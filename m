@@ -2,133 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D9D658F4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06564658F4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbiL2Q5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 11:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
+        id S233533AbiL2Q4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 11:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiL2Q5a (ORCPT
+        with ESMTP id S233553AbiL2Q4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 11:57:30 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D60AF5A7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:57:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Bjgvc
-        YpLFCPLXyGdhy/jjW+A0l9sfosElfSN1VeTjBU=; b=qSwTlsauuGHlFCP/ExbcF
-        6lFaX5qVzaqgycnVb7WGf7xg+tK7fyV/Lm0r+gKVom45OCzH2yBzFd9aWzByEiFs
-        NvuXsf5qHC/IBDkJ070PN3z5po5fY8zvxvD27MBIqD6Z9cEUz7sqRLow9qIcjfiz
-        7j3otB5MjP4XSwAVQBt7zA=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g4-4 (Coremail) with SMTP id _____wA3dl7Lxq1j2hKAAA--.23382S2;
-        Fri, 30 Dec 2022 00:56:43 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     zhi.a.wang@intel.com
-Cc:     1002992920@qq.com, airlied@gmail.com, airlied@linux.ie,
-        alex000young@gmail.com, dri-devel@lists.freedesktop.org,
-        gregkh@linuxfoundation.org, hackerzheng666@gmail.com,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        joonas.lahtinen@linux.intel.com, linux-kernel@vger.kernel.org,
-        security@kernel.org, tvrtko.ursulin@linux.intel.com,
-        zhenyuw@linux.intel.com, zyytlz.wz@163.com
-Subject: [PATCH v6] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
-Date:   Fri, 30 Dec 2022 00:56:41 +0800
-Message-Id: <20221229165641.1192455-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <11728bc1-7b59-1623-b517-d1a0d57eb275@intel.com>
-References: <11728bc1-7b59-1623-b517-d1a0d57eb275@intel.com>
+        Thu, 29 Dec 2022 11:56:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD29F5A7;
+        Thu, 29 Dec 2022 08:56:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BC7F61839;
+        Thu, 29 Dec 2022 16:56:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66131C433EF;
+        Thu, 29 Dec 2022 16:56:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672333010;
+        bh=ViY2BQZiltKQ4jvkmjytVNSOGiM2TZgrElzKyBr36hI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=il2VIfqB0ez0Rmb8rH8N8IDk4hm1ko30z46bpjv8Rg9GUkfXEeZbMhhL0NBzyw7Be
+         7Qj1a23+u68ocrKbH/Ulo2wwMFN0I6kYWMu/XOTRpxNRVIEQ3u6lQv4s7uJViJ/x5a
+         tL4qJBgqrQLGzDWbiLoPjYCfo1fzvPmJxjm6pZF0Xp03wjAU++P3v+j2EixzHLhPIs
+         ZpdJKbaT2VXdDAh+vEiXbFxquISfD4ySjIz7qZSZlXW9xToM2UbhVO7YrLzaZf113s
+         hNIvwVnW+IyikoDTK2Y3arQLyAT9eDZpN3ab145lcY1npyZCoyOwclqfjScbTRbtHq
+         oLfLjOEte7dvw==
+Date:   Thu, 29 Dec 2022 09:56:47 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, andrii@kernel.org,
+        dave.stevenson@raspberrypi.com, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
+Message-ID: <Y63Gz7Jpms95bz15@dev-arch.thelio-3990X>
+References: <20221228144256.536395940@linuxfoundation.org>
+ <Y62m85tYWONgSWmm@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wA3dl7Lxq1j2hKAAA--.23382S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4kAr15Xr1rCr1kAr43KFg_yoW5GFWUpF
-        W8Wa1YyF4rAF1Iva97uF1xAFy3Z3W3Xa48WrWkKa4Ykrs0qF1qkrZ0kFW5XrykuFn8Aa1f
-        Cr4DJrW3C34jvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRoGQgUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbCbxXmU2BbENo9ZQAAsm
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y62m85tYWONgSWmm@duo.ucw.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If intel_gvt_dma_map_guest_page failed, it will call
- ppgtt_invalidate_spt, which will finally free the spt.
- But the caller function ppgtt_populate_spt_by_guest_entry
- does not notice that, it will free spt again in its error
- path.
+On Thu, Dec 29, 2022 at 03:40:51PM +0100, Pavel Machek wrote:
+> Hi!
+> 
+> > This is the start of the stable review cycle for the 5.15.86 release.
+> > There are 731 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> 
+> These are just kCFI annotations. I don't believe we need them in 5.10
+> (and 5.15).
 
-Fix this by canceling the mapping of DMA address and freeing sub_spt.
-Besides, leave the handle of spt destroy to caller function instead
-of callee function when error occurs.
+The original CFI implementation exists in 5.15 and the problem described
+in those patches should still trigger with that implementation just like
+kCFI, so they should likely still go to 5.15. However, they were
+AUTOSEL'd and we have not had any reports of problems that are solved
+with these patches (although that is likely because nobody who is using
+this hardware has tried running a CONFIG_CFI_CLANG kernel), so I do not
+really care if they are applied or not.
 
-Fixes: b901b252b6cf ("drm/i915/gvt: Add 2M huge gtt support")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Reviewed-by: Zhenyu Wang <zhenyuw@linux.intel.com>
----
-v6:
-- remove the code for setting unused variable to NULL and fix type suggested
-by Zhenyu
+> > Nathan Chancellor <nathan@kernel.org>
+> >     net: ethernet: ti: Fix return type of netcp_ndo_start_xmit()
+> > Nathan Chancellor <nathan@kernel.org>
+> >     drm/fsl-dcu: Fix return type of fsl_dcu_drm_connector_mode_valid()
+> > Nathan Chancellor <nathan@kernel.org>
+> >     drm/sti: Fix return type of sti_{dvo,hda,hdmi}_connector_mode_valid()
 
-v5:
-- remove unnecessary switch-case code for there is only one particular case,
-correct the unmap target from parent_spt to sub_spt.add more details in
-commit message. All suggested by Zhenyu
-
-v4:
-- fix by undo the mapping of DMA address and free sub_spt suggested by Zhi
-
-v3:
-- correct spelling mistake and remove unused variable suggested by Greg
-
-v2: https://lore.kernel.org/all/20221006165845.1735393-1-zyytlz.wz@163.com/
-
-v1: https://lore.kernel.org/all/20220928033340.1063949-1-zyytlz.wz@163.com/
----
- drivers/gpu/drm/i915/gvt/gtt.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-index 51e5e8fb505b..7379e8d98417 100644
---- a/drivers/gpu/drm/i915/gvt/gtt.c
-+++ b/drivers/gpu/drm/i915/gvt/gtt.c
-@@ -1209,10 +1209,8 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
- 	for_each_shadow_entry(sub_spt, &sub_se, sub_index) {
- 		ret = intel_gvt_dma_map_guest_page(vgpu, start_gfn + sub_index,
- 						   PAGE_SIZE, &dma_addr);
--		if (ret) {
--			ppgtt_invalidate_spt(spt);
--			return ret;
--		}
-+		if (ret)
-+			goto err;
- 		sub_se.val64 = se->val64;
- 
- 		/* Copy the PAT field from PDE. */
-@@ -1231,6 +1229,17 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
- 	ops->set_pfn(se, sub_spt->shadow_page.mfn);
- 	ppgtt_set_shadow_entry(spt, se, index);
- 	return 0;
-+err:
-+	/* Cancel the existing addess mappings of DMA addr. */
-+	for_each_present_shadow_entry(sub_spt, &sub_se, sub_index) {
-+		gvt_vdbg_mm("invalidate 4K entry\n");
-+		ppgtt_invalidate_pte(sub_spt, &sub_se);
-+	}
-+	/* Release the new allocated spt. */
-+	trace_spt_change(sub_spt->vgpu->id, "release", sub_spt,
-+		sub_spt->guest_page.gfn, sub_spt->shadow_page.type);
-+	ppgtt_free_spt(sub_spt);
-+	return ret;
- }
- 
- static int split_64KB_gtt_entry(struct intel_vgpu *vgpu,
--- 
-2.25.1
-
+Cheers,
+Nathan
