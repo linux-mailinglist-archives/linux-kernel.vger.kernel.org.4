@@ -2,88 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0199E658F5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E977C658FFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbiL2RDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 12:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S233387AbiL2Rn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbiL2RDV (ORCPT
+        with ESMTP id S229535AbiL2Rn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 12:03:21 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE2A13CD5;
-        Thu, 29 Dec 2022 09:03:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FpO/eHt+84zbk9M68yu6DzZDNP2UCbAiX18klEN4/yA=; b=VTl9/194oI/R+TtJ/HBvlyV61k
-        HXcMgF2toNI6pBRb/3FHLQ7fLcPI0De+9GfAn2n5NX6yL2Typvq+RiYIcsDx1KIKxdNXB73jKNStO
-        y1hvemZd5yjmRV5iKBeY3t0A3bHEc9QUbAbvksyewg4PTT+MD3jWxtB9SyQkDPFAodEySLBeJ+kOi
-        q14YcbDb7g1Pyv4wdK/VoGJsKmkJVN4vD/3GnbVg2kWT8j5qAqZu+OrmgkMwzNxi0D2vd7dII/VsH
-        FSR5Y94CqlYw8/uRlVgYZY5rbq+p6wBi3UwYIXOx6hiLT80jAE+FT8noE9bjw6Q1DL/ANFIki+p1J
-        GZGVUxeg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pAwJN-00A0P1-1z; Thu, 29 Dec 2022 17:03:21 +0000
-Date:   Thu, 29 Dec 2022 17:03:21 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     yang.yang29@zte.com.cn
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, iamjoonsoo.kim@lge.com
-Subject: Re: [PATCH linux-next] swap_state: update shadow_nodes for anonymous
- page
-Message-ID: <Y63IWTOE4sNKuseL@casper.infradead.org>
-References: <202212292130035747813@zte.com.cn>
+        Thu, 29 Dec 2022 12:43:26 -0500
+X-Greylist: delayed 2252 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 29 Dec 2022 09:43:24 PST
+Received: from luna (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net [86.15.83.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40B4CE01
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 09:43:24 -0800 (PST)
+Received: from ben by luna with local (Exim 4.96)
+        (envelope-from <ben@luna.fluff.org>)
+        id 1pAwLi-0030r7-1l;
+        Thu, 29 Dec 2022 17:05:46 +0000
+From:   Ben Dooks <ben-linux@fluff.org>
+To:     linux-riscv@lists.infradead.org
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
+        Ben Dooks <ben-linux@fluff.org>
+Subject: [PATCH] riscv: uaccess: fix type of 0 variable on error in get_user()
+Date:   Thu, 29 Dec 2022 17:05:45 +0000
+Message-Id: <20221229170545.718264-1-ben-linux@fluff.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202212292130035747813@zte.com.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
+        HELO_NO_DOMAIN,KHOP_HELO_FCRDNS,PDS_RDNS_DYNAMIC_FP,RCVD_IN_SORBS_DUL,
+        RDNS_DYNAMIC,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 09:30:03PM +0800, yang.yang29@zte.com.cn wrote:
-> From: Yang Yang <yang.yang29@zte.com.cn>
-> 
-> Shadow_nodes is for shadow nodes reclaiming of workingset handling,
-> it is updated when page cache add or delete since long time ago
-> workingset only supported page cache. But when workingset supports
-> anonymous page detection[1], we missied updating shadow nodes for
-> it.
+If the get_user(x, ptr) has x as a pointer, then the setting
+of (x) = 0 is going to produce the following sparse warning,
+so fix this by forcing the type of 'x' when access_ok() fails.
 
-Please include a description of the user-visible effect of this (I
-think I can guess, but I'd like it spelled out)
+fs/aio.c:2073:21: warning: Using plain integer as NULL pointer
 
-> [1] commit aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
-> 
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
+Signed-off-by: Ben Dooks <ben-linux@fluff.org>
+---
+ arch/riscv/include/asm/uaccess.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No Fixes: line?  It doesn't need to be backported?
-
-> ---
->  include/linux/xarray.h | 3 ++-
->  mm/swap_state.c        | 4 ++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/xarray.h b/include/linux/xarray.h
-> index 44dd6d6e01bc..cd2ccb09c596 100644
-> --- a/include/linux/xarray.h
-> +++ b/include/linux/xarray.h
-> @@ -1643,7 +1643,8 @@ static inline void xas_set_order(struct xa_state *xas, unsigned long index,
->   * @update: Function to call when updating a node.
->   *
->   * The XArray can notify a caller after it has updated an xa_node.
-> - * This is advanced functionality and is only needed by the page cache.
-> + * This is advanced functionality and is only needed by the page cache
-> + * and anonymous page.
-
-... "and swap cache.", not anonymous page.
+diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
+index 855450bed9f5..ec0cab9fbddd 100644
+--- a/arch/riscv/include/asm/uaccess.h
++++ b/arch/riscv/include/asm/uaccess.h
+@@ -165,7 +165,7 @@ do {								\
+ 	might_fault();						\
+ 	access_ok(__p, sizeof(*__p)) ?		\
+ 		__get_user((x), __p) :				\
+-		((x) = 0, -EFAULT);				\
++		((x) = (__force __typeof__(x))0, -EFAULT);	\
+ })
+ 
+ #define __put_user_asm(insn, x, ptr, err)			\
+-- 
+2.39.0
 
