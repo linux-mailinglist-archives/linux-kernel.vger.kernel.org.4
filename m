@@ -2,136 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4416588A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD61A6588A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232887AbiL2CbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 21:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S232929AbiL2Cbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 21:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiL2CbP (ORCPT
+        with ESMTP id S230078AbiL2Cbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 21:31:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4268513D27
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 18:31:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9C88615A5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:31:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC84BC433EF;
-        Thu, 29 Dec 2022 02:31:11 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vq8QSPON"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672281070;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fo1jslvfeopSkuICCRwlACwE2DX39yLIKwrIJZqYHzI=;
-        b=Vq8QSPON47EV4x6TnTViJgI6ozO4r5JLnAo/dYSxkIpP6q+0821Jw9K4zZoaeGJecFR7GP
-        AtZPNYm426vAh6bLbVxlhWUECiL0VLL2b5PfSODtaIVrDrenWx6Xxiie06KoATfLhAMvip
-        zRW9dQqu13vmuk/sxaXYwGx9KfRTS8I=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 675c8781 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 29 Dec 2022 02:31:09 +0000 (UTC)
-Date:   Thu, 29 Dec 2022 03:31:07 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        ardb@kernel.org, kraxel@redhat.com, bp@alien8.de, philmd@linaro.org
-Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
- setup_data
-Message-ID: <Y6z765zHrQ6Rl/0o@zx2c4.com>
-References: <20221228143831.396245-1-Jason@zx2c4.com>
- <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org>
- <Y6xvJheSYC83voCZ@zx2c4.com>
- <Y6x1knb8udpSyMSp@zx2c4.com>
- <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com>
+        Wed, 28 Dec 2022 21:31:44 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6101813D47;
+        Wed, 28 Dec 2022 18:31:43 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C8B3D109;
+        Thu, 29 Dec 2022 03:31:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672281102;
+        bh=dH8oWD18PnHqBJzdW67bOpes0o1O+bRiZKBgAZ4gzJw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rsTS9aEBpL2yHQtmZeLWgqFxYM+F8pvNzSUgbFdmf0M/mEZJo9NMjlIccPiKN4nL2
+         ILMkomfv/+64WoOYEkVqt8OKrbN41rYNQXLbnUOkeFLHd5DgaxePs76m3OIcYR97Iw
+         oE3vZAIs0ulPkjUkWcoGwDDK/BOAu7BBTeadpuyc=
+Date:   Thu, 29 Dec 2022 04:31:37 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 2/2] media: uvcvideo: Limit power line control
+ for Lenovo Integrated Camera
+Message-ID: <Y6z8Cc9LWa3Nyin3@pendragon.ideasonboard.com>
+References: <20221101-easycam-v2-0-ffe3e3a152df@chromium.org>
+ <20221101-easycam-v2-2-ffe3e3a152df@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221101-easycam-v2-2-ffe3e3a152df@chromium.org>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        SUBJECT_DRUG_GAP_L autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Ricardo,
 
-Read this message in a fixed width text editor with a lot of columns.
+Thank you for the patch.
 
-On Wed, Dec 28, 2022 at 03:58:12PM -0800, H. Peter Anvin wrote:
-> Glad you asked.
+On Fri, Dec 02, 2022 at 05:45:07PM +0100, Ricardo Ribalda wrote:
+> The device does not implement the power line control correctly. Add a
+> corresponding control mapping override.
+
+Do I understand correctly that this device advertises UVC 1.5 support
+buth implements the power line frequency control as if it was a UVC 1.1
+device ? Could you record this in the commit message ?
+
+I wonder how all these cameras can pass the UVC conformance test suite.
+Either they don't even bother trying, or the test suite is useless.
+
+> Bus 003 Device 002: ID 30c9:0093 Lenovo Integrated Camera
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               2.01
+>   bDeviceClass          239 Miscellaneous Device
+>   bDeviceSubClass         2
+>   bDeviceProtocol         1 Interface Association
+>   bMaxPacketSize0        64
+>   idVendor           0x30c9
+>   idProduct          0x0093
+>   bcdDevice            0.07
+>   iManufacturer           3 Lenovo
+>   iProduct                1 Integrated Camera
+>   iSerial                 2 8SSC21J75356V1SR2830069
+>   bNumConfigurations      1
 > 
-> So the kernel load addresses are parameterized in the kernel image
-> setup header. One of the things that are so parameterized are the size
-> and possible realignment of the kernel image in memory.
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 33 +++++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
 > 
-> I'm very confused where you are getting the 64 MB number from. There
-> should not be any such limitation.
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index cca3012c8912..e0bb21f2e133 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2373,6 +2373,30 @@ MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
+>   * Driver initialization and cleanup
+>   */
+>  
+> +static const struct uvc_menu_info power_line_frequency_controls_uvc11[] = {
+> +	{ 0, "Disabled" },
+> +	{ 1, "50 Hz" },
+> +	{ 2, "60 Hz" },
+> +};
+> +
+> +static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
+> +	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
+> +	.entity		= UVC_GUID_UVC_PROCESSING,
+> +	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
+> +	.size		= 2,
+> +	.offset		= 0,
+> +	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
+> +	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
+> +	.menu_info	= power_line_frequency_controls_uvc11,
+> +	.menu_count	= ARRAY_SIZE(power_line_frequency_controls_uvc11),
+> +};
 
-Currently, QEMU appends it to the kernel image, not to the initramfs as
-you suggest below. So, that winds up looking, currently, like:
+It would be nice to avoid duplicating the data, do you think we could
+reference uvc_ctrl_mappings_uvc11 from uvc_ctrl.c instead ?
 
-          kernel image            setup_data
-   |--------------------------||----------------|
-0x100000                  0x100000+l1     0x100000+l1+l2
+> +
+> +static const struct uvc_device_info uvc_ctrl_power_line_uvc11 = {
+> +	.mappings = (const struct uvc_control_mapping *[]) {
+> +		&uvc_ctrl_power_line_mapping_uvc11,
+> +		NULL, /* Sentinel */
+> +	},
+> +};
+>  static const struct uvc_menu_info power_line_frequency_controls_limited[] = {
+>  	{ 1, "50 Hz" },
+>  	{ 2, "60 Hz" },
+> @@ -2976,6 +3000,15 @@ static const struct usb_device_id uvc_ids[] = {
+>  	  .bInterfaceSubClass	= 1,
+>  	  .bInterfaceProtocol	= 0,
+>  	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
+> +	/* Lenovo Integrated Camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x30c9,
+> +	  .idProduct		= 0x0093,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
+> +	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_uvc11 },
+>  	/* Sonix Technology USB 2.0 Camera */
+>  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+>  				| USB_DEVICE_ID_MATCH_INT_INFO,
 
-The problem is that this decompresses to 0x1000000 (one more zero). So
-if l1 is > (0x1000000-0x100000), then this winds up looking like:
+-- 
+Regards,
 
-          kernel image            setup_data
-   |--------------------------||----------------|
-0x100000                  0x100000+l1     0x100000+l1+l2
-
-                                 d e c o m p r e s s e d   k e r n e l
-		     |-------------------------------------------------------------|
-                0x1000000                                                     0x1000000+l3 
-
-The decompressed kernel seemingly overwriting the compressed kernel
-image isn't a problem, because that gets relocated to a higher address
-early on in the boot process. setup_data, however, stays in the same
-place, since those links are self referential and nothing fixes them up.
-So the decompressed kernel clobbers it.
-
-The solution in this commit adds a bunch of padding between the kernel
-image and setup_data to avoid this. That looks like this:
-
-          kernel image                            padding                               setup_data
-   |--------------------------||---------------------------------------------------||----------------|
-0x100000                  0x100000+l1                                         0x1000000+l3      0x1000000+l3+l2
-
-                                 d e c o m p r e s s e d   k e r n e l
-		     |-------------------------------------------------------------|
-                0x1000000                                                     0x1000000+l3 
-
-This way, the decompressed kernel doesn't clobber setup_data.
-
-The problem is that if 0x1000000+l3-0x100000 is around 62 megabytes,
-then the bootloader crashes when trying to dereference setup_data's
-->len param at the end of initialize_identity_maps() in ident_map_64.c.
-I don't know why it does this. If I could remove the 62 megabyte
-restriction, then I could keep with this technique and all would be
-well.
-
-> In general, setup_data should be able to go anywhere the initrd can
-> go, and so is subject to the same address cap (896 MB for old kernels,
-> 4 GB on newer ones; this address too is enumerated in the header.)
-
-It would be theoretically possible to attach it to the initrd image
-instead of to the kernel image. As a last resort, I guess I can look
-into doing that. However, that's going to require some serious rework
-and plumbing of a lot of different components. So if I can make it work
-as is, that'd be ideal. However, I need to figure out this weird 62 meg
-limitation.
-
-Any ideas on that?
-
-Jason
+Laurent Pinchart
