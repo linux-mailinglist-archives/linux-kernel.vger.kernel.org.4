@@ -2,339 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED7D658FEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67481658FF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233909AbiL2Rdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 12:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S233921AbiL2Rez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiL2RdO (ORCPT
+        with ESMTP id S234011AbiL2Ret (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 12:33:14 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8151115F2B;
-        Thu, 29 Dec 2022 09:33:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672335193; x=1703871193;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=mA1aVFRaMsOcJtQ5SDdn3FwLj8DAkdodQXt0ho57zsQ=;
-  b=iO4qZemHJfJ0g7EkB3U7A8kquco5xt69Q0B42xIjKkkvACIABJE7b1y7
-   LGbBPebnoHbmnDO0ROebaL3/G0yZyhep427vGS8gmso7mx/TwyykOhbI/
-   /5RjoEh4fQ4IuyMHbvFL1nVC/6/pMNCLfb2lLvxFSdKCcSly5Y09hpGgm
-   RJ8iNaFWxsMTszX+dME8/7ywpxpPCjTvioggAQ8EPHwE+5JNz6sfChaOa
-   29v0r81XCLgaSTfMUYeJpk2Jd0yGZtdyAEFrvrJesouJ9OwyfXVNNVQ1K
-   S8ItOK5goXRarXg1+uRkUhOhtuKVCYS6QRnzdNjvZTVLIplykphv5Sz2I
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="301450862"
-X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
-   d="scan'208";a="301450862"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 09:33:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="684271925"
-X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
-   d="scan'208";a="684271925"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 09:33:12 -0800
-Date:   Thu, 29 Dec 2022 09:33:38 -0800 (PST)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v8 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <Y61kwSEBTHNAU/Fh@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2212290932310.1857691@rhweight-WRK1>
-References: <20221228181624.1793433-1-matthew.gerlach@linux.intel.com> <20221228181624.1793433-5-matthew.gerlach@linux.intel.com> <Y61kwSEBTHNAU/Fh@smile.fi.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 29 Dec 2022 12:34:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8278614017
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 09:34:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672335239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cSN4qRzkjG7moedM70V1xHmUGsUwaFVTnRTOfqVw+jc=;
+        b=K/eGVEQFerChh10j9TyBp/VICtOxCx66JlltSkCkxCv6JxL8baAZB66b1V0e+bkbKSytb7
+        0wAcG7yzmNyIU7lYJbQasHBaWh+V3sm8qnZSldhrpLoFfCgMlI6WSxDCYACunEpolMb2ZK
+        82LhT43qmnuUvQ/Vrn67f10K5kL0lZY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-_ftLoMbONAS1BnvIxiU_7w-1; Thu, 29 Dec 2022 12:33:55 -0500
+X-MC-Unique: _ftLoMbONAS1BnvIxiU_7w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44B601C07581;
+        Thu, 29 Dec 2022 17:33:55 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 26A7B53A3;
+        Thu, 29 Dec 2022 17:33:55 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 6.2-rc2
+Date:   Thu, 29 Dec 2022 12:33:54 -0500
+Message-Id: <20221229173354.1769443-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1806459893-1672335218=:1857691"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Linus,
 
---8323328-1806459893-1672335218=:1857691
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
+are available in the Git repository at:
 
-On Thu, 29 Dec 2022, Andy Shevchenko wrote:
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-> On Wed, Dec 28, 2022 at 10:16:24AM -0800, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add a Device Feature List (DFL) bus driver for the Altera
->> 16550 implementation of UART.
->
-> With that helper looks better,
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+for you to fetch changes up to a5496886eb130ea08b1a5cd5c284543909bde749:
 
-I agree the helper function makes the code look better and is safer.
+  Merge branch 'kvm-late-6.1-fixes' into HEAD (2022-12-28 07:19:14 -0500)
 
-Thanks for the review,
-Matthew Gerlach
+----------------------------------------------------------------
+Changes that were posted too late for 6.1, or after the release.
 
->
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->> ---
->> v8: use dfh_get_u64_param_vals()
->>
->> v7: no change
->>
->> v6: move driver specific parameter definitions to limit scope
->>
->> v5: removed unneeded blank line
->>     removed unneeded includes
->>     included device.h and types.h
->>     removed unneeded local variable
->>     remove calls to dev_dbg
->>     memset -> { }
->>     remove space after period
->>     explicitly include used headers
->>     remove redundant Inc from Copyright
->>     fix format specifier
->>
->> v4: use dev_err_probe() everywhere that is appropriate
->>     clean up noise
->>     change error messages to use the word, unsupported
->>     tried again to sort Makefile and KConfig better
->>     reorder probe function for easier error handling
->>     use new dfh_find_param API
->>
->> v3: use passed in location of registers
->>     use cleaned up functions for parsing parameters
->>
->> v2: clean up error messages
->>     alphabetize header files
->>     fix 'missing prototype' error by making function static
->>     tried to sort Makefile and Kconfig better
->> ---
->>  drivers/tty/serial/8250/8250_dfl.c | 150 +++++++++++++++++++++++++++++
->>  drivers/tty/serial/8250/Kconfig    |  12 +++
->>  drivers/tty/serial/8250/Makefile   |   1 +
->>  3 files changed, 163 insertions(+)
->>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
->>
->> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
->> new file mode 100644
->> index 000000000000..0ee78c38a721
->> --- /dev/null
->> +++ b/drivers/tty/serial/8250/8250_dfl.c
->> @@ -0,0 +1,150 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Driver for FPGA UART
->> + *
->> + * Copyright (C) 2022 Intel Corporation.
->> + *
->> + * Authors:
->> + *   Ananda Ravuri <ananda.ravuri@intel.com>
->> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> + */
->> +
->> +#include <linux/bitfield.h>
->> +#include <linux/device.h>
->> +#include <linux/dfl.h>
->> +#include <linux/errno.h>
->> +#include <linux/ioport.h>
->> +#include <linux/module.h>
->> +#include <linux/mod_devicetable.h>
->> +#include <linux/types.h>
->> +
->> +#include <linux/serial.h>
->> +#include <linux/serial_8250.h>
->> +
->> +#define DFHv1_PARAM_ID_CLK_FRQ    0x2
->> +#define DFHv1_PARAM_ID_FIFO_LEN   0x3
->> +
->> +#define DFHv1_PARAM_ID_REG_LAYOUT	0x4
->> +#define DFHv1_PARAM_REG_LAYOUT_WIDTH	GENMASK_ULL(63, 32)
->> +#define DFHv1_PARAM_REG_LAYOUT_SHIFT	GENMASK_ULL(31, 0)
->> +
->> +struct dfl_uart {
->> +	int line;
->> +};
->> +
->> +static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
->> +{
->> +	struct device *dev = &dfl_dev->dev;
->> +	u64 fifo_len, clk_freq, reg_layout;
->> +	u32 reg_width;
->> +	u64 *p;
->> +
->> +	p = dfh_get_u64_param_vals(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ, &clk_freq, 1);
->> +	if (IS_ERR(p))
->> +		return dev_err_probe(dev, PTR_ERR(p), "missing CLK_FRQ param\n");
->> +
->> +	uart->port.uartclk = clk_freq;
->> +
->> +	p = dfh_get_u64_param_vals(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN, &fifo_len, 1);
->> +	if (IS_ERR(p))
->> +		return dev_err_probe(dev, PTR_ERR(p), "missing FIFO_LEN param\n");
->> +
->> +	switch (fifo_len) {
->> +	case 32:
->> +		uart->port.type = PORT_ALTR_16550_F32;
->> +		break;
->> +
->> +	case 64:
->> +		uart->port.type = PORT_ALTR_16550_F64;
->> +		break;
->> +
->> +	case 128:
->> +		uart->port.type = PORT_ALTR_16550_F128;
->> +		break;
->> +
->> +	default:
->> +		return dev_err_probe(dev, -EINVAL, "unsupported FIFO_LEN %llu\n", fifo_len);
->> +	}
->> +
->> +	p = dfh_get_u64_param_vals(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT, &reg_layout, 1);
->> +	if (IS_ERR(p))
->> +		return dev_err_probe(dev, PTR_ERR(p), "missing REG_LAYOUT param\n");
->> +
->> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_SHIFT, reg_layout);
->> +	reg_width = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_WIDTH, reg_layout);
->> +	switch (reg_width) {
->> +	case 4:
->> +		uart->port.iotype = UPIO_MEM32;
->> +		break;
->> +
->> +	case 2:
->> +		uart->port.iotype = UPIO_MEM16;
->> +		break;
->> +
->> +	default:
->> +		return dev_err_probe(dev, -EINVAL, "unsupported reg-width %u\n", reg_width);
->> +
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
->> +{
->> +	struct device *dev = &dfl_dev->dev;
->> +	struct uart_8250_port uart = { };
->> +	struct dfl_uart *dfluart;
->> +	int ret;
->> +
->> +	uart.port.flags = UPF_IOREMAP;
->> +	uart.port.mapbase = dfl_dev->mmio_res.start;
->> +	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
->> +
->> +	ret = dfl_uart_get_params(dfl_dev, &uart);
->> +	if (ret < 0)
->> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
->> +
->> +	if (dfl_dev->num_irqs == 1)
->> +		uart.port.irq = dfl_dev->irqs[0];
->> +
->> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
->> +	if (!dfluart)
->> +		return -ENOMEM;
->> +
->> +	dfluart->line = serial8250_register_8250_port(&uart);
->> +	if (dfluart->line < 0)
->> +		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
->> +
->> +	dev_set_drvdata(dev, dfluart);
->> +
->> +	return 0;
->> +}
->> +
->> +static void dfl_uart_remove(struct dfl_device *dfl_dev)
->> +{
->> +	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
->> +
->> +	serial8250_unregister_port(dfluart->line);
->> +}
->> +
->> +#define FME_FEATURE_ID_UART 0x24
->> +
->> +static const struct dfl_device_id dfl_uart_ids[] = {
->> +	{ FME_ID, FME_FEATURE_ID_UART },
->> +	{ }
->> +};
->> +MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
->> +
->> +static struct dfl_driver dfl_uart_driver = {
->> +	.drv = {
->> +		.name = "dfl-uart",
->> +	},
->> +	.id_table = dfl_uart_ids,
->> +	.probe = dfl_uart_probe,
->> +	.remove = dfl_uart_remove,
->> +};
->> +module_dfl_driver(dfl_uart_driver);
->> +
->> +MODULE_DESCRIPTION("DFL Intel UART driver");
->> +MODULE_AUTHOR("Intel Corporation");
->> +MODULE_LICENSE("GPL");
->> diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
->> index b0f62345bc84..08af2acd4645 100644
->> --- a/drivers/tty/serial/8250/Kconfig
->> +++ b/drivers/tty/serial/8250/Kconfig
->> @@ -370,6 +370,18 @@ config SERIAL_8250_FSL
->>  	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
->>  	  enables support for ACPI enumeration.
->>
->> +config SERIAL_8250_DFL
->> +	tristate "DFL bus driver for Altera 16550 UART"
->> +	depends on SERIAL_8250 && FPGA_DFL
->> +	help
->> +	  This option enables support for a Device Feature List (DFL) bus
->> +	  driver for the Altera 16650 UART. One or more Altera 16650 UARTs
->> +	  can be instantiated in a FPGA and then be discovered during
->> +	  enumeration of the DFL bus.
->> +
->> +	  To compile this driver as a module, chose M here: the
->> +	  module will be called 8250_dfl.
->> +
->>  config SERIAL_8250_DW
->>  	tristate "Support for Synopsys DesignWare 8250 quirks"
->>  	depends on SERIAL_8250
->> diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
->> index 1615bfdde2a0..4e1a32812683 100644
->> --- a/drivers/tty/serial/8250/Makefile
->> +++ b/drivers/tty/serial/8250/Makefile
->> @@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
->>  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
->>  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
->>  obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
->> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
->>  obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
->>  obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
->>  obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
->> --
->> 2.25.1
->>
->
-> -- 
-> With Best Regards,
-> Andy Shevchenko
->
->
->
---8323328-1806459893-1672335218=:1857691--
+x86:
+
+* several fixes to nested VMX execution controls
+
+* fixes and clarification to the documentation for Xen emulation
+
+* do not unnecessarily release a pmu event with zero period
+
+* MMU fixes
+
+* fix Coverity warning in kvm_hv_flush_tlb()
+
+selftests:
+
+* fixes for the ucall mechanism in selftests
+
+* other fixes mostly related to compilation with clang
+
+----------------------------------------------------------------
+Adamos Ttofari (1):
+      KVM: x86: ioapic: Fix level-triggered EOI and userspace I/OAPIC reconfigure race
+
+David Woodhouse (3):
+      KVM: x86/xen: Use kvm_read_guest_virt() instead of open-coding it badly
+      KVM: x86/xen: Add KVM_XEN_INVALID_GPA and KVM_XEN_INVALID_GFN to uapi
+      KVM: x86/xen: Documentation updates and clarifications
+
+Lai Jiangshan (2):
+      kvm: Remove the unused macro KVM_MMU_READ_{,UN}LOCK()
+      kvm: x86/mmu: Remove duplicated "be split" in spte.h
+
+Like Xu (1):
+      KVM: x86/pmu: Prevent zero period event from being repeatedly released
+
+Lukas Bulwahn (1):
+      MAINTAINERS: adjust entry after renaming the vmx hyperv files
+
+Michal Luczaj (2):
+      KVM: x86/xen: Fix memory leak in kvm_xen_write_hypercall_page()
+      KVM: x86/xen: Simplify eventfd IOCTLs
+
+Oliver Upton (2):
+      KVM: arm64: selftests: Don't identity map the ucall MMIO hole
+      KVM: selftests: Mark correct page as mapped in virt_map()
+
+Paolo Bonzini (6):
+      KVM: selftests: document the default implementation of vm_vaddr_populate_bitmap
+      KVM: x86/xen: Fix SRCU/RCU usage in readers of evtchn_ports
+      KVM: x86: fix deadlock for KVM_XEN_EVTCHN_RESET
+      Documentation: kvm: clarify SRCU locking order
+      KVM: selftests: restore special vmmcall code layout needed by the harness
+      Merge branch 'kvm-late-6.1-fixes' into HEAD
+
+Peng Hao (1):
+      KVM: x86: Simplify kvm_apic_hw_enabled
+
+Sean Christopherson (22):
+      KVM: x86: Sanity check inputs to kvm_handle_memory_failure()
+      KVM: selftests: Zero out valid_bank_mask for "all" case in Hyper-V IPI test
+      KVM: nVMX: Document that ignoring memory failures for VMCLEAR is deliberate
+      KVM: nVMX: Properly expose ENABLE_USR_WAIT_PAUSE control to L1
+      KVM: nVMX: Don't stuff secondary execution control if it's not supported
+      KVM: x86/mmu: Don't attempt to map leaf if target TDP MMU SPTE is frozen
+      KVM: x86/mmu: Map TDP MMU leaf SPTE iff target level is reached
+      KVM: x86/mmu: Re-check under lock that TDP MMU SP hugepage is disallowed
+      KVM: x86/mmu: Don't install TDP MMU SPTE if SP has unexpected level
+      KVM: selftests: Define literal to asm constraint in aarch64 as unsigned long
+      KVM: selftests: Delete dead code in x86_64/vmx_tsc_adjust_test.c
+      KVM: selftests: Fix divide-by-zero bug in memslot_perf_test
+      KVM: selftests: Use pattern matching in .gitignore
+      KVM: selftests: Fix a typo in x86-64's kvm_get_cpu_address_width()
+      KVM: selftests: Rename UNAME_M to ARCH_DIR, fill explicitly for x86
+      KVM: selftests: Use proper function prototypes in probing code
+      KVM: selftests: Probe -no-pie with actual CFLAGS used to compile
+      KVM: selftests: Explicitly disable builtins for mem*() overrides
+      KVM: selftests: Include lib.mk before consuming $(CC)
+      KVM: selftests: Disable "gnu-variable-sized-type-not-at-end" warning
+      KVM: selftests: Use magic value to signal ucall_alloc() failure
+      KVM: Delete extra block of "};" in the KVM API documentation
+
+Vitaly Kuznetsov (1):
+      KVM: x86: hyper-v: Fix 'using uninitialized value' Coverity warning
+
+ Documentation/virt/kvm/api.rst                     |  46 ++++---
+ Documentation/virt/kvm/locking.rst                 |  19 ++-
+ MAINTAINERS                                        |   2 +-
+ arch/x86/kvm/hyperv.c                              |  63 +++++----
+ arch/x86/kvm/irq_comm.c                            |   5 +-
+ arch/x86/kvm/lapic.h                               |   4 +-
+ arch/x86/kvm/mmu/spte.h                            |   2 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                         |  25 +++-
+ arch/x86/kvm/pmu.c                                 |   3 +-
+ arch/x86/kvm/pmu.h                                 |   3 +-
+ arch/x86/kvm/vmx/nested.c                          |  20 ++-
+ arch/x86/kvm/vmx/vmx.c                             |   7 +
+ arch/x86/kvm/x86.c                                 |   3 +
+ arch/x86/kvm/xen.c                                 | 144 +++++++++++----------
+ include/uapi/linux/kvm.h                           |   3 +
+ tools/testing/selftests/kvm/.gitignore             |  91 +------------
+ tools/testing/selftests/kvm/Makefile               |  64 ++++-----
+ .../selftests/kvm/aarch64/page_fault_test.c        |   2 +-
+ tools/testing/selftests/kvm/lib/aarch64/ucall.c    |   6 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c         |  13 +-
+ tools/testing/selftests/kvm/lib/ucall_common.c     |  16 ++-
+ tools/testing/selftests/kvm/lib/x86_64/processor.c |   2 +-
+ tools/testing/selftests/kvm/memslot_perf_test.c    |   3 +
+ tools/testing/selftests/kvm/x86_64/hyperv_ipi.c    |   3 +-
+ .../kvm/x86_64/svm_nested_soft_inject_test.c       |  13 +-
+ .../selftests/kvm/x86_64/vmx_tsc_adjust_test.c     |   5 -
+ .../testing/selftests/kvm/x86_64/xen_shinfo_test.c |   6 +
+ virt/kvm/kvm_mm.h                                  |   4 -
+ 28 files changed, 290 insertions(+), 287 deletions(-)
+
