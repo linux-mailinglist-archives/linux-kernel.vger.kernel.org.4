@@ -2,266 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDE86591AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FBD65919C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbiL2Ujj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 15:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S233973AbiL2UiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 15:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234097AbiL2Uii (ORCPT
+        with ESMTP id S234000AbiL2Uhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 15:38:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8E11740D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:37:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672346267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4TT6ZnS4c4XNNryd0dblg0NDQpCD/OKbVNdhp0j+A+E=;
-        b=cneDBfrqmm+XWT5Oaa01zVxqGYjBfElO/Ks3ks4eo26deyifgYPU4JgpuFUej52WyoArO7
-        ftNcZMzeHVkIGPuqBl7Z2LCKCKSeBlit9UmZ58O+sKuKmNlTTweMurCr1EAvLY8pjuDdZu
-        TdsFuEkYHfVGQtf7UhIuZeyy/86Y8+k=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-2xsDZWeQOCSNy2qsoLlUbA-1; Thu, 29 Dec 2022 15:37:46 -0500
-X-MC-Unique: 2xsDZWeQOCSNy2qsoLlUbA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 92C461C05AC5;
-        Thu, 29 Dec 2022 20:37:45 +0000 (UTC)
-Received: from rules.brq.redhat.com (ovpn-208-2.brq.redhat.com [10.40.208.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5D0F3112132C;
-        Thu, 29 Dec 2022 20:37:43 +0000 (UTC)
-From:   Vladis Dronov <vdronov@redhat.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Nicolai Stange <nstange@suse.de>, Elliott Robert <elliott@hpe.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vladis Dronov <vdronov@redhat.com>
-Subject: [PATCH v2 2/6] crypto: xts - drop xts_check_key()
+        Thu, 29 Dec 2022 15:37:48 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2502717046
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:37:47 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id vm8so40509873ejc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:37:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PR1sxuRU/36TJDiACytBY64OGuYBjmbBR8pWbCnAcBY=;
+        b=GWZy175mB1j6fdLDvTSm6Lmk2BC9k4erUX21w+Mmc/mvwPbOo59uJFZedUv1rICbsC
+         idCKGc1Ut6k8q5neOSJMutWJvmfhEwn60I3KKX2k91P5BKI7EvJBMky6q7omvXeasaEl
+         81/xB88Dgar6X7jJUn5Tgks454bTK+OhHwuSby9q5nK2ND7GQNrHVTxiTcpJdXh0RmjM
+         RZiZ/PluNlJZ8Drt/ja086JyTH5vf1YNMHeR3cv71lji4DtdWxiLI+PruycMzh/4LRAw
+         qSc5GFio38KZkD/MSMS2gpwobZSa9snrEBLTDhwg7FDKxrEBwjkitCjoovtZe4ewgnQy
+         wlZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PR1sxuRU/36TJDiACytBY64OGuYBjmbBR8pWbCnAcBY=;
+        b=ChzQHBZebZhlsjlzbkD2f2QTHhBCHlCGza5FLHYknrywRNYXct5Uf5CqsCkRZkf8y0
+         XKRRxNUGk+7A73EWPXganqIBslfBc/QR8euzBsfsR3n2EO8uLHgIK8lnSvaWCR5ZXbAr
+         eWR4p+708cWDpPVyu4t7mGuHCFm3nYqmDDVGyGjBB3cuLShLRopWKbRMujU5tMfEpaCe
+         8+DwCHjp3t84kk9seAdbdq/36bn4rQ4rlTrpMO/vSyMUJP9LCtgk+Nkh9VWoQ6+bCXZq
+         r9Z5hew8ZZpuwDvi+PtpCWMgJ8lfUrQ2bdV7f+raeXq4XIYqhF1NH5O71U4GH4CcQLzz
+         LofQ==
+X-Gm-Message-State: AFqh2kqY3zBCuKqWXarAzMy6KtXpzwFq+oW7BETHage2LIPm5gDu3rZ2
+        L1N4mPFEYVcjZrmKWGbCbRXMWA==
+X-Google-Smtp-Source: AMrXdXufFOOaHr2CU7hsFNKq4Pqijjdinl6gtA+zgaHltSxcHTAmWt73sRQKXepop457/r9988hy4w==
+X-Received: by 2002:a17:907:a407:b0:84c:7974:8a73 with SMTP id sg7-20020a170907a40700b0084c79748a73mr8259023ejc.57.1672346265657;
+        Thu, 29 Dec 2022 12:37:45 -0800 (PST)
+Received: from localhost.localdomain (mob-109-118-160-216.net.vodafone.it. [109.118.160.216])
+        by smtp.gmail.com with ESMTPSA id d16-20020a170906371000b0073d7b876621sm8872814ejc.205.2022.12.29.12.37.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 29 Dec 2022 12:37:45 -0800 (PST)
+From:   Paolo Valente <paolo.valente@linaro.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
+        glen.valante@linaro.org, damien.lemoal@opensource.wdc.com,
+        Davide Zini <davidezini2@gmail.com>,
+        Paolo Valente <paolo.valente@linaro.org>
+Subject: [PATCH V13 5/8] block, bfq: split also async bfq_queues on a per-actuator basis
 Date:   Thu, 29 Dec 2022 21:37:04 +0100
-Message-Id: <20221229203708.13628-3-vdronov@redhat.com>
-In-Reply-To: <20221229203708.13628-1-vdronov@redhat.com>
-References: <20221229203708.13628-1-vdronov@redhat.com>
+Message-Id: <20221229203707.68458-6-paolo.valente@linaro.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221229203707.68458-1-paolo.valente@linaro.org>
+References: <20221229203707.68458-1-paolo.valente@linaro.org>
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xts_check_key() is obsoleted by xts_verify_key(). Over time XTS crypto
-drivers adopted the newer xts_verify_key() variant, but xts_check_key()
-is still used by a number of drivers. Switch drivers to use the newer
-xts_verify_key() and make a couple of cleanups. This allows us to drop
-xts_check_key() completely and avoid redundancy.
+From: Davide Zini <davidezini2@gmail.com>
 
-Signed-off-by: Vladis Dronov <vdronov@redhat.com>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Similarly to sync bfq_queues, also async bfq_queues need to be split
+on a per-actuator basis.
+
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+Signed-off-by: Davide Zini <davidezini2@gmail.com>
 ---
- arch/s390/crypto/paes_s390.c                  |  2 +-
- drivers/crypto/atmel-aes.c                    |  2 +-
- drivers/crypto/axis/artpec6_crypto.c          |  2 +-
- drivers/crypto/cavium/cpt/cptvf_algs.c        |  8 +++----
- .../crypto/cavium/nitrox/nitrox_skcipher.c    |  8 +++----
- drivers/crypto/ccree/cc_cipher.c              |  2 +-
- .../crypto/marvell/octeontx/otx_cptvf_algs.c  |  2 +-
- .../marvell/octeontx2/otx2_cptvf_algs.c       |  2 +-
- include/crypto/xts.h                          | 22 ++++---------------
- 9 files changed, 16 insertions(+), 34 deletions(-)
+ block/bfq-iosched.c | 41 +++++++++++++++++++++++------------------
+ block/bfq-iosched.h |  8 ++++----
+ 2 files changed, 27 insertions(+), 22 deletions(-)
 
-diff --git a/arch/s390/crypto/paes_s390.c b/arch/s390/crypto/paes_s390.c
-index a279b7d23a5e..29dc827e0fe8 100644
---- a/arch/s390/crypto/paes_s390.c
-+++ b/arch/s390/crypto/paes_s390.c
-@@ -474,7 +474,7 @@ static int xts_paes_set_key(struct crypto_skcipher *tfm, const u8 *in_key,
- 		return rc;
- 
- 	/*
--	 * xts_check_key verifies the key length is not odd and makes
-+	 * xts_verify_key verifies the key length is not odd and makes
- 	 * sure that the two keys are not the same. This can be done
- 	 * on the two protected keys as well
- 	 */
-diff --git a/drivers/crypto/atmel-aes.c b/drivers/crypto/atmel-aes.c
-index 886bf258544c..130f8bf09a9a 100644
---- a/drivers/crypto/atmel-aes.c
-+++ b/drivers/crypto/atmel-aes.c
-@@ -1879,7 +1879,7 @@ static int atmel_aes_xts_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 	struct atmel_aes_xts_ctx *ctx = crypto_skcipher_ctx(tfm);
- 	int err;
- 
--	err = xts_check_key(crypto_skcipher_tfm(tfm), key, keylen);
-+	err = xts_verify_key(tfm, key, keylen);
- 	if (err)
- 		return err;
- 
-diff --git a/drivers/crypto/axis/artpec6_crypto.c b/drivers/crypto/axis/artpec6_crypto.c
-index 51c66afbe677..f6f41e316dfe 100644
---- a/drivers/crypto/axis/artpec6_crypto.c
-+++ b/drivers/crypto/axis/artpec6_crypto.c
-@@ -1621,7 +1621,7 @@ artpec6_crypto_xts_set_key(struct crypto_skcipher *cipher, const u8 *key,
- 		crypto_skcipher_ctx(cipher);
- 	int ret;
- 
--	ret = xts_check_key(&cipher->base, key, keylen);
-+	ret = xts_verify_key(cipher, key, keylen);
- 	if (ret)
- 		return ret;
- 
-diff --git a/drivers/crypto/cavium/cpt/cptvf_algs.c b/drivers/crypto/cavium/cpt/cptvf_algs.c
-index 9eca0c302186..0b38c2600b86 100644
---- a/drivers/crypto/cavium/cpt/cptvf_algs.c
-+++ b/drivers/crypto/cavium/cpt/cptvf_algs.c
-@@ -232,13 +232,12 @@ static int cvm_decrypt(struct skcipher_request *req)
- static int cvm_xts_setkey(struct crypto_skcipher *cipher, const u8 *key,
- 		   u32 keylen)
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index b522438a61cd..9abd920467cf 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -2620,14 +2620,16 @@ static void bfq_bfqq_end_wr(struct bfq_queue *bfqq)
+ void bfq_end_wr_async_queues(struct bfq_data *bfqd,
+ 			     struct bfq_group *bfqg)
  {
--	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
--	struct cvm_enc_ctx *ctx = crypto_tfm_ctx(tfm);
-+	struct cvm_enc_ctx *ctx = crypto_skcipher_ctx(cipher);
- 	int err;
- 	const u8 *key1 = key;
- 	const u8 *key2 = key + (keylen / 2);
+-	int i, j;
+-
+-	for (i = 0; i < 2; i++)
+-		for (j = 0; j < IOPRIO_NR_LEVELS; j++)
+-			if (bfqg->async_bfqq[i][j])
+-				bfq_bfqq_end_wr(bfqg->async_bfqq[i][j]);
+-	if (bfqg->async_idle_bfqq)
+-		bfq_bfqq_end_wr(bfqg->async_idle_bfqq);
++	int i, j, k;
++
++	for (k = 0; k < bfqd->num_actuators; k++) {
++		for (i = 0; i < 2; i++)
++			for (j = 0; j < IOPRIO_NR_LEVELS; j++)
++				if (bfqg->async_bfqq[i][j][k])
++					bfq_bfqq_end_wr(bfqg->async_bfqq[i][j][k]);
++		if (bfqg->async_idle_bfqq[k])
++			bfq_bfqq_end_wr(bfqg->async_idle_bfqq[k]);
++	}
+ }
  
--	err = xts_check_key(tfm, key, keylen);
-+	err = xts_verify_key(cipher, key, keylen);
- 	if (err)
- 		return err;
- 	ctx->key_len = keylen;
-@@ -289,8 +288,7 @@ static int cvm_validate_keylen(struct cvm_enc_ctx *ctx, u32 keylen)
- static int cvm_setkey(struct crypto_skcipher *cipher, const u8 *key,
- 		      u32 keylen, u8 cipher_type)
+ static void bfq_end_wr(struct bfq_data *bfqd)
+@@ -5575,18 +5577,18 @@ static void bfq_init_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 
+ static struct bfq_queue **bfq_async_queue_prio(struct bfq_data *bfqd,
+ 					       struct bfq_group *bfqg,
+-					       int ioprio_class, int ioprio)
++					       int ioprio_class, int ioprio, int act_idx)
  {
--	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
--	struct cvm_enc_ctx *ctx = crypto_tfm_ctx(tfm);
-+	struct cvm_enc_ctx *ctx = crypto_skcipher_ctx(cipher);
- 
- 	ctx->cipher_type = cipher_type;
- 	if (!cvm_validate_keylen(ctx, keylen)) {
-diff --git a/drivers/crypto/cavium/nitrox/nitrox_skcipher.c b/drivers/crypto/cavium/nitrox/nitrox_skcipher.c
-index 248b4fff1c72..138261dcd032 100644
---- a/drivers/crypto/cavium/nitrox/nitrox_skcipher.c
-+++ b/drivers/crypto/cavium/nitrox/nitrox_skcipher.c
-@@ -337,12 +337,11 @@ static int nitrox_3des_decrypt(struct skcipher_request *skreq)
- static int nitrox_aes_xts_setkey(struct crypto_skcipher *cipher,
- 				 const u8 *key, unsigned int keylen)
- {
--	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
--	struct nitrox_crypto_ctx *nctx = crypto_tfm_ctx(tfm);
-+	struct nitrox_crypto_ctx *nctx = crypto_skcipher_ctx(cipher);
- 	struct flexi_crypto_context *fctx;
- 	int aes_keylen, ret;
- 
--	ret = xts_check_key(tfm, key, keylen);
-+	ret = xts_verify_key(cipher, key, keylen);
- 	if (ret)
- 		return ret;
- 
-@@ -362,8 +361,7 @@ static int nitrox_aes_xts_setkey(struct crypto_skcipher *cipher,
- static int nitrox_aes_ctr_rfc3686_setkey(struct crypto_skcipher *cipher,
- 					 const u8 *key, unsigned int keylen)
- {
--	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
--	struct nitrox_crypto_ctx *nctx = crypto_tfm_ctx(tfm);
-+	struct nitrox_crypto_ctx *nctx = crypto_skcipher_ctx(cipher);
- 	struct flexi_crypto_context *fctx;
- 	int aes_keylen;
- 
-diff --git a/drivers/crypto/ccree/cc_cipher.c b/drivers/crypto/ccree/cc_cipher.c
-index 309da6334a0a..2cd44d7457a4 100644
---- a/drivers/crypto/ccree/cc_cipher.c
-+++ b/drivers/crypto/ccree/cc_cipher.c
-@@ -460,7 +460,7 @@ static int cc_cipher_setkey(struct crypto_skcipher *sktfm, const u8 *key,
+ 	switch (ioprio_class) {
+ 	case IOPRIO_CLASS_RT:
+-		return &bfqg->async_bfqq[0][ioprio];
++		return &bfqg->async_bfqq[0][ioprio][act_idx];
+ 	case IOPRIO_CLASS_NONE:
+ 		ioprio = IOPRIO_BE_NORM;
+ 		fallthrough;
+ 	case IOPRIO_CLASS_BE:
+-		return &bfqg->async_bfqq[1][ioprio];
++		return &bfqg->async_bfqq[1][ioprio][act_idx];
+ 	case IOPRIO_CLASS_IDLE:
+-		return &bfqg->async_idle_bfqq;
++		return &bfqg->async_idle_bfqq[act_idx];
+ 	default:
+ 		return NULL;
  	}
- 
- 	if (ctx_p->cipher_mode == DRV_CIPHER_XTS &&
--	    xts_check_key(tfm, key, keylen)) {
-+	    xts_verify_key(sktfm, key, keylen)) {
- 		dev_dbg(dev, "weak XTS key");
- 		return -EINVAL;
- 	}
-diff --git a/drivers/crypto/marvell/octeontx/otx_cptvf_algs.c b/drivers/crypto/marvell/octeontx/otx_cptvf_algs.c
-index 80ba77c793a7..83493dd0416f 100644
---- a/drivers/crypto/marvell/octeontx/otx_cptvf_algs.c
-+++ b/drivers/crypto/marvell/octeontx/otx_cptvf_algs.c
-@@ -398,7 +398,7 @@ static int otx_cpt_skcipher_xts_setkey(struct crypto_skcipher *tfm,
- 	const u8 *key1 = key;
- 	int ret;
- 
--	ret = xts_check_key(crypto_skcipher_tfm(tfm), key, keylen);
-+	ret = xts_verify_key(tfm, key, keylen);
- 	if (ret)
- 		return ret;
- 	ctx->key_len = keylen;
-diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-index 30b423605c9c..443202caa140 100644
---- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-@@ -412,7 +412,7 @@ static int otx2_cpt_skcipher_xts_setkey(struct crypto_skcipher *tfm,
- 	const u8 *key1 = key;
- 	int ret;
- 
--	ret = xts_check_key(crypto_skcipher_tfm(tfm), key, keylen);
-+	ret = xts_verify_key(tfm, key, keylen);
- 	if (ret)
- 		return ret;
- 	ctx->key_len = keylen;
-diff --git a/include/crypto/xts.h b/include/crypto/xts.h
-index a233c1054df2..15b16c4853d8 100644
---- a/include/crypto/xts.h
-+++ b/include/crypto/xts.h
-@@ -8,23 +8,6 @@
- 
- #define XTS_BLOCK_SIZE 16
- 
--static inline int xts_check_key(struct crypto_tfm *tfm,
--				const u8 *key, unsigned int keylen)
--{
--	/*
--	 * key consists of keys of equal size concatenated, therefore
--	 * the length must be even.
--	 */
--	if (keylen % 2)
--		return -EINVAL;
--
--	/* ensure that the AES and tweak key are not identical */
--	if (fips_enabled && !crypto_memneq(key, key + (keylen / 2), keylen / 2))
--		return -EINVAL;
--
--	return 0;
--}
--
- static inline int xts_verify_key(struct crypto_skcipher *tfm,
- 				 const u8 *key, unsigned int keylen)
+@@ -5759,7 +5761,8 @@ static struct bfq_queue *bfq_get_queue(struct bfq_data *bfqd,
+ 	bfqg = bfq_bio_bfqg(bfqd, bio);
+ 	if (!is_sync) {
+ 		async_bfqq = bfq_async_queue_prio(bfqd, bfqg, ioprio_class,
+-						  ioprio);
++						  ioprio,
++						  bfq_actuator_index(bfqd, bio));
+ 		bfqq = *async_bfqq;
+ 		if (bfqq)
+ 			goto out;
+@@ -6982,13 +6985,15 @@ static void __bfq_put_async_bfqq(struct bfq_data *bfqd,
+  */
+ void bfq_put_async_queues(struct bfq_data *bfqd, struct bfq_group *bfqg)
  {
-@@ -42,7 +25,10 @@ static inline int xts_verify_key(struct crypto_skcipher *tfm,
- 	if (fips_enabled && keylen != 32 && keylen != 64)
- 		return -EINVAL;
+-	int i, j;
++	int i, j, k;
  
--	/* ensure that the AES and tweak key are not identical */
-+	/*
-+	 * Ensure that the AES and tweak key are not identical when
-+	 * in FIPS mode or the FORBID_WEAK_KEYS flag is set.
-+	 */
- 	if ((fips_enabled || (crypto_skcipher_get_flags(tfm) &
- 			      CRYPTO_TFM_REQ_FORBID_WEAK_KEYS)) &&
- 	    !crypto_memneq(key, key + (keylen / 2), keylen / 2))
+-	for (i = 0; i < 2; i++)
+-		for (j = 0; j < IOPRIO_NR_LEVELS; j++)
+-			__bfq_put_async_bfqq(bfqd, &bfqg->async_bfqq[i][j]);
++	for (k = 0; k < bfqd->num_actuators; k++) {
++		for (i = 0; i < 2; i++)
++			for (j = 0; j < IOPRIO_NR_LEVELS; j++)
++				__bfq_put_async_bfqq(bfqd, &bfqg->async_bfqq[i][j][k]);
+ 
+-	__bfq_put_async_bfqq(bfqd, &bfqg->async_idle_bfqq);
++		__bfq_put_async_bfqq(bfqd, &bfqg->async_idle_bfqq[k]);
++	}
+ }
+ 
+ /*
+diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+index 5a6f888930ad..de2b2af643e5 100644
+--- a/block/bfq-iosched.h
++++ b/block/bfq-iosched.h
+@@ -980,8 +980,8 @@ struct bfq_group {
+ 
+ 	struct bfq_data *bfqd;
+ 
+-	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS];
+-	struct bfq_queue *async_idle_bfqq;
++	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS][BFQ_MAX_ACTUATORS];
++	struct bfq_queue *async_idle_bfqq[BFQ_MAX_ACTUATORS];
+ 
+ 	struct bfq_entity *my_entity;
+ 
+@@ -998,8 +998,8 @@ struct bfq_group {
+ 	struct bfq_entity entity;
+ 	struct bfq_sched_data sched_data;
+ 
+-	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS];
+-	struct bfq_queue *async_idle_bfqq;
++	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS][BFQ_MAX_ACTUATORS];
++	struct bfq_queue *async_idle_bfqq[BFQ_MAX_ACTUATORS];
+ 
+ 	struct rb_root rq_pos_tree;
+ };
 -- 
-2.38.1
+2.20.1
 
