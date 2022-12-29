@@ -2,137 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2B7658AEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 10:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B7A658AEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 10:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiL2JY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 04:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
+        id S233065AbiL2JZb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Dec 2022 04:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiL2JYz (ORCPT
+        with ESMTP id S229483AbiL2JZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 04:24:55 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E30CDF21
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 01:24:54 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso10700127wmb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 01:24:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=osLtJOc/4PM5X4uBlOLQKHlEYcjzPp8720JlY48ebIc=;
-        b=fHcQQDQtGQAVcssMtTLRqFMbtspw8JwpnHg8lO8tJTvbHS+Vn5vGTmNgZTvmI1MntV
-         /F+OME2MZnNvnKPTB3LYC0fs0slIT1CV3qtp1b+8oeGkQ41iWZHJeOt7rkmiMsLTXffB
-         UAILq3M7H83ri4NinGUy2l2IIxIPxqF7iNuldhvOQomOVtpAhiQ4f8xu8ktZnBQrL1IZ
-         rBROWaMBqpAyUGiK565VySK/57eGx5lcdVOa8if4M7gb0Izm6wLxzs6hHOzL7ttcoiSq
-         Qq0X04+hLQgsBoYtPiJGT91EopX2ym+t3f2KdSmrWjieLaEqqVHX8FPIdLeMKjFTOZtK
-         fv4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=osLtJOc/4PM5X4uBlOLQKHlEYcjzPp8720JlY48ebIc=;
-        b=QDC+h1YKrxDYsFsK25OWUGtLlyyL9OsLl1zzvORxWvbScUTKvfIqW2OvDBCsNAv3bS
-         h2QWmcclVjIyUMZxApmpwoIzSYibq6tUDAfVX0Fkmkz7jMCAlyJUTZqFu+/0ZnF4Y8ZM
-         tD+L70rP/p7VtaQ1h8I7OURIedJvkZ06gwwwq4faESl8x3os7agP5nModM/FVkvjGjoo
-         wP5Og4enlOVEcwsrpVU82AA1HCwC8ez7BtOiBcP9gbCds2WyeS95in+xPaWRM93ljnLO
-         RiV4F+zDqgCRLowgQdXVQONQ+bGl43N71d+GfMWLG05+A89wSiXypJnN2Gq7wVuqafTT
-         gHFw==
-X-Gm-Message-State: AFqh2ko0tIILEnRrlL5cfaD0JxDXbvG3JobwSRL793MQjj3xibivA9jz
-        j/WQf58xgxBfNPAu/EeXxXk=
-X-Google-Smtp-Source: AMrXdXsypwyZC4j7d5EUZyhoYOxFhMCPePPMlU/YyWDot9po4OCgJUbdXHW7QXv54z+lGb2u6WCf4Q==
-X-Received: by 2002:a05:600c:1d8e:b0:3d6:e23:76a2 with SMTP id p14-20020a05600c1d8e00b003d60e2376a2mr19263586wms.34.1672305893029;
-        Thu, 29 Dec 2022 01:24:53 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id m4-20020a05600c3b0400b003c6b7f5567csm46125259wms.0.2022.12.29.01.24.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 01:24:52 -0800 (PST)
-Date:   Thu, 29 Dec 2022 12:24:49 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Ben Skeggs <bskeggs@redhat.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>
-Subject: drivers/gpu/drm/nouveau/nvkm/engine/fifo/chan.c:282
- nvkm_chan_cctx_get() warn: inconsistent returns '&cgrp->mutex'.
-Message-ID: <202212260844.AYAkoVok-lkp@intel.com>
+        Thu, 29 Dec 2022 04:25:29 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E39AFFD00;
+        Thu, 29 Dec 2022 01:25:24 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BT9NxtqE021772, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BT9NxtqE021772
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 29 Dec 2022 17:23:59 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.9; Thu, 29 Dec 2022 17:24:53 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 29 Dec 2022 17:24:52 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Thu, 29 Dec 2022 17:24:52 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tehuang@realtek.com" <tehuang@realtek.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+Thread-Topic: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+Thread-Index: AQHZGsFtJHlbRNsmYUOpTa0F4ufSPq6EmMng
+Date:   Thu, 29 Dec 2022 09:24:52 +0000
+Message-ID: <92eb7dfa8b7d447e966a2751e174b642@realtek.com>
+References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
+ <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/29_=3F=3F_07:25:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   72a85e2b0a1e1e6fb4ee51ae902730212b2de25c
-commit: f48dd2936138882d7755cbbc5d9984015c75980c drm/nouveau/fifo: add new engine context tracking
-config: s390-randconfig-m041-20221225
-compiler: s390-linux-gcc (GCC) 12.1.0
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
 
-smatch warnings:
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/chan.c:282 nvkm_chan_cctx_get() warn: inconsistent returns '&cgrp->mutex'.
+> -----Original Message-----
+> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Sent: Wednesday, December 28, 2022 9:36 PM
+> To: linux-wireless@vger.kernel.org
+> Cc: tony0620emma@gmail.com; kvalo@kernel.org; Ping-Ke Shih <pkshih@realtek.com>; tehuang@realtek.com;
+> s.hauer@pengutronix.de; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Martin Blumenstingl
+> <martin.blumenstingl@googlemail.com>
+> Subject: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+> 
+> The eFuse definitions in the rtw88 are using structs to describe the
+> eFuse contents. Add the packed attribute to all structs used for the
+> eFuse description so the compiler doesn't add gaps or re-order
+> attributes.
+> 
+> Also change the type of the res2..res3 eFuse fields to u16 to avoid the
+> following warning, now that their surrounding struct has the packed
+> attribute:
+>   note: offset of packed bit-field 'res2' has changed in GCC 4.4
+> 
+> Fixes: e3037485c68e ("rtw88: new Realtek 802.11ac driver")
+> Fixes: ab0a031ecf29 ("rtw88: 8723d: Add read_efuse to recognize efuse info from map")
+> Fixes: 769a29ce2af4 ("rtw88: 8821c: add basic functions")
+> Fixes: 87caeef032fc ("wifi: rtw88: Add rtw8723du chipset support")
+> Fixes: aff5ffd718de ("wifi: rtw88: Add rtw8821cu chipset support")
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>  drivers/net/wireless/realtek/rtw88/main.h     |  6 +++---
+>  drivers/net/wireless/realtek/rtw88/rtw8723d.h |  6 +++---
+>  drivers/net/wireless/realtek/rtw88/rtw8821c.h | 20 +++++++++----------
+>  drivers/net/wireless/realtek/rtw88/rtw8822b.h | 20 +++++++++----------
+>  drivers/net/wireless/realtek/rtw88/rtw8822c.h | 20 +++++++++----------
+>  5 files changed, 36 insertions(+), 36 deletions(-)
+> 
 
-vim +282 drivers/gpu/drm/nouveau/nvkm/engine/fifo/chan.c
+[...]
 
-f48dd293613888 Ben Skeggs 2022-06-01  241  int
-f48dd293613888 Ben Skeggs 2022-06-01  242  nvkm_chan_cctx_get(struct nvkm_chan *chan, struct nvkm_engn *engn, struct nvkm_cctx **pcctx,
-f48dd293613888 Ben Skeggs 2022-06-01  243  		   struct nvkm_client *client)
-f48dd293613888 Ben Skeggs 2022-06-01  244  {
-f48dd293613888 Ben Skeggs 2022-06-01  245  	struct nvkm_cgrp *cgrp = chan->cgrp;
-f48dd293613888 Ben Skeggs 2022-06-01  246  	struct nvkm_vctx *vctx;
-f48dd293613888 Ben Skeggs 2022-06-01  247  	struct nvkm_cctx *cctx;
-f48dd293613888 Ben Skeggs 2022-06-01  248  	int ret;
-f48dd293613888 Ben Skeggs 2022-06-01  249  
-f48dd293613888 Ben Skeggs 2022-06-01  250  	/* Look for an existing channel context for this engine+VEID. */
-f48dd293613888 Ben Skeggs 2022-06-01  251  	mutex_lock(&cgrp->mutex);
-f48dd293613888 Ben Skeggs 2022-06-01  252  	cctx = nvkm_list_find(cctx, &chan->cctxs, head,
-f48dd293613888 Ben Skeggs 2022-06-01  253  			      cctx->vctx->ectx->engn == engn && cctx->vctx->vmm == chan->vmm);
-f48dd293613888 Ben Skeggs 2022-06-01  254  	if (cctx) {
-f48dd293613888 Ben Skeggs 2022-06-01  255  		refcount_inc(&cctx->refs);
-f48dd293613888 Ben Skeggs 2022-06-01  256  		*pcctx = cctx;
-f48dd293613888 Ben Skeggs 2022-06-01  257  		mutex_unlock(&chan->cgrp->mutex);
+> @@ -43,13 +43,13 @@ struct rtw8821ce_efuse {
+>  	u8 link_cap[4];
+>  	u8 link_control[2];
+>  	u8 serial_number[8];
+> -	u8 res0:2;			/* 0xf4 */
+> -	u8 ltr_en:1;
+> -	u8 res1:2;
+> -	u8 obff:2;
+> -	u8 res2:3;
+> -	u8 obff_cap:2;
+> -	u8 res3:4;
+> +	u16 res0:2;			/* 0xf4 */
+> +	u16 ltr_en:1;
+> +	u16 res1:2;
+> +	u16 obff:2;
+> +	u16 res2:3;
+> +	u16 obff_cap:2;
+> +	u16 res3:4;
 
-This code is correct, but smatch wants people to use "&cgrp->mutex"
-constistently instead of "&chan->cgrp->mutex".
+These should be __le16. Though bit fields are suitable to efuse layout, 
+we don't access these fields for now. It would be well.
 
-f48dd293613888 Ben Skeggs 2022-06-01  258  		return 0;
-f48dd293613888 Ben Skeggs 2022-06-01  259  	}
-f48dd293613888 Ben Skeggs 2022-06-01  260  
-f48dd293613888 Ben Skeggs 2022-06-01  261  	/* Nope - create a fresh one.  But, sub-context first. */
-f48dd293613888 Ben Skeggs 2022-06-01  262  	ret = nvkm_cgrp_vctx_get(cgrp, engn, chan, &vctx, client);
-f48dd293613888 Ben Skeggs 2022-06-01  263  	if (ret) {
-f48dd293613888 Ben Skeggs 2022-06-01  264  		CHAN_ERROR(chan, "vctx %d[%s]: %d", engn->id, engn->engine->subdev.name, ret);
-f48dd293613888 Ben Skeggs 2022-06-01  265  		goto done;
-f48dd293613888 Ben Skeggs 2022-06-01  266  	}
-f48dd293613888 Ben Skeggs 2022-06-01  267  
-f48dd293613888 Ben Skeggs 2022-06-01  268  	/* Now, create the channel context - to track engine binding. */
-f48dd293613888 Ben Skeggs 2022-06-01  269  	CHAN_TRACE(chan, "ctor cctx %d[%s]", engn->id, engn->engine->subdev.name);
-f48dd293613888 Ben Skeggs 2022-06-01  270  	if (!(cctx = *pcctx = kzalloc(sizeof(*cctx), GFP_KERNEL))) {
-f48dd293613888 Ben Skeggs 2022-06-01  271  		nvkm_cgrp_vctx_put(cgrp, &vctx);
-f48dd293613888 Ben Skeggs 2022-06-01  272  		ret = -ENOMEM;
-f48dd293613888 Ben Skeggs 2022-06-01  273  		goto done;
-f48dd293613888 Ben Skeggs 2022-06-01  274  	}
-f48dd293613888 Ben Skeggs 2022-06-01  275  
-f48dd293613888 Ben Skeggs 2022-06-01  276  	cctx->vctx = vctx;
-f48dd293613888 Ben Skeggs 2022-06-01  277  	refcount_set(&cctx->refs, 1);
-f48dd293613888 Ben Skeggs 2022-06-01  278  	refcount_set(&cctx->uses, 0);
-f48dd293613888 Ben Skeggs 2022-06-01  279  	list_add_tail(&cctx->head, &chan->cctxs);
-f48dd293613888 Ben Skeggs 2022-06-01  280  done:
-f48dd293613888 Ben Skeggs 2022-06-01  281  	mutex_unlock(&cgrp->mutex);
-f48dd293613888 Ben Skeggs 2022-06-01 @282  	return ret;
-f48dd293613888 Ben Skeggs 2022-06-01  283  }
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[...]
 
