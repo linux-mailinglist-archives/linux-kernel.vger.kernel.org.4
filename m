@@ -2,117 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C6265926C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 23:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10123659275
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 23:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234108AbiL2WRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 17:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S234129AbiL2Wa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 17:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiL2WRc (ORCPT
+        with ESMTP id S229871AbiL2Wa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 17:17:32 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5B710FEB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 14:17:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672352250; x=1703888250;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=0Bwu8q8NcSs4olMgZzczoNf795r7NhoTTUkYK+RcF7Q=;
-  b=ZSBq+/lb4rIUBzhS3X1/mMkVe9bGSM3bV+4UzB8L1F1mGWrbFf57Ir1s
-   K2wX4F1ui/QkZUw10zDIikQ/8w8vAxTFFvlOKwa2QwMK+KXqkRsILBUoT
-   cLocXdiTzo1cWvs8jQ41flNCZuklA+vd5HuO0e0noX44hY8FWyjDn7DIl
-   rI5nC4MKMR8pwTL68O74TfQHXm5eGwPUE3uAZr8Zj5TtUQCqpmKaMhGET
-   JdWJDO+n6GVrqoUHfA/M8jOEDhe//+DbmD8ZPVMBbVeiojed88xB3x/vn
-   Ev7Ucc2kjtDbYPOPgjE1g/WUYv3kq7EMOPLfF4GVqX2fryQGqOZCDt6pn
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="385547734"
-X-IronPort-AV: E=Sophos;i="5.96,285,1665471600"; 
-   d="scan'208";a="385547734"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 14:17:30 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="899094694"
-X-IronPort-AV: E=Sophos;i="5.96,285,1665471600"; 
-   d="scan'208";a="899094694"
-Received: from iweiny-desk3.amr.corp.intel.com (HELO localhost) ([10.212.27.114])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 14:17:29 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-Date:   Thu, 29 Dec 2022 14:17:15 -0800
-Subject: [PATCH v2] checkpatch: Mark kunmap() and kunmap_atomic() deprecated
+        Thu, 29 Dec 2022 17:30:57 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4C0BC25
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 14:30:56 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id k19so5759670pfg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 14:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/T7t6TqLFYse20ylRlVN/6lR+B2I/VOA2dwMXXCSOuk=;
+        b=YxCiGBDi8ZLG/+4RsZkzEV/FWaasqxmdRL4VKK2MsCWqNDUoQvbsvcMjHZC6LNvZr7
+         HdUVkwsU+nfs6NNknJCj4l8MUx+xDcaFgZF5mmA/omnDtZg1/IrhEOw1ib8oqx15HN/Q
+         yaCN6dWS1B3r/xZqzqQIV3jDJU2c+7LHgMyKm+00vLFgEIjKUNimp6gzBCISbdAW+Ttt
+         CD6FBsxslNIGKZRlHfLQNQP5jxIbP6fp8JrGBu/CVfSFyFikzQGisEr8S/DiP7s6pz1a
+         Z5/6ykkH0NtnO6c7cDxrrRmh6bVEYUn9gVmGunARS5Uneo4S0AJUtQ0yF/psORuO7TWz
+         IKWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/T7t6TqLFYse20ylRlVN/6lR+B2I/VOA2dwMXXCSOuk=;
+        b=mpgs0AaZqshxDBaM12SYQOcM5V8bf6mHnDPa15uB8ucJx6oGj9MJINL50F1OpK+7ne
+         2lVkf7eazcRSfJVUUheDOYAab2zlWvHF0UOI8Hsf2jwE5iFYvU1YaM09sJzgAEOvOqQg
+         lmlylLCKUpShIthCugVL/vJtAjGYLD7/KsfATr0kHxMlPvIUTa4gROTPpqGRN+3QizcX
+         snkhAjEhVeSg1ELK4Qo1P8rx6xIbbVzNXTUrs3p2a4z6sATTMZPp4ok/3HTLChmuXKfA
+         iEv9cIZVuOM1mXNbjHYFQm5zpblhq+6/7bW7wMJduL9dm1bHZy/1v6TaM0Unz4St4ACT
+         SxMA==
+X-Gm-Message-State: AFqh2kqA6Z16bTX+7ff6GvTojxKLQGZF/aw1Q/JPOIlpIdfF7sH8+/py
+        hBZCxGrehDAe9JuLMv3cQRKcwg==
+X-Google-Smtp-Source: AMrXdXuHIj+DCE+mwA4RZWLh+xZAPbs9xd95o8uZw9dwZkUO+L5+0IrPo1Qt2sgvYpYVIwwOkvi3zQ==
+X-Received: by 2002:a62:4e93:0:b0:57f:ef11:acf9 with SMTP id c141-20020a624e93000000b0057fef11acf9mr28967825pfb.10.1672353055934;
+        Thu, 29 Dec 2022 14:30:55 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id y18-20020aa79432000000b00577617c05ecsm12552429pfo.130.2022.12.29.14.30.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 14:30:55 -0800 (PST)
+Date:   Thu, 29 Dec 2022 14:30:51 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch v3 5/9] KVM: x86/mmu: Allocate TDP page table's page on
+ correct NUMA node on split
+Message-ID: <Y64VG4Bl0fujE2qG@google.com>
+References: <20221222023457.1764-1-vipinsh@google.com>
+ <20221222023457.1764-6-vipinsh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221229-kmap-checkpatch-v2-1-919fc4d4e3c2@intel.com>
-X-B4-Tracking: v=1; b=H4sIAOsRrmMC/3WNQQ6CMBBFr0K6toaOAdEV9zAspuNgJ0ghbUM0h
- Ltb2Lt8/+flrSpyEI7qXqwq8CJRJp8BToUih/7FWp6ZFZQABuCmhxFnTY5pmDGR09f6QgRI3HCl
- smUxsrYBPbndGzEmDvsxB+7lc6QeXWYnMU3he5QXs6//I4vRRte2qS31VdmU2IpP/D7TNKpu27Y
- fiGunX8cAAAA=
-To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-X-Mailer: b4 0.11.0-dev-e429b
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1672352249; l=1755;
- i=ira.weiny@intel.com; s=20221222; h=from:subject:message-id;
- bh=0Bwu8q8NcSs4olMgZzczoNf795r7NhoTTUkYK+RcF7Q=;
- b=q+zqaU3yZQLK9mLV87owPphuNImMaR2BK1Wmml93OLfYS0h5tmM/uABVHYQCv5AfOMmt9Atjauk2
- Ol+4WJUZBF0TrnGA323037ThscjkaQ+hhk+U6aN2G8twF7HCVc3b
-X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
- pk=brwqReAJklzu/xZ9FpSsMPSQ/qkSalbg6scP3w809Ec=
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221222023457.1764-6-vipinsh@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was suggested by Fabio that kunmap() be marked deprecated in
-checkpatch.[1]  This did not seem necessary until an invalid conversion
-of kmap_local_page() appeared in mainline.[2][3]  The introduction of
-this bug would have been flagged with kunmap() being marked deprecated.
+On Wed, Dec 21, 2022 at 06:34:53PM -0800, Vipin Sharma wrote:
+> When dirty log is enabled, huge pages are split. Page table's pages
+> during the split are allocated based on the current thread NUMA node or
+> mempolicy. This causes inefficient page table accesses if underlying
+> page is on a different NUMA node
+> 
+> Allocate page table's pages on the same NUMA node as the underlying huge
+> page when dirty log is enabled and huge pages are split.
+> 
+> The performance gain during the pre-copy phase of live migrations of a
+> 416 vCPUs and 11 TiB memory VM  on a 8 node host was seen in the range
+> of 130% to 150%.
 
-Add kunmap() and kunmap_atomic() to checkpatch to help prevent further
-confusion.
+Can you be more specific about this. "The performance" is vague. I know
+it's an internal workload and fully explaining it would be difficult,
+but you can give readers a slightly more specific idea of what improved.
+e.g.
 
-[1] https://lore.kernel.org/all/1884934.6tgchFWduM@suse/
-[2] d406d26745ab ("cifs: skip alloc when request has no pages")
-[3] https://lore.kernel.org/r/20221229-cifs-kmap-v1-1-c70d0e9a53eb@intel.com
+ When testing with a synthetic write-heavy workload in a 416 vCPU VM on
+ an 8 NUMA node host, the throughput increased by 150% from X to Y
+ operations per second.
 
-Cc: Andy Whitcroft <apw@canonical.com>
-Cc: Joe Perches <joe@perches.com>
-Suggested-by: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
----
-Changes in v2:
-- Add LKML and send directly to Andy and Joe (I'm still learning b4 send...)
-- Link to v1: https://lore.kernel.org/r/20221229-kmap-checkpatch-v1-1-6b86bcf5080a@intel.com
----
- scripts/checkpatch.pl | 2 ++
- 1 file changed, 2 insertions(+)
+It's also necessary to characterize the improvement relative to the
+performance when dirty logging is not enabled. Whithout that information
+it would be hard for an unfamiliar reader to understand how useful this
+change really is.
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 78cc595b98ce..a6d6d7e1d0cf 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -823,7 +823,9 @@ our %deprecated_apis = (
- 	"get_state_synchronize_sched"		=> "get_state_synchronize_rcu",
- 	"cond_synchronize_sched"		=> "cond_synchronize_rcu",
- 	"kmap"					=> "kmap_local_page",
-+	"kunmap"				=> "kunmap_local",
- 	"kmap_atomic"				=> "kmap_local_page",
-+	"kunmap_atomic"				=> "kunmap_local",
- );
- 
- #Create a search pattern for all these strings to speed up a loop below
+For example, let's say the throughput of your workload is 100,000
+operations per second before dirty logging is enabled, and that drops
+down to 1,000 operations per second after dirty logging is enabled. This
+commit could increase that by 150% to 2,500 operations per second, but
+that's actually not a very meaningful improvement since, either way,
+guest performance is degraded by 95+% during dirty logging.
 
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20221229-kmap-checkpatch-763cc2ace8e5
+On the other hand, if performance goes from 100,000 to 30,000 normally,
+and this commit increases that 30,000 to 75,000 (150%), that's a much
+more meaningful improvement.
 
-Best regards,
--- 
-Ira Weiny <ira.weiny@intel.com>
+> 
+> Suggested-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++----
+>  include/linux/kvm_host.h   | 18 ++++++++++++++++++
+>  2 files changed, 26 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 4974fa96deff..376b8dceb3f9 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -1403,7 +1403,7 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
+>  	return spte_set;
+>  }
+>  
+> -static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+> +static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
+>  {
+>  	struct kvm_mmu_page *sp;
+>  
+> @@ -1413,7 +1413,8 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+>  	if (!sp)
+>  		return NULL;
+>  
+> -	sp->spt = (void *)__get_free_page(gfp);
+> +	sp->spt = kvm_mmu_get_free_page(nid, gfp);
+> +
+>  	if (!sp->spt) {
+>  		kmem_cache_free(mmu_page_header_cache, sp);
+>  		return NULL;
+> @@ -1427,6 +1428,9 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+>  						       bool shared)
+>  {
+>  	struct kvm_mmu_page *sp;
+> +	int nid;
+> +
+> +	nid = kvm_pfn_to_page_table_nid(spte_to_pfn(iter->old_spte));
+>  
+>  	/*
+>  	 * Since we are allocating while under the MMU lock we have to be
+> @@ -1437,7 +1441,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+>  	 * If this allocation fails we drop the lock and retry with reclaim
+>  	 * allowed.
+>  	 */
+> -	sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
+> +	sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_NOWAIT | __GFP_ACCOUNT);
+>  	if (sp)
+>  		return sp;
+>  
+> @@ -1449,7 +1453,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+>  		write_unlock(&kvm->mmu_lock);
+>  
+>  	iter->yielded = true;
+> -	sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
+> +	sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_KERNEL_ACCOUNT);
+>  
+>  	if (shared)
+>  		read_lock(&kvm->mmu_lock);
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index d48064503b88..a262e15ebd19 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1583,6 +1583,24 @@ void kvm_arch_sync_events(struct kvm *kvm);
+>  int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
+>  
+>  struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn);
+> +
+> +/*
+> + * Tells the appropriate NUMA node location of the page table's page based on
+> + * pfn it will point to.
+
+I know what you are trying to say but the wording is a bit awkward. e.g.
+"Tells" instead of "Returns", "location" is redundant, "page table's
+page", etc. Suggest this:
+
+/*
+ * Returns an appropriate NUMA node on which to allocate a page table that
+ * maps @pfn.
+ */
+
+> + *
+> + * Return the nid of the page if pfn is valid and backed by a refcounted page,
+> + * otherwise, return the nearest memory node for the current CPU.
+
+I would just drop this as it's just restating the code, which is already
+very readable.
+
+> + */
+> +static inline int kvm_pfn_to_page_table_nid(kvm_pfn_t pfn)
+> +{
+> +	struct page *page = kvm_pfn_to_refcounted_page(pfn);
+> +
+> +	if (page)
+> +		return page_to_nid(page);
+> +	else
+> +		return numa_mem_id();
+> +}
+> +
+>  bool kvm_is_zone_device_page(struct page *page);
+>  
+>  struct kvm_irq_ack_notifier {
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+> 
