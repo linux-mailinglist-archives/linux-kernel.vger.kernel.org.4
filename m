@@ -2,99 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE61E658CED
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B215E658CF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiL2M5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:57:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S233264AbiL2M6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiL2M5c (ORCPT
+        with ESMTP id S229611AbiL2M6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:57:32 -0500
-Received: from mail.holmansrus.com (unknown [143.59.183.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E5F13D5D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:57:30 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.holmansrus.com (Postfix) with ESMTP id B7B62E1D70;
-        Thu, 29 Dec 2022 06:57:29 -0600 (CST)
-Received: from mail.holmansrus.com ([127.0.0.1])
-        by localhost (mail.holmansrus.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Za0-y-PG-rg2; Thu, 29 Dec 2022 06:57:29 -0600 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.holmansrus.com (Postfix) with ESMTP id 0003CE1CFB;
-        Thu, 29 Dec 2022 06:57:28 -0600 (CST)
-X-Virus-Scanned: amavisd-new at holmansrus.com
-Received: from mail.holmansrus.com ([127.0.0.1])
-        by localhost (mail.holmansrus.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id rEt54f3WH5uz; Thu, 29 Dec 2022 06:57:28 -0600 (CST)
-Received: from mail.holmansrus.com (mail.holmansrus.com [10.90.0.246])
-        by mail.holmansrus.com (Postfix) with ESMTP id AB6E3E1D01;
-        Thu, 29 Dec 2022 06:57:28 -0600 (CST)
-Date:   Thu, 29 Dec 2022 06:57:28 -0600 (CST)
-From:   Walt Holman <walt@holmansrus.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <255732713.91.1672318648501.JavaMail.zimbra@holmansrus.com>
-In-Reply-To: <Y60+ClXkkBAfKhUf@kroah.com>
-References: <933489772.83.1672266579857.JavaMail.zimbra@holmansrus.com> <Y60+ClXkkBAfKhUf@kroah.com>
-Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
+        Thu, 29 Dec 2022 07:58:39 -0500
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38E613DE9;
+        Thu, 29 Dec 2022 04:58:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1672318719; x=1703854719;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=fPipVc4z0gWEOJMhi7+Lql0b+KIlINn8rsi5K72nNU4=;
+  b=ivk5BPlqnEWddg5acAzcTnHH1K+W/6wzAZPtFSgdy3psZmNR5SCs/8pg
+   1ruuq/VqT2Wan9d5wwFYOS3L8W7atHstEFewZxLvHi9/ub5XTzjVUMEBy
+   DdpLtXGqKBFdVj4IYUZqKcPkbuPW60a3bT/7DxDIWUCogufMdF6d44go+
+   Y=;
+X-IronPort-AV: E=Sophos;i="5.96,284,1665446400"; 
+   d="scan'208";a="166123243"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-26a610d2.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 12:58:37 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-26a610d2.us-west-2.amazon.com (Postfix) with ESMTPS id 6032441886;
+        Thu, 29 Dec 2022 12:58:36 +0000 (UTC)
+Received: from EX19D024UWB003.ant.amazon.com (10.13.138.126) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Thu, 29 Dec 2022 12:58:35 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D024UWB003.ant.amazon.com (10.13.138.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.20; Thu, 29 Dec 2022 12:58:35 +0000
+Received: from dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (10.15.11.255)
+ by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP Server id
+ 15.0.1497.42 via Frontend Transport; Thu, 29 Dec 2022 12:58:35 +0000
+Received: by dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (Postfix, from userid 23027615)
+        id C228220D25; Thu, 29 Dec 2022 13:58:33 +0100 (CET)
+From:   Pratyush Yadav <ptyadav@amazon.de>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: [PATCH v2 1/3] ACPI: processor: perflib: Use the "no limit"
+ frequency QoS
+References: <12138067.O9o76ZdvQC@kreacher> <12124970.O9o76ZdvQC@kreacher>
+Date:   Thu, 29 Dec 2022 13:58:33 +0100
+In-Reply-To: <12124970.O9o76ZdvQC@kreacher> (Rafael J. Wysocki's message of
+        "Wed, 28 Dec 2022 22:21:49 +0100")
+Message-ID: <mafs0sfgybc3q.fsf_-_@amazon.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.90.0.246]
-X-Mailer: Zimbra 8.8.15_GA_4484 (ZimbraWebClient - GC108 (Linux)/8.8.15_GA_4481)
-Thread-Topic: 6.1.2-rc1 review
-Thread-Index: ersqxz6lVnikKAcGC4xoUSRYuHBNOQ==
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Dec 29, 2022, at 1:13 AM, Greg KH gregkh@linuxfoundation.org wrote:
+Hi Rafael,
 
-> On Wed, Dec 28, 2022 at 04:29:39PM -0600, Walt Holman wrote:
->> > This is the start of the stable review cycle for the 6.1.2 release.
->> > There are 1146 patches in this series, all will be posted as a response
->> > to this one.  If anyone has any issues with these being applied, please
->> > let me know.
->> > 
->> > Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
->> > Anything received after that time might be too late.
->> > 
->> > The whole patch series can be found in one patch at:
->> > [ https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
->> > | https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
->> > ] > or in the git tree and branch at:
->> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
->> > 	linux-6.1.y
->> > and the diffstat can be found below.
->> > 
->> > thanks,
->> > 
->> > greg k-h
->> > 
->> > -------------
->> 
->> Hello,
->> 
->> I'm getting a NULL Pointer Dereference when shutting down or rebooting. It
->> happens just as it tries to shut down the swap device ( /dev/dm-3 ). This
->> happens late in the shutdown process and nothing gets saved in the logs.
->> However, I've attached a photo of my screen showing the Oops and stack trace.
->> Let me know if there's anything you'd like me to try.
-> 
-> Does this happen with 6.1.1 also?
-> 
-> Can you use 'git bisect' to track down the offending change?
-> 
-> thanks,
-> 
-> greg k-h
+On Wed, Dec 28 2022, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> When _PPC returns 0, it means that the CPU frequency is not limited by
+> the platform firmware, so make acpi_processor_get_platform_limit()
+> update the frequency QoS request used by it to "no limit" in that case.
+>
+> This addresses a problem with limiting CPU frequency artificially on
+> some systems after CPU offline/online to the frequency that corresponds
+> to the first entry in the _PSS return package.
+>
+> Reported-by: Pratyush Yadav <ptyadav@amazon.de>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>
+> v1 -> v2:
+>    * Move some changes into a separate patch
+>    * Update the changelog accordingly
+>
+> ---
+>  drivers/acpi/processor_perflib.c |   20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
+>
+> Index: linux-pm/drivers/acpi/processor_perflib.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/processor_perflib.c
+> +++ linux-pm/drivers/acpi/processor_perflib.c
+> @@ -53,6 +53,8 @@ static int acpi_processor_get_platform_l
+>  {
+>         acpi_status status = 0;
+>         unsigned long long ppc = 0;
+> +       s32 qos_value;
+> +       int index;
+>         int ret;
+>
+>         if (!pr)
+> @@ -72,17 +74,27 @@ static int acpi_processor_get_platform_l
+>                 }
+>         }
+>
+> +       index = ppc;
+> +
+>         pr_debug("CPU %d: _PPC is %d - frequency %s limited\n", pr->id,
+> -                      (int)ppc, ppc ? "" : "not");
+> +                index, index ? "is" : "is not");
+>
+> -       pr->performance_platform_limit = (int)ppc;
+> +       pr->performance_platform_limit = index;
+>
+>         if (ppc >= pr->performance->state_count ||
+>             unlikely(!freq_qos_request_active(&pr->perflib_req)))
+>                 return 0;
+>
+> -       ret = freq_qos_update_request(&pr->perflib_req,
+> -                       pr->performance->states[ppc].core_frequency * 1000);
+> +       /*
+> +        * If _PPC returns 0, it means that all of the available states can be
+> +        * used ("no limit").
+> +        */
+> +       if (index == 0)
+> +               qos_value = FREQ_QOS_MAX_DEFAULT_VALUE;
 
-This does NOT happen with 6.1.1 I'll get on bisecting here in a bit. I'm wondering about the changes that were made to blk-mq.c  That's where the new quiesce code and the null pointer dereference occur. I'll start by rolling back that commit and see what happens before bisecting. 
+One small thing I noticed: in acpi_processor_ppc_init() "no limit" value
+is set to INT_MAX and here it is set to FREQ_QOS_MAX_DEFAULT_VALUE. Both
+should evaluate to the same value but I think it would be nice if the
+same thing is used in both places. Perhaps you can fix that up when
+applying?
 
--Walt 
+Other than this,
+
+Reviewed-by: Pratyush Yadav <ptyadav@amazon.de>
+Tested-by: Pratyush Yadav <ptyadav@amazon.de>
+
+Thanks for working on this.
+
+> +       else
+> +               qos_value = pr->performance->states[index].core_frequency * 1000;
+> +
+> +       ret = freq_qos_update_request(&pr->perflib_req, qos_value);
+>         if (ret < 0) {
+>                 pr_warn("Failed to update perflib freq constraint: CPU%d (%d)\n",
+>                         pr->id, ret);
+>
+>
+>
+
+-- 
+Regards,
+Pratyush Yadav
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
