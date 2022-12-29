@@ -2,109 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF69658C8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02C3658CAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbiL2MJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S231176AbiL2M0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiL2MJi (ORCPT
+        with ESMTP id S229535AbiL2M0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:09:38 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F885FFA
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:09:37 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NjRxC1SFtz16LvT;
-        Thu, 29 Dec 2022 20:08:15 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 29 Dec 2022 20:09:32 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
-CC:     <linux-kernel@vger.kernel.org>, <willy@infradead.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH] mm: huge_memory: convert split_huge_pages_all() to use a folio
-Date:   Thu, 29 Dec 2022 20:25:03 +0800
-Message-ID: <20221229122503.149083-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 29 Dec 2022 07:26:39 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E7F263C;
+        Thu, 29 Dec 2022 04:26:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672316798; x=1703852798;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dn3epGzIAwWUMYhcvjgvIraCnxNDGBxxZThnjliU4Tw=;
+  b=Z+3/Dx+hEFfWZ/sCBI1YvpUQ59mO+HGjoUbRf7n6iQ4+do1cOFk5K+p8
+   5Azf0GI9dNqszWyFX3nc0jDoXLIeUPxFyF5Ud1q8hM6inagu2ILLTKESv
+   Q8mSZQ/5pFugLwP/I153CGTF1MHth9nHcluMcqtTGf/mqi/Fv03FS8DHf
+   ANDoLtuS1KrFAHO2VQ+emWXJ5FauZLYz9YdY3/y/vvcX7wS6kzpnua9Ao
+   N40jQpOcz9oSejYeS3pk51Ke1jFjWO6G9wCjEUf44T6wH1B6n+iLQnYYC
+   JL8ZEm3pMwuhnXstN31Q+SEenPHonuSHa05q6jihbnRahJxdSNebhViht
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="348243043"
+X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
+   d="scan'208";a="348243043"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 04:26:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="795956079"
+X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
+   d="scan'208";a="795956079"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 04:26:34 -0800
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajat.khandelwal@intel.com,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH] igc: Mask replay rollover/timeout errors in I225_LMVP
+Date:   Thu, 29 Dec 2022 17:56:40 +0530
+Message-Id: <20221229122640.239859-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Straightforwardly convert split_huge_pages_all() to use a folio.
+The CPU logs get flooded with replay rollover/timeout AER errors in
+the system with i225_lmvp connected, usually inside thunderbolt devices.
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+One of the prominent TBT4 docks we use is HP G4 Hook2, which incorporates
+an Intel Foxville chipset, which uses the igc driver.
+On connecting ethernet, CPU logs get inundated with these errors. The point
+is we shouldn't be spamming the logs with such correctible errors as it
+confuses other kernel developers less familiar with PCI errors, support
+staff, and users who happen to look at the logs.
+
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
 ---
- mm/huge_memory.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_main.c | 28 +++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 266c4b557946..c8cbe7f62eaa 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2932,6 +2932,7 @@ static void split_huge_pages_all(void)
- {
- 	struct zone *zone;
- 	struct page *page;
-+	struct folio *folio;
- 	unsigned long pfn, max_zone_pfn;
- 	unsigned long total = 0, split = 0;
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index ebff0e04045d..a3a6e8086c8d 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -6201,6 +6201,26 @@ u32 igc_rd32(struct igc_hw *hw, u32 reg)
+ 	return value;
+ }
  
-@@ -2944,24 +2945,32 @@ static void split_huge_pages_all(void)
- 			int nr_pages;
- 
- 			page = pfn_to_online_page(pfn);
--			if (!page || !get_page_unless_zero(page))
-+			if (!page || PageTail(page))
-+				continue;
-+			folio = page_folio(page);
-+			if (!folio_try_get(folio))
- 				continue;
- 
--			if (zone != page_zone(page))
-+			if (unlikely(page_folio(page) != folio))
-+				goto next;
++#ifdef CONFIG_PCIEAER
++static void igc_mask_aer_replay_correctible(struct igc_adapter *adapter)
++{
++	struct pci_dev *pdev = adapter->pdev;
++	u32 aer_pos, corr_mask;
 +
-+			if (zone != folio_zone(folio))
- 				goto next;
++	if (pdev->device != IGC_DEV_ID_I225_LMVP)
++		return;
++
++	aer_pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_ERR);
++	if (!aer_pos)
++		return;
++
++	pci_read_config_dword(pdev, aer_pos + PCI_ERR_COR_MASK, &corr_mask);
++
++	corr_mask |= PCI_ERR_COR_REP_ROLL | PCI_ERR_COR_REP_TIMER;
++	pci_write_config_dword(pdev, aer_pos + PCI_ERR_COR_MASK, corr_mask);
++}
++#endif
++
+ /**
+  * igc_probe - Device Initialization Routine
+  * @pdev: PCI device information struct
+@@ -6236,8 +6256,6 @@ static int igc_probe(struct pci_dev *pdev,
+ 	if (err)
+ 		goto err_pci_reg;
  
--			if (!PageHead(page) || PageHuge(page) || !PageLRU(page))
-+			if (!folio_test_large(folio)
-+				|| folio_test_hugetlb(folio)
-+				|| !folio_test_lru(folio))
- 				goto next;
+-	pci_enable_pcie_error_reporting(pdev);
+-
+ 	err = pci_enable_ptm(pdev, NULL);
+ 	if (err < 0)
+ 		dev_info(&pdev->dev, "PCIe PTM not supported by PCIe bus/controller\n");
+@@ -6272,6 +6290,12 @@ static int igc_probe(struct pci_dev *pdev,
+ 	if (!adapter->io_addr)
+ 		goto err_ioremap;
  
- 			total++;
--			lock_page(page);
--			nr_pages = thp_nr_pages(page);
--			if (!split_huge_page(page))
-+			folio_lock(folio);
-+			nr_pages = folio_nr_pages(folio);
-+			if (!split_folio(folio))
- 				split++;
- 			pfn += nr_pages - 1;
--			unlock_page(page);
-+			folio_unlock(folio);
- next:
--			put_page(page);
-+			folio_put(folio);
- 			cond_resched();
- 		}
- 	}
++#ifdef CONFIG_PCIEAER
++	igc_mask_aer_replay_correctible(adapter);
++#endif
++
++	pci_enable_pcie_error_reporting(pdev);
++
+ 	/* hw->hw_addr can be zeroed, so use adapter->io_addr for unmap */
+ 	hw->hw_addr = adapter->io_addr;
+ 
 -- 
-2.35.3
+2.34.1
 
