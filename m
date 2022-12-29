@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D40658E30
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E13658E33
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbiL2PAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 10:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S233351AbiL2PAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 10:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233632AbiL2PAL (ORCPT
+        with ESMTP id S233409AbiL2PAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 10:00:11 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B95812745
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:00:08 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id cf42so27842234lfb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:00:08 -0800 (PST)
+        Thu, 29 Dec 2022 10:00:45 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22249B9B
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:00:44 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id cf42so27844675lfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:00:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=iEA2z7h5roaHdOOiakFPN8EBJnuMvYFHiTI2AEUpqhw=;
-        b=PJq1TOY9Jj06YAspAhnVH2FxAQNUGaqX3QFVBVluNVRxi7CLZQHZnbEjKExGH8iLWK
-         vC9cqK2dtzbjlLUiXUhzezlYxUvQGyOaYBy4XAgZmaamqz7xTfD60TU6wLIsCmXVSEyj
-         jafMJe0shF7UJuWw65Z//ZHgH64hcQrwKNNr3irJrTAX1XB0xS6PIeLtqWHcyuD/NAmm
-         FcTLBQuV7FB2Lq9h+crFktFJD56onBCif/U8NkiWhxMcLzyZg5zNnDChGBmuTbr436q6
-         NJ0/uAsm7Mv2QToEssVFX/ReBb44ztXtxCP+4hO5HC7QXCBllnovi1SlRInk/oww03Hw
-         kwJg==
+        bh=y8T3Cnhk+uutaNaK4ajOfaW3pnDHfKYJwhA+wD1OiWw=;
+        b=TdoiO2RoNC2zxTU3D8pbHWFty1hKb8ldMAdoqf9YSFJSBcpXkjpgakhaCLJ35cp2VX
+         g4p3TpdVJpObDruBJ75yhshf0YC6GyM22GfPfUgYmlNTw76qx9uNfQGi/WvzrwppeNJx
+         CKXenA7g06ulD9DxyggRgdPrWz4FYbA7+gh2U+JPVY96ADH7j98e+vy4zkiGcCiZKDGT
+         3RfrobGtTY/Z64MRZEvCSj51+ed56nfFhOJbRWW4w/xybvAYFczplb2mh6nxNsSdWZJe
+         OGLDvfHEteWCa+cx1ASU+lWZ0LvvmX3a/IeA+OPGaHHkOPsbL2f4hIsV4IvMrouYFnZS
+         7SHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iEA2z7h5roaHdOOiakFPN8EBJnuMvYFHiTI2AEUpqhw=;
-        b=ROaKomnbwa1Fyl3Zvx2QqJkv+eMiqoqaWV96nRy6bbBwvjX6yt2Zv8EKPwk6seAOLW
-         ULqjBnE/t3pbPJfW0V49K+ppdo0N6cmjfKJijqnIq+TgovYN3j9gJnQo4MqxMwasPVQA
-         tIsdu+DxP0sX45mFaxg99gUYgq/DGH7Qtc+KRF3ln0PvXXwTXdjrPNd0o9htyHQBt2Xa
-         aOve2qVrGt1kQANpmfqlr+S7yEAcScsKYy2GKxtGAyVbDcLPOkNvn3mJcxvYlJnoTbBH
-         236FGFHao7rRNoyrpQPrm0H18Ldcbb9TRlq0uVYS8gEDjQgyx+EgGNs0FuBh2F0I7wTW
-         RPfw==
-X-Gm-Message-State: AFqh2kpjYmYqrvqyfsNuyLW0LFcsuBGhDYd4sQpW6sACM/rgAKfXZQP4
-        z8TxokrOi6fsQuHWB3hV8nikKw==
-X-Google-Smtp-Source: AMrXdXvjUjnh+EXjicjBMLnDOa1R27wsk3E+NhgFoi/e3a1XMBHabZOTZhDjPOYrfWCakxRrZvYLAg==
-X-Received: by 2002:a05:6512:3052:b0:4bc:af5:b8d9 with SMTP id b18-20020a056512305200b004bc0af5b8d9mr11605209lfb.6.1672326006638;
-        Thu, 29 Dec 2022 07:00:06 -0800 (PST)
+        bh=y8T3Cnhk+uutaNaK4ajOfaW3pnDHfKYJwhA+wD1OiWw=;
+        b=BiOeVZp6AQKSigZQZQsbZwA2ARaiS6HEmGLpZGSI9Fb/xzLJ7Pv1/83MaeBRAVBAcU
+         sW44LSDUxQU5XyEvGRS4Av4KoV7ugfnMfRwJ5Jg1DC72hMeVcjiGj6E0UtknYR5W+Q07
+         yG0ZcasEM90zqdu8JpCUPcsvLY3xDNmY7tVE/GMvkkhb9A4HAV+gpovFSqlMXPwY4O/l
+         hkYQz5ok4/jn7VGBVi4d6DFXKGmoy1Qji71fGrhLsdI6yOiGuIkFSIoMRS5iCMRWW60t
+         OFPJfe4IsTz9ZSvr5IMBoGXCpQ71GT2atUPKaI6V36K+2x/KqH956dY9brg/+QeFgCzU
+         osgA==
+X-Gm-Message-State: AFqh2krG2mG7sPOwMWVI7CmUPH+Xlv02zSieRICauH5Razs3RDqDSdZM
+        vUsmkmx+Wzmcu7FBhCeJHbQlKg==
+X-Google-Smtp-Source: AMrXdXtB+1vKWx3NpqukhYH3EN1EzdtM4nON7C728CEN/RHUhzUQyJz5672v4lVrWFePXhZTwv+6Zg==
+X-Received: by 2002:a05:6512:2030:b0:4bc:df73:4459 with SMTP id s16-20020a056512203000b004bcdf734459mr7514900lfs.29.1672326042504;
+        Thu, 29 Dec 2022 07:00:42 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b3-20020ac25623000000b004b4bae1a05asm3059669lff.293.2022.12.29.07.00.05
+        by smtp.gmail.com with ESMTPSA id b8-20020a056512070800b004cb00bf6724sm2230270lfs.143.2022.12.29.07.00.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 07:00:06 -0800 (PST)
-Message-ID: <a3338564-c895-5558-8953-38287ea74797@linaro.org>
-Date:   Thu, 29 Dec 2022 16:00:05 +0100
+        Thu, 29 Dec 2022 07:00:41 -0800 (PST)
+Message-ID: <330942f7-6f53-cc7b-2b91-71b8bec6fe4e@linaro.org>
+Date:   Thu, 29 Dec 2022 16:00:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/2] ARM: dts: n900: use iio driver for accelerometer
+Subject: Re: [PATCH v3] dt-bindings: net: marvell,orion-mdio: Fix examples
 Content-Language: en-US
-To:     "Sicelo A. Mhlongo" <absicsz@gmail.com>, linux-omap@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tony@atomide.com,
-        devicetree@vger.kernel.org, maemo-leste@lists.dyne.org
-References: <20221227223841.2990847-1-absicsz@gmail.com>
- <20221229145251.3535402-3-absicsz@gmail.com>
+To:     =?UTF-8?Q?Micha=c5=82_Grzelak?= <mig@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrew@lunn.ch, chris.packham@alliedtelesis.co.nz,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        upstream@semihalf.com, mw@semihalf.com, mchl.grzlk@gmail.com
+References: <20221229142219.93427-1-mig@semihalf.com>
+ <8e4ec6b0-63cf-c086-c00e-5b4e8a2b2d25@linaro.org>
+ <CADcojVOt+pWSZkVdOSE15HmdfFSZWNDUkEA1hNvn62vGAYjFsg@mail.gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221229145251.3535402-3-absicsz@gmail.com>
+In-Reply-To: <CADcojVOt+pWSZkVdOSE15HmdfFSZWNDUkEA1hNvn62vGAYjFsg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -77,20 +81,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/12/2022 15:52, Sicelo A. Mhlongo wrote:
-> The accelerometer in the N900 is supported by the iio-framework since commit
-> 8a7449d68670a8f9 ("iio: accel: add support for LIS302DL variant). This commit
-> switches to it and updates node properties to match the bindings of the new
-> compatible
+On 29/12/2022 15:51, Michał Grzelak wrote:
+> Hi Krzysztof,
 > 
-> Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
-> ---
->  arch/arm/boot/dts/omap3-n900.dts | 52 +++++---------------------------
->  1 file changed, 8 insertions(+), 44 deletions(-)
+> On Thu, Dec 29, 2022 at 3:30 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 29/12/2022 15:22, Michał Grzelak wrote:
+>>> As stated in marvell-orion-mdio.txt deleted in commit 0781434af811f
+>>> ("dt-bindings: net: orion-mdio: Convert to JSON schema") if
+>>> 'interrupts' property is present, width of 'reg' should be 0x84.
+>>> Otherwise, width of 'reg' should be 0x4. Fix 'examples:' and add
+>>> constraints checking whether 'interrupts' property is present
+>>> and validate it against fixed values in reg.
+>>>
+>>> Signed-off-by: Michał Grzelak <mig@semihalf.com>
+>>
+>> This is a friendly reminder during the review process.
+>>
+>> It looks like you received a tag and forgot to add it.
+>>
+>> If you do not know the process, here is a short explanation:
+>> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+>> versions. However, there's no need to repost patches *only* to add the
+>> tags. The upstream maintainer will do that for acks received on the
+>> version they apply.
+>>
+>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>>
+>> If a tag was not added on purpose, please state why and what changed.
 > 
+> Deletion of tag wasn't on purpose, it was done by accident. Would you
+> like me to resend the patch with it being added, or leave it as is?
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+No need, I added it here, so will be picked-up by maintainers.
 
 Best regards,
 Krzysztof
