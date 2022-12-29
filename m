@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D761F658F08
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A6C658F09
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233751AbiL2Q0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 11:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S233782AbiL2Q0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 11:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbiL2QZo (ORCPT
+        with ESMTP id S233513AbiL2QZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 11:25:44 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E29DBB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:25:42 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id u28so22456929edd.10
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:25:42 -0800 (PST)
+        Thu, 29 Dec 2022 11:25:51 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115E613D1E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:25:50 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id qk9so46091121ejc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:25:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t8N//8jqLWrIkBGyfF8wv4Tl2KGsW1laCrcUj0eqwXw=;
-        b=SOjIqDPJjAG3X8J2l0O1eskK3G1j4SzA1AkgO3M8IcMOGAfztcEIN0KSRvfW5nTL1c
-         QBqK6wQBjo+GxJGcwUPfSufBmYCEG3TLjOMiDGPiiuVXw0rvqyLeALougT+LBzP5wIxj
-         FKIF5Zf3HX4K9c4oDeZV6RpaA8xspwXNhozk6x1PgN16C+nxgRIHqjGNUSzAHBcn9eaz
-         9w/cO6YzILmXE6rmSLYAZSe3PEvroAtnMweberW0+j9NEJ1iiJ8e5tvf58Pl9/Xco093
-         b2cywR8IKDTatE3ZgHYEZcH6wBbtedaqn0qeZr/RqvE9g7wzJ178dmD3oLadYRT6tBfC
-         AVCw==
+        bh=x8lP7ydRMGUwV1Ross2Ed1IrnFNvMI3LfJx3zEWET/c=;
+        b=KOIOJzXi2fSTKQghBJfAclApEuXEO+z4J4tHUBPVGzBh6ud+pdt3NdQlc+Zpayvf6Q
+         9KD2EX483x7jkwmd3Lk9S1FaRoA1vj88cQTzB+fe92DlCzTC6afcQ5B2ovauXhCZoeG9
+         orYUuZQmx+pl+IYJifRB92W6mwFjLQ48reM2t8tmOswxkjhdDpdY5MRWRRUzmqI4LrGQ
+         jv5T5QdO4b3l4DuM+NdQ8DFfOu2h01+QYjUyH7z1E6O7anaQTKxMGc3skXj1REcLvyXc
+         /5tTXzeKal7fgKauTvz8uwSndgZkIqgsg1YgTr8T7MCs85r32Hvkic+OoD5S2zLmnqtO
+         3CSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t8N//8jqLWrIkBGyfF8wv4Tl2KGsW1laCrcUj0eqwXw=;
-        b=WEYuxA7I2PkLcWt6MO8iGV3KGISGCgKt6u3tILzgRJFojN3WmJuPa+bgRACGntppdp
-         gNONBW1nQRi2ZN+WFDldAcN28c+k5ECIUFcVTUkJI8bzrl9wp9Z0wpX0JSyFgs9Qs2YX
-         KOlayZXh6rm2p1gWofuLEx4aa8abMbi9bR/M54ewzLMA9N4ar5i9BDwE68H+uSPu1TF6
-         HQjUSLspn7dICt8afXVX1aVkogtc43+X4U9c7QGubVFAEIePYkjHd4xXPrLjKXwxWUyK
-         6vbdrUtTZQsfrB5qwpfxx6T5rLh1pGqwSAvYXKyT3DYRgOIU9rjdwJSQoB7+qm1CHnKH
-         O2Ow==
-X-Gm-Message-State: AFqh2kqqY89IANcKg97Udbs6fpQfii2wsFsM/YhS3hv/peHusj5HWTMY
-        26S1OJxVogm7fQPDtiKxJp6jUWZvJ7Q=
-X-Google-Smtp-Source: AMrXdXtAgAaBcAczHzVDiavvwBqKWtBJ7XKXpu6mOv6PHDKBjjo6OQGw73CzqRIFzxE01OfbMiFeVg==
-X-Received: by 2002:aa7:dd13:0:b0:479:8313:2fe6 with SMTP id i19-20020aa7dd13000000b0047983132fe6mr4986436edv.1.1672331140891;
-        Thu, 29 Dec 2022 08:25:40 -0800 (PST)
+        bh=x8lP7ydRMGUwV1Ross2Ed1IrnFNvMI3LfJx3zEWET/c=;
+        b=dPTdyLVHjdiAWLIN+OSPSV55+MAna1SKeijDXLvyufHfn5rIj0+4ZUZVt+v1nZw6rE
+         Q9tMvGInTPzut8puRqRt2GXIjDF4P9O1z814yj1GUUd4GHqyhiSoubup/JVBvnq20483
+         /3opJMmqYPJ1TaPT6EjGgX/14bRl4omLNPuWlFqM51+HT3GOnqE+Wkag0pIhgbD7OZVx
+         ZIKeQotq5ZBXky2zuI5U9rBEC9oXDkYviJAveIBkd/+wCKhqrVO/WWOdWZFR2QzEhHQK
+         iWw7Fk4XqKWTRNV6wksn2Ns/BjnKJ5foK009HgvuSD/TvF/iSXvr4Obzy+/o4ot5ht54
+         j7hw==
+X-Gm-Message-State: AFqh2kpqzmObAi0OfEBxER4dsMxuubrvv7C9YzZLzsywJWmnwrMv5Kz+
+        7q+mCJFMiqYDcvNMkjziVoc=
+X-Google-Smtp-Source: AMrXdXsQwwb9S5E5bOXG/JdCW2hO/vy4aFkWCxwXA72qIMlXj+gIw6VIan8y6zp1ob1yKtgoMpabig==
+X-Received: by 2002:a17:906:280d:b0:837:c290:eb83 with SMTP id r13-20020a170906280d00b00837c290eb83mr6179075ejc.2.1672331148659;
+        Thu, 29 Dec 2022 08:25:48 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p54a07888.dip0.t-ipconnect.de. [84.160.120.136])
-        by smtp.gmail.com with ESMTPSA id bm25-20020a0564020b1900b0045cf4f72b04sm8420941edb.94.2022.12.29.08.25.40
+        by smtp.gmail.com with ESMTPSA id d20-20020a170906305400b0084c9036a526sm867719ejd.20.2022.12.29.08.25.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 08:25:40 -0800 (PST)
-Date:   Thu, 29 Dec 2022 17:25:38 +0100
+        Thu, 29 Dec 2022 08:25:48 -0800 (PST)
+Date:   Thu, 29 Dec 2022 17:25:46 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/7] staging: rtl8192e: Rename ChannelPlan,
- eeprom_ChannelPlan and CckPwEnl
-Message-ID: <1b705718afdcf56475c10db4b284d2c91a58b250.1672330343.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 2/7] staging: rtl8192e: Rename TSSI_13dBm, Pwr_Track and
+ NumTotalRFPath
+Message-ID: <c7d3be41602e656170de46ea649b5bdf1081d5cf.1672330343.git.philipp.g.hortmann@gmail.com>
 References: <cover.1672330343.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,153 +71,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable ChannelPlan to chnl_plan, eeprom_ChannelPlan to
-eeprom_chnl_plan and CckPwEnl to cck_pwr_enl to avoid CamelCase which is
-not accepted by checkpatch.
+Rename variable TSSI_13dBm to tssi_13dbm, Pwr_Track to pwr_track and
+NumTotalRFPath to num_total_rf_path to avoid CamelCase which is not
+accepted by checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- .../rtl8192e/rtl8192e/r8190P_rtl8256.c        |  2 +-
- .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 20 +++++++++----------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |  8 ++++----
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  6 +++---
- 4 files changed, 18 insertions(+), 18 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c |  8 ++++----
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c     |  2 +-
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c     |  2 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h       |  6 +++---
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c         | 14 +++++++-------
+ 5 files changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c b/drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c
-index ab2e9b729883..93928f3585c1 100644
+index 93928f3585c1..7517ec001421 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c
-@@ -154,7 +154,7 @@ void rtl92e_set_cck_tx_power(struct net_device *dev, u8 powerlevel)
- 		if (priv->CustomerID == RT_CID_819x_Netcore)
- 			TxAGC = 0x22;
- 		else
--			TxAGC += priv->CckPwEnl;
-+			TxAGC += priv->cck_pwr_enl;
+@@ -21,7 +21,7 @@ void rtl92e_set_bandwidth(struct net_device *dev,
+ 		return;
  	}
- 	if (TxAGC > 0x24)
- 		TxAGC = 0x24;
+ 
+-	for (eRFPath = 0; eRFPath < priv->NumTotalRFPath; eRFPath++) {
++	for (eRFPath = 0; eRFPath < priv->num_total_rf_path; eRFPath++) {
+ 		if (!rtl92e_is_legal_rf_path(dev, eRFPath))
+ 			continue;
+ 
+@@ -63,10 +63,10 @@ bool rtl92e_config_rf(struct net_device *dev)
+ 	u8	ConstRetryTimes = 5, RetryTimes = 5;
+ 	u8 ret = 0;
+ 
+-	priv->NumTotalRFPath = RTL819X_TOTAL_RF_PATH;
++	priv->num_total_rf_path = RTL819X_TOTAL_RF_PATH;
+ 
+ 	for (eRFPath = (enum rf90_radio_path)RF90_PATH_A;
+-	     eRFPath < priv->NumTotalRFPath; eRFPath++) {
++	     eRFPath < priv->num_total_rf_path; eRFPath++) {
+ 		if (!rtl92e_is_legal_rf_path(dev, eRFPath))
+ 			continue;
+ 
+@@ -195,7 +195,7 @@ void rtl92e_set_ofdm_tx_power(struct net_device *dev, u8 powerlevel)
+ 		if (index == 3) {
+ 			writeVal_tmp = (byte3 << 24) | (byte2 << 16) |
+ 				       (byte1 << 8) | byte0;
+-			priv->Pwr_Track = writeVal_tmp;
++			priv->pwr_track = writeVal_tmp;
+ 		}
+ 
+ 		if (priv->bDynamicTxHighPower)
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index f02e67f68e23..25fa7714df4e 100644
+index 25fa7714df4e..c94c67643efb 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -306,7 +306,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 		priv->eeprom_CustomerID = usValue & 0xff;
- 		usValue = rtl92e_eeprom_read(dev,
- 					     EEPROM_ICVersion_ChannelPlan>>1);
--		priv->eeprom_ChannelPlan = usValue&0xff;
-+		priv->eeprom_chnl_plan = usValue&0xff;
- 		IC_Version = (usValue & 0xff00)>>8;
- 
- 		ICVer8192 = IC_Version & 0xf;
-@@ -328,7 +328,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 		priv->eeprom_vid = 0;
- 		priv->eeprom_did = 0;
- 		priv->eeprom_CustomerID = 0;
--		priv->eeprom_ChannelPlan = 0;
-+		priv->eeprom_chnl_plan = 0;
- 	}
- 
- 	if (!priv->AutoloadFailFlag) {
-@@ -473,9 +473,9 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 	priv->rf_chip = RF_8256;
- 
- 	if (priv->reg_chnl_plan == 0xf)
--		priv->ChannelPlan = priv->eeprom_ChannelPlan;
-+		priv->chnl_plan = priv->eeprom_chnl_plan;
- 	else
--		priv->ChannelPlan = priv->reg_chnl_plan;
-+		priv->chnl_plan = priv->reg_chnl_plan;
- 
- 	if (priv->eeprom_vid == 0x1186 &&  priv->eeprom_did == 0x3304)
- 		priv->CustomerID =  RT_CID_DLINK;
-@@ -495,10 +495,10 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 		break;
- 	case EEPROM_CID_TOSHIBA:
- 		priv->CustomerID = RT_CID_TOSHIBA;
--		if (priv->eeprom_ChannelPlan&0x80)
--			priv->ChannelPlan = priv->eeprom_ChannelPlan&0x7f;
-+		if (priv->eeprom_chnl_plan & 0x80)
-+			priv->chnl_plan = priv->eeprom_chnl_plan & 0x7f;
+@@ -371,7 +371,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 						   0xff00) >> 8;
  		else
--			priv->ChannelPlan = 0x0;
-+			priv->chnl_plan = 0x0;
- 		break;
- 	case EEPROM_CID_Nettronix:
- 		priv->CustomerID = RT_CID_Nettronix;
-@@ -516,9 +516,9 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 		break;
- 	}
+ 			priv->EEPROMThermalMeter = EEPROM_Default_ThermalMeter;
+-		priv->TSSI_13dBm = priv->EEPROMThermalMeter * 100;
++		priv->tssi_13dbm = priv->EEPROMThermalMeter * 100;
  
--	if (priv->ChannelPlan > CHANNEL_PLAN_LEN - 1)
--		priv->ChannelPlan = 0;
--	priv->ChannelPlan = COUNTRY_CODE_WORLD_WIDE_13;
-+	if (priv->chnl_plan > CHANNEL_PLAN_LEN - 1)
-+		priv->chnl_plan = 0;
-+	priv->chnl_plan = COUNTRY_CODE_WORLD_WIDE_13;
- 
- 	if (priv->eeprom_vid == 0x1186 &&  priv->eeprom_did == 0x3304)
- 		priv->rtllib->bSupportRemoteWakeUp = true;
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index f8fbe78ccad9..92260d098eaa 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -862,7 +862,7 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
- 	priv->cck_present_attn = 0;
- 	priv->rfa_txpowertrackingindex = 0;
- 	priv->rfc_txpowertrackingindex = 0;
--	priv->CckPwEnl = 6;
-+	priv->cck_pwr_enl = 6;
- 	priv->rst_progress = RESET_TYPE_NORESET;
- 	priv->force_reset = false;
- 	memset(priv->rtllib->swcamtable, 0, sizeof(struct sw_cam_table) * 32);
-@@ -952,13 +952,13 @@ static short _rtl92e_get_channel_map(struct net_device *dev)
- 		return -1;
- 	}
- 
--	if (priv->ChannelPlan >= COUNTRY_CODE_MAX) {
-+	if (priv->chnl_plan >= COUNTRY_CODE_MAX) {
- 		netdev_info(dev,
- 			    "rtl819x_init:Error channel plan! Set to default.\n");
--		priv->ChannelPlan = COUNTRY_CODE_FCC;
-+		priv->chnl_plan = COUNTRY_CODE_FCC;
- 	}
- 	dot11d_init(priv->rtllib);
--	dot11d_channel_map(priv->ChannelPlan, priv->rtllib);
-+	dot11d_channel_map(priv->chnl_plan, priv->rtllib);
- 	for (i = 1; i <= 11; i++)
- 		(priv->rtllib->active_channel_map)[i] = 1;
- 	(priv->rtllib->active_channel_map)[12] = 2;
+ 		if (priv->epromtype == EEPROM_93C46) {
+ 			if (!priv->AutoloadFailFlag) {
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+index a813eded4cb3..ccbce3e177b6 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+@@ -904,7 +904,7 @@ static u8 _rtl92e_phy_switch_channel_step(struct net_device *dev, u8 channel,
+ 				break;
+ 			case CmdID_RF_WriteReg:
+ 				for (eRFPath = 0; eRFPath <
+-				     priv->NumTotalRFPath; eRFPath++)
++				     priv->num_total_rf_path; eRFPath++)
+ 					rtl92e_set_rf_reg(dev,
+ 						 (enum rf90_radio_path)eRFPath,
+ 						 CurrentCmd->Para1, bMask12Bits,
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index cceb77492363..93b3b75a063f 100644
+index 93b3b75a063f..0e02add8b6be 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -420,7 +420,7 @@ struct r8192_priv {
- 	u16 eeprom_vid;
- 	u16 eeprom_did;
- 	u8 eeprom_CustomerID;
--	u16 eeprom_ChannelPlan;
-+	u16 eeprom_chnl_plan;
+@@ -445,7 +445,7 @@ struct r8192_priv {
+ 	u8 nCur40MhzPrimeSC;
  
- 	u8 EEPROMTxPowerLevelCCK[14];
- 	u8 EEPROMTxPowerLevelOFDM24G[14];
-@@ -451,7 +451,7 @@ struct r8192_priv {
+ 	u32 RfReg0Value[4];
+-	u8 NumTotalRFPath;
++	u8 num_total_rf_path;
+ 	bool brfpath_rxenable[4];
+ 
  	bool bTXPowerDataReadFromEEPORM;
- 
- 	u16 reg_chnl_plan;
--	u16 ChannelPlan;
-+	u16 chnl_plan;
- 	u8 hw_rf_off_action;
- 
- 	bool rf_change_in_progress;
-@@ -460,7 +460,7 @@ struct r8192_priv {
- 
+@@ -461,8 +461,8 @@ struct r8192_priv {
  	u8 DM_Type;
  
--	u8 CckPwEnl;
-+	u8 cck_pwr_enl;
- 	u16 TSSI_13dBm;
- 	u32 Pwr_Track;
+ 	u8 cck_pwr_enl;
+-	u16 TSSI_13dBm;
+-	u32 Pwr_Track;
++	u16 tssi_13dbm;
++	u32 pwr_track;
  	u8 CCKPresentAttentuation_20Mdefault;
+ 	u8 CCKPresentAttentuation_40Mdefault;
+ 	s8 CCKPresentAttentuation_difference;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+index a18393c8a833..c27d9fb7a7e6 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+@@ -615,14 +615,14 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
+ 	u8	RF_Type, tmp_report[5] = {0, 0, 0, 0, 0};
+ 	u32	Value;
+ 	u8	Pwr_Flag;
+-	u16	Avg_TSSI_Meas, TSSI_13dBm, Avg_TSSI_Meas_from_driver = 0;
++	u16	Avg_TSSI_Meas, tssi_13dbm, Avg_TSSI_Meas_from_driver = 0;
+ 	u32	delta = 0;
+ 
+ 	rtl92e_writeb(dev, Pw_Track_Flag, 0);
+ 	rtl92e_writeb(dev, FW_Busy_Flag, 0);
+ 	priv->rtllib->bdynamic_txpower_enable = false;
+ 
+-	powerlevelOFDM24G = priv->Pwr_Track >> 24;
++	powerlevelOFDM24G = priv->pwr_track >> 24;
+ 	RF_Type = priv->rf_type;
+ 	Value = (RF_Type<<8) | powerlevelOFDM24G;
+ 
+@@ -688,12 +688,12 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
+ 				Avg_TSSI_Meas_from_driver += tmp_report[k];
+ 
+ 			Avg_TSSI_Meas_from_driver *= 100 / 5;
+-			TSSI_13dBm = priv->TSSI_13dBm;
++			tssi_13dbm = priv->tssi_13dbm;
+ 
+-			if (Avg_TSSI_Meas_from_driver > TSSI_13dBm)
+-				delta = Avg_TSSI_Meas_from_driver - TSSI_13dBm;
++			if (Avg_TSSI_Meas_from_driver > tssi_13dbm)
++				delta = Avg_TSSI_Meas_from_driver - tssi_13dbm;
+ 			else
+-				delta = TSSI_13dBm - Avg_TSSI_Meas_from_driver;
++				delta = tssi_13dbm - Avg_TSSI_Meas_from_driver;
+ 
+ 			if (delta <= E_FOR_TX_POWER_TRACK) {
+ 				priv->rtllib->bdynamic_txpower_enable = true;
+@@ -701,7 +701,7 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
+ 				rtl92e_writeb(dev, FW_Busy_Flag, 0);
+ 				return;
+ 			}
+-			if (Avg_TSSI_Meas_from_driver < TSSI_13dBm - E_FOR_TX_POWER_TRACK)
++			if (Avg_TSSI_Meas_from_driver < tssi_13dbm - E_FOR_TX_POWER_TRACK)
+ 				_rtl92e_dm_tx_update_tssi_weak_signal(dev,
+ 								      RF_Type);
+ 			else
 -- 
 2.39.0
 
