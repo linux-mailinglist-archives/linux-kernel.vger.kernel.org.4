@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFC8658D8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFFD658D94
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbiL2NjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 08:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        id S233551AbiL2Nki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 08:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233576AbiL2Ni1 (ORCPT
+        with ESMTP id S233578AbiL2NkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 08:38:27 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67B414D36
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:36:27 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v23so19193521pju.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:36:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yLcd8CiyLYIlvCRq1660gY/l+h/v8zU2lfmkPPHTSdQ=;
-        b=DZ4mL9PWqEgn4n3LYbFe8pA/69bpQ95H0RcO+2+3yq4x0SDTKvnduhg67Plac3jB1l
-         4xNZgV135z+HodeqouoXU1um1hMg6Ht4VF3h9BF3M+VGRViTTRDTgCdp7AN8Yy+QL9vN
-         Ct5Eq0YBS2OjbzgkhOheLEOwEIhcN45ExNXkHQD9ALc9mPkJ+n2RnTbjA3XTN2qIml+X
-         x7b/enqqiIUwB4qETNRqPfgoBJHWsRxplVg9hU/Od5tRUMZmBw//kaAkhsFcb2VZJaZ+
-         G1hdb0CoNsyXKhBxHYzuMnf3q5dqseWxv1LRGFD17x09d90h+AMuNvEUtxRN2K6nskg2
-         4nUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yLcd8CiyLYIlvCRq1660gY/l+h/v8zU2lfmkPPHTSdQ=;
-        b=Nt6kYidjIWYHrUHOpLCs8W3OxOvy5bKjS2sFiVfcfJfGlR52CZ6TJZU3/lSAsWg1Ow
-         A83CheBtuXYc01rXZK+JNSNcSwaXeX7He4mb1wjzscNscxWrHbV1bjvjLuD7zV718Nwj
-         POrDeVuTmNhEXVHAtJbjDQs1K0wF0E56alNxbhLck7/xSL3csyNWZoJ5xTVbtX11KWv/
-         v55DsBFs7Um8mTKmaOWWU+M+r6qBoCEA3Q6wtX5WAjiyogawxxEZAWstbPqdBNszhey4
-         gJbPT+8R2lOi04Y9RIT1OxgxEmH+IJpirWsjpGg/xnbd80WAaHMQWj/Gnj61OKh7hM5K
-         kTeg==
-X-Gm-Message-State: AFqh2kr4Wdwcb/AAltoYIcr+8jdYUTDi5KiDsnXuNpyLCyha8VAY7pgV
-        pbr+bxZ1nMuyb/knj3u8DsE=
-X-Google-Smtp-Source: AMrXdXuaF2hKa0CKPGYmhiCk8cIr5uNdjSWMYoXwWFt8y4Cco8mStUDpXzudgxQ/f9QRGK5XpnVy2w==
-X-Received: by 2002:a17:902:ebc9:b0:189:a6be:85db with SMTP id p9-20020a170902ebc900b00189a6be85dbmr33011377plg.39.1672320944404;
-        Thu, 29 Dec 2022 05:35:44 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id t8-20020a170902e84800b0017849a2b56asm13002488plg.46.2022.12.29.05.35.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 05:35:43 -0800 (PST)
-Date:   Thu, 29 Dec 2022 22:35:37 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+jIOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>, Joe Perches <joe@perches.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Matthew WilCox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC v3 3/4] mm, printk: introduce new format %pGt for page_type
-Message-ID: <Y62XqcQUyaeqTQXu@hyeyoo>
-References: <20221218101901.373450-1-42.hyeyoo@gmail.com>
- <20221218101901.373450-4-42.hyeyoo@gmail.com>
- <Y6AycLbpjVzXM5I9@smile.fi.intel.com>
- <82feabee-0446-b913-adbb-0e96ecb10c94@infradead.org>
- <Y6GVbeB8Onzlcb8c@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6GVbeB8Onzlcb8c@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 29 Dec 2022 08:40:08 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B73517073;
+        Thu, 29 Dec 2022 05:37:37 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D47B95818EC;
+        Thu, 29 Dec 2022 08:36:54 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 29 Dec 2022 08:36:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1672321014; x=1672328214; bh=lvF0202SLO
+        TzT8hbWZsF0xJL4uK7PlwT0Y7oJgXZa8M=; b=nLBnuo5MB8ib40z9s0xLWilN6X
+        /WXV1Zqm3SxWb/ruB/kuFnhd7wdVmFZDNY+gYekuqiDs/3zSKTYpDCWeSGomp00d
+        RPXAAm15lH7k/HckP7H41S1nTIssGFqnGEUCiAueXZhfqHbgvsgt2V/PjS5+24eK
+        AZrmaFdvUCvnyYqeGiXNjFNJi0Nt+kY19b5QAViPegESXxc5lkw5/x38rzXBkE3E
+        iMI/LuxJaJhu/PzxHG/w2bIL1OevR4DRQqXzZhgnnNrL6JlGZ2hfawrGtcjmfT5j
+        4NFrf2y4B2F4odzFC/4UEfyR9o8m6Tb2OX8h3xaP+cQbWCLPHyzz+PMCgWqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672321014; x=1672328214; bh=lvF0202SLOTzT8hbWZsF0xJL4uK7
+        PlwT0Y7oJgXZa8M=; b=Jr7RZJ443Rh8Qo+omI31KtzhJxzRr/gmnxzyHbaByHQ4
+        STqt+Vc4cv+k0j8Dn73jUOrcx91eQtuXMzjq9aHKcghW7M7CCsGYLd01CHiSCaAJ
+        imgUtF7DvNdZzdYbFAKU118qzhWZ45FFNkuq01JO3G44O8dNsNM026hoPloISUUK
+        uLAuPol2cYeE+H6rlz4SUHqOMhoDdaT6jlH1aTcg49YvTbDlhhD5kYpLI5s8bJxE
+        VEdpvdUeBr2HOtE5jiNe1JbI9qe+BqGW8ENvyet3ESOPsDs6y7wveuue+TeGQ6OF
+        63+RmCQO5AYjeEdbwbZySMWQsDDFqh1CfW/rw6fbgQ==
+X-ME-Sender: <xms:9JetY317jGDP8GU6R9s5P3feYX4b7JYnXuYW9oxrPtX4neZSlQhn_g>
+    <xme:9JetY2H-9Ndmta7egwtoh9Qd7iKWQAb1a1Gysv2bD9db8yknC1mA_eZz9GoINFs1O
+    mxmkGXxxIrZhDgI32M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdehgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:9JetY37Np6b49AaL3STy0ZgjFyhCS7H5vsUZxB6VrMJPnKFk2gWG_Q>
+    <xmx:9JetY80eHbEBLheoSTsnWIIch3xp-KorU8P9-48XP3Ihye8VysyR4g>
+    <xmx:9JetY6EPUvpUXO4ud7kX_WBGQ-K_e16zVv9iLREEkWdF5C8vmD3ZiA>
+    <xmx:9petY6ndaNDL17h1d1VwhHZdsw1NSQgvJDADFPi05YBImlRtM5t8dA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 640B9B60086; Thu, 29 Dec 2022 08:36:52 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <1d88ba9f-5541-4b67-9cc8-a361eef36547@app.fastmail.com>
+In-Reply-To: <20221219154119.286760562@infradead.org>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.286760562@infradead.org>
+Date:   Thu, 29 Dec 2022 14:36:32 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Peter Zijlstra" <peterz@infradead.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     "Jonathan Corbet" <corbet@lwn.net>,
+        "Will Deacon" <will@kernel.org>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
+        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com,
+        "Robin Murphy" <robin.murphy@arm.com>, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, "Pekka Enberg" <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linux-crypto@vger.kernel.org,
+        iommu@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC][PATCH 07/12] percpu: Wire up cmpxchg128
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 12:58:53PM +0200, Andy Shevchenko wrote:
-> On Mon, Dec 19, 2022 at 11:35:38AM -0800, Randy Dunlap wrote:
-> > On 12/19/22 01:44, Andy Shevchenko wrote:
-> > > On Sun, Dec 18, 2022 at 07:19:00PM +0900, Hyeonggon Yoo wrote:
-> 
-> ...
-> 
-> > > #define DEF_PAGETYPE_NAME(_name)	{ PG_##_name, __stringify(_name) }
-> > > ...
-> > > #undef DEF_PAGETYPE_MASK
-> > > 
-> > > In this case it decreases the chances of typo in the strings and flags.
-> > 
-> > I'd say Yes.  (and #undef DEF_PAGETYPE_NAME methinks; or change both to _MASK)
-> 
-> Ah, it's me who used two different names for the same macro :-)
+On Mon, Dec 19, 2022, at 16:35, Peter Zijlstra wrote:
+> In order to replace cmpxchg_double() with the newly minted
+> cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-It seems like a good way to make fewer mistakes.
-Will do in next version, thanks! :-)
+Does this work on x86 chips without X86_FEATURE_CX16?
 
--- 
-Thanks,
-Hyeonggon
+As far as I can tell, the new percpu_cmpxchg128_op uses
+the cmpxchg16b instruction unconditionally without checking
+for the feature bit first, and is now used by this_cpu_cmpxchg()
+unconditionally as well.
+
+This is fine for the moment if the only user is mm/slub.c
+and that retains the system_has_cmpxchg128() runtime check,
+but I think a better interface would be to guarantee that
+this_cpu_cmpxchg() always ends up either in a working
+inline asm or the generic fallback but not an invalid
+opcode.
+
+For consistency, I would also suggest this_cpu_cmpxchg() to
+take the same argument types as cmpxchg(): at most 'unsigned
+long' sized, with additional this_cpu_cmpxchg64() and
+this_cpu_cmpxchg128() macros that take fixed-size arguments.
+I have an older patch set that additionally converts all
+8-bit and 16-bit cmpxchg()/xchg() calls to cmpxchg_8()/
+xchg_8()/cmpxchg_16()/xchg_16() and and leaves only the
+fixed-32bit and variable typed 'unsigned long' sized
+callers for the weakly typed variant.
+
+       Arnd
