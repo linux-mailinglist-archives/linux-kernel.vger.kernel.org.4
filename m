@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC04A65886C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE38658876
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232731AbiL2Blp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 20:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
+        id S232845AbiL2Bov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 20:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiL2Blo (ORCPT
+        with ESMTP id S230106AbiL2Bos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 20:41:44 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C1D262C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:41:41 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1322d768ba7so20356150fac.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:41:41 -0800 (PST)
+        Wed, 28 Dec 2022 20:44:48 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359372DD8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:44:48 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id d10so11525412pgm.13
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:44:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5EkBJQD/c68RJVZGXy0HKcVQWj7dlCTAB7HBSkm2xT8=;
-        b=VJnM6/MLfCtzy4OB3sFx1Fm7iBipjbNMb2bH5oEcXDaiIJPjND9L+3WJIgG/vFFhdI
-         qBuLikVKrZnlHITAQvDh4N3bTmwMcAzQqMSNxpU8NHjF47ldKXk+zimbXI02FFiSUND0
-         1+mpRYOhDCWk7W+yndOYj7lJkMeDBUUUPHTw30/zGwHL2GnNTsyScpTJDdPrtW7PCzX3
-         GjaShPwnLDygudFk2DbOz3dCPIq0QR9XvNdauuAaFZ7fn5iaWdcM/JZk8OHcsfzXUWlu
-         lPRdYCvK3/3MzT+ppjlbYRQ4iIdzfQ1GsoAevaR8JN+alytdO7ZXeSHcjJWh5xdaanAw
-         8nJA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZPAYQwDWE9OMZ/U/cOHoYvo1QQGJp7a/uZzvsCRbps0=;
+        b=nFcHKhnkpBC8BREMcxP6tbEj+TD9ajmkyJeQtRZZQ/8zkzT5/QZOU78DQ21N+GzqYH
+         CQXOJTtSFRibm/v+SzFg61MduaSpd+9kBPFEwfxmRkSMyd8Uw+jyIdBrkCCr/3WNhkD9
+         5e6g8pY/n6Towtipvc5j8LuWaEuVoX4/0heST9kOcWC30YYNCB/oo1hUg+DJYMuFBlxx
+         8lNsSEjSkC4nDBGRC8Mnqjjl6gNx+i4XRQHMKta54ZX+TSftPH3BgAH8gzvmpny1Z347
+         1qjn6qbwDMQ0FyiyZPn3E7Tqjy1vCRF+3L3ijw3jKeXuHOl4nopIbpcJa8nB+8djRSta
+         E0CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5EkBJQD/c68RJVZGXy0HKcVQWj7dlCTAB7HBSkm2xT8=;
-        b=kVtju8tfwpFUufexC+hS4A//mzjoxZ4rfps2skMw9SaJsgZdBxaTj7Firh2JrXUUN7
-         6MiTudRqNDY0BlIA8r/rUS8lZqcUZfphCOu+91AInTcFiI8efJrz92sV6oxanfvrDnUn
-         MwtWrSdfLhL+A6qRki3AjySDdzicy1MZ+GTL5HIxmy0iifp5xFVeMoHQJzKXID0mblCc
-         JbNwlw8r0GxbMwc7EXMDV7zbVhSowta8JTFFn9rCF0NP92iueDa+cMC87Pcfusvdtehn
-         9XZdRFJQEvc0bRPp8iTG82mD/JC/+WfmOXgYb+EOlIvtfUSXdA6dhyJDBlR9b5EwXBGG
-         vrZQ==
-X-Gm-Message-State: AFqh2kpEksnjWE159HmgWI3rtnokjNRTcfa+Cb+rLYpNGo2mIGxWndDC
-        URUfvsX3E/BWhTj8bI7MY2k0NUecofLwbtuxoGe7aA==
-X-Google-Smtp-Source: AMrXdXuwaw7kd2b2t7tpaXaGkV5+98Jws9Pf+vV4ef7pixGviYj7YGU4fswLGw0TrQJnzv3W0zkI3SVwb8V1GdFKOkk=
-X-Received: by 2002:a05:6870:fd89:b0:14f:ede2:db25 with SMTP id
- ma9-20020a056870fd8900b0014fede2db25mr909119oab.42.1672278100651; Wed, 28 Dec
- 2022 17:41:40 -0800 (PST)
+        bh=ZPAYQwDWE9OMZ/U/cOHoYvo1QQGJp7a/uZzvsCRbps0=;
+        b=f0lFdSY5hKkTp+8Of/yvTJeAi9IKO7hyARgFX8cd7FuXfsInPChW50WbqGiRUZgnNw
+         sip9E8gg5Cd30NSQnOfs3vdYjAK3lbXmJjax398KuI01uSL8Ip0N56WTPOxO3rBwxWIZ
+         VOHv/l7IIrFmqvJh1H2D3/vQwqEsZb+OVeWZe0QHmZO/F7e/xZQJBCf7Tibdh/g4i1Rg
+         AhjWf6slgwg8Xkxing8Bd3SDfA7K4rFTlSTpyqpwpWEs+eaqDT9MLd3mK8+5q8qgzwOA
+         DP7jhgcjz23BRvXQgL4LsvN8jJgOmKTEJNsXZjjxArCaqW6u8OP020bUMO9RuQq8YupK
+         +RSg==
+X-Gm-Message-State: AFqh2kp9HZZkLWxtkjiT3DUrwfKkhCqHuInyuxo1H9RCNnugYED/r3ho
+        KxhOQSc20QC0C4YEKHBuMSNAxg==
+X-Google-Smtp-Source: AMrXdXvojSXuSoryp/+zW9mksXlqmVI/fQmGd01x2fGKaWw8fg70sKCJgMP5IIIdoaXSU2ynA3ADMw==
+X-Received: by 2002:a05:6a00:410b:b0:57a:9482:843b with SMTP id bu11-20020a056a00410b00b0057a9482843bmr30916851pfb.5.1672278287678;
+        Wed, 28 Dec 2022 17:44:47 -0800 (PST)
+Received: from niej-dt-7B47.. (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id 14-20020a62150e000000b005609d3d3008sm5433780pfv.171.2022.12.28.17.44.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 17:44:46 -0800 (PST)
+From:   Jun Nie <jun.nie@linaro.org>
+To:     djwong@kernel.org, tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tudor.ambarus@linaro.org
+Subject: [PATCH] ext4: reject 1k block fs on the first block of disk
+Date:   Thu, 29 Dec 2022 09:45:02 +0800
+Message-Id: <20221229014502.2322727-1-jun.nie@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221220090248.1134214-1-haibo.chen@nxp.com>
-In-Reply-To: <20221220090248.1134214-1-haibo.chen@nxp.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 29 Dec 2022 02:43:34 +0100
-Message-ID: <CACRpkdbmcyO+QMbvAVC7Wm+u3btcAebiGQySSb7jG9J8gYNOnA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] gpio: vf610: connect GPIO label to dev name
-To:     haibo.chen@nxp.com
-Cc:     brgl@bgdev.pl, stefan@agner.ch, linux-gpio@vger.kernel.org,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,18 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 10:02 AM <haibo.chen@nxp.com> wrote:
+For 1k-block filesystems, the filesystem starts at block 1, not block 0.
+If start_fsb is 0, it will be bump up to s_first_data_block. Then
+ext4_get_group_no_and_offset don't know what to do and return garbage
+results (blockgroup 2^32-1). The underflow make index
+exceed es->s_groups_count in ext4_get_group_info() and trigger the BUG_ON.
 
-> From: Haibo Chen <haibo.chen@nxp.com>
->
-> Current GPIO label is fixed, so can't distinguish different GPIO
-> controllers through labels. Use dev name instead.
->
-> Fixes: 7f2691a19627 ("gpio: vf610: add gpiolib/IRQ chip driver for Vybrid")
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+Fixes: 4a4956249dac0 ("ext4: fix off-by-one fsmap error on 1k block filesystems")
+Link: https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
+Reported-by: syzbot+6be2b977c89f79b6b153@syzkaller.appspotmail.com
+Signed-off-by: Jun Nie <jun.nie@linaro.org>
+---
+ fs/ext4/fsmap.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
+index 4493ef0c715e..1aef127b0634 100644
+--- a/fs/ext4/fsmap.c
++++ b/fs/ext4/fsmap.c
+@@ -702,6 +702,12 @@ int ext4_getfsmap(struct super_block *sb, struct ext4_fsmap_head *head,
+ 		if (handlers[i].gfd_dev > head->fmh_keys[0].fmr_device)
+ 			memset(&dkeys[0], 0, sizeof(struct ext4_fsmap));
+ 
++		/*
++		 * Re-check the range after above limit operation and reject
++		 * 1K fs on block 0 as fs should start block 1. */
++		if (dkeys[0].fmr_physical ==0 && dkeys[1].fmr_physical == 0)
++			continue;
++
+ 		info.gfi_dev = handlers[i].gfd_dev;
+ 		info.gfi_last = false;
+ 		info.gfi_agno = -1;
+-- 
+2.34.1
 
-Yours,
-Linus Walleij
