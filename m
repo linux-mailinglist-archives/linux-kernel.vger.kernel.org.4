@@ -2,137 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F22658BD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C230E658BD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbiL2KiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 05:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
+        id S233089AbiL2KlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 05:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbiL2Khz (ORCPT
+        with ESMTP id S229625AbiL2Kkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 05:37:55 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B927510B58
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:37:53 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id d185so18102695vsd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:37:53 -0800 (PST)
+        Thu, 29 Dec 2022 05:40:51 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A08DCF;
+        Thu, 29 Dec 2022 02:40:50 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id m18so44045531eji.5;
+        Thu, 29 Dec 2022 02:40:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b8Y42xIXgL1eMkrgLpvrHsYvzuZh55E8nXO8bqFw93M=;
-        b=n+1rGnKC54+rbc4cgQix6MlqAvLsOt+mxxCIvHqRujHtqOBdnTa21rRtnbRJeRS9C8
-         ET7G5Cv5S0SiyXRAkPQ6x4aHcSt/MR2F0W2INwqkgkHIJ1ODE1omptcwDMPkxBQp3qFo
-         FeI9BsYoYgtYllUyGD5PdfmRjS/iBH+1AJPb0=
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NzZOv1CRraywjb+t+xrlHJC1I3n/ntQos2kcP4ZYPFE=;
+        b=qbjkceik0jikKwPqQ5YUpus+366wQdlW8/3vTKPMjIuyca6c8AaXJowv1TqYVP0OJc
+         k6QZgc0JMs+FIZ4YaHuhIM9WM8wLywrOM1ipt9d7tTDhlorSHbmEx/kgt0g0CS6WxZXt
+         QvPPFQiBpkednku2IBMaU9AkhLySELYC41Vz+QusNumArOsQa+2pfMuoVhp4jhbGwpju
+         qp3/vLOearVHAZkfXOo+GDH9l1vL4CL97wODxSg1Fw7eUNFnOKazM5t8l4yG38zhyP0M
+         VmMtgwKrH4LnTginj5RAD/kSjbRx6Nnk3uFMZUHNfayM7JbPlRADljFzpvF1JhtDHLvt
+         aClA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b8Y42xIXgL1eMkrgLpvrHsYvzuZh55E8nXO8bqFw93M=;
-        b=mFDP1g9Ak03JxH0Qz6epG5zUd4B0vrPfVLbVvet+hDTEpzY7VqkpS56YIh88mtmm1M
-         pPqzIsu3TZTDnTwAtOwnuleQmCkvl5rmw7MGhL1DQ3dBc3d0k/jZZ7japaydgEgwXohI
-         +kj/l9NtZCwwlCpgtyY6/pzbEBRdEGOSC07/PlbGFKealKYeJKci1Rup52E2lXTgpoCx
-         8NGmATrr5fCXL94GMedhSCj7v4UsaJz/IWpO7C+1CgwqYfC9sMkFFfNvgNLwpLLpKWNR
-         PWSmpQi1Fy0iajpgd9I9YCg0UJQyoy7wUf/nNvydm1YueLYFSWRlUFneaG+UrgsQ3a5H
-         GVLg==
-X-Gm-Message-State: AFqh2kqrrZY6N9GI10IwPIIm/zB/bB6ukr5TuLfMIvQ+0W9fT7ANN98h
-        2nTuGIgJcVvbSm41QdKtppdvVJKsPicxuN/7TY5R2A==
-X-Google-Smtp-Source: AMrXdXuGd+euo/Y/QzF70Wh9yJgo9zt/cVIVFVgu/E4UIEn36ysnrttGlo14HEh6kgdeVcojyAcKK885ahyhQcOCVdg=
-X-Received: by 2002:a05:6102:74b:b0:3ad:3d65:22b with SMTP id
- v11-20020a056102074b00b003ad3d65022bmr3992771vsg.65.1672310272757; Thu, 29
- Dec 2022 02:37:52 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NzZOv1CRraywjb+t+xrlHJC1I3n/ntQos2kcP4ZYPFE=;
+        b=DVpWW98H423UVAtUti8BfFyw/qiW4VqrIKAY6jbNqfDdwrEHB69u2CK+U8RAxOmBX9
+         POEh9WQ8rmNoYrph/jxty8iglqKfxuRwr2wbPqzSf/AJ+azlc7BJ7qF4KZsUONG/1F0t
+         di1Dbw25DYrU9hdEJ3dlNZ2fkNdnjnl4zsz1+SaDdSbLrEPP9fnI0PhUTwtthULOmEf6
+         klVS0NKtmB8UhSqVjG4iAFwKJ0UpsZKHBO7mn6VVA+EqGZwRWohy9WJJUr21Hj/kpMbX
+         68yzv1rhoJWsYJE312Enmr486UWoNpQmxAbj5CsxSzVBRR7niyW8E7u4DtXiZQi69D9B
+         AglA==
+X-Gm-Message-State: AFqh2kpO/CxEzsjAanhu8pgVqq0gYWrwp2ttZol46htq8iOr38AFDl5U
+        gGs82RgIIqrA2J6sAzwrnM7/+D/MXI7eo8YkYva0R3mQYU8=
+X-Google-Smtp-Source: AMrXdXuyP1yNLlQySKApsJpcisyAUsFg8+A5y+WxBvR6yikiFExXtVKouGOP6s8yz7xdFhmFP9uz9RsixLbOSPRNsaw=
+X-Received: by 2002:a17:906:e4f:b0:7c0:ae1c:3eb7 with SMTP id
+ q15-20020a1709060e4f00b007c0ae1c3eb7mr1771649eji.510.1672310449173; Thu, 29
+ Dec 2022 02:40:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20221108033209.22751-1-allen-kh.cheng@mediatek.com>
-In-Reply-To: <20221108033209.22751-1-allen-kh.cheng@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 29 Dec 2022 18:37:41 +0800
-Message-ID: <CAGXv+5EkPWF77ATVRhxygVOyYmxXgdTNPmOefP7jGeOMeZw_MA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] MediaTek watchdog: Convert mtk-wdt.txt to dt-schema
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     nfraprado@collabora.com, angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com> <84e2f2289e964834b1eaf60d4f9f5255@realtek.com>
+In-Reply-To: <84e2f2289e964834b1eaf60d4f9f5255@realtek.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 29 Dec 2022 11:40:38 +0100
+Message-ID: <CAFBinCAvSYgnamMCEBGg5+vt6Uvz+AKapJ+dSfSPBbmtERYsBw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] rtw88: Four fixes found while working on SDIO support
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tehuang@realtek.com" <tehuang@realtek.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 12:03 PM Allen-KH Cheng
-<allen-kh.cheng@mediatek.com> wrote:
->
-> Based on git/groeck/linux-staging.git, watchdog-next.
-> We use [1] and [2] as references to send a new series.
->
-> This series converts mtk-wdt.txt to dt-schema and contains
-> - Fix watchdog compatibles for MT7986, MT8186, MT8188 and MT8195,
-> - Fix the watchdog name of mt8516
-> - Add mt6795 and MT8173 watchdog compatible
->
-> Changes since v4:
->  - Drop label for watchdog node in mt8516
->
-> Changes since v3:
->  - Drop label for watchdog example in yaml
->
-> Changes since v2:
->  - Drop merged patch from series
->  - Rebase to watchdog-next (for mt8188)
->
-> Changes since v1:
->  - Drop "items" for a single enum=C2=B7
->
-> Changes since [1]:
->   - Update the commit message with some details
->  - Drop "timeout-sec: true" and use unevaluatedProperties
-> [1] https://lore.kernel.org/all/20221005113517.70628-1-angelogioacchino.d=
-elregno@collabora.com/
-> [2] https://lore.kernel.org/all/20220422121017.23920-3-allen-kh.cheng@med=
-iatek.com/
->
-> Allen-KH Cheng (3):
->   arm64: dts: mediatek: mt7986: Fix watchdog compatible
->   arm64: dts: mediatek: mt8516: Fix the watchdog node name
->   dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT8173
->
-> AngeloGioacchino Del Regno (4):
->   arm64: dts: mediatek: mt8186: Fix watchdog compatible
->   arm64: dts: mediatek: mt8195: Fix watchdog compatible
+Hi Ping-Ke,
 
-Looks like the dt-bindings have been merged, but the dts fixes haven't.
-
-Matthias, could you queue them up?
+On Thu, Dec 29, 2022 at 10:26 AM Ping-Ke Shih <pkshih@realtek.com> wrote:
+[...]
+> > Martin Blumenstingl (4):
+> >   rtw88: Add packed attribute to the eFuse structs
+>
+> I think this patch depends on another patchset or oppositely.
+> Please point that out for reviewers.
+There are no dependencies for this smaller individual series other
+than Linux 6.2-rc1 (as this has USB support). I made sure to not
+include any of the SDIO changes in this series.
+The idea is that it can be applied individually and make it either
+into 6.2-rc2 (or newer) or -next (6.3).
 
 
-Thanks
-ChenYu
-
->   dt-bindings: watchdog: mediatek: Convert mtk-wdt to json-schema
->   dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT6795
->
->  .../bindings/watchdog/mediatek,mtk-wdt.yaml   | 80 +++++++++++++++++++
->  .../devicetree/bindings/watchdog/mtk-wdt.txt  | 43 ----------
->  arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  3 +-
->  arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  3 +-
->  arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  3 +-
->  arch/arm64/boot/dts/mediatek/mt8516.dtsi      |  2 +-
->  6 files changed, 84 insertions(+), 50 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,m=
-tk-wdt.yaml
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.tx=
-t
->
-> --
-> 2.18.0
->
->
+Best regards,
+Martin
