@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3945659319
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 00:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC0665931F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 00:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiL2XSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 18:18:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
+        id S234236AbiL2XTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 18:19:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbiL2XSN (ORCPT
+        with ESMTP id S234200AbiL2XSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 18:18:13 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEB616582
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:18:12 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id k137so8727858pfd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:18:12 -0800 (PST)
+        Thu, 29 Dec 2022 18:18:53 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A66C167DC;
+        Thu, 29 Dec 2022 15:18:52 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id fc4so48017535ejc.12;
+        Thu, 29 Dec 2022 15:18:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vWTQqj9fLeMGJngGnyZxH0IxP2qo9acI3FCjYeqg6Bs=;
-        b=ID2SKEAfdHOaLFW3OT0zldsRVWOZF0Z1I0WzWXpBQr7JuHGQSbzVTFFPY89Xh95zl2
-         ThArPmQ76At+xqL5aXRjf7cgMMTxwst1N6F+BF+63BVZCnZyzzFaeVEiPOa2OgufWVj5
-         8LdqzblM6Hg/q2sxNN1+RY0hT09x/IKcYnYKzTlq3buUIlY1uA50hYhzByrNgnrSAu80
-         7MkO+5KG4cRSnZVDDgwo0lJZspb98WgHx3iS6Im1ZRTjKlpiSMj6KR4LHLKhMd5sMwmg
-         onyLOuaG9u1kHp6UxJAmAI7R0pj25xnkVLgVK1bylTomQRuwgiS2AlO0JCrDYnByfsQG
-         Zggw==
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nKD4sJvY8u64R4lrHG7fSPlR5NgK9Ot3QdTgymkFPk4=;
+        b=A1G/xzVKyRmQOfDsg8QC6+flkO9ORVgWYbr+iMzLp4FFAu25Sd940VxIx5IkDevPti
+         ki1vPF9teW/7MhHSyZZaWUjbOPIQ57aAqcCNZ99mBiTmla8maFfzoO5cHuIxQgHXlB4a
+         2ND9wNie4pYbBhYlAiDndGCLedFxWem++Mz06Qadn4kOmfg6ZRkhIk/8FvP17Ue6KDCb
+         iDXA2uz4DlWxAu30tzjl/ONi3DzpoKgbIwijKIYAdlI/5wLNKmjtvtRwSORShHdkJPYa
+         5J9S7wXYLVZvNXNttBp24FzzOiXjKzfcZvtlx/ShMUj2+vYLmlEO7fVWrS6C8dhjzRLP
+         iH2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vWTQqj9fLeMGJngGnyZxH0IxP2qo9acI3FCjYeqg6Bs=;
-        b=gmoa5HtL8b6SRSbSi9Odb+ZgqTEQDa1FN7yhiC8eU53xo2Ljh3qc7wN3dfK8ZS4bSe
-         nh8TdBTRNimTxIiMH0JgEk2We+EyXJw75kx8wrxuly1NMU7PuVRdwSAY6nizyllesKUB
-         Js1acMcxxZiZLBq/AUrUYPwmck3N93TqYP8UVQhcLkG594OTEjY5ZUtJhJ55vcS/60Mk
-         TDATgE1E9ZlCXfUXmJeCLm/zKlMdiXodndVGDofI+s/PkC8y4uSgti2rutjJgenOC8jw
-         uXv2P5koa6GPJQMgi5k27t+bLcFiDWrNSVLU7ilxCN2tWkb69HbqKRBQrHB3dLbT2dtU
-         +jyQ==
-X-Gm-Message-State: AFqh2kpK74Bf/7eVgO1jlZHiRp6slMRNo1OMtYckFzELTVlrMfcgouc/
-        X8ZwdG4rCBvkGRud/N+kQ/tp3g==
-X-Google-Smtp-Source: AMrXdXsD/4SlRAUBscl3FIEh3HuaboDmSyPc2XyDxIXuLC/dPSOSigcbjVHn9BM3WqBcq4wxBt9ohA==
-X-Received: by 2002:a62:1791:0:b0:578:8533:9573 with SMTP id 139-20020a621791000000b0057885339573mr26006122pfx.22.1672355892200;
-        Thu, 29 Dec 2022 15:18:12 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id y65-20020a623244000000b00574db8ca00fsm12510101pfy.185.2022.12.29.15.18.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 15:18:11 -0800 (PST)
-Date:   Thu, 29 Dec 2022 15:18:07 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch v3 8/9] KVM: x86/mmu: Make split_shadow_page_cache NUMA
- aware
-Message-ID: <Y64gLzMJ5Ap2VmDs@google.com>
-References: <20221222023457.1764-1-vipinsh@google.com>
- <20221222023457.1764-9-vipinsh@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nKD4sJvY8u64R4lrHG7fSPlR5NgK9Ot3QdTgymkFPk4=;
+        b=QoeJvmvSZsD9fS+hDBz5GXG4cOM6VYmv9tkxOC8sbWRRWHquanqrsQD5SUBb3darIS
+         0S6SyWKS4yJ+i0GFu0GR4giZtM3KYmmZD+mYIcqOYDKRnIURKEwZ+jfrsqMQk7xN2hgL
+         8Rs9TjDVy4ZOCoNqlo7TWjTu7R56KR60LkTQmdb9dTPHA2dk5uts7hViv0ajZ9PvHCGa
+         jFE/YN7BJoJDkdNRmgCoaaGTay9vhF2LkDMSGRk/VeptDt1D0pGi8Feg4WL+ktydaF+n
+         XVbsBV2e8CvnRCQ/vEHYvt+ltV0sGA2LOaXh3+8PqrXeIwfD4FPsROa9ZQ+ZTYoPVDsG
+         xZHQ==
+X-Gm-Message-State: AFqh2krcLC282LWndnXZVIUDkVEVyrDpvsAtsLZPNft0PlQSjQEV3mUC
+        cSnNWTblML/Ln3iyDpRAqDDXtkrXQxkoP0h8UMA=
+X-Google-Smtp-Source: AMrXdXubUgI5QrUr9jQhMlRzP8ft2o7xEYt/jx8JmTEK8dKUAm4wI10/ibMcbPMziEtfHpDwzz4ralS47JWHJNcnCcc=
+X-Received: by 2002:a17:906:26d2:b0:7c1:36:8ffe with SMTP id
+ u18-20020a17090626d200b007c100368ffemr2089811ejc.725.1672355930684; Thu, 29
+ Dec 2022 15:18:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222023457.1764-9-vipinsh@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com> <8fe9b10318994be18934ec41e792af56@realtek.com>
+In-Reply-To: <8fe9b10318994be18934ec41e792af56@realtek.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Fri, 30 Dec 2022 00:18:39 +0100
+Message-ID: <CAFBinCBcurqiHJRSyaFpweYmrgaaUhpy632QQNWcrd3UHRtZbQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 00/19] rtw88: Add SDIO support
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Chris Morgan <macroalpha82@gmail.com>,
+        Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,50 +76,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 06:34:56PM -0800, Vipin Sharma wrote:
-> Make split_shadow_page_cache NUMA aware and allocate page table's pages
-> during the split based on the underlying physical page's NUMA node.
-> 
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  2 +-
->  arch/x86/kvm/mmu/mmu.c          | 50 ++++++++++++++++++---------------
->  2 files changed, 29 insertions(+), 23 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index b1f319ad6f89..7b3f36ae37a4 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1410,7 +1410,7 @@ struct kvm_arch {
->  	 *
->  	 * Protected by kvm->slots_lock.
->  	 */
-> -	struct kvm_mmu_memory_cache split_shadow_page_cache;
-> +	struct kvm_mmu_memory_cache split_shadow_page_cache[MAX_NUMNODES];
->  	struct kvm_mmu_memory_cache split_page_header_cache;
->  
->  	/*
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 511c6ef265ee..7454bfc49a51 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -6126,7 +6126,7 @@ static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
->  int kvm_mmu_init_vm(struct kvm *kvm)
->  {
->  	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
-> -	int r;
-> +	int r, nid;
->  
->  	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
->  	INIT_LIST_HEAD(&kvm->arch.possible_nx_huge_pages);
-> @@ -6145,8 +6145,9 @@ int kvm_mmu_init_vm(struct kvm *kvm)
->  	INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache,
->  				  mmu_page_header_cache, NUMA_NO_NODE);
->  
-> -	INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache,
-> -				  NULL, NUMA_NO_NODE);
-> +	for_each_node(nid)
-> +		INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache[nid],
-> +					  NULL, NUMA_NO_NODE);
-                                                ^^^^^^^^^^^^
-						Should this be nid?
+Hi Ping-Ke,
+
+thanks again for all your input!
+
+On Thu, Dec 29, 2022 at 5:19 AM Ping-Ke Shih <pkshih@realtek.com> wrote:
+[...]
+> > - RX throughput on a 5GHz network is at 19 Mbit/s
+>
+> I have a suggestion about RX throughput, please check below registers with
+> vendor driver:
+>
+> REG_RXDMA_AGG_PG_TH
+> REG_TXDMA_PQ_MAP(0x10c) BIT_RXDMA_AGG_EN (bit2)
+> REG_RXDMA_MODE(0290)  BIT_DMA_MODE (bit1)
+Unfortunately I didn't manage to get the vendor driver to work with
+mainline Linux.
+The Android installation on my board (which is how it was shipped)
+uses the vendor driver but unlike some Amlogic code the Realtek
+(vendor) wireless driver does not allow reading arbitrary registers
+through sysfs.
+So I can't check the values that the vendor driver uses.
+
+> Try to adjust AGG_PG_TH to see if it can help.
+I tried a few values and I can say that it does change the RX
+throughput, but the result is always lower than 19 Mbit/s, meaning
+that it's worse than RX aggregation disabled (on my RTL8822CS).
+Currently we're disabling RX aggregation in the driver. But Jernej
+mentioned previously that for his RTL8822BS he found that RX
+aggregation seems to improve performance.
+
+Independent of this I did some investigation on my own and found that
+when reducing the TX throughput the RX throughput increases.
+For this I tried using ieee80211_{stop,wake}_queue() in the sdio.c HCI
+sub-driver.
+RX throughput is now at 23.5 Mbit/s (that +25% compared to before) on
+my RTL8822CS (with RX aggregation still disabled, just like in the 19
+Mbit/s test).
+Unfortunately TX throughput is now way below 10 Mbit/s.
+
+Additionally I think that the antenna of my board is worse than my
+access point's antenna. So TX from rtw88 to my AP may be faster
+(because the AP can "hear better") than RX (rtw88 "hearing is worse").
+
+For today I'm tired and will stop here.
+
+
+Best regards,
+Martin
+
+
+[0] https://github.com/xdarklight/linux/commit/3f2e6b9cd40dc785b5c72dbc9c8b471a2e205344
