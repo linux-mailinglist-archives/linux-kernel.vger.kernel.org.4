@@ -2,133 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3BC658DA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD302658DA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbiL2Ntd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 08:49:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        id S233443AbiL2Num (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 08:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbiL2Ntb (ORCPT
+        with ESMTP id S229487AbiL2Nuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 08:49:31 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2057.outbound.protection.outlook.com [40.107.8.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5091EA;
-        Thu, 29 Dec 2022 05:49:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hNWufXSklnW8eXXnYTFu+tEZVNEkYxpncNMi4DQ2zkAcmvqdY+mT48rt9ppwDyYFjtHn6qsKw3mO7muNZdxmY9CACadm/O7cUW+N0hQyRPPctFPDaadqRweZSWDaVKPwE86VyOxGYJMN7G4qOOIRXgHlc7X7WE6bXPjnwcDb/QbUj4uaE902NFF0pqNFwuXmaxYHwtWSl2g/oUHMEid5PrbBkHu0O0DOXvG6doTi2t6SVdKB9OHetC2CrwrLEyXQeByJS7NbJVAmsA5tcd9zN6EdiIyWujdj+5AlJQRnR38pXJZH91x2mDUYbjTosO3PHo4RAKG3qiVV8PAt1vlTWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tOGAfx/guPmUARXxFkmG6O4/lEBz4kLkW3y8nSEDQps=;
- b=RptzvDFmo81OCIg+hYIaCsd/7BcmdGABX86RFWInPlCo0UOAzt3j+f3amKkqWEm+PCAYMsG99DVXADAnqmuZVTCvTtEOeccURc1/f0rhANLlCoBxWcBmDhpJLw1peQ9qXarLF/weRo6d3ElnpJtQsALFALwhf/QoF+RZLNKr0C4vpAan9jb0qdRBTxjeY+dBD8njUTGQEL4vOpeOsGgyp4pxTW7HmLk2AA2dVlmYOdg5Gdv4+OBTu5a41dhvTyZ73Ja//Jj6AamNbdmfcGpBXW3uoJDkE2WHwiBv43V/H62odv3DhjFo3oqXi6GIvQD1aZ2kjleI0bdyhiTUr37tPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tOGAfx/guPmUARXxFkmG6O4/lEBz4kLkW3y8nSEDQps=;
- b=Nrem9Pt4JNVHsfP25qDFwa150WxW14hb3gAaAjiS7LhgaY70opxjKF7nwGBkhn/C5bPRuR4zYQJbj3anZNba/SQZB4zAMMaeGpPro14ovyjPib59vMPT7iFrXSPkm+9+IfKqJDvW7LSVcQt7ucWa8UONWNbWPVxcZKMeH/te49krZYUEOAImWJ7jKov79jpyXAk7+b9nrc4HLkITkOAhuMEAsRattOBjcG3EOgmSPOGKQn4hHvMNEYKcMJqoIIY8HH8v0ZTXRNZtv0KqzvRRM1+7UiM3vHw3uB/aAE31R0SkZHLTwnlascUh+srwF1bVau9Uunq2A8gHWYtnJB9sHw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by DB8PR04MB6955.eurprd04.prod.outlook.com (2603:10a6:10:11d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Thu, 29 Dec
- 2022 13:49:25 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::8d51:14ac:adfd:2d9b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::8d51:14ac:adfd:2d9b%5]) with mapi id 15.20.5944.016; Thu, 29 Dec 2022
- 13:49:25 +0000
-Message-ID: <80f92635-6d14-8ff3-17ac-de2e5b977947@suse.com>
-Date:   Thu, 29 Dec 2022 14:49:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC PATCH 04/14] sound: usb: card: Introduce USB SND vendor op
- callbacks
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-5-quic_wcheng@quicinc.com>
-Content-Language: en-US
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20221223233200.26089-5-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0066.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4b::17) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        Thu, 29 Dec 2022 08:50:39 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320D61EA;
+        Thu, 29 Dec 2022 05:50:38 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id o15so13137142wmr.4;
+        Thu, 29 Dec 2022 05:50:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=duyEJD1qg+3LQJyuFvYZow64sOCy88nxykalmK5O5YU=;
+        b=DC8n2ULg36RcVmSYx50CJMQ0eKjA+XqWSbxmNNQddQPw+y9jGuqMJ5bSMLhE3wWw2l
+         dJ2X9J1UwT9HegH6ldg4b5+Obboc0CtWWjA5Wdd5Cw7aXR0o+tDcpBH4YXabdnlgWHd8
+         B4WjwxV2ChiLz6RTDIIOBU38djnNzOTb+f2rdu7fqheO4Vw5uxcmIxPCiAWwKxv0DPtv
+         67vz7MExxkSIZZiRKAf9SjVDv1NHtlMg5I0QNEkoZzgR7aIp8L96S5M8U3MzNpLamQoH
+         NYzlH9UABH4e7N6JKbFmyaobUvMgLY+Ev+EKa2Xw1u8E+TOwexJTTWsG+Tpu6KCBTPMp
+         s8Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=duyEJD1qg+3LQJyuFvYZow64sOCy88nxykalmK5O5YU=;
+        b=2Trw2U0iHrtqI7cPlSi5aI0bu30pQD1JjLlE6f6wxmMIYpyZrNZLTlUKLLo+oZKJwr
+         SaJpoVbOB0YosWPzdlewLcBdSHOsmkwiS0jwyWcE1oaER7wHzEJ86gp/C5vkcZwS/BQx
+         x64psjn6cJtYYzEAWHkICUgVLaN9RUpF972eBn7EbkOJZ0fA5bNMxl6PGIng4+hMTdOJ
+         SVIYpJp9xQytd0w6GQjKrfw08/qVtzGBfMTEufZpJNm8cvhkI6OWLWBRfNoXlFLZKJP8
+         0PG+7wUO+c0X/o6ciNpGbu2iPiX66+Y5Qt9mXAqoFp+fl7cKY0q4b9na20xqgg9S6IPr
+         IReg==
+X-Gm-Message-State: AFqh2krXyRS0KZCPDjynC+KBoOtahSB+FnbmeiyQYV61lVFJhKcc1le3
+        SJNRAVvSWEtxJVWYEA3UW8T8Jt4Pj5Bbpil1
+X-Google-Smtp-Source: AMrXdXsejk/XMwVhyDlX8eDlbR3H9pClUTd3eb8SV8HIMnlFVXHwnRl+nWjcGCr1FNcJ5hGZnloybQ==
+X-Received: by 2002:a05:600c:512a:b0:3d3:3c60:b2bb with SMTP id o42-20020a05600c512a00b003d33c60b2bbmr20372131wms.23.1672321836534;
+        Thu, 29 Dec 2022 05:50:36 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id u9-20020a05600c19c900b003d9876aa04asm14969441wmq.41.2022.12.29.05.50.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 05:50:36 -0800 (PST)
+Date:   Thu, 29 Dec 2022 16:50:33 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: drivers/media/v4l2-core/v4l2-ctrls-api.c:152 user_to_new() warn: if
+ statement not indented
+Message-ID: <202212291913.3PNcavtH-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DB8PR04MB6955:EE_
-X-MS-Office365-Filtering-Correlation-Id: c24555f4-b798-4ee3-f984-08dae9a37eac
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 25UvJLzIJNi+EsjKt5Vge8hETjTsp7in8TKuQaiMqtRQkmEUjO9pltptqYEmjXpQoJGe1HGCv3DcKrqmmAdJNX8vaFxB1/0Pq6y9G8I9ysBlt01Kn3KlfdjkXr1AgMnLyOWk5lvoPjFUkoqVhnlc87mtaamarmBbaoD4WBduoJECMy2a9hDqyxclvOBB4UC2HmFHyksc7lLY1ShKI1PCAqk2wb4GP63265E9kC/8omypjhkE7qj8Xsmtg1d55P9ALVqKXv0ZKbHE2NqLUa+yd/h6gNg+eUskZSLPMdbeLJjToY/B3ahkTx72LTVL5QQPyoKq4x/9erVZlVCJS62DLLeIo0Lc2sHpOqqMCF8GvVyR+pm4LCNrDd7IYGlRN/WNiWEFgfOfIq9dKDhjr6rIX+w5uwh0NPVFDC+nfIa+2qzOkMERL8nsdiYwQdibaGL9vcraqOEEZQg0YyUOtQ6gfUDcQdDAFE560YqflBaaaA/fB5dTn0LbjYon/WbPzJ5MVMHXh2zEro5U8OqPjShj4JmHbdqsin44zB/YGFgCFL40Vtd+fiW6JziQxZGQZbjuRjFml6+ycNrmLs6XM2IfsWiPaAmFME/gT67E2qixNRWZjAAQvOvKutAfOLPfGqfuT1HUDLVqw+/aehMQi5S3SdC+gmQQUsCHnywT2r2An8zpLCnyxNAbYr685iqfn4fegqrDaY/6xAQb297CemdLI2a0z64XjfqhNVqeOTzLh8Min/EtNkrR4iRAihrFNWC3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(376002)(136003)(39860400002)(346002)(451199015)(6512007)(31686004)(5660300002)(4744005)(7416002)(8676002)(41300700001)(8936002)(66946007)(66476007)(4326008)(66556008)(186003)(2616005)(36756003)(921005)(2906002)(478600001)(6486002)(316002)(86362001)(6666004)(53546011)(31696002)(6506007)(38100700002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWVRZHcwMjg0dUt0NWZ5OFo1dXRvVGFtR0Q3RnRDQWJQV3FEUjA5QTJQdGVy?=
- =?utf-8?B?NGVnVEUvMG5yai9rWmcvL0dPS3Q2Q0NGZFhPZVZCK1ZlVUcwOTRCNUI5dDZw?=
- =?utf-8?B?K3Jya2tIOHJZYmlmdkJrNFZRZ0xuODRIWTNoSkRQak5xMEFtK0x1WmJRZTMy?=
- =?utf-8?B?MkE4clZyL3UrWnVKbFh6aTBZYTYwcUJha2J6bDFScGt4bWRvYkg4dURNSThr?=
- =?utf-8?B?RHF6eE13cmlET2wxMUhLZERXemc4VGgxLzdxV2pYS3Q5L2tvVjhWbWVhS1hX?=
- =?utf-8?B?SlNaWUdqUkJ4Q08rVmt4d3BRbnFOcDdqVHdNRmdYOVh3K1lNQ3JjaTNTYTVu?=
- =?utf-8?B?V0FQM1lSbnlyUHRjaTlpVE9FVExCbkVEcjJENk5odlk1bmdJbGtXaXlwMUpN?=
- =?utf-8?B?YlZpbGNxdFcrb21jRTRFYzY3dFZjM3lrWUxhaERuM0lGQnE3d05rMHUzQWdU?=
- =?utf-8?B?b0plRVNVNzY5LzdWdUlSMUJvMzNMclZNVElud0hMN0tKVzlRSHB4Mm9rcXl2?=
- =?utf-8?B?NFRvUzI2VktyYnhCc2l4em4yM3VoYlZ1T2JjQ0s3V1JYOUhIenF4dEFTM3lx?=
- =?utf-8?B?c01Sb3lOOXlucndTUVF1M29GRHA1WWxMd09qd2paMXQwd3pPVndlRzB5UzBG?=
- =?utf-8?B?R3hVUVJkMklJWmRmVCt1aGRWMEdUWTBsd0Z5ZDBNQks1Y0M4Ui9oQVlQcmVP?=
- =?utf-8?B?N3pOMEF1RnVLL0ZldExvZ3pUOWtYRzVYSE85N05jbGh0L3FQOGcxVnIvbGVU?=
- =?utf-8?B?THRjWVVaRjM5Z3BuYjh6YTkyMVZxS3doTSt6SWt1ckVpSjJ1YjcrYmU2M2hP?=
- =?utf-8?B?VDlNOURzSmxjU0hBVitZT01LR3I5R01KcmRNWGhhaG1QZFg0blJFSHVBaGJU?=
- =?utf-8?B?T0JGVHFEL05NbGx6SHFES3JHZGRzcURhd3l5c3hBdHBKSmtnQjIyUlI4RlFQ?=
- =?utf-8?B?UXBPdnNDSFN4Nk00ZHhzZGFmaGNucUgza3RBdGd0RWlSaGlIM0pReXQ2QnR6?=
- =?utf-8?B?d2N3VGJkenUrTlhXaWRHTU8rM2NkclpXbjVaekQ5WE1XVUJXQlUvTXcyZ1Ev?=
- =?utf-8?B?V29PeldjUCtxNi9qa3FHN1pubXFKMUNlZDRUNzl5b2lseG00MnhrSVdNalpR?=
- =?utf-8?B?M0gzZVpsdm1hV25JYWcyUmhtbnFSZndRSkxESW1GY3NUU1pLRnJOaVIySUIw?=
- =?utf-8?B?YzRqUlZjalpuNXRoTTdpeTZsRFNIbjRmck92Y1hmbFh1UDdXWUJSTUYrc3Fq?=
- =?utf-8?B?NE1GaFFTeUtjTC96ZituOWw2dGtxMDhCRGVKcGZadHRRYTAzbUQ2dTY5OTJw?=
- =?utf-8?B?QmN4MmhJcFNob3JMZ2t1TkppcnFOcVUwRHZrbHJhK3RnU0Mxald0TXYzQVpr?=
- =?utf-8?B?RndMc3c3U0RKM24xWlIzUzNxRytod0pWSzhRYVBrY2l3UkdCYWZxRVFlTE1i?=
- =?utf-8?B?SjVVRzF3KzFlUWJsS3B0Nmw2VmtWSWZiYjhxcmwwUll3bkVuNDU0R0lFSG9j?=
- =?utf-8?B?SGhDZjJwcHEzamNnMDBnUFdYRjQ5bUJhNUpOaTE1SjJNcmowVGE4bklrMURy?=
- =?utf-8?B?dVdlMkZxT09qakZMeFFaOFZYMEdXVTF0b0RpYXNlWFpXend4M1FRRjdXK20r?=
- =?utf-8?B?TXdJZ1AwMHY1MjFpR2txZEY5RFVWM1BDV3V6TU9kNWtsdHdIOXo4eVdwdXlu?=
- =?utf-8?B?VEM4K1VZWDlnN1Zxemh4aEtkWmhIb3JPSjk0dkdCSlF5dTVXR216UlR5MnRn?=
- =?utf-8?B?OWVqbThNdW5PdTRSNGlWanFUbFNBRU5QR1VtZEZsb0YzU21SMmlDNUhST05p?=
- =?utf-8?B?SUZWWFB2bWJoTE9jZWczZkNwSENHMU9TaFdrOHlraU5HK3pSd2QxbVg4MXNr?=
- =?utf-8?B?U3dzSmZ0TDdxTEdodHVoekRoMVZnRVFUOWZyeENpenJnNC9CRHVZbUVtVWp5?=
- =?utf-8?B?K2oxcHpsT2FrUTZsTmJ1aWM3Vld6UWZrMkpEZDNQQ01HSlVWQ29DeW1ZZ2RI?=
- =?utf-8?B?REU1eDFrbzE2eTgvZDdQM09yY2RHSkpNdEZOUFE1aklIR3gwbDh0RTF4WFZi?=
- =?utf-8?B?bmFPWDU2V0pBdUwxampqc1JjMG1UUm5janozcC9qeGJWd25ycTZpcks1dkM2?=
- =?utf-8?B?d3lFTHhpcEpYdTBuMU81dm5yd1BWY2xyRVh4K0RDUzJhSWdUTGMvamhiQ1Ix?=
- =?utf-8?Q?ApZTjEnZBoTOB9myhv3h6EwJEdBJ4B9dsPL591YtbCEl?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c24555f4-b798-4ee3-f984-08dae9a37eac
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2022 13:49:24.8208
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: evRh6gyk/8CzmlodGygCF/60r6j4+/2zFdKLVNUM2SqGpN6thOhdbiYWQ4O8XDj+5OCWPqjZ0vt2CTFtPdR0zg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6955
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,20 +71,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1b929c02afd37871d5afb9d498426f83432e71c2
+commit: 73278d483378cf850ade923a1107a70297b2602a media: v4l2-ctrls-api.c: add back dropped ctrl->is_new = 1
+config: sh-randconfig-m031-20221228
+compiler: sh4-linux-gcc (GCC) 12.1.0
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
-On 24.12.22 00:31, Wesley Cheng wrote:
-> Allow for different vendors to be notified on USB SND connect/disconnect
-> seqeunces.  This allows for vendor USB SND modules to properly initialize
-> and populate internal structures with references to the USB SND chip
-> device.
+smatch warnings:
+drivers/media/v4l2-core/v4l2-ctrls-api.c:152 user_to_new() warn: if statement not indented
+drivers/media/v4l2-core/v4l2-ctrls-api.c:154 user_to_new() warn: inconsistent indenting
 
-Hi,
+vim +152 drivers/media/v4l2-core/v4l2-ctrls-api.c
 
-this raises a design question. If the system is suspending or, worse,
-hibernating, how do you make sure the offloader and the device are
-suspended in the correct order?
-And what happens if you need to go into reset_resume() when resuming?
+fb582cba44928f Hans Verkuil 2022-07-08   98  static int user_to_new(struct v4l2_ext_control *c, struct v4l2_ctrl *ctrl)
+71c689dc2e732d Hans Verkuil 2021-04-27   99  {
+71c689dc2e732d Hans Verkuil 2021-04-27  100  	int ret;
+71c689dc2e732d Hans Verkuil 2021-04-27  101  	u32 size;
+71c689dc2e732d Hans Verkuil 2021-04-27  102  
+fb582cba44928f Hans Verkuil 2022-07-08  103  	ctrl->is_new = 0;
+fb582cba44928f Hans Verkuil 2022-07-08  104  	if (ctrl->is_dyn_array &&
+5f2c5c69a61dc5 Hans Verkuil 2022-07-11  105  	    c->size > ctrl->p_array_alloc_elems * ctrl->elem_size) {
+5f2c5c69a61dc5 Hans Verkuil 2022-07-11  106  		void *old = ctrl->p_array;
+fb582cba44928f Hans Verkuil 2022-07-08  107  		void *tmp = kvzalloc(2 * c->size, GFP_KERNEL);
+fb582cba44928f Hans Verkuil 2022-07-08  108  
+fb582cba44928f Hans Verkuil 2022-07-08  109  		if (!tmp)
+fb582cba44928f Hans Verkuil 2022-07-08  110  			return -ENOMEM;
+fb582cba44928f Hans Verkuil 2022-07-08  111  		memcpy(tmp, ctrl->p_new.p, ctrl->elems * ctrl->elem_size);
+fb582cba44928f Hans Verkuil 2022-07-08  112  		memcpy(tmp + c->size, ctrl->p_cur.p, ctrl->elems * ctrl->elem_size);
+fb582cba44928f Hans Verkuil 2022-07-08  113  		ctrl->p_new.p = tmp;
+fb582cba44928f Hans Verkuil 2022-07-08  114  		ctrl->p_cur.p = tmp + c->size;
+5f2c5c69a61dc5 Hans Verkuil 2022-07-11  115  		ctrl->p_array = tmp;
+5f2c5c69a61dc5 Hans Verkuil 2022-07-11  116  		ctrl->p_array_alloc_elems = c->size / ctrl->elem_size;
+fb582cba44928f Hans Verkuil 2022-07-08  117  		kvfree(old);
+fb582cba44928f Hans Verkuil 2022-07-08  118  	}
+fb582cba44928f Hans Verkuil 2022-07-08  119  
+71c689dc2e732d Hans Verkuil 2021-04-27  120  	if (ctrl->is_ptr && !ctrl->is_string) {
+fb582cba44928f Hans Verkuil 2022-07-08  121  		unsigned int elems = c->size / ctrl->elem_size;
+71c689dc2e732d Hans Verkuil 2021-04-27  122  
+fb582cba44928f Hans Verkuil 2022-07-08  123  		if (copy_from_user(ctrl->p_new.p, c->ptr, c->size))
+fb582cba44928f Hans Verkuil 2022-07-08  124  			return -EFAULT;
+fb582cba44928f Hans Verkuil 2022-07-08  125  		ctrl->is_new = 1;
+fb582cba44928f Hans Verkuil 2022-07-08  126  		if (ctrl->is_dyn_array)
+fb582cba44928f Hans Verkuil 2022-07-08  127  			ctrl->new_elems = elems;
+fb582cba44928f Hans Verkuil 2022-07-08  128  		else if (ctrl->is_array)
+cd75981ec93a3a Hans Verkuil 2022-08-29  129  			ctrl->type_ops->init(ctrl, elems, ctrl->p_new);
+71c689dc2e732d Hans Verkuil 2021-04-27  130  		return 0;
+71c689dc2e732d Hans Verkuil 2021-04-27  131  	}
+71c689dc2e732d Hans Verkuil 2021-04-27  132  
+71c689dc2e732d Hans Verkuil 2021-04-27  133  	switch (ctrl->type) {
+71c689dc2e732d Hans Verkuil 2021-04-27  134  	case V4L2_CTRL_TYPE_INTEGER64:
+fb582cba44928f Hans Verkuil 2022-07-08  135  		*ctrl->p_new.p_s64 = c->value64;
+71c689dc2e732d Hans Verkuil 2021-04-27  136  		break;
+71c689dc2e732d Hans Verkuil 2021-04-27  137  	case V4L2_CTRL_TYPE_STRING:
+71c689dc2e732d Hans Verkuil 2021-04-27  138  		size = c->size;
+71c689dc2e732d Hans Verkuil 2021-04-27  139  		if (size == 0)
+71c689dc2e732d Hans Verkuil 2021-04-27  140  			return -ERANGE;
+71c689dc2e732d Hans Verkuil 2021-04-27  141  		if (size > ctrl->maximum + 1)
+71c689dc2e732d Hans Verkuil 2021-04-27  142  			size = ctrl->maximum + 1;
+fb582cba44928f Hans Verkuil 2022-07-08  143  		ret = copy_from_user(ctrl->p_new.p_char, c->string, size) ? -EFAULT : 0;
+71c689dc2e732d Hans Verkuil 2021-04-27  144  		if (!ret) {
+fb582cba44928f Hans Verkuil 2022-07-08  145  			char last = ctrl->p_new.p_char[size - 1];
+71c689dc2e732d Hans Verkuil 2021-04-27  146  
+fb582cba44928f Hans Verkuil 2022-07-08  147  			ctrl->p_new.p_char[size - 1] = 0;
+71c689dc2e732d Hans Verkuil 2021-04-27  148  			/*
+71c689dc2e732d Hans Verkuil 2021-04-27  149  			 * If the string was longer than ctrl->maximum,
+71c689dc2e732d Hans Verkuil 2021-04-27  150  			 * then return an error.
+71c689dc2e732d Hans Verkuil 2021-04-27  151  			 */
+fb582cba44928f Hans Verkuil 2022-07-08 @152  			if (strlen(ctrl->p_new.p_char) == ctrl->maximum && last)
+73278d483378cf Hans Verkuil 2022-12-12  153  			ctrl->is_new = 1;
 
-	Regards
-		Oliver
+Was "ctrl->is_new = 1;" supposed to go before the if statement?
+
+71c689dc2e732d Hans Verkuil 2021-04-27 @154  				return -ERANGE;
+71c689dc2e732d Hans Verkuil 2021-04-27  155  		}
+71c689dc2e732d Hans Verkuil 2021-04-27  156  		return ret;
+71c689dc2e732d Hans Verkuil 2021-04-27  157  	default:
+fb582cba44928f Hans Verkuil 2022-07-08  158  		*ctrl->p_new.p_s32 = c->value;
+71c689dc2e732d Hans Verkuil 2021-04-27  159  		break;
+71c689dc2e732d Hans Verkuil 2021-04-27  160  	}
+fb582cba44928f Hans Verkuil 2022-07-08  161  	ctrl->is_new = 1;
+71c689dc2e732d Hans Verkuil 2021-04-27  162  	return 0;
+71c689dc2e732d Hans Verkuil 2021-04-27  163  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
