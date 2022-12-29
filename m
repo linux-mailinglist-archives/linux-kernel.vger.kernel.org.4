@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10123659275
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 23:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3169659278
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 23:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbiL2Wa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 17:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
+        id S234143AbiL2Wdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 17:33:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiL2Wa5 (ORCPT
+        with ESMTP id S229650AbiL2Wdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 17:30:57 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4C0BC25
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 14:30:56 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id k19so5759670pfg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 14:30:56 -0800 (PST)
+        Thu, 29 Dec 2022 17:33:46 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB023BC25;
+        Thu, 29 Dec 2022 14:33:45 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id gh17so47947538ejb.6;
+        Thu, 29 Dec 2022 14:33:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/T7t6TqLFYse20ylRlVN/6lR+B2I/VOA2dwMXXCSOuk=;
-        b=YxCiGBDi8ZLG/+4RsZkzEV/FWaasqxmdRL4VKK2MsCWqNDUoQvbsvcMjHZC6LNvZr7
-         HdUVkwsU+nfs6NNknJCj4l8MUx+xDcaFgZF5mmA/omnDtZg1/IrhEOw1ib8oqx15HN/Q
-         yaCN6dWS1B3r/xZqzqQIV3jDJU2c+7LHgMyKm+00vLFgEIjKUNimp6gzBCISbdAW+Ttt
-         CD6FBsxslNIGKZRlHfLQNQP5jxIbP6fp8JrGBu/CVfSFyFikzQGisEr8S/DiP7s6pz1a
-         Z5/6ykkH0NtnO6c7cDxrrRmh6bVEYUn9gVmGunARS5Uneo4S0AJUtQ0yF/psORuO7TWz
-         IKWg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NnEqCpAGobkh5yewq/ZVNZcO4mC87hVyaNZrine7Wa0=;
+        b=Fk/9xRQHxoeMg/p1YiGg64Q8qCkmhOA5vj6mgCyojGZ74/c5sgf/7iEUbSzOzZp3TH
+         D3fbeJsBlnuO648QzYX5d8dR3Www0JQSlHB0duujUoW8mlZ2BFxr6/P7MG/DV2RYTI/g
+         99shbkG4y+8yaNYxGguM8+0dU3YDol6y0cIP5rOJp7Mow0VMDW3H3d7k4EYRJo7YRECz
+         laxG4XiKn4yQUjOEohcobt+zxi71ykjatlVyA6jdwLkSbLCWvDcVQIl07MPUuuGzsbt/
+         545mX+k0fVqGwbyZM8XHT51wc6mZBhGrd8VkH0nQC54AY/jTx9C39oNzI6TnrHVqirNT
+         Atpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/T7t6TqLFYse20ylRlVN/6lR+B2I/VOA2dwMXXCSOuk=;
-        b=mpgs0AaZqshxDBaM12SYQOcM5V8bf6mHnDPa15uB8ucJx6oGj9MJINL50F1OpK+7ne
-         2lVkf7eazcRSfJVUUheDOYAab2zlWvHF0UOI8Hsf2jwE5iFYvU1YaM09sJzgAEOvOqQg
-         lmlylLCKUpShIthCugVL/vJtAjGYLD7/KsfATr0kHxMlPvIUTa4gROTPpqGRN+3QizcX
-         snkhAjEhVeSg1ELK4Qo1P8rx6xIbbVzNXTUrs3p2a4z6sATTMZPp4ok/3HTLChmuXKfA
-         iEv9cIZVuOM1mXNbjHYFQm5zpblhq+6/7bW7wMJduL9dm1bHZy/1v6TaM0Unz4St4ACT
-         SxMA==
-X-Gm-Message-State: AFqh2kqA6Z16bTX+7ff6GvTojxKLQGZF/aw1Q/JPOIlpIdfF7sH8+/py
-        hBZCxGrehDAe9JuLMv3cQRKcwg==
-X-Google-Smtp-Source: AMrXdXuHIj+DCE+mwA4RZWLh+xZAPbs9xd95o8uZw9dwZkUO+L5+0IrPo1Qt2sgvYpYVIwwOkvi3zQ==
-X-Received: by 2002:a62:4e93:0:b0:57f:ef11:acf9 with SMTP id c141-20020a624e93000000b0057fef11acf9mr28967825pfb.10.1672353055934;
-        Thu, 29 Dec 2022 14:30:55 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id y18-20020aa79432000000b00577617c05ecsm12552429pfo.130.2022.12.29.14.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 14:30:55 -0800 (PST)
-Date:   Thu, 29 Dec 2022 14:30:51 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch v3 5/9] KVM: x86/mmu: Allocate TDP page table's page on
- correct NUMA node on split
-Message-ID: <Y64VG4Bl0fujE2qG@google.com>
-References: <20221222023457.1764-1-vipinsh@google.com>
- <20221222023457.1764-6-vipinsh@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NnEqCpAGobkh5yewq/ZVNZcO4mC87hVyaNZrine7Wa0=;
+        b=6mfPWKxl2ETu+O8Pi89lPnRyyzWG0BHrXlhWpWcP31KVo3jneZEI4rNq5F1Sz8ALeD
+         cW3S/Go4t/ksvXnChZRheWuX/TATSnKBOMJqiq0JAGR/hXy63iSJfG+exaXcxHxlMFQP
+         ikK3KrmlHccEMkJw2+UpAY6qIK0ALu5/ceCcE2NRGXS5bndvzHqImc2p0q3acMeOtjA3
+         Ha9tD4pa1Vhx1hep8H+1Let7cBesbOSrU333YHZhyrIjswvYs481B6iEo93LGWDUvWVI
+         RElyFM7MMimYT7cNwg//q2kU8pwSCQE0Ebv1HC1LmjVYMfwbfYQsrB64a2zGtabTatNR
+         GN3Q==
+X-Gm-Message-State: AFqh2kpFEqHLLZkVNXw+spPj4gbCqmcu37bgWPhR2GE4uzFxTHHdhNSW
+        C+ohdXi3obs5jkxzv2noMzyJStS3gLOQi3m7pAY=
+X-Google-Smtp-Source: AMrXdXuixgE4j+vNTM6toM3AGYa/w3FzZ5+RZbWzcDytBMAu1O+/+kYQ1OQW5eKfMbpTGScdKOAes4DqZOsa9OCNNDE=
+X-Received: by 2002:a17:906:2ccc:b0:7f3:3b2:314f with SMTP id
+ r12-20020a1709062ccc00b007f303b2314fmr2337967ejr.115.1672353224524; Thu, 29
+ Dec 2022 14:33:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222023457.1764-6-vipinsh@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20221224112058.12038-1-liuxin350@huawei.com>
+In-Reply-To: <20221224112058.12038-1-liuxin350@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 29 Dec 2022 14:33:32 -0800
+Message-ID: <CAEf4BzbYAX2KS-KA_6PPhn2edP+1_pDGJC6m6_=ihWGsz71heA@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: Added the description of some API functions
+To:     Xin Liu <liuxin350@huawei.com>
+Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yanan@huawei.com,
+        wuchangye@huawei.com, xiesongyang@huawei.com,
+        kongweibin2@huawei.com, zhangmingyi5@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,146 +72,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 06:34:53PM -0800, Vipin Sharma wrote:
-> When dirty log is enabled, huge pages are split. Page table's pages
-> during the split are allocated based on the current thread NUMA node or
-> mempolicy. This causes inefficient page table accesses if underlying
-> page is on a different NUMA node
-> 
-> Allocate page table's pages on the same NUMA node as the underlying huge
-> page when dirty log is enabled and huge pages are split.
-> 
-> The performance gain during the pre-copy phase of live migrations of a
-> 416 vCPUs and 11 TiB memory VM  on a 8 node host was seen in the range
-> of 130% to 150%.
-
-Can you be more specific about this. "The performance" is vague. I know
-it's an internal workload and fully explaining it would be difficult,
-but you can give readers a slightly more specific idea of what improved.
-e.g.
-
- When testing with a synthetic write-heavy workload in a 416 vCPU VM on
- an 8 NUMA node host, the throughput increased by 150% from X to Y
- operations per second.
-
-It's also necessary to characterize the improvement relative to the
-performance when dirty logging is not enabled. Whithout that information
-it would be hard for an unfamiliar reader to understand how useful this
-change really is.
-
-For example, let's say the throughput of your workload is 100,000
-operations per second before dirty logging is enabled, and that drops
-down to 1,000 operations per second after dirty logging is enabled. This
-commit could increase that by 150% to 2,500 operations per second, but
-that's actually not a very meaningful improvement since, either way,
-guest performance is degraded by 95+% during dirty logging.
-
-On the other hand, if performance goes from 100,000 to 30,000 normally,
-and this commit increases that 30,000 to 75,000 (150%), that's a much
-more meaningful improvement.
-
-> 
-> Suggested-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+On Sat, Dec 24, 2022 at 3:21 AM Xin Liu <liuxin350@huawei.com> wrote:
+>
+> Currently, many API functions are not described in the document.
+> I have tried to add the API description of the following four API
+> functions:
+>  libbpf_set_print
+>  bpf_object__open
+>  bpf_object__load
+>  bpf_object__close
+>
+> Signed-off-by: Xin Liu <liuxin350@huawei.com>
 > ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++----
->  include/linux/kvm_host.h   | 18 ++++++++++++++++++
->  2 files changed, 26 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 4974fa96deff..376b8dceb3f9 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1403,7 +1403,7 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
->  	return spte_set;
->  }
->  
-> -static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
-> +static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
->  {
->  	struct kvm_mmu_page *sp;
->  
-> @@ -1413,7 +1413,8 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
->  	if (!sp)
->  		return NULL;
->  
-> -	sp->spt = (void *)__get_free_page(gfp);
-> +	sp->spt = kvm_mmu_get_free_page(nid, gfp);
-> +
->  	if (!sp->spt) {
->  		kmem_cache_free(mmu_page_header_cache, sp);
->  		return NULL;
-> @@ -1427,6 +1428,9 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->  						       bool shared)
->  {
->  	struct kvm_mmu_page *sp;
-> +	int nid;
-> +
-> +	nid = kvm_pfn_to_page_table_nid(spte_to_pfn(iter->old_spte));
->  
->  	/*
->  	 * Since we are allocating while under the MMU lock we have to be
-> @@ -1437,7 +1441,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->  	 * If this allocation fails we drop the lock and retry with reclaim
->  	 * allowed.
->  	 */
-> -	sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
-> +	sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_NOWAIT | __GFP_ACCOUNT);
->  	if (sp)
->  		return sp;
->  
-> @@ -1449,7 +1453,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->  		write_unlock(&kvm->mmu_lock);
->  
->  	iter->yielded = true;
-> -	sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
-> +	sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_KERNEL_ACCOUNT);
->  
->  	if (shared)
->  		read_lock(&kvm->mmu_lock);
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index d48064503b88..a262e15ebd19 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1583,6 +1583,24 @@ void kvm_arch_sync_events(struct kvm *kvm);
->  int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
->  
->  struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn);
-> +
-> +/*
-> + * Tells the appropriate NUMA node location of the page table's page based on
-> + * pfn it will point to.
 
-I know what you are trying to say but the wording is a bit awkward. e.g.
-"Tells" instead of "Returns", "location" is redundant, "page table's
-page", etc. Suggest this:
+I've tweaked descriptions a bit to match the overall style and fixed
+few typos. Pushed to bpf-next, thanks!
 
-/*
- * Returns an appropriate NUMA node on which to allocate a page table that
- * maps @pfn.
- */
-
-> + *
-> + * Return the nid of the page if pfn is valid and backed by a refcounted page,
-> + * otherwise, return the nearest memory node for the current CPU.
-
-I would just drop this as it's just restating the code, which is already
-very readable.
-
+>  tools/lib/bpf/libbpf.h | 27 ++++++++++++++++++++++++++-
+>  1 file changed, 26 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index eee883f007f9..bf3af52d42be 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -96,6 +96,12 @@ enum libbpf_print_level {
+>  typedef int (*libbpf_print_fn_t)(enum libbpf_print_level level,
+>                                  const char *, va_list ap);
+>
+> +/**
+> + * @brief **libbpf_set_print()** use the user-provided log print function.
+> + * @param fn the log print function. Disable all print if the parameter
+> + * is NULL.
+> + * @return Pointer to old print function.
 > + */
-> +static inline int kvm_pfn_to_page_table_nid(kvm_pfn_t pfn)
-> +{
-> +	struct page *page = kvm_pfn_to_refcounted_page(pfn);
-> +
-> +	if (page)
-> +		return page_to_nid(page);
-> +	else
-> +		return numa_mem_id();
-> +}
-> +
->  bool kvm_is_zone_device_page(struct page *page);
->  
->  struct kvm_irq_ack_notifier {
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
+>  LIBBPF_API libbpf_print_fn_t libbpf_set_print(libbpf_print_fn_t fn);
+>
+>  /* Hide internal to user */
+> @@ -174,6 +180,14 @@ struct bpf_object_open_opts {
+>  };
+>  #define bpf_object_open_opts__last_field kernel_log_level
+>
+> +/**
+> + * @brief **bpf_object__open()** creates a bpf_object by opening
+> + * the BPF ELF object file pointed to by the passed path and loading it
+> + * into memory.
+> + * @param path BPF object file path.
+> + * @return pointer to the new bpf_object; or NULL is returned on error,
+> + * error code is stored in errno
+> + */
+>  LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
+>
+>  /**
+> @@ -204,9 +218,20 @@ bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
+>                      const struct bpf_object_open_opts *opts);
+>
+>  /* Load/unload object into/from kernel */
+> +/**
+> + * @brief **bpf_object__load()** load bpf_object into kernel
+> + * @param obj pointer to a valid bpf_object
+> + * @return 0, on success; negative error code, otherwise, error code is
+> + * stored in errno
+> + */
+>  LIBBPF_API int bpf_object__load(struct bpf_object *obj);
+>
+> -LIBBPF_API void bpf_object__close(struct bpf_object *object);
+> +/**
+> + * @brief **bpf_object__close()** close a bpf_object and release all
+> + * resources.
+> + * @param obj pointer to a valid bpf_object
+> + */
+> +LIBBPF_API void bpf_object__close(struct bpf_object *obj);
+>
+>  /* pin_maps and unpin_maps can both be called with a NULL path, in which case
+>   * they will use the pin_path attribute of each map (and ignore all maps that
+> --
+> 2.33.0
+>
