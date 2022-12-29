@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C2E658DE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A344658DE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbiL2OXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 09:23:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S233306AbiL2O0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 09:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiL2OXw (ORCPT
+        with ESMTP id S229658AbiL2O0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 09:23:52 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADDC11162;
-        Thu, 29 Dec 2022 06:23:46 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.97.69]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N1M4p-1oiToD4B3b-012o5W; Thu, 29 Dec 2022 15:23:19 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id C85883C0EF; Thu, 29 Dec 2022 15:23:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1672323797; bh=mjwczseVNfUo1/OKAMNSB9yiaJUfPCMTsbX3+JrZzwY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=3i6otrRS4i/0Hp2N4h00eUREbxwSQ1a8j6qALIu8rHgPUuVxrQTbe0IILgYsK14Db
-         f90X1dDN6hGcZ2BcQ/F5xm/247ULXAKRLvIGJe9xu8YURx45NzhVgHE2WK6yb7+S/K
-         1EO2bu98VAdRton/wR6VKNL2y7BFeJaSvApHNRWE=
-Date:   Thu, 29 Dec 2022 15:23:17 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v3 2/2] kbuild: make W=1 warn files that are tracked but
- ignored by git
-Message-ID: <Y62i1bwkYfhg2PSl@fjasle.eu>
-References: <20221229074310.906556-1-masahiroy@kernel.org>
- <20221229074310.906556-2-masahiroy@kernel.org>
+        Thu, 29 Dec 2022 09:26:10 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3976E0A8;
+        Thu, 29 Dec 2022 06:26:07 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id j130so11619243oif.4;
+        Thu, 29 Dec 2022 06:26:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pu2i+yqAuTpsosJSjE8BjQ/j8yCFJ6AF+GvsZ04xxRY=;
+        b=WZ/aiULlHgKhCNIC2gvA+k7OyG1HotluR0o3Ig1QNlRPvj74h7umpuZPUhvcZCs9cp
+         jrBpgHKYcwGgdNLUi30Sq0BcTN6O4sltMtRrqJVyXY/DHiCnlhov+WdTpHm6kq+922fM
+         zPWcUUjsluax0vcbNREv68sbMrGD74zwPVrNM5YIJblQqA0z9BG0PvV3kvTUoirMrFck
+         f9Obx4fn4wKSDqi08eiqEtyOGV47h0773mjcTyFDldRZoD2n+hzmwYMrxhdSsXI3cxI2
+         pDDESHTalyUTYosGGIES+O36PgeYzhWb0OkMsgKlUvVf9UQml5xcBQVHIfQYCMJPoXdQ
+         1d+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pu2i+yqAuTpsosJSjE8BjQ/j8yCFJ6AF+GvsZ04xxRY=;
+        b=lG0PZyg7FsDrXJz6nCVKnx9Tb+kKxiC9kQkSxobYrwZ3svZzm6LLXisv5rqNBT8SL6
+         9NstkhzMOvMZTYl+w8oyUFE3NWDZZhEqa/pbAYysI2q6PtqsEv/lmZ8T/0nYbF9NqXga
+         uX3ug8nY+MVS8aCeSfdt8vWxGyiNmDAvDobaX6/DbiNsSzkArdXy1zwMVCA7nLpFjC37
+         HzEVn12a1+oiqsDwShu+00BMIUOMZcXvpnj68NAU5KsKxl69G79/bYDkdksy9aTzjBdn
+         wyCwh01gS5+Ql5jyYh/bhz971Yu/GeUHjorp1ixdmVzFSJ2E4AzyZXbOanVtphBAXwmq
+         gIfA==
+X-Gm-Message-State: AFqh2krpi+hBPl610dKNWwxyKaDIGD+kRoDgdY0kIl2jBdZ13CCNGAPv
+        GAiLR79PcJufclHEYfuEUjI5dryUKtM=
+X-Google-Smtp-Source: AMrXdXul0FfiL51kGC1BF3UBOu+y2T89lKbLnMENTSBBRzlZ2FXOTvjmcCVTs6rs+znhrUrOdca5cw==
+X-Received: by 2002:a05:6808:3af:b0:360:ea74:b6b9 with SMTP id n15-20020a05680803af00b00360ea74b6b9mr12937155oie.37.1672323967066;
+        Thu, 29 Dec 2022 06:26:07 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id be15-20020a056808218f00b0035e7c48d08esm8148585oib.15.2022.12.29.06.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 06:26:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 29 Dec 2022 06:26:05 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (ftsteutates) Fix scaling of measurements
+Message-ID: <20221229142605.GA20427@roeck-us.net>
+References: <20221224041855.83981-1-W_Armin@gmx.de>
+ <20221224041855.83981-2-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="X0NbyVINxFPwW/kn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221229074310.906556-2-masahiroy@kernel.org>
-X-Provags-ID: V03:K1:i4s6tLvk0LaalFYtwYmE4oLGGn8grnGCND1Nki1rGSqQnw/qgov
- Gj8kZWMiyPm6Mw/8k2PkOBckSEsVmDaLagMcj43cv4FYA20K6zeanYIebTfmPr9usiOWPaT
- P8lprHavyEulil6YjaIiHfUE8G3ReFHyCUIwKt3f68np4zxSW6wMaIC1EbyOMR49qXC+hiV
- NwlgnLGDB9fuMkP6rnZxQ==
-UI-OutboundReport: notjunk:1;M01:P0:A5qdHYWe55I=;SJDkzolwm5lVoedeQKHholWTP2q
- lpABVyBu4sKK3+h8kcydBpheMFgvLS0LGza/LQXdo6gpnY38ExHlUwAQst20lvcwWdAC+iB1f
- beu1nnO2Q3cztrUY5KxXY9yQwDzTcQ4OAzrGQy7pCEUhqzQY1DgGt1WcMgS03ZnKSGpvEyBNk
- uh/wE6JSU6/fL1evC5HTwWn23F7A/opwGSj9dh+0RMMZ/hqL5ERNeE8MpX96dyNOeOh56uNl0
- KJ2SlqRNtVLTyXNj3IZiZei4dddSmI6M6huKLHNsilcnGR+Z944gb8F7rQKSk95kOac96ROHI
- UdiAxOc+n2+WOaTU6sHM263x6RalA21Nr6xw3H8PvCqUXLZnsUpNas/AQXtrzIyrBVuKJrqDT
- +/7pUH5U2kcriGzTpABweFkgE3X59z414/5ChhxLfGJiuxua8MsLmALJABQfCKdIdKHBfdBIE
- blplbu2fQHwKbBSHtBO9S9QxVttqY9IYoS7b+ukxDglriVkEFCAbI0CuBoSkcPcsn7GtwHUKj
- RHEBK3lOrsG8MGC0xHqVaxNIcA9sWz8HibJy7ca+7CV6hCNIHRthyKYyJZPCjg7mq840sVFDG
- xiywy4/YHGMda9mAPc5Y+w1ZkXukMgv6B4EzMsX1An6elPJwN2VvcBm435eQbReELZNEXcSsQ
- RhcT+RK1JTTDQGTXQliQSUjEUDEHxD4Ep1ZR6/Lp0w==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221224041855.83981-2-W_Armin@gmx.de>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,95 +75,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Dec 24, 2022 at 05:18:53AM +0100, Armin Wolf wrote:
+> A user complained that the ftsteutates driver was displaying
+> bogus values since its introduction. This happens because the
+> sensor measurements need to be scaled in order to produce
+> meaningful results:
+> - the fan speed needs to be multiplied by 60 since its in RPS
+> - the temperature is in degrees celsius and needs an offset of 64
+> - the voltage is in 1/256 of 3.3V
+> 
+> The offical datasheet says the voltage needs to be divided by 256,
+> but this is likely an off-by-one-error, since even the BIOS
+> devides by 255 (otherwise 3.3V could not be measured).
+> 
+> The voltage channels additionally need a board-specific multiplier,
+> however this can be done by the driver since its board-specific.
+> 
+> The reason the missing scaling of measurements is the way Fujitsu
+> used this driver when it was still out-of-tree. Back then, all
+> scaling was done in userspace by libsensors, even the generic one.
+> 
+> Tested on a Fujitsu DS3401-B1.
+> 
+> Fixes: 08426eda58e0 ("hwmon: Add driver for FTS BMC chip "Teutates"")
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
---X0NbyVINxFPwW/kn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied.
 
-On Thu, Dec 29, 2022 at 04:43:10PM +0900 Masahiro Yamada wrote:
-> The top .gitignore comments about how to detect files breaking
-> .gitignore rules, but people rarely care about it.
->=20
-> Add a new W=3D1 warning to detect files that are tracked but ignored by
-> git. If git is not installed or the source tree is not tracked by git
-> at all, this script does not print anything.
->=20
-> Running it on v6.2-rc1 detected the following:
->=20
->   $ make W=3D1 misc-check
->   Documentation/devicetree/bindings/.yamllint: warning: ignored by one of=
- the .gitignore files
->   drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore fil=
-es
->   drivers/gpu/drm/tests/.kunitconfig: warning: ignored by one of the .git=
-ignore files
->   drivers/hid/.kunitconfig: warning: ignored by one of the .gitignore fil=
-es
->   fs/ext4/.kunitconfig: warning: ignored by one of the .gitignore files
->   fs/fat/.kunitconfig: warning: ignored by one of the .gitignore files
->   kernel/kcsan/.kunitconfig: warning: ignored by one of the .gitignore fi=
-les
->   lib/kunit/.kunitconfig: warning: ignored by one of the .gitignore files
->   mm/kfence/.kunitconfig: warning: ignored by one of the .gitignore files
->   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one =
-of the .gitignore files
->   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of=
- the .gitignore files
->   tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored b=
-y one of the .gitignore files
->   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one=
- of the .gitignore files
->=20
-> These are ignored by the '.*' or 'tags' in the top .gitignore, but
-> there is no rule to negate it.
->=20
-> You might be tempted to do 'git add -f' but I want to have the real
-> issue fixed (by fixing a .gitignore, or by renaming files, etc.).
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+Thanks,
+Guenter
+
 > ---
->=20
-> Changes in v3:
->   - change working directory to srctree (Nicolas)
->=20
-> Changes in v2:
->   - Add $(srctree)/ to make it work with O=3D
->=20
->  Makefile           |  6 ++++++
->  scripts/misc-check | 19 +++++++++++++++++++
->  2 files changed, 25 insertions(+)
->  create mode 100755 scripts/misc-check
-
-Tested-by: Nicolas Schier <nicolas@fjasle.eu>
-
-out of curiosity: do you plan to implement more checks in the misc-checks
-target?
-
-Kind regards,
-Nicolas
-
-
---X0NbyVINxFPwW/kn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmOtotUACgkQB1IKcBYm
-EmnwuBAAoMmfuZ6JPzJHu0ceuCT067vTo+07ut0PHHsaP0c+waWmODqVIpjmW5gV
-9rf5NMaEHi+qWYrjkzhM+sAb5PRt68lw9t0bwqCw6mpkWjCREw6PSgjgOs+KhgW7
-ozlnmFSzHMviZJ6+unjIJtgQl871Uugv7RvIcUC2/xdfwaAGeao7AmGv1juyagFl
-ZIqoJeLzRiYcrdZ8TDPEcib1AjOG3C7Ck0djNlMvMC/5VFpxvAMCyD5TpiHKRV4B
-w2+jt4jdHV3FuFtw57QdnMkJVkOK7iE3YQsk8RycMM0yE20yqtAFVMkYzqAEnGmR
-DV9Brc6AAmlJovalRaT0ztlyXmumhADxVM7Sk40tcgqmU3HJF87mH0PzV9NA/n6/
-idubT98895106yt3y80Ffwe0l6lJ/rct8refiJLSd+7+QUMmKYjdxrLvBPhHUK7y
-7OpkkTt/vc8Hmlu87ZwnYy7Afg8AYVs7iwKyDzC54FnC/PUknkjI5UmbhxRe3/gh
-9VWiDAnY9XEBUqvrIsIwMb+rP6AyAqppyix4UaonZURwIYt3v/vZHhjGvHrNvWXR
-g5SlK/cm3/FsqATqzGwzPPjnbb5a7eVmgKWVdeaKDK8IBdfYNCj337PT5feYcDwB
-KXvtdxEiS7S+iGzgOroaLuubjv69vx1roUMww/lIWEYtAUDMjG4=
-=D8WC
------END PGP SIGNATURE-----
-
---X0NbyVINxFPwW/kn--
+>  Documentation/hwmon/ftsteutates.rst |  4 ++++
+>  drivers/hwmon/ftsteutates.c         | 19 +++++++++++++------
+>  2 files changed, 17 insertions(+), 6 deletions(-)
+> 
+> --
+> 2.30.2
+> 
+> diff --git a/Documentation/hwmon/ftsteutates.rst b/Documentation/hwmon/ftsteutates.rst
+> index 58a2483d8d0d..198fa8e2819d 100644
+> --- a/Documentation/hwmon/ftsteutates.rst
+> +++ b/Documentation/hwmon/ftsteutates.rst
+> @@ -22,6 +22,10 @@ enhancements. It can monitor up to 4 voltages, 16 temperatures and
+>  8 fans. It also contains an integrated watchdog which is currently
+>  implemented in this driver.
+> 
+> +The 4 voltages require a board-specific multiplier, since the BMC can
+> +only measure voltages up to 3.3V and thus relies on voltage dividers.
+> +Consult your motherboard manual for details.
+> +
+>  To clear a temperature or fan alarm, execute the following command with the
+>  correct path to the alarm file::
+> 
+> diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
+> index f5b8e724a8ca..ffa0bb364877 100644
+> --- a/drivers/hwmon/ftsteutates.c
+> +++ b/drivers/hwmon/ftsteutates.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/i2c.h>
+>  #include <linux/init.h>
+>  #include <linux/jiffies.h>
+> +#include <linux/math.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/slab.h>
+> @@ -347,13 +348,15 @@ static ssize_t in_value_show(struct device *dev,
+>  {
+>  	struct fts_data *data = dev_get_drvdata(dev);
+>  	int index = to_sensor_dev_attr(devattr)->index;
+> -	int err;
+> +	int value, err;
+> 
+>  	err = fts_update_device(data);
+>  	if (err < 0)
+>  		return err;
+> 
+> -	return sprintf(buf, "%u\n", data->volt[index]);
+> +	value = DIV_ROUND_CLOSEST(data->volt[index] * 3300, 255);
+> +
+> +	return sprintf(buf, "%d\n", value);
+>  }
+> 
+>  static ssize_t temp_value_show(struct device *dev,
+> @@ -361,13 +364,15 @@ static ssize_t temp_value_show(struct device *dev,
+>  {
+>  	struct fts_data *data = dev_get_drvdata(dev);
+>  	int index = to_sensor_dev_attr(devattr)->index;
+> -	int err;
+> +	int value, err;
+> 
+>  	err = fts_update_device(data);
+>  	if (err < 0)
+>  		return err;
+> 
+> -	return sprintf(buf, "%u\n", data->temp_input[index]);
+> +	value = (data->temp_input[index] - 64) * 1000;
+> +
+> +	return sprintf(buf, "%d\n", value);
+>  }
+> 
+>  static ssize_t temp_fault_show(struct device *dev,
+> @@ -436,13 +441,15 @@ static ssize_t fan_value_show(struct device *dev,
+>  {
+>  	struct fts_data *data = dev_get_drvdata(dev);
+>  	int index = to_sensor_dev_attr(devattr)->index;
+> -	int err;
+> +	int value, err;
+> 
+>  	err = fts_update_device(data);
+>  	if (err < 0)
+>  		return err;
+> 
+> -	return sprintf(buf, "%u\n", data->fan_input[index]);
+> +	value = data->fan_input[index] * 60;
+> +
+> +	return sprintf(buf, "%d\n", value);
+>  }
+> 
+>  static ssize_t fan_source_show(struct device *dev,
