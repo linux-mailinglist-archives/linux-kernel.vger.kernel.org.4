@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569816587F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 00:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0566587F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 01:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiL1X6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 18:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S231722AbiL2AA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 19:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiL1X6d (ORCPT
+        with ESMTP id S229630AbiL2AAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 18:58:33 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3A213FAC
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 15:58:32 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BSNwDZT740625
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Wed, 28 Dec 2022 15:58:14 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BSNwDZT740625
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022120601; t=1672271895;
-        bh=g+vUQSWM8S+CJcD539vqhAMG4lCGgJ1msfXsb2Kc1bw=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=SP9mXm3ejT+I8KWJp7ZU7QfEACk1fXjCLwlsr2JPh6kPi9vhWZyLPKUoDA7xez7Lj
-         8mKL7hIh7LMUn+GDh4r3IL20SSFePUBHCj79Kdmm+ivgBlLmkBz3jMxk5j5lprW76Y
-         4RionjIX8AniNu6B62nbeyVrI4zKOpabnl8x67U89CPZEVeWvW/i63LSu/kfSiHeeE
-         LtelFnwDnjaGOOP5COPrE72KDcj9CZh5+4rm9JiyqWUPMXx4lsZK6U74GyOka5Q4A9
-         BDPDdM/MVzJe1QovMZUoNWdk1yNeKU5Apd9EO0OZ0Rznt1fD7BK3oHyX6rJFan5Nby
-         iGN3NMKleVkBg==
-Date:   Wed, 28 Dec 2022 15:58:12 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        ardb@kernel.org, kraxel@redhat.com, bp@alien8.de, philmd@linaro.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_qemu=5D_x86=3A_don=27t_let_decomp?= =?US-ASCII?Q?ressed_kernel_image_clobber_setup=5Fdata?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y6x1knb8udpSyMSp@zx2c4.com>
-References: <20221228143831.396245-1-Jason@zx2c4.com> <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org> <Y6xvJheSYC83voCZ@zx2c4.com> <Y6x1knb8udpSyMSp@zx2c4.com>
-Message-ID: <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com>
+        Wed, 28 Dec 2022 19:00:23 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809DC13F66;
+        Wed, 28 Dec 2022 16:00:19 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MgNh1-1odFjc0WTP-00hz5T; Thu, 29
+ Dec 2022 01:00:16 +0100
+Message-ID: <52793f07-a842-dac0-b7c2-bca641e18a94@gmx.com>
+Date:   Thu, 29 Dec 2022 08:00:11 +0800
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     Qu Wenruo <wqu@suse.com>, dsterba@suse.com,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+References: <CABXGCsNzVxo4iq-tJSGm_kO1UggHXgq6CdcHDL=z5FL4njYXSQ@mail.gmail.com>
+ <CABXGCsMMYmCT_Hz=wfKWDy4OQJ2KyBO3rNAFC1YCAthziWm+Lg@mail.gmail.com>
+ <41734bdb-2df0-6596-01b6-76a7dfd05d64@gmx.com>
+ <CABXGCsM6GOzr+wL9BEk7mD5xLNgsKE5KUBADD8r783V6-FwXdg@mail.gmail.com>
+ <e9f4d768-d91b-b5cc-dbe6-041a81833cf3@gmx.com>
+ <CABXGCsPK6ZZ4=5qathvjqSJNde6MYhA0uvh6zAMznT9Yj3xk2g@mail.gmail.com>
+ <24cd64b2-4536-372c-91af-b425d2f6efd4@gmx.com>
+ <CABXGCsOG1GR1QqQSULHRcqJyfo5zY1bkZA+Mkb2m3C=rV_2z2w@mail.gmail.com>
+ <ff262ad5-2ae3-329a-ba88-19721850131d@gmx.com>
+ <CABXGCsOgy0N_TLEadgacMBQLuU5xBe-hmoRvv4h=q-M5PcPvEg@mail.gmail.com>
+ <7d2edc1d-922b-763c-3122-0a6f81c3454e@suse.com>
+ <CABXGCsOq56Qjq+-Bnfbe7ZvhfjSs204cbc8VFG7b+J2Ncss0ng@mail.gmail.com>
+ <fd0a0bfe-5c67-fd95-b17c-78a14c63bea6@gmx.com>
+ <CABXGCsMev+96zixic3=5cLgzMfZKcJE-zOLPrc3-vTrrDZQDig@mail.gmail.com>
+ <dc63f5ac-44f4-f5eb-f1b0-c14291595e3d@gmx.com>
+ <CABXGCsMhtEFDWYhFU25X3NSw3R3z8byV23F_E0EgSEfcvHrZFw@mail.gmail.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: Re: [6.2][regression] after commit
+ 947a629988f191807d2d22ba63ae18259bb645c5 btrfs volume periodical forced
+ switch to readonly after a lot of disk writes
+In-Reply-To: <CABXGCsMhtEFDWYhFU25X3NSw3R3z8byV23F_E0EgSEfcvHrZFw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:2SUEsCNvuq/EcN3gZ72JCc9vQLF2LpaosyJ8iDEUdcn8LbHps5R
+ SxNUXd1Wh23brnOSZTwDZmtRTlm9OZkyh5NJ/4hGgYoC5Rbn4KlnDIFqO0hOa/YpCrfE1NU
+ XdbyrC8VKvokvbZXw5pKtOFOV2Nt/gGRUhEOS0dyTrUA5PgBLuTqs8aitpltiLa1PhWT38u
+ PDaHmApmnhWM3VSx9jxsg==
+UI-OutboundReport: notjunk:1;M01:P0:tVGWBWFHVek=;16r7pdq3iojDXlexuZfAUAhrq2V
+ x1Q0zvnhmNaXv4ukPVSwZ9tiZSioTVdJDSXibWLnzHbLc5omXtQ62asyDCeLHCRJD7hrEeqep
+ Hxr7E6M4Yr2FkQvfYGrmo7BSziGax3enaQ7Y3Pf/OVDoaPPgPISzHS/JJbT3V3TZSWKlriVwy
+ N+9oD8ZkZn0AQCyWa9KkyFUBFeP3coJJveG9tIlGDyj3riSvfthX9R3LAldK/e7YG4p1vybm6
+ Otg12crnfOpNj1banWacXXTIeB4fOARTvxJgsHeo/GUIAuTbFMQ5P4MJD0+bg5mjlAA8vEHsb
+ ett9peGer2KymSGGjAnFfzCaqiY+FVgjoTl5uF75ImYjXyHCnafr/cBU72C1ddzf2gvy8bA6I
+ Ozh4KJPzhoURxqPE5Rsu+QaI0JSY8aEDY3cFKmn1KRxFfUpfogTgNwtoGzRCvX/pi63EtTg0B
+ S7sNCJJaG4Ijl4GElyrLTEuSwkKI4aDSofoydqFK85Ss+joQ84YZrwBHTM1OWU07MAIk9IHvw
+ iUeLA+/5rl69aP0PkyEpVmMP+nuYnCvyaDsKaaZrMSPIGo1NIYwghxW8zVrAbz1xRtGcaLXzS
+ xfkpI2AueT8bGCiMwIRGUavLaVcsRSaLuarqShWvXSseSAUGvKV3iQVu1nvwbw0VSPD/ZrBgx
+ O47Z4AuUE1mtg5nkzMg3eeqClCSHN28IRP8BjCwGdVdDlWOMi+jZKOP5bPmSkw5IbPu4PVG6G
+ LRlknGqkptnhZddwEaZiXxqCmeUljWfMtfJGDSrO9YtEUG3OxhIAFP3+SdIeUB8UWHIhmwUiC
+ m4uKawPudJQKdHX4cY7cGqhOmBJRJCQToaBtpp0B5ZpSvAhHS9kSZF8tXkVXijI3m/VUejl6w
+ K5mBq1Qy6qMWcTT2TOdsxceKpSwtUOcTOJtf+agiw65WEr+uNjIn50Llfrwb1XQsZKzp4TX8+
+ +QArXJNxOqpfHydsafp3Y+3cTUg=
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On December 28, 2022 8:57:54 AM PST, "Jason A=2E Donenfeld" <Jason@zx2c4=2E=
-com> wrote:
->HELLO H=2E PETER ANVIN,
->E
->L
->L
->O
->
->On Wed, Dec 28, 2022 at 05:30:30PM +0100, Jason A=2E Donenfeld wrote:
->> > Fix looks good, glad you figured out the problem=2E
->>=20
->> I mean, kind of=2E The solution here sucks, especially given that in th=
-e
->> worst case, setup_data just gets dropped=2E I'm half inclined to consid=
-er
->> this a kernel bug instead, and add some code to relocate setup_data
->> prior to decompression, and then fix up all the links=2E It seems like
->> this would be a lot more robust=2E
->>=20
->> I just wish the people who wrote this stuff would chime in=2E I've had
->> x86@kernel=2Eorg CC'd but so far, no input from them=2E
->
->Apparently you are the x86 boot guru=2E What do you want to happen here?
->Your input would be very instrumental=2E
->
->Jason
 
-Hi!
 
-Glad you asked=2E
+On 2022/12/29 07:42, Mikhail Gavrilov wrote:
+> On Thu, Dec 29, 2022 at 4:24 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>>
+>> Just one last thing to confirm, mind to provide the following dump?
+>>
+>>    # btrfs ins dump-tree -t chunk <device>
+>>
+>> If the fix works, it means you have some tree block crossing stripe
+>> boundary, which is not the ideal situation.
+> 
+> I attached this dump.
+> The only thing that I did from a working system I hope it is not
+> affected to result?
+> 
+For small dumps like chunk tree, it's completely fine to dump from live 
+systems.
 
-So the kernel load addresses are parameterized in the kernel image setup h=
-eader=2E One of the things that are so parameterized are the size and possi=
-ble realignment of the kernel image in memory=2E
+And your dumps (along with your previous debug output) shows no metadata 
+crossing stripe boundaries.
 
-I'm very confused where you are getting the 64 MB number from=2E There sho=
-uld not be any such limitation=2E
+I'd need dig deeper why btrfs is splitting extent buffers unnecessarily.
 
-In general, setup_data should be able to go anywhere the initrd can go, an=
-d so is subject to the same address cap (896 MB for old kernels, 4 GB on ne=
-wer ones; this address too is enumerated in the header=2E)
-
-If you want to put setup_data above 4 GB, it *should* be ok if and only if=
- the kernel supports loading the initrd high, too (again, enumerated in the=
- header=2E
-
-TL;DR: put setup_data where you put the initrd (before or after doesn't ma=
-tter=2E)
-
-To be maximally conservative, link the setup_data list in order from lowes=
-t to highest address; currently there is no such item of relevance, but in =
-the future there may be setup_data items needed by the BIOS part of the boo=
-tstrap in which case they would have to be < 1 MB and precede any items > 1=
- MB for obvious reasons=2E That being said, with BIOS dying it is not all t=
-hat likely that such entries will ever be needed=2E
-
+Thanks,
+Qu
