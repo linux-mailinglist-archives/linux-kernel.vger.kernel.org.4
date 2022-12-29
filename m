@@ -2,129 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2956591D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DE96591D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234049AbiL2UxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 15:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        id S233861AbiL2UzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 15:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiL2UxK (ORCPT
+        with ESMTP id S229613AbiL2UzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 15:53:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1B5BC0D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:52:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672347148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DeG05ASAQvY/FceYSGJdKCGQ3OFwx25lz4jlpRPWbnU=;
-        b=CyydvGwzPP3fLVYWpVliXmXQqCrkO5vFWqD2G/eF6WnvrzLE9bE4odPOFEByCJPXx1zK7N
-        3CW4NLlm4xL0AqHnTqMhsk9cWBJ6Uuhsic1loBCpqEVeOVsFEOTwngBg+tn14ERoLM33Ac
-        yUygSuFg7+aLVxGsIqRVpizKmEoGM14=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-611-2y7CwD2ZPyOBvwHcz4jBAQ-1; Thu, 29 Dec 2022 15:52:27 -0500
-X-MC-Unique: 2y7CwD2ZPyOBvwHcz4jBAQ-1
-Received: by mail-ed1-f71.google.com with SMTP id v4-20020a056402348400b0046cbbc786bdso13344857edc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:52:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DeG05ASAQvY/FceYSGJdKCGQ3OFwx25lz4jlpRPWbnU=;
-        b=4EjAXDL73j/jeJw9NA67qZJUul3mq/sWzsgW/7k4bO8Aws3/KCutzu27+mKNObo1dT
-         xVorQXwZgy4lbbESIXwPj+XLzw6v7FgIehEB6+qkBQ75dcg9cjK0cbNu9MuXKKdOuJw4
-         SSUkTOsLrvpNXWW1pdrxoCa+45ZJBsHhXwivZUOpTNe5FpTIoBB4ptg65TDtpVWnhWLm
-         9Xjpbx0LwmOF2LiUUt5JJHPmZB1iV0PmC80KTH6i4/aGFkWV/IZqPhbLCMNXmDoyKE9l
-         RGZJtuNuOGzTJvMtt0fagvefxndG7zUb0xy72ZmkGqOa27Zfspscrf0Sr7oaCpLcDEmo
-         CRMg==
-X-Gm-Message-State: AFqh2koZulaclAz05orz71ONbuWmTMQZUfTFIQmJTK79qPocPO5Fkyju
-        bzpMOq1sbi0Qgm1QKP5VZs5kICxPxCqIFfUHnrSU0u4sNlDZhyVYIyKuSVvcvVxu59xkaaoeYVy
-        29fsxu1tBfsphiAzWz8HZBN69
-X-Received: by 2002:a17:907:6f09:b0:7c1:37:6d5e with SMTP id sy9-20020a1709076f0900b007c100376d5emr4872268ejc.2.1672347146329;
-        Thu, 29 Dec 2022 12:52:26 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuAZx8SHyajJmJ++QT23AGJAvs5IxosEfN11APvih7Pbj5KPIpkonmPHiwyMLfqMEbO8Dqn3Q==
-X-Received: by 2002:a17:907:6f09:b0:7c1:37:6d5e with SMTP id sy9-20020a1709076f0900b007c100376d5emr4872244ejc.2.1672347146101;
-        Thu, 29 Dec 2022 12:52:26 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312::529? ([2001:b07:6468:f312::529])
-        by smtp.googlemail.com with ESMTPSA id 23-20020a170906301700b0084c90164a56sm1096571ejz.29.2022.12.29.12.52.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 12:52:25 -0800 (PST)
-Message-ID: <4d73d1b9-2c28-ab6a-2963-579bcc7a9e67@redhat.com>
-Date:   Thu, 29 Dec 2022 21:52:21 +0100
+        Thu, 29 Dec 2022 15:55:02 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34F1AE41;
+        Thu, 29 Dec 2022 12:55:00 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EE2FD283;
+        Thu, 29 Dec 2022 21:54:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672347298;
+        bh=97obUa25AWySinbvAk5YwsC8CEZqGjb8Mg5elGlUPA8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DQMj0DYvvFu0sqegxHbl647x3Y1Shx67J1qhM7q20J+RH9sDWBnnOBsYSI7R3VJnk
+         zaUMfqcqNjSqxz8h7gO/+MF9D6T3xkn3t1fi9LmnzZWBtqIwMRpVGCbKPVPl1R4GS+
+         a5vbiVDAtb0bUgxAsritLJ3fNrG/h3WG3DL8q+FU=
+Date:   Thu, 29 Dec 2022 22:54:52 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Subject: Re: [PATCH RESEND v2 1/7] media: uvcvideo: uvc_ctrl_is_accessible:
+ check for INACTIVE
+Message-ID: <Y63+nF2PqKad8S18@pendragon.ideasonboard.com>
+References: <20220920-resend-v4l2-compliance-v2-0-b0ceb15353ac@chromium.org>
+ <20220920-resend-v4l2-compliance-v2-1-b0ceb15353ac@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 00/50] KVM: Rework kvm_init() and hardware enabling
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paul Durrant <paul@xen.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20221227130249.1650197-1-pbonzini@redhat.com>
- <9acea262dec3511e9cf63081506f0bd7@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <9acea262dec3511e9cf63081506f0bd7@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220920-resend-v4l2-compliance-v2-1-b0ceb15353ac@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/22 12:22, Marc Zyngier wrote:
+Hi Ricardo and Hans,
+
+Thank you for the patch.
+
+On Fri, Dec 02, 2022 at 06:21:35PM +0100, Ricardo Ribalda wrote:
+> From: Hans Verkuil <hverkuil@xs4all.nl>
 > 
->> Queued, thanks.  I will leave this in kvm/queue after testing everything
->> else and moving it to kvm/next; this way, we can wait for test results
->> on other architectures.
+> Check for inactive controls in uvc_ctrl_is_accessible().
+> Use the new value for the master_id controls if present,
+> otherwise use the existing value to determine if it is OK
+> to set the control. Doing this here avoids attempting to
+> set an inactive control, which will return an error from the
+> USB device, which returns an invalid errorcode.
+
+I'd write the subject line as
+
+media: uvcvideo: Check for INACTIVE in uvc_ctrl_is_accessible()
+
+and reflow the commit message to 72 columns here.
+
+> This fixes:
+>   warn: v4l2-test-controls.cpp(483): s_ctrl returned EIO
+>   warn: v4l2-test-controls.cpp(483): s_ctrl returned EIO
+> test VIDIOC_G/S_CTRL: OK
+>   warn: v4l2-test-controls.cpp(739): s_ext_ctrls returned EIO
+>   warn: v4l2-test-controls.cpp(739): s_ext_ctrls returned EIO
+>   warn: v4l2-test-controls.cpp(816): s_ext_ctrls returned EIO
+> test VIDIOC_G/S/TRY_EXT_CTRLS: OK
 > 
-> Can you please make this a topic branch, and if possible based
-> on a released -rc? It would make it a lot easier for everyone.
+> Tested with:
+> v4l2-ctl -c auto_exposure=1
+> OK
+> v4l2-ctl -c exposure_time_absolute=251
+> OK
+> v4l2-ctl -c auto_exposure=3
+> OK
+> v4l2-ctl -c exposure_time_absolute=251
+> VIDIOC_S_EXT_CTRLS: failed: Input/output error
+> exposure_time_absolute: Input/output error
+> ERROR
+> v4l2-ctl -c auto_exposure=3,exposure_time_absolute=251,auto_exposure=1
+> v4l2-ctl -C auto_exposure,exposure_time_absolute  
+> auto_exposure: 1
+> exposure_time_absolute: 251
+> 
+> Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+> Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c | 47 +++++++++++++++++++++++++++++++++++++++-
+>  drivers/media/usb/uvc/uvc_v4l2.c |  4 ++--
+>  drivers/media/usb/uvc/uvcvideo.h |  3 ++-
+>  3 files changed, 50 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index 8c208db9600b..7153ee5aabb1 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -1064,11 +1064,33 @@ static int uvc_query_v4l2_class(struct uvc_video_chain *chain, u32 req_id,
+>  	return 0;
+>  }
+>  
+> +/**
+> + * uvc_ctrl_is_accessible() - Check if a control can be read/writen/tried.
+> + * @chain: uvc_video_chain that the controls belong to.
+> + * @v4l2_id: video4linux id of the control.
+> + * @ctrl: Other controls that will be accessed in the ioctl.
+> + * @ioctl: ioctl used to access the control.
 
-This is now refs/heads/kvm-hw-enable-refactor in 
-https://git.kernel.org/pub/scm/virt/kvm/kvm.git.
+The driver doesn't use kerneldoc anywhere, so to match the current style
+I'd use /* instead of /**, and drop the documentation of the function
+arguments as it's trivial.
 
-The commits for this series start at hash fc471e831016.
+> + *
+> + * Check if a control can be accessed by a specicific ioctl operation,
 
-Paolo
+s/specicific/specific/
 
+> + * assuming that other controls are also going to be accessed by that ioctl.
+> + * We need to check the value of the other controls, to support operations
+> + * where a master value is changed with a slave value. Eg.
+> + * auto_exposure=1,exposure_time_absolute=251
+> + *
+
+Extra blank line.
+
+I'd rephrase that a bit to make it more precise:
+
+ * Check if control @v4l2_id can be accessed by the given control @ioctl
+ * (VIDIOC_G_EXT_CTRLS, VIDIOC_TRY_EXT_CTRLS or VIDIOC_S_EXT_CTRLS).
+ *
+ * For set operations on slave controls, check if the master's value is set to
+ * manual, either in the others controls set in the same ioctl call, or from the
+ * master's current value. This catches VIDIOC_S_EXT_CTRLS calls that
+ * set both the master and slave control, such as for instance setting
+ * auto_exposure=1,exposure_time_absolute=251.
+
+> + */
+>  int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
+> -			   bool read)
+> +			   const struct v4l2_ext_controls *ctrls,
+> +			   unsigned long ioctl)
+>  {
+> +	struct uvc_control_mapping *master_map = NULL;
+> +	struct uvc_control *master_ctrl = NULL;
+>  	struct uvc_control_mapping *mapping;
+>  	struct uvc_control *ctrl;
+> +	bool read = ioctl == VIDIOC_G_EXT_CTRLS;
+> +	bool try = ioctl == VIDIOC_TRY_EXT_CTRLS;
+> +	s32 val;
+> +	int ret;
+> +	int i;
+>  
+>  	if (__uvc_query_v4l2_class(chain, v4l2_id, 0) >= 0)
+>  		return -EACCES;
+> @@ -1083,6 +1105,29 @@ int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
+>  	if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR) && !read)
+>  		return -EACCES;
+>  
+> +	if (read || try || !mapping->master_id)
+
+I'd write this
+
+	if (ioctl != VIDIOC_S_EXT_CTRLS || !mapping->master_id)
+
+and drop the try variable.
+
+> +		return 0;
+> +
+> +	/*
+> +	 * Iterate backwards in cases where the master control is accessed
+> +	 * multiple times in the same ioctl. We want the last value.
+> +	 */
+> +	for (i = ctrls->count - 1; i >= 0; i--) {
+> +		if (ctrls->controls[i].id == mapping->master_id)
+> +			return ctrls->controls[i].value ==
+> +					mapping->master_manual ? 0 : -EACCES;
+> +	}
+> +
+> +	__uvc_find_control(ctrl->entity, mapping->master_id, &master_map,
+> +			   &master_ctrl, 0);
+> +
+> +	if (!master_ctrl || !(master_ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR))
+> +		return 0;
+> +
+> +	ret = __uvc_ctrl_get(chain, master_ctrl, master_map, &val);
+> +	if (ret >= 0 && val != mapping->master_manual)
+> +		return -EACCES;
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> index 4cc3fa6b8c98..d95168cdc2d1 100644
+> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> @@ -1020,8 +1020,8 @@ static int uvc_ctrl_check_access(struct uvc_video_chain *chain,
+>  	int ret = 0;
+>  
+>  	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
+> -		ret = uvc_ctrl_is_accessible(chain, ctrl->id,
+> -					    ioctl == VIDIOC_G_EXT_CTRLS);
+> +		ret = uvc_ctrl_is_accessible(chain, ctrl->id, ctrls,
+> +					    ioctl);
+
+This holds on a single line.
+
+Conditionally-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+I can address all the review comments when applying.
+
+>  		if (ret)
+>  			break;
+>  	}
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index 24c911aeebce..644d5fcf2eef 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -905,7 +905,8 @@ static inline int uvc_ctrl_rollback(struct uvc_fh *handle)
+>  int uvc_ctrl_get(struct uvc_video_chain *chain, struct v4l2_ext_control *xctrl);
+>  int uvc_ctrl_set(struct uvc_fh *handle, struct v4l2_ext_control *xctrl);
+>  int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
+> -			   bool read);
+> +			   const struct v4l2_ext_controls *ctrls,
+> +			   unsigned long ioctl);
+>  
+>  int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+>  		      struct uvc_xu_control_query *xqry);
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
