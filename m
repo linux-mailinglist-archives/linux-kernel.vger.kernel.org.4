@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F38658FC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D09B658FC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234042AbiL2RZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 12:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S233951AbiL2RZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:25:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbiL2RYX (ORCPT
+        with ESMTP id S233928AbiL2RYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 12:24:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5119A15F23;
+        Thu, 29 Dec 2022 12:24:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDFF15F2A;
         Thu, 29 Dec 2022 09:24:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0118DB819FC;
-        Thu, 29 Dec 2022 17:24:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43CF8C4331E;
-        Thu, 29 Dec 2022 17:23:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14CE461888;
+        Thu, 29 Dec 2022 17:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD65C433EF;
+        Thu, 29 Dec 2022 17:24:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672334640;
-        bh=F0VX9OVaVAi5UqXtbc8wTdMW41xY9SwZl+5ouw15lzY=;
+        s=k20201202; t=1672334642;
+        bh=XHmLp9yZDI+BKgWJ96JFpf1Pfxo9Zv/tr9yi9QJuKX0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eCggH+9pRcWviQVGukbO+YKB6HGjcqZc3NMYBBfK8EZjbwnQj4MdxQTTrMZdWQIMX
-         aj9//GsogJljut3SO2gSDT7J1rfAscOfT3Al0s7cg/iSCSpQcU04d1P7NmtizjQ3mL
-         xozIvgZka7TLZv6coqM9FYi7swPV5zynisbg3w6ewZ/9AUc2Wdvc2BB4CAinGx8KUX
-         QM7QdDwB6oKr2TH3t9LOQRVX4UUmceWy4dUD8HImwFq1tak00SV7aoj+HEpzIL2kIJ
-         AfY+xd5M9jtz2i9bvxwUbJqgAmesEgEsDv23GY/yJtuoGrkOxFELvUqJVJa5sY+eMk
-         AgNVcL9Ys96Xg==
+        b=mcK3XdXbBpV36VckC+R/1ONh/uy9uKkTBKyERB85jj+dKbOf+YjepFPvWAkAXrI1I
+         zOAAhEp6/a2toL52Lywi+Dq1l9zy+hVidY9zLxEyWuQ1/P4ZSMwzdRBGl/tKLZZwfA
+         XfjRsCWQVUnDIGDPeyYqbmH9Tc7l+GXh0U/pAbtXs3uroqE1XN93ZmQilfJEPUU/S+
+         98oaDSSyOwAAbLEq3Yexn8GanJxR2zU5eUAZsLTKeLJrwVBVNQjnK4K+JPRLp0yR8J
+         b5HxwzS65RlgWkMZk9E7Mbw1fLJPOvg94N3GvbV8w9UwgSICNuHnq1nw+3Iru7Zaog
+         iZo6ulTDdBXNw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, phone-devel@vger.kernel.org, vkoul@kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     bhupesh.sharma@linaro.org, mailingradian@gmail.com,
-        linux-arm-msm@vger.kernel.org, martin.botka@somainline.org,
-        jami.kettunen@somainline.org, they@mint.lgbt,
-        konrad.dybcio@somainline.org, luca.weiss@fairphone.com,
-        dmaengine@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
+To:     joro@8bytes.org, phone-devel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>, will@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org,
+        martin.botka@somainline.org, krzysztof.kozlowski+dt@linaro.org,
         ~postmarketos/upstreaming@lists.sr.ht,
-        linux-kernel@vger.kernel.org,
-        angelogioacchino.delregno@somainline.org, konrad.dybcio@linaro.org,
-        devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 0/2] arm64: dts: qcom: sm6125: Enable GPI DMA
-Date:   Thu, 29 Dec 2022 11:23:38 -0600
-Message-Id: <167233461774.1099840.1967515625455827333.b4-ty@kernel.org>
+        angelogioacchino.delregno@somainline.org,
+        bhupesh.sharma@linaro.org, dmitry.baryshkov@linaro.org,
+        quic_molvera@quicinc.com, linux-arm-kernel@lists.infradead.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, jami.kettunen@somainline.org,
+        robh+dt@kernel.org, treding@nvidia.com, agross@kernel.org,
+        they@mint.lgbt, konrad.dybcio@linaro.org, robin.murphy@arm.com,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev
+Subject: Re: (subset) [PATCH v5 0/4] arm64: dts: qcom: sm6125: Enable APPS SMMU
+Date:   Thu, 29 Dec 2022 11:23:39 -0600
+Message-Id: <167233461773.1099840.14120754082491956847.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221222194600.139854-1-marijn.suijten@somainline.org>
-References: <20221222194600.139854-1-marijn.suijten@somainline.org>
+In-Reply-To: <20221222193254.126925-1-marijn.suijten@somainline.org>
+References: <20221222193254.126925-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,21 +64,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Dec 2022 20:45:58 +0100, Marijn Suijten wrote:
-> Enable GPI DMA on SM6125 by using the new sdm845 compatible with
-> ee_offset 0.
+On Thu, 22 Dec 2022 20:32:50 +0100, Marijn Suijten wrote:
+> Add APPS SMMU to SM6125 dtsi and use it in SDHCI/USB nodes.
 > 
-> Changes since v2:
-> - Remove leading zero from iommu stream ID.
+> Changes since v4:
 > 
-> v2: https://lore.kernel.org/linux-arm-msm/20221216231528.1268447-1-marijn.suijten@somainline.org/T/#u
+> - Use hexadecimal 0x0 for iommu mask;
+> - Add sm6125 to the dt-bindings list without clocks, now depending on:
+>   https://lore.kernel.org/linux-arm-kernel/20221222092355.74586-1-krzysztof.kozlowski@linaro.org/
 > 
 > [...]
 
 Applied, thanks!
 
-[2/2] arm64: dts: qcom: sm6125: Add GPI DMA nodes
-      commit: 581734f754d2cb3bd748687dedb3c4ba298d7d80
+[2/4] arm64: dts: qcom: sm6125: Configure APPS SMMU
+      commit: 8ddb4bc3d3b52e0a560a18e4d739c83f56efe7c9
+[3/4] arm64: dts: qcom: sm6125: Add apps_smmu with streamID to SDHCI 1/2 nodes
+      commit: 60f6c86fb4fd16bd86aa1b16bc51ef4ac0e20d4e
+[4/4] arm64: dts: qcom: sm6125: Add IOMMU context to DWC3
+      commit: ac54563c27528ab9461899de7d99ee4e3858b858
 
 Best regards,
 -- 
