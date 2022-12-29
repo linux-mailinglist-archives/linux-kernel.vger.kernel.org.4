@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF27658C50
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:39:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F695658C54
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbiL2Ljh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 06:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
+        id S230521AbiL2LmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 06:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbiL2LjW (ORCPT
+        with ESMTP id S229871AbiL2LmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 06:39:22 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C71B13E9B;
-        Thu, 29 Dec 2022 03:39:21 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id z11so10493633ede.1;
-        Thu, 29 Dec 2022 03:39:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZL7W0UbK/uwHhrL/ebbYLl16dFNUQnqpqk5DlrkcofQ=;
-        b=XZebkHQJ416b2bVgOIpHp7OjUe+l5KMCIwXfMscGFBwoNs4j4l32Jrbn64AgdoaKq3
-         eFwp5ruKCymbMl4iHGbjt7ZXCZlJkRwMKoETrNz77eX670EGUDPV1qg8mOzLTl4W8KzN
-         gRHxEacLvb0dGJZGd8nlhzlLvohACE2GeQj/CKmRFWDug9fkVV1GI6G4Dd6ZPJUTgwBX
-         8kIyQS4FNd6Qail9uIbTpfhf0rBoaK1poKfC2To12ARZAvYLBDPdjfetv50kXBInudH4
-         ZxQrQKLJioMFOTe4eWEyAj+mvbMunSRGNUyrZhApDj1E1omytLGjg+70ejvgUP1GoG1B
-         b0iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZL7W0UbK/uwHhrL/ebbYLl16dFNUQnqpqk5DlrkcofQ=;
-        b=bWkGqh51u/dLLBNANViz3Ol9fKhSeAazzp534ZwLtVPVcjN1xcvx9QHhDTOjlekfbF
-         RIAKnw/jQi4MuswpZnqvoa5zpS/gbKuv1wlCWMke1UC9rNwi6s4/gsW2DFc+e1hV5VDF
-         LuBiuIg4B84rDy/BIQlCN0cHPS7oGFi6NqegfyjJbRbwVKxQzvHFS2awzsLVje5I6ERF
-         zxkZatxBJAklIPNeR676liE9Va2Dr1viiy0Hp9qjTLdwuIshKcsUTuPnc/ihNeToLNg6
-         PmGem/PU//6Aqe86W/YXUzkxKsYcxkKpcWDhIIqZRPTnIgQ7obcdyht46ius3+wolTu+
-         bo4A==
-X-Gm-Message-State: AFqh2kq1heE0cJkmsBaeOUF77ujbsPOpxTbHkzXuPq83UendZQsSwxeX
-        NWDLZ0BrRJtQG8QTrKD1ueJ8J0XrWSw=
-X-Google-Smtp-Source: AMrXdXvpRLDZqD2mcnt2ORSXZKriqyX1MovkfFzEg33cDv6OGKF42t7q6lJRk0KCvZs3N4kx+yTweQ==
-X-Received: by 2002:aa7:c516:0:b0:485:48ed:b1f3 with SMTP id o22-20020aa7c516000000b0048548edb1f3mr10954209edq.26.1672313959810;
-        Thu, 29 Dec 2022 03:39:19 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id r28-20020a056402035c00b0045b4b67156fsm8161374edw.45.2022.12.29.03.39.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 03:39:19 -0800 (PST)
-Message-ID: <99794484-d67e-ee1f-4e76-200de20a879c@gmail.com>
-Date:   Thu, 29 Dec 2022 12:39:17 +0100
+        Thu, 29 Dec 2022 06:42:08 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA691EE2B;
+        Thu, 29 Dec 2022 03:42:07 -0800 (PST)
+Received: from [192.168.88.87] (unknown [125.160.97.236])
+        by gnuweeb.org (Postfix) with ESMTPSA id CD84D7E259;
+        Thu, 29 Dec 2022 11:42:03 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1672314126;
+        bh=Wm/M0KFPV/UrXA6Ml+ZYeaSNEGdUKJquP84+pixMr+Q=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=ioEorrDULg3Vw9Qd+4LGx9rD7cCo67YGL8iFu7LH+j5isM323rjg3vzUW+u5yueMZ
+         RVzN1O83fZL6I+9sCJ7M6InEbiYLXC3t1CWc9M6nJKPn2DsxlgqhnEpY00wcw86iBV
+         1qhspCaMEOt5GtvxTaXjmyaDW9FnO3JGxB8VTUH1+XQEBp0mFA2OnEB9brCE6GchKr
+         Fgf3BUk68UNoWamXXKM0Ubw9yMwdaimTBt4SrAZLx0fh2bv2pPap1tkLGOnxWiHsQg
+         UZBD4GivfptXWNdiVmxFbjZ32PcASp6lWmb04kxQJnthS2wRMZ0UkBTt9M38uYqqSY
+         OS5u22AWSGmxA==
+Message-ID: <39d68044-2641-75da-929a-f5e852f0a3d0@gnuweeb.org>
+Date:   Thu, 29 Dec 2022 18:41:59 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v1] dt-bindings: phy: rename phy-rockchip-inno-usb2.yaml
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-phy@lists.infradead.org,
-        vkoul@kernel.org, kishon@kernel.org
+ Thunderbird/102.4.2
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        VNLX Kernel Department <kernel@vnlx.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+References: <20221222035134.3467659-1-ammar.faizi@intel.com>
+ <20221222043452.GB29086@1wt.eu>
+ <20221222134615.3535422-1-ammar.faizi@intel.com>
+ <20221227062640.GA5337@1wt.eu>
+ <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
+ <20221227184902.GA6287@1wt.eu>
+ <23e84c59-4f2c-01b4-5b8a-80af39a1d761@gnuweeb.org>
+ <20221228133513.GA7457@1wt.eu>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
+In-Reply-To: <20221228133513.GA7457@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename phy-rockchip-inno-usb2.yaml to a more common format of
-rockchip,inno-usb2phy.yaml
+On 12/28/22 8:35 PM, Willy Tarreau wrote:
+> OK thanks!
+> 
+> I've pushed for you an update which starts to do what I proposed. Errno
+> and environ are now marked weak for all archs, and _auxv is set for i386,
+> x86_64, arm64 and arm for now:
+> 
+>     https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20221227-nolibc-weak-2
+> 
+> You can already use it to implement getauxval(), it will normally work
+> for these archs.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
+Will do and be back with two patch series.
 
-Apply after:
-  dt-bindings: soc: rockchip: grf: add rockchip,rk3288-dp-phy.yaml
----
- .../{phy-rockchip-inno-usb2.yaml => rockchip,inno-usb2phy.yaml} | 2 +-
- Documentation/devicetree/bindings/soc/rockchip/grf.yaml         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename Documentation/devicetree/bindings/phy/{phy-rockchip-inno-usb2.yaml => rockchip,inno-usb2phy.yaml} (98%)
+> I think we could avoid the asm specific stuff is we get rid of the frame
+> pointer. Please look below:
+> 
+>    __attribute__((weak,unused,noreturn,optimize("omit-frame-pointer"),section(".text.nolibc_rt_sigreturn")))
+>    void sys_rt_sigreturn()
+>    {
+>          my_syscall0(__NR_rt_sigreturn);
+>          __builtin_unreachable();
+>    }
 
-diff --git a/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml b/Documentation/devicetree/bindings/phy/rockchip,inno-usb2phy.yaml
-similarity index 98%
-rename from Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
-rename to Documentation/devicetree/bindings/phy/rockchip,inno-usb2phy.yaml
-index f71920082..0d6b8c28b 100644
---- a/Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
-+++ b/Documentation/devicetree/bindings/phy/rockchip,inno-usb2phy.yaml
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/phy/phy-rockchip-inno-usb2.yaml#
-+$id: http://devicetree.org/schemas/phy/rockchip,inno-usb2phy.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+Wow! You just taught me that we can force optimize a function with
+optimize("omit-frame-pointer") attribute. Nice to know this one!
 
- title: Rockchip USB2.0 phy with inno IP block
-diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-index 8dc141410..39d8c3b5d 100644
---- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-+++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-@@ -192,7 +192,7 @@ allOf:
-       patternProperties:
-         "usb2phy@[0-9a-f]+$":
-           type: object
--          $ref: /schemas/phy/phy-rockchip-inno-usb2.yaml#
-+          $ref: /schemas/phy/rockchip,inno-usb2phy.yaml#
-           unevaluatedProperties: false
+I compile-tested it and it indeed gives the correct code on x86-64.
+Hopefully this approach works for all archs.
 
-   - if:
---
-2.20.1
+> It gives me the correct code for x86_64 and i586. I don't know if other
+> architectures will want to add a prologue. I tried with "naked" but it's
+> ignored by the compiler since the function is not purely asm. Not very
+> important but given that we already have everything to perform our calls
+> it would make sense to stay on this. By the way, for the sake of
+> consistency with other syscalls, I do think the function (or label if
+> we can't do otherwise) should be called "sys_rt_sigreturn" as it just
+> performs a syscall.
+
+Will call that 'sys_rt_sigreturn' in the next series.
+
+Thanks!
+
+-- 
+Ammar Faizi
 
