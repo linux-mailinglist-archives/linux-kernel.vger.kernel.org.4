@@ -2,169 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B41658FDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E703658FE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbiL2RbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 12:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S233942AbiL2Rbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233860AbiL2Ras (ORCPT
+        with ESMTP id S233840AbiL2RbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 12:30:48 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC99396;
-        Thu, 29 Dec 2022 09:30:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672335043; x=1703871043;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=jzJmJ8hNoMsewqwbxcPd1etes2MnlJv/Rt5CviLAz5E=;
-  b=N17Q1U+j0UPm09zmjsfo2XlGVatUgI0QMpU9RjFvRhyJn+GSovwuTYD2
-   TYSm2mWi96kKOpcYTYGBYUaE4jMzyaIOHkvSOJqRLLKroJBAXW2aK2/Z1
-   g70eSzy63Z+PnZvGn6vpOwWPwnUWsmaP4wHvSZud0QG556lFZAAXwnDFD
-   SETjXtSaF57/THypDrtkC42Sz6CYBssMVatSea4tnRVeAW62q+y0RzqPM
-   RKCDy7pyGPqJxtxZsczTiDTOOeMRkypLCEMJTGX9lmbb68ubB2NR3U/fl
-   kq7DDtyHYlnfNrA/bs4+CiBvEaYOyVrI9HjE4zP7pes9Du3BQIn2DxJF2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="319798857"
-X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
-   d="scan'208";a="319798857"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 09:30:43 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="777740202"
-X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
-   d="scan'208";a="777740202"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 09:30:43 -0800
-Date:   Thu, 29 Dec 2022 09:31:02 -0800 (PST)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v8 3/4] fpga: dfl: add basic support for DFHv1
-In-Reply-To: <Y61kb9OGikxLvAcr@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2212290911001.1857691@rhweight-WRK1>
-References: <20221228181624.1793433-1-matthew.gerlach@linux.intel.com> <20221228181624.1793433-4-matthew.gerlach@linux.intel.com> <Y61kb9OGikxLvAcr@smile.fi.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 29 Dec 2022 12:31:18 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032E314D19
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 09:31:16 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id i127so17646769oif.8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 09:31:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NJCXUXY/M8fTwQQAdzuC6CJTX/+lXiGdvSWxvK5G6oA=;
+        b=WKZIfZNz9UKJkJ+ocpI1xexXH07sw2P3f7WU9Ir50CBc32zAlHh+SkNDRzlF9SSgWo
+         RlN0i7HCiy+GdOL58Zxc1c5OuyPStHLJYsJFFJkPqkLkISnxpuoHhydccPpMCpkeVL2J
+         pXK48VH6n5Sug61DnBSQ71+CkC0/IxZxXaNuBuNkb0hSTwIkBqKolyI307YYSGOe2hhb
+         yluu9wuElKnfK7LrBejgiPIo9J7BT5bFB/FHkAGOKeDmfeoqUacKeUNV3Tc//2R02IGv
+         6StasNqLXd2xih4D/ujoXAAJw7F1DH23xr81arzoDispPWa9w2PFZODJETqFZnWt5xU9
+         sK6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NJCXUXY/M8fTwQQAdzuC6CJTX/+lXiGdvSWxvK5G6oA=;
+        b=EUgr/348tGHlmhVeAJcg7WmQPrCHw6Q76w0z8f66BP6qQ7ge22Utxer8gk4b5NXRF3
+         TNoBOJBN9uXE/R6yBnkjS00gSJ1S+dsOjrwYmDBmCH4TRHMtvJt++gLPIZF0jhH8rGFH
+         Gq22a8Y1jcYZIwQaHliGWivagj19m092GaHAnklQhcZPv7/HejMtTMjRzvstOX4r6Vk4
+         puiK05NOCyj5WCNd9cF17cv03J4UBI7MpnM1Hq7Vi0o1Q6hZXRiGVxJ+BeA9YjlKjZJj
+         60EBCb3sGGzwuTo9f/hP4euqobnJI20APv1h28C0m2iR9obetff3+Yk2CK5JUjIWvzBn
+         soyg==
+X-Gm-Message-State: AFqh2ko+x4LXObrvItXh1hwdl0DmhU+/l9iG783YruPtnnJojGEL9zw8
+        zB/nxf1aT5w0jf+Qu3qIEdRzSpRjxWYIcXQhaOk=
+X-Google-Smtp-Source: AMrXdXvp283pf5WoH/3pj/+GlGfkAIOh/nwYkfc/HL9Vkid6wsHr7LAhQ9viUtuYtqwqumkJIaO5Tdp8p1Rq2NVDPGY=
+X-Received: by 2002:a05:6808:2994:b0:35b:f5f7:3ed0 with SMTP id
+ ex20-20020a056808299400b0035bf5f73ed0mr1888175oib.46.1672335075214; Thu, 29
+ Dec 2022 09:31:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228163102.468-1-mario.limonciello@amd.com>
+In-Reply-To: <20221228163102.468-1-mario.limonciello@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 29 Dec 2022 12:31:03 -0500
+Message-ID: <CADnq5_NpLB5Nr_C5UN5UkJEo7E9=MBExmbhcTJHdjEuRSU8ccw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/11] Recover from failure to probe GPU
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org,
+        Carlos Soriano Sanchez <csoriano@redhat.com>,
+        christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Patches 1-10 are:
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
 
-
-On Thu, 29 Dec 2022, Andy Shevchenko wrote:
-
-> On Wed, Dec 28, 2022 at 10:16:23AM -0800, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Version 1 of the Device Feature Header (DFH) definition adds
->> functionality to the DFL bus.
->>
->> A DFHv1 header may have one or more parameter blocks that
->> further describes the HW to SW.  Add support to the DFL bus
+On Wed, Dec 28, 2022 at 11:31 AM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> Single space is enough.
-
-Yes, single space is enough. Two spaces after a period is hard habit for 
-me break. I will update in v9.
-
+> One of the first thing that KMS drivers do during initialization is
+> destroy the system firmware framebuffer by means of
+> `drm_aperture_remove_conflicting_pci_framebuffers`
 >
->> to parse the MSI-X parameter.
->>
->> The location of a feature's register set is explicitly
->> described in DFHv1 and can be relative to the base of the DFHv1
->> or an absolute address.  Parse the location and pass the information
->> to DFL driver.
+> This means that if for any reason the GPU failed to probe the user
+> will be stuck with at best a screen frozen at the last thing that
+> was shown before the KMS driver continued it's probe.
 >
-> I'm wondering what DFL states for.
-
-I will define DFL in the commit message like DFH in the next revision.
-
+> The problem is most pronounced when new GPU support is introduced
+> because users will need to have a recent linux-firmware snapshot
+> on their system when they boot a kernel with matching support.
 >
-> ...
+> However the problem is further exaggerated in the case of amdgpu because
+> it has migrated to "IP discovery" where amdgpu will attempt to load
+> on "ALL" AMD GPUs even if the driver is missing support for IP blocks
+> contained in that GPU.
 >
->> +/**
->> + * dfh_get_u64_param_vals() - get array of u64 param values for given parameter id
->> + * @dfl_dev: dfl device
->> + * @param: id of dfl parameter
->> + * @pval: location of parameter data destination
->> + * @nvals: number of u64 elements of parameter data
->> + *
->> + * Return: pointer to start of parameter block, PTR_ERR otherwise
->> + */
->> +u64 *dfh_get_u64_param_vals(struct dfl_device *dfl_dev, int param_id, u64 *pval, int nvals)
->> +{
->> +	u64 *param = find_param(dfl_dev->params, dfl_dev->param_size, param_id);
->> +	u64 next;
->> +	int i;
->> +
->> +	if (!param)
->> +		return ERR_PTR(-ENOENT);
->> +
->> +	next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, *param);
->> +
->> +	if (nvals >= next)
->> +		return ERR_PTR(-ENOMEM);
+> IP discovery requires some probing and isn't run until after the
+> framebuffer has been destroyed.
 >
-> ENODATA ?
-
-ENODATA does seem to be more accurate than ENOMEM in this case.
-
+> This means a situation can occur where a user purchases a new GPU not
+> yet supported by a distribution and when booting the installer it will
+> "freeze" even if the distribution doesn't have the matching kernel support
+> for those IP blocks.
 >
->> +	for (i = 0; i < nvals; i++)
->> +		*pval++ = param[i + 1];
+> The perfect example of this is Ubuntu 22.10 and the new dGPUs just
+> launched by AMD.  The installation media ships with kernel 5.19 (which
+> has IP discovery) but the amdgpu support for those IP blocks landed in
+> kernel 6.0. The matching linux-firmware was released after 22.10's launch.
+> The screen will freeze without nomodeset. Even if a user manages to install
+> and then upgrades to kernel 6.0 after install they'll still have the
+> problem of missing firmware, and the same experience.
 >
-> memcpy() ?
-
-Using memcpy() will make code cleaner.
-
+> This is quite jarring for users, particularly if they don't know
+> that they have to use "nomodeset" to install.
 >
->> +	return param;
->> +}
+> To help the situation make changes to GPU discovery:
+> 1) Delay releasing the firmware framebuffer until after IP discovery has
+> completed.  This will help the situation of an older kernel that doesn't
+> yet support the IP blocks probing a new GPU.
+> 2) Request loading all PSP, VCN, SDMA, MES and GC microcode into memory
+> during IP discovery. This will help the situation of new enough kernel for
+> the IP discovery phase to otherwise pass but missing microcode from
+> linux-firmware.git.
 >
-> ...
+> Not all requested firmware will be loaded during IP discovery as some of it
+> will require larger driver architecture changes. For example SMU firmware
+> isn't loaded on certain products, but that's not known until later on when
+> the early_init phase of the SMU load occurs.
 >
->> +	finfo = kzalloc(struct_size(finfo, params, dfh_psize/sizeof(u64)), GFP_KERNEL);
+> v1->v2:
+>  * Take the suggestion from v1 thread to delay the framebuffer release until
+>    ip discovery is done. This patch is CC to stable to that older stable
+>    kernels with IP discovery won't try to probe unknown IP.
+>  * Drop changes to drm aperature.
+>  * Fetch SDMA, VCN, MES, GC and PSP microcode during IP discovery.
 >
-> ' / ' (mind the spaces)
-
-Yes, I will mind the spaces.
-
+> Mario Limonciello (11):
+>   drm/amd: Delay removal of the firmware framebuffer
+>   drm/amd: Add a legacy mapping to "amdgpu_ucode_ip_version_decode"
+>   drm/amd: Convert SMUv11 microcode init to use
+>     `amdgpu_ucode_ip_version_decode`
+>   drm/amd: Convert SMU v13 to use `amdgpu_ucode_ip_version_decode`
+>   drm/amd: Request SDMA microcode during IP discovery
+>   drm/amd: Request VCN microcode during IP discovery
+>   drm/amd: Request MES microcode during IP discovery
+>   drm/amd: Request GFX9 microcode during IP discovery
+>   drm/amd: Request GFX10 microcode during IP discovery
+>   drm/amd: Request GFX11 microcode during IP discovery
+>   drm/amd: Request PSP microcode during IP discovery
 >
-> Also, perhaps better to use sizeof(*params) or what is the member of that
-> structure. So it will be more robust against possible changes.
-
-params is the name of the structure member that is the trailing array.
-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |   8 +
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 590 +++++++++++++++++-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |   6 -
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c       |   2 -
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c      |   9 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h      |   2 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c     | 208 ++++++
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c       |  85 +--
+>  drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c        | 180 +-----
+>  drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c        |  64 +-
+>  drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c         | 143 +----
+>  drivers/gpu/drm/amd/amdgpu/mes_v10_1.c        |  28 -
+>  drivers/gpu/drm/amd/amdgpu/mes_v11_0.c        |  25 +-
+>  drivers/gpu/drm/amd/amdgpu/psp_v10_0.c        | 106 +---
+>  drivers/gpu/drm/amd/amdgpu/psp_v11_0.c        | 165 +----
+>  drivers/gpu/drm/amd/amdgpu/psp_v12_0.c        | 102 +--
+>  drivers/gpu/drm/amd/amdgpu/psp_v13_0.c        |  82 ---
+>  drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c      |  36 --
+>  drivers/gpu/drm/amd/amdgpu/psp_v3_1.c         |  36 --
+>  drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c        |  61 +-
+>  drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c        |  42 +-
+>  drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c        |  65 +-
+>  drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c        |  30 +-
+>  .../gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c    |  35 +-
+>  .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c    |  12 +-
+>  25 files changed, 919 insertions(+), 1203 deletions(-)
 >
->>  	if (!finfo)
->>  		return -ENOMEM;
 >
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-
-Thanks for the feedback,
-Matthew Gerlach
-
->
->
+> base-commit: de9a71e391a92841582ca3008e7b127a0b8ccf41
+> --
+> 2.34.1
 >
