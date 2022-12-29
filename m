@@ -2,95 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFDBD658841
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7F765885B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbiL2BJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 20:09:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
+        id S232508AbiL2BaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 20:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbiL2BJL (ORCPT
+        with ESMTP id S229716AbiL2BaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 20:09:11 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2E913E0B
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:09:10 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-15027746720so5228084fac.13
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:09:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CSxGIw+ZRj8V/kCVsC6Js3ZVqSjZmXsDp/GBkaKhYUE=;
-        b=oXgTdEjlZoCSNLk0P98/BmkldDqLU6kFo5uqsAiePgjZgvLlSalqrtav3TVPeGqAt0
-         Ds1s2VqQYf+ybpBHjoPinfAQm0uXY5rD5VHix0rVwzUsFzITY6/UJSDrRE6eT/6FrRlt
-         z8l3rs9U/zs/4YzdmVo3kBCE5iZg8/HK9+waZP4lCZf0zPufspMnu0BW0lf9kTMfv1rg
-         I5rzm7DQvW+UkfIXIUEj1b1VQuxnbQeWVadjEu8LOyJ6re/EibXrx2GTk0c5bKSAD/go
-         LAduq+7YBc3xS1j7VaNlzYUP8f/OPH2dJQ6A2+9Yw5+MP+GtxDFIp9xupMEO6GpN8k4D
-         7yDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CSxGIw+ZRj8V/kCVsC6Js3ZVqSjZmXsDp/GBkaKhYUE=;
-        b=3mVhqHLKuFFU9mtN/x3NXrKOmxS1Bmlzu3iiitEE1mc1LXxs/xlsgpWjm0NaGYqIWF
-         CShmpceN4sUtQ58NwMhcjOLTgBWrdtxcDxP1+64MWBZCHBefo7+KAtl5jRK3FGaAqia3
-         rUlnh/dIOy1Kjd/O2C1B1PVi3NbNvfSGj1Wef5lzDsD49OgA7bITwwrWjCexxynGay0V
-         KyEx2DU0n+MhJ1NANgJiYZzNVUZKEsOgyv9n0b4Sn77+0h4k+lnYjdAh7GIHAtOC7/ZX
-         /xzs+3IiDvzO0mg4lCmWLuBTk4027O6F7Nh1ihvtwSE2x1eRUveqZ+DJEYsIamX8f/t8
-         pegA==
-X-Gm-Message-State: AFqh2ko4cS7d8BG+jIUHWFevnkc/h8BIRl6lDq7GipVrln9Hzjd9giJw
-        OcLsXVjbeYjcQB22D0TBj6fqfIzYF/Hb8J2By3QHOA==
-X-Google-Smtp-Source: AMrXdXtDoQrhdeOOoONNNLue4VjIU2gFq400wqiDHHng8CJLddjmM/zWlyuce0ENdXblIvtb4zjitumPbisCQazPnn4=
-X-Received: by 2002:a05:6870:6c0b:b0:13b:96fc:18c1 with SMTP id
- na11-20020a0568706c0b00b0013b96fc18c1mr1774410oab.291.1672276150033; Wed, 28
- Dec 2022 17:09:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20221215164301.934805-1-arnd@kernel.org>
-In-Reply-To: <20221215164301.934805-1-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 29 Dec 2022 02:11:04 +0100
-Message-ID: <CACRpkdZuA0Fo9Nh8s0RjMgHs35uwtK8VvhZYrr9nmr_gnku8RQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: at91: convert to NOIRQ_SYSTEM_SLEEP_PM_OPS
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Slark Xiao <slark_xiao@163.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 28 Dec 2022 20:30:07 -0500
+X-Greylist: delayed 911 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Dec 2022 17:30:04 PST
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECF0CCE00;
+        Wed, 28 Dec 2022 17:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=VE/6IL+NyZmYYt73YY
+        RzDpOKhISVzB3dUqOTz13Lnzc=; b=ga/7wCMgvI5X0MnKgHctK2L2G3/hm/itQf
+        LnOwSFMK2FA+KUlTcIHWQKILJcM1JquOgOKLgGjhUIrBeKWt6upJSCc27mL0SEhu
+        MwLIBB589RKszzJTY0hjsM+++DWpb9TVESuxDKnHiwLk4t69Y70kkJo3IGBVmEuo
+        uYXmds9Yw=
+Received: from localhost.localdomain (unknown [43.134.191.38])
+        by zwqz-smtp-mta-g4-3 (Coremail) with SMTP id _____wD3__Pr6axjhyEfAA--.12469S2;
+        Thu, 29 Dec 2022 09:14:22 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mani@kernel.org
+Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] bus: mhi: host: Update mhi driver description
+Date:   Thu, 29 Dec 2022 09:13:58 +0800
+Message-Id: <20221229011358.15874-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: _____wD3__Pr6axjhyEfAA--.12469S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFyUurW3Ar4DJryxAr4xZwb_yoWxKrg_C3
+        9rXr1xKwsYgryqkws5Z3Z5ZFyIyF4xXr43AFs2gF1fX347ZwnxJa4DWrWft3ZxCrWIyFyU
+        CrWqgry0y3W7ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRKiSl7UUUUU==
+X-Originating-IP: [43.134.191.38]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiMADmZFWB0K6zKQABsD
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 5:43 PM Arnd Bergmann <arnd@kernel.org> wrote:
+This should be a mistake. MHI contains "Host Interface"
+already. So we shall update "MHI" to "Modem" and the full
+name shall be "Modem Host Interface".
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> With the old SET_NOIRQ_SYSTEM_SLEEP_PM_OPS, some configs result in a
-> build warning:
->
-> drivers/pinctrl/pinctrl-at91.c:1668:12: error: 'at91_gpio_resume' defined but not used [-Werror=unused-function]
->  1668 | static int at91_gpio_resume(struct device *dev)
->       |            ^~~~~~~~~~~~~~~~
-> drivers/pinctrl/pinctrl-at91.c:1650:12: error: 'at91_gpio_suspend' defined but not used [-Werror=unused-function]
->  1650 | static int at91_gpio_suspend(struct device *dev)
->       |            ^~~~~~~~~~~~~~~~~
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/bus/mhi/host/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Patch applied!
+diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+index bf672de35131..7307335c4fd1 100644
+--- a/drivers/bus/mhi/host/init.c
++++ b/drivers/bus/mhi/host/init.c
+@@ -1449,4 +1449,4 @@ postcore_initcall(mhi_init);
+ module_exit(mhi_exit);
+ 
+ MODULE_LICENSE("GPL v2");
+-MODULE_DESCRIPTION("MHI Host Interface");
++MODULE_DESCRIPTION("Modem Host Interface");
+-- 
+2.17.1
 
-Yours,
-Linus Walleij
