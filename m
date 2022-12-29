@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63D6658C57
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5CE658C67
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbiL2Lmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 06:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S233022AbiL2Lty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 06:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiL2Lm3 (ORCPT
+        with ESMTP id S229721AbiL2Lts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 06:42:29 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6433A13E81;
-        Thu, 29 Dec 2022 03:42:25 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BTBfErX5002841, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BTBfErX5002841
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 29 Dec 2022 19:41:15 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Thu, 29 Dec 2022 19:42:09 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 29 Dec 2022 19:42:06 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Thu, 29 Dec 2022 19:42:06 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tehuang@realtek.com" <tehuang@realtek.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/4] rtw88: Four fixes found while working on SDIO support
-Thread-Topic: [PATCH 0/4] rtw88: Four fixes found while working on SDIO
- support
-Thread-Index: AQHZGsFtyqvVdb8Ir06VvN9lkSQirK6EmVQw//+PBwCAABEeAA==
-Date:   Thu, 29 Dec 2022 11:42:06 +0000
-Message-ID: <c29eb85527c6834482ecdbb0946ff9b794fe7cb6.camel@realtek.com>
-References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
-         <84e2f2289e964834b1eaf60d4f9f5255@realtek.com>
-         <CAFBinCAvSYgnamMCEBGg5+vt6Uvz+AKapJ+dSfSPBbmtERYsBw@mail.gmail.com>
-In-Reply-To: <CAFBinCAvSYgnamMCEBGg5+vt6Uvz+AKapJ+dSfSPBbmtERYsBw@mail.gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [172.16.22.50]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEyLzI5IOS4iuWNiCAwNzoyNTowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B7AE489C41B8D24BBD47138620B88D83@realtek.com>
-Content-Transfer-Encoding: base64
+        Thu, 29 Dec 2022 06:49:48 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0A7FAEF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:49:47 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id l13-20020a056e021c0d00b003034e24b866so11921129ilh.22
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:49:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GxXQnBivBvS5Io4jtX9fYGxpNHPwBgCya+UQD8rvg/Q=;
+        b=de+ROh7MwOmSqDM5fRs/ks0DoeIcTSLs5Lan/UHC5z2FoZ3sqjE+pM3q39PsibInNv
+         tEn3sW4pb7IhVqpW97rVw2yVFspK6CytP/CC9NadIc0I3z9FTGog4FmSA1Wz9f3aJu/T
+         0ujIyiIJpfq6NwXyq9ciW5qDz2m9sjbs6Dj4P89DgJNwKVHZgTeMLY2ul/TWenl9yWb+
+         zdW+adbDUdSXuO5bssORzl7ORdGJoG/P5m7pbYvfKubhshXRzoVxizTuQJ4+35/wYY+W
+         5ij6d1Ur6Od1tao9TQ64CObyOaizSwHq0BUWCMooMvQ7fK8iN4duR42uksyqiljIUr85
+         0oBA==
+X-Gm-Message-State: AFqh2koS0Wm2uMe6fygMCVhKRAuD7Z1oV9s+BJLrjoNSUMrrGpgoW+GH
+        6/Nv+lRKlvAkui5JzAD1DfqR95kQDyHLnIwP5X1ocCSpctj9
+X-Google-Smtp-Source: AMrXdXt6rrsKj8NEyX9WQjWSdYEsl7eIAv/WasV2qWDBByJoup7eNvKeEaZ/WZzis89vAQWxSK5KOG53ILMBvCKGfn1mQPzLpXh+
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1a1:b0:38a:7f45:a5ff with SMTP id
+ b1-20020a05663801a100b0038a7f45a5ffmr2322457jaq.9.1672314587167; Thu, 29 Dec
+ 2022 03:49:47 -0800 (PST)
+Date:   Thu, 29 Dec 2022 03:49:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ebc50f05f0f614ee@google.com>
+Subject: [syzbot] [btrfs?] WARNING in btrfs_finish_ordered_io
+From:   syzbot <syzbot+b3a2926f65a93a3cf55b@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIyLTEyLTI5IGF0IDExOjQwICswMTAwLCBNYXJ0aW4gQmx1bWVuc3RpbmdsIHdy
-b3RlOg0KPiBIaSBQaW5nLUtlLA0KPiANCj4gT24gVGh1LCBEZWMgMjksIDIwMjIgYXQgMTA6MjYg
-QU0gUGluZy1LZSBTaGloIDxwa3NoaWhAcmVhbHRlay5jb20+IHdyb3RlOg0KPiBbLi4uXQ0KPiA+
-ID4gTWFydGluIEJsdW1lbnN0aW5nbCAoNCk6DQo+ID4gPiAgIHJ0dzg4OiBBZGQgcGFja2VkIGF0
-dHJpYnV0ZSB0byB0aGUgZUZ1c2Ugc3RydWN0cw0KPiA+IA0KPiA+IEkgdGhpbmsgdGhpcyBwYXRj
-aCBkZXBlbmRzIG9uIGFub3RoZXIgcGF0Y2hzZXQgb3Igb3Bwb3NpdGVseS4NCj4gPiBQbGVhc2Ug
-cG9pbnQgdGhhdCBvdXQgZm9yIHJldmlld2Vycy4NCj4gVGhlcmUgYXJlIG5vIGRlcGVuZGVuY2ll
-cyBmb3IgdGhpcyBzbWFsbGVyIGluZGl2aWR1YWwgc2VyaWVzIG90aGVyDQo+IHRoYW4gTGludXgg
-Ni4yLXJjMSAoYXMgdGhpcyBoYXMgVVNCIHN1cHBvcnQpLiBJIG1hZGUgc3VyZSB0byBub3QNCj4g
-aW5jbHVkZSBhbnkgb2YgdGhlIFNESU8gY2hhbmdlcyBpbiB0aGlzIHNlcmllcy4NCj4gVGhlIGlk
-ZWEgaXMgdGhhdCBpdCBjYW4gYmUgYXBwbGllZCBpbmRpdmlkdWFsbHkgYW5kIG1ha2UgaXQgZWl0
-aGVyDQo+IGludG8gNi4yLXJjMiAob3IgbmV3ZXIpIG9yIC1uZXh0ICg2LjMpLg0KPiANCg0KSSB0
-aG91Z2h0IHRoaXMgY291bGQgZGVwZW5kIG9uIFNESU8gcGF0Y2hzZXQsIGJlY2F1c2UgeW91IGFk
-ZA0Kc3RydWN0IGZvciBlZnVzZSBsYXlvdXQgbmVhcmJ5LCBzbyB0aGVyZSBtYXkgYmUgbWVyZ2Ug
-Y29uZmxpY3RzLg0KUGxlYXNlIGlnbm9yZSB0aGlzIGNvbW1lbnQsIHRoZW4uDQoNClBpbmctS2UN
-Cg0K
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    72a85e2b0a1e Merge tag 'spi-fix-v6.2-rc1' of git://git.ker..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=136100a8480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4e2d7bfa2d6d5a76
+dashboard link: https://syzkaller.appspot.com/bug?extid=b3a2926f65a93a3cf55b
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114b2aac480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1765ae54480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/510d16df06c8/disk-72a85e2b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/50ef5477a1d4/vmlinux-72a85e2b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f2acd6f1189a/bzImage-72a85e2b.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/989578dc9fd1/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b3a2926f65a93a3cf55b@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+BTRFS: Transaction aborted (error -28)
+WARNING: CPU: 1 PID: 56 at fs/btrfs/inode.c:3343 btrfs_finish_ordered_io+0x1ac9/0x1cb0 fs/btrfs/inode.c:3343
+Modules linked in:
+CPU: 1 PID: 56 Comm: kworker/u4:4 Not tainted 6.1.0-syzkaller-14594-g72a85e2b0a1e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: btrfs-endio-write btrfs_work_helper
+RIP: 0010:btrfs_finish_ordered_io+0x1ac9/0x1cb0 fs/btrfs/inode.c:3343
+Code: 8b 44 89 ee 31 c0 e8 26 e8 c5 fd 0f 0b b0 01 e9 4b ff ff ff e8 58 f8 fe fd 48 c7 c7 c0 9f 39 8b 44 89 ee 31 c0 e8 07 e8 c5 fd <0f> 0b e9 a6 fe ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 11 ed ff
+RSP: 0018:ffffc900015779e0 EFLAGS: 00010246
+RAX: 203bb8e87d482d00 RBX: 0000000000000024 RCX: ffff888017d91d40
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc90001577bc0 R08: ffffffff816f2c9d R09: fffff520002aeef5
+R10: fffff520002aeef5 R11: 1ffff920002aeef4 R12: 0000000000000000
+R13: 00000000ffffffe4 R14: dffffc0000000000 R15: ffff88807292d540
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffef9d1dda0 CR3: 00000000290a7000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_work_helper+0x312/0x850 fs/btrfs/async-thread.c:280
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
