@@ -2,267 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5489D658A21
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229EA658A22
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbiL2IC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 03:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S233090AbiL2IED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 03:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiL2ICx (ORCPT
+        with ESMTP id S229520AbiL2IEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 03:02:53 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA17FD2DA
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:02:23 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id b145so8095394pfb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:02:23 -0800 (PST)
+        Thu, 29 Dec 2022 03:04:01 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADA1D2DA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:04:01 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id fy4so18543137pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:04:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YYn77ci8+oadBW76lYzJfKZ6fFNIjqBEwRX0Ww9TJ7s=;
-        b=Dn6En9W1e8cvEiQoDDVWTZzEhI8jZ1ErnKGxbi6HBk4DW/AKMU1+gcswtxwjrru8kf
-         8B/8zwi25Cr+1OxPpx/7zMQjEiw5ewfmX8xAhAo9u4gxjj/NLtDGgk+YprKWbhlCmeWW
-         AAxgE6cdm36llA/q9WPCKI60l9jGJEWmmbk3TpkHmvrWSyMB6OkkE8MvTG+6RNIu+oU0
-         R/gm9aBaQOxiJmdN70/jpopv7gVx6htBToGrpLSOyTfQIac1gBCYsYazgZ9Zw+uTsAMP
-         MIF4VqjN4rr/1GTHPuC1lvhf5OdDFDjVM7chHc5oVlqaM8tc8pbn3lMGIIK3DC72THig
-         T4rw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8KIiQNFKqzc7opQJ8ok0FfP39sLd9x5gpUsGJ8JTvp0=;
+        b=fxENY/WxTKg7eKS46UKKzjcaEgaZMSAIt+Ys0flXSHONKVVDibA7JqN54SUBJLdBQW
+         V5RCs11JLQz/M4GNr81/8s4fRvLBIgQeIpHfXHNMUgRAcRp4Kj8Nwg5n32JP41kTCk+p
+         unFP7fkQA797WjqhRok4wwHbqejpy7xzm/4f0MjXR3S8jHGaM1CFnEbnckhDr4ULyBb7
+         pN4RzdniMZXFgDM3+XED28/fKuvdn7Vg2gHlygbmglLe4Ro9h822/ACLAKlHH+tX8vTX
+         lg+83a9cQpOE/nc+t3tcbnhTQ/S8ZOJ+5XMqVZ4XPR1+Gw0+6gxmVrNMxrTRhgPb6a2k
+         CuFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YYn77ci8+oadBW76lYzJfKZ6fFNIjqBEwRX0Ww9TJ7s=;
-        b=6fPyw9PUR0Xf5TV81oNBVW1uXDjPEs9uwdtA7+KPxl+kzy+t9R4tXrzfVEvDaDHID9
-         OmxMuiYqCikTNk/x8WfU+ZAW3vH6Icp0ghxRQIc7SfC9fHD71RaNH4ibBWeoPsjvD6iM
-         CQsi+Z/fDDTfsgEFPsKmjZk8abcmvIoB1TYDHJZz+cQF6K614tDuN1HjpxhreGoMg9hj
-         fScw36CEA0eldeoHrIMA4vl1RL+k3BSHfzm6qr2PMnF4JwrNPENyftxUK1tZjWv+k6p/
-         ape/EPH/5PN3S/Bn+HkBB8CHjXDLFv/RAdzRptAF9bQui4lpCPM5cYbzc7jXhqjzRyUw
-         ieZA==
-X-Gm-Message-State: AFqh2kp6spA+9tOedSmM4pdkL9q0M6+XpgJktkmiBJ7FXrwIR6fb09Ab
-        0awbQx+DqGO1Bp5ASAVm/funlw==
-X-Google-Smtp-Source: AMrXdXvczbVUCzIVrbJxWzaGVw3CX97HUqqvyMnn4zkn6ZEH4k4Vjnicexgjj2tSI+5JDyoPrIq4YQ==
-X-Received: by 2002:a62:648b:0:b0:57a:a199:93e7 with SMTP id y133-20020a62648b000000b0057aa19993e7mr28677722pfb.28.1672300943082;
-        Thu, 29 Dec 2022 00:02:23 -0800 (PST)
-Received: from PF2E59YH-BKX.inc.bytedance.com ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id k17-20020aa79d11000000b005764c8f8f15sm11485781pfp.73.2022.12.29.00.02.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 00:02:22 -0800 (PST)
-From:   Yunhui Cui <cuiyunhui@bytedance.com>
-To:     edumazet@google.com, rostedt@goodmis.org, mhiramat@kernel.org,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, duanxiongchun@bytedance.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, cuiyunhui@bytedance.com
-Subject: [PATCH] tcp/udp: add tracepoint for send recv length
-Date:   Thu, 29 Dec 2022 16:02:07 +0800
-Message-Id: <20221229080207.1029-1-cuiyunhui@bytedance.com>
-X-Mailer: git-send-email 2.37.3.windows.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8KIiQNFKqzc7opQJ8ok0FfP39sLd9x5gpUsGJ8JTvp0=;
+        b=qQEXViiiporgelJ9CfUkuICvlpFxdV43Fe0C3zFcj+wKI2bJYp3NHl8LBwjuWsy0RI
+         DU5T84nog3YEJ7FeZX5mDi0yiOGutYM8Z187MG6RYlqp4WrD8uJT5F5qP+Gqa0yBC+8H
+         jpabifSzOPgO13QJy92e6pBCpDOPMdJ0ADCCrZmcHY2QOK99pIJjW08eisG8GLjWOCFs
+         2YdN84q80+gf9CDW+DXma4ch1Cg7619KE7E4h1vKr53w8k6INiCeB/XJ1/E5HpUj+BcB
+         IruUinTsiwqhsrZKsxvQnZf01Js6Z45gvlKgOAhsyznRlZXC+wvgDc2yZ/uKW+Q7IJLP
+         NrCg==
+X-Gm-Message-State: AFqh2kpaOE+uM2o8yErF1bDagdK7MZyb+whg7NRy3KXJYF1gAxkan9Au
+        5cNdUisfDmhgbzFDs74USno=
+X-Google-Smtp-Source: AMrXdXs3S5oDblrRByIPHLBud9vtobVm0v+3RvFHKnj/1tUpoKvkA+II3DVZ10IefiUKE71/a55T0g==
+X-Received: by 2002:a17:902:edc3:b0:189:5ef4:6ae9 with SMTP id q3-20020a170902edc300b001895ef46ae9mr26746572plk.45.1672301040510;
+        Thu, 29 Dec 2022 00:04:00 -0800 (PST)
+Received: from localhost.localdomain ([2402:7500:587:a2f0:9dda:bb2d:720c:85e8])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170902784900b001895b2c4cf6sm12146987pln.297.2022.12.29.00.03.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 29 Dec 2022 00:04:00 -0800 (PST)
+From:   cy_huang <u0084500@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org
+Cc:     cy_huang@richtek.com, jeff_chang@richtek.com,
+        oder_chiou@realtek.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: rt9120: Make dev PM runtime bind AsoC component PM
+Date:   Thu, 29 Dec 2022 16:03:53 +0800
+Message-Id: <1672301033-3675-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiongchun Duan <duanxiongchun@bytedance.com>
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Add a tracepoint for capturing TCP segments with
-a send or receive length. This makes it easy to obtain
-the packet sending and receiving information of each process
-in the user mode, such as the netatop tool.
+RT9120 uses PM runtime autosuspend to decrease the frequently on/off
+spent time. This exists one case, when pcm is closed and dev PM is
+waiting for autosuspend time expired to enter runtime suspend state.
+At the mean time, system is going to enter suspend, dev PM runtime
+suspend won't be called. It makes the rt9120 suspend consumption
+current not as expected.
 
-Signed-off-by: Xiongchun Duan <duanxiongchun@bytedance.com>
+This patch can fix the rt9120 dev PM issue during runtime autosuspend
+and system suspend by binding dev PM runtime and ASoC component PM.
+
+Fixes: 80b949f332e3 ("ASoC: rt9120: Use pm_runtime and regcache to optimize 'pwdnn' logic")
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 ---
- include/trace/events/tcp.h | 41 ++++++++++++++++++++++++++++++++++++++
- include/trace/events/udp.h | 34 +++++++++++++++++++++++++++++++
- net/ipv4/tcp.c             |  7 +++++++
- net/ipv4/udp.c             | 11 ++++++++--
- 4 files changed, 91 insertions(+), 2 deletions(-)
+ sound/soc/codecs/rt9120.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
-index 901b440238d5..d9973c8508d1 100644
---- a/include/trace/events/tcp.h
-+++ b/include/trace/events/tcp.h
-@@ -187,6 +187,47 @@ DEFINE_EVENT(tcp_event_sk, tcp_rcv_space_adjust,
- 	TP_ARGS(sk)
- );
- 
-+/*
-+ * tcp send/recv stream length
-+ *
-+ * Note: this class requires positive integer
-+ */
-+DECLARE_EVENT_CLASS(tcp_stream_length,
-+
-+	TP_PROTO(struct sock *sk, int length, int error, int flags),
-+
-+	TP_ARGS(sk, length, error, flags),
-+
-+	TP_STRUCT__entry(
-+		__field(void *, sk)
-+		__field(int, length)
-+		__field(int, error)
-+		__field(int, flags)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->sk = sk;
-+		__entry->length = length;
-+		__entry->error = error;
-+		__entry->flags = flags;
-+	),
-+
-+	TP_printk("sk address = %p, length = %d, error = %d flags = %u ",
-+		__entry->sk, __entry->length, __entry->error, __entry->flags)
-+);
-+
-+DEFINE_EVENT(tcp_stream_length, tcp_send_length,
-+	TP_PROTO(struct sock *sk, int length, int error, int flags),
-+
-+	TP_ARGS(sk, length, error, flags)
-+);
-+
-+DEFINE_EVENT(tcp_stream_length, tcp_recv_length,
-+	TP_PROTO(struct sock *sk, int length, int error, int flags),
-+
-+	TP_ARGS(sk, length, error, flags)
-+);
-+
- TRACE_EVENT(tcp_retransmit_synack,
- 
- 	TP_PROTO(const struct sock *sk, const struct request_sock *req),
-diff --git a/include/trace/events/udp.h b/include/trace/events/udp.h
-index 336fe272889f..22181c91c8e2 100644
---- a/include/trace/events/udp.h
-+++ b/include/trace/events/udp.h
-@@ -27,6 +27,40 @@ TRACE_EVENT(udp_fail_queue_rcv_skb,
- 	TP_printk("rc=%d port=%hu", __entry->rc, __entry->lport)
- );
- 
-+DECLARE_EVENT_CLASS(udp_stream_length,
-+
-+	TP_PROTO(struct sock *sk, int length, int error, int flags),
-+
-+	TP_ARGS(sk, length, error, flags),
-+
-+	TP_STRUCT__entry(
-+		__field(void *, sk)
-+		__field(int, length)
-+		__field(int, error)
-+		__field(int, flags)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->sk = sk;
-+		__entry->length = length;
-+		__entry->error = error;
-+		__entry->flags = flags;
-+	),
-+
-+	TP_printk("sk address = %p, length = %d, error=%d, flags = %u ",
-+	__entry->sk, __entry->length, __entry->error, __entry->flags)
-+);
-+
-+DEFINE_EVENT(udp_stream_length, udp_send_length,
-+	TP_PROTO(struct sock *sk, int length, int error, int flags),
-+	TP_ARGS(sk, length, error, flags)
-+);
-+
-+DEFINE_EVENT(udp_stream_length, udp_recv_length,
-+	TP_PROTO(struct sock *sk, int length, int error, int flags),
-+	TP_ARGS(sk, length, error, flags)
-+);
-+
- #endif /* _TRACE_UDP_H */
- 
- /* This part must be outside protection */
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index c567d5e8053e..5deb69e2d3e7 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -267,6 +267,7 @@
- #include <linux/errqueue.h>
- #include <linux/static_key.h>
- #include <linux/btf.h>
-+#include <trace/events/tcp.h>
- 
- #include <net/icmp.h>
- #include <net/inet_common.h>
-@@ -1150,6 +1151,7 @@ int tcp_sendpage(struct sock *sk, struct page *page, int offset,
- 	lock_sock(sk);
- 	ret = tcp_sendpage_locked(sk, page, offset, size, flags);
- 	release_sock(sk);
-+	trace_tcp_send_length(sk, ret > 0 ? ret : 0, ret > 0 ? 0 : ret, 0);
- 
- 	return ret;
+diff --git a/sound/soc/codecs/rt9120.c b/sound/soc/codecs/rt9120.c
+index 644300e..fcf4fba 100644
+--- a/sound/soc/codecs/rt9120.c
++++ b/sound/soc/codecs/rt9120.c
+@@ -177,8 +177,20 @@ static int rt9120_codec_probe(struct snd_soc_component *comp)
+ 	return 0;
  }
-@@ -1482,6 +1484,7 @@ int tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- 	lock_sock(sk);
- 	ret = tcp_sendmsg_locked(sk, msg, size);
- 	release_sock(sk);
-+	trace_tcp_send_length(sk, ret > 0 ? ret : 0, ret > 0 ? 0 : ret, 0);
  
- 	return ret;
- }
-@@ -2647,6 +2650,10 @@ static int tcp_recvmsg_locked(struct sock *sk, struct msghdr *msg, size_t len,
- 
- 	/* Clean up data we have read: This will do ACK frames. */
- 	tcp_cleanup_rbuf(sk, copied);
-+	trace_tcp_recv_length(sk, (copied > 0 && !(flags & MSG_PEEK)) ?
-+				   copied : 0,
-+			      (copied > 0 &&
-+			       !(flags & MSG_PEEK)) ? 0 : copied, flags);
- 	return copied;
- 
- out:
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 9592fe3e444a..1b336af4df6d 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -1300,6 +1300,7 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	release_sock(sk);
- 
- out:
-+	trace_udp_send_length(sk, err == 0 ? len : 0, err, 0);
- 	ip_rt_put(rt);
- out_free:
- 	if (free)
-@@ -1364,8 +1365,10 @@ int udp_sendpage(struct sock *sk, struct page *page, int offset,
- 			     page, offset, size, flags);
- 	if (ret == -EOPNOTSUPP) {
- 		release_sock(sk);
--		return sock_no_sendpage(sk->sk_socket, page, offset,
--					size, flags);
-+		ret = sock_no_sendpage(sk->sk_socket, page, offset,
-+				       size, flags);
-+		trace_udp_send_length(sk, ret > 0 ? ret : 0, ret > 0 ? 0 : ret, 0);
-+		return ret;
- 	}
- 	if (ret < 0) {
- 		udp_flush_pending_frames(sk);
-@@ -1377,6 +1380,7 @@ int udp_sendpage(struct sock *sk, struct page *page, int offset,
- 		ret = udp_push_pending_frames(sk);
- 	if (!ret)
- 		ret = size;
-+	trace_udp_send_length(sk, ret > 0 ? ret : 0, ret > 0 ? 0 : ret, 0);
- out:
- 	release_sock(sk);
- 	return ret;
-@@ -1935,6 +1939,9 @@ int udp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int flags,
- 	if (flags & MSG_TRUNC)
- 		err = ulen;
- 
-+	trace_udp_recv_length(sk, (err > 0 && !peeking) ? err : 0,
-+			      (err > 0 && !peeking) ? 0 : err, flags);
++static int rt9120_codec_suspend(struct snd_soc_component *comp)
++{
++	return pm_runtime_force_suspend(comp->dev);
++}
 +
- 	skb_consume_udp(sk, skb, peeking ? -err : err);
- 	return err;
- 
++static int rt9120_codec_resume(struct snd_soc_component *comp)
++{
++	return pm_runtime_force_resume(comp->dev);
++}
++
+ static const struct snd_soc_component_driver rt9120_component_driver = {
+ 	.probe = rt9120_codec_probe,
++	.suspend = rt9120_codec_suspend,
++	.resume = rt9120_codec_resume,
+ 	.controls = rt9120_snd_controls,
+ 	.num_controls = ARRAY_SIZE(rt9120_snd_controls),
+ 	.dapm_widgets = rt9120_dapm_widgets,
 -- 
-2.20.1
+2.7.4
 
