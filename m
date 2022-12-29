@@ -2,89 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06564658F4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0199E658F5F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbiL2Q4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 11:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S230284AbiL2RDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbiL2Q4w (ORCPT
+        with ESMTP id S230173AbiL2RDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 11:56:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD29F5A7;
-        Thu, 29 Dec 2022 08:56:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BC7F61839;
-        Thu, 29 Dec 2022 16:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66131C433EF;
-        Thu, 29 Dec 2022 16:56:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672333010;
-        bh=ViY2BQZiltKQ4jvkmjytVNSOGiM2TZgrElzKyBr36hI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=il2VIfqB0ez0Rmb8rH8N8IDk4hm1ko30z46bpjv8Rg9GUkfXEeZbMhhL0NBzyw7Be
-         7Qj1a23+u68ocrKbH/Ulo2wwMFN0I6kYWMu/XOTRpxNRVIEQ3u6lQv4s7uJViJ/x5a
-         tL4qJBgqrQLGzDWbiLoPjYCfo1fzvPmJxjm6pZF0Xp03wjAU++P3v+j2EixzHLhPIs
-         ZpdJKbaT2VXdDAh+vEiXbFxquISfD4ySjIz7qZSZlXW9xToM2UbhVO7YrLzaZf113s
-         hNIvwVnW+IyikoDTK2Y3arQLyAT9eDZpN3ab145lcY1npyZCoyOwclqfjScbTRbtHq
-         oLfLjOEte7dvw==
-Date:   Thu, 29 Dec 2022 09:56:47 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, andrii@kernel.org,
-        dave.stevenson@raspberrypi.com, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
-Message-ID: <Y63Gz7Jpms95bz15@dev-arch.thelio-3990X>
-References: <20221228144256.536395940@linuxfoundation.org>
- <Y62m85tYWONgSWmm@duo.ucw.cz>
+        Thu, 29 Dec 2022 12:03:21 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE2A13CD5;
+        Thu, 29 Dec 2022 09:03:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FpO/eHt+84zbk9M68yu6DzZDNP2UCbAiX18klEN4/yA=; b=VTl9/194oI/R+TtJ/HBvlyV61k
+        HXcMgF2toNI6pBRb/3FHLQ7fLcPI0De+9GfAn2n5NX6yL2Typvq+RiYIcsDx1KIKxdNXB73jKNStO
+        y1hvemZd5yjmRV5iKBeY3t0A3bHEc9QUbAbvksyewg4PTT+MD3jWxtB9SyQkDPFAodEySLBeJ+kOi
+        q14YcbDb7g1Pyv4wdK/VoGJsKmkJVN4vD/3GnbVg2kWT8j5qAqZu+OrmgkMwzNxi0D2vd7dII/VsH
+        FSR5Y94CqlYw8/uRlVgYZY5rbq+p6wBi3UwYIXOx6hiLT80jAE+FT8noE9bjw6Q1DL/ANFIki+p1J
+        GZGVUxeg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pAwJN-00A0P1-1z; Thu, 29 Dec 2022 17:03:21 +0000
+Date:   Thu, 29 Dec 2022 17:03:21 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     yang.yang29@zte.com.cn
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, iamjoonsoo.kim@lge.com
+Subject: Re: [PATCH linux-next] swap_state: update shadow_nodes for anonymous
+ page
+Message-ID: <Y63IWTOE4sNKuseL@casper.infradead.org>
+References: <202212292130035747813@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y62m85tYWONgSWmm@duo.ucw.cz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202212292130035747813@zte.com.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 03:40:51PM +0100, Pavel Machek wrote:
-> Hi!
+On Thu, Dec 29, 2022 at 09:30:03PM +0800, yang.yang29@zte.com.cn wrote:
+> From: Yang Yang <yang.yang29@zte.com.cn>
 > 
-> > This is the start of the stable review cycle for the 5.15.86 release.
-> > There are 731 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
+> Shadow_nodes is for shadow nodes reclaiming of workingset handling,
+> it is updated when page cache add or delete since long time ago
+> workingset only supported page cache. But when workingset supports
+> anonymous page detection[1], we missied updating shadow nodes for
+> it.
+
+Please include a description of the user-visible effect of this (I
+think I can guess, but I'd like it spelled out)
+
+> [1] commit aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
 > 
-> These are just kCFI annotations. I don't believe we need them in 5.10
-> (and 5.15).
+> Signed-off-by: Yang Yang <yang.yang29@zte.com>
 
-The original CFI implementation exists in 5.15 and the problem described
-in those patches should still trigger with that implementation just like
-kCFI, so they should likely still go to 5.15. However, they were
-AUTOSEL'd and we have not had any reports of problems that are solved
-with these patches (although that is likely because nobody who is using
-this hardware has tried running a CONFIG_CFI_CLANG kernel), so I do not
-really care if they are applied or not.
+No Fixes: line?  It doesn't need to be backported?
 
-> > Nathan Chancellor <nathan@kernel.org>
-> >     net: ethernet: ti: Fix return type of netcp_ndo_start_xmit()
-> > Nathan Chancellor <nathan@kernel.org>
-> >     drm/fsl-dcu: Fix return type of fsl_dcu_drm_connector_mode_valid()
-> > Nathan Chancellor <nathan@kernel.org>
-> >     drm/sti: Fix return type of sti_{dvo,hda,hdmi}_connector_mode_valid()
+> ---
+>  include/linux/xarray.h | 3 ++-
+>  mm/swap_state.c        | 4 ++++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/xarray.h b/include/linux/xarray.h
+> index 44dd6d6e01bc..cd2ccb09c596 100644
+> --- a/include/linux/xarray.h
+> +++ b/include/linux/xarray.h
+> @@ -1643,7 +1643,8 @@ static inline void xas_set_order(struct xa_state *xas, unsigned long index,
+>   * @update: Function to call when updating a node.
+>   *
+>   * The XArray can notify a caller after it has updated an xa_node.
+> - * This is advanced functionality and is only needed by the page cache.
+> + * This is advanced functionality and is only needed by the page cache
+> + * and anonymous page.
 
-Cheers,
-Nathan
+... "and swap cache.", not anonymous page.
+
