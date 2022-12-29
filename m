@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EE3658B37
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 10:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 143DE658B36
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 10:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiL2Jta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 04:49:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S232944AbiL2Jt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 04:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbiL2JrC (ORCPT
+        with ESMTP id S232179AbiL2JrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 29 Dec 2022 04:47:02 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D79113B
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 01:45:16 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso12862429wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 01:45:16 -0800 (PST)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16F713CC6;
+        Thu, 29 Dec 2022 01:45:19 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id g1so11816505edj.8;
+        Thu, 29 Dec 2022 01:45:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JlwudR1yq0j8l6dXe2FNX5uZ434yQGNV8t9LPJL/6tM=;
-        b=nUHwdBrBS6LeYbs+YS3gdxxv7I3AORr8iVEX+sIMxjgK+nNK2hcm/m+/NZyGz55W4m
-         /2WiPf7rALiIl1XNGy8oNlYm3TqHrEVPzEiTZ3vAbqnFGu8msb4hHSMsifMUHYyNlYEv
-         yxE42J1SHiOffhA8G4tZzerRzzqj0unHksAtNmudLgbPN6z6KmoxOpU7iaqiNm2hUQKu
-         cTy2fPBgJQCZfabMZt1p+wQ6DrToheWRi6o8OKVPf9/NHBFNusYwYRdyMSZvkOjCTo+D
-         vAASc9hQuRqsAGS4kON3vXrPQ8HnrkOjkRy+aADHt6hRcORxzbzhyInPK3wrKpze5Z00
-         Gb7Q==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0cpfrQrCcKnzaVIJpPos2V3z+c3X6E+K3Dy1Hme0IGc=;
+        b=bgTGDGl+BrixW/GRVJOepBvDeQGJgJl0spl3smoeAQhKAOtEVSZ8auWuMTaYprBQf9
+         EW3OSYdPofHkUlis0qABqDvHYwQYvLsIh7qmLemIV7DnLNphROwbjIuz3qJXjyynfu2/
+         41uxQ3FMbS5076Ic3DKuwdl3B15ZVDsjPkJndHOTB6UAvDtu0Qb5I6rX426rYKQ/6sLX
+         P0Yph0fU0NGRLlJWZZ2aMvfUCDmcl9H9skEGjiZ+AvtkdT+A7hDyzgha9RC0JeF78pWl
+         YkgUW+ctTUEy8HSL+YVqRx7jyPGGfDxbWQaHhzOYIgftUtJWkSVIuKgAxlL1iFRir6P+
+         Zcpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JlwudR1yq0j8l6dXe2FNX5uZ434yQGNV8t9LPJL/6tM=;
-        b=IDFLOjpIWzeYpZ1U5Ba0dgPjVD2/n/8etk7AelxyoGrv/WawjvcqoBE5J59pd7eq1T
-         jePC6W/12fKg9s721JxDc6RZATq83JYBqqHR1tI7BzBaYpXlsw81wXOqfnruoy5HYXQt
-         1lupOLAd9+a6IX/7Z4i9YgBxLgQjR8GRs51iObLpqF3tYMXbvRYJXAnfzB37nSR16eYl
-         lUDd3bbzB3kMW+01vjDNl2PYVkRqYRx5+jgnVOedYU+HRWfUxR/GpfwIBLPWhNL0ZQNm
-         z6mPwzHmcScVtb90G/1sOherp0F/4DjIqPaDe52BA1+1RZ9/yE4VV3ROCaMzkCa5FuAI
-         KCzw==
-X-Gm-Message-State: AFqh2kqH0g5KAlWwxB7AqXXBxDTp/TCkEWAyjA009hg4TCr/HWGVUJhx
-        pe7O8pXyj8RdmnGpAXg5pAM=
-X-Google-Smtp-Source: AMrXdXs5lANX27sWsHHeOuHvhjwBNhps7lPfjmKuE+KRWec7tXPH6Us7T2cE1di2Y7ptz7971G9M7w==
-X-Received: by 2002:a1c:5442:0:b0:3cf:7385:677f with SMTP id p2-20020a1c5442000000b003cf7385677fmr19294169wmi.35.1672307114296;
-        Thu, 29 Dec 2022 01:45:14 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id i2-20020a05600c354200b003d35acb0fd7sm31043399wmq.34.2022.12.29.01.45.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 01:45:13 -0800 (PST)
-Date:   Thu, 29 Dec 2022 12:45:10 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     yang.yang29@zte.com.cn
-Cc:     gustavoars@kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, xu.panda@zte.com.cn
-Subject: Re: [PATCH linux-next] staging: ks7010: use strscpy() to instead of
- strncpy()
-Message-ID: <Y61hpuMcp3NKbqL5@kadam>
-References: <202212261903245548969@zte.com.cn>
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0cpfrQrCcKnzaVIJpPos2V3z+c3X6E+K3Dy1Hme0IGc=;
+        b=UGGJZcMDS7nm9AdOnD/nPkMrb3RsCap6si10qO6Pzvl1n1RHMDMFE+F1EQGSkmXv+u
+         dkw2dbL+0hQpUAT5aSQvRdgML/AZpjYaKtJkSkSI9mc/og5gAg7cPLI7ek9tkvPKXvxa
+         ckqcNWeLQ0YILWW+KDgw7fFQqn+bfkVye1spd4bW792VMA5YoNJ8rGLzRJq87OGUupHW
+         pBgB/rT6b065UaOjb4LdMVK1vpXvGK+N2ccS1ouTUYGWZuMtLneHn8tdswKVuYxroHvy
+         DqsQkRAPm0l8QNW7ORdaTy11l6yMjzMChWNYo+kJ6gW6Z49cYRRQvdSCe48GirOEKvtc
+         RQHw==
+X-Gm-Message-State: AFqh2koNbZz8cyW/VFDvIxzd4iOl8/oBWjW3RsMzVQOhlVt7a0GBELHf
+        ANr7kPjbkPq+zcg57JPD7GY=
+X-Google-Smtp-Source: AMrXdXvDNY0hTnxgzXYxlRZ5nuTWqtRuO9Vf+bIy6BtI6hHCS2hyZFrD7MqhMYOw0ACyN7ts1vIeYQ==
+X-Received: by 2002:a05:6402:f04:b0:46d:ca42:2e59 with SMTP id i4-20020a0564020f0400b0046dca422e59mr26446335eda.11.1672307118304;
+        Thu, 29 Dec 2022 01:45:18 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id f9-20020a056402004900b0046c7c3755a7sm8091016edu.17.2022.12.29.01.45.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Dec 2022 01:45:18 -0800 (PST)
+Message-ID: <5759c6e1-9c89-4cb2-dd57-83a8db09f547@gmail.com>
+Date:   Thu, 29 Dec 2022 10:45:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202212261903245548969@zte.com.cn>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v2 2/2] dt-bindings: soc: rockchip: grf: add
+ rockchip,rk3288-dp-phy.yaml
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-phy@lists.infradead.org,
+        vkoul@kernel.org, kishon@kernel.org
+References: <aa6fe473-71f2-edba-f009-994a3dbc9802@gmail.com>
+Content-Language: en-US
+In-Reply-To: <aa6fe473-71f2-edba-f009-994a3dbc9802@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,48 +79,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 26, 2022 at 07:03:24PM +0800, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
-> 
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL-terminated strings.
-> 
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
-> ---
->  drivers/staging/ks7010/ks_wlan_net.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/ks7010/ks_wlan_net.c b/drivers/staging/ks7010/ks_wlan_net.c
-> index 044c807ca022..e03c87f0bfe7 100644
-> --- a/drivers/staging/ks7010/ks_wlan_net.c
-> +++ b/drivers/staging/ks7010/ks_wlan_net.c
-> @@ -382,8 +382,7 @@ static int ks_wlan_get_nick(struct net_device *dev,
->  		return -EPERM;
-> 
->  	/* for SLEEP MODE */
-> -	strncpy(extra, priv->nick, 16);
-> -	extra[16] = '\0';
-> +	strscpy(extra, priv->nick, 17);
+Add new converted rockchip,rk3288-dp-phy.yaml to grf.yaml file.
 
-I think this code is a buffer overflow.  This is an implementation of
-SIOCGIWNICKN.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
-net/wireless/wext-core.c
-   169          [IW_IOCTL_IDX(SIOCGIWNICKN)] = {
-   170                  .header_type    = IW_HEADER_TYPE_POINT,
-   171                  .token_size     = 1,
-   172                  .max_tokens     = IW_ESSID_MAX_SIZE,
-   173          },
+Apply after:
+  dt-bindings: soc: rockchip: grf: add rockchip,lvds.yaml
 
-As you can see there is a .max_tokens but no .min_tokens.  It is called
-from ioctl_standard_iw_point().  So if the user specifies something
-smaller than 17 it leads to a buffer overflow.
+Changed V2:
+  Use the compatible as filename.
+  Drop blank lines.
+---
+ .../devicetree/bindings/soc/rockchip/grf.yaml | 21 +++----------------
+ 1 file changed, 3 insertions(+), 18 deletions(-)
 
-Your patch is mechanically correct, but now that we have eyes on the
-code we should fix the security bug instead making checkpatch happy or
-whatever.
+diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+index 7ac9aa5fa..8dc141410 100644
+--- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
++++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+@@ -82,9 +82,7 @@ allOf:
+       properties:
+         lvds:
+           type: object
+-
+           $ref: /schemas/display/rockchip/rockchip,lvds.yaml#
+-
+           unevaluatedProperties: false
 
-regards,
-dan carpenter
+   - if:
+@@ -96,8 +94,9 @@ allOf:
+     then:
+       properties:
+         edp-phy:
+-          description:
+-            Documentation/devicetree/bindings/phy/rockchip-dp-phy.txt
++          type: object
++          $ref: /schemas/phy/rockchip,rk3288-dp-phy.yaml#
++          unevaluatedProperties: false
+
+   - if:
+       properties:
+@@ -112,9 +111,7 @@ allOf:
+       properties:
+         usbphy:
+           type: object
+-
+           $ref: /schemas/phy/rockchip-usb-phy.yaml#
+-
+           unevaluatedProperties: false
+
+   - if:
+@@ -127,16 +124,12 @@ allOf:
+       properties:
+         gpio:
+           type: object
+-
+           $ref: /schemas/gpio/rockchip,rk3328-grf-gpio.yaml#
+-
+           unevaluatedProperties: false
+
+         power-controller:
+           type: object
+-
+           $ref: /schemas/power/rockchip,power-controller.yaml#
+-
+           unevaluatedProperties: false
+
+   - if:
+@@ -149,9 +142,7 @@ allOf:
+       properties:
+         mipi-dphy-rx0:
+           type: object
+-
+           $ref: /schemas/phy/rockchip-mipi-dphy-rx0.yaml#
+-
+           unevaluatedProperties: false
+
+         pcie-phy:
+@@ -177,9 +168,7 @@ allOf:
+       properties:
+         reboot-mode:
+           type: object
+-
+           $ref: /schemas/power/reset/syscon-reboot-mode.yaml#
+-
+           unevaluatedProperties: false
+
+   - if:
+@@ -203,9 +192,7 @@ allOf:
+       patternProperties:
+         "usb2phy@[0-9a-f]+$":
+           type: object
+-
+           $ref: /schemas/phy/phy-rockchip-inno-usb2.yaml#
+-
+           unevaluatedProperties: false
+
+   - if:
+@@ -231,9 +218,7 @@ allOf:
+       properties:
+         io-domains:
+           type: object
+-
+           $ref: /schemas/power/rockchip-io-domain.yaml#
+-
+           unevaluatedProperties: false
+
+ examples:
+--
+2.20.1
 
