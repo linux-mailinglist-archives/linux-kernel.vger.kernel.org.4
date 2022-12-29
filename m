@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3368B658E3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BAD658E4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiL2PRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 10:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S233184AbiL2PXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 10:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiL2PRK (ORCPT
+        with ESMTP id S230083AbiL2PXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 10:17:10 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7AC2AC6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:17:09 -0800 (PST)
+        Thu, 29 Dec 2022 10:23:50 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C2F11C22;
+        Thu, 29 Dec 2022 07:23:49 -0800 (PST)
 Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 459D81EC01CE;
-        Thu, 29 Dec 2022 16:17:08 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 70AFD1EC01CE;
+        Thu, 29 Dec 2022 16:23:47 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672327028;
+        t=1672327427;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=vVtKZ71SWnQB5BwkzlAN76tBBTSl4Z9ahAWOA7tn6nE=;
-        b=aBOcctTvdMU9LTdkH/hh/nXZH1N8mQcD1Uox4kU+LU6vHo1h4CEbzt7tvsVYjQz6VS7DYj
-        30ixhAEkLRjYAnnIGhKcNKloNHFF/pLAyLJDrCAqEXepgT2AsKwKRFPnnalTaZfKc2THpG
-        Yn9zg8ytmEPaDc/N8dbXh71O9s4TySw=
-Date:   Thu, 29 Dec 2022 16:17:02 +0100
+        bh=aMtwDH9fuMNyFWkoAK3zz+2vAD5QW+IjABKWKnCr+0I=;
+        b=qTwUc/jR654Qr5GDk415696RujRNTCW0Uy30uEQgRiQ9eB/DeGNUpE50RaYgRmKuldKdTI
+        EUgu4ug3fXezwT5KG0Wdx17Bsoc844F5a08onIqG02Z7WD7SwEH0/4x3xOK9Te5McGdh7t
+        r8ssJEEcol8P5nDMdOjangRptj/miVI=
+Date:   Thu, 29 Dec 2022 16:23:47 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com
-Subject: Re: [BUG Report] undefined reference to `convert_to_fxsr'
-Message-ID: <Y62vbjBzHF4rmh1V@zn.tnic>
-References: <50aa72a7-043d-8091-78de-458cbcc6c356@huawei.com>
- <Y6w49Y1d3lpv3KFn@zn.tnic>
- <23e2907c-5188-5ac6-3db8-1c5a12120bf2@huawei.com>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, jonnyc@amazon.com,
+        hhhawa@amazon.com, hanochu@amazon.com, itamark@amazon.com,
+        shellykz@amazon.com, amitlavi@amazon.com, dkl@amazon.com
+Subject: Re: [PATCH v2] edac: fix period calculation in
+ edac_device_reset_delay_period()
+Message-ID: <Y62xA548/wQAggRL@zn.tnic>
+References: <20221020124458.22153-1-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <23e2907c-5188-5ac6-3db8-1c5a12120bf2@huawei.com>
+In-Reply-To: <20221020124458.22153-1-farbere@amazon.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -55,12 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 09:50:16AM +0800, Miaohe Lin wrote:
-> CONFIG_CC_VERSION_TEXT="gcc (GCC) 7.3.0"
+On Thu, Oct 20, 2022 at 12:44:58PM +0000, Eliav Farber wrote:
+> Fix period calculation in case user sets a value of 1000.
+> The input of round_jiffies_relative() should be in jiffies and not in
+> milli-seconds.
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
 
-Builds fine with gcc (Debian 12.2.0-9) 12.2.0
+Fixes: c4cf3b454eca ("EDAC: Rework workqueue handling")
 
-Lemme build 7.3 and test with it.
+I guess.
+
+Also, I think the one-liner below does the same, no?
+
+---
+
+diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+index 19522c568aa5..88942a6edc2c 100644
+--- a/drivers/edac/edac_device.c
++++ b/drivers/edac/edac_device.c
+@@ -399,7 +399,7 @@ void edac_device_reset_delay_period(struct edac_device_ctl_info *edac_dev,
+ 	unsigned long jiffs = msecs_to_jiffies(value);
+ 
+ 	if (value == 1000)
+-		jiffs = round_jiffies_relative(value);
++		jiffs = round_jiffies_relative(jiffs);
+ 
+ 	edac_dev->poll_msec = value;
+ 	edac_dev->delay	    = jiffs;
 
 -- 
 Regards/Gruss,
