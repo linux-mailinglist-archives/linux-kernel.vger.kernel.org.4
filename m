@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599E2658800
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 01:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DCF658804
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 01:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbiL2AFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 19:05:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
+        id S231584AbiL2AIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 19:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiL2AFH (ORCPT
+        with ESMTP id S229959AbiL2AIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 19:05:07 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589AB2AFD;
-        Wed, 28 Dec 2022 16:05:06 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id x44-20020a05683040ac00b006707c74330eso10682042ott.10;
-        Wed, 28 Dec 2022 16:05:06 -0800 (PST)
+        Wed, 28 Dec 2022 19:08:20 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B76C14D00;
+        Wed, 28 Dec 2022 16:08:19 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id i12so11956620qvs.2;
+        Wed, 28 Dec 2022 16:08:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NlwAyp2ePGonWkoengdxdT+6OP15Q+SHwp/Pz5RrlC0=;
-        b=KDFnFP/41r8wVE4dsVTXM8rn1UQRh2WWPQofgFp09TBrAUzUvzomPsYRs86sv00IuU
-         PQulr2I3HLPqM+5jezNDbx7MHrgzPwgXq7ptQKC+vGhHboknX6yHoDBLeGroQ6UUby/3
-         TFxui6xP0xzyV8HRGKivRbpkEaPA/PVBFFsc//OM0bC8gIpfXia5SK5NNTYP6qmBBkAX
-         vSVRMKs4dXhGyr14RNt/UD7PFqmddNrHTF9i0ItFSdkHC6efjN4i6x2wg4i1vwOxwGjD
-         R6ONAcH35X1RZ/7OTQxY8hszbZNv2oTJbor6Zfw+xC5cVD91Gz8McRKI30E4FsBir9t8
-         GFrg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lEqtTwvMMsN+kiKq4Md/C7M7dS80KVmeITunwk8+FbI=;
+        b=DkwXQESyG5omlqK4NSe7tHvQy/fgu/Bt2w+zC36ggTaRREDbYJS7B6q1nfa47Rv6qm
+         by1j1GiyLX3P4eEs5g78121ns7OZdkGlUrsRrpflGiqmXNDhSZ+B7NIJ9mdcjn686XZC
+         RZyC7jz55GGodXKWmKkn4OYIZWldiJZTycw5a6xrFAw185hGSsI9RCNfQYYeXsRoyh7Q
+         FfnW01m7WLGMEegtNHFoVOR/N2hPsNIsLGtNGB7OVH5sUjX+yDSqAPniBEK3AxstiMco
+         7WyW5XhhGNqexajFd7uH9W3utuj0RGMVoWURGeykBA2eWCJm/lRXY0WHZ/NKaZLRkcJ/
+         S4HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NlwAyp2ePGonWkoengdxdT+6OP15Q+SHwp/Pz5RrlC0=;
-        b=GoBwIKTiMo2Yu10Yjpzv0RQN0vDQblTo53Laz/5MD+tzFdTIHE+BNNm1z5dtTHkcPY
-         XOhU26tIRtlb8rdeWxjvtNBtaQQfPTgd8wP612QNu0zn/aQ8869pl0q3zeaQDgS0CIt5
-         nknIlC4CfGjANCbKjGjAKWRyWl42WuQMmr37IlvDCQA/YarO2XEQ3BxWNeJejC5w4grr
-         K10S3byQXO9v/Yzn7YDfD5QwG/ieEtA1aHEOAQfi57LhWNVraYWDLcG0fF/QmT4M9FH/
-         MtURhedWCFzDEhb8w00fq36jyvrpm7SAa2eXWuKRITIcrctt+wvI86oG/nNmgGvUeWG+
-         i8rA==
-X-Gm-Message-State: AFqh2kpYUGt+DXY/3ejQERPKh6LgU6yjge9L0dqDxWesUICNay4Z4utf
-        /TJXWj8AwFxezdMYfyWrBWE37/Ntwco=
-X-Google-Smtp-Source: AMrXdXu39jwb8moy5Sw5YKsFimJgCIoytGvrDwvw85CHKHrTjfFiMeoOg/lgXelewtLb0xONbZcJ7A==
-X-Received: by 2002:a9d:3637:0:b0:670:5684:d87c with SMTP id w52-20020a9d3637000000b006705684d87cmr12100959otb.5.1672272305651;
-        Wed, 28 Dec 2022 16:05:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c1-20020a9d6c81000000b0066c15490a55sm8346901otr.19.2022.12.28.16.05.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 16:05:04 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 28 Dec 2022 16:05:03 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Derek John Clark <derekjohn.clark@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (oxp-sensors) Add AYANEO AIR and AIR Pro
-Message-ID: <20221228235933.GA417463@roeck-us.net>
-References: <Y5lBue87IXkhNs42@debian.me>
- <20221214154713.100648-1-derekjohn.clark@gmail.com>
- <20221228155542.GA3964987@roeck-us.net>
- <CAFqHKT=OO6367zfbEGmghahCUkV4ECLvCH+A_WLhBQyZf4k_jw@mail.gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lEqtTwvMMsN+kiKq4Md/C7M7dS80KVmeITunwk8+FbI=;
+        b=EMM+o23rG/X+p1fKL+tfVoUVmt+uhfbb+V+c+p6jntaJP3A/fd2AonuYnFkCoqBdFm
+         S15ksuCHzLlY/Z7dFRH0XaOD4O33oiKndTzbnpUwfm3HaffxRdU5iNej4xILhQFQZIiP
+         5lELB8aMKwh9xnYMMaC2kV1DnchHnpzdgMru6c5UdJ2DasdIp0MyrEib2fptp/ZLUvXq
+         TR750n9ORUW7/wgpDLxN9wqqU/Ssg79F/FoyL482U5EOHYzfMRyrcGvBwrFkWtjZggdx
+         4HFIoEjmOubmb3q+NZEqk0CM+Un+u9FhgbsJFRB6+IfhD+O1qgbNbQ0nxf0ICie9Ufmk
+         MCLg==
+X-Gm-Message-State: AFqh2kpnnVmNggMjSGMASHdYnLE7tcNG1955D9cuZOhzGJzzwLbTX9di
+        AVyxnBbO5z9AUIuKJ8nB6w56MJiM4QccT/2yDYiEChgzA1OWDWH3nss=
+X-Google-Smtp-Source: AMrXdXuW9SMiwEH3dpCDZoKzYlPBrByUnMVPnPiUETckuv+3LSyOuqUzU0wnwA5ON6cRhFx3BLjtLCxWaWpJw4/5Cd0=
+X-Received: by 2002:a05:6214:15d3:b0:4df:2bdc:14f3 with SMTP id
+ p19-20020a05621415d300b004df2bdc14f3mr925417qvz.34.1672272498179; Wed, 28 Dec
+ 2022 16:08:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFqHKT=OO6367zfbEGmghahCUkV4ECLvCH+A_WLhBQyZf4k_jw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <CABXGCsNzVxo4iq-tJSGm_kO1UggHXgq6CdcHDL=z5FL4njYXSQ@mail.gmail.com>
+ <CABXGCsM5y6m=pLX7tyE-RB1yuHEgZh3fxDu5ESfTRxEnW+djZA@mail.gmail.com>
+ <0036622d-53f7-eaba-f720-6dd9bdca28ad@gmx.com> <CABXGCsMMYmCT_Hz=wfKWDy4OQJ2KyBO3rNAFC1YCAthziWm+Lg@mail.gmail.com>
+ <41734bdb-2df0-6596-01b6-76a7dfd05d64@gmx.com> <CABXGCsM6GOzr+wL9BEk7mD5xLNgsKE5KUBADD8r783V6-FwXdg@mail.gmail.com>
+ <e9f4d768-d91b-b5cc-dbe6-041a81833cf3@gmx.com> <CABXGCsPK6ZZ4=5qathvjqSJNde6MYhA0uvh6zAMznT9Yj3xk2g@mail.gmail.com>
+ <24cd64b2-4536-372c-91af-b425d2f6efd4@gmx.com> <CABXGCsOG1GR1QqQSULHRcqJyfo5zY1bkZA+Mkb2m3C=rV_2z2w@mail.gmail.com>
+ <ff262ad5-2ae3-329a-ba88-19721850131d@gmx.com> <CABXGCsOgy0N_TLEadgacMBQLuU5xBe-hmoRvv4h=q-M5PcPvEg@mail.gmail.com>
+ <7d2edc1d-922b-763c-3122-0a6f81c3454e@suse.com> <CABXGCsOq56Qjq+-Bnfbe7ZvhfjSs204cbc8VFG7b+J2Ncss0ng@mail.gmail.com>
+ <fd0a0bfe-5c67-fd95-b17c-78a14c63bea6@gmx.com> <CABXGCsMev+96zixic3=5cLgzMfZKcJE-zOLPrc3-vTrrDZQDig@mail.gmail.com>
+ <de8fb932-2934-7ad2-112a-a9a2e63b532d@gmx.com>
+In-Reply-To: <de8fb932-2934-7ad2-112a-a9a2e63b532d@gmx.com>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Thu, 29 Dec 2022 05:08:06 +0500
+Message-ID: <CABXGCsMN-wviuURYkGXxr_d3BKtW3vyYhQ3Kpd7ZVo-Yr4gBvQ@mail.gmail.com>
+Subject: Re: [6.2][regression] after commit 947a629988f191807d2d22ba63ae18259bb645c5
+ btrfs volume periodical forced switch to readonly after a lot of disk writes
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc:     Qu Wenruo <wqu@suse.com>, dsterba@suse.com,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,53 +80,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 02:50:23PM -0800, Derek John Clark wrote:
-> > > ---
-> > >  Documentation/hwmon/oxp-sensors.rst | 19 ++++++----
-> > >  MAINTAINERS                         |  1 +
-> > >  drivers/hwmon/oxp-sensors.c         | 54 ++++++++++++++++++++++++-----
-> > >  3 files changed, 59 insertions(+), 15 deletions(-)
-> > >
-> > > diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-> > > index 39c588ec5c50..a53c961065b2 100644
-> > > --- a/Documentation/hwmon/oxp-sensors.rst
-> > > +++ b/Documentation/hwmon/oxp-sensors.rst
-> > > @@ -3,18 +3,21 @@
-> > >  Kernel driver oxp-sensors
-> > >  =========================
-> > >
-> > > -Author:
-> > > +Authors:
-> > > +    - Derek John Clark <derekjohn.clark@gmail.com>
-> > >      - Joaquín Ignacio Aramendía <samsagax@gmail.com>
-> > >
-> > > -Description:
-> > > +Description
-> > >  ------------
-> >
-> > Why drop ":" here ?
-> To match the style of the rest of the Documentation section titles.
-> Per Bagas Sanjaya previously:
-> 
-> >> -Author:
-> >> +Authors:
-> >> +    - Derek John Clark <derekjohn.clark@gmail.com>
-> >>      - Joaquín Ignacio Aramendía <samsagax@gmail.com>
-> >>
-> >>  Description:
-> >>  ------------
-> 
-> >Trim the trailing colon as it is not needed for section title.
+On Thu, Dec 29, 2022 at 4:31 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>
+> Are you using qgroup? If so it may be worthy trying disabling qgroup.
 
-That is POV, unrelated to this patch, and would have to be submitted as
-separate patch. Please refrain from changes like that and get me involved
-if someone requests it (actually they should provide such changes
-themselves since they request it and it is unrelated, and they should
-explain in the patch description why it is needed).
+I do not use quota.
+And looks like my distro does not use quita by default.
+=E2=9D=AF btrfs qgroup show -f /
+ERROR: can't list qgroups: quotas not enabled
 
-On a side note, '------------' would have to be changed as well.
+> But for newer kernel, qgroup hang should only happen when dropping large
+> snapshot, I don't know if podman pull would cause older snapshots to be
+> deleted...
 
-Guenter
+It is not a regression, it also happened on older kernels.
+But it is really annoying when the browser process waits when "podman
+pull" writes changes to disk.
+In fact, I have been waiting for 5 years for caching of slow HDDs by
+using the cache on the SSD, but apparently I can=E2=80=99t wait.
+And I started slowly buying expensive large SSDs to replace the big
+HDD. I still can=E2=80=99t find time to connect D5 P5316 30.72 Tb to the
+primary workstation.
+I want to make a video review of it. I understand this is an expensive
+solution and not suitable for everyone, unlike an affordable SDD
+cache.
 
-> 
-> Additional changes forthcoming. Thanks.
+--=20
+Best Regards,
+Mike Gavrilov.
