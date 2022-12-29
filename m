@@ -2,88 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB068659039
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5E2659041
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234002AbiL2SQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 13:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S231355AbiL2SU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 13:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbiL2SP5 (ORCPT
+        with ESMTP id S229615AbiL2SUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 13:15:57 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1475E0E4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:15:49 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 5352A32005C1;
-        Thu, 29 Dec 2022 13:15:48 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 29 Dec 2022 13:15:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672337747; x=1672424147; bh=cc
-        VLhMcmGv5G5PBWQJoQHqPqbnjedt1DR07CNYuDpwA=; b=pimmPEMA0ZTHlPQkRY
-        Sv9T3GMud0xar6KGf7/ExMGEvsE+gkLoPoe+4sOT5HAwQiOtWz+/+71stIsLbidu
-        T2UnPPSI48XL7HI2wP78E4aMCVTT1E0oMRZdEXOU6hQhT/xusKadHyMtHoq3loaV
-        wbC65/uq6HB1jVr9jNabrxHJCvAOzAt6UOobwwTyidvW1C6DNPtKoqoxdCi2uQNU
-        FqbZKGEpO55oWcQzpajYQ5uMBX4o1oHJxdhnXci8eM+/j8IndhN9Za74blRDk99V
-        4oPeYjF3vrkXrtXcrdhwUQVhMxVTVyU/CbGMpjy+RJNmHxhNf8XHN5bM8odYUj0o
-        zDlA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672337747; x=1672424147; bh=ccVLhMcmGv5G5
-        PBWQJoQHqPqbnjedt1DR07CNYuDpwA=; b=ZV3DQMhC1MDoTmBTQY+7NpGmuviZ3
-        c5+UXM65FJQmUpmCiQUzGlnk6s0Rspk0pI6/HaBhslmUPi44NCalVr0ER/ghgMpB
-        LdMD79+mVdP1V/z6PFAcEfgLjLrWqvk2QaN0SHIwHT9nzIAk+oQgPsAmldugppma
-        nE8P0L9+IsvCN/UslNnD0IvLwH+gJdLrOH9DGqviA0sOXahmGa4/ljVoJ++9HUsh
-        PfYgBGr/Zvh7JBHTTQL0j+77Kp2SLTQjo3EXfjCM06mhu+OAwko/QzH25Qt6pvLP
-        p1MXecAnMr36wY8NGMFh2f/8VB3JjBUyqxIWHeh8bWHSKNiHbZ2j/BMHA==
-X-ME-Sender: <xms:U9mtY_mtAj2fwwS0EcUn9McDELUGkChlnJnEKzTGTxlE_pyASuu0-g>
-    <xme:U9mtYy3l8_nsZ-2BYUJ-wjYiwQlUw0FkB9PXm_Ez96PBXjponQMiE6V7m4rdo37BC
-    9gu-JamoqOM21WI5w>
-X-ME-Received: <xmr:U9mtY1pam89qWLw3u1VRjR7EL_ANFHqtoKD1_5opK7ayB51697i13SW0TSsPwMwnjeY5cpehsz7F3iw0SVDgUCzB9M1Z6BrgsfeC9mXKDDPTrqS2PTqOxXTkVvsdcGcQzSlbRA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdduuddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:U9mtY3nALZS1qIcn2J0I7xtDVwwLkUVbBhIjlSqvY4MrJosiyY0LPQ>
-    <xmx:U9mtY91tN8zO5TCiMGFi8sQAhE6BQFUleOp8MPmIdarpGFVT7ckp6w>
-    <xmx:U9mtY2vx8C6hep4_oK8du6AfeqfZsiPCjD36CByi_T2Kvj4ucRqUww>
-    <xmx:U9mtY2sxeYFdn8pnRYQislGo7sZiWDcyEalHvZIf5WuaKNtnBPshcg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Dec 2022 13:15:47 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Boris Brezillon <bbrezillon@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH 7/7] mtd: rawnand: sunxi: Precompute the ECC_CTL register value
-Date:   Thu, 29 Dec 2022 12:15:26 -0600
-Message-Id: <20221229181526.53766-8-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221229181526.53766-1-samuel@sholland.org>
-References: <20221229181526.53766-1-samuel@sholland.org>
+        Thu, 29 Dec 2022 13:20:55 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF79A13EB0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:20:48 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id u28so22794537edd.10
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:20:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ON3me5uunsk4XleJoGvtCW00ElJeZA1o43QDGwsGENY=;
+        b=DcDtMicUWn8mu80sWCPWXICeHw1CtsaWHUywPGih6hfWB+smbHF3kgwL9SO7LkLmC1
+         /TF0MzknWi2sphxy5knIi3KKvVnavNgwV/NHjOq5lOuiTYyxqeDBZdUsLPkrw4V5FcV4
+         wFMiKMmpBEYupziUftIt4PdFaJxIWxcoeik0po1yG2f7SfVth4xwWS/HP8Wbt5f6iAsZ
+         0wtdPTnvC1w8zydIgMZxcWpOiSXHiD/NVEExI6nZa5/qRaS/Zd8FFrnuXc6jHfG/HH2s
+         3QyFpt8v8GVm2ghYxOuNr/hsRU0lkxGlXGvNA5xWzLlAScuLu1Kwy9/ylTzVOUe73GDM
+         iXtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ON3me5uunsk4XleJoGvtCW00ElJeZA1o43QDGwsGENY=;
+        b=QAB5RRlMOyXHzlOLJgTOyPYaziqos5Rt2zmz2V/UNoftPG9gvyCV5Ct0CGOMUzdABU
+         Ay/ZmCll3qRszMtCsDSZaE98YdVgzlRyBEAybTUIiI54mOgsVJdOksJkASQpMVcrMNrB
+         UQtAcXkIb9RLX7ZE1YZvyTEw6aWqejystWqTJm+La8H+Ku+VFjhndjB1t78iVw7pI7s5
+         riA+7211XnqvqXreh6N4hvr2NZOl31lSrwRItHG8sU1zQv3H37FHSlbUAJz1S+aYrgIC
+         56rvrBd/hvlcel7a2lXmfIUGYNYLrHq+IH6hBNIWslL353riT30Ij0SpcRtYcSGtLesf
+         Fkkw==
+X-Gm-Message-State: AFqh2kqQPhYhPBupExB5k/Oq9cvA5uj14QPFMM7B1vFJt7ipDze8F5SI
+        JC1DUNL8e5wYKEjDRKeFVTmEB/p9XuejrAZGeG7lsQ==
+X-Google-Smtp-Source: AMrXdXuX7hDJJFMW8bVCDXPgZW120f/VGaoT38dceDKWI+pCgb8sxy7Q6BUU/q1IctaOrBjGIq9gdsMrZgNDhTOjAo8=
+X-Received: by 2002:aa7:d741:0:b0:47d:f760:d4b2 with SMTP id
+ a1-20020aa7d741000000b0047df760d4b2mr3438224eds.202.1672338047233; Thu, 29
+ Dec 2022 10:20:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-8-vipinsh@google.com>
+ <CANgfPd_iktQYfRc0=zp4wsrADPQhPQNKo_MBZ0djzeeYi+w6aw@mail.gmail.com> <CAHVum0dU5C7Nrs1GPMzrWcg6juz6xYKoEPbvUj4h_VLiov4z0w@mail.gmail.com>
+In-Reply-To: <CAHVum0dU5C7Nrs1GPMzrWcg6juz6xYKoEPbvUj4h_VLiov4z0w@mail.gmail.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 29 Dec 2022 10:20:35 -0800
+Message-ID: <CANgfPd9BawLX7qxGCfgeduDjFD4pPyRr-VcyJ2=+KyvjT63R0w@mail.gmail.com>
+Subject: Re: [Patch v3 7/9] KVM: x86/mmu: Allocate page table's pages on NUMA
+ node of the underlying pages
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,180 +70,387 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This removes an unnecessary memory allocation, and avoids recomputing
-the same register value every time ECC is enabled.
+On Wed, Dec 28, 2022 at 2:08 PM Vipin Sharma <vipinsh@google.com> wrote:
+>
+> On Tue, Dec 27, 2022 at 11:34 AM Ben Gardon <bgardon@google.com> wrote:
+> >
+> > On Wed, Dec 21, 2022 at 6:35 PM Vipin Sharma <vipinsh@google.com> wrote:
+> > >
+> > > Page table pages of a VM are currently allocated based on the current
+> > > task's NUMA node or its mempolicy. This can cause suboptimal remote
+> > > accesses by the vCPU if it is accessing physical pages local to its NUMA
+> > > node but the page table pages mapping those physcal pages were created
+> > > by some other vCPU which was on different NUMA node or had different
+> > > policy.
+> > >
+> > > Allocate page table pages on the same NUMA node where underlying
+> > > physical page exists. Page table at level 5, 4, and 3 might not end up
+> > > on the same NUMA node as they can span multiple NUMA nodes.
+> >
+> > A page table at any level could map memory spanning multiple NUMA
+> > nodes, it just becomes more likely at higher levels.
+> > We're only guaranteed that a page table maps memory all on the same
+> > node if it's a split hugepage.
+>
+> Even in this case, it is a best effort.
+>
+> > This change can only guarantee that the page table pages are allocated
+> > on the same node as at least some of the memory they map.
+> > Of course in practice, the above is absolutely correct since we'd
+> > expect to have multi-GB continuous ranges of GFNs allocated on the
+> > same node via huge pages.
+> >
+> > And since the root pages are allocated based only on where the thread
+> > allocating them is running, they're not actually guaranteed to be on
+> > the same node as any of the memory they map. (Though they probably
+> > will be.)
+> >
+>
+> I will add more details in the commit in the next version.
+>
+> > >
+> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > > ---
+> > >  arch/x86/include/asm/kvm_host.h |  2 +-
+> > >  arch/x86/kvm/mmu/mmu.c          | 63 ++++++++++++++++++++++-----------
+> > >  arch/x86/kvm/mmu/paging_tmpl.h  |  4 +--
+> > >  arch/x86/kvm/mmu/tdp_mmu.c      | 11 +++---
+> > >  virt/kvm/kvm_main.c             |  2 +-
+> > >  5 files changed, 53 insertions(+), 29 deletions(-)
+> > >
+> > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > > index 293994fabae3..b1f319ad6f89 100644
+> > > --- a/arch/x86/include/asm/kvm_host.h
+> > > +++ b/arch/x86/include/asm/kvm_host.h
+> > > @@ -782,7 +782,7 @@ struct kvm_vcpu_arch {
+> > >         struct kvm_mmu *walk_mmu;
+> > >
+> > >         struct kvm_mmu_memory_cache mmu_pte_list_desc_cache;
+> > > -       struct kvm_mmu_memory_cache mmu_shadow_page_cache;
+> > > +       struct kvm_mmu_memory_cache mmu_shadow_page_cache[MAX_NUMNODES];
+> > >         struct kvm_mmu_memory_cache mmu_shadowed_info_cache;
+> > >         struct kvm_mmu_memory_cache mmu_page_header_cache;
+> > >
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index 23a3b82b2384..511c6ef265ee 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -677,24 +677,29 @@ static int mmu_topup_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
+> > >
+> > >  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+> > >  {
+> > > -       int r;
+> > > +       int r, nid;
+> > >
+> > >         /* 1 rmap, 1 parent PTE per level, and the prefetched rmaps. */
+> > >         r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
+> > >                                        1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
+> > >         if (r)
+> > >                 return r;
+> > > -       r = mmu_topup_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
+> > > -                                     &vcpu->arch.mmu_shadow_page_cache_lock,
+> > > -                                     PT64_ROOT_MAX_LEVEL);
+> > > -       if (r)
+> > > -               return r;
+> > > +
+> > > +       for_each_online_node(nid) {
+> > > +               r = mmu_topup_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache[nid],
+> > > +                                             &vcpu->arch.mmu_shadow_page_cache_lock,
+> > > +                                             PT64_ROOT_MAX_LEVEL);
+> > > +               if (r)
+> > > +                       return r;
+> > > +       }
+> > > +
+> > >         if (maybe_indirect) {
+> > >                 r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadowed_info_cache,
+> > >                                                PT64_ROOT_MAX_LEVEL);
+> > >                 if (r)
+> > >                         return r;
+> > >         }
+> > > +
+> > >         return kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_page_header_cache,
+> > >                                           PT64_ROOT_MAX_LEVEL);
+> > >  }
+> > > @@ -715,9 +720,14 @@ static void mmu_free_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
+> > >
+> > >  static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
+> > >  {
+> > > +       int nid;
+> > > +
+> > >         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
+> > > -       mmu_free_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
+> > > -                                &vcpu->arch.mmu_shadow_page_cache_lock);
+> > > +
+> > > +       for_each_node(nid)
+> > > +               mmu_free_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache[nid],
+> > > +                                        &vcpu->arch.mmu_shadow_page_cache_lock);
+> > > +
+> >
+> > Was just trying to think if there could be any issue with memory
+> > leakage if the online nodes changed, though IDK if any hardware does
+> > that.
+> > Still, it might be more robust to use ARRAY_SIZE and cover the whole array.
+>
+> for_each_node() goes through all of the possible nodes on the system,
+> whereas, for_each_online_node() goes through only online nodes.
+> Current code seems right to me, let me know if I am overlooking
+> something.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+Ah okay, I didn't see the distinction. That sounds good to me.
 
- drivers/mtd/nand/raw/sunxi_nand.c | 75 ++++++-------------------------
- 1 file changed, 13 insertions(+), 62 deletions(-)
+>
+> >
+> > >         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadowed_info_cache);
+> > >         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
+> > >  }
+> > > @@ -2256,11 +2266,12 @@ static struct kvm_mmu_page *__kvm_mmu_get_shadow_page(struct kvm *kvm,
+> > >
+> > >  static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
+> > >                                                     gfn_t gfn,
+> > > -                                                   union kvm_mmu_page_role role)
+> > > +                                                   union kvm_mmu_page_role role,
+> > > +                                                   int nid)
+> > >  {
+> > >         struct shadow_page_caches caches = {
+> > >                 .page_header_cache = &vcpu->arch.mmu_page_header_cache,
+> > > -               .shadow_page_cache = &vcpu->arch.mmu_shadow_page_cache,
+> > > +               .shadow_page_cache = &vcpu->arch.mmu_shadow_page_cache[nid],
+> > >                 .shadowed_info_cache = &vcpu->arch.mmu_shadowed_info_cache,
+> > >                 .shadow_page_cache_lock = &vcpu->arch.mmu_shadow_page_cache_lock
+> > >         };
+> > > @@ -2316,15 +2327,19 @@ static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct,
+> > >
+> > >  static struct kvm_mmu_page *kvm_mmu_get_child_sp(struct kvm_vcpu *vcpu,
+> > >                                                  u64 *sptep, gfn_t gfn,
+> > > -                                                bool direct, unsigned int access)
+> > > +                                                bool direct, unsigned int access,
+> > > +                                                kvm_pfn_t pfn)
+> > >  {
+> > >         union kvm_mmu_page_role role;
+> > > +       int nid;
+> > >
+> > >         if (is_shadow_present_pte(*sptep) && !is_large_pte(*sptep))
+> > >                 return ERR_PTR(-EEXIST);
+> > >
+> > >         role = kvm_mmu_child_role(sptep, direct, access);
+> > > -       return kvm_mmu_get_shadow_page(vcpu, gfn, role);
+> > > +       nid = kvm_pfn_to_page_table_nid(pfn);
+> > > +
+> > > +       return kvm_mmu_get_shadow_page(vcpu, gfn, role, nid);
+> > >  }
+> > >
+> > >  static void shadow_walk_init_using_root(struct kvm_shadow_walk_iterator *iterator,
+> > > @@ -3208,7 +3223,8 @@ static int direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> > >                 if (it.level == fault->goal_level)
+> > >                         break;
+> > >
+> > > -               sp = kvm_mmu_get_child_sp(vcpu, it.sptep, base_gfn, true, ACC_ALL);
+> > > +               sp = kvm_mmu_get_child_sp(vcpu, it.sptep, base_gfn, true,
+> > > +                                         ACC_ALL, fault->pfn);
+> > >                 if (sp == ERR_PTR(-EEXIST))
+> > >                         continue;
+> > >
+> > > @@ -3636,7 +3652,7 @@ static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
+> > >         WARN_ON_ONCE(quadrant && !role.has_4_byte_gpte);
+> > >         WARN_ON_ONCE(role.direct && role.has_4_byte_gpte);
+> > >
+> > > -       sp = kvm_mmu_get_shadow_page(vcpu, gfn, role);
+> > > +       sp = kvm_mmu_get_shadow_page(vcpu, gfn, role, numa_mem_id());
+> > >         ++sp->root_count;
+> > >
+> > >         return __pa(sp->spt);
+> > > @@ -5952,7 +5968,7 @@ static int __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
+> > >
+> > >  int kvm_mmu_create(struct kvm_vcpu *vcpu)
+> > >  {
+> > > -       int ret;
+> > > +       int ret, nid;
+> > >
+> > >         INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_pte_list_desc_cache,
+> > >                                   pte_list_desc_cache, NUMA_NO_NODE);
+> > > @@ -5960,8 +5976,9 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+> > >         INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache,
+> > >                                   mmu_page_header_cache, NUMA_NO_NODE);
+> > >
+> > > -       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache,
+> > > -                                 NULL, NUMA_NO_NODE);
+> > > +       for_each_node(nid)
+> > > +               INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache[nid],
+> > > +                                         NULL, nid);
+> > >         spin_lock_init(&vcpu->arch.mmu_shadow_page_cache_lock);
+> > >
+> > >         vcpu->arch.mmu = &vcpu->arch.root_mmu;
+> > > @@ -6692,13 +6709,17 @@ void kvm_mmu_invalidate_mmio_sptes(struct kvm *kvm, u64 gen)
+> > >  }
+> > >
+> > >  static unsigned long mmu_shrink_cache(struct kvm_mmu_memory_cache *cache,
+> > > +                                     int cache_count,
+> > >                                       spinlock_t *cache_lock)
+> > >  {
+> > >         unsigned long freed = 0;
+> > > +       int nid;
+> > >
+> > >         spin_lock(cache_lock);
+> > > -       if (cache->nobjs)
+> > > -               freed = kvm_mmu_empty_memory_cache(cache);
+> > > +       for (nid = 0; nid < cache_count; nid++) {
+> > > +               if (node_online(nid) && cache[nid].nobjs)
+> >
+> > Is there any reason to keep the cache if !node_online(nid)?
+> > Actually, I'd also just drop the cache_count argument and always
+> > iterate over the entire array, only checking nobjs. There's no
+> > guarantee I'm aware of that the set of nodes has a sequential series
+> > of IDs starting at 0 and you'd get a bug if that wasn't the case since
+> > it only iterates to  nid < cache_count here but some of the earlier
+> > nids might not have been online.
+> >
+>
+> This is just temporary and will be removed in the next patch in the series.
+>
+> mmu_shrink_cache() is used for both split_shadow_page_cache (single
+> object) and mmu_shadow_page_cache[MAX_NUMANODES].
+>
+> In next patch of this series, I used for_each_online_node(nide), I
+> will change it to for_each_node() in the next version.
+>
+> > > +                       freed += kvm_mmu_empty_memory_cache(&cache[nid]);
+> > > +       }
+> > >         spin_unlock(cache_lock);
+> > >         return freed;
+> > >  }
+> > > @@ -6721,13 +6742,15 @@ mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+> > >                 list_move_tail(&kvm->vm_list, &vm_list);
+> > >
+> > >                 freed += mmu_shrink_cache(&kvm->arch.split_shadow_page_cache,
+> > > +                                         1,
+> >
+> > So lonely.
+> > One.
+> > All by itself,
+> > with only a coma for company.
+> >
+> > NIT: This could be merged to the previous or subsequent lines.
+>
+> This is a strong and independent '1'.
+>
+> >
+> > >                                           &kvm->arch.split_shadow_page_cache_lock);
+> > >
+> > >                 if (freed >= sc->nr_to_scan)
+> > >                         break;
+> > >
+> > >                 kvm_for_each_vcpu(i, vcpu, kvm) {
+> > > -                       freed += mmu_shrink_cache(&vcpu->arch.mmu_shadow_page_cache,
+> > > +                       freed += mmu_shrink_cache(vcpu->arch.mmu_shadow_page_cache,
+> > > +                                                 MAX_NUMNODES,
+> > >                                                   &vcpu->arch.mmu_shadow_page_cache_lock);
+> > >                 }
+> > >
+> > > diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> > > index e5662dbd519c..1ceca62ec4cf 100644
+> > > --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> > > +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> > > @@ -652,7 +652,7 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> > >                 table_gfn = gw->table_gfn[it.level - 2];
+> > >                 access = gw->pt_access[it.level - 2];
+> > >                 sp = kvm_mmu_get_child_sp(vcpu, it.sptep, table_gfn,
+> > > -                                         false, access);
+> > > +                                         false, access, fault->pfn);
+> > >
+> > >                 if (sp != ERR_PTR(-EEXIST)) {
+> > >                         /*
+> > > @@ -708,7 +708,7 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> > >                 validate_direct_spte(vcpu, it.sptep, direct_access);
+> > >
+> > >                 sp = kvm_mmu_get_child_sp(vcpu, it.sptep, base_gfn,
+> > > -                                         true, direct_access);
+> > > +                                         true, direct_access, fault->pfn);
+> > >                 if (sp == ERR_PTR(-EEXIST))
+> > >                         continue;
+> > >
+> > > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > > index 376b8dceb3f9..b5abae2366dd 100644
+> > > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > > @@ -259,12 +259,12 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
+> > >                     kvm_mmu_page_as_id(_root) != _as_id) {              \
+> > >                 } else
+> > >
+> > > -static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
+> > > +static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu, int nid)
+> > >  {
+> > >         struct kvm_mmu_page *sp;
+> > >
+> > >         sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
+> > > -       sp->spt = kvm_mmu_sp_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache,
+> > > +       sp->spt = kvm_mmu_sp_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache[nid],
+> > >                                                 &vcpu->arch.mmu_shadow_page_cache_lock);
+> > >
+> > >         return sp;
+> > > @@ -317,7 +317,7 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu)
+> > >                         goto out;
+> > >         }
+> > >
+> > > -       root = tdp_mmu_alloc_sp(vcpu);
+> > > +       root = tdp_mmu_alloc_sp(vcpu, numa_mem_id());
+> >
+> > Might be worth calling out somewhere that the root page is just
+> > allocated based on where the thread allocating it runs.
+> >
+>
+> How about a comment just up here or do you prefer at tdp_mmu_roots in
+> struct kvm_arch{}?
 
-diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sunxi_nand.c
-index a3bc9f7f9e5a..5c5a567d8870 100644
---- a/drivers/mtd/nand/raw/sunxi_nand.c
-+++ b/drivers/mtd/nand/raw/sunxi_nand.c
-@@ -169,22 +169,13 @@ struct sunxi_nand_chip_sel {
- 	s8 rb;
- };
- 
--/**
-- * struct sunxi_nand_hw_ecc - stores information related to HW ECC support
-- *
-- * @mode: the sunxi ECC mode field deduced from ECC requirements
-- */
--struct sunxi_nand_hw_ecc {
--	int mode;
--};
--
- /**
-  * struct sunxi_nand_chip - stores NAND chip device related information
-  *
-  * @node: used to store NAND chips into a list
-  * @nand: base NAND chip structure
-- * @ecc: ECC controller structure
-  * @clk_rate: clk_rate required for this NAND chip
-+ * @ecc_ctl: ECC_CTL register value for this NAND chip
-  * @timing_cfg: TIMING_CFG register value for this NAND chip
-  * @timing_ctl: TIMING_CTL register value for this NAND chip
-  * @nsels: number of CS lines required by the NAND chip
-@@ -193,8 +184,8 @@ struct sunxi_nand_hw_ecc {
- struct sunxi_nand_chip {
- 	struct list_head node;
- 	struct nand_chip nand;
--	struct sunxi_nand_hw_ecc *ecc;
- 	unsigned long clk_rate;
-+	u32 ecc_ctl;
- 	u32 timing_cfg;
- 	u32 timing_ctl;
- 	int nsels;
-@@ -689,26 +680,15 @@ static void sunxi_nfc_hw_ecc_enable(struct nand_chip *nand)
- {
- 	struct sunxi_nand_chip *sunxi_nand = to_sunxi_nand(nand);
- 	struct sunxi_nfc *nfc = to_sunxi_nfc(nand->controller);
--	u32 ecc_ctl;
--
--	ecc_ctl = readl(nfc->regs + NFC_REG_ECC_CTL);
--	ecc_ctl &= ~(NFC_ECC_MODE_MSK | NFC_ECC_PIPELINE |
--		     NFC_ECC_BLOCK_SIZE_MSK);
--	ecc_ctl |= NFC_ECC_EN | NFC_ECC_MODE(sunxi_nand->ecc->mode) |
--		   NFC_ECC_EXCEPTION | NFC_ECC_PIPELINE;
--
--	if (nand->ecc.size == 512)
--		ecc_ctl |= NFC_ECC_BLOCK_512;
- 
--	writel(ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
-+	writel(sunxi_nand->ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
- }
- 
- static void sunxi_nfc_hw_ecc_disable(struct nand_chip *nand)
- {
- 	struct sunxi_nfc *nfc = to_sunxi_nfc(nand->controller);
- 
--	writel(readl(nfc->regs + NFC_REG_ECC_CTL) & ~NFC_ECC_EN,
--	       nfc->regs + NFC_REG_ECC_CTL);
-+	writel(0, nfc->regs + NFC_REG_ECC_CTL);
- }
- 
- static inline void sunxi_nfc_user_data_to_buf(u32 user_data, u8 *buf)
-@@ -1626,11 +1606,6 @@ static const struct mtd_ooblayout_ops sunxi_nand_ooblayout_ops = {
- 	.free = sunxi_nand_ooblayout_free,
- };
- 
--static void sunxi_nand_hw_ecc_ctrl_cleanup(struct sunxi_nand_chip *sunxi_nand)
--{
--	kfree(sunxi_nand->ecc);
--}
--
- static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
- 				       struct nand_ecc_ctrl *ecc,
- 				       struct device_node *np)
-@@ -1641,7 +1616,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
- 	struct mtd_info *mtd = nand_to_mtd(nand);
- 	struct nand_device *nanddev = mtd_to_nanddev(mtd);
- 	int nsectors;
--	int ret;
- 	int i;
- 
- 	if (nanddev->ecc.user_conf.flags & NAND_ECC_MAXIMIZE_STRENGTH) {
-@@ -1675,10 +1649,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
- 	if (ecc->size != 512 && ecc->size != 1024)
- 		return -EINVAL;
- 
--	sunxi_nand->ecc = kzalloc(sizeof(*sunxi_nand->ecc), GFP_KERNEL);
--	if (!sunxi_nand->ecc)
--		return -ENOMEM;
--
- 	/* Prefer 1k ECC chunk over 512 ones */
- 	if (ecc->size == 512 && mtd->writesize > 512) {
- 		ecc->size = 1024;
-@@ -1699,12 +1669,9 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
- 
- 	if (i >= ARRAY_SIZE(strengths)) {
- 		dev_err(nfc->dev, "unsupported strength\n");
--		ret = -ENOTSUPP;
--		goto err;
-+		return -ENOTSUPP;
- 	}
- 
--	sunxi_nand->ecc->mode = i;
--
- 	/* HW ECC always request ECC bytes for 1024 bytes blocks */
- 	ecc->bytes = DIV_ROUND_UP(ecc->strength * fls(8 * 1024), 8);
- 
-@@ -1713,10 +1680,14 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
- 
- 	nsectors = mtd->writesize / ecc->size;
- 
--	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors)) {
--		ret = -EINVAL;
--		goto err;
--	}
-+	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors))
-+		return -EINVAL;
-+
-+	sunxi_nand->ecc_ctl = NFC_ECC_MODE(i) | NFC_ECC_EXCEPTION |
-+			      NFC_ECC_PIPELINE | NFC_ECC_EN;
-+
-+	if (ecc->size == 512)
-+		sunxi_nand->ecc_ctl |= NFC_ECC_BLOCK_512;
- 
- 	ecc->read_oob = sunxi_nfc_hw_ecc_read_oob;
- 	ecc->write_oob = sunxi_nfc_hw_ecc_write_oob;
-@@ -1739,25 +1710,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
- 	ecc->write_oob_raw = nand_write_oob_std;
- 
- 	return 0;
--
--err:
--	kfree(sunxi_nand->ecc);
--
--	return ret;
--}
--
--static void sunxi_nand_ecc_cleanup(struct sunxi_nand_chip *sunxi_nand)
--{
--	struct nand_ecc_ctrl *ecc = &sunxi_nand->nand.ecc;
--
--	switch (ecc->engine_type) {
--	case NAND_ECC_ENGINE_TYPE_ON_HOST:
--		sunxi_nand_hw_ecc_ctrl_cleanup(sunxi_nand);
--		break;
--	case NAND_ECC_ENGINE_TYPE_NONE:
--	default:
--		break;
--	}
- }
- 
- static int sunxi_nand_attach_chip(struct nand_chip *nand)
-@@ -1970,7 +1922,6 @@ static void sunxi_nand_chips_cleanup(struct sunxi_nfc *nfc)
- 		ret = mtd_device_unregister(nand_to_mtd(chip));
- 		WARN_ON(ret);
- 		nand_cleanup(chip);
--		sunxi_nand_ecc_cleanup(sunxi_nand);
- 		list_del(&sunxi_nand->node);
- 	}
- }
--- 
-2.37.4
+Here or just in the commit description or cover letter.
+Thanks!
 
+>
+> > >         tdp_mmu_init_sp(root, NULL, 0, role);
+> > >
+> > >         refcount_set(&root->tdp_mmu_root_count, 1);
+> > > @@ -1149,7 +1149,7 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> > >         struct kvm *kvm = vcpu->kvm;
+> > >         struct tdp_iter iter;
+> > >         struct kvm_mmu_page *sp;
+> > > -       int ret = RET_PF_RETRY;
+> > > +       int ret = RET_PF_RETRY, nid;
+> > >
+> > >         kvm_mmu_hugepage_adjust(vcpu, fault);
+> > >
+> > > @@ -1178,11 +1178,12 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> > >                     !is_large_pte(iter.old_spte))
+> > >                         continue;
+> > >
+> > > +               nid = kvm_pfn_to_page_table_nid(fault->pfn);
+> > >                 /*
+> > >                  * The SPTE is either non-present or points to a huge page that
+> > >                  * needs to be split.
+> > >                  */
+> > > -               sp = tdp_mmu_alloc_sp(vcpu);
+> > > +               sp = tdp_mmu_alloc_sp(vcpu, nid);
+> > >                 tdp_mmu_init_child_sp(sp, &iter);
+> > >
+> > >                 sp->nx_huge_page_disallowed = fault->huge_page_disallowed;
+> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > > index d96c8146e9ba..4f3db7ffeba8 100644
+> > > --- a/virt/kvm/kvm_main.c
+> > > +++ b/virt/kvm/kvm_main.c
+> > > @@ -415,7 +415,7 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+> > >         if (mc->kmem_cache)
+> > >                 return kmem_cache_alloc(mc->kmem_cache, gfp_flags);
+> > >         else
+> > > -               return (void *)__get_free_page(gfp_flags);
+> > > +               return kvm_mmu_get_free_page(mc->node, gfp_flags);
+> >
+> > You could do part of this change in the commit that introduced
+> > kvm_mmu_get_free_page too.
+>
+> Yeah, I can do it there as well. No strong opinions. I will update in
+> the next version.
+>
+> > >  }
+> > >
+> > >  int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+> > > --
+> > > 2.39.0.314.g84b9a713c41-goog
+> > >
