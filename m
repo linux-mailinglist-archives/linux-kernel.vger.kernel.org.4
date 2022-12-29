@@ -2,163 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D7A658E9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707A4658EA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbiL2Pwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 10:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S233552AbiL2Pyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 10:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233698AbiL2Pvn (ORCPT
+        with ESMTP id S233682AbiL2Py2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 10:51:43 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C022A140DE
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:51:39 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id e9-20020a056e020b2900b003036757d5caso12010721ilu.10
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:51:39 -0800 (PST)
+        Thu, 29 Dec 2022 10:54:28 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6DA167F9;
+        Thu, 29 Dec 2022 07:52:42 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1447c7aa004so22057728fac.11;
+        Thu, 29 Dec 2022 07:52:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vW8MXh4Mn1681f84anrjuU04/GdxNepGDloajKgzfZk=;
+        b=iST9t6g3S6A5oY0zCVrxOMlz1aufM0trr1bdCOJ3tv6CL8Ac/BYf/QVAhevqfgKaWx
+         wWYDZnSYlIUO1dSYmJO15PoPYnUMggsKu1EFhEuQlQ0mqFg4wRdt93i4CzM/IvlCMuER
+         WedrLTWJh6w7qlgwsY95gO/eFy42t6dLkEWDIkwShgt4fUsQrc3ICQanThqJcxufG7zD
+         xEvHsFTMGBuQ863fq7L6pjyK9s6fnT0wp/KPYl/tX4lmq5NSfP5FS+DcY5i59tJGT4g5
+         xrDOWxAa/Cy4Zq8bm/Wbv6YmvSkwy1MJDKG8o0r3UkDnTQqIqh2dkwNfn1z88U8ckTLa
+         Wfjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zSDbzxWAzJuRcWytmEq8mtAWp2Ew3sUJubFv6e3Eplk=;
-        b=tTjWWYUw6z3zmwCXsRjbJtp5ZZc4SndpSEwfhYGBWRMsifBtjMNlobqHokjHfCZOqX
-         NKlDyuTk7EkJ+h0PwidWVM28UurhaKCEOiJi7KBnXSq51Q9R0RFKxfOSMYLWl1JCm/2U
-         xGnH9RVFcvFhruIPDFfzG2q73nYKqF+zjW+Tqb4kfVlXOBx9Kkx9Wc413xFCW75Xj4pj
-         o3hp3MPQgBoU/GK4PPKfC1gmySpCkLwqGLCOqYey2YCX2giKcCGblm3L5geMQ3noSEsb
-         1KyJds4XVyzqweUh/+gkgCoHOVIEL+JJ7QpGT1iY9lU0KrZlP3A6zaMuF+bBVfhgxGXb
-         9SBg==
-X-Gm-Message-State: AFqh2kqXa2KiNQRFPdxyB+WUD/xE7Ln8uzq2Eh0CVJNa2PruRcZbA3Vm
-        rqRCsTWb1SfMb0bk0JY25USRYOLjTxviWnB0APrl1/aqIM45
-X-Google-Smtp-Source: AMrXdXtJJQq4j3qyywaHZ2fnHBIb+Z0/lWXX+jBJhdb4j4F5bo/mEPjjvoDtdSjHzklg5hEXFVGIUuJdjKOqwthWHwb+Uc/Uvltd
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vW8MXh4Mn1681f84anrjuU04/GdxNepGDloajKgzfZk=;
+        b=X1XHlptZDiiH6UOAcbY4uLHDBf6c+BqSvZIUF18SWrdjx6kjfJexYPVpE6TNAq4WgZ
+         FmoFIC4L1+C4fIoIk8Ou6X9UnHYrKDJr2OPMpDq5WYURx7GEmChw7c1LSuglMeW7jtVB
+         uok79CP7sd5JVxRmdAzVyQMqyvvI/sjF+C8osZbwedrjNm/4dBG6K0RCJY4wpSVFXybP
+         ofR0hL7PjSXfRNRNGRWKuAlDWAiDjGNvnIL5TutOJVLblOncdYi5I+rOscg7OMsNgk91
+         ZumIMx91sA5MeDO0xC/Fn0in5PEoFWR3Pvui/FUV1HiaCRe95WvnyDYxh9MTrMCDyMnX
+         J3/Q==
+X-Gm-Message-State: AFqh2kosL7THvV7cobNgH29OA5UPL7vXvfwG3CevNKACPfvNU8ZU7hjC
+        WC1rcts2ap76iRiniuq/Gs0=
+X-Google-Smtp-Source: AMrXdXuT0vomwfXAvwp7Bx6QpIpSSp1oqi9iVQAiP34/b5hkljMMUBTku4/UQgxyiOkRDxtkuyGUWg==
+X-Received: by 2002:a05:6870:4711:b0:144:49b8:6800 with SMTP id b17-20020a056870471100b0014449b86800mr16565499oaq.58.1672329149252;
+        Thu, 29 Dec 2022 07:52:29 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u3-20020a056871008300b0010d7242b623sm8774842oaa.21.2022.12.29.07.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 07:52:28 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 29 Dec 2022 07:52:27 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sinan Divarci <Sinan.Divarci@analog.com>, jdelvare@suse.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: Add bindings for max31732
+Message-ID: <20221229155227.GA22937@roeck-us.net>
+References: <20221214142206.13288-1-Sinan.Divarci@analog.com>
+ <20221214142206.13288-4-Sinan.Divarci@analog.com>
+ <386e3717-a063-a2ea-6028-19d11b5838b0@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:ac02:0:b0:39d:7353:149b with SMTP id
- a2-20020a02ac02000000b0039d7353149bmr2209764jao.7.1672329099076; Thu, 29 Dec
- 2022 07:51:39 -0800 (PST)
-Date:   Thu, 29 Dec 2022 07:51:39 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e5ee7305f0f975e8@google.com>
-Subject: [syzbot] WARNING in print_bfs_bug (2)
-From:   syzbot <syzbot+630f83b42d801d922b8b@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, jiri@resnulli.us,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <386e3717-a063-a2ea-6028-19d11b5838b0@linaro.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Dec 14, 2022 at 06:00:03PM +0100, Krzysztof Kozlowski wrote:
+> On 14/12/2022 15:22, Sinan Divarci wrote:
+> > Adding bindings for max31732 quad remote temperature sensor
+> 
+> Full stop.
+> 
+> Subject: drop second, redundant "bindings for".
+> 
+> > 
+> > Signed-off-by: Sinan Divarci <Sinan.Divarci@analog.com>
+> > ---
+> >  .../bindings/hwmon/adi,max31732.yaml          | 83 +++++++++++++++++++
+> >  1 file changed, 83 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+> > new file mode 100644
+> > index 000000000..c701cda95
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+> > @@ -0,0 +1,83 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +# Copyright 2022 Analog Devices Inc.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hwmon/adi,max31732.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Analog Devices MAX31732 Temperature Sensor Device Driver
+> 
+> Drop "Device Driver"
+> 
+> > +
+> > +maintainers:
+> > +  - Sinan Divarci <Sinan.Divarci@analog.com>
+> > +
+> > +description: Bindings for the Analog Devices MAX31732 Temperature Sensor Device.
+> 
+> Drop "Bindings for". Actually, either drop entire description or write
+> something else than title.
+> 
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - adi,max31732
+> > +
+> > +  reg:
+> > +    description: I2C address of the Temperature Sensor Device.
+> 
+> Drop description.
+> 
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +
+> > +  interrupt-names:
+> > +    description: Name of the interrupt pin of max31732 used for IRQ.
+> 
+> Drop description.
+> 
+> > +    minItems: 1
+> > +    items:
+> > +      - enum: [ALARM1, ALARM2]
+> > +      - enum: [ALARM1, ALARM2]
+> 
+> This should be fixed, not flexible. Why it's flexible?
+> 
+> lowercase letters only
+> 
+> > +
+> > +  adi,alarm1-interrupt-mode:
+> > +    description: |
+> > +      Enables the ALARM1 output to function in interrupt mode.
+> > +      Default ALARM1 output function is comparator mode.
+> 
+> Why this is a property of DT/hardware? Don't encode policy in DT.
+> 
 
-syzbot found the following issue on:
+I would not call this "policy". Normally it is an implementation
+question or decision, since interrupts behave differently depending
+on the mode. Impact is difficult to see, though, since the chip
+documentation is not available to the public.
 
-HEAD commit:    72a85e2b0a1e Merge tag 'spi-fix-v6.2-rc1' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10127b44480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b0e81c4eb13a67cd
-dashboard link: https://syzkaller.appspot.com/bug?extid=630f83b42d801d922b8b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > +    type: boolean
+> > +
+> > +  adi,alarm2-interrupt-mode:
+> > +    description: |
+> > +      Enables the ALARM2 output to function in interrupt mode.
+> > +      Default ALARM2 output function is comparator mode.
+> 
+> Same question.
+> 
+> > +    type: boolean
+> > +
+> > +  adi,alarm1-fault-queue:
+> > +    description: The number of consecutive faults required to assert ALARM1.
+> 
+> Same question - why this number differs with hardware?
+> 
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Noisier hardware will require more samples to avoid spurious faults.
+Trade-off is speed of reporting a fault. Normally the board designer
+would determine a value which is low enough to avoid spurious faults.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/bf5b7ea54f05/disk-72a85e2b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/cd3c30b473ee/vmlinux-72a85e2b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/df9aad922f68/bzImage-72a85e2b.xz
+Note that the chip (according to patch 2/3) supports resistance
+cancellation as well as beta compensation, which are also board specific.
+I don't have access to the datasheet, so I don't know for sure if those
+are configurable (typically they are). If they are configurable, I would
+expect to see respective properties.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+630f83b42d801d922b8b@syzkaller.appspotmail.com
-
-device team1929 entered promiscuous mode
-8021q: adding VLAN 0 to HW filter on device team1929
-------------[ cut here ]------------
-lockdep bfs error:-1
-WARNING: CPU: 0 PID: 17604 at kernel/locking/lockdep.c:2066 print_bfs_bug+0x22/0x30 kernel/locking/lockdep.c:2066
-Modules linked in:
-CPU: 0 PID: 17604 Comm: syz-executor.2 Not tainted 6.1.0-syzkaller-14594-g72a85e2b0a1e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:print_bfs_bug+0x22/0x30 kernel/locking/lockdep.c:2066
-Code: 84 00 00 00 00 00 66 90 55 89 fd 53 e8 17 67 a5 02 89 c3 e8 60 fd ff ff 85 db 74 10 89 ee 48 c7 c7 20 42 4c 8a e8 c3 48 5c 08 <0f> 0b 5b 5d c3 66 0f 1f 84 00 00 00 00 00 41 57 be fd ff 0f 00 41
-RSP: 0018:ffffc90016386800 EFLAGS: 00010082
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: 0000000000040000 RSI: ffffffff8165927c RDI: fffff52002c70cf2
-RBP: 00000000ffffffff R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000002 R11: 207065646b636f6c R12: ffff8881bee94d08
-R13: ffff8881bee94d30 R14: ffff8881bee94280 R15: ffffc90016386910
-FS:  00007f3023c34700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f589d7a6cc4 CR3: 00000001b2879000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- check_irq_usage+0x69a/0xab0 kernel/locking/lockdep.c:2791
- check_prev_add kernel/locking/lockdep.c:3101 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x2a5b/0x56d0 kernel/locking/lockdep.c:5055
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
- do_write_seqcount_begin_nested include/linux/seqlock.h:516 [inline]
- do_write_seqcount_begin include/linux/seqlock.h:541 [inline]
- psi_group_change+0x138/0xc10 kernel/sched/psi.c:775
- psi_task_switch+0x582/0x930 kernel/sched/psi.c:926
- psi_sched_switch kernel/sched/stats.h:185 [inline]
- __schedule+0x379b/0x5450 kernel/sched/core.c:6550
- preempt_schedule_common+0x45/0xc0 kernel/sched/core.c:6724
- preempt_schedule_thunk+0x1a/0x20 arch/x86/entry/thunk_64.S:34
- __mutex_lock_common kernel/locking/mutex.c:728 [inline]
- __mutex_lock+0xfff/0x1360 kernel/locking/mutex.c:747
- team_vlan_rx_add_vid+0x3c/0x1e0 drivers/net/team/team.c:1906
- vlan_add_rx_filter_info+0x149/0x1d0 net/8021q/vlan_core.c:211
- __vlan_vid_add net/8021q/vlan_core.c:306 [inline]
- vlan_vid_add+0x3f6/0x7f0 net/8021q/vlan_core.c:336
- vlan_device_event.cold+0x28/0x2d net/8021q/vlan.c:385
- notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
- call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1944
- call_netdevice_notifiers_extack net/core/dev.c:1982 [inline]
- call_netdevice_notifiers net/core/dev.c:1996 [inline]
- __dev_notify_flags+0x120/0x2d0 net/core/dev.c:8569
- rtnl_configure_link+0x181/0x260 net/core/rtnetlink.c:3241
- rtnl_newlink_create net/core/rtnetlink.c:3415 [inline]
- __rtnl_newlink+0x10f6/0x1840 net/core/rtnetlink.c:3624
- rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3637
- rtnetlink_rcv_msg+0x43e/0xca0 net/core/rtnetlink.c:6141
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2564
- netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
- netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xd3/0x120 net/socket.c:734
- ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f3022e8c0a9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f3023c34168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f3022fabf80 RCX: 00007f3022e8c0a9
-RDX: 0000000000000000 RSI: 0000000020000040 RDI: 0000000000000007
-RBP: 00007f3022ee7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffeb966cb2f R14: 00007f3023c34300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Guenter
