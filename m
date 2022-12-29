@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B10658B38
+	by mail.lfdr.de (Postfix) with ESMTP id 28EE3658B37
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 10:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbiL2Jtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 04:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S230334AbiL2Jta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 04:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiL2Jqr (ORCPT
+        with ESMTP id S232081AbiL2JrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 04:46:47 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E5E13F96;
-        Thu, 29 Dec 2022 01:44:31 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id fc4so43791580ejc.12;
-        Thu, 29 Dec 2022 01:44:31 -0800 (PST)
+        Thu, 29 Dec 2022 04:47:02 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D79113B
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 01:45:16 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso12862429wmb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 01:45:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iyphewPZOfLnxnaRNTB29uqTkJVQ86RQ4fAds/3h3Vs=;
-        b=UILyHAR71jRgy8hhzyaRGBWZA/3j6ZCcj33u4g6LkDlrE7d1URoiSz+mXM6Ou1R8z8
-         /uzl0JEIqBlkwRzFwi0//frG6jJ2zCgcvaBCwabhhOLn8extuXQgd53Ky/zuEShcIptW
-         1SuMd/WZfftH+qhLMHuaebr8lAvHeaG9RVOQige+q1KYZdFf8FAS6FXljuYvD+B0QqJF
-         36tiGKzHUQQ8Q7E3apO9vSfOEMcIRUxXa8Jk67Mvd5yDebFyaN2Vfwrg8q715sMkzPss
-         fe+7mSLJxCbleoWaJgnroxnWH3wBvBAdORzAYFjSQlCedmjiV/T5D0AoNV7yfgZ20+oT
-         9AAg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JlwudR1yq0j8l6dXe2FNX5uZ434yQGNV8t9LPJL/6tM=;
+        b=nUHwdBrBS6LeYbs+YS3gdxxv7I3AORr8iVEX+sIMxjgK+nNK2hcm/m+/NZyGz55W4m
+         /2WiPf7rALiIl1XNGy8oNlYm3TqHrEVPzEiTZ3vAbqnFGu8msb4hHSMsifMUHYyNlYEv
+         yxE42J1SHiOffhA8G4tZzerRzzqj0unHksAtNmudLgbPN6z6KmoxOpU7iaqiNm2hUQKu
+         cTy2fPBgJQCZfabMZt1p+wQ6DrToheWRi6o8OKVPf9/NHBFNusYwYRdyMSZvkOjCTo+D
+         vAASc9hQuRqsAGS4kON3vXrPQ8HnrkOjkRy+aADHt6hRcORxzbzhyInPK3wrKpze5Z00
+         Gb7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iyphewPZOfLnxnaRNTB29uqTkJVQ86RQ4fAds/3h3Vs=;
-        b=TTHRkSUuQgU3gOCbWwtpVUcRh0gjC9TwGCXjmWYR4/3CkyUZ+6Aadyw/QyTEtoer+z
-         OA01Z4alIO7/haj0Cp1Mcht2OTefuOXfVt69BTaPAFGJfK//Y9TsszWY9CIVSd+FJgvc
-         PGxofLoEWvuZD3tNQ7CiHGfpKsDvmatoACThbicBTNpZw/Z/HVpQ74OZLsQfuRp8QtH8
-         sgGkYIXegW3WxJUWuOMFE3gBu6rJrXw024xKo5sm5LQ9yauIPWVIE2jL/DMDtIFVTMDs
-         iKrjVgduV0ZXQQqIu4dIemtzkFYvSFZ8FsTvdCSYJWx8oH0oodgnTYW6oUNiVQpllmke
-         00iQ==
-X-Gm-Message-State: AFqh2kquW1LNZ/eFwJuzz2+LwPEMFxEQ5+zm8aCUEeEzmmbrJ4EbKC/l
-        6PMeb98h35/K8AD0HwAvG/k=
-X-Google-Smtp-Source: AMrXdXsZL1j1TTNvr8CasU6e9oELKnEX7gPztZg2Fjnd1DsSXTPke5G6cc0hnwJgSA2jIWfVe3gKLw==
-X-Received: by 2002:a17:907:a782:b0:7c1:6430:e5d0 with SMTP id vx2-20020a170907a78200b007c16430e5d0mr24247352ejc.4.1672307070247;
-        Thu, 29 Dec 2022 01:44:30 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id o11-20020a170906768b00b0077b523d309asm8357801ejm.185.2022.12.29.01.44.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 01:44:29 -0800 (PST)
-Message-ID: <aa6fe473-71f2-edba-f009-994a3dbc9802@gmail.com>
-Date:   Thu, 29 Dec 2022 10:44:28 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JlwudR1yq0j8l6dXe2FNX5uZ434yQGNV8t9LPJL/6tM=;
+        b=IDFLOjpIWzeYpZ1U5Ba0dgPjVD2/n/8etk7AelxyoGrv/WawjvcqoBE5J59pd7eq1T
+         jePC6W/12fKg9s721JxDc6RZATq83JYBqqHR1tI7BzBaYpXlsw81wXOqfnruoy5HYXQt
+         1lupOLAd9+a6IX/7Z4i9YgBxLgQjR8GRs51iObLpqF3tYMXbvRYJXAnfzB37nSR16eYl
+         lUDd3bbzB3kMW+01vjDNl2PYVkRqYRx5+jgnVOedYU+HRWfUxR/GpfwIBLPWhNL0ZQNm
+         z6mPwzHmcScVtb90G/1sOherp0F/4DjIqPaDe52BA1+1RZ9/yE4VV3ROCaMzkCa5FuAI
+         KCzw==
+X-Gm-Message-State: AFqh2kqH0g5KAlWwxB7AqXXBxDTp/TCkEWAyjA009hg4TCr/HWGVUJhx
+        pe7O8pXyj8RdmnGpAXg5pAM=
+X-Google-Smtp-Source: AMrXdXs5lANX27sWsHHeOuHvhjwBNhps7lPfjmKuE+KRWec7tXPH6Us7T2cE1di2Y7ptz7971G9M7w==
+X-Received: by 2002:a1c:5442:0:b0:3cf:7385:677f with SMTP id p2-20020a1c5442000000b003cf7385677fmr19294169wmi.35.1672307114296;
+        Thu, 29 Dec 2022 01:45:14 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i2-20020a05600c354200b003d35acb0fd7sm31043399wmq.34.2022.12.29.01.45.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 01:45:13 -0800 (PST)
+Date:   Thu, 29 Dec 2022 12:45:10 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     yang.yang29@zte.com.cn
+Cc:     gustavoars@kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, xu.panda@zte.com.cn
+Subject: Re: [PATCH linux-next] staging: ks7010: use strscpy() to instead of
+ strncpy()
+Message-ID: <Y61hpuMcp3NKbqL5@kadam>
+References: <202212261903245548969@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2 1/2] dt-bindings: phy: rockchip: convert
- rockchip-dp-phy.txt to yaml
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-phy@lists.infradead.org,
-        vkoul@kernel.org, kishon@kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212261903245548969@zte.com.cn>
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,102 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert rockchip-dp-phy.txt to yaml.
+On Mon, Dec 26, 2022 at 07:03:24PM +0800, yang.yang29@zte.com.cn wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+> 
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL-terminated strings.
+> 
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com>
+> ---
+>  drivers/staging/ks7010/ks_wlan_net.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/ks7010/ks_wlan_net.c b/drivers/staging/ks7010/ks_wlan_net.c
+> index 044c807ca022..e03c87f0bfe7 100644
+> --- a/drivers/staging/ks7010/ks_wlan_net.c
+> +++ b/drivers/staging/ks7010/ks_wlan_net.c
+> @@ -382,8 +382,7 @@ static int ks_wlan_get_nick(struct net_device *dev,
+>  		return -EPERM;
+> 
+>  	/* for SLEEP MODE */
+> -	strncpy(extra, priv->nick, 16);
+> -	extra[16] = '\0';
+> +	strscpy(extra, priv->nick, 17);
 
-Changed:
-  rename file name
+I think this code is a buffer overflow.  This is an implementation of
+SIOCGIWNICKN.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
+net/wireless/wext-core.c
+   169          [IW_IOCTL_IDX(SIOCGIWNICKN)] = {
+   170                  .header_type    = IW_HEADER_TYPE_POINT,
+   171                  .token_size     = 1,
+   172                  .max_tokens     = IW_ESSID_MAX_SIZE,
+   173          },
 
-Changed V2:
-  Use the compatible as filename.
----
- .../bindings/phy/rockchip,rk3288-dp-phy.yaml  | 41 +++++++++++++++++++
- .../bindings/phy/rockchip-dp-phy.txt          | 26 ------------
- 2 files changed, 41 insertions(+), 26 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/phy/rockchip,rk3288-dp-phy.yaml
- delete mode 100644 Documentation/devicetree/bindings/phy/rockchip-dp-phy.txt
+As you can see there is a .max_tokens but no .min_tokens.  It is called
+from ioctl_standard_iw_point().  So if the user specifies something
+smaller than 17 it leads to a buffer overflow.
 
-diff --git a/Documentation/devicetree/bindings/phy/rockchip,rk3288-dp-phy.yaml b/Documentation/devicetree/bindings/phy/rockchip,rk3288-dp-phy.yaml
-new file mode 100644
-index 000000000..2538235c5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/rockchip,rk3288-dp-phy.yaml
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/rockchip,rk3288-dp-phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip specific extensions to the Analogix Display Port PHY
-+
-+maintainers:
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+properties:
-+  compatible:
-+    const: rockchip,rk3288-dp-phy
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: 24m
-+
-+  "#phy-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - clocks
-+  - clock-names
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/rk3288-cru.h>
-+    edp-phy {
-+      compatible = "rockchip,rk3288-dp-phy";
-+      clocks = <&cru SCLK_EDP_24M>;
-+      clock-names = "24m";
-+      #phy-cells = <0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/phy/rockchip-dp-phy.txt b/Documentation/devicetree/bindings/phy/rockchip-dp-phy.txt
-deleted file mode 100644
-index e3b4809fb..000000000
---- a/Documentation/devicetree/bindings/phy/rockchip-dp-phy.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Rockchip specific extensions to the Analogix Display Port PHY
--------------------------------------
--
--Required properties:
--- compatible : should be one of the following supported values:
--	 - "rockchip.rk3288-dp-phy"
--- clocks: from common clock binding: handle to dp clock.
--	of memory mapped region.
--- clock-names: from common clock binding:
--	Required elements: "24m"
--- #phy-cells : from the generic PHY bindings, must be 0;
--
--Example:
--
--grf: syscon@ff770000 {
--	compatible = "rockchip,rk3288-grf", "syscon", "simple-mfd";
--
--...
--
--	edp_phy: edp-phy {
--		compatible = "rockchip,rk3288-dp-phy";
--		clocks = <&cru SCLK_EDP_24M>;
--		clock-names = "24m";
--		#phy-cells = <0>;
--	};
--};
---
-2.20.1
+Your patch is mechanically correct, but now that we have eyes on the
+code we should fix the security bug instead making checkpatch happy or
+whatever.
+
+regards,
+dan carpenter
 
