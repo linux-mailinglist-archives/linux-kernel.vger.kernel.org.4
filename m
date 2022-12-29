@@ -2,214 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AABF65913C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 20:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92603659140
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 20:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiL2Tp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 14:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S229890AbiL2Trw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 14:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiL2TpY (ORCPT
+        with ESMTP id S229535AbiL2Tru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 14:45:24 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355391658A;
-        Thu, 29 Dec 2022 11:45:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1672343115;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=XJILgGi4xeHtUxcRU/ADCLqTTzwi+IW/Z/vrPjHewv4=;
-    b=B9ebXYJ7m/b44oyVE+23R8yR3oW+x/C2LwkSgdjK+MW9iYL8nD9qSGRcSaRnu9+yKT
-    zmru2FHhWnYXgDxa+Y1OkHvW7FXo4spRZvB33l1HH7hLV0bQgTyYnUOcRAUsa16WXfB1
-    YmIesRZfL81vqpHVIqmrUepYW6k3ccYHyaawFWyKZ43Mcv6mwmIsaSySSp2IwDkuN25Y
-    wdlqiOUpDu0xyWVSmvMHXBEFS24bcz6HB64AM4/BZZ4W3KwpSVD74IP2s8fFiLZnljly
-    1nPs9WozQy5TJ1LK7TzssuL/gQtjfY4cN1RBKD15byGvJ9XFd0PL3nAmrwGgtlzRKndP
-    4DQg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWyvDI"
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
-    with ESMTPSA id Yce349yBTJjFXmD
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 29 Dec 2022 20:45:15 +0100 (CET)
-Date:   Thu, 29 Dec 2022 20:45:14 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] phy: qcom-usb-hs: Add qcom,dp-manual-pullup logic
-Message-ID: <Y63uSgMdP4m6nvhL@gerhold.net>
-References: <20221229183410.683584-1-bryan.odonoghue@linaro.org>
- <20221229183410.683584-3-bryan.odonoghue@linaro.org>
+        Thu, 29 Dec 2022 14:47:50 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C555D165B0;
+        Thu, 29 Dec 2022 11:47:41 -0800 (PST)
+Received: from leknes.fjasle.eu ([46.142.97.69]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N7AAk-1olRgP2OJI-017Qzv; Thu, 29 Dec 2022 20:47:17 +0100
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id 65DE03C0EF; Thu, 29 Dec 2022 20:47:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1672343235; bh=Ssiaq0UCBUNmKvQggRzr07i09RelaxqQve23Idug6co=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DXlsgr06qCbo9+gk/suhU5qopL+ga4NwZ81LwMJnPX+wYUfZcbEa5LIybtawNTbgV
+         h2/FNwCYMdpA66rtLjs0XvreX9BmZZK/k//eyGXTVe3wsIP9cTLXCUjW3NsAHvNsGs
+         ww3cjNmIel1aYIEpu3cCQerjkQfBwBg4gIC1yNr0=
+Date:   Thu, 29 Dec 2022 20:47:15 +0100
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] kbuild: unify cmd_dt_S_dtb and cmd_dt_S_dtbo
+Message-ID: <Y63uw1HGiL5ZxJkk@fjasle.eu>
+References: <20221229184650.1107463-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="guvpMswPTi1NG181"
 Content-Disposition: inline
-In-Reply-To: <20221229183410.683584-3-bryan.odonoghue@linaro.org>
+In-Reply-To: <20221229184650.1107463-1-masahiroy@kernel.org>
+X-Provags-ID: V03:K1:Wa28HNUXKQWMjjrooBQKiPvM26xDjVz/antJMaKuE44Ev5z34pB
+ OMc1ndLxOk8UuH0KitG4gPeLRmJDmtxLG/T0AYLPfN0I7hoFJOR9jFQNK2Q1Y6J6+TR8YOE
+ XFH/Cewl2ljgVy/roT2vQvqlW3sE4L0Y4NeONoJVn5Hfcg13zGdqVuReTTao2UoYiAXvosT
+ 6fC3Iak6LGLMHNEcmOX8w==
+UI-OutboundReport: notjunk:1;M01:P0:y6YlNRfDplk=;zWkJfjiPHSx0Jh+brLolqFM7she
+ kK61b1bZy7auigq/7jQ/rTQWdYzLK3szJNC34koBuw1RKF7heUlgEvYgILapc4eEbFVlVjNh6
+ f4JqTojEq1CTb7/USPGqOzRfVIEsyEUfydV8EQX4EZQSAg1rUP9K8afvpcD4RNOoX354xXsQm
+ jEQOEa8icwMH/rv2nNtEiTSRNsOhRAxHiTJ3KrAFW8o6kMWtoP5d6KL9sLN4FtJ0g/6UkMhRF
+ dAYrCRmc/lBVDyj2JerKEW0+HQXjVkdziGi1zfzYUq27uxljE15gdfv52vEAIxZ3C88BpShcw
+ FdOrtJNdYOjI5b0Ug26nJ2dc/dB1ANwkpUra11d6OLWzpcm9iJftddfZG6EFo6MyEsasRWV/Z
+ iySoOcYGa/oyjquBuN82CuUTWFgCueanwo85y7yedBHUNIb3UxEO44MdNFrKu45oNdWUf1Ojz
+ oPGuJfOGhE0tKkPs3fCPUW5No972EWA1JWowmluYi0CXEnTAHg/fC1n4OQ3TWDTWuZocij2jR
+ +RsN3ZEHmoHcQiykN1tY5CjNvrMQq36RdIfC5TZfZfbneRrid9rYrtung/GtKdcVpIE6HHmFH
+ ivLhuXJVIo7Y/MwylZVg/vRm+mpBv/zAfs0ajTEfN5mL0X3i77cuzF/5lbbuhPjFz4Wzv7HFy
+ E3kDH9ev/QnrILhWTUWq+2NjXJz6Dq8iVqXLS4QPYg==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 06:34:10PM +0000, Bryan O'Donoghue wrote:
-> Downstream has a flag called qcom,dp-manual-pullup which informs the
-> downstream driver if it should toggle ULPI_MISC_A_VBUSVLDEXTSEL and
-> ULPI_MISC_A_VBUSVLDEXT.
-> 
-> Downstream states:
-> 
-> "qcom,dp-manual-pullup: If present, vbus is not routed to USB
->         controller/phy and controller driver therefore enables pull-up
->         explicitly before starting controller using usbcmd run/stop bit."
-> 
-> Working with a system that has both an external Type-C port controller and
-> an internal USB Hub results in a situation where VBUS is not connected to
-> the SoC.
-> 
-> In this case we still need to set the DP pullup.
-> 
-> This patch enables and disables the DP pullup on PHY power_on and power_off
-> respectively if the DT has declared the bool "qcom,enable-vbus-pullup"
-> effectively replicating the downstream logic to the same effect.
-> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-I think ideally you would add an extcon device (or equivalent, e.g.
-power supply) somewhere in your Type-C setup so that the VBUS state is
-set correctly and does not need to be forced permanently. The chipidea
-USB driver will also benefit from this because AFAICT it uses that
-information to power down the USB PHY and controller entirely when
-in device mode and there is no USB cable connected.
+--guvpMswPTi1NG181
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But I agree that setting up a proper extcon device can be difficult,
-especially during early bring-up where you just want USB to work and
-don't care much about power saving. So I still think that making USB
-work without extcon (like your patch does) is a useful change.
+On Fri, Dec 30, 2022 at 03:46:50AM +0900 Masahiro Yamada wrote:
+> cmd_dt_S_dtb and cmd_dt_S_dtbo are almost the same; the only differnce
+> is the prefix of the bein/end symbols. (__dtb vs __dtbo)
 
-For the implementation, I think this flag should effectively emulate the
-logic that is currently used if you assign an extcon, except that the
-VBUS state is permanently forced active. Right now your
-qcom_usb_hs_phy_enable_dp_pullup() function kind of duplicates logic
-that already exists in the driver, which already has code to set
-VBUSVLDEXTSEL and VBUSVLDEXT.
+Two letters got lost: differ_e_nce, be_g_in.
 
-qcom_usb_hs_phy_set_mode() should be modified to use the else branch (as
-if vbus_edev was set), which will set VBUSVLDEXTSEL for you. Without
-extcon you currently use the if (!uphy->vbus_edev) branch, which will
-enable the internal VBUS detection in the PHY (the ULPI_INT_SESS_VALID
-code). This does not make any sense IMO if VBUS is not connected to the
-SoC.
-
-And then you basically just need to call qcom_usb_hs_phy_vbus_notifier()
-to set the VBUSVLDEXT forcefully (rather than relying on the extcon
-detection).
-
-An alternative that I've occasionally used for early bring-up is to
-simply use a dummy extcon driver [1] that permanently reports active
-VBUS. The end result is the same. While it's clearly a hack perhaps this
-makes it a bit more clear that ideally you really should try to assign
-an extcon device, to avoid keeping the USB controller and PHY on
-permanently.
-
-Thanks,
-Stephan
-
-[1]: https://github.com/msm8916-mainline/linux/commit/3d029e6d4303e125aa013c501308d2d98e3cdc89
-
+>=20
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
->  drivers/phy/qualcomm/phy-qcom-usb-hs.c | 36 ++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-usb-hs.c b/drivers/phy/qualcomm/phy-qcom-usb-hs.c
-> index 53e46c220a3aa..45c94f6722c66 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-usb-hs.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-usb-hs.c
-> @@ -37,6 +37,7 @@ struct qcom_usb_hs_phy {
->  	struct ulpi_seq *init_seq;
->  	struct extcon_dev *vbus_edev;
->  	struct notifier_block vbus_notify;
-> +	u8 enable_dp_pullup:1;
->  };
->  
->  static int qcom_usb_hs_phy_set_mode(struct phy *phy,
-> @@ -105,6 +106,23 @@ qcom_usb_hs_phy_vbus_notifier(struct notifier_block *nb, unsigned long event,
->  	return ulpi_write(uphy->ulpi, addr, ULPI_MISC_A_VBUSVLDEXT);
->  }
->  
-> +static int qcom_usb_hs_phy_enable_dp_pullup(struct ulpi *ulpi, bool enable)
-> +{
-> +	u8 addr;
-> +	int ret;
-> +
-> +	if (enable)
-> +		addr = ULPI_SET(ULPI_MISC_A);
-> +	else
-> +		addr = ULPI_CLR(ULPI_MISC_A);
-> +
-> +	ret = ulpi_write(ulpi, addr, ULPI_MISC_A_VBUSVLDEXTSEL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return ulpi_write(ulpi, addr, ULPI_MISC_A_VBUSVLDEXT);
-> +}
-> +
->  static int qcom_usb_hs_phy_power_on(struct phy *phy)
->  {
->  	struct qcom_usb_hs_phy *uphy = phy_get_drvdata(phy);
-> @@ -154,6 +172,12 @@ static int qcom_usb_hs_phy_power_on(struct phy *phy)
->  			goto err_ulpi;
->  	}
->  
-> +	if (uphy->enable_dp_pullup) {
-> +		ret = qcom_usb_hs_phy_enable_dp_pullup(ulpi, true);
-> +		if (ret)
-> +			goto err_ulpi;
-> +	}
-> +
->  	if (uphy->vbus_edev) {
->  		state = extcon_get_state(uphy->vbus_edev, EXTCON_USB);
->  		/* setup initial state */
-> @@ -180,10 +204,19 @@ static int qcom_usb_hs_phy_power_on(struct phy *phy)
->  static int qcom_usb_hs_phy_power_off(struct phy *phy)
->  {
->  	struct qcom_usb_hs_phy *uphy = phy_get_drvdata(phy);
-> +	struct ulpi *ulpi = uphy->ulpi;
-> +	int ret;
->  
->  	if (uphy->vbus_edev)
->  		extcon_unregister_notifier(uphy->vbus_edev, EXTCON_USB,
->  					   &uphy->vbus_notify);
-> +
-> +	if (uphy->enable_dp_pullup) {
-> +		ret = qcom_usb_hs_phy_enable_dp_pullup(ulpi, false);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	regulator_disable(uphy->v3p3);
->  	regulator_disable(uphy->v1p8);
->  	clk_disable_unprepare(uphy->sleep_clk);
-> @@ -229,6 +262,9 @@ static int qcom_usb_hs_phy_probe(struct ulpi *ulpi)
->  	/* NUL terminate */
->  	uphy->init_seq[size / 2].addr = uphy->init_seq[size / 2].val = 0;
->  
-> +	if (of_property_read_bool(ulpi->dev.of_node, "qcom,dp-manual-pullup"))
-> +		uphy->enable_dp_pullup = 1;
-> +
->  	uphy->ref_clk = clk = devm_clk_get(&ulpi->dev, "ref");
->  	if (IS_ERR(clk))
->  		return PTR_ERR(clk);
-> -- 
-> 2.34.1
-> 
+>=20
+>  scripts/Makefile.lib | 45 +++++++++++++++-----------------------------
+>  1 file changed, 15 insertions(+), 30 deletions(-)
+>=20
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 4a4a5f67c1a6..100a386fcd71 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -368,40 +368,25 @@ DTC_FLAGS +=3D $(DTC_FLAGS_$(basetarget))
+>  DTC_FLAGS +=3D $(if $(filter $(patsubst $(obj)/%,%,$@), $(base-dtb-y)), =
+-@)
+> =20
+>  # Generate an assembly file to wrap the output of the device tree compil=
+er
+> -quiet_cmd_dt_S_dtb=3D DTBS    $@
+> -cmd_dt_S_dtb=3D						\
+> -{							\
+> -	echo '\#include <asm-generic/vmlinux.lds.h>'; 	\
+> -	echo '.section .dtb.init.rodata,"a"';		\
+> -	echo '.balign STRUCT_ALIGNMENT';		\
+> -	echo '.global __dtb_$(subst -,_,$(*F))_begin';	\
+> -	echo '__dtb_$(subst -,_,$(*F))_begin:';		\
+> -	echo '.incbin "$<" ';				\
+> -	echo '__dtb_$(subst -,_,$(*F))_end:';		\
+> -	echo '.global __dtb_$(subst -,_,$(*F))_end';	\
+> -	echo '.balign STRUCT_ALIGNMENT'; 		\
+> -} > $@
+> +quiet_cmd_wrap_S_dtb =3D WRAP    $@
+> +      cmd_wrap_S_dtb =3D {								\
+> +		symbase=3D__$(patsubst .%,%,$(suffix $<))_$(subst -,_,$(notdir $*));	\
+
+As long as I know, '$(notdir $*)' should be equivalent to '$(*F)'.  Is it j=
+ust
+personal preference or is there some other reason for choosing one or the
+other?
+
+Nevertheless, with the typos fixed, it looks good to me:
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+
+
+--guvpMswPTi1NG181
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmOt7sIACgkQB1IKcBYm
+Emmvlg//ajMpzoFgEDR/6HTlwxYwKGBbhZkx2O0jz/2xXVW9eItzm1TslT6DWPR1
+SV8llpZQUpUEbSu3BcNSbvUuhYLXJbUmzf87+xlB8tzzTLjp1TGWEOd8UZeF0Ieh
+tRGeu4nqRE+3xQzf/7rH5K7fWhyMqE56o9JkDTMW1KjxFosAd2K0Qes0tSwwVMoN
+FEgcCTVzI4al8sW0n98jb9G/eOtPbHkdpTKD1apUUm2KfLd6YXYZPR86ET0rnRNR
+pTVafRInpPzTYqIy+yoBMsKJg1JZAGygmvPYsKrklhjwD4pwNK8vHSP8ckblHrHk
+frOG4WApnuejJfayn9HgyEB4tMYzs0q+r9c4KHJQuLLHS0EixTMBHmSyDidX7dlA
+jqLQCDJt9cTC4sjbuhCbGNOSgfENI7sPq/hpV0OrwkLCbj1dH3wnHqfC9G4D9aQ+
++qZfsoknJmPpMJx0aQjmkwRLD+u0q11ElG4WQAGhRxyFzPLZCiqgS0Ugsb1HntIC
+4IjdhlVahId1+YNAjQqQvI9rHApWyFGLmwJMJsP6tT4WdwL4uh15CWXR/Fu5nIOh
+jILTpzaYyfc/AabrEfAFamGSp0gYKaTURkaFPS55cfjZa/wiTMtDYr+s0NZXSyzJ
+H3MQ6m9BRXQbuIMHmXsslj69SZh0dcqL9Rn2N9SsDwcoN94f29E=
+=OugI
+-----END PGP SIGNATURE-----
+
+--guvpMswPTi1NG181--
