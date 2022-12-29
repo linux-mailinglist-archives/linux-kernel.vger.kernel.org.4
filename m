@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21FA65907F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AA5659084
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbiL2Sja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 13:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S233804AbiL2Skh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 13:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbiL2Sj1 (ORCPT
+        with ESMTP id S233575AbiL2SkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 13:39:27 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69B3207
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:39:26 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id v70so17782340oie.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:39:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YL1+jd+bqxEYuNhsfkKoW4Bib0tbO/GWG1d3h67uOqo=;
-        b=RqetY5wq3Isg0XpDwrtgF58pMUZ91i3hZQu1kIW/923plJ95a91r8xq2bp9eQz8ztu
-         LXaqbR48IrAunbPdY/ItJ2X63rtW1mptuS+uc18XNwHqA10P7wWlBvac79bXmFvgvmst
-         D38bUiT123LS6MRFw5oPXHNBsIL7QVoxH2LR+WRb9BjM4NwWaCDAzAO3EU2vC5/BRLoI
-         x2v21MSTjSu7REXira0bwgbrODiznCOTX/M08qfqq39q1WOmKEUHZrS34aw3Q0jV7asU
-         fEa9/VDLt6g23id++bl7x/yA2FaN+4WAiCiKzfStkoUVGsh5kC+oXUxd8hGPauFxFl7q
-         QqMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YL1+jd+bqxEYuNhsfkKoW4Bib0tbO/GWG1d3h67uOqo=;
-        b=XH/rtiIaHV4fVgx6jbjrZ+uxrrt+vFNpRzgEIr8UDTjIQaqXrenS6jP8tQsXL74TOz
-         U6NLgWtwiaoZQ9hEfFEF3J6QtlVNjKTWzSWneyP28EldD18kukgBq5Q71NvIPR2uHpCt
-         uz2SQdL6uSTrUjhW/a4d2mTue15kV1eeGgvZnWIDwsleoIVvKJNwztJd0oEqJot4FoJP
-         E5DNZneRkkYIARRVRzq2xSPuygQhMvaTLoMf5ES+kIQ3zfCsQyxlECx5LMGveEhfQlxy
-         jo5k8xc3etx3WUDOhPPAKQV5bPJXJvAxOKMdFulI6iCXZ99uKPEiB0JQxsCsQguKN2Ae
-         UyTw==
-X-Gm-Message-State: AFqh2krRKXEP4p/NZX6lFQaJP1nM4jiBeDdDCOvcLJBdmTmXfvrwujcZ
-        i0qBKostHSOubEl4cDBiA/4Q5COwqABXhzBWwziL+9eBCTw=
-X-Google-Smtp-Source: AMrXdXsENIQJahUj9UFgrkh5/8IScjIPoncvjIGWSO7C76fOzgfaDskmNsrRotPE1nZcskTQO1LK7Ir95OCeh9xUqSk=
-X-Received: by 2002:a05:6808:7ce:b0:35e:250d:abc1 with SMTP id
- f14-20020a05680807ce00b0035e250dabc1mr1194682oij.222.1672339165839; Thu, 29
- Dec 2022 10:39:25 -0800 (PST)
+        Thu, 29 Dec 2022 13:40:17 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FD5116A;
+        Thu, 29 Dec 2022 10:40:16 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id B239432007F1;
+        Thu, 29 Dec 2022 13:40:13 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 29 Dec 2022 13:40:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1672339213; x=1672425613; bh=Ub6/Sg6MtwK7zSZLvDEMExGoi
+        kMh9KjbbFTpe8DKeuA=; b=gw+eCMVAO9wS/xum4K/FmCm8RLK+HPddgKot9F+6C
+        aXmo+a4J5GbZ/4SQIPdakBOJYRFUnQhvcCA+XVB3SsHzW7NAbSKmotc1ujaD8Y8O
+        vODRxqEvuCsmehC/Kuw9s3h+FY5gHJw4Yv7M1xcQvrhv0JgzDaTBQ/n8yOdkv9ih
+        snRcMti+ltyPcsj+T1ccNfpLLo9W9MEPcGfts8/Uwt7rK4IKydVggD/NcJ4MRpyw
+        hrg9P8FNnY6UQuTZikUJctqGNE+CoVjT+qg2qpg7IVSZ6teE6iotZcmOmwO56qIB
+        o7fhNWNkESC72HMpJ/UQPuUiNBu1yaKj2eX60W9W35MNQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1672339213; x=1672425613; bh=Ub6/Sg6MtwK7zSZLvDEMExGoikMh9KjbbFT
+        pe8DKeuA=; b=d0Ax4PSWdXTAOophmW8FbmoPkGdXa0JFRPff+iWnGGT7jU9VIfw
+        h8SOWIcNDDSZJU2hvODYDoyQXuCvff9dL3p+Nbi2FKaXqqDFTmcZlkPBJZ2HcSqB
+        VejGcWgf7H3NgVKWEDhSA4hnna7Ql7SCrAF1rKyykrC7z55lsegk3KZZ+1EPdRnY
+        4e1RCKjRR4ulSAMhOmvBlawaDFBHayMO7BcmhKqo0eqIgzNT4Q22Hzd+E0eUfe1i
+        yOh/UuZu7xBn9CoESjRPiboWUdUgF96SZjHM4Uybo+HqxjL4VfUIwqxJBQAAcK6Q
+        oQNF34KNhHa8kjFqHBojTrORJbg7NwAKi0A==
+X-ME-Sender: <xms:Dd-tY1c6jzUb0hyju4GwDZH1oft3CCyXVijpSqpDl8cv9-oeZaLONA>
+    <xme:Dd-tYzMdkP4pG3FMiD8k0KyIYSz4Cunbh8dTw5pJ6NDPWp730s8rAgRDuSeEORT6T
+    7hE0zH2Iq6or7o4uQ>
+X-ME-Received: <xmr:Dd-tY-iY_PkIGgF9HXiucJrEOXJIwGOTiXLJvE6hoUFdTR_npT4Tu7eX48PQZ1mtF6WL8IwAIQmAsBYQUvP4-S8x39NunvRzLQTRQFdtQfkHc0EHPVviKKWJdq-b0NbC13ugGQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdduudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
+    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:Dd-tY-_2sMylYYXdONF5dVioDiH-G7zAxEGZbB-xlJY6MtoNNh9lrw>
+    <xmx:Dd-tYxuiy0caaCttUucdX2r-jxGouwl5xMJuVdAysE6NLSz-rYtILA>
+    <xmx:Dd-tY9HjIuGchgcq7GWs9miG1a7fPwA8s6O30AdaGVZA5nNiYxosDg>
+    <xmx:Dd-tYy9aVxAJWBiIe_B5URbRY-pyuR4RBWvGvJzZY8nMmvk50fNIwA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 29 Dec 2022 13:40:12 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH 1/2] rtc: sun6i: Prevent an out-of-bounds read
+Date:   Thu, 29 Dec 2022 12:40:10 -0600
+Message-Id: <20221229184011.62925-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-References: <20221229060549.3976570-1-ztong0001@gmail.com> <Y63WsX8Hvxep/dtN@kbusch-mbp.dhcp.thefacebook.com>
-In-Reply-To: <Y63WsX8Hvxep/dtN@kbusch-mbp.dhcp.thefacebook.com>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Thu, 29 Dec 2022 10:39:15 -0800
-Message-ID: <CAA5qM4Djc+5p45+isj5Vn47erUR6rY32n-2Epkkx1Pv-PX8wRg@mail.gmail.com>
-Subject: Re: [PATCH] nvme-pci: free irq properly when cannot create adminq
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        t.zhang2@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLACK autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,54 +85,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 10:04 AM Keith Busch <kbusch@kernel.org> wrote:
->
-> On Wed, Dec 28, 2022 at 10:05:49PM -0800, Tong Zhang wrote:
-> > nvme_pci_configure_admin_queue could return -ENODEV, in this case, we
-> > will need to free IRQ properly. Otherwise following warning could be
-> > triggered
-> >
-> > [    5.286752] WARNING: CPU: 0 PID: 33 at kernel/irq/irqdomain.c:253 irq_domain_remove+0x12d/0x140
-> > [    5.290547] Call Trace:
-> > [    5.290626]  <TASK>
-> > [    5.290695]  msi_remove_device_irq_domain+0xc9/0xf0
-> > [    5.290843]  msi_device_data_release+0x15/0x80
-> > [    5.290978]  release_nodes+0x58/0x90
-> > [    5.293788] WARNING: CPU: 0 PID: 33 at kernel/irq/msi.c:276 msi_device_data_release+0x76/0x80
-> > [    5.297573] Call Trace:
-> > [    5.297651]  <TASK>
-> > [    5.297719]  release_nodes+0x58/0x90
-> > [    5.297831]  devres_release_all+0xef/0x140
-> > [    5.298339]  device_unbind_cleanup+0x11/0xc0
-> > [    5.298479]  really_probe+0x296/0x320
-> >
-> > Fixes: a6ee7f19ebfd ("nvme-pci: call nvme_pci_configure_admin_queue from nvme_pci_enable")
->
-> Right. It's really only needed when called from probe as the reset_work
-> handles the cleanup when called from there, but this is safe for both
-> cases.
->
-> > @@ -2584,8 +2584,13 @@ static int nvme_pci_enable(struct nvme_dev *dev)
-> >       pci_enable_pcie_error_reporting(pdev);
-> >       pci_save_state(pdev);
-> >
-> > -     return nvme_pci_configure_admin_queue(dev);
-> > +     result = nvme_pci_configure_admin_queue(dev);
-> > +     if (result)
-> > +             goto free_irq;
-> > +     return result;
->
-> Since you're already in this function, you should also add a "goto
-> disable" if pci_alloc_irq_vectors() fails. Right now it just returns
-> with the pci device still enabled, and it won't get disabled from probe.
->
+If there is more than one parent clock in the devicetree, the
+driver sets .num_parents to a larger value than the number of array
+elements, which causes an out-of-bounds read in the clock framework.
 
-Thank you Keith! I have added this fix and sent a v2.
-- Tong
+Fix this by coercing the parent count to a Boolean value, like the
+driver expects.
 
-> > + free_irq:
-> > +     pci_free_irq_vectors(pdev);
-> >   disable:
-> >       pci_disable_device(pdev);
-> >       return result;
-> > --
+Fixes: 3855c2c3e546 ("rtc: sun6i: Expose the 32kHz oscillator")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+
+ drivers/rtc/rtc-sun6i.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index ed5516089e9a..a22358a44e32 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -294,7 +294,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 
+ 	init.parent_names = parents;
+ 	/* ... number of clock parents will be 1. */
+-	init.num_parents = of_clk_get_parent_count(node) + 1;
++	init.num_parents = !!of_clk_get_parent_count(node) + 1;
+ 	of_property_read_string_index(node, "clock-output-names", 0,
+ 				      &init.name);
+ 
+-- 
+2.37.4
+
