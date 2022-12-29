@@ -2,79 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00A865895B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 05:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7E965895F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 05:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbiL2ERM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 23:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S232845AbiL2EUL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Dec 2022 23:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiL2ERI (ORCPT
+        with ESMTP id S230006AbiL2EUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 23:17:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2C912087;
-        Wed, 28 Dec 2022 20:17:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8404C61701;
-        Thu, 29 Dec 2022 04:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85084C433D2;
-        Thu, 29 Dec 2022 04:17:04 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="HIwmwkOQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672287423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mryHCuwKL4ka0P8BgAVspE8IMbN7LJc0YktowyLFPBU=;
-        b=HIwmwkOQ33WeQbwrhkbvP9jwvW6KhesTh1A1e6UMyWZYf1mH5qGJFqk8/M/bmzvSeU9hg+
-        8HBWjdLAUMVbiSicxFUbBsJkY8IxvC4XFd926K1MZGUMUfIliLoFqDq3aYWUwAdQH2U6Ar
-        PpsmuM0TbZxiqtOWTUtqmvk8Mv6aHe8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 18782bdc (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 29 Dec 2022 04:17:02 +0000 (UTC)
-Date:   Thu, 29 Dec 2022 05:16:59 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-Message-ID: <Y60Uu8HcGyXasnOO@zx2c4.com>
-References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
- <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
- <Y60RoP77HnwaukEA@zx2c4.com>
+        Wed, 28 Dec 2022 23:20:06 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E1BD12087;
+        Wed, 28 Dec 2022 20:20:02 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BT4IrznE022628, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BT4IrznE022628
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 29 Dec 2022 12:18:54 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 29 Dec 2022 12:19:47 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 29 Dec 2022 12:19:47 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Thu, 29 Dec 2022 12:19:47 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Chris Morgan <macroalpha82@gmail.com>,
+        "Nitin Gupta" <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: RE: [RFC PATCH v1 00/19] rtw88: Add SDIO support
+Thread-Topic: [RFC PATCH v1 00/19] rtw88: Add SDIO support
+Thread-Index: AQHZGks+1Xp5+2HTNk6lcrww/IAcmq6EK72Q
+Date:   Thu, 29 Dec 2022 04:19:47 +0000
+Message-ID: <8fe9b10318994be18934ec41e792af56@realtek.com>
+References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/28_=3F=3F_10:54:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y60RoP77HnwaukEA@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 05:03:44AM +0100, Jason A. Donenfeld wrote:
-> I recall seeing something pretty similar to this report with the
-> selftest as well. Basically, the call to tpm1_do_selftest can race with
-> the call to tpm1_get_random, presumably because tpm1_get_random doesn't
-> do any locking on its own. So it might be a good idea to make sure that
-> tpm1_get_random() isn't running before tpm1_do_selftest() or any other
-> TPM commands run.
 
-The other locking angle is that tpm1_pm_suspend() should wait for
-tpm1_get_random() to finish or cancel tpm1_get_random(), if that's not
-already happening. IIRC, the selftest gets tripped up when it's
-triggered on resume due to an already in-flight tpm1_get_random() from
-prior to sleep, that never completed.
+
+> -----Original Message-----
+> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Sent: Wednesday, December 28, 2022 7:30 AM
+> To: linux-wireless@vger.kernel.org
+> Cc: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; Ulf Hansson
+> <ulf.hansson@linaro.org>; linux-kernel@vger.kernel.org; netdev@vger.kernel.org;
+> linux-mmc@vger.kernel.org; Chris Morgan <macroalpha82@gmail.com>; Nitin Gupta <nitin.gupta981@gmail.com>;
+> Neo Jou <neojou@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
+> Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Subject: [RFC PATCH v1 00/19] rtw88: Add SDIO support
+> 
+> Recently the rtw88 driver has gained locking support for the "slow" bus
+> types (USB, SDIO) as part of USB support. Thanks to everyone who helped
+> make this happen!
+> 
+> Based on the USB work (especially the locking part and various
+> bugfixes) this series adds support for SDIO based cards. It's the
+> result of a collaboration between Jernej and myself. Neither of us has
+> access to the rtw88 datasheets. All of our work is based on studying
+> the RTL8822BS and RTL8822CS vendor drivers and trial and error.
+> 
+> Jernej and myself have tested this with RTL8822BS and RTL8822CS cards.
+> Other users have confirmed that RTL8821CS support is working as well.
+> RTL8723DS may also work (we tried our best to handle rtw_chip_wcpu_11n
+> where needed) but has not been tested at this point.
+> 
+> Jernej's results with a RTL8822BS:
+> - Main functionality works
+> - Had a case where no traffic got across the link until he issued a
+>   scan
+> 
+> My results with a RTL8822CS:
+> - 2.4GHz and 5GHz bands are both working
+> - TX throughput on a 5GHz network is between 50 Mbit/s and 90 Mbit/s
+> - RX throughput on a 5GHz network is at 19 Mbit/s
+
+I have a suggestion about RX throughput, please check below registers with
+vendor driver:
+
+REG_RXDMA_AGG_PG_TH
+REG_TXDMA_PQ_MAP(0x10c) BIT_RXDMA_AGG_EN (bit2)
+REG_RXDMA_MODE(0290)  BIT_DMA_MODE (bit1)
+
+Try to adjust AGG_PG_TH to see if it can help.
+
+--
+Ping-Ke
+
