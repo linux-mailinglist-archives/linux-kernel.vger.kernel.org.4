@@ -2,165 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17D56589B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 07:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C3A6589C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 07:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233068AbiL2Ga7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 01:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
+        id S231264AbiL2Gm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 01:42:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbiL2Gat (ORCPT
+        with ESMTP id S229644AbiL2GmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 01:30:49 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2041.outbound.protection.outlook.com [40.107.20.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD47D90;
-        Wed, 28 Dec 2022 22:30:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BEd1dHCl1yNp3EzVJoGdioTs74YSlOPdfldLbcggjFwxAyVqPzS1/9Mr64yVdtG/4gjm2LfPID2BeN+aFh30D7nrN7AeTaAogujeFTmRhf0E61+PnfHr++jSJVB+7Vx5WVjquHYKC3DGY1QgGWKZT+29OjnyR1rJEPu2KJhgmDjCVhYi7DF75e/yFwjWTyEvmvIvsPDFfx4e+KXM5776K92uiPHZtbfsKgF/aPStus2l/cSIO1V6zx7lod0b8irmGFnkIvXKR8DGxqVwIWJ45QYCr+OuC/AiVG2yE4YXA4iD7lL3yHEmd7yL05MdLWsDR4V2l1MZ09XFQjv7GMDeBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jfqqfKq+p5L47STbaiUShceGluBUv/TPjceQ6WfftIM=;
- b=kydmW3ZBJaWd+xvRWgXuKL6q0/b3M3zsvZGfEl4/+9emuNuuCAv8p/1L2Fcv0Mi/pNZZ/+pQE5hw5l5/Fpso0ozilvfgw9iDh9QOOnKjFuFVOnn5MtroAZ6sZ2gu86mHEc9fbnoeeZpzmJ6TPqKdipfv+WqI7BwGlwuJBY2qXAIumf5KjE3ap/b9ywRkJwDQHe0Wqv6DMSbrqYXxKdbLy7dZBbOQPErJTWhqpggoO83VNPzPybiL4DstBV9SjuLD3qwDTgsF8J2oOdekfxBdH7ydXzmWj04jGo/PcqyfS+poTn4nXaePB6s0pD/tFQGR1xOgtNlDrd6lAdGTJuYD2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jfqqfKq+p5L47STbaiUShceGluBUv/TPjceQ6WfftIM=;
- b=QxsFXlnozdgYE1p4XmVKn8783+vx3jNXL7f3ZyE1lrW9anYOYoBt2CTmud1bX+5OVYEjjrVEU3yzIDod/WkIoFRkUiZwAtfB7dJxN6xJRyn+hnPPJ1u2XDNFJMIoreRwycL1wHx6GVaXG0gDZISynkH122aXCd4S4SGCXapiPcE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB4211.eurprd04.prod.outlook.com (2603:10a6:208:5b::30)
- by DU2PR04MB9193.eurprd04.prod.outlook.com (2603:10a6:10:2f8::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Thu, 29 Dec
- 2022 06:30:42 +0000
-Received: from AM0PR04MB4211.eurprd04.prod.outlook.com
- ([fe80::c1e7:eafb:408c:6ae5]) by AM0PR04MB4211.eurprd04.prod.outlook.com
- ([fe80::c1e7:eafb:408c:6ae5%4]) with mapi id 15.20.5944.016; Thu, 29 Dec 2022
- 06:30:42 +0000
-From:   Chancel Liu <chancel.liu@nxp.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shengjiu.wang@gmail.com,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        perex@perex.cz, tiwai@suse.com, devicetree@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     Chancel Liu <chancel.liu@nxp.com>
-Subject: [PATCH v2 3/3] ASoC: fsl_xcvr: Add constraints of period size while using eDMA
-Date:   Thu, 29 Dec 2022 14:30:09 +0800
-Message-Id: <20221229063009.2396716-4-chancel.liu@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221229063009.2396716-1-chancel.liu@nxp.com>
-References: <20221229063009.2396716-1-chancel.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0017.apcprd02.prod.outlook.com
- (2603:1096:3:17::29) To AM0PR04MB4211.eurprd04.prod.outlook.com
- (2603:10a6:208:5b::30)
+        Thu, 29 Dec 2022 01:42:22 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3489FAE0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:42:20 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id s187so16499235oie.10
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:42:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ke6drZ+UWK1KTmMIerl9sTzLh5swNNgIhEk6sbJwwA=;
+        b=frN1xp38sPqi7kkpY0Y5VQFpp9VZWVElgpRHYyBgeN9Ja1KGY9HQ1ZqVmX7qefaV0+
+         iir0jUUUrp62OOWgaM51/aXxGjIXBnGSHp7HIMDAmcATptn8Se15lar6im26TUyNqTl0
+         8Xkikq1JEUEGtyrXWUPyG3zL+FK+LymaIm+i8uONuYztKygvzU8wUcDMtsMOyQr4OyT1
+         LMW1/DLCyQKTdoBR/XCrCKnER/3lhM7zLukGJJiEapgxDTbtRuwk3ftVcwp2mJcBt1cz
+         +bRmGPbHUr094eGzZxaY8YjhyVlzD3kdFcLcYBHxrDn4DoSWGkXn6+kZ1kqFOdRwe2wx
+         5gBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9ke6drZ+UWK1KTmMIerl9sTzLh5swNNgIhEk6sbJwwA=;
+        b=QBSrVRd2UJQPQZh9wGC7jhYbPhg0/P8OGDU1UMMqWZYohMJ1aZXfN964EmXW2GzCl1
+         l37jK5uugzo+zjYmj1NTXCj/rAmzSya8ZI9fMao//ZOJjg3phqLkA12Ph8utXpmSnSYp
+         RAIzLfcq16Mb7tUzFmWaTiXmtwv3CwK0B+rKfoPvO3cnu+KiYl5sXRATNDVokUBHexhy
+         dsZ4wV7CW+fys8Sv51t3xrtQfwhbBJGhdwk1rCe4R/oYJfUcJCatTQZVAeL8SAXPGLeZ
+         m45d+PO6aHuU51efpHzHnW55inSAmI2tX5wEqeZgWfvv5KHfzWlvpSfd2zDsu8iVbeIT
+         LElw==
+X-Gm-Message-State: AFqh2krfD0ME4Er1oisgnxHN6PSCk3uEw6Hx4JQR2wuLT5iio/7oKoHo
+        3l1wzgBxyhRCJjdXVE/UuJY=
+X-Google-Smtp-Source: AMrXdXs48f3S7mdAEcHD6Xebq446QOF/kyasJRFspaYxyJll6yORKTm1+UnBTAUX8ytbxMIuBNPV6Q==
+X-Received: by 2002:a05:6808:28e:b0:35e:cdd7:d8fe with SMTP id z14-20020a056808028e00b0035ecdd7d8femr12947331oic.53.1672296140159;
+        Wed, 28 Dec 2022 22:42:20 -0800 (PST)
+Received: from protoss.cs.ucr.edu (protoss.cs.ucr.edu. [169.235.26.60])
+        by smtp.gmail.com with ESMTPSA id b24-20020a056808011800b0035b99bbe30bsm7755351oie.54.2022.12.28.22.42.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Dec 2022 22:42:19 -0800 (PST)
+From:   Hang Zhang <zh.nvgt@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Hang Zhang <zh.nvgt@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Yangxi Xiang <xyangxi5@gmail.com>,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
+        Helge Deller <deller@gmx.de>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] tty: vt: add some NULL checks for vc_data
+Date:   Wed, 28 Dec 2022 22:41:53 -0800
+Message-Id: <20221229064153.23511-1-zh.nvgt@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB4211:EE_|DU2PR04MB9193:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5bf28895-f001-4487-2b87-08dae9663551
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ItHFV4CRocwZ2OYoA3PtprqWOYuVZuFkjUOr+NU7PS82gb4abM5+nZNBdwdExL3hrnunIJOyl03uxjlPlS/Fla2yy2KYFCmgbjFZfsZH7l+gAQ3LpvVogneGmBvB8A6E080dmjiuZdBmuPrepnfNV/29VKKnwM3T0N27phpGeRctPvVNxE/QVJTUZEmIoWak5Ce343AORTP/UeCgS8DIrrMwg1VMNJVu/9kxYdhhMnCATpjwnrCkrpMd8+z25moGWhM7y0JN1gpLF+gAJ+kUi35FPRaed2Xt1WXl3QNhEr/cglEw4JpiLXNB1wG80zrKGlnlB8Mj+LVY35FOBnSQGXMsSuSw3iviVd2fS6/uCYeuMtpBAInWRF/rllvCFLg+5PNOmjm8a764hv+bP5gTBWwZI6nVCVwM9REbQG/VuidS9vKGg7KzbLULqlHYtjS3shlI3r85gOqivMi6Ly0jqJdFisnvQ/If/f6OKf+WpJMEGICIQHt9KddZBFYNzvQKvjC3owiHucrLvAQ6/4U/tiU+KK0WEMzx4uSqaOh/GRrCW2bcH4k/2QPZTxtrH1kwVFWiH+yzsoEKxJP8IKdg7IOoOF2IkMeTno/SFxJ8K3RR/lw2jjBU0Il1g40o7oP/VJpw+AJmFPKBHoKeNlxJOM/tg4WUuWA8qOS9W3VjoL7g2QygqhzuPQLNcEjnpE2+2wx6+xr4jgipTgm+1tMdZA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4211.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(346002)(136003)(396003)(376002)(451199015)(8936002)(8676002)(66556008)(66476007)(66946007)(4326008)(44832011)(316002)(2906002)(7416002)(38350700002)(86362001)(6486002)(52116002)(478600001)(36756003)(6666004)(5660300002)(2616005)(38100700002)(6512007)(186003)(26005)(6506007)(921005)(41300700001)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XwUyp0vqZUecVTL1foS7FPM/iTV60IVyOl7UepDfdMHU7A4b50tg2JAI648Q?=
- =?us-ascii?Q?28M0nWa5s4e8RBGBq6jmd7WtOvqh5iKc1+PiGBWpixvDDdZNlHa8+9jonT1E?=
- =?us-ascii?Q?/RPyDE5kOW8W+kU6LYJXj3mW6lBVtAMsFCa0JhNMa0sAw/sz2u0J7Zenx3FZ?=
- =?us-ascii?Q?SgOD1vvobSG6+RQ0d1XmHfZA+8M6ELjyfKb1Bs7SjuyLaIzfqNDEJph1lPqV?=
- =?us-ascii?Q?sL/KcxrMgAHqyJBx55o8Aa7+wo32L/NujSdobdZIvBnwCjtErrhPv1lvC3Qc?=
- =?us-ascii?Q?VJmTM2MUjdBi3yqrCPqwhSIP9BcS/vg3YHmnQKBMsj8KoozKi/Jm9bQJMERR?=
- =?us-ascii?Q?8nWZVIfuwAnBGmv9aINMqSWYmmDOjxk79Vt5N59aIt/kxKHVsDq9M4voCL25?=
- =?us-ascii?Q?P084/yzZpnO2y5EMBI+onUgNE3pIFUnj6SXC2aVFPWQiaf9EL/atkph5Qa19?=
- =?us-ascii?Q?dBXsJQJPy2rvrIRN/l502La6qDGlxg5WAFguyLT8ltMQ0GWuwe+QWKmy8csw?=
- =?us-ascii?Q?Y8G+g/NWqlP5JHq8WKdUoV3+0B2/dItiPEyMmjkNymjknw/Kc2Z7Bhe581ld?=
- =?us-ascii?Q?lNJ6Thxy1C0m214EHZ5+gDkrHjYiwpV9ThlurbT9fGBEMbt08buSA7KqiBS/?=
- =?us-ascii?Q?NFs5vLiLNw5tQz/XJaVF+756YTL6tA6IfjufX0jwZJUYclPF7t1Wq3qQeLNa?=
- =?us-ascii?Q?vV7DXiBLQbBTKVgbU1xVAmzwoRyv3+S5lHhkbQaOJi2UIJhz7oz/s+wlvEl+?=
- =?us-ascii?Q?iSKs+qrYy84Z68ts1BB/08UIlXaA7Ua8CDyBuNVT/qjQabGXb79fpy53+BS/?=
- =?us-ascii?Q?YGPaXTp7A/XSDwXecBMBC/GgdHuaLEbFrCtAfs7AAqjcONlyxpqbltik6A+X?=
- =?us-ascii?Q?HqWASGjXF+nWxN9LxwuFgZuF5+ZHszkGllloOZ5sqZIPq4sRQWA3U+MqWYD+?=
- =?us-ascii?Q?2fsuJk8PAw3zyBRzJ8DBb/nE6Dac8Nhx4LeWv+qZ5LxHxYRCFL1H56Zi7nDV?=
- =?us-ascii?Q?dMPcwKqfjo6hGw0Pb/fBPqvVnqNlqBz5nEXJAch7XQCgDHdk9L2OGcVMRK9w?=
- =?us-ascii?Q?fvWHMCw15wIZWos4yOD/x/a95zPdWR6suXIn3FtD1wtTWFpf6xNmRIKnmuJO?=
- =?us-ascii?Q?G+T3dkLu+StC9XVOXqQF0RxPuw5S1cUz6o6876gPAYq+eNXwC/OPihS4yng8?=
- =?us-ascii?Q?V9OQnrjEn5q5A477fc1G+V6bsIJXwHviT+xILPI3XEszvxryjseLHeKCSD5K?=
- =?us-ascii?Q?LxFBiMvAiWtyobijnKXkiZGvcGjcjdBUAtOWx2ge7iP2byL/I6veIFQGS4ZM?=
- =?us-ascii?Q?rojO6jZb/GltEPUgyXn9wzCnpzOEZz/0mKL8IZ7FdcuW0UcN+Fa8XO2sZMJI?=
- =?us-ascii?Q?qTOiac+9j6mt4Bftrv7ThLVm50kMaQ1E3ruQy+5CHX78KIOIBYHN0G10YzL2?=
- =?us-ascii?Q?hn7RKa9Vbnco42dUptVuE4jqsZoGxncf0E2qH83xRVRJdoYcuQc3mPz2/ONF?=
- =?us-ascii?Q?0JgzCdbgckntsc1oMw6dnrqZ+Bgg4pfSbWzi2gyWgtZpdWDLAvrozgZb6Gvn?=
- =?us-ascii?Q?6QJN/b7HwmkTA/RMSLmmrECRWc6xC2fjPGVO9wN2?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5bf28895-f001-4487-2b87-08dae9663551
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB4211.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2022 06:30:42.0387
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /8x5LKoU0BhMZPe7iiNk8id7cGhETF1PWL2sJ6pTl93qnSccilwX14vSfL8qiwUOl+Ja+INSsKHuSiB3s79slg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9193
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-eDMA on i.MX93 platform requires the period size to be multiple of
-maxburst.
+vc_selection(), do_blank_screen() and scrollfront() all access "vc_data"
+structures obtained from the global "vc_cons[fg_console].d", which can
+be freed and nullified (e.g., in the error path of vc_allocate()). But
+these functions don't have any NULL checks against the pointers before
+dereferencing them, causing potentially use-after-free or null pointer
+dereference.
 
-Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
+Prevent these potential issues by placing NULL checks in these functions
+before accessing "vc_data" structures. Similar checks can be found in
+other functions like vt_console_print() and poke_blanked_console().
+
+Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
 ---
- sound/soc/fsl/fsl_xcvr.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/tty/vt/selection.c | 3 +++
+ drivers/tty/vt/vt.c        | 5 +++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/sound/soc/fsl/fsl_xcvr.c b/sound/soc/fsl/fsl_xcvr.c
-index b794158a7876..2a78243df752 100644
---- a/sound/soc/fsl/fsl_xcvr.c
-+++ b/sound/soc/fsl/fsl_xcvr.c
-@@ -22,6 +22,7 @@
- struct fsl_xcvr_soc_data {
- 	const char *fw_name;
- 	bool spdif_only;
-+	bool use_edma;
- };
+diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
+index 6ef22f01cc51..c727fd947683 100644
+--- a/drivers/tty/vt/selection.c
++++ b/drivers/tty/vt/selection.c
+@@ -319,6 +319,9 @@ static int vc_selection(struct vc_data *vc, struct tiocl_selection *v,
+ {
+ 	int ps, pe;
  
- struct fsl_xcvr {
-@@ -538,6 +539,16 @@ static int fsl_xcvr_startup(struct snd_pcm_substream *substream,
- 		return -EBUSY;
- 	}
- 
-+	/*
-+	 * EDMA controller needs period size to be a multiple of
-+	 * tx/rx maxburst
-+	 */
-+	if (xcvr->soc_data->use_edma)
-+		snd_pcm_hw_constraint_step(substream->runtime, 0,
-+					   SNDRV_PCM_HW_PARAM_PERIOD_SIZE,
-+					   tx ? xcvr->dma_prms_tx.maxburst :
-+					   xcvr->dma_prms_rx.maxburst);
++	if (!vc)
++		return 0;
 +
- 	switch (xcvr->mode) {
- 	case FSL_XCVR_MODE_SPDIF:
- 	case FSL_XCVR_MODE_ARC:
-@@ -1207,6 +1218,7 @@ static const struct fsl_xcvr_soc_data fsl_xcvr_imx8mp_data = {
+ 	poke_blanked_console();
  
- static const struct fsl_xcvr_soc_data fsl_xcvr_imx93_data = {
- 	.spdif_only = true,
-+	.use_edma = true,
- };
+ 	if (v->sel_mode == TIOCL_SELCLEAR) {
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index 981d2bfcf9a5..00f8fdc61e9f 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -1493,6 +1493,8 @@ void scrollback(struct vc_data *vc)
  
- static const struct of_device_id fsl_xcvr_dt_ids[] = {
+ void scrollfront(struct vc_data *vc, int lines)
+ {
++	if (!vc)
++		return;
+ 	if (!lines)
+ 		lines = vc->vc_rows / 2;
+ 	scrolldelta(lines);
+@@ -4346,6 +4348,9 @@ void do_blank_screen(int entering_gfx)
+ 	struct vc_data *vc = vc_cons[fg_console].d;
+ 	int i;
+ 
++	if (!vc)
++		return;
++
+ 	might_sleep();
+ 
+ 	WARN_CONSOLE_UNLOCKED();
 -- 
-2.25.1
+2.39.0
 
