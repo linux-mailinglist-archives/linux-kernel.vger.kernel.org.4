@@ -2,112 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E8065894F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 05:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A89658952
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 05:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbiL2EBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 23:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S232778AbiL2EEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 23:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiL2EBI (ORCPT
+        with ESMTP id S230078AbiL2ED4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 23:01:08 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B57DDECF
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 20:01:02 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1441d7d40c6so20587775fac.8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 20:01:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:content-language:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2BDqduqb6ENB6ect47hdnA/HnzbGe7Z34rN6m3i2/LI=;
-        b=l8XXenh096e3GNy8CjcUgsB4J0pjM2n6DpzWoKe1hXQKzwtse2ongdLFrVuyQak6Xd
-         Y/OimK0A3KWeYeCmfC4egSAk4h/DNN4kpYl9udTzSIF2BrU3FjaFnESzrRzZMeX9EHoT
-         JHsgpExIEJSDsWammoJ0Pr53upuwmJ6sJSfVPwveM3V/IX0OfLGc176Katg7EEC14BdM
-         K8VNQwnEDomWitzFkkxjIqhuCDqoSCto1ltoV84tUOMlSOt469uOWEnQ9rnSqqmDyvuX
-         ueEAYjRTI4aMLqDH8VrCTE4ESIwjJCswD37JR4UjpqAcxXPVRDM4GesTNED+zjgV9HEN
-         s8Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2BDqduqb6ENB6ect47hdnA/HnzbGe7Z34rN6m3i2/LI=;
-        b=Xz7JBSeku3Km+4lkQE2BXLb/FvlNpWKXVxIO81tAPYjkDHlpH1137gJ9oKht3zjreO
-         BSrKWd4hnsJz47wSk91mKW5wTHgLMN4b4jY2mikIpF35XrjSVEIoPx9ZOSviZXzVT1DX
-         lP4h4ENYM+2N9+/hp4ciBOiVZ1nLtwdhB704zRqtZ7hEYV4tr2GwIR0LStIm8jQIrtrr
-         mu0lxTlr/kmynIKhL+7zTH6hfthnWdpHl2MFIsVSDkNNsYSAmlf6czBA+w881ardXhTX
-         qSoAC1ZsZyIsTV859s8dxW8rX9IamFXggaGMi7h8mZmtjUdiyyBvv2TNynwI55T+YKmK
-         dNQg==
-X-Gm-Message-State: AFqh2korXnCYJXZuL2dx53z2ligoozg14+mwv+pSHjYbGRS0NGM6LupU
-        CsOYqeGa/zYd74yTiCyW+GRUQQ==
-X-Google-Smtp-Source: AMrXdXtwQN5WQkPMfMqdkUGY2ukaQzlupyadCdigo1ZFao/pbOwF2Nav4Yqv/nDDJmoGy1Vl2isIQA==
-X-Received: by 2002:a05:6871:5c8:b0:13b:1f84:b7ee with SMTP id v8-20020a05687105c800b0013b1f84b7eemr24415006oan.8.1672286461520;
-        Wed, 28 Dec 2022 20:01:01 -0800 (PST)
-Received: from [192.168.17.16] ([189.219.72.83])
-        by smtp.gmail.com with ESMTPSA id a11-20020a056870b14b00b0013d6d924995sm8216333oal.19.2022.12.28.20.01.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 20:01:00 -0800 (PST)
-Message-ID: <0328eb25-f711-d6ca-28f4-60601b6e0bfe@linaro.org>
-Date:   Wed, 28 Dec 2022 22:00:59 -0600
+        Wed, 28 Dec 2022 23:03:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0B712767;
+        Wed, 28 Dec 2022 20:03:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7C0BB818F0;
+        Thu, 29 Dec 2022 04:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24094C433EF;
+        Thu, 29 Dec 2022 04:03:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fs21zXWb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672286628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kb9UvNFwpxHzxaiK0AFEtw4Ov1SgKsqV5mnJobfZPTU=;
+        b=fs21zXWbGD7tePI4bbXNGWACXGHiVPHAWzs85NTvYJFBU3wq8aictVEjT9VoKw7283YlgB
+        XlbLxf3iAWePgtJ/0gg+eFWzGGHAabksw9KnWKgqrOkT3lczpblYKV8GR2mJZP22g5lBbr
+        2PLM31mCOfZMWFkQhe6nSZjbdNBj4P4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e76c06d8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 29 Dec 2022 04:03:48 +0000 (UTC)
+Date:   Thu, 29 Dec 2022 05:03:44 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+Message-ID: <Y60RoP77HnwaukEA@zx2c4.com>
+References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
+ <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-
-On Wed, 28 Dec 2022 15:31:47 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.15.86 release.
-> There are 731 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
+> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
+> > Ugh, while the problem [1] was fixed in 6.1, it's now happening again
+> > on the T460 with 6.2-rc1. Except I didn't see any oops message or
+> > "tpm_try_transmit" error this time. The first indication of a problem
+> > is this during a resume from suspend to ram:
+> > 
+> > tpm tpm0: A TPM error (28) occurred continue selftest
+> > 
+> > and then periodically 
+> > 
+> > tpm tpm0: A TPM error (28) occurred attempting get random
 > 
-> Responses should be made by Fri, 30 Dec 2022 14:41:39 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.86-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> That's a TPM 1.2 error which means the TPM failed the selftest.  The
+> original problem was reported against TPM 2.0  because of a missing
+> try_get_ops().
 
-We're seeing the following problem, as with 6.1 and 6.0, with GCC-8 on allmodconfig on the following architectures: Arm64 and Arm; with GCC-12/allmodconfig on Arm64 and Arm.
+No, I'm pretty sure the original bug, which was fixed by "char: tpm:
+Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
+considering it's the same hardware from Vlastimil causing this. I also
+recall seeing this in 1.2 when I ran this with the TPM emulator. So
+that's not correct.
 
-| /builds/linux/drivers/mfd/qcom_rpm.c: In function 'qcom_rpm_remove':
-| /builds/linux/drivers/mfd/qcom_rpm.c:680:19: error: unused variable 'rpm' [-Werror=unused-variable]
-|   struct qcom_rpm *rpm = dev_get_drvdata(&pdev->dev);
-|                    ^~~
+> The tpm 1.2 command path was never changed to require
+> this (and in fact hasn't changed for ages, TPM 1.2 being a bit
+> obsolete).
 
-Greetings!
+False. I'll just copy and paste the diff of that commit:
 
-Daniel Díaz
-daniel.diaz@linaro.org
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 1621ce818705..d69905233aff 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -401,13 +401,14 @@ int tpm_pm_suspend(struct device *dev)
+ 	    !pm_suspend_via_firmware())
+ 		goto suspended;
+
+-	if (!tpm_chip_start(chip)) {
++	rc = tpm_try_get_ops(chip);
++	if (!rc) {
+ 		if (chip->flags & TPM_CHIP_FLAG_TPM2)
+ 			tpm2_shutdown(chip, TPM2_SU_STATE);
+ 		else
+ 			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+
+-		tpm_chip_stop(chip);
++		tpm_put_ops(chip);
+ 	}
+
+ suspended:
+
+
+So, as you can see, this affects the call to tpm1_pm_suspend.
+
+> So this looks like a new problem with TPM 1.2 and
+> suspend/resume, likely in the BIOS of your system.
+
+No, this is not a BIOS problem. This is a kernel bug in the TPM 1.2
+driver. Yes, it'd be very nice to wave this all away and blame it on the
+BIOS, but I really don't think that's the case, especially considering
+this is all reproducible in the emulator.
+
+I recall seeing something pretty similar to this report with the
+selftest as well. Basically, the call to tpm1_do_selftest can race with
+the call to tpm1_get_random, presumably because tpm1_get_random doesn't
+do any locking on its own. So it might be a good idea to make sure that
+tpm1_get_random() isn't running before tpm1_do_selftest() or any other
+TPM commands run.
+
+I spent a long time working through the TPM code when this came up
+during 6.1. I set up the TPM emulator with QEMU and reproduced this and
+had a whole test setup and S3 fuzzer. It took a long time, and when I was
+done, I paged it all out of my brain. When I found that patch from Jan
+that fixed the problem most of the time (but not all the time), I wasted
+tons of time trying to get the TPM maintainers to take the patch and
+send it to Linus as part of rc7 or rc8. But they all ignored me, and
+eventually Linus just took that patch directly.
+
+So I don't think I want to go down another rabbit hole here, having
+experienced the TPM maintainers not really caring much, and that sucking
+away the remaining energy I had before to keep looking at the issue and
+its edge cases not handled by Jan's patch.
+
+On the contrary, it'd make a big difference if the TPM maintainers could
+actually help analyze the code that they're most familiar with, so that
+we can get to the bottom of this. That's a lot better than some random
+drive-by patches from a non-TPM person like me; before the 6.1 bug, I'd
+never even looked at these drivers. 
+
+My plan is to therefore be available to help and analyze and test and
+maybe even write some code, if the TPM maintainers take the lead on
+getting to the bottom of this. But if this hits neglect again like last
+time, I'll just send a `depends on BROKEN if PM` patch to the TPM
+hw_random driver and see what happens... That's a really awful solution
+though, so I hope the maintainers will wake up this cycle.
+
+Regards,
+Jason
