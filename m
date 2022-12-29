@@ -2,157 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64710658C2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2AF658C30
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiL2Lbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 06:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        id S230061AbiL2Ldh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 06:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiL2Lbf (ORCPT
+        with ESMTP id S229611AbiL2Lde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 06:31:35 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C9813DF9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:31:33 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id m6so16754392lfj.11
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:31:33 -0800 (PST)
+        Thu, 29 Dec 2022 06:33:34 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A36E13DE4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:33:33 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id r18so12211296pgr.12
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:33:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QQDxoBS/o/39TrH1qe45eXS30LOpQBp1BK407ABXLfk=;
-        b=tNpYVaVAsbbviDjADfCQME8VsRaT2ukWQpzL3RsY3j51GVwQvkH70JlekgOwUDKpza
-         9f8IoTlMG4hRrs2mva6Hce+gRg4WNq0T+wfK0ctsg8l5OChH5A/CQfhfKxktRnJhAaJn
-         U5BNbEXbZSIWQ3aVTf4RPhoVQI8DNwiyUp+4OI5d0rkVMqa9oj33QD4WyazsDA919SV2
-         Yv0x2/ZA4G/PBj4kfzL7IyQSRcqT4eysH5sLfI+co64jKP7YTELhRMq+yEffj2rxYNZd
-         adgxe1SwLP9RBBS+XHb5z8ZMpOnDEu4pQvLbmyhWcvhEIWQboDLk5iVjQjQ8KnQyOLJp
-         B2lw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qTVxiGDTHL6hg1UtFQZfca+oAw3eSFaWQe0kuo3tP9Q=;
+        b=d65eMAGGk3tndOjyb0lT2sYt7tsemWRwoQqx4ooPMj0H+EA01kJ15xOPX4X+AmkZa/
+         x9Jc69lBdrTWFxI1uCuMx7QrRByzMJxs4vkW69MwKe7d6/A7GMVx6JgswuJ/lM+zbQJG
+         aUnWu1GZA+jNg+4USaM37ZlA/MpyZA+69zji0o/pKdvo1rtWlJhcuqco6ZB+96p5P3kK
+         rSt46jw3rfyfiYC0XH1iE5csFT8LSp4zoc62xHezweFq4mk3ZZ1VeaoX5fbZ2OkEm+EM
+         6/gLo0q3Cy1m2mETPNxJ9CTugIfAPAfTnvz8rwomFWgfek9q7jy/9/ID75afCbZ1nzql
+         /xOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QQDxoBS/o/39TrH1qe45eXS30LOpQBp1BK407ABXLfk=;
-        b=HZVUfRhauFHsss/mHNbxrwpNrKliQWaq9cS4ddlpZluI/IMqAApFmLK1b0pUi6/eSl
-         xts1yOy8RIkLZ6RxXhw3oH7DRpbE1C09bFlsUnduydrq0jsnO/DFllbfpm30N4b+vTqD
-         q4FpKlYRWA3+GfWDfwB0Icti0Ly1J2M4lEa9uzM66wKSc47YG8QIC6H4ziDiqrtV/gKt
-         iRHpefkiRzEhwQKtvQWBKpEsQaV0Ry9XxK8sqii6ME3J/bsux4D+Xo406X3VmmTUncRJ
-         THvLWliOsb2yERlg6hopdF64axdwsJBUTJb/dhqou0iKy5Wb7Fk1+sG4JucFLE1/UwxT
-         TFTw==
-X-Gm-Message-State: AFqh2koEcmaflyY0/4JD4/AmaBVm1OdhGauQx1wpz5z+3eGp28fX50Q0
-        8iCG5t89fAwEIxSuTSbS9lDHsQ==
-X-Google-Smtp-Source: AMrXdXv8NQZRUm/WQTClSW9gKM7555QdSJfE3CZZ3i1we7CBGcg/d4BOuq888+1ZGIdoYqvDzNKbdw==
-X-Received: by 2002:a05:6512:3c97:b0:4a5:42ba:d827 with SMTP id h23-20020a0565123c9700b004a542bad827mr8766477lfv.14.1672313491952;
-        Thu, 29 Dec 2022 03:31:31 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a14-20020a056512390e00b004b5872a7003sm3046435lfu.98.2022.12.29.03.31.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 03:31:31 -0800 (PST)
-Message-ID: <24837866-9da2-9c9d-4094-d604db19cebd@linaro.org>
-Date:   Thu, 29 Dec 2022 12:31:30 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qTVxiGDTHL6hg1UtFQZfca+oAw3eSFaWQe0kuo3tP9Q=;
+        b=2bphoWlNKa8Kae7ZWK3kAzjFQ1wn1jJdMW+ZeyVzTKLf7rCvH9rOdfeKKyDpqNIUiy
+         gV31noMoGuh1G4KN0AmPnJTDwUZpSpZipmmTSFhsRaA0p3HQ2J7NvsSypd4FyCfXXWeJ
+         8gSp81Lh5iGp/baSaK+33vwUHG01ekYCehnZ0wMS7jIbTmaea7W9gK6YF3BiGEVlcYwT
+         0PxJBwQvrtxvtrsHQsTY6gyG7w9mHi1rSoDH0Ztl62E8g15MYYzKGfG1P0G9aTb7MVOr
+         0Xwe35KICcwgpkA+kA1AT0eXhBGtxeJep1x8Q0tPjEe9yJXYNqZNr4GbkKTAG7/OdMq1
+         zBTg==
+X-Gm-Message-State: AFqh2kpergk6yJYsBc5LIMD1tedlzkERGpFrrXv+YFqoPIRWW34P06Du
+        94zbwIcnRxPkvq6meDVfh7N3D7/3evFdjD+W
+X-Google-Smtp-Source: AMrXdXvnmF6f+NEOc+uLAfGZASLXPlvHzt3wKi9SEnxPBOt39NwwQbkr3lgpYgOEiMhDZKciV49qIg==
+X-Received: by 2002:a62:4e93:0:b0:57f:ef11:acf9 with SMTP id c141-20020a624e93000000b0057fef11acf9mr27300836pfb.10.1672313612386;
+        Thu, 29 Dec 2022 03:33:32 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id d188-20020a6236c5000000b0057a9b146592sm11871081pfa.186.2022.12.29.03.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 03:33:31 -0800 (PST)
+Date:   Thu, 29 Dec 2022 20:33:26 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     linux-mm@kvack.org, liam.howlett@oracle.com, willy@infradead.org,
+        ldufour@linux.ibm.com, michel@lespinasse.org, vbabka@suse.cz,
+        linux-kernel@vger.kernel.org
+Subject: Re: [QUESTION] about the maple tree and current status of mmap_lock
+ scalability
+Message-ID: <Y617Bgn1slh+BqwO@hyeyoo>
+References: <EC51CFA7-2BC8-4F72-A7D4-3B1A778EDB37@gmail.com>
+ <CAJuCfpFUh4qGqePueUd5snz27nxLUPehQeAmbkshheno==KtcA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/7] arm64: dts: qcom: sm8450: add spmi node
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Vinod Koul <vkoul@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221229103212.984324-1-konrad.dybcio@linaro.org>
- <7b32e414-96a9-7265-efee-f872badb32b2@linaro.org>
- <71d7a162-569d-1443-9e53-3ba374d06ccd@linaro.org>
- <ee24809b-cf9b-c555-9c30-956949be25a4@linaro.org>
- <c4cc7365-df3e-f591-58b8-b844d5bf1737@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c4cc7365-df3e-f591-58b8-b844d5bf1737@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpFUh4qGqePueUd5snz27nxLUPehQeAmbkshheno==KtcA@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/12/2022 12:04, Konrad Dybcio wrote:
+On Wed, Dec 28, 2022 at 09:10:20AM -0800, Suren Baghdasaryan wrote:
+> Hi Hyeonggon,
 > 
+> On Wed, Dec 28, 2022 at 4:49 AM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+> >
+> > Hello mm folks,
+> >
+> > I have a few questions about the current status of mmap_lock scalability.
+> >
+> > =============================================================
+> > What is currently causing the kernel to use mmap_lock to protect the maple tree?
+> > =============================================================
+> >
+> > I understand that the long-term goal is to remove the need for mmap_lock in readers
+> > while traversing the maple tree, using techniques such as RCU or SPF.
+> > What is the biggest obstacle preventing this from being achieved at this time?
 > 
-> On 29.12.2022 11:57, Krzysztof Kozlowski wrote:
->> On 29/12/2022 11:45, Konrad Dybcio wrote:
->>>
->>>
->>> On 29.12.2022 11:42, Krzysztof Kozlowski wrote:
->>>> On 29/12/2022 11:32, Konrad Dybcio wrote:
->>>>> From: Vinod Koul <vkoul@kernel.org>
->>>>>
->>>>> Add the spmi bus as found in the SM8450 SoC
->>>>>
->>>>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
->>>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>>>> [Konrad: 0x0 -> 0, move #cells down, make reg-names a vertical list]
->>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>> ---
->>>>> v1 -> v2:
->>>>> No changes
->>>>>
->>>>>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 22 ++++++++++++++++++++++
->>>>>  1 file changed, 22 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->>>>> index 570475040d95..b9b59c5223eb 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->>>>> @@ -2715,6 +2715,28 @@ aoss_qmp: power-controller@c300000 {
->>>>>  			#clock-cells = <0>;
->>>>>  		};
->>>>>  
->>>>> +		spmi_bus: spmi@c42d000 {
->>>>
->>>> Hmm looks different than reg.
->>>>
->>>>> +			compatible = "qcom,spmi-pmic-arb";
->>>>> +			reg = <0 0x0c400000 0 0x00003000>,
->>>>> +			      <0 0x0c500000 0 0x00400000>,
->>>>> +			      <0 0x0c440000 0 0x00080000>,
->>>>> +			      <0 0x0c4c0000 0 0x00010000>,
->>>>> +			      <0 0x0c42d000 0 0x00010000>;
->>>> x
->>> Hm, my guess would be that Vinod chose to put the "cnfg" reg
->>> instead of "core" in the unit address, as 8450 has 2 SPMI bus
->>> hosts and they both share the core reg, so it would have been
->>> impossible to have two spmi@core nodes..
->>
->> Eh? SM8450 has 2 SPMI hosts both using 0x0c400000? How does that work?
->> Usually address can be mapped only once.
-> No idea either!
-> 
->>
->> Where is the second SPMI? I cannot find it in linux-next.
-> It's only there on downstream and I'm not sure how useful it is
-> really, only some debug subdevice is attached to it.. Perhaps
-> we could ignore its existence for now and I could use the core
-> reg in unit address for spmi0?
+> Maple tree has an RCU mode which does not need mmap_lock for
+> traversal. Liam and I were testing it recently and Liam fixed a number
+> of issues to enable it. It seems stable now and the fixes are
+> incorporated into the "per-vma locks" patchset which I prepared in
+> this branch: https://github.com/surenbaghdasaryan/linux/tree/per_vma_lock.
 
-I see it indeed in downstream. core, chnls and obsrvr IO are the same.
-There is quite of debug devices attached.
+Thank you for the link. I didn't realize how far the discussion had progressed.
 
-There is a comment in PMIC arbiter code to use a IO mapping allowing
-simultaneous mappings, so this is actually valid.
+Let me check if I understand correctly:
 
-Anyway, DT expects unit address to match first reg, so if we want to
-have second PMIC, we need to change the order of reg entries.
+To allow non-overlapping page faults while writers are performing VMA operations,
+per-VMA locking moves from the mmap_lock to the VMA lock on the reader
+side during page fault.
 
-We can ignore this problem till we add second PMIC...
+While maple tree traversal is done without locking, readers must take
+VMA lock in read mode within RCU read section (or retry taking mmap_lock
+if failed) to process page fault.
 
-Best regards,
-Krzysztof
+This ensures that readers are not racing with writers for access to the same
+VMA.
 
+Am I getting it right?
+
+> I haven't posted this patchset upstream yet but it's pretty much ready
+> to go. I'm planning to post it in early January.
+
+Looking forward to that,
+thank you for working on this.
+
+-- 
+Thanks,
+Hyeonggon
