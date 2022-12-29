@@ -2,149 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3169659278
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 23:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9B365927F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 23:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbiL2Wdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 17:33:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S234124AbiL2Wie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 17:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiL2Wdq (ORCPT
+        with ESMTP id S229650AbiL2Wib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 17:33:46 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB023BC25;
-        Thu, 29 Dec 2022 14:33:45 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id gh17so47947538ejb.6;
-        Thu, 29 Dec 2022 14:33:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NnEqCpAGobkh5yewq/ZVNZcO4mC87hVyaNZrine7Wa0=;
-        b=Fk/9xRQHxoeMg/p1YiGg64Q8qCkmhOA5vj6mgCyojGZ74/c5sgf/7iEUbSzOzZp3TH
-         D3fbeJsBlnuO648QzYX5d8dR3Www0JQSlHB0duujUoW8mlZ2BFxr6/P7MG/DV2RYTI/g
-         99shbkG4y+8yaNYxGguM8+0dU3YDol6y0cIP5rOJp7Mow0VMDW3H3d7k4EYRJo7YRECz
-         laxG4XiKn4yQUjOEohcobt+zxi71ykjatlVyA6jdwLkSbLCWvDcVQIl07MPUuuGzsbt/
-         545mX+k0fVqGwbyZM8XHT51wc6mZBhGrd8VkH0nQC54AY/jTx9C39oNzI6TnrHVqirNT
-         Atpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NnEqCpAGobkh5yewq/ZVNZcO4mC87hVyaNZrine7Wa0=;
-        b=6mfPWKxl2ETu+O8Pi89lPnRyyzWG0BHrXlhWpWcP31KVo3jneZEI4rNq5F1Sz8ALeD
-         cW3S/Go4t/ksvXnChZRheWuX/TATSnKBOMJqiq0JAGR/hXy63iSJfG+exaXcxHxlMFQP
-         ikK3KrmlHccEMkJw2+UpAY6qIK0ALu5/ceCcE2NRGXS5bndvzHqImc2p0q3acMeOtjA3
-         Ha9tD4pa1Vhx1hep8H+1Let7cBesbOSrU333YHZhyrIjswvYs481B6iEo93LGWDUvWVI
-         RElyFM7MMimYT7cNwg//q2kU8pwSCQE0Ebv1HC1LmjVYMfwbfYQsrB64a2zGtabTatNR
-         GN3Q==
-X-Gm-Message-State: AFqh2kpFEqHLLZkVNXw+spPj4gbCqmcu37bgWPhR2GE4uzFxTHHdhNSW
-        C+ohdXi3obs5jkxzv2noMzyJStS3gLOQi3m7pAY=
-X-Google-Smtp-Source: AMrXdXuixgE4j+vNTM6toM3AGYa/w3FzZ5+RZbWzcDytBMAu1O+/+kYQ1OQW5eKfMbpTGScdKOAes4DqZOsa9OCNNDE=
-X-Received: by 2002:a17:906:2ccc:b0:7f3:3b2:314f with SMTP id
- r12-20020a1709062ccc00b007f303b2314fmr2337967ejr.115.1672353224524; Thu, 29
- Dec 2022 14:33:44 -0800 (PST)
+        Thu, 29 Dec 2022 17:38:31 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B670714024;
+        Thu, 29 Dec 2022 14:38:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F1688CE16FF;
+        Thu, 29 Dec 2022 22:38:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BDBFC433EF;
+        Thu, 29 Dec 2022 22:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672353507;
+        bh=A9gotjONIBv6IFFnxiV0ZpJT3luAFunzfuUNR0nSF6M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=psNC/lmYxEKZESOKibYosuZ8dO7kCkTl0O/qdp0AYjf77J9vz5ucj8GzKuuiZTDRd
+         Q6a2krcvh2/G/jvPlFSXGznrMXOTNfJN/ta4OkHBEEs+c9r2EORjONxrGtH/+tNcdn
+         EUwQSPr/t1AnpQoWMLbJyCIISSVcNpDJg+hss9VcGwbn3JUAmsGXA/jrqr29U3kZw2
+         +jxW5Wn66QpIW8kk0bp6iro9MPqNyNqr2HY+EB/He+ifXKEUaAaqTMu5hgBYid1iWT
+         1MUUKXO1DLvmKUUazhYwaGufrounOXgvHMMA1MEVCtWvG7jdnaM+neZlxI/SqIGXRj
+         Bo81+Qxo9rTrQ==
+Date:   Thu, 29 Dec 2022 14:38:24 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
+Message-ID: <Y64W4BqHbA+lf/8v@sol.localdomain>
+References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
+ <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-References: <20221224112058.12038-1-liuxin350@huawei.com>
-In-Reply-To: <20221224112058.12038-1-liuxin350@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 29 Dec 2022 14:33:32 -0800
-Message-ID: <CAEf4BzbYAX2KS-KA_6PPhn2edP+1_pDGJC6m6_=ihWGsz71heA@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: Added the description of some API functions
-To:     Xin Liu <liuxin350@huawei.com>
-Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yanan@huawei.com,
-        wuchangye@huawei.com, xiesongyang@huawei.com,
-        kongweibin2@huawei.com, zhangmingyi5@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 24, 2022 at 3:21 AM Xin Liu <liuxin350@huawei.com> wrote:
->
-> Currently, many API functions are not described in the document.
-> I have tried to add the API description of the following four API
-> functions:
->  libbpf_set_print
->  bpf_object__open
->  bpf_object__load
->  bpf_object__close
->
-> Signed-off-by: Xin Liu <liuxin350@huawei.com>
+On Tue, Dec 27, 2022 at 03:27:39PM +0100, Roberto Sassu wrote:
+> From: Herbert Xu <herbert@gondor.apana.org.au>
+> 
+> The helper mpi_read_raw_from_sgl sets the number of entries in
+> the SG list according to nbytes.  However, if the last entry
+> in the SG list contains more data than nbytes, then it may overrun
+> the buffer because it only allocates enough memory for nbytes.
+> 
+> Fixes: 2d4d1eea540b ("lib/mpi: Add mpi sgl helpers")
+> Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 > ---
+>  lib/mpi/mpicoder.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-I've tweaked descriptions a bit to match the overall style and fixed
-few typos. Pushed to bpf-next, thanks!
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 
->  tools/lib/bpf/libbpf.h | 27 ++++++++++++++++++++++++++-
->  1 file changed, 26 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index eee883f007f9..bf3af52d42be 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -96,6 +96,12 @@ enum libbpf_print_level {
->  typedef int (*libbpf_print_fn_t)(enum libbpf_print_level level,
->                                  const char *, va_list ap);
->
-> +/**
-> + * @brief **libbpf_set_print()** use the user-provided log print function.
-> + * @param fn the log print function. Disable all print if the parameter
-> + * is NULL.
-> + * @return Pointer to old print function.
-> + */
->  LIBBPF_API libbpf_print_fn_t libbpf_set_print(libbpf_print_fn_t fn);
->
->  /* Hide internal to user */
-> @@ -174,6 +180,14 @@ struct bpf_object_open_opts {
->  };
->  #define bpf_object_open_opts__last_field kernel_log_level
->
-> +/**
-> + * @brief **bpf_object__open()** creates a bpf_object by opening
-> + * the BPF ELF object file pointed to by the passed path and loading it
-> + * into memory.
-> + * @param path BPF object file path.
-> + * @return pointer to the new bpf_object; or NULL is returned on error,
-> + * error code is stored in errno
-> + */
->  LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
->
->  /**
-> @@ -204,9 +218,20 @@ bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
->                      const struct bpf_object_open_opts *opts);
->
->  /* Load/unload object into/from kernel */
-> +/**
-> + * @brief **bpf_object__load()** load bpf_object into kernel
-> + * @param obj pointer to a valid bpf_object
-> + * @return 0, on success; negative error code, otherwise, error code is
-> + * stored in errno
-> + */
->  LIBBPF_API int bpf_object__load(struct bpf_object *obj);
->
-> -LIBBPF_API void bpf_object__close(struct bpf_object *object);
-> +/**
-> + * @brief **bpf_object__close()** close a bpf_object and release all
-> + * resources.
-> + * @param obj pointer to a valid bpf_object
-> + */
-> +LIBBPF_API void bpf_object__close(struct bpf_object *obj);
->
->  /* pin_maps and unpin_maps can both be called with a NULL path, in which case
->   * they will use the pin_path attribute of each map (and ignore all maps that
-> --
-> 2.33.0
->
+- Eric
