@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97BE659243
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 22:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D00659245
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 22:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiL2Vll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 16:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
+        id S233978AbiL2Vne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 16:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiL2Vli (ORCPT
+        with ESMTP id S230155AbiL2Vnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 16:41:38 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7F310046;
-        Thu, 29 Dec 2022 13:41:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1672350091;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=FCYu/+2jwjS7Uakcb1o/IFHjx95os9NV5cCdt0qqmk8=;
-    b=KHZEnWSD93VHbRpn+w8cWpmVwvFEi0phNEmA+U/yDBBm/sFOOw9waFX5bRGoUBykfJ
-    ZYy018apK3SS3Vv75pqE5DPIBwwuexceGl1dT9EM0qFuR3rD3x0xR1FoJLvFe5wDRHDX
-    KWwki68lyyzmD+w2h3WsFXDbsE4D01P9TGyzVekZHg7SBuBUkLd3BY2QvwkMpgBPWhUR
-    k0tsy4hDeBCzondU4TAfqAgLji187irI5e1jAHFcpenKmspGKb0r3OTdFdCP30WGQiWP
-    lHX3HstFw5DcblnKS6JqpLhH4MiKfQf96qIb3WnTzqF2irDAi5dHaED0tpgrUsdXsb63
-    XDPw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWyvDI"
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
-    with ESMTPSA id Yce349yBTLfTXsA
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 29 Dec 2022 22:41:29 +0100 (CET)
-Date:   Thu, 29 Dec 2022 22:41:22 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] phy: qcom-usb-hs: Add qcom,dp-manual-pullup logic
-Message-ID: <Y64Jgu2o6aJV4ggk@gerhold.net>
-References: <20221229183410.683584-1-bryan.odonoghue@linaro.org>
- <20221229183410.683584-3-bryan.odonoghue@linaro.org>
- <Y63uSgMdP4m6nvhL@gerhold.net>
- <Y64AfHcUw192Pyr6@gerhold.net>
- <6061938c-b830-2fe0-2f4d-368e34c33676@linaro.org>
- <Y64CaOzWZXERrvkz@gerhold.net>
- <cdcef656-1ae7-fe8a-a4dd-3547d6395b33@linaro.org>
+        Thu, 29 Dec 2022 16:43:31 -0500
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AA110046
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 13:43:27 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id B0gKp7mDjBicGB0gKpHr5U; Thu, 29 Dec 2022 22:43:25 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 29 Dec 2022 22:43:25 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <c0deb523-0458-5422-bed5-ee104ca7c479@wanadoo.fr>
+Date:   Thu, 29 Dec 2022 22:43:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] PCI: amlogic: The check for devm_add_action_or_reset's
+ return value added
+Content-Language: fr, en-US
+To:     Aleksandr Burakov <a.burakov@rosalinux.ru>
+Cc:     linux-pci@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Yue Wang <yue.wang@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20221220092137.6527-1-a.burakov@rosalinux.ru>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221220092137.6527-1-a.burakov@rosalinux.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <cdcef656-1ae7-fe8a-a4dd-3547d6395b33@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 09:20:03PM +0000, Bryan O'Donoghue wrote:
-> On 29/12/2022 21:11, Stephan Gerhold wrote:
-> > Then it doesn't seem to be a particularly complete schematic. 😄
-> > PM8916 definitely has USB_IN pads (pad # N13, P13). 😄
+Le 20/12/2022 à 10:21, Aleksandr Burakov a écrit :
+> The return value of the function devm_add_action_or_reset() was not
+> checked hence an error code would not be returned.
 > 
-> Let me check again.
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> No sorry USB_IN_0 and USB_IN_1 are connected to +5V in my schematic, I did
-> check USB_IN I just forgot why it wasn't usable... +5v not VBUS is what its
-> connected to.
+> Fixes: 9c0ef6d34fdb ("PCI: amlogic: Add the Amlogic Meson PCIe controller driver")
+> Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
+> ---
+>   drivers/pci/controller/dwc/pci-meson.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/pci/controller/dwc/pci-meson.c b/drivers/pci/controller/dwc/pci-meson.c
+> index c1527693bed9..3d82f0b65480 100644
+> --- a/drivers/pci/controller/dwc/pci-meson.c
+> +++ b/drivers/pci/controller/dwc/pci-meson.c
+> @@ -187,9 +187,13 @@ static inline struct clk *meson_pcie_probe_clock(struct device *dev,
+>   		return ERR_PTR(ret);
+>   	}
+>   
+> -	devm_add_action_or_reset(dev,
+> +	ret = devm_add_action_or_reset(dev,
+>   				 (void (*) (void *))clk_disable_unprepare,
 
-That is still good enough to replace qcom,dp-manual-pullup though.
+Hi,
 
-If you have +5V connected to USB_IN then &pm8916_usbin should report
-active VBUS permanently. Set it as extcon for &usb and &usb_hs_phy and
-you should have VBUSVLDEXT "pulled-up" like in your patch here, without
-any driver changes. :-)
+using devm_clk_get_enabled() a few lines above would be IMHO much more 
+elegant than these casts.
 
-It's a bit of a hack of course, which probably deserves a comment in the
-device tree. But since it should not make any functional difference
-compared to this patch the approach might be easier than getting this
-patch finalized & accepted.
+This also saves a few LoC and avoid some other warnings/issues. (see [1])
 
-I leave that up to you :)
+Such an approach has already been used in [2].
 
-Stephan
+Just my 2c,
+
+CJ
+
+[1]: https://lore.kernel.org/all/20221118233101.never.215-kees@kernel.org/
+[2]: https://lore.kernel.org/all/20221202184525.gonna.423-kees@kernel.org/
+
+>   				 clk);
+> +	if (ret) {
+> +		dev_err(dev, "couldn't reset clk\n");
+> +		return ERR_PTR(ret);
+> +	}
+>   
+>   	return clk;
+>   }
+
