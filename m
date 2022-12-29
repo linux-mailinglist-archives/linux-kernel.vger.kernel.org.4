@@ -2,265 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EC6658947
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E8065894F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 05:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiL2Dv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 22:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        id S232364AbiL2EBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 23:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiL2Dv0 (ORCPT
+        with ESMTP id S230078AbiL2EBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 22:51:26 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE18E95
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 19:51:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672285885; x=1703821885;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=59i36TC3qVB7r4xcr2ZX3sAZi9oelqMTs+Bwmm1RP7M=;
-  b=QJwtQBS3fMC1Zo0ZQHoh6ZFDGIOeOdN9MoRpIdVCk0kHZx0gRq21sx1p
-   2YqrvDO/iLKc1sbwgghsAjzSZkNFVwzQj7g3RNJ9Bi7rSZP24YoJLQOXK
-   tx8CUHwhplmZpahbgsJ7JRKhZUmHT0mgf32Tt4dAnm2klduE9aoexcm2/
-   RF0Bx2WyOQY3TY+xeUuoIdBmC5hLrCUH4e3HqmB5hpDktIl0cwqwrEzmu
-   ul5eSMIMZcqyitPutU5oiAHfhKvcTW7PNOlbKZYDgn73BN6fPd5wXNmz+
-   P6hGMUAkrzEXWg3zX3C5kaSYbIJjNYWHkduA0kj9u5eTpL/Yj/IZlD88L
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="383274425"
-X-IronPort-AV: E=Sophos;i="5.96,282,1665471600"; 
-   d="scan'208";a="383274425"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 19:51:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="716803442"
-X-IronPort-AV: E=Sophos;i="5.96,282,1665471600"; 
-   d="scan'208";a="716803442"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Dec 2022 19:51:24 -0800
-Date:   Wed, 28 Dec 2022 20:00:03 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 1/7] sched/fair: Generalize asym_packing logic for SMT
- local sched group
-Message-ID: <20221229040003.GA11497@ranerica-svr.sc.intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
- <xhsmhv8m3e5sx.mognet@vschneid.remote.csb>
+        Wed, 28 Dec 2022 23:01:08 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B57DDECF
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 20:01:02 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1441d7d40c6so20587775fac.8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 20:01:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:content-language:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2BDqduqb6ENB6ect47hdnA/HnzbGe7Z34rN6m3i2/LI=;
+        b=l8XXenh096e3GNy8CjcUgsB4J0pjM2n6DpzWoKe1hXQKzwtse2ongdLFrVuyQak6Xd
+         Y/OimK0A3KWeYeCmfC4egSAk4h/DNN4kpYl9udTzSIF2BrU3FjaFnESzrRzZMeX9EHoT
+         JHsgpExIEJSDsWammoJ0Pr53upuwmJ6sJSfVPwveM3V/IX0OfLGc176Katg7EEC14BdM
+         K8VNQwnEDomWitzFkkxjIqhuCDqoSCto1ltoV84tUOMlSOt469uOWEnQ9rnSqqmDyvuX
+         ueEAYjRTI4aMLqDH8VrCTE4ESIwjJCswD37JR4UjpqAcxXPVRDM4GesTNED+zjgV9HEN
+         s8Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2BDqduqb6ENB6ect47hdnA/HnzbGe7Z34rN6m3i2/LI=;
+        b=Xz7JBSeku3Km+4lkQE2BXLb/FvlNpWKXVxIO81tAPYjkDHlpH1137gJ9oKht3zjreO
+         BSrKWd4hnsJz47wSk91mKW5wTHgLMN4b4jY2mikIpF35XrjSVEIoPx9ZOSviZXzVT1DX
+         lP4h4ENYM+2N9+/hp4ciBOiVZ1nLtwdhB704zRqtZ7hEYV4tr2GwIR0LStIm8jQIrtrr
+         mu0lxTlr/kmynIKhL+7zTH6hfthnWdpHl2MFIsVSDkNNsYSAmlf6czBA+w881ardXhTX
+         qSoAC1ZsZyIsTV859s8dxW8rX9IamFXggaGMi7h8mZmtjUdiyyBvv2TNynwI55T+YKmK
+         dNQg==
+X-Gm-Message-State: AFqh2korXnCYJXZuL2dx53z2ligoozg14+mwv+pSHjYbGRS0NGM6LupU
+        CsOYqeGa/zYd74yTiCyW+GRUQQ==
+X-Google-Smtp-Source: AMrXdXtwQN5WQkPMfMqdkUGY2ukaQzlupyadCdigo1ZFao/pbOwF2Nav4Yqv/nDDJmoGy1Vl2isIQA==
+X-Received: by 2002:a05:6871:5c8:b0:13b:1f84:b7ee with SMTP id v8-20020a05687105c800b0013b1f84b7eemr24415006oan.8.1672286461520;
+        Wed, 28 Dec 2022 20:01:01 -0800 (PST)
+Received: from [192.168.17.16] ([189.219.72.83])
+        by smtp.gmail.com with ESMTPSA id a11-20020a056870b14b00b0013d6d924995sm8216333oal.19.2022.12.28.20.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 20:01:00 -0800 (PST)
+Message-ID: <0328eb25-f711-d6ca-28f4-60601b6e0bfe@linaro.org>
+Date:   Wed, 28 Dec 2022 22:00:59 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhv8m3e5sx.mognet@vschneid.remote.csb>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 04:55:58PM +0000, Valentin Schneider wrote:
-> On 22/11/22 12:35, Ricardo Neri wrote:
-> > @@ -8926,25 +8924,16 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
-> >               return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
-> >       }
-> >
-> > -	/* @dst_cpu has SMT siblings. */
-> > -
-> > -	if (sg_is_smt) {
-> > -		int local_busy_cpus = sds->local->group_weight -
-> > -				      sds->local_stat.idle_cpus;
-> > -		int busy_cpus_delta = sg_busy_cpus - local_busy_cpus;
-> > -
-> > -		if (busy_cpus_delta == 1)
-> > -			return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
-> > -
-> > -		return false;
-> > -	}
-> > -
-> >       /*
-> > -	 * @sg does not have SMT siblings. Ensure that @sds::local does not end
-> > -	 * up with more than one busy SMT sibling and only pull tasks if there
-> > -	 * are not busy CPUs (i.e., no CPU has running tasks).
-> > +	 * @dst_cpu has SMT siblings. Do asym_packing load balancing only if
-> > +	 * all its siblings are idle (moving tasks between physical cores in
-> > +	 * which some SMT siblings are busy results in the same throughput).
-> > +	 *
-> > +	 * If the difference in the number of busy CPUs is two or more, let
-> > +	 * find_busiest_group() take care of it. We only care if @sg has
-> > +	 * exactly one busy CPU. This covers SMT and non-SMT sched groups.
-> >        */
-> > -	if (!sds->local_stat.sum_nr_running)
-> > +	if (sg_busy_cpus == 1 && !sds->local_stat.sum_nr_running)
-> >               return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
-> >
+Hello!
+
+
+On Wed, 28 Dec 2022 15:31:47 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.86 release.
+> There are 731 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Some of this is new to me - I had missed the original series introducing
-> this. However ISTM that this is conflating two concepts: SMT occupancy
-> balancing, and asym packing.
+> Responses should be made by Fri, 30 Dec 2022 14:41:39 +0000.
+> Anything received after that time might be too late.
 > 
-> Take the !local_is_smt :: sg_busy_cpus >= 2 :: return true; path. It does
-> not involve asym packing priorities at all. This can end up in an
-> ASYM_PACKING load balance,
-
-Yes, this the desired result: an idle low-priority CPU should help a high-
-priority core with more than one busy SMT sibling. But yes, it does not
-relate to priorities and can be implemented differently.
-
-> which per calculate_imbalance() tries to move
-> *all* tasks to the higher priority CPU - in the case of SMT balancing,
-> we don't want to totally empty the core, just its siblings.
-
-But it will not empty the core, only one of its SMT siblings. A single
-sibling will be selected in find_busiest_queue(). The other siblings will
-be unaffected.
-
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.86-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 > 
-> Is there an ITMT/big.LITTLE (or however x86 calls it) case that invalidates
-> the above?
-
-Please see below.
-
+> thanks,
 > 
-> Say, what's not sufficient with the below? AFAICT the only thing that isn't
-> covered is the sg_busy_cpus >= 2 thing, but IMO that's SMT balancing, not
-> asym packing - if the current calculate_imbalance() doesn't do it, it
-> should be fixed to do it.
+> greg k-h
 
-Agreed.
+We're seeing the following problem, as with 6.1 and 6.0, with GCC-8 on allmodconfig on the following architectures: Arm64 and Arm; with GCC-12/allmodconfig on Arm64 and Arm.
 
->Looking at the
-> 
->   local->group_type == group_has_spare
-> 
-> case, it looks like it should DTRT.
+| /builds/linux/drivers/mfd/qcom_rpm.c: In function 'qcom_rpm_remove':
+| /builds/linux/drivers/mfd/qcom_rpm.c:680:19: error: unused variable 'rpm' [-Werror=unused-variable]
+|   struct qcom_rpm *rpm = dev_get_drvdata(&pdev->dev);
+|                    ^~~
 
-I had tried (and failed) to have find_busiest_group() handle the
-!local_is_smt :: sg_busy_cpus >= 2 case. Now I think I made it work.
+Greetings!
 
-When the busiest group is not overloaded, find_busiest_group() and
-local->group = group_has_spare during an idle load balance events the
-number of *idle* CPUs. However, this does not work if the local and busiest
-groups have different weights. In SMT2, for instance, if busiest has 2 busy
-CPUs (i.e., 0 idle CPUs) and the destination CPU is idle, the difference in
-the number of idle CPUs is 1. find_busiest_group() will incorrectly goto
-out_balanced.
-
-This issue very visible in Intel hybrid processors because the big cores
-have SMT but the small cores do not. It can, however, be reproduced in non-
-hybrid processors by offlining the SMT siblings of some cores.
-
-The problem can be fixed by instead balancing the number of *busy* CPUs,
-which is what in general we want, IMO. (When two groups have the same
-weight, it is equivalent to balancing the number of idle CPUs).
-
-This patch worked for me:
-
-@@ -9787,14 +9787,18 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
- 			lsub_positive(&nr_diff, local->sum_nr_running);
- 			env->imbalance = nr_diff;
- 		} else {
-+			unsigned int busiest_busy_cpus, local_busy_cpus;
-+
-+			busiest_busy_cpus = busiest->group_weight - busiest->idle_cpus;
-+			local_busy_cpus = local->group_weight - local->idle_cpus;
- 
- 			/*
- 			 * If there is no overload, we just want to even the number of
--			 * idle cpus.
-+			 * busy cpus.
- 			 */
- 			env->migration_type = migrate_task;
--			env->imbalance = max_t(long, 0,
--					       (local->idle_cpus - busiest->idle_cpus));
-+			env->imbalance = max_t(long, 0 ,
-+					       (busiest_busy_cpus -  local_busy_cpus));
- 		}
- 
- #ifdef CONFIG_NUMA
-@@ -9981,18 +9985,24 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
- 			 */
- 			goto out_balanced;
- 
--		if (busiest->group_weight > 1 &&
--		    local->idle_cpus <= (busiest->idle_cpus + 1))
--			/*
--			 * If the busiest group is not overloaded
--			 * and there is no imbalance between this and busiest
--			 * group wrt idle CPUs, it is balanced. The imbalance
--			 * becomes significant if the diff is greater than 1
--			 * otherwise we might end up to just move the imbalance
--			 * on another group. Of course this applies only if
--			 * there is more than 1 CPU per group.
--			 */
--			goto out_balanced;
-+		if (busiest->group_weight > 1) {
-+			unsigned int local_busy_cpus, busiest_busy_cpus;
-+
-+			local_busy_cpus = local->group_weight - local->idle_cpus;
-+			busiest_busy_cpus = busiest->group_weight - busiest->idle_cpus;
-+
-+			if (busiest_busy_cpus <= local_busy_cpus + 1)
-+				/*
-+				 * If the busiest group is not overloaded
-+				 * and there is no imbalance between this and busiest
-+				 * group wrt busy CPUs, it is balanced. The imbalance
-+				 * becomes significant if the diff is greater than 1
-+				 * otherwise we might end up to just move the imbalance
-+				 * on another group. Of course this applies only if
-+				 * there is more than 1 CPU per group.
-+				 */
-+				goto out_balanced;
-+		}
- 
- 		if (busiest->sum_h_nr_running == 1)
- 			/*
-
-With this I can remove the sg_busy_cpus >=2 thing from asym_smt_can_pull_tasks().
-
-> 
-> ---
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 224107278471f..15eb2d3cff186 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9176,12 +9176,15 @@ static inline bool
->  sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs,
->  	   struct sched_group *group)
->  {
-> -	/* Only do SMT checks if either local or candidate have SMT siblings */
-> -	if ((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
-> -	    (group->flags & SD_SHARE_CPUCAPACITY))
-> -		return asym_smt_can_pull_tasks(env->dst_cpu, sds, sgs, group);
-> +	/*
-> +	 * For SMT, env->idle != CPU_NOT_IDLE isn't sufficient, we need to make
-> +	 * sure the whole core is idle.
-> +	 */
-> +	if (((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
-> +	     (group->flags & SD_SHARE_CPUCAPACITY)) &&
-> +	    !test_idle_cores(env->dst_cpu))
-
-But test_idle_cores() tests for *any* idle core in the highest domain with the
-SD_SHARE_PKG_RESOURCES flag. Here we are only interested in the SMT siblings
-of env->dst_cpu. If is_core_idle(env->dst_cpu) is used, then I agree with the
-change.
-
-Thanks and BR,
-Ricardo
+Daniel Díaz
+daniel.diaz@linaro.org
