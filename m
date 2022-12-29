@@ -2,106 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E56E659328
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 00:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FDF65932B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 00:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234223AbiL2X0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 18:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S234206AbiL2X23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 18:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiL2X0u (ORCPT
+        with ESMTP id S234161AbiL2X2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 18:26:50 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71089164A8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:26:48 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id z10so2209355ilq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:26:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/xDGNtMWURvljwRiBs8LuLEHcAsVVQHtWigZK+qLiE8=;
-        b=AFN26eojPCYRqgY4nrPD0V96+ROKZNOlW2H3Y5HJYtPrDYvaa8TaZW1oMBw9oXoZfN
-         40poAMjuNSedgSaEFOr2W4vic7D3GDUh1gnHKgQws8DiMcCtbDN1RYqNHNdn7hHzM1nU
-         CWKugpaCFpoXBo/sxQwG/C/lTwIrt8rgeohKM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/xDGNtMWURvljwRiBs8LuLEHcAsVVQHtWigZK+qLiE8=;
-        b=UlBA9XxVDapSW4ikRME26VXGbgpO5Q2BhDDJo2VuVDLRkFAJHU5HqrnUFvtrLlOuuw
-         L24LSFbrO+tM8EUjpHRPIQ3cGnVoNSZWWlG4EjwQgAisZ52T2w5uNygSYwdIOvxcQXwe
-         7Uo8/YBrBCFi4RAjTdp+hw9GcDbUuS6RWP3XPrl7YdZgMDLvyOIFoFBlujFCWV1l5821
-         6//3DTrI7YwcQP0xwioxRZVMLVmBh3ECqkS7P9MLBg4WLe2kDQtgTzrdfBX7iMLOR+Ev
-         ION99suRhnin9HLaCWdL3ezxQFKjdEDyyqQSWwKjj76qDaSRNRPpiPFbujoneK/ut38Y
-         //gg==
-X-Gm-Message-State: AFqh2kqQW0M3xjUbp2NQD73u8eqvBZMqDiOZ6NUjp7Js6nv233Sf05Pn
-        ALTrw3qJnnU1DgIIYc3mLIFttw==
-X-Google-Smtp-Source: AMrXdXubrhQqtg4cUYcuyLvM+GheoaOSWIKj5qAljwWYyGRxDWBGzdrY1eoFmMCwyS8yUhhNdaIgFQ==
-X-Received: by 2002:a05:6e02:13e1:b0:30c:276b:af80 with SMTP id w1-20020a056e0213e100b0030c276baf80mr606833ilj.0.1672356407796;
-        Thu, 29 Dec 2022 15:26:47 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id o8-20020a056e0214c800b0030c048e60bbsm3459978ilk.34.2022.12.29.15.26.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 15:26:47 -0800 (PST)
-Message-ID: <38aa4c96-00bf-d5e1-a820-806d7d7faf78@linuxfoundation.org>
-Date:   Thu, 29 Dec 2022 16:26:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221228144256.536395940@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221228144256.536395940@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 29 Dec 2022 18:28:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56009167E4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:28:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3F5E61985
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 23:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25E15C433EF;
+        Thu, 29 Dec 2022 23:28:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1672356503;
+        bh=hN/O7/DsuJPZHbYIvsoTEdsXX7zDNtXmGUbeZYQ3mIs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SUK0ZE5BGDKMs5/xALYV1saOFeKVO2nJ8FAJznkv7TQsU68qSa07W/sYlc1kPR6pj
+         dytmpDxpqcnK3icXGgVcwh4PKI62Maekws6/7SIxfdhfet9Ps0PfqZd9YbEMq+BvTZ
+         WFbuwIgw4im7BqFkB2o8w4LQjrikOasuiYlP1OVw=
+Date:   Thu, 29 Dec 2022 15:28:22 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <willy@infradead.org>
+Subject: Re: [PATCH] mm: huge_memory: convert split_huge_pages_all() to use
+ a folio
+Message-Id: <20221229152822.a283198e5df331caaac88a55@linux-foundation.org>
+In-Reply-To: <20221229122503.149083-1-wangkefeng.wang@huawei.com>
+References: <20221229122503.149083-1-wangkefeng.wang@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/22 07:31, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.86 release.
-> There are 731 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 30 Dec 2022 14:41:39 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.86-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Thu, 29 Dec 2022 20:25:03 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 
-Compiled and booted on my test system. No dmesg regressions.
+> Straightforwardly convert split_huge_pages_all() to use a folio.
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  mm/huge_memory.c | 25 +++++++++++++++++--------
+>  1 file changed, 17 insertions(+), 8 deletions(-)
+> 
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 266c4b557946..c8cbe7f62eaa 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2932,6 +2932,7 @@ static void split_huge_pages_all(void)
+>  {
+>  	struct zone *zone;
+>  	struct page *page;
+> +	struct folio *folio;
+>  	unsigned long pfn, max_zone_pfn;
+>  	unsigned long total = 0, split = 0;
+>  
+> @@ -2944,24 +2945,32 @@ static void split_huge_pages_all(void)
+>  			int nr_pages;
+>  
+>  			page = pfn_to_online_page(pfn);
+> -			if (!page || !get_page_unless_zero(page))
+> +			if (!page || PageTail(page))
+> +				continue;
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Why is the PageTail() test added?
 
-thanks,
--- Shuah
+> +			folio = page_folio(page);
+> +			if (!folio_try_get(folio))
+>  				continue;
+>  
+> -			if (zone != page_zone(page))
+> +			if (unlikely(page_folio(page) != folio))
+
+And this?
+
+> +				goto next;
+> +
+> +			if (zone != folio_zone(folio))
+>  				goto next;
+>  
+> -			if (!PageHead(page) || PageHuge(page) || !PageLRU(page))
+> +			if (!folio_test_large(folio)
+> +				|| folio_test_hugetlb(folio)
+> +				|| !folio_test_lru(folio))
+>  				goto next;
+>  
+>  			total++;
+> -			lock_page(page);
+> -			nr_pages = thp_nr_pages(page);
+> -			if (!split_huge_page(page))
+> +			folio_lock(folio);
+> +			nr_pages = folio_nr_pages(folio);
+> +			if (!split_folio(folio))
+>  				split++;
+>  			pfn += nr_pages - 1;
+> -			unlock_page(page);
+> +			folio_unlock(folio);
+>  next:
+> -			put_page(page);
+> +			folio_put(folio);
+>  			cond_resched();
+>  		}
+>  	}
 
