@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0337865883E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDBD658841
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiL2BHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 20:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S232706AbiL2BJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 20:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiL2BHS (ORCPT
+        with ESMTP id S231512AbiL2BJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 20:07:18 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1953E13DFA
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:07:18 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id k7-20020a056830168700b0067832816190so10766491otr.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:07:18 -0800 (PST)
+        Wed, 28 Dec 2022 20:09:11 -0500
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2E913E0B
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:09:10 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-15027746720so5228084fac.13
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:09:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GstWgD6pi9exQ0bv5bGn3BCV+taiIfBYlUvekjsyeZY=;
-        b=K2Iip4YfjTPzPv5Slmn56NAQiSADHK2Ch5wPeGXTuK38j7VbcAcuTcsIEAe3zRdNVt
-         hBom8WFoogY4Wy7Y1zEmuLe3e4XERVlKRAc70q6ZYznLlkuSM2nvJqgahtuAS1hdBSCk
-         DS53GKvdfdT/eYcbN4EMYXZwn3geq/TltULwpH86vE5+GESw9NUitWMsjrkJ1PFAgn7l
-         JRze5JuFdPrrzW/t1XQLQ1Pa1Ex6nRL46sXg9Uy+O6MIEN+tsXPKmSe/lEgPS9TG8lE8
-         x/HEXwHfWE3wk/cSv2iT1toK/BEZwmRCDGSor6khDQObfJwrTglk3SMWzZq9/MVA/113
-         2jWQ==
+        bh=CSxGIw+ZRj8V/kCVsC6Js3ZVqSjZmXsDp/GBkaKhYUE=;
+        b=oXgTdEjlZoCSNLk0P98/BmkldDqLU6kFo5uqsAiePgjZgvLlSalqrtav3TVPeGqAt0
+         Ds1s2VqQYf+ybpBHjoPinfAQm0uXY5rD5VHix0rVwzUsFzITY6/UJSDrRE6eT/6FrRlt
+         z8l3rs9U/zs/4YzdmVo3kBCE5iZg8/HK9+waZP4lCZf0zPufspMnu0BW0lf9kTMfv1rg
+         I5rzm7DQvW+UkfIXIUEj1b1VQuxnbQeWVadjEu8LOyJ6re/EibXrx2GTk0c5bKSAD/go
+         LAduq+7YBc3xS1j7VaNlzYUP8f/OPH2dJQ6A2+9Yw5+MP+GtxDFIp9xupMEO6GpN8k4D
+         7yDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GstWgD6pi9exQ0bv5bGn3BCV+taiIfBYlUvekjsyeZY=;
-        b=cQ1Tm+R85jFAoJsZFI/J5YDd+1bqHWbv1yzErJZ679pWwNBBL0yoqg9L+jFbC55C6k
-         ay+52cJCNlLiEWCdeZc99squDvMZ2iOSBkP994jYLes/hTQZ/Nipp9Q1ajW4UQ6iGBRQ
-         EHOG844TdlwZCKj/xgB4K9ymjU4j0ClF6D9AYFaR/NylnhbQ1gC7AAatrYZf5S8SVFaI
-         t94Zip5RmvAollGTWJCNkw7p/34d9VyvmrRK1Ela75nIih+ko6o0YA9kBLeovk8SHIbl
-         l9aGOXEMua/I8KEApQ8c3EQPVPJEooiWpJWiPRyAQHabuxtbrIlzsrWs1odJMtbafa2W
-         pq6w==
-X-Gm-Message-State: AFqh2kqJOCdfcxKEepl0L3CJf34wesk+StnE7A4GHq3lAKr9jz4kHO9T
-        6vtmK8tK5H1DehBRicwT4jbA5E+8QMTjxcjLEMfXtQ==
-X-Google-Smtp-Source: AMrXdXtTDVlw3GDkypP2l5QtbfdX9kedLos3gb565LD+nG8UaM7MjCjcFv8UR57dDARgapurQ6K5Hp6pgbNA/srFoU8=
-X-Received: by 2002:a9d:750d:0:b0:66e:abbc:cfe4 with SMTP id
- r13-20020a9d750d000000b0066eabbccfe4mr1774657otk.102.1672276037445; Wed, 28
- Dec 2022 17:07:17 -0800 (PST)
+        bh=CSxGIw+ZRj8V/kCVsC6Js3ZVqSjZmXsDp/GBkaKhYUE=;
+        b=3mVhqHLKuFFU9mtN/x3NXrKOmxS1Bmlzu3iiitEE1mc1LXxs/xlsgpWjm0NaGYqIWF
+         CShmpceN4sUtQ58NwMhcjOLTgBWrdtxcDxP1+64MWBZCHBefo7+KAtl5jRK3FGaAqia3
+         rUlnh/dIOy1Kjd/O2C1B1PVi3NbNvfSGj1Wef5lzDsD49OgA7bITwwrWjCexxynGay0V
+         KyEx2DU0n+MhJ1NANgJiYZzNVUZKEsOgyv9n0b4Sn77+0h4k+lnYjdAh7GIHAtOC7/ZX
+         /xzs+3IiDvzO0mg4lCmWLuBTk4027O6F7Nh1ihvtwSE2x1eRUveqZ+DJEYsIamX8f/t8
+         pegA==
+X-Gm-Message-State: AFqh2ko4cS7d8BG+jIUHWFevnkc/h8BIRl6lDq7GipVrln9Hzjd9giJw
+        OcLsXVjbeYjcQB22D0TBj6fqfIzYF/Hb8J2By3QHOA==
+X-Google-Smtp-Source: AMrXdXtDoQrhdeOOoONNNLue4VjIU2gFq400wqiDHHng8CJLddjmM/zWlyuce0ENdXblIvtb4zjitumPbisCQazPnn4=
+X-Received: by 2002:a05:6870:6c0b:b0:13b:96fc:18c1 with SMTP id
+ na11-20020a0568706c0b00b0013b96fc18c1mr1774410oab.291.1672276150033; Wed, 28
+ Dec 2022 17:09:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20221215163822.542622-1-arnd@kernel.org>
-In-Reply-To: <20221215163822.542622-1-arnd@kernel.org>
+References: <20221215164301.934805-1-arnd@kernel.org>
+In-Reply-To: <20221215164301.934805-1-arnd@kernel.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 29 Dec 2022 02:09:11 +0100
-Message-ID: <CACRpkdaUXkUCcP9oWq-Esp0A2ay=QoUuSfgUMYvKbjDehW_UsQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: sp7021: fix unused function warning
+Date:   Thu, 29 Dec 2022 02:11:04 +0100
+Message-ID: <CACRpkdZuA0Fo9Nh8s0RjMgHs35uwtK8VvhZYrr9nmr_gnku8RQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: at91: convert to NOIRQ_SYSTEM_SLEEP_PM_OPS
 To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        William Dean <williamsukatube@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Slark Xiao <slark_xiao@163.com>,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -70,20 +74,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 5:38 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Thu, Dec 15, 2022 at 5:43 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> sppctl_gpio_inv_get is only used from the debugfs code inside
-> of an #ifdef, so we get a warning without that:
+> With the old SET_NOIRQ_SYSTEM_SLEEP_PM_OPS, some configs result in a
+> build warning:
 >
-> drivers/pinctrl/sunplus/sppctl.c:393:12: error: 'sppctl_gpio_inv_get' defined but not used [-Werror=unused-function]
->   393 | static int sppctl_gpio_inv_get(struct gpio_chip *chip, unsigned int offset)
->       |            ^~~~~~~~~~~~~~~~~~~
+> drivers/pinctrl/pinctrl-at91.c:1668:12: error: 'at91_gpio_resume' defined but not used [-Werror=unused-function]
+>  1668 | static int at91_gpio_resume(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~
+> drivers/pinctrl/pinctrl-at91.c:1650:12: error: 'at91_gpio_suspend' defined but not used [-Werror=unused-function]
+>  1650 | static int at91_gpio_suspend(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~
 >
-> Replace the #ifdef with an IS_ENABLED() check that avoids the warning.
->
-> Fixes: aa74c44be19c ("pinctrl: Add driver for Sunplus SP7021")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 Patch applied!
