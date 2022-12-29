@@ -2,132 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA17B65886A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F08658870
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbiL2Bkf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Dec 2022 20:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S230106AbiL2BmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 20:42:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiL2Bkb (ORCPT
+        with ESMTP id S232848AbiL2Bl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 20:40:31 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FF681183D;
-        Wed, 28 Dec 2022 17:40:30 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BT1dNdR5006250, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BT1dNdR5006250
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 29 Dec 2022 09:39:23 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 29 Dec 2022 09:40:17 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 29 Dec 2022 09:40:16 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Thu, 29 Dec 2022 09:40:16 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        "Nitin Gupta" <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: RE: [RFC PATCH v1 18/19] rtw88: Add support for the SDIO based RTL8822CS chipset
-Thread-Topic: [RFC PATCH v1 18/19] rtw88: Add support for the SDIO based
- RTL8822CS chipset
-Thread-Index: AQHZGktEJugCouG9V0Kgbw48Ihs1066EFpog
-Date:   Thu, 29 Dec 2022 01:40:16 +0000
-Message-ID: <59ab30de2c33438ebad948b0a36aad21@realtek.com>
-References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
- <20221227233020.284266-19-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20221227233020.284266-19-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/28_=3F=3F_10:54:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 28 Dec 2022 20:41:58 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9DCB912757
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:41:57 -0800 (PST)
+Received: (qmail 291561 invoked by uid 1000); 28 Dec 2022 20:41:56 -0500
+Date:   Wed, 28 Dec 2022 20:41:56 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     Oliver Neukum <oneukum@suse.com>, srinivas.kandagatla@linaro.org,
+        mathias.nyman@intel.com, perex@perex.cz, broonie@kernel.org,
+        lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
+        robh+dt@kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [RFC PATCH 06/14] usb: core: hcd: Introduce USB HCD APIs for
+ interrupter management
+Message-ID: <Y6zwZOquZOTZfnvP@rowland.harvard.edu>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-7-quic_wcheng@quicinc.com>
+ <Y6ca8IKLK9g497Qv@rowland.harvard.edu>
+ <e1203849-01b4-b196-36f3-76d58dd7c724@quicinc.com>
+ <bf1011a8-c746-c465-f161-f0293409d922@suse.com>
+ <Y6xd1c3s2XPpOqfi@rowland.harvard.edu>
+ <559030ff-112b-e0a8-b278-72f909724496@quicinc.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <559030ff-112b-e0a8-b278-72f909724496@quicinc.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Wednesday, December 28, 2022 7:30 AM
-> To: linux-wireless@vger.kernel.org
-> Cc: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; Ulf Hansson
-> <ulf.hansson@linaro.org>; linux-kernel@vger.kernel.org; netdev@vger.kernel.org;
-> linux-mmc@vger.kernel.org; Chris Morgan <macroalpha82@gmail.com>; Nitin Gupta <nitin.gupta981@gmail.com>;
-> Neo Jou <neojou@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
-> Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [RFC PATCH v1 18/19] rtw88: Add support for the SDIO based RTL8822CS chipset
+On Wed, Dec 28, 2022 at 12:31:16PM -0800, Wesley Cheng wrote:
+> Hi Alan,
 > 
-> Wire up RTL8822CS chipset support using the new rtw88 SDIO HCI code as
-> well as the existing RTL8822C chipset code.
+> On 12/28/2022 7:16 AM, Alan Stern wrote:
+> > On Wed, Dec 28, 2022 at 09:59:03AM +0100, Oliver Neukum wrote:
+> > > 
+> > > 
+> > > On 27.12.22 22:07, Wesley Cheng wrote:
+> > > 
+> > > > 
+> > > > Hmmm...maybe I should change the name of the API then to avoid the confusion.  Yes, usb_hcd_flush_endpoint() does ensure that URBs submitted to the EP are stopped.  However, with this offloading concept, we aren't actually submitting URBs from the main processor, so the ep->urb_list will be empty.
+> > > > 
+> > > > This means the usb_hcd_flush_endpoint() API won't actually do anything.  What we need is to ensure that we send a XHCI stop ep command to the controller.
+> > > 
+> > > That is a concept specific to XHCI, yet you are adding a generic
+> > > API. The namin should reflect that. usb_quiesce_endpoint() ?
+> > 
+> > Or even xhci_send_stop_ep_cmd(), which is what the routine is intended
+> > to do.
+> > 
 > 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->  drivers/net/wireless/realtek/rtw88/Kconfig    | 11 ++++++
->  drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
->  .../net/wireless/realtek/rtw88/rtw8822cs.c    | 34 +++++++++++++++++++
->  3 files changed, 48 insertions(+)
->  create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8822cs.c
-> 
+> Just to clarify, you're talking about renaming the API that was added in the
+> XHCI driver, correct?
 
-[...]
+To be precise, we're talking about renaming your usb_hcd_stop_endpoint() 
+function, although similar arguments probably apply to your 
+usb_free_interrupter(), usb_set_interrupter(), and 
+usb_hcd_get_transfer_resource() routines.
 
-> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8822cs.c
-> b/drivers/net/wireless/realtek/rtw88/rtw8822cs.c
-> new file mode 100644
-> index 000000000000..3d7279d70aa9
-> --- /dev/null
-> +++ b/drivers/net/wireless/realtek/rtw88/rtw8822cs.c
-> @@ -0,0 +1,34 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> +// Copyright(c) Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+You wrote earlier:
 
-Normally, we should use '/* ... */' style comment. The exception is 
-'// SPDX-License-Identifier: ...' in *.c
+	The XHCI driver is the one that maintains the list of 
+	interrupters that are available, so the locking was placed in 
+	the XHCI driver versus adding it in the core hcd layer.
 
-Therefore, here should be:
+The "stop ep" functionality and other interrupter management things you 
+want to add seem a lot like this locking stuff.  Since you decided to 
+put the locking in the xhci-hcd driver instead of the core HCD layer, it 
+would be logical to do the same with the "stop ep" and other routines.  
+Which means there shouldn't be any need to make changes to hcd.c or 
+include/linux/usb/hcd.h.
 
-// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-/* Copyright(c) Martin Blumenstingl <martin.blumenstingl@googlemail.com>
- */
-
-As well as other rtw88*s.c
-
---
-Ping-Ke
-
+Alan Stern
