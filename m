@@ -2,183 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C761659079
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5B065907D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbiL2Sev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 13:34:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
+        id S231207AbiL2SiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 13:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233994AbiL2SeQ (ORCPT
+        with ESMTP id S229773AbiL2SiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 13:34:16 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E710FE00
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:34:15 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id fc4so46784038ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:34:15 -0800 (PST)
+        Thu, 29 Dec 2022 13:38:12 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940D6207
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:38:10 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id n12so7118319pjp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:38:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qOwNzTdUKlF0YVErH+m4Hrlu8Y/CqgzRzrTuhq10EAc=;
-        b=RpPdq2z8ewpQAJ+Pq0zFsE+golr0XOyCeAmQ8xF4SnuhD4fy8ggns0HkMbA9lvQlAp
-         aVnP0Dxbo/eGyNh2LUIz/M06a2X1mMCyh9d/nKEIqcueDwVj1n/ADSztLB6cGDJcEtBr
-         yeaC241RtYWYMMM2RuU3I0ONfM54CJEgGfnrvMXDiScWPqMn36xAXArGcG4uOFJO77nX
-         zJQTj/7gPqJ+P7c++wPIcLhUk2wojbzpnIEn/Ijy4FW4RMuTMc9TxmSE+x3cP2zZ4OzF
-         qlIkuB+/1eHikr40668fcd4xOaSd9shwA6grac+jhojdIWVB2HkgGCcn5xJSyUzLcOC9
-         4mzQ==
+        bh=JbrQz0kg29Xa0GDRC8ClbCWM8goTDo4dB/HNu/0RBic=;
+        b=Iom+BzmpkbCSWAfxsPg0W4sRHVtvaB49EFLSRxp6WXmDIsMs/FCKosy/c0Ek7UxrRv
+         FLF/loNKG5Km4+1PXzUZxquGpVxkUOVz1ohxTghfGbXGnEPk+V0xnjW2wRYqp+0LtzK7
+         xTeTNEPWCbJICWJjKsz5VJ4z/yqQLJeSE/lJ/rMv8JSR0unV5xXU+9lhPFt6nlAvkH2c
+         jrzF7fBGQPH6DIgtAuGT7DUNhpx8nKKUTmsrm1c5VlzbtSh/zt3g0UpIZ8ZzZ8ATZOfb
+         UPElKwBp7h7+DqdNOfHqbxLL5uaBGf8/4OJ+BV0oCkBrKmvoGc879fepMO7/Phnggbgd
+         BNPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qOwNzTdUKlF0YVErH+m4Hrlu8Y/CqgzRzrTuhq10EAc=;
-        b=3GOBwu//Mg61NjRW64Jz7XjDyO5EpFaGYMkpvnHNbTP3zLQRbxAPwyrdMJsrPDhyUj
-         afcNEgBV+gdOjyV058T50MlljmSIy07emH3WkpkUlL38IoRfGwhkTLZfkQNpYk7TcwO8
-         BXjLs/Ua5g+NrsMA68qcwCxP4SloLxALjdMiqAL74s0XAHojFIhxfTxRaN4s9Ai0Zaho
-         wG44ZTUhPr6RMuNvdfQXPGnjvjf3Z7aeoDIDX+HnOamRloroyd7SfgVdXRT58uzoh0ut
-         hPE/EZ47YcytU/Nf1Z0xJ9kPViYNgYLzccx+552vmgxah+3MAzDyQ6Ee7oqYtj+67KLi
-         Wtgg==
-X-Gm-Message-State: AFqh2kojAyPKG+/Hca3gp+Aw1mrEDu6Wpa0rXFCdiYpVIWCrBjilvl9W
-        tsSMsYid0t9zsTrhzdfxbZSRMg==
-X-Google-Smtp-Source: AMrXdXvVMq4b7/E7hSZxnG5HN5oB/9/neiMONpxkkMMUQmt2TjO7i8r2qUhnlCxDRnksiZpVIL3ulg==
-X-Received: by 2002:a17:907:c70c:b0:81e:9027:dedc with SMTP id ty12-20020a170907c70c00b0081e9027dedcmr25356911ejc.39.1672338854528;
-        Thu, 29 Dec 2022 10:34:14 -0800 (PST)
-Received: from planet9.chello.ie (2001-1c06-2302-5600-12a8-8cf4-e3f6-f90f.cable.dynamic.v6.ziggo.nl. [2001:1c06:2302:5600:12a8:8cf4:e3f6:f90f])
-        by smtp.gmail.com with ESMTPSA id g22-20020a1709064e5600b007c0688a68cbsm9013936ejw.176.2022.12.29.10.34.13
+        bh=JbrQz0kg29Xa0GDRC8ClbCWM8goTDo4dB/HNu/0RBic=;
+        b=6DqswquUK6E8AMKdki5qvDEvIsjYwWKBjoNYvZEDYQdxllNPSC/LQ2K0E98uiXO/uL
+         Sm6/fFl3GlYOHoImUbNryf1v2OJxcwZDoM6CUVGxVzsIKuSt47x7UP43uCDZHPlMEfN4
+         v8XilV5BU3vIW9dSq/9wqaUhJNCPEnfMIXW1xKKZ9mveg7FXYpI3Te8taw3joZXvL8y6
+         WxsCPpdYHq2YX2FlLacAIcup23CCAFWrdpxeBhi6tfH+Gvt/jTFO0OHCNIyoGeMEPFtJ
+         qkSTIZ3H7Jx+4lLZ8cPW5eC6d72hXsxJiin6Mjd4XnuVR+h106iE/Gk85inmcgllKxIL
+         8NGg==
+X-Gm-Message-State: AFqh2kpT1eW3NZ/iVNPHtrAU4b8J1ZMs3z8tFfazTsZMWPA9P2rOknYW
+        j6UEeo5MIZ9wiMr5A+cENTM=
+X-Google-Smtp-Source: AMrXdXup1GjWb1k9WrctBbG+G+m+lAL5Ir5yQzr14N98Zgy349FFZFUwqsocNJ4OvcCpEjpTKmrRiQ==
+X-Received: by 2002:a17:90b:2791:b0:226:3a7c:f97a with SMTP id pw17-20020a17090b279100b002263a7cf97amr1192193pjb.26.1672339089943;
+        Thu, 29 Dec 2022 10:38:09 -0800 (PST)
+Received: from ubuntu-server.local ([2600:1700:3ec7:421f:61cf:da7:ef83:e43e])
+        by smtp.googlemail.com with ESMTPSA id mq18-20020a17090b381200b001df264610c4sm11852655pjb.0.2022.12.29.10.38.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 10:34:14 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     agross@kernel.org, andersson@kernel.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bryan.odonoghue@linaro.org
-Subject: [PATCH v2 2/2] phy: qcom-usb-hs: Add qcom,dp-manual-pullup logic
-Date:   Thu, 29 Dec 2022 18:34:10 +0000
-Message-Id: <20221229183410.683584-3-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221229183410.683584-1-bryan.odonoghue@linaro.org>
-References: <20221229183410.683584-1-bryan.odonoghue@linaro.org>
+        Thu, 29 Dec 2022 10:38:09 -0800 (PST)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     t.zhang2@samsung.com, Tong Zhang <ztong0001@gmail.com>
+Subject: [PATCH v2] nvme-pci: fix error handling in nvme_pci_enable()
+Date:   Thu, 29 Dec 2022 10:37:31 -0800
+Message-Id: <20221229183731.4013056-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <Y63WsX8Hvxep/dtN@kbusch-mbp.dhcp.thefacebook.com>
+References: <Y63WsX8Hvxep/dtN@kbusch-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Downstream has a flag called qcom,dp-manual-pullup which informs the
-downstream driver if it should toggle ULPI_MISC_A_VBUSVLDEXTSEL and
-ULPI_MISC_A_VBUSVLDEXT.
+There are two issues in nvme_pci_enable()
+1) If pci_alloc_irq_vectors() fails, device is left enabled. Fix this by
+adding a goto disable statement.
+2) nvme_pci_configure_admin_queue could return -ENODEV, in this case,
+we will need to free IRQ properly. Otherwise following warning could be
+triggered
 
-Downstream states:
+[    5.286752] WARNING: CPU: 0 PID: 33 at kernel/irq/irqdomain.c:253 irq_domain_remove+0x12d/0x140
+[    5.290547] Call Trace:
+[    5.290626]  <TASK>
+[    5.290695]  msi_remove_device_irq_domain+0xc9/0xf0
+[    5.290843]  msi_device_data_release+0x15/0x80
+[    5.290978]  release_nodes+0x58/0x90
+[    5.293788] WARNING: CPU: 0 PID: 33 at kernel/irq/msi.c:276 msi_device_data_release+0x76/0x80
+[    5.297573] Call Trace:
+[    5.297651]  <TASK>
+[    5.297719]  release_nodes+0x58/0x90
+[    5.297831]  devres_release_all+0xef/0x140
+[    5.298339]  device_unbind_cleanup+0x11/0xc0
+[    5.298479]  really_probe+0x296/0x320
 
-"qcom,dp-manual-pullup: If present, vbus is not routed to USB
-        controller/phy and controller driver therefore enables pull-up
-        explicitly before starting controller using usbcmd run/stop bit."
-
-Working with a system that has both an external Type-C port controller and
-an internal USB Hub results in a situation where VBUS is not connected to
-the SoC.
-
-In this case we still need to set the DP pullup.
-
-This patch enables and disables the DP pullup on PHY power_on and power_off
-respectively if the DT has declared the bool "qcom,enable-vbus-pullup"
-effectively replicating the downstream logic to the same effect.
-
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Fixes: a6ee7f19ebfd ("nvme-pci: call nvme_pci_configure_admin_queue from nvme_pci_enable")
+Co-developed-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
 ---
- drivers/phy/qualcomm/phy-qcom-usb-hs.c | 36 ++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+v2: handle pci_alloc_irq_vectors() error
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-usb-hs.c b/drivers/phy/qualcomm/phy-qcom-usb-hs.c
-index 53e46c220a3aa..45c94f6722c66 100644
---- a/drivers/phy/qualcomm/phy-qcom-usb-hs.c
-+++ b/drivers/phy/qualcomm/phy-qcom-usb-hs.c
-@@ -37,6 +37,7 @@ struct qcom_usb_hs_phy {
- 	struct ulpi_seq *init_seq;
- 	struct extcon_dev *vbus_edev;
- 	struct notifier_block vbus_notify;
-+	u8 enable_dp_pullup:1;
- };
+ drivers/nvme/host/pci.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index f0f8027644bb..3255e7a6f643 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -2530,7 +2530,7 @@ static int nvme_pci_enable(struct nvme_dev *dev)
+ 	 */
+ 	result = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
+ 	if (result < 0)
+-		return result;
++		goto disable;
  
- static int qcom_usb_hs_phy_set_mode(struct phy *phy,
-@@ -105,6 +106,23 @@ qcom_usb_hs_phy_vbus_notifier(struct notifier_block *nb, unsigned long event,
- 	return ulpi_write(uphy->ulpi, addr, ULPI_MISC_A_VBUSVLDEXT);
- }
+ 	dev->ctrl.cap = lo_hi_readq(dev->bar + NVME_REG_CAP);
  
-+static int qcom_usb_hs_phy_enable_dp_pullup(struct ulpi *ulpi, bool enable)
-+{
-+	u8 addr;
-+	int ret;
-+
-+	if (enable)
-+		addr = ULPI_SET(ULPI_MISC_A);
-+	else
-+		addr = ULPI_CLR(ULPI_MISC_A);
-+
-+	ret = ulpi_write(ulpi, addr, ULPI_MISC_A_VBUSVLDEXTSEL);
-+	if (ret)
-+		return ret;
-+
-+	return ulpi_write(ulpi, addr, ULPI_MISC_A_VBUSVLDEXT);
-+}
-+
- static int qcom_usb_hs_phy_power_on(struct phy *phy)
- {
- 	struct qcom_usb_hs_phy *uphy = phy_get_drvdata(phy);
-@@ -154,6 +172,12 @@ static int qcom_usb_hs_phy_power_on(struct phy *phy)
- 			goto err_ulpi;
- 	}
+@@ -2584,8 +2584,13 @@ static int nvme_pci_enable(struct nvme_dev *dev)
+ 	pci_enable_pcie_error_reporting(pdev);
+ 	pci_save_state(pdev);
  
-+	if (uphy->enable_dp_pullup) {
-+		ret = qcom_usb_hs_phy_enable_dp_pullup(ulpi, true);
-+		if (ret)
-+			goto err_ulpi;
-+	}
-+
- 	if (uphy->vbus_edev) {
- 		state = extcon_get_state(uphy->vbus_edev, EXTCON_USB);
- 		/* setup initial state */
-@@ -180,10 +204,19 @@ static int qcom_usb_hs_phy_power_on(struct phy *phy)
- static int qcom_usb_hs_phy_power_off(struct phy *phy)
- {
- 	struct qcom_usb_hs_phy *uphy = phy_get_drvdata(phy);
-+	struct ulpi *ulpi = uphy->ulpi;
-+	int ret;
+-	return nvme_pci_configure_admin_queue(dev);
++	result = nvme_pci_configure_admin_queue(dev);
++	if (result)
++		goto free_irq;
++	return result;
  
- 	if (uphy->vbus_edev)
- 		extcon_unregister_notifier(uphy->vbus_edev, EXTCON_USB,
- 					   &uphy->vbus_notify);
-+
-+	if (uphy->enable_dp_pullup) {
-+		ret = qcom_usb_hs_phy_enable_dp_pullup(ulpi, false);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	regulator_disable(uphy->v3p3);
- 	regulator_disable(uphy->v1p8);
- 	clk_disable_unprepare(uphy->sleep_clk);
-@@ -229,6 +262,9 @@ static int qcom_usb_hs_phy_probe(struct ulpi *ulpi)
- 	/* NUL terminate */
- 	uphy->init_seq[size / 2].addr = uphy->init_seq[size / 2].val = 0;
- 
-+	if (of_property_read_bool(ulpi->dev.of_node, "qcom,dp-manual-pullup"))
-+		uphy->enable_dp_pullup = 1;
-+
- 	uphy->ref_clk = clk = devm_clk_get(&ulpi->dev, "ref");
- 	if (IS_ERR(clk))
- 		return PTR_ERR(clk);
++ free_irq:
++	pci_free_irq_vectors(pdev);
+  disable:
+ 	pci_disable_device(pdev);
+ 	return result;
 -- 
-2.34.1
+2.25.1
 
