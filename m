@@ -2,392 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A175B658B7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29469658B8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbiL2KPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 05:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
+        id S233356AbiL2KQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 05:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbiL2KNS (ORCPT
+        with ESMTP id S233197AbiL2KNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 05:13:18 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A08413F90
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:05:20 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id bp15so26864976lfb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:05:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BEg+7O0bMcFEptEbMe/48vx9Lz2TOL8oqK4EcTHhCs4=;
-        b=CE4Ow8eEOaHlnpQ1GHsWMuywBnuogDiZdTpjmniuMz8ARpZHu39/8l87YM1YM6ha/L
-         WJAjpM12VSr2M/d4NA22GxFFeOAIKZMxklnI/7z5yLVNsK4Sgs7CAaJbyHk2rL8hmjJU
-         siYTMWvNLCuSNPTimPu3qXgODpndYDKkKl3Fyi8W6Li3yHsBCI0YotSi7L6wDcL6Rvfi
-         JUIuqA48vSJpioqvRLyaNofBjvMv4gOzNXWuGMyGBRPGfwBJbFYPUw2YR3wkH9ZqUxVq
-         o37xok2HpVnHrafdcLOLIrYlWbmgX2xlz/IhOIEvvBaeWBqeSqPGjieNX/dVbAtl6KC4
-         Iv4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BEg+7O0bMcFEptEbMe/48vx9Lz2TOL8oqK4EcTHhCs4=;
-        b=fES1smYbDgnWuC2ZPkO5dJj1A0Vl5egUSSyPkx5qr1Q+ZpCzG5CQ9OvYFsnmOCTi9q
-         ujnafE3uUOGQt3xq8qfmFBws4CxzeAT+bHRQS9jI9lRD9AK9ZPA8Zg9kn862YG98ORzT
-         +3O+20yIiEnPBlDKpT1frOYuNTLETscgGq6Gua5HX/j7YWPnA7V1yqn99kfiw6luyyS5
-         KXQAByg97+LJpodgIqidWylERUJ4bnvI5vgpuLH7Y5qrIY524IObfo9MVQ93HL8vv7Yy
-         sAVVp0dwlN8Rv57inFmj3oqEl9AlvPKAmpMsdKrV8MIzJfFdpxYUzQLEpVZN+/pr/1CB
-         7k4g==
-X-Gm-Message-State: AFqh2kqKVhlgwJbg2W0MPGpOHTyBhhPC11XirnIBrqR6+snEK9/4o4Rx
-        jeLZbU1GR3krbQ7jkpxE6Q4zZA==
-X-Google-Smtp-Source: AMrXdXsMvEauy81PnqJaGLlZdF8KNqz/0zuKpjGhSqfaqVrN3I7pe1eadByUUx3I9YHQP0xniH/l4A==
-X-Received: by 2002:ac2:5e6a:0:b0:4b0:f376:225a with SMTP id a10-20020ac25e6a000000b004b0f376225amr10207832lfr.63.1672308318806;
-        Thu, 29 Dec 2022 02:05:18 -0800 (PST)
-Received: from localhost.localdomain (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id x2-20020a0565123f8200b004b590b0c084sm2959896lfa.3.2022.12.29.02.05.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 02:05:18 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sm8150: Wire up MDSS
-Date:   Thu, 29 Dec 2022 11:05:10 +0100
-Message-Id: <20221229100511.979972-3-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221229100511.979972-1-konrad.dybcio@linaro.org>
-References: <20221229100511.979972-1-konrad.dybcio@linaro.org>
+        Thu, 29 Dec 2022 05:13:41 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4C56479;
+        Thu, 29 Dec 2022 02:07:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672308438; x=1703844438;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=paLSuCdEXTeMtOuhafEQtKGV/Qef2iO8sy8oVi1aEGU=;
+  b=UfD1OYy7Z9ZjNLgmBXD4uqzag7aRexw97vK7QqnnkI5vyU0HEvWyaF+y
+   CcO9jbddeQyqKrYQ/m24P8DVCUP8IDbvwK0j2JLnylsrwRIVd6r69wY3e
+   hUJ6NfjJesq9Jpt8mHWX4yXn6sMK5ZWheBCbeDuM6QDHqKIOzUQwCEQz2
+   Rh7lZAO2sLivItCBdIFuWBT4o61oXEzLekthxz/h2E6S63/SSAZ+X7mbS
+   DSlZHD9jjW5QNA+XD0/1VZZKtlyjGaAd4YnUh23Dmf1w2mciIGteVD0T4
+   T8gIOZ3/ePLhcthS1uJRHhwkXOWJbI1gGkYgWSFvvxVM5tngKPabve4X1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="308775654"
+X-IronPort-AV: E=Sophos;i="5.96,283,1665471600"; 
+   d="scan'208";a="308775654"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 02:07:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="685945234"
+X-IronPort-AV: E=Sophos;i="5.96,283,1665471600"; 
+   d="scan'208";a="685945234"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 29 Dec 2022 02:07:16 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 576EC159; Thu, 29 Dec 2022 12:07:47 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 1/1] pinctrl: nomadik: Add missing header(s)
+Date:   Thu, 29 Dec 2022 12:07:46 +0200
+Message-Id: <20221229100746.35047-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add required nodes for MDSS and hook up provided clocks in DISPCC.
-This setup is almost identical to 8[23]50.
+Do not imply that some of the generic headers may be always included.
+Instead, include explicitly what we are direct user of.
 
-Tested-by: Marijn Suijten <marijn.suijten@somainline.org> # Xperia 5
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+While at it, sort headers alphabetically.
+
+Fixes: e5530adc17a7 ("pinctrl: Clean up headers")
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-v1 -> v2:
-- Pick up tags
-- mdss@ -> display-subsystem@
 
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 271 ++++++++++++++++++++++++++-
- 1 file changed, 267 insertions(+), 4 deletions(-)
+v2: removed double inclusion (Randy)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index c7935f7a2926..f7721ec37b03 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -9,6 +9,7 @@
- #include <dt-bindings/power/qcom-rpmpd.h>
- #include <dt-bindings/soc/qcom,rpmh-rsc.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/clock/qcom,dispcc-sm8150.h>
- #include <dt-bindings/clock/qcom,gcc-sm8150.h>
- #include <dt-bindings/clock/qcom,gpucc-sm8150.h>
- #include <dt-bindings/interconnect/qcom,osm-l3.h>
-@@ -3579,14 +3580,276 @@ camnoc_virt: interconnect@ac00000 {
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
+ drivers/pinctrl/nomadik/pinctrl-ab8500.c      |  3 +-
+ drivers/pinctrl/nomadik/pinctrl-ab8505.c      |  3 +-
+ drivers/pinctrl/nomadik/pinctrl-abx500.c      | 32 +++++++++++--------
+ drivers/pinctrl/nomadik/pinctrl-abx500.h      |  4 +++
+ .../pinctrl/nomadik/pinctrl-nomadik-db8500.c  |  3 ++
+ .../pinctrl/nomadik/pinctrl-nomadik-stn8815.c |  3 ++
+ drivers/pinctrl/nomadik/pinctrl-nomadik.c     | 32 ++++++++++---------
+ drivers/pinctrl/nomadik/pinctrl-nomadik.h     |  5 +++
+ 8 files changed, 54 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/pinctrl/nomadik/pinctrl-ab8500.c b/drivers/pinctrl/nomadik/pinctrl-ab8500.c
+index 3106a21cd277..d7b244df058f 100644
+--- a/drivers/pinctrl/nomadik/pinctrl-ab8500.c
++++ b/drivers/pinctrl/nomadik/pinctrl-ab8500.c
+@@ -6,9 +6,10 @@
+  */
  
-+		mdss: display-subsystem@ae00000 {
-+			compatible = "qcom,sm8150-mdss";
-+			reg = <0 0x0ae00000 0 0x1000>;
-+			reg-names = "mdss";
+ #include <linux/kernel.h>
+-#include <linux/gpio/driver.h>
+ #include <linux/pinctrl/pinctrl.h>
 +
-+			interconnects = <&mmss_noc MASTER_MDP_PORT0 &mc_virt SLAVE_EBI_CH0>,
-+					<&mmss_noc MASTER_MDP_PORT1 &mc_virt SLAVE_EBI_CH0>;
-+			interconnect-names = "mdp0-mem", "mdp1-mem";
+ #include <linux/mfd/abx500/ab8500.h>
 +
-+			power-domains = <&dispcc MDSS_GDSC>;
+ #include "pinctrl-abx500.h"
+ 
+ /* All the pins that can be used for GPIO and some other functions */
+diff --git a/drivers/pinctrl/nomadik/pinctrl-ab8505.c b/drivers/pinctrl/nomadik/pinctrl-ab8505.c
+index b93af1fb37f0..45aa958b573e 100644
+--- a/drivers/pinctrl/nomadik/pinctrl-ab8505.c
++++ b/drivers/pinctrl/nomadik/pinctrl-ab8505.c
+@@ -6,9 +6,10 @@
+  */
+ 
+ #include <linux/kernel.h>
+-#include <linux/gpio/driver.h>
+ #include <linux/pinctrl/pinctrl.h>
 +
-+			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+				 <&gcc GCC_DISP_HF_AXI_CLK>,
-+				 <&gcc GCC_DISP_SF_AXI_CLK>,
-+				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
-+			clock-names = "iface", "bus", "nrt_bus", "core";
+ #include <linux/mfd/abx500/ab8500.h>
 +
-+			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
+ #include "pinctrl-abx500.h"
+ 
+ /* All the pins that can be used for GPIO and some other functions */
+diff --git a/drivers/pinctrl/nomadik/pinctrl-abx500.c b/drivers/pinctrl/nomadik/pinctrl-abx500.c
+index 7aa534576a45..28c3403df1b0 100644
+--- a/drivers/pinctrl/nomadik/pinctrl-abx500.c
++++ b/drivers/pinctrl/nomadik/pinctrl-abx500.c
+@@ -6,33 +6,37 @@
+  *
+  * Driver allows to use AxB5xx unused pins to be used as GPIO
+  */
+-#include <linux/kernel.h>
+-#include <linux/types.h>
+-#include <linux/slab.h>
+-#include <linux/init.h>
++#include <linux/bitops.h>
+ #include <linux/err.h>
+-#include <linux/of.h>
+-#include <linux/of_device.h>
+-#include <linux/platform_device.h>
+ #include <linux/gpio/driver.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
+ #include <linux/irq.h>
+ #include <linux/irqdomain.h>
+-#include <linux/interrupt.h>
+-#include <linux/bitops.h>
++#include <linux/kernel.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/seq_file.h>
++#include <linux/slab.h>
++#include <linux/types.h>
 +
-+			iommus = <&apps_smmu 0x800 0x420>;
+ #include <linux/mfd/abx500.h>
+ #include <linux/mfd/abx500/ab8500.h>
+-#include <linux/pinctrl/pinctrl.h>
 +
-+			status = "disabled";
+ #include <linux/pinctrl/consumer.h>
+-#include <linux/pinctrl/pinmux.h>
+-#include <linux/pinctrl/pinconf.h>
+-#include <linux/pinctrl/pinconf-generic.h>
+ #include <linux/pinctrl/machine.h>
++#include <linux/pinctrl/pinconf-generic.h>
++#include <linux/pinctrl/pinconf.h>
++#include <linux/pinctrl/pinctrl.h>
++#include <linux/pinctrl/pinmux.h>
+ 
+-#include "pinctrl-abx500.h"
+ #include "../core.h"
+ #include "../pinconf.h"
+ #include "../pinctrl-utils.h"
+ 
++#include "pinctrl-abx500.h"
 +
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
+ /*
+  * GPIO registers offset
+  * Bank: 0x10
+diff --git a/drivers/pinctrl/nomadik/pinctrl-abx500.h b/drivers/pinctrl/nomadik/pinctrl-abx500.h
+index 90bb12fe8073..d67522084675 100644
+--- a/drivers/pinctrl/nomadik/pinctrl-abx500.h
++++ b/drivers/pinctrl/nomadik/pinctrl-abx500.h
+@@ -2,6 +2,10 @@
+ #ifndef PINCTRL_PINCTRL_ABx500_H
+ #define PINCTRL_PINCTRL_ABx500_H
+ 
++#include <linux/types.h>
 +
-+			mdss_mdp: display-controller@ae01000 {
-+				compatible = "qcom,sm8150-dpu";
-+				reg = <0 0x0ae01000 0 0x8f000>,
-+				      <0 0x0aeb0000 0 0x2008>;
-+				reg-names = "mdp", "vbif";
++struct pinctrl_pin_desc;
 +
-+				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&gcc GCC_DISP_HF_AXI_CLK>,
-+					 <&dispcc DISP_CC_MDSS_MDP_CLK>,
-+					 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-+				clock-names = "iface", "bus", "core", "vsync";
+ /* Package definitions */
+ #define PINCTRL_AB8500	0
+ #define PINCTRL_AB8505	1
+diff --git a/drivers/pinctrl/nomadik/pinctrl-nomadik-db8500.c b/drivers/pinctrl/nomadik/pinctrl-nomadik-db8500.c
+index 758d21f0a850..490e0959e8be 100644
+--- a/drivers/pinctrl/nomadik/pinctrl-nomadik-db8500.c
++++ b/drivers/pinctrl/nomadik/pinctrl-nomadik-db8500.c
+@@ -1,6 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/kernel.h>
++#include <linux/types.h>
 +
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-+				assigned-clock-rates = <19200000>;
+ #include <linux/pinctrl/pinctrl.h>
 +
-+				operating-points-v2 = <&mdp_opp_table>;
-+				power-domains = <&rpmhpd SM8150_MMCX>;
+ #include "pinctrl-nomadik.h"
+ 
+ /* All the pins that can be used for GPIO and some other functions */
+diff --git a/drivers/pinctrl/nomadik/pinctrl-nomadik-stn8815.c b/drivers/pinctrl/nomadik/pinctrl-nomadik-stn8815.c
+index c0d7c86d0939..1552222ac68e 100644
+--- a/drivers/pinctrl/nomadik/pinctrl-nomadik-stn8815.c
++++ b/drivers/pinctrl/nomadik/pinctrl-nomadik-stn8815.c
+@@ -1,6 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/kernel.h>
++#include <linux/types.h>
 +
-+				interrupt-parent = <&mdss>;
-+				interrupts = <0>;
+ #include <linux/pinctrl/pinctrl.h>
 +
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
+ #include "pinctrl-nomadik.h"
+ 
+ /* All the pins that can be used for GPIO and some other functions */
+diff --git a/drivers/pinctrl/nomadik/pinctrl-nomadik.c b/drivers/pinctrl/nomadik/pinctrl-nomadik.c
+index f7d02513d8cc..86a638077a69 100644
+--- a/drivers/pinctrl/nomadik/pinctrl-nomadik.c
++++ b/drivers/pinctrl/nomadik/pinctrl-nomadik.c
+@@ -7,30 +7,34 @@
+  *   Rewritten based on work by Prafulla WADASKAR <prafulla.wadaskar@st.com>
+  * Copyright (C) 2011-2013 Linus Walleij <linus.walleij@linaro.org>
+  */
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/device.h>
+-#include <linux/platform_device.h>
+-#include <linux/io.h>
++#include <linux/bitops.h>
+ #include <linux/clk.h>
++#include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/gpio/driver.h>
+-#include <linux/spinlock.h>
++#include <linux/init.h>
+ #include <linux/interrupt.h>
+-#include <linux/slab.h>
+-#include <linux/of_device.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
+ #include <linux/of_address.h>
+-#include <linux/bitops.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/seq_file.h>
++#include <linux/slab.h>
++#include <linux/spinlock.h>
 +
-+					port@0 {
-+						reg = <0>;
-+						dpu_intf1_out: endpoint {
-+							remote-endpoint = <&mdss_dsi0_in>;
-+						};
-+					};
++/* Since we request GPIOs from ourself */
++#include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/machine.h>
++#include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinctrl.h>
+ #include <linux/pinctrl/pinmux.h>
+-#include <linux/pinctrl/pinconf.h>
+-/* Since we request GPIOs from ourself */
+-#include <linux/pinctrl/consumer.h>
+-#include "pinctrl-nomadik.h"
 +
-+					port@1 {
-+						reg = <1>;
-+						dpu_intf2_out: endpoint {
-+							remote-endpoint = <&mdss_dsi1_in>;
-+						};
-+					};
-+				};
+ #include "../core.h"
+ #include "../pinctrl-utils.h"
+ 
++#include "pinctrl-nomadik.h"
 +
-+				mdp_opp_table: opp-table {
-+					compatible = "operating-points-v2";
+ /*
+  * The GPIO module in the Nomadik family of Systems-on-Chip is an
+  * AMBA device, managing 32 pins and alternate functions.  The logic block
+@@ -907,8 +911,6 @@ static int nmk_gpio_get_mode(struct nmk_gpio_chip *nmk_chip, int offset)
+ 	return (afunc ? NMK_GPIO_ALT_A : 0) | (bfunc ? NMK_GPIO_ALT_B : 0);
+ }
+ 
+-#include <linux/seq_file.h>
+-
+ static void nmk_gpio_dbg_show_one(struct seq_file *s,
+ 	struct pinctrl_dev *pctldev, struct gpio_chip *chip,
+ 	unsigned offset, unsigned gpio)
+diff --git a/drivers/pinctrl/nomadik/pinctrl-nomadik.h b/drivers/pinctrl/nomadik/pinctrl-nomadik.h
+index 84e297757335..1ef2559bc571 100644
+--- a/drivers/pinctrl/nomadik/pinctrl-nomadik.h
++++ b/drivers/pinctrl/nomadik/pinctrl-nomadik.h
+@@ -2,6 +2,11 @@
+ #ifndef PINCTRL_PINCTRL_NOMADIK_H
+ #define PINCTRL_PINCTRL_NOMADIK_H
+ 
++#include <linux/kernel.h>
++#include <linux/types.h>
 +
-+					opp-171428571 {
-+						opp-hz = /bits/ 64 <171428571>;
-+						required-opps = <&rpmhpd_opp_low_svs>;
-+					};
++#include <linux/pinctrl/pinctrl.h>
 +
-+					opp-300000000 {
-+						opp-hz = /bits/ 64 <300000000>;
-+						required-opps = <&rpmhpd_opp_svs>;
-+					};
-+
-+					opp-345000000 {
-+						opp-hz = /bits/ 64 <345000000>;
-+						required-opps = <&rpmhpd_opp_svs_l1>;
-+					};
-+
-+					opp-460000000 {
-+						opp-hz = /bits/ 64 <460000000>;
-+						required-opps = <&rpmhpd_opp_nom>;
-+					};
-+				};
-+			};
-+
-+			mdss_dsi0: dsi@ae94000 {
-+				compatible = "qcom,mdss-dsi-ctrl";
-+				reg = <0 0x0ae94000 0 0x400>;
-+				reg-names = "dsi_ctrl";
-+
-+				interrupt-parent = <&mdss>;
-+				interrupts = <4>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
-+					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
-+					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
-+					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
-+					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&gcc GCC_DISP_HF_AXI_CLK>;
-+				clock-names = "byte",
-+					      "byte_intf",
-+					      "pixel",
-+					      "core",
-+					      "iface",
-+					      "bus";
-+
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
-+						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
-+				assigned-clock-parents = <&mdss_dsi0_phy 0>,
-+							 <&mdss_dsi0_phy 1>;
-+
-+				operating-points-v2 = <&dsi_opp_table>;
-+				power-domains = <&rpmhpd SM8150_MMCX>;
-+
-+				phys = <&mdss_dsi0_phy>;
-+
-+				status = "disabled";
-+
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						mdss_dsi0_in: endpoint {
-+							remote-endpoint = <&dpu_intf1_out>;
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+						mdss_dsi0_out: endpoint {
-+						};
-+					};
-+				};
-+
-+				dsi_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					opp-187500000 {
-+						opp-hz = /bits/ 64 <187500000>;
-+						required-opps = <&rpmhpd_opp_low_svs>;
-+					};
-+
-+					opp-300000000 {
-+						opp-hz = /bits/ 64 <300000000>;
-+						required-opps = <&rpmhpd_opp_svs>;
-+					};
-+
-+					opp-358000000 {
-+						opp-hz = /bits/ 64 <358000000>;
-+						required-opps = <&rpmhpd_opp_svs_l1>;
-+					};
-+				};
-+			};
-+
-+			mdss_dsi0_phy: phy@ae94400 {
-+				compatible = "qcom,dsi-phy-7nm";
-+				reg = <0 0x0ae94400 0 0x200>,
-+				      <0 0x0ae94600 0 0x280>,
-+				      <0 0x0ae94900 0 0x260>;
-+				reg-names = "dsi_phy",
-+					    "dsi_phy_lane",
-+					    "dsi_pll";
-+
-+				#clock-cells = <1>;
-+				#phy-cells = <0>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&rpmhcc RPMH_CXO_CLK>;
-+				clock-names = "iface", "ref";
-+
-+				status = "disabled";
-+			};
-+
-+			mdss_dsi1: dsi@ae96000 {
-+				compatible = "qcom,mdss-dsi-ctrl";
-+				reg = <0 0x0ae96000 0 0x400>;
-+				reg-names = "dsi_ctrl";
-+
-+				interrupt-parent = <&mdss>;
-+				interrupts = <5>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK>,
-+					 <&dispcc DISP_CC_MDSS_BYTE1_INTF_CLK>,
-+					 <&dispcc DISP_CC_MDSS_PCLK1_CLK>,
-+					 <&dispcc DISP_CC_MDSS_ESC1_CLK>,
-+					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&gcc GCC_DISP_HF_AXI_CLK>;
-+				clock-names = "byte",
-+					      "byte_intf",
-+					      "pixel",
-+					      "core",
-+					      "iface",
-+					      "bus";
-+
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK_SRC>,
-+						  <&dispcc DISP_CC_MDSS_PCLK1_CLK_SRC>;
-+				assigned-clock-parents = <&mdss_dsi1_phy 0>,
-+							 <&mdss_dsi1_phy 1>;
-+
-+				operating-points-v2 = <&dsi_opp_table>;
-+				power-domains = <&rpmhpd SM8150_MMCX>;
-+
-+				phys = <&mdss_dsi1_phy>;
-+
-+				status = "disabled";
-+
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						mdss_dsi1_in: endpoint {
-+							remote-endpoint = <&dpu_intf2_out>;
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+						mdss_dsi1_out: endpoint {
-+						};
-+					};
-+				};
-+			};
-+
-+			mdss_dsi1_phy: phy@ae96400 {
-+				compatible = "qcom,dsi-phy-7nm";
-+				reg = <0 0x0ae96400 0 0x200>,
-+				      <0 0x0ae96600 0 0x280>,
-+				      <0 0x0ae96900 0 0x260>;
-+				reg-names = "dsi_phy",
-+					    "dsi_phy_lane",
-+					    "dsi_pll";
-+
-+				#clock-cells = <1>;
-+				#phy-cells = <0>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&rpmhcc RPMH_CXO_CLK>;
-+				clock-names = "iface", "ref";
-+
-+				status = "disabled";
-+			};
-+		};
-+
- 		dispcc: clock-controller@af00000 {
- 			compatible = "qcom,sm8150-dispcc";
- 			reg = <0 0x0af00000 0 0x10000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>,
--				 <0>,
--				 <0>,
--				 <0>,
--				 <0>,
-+				 <&mdss_dsi0_phy 0>,
-+				 <&mdss_dsi0_phy 1>,
-+				 <&mdss_dsi1_phy 0>,
-+				 <&mdss_dsi1_phy 1>,
- 				 <0>,
- 				 <0>;
- 			clock-names = "bi_tcxo",
+ /* Package definitions */
+ #define PINCTRL_NMK_STN8815	0
+ #define PINCTRL_NMK_DB8500	1
 -- 
-2.39.0
+2.35.1
 
