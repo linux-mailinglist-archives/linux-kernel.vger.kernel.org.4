@@ -2,124 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0A9658ECF
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD41658ED3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233705AbiL2QM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 11:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
+        id S233723AbiL2QOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 11:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiL2QMx (ORCPT
+        with ESMTP id S231217AbiL2QOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 11:12:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A605FF0;
-        Thu, 29 Dec 2022 08:12:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 29 Dec 2022 11:14:11 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C31FF0;
+        Thu, 29 Dec 2022 08:14:10 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AABA6183D;
-        Thu, 29 Dec 2022 16:12:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EE60C433F0;
-        Thu, 29 Dec 2022 16:12:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672330372;
-        bh=1FBrD6XHPFiM6g/S/VhHmBUtyYNpfvk6206YTBkt7w8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q131yO/zv6p1g6U2mU9idvwcbdySugYey845zHfH6jwVsd8IPXO4vQrzm1K4h1EJj
-         rlxP9tKe3/ejHQrxsqhv/GhtgiWSoP6MmWnW8Ow4v1HCm6AgLah9zTpQit0UjO0bJU
-         ceSwQQWClkT/eb3jq2Jwk5YiQ9GCA18sObq5WU/tmSmVGBMWtnQdRjM63frJ8lguv/
-         O7ufGJLxx0ZfeILrkidSLMOhjPZ7/kHL5woC59gBHlNwSIcqDjIWKp075EMWs4Mbjk
-         TYTB71xXqacRWGGoOIg08f9nc0ckd9FV+mlnXXt+ngaQxL/V9DBV6slbNDYcrHAokm
-         WqURj/aty78kg==
-Date:   Thu, 29 Dec 2022 10:12:49 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        marijn.suijten@somainline.org, Vinod Koul <vkoul@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/7] arm64: dts: qcom: sm8450: add spmi node
-Message-ID: <20221229161249.34jgdev2446rdxkf@builder.lan>
-References: <20221229103212.984324-1-konrad.dybcio@linaro.org>
- <7b32e414-96a9-7265-efee-f872badb32b2@linaro.org>
- <71d7a162-569d-1443-9e53-3ba374d06ccd@linaro.org>
- <ee24809b-cf9b-c555-9c30-956949be25a4@linaro.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 88E171EC0622;
+        Thu, 29 Dec 2022 17:14:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672330448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=yiv7ygs+SuK0x+dgF6bq6lJbSdbknPxlHUob4CtNI7I=;
+        b=U+ywzFGfQlEWXXsPeZVWUBAI3CV4cBV33gK2O0narbJnFvVhbFNhPZQje1x01QqrasMH3V
+        MUpdr2/87oWoNpnkAbXLOCYjk2VEkAfyPdEdqPY8XKhnCBbs4HSaN2gv7OMPgCuhiN5TG2
+        WroaVxJLLGmzNIcOGkr0TzHey0VNpSQ=
+Date:   Thu, 29 Dec 2022 17:14:03 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
+        ashish.kalra@amd.com, harald@profian.com
+Subject: Re: [PATCH RFC v7 04/64] KVM: x86: Add 'fault_is_private' x86 op
+Message-ID: <Y628y6hQK38+IAev@zn.tnic>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-5-michael.roth@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ee24809b-cf9b-c555-9c30-956949be25a4@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221214194056.161492-5-michael.roth@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 11:57:58AM +0100, Krzysztof Kozlowski wrote:
-> On 29/12/2022 11:45, Konrad Dybcio wrote:
-> > 
-> > 
-> > On 29.12.2022 11:42, Krzysztof Kozlowski wrote:
-> >> On 29/12/2022 11:32, Konrad Dybcio wrote:
-> >>> From: Vinod Koul <vkoul@kernel.org>
-> >>>
-> >>> Add the spmi bus as found in the SM8450 SoC
-> >>>
-> >>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> >>> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> >>> [Konrad: 0x0 -> 0, move #cells down, make reg-names a vertical list]
-> >>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >>> ---
-> >>> v1 -> v2:
-> >>> No changes
-> >>>
-> >>>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 22 ++++++++++++++++++++++
-> >>>  1 file changed, 22 insertions(+)
-> >>>
-> >>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> >>> index 570475040d95..b9b59c5223eb 100644
-> >>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> >>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> >>> @@ -2715,6 +2715,28 @@ aoss_qmp: power-controller@c300000 {
-> >>>  			#clock-cells = <0>;
-> >>>  		};
-> >>>  
-> >>> +		spmi_bus: spmi@c42d000 {
-> >>
-> >> Hmm looks different than reg.
-> >>
-> >>> +			compatible = "qcom,spmi-pmic-arb";
-> >>> +			reg = <0 0x0c400000 0 0x00003000>,
-> >>> +			      <0 0x0c500000 0 0x00400000>,
-> >>> +			      <0 0x0c440000 0 0x00080000>,
-> >>> +			      <0 0x0c4c0000 0 0x00010000>,
-> >>> +			      <0 0x0c42d000 0 0x00010000>;
-> >> x
-> > Hm, my guess would be that Vinod chose to put the "cnfg" reg
-> > instead of "core" in the unit address, as 8450 has 2 SPMI bus
-> > hosts and they both share the core reg, so it would have been
-> > impossible to have two spmi@core nodes..
+On Wed, Dec 14, 2022 at 01:39:56PM -0600, Michael Roth wrote:
+> This callback is used by the KVM MMU to check whether a #NPF was
+> or a private GPA or not.
+
+s/or //
+
 > 
-> Eh? SM8450 has 2 SPMI hosts both using 0x0c400000? How does that work?
-> Usually address can be mapped only once.
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>  arch/x86/include/asm/kvm_host.h    |  1 +
+>  arch/x86/kvm/mmu/mmu.c             |  3 +--
+>  arch/x86/kvm/mmu/mmu_internal.h    | 40 +++++++++++++++++++++++++++---
+>  4 files changed, 39 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index f530a550c092..efae987cdce0 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -132,6 +132,7 @@ KVM_X86_OP(complete_emulated_msr)
+>  KVM_X86_OP(vcpu_deliver_sipi_vector)
+>  KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
+>  KVM_X86_OP_OPTIONAL_RET0(private_mem_enabled);
+> +KVM_X86_OP_OPTIONAL_RET0(fault_is_private);
+>  
+>  #undef KVM_X86_OP
+>  #undef KVM_X86_OP_OPTIONAL
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 9317abffbf68..92539708f062 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1636,6 +1636,7 @@ struct kvm_x86_ops {
+>  	void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+>  			     int root_level);
+>  	int (*private_mem_enabled)(struct kvm *kvm);
+> +	int (*fault_is_private)(struct kvm *kvm, gpa_t gpa, u64 error_code, bool *private_fault);
+
+bool
+
+and then you don't need the silly "== 1" at the call site.
+
+>  
+>  	bool (*has_wbinvd_exit)(void);
+
+...
+
+> @@ -261,13 +293,13 @@ enum {
+>  };
+>  
+>  static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+> -					u32 err, bool prefetch)
+> +					u64 err, bool prefetch)
+
+The u32 -> u64 change of err could use a sentence or two of
+clarification in the commit message...
+
+>  {
+>  	bool is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault);
+>  
+>  	struct kvm_page_fault fault = {
+>  		.addr = cr2_or_gpa,
+> -		.error_code = err,
+> +		.error_code = lower_32_bits(err),
+>  		.exec = err & PFERR_FETCH_MASK,
+>  		.write = err & PFERR_WRITE_MASK,
+>  		.present = err & PFERR_PRESENT_MASK,
+> @@ -281,8 +313,8 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>  		.max_level = KVM_MAX_HUGEPAGE_LEVEL,
+>  		.req_level = PG_LEVEL_4K,
+>  		.goal_level = PG_LEVEL_4K,
+> -		.is_private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
+> -				kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
+> +		.is_private = is_tdp && kvm_mmu_fault_is_private(vcpu->kvm,
+> +								 cr2_or_gpa, err),
+>  	};
+>  	int r;
+>  
+> -- 
+> 2.25.1
 > 
 
-The SPMI controller does something like multi-master. The driver expects
-the same region to be mapped multiple times and qcom,channel is used to
-select which one each instance should operate on.
+-- 
+Regards/Gruss,
+    Boris.
 
-Regards,
-Bjorn
-
-> Where is the second SPMI? I cannot find it in linux-next.
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+https://people.kernel.org/tglx/notes-about-netiquette
