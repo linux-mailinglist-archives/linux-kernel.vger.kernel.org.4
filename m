@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7E965895F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 05:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863CD658961
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 05:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbiL2EUL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Dec 2022 23:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S232845AbiL2EWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 23:22:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiL2EUG (ORCPT
+        with ESMTP id S230419AbiL2EWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 23:20:06 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E1BD12087;
-        Wed, 28 Dec 2022 20:20:02 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BT4IrznE022628, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BT4IrznE022628
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 29 Dec 2022 12:18:54 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 29 Dec 2022 12:19:47 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 29 Dec 2022 12:19:47 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Thu, 29 Dec 2022 12:19:47 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        "Nitin Gupta" <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>,
+        Wed, 28 Dec 2022 23:22:37 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FA212740;
+        Wed, 28 Dec 2022 20:22:35 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2EBC25C02C8;
+        Wed, 28 Dec 2022 23:22:33 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 28 Dec 2022 23:22:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1672287753; x=1672374153; bh=UHHIyJfdp+M76yk2yMa2U2mWK
+        RDFfFpLFlFWfeZpPHQ=; b=EW3hJKlIfV7kB0V9nmfQU2woQyesKsL3KBb/Yc34b
+        r4F+cpMPbNO82O3STXvGiBsv8MHeWi9t5nf1S7NB84WJkZ48V08JwtlBb6QgLR1E
+        nGM09ROQojLe4RUfMpfzCZ3P3/kB1fmTd+pttOggLzy/aQQb1w58/I/YY8M5OLoc
+        IUxPG6O7ApISZoHHdCmHSIweEF0Gj4jMYasIlglboWHS3XcBMXibO2FxX36NlKyQ
+        C+1QNwcYlS8YaDGp7uWZ/WdZ9NFAw+xfMHE6b9XIRRDC+j2AqMp6+av2xDbrVbFK
+        ThMcchrIJ1wghwIvQfbFlNrN+NbAfdeC3utdrxyjHIVhQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1672287753; x=1672374153; bh=UHHIyJfdp+M76yk2yMa2U2mWKRDFfFpLFlF
+        WfeZpPHQ=; b=Z0XE9nGdGFLPXiu1kL9g9KoQ1lOiP5urppR7zVPOJHTVnda61lr
+        j5hGfsZsId8NNMc+/jvJZUaDEYA8xeG0JSKRSqrAIBdqc2RbHbIO8LbfwUfM/z+Q
+        IsPqLxXpd1ElQJTwyDJBqL0yCu2zz0JtqQGgK7rXOHEcJbTSamraJnx+QGnQNGsp
+        rav0D/T3Rjc4SihCZt4BKg9gT1bJOfGmZrh9BA+CXj7AJSHqlY3aLPyzT04+Pxxg
+        hWjZiwZ5WhvTGCPa9DbJLsVosXe/wuEYK/CI9EQe7xrpIb+v+BbkBFnpIiGdNzda
+        3UPxOACxz1L68SLofrKzUoTphiY4rLZzgFw==
+X-ME-Sender: <xms:CBatY5Ld5IlOgNerONti26FXJxZa5qYdOh5LB1CwvZiGXhESZZsNVA>
+    <xme:CBatY1KfEXyhyywoSLiMKpourtBCXldF5iPbN5KmoclamHuIzzV_hwfmQX5o4YiFt
+    0Ez2cXqV5TbfBiaFw>
+X-ME-Received: <xmr:CBatYxvanJsQntro3LaUqeSHq0Q-aRUzDmsdS7sI2VQts4CXWV-9JWFTgH4rvcAtBIWFtMWBCjLOJ02XkDUWr4n8s8b0TX80QsI9FBJTLO-n4S-d3uT6wRFg4g71rnPIHHZFFA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieefgdejudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeehhffh
+    keekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:CBatY6aLhO2PESMuEMzqRQ_HzCHz2lABofvoLnnoLUIt5w-dVLHorg>
+    <xmx:CBatYwZeMiQRfeoQ-Y1Exrht-tadVOuCUcOdpXg5uwXDhCxB7ET72g>
+    <xmx:CBatY-AIWgwZiyCs3uoD_A2JrNzIbCUBM19iFxWOmRczjFhoQOKZ1A>
+    <xmx:CRatYw6iSYeGeKBWleAkH-TxgsU1BHR2sTtky6yHDBzMUHMA0VftUw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 28 Dec 2022 23:22:31 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: RE: [RFC PATCH v1 00/19] rtw88: Add SDIO support
-Thread-Topic: [RFC PATCH v1 00/19] rtw88: Add SDIO support
-Thread-Index: AQHZGks+1Xp5+2HTNk6lcrww/IAcmq6EK72Q
-Date:   Thu, 29 Dec 2022 04:19:47 +0000
-Message-ID: <8fe9b10318994be18934ec41e792af56@realtek.com>
-References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/28_=3F=3F_10:54:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] clk: sunxi-ng: h3/h5: Model H3 CLK_DRAM as a fixed clock
+Date:   Wed, 28 Dec 2022 22:22:30 -0600
+Message-Id: <20221229042230.24532-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,53 +84,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The DRAM controller clock is only allowed to change frequency while the
+DRAM chips are in self-refresh. To support this, changes to the CLK_DRAM
+mux and divider have no effect until acknowledged by the memory dynamic
+frequency scaling (MDFS) hardware inside the DRAM controller. (There is
+a SDRCLK_UPD bit in DRAM_CFG_REG which should serve a similar purpose,
+but this bit actually does nothing.)
 
+However, the MDFS hardware in H3 appears to be broken. Triggering a
+frequency change using the procedure from similar SoCs (A64/H5) hangs
+the hardware. Additionally, the vendor BSP specifically avoids using the
+MDFS hardware on H3, instead performing all DRAM PHY parameter updates
+and resets in software.
 
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Wednesday, December 28, 2022 7:30 AM
-> To: linux-wireless@vger.kernel.org
-> Cc: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; Ulf Hansson
-> <ulf.hansson@linaro.org>; linux-kernel@vger.kernel.org; netdev@vger.kernel.org;
-> linux-mmc@vger.kernel.org; Chris Morgan <macroalpha82@gmail.com>; Nitin Gupta <nitin.gupta981@gmail.com>;
-> Neo Jou <neojou@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
-> Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [RFC PATCH v1 00/19] rtw88: Add SDIO support
-> 
-> Recently the rtw88 driver has gained locking support for the "slow" bus
-> types (USB, SDIO) as part of USB support. Thanks to everyone who helped
-> make this happen!
-> 
-> Based on the USB work (especially the locking part and various
-> bugfixes) this series adds support for SDIO based cards. It's the
-> result of a collaboration between Jernej and myself. Neither of us has
-> access to the rtw88 datasheets. All of our work is based on studying
-> the RTL8822BS and RTL8822CS vendor drivers and trial and error.
-> 
-> Jernej and myself have tested this with RTL8822BS and RTL8822CS cards.
-> Other users have confirmed that RTL8821CS support is working as well.
-> RTL8723DS may also work (we tried our best to handle rtw_chip_wcpu_11n
-> where needed) but has not been tested at this point.
-> 
-> Jernej's results with a RTL8822BS:
-> - Main functionality works
-> - Had a case where no traffic got across the link until he issued a
->   scan
-> 
-> My results with a RTL8822CS:
-> - 2.4GHz and 5GHz bands are both working
-> - TX throughput on a 5GHz network is between 50 Mbit/s and 90 Mbit/s
-> - RX throughput on a 5GHz network is at 19 Mbit/s
+Thus, it is effectively impossible to change the CLK_DRAM mux/divider,
+so those features should not be modeled. Add CLK_SET_RATE_PARENT so
+frequency changes apply to PLL_DDR instead.
 
-I have a suggestion about RX throughput, please check below registers with
-vendor driver:
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-REG_RXDMA_AGG_PG_TH
-REG_TXDMA_PQ_MAP(0x10c) BIT_RXDMA_AGG_EN (bit2)
-REG_RXDMA_MODE(0290)  BIT_DMA_MODE (bit1)
+ drivers/clk/sunxi-ng/ccu-sun8i-h3.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-Try to adjust AGG_PG_TH to see if it can help.
-
---
-Ping-Ke
+diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-h3.c b/drivers/clk/sunxi-ng/ccu-sun8i-h3.c
+index d3fcb983c17c..bfebe8dbbe65 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun8i-h3.c
++++ b/drivers/clk/sunxi-ng/ccu-sun8i-h3.c
+@@ -434,8 +434,13 @@ static SUNXI_CCU_GATE(usb_ohci2_clk,	"usb-ohci2",	"osc24M",
+ static SUNXI_CCU_GATE(usb_ohci3_clk,	"usb-ohci3",	"osc24M",
+ 		      0x0cc, BIT(19), 0);
+ 
+-static const char * const dram_parents[] = { "pll-ddr", "pll-periph0-2x" };
+-static SUNXI_CCU_M_WITH_MUX(dram_clk, "dram", dram_parents,
++/* H3 has broken MDFS hardware, so the mux/divider cannot be changed. */
++static CLK_FIXED_FACTOR_HW(h3_dram_clk, "dram",
++			   &pll_ddr_clk.common.hw,
++			   1, 1, CLK_SET_RATE_PARENT | CLK_IS_CRITICAL);
++
++static const char * const h5_dram_parents[] = { "pll-ddr", "pll-periph0-2x" };
++static SUNXI_CCU_M_WITH_MUX(h5_dram_clk, "dram", h5_dram_parents,
+ 			    0x0f4, 0, 4, 20, 2, CLK_IS_CRITICAL);
+ 
+ static SUNXI_CCU_GATE(dram_ve_clk,	"dram-ve",	"dram",
+@@ -592,7 +597,7 @@ static struct ccu_common *sun8i_h3_ccu_clks[] = {
+ 	&usb_ohci1_clk.common,
+ 	&usb_ohci2_clk.common,
+ 	&usb_ohci3_clk.common,
+-	&dram_clk.common,
++	&h5_dram_clk.common,
+ 	&dram_ve_clk.common,
+ 	&dram_csi_clk.common,
+ 	&dram_deinterlace_clk.common,
+@@ -732,7 +737,7 @@ static struct clk_hw_onecell_data sun8i_h3_hw_clks = {
+ 		[CLK_USB_OHCI1]		= &usb_ohci1_clk.common.hw,
+ 		[CLK_USB_OHCI2]		= &usb_ohci2_clk.common.hw,
+ 		[CLK_USB_OHCI3]		= &usb_ohci3_clk.common.hw,
+-		[CLK_DRAM]		= &dram_clk.common.hw,
++		[CLK_DRAM]		= &h3_dram_clk.hw,
+ 		[CLK_DRAM_VE]		= &dram_ve_clk.common.hw,
+ 		[CLK_DRAM_CSI]		= &dram_csi_clk.common.hw,
+ 		[CLK_DRAM_DEINTERLACE]	= &dram_deinterlace_clk.common.hw,
+@@ -848,7 +853,7 @@ static struct clk_hw_onecell_data sun50i_h5_hw_clks = {
+ 		[CLK_USB_OHCI1]		= &usb_ohci1_clk.common.hw,
+ 		[CLK_USB_OHCI2]		= &usb_ohci2_clk.common.hw,
+ 		[CLK_USB_OHCI3]		= &usb_ohci3_clk.common.hw,
+-		[CLK_DRAM]		= &dram_clk.common.hw,
++		[CLK_DRAM]		= &h5_dram_clk.common.hw,
+ 		[CLK_DRAM_VE]		= &dram_ve_clk.common.hw,
+ 		[CLK_DRAM_CSI]		= &dram_csi_clk.common.hw,
+ 		[CLK_DRAM_DEINTERLACE]	= &dram_deinterlace_clk.common.hw,
+-- 
+2.37.4
 
