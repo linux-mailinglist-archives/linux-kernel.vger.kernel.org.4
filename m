@@ -2,65 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E31658F64
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FDD658F66
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbiL2RJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 12:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
+        id S233658AbiL2RKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiL2RJo (ORCPT
+        with ESMTP id S229773AbiL2RKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 12:09:44 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFF365FF;
-        Thu, 29 Dec 2022 09:09:41 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 36C1E1EC01CE;
-        Thu, 29 Dec 2022 18:09:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672333780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=+OOhnZUur7/65XYNN5FmieX2LDevIBg+5FobdbkM0V4=;
-        b=ZZ5a6aHw8mkatXdcTQjTIBD0qcmeQny18h0PJgtL3SDF/M34eLTxnFU2ln362VqwAnk9cW
-        HmuFwJeKmNCRp8KTd2O86F+ZNQ7Zb2KrYhShQl84Tbw1xAmuPzmUh3VGZhvASwYz38MQrL
-        lWkFhXIbJA9GKPkwwHAxZXMwVNKAGuE=
-Date:   Thu, 29 Dec 2022 18:09:35 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>
-Cc:     Michael Roth <michael.roth@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
- when adding it to RMP table
-Message-ID: <Y63Jz01c7zLx03gQ@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
- <YuFvbm/Zck9Tr5pq@zn.tnic>
- <20221219150026.bltiyk72pmdc2ic3@amd.com>
- <Y6DEv4QuvIfwWlCW@zn.tnic>
- <ab96e918-c8b7-67d5-1dfd-320264858cec@amd.com>
+        Thu, 29 Dec 2022 12:10:18 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CEA12AFE;
+        Thu, 29 Dec 2022 09:10:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=n24bHX1gBmth/ET2IDQOYpiSkmQVrPxAGfP6M/8nc2s=; b=pY
+        oR+h6jn+ue96AoT9FoSc7Jzv8kunLFBq6D0sbwOozRllNSJj2+UQm4ZQVOrXMs3w6/pl1MFx85Ci6
+        ZLu7n6OjpxS60eIZUZOc7XTZIFeUVDzzIA984AIbhB9YrJ0sJm+JUNMhH4bFO/TR503r24kSRtLhN
+        EPkKSZUusWqQjFQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pAwPw-000iHz-IQ; Thu, 29 Dec 2022 18:10:08 +0100
+Date:   Thu, 29 Dec 2022 18:10:08 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?utf-8?Q?Micha=C5=82?= Grzelak <mig@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, sebastian.hesselbarth@gmail.com,
+        gregory.clement@bootlin.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        mw@semihalf.com, upstream@semihalf.com, mchl.grzlk@gmail.com
+Subject: Re: [PATCH v2] ARM: dts: dove.dtsi: Move ethphy to fix schema error
+Message-ID: <Y63J8PGch6nRLQIg@lunn.ch>
+References: <20221228200234.86391-1-mig@semihalf.com>
+ <Y6zuJrb+8j+XCksN@lunn.ch>
+ <CADcojVPnZYtNHJUsLJCcHTnG=j0dfCbDNRqf2xmhcmV3b-oGfQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ab96e918-c8b7-67d5-1dfd-320264858cec@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADcojVPnZYtNHJUsLJCcHTnG=j0dfCbDNRqf2xmhcmV3b-oGfQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 03:49:39PM -0600, Kalra, Ashish wrote:
-> Milan onward,
+On Thu, Dec 29, 2022 at 03:14:47PM +0100, Michał Grzelak wrote:
+> Hi Andrew,
+> 
+> Thanks for quick reply.
+> 
+> On Thu, Dec 29, 2022 at 2:32 AM Andrew Lunn <andrew@lunn.ch> wrote:
+> >
+> > On Wed, Dec 28, 2022 at 09:02:34PM +0100, Michał Grzelak wrote:
+> > > Running 'make dtbs_check' with schema in net/marvell,orion-mdio.yaml
+> > > gives the following warnings:
+> > > mdio-bus@72004: Unevaluated properties are not allowed
+> > > ('ethernet-phy' was unexpected)
+> > >       arch/arm/boot/dts/dove-cubox.dtb
+> > >       arch/arm/boot/dts/dove-cubox-es.dtb
+> > >       arch/arm/boot/dts/dove-d2plug.dtb
+> > >       arch/arm/boot/dts/dove-d2plug.dtb
+> > >       arch/arm/boot/dts/dove-dove-db.dtb
+> > >       arch/arm/boot/dts/dove-d3plug.dtb
+> > >       arch/arm/boot/dts/dove-sbc-a510.dtb
+> > > Fix them by removing empty ethphy subnode from dove.dtsi and describe
+> > > PHY on the relevant board .dts files level.
+> >
+> > I don't think your description is correct. What i think is causing the
+> > problem is that the ethphy subnode in dove.dtsi does not have an @X.
+> >
+> 
+> Yes, it is exactly the case. The problem is after adding dummy address
+> e.g. ethernet-phy@0 in dove.dtsi 'make dtbs_check' shows warnings
+> about missing required 'reg' property, that's why ethernet-phy is
+> moved to .dts files.
+> 
+> > By moving it into the .dts file, you can then give it the correct @1,
+> > or @3, which makes the linter happy. The kernel itself does not care
+> > about this, it is an example of the linter being much more strict than
+> > the kernel.
+> >
+> > If you agree with me, please update the description.
+> 
+> This patch exactly fixes this issue by setting proper
+> ethernet-phy@<reg value> in board files.
+> In such a case would you like me to update the commit message to
+> better describe the change or do you have other remarks to the diff?
 
-And before ML there's no SNP, right?
+I would like the description to actually describe the problem, that
+the linter allows ethernet-phy@X but not ethernet-phy. You description
+does not make any sense to me, it is not an empty node which is
+causing the problem, but that node is expected to have an @X.
 
-> there is H/W support for coherency between mappings of the
-> same physical page with different encryption keys, so AFAIK, there should be
-> no need to flush during page state transitions, where we invoke these direct
-> map interface functions for re-mapping/invalidating pages.
-
-Yah, that rings a bell.
-
-In any case, the fact that flushing is not needed should be stated
-somewhere in text so that it is clear why.
-
-> I don't know if there is any other reason to flush after modifying
-> the direct map ?
-
-There's
-
-        /*
-         * No need to flush, when we did not set any of the caching
-         * attributes:
-         */
-        cache = !!pgprot2cachemode(mask_set);
-
-
-Does the above HW cover this case too?
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+	Andrew
