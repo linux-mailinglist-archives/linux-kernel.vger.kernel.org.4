@@ -2,170 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233E16588A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4416588A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbiL2C2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 21:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S232887AbiL2CbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 21:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbiL2C2b (ORCPT
+        with ESMTP id S230078AbiL2CbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 21:28:31 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711821274B
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 18:28:29 -0800 (PST)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221229022827epoutp02de1dcbe6e488d3427d59637f3938368f~1IqApc2Rv2885128851epoutp02_
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:28:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221229022827epoutp02de1dcbe6e488d3427d59637f3938368f~1IqApc2Rv2885128851epoutp02_
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1672280907;
-        bh=B/5YBfWgnCkRecqs7NGGcqjwzt+UYfoqtf1L2CsmvII=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=T4ECNvOQLtrLkfsYqayGK+YcvBdCwRvtfeFD95uM8F0Y+SdHYsVIBCf3H+bsJRIIz
-         f5q66MzPOfLrjKeAbfUDYHHvUOxqPHKDWdrlWWbs29XsKz94H5AaBZ8NA0y3YbwPr+
-         kQeO7NaLgeoB2y364gWukj3WiO4bnGPgl9/XnaKk=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20221229022827epcas1p1eebface5cb2a0ed7871081c13649bade~1IqAZlGFn0283202832epcas1p1A;
-        Thu, 29 Dec 2022 02:28:27 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.223]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4NjC4C2BpBz4x9Q0; Thu, 29 Dec
-        2022 02:28:27 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C0.70.02461.B4BFCA36; Thu, 29 Dec 2022 11:28:27 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20221229022826epcas1p2cdc22486ee5080e220a15286cff5dbd2~1Ip-j2-yX3187131871epcas1p2O;
-        Thu, 29 Dec 2022 02:28:26 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221229022826epsmtrp2d86d41ff34ce2e1ea5ebd73bcd4896e3~1Ip-jO3Sx0564305643epsmtrp2U;
-        Thu, 29 Dec 2022 02:28:26 +0000 (GMT)
-X-AuditID: b6c32a37-adffd7000000099d-2b-63acfb4b53e6
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BF.F3.02211.A4BFCA36; Thu, 29 Dec 2022 11:28:26 +0900 (KST)
-Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221229022826epsmtip11bb862b4e83422ce8e9ce44156c95b4b~1Ip-bykXT0383203832epsmtip1B;
-        Thu, 29 Dec 2022 02:28:26 +0000 (GMT)
-From:   "Sungjong Seo" <sj1557.seo@samsung.com>
-To:     <linkinjeon@kernel.org>
-Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sj1557.seo@samsung.com>
-In-Reply-To: <PUZPR04MB6316579893496BC54C4FE96F81EC9@PUZPR04MB6316.apcprd04.prod.outlook.com>
-Subject: RE: [PATCH v1] exfat: fix reporting fs error when reading dir
- beyond EOF
-Date:   Thu, 29 Dec 2022 11:28:26 +0900
-Message-ID: <019301d91b2d$3b3c0dd0$b1b42970$@samsung.com>
+        Wed, 28 Dec 2022 21:31:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4268513D27
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 18:31:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9C88615A5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:31:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC84BC433EF;
+        Thu, 29 Dec 2022 02:31:11 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vq8QSPON"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672281070;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fo1jslvfeopSkuICCRwlACwE2DX39yLIKwrIJZqYHzI=;
+        b=Vq8QSPON47EV4x6TnTViJgI6ozO4r5JLnAo/dYSxkIpP6q+0821Jw9K4zZoaeGJecFR7GP
+        AtZPNYm426vAh6bLbVxlhWUECiL0VLL2b5PfSODtaIVrDrenWx6Xxiie06KoATfLhAMvip
+        zRW9dQqu13vmuk/sxaXYwGx9KfRTS8I=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 675c8781 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 29 Dec 2022 02:31:09 +0000 (UTC)
+Date:   Thu, 29 Dec 2022 03:31:07 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
+        ardb@kernel.org, kraxel@redhat.com, bp@alien8.de, philmd@linaro.org
+Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
+ setup_data
+Message-ID: <Y6z765zHrQ6Rl/0o@zx2c4.com>
+References: <20221228143831.396245-1-Jason@zx2c4.com>
+ <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org>
+ <Y6xvJheSYC83voCZ@zx2c4.com>
+ <Y6x1knb8udpSyMSp@zx2c4.com>
+ <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQHGf8/eNee1lFo92Y4FqX1qCBeMTAHRB6CHrprSKTA=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEJsWRmVeSWpSXmKPExsWy7bCmrq737zXJBufe8llMnLaU2WLP3pMs
-        Fpd3zWGz2PLvCKsDi8emVZ1sHn1bVjF6fN4kF8Ac1cBok1iUnJFZlqqQmpecn5KZl26rFBri
-        pmuhpJCRX1xiqxRtaGikZ2hgrmdkZKRnbBlrZWSqpJCXmJtqq1ShC9WrpFCUXABUm1tZDDQg
-        J1UPKq5XnJqX4pCVXwpyol5xYm5xaV66XnJ+rpJCWWJOKdAIJf2ERuaMYz+usRS85KmYf+YO
-        UwPjEq4uRk4OCQETidf9j1i7GLk4hAR2MEocW7CdCcL5xCjxZcMnVpAqIYFvjBIPppnDdPxp
-        vwQV38so8eKJI0TDS0aJjgvb2EESbAK6Ek9u/GQGsUUEpCXmXZzCBGIzC8RLLN5xnA3E5hSI
-        lZh9ZwMLiC0sECzxa9lqRhCbRUBVYvWLjWA2r4ClxNbbk9kgbEGJkzOfsEDMkZfY/nYOM8RB
-        ChK7Px1lhdhlJdFz8xEbRI2IxOzONmaQ4yQEvrJLTDgNsUxCwEVi8aUZUM3CEq+Ob2GHsKUk
-        Pr/bywbR0M0ocfzjO6iGGYwSSzocIGx7iebWZqAiDqANmhLrd+lDhBUldv6eywhhC0qcvtbN
-        DHEEn8S7rz2sIOUSArwSHW1CECUqEt8/7GSZwKg8C8lrs5C8NgvJC7MQli1gZFnFKJZaUJyb
-        nlpsWGCMHN+bGMHpU8t8B+O0tx/0DjEycTAeYpTgYFYS4dU4uzpZiDclsbIqtSg/vqg0J7X4
-        EONERmBoT2SWEk3OB6bwvJJ4QzMzSwtLIxNDYzNDQ8LCJsYGBkbAVGtuaW5MhLClgYmZkYmF
-        saWxmZI4b/7+RclCAumJJanZqakFqUUwRzFxcEo1MIW47/49++imuhN5td/Pi6047nbure7Z
-        ELlJDNMEWDOr43hWhwfXxF746OrEZbj9+gG1jZukVQUWB///UOL3dtLEpWV8a1N4ZsUqmqWL
-        njRSPJlwza36/qnfPlkF8iqH5JaHzRI7Pd9lmmHn1OxpqtndShVRwud+vOp4FOzc/c7KWLmG
-        J4VPy2T9zEUHXRl0/5j+uZ8ae+3Qvr+8ouzx6rdu7LKpq7344P/0irxyjs92hed/zLokM2P7
-        zc1tv/ed7eWdYHWd74Nhk9FNN/PKmMjK+WpR8zZ+nfDvpugzo0OB6gfX6R+xNkqw0eGxvTL/
-        udmDw4fUGx8+WGF0pu2S0ZzsgMT/qnlih66nNzOZsCmxFGckGmoxFxUnAgB/Nlv8hQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJLMWRmVeSWpSXmKPExsWy7bCSnK7X7zXJBkt/aVlMnLaU2WLP3pMs
-        Fpd3zWGz2PLvCKsDi8emVZ1sHn1bVjF6fN4kF8AcxWWTkpqTWZZapG+XwJVx7Mc1loKXPBXz
-        z9xhamBcwtXFyMkhIWAi8af9EmsXIxeHkMBuRonXl54xdzFyACWkJA7u04QwhSUOHy6GKHnO
-        KLH8wXkmkF42AV2JJzd+MoPYIgLSEvMuTgGLMwskSpxZ0gY1cx2jxNrZT8GKOAViJWbf2cAC
-        YgsLBEpM3PyfDcRmEVCVWP1iIyOIzStgKbH19mQ2CFtQ4uTMJywQQ7Uleh+2MkLY8hLb385h
-        hnhAQWL3p6OsEEdYSfTcfMQGUSMiMbuzjXkCo/AsJKNmIRk1C8moWUhaFjCyrGKUTC0ozk3P
-        LTYsMMxLLdcrTswtLs1L10vOz93ECI4NLc0djNtXfdA7xMjEwXiIUYKDWUmEV+Ps6mQh3pTE
-        yqrUovz4otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamE6wzypdaKqxn3lF
-        gZbP/6gfrhXM1uze9gyPVgnt9S2PdAv8d3pdOMt3hckp27PNlR7e5n/RcdfQa8bFBIWOx7s9
-        J3VdScuoutTFlCfm8bZ4xXvex4ntRQd+tvReunX49+bO7eEbHd7G7jqce/pAgeCCJe7S08s3
-        SD/bc/7wce/F+4LXpN3yzDcpblCfIdyj9YVj4tdre2OKnLTWCsXf1ZpfXWyu9KX0auuF97lx
-        kxja/iZI+10R22P0kWth8OyPpx/6T7aSOrqV7bFZussGkSKhjxK7ZA7bV/IuM3cOvnpl9rap
-        j3dJRCfZzpuXNKu99YuEevxPYcW9mT639lqulGnkNEmwnDXP6tmrn2F31iixFGckGmoxFxUn
-        AgCMvNqu/AIAAA==
-X-CMS-MailID: 20221229022826epcas1p2cdc22486ee5080e220a15286cff5dbd2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-ArchiveUser: EV
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221226072355epcas1p102afc2f21ff427877c8b34f650f9cb97
-References: <CGME20221226072355epcas1p102afc2f21ff427877c8b34f650f9cb97@epcas1p1.samsung.com>
-        <PUZPR04MB6316579893496BC54C4FE96F81EC9@PUZPR04MB6316.apcprd04.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Since seekdir() does not check whether the position is valid, the
-> position may exceed the size of the directory. We found that for
-> a directory with discontinuous clusters, if the position exceeds
-> the size of the directory and the excess size is greater than or
-> equal to the cluster size, exfat_readdir() will return -EIO,
-> causing a file system error and making the file system unavailable.
-> 
-> Reproduce this bug by:
-> 
-> seekdir(dir, dir_size + cluster_size);
-> dirent = readdir(dir);
-> 
-> The following log will be printed if mount with 'errors=remount-ro'.
-> 
-> [11166.712896] exFAT-fs (sdb1): error, invalid access to FAT (entry
-> 0xffffffff)
-> [11166.712905] exFAT-fs (sdb1): Filesystem has been set read-only
-> 
-> Fixes: 1e5654de0f51 ("exfat: handle wrong stream entry size in
-> exfat_readdir()")
-> 
-> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
-> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
-> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
+Hi,
 
-Looks good. Thanks.
+Read this message in a fixed width text editor with a lot of columns.
 
-Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
-
-> ---
->  fs/exfat/dir.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Dec 28, 2022 at 03:58:12PM -0800, H. Peter Anvin wrote:
+> Glad you asked.
 > 
-> diff --git a/fs/exfat/dir.c b/fs/exfat/dir.c
-> index 1122bee3b634..158427e8124e 100644
-> --- a/fs/exfat/dir.c
-> +++ b/fs/exfat/dir.c
-> @@ -100,7 +100,7 @@ static int exfat_readdir(struct inode *inode, loff_t
-> *cpos, struct exfat_dir_ent
->  			clu.dir = ei->hint_bmap.clu;
->  		}
+> So the kernel load addresses are parameterized in the kernel image
+> setup header. One of the things that are so parameterized are the size
+> and possible realignment of the kernel image in memory.
 > 
-> -		while (clu_offset > 0) {
-> +		while (clu_offset > 0 && clu.dir != EXFAT_EOF_CLUSTER) {
->  			if (exfat_get_next_cluster(sb, &(clu.dir)))
->  				return -EIO;
-> 
-> --
-> 2.25.1
+> I'm very confused where you are getting the 64 MB number from. There
+> should not be any such limitation.
 
+Currently, QEMU appends it to the kernel image, not to the initramfs as
+you suggest below. So, that winds up looking, currently, like:
 
+          kernel image            setup_data
+   |--------------------------||----------------|
+0x100000                  0x100000+l1     0x100000+l1+l2
+
+The problem is that this decompresses to 0x1000000 (one more zero). So
+if l1 is > (0x1000000-0x100000), then this winds up looking like:
+
+          kernel image            setup_data
+   |--------------------------||----------------|
+0x100000                  0x100000+l1     0x100000+l1+l2
+
+                                 d e c o m p r e s s e d   k e r n e l
+		     |-------------------------------------------------------------|
+                0x1000000                                                     0x1000000+l3 
+
+The decompressed kernel seemingly overwriting the compressed kernel
+image isn't a problem, because that gets relocated to a higher address
+early on in the boot process. setup_data, however, stays in the same
+place, since those links are self referential and nothing fixes them up.
+So the decompressed kernel clobbers it.
+
+The solution in this commit adds a bunch of padding between the kernel
+image and setup_data to avoid this. That looks like this:
+
+          kernel image                            padding                               setup_data
+   |--------------------------||---------------------------------------------------||----------------|
+0x100000                  0x100000+l1                                         0x1000000+l3      0x1000000+l3+l2
+
+                                 d e c o m p r e s s e d   k e r n e l
+		     |-------------------------------------------------------------|
+                0x1000000                                                     0x1000000+l3 
+
+This way, the decompressed kernel doesn't clobber setup_data.
+
+The problem is that if 0x1000000+l3-0x100000 is around 62 megabytes,
+then the bootloader crashes when trying to dereference setup_data's
+->len param at the end of initialize_identity_maps() in ident_map_64.c.
+I don't know why it does this. If I could remove the 62 megabyte
+restriction, then I could keep with this technique and all would be
+well.
+
+> In general, setup_data should be able to go anywhere the initrd can
+> go, and so is subject to the same address cap (896 MB for old kernels,
+> 4 GB on newer ones; this address too is enumerated in the header.)
+
+It would be theoretically possible to attach it to the initrd image
+instead of to the kernel image. As a last resort, I guess I can look
+into doing that. However, that's going to require some serious rework
+and plumbing of a lot of different components. So if I can make it work
+as is, that'd be ideal. However, I need to figure out this weird 62 meg
+limitation.
+
+Any ideas on that?
+
+Jason
