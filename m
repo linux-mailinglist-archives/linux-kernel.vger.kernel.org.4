@@ -2,116 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5CE658C67
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 348A7658C62
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbiL2Lty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 06:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50464 "EHLO
+        id S231185AbiL2LtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 06:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiL2Lts (ORCPT
+        with ESMTP id S229625AbiL2LtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 06:49:48 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0A7FAEF
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:49:47 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id l13-20020a056e021c0d00b003034e24b866so11921129ilh.22
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:49:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GxXQnBivBvS5Io4jtX9fYGxpNHPwBgCya+UQD8rvg/Q=;
-        b=de+ROh7MwOmSqDM5fRs/ks0DoeIcTSLs5Lan/UHC5z2FoZ3sqjE+pM3q39PsibInNv
-         tEn3sW4pb7IhVqpW97rVw2yVFspK6CytP/CC9NadIc0I3z9FTGog4FmSA1Wz9f3aJu/T
-         0ujIyiIJpfq6NwXyq9ciW5qDz2m9sjbs6Dj4P89DgJNwKVHZgTeMLY2ul/TWenl9yWb+
-         zdW+adbDUdSXuO5bssORzl7ORdGJoG/P5m7pbYvfKubhshXRzoVxizTuQJ4+35/wYY+W
-         5ij6d1Ur6Od1tao9TQ64CObyOaizSwHq0BUWCMooMvQ7fK8iN4duR42uksyqiljIUr85
-         0oBA==
-X-Gm-Message-State: AFqh2koS0Wm2uMe6fygMCVhKRAuD7Z1oV9s+BJLrjoNSUMrrGpgoW+GH
-        6/Nv+lRKlvAkui5JzAD1DfqR95kQDyHLnIwP5X1ocCSpctj9
-X-Google-Smtp-Source: AMrXdXt6rrsKj8NEyX9WQjWSdYEsl7eIAv/WasV2qWDBByJoup7eNvKeEaZ/WZzis89vAQWxSK5KOG53ILMBvCKGfn1mQPzLpXh+
+        Thu, 29 Dec 2022 06:49:16 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01258EE10;
+        Thu, 29 Dec 2022 03:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672314554; x=1703850554;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=n4tX9uVtsaVSzOHfp9IJXLazRHHzOs74y/0kur3sE+w=;
+  b=Hthtop+475nRJ2AfgDYzLPwA2LK833tvnnl6NTcTFtyaMC73rE4AVCRh
+   tRylGufYNCylh3v65dGB2N7cbgutzFiAF3xyZGc9KB0GdyrnMQWB/HubA
+   COqXjBzDG5OaTuY4Md+5idrlFdmTuI2EUW5sSmfbKTQ1qiCZDLewq/xe6
+   Mdf0BVUi2rx0IUdCrEYEWiuaX70ejTd78z0S+65HXeaE3H7jtILAVGo9u
+   C5RRTniYfX1CKcSEqPGvPD4T4dHx/0wwZ9JhkiMQq+eWBsPdh9FBspGMB
+   CRntA1pdPevmBPK8qgiblbttjrCTMDzIVIoiF7JeFIQet38ANQPW2V6a2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="318714321"
+X-IronPort-AV: E=Sophos;i="5.96,283,1665471600"; 
+   d="scan'208";a="318714321"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 03:49:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="716898232"
+X-IronPort-AV: E=Sophos;i="5.96,283,1665471600"; 
+   d="scan'208";a="716898232"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Dec 2022 03:49:12 -0800
+Message-ID: <1bf75820-dcb1-e6f3-d01b-6dd246fa3666@linux.intel.com>
+Date:   Thu, 29 Dec 2022 13:50:28 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1a1:b0:38a:7f45:a5ff with SMTP id
- b1-20020a05663801a100b0038a7f45a5ffmr2322457jaq.9.1672314587167; Thu, 29 Dec
- 2022 03:49:47 -0800 (PST)
-Date:   Thu, 29 Dec 2022 03:49:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ebc50f05f0f614ee@google.com>
-Subject: [syzbot] [btrfs?] WARNING in btrfs_finish_ordered_io
-From:   syzbot <syzbot+b3a2926f65a93a3cf55b@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v2] usb: xhci: Check endpoint is valid before
+ dereferencing it
+To:     Ladislav Michl <oss-lists@triops.cz>, Jimmy Hu <hhhuuu@google.com>
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20221222072912.1843384-1-hhhuuu@google.com>
+ <Y6Qc1p4saGFTdh9n@lenoch>
+ <23fe0fe3-f330-b58e-c366-3ac5bd80fe22@linux.intel.com>
+ <Y6RFCjbMswOBoKdV@lenoch>
+ <0fe978ed-8269-9774-1c40-f8a98c17e838@linux.intel.com>
+Content-Language: en-US
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <0fe978ed-8269-9774-1c40-f8a98c17e838@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 22.12.2022 15.18, Mathias Nyman wrote:
+> On 22.12.2022 13.52, Ladislav Michl wrote:
+>> On Thu, Dec 22, 2022 at 01:08:47PM +0200, Mathias Nyman wrote:
+>>> On 22.12.2022 11.01, Ladislav Michl wrote:
+>>>> On Thu, Dec 22, 2022 at 07:29:12AM +0000, Jimmy Hu wrote:
+>>>>> When the host controller is not responding, all URBs queued to all
+>>>>> endpoints need to be killed. This can cause a kernel panic if we
+>>>>> dereference an invalid endpoint.
+>>>>>
+>>>>> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
+>>>>> checking if the endpoint is valid before dereferencing it.
+>>>>>
+>>>>> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
+>>>>> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
+>>>>>
+>>>>> [233311.853964] pc : xhci_hc_died+0x10c/0x270
+>>>>> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
+>>>>>
+>>>>> [233311.854077] Call trace:
+>>>>> [233311.854085]  xhci_hc_died+0x10c/0x270
+>>>>> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
+>>>>> [233311.854105]  call_timer_fn+0x50/0x2d4
+>>>>> [233311.854112]  expire_timers+0xac/0x2e4
+>>>>> [233311.854118]  run_timer_softirq+0x300/0xabc
+>>>>> [233311.854127]  __do_softirq+0x148/0x528
+>>>>> [233311.854135]  irq_exit+0x194/0x1a8
+>>>>> [233311.854143]  __handle_domain_irq+0x164/0x1d0
+>>>>> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
+>>>>> [233311.854156]  el1_irq+0xfc/0x1a8
+>>>>> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
+>>>>> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
+>>>>> [233311.854194]  do_idle+0x594/0x6ac
+>>>>> [233311.854201]  cpu_startup_entry+0x7c/0x80
+>>>>> [233311.854209]  secondary_start_kernel+0x170/0x198
+>>>>>
+>>>>> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
+>>>>> Cc: stable@vger.kernel.org
+>>>>> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+>>>>> ---
+>>>>>    drivers/usb/host/xhci-ring.c | 5 ++++-
+>>>>>    1 file changed, 4 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>>>>> index ddc30037f9ce..f5b0e1ce22af 100644
+>>>>> --- a/drivers/usb/host/xhci-ring.c
+>>>>> +++ b/drivers/usb/host/xhci-ring.c
+>>>>> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+>>>>>        struct xhci_virt_ep *ep;
+>>>>>        struct xhci_ring *ring;
+>>>>> -    ep = &xhci->devs[slot_id]->eps[ep_index];
+>>>>> +    ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
+>>>>> +    if (!ep)
+>>>>> +        return;
+>>>>> +
+>>>>
+>>>> xhci_get_virt_ep also adds check for slot_id == 0. It changes behaviour,
+>>>> do we really want to skip that slot? Original code went from 0 to
+>>>> MAX_HC_SLOTS-1.
+>>>>
+>>>> It seems to be off by one to me. Am I missing anything?
+>>>
+>>> slot_id 0 is always invalid, so this is a good change.
+>>
+>> I see. Now reading more carefully:
+>> #define HCS_MAX_SLOTS(p)    (((p) >> 0) & 0xff)
+>> #define MAX_HC_SLOTS        256
+>> So the loop should go:
+>>     for (i = 1; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++)
+> 
+> yes
+> 
+>>
+>>>> Also, what about passing ep directly to xhci_kill_endpoint_urbs
+>>>> and do the check in xhci_hc_died? Not even compile tested:
+>>>
+>>> passing ep to a function named kill_endpoint_urbs() sound like the
+>>> right thing to do, but as a generic change.
+>>>
+>>> I think its a good idea to first do a targeted fix for this null pointer
+>>> issue that we can send to stable fist.
+>>
+>> Agree. But I still do not understand the root cause. There is a check
+>> for NULL xhci->devs[i] already, so patch does not add much more, except
+>> for test for slot_id == 0. And the eps array is just array of
+>> struct xhci_virt_ep, not a pointers to them, so &xhci->devs[i]->eps[j]
+>> should be always valid pointer. However struct xhci_ring in each eps
+>> is allocated and not protected by any lock here. Is that correct?
+> 
+> I think root cause is that freeing xhci->devs[i] and including rings isn't
+> protected by the lock, this happens in xhci_free_virt_device() called by
+> xhci_free_dev(), which in turn may be called by usbcore at any time
+> 
+> So xhci->devs[i] might just suddenly disappear
+> 
+> Patch just checks more often if xhci->devs[i] is valid, between every endpoint.
+> So the race between xhci_free_virt_device() and xhci_kill_endpoint_urbs()
+> doesn't trigger null pointer deref as easily.
 
-syzbot found the following issue on:
+Jimmy Hu,
 
-HEAD commit:    72a85e2b0a1e Merge tag 'spi-fix-v6.2-rc1' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=136100a8480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4e2d7bfa2d6d5a76
-dashboard link: https://syzkaller.appspot.com/bug?extid=b3a2926f65a93a3cf55b
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114b2aac480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1765ae54480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/510d16df06c8/disk-72a85e2b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/50ef5477a1d4/vmlinux-72a85e2b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f2acd6f1189a/bzImage-72a85e2b.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/989578dc9fd1/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b3a2926f65a93a3cf55b@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-BTRFS: Transaction aborted (error -28)
-WARNING: CPU: 1 PID: 56 at fs/btrfs/inode.c:3343 btrfs_finish_ordered_io+0x1ac9/0x1cb0 fs/btrfs/inode.c:3343
-Modules linked in:
-CPU: 1 PID: 56 Comm: kworker/u4:4 Not tainted 6.1.0-syzkaller-14594-g72a85e2b0a1e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: btrfs-endio-write btrfs_work_helper
-RIP: 0010:btrfs_finish_ordered_io+0x1ac9/0x1cb0 fs/btrfs/inode.c:3343
-Code: 8b 44 89 ee 31 c0 e8 26 e8 c5 fd 0f 0b b0 01 e9 4b ff ff ff e8 58 f8 fe fd 48 c7 c7 c0 9f 39 8b 44 89 ee 31 c0 e8 07 e8 c5 fd <0f> 0b e9 a6 fe ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 11 ed ff
-RSP: 0018:ffffc900015779e0 EFLAGS: 00010246
-RAX: 203bb8e87d482d00 RBX: 0000000000000024 RCX: ffff888017d91d40
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc90001577bc0 R08: ffffffff816f2c9d R09: fffff520002aeef5
-R10: fffff520002aeef5 R11: 1ffff920002aeef4 R12: 0000000000000000
-R13: 00000000ffffffe4 R14: dffffc0000000000 R15: ffff88807292d540
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffef9d1dda0 CR3: 00000000290a7000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_work_helper+0x312/0x850 fs/btrfs/async-thread.c:280
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+Any chance you could try if the change below works for you instead of
+using xhci_get_virt_ep().
+I don't have a easy way to trigger the issue-
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 79d7931c048a..50b41213e827 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3974,6 +3974,7 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
+  	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+  	struct xhci_virt_device *virt_dev;
+  	struct xhci_slot_ctx *slot_ctx;
++	unsigned long flags;
+  	int i, ret;
+  
+  	/*
+@@ -4000,7 +4001,11 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
+  		virt_dev->eps[i].ep_state &= ~EP_STOP_CMD_PENDING;
+  	virt_dev->udev = NULL;
+  	xhci_disable_slot(xhci, udev->slot_id);
++
++	spin_lock_irqsave(&xhci->lock, flags);
+  	xhci_free_virt_device(xhci, udev->slot_id);
++	spin_unlock_irqrestore(&xhci->lock, flags);
++
+  }
+  
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks
+Mathias
