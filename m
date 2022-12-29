@@ -2,107 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E7D658C2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64710658C2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbiL2L1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 06:27:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S230452AbiL2Lbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 06:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiL2L1s (ORCPT
+        with ESMTP id S230052AbiL2Lbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 06:27:48 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2BF13DCE;
-        Thu, 29 Dec 2022 03:27:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672313267; x=1703849267;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=izooh+aJOq0y9ZY7bsO6ygU34U8zhrGdVSoaIebW5LI=;
-  b=iJkknKiY/uwtGE6fAzcqbWT3Yf42bDd8ODErIVUb8HM3P+DCdix5puf/
-   5/rkOw1T+0CCwOo5rvh6IfmwtEx10Y56+el7CQdVfiqKXPFet78/OinyH
-   S148Y8ZvhPubBjGMkRDcy8Ce76D3Wql+4NqBiN0YpCs+TumlmYmitOzTI
-   AyqRagcSuIPcwoQ3RUqCGJCZ/ZEuqdP21pnxNeXplHDR+ksofrtoa0SQ/
-   x9Eb+aD8NEnJ0JxZdim6ZCkBpsIrUBfoLplHLcWq+XCnV4MojZaN9Kdg+
-   9thj/RDX2VbWWV2SNHQosBPPm9qVB9KbpTm8w9uYTQ7V0fsHg89R1LyQM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="383324171"
-X-IronPort-AV: E=Sophos;i="5.96,283,1665471600"; 
-   d="scan'208";a="383324171"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 03:27:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="653581106"
-X-IronPort-AV: E=Sophos;i="5.96,283,1665471600"; 
-   d="scan'208";a="653581106"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.63.128])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 03:27:44 -0800
-Message-ID: <d0cf59ae-87c3-3aab-34fa-aa88ea467423@intel.com>
-Date:   Thu, 29 Dec 2022 13:27:39 +0200
+        Thu, 29 Dec 2022 06:31:35 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C9813DF9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:31:33 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id m6so16754392lfj.11
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:31:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QQDxoBS/o/39TrH1qe45eXS30LOpQBp1BK407ABXLfk=;
+        b=tNpYVaVAsbbviDjADfCQME8VsRaT2ukWQpzL3RsY3j51GVwQvkH70JlekgOwUDKpza
+         9f8IoTlMG4hRrs2mva6Hce+gRg4WNq0T+wfK0ctsg8l5OChH5A/CQfhfKxktRnJhAaJn
+         U5BNbEXbZSIWQ3aVTf4RPhoVQI8DNwiyUp+4OI5d0rkVMqa9oj33QD4WyazsDA919SV2
+         Yv0x2/ZA4G/PBj4kfzL7IyQSRcqT4eysH5sLfI+co64jKP7YTELhRMq+yEffj2rxYNZd
+         adgxe1SwLP9RBBS+XHb5z8ZMpOnDEu4pQvLbmyhWcvhEIWQboDLk5iVjQjQ8KnQyOLJp
+         B2lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QQDxoBS/o/39TrH1qe45eXS30LOpQBp1BK407ABXLfk=;
+        b=HZVUfRhauFHsss/mHNbxrwpNrKliQWaq9cS4ddlpZluI/IMqAApFmLK1b0pUi6/eSl
+         xts1yOy8RIkLZ6RxXhw3oH7DRpbE1C09bFlsUnduydrq0jsnO/DFllbfpm30N4b+vTqD
+         q4FpKlYRWA3+GfWDfwB0Icti0Ly1J2M4lEa9uzM66wKSc47YG8QIC6H4ziDiqrtV/gKt
+         iRHpefkiRzEhwQKtvQWBKpEsQaV0Ry9XxK8sqii6ME3J/bsux4D+Xo406X3VmmTUncRJ
+         THvLWliOsb2yERlg6hopdF64axdwsJBUTJb/dhqou0iKy5Wb7Fk1+sG4JucFLE1/UwxT
+         TFTw==
+X-Gm-Message-State: AFqh2koEcmaflyY0/4JD4/AmaBVm1OdhGauQx1wpz5z+3eGp28fX50Q0
+        8iCG5t89fAwEIxSuTSbS9lDHsQ==
+X-Google-Smtp-Source: AMrXdXv8NQZRUm/WQTClSW9gKM7555QdSJfE3CZZ3i1we7CBGcg/d4BOuq888+1ZGIdoYqvDzNKbdw==
+X-Received: by 2002:a05:6512:3c97:b0:4a5:42ba:d827 with SMTP id h23-20020a0565123c9700b004a542bad827mr8766477lfv.14.1672313491952;
+        Thu, 29 Dec 2022 03:31:31 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a14-20020a056512390e00b004b5872a7003sm3046435lfu.98.2022.12.29.03.31.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Dec 2022 03:31:31 -0800 (PST)
+Message-ID: <24837866-9da2-9c9d-4094-d604db19cebd@linaro.org>
+Date:   Thu, 29 Dec 2022 12:31:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.1
-Subject: Re: [PATCH] perf tools: Fix resources leak in perf_data__open_dir
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/7] arm64: dts: qcom: sm8450: add spmi node
 Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221229090903.1402395-1-linmq006@gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221229090903.1402395-1-linmq006@gmail.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221229103212.984324-1-konrad.dybcio@linaro.org>
+ <7b32e414-96a9-7265-efee-f872badb32b2@linaro.org>
+ <71d7a162-569d-1443-9e53-3ba374d06ccd@linaro.org>
+ <ee24809b-cf9b-c555-9c30-956949be25a4@linaro.org>
+ <c4cc7365-df3e-f591-58b8-b844d5bf1737@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c4cc7365-df3e-f591-58b8-b844d5bf1737@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/12/22 11:09, Miaoqian Lin wrote:
-> In perf_data__open_dir(), opendir() opens the directory stream.
-> Add missing closedir() to release it after use.
+On 29/12/2022 12:04, Konrad Dybcio wrote:
 > 
-> Fixes: eb6176709b23 ("perf data: Add perf_data__open_dir_data function")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
-
-> ---
->  tools/perf/util/data.c | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/tools/perf/util/data.c b/tools/perf/util/data.c
-> index a7f68c309545..fc16299c915f 100644
-> --- a/tools/perf/util/data.c
-> +++ b/tools/perf/util/data.c
-> @@ -132,6 +132,7 @@ int perf_data__open_dir(struct perf_data *data)
->  		file->size = st.st_size;
->  	}
->  
-> +	closedir(dir);
->  	if (!files)
->  		return -EINVAL;
->  
-> @@ -140,6 +141,7 @@ int perf_data__open_dir(struct perf_data *data)
->  	return 0;
->  
->  out_err:
-> +	closedir(dir);
->  	close_dir(files, nr);
->  	return ret;
->  }
+> On 29.12.2022 11:57, Krzysztof Kozlowski wrote:
+>> On 29/12/2022 11:45, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 29.12.2022 11:42, Krzysztof Kozlowski wrote:
+>>>> On 29/12/2022 11:32, Konrad Dybcio wrote:
+>>>>> From: Vinod Koul <vkoul@kernel.org>
+>>>>>
+>>>>> Add the spmi bus as found in the SM8450 SoC
+>>>>>
+>>>>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>>>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>>>> [Konrad: 0x0 -> 0, move #cells down, make reg-names a vertical list]
+>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>> ---
+>>>>> v1 -> v2:
+>>>>> No changes
+>>>>>
+>>>>>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 22 ++++++++++++++++++++++
+>>>>>  1 file changed, 22 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>>>> index 570475040d95..b9b59c5223eb 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>>>> @@ -2715,6 +2715,28 @@ aoss_qmp: power-controller@c300000 {
+>>>>>  			#clock-cells = <0>;
+>>>>>  		};
+>>>>>  
+>>>>> +		spmi_bus: spmi@c42d000 {
+>>>>
+>>>> Hmm looks different than reg.
+>>>>
+>>>>> +			compatible = "qcom,spmi-pmic-arb";
+>>>>> +			reg = <0 0x0c400000 0 0x00003000>,
+>>>>> +			      <0 0x0c500000 0 0x00400000>,
+>>>>> +			      <0 0x0c440000 0 0x00080000>,
+>>>>> +			      <0 0x0c4c0000 0 0x00010000>,
+>>>>> +			      <0 0x0c42d000 0 0x00010000>;
+>>>> x
+>>> Hm, my guess would be that Vinod chose to put the "cnfg" reg
+>>> instead of "core" in the unit address, as 8450 has 2 SPMI bus
+>>> hosts and they both share the core reg, so it would have been
+>>> impossible to have two spmi@core nodes..
+>>
+>> Eh? SM8450 has 2 SPMI hosts both using 0x0c400000? How does that work?
+>> Usually address can be mapped only once.
+> No idea either!
+> 
+>>
+>> Where is the second SPMI? I cannot find it in linux-next.
+> It's only there on downstream and I'm not sure how useful it is
+> really, only some debug subdevice is attached to it.. Perhaps
+> we could ignore its existence for now and I could use the core
+> reg in unit address for spmi0?
+
+I see it indeed in downstream. core, chnls and obsrvr IO are the same.
+There is quite of debug devices attached.
+
+There is a comment in PMIC arbiter code to use a IO mapping allowing
+simultaneous mappings, so this is actually valid.
+
+Anyway, DT expects unit address to match first reg, so if we want to
+have second PMIC, we need to change the order of reg entries.
+
+We can ignore this problem till we add second PMIC...
+
+Best regards,
+Krzysztof
 
