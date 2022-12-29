@@ -2,115 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63619658F16
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 840F2658F21
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbiL2Qeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 11:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
+        id S233150AbiL2Qjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 11:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiL2Qe3 (ORCPT
+        with ESMTP id S230022AbiL2Qjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 11:34:29 -0500
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8905D11A32
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:34:27 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id AvrKpnmhptht4AvrKpvTPn; Thu, 29 Dec 2022 17:34:25 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 29 Dec 2022 17:34:25 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <437145bf-d925-e91e-affd-835d272c55a0@wanadoo.fr>
-Date:   Thu, 29 Dec 2022 17:34:22 +0100
+        Thu, 29 Dec 2022 11:39:36 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCC6DFBB
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:39:34 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id f34so28189589lfv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=txhwA/ZUpFbIFup9wIuYZkJbnGVjKJ2jOcyXprhCmPo=;
+        b=dciD/Ycio+250FM8/AnXaPz7gWoiQnZOdqmXMoWmcp4LN7w7crY0b6I2jusEBfZXtb
+         ktw4vWgyJ5jgYO9TR6pKjLXzCcMFVGX1Ss5Y0tQvijj2VkDHekM0sIXS0NddjGSEuwEn
+         06nXyfTFWuMz94aVPy4D2FnFXUQY+k7dl7x9wbEjgrV7klfIGDflVhZQ9jBTK33he120
+         yUlrzN98WHnDpN/FwIIwwnBIk7LV2RjS3VAVYYf7JsleInUKpbjWIUn8cub29ioBxett
+         qlcnodjnJTOj3GDtc7dhrYVnQfreLB3buLsnAfcsqcykkTK9jOdnu0KyRslmdiXdApq+
+         14Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=txhwA/ZUpFbIFup9wIuYZkJbnGVjKJ2jOcyXprhCmPo=;
+        b=1Wc81C5lFiOqdWDkj4W2sqXc0HV7IpUiwG2ZOBSE7v2oU4gJ4BXoXhuopWv4NCJwYi
+         4oTe21jIyWPkcw43Z7H5UwAHKP2XnJKHeTEDodMbwwlazsxpz/jecfkDqwLm4nArM4+c
+         XqsJDL8c9XXBfp4ivN3PNDCtfJu8EdN1KffM6Fyy3La7e8uv8hLbp3DErz/CVAfSUPyN
+         zJp3qqk6gR3t+EqIdRmVRCUyqhdZBskCDQqQl0Bdu0k/0qeoStljJ3DqkwLrVxbhs9St
+         l56hsXgH01VKK/aUBov0DxWJl7BGUTvu6u82tS8Oq544whOxOzG+9FhJUwU00dRNEdO+
+         5Wwg==
+X-Gm-Message-State: AFqh2krGyOeM5lsnqKxyqEZRwzIbti3vtLRF5V5i8LrBXbp2TT8FMCq0
+        OxtX9oq3t7Lszj1NKWibPKzskg==
+X-Google-Smtp-Source: AMrXdXvRaSHvaRVe+JHJaQXcOjSgEqHn7LvdZ9o/fNdzXysgRNxJg4InJ4AXNIgDCb7l0sIfT68vxA==
+X-Received: by 2002:a05:6512:529:b0:4cb:1438:12d6 with SMTP id o9-20020a056512052900b004cb143812d6mr2499958lfc.8.1672331972997;
+        Thu, 29 Dec 2022 08:39:32 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c8-20020a056512324800b00499aefcf68esm3141911lfr.292.2022.12.29.08.39.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Dec 2022 08:39:32 -0800 (PST)
+Message-ID: <105cae8a-ba03-ea60-70f2-8a307a26ad14@linaro.org>
+Date:   Thu, 29 Dec 2022 17:39:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net] fjes: Fix an error handling path in fjes_probe()
-To:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Taku Izumi <izumi.taku@jp.fujitsu.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <fde673f106d2b264ad76759195901aae94691b5c.1671569785.git.christophe.jaillet@wanadoo.fr>
- <Y6LZEVU7tKPzjHQ8@localhost.localdomain>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <Y6LZEVU7tKPzjHQ8@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: Add bindings for max31732
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Sinan Divarci <Sinan.Divarci@analog.com>, jdelvare@suse.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214142206.13288-1-Sinan.Divarci@analog.com>
+ <20221214142206.13288-4-Sinan.Divarci@analog.com>
+ <386e3717-a063-a2ea-6028-19d11b5838b0@linaro.org>
+ <20221229155227.GA22937@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221229155227.GA22937@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 21/12/2022 à 10:59, Michal Swiatkowski a écrit :
-> On Tue, Dec 20, 2022 at 09:57:06PM +0100, Christophe JAILLET wrote:
->> A netif_napi_add() call is hidden in fjes_sw_init(). It should be undone
->> by a corresponding netif_napi_del() call in the error handling path of the
->> probe, as already done inthe remove function.
+On 29/12/2022 16:52, Guenter Roeck wrote:
+>>> +  adi,alarm1-interrupt-mode:
+>>> +    description: |
+>>> +      Enables the ALARM1 output to function in interrupt mode.
+>>> +      Default ALARM1 output function is comparator mode.
 >>
->> Fixes: 265859309a76 ("fjes: NAPI polling function")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->>   drivers/net/fjes/fjes_main.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
->> index 2513be6d4e11..01b4c9c6adbd 100644
->> --- a/drivers/net/fjes/fjes_main.c
->> +++ b/drivers/net/fjes/fjes_main.c
->> @@ -1370,7 +1370,7 @@ static int fjes_probe(struct platform_device *plat_dev)
->>   	adapter->txrx_wq = alloc_workqueue(DRV_NAME "/txrx", WQ_MEM_RECLAIM, 0);
->>   	if (unlikely(!adapter->txrx_wq)) {
->>   		err = -ENOMEM;
->> -		goto err_free_netdev;
->> +		goto err_del_napi;
->>   	}
->>   
->>   	adapter->control_wq = alloc_workqueue(DRV_NAME "/control",
->> @@ -1431,6 +1431,8 @@ static int fjes_probe(struct platform_device *plat_dev)
->>   	destroy_workqueue(adapter->control_wq);
->>   err_free_txrx_wq:
->>   	destroy_workqueue(adapter->txrx_wq);
->> +err_del_napi:
->> +	netif_napi_del(&adapter->napi);
->>   err_free_netdev:
->>   	free_netdev(netdev);
->>   err_out:
-> 
-> Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-> 
-> I wonder if it won't be better to have fjes_sw_deinit() instead or
-> change fjes_sw_init to only netif_napi_add(). You know, to avoid another
-> bug here when someone add sth to the fjes_sw_deinit(). This is only
-> suggestion, patch looks fine.
-
-hi,
-
-based on Jakub's comment [1], free_netdev() already cleans up NAPIs (see 
-[2]).
-
-So would it make more sense to remove netif_napi_del() from the 
-.remove() function instead?
-The call looks useless to me now.
-
-CJ
-
-[1]: https://lore.kernel.org/all/20221221174043.1191996a@kernel.org/
-[2]: https://elixir.bootlin.com/linux/v6.2-rc1/source/net/core/dev.c#L10710
-
-> 
->> -- 
->> 2.34.1
+>> Why this is a property of DT/hardware? Don't encode policy in DT.
 >>
 > 
+> I would not call this "policy". Normally it is an implementation
+> question or decision, since interrupts behave differently depending
+> on the mode. Impact is difficult to see, though, since the chip
+> documentation is not available to the public.
+
+Some more background would be useful here from the author...
+
+> 
+>>> +    type: boolean
+>>> +
+>>> +  adi,alarm2-interrupt-mode:
+>>> +    description: |
+>>> +      Enables the ALARM2 output to function in interrupt mode.
+>>> +      Default ALARM2 output function is comparator mode.
+>>
+>> Same question.
+>>
+>>> +    type: boolean
+>>> +
+>>> +  adi,alarm1-fault-queue:
+>>> +    description: The number of consecutive faults required to assert ALARM1.
+>>
+>> Same question - why this number differs with hardware?
+>>
+> 
+> Noisier hardware will require more samples to avoid spurious faults.
+> Trade-off is speed of reporting a fault. Normally the board designer
+> would determine a value which is low enough to avoid spurious faults.
+> 
+> Note that the chip (according to patch 2/3) supports resistance
+> cancellation as well as beta compensation, which are also board specific.
+> I don't have access to the datasheet, so I don't know for sure if those
+> are configurable (typically they are). If they are configurable, I would
+> expect to see respective properties.
+
+If that's the argument behind property, then it's fine.
+
+Best regards,
+Krzysztof
 
