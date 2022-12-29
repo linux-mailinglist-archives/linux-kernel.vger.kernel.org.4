@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F5F65906B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B01D659068
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234018AbiL2Saz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 13:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
+        id S233876AbiL2Saj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 13:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233993AbiL2Sas (ORCPT
+        with ESMTP id S233719AbiL2Saf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 13:30:48 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32067E00
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:30:47 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id 203so21389238yby.10
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:30:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eK7n1ws2WcG0waDTRu+O3A0BCNoRbhODPLcsgDDo3Q8=;
-        b=Yh2zmxWqOHHAFR+IODFXfo5EgugJNXP4HS+funosv9mmvuhpi4TvuWuiZ+y+1boM+L
-         DCQwVIYI4gDwvrYFw9r7EZOrtCVuG36+ZUJnwt5AQGFUbton0k7San2dVW01iboObhkZ
-         0k4YR5DY/YluFcU5B1zoNmxcczFqOOTazjVs4ZqfsDKeM4wQj6/Eb2+fP3EoitKsKV+I
-         iy7mKRUbK0AxKphCHG4dADG0FfFVsWkhIrzL3TlwMekDQY435VISVhjnYPmA5BtW7IKy
-         17SPZ0NMOwVEjZ6lhpIX/vWoZBGoF75LZPBIk4JtY4BA/9wPc6oML228NwQrWo/oXZaC
-         SpuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eK7n1ws2WcG0waDTRu+O3A0BCNoRbhODPLcsgDDo3Q8=;
-        b=q6OB6hxrjGBzri2KsdPdIlfUdS+8Ek4bYzpIOaBHvoQYYMq1Xz3QpAjI/4Oxl+czrc
-         Ff5tAufkdBhjWYgMGo3WgvdK9dPPrQ9H8ACwHDTjZf9YkCWpDJaE5qwKzTFFurDBMn2U
-         Uxl4wiHbdP5BqwvdLG4tnBbnaOldBoGvxqc5hhbLFx5/kB77myFKqyUpqkCWnjL5BubB
-         BjGM+a0uLvqYpYm7s9yh2yITR0Bw9eBd0+cvGXcr34rkbTzfhXGysdq/Q8qR6rJO17PS
-         5Cm1wVJ9+2ni2o/ksIvv1FKzfEXpTcD2B087ViJ2F35F9f1mTPvxwsG779+uNl5ok/SS
-         5WbA==
-X-Gm-Message-State: AFqh2kq7WeAnUZCYjzC46Os89a5nlqKwvF/A+kv3BmwOqed4tg+fswUI
-        TqNeJh4Z5T9dBbTxyxkod74TC7OVl+VynchDeAvZ6Q==
-X-Google-Smtp-Source: AMrXdXvhdOITh6b9oxTSQEr0IMc24EgLs659VNyESwPFjQBFdoFblc7lunk3l5kSHBeDRzZwl20npxuFRk8xJg+N8dA=
-X-Received: by 2002:a5b:1c8:0:b0:6fe:46c9:7479 with SMTP id
- f8-20020a5b01c8000000b006fe46c97479mr3327366ybp.191.1672338646326; Thu, 29
- Dec 2022 10:30:46 -0800 (PST)
+        Thu, 29 Dec 2022 13:30:35 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D936D22B;
+        Thu, 29 Dec 2022 10:30:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1672338632; bh=r0ojIH8Vn8oM6pui9lzwJ5Xziz63tdtGqikK2Iy4tF0=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=t/0zHojuWW0MB2yxQ+aOUErVv1Dt8IHxWQS/h/XNyvXwtxl74ssMuhpWuaN1N/Cfr
+         c1+XyHJLRbesT4kNf6xrI7BRMHm5yPMVwSJ7HRFWHRFpHyorHWohIbVq3COokhFR6N
+         OsIJQPC7c8hNEau/PQuK+o5bnG4JikQa+ybe3dcG6c2Hzq//nk+W4GS9EqmCgG0G7r
+         gCaf0My4Ee+MwwhWLU58/7uvBvmRGTCFi2FTj2RzlxGONuE3s+Zj/P8+BZV0TFdaf+
+         bme5nkkyx/GoXK5dKMkZO899KyKk64+F0PiSpeREVpB8dSxWcswM0E9Y9ZQot882o4
+         RiHbr6/xRyO2g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.34.177]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mo6qv-1oVJTP0ScN-00pger; Thu, 29
+ Dec 2022 19:30:32 +0100
+Message-ID: <ac64a6d4-d5cd-c239-59b1-5efdeea1de60@gmx.de>
+Date:   Thu, 29 Dec 2022 19:30:31 +0100
 MIME-Version: 1.0
-References: <20221221222418.3307832-1-bgardon@google.com> <20221221222418.3307832-10-bgardon@google.com>
-In-Reply-To: <20221221222418.3307832-10-bgardon@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Thu, 29 Dec 2022 10:30:20 -0800
-Message-ID: <CALzav=e5xeUVCJVPax216MxbQJWEDuZrAtULWLH7GBXB5RURnw@mail.gmail.com>
-Subject: Re: [RFC 09/14] KVM: x86/MMU: Only make pages available on Shadow MMU fault
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Nagareddy Reddy <nspreddy@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:YhH0p53JEb/Ng9P8X9oOw4QL0Vv1Dzu8Txb2lXgH6svxmBiZdZO
+ nqPxrPsXzocRqZq1BF6PK8ARfJ92YJQatKDl3iego5Asn3TChBjfnI1x8zfE/CFVkps18UU
+ y5l+wcAWa2yBO/OnFehmlre4UGXM+ZNFc/Ia5dR3G0F28n1hZa4J6fnbNVOWIAXNaV9ZJGp
+ 11rYJ8Ez8txCvrL9Y7lQg==
+UI-OutboundReport: notjunk:1;M01:P0:gZKPqI6U41o=;kRupIjEeZVRbjwBPucy1aERn0Ef
+ /NKY0LpTFN9snpy9g9HpXSa//dlNFf6g9R5RofVU5KdijGVWbmL9KCo2tLfmkQgsclB7Rwiem
+ f0Pl9/JWjv9jXuvTU7o1jN6gISA9s8N1fNTN/ZQTZoyCk2A3kGbbqdh2zjbbPPv47No4Qsnqv
+ jQ06eP01esSgl3tNGj6S7683GRyTZg0U6ju9t0m/Da+WVdXFkzBVudP1X+fxw7/SjYh8mOjRj
+ oNdVnqtRbxs3uT7Mo5xlSvr1zc0ZaCsWShu5IkzMm4g7f6F5IdeB1wOf/4rkFrfmrCVV/7US0
+ tiSLRAZ0eU6K8XMCB0vbXdZnCDTzjJO3Gcxgu1O6/JfUfoTZzQRpkV6VZz+5TLDVxoaWEk9d+
+ FBwIuthn9yhibkaHBuMLbBXPQAA4Z5QwH7PApwq2XU5TbI2mB9t2URESEVROQ+QaY1A24jEtK
+ 7NMa4swdXMSTBxBfMJx+Nzk/mmAfotlwV/lBPcbCs96UUqx/jJ4hkEFGld9JXjcoUdCcguTCV
+ x6luXm2Ymr1+VxjHMJGx++ohgL3z0OWC7W1DrtnLy+gzCHIq+aJxV/GzIRYN960G75eQKaBAp
+ KC+NGVFmIfCYkM4WmzF1G+fpo3eQeSPwgRAtOV9pFHLwiEYrPpHGu/V02jNt4olPev2U/9uh9
+ 7W2l+ZtP4d3TkfBcQ7QLuB2jf7JbtP+brKF8brIeOHed/zArJCEXTeSanYdBK/ebFpodAx4NP
+ 8iUtxGFlrfuk/FBSxhvrIIHh0QlSOg72f1rdrOeQ1AfxgwdiH8NB6Ss2NokZ9ivAAzjY+RMrs
+ BtOf5x69U7TDs3y6sdL7WzraxuNIqFugsQURHcrWho4uNA0GBUx3ISLgkgVpTxiFqtdRER534
+ aqdIcvs79Z8y1/HMZ7JSSrXULm1+5ptmJejkbrC57lkvC0qsNn/h3bITqLhNn0MyNZoDHOiNj
+ +fMXkQ==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,15 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 2:24 PM Ben Gardon <bgardon@google.com> wrote:
->
-> Now that the Shadow MMU has been factored out of mmu.c and the naming
-> sheme has been cleaned up, it's clear that there's an unnecessary
-> operation in direct_page_fault(). Since the MMU page quota is only
-> applied to the Shadow MMU, there's no point to calling
-> kvm_shadow_mmu_make_pages_available on a fault where the TDP MMU is
-> going to handle installing new TDP PTEs.
+Hi Greg
 
-Jinx! An equivalent change recently went into kvm/queue:
+6.1.2-rc1
 
-https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?h=queue&id=1290f90e77186bf8a06a3a35ebf254f5b004676b
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 37)
+
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
+
