@@ -2,144 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE766591B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82066591C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234224AbiL2UoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 15:44:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S231390AbiL2Uo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 15:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234182AbiL2Ung (ORCPT
+        with ESMTP id S234179AbiL2UoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 15:43:36 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B68A18387;
-        Thu, 29 Dec 2022 12:41:07 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id jn22so19944749plb.13;
-        Thu, 29 Dec 2022 12:41:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5+7CR58SPvhZSbvxiF3pO3ff849ICg9QIOe5C8t8+9o=;
-        b=XrHqS0Trcpa4Hn59n/py1EEYcBPf8OPeyq9pDLIzTLmc/xTM376UuDQEjqJbvCAU0O
-         pORf3gMmzYLe6R6hrjbjjIGN5qmJV4O2/BKkPVmwM1z7ByVSh2bcGKH43sI0Gobopw16
-         DQsgYebDdH0VDoKCNIrLtkyH+2Q7Um0LAte1tKWw4mMaVoHkVzs7TYSsDcypOIyKxMsc
-         s+mhNPoFfCm4+dmMbj0DhoNlvqk+b03iA2p6FWQIRkkzMk0/yqOdxHqbOxN0MLvyMgfM
-         0mq1aQp1ceQpBx+NBXusEz9OjzyOZSHvnCd5XwR2EQi1iHi0LMRMHORnfmfF6weed7il
-         PDkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5+7CR58SPvhZSbvxiF3pO3ff849ICg9QIOe5C8t8+9o=;
-        b=Os/5xXIiOKmcwQRYrYcs8XXmF5+63gcNt4j34xkT3kzUmfvoMVlrbpLJVEnsUKwq/V
-         IlRCIPlNAQDi42qFkwumrIcO/98y0ld6wy4Syp0bFGUyVzK45fb/4tjrS/i84n8VHxxB
-         us8rcqySRCbsRpI2biI6XsDis2IlRBTjolZg9Ba83J9H6yp2dM9rKeIolgpYgSykBwcc
-         38cUFzHuel3HFUSX7SAkv3hxXSAOVuDYKnYGJrdeMpck8ODMvS8FLALzw2FYBVkLDV/K
-         IJqX5DhdJ5ccZWZ2jCgTRtFr16d3UfkBhu48s3NcT8Io3LQp+YHuP09Ymx7WRVTZ6wvP
-         N8GA==
-X-Gm-Message-State: AFqh2kq4RAeXIjVzzgkKUNRwzAxKx/I9SoYe2rdmmvteUHXA6tCPBtAz
-        /jYWrZypjptcSYsOlqyPnTVm1iTcq2CyCw==
-X-Google-Smtp-Source: AMrXdXuamyUtbCEYIAxU87Kwz446hazHbxIhbYjn3tc/7GQegmmiAhB4yDaqhA2edKHhkxWXcOAjag==
-X-Received: by 2002:a17:903:31d5:b0:191:4539:d2c1 with SMTP id v21-20020a17090331d500b001914539d2c1mr30581759ple.47.1672346466671;
-        Thu, 29 Dec 2022 12:41:06 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:d74d:9c28:5a9d:f5b9])
-        by smtp.gmail.com with ESMTPSA id q15-20020a17090311cf00b001754fa42065sm13413824plh.143.2022.12.29.12.41.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 12:41:06 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, bpf@vger.kernel.org
-Subject: [PATCH 3/3] perf/core: Save calculated sample data size
-Date:   Thu, 29 Dec 2022 12:41:01 -0800
-Message-Id: <20221229204101.1099430-3-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20221229204101.1099430-1-namhyung@kernel.org>
-References: <20221229204101.1099430-1-namhyung@kernel.org>
+        Thu, 29 Dec 2022 15:44:05 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104F6192BE;
+        Thu, 29 Dec 2022 12:41:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672346481; x=1703882481;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8nFJfj1L6ajQNAz63881lx/5UMY+BMa5JW/kyHbHarg=;
+  b=GXETx/eOQ6wJQKFq8g8SPyslTtREOI3zGXXH+OO0OH0DbaYtDsX805PS
+   7sulWRPOSDE7BWDFodDcI0LYhH/hDlSFSqsn4O7iHVCkJ05fjGcHbQX2e
+   vrDwCBOnapOtGYhY/0QZVtpNfISs8AJ60hNG2iQ5xXKCWO4nt9dZX9XsD
+   pywvIcj5XGjSERekM6G63FG2Oo8WkOBnnVC+Jw6k68FXrqj64pCSnxD3t
+   MEp6i/IniP21dJjpC75+a+0A4IoVxOAiq3bHD7+aX0DH184oY69sDspcr
+   gObzAjwUTSxlLzCcwFhDtYm0TA/FfRi/tMLSnnArJC6jnzTA/+owyg5sm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="300801858"
+X-IronPort-AV: E=Sophos;i="5.96,285,1665471600"; 
+   d="scan'208";a="300801858"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 12:41:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="716996496"
+X-IronPort-AV: E=Sophos;i="5.96,285,1665471600"; 
+   d="scan'208";a="716996496"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Dec 2022 12:41:15 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pAziD-001Kfc-0V;
+        Thu, 29 Dec 2022 22:41:13 +0200
+Date:   Thu, 29 Dec 2022 22:41:12 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
+        yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com,
+        corbet@lwn.net, gregkh@linuxfoundation.org,
+        linux-serial@vger.kernel.org, jirislaby@kernel.org,
+        geert+renesas@glider.be, niklas.soderlund+renesas@ragnatech.se,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
+        ilpo.jarvinen@linux.intel.com, marpagan@redhat.com,
+        bagasdotme@gmail.com
+Subject: Re: [PATCH v8 3/4] fpga: dfl: add basic support for DFHv1
+Message-ID: <Y637aBTrbRloUtvD@smile.fi.intel.com>
+References: <20221228181624.1793433-1-matthew.gerlach@linux.intel.com>
+ <20221228181624.1793433-4-matthew.gerlach@linux.intel.com>
+ <628c125a-5a84-e1bd-7724-2637315cc35e@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <628c125a-5a84-e1bd-7724-2637315cc35e@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid duplicate work in perf_prepare_sample(), save the final header
-size in data->saved_size.  It's initialized to 0 and set to an actual
-value at the end of perf_prepare_sample().
+On Thu, Dec 29, 2022 at 08:18:03AM -0800, Tom Rix wrote:
+> On 12/28/22 10:16 AM, matthew.gerlach@linux.intel.com wrote:
 
-If it sees a non-zero value that means it's the second time of the call
-and it knows the sample data is populated already.  So update the header
-size with the data->saved_size and bail out.
+...
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- include/linux/perf_event.h |  2 ++
- kernel/events/core.c       | 11 +++++++++++
- 2 files changed, 13 insertions(+)
+> >   struct dfl_feature_info {
+> >   	u16 fid;
+> >   	u8 revision;
+> > +	u8 dfh_version;
+> >   	struct resource mmio_res;
+> >   	void __iomem *ioaddr;
+> >   	struct list_head node;
+> >   	unsigned int irq_base;
+> >   	unsigned int nr_irqs;
+> > +	unsigned int param_size;
+> > +	u64 params[];
+> u64 *params
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index dd565306f479..ccde631a0cb4 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1103,6 +1103,7 @@ struct perf_sample_data {
- 	 */
- 	u64				sample_flags;
- 	u64				period;
-+	u64				saved_size;
- 
- 	/*
- 	 * Fields commonly set by __perf_event_header__init_id(),
-@@ -1158,6 +1159,7 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
- 	/* remaining struct members initialized in perf_prepare_sample() */
- 	data->sample_flags = PERF_SAMPLE_PERIOD;
- 	data->period = period;
-+	data->saved_size = 0;
- 
- 	if (addr) {
- 		data->addr = addr;
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 70bff8a04583..dac4d76e2877 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -7575,6 +7575,15 @@ void perf_prepare_sample(struct perf_event_header *header,
- 	header->misc = 0;
- 	header->misc |= perf_misc_flags(regs);
- 
-+	/*
-+	 * If it called perf_prepare_sample() already, it set the all data fields
-+	 * and recorded the final size to data->saved_size.
-+	 */
-+	if (data->saved_size) {
-+		header->size = data->saved_size;
-+		return;
-+	}
-+
- 	/*
- 	 * Clear the sample flags that have already been done by the
- 	 * PMU driver.
-@@ -7796,6 +7805,8 @@ void perf_prepare_sample(struct perf_event_header *header,
- 	 * do here next.
- 	 */
- 	WARN_ON_ONCE(header->size & 7);
-+
-+	data->saved_size = header->size;
- }
- 
- static __always_inline int
+This will break the overflow.h macros, no?
+Besides that it will break the code for sure as it's not an equivalent.
+
+> >   };
+
+
 -- 
-2.39.0.314.g84b9a713c41-goog
+With Best Regards,
+Andy Shevchenko
+
 
