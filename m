@@ -2,189 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62878658A85
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E9B658A8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbiL2I15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 03:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
+        id S233192AbiL2Ia5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 03:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbiL2I14 (ORCPT
+        with ESMTP id S229535AbiL2Iay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 03:27:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B6ADC7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:27:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672302433;
+        Thu, 29 Dec 2022 03:30:54 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A2EBF2;
+        Thu, 29 Dec 2022 00:30:52 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 31BDD1C09F6; Thu, 29 Dec 2022 09:30:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1672302650;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3gwn9uw8GpeaAYNSjcfDG9cgBntGteGPOXdgf7cDThI=;
-        b=f+n+jcDxrJej5p33uVFnAZ7zsKK8JRj/vvAl3ACECEfHrVK+VLZpFQ0dlk2GMtHizEO8GL
-        KV7FT4huP3j9gJlRqaTxrNWc+6cU8bqtRmbwOUe+9D/JzwRhhA2U4NKPaKUI/cKRYawBF9
-        r8+uxVmnCgS5hN3x56X9Yk3wt9DJdEc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-249-9cxv75FDN7GZYUN1y-C08A-1; Thu, 29 Dec 2022 03:27:12 -0500
-X-MC-Unique: 9cxv75FDN7GZYUN1y-C08A-1
-Received: by mail-wm1-f70.google.com with SMTP id fl12-20020a05600c0b8c00b003d96f0a7f36so7980727wmb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:27:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3gwn9uw8GpeaAYNSjcfDG9cgBntGteGPOXdgf7cDThI=;
-        b=DSwmFwuKGZaHUfMTeZGIjuWFrMf7yKG9oL5UfHOE0gcGQ6vZgD84sNPougzeaUIghx
-         5QcTQ2szopgvyWkV/7bWwm7/RnqZ5S/m70vdmg7iaqqKJwVRgTXboQVFjeSieGazwCMg
-         rgjoSy+lGM1yFd3urQrWQH22t9+2lofQbhXniRgrR7tQ3bOoapZWSOS+Q1pcdZTGfFa+
-         wZelrBns+/f3ILjh75XtmuLZUqqCbj6m4tJ/8vLF3iFqW2NWZyxUz/c0aXeMpH1P4Iax
-         kv6M+8jIL9RXtpLXzntNx2bDTsNwSfa2FLvNCKjOb9xO3K2M0TVPsRMLvKer4YCyly3s
-         Z9bg==
-X-Gm-Message-State: AFqh2kr43ieImc0u2StSG0XhtqJsITriYSxI883tVzSqPeQCFSGIxIkA
-        QvDM4uYIhPE6bxBohOEGyqTRKppmLXolMPQCzTsGdUH47hhIGEyC0mcPRmqrdU+cuAy+MhuGukY
-        +VSyIDY4wPtQsiSvBsyYuKWRj
-X-Received: by 2002:a05:600c:6020:b0:3d1:f0b4:8827 with SMTP id az32-20020a05600c602000b003d1f0b48827mr19496190wmb.25.1672302430934;
-        Thu, 29 Dec 2022 00:27:10 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsQs9zU/+72QHHkqHDKfXVW3103mpuPJJ/aAonpa2iu+6ge/EIA41O0YEwthIKCtPSmtrVmsQ==
-X-Received: by 2002:a05:600c:6020:b0:3d1:f0b4:8827 with SMTP id az32-20020a05600c602000b003d1f0b48827mr19496182wmb.25.1672302430729;
-        Thu, 29 Dec 2022 00:27:10 -0800 (PST)
-Received: from starship ([89.237.103.62])
-        by smtp.gmail.com with ESMTPSA id f18-20020a05600c4e9200b003d35c845cbbsm32258609wmq.21.2022.12.29.00.27.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 00:27:10 -0800 (PST)
-Message-ID: <b002fd18c2abdfe5f4395be38858f461b3c76ac3.camel@redhat.com>
-Subject: Re: [PATCH v4 28/32] KVM: SVM: Require logical ID to be power-of-2
- for AVIC entry
-From:   mlevitsk@redhat.com
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Thu, 29 Dec 2022 10:27:08 +0200
-In-Reply-To: <f1f1a33134c739f09f5820b5a4973535f121c0da.camel@redhat.com>
-References: <20221001005915.2041642-1-seanjc@google.com>
-         <20221001005915.2041642-29-seanjc@google.com>
-         <f1f1a33134c739f09f5820b5a4973535f121c0da.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        bh=GMDiP+si500La00phNcMqFDqIk07ZuaffuXl6TOuXZk=;
+        b=hreBY2Gq0qPdVV2AreCvib6znrR+veQn1XOcjer0BGSek7nBorfHy6PV3r6geAMyF4RJPR
+        GcW1vrsHK6cVVfsIysL8GTR+Gdakje/O8QKG/HSFjWyjMQU1LG3teBsW6NYHF7Bg8R10yH
+        RE/j7iwL7oq4Qo381iDimzr4wrPrCyY=
+Date:   Thu, 29 Dec 2022 09:30:49 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 04/12] types: Introduce [us]128
+Message-ID: <Y61QOe8XG5sUAXoc@duo.ucw.cz>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.087799661@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="fTFbN55brR9qMT+p"
+Content-Disposition: inline
+In-Reply-To: <20221219154119.087799661@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-12-09 at 00:00 +0200, Maxim Levitsky wrote:
-> On Sat, 2022-10-01 at 00:59 +0000, Sean Christopherson wrote:
-> > Do not modify AVIC's logical ID table if the logical ID portion of the
-> > LDR is not a power-of-2, i.e. if the LDR has multiple bits set.  Taking
-> > only the first bit means that KVM will fail to match MDAs that intersect
-> > with "higher" bits in the "ID"
-> > 
-> > The "ID" acts as a bitmap, but is referred to as an ID because theres an
-> > implicit, unenforced "requirement" that software only set one bit.  This
-> > edge case is arguably out-of-spec behavior, but KVM cleanly handles it
-> > in all other cases, e.g. the optimized logical map (and AVIC!) is also
-> > disabled in this scenario.
-> > 
-> > Refactor the code to consolidate the checks, and so that the code looks
-> > more like avic_kick_target_vcpus_fast().
-> > 
-> > Fixes: 18f40c53e10f ("svm: Add VMEXIT handlers for AVIC")
-> > Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> > Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/kvm/svm/avic.c | 30 +++++++++++++++---------------
-> >  1 file changed, 15 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> > index 4b6fc9d64f4d..a9e4e09f83fc 100644
-> > --- a/arch/x86/kvm/svm/avic.c
-> > +++ b/arch/x86/kvm/svm/avic.c
-> > @@ -513,26 +513,26 @@ unsigned long avic_vcpu_get_apicv_inhibit_reasons(struct kvm_vcpu *vcpu)
-> >  static u32 *avic_get_logical_id_entry(struct kvm_vcpu *vcpu, u32 ldr, bool flat)
-> >  {
-> >  	struct kvm_svm *kvm_svm = to_kvm_svm(vcpu->kvm);
-> > -	int index;
-> >  	u32 *logical_apic_id_table;
-> > -	int dlid = GET_APIC_LOGICAL_ID(ldr);
-> > +	u32 cluster, index;
-> >  
-> > -	if (!dlid)
-> > -		return NULL;
-> > +	ldr = GET_APIC_LOGICAL_ID(ldr);
-> >  
-> > -	if (flat) { /* flat */
-> > -		index = ffs(dlid) - 1;
-> > -		if (index > 7)
-> > +	if (flat) {
-> > +		cluster = 0;
-> > +	} else {
-> > +		cluster = (ldr >> 4) << 2;
-> > +		if (cluster >= 0xf)
-> >  			return NULL;
-> > -	} else { /* cluster */
-> > -		int cluster = (dlid & 0xf0) >> 4;
-> > -		int apic = ffs(dlid & 0x0f) - 1;
-> > -
-> > -		if ((apic < 0) || (apic > 7) ||
-> > -		    (cluster >= 0xf))
-> > -			return NULL;
-> > -		index = (cluster << 2) + apic;
-> > +		ldr &= 0xf;
-> >  	}
-> > +	if (!ldr || !is_power_of_2(ldr))
-> > +		return NULL;
-> > +
-> > +	index = __ffs(ldr);
-> > +	if (WARN_ON_ONCE(index > 7))
-> > +		return NULL;
-> > +	index += (cluster << 2);
-> >  
-> >  	logical_apic_id_table = (u32 *) page_address(kvm_svm->avic_logical_id_table_page);
-> >  
-> 
-> Looks good.
 
-I hate to say it but this patch has a bug:
+--fTFbN55brR9qMT+p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We have both 'cluster = (ldr >> 4) << 2' and then 'index += (cluster << 2)'
+Hi!
 
-One of the shifts has to go.
+> Introduce [us]128 (when available). Unlike [us]64, ensure they are
+> always naturally aligned.
+>=20
+> This also enables 128bit wide atomics (which require natural
+> alignment) such as cmpxchg128().
+>=20
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  include/linux/types.h      |    5 +++++
+>  include/uapi/linux/types.h |    4 ++++
+>  2 files changed, 9 insertions(+)
+>=20
+> --- a/include/linux/types.h
+> +++ b/include/linux/types.h
+> @@ -10,6 +10,11 @@
+>  #define DECLARE_BITMAP(name,bits) \
+>  	unsigned long name[BITS_TO_LONGS(bits)]
+> =20
+> +#ifdef __SIZEOF_INT128__
+> +typedef __s128 s128;
+> +typedef __u128 u128;
+> +#endif
 
-Best regards,
-	Maxim Levitsky
+Should this come as a note here?
 
+> Introduce [us]128 (when available). Unlike [us]64, ensure they are
+> always naturally aligned.
 
-> 
-> For future refactoring, I also suggest to rename this function to 'avic_get_logical_id_table_entry'
-> to stress the fact that it gets a pointer to the AVIC's data structure.
-> 
-> Same for 'avic_get_physical_id_entry'
-> 
-> And also while at it : the 'svm->avic_physical_id_cache', is a very misleading name,
-> 
-> It should be svm->avic_physical_id_table_entry_ptr with a comment explaining that
-> is is the pointer to physid table entry.
-> 
-> 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> 
-> 
-> 
-> Best regards,
-> 	Maxim Levitsky
+BR,
+							Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
+--fTFbN55brR9qMT+p
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY61QOQAKCRAw5/Bqldv6
+8vQtAJ9J9UDlQpqaRV7DVlgZctKi1W8mygCfRehrcFJV2fHBfVb6C4cplLPxxog=
+=Yely
+-----END PGP SIGNATURE-----
+
+--fTFbN55brR9qMT+p--
