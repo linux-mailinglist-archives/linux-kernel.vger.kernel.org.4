@@ -2,58 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2539658CB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70EF658CAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbiL2M2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:28:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S233182AbiL2M0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233284AbiL2M16 (ORCPT
+        with ESMTP id S229535AbiL2M0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:27:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF91D263D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:27:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CDDB6178A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:27:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3FFEC433F2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672316876;
-        bh=kMyVX3hg9ufAE640eUtlK+duN/DOwEbGq6CsAH0RFpg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GI2zZo+vDQhG/4GZj20RE1NAvTP2RmC4PcROi5lNyZwDULNM3zm7m29XeFRegG3iq
-         DKr3o0pPX+0S7goAG93sCKkowjaU9mT7Y8VDCj6YLSRZvNRpagiddPPqG6j7fFw53r
-         AVr1DE8/E8aIKXEjtnZAkImXGpUWsCRk2G69/P9KUWEe41QJUPFwgX6xBiaf4cmnjO
-         7lgv49lsC9lvx7YQ3s5OGQik/cmA1fQ1hx1c6Xd+PAOUIAfxeeMYdzNXOn4/vrfR6U
-         3GgdLOh93QjQWxhzmJ/3PowWrC+d9V7/7ie2+DV9VzbJc3YSZ+Ia5V2fvU0873F+u7
-         zpkHhfs8XDKxA==
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-48641a481dfso84893137b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:27:56 -0800 (PST)
-X-Gm-Message-State: AFqh2krt4BFSCSejRkWA5UrFWJITdMOvshwVBN6m0tt+ihqKv8eP3vLS
-        mP9/5lBSWoohb6W//ycpAIcb/ebI76rojJCAavE=
-X-Google-Smtp-Source: AMrXdXvbkB7RvKVDzQDmZBdvczEpFKYqXxTUYwGdumSZ1d2h8wVpkpY8a/NOxNif2Pa56CsSZ68dT/sx+EPANuc+rrk=
-X-Received: by 2002:a81:838d:0:b0:46e:a921:1d82 with SMTP id
- t135-20020a81838d000000b0046ea9211d82mr2312203ywf.487.1672316875943; Thu, 29
- Dec 2022 04:27:55 -0800 (PST)
+        Thu, 29 Dec 2022 07:26:17 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00AF2618;
+        Thu, 29 Dec 2022 04:26:15 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NjSJR40vkzmWwG;
+        Thu, 29 Dec 2022 20:24:55 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 29 Dec 2022 20:26:14 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <frederic@kernel.org>
+CC:     <jiangshanlai@gmail.com>, <joel@joelfernandes.org>,
+        <josh@joshtriplett.org>, <linux-kernel@vger.kernel.org>,
+        <mathieu.desnoyers@efficios.com>, <paulmck@kernel.org>,
+        <quic_neeraju@quicinc.com>, <rcu@vger.kernel.org>,
+        <rostedt@goodmis.org>, <zhengyejian1@huawei.com>,
+        <mhiramat@kernel.org>
+Subject: Re: [PATCH] rcu: Fix kernel stack overflow caused by kprobe on rcu_irq_enter_check_tick()
+Date:   Thu, 29 Dec 2022 12:27:31 +0000
+Message-ID: <20221229122731.1603031-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221205132353.GB1796992@lothringen>
+References: <20221205132353.GB1796992@lothringen>
 MIME-Version: 1.0
-References: <20221226213227.26953-1-ogabbay@kernel.org> <5db3ee62-d864-1eb7-65c3-21e86037cbe0@quicinc.com>
-In-Reply-To: <5db3ee62-d864-1eb7-65c3-21e86037cbe0@quicinc.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Thu, 29 Dec 2022 14:27:29 +0200
-X-Gmail-Original-Message-ID: <CAFCwf106PK-Rbr-P397xqm_4xkiKZgbo6CfGbSQQQTq0=AWQPA@mail.gmail.com>
-Message-ID: <CAFCwf106PK-Rbr-P397xqm_4xkiKZgbo6CfGbSQQQTq0=AWQPA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] habanalabs/uapi: move uapi file to drm
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     airlied@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,25 +51,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 8:29 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
->
-> On 12/26/2022 2:32 PM, Oded Gabbay wrote:
-> > Move the habanalabs.h uapi file from include/uapi/misc to
-> > include/uapi/drm, and rename it to habanalabs_accel.h.
-> >
-> > This is required before moving the actual driver to the accel
-> > subsystem.
-> >
-> > Update MAINTAINERS file accordingly.
-> >
-> > Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
->
-> This would impact the hl-thunk project at
-> https://github.com/HabanaAI/hl-thunk as the open userspace, right?  I
-> don't appear to see corresponding changes there.  Is there a dev branch
-> I'm missing?
-I will change it in a few weeks. The driver changes are only inside my
-branch, I have time until the next merge cycle.
-Oded
->
-> -Jeff
+On Mon, 5 Dec 2022 14:23:53 +0100, Frederic Weisbecker wrote:
+> On Mon, Nov 21, 2022 at 11:57:03AM -0800, Paul E. McKenney wrote:
+> > On Sat, Nov 19, 2022 at 12:00:49PM +0800, Zheng Yejian wrote:
+> > > Register kprobe on __rcu_irq_enter_check_tick() can cause kernel stack
+> > > overflow [1]. This issue is first found in v5.10 and can be reproduced
+> > > by enabling CONFIG_NO_HZ_FULL and doing like:
+> > >   # cd /sys/kernel/debug/tracing/
+> > >   # echo 'p:mp1 __rcu_irq_enter_check_tick' >> kprobe_events
+> > >   # echo 1 > events/kprobes/enable
+> > > 
+> > > So __rcu_irq_enter_check_tick() should not be kprobed, mark it as noinstr.
+> > 
+> > Good catch!
+> > 
+> > I am inclined to queue this, but noticed that one of its callers need
+> > it to be noinstr but that the others do not.
+> > 
+> > Need noinstr:
+> > 
+> > o	enter_from_kernel_mode() -> __enter_from_kernel_mode() ->
+> >	rcu_irq_enter_check_tick() -> __rcu_irq_enter_check_tick()
+> > 
+> > Doesn't need noinstr:
+> > 
+> > o	ct_nmi_enter() -> rcu_irq_enter_check_tick() ->
+> >	__rcu_irq_enter_check_tick(), courtesy of the call to
+> >	instrumentation_begin() in ct_nmi_enter() that precedes the call
+> >	to rcu_irq_enter_check_tick().
+> > 
+> > o	irqentry_enter() -> rcu_irq_enter_check_tick() ->
+> >	__rcu_irq_enter_check_tick(), courtesy of the call to
+> >	instrumentation_begin() in irqentry_enter() that precedes the
+> >	call to rcu_irq_enter_check_tick().
+> > 
+> > Is tagging __rcu_irq_enter_check_tick() with noinstr as
+> > proposed in this patch the right thing to do, or should there
+> > be calls to instrumentation_begin() and instrumentation_end() in
+> > enter_from_kernel_mode()?  Or something else entirely?
+> 
+> Tagging as noinstr doesn't look right as there are functions in
+> __rcu_irq_enter_check_tick() that can be traced anyway. Also that
+> function has the constraint that it can't be called while RCU is idle
+> so it's up to the caller to call instrumentation_begin()/end().
+
+This problem is due to __rcu_irq_enter_check_tick() being kprobe-ed, so
+how about adding __rcu_irq_enter_check_tick() into kprobe blacklist by
+tagging with NOKPROBE_SYMBOL:
+
+  diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+  index cf34a961821a..41606d3ed083 100644
+  --- a/kernel/rcu/tree.c
+  +++ b/kernel/rcu/tree.c
+  @@ -659,6 +659,7 @@ void __rcu_irq_enter_check_tick(void)
+          }
+          raw_spin_unlock_rcu_node(rdp->mynode);
+   }
+  +NOKPROBE_SYMBOL(__rcu_irq_enter_check_tick);
+   #endif /* CONFIG_NO_HZ_FULL */
+
++Cc: <mhiramat@kernel.org>
+
+--
+Best regards,
+Zheng Yejian
