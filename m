@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A89658952
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 05:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1C3658955
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 05:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiL2EEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 23:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S232434AbiL2EJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 23:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiL2ED4 (ORCPT
+        with ESMTP id S230006AbiL2EJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 23:03:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0B712767;
-        Wed, 28 Dec 2022 20:03:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7C0BB818F0;
-        Thu, 29 Dec 2022 04:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24094C433EF;
-        Thu, 29 Dec 2022 04:03:51 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fs21zXWb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672286628;
+        Wed, 28 Dec 2022 23:09:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150071183D
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 20:08:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672286917;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Kb9UvNFwpxHzxaiK0AFEtw4Ov1SgKsqV5mnJobfZPTU=;
-        b=fs21zXWbGD7tePI4bbXNGWACXGHiVPHAWzs85NTvYJFBU3wq8aictVEjT9VoKw7283YlgB
-        XlbLxf3iAWePgtJ/0gg+eFWzGGHAabksw9KnWKgqrOkT3lczpblYKV8GR2mJZP22g5lBbr
-        2PLM31mCOfZMWFkQhe6nSZjbdNBj4P4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e76c06d8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 29 Dec 2022 04:03:48 +0000 (UTC)
-Date:   Thu, 29 Dec 2022 05:03:44 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-Message-ID: <Y60RoP77HnwaukEA@zx2c4.com>
-References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
- <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
+        bh=z01BL5bMB7RYnKPBfK6zlYcNUBcynjBlLSUbgL2WGro=;
+        b=b/blzro4QJmDdDWWqoE2k55HEwftzuGUk92QmOu/OQ6L5QW2yzujfirr9wowYQo7Q8hbsj
+        J+Y+9f7k4h9hHn67SjqukHI4vKVcFZmDsp0WfxUAgD1Xg1oJUV7LGCnr1SMcGIG/LPsx1F
+        HWqbyaqfNZzZ1BVt8ZdxtmFi29kdV+M=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-528-8fjsLqdZOhOFaJ94q02ryA-1; Wed, 28 Dec 2022 23:08:36 -0500
+X-MC-Unique: 8fjsLqdZOhOFaJ94q02ryA-1
+Received: by mail-oi1-f200.google.com with SMTP id j8-20020a056808034800b0035eb41b5638so2926210oie.14
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 20:08:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z01BL5bMB7RYnKPBfK6zlYcNUBcynjBlLSUbgL2WGro=;
+        b=gIzRlSnselmxB3AR5G5Vdf4MBDYMuwBxqAoUmIDMzNIfz8KVY95pKT0GHDscwQre2M
+         jgP7J5hTHF2m0SVrZrtCwtITKKazJxVbt6aINMrQEByluEfEyvEj7kklH9LVOTZbn7Ew
+         GtgXV8uNhwzkeAa2yaSUaEWuXzouFHqT8h79F5yP2LuxxoudTwLfDTpzAhJ7LWNZa8vv
+         Jj4fAXzfJC5+9HcHfuFMndEencuSyO1EU/xKn7rQeN4hXlOKPtckU4aaxSNp5hCxHCZ8
+         uh9X8a2iKjd70YflJcz1DTvgv7WEfAyWaZdPt3iex8z/RsQ53xz3dRaxlLze+v0UtFkd
+         4GpQ==
+X-Gm-Message-State: AFqh2krdzCILWfJWN1moYyTH40tn+okZ104DFV3UqMo8umWt/73JsSSP
+        VKhbIoZz5m1R+OqlU/kkdElgQIRMNdY6LXX1yHGXzn/al8GjMpmAuTiTdLypvTEyRIeJmFdYtfz
+        VNftRRdH7ZJPxj8+SrkAZjCXtPVzaZf4rBzRo5s1u
+X-Received: by 2002:aca:1111:0:b0:35e:7a42:7ab5 with SMTP id 17-20020aca1111000000b0035e7a427ab5mr1448939oir.280.1672286914980;
+        Wed, 28 Dec 2022 20:08:34 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsaWRZQ5+rAi9IeH7lTkZNBcXDfCB7Tz7Djuos0QGbB53xwmMCkUmg6O5An4K+8oKuuMJPP718TvKimp/ofUBk=
+X-Received: by 2002:aca:1111:0:b0:35e:7a42:7ab5 with SMTP id
+ 17-20020aca1111000000b0035e7a427ab5mr1448927oir.280.1672286914639; Wed, 28
+ Dec 2022 20:08:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221226074908.8154-1-jasowang@redhat.com> <20221226074908.8154-5-jasowang@redhat.com>
+ <1672107557.0142956-1-xuanzhuo@linux.alibaba.com> <CACGkMEvzhAFj5HCmP--9DKfCAq_4wPNwsmmg4h0Sbv6ra0+DrQ@mail.gmail.com>
+ <20221227014641-mutt-send-email-mst@kernel.org> <1672216298.4455094-1-xuanzhuo@linux.alibaba.com>
+ <CACGkMEuADspVzge5Q8JdEQssjGg911CaT1u_NQ9s7i-7UMwkhg@mail.gmail.com>
+ <1672279792.8628097-2-xuanzhuo@linux.alibaba.com> <CACGkMEsET7fKxuKu7NckZX5N8fs+AqZ-adwKFNixJRNNn09GRQ@mail.gmail.com>
+ <1672285288.3368185-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1672285288.3368185-1-xuanzhuo@linux.alibaba.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 29 Dec 2022 12:08:23 +0800
+Message-ID: <CACGkMEtp7ee_Tv21SZXh+a5Y6TsT31SUABECbOwRk=Hk3xRcWw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq command
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, eperezma@redhat.com,
+        edumazet@google.com, maxime.coquelin@redhat.com, kuba@kernel.org,
+        pabeni@redhat.com, davem@davemloft.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,101 +81,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
-> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
-> > Ugh, while the problem [1] was fixed in 6.1, it's now happening again
-> > on the T460 with 6.2-rc1. Except I didn't see any oops message or
-> > "tpm_try_transmit" error this time. The first indication of a problem
-> > is this during a resume from suspend to ram:
-> > 
-> > tpm tpm0: A TPM error (28) occurred continue selftest
-> > 
-> > and then periodically 
-> > 
-> > tpm tpm0: A TPM error (28) occurred attempting get random
-> 
-> That's a TPM 1.2 error which means the TPM failed the selftest.  The
-> original problem was reported against TPM 2.0  because of a missing
-> try_get_ops().
+On Thu, Dec 29, 2022 at 11:49 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+>
+> On Thu, 29 Dec 2022 11:22:13 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> > On Thu, Dec 29, 2022 at 10:10 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> > >
+> > > On Wed, 28 Dec 2022 19:41:13 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> > > > On Wed, Dec 28, 2022 at 4:34 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> > > > >
+> > > > > On Tue, 27 Dec 2022 01:58:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > > > > > On Tue, Dec 27, 2022 at 12:33:53PM +0800, Jason Wang wrote:
+> > > > > > > On Tue, Dec 27, 2022 at 10:25 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, 26 Dec 2022 15:49:08 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> > > > > > > > > We used to busy waiting on the cvq command this tends to be
+> > > > > > > > > problematic since:
+> > > > > > > > >
+> > > > > > > > > 1) CPU could wait for ever on a buggy/malicous device
+> > > > > > > > > 2) There's no wait to terminate the process that triggers the cvq
+> > > > > > > > >    command
+> > > > > > > > >
+> > > > > > > > > So this patch switch to use virtqueue_wait_for_used() to sleep with a
+> > > > > > > > > timeout (1s) instead of busy polling for the cvq command forever. This
+> > > > > > > >
+> > > > > > > > I don't think that a fixed 1S is a good choice.
+> > > > > > >
+> > > > > > > Well, it could be tweaked to be a little bit longer.
+> > > > > > >
+> > > > > > > One way, as discussed, is to let the device advertise a timeout then
+> > > > > > > the driver can validate if it's valid and use that timeout. But it
+> > > > > > > needs extension to the spec.
+> > > > > >
+> > > > > > Controlling timeout from device is a good idea, e.g. hardware devices
+> > > > > > would benefit from a shorter timeout, hypervisor devices from a longer
+> > > > > > timeout or no timeout.
+> > > > >
+> > > > > Yes. That is good.
+> > > > >
+> > > > > Before introducing this feature, I personally like to use "wait", rather than
+> > > > > define a timeout.
+> > > >
+> > > > Note that the driver still needs to validate what device advertises to
+> > > > avoid infinite wait.
+> > >
+> > > Sorry, I didn't understand what you mean.
+> >
+> > I meant the interface needs to carefully designed to
+> >
+> > 1) avoid device to advertise a infinite (or very long) timeout
+> > 2) driver need to have its own max timeout regardless what device advertises
+>
+>
+> I see.
+>
+> As far as I know, different operations will take different time.
+> For example, the queues are initialized one by one when performing
+> VIRTIO_NET_CTRL_MQ_VQ_PAIRS_SET commands. If the number of queues is large, then
+> this time will be very long.
 
-No, I'm pretty sure the original bug, which was fixed by "char: tpm:
-Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
-considering it's the same hardware from Vlastimil causing this. I also
-recall seeing this in 1.2 when I ran this with the TPM emulator. So
-that's not correct.
+I see. This is the case even for the software backends.
 
-> The tpm 1.2 command path was never changed to require
-> this (and in fact hasn't changed for ages, TPM 1.2 being a bit
-> obsolete).
+>
+> So we should set different timeouts for different commands.
 
-False. I'll just copy and paste the diff of that commit:
+Probably but it would result in a very complex interface, the device
+can just choose to advertise the maximum timeout of all the commands
+in this case. As discussed, I think we can start a very long timeout.
+Is 1 minutes sufficient in this case?
 
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index 1621ce818705..d69905233aff 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -401,13 +401,14 @@ int tpm_pm_suspend(struct device *dev)
- 	    !pm_suspend_via_firmware())
- 		goto suspended;
+Thanks
 
--	if (!tpm_chip_start(chip)) {
-+	rc = tpm_try_get_ops(chip);
-+	if (!rc) {
- 		if (chip->flags & TPM_CHIP_FLAG_TPM2)
- 			tpm2_shutdown(chip, TPM2_SU_STATE);
- 		else
- 			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+>
+> Thanks.
+>
+> >
+> > Thanks
+> >
+> > >
+> > > Thanks.
+> > >
+> > > >
+> > > > Thanks
+> > > >
+> > > > >
+> > > > > Thanks.
+> > > > >
+> > > > >
+> > > > > >
+> > > > > > >
+> > > > > > > > Some of the DPUs are very
+> > > > > > > > lazy for cvq handle.
+> > > > > > >
+> > > > > > > Such design needs to be revisited, cvq (control path) should have a
+> > > > > > > better priority or QOS than datapath.
+> > > > > >
+> > > > > > Spec says nothing about this, so driver can't assume this either.
+> > > > > >
+> > > > > > > > In particular, we will also directly break the device.
+> > > > > > >
+> > > > > > > It's kind of hardening for malicious devices.
+> > > > > >
+> > > > > > ATM no amount of hardening can prevent a malicious hypervisor from
+> > > > > > blocking the guest. Recovering when a hardware device is broken would be
+> > > > > > nice but I think if we do bother then we should try harder to recover,
+> > > > > > such as by driving device reset.
+> > > > > >
+> > > > > >
+> > > > > > Also, does your patch break surprise removal? There's no callback
+> > > > > > in this case ATM.
+> > > > > >
+> > > > > > > >
+> > > > > > > > I think it is necessary to add a Virtio-Net parameter to allow users to define
+> > > > > > > > this timeout by themselves. Although I don't think this is a good way.
+> > > > > > >
+> > > > > > > Very hard and unfriendly to the end users.
+> > > > > > >
+> > > > > > > Thanks
+> > > > > > >
+> > > > > > > >
+> > > > > > > > Thanks.
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > > gives the scheduler a breath and can let the process can respond to
+> > > > > > > > > asignal. If the device doesn't respond in the timeout, break the
+> > > > > > > > > device.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > > > > > > ---
+> > > > > > > > > Changes since V1:
+> > > > > > > > > - break the device when timeout
+> > > > > > > > > - get buffer manually since the virtio core check more_used() instead
+> > > > > > > > > ---
+> > > > > > > > >  drivers/net/virtio_net.c | 24 ++++++++++++++++--------
+> > > > > > > > >  1 file changed, 16 insertions(+), 8 deletions(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > > > > > > > index efd9dd55828b..6a2ea64cfcb5 100644
+> > > > > > > > > --- a/drivers/net/virtio_net.c
+> > > > > > > > > +++ b/drivers/net/virtio_net.c
+> > > > > > > > > @@ -405,6 +405,7 @@ static void disable_rx_mode_work(struct virtnet_info *vi)
+> > > > > > > > >       vi->rx_mode_work_enabled = false;
+> > > > > > > > >       spin_unlock_bh(&vi->rx_mode_lock);
+> > > > > > > > >
+> > > > > > > > > +     virtqueue_wake_up(vi->cvq);
+> > > > > > > > >       flush_work(&vi->rx_mode_work);
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > > @@ -1497,6 +1498,11 @@ static bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq,
+> > > > > > > > >       return !oom;
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > > +static void virtnet_cvq_done(struct virtqueue *cvq)
+> > > > > > > > > +{
+> > > > > > > > > +     virtqueue_wake_up(cvq);
+> > > > > > > > > +}
+> > > > > > > > > +
+> > > > > > > > >  static void skb_recv_done(struct virtqueue *rvq)
+> > > > > > > > >  {
+> > > > > > > > >       struct virtnet_info *vi = rvq->vdev->priv;
+> > > > > > > > > @@ -1984,6 +1990,8 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
+> > > > > > > > >       return err;
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > > +static int virtnet_close(struct net_device *dev);
+> > > > > > > > > +
+> > > > > > > > >  /*
+> > > > > > > > >   * Send command via the control virtqueue and check status.  Commands
+> > > > > > > > >   * supported by the hypervisor, as indicated by feature bits, should
+> > > > > > > > > @@ -2026,14 +2034,14 @@ static bool virtnet_send_command(struct virtnet_info *vi, u8 class, u8 cmd,
+> > > > > > > > >       if (unlikely(!virtqueue_kick(vi->cvq)))
+> > > > > > > > >               return vi->ctrl->status == VIRTIO_NET_OK;
+> > > > > > > > >
+> > > > > > > > > -     /* Spin for a response, the kick causes an ioport write, trapping
+> > > > > > > > > -      * into the hypervisor, so the request should be handled immediately.
+> > > > > > > > > -      */
+> > > > > > > > > -     while (!virtqueue_get_buf(vi->cvq, &tmp) &&
+> > > > > > > > > -            !virtqueue_is_broken(vi->cvq))
+> > > > > > > > > -             cpu_relax();
+> > > > > > > > > +     if (virtqueue_wait_for_used(vi->cvq)) {
+> > > > > > > > > +             virtqueue_get_buf(vi->cvq, &tmp);
+> > > > > > > > > +             return vi->ctrl->status == VIRTIO_NET_OK;
+> > > > > > > > > +     }
+> > > > > > > > >
+> > > > > > > > > -     return vi->ctrl->status == VIRTIO_NET_OK;
+> > > > > > > > > +     netdev_err(vi->dev, "CVQ command timeout, break the virtio device.");
+> > > > > > > > > +     virtio_break_device(vi->vdev);
+> > > > > > > > > +     return VIRTIO_NET_ERR;
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > >  static int virtnet_set_mac_address(struct net_device *dev, void *p)
+> > > > > > > > > @@ -3526,7 +3534,7 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
+> > > > > > > > >
+> > > > > > > > >       /* Parameters for control virtqueue, if any */
+> > > > > > > > >       if (vi->has_cvq) {
+> > > > > > > > > -             callbacks[total_vqs - 1] = NULL;
+> > > > > > > > > +             callbacks[total_vqs - 1] = virtnet_cvq_done;
+> > > > > > > > >               names[total_vqs - 1] = "control";
+> > > > > > > > >       }
+> > > > > > > > >
+> > > > > > > > > --
+> > > > > > > > > 2.25.1
+> > > > > > > > >
+> > > > > > > > > _______________________________________________
+> > > > > > > > > Virtualization mailing list
+> > > > > > > > > Virtualization@lists.linux-foundation.org
+> > > > > > > > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+> > > > > > > >
+> > > > > >
+> > > > >
+> > > >
+> > >
+> >
+>
 
--		tpm_chip_stop(chip);
-+		tpm_put_ops(chip);
- 	}
-
- suspended:
-
-
-So, as you can see, this affects the call to tpm1_pm_suspend.
-
-> So this looks like a new problem with TPM 1.2 and
-> suspend/resume, likely in the BIOS of your system.
-
-No, this is not a BIOS problem. This is a kernel bug in the TPM 1.2
-driver. Yes, it'd be very nice to wave this all away and blame it on the
-BIOS, but I really don't think that's the case, especially considering
-this is all reproducible in the emulator.
-
-I recall seeing something pretty similar to this report with the
-selftest as well. Basically, the call to tpm1_do_selftest can race with
-the call to tpm1_get_random, presumably because tpm1_get_random doesn't
-do any locking on its own. So it might be a good idea to make sure that
-tpm1_get_random() isn't running before tpm1_do_selftest() or any other
-TPM commands run.
-
-I spent a long time working through the TPM code when this came up
-during 6.1. I set up the TPM emulator with QEMU and reproduced this and
-had a whole test setup and S3 fuzzer. It took a long time, and when I was
-done, I paged it all out of my brain. When I found that patch from Jan
-that fixed the problem most of the time (but not all the time), I wasted
-tons of time trying to get the TPM maintainers to take the patch and
-send it to Linus as part of rc7 or rc8. But they all ignored me, and
-eventually Linus just took that patch directly.
-
-So I don't think I want to go down another rabbit hole here, having
-experienced the TPM maintainers not really caring much, and that sucking
-away the remaining energy I had before to keep looking at the issue and
-its edge cases not handled by Jan's patch.
-
-On the contrary, it'd make a big difference if the TPM maintainers could
-actually help analyze the code that they're most familiar with, so that
-we can get to the bottom of this. That's a lot better than some random
-drive-by patches from a non-TPM person like me; before the 6.1 bug, I'd
-never even looked at these drivers. 
-
-My plan is to therefore be available to help and analyze and test and
-maybe even write some code, if the TPM maintainers take the lead on
-getting to the bottom of this. But if this hits neglect again like last
-time, I'll just send a `depends on BROKEN if PM` patch to the TPM
-hw_random driver and see what happens... That's a really awful solution
-though, so I hope the maintainers will wake up this cycle.
-
-Regards,
-Jason
