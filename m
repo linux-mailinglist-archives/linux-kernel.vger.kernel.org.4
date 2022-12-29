@@ -2,101 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56CC658C94
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E8D658C7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233239AbiL2MLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
+        id S233209AbiL2MCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiL2MLl (ORCPT
+        with ESMTP id S230487AbiL2MCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:11:41 -0500
-X-Greylist: delayed 942 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 29 Dec 2022 04:11:40 PST
-Received: from m13122.mail.163.com (m13122.mail.163.com [220.181.13.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0ADE765AE;
-        Thu, 29 Dec 2022 04:11:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=dVm2duRCYQpcLBg/h6h7ZaAY5XzexeXnERJ1uibrhjI=; b=f
-        XHvF1ImNoQ1/Tff3vBhJXjopdx2O2Pp84u3qUo6LNhtbwogjLUaa41+R8WmDKcak
-        7HaAyWNJgNlezFgo2j+sLnQPqRKER5MaMQQL0IOtHyNFOn8MTAI5EkEoG5CW7ZsS
-        vH0QgPBlVfulDIajUOOJYhsAGp3nyp30xN0Hfm1qNw=
-Received: from andyshrk$163.com ( [58.22.7.114] ) by ajax-webmail-wmsvr122
- (Coremail) ; Thu, 29 Dec 2022 19:55:32 +0800 (CST)
-X-Originating-IP: [58.22.7.114]
-Date:   Thu, 29 Dec 2022 19:55:32 +0800 (CST)
-From:   "Andy Yan" <andyshrk@163.com>
-To:     "Heiko Stuebner" <heiko@sntech.de>
-Cc:     krzysztof.kozlowski+dt@linaro.org, piotr.oniszczuk@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re:Re: [PATCH 2/2] arm64: dts: rockchip: Enable wifi module AP6398s
- for rk3566 box demo
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220708(c4627114)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <17226287.uLZWGnKmhe@phil>
-References: <20221225114915.3518502-1-andyshrk@163.com>
- <20221225114953.3518595-1-andyshrk@163.com> <17226287.uLZWGnKmhe@phil>
-X-NTES-SC: AL_QuycAP+au0Eo5CSeZOkZnEobh+Y5UcK2s/ki2YFXN5k0nSvC4DkcY3FzN2PEyuieIQq0vha7cgNw1N95QLZJcKXVjFLqKLEiWdP6kzd/LRYB
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 29 Dec 2022 07:02:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5CFA44E;
+        Thu, 29 Dec 2022 04:02:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7224B6178E;
+        Thu, 29 Dec 2022 12:02:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C8BC433F0;
+        Thu, 29 Dec 2022 12:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672315333;
+        bh=X2pN8B/BGZKtk8FeGaspeHQmhVHKSmjfxFxrouKarY4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aQFVrNGuTiQODVDdNwvubAQnidVxUMgzotdE5qOJowQFJa2FRl/9dvtLLOexwy3+p
+         fSj8ts0Rtz5PBcRp6uY7jSbxxf05LWRq1Lt/QB2gVaZEC2CjVnmoapwUtTEXlEeJXW
+         e+yPxITUhainCXrewb6dkE9MSWFumAPoHcvz9vlplaqDJptfZIF+H1G5UgW2oAU0xL
+         JqyH+I5XHgxy0xJUBYh/gpVNnc7UNF60dQi1S2OhmKqol1YrlaflA8e8ab9h+us6Xj
+         X+I3oe1zZESUcIuf2hLFlP7D8TuTX+GmOUpBj44s8g0heibChIZaSl1+Ecco5QHj00
+         4t/9Mr8yiVK7Q==
+Received: by pali.im (Postfix)
+        id 3ECE17C3; Thu, 29 Dec 2022 13:02:10 +0100 (CET)
+Date:   Thu, 29 Dec 2022 13:02:10 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     bhelgaas@google.com, Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Stefan Roese <sr@denx.de>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI/portdrv: Avoid enabling AER on Thunderbolt devices
+Message-ID: <20221229120210.fwz7w6i7zwqelxbw@pali>
+References: <20221226153048.1208359-1-kai.heng.feng@canonical.com>
+ <20221226154643.kidhqooedmijj3iw@pali>
+ <CAAd53p4CU+K5sOumJYxENRE-Ci7zPKxk0ROszvBUPWV=1xYZyw@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <98e7c6a.2e9c.1855dbcccf1.Coremail.andyshrk@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: esGowACnSCw0gK1jVYppAA--.8778W
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbivBnmXmASagkiyQABsm
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAd53p4CU+K5sOumJYxENRE-Ci7zPKxk0ROszvBUPWV=1xYZyw@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKSGkgSGVpa286CgoKCgoKCgoKCgoKQXQgMjAyMi0xMi0yOSAwMzoyMTozMiwgIkhlaWtvIFN0
-dWVibmVyIiA8aGVpa29Ac250ZWNoLmRlPiB3cm90ZToKPkhpIEFuZHksCj4KPkFtIFNvbm50YWcs
-IDI1LiBEZXplbWJlciAyMDIyLCAxMjo0OTo1MyBDRVQgc2NocmllYiBBbmR5IFlhbjoKPj4gVGhl
-cmUgaXMgYSBBUDYzOThzIHdpZmkvYnQgbW9kdWxlIG9uIHRoaXMgYm9hcmQuCj4+IEZpeCB0aGUg
-c2RtbWMxIGR0IG5vZGUgdG8gbWFrZSB3aWZpIHdvcmsuCj4+IAo+PiBGaXhlczogMmUwNTM3YjE2
-YjI1ICgiYXJtNjQ6IGR0czogcm9ja2NoaXA6IEFkZCBkdHMgZm9yIHJvY2tjaGlwIHJrMzU2NiBi
-b3ggZGVtbyBib2FyZCIpCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBBbmR5IFlhbiA8YW5keXNocmtA
-MTYzLmNvbT4KPj4gLS0tCj4+IAo+PiAgLi4uL2Jvb3QvZHRzL3JvY2tjaGlwL3JrMzU2Ni1ib3gt
-ZGVtby5kdHMgICAgIHwgMjYgKysrKysrKysrKysrKysrKy0tLQo+PiAgMSBmaWxlIGNoYW5nZWQs
-IDIyIGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCj4+IAo+PiBkaWZmIC0tZ2l0IGEvYXJj
-aC9hcm02NC9ib290L2R0cy9yb2NrY2hpcC9yazM1NjYtYm94LWRlbW8uZHRzIGIvYXJjaC9hcm02
-NC9ib290L2R0cy9yb2NrY2hpcC9yazM1NjYtYm94LWRlbW8uZHRzCj4+IGluZGV4IGQ5NTY0OTZk
-NTIyMS4uNmMwYzI0MjI2YjUyIDEwMDY0NAo+PiAtLS0gYS9hcmNoL2FybTY0L2Jvb3QvZHRzL3Jv
-Y2tjaGlwL3JrMzU2Ni1ib3gtZGVtby5kdHMKPj4gKysrIGIvYXJjaC9hcm02NC9ib290L2R0cy9y
-b2NrY2hpcC9yazM1NjYtYm94LWRlbW8uZHRzCj4+IEBAIC0zMjQsOCArMzI0LDEyIEBAIHdpZmlf
-ZW5hYmxlX2g6IHdpZmktZW5hYmxlLWggewo+PiAgCQkJcm9ja2NoaXAscGlucyA9IDwyIFJLX1BC
-MSBSS19GVU5DX0dQSU8gJnBjZmdfcHVsbF9ub25lPjsKPj4gIAkJfTsKPj4gIAo+PiArCQl3aWZp
-X2hvc3Rfd2FrZV9oOiB3aWZpLWhvc3Qtd2FrZS1sIHsKPj4gKwkJCXJvY2tjaGlwLHBpbnMgPSA8
-MiBSS19QQjIgUktfRlVOQ19HUElPICZwY2ZnX3B1bGxfbm9uZT47Cj4+ICsJCX07Cj4+ICsKPj4g
-IAkJd2lmaV8zMms6IHdpZmktMzJrIHsKPj4gLQkJCXJvY2tjaGlwLHBpbnMgPSA8MCBSS19QQjAg
-MiAmcGNmZ19wdWxsX25vbmU+Owo+PiArCQkJcm9ja2NoaXAscGlucyA9IDwyIFJLX1BDNiAxICZw
-Y2ZnX3B1bGxfbm9uZT47Cj4+ICAJCX07Cj4+ICAJfTsKPj4gIAo+PiBAQCAtMzkxLDE2ICszOTUs
-MzAgQEAgJnNkbW1jMCB7Cj4+ICB9Owo+PiAgCj4+ICAmc2RtbWMxIHsKPj4gKwkvKiBXaUZpICYg
-QlQgY29tYm8gbW9kdWxlIEFNUEFLIEFQNjM5OFMgKi8KPj4gKwkjYWRkcmVzcy1jZWxscyA9IDwx
-PjsKPj4gKwkjc2l6ZS1jZWxscyA9IDwwPjsKPj4gIAlidXMtd2lkdGggPSA8ND47Cj4+ICsJY2xv
-Y2stZnJlcXVlbmN5ID0gPDE1MDAwMDAwMD47Cj4+ICsJY2FwLXNkaW8taXJxOwo+PiAgCWNhcC1z
-ZC1oaWdoc3BlZWQ7Cj4+IC0JZGlzYWJsZS13cDsKPj4gKwlzZC11aHMtc2RyMTA0Owo+PiArCWtl
-ZXAtcG93ZXItaW4tc3VzcGVuZDsKPj4gIAltbWMtcHdyc2VxID0gPCZzZGlvX3B3cnNlcT47Cj4+
-ICAJbm9uLXJlbW92YWJsZTsKPj4gIAlwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOwo+PiAgCXBp
-bmN0cmwtMCA9IDwmc2RtbWMxX2J1czQgJnNkbW1jMV9jbWQgJnNkbW1jMV9jbGs+Owo+PiAtCXZt
-bWMtc3VwcGx5ID0gPCZ2Y2NfM3YzPjsKPj4gLQl2cW1tYy1zdXBwbHkgPSA8JnZjY2FfMXY4PjsK
-Pgo+d2h5IGFyZSB5b3UgcmVtb3ZpbmcgdGhlIG1tYy1zdXBwbGllcyBoZXJlPwo+VGhlIHN1cHBs
-aWVzIG5lZWRlZCBmb3IgbW1jIHRvIHdvcmsgc2hvdWxkIHZlcnkgbXVjaCBiZSBwcmVzZW50Cj5J
-IHRoaW5rLCBlc3BlY2lhbGx5IHRvIGFsc28gbWFrZSBzdXJlIHNvbWV0aGluZyBlbHNlIGRvZXNu
-J3QKPnR1cm4gdGhlbSBvZmYuCgpUaGFua3MgZm9yIGNhdGNoaW5nIHRoaXMsIEkgd2lsbCBmaXgg
-aXQgaW4gVjIuCgo+Cj5IZWlrbwo+Cj4+ICAJc3RhdHVzID0gIm9rYXkiOwo+PiArCj4+ICsJYnJj
-bWY6IHdpZmlAMSB7Cj4+ICsJCWNvbXBhdGlibGUgPSAiYnJjbSxiY200MzI5LWZtYWMiOwo+PiAr
-CQlyZWcgPSA8MT47Cj4+ICsJCWludGVycnVwdC1wYXJlbnQgPSA8JmdwaW8yPjsKPj4gKwkJaW50
-ZXJydXB0cyA9IDxSS19QQjIgR1BJT19BQ1RJVkVfSElHSD47Cj4+ICsJCWludGVycnVwdC1uYW1l
-cyA9ICJob3N0LXdha2UiOwo+PiArCQlwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOwo+PiArCQlw
-aW5jdHJsLTAgPSA8JndpZmlfaG9zdF93YWtlX2g+Owo+PiArCX07Cj4+ICB9Owo+PiAgCj4+ICAm
-c3BkaWYgewo+PiAKPgo+Cj4K
+Hello!
+
+On Thursday 29 December 2022 11:45:51 Kai-Heng Feng wrote:
+> Hi Pali,
+> 
+> 
+> On Mon, Dec 26, 2022 at 11:46 PM Pali Rohár <pali@kernel.org> wrote:
+> >
+> > On Monday 26 December 2022 23:30:31 Kai-Heng Feng wrote:
+> > > We are seeing igc ethernet device on Thunderbolt dock stops working
+> > > after S3 resume because of AER error, or even make S3 resume freeze:
+> >
+> > Hello! Is igc ethernet the only device which does not work after resume?
+> 
+> Seems so.
+> A Thunderbolt NVMe enclosure plugged to the dock doesn't exhibit this
+> issue. I don't have an eGPU to try.
+
+Ok! So at least this test means that the issue does not affect all
+devices. That is good to know.
+
+> > Or do you have also more devices to test and check for this issue?
+> >
+> > I'm asking it just because to know if we are dealing with one device or
+> > there are lot of more. Because if it is just one device then it could be
+> > better to disable AER only for one targeted device instead of all. Error
+> > reporting is a feature which may help to detect broken HW unit and be useful.
+> >
+> > > pcieport 0000:00:1d.0: AER: Multiple Corrected error received: 0000:00:1d.0
+> > > pcieport 0000:00:1d.0: PCIe Bus Error: severity=Corrected, type=Transaction Layer, (Receiver ID)
+> > > pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00008000/00002000
+> > > pcieport 0000:00:1d.0:    [15] HeaderOF
+> > > pcieport 0000:00:1d.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+> > > pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> > > pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+> > > pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+> > > pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 0a000052 00000000 00000000
+> > > pcieport 0000:00:1d.0: AER:   Error of this Agent is reported first
+> > > pcieport 0000:04:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> > > pcieport 0000:04:01.0:   device [8086:1136] error status/mask=00300000/00000000
+> > > pcieport 0000:04:01.0:    [20] UnsupReq               (First)
+> > > pcieport 0000:04:01.0:    [21] ACSViol
+> > > pcieport 0000:04:01.0: AER:   TLP Header: 34000000 04000052 00000000 00000000
+> > > thunderbolt 0000:05:00.0: AER: can't recover (no error_detected callback)
+> > >
+> > > This supposedly should be fixed by commit c01163dbd1b8 ("PCI/PM: Always disable
+> > > PTM for all devices during suspend"), but somehow it doesn't work for
+> > > this case.
+> > >
+> > > By dumping the PCI_PTM_CTRL register on resume, it turns out PTM is
+> > > already flipped on by either the Thunderbolt dock firmware or the host
+> > > BIOS. Writing 0 to PCI_PTM_CTRL yields the same result.
+> > >
+> > > Windows is however not affected by this issue, by using WinDbg's !pci
+> > > command, it shows that AER is not enabled for devices connected via
+> > > Thunderbolt port, and that's the reason why Windows doesn't exhibit the
+> > > issue.
+> >
+> > Could you try to manually enable AER on Windows (via touching PCIe
+> > config registers) if Windows can trigger this issue too, or not?
+> 
+> Actually I misread the output of WinDbg !pci command, the AER is also
+> enabled under Windows.
+> !pci command also shows the same PTM error in Header Log. I can also
+> find the AER warnings in Windows' Event Viewer.
+
+This is interesting. Maybe Windows can recover from that error?
+
+Anyway, you can use also lspci and setpci on Windows, last version of
+pciutils has better support for it.
+
+> I am asking hardware vendor to see if it's possible to fix it at firmware side.
+> 
+> However, on Windows the ACS is disabled for all downstream ports in
+> the dock, so unlike Linux there's no ACS violation.
+> That can be the reason why the igc device continues to work on Windows
+> despite AER errors.
+
+Could you try to enable ACS on Windows? If igc continue to work or also
+crash on Windows?
+
+> So yes, this patch is wrong. Let me dig this issue a bit more.
+> 
+> Kai-Heng
+> 
+> >
+> > > So turn a blind eye on external Thunderbolt devices like Windows does by
+> > > disabling AER.
+> > >
+> > > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216850
+> > > Cc: Mario Limonciello <mario.limonciello@amd.com>
+> > > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > ---
+> > >  drivers/pci/pcie/portdrv.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+> > > index 2cc2e60bcb396..59d00e20e57bf 100644
+> > > --- a/drivers/pci/pcie/portdrv.c
+> > > +++ b/drivers/pci/pcie/portdrv.c
+> > > @@ -237,7 +237,8 @@ static int get_port_device_capability(struct pci_dev *dev)
+> > >       if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
+> > >               pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
+> > >           dev->aer_cap && pci_aer_available() &&
+> > > -         (pcie_ports_native || host->native_aer))
+> > > +         (pcie_ports_native || host->native_aer) &&
+> > > +         !dev_is_removable(&dev->dev))
+> > >               services |= PCIE_PORT_SERVICE_AER;
+> > >  #endif
+> > >
+> > > --
+> > > 2.34.1
+> > >
