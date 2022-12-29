@@ -2,42 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5030658883
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559BD658888
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbiL2CGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 21:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S232900AbiL2CI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 21:08:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiL2CGQ (ORCPT
+        with ESMTP id S232834AbiL2CI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 21:06:16 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43393194;
-        Wed, 28 Dec 2022 18:06:14 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VYJPPK2_1672279570;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VYJPPK2_1672279570)
-          by smtp.aliyun-inc.com;
-          Thu, 29 Dec 2022 10:06:11 +0800
-Message-ID: <1672279315.3435805-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq command
-Date:   Thu, 29 Dec 2022 10:01:55 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, eperezma@redhat.com,
-        edumazet@google.com, maxime.coquelin@redhat.com, kuba@kernel.org,
-        pabeni@redhat.com, davem@davemloft.net, mst@redhat.com
-References: <20221226074908.8154-1-jasowang@redhat.com>
- <20221226074908.8154-5-jasowang@redhat.com>
- <1672107557.0142956-1-xuanzhuo@linux.alibaba.com>
- <CACGkMEvzhAFj5HCmP--9DKfCAq_4wPNwsmmg4h0Sbv6ra0+DrQ@mail.gmail.com>
- <1672216748.7057884-1-xuanzhuo@linux.alibaba.com>
- <CACGkMEtr7r25s6Tgsj=fcw3MD3ShLmuuVHvx0WVNiQHyV_G=zw@mail.gmail.com>
-In-Reply-To: <CACGkMEtr7r25s6Tgsj=fcw3MD3ShLmuuVHvx0WVNiQHyV_G=zw@mail.gmail.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Wed, 28 Dec 2022 21:08:27 -0500
+Received: from out-221.mta0.migadu.com (out-221.mta0.migadu.com [91.218.175.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE17B877
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 18:08:24 -0800 (PST)
+Message-ID: <ce9e05f5-4752-7f70-9355-da881565b96c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1672279702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XoA8wcm8vNDF3JjdWU9rkQ7IGGhq07pfPELEbL9sYWw=;
+        b=absds2v6QAAfiAjI6jEc4rGbjuwy9Yt9NI/fGrLEJAgIZBdRSms9UpEDzJLI9QZBtk6UAU
+        O+51xoTcwlc/SrcKaVcoI9rH7jZFSu93vqsXrNgD42QqSOuA7Qw/JBOD9fnfTaXm6+DMnH
+        Y1bukPIa6w/vyfvMtPgwtk8N5KPeE6E=
+Date:   Thu, 29 Dec 2022 10:08:18 +0800
+MIME-Version: 1.0
+Subject: Re: [PATCH] kbuild: rpm-pkg: add libelf-devel as alternative for
+ BuildRequires
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Jonathan Toppins <jtoppins@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
+References: <20221228191014.659746-1-masahiroy@kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+In-Reply-To: <20221228191014.659746-1-masahiroy@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,162 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Dec 2022 19:43:56 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> On Wed, Dec 28, 2022 at 4:40 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> >
-> > On Tue, 27 Dec 2022 12:33:53 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> > > On Tue, Dec 27, 2022 at 10:25 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> > > >
-> > > > On Mon, 26 Dec 2022 15:49:08 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> > > > > We used to busy waiting on the cvq command this tends to be
-> > > > > problematic since:
-> > > > >
-> > > > > 1) CPU could wait for ever on a buggy/malicous device
-> > > > > 2) There's no wait to terminate the process that triggers the cvq
-> > > > >    command
-> > > > >
-> > > > > So this patch switch to use virtqueue_wait_for_used() to sleep with a
-> > > > > timeout (1s) instead of busy polling for the cvq command forever. This
-> > > >
-> > > > I don't think that a fixed 1S is a good choice.
-> > >
-> > > Well, it could be tweaked to be a little bit longer.
-> > >
-> > > One way, as discussed, is to let the device advertise a timeout then
-> > > the driver can validate if it's valid and use that timeout. But it
-> > > needs extension to the spec.
-> > >
-> > > > Some of the DPUs are very
-> > > > lazy for cvq handle.
-> > >
-> > > Such design needs to be revisited, cvq (control path) should have a
-> > > better priority or QOS than datapath.
-> > >
-> > > > In particular, we will also directly break the device.
-> > >
-> > > It's kind of hardening for malicious devices.
-> >
-> > Just based on timeout, it is judged that it is a malicious device. I think it is
-> > too arbitrary.
->
-> Drivers have very little information to make the decision. So it's
-> really a balance.
->
-> We can start with a very long timeout like 10 minutes. Otherwise a
-> buggy/malicious device will block a lot of important things (reboot,
-> modprobe) even if the scheduler is still functional.
-
-Relatively speaking, starting from a 1min+ timeout, I think it is safe.
-
-Thanks.
 
 
+On 12/29/22 03:10, Masahiro Yamada wrote:
+> Guoqing Jiang reports that openSUSE cannot compile the kernel rpm due
+> to "BuildRequires: elfutils-libelf-devel" added by commit 8818039f959b
+> ("kbuild: add ability to make source rpm buildable using koji").
+> The relevant package name in openSUSE is libelf-devel.
+>
+> Add it an alternative package.
+>
+> BTW, if it is impossible to solve the build requirement, the final
+> resort would be:
+>
+>      $ make RPMOPTS=--nodeps rpm-pkg
+>
+> This passes --nodeps to the rpmbuild command so it will not verify
+> build dependencies. This is useful to test rpm builds on non-rpm
+> system. On Debian/Ubuntu, for example, you can install rpmbuild by
+> 'apt-get install rpm'.
+>
+> NOTE1:
+>    Likewise, it is possible to bypass the build dependency check for
+>    debian package builds:
+>
+>      $ make DPKG_FLAGS=-d deb-pkg
+>
+> NOTE2:
+>    The 'or' operator is supported since RPM 4.13. So, old distros such
+>    as CentOS 7 will break. I suggest installing newer rpmbuild in such
+>    cases.
+>
+> Link: https://lore.kernel.org/linux-kbuild/ee227d24-9c94-bfa3-166a-4ee6b5dfea09@linux.dev/T/#u
+> Fixes: 8818039f959b ("kbuild: add ability to make source rpm buildable using koji")
+> Reported-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>   scripts/package/mkspec | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+> index dda00a948a01..adab28fa7f89 100755
+> --- a/scripts/package/mkspec
+> +++ b/scripts/package/mkspec
+> @@ -51,7 +51,8 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
+>   	URL: https://www.kernel.org
+>   $S	Source: kernel-$__KERNELRELEASE.tar.gz
+>   	Provides: $PROVIDES
+> -$S	BuildRequires: bc binutils bison dwarves elfutils-libelf-devel flex
+> +$S	BuildRequires: bc binutils bison dwarves
+> +$S	BuildRequires: (elfutils-libelf-devel or libelf-devel) flex
+>   $S	BuildRequires: gcc make openssl openssl-devel perl python3 rsync
+>   
+>   	# $UTS_MACHINE as a fallback of _arch in case
 
->
-> Thanks
->
-> >
-> > Thanks.
-> >
-> >
-> > >
-> > > >
-> > > > I think it is necessary to add a Virtio-Net parameter to allow users to define
-> > > > this timeout by themselves. Although I don't think this is a good way.
-> > >
-> > > Very hard and unfriendly to the end users.
-> > >
-> > > Thanks
-> > >
-> > > >
-> > > > Thanks.
-> > > >
-> > > >
-> > > > > gives the scheduler a breath and can let the process can respond to
-> > > > > asignal. If the device doesn't respond in the timeout, break the
-> > > > > device.
-> > > > >
-> > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > ---
-> > > > > Changes since V1:
-> > > > > - break the device when timeout
-> > > > > - get buffer manually since the virtio core check more_used() instead
-> > > > > ---
-> > > > >  drivers/net/virtio_net.c | 24 ++++++++++++++++--------
-> > > > >  1 file changed, 16 insertions(+), 8 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > index efd9dd55828b..6a2ea64cfcb5 100644
-> > > > > --- a/drivers/net/virtio_net.c
-> > > > > +++ b/drivers/net/virtio_net.c
-> > > > > @@ -405,6 +405,7 @@ static void disable_rx_mode_work(struct virtnet_info *vi)
-> > > > >       vi->rx_mode_work_enabled = false;
-> > > > >       spin_unlock_bh(&vi->rx_mode_lock);
-> > > > >
-> > > > > +     virtqueue_wake_up(vi->cvq);
-> > > > >       flush_work(&vi->rx_mode_work);
-> > > > >  }
-> > > > >
-> > > > > @@ -1497,6 +1498,11 @@ static bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq,
-> > > > >       return !oom;
-> > > > >  }
-> > > > >
-> > > > > +static void virtnet_cvq_done(struct virtqueue *cvq)
-> > > > > +{
-> > > > > +     virtqueue_wake_up(cvq);
-> > > > > +}
-> > > > > +
-> > > > >  static void skb_recv_done(struct virtqueue *rvq)
-> > > > >  {
-> > > > >       struct virtnet_info *vi = rvq->vdev->priv;
-> > > > > @@ -1984,6 +1990,8 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
-> > > > >       return err;
-> > > > >  }
-> > > > >
-> > > > > +static int virtnet_close(struct net_device *dev);
-> > > > > +
-> > > > >  /*
-> > > > >   * Send command via the control virtqueue and check status.  Commands
-> > > > >   * supported by the hypervisor, as indicated by feature bits, should
-> > > > > @@ -2026,14 +2034,14 @@ static bool virtnet_send_command(struct virtnet_info *vi, u8 class, u8 cmd,
-> > > > >       if (unlikely(!virtqueue_kick(vi->cvq)))
-> > > > >               return vi->ctrl->status == VIRTIO_NET_OK;
-> > > > >
-> > > > > -     /* Spin for a response, the kick causes an ioport write, trapping
-> > > > > -      * into the hypervisor, so the request should be handled immediately.
-> > > > > -      */
-> > > > > -     while (!virtqueue_get_buf(vi->cvq, &tmp) &&
-> > > > > -            !virtqueue_is_broken(vi->cvq))
-> > > > > -             cpu_relax();
-> > > > > +     if (virtqueue_wait_for_used(vi->cvq)) {
-> > > > > +             virtqueue_get_buf(vi->cvq, &tmp);
-> > > > > +             return vi->ctrl->status == VIRTIO_NET_OK;
-> > > > > +     }
-> > > > >
-> > > > > -     return vi->ctrl->status == VIRTIO_NET_OK;
-> > > > > +     netdev_err(vi->dev, "CVQ command timeout, break the virtio device.");
-> > > > > +     virtio_break_device(vi->vdev);
-> > > > > +     return VIRTIO_NET_ERR;
-> > > > >  }
-> > > > >
-> > > > >  static int virtnet_set_mac_address(struct net_device *dev, void *p)
-> > > > > @@ -3526,7 +3534,7 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
-> > > > >
-> > > > >       /* Parameters for control virtqueue, if any */
-> > > > >       if (vi->has_cvq) {
-> > > > > -             callbacks[total_vqs - 1] = NULL;
-> > > > > +             callbacks[total_vqs - 1] = virtnet_cvq_done;
-> > > > >               names[total_vqs - 1] = "control";
-> > > > >       }
-> > > > >
-> > > > > --
-> > > > > 2.25.1
-> > > > >
-> > > > > _______________________________________________
-> > > > > Virtualization mailing list
-> > > > > Virtualization@lists.linux-foundation.org
-> > > > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
-> > > >
-> > >
-> >
->
+Thanks for the quick fix! I verified the above works for openSUSE leap 15.4.
+
+Tested-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+
+Thanks,
+Guoqing
