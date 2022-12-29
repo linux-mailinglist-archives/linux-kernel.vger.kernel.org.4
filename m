@@ -2,142 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92603659140
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 20:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA370659145
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 20:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiL2Trw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 14:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S233675AbiL2Ts4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 14:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiL2Tru (ORCPT
+        with ESMTP id S230160AbiL2Tsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 14:47:50 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C555D165B0;
-        Thu, 29 Dec 2022 11:47:41 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.97.69]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N7AAk-1olRgP2OJI-017Qzv; Thu, 29 Dec 2022 20:47:17 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id 65DE03C0EF; Thu, 29 Dec 2022 20:47:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1672343235; bh=Ssiaq0UCBUNmKvQggRzr07i09RelaxqQve23Idug6co=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DXlsgr06qCbo9+gk/suhU5qopL+ga4NwZ81LwMJnPX+wYUfZcbEa5LIybtawNTbgV
-         h2/FNwCYMdpA66rtLjs0XvreX9BmZZK/k//eyGXTVe3wsIP9cTLXCUjW3NsAHvNsGs
-         ww3cjNmIel1aYIEpu3cCQerjkQfBwBg4gIC1yNr0=
-Date:   Thu, 29 Dec 2022 20:47:15 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH] kbuild: unify cmd_dt_S_dtb and cmd_dt_S_dtbo
-Message-ID: <Y63uw1HGiL5ZxJkk@fjasle.eu>
-References: <20221229184650.1107463-1-masahiroy@kernel.org>
+        Thu, 29 Dec 2022 14:48:53 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AD316596
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 11:48:50 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id u18so26511988eda.9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 11:48:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=541SBCv8SU6FPzh9UWaGvbUvGVDwpHo87zFERdHNWi0=;
+        b=Rzvy+I7F75jZMdEUittNMZUI83ttB0C748UEtsIIh1KqT+IpY3yEU5fNM8GyBgKoxb
+         WP2bL4k67n5d836msKdYlrc6q83/CrGAYMNKBOERpDehMbekQB+aDip7qBvd4sBCgtN2
+         g3sSuVGWaZwUcLjFvIqVsPmjHTXmzfNPRGmwbs26NIQ1nKeuif8px+UTOBkZtCq8sUKo
+         c29d/9j2WIBA0sRf6W0pxadb6SAqAu8iAzHvadDHRFV54eYXjwebgvPdbjliQ5DdfipW
+         i/0B+uGTz50cD5txm0Y0KClWITQMXLqDfJ5jfAL2HaXVPuw/zxEMm1gT2w1e1ZEFk2rQ
+         5Qew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=541SBCv8SU6FPzh9UWaGvbUvGVDwpHo87zFERdHNWi0=;
+        b=VGinZTVBKJyzUrlXMNewJnGD+BbtXjoeyXSkiPIAySIXS9MsNmnrC5n+yjCd1IPmXo
+         6lsHLMzraeIbuNKpLEaJSAfJyqkTyxdxpy1bCP3xgtyLeK1rgTJeoSG6/UbAELbA8CoW
+         rc6Oyv1cZe1uqdWnKFW06khN9nMSQy2vht/YCeRO0lj3xgHOXKMJcyV8t8PkhS994LRR
+         InMYhdtpCceiFK8QZqoLVdKU+0WK1s7FaKGh+7yJBKuyClS7BwKAMyeX2QICtoEF7hDn
+         p0STESOxDH5tZk101bNE/vSSqxvxYuaBKOD2vtXL84DdLHfg1COLt2PA0nE1+E23455d
+         1Pcg==
+X-Gm-Message-State: AFqh2kqRxkDZ+4FcaA0ByErLYqGlvdICJWbdwsH4hF2MvUSrdxSYum8t
+        CdzfXc9kMRbSBVZeWeknPJlBWg==
+X-Google-Smtp-Source: AMrXdXtzMH8RQc69dHcJbPn/IEciyDfXVfpA7FY0UV5nx5VJSiLTDU10Hdm1GSWIS/rb8qewbPffkw==
+X-Received: by 2002:a50:cc4c:0:b0:479:8313:2fdd with SMTP id n12-20020a50cc4c000000b0047983132fddmr26523037edi.10.1672343328647;
+        Thu, 29 Dec 2022 11:48:48 -0800 (PST)
+Received: from ?IPV6:2001:1c06:2302:5600:12a8:8cf4:e3f6:f90f? (2001-1c06-2302-5600-12a8-8cf4-e3f6-f90f.cable.dynamic.v6.ziggo.nl. [2001:1c06:2302:5600:12a8:8cf4:e3f6:f90f])
+        by smtp.gmail.com with ESMTPSA id m9-20020a1709062ac900b007c0d41736c0sm8838265eje.39.2022.12.29.11.48.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Dec 2022 11:48:48 -0800 (PST)
+Message-ID: <d1cd6d30-2142-765b-c201-4d6662576665@linaro.org>
+Date:   Thu, 29 Dec 2022 19:48:46 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="guvpMswPTi1NG181"
-Content-Disposition: inline
-In-Reply-To: <20221229184650.1107463-1-masahiroy@kernel.org>
-X-Provags-ID: V03:K1:Wa28HNUXKQWMjjrooBQKiPvM26xDjVz/antJMaKuE44Ev5z34pB
- OMc1ndLxOk8UuH0KitG4gPeLRmJDmtxLG/T0AYLPfN0I7hoFJOR9jFQNK2Q1Y6J6+TR8YOE
- XFH/Cewl2ljgVy/roT2vQvqlW3sE4L0Y4NeONoJVn5Hfcg13zGdqVuReTTao2UoYiAXvosT
- 6fC3Iak6LGLMHNEcmOX8w==
-UI-OutboundReport: notjunk:1;M01:P0:y6YlNRfDplk=;zWkJfjiPHSx0Jh+brLolqFM7she
- kK61b1bZy7auigq/7jQ/rTQWdYzLK3szJNC34koBuw1RKF7heUlgEvYgILapc4eEbFVlVjNh6
- f4JqTojEq1CTb7/USPGqOzRfVIEsyEUfydV8EQX4EZQSAg1rUP9K8afvpcD4RNOoX354xXsQm
- jEQOEa8icwMH/rv2nNtEiTSRNsOhRAxHiTJ3KrAFW8o6kMWtoP5d6KL9sLN4FtJ0g/6UkMhRF
- dAYrCRmc/lBVDyj2JerKEW0+HQXjVkdziGi1zfzYUq27uxljE15gdfv52vEAIxZ3C88BpShcw
- FdOrtJNdYOjI5b0Ug26nJ2dc/dB1ANwkpUra11d6OLWzpcm9iJftddfZG6EFo6MyEsasRWV/Z
- iySoOcYGa/oyjquBuN82CuUTWFgCueanwo85y7yedBHUNIb3UxEO44MdNFrKu45oNdWUf1Ojz
- oPGuJfOGhE0tKkPs3fCPUW5No972EWA1JWowmluYi0CXEnTAHg/fC1n4OQ3TWDTWuZocij2jR
- +RsN3ZEHmoHcQiykN1tY5CjNvrMQq36RdIfC5TZfZfbneRrid9rYrtung/GtKdcVpIE6HHmFH
- ivLhuXJVIo7Y/MwylZVg/vRm+mpBv/zAfs0ajTEfN5mL0X3i77cuzF/5lbbuhPjFz4Wzv7HFy
- E3kDH9ev/QnrILhWTUWq+2NjXJz6Dq8iVqXLS4QPYg==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] dt-bindings: phy: Add qcom,dp-manual-pullup
+ description
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20221229183410.683584-1-bryan.odonoghue@linaro.org>
+ <20221229183410.683584-2-bryan.odonoghue@linaro.org>
+ <Y63jBu38L/5cQ75S@gerhold.net>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <Y63jBu38L/5cQ75S@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 29/12/2022 18:57, Stephan Gerhold wrote:
+> AFAIK it is not possible to route VBUS directly to the controller on
+> these SoCs so this property would likely be added to the SoC dtsi
+> (i.e. msm8916.dtsi and msm8939.dtsi) and used by all boards.
 
---guvpMswPTi1NG181
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So db410c signals the SoC via GPIO 121 / USB_HS_ID
 
-On Fri, Dec 30, 2022 at 03:46:50AM +0900 Masahiro Yamada wrote:
-> cmd_dt_S_dtb and cmd_dt_S_dtbo are almost the same; the only differnce
-> is the prefix of the bein/end symbols. (__dtb vs __dtbo)
+https://fccid.io/2AFQA-DB410C/Schematics/Schematics-2816094.pdf
 
-Two letters got lost: differ_e_nce, be_g_in.
+Which causes ULPI_MISC_A_VBUSVLDEXT to be updated depending on the state 
+VBUS.
 
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->=20
->  scripts/Makefile.lib | 45 +++++++++++++++-----------------------------
->  1 file changed, 15 insertions(+), 30 deletions(-)
->=20
-> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> index 4a4a5f67c1a6..100a386fcd71 100644
-> --- a/scripts/Makefile.lib
-> +++ b/scripts/Makefile.lib
-> @@ -368,40 +368,25 @@ DTC_FLAGS +=3D $(DTC_FLAGS_$(basetarget))
->  DTC_FLAGS +=3D $(if $(filter $(patsubst $(obj)/%,%,$@), $(base-dtb-y)), =
--@)
-> =20
->  # Generate an assembly file to wrap the output of the device tree compil=
-er
-> -quiet_cmd_dt_S_dtb=3D DTBS    $@
-> -cmd_dt_S_dtb=3D						\
-> -{							\
-> -	echo '\#include <asm-generic/vmlinux.lds.h>'; 	\
-> -	echo '.section .dtb.init.rodata,"a"';		\
-> -	echo '.balign STRUCT_ALIGNMENT';		\
-> -	echo '.global __dtb_$(subst -,_,$(*F))_begin';	\
-> -	echo '__dtb_$(subst -,_,$(*F))_begin:';		\
-> -	echo '.incbin "$<" ';				\
-> -	echo '__dtb_$(subst -,_,$(*F))_end:';		\
-> -	echo '.global __dtb_$(subst -,_,$(*F))_end';	\
-> -	echo '.balign STRUCT_ALIGNMENT'; 		\
-> -} > $@
-> +quiet_cmd_wrap_S_dtb =3D WRAP    $@
-> +      cmd_wrap_S_dtb =3D {								\
-> +		symbase=3D__$(patsubst .%,%,$(suffix $<))_$(subst -,_,$(notdir $*));	\
+But not ULPI_MISC_A_VBUSVLDEXTSEL this is the additional register that 
+downstream updates when "VBUS is not routed to the controller"
 
-As long as I know, '$(notdir $*)' should be equivalent to '$(*F)'.  Is it j=
-ust
-personal preference or is there some other reason for choosing one or the
-other?
+I don't have a bit-level description of these registers at the moment 
+so, I'm guessing that ULPI_MISC_A_VBUSVLDEXTSEL *is* being updated.
 
-Nevertheless, with the typos fixed, it looks good to me:
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+The reason for that is if I just set ULPI_MISC_A_VBUSVLDEXT then as a 
+device a host never sees my SoC via the internal USB hub.
 
+In other words, for me at any rate I need to see both
 
---guvpMswPTi1NG181
-Content-Type: application/pgp-signature; name="signature.asc"
+- ULPI_MISC_A_VBUSVLDEXT
+- ULPI_MISC_A_VBUSVLDEXTSEL
 
------BEGIN PGP SIGNATURE-----
+to get the pullup to work and hence the Hub/Host to detect the 8939.
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmOt7sIACgkQB1IKcBYm
-Emmvlg//ajMpzoFgEDR/6HTlwxYwKGBbhZkx2O0jz/2xXVW9eItzm1TslT6DWPR1
-SV8llpZQUpUEbSu3BcNSbvUuhYLXJbUmzf87+xlB8tzzTLjp1TGWEOd8UZeF0Ieh
-tRGeu4nqRE+3xQzf/7rH5K7fWhyMqE56o9JkDTMW1KjxFosAd2K0Qes0tSwwVMoN
-FEgcCTVzI4al8sW0n98jb9G/eOtPbHkdpTKD1apUUm2KfLd6YXYZPR86ET0rnRNR
-pTVafRInpPzTYqIy+yoBMsKJg1JZAGygmvPYsKrklhjwD4pwNK8vHSP8ckblHrHk
-frOG4WApnuejJfayn9HgyEB4tMYzs0q+r9c4KHJQuLLHS0EixTMBHmSyDidX7dlA
-jqLQCDJt9cTC4sjbuhCbGNOSgfENI7sPq/hpV0OrwkLCbj1dH3wnHqfC9G4D9aQ+
-+qZfsoknJmPpMJx0aQjmkwRLD+u0q11ElG4WQAGhRxyFzPLZCiqgS0Ugsb1HntIC
-4IjdhlVahId1+YNAjQqQvI9rHApWyFGLmwJMJsP6tT4WdwL4uh15CWXR/Fu5nIOh
-jILTpzaYyfc/AabrEfAFamGSp0gYKaTURkaFPS55cfjZa/wiTMtDYr+s0NZXSyzJ
-H3MQ6m9BRXQbuIMHmXsslj69SZh0dcqL9Rn2N9SsDwcoN94f29E=
-=OugI
------END PGP SIGNATURE-----
+> This means we could just bind this behavior to the existing SoC-specific
+> compatible (i.e. of_device_is_compatible(..., "qcom,usb-hs-phy-msm8916"))
+> and avoid having an extra property.
+> 
+> Thoughts?
 
---guvpMswPTi1NG181--
+So. I'm OOO at the moment and didn't bring my db410c but TBH to me I 
+don't see why we do this whole dance with the pullup on/off with VBUS.
+
+The right thing to do is to run an experiment statically setting
+
+- ULPI_MISC_A_VBUSVLDEXT
+- ULPI_MISC_A_VBUSVLDEXTSEL
+
+On/off at power on/off respectively on
+
+- db410c
+- My reference where I already know it works
+
+I'm not really seeing the utility of - partially waggling one of two 
+registers with VBUS.
+
+Why not just push the pullup on with power-on and off with power-off..
+
+Its worth an experiement if you have the time, if not I'll check it when 
+I get back home.
+
+---
+bod
