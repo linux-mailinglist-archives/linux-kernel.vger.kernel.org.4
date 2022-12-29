@@ -2,159 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B017F6589AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 07:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CD76589AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 07:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbiL2G0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 01:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
+        id S231722AbiL2G10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 01:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiL2G0j (ORCPT
+        with ESMTP id S229747AbiL2G1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 01:26:39 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790C78FE5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:26:37 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id n15-20020a056e021baf00b0030387c2e1d3so11272538ili.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:26:37 -0800 (PST)
+        Thu, 29 Dec 2022 01:27:24 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96B3A196
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:27:23 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id 17so18143575pll.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:27:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wp7a/SqxkJQiBzNObkC8yuL3dMlA3/D0swG9wS0+8cI=;
+        b=nvmp5uWL2MCA7VFC+xj2NcKawctJVWIVLQ/dOq9XgsrR4yNKTrP3E78LO9oVdpKjBE
+         rzlmlntfj5UVzNju5fBtj20Xll4DXBF14wk8VGayE4QXdG67kilB6PCmAZdUDAJDEbpa
+         rLtcZTPpyEiSSuH5BbF84VRrVRutdNCt0CiQiH1xYME9L0YH3O3RVy2EwIRrOb7ePKcH
+         Tu62W/erGqOlpEd8omExuIjfN7237/xC4KWTAIx9J/l6DgTm2yNu+lJnmDpPpvuXrEL6
+         cufvuYx/vDK+COa+jCak6hCzrWfcrxNOosOVPaDX46prvbpIy0HWV96xUVJcma54lyu4
+         BQSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BhbflDOV2k1KLyHwZs0cA13pq6md2aueXIcWzsW7/xQ=;
-        b=B0uPjHYWEUA6ONQUL/p3zjpvvFRQOVTrw+MT5NCB8rPzwo2kP3R8bHcq5HWgmyKYkO
-         5cjeKPREpJ87lanf+3K/QEgt05VwzOC5iynCcvVwOwpU3ZL5cZ0i/E3bW4RVnkpxgHdo
-         OtdHc1J8tkhz15rO8sxy/13NyLDW6NOIRTe14ARBUM1tPsVYBPOKwG1OJz8GTXyibcWk
-         rx+cHMgamFSibCLdmJKfx+wJw3HK1D4MTs0KMHcZpZp0+dar0YEqhTNquh7pyUidxhkq
-         ak3EuLJYjvVbKbHTcd+4ymtRnuIPdVzpGC4fM3ziyTBKfk8nSIPVVwrYN80OcKXG0F02
-         WJ4Q==
-X-Gm-Message-State: AFqh2krqoKwKJSmgVdHFroOXdbB5OqZobUvcBs0+yOHnIZjRirzA61ku
-        5Dmey4cAHanQ8yMob+QvTtC/i0E5ny2+KWmFOMPXaaSQK0vP
-X-Google-Smtp-Source: AMrXdXtEXNg77rqsguWCrJD35UlA6mDxsEdnkiJQx9de80ndRMBTEEGwG/IbtoSUP4YA+jNL5E5JiryM/qq7CbLOIJW1ese8qpQL
+        bh=Wp7a/SqxkJQiBzNObkC8yuL3dMlA3/D0swG9wS0+8cI=;
+        b=1UvSElYEqVqEHsl5PDjMojhc7X6IXx7wk+f8yJ1n91O1kM/IO87wKNz/3CRxY9VPZO
+         WEYEiQeXhoDASOzOMgNzfyn2A80K3EPb1NUyOJxvmgKhmsXZrRDa+lghcd0r5gZUhgUF
+         Mq2Qns2RGtS1sVm9620AV5M3cJ2FuAs473Tpt5T5KQUFrJsnHcnupD8XDEvO5fzpeNAn
+         vVnAHC8wt34RPdGwH3TiMzAQxCznmiWTW/VjG+nhUOlEwg7tPfobW/tnuzyvHq1ZMLxE
+         MCxpDrW2TbaSg/uAyMk6IUs3DoftRsDTGRynzE68Xd4CLaIXMBWb9/cF/BPqQ2vSaQff
+         fjkg==
+X-Gm-Message-State: AFqh2kpdQIiMyDTJcPIElovOpzbQ4AC16s21JwuLitqbTdKyL0JxB34t
+        uxcrftWJfe2+gP8XpGdrCuM=
+X-Google-Smtp-Source: AMrXdXvouxlTS5q6FeDiLy5aU5YcHYFqVnKOe57Ma/nRuF4I7JRhIKzb1XgiczitPxdkQGNQwxYNhw==
+X-Received: by 2002:a05:6a21:3290:b0:af:757d:a8b0 with SMTP id yt16-20020a056a21329000b000af757da8b0mr40845162pzb.9.1672295243170;
+        Wed, 28 Dec 2022 22:27:23 -0800 (PST)
+Received: from [192.168.10.103] (ab137057.f.west.v6connect.net. [183.76.137.57])
+        by smtp.gmail.com with ESMTPSA id b6-20020a63d306000000b0047850cecbdesm10081737pgg.69.2022.12.28.22.27.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 22:27:22 -0800 (PST)
+Message-ID: <03cb5a7d-a10a-91b0-9e10-6a1147e56963@gmail.com>
+Date:   Thu, 29 Dec 2022 15:27:19 +0900
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:803:b0:304:c661:f53 with SMTP id
- u3-20020a056e02080300b00304c6610f53mr2292911ilm.155.1672295196843; Wed, 28
- Dec 2022 22:26:36 -0800 (PST)
-Date:   Wed, 28 Dec 2022 22:26:36 -0800
-In-Reply-To: <00000000000033a0120588fac894@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002ae67f05f0f191aa@google.com>
-Subject: Re: [syzbot] WARNING: locking bug in inet_autobind
-From:   syzbot <syzbot+94cc2a66fc228b23f360@syzkaller.appspotmail.com>
-To:     Alexander.Deucher@amd.com, Christian.Koenig@amd.com,
-        David1.Zhou@amd.com, Evan.Quan@amd.com, Felix.Kuehling@amd.com,
-        Harry.Wentland@amd.com, Oak.Zeng@amd.com, Ray.Huang@amd.com,
-        Yong.Zhao@amd.com, airlied@linux.ie, alexander.deucher@amd.com,
-        amd-gfx@lists.freedesktop.org, ast@kernel.org,
-        boqun.feng@gmail.com, bpf@vger.kernel.org,
-        christian.koenig@amd.com, daniel@ffwll.ch, daniel@iogearbox.net,
-        davem@davemloft.net, david1.zhou@amd.com,
-        dri-devel@lists.freedesktop.org, dsahern@kernel.org,
-        edumazet@google.com, evan.quan@amd.com, felix.kuehling@amd.com,
-        gautammenghani201@gmail.com, harry.wentland@amd.com,
-        jakub@cloudflare.com, kafai@fb.com, kuba@kernel.org,
-        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
-        longman@redhat.com, mingo@redhat.com, netdev@vger.kernel.org,
-        ozeng@amd.com, pabeni@redhat.com,
-        penguin-kernel@I-love.SAKURA.ne.jp,
-        penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
-        ray.huang@amd.com, rex.zhu@amd.com, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, will@kernel.org, yhs@fb.com,
-        yong.zhao@amd.com, yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] virtio_balloon: high order allocation
+Content-Language: en-US
+To:     Liu Shixin <liushixin2@huawei.com>, mst@redhat.com,
+        david@redhat.com, jasowang@redhat.com, akpm@linux-foundation.org
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        kalutes@google.com, mhiramat@kernel.org, cwd@google.com
+References: <20221223093527.12424-1-the.latticeheart@gmail.com>
+ <3fabf076-0fd8-2ad2-52e7-3c2913308156@huawei.com>
+From:   Soichiro Ueda <the.latticeheart@gmail.com>
+In-Reply-To: <3fabf076-0fd8-2ad2-52e7-3c2913308156@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi, Shixin.
 
-HEAD commit:    1b929c02afd3 Linux 6.2-rc1
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=145c6a68480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2651619a26b4d687
-dashboard link: https://syzkaller.appspot.com/bug?extid=94cc2a66fc228b23f360
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e13e32480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13790f08480000
+Thanks for checking the patch!
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d1849f1ca322/disk-1b929c02.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/924cb8aa4ada/vmlinux-1b929c02.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8c7330dae0a0/bzImage-1b929c02.xz
+>> +			for (i = 0; i < num_pfns; i++) {
+>> +				set_page_pfns(vb, vb->pfns + vb->num_pfns + i,
+>> +					      nth_page(page, i));
+>> +			}
+> Since the interval of vb->num_pfns is VIRTIO_BALLOON_PAGES_PER_PAGE,
+> it seems that the pfns[] should be vb->pfns + vb->num_pfns + i * VIRTIO_BALLOON_PAGES_PER_PAGE.
+Definitely.
+>> +			vb->num_pages +=
+>> +				num_pfns * VIRTIO_BALLOON_PAGES_PER_PAGE;
+>> +			if (!virtio_has_feature(
+>> +				    vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+>> +				adjust_managed_page_count(page, -num_pfns);
+> num_pfns is of the unsigned int type so need be to converted to long manually.
 
-The issue was bisected to:
+Oh, the second argument of adjust_managed_page_count is long type. So it 
+needs casting as you say.
 
-commit c0d9271ecbd891cdeb0fad1edcdd99ee717a655f
-Author: Yong Zhao <Yong.Zhao@amd.com>
-Date:   Fri Feb 1 23:36:21 2019 +0000
+I'll fix these problems in the v2 patch.
 
-    drm/amdgpu: Delete user queue doorbell variables
+Thank you,
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1433ece4a00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1633ece4a00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1233ece4a00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+94cc2a66fc228b23f360@syzkaller.appspotmail.com
-Fixes: c0d9271ecbd8 ("drm/amdgpu: Delete user queue doorbell variables")
-
-------------[ cut here ]------------
-Looking for class "l2tp_sock" with key l2tp_socket_class, but found a different class "slock-AF_INET6" with the same key
-WARNING: CPU: 0 PID: 7280 at kernel/locking/lockdep.c:937 look_up_lock_class+0x97/0x110 kernel/locking/lockdep.c:937
-Modules linked in:
-CPU: 0 PID: 7280 Comm: syz-executor835 Not tainted 6.2.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:look_up_lock_class+0x97/0x110 kernel/locking/lockdep.c:937
-Code: 17 48 81 fa e0 e5 f6 8f 74 59 80 3d 5d bc 57 04 00 75 50 48 c7 c7 00 4d 4c 8a 48 89 04 24 c6 05 49 bc 57 04 01 e8 a9 42 b9 ff <0f> 0b 48 8b 04 24 eb 31 9c 5a 80 e6 02 74 95 e8 45 38 02 fa 85 c0
-RSP: 0018:ffffc9000b5378b8 EFLAGS: 00010082
-RAX: 0000000000000000 RBX: ffffffff91c06a00 RCX: 0000000000000000
-RDX: ffff8880292d0000 RSI: ffffffff8166721c RDI: fffff520016a6f09
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000201 R11: 20676e696b6f6f4c R12: 0000000000000000
-R13: ffff88802a5820b0 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f1fd7a97700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000100 CR3: 0000000078ab4000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- register_lock_class+0xbe/0x1120 kernel/locking/lockdep.c:1289
- __lock_acquire+0x109/0x56d0 kernel/locking/lockdep.c:4934
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- lock_sock_nested+0x5f/0xf0 net/core/sock.c:3473
- lock_sock include/net/sock.h:1725 [inline]
- inet_autobind+0x1a/0x190 net/ipv4/af_inet.c:177
- inet_send_prepare net/ipv4/af_inet.c:813 [inline]
- inet_send_prepare+0x325/0x4e0 net/ipv4/af_inet.c:807
- inet6_sendmsg+0x43/0xe0 net/ipv6/af_inet6.c:655
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xd3/0x120 net/socket.c:734
- __sys_sendto+0x23a/0x340 net/socket.c:2117
- __do_sys_sendto net/socket.c:2129 [inline]
- __se_sys_sendto net/socket.c:2125 [inline]
- __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2125
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1fd78538b9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1fd7a971f8 EFLAGS: 00000212 ORIG_RAX: 000000000000002c
-RAX: ffffffffffffffda RBX: 00007f1fd78f0038 RCX: 00007f1fd78538b9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 00007f1fd78f0030 R08: 0000000020000100 R09: 000000000000001c
-R10: 0000000004008000 R11: 0000000000000212 R12: 00007f1fd78f003c
-R13: 00007f1fd79ffc8f R14: 00007f1fd7a97300 R15: 0000000000022000
- </TASK>
 
