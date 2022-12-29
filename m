@@ -2,105 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2020659168
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAAC659173
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbiL2UMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 15:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        id S233930AbiL2USD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 15:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiL2UL6 (ORCPT
+        with ESMTP id S233575AbiL2USB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 15:11:58 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E772B13D74;
-        Thu, 29 Dec 2022 12:11:56 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id ud5so47306604ejc.4;
-        Thu, 29 Dec 2022 12:11:56 -0800 (PST)
+        Thu, 29 Dec 2022 15:18:01 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F1E140F1;
+        Thu, 29 Dec 2022 12:17:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lXs+PETp5F1sLmKlUpnJ7KVN9WjqhwaoNYx00yCpTSY=;
-        b=f2HwiOKmQSTMlha8bpeMVmXGnoKK5540JbD4UUkSvcj93uWC/JkG9HL41f4TJtyQuW
-         WZcgfexiJSTgVV7RFQND06mUatgFWHTL4fpD+/3uhvZkmdDvgURiCpyGs/L+aVDdFdvN
-         Y9Xt7e/Q76wKUD8cCAIcKw3id8vZqqpFA+yxinET+h4OReZtxNa7HNoj9hTQoOfWMrLX
-         QMum5xjXhaIy4tbZ6zHuS7G3ZaN8mF4VVTxf9RxFG8sESEBrsRZvWM4UnB8/SuV2T8MF
-         vLYGuyLK1OELQ5Eu5RZ4pnA5okn2Ltq6g/fU6CMEwTHJqXlvwVRtRYa0rslxfxJc03is
-         nsxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lXs+PETp5F1sLmKlUpnJ7KVN9WjqhwaoNYx00yCpTSY=;
-        b=YHJ/B5DRYmxevrR5bVF2PXbQ/MA1jbYqadvmaDCakswh4yTIOyomig2L7Oq3zWvSsn
-         3dkSQUyJUqIRsiClXUzy0C6KORP/Cl03MV7+z05NGzVEbskhmgajDms0adkdWE/Ll2WW
-         r6ECpYAvUYm98i7cmte7p1tuqh9eZMC/5UoUvWpnR1gqNprVgD2Ody88saq18QSXFz6/
-         7J0vRfu6fUXyPxDP4/I7K4CGnmxDHfv+I7QK1dhKw5RqX3ilEvaY9wzXqjvsAwzb/7YL
-         UKhp1s3hrr55sC8WOQtVFPA/B25MWeIfOxo92OtpqZFuVEhAVsEUNr/daVBGU5YDCGq3
-         n7CQ==
-X-Gm-Message-State: AFqh2koUmPr+b5SuR21/8QQM3Aq5zzrizqa4UBCODxmh+yKmlJM0JeT2
-        p4CSCLC3RRTzKxNaIFICADmdOWMUQHXZDl+03yg=
-X-Google-Smtp-Source: AMrXdXsRFyZO21OsR6MyDEqPE+3QuBmJxj3hiIt8xfTZZTF3BZtZ4kJ3PzB1F5J33iMonRQPeM0Pd2Y/++tDb5LWlgo=
-X-Received: by 2002:a17:906:3989:b0:7c1:1f28:afed with SMTP id
- h9-20020a170906398900b007c11f28afedmr2446393eje.678.1672344715221; Thu, 29
- Dec 2022 12:11:55 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1672345080; x=1703881080;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=PQ848iD1ustBfk9pOIqJVV9lQblCt84oT36k4PUVOrA=;
+  b=Au+746kU/mS5E9ViAuzzn4M6g4JvgJKa1NEknqwj7SfStVN/ddXMabrA
+   l4BL5gNkhWQzKnvSYtkHXHemE5CTRKLyWeMi+G6MiFODLvd2gNKTqV4m2
+   JjcfzUNj2YISHyffS4Ye5SbhRsjqmflCD3XEYMkNBq6DJq3EiZUX/875A
+   U=;
+X-IronPort-AV: E=Sophos;i="5.96,285,1665446400"; 
+   d="scan'208";a="166268760"
+Subject: Re: [PATCH v2] edac: fix period calculation in
+ edac_device_reset_delay_period()
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-96feee09.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 20:17:57 +0000
+Received: from EX13D28EUC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-m6i4x-96feee09.us-east-1.amazon.com (Postfix) with ESMTPS id B4C2143387;
+        Thu, 29 Dec 2022 20:17:53 +0000 (UTC)
+Received: from EX19D034EUC002.ant.amazon.com (10.252.61.195) by
+ EX13D28EUC002.ant.amazon.com (10.43.164.254) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Thu, 29 Dec 2022 20:17:52 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D034EUC002.ant.amazon.com (10.252.61.195) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.20; Thu, 29 Dec 2022 20:17:52 +0000
+Received: from [192.168.167.129] (10.85.143.176) by mail-relay.amazon.com
+ (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Thu, 29 Dec 2022 20:17:48 +0000
+Message-ID: <aebd2f07-674c-b848-69e7-5479d111bad1@amazon.com>
+Date:   Thu, 29 Dec 2022 22:17:48 +0200
 MIME-Version: 1.0
-References: <20221229124845.1155429-1-martin.blumenstingl@googlemail.com> <d09d2480-a21e-69b3-90e4-5f361947057b@lwfinger.net>
-In-Reply-To: <d09d2480-a21e-69b3-90e4-5f361947057b@lwfinger.net>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 29 Dec 2022 21:11:43 +0100
-Message-ID: <CAFBinCBYbmrxP7UegAO7n7d1Dd=xo4pG1RE=H5-NVoSRX=Vdvg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] rtw88: Four fixes found while working on SDIO support
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     linux-wireless@vger.kernel.org, tony0620emma@gmail.com,
-        kvalo@kernel.org, pkshih@realtek.com, s.hauer@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+CC:     <mchehab@kernel.org>, <tony.luck@intel.com>, <james.morse@arm.com>,
+        <rric@kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <jonnyc@amazon.com>, <hhhawa@amazon.com>, <hanochu@amazon.com>,
+        <itamark@amazon.com>, <shellykz@amazon.com>, <amitlavi@amazon.com>,
+        <dkl@amazon.com>
+References: <20221020124458.22153-1-farbere@amazon.com>
+ <Y62xA548/wQAggRL@zn.tnic>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <Y62xA548/wQAggRL@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Larry,
-
-On Thu, Dec 29, 2022 at 6:41 PM Larry Finger <Larry.Finger@lwfinger.net> wrote:
-[...]
-> I do not feel qualified to review these contributions, but I have some suggestions.
+On 12/29/2022 5:23 PM, Borislav Petkov wrote:
+> On Thu, Oct 20, 2022 at 12:44:58PM +0000, Eliav Farber wrote:
+>> Fix period calculation in case user sets a value of 1000.
+>> The input of round_jiffies_relative() should be in jiffies and not in
+>> milli-seconds.
+>>
+>> Signed-off-by: Eliav Farber <farbere@amazon.com>
 >
-> The first is that the subject should start with wifi: rtw88: .... That is a
-> fairly recent change that you likely did not catch.
-Oh, this is something that I missed. I'll wait until tomorrow to see
-if I can get Ping-Ke's Reviewed-by on patch 1 and then re-send the
-whole series with fixed subjects.
+> Fixes: c4cf3b454eca ("EDAC: Rework workqueue handling")
+>
+> I guess.
+>
+> Also, I think the one-liner below does the same, no?
 
-> My second comment is that changed patches should have a version number to
-> identify that they are new patches.
-This series had four patches from the beginning. So no patches were
-added/removed during the lifecycle of this patchset.
-I think the cover-letter subject is a bit misleading as it contains
-the words "SDIO support". In fact the issues (which are fixed by this
-series) were found while working on SDIO support, but they also apply
-to existing PCIe/USB support.
+The one-liner below will not work.
+See the comment in edac_device_workq_setup() that explains why round
+is used:
+"
+optimize here for the 1 second case, which will be normal value, to
+fire ON the 1 second time event. This helps reduce all sorts of
+timers firing on sub-second basis, while they are happy
+to fire together on the 1 second exactly
+"
+So only the first schedule should be rounded.
+But all other schedules after that should be 1000ms.
+When rounding jiffs and saving it in edac_dev->delay it means that all
+future schedules will not be with the correct delay.
 
-> [...] Once you have generated the patches, you
-> should then edit them to indicate what change was made to each patch in the
-> various versions. Such explanations should go below the --- following the
-> Signed-off-by line, and end with another ---. With these additions, the
-> community, and more importantly Kalle, can keep track of the various versions,
-> and know what reviewer's comments have been addressed.
-Noted. I will take care of this in v3 along with the updated subjects.
+The fix I suggested is the same logic used in:
+  - edac_device_workq_setup()
+  - edac_device_workq_function()
 
-> I know of several people that have asked about SDIO versions of these drivers.
-> They will be pleased to see them become available.
-Thanks for the motivating words :-)
+--
+Regards, Eliav
 
 
-Best regards,
-Martin
+> ---
+>
+> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+> index 19522c568aa5..88942a6edc2c 100644
+> --- a/drivers/edac/edac_device.c
+> +++ b/drivers/edac/edac_device.c
+> @@ -399,7 +399,7 @@ void edac_device_reset_delay_period(struct 
+> edac_device_ctl_info *edac_dev,
+>        unsigned long jiffs = msecs_to_jiffies(value);
+>
+>        if (value == 1000)
+> -               jiffs = round_jiffies_relative(value);
+> +               jiffs = round_jiffies_relative(jiffs);
+>
+>        edac_dev->poll_msec = value;
+>        edac_dev->delay     = jiffs;
+>
+> -- 
+> Regards/Gruss,
+>    Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
