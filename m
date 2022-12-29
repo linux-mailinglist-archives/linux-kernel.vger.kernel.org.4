@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA57A658EFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1051658EFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 17:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbiL2QXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 11:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S233733AbiL2QW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 11:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbiL2QW0 (ORCPT
+        with ESMTP id S233657AbiL2QW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 11:22:26 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CA813DE0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:22:24 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id h7-20020a17090aa88700b00225f3e4c992so10723205pjq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:22:24 -0800 (PST)
+        Thu, 29 Dec 2022 11:22:27 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FAA13DD4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:22:25 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id s67so3349696pgs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 08:22:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ec85AyiKc77bI9XsP5tX5lamemx/Nh18BP3PMc4R5sU=;
-        b=JyJ1HotxL5h5gP0PAUr+bSyy8u1zOFXKWz1ZfgSiQeQvzYRYtdYK5A29TTv7eUyBSq
-         O6WUTpHiy10Kl0hHmRgy/d9fal5bMY/E/lNTQ2LCgCfG8iVu/uN6+Uj5ExC6mHOnsXiu
-         0ohB97kr44YJgmKniWXNLUoVi+8oVMmtdexytQrx6+rzrxhktuoTfzAedL35hCbYbn09
-         5yB5XsMVIjKdTNReT5H6YpQsO7a4nnDDcbUBIjnPH2H4vmdpB5S32Eq6ZsH3EXQnBVqu
-         h/JxK+dWLoxFuxlgdjXCLEO7aHIvjXxyMe2Wjpx0m1kdrzxduQK6w3r0Q8wQ2fW6djA1
-         pXZA==
+        bh=lGyrD0+PhkAL5dbAeObFs9RwoqBo5ONG0NwovuaDsrM=;
+        b=dahVygbdXamhJiKEgN7Jyg1lXYgvfTSo1DMUkYl6yXrdIMvfnyRS0HpjAJGhYD3IFg
+         E+JY0GnUUwwkM2h9ox2Zgy/UxJJ4gx7kMRbUi8BoQs1MkH7ANMKs27AnO7PEO784TqXp
+         ruuAqGepnkn93qVt3OFjdbG1AsqdvffnpusA3lSTC6zFKd8HiqB0qYg9fELjUJN4UbO/
+         3lnm7IU3UfXKaT3AUgnmQMHaYpOZ2VZND7TcbraC5FIjkTHVAEIVzHPRo5TQwNIMJbMP
+         q3kZJpTtujX11O+tGSd8oHpehkbK7CbScXp9TvIT0cj2FcWn3tOzaHwI3gNMSd/9wBDx
+         rNGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ec85AyiKc77bI9XsP5tX5lamemx/Nh18BP3PMc4R5sU=;
-        b=JZz8QFyB4MdEECpnD2qbinxtQeiT5akirW6VWNiApE+rUsxiHAAudKx2I2UJFRwNRw
-         6RB07ULv5c19I0pWaJrbKf9QPHPS0xTa1FZMp+EaBby9/0NpDIop6thF6qTYSe0RzvBi
-         DRb7Hlcwq9j7MdRR2mRAuYl0qp7/RQNtX8i7ineQgIYzuj+JJDYRROPLZ9VPEot9rNGx
-         E1RNiQfio8k3uHWd0PzVdvvuc+DAfKS+QSb+y+qAnLtv7q1l6kwtoI4ehx3OsFhI0WlR
-         yRP35Z84RGsrv4N4rFjAQUsCgvuAvU5uxyRI9d4l+61B0w1+lwlOsD35+Z806/RGzzWK
-         SBFw==
-X-Gm-Message-State: AFqh2kqZeC8cC8vmZJXq+bEcbd0nqPoRvztAge/nSnRB1BXFXDx5Ytbe
-        cGvrKler3AK5uOPN3+AQhgkCXw==
-X-Google-Smtp-Source: AMrXdXvdOJhcRsj0KUW218UKcAvJUd1l0xKIGxZQv8spR2kcI0qwBPtGX+cj507spyFm31HkJycFdg==
-X-Received: by 2002:a17:902:a981:b0:187:403c:7a3b with SMTP id bh1-20020a170902a98100b00187403c7a3bmr25977484plb.69.1672330943683;
-        Thu, 29 Dec 2022 08:22:23 -0800 (PST)
+        bh=lGyrD0+PhkAL5dbAeObFs9RwoqBo5ONG0NwovuaDsrM=;
+        b=5I+JMHTGBp/kr9QA0SZgySyHn5bnfQvqyOlrfgATBx+OqtFPkDQr+BPN45cKxuOklg
+         DPPXhGCbzs0AlRvde/NQhwEXKqtFOPABYONHr08/nImWmsJWEOeZvm92OtqKswtLrMM2
+         me8RF5ZxKbHsYV8WZLSEL5chnW5qFKUaqk9HVIXkGHxibuR3RobBRgGl5AgFLGzGiYFk
+         pGjuDUXr9kjmaImTIMeMSIDkGKmlsck0U4j/wmRrWDXFo/3kLBTCtPLpHEF+O/GQQ37y
+         EaUU9xYoYaXIqwd8dQyBFZYolv6FruQLEnVCxuWpDGx2LwhRNG9fVQ7Zf3ap/CUwUNuu
+         hPYA==
+X-Gm-Message-State: AFqh2kogJq5IrR02oE/eNZuUi2Wa1HD1Vw1oVwoyFZ0yVA9CXmh6bm2g
+        xP3nkeaix5v1Q6XDxkndAGHRoBw6a5o0aOf8
+X-Google-Smtp-Source: AMrXdXvpdMbR8CMYmi4dUk/9PgGNumQG+p4T2pa56FD3JYpViB2+8Ov5fWBEh9VYECa0d3vj+bwoEw==
+X-Received: by 2002:aa7:99cb:0:b0:580:d188:f516 with SMTP id v11-20020aa799cb000000b00580d188f516mr22924872pfi.19.1672330945228;
+        Thu, 29 Dec 2022 08:22:25 -0800 (PST)
 Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id o4-20020a170902bcc400b0019254c19697sm13000824pls.289.2022.12.29.08.22.23
+        by smtp.gmail.com with ESMTPSA id x185-20020a6286c2000000b0056bfebfa6e4sm12277463pfd.190.2022.12.29.08.22.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 08:22:23 -0800 (PST)
-Date:   Thu, 29 Dec 2022 08:22:23 -0800 (PST)
-X-Google-Original-Date: Thu, 29 Dec 2022 07:51:42 PST (-0800)
-Subject:     Re: [RFC PATCH] mm: remove zap_page_range and change callers to use zap_vma_page_range
-In-Reply-To: <20221216192012.13562-1-mike.kravetz@oracle.com>
-CC:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        david@redhat.com, mhocko@suse.com, peterx@redhat.com,
-        nadav.amit@gmail.com, willy@infradead.org, vbabka@suse.cz,
-        riel@surriel.com, Will Deacon <will@kernel.org>,
-        mpe@ellerman.id.au, borntraeger@linux.ibm.com,
-        dave.hansen@linux.intel.com, brauner@kernel.org,
-        edumazet@google.com, akpm@linux-foundation.org,
-        mike.kravetz@oracle.com
+        Thu, 29 Dec 2022 08:22:24 -0800 (PST)
+Date:   Thu, 29 Dec 2022 08:22:24 -0800 (PST)
+X-Google-Original-Date: Thu, 29 Dec 2022 07:53:04 PST (-0800)
+Subject:     Re: [PATCH v2] vdso: Improve cmd_vdso_check to check all dynamic relocations
+In-Reply-To: <20221221235147.45lkqmosndritfpe@google.com>
+CC:     christophe.leroy@csgroup.eu, luto@kernel.org, tglx@linutronix.de,
+        vincenzo.frascino@arm.com, Arnd Bergmann <arnd@arndb.de>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     mike.kravetz@oracle.com
-Message-ID: <mhng-3136c2a0-6953-4794-856c-46cacdc2c30a@palmer-ri-x1c9>
+To:     maskray@google.com
+Message-ID: <mhng-17d41c33-7f33-4a1c-8af2-ae7d07134e8c@palmer-ri-x1c9>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -79,60 +75,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 11:20:12 PST (-0800), mike.kravetz@oracle.com wrote:
-> zap_page_range was originally designed to unmap pages within an address
-> range that could span multiple vmas.  While working on [1], it was
-> discovered that all callers of zap_page_range pass a range entirely within
-> a single vma.  In addition, the mmu notification call within zap_page
-> range does not correctly handle ranges that span multiple vmas as calls
-> should be vma specific.
+On Wed, 21 Dec 2022 15:51:47 PST (-0800), maskray@google.com wrote:
+> The actual intention is that no dynamic relocation exists. However, some
+> GNU ld ports produce unneeded R_*_NONE. (If a port fails to determine
+> the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
+> relocations. E.g. ld's powerpc port recently fixed
+> https://sourceware.org/bugzilla/show_bug.cgi?id=29540) R_*_NONE are
+> generally no-op in the dynamic loaders. So just ignore them.
 >
-> Instead of fixing zap_page_range, change all callers to use the new
-> routine zap_vma_page_range.  zap_vma_page_range is just a wrapper around
-> zap_page_range_single passing in NULL zap details.  The name is also
-> more in line with other exported routines that operate within a vma.
-> We can then remove zap_page_range.
+> With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
+> bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
+> not called "absolute relocations". (The patch is motivated by the arm64
+> port missing R_AARCH64_RELATIVE.)
 >
-> Also, change madvise_dontneed_single_vma to use this new routine.
->
-> [1] https://lore.kernel.org/linux-mm/20221114235507.294320-2-mike.kravetz@oracle.com/
-> Suggested-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Signed-off-by: Fangrui Song <maskray@google.com>
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 > ---
->  arch/arm64/kernel/vdso.c                |  4 ++--
->  arch/powerpc/kernel/vdso.c              |  2 +-
->  arch/powerpc/platforms/book3s/vas-api.c |  2 +-
->  arch/powerpc/platforms/pseries/vas.c    |  2 +-
->  arch/riscv/kernel/vdso.c                |  4 ++--
->  arch/s390/kernel/vdso.c                 |  2 +-
->  arch/s390/mm/gmap.c                     |  2 +-
->  arch/x86/entry/vdso/vma.c               |  2 +-
->  drivers/android/binder_alloc.c          |  2 +-
->  include/linux/mm.h                      |  7 ++++--
->  mm/madvise.c                            |  4 ++--
->  mm/memory.c                             | 30 -------------------------
->  mm/page-writeback.c                     |  2 +-
->  net/ipv4/tcp.c                          |  6 ++---
->  14 files changed, 22 insertions(+), 49 deletions(-)
+> Change from v1:
+> * rebase after 8ac3b5cd3e0521d92f9755e90d140382fc292510 (lib/vdso: use "grep -E" instead of "egrep")
+> * change the commit message to mention an example GNU ld bug; no longer say the patch fixes a deprecated egrep use
+> ---
+>   arch/arm/vdso/Makefile            |  3 ---
+>   arch/arm64/kernel/vdso/Makefile   |  3 ---
+>   arch/arm64/kernel/vdso32/Makefile |  3 ---
+>   arch/csky/kernel/vdso/Makefile    |  3 ---
+>   arch/loongarch/vdso/Makefile      |  3 ---
+>   arch/mips/vdso/Makefile           |  3 ---
+>   arch/powerpc/kernel/vdso/Makefile |  1 -
+>   arch/riscv/kernel/vdso/Makefile   |  3 ---
+>   arch/s390/kernel/vdso32/Makefile  |  2 --
+>   arch/s390/kernel/vdso64/Makefile  |  2 --
+>   arch/x86/entry/vdso/Makefile      |  4 ----
+>   lib/vdso/Makefile                 | 13 ++++---------
+>   12 files changed, 4 insertions(+), 39 deletions(-)
 
 [snip]
 
-> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
-> index e410275918ac..a405119da2c0 100644
-> --- a/arch/riscv/kernel/vdso.c
-> +++ b/arch/riscv/kernel/vdso.c
-> @@ -127,10 +127,10 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
->  		unsigned long size = vma->vm_end - vma->vm_start;
+> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+> index 06e6b27f3bcc..d85c37e11b21 100644
+> --- a/arch/riscv/kernel/vdso/Makefile
+> +++ b/arch/riscv/kernel/vdso/Makefile
+> @@ -1,9 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   # Copied from arch/tile/kernel/vdso/Makefile
 >
->  		if (vma_is_special_mapping(vma, vdso_info.dm))
-> -			zap_page_range(vma, vma->vm_start, size);
-> +			zap_vma_page_range(vma, vma->vm_start, size);
->  #ifdef CONFIG_COMPAT
->  		if (vma_is_special_mapping(vma, compat_vdso_info.dm))
-> -			zap_page_range(vma, vma->vm_start, size);
-> +			zap_vma_page_range(vma, vma->vm_start, size);
->  #endif
->  	}
+> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> -# the inclusion of generic Makefile.
+> -ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
+>   include $(srctree)/lib/vdso/Makefile
+>   # Symbols present in the vdso
+>   vdso-syms  = rt_sigreturn
 
 Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
 
