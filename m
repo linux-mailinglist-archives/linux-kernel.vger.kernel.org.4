@@ -2,145 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC70E658DF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D905658DFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233538AbiL2Oob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 09:44:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
+        id S233557AbiL2Oqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 09:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbiL2Oo2 (ORCPT
+        with ESMTP id S229503AbiL2Oqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 09:44:28 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50C712AEA;
-        Thu, 29 Dec 2022 06:44:27 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 81A23320051E;
-        Thu, 29 Dec 2022 09:44:24 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 29 Dec 2022 09:44:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1672325064; x=1672411464; bh=JTZgLSlIIO
-        qenxEyLqfYo+J6+xlLVEFKuOuTUw7iSWE=; b=DZTPZthcZYu1YEUlH1zU3pVIG3
-        RzyI9Zm0zpIAOe8fvCgTm13UsUnNFGXVWZXfN9XFrY9emstyy746EfdppTH+rs1K
-        nESO87lyUky4GtWjyfgb6xdqrRGJNJml423z04OqR1uzFVIeDeyBhKUmjPRrg2Lm
-        X1GCZd3LrJmjG7qmnq9Qcd+pcs/dqMT6VO7QDWV3R5oElO2eZPLQe95HEEFil1Yo
-        PBV2Ymm1IsZh2yE44klgHvNdQcteYWGMOKgqP/WCtXoy9tlO/bz4UFxFny50ZsEg
-        5GE1mvcf+qA6tezCydHEGd4T8lGlTyTw/uf+6JH9JvZin2zKKNYXp0HoV8BA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672325064; x=1672411464; bh=JTZgLSlIIOqenxEyLqfYo+J6+xlL
-        VEFKuOuTUw7iSWE=; b=bLSbDrHhS8mDxk5E+B4reyFQ2TvYVxi2YOEZKLDx/AZ5
-        7a/E+YLSbCqWeK4lJZ8xVdlbhpdry5H/Cmn2ek0DtLS9cZ6N+NmRjHW8P57u5nHz
-        9JhKqmqL3tJ8IZ3C3luaDV+YvLeup/A+xeiTQj0nKdyrBzz3lh2kUmPMJVt+q+xu
-        bfcYL3CIOI13yE1U30yVcocSYlRWEaxreEJiDC48eVPYqPbn/eCFQg5Igv9GpEX5
-        KiF08DMezFHcecNODfsIjyy/nm+o2UGYiS0Ncvc5asuTfgZtM7LbBnIsYG16kJRT
-        DPZtEjhxLndbXccqH1yAEmnymf9P+MXl78JciTR2kQ==
-X-ME-Sender: <xms:x6etY4Ct9AFWXGC9nEQtP26zZAncySJfT1MfpLpaTzqymEPMB4kP-Q>
-    <xme:x6etY6j7BOMcFbWpYIZT8C_Bw8tHiTXcKLYpocF-aAP8yAFhfXIh4cnunxYeTuXcp
-    UjRuviFusDfeSgGpZU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdeilecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:x6etY7lueMmwiP7xJPHL13jyILA21u7gCw-emD34a2rA1lMjCj7I-w>
-    <xmx:x6etY-zGMMELoPCgcBp6AdiznVmP8rEO_tKyuHS3YaRscHN6LPC_3g>
-    <xmx:x6etY9R-UFq5lpUObbZt8oZ4sWF6dqh3-vO2Mh-9QVu86z4GX_0mwQ>
-    <xmx:yKetY9Z4C58471U1lsksfQ1qQwEmOVEjo1TuVIG0tv7aRa24A2zkzw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 60BDFB60086; Thu, 29 Dec 2022 09:44:23 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <4c779562-37d2-4bd3-bb02-41b943d7ef9d@app.fastmail.com>
-In-Reply-To: <1672307866-25839-2-git-send-email-dh10.jung@samsung.com>
-References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>
- <CGME20221229100413epcas2p34c702faf8c96d207cf1659b1173f8858@epcas2p3.samsung.com>
- <1672307866-25839-2-git-send-email-dh10.jung@samsung.com>
-Date:   Thu, 29 Dec 2022 15:44:02 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Daehwan Jung" <dh10.jung@samsung.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>,
-        "Mathias Nyman" <mathias.nyman@intel.com>,
-        "Felipe Balbi" <balbi@kernel.org>
-Cc:     "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
-        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
-        eomji.oh@samsung.com
-Subject: Re: [RFC PATCH v2 1/3] usb: support Samsung Exynos xHCI Controller
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 29 Dec 2022 09:46:47 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF54F71;
+        Thu, 29 Dec 2022 06:46:46 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-142b72a728fso21862668fac.9;
+        Thu, 29 Dec 2022 06:46:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mjny4r3e+yHFwg3COWI/pc1YRKBJT4hl+VX4zVowcfU=;
+        b=JCrmXzWkZ+Xl1P6FmoFZyRZUilc99pfMaNOtXu2ey5cmvn/E7ueVMhQ6GJRe2CRN2I
+         b/DIxIZ6T9V1e5XuSoEBcuk5TlMmE39+dsFgMgkzPTYA4V+FR7aJ8ShnyA6Lu1HJfKgO
+         8WYk2Zhw1yufDcqOLMRTLUoHf3PFoOik5q/3iSLAuJK7mjysidg0T5koG51BORYTPvDb
+         fWewWY1BgNQQVMg+PyZrpOCcYAuox+BRpz3vUDmrxSymLB2kcf7ayOAwZbg7bT04CObN
+         Z3zk3Z8CstJU38uKvWtuVBxmX+cn9QFgEviQsXp9+TAsJY9JBcNhfZsEQXW0V3FIx1ML
+         1gLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mjny4r3e+yHFwg3COWI/pc1YRKBJT4hl+VX4zVowcfU=;
+        b=HCbs+C2lIz7nslds0XWiFctmcYaV/zZKCN7nK9xmawuFWRrGqwgIHQTAlMuD2z3HYy
+         bTXA8sm6OX3g6+KlNSztgv4HRf2j/C7Q1LHiadx0fFZ6ncFtUTj4ifzd8ztww6L/Enz2
+         nPr3ZMDIbBltpS2eeMscvxNJBWnnTr2K89RPM6l4QwtftSBEJeTk8yVL3y56iTBStqA2
+         e5etQwb7CeiDsFQf6kAX1TwFEgeU6A2fnbo4VWbbFrEgTGq8bHXrd0zsKLpnMTp8od+x
+         nCCATcnjFoGG4PdOY+UWavceCBOwSxioZzpYD8ZK7dMCEuQP3nhU8VG0MbdQKS6CzvOa
+         /OEQ==
+X-Gm-Message-State: AFqh2kp7QulJV1w0qQdhDR6+ZMBeqNPvw3dWS4MOqepz50AnwKPYtuch
+        5JRYxS2tNxkO+Md13F47lSsdN5rSK7g=
+X-Google-Smtp-Source: AMrXdXul+qhuUeEnULbMFsfEq4K5r2x2MJGyn57HRRl+RP+oXKI1r4+qVhFmiDmNRXj4pnzEghza2Q==
+X-Received: by 2002:a05:6870:6789:b0:143:8299:2b5a with SMTP id gc9-20020a056870678900b0014382992b5amr14549082oab.57.1672325205725;
+        Thu, 29 Dec 2022 06:46:45 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id cv18-20020a056870c69200b0013ae5246449sm8640191oab.22.2022.12.29.06.46.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 06:46:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 29 Dec 2022 06:46:43 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH RESEND v6 2/5] hwmon: (pmbus/core): Notify hwmon events
+Message-ID: <20221229144643.GA21642@roeck-us.net>
+References: <20221214080715.2700442-1-Naresh.Solanki@9elements.com>
+ <20221214080715.2700442-2-Naresh.Solanki@9elements.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214080715.2700442-2-Naresh.Solanki@9elements.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022, at 10:57, Daehwan Jung wrote:
-> Currently, dwc3 invokes just xhci platform driver without any data.
-> We add xhci node as child of dwc3 node in order to get data from
-> device tree. It populates "xhci" child by name during initialization
-> of host. This patch only effects if dwc3 node has a child named "xhci"
-> not to disturb original path.
-
-Using child nodes is not the normal way of abstracting a soc specific
-variant of a device, though there are some USB host drivers that
-do this. Just use the node itself and add whatever samsung specific
-properties are needed based on the compatible string.
-
-> @@ -86,6 +90,33 @@ static void xhci_plat_quirks(struct device *dev, 
-> struct xhci_hcd *xhci)
->  	xhci->quirks |= XHCI_PLAT | priv->quirks;
->  }
+On Wed, Dec 14, 2022 at 09:07:12AM +0100, Naresh Solanki wrote:
+> Notify hwmon events using the pmbus irq handler.
 > 
-> +static int xhci_plat_bus_suspend(struct usb_hcd *hcd)
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  drivers/hwmon/pmbus/pmbus_core.c | 95 ++++++++++++++++++++++++--------
+>  1 file changed, 72 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 244fd2597252..b005a1c8ad7e 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2781,18 +2781,43 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
+>  	},
+>  };
+>  
+> -static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
+> +#define to_dev_attr(_dev_attr) \
+> +	container_of(_dev_attr, struct device_attribute, attr)
+> +
+> +static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
 > +{
-> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+> +	int i;
 > +
-> +	if (xhci->quirks & XHCI_ROOTHUB_WAKEUP) {
-> +		if (hcd == xhci->main_hcd)
-> +			__pm_relax(xhci->main_wakelock);
-> +		else
-> +			__pm_relax(xhci->shared_wakelock);
+> +	for (i = 0; i < data->num_attributes; i++) {
+> +		struct device_attribute *da = to_dev_attr(data->group.attrs[i]);
+> +		struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+> +		int index = attr->index;
+> +		u16 smask = pb_index_to_mask(index);
+> +		u8 spage = pb_index_to_page(index);
+> +		u16 sreg = pb_index_to_reg(index);
+> +
+> +		if (reg == sreg && page == spage && (smask & flags)) {
+> +			dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
+> +			sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
+> +			kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
+> +			flags &= ~smask;
+> +		}
+> +
+> +		if (!flags)
+> +			break;
 > +	}
-> +
-> +	return xhci_bus_suspend(hcd);
-> +}
-> +
-> +static int xhci_plat_bus_resume(struct usb_hcd *hcd)
-> +{
-> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-> +
-> +	if (xhci->quirks & XHCI_ROOTHUB_WAKEUP) {
-> +		if (hcd == xhci->main_hcd)
-> +			__pm_stay_awake(xhci->main_wakelock);
-> +		else
-> +			__pm_stay_awake(xhci->shared_wakelock);
-> +	}
-> +	return xhci_bus_resume(hcd);
 > +}
 
-It looks like these are no longer tied to the Samsung
-device type, which would be a step in the right direction,
-but I think adding this should be a separate patch since
-it is not a hardware specific change but a new feature.
+Interrupt aupport as well as sysfs and kobject notifications are not
+regulator specific and do not depend on regulator support. It has to be
+independent of regulator support, meaning it must also work if regulator
+support is disabled.
 
-    Arnd
+I seem to have trouble expressing myself, but I don't know how else to say
+it, sorry.
+
+It doesn't make sense to review the series further until this is addressed.
+
+Guenter
+
+> +
+> +static int pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *error,
+> +				    bool notify)
+>  {
+> -	int i, status;
+>  	const struct pmbus_regulator_status_category *cat;
+>  	const struct pmbus_regulator_status_assoc *bit;
+> -	struct device *dev = rdev_get_dev(rdev);
+> -	struct i2c_client *client = to_i2c_client(dev->parent);
+> -	struct pmbus_data *data = i2c_get_clientdata(client);
+> -	u8 page = rdev_get_id(rdev);
+> +	struct i2c_client *client = to_i2c_client(data->dev);
+>  	int func = data->info->func[page];
+> +	int i, status, ret;
+>  
+> -	*flags = 0;
+> +	*error = 0;
+>  
+>  	mutex_lock(&data->update_lock);
+>  
+> @@ -2803,14 +2828,17 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>  
+>  		status = _pmbus_read_byte_data(client, page, cat->reg);
+>  		if (status < 0) {
+> -			mutex_unlock(&data->update_lock);
+> -			return status;
+> +			ret = status;
+> +			goto unlock;
+>  		}
+>  
+>  		for (bit = cat->bits; bit->pflag; bit++) {
+>  			if (status & bit->pflag)
+> -				*flags |= bit->rflag;
+> +				*error |= bit->rflag;
+>  		}
+> +
+> +		if (notify && status)
+> +			pmbus_notify(data, page, cat->reg, status);
+>  	}
+>  
+>  	/*
+> @@ -2823,36 +2851,53 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>  	 * REGULATOR_ERROR_<foo>_WARN.
+>  	 */
+>  	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
+> -	mutex_unlock(&data->update_lock);
+> -	if (status < 0)
+> -		return status;
+>  
+> -	if (pmbus_regulator_is_enabled(rdev)) {
+> +	if (status < 0) {
+> +		ret = status;
+> +		goto unlock;
+> +	}
+> +
+> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
+> +	if (ret < 0)
+> +		goto unlock;
+> +
+> +	if (ret & PB_OPERATION_CONTROL_ON) {
+>  		if (status & PB_STATUS_OFF)
+> -			*flags |= REGULATOR_ERROR_FAIL;
+> +			*error |= REGULATOR_ERROR_FAIL;
+>  
+>  		if (status & PB_STATUS_POWER_GOOD_N)
+> -			*flags |= REGULATOR_ERROR_REGULATION_OUT;
+> +			*error |= REGULATOR_ERROR_REGULATION_OUT;
+>  	}
+>  	/*
+>  	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
+>  	 * defined strictly as fault indicators (not warnings).
+>  	 */
+>  	if (status & PB_STATUS_IOUT_OC)
+> -		*flags |= REGULATOR_ERROR_OVER_CURRENT;
+> +		*error |= REGULATOR_ERROR_OVER_CURRENT;
+>  	if (status & PB_STATUS_VOUT_OV)
+> -		*flags |= REGULATOR_ERROR_REGULATION_OUT;
+> +		*error |= REGULATOR_ERROR_REGULATION_OUT;
+>  
+>  	/*
+>  	 * If we haven't discovered any thermal faults or warnings via
+>  	 * PMBUS_STATUS_TEMPERATURE, map PB_STATUS_TEMPERATURE to a warning as
+>  	 * a (conservative) best-effort interpretation.
+>  	 */
+> -	if (!(*flags & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN)) &&
+> +	if (!(*error & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN)) &&
+>  	    (status & PB_STATUS_TEMPERATURE))
+> -		*flags |= REGULATOR_ERROR_OVER_TEMP_WARN;
+> +		*error |= REGULATOR_ERROR_OVER_TEMP_WARN;
+>  
+> -	return 0;
+> +unlock:
+> +	mutex_unlock(&data->update_lock);
+> +	return ret;
+> +}
+> +
+> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
+> +{
+> +	struct device *dev = rdev_get_dev(rdev);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> +
+> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags, false);
+>  }
+>  
+>  static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+> @@ -3082,10 +3127,14 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+>  {
+>  	struct pmbus_data *data = pdata;
+>  	struct i2c_client *client = to_i2c_client(data->dev);
+> -	int i, status;
+> +	int i, status, ret;
+>  
+>  	for (i = 0; i < data->info->pages; i++) {
+>  
+> +		ret = pmbus_get_flags(data, i, &status, true);
+> +		if (ret)
+> +			return ret;
+> +
+>  		mutex_lock(&data->update_lock);
+>  		status = pmbus_read_status_word(client, i);
+>  		if (status < 0) {
+> @@ -3099,7 +3148,7 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+>  		mutex_unlock(&data->update_lock);
+>  	}
+>  
+> -	return IRQ_HANDLED;
+> +	return ret;
+>  }
+>  
+>  static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
