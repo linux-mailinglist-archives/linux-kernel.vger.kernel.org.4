@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32371658CEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE61E658CED
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbiL2MwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S231288AbiL2M5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbiL2Mvl (ORCPT
+        with ESMTP id S229611AbiL2M5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:51:41 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251821E0;
-        Thu, 29 Dec 2022 04:51:35 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B6FA81EC0674;
-        Thu, 29 Dec 2022 13:51:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672318293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=N7FO3U5/GpmvSVtyOqXlqSdGk1QBVSV7WPKy7QurzN8=;
-        b=I941J+Ga0411Y0CZVdZvknFhDiOy1gMVmD1+RB8tb8JrPGABlOyZk1ZaMjvHlZ8zOScfE0
-        7sUlIPtj45HKxT4LMfLG7LhDTOHIFIRPVts+W0ngGTSPo6mNX957lfkKQfX7lPXzFoyJgq
-        aCNjthWoHu64tiSHjepyliQj4GB7uMY=
-Date:   Thu, 29 Dec 2022 13:51:33 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH] mce: fix missing stack-dumping in mce_panic()
-Message-ID: <Y62NVThhnGtnj71u@zn.tnic>
-References: <20221202163728.392509-1-linmiaohe@huawei.com>
- <SJ1PR11MB60830CE8C3F79C9531C8567AFC179@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <5cf492bf-9807-a091-6ac2-a953fce276da@huawei.com>
- <Y61/+V47qH/8OVxp@zn.tnic>
- <1e97c11d-99b6-c06f-b67f-c56ba6653d27@huawei.com>
+        Thu, 29 Dec 2022 07:57:32 -0500
+Received: from mail.holmansrus.com (unknown [143.59.183.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E5F13D5D
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:57:30 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.holmansrus.com (Postfix) with ESMTP id B7B62E1D70;
+        Thu, 29 Dec 2022 06:57:29 -0600 (CST)
+Received: from mail.holmansrus.com ([127.0.0.1])
+        by localhost (mail.holmansrus.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Za0-y-PG-rg2; Thu, 29 Dec 2022 06:57:29 -0600 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.holmansrus.com (Postfix) with ESMTP id 0003CE1CFB;
+        Thu, 29 Dec 2022 06:57:28 -0600 (CST)
+X-Virus-Scanned: amavisd-new at holmansrus.com
+Received: from mail.holmansrus.com ([127.0.0.1])
+        by localhost (mail.holmansrus.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id rEt54f3WH5uz; Thu, 29 Dec 2022 06:57:28 -0600 (CST)
+Received: from mail.holmansrus.com (mail.holmansrus.com [10.90.0.246])
+        by mail.holmansrus.com (Postfix) with ESMTP id AB6E3E1D01;
+        Thu, 29 Dec 2022 06:57:28 -0600 (CST)
+Date:   Thu, 29 Dec 2022 06:57:28 -0600 (CST)
+From:   Walt Holman <walt@holmansrus.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <255732713.91.1672318648501.JavaMail.zimbra@holmansrus.com>
+In-Reply-To: <Y60+ClXkkBAfKhUf@kroah.com>
+References: <933489772.83.1672266579857.JavaMail.zimbra@holmansrus.com> <Y60+ClXkkBAfKhUf@kroah.com>
+Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1e97c11d-99b6-c06f-b67f-c56ba6653d27@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.90.0.246]
+X-Mailer: Zimbra 8.8.15_GA_4484 (ZimbraWebClient - GC108 (Linux)/8.8.15_GA_4481)
+Thread-Topic: 6.1.2-rc1 review
+Thread-Index: ersqxz6lVnikKAcGC4xoUSRYuHBNOQ==
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 08:33:55PM +0800, Miaohe Lin wrote:
-> I think
+----- On Dec 29, 2022, at 1:13 AM, Greg KH gregkh@linuxfoundation.org wrote:
 
-You think or you know?
+> On Wed, Dec 28, 2022 at 04:29:39PM -0600, Walt Holman wrote:
+>> > This is the start of the stable review cycle for the 6.1.2 release.
+>> > There are 1146 patches in this series, all will be posted as a response
+>> > to this one.  If anyone has any issues with these being applied, please
+>> > let me know.
+>> > 
+>> > Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
+>> > Anything received after that time might be too late.
+>> > 
+>> > The whole patch series can be found in one patch at:
+>> > [ https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
+>> > | https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
+>> > ] > or in the git tree and branch at:
+>> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+>> > 	linux-6.1.y
+>> > and the diffstat can be found below.
+>> > 
+>> > thanks,
+>> > 
+>> > greg k-h
+>> > 
+>> > -------------
+>> 
+>> Hello,
+>> 
+>> I'm getting a NULL Pointer Dereference when shutting down or rebooting. It
+>> happens just as it tries to shut down the swap device ( /dev/dm-3 ). This
+>> happens late in the shutdown process and nothing gets saved in the logs.
+>> However, I've attached a photo of my screen showing the Oops and stack trace.
+>> Let me know if there's anything you'd like me to try.
+> 
+> Does this happen with 6.1.1 also?
+> 
+> Can you use 'git bisect' to track down the offending change?
+> 
+> thanks,
+> 
+> greg k-h
 
-I'm assuming reverting 6e6f0a1f0fa6 shows the MCE panic?
+This does NOT happen with 6.1.1 I'll get on bisecting here in a bit. I'm wondering about the changes that were made to blk-mq.c  That's where the new quiesce code and the null pointer dereference occur. I'll start by rolling back that commit and see what happens before bisecting. 
 
-I guess the original issue that commit was fixing is to save that
-redundant oops message but Tony seems to want to see it now and I'm not
-sure how much we care about 80x50 screens nowadays... :-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+-Walt 
