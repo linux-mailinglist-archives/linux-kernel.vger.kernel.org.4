@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092966589F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 08:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB0D6589F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 08:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbiL2HbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 02:31:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
+        id S233000AbiL2Hbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 02:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbiL2Ha7 (ORCPT
+        with ESMTP id S230229AbiL2Hbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 02:30:59 -0500
+        Thu, 29 Dec 2022 02:31:53 -0500
 Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2DE13CFD
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 23:30:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627A7C9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 23:31:52 -0800 (PST)
 Received: from [127.0.0.1] ([73.223.250.219])
         (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BT7Udw9843196
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BT7VXCx843333
         (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Wed, 28 Dec 2022 23:30:39 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BT7Udw9843196
+        Wed, 28 Dec 2022 23:31:34 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BT7VXCx843333
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022120601; t=1672299040;
-        bh=cqzF6SpAHTgTSF+MchRQqVKPbF8CT5G9XqBt9+XSgt4=;
+        s=2022120601; t=1672299094;
+        bh=P9B3uTyi8J6q0aKf9lvY9XtgOYfhraMemSVXlke1pIA=;
         h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=LR8SqMO8jV+FnBGjSpDWwRfN0VNOX43niwadXMvO2UhRsXSzix7gGS4d4oMZQOOUs
-         gKksMFdr1dNraATMTJagPy9Lti0eV51ejHqzfQeCf61bel8E63Y4u17SsM2/NH9ubk
-         8+Ub7rk59JPdiUoXBvkH7WcMiNi4nkgnf28em6515E3WdMSsr62oQ8JPHHl/HbWhtb
-         D8jspGEDFtB6O8urEDub5qTuRt1pi3eRh1Dsh3S9hhAkLYhC0KJ9UpxY9k34E1M8Pe
-         uLtNe1+GXGOBiCO5ELgiK/o3EKbyQFDtj/AgLYM5HUewLJmT/P2Dq4fMTph4Yucmzk
-         VhKJjgnBawbuQ==
-Date:   Wed, 28 Dec 2022 23:30:39 -0800
+        b=WfW98zlmWRjat8XXY4YvCjtF2d0PV7rT+SdB96ndtnnoBKwdX/tOa6eLa2EkWSCRK
+         CCoyD+laiIIWUgeKHqKq0hci7eRSLMbWMIvFPu/ORqu2BN2rzjDC/UrC4Vl27UnFF2
+         TfrHoxxZ9RlyCJj294k97ulX28VeCqKDS3ixu0/enFvWSugbhiLsn42XFGuruY/avT
+         iZrDcFkjXqWp6YyulCn2HLcEHcM2yz588rfzBo1CcoqIcfs94nTckFPzMha5gzOAI5
+         s1MlB6P/10I00c2tN1uf+XIpAGM7w8dJufC2sQUTKSqgV8MYvAaB44ddsY3vJm6qIa
+         wJCmDBVAceroA==
+Date:   Wed, 28 Dec 2022 23:31:34 -0800
 From:   "H. Peter Anvin" <hpa@zytor.com>
 To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
 CC:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
@@ -41,7 +41,7 @@ Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_qemu=5D_x86=3A_don=27t_let_decomp?= =?US-AS
 User-Agent: K-9 Mail for Android
 In-Reply-To: <Y6z765zHrQ6Rl/0o@zx2c4.com>
 References: <20221228143831.396245-1-Jason@zx2c4.com> <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org> <Y6xvJheSYC83voCZ@zx2c4.com> <Y6x1knb8udpSyMSp@zx2c4.com> <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com> <Y6z765zHrQ6Rl/0o@zx2c4.com>
-Message-ID: <40EE70D4-9B24-4282-844A-53D482201ED4@zytor.com>
+Message-ID: <AF921575-0968-434A-8B46-095B78C209C1@zytor.com>
 MIME-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
@@ -138,5 +138,8 @@ e
 >
 >Jason
 
-Ok, the code I sent will figure out the minimum amount of padding that you=
- need (min_initrd_addr) as well=2E
+As far as a crash=2E=2E=2E that sounds like a big and a pretty serious one=
+ at that=2E
+
+Could you let me know what kernel you are using and how *exactly* you are =
+booting it?
