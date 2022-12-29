@@ -2,274 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C356658809
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 01:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A8565880E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 01:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbiL2AKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 19:10:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
+        id S230435AbiL2AXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 19:23:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiL2AKh (ORCPT
+        with ESMTP id S230078AbiL2AXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 19:10:37 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5121610FCF;
-        Wed, 28 Dec 2022 16:10:33 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id r11so16007852oie.13;
-        Wed, 28 Dec 2022 16:10:33 -0800 (PST)
+        Wed, 28 Dec 2022 19:23:32 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735E86589
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 16:23:31 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id d127so14691024oif.12
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 16:23:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UVFzkE367g76hEdHAnpQgdk5KYpJ4SEVgNfUXDyiXMs=;
-        b=FNBOc4Qm0gZ+PbTagUKYgmu2y4/LPF4gF9LQyrTZxRCtLFdWTHO146/hKaOGtcMK73
-         UjN3EJ84Nam7hBw/RC1Pqf5fftjEK5yqs5cE3gYh81nde2YSIF0Fz12t7gL4GHfoU7cy
-         MeBaGSJFgJDjlaEi4ghEs9nt+qubTUQ3dx0UprRUmqN0FIRqbZ7u+WDTapspStco61CH
-         JMQuEQLbdOuQDvwYEbxtAH3PDT9BhWmIPk9myA0J4gpYPAE9FRsxkO9VbtO+Wnva00P2
-         eEtbW+DinuVMS2UB3oNnpnZAz/+rDZQefiPC6x8ilF2z30Wqt6t38bSuJg1q0Hv1MMQs
-         3sjQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5n19q5k9lrHaHasolTS/ptrEfcV+LGTg7kYhaCHvFHQ=;
+        b=Cf4l9JKrdX/Ez2nZNvo9zM5aX/7hd7PNIEIjJ8L9QGCjmUrTdgfPSWmKAe/jUKUMNl
+         dniw6e1eDsh6BzutXynzstEtsWOBfSZDoCxlMCzwDZkTRuceeUuwsWB1KFIHO5qqMy+D
+         tm72D4OjR8XKDN9oncoyEFIqsb5hyMVWDTpWyAAf/dUzp/ifvY58bhba8zn1ehZQgBs9
+         d8AtLNzBPOifVswf0OhJAQu3iNabD1zz/7q2bsq8Nl2Q8Yuu3AG3NkkW7YV4RZYaNTUq
+         gOBDsrg3Wg3hHyg7Fi1c+c9QcyuqZYJg22yOHplkFt2Jn1aGXfYosAqoF5Ac7yVGF4dy
+         jJbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UVFzkE367g76hEdHAnpQgdk5KYpJ4SEVgNfUXDyiXMs=;
-        b=J0/aMLqUPYp3sst2bK8r+FjMWUnxi5e980Vi6/7puqVUxSds038ObaU/MEu7ItW5Ko
-         LdlGVVrBpilrQ2B7lLUjkCkkh5idn7h8xt6/zVwy4PR+1+DkuK17xG026b4kF3PXMFNG
-         RajEkeBGuyL6lc9KFkSmkx5A86TRSIjK9ykCReyF6CVaU1AX7/QMo6k7V4P91YbubjX+
-         a54bgEIrOr58+MRpJ5sSgWS0rTLmV8F+y9/e1l8laqltjEWy3mSF+PlAU8t9e8YlBWNI
-         hpLFgRlv/X7HK2k3YUxuFqg3I4+b8hvZznQzXHJrGqeRFOFSxpxB3zZ5TQXyg/mdCjJS
-         4NDg==
-X-Gm-Message-State: AFqh2koDPPyz6BwNI+JKH9F4O8JhAPF0TWVGeTnaKgHsDrnrlZXX3Y24
-        nCzQacEmwp5H49zWWLyWCNrsC8cXKdk=
-X-Google-Smtp-Source: AMrXdXvZdCseZOjA6SZJfQgjT8jd7esMfZlVtUydpLuUdXBuaK7V2NrybtqZ5M/2ei+t9CqLvRAHuQ==
-X-Received: by 2002:aca:bbc6:0:b0:360:d8c5:1eef with SMTP id l189-20020acabbc6000000b00360d8c51eefmr11109461oif.53.1672272632582;
-        Wed, 28 Dec 2022 16:10:32 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j6-20020aca1706000000b0035a64076e0bsm7482738oii.37.2022.12.28.16.10.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 16:10:32 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 28 Dec 2022 16:10:30 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Derek J. Clark" <derekjohn.clark@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] Add support for the AYANEO AIR and AYANEO AIR Pro
- models of handheld devices. These devices use the same EC registers and
- logic as the One X Player mini AMD. Previous AYANEO models are not supported
- as they use a different EC and do not have the necessary fan speed write
- enable and setting registers. The driver is tested on AYANEO AIR while AIR
- Pro model EC functionality and DMI data were verified using command line
- tools by another user.
-Message-ID: <20221229001030.GA540645@roeck-us.net>
-References: <20221228230632.141917-1-derekjohn.clark@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5n19q5k9lrHaHasolTS/ptrEfcV+LGTg7kYhaCHvFHQ=;
+        b=y5pV6FNbHFF/qNiJwWHFgv9T0YTFqZkcHdgyRa1rGo22tMUJ7vaMSQ4laC+rM1lkMx
+         EDo3AD/zkMLEjBQAKcpNLGJLsyO4/AhJkmSVwQNSUQK/i9uDgcwRrMKFvTBxwhgYk2HL
+         PifhXtrDxmlEnOpf2m5H+KjCJXje5EtEtO26HHN2s/Oe0qGJoeASBWhlE123uOQBWqIT
+         mTFhYfuiblAKpHF4lhPujcpnY35gUUl6zSm6NZbkl46vSjsS5Wa4wu/xvU1iNlvkktAt
+         XAVmI3RI28AXJwZE7bToz/8xo9qNR+TuZFJoDcnHwwVJCmVv6FY4FGyeS8whjaXDXVQT
+         ZOtQ==
+X-Gm-Message-State: AFqh2kplIPqWmMunt89n5wi8mWEC0DowdxiXtsjyke/3Hs+TEUrdNIlT
+        h1wvWGKWvnQhE0Cu4/cG0Xtn+MNfw7X9JGUi07nHO9gmJ+Q0CRzNv54=
+X-Google-Smtp-Source: AMrXdXt9HxYfhcMXjKBtBHyCEDmd0OQJn/C8Wfcv/tiY3a9Q9iTDYQ5TkNCQuLDAM2jjWd2akxSupd0TXW52M4s7oQo=
+X-Received: by 2002:aca:3dd7:0:b0:35b:8358:aed4 with SMTP id
+ k206-20020aca3dd7000000b0035b8358aed4mr1385039oia.291.1672273410711; Wed, 28
+ Dec 2022 16:23:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221228230632.141917-1-derekjohn.clark@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221226073908.17317-1-balamanikandan.gunasundar@microchip.com> <20221226073908.17317-2-balamanikandan.gunasundar@microchip.com>
+In-Reply-To: <20221226073908.17317-2-balamanikandan.gunasundar@microchip.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 29 Dec 2022 01:23:18 +0100
+Message-ID: <CACRpkdbORVt9sFCnBFE1U206M92u4fjk9enbDJYZw7HJyAC=ng@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] mmc: atmel-mci: Convert to gpio descriptors
+To:     Balamanikandan Gunasundar 
+        <balamanikandan.gunasundar@microchip.com>
+Cc:     ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        hari.prasathge@microchip.com, dmitry.torokhov@gmail.com,
+        ulf.hansson@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 03:06:32PM -0800, Derek J. Clark wrote:
-> The added devices are:
-> - AYANEO AIR (AMD 5560U)
-> - AYANEO AIR Pro (AMD 5560U)
-> - AYANEO AIR Pro (AMD 5825U)
+Hi Balamanikandan,
 
-Add:
+thanks for your patch!
 
-While at it, fix spelling error (appart -> apart).
+On Mon, Dec 26, 2022 at 8:39 AM Balamanikandan Gunasundar
+<balamanikandan.gunasundar@microchip.com> wrote:
 
-> ---
-> Bundled all cases that lead to break.
-> Spelling and grammar fixes.
-> More verbose description of supported devices.
-> ---
-> Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> ---
->  Documentation/hwmon/oxp-sensors.rst | 19 +++++++----
->  MAINTAINERS                         |  1 +
->  drivers/hwmon/oxp-sensors.c         | 52 ++++++++++++++++++++++++-----
->  3 files changed, 56 insertions(+), 16 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-> index 39c588ec5c50..7f6e8def5aef 100644
-> --- a/Documentation/hwmon/oxp-sensors.rst
-> +++ b/Documentation/hwmon/oxp-sensors.rst
-> @@ -3,18 +3,21 @@
->  Kernel driver oxp-sensors
->  =========================
->  
-> -Author:
-> +Authors:
-> +    - Derek John Clark <derekjohn.clark@gmail.com>
->      - Joaquín Ignacio Aramendía <samsagax@gmail.com>
->  
-> -Description:
-> +Description
->  ------------
+> Replace the legacy GPIO APIs with gpio descriptor consumer interface.
+>
+> To maintain backward compatibility, we rely on the "cd-inverted"
+> property to manage the invertion flag instead of GPIO property.
+>
+> Signed-off-by: Balamanikandan Gunasundar <balamanikandan.gunasundar@microchip.com>
 
-I am not going to accept this. The change is POV, and it is unrelated to
-this patch. Either submit a separate patch or let the person requesting
-the change submit it. It is very unlikely that I am going to accept it,
-though, since the change is POV, unnecessary, and the original author may
-rightfully come back tomorrow and submit a revert.
+Overall this looks really nice! I thought about converting this driver
+but was a bit afraid of doing mistakes since it was a bit elaborate.
+Nice that you use fwnode accessors!
 
-Really, seriously, please refrain from making such changes.
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Guenter
+Improvement to consider (can also be a separate patch):
 
->  
-> -One X Player devices from One Netbook provide fan readings and fan control
-> -through its Embedded Controller.
-> +Handheld devices from One Netbook and Aya Neo provide fan readings and fan
-> +control through their embedded controllers.
->  
-> -Currently only supports AMD boards from the One X Player and AOK ZOE lineup.
-> -Intel boards could be supported if we could figure out the EC registers and
-> -values to write to since the EC layout and model is different.
-> +Currently only supports AMD boards from One X Player, AOK ZOE, and some Aya
-> +Neo devices. One X Player Intel boards could be supported if we could figure
-> +out the EC registers and values to write to since the EC layout and model is
-> +different. Aya Neo devices preceding the AIR may not be supportable as the EC
-> +model is different and do not appear to have manual control capabilities.
->  
->  Supported devices
->  -----------------
-> @@ -22,6 +25,8 @@ Supported devices
->  Currently the driver supports the following handhelds:
->  
->   - AOK ZOE A1
-> + - Aya Neo AIR
-> + - Aya Neo AIR Pro
->   - OneXPlayer AMD
->   - OneXPlayer mini AMD
->   - OneXPlayer mini AMD PRO
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 90220659206c..8bce95170f12 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15346,6 +15346,7 @@ F:	drivers/mtd/nand/onenand/
->  F:	include/linux/mtd/onenand*.h
->  
->  ONEXPLAYER FAN DRIVER
-> +M:	Derek John Clark <derekjohn.clark@gmail.com>
->  M:	Joaquín Ignacio Aramendía <samsagax@gmail.com>
->  L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
-> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-> index f84ec8f8eda9..36872b57912a 100644
-> --- a/drivers/hwmon/oxp-sensors.c
-> +++ b/drivers/hwmon/oxp-sensors.c
-> @@ -1,12 +1,12 @@
->  // SPDX-License-Identifier: GPL-2.0+
->  /*
-> - * Platform driver for OXP Handhelds that expose fan reading and control
-> - * via hwmon sysfs.
-> + * Platform driver for OneXPlayer, AOK ZOE, and Aya Neo Handhelds that expose
-> + * fan reading and control via hwmon sysfs.
->   *
-> - * Old boards have the same DMI strings and they are told appart by the
-> - * boot cpu vendor (Intel/AMD). Currently only AMD boards are supported
-> - * but the code is made to be simple to add other handheld boards in the
-> - * future.
-> + * Old OXP boards have the same DMI strings and they are told apart by
-> + * the boot cpu vendor (Intel/AMD). Currently only AMD boards are
-> + * supported but the code is made to be simple to add other handheld
-> + * boards in the future.
->   * Fan control is provided via pwm interface in the range [0-255].
->   * Old AMD boards use [0-100] as range in the EC, the written value is
->   * scaled to accommodate for that. Newer boards like the mini PRO and
-> @@ -42,6 +42,8 @@ static bool unlock_global_acpi_lock(void)
->  
->  enum oxp_board {
->  	aok_zoe_a1 = 1,
-> +	aya_neo_air,
-> +	aya_neo_air_pro,
->  	oxp_mini_amd,
->  	oxp_mini_amd_pro,
->  };
-> @@ -60,6 +62,20 @@ static const struct dmi_system_id dmi_table[] = {
->  		},
->  		.driver_data = (void *) &(enum oxp_board) {aok_zoe_a1},
->  	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
-> +		},
-> +		.driver_data = (void *) &(enum oxp_board) {aya_neo_air},
-> +	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
-> +		},
-> +		.driver_data = (void *) &(enum oxp_board) {aya_neo_air_pro},
-> +	},
->  	{
->  		.matches = {
->  			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> @@ -161,8 +177,17 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
->  			ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
->  			if (ret)
->  				return ret;
-> -			if (board == oxp_mini_amd)
-> +			switch (board) {
-> +			case aya_neo_air:
-> +			case aya_neo_air_pro:
-> +			case oxp_mini_amd:
->  				*val = (*val * 255) / 100;
-> +				break;
-> +			case aok_zoe_a1:
-> +			case oxp_mini_amd_pro:
-> +			default:
-> +				break;
-> +			}
->  			return 0;
->  		case hwmon_pwm_enable:
->  			return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
-> @@ -191,8 +216,17 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
->  		case hwmon_pwm_input:
->  			if (val < 0 || val > 255)
->  				return -EINVAL;
-> -			if (board == oxp_mini_amd)
-> +			switch (board) {
-> +			case aya_neo_air:
-> +			case aya_neo_air_pro:
-> +			case oxp_mini_amd:
->  				val = (val * 100) / 255;
-> +				break;
-> +			case aok_zoe_a1:
-> +			case oxp_mini_amd_pro:
-> +			default:
-> +				break;
-> +			}
->  			return write_to_ec(dev, OXP_SENSOR_PWM_REG, val);
->  		default:
->  			break;
-> @@ -233,7 +267,7 @@ static int oxp_platform_probe(struct platform_device *pdev)
->  
->  	/*
->  	 * Have to check for AMD processor here because DMI strings are the
-> -	 * same between Intel and AMD boards, the only way to tell them appart
-> +	 * same between Intel and AMD boards, the only way to tell them apart
->  	 * is the CPU.
->  	 * Intel boards seem to have different EC registers and values to
->  	 * read/write.
-> -- 
-> 2.39.0
-> 
+> +       if (slot->detect_pin) {
+> +               present = !(gpiod_get_raw_value(slot->detect_pin) ^
+>                             slot->detect_is_active_high);
+
+Normally we contain all this active low/high mess in mmc_of_parse(),
+but I guess this doesn't work here because the of node is different
+from the device :P
+
+Since the code says *explicitly* "active high" not "inverted" as the
+core code parses it, could you try just push this to gpiolib like
+we usually do, by deleting the detect_is_active_high stuff and
+just apply a patch like this?
+
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index 4fff7258ee41..5979c9a75cf9 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -199,7 +199,9 @@ static void of_gpio_set_polarity_by_property(const
+struct device_node *np,
+                { "fsl,imx8mm-pcie", "reset-gpio", "reset-gpio-active-high" },
+                { "fsl,imx8mp-pcie", "reset-gpio", "reset-gpio-active-high" },
+ #endif
+-
++#if IS_ENABLED(CONFIG_MMC_ATMELMCI)
++               { "atmel,hsmci", "cd-gpios", "cd-inverted" },
++#endif
+                /*
+                 * The regulator GPIO handles are specified such that the
+                 * presence or absence of "enable-active-high" solely controls
+
+(It's fine to include in your MMC patch if some GPIO maintainer like
+me ACK it.)
+
+Yours,
+Linus Walleij
