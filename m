@@ -2,81 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBF8658D1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E88C7658D21
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233252AbiL2NbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 08:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S233305AbiL2NcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 08:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiL2NbI (ORCPT
+        with ESMTP id S229535AbiL2NcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 08:31:08 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155515FCB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:31:06 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id 124so12662487pfy.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:31:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nJyXOHIJy199WKQmrcss/MftC0S714TuH1DdiOZFBe8=;
-        b=CHkKg4pKUiD5Odl/DCpWFAuhudcLG+uwXgtoD/ao8t24YBoeFQPtIFtL9iYoyjJmf2
-         rVO+pZK2HGEfrsDMGUp0bvwU2p1booGk3yA9BFxWkEWaccAcgolHwYxR3P3KjxpXi6IT
-         uN11cTNyqmdLPzm+fuXJluv/X/McnSBpD8S230Gs83bUxt761lP7AmIM6XgPGDiScq0V
-         Qs9MShVIMhVCdo6U8RuouVFr62htSbaIbXJfOfxS+1BLA+bUQDsJgVMp5FS2KJIhGDXZ
-         4zTmWEbHUJHSnGA3dZJknElLIqkHLw2fIDpFS2ZdrLtysAU3Te8AjFwOZLAXJGJRnUIm
-         QsDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nJyXOHIJy199WKQmrcss/MftC0S714TuH1DdiOZFBe8=;
-        b=sJ4wlwkeZjI1Gn3vSzc/XL6igitr2z/ZrnObbiTdvXi16GCTtUU4wkfBF2J6lYCEH8
-         80qELfqBy9UvkMW1ajfCWAEDsdQzCgtvOBvwEYefdc1BTX//plEbhgLUBf44p+bdEY6w
-         7ghNQq98R4TYg76P7aZvZ9b2AGVwCFNz6xyKLZkYn2Puf4uM+qk/3oe4EvGMmWbgpTI+
-         OmBbIWdYUoPytbqi+ygYeHTLOuy3dwRDC3uz+HrRcQYyeY8ki1sODlmIHoS+q2h5sjNf
-         a/P7lwJa1AmvvpmjFjf38TF+NOWTKb2HMp68bOZYzqqCx/cWyaM4p7UVq0ruyUKvHujX
-         2/cw==
-X-Gm-Message-State: AFqh2koYY3yIvIpHSYwcZBQFWFt5s7MdSZUDH2bIEnk8tm8iYtbioivJ
-        1HvO753lXcJloybV+MF+BHE=
-X-Google-Smtp-Source: AMrXdXtJuDlA/aYufo+aCodeU7FfCubBFPa1GVtVH7kHMYxHgSbLUUfM78MOv1CAUv7d4IwfQwkw6w==
-X-Received: by 2002:a62:b412:0:b0:581:3557:f75b with SMTP id h18-20020a62b412000000b005813557f75bmr12396832pfn.5.1672320665523;
-        Thu, 29 Dec 2022 05:31:05 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id 12-20020a62170c000000b005769436a23dsm12089673pfx.218.2022.12.29.05.31.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 05:31:04 -0800 (PST)
-Date:   Thu, 29 Dec 2022 22:30:58 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+j44CA55u05LmfKQ==?= 
-        <naoya.horiguchi@nec.com>, Joe Perches <joe@perches.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matthew WilCox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC v3 3/4] mm, printk: introduce new format %pGt for page_type
-Message-ID: <Y62WkiG3dSWOKL1i@hyeyoo>
-References: <20221218101901.373450-1-42.hyeyoo@gmail.com>
- <20221218101901.373450-4-42.hyeyoo@gmail.com>
- <Y6HSutM8pmoKxQWp@alley>
+        Thu, 29 Dec 2022 08:32:17 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3185711156;
+        Thu, 29 Dec 2022 05:32:14 -0800 (PST)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 717F1FF807;
+        Thu, 29 Dec 2022 13:32:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672320733;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jKTmICtgS5CE15mgXypcbICDTCnPat9jm5uLCXEeSv8=;
+        b=R8b59MnDxsb9rbaru0h1PgKK2ZDdCxXKz63dZF8YIzLJZjTTkqnR06fVirDyejBgyNkmFM
+        gSUfbjUpS4QORukiC84rwyECuySp80jHZnrcgLtnPVpQwRUpvJSM1t5lyDtP4cepJDDwn1
+        Wxc0xEok6MgqHsj0N7LX/SlCYFCdRX0SeWPTekoPmEazrorBlMJuGLsNeCGsro9Y8S16UE
+        roqGLHs7Mh4bHj16IxxGHfqqDLz5GbAK0A0/fc8plbpPHQnfANr/ygne5WtfTMlRwNeMYX
+        D1Nm8jNt+h3bBjN1/dQ/tw1UXK6ZTrsjJk63Qy71R3lbsi45f/zP1dij0GfoYA==
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+Subject: [PATCH v3 00/21] Add Tegra20 parallel video input capture
+Date:   Thu, 29 Dec 2022 14:31:44 +0100
+Message-Id: <20221229133205.981397-1-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6HSutM8pmoKxQWp@alley>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,86 +65,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 04:20:26PM +0100, Petr Mladek wrote:
-> On Sun 2022-12-18 19:19:00, Hyeonggon Yoo wrote:
-> > %pGp format is used to print 'flags' field of struct page.
-> > As some page flags (e.g. PG_buddy, see page-flags.h for more details)
-> > are set in page_type field, introduce %pGt format which provides
-> > human readable output of page_type.
-> > 
-> > Note that the sense of bits are different in page_type. if page_type is
-> > 0xffffffff, no flags are set. if PG_slab (0x00100000) flag is set,
-> > page_type is 0xffefffff. Clearing a bit means we set the bit.
-> > 
-> > Bits in page_type are inverted when printing page type names.
-> > 
-> > --- a/Documentation/core-api/printk-formats.rst
-> > +++ b/Documentation/core-api/printk-formats.rst
-> > @@ -575,12 +575,13 @@ The field width is passed by value, the bitmap is passed by reference.
-> >  Helper macros cpumask_pr_args() and nodemask_pr_args() are available to ease
-> >  printing cpumask and nodemask.
-> >  
-> > -Flags bitfields such as page flags, gfp_flags
-> > +Flags bitfields such as page flags, page_type, gfp_flags
-> >  ---------------------------------------------
-> 
-> Please, underline the entire title. Otherwise, "make htmldoc"
-> complains ;-)
-> 
->     /prace/kernel/linux/Documentation/core-api/printk-formats.rst:579: WARNING: Title underline too short.
->     Flags bitfields such as page flags, page_type, gfp_flags
+Tegra20 and other Tegra SoCs have a video input (VI) peripheral that can
+receive from either MIPI CSI-2 or parallel video (called respectively "CSI"
+and "VIP" in the documentation). The kernel currently has a staging driver
+for Tegra210 CSI capture. This patch set adds support for Tegra20 VIP
+capture.
 
-Still not getting used to rst format ;)
-Will fix, thanks!
+Unfortunately I had no real documentation available to base this work on.
+I only had a working downstream 3.1 kernel, so I started with the driver
+found there and heavily reworked it to fit into the mainline tegra-video
+driver structure. The existing code appears written with the intent of
+being modular and allow adding new input mechanisms and new SoCs while
+keeping a unique VI core module. However its modularity and extensibility
+was not enough to add Tegra20 VIP support, so I added some hooks to turn
+hard-coded behaviour into per-SoC or per-bus customizable code. There are
+also a fix, some generic cleanups and DT bindings.
 
-> 
-> 
-> >  
-> >  ::
-> >  
-> >  	%pGp	0x17ffffc0002036(referenced|uptodate|lru|active|private|node=0|zone=2|lastcpupid=0x1fffff)
-> > +	%pGt	0xffefffff(slab)
-> >  	%pGg	GFP_USER|GFP_DMA32|GFP_NOWARN
-> >  	%pGv	read|exec|mayread|maywrite|mayexec|denywrite
-> >  
-> 
-> Please, explain this also in the paragraph below these examples.
-> I would personally refactor it to an itemized list, something like:
-> 
-> <proposal>
-> For printing flags bitfields as a collection of symbolic constants that
-> would construct the value. The type of flags is given by the third
-> character. Currently supported are:
-> 
-> 	- p - [p]age flags, expects value of type (``unsigned long *``)
-> 	- t - page [t]ype, expects value of type (``unsigned int *``)
-> 	- v - [v]ma_flags, expects value of type (``unsigned long *``)
-> 	- g - [g]fp_flags, expects value of type (``gfp_t *``)
-> 
-> The flag names and print order depends on the particular type.
-> </proposal>
+Quick tour of the patches:
 
-The proposal sounds reasonable to me,
-will adjust in next version.
+ * Device tree bindings and minor DTS improvements
 
-> Rant:
-> Sigh, it looks a bit error prone when similar pointer modifiers
-> expects pointers to different types. I wish there was a way how
-> to check the passed pointer type at compilation time. But it
-> is generic problem with these %p* modifiers.
+   01. dt-bindings: display: tegra: add Tegra20 VIP
+   02. dt-bindings: display: tegra: vi: add 'vip' property and example
 
-From my limited knowledge, it seems that there is no way to check
-this :/
+ * A fix
 
-> 
-> Otherwise the patch looks fine for the vsprinf side.
+   03. staging: media: tegra-video: fix .vidioc_enum_fmt_vid_cap to return all formats
 
-Thank you for looking at this!
+ * Minor improvements to logging, comments, cleanups
 
-> 
-> Best Regards,
-> Petr
+   04. staging: media: tegra-video: improve documentation of tegra_video_format fields
+   05. staging: media: tegra-video: document tegra_channel_get_remote_source_subdev
+   06. staging: media: tegra-video: fix typos in comment
+   07. staging: media: tegra-video: improve error messages
+   08. staging: media: tegra-video: slightly simplify cleanup on errors
+   09. staging: media: tegra-video: move private struct declaration to C file
+   10. staging: media: tegra-video: move tegra210_csi_soc to C file
+   11. staging: media: tegra-video: remove unneeded include
+
+ * Preparation to make the VI module generic enough to host Tegra20 and VIP
+
+   12. staging: media: tegra-video: Kconfig: allow TPG only on Tegra210
+   13. staging: media: tegra-video: move tegra_channel_fmt_align to a per-soc op
+   14. staging: media: tegra-video: move default format to soc-specific data
+   15. staging: media: tegra-video: move MIPI calibration calls from VI to CSI
+   16. staging: media: tegra-video: add a per-soc enable/disable op
+   17. staging: media: tegra-video: move syncpt init/free to a per-soc op
+   18. staging: media: tegra-video: add syncpts for Tegra20 to struct tegra_vi
+   19. staging: media: tegra-video: add hooks for planar YUV and H/V flip
+   20. staging: media: tegra-video: add H/V flip controls
+
+ * Implementation of VIP and Tegra20
+
+   21. staging: media: tegra-video: add support for Tegra20 parallel input
+
+Enjoy!
+
+Changed in v3:
+- removed the 'channel@0' node from the device tree representation of vip
+- squashed the last two patches (VIP + T20) into one
+- small cleanups
+- rebase on v6.2-rc1
+
+Changed in v2:
+- improved dt-bindings patches based on reviews
+- removed patches 3 and 4 adding DT labels without a mainline user
+- two small fixes to the last patch
+
+[v2] https://lore.kernel.org/linux-tegra/20221222100328.6e341874@booty/T/#t
+[v1] https://lore.kernel.org/linux-tegra/20221124155634.5bc2a423@booty/T/#t
+
+Luca
+
+Luca Ceresoli (21):
+  dt-bindings: display: tegra: add Tegra20 VIP
+  dt-bindings: display: tegra: vi: add 'vip' property and example
+  staging: media: tegra-video: fix .vidioc_enum_fmt_vid_cap to return
+    all formats
+  staging: media: tegra-video: improve documentation of
+    tegra_video_format fields
+  staging: media: tegra-video: document
+    tegra_channel_get_remote_source_subdev
+  staging: media: tegra-video: fix typos in comment
+  staging: media: tegra-video: improve error messages
+  staging: media: tegra-video: slightly simplify cleanup on errors
+  staging: media: tegra-video: move private struct declaration to C file
+  staging: media: tegra-video: move tegra210_csi_soc to C file
+  staging: media: tegra-video: remove unneeded include
+  staging: media: tegra-video: Kconfig: allow TPG only on Tegra210
+  staging: media: tegra-video: move tegra_channel_fmt_align to a per-soc
+    op
+  staging: media: tegra-video: move default format to soc-specific data
+  staging: media: tegra-video: move MIPI calibration calls from VI to
+    CSI
+  staging: media: tegra-video: add a per-soc enable/disable op
+  staging: media: tegra-video: move syncpt init/free to a per-soc op
+  staging: media: tegra-video: add syncpts for Tegra20 to struct
+    tegra_vi
+  staging: media: tegra-video: add hooks for planar YUV and H/V flip
+  staging: media: tegra-video: add H/V flip controls
+  staging: media: tegra-video: add support for Tegra20 parallel input
+
+ .../display/tegra/nvidia,tegra20-vi.yaml      |  64 ++
+ .../display/tegra/nvidia,tegra20-vip.yaml     |  49 ++
+ MAINTAINERS                                   |   3 +
+ drivers/staging/media/tegra-video/Kconfig     |   1 +
+ drivers/staging/media/tegra-video/Makefile    |   2 +
+ drivers/staging/media/tegra-video/csi.c       |  48 ++
+ drivers/staging/media/tegra-video/csi.h       |   4 -
+ drivers/staging/media/tegra-video/tegra20.c   | 661 ++++++++++++++++++
+ drivers/staging/media/tegra-video/tegra210.c  |  97 ++-
+ drivers/staging/media/tegra-video/vi.c        | 321 ++-------
+ drivers/staging/media/tegra-video/vi.h        |  75 +-
+ drivers/staging/media/tegra-video/video.c     |   5 +
+ drivers/staging/media/tegra-video/video.h     |   2 +-
+ drivers/staging/media/tegra-video/vip.c       | 290 ++++++++
+ drivers/staging/media/tegra-video/vip.h       |  68 ++
+ 15 files changed, 1400 insertions(+), 290 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml
+ create mode 100644 drivers/staging/media/tegra-video/tegra20.c
+ create mode 100644 drivers/staging/media/tegra-video/vip.c
+ create mode 100644 drivers/staging/media/tegra-video/vip.h
 
 -- 
-Thanks,
-Hyeonggon
+2.34.1
+
