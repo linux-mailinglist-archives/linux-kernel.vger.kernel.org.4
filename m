@@ -2,96 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E06A658911
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78401658917
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiL2DH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 22:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S230159AbiL2DRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 22:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiL2DH0 (ORCPT
+        with ESMTP id S229822AbiL2DRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 22:07:26 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EDAC740;
-        Wed, 28 Dec 2022 19:07:24 -0800 (PST)
-X-UUID: 27deb0d81236403f95e38ab3de441de5-20221229
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=5APWQ/KbXgNbszB/TlGiUT+18qB2uNXqqSohrW/gfYk=;
-        b=M+SEdy1odN/D7M0XvmrsTCkZL4+LGihKK/MHy+ImExNMtwEhw8rg4WxKkSYwEICe3F3L1UooFt0rF8nasF5GuH0ffEqBXno2BaUe19JG5Go0PILseVDes41t5TOmH2PGtUBlcpZ0K9OzW9ZXSD7OiReaaRtKgMiGJ+WTwxRyMY0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:9876b4b4-a47e-48d0-b3ca-1651564b39dc,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:dcaaed0,CLOUDID:6d3b40f4-ff42-4fb0-b929-626456a83c14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 27deb0d81236403f95e38ab3de441de5-20221229
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-        (envelope-from <ed.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1651047375; Thu, 29 Dec 2022 11:07:18 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 29 Dec 2022 11:07:17 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 29 Dec 2022 11:07:17 +0800
-From:   Ed Tsai <ed.tsai@mediatek.com>
-To:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <matthias.bgg@gmail.com>, <linux-scsi@vger.kernel.org>
-CC:     <peter.wang@mediatek.com>, <alice.chao@mediatek.com>,
-        <powen.kao@mediatek.com>, <naomi.chu@mediatek.com>,
-        <stanley.chu@mediatek.com>, <wsd_upstream@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Ed Tsai <ed.tsai@mediatek.com>
-Subject: [PATCH 1/1] ufs: update the timeout timer after resume
-Date:   Thu, 29 Dec 2022 11:06:45 +0800
-Message-ID: <20221229030645.11558-1-ed.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 28 Dec 2022 22:17:36 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B986A12AA3;
+        Wed, 28 Dec 2022 19:17:33 -0800 (PST)
+Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NjD7F1kVvzRpGW;
+        Thu, 29 Dec 2022 11:16:09 +0800 (CST)
+Received: from [10.174.179.189] (10.174.179.189) by
+ dggpeml500019.china.huawei.com (7.185.36.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 29 Dec 2022 11:17:31 +0800
+Message-ID: <703686f3-19aa-eb15-dd54-00f463e6e620@huawei.com>
+Date:   Thu, 29 Dec 2022 11:17:31 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [RFC PATCH] ata: libata-eh: Retry the cmnd when normal complete
+ occurrd after scsi timeout
+Content-Language: en-US
+To:     Niklas Cassel <Niklas.Cassel@wdc.com>
+CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "qiuchangqi.qiu@huawei.com" <qiuchangqi.qiu@huawei.com>,
+        Wenchao Hao <haowenchao@huawei.com>, <chenchunxiao@huawei.com>
+References: <1672220216-46938-1-git-send-email-wubo40@huawei.com>
+ <Y6yD7Jy0vNr2ZAmE@x1-carbon>
+From:   Wu Bo <wubo40@huawei.com>
+In-Reply-To: <Y6yD7Jy0vNr2ZAmE@x1-carbon>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.189]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tags allocation is limited by the number of active queues and a
-queue is marked as inactive by the queue timeout worker after up to 30Hz
-by default.
+On 2022/12/29 1:59, Niklas Cassel wrote:
+> On Wed, Dec 28, 2022 at 05:36:56PM +0800, Wu Bo wrote:
+>> From: wubo <wubo40@huawei.com>
+>>
+>> Hi,
+>>
+>> Now SCSI middle layer EH and normal IO handler can only choose one of them,
+>> after the SCSI command is completed normally after scsi timeout period,
+>> Should this scenario be given a chance to retry?
+>>
+>> Signed-off-by: wubo <wubo40@huawei.com>
+>> ---
+>>   drivers/ata/libata-eh.c | 8 +-------
+>>   1 file changed, 1 insertion(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+>> index 34303ce..8d1856f 100644
+>> --- a/drivers/ata/libata-eh.c
+>> +++ b/drivers/ata/libata-eh.c
+>> @@ -617,14 +617,8 @@ void ata_scsi_cmd_error_handler(struct Scsi_Host *host, struct ata_port *ap,
+>>   					qc->flags |= ATA_QCFLAG_FAILED;
+>>   					nr_timedout++;
+>>   				}
+>> -			} else {
+>> -				/* Normal completion occurred after
+>> -				 * SCSI timeout but before this point.
+>> -				 * Successfully complete it.
+>> -				 */
+>> -				scmd->retries = scmd->allowed;
+>> +			} else
+>>   				scsi_eh_finish_cmd(scmd, &ap->eh_done_q);
+>> -			}
+>>   		}
+>>
+> 
+> Hello Wu,
+> 
+> 
+> The function comment looks like this:
+> 	/* For new EH, all qcs are finished in one of three ways -
+> 	 * normal completion, error completion, and SCSI timeout.
+> 	 * Both completions can race against SCSI timeout.  When normal
+> 	 * completion wins, the qc never reaches EH.  When error
+> 	 * completion wins, the qc has ATA_QCFLAG_FAILED set.
+> 	 *
+> 	 * When SCSI timeout wins, things are a bit more complex.
+> 	 * Normal or error completion can occur after the timeout but
+> 	 * before this point.  In such cases, both types of
+> 	 * completions are honored.  A scmd is determined to have
+> 	 * timed out iff its associated qc is active and not failed.
+> 	 */
+> 
+> And the code looks like this:
+> 
+> 			if (i < ATA_MAX_QUEUE) {
+> 				/* the scmd has an associated qc */
+> 				if (!(qc->flags & ATA_QCFLAG_FAILED)) {
+> 					/* which hasn't failed yet, timeout */
+> 					qc->err_mask |= AC_ERR_TIMEOUT;
+> 					qc->flags |= ATA_QCFLAG_FAILED;
+> 					nr_timedout++;
+> 				}
+> 			} else {
+> 				/* Normal completion occurred after
+> 				 * SCSI timeout but before this point.
+> 				 * Successfully complete it.
+> 				 */
+> 				scmd->retries = scmd->allowed;
+> 				scsi_eh_finish_cmd(scmd, &ap->eh_done_q);
+> 			}
+> 
+> 
+> 
+> If SCSI timeout wins, but there came an error completion after,
+> then we will go into the if (i < ATA_MAX_QUEUE) case, but we will
+> not enter the if !(qc->flags & ATA_QCFLAG_FAILED), as ATA_QCFLAG_FAILED
+> will already be set by the irq handler. This QC will be completed
+> by the ata_scsi_port_error_handler(), which gets to run just after
+> this function has returned:
+> https://github.com/torvalds/linux/blob/v6.2-rc1/drivers/ata/libata-eh.c#L546
+> 
+> 
+> 
+> The else clause you are modifying however is for the case where SCSI timeout
+> wins, but there came a normal completion occurred after the SCSI timeout.
+> 
+> In more detail, what happens first is that scsi_timeout() gets called,
+> and if scsi timeout wins, it sets SCMD_STATE_COMPLETE:
+> https://github.com/torvalds/linux/blob/v6.2-rc1/drivers/scsi/scsi_error.c#L355
+> and then schedules EH for that command using scsi_eh_scmd_add().
+> 
+> What happens next in this specific case is that the IRQ handler is called,
+> takes the ap->lock (which is also taken is this function so that it can run
+> at the same time as the IRQ handler), then the IRQ handler calls
+> __ata_qc_complete() for the QC, however, when scsi_done() is finally called
+> in ata_qc_done() (from IRQ context), it will not be a no-op, since
+> SCMD_STATE_COMPLETE is already set:
+> https://github.com/torvalds/linux/blob/v6.2-rc1/drivers/scsi/scsi_lib.c#L1623
+> 
+> Since scsi_done() never finished the scsi_cmd, we need to finish it here,
+> in the else clause, by calling scsi_eh_finish_cmd().
+> 
+> When the EH queue is flushed, it will check if scsi_cmd_retry_allowed()
+> and if it is, the command will be retried, otherwise it will call scsi_finish()
+> on the command:
+> https://github.com/torvalds/linux/blob/v6.2-rc1/drivers/scsi/scsi_error.c#L2150
+> 
+> Considering that we want to only finish the scmd here, libata sets
+> scmd->retries = scmd->allowed; such that the check:
+> 	return ++cmd->retries <= cmd->allowed;
+> in scsi_cmd_retry_allowed() will evaulate to false.
+> 
+> 
+> So TL;DR:
+> It is absolutely essential to set scmd->retries = scmd->allowed;
+> in this else clause, as that is the only reason why this command will
+> be finished instead of retried.
+> Since this else clause is for a command that timed out, but got completed
+> successfully via the IRQ handler after timing out (so the QC got freed),
+> we only need to finish the scmd. Retrying the scmd is wrong in this case.
+> 
+> 
+> Kind regards,
+> Niklas.
 
-Therefore, tags for the general I/O may be limited to half of the max
-depth up to 30HZ after resume. To make sure the ufs request queue for pm
-usage can be inactive immediately, trigger the timeout worker to release
-the tag set.
+Hi Niklas,
 
-Signed-off-by: Ed Tsai <ed.tsai@mediatek.com>
----
- drivers/ufs/core/ufshcd.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for your detailed reply.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index e18c9f4463ec..c77570caa3a8 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8842,6 +8842,7 @@ static int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
- 		hba->curr_dev_pwr_mode = pwr_mode;
- 	}
- 
-+	mod_timer(&sdp->request_queue->timeout, 0);
- 	scsi_device_put(sdp);
- 	hba->host->eh_noresume = 0;
- 	return ret;
+The case where SCSI timeout wins,
+but there came a normal completion occurred after the SCSI timeout.
+in this scenario, The EH process cannot get the command status
+from the IRQ handler process.
+
+If the command is not retried, it can only be returned to the upper 
+layer with timeout state.
+
+Log as fllows:
+sd 1:0:0:0: [sda] tag#30 scsi_eh_1: flush retry cmd, scmd->retries:3, 
+scmd->allowed:2
+sd 1:0:0:0: [sda] tag#30 FAILED Result: hostbyte=DID_OK 
+driverbyte=DRIVER_TIMEOUT
+sd 1:0:0:0: [sda] tag#30 CDB: Read(10) 28 00 07 5e e6 7b 00 00 01 00
+print_req_error: I/O error, dev sda, sector 123659899
+
+In fact, The I/O can be completed normally, but it takes a little 
+longer. In this scenario, do we give the opportunity as much as possible
+so that the IO can return successfully?
+
 -- 
-2.18.0
-
+Wu Bo
