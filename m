@@ -2,264 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8B765891F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8008658922
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiL2DXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 22:23:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S230280AbiL2DZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 22:25:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiL2DXP (ORCPT
+        with ESMTP id S230078AbiL2DZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 22:23:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D46B13CE2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 19:22:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672284147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9BpqrE0CuCNq8PSJ8RLUJySWEaGLuhrI4cjH6ZXXph4=;
-        b=ca7uJiqPxvFbma05EMgglKLbFP9RONv8nqgm3xGoxCq+atWzQKlIUzeyk7iDVhC3zB5FEP
-        qqSCWOFxP0TuMGXQXJpYcfEo8MQOA+suEXO5S84B94NRw74aMksJzuRw+5zmX/OX9V8rqJ
-        xyFa4G0Sl+UbUIs8GJ3y6mSmm4O0nio=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-582-Q2LUtNXDOtyK_sD977ynhA-1; Wed, 28 Dec 2022 22:22:25 -0500
-X-MC-Unique: Q2LUtNXDOtyK_sD977ynhA-1
-Received: by mail-ot1-f71.google.com with SMTP id s22-20020a9d7596000000b0066eb4e77127so9682261otk.13
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 19:22:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9BpqrE0CuCNq8PSJ8RLUJySWEaGLuhrI4cjH6ZXXph4=;
-        b=bi7QbElTrjz1pDlF3NcI8C1U9ejw44VVH0l1zjCur/ob2Jw4V7/VabXPwAsBVSGZ/J
-         Fik1Ivvj95Nm0hqcI7oiqfVpf9LBzxhNFfEAKXOY98IkAgv77EWQxDeezEA1aW6845F/
-         v9gKWP6MX8gCgU9lcacc2LOWaywcc7TPDr7+M9RNnCVKRHCIujQMTLd/+MC2VLUWa+28
-         DdqKBSi3SyEaWp8gOtYkE1ylvOvfSW6GIPpN0er9IsHisbOaUy9ilOsr796/m58kVBHD
-         4h+CMSfW16aD+a76efP2HkHkvlX3sCMpWI6hTYLKBwG63s/0S35DdTQbqoaelP4BEN7f
-         85cA==
-X-Gm-Message-State: AFqh2kqwTDDLXm0Zm8K77YMpxOGIwTV6r9owOEbrhUVI/4j2GfOgvfdd
-        jOSMGxBWtgJxNKIkAYS80BmR1Jg/T/8aFnUGr539bAB5R/zkmD82gqKN7Uq4/NIJy2x62/NQpCC
-        +rbIeihBsOHtrCjgeKiIyrdml61X0xKSl60I0pSUi
-X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id u19-20020a056870441300b00144a97b1ae2mr1349909oah.35.1672284144885;
-        Wed, 28 Dec 2022 19:22:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsl9gULWwNmOCV4XIla9Vz7brSNSb7Xq5lIOeH04gCIi128/IiqNQZ2o2MYUjGeX3D9N5CnhUwfAjfW1EE2maU=
-X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id
- u19-20020a056870441300b00144a97b1ae2mr1349904oah.35.1672284144560; Wed, 28
- Dec 2022 19:22:24 -0800 (PST)
+        Wed, 28 Dec 2022 22:25:49 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96D0764F;
+        Wed, 28 Dec 2022 19:25:48 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BB6C6109;
+        Thu, 29 Dec 2022 04:25:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672284347;
+        bh=0/rDbNgt/5sxI9Wpv4iIZv2FrPG78nKm6P2upG60vfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kuG4jdYqtEb0e0IP8kWYxCEA89r81o5HtklmIpj+Bt0N8Be/hqi7eOV2TQ8NwrxzD
+         oDW1Pu3VTSYwfoSNmVEhM76f/Zu1z49I0F9ejMquv/5/egZbuP8EsVowatkJ1i3/Ah
+         PyQHolfx6bF1CtDnrD1ElaV+FnDvywSINO7qAYqI=
+Date:   Thu, 29 Dec 2022 05:25:42 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Subject: Re: [PATCH RESEND v2 3/7] media: uvcvideo: Return -EACCES for Wrong
+ state error
+Message-ID: <Y60Itu7apCFpCKzW@pendragon.ideasonboard.com>
+References: <20220920-resend-v4l2-compliance-v2-0-b0ceb15353ac@chromium.org>
+ <20220920-resend-v4l2-compliance-v2-3-b0ceb15353ac@chromium.org>
 MIME-Version: 1.0
-References: <20221226074908.8154-1-jasowang@redhat.com> <20221226074908.8154-5-jasowang@redhat.com>
- <1672107557.0142956-1-xuanzhuo@linux.alibaba.com> <CACGkMEvzhAFj5HCmP--9DKfCAq_4wPNwsmmg4h0Sbv6ra0+DrQ@mail.gmail.com>
- <20221227014641-mutt-send-email-mst@kernel.org> <1672216298.4455094-1-xuanzhuo@linux.alibaba.com>
- <CACGkMEuADspVzge5Q8JdEQssjGg911CaT1u_NQ9s7i-7UMwkhg@mail.gmail.com> <1672279792.8628097-2-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1672279792.8628097-2-xuanzhuo@linux.alibaba.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 29 Dec 2022 11:22:13 +0800
-Message-ID: <CACGkMEsET7fKxuKu7NckZX5N8fs+AqZ-adwKFNixJRNNn09GRQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq command
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, eperezma@redhat.com,
-        edumazet@google.com, maxime.coquelin@redhat.com, kuba@kernel.org,
-        pabeni@redhat.com, davem@davemloft.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-v4l2-compliance-v2-3-b0ceb15353ac@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 10:10 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
->
-> On Wed, 28 Dec 2022 19:41:13 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> > On Wed, Dec 28, 2022 at 4:34 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> > >
-> > > On Tue, 27 Dec 2022 01:58:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > On Tue, Dec 27, 2022 at 12:33:53PM +0800, Jason Wang wrote:
-> > > > > On Tue, Dec 27, 2022 at 10:25 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> > > > > >
-> > > > > > On Mon, 26 Dec 2022 15:49:08 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> > > > > > > We used to busy waiting on the cvq command this tends to be
-> > > > > > > problematic since:
-> > > > > > >
-> > > > > > > 1) CPU could wait for ever on a buggy/malicous device
-> > > > > > > 2) There's no wait to terminate the process that triggers the cvq
-> > > > > > >    command
-> > > > > > >
-> > > > > > > So this patch switch to use virtqueue_wait_for_used() to sleep with a
-> > > > > > > timeout (1s) instead of busy polling for the cvq command forever. This
-> > > > > >
-> > > > > > I don't think that a fixed 1S is a good choice.
-> > > > >
-> > > > > Well, it could be tweaked to be a little bit longer.
-> > > > >
-> > > > > One way, as discussed, is to let the device advertise a timeout then
-> > > > > the driver can validate if it's valid and use that timeout. But it
-> > > > > needs extension to the spec.
-> > > >
-> > > > Controlling timeout from device is a good idea, e.g. hardware devices
-> > > > would benefit from a shorter timeout, hypervisor devices from a longer
-> > > > timeout or no timeout.
-> > >
-> > > Yes. That is good.
-> > >
-> > > Before introducing this feature, I personally like to use "wait", rather than
-> > > define a timeout.
-> >
-> > Note that the driver still needs to validate what device advertises to
-> > avoid infinite wait.
->
-> Sorry, I didn't understand what you mean.
+Hi Ricardo,
 
-I meant the interface needs to carefully designed to
+Thank you for the patch.
 
-1) avoid device to advertise a infinite (or very long) timeout
-2) driver need to have its own max timeout regardless what device advertises
+On Fri, Dec 02, 2022 at 06:21:37PM +0100, Ricardo Ribalda wrote:
+> For error 2 (Wrong state) return -EACCES instead of -EILSEQ.
+> EACCES is a much more appropriate error code. EILSEQ will return
+> "Invalid or incomplete multibyte or wide character." in strerror(),
+> which is a *very* confusing message.
 
-Thanks
+Unless there's an objection, I'd like to use the following text to
+replace the commit message to provide more information:
 
->
-> Thanks.
->
-> >
-> > Thanks
-> >
-> > >
-> > > Thanks.
-> > >
-> > >
-> > > >
-> > > > >
-> > > > > > Some of the DPUs are very
-> > > > > > lazy for cvq handle.
-> > > > >
-> > > > > Such design needs to be revisited, cvq (control path) should have a
-> > > > > better priority or QOS than datapath.
-> > > >
-> > > > Spec says nothing about this, so driver can't assume this either.
-> > > >
-> > > > > > In particular, we will also directly break the device.
-> > > > >
-> > > > > It's kind of hardening for malicious devices.
-> > > >
-> > > > ATM no amount of hardening can prevent a malicious hypervisor from
-> > > > blocking the guest. Recovering when a hardware device is broken would be
-> > > > nice but I think if we do bother then we should try harder to recover,
-> > > > such as by driving device reset.
-> > > >
-> > > >
-> > > > Also, does your patch break surprise removal? There's no callback
-> > > > in this case ATM.
-> > > >
-> > > > > >
-> > > > > > I think it is necessary to add a Virtio-Net parameter to allow users to define
-> > > > > > this timeout by themselves. Although I don't think this is a good way.
-> > > > >
-> > > > > Very hard and unfriendly to the end users.
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > > > >
-> > > > > > Thanks.
-> > > > > >
-> > > > > >
-> > > > > > > gives the scheduler a breath and can let the process can respond to
-> > > > > > > asignal. If the device doesn't respond in the timeout, break the
-> > > > > > > device.
-> > > > > > >
-> > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > ---
-> > > > > > > Changes since V1:
-> > > > > > > - break the device when timeout
-> > > > > > > - get buffer manually since the virtio core check more_used() instead
-> > > > > > > ---
-> > > > > > >  drivers/net/virtio_net.c | 24 ++++++++++++++++--------
-> > > > > > >  1 file changed, 16 insertions(+), 8 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > > > index efd9dd55828b..6a2ea64cfcb5 100644
-> > > > > > > --- a/drivers/net/virtio_net.c
-> > > > > > > +++ b/drivers/net/virtio_net.c
-> > > > > > > @@ -405,6 +405,7 @@ static void disable_rx_mode_work(struct virtnet_info *vi)
-> > > > > > >       vi->rx_mode_work_enabled = false;
-> > > > > > >       spin_unlock_bh(&vi->rx_mode_lock);
-> > > > > > >
-> > > > > > > +     virtqueue_wake_up(vi->cvq);
-> > > > > > >       flush_work(&vi->rx_mode_work);
-> > > > > > >  }
-> > > > > > >
-> > > > > > > @@ -1497,6 +1498,11 @@ static bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq,
-> > > > > > >       return !oom;
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +static void virtnet_cvq_done(struct virtqueue *cvq)
-> > > > > > > +{
-> > > > > > > +     virtqueue_wake_up(cvq);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > >  static void skb_recv_done(struct virtqueue *rvq)
-> > > > > > >  {
-> > > > > > >       struct virtnet_info *vi = rvq->vdev->priv;
-> > > > > > > @@ -1984,6 +1990,8 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
-> > > > > > >       return err;
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +static int virtnet_close(struct net_device *dev);
-> > > > > > > +
-> > > > > > >  /*
-> > > > > > >   * Send command via the control virtqueue and check status.  Commands
-> > > > > > >   * supported by the hypervisor, as indicated by feature bits, should
-> > > > > > > @@ -2026,14 +2034,14 @@ static bool virtnet_send_command(struct virtnet_info *vi, u8 class, u8 cmd,
-> > > > > > >       if (unlikely(!virtqueue_kick(vi->cvq)))
-> > > > > > >               return vi->ctrl->status == VIRTIO_NET_OK;
-> > > > > > >
-> > > > > > > -     /* Spin for a response, the kick causes an ioport write, trapping
-> > > > > > > -      * into the hypervisor, so the request should be handled immediately.
-> > > > > > > -      */
-> > > > > > > -     while (!virtqueue_get_buf(vi->cvq, &tmp) &&
-> > > > > > > -            !virtqueue_is_broken(vi->cvq))
-> > > > > > > -             cpu_relax();
-> > > > > > > +     if (virtqueue_wait_for_used(vi->cvq)) {
-> > > > > > > +             virtqueue_get_buf(vi->cvq, &tmp);
-> > > > > > > +             return vi->ctrl->status == VIRTIO_NET_OK;
-> > > > > > > +     }
-> > > > > > >
-> > > > > > > -     return vi->ctrl->status == VIRTIO_NET_OK;
-> > > > > > > +     netdev_err(vi->dev, "CVQ command timeout, break the virtio device.");
-> > > > > > > +     virtio_break_device(vi->vdev);
-> > > > > > > +     return VIRTIO_NET_ERR;
-> > > > > > >  }
-> > > > > > >
-> > > > > > >  static int virtnet_set_mac_address(struct net_device *dev, void *p)
-> > > > > > > @@ -3526,7 +3534,7 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
-> > > > > > >
-> > > > > > >       /* Parameters for control virtqueue, if any */
-> > > > > > >       if (vi->has_cvq) {
-> > > > > > > -             callbacks[total_vqs - 1] = NULL;
-> > > > > > > +             callbacks[total_vqs - 1] = virtnet_cvq_done;
-> > > > > > >               names[total_vqs - 1] = "control";
-> > > > > > >       }
-> > > > > > >
-> > > > > > > --
-> > > > > > > 2.25.1
-> > > > > > >
-> > > > > > > _______________________________________________
-> > > > > > > Virtualization mailing list
-> > > > > > > Virtualization@lists.linux-foundation.org
-> > > > > > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
-> > > > > >
-> > > >
-> > >
-> >
->
+Error 2 is defined by UVC as
 
+  Wrong State: The device is in a state that disallows the specific
+  request. The device will remain in this state until a specific action
+  from the host or the user is completed.
+
+This is documented as happening happen when attempting to set the value
+of a manual control when the device is in auto mode. While V4L2 allows
+this, the closest error code defined by VIDIOC_S_CTRL is indeed EACCES:
+
+EACCES
+
+    Attempt to set a read-only control or to get a write-only control.
+
+    Or if there is an attempt to set an inactive control and the driver
+    is not capable of caching the new value until the control is active
+    again.
+
+Replace EILSEQ with EACCESS.
+
+> Suggested-by: Hans Verkuil <hans.verkuil@cisco.com>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/media/usb/uvc/uvc_video.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index 2cf7f692c0bb..497073a50194 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -108,7 +108,7 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+>  	case 1: /* Not ready */
+>  		return -EBUSY;
+>  	case 2: /* Wrong state */
+> -		return -EILSEQ;
+> +		return -EACCES;
+>  	case 3: /* Power */
+>  		return -EREMOTE;
+>  	case 4: /* Out of range */
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
