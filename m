@@ -2,124 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39872658C6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C4C6593D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 01:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiL2LwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 06:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S234161AbiL3AaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 19:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233210AbiL2LwH (ORCPT
+        with ESMTP id S229667AbiL3AaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 06:52:07 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F2DE13EB1;
-        Thu, 29 Dec 2022 03:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=FPYog
-        8VHYYQIw1Wnto4/o37NSMT3g91TZKJFzlnQXlk=; b=RAh3u5B4aDWz+BfCZmF3x
-        c2SaDfVJXm2uKTMrfznYfe9KA/SzbG24xtC4wTV78oE76YLbyvo+L2C4h9CGCmU7
-        7YPI5aY9BMvJ/euMAVGlAdqF9vi4cJM2PNntZdSA06assDrh/L6CyILziOMEE2m3
-        OrfgQC9GkqZkPgDoDZKPTA=
-Received: from ProDesk.. (unknown [58.22.7.114])
-        by zwqz-smtp-mta-g4-1 (Coremail) with SMTP id _____wCX5SUxf61jRl5hAA--.5754S2;
-        Thu, 29 Dec 2022 19:51:16 +0800 (CST)
-From:   Andy Yan <andyshrk@163.com>
-To:     heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
-        piotr.oniszczuk@gmail.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
-Cc:     Andy Yan <andyshrk@163.com>
-Subject: [PATCH v2 2/2] arm64: dts: rockchip: Enable wifi module AP6398s for rk3566 box demo
-Date:   Thu, 29 Dec 2022 19:51:11 +0800
-Message-Id: <20221229115111.3899793-1-andyshrk@163.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221229115043.3899733-1-andyshrk@163.co>
-References: <20221229115043.3899733-1-andyshrk@163.co>
+        Thu, 29 Dec 2022 19:30:10 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE9D178B0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 16:30:05 -0800 (PST)
+Received: from epcas3p3.samsung.com (unknown [182.195.41.21])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221230003002epoutp03b5e63262a419e04b58ad67280a0efde3~1ar5WK8TB0532905329epoutp03l
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 00:30:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221230003002epoutp03b5e63262a419e04b58ad67280a0efde3~1ar5WK8TB0532905329epoutp03l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1672360202;
+        bh=+tvtuSUWl1NzTezDXYG0Z6wCNch06t+kT3NNHwqxPys=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=eJvj8DIsPPnWe3zhKQUjnYns6IJFiIkKZOSOFBQkXEcG3Usp6CbLPGGPVLaj5J9RB
+         J1pI/ELmkEHaKV5DXmVvBtOKJnXCvH5dHOBa/+YCuJxBihImorwaoXpJ4TNF6QOheM
+         EVgBi/HxDvqeK8u27ZYSig2knM1EG5rK/lvqXBz4=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas3p3.samsung.com (KnoxPortal) with ESMTP id
+        20221230003001epcas3p3363d51c49cbbc6de4379d25b9622fbce~1ar46CLWH1067710677epcas3p3B;
+        Fri, 30 Dec 2022 00:30:01 +0000 (GMT)
+Received: from epcpadp3 (unknown [182.195.40.17]) by epsnrtp1.localdomain
+        (Postfix) with ESMTP id 4NjmP55KHRz4x9Q0; Fri, 30 Dec 2022 00:30:01 +0000
+        (GMT)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221229115257epcas1p27195844dc54cf09608dad9967808530a~1QW4L37ph2094120941epcas1p2w;
+        Thu, 29 Dec 2022 11:52:57 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221229115257epsmtrp1d43ffca1fd9e78952882933bda8838ba~1QW4LKav82629826298epsmtrp14;
+        Thu, 29 Dec 2022 11:52:57 +0000 (GMT)
+X-AuditID: b6c32a29-f05bc700000008a3-dc-63ad7f99bacb
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7B.74.02211.99F7DA36; Thu, 29 Dec 2022 20:52:57 +0900 (KST)
+Received: from u20pb1-0435.tn.corp.samsungelectronics.net (unknown
+        [10.91.133.14]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20221229115257epsmtip183731033688138e7f4e545a6111df90b~1QW373ajx1835018350epsmtip1K;
+        Thu, 29 Dec 2022 11:52:57 +0000 (GMT)
+From:   Sungjong Seo <sj1557.seo@samsung.com>
+To:     linkinjeon@kernel.org
+Cc:     pali@kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Yuezhang Mo <Yuezhang.Mo@sony.com>
+Subject: [PATCH] exfat: redefine DIR_DELETED as the bad cluster number
+Date:   Thu, 29 Dec 2022 20:52:38 +0900
+Message-Id: <1891546521.01672360201726.JavaMail.epsvc@epcpadp3>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCX5SUxf61jRl5hAA--.5754S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJF15XF15Gw45JF4kXF1DZFb_yoW8Aw1xp3
-        sxCrZYgr1kCr1jganxJwn5Xrn5Kw4kta1qkwn7u3WfJr1I9a1DGF1Uurn5AF15WF48Xa1Y
-        9rs8Aa4agrsFqw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_wZ2hUUUUU=
-X-Originating-IP: [58.22.7.114]
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbivBnmXmASagkixwAAsp
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHLMWRmVeSWpSXmKPExsWy7bCSnO7M+rXJBreXSli8PKRpMXHaUmaL
+        PXtPslhc3jWHzWLBntNsFlv+HWG1OP/3OKvF9TcPWR04PDat6mTz6NuyitGjfcJOZo/Pm+Q8
+        Nj15yxTAGsVlk5Kak1mWWqRvl8CVMWn/YaaCFs6Kf+cXMzUwHmLvYuTgkBAwkXh/wLeLkYtD
+        SGA3o8SJ3o2MEHEpiYP7NCFMYYnDh4u7GDmBSlqZJB5MLwCx2QS0JZY3LWMGKRERkJRYez8V
+        ZAqzwD5GiU3LnjOD1AgLuEnMuvuECaSGRUBVYtGxSJAwr4CtxJOm/4wgtoSAvMTMS9/ZIeKC
+        EidnPmEBsZmB4s1bZzNPYOSbhSQ1C0lqASPTKkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT8
+        3E2M4CDV0tzBuH3VB71DjEwcjIcYJTiYlUR4Nc6uThbiTUmsrEotyo8vKs1JLT7EKM3BoiTO
+        e6HrZLyQQHpiSWp2ampBahFMlomDU6qBKTPAIZ9zadvEFc3b6wIPzvWXrH7pckJGIo+JdUfC
+        87taIk4HHVkO393BN+nrA5M7nvodK2Yzm2yJyZ+duXZFtebm3f7rr01rY0qze7fkUe8fYd0b
+        PIbzjLWcPRdaBX6e0nrEKWHXS2XJ53o5MvYySdNKt72IOTXDTGKh5ZfUyAf8NVdLDxrqbVv4
+        VYuR2XW+7OxklrKF2oU8cQprV3JdVut5t+KZ8OHO9Q+5RPJLI3zvKVdnpigYOBVYaq+6WCCv
+        z/d/09GEpKXrvddoHbD8Gp9eOM/llnPH7eZPvMWnZ27mnKYSzsj8wcn0idKKU+6up4+sUOze
+        MUEo7t7m2Isc/zSOyyyzUrOcNlUofMomJZbijERDLeai4kQA4hbc98ECAAA=
+X-CMS-MailID: 20221229115257epcas1p27195844dc54cf09608dad9967808530a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-CPGSPASS: Y
+X-ArchiveUser: EV
+X-Hop-Count: 3
+X-CMS-RootMailID: 20221229115257epcas1p27195844dc54cf09608dad9967808530a
+References: <CGME20221229115257epcas1p27195844dc54cf09608dad9967808530a@epcas1p2.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a AP6398s wifi/bt module on this board.
-Fix the sdmmc1 dt node to make wifi work.
+When a file or a directory is deleted, the hint for the cluster of
+its parent directory in its in-memory inode is set as DIR_DELETED.
+Therefore, DIR_DELETED must be one of invalid cluster numbers. According
+to the exFAT specification, a volume can have at most 2^32-11 clusters.
+However, DIR_DELETED is wrongly defined as 0xFFFF0321, which could be
+a valid cluster number. To fix it, let's redefine DIR_DELETED as
+0xFFFFFFF7, the bad cluster number.
 
-Fixes: 2e0537b16b25 ("arm64: dts: rockchip: Add dts for rockchip rk3566 box demo board")
+Fixes: 1acf1a564b60 ("exfat: add in-memory and on-disk structures and headers")
 
-Signed-off-by: Andy Yan <andyshrk@163.com>
+Reported-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
+Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
 ---
+ fs/exfat/exfat_fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v2:
-- add vmmc/vqmmc supply back.
-
- .../boot/dts/rockchip/rk3566-box-demo.dts     | 24 +++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-index d956496d5221..2671f207cfd1 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-@@ -324,8 +324,12 @@ wifi_enable_h: wifi-enable-h {
- 			rockchip,pins = <2 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
- 		};
+diff --git a/fs/exfat/exfat_fs.h b/fs/exfat/exfat_fs.h
+index bc6d21d7c5ad..25a5df0fdfe0 100644
+--- a/fs/exfat/exfat_fs.h
++++ b/fs/exfat/exfat_fs.h
+@@ -50,7 +50,7 @@ enum {
+ #define ES_IDX_LAST_FILENAME(name_len)	\
+ 	(ES_IDX_FIRST_FILENAME + EXFAT_FILENAME_ENTRY_NUM(name_len) - 1)
  
-+		wifi_host_wake_h: wifi-host-wake-l {
-+			rockchip,pins = <2 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+
- 		wifi_32k: wifi-32k {
--			rockchip,pins = <0 RK_PB0 2 &pcfg_pull_none>;
-+			rockchip,pins = <2 RK_PC6 1 &pcfg_pull_none>;
- 		};
- 	};
+-#define DIR_DELETED		0xFFFF0321
++#define DIR_DELETED		0xFFFFFFF7
  
-@@ -391,9 +395,15 @@ &sdmmc0 {
- };
- 
- &sdmmc1 {
-+	/* WiFi & BT combo module AMPAK AP6398S */
-+	#address-cells = <1>;
-+	#size-cells = <0>;
- 	bus-width = <4>;
-+	clock-frequency = <150000000>;
-+	cap-sdio-irq;
- 	cap-sd-highspeed;
--	disable-wp;
-+	sd-uhs-sdr104;
-+	keep-power-in-suspend;
- 	mmc-pwrseq = <&sdio_pwrseq>;
- 	non-removable;
- 	pinctrl-names = "default";
-@@ -401,6 +411,16 @@ &sdmmc1 {
- 	vmmc-supply = <&vcc_3v3>;
- 	vqmmc-supply = <&vcca_1v8>;
- 	status = "okay";
-+
-+	brcmf: wifi@1 {
-+		compatible = "brcm,bcm4329-fmac";
-+		reg = <1>;
-+		interrupt-parent = <&gpio2>;
-+		interrupts = <RK_PB2 GPIO_ACTIVE_HIGH>;
-+		interrupt-names = "host-wake";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wifi_host_wake_h>;
-+	};
- };
- 
- &spdif {
+ /* type values */
+ #define TYPE_UNUSED		0x0000
 -- 
-2.34.1
+2.25.1
+
 
