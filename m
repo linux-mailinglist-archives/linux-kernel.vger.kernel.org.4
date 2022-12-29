@@ -2,126 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADA865890F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E06A658911
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbiL2DGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 22:06:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
+        id S232963AbiL2DH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 22:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbiL2DGG (ORCPT
+        with ESMTP id S230225AbiL2DH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 22:06:06 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B183C63E9;
-        Wed, 28 Dec 2022 19:06:02 -0800 (PST)
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MtfJd-1oqJsT3ZM7-00v3n0; Thu, 29
- Dec 2022 04:05:55 +0100
-Message-ID: <9d56a546-ea4f-83cb-4efb-093af270544b@gmx.com>
-Date:   Thu, 29 Dec 2022 11:05:51 +0800
+        Wed, 28 Dec 2022 22:07:26 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EDAC740;
+        Wed, 28 Dec 2022 19:07:24 -0800 (PST)
+X-UUID: 27deb0d81236403f95e38ab3de441de5-20221229
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=5APWQ/KbXgNbszB/TlGiUT+18qB2uNXqqSohrW/gfYk=;
+        b=M+SEdy1odN/D7M0XvmrsTCkZL4+LGihKK/MHy+ImExNMtwEhw8rg4WxKkSYwEICe3F3L1UooFt0rF8nasF5GuH0ffEqBXno2BaUe19JG5Go0PILseVDes41t5TOmH2PGtUBlcpZ0K9OzW9ZXSD7OiReaaRtKgMiGJ+WTwxRyMY0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:9876b4b4-a47e-48d0-b3ca-1651564b39dc,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:dcaaed0,CLOUDID:6d3b40f4-ff42-4fb0-b929-626456a83c14,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 27deb0d81236403f95e38ab3de441de5-20221229
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+        (envelope-from <ed.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1651047375; Thu, 29 Dec 2022 11:07:18 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 29 Dec 2022 11:07:17 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 29 Dec 2022 11:07:17 +0800
+From:   Ed Tsai <ed.tsai@mediatek.com>
+To:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <matthias.bgg@gmail.com>, <linux-scsi@vger.kernel.org>
+CC:     <peter.wang@mediatek.com>, <alice.chao@mediatek.com>,
+        <powen.kao@mediatek.com>, <naomi.chu@mediatek.com>,
+        <stanley.chu@mediatek.com>, <wsd_upstream@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Ed Tsai <ed.tsai@mediatek.com>
+Subject: [PATCH 1/1] ufs: update the timeout timer after resume
+Date:   Thu, 29 Dec 2022 11:06:45 +0800
+Message-ID: <20221229030645.11558-1-ed.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     Qu Wenruo <wqu@suse.com>, dsterba@suse.com,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-References: <CABXGCsNzVxo4iq-tJSGm_kO1UggHXgq6CdcHDL=z5FL4njYXSQ@mail.gmail.com>
- <CABXGCsMMYmCT_Hz=wfKWDy4OQJ2KyBO3rNAFC1YCAthziWm+Lg@mail.gmail.com>
- <41734bdb-2df0-6596-01b6-76a7dfd05d64@gmx.com>
- <CABXGCsM6GOzr+wL9BEk7mD5xLNgsKE5KUBADD8r783V6-FwXdg@mail.gmail.com>
- <e9f4d768-d91b-b5cc-dbe6-041a81833cf3@gmx.com>
- <CABXGCsPK6ZZ4=5qathvjqSJNde6MYhA0uvh6zAMznT9Yj3xk2g@mail.gmail.com>
- <24cd64b2-4536-372c-91af-b425d2f6efd4@gmx.com>
- <CABXGCsOG1GR1QqQSULHRcqJyfo5zY1bkZA+Mkb2m3C=rV_2z2w@mail.gmail.com>
- <ff262ad5-2ae3-329a-ba88-19721850131d@gmx.com>
- <CABXGCsOgy0N_TLEadgacMBQLuU5xBe-hmoRvv4h=q-M5PcPvEg@mail.gmail.com>
- <7d2edc1d-922b-763c-3122-0a6f81c3454e@suse.com>
- <CABXGCsOq56Qjq+-Bnfbe7ZvhfjSs204cbc8VFG7b+J2Ncss0ng@mail.gmail.com>
- <fd0a0bfe-5c67-fd95-b17c-78a14c63bea6@gmx.com>
- <CABXGCsMev+96zixic3=5cLgzMfZKcJE-zOLPrc3-vTrrDZQDig@mail.gmail.com>
- <de8fb932-2934-7ad2-112a-a9a2e63b532d@gmx.com>
- <CABXGCsMN-wviuURYkGXxr_d3BKtW3vyYhQ3Kpd7ZVo-Yr4gBvQ@mail.gmail.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [6.2][regression] after commit
- 947a629988f191807d2d22ba63ae18259bb645c5 btrfs volume periodical forced
- switch to readonly after a lot of disk writes
-In-Reply-To: <CABXGCsMN-wviuURYkGXxr_d3BKtW3vyYhQ3Kpd7ZVo-Yr4gBvQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:C48139QmNLwssfAzBbQOj1vGYGq7X0X5q4ZfCR8qbV8N6cEgVmO
- W6iO93jPmsNMIktPTPQxYcYByTdwbh4nw84ReaDWIdr0945+xqiEZ8e6XBlRv70sAZDRkaM
- sfsH32/0mdrqqqddz8zHNBpv/LqYQp5Q2mBZHfFKB/mI150SI/QmJJZHqa0VNOmMFWr84qY
- 6SAm1DQs0GgQqonS9ShLg==
-UI-OutboundReport: notjunk:1;M01:P0:+y0CddqR3Lg=;wpvM+eqjVe2cokghf//YUuwhdQ7
- UsXUL4dAv7pR+XRWlPWZc5KBv6Buq12sTRA0LiXvvAKQ3WAKAOjFEPQy9MVnx5whKJi34/PZ3
- qY/9D5blBXJJPGmbnLxkW7buDHNl5kf8Ee0jIVh5BP/g4ILtWjF3+euQkKxlFN99m5KY9no3V
- 53jaEmqJhYB3ao8DPfYIc66eBqyIUyz/Cg+LTGelDqrMh+68hMMsEqnfg0yQllc1+rKcDyZ2B
- e5wk/LyMGOTdduTTN+nFniAc8q/ke0+Y9j27vndBTIVTO0qtw/loFjtHAFY75Fl54NcUl2R6u
- UiWb7sQwkYBl7kqQQL1bluBRfBi1+SDcbshimUNme6k9hTOLdk5RsgOKiaSpYYZs6osQqorvy
- N9fc/HdMqcj/9wiLt4wHoZ0kZC2LEDQQbHh6oi/UBuQrN4oifyjFUfAK9zX5IhasvgHS1ZXCI
- uG/9odCXnJkT1ylzOTJtKRRqrx+aSpe5kAz3PPjqOE5cWDOA7V19NE+71/StS8RP3KBPfPO3+
- sZsUGoNmB8rUAanYU9WeGiTnB/cvTpeRqpSYDOrkGMZhietnzdNaCLfHz7Z9hm2zaUqVxFnSy
- u/6vgz9VxVDgIv7KBG70OgBmtA3ihMeYEivM4AqXiHrpKL7ESiYQBQT7a7ND3oTEk/2ufKxli
- JaFyqtVgzSXafD0l5hfYfIzSqA/7CpzgE6m+4x5M70jOnz7fw/IPBWoMVvMjAPNpGbr6WZRc7
- hmmzSG8xDUev4D3BTIQLhkNA5pyHJaKy6YL0iDSdkERO8uix915H53mmRSDndvJ9ySERUVD6H
- C+HpA05IWyLbUBA7vpls1XlX2Bh4zTvssM+LJ6AU4EFnjlhWiFXzijCmCPeDM8YBxTzNY6OdT
- PT7FnrHzHk2YYk8DtZ/kH93g+srZkIOcZurdH+ldkLbgqPHw9b+6R+elSv9BqOORdq74S/C4M
- lqaL1tGdi/FeqxUDUy6eVrH3+pw=
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The tags allocation is limited by the number of active queues and a
+queue is marked as inactive by the queue timeout worker after up to 30Hz
+by default.
 
+Therefore, tags for the general I/O may be limited to half of the max
+depth up to 30HZ after resume. To make sure the ufs request queue for pm
+usage can be inactive immediately, trigger the timeout worker to release
+the tag set.
 
-On 2022/12/29 08:08, Mikhail Gavrilov wrote:
-> On Thu, Dec 29, 2022 at 4:31 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
->>
->> Are you using qgroup? If so it may be worthy trying disabling qgroup.
-> 
-> I do not use quota.
-> And looks like my distro does not use quita by default.
-> ❯ btrfs qgroup show -f /
-> ERROR: can't list qgroups: quotas not enabled
-> 
->> But for newer kernel, qgroup hang should only happen when dropping large
->> snapshot, I don't know if podman pull would cause older snapshots to be
->> deleted...
-> 
-> It is not a regression, it also happened on older kernels.
-> But it is really annoying when the browser process waits when "podman
-> pull" writes changes to disk.
-> In fact, I have been waiting for 5 years for caching of slow HDDs by
-> using the cache on the SSD, but apparently I can’t wait.
-> And I started slowly buying expensive large SSDs to replace the big
-> HDD. I still can’t find time to connect D5 P5316 30.72 Tb to the
-> primary workstation.
-> I want to make a video review of it. I understand this is an expensive
-> solution and not suitable for everyone, unlike an affordable SDD
-> cache.
-> 
-This is really sad to hear that.
+Signed-off-by: Ed Tsai <ed.tsai@mediatek.com>
+---
+ drivers/ufs/core/ufshcd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-For now, I only have several guesses on how this could happen.
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index e18c9f4463ec..c77570caa3a8 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -8842,6 +8842,7 @@ static int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
+ 		hba->curr_dev_pwr_mode = pwr_mode;
+ 	}
+ 
++	mod_timer(&sdp->request_queue->timeout, 0);
+ 	scsi_device_put(sdp);
+ 	hba->host->eh_noresume = 0;
+ 	return ret;
+-- 
+2.18.0
 
-- Extra seeks between metadata and data chunks
-   You can try with mixed block groups, but this needs mkfs time tuning.
-
-- Extra inlined extents causing too much metadata overhead
-   You can disable inline extents using max_inline=0 as mount options.
-   But that only affects newly created files, not the existing ones.
-
-Otherwise, using bcache may be a solution.
-
-For now I'm not aware of any HDD specific tests, other than zoned 
-devices, thus the performance problem can be really hard to debug.
-
-Thanks,
-Qu
