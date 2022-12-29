@@ -2,156 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C51658E1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019E7658E24
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbiL2OyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 09:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S233634AbiL2O4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 09:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233470AbiL2Oxw (ORCPT
+        with ESMTP id S233599AbiL2O4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 09:53:52 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F8594;
-        Thu, 29 Dec 2022 06:53:51 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id bk16so4381270wrb.11;
-        Thu, 29 Dec 2022 06:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GTM/UzbZlQLHzZ7f/Z9OSVfC+V1LjXS0BfKlhKw7U1k=;
-        b=J/VuH1CkG+KFiqLc1lrXWU19CjO1wjb/OxUAf3YMBfbj3m9p7S8i0Tifn1Y/yMPxCs
-         ua7zM7XH+D+3wvlF6QhGobYCR2G/35bUdRD0uSpllKXU7nM/Tjp0I3FJa/mDQ+pj7E/E
-         hgxthjIbtfILOxLmEW7/OW5+wRizxqHQDH5DZGxDk5TZGbfqNdMJKD4SBLmzRYkFGrK/
-         H8E5ZnQQoga7K8JTSXMaeMoPzBwFJ2L3eNIBPVV/xnt6gths65G/La+By7rE9/FtdrcW
-         GPMiwAmpOzV7RGDl3CdyHb/uwTmbFGPIcIcXtn9HPRkUHO+8Am7lLHAP6XgZypNm5Ddv
-         QcYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GTM/UzbZlQLHzZ7f/Z9OSVfC+V1LjXS0BfKlhKw7U1k=;
-        b=BYLiTylXm0bvDIFxclswmHA4XRU3dZdFtBf2X25BvX+heK0NQrYHR0VWkK0w6Ji89t
-         trjwwpPWL8/B5/B9Ru5BBW40lv0B0RcfoKc4TkgNGEIca6eIrhdcCej2n9TqgAfV6a1F
-         Na2+erHBfFKXZzf0omoO39YWkebshaBGwIS96yl7+CdT6BoE63cNcY7Z6i796reu9iVe
-         gjlf/gZ1+yNDhqkkpufXJSenOXFTpFA6vumwqwH3IOGED1yIC4lXCi09IftU87nK7pso
-         BX7PzDvi3VWaAjBXoAI3CMtVydjPvv7Gk2l1lg4UkTZpXQS9N+2U6oYJsoLpfcILc0k9
-         7v4Q==
-X-Gm-Message-State: AFqh2krm2pYwaI/weGNLWxRQxMifls7r0BP5Zb51vdygQt9P4eDCHeYq
-        0hIHU+o4t7istsJuIqvy/Fj6vemIO7+4Rbhf
-X-Google-Smtp-Source: AMrXdXvKu2IuIPWoA9PL/IdO+YQYezH8pV+6r2GNw5u88CuBFq3rI68QFAwBwgaAbRQ9WGd2Q1b+QA==
-X-Received: by 2002:adf:ec43:0:b0:280:cc12:2827 with SMTP id w3-20020adfec43000000b00280cc122827mr8130110wrn.21.1672325630304;
-        Thu, 29 Dec 2022 06:53:50 -0800 (PST)
-Received: from tpt440p.steeds.sam ([69.63.64.50])
-        by smtp.gmail.com with ESMTPSA id v7-20020adfe287000000b00241bd177f89sm18151089wri.14.2022.12.29.06.53.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 06:53:49 -0800 (PST)
-From:   "Sicelo A. Mhlongo" <absicsz@gmail.com>
-To:     linux-omap@vger.kernel.org
-Cc:     "Sicelo A. Mhlongo" <absicsz@gmail.com>,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tony@atomide.com,
-        devicetree@vger.kernel.org, maemo-leste@lists.dyne.org
-Subject: [PATCH v2 2/2] ARM: dts: n900: use iio driver for accelerometer
-Date:   Thu, 29 Dec 2022 16:52:50 +0200
-Message-Id: <20221229145251.3535402-3-absicsz@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221227223841.2990847-1-absicsz@gmail.com>
-References: <20221227223841.2990847-1-absicsz@gmail.com>
+        Thu, 29 Dec 2022 09:56:17 -0500
+Received: from out-49.mta0.migadu.com (out-49.mta0.migadu.com [91.218.175.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F4A6432
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 06:56:15 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1672325771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bLYw8OpQUwlsZ3K6VZBKjvnvbyH21lb8PABr6jPPy3M=;
+        b=A2hSB6FIyTOMx28XeYgGgla6Dba07pxyFDx2kue17026UbQ0iHegnJXkQG0f+3LEVBrsBN
+        zUFYW55gUpIjFLCIjVZdHj6jKjXWbVfrBgfvEsAB6sdBkVvs++EasCvZcgBFtcnRgSsb84
+        r3Dq6xZ2TOUDnA9wVujkgLabLPfTjng=
+From:   Cixi Geng <cixi.geng@linux.dev>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cixi.geng1@unisoc.com
+Subject: [PATCH V4 0/3] Make the irqchip immutable
+Date:   Thu, 29 Dec 2022 22:55:42 +0800
+Message-Id: <20221229145545.14055-1-cixi.geng@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The accelerometer in the N900 is supported by the iio-framework since commit
-8a7449d68670a8f9 ("iio: accel: add support for LIS302DL variant). This commit
-switches to it and updates node properties to match the bindings of the new
-compatible
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
----
- arch/arm/boot/dts/omap3-n900.dts | 52 +++++---------------------------
- 1 file changed, 8 insertions(+), 44 deletions(-)
+Kernel warns about mutable irq_chips:
+    "not an immutable chip, please consider fixing!"
 
-diff --git a/arch/arm/boot/dts/omap3-n900.dts b/arch/arm/boot/dts/omap3-n900.dts
-index 20d7a7bb6b04..adee3da93421 100644
---- a/arch/arm/boot/dts/omap3-n900.dts
-+++ b/arch/arm/boot/dts/omap3-n900.dts
-@@ -768,55 +768,19 @@ &i2c3 {
- 	clock-frequency = <400000>;
- 
- 	accelerometer@1d {
--		compatible = "st,lis3lv02d";
-+		compatible = "st,lis302dl";
- 		reg = <0x1d>;
- 
--		Vdd-supply = <&vaux1>;
--		Vdd_IO-supply = <&vio>;
-+		vdd-supply = <&vaux1>;
-+		vddio-supply = <&vio>;
- 
- 		interrupt-parent = <&gpio6>;
--		interrupts = <21 20>; /* 181 and 180 */
--
--		/* click flags */
--		st,click-single-x;
--		st,click-single-y;
--		st,click-single-z;
--
--		/* Limits are 0.5g * value */
--		st,click-threshold-x = <8>;
--		st,click-threshold-y = <8>;
--		st,click-threshold-z = <10>;
--
--		/* Click must be longer than time limit */
--		st,click-time-limit = <9>;
--
--		/* Kind of debounce filter */
--		st,click-latency = <50>;
--
--		/* Interrupt line 2 for click detection */
--		st,irq2-click;
--
--		st,wakeup-x-hi;
--		st,wakeup-y-hi;
--		st,wakeup-threshold = <(800/18)>; /* millig-value / 18 to get HW values */
--
--		st,wakeup2-z-hi;
--		st,wakeup2-threshold = <(900/18)>; /* millig-value / 18 to get HW values */
--
--		st,hipass1-disable;
--		st,hipass2-disable;
--
--		st,axis-x = <1>;    /* LIS3_DEV_X */
--		st,axis-y = <(-2)>; /* LIS3_INV_DEV_Y */
--		st,axis-z = <(-3)>; /* LIS3_INV_DEV_Z */
--
--		st,min-limit-x = <(-32)>;
--		st,min-limit-y = <3>;
--		st,min-limit-z = <3>;
-+		interrupts = <21 IRQ_TYPE_EDGE_RISING>,
-+			     <20 IRQ_TYPE_EDGE_RISING>; /* 181 and 180 */
- 
--		st,max-limit-x = <(-3)>;
--		st,max-limit-y = <32>;
--		st,max-limit-z = <32>;
-+		mount-matrix =	 "-1",  "0",  "0",
-+				  "0",  "1",  "0",
-+				  "0",  "0",  "1";
- 	};
- 
- 	cam1: camera@3e {
+Make the struct irq_chip const, flag it as IRQCHIP_IMMUTABLE, add the
+new helper functions, and call the appropriate gpiolib functions.
+
+v2 changes:
+Split the patch by each driver. and other comment by baolin in[1]
+
+v3 changes:
+Fix cocci warnings test by lkp[2].
+
+v4 changes:
+Change the irq name.
+Keep the same coding style by using offset for irqd_to_hwirq(data)
+Add Reviewed-by tag.
+
+[1]:https://lore.kernel.org/all/97e244d4-6b5c-31c9-7329-b8deef615645@linux.alibaba.com/
+[2]:https://lore.kernel.org/all/202212240406.9Nm190P8-lkp@intel.com/
+
+Cixi Geng (3):
+  gpio: eic-sprd: Make the irqchip immutable
+  gpio: gpio-pmic-eic-sprd: Make the irqchip immutable
+  gpio: gpio-sprd: Make the irqchip immutable
+
+ drivers/gpio/gpio-eic-sprd.c      | 23 ++++++++++++++---------
+ drivers/gpio/gpio-pmic-eic-sprd.c | 29 ++++++++++++++++++-----------
+ drivers/gpio/gpio-sprd.c          |  9 ++++++---
+ 3 files changed, 38 insertions(+), 23 deletions(-)
+
+
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
 -- 
-2.39.0
+2.34.1
 
