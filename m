@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5FB65944D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 03:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F8F65944F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 04:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234358AbiL3C4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 21:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        id S234389AbiL3DAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 22:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiL3C4g (ORCPT
+        with ESMTP id S229537AbiL3DAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 21:56:36 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B142F5A0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 18:56:35 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id o8so10722407ilo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 18:56:35 -0800 (PST)
+        Thu, 29 Dec 2022 22:00:08 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834E3F5A0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 19:00:07 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so20552876pjh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 19:00:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RtF5SUWBqaHRppCTBd3O4hwIqgQkuxR2xGhsb6MFe0=;
-        b=lslruclbd0+6oJn6TRKbB15gif/gn3Wc/xtjDc2OUeEPped+hZAa5TdxiI3gXU2DJv
-         EiWhvL1H7VIC0FyS2fGa9IHiWPq5lOIjZW+/JGxIbbHeoDDlfydD5jmV4hSI8LCGZT/n
-         6oUA2NqmTLyo0gNscQJHpaKjSgmHXgByYYSZDexfem4seazKlr8eHeerWpiTGrQE+tkJ
-         cWIaxDr+2/DDTcuQsb2anwe+feWF+FAvSIMtOO8LEnbeY7/WdLq0UfCxWjWxJOUqqGoM
-         Dx7booc74EVFqoAHmSrByrKCUFFBozQGOuQVzq+J8RzKiHVs9Os+FMq8tfv3Viop6XIs
-         RwEQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d0uhFEXzMNDX1WYYp3dRuU60CaEFOmJXENlYiqSnj+4=;
+        b=UefRgFQeLcsX5WpcpHu94Bhmw9cx/AUxKFnkhCJdOE+paITwYJngklO5Fwn/pulugJ
+         PX8HZAGA1vo5OS9qFQS90EvncpovcUpIfg8J61iO1j2nMb6hVcj9KWGVgFCtuCG1A8KW
+         adF+stmJC+QVzskNjmdMPKznIRaaLurMhbiZb0u0MCnmPLZkolHfDq/2xpvwdP9zeePi
+         +WvBkf77xO1OqJLwvtfOkGJT4Vx2fzELHDocM4E9rEGJWVFw/BiLeS9sm2tkr3cLkXj1
+         jBlIen+K4c42wt3XtFqD5bPcfTzqCMvzVpcshhXfa12xVKQQVJWY/JGQEMljrXCCaoFm
+         cKng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9RtF5SUWBqaHRppCTBd3O4hwIqgQkuxR2xGhsb6MFe0=;
-        b=nGijk6O16qHxorJyJI5MzlwzsHaajSeyTYi7EfWvDUu28woJHik87Ors6BNrND1azt
-         34hcuihkh9p2m9sfcXywX+HYPvSuoZyoPJYT2fmtTccr666YVgANWlEVVOAZupBBk5iR
-         Uwbdj8SAqjKdLriLVszY/VYhtUMjFzcoILSUst9G3Ea099klJ5/8H8EUgyNiOubV6XQd
-         Ltb2l9mIccDwFWe9+6fw2QMYDN8FxGrU5niwHyCnczZnmW1yvGwltay+vQbrIiV7cY+S
-         yx5EF5nOKGEHRLH/NIV2SbEVPRjXED0Nxfe79+GWHUhsknciBWvbFv/+YrQSFKAljeRt
-         xkRg==
-X-Gm-Message-State: AFqh2kphIBrXzWAKiZ3ylJkLq7k94eGbGwgSE5h07Iv5epBmlMxo6Usq
-        VPKcbELzOExHp5uHjyG0KjQ=
-X-Google-Smtp-Source: AMrXdXvwR3Oc+w5mvWabBOPuNPOoCu6bC6PXnmpqNnWtMYn+S1ffyue5lhjhqQ6zTcpcEW16TJCvnQ==
-X-Received: by 2002:a05:6e02:e05:b0:30c:21d5:5cdf with SMTP id a5-20020a056e020e0500b0030c21d55cdfmr4551312ilk.27.1672368994681;
-        Thu, 29 Dec 2022 18:56:34 -0800 (PST)
-Received: from pek-khao-d2 ([128.224.252.2])
-        by smtp.gmail.com with ESMTPSA id r27-20020a02aa1b000000b0039dc4d26bd2sm4176173jam.58.2022.12.29.18.56.31
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d0uhFEXzMNDX1WYYp3dRuU60CaEFOmJXENlYiqSnj+4=;
+        b=5ONi78P5V2vd3frbF2GELlkObLx6QL8piN9sjkZ14LgJUJ+oJnYnaP04I8fvoqx/0J
+         ReMQYugoieQ9zyccUdvkzsPo7voMQ00hlf6SpiIwHpAYZLZ0CshA5Q9Bfk2DorXyIFIG
+         dxG7gVwRTsrTXruZ41MGjRB65WWqJHswq0SOXq0uMJtME0Uxl9QCekX/YaskM0xuAcg7
+         CU+tlkCTjfDH8hgb1Oo89z5ITu6m7gMI1Cp859/Shqymj9fWf5hmjzclsTMIcXvPdbzI
+         vDenND9OZ8zO1cpiL1MypEmnZVx793WREmh8wg7pQeTaOha8eF9yDHWI8Q58h4hLEk0E
+         5ejA==
+X-Gm-Message-State: AFqh2kpbgc3A37+cqY6SN0Vu8vTdJqfynvf6punbJUwr7bNmxnr9lzPv
+        sEPcKmBwwBZiDJiJ2xzcTnckSDewZ+Lx4g==
+X-Google-Smtp-Source: AMrXdXt/grH2n5MRDbNKdHXQSS8+fCcmeJO83vmmNoc9rnDw9xk8EdWd9FwXZ56pb8vvwCwf+pWMZQ==
+X-Received: by 2002:a17:902:d589:b0:189:7f28:43a7 with SMTP id k9-20020a170902d58900b001897f2843a7mr51655420plh.29.1672369206203;
+        Thu, 29 Dec 2022 19:00:06 -0800 (PST)
+Received: from pek-lpggp6.wrs.com (unknown-105-121.windriver.com. [147.11.105.121])
+        by smtp.gmail.com with ESMTPSA id q9-20020a170902dac900b00190fb8f9e0asm13636682plx.249.2022.12.29.19.00.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 18:56:33 -0800 (PST)
-Date:   Fri, 30 Dec 2022 10:56:28 +0800
+        Thu, 29 Dec 2022 19:00:05 -0800 (PST)
 From:   Kevin Hao <haokexin@gmail.com>
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     linux-kernel@vger.kernel.org,
+To:     linux-kernel@vger.kernel.org
+Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH] scripts/tags.sh: Fix the Kconfig tags generation when
- using latest ctags
-Message-ID: <Y65TXGzQTJ/+5Mr5@pek-khao-d2>
-References: <20221229055401.855185-1-haokexin@gmail.com>
- <5e1b0401-db1e-a7a4-787c-4b93d02f5b73@collabora.com>
+Subject: [PATCH v2] scripts/tags.sh: Fix the Kconfig tags generation when using latest ctags
+Date:   Fri, 30 Dec 2022 10:56:32 +0800
+Message-Id: <20221230025632.1053726-1-haokexin@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="V/Y5c8o4YZu8/fyS"
-Content-Disposition: inline
-In-Reply-To: <5e1b0401-db1e-a7a4-787c-4b93d02f5b73@collabora.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,84 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Kconfig language has already been built-in in the latest ctags, so
+it would error exit if we try to define it as an user-defined language
+via '--langdef=kconfig'. This results that there is no Kconfig tags in
+the final tag file. Fix this by skipping the user Kconfig definition for
+the latest ctags.
 
---V/Y5c8o4YZu8/fyS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Kevin Hao <haokexin@gmail.com>
+---
+v2: Convert 'KCONFIG_ARGS' into array as suggested by Cristian.
 
-On Thu, Dec 29, 2022 at 02:33:15PM +0200, Cristian Ciocaltea wrote:
->=20
-> On 12/29/22 07:54, Kevin Hao wrote:
-> > The Kconfig language has already been built-in in the latest ctags, so
-> > it would error exit if we try to define it as an user-defined language
-> > via '--langdef=3Dkconfig'. This results that there is no Kconfig tags in
-> > the final tag file. Fix this by skipping the user Kconfig definition for
-> > the latest ctags.
-> >=20
-> > Signed-off-by: Kevin Hao <haokexin@gmail.com>
-> > ---
-> >   scripts/tags.sh | 10 ++++++----
-> >   1 file changed, 6 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/scripts/tags.sh b/scripts/tags.sh
-> > index e137cf15aae9..c56b13ae3fdf 100755
-> > --- a/scripts/tags.sh
-> > +++ b/scripts/tags.sh
-> > @@ -264,10 +264,12 @@ exuberant()
-> >   	--$CTAGS_EXTRA=3D+fq --c-kinds=3D+px --fields=3D+iaS --langmap=3Dc:+=
-=2Eh \
-> >   	"${regex[@]}"
-> > -	setup_regex exuberant kconfig
-> > -	all_kconfigs | xargs $1 -a                              \
-> > -	--langdef=3Dkconfig --language-force=3Dkconfig "${regex[@]}"
-> > -
-> > +	KCONFIG_ARGS=3D""
-> > +	if ! $1 --list-languages | grep -iq kconfig; then
-> > +		setup_regex exuberant kconfig
-> > +		KCONFIG_ARGS=3D"--langdef=3Dkconfig --language-force=3Dkconfig ${reg=
-ex[@]}"
-> > +	fi
-> > +	all_kconfigs | xargs $1 -a $KCONFIG_ARGS
-> >   }
->=20
-> The 'regex' array needs quoting to prevent word splitting/globbing.
+ scripts/tags.sh | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Fair enough.
+diff --git a/scripts/tags.sh b/scripts/tags.sh
+index e137cf15aae9..84775f08260f 100755
+--- a/scripts/tags.sh
++++ b/scripts/tags.sh
+@@ -264,10 +264,12 @@ exuberant()
+ 	--$CTAGS_EXTRA=+fq --c-kinds=+px --fields=+iaS --langmap=c:+.h \
+ 	"${regex[@]}"
+ 
+-	setup_regex exuberant kconfig
+-	all_kconfigs | xargs $1 -a                              \
+-	--langdef=kconfig --language-force=kconfig "${regex[@]}"
+-
++	KCONFIG_ARGS=()
++	if ! $1 --list-languages | grep -iq kconfig; then
++		setup_regex exuberant kconfig
++		KCONFIG_ARGS=(--langdef=kconfig --language-force=kconfig "${regex[@]}")
++	fi
++	all_kconfigs | xargs $1 -a "${KCONFIG_ARGS[@]}"
+ }
+ 
+ emacs()
+-- 
+2.38.1
 
-> I would
-> suggest to transform 'KCONFIG_ARGS' into an array as well:
-
-Sounds great. V2 is coming.
-
-Thanks,
-Kevin
-
->=20
-> KCONFIG_ARGS=3D()
-> if ! $1 --list-languages | grep -iq kconfig; then
-> 	setup_regex exuberant kconfig
-> 	KCONFIG_ARGS=3D(--langdef=3Dkconfig --language-force=3Dkconfig "${regex[=
-@]}")
-> fi
-> all_kconfigs | xargs $1 -a "${KCONFIG_ARGS[@]}"
->=20
->=20
-> >   emacs()
-
---V/Y5c8o4YZu8/fyS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEHc6qFoLCZqgJD98Zk1jtMN6usXEFAmOuU1wACgkQk1jtMN6u
-sXEnlQf/Z8WDmHpzGfxDOdDP7z8nxoq+RR9f1R2LkeQg085MTAYa2V9IbNUAnsVe
-DSo/3ZYhBZ9LPZjEvSRdp9qkOO9zvmJTy68myO4515bLWG56WF0w8jI/XqsbDIiI
-nELY5ZLVxw2oUzUrTlBandtHMRudOpsMiHrmmoS07aiy4v8pSBCEUGg1dBZ2r05d
-GLQYbQ2ptNG27LgpeElcCPJHUgLPZeRLRckZay/W8blO8G5o1e7lWzfQ4/j7HikC
-GhBqQ2pyA1xNotI0UafLpmOGZTBS1dOJrYkrvu+gPILKoziBlRDP8jaopCETq3XJ
-EzNxBwNdBb411Tpx+06Vz0A5IBEOBg==
-=Tx68
------END PGP SIGNATURE-----
-
---V/Y5c8o4YZu8/fyS--
