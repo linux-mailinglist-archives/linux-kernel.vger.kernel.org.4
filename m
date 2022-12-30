@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A22E6595C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 08:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C5C6595D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 08:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbiL3HcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 02:32:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S234692AbiL3Hle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 02:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234646AbiL3HcG (ORCPT
+        with ESMTP id S229663AbiL3HkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 02:32:06 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FBA65B0;
-        Thu, 29 Dec 2022 23:32:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=QkQJAkmCP+Nuor28oAQ7xUGQ6VarGmNl8TUneHFaCpI=; b=W5dlGu8PC6yganKCBF8FGA+SjX
-        XiqTrLOvVu3t6wuzB0NGf+302TDzqUOqklTX5ypScG+5JJsg8Kk32zJMHJmmeYv9YjPyAhHyoAjWR
-        ZQbZoxVhA491TbQKcMPTyeVONkrXBHatKh816IW9KRE72QPw5gptHygsDTTs3Wgtb2VU=;
-Received: from p200300daa720fc00fd7bb9014adaf597.dip0.t-ipconnect.de ([2003:da:a720:fc00:fd7b:b901:4ada:f597] helo=Maecks.lan)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1pB9rp-00CcyM-L4; Fri, 30 Dec 2022 08:31:49 +0100
-From:   Felix Fietkau <nbd@nbd.name>
-To:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v3 5/5] net: ethernet: mtk_eth_soc: ppe: fix L2 offloading with DSA untagging offload enabled
-Date:   Fri, 30 Dec 2022 08:31:45 +0100
-Message-Id: <20221230073145.53386-5-nbd@nbd.name>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221230073145.53386-1-nbd@nbd.name>
-References: <20221230073145.53386-1-nbd@nbd.name>
+        Fri, 30 Dec 2022 02:40:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A29E64CE;
+        Thu, 29 Dec 2022 23:40:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB024B818ED;
+        Fri, 30 Dec 2022 07:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DE89C433F1;
+        Fri, 30 Dec 2022 07:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672386018;
+        bh=qbIRS1t7qbPmay/00gYg3v6cvnMqr6be+ff+5DoVvDM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EtG3vzu8tx2m14S0zCbE6hIIfDGGWjBVqEq+ZfRy/4LH3QZLl9TEJTrKlUC0bkOye
+         LbJwLIQVnYxPFP7bHV1DhCxWHqSUNlQGXtuXzwQQ7rTsiXW3QV1r8MvswtjNcbx0eL
+         vsYnXWZyhjmPcsCxQFuLZqbNO9k0y0ieBB4sPkoSFJjuyS99ALvscOSTDXVXSwpy/x
+         m19w+HsYKSoJhhvLj7UECSMVTCR9wtQbwVgVmpA1tSxkSL0bB/HrXEyagb3n68IpAO
+         pOdwYGVeP+b8F9pjoPlE2pj7ZyKB0XufjDRMCg3daK/bLl8X0G8h+TDHhZdFfjH0W3
+         ckhq5dRwwKKkA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6E1FFE50D71;
+        Fri, 30 Dec 2022 07:40:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] selftests: net: fix cmsg_so_mark.sh test hang
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167238601844.1408.7811509081427626262.git-patchwork-notify@kernel.org>
+Date:   Fri, 30 Dec 2022 07:40:18 +0000
+References: <20221229054106.96682-1-po-hsu.lin@canonical.com>
+In-Reply-To: <20221229054106.96682-1-po-hsu.lin@canonical.com>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        shuah@kernel.org, naresh.kamboju@linaro.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check for skb metadata in order to detect the case where the DSA header is not
-present.
+Hello:
 
-Fixes: 2d7605a72906 ("net: ethernet: mtk_eth_soc: enable hardware DSA untagging")
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 6 +++---
- drivers/net/ethernet/mediatek/mtk_ppe.c     | 5 ++++-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index ab6c571a39ae..cec2fcab3dfa 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -2039,9 +2039,6 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 			skb_checksum_none_assert(skb);
- 		skb->protocol = eth_type_trans(skb, netdev);
- 
--		if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
--			mtk_ppe_check_skb(eth->ppe[0], skb, hash);
--
- 		/* When using VLAN untagging in combination with DSA, the
- 		 * hardware treats the MTK special tag as a VLAN and untags it.
- 		 */
-@@ -2054,6 +2051,9 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 				skb_dst_set_noref(skb, &eth->dsa_meta[port]->dst);
- 		}
- 
-+		if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
-+			mtk_ppe_check_skb(eth->ppe[0], skb, hash);
-+
- 		skb_record_rx_queue(skb, 0);
- 		napi_gro_receive(napi, skb);
- 
-diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.c b/drivers/net/ethernet/mediatek/mtk_ppe.c
-index 269208a841c7..e366a83cf516 100644
---- a/drivers/net/ethernet/mediatek/mtk_ppe.c
-+++ b/drivers/net/ethernet/mediatek/mtk_ppe.c
-@@ -8,6 +8,7 @@
- #include <linux/platform_device.h>
- #include <linux/if_ether.h>
- #include <linux/if_vlan.h>
-+#include <net/dst_metadata.h>
- #include <net/dsa.h>
- #include "mtk_eth_soc.h"
- #include "mtk_ppe.h"
-@@ -700,7 +701,9 @@ void __mtk_ppe_check_skb(struct mtk_ppe *ppe, struct sk_buff *skb, u16 hash)
- 		    skb->dev->dsa_ptr->tag_ops->proto != DSA_TAG_PROTO_MTK)
- 			goto out;
- 
--		tag += 4;
-+		if (!skb_metadata_dst(skb))
-+			tag += 4;
-+
- 		if (get_unaligned_be16(tag) != ETH_P_8021Q)
- 			break;
- 
+On Thu, 29 Dec 2022 13:41:06 +0800 you wrote:
+> This cmsg_so_mark.sh test will hang on non-amd64 systems because of the
+> infinity loop for argument parsing in cmsg_sender.
+> 
+> Variable "o" in cs_parse_args() for taking getopt() should be an int,
+> otherwise it will be 255 when getopt() returns -1 on non-amd64 system
+> and thus causing infinity loop.
+> 
+> [...]
+
+Here is the summary with links:
+  - selftests: net: fix cmsg_so_mark.sh test hang
+    https://git.kernel.org/netdev/net/c/1573c6882018
+
+You are awesome, thank you!
 -- 
-2.38.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
