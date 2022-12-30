@@ -2,99 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2761F6598F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A4D6598F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbiL3NqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 08:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        id S234958AbiL3NrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 08:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235142AbiL3NqG (ORCPT
+        with ESMTP id S230056AbiL3NrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 08:46:06 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F109DDD1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1672407959;
-        bh=ksN4+yXcEZh786ZHkB2irPN5To2fNnhab+DGw9fAu3s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=wLc4LQP54paJbC0kQ/j9785marUxFgd1EGqWEKgkdrNAExaEnmIIzaA0XTfuJIQ2D
-         g9KmKy8zGocFLZujAFVb+zd/CRaYBqeRRGQ3JlN1RsKZOzIUTc5iOqhDJ/w3zlrFKu
-         rNX/p2DXnCmotQ86e0gCZKjLh6KvaVUAGP+ngqNDMkt/oYPxNSdfDVVMP8IdaYf6pO
-         rKY/xyAR3bSUoxaaQUSaHn3jd9s5ouNKcSH+gpPrlrnAz4Q55U66NZswZNAGZYnAGC
-         4u5Fq4xsH9mENNRomL2yC8rBXQdOI73nicxfD0EgxQ+7Kb7RO/WzqPoyCAjuDsnJNF
-         iiW68p6hFgW0Q==
-Received: from [10.1.0.205] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Nk63V66mxzcp5;
-        Fri, 30 Dec 2022 08:45:58 -0500 (EST)
-Message-ID: <fb7343a9-dc48-52f6-e899-d0283046a011@efficios.com>
-Date:   Fri, 30 Dec 2022 08:46:25 -0500
+        Fri, 30 Dec 2022 08:47:19 -0500
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD70DD1;
+        Fri, 30 Dec 2022 05:47:18 -0800 (PST)
+Received: by mail-io1-f44.google.com with SMTP id g20so11127178iob.2;
+        Fri, 30 Dec 2022 05:47:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xPlF5GPACJ7tc/xfdCV9WtHQwz/gtCn+OAsHdfRx9JY=;
+        b=2mnscl/SVqsjVnwqZDLSKbOHA0BQBXqS5ti7iPXYKYz61K7kRWz5TJqBz7SVlghYzI
+         tK+EHS4nhRSCkxCtEu3TVpSAJ3vDySv1nD/gNHKaw9rp32EoSAvztFbuj/5yl8UUkiQQ
+         e/gxud8LKyvwoMuL5yBgIRIhGoWyjUkGd9MQjBGGbrW7obAfIyrmMwoiPCPiDwrkqPbH
+         II0pd+IDjslh242nydwuCJTYkhl9JoHkTZgxvx60/Zxd75nTtb/BxKKQkaL8kc1zGNhX
+         uGdh0D9Yg7KQKdL08LqNDxPX9SNYxlmMWsVV53KR+6u6CCKMwvHYV0pCFfWw2UgA+16t
+         O1Ww==
+X-Gm-Message-State: AFqh2kqzSRFLE788jaMDoquIh5DhcJwT/HpeW7JKF2vHz7R3vihze3Z6
+        3opNN5+JkXuI4iDzsqJ5MuEfZ8ywrHMo4YI8QgY=
+X-Google-Smtp-Source: AMrXdXuTfRUS/EimsFwvSQNOQZwUu/AHIIKV2ZIh+H1Sq50AznmALmEtfIRGHefdYg6rzWEzJBWLyhBm/UGcEq8rh34=
+X-Received: by 2002:a02:3b4f:0:b0:39a:98b:480e with SMTP id
+ i15-20020a023b4f000000b0039a098b480emr2435567jaf.125.1672408037690; Fri, 30
+ Dec 2022 05:47:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [tip:sched/core] [sched] af7f588d8f:
- WARNING:at_kernel/sched/core.c:#sched_mm_cid_after_execve
-Content-Language: en-US
-To:     kernel test robot <yujie.liu@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org
-References: <202212301353.5c959d72-yujie.liu@intel.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <202212301353.5c959d72-yujie.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228114558.3504-1-kvijayab@amd.com> <0e299876606352ca868d7b71991c66a1c1d361cb.camel@intel.com>
+In-Reply-To: <0e299876606352ca868d7b71991c66a1c1d361cb.camel@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 30 Dec 2022 14:47:01 +0100
+Message-ID: <CAJZ5v0hzo7zSWjbC2h4S+B1ZShmrz8q_TtuUTGRGarhdh2HA+w@mail.gmail.com>
+Subject: Re: [PATCH] x86/acpi/boot: Do not register processors that cannot be
+ onlined for x2apic
+To:     "Zhang, Rui" <rui.zhang@intel.com>, Tony Luck <tony.luck@intel.com>
+Cc:     "Brown, Len" <len.brown@intel.com>,
+        "kvijayab@amd.com" <kvijayab@amd.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Mario.Limonciello@amd.com" <Mario.Limonciello@amd.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bpetkov@amd.com" <bpetkov@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "santosh.shukla@amd.com" <santosh.shukla@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-30 01:48, kernel test robot wrote:
-> Greeting,
-> 
-> FYI, we noticed WARNING:at_kernel/sched/core.c:#sched_mm_cid_after_execve due to commit (built with gcc-11):
-> 
-[...]
+On Fri, Dec 30, 2022 at 2:23 PM Zhang, Rui <rui.zhang@intel.com> wrote:
+>
+> Hi, Kishon,
+>
+> On Wed, 2022-12-28 at 11:45 +0000, Kishon Vijay Abraham I wrote:
+> > Section 5.2.12.12 Processor Local x2APIC Structure in the ACPI v6.3
+> > spec mandates that both "enabled" and "online capable" Local APIC
+> > Flags
+> > should be used to determine if the processor is usable or not.
+>
+> ACPI spec 6.4 is released, so better to refer to the latest ACPI spec,
+> say,
+> https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#processor-local-x2apic-structure
+> or
+> https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#local-apic-flags
 
-> [ 17.747520][ T48] bprm_execve (exec.c:?)
-> [ 17.748358][ T48] ? call_usermodehelper_exec_work (umh.c:?)
-> [ 17.749462][ T48] kernel_execve (??:?)
-> [ 17.750332][ T48] call_usermodehelper_exec_async (umh.c:?)
-> [ 17.751363][ T48] ? call_usermodehelper_exec_work (umh.c:?)
-> [ 17.752163][ T48] ret_from_fork (??:?)
+ACPI 6.5 is out even.
 
-I suspect this check:
+> > However, Linux doesn't use the "online capable" flag for x2APIC to
+> > determine if the processor is usable. As a result, cpu_possible_mask
+> > has incorrect value and results in more memory getting allocated for
+> > per_cpu variables than it is going to be used.
+>
+> Thanks for catching this. I had the same question when I was reading
+> this piece of code recently.
+>
+> > Make sure Linux parses both "enabled" and "online capable" flags for
+> > x2APIC to correctly determine if the processor is usable.
+>
+> A dumb question, the Local SAPIC structure also uses the Local APIC
+> flags, and should we add the same check in acpi_parse_sapic()?
 
-void sched_mm_cid_after_execve(struct task_struct *t)
-{
-         struct mm_struct *mm = t->mm;
-         unsigned long flags;
+I'm not sure if this matters in practice, because SAPIC is only used
+on IA64 anyway.
 
-         WARN_ON_ONCE((t->flags & PF_KTHREAD) || !t->mm);
+Tony, what do you think?
 
-is too strict. AFAIU the usermodehelper thread is a kernel thread, which 
-happens to have a non-NULL mm after execve. We want to allow 
-usermodehelper threads to use rseq, so I think the appropriate approach 
-here would be to just warn if !t->mm:
+> > Fixes: 7237d3de78ff ("x86, ACPI: add support for x2apic ACPI
+> > extensions")
+>
+> I'm not sure if this "Fixes" tag is accurate or not.
+>
+> Checking for the Local APIC flags was just added last year, by commit
+> aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable"),
+> and the variable 'acpi_support_online_capable' used in this patch is
+> also introduced by that commit. So, to me, this patch fixes a gap in aa
+> 06e20f1be6, rather than the original x2apic support commit.
 
-         WARN_ON_ONCE(!t->mm);
-
-We should probably apply a similar change to the warning in 
-sched_mm_cid_fork() as well.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Agreed.
