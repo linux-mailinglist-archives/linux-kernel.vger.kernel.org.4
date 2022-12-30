@@ -2,87 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B47F659A70
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2C9659A75
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbiL3QNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 11:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
+        id S235193AbiL3QOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 11:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235064AbiL3QNV (ORCPT
+        with ESMTP id S235148AbiL3QOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 11:13:21 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066431BEA6;
-        Fri, 30 Dec 2022 08:13:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=oLpu04+RbbeBI/Nbl4YEI0+hXME43XlTduDWQwUs7U0=; b=W0V4c2xmmo9qMY2lMo0UPZC2L+
-        OSWUKXOVgSit6IqjGEFoC87+rhuqEG5V0O87EkI2hG1sE96HiEe5/M/1p5fXj5MFKBEBXJyfJlR9p
-        bceHia7lyYICoGtrdFxhLTFGqsD0KyWAEyRaxajtmOX1BpOgbO/++ZryOAPpVBvbLbuM=;
-Received: from p200300daa720fc02b9d78281b940d549.dip0.t-ipconnect.de ([2003:da:a720:fc02:b9d7:8281:b940:d549] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1pBI0E-00CklB-8W; Fri, 30 Dec 2022 17:13:02 +0100
-Message-ID: <904dfc35-ecae-97dc-e9d9-a7df83ff89d4@nbd.name>
-Date:   Fri, 30 Dec 2022 17:13:01 +0100
+        Fri, 30 Dec 2022 11:14:51 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C0E1C109
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:14:50 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id bp15so32263219lfb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:14:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jbyv4Oy8didpwFYD17V58dHAAX/DTrU/zE0z4pQAgYo=;
+        b=To2ksXIJV9+WbeESZs4xX0hYjVnUCAO4VCpaHiAeqtYOYKKCu64D+fUEBE+Jrr6qIP
+         R/eTASpH7PGcWf8qszwbDC7n/9gdjeXMjrTBPc8iLqvBCKYTpU4eOrHgDQaC4ybgWGKq
+         q/fOUTvwI/e5ld0Eqzbuw/BLJj6f+uTK81hNG1kYpy2pk5abJXnTJ40aDty9D4sPCV45
+         iCyl5bFYVIjl4hTAfg80QkDr4p9sCnGH1YOPeVekJbSCF+TVzW+5OrsKwO0t17ffCgZd
+         RJl82P6e+SqL3JB3EuaVd6VRw4W9bUuO8f8nMx+AjQ1wJYMtGCLwv2+uuHjwWRuzjcXj
+         Zujg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jbyv4Oy8didpwFYD17V58dHAAX/DTrU/zE0z4pQAgYo=;
+        b=f8KgyU4SBPeKeX0Osv7WzxOihQN+zb2/dlDZtKr8VW8GtmYORL4dCPi+UA7mvRtSF6
+         CoR76BmJ4nyEit+A8d+fO5ntDbgy7MSvBTDPsSsHUov09lyjeAygGXF0tKKXaWmlV+/k
+         OOprHPMvBLKA+D5EmLwfx/6XgU++XB56zrgH3VgjhufyJuMIWyVjBbVyjNixaAv3NBgm
+         1EG7kjtUYUAx/i3MyZPxhCxMiMShg4YNu07yf4/ttVEGpJiKg7X+KKtKXapSbb6SKaHB
+         9M0Aj97RP2I4bqhwSI6S0IT1ttv1uB9t9BN6zbWh0UywKZQi+4r46sqS9fmCf95eE9uO
+         LT7A==
+X-Gm-Message-State: AFqh2krqESGruqtHBoYXqco44+an1oF1HynaANO4i3buv4qyX/HZridV
+        XxW54R79lzOpvybrAz2Xjyirpw==
+X-Google-Smtp-Source: AMrXdXvt2vZu5fuaitjDO5j8xBPAxgO+bIc23hMUVB0akOKLgqyj9XAcwvHkgYQWNICQMS6eagpzuw==
+X-Received: by 2002:ac2:5394:0:b0:4b4:e2c9:9b25 with SMTP id g20-20020ac25394000000b004b4e2c99b25mr8707849lfh.44.1672416888646;
+        Fri, 30 Dec 2022 08:14:48 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id j18-20020a056512109200b00498f67cbfa9sm3539912lfg.22.2022.12.30.08.14.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Dec 2022 08:14:48 -0800 (PST)
+Message-ID: <b32cf5e6-15be-4055-35b1-ad9d90e3c0ad@linaro.org>
+Date:   Fri, 30 Dec 2022 17:14:46 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: Aw: Re: Re: [PATCH net v3 4/5] net: ethernet: mtk_eth_soc: drop
- generic vlan rx offload, only use DSA untagging
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 07/11] arm64: dts: qcom: sm8350: Remove mmxc
+ power-domain-name
 Content-Language: en-US
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221230073145.53386-1-nbd@nbd.name>
- <20221230073145.53386-4-nbd@nbd.name>
- <trinity-a07d48f4-11cf-4a24-a797-03ad4b1150d9-1672400818371@3c-app-gmx-bap18>
- <82821d48-9259-9508-cc80-fc07f4d3ba14@nbd.name>
- <trinity-ace28b50-2929-4af3-9dd2-765f848c4d99-1672408565903@3c-app-gmx-bap18>
- <fc09b981-282e-26cd-661e-86fdc72bedf9@nbd.name>
- <trinity-01eda9f9-b989-4554-ba35-a7f7a18da786-1672414711074@3c-app-gmx-bap18>
-From:   Felix Fietkau <nbd@nbd.name>
-In-Reply-To: <trinity-01eda9f9-b989-4554-ba35-a7f7a18da786-1672414711074@3c-app-gmx-bap18>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, quic_jesszhan@quicinc.com,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        vkoul@kernel.org, a39.skl@gmail.com, quic_khsieh@quicinc.com,
+        quic_vpolimer@quicinc.com, swboyd@chromium.org,
+        dianders@chromium.org, liushixin2@huawei.com,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        vinod.koul@linaro.org
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>
+References: <20221230153554.105856-1-robert.foss@linaro.org>
+ <20221230153554.105856-8-robert.foss@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221230153554.105856-8-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.12.22 16:38, Frank Wunderlich wrote:
-> seems only tx is affected on r3, as i see packets on the vlan from my laptop
+On 30/12/2022 16:35, Robert Foss wrote:
+> The mmxc power-domain-name is not required, and is not
+> used by either earlier or later SoC versions (sm8250 / sm8450).
 > 
-> tcpdump on R3 (e4:b9:7a:f7:c4:8b is mac from laptop):
-> 
-> 13:47:05.265508 e4:b9:7a:f7:c4:8b > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 577: vlan 500, p 0, ethertype IPv4 (0x0800), 192.168.50.2.59389 > 192.168.50.255.21027: UDP, length 531
-> 13:47:05.265548 e4:b9:7a:f7:c4:8b > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 577: vlan 600, p 0, ethertype IPv4 (0x0800), 192.168.60.2.59389 > 192.168.60.255.21027: UDP, length 531
-> 
-> regards Frank
-I don't have a setup to test 6.2 on my MT7986 board right now, but I did 
-test latest OpenWrt with my changes and couldn't reproduce the issue there.
-I checked the diff between my tree and upstream and didn't find any 
-relevant differences in mtk_eth_soc.c
-Not sure what's going on or how to narrow it down further.
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
 
-- Felix
+Please, do not mix fixes, cleanups and new features. This delays
+applying of fixes for many, many days without a need and causes a lot of
+duplicated work...
+
+This SHOULD be merged long time ago so I won't waste time on such stuff.
+But because it was always waiting for rest of patches it was never merged...
+
+Best regards,
+Krzysztof
+
