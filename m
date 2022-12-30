@@ -2,88 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927BE659BB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 20:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAC4659BB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 20:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiL3Tn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 14:43:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S235069AbiL3TpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 14:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiL3Tn0 (ORCPT
+        with ESMTP id S231171AbiL3TpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 14:43:26 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C38218397
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 11:43:25 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id z12so17838593qtv.5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 11:43:25 -0800 (PST)
+        Fri, 30 Dec 2022 14:45:06 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEB214024
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 11:45:04 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so15750271wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 11:45:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tQ56hL2pZJLjzLwQ/3T/CpWJ1q/WCG6zfqoO1PWUhok=;
-        b=HXW5xZVrFNQn6IFmuRqi6c/kp3HPyFLuASeWLDiU8QYfKNe0PB/mjBPGkAHL/te/tV
-         bBWgSkWD9gmsNaa+zkwE/9QtOh+a5Adpf/6Luy0rf53L4bYU/Rmc1pL8SmutXRZ00uKV
-         Tzvsny/YYQUQxCkUPSmamin7F9umRRs1DgMCU=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q72SkNrjUv6hApXPAFQeSLQafL5ZXzh4liHqcfBQoss=;
+        b=cl+lv5TpIcUAycTAeAn5TmieFmvwZ3TC9P3bzUzh8NMNaZlhTHCchdvZLOWRsIwFHF
+         N739iA1eLpJa7Rth4rnlBI9QqtmQKQGA5bjBmcwrUOS7Rrj0lzIqslyIPJZTZyS+FTt1
+         bwfUrkYy1W85CM42cEi+eqleY8cvrhYnwutMZrTSmmzQAY/W1W27lVBQ8YyCxvvqGjbC
+         YDkMQiAkXazpjplvjj+Jn0i+CsnsLgbpSgJ9FlrQwnBTzQM7YKBoWutv07wbQX7/hRIX
+         fq8YzxjbBpkKJvpOwi+f/HGK9+xIy1CxvKgOTwS7DQDHMCoFpanNaTvE1wvHv6WZ+viZ
+         qiEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tQ56hL2pZJLjzLwQ/3T/CpWJ1q/WCG6zfqoO1PWUhok=;
-        b=b/tQG6gNibZYKIAuRzJ2+HuCJcYSs6F3UD4DCozfm37ZUoVRVsYBZhX2XgzY2MrNd0
-         nJQeRbyZ54p6w+dViJlopX+OtxbImAcSkHbzWIdElVpabEug9/lyHPYdILNhUZFa2nPc
-         yZKySGDkYqnTn0OHL5ZtwMxu88J9Gd5ezSjmrmjKB3pLYARSsxp35H0hKwihJKKiLHGn
-         XV0zDuBjkl1loxO+VR7GpWYORSfT4h7UK9G0MtCIGhfBnqbGNx8XEobiDbeWz7utkCLu
-         5tgFRnwhz7qkncsMpn4sI3LAy0rN96x98VdWBFK+nSg/m+mRkBrfRsDV+Ibs0vn+o6fg
-         Tp3g==
-X-Gm-Message-State: AFqh2kpZgkNyGDchYy2DRZ4GnTr6zZE/opmJ2p7PG+RQlPpZFB3Lw+c5
-        tI6LsL/qGzt1Xh2zVwKq/cR3R3UJ83HGhk3f
-X-Google-Smtp-Source: AMrXdXsTGc0WfJQMaRCIykxiekLmWiY+P1A+X9GhjScPIhmDzH8z/Ze9m4Y3IaGbaR/M2jnTnXMS4w==
-X-Received: by 2002:ac8:4f17:0:b0:3a6:95ff:ffd4 with SMTP id b23-20020ac84f17000000b003a695ffffd4mr44080186qte.52.1672429404740;
-        Fri, 30 Dec 2022 11:43:24 -0800 (PST)
-Received: from nitro.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
-        by smtp.gmail.com with ESMTPSA id bl41-20020a05620a1aa900b00702d1c6e7bbsm15500477qkb.130.2022.12.30.11.43.24
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q72SkNrjUv6hApXPAFQeSLQafL5ZXzh4liHqcfBQoss=;
+        b=D6acL/FCIae1XeloDexoIT+9V9LdTkGZ0MCWbnjuv9OiWQyrRaScz7exVPdRUaa0VR
+         EXIfG0UPUj45nPLdpl06V4yWjpv1GzsNtgMHfS1bEcF5u/TNym/TYQwo7RLqTAx1C64r
+         sdO0BcZWjOUZ3emVH103GbVC9BfsHp+2Y9ZqzcIcgOmzTEGmqCJgoNTLhSRvjNyTxaYM
+         qVEclMeR7z4KeARi9PhNdF07HzM+xVlffmM/vrYn8gBGEq0DHxzxWlWr3wtpCQvSglD/
+         x9rtAKELkw3Ntl+RL6PLwVxoQV0DC7OcOfd9se4GuprILc3BZZ7e6Bs88K12NmdlpdaC
+         8QCQ==
+X-Gm-Message-State: AFqh2krmG+Lhqz51SdAMzNYGkh2tnEXUkEOycS1M9L31ybfQUjVyhuzE
+        I3WrTZzxZ9L8DBG7zL2F37ywXA==
+X-Google-Smtp-Source: AMrXdXsnGymGIz5wKkyeGlp5NGCZTlccx+1TfgiDq4nzoUgDuD/JJts9ZAFkwK5mVOXUx44yP3ydGA==
+X-Received: by 2002:a05:600c:3491:b0:3d1:f16d:5848 with SMTP id a17-20020a05600c349100b003d1f16d5848mr23777360wmq.26.1672429502975;
+        Fri, 30 Dec 2022 11:45:02 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id j30-20020a05600c1c1e00b003c71358a42dsm44855413wms.18.2022.12.30.11.45.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 11:43:24 -0800 (PST)
-Date:   Fri, 30 Dec 2022 14:43:22 -0500
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     corbet@lwn.net, Conor Dooley <conor.dooley@microchip.com>,
-        broonie@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] Documentation: process: Document suitability of
- Proton Mail for kernel development
-Message-ID: <20221230194322.gonid4ld27jwjfw4@nitro.local>
-References: <20221228000330.3971104-1-conor@kernel.org>
+        Fri, 30 Dec 2022 11:45:02 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: [PATCH v3 0/2] pinctrl: qcom: Add support for SM8550
+Date:   Fri, 30 Dec 2022 21:44:57 +0200
+Message-Id: <20221230194459.2370924-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221228000330.3971104-1-conor@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 12:03:31AM +0000, Conor Dooley wrote:
-> +This affects mail sent from their web GUI, from other mail clients using their
-> +mail "bridge", as well as patches sent using ``git send-email``.
+This patchset adds pinctrl support for the new Qualcomm SM8550 SoC,
 
-I suggest a minor tweak to wording here:
+Changes since v2:
+ * dropped the i2c pull up bit for now. (dropped patches #2 and #3).
+   It needs a proper approach which I intend to take care of soon.
 
-    The automatic encryption feature is also enabled for mail sent via the
-    Proton Mail Bridge, so this affects all outgoing messages, including
-    patches sent with ``git send-email``.
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-gpio@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-> +Unless a way to disable this "feature" is introduced, Proton Mail is unsuited
-> +to kernel development.
+Abel Vesa (2):
+  dt-bindings: pinctrl: qcom: Add SM8550 pinctrl
+  pinctrl: qcom: Add SM8550 pinctrl driver
 
-Reviewed-by: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+ .../bindings/pinctrl/qcom,sm8550-tlmm.yaml    |  163 ++
+ drivers/pinctrl/qcom/Kconfig                  |   10 +
+ drivers/pinctrl/qcom/Makefile                 |    1 +
+ drivers/pinctrl/qcom/pinctrl-sm8550.c         | 1789 +++++++++++++++++
+ 4 files changed, 1963 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sm8550-tlmm.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sm8550.c
 
-Thanks!
+-- 
+2.34.1
 
--K
