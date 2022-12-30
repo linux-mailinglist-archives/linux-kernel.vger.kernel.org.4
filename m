@@ -2,113 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAB9659453
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 04:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89406659455
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 04:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234399AbiL3DFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 22:05:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
+        id S234402AbiL3DJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 22:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiL3DFH (ORCPT
+        with ESMTP id S229607AbiL3DJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 22:05:07 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC26111C3A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 19:05:05 -0800 (PST)
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 30DC0418C5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 03:05:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1672369504;
-        bh=lwvEOmEMF0O/z3RmuxwF6rUwUcUS81nDydZThS1Yl7w=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=Rcaeir3RSP+vcwnvGxQN8vzWaqqLNPzo6MTif0k6Dci5ek21BXIKZH7C6gNE1YIsh
-         NMtGHxlOvCI6moFMxiDwoWW1seooTDS89/nglf+rD+HHiTt3LCX+v68HtHhe6k9N0a
-         XEyanAv3Z2VCsNSHM96DUTy+alj2mosbnuyUzZef6kM/UKb8fJlNofSTIysen2aXGo
-         ZTcfQKIwsztyDNH+r6SolKeNAFS/AIsG+Tfxh5yFpIUGs38P28OSDON+iXz4MiDUFo
-         APhOb+CIiXiWZwhT1z5/RgWd5s+Vfrqh7+85ouJMLtXlWjjIrRbAD58mMdMIkBQwsR
-         mjUn01+HtHrLg==
-Received: by mail-pg1-f197.google.com with SMTP id q18-20020a632a12000000b0049680eea1dbso7618787pgq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 19:05:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwvEOmEMF0O/z3RmuxwF6rUwUcUS81nDydZThS1Yl7w=;
-        b=MxDYajilp0A8Y6UqL6zWckhJKXXMx6R/6HOWIVFl5ra0M7wzCa85FwG23RzVhfajHD
-         opdFJP5oBAf2LBfpJRcMevD9zs/ixGCDBWSd6dVlnXhYz5KCnfc7ulIEOV6gV8mB2GqK
-         w+ZHgInv3lptS1H+H1n0ePHlH1WcoPYuqUJG/SuWhP8rkEVpxle8jNBl4q/b3GhQK2OB
-         pmdmtHuLmlt+hUNl/csnupaxGSY1JhjA32rMCvzR//SyIev8mKv+V+lZc4wsXiPfvVi5
-         VWwAHtNvgxrHIZT/06yZw58IouOaNxqKHOVJUl4ad1H8K4Q+N11Eh8azul/zU4q7JFYz
-         9mqg==
-X-Gm-Message-State: AFqh2kpapcyRYUFjKiDZbPGmvYAiMKwvhER6haniPNryDR615cuDab7f
-        ZZL4GGAVbJxaWdzZHAiZxRd48mHiVCCgna70RePGqYdv1JBuWT4SCU86XO77BvtyLm0R7aXT1yz
-        QyLHm8leCMweiMd7dKKHVnESKPyAj4xgdjwhaX+KoVw==
-X-Received: by 2002:a17:902:b205:b0:185:441e:224a with SMTP id t5-20020a170902b20500b00185441e224amr29785085plr.69.1672369502889;
-        Thu, 29 Dec 2022 19:05:02 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuOX0hwNCD1uwfltxofFg6zTdEbzIdHHCh+wxMcGtvo9ZU54GvehkMaV9Bibf4xJtTfC0YPxQ==
-X-Received: by 2002:a17:902:b205:b0:185:441e:224a with SMTP id t5-20020a170902b20500b00185441e224amr29785069plr.69.1672369502673;
-        Thu, 29 Dec 2022 19:05:02 -0800 (PST)
-Received: from chengendu.. (111-248-115-10.dynamic-ip.hinet.net. [111.248.115.10])
-        by smtp.gmail.com with ESMTPSA id q15-20020a17090311cf00b00189f2fdc178sm13643520plh.177.2022.12.29.19.05.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 19:05:02 -0800 (PST)
-From:   Chengen Du <chengen.du@canonical.com>
-To:     trond.myklebust@hammerspace.com
-Cc:     anna@kernel.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chengen Du <chengen.du@canonical.com>
-Subject: [PATCH] NFS: Judge the file access cache's timestamp in rcu path
-Date:   Fri, 30 Dec 2022 11:04:32 +0800
-Message-Id: <20221230030432.38908-1-chengen.du@canonical.com>
-X-Mailer: git-send-email 2.37.2
+        Thu, 29 Dec 2022 22:09:37 -0500
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C0D11A1F;
+        Thu, 29 Dec 2022 19:09:35 -0800 (PST)
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 2BU398UJ023536;
+        Fri, 30 Dec 2022 12:09:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2BU398UJ023536
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1672369749;
+        bh=TwSK/YTGRNFZNCD09DtAb/IuCcZC4pESJUPfPCOaUdk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Kj7eUvcz07L1cJqBezGR2dI6IqEV+qQG37TwgQAcQF9iGn1giQvHZLbth7hj7x9+0
+         8CnbIxONbgylsq1aQ9ltDHbWYHd3r4+RA9PmVPdxAncNn1xZZ6IkGn+k/OfpY1c+tT
+         QbCBHDWqie4kZxO98fo7qXz8OrjE+Pzsp9H54nMpRjAH0SsJEp5f+SHHJdybyk/WZm
+         iz5NUsVaP4OnOkodXHewF66vDiaHhS6ned+Fc4NJ7QCgp5A5ERVAsN7iYII3v7r//i
+         5jz/fCzHz8aDfRXCBgHlcJy3s5RWCneZaYnIXHU2L1HV+FqLwiZ5DaOQuY8TsMH9ol
+         SCx0ZkoqdRB5Q==
+X-Nifty-SrcIP: [209.85.160.48]
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1447c7aa004so23588478fac.11;
+        Thu, 29 Dec 2022 19:09:09 -0800 (PST)
+X-Gm-Message-State: AFqh2koaXiqD/Eblq0V7ephpFdFPagxT9ze/+WKq1zwRJZpPv3TXOSKa
+        2LyGy6PLZY2EDKfa+lsWAhgTMVmfA0Xi0o6hnGM=
+X-Google-Smtp-Source: AMrXdXtm0xaZNHSAhj1QT6ARzFlNHOO/JMitfouFijNPedUgQ2TcsLJ4ExlYxUh2YldSdXEjwB36vLLkGQgk7xB6Yxo=
+X-Received: by 2002:a05:6870:cc89:b0:150:39e2:c688 with SMTP id
+ ot9-20020a056870cc8900b0015039e2c688mr476912oab.287.1672369747959; Thu, 29
+ Dec 2022 19:09:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221229184650.1107463-1-masahiroy@kernel.org> <Y63uw1HGiL5ZxJkk@fjasle.eu>
+In-Reply-To: <Y63uw1HGiL5ZxJkk@fjasle.eu>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 30 Dec 2022 12:08:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATLBQu=0rMhH2iOwoNpUMA-4BH4-XeiedZSccRU9hxFCg@mail.gmail.com>
+Message-ID: <CAK7LNATLBQu=0rMhH2iOwoNpUMA-4BH4-XeiedZSccRU9hxFCg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: unify cmd_dt_S_dtb and cmd_dt_S_dtbo
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the user's login time is newer than the cache's timestamp,
-we expect the cache may be stale and need to clear.
-The stale cache will remain in the list's tail if no other
-users operate on that inode.
-Once the user accesses the inode, the stale cache will be
-returned in rcu path.
+On Fri, Dec 30, 2022 at 4:47 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
+>
+> On Fri, Dec 30, 2022 at 03:46:50AM +0900 Masahiro Yamada wrote:
+> > cmd_dt_S_dtb and cmd_dt_S_dtbo are almost the same; the only differnce
+> > is the prefix of the bein/end symbols. (__dtb vs __dtbo)
+>
+> Two letters got lost: differ_e_nce, be_g_in.
 
-Signed-off-by: Chengen Du <chengen.du@canonical.com>
----
- fs/nfs/dir.c | 3 +++
- 1 file changed, 3 insertions(+)
+Ah, thanks. I will fix it.
 
-diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-index ea1ceffa1d3a..d490d64a9ebd 100644
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -3023,6 +3023,7 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
- 	 * but do it without locking.
- 	 */
- 	struct nfs_inode *nfsi = NFS_I(inode);
-+	u64 login_time = nfs_access_login_time(current, cred);
- 	struct nfs_access_entry *cache;
- 	int err = -ECHILD;
- 	struct list_head *lh;
-@@ -3037,6 +3038,8 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
- 		cache = NULL;
- 	if (cache == NULL)
- 		goto out;
-+	if ((s64)(login_time - cache->timestamp) > 0)
-+		goto out;
- 	if (nfs_check_cache_invalid(inode, NFS_INO_INVALID_ACCESS))
- 		goto out;
- 	*mask = cache->mask;
+
+>
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/Makefile.lib | 45 +++++++++++++++-----------------------------
+> >  1 file changed, 15 insertions(+), 30 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> > index 4a4a5f67c1a6..100a386fcd71 100644
+> > --- a/scripts/Makefile.lib
+> > +++ b/scripts/Makefile.lib
+> > @@ -368,40 +368,25 @@ DTC_FLAGS += $(DTC_FLAGS_$(basetarget))
+> >  DTC_FLAGS += $(if $(filter $(patsubst $(obj)/%,%,$@), $(base-dtb-y)), -@)
+> >
+> >  # Generate an assembly file to wrap the output of the device tree compiler
+> > -quiet_cmd_dt_S_dtb= DTBS    $@
+> > -cmd_dt_S_dtb=                                                \
+> > -{                                                    \
+> > -     echo '\#include <asm-generic/vmlinux.lds.h>';   \
+> > -     echo '.section .dtb.init.rodata,"a"';           \
+> > -     echo '.balign STRUCT_ALIGNMENT';                \
+> > -     echo '.global __dtb_$(subst -,_,$(*F))_begin';  \
+> > -     echo '__dtb_$(subst -,_,$(*F))_begin:';         \
+> > -     echo '.incbin "$<" ';                           \
+> > -     echo '__dtb_$(subst -,_,$(*F))_end:';           \
+> > -     echo '.global __dtb_$(subst -,_,$(*F))_end';    \
+> > -     echo '.balign STRUCT_ALIGNMENT';                \
+> > -} > $@
+> > +quiet_cmd_wrap_S_dtb = WRAP    $@
+> > +      cmd_wrap_S_dtb = {                                                             \
+> > +             symbase=__$(patsubst .%,%,$(suffix $<))_$(subst -,_,$(notdir $*));      \
+>
+> As long as I know, '$(notdir $*)' should be equivalent to '$(*F)'.  Is it just
+> personal preference or is there some other reason for choosing one or the
+> other?
+
+Your understanding is correct.
+Automatic variables can have 'D' / 'F', as explained in the manual.
+https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+
+
+Yes, it is just my personal preference.
+Perhaps, I did not need to change it, though.
+
+
+
+
+
+
+> Nevertheless, with the typos fixed, it looks good to me:
+> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+>
+
+
 -- 
-2.37.2
-
+Best Regards
+Masahiro Yamada
