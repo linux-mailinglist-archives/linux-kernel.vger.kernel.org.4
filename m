@@ -2,86 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2845659BDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 21:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0391659C0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 21:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235458AbiL3UNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 15:13:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S235195AbiL3UdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 15:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiL3UNa (ORCPT
+        with ESMTP id S229527AbiL3UdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 15:13:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5611AA38;
-        Fri, 30 Dec 2022 12:13:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD2B561BCB;
-        Fri, 30 Dec 2022 20:13:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C922C433EF;
-        Fri, 30 Dec 2022 20:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672431207;
-        bh=EfI7l5SQjlOPh7QWIN2CUcMKcJaGYutOHFmQnj1qNNU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q7qtzJQ/OQ2UE66v3GVjpd1OInb1g16GuxQCQ62PBFRbr3U6dJqQfJODjNcAkwreE
-         0QHGQ4SwikFyt0hUcM63UfZ1lE+01XPaPV1BLsGSP8m5kb+sMWDl1jGSpLYu0gUZnM
-         Ejaiy3j9tiUdQTyX+aZ6pRIAwUTIZWSrC3YCly4RP62ZDSXZLZq6FtzIHOmGG2+V0l
-         aq+yCAaiSvtI8bEedexIuA4foBE6sgNtfJLc4xlIL5k/fxU67LnFTLL0pM0S3+I682
-         hYP6LhcJjlYOIaIqFQRj4P286blawSrTzUIJdX8aTANFJc+enl2qVgXiKeQkxFn5Tt
-         crVxAVI7YXOJQ==
-Date:   Fri, 30 Dec 2022 12:13:25 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Jun Nie <jun.nie@linaro.org>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tudor.ambarus@linaro.org
-Subject: Re: [PATCH 2/2] ext4: refuse to create ea block when umounted
-Message-ID: <Y69GZdLcWkCvZhq1@sol.localdomain>
-References: <20221230110016.476621-1-jun.nie@linaro.org>
- <20221230110016.476621-2-jun.nie@linaro.org>
+        Fri, 30 Dec 2022 15:33:23 -0500
+Received: from 1.mo552.mail-out.ovh.net (1.mo552.mail-out.ovh.net [178.32.96.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B941BEBA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 12:33:21 -0800 (PST)
+Received: from mxplan6.mail.ovh.net (unknown [10.109.146.51])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 2521C2B0CD;
+        Fri, 30 Dec 2022 20:15:56 +0000 (UTC)
+Received: from jwilk.net (37.59.142.104) by DAG4EX1.mxp6.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 30 Dec
+ 2022 21:15:55 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-104R005e5696247-8558-4316-907d-20674b30cbbf,
+                    61162F1CAD51C30F4082BD59ECF03BCF2A04D20D) smtp.auth=jwilk@jwilk.net
+X-OVh-ClientIp: 5.172.255.8
+Date:   Fri, 30 Dec 2022 21:15:54 +0100
+From:   Jakub Wilk <jwilk@jwilk.net>
+To:     <oss-security@lists.openwall.com>
+CC:     <linux-man@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat
+ correctly
+Message-ID: <20221230201554.xborkqi2x5dvnh6h@jwilk.net>
+Mail-Followup-To: oss-security@lists.openwall.com,
+        linux-man@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <Y6SJDbKBk471KE4k@p183>
+ <Y6TUJcr/IHrsTE0W@codewreck.org>
+ <1a1963aa1036ba07@orthanc.ca>
+ <tog7cb$105a$1@ciao.gmane.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221230110016.476621-2-jun.nie@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <tog7cb$105a$1@ciao.gmane.io>
+X-Originating-IP: [37.59.142.104]
+X-ClientProxiedBy: DAG3EX2.mxp6.local (172.16.2.22) To DAG4EX1.mxp6.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 964eb37d-b66c-4350-8a99-ebd663178077
+X-Ovh-Tracer-Id: 5114681804795926493
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrieeigddufeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpeffhffvvefukfhfgggtuggjihesthdtredttddtvdenucfhrhhomheplfgrkhhusgcuhghilhhkuceojhifihhlkhesjhifihhlkhdrnhgvtheqnecuggftrfgrthhtvghrnhepuedttdetlefhffduvdehgfefudejledtkeehudevkeekleefudeuvdegjedufffgnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrddutdegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeojhifihhlkhesjhifihhlkhdrnhgvtheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepohhsshdqshgvtghurhhithihsehlihhsthhsrdhophgvnhifrghllhdrtghomhdplhhinhhugidqmhgrnhesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehhedvpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 07:00:16PM +0800, Jun Nie wrote:
-> The ea block expansion need to access s_root while it is
-> already set as NULL when umount is triggered. Refuse this
-> request to avoid panic.
-> 
-> Reported-by: syzbot+2dacb8f015bf1420155f@syzkaller.appspotmail.com
-> Link: https://syzkaller.appspot.com/bug?id=3613786cb88c93aa1c6a279b1df6a7b201347d08
-> Signed-off-by: Jun Nie <jun.nie@linaro.org>
-> ---
->  fs/ext4/xattr.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-> index 235a517d9c17..ac58494e49b6 100644
-> --- a/fs/ext4/xattr.c
-> +++ b/fs/ext4/xattr.c
-> @@ -1422,6 +1422,12 @@ static struct inode *ext4_xattr_inode_create(handle_t *handle,
->  	uid_t owner[2] = { i_uid_read(inode), i_gid_read(inode) };
->  	int err;
->  
-> +	if (inode->i_sb->s_root == NULL) {
-> +		ext4_error(inode->i_sb,
-> +			   "refuse to create EA inode when umounting");
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
+* Tavis Ormandy <taviso@gmail.com>, 2022-12-28 01:50:
+>>>But, really, I just don't see how this can practically be said to be 
+>>>parsable...
+>>
+>>In its current form it never will be.  The solution is to place this 
+>>variable-length field last.  Then you can "cut -d ' ' -f 51-" to get 
+>>the command+args part (assuming I counted all those fields correctly 
+>>...)
+>>
+>>Of course, this breaks backwards compatability.
+>
+>I think that cut command doesn't handle newlines,
 
-Why is an xattr being set during unmount?
+Indeed.
 
-- Eric
+>There already is 'ps -q $$ -o >comm='
+
+FWIW, "ps ... -o comm=" doesn't just print the raw comm value: it 
+replaces non-printable chars with punctuation characters, and it may 
+append " <defunct>" if the process is a zombie.
+
+The easiest way to get unmangled comm is to read it from 
+/proc/$PID/comm, then strip the trailing newline.
+
+(But I suspect most /proc/*/stat parsers don't care about the comm field 
+at all; they just want to skip over it to get their hands on the 
+following fields.)
+
+-- 
+Jakub Wilk
