@@ -2,246 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A5065990B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879B6659910
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbiL3NvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 08:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
+        id S234898AbiL3NxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 08:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235094AbiL3Nuy (ORCPT
+        with ESMTP id S229505AbiL3Nw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 08:50:54 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BCE101D7
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:50:52 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id cf42so31815275lfb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nI8e/WlhysOYJ8g3aZB6ye/hx/UC/4lV7s/lAfytAMA=;
-        b=DoJBDYzaxIgvqgtCMXGZjRrqxt1XPGWyQEyqPp2hvqpp+jwCENNL0UOHZyRiFxTmjs
-         mH7VRDUeMe4Ld3V9XCl1JZOXnQeDU3jYBQhhfcO3mnWGlfrIfhLOcSXUburaWj4RE4Lj
-         YpW4a+CWW+8DNXkoHWaaSGT71pDdzUhq0iZwT79R2rBGfJrRZnf+YrlEhtyuM9TO1Eqn
-         Oc35Qpz5H/9ILAcDTAnVXUYlgZQxmJky9T9sdXgSMbtXt1r/KU46UVpx5X4szHJg3Z/c
-         BH8goMedx9OunzykLfr21mhw/0K203SnEShrdcXQqETk5TtKDc8HcfgY0lnbveQGuotS
-         z/wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nI8e/WlhysOYJ8g3aZB6ye/hx/UC/4lV7s/lAfytAMA=;
-        b=sZRM+N0ZV9G2Ik2SDJ420akxAfOlGUw3znrfNrVTfgsSYT17VmZOjWC3bqo8R/TBC5
-         26eqyDVkh6NzecUM/aBEALYV/03pXF1youHWK4sshDLlPrUeOdQYF8OquwgCCa8U85nk
-         cqjOT7tbdo9dCkOdqu/z+tyorBuCWHwSHzsE1sMNSfvZQR+ME3z9gdp4gS9Yt7fFaOeK
-         SKh4MduOkrQl1j1GCTazm/TWPqmELgjVTaYCdSTT4pg6g4K/lPNEyQ9wF2sX/tkW3s64
-         QAQtmg4M9TFKZ9nBd5fVw5+XoBf1tyIW+y0QNeIQRHlwAq5eZskFdnnquJn0Sx8N4OqQ
-         IpfQ==
-X-Gm-Message-State: AFqh2koHlnKnldvIgW8o5Ip+fx3rk6VZe1R8t1bOJUUUOOb9j5GgYV6A
-        tvGKF72Wfa+SSjtCgcxj0NhXkw==
-X-Google-Smtp-Source: AMrXdXu3mXETrCUP3x0pgC0Ic/4KHE60wiE62LKDmBWJULVEhYTmhFAoQCDcu0Lzr+j93aV9LAJT+Q==
-X-Received: by 2002:a05:6512:25ac:b0:4b5:8053:5bcc with SMTP id bf44-20020a05651225ac00b004b580535bccmr9463538lfb.47.1672408250400;
-        Fri, 30 Dec 2022 05:50:50 -0800 (PST)
-Received: from localhost.localdomain (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id e16-20020ac24e10000000b004b4ea0f4e25sm3447970lfr.301.2022.12.30.05.50.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 05:50:50 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: qcom: sm8250: Sort audio hw nodes
-Date:   Fri, 30 Dec 2022 14:50:44 +0100
-Message-Id: <20221230135044.287874-3-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221230135044.287874-1-konrad.dybcio@linaro.org>
-References: <20221230135044.287874-1-konrad.dybcio@linaro.org>
+        Fri, 30 Dec 2022 08:52:56 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E81266C;
+        Fri, 30 Dec 2022 05:52:55 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 68CC52F5;
+        Fri, 30 Dec 2022 14:52:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672408373;
+        bh=pWyCa7YPvyQYxGyOzTcJlxTW9SXuUg3m6Q4yMoxGhW0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YMqOAcXUgmJuS0lg10N8wUPVWnDWf8LHr19nDNkncUPE5JiOQPf2ggNP9ZmKW+xjX
+         pXFwAfCGccetKtauXuu/jLVIkzsh5HOjtTF+2AUc7UwyQg0FEGtR3pUSMRDVi+wFib
+         2rAZYqDq5lGIsG+iUFmnxW+CULjaKJJbGY1x8Mgg=
+Date:   Fri, 30 Dec 2022 15:52:48 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 5/8] media: uvcvideo: Quirk for autosuspend in
+ Logi C910
+Message-ID: <Y67tMN5+7vASplsE@pendragon.ideasonboard.com>
+References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
+ <20220920-resend-hwtimestamp-v2-5-0d7978a817cc@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-hwtimestamp-v2-5-0d7978a817cc@chromium.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Half of the audio hardware nodes were not sorted properly. Fix that.
+Hi Ricardo,
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 142 +++++++++++++--------------
- 1 file changed, 71 insertions(+), 71 deletions(-)
+Thank you for the patch.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index dffce681d417..0b6a6a809503 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2214,77 +2214,6 @@ tcsr_mutex: hwlock@1f40000 {
- 			#hwlock-cells = <1>;
- 		};
- 
--		wsamacro: codec@3240000 {
--			compatible = "qcom,sm8250-lpass-wsa-macro";
--			reg = <0 0x03240000 0 0x1000>;
--			clocks = <&audiocc LPASS_CDC_WSA_MCLK>,
--				 <&audiocc LPASS_CDC_WSA_NPL>,
--				 <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
--				 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
--				 <&aoncc LPASS_CDC_VA_MCLK>,
--				 <&vamacro>;
--			clock-names = "mclk",
--				      "npl",
--				      "macro",
--				      "dcodec",
--				      "va",
--				      "fsgen";
--
--			pinctrl-names = "default";
--			pinctrl-0 = <&wsa_swr_active>;
--
--			#clock-cells = <0>;
--			clock-frequency = <9600000>;
--			clock-output-names = "mclk";
--			#sound-dai-cells = <1>;
--			status = "disabled";
--		};
--
--		swr0: soundwire-controller@3250000 {
--			compatible = "qcom,soundwire-v1.5.1";
--			reg = <0 0x03250000 0 0x2000>;
--			interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&wsamacro>;
--			clock-names = "iface";
--
--			qcom,din-ports = <2>;
--			qcom,dout-ports = <6>;
--
--			qcom,ports-sinterval-low =	/bits/ 8 <0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x0f 0x0f>;
--			qcom,ports-offset1 =		/bits/ 8 <0x01 0x02 0x0c 0x06 0x12 0x0d 0x07 0x0a>;
--			qcom,ports-offset2 =		/bits/ 8 <0xff 0x00 0x1f 0xff 0x00 0x1f 0x00 0x00>;
--			qcom,ports-block-pack-mode =	/bits/ 8 <0x0 0x0 0x1 0x0 0x0 0x1 0x0 0x0>;
--
--			#sound-dai-cells = <1>;
--			#address-cells = <2>;
--			#size-cells = <0>;
--			status = "disabled";
--		};
--
--		audiocc: clock-controller@3300000 {
--			compatible = "qcom,sm8250-lpass-audiocc";
--			reg = <0 0x03300000 0 0x30000>;
--			#clock-cells = <1>;
--			clocks = <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
--				 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
--				 <&q6afecc LPASS_CLK_ID_TX_CORE_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
--			clock-names = "core", "audio", "bus";
--		};
--
--		vamacro: codec@3370000 {
--			compatible = "qcom,sm8250-lpass-va-macro";
--			reg = <0 0x03370000 0 0x1000>;
--			clocks = <&aoncc LPASS_CDC_VA_MCLK>,
--				 <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
--				 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
--			clock-names = "mclk", "macro", "dcodec";
--
--			#clock-cells = <0>;
--			clock-frequency = <9600000>;
--			clock-output-names = "fsgen";
--			#sound-dai-cells = <1>;
--		};
--
- 		rxmacro: rxmacro@3200000 {
- 			compatible = "qcom,sm8250-lpass-rx-macro";
- 			reg = <0 0x03200000 0 0x1000>;
-@@ -2388,6 +2317,77 @@ swr2: soundwire-controller@3230000 {
- 			status = "disabled";
- 		};
- 
-+		wsamacro: codec@3240000 {
-+			compatible = "qcom,sm8250-lpass-wsa-macro";
-+			reg = <0 0x03240000 0 0x1000>;
-+			clocks = <&audiocc LPASS_CDC_WSA_MCLK>,
-+				 <&audiocc LPASS_CDC_WSA_NPL>,
-+				 <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-+				 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-+				 <&aoncc LPASS_CDC_VA_MCLK>,
-+				 <&vamacro>;
-+			clock-names = "mclk",
-+				      "npl",
-+				      "macro",
-+				      "dcodec",
-+				      "va",
-+				      "fsgen";
-+
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&wsa_swr_active>;
-+
-+			#clock-cells = <0>;
-+			clock-frequency = <9600000>;
-+			clock-output-names = "mclk";
-+			#sound-dai-cells = <1>;
-+			status = "disabled";
-+		};
-+
-+		swr0: soundwire-controller@3250000 {
-+			compatible = "qcom,soundwire-v1.5.1";
-+			reg = <0 0x03250000 0 0x2000>;
-+			interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&wsamacro>;
-+			clock-names = "iface";
-+
-+			qcom,din-ports = <2>;
-+			qcom,dout-ports = <6>;
-+
-+			qcom,ports-sinterval-low =	/bits/ 8 <0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x0f 0x0f>;
-+			qcom,ports-offset1 =		/bits/ 8 <0x01 0x02 0x0c 0x06 0x12 0x0d 0x07 0x0a>;
-+			qcom,ports-offset2 =		/bits/ 8 <0xff 0x00 0x1f 0xff 0x00 0x1f 0x00 0x00>;
-+			qcom,ports-block-pack-mode =	/bits/ 8 <0x0 0x0 0x1 0x0 0x0 0x1 0x0 0x0>;
-+
-+			#sound-dai-cells = <1>;
-+			#address-cells = <2>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		audiocc: clock-controller@3300000 {
-+			compatible = "qcom,sm8250-lpass-audiocc";
-+			reg = <0 0x03300000 0 0x30000>;
-+			#clock-cells = <1>;
-+			clocks = <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-+				 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-+				 <&q6afecc LPASS_CLK_ID_TX_CORE_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
-+			clock-names = "core", "audio", "bus";
-+		};
-+
-+		vamacro: codec@3370000 {
-+			compatible = "qcom,sm8250-lpass-va-macro";
-+			reg = <0 0x03370000 0 0x1000>;
-+			clocks = <&aoncc LPASS_CDC_VA_MCLK>,
-+				 <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-+				 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
-+			clock-names = "mclk", "macro", "dcodec";
-+
-+			#clock-cells = <0>;
-+			clock-frequency = <9600000>;
-+			clock-output-names = "fsgen";
-+			#sound-dai-cells = <1>;
-+		};
-+
- 		aoncc: clock-controller@3380000 {
- 			compatible = "qcom,sm8250-lpass-aoncc";
- 			reg = <0 0x03380000 0 0x40000>;
+s/C910/B910 and C910/ in the subject line.
+
+On Fri, Dec 02, 2022 at 06:02:45PM +0100, Ricardo Ribalda wrote:
+> Logitech C910 firmware is unable to recover from a usb autosuspend. When
+
+s/C910/B910 and C910/
+s/usb/USB/
+
+> it resumes, the device is in a state where it only produces invalid
+> frames. Eg:
+> 
+> $ echo 0xFFFF > /sys/module/uvcvideo/parameters/trace # enable verbose log
+> $ yavta -c1 -n1 --file='frame#.jpg' --format MJPEG --size=1920x1080 /dev/video1
+
+Is this true for YUYV frames too ?
+
+> [350438.435219] uvcvideo: uvc_v4l2_open
+> [350438.529794] uvcvideo: Resuming interface 2
+> [350438.529801] uvcvideo: Resuming interface 3
+> [350438.529991] uvcvideo: Trying format 0x47504a4d (MJPG): 1920x1080.
+> [350438.529996] uvcvideo: Using default frame interval 33333.3 us (30.0 fps).
+> [350438.551496] uvcvideo: uvc_v4l2_mmap
+> [350438.555890] uvcvideo: Device requested 3060 B/frame bandwidth.
+> [350438.555896] uvcvideo: Selecting alternate setting 11 (3060 B/frame bandwidth).
+> [350438.556362] uvcvideo: Allocated 5 URB buffers of 32x3060 bytes each.
+> [350439.316468] uvcvideo: Marking buffer as bad (error bit set).
+> [350439.316475] uvcvideo: Frame complete (EOF found).
+> [350439.316477] uvcvideo: EOF in empty payload.
+> [350439.316484] uvcvideo: frame 1 stats: 149/261/417 packets, 1/149/417 pts (early initial), 416/417 scr, last pts/stc/sof 2976325734/2978107243/249
+> [350439.384510] uvcvideo: Marking buffer as bad (error bit set).
+> [350439.384516] uvcvideo: Frame complete (EOF found).
+> [350439.384518] uvcvideo: EOF in empty payload.
+> [350439.384525] uvcvideo: frame 2 stats: 265/379/533 packets, 1/265/533 pts (early initial), 532/533 scr, last pts/stc/sof 2979524454/2981305193/316
+> [350439.448472] uvcvideo: Marking buffer as bad (error bit set).
+> [350439.448478] uvcvideo: Frame complete (EOF found).
+> [350439.448480] uvcvideo: EOF in empty payload.
+> [350439.448487] uvcvideo: frame 3 stats: 265/377/533 packets, 1/265/533 pts (early initial), 532/533 scr, last pts/stc/sof 2982723174/2984503144/382
+> ...(loop)...
+> 
+> The devices can leave this invalid state if its altstate is toggled.
+
+s/its altstate/the alternate setting of the streaming interface/
+
+How did you figure this out ?
+
+> This patch addes a quirk for this device so it can be autosuspended
+> properly.
+> 
+> lsusb -v:
+> Bus 001 Device 049: ID 046d:0821 Logitech, Inc. HD Webcam C910
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               2.00
+>   bDeviceClass          239 Miscellaneous Device
+>   bDeviceSubClass         2
+>   bDeviceProtocol         1 Interface Association
+>   bMaxPacketSize0        64
+>   idVendor           0x046d Logitech, Inc.
+>   idProduct          0x0821 HD Webcam C910
+>   bcdDevice            0.10
+>   iManufacturer           0
+>   iProduct                0
+>   iSerial                 1 390022B0
+>   bNumConfigurations      1
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 18 ++++++++++++++++++
+>  drivers/media/usb/uvc/uvc_video.c  |  5 +++++
+>  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+>  3 files changed, 24 insertions(+)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 4512316c8748..d2a158a1ce35 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2823,6 +2823,24 @@ static const struct usb_device_id uvc_ids[] = {
+>  	  .bInterfaceSubClass	= 1,
+>  	  .bInterfaceProtocol	= 0,
+>  	  .driver_info		= (kernel_ulong_t)&uvc_quirk_probe_minmax },
+> +	/* Logitech, Webcam C910 */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x046d,
+> +	  .idProduct		= 0x0821,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_WAKE_AUTOSUSPEND)},
+> +	/* Logitech, Webcam B910 */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x046d,
+> +	  .idProduct		= 0x0823,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_WAKE_AUTOSUSPEND)},
+>  	/* Logitech Quickcam Fusion */
+>  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+>  				| USB_DEVICE_ID_MATCH_INT_INFO,
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index d387d6335344..75c32e232f5d 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -1983,6 +1983,11 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
+>  			"Selecting alternate setting %u (%u B/frame bandwidth)\n",
+>  			altsetting, best_psize);
+>  
+
+Please add a comment to explain the issue.
+
+> +		if (stream->dev->quirks & UVC_QUIRK_WAKE_AUTOSUSPEND) {
+> +			usb_set_interface(stream->dev->udev, intfnum,
+> +					  altsetting);
+> +			usb_set_interface(stream->dev->udev, intfnum, 0);
+> +		}
+
+Missing blank line.
+
+>  		ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
+>  		if (ret < 0)
+>  			return ret;
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index e41289605d0e..14daa7111953 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -214,6 +214,7 @@
+>  #define UVC_QUIRK_FORCE_BPP		0x00001000
+>  #define UVC_QUIRK_IGNORE_EMPTY_TS	0x00002000
+>  #define UVC_QUIRK_INVALID_DEVICE_SOF	0x00004000
+> +#define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00008000
+>  
+>  /* Format flags */
+>  #define UVC_FMT_FLAG_COMPRESSED		0x00000001
+> 
+
 -- 
-2.39.0
+Regards,
 
+Laurent Pinchart
