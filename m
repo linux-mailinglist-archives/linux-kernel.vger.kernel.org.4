@@ -2,207 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC606594C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 06:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2FB6594C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 06:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiL3FMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 00:12:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S230312AbiL3FNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 00:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiL3FMs (ORCPT
+        with ESMTP id S229379AbiL3FNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 00:12:48 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E2915FC9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 21:12:47 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id d185so20432611vsd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 21:12:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4sxQBZTeARJaOtpQ26mu6MKSoj0k8stp/j0GJKpAsI=;
-        b=S2uvp+3QvQHmc53dc1Zb1zRkgnvTrqDFph6z1iQJ1dkE2S6Lmyw3pPi+ReQ+TZaYlj
-         +bKXUOQpdkzuNh3oeBy/xi3M8XP7xyHXoZqCEIFP8mjmmnjMsQAnKKXwimC5lwdvax/e
-         7Thkl1MUfROcmT+3COFvA0FOA1TwikZ6me+j4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j4sxQBZTeARJaOtpQ26mu6MKSoj0k8stp/j0GJKpAsI=;
-        b=UlizNCBbJDTXBYBxHI2AJDsXfHTILSYBL1ThbKkoD7jcql60kAY49cShC4l9F9pjg3
-         c87N0k65kIqU8/6U6DJDMhEBEbFFTq6CkCDENtqyvo7zSvvJ5ACsbboeS359zlrpqj25
-         Wcp09EvhddR9LvGE4qyW1SwbRpMPGcE8RavprIh31T6/EQFL0xTC5GHy0IHzTyXyJNam
-         AHb+64OPA9qJMDfiivV7NHekb5ExnukccgldOxpxt/FrEPsN6mpJmVi1FNDXktbd6NxZ
-         vgPWuIzWrbDc9bMVNLyR+qqtKQmoLGGQX9nHoBVF/SniKvOOaaiUud8St8UqppSLBpCc
-         MldQ==
-X-Gm-Message-State: AFqh2kpwRerHqoDoVG62MmxyD2LE2D3Q2K/2x5JGMB7ahtyD2sCOQasg
-        1rp+WhTJp0f7sYvS5OQd9uP2k4hmzcGC/aIhCgrSWw==
-X-Google-Smtp-Source: AMrXdXvBIpfvv7eYq0qOFA9b8lukSrK2ZsYP9FnFRdTNpKcBJc7aHUFbMHI+JTfSPUyiqECr7ENUw3wXDtbCuyv/VHU=
-X-Received: by 2002:a05:6102:3d9f:b0:3c4:4918:80c with SMTP id
- h31-20020a0561023d9f00b003c44918080cmr2639318vsv.9.1672377166648; Thu, 29 Dec
- 2022 21:12:46 -0800 (PST)
+        Fri, 30 Dec 2022 00:13:46 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDD515FC9;
+        Thu, 29 Dec 2022 21:13:44 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BU5DTtd001654;
+        Thu, 29 Dec 2022 23:13:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672377209;
+        bh=aWpI/2A/8BCwAHOBAzcTOXDKEcPVlLmHAqOympV/RUM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=p1Rw/dbey87w9rhM9dYeHRz0hH6xc6H1CbJeVCq40EsPzJxa64fy0YdkO+NmIMzKR
+         eLTIqwS3sWev2KElzdf/ZSa5p3SU1HV4vEAhQ3sDe/Y7TZsYv2O+JaJmxoo2CUF6CX
+         xM6juCxBbkWdBL4pTMj6bTb2ni/PsWmB1xay3rM8=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BU5DTu9001478
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 29 Dec 2022 23:13:29 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 29
+ Dec 2022 23:13:28 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 29 Dec 2022 23:13:28 -0600
+Received: from [10.250.234.245] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BU5DP0d018402;
+        Thu, 29 Dec 2022 23:13:26 -0600
+Message-ID: <ff76a343-19bb-7359-73bb-39065f343a42@ti.com>
+Date:   Fri, 30 Dec 2022 10:43:24 +0530
 MIME-Version: 1.0
-References: <20221223094259.87373-1-angelogioacchino.delregno@collabora.com> <20221223094259.87373-12-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221223094259.87373-12-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 30 Dec 2022 13:12:35 +0800
-Message-ID: <CAGXv+5GYk2wr-UnnshT3R2uDUSn7-i5KifyJ4qDDZbptSQ9G7A@mail.gmail.com>
-Subject: Re: [PATCH v2 11/23] clk: mediatek: Switch to mtk_clk_simple_probe()
- where possible
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721e-main: Remove ti,strobe-sel
+ property
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>
+References: <20221116091652.112620-1-b-kapoor@ti.com>
+ <20221117072635.k4fmjqcnw3kcjrc4@precinct>
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+In-Reply-To: <20221117072635.k4fmjqcnw3kcjrc4@precinct>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 5:43 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> mtk_clk_simple_probe() is a function that registers mtk gate clocks
-> and, if reset data is present, a reset controller and across all of
-> the MTK clock drivers, such a function is duplicated many times:
-> switch to the common mtk_clk_simple_probe() function for all of the
-> clock drivers that are registering as platform drivers.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/clk/mediatek/clk-mt2701-aud.c   | 26 +++----
->  drivers/clk/mediatek/clk-mt2701-eth.c   | 34 +++------
->  drivers/clk/mediatek/clk-mt2701-g3d.c   | 56 +++-----------
->  drivers/clk/mediatek/clk-mt2701-hif.c   | 36 +++------
->  drivers/clk/mediatek/clk-mt2712.c       | 83 ++++++++-------------
->  drivers/clk/mediatek/clk-mt6779.c       | 42 ++++++-----
->  drivers/clk/mediatek/clk-mt7622-aud.c   | 49 +++----------
->  drivers/clk/mediatek/clk-mt7622-eth.c   | 82 ++++-----------------
->  drivers/clk/mediatek/clk-mt7622-hif.c   | 85 ++++-----------------
->  drivers/clk/mediatek/clk-mt7629-hif.c   | 85 ++++-----------------
->  drivers/clk/mediatek/clk-mt8183-audio.c | 19 +++--
->  drivers/clk/mediatek/clk-mt8183.c       | 75 ++++++++-----------
->  drivers/clk/mediatek/clk-mt8192-aud.c   | 25 +++----
->  drivers/clk/mediatek/clk-mt8192.c       | 98 ++++++++-----------------
->  14 files changed, 236 insertions(+), 559 deletions(-)
 
-This looks mostly good, however ...
-
-> diff --git a/drivers/clk/mediatek/clk-mt2701-aud.c b/drivers/clk/mediatek/clk-mt2701-aud.c
-> index ab13ab618fb5..1fd6d96b34dc 100644
-> --- a/drivers/clk/mediatek/clk-mt2701-aud.c
-> +++ b/drivers/clk/mediatek/clk-mt2701-aud.c
-> @@ -76,6 +76,7 @@ static const struct mtk_gate_regs audio3_cg_regs = {
->  };
+On 17/11/22 12:56, Nishanth Menon wrote:
+> On 14:46-20221116, Bhavya Kapoor wrote:
+>> According to latest errata of J721e [1], HS400 mode is not supported
+>> in MMCSD0 subsystem (i2024) .  Speed modes supported has been already
+> 			     ^^ space before "."
 >
->  static const struct mtk_gate audio_clks[] = {
-> +       GATE_DUMMY(CLK_DUMMY, "aud_dummy"),
->         /* AUDIO0 */
->         GATE_AUDIO0(CLK_AUD_AFE, "audio_afe", "aud_intbus_sel", 2),
->         GATE_AUDIO0(CLK_AUD_HDMI, "audio_hdmi", "audpll_sel", 20),
-> @@ -138,29 +139,26 @@ static const struct mtk_gate audio_clks[] = {
->         GATE_AUDIO3(CLK_AUD_MEM_ASRC5, "audio_mem_asrc5", "asm_h_sel", 14),
->  };
+> btw, "The MMCSD peripherals do not support the Multimedia Card HS400
+> mode." is the exact text of the erratum. Even though it applies to
+> instance 0. I think minor rewording will probably help people from
+> running to search for which specific instances.
 >
-> +static const struct mtk_clk_desc audio_desc = {
-> +       .clks = audio_clks,
-> +       .num_clks = ARRAY_SIZE(audio_clks),
-> +};
-> +
->  static const struct of_device_id of_match_clk_mt2701_aud[] = {
-> -       { .compatible = "mediatek,mt2701-audsys", },
-> -       {}
-> +       { .compatible = "mediatek,mt2701-audsys", .data = &audio_desc },
-> +       { /* sentinel */ }
->  };
+>> updated in commit eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
+> Please format this correctly.
+Commit Title was large ( > 72 chars ) so kept in same line.
 >
->  static int clk_mt2701_aud_probe(struct platform_device *pdev)
->  {
-> -       struct clk_hw_onecell_data *clk_data;
-> -       struct device_node *node = pdev->dev.of_node;
->         int r;
->
-> -       clk_data = mtk_alloc_clk_data(CLK_AUD_NR);
-> -
-> -       mtk_clk_register_gates(node, audio_clks, ARRAY_SIZE(audio_clks),
-> -                              clk_data, &pdev->dev);
-> -
-> -       r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-> +       r = mtk_clk_simple_probe(pdev);
->         if (r) {
->                 dev_err(&pdev->dev,
->                         "could not register clock provider: %s: %d\n",
->                         pdev->name, r);
-> -
-> -               goto err_clk_provider;
-> +               return r;
->         }
->
->         r = devm_of_platform_populate(&pdev->dev);
-> @@ -170,13 +168,13 @@ static int clk_mt2701_aud_probe(struct platform_device *pdev)
->         return 0;
->
->  err_plat_populate:
-> -       of_clk_del_provider(node);
-> -err_clk_provider:
-> +       mtk_clk_simple_remove(pdev);
->         return r;
->  }
->
->  static struct platform_driver clk_mt2701_aud_drv = {
->         .probe = clk_mt2701_aud_probe,
-> +       .remove = mtk_clk_simple_remove,
-
-I'm not a big fan of mixing devres and non-devres teardown code. Automatic
-devres teardown happens after the remove callback returns, so in this
-case you could have child devices being unregistered that touch clocks
-or resets that have already been unregistered and freed in the remove
-callback.
-
->         .driver = {
->                 .name = "clk-mt2701-aud",
->                 .of_match_table = of_match_clk_mt2701_aud,
-
-[...]
-
-> --- a/drivers/clk/mediatek/clk-mt2712.c
-> +++ b/drivers/clk/mediatek/clk-mt2712.c
-
-[...]
-
-> @@ -1482,7 +1459,11 @@ static struct platform_driver clk_mt2712_drv = {
->
->  static int __init clk_mt2712_init(void)
->  {
-> -       return platform_driver_register(&clk_mt2712_drv);
-> +       int ret = platform_driver_register(&clk_mt2712_drv);
-> +
-> +       if (ret)
-> +               return ret;
-> +       return platform_driver_register(&clk_mt2712_simple_drv);
->  }
->
->  arch_initcall(clk_mt2712_init);
-
-Would this get cleaned up even more? I.e. have just one driver left and
-we could have the nice *_platform_driver() macros.
-
-Thanks
-ChenYu
+>> but it missed dropping 'ti,strobe-sel' property which is
+>> only required by HS400 speed mode.
+>>
+>> Thus, drop 'ti,strobe-sel' property from kernel dtsi for J721e SoC.
+>>
+>> [1] https://www.ti.com/lit/er/sprz455/sprz455.pdf
+>>
+>> Fixes: eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
+>> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+>> ---
+>>
+>> Changelog v1 -> v2 :
+>> 	- Updated Commit Message based on what Nishanth Menon has told
+>> 		in https://lore.kernel.org/all/20221115034324.6qpxl2774bzwbl3t@acorn/
+>>
+>>   arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 1 -
+>>   1 file changed, 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+>> index 917c9dc99efa..e4748a838d83 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+>> @@ -1094,7 +1094,6 @@
+>>   		ti,itap-del-sel-mmc-hs = <0xa>;
+>>   		ti,itap-del-sel-ddr52 = <0x3>;
+>>   		ti,trm-icp = <0x8>;
+>> -		ti,strobe-sel = <0x77>;
+>>   		dma-coherent;
+>>   	};
+>>   
+>> -- 
+>> 2.20.1
+>>
