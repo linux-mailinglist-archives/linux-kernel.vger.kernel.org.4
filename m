@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89406659455
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 04:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69C5659459
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 04:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234402AbiL3DJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 22:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        id S234413AbiL3DLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 22:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiL3DJh (ORCPT
+        with ESMTP id S229607AbiL3DLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 22:09:37 -0500
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C0D11A1F;
-        Thu, 29 Dec 2022 19:09:35 -0800 (PST)
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 2BU398UJ023536;
-        Fri, 30 Dec 2022 12:09:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2BU398UJ023536
+        Thu, 29 Dec 2022 22:11:47 -0500
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4EE13D48;
+        Thu, 29 Dec 2022 19:11:46 -0800 (PST)
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 2BU3BIee020234;
+        Fri, 30 Dec 2022 12:11:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2BU3BIee020234
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1672369749;
-        bh=TwSK/YTGRNFZNCD09DtAb/IuCcZC4pESJUPfPCOaUdk=;
+        s=dec2015msa; t=1672369879;
+        bh=edZ9gHnsXwtflB4Xm2fLMJuIuiM21/LDbxXQ5W5LH4Q=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Kj7eUvcz07L1cJqBezGR2dI6IqEV+qQG37TwgQAcQF9iGn1giQvHZLbth7hj7x9+0
-         8CnbIxONbgylsq1aQ9ltDHbWYHd3r4+RA9PmVPdxAncNn1xZZ6IkGn+k/OfpY1c+tT
-         QbCBHDWqie4kZxO98fo7qXz8OrjE+Pzsp9H54nMpRjAH0SsJEp5f+SHHJdybyk/WZm
-         iz5NUsVaP4OnOkodXHewF66vDiaHhS6ned+Fc4NJ7QCgp5A5ERVAsN7iYII3v7r//i
-         5jz/fCzHz8aDfRXCBgHlcJy3s5RWCneZaYnIXHU2L1HV+FqLwiZ5DaOQuY8TsMH9ol
-         SCx0ZkoqdRB5Q==
-X-Nifty-SrcIP: [209.85.160.48]
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1447c7aa004so23588478fac.11;
-        Thu, 29 Dec 2022 19:09:09 -0800 (PST)
-X-Gm-Message-State: AFqh2koaXiqD/Eblq0V7ephpFdFPagxT9ze/+WKq1zwRJZpPv3TXOSKa
-        2LyGy6PLZY2EDKfa+lsWAhgTMVmfA0Xi0o6hnGM=
-X-Google-Smtp-Source: AMrXdXtm0xaZNHSAhj1QT6ARzFlNHOO/JMitfouFijNPedUgQ2TcsLJ4ExlYxUh2YldSdXEjwB36vLLkGQgk7xB6Yxo=
-X-Received: by 2002:a05:6870:cc89:b0:150:39e2:c688 with SMTP id
- ot9-20020a056870cc8900b0015039e2c688mr476912oab.287.1672369747959; Thu, 29
- Dec 2022 19:09:07 -0800 (PST)
+        b=ovJ4J3lGTiasN1FAgiqSylCu1kk/d6pLUJytUBdO+7AzC98PknEHiBCprtws25ZjX
+         w5pkOGUJsBCZwX/fBDwAGb5TTur6QCWu6oJBk/6izU4R6HjlRLm/WuTnJkyJpXwy4r
+         joLi6yMwVu5Z5w6DasTnd3g7T70DRwzGTWMeqfspAPL8YpK5mI9a9hGg4UrddBTjTG
+         i8EELLDgktUcmMNaShw2Ob2mwCtTL2egv0gohqA+3fF3q36O/vAqTQ72HyqetZSLXL
+         wHNbe/iPfkIVKjBRt5Jumecj1kWFzZjWm6LkwFGnZJaMD8dYA3wqgaunh3FtnFOKby
+         AfGbQlsE7Cy3A==
+X-Nifty-SrcIP: [209.85.210.44]
+Received: by mail-ot1-f44.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so12487094otp.9;
+        Thu, 29 Dec 2022 19:11:19 -0800 (PST)
+X-Gm-Message-State: AFqh2koI0265YuTzkS2tCr/ljYpSJRdKKa5wVJSV/x6uiXBKjnGCL7Bd
+        ts1fg/n/LU5m5fzbOLBwJc1PwDB72G7XwhqaS8I=
+X-Google-Smtp-Source: AMrXdXtyjNGQDKkaN9OyM0/D4600V7ght31O+A/dfo+c/yiyr7H6rYtevjWXtc8OKEU0p3E3z3dZhhJBwfHmQ6SMn1Q=
+X-Received: by 2002:a9d:7e99:0:b0:670:64b2:ae66 with SMTP id
+ m25-20020a9d7e99000000b0067064b2ae66mr1951907otp.225.1672369878134; Thu, 29
+ Dec 2022 19:11:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20221229184650.1107463-1-masahiroy@kernel.org> <Y63uw1HGiL5ZxJkk@fjasle.eu>
-In-Reply-To: <Y63uw1HGiL5ZxJkk@fjasle.eu>
+References: <20221229074310.906556-1-masahiroy@kernel.org> <20221229074310.906556-2-masahiroy@kernel.org>
+ <Y62i1bwkYfhg2PSl@fjasle.eu>
+In-Reply-To: <Y62i1bwkYfhg2PSl@fjasle.eu>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 30 Dec 2022 12:08:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATLBQu=0rMhH2iOwoNpUMA-4BH4-XeiedZSccRU9hxFCg@mail.gmail.com>
-Message-ID: <CAK7LNATLBQu=0rMhH2iOwoNpUMA-4BH4-XeiedZSccRU9hxFCg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: unify cmd_dt_S_dtb and cmd_dt_S_dtbo
+Date:   Fri, 30 Dec 2022 12:10:41 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATTUDpyzhdE253GU0u-m4GNW5+WFyxxj=7ML6BtRz4Thw@mail.gmail.com>
+Message-ID: <CAK7LNATTUDpyzhdE253GU0u-m4GNW5+WFyxxj=7ML6BtRz4Thw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] kbuild: make W=1 warn files that are tracked but
+ ignored by git
 To:     Nicolas Schier <nicolas@fjasle.eu>
 Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
@@ -60,69 +62,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 4:47 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
+On Thu, Dec 29, 2022 at 11:23 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
 >
-> On Fri, Dec 30, 2022 at 03:46:50AM +0900 Masahiro Yamada wrote:
-> > cmd_dt_S_dtb and cmd_dt_S_dtbo are almost the same; the only differnce
-> > is the prefix of the bein/end symbols. (__dtb vs __dtbo)
->
-> Two letters got lost: differ_e_nce, be_g_in.
-
-Ah, thanks. I will fix it.
-
-
->
+> On Thu, Dec 29, 2022 at 04:43:10PM +0900 Masahiro Yamada wrote:
+> > The top .gitignore comments about how to detect files breaking
+> > .gitignore rules, but people rarely care about it.
+> >
+> > Add a new W=1 warning to detect files that are tracked but ignored by
+> > git. If git is not installed or the source tree is not tracked by git
+> > at all, this script does not print anything.
+> >
+> > Running it on v6.2-rc1 detected the following:
+> >
+> >   $ make W=1 misc-check
+> >   Documentation/devicetree/bindings/.yamllint: warning: ignored by one of the .gitignore files
+> >   drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore files
+> >   drivers/gpu/drm/tests/.kunitconfig: warning: ignored by one of the .gitignore files
+> >   drivers/hid/.kunitconfig: warning: ignored by one of the .gitignore files
+> >   fs/ext4/.kunitconfig: warning: ignored by one of the .gitignore files
+> >   fs/fat/.kunitconfig: warning: ignored by one of the .gitignore files
+> >   kernel/kcsan/.kunitconfig: warning: ignored by one of the .gitignore files
+> >   lib/kunit/.kunitconfig: warning: ignored by one of the .gitignore files
+> >   mm/kfence/.kunitconfig: warning: ignored by one of the .gitignore files
+> >   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
+> >   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
+> >   tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
+> >   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
+> >
+> > These are ignored by the '.*' or 'tags' in the top .gitignore, but
+> > there is no rule to negate it.
+> >
+> > You might be tempted to do 'git add -f' but I want to have the real
+> > issue fixed (by fixing a .gitignore, or by renaming files, etc.).
 > >
 > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 > > ---
 > >
-> >  scripts/Makefile.lib | 45 +++++++++++++++-----------------------------
-> >  1 file changed, 15 insertions(+), 30 deletions(-)
+> > Changes in v3:
+> >   - change working directory to srctree (Nicolas)
 > >
-> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > index 4a4a5f67c1a6..100a386fcd71 100644
-> > --- a/scripts/Makefile.lib
-> > +++ b/scripts/Makefile.lib
-> > @@ -368,40 +368,25 @@ DTC_FLAGS += $(DTC_FLAGS_$(basetarget))
-> >  DTC_FLAGS += $(if $(filter $(patsubst $(obj)/%,%,$@), $(base-dtb-y)), -@)
+> > Changes in v2:
+> >   - Add $(srctree)/ to make it work with O=
 > >
-> >  # Generate an assembly file to wrap the output of the device tree compiler
-> > -quiet_cmd_dt_S_dtb= DTBS    $@
-> > -cmd_dt_S_dtb=                                                \
-> > -{                                                    \
-> > -     echo '\#include <asm-generic/vmlinux.lds.h>';   \
-> > -     echo '.section .dtb.init.rodata,"a"';           \
-> > -     echo '.balign STRUCT_ALIGNMENT';                \
-> > -     echo '.global __dtb_$(subst -,_,$(*F))_begin';  \
-> > -     echo '__dtb_$(subst -,_,$(*F))_begin:';         \
-> > -     echo '.incbin "$<" ';                           \
-> > -     echo '__dtb_$(subst -,_,$(*F))_end:';           \
-> > -     echo '.global __dtb_$(subst -,_,$(*F))_end';    \
-> > -     echo '.balign STRUCT_ALIGNMENT';                \
-> > -} > $@
-> > +quiet_cmd_wrap_S_dtb = WRAP    $@
-> > +      cmd_wrap_S_dtb = {                                                             \
-> > +             symbase=__$(patsubst .%,%,$(suffix $<))_$(subst -,_,$(notdir $*));      \
+> >  Makefile           |  6 ++++++
+> >  scripts/misc-check | 19 +++++++++++++++++++
+> >  2 files changed, 25 insertions(+)
+> >  create mode 100755 scripts/misc-check
 >
-> As long as I know, '$(notdir $*)' should be equivalent to '$(*F)'.  Is it just
-> personal preference or is there some other reason for choosing one or the
-> other?
-
-Your understanding is correct.
-Automatic variables can have 'D' / 'F', as explained in the manual.
-https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+> Tested-by: Nicolas Schier <nicolas@fjasle.eu>
+>
+> out of curiosity: do you plan to implement more checks in the misc-checks
+> target?
 
 
-Yes, it is just my personal preference.
-Perhaps, I did not need to change it, though.
+I chose a generic name so I can put more in this script, but
+honestly I have nothing else in my mind for now.
 
 
 
 
-
-
-> Nevertheless, with the typos fixed, it looks good to me:
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+>
+> Kind regards,
+> Nicolas
 >
 
 
