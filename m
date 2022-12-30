@@ -2,131 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A097F659B52
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 19:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD16659B25
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiL3SQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 13:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S235428AbiL3RzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 12:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiL3SQE (ORCPT
+        with ESMTP id S235424AbiL3RzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 13:16:04 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E4E2DC2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 10:16:03 -0800 (PST)
-Received: from dslb-188-097-208-179.188.097.pools.vodafone-ip.de ([188.97.208.179] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1pBJms-0004rR-8L; Fri, 30 Dec 2022 19:07:22 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 20/20] staging: r8188eu: we use a constant number of hw_xmit entries
-Date:   Fri, 30 Dec 2022 19:06:46 +0100
-Message-Id: <20221230180646.91008-21-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221230180646.91008-1-martin@kaiser.cx>
-References: <20221230180646.91008-1-martin@kaiser.cx>
+        Fri, 30 Dec 2022 12:55:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2020B1C90C;
+        Fri, 30 Dec 2022 09:54:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBC25B81CE7;
+        Fri, 30 Dec 2022 17:54:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16E6C433EF;
+        Fri, 30 Dec 2022 17:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672422891;
+        bh=n26j3UNEBWhnst1Oo9v8s52C4KD49fhyEge2J4vzAmc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mzqd2UgN5mNYi2ZRQozGDhqjfBuD6TjIX+dV/JNT/N+/DTkzRqDdGSw9BiUyKGAYM
+         KsZYneFe0OmEFn5LhB8boWiTMgaKAnOdXJeMKW/NlvhbJnLMmDcOt7QCTRLoNtx5Sz
+         BohFSRe++CrN0yTtaklYUKypwsd9zqxHBxnER+am3OymXkeK447j3e3DGOy6/kcXz2
+         hBxBqYb1Gu0buKUl0s6bjN7G2sTlWIihvYOWgzEV+isQiI/HM544kYR7kRLujrYUEf
+         b4b9sjOQMAwdrAnqbpuKeHTxbuYRpCfx+Vmq7HTGh5PUELXbU8pxyxMcpqfnSwu16K
+         eqvl7Jf2gtBEQ==
+Date:   Fri, 30 Dec 2022 18:08:09 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc:     linux-iio@vger.kernel.org,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: ep93xx: Add
+ cirrus,ep9301-adc description
+Message-ID: <20221230180809.051fc6bd@jic23-huawei>
+In-Reply-To: <20221223162636.6488-1-alexander.sverdlin@gmail.com>
+References: <20221223162636.6488-1-alexander.sverdlin@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct xmit_priv contains a pointer to an array of struct hw_xmit entries.
-xmit_priv's (ill-named) hwxmit_entry component stores the size of this
-array, i.e. the number of hw_xmit entries that are used.
+On Fri, 23 Dec 2022 17:26:35 +0100
+Alexander Sverdlin <alexander.sverdlin@gmail.com> wrote:
 
-The array size is constant, it's initialised to HWXMIT_ENTRY and never
-updated. Simplify the code accordingly. Remove hwxmit_entry, do not pass
-the array size as a function parameter and use HWXMIT_ENTRY in the code
-that handles the array.
+> Add device tree bindings for Cirrus Logic EP9301/EP9302 internal SoCs' ADC
+> block.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_xmit.c      | 8 +++-----
- drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 2 +-
- drivers/staging/r8188eu/include/rtw_xmit.h   | 3 +--
- 3 files changed, 5 insertions(+), 8 deletions(-)
+Applied to the togreg branch of iio.git and pushed out as testing.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 76b0839ca19d..d224785a747b 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -1417,7 +1417,7 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
- 	return pxmitframe;
- }
+Whilst we are looking at this driver, Alexander, would you mind if we relaxed
+the Kconfig dependencies to:
+
+diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+index 46c4fc2fc534..fd1d68dce507 100644
+--- a/drivers/iio/adc/Kconfig
++++ b/drivers/iio/adc/Kconfig
+@@ -441,7 +441,7 @@ config ENVELOPE_DETECTOR
  
--struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit_i, int entry)
-+struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit_i)
- {
- 	struct list_head *sta_plist, *sta_phead;
- 	struct hw_xmit *phwxmit;
-@@ -1439,7 +1439,7 @@ struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
- 
- 	spin_lock_bh(&pxmitpriv->lock);
- 
--	for (i = 0; i < entry; i++) {
-+	for (i = 0; i < HWXMIT_ENTRY; i++) {
- 		phwxmit = phwxmit_i + inx[i];
- 
- 		sta_phead = get_list_head(phwxmit->sta_queue);
-@@ -1543,9 +1543,7 @@ int rtw_alloc_hwxmits(struct adapter *padapter)
- 	struct hw_xmit *hwxmits;
- 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
- 
--	pxmitpriv->hwxmit_entry = HWXMIT_ENTRY;
--
--	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
-+	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * HWXMIT_ENTRY, GFP_KERNEL);
- 	if (!pxmitpriv->hwxmits)
- 		return -ENOMEM;
- 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-index d1af76cc2091..e097fa14dc6e 100644
---- a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-@@ -398,7 +398,7 @@ bool rtl8188eu_xmitframe_complete(struct adapter *adapt, struct xmit_priv *pxmit
- 	if (!pxmitbuf)
- 		return false;
- 
--	pxmitframe = rtw_dequeue_xframe(pxmitpriv, pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
-+	pxmitframe = rtw_dequeue_xframe(pxmitpriv, pxmitpriv->hwxmits);
- 	if (!pxmitframe) {
- 		/*  no more xmit frame, release xmit buffer */
- 		rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
-diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
-index eafa693efc2f..f8f10c67b764 100644
---- a/drivers/staging/r8188eu/include/rtw_xmit.h
-+++ b/drivers/staging/r8188eu/include/rtw_xmit.h
-@@ -276,7 +276,6 @@ struct	xmit_priv {
- 	u64	last_tx_bytes;
- 	u64	last_tx_pkts;
- 	struct hw_xmit *hwxmits;
--	u8	hwxmit_entry;
- 	u8	wmm_para_seq[4];/* sequence for wmm ac parameter strength
- 				 * from large to small. it's value is 0->vo,
- 				 * 1->vi, 2->be, 3->bk. */
-@@ -334,7 +333,7 @@ struct tx_servq *rtw_get_sta_pending(struct adapter *padapter,
- s32 rtw_xmitframe_enqueue(struct adapter *padapter,
- 			  struct xmit_frame *pxmitframe);
- struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv,
--				      struct hw_xmit *phwxmit_i, int entry);
-+				      struct hw_xmit *phwxmit_i);
- 
- s32 rtw_xmit_classifier(struct adapter *padapter,
- 			struct xmit_frame *pxmitframe);
--- 
-2.30.2
+ config EP93XX_ADC
+        tristate "Cirrus Logic EP93XX ADC driver"
+-       depends on ARCH_EP93XX
++       depends on ARCH_EP93XX || COMPILE_TEST
+        help
+          Driver for the ADC module on the EP93XX series of SoC from Cirrus Logic.
+          It's recommended to switch on CONFIG_HIGH_RES_TIMERS option, in this
+
+I end up doing that locally to build test patches like this one and it doesn't
+seem to cause any problems.
+
+Jonathan
+
+> ---
+> Changelog:
+> v2: removed clock-names property, soc node and include as Krzysztof suggested
+> 
+>  .../bindings/iio/adc/cirrus,ep9301-adc.yaml   | 47 +++++++++++++++++++
+>  MAINTAINERS                                   |  2 +
+>  2 files changed, 49 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml b/Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+> new file mode 100644
+> index 000000000000..6d4fb3e1d2a2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/adc/cirrus,ep9301-adc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cirrus Logic EP930x internal ADC
+> +
+> +description: |
+> +  Cirrus Logic EP9301/EP9302 SoCs' internal ADC block.
+> +
+> +  User's manual:
+> +  https://cdn.embeddedts.com/resource-attachments/ts-7000_ep9301-ug.pdf
+> +
+> +maintainers:
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: cirrus,ep9301-adc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    adc: adc@80900000 {
+> +        compatible = "cirrus,ep9301-adc";
+> +        reg = <0x80900000 0x28>;
+> +        clocks = <&syscon 24>;
+> +        interrupt-parent = <&vic1>;
+> +        interrupts = <30>;
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 69565ac0c224..4a914d5bc2e6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2027,8 +2027,10 @@ M:	Hartley Sweeten <hsweeten@visionengravers.com>
+>  M:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+>  F:	arch/arm/mach-ep93xx/
+>  F:	arch/arm/mach-ep93xx/include/mach/
+> +F:	drivers/iio/adc/ep93xx_adc.c
+>  
+>  ARM/CLKDEV SUPPORT
+>  M:	Russell King <linux@armlinux.org.uk>
 
