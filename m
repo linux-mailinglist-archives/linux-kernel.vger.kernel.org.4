@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C445659C51
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 21:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD71B659C54
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 21:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235329AbiL3UuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 15:50:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
+        id S235500AbiL3U6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 15:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiL3UuF (ORCPT
+        with ESMTP id S229616AbiL3U6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 15:50:05 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69CECE1E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 12:50:04 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bk16so7507291wrb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 12:50:04 -0800 (PST)
+        Fri, 30 Dec 2022 15:58:20 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FA813F7A;
+        Fri, 30 Dec 2022 12:58:20 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id p4so23460945pjk.2;
+        Fri, 30 Dec 2022 12:58:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6b9aelL9iSEbjyOBwL53WmG//4FVZXwYLwFNbDpMUw=;
-        b=UCCgE4fCvwFxwjRK0yqscFsK3vDERv1qxNA9peDx8gyIK+a8/FgD2X9kHWgF9H4VJM
-         qlpFIqNXW2wUUtAahQVXwtFvSgO8LAHd2luBNq3m6fh2Dy16Zk0K8csGaoqkt+1uPBLz
-         KJXtoRaKO7H/I+r0bWwP+FEL4HcdT6ouoUk72Biak4xLsaykZ1eMdKEA7s4jbY4uB5Os
-         Beld5Cs/ZNFIuaFEndlE5Ul4WiYRu8HEsvc/eIkqQejNmjwv3QHmLxQBtiWs5owKA8+f
-         fRILj6CqkdMB7xwVTX4+6vSxXRqzq2t/0OgycASrqwatUyeQBIuhdETa1eJb1Oot+xtG
-         UZJQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=A5HECF9+rVuUX+brSXubDgLVHbeqG015MmzEZ9FF8VE=;
+        b=cSpq2X/PC9hjQIhn7TixPaxyLrIj2Echgf4Uompnm8LQwp9Xgo0+CSaK9/Sr/KXeJk
+         mOtg8BP7ddm/QCWE7JpxN3LP9Aqg5QzZVdGjnEYCW8wx32yseo85V5xV92i5ZvItDK2I
+         BfJVJkugU5z5I5OwKSA4dTR4rDLQjkw5mXhHAeqR1DLPATG9p8qVNS77vVFnkO06SMeJ
+         BgvnScHLQWSBIGL4Zfyph+eosR5jG+mOVn7GQuqPug6mrisNZDAOT0k2mx0Z2h1GfKbk
+         mI50xA2ykj84l2ZLzvjokG/uctzKIMfU8vI8kH3aXCrZ8NajkaxLNW2UONZZpeniHUsw
+         LNfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6b9aelL9iSEbjyOBwL53WmG//4FVZXwYLwFNbDpMUw=;
-        b=klXOxKMG1t9zbuDH3g18eGVowxKHh7yav7RChRq6BvuJ1G7WAljHP+pvep6TQB9xyi
-         bAQNTy7eRVpVNNAIMzDjPTuvHoLQchX3HQtJY/jAvjSJhJjomOwgyO/UOr0gS3OXt98r
-         vfiiqSh8ooKV8jKtedjpLdwf1zZ5t+Pq1HQ+rLPoAA5bV62qCzNiPj1VRm9grP6p+R3B
-         ZT5Lvt0TRx1JudsIhHOeDztbRh0br377up5LsfJXq/6u0lySauQvRyxEdx/5MQYq1B7b
-         qjM0UXupsQV81RQo9gmoxlYs8wdSLFKE1YHLkMalN7w0y9zo4WZXnI8XNpVjeQwdUFgN
-         /GOg==
-X-Gm-Message-State: AFqh2krCZg6ALymmDUxH53jGblf4iqnD3kFgIpjOm84cVZRYItXu6v/y
-        njyVifVd2tYZTvDBF/4BEctbCw==
-X-Google-Smtp-Source: AMrXdXs9zsAkclgd1Vq9SvyW38PaxbPK3XY99VdcD1efED48RBNOm7YL3SK6EhMGoQ2pzLyYvqQuXg==
-X-Received: by 2002:a5d:6808:0:b0:272:3a86:29c1 with SMTP id w8-20020a5d6808000000b002723a8629c1mr17458587wru.16.1672433403417;
-        Fri, 30 Dec 2022 12:50:03 -0800 (PST)
-Received: from [192.168.1.12] (host-92-24-101-87.as13285.net. [92.24.101.87])
-        by smtp.gmail.com with ESMTPSA id o15-20020adfe80f000000b0028965dc7c6bsm7006911wrm.73.2022.12.30.12.50.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Dec 2022 12:50:02 -0800 (PST)
-Message-ID: <1dee1e8e-60dd-0a9d-ad4f-1370bba66bde@linaro.org>
-Date:   Fri, 30 Dec 2022 20:50:01 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A5HECF9+rVuUX+brSXubDgLVHbeqG015MmzEZ9FF8VE=;
+        b=jmDQOm1oMzccirieGR3TVU2Y/PUbxE8EljswcDN2EDN77RPmt1WWDF30t4nauSTEQ6
+         rKJIZyYt4eIspQ1NzNT5hR62E8aR91LEQme6vB0zrwssLW9fK8PfCRRFB7IsslrPh65Z
+         YD+MBbwQMqW2Z6+z7CsiqqsJLlEG4Gi3huotMb32FcLYrQF4To0bMDAJnFGfmxcUN8iz
+         Sve6cGDwtY0xT5z1H4xG7dvrzopP/ft7IKSZvDYgB/2yo1yR1h93Fj/dcF/N2xn7KfdW
+         1iDaCP0SuaJGnMnzEE/4Zz9z/sysynkgXEr0sspT+8DcZzjpXfnR67bhkdGUxW5hh3Dd
+         OpCw==
+X-Gm-Message-State: AFqh2kpmLXe7c0GHZfAS9RJ/RDIHZd3KlgJQ4fBuO4YuDWpYEZPMh6e5
+        ULcArlnxsR5iM/kKvlHISTdGNLbUibCsMLS257Y=
+X-Google-Smtp-Source: AMrXdXs//T30asV4CVfSzhXj0gdwFo0Wu17EEcoS58I75cZvc0GcWON/DNDt1cGUFxotQ/fqO0EJG5T+Q1wMc6L5HFA=
+X-Received: by 2002:a17:90a:fd03:b0:219:d32a:ef96 with SMTP id
+ cv3-20020a17090afd0300b00219d32aef96mr2717571pjb.12.1672433899545; Fri, 30
+ Dec 2022 12:58:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH net-next 1/2] dt-bindings: net: qcom,ipa: Add SM6350
- compatible
-Content-Language: en-US
-To:     Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     Luca Weiss <luca.weiss@fairphone.com>, andersson@kernel.org,
-        konrad.dybcio@linaro.org, agross@kernel.org, elder@kernel.org,
-        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221208211529.757669-1-elder@linaro.org>
- <mlVN9KS9KdswblsJtK7F6Yyu3c3vWIsdzIwAo8iVaZDt_Ti53FvYwfzzVF60yEeCXuw17joStgI1cti0HipwCA==@protonmail.internalid>
- <20221208211529.757669-2-elder@linaro.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20221208211529.757669-2-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221230094059.698032393@linuxfoundation.org>
+In-Reply-To: <20221230094059.698032393@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Fri, 30 Dec 2022 12:58:08 -0800
+Message-ID: <CAJq+SaATrjeJrBnqT9uR=i3OzmsPnYuvSvnv1N8cbaVDRN2djw@mail.gmail.com>
+Subject: Re: [PATCH 6.0 0000/1066] 6.0.16-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+>
+> This is the start of the stable review cycle for the 6.0.16 release.
+> There are 1066 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 01 Jan 2023 09:38:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.16-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
+Compiled and boot tested on my x86 and arm64 test systems.
 
-On 08/12/2022 21:15, Alex Elder wrote:
-> From: Luca Weiss <luca.weiss@fairphone.com>
-> 
-> Add support for SM6350, which uses IPA v4.7.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> Signed-off-by: Alex Elder <elder@linaro.org>
+Tested-by: Allen Pais <apais@linux.microsoft.com>
 
-Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
-> ---
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-> index 9e81b9ec7cfdd..4aeda379726fa 100644
-> --- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-> +++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-> @@ -49,6 +49,7 @@ properties:
->        - qcom,sc7280-ipa
->        - qcom,sdm845-ipa
->        - qcom,sdx55-ipa
-> +      - qcom,sm6350-ipa
->        - qcom,sm8350-ipa
-> 
->    reg:
-> --
-> 2.34.1
-> 
-
--- 
-Kind Regards,
-Caleb (they/them)
+Thanks.
