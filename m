@@ -2,202 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C298965953D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 06:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659ED659542
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 06:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234472AbiL3F61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 00:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S234679AbiL3F6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 00:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbiL3F6I (ORCPT
+        with ESMTP id S234635AbiL3F6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 00:58:08 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11975193E8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 21:57:42 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pB8Nh-0007GX-DP; Fri, 30 Dec 2022 06:56:37 +0100
-Message-ID: <f500d64b-c26d-ee34-092a-421c64c69f9e@leemhuis.info>
-Date:   Fri, 30 Dec 2022 06:56:36 +0100
+        Fri, 30 Dec 2022 00:58:21 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28896331;
+        Thu, 29 Dec 2022 21:58:04 -0800 (PST)
+X-UUID: b3a214bd837247ce8a762e5edb0e9103-20221230
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=PdhLdC1JSmSwnnt97TiXP6Gti1HSuLQBE8MO18Jar3w=;
+        b=Gu0zGkk+wNn7xeG8BYUK0HIYyRueczPpfu8lWJktpVyd/86O4x8Ckexbc3772900saPFSqWh6gxYEO6VltPXkcdTHGM2bFvpJy3r3b+d86YtFLsjY+UygjCynDNtPIlbiEIb9QMMpx11HhRSh/19AIIo6KxlBCO/Ui11tb64DYE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.16,REQID:5000ea12-34e7-4903-a57e-45c41f9e0d73,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:09771b1,CLOUDID:72513653-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 1,FCT|NGT
+X-UUID: b3a214bd837247ce8a762e5edb0e9103-20221230
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 5588775; Fri, 30 Dec 2022 13:56:45 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 30 Dec 2022 13:56:43 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 30 Dec 2022 13:56:43 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <angelogioacchino.delregno@collabora.com>
+CC:     <chun-jie.chen@mediatek.com>, <daniel@makrotopia.org>,
+        <devicetree@vger.kernel.org>, <fparent@baylibre.com>,
+        <ikjn@chromium.org>, <johnson.wang@mediatek.com>,
+        <jose.exposito89@gmail.com>, <kernel@collabora.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <msp@baylibre.com>,
+        <mturquette@baylibre.com>, <nfraprado@collabora.com>,
+        <pablo.sun@mediatek.com>, <rex-bc.chen@mediatek.com>,
+        <robh+dt@kernel.org>, <ryder.lee@kernel.org>,
+        <sam.shih@mediatek.com>, <sboyd@kernel.org>,
+        <weiyi.lu@mediatek.com>, <wenst@chromium.org>,
+        <y.oudjana@protonmail.com>, <yangyingliang@huawei.com>
+Subject: Re: [PATCH v2 21/23] clk: mediatek: clk-mt6795-topckgen: Migrate to mtk_clk_simple_probe()
+Date:   Fri, 30 Dec 2022 13:56:43 +0800
+Message-ID: <20221230055643.16176-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20221223094259.87373-22-angelogioacchino.delregno@collabora.com>
+References: <20221223094259.87373-22-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: Fwd: f2fs write error Linux v6.2
-Content-Language: en-US, de-DE
-To:     Jeff Chua <jeff.chua.linux@gmail.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        F2FS Development <linux-f2fs-devel@lists.sourceforge.net>,
-        Linux Regressions <regressions@lists.linux.dev>
-References: <CAAJw_Ztzyh-GNTJYpXbA0CeJv2Rz=fLZKE6_Q=7JMmM+s9yHXQ@mail.gmail.com>
- <CAAJw_Ztb0mJVkHtBhryf=9g8CA0fZZRa8HVio8GCGUSLOvqa7A@mail.gmail.com>
- <Y6bz4wOC0nwu2yGU@debian.me> <0c70ba66-ef00-7242-d198-844f803662fa@gmail.com>
- <CAAJw_Zv0iBg4rkzxQ2UOOLS9JQZ4cCmM7gSoDXec_gm-GggB6A@mail.gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CAAJw_Zv0iBg4rkzxQ2UOOLS9JQZ4cCmM7gSoDXec_gm-GggB6A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1672379863;344b7bcf;
-X-HE-SMSGID: 1pB8Nh-0007GX-DP
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.12.22 05:04, Jeff Chua wrote:
-> On 12/24/22 19:43, Bagas Sanjaya wrote:
->> On Sat, Dec 24, 2022 at 01:48:55PM +0800, Jeff Chua wrote:
->>> Got the following error in latest linux-6.2-git with just vim (:w
->>> file1). No problem with linux-6.1.1
-> 
-> What happened to the f2fs developers? No response from anyone yet.
-
-Well, that indeed is unfortunate and ideally shouldn't happen, but the
-simple reality is: that can happen this time of the year due to this
-thing called "festive season".
-
-> Am
-> I the only one facing this? Linux-6.2 is unusable until this is fixed.
-> What can I do to help?
-
-The usual: bisect the issue, as then (a) we know exactly which developer
-caused it, (b) which subsystem/maintainer is responsible (issues in a fs
-might be caused by the VFS, block layer, mm, ...), and (c) might be able
-to quickly revert that culprit, even if the people normally responsible
-are MIA for some reason.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
->>> 2022-12-22T14:09:51.419409+08:00 [localhost] kernel: BUG: kernel NULL
->>> pointer dereference, address: 0000000000000024
->>> 2022-12-22T14:09:51.419422+08:00 [localhost] kernel: #PF: supervisor
->>> write access in kernel mode
->>> 2022-12-22T14:09:51.419423+08:00 [localhost] kernel: #PF:
->>> error_code(0x0002) - not-present page
->>> 2022-12-22T14:09:51.419424+08:00 [localhost] kernel: PGD 147b63067 P4D
->>> 147b63067 PUD 177d5c067 PMD 0
->>> 2022-12-22T14:09:51.419424+08:00 [localhost] kernel: Oops: 0002 [#7] PREEMPT SMP
->>> 2022-12-22T14:09:51.419428+08:00 [localhost] kernel: CPU: 6 PID: 22891
->>> Comm: vi Tainted: G     UD            6.1.0 #11
->>> 2022-12-22T14:09:51.419428+08:00 [localhost] kernel: Hardware name:
->>> LENOVO 21CCS1GL00/21CCS1GL00, BIOS N3AET69W (1.34 ) 12/05/2022
->>> 2022-12-22T14:09:51.419428+08:00 [localhost] kernel: RIP:
->>> 0010:f2fs_issue_flush+0x10e/0x180
->>> 2022-12-22T14:09:51.419429+08:00 [localhost] kernel: Code: ba 01 00 00
->>> 00 be 03 00 00 00 e8 ad e8 d5 ff 48 83 3b 00 74 1e 48 89 e7 e8 7f c1
->>> 84 00 f0 ff 4b 24 8b 44 24 2c e9 66 ff ff ff <f0> ff 43 24 e9 4a ff ff
->>> ff 45 31 ff 4c 87 7b 28 4d 85 ff 74 d6 44
->>> 2022-12-22T14:09:51.419429+08:00 [localhost] kernel: RSP:
->>> 0018:ffffc90000b13df0 EFLAGS: 00010246
->>> 2022-12-22T14:09:51.419430+08:00 [localhost] kernel: RAX:
->>> ffff888101caccc0 RBX: 0000000000000000 RCX: 0000000000000000
->>> 2022-12-22T14:09:51.419430+08:00 [localhost] kernel: RDX:
->>> 0000000010000088 RSI: 000000000005a844 RDI: ffff8881027bf000
->>> 2022-12-22T14:09:51.419431+08:00 [localhost] kernel: RBP:
->>> ffff8881027bf000 R08: 0000000000000000 R09: ffff8881027bf2a8
->>> 2022-12-22T14:09:51.419431+08:00 [localhost] kernel: R10:
->>> 0000000000000000 R11: 0000000000000000 R12: 0000000000000024
->>> 2022-12-22T14:09:51.419432+08:00 [localhost] kernel: R13:
->>> 000000000005a844 R14: 000000000005a844 R15: 0000000000000000
->>> 2022-12-22T14:09:51.419432+08:00 [localhost] kernel: FS:
->>> 00007ff03fdf0b80(0000) GS:ffff88883f380000(0000)
->>> knlGS:0000000000000000
->>> 2022-12-22T14:09:51.419432+08:00 [localhost] kernel: CS:  0010 DS:
->>> 0000 ES: 0000 CR0: 0000000080050033
->>> 2022-12-22T14:09:51.419433+08:00 [localhost] kernel: CR2:
->>> 0000000000000024 CR3: 000000013d64e006 CR4: 0000000000770ee0
->>> 2022-12-22T14:09:51.419433+08:00 [localhost] kernel: PKRU: 55555554
->>> 2022-12-22T14:09:51.419434+08:00 [localhost] kernel: Call Trace:
->>> 2022-12-22T14:09:51.419434+08:00 [localhost] kernel: <TASK>
->>> 2022-12-22T14:09:51.419435+08:00 [localhost] kernel: ?
->>> preempt_count_add+0x63/0x90
->>> 2022-12-22T14:09:51.419435+08:00 [localhost] kernel: ?
->>> preempt_count_add+0x63/0x90
->>> 2022-12-22T14:09:51.419435+08:00 [localhost] kernel: ?
->>> preempt_count_add+0x63/0x90
->>> 2022-12-22T14:09:51.419436+08:00 [localhost] kernel:
->>> f2fs_do_sync_file+0x489/0x650
->>> 2022-12-22T14:09:51.419436+08:00 [localhost] kernel: __x64_sys_fsync+0x2f/0x60
->>> 2022-12-22T14:09:51.419437+08:00 [localhost] kernel: do_syscall_64+0x35/0x80
->>> 2022-12-22T14:09:51.419437+08:00 [localhost] kernel:
->>> entry_SYSCALL_64_after_hwframe+0x46/0xb0
->>> 2022-12-22T14:09:51.419438+08:00 [localhost] kernel: RIP: 0033:0x7ff03feef20b
->>> 2022-12-22T14:09:51.419438+08:00 [localhost] kernel: Code: 3d 00 f0 ff
->>> ff 77 48 c3 0f 1f 80 00 00 00 00 48 83 ec 18 89 7c 24 0c e8 a3 a2 f8
->>> ff 8b 7c 24 0c 41 89 c0 b8 4a 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35
->>> 44 89 c7 89 44 24 0c e8 01 a3 f8 ff 8b 44
->>> 2022-12-22T14:09:51.419438+08:00 [localhost] kernel: RSP:
->>> 002b:00007ffe6ecca530 EFLAGS: 00000293 ORIG_RAX: 000000000000004a
->>> 2022-12-22T14:09:51.419439+08:00 [localhost] kernel: RAX:
->>> ffffffffffffffda RBX: 0000000000000001 RCX: 00007ff03feef20b
->>> 2022-12-22T14:09:51.419439+08:00 [localhost] kernel: RDX:
->>> 0000000000000002 RSI: 0000000000000002 RDI: 0000000000000003
->>> 2022-12-22T14:09:51.419440+08:00 [localhost] kernel: RBP:
->>> 0000000000002000 R08: 0000000000000000 R09: 00000000024bcfb0
->>> 2022-12-22T14:09:51.419440+08:00 [localhost] kernel: R10:
->>> fffffffffffff4bf R11: 0000000000000293 R12: 00000000000006b7
->>> 2022-12-22T14:09:51.419440+08:00 [localhost] kernel: R13:
->>> 000000000000003d R14: 0000000000000000 R15: 00000000024a1680
->>> 2022-12-22T14:09:51.419441+08:00 [localhost] kernel: </TASK>
->>> 2022-12-22T14:09:51.419441+08:00 [localhost] kernel: Modules linked
->>> in: [last unloaded: ecc]
->>> 2022-12-22T14:09:51.419442+08:00 [localhost] kernel: CR2: 0000000000000024
->>> 2022-12-22T14:09:51.419442+08:00 [localhost] kernel: ---[ end trace
->>> 0000000000000000 ]---
->>> 2022-12-22T14:09:51.419443+08:00 [localhost] kernel: RIP:
->>> 0010:f2fs_issue_flush+0x10e/0x180
->>> 2022-12-22T14:09:51.419443+08:00 [localhost] kernel: Code: ba 01 00 00
->>> 00 be 03 00 00 00 e8 ad e8 d5 ff 48 83 3b 00 74 1e 48 89 e7 e8 7f c1
->>> 84 00 f0 ff 4b 24 8b 44 24 2c e9 66 ff ff ff <f0> ff 43 24 e9 4a ff ff
->>> ff 45 31 ff 4c 87 7b 28 4d 85 ff 74 d6 44
->>> 2022-12-22T14:09:51.419443+08:00 [localhost] kernel: RSP:
->>> 0018:ffffc90003903df0 EFLAGS: 00010246
->>> 2022-12-22T14:09:51.419444+08:00 [localhost] kernel: RAX:
->>> ffff888100106d80 RBX: 0000000000000000 RCX: 0000000000000000
->>> 2022-12-22T14:09:51.419444+08:00 [localhost] kernel: RDX:
->>> 0000000010000088 RSI: 0000000000b0e2ba RDI: ffff888116227000
->>> 2022-12-22T14:09:51.419445+08:00 [localhost] kernel: RBP:
->>> ffff888116227000 R08: 0000000000000000 R09: ffff8881162272a8
->>> 2022-12-22T14:09:51.419445+08:00 [localhost] kernel: R10:
->>> 0000000000000000 R11: 0000000000000000 R12: 0000000000000024
->>> 2022-12-22T14:09:51.419445+08:00 [localhost] kernel: R13:
->>> 0000000000b0e2ba R14: 0000000000b0e2ba R15: 0000000000000000
->>> 2022-12-22T14:09:51.419446+08:00 [localhost] kernel: FS:
->>> 00007ff03fdf0b80(0000) GS:ffff88883f380000(0000)
->>> knlGS:0000000000000000
->>> 2022-12-22T14:09:51.419446+08:00 [localhost] kernel: CS:  0010 DS:
->>> 0000 ES: 0000 CR0: 0000000080050033
->>> 2022-12-22T14:09:51.419446+08:00 [localhost] kernel: CR2:
->>> 0000000000000024 CR3: 000000013d64e006 CR4: 0000000000770ee0
->>> 2022-12-22T14:09:51.419447+08:00 [localhost] kernel: PKRU: 55555554
->>
->> Thanks for the report! I'm adding this to regzbot:
->>
->> #regzbot ^introduced v6.1.1..v6.2
->> #regzbot title f2fs: kernel NULL pointer dereference when writing file
->>
-> 
-> Oops, I mean:
-> 
-> #regzbot introduced v6.1.1..72a85e2b0a1e1e
-> 
-> Also, Cc'ed other F2FS maintainers and relevant lists.
-> 
-> Thanks.
-> 
-> --
-> An old man doll... just what I always wanted! - Clara
-> 
-> 
+>Migrate away from custom probe functions and use the commonized
+>mtk_clk_simple_{probe, remove}().
+>
+>Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com> 
