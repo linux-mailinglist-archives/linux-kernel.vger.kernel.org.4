@@ -2,109 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9146595D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 08:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF17D6595BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 08:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbiL3HmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 02:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S234649AbiL3HcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 02:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234765AbiL3Hl4 (ORCPT
+        with ESMTP id S229557AbiL3HcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 02:41:56 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31196A451;
-        Thu, 29 Dec 2022 23:41:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672386069; x=1703922069;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8wPdm2gQ9teAbmG18b2fI8r2C7mIaxNEPTgadQdH8cA=;
-  b=QMffgqKrLt2j0F5Vsz5i+Qhz4chbZ51QWabfaovw8mEnc7Qv+IWYQwxA
-   3SldKe2gwmXsQRhFgyMwWZBK3kBZd3213L1nhlW1NqzhrQq1N5KgKa+Kn
-   EqQ6LpULpK055vNCFpJpj22iPu/I4y+91wZQrQlqi7fy3OVj1vFukpFKX
-   L4+pCBiZNO1rLJz2rfI0MlJ/YfbSloC5GQ3OSGSH9JmVmD5ElnJbFt5EZ
-   jw4jBzntcp+mGrN9Zkeo5/70vEwvv0hAiaeMi0co4FjxjvusJSj0Uj7Y1
-   ZglzLHbAUl/EEFFFD8ismj/pp77mcaF/sIFW4h0VSX4LzIfNBA2wJ0NI8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="407438734"
-X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
-   d="scan'208";a="407438734"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 23:41:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="655799359"
-X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
-   d="scan'208";a="655799359"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga007.fm.intel.com with ESMTP; 29 Dec 2022 23:41:06 -0800
-Date:   Fri, 30 Dec 2022 15:30:59 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     linux-fpga@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v4 1/3] fpga: microchip-spi: move SPI I/O buffers out of
- stack
-Message-ID: <Y66Ts4SIYBE8QFF8@yilunxu-OptiPlex-7050>
-References: <20221229104604.2496-1-i.bornyakov@metrotek.ru>
- <20221229104604.2496-2-i.bornyakov@metrotek.ru>
+        Fri, 30 Dec 2022 02:32:03 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A062C2BD9;
+        Thu, 29 Dec 2022 23:32:00 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pB9rZ-00CGJz-Vs; Fri, 30 Dec 2022 15:31:35 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 30 Dec 2022 15:31:33 +0800
+Date:   Fri, 30 Dec 2022 15:31:33 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH] crypto: talitos - Remove GFP_DMA and add DMA alignment
+ padding
+Message-ID: <Y66T1UCBTqBE6GQ4@gondor.apana.org.au>
+References: <Y4nDL50nToBbi4DS@gondor.apana.org.au>
+ <Y4xpGNNsfbucyUlt@infradead.org>
+ <Y47BgCuZsYLX61A9@gondor.apana.org.au>
+ <Y47g7qO8dsRdxCgf@infradead.org>
+ <Y47+gxbdKR03EYCj@gondor.apana.org.au>
+ <Y61WrVAjjtAMAvSh@gondor.apana.org.au>
+ <Y651YoR58cCg3adj@gondor.apana.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221229104604.2496-2-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y651YoR58cCg3adj@gondor.apana.org.au>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-29 at 13:46:02 +0300, Ivan Bornyakov wrote:
-> As spi-summary doc says:
->  > I/O buffers use the usual Linux rules, and must be DMA-safe.
->  > You'd normally allocate them from the heap or free page pool.
->  > Don't use the stack, or anything that's declared "static".
-> 
-> Replace spi_write() with spi_write_then_read(), which is dma-safe for
-> on-stack buffers. Use allocated buffers for transfers used in
+GFP_DMA does not guarantee that the returned memory is aligned
+for DMA.  It should be removed where it is superfluous.
 
-How about "Use cacheline aligned buffers for ..."
+However, kmalloc may start returning DMA-unaligned memory in future
+so fix this by adding the alignment by hand.
 
-> spi_sync_transfer().
-> 
-> Although everything works OK with stack-located I/O buffers, better
-> follow the doc to be safe.
-> 
-> Fixes: 5f8d4a900830 ("fpga: microchip-spi: add Microchip MPF FPGA manager")
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  drivers/fpga/microchip-spi.c | 93 ++++++++++++++++++------------------
->  1 file changed, 47 insertions(+), 46 deletions(-)
-> 
-> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-> index 7436976ea904..e72fedd93a27 100644
-> --- a/drivers/fpga/microchip-spi.c
-> +++ b/drivers/fpga/microchip-spi.c
-> @@ -42,46 +42,55 @@
->  struct mpf_priv {
->  	struct spi_device *spi;
->  	bool program_mode;
-> +	u8 tx __aligned(ARCH_KMALLOC_MINALIGN);
-> +	u8 rx __aligned(ARCH_KMALLOC_MINALIGN);
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-If the 2 buffers are used synchronously by dma, they could share a
-cacheline. Just separate them from other members should be OK, like:
-
-	u8 tx __aligned(ARCH_KMALLOC_MINALIGN);
-	u8 rx;
-
->  };
->  
+diff --git a/drivers/crypto/talitos.c b/drivers/crypto/talitos.c
+index 71db6450b6aa..d62ec68e3183 100644
+--- a/drivers/crypto/talitos.c
++++ b/drivers/crypto/talitos.c
+@@ -1393,7 +1393,7 @@ static struct talitos_edesc *talitos_edesc_alloc(struct device *dev,
+ 		alloc_len += sizeof(struct talitos_desc);
+ 	alloc_len += ivsize;
+ 
+-	edesc = kmalloc(alloc_len, GFP_DMA | flags);
++	edesc = kmalloc(ALIGN(alloc_len, dma_get_cache_alignment()), flags);
+ 	if (!edesc)
+ 		return ERR_PTR(-ENOMEM);
+ 	if (ivsize) {
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
