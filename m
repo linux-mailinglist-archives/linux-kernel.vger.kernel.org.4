@@ -2,192 +2,528 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7A0659AF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC722659AF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235337AbiL3RZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 12:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S235345AbiL3R0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 12:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235069AbiL3RZZ (ORCPT
+        with ESMTP id S235340AbiL3RZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 12:25:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C87FD08
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 09:25:24 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pBJ86-00067i-8P; Fri, 30 Dec 2022 18:25:14 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pBJ83-0004m5-TT; Fri, 30 Dec 2022 18:25:11 +0100
-Date:   Fri, 30 Dec 2022 18:25:11 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Primoz Fiser <primoz.fiser@norik.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        upstream@lists.phytec.de, Marco Felsch <m.felsch@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        francesco.dolcini@toradex.com, wsa@kernel.org
-Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
-Message-ID: <20221230172511.GB14776@pengutronix.de>
-References: <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
- <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
- <20221216110227.GA12327@pengutronix.de>
- <20221216111308.wckibotr5d3q6ree@pengutronix.de>
- <5c2e0531-e7c3-1b37-35ed-c8e9795a0d18@norik.com>
- <Y5xpt6J01Boec6Xr@francesco-nb.int.toradex.com>
- <41991ce2-3e88-5afc-6def-6e718d624768@norik.com>
- <Y674eoNsHtAeG7IP@francesco-nb.int.toradex.com>
- <20221230161209.GA14776@pengutronix.de>
- <Y68WGcdQNQkD0vfa@francesco-nb.int.toradex.com>
+        Fri, 30 Dec 2022 12:25:56 -0500
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0F4C22;
+        Fri, 30 Dec 2022 09:25:54 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id 0AD511466;
+        Fri, 30 Dec 2022 18:25:53 +0100 (CET)
+Authentication-Results: ext-mx-out002.mykolab.com (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        content-transfer-encoding:content-type:content-type:mime-version
+        :message-id:date:date:subject:subject:from:from:received
+        :received:received; s=dkim20160331; t=1672421148; x=1674235549;
+         bh=cpzY3QNeeTkSZN6DmEhnllwIB6yigynBJRoX+oPeZAM=; b=gi753zfII+bK
+        s+G7EdG6trADssUi/95nZEwFHmqaCNesd3/u29RV9/Zj+k7h+HO7h+G6pR8GErZZ
+        0bx5CUv4ulIDgzRxorGm1tBmPP4ed4lqcLvBHHYX6sGMx41tSK7+mh9nTKN7626x
+        DXEuGlPnqfvpWoF5K4iyqsdE1M8APRCScmQklQbnRXxQW3FYGa117+OP76CNBqK1
+        dmz6jmrcwA0HdRXPr8MReYX7DMXw4xb5eov+OFEZsh5S/c6Y9mtlUPFZtl0sDZjA
+        MBHF+5mY2/eY04PU0ErFgoWYqIJpE4SYurAlnDYdEwU38sdHEvzAlRd3BJHwsyM5
+        SHTUWuwBZlKYaM407x8R8OVYGgKuUcVWfEWQRgNFoi/EjBD4N8RKlhLiTBuSEiKQ
+        Z1llfyiCI+oP8+e+tlzgs10Q+srQyNzTcxjSXNkVf4GL1KI+9BV3U9jVSHVTR8DP
+        yZoz2HS1dh7EiuwW+ao/zpONjzOCcFJqUipNzpZIBaH8s5Grw7GqCVLW6cF864xv
+        M/v6yvlBw7hQOueI7vhM6c5Z1LKjUikSMuXaIa7G3AVb7rjQD52AOcb7MkkyjZnZ
+        iWsgUyDe40vterJNWTDUquruPiW3WwDkDirHSIFf4wllI6bSZ8wvKUNAVymVdJWE
+        WThqvy80X6TJ4boitxDo2lvMA05zlS4=
+X-Virus-Scanned: amavisd-new at mykolab.com
+X-Spam-Score: -1.899
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
+Received: from mx.kolabnow.com ([127.0.0.1])
+        by localhost (ext-mx-out002.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hYA45TQFvxp4; Fri, 30 Dec 2022 18:25:48 +0100 (CET)
+Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
+        by mx.kolabnow.com (Postfix) with ESMTPS id CBE0013B6;
+        Fri, 30 Dec 2022 18:25:48 +0100 (CET)
+Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
+        by int-mx002.mykolab.com (Postfix) with ESMTPS id 702862BE1;
+        Fri, 30 Dec 2022 18:25:48 +0100 (CET)
+From:   Federico Vaga <federico.vaga@vaga.pv.it>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Federico Vaga <federico.vaga@vaga.pv.it>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] doc:it_IT: align Italian documentation
+Date:   Fri, 30 Dec 2022 18:25:34 +0100
+Message-Id: <20221230172534.58822-1-federico.vaga@vaga.pv.it>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y68WGcdQNQkD0vfa@francesco-nb.int.toradex.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 05:47:21PM +0100, Francesco Dolcini wrote:
-> On Fri, Dec 30, 2022 at 05:12:09PM +0100, Oleksij Rempel wrote:
-> > On Fri, Dec 30, 2022 at 03:40:58PM +0100, Francesco Dolcini wrote:
-> > > +Wolfram
-> > > 
-> > > On Wed, Dec 28, 2022 at 09:01:46AM +0100, Primoz Fiser wrote:
-> > > > On 16. 12. 22 13:51, Francesco Dolcini wrote:
-> > > > > On Fri, Dec 16, 2022 at 01:23:29PM +0100, Primoz Fiser wrote:
-> > > > > > The only solid point in the thread seems to be that in that case we are not
-> > > > > > covering up the potential i2c hardware issues?
-> > > > > 
-> > > > > I believe that in this case we should just have a warning in the kernel.
-> > > > > The retry potentially work-around a transient issue and we do not hide any hardware
-> > > > > issue at the same time. It seems an easy win-win solution.
-> > > > 
-> > > > I would agree about throwing a warning message in retry case.
-> > > > 
-> > > > Not sure how would it affect other i2c bus drivers using retries > 0.
-> > > > Retries might be pretty rare with i2c-imx but some other drivers set this to
-> > > > 5 for example. At least using _ratelimited printk is a must using this
-> > > > approach.
-> > > 
-> > > Wolfram, Uwe, Oleksij
-> > > 
-> > > Would it be acceptable to have a warning when we have I2C retries, and
-> > > with that in place enabling retries on the imx driver?
-> > > 
-> > > It exists hardware that requires this to work correctly,
-> > 
-> > Well, this is persistent confusion in this monolog. It will not make it
-> > correctly.
-> > 
-> > > and at a
-> > > minimum setting the retry count from user space is not going to solve
-> > > potential issues during initial driver probe.
-> > 
-> > I assume it is not clear from programmer point of view. Lets try other way:
-> > 
-> > - The I2C slave could not correctly interpret the data on SDA because the SDA
-> >   high or low-level voltages do not reach its appropriate input
-> >   thresholds.
-> > 
-> > This means:
-> > 
-> > You have this:
-> > 
-> >     /-\    /-\ ----- 2.5Vcc
-> > ___/   \__/   \___
-> > 
-> > Instead of this:
-> > 
-> >      /-\     /-\ ----- 3.3Vcc
-> >     /  \    /   \
-> > ___/    \__/     \___
-> > 
-> > This is bad, because master or slave will not be able to interpret the pick level
-> > correctly. It may see some times 0 instead of 1. This means, what ever we are
-> > writing we are to the slave or reading from the slave is potentially corrupt
-> > and only __sometimes__ the master was able to detect it. 
-> > 
-> > - The I2C slave missed an SCL cycle because the SCL high or low-level voltages
-> >   do not reach its appropriate input thresholds.
-> > 
-> > This means, the bus frequency is too high for current configured or physical PCB
-> > designed. So, you will have different kind of corruptions and some times they
-> > will be detected. 
-> > 
-> > - The I2C slave accidently interpreted a spike etc. as an SCL cycle.
-> > 
-> > This means the noise level is to high. The driver strange should be increased
-> > or PCB redesign should be made. May be there are more options. If not done,
-> > data corruption can be expected.
-> > 
-> > None of this issue can be "fixed" by retries or made more "robust".
-> > Doing more retries means: we do what ever we do until the system was not able to
-> > detect the error.
-> 
-> Hello Oleksij,
-> thanks for the detailed explanation, appreciated.
-> 
-> Given that is it correct that the i2c imx driver return EAGAIN in such a
-> case (arbitration error)? You made it crystal clear that there is no
-> such thing as try again for this error, I would be inclined to prepare a
-> patch to fix this.
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index cf5bacf3a488..a2a581c8ae07 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -492,7 +492,7 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool a
->                 /* check for arbitration lost */
->                 if (temp & I2SR_IAL) {
->                         i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
-> -                       return -EAGAIN;
-> +                       return -EIO;
->                 }
-> 
->                 if (for_busy && (temp & I2SR_IBB)) {
-> 
+Translation for the following patches
 
-Hm, good question.
+commit da4288b95baa ("scripts/check-local-export: avoid 'wait $!' for process substitution")
+commit 5372de4e4545 ("docs/doc-guide: Put meta title for kernel-doc HTML page")
+commit 4d627ef12b40 ("docs/doc-guide: Mention make variable SPHINXDIRS")
+commit 7c43214dddfd ("docs/doc-guide: Add footnote on Inkscape for better images in PDF documents")
+commit 615041d42a1a ("docs: kernel-docs: shorten the lengthy doc title")
+commit cbf4adfd4d19 ("Documentation: process: Update email client instructions for Thunderbird")
+commit e72b3b9810dd ("maintainer-pgp-guide: minor wording tweaks")
+commit ea522496afa1 ("Documentation: process: replace outdated LTS table w/ link")
+commit 93431e0607e5 ("Replace HTTP links with HTTPS ones: documentation")
+commit e648174b53f1 ("Documentation: Fix spelling mistake in hacking.rst")
+commit 602684adb42a ("docs: Update version number from 5.x to 6.x in README.rst")
+commit 489876063fb1 ("docs: add a man-pages link to the front page")
+commit 0c7b4366f1ab ("docs: Rewrite the front page")
 
-> In addition to that is there any valid use case of the i2c retry
-> mechanism?
-> Is possible for an I2C controller to report anything that can
-> be recovered with a retry?
+Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
+---
+ .../translations/it_IT/admin-guide/README.rst |  2 +-
+ .../it_IT/doc-guide/kernel-doc.rst            |  2 +
+ .../translations/it_IT/doc-guide/sphinx.rst   | 14 ++-
+ Documentation/translations/it_IT/index.rst    | 93 +++++++++----------
+ .../it_IT/kernel-hacking/hacking.rst          |  2 +-
+ .../translations/it_IT/process/2.Process.rst  | 15 +--
+ .../it_IT/process/7.AdvancedTopics.rst        |  8 +-
+ .../translations/it_IT/process/changes.rst    | 11 +++
+ .../it_IT/process/email-clients.rst           | 67 ++++++++-----
+ .../it_IT/process/kernel-docs.rst             |  4 +-
+ .../it_IT/process/maintainer-pgp-guide.rst    |  4 +-
+ 11 files changed, 127 insertions(+), 95 deletions(-)
 
-In case of multimaster bus, except of noise and signal level issues, we
-would have a simple conflict between masters. In this case, we should
-retry. Potentially, every master should use randomized pause before
-retrying (at last it is done by some other protocol using shared
-medium).
-
-Regards,
-Oleksij
+diff --git a/Documentation/translations/it_IT/admin-guide/README.rst b/Documentation/translations/it_IT/admin-guide/README.rst
+index b37166817842..c874586a9af9 100644
+--- a/Documentation/translations/it_IT/admin-guide/README.rst
++++ b/Documentation/translations/it_IT/admin-guide/README.rst
+@@ -4,7 +4,7 @@
+ 
+ .. _it_readme:
+ 
+-Rilascio del kernel Linux  5.x <http://kernel.org/>
++Rilascio del kernel Linux  6.x <http://kernel.org/>
+ ===================================================
+ 
+ .. warning::
+diff --git a/Documentation/translations/it_IT/doc-guide/kernel-doc.rst b/Documentation/translations/it_IT/doc-guide/kernel-doc.rst
+index 78082281acf9..5cece223b46b 100644
+--- a/Documentation/translations/it_IT/doc-guide/kernel-doc.rst
++++ b/Documentation/translations/it_IT/doc-guide/kernel-doc.rst
+@@ -3,6 +3,8 @@
+ .. note:: Per leggere la documentazione originale in inglese:
+ 	  :ref:`Documentation/doc-guide/index.rst <doc_guide>`
+ 
++.. title:: Commenti in kernel-doc
++
+ .. _it_kernel_doc:
+ 
+ =================================
+diff --git a/Documentation/translations/it_IT/doc-guide/sphinx.rst b/Documentation/translations/it_IT/doc-guide/sphinx.rst
+index 64528790dc34..3030eedcff88 100644
+--- a/Documentation/translations/it_IT/doc-guide/sphinx.rst
++++ b/Documentation/translations/it_IT/doc-guide/sphinx.rst
+@@ -151,7 +151,8 @@ Ovviamente, per generare la documentazione, Sphinx (``sphinx-build``)
+ dev'essere installato. Se disponibile, il tema *Read the Docs* per Sphinx
+ verrà utilizzato per ottenere una documentazione HTML più gradevole.
+ Per la documentazione in formato PDF, invece, avrete bisogno di ``XeLaTeX`
+-e di ``convert(1)`` disponibile in ImageMagick (https://www.imagemagick.org).
++e di ``convert(1)`` disponibile in ImageMagick
++(https://www.imagemagick.org). \ [#ink]__
+ Tipicamente, tutti questi pacchetti sono disponibili e pacchettizzati nelle
+ distribuzioni Linux.
+ 
+@@ -162,9 +163,20 @@ la generazione potete usare il seguente comando ``make SPHINXOPTS=-v htmldocs``.
+ Potete anche personalizzare l'ouptut html passando un livello aggiuntivo
+ DOCS_CSS usando la rispettiva variabile d'ambiente ``DOCS_CSS``.
+ 
++La variable make ``SPHINXDIRS`` è utile quando si vuole generare solo una parte
++della documentazione. Per esempio, si possono generare solo di documenti in
++``Documentation/doc-guide`` eseguendo ``make SPHINXDIRS=doc-guide htmldocs``. La
++sezione dedicata alla documentazione di ``make help`` vi mostrerà quali sotto
++cartelle potete specificare.
++
+ Potete eliminare la documentazione generata tramite il comando
+ ``make cleandocs``.
+ 
++.. [#ink] Avere installato anche ``inkscape(1)`` dal progetto Inkscape ()
++          potrebbe aumentare la qualità delle immagini che verranno integrate
++          nel documento PDF, specialmente per quando si usando rilasci del
++          kernel uguali o superiori a 5.18
++
+ Scrivere la documentazione
+ ==========================
+ 
+diff --git a/Documentation/translations/it_IT/index.rst b/Documentation/translations/it_IT/index.rst
+index e80a3097aa57..5dd751349adc 100644
+--- a/Documentation/translations/it_IT/index.rst
++++ b/Documentation/translations/it_IT/index.rst
+@@ -1,13 +1,11 @@
++.. SPDX-License-Identifier: GPL-2.0
++
+ .. _it_linux_doc:
+ 
+ ===================
+ Traduzione italiana
+ ===================
+ 
+-.. raw:: latex
+-
+-	\kerneldocCJKoff
+-
+ :manutentore: Federico Vaga <federico.vaga@vaga.pv.it>
+ 
+ .. _it_disclaimer:
+@@ -67,75 +65,68 @@ I miglioramenti alla documentazione sono sempre i benvenuti; per cui,
+ se vuoi aiutare, iscriviti alla lista di discussione linux-doc presso
+ vger.kernel.org.
+ 
+-Documentazione sulla licenza dei sorgenti
+------------------------------------------
+-
+-I seguenti documenti descrivono la licenza usata nei sorgenti del kernel Linux
+-(GPLv2), come licenziare i singoli file; inoltre troverete i riferimenti al
+-testo integrale della licenza.
++Lavorare con la comunità di sviluppo
++------------------------------------
+ 
+-* :ref:`it_kernel_licensing`
++Le guide fondamentali per l'interazione con la comunità di sviluppo del kernel e
++su come vedere il proprio lavoro integrato.
+ 
+-Documentazione per gli utenti
+------------------------------
+-
+-I seguenti manuali sono scritti per gli *utenti* del kernel - ovvero,
+-coloro che cercano di farlo funzionare in modo ottimale su un dato sistema
+-
+-.. warning::
++.. toctree::
++   :maxdepth: 1
+ 
+-    TODO ancora da tradurre
++   process/development-process
++   process/submitting-patches
++   Code of conduct <process/code-of-conduct>
++   All development-process docs <process/index>
+ 
+-Documentazione per gli sviluppatori di applicazioni
+----------------------------------------------------
+ 
+-Il manuale delle API verso lo spazio utente è una collezione di documenti
+-che descrivono le interfacce del kernel viste dagli sviluppatori
+-di applicazioni.
++Manuali sull'API interna
++------------------------
+ 
+-.. warning::
++Di seguito una serie di manuali per gli sviluppatori che hanno bisogno di
++interfacciarsi con il resto del kernel.
+ 
+-    TODO ancora da tradurre
++.. toctree::
++   :maxdepth: 1
+ 
++   core-api/index
+ 
+-Introduzione allo sviluppo del kernel
+--------------------------------------
++Strumenti e processi per lo sviluppo
++------------------------------------
+ 
+-Questi manuali contengono informazioni su come contribuire allo sviluppo
+-del kernel.
+-Attorno al kernel Linux gira una comunità molto grande con migliaia di
+-sviluppatori che contribuiscono ogni anno. Come in ogni grande comunità,
+-sapere come le cose vengono fatte renderà il processo di integrazione delle
+-vostre modifiche molto più semplice
++Di seguito una serie di manuali contenenti informazioni utili a tutti gli
++sviluppatori del kernel.
+ 
+ .. toctree::
+-   :maxdepth: 2
++   :maxdepth: 1
+ 
+-   process/index
++   process/license-rules
+    doc-guide/index
+    kernel-hacking/index
+ 
+-Documentazione della API del kernel
+------------------------------------
++Documentazione per gli utenti
++-----------------------------
+ 
+-Questi manuali forniscono dettagli su come funzionano i sottosistemi del
+-kernel dal punto di vista degli sviluppatori del kernel. Molte delle
+-informazioni contenute in questi manuali sono prese direttamente dai
+-file sorgenti, informazioni aggiuntive vengono aggiunte solo se necessarie
+-(o almeno ci proviamo — probabilmente *non* tutto quello che è davvero
+-necessario).
++Di seguito una serie di manuali per gli *utenti* del kernel - ovvero coloro che
++stanno cercando di farlo funzionare al meglio per un dato sistema, ma anche
++coloro che stanno sviluppando applicazioni che sfruttano l'API verso lo
++spazio-utente.
+ 
+-.. toctree::
+-   :maxdepth: 2
++Consultate anche `Linux man pages <https://www.kernel.org/doc/man-pages/>`_, che
++vengono mantenuti separatamente dalla documentazione del kernel Linux
++
++Documentazione relativa ai firmware
++-----------------------------------
++Di seguito informazioni sulle aspettative del kernel circa i firmware.
+ 
+-   core-api/index
+ 
+ Documentazione specifica per architettura
+ -----------------------------------------
+ 
+-Questi manuali forniscono dettagli di programmazione per le diverse
+-implementazioni d'architettura.
+ 
+-.. warning::
++Documentazione varia
++--------------------
+ 
+-    TODO ancora da tradurre
++Ci sono documenti che sono difficili da inserire nell'attuale organizzazione
++della documentazione; altri hanno bisogno di essere migliorati e/o convertiti
++nel formato *ReStructured Text*; altri sono semplicamente troppo vecchi.
+diff --git a/Documentation/translations/it_IT/kernel-hacking/hacking.rst b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
+index 560f1d0482d2..dd06bfc1a050 100644
+--- a/Documentation/translations/it_IT/kernel-hacking/hacking.rst
++++ b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
+@@ -137,7 +137,7 @@ macro :c:func:`in_softirq()` (``include/linux/preempt.h``).
+ .. warning::
+ 
+     State attenti che questa macro ritornerà un falso positivo
+-    se :ref:`botton half lock <it_local_bh_disable>` è bloccato.
++    se :ref:`bottom half lock <it_local_bh_disable>` è bloccato.
+ 
+ Alcune regole basilari
+ ======================
+diff --git a/Documentation/translations/it_IT/process/2.Process.rst b/Documentation/translations/it_IT/process/2.Process.rst
+index 62826034e0b2..25cd00351c03 100644
+--- a/Documentation/translations/it_IT/process/2.Process.rst
++++ b/Documentation/translations/it_IT/process/2.Process.rst
+@@ -136,18 +136,11 @@ Quindi, per esempio, la storia del kernel 5.2 appare così (anno 2019):
+ La 5.2.21 fu l'aggiornamento finale per la versione 5.2.
+ 
+ Alcuni kernel sono destinati ad essere kernel a "lungo termine"; questi
+-riceveranno assistenza per un lungo periodo di tempo.  Al momento in cui
+-scriviamo, i manutentori dei kernel stabili a lungo termine sono:
+-
+-	======  ================================  ==========================================
+-	3.16	Ben Hutchings			  (kernel stabile molto più a lungo termine)
+-	4.4	Greg Kroah-Hartman e Sasha Levin  (kernel stabile molto più a lungo termine)
+-	4.9	Greg Kroah-Hartman e Sasha Levin
+-	4.14	Greg Kroah-Hartman e Sasha Levin
+-	4.19	Greg Kroah-Hartman e Sasha Levin
+-	5.4i	Greg Kroah-Hartman e Sasha Levin
+-	======  ================================  ==========================================
++riceveranno assistenza per un lungo periodo di tempo. Consultate il seguente
++collegamento per avere la lista delle versioni attualmente supportate e i
++relativi manutentori:
+ 
++       https://www.kernel.org/category/releases.html
+ 
+ Questa selezione di kernel di lungo periodo sono puramente dovuti ai loro
+ manutentori, alla loro necessità e al tempo per tenere aggiornate proprio
+diff --git a/Documentation/translations/it_IT/process/7.AdvancedTopics.rst b/Documentation/translations/it_IT/process/7.AdvancedTopics.rst
+index cc1cff5d23ae..dffd813a0910 100644
+--- a/Documentation/translations/it_IT/process/7.AdvancedTopics.rst
++++ b/Documentation/translations/it_IT/process/7.AdvancedTopics.rst
+@@ -35,9 +35,9 @@ git è parte del processo di sviluppo del kernel.  Gli sviluppatori che
+ desiderassero diventare agili con git troveranno più informazioni ai
+ seguenti indirizzi:
+ 
+-	http://git-scm.com/
++	https://git-scm.com/
+ 
+-	http://www.kernel.org/pub/software/scm/git/docs/user-manual.html
++	https://www.kernel.org/pub/software/scm/git/docs/user-manual.html
+ 
+ e su varie guide che potrete trovare su internet.
+ 
+@@ -63,7 +63,7 @@ eseguire git-daemon è relativamente semplice .  Altrimenti, iniziano a
+ svilupparsi piattaforme che offrono spazi pubblici, e gratuiti (Github,
+ per esempio).  Gli sviluppatori permanenti possono ottenere un account
+ su kernel.org, ma non è proprio facile da ottenere; per maggiori informazioni
+-consultate la pagina web http://kernel.org/faq/.
++consultate la pagina web https://kernel.org/faq/.
+ 
+ In git è normale avere a che fare con tanti rami.  Ogni linea di sviluppo
+ può essere separata in "rami per argomenti" e gestiti indipendentemente.
+@@ -137,7 +137,7 @@ vostri rami.  Citando Linus
+ 	facendo, e ho bisogno di fidarmi *senza* dover passare tutte
+ 	le modifiche manualmente una per una.
+ 
+-(http://lwn.net/Articles/224135/).
++(https://lwn.net/Articles/224135/).
+ 
+ Per evitare queste situazioni, assicuratevi che tutte le patch in un ramo
+ siano strettamente correlate al tema delle modifiche; un ramo "driver fixes"
+diff --git a/Documentation/translations/it_IT/process/changes.rst b/Documentation/translations/it_IT/process/changes.rst
+index 10e0ef9c34b7..473ec2cc558e 100644
+--- a/Documentation/translations/it_IT/process/changes.rst
++++ b/Documentation/translations/it_IT/process/changes.rst
+@@ -35,6 +35,7 @@ PC Card, per esempio, probabilmente non dovreste preoccuparvi di pcmciautils.
+ GNU C                  5.1                gcc --version
+ Clang/LLVM (optional)  11.0.0             clang --version
+ GNU make               3.81               make --version
++bash                   4.2                bash --version
+ binutils               2.23               ld -v
+ flex                   2.5.35             flex --version
+ bison                  2.0                bison --version
+@@ -88,6 +89,11 @@ Make
+ 
+ Per compilare il kernel vi servirà GNU make 3.81 o successivo.
+ 
++Bash
++----
++Per generare il kernel vengono usati alcuni script per bash.
++Questo richiede bash 4.2 o successivo.
++
+ Binutils
+ --------
+ 
+@@ -370,6 +376,11 @@ Make
+ 
+ - <ftp://ftp.gnu.org/gnu/make/>
+ 
++Bash
++----
++
++- <ftp://ftp.gnu.org/gnu/bash/>
++
+ Binutils
+ --------
+ 
+diff --git a/Documentation/translations/it_IT/process/email-clients.rst b/Documentation/translations/it_IT/process/email-clients.rst
+index b792f2f06a74..970671cd91af 100644
+--- a/Documentation/translations/it_IT/process/email-clients.rst
++++ b/Documentation/translations/it_IT/process/email-clients.rst
+@@ -288,37 +288,62 @@ Thunderbird (GUI)
+ Thunderbird è un clone di Outlook a cui piace maciullare il testo, ma esistono
+ modi per impedirglielo.
+ 
++Dopo la configurazione, inclusa l'installazione delle estenzioni, dovrete
++riavviare Thunderbird.
++
+ - permettere l'uso di editor esterni:
++
+   La cosa più semplice da fare con Thunderbird e le patch è quello di usare
+-  l'estensione "external editor" e di usare il vostro ``$EDITOR`` preferito per
+-  leggere/includere patch nel vostro messaggio.  Per farlo, scaricate ed
+-  installate l'estensione e aggiungete un bottone per chiamarla rapidamente
+-  usando :menuselection:`Visualizza-->Barra degli strumenti-->Personalizza...`;
+-  una volta fatto potrete richiamarlo premendo sul bottone mentre siete nella
+-  finestra :menuselection:`Scrivi`
+-
+-  Tenete presente che "external editor" richiede che il vostro editor non
+-  faccia alcun fork, in altre parole, l'editor non deve ritornare prima di
+-  essere stato chiuso.  Potreste dover passare dei parametri aggiuntivi al
+-  vostro editor oppure cambiargli la configurazione.  Per esempio, usando
+-  gvim dovrete aggiungere l'opzione -f ``/usr/bin/gvim -f`` (Se il binario
+-  si trova in ``/usr/bin``) nell'apposito campo nell'interfaccia di
+-  configurazione di  :menuselection:`external editor`.  Se usate altri editor
+-  consultate il loro  manuale per sapere come configurarli.
++  estensioni che permettano di aprire il vostro editor preferito.
++
++  Di seguito alcune estensioni che possono essere utili al caso.
++
++  - "External Editor Revived"
++
++    https://github.com/Frederick888/external-editor-revived
++
++    https://addons.thunderbird.net/en-GB/thunderbird/addon/external-editor-revived/
++
++    L'estensione richiede l'installazione di "native messaging host". Date
++    un'occhiata alla seguente wiki:
++    https://github.com/Frederick888/external-editor-revived/wiki
++
++  - "External Editor"
++
++    https://github.com/exteditor/exteditor
++
++    Per usarlo, scaricate ed installate l'applicazione. Poi aprite la finestra
++    :menuselection:`Scrivi` e a seguire aggiungete un bottone per eseguirlo
++    `Visualizza-->Barra degli strumenti-->Personalizza...`. Infine, premente
++    questo nuovo bottone tutte le volte che volete usare l'editor esterno.
++
++    Tenete presente che "external editor" richiede che il vostro editor non
++    faccia alcun fork, in altre parole, l'editor non deve ritornare prima di
++    essere stato chiuso.  Potreste dover passare dei parametri aggiuntivi al
++    vostro editor oppure cambiargli la configurazione.  Per esempio, usando
++    gvim dovrete aggiungere l'opzione -f ``/usr/bin/gvim -f`` (Se il binario
++    si trova in ``/usr/bin``) nell'apposito campo nell'interfaccia di
++    configurazione di  :menuselection:`external editor`.  Se usate altri editor
++    consultate il loro  manuale per sapere come configurarli.``)``
+ 
+ Per rendere l'editor interno un po' più sensato, fate così:
+ 
+-- Modificate le impostazioni di Thunderbird per far si che non usi
+-  ``format=flowed``. Andate in :menuselection:`Modifica-->Preferenze-->Avanzate-->Editor di configurazione`
++- Modificate le impostazioni di Thunderbird per far si che non usi ``format=flowed``!
++  Andate sulla finestra principale e cercate il bottone per il menu a tendina principale.
++  Poi :menuselection:`Modifica-->Preferenze-->Avanzate-->Editor di configurazione`
+   per invocare il registro delle impostazioni.
+ 
+-- impostate ``mailnews.send_plaintext_flowed`` a ``false``
++  - impostate ``mailnews.send_plaintext_flowed`` a ``false``
+ 
+-- impostate ``mailnews.wraplength`` da ``72`` a ``0``
++  - impostate ``mailnews.wraplength`` da ``72`` a ``0``
+ 
+-- :menuselection:`Visualizza-->Corpo del messaggio come-->Testo semplice`
++- Non scrivete messaggi HTML! Andate sulla finestra principale ed aprite la
++  schermata :menuselection:`Menu principale-->Impostazioni account-->nome@unserver.ovunque-->Composizioni e indirizzi`.
++  Qui potrete disabilitare l'opzione "Componi i messaggi in HTML"
+ 
+-- :menuselection:`Visualizza-->Codifica del testo-->Unicode`
++- Aprite i messaggi solo in formato testo! Andate sulla finestra principale e
++  selezionate
++  :menuselection:`Menu principale-->Visualizza-->Copro del messaggio come-->Testo semplice`
+ 
+ 
+ TkRat (GUI)
+diff --git a/Documentation/translations/it_IT/process/kernel-docs.rst b/Documentation/translations/it_IT/process/kernel-docs.rst
+index 38e0a955121a..eadcbf50a1b5 100644
+--- a/Documentation/translations/it_IT/process/kernel-docs.rst
++++ b/Documentation/translations/it_IT/process/kernel-docs.rst
+@@ -6,8 +6,8 @@
+ 
+ .. _it_kernel_docs:
+ 
+-Indice di documenti per le persone interessate a capire e/o scrivere per il kernel Linux
+-========================================================================================
++Ulteriore Documentazione Del Kernel Linux
++=========================================
+ 
+ .. note::
+    Questo documento contiene riferimenti a documenti in lingua inglese; inoltre
+diff --git a/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst b/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
+index a1e98ec9532e..4bd7a8a66904 100644
+--- a/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
++++ b/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
+@@ -286,9 +286,7 @@ magari in una cassetta di sicurezza in banca.
+     Probabilmente la vostra stampante non è più quello stupido dispositivo
+     connesso alla porta parallela, ma dato che il suo output è comunque
+     criptato con la passphrase, eseguire la stampa in un sistema "cloud"
+-    moderno dovrebbe essere comunque relativamente sicuro. Un'opzione potrebbe
+-    essere quella di cambiare la passphrase della vostra chiave primaria
+-    subito dopo aver finito con paperkey.
++    moderno dovrebbe essere comunque relativamente sicuro.
+ 
+ Copia di riserva di tutta la cartella GnuPG
+ -------------------------------------------
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.30.2
+
