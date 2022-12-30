@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A94659A3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 16:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2AD659A3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 16:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235308AbiL3PzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 10:55:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
+        id S235309AbiL3P4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 10:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235302AbiL3PzI (ORCPT
+        with ESMTP id S235001AbiL3Pz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 10:55:08 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CEC1BEAD
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 07:55:08 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id y25so32214344lfa.9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 07:55:07 -0800 (PST)
+        Fri, 30 Dec 2022 10:55:57 -0500
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DE021B2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 07:55:55 -0800 (PST)
+Received: by mail-vk1-xa2b.google.com with SMTP id b81so10254067vkf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 07:55:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VGfyma8Qn7sSFvu2zSEpMZKY5/A9O53T6J2YqTZdXjc=;
-        b=OFnopBeZPQAUbNaRLYVpb7OIMIGUbHsbCDQv1dukARbxv0lwF2fMcinCIPg1rIHLbY
-         NTZTfoA/ZCefIue/e5dCz10TeMPxcPglosk4+DzVZiWfOsq7CxTuuPZ5ae3EesO8OXAI
-         YsVACSTniFkatgmHIoR6S5oQ1VVz5XUMcnN4a+dtg88N2as97ludx9SYvWC1mUciC9RI
-         visOK15+zSj+U7tD4J5/+2Q/ex53tdisF5gvrCSCuBL18vTPOc4kc0SJ4kHfSACcRy8c
-         YG7xOu8fynvbJtyfQaJXL79fWmsWIRdMZKqlscul5NmJyDtC8qDtN/XSWA91r/n6jyy3
-         Zi8Q==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o7zb+TjyOCJ5Qv3IrJ07U93Hor1hao+xRRIpVMTYJ34=;
+        b=sXRZXJyjtqPl1pLLhxIM2Bprko/93NJCyv2iToSKUrcfMjnYapW/R8FMjoDC4muljW
+         PcmInvjhlsB/i6PAMqPcVxgyPvhFNCSaCXxCcdCiYVGeYlLN/rtnWbIsqfw3ixJNphs8
+         o2E5ImzHY/f1xcxvc68UV541Z+4AUZqfxfWMap9wy+j+Bz6j/0U5K7wyo+Bpr3RmCdx0
+         OR2NQP/XJ5+EO0NmEEblkiYGbFJYWj2tRmrMjVZRuXb58TDQE4gyd4mkPPdOOpJboEUa
+         3b9cjZRogQLLKfvJlxf3CE+RQeRdVZGgqxNjt2uwRYZ97rz3ULcu000PiWT3oQfYGGZs
+         1zNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VGfyma8Qn7sSFvu2zSEpMZKY5/A9O53T6J2YqTZdXjc=;
-        b=VVeVl3ad+ZoQBnPTg7RVceeKLS1j+qXtfIkYyL3IVB+1m+HfoAtTtWj4WEDRUG49Ek
-         9TLqKnh6wjRv79fykGZqevBEIC7rRsf/cCpJ1N9mRk9j1i+glSx+ndJaXRm4g4FQ+SiA
-         9Dc6lTKmuV0MQ7mz2PXnPXlWdSxsa+S50p63nCtbfBgH+LlX8PF8wsoZr42DwfIz4GXS
-         6wiVIml2v3BU3O7VOkaa7vsGcomiFdZbxQOPERiKgQmCU50dH21eS5dNvdMuOeHXJve2
-         bRhMb/N4Gah7xun2UCILB9Evsk9TKwLA7OtRrJhY99SFf7OmwkHxt8WujIQedD2YYLUX
-         YgIQ==
-X-Gm-Message-State: AFqh2kqQlkXTSMuXIBrOuJpmlcUvaHRYsb0BWuF3nL4NmtvrB6ruGDt5
-        YjPRgx4keSGsxfYPiQeL4DMDrA==
-X-Google-Smtp-Source: AMrXdXvLmPUA4Zd1qNu6Cy/5mT64Qmj3iYHxUKZJgRpzLHWD6hamB78MApyV68kq/q7oikoYxyl1CA==
-X-Received: by 2002:a05:6512:1049:b0:4b0:a1e7:915a with SMTP id c9-20020a056512104900b004b0a1e7915amr10290789lfb.49.1672415706422;
-        Fri, 30 Dec 2022 07:55:06 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z21-20020a196515000000b004b4bab7d5a9sm3546979lfb.46.2022.12.30.07.55.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 07:55:05 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFT PATCH] arm64: dts: qcom: sc8280xp: remove GCC from CX power domain
-Date:   Fri, 30 Dec 2022 16:55:02 +0100
-Message-Id: <20221230155502.115205-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=o7zb+TjyOCJ5Qv3IrJ07U93Hor1hao+xRRIpVMTYJ34=;
+        b=x3S572JvxRZ6cl4P5vzAluzYWI3OU0xSPP0CnRQD26hGLFCXcgEyZw7KHov1aPd9Ms
+         q+7hym2bqQy/gYzSnAJYNBB5yKWEKKFj53h7i0wV+u3JUcQHsVHgEMkbO8tSbRoPaLrT
+         nZCBzQSn3GbQrPQarzJvohT+DFmFYC/rRgDY6s3P8+A3KMrrRBUBjDM1TT4rt4DY6ZmC
+         JUHpRD0cXtQ/DiybWzKIZD8DWuffSDyRT1PDmn9aUxddsTEJL44Xf/iSOUWFBs9aq4iV
+         oa/pb9E84FdbnPFv6j2GxARQFOmXJtblpXXBYBg0DzsvtLg6K9IXor5YI/akFLrKsFrs
+         7cCQ==
+X-Gm-Message-State: AFqh2koOaX1snJOQaYctMBpCAz12V7SRCM4pd5N1Wg5h5Xg7r45+4kws
+        Nd4/Ux8ChZE+yx3mRQ6ZZxS1HQj4l3wRM5/x/qqLPmbB4Ldy1Q==
+X-Google-Smtp-Source: AMrXdXuykR6UjtrhR8E0rPTCaSKn77+wJWJFDWSlNmnqsysrri8SrWgpPgnvpWQ+tLAKGdS12NC0U2QDLuurNt7NZrc=
+X-Received: by 2002:ac5:c382:0:b0:3bd:e0b8:e350 with SMTP id
+ s2-20020ac5c382000000b003bde0b8e350mr3545220vkk.25.1672415755006; Fri, 30 Dec
+ 2022 07:55:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=no
+References: <20221219192016.1396950-1-dmitry.torokhov@gmail.com>
+In-Reply-To: <20221219192016.1396950-1-dmitry.torokhov@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 30 Dec 2022 16:55:44 +0100
+Message-ID: <CAMRc=Mdp39GpD8XJO4U5rJiU7t-C6jeNs37sp_JyKEaGf6y6rA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] gpiolib: of: remove of_gpio_count()
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +67,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bindings do not allow power-domain property in GCC clock controller and
-documentation does not indicate that GCC is part of VDD_CX.
+On Mon, Dec 19, 2022 at 8:20 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> There are no more users of of_gpio_count() in the mainline kernel,
+> remove it.
+>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>
+> After 6.2-rc1 there should be no more users of the APIs mentioned in
+> this series.
+>
+>  include/linux/of_gpio.h | 11 -----------
+>  1 file changed, 11 deletions(-)
+>
+> diff --git a/include/linux/of_gpio.h b/include/linux/of_gpio.h
+> index 6db627257a7b..39f16a960565 100644
+> --- a/include/linux/of_gpio.h
+> +++ b/include/linux/of_gpio.h
+> @@ -105,17 +105,6 @@ static inline int of_gpio_named_count(const struct device_node *np,
+>         return of_count_phandle_with_args(np, propname, "#gpio-cells");
+>  }
+>
+> -/**
+> - * of_gpio_count() - Count GPIOs for a device
+> - * @np:                device node to count GPIOs for
+> - *
+> - * Same as of_gpio_named_count, but hard coded to use the 'gpios' property
+> - */
+> -static inline int of_gpio_count(const struct device_node *np)
+> -{
+> -       return of_gpio_named_count(np, "gpios");
+> -}
+> -
+>  static inline int of_get_gpio_flags(const struct device_node *np, int index,
+>                       enum of_gpio_flags *flags)
+>  {
+> --
+> 2.39.0.314.g84b9a713c41-goog
+>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I applied the entire series, thanks a lot for doing that!
 
----
-
-Maybe the bindings should be fixed? Maybe this was added as workaround?
-Anyway looking at documentation I do not see such relation, except
-downstream vdd_cx-supply (which is the same as in other SoCs and we do
-not represent it in upstream).
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 1d1420c8720c..d14663c9f34c 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -799,7 +799,6 @@ gcc: clock-controller@100000 {
- 				 <&pcie4_phy>,
- 				 <0>,
- 				 <0>;
--			power-domains = <&rpmhpd SC8280XP_CX>;
- 		};
- 
- 		ipcc: mailbox@408000 {
--- 
-2.34.1
-
+Bart
