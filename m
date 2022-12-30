@@ -2,67 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0624F659A13
+	by mail.lfdr.de (Postfix) with ESMTP id 516A2659A14
 	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 16:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235192AbiL3PlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 10:41:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        id S235258AbiL3PlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 10:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235259AbiL3Pkb (ORCPT
+        with ESMTP id S235358AbiL3Pkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 10:40:31 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEA01C12A;
-        Fri, 30 Dec 2022 07:39:58 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pBHTm-00CPNM-VQ; Fri, 30 Dec 2022 23:39:32 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 30 Dec 2022 23:39:30 +0800
-Date:   Fri, 30 Dec 2022 23:39:30 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Roberto Sassu' <roberto.sassu@huaweicloud.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
-Message-ID: <Y68GMsGKROsgDbcs@gondor.apana.org.au>
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
- <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
- <6949ced7c1014488b2d00ff26eba6b6b@AcuMS.aculab.com>
+        Fri, 30 Dec 2022 10:40:32 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E521C411
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 07:40:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672414802; x=1703950802;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TIFFIonNfFuuxbjnwg8CcM1HsTMfK/pa2Ssm4mBgVPE=;
+  b=KpHIqsrDzZ+xi0ZuCnzrPaplrmcibFIUT8egOQJE0TNO8DlHRTD0Vx+4
+   eJn412AKvftE27QGqwGzXbAIONdGptRqMqgPockt41HdqQ4ggszlaU0XU
+   CcbI8xZUPPyy7G4BBCtrZTnNcXq/dGY/RS1EXmL4zE60Ha3OB9mK0Xi4l
+   EPYm5Y109T0l6rQnWEfKkgoYBISUevoDCGqv5Zp8o8CyITftgAZEPjXyP
+   3kZ5WPDC6O2IWd1MUHWdxTNgZ87yVkA6sQ/M1fTwHG51NMixaX947whrX
+   Dy35VljIsNXKvjuOXvc0+gvoFtmlh1GKUnrV+okLxkcJMNJLY+P+DIwYE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10576"; a="318919504"
+X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
+   d="scan'208";a="318919504"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 07:40:02 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10576"; a="796256472"
+X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
+   d="scan'208";a="796256472"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.2.40]) ([10.213.2.40])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 07:39:59 -0800
+Message-ID: <354afea4-f909-8352-753d-0f2509d7165b@intel.com>
+Date:   Fri, 30 Dec 2022 16:39:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6949ced7c1014488b2d00ff26eba6b6b@AcuMS.aculab.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: [PATCH] drm/bridge: sii902x: Allow reset line to be tied to a
+ sleepy GPIO controller
+Content-Language: en-US
+To:     Wadim Egorov <w.egorov@phytec.de>, upstream@lists.phytec.de,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     daniel@ffwll.ch, airlied@gmail.com, jernej.skrabec@gmail.com,
+        jonas@kwiboo.se, Laurent.pinchart@ideasonboard.com,
+        robert.foss@linaro.org, neil.armstrong@linaro.org
+References: <20221228145704.939801-1-w.egorov@phytec.de>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20221228145704.939801-1-w.egorov@phytec.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 01:35:07PM +0000, David Laight wrote:
+
+
+On 28.12.2022 15:57, Wadim Egorov wrote:
+> Switch to gpiod_set_value_cansleep() in sii902x_reset().
+> This is relevant if the reset line is tied to a I2C GPIO
+> controller.
 >
-> miter.length is size_t (unsigned long on 64bit) and nbytes unsigned int.
+> Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
 
-miter.length is bounded by sg->length which is unsigned int.
+Regards
+Andrzej
+> ---
+>   drivers/gpu/drm/bridge/sii902x.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
+> index 878fb7d3732b..980611aec2f6 100644
+> --- a/drivers/gpu/drm/bridge/sii902x.c
+> +++ b/drivers/gpu/drm/bridge/sii902x.c
+> @@ -240,12 +240,12 @@ static void sii902x_reset(struct sii902x *sii902x)
+>   	if (!sii902x->reset_gpio)
+>   		return;
+>   
+> -	gpiod_set_value(sii902x->reset_gpio, 1);
+> +	gpiod_set_value_cansleep(sii902x->reset_gpio, 1);
+>   
+>   	/* The datasheet says treset-min = 100us. Make it 150us to be sure. */
+>   	usleep_range(150, 200);
+>   
+> -	gpiod_set_value(sii902x->reset_gpio, 0);
+> +	gpiod_set_value_cansleep(sii902x->reset_gpio, 0);
+>   }
+>   
+>   static enum drm_connector_status sii902x_detect(struct sii902x *sii902x)
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
