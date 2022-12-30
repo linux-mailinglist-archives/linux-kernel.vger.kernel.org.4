@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F14659E54
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 00:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FE8659E79
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 00:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235674AbiL3Xc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 18:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S235588AbiL3XlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 18:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbiL3Xc0 (ORCPT
+        with ESMTP id S235567AbiL3XlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 18:32:26 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A327412D20;
-        Fri, 30 Dec 2022 15:32:24 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id co23so21064943wrb.4;
-        Fri, 30 Dec 2022 15:32:24 -0800 (PST)
+        Fri, 30 Dec 2022 18:41:09 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF535120AF
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 15:41:04 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id bn6so13478562ljb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 15:41:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=I67DJyMZ2pVBI8781A9LPZqkSNUsohSh0BZqH+JheCc=;
-        b=nWx3Otszq8LNvUhzN+GkPHe49rJvZicXb/35lWUQBDolDbDSfowtvv0JzqvXuPnJ0V
-         xQICKBGUryYOphQGf6/Bed0u9HTDWwdqPVHbD3vKUK7tR+UV1b/ph8k4SX/cRVT9lvB+
-         cB+tfVcg+u5YkwozoBuGwVIUJrahnf+maImB0uyd0FhSBLDbUqgjtshFvtfnBqIrpYcS
-         rdosCBYzdycSQ+Ypbv5QKd/8oNWNYCruQLazjyL6J0PQKS9auceBKNja09ecolvjXptz
-         UqqBwPQN775CY4NICoBh/69cDhCUw1BswPZPcCklVBB2rKLmezKhDIHaBvazmPDizbsW
-         77gw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zPnKBnQYDe91n3qzykPwxYPbik46clNWIIiDLmpM+LM=;
+        b=Xa/Fqx0NvUxpJgTPIvX4T0vNyb26l/p1LbaRpx79zHmFUTrotoFn+o/GP2/1/JAduT
+         JCUXNu2z5WZS7KqEx3NGub8LArCpgQ7xUPJPEFz0Hjao3hhPH9ba6VXgZrc3SVJ3KjLN
+         ionaedx4yrjZ2QsGoYNI59Y8/hngQAJS3ql9VXT1ObXQ0N3qLKO7KFLFCY484xuGjm9D
+         baIer4aQ9jYHKCkjbkA8+8ScvPOmZiUPTn+ZdyEH/Dlap71vU0JqsvAVRaSFAZqrWVXm
+         xId9PD6TRSpCAUTIzSkcXguMGjk0+TT3/0coZG4OKJ6XmHQJDHApWhds3HOysLWjPybC
+         e6pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I67DJyMZ2pVBI8781A9LPZqkSNUsohSh0BZqH+JheCc=;
-        b=Hs/vzKE8y7nW3DbzTclc7zhtbaIuRANsaSXXEqytc0i9/8HSkYVtcnmvdNszqAuEVJ
-         lbZjEIR+j4E0btiM1cRZUINDbpLFd6TOHCdZGi74/ftMxphAtZAHgrS4Il2Up5aWSOgo
-         OfPyiaBreZUfSJPsInfx2j+4StEADYLi8yaSEj4Cu/pTCnmE1ryukBQ7pwvG+hQShxAL
-         4GJF3WZDj3EPl+eqyeWbwNnIVycYnJslnG4lHqumrY4QTUGMCzfO8JuZ/+URY4CmfnJ2
-         vn5hmLFEtVF+OEJNMEOmTmktlkZkXoiZoqnS3GjQ1nbI3vCq8mU5TQcIKxscvYTONdCL
-         X4bQ==
-X-Gm-Message-State: AFqh2kprMxtyvI2/2SQcTUi+bFOVdwYJ69+2I+NFwcVLX/Npag9BZFrc
-        ALLxBcPUjLwFTJ8dulRDfT4=
-X-Google-Smtp-Source: AMrXdXuvEzISEd/jtpcHkGpk9jeGiHTZ08jmZJMO986jqYdOIcSx3H7di8izv5YXBGQDXcfCayznbg==
-X-Received: by 2002:adf:a50c:0:b0:254:3dcb:dbbc with SMTP id i12-20020adfa50c000000b002543dcbdbbcmr23398533wrb.11.1672443143261;
-        Fri, 30 Dec 2022 15:32:23 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id y6-20020adfdf06000000b002879c013b8asm8049812wrl.42.2022.12.30.15.32.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 15:32:22 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] perf-tools: Fix spelling mistake "lenght" -> "length"
-Date:   Fri, 30 Dec 2022 23:32:22 +0000
-Message-Id: <20221230233222.45385-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zPnKBnQYDe91n3qzykPwxYPbik46clNWIIiDLmpM+LM=;
+        b=2nVwbJMOAtNJ9hIsaJe4hXk7HgvlCmsvfx0AJUKwvmEsw0Q+zJNFClBHc/oVDiW0zA
+         7CNyHNVbK/pS6YgOx9KZIBMRLwmkI1J7LV5UVaOlrTqwYmVdOyQGw2ZPwHA1nGfYAVm9
+         9Wb9IGZvvH4g3vP/MHUx2KjraFvUquY2QuH80Ip7gtuqJZrC4SHKPZYEKOy/yugZf3k6
+         VB0O/YCyurgDB8xFYZKAePS0HkAE8OWHPXezRmqgQFUqRqeVaHf0sPzfdB4MUoNvCGAT
+         TGqxOwDh+nfb6H/o2oWsa6O063LbRGZuX/5FYjpamSDeZ01fkyWX0dlwyqsP74b5RnGd
+         jMkw==
+X-Gm-Message-State: AFqh2kr+VWXFbPR1GJbjzww6I/+O0LzKLisDaC8zu7T4gs54O4heeZAu
+        RwO84Supy5EXalWQ5B73/9boj0VGf8EP37Wh
+X-Google-Smtp-Source: AMrXdXtUJ0n2iB/3L4iWOK6t4N4W+Z7NlbgoxhBolpAqMyQlW2bTixiUoanC6jUUS+d9Rl8zpdtEgg==
+X-Received: by 2002:a05:651c:1a22:b0:279:d144:9eb4 with SMTP id by34-20020a05651c1a2200b00279d1449eb4mr11961055ljb.12.1672443663155;
+        Fri, 30 Dec 2022 15:41:03 -0800 (PST)
+Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
+        by smtp.gmail.com with ESMTPSA id r18-20020a2e8e32000000b0027cf0ecab3fsm2812716ljk.138.2022.12.30.15.41.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Dec 2022 15:41:02 -0800 (PST)
+Message-ID: <9bfe5409-3174-c3be-b0b9-55c5a857e834@linaro.org>
+Date:   Sat, 31 Dec 2022 00:41:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/7] arm64: dts: qcom: sc8280xp: remove GCC from CX power
+ domain
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221230160103.250996-1-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221230160103.250996-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,35 +80,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in the variable expansion_lenght. Fix it.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/perf/builtin-trace.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index 86e06f136f40..ccd7923ae802 100644
---- a/tools/perf/builtin-trace.c
-+++ b/tools/perf/builtin-trace.c
-@@ -3784,7 +3784,7 @@ static int trace__expand_filter(struct trace *trace __maybe_unused, struct evsel
- 
- 				if (fmt->strtoul(right, right_size, &syscall_arg, &val)) {
- 					char *n, expansion[19];
--					int expansion_lenght = scnprintf(expansion, sizeof(expansion), "%#" PRIx64, val);
-+					int expansion_length = scnprintf(expansion, sizeof(expansion), "%#" PRIx64, val);
- 					int expansion_offset = right - new_filter;
- 
- 					pr_debug("%s", expansion);
-@@ -3796,7 +3796,7 @@ static int trace__expand_filter(struct trace *trace __maybe_unused, struct evsel
- 					}
- 					if (new_filter != evsel->filter)
- 						free(new_filter);
--					left = n + expansion_offset + expansion_lenght;
-+					left = n + expansion_offset + expansion_length;
- 					new_filter = n;
- 				} else {
- 					pr_err("\"%.*s\" not found for \"%s\" in \"%s\", can't set filter \"%s\"\n",
--- 
-2.30.2
+On 30.12.2022 17:00, Krzysztof Kozlowski wrote:
+> Bindings do not allow power-domain property in GCC clock controller and
+> documentation does not indicate that GCC is part of VDD_CX.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Maybe the bindings should be fixed? Maybe this was added as workaround?
+> Anyway looking at documentation I do not see such relation, except
+> downstream vdd_cx-supply (which is the same as in other SoCs and we do
+> not represent it in upstream).
+Some clocks scale with _CX, which is annotated on downstream with vdd-levels.
+We take care of that by using opp tables in consumer drivers. Usually if
+power-domains is added to a clock controller, it means that at least one of
+the clocks needs the power domain to be on (which.. should be true for CX
+if the ARM part runs anyway, no?), as for example VDD_MX/VDD_GFX may not be
+on at boot and trying to enable such clocks would result in a big kaboom..
 
+TL;DR: if nothing exploded, it's fine to remove it
+
+Konrad
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 1d1420c8720c..d14663c9f34c 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -799,7 +799,6 @@ gcc: clock-controller@100000 {
+>  				 <&pcie4_phy>,
+>  				 <0>,
+>  				 <0>;
+> -			power-domains = <&rpmhpd SC8280XP_CX>;
+>  		};
+>  
+>  		ipcc: mailbox@408000 {
