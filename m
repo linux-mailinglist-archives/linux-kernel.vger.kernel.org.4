@@ -2,177 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A687F659892
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBC6659893
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbiL3NJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 08:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S234892AbiL3NM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 08:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiL3NJX (ORCPT
+        with ESMTP id S229746AbiL3NMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 08:09:23 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C104D186CD
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:09:21 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id p30so15585226vsr.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E52pxg0Ieuxx94IUZMALcwMIHlB9oJ0ae6r7GhsPesE=;
-        b=qOYzZ22PlOTxy5rz+2Jr6vOdX7lOUg0qaafPHrEjHG5f40E6RiScGPuGIEoUXr/2PH
-         +oGvuptZsVJRju9ipSuVycuQ2W1ky3QRWi8zYzVx1KdMuC/JFOidxN1UJUimAjP1fsmn
-         tm5Ny181bxJ6l/v6HbNscM306YS/OExwGnUmed+ZTlFqqct6x37nTtKHAO0ERc9MyPuo
-         EVizILuGKO2iB6xrLdsaHGozVKQ+DAXtMH9IsOyRbgKGplHS4KROXebu2krcdX8gRcfe
-         cFsAcKxLqZyiI1fpvuURw+3uSV1kv/KUBupXD4MMlFdCULnNBm1KUN2XFRlWZhdejD5I
-         SUjg==
+        Fri, 30 Dec 2022 08:12:23 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEC51A052
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:12:22 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id b77-20020a6bb250000000b006e4ec8b2364so6613192iof.20
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:12:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E52pxg0Ieuxx94IUZMALcwMIHlB9oJ0ae6r7GhsPesE=;
-        b=TJYcmeiaW4GAkPWDsy0o/ZLvetLyqMfYFcuyhn8qmiF8gmTig0JVJE+KUAnbQ6ki9C
-         BHo61xt9emVrmuZ1Pxn9RiV35y0sm7rkJuKxGfGFvOQf5OHW4QGRkW5QuOiqBn2Qcu/U
-         q2b0s+ZI22HS3Rz6KdgfOY95lOAg5Dyugw5IhAlI7uSmX4wwrIlwaxoAy2Svuoea5h+H
-         lS14GtQMR12Zheq45kiXglv8Ry6izUtcvmiHnQu7HWvy2MucIPGPbRd91tzczrEA3ePg
-         n7gEvEwtK3eZx66mpp2XYONftczEDnLSSpX+z7gxdQXYCgrIF2V/SjK8fuJEdZqaofxs
-         nNrw==
-X-Gm-Message-State: AFqh2kptfRL1Zzj0o0r/KHt3OW/SLWsx6xbT25xppeIEWBFSFFVzTpG2
-        /j6LxTdZL3wf/Tb2+7Rm8cbhOUTDpfxyF0j4i6qr0Q==
-X-Google-Smtp-Source: AMrXdXuiIsORfdwTU8aiPfidGRU10vfw7irJHhwQafIrscv2Z2093Jcg+5ApA5mnSo+X462x4xJnegGVTE5BWClrxZ0=
-X-Received: by 2002:a05:6102:3d9f:b0:3c4:4918:80c with SMTP id
- h31-20020a0561023d9f00b003c44918080cmr2749753vsv.9.1672405760903; Fri, 30 Dec
- 2022 05:09:20 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aOyXb6XekkEj9NSf9pTRX0h4vJFQ+YhjmmSQ9RBSD/w=;
+        b=e7ivGUtTv4B10J1dSoWuV7Ng4TSPSEJNzdMROOz1tvr0rNcmA8CEpiKV/WnAEfAwxE
+         ixfEDnpLcBb2Y39/iXrO8FplrRim3drpetkYXlB0BuHDT18juMq7GIFG3YEOK6EcaygT
+         VQcdLF+9BASBcGb4fuI+ksmJujnsr5uXEPbzlCgOvcp416NMvJ1q+cWz830Kp6zz32bQ
+         gfEBQ1MOHYf2F3GNyPcknfh9Dbp9gXDytSj3GzmJtVyN32FWu7Fx/k9PcoC6ogMK65vG
+         83zqVMBQNZlyLvebgx1c24RJzibUTKwiDlecvKDEC+7KvZd4ZS2KqCk7QWJlv1C/GWnE
+         0Gxw==
+X-Gm-Message-State: AFqh2kp673/leUasVUPsUwfasOFflLxdwRMjpYWTLHjUev33vqJCUH4I
+        sfsdW0bpTXQ8Qya0UhEcpJSZbEMm7YGYpoR3LGsngolPXKGl
+X-Google-Smtp-Source: AMrXdXsC9GTH11Mx+a+LFj8XQdxirbDNp6aSz7CDjkAsV0BTeq4cpIa5zCd11viPWp9l7vMsUqR+1lcY4tM6XM7xW4E0VYSvPGVF
 MIME-Version: 1.0
-References: <20221209171629.3351420-1-robh@kernel.org>
-In-Reply-To: <20221209171629.3351420-1-robh@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 30 Dec 2022 14:09:10 +0100
-Message-ID: <CAMRc=MeVNcaGdZE-JUAA9EZDUwAn4yhicgHZHizEsugecWj+GA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: gpio: Convert Fujitsu MB86S7x GPIO to DT schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a92:c98d:0:b0:30b:b810:8a57 with SMTP id
+ y13-20020a92c98d000000b0030bb8108a57mr2803366iln.276.1672405941825; Fri, 30
+ Dec 2022 05:12:21 -0800 (PST)
+Date:   Fri, 30 Dec 2022 05:12:21 -0800
+In-Reply-To: <20221230125241.3152-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001539e805f10b5a78@google.com>
+Subject: Re: [syzbot] BUG: corrupted list in nfc_llcp_unregister_device
+From:   syzbot <syzbot+81232c4a81a886e2b580@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 6:16 PM Rob Herring <robh@kernel.org> wrote:
->
-> Convert the Fujitsu MB86S7x GPIO binding to DT schema format.
->
-> The "socionext,synquacer-gpio" compatible was not documented, but is
-> compatible with "fujitsu,mb86s70-gpio" and is in use (in u-boot
-> Synquacer dts).
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/gpio/fujitsu,mb86s70-gpio.txt    | 20 --------
->  .../bindings/gpio/fujitsu,mb86s70-gpio.yaml   | 50 +++++++++++++++++++
->  2 files changed, 50 insertions(+), 20 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.txt
->  create mode 100644 Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.yaml
->
-> diff --git a/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.txt b/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.txt
-> deleted file mode 100644
-> index bef353f370d8..000000000000
-> --- a/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.txt
-> +++ /dev/null
-> @@ -1,20 +0,0 @@
-> -Fujitsu MB86S7x GPIO Controller
-> --------------------------------
-> -
-> -Required properties:
-> -- compatible: Should be "fujitsu,mb86s70-gpio"
-> -- reg: Base address and length of register space
-> -- clocks: Specify the clock
-> -- gpio-controller: Marks the device node as a gpio controller.
-> -- #gpio-cells: Should be <2>. The first cell is the pin number and the
-> -  second cell is used to specify optional parameters:
-> -   - bit 0 specifies polarity (0 for normal, 1 for inverted).
-> -
-> -Examples:
-> -       gpio0: gpio@31000000 {
-> -               compatible = "fujitsu,mb86s70-gpio";
-> -               reg = <0 0x31000000 0x10000>;
-> -               gpio-controller;
-> -               #gpio-cells = <2>;
-> -               clocks = <&clk 0 2 1>;
-> -       };
-> diff --git a/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.yaml b/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.yaml
-> new file mode 100644
-> index 000000000000..d18d95285465
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/fujitsu,mb86s70-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Fujitsu MB86S7x GPIO Controller
-> +
-> +maintainers:
-> +  - Jassi Brar <jaswinder.singh@linaro.org>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: socionext,synquacer-gpio
-> +          - const: fujitsu,mb86s70-gpio
-> +      - const: fujitsu,mb86s70-gpio
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#gpio-cells':
-> +    const: 2
-> +
-> +  gpio-controller: true
-> +  gpio-line-names: true
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#gpio-cells'
-> +  - gpio-controller
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    gpio@31000000 {
-> +        compatible = "fujitsu,mb86s70-gpio";
-> +        reg = <0x31000000 0x10000>;
-> +        gpio-controller;
-> +        #gpio-cells = <2>;
-> +        clocks = <&clk 0 2 1>;
-> +    };
-> +...
-> --
-> 2.35.1
->
+Hello,
 
-Applied, thanks!
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-Bart
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5544 } 2636 jiffies s: 2861 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
+
+
+Tested on:
+
+commit:         2258c2dc Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a33938480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=555d27e379d75ff1
+dashboard link: https://syzkaller.appspot.com/bug?extid=81232c4a81a886e2b580
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1341acbc480000
+
