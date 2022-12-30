@@ -2,110 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E31965979C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7036597B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234917AbiL3L2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 06:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
+        id S230453AbiL3LdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 06:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234894AbiL3L2B (ORCPT
+        with ESMTP id S229527AbiL3LdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 06:28:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3931D140C0;
-        Fri, 30 Dec 2022 03:28:01 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B87981EC0622;
-        Fri, 30 Dec 2022 12:27:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672399679;
+        Fri, 30 Dec 2022 06:33:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9A01AD91
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 03:32:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672399940;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Rc57ZPovDpq235rKCZ5fF1N14hn+t2Wcm4W4m/D7lWo=;
-        b=a/zY+elMZ2XEfVyrjInY4d4UfNOwEbEpG6OT37YjBnYGgH1Je2hg5szpaBBD98O69ELr5P
-        uS8nNzGeh3jxWcAv5xsB0bXxCZ4s24+yc+5Lt6A4jhft1OUbo2aArW6W9nd/98oVdIQe+7
-        rqQNYCw4GIhU5mIbxVDQjFSuBmVD8to=
-Date:   Fri, 30 Dec 2022 12:27:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
-        ashish.kalra@amd.com, harald@profian.com
-Subject: Re: [PATCH RFC v7 05/64] KVM: x86: Add 'update_mem_attr' x86 op
-Message-ID: <Y67LO7OdnzzGIb8N@zn.tnic>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-6-michael.roth@amd.com>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+/oAGKz8UHTa57iRKW4s5lGYuywGUey4a7vrsAc6ygU=;
+        b=EcvyVIlMhm4wLGraSAChKMIfXVQV5dwqobw0jvr/89MghzLMlN8w3G+iIMbGDC6FajFJfr
+        jH/BE7Iud/jg0ezO892XqOR6uWE9DyYjDu05RMO1Q2btSCqUfihnq3I4W3Oe2A/+lkxk4S
+        a1B9Y0hdrHZsIW1ylRcSOoAkAfDM8r0=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-363-p8n0QfeFObiJlCLcokmL4Q-1; Fri, 30 Dec 2022 06:32:19 -0500
+X-MC-Unique: p8n0QfeFObiJlCLcokmL4Q-1
+Received: by mail-wr1-f72.google.com with SMTP id d14-20020adfa40e000000b0028e67b296c0so177777wra.23
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 03:32:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+/oAGKz8UHTa57iRKW4s5lGYuywGUey4a7vrsAc6ygU=;
+        b=uyHVUlUM2QG2w2StxhCFTcJi/aqzoSc8q66+7hkCxAOoTtn+JuI94eM+Taa/TddcD0
+         f5bfENey/pViTFXXp5F3ZdRLMoGXhTFf6vzeOeU1j1ZZ5KERQp9V4ZFU4RdgxInNBHFc
+         fStNuiWnjsG8qw4uJYUkBufnWtZxDP8q9aQlB9N85bffM+kMIlGDGh5VvB2WCLi0JR81
+         dJa9w38YPPBIjYUY2SyVZR6ndU7RSaPNsB5jXi2TzapZH7ICM73MjplfKtx14zlxH+7e
+         YozvD6FlgPjt2QEWoa2utLxUEfYYvf/MUTIj1u+M1xcRDQ39lkywL6YbAQEZSIZ/8k8V
+         Kczw==
+X-Gm-Message-State: AFqh2krJq5OhD0p3dJZ9Xo/KIeaaw73jPk1Sy7g3/s1sZqPGy5rPmD7+
+        M9D7r7QlKdxhoYwoBZkuc3kPm15hYEz1/0P1iWzCMVWn0Ow78FDeQy9IgNhpw1g6DGwZpRQ6LOO
+        elTlYNvQxYKpdPyA5TfLgET8nSCnLIXSfmoVdRnm+45b9+p8/92/mjQkZVX+4Sr9024j7nLLGGf
+        c=
+X-Received: by 2002:a05:600c:1da3:b0:3d3:4dbc:75ef with SMTP id p35-20020a05600c1da300b003d34dbc75efmr22353800wms.17.1672399937654;
+        Fri, 30 Dec 2022 03:32:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXujD8ZzgS7Pb826oREyFiC1KNraLQbuNX7XL2S+SNLv8iwIINUvUgMCaq86xR2bPIYl4qfNTA==
+X-Received: by 2002:a05:600c:1da3:b0:3d3:4dbc:75ef with SMTP id p35-20020a05600c1da300b003d34dbc75efmr22353756wms.17.1672399937268;
+        Fri, 30 Dec 2022 03:32:17 -0800 (PST)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id y22-20020a1c4b16000000b003d01b84e9b2sm27638432wma.27.2022.12.30.03.32.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Dec 2022 03:32:16 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Kamil=20Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Martijn Braam <martijn@brixit.nl>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Robert Mader <robert.mader@posteo.de>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
+        dri-devel@lists.freedesktop.org, Ondrej Jirman <megi@xff.cz>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Neal Gompa <ngompa13@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH v4 0/4] Add PinePhone Pro display support
+Date:   Fri, 30 Dec 2022 12:31:50 +0100
+Message-Id: <20221230113155.3430142-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221214194056.161492-6-michael.roth@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 01:39:57PM -0600, Michael Roth wrote:
-> This callback will handle any platform-specific handling needed for
+This series add support for the display present in the PinePhone Pro.
 
-s/handle/do/
+Patch #1 adds a driver for panels using the Himax HX8394 panel controller,
+such as the HSD060BHW4 720x1440 TFT LCD panel present in the PinePhone Pro.
 
-> converting pages between shared/private.
-> 
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  arch/x86/include/asm/kvm-x86-ops.h |  1 +
->  arch/x86/include/asm/kvm_host.h    |  2 ++
->  arch/x86/kvm/mmu/mmu.c             | 10 ++++++++--
->  3 files changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index efae987cdce0..52f94a0ba5e9 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -133,6 +133,7 @@ KVM_X86_OP(vcpu_deliver_sipi_vector)
->  KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
->  KVM_X86_OP_OPTIONAL_RET0(private_mem_enabled);
->  KVM_X86_OP_OPTIONAL_RET0(fault_is_private);
-> +KVM_X86_OP_OPTIONAL_RET0(update_mem_attr)
->  
->  #undef KVM_X86_OP
->  #undef KVM_X86_OP_OPTIONAL
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 92539708f062..13802389f0f9 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1637,6 +1637,8 @@ struct kvm_x86_ops {
->  			     int root_level);
->  	int (*private_mem_enabled)(struct kvm *kvm);
->  	int (*fault_is_private)(struct kvm *kvm, gpa_t gpa, u64 error_code, bool *private_fault);
-> +	int (*update_mem_attr)(struct kvm_memory_slot *slot, unsigned int attr,
-> +			       gfn_t start, gfn_t end);
+Patch #2 adds a devicetree binding schema for this driver and patch #3 adds
+an entry for the driver in the MAINTAINERS file.
 
-Does this one want to return bool too?
+Finally patch #4 adds the needed devicetree nodes in the PinePhone Pro DTS,
+to enable both the display and the touchscreen. This makes the upstream DTS
+much more usable and will allow for example to enable support for the phone
+in the Fedora distribution.
 
-I guess I'll see later...
+I only added myself as the maintainer for the driver because I don't know
+if Kamil and Ondrej that worked in the driver would be interested. Please
+let me know folks if you are, and I can add you too in the next revision.
+
+This is a v4 of the patch-set that addresses issues pointed out in v3:
+
+https://lists.freedesktop.org/archives/dri-devel/2022-December/384560.html
+
+The patches were tested on a PinePhone Pro Explorer Edition using a Fedora
+37 Workstation image.
+
+Best regards,
+Javier
+
+Changes in v4:
+- Add fallback "himax,hx8394" compatible for the panel controller (Jagan Teki).
+- Add Tom Fitzhenry's Tested-by tag.
+- Add Sam Ravnborg's Acked-by tag.
+- Add Tom Fitzhenry's Tested-by tag.
+- Keep the DTS nodes sorted alphabetically (Tom Fitzhenry).
+
+Changes in v3:
+- Fix example snippet for `make dt_binding_check` to pass (Krzysztof Kozlowski).
+- Add Sam Ravnborg's reviwed-by tag.
+- Move driver patch after one introducing the DT binding (Sam Ravnborg).
+
+Changes in v2:
+- Drop redundant "bindings" in subject (Krzysztof Kozlowski).
+- Drop "device tree bindings" in title (Krzysztof Kozlowski).
+- Put port next to other "true" properties (Krzysztof Kozlowski).
+- Add Krzysztof Kozlowski's Reviewed-by tag.
+- Add year to driver's copyright notice (Sam Ravnborg)
+- Remove unused <video/display_timing.h> header include (Sam Ravnborg).
+- Use mipi_dsi_dcs_write_seq() helper and drop custom macro (Sam Ravnborg).
+- Drop unnecessary info messages and move useful one to debug (Sam Ravnborg).
+- Fix regulator node names (Maya Matuszczyk).
+- Drop non-existent "poweroff-in-suspend" property (Maya Matuszczyk).
+- Remove unnecessary comments in panel node (Maya Matuszczyk).
+
+Javier Martinez Canillas (2):
+  dt-bindings: display: Add Himax HX8394 panel controller
+  MAINTAINERS: Add entry for Himax HX8394 panel controller driver
+
+Kamil Trzciński (1):
+  drm: panel: Add Himax HX8394 panel controller driver
+
+Ondrej Jirman (1):
+  arm64: dts: rk3399-pinephone-pro: Add internal display support
+
+ .../bindings/display/panel/himax,hx8394.yaml  |  75 +++
+ MAINTAINERS                                   |   7 +
+ .../dts/rockchip/rk3399-pinephone-pro.dts     | 123 +++++
+ drivers/gpu/drm/panel/Kconfig                 |  12 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-himax-hx8394.c    | 446 ++++++++++++++++++
+ 6 files changed, 664 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-himax-hx8394.c
 
 -- 
-Regards/Gruss,
-    Boris.
+2.38.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
