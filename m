@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104B9659AE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE13A659AF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235036AbiL3RQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 12:16:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
+        id S235340AbiL3R16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 12:27:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiL3RQY (ORCPT
+        with ESMTP id S231143AbiL3R14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 12:16:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BFB2654;
-        Fri, 30 Dec 2022 09:16:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3DA86181A;
-        Fri, 30 Dec 2022 17:16:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B68FC433EF;
-        Fri, 30 Dec 2022 17:16:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672420582;
-        bh=EjjJYlDGDYCeAbL7B91JnbZs5ulwNKec7qPkIMCdOvw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lLn77BkYgZHJjz375jHL6HGSvBeJ1aI/IBmmoKjVVWEEDDKKLsjEK2SsN9XYimbYi
-         bjRAmiJp25ARsoy2dOFjrqZxbH+RcFEaUmUgXZKm5gOPqoaKV11T7OCYQ+tN/BNMUw
-         Jd5FlVE2Eknoj6Rk8k88/bwM8Au0J88/owbTTwLyphdRA2prmsfeJvGG6253aROfUQ
-         nUNsrxAYP/x+kA3+VDigcc5JnAUXEPA5Sqvre1xzZIgJyZUDfQThM3RG63W9rrExOf
-         WLpwP1SM2IAT9+Ydkd3asy4aNDTymnstCLVzfKHSh2icxkoublQaiHYFFaEHJyE2sF
-         YJfzY4n3/lTjw==
-Date:   Fri, 30 Dec 2022 11:16:19 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFT PATCH] arm64: dts: qcom: sc8280xp: remove GCC from CX power
- domain
-Message-ID: <20221230171619.om5mfvsp7gwatvu6@builder.lan>
-References: <20221230155502.115205-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221230155502.115205-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=ham
+        Fri, 30 Dec 2022 12:27:56 -0500
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2F5113B;
+        Fri, 30 Dec 2022 09:27:55 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id 6F4051B3C;
+        Fri, 30 Dec 2022 18:20:56 +0100 (CET)
+Authentication-Results: ext-mx-out001.mykolab.com (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        content-transfer-encoding:mime-version:message-id:date:date
+        :subject:subject:from:from:received:received:received; s=
+        dkim20160331; t=1672420853; x=1674235254; bh=99ByR2tq5JLhQR4+MTv
+        Sm3Sw418P1F9GiyP9tDZjzi8=; b=DLo/055cOipsDakQEGTmNlmF/IhKun4L7TX
+        y0AUE+3PKDaSJrxF4aYe9Kc1MyFdW1zuFmsuM/VAqCj8eKF5NmsxHT2KdCxLUuh2
+        t2LoeBHkG8mpVUHq+8/ramKshSqH3uPWyS7m36tcnKsNz5KkgrrE5ZRe0U+GCycn
+        VwgNUe0uINh0ft0fOYudUutJBoddr2FJoB+pcvWaig75DqmZF+8nl9uIMJ1kOA7f
+        9b24GlS1NDlP8DMkvbeq/5HWdMPC+0DKcMBe1sbDtIjIMumCRD5jFkXovXhvXA9w
+        FvZBdwVgZwBEE87d8b9UcnN54Y6fR75H2b64UIvJgwmeTlHswBb2TK2biakktM7D
+        kQQHYRl2oZqwcCDTtkOYjYq7wzI5JqRRevJYseNkEZ3D1X1o5z5FRA2b54/VZXyX
+        eQysVg9x0nTI43kfpIZUYqHdAlHw3TmksdUrwBiDa6i/fnTBixsOe6yjG0GFubhw
+        4M/eZ7NF+unrclsrdCH+czjJhnVjdtk5OsBw9F1r6+pkgksuQad6ElpSmqE48ROb
+        Df8VGN/Ghe1yPa0lF1iVFNU9XcJ4yvdTIOzhR/2rT52y/C6kxZTM+E7B3AJpLo0E
+        RPfhGQX0DsZsGFK6EcTcxMjrTJ8ZyF6Ih7DcsV7zeBE24TTfvdkPuBSwi2IX1Jxz
+        hUk1IjIc=
+X-Virus-Scanned: amavisd-new at mykolab.com
+X-Spam-Score: -1.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
+Received: from mx.kolabnow.com ([127.0.0.1])
+        by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xLYFPb-k0vU6; Fri, 30 Dec 2022 18:20:53 +0100 (CET)
+Received: from int-mx001.mykolab.com (unknown [10.9.13.1])
+        by mx.kolabnow.com (Postfix) with ESMTPS id BBE911B36;
+        Fri, 30 Dec 2022 18:20:52 +0100 (CET)
+Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
+        by int-mx001.mykolab.com (Postfix) with ESMTPS id 341D0BC4;
+        Fri, 30 Dec 2022 18:20:52 +0100 (CET)
+From:   Federico Vaga <federico.vaga@vaga.pv.it>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Federico Vaga <federico.vaga@vaga.pv.it>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] doc: fix typos in botching up ioctls
+Date:   Fri, 30 Dec 2022 18:20:24 +0100
+Message-Id: <20221230172024.58372-1-federico.vaga@vaga.pv.it>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 04:55:02PM +0100, Krzysztof Kozlowski wrote:
-> Bindings do not allow power-domain property in GCC clock controller and
-> documentation does not indicate that GCC is part of VDD_CX.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Maybe the bindings should be fixed? Maybe this was added as workaround?
-> Anyway looking at documentation I do not see such relation, except
-> downstream vdd_cx-supply (which is the same as in other SoCs and we do
-> not represent it in upstream).
+The type contained a type `uintprt` -> `uintptr`
 
-The GCC itself is powered by CX and the GDSC power-domains exposed by
-GCC are powered by CX.
+Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
+---
+ Documentation/process/botching-up-ioctls.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It's fairly recently that we started attempting to scale CX - and
-attempted to suspend things. But this is probably how it should be
-represented on all platforms.
+diff --git a/Documentation/process/botching-up-ioctls.rst b/Documentation/process/botching-up-ioctls.rst
+index ba4667ab396b..9739b88463a5 100644
+--- a/Documentation/process/botching-up-ioctls.rst
++++ b/Documentation/process/botching-up-ioctls.rst
+@@ -41,7 +41,7 @@ will need to add a 32-bit compat layer:
+    structures to the kernel, or if the kernel checks the structure size, which
+    e.g. the drm core does.
+ 
+- * Pointers are __u64, cast from/to a uintprt_t on the userspace side and
++ * Pointers are __u64, cast from/to a uintptr_t on the userspace side and
+    from/to a void __user * in the kernel. Try really hard not to delay this
+    conversion or worse, fiddle the raw __u64 through your code since that
+    diminishes the checking tools like sparse can provide. The macro
+-- 
+2.30.2
 
-
-So let's fix the binding instead.
-
-Regards,
-Bjorn
-
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 1d1420c8720c..d14663c9f34c 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -799,7 +799,6 @@ gcc: clock-controller@100000 {
->  				 <&pcie4_phy>,
->  				 <0>,
->  				 <0>;
-> -			power-domains = <&rpmhpd SC8280XP_CX>;
->  		};
->  
->  		ipcc: mailbox@408000 {
-> -- 
-> 2.34.1
-> 
