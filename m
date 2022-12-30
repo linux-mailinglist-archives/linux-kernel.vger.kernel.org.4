@@ -2,120 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD2F659574
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 07:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F48865957B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 07:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbiL3GgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 01:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
+        id S234480AbiL3GjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 01:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiL3GgH (ORCPT
+        with ESMTP id S229557AbiL3GjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 01:36:07 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9BAAE43;
-        Thu, 29 Dec 2022 22:36:02 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1447c7aa004so23918735fac.11;
-        Thu, 29 Dec 2022 22:36:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GAvkJUoPDYmWRhAwgSj95u5byto+2nWkIpy69HcVzzA=;
-        b=chmxPcmZDfrqDkOb6grw5n9WABwC7AWm9NlE1JDaiZZVXSjJ0sTBOCA65G6ANggrp4
-         vZhXEMQwEMhw1TnKRlDtIz2+9kmySb60qBl9lliQwjy225K7qGxeKyjp17ocxLHj21F1
-         WjWW/Keir209f60myxHUh3MLgunDT8F4a6B3p7bRkTPDvWCyBqQMOovUxaJ3B/fIg1/x
-         QwTtfarB29BSW6+WY9me3g666RVfvCG3JXyF4K3VOZPdLEX85petPfRFz7tcAy9WXG6G
-         kz6aEl4nTZwiwAMyjwk6erNtMiqGF4ANOl62eqOcqxiaxWTaz2bhHAZ8gjLkhsiz+bnN
-         E9yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GAvkJUoPDYmWRhAwgSj95u5byto+2nWkIpy69HcVzzA=;
-        b=fx3cvADoaD+8dLtmpBsSjekjwN2FhmLngO6MVDa7n0vhIW7DleMxSUjZuEKjunDfxE
-         d6Xev1L0EwP+qvcZb1JFelIm/5VzsXEIUMbOx7NqUODxfp20OKB3eWuBILvwZAqCpkAB
-         meUcBkYGRryde3/B+8ww8nnUxf+kwEdlkfIxAE8RIqI6ukA7JzBgCzxfjiy2sC/6W4XK
-         za9t7934cdSX4sUcsIjRSh0Vs540keeJyzoaZhGRn1lknukIY8qfr90ajqW2HxzSz2h4
-         1/ylsD2VGzuaOv6eM8FhPLwCFYyI1V802HSEMouvEP5Z1yifP+qYssztuEOtQvJPgX5t
-         GZ7A==
-X-Gm-Message-State: AFqh2krRxhee2i468+HBtK8ZptzrEC3bWLinL4nEk0Lk8r6GCr1MK/Mo
-        S29SRTJEiLd/IsyUwmUlMF4=
-X-Google-Smtp-Source: AMrXdXu8tuII+NQ94TSjxHteZaU5UKVhWyRIdtPSP8n4vzqiJe3EBkB9K95dp/oEC/QKGMbL8PYeng==
-X-Received: by 2002:a05:6870:be85:b0:144:4c04:4b73 with SMTP id nx5-20020a056870be8500b001444c044b73mr15306401oab.50.1672382161887;
-        Thu, 29 Dec 2022 22:36:01 -0800 (PST)
-Received: from protoss.cs.ucr.edu (protoss.cs.ucr.edu. [169.235.26.60])
-        by smtp.gmail.com with ESMTPSA id o10-20020a4abe8a000000b004a0ad937ccdsm8281508oop.1.2022.12.29.22.36.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 29 Dec 2022 22:36:01 -0800 (PST)
-From:   Hang Zhang <zh.nvgt@gmail.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Hang Zhang <zh.nvgt@gmail.com>
-Subject: [PATCH] fbmem: prevent potential use-after-free issues with console_lock()
-Date:   Thu, 29 Dec 2022 22:35:28 -0800
-Message-Id: <20221230063528.41037-1-zh.nvgt@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        Fri, 30 Dec 2022 01:39:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF231186A0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 22:39:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2006161A2D
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 06:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371DAC433EF;
+        Fri, 30 Dec 2022 06:39:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672382357;
+        bh=q8wxwX0wZcFLGiE0Owq5Y55vjOPnnvuF0IJnjlUHQQc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E1QqX7mvBwvtYiYgzlRKkx5+AdvXwNKskV3hb9gbn7BlLtvHHgNkDaGINPa0KOFTp
+         Kz6m0liioTY55DRPiX80Ya8/CZqDPG++A9ZtT85jub05Eo90wr0krBVKPsGgCnFCqB
+         p4zmHmuBtRHIUAEwecBLrnlOtbU53Y+XKWpkBPwzkUGwZW+BZoP0fh11FtIJuRQZhT
+         ECO5b15lPjeo7pMZVkHwuCVuNDp5XD0qn8Dj7XVcGsUKBxDGXtCRGdKHTfWH34aJTU
+         tmgTufFBfcLc3p8nCHk2RYwoeub31f0ynX4EjSQQC8IyWDvoLZ2IYKWrjpxUs31mJ6
+         jmaQLdRjXK5Yw==
+Date:   Thu, 29 Dec 2022 22:39:15 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Jeff Chua <jeff.chua.linux@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        F2FS Development <linux-f2fs-devel@lists.sourceforge.net>,
+        Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: Fwd: f2fs write error Linux v6.2
+Message-ID: <Y66Hk6waTeXQDz1/@sol.localdomain>
+References: <CAAJw_Ztzyh-GNTJYpXbA0CeJv2Rz=fLZKE6_Q=7JMmM+s9yHXQ@mail.gmail.com>
+ <CAAJw_Ztb0mJVkHtBhryf=9g8CA0fZZRa8HVio8GCGUSLOvqa7A@mail.gmail.com>
+ <Y6bz4wOC0nwu2yGU@debian.me>
+ <0c70ba66-ef00-7242-d198-844f803662fa@gmail.com>
+ <CAAJw_Zv0iBg4rkzxQ2UOOLS9JQZ4cCmM7gSoDXec_gm-GggB6A@mail.gmail.com>
+ <f500d64b-c26d-ee34-092a-421c64c69f9e@leemhuis.info>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f500d64b-c26d-ee34-092a-421c64c69f9e@leemhuis.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In do_fb_ioctl(), user specified "fb_info" can be freed in the callee
-fbcon_get_con2fb_map_ioctl() -> set_con2fb_map() ->
-con2fb_release_oldinfo(), this free operation is protected by
-console_lock() in fbcon_set_con2fb_map_ioctl(), it also results in
-the change of certain states such as "minfo->dead" in matroxfb_remove(),
-so that it can be checked to avoid use-after-free before the use sites
-(e.g., the check at the beginning of matroxfb_ioctl()). However,
-the problem is that the use site is not protected by the same locks
-as for the free operation, e.g., "default" case in do_fb_ioctl()
-can lead to "matroxfb_ioctl()" but it's not protected by console_lock(),
-which can invalidate the aforementioned state set and check in a
-concurrent setting.
+On Fri, Dec 30, 2022 at 06:56:36AM +0100, Thorsten Leemhuis wrote:
+> On 30.12.22 05:04, Jeff Chua wrote:
+> > On 12/24/22 19:43, Bagas Sanjaya wrote:
+> >> On Sat, Dec 24, 2022 at 01:48:55PM +0800, Jeff Chua wrote:
+> >>> Got the following error in latest linux-6.2-git with just vim (:w
+> >>> file1). No problem with linux-6.1.1
+> > 
+> > What happened to the f2fs developers? No response from anyone yet.
+> 
+> Well, that indeed is unfortunate and ideally shouldn't happen, but the
+> simple reality is: that can happen this time of the year due to this
+> thing called "festive season".
+> 
+> > Am
+> > I the only one facing this? Linux-6.2 is unusable until this is fixed.
+> > What can I do to help?
+> 
+> The usual: bisect the issue, as then (a) we know exactly which developer
+> caused it, (b) which subsystem/maintainer is responsible (issues in a fs
+> might be caused by the VFS, block layer, mm, ...), and (c) might be able
+> to quickly revert that culprit, even if the people normally responsible
+> are MIA for some reason.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> reports and sometimes miss something important when writing mails like
+> this. If that's the case here, don't hesitate to tell me in a public
+> reply, it's in everyone's interest to set the public record straight.
+> 
 
-Prevent the potential use-after-free issues by protecting the "default"
-case in do_fb_ioctl() with console_lock(), similarly as for many other
-cases like "case FBIOBLANK" and "case FBIOPAN_DISPLAY".
+FWIW, I've tested f2fs on mainline in the last few days, and I haven't seen
+this.  The following works fine, for example:
 
-Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
----
- drivers/video/fbdev/core/fbmem.c | 2 ++
- 1 file changed, 2 insertions(+)
+    mkfs.f2fs -f /dev/vdb
+    mount /dev/vdb /mnt
+    vim
+    # write something, then ':w /mnt/file'
 
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 1e70d8c67653..8b1a1527d18a 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1182,6 +1182,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
- 		console_unlock();
- 		break;
- 	default:
-+		console_lock();
- 		lock_fb_info(info);
- 		fb = info->fbops;
- 		if (fb->fb_ioctl)
-@@ -1189,6 +1190,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
- 		else
- 			ret = -ENOTTY;
- 		unlock_fb_info(info);
-+		console_unlock();
- 	}
- 	return ret;
- }
--- 
-2.39.0
+If you could provide the mkfs and mount options you are using, and any other
+relevant details, that would be helpful.  Bisection would also be very helpful,
+as Thorsten mentioned.
 
+- Eric
