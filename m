@@ -2,142 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC996659AD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8913659ADD
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235297AbiL3RJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 12:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S235336AbiL3RKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 12:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiL3RJF (ORCPT
+        with ESMTP id S235347AbiL3RKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 12:09:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0337114011;
-        Fri, 30 Dec 2022 09:09:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 30 Dec 2022 12:10:17 -0500
+Received: from smtp-out-06.comm2000.it (smtp-out-06.comm2000.it [212.97.32.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1519183B9;
+        Fri, 30 Dec 2022 09:10:09 -0800 (PST)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95AB561B0C;
-        Fri, 30 Dec 2022 17:09:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D798AC433D2;
-        Fri, 30 Dec 2022 17:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672420144;
-        bh=GvOiKqNHF1H13zIfDzDktRmecgOy4gbqAWyr1vFM/84=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Pa2dtf4MfixEfHN8xynX38q0GPGJHp0VN/zKLX/gGc1+pO+MPbw56VNkUFU3lBg9q
-         uK4rcvqNnC4iWfRvp+Nvc2zrw4OI48KnOUVk93nnXmwGuS70rQJmmSAtN9zSWBqfjl
-         yie+H8PXjJY9Ax9Yc9eJdgqM6Y/yE79v8yBsMUp6XtUjQ+RfltNqjF4JjTsb4TkQCt
-         KdbkKQ9JF/5FR4hoRpROuWiYP5yp3h6hunc9C+2/lxeRWqiWcspsZfIKNjLdK/PP71
-         2fJmYLNEzZt1Dr8UWy7G8g/ilV8rcjgx+qdf0/Cl7Y3SIIQVPCCvNDAlFujz7zytsT
-         zJPYBtdTa76xw==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains
- property
-In-Reply-To: <CAL_Jsq+viP_aY3n378WC7WpxZFnsTc-vKjW9Ojvcy0Ef-z09Ng@mail.gmail.com>
-References: <20221219191038.1973807-1-robh@kernel.org>
- <87edsua5q4.fsf@balbi.sh>
- <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
- <878riy9ztm.fsf@balbi.sh> <20221223235712.h54lggnjjuu3weol@synopsys.com>
- <CAL_Jsq+gCi8g0jY2ic1tJebc_JijMU-GntWQg09q+X41O3=1RA@mail.gmail.com>
- <87o7rlffi7.fsf@balbi.sh>
- <CAL_Jsq+viP_aY3n378WC7WpxZFnsTc-vKjW9Ojvcy0Ef-z09Ng@mail.gmail.com>
-Date:   Fri, 30 Dec 2022 19:08:58 +0200
-Message-ID: <87k028g6ol.fsf@balbi.sh>
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-06.comm2000.it (Postfix) with ESMTPSA id E200E561636;
+        Fri, 30 Dec 2022 18:10:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1672420207;
+        bh=CwPdwECEa0lZNbWx3u+AEjaZwD0ypB8MrNfUb6Wyo5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=1Zm7EhgCaNt3T60FHS5zJkYJs4HxKkkhT/o4YWTxIJwhFfFduky6yrFxgxU8TueY+
+         9pduKkFVBjm0JgSo4xILrpcy3KETkGY6PyP3B6aFc9TXH8dmQUY3MV62uZ0DXrRVAm
+         +i1CNyd23RgVVxVcrWae6IkmFBAdELPFC6n+r0Uk8wnIvBOys0CobJuPQ8MAorCgFL
+         CFcojwGlzuTmennb6Ro+APlaQFUapB4LkeAJ+qDb3JOZ+STzjWn5W7/N2vVKRNTM1T
+         /86fEkXkCdg6OMgwY4IpBv62gMKNOW/Lk0ZkZugBs3kk/rnlBLKD/Nn4N0mD/OsRc1
+         tj46nN5ZvrKRg==
+Date:   Fri, 30 Dec 2022 18:09:57 +0100
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Primoz Fiser <primoz.fiser@norik.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        upstream@lists.phytec.de, Marco Felsch <m.felsch@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        francesco.dolcini@toradex.com, wsa@kernel.org,
+        Francesco Dolcini <francesco@dolcini.it>
+Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
+Message-ID: <Y68bZXhv2gJsF74O@francesco-nb.int.toradex.com>
+References: <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
+ <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
+ <20221216110227.GA12327@pengutronix.de>
+ <20221216111308.wckibotr5d3q6ree@pengutronix.de>
+ <5c2e0531-e7c3-1b37-35ed-c8e9795a0d18@norik.com>
+ <Y5xpt6J01Boec6Xr@francesco-nb.int.toradex.com>
+ <41991ce2-3e88-5afc-6def-6e718d624768@norik.com>
+ <Y674eoNsHtAeG7IP@francesco-nb.int.toradex.com>
+ <20221230161209.GA14776@pengutronix.de>
+ <Y68WGcdQNQkD0vfa@francesco-nb.int.toradex.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y68WGcdQNQkD0vfa@francesco-nb.int.toradex.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 30, 2022 at 05:47:42PM +0100, Francesco Dolcini wrote:
+> On Fri, Dec 30, 2022 at 05:12:09PM +0100, Oleksij Rempel wrote:
+> > On Fri, Dec 30, 2022 at 03:40:58PM +0100, Francesco Dolcini wrote:
+> > > +Wolfram
+> > > 
+> > > On Wed, Dec 28, 2022 at 09:01:46AM +0100, Primoz Fiser wrote:
+> > > > On 16. 12. 22 13:51, Francesco Dolcini wrote:
+> > > > > On Fri, Dec 16, 2022 at 01:23:29PM +0100, Primoz Fiser wrote:
+> > > > > > The only solid point in the thread seems to be that in that case we are not
+> > > > > > covering up the potential i2c hardware issues?
+> > > > > 
+> > > > > I believe that in this case we should just have a warning in the kernel.
+> > > > > The retry potentially work-around a transient issue and we do not hide any hardware
+> > > > > issue at the same time. It seems an easy win-win solution.
+> > > > 
+> > > > I would agree about throwing a warning message in retry case.
+> > > > 
+> > > > Not sure how would it affect other i2c bus drivers using retries > 0.
+> > > > Retries might be pretty rare with i2c-imx but some other drivers set this to
+> > > > 5 for example. At least using _ratelimited printk is a must using this
+> > > > approach.
+> > > 
+> > > Wolfram, Uwe, Oleksij
+> > > 
+> > > Would it be acceptable to have a warning when we have I2C retries, and
+> > > with that in place enabling retries on the imx driver?
+> > > 
+> > > It exists hardware that requires this to work correctly,
+> > 
+> > Well, this is persistent confusion in this monolog. It will not make it
+> > correctly.
+> > 
+> > > and at a
+> > > minimum setting the retry count from user space is not going to solve
+> > > potential issues during initial driver probe.
+> > 
+> > I assume it is not clear from programmer point of view. Lets try other way:
+> > 
+> > - The I2C slave could not correctly interpret the data on SDA because the SDA
+> >   high or low-level voltages do not reach its appropriate input
+> >   thresholds.
+> > 
+> > This means:
+> > 
+> > You have this:
+> > 
+> >     /-\    /-\ ----- 2.5Vcc
+> > ___/   \__/   \___
+> > 
+> > Instead of this:
+> > 
+> >      /-\     /-\ ----- 3.3Vcc
+> >     /  \    /   \
+> > ___/    \__/     \___
+> > 
+> > This is bad, because master or slave will not be able to interpret the pick level
+> > correctly. It may see some times 0 instead of 1. This means, what ever we are
+> > writing we are to the slave or reading from the slave is potentially corrupt
+> > and only __sometimes__ the master was able to detect it. 
+> > 
+> > - The I2C slave missed an SCL cycle because the SCL high or low-level voltages
+> >   do not reach its appropriate input thresholds.
+> > 
+> > This means, the bus frequency is too high for current configured or physical PCB
+> > designed. So, you will have different kind of corruptions and some times they
+> > will be detected. 
+> > 
+> > - The I2C slave accidently interpreted a spike etc. as an SCL cycle.
+> > 
+> > This means the noise level is to high. The driver strange should be increased
+> > or PCB redesign should be made. May be there are more options. If not done,
+> > data corruption can be expected.
+> > 
+> > None of this issue can be "fixed" by retries or made more "robust".
+> > Doing more retries means: we do what ever we do until the system was not able to
+> > detect the error.
+> 
+> Hello Oleksij,
+> thanks for the detailed explanation, appreciated.
+> 
+> Given that is it correct that the i2c imx driver return EAGAIN in such a
+> case (arbitration error)? You made it crystal clear that there is no
+> such thing as try again for this error, I would be inclined to prepare a
+> patch to fix this.
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index cf5bacf3a488..a2a581c8ae07 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -492,7 +492,7 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool a
+>                 /* check for arbitration lost */
+>                 if (temp & I2SR_IAL) {
+>                         i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
+> -                       return -EAGAIN;
+> +                       return -EIO;
+>                 }
+> 
+>                 if (for_busy && (temp & I2SR_IBB)) {
+> 
 
-Hi,
+Just a small addition, the tegra i2c driver is interesting.
+It returns EAGAIN only when an arbitration error is detected on multi master
+node, otherwise it tries the bus recovery procedure.
 
-Rob Herring <robh@kernel.org> writes:
->> >> > >> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
->> >> > >> >  1 file changed, 3 insertions(+)
->> >> > >> >
->> >> > >> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> >> > >> > index 6d78048c4613..bcefd1c2410a 100644
->> >> > >> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> >> > >> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> >> > >> > @@ -91,6 +91,9 @@ properties:
->> >> > >> >          - usb2-phy
->> >> > >> >          - usb3-phy
->> >> > >> >
->> >> > >> > +  power-domains:
->> >> > >> > +    maxItems: 1
->> >> > >>
->> >> > >> AFAICT this can be incorrect. Also, you could have Cc the dwc3
->> >> > >> maintainer to get comments.
->> >>
->> >> Felipe is correct. We have 2 power-domains: Core domain and PMU.
->> >
->> > Power management unit? Performance management unit?
->> >
->> > That doesn't change that the rk3399 is 1 and we're stuck with it. So I
->> > can say 1 or 2 domains, or we add the 2nd domain when someone needs
->> > it.
->>
->> Isn't the snps,dwc3.yaml document supposed to document dwc3's view of
->> the world? In that case, dwc3 expects 2 power domains. It just so
->> happens that in rk3399 they are fed from the same power supply, but
->> dwc3' still thinks there are two of them. No?
->
-> Yes. That is how bindings *should* be. However, RK3399 defined one PD
-> long ago and it's an ABI. So we are stuck with it. Everyone else put
+	/* start recovery upon arbitration loss in single master mode */
+	if (i2c_dev->msg_err == I2C_ERR_ARBITRATION_LOST) {
+		if (!i2c_dev->multimaster_mode)
+			return i2c_recover_bus(&i2c_dev->adapter);
 
-Are you confusing things, perhaps? DWC3, the block Synopsys licenses,
-has, as Thinh confirmed, 2 internal power domains. How OEMs (TI, Intel,
-Rockchip, Allwinner, etc) decide to integrate the IP into their systems
-is something different. That is part of the (so-called)
-wrapper. Different integrators will wrap Synopsys IP however they see
-fit, as long as they can provide a suitable translation layer between
-Synopsys own view of the world (its own interconnect implementation, of
-which there are 3 to choose from, IIRC) and the rest of the SoC.
+		return -EAGAIN;
+	}
 
-Perhaps what RK3399 did was provide a single power domain at the wrapper
-level that feeds both of DWC3's own power domains, but DWC3 itself still
-has 2 power domains, that's not something rockchip can change without
-risking the loss of support from Synopsys, as it would not be Synopsys
-IP anymore.
+Francesco
 
-> power-domains in the parent because obviously the DWC3 has 0
-> power-domains.
-
-How did you come to this conclusion?
-
->> It's a similar situation when you have multiple clock domains with the
->> same parent clock.
->
-> Yes, that's a common problem in clock bindings too. Not really
-> anything we can do about that other than require a detailed reference
-> manual with every binding and someone (me) reviewing the manual
-> against the binding. Neither of those are going to happen. Even on Arm
-> Primecell blocks which clearly (and publicly) document the clocks,
-> we've gotten these wrong (or .dts authors just didn't follow the
-> binding).
-
-Heh
-
--- 
-balbi
