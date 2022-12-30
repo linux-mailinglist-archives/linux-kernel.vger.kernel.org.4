@@ -2,228 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58168659B6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 19:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ABD659B81
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 19:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235048AbiL3SgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 13:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
+        id S235410AbiL3Sto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 13:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiL3SgQ (ORCPT
+        with ESMTP id S229527AbiL3Stm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 13:36:16 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6E4193D7;
-        Fri, 30 Dec 2022 10:36:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A01BCCE175F;
-        Fri, 30 Dec 2022 18:36:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E79C433D2;
-        Fri, 30 Dec 2022 18:36:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672425371;
-        bh=t1Ep3yE+UPYrmEucrzGo/7bQGiZxo5BU23bcF+bvORk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kmYRJKzn3xxwMicF8I1GP7IgQHU9NSLi6GTw1btUsR5O3yLIxsI9FoJHp1Y8aAVGu
-         CwsEdEMhHJJs4sSymYQj2qfq180Rt2TKtHSzha25NzRaflX0z50aMLT7asfRMbH3Dp
-         h43CKLzS2adP5YLpKtnAiaAzJxx8rL5mMPQrKpxBTcB2P3uGN+o6jERyUF/PepY5Uw
-         ++sh75Yse3UtuzPhkZgRH2I2cLp/cbm6dBWP/w6On3hZOo3iHBd/QCYs0YNyL4U+kn
-         bWXP4HiMKxOYcnA+4brrpfD7hAYha+tf2S7GEBKUxAenipSDQEa29uCiQPKX+YUyYS
-         miVUdTeRcITFw==
-Date:   Fri, 30 Dec 2022 18:49:28 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] iio: pressure: bmp280: Add nvmem operations for
- BMP580
-Message-ID: <20221230184928.011a7851@jic23-huawei>
-In-Reply-To: <92664164d24cbd9c6541cdbd73b163dbf964ab68.1672062380.git.ang.iglesiasg@gmail.com>
-References: <cover.1672062380.git.ang.iglesiasg@gmail.com>
-        <92664164d24cbd9c6541cdbd73b163dbf964ab68.1672062380.git.ang.iglesiasg@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Fri, 30 Dec 2022 13:49:42 -0500
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8331AA3F;
+        Fri, 30 Dec 2022 10:49:41 -0800 (PST)
+Received: by mail-il1-f182.google.com with SMTP id u8so11708151ilq.13;
+        Fri, 30 Dec 2022 10:49:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ef17OwmZTYJ+YKPmsBEYVOvL1BpHTwev+vCE7IeH1/8=;
+        b=2RMs0AjdivBaa6yW0YFPQCsYzIjfZJ7aLiD2yCqu9AAwx19IEYqJY+LEXJbzKYiT0a
+         CxA1VEsafVcvAxy+haOGgCoXBB3u1ZDwpjz/j0Hk5mxLgCpOwT0hanpo8DiCoCcT5HD6
+         wQEfnYTWvybT4ETauZhJRJ1y4l4Msiz0s8UWvp2Atb/fOrxzlTTo75G1ylFq7cZBTZrM
+         jia6hvqagNoUy4HKrHs8PLbuXI/HbkB0aNDYqczSFyGrHJVxjiHAUO/nT/E6yiwNWKGp
+         irHyIXHnBKzKSLb8LwXOajf1DppMDUGQRusXqHpc2es8I0laNn8D1lT6laNiGamrr6bT
+         Ztng==
+X-Gm-Message-State: AFqh2koroewXxoL7P35jSgiNckI/Fm8KIkBEMUz+EYw+H23bjuLixCh+
+        KMjhHTQA+pzLmwlwOUhn3U22ecwhv2n0Bi+67ll1hNKa
+X-Google-Smtp-Source: AMrXdXsm39sNpY0bcz9H3tqkuNraq0MylJ74jqW4eniQQaGWZuw9igXIVkaYkBK6Shh9uvfQNqUEOnYED7htgwVYcK8=
+X-Received: by 2002:a92:ab05:0:b0:30b:b015:376c with SMTP id
+ v5-20020a92ab05000000b0030bb015376cmr2711454ilh.201.1672426181203; Fri, 30
+ Dec 2022 10:49:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228001005.2690278-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20221228001005.2690278-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 30 Dec 2022 19:49:29 +0100
+Message-ID: <CAJZ5v0hy9X=4ZKCSY7W6LfqaFMqcc6GNzx8CdDkmjuUODcBC_Q@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/int340x: Add missing attribute for data
+ rate base
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Dec 2022 15:29:24 +0100
-Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
+On Wed, Dec 28, 2022 at 1:10 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> commit 473be51142ad ("thermal: int340x: processor_thermal: Add RFIM
+> driver")'
+> added rfi_restriction_data_rate_base string, mmio details and
+> documentation, but missed adding attribute to sysfs.
+>
+> Add missing sysfs attribute.
+>
+> Fixes: 473be51142ad ("thermal: int340x: processor_thermal: Add RFIM driver")
+> Cc: stable@vger.kernel.org # v5.11+
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  .../thermal/intel/int340x_thermal/processor_thermal_rfim.c    | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> index 8c42e7662033..92ed1213fe37 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> @@ -172,6 +172,7 @@ static const struct attribute_group fivr_attribute_group = {
+>  RFIM_SHOW(rfi_restriction_run_busy, 1)
+>  RFIM_SHOW(rfi_restriction_err_code, 1)
+>  RFIM_SHOW(rfi_restriction_data_rate, 1)
+> +RFIM_SHOW(rfi_restriction_data_rate_base, 1)
+>  RFIM_SHOW(ddr_data_rate_point_0, 1)
+>  RFIM_SHOW(ddr_data_rate_point_1, 1)
+>  RFIM_SHOW(ddr_data_rate_point_2, 1)
+> @@ -181,11 +182,13 @@ RFIM_SHOW(rfi_disable, 1)
+>  RFIM_STORE(rfi_restriction_run_busy, 1)
+>  RFIM_STORE(rfi_restriction_err_code, 1)
+>  RFIM_STORE(rfi_restriction_data_rate, 1)
+> +RFIM_STORE(rfi_restriction_data_rate_base, 1)
+>  RFIM_STORE(rfi_disable, 1)
+>
+>  static DEVICE_ATTR_RW(rfi_restriction_run_busy);
+>  static DEVICE_ATTR_RW(rfi_restriction_err_code);
+>  static DEVICE_ATTR_RW(rfi_restriction_data_rate);
+> +static DEVICE_ATTR_RW(rfi_restriction_data_rate_base);
+>  static DEVICE_ATTR_RO(ddr_data_rate_point_0);
+>  static DEVICE_ATTR_RO(ddr_data_rate_point_1);
+>  static DEVICE_ATTR_RO(ddr_data_rate_point_2);
+> @@ -248,6 +251,7 @@ static struct attribute *dvfs_attrs[] = {
+>         &dev_attr_rfi_restriction_run_busy.attr,
+>         &dev_attr_rfi_restriction_err_code.attr,
+>         &dev_attr_rfi_restriction_data_rate.attr,
+> +       &dev_attr_rfi_restriction_data_rate_base.attr,
+>         &dev_attr_ddr_data_rate_point_0.attr,
+>         &dev_attr_ddr_data_rate_point_1.attr,
+>         &dev_attr_ddr_data_rate_point_2.attr,
+> --
 
-> The pressure sensor BMP580 contains a non-volatile memory that stores
-> trimming and configuration params. That memory provides an programmable
-> user range of three 2-byte words.
-> 
-> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
-
-Not much in this one from me other than follow on from earlier patch.
-Thanks,
-
-Jonathan
-
-> 
-> diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-> index 44901c6eb2f9..578d145be55d 100644
-> --- a/drivers/iio/pressure/bmp280-core.c
-> +++ b/drivers/iio/pressure/bmp280-core.c
-> @@ -28,6 +28,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/device.h>
->  #include <linux/module.h>
-> +#include <linux/nvmem-provider.h>
->  #include <linux/regmap.h>
->  #include <linux/delay.h>
->  #include <linux/iio/iio.h>
-> @@ -1628,8 +1629,140 @@ static const int bmp580_odr_table[][2] = {
->  	[BMP580_ODR_0_125HZ] =	{0, 125000},
->  };
->  
-> +const int bmp580_nvmem_addrs[] = { 0x20, 0x21, 0x22 };
-> +
-> +static int bmp580_nvmem_read(void *priv, unsigned int offset, void *val,
-> +			     size_t bytes)
-> +{
-> +	struct bmp280_data *data = priv;
-> +	u16 *dst = val;
-> +	int ret, addr;
-> +
-> +	pm_runtime_get_sync(data->dev);
-> +	mutex_lock(&data->lock);
-> +
-> +	/* Set sensor in standby mode */
-> +	ret = regmap_update_bits(data->regmap, BMP580_REG_ODR_CONFIG,
-> +				 BMP580_MODE_MASK | BMP580_ODR_DEEPSLEEP_DIS,
-> +				 BMP580_ODR_DEEPSLEEP_DIS |
-> +				 FIELD_PREP(BMP580_MODE_MASK, BMP580_MODE_SLEEP));
-> +	if (ret) {
-> +		dev_err(data->dev, "failed to change sensor to standby mode\n");
-> +		goto exit;
-> +	}
-> +	/* Wait standby transition time */
-> +	usleep_range(2500, 3000);
-> +
-> +	while (bytes >= sizeof(u16)) {
-> +		addr = bmp580_nvmem_addrs[offset / sizeof(u16)];
-> +
-> +		ret = regmap_write(data->regmap, BMP580_REG_NVM_ADDR,
-> +				   FIELD_PREP(BMP580_NVM_ROW_ADDR_MASK, addr));
-> +		if (ret) {
-> +			dev_err(data->dev, "error writing nvm address\n");
-> +			goto exit;
-> +		}
-> +
-> +		ret = bmp580_cmd(data, BMP580_NVM_READ_CMD);
-Ah. Here is the command being used.  Good to pull that code forwards to this patch.
-
-> +		if (ret)
-> +			goto exit;
-> +
-> +		ret = regmap_bulk_read(data->regmap, BMP580_REG_NVM_DATA_LSB, &data->le16,
-> +				       sizeof(data->le16));
-> +		if (ret) {
-> +			dev_err(data->dev, "error reading nvm data regs\n");
-> +			goto exit;
-> +		}
-> +
-> +		*dst++ = le16_to_cpu(data->le16);
-> +		bytes -= sizeof(u16);
-
-sizeof(le16) seems more appropriate (obviously it's the same value).
-
-> +		offset += sizeof(u16);
-> +	}
-> +exit:
-> +	/* Restore chip config */
-> +	data->chip_info->chip_config(data);
-> +	mutex_unlock(&data->lock);
-> +	pm_runtime_mark_last_busy(data->dev);
-> +	pm_runtime_put_autosuspend(data->dev);
-> +	return ret;
-> +}
-> +
-> +static int bmp580_nvmem_write(void *priv, unsigned int offset, void *val,
-> +			      size_t bytes)
-> +{
-> +	struct bmp280_data *data = priv;
-> +	u16 *buf = val;
-> +	int ret, addr;
-> +
-> +	pm_runtime_get_sync(data->dev);
-> +	mutex_lock(&data->lock);
-> +
-> +	/* Set sensor in standby mode */
-> +	ret = regmap_update_bits(data->regmap, BMP580_REG_ODR_CONFIG,
-> +				 BMP580_MODE_MASK | BMP580_ODR_DEEPSLEEP_DIS,
-> +				 BMP580_ODR_DEEPSLEEP_DIS |
-> +				 FIELD_PREP(BMP580_MODE_MASK, BMP580_MODE_SLEEP));
-> +	if (ret) {
-> +		dev_err(data->dev, "failed to change sensor to standby mode\n");
-> +		goto exit;
-> +	}
-> +	/* Wait standby transition time */
-> +	usleep_range(2500, 3000);
-> +
-> +	while (bytes >= sizeof(u16)) {
-> +		addr = bmp580_nvmem_addrs[offset / sizeof(u16)];
-> +
-> +		ret = regmap_write(data->regmap, BMP580_REG_NVM_ADDR, BMP580_NVM_PROG_EN |
-> +				   FIELD_PREP(BMP580_NVM_ROW_ADDR_MASK, addr));
-> +		if (ret) {
-> +			dev_err(data->dev, "error writing nvm address\n");
-> +			goto exit;
-> +		}
-> +		data->le16 = cpu_to_le16(*buf++);
-> +
-> +		ret = regmap_bulk_write(data->regmap, BMP580_REG_NVM_DATA_LSB, &data->le16,
-> +					sizeof(data->le16));
-> +		if (ret) {
-> +			dev_err(data->dev, "error writing LSB NVM data regs\n");
-> +			goto exit;
-> +		}
-> +
-> +		ret = bmp580_cmd(data, BMP580_NVM_WRITE_CMD);
-> +		if (ret)
-> +			goto exit;
-> +
-> +		/* Disable programming mode bit */
-> +		ret = regmap_update_bits(data->regmap, BMP580_REG_NVM_ADDR,
-> +					 BMP580_NVM_PROG_EN, 0);
-> +		if (ret) {
-> +			dev_err(data->dev, "error resetting nvm write\n");
-> +			goto exit;
-> +		}
-> +
-> +		bytes -= sizeof(u16);
-
-As above, maybe sizeof(le16)
-
-> +		offset += sizeof(u16);
-> +	}
-> +exit:
-> +	/* Restore chip config */
-> +	data->chip_info->chip_config(data);
-> +	mutex_unlock(&data->lock);
-> +	pm_runtime_mark_last_busy(data->dev);
-> +	pm_runtime_put_autosuspend(data->dev);
-> +	return ret;
-> +}
-> +
-
-
+Applied as 6.2-rc material, thanks!
