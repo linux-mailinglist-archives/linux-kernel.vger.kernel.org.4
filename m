@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B5D65995F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 15:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F191659961
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 15:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235055AbiL3OiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 09:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S235072AbiL3OiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 09:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiL3OiA (ORCPT
+        with ESMTP id S235064AbiL3OiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 09:38:00 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951591901E;
-        Fri, 30 Dec 2022 06:37:57 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E8D452F5;
-        Fri, 30 Dec 2022 15:37:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672411076;
-        bh=XnXoPl0/oTF/xEWJsb6tZooAxDcN8WbanoTfny0E5lQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mw0goLIbKld12s8iBzuSOHgRhJKR7suovCSRb33Ato5970iSXCaXellDPX4scibeU
-         td7SjRb4NjLYxI7SWI+mLuePiWLihxaBhuZaJAwsnHCF7ciUchkS1zSihq+Jn4PkKy
-         Ob7RHN6EorzgzGxGkjnTXbsAHNME0v+1CiJO87/I=
-Date:   Fri, 30 Dec 2022 16:37:51 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v2 6/8] media: uvcvideo: Allow hw clock updates
- with buffers not full
-Message-ID: <Y673v07cMWLgHecD@pendragon.ideasonboard.com>
-References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
- <20220920-resend-hwtimestamp-v2-6-0d7978a817cc@chromium.org>
+        Fri, 30 Dec 2022 09:38:22 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3139F1A38A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 06:38:21 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id y19so3020625plb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 06:38:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D0SWZDx0V1D/HIfCQH5ieh3dByUshQE5TdJw3a+TDeo=;
+        b=fnfGF6A7esg956mneyuZG42t7fnkhl/sRIHsTvqdDR6SYRfFQs/pLqKrX1ph0kbzrq
+         m0iA5PjUwHMJVRm7XnPoMKFHgatU1Z2/zcnJ0+RmKKdEb9bgK3bVVHxDgP5Glhi8gUD7
+         tOxrl4tiqnubKOuMRPR7CBWUZrZ50JcoHLSBg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D0SWZDx0V1D/HIfCQH5ieh3dByUshQE5TdJw3a+TDeo=;
+        b=LcY3WofGFHmwx+Ig+gmDOcqPNoBItU7ZsbRifSa1R/pIoejAbgE/GM2rk/W10N0Ea3
+         on2W2mn70gZncny9oISelJoFyZr0wfeLQ0RMPo8tzG3rN/z2zMPYtJvPYqnBHnVX77lv
+         Ktn+BVxt4uAsLSxb4ijuzhA8QoVYUHPKfjCB9Aq+uadfpNq7zFhx5VvyxH05Z9xDCjRV
+         1jKgfoDGYtsVnxNXlZSB7OkVBwllnSFCFgFafFf+QakeWFTcDFSDEHm7u8wmRZOl6ZcI
+         YN77zDAP2tqpo+yWnmDLs/OLU65aDNv9rKKdA42VpjRpxBKxfRcLqq39v04wM0UFpdFe
+         ksYA==
+X-Gm-Message-State: AFqh2kq4zVLvrqEKAEM9KSMZUqPf3JR4WUBi9PmygOcRoeX0VicU6Rhg
+        ZhKkEnblvzNua3sl1Jg13YoJlw==
+X-Google-Smtp-Source: AMrXdXsprLveRXW4bK7IbVnhIlYhMg/hTUgGv0jcPjRWEBPmaSlvPmgR8hFmojNAQFDzhv008E0pyA==
+X-Received: by 2002:a17:902:e2ca:b0:18e:c6b0:b2f6 with SMTP id l10-20020a170902e2ca00b0018ec6b0b2f6mr29800656plc.14.1672411100566;
+        Fri, 30 Dec 2022 06:38:20 -0800 (PST)
+Received: from 20bae947266a (lma3293270.lnk.telstra.net. [60.231.90.117])
+        by smtp.gmail.com with ESMTPSA id jj13-20020a170903048d00b001889e58d520sm14933629plb.184.2022.12.30.06.38.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Dec 2022 06:38:19 -0800 (PST)
+Date:   Fri, 30 Dec 2022 14:38:11 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 0000/1140] 6.1.2-rc2 review
+Message-ID: <20221230143811.GA8@20bae947266a>
+References: <20221230094107.317705320@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220920-resend-hwtimestamp-v2-6-0d7978a817cc@chromium.org>
+In-Reply-To: <20221230094107.317705320@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
-
-Thank you for the patch.
-
-On Fri, Dec 02, 2022 at 06:02:46PM +0100, Ricardo Ribalda wrote:
-> With UVC 1.5 we get as little as one clock sample per frame. Which means
-> that it takes 32 frames to move from the software timestamp to the
-> hardware timestamp method.
+On Fri, Dec 30, 2022 at 10:49:32AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.2 release.
+> There are 1140 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This results in abrupt changes in the timestamping after 32 frames (~1
-> second), resulting in noticeable artifacts when used for encoding.
-> 
-> With this patch we modify the update algorithm to work with whatever
-> amount of values are available.
+> Responses should be made by Sun, 01 Jan 2023 09:38:41 +0000.
+> Anything received after that time might be too late.
 
-This too makes me thing that we should *really* move this to userspace.
-It will but much easier to implement clock domain translation there,
-with a better precision.
+Hi Greg,
 
-> Tested-by: HungNien Chen <hn.chen@sunplusit.com>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_video.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index 75c32e232f5d..7c6448c6d706 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -742,10 +742,10 @@ void uvc_video_clock_update(struct uvc_streaming *stream,
->  
->  	spin_lock_irqsave(&clock->lock, flags);
->  
-> -	if (clock->count < clock->size)
-> +	if (clock->count < 2)
->  		goto done;
->  
-> -	first = &clock->samples[clock->head];
-> +	first = &clock->samples[(clock->head - clock->count) % clock->size];
->  	last = &clock->samples[(clock->head - 1) % clock->size];
->  
->  	/* First step, PTS to SOF conversion. */
-> @@ -760,6 +760,14 @@ void uvc_video_clock_update(struct uvc_streaming *stream,
->  	if (y2 < y1)
->  		y2 += 2048 << 16;
->  
-> +	/*
-> +	 * Have at least 1/4 of a second of timestamps before we
-> +	 * try to do any calculation. Otherwise we do not have enough
-> +	 * precission.
+6.1.2-rc2 tested.
 
-s/precission/precision/
+Run tested on:
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+- Tanix TX6 - Allwinner H6
 
-How did you determine 250ms was the right threshold ?
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-> +	 */
-> +	if ((y2 - y1) < (256 << 16))
-> +		goto done;
-> +
->  	y = (u64)(y2 - y1) * (1ULL << 31) + (u64)y1 * (u64)x2
->  	  - (u64)y2 * (u64)x1;
->  	y = div_u64(y, x2 - x1);
-> 
-
--- 
-Regards,
-
-Laurent Pinchart
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
