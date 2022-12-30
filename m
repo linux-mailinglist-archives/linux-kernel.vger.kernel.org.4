@@ -2,149 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2E8659899
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEEE6598A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234383AbiL3NOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 08:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S234966AbiL3NVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 08:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiL3NOe (ORCPT
+        with ESMTP id S229505AbiL3NVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 08:14:34 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4998E1ADA3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:14:33 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id bs20so17785950wrb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:14:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZODiERr2nILpNR045ZQJNrA0TwmM8JmrarYNMEwpKfw=;
-        b=PcuU+Eu2EzRD/xeuVTSTpoXSI9BqWaqrPLjBZrA7RN4y/D6His70PGn3AtCaURZWhJ
-         HBKmIoZkRErlH9ZynGnGyymXGZQBF/0pqn1zrLxXKZa8g2D52VQ0o3JCeeiJEPMF0yQ5
-         +DUe9e8HQhp1+9zYN1EWYL8VAeKnXjFqIUoDCZpizC7yQg5oKsFZrXNEhlBOxVf+6BPY
-         pi8R91e3j3D4zGFgo8552jJXJuL5smd/q2VBfSLPinHl6HCSb/ZgKZAE8mQkl/lhNMXX
-         f45kvYIn+SITtTYonQzqJS/QHu6iPDYEP0VxHwMaySnLhHoXZBLle2CniH3S6Feaoytf
-         M3kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZODiERr2nILpNR045ZQJNrA0TwmM8JmrarYNMEwpKfw=;
-        b=aNQdgO1k1u19j9DkFtOXp9G5b4Ct/Yi7r6zMCcRphGJArDBl1JiZ8p/whU/wJQ+4AN
-         b8V3b38QdcKNiONnHtU7DCYEac3uBwXqP0gI/ASWqv39Lm9FC/D2e/hMW7V9XB4n6xEl
-         eksNQMw8tCwpZxXUz1NtgBYsoHq7YsdurA+85vfUcn0ljZJfZTKqiivZjfSst7S6vAFu
-         Kf2YEPqEVH0ZFgzDZJxPc2O1IzLcQ7pVMPAkP5FVg9jmVnLIAOtlsdbm7SbKCewU2V+O
-         yYCIzeytXMAuFHlab0qFoVPs+ExHzFkBgNWOUkujBdk0yCEB+mjC4mmPzC1mY1DEgPSa
-         ZjNA==
-X-Gm-Message-State: AFqh2koXKQxBuh6yKSCKnBASD3KuA3yjkhCPqlPW8SZR1ewgM8sgiISp
-        Qap4YRCs1n1cuJitLnEiclr3oH0Fp/AD4KB5
-X-Google-Smtp-Source: AMrXdXtW/nGYu4K7UXZK7l+hzu45xTsVCAYKoS4RQEPtXBP8fMRfHqA5H7N4MOQWXQqL9qaYgLMXBA==
-X-Received: by 2002:adf:e383:0:b0:242:3cb6:36b8 with SMTP id e3-20020adfe383000000b002423cb636b8mr21138209wrm.44.1672406071838;
-        Fri, 30 Dec 2022 05:14:31 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id j13-20020a5d618d000000b002425dc49024sm20519086wru.43.2022.12.30.05.14.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Dec 2022 05:14:30 -0800 (PST)
-Message-ID: <9ad399f9-7d27-b541-2379-355f3a8258ae@linaro.org>
-Date:   Fri, 30 Dec 2022 14:14:29 +0100
+        Fri, 30 Dec 2022 08:21:34 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA641A05B;
+        Fri, 30 Dec 2022 05:21:32 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BUDLIq2048320;
+        Fri, 30 Dec 2022 07:21:18 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672406478;
+        bh=dgtWKiypkfZyZIMMgNnZ1rCIMvsBKWgzAMtTZGyqJDk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=HvaHtmfz5BgNpQkmjKlxkohl6ShTXsWaahJ7uP+LOgwdiiTPIqDEa7xdM8DR6UqNO
+         lDiOoyBrki4D54sCEZTFgUX6QVKJH8yLEi1XdYNM/V0bWjkUlh6UaOn1+UuS9mc199
+         2GODsgjbazU/O4BYeyZcEAEOBupPUly9Yoncb8JM=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BUDLIxO011205
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 30 Dec 2022 07:21:18 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 30
+ Dec 2022 07:21:18 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 30 Dec 2022 07:21:17 -0600
+Received: from [10.249.48.175] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BUDLHft130087;
+        Fri, 30 Dec 2022 07:21:17 -0600
+Message-ID: <b746fd70-95eb-307e-0f95-28d009d95f85@ti.com>
+Date:   Fri, 30 Dec 2022 07:21:17 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH 3/3] serial: 8250_rt288x: Remove unnecessary
- UART_REG_UNMAPPED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: k3-dsp: update bindings for
+ AM62A SoCs
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andersson@kernel.org>, <devicetree@vger.kernel.org>,
+        <mathieu.poirier@linaro.org>, <p.zabel@pengutronix.de>,
+        <linux-remoteproc@vger.kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>
+CC:     <praneeth@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <a-bhatia1@ti.com>, <j-luthra@ti.com>, <devarsht@ti.com>
+References: <20221228123655.15384-1-hnagalla@ti.com>
+ <20221228123655.15384-2-hnagalla@ti.com>
+ <18a2fd76-c708-0c14-2d5c-b771ab8baee5@linaro.org>
 Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     inux-kernel@vger.kernel.org
-References: <20221230114603.16946-1-ilpo.jarvinen@linux.intel.com>
- <20221230114603.16946-4-ilpo.jarvinen@linux.intel.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221230114603.16946-4-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Hari Nagalla <hnagalla@ti.com>
+In-Reply-To: <18a2fd76-c708-0c14-2d5c-b771ab8baee5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilpo,
-
-On 30/12/22 12:46, Ilpo Järvinen wrote:
-> As unmapped registers are at the tail of the array, the ARRAY_SIZE()
-> condition will catch them just fine. No need to define special
-> value for them.
-
-True but fragile example...
-
-> Also, let the compiler to calculate the size of the array instead of
-> providing it manually.
+On 12/28/22 06:38, Krzysztof Kozlowski wrote:
+>>   
+>>     resets:
+>>       description: |
+>> @@ -111,6 +113,7 @@ else:
+>>           enum:
+>>             - ti,j721e-c71-dsp
+>>             - ti,j721s2-c71-dsp
+>> +	  - ti,am62a-c7xv-dsp
+> Does not look like you tested the bindings. Please run `make
+> dt_binding_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst for instructions).
 > 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->   drivers/tty/serial/8250/8250_rt288x.c | 16 ++++------------
->   1 file changed, 4 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_rt288x.c b/drivers/tty/serial/8250/8250_rt288x.c
-> index 3015afb99722..da8be9a802c1 100644
-> --- a/drivers/tty/serial/8250/8250_rt288x.c
-> +++ b/drivers/tty/serial/8250/8250_rt288x.c
-> @@ -14,10 +14,8 @@
->   
->   #define RT288X_DL	0x28
->   
-> -#define UART_REG_UNMAPPED	-1
+> Wrong indentation.
+Seems, i used a wrong option in our patch verify script. Used the 
+correct options and fixed it. sending v2 with review comment updates. Thanks
 
-
-> -static const s8 au_io_out_map[8] = {
-> +static const s8 au_io_out_map[] = {
->   	[UART_TX]	= 1,
->   	[UART_IER]	= 2,
->   	[UART_FCR]	= 4,
->   	[UART_LCR]	= 5,
->   	[UART_MCR]	= 6,
-> -	[UART_LSR]	= UART_REG_UNMAPPED,
-> -	[UART_MSR]	= UART_REG_UNMAPPED,
-> -	[UART_SCR]	= UART_REG_UNMAPPED,
-
-If someone were to re-add an unlikely single
-
-         [UART_SCR] = 42,
-
-The array will also contain these hidden entries:
-
-         [UART_LSR] = 0,
-         [UART_MSR] = 0,
-
-And these 2 registers end mapped.
-
->   };
-
-Trying to 'optimize' array size when the array is index-initialized
-can be bug-prone.
-
->   static unsigned int au_serial_in(struct uart_port *p, int offset)
-> @@ -44,8 +38,7 @@ static unsigned int au_serial_in(struct uart_port *p, int offset)
->   	if (offset >= ARRAY_SIZE(au_io_in_map))
->   		return UINT_MAX;
->   	offset = au_io_in_map[offset];
-> -	if (offset == UART_REG_UNMAPPED)
-> -		return UINT_MAX;
-> +
->   	return __raw_readl(p->membase + (offset << p->regshift));
->   }
-Regards,
-
-Phil.
