@@ -2,87 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A596595B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 08:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0906595B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 08:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234634AbiL3H20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 02:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
+        id S234741AbiL3H3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 02:29:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbiL3H2V (ORCPT
+        with ESMTP id S234675AbiL3H3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 02:28:21 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [123.126.96.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09F5018E08
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 23:28:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=BZVBV
-        RQVrTSn4BzI4JujaZV4qktmUeRF9eHZ5CKmHQM=; b=gJadKLaWCNs+R5dJcOlvU
-        pXAWaVns4xKQJLjAOu+DCzyNHH7dhJ3pj3HBpKS6uyqCsb9Hz5V5ts2/uazefHoT
-        t+TzH+ipfiNnAwWJ/KJaRUX3DCOcCdjr1SyFCyCIczbjTBIXcwvMrD8tlF5jnqtg
-        Ercxuwa3ZpPBCNZF8HhgUQ=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp16 (Coremail) with SMTP id MNxpCgCnzzsVk65jw+eMDQ--.25047S2;
-        Fri, 30 Dec 2022 15:28:21 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     bskeggs@redhat.com
-Cc:     kherbst@redhat.com, lyude@redhat.com, airlied@gmail.com,
-        hackerzheng666@gmail.com, alex000young@gmail.com,
-        security@kernel.org, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] drm/nouveau/mmu: fix Use after Free bug in nvkm_vmm_node_split
-Date:   Fri, 30 Dec 2022 15:27:58 +0800
-Message-Id: <20221230072758.443644-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 30 Dec 2022 02:29:24 -0500
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D120019293
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 23:28:59 -0800 (PST)
+Received: by mail-vk1-xa36.google.com with SMTP id g65so6363687vkh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 23:28:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O4rWDBnich9Pr6lmmK6XSKuKBAi2tSUB5CAPgAozAlE=;
+        b=XegkyVKV+PgUZa65lBzqGnH3bl4fhLNyQYEGygUbEJbcmgtYHf3+hQP2MXiEnbpaW4
+         QuW+e+I2bMxHSfa2Bj2Z5r48w+YZADkfv4I/1TWUFCaV+VUe27mQsF8outWlygJshdpG
+         AU53Bg1H1nTVYhI9TCgXHsqo0r9E34eyAacsX7AUvghb6LojnCggIOq47/HyQjDcPt5X
+         lugbp9QKQYC7TD2GHQSGCDNqATgYcCP6hMaIMwi8Xx9G8zIZHVq+rqLqk6FSd8YZ4RDo
+         u5XubKnl9Lik2djUMvslbq8GbwAOuHeTw8Jms98QyFiJ5pG54HPb3nSjxNCqkFBYWRHw
+         f5mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O4rWDBnich9Pr6lmmK6XSKuKBAi2tSUB5CAPgAozAlE=;
+        b=FKmlTLDvXru5jhrD/VoEJzgade4vz2Mtb9TQREKzxa4KF/OUPcaddQZoRZucBI3SNH
+         zBhS9v/Y4gfOvU+L4KQyPTb0lZNaFKyX3XBK3ijT93SoxX0FGXSr7clHg3imR35YEYIt
+         XYBG6xY72bIetDEUItCOH1lGOVwGTjQUzNKP92zKPeDMMDIATBJ7d23fTSdFP/PwRVC5
+         Y1Ec7XrAAiG140l1srp5eertbbQtVWS6hPGwesxGxqgWbcqKh8h4yZpixD+S/4q8kjZT
+         EbtbQPaAKAtrwqs71CnGTssSC5zzLHXqKeMqRWyh8IVBl8Rd6myKbt9FTn2YUKcXBnV8
+         hfJA==
+X-Gm-Message-State: AFqh2kq3RLc0MXf4deH3Z5aEszvLS3JLyDT3VuZGQWdJ2W7YXsgprT3j
+        6sJHjr0I1LYciinrPmNqGW8d8s7U7U2FS1DQgyjDMg==
+X-Google-Smtp-Source: AMrXdXtkAY/uzal0nBliIfYQXiC4k+adlA8+pERXrTaj7CT8ZC3STOF5lX4ND2bGwJPtTvEUYMp8gfv6xd9Chkfy8uQ=
+X-Received: by 2002:a1f:d904:0:b0:3d5:413f:ecd0 with SMTP id
+ q4-20020a1fd904000000b003d5413fecd0mr2461946vkg.20.1672385338756; Thu, 29 Dec
+ 2022 23:28:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: MNxpCgCnzzsVk65jw+eMDQ--.25047S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7GF15Gr48ur17XrW5WryxGrg_yoW8JF4rpF
-        45uryYvryxuF4Ut340vFy8ur90kan2yFWIk34YvasIvwnxZ3y0vFW5AryUGryrZw4xWw1a
-        qr4DGr1fWry5ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaZXrUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbCbxTnU2BbEN8pBAAAsW
+References: <20221228144256.536395940@linuxfoundation.org>
+In-Reply-To: <20221228144256.536395940@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 30 Dec 2022 12:58:47 +0530
+Message-ID: <CA+G9fYt_jC+FkQnUXhciRdbj+MvyFc-oe2uNz2Khr6rMJPirsA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here is a function call chain.
-nvkm_vmm_pfn_map->nvkm_vmm_pfn_split_merge->nvkm_vmm_node_split
-If nvkm_vma_tail return NULL in nvkm_vmm_node_split, it will
-finally invoke nvkm_vmm_node_merge->nvkm_vmm_node_delete, which
-will free the vma. However, nvkm_vmm_pfn_map didn't notice that.
-It goes into next label and UAF happens.
+On Wed, 28 Dec 2022 at 20:14, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.86 release.
+> There are 731 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 30 Dec 2022 14:41:39 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.86-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Fix it by returning the return-value of nvkm_vmm_node_merge
-instead of NULL.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
-index ae793f400ba1..84d6fc87b2e8 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
-@@ -937,8 +937,8 @@ nvkm_vmm_node_split(struct nvkm_vmm *vmm,
- 	if (vma->size != size) {
- 		struct nvkm_vma *tmp;
- 		if (!(tmp = nvkm_vma_tail(vma, vma->size - size))) {
--			nvkm_vmm_node_merge(vmm, prev, vma, NULL, vma->size);
--			return NULL;
-+			tmp = nvkm_vmm_node_merge(vmm, prev, vma, NULL, vma->size);
-+			return tmp;
- 		}
- 		tmp->part = true;
- 		nvkm_vmm_node_insert(vmm, tmp);
--- 
-2.25.1
+NOTE:
+Daniel D=C3=ADaz reported allmodconfig failures [1]
+[1] https://lore.kernel.org/stable/0328eb25-f711-d6ca-28f4-60601b6e0bfe@lin=
+aro.org/
 
+## Build
+* kernel: 5.15.86-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 87d5d5cae7d93d584c504a91241ccf7a09217bab
+* git describe: v5.15.85-732-g87d5d5cae7d9
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.85-732-g87d5d5cae7d9
+
+## Test Regressions (compared to v5.15.84-18-gbef75c6188c7)
+
+## Metric Regressions (compared to v5.15.84-18-gbef75c6188c7)
+
+## Test Fixes (compared to v5.15.84-18-gbef75c6188c7)
+
+## Metric Fixes (compared to v5.15.84-18-gbef75c6188c7)
+
+## Test result summary
+total: 148474, pass: 130464, fail: 2813, skip: 14903, xfail: 294
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 146 passed, 5 failed
+* arm64: 49 total, 43 passed, 6 failed
+* i386: 39 total, 35 passed, 4 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 34 total, 32 passed, 2 failed
+* riscv: 14 total, 14 passed, 0 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
