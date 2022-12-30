@@ -2,203 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99023659737
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B26659742
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234381AbiL3KXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 05:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
+        id S234387AbiL3K0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 05:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiL3KX3 (ORCPT
+        with ESMTP id S229485AbiL3K0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 05:23:29 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE60917E37;
-        Fri, 30 Dec 2022 02:23:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672395808; x=1703931808;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=qo29QrWsuU7LzMUtenaPcBp4E8W7PbGqVqlhZBfF2pM=;
-  b=oEAI7FKU5GrLhzpIEDA2LSynN6OagWzd63u4t199MS9bZL5xqozt4w9E
-   P2+ebqRTJONDBo4J2n5q0dPmADt/ahE6C+bEbW7Ts7ISP1dJ+hmGA4a4+
-   +edmAi5GAvsiUpyKi5ZRaKFprx0402k0ijg81Y95AMH5W9XISIqLVobm/
-   LDlE8loCYAd3oCHSHdHMmA/JqmEeVsErZJlQj5YSQ+l0zmFIhUSPPEjV2
-   1kVSUC7umPzfHL+nCFMsFp97APB8uvWlpCumEjdkf8BQ51ZQJmudrZBGm
-   yUT/eMq8l3yi2U0/rui17QGD3iMR8XqT1Xt+YlsYy80hmZPWOadfaXXdj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="348397556"
-X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
-   d="scan'208";a="348397556"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 02:23:28 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="684435860"
-X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
-   d="scan'208";a="684435860"
-Received: from vsemouch-mobl.ger.corp.intel.com ([10.249.41.102])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 02:23:23 -0800
-Date:   Fri, 30 Dec 2022 12:23:18 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 08/10] fpga: m10bmc-sec: Differentiate rsu status from
- doorbell in csr map
-In-Reply-To: <Y65p0kEZjyVt2pgr@yilunxu-OptiPlex-7050>
-Message-ID: <6d9ccd20-2c13-e352-c9e9-804ea3dadf@linux.intel.com>
-References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com> <20221226175849.13056-9-ilpo.jarvinen@linux.intel.com> <Y65p0kEZjyVt2pgr@yilunxu-OptiPlex-7050>
+        Fri, 30 Dec 2022 05:26:49 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BF57648;
+        Fri, 30 Dec 2022 02:26:48 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BU7iLYj040913;
+        Fri, 30 Dec 2022 10:26:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=xXY6Uc2QEJ8u+4R1yUcvmo2PgvRykdLOP/G/aMvJNNw=;
+ b=JrO0Hv1wdtnVtqW2M7ROQSNTM0mNBuvetE4O8XZ86znntBz2qO/HdZfSN/SKJCWkLkMV
+ hJ/2kXOd9TlHI6F5kK83OqXiLo6V1QnWXidZpzgCmQIJQA5ETj6cYHUhMLDh66ypCDS5
+ 6wlbreyH8FVdcMyPkCaZt2bKotjMUhY3948/Vf6YrqL9m3r+moEKyA7ID8gJRWkf01SG
+ A2CsD3hUpFpo7aCfNjmYICNneJ/F8ZHqA9ixe3WW5dF70qLARB4GpNT1QnEHLnvHo3aX
+ L2zEHGX7x0np8huhEPvLO7aT719ljxjMwek3Ram/fvLq8fchyszMr6ZeiveEh5MhCwJl cQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3msuv4je8v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Dec 2022 10:26:40 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BU92Fot003534;
+        Fri, 30 Dec 2022 10:26:38 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mnrpfr337-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Dec 2022 10:26:37 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BUAQYTB47120726
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Dec 2022 10:26:34 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11FDC20075;
+        Fri, 30 Dec 2022 10:26:34 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E24F920073;
+        Fri, 30 Dec 2022 10:26:33 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 30 Dec 2022 10:26:33 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH] perf lock: Fix core dump in command perf lock contention
+Date:   Fri, 30 Dec 2022 11:26:27 +0100
+Message-Id: <20221230102627.2410847-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-447113576-1672395808=:2020"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: owIXJVDiYEEKkCgV86OK-fQdVHMPBeEt
+X-Proofpoint-ORIG-GUID: owIXJVDiYEEKkCgV86OK-fQdVHMPBeEt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-30_07,2022-12-29_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ mlxscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212300087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+The test case perf lock contention dumps core on s390. Run the following
+commands:
+ # ./perf lock record -- ./perf bench sched messaging
+ # Running 'sched/messaging' benchmark:
+ # 20 sender and receiver processes per group
+ # 10 groups == 400 processes run
 
---8323329-447113576-1672395808=:2020
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+     Total time: 2.799 [sec]
+ [ perf record: Woken up 1 times to write data ]
+ [ perf record: Captured and wrote 0.073 MB perf.data (100 samples) ]
+ #
+ # ./perf lock contention
+ Segmentation fault (core dumped)
+ #
 
-On Fri, 30 Dec 2022, Xu Yilun wrote:
+The function call stack is lengthy, here are the top 5 functions:
+ # gdb ./perf core.24048
+ GNU gdb (GDB) Fedora Linux 12.1-6.fc37
+ Copyright (C) 2022 Free Software Foundation, Inc.
+ Core was generated by `./perf lock contention'.
+ Program terminated with signal SIGSEGV, Segmentation fault.
+ #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,
+         addr=1789230) at util/machine.c:3356
+         3356 machine->sched.text_end = kmap->unmap_ip(kmap, sym->start);
 
-> On 2022-12-26 at 19:58:47 +0200, Ilpo Järvinen wrote:
-> > The rsu_status field moves from the doorbell register to the auth
-> > result register in the PMCI implementation of the MAX10 BMC. Refactor
-> > the sec update driver code to handle two distinct registers (rsu_status
-> > field was added into csr map already when it was introduced but it was
-> > unused until now).
-> > 
-> > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  drivers/fpga/intel-m10-bmc-sec-update.c | 68 ++++++++++++++++---------
-> >  include/linux/mfd/intel-m10-bmc.h       |  2 +-
-> >  2 files changed, 46 insertions(+), 24 deletions(-)
-> > 
-> > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > index 6e58a463619c..1fe8b7ff594c 100644
-> > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > @@ -251,7 +251,7 @@ static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
-> >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> >  	u32 auth_result;
-> >  
-> > -	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
-> > +	dev_err(sec->dev, "Doorbell: 0x%08x\n", doorbell);
-> >  
-> >  	if (!m10bmc_sys_read(sec->m10bmc, csr_map->auth_result, &auth_result))
-> >  		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
-> > @@ -279,6 +279,30 @@ static bool rsu_progress_busy(u32 progress)
-> >  		progress == RSU_PROG_PROGRAM_KEY_HASH);
-> >  }
-> >  
-> > +static int m10bmc_sec_progress_status(struct m10bmc_sec *sec, u32 *doorbell,
-> 
-> Please try to rename the parameters, to indicate u32 *doorbell is the
-> raw value from doorbell register, and u32 *progress & status are
-> software managed info.
+ (gdb) where
+  #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,\
+         addr=1789230) at util/machine.c:3356
+  #1  0x000000000109f244 in callchain_id (evsel=0x30313e0,\
+         sample=0x3ffea4f77d0) at builtin-lock.c:957
+  #2  0x000000000109e094 in get_key_by_aggr_mode (key=0x3ffea4f7290,\
+         addr=27758136, evsel=0x30313e0, sample=0x3ffea4f77d0) \
+         at builtin-lock.c:586
+  #3  0x000000000109f4d0 in report_lock_contention_begin_event \
+         (evsel=0x30313e0, sample=0x3ffea4f77d0)
+         at builtin-lock.c:1004
+  #4  0x00000000010a00ae in evsel__process_contention_begin \
+         (evsel=0x30313e0, sample=0x3ffea4f77d0)
+         at builtin-lock.c:1254
+  #5  0x00000000010a0e14 in process_sample_event (tool=0x3ffea4f8480, \
+         event=0x3ff85601ef8, sample=0x3ffea4f77d0,
+         evsel=0x30313e0, machine=0x3029e28) at builtin-lock.c:1464
+          sample=0x3ffea4f77d0, evsel=0x30313e0, machine=0x3029e28) \
+	 at util/session.c:1523
+  .....
 
-I'll try to do that.
+The issue is in function machine__is_lock_function() in file
+./util/machine.c lines 3355:
+   /* should not fail from here */
+   sym = machine__find_kernel_symbol_by_name(machine, "__sched_text_end",
+		                             &kmap);
+   machine->sched.text_end = kmap->unmap_ip(kmap, sym->start)
+
+On s390 the symbol __sched_text_end is *NOT* in the symbol list and the
+resulting pointer sym is set to NULL. The sym->start is then a NULL pointer
+access and generates the core dump.
+
+The reason why __sched_text_end is not in the symbol list on s390 is
+simple:
+When the symbol list is created at perf start up with function calls
+  dso__load
+  +--> dso__load_vmlinux_path
+       +--> dso__load_vmlinux
+            +--> dso__load_sym
+	         +--> dso__load_sym_internal (reads kernel symbols)
+		 +--> symbols__fixup_end
+		 +--> symbols__fixup_duplicate
+
+The issue is in function symbols__fixup_duplicate(). It deletes all
+symbols with have the same address. On s390
+ # nm -g  ~/linux/vmlinux| fgrep c68390
+ 0000000000c68390 T __cpuidle_text_start
+ 0000000000c68390 T __sched_text_end
+ #
+two symbols have identical addresses and __sched_text_end is considered
+duplicate (in ascending sort order) and removed from the symbol list.
+Therefore it is missing and an invalid pointer reference occurs.
+The code checks for symbol __sched_text_start and when it exists assumes
+symbol __sched_text_end is also in the symbol table. However this is
+not the case on s390.
+
+Same situation exists for symbol __lock_text_start:
+0000000000c68770 T __cpuidle_text_end
+0000000000c68770 T __lock_text_start
+This symbol is also removed from the symbol table but used in function
+machine__is_lock_function().
+
+To fix this and keep duplicate symbols in the symbol table, set
+symbol_conf.allow_aliases to true. This prevents the removal of duplicate
+symbols in function symbols__fixup_duplicate().
+
+Output After:
+ # ./perf lock contention
+ contended total wait  max wait  avg wait    type   caller
+
+        48   124.39 ms 123.99 ms   2.59 ms rwsem:W unlink_anon_vmas+0x24a
+        47    83.68 ms  83.26 ms   1.78 ms rwsem:W free_pgtables+0x132
+         5    41.22 us  10.55 us   8.24 us rwsem:W free_pgtables+0x140
+         4    40.12 us  20.55 us  10.03 us rwsem:W copy_process+0x1ac8
+ #
+
+Fixes: cc2367eebb0c ("machine: Adopt is_lock_function() from builtin-lock.c")
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+---
+ tools/perf/builtin-lock.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index 718b82bfcdff..506c2fe42d52 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -1670,6 +1670,7 @@ static int __cmd_report(bool display_info)
  
-> > +				      u32 *progress, u32 *status)
-> > +{
-> > +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> > +	u32 status_reg;
-> > +	int ret;
-> > +
-> > +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, doorbell);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (csr_map->doorbell != csr_map->rsu_status) {
-> 
-> I prefer not to complicate the csr map filling in intel-m10-bmc, just invalid
-> the addr value if there is no such register for the board.
-
-I'm sorry but I didn't get the meaning of your comment. Could you please 
-rephrase?
-
-My guess is that you might have tried to say that if there's no register 
-for rsu_status, mark it not existing in csr map? But the field exists in 
-both cases, it's just part of a different register (doorbell or 
-auth_result) so if I use that kind of "register doesn't exist" condition, 
-it would apply to both cases.
-
-> > @@ -330,21 +350,20 @@ static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
-> >  	if (ret)
-> >  		return FW_UPLOAD_ERR_RW_ERROR;
-> >  
-> > -	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> > -				       csr_map->base + csr_map->doorbell,
-> > -				       doorbell,
-> > -				       rsu_start_done(doorbell),
-> > -				       NIOS_HANDSHAKE_INTERVAL_US,
-> > -				       NIOS_HANDSHAKE_TIMEOUT_US);
-> > +	ret = read_poll_timeout(m10bmc_sec_progress_status, err,
-> > +				err < 0 || rsu_start_done(doorbell, progress, status),
-> > +				NIOS_HANDSHAKE_INTERVAL_US,
-> > +				NIOS_HANDSHAKE_TIMEOUT_US,
-> > +				false,
-> > +				sec, &doorbell, &progress, &status);
-> >  
-> >  	if (ret == -ETIMEDOUT) {
-> >  		log_error_regs(sec, doorbell);
-> >  		return FW_UPLOAD_ERR_TIMEOUT;
-> > -	} else if (ret) {
-> > +	} else if (err) {
-> >  		return FW_UPLOAD_ERR_RW_ERROR;
-> >  	}
-> >  
-> > -	status = rsu_stat(doorbell);
-> >  	if (status == RSU_STAT_WEAROUT) {
-> >  		dev_warn(sec->dev, "Excessive flash update count detected\n");
-> >  		return FW_UPLOAD_ERR_WEAROUT;
-> > @@ -393,7 +412,7 @@ static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
-> >  static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-> >  {
-> >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> > -	u32 doorbell;
-> > +	u32 doorbell, status;
-> >  	int ret;
-> >  
-> >  	ret = regmap_update_bits(sec->m10bmc->regmap,
-> > @@ -418,7 +437,10 @@ static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-> >  		return FW_UPLOAD_ERR_RW_ERROR;
-> >  	}
-> >  
-> > -	if (!rsu_status_ok(rsu_stat(doorbell))) {
-> > +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->rsu_status, &status);
-> 
-> Same as above, please just handle the detailed register definition 
-> differences in this driver, not in csr map.
-
-Earlier you were having the exactly opposite opinion:
-
-https://lore.kernel.org/linux-fpga/20221108144305.45424-1-ilpo.jarvinen@linux.intel.com/T/#me2d20e60d7feeafcdeeab4d58bd82787acf3ada9
-
-So which way you want it? Should I have the board types here in the sec 
-update drivers as a second layer of differentiation or not?
-
-
+ 	/* for lock function check */
+ 	symbol_conf.sort_by_name = true;
++	symbol_conf.allow_aliases = true;
+ 	symbol__init(&session->header.env);
+ 
+ 	if (!data.is_pipe) {
+@@ -1757,6 +1758,7 @@ static int __cmd_contention(int argc, const char **argv)
+ 
+ 	/* for lock function check */
+ 	symbol_conf.sort_by_name = true;
++	symbol_conf.allow_aliases = true;
+ 	symbol__init(&session->header.env);
+ 
+ 	if (use_bpf) {
 -- 
- i.
+2.38.1
 
---8323329-447113576-1672395808=:2020--
