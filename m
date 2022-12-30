@@ -2,144 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3536596B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 10:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5BE6596B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 10:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbiL3JU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 04:20:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        id S234858AbiL3JUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 04:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234836AbiL3JTz (ORCPT
+        with ESMTP id S234893AbiL3JUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 04:19:55 -0500
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44181A38A;
-        Fri, 30 Dec 2022 01:19:53 -0800 (PST)
-Received: from localhost.localdomain (1.general.phlin.us.vpn [10.172.66.38])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 97AD04282F;
-        Fri, 30 Dec 2022 09:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1672391992;
-        bh=8EctNHcSZJ4z/u91cUEbWtjzKmELejvlmw6JU4LB5p4=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=Ahm9cPTUtlZpzvmNofU4NJ23p+VRNvc3ISDPyTQYCfDHx7KpxYenur+oST52+9jv2
-         1ZH6YwI7GvvVJcSp+B3W7RC6SRsdxHjeCOChedtw7hQEYuN/6D+iLv8Tij7uk1UDyi
-         st5zjjS+xP8pZS04CZ9sXqJIgAbA2RCBkGAL3relUuCSKh6xLc+3XOHU+ZLx+weanW
-         OdZ4iQRMJorlTs7n6VGMfbFN3N0B8OnJiNnvx8OXAcaQjpaCV2ObdlaRP+RdG4PhNG
-         PTGP2W3/gscD/mIbemURjbEOfy1f4Nu5Zwk0lvi1n4Q27keo1jIyhLtMyupeEblE/V
-         sVo6nKB4PIddA==
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     po-hsu.lin@canonical.com, dsahern@kernel.org, prestwoj@gmail.com,
-        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net
-Subject: [PATCH 2/2] selftests: net: return non-zero for failures reported in arp_ndisc_evict_nocarrier
-Date:   Fri, 30 Dec 2022 17:18:29 +0800
-Message-Id: <20221230091829.217007-3-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221230091829.217007-1-po-hsu.lin@canonical.com>
-References: <20221230091829.217007-1-po-hsu.lin@canonical.com>
+        Fri, 30 Dec 2022 04:20:15 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8B61A38A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 01:20:14 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id z16so2936780wrw.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 01:20:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+lt3n3rG4Y9lEnTnt6F68qMx8dXRezJp1CS2q5yx68c=;
+        b=EZmeAzqjxZoo5qSHNrVV/kUBc/pe0vnExRlFi4wZ32pNr0cAq2NpYgidG7pnNZQeLt
+         H7+oxjbq9Jv1SFUVeTqc6CsUtblk9mLb8skbVQj+/b7YBdogxKwDMqGPSqFZtQAsigV5
+         iNuiG91zs1zX6s19Kxk7nuR0ONv0YgO8iFHfHSdtvlQb3ApiCJqNTTEqr56Pl8Gs1/Oz
+         mY38aIOL9BgxZix8GVCu8qoYM6Dl9+h07Qh5B/qDhWFctL/vsHHZ2xmufRkn93LzwxR8
+         t0TE35s5o1cLgVm4WXAvzICNHBomgf99ko0SNmqKGb565KWAclbIekTLlSXF1fZV6iOq
+         cA5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+lt3n3rG4Y9lEnTnt6F68qMx8dXRezJp1CS2q5yx68c=;
+        b=yq8UkkMm6lpOVfTXRDuPlEcDZmNDbEVFzfgpqoFS7/a+NL9ilyyJp/x4i5J5ta86qG
+         GT472FWfGyaxbE5SLBWMwUlNswbWFJ3ee2JywYrz3N2CAPvf1xmM29NyOopj9x78+WtV
+         YjQhqlZzx9JbUN3ZQJ5VX790abENhp9IZosOWh4yWnpWUE2ZwUjuBAPVMtgzPb/gAeaM
+         AeBBfekfstMN59NbtdxzywlMfJ3QZRyRilC+gCkBF7JXR5pXKj3Uhng6Vipn8v6DTzJ+
+         12E+UgyV4fMu8VCWLDJtjo6t4Lrd12EoIDbR0pznZj4RR+Bop7rEbChfGNR9DGX9yagG
+         aIBQ==
+X-Gm-Message-State: AFqh2kqbZQg4v1ryeIIDYV0of7poGHAI8xTduEDoztqexj3ndhqSWhqr
+        Tx5cwsdIMBjNbAItk31qyv0rnQ==
+X-Google-Smtp-Source: AMrXdXsxRFqhUQkGFaEdxIUamk2HnFD7/ql/BysxaOE1KK/YBtvo8PfSmK8ryUb7nORcuIyJsfBjrQ==
+X-Received: by 2002:a05:6000:234:b0:28f:62f:b4eb with SMTP id l20-20020a056000023400b0028f062fb4ebmr1101525wrz.44.1672392012795;
+        Fri, 30 Dec 2022 01:20:12 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id j5-20020adfea45000000b0024206ed539fsm20126081wrn.66.2022.12.30.01.20.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Dec 2022 01:20:12 -0800 (PST)
+Date:   Fri, 30 Dec 2022 11:20:11 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-x13s: Add RTC support
+Message-ID: <Y66tSyDKOkH3T1BT@linaro.org>
+References: <20221230085010.717423-1-abel.vesa@linaro.org>
+ <Y66qkR+WWkopNzQ4@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y66qkR+WWkopNzQ4@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return non-zero return value if there is any failure reported in this
-script during the test. Otherwise it can only reflect the status of
-the last command.
+On 22-12-30 10:08:33, Johan Hovold wrote:
+> Hi Abel,
+> 
+> On Fri, Dec 30, 2022 at 10:50:10AM +0200, Abel Vesa wrote:
+> > The PMK8350 PMIC has an available RTC block. Describe it in
+> > sc8280xp-pmics dtsi and enable it in Lenovo Thinkpad X13s specific dts.
+> > Mark it as wakeup-source to allow waking the system from sleep.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> 
+> I'm currently working on proper RTC support which implies reading and
+> storing the time offset from EFI.
+> 
+> This patch in itself is pretty much useless as the returned time is just
+> some random time from the epoch (e.g. in the 1970's).
+> 
+> So I suggest waiting another week or so until I'm done.
 
-Fixes: f86ca07eb531 ("selftests: net: add arp_ndisc_evict_nocarrier")
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Sure thing. Consider this dropped then.
 
-diff --git a/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh b/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh
-index b4ec1ee..4a110bb 100755
---- a/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh
-+++ b/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh
-@@ -18,6 +18,7 @@ readonly V4_ADDR1=10.0.10.2
- readonly V6_ADDR0=2001:db8:91::1
- readonly V6_ADDR1=2001:db8:91::2
- nsid=100
-+ret=0
- 
- cleanup_v6()
- {
-@@ -61,7 +62,7 @@ setup_v6() {
-     if [ $? -ne 0 ]; then
-         cleanup_v6
-         echo "failed"
--        exit
-+        exit 1
-     fi
- 
-     # Set veth2 down, which will put veth1 in NOCARRIER state
-@@ -88,7 +89,7 @@ setup_v4() {
-     if [ $? -ne 0 ]; then
-         cleanup_v4
-         echo "failed"
--        exit
-+        exit 1
-     fi
- 
-     # Set veth1 down, which will put veth0 in NOCARRIER state
-@@ -115,6 +116,7 @@ run_arp_evict_nocarrier_enabled() {
- 
-     if [ $? -eq 0 ];then
-         echo "failed"
-+        ret=1
-     else
-         echo "ok"
-     fi
-@@ -134,6 +136,7 @@ run_arp_evict_nocarrier_disabled() {
-         echo "ok"
-     else
-         echo "failed"
-+        ret=1
-     fi
- 
-     cleanup_v4
-@@ -164,6 +167,7 @@ run_ndisc_evict_nocarrier_enabled() {
- 
-     if [ $? -eq 0 ];then
-         echo "failed"
-+        ret=1
-     else
-         echo "ok"
-     fi
-@@ -182,6 +186,7 @@ run_ndisc_evict_nocarrier_disabled() {
-         echo "ok"
-     else
-         echo "failed"
-+        ret=1
-     fi
- 
-     cleanup_v6
-@@ -198,6 +203,7 @@ run_ndisc_evict_nocarrier_disabled_all() {
-         echo "ok"
-     else
-         echo "failed"
-+        ret=1
-     fi
- 
-     cleanup_v6
-@@ -218,3 +224,4 @@ if [ "$(id -u)" -ne 0 ];then
- fi
- 
- run_all_tests
-+exit $ret
--- 
-2.7.4
+Please CC me when you have something so I can try it out.
 
+Thanks,
+Abel
+
+> 
+> Johan
