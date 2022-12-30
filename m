@@ -2,173 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD16659B25
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCF6659B51
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 19:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235428AbiL3RzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 12:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S235124AbiL3SNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 13:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235424AbiL3RzN (ORCPT
+        with ESMTP id S229832AbiL3SNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 12:55:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2020B1C90C;
-        Fri, 30 Dec 2022 09:54:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBC25B81CE7;
-        Fri, 30 Dec 2022 17:54:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16E6C433EF;
-        Fri, 30 Dec 2022 17:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672422891;
-        bh=n26j3UNEBWhnst1Oo9v8s52C4KD49fhyEge2J4vzAmc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mzqd2UgN5mNYi2ZRQozGDhqjfBuD6TjIX+dV/JNT/N+/DTkzRqDdGSw9BiUyKGAYM
-         KsZYneFe0OmEFn5LhB8boWiTMgaKAnOdXJeMKW/NlvhbJnLMmDcOt7QCTRLoNtx5Sz
-         BohFSRe++CrN0yTtaklYUKypwsd9zqxHBxnER+am3OymXkeK447j3e3DGOy6/kcXz2
-         hBxBqYb1Gu0buKUl0s6bjN7G2sTlWIihvYOWgzEV+isQiI/HM544kYR7kRLujrYUEf
-         b4b9sjOQMAwdrAnqbpuKeHTxbuYRpCfx+Vmq7HTGh5PUELXbU8pxyxMcpqfnSwu16K
-         eqvl7Jf2gtBEQ==
-Date:   Fri, 30 Dec 2022 18:08:09 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc:     linux-iio@vger.kernel.org,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: ep93xx: Add
- cirrus,ep9301-adc description
-Message-ID: <20221230180809.051fc6bd@jic23-huawei>
-In-Reply-To: <20221223162636.6488-1-alexander.sverdlin@gmail.com>
-References: <20221223162636.6488-1-alexander.sverdlin@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Fri, 30 Dec 2022 13:13:48 -0500
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9CAFC3;
+        Fri, 30 Dec 2022 10:13:48 -0800 (PST)
+Received: by mail-io1-f50.google.com with SMTP id p66so11493029iof.1;
+        Fri, 30 Dec 2022 10:13:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BjjFYrn+Z6BrwQksjCuz3/lydaArAzbP2sbV0KLxPy8=;
+        b=irqIXhOR+QG3T3O+d81CHOLzqANbrlZCJ/hoiDso9hEtIoXY4sZYtRECMCY/KQe6Zd
+         NrT9Sh86QdStcjfAPoLI6+dQXWaQLoU9B0iAf2pI1nHv0PVR954WU/1fWFfm59f70Cmd
+         YZteNu2cyPgm8HOmrP6G9DRxTojK/ojzM+gHcPWi6Ve72tWzoVdENndoFX19UaWMTuvT
+         YNDH8q3Z4fRMQGsbkTeiIyB7g9fNJQeZloWEdeFc1oCNKX81/0lPzk8TjqtxNpAa7ipr
+         iyvS2SVrVtddhGIRAN4k3aB0H2ps8HVBCoR4dqKm/+9TQp1HzGDPfsBtENf5+KuNG3Js
+         L7bw==
+X-Gm-Message-State: AFqh2kqLfZwHM4sVvsTHTKHkIO/Lr7t9nq1/hPT5g5iBm3fxboAZt82g
+        Gj5tFc04BqgRUvYnQBd4DHE84224YIqS7aMqR5M=
+X-Google-Smtp-Source: AMrXdXsFDmiFbOwAISGoYvX96GPBHqjsnblzpwinRTNmG/43jaVn4C/GjMuEMo/LrdYQwGIRK6DNTbQ8+wvW98l2lTo=
+X-Received: by 2002:a5e:c00c:0:b0:6a2:8015:afef with SMTP id
+ u12-20020a5ec00c000000b006a28015afefmr2425943iol.149.1672424027483; Fri, 30
+ Dec 2022 10:13:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221223142419.3781410-1-ammar.faizi@intel.com> <20221223142419.3781410-2-ammar.faizi@intel.com>
+In-Reply-To: <20221223142419.3781410-2-ammar.faizi@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 30 Dec 2022 19:13:35 +0100
+Message-ID: <CAJZ5v0j1nB9W=uNHKhqLHovTgAq_5ZYkzp6z==AspY4Dfp3PxA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] ACPI: Silence missing prototype warnings
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Robert Moore <robert.moore@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux ACPI Mailing List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPICA Mailing List <devel@acpica.org>,
+        LLVM Mailing List <llvm@lists.linux.dev>,
+        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Dec 2022 17:26:35 +0100
-Alexander Sverdlin <alexander.sverdlin@gmail.com> wrote:
-
-> Add device tree bindings for Cirrus Logic EP9301/EP9302 internal SoCs' ADC
-> block.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-
-Applied to the togreg branch of iio.git and pushed out as testing.
-
-Whilst we are looking at this driver, Alexander, would you mind if we relaxed
-the Kconfig dependencies to:
-
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index 46c4fc2fc534..fd1d68dce507 100644
---- a/drivers/iio/adc/Kconfig
-+++ b/drivers/iio/adc/Kconfig
-@@ -441,7 +441,7 @@ config ENVELOPE_DETECTOR
- 
- config EP93XX_ADC
-        tristate "Cirrus Logic EP93XX ADC driver"
--       depends on ARCH_EP93XX
-+       depends on ARCH_EP93XX || COMPILE_TEST
-        help
-          Driver for the ADC module on the EP93XX series of SoC from Cirrus Logic.
-          It's recommended to switch on CONFIG_HIGH_RES_TIMERS option, in this
-
-I end up doing that locally to build test patches like this one and it doesn't
-seem to cause any problems.
-
-Jonathan
-
+On Fri, Dec 23, 2022 at 3:25 PM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
+>
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+>
+> Compiling with clang-16:
+>
+>   drivers/acpi/acpi_lpit.c:142:6: error: no previous prototype \
+>   for function 'acpi_init_lpit' [-Werror,-Wmissing-prototypes]
+>
+>   drivers/acpi/ioapic.c:212:6: error: no previous prototype \
+>   for function 'pci_ioapic_remove' [-Werror,-Wmissing-prototypes]
+>
+>   drivers/acpi/ioapic.c:229:5: error: no previous prototype \
+>   for function 'acpi_ioapic_remove' [-Werror,-Wmissing-prototypes]
+>
+> Include "internal.h" to silence them.
+>
+> Cc: LLVM Mailing List <llvm@lists.linux.dev>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 > ---
-> Changelog:
-> v2: removed clock-names property, soc node and include as Krzysztof suggested
-> 
->  .../bindings/iio/adc/cirrus,ep9301-adc.yaml   | 47 +++++++++++++++++++
->  MAINTAINERS                                   |  2 +
->  2 files changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml b/Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
-> new file mode 100644
-> index 000000000000..6d4fb3e1d2a2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/cirrus,ep9301-adc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cirrus Logic EP930x internal ADC
-> +
-> +description: |
-> +  Cirrus Logic EP9301/EP9302 SoCs' internal ADC block.
-> +
-> +  User's manual:
-> +  https://cdn.embeddedts.com/resource-attachments/ts-7000_ep9301-ug.pdf
-> +
-> +maintainers:
-> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: cirrus,ep9301-adc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    adc: adc@80900000 {
-> +        compatible = "cirrus,ep9301-adc";
-> +        reg = <0x80900000 0x28>;
-> +        clocks = <&syscon 24>;
-> +        interrupt-parent = <&vic1>;
-> +        interrupts = <30>;
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 69565ac0c224..4a914d5bc2e6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2027,8 +2027,10 @@ M:	Hartley Sweeten <hsweeten@visionengravers.com>
->  M:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
->  F:	arch/arm/mach-ep93xx/
->  F:	arch/arm/mach-ep93xx/include/mach/
-> +F:	drivers/iio/adc/ep93xx_adc.c
->  
->  ARM/CLKDEV SUPPORT
->  M:	Russell King <linux@armlinux.org.uk>
+>  drivers/acpi/acpi_lpit.c | 1 +
+>  drivers/acpi/ioapic.c    | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/drivers/acpi/acpi_lpit.c b/drivers/acpi/acpi_lpit.c
+> index 50540d4d4948..3843d2576d3f 100644
+> --- a/drivers/acpi/acpi_lpit.c
+> +++ b/drivers/acpi/acpi_lpit.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/acpi.h>
+>  #include <asm/msr.h>
+>  #include <asm/tsc.h>
+> +#include "internal.h"
+>
+>  struct lpit_residency_info {
+>         struct acpi_generic_address gaddr;
+> diff --git a/drivers/acpi/ioapic.c b/drivers/acpi/ioapic.c
+> index a690c7b18623..6677955b4a8e 100644
+> --- a/drivers/acpi/ioapic.c
+> +++ b/drivers/acpi/ioapic.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/acpi.h>
+>  #include <linux/pci.h>
+>  #include <acpi/acpi.h>
+> +#include "internal.h"
+>
+>  struct acpi_pci_ioapic {
+>         acpi_handle     root_handle;
+> --
 
+Applied as 6.3 material, thanks!
