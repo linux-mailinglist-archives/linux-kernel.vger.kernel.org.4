@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF8F659A5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AEA4659A5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235425AbiL3QCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 11:02:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
+        id S235402AbiL3QCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 11:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235391AbiL3QBv (ORCPT
+        with ESMTP id S235396AbiL3QBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 11:01:51 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4720DE0B9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:01:50 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bt23so15584925lfb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:01:50 -0800 (PST)
+        Fri, 30 Dec 2022 11:01:52 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECC6FC6
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:01:51 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id p36so32215210lfa.12
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:01:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k95saGKNV3oo8L8imXQdteC3frkkr+UuodEJidAAnPY=;
-        b=jCQ6iDRcZXPpDvREglDNCm2qTsAZ0ppEMBGyG0+pt7tgDRhQygJVHx8rZdW6L4o8eO
-         rBR/HRdiqO9SimTy6VgPs8K7ZfPshNj1IIud9wlUVDk0yQtTnOCbowNewATq1qyRaJvk
-         ffS43mwb1XCWmxqAAGrnybs6VE4UHY9xWObn6do2aT/w+Av2JIr8m1vg+IG5RQinxCxu
-         GsicuUkxyucqoQKXRsCBoPcCylCRRbK25qBVL4JxdS2cZT3rSb0xLwDOMbGg2jFpKlDe
-         W5ZG6dNAFNza+7DgbQxbapZjmcwuIn0EG4E5ShnZtGZp0r8J1qBWznFYuVATybVNz6sC
-         hg/g==
+        bh=pllbBh5k3s3WnAvY6E7FolG6ZQajmtIaJ+/Mr0bUYm0=;
+        b=EmoHFYlMs9hdzhxoDYd2Z4UKQvagKJ+8aN9R3HZI4/MYN1CuIsRsqDSd/izCAZXt84
+         KGG6TJDjNsX8TfQkni5Ipyd/429Mwaaipw89jnt7aSPcAa5C4P+QDwkBwSQTInaJVodv
+         QKw5ng7VrOvn0nTNuDmipEw4wt8+gsWY0RWDQtBaXxyNlQRbfm1xzAkejThXfKayP+/d
+         3NNWm1ggmQpwsKubMAIeqFBsyW34aTOp0/ihcLbcDoNetinBfHW+e6VwseyIhgv5JBb/
+         P7H4tewnRg144w5lLx56b9EiF7TMmH5GuIkBzA9KNN5BUAE4T+JtSk9eCaOK/w/3y/33
+         OqqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k95saGKNV3oo8L8imXQdteC3frkkr+UuodEJidAAnPY=;
-        b=K0pCK1Wj/ATyN/EP2nwB7YUngw+pwelIzt42L8pkO8vTok+kK8E53gnWTkWtiWYmPV
-         SvcIvo8wn+L8cBaMWPC54SLm4n7AC7DVKpJPl7MMa37YOck4MBULd8DCXFfa1zcohsrW
-         8flDwpEf6Ruims25h/PMMB1P1fGn4Xk04Fcu5TRyuY7MCYtBElhalsORk5J8X7fE2twK
-         QbzrDcdtaGeaLoVRjQDXavdF0AgTlwdCT8/f3TZaKQ0SoG8mW8Tr5uukBjpMesw9JM+M
-         LMtZIMkMFFD6Kj8JZHViUkOFMuIGmw/8Dx6boHtBQy4YFPs804xFdfX+sqWsTLitNgPE
-         m3iw==
-X-Gm-Message-State: AFqh2kpmHvEtTrDzzLLSog7WEvAcD5Tofokw01qFG4frWIUO0k+HMYyq
-        CPS2fiU3ryUXYchqdwg6Nx2G4A==
-X-Google-Smtp-Source: AMrXdXuOmD/Br2iqoEI+Dq2lOSKeLA40AVIW5Ewkqr1aDH2KTyyWrxrGkqsJR2bHJ0WgIHEP3Q+ebw==
-X-Received: by 2002:a05:6512:258b:b0:4b5:b85a:5ba6 with SMTP id bf11-20020a056512258b00b004b5b85a5ba6mr9989453lfb.20.1672416108662;
-        Fri, 30 Dec 2022 08:01:48 -0800 (PST)
+        bh=pllbBh5k3s3WnAvY6E7FolG6ZQajmtIaJ+/Mr0bUYm0=;
+        b=OjgIytF4qP4Rj3Ozp3pCXjdMbqmn0NYRX/oFYv6nexX2Fusn1fUOHTBoAqHSL6gpDU
+         tfu0LVquJyb5btfDUVneVw0m3YJqeIbEI4JkRtZcr//LePV5VZcEcvMHqWIGMIhfJKM9
+         1a5YLSECZo+51IN5Q/vuUqgvX/AawHqYw9x1LjI3FIzSEYXWdp4gqv76+Af3vdAsJa4h
+         2BEgoRpoOCZeTBIWodw8eK6xkoHRu51ng9UM9auTrYKoR2hYYWede7KtKpZ+uZy5rlhI
+         JprmIbqtM162K6gwOFgA+IQNEkpO94naPYKSkycAzQFLIQ+EKpiWeOf7/2RBqlTDIqO9
+         AkXw==
+X-Gm-Message-State: AFqh2krFGGYivTKDldzA/fXRvLrcYQmABBu+kZ5rZS2qOsS4vh0KJkM3
+        aim5fBoHN3I5fkwRvjKajZExcQ==
+X-Google-Smtp-Source: AMrXdXuUerX2c1HYYTDveeYwTVRRZfLrggq6WWcCLFBZgsKuV7YnQNaRLp7fzojNfkuqYUNkDoiKZQ==
+X-Received: by 2002:a05:6512:3d94:b0:4a4:68b8:f4f4 with SMTP id k20-20020a0565123d9400b004a468b8f4f4mr11730876lfv.58.1672416109789;
+        Fri, 30 Dec 2022 08:01:49 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p1-20020ac24ec1000000b004b15bc0ff63sm3520874lfr.277.2022.12.30.08.01.47
+        by smtp.gmail.com with ESMTPSA id p1-20020ac24ec1000000b004b15bc0ff63sm3520874lfr.277.2022.12.30.08.01.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 08:01:48 -0800 (PST)
+        Fri, 30 Dec 2022 08:01:49 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 6/7] arm64: dts: qcom: sm8350: align PSCI domain names with DT schema
-Date:   Fri, 30 Dec 2022 17:01:02 +0100
-Message-Id: <20221230160103.250996-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 7/7] arm64: dts: qcom: sm8450: align PSCI domain names with DT schema
+Date:   Fri, 30 Dec 2022 17:01:03 +0100
+Message-Id: <20221230160103.250996-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221230160103.250996-1-krzysztof.kozlowski@linaro.org>
 References: <20221230160103.250996-1-krzysztof.kozlowski@linaro.org>
@@ -79,19 +79,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Bindings expect power domains to follow generic naming pattern:
 
-  sm8350-hdk.dtb: psci: 'cpu-cluster0', 'cpu0', 'cpu1', 'cpu2', 'cpu3', 'cpu4', 'cpu5', 'cpu6',
+  sm8450-qrd.dtb: psci: 'cpu-cluster0', 'cpu0', 'cpu1', 'cpu2', 'cpu3', 'cpu4', 'cpu5', 'cpu6',
     'cpu7' do not match any of the regexes: '^power-domain-', 'pinctrl-[0-9]+'
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 18 +++++++++---------
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 18 +++++++++---------
  1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index a7da48b7e788..743ca0c80ac3 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -297,55 +297,55 @@ psci {
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 33db6b6c4123..5530bdee6f25 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -311,55 +311,55 @@ psci {
  		compatible = "arm,psci-1.0";
  		method = "smc";
  
@@ -154,7 +154,7 @@ index a7da48b7e788..743ca0c80ac3 100644
 -		CLUSTER_PD: cpu-cluster0 {
 +		CLUSTER_PD: power-domain-cpu-cluster0 {
  			#power-domain-cells = <0>;
- 			domain-idle-states = <&CLUSTER_SLEEP_0>;
+ 			domain-idle-states = <&CLUSTER_SLEEP_0>, <&CLUSTER_SLEEP_1>;
  		};
 -- 
 2.34.1
