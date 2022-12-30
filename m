@@ -2,60 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F48865957B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 07:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DCC65957F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 07:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234480AbiL3GjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 01:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S234454AbiL3Gm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 01:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiL3GjT (ORCPT
+        with ESMTP id S229557AbiL3Gmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 01:39:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF231186A0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 22:39:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2006161A2D
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 06:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371DAC433EF;
-        Fri, 30 Dec 2022 06:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672382357;
-        bh=q8wxwX0wZcFLGiE0Owq5Y55vjOPnnvuF0IJnjlUHQQc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E1QqX7mvBwvtYiYgzlRKkx5+AdvXwNKskV3hb9gbn7BlLtvHHgNkDaGINPa0KOFTp
-         Kz6m0liioTY55DRPiX80Ya8/CZqDPG++A9ZtT85jub05Eo90wr0krBVKPsGgCnFCqB
-         p4zmHmuBtRHIUAEwecBLrnlOtbU53Y+XKWpkBPwzkUGwZW+BZoP0fh11FtIJuRQZhT
-         ECO5b15lPjeo7pMZVkHwuCVuNDp5XD0qn8Dj7XVcGsUKBxDGXtCRGdKHTfWH34aJTU
-         tmgTufFBfcLc3p8nCHk2RYwoeub31f0ynX4EjSQQC8IyWDvoLZ2IYKWrjpxUs31mJ6
-         jmaQLdRjXK5Yw==
-Date:   Thu, 29 Dec 2022 22:39:15 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Jeff Chua <jeff.chua.linux@gmail.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        F2FS Development <linux-f2fs-devel@lists.sourceforge.net>,
-        Linux Regressions <regressions@lists.linux.dev>
-Subject: Re: Fwd: f2fs write error Linux v6.2
-Message-ID: <Y66Hk6waTeXQDz1/@sol.localdomain>
-References: <CAAJw_Ztzyh-GNTJYpXbA0CeJv2Rz=fLZKE6_Q=7JMmM+s9yHXQ@mail.gmail.com>
- <CAAJw_Ztb0mJVkHtBhryf=9g8CA0fZZRa8HVio8GCGUSLOvqa7A@mail.gmail.com>
- <Y6bz4wOC0nwu2yGU@debian.me>
- <0c70ba66-ef00-7242-d198-844f803662fa@gmail.com>
- <CAAJw_Zv0iBg4rkzxQ2UOOLS9JQZ4cCmM7gSoDXec_gm-GggB6A@mail.gmail.com>
- <f500d64b-c26d-ee34-092a-421c64c69f9e@leemhuis.info>
+        Fri, 30 Dec 2022 01:42:54 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D78186A9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 22:42:51 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id 3so20473468vsq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 22:42:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XrpQaBNpbz5C7gEc30JXJD4ksBAoVukkRs4REF7J3cA=;
+        b=ieXRxqKlr8oyA7r8oWv5vNjeFdB1A3ZleV0nsNDeN+cCb+ZLeuFA5X93VFGh/jXSpy
+         8vhLveMu+xVU3utEC/s5ogI75eX3T82AglX1Uu2BHmrdqEb5fqhkuelWB5l3GEOzeI0i
+         GFlJcKDDe2AAgKzGmoaCY8hHz4nCxh5d6ERJQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XrpQaBNpbz5C7gEc30JXJD4ksBAoVukkRs4REF7J3cA=;
+        b=vhcgB+Y4BWrQxxRil2q4cdoZhaObkjzjCMJUDr4VsqNIIUKvbBxf4W/IRnpaNcnA+F
+         t4a7UTwMPYc+k1vMPKAxPgBbn6aR2gV4bzDCW0fU06kpH3AErU95nB1L6BxNyBTu8XPP
+         eEp7GQdlW6fxzrrtIX1WknNQgiXLjxeTP79/ao/puMHWsr1xWrw2fvb2A1b5wVCmxw+j
+         Ln+wsWXY1YELDOI+YBIS5z/MgJfzzV5/36px+5izOywV2s3A7UirIQyItch0ExlZW7SV
+         gCg6oaVXFwHLqCf23ITGB9IYahP/+4PE/3DiIRLSMXaJwD0iXI2v2Mn/Zv4Jz7oeHtPG
+         /J1A==
+X-Gm-Message-State: AFqh2kreEGm/iIWTGRB9Zei0LUJKwvWVPCad0pggXh61edGoAGrBZNJz
+        vLflQ/MhaoOrZXlcM3blmtCxp+po7Hzi2VcD06TRCg==
+X-Google-Smtp-Source: AMrXdXvrIUXju3J24bym43P+d+BGgTRL65FUNwwpDeRTxYGdxEQI/sLV9PJ9RkGhzNeKQ2VL0EKFXN2ejtTMxQEBC1c=
+X-Received: by 2002:a05:6102:3d9f:b0:3c4:4918:80c with SMTP id
+ h31-20020a0561023d9f00b003c44918080cmr2656935vsv.9.1672382570811; Thu, 29 Dec
+ 2022 22:42:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f500d64b-c26d-ee34-092a-421c64c69f9e@leemhuis.info>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221223094259.87373-1-angelogioacchino.delregno@collabora.com> <20221230061309.16643-1-miles.chen@mediatek.com>
+In-Reply-To: <20221230061309.16643-1-miles.chen@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 30 Dec 2022 14:42:39 +0800
+Message-ID: <CAGXv+5HqLc2xsz6b_d5hrPiAu363aMcJkQrqX32ukA2pcsj6kQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/23] MediaTek clocks cleanups and improvements
+To:     Miles Chen <miles.chen@mediatek.com>
+Cc:     angelogioacchino.delregno@collabora.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        devicetree@vger.kernel.org, fparent@baylibre.com,
+        ikjn@chromium.org, johnson.wang@mediatek.com,
+        jose.exposito89@gmail.com, kernel@collabora.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        matthias.bgg@gmail.com, msp@baylibre.com, mturquette@baylibre.com,
+        nfraprado@collabora.com, pablo.sun@mediatek.com,
+        rex-bc.chen@mediatek.com, robh+dt@kernel.org, ryder.lee@kernel.org,
+        sam.shih@mediatek.com, sboyd@kernel.org, weiyi.lu@mediatek.com,
+        y.oudjana@protonmail.com, yangyingliang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,47 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 06:56:36AM +0100, Thorsten Leemhuis wrote:
-> On 30.12.22 05:04, Jeff Chua wrote:
-> > On 12/24/22 19:43, Bagas Sanjaya wrote:
-> >> On Sat, Dec 24, 2022 at 01:48:55PM +0800, Jeff Chua wrote:
-> >>> Got the following error in latest linux-6.2-git with just vim (:w
-> >>> file1). No problem with linux-6.1.1
-> > 
-> > What happened to the f2fs developers? No response from anyone yet.
-> 
-> Well, that indeed is unfortunate and ideally shouldn't happen, but the
-> simple reality is: that can happen this time of the year due to this
-> thing called "festive season".
-> 
-> > Am
-> > I the only one facing this? Linux-6.2 is unusable until this is fixed.
-> > What can I do to help?
-> 
-> The usual: bisect the issue, as then (a) we know exactly which developer
-> caused it, (b) which subsystem/maintainer is responsible (issues in a fs
-> might be caused by the VFS, block layer, mm, ...), and (c) might be able
-> to quickly revert that culprit, even if the people normally responsible
-> are MIA for some reason.
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> 
-> P.S.: As the Linux kernel's regression tracker I deal with a lot of
-> reports and sometimes miss something important when writing mails like
-> this. If that's the case here, don't hesitate to tell me in a public
-> reply, it's in everyone's interest to set the public record straight.
-> 
+On Fri, Dec 30, 2022 at 2:13 PM Miles Chen <miles.chen@mediatek.com> wrote:
+> > Changes in v2:
+> >  - Moved dt-bindings CLK_DUMMY to clk-mtk.h instead
+> >
+> >
+> > This series performs cleanups and improvements on MediaTek clock
+> > drivers, greatly reducing code duplication (hence also reducing
+> > kernel size).
+> >
+> > There would be a lot to say about it, but summarizing:
+> >
+> > * Propagates struct device where possible in order to introduce the
+> >   possibility of using Runtime PM on clock drivers as needed,
+> >   possibly enhancing reliability of some platforms (obviously, this
+> >   will do nothing unless power-domains are added to devicetree);
+> >
+> > * Cleans up some duplicated clock(s) registration attempt(s): on
+> >   some platforms the 26M fixed factor clock is registered early,
+> >   but then upon platform_driver probe, an attempt to re-register
+> >   that clock was performed;
+> >
+> > * Removes some early clock registration where possible, moving
+> >   everything to platform_driver clock probe;
+> >
+> > * Breaks down the big MT8173 clock driver in multiple ones, as it's
+> >   already done with the others, cleans it up and adds possibility
+> >   possibility to compile non-boot-critical clock drivers (for 8173)
+> >   as modules;
+> >
+> > * Extends the common mtk_clk_simple_probe() function to be able to
+> >   register multiple MediaTek clock types;
+> >
+> > * Removes duplicated [...]_probe functions from multiple MediaTek SoC
+> >   clock drivers, migrating almost everything to the common functions
+> >   mtk_clk_simple_probe();
+> >
+> > * Adds a .remove() callback, pointing to the common mtk_clk_simple_remove()
+> >   function to all clock drivers that were migrated to the common probe;
+> >
+> > * Some more spare cleanups here and there.
+> >
+> > All of this was manually tested on various Chromebooks (with different MTK
+> > SoCs) and no regression was detected.
+> >
+> > Cheers!
+>
+> I tested this v2 series on mt6779 and mt8192 without any problem.
 
-FWIW, I've tested f2fs on mainline in the last few days, and I haven't seen
-this.  The following works fine, for example:
-
-    mkfs.f2fs -f /dev/vdb
-    mount /dev/vdb /mnt
-    vim
-    # write something, then ':w /mnt/file'
-
-If you could provide the mkfs and mount options you are using, and any other
-relevant details, that would be helpful.  Bisection would also be very helpful,
-as Thorsten mentioned.
-
-- Eric
+Please give Tested-by. :)
