@@ -2,188 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36026596FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 10:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2616596FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 10:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbiL3JyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 04:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S234918AbiL3JzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 04:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiL3JyU (ORCPT
+        with ESMTP id S229505AbiL3JzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 04:54:20 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0449140D2;
-        Fri, 30 Dec 2022 01:54:18 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id z7so8496326pfq.13;
-        Fri, 30 Dec 2022 01:54:18 -0800 (PST)
+        Fri, 30 Dec 2022 04:55:01 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7131C1A807
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 01:55:00 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id jn22so21333780plb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 01:55:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nupBY8IgCxlZ4P9Kxn+Uy2z0GV1YOr96iu4t1qMcG7I=;
-        b=VCpCd6pswqeSZwAFO1KQNPvpSckF62CmpP24C/LpkF1mvmbmBQ9qWY26OXStaR6yqN
-         I72Dwh3jIsYQu5DpgmCYxI0atsdZsNgrbhQ2vxIUr7Rb++4QBw5Sa8KaxKNUHUgAZ23r
-         Van+nro4tE50vFJpXfYrgs4Ncyqn8olfKxjVwlDHYs/mHB7iYPyjVTQ93aPxy8Eeqq33
-         3cCgRr2NtECCt6rs/PczhsmwILm2lTxdwPasPDSbNHcL10NgofH956PUfDIdUsyn/nkF
-         T7K3uT7XV8VjBuvUPBV97GlW3GdVGgDPyt5sUlt+GCA1kGK88e8WQG211qpMr9ETtd+r
-         QGzg==
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2HDTeomnMfOdczuT9/F20bMQlAjaFMXCpRqH1kdgIVY=;
+        b=P9Ljo6kGW+xXABlWTHQolBfJ92OlshrKeGbeNt/GrqH7QUYhjfdCECOnQT6TSUHFt0
+         BVmVAq9orDdtalAj8cJy59Toe8NUXr9mGDh5YSq6U1hQ4izys8arYQcQqgrYPJ+4oGUv
+         tfh8nq+ILIaVR6vyApuEdCU+iykOlI1TNZoH4EmL3i6GAEoB/f93QGDdJYs7qpx+xeO+
+         MCRrEDYCS5hmzgdV4mkghCCVsttFUg698w4d2Tf3VrgLBGjy+lqA+OzLmYca/7Ukj0tU
+         1SInCBY3SYEfYv27cTfv2QjJSvZOLF+bC/YDogY+/KIVKqRZfkRIz9G1a6largSAZw1Q
+         rHcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nupBY8IgCxlZ4P9Kxn+Uy2z0GV1YOr96iu4t1qMcG7I=;
-        b=q4E4jn48t+dXoXuGAUU736RDcJTmW082R/NkMF2GRJII3QDj7tUFiyqTU+uUX863BT
-         L7Oyh2Vv6SGhHyAnnaHw1UpnqBZ21NUqfhvBhs/CDoiMNwWFYTguE/E7Z3Lgbifvjh2T
-         mBZLAJKfrs1zLymUCKGwmGnVnaBjS9WTejiEu5X6fJe6KLeAFOMqArQ7XQyvRgXJHwWr
-         zv4C8WJtHqsR5ixCe2mWg+NYOR0rFiEklrUVIri9zU4/SlvQ9z/V2JxBL3NFKCaonl91
-         CCYAkD8P3UQJakhWNjKyK1EoRhOhCqJRXTcB6kpW+8UwErYSP9yjy8EMQMfSBxCXmpHg
-         ISJg==
-X-Gm-Message-State: AFqh2kqXFrcD1DwSvlFQjrDHPoGX8qCbjpLBAfMUmyqNAtPYWv5brPdT
-        U7hu/InV1gjaNDsU9BQCGQ==
-X-Google-Smtp-Source: AMrXdXubpKdrsO5YigBeNw/YayOXVNsmcDYEDBKPpiSbgbnG9ZYTAnrKYExHgA7A/lS46RrdDQkazA==
-X-Received: by 2002:a62:6546:0:b0:578:119c:1c52 with SMTP id z67-20020a626546000000b00578119c1c52mr26595111pfb.14.1672394058343;
-        Fri, 30 Dec 2022 01:54:18 -0800 (PST)
-Received: from smtpclient.apple ([144.214.0.13])
-        by smtp.gmail.com with ESMTPSA id 2-20020a621902000000b0058167c59bd7sm6141878pfz.40.2022.12.30.01.54.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 30 Dec 2022 01:54:18 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: kernel panic: Attempted to kill init!
-From:   Hao Sun <sunhao.th@gmail.com>
-In-Reply-To: <ef46c1f6-0939-c2ed-3efb-c3c5f28d1931@meta.com>
-Date:   Fri, 30 Dec 2022 17:54:04 +0800
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <73E3CA9E-F67E-429F-A2DB-C77649E32D7A@gmail.com>
-References: <20221222043507.33037-1-sunhao.th@gmail.com>
- <ef46c1f6-0939-c2ed-3efb-c3c5f28d1931@meta.com>
-To:     Yonghong Song <yhs@meta.com>
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2HDTeomnMfOdczuT9/F20bMQlAjaFMXCpRqH1kdgIVY=;
+        b=mQj/SLwFhidYO+n1eVOTwUrPJe+HYst7agB7+PQD7Lu8xv/bnfE4SYY3aU2UqlsfX8
+         dq0nzkvmlbK6jD9T+WhemAN+EufKTWkHQEWJuUead9NZmtpDzEDWnx1UtT6uEld78d/o
+         gM/HMbbbItkjUEC4RYlTo7Ruaik0ICuuk4Ve5ZaD5DO1OCukbF7mcDxMLnJDoPd4Ampd
+         6ccd4toNzkemxyvt6p8nSvZBG3/SE1UzdIHZRz7XA1UlL/EiMqKmNlvrUuuOjwpDc8I4
+         QWsudfdda62JxBQ44mi7VqO1aRURyLV9N4kPqmlnq/hG7HpOA3HeVZK7QhWkMPmgKn1k
+         lqQg==
+X-Gm-Message-State: AFqh2ko6ClCw5ITmnZnudA/2s1nb87aAFOrs1Xtz9E9B9GmpB+5fRblx
+        0OIOaQ8qaRPGM3YXfssVBH1MUA==
+X-Google-Smtp-Source: AMrXdXt/fAe2lXnpbEVPcBDmkZY6Wl4VVcSk141fejrUaMn53mFyxFW3jXXtZ/DXOfhybJVp3n0G3w==
+X-Received: by 2002:a17:903:2312:b0:192:8c7f:2654 with SMTP id d18-20020a170903231200b001928c7f2654mr16330645plh.0.1672394099989;
+        Fri, 30 Dec 2022 01:54:59 -0800 (PST)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170902650700b00189c536c72asm14487719plk.148.2022.12.30.01.54.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Dec 2022 01:54:59 -0800 (PST)
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH v5 0/7] KVM: arm64: Normalize cache configuration
+Date:   Fri, 30 Dec 2022 18:54:45 +0900
+Message-Id: <20221230095452.181764-1-akihiko.odaki@daynix.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Before this change, the cache configuration of the physical CPU was
+exposed to vcpus. This is problematic because the cache configuration a
+vcpu sees varies when it migrates between vcpus with different cache
+configurations.
 
+Fabricate cache configuration from the sanitized value, which holds the
+CTR_EL0 value the userspace sees regardless of which physical CPU it
+resides on.
 
-> On 28 Dec 2022, at 2:35 PM, Yonghong Song <yhs@meta.com> wrote:
->=20
->=20
->=20
-> On 12/21/22 8:35 PM, Hao Sun wrote:
->> Hi,
->> This crash can be triggered by executing the C reproducer for
->> multiple times, which just keep loading the following prog as
->> raw tracepoint into kmem_cache_free().
->> The prog send SIGSEGV to current via bpf_send_signal_thread(),
->> after load this, whoever tries to free mem would trigger this,
->> kernel crashed when this happens to init.
->> Seems we should filter init out in bpf_send_signal_common() by
->> is_global_init(current), or maybe we should check this in the
->> verifier?
->=20
-> The helper is just to send a particular signal to *current*
-> thread. In typical use case, it is never a good idea to send
-> the signal to a *random* thread. In certain cases, maybe user
-> indeed wants to send the signal to init thread to observe
-> something. Note that such destructive side effect already
-> exists in the bpf land. For example, for a xdp program,
-> it could drop all packets to make machine not responsive
-> to ssh etc. Therefore, I recommend to keep the existing
-> bpf_send_signal_common() helper behavior.
+V4 -> V5:
+- Noted why cache level existence check is unnecessary when fabricating
+  CCSIDR_EL1 value.
+- Removed FWB check. It is necessary as CLIDR_EL1.{LoUU, LoIUS} on the
+  host are {0, 0} if FWB is enabled, and such a CLIDR_EL1 value sets
+  the IDC bit of the sanitized CTR_EL0 value, which is already checked.
+- Removed UNDEF injection when reading CCSIDR_EL1 with an invalid
+  CSSELR_EL1 value.
+- Added a check for CLIDR_EL1.{LoUU,LoC,LoUIS} values set from the
+  userspace.
 
-Sound the two are different cases. Not responsive in XDP seems like
-an intended behaviour, panic caused by killing init is buggy. If the
-last thread of global init was killed, kernel panic immediately.
+V3 -> V4:
+- Implemented UNKNOWN system register definition for CCSIDR_EL1
+- Added a comment about the relation between CCSIDR_EL1 and FEAT_CCIDX
+- Squashed "Normalize cache configuration" and "Allow user to set
+  CCSIDR_EL1"
+  The intermediate state between them did not make much sense.
+- Introduced FIELD_GET to extract CCSIDR_EL1_LineSize.
 
+V2 -> V3:
+- Corrected message for patch "Normalize cache configuration"
+- Split patch "Normalize cache configuration"
+- Added handling for CSSELR_EL1.TnD
+- Added code to ignore RES0 in CSSELR_EL1
+- Replaced arm64_ftr_reg_ctrel0.sys_val with
+  read_sanitised_ftr_reg(SYS_CTR_EL0)
+- Fixed vcpu->arch.ccsidr initialziation
+- Added CCSIDR_EL1 sanitization
+- Added FWB check
+- Added a comment for CACHE_TYPE_SEPARATE
+- Added MTE tag cache creation code for CLIDR_EL1 fabrication
+- Removed CLIDR_EL1 reset code for reset caused by guest
+- Added a comment for CCSIDR2
 
->=20
->> This can be reproduced on:
->> HEAD commit: 59fe41b5255f selftests/bpf: Add verifier test exercising =
-jit PROBE_MEM logic
->> git tree: bpf-next
->> console output: https://pastebin.com/raw/FMgyvEnH
->> kernel config : https://pastebin.com/raw/XeF6jU43
->> C reproducer  : https://pastebin.com/raw/Tag5N893
->> func#0 @0
->> 0: R1=3Dctx(off=3D0,imm=3D0) R10=3Dfp0
->> 0: (18) r0 =3D 0x0                      ; R0_w=3D0
->> 2: (18) r6 =3D 0x0                      ; R6_w=3D0
->> 4: (18) r7 =3D 0x0                      ; R7_w=3D0
->> 6: (18) r8 =3D 0x0                      ; R8_w=3D0
->> 8: (18) r9 =3D 0x0                      ; R9_w=3D0
->> 10: (2d) if r0 > r0 goto pc+2
->> last_idx 10 first_idx 0
->> regs=3D1 stack=3D0 before 8: (18) r9 =3D 0x0
->> regs=3D1 stack=3D0 before 6: (18) r8 =3D 0x0
->> regs=3D1 stack=3D0 before 4: (18) r7 =3D 0x0
->> regs=3D1 stack=3D0 before 2: (18) r6 =3D 0x0
->> regs=3D1 stack=3D0 before 0: (18) r0 =3D 0x0
->> last_idx 10 first_idx 0
->> regs=3D1 stack=3D0 before 8: (18) r9 =3D 0x0
->> regs=3D1 stack=3D0 before 6: (18) r8 =3D 0x0
->> regs=3D1 stack=3D0 before 4: (18) r7 =3D 0x0
->> regs=3D1 stack=3D0 before 2: (18) r6 =3D 0x0
->> regs=3D1 stack=3D0 before 0: (18) r0 =3D 0x0
->> 11: R0_w=3D0
->> 11: (b7) r1 =3D 11                      ; R1_w=3D11
->> 12: (85) call bpf_send_signal_thread#117      ; R0=3Dscalar()
->> 13: (95) exit
->> processed 9 insns (limit 1000000) max_states_per_insn 0 total_states =
-1 peak_states 1 mark_read 1
->> Kernel panic - not syncing: Attempted to kill init! =
-exitcode=3D0x0000000b
->> CPU: 3 PID: 1 Comm: systemd Not tainted 6.1.0-09652-g59fe41b5255f =
-#148
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS =
-rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
->> Call Trace:
->>  <TASK>
->>  __dump_stack lib/dump_stack.c:88 [inline]
->>  dump_stack_lvl+0x100/0x178 lib/dump_stack.c:106
->>  panic+0x2c4/0x60f kernel/panic.c:275
->>  do_exit.cold+0x63/0xe4 kernel/exit.c:789
->>  do_group_exit+0xd4/0x2a0 kernel/exit.c:950
->>  get_signal+0x2460/0x2600 kernel/signal.c:2858
->>  arch_do_signal_or_restart+0x78/0x5d0 arch/x86/kernel/signal.c:306
->>  exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
->>  exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
->>  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->>  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
->>  do_syscall_64+0x44/0xb0 arch/x86/entry/common.c:86
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> RIP: 0033:0x55e738964df0
->> Code: 00 31 f6 89 ef 4c 8d 05 be 1b 0d 00 48 8d 15 b0 85 0c 00 31 c0 =
-e8 f0 c3 ff ff e9 1c ff ff ff 66 66 2e 0f 1f 84 00 00 00 00 00 <41> 57 =
-41 56 41 55 41 54 41 89 fc 55 53 48 81 ec 48 01 00 00 64 48
->> RSP: 002b:00007ffeb8e87bb8 EFLAGS: 00000246 ORIG_RAX: =
-00000000000000f7
->> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f29dc8a6bc1
->> RDX: 00007ffeb8e87bc0 RSI: 00007ffeb8e87cf0 RDI: 000000000000000b
->> RBP: 00007ffeb90b73c0 R08: 0000000000000000 R09: 0000000000000002
->> R10: 0000000000000004 R11: 0000000000000246 R12: 00007f29dc3f76c8
->> R13: 000000000000294d R14: 0000000000000000 R15: 00007ffeb9686870
->>  </TASK>
->> Kernel Offset: disabled
->> Rebooting in 86400 seconds..
+V2: https://lore.kernel.org/lkml/20221211051700.275761-2-akihiko.odaki@daynix.com/
+V1: https://lore.kernel.org/lkml/525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com/
+
+Akihiko Odaki (6):
+  arm64/sysreg: Convert CCSIDR_EL1 to automatic generation
+  arm64/sysreg: Add CCSIDR2_EL1
+  arm64/cache: Move CLIDR macro definitions
+  KVM: arm64: Always set HCR_TID2
+  KVM: arm64: Mask FEAT_CCIDX
+  KVM: arm64: Normalize cache configuration
+
+Marc Zyngier (1):
+  arm64: Allow the definition of UNKNOWN system register fields
+
+ arch/arm64/include/asm/cache.h             |   9 +
+ arch/arm64/include/asm/kvm_arm.h           |   3 +-
+ arch/arm64/include/asm/kvm_emulate.h       |   4 -
+ arch/arm64/include/asm/kvm_host.h          |   6 +-
+ arch/arm64/include/asm/sysreg.h            |   1 -
+ arch/arm64/kernel/cacheinfo.c              |   5 -
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h |   2 -
+ arch/arm64/kvm/reset.c                     |   1 +
+ arch/arm64/kvm/sys_regs.c                  | 256 +++++++++++++--------
+ arch/arm64/tools/gen-sysreg.awk            |  20 +-
+ arch/arm64/tools/sysreg                    |  17 ++
+ 11 files changed, 212 insertions(+), 112 deletions(-)
+
+-- 
+2.38.1
 
