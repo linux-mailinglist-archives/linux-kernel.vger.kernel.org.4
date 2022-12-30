@@ -2,146 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D245659512
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 06:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D3F659522
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 06:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234188AbiL3FrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 00:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
+        id S234545AbiL3FzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 00:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbiL3Fq4 (ORCPT
+        with ESMTP id S233908AbiL3FzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 00:46:56 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C005113CF9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 21:46:54 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id i20-20020a056e021d1400b0030c306598c6so816659ila.9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 21:46:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p+YVz3neef6XilpEvBTHQcYPDTEwX3CUheAw2p53HLk=;
-        b=4YkW2SBznYeE9SHMLfpUA+HEXUJVwXs5uiA6bmTexQFSy/Z7cLCm0aMhCWQ+OqL5Wg
-         HMb+nVqlzYX3mcLJPUkslVmCpGNnwl3m/oOJLzN+yZo2bXknVjeyRp+Tb13ugUrfIhub
-         UurFK4PNsZpUuRUdG1hniPD4lb0mMbMWjbLHuQHAUM+xgV44P4/6OZc8cL85zl0GefHa
-         UOaln/xm1AyplHYxwgSHrIv13Va01UTbkKDBEYRNsFmBwTyjEK+HkpUuGDwWxI1aD9dC
-         7Lmvv7dhl8CmKY+ua7XvIckl87Ws/ciygDgsu7UA/9XT7VwuM5KGRsHdEVLxc8yQBKwA
-         S7Wg==
-X-Gm-Message-State: AFqh2ko7zTdKeqAed35LpIg2O1GMfJH+GmqjTkqsMwe7DMMwLHNj+zmK
-        ynPmAXFSLks6VixOtKJvX/GtEYWV29hIB+PV5Ii/kZDCxvTk
-X-Google-Smtp-Source: AMrXdXtZBc/oIzFhBRyEHR1rJ6rgBRI1dw3E6hzk5yeGLLRhdW1+L+y0lg0wEbR7SfOzGjSdernvOlrjD7HsH1w/I17pdpgaPOTy
+        Fri, 30 Dec 2022 00:55:02 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E3A1570D;
+        Thu, 29 Dec 2022 21:54:53 -0800 (PST)
+X-UUID: c9dd9c6c326d49b797bf50aa3459c47b-20221230
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=xYt3xlXktF9xW4hXj/eVHX+tJHxTC09pCroozFtLqK8=;
+        b=CZfbvziPg67T74N6B7/ND2xiBIR4BxzGWgNxUUQvwshnjmPAh6PEZgYFQP/KuqnDwlBAHMkIsD0YK7UdEacYTt8AhKtdZ0yUL2t5QJaafU55MOdQo18yVShfz2dD02GEy9qfX+jq3Yc0C/60tJXAZ7hzb0hnYZIu9To7zKJ6MDc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.16,REQID:da5a71c8-1604-4f27-953f-18fbe9edd829,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.16,REQID:da5a71c8-1604-4f27-953f-18fbe9edd829,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:09771b1,CLOUDID:8c32d18a-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:2212301354498V0LHW32,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0
+X-CID-BVR: 0
+X-UUID: c9dd9c6c326d49b797bf50aa3459c47b-20221230
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <trevor.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 296271895; Fri, 30 Dec 2022 13:54:47 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 30 Dec 2022 13:54:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 30 Dec 2022 13:54:47 +0800
+From:   Trevor Wu <trevor.wu@mediatek.com>
+To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
+        <perex@perex.cz>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <p.zabel@pengutronix.de>
+CC:     <trevor.wu@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v4 00/13] ASoC: mediatek: Add support for MT8188 SoC
+Date:   Fri, 30 Dec 2022 13:54:30 +0800
+Message-ID: <20221230055443.16024-1-trevor.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:cacd:0:b0:303:6b79:14bb with SMTP id
- m13-20020a92cacd000000b003036b7914bbmr2730358ilq.9.1672379214114; Thu, 29 Dec
- 2022 21:46:54 -0800 (PST)
-Date:   Thu, 29 Dec 2022 21:46:54 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fcb8c105f1052058@google.com>
-Subject: [syzbot] [ext4?] WARNING in ext4_update_inline_data
-From:   syzbot <syzbot+d30838395804afc2fa6f@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This series of patches adds support for Mediatek AFE of MT8188 SoC.
+Patches are based on broonie tree "for-next" branch.
 
-syzbot found the following issue on:
+Changes since v3:
+  - replace apll_ck with apll to sync with the relationship in CCF
+  - add mtk-soundcard-driver.c to support codec parsing
+  - drop mclk-always-on-rates support in mt8188-dai-etdm.c
+  - refine dt-binding files based on reviewer's suggestions
 
-HEAD commit:    1b929c02afd3 Linux 6.2-rc1
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10fae73c480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=68e0be42c8ee4bb4
-dashboard link: https://syzkaller.appspot.com/bug?extid=d30838395804afc2fa6f
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=119737b0480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=103322c4480000
+Changes since v2:
+  - drop CLK_IGNORE_UNUSED flag
+  - include bitfield.h to reslove the issue reported by kernel test robot
+  - rename mt8188-afe-pcm.yaml to mt8188-afe.yaml
+  - refine dt-binding files based on reviewer's suggestions
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2d8c5072480f/disk-1b929c02.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/46687f1395db/vmlinux-1b929c02.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/26f1afa5ec00/bzImage-1b929c02.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/91c003e7bb4a/mount_0.gz
+Changes since v1:
+  - remove bus protection functions in case of unmerged dependency problem
+  - replace some bit operation macro with FIELD_PREP
+  - simplify register control by regmap_set_bits and regmap_clear_bits
+  - fix dt-binding errors
+  - rename compatible string for recognition
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d30838395804afc2fa6f@syzkaller.appspotmail.com
+Trevor Wu (13):
+  ASoC: mediatek: common: add SMC ops and SMC CMD
+  ASoC: mediatek: mt8188: add common header
+  ASoC: mediatek: mt8188: support audsys clock
+  ASoC: mediatek: mt8188: support adda in platform driver
+  ASoC: mediatek: mt8188: support etdm in platform driver
+  ASoC: mediatek: mt8188: support pcmif in platform driver
+  ASoC: mediatek: mt8188: support audio clock control
+  ASoC: mediatek: mt8188: add platform driver
+  ASoC: mediatek: mt8188: add control for timing select
+  dt-bindings: mediatek: mt8188: add audio afe document
+  ASoC: mediatek: common: add soundcard driver common code
+  ASoC: mediatek: mt8188: add machine driver with mt6359
+  dt-bindings: mediatek: mt8188: add mt8188-mt6359 document
 
-EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
-fscrypt: AES-256-CTS-CBC using implementation "cts-cbc-aes-aesni"
-fscrypt: AES-256-XTS using implementation "xts-aes-aesni"
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5071 at mm/page_alloc.c:5525 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
-Modules linked in:
-CPU: 1 PID: 5071 Comm: syz-executor263 Not tainted 6.2.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
-Code: 5c 24 04 0f 85 f3 00 00 00 44 89 e1 81 e1 7f ff ff ff a9 00 00 04 00 41 0f 44 cc 41 89 cc e9 e3 00 00 00 c6 05 d6 68 ad 0c 01 <0f> 0b 83 fb 0a 0f 86 c8 fd ff ff 31 db 48 c7 44 24 20 0e 36 e0 45
-RSP: 0018:ffffc90003c2f1c0 EFLAGS: 00010246
-RAX: ffffc90003c2f220 RBX: 0000000000000014 RCX: 0000000000000000
-RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003c2f248
-RBP: ffffc90003c2f2d8 R08: dffffc0000000000 R09: ffffc90003c2f220
-R10: fffff52000785e49 R11: 1ffff92000785e44 R12: 0000000000040d40
-R13: 1ffff92000785e40 R14: dffffc0000000000 R15: 1ffff92000785e3c
-FS:  0000555556c0d300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f95d5e04138 CR3: 00000000793aa000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __alloc_pages_node include/linux/gfp.h:237 [inline]
- alloc_pages_node include/linux/gfp.h:260 [inline]
- __kmalloc_large_node+0x95/0x1e0 mm/slab_common.c:1113
- __do_kmalloc_node mm/slab_common.c:956 [inline]
- __kmalloc+0xfe/0x190 mm/slab_common.c:981
- kmalloc include/linux/slab.h:584 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- ext4_update_inline_data+0x236/0x6b0 fs/ext4/inline.c:346
- ext4_update_inline_dir fs/ext4/inline.c:1115 [inline]
- ext4_try_add_inline_entry+0x328/0x990 fs/ext4/inline.c:1307
- ext4_add_entry+0x5a4/0xeb0 fs/ext4/namei.c:2385
- ext4_add_nondir+0x96/0x260 fs/ext4/namei.c:2772
- ext4_create+0x36c/0x560 fs/ext4/namei.c:2817
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12ac/0x2dd0 fs/namei.c:3711
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f95d5d925a9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdec99f098 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f95d5d925a9
-RDX: 000000000000275a RSI: 0000000020000080 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 00007f95d5e00ec0 R09: 00007f95d5e00ec0
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffdec99f0c0
-R13: 0000000000000000 R14: 431bde82d7b634db R15: 0000000000000000
- </TASK>
+ .../bindings/sound/mediatek,mt8188-afe.yaml   |  208 +
+ .../sound/mediatek,mt8188-mt6359.yaml         |   93 +
+ sound/soc/mediatek/Kconfig                    |   23 +
+ sound/soc/mediatek/Makefile                   |    1 +
+ sound/soc/mediatek/common/Makefile            |    2 +-
+ sound/soc/mediatek/common/mtk-base-afe.h      |   19 +
+ .../mediatek/common/mtk-soundcard-driver.c    |   79 +
+ .../mediatek/common/mtk-soundcard-driver.h    |   14 +
+ sound/soc/mediatek/mt8188/Makefile            |   15 +
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.c    |  658 ++++
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.h    |  115 +
+ sound/soc/mediatek/mt8188/mt8188-afe-common.h |  151 +
+ sound/soc/mediatek/mt8188/mt8188-afe-pcm.c    | 3359 +++++++++++++++++
+ sound/soc/mediatek/mt8188/mt8188-audsys-clk.c |  205 +
+ sound/soc/mediatek/mt8188/mt8188-audsys-clk.h |   15 +
+ .../soc/mediatek/mt8188/mt8188-audsys-clkid.h |   83 +
+ sound/soc/mediatek/mt8188/mt8188-dai-adda.c   |  632 ++++
+ sound/soc/mediatek/mt8188/mt8188-dai-etdm.c   | 2591 +++++++++++++
+ sound/soc/mediatek/mt8188/mt8188-dai-pcm.c    |  367 ++
+ sound/soc/mediatek/mt8188/mt8188-mt6359.c     |  785 ++++
+ sound/soc/mediatek/mt8188/mt8188-reg.h        | 3180 ++++++++++++++++
+ 21 files changed, 12594 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt8188-afe.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
+ create mode 100644 sound/soc/mediatek/common/mtk-soundcard-driver.c
+ create mode 100644 sound/soc/mediatek/common/mtk-soundcard-driver.h
+ create mode 100644 sound/soc/mediatek/mt8188/Makefile
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-clk.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-clk.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-common.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clkid.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-adda.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-etdm.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-mt6359.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-reg.h
 
+-- 
+2.18.0
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
