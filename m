@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2C9659A75
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5AB4659A79
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbiL3QOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 11:14:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        id S235224AbiL3QRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 11:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbiL3QOv (ORCPT
+        with ESMTP id S231150AbiL3QRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 11:14:51 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C0E1C109
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:14:50 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id bp15so32263219lfb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:14:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jbyv4Oy8didpwFYD17V58dHAAX/DTrU/zE0z4pQAgYo=;
-        b=To2ksXIJV9+WbeESZs4xX0hYjVnUCAO4VCpaHiAeqtYOYKKCu64D+fUEBE+Jrr6qIP
-         R/eTASpH7PGcWf8qszwbDC7n/9gdjeXMjrTBPc8iLqvBCKYTpU4eOrHgDQaC4ybgWGKq
-         q/fOUTvwI/e5ld0Eqzbuw/BLJj6f+uTK81hNG1kYpy2pk5abJXnTJ40aDty9D4sPCV45
-         iCyl5bFYVIjl4hTAfg80QkDr4p9sCnGH1YOPeVekJbSCF+TVzW+5OrsKwO0t17ffCgZd
-         RJl82P6e+SqL3JB3EuaVd6VRw4W9bUuO8f8nMx+AjQ1wJYMtGCLwv2+uuHjwWRuzjcXj
-         Zujg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jbyv4Oy8didpwFYD17V58dHAAX/DTrU/zE0z4pQAgYo=;
-        b=f8KgyU4SBPeKeX0Osv7WzxOihQN+zb2/dlDZtKr8VW8GtmYORL4dCPi+UA7mvRtSF6
-         CoR76BmJ4nyEit+A8d+fO5ntDbgy7MSvBTDPsSsHUov09lyjeAygGXF0tKKXaWmlV+/k
-         OOprHPMvBLKA+D5EmLwfx/6XgU++XB56zrgH3VgjhufyJuMIWyVjBbVyjNixaAv3NBgm
-         1EG7kjtUYUAx/i3MyZPxhCxMiMShg4YNu07yf4/ttVEGpJiKg7X+KKtKXapSbb6SKaHB
-         9M0Aj97RP2I4bqhwSI6S0IT1ttv1uB9t9BN6zbWh0UywKZQi+4r46sqS9fmCf95eE9uO
-         LT7A==
-X-Gm-Message-State: AFqh2krqESGruqtHBoYXqco44+an1oF1HynaANO4i3buv4qyX/HZridV
-        XxW54R79lzOpvybrAz2Xjyirpw==
-X-Google-Smtp-Source: AMrXdXvt2vZu5fuaitjDO5j8xBPAxgO+bIc23hMUVB0akOKLgqyj9XAcwvHkgYQWNICQMS6eagpzuw==
-X-Received: by 2002:ac2:5394:0:b0:4b4:e2c9:9b25 with SMTP id g20-20020ac25394000000b004b4e2c99b25mr8707849lfh.44.1672416888646;
-        Fri, 30 Dec 2022 08:14:48 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id j18-20020a056512109200b00498f67cbfa9sm3539912lfg.22.2022.12.30.08.14.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Dec 2022 08:14:48 -0800 (PST)
-Message-ID: <b32cf5e6-15be-4055-35b1-ad9d90e3c0ad@linaro.org>
-Date:   Fri, 30 Dec 2022 17:14:46 +0100
+        Fri, 30 Dec 2022 11:17:47 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F163636F;
+        Fri, 30 Dec 2022 08:17:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=XsTtrjg75si90dxfNtwbabByETT2NBXCVBmC40eZH04=; b=IZ0KhtNn2y1QLsmjvOkmntLu97
+        IbeYhdPHWUsp0yyWMS9oytIY+1lx1y1oqlUglRtNTiMkqNaGYHa+p4NoQEEoJbRFCtUx6oJ+Umoho
+        BHgk7XDQen41+LoPAmU+XCiLwtQrKUJGHHpsGHXwcCIFKn2Zyn6FwP/7p2sztzXXEIdY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pBI4N-000leV-Mk; Fri, 30 Dec 2022 17:17:19 +0100
+Date:   Fri, 30 Dec 2022 17:17:19 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lixue Liang <lianglixuehao@126.com>,
+        anthony.l.nguyen@intel.com, linux-kernel@vger.kernel.org,
+        jesse.brandeburg@intel.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        lianglixue@greatwall.com.cn
+Subject: Re: [PATCH v7] igb: Assign random MAC address instead of fail in
+ case of invalid one
+Message-ID: <Y68PD9G2tXkb9AZ/@lunn.ch>
+References: <20221213074726.51756-1-lianglixuehao@126.com>
+ <Y5l5pUKBW9DvHJAW@unreal>
+ <20221214085106.42a88df1@kernel.org>
+ <Y5obql8TVeYEsRw8@unreal>
+ <20221214125016.5a23c32a@kernel.org>
+ <Y57SPPmui6cwD5Ma@unreal>
+ <CAKgT0UfZk3=b0q3AQiexaJ=gCz6vW_hnHRnFiYLFSCESYdenOw@mail.gmail.com>
+ <Y6wJFYMZVQ7V+ogG@unreal>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 07/11] arm64: dts: qcom: sm8350: Remove mmxc
- power-domain-name
-Content-Language: en-US
-To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        sean@poorly.run, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, quic_jesszhan@quicinc.com,
-        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
-        vkoul@kernel.org, a39.skl@gmail.com, quic_khsieh@quicinc.com,
-        quic_vpolimer@quicinc.com, swboyd@chromium.org,
-        dianders@chromium.org, liushixin2@huawei.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
-        vinod.koul@linaro.org
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>
-References: <20221230153554.105856-1-robert.foss@linaro.org>
- <20221230153554.105856-8-robert.foss@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221230153554.105856-8-robert.foss@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6wJFYMZVQ7V+ogG@unreal>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/12/2022 16:35, Robert Foss wrote:
-> The mmxc power-domain-name is not required, and is not
-> used by either earlier or later SoC versions (sm8250 / sm8450).
+On Wed, Dec 28, 2022 at 11:15:01AM +0200, Leon Romanovsky wrote:
+> On Mon, Dec 19, 2022 at 07:30:45AM -0800, Alexander Duyck wrote:
+> > On Sun, Dec 18, 2022 at 12:41 AM Leon Romanovsky <leon@kernel.org> wrote:
+> > >
+> > > On Wed, Dec 14, 2022 at 12:50:16PM -0800, Jakub Kicinski wrote:
+> > > > On Wed, 14 Dec 2022 20:53:30 +0200 Leon Romanovsky wrote:
+> > > > > On Wed, Dec 14, 2022 at 08:51:06AM -0800, Jakub Kicinski wrote:
+> > > > > > On Wed, 14 Dec 2022 09:22:13 +0200 Leon Romanovsky wrote:
+> > > > > > > NAK to any module driver parameter. If it is applicable to all drivers,
+> > > > > > > please find a way to configure it to more user-friendly. If it is not,
+> > > > > > > try to do the same as other drivers do.
+> > > > > >
+> > > > > > I think this one may be fine. Configuration which has to be set before
+> > > > > > device probing can't really be per-device.
+> > > > >
+> > > > > This configuration can be different between multiple devices
+> > > > > which use same igb module. Module parameters doesn't allow such
+> > > > > separation.
+> > > >
+> > > > Configuration of the device, sure, but this module param is more of
+> > > > a system policy.
+> > >
+> > > And system policy should be controlled by userspace and applicable to as
+> > > much as possible NICs, without custom module parameters.
+> > >
+> > > I would imagine global (at the beginning, till someone comes forward and
+> > > requests this parameter be per-device) to whole stack parameter with policies:
+> > >  * Be strict - fail if mac is not valid
+> > >  * Fallback to random
+> > >  * Random only ???
+> > >
+> > > Thanks
+> > 
+> > So are you suggesting you would rather see something like this as a
+> > sysctl then? Maybe something like net.core.netdev_mac_behavior where
+> > we have some enum with a predetermined set of behaviors available? I
+> > would be fine with us making this a global policy if that is the route
+> > we want to go. It would just be a matter of adding the sysctl and an
+> > accessor so that drivers can determine if it is set or not.
 > 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
+> Something like that and maybe convert drivers and/or to honor this policy.
 
-Please, do not mix fixes, cleanups and new features. This delays
-applying of fixes for many, many days without a need and causes a lot of
-duplicated work...
+Converting drivers is very unlikely to happen. There are over 240
+calls to register_netdev() under drivers/net/ethernet. Who has the
+time to add such code to so many drivers?
 
-This SHOULD be merged long time ago so I won't waste time on such stuff.
-But because it was always waiting for rest of patches it was never merged...
+What many drivers do is called one of platform_get_ethdev_addr(),
+of_get_mac_address(), or device_get_ethdev_address() etc, which will
+look around DT, ACPI and maybe in NVMEM, etc. It is not user space
+controllable policy, but most drivers fall back to a random MAC
+address, and a warning, if no fixed MAC addresses can be found.
 
-Best regards,
-Krzysztof
+So i would recommend doing what most drivers do, if everything else
+fails, us a random address.
 
+       Andrew
