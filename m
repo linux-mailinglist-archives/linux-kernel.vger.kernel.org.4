@@ -2,120 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BD2659B09
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA513659B0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235075AbiL3Rpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 12:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
+        id S235204AbiL3Rrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 12:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiL3Rpr (ORCPT
+        with ESMTP id S229771AbiL3Rrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 12:45:47 -0500
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E49E78;
-        Fri, 30 Dec 2022 09:45:45 -0800 (PST)
-Received: by mail-io1-f43.google.com with SMTP id p66so11455726iof.1;
-        Fri, 30 Dec 2022 09:45:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gTP1DtWjB+7nv7oA/EEYqYhJy7cQJi0Y6iPnNBwX9Ic=;
-        b=G4tHhRoU8nLzdlsUqUdWGOKDRrRTHK9d6/rhIou7AB1tdu1q7xucGL7jqboByrvlWF
-         7wEjsSAPXG1Ev5zv14ygVQTBMCI1KoiLajIU//hiPY6AxfPnJfryZwlPgJMs1KHIPRtq
-         2ENocB1pRxjou+lXD0oosEKqs2BCbWKDYA1HWVlzMITGx4dmkajbNOgsNoRDmpLfpJI2
-         YapzU6sfQ2iuGHfh67hu5DIDJyabS3iW1SZS7LzOL6AKIGno6nl+3rKf6urv8t3b397G
-         X9+hl4nvP4ldyPbCRcNh0kRBE1PJYKMIlw7rx11R1B6UpikiO7Pr3BQBrm61nS9Yx8M+
-         GEKQ==
-X-Gm-Message-State: AFqh2kpy8HiWW+cfuiGDPUpMnsBaZF/BL8MHj6RC2ugNEdHaE1KY141O
-        qwNIR/8ShvAd2fKF9xbuX7hVLEsrre+Y1hdI2mQ=
-X-Google-Smtp-Source: AMrXdXv7+vNpXgfaps2GjiqW0Qs8iqSZRHzzk0jsVoislu1IZqz79DzHDTWjiLiavaOv58M02rMdfTjiGRIoBBxWM6Y=
-X-Received: by 2002:a5e:cb44:0:b0:6df:b793:35ac with SMTP id
- h4-20020a5ecb44000000b006dfb79335acmr2331705iok.33.1672422344590; Fri, 30 Dec
- 2022 09:45:44 -0800 (PST)
+        Fri, 30 Dec 2022 12:47:46 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7C313CC3;
+        Fri, 30 Dec 2022 09:47:44 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8C5222F5;
+        Fri, 30 Dec 2022 18:47:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672422462;
+        bh=j/YlUzIxu/q6NUJAqgakN4HSBzdHx5nGEFvh9jW71IM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r7aAhpaIQ1KSija3BtmyEzSP54U//kfyObok42ceO4JwSuDaElZyVwX0pJCitWtWI
+         t6n+1/yVMjhStGbxfSP9UZy+pXRnfSqMn6hXu+6S4Bq7rOoexWD5Js6tUdE9eqRMMm
+         DKxfaYvAMwospvbXTTbbbMNjwmQyAU21xS/2r7t8=
+Date:   Fri, 30 Dec 2022 19:47:37 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ai Chao <aichao@kylinos.cn>
+Cc:     mchehab@kernel.org, ribalda@chromium.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] media: uvcvideo: Fix bandwidth error for Alcor camera
+Message-ID: <Y68kOe3WNjnkPS57@pendragon.ideasonboard.com>
+References: <20221122084833.1241078-1-aichao@kylinos.cn>
 MIME-Version: 1.0
-References: <20221208232536.591347-1-stuart.w.hayes@gmail.com>
-In-Reply-To: <20221208232536.591347-1-stuart.w.hayes@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 30 Dec 2022 18:45:32 +0100
-Message-ID: <CAJZ5v0jq_z3H5Uw7vM1998pgtUyHE0M19aOg+mf1O=UgApf7cg@mail.gmail.com>
-Subject: Re: [PATCH] acpi: add support for the NBFT
-To:     Stuart Hayes <stuart.w.hayes@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, John Meneghini <jmeneghi@redhat.com>,
-        Charles Rose <charles_rose@dell.com>,
-        Doug Farley <Douglas_Farley@dell.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221122084833.1241078-1-aichao@kylinos.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 12:25 AM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
+Hi Ai,
+
+Thank you for the patch.
+
+On Tue, Nov 22, 2022 at 04:48:33PM +0800, Ai Chao wrote:
+> For Alcor Corp. Slave camera(1b17:6684/2017:0011), it support to output
+
+Could you please send me the USB descriptors for the 2017:0011 device
+(lsusb -v -d 2017:0011) ?
+
+>  compressed video data, and it return a wrong dwMaxPayloadTransferSize
+>  fields. This is a fireware issue, but the manufacturer cannot provide
+>  a const return fieldsby the fireware. For some device, it requested
+>  2752512 B/frame bandwidth. For normally device, it requested 3072 or 1024
+>  B/frame bandwidth. so we check the dwMaxPayloadTransferSize fields,if it
+>  large than 0x1000, reset dwMaxPayloadTransferSize to 1024, and the camera
+>  preview normally.
 >
-> Add support for the NVMe Boot Firmware Table (NBFT) to facilitate
-> booting from NVM Express namespaces which are accessed via
-> NVMe over Fabrics (NVMe-oF).
->
-> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
-
-Tentatively applied as 6.3 material, but it was unclear what the S-o-b
-tags below mean, so I've dropped them.
-
-If you are not the original author of the patch, you should add a From
-line pointing to the original author to it and the corresponding S-o-b
-tag along with your S-o-b.
-
-If you have developed the patch in collaboration with someone, there
-should be a Co-developed-by tag pointing to the other author along
-with the corresponding S-o-b tag.
-
-S-o-b alone is meaningful only if you are sending a patch from someone
-else, for example as a code maintainer.
-
-> Signed-off-by: Doug Farley <Douglas_Farley@dell.com>
-> Signed-off-by: Lenny Szubowicz <lszubowi@redhat.com>
+> Signed-off-by: Ai Chao <aichao@kylinos.cn>
+> 
 > ---
->  drivers/acpi/tables.c | 3 ++-
->  include/acpi/actbl1.h | 2 ++
->  2 files changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
-> index 47ec11d4c68e..f390c5883b56 100644
-> --- a/drivers/acpi/tables.c
-> +++ b/drivers/acpi/tables.c
-> @@ -545,7 +545,8 @@ static const char table_sigs[][ACPI_NAMESEG_SIZE] __initconst = {
->         ACPI_SIG_WDDT, ACPI_SIG_WDRT, ACPI_SIG_DSDT, ACPI_SIG_FADT,
->         ACPI_SIG_PSDT, ACPI_SIG_RSDT, ACPI_SIG_XSDT, ACPI_SIG_SSDT,
->         ACPI_SIG_IORT, ACPI_SIG_NFIT, ACPI_SIG_HMAT, ACPI_SIG_PPTT,
-> -       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT, ACPI_SIG_AGDI };
-> +       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT, ACPI_SIG_AGDI,
-> +       ACPI_SIG_NBFT };
->
->  #define ACPI_HEADER_SIZE sizeof(struct acpi_table_header)
->
-> diff --git a/include/acpi/actbl1.h b/include/acpi/actbl1.h
-> index 15c78678c5d3..6ec43410288a 100644
-> --- a/include/acpi/actbl1.h
-> +++ b/include/acpi/actbl1.h
-> @@ -49,6 +49,8 @@
->  #define ACPI_SIG_S3PT           "S3PT" /* S3 Performance (sub)Table */
->  #define ACPI_SIG_PCCS           "PCC"  /* PCC Shared Memory Region */
->
-> +#define ACPI_SIG_NBFT          "NBFT"  /* NVMe Boot Firmware Table */
+> change for v4
+> - Change usb_match_one_id to usb_match_id
+> - Modify the discription
+> 
+> change for v3
+> - Add VID/PID 2017:0011
+> 
+> change for v2
+> - Used usb_match_one_id to check VID and PID
+> ---
+> ---
+>  drivers/media/usb/uvc/uvc_video.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index d2eb9066e4dc..75bdd71d0e5a 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -135,6 +135,11 @@ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
+>  	static const struct usb_device_id elgato_cam_link_4k = {
+>  		USB_DEVICE(0x0fd9, 0x0066)
+>  	};
+> +	static const struct usb_device_id alcor_corp_slave_cam[] = {
+> +		{ USB_DEVICE(0x2017, 0x0011) },
+> +		{ USB_DEVICE(0x1b17, 0x6684) },
+> +		{ }
+> +	};
+>  	struct uvc_format *format = NULL;
+>  	struct uvc_frame *frame = NULL;
+>  	unsigned int i;
+> @@ -234,6 +239,13 @@ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
+>  
+>  		ctrl->dwMaxPayloadTransferSize = bandwidth;
+>  	}
 > +
->  /* Reserved table signatures */
->
->  #define ACPI_SIG_MATR           "MATR" /* Memory Address Translation Table */
-> --
-> 2.31.1
->
+> +	/* Alcor Corp. Slave camera return wrong dwMaxPayloadTransferSize */
+> +	if ((format->flags & UVC_FMT_FLAG_COMPRESSED) &&
+
+Is the issue limited to MJPEG ? The device also supports YUYV, does it
+provide a correct dwMaxPayloadTransferSize in that case ?
+
+> +	    (ctrl->dwMaxPayloadTransferSize > 0x1000) &&
+> +	    usb_match_id(stream->dev->intf, alcor_corp_slave_cam)) {
+> +		ctrl->dwMaxPayloadTransferSize = 1024;
+> +	}
+>  }
+>  
+>  static size_t uvc_video_ctrl_size(struct uvc_streaming *stream)
+
+-- 
+Regards,
+
+Laurent Pinchart
