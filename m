@@ -2,127 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0811C659968
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 15:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB5665996A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 15:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235024AbiL3Olc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 09:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
+        id S235084AbiL3Omg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 09:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235139AbiL3OlT (ORCPT
+        with ESMTP id S235085AbiL3OmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 09:41:19 -0500
-Received: from smtp-out-03.comm2000.it (smtp-out-03.comm2000.it [212.97.32.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DED1A830;
-        Fri, 30 Dec 2022 06:41:14 -0800 (PST)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: francesco@dolcini.it)
-        by smtp-out-03.comm2000.it (Postfix) with ESMTPSA id 517C1B44F2D;
-        Fri, 30 Dec 2022 15:41:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
-        s=mailsrv; t=1672411270;
-        bh=slpFlEiEoA19QdYQl6qukZiRr34GdN+uJEB251p+cA8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=VcxT5lfeDcGXEfClRD2fELOhpitRhEkx+GYqtvK5mpVSQwZiBiW6BeJGvC9utommQ
-         56XtaiLtzGjmtZtOXpJ4a5CYA9xr3yAuC9lDKsa7aEleYs/prGa9o9Gj2yaNWXkeXi
-         V0xSneteVB5OpZhNMuv00KfqkhxCPDZkDprc/B5s90sVulr/VDNel8+y8ZM5wVmP6u
-         TlkLmZGFSQUuhEBA3xsl/W2vpvUFOHgaSzAuSF/cx3P7lcWaQUpv/hIsfPASkqXkll
-         amzIMzSdS4pqGZ6Uev7v8UOrPvP2kX0u0jBza+FnyCK4qKOv5HgGFadwiwyEHxIg0t
-         yPlHcVpXNQdHg==
-Date:   Fri, 30 Dec 2022 15:40:58 +0100
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Primoz Fiser <primoz.fiser@norik.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        upstream@lists.phytec.de, Marco Felsch <m.felsch@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        francesco.dolcini@toradex.com, wsa@kernel.org
-Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
-Message-ID: <Y674eoNsHtAeG7IP@francesco-nb.int.toradex.com>
-References: <20221216084511.2576786-1-primoz.fiser@norik.com>
- <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
- <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
- <20221216110227.GA12327@pengutronix.de>
- <20221216111308.wckibotr5d3q6ree@pengutronix.de>
- <5c2e0531-e7c3-1b37-35ed-c8e9795a0d18@norik.com>
- <Y5xpt6J01Boec6Xr@francesco-nb.int.toradex.com>
- <41991ce2-3e88-5afc-6def-6e718d624768@norik.com>
+        Fri, 30 Dec 2022 09:42:24 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82F7193D3;
+        Fri, 30 Dec 2022 06:42:23 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id r11so19536264oie.13;
+        Fri, 30 Dec 2022 06:42:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ImGgkIxtp0R2ay3gNEpK2ygUXRVYeCeky2W5vFQ3J+8=;
+        b=Z/H0fzziQQhuYuww4lmzf5G2bNgS2aaGHpSBtqoKn8mlA/syKix0o5Ddr8VYAR9ZzO
+         ZpBTuPxQxLntY2aG/iit3r9h9yL6lYVMoxRxcoyZTXMvkjhno0zJkXccWM7Qy19mRqFY
+         ZMkv7Z3Sh5AmakzqGDHOqxFMqknA59a/vqv82IwsdZmYi01b9UTreIdc5TXvbK/czd7T
+         qt97t+3m/vtXFuB7GE0QTlzE7ekL5CX3k9r1lUSBJRVcsVjfCoCKduizfQ7jqc8cnZnR
+         Le/pvglg9ZlbWIj5c7LqHR6drKUP7Hg6JsyomqGE26ljTktGedD2ltCwVLA+AGh/rBn/
+         yJLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ImGgkIxtp0R2ay3gNEpK2ygUXRVYeCeky2W5vFQ3J+8=;
+        b=pC0NX5nzqahhe7EixYE38itFj7Qnq1WiVgW+X+IkMrDbjM2kRg0+zWQ+deWzFFcGwh
+         pc2tTgb2gw0sIv3uVbLJ3zXTtlsNuzEs6nKx9OfUWEsAP/DeVsH5Lu5BW3+0Ri54R7+I
+         mxMka7mCNXL6MWRrOTBgiOnqzzYyKmRDLounLhDhk0mVWYvvmespq1qK7Q5PU/1gJgbH
+         4M/nl/BhdAWzDWPpQYklwOy8oSKbWuXaZDospKb0dB22AtXuBkj3mHm1siWaN6Mnb3Gz
+         662mDiOmyIfygn3U5LGtMGst1EYjteu4hQMXa8hNTB1hiVh3P/w4Z/k3RFQaClFnYcoD
+         iT/w==
+X-Gm-Message-State: AFqh2kp0XEUl8WFR5xJcC/Xh5PbVXtzRf+NLUOix/e9YZd6uiAFRA88Z
+        zDL4Odot3+y9SpsT31R/nX1PtCynUgd0tKqcyxo=
+X-Google-Smtp-Source: AMrXdXuDno+6OeOZuZPUQqB3mZ7Z/yNqxhwVHv640fuMuwX8koOEpJRdNDz/ReuKWRXgEWUuJOrOjAdbJLiN1/OtjqY=
+X-Received: by 2002:aca:6706:0:b0:35a:51fc:2134 with SMTP id
+ z6-20020aca6706000000b0035a51fc2134mr1727368oix.144.1672411342609; Fri, 30
+ Dec 2022 06:42:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41991ce2-3e88-5afc-6def-6e718d624768@norik.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221209071703.2891714-1-sergio.paracuellos@gmail.com> <Y670XhTSrs3n9c0H@lpieralisi>
+In-Reply-To: <Y670XhTSrs3n9c0H@lpieralisi>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 30 Dec 2022 15:42:11 +0100
+Message-ID: <CAMhs-H9hLYa5kwr=oy1wYZOow-CMpQTUJhB6kDFW3b_EAbJb7g@mail.gmail.com>
+Subject: Re: [PATCH] PCI: mt7621: Sleep a bit after power on the PCIs phy ports
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     linux-pci@vger.kernel.org, bhelgaas@google.com, robh@kernel.org,
+        kw@linux.com, matthias.bgg@gmail.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Wolfram
+Hi Lorenzo,
 
-On Wed, Dec 28, 2022 at 09:01:46AM +0100, Primoz Fiser wrote:
-> On 16. 12. 22 13:51, Francesco Dolcini wrote:
-> > On Fri, Dec 16, 2022 at 01:23:29PM +0100, Primoz Fiser wrote:
-> > > The only solid point in the thread seems to be that in that case we are not
-> > > covering up the potential i2c hardware issues?
-> > 
-> > I believe that in this case we should just have a warning in the kernel.
-> > The retry potentially work-around a transient issue and we do not hide any hardware
-> > issue at the same time. It seems an easy win-win solution.
-> 
-> I would agree about throwing a warning message in retry case.
-> 
-> Not sure how would it affect other i2c bus drivers using retries > 0.
-> Retries might be pretty rare with i2c-imx but some other drivers set this to
-> 5 for example. At least using _ratelimited printk is a must using this
-> approach.
+On Fri, Dec 30, 2022 at 3:23 PM Lorenzo Pieralisi <lpieralisi@kernel.org> wrote:
+>
+> On Fri, Dec 09, 2022 at 08:17:03AM +0100, Sergio Paracuellos wrote:
+> > Some devices like ZBT WE1326 and ZBT WF3526-P need to sleep a bit after call
+> > to mt7621_pcie_init_port() driver function to get into reliable boots for
+> > both warn and hard resets. The needed time for these devices to always detect
+>
+> s/warn/warm
 
-Wolfram, Uwe, Oleksij
+Sure, I will fix this in v2.
 
-Would it be acceptable to have a warning when we have I2C retries, and
-with that in place enabling retries on the imx driver?
+>
+> > the ports seems to be from 75 to 100 milliseconds. Hence, properly add an
+> > extra 100 milliseconds msleep() call to make also these devices work.
+>
+> This sounds empirical and it probably is, is it asking too much please
+> to add why this delay is *actually* needed ? I think it is important
+> to understand that to make sure that in the future developers have a
+> clue about why this code was added.
+>
+> At the very least add a Link: tag to the openwrt discussion.
 
-It exists hardware that requires this to work correctly, and at a
-minimum setting the retry count from user space is not going to solve
-potential issues during initial driver probe.
+Most mt7621 boards don't need this extra time after initializing pci
+phy related ports registers.
+Devices like the two commented here (and some netgear models) seem to
+need it to reliably
+detect pci ports in both warm and cold resets. I don't have the
+devices but the time added by
+this patch has been tested on those devices. Since there is no
+datasheet or something similar
+that says what is this needed in the particular devices I will add the
+following link to the commit
+message pointing out the openwrt discussion:
 
-To me the only reasonable solution is to have the retry enabled with a
-sensible number (3? 5?), however there is a concern that this might
-hide real hardware issues.
+https://github.com/openwrt/openwrt/pull/11220
 
-> > > Yeah fair point but on the other hand, goal of this patch would be to
-> > > improve robustness in case of otherwise good performing hardware. From user
-> > > perspective I just want it to work despite it retrying under the hood from
-> > > time to time. I think Francesco had the same idea.
-> > 
-> > Unfortunately I was missing the exact background that made us do this
-> > change, we just had it sitting in our fork for too long :-/
-> > This is one of the reason I gave up on it.
-> > 
-> > Quoting Uwe [1]
-> > > sometimes there is no practical way around such work arounds. I happens
-> > > from time to time that the reason for problem is known, but fixing the
-> > > hardware is no option, then you need such workrounds. (This applies to
-> > > both, retrying the transfers and resetting the bus.)
-> 
-> I wouldn't say this is exactly a workaround if "retries mechanism" is
-> standard part of the i2c core. Other drivers use it as well. it is just a
-> setting to improve bus robustness.
-> 
-> But OK, I guess we can live with this one-liner in the downstream kernel.
-To me this is not a good idea.
+>
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> > Hi Bjorn / Lorenzo,
+> >
+> > I send previous patch here [0] related with this issue. Since after a bit
+> > of testing with these devices by openwrt community [1] we end up that there is
+> > no need of increasing PERST_DELAY_MS definition. This is also the reason
+> > of not sending a v2 for this but a new patch with the proper solution.
+>
+> See above, please define "proper". I don't have a problem with defining
+> multiple delays as long as we can define with certainty what they are
+> there for.
 
-Francesco
+Well, "proper" here was referring to having an always working solution
+for these particular devices.
 
+>
+> > I preferred to just use the same PERST_DELAY_MS define also for this to
+> > not perform extra changes but the needed to the driver.
+>
+> The problem is not adding more defines, the problem is defining what
+> the delay is there for. Reusing the macro may even turn out to be
+> misleading if that has nothing to do with PERST - that's what Bjorn
+> pointed out already.
+
+Pretty clear, thanks. Will add them and send v2.
+
+>
+> > If you prefer me to write new definitions for all the sleep paths you
+> > pointed out in [0], just let me know and I will send them also.
+>
+> Yes, see above.
+>
+> Thanks,
+> Lorenzo
+
+Thanks,
+    Sergio Paracuellos
+
+>
+> > Thanks in advance for your time.
+> >
+> > Best regards,
+> >     Sergio Paracuellos
+> >
+> > [0]: https://lore.kernel.org/linux-pci/20221119110837.2419466-1-sergio.paracuellos@gmail.com/T/#u
+> > [1]: https://github.com/openwrt/openwrt/pull/11220
+> >
+> >  drivers/pci/controller/pcie-mt7621.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
+> > index 4bd1abf26008..3311ca64b315 100644
+> > --- a/drivers/pci/controller/pcie-mt7621.c
+> > +++ b/drivers/pci/controller/pcie-mt7621.c
+> > @@ -369,6 +369,7 @@ static int mt7621_pcie_init_ports(struct mt7621_pcie *pcie)
+> >               }
+> >       }
+> >
+> > +     msleep(PERST_DELAY_MS);
+> >       mt7621_pcie_reset_ep_deassert(pcie);
+> >
+> >       tmp = NULL;
+> > --
+> > 2.25.1
+> >
