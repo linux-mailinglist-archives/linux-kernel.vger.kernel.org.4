@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CDA659A37
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 16:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78E0659A38
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 16:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbiL3Pw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 10:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S235154AbiL3Pyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 10:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiL3Pwx (ORCPT
+        with ESMTP id S229527AbiL3Pyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 10:52:53 -0500
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D85178BE;
-        Fri, 30 Dec 2022 07:52:52 -0800 (PST)
-Received: by mail-io1-f43.google.com with SMTP id i83so11263601ioa.11;
-        Fri, 30 Dec 2022 07:52:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IMhrVDylLdSSZiiGal6d5OdoolcBpjlvVV/YDpmQ7VU=;
-        b=Ziao3QSV6HLqXT5s8OmszhM5Am86trE6Xo9QP9Wplr36PwL+CPVa32w/XvqOFH9JA7
-         4LE+PAd6Wp3IopDyqFPM29E8nqPym2JaEsBLVuTVBDSFCjq3fn4FxHehcl5+TSg6prtV
-         nzUrc3wMBoHyYq8J5FNjA5PGpeFVkmfUCrNgkjebGK8Mf0jWcG5H3BsHdLkM3sQtYDiT
-         iJCftmiTs8b3WmzHYnKIwLkV2LqimmUFfHUuHv9PKJ8+KAGrK3AEK141lWzxH91GRhPK
-         YD5rOkJwoFCvT96Ggu/Vsx4zk1+Uceg9hXXjJcch//B0BF7528OzHWrm5frtsp/h7LEC
-         a4FA==
-X-Gm-Message-State: AFqh2kqq5YiYCyZMEWmI3lJKvEBJXPfaYlRcUJt9fqVhMyQZTLOJoFmU
-        oxg2EWzClSwNQZEQ9yFzR4rosBsEInTv0LoD5BSrYTP2
-X-Google-Smtp-Source: AMrXdXvpAT6YjQ1nFxmbN0JScsZwmWSZj8k0RnFLb5ZBFiFYx+MhcFMACLWS+pIETR4njRRbXgw/tFMgL5UNRgb5+WA=
-X-Received: by 2002:a05:6638:8d:b0:38a:3357:8a4 with SMTP id
- v13-20020a056638008d00b0038a335708a4mr2559982jao.53.1672415572137; Fri, 30
- Dec 2022 07:52:52 -0800 (PST)
+        Fri, 30 Dec 2022 10:54:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1583E178BE
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 07:54:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF544B81CC2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 15:54:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368B7C433D2;
+        Fri, 30 Dec 2022 15:54:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cthGg0NM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672415676;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BxfkqOG1X9KuqUurA2SWp45MzpX2tzl76AOrYBX8vQ0=;
+        b=cthGg0NM0dVWdKvV1zp+jB5rca47a21IO6n3zxLLzOp65JWqNPbQJNl3WrtYsGIT0TEPPN
+        TorQyQeFPOUl9l7L9+CP2bIPR07oP181k7iAQDPwvaZ4N5oBMkcWM641IcoE9QcEecKgFu
+        0vJZQPICKmJERWhDOqV+okWpoUilnf8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2838488f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 30 Dec 2022 15:54:35 +0000 (UTC)
+Date:   Fri, 30 Dec 2022 16:54:27 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, pbonzini@redhat.com,
+        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
+        philmd@linaro.org
+Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
+ setup_data
+Message-ID: <Y68Js5b0jW/2nLU4@zx2c4.com>
+References: <20221228143831.396245-1-Jason@zx2c4.com>
+ <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org>
+ <Y6xvJheSYC83voCZ@zx2c4.com>
+ <Y6x1knb8udpSyMSp@zx2c4.com>
+ <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com>
+ <Y6z765zHrQ6Rl/0o@zx2c4.com>
+ <AF921575-0968-434A-8B46-095B78C209C1@zytor.com>
+ <Y62MdawGaasXmoVL@zn.tnic>
 MIME-Version: 1.0
-References: <20221214233106.69b2c01b@gandalf.local.home> <Y5trUep9IvCv1Uwy@google.com>
- <20221215141146.6ceb7cf2@gandalf.local.home> <CAEXW_YQLtK=4LMJ+LHPVWU0wbV-027HJoCEKTjZvBZ6krrn6vw@mail.gmail.com>
- <20221215151333.49af5442@gandalf.local.home>
-In-Reply-To: <20221215151333.49af5442@gandalf.local.home>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 30 Dec 2022 16:52:36 +0100
-Message-ID: <CAJZ5v0iNdLyOpAxsCTTq-zqRfWDrJ5_c2DUcJYE5ZFn7u+2qdQ@mail.gmail.com>
-Subject: Re: [RFC][PATCH] ACPI: tracing: Have ACPI debug go to tracing ring buffer
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Ching-lin Yu <chinglinyu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y62MdawGaasXmoVL@zn.tnic>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 9:13 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Thu, 15 Dec 2022 14:52:48 -0500
-> Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> > Another approach could be to always enable the trace event by default,
-> > if the CONFIG is turned on. Or do a printk() telling the user about
-> > the event to enable, so they know why their trace buffer is empty.
->
-> Yeah, that is another option.
->
-> And, yes I need to document it better. I started to, but then decided to
-> hold off until I get some feedback in case this is rejected.
->
-> >
-> > Up to you and the ACPI maintainers. ;-)
->
-> I'm going to guess I may not hear back until the new year. I'm fine with
-> that :-)
+On Thu, Dec 29, 2022 at 01:47:49PM +0100, Borislav Petkov wrote:
+> On Wed, Dec 28, 2022 at 11:31:34PM -0800, H. Peter Anvin wrote:
+> > As far as a crash... that sounds like a big and a pretty serious one at that.
+> > 
+> > Could you let me know what kernel you are using and how *exactly* you are booting it?
+> 
+> Right, with CONFIG_X86_VERBOSE_BOOTUP=y in a guest here, it says:
+> 
+> early console in extract_kernel
+> input_data: 0x000000000be073a8
+> input_len: 0x00000000008cfc43
+> output: 0x0000000001000000
+> output_len: 0x000000000b600a98
+> kernel_total_size: 0x000000000ac26000
+> needed_size: 0x000000000b800000
+> trampoline_32bit: 0x000000000009d000
+> 
+> so that's a ~9M kernel which gets decompressed at 0x1000000 and the
+> output len is, what, ~180M which looks like plenty to me...
 
-It's just a couple of days, but still.
+I think you might have misunderstood the thread. First, to reproduce the
+bug that this patch fixes, you need a kernel with a compressed size of
+around 16 megs, not 9. Secondly, that crash is well understood and
+doesn't need to be reproduced; this patch fixes it. Rather, the question
+now is how to improve this patch to remove the 62 meg limit. I'll follow
+up with hpa's request for reproduction info.
 
-Personally, I would use a command line option to control the behavior
-and the Kconfig option to provide its default value.
-
-This way it can be flipped without rebuilding the kernel if need be.
-
-I would also make the ACPI debug output go into the trace buffer so
-long as the Kconfig option is not changed or the command line option
-is not flipped.
-
-Cheers!
+Jason
