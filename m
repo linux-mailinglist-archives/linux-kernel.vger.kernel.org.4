@@ -2,224 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D360F6597AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E31965979C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234999AbiL3L3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 06:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
+        id S234917AbiL3L2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 06:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234874AbiL3L2x (ORCPT
+        with ESMTP id S234894AbiL3L2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 06:28:53 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D01A140C0;
-        Fri, 30 Dec 2022 03:28:52 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nk2w02KdgzqTHX;
-        Fri, 30 Dec 2022 19:24:16 +0800 (CST)
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 30 Dec 2022 19:28:49 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 3/3] kallsyms: Delete an unused parameter related to {module_}kallsyms_on_each_symbol()
-Date:   Fri, 30 Dec 2022 19:27:29 +0800
-Message-ID: <20221230112729.351-4-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
-In-Reply-To: <20221230112729.351-1-thunder.leizhen@huawei.com>
-References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+        Fri, 30 Dec 2022 06:28:01 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3931D140C0;
+        Fri, 30 Dec 2022 03:28:01 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B87981EC0622;
+        Fri, 30 Dec 2022 12:27:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672399679;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Rc57ZPovDpq235rKCZ5fF1N14hn+t2Wcm4W4m/D7lWo=;
+        b=a/zY+elMZ2XEfVyrjInY4d4UfNOwEbEpG6OT37YjBnYGgH1Je2hg5szpaBBD98O69ELr5P
+        uS8nNzGeh3jxWcAv5xsB0bXxCZ4s24+yc+5Lt6A4jhft1OUbo2aArW6W9nd/98oVdIQe+7
+        rqQNYCw4GIhU5mIbxVDQjFSuBmVD8to=
+Date:   Fri, 30 Dec 2022 12:27:55 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
+        ashish.kalra@amd.com, harald@profian.com
+Subject: Re: [PATCH RFC v7 05/64] KVM: x86: Add 'update_mem_attr' x86 op
+Message-ID: <Y67LO7OdnzzGIb8N@zn.tnic>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-6-michael.roth@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221214194056.161492-6-michael.roth@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The parameter 'struct module *' in the hook function associated with
-{module_}kallsyms_on_each_symbol() is no longer used. Delete it.
+On Wed, Dec 14, 2022 at 01:39:57PM -0600, Michael Roth wrote:
+> This callback will handle any platform-specific handling needed for
 
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- include/linux/kallsyms.h   | 3 +--
- include/linux/module.h     | 6 ++----
- kernel/kallsyms.c          | 5 ++---
- kernel/kallsyms_selftest.c | 6 +++---
- kernel/livepatch/core.c    | 3 +--
- kernel/module/kallsyms.c   | 5 ++---
- kernel/trace/ftrace.c      | 3 +--
- 7 files changed, 12 insertions(+), 19 deletions(-)
+s/handle/do/
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index 0065209cc00424b..d4079b3d951d1ef 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -67,8 +67,7 @@ static inline void *dereference_symbol_descriptor(void *ptr)
- 
- #ifdef CONFIG_KALLSYMS
- unsigned long kallsyms_sym_address(int idx);
--int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
--				      unsigned long),
-+int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
- 			    void *data);
- int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
- 				  const char *name, void *data);
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 514bc81568c5220..39f928e9d9fed7e 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -880,13 +880,11 @@ static inline bool module_sig_ok(struct module *module)
- 
- #if defined(CONFIG_MODULES) && defined(CONFIG_KALLSYMS)
- int module_kallsyms_on_each_symbol(const char *modname,
--				   int (*fn)(void *, const char *,
--					     struct module *, unsigned long),
-+				   int (*fn)(void *, const char *, unsigned long),
- 				   void *data);
- #else
- static inline int module_kallsyms_on_each_symbol(const char *modname,
--						 int (*fn)(void *, const char *,
--						 struct module *, unsigned long),
-+						 int (*fn)(void *, const char *, unsigned long),
- 						 void *data)
- {
- 	return -EOPNOTSUPP;
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 83f499182c9aa31..77747391f49b66c 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -288,8 +288,7 @@ unsigned long kallsyms_lookup_name(const char *name)
-  * Iterate over all symbols in vmlinux.  For symbols from modules use
-  * module_kallsyms_on_each_symbol instead.
-  */
--int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
--				      unsigned long),
-+int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
- 			    void *data)
- {
- 	char namebuf[KSYM_NAME_LEN];
-@@ -299,7 +298,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
- 
- 	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
- 		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
--		ret = fn(data, namebuf, NULL, kallsyms_sym_address(i));
-+		ret = fn(data, namebuf, kallsyms_sym_address(i));
- 		if (ret != 0)
- 			return ret;
- 		cond_resched();
-diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
-index 9c94f06aa951971..1b6891a0a79052b 100644
---- a/kernel/kallsyms_selftest.c
-+++ b/kernel/kallsyms_selftest.c
-@@ -97,7 +97,7 @@ static struct test_item test_items[] = {
- 
- static char stub_name[KSYM_NAME_LEN];
- 
--static int stat_symbol_len(void *data, const char *name, struct module *mod, unsigned long addr)
-+static int stat_symbol_len(void *data, const char *name, unsigned long addr)
- {
- 	*(u32 *)data += strlen(name);
- 
-@@ -156,7 +156,7 @@ static void test_kallsyms_compression_ratio(void)
- 	pr_info(" ---------------------------------------------------------\n");
- }
- 
--static int lookup_name(void *data, const char *name, struct module *mod, unsigned long addr)
-+static int lookup_name(void *data, const char *name, unsigned long addr)
- {
- 	u64 t0, t1, t;
- 	unsigned long flags;
-@@ -212,7 +212,7 @@ static bool match_cleanup_name(const char *s, const char *name)
- 	return !strncmp(s, name, len);
- }
- 
--static int find_symbol(void *data, const char *name, struct module *mod, unsigned long addr)
-+static int find_symbol(void *data, const char *name, unsigned long addr)
- {
- 	struct test_stat *stat = (struct test_stat *)data;
- 
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index c973ed9e42f8177..bdb40a4b1f29845 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -142,8 +142,7 @@ static int klp_match_callback(void *data, unsigned long addr)
- 	return 0;
- }
- 
--static int klp_find_callback(void *data, const char *name,
--			     struct module *mod, unsigned long addr)
-+static int klp_find_callback(void *data, const char *name, unsigned long addr)
- {
- 	struct klp_find_arg *args = data;
- 
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index ab2376a1be88e7e..c4fe856e5052ff7 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -495,8 +495,7 @@ unsigned long module_kallsyms_lookup_name(const char *name)
- }
- 
- int module_kallsyms_on_each_symbol(const char *modname,
--				   int (*fn)(void *, const char *,
--					     struct module *, unsigned long),
-+				   int (*fn)(void *, const char *, unsigned long),
- 				   void *data)
- {
- 	struct module *mod;
-@@ -525,7 +524,7 @@ int module_kallsyms_on_each_symbol(const char *modname,
- 				continue;
- 
- 			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
--				 mod, kallsyms_symbol_value(sym));
-+				 kallsyms_symbol_value(sym));
- 			if (ret != 0)
- 				goto out;
- 		}
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index d249a55d9005765..8f12524f8062686 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -8271,8 +8271,7 @@ struct kallsyms_data {
-  * and returns 1 in case we resolved all the requested symbols,
-  * 0 otherwise.
-  */
--static int kallsyms_callback(void *data, const char *name,
--			     struct module *mod, unsigned long addr)
-+static int kallsyms_callback(void *data, const char *name, unsigned long addr)
- {
- 	struct kallsyms_data *args = data;
- 	const char **sym;
+> converting pages between shared/private.
+> 
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>  arch/x86/include/asm/kvm_host.h    |  2 ++
+>  arch/x86/kvm/mmu/mmu.c             | 10 ++++++++--
+>  3 files changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index efae987cdce0..52f94a0ba5e9 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -133,6 +133,7 @@ KVM_X86_OP(vcpu_deliver_sipi_vector)
+>  KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
+>  KVM_X86_OP_OPTIONAL_RET0(private_mem_enabled);
+>  KVM_X86_OP_OPTIONAL_RET0(fault_is_private);
+> +KVM_X86_OP_OPTIONAL_RET0(update_mem_attr)
+>  
+>  #undef KVM_X86_OP
+>  #undef KVM_X86_OP_OPTIONAL
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 92539708f062..13802389f0f9 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1637,6 +1637,8 @@ struct kvm_x86_ops {
+>  			     int root_level);
+>  	int (*private_mem_enabled)(struct kvm *kvm);
+>  	int (*fault_is_private)(struct kvm *kvm, gpa_t gpa, u64 error_code, bool *private_fault);
+> +	int (*update_mem_attr)(struct kvm_memory_slot *slot, unsigned int attr,
+> +			       gfn_t start, gfn_t end);
+
+Does this one want to return bool too?
+
+I guess I'll see later...
+
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
