@@ -2,65 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4107665999E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 16:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0851F6599A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 16:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235147AbiL3PQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 10:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
+        id S234825AbiL3PUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 10:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234825AbiL3PPz (ORCPT
+        with ESMTP id S229464AbiL3PUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 10:15:55 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5C7140C3;
-        Fri, 30 Dec 2022 07:15:54 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pBH6k-00COx8-JD; Fri, 30 Dec 2022 23:15:43 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 30 Dec 2022 23:15:42 +0800
-Date:   Fri, 30 Dec 2022 23:15:42 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: arm64/sm4 - fix possible crash with CFI enabled
-Message-ID: <Y68Anj0R2H5Wwca8@gondor.apana.org.au>
-References: <20221221073232.15110-1-tianjia.zhang@linux.alibaba.com>
+        Fri, 30 Dec 2022 10:20:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1665F140A8;
+        Fri, 30 Dec 2022 07:20:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBEF8B81A94;
+        Fri, 30 Dec 2022 15:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28DB5C433D2;
+        Fri, 30 Dec 2022 15:20:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672413613;
+        bh=mEIlsiCgiRPca7MIEp0cdGq/tH1/+rGW8cuwJMfMUf0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mCZxNJ8xqKIPIJ+QzzzJsJR394Fy8eD+SyWyhwuthJnpMbOqI03lzjQlKaZrPnhtS
+         Ex1DArvhBsu807BjZBxNYrsfhTEwNm6gPc+An3kcRaLoEkMB6M19c4DMQj+b8KtvoC
+         AAs1inzY1AJFjgVryP/yF34N+gMVaJfGmsqP5raUF0AICJPo8GNlmJr72nTldohUta
+         0sYmdo5g0HompG0016vu/uyg1CDUgQFGjKM7tgoYjIlbtY4C//M+9klpIcSf8bHC0f
+         rZpiXp1bcEAcktV+pJeryrhe6rOAEcE9v748PNKLwKhLMS6tukBOdDyABD1ieJFwnO
+         /fvcjwbaC5ogQ==
+Date:   Fri, 30 Dec 2022 17:19:49 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Michael Roth <michael.roth@amd.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
+ when adding it to RMP table
+Message-ID: <Y68BlcnT0vrpcwf5@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
+ <YuFvbm/Zck9Tr5pq@zn.tnic>
+ <20221219150026.bltiyk72pmdc2ic3@amd.com>
+ <Y6DEv4QuvIfwWlCW@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221221073232.15110-1-tianjia.zhang@linux.alibaba.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y6DEv4QuvIfwWlCW@zn.tnic>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 03:32:32PM +0800, Tianjia Zhang wrote:
-> The SM4 CCM/GCM assembly functions for encryption and decryption is
-> called via indirect function calls.  Therefore they need to use
-> SYM_TYPED_FUNC_START instead of SYM_FUNC_START to cause its type hash
-> to be emitted when the kernel is built with CONFIG_CFI_CLANG=y.
-> Otherwise, the code crashes with a CFI failure (if the compiler didn't
-> happen to optimize out the indirect call).
+On Mon, Dec 19, 2022 at 09:08:31PM +0100, Borislav Petkov wrote:
+> On Mon, Dec 19, 2022 at 09:00:26AM -0600, Michael Roth wrote:
+> > We implemented this approach for v7, but it causes a fairly significant
+> > performance regression, particularly for the case for npages > 1 which
+> > this change was meant to optimize.
+> > 
+> > I still need to dig in a big but I'm guessing it's related to flushing
+> > behavior.
 > 
-> Fixes: 67fa3a7fdf80 ("crypto: arm64/sm4 - add CE implementation for CCM mode")
-> Fixes: ae1b83c7d572 ("crypto: arm64/sm4 - add CE implementation for GCM mode")
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  arch/arm64/crypto/sm4-ce-ccm-core.S | 5 +++--
->  arch/arm64/crypto/sm4-ce-gcm-core.S | 5 +++--
->  2 files changed, 6 insertions(+), 4 deletions(-)
+> Well, AFAICT, change_page_attr_set_clr() flushes once at the end.
+> 
+> Don't you need to flush when you modify the direct map?
+> 
+> > It would however be nice to have a set_direct_map_default_noflush()
+> > variant that accepted a 'npages' argument, since it would be more
+> > performant here and also would potentially allow for restoring the 2M
+> > direct mapping in some cases. Will look into this more for v8.
+> 
+> set_pages_direct_map_default_noflush()
+>
+> I guess.
+> 
+> Although the name is a mouthful so I wouldn't mind having those
+> shortened.
 
-Patch applied.  Thanks.
+I had a patch that just adds numpages parameter:
+
+https://lore.kernel.org/lkml/20201123095432.5860-4-rppt@kernel.org/
+
+The set_direct_map*() are not too widely used, so it's not a big deal to
+update all callers.
+ 
+> In any case, as long as that helper is properly defined and documented,
+> I don't mind.
+> 
+> Thx.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+> 
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Sincerely yours,
+Mike.
