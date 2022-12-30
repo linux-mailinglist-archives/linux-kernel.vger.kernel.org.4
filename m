@@ -2,80 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984CF659EE2
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 00:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F27EA659EF3
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 00:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235762AbiL3Xx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 18:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        id S235814AbiL3Xye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 18:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbiL3XxW (ORCPT
+        with ESMTP id S235810AbiL3Xyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 18:53:22 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928361DF3A
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 15:53:21 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id b192so11827550iof.8
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 15:53:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yaIIHCyPAmWR615tbC0Nk+wPaByZza1YhVt2KyUXJDk=;
-        b=YepwaYPDqvh2fMTqnr2Ug0m3VXi1/1ssxkSfD98N+DDQrFRq9YzydqmOUIurdKLQq3
-         ZtOpErHdR2+mslkHyoOXf8ejDrE6o2iAG4CP9kdq93AfiSjyHf/5zKwgC4Mh8WFIfStU
-         /t/WVi3b5FgUENAOjWPChZyBWiJAZfB+E60SUZ3iTykoP/9obp+59nmjxx9AFepJnpY+
-         o4j0RIc7cI8R2X+5oQqjopL6UYgAD9vdHJz1wyZpS7NGHjRHUcmM9mm7rBnfRBsP1jwR
-         eWG8ueGQlzFXg2l5C73GmBupeLfCi9Pq+Mlpu9WFnBlA7Qzu2STHs+/A0qENX5Ta+mcW
-         ZFqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yaIIHCyPAmWR615tbC0Nk+wPaByZza1YhVt2KyUXJDk=;
-        b=p55ZQEKKuNRzLe1FdYiBmDqZcet4Cy3MY8M0j2bmbWHbZuWyptqg2bfpYIKREIf7MR
-         3Sl4lZH9f74aVzljrlh/B8+zMVrNM/uModtJBjEI7zUuxB6sDPzCVe8nqhTzcGjhBFHu
-         H7W6EEK+LWV8ySwQlDtkA0mojGJEl2Bm07vWMmvCKgsgiltW0NCCy44Lc+pnRwqHEOVI
-         N3XDmVCwi3Drr2ir+F7mpy/2Db43gSh++THScgWYKwLSgRB8c9x42+7cSL1OLcpqY3D/
-         UCoPA8bXBdEh7KnebtP6yNhkke2WzAah34aBjHsHsO4puGt9BZisQ+BrH8RsFqoKeGvv
-         +B4Q==
-X-Gm-Message-State: AFqh2kpgny2luebgCmpPmrogN4NL9gAoK18aar9qCIOQWwYz7r1NlBut
-        L7ob6fuAvAMGSBDuGP8c+G3UdA==
-X-Google-Smtp-Source: AMrXdXtA1uM+5d0hzTdQjOg114pyKUxZstpIsPcMhUlPHPTLiQnXeX798H2SAyX9xamrH94Y/kHwAA==
-X-Received: by 2002:a5e:c708:0:b0:6bc:d715:362d with SMTP id f8-20020a5ec708000000b006bcd715362dmr21400562iop.2.1672444400974;
-        Fri, 30 Dec 2022 15:53:20 -0800 (PST)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id k5-20020a0566022a4500b006dffde23fa9sm8172082iov.24.2022.12.30.15.53.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Dec 2022 15:53:20 -0800 (PST)
-Message-ID: <4bd03a34-7de9-2ae4-ff82-df2470b92ea5@linaro.org>
-Date:   Fri, 30 Dec 2022 17:53:19 -0600
+        Fri, 30 Dec 2022 18:54:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0FB1DF3A;
+        Fri, 30 Dec 2022 15:54:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D20CB81DD1;
+        Fri, 30 Dec 2022 23:54:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B42C433EF;
+        Fri, 30 Dec 2022 23:54:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672444468;
+        bh=AAPK9XSQHHgh0qvLsmwiNWwN3eQnjJuKKP4MZDTbj6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UuxdVp1TFYOFWUP4ThNtYfaaIBiK0coESQmd9YRUqc4iWtVRe6M+D0vkJdtQrf8lG
+         WKpJQ8w8cWBeTPwCAkEt8zCGDwamexfXUQQ0QssNmz+DbY9iVauvmx0Bs72m1V2vBG
+         1pVxRDqjQ4YsxIHA+U+tX+gB1qIm32P92zb3E2P1ZWVAMftSBeUkt2jxaXGOe6KMYq
+         TO2an/gvcHSYNISexDi3mTWd+S/UJ7zfaFk489f6XLep4dS48n/K4EBs+Ow+xZBVXh
+         bmyetuH2SCiI/GJJcRPt54/GIpxmlkthjbk7np/FRlrjp1W90VTfyxX37h5Cl30/FD
+         OhzGvrzYqoYhQ==
+Date:   Fri, 30 Dec 2022 23:54:25 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 001/606] tpm: st33zp24: Convert to Convert to i2c's
+ .probe_new()
+Message-ID: <Y696MSvhEUWlHSoK@kernel.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-2-uwe@kleine-koenig.org>
+ <20221216090904.qlekgvtpriijmvay@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next 2/2] net: ipa: add IPA v4.7 support
-Content-Language: en-US
-From:   Alex Elder <elder@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     andersson@kernel.org, agross@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, elder@kernel.org,
-        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>
-References: <20221208211529.757669-1-elder@linaro.org>
- <20221208211529.757669-3-elder@linaro.org>
- <47b2fb29-1c2e-db6e-b14f-6dfe90341825@linaro.org>
- <fa6d342e-0cfe-b870-b044-b0af476e3905@linaro.org>
- <48bef9dd-b71c-b6aa-e853-1cf821e88b50@linaro.org>
- <20b2f7c3-6481-eabf-7c46-f5f38d258c62@linaro.org>
-In-Reply-To: <20b2f7c3-6481-eabf-7c46-f5f38d258c62@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221216090904.qlekgvtpriijmvay@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,19 +67,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/30/22 11:28 AM, Alex Elder wrote:
+I picked it now.
+
+BR, Jarkko
+
+On Fri, Dec 16, 2022 at 10:09:04AM +0100, Uwe Kleine-König wrote:
+> Hello,
 > 
-> Anyway, for a given SoC, the whole IMEM region is used
-> by different entities.Â  For SM7550, for example, it is
+> while rebasing my series onto today's next I noticed the Subject being
+> broken:
+> 
+> 	$Subject ~= s/Convert to //
+> 
+> Apart from that I wonder who feels responsible to apply this patch (and
+> the other tpm patches in this series). They got an Ack by Jarkko, but
+> didn't appear in next.
+> 
+> The plan for this series is not to apply to a single tree, but let the
+> subsystem maintainers take their patches. I'd be happy if you consider
+> them for the next merge window.
+> 
+> Should I resend the tpm patches (with the subject fixed) once v6.2-rc1
+> is published?
+> 
+> Note that 662233731d66 ("i2c: core: Introduce i2c_client_get_device_id
+> helper function") is already in Linus' tree, so if your tree is new
+> enough (say v6.2-rc1 then) you don't need to care for this dependency.
+> 
+> Best regards and thanks
+> Uwe
+> 
+> -- 
+> Pengutronix e.K.                           | Uwe Kleine-König            |
+> Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-NOTE:  This is a typo.  I meant SM7250 above.
 
-> divided into 6 parts of various sizes (100KB, 24KB, 32KB,
-> 8KB, 8KB, and 4KB).Â  For IPA on this SoC, the offset is
-> 0x146a9000, with size 0x2000.Â  Hence the range defined
-> above.
-
-Konrad pointed out the error, I just want to be sure
-it's corrected so it's clear...
-
-					-Alex
