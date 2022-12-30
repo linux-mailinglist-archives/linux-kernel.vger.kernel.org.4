@@ -2,65 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA84C65942C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 03:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AD365942F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 03:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiL3CWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 21:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S234333AbiL3CY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 21:24:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiL3CWa (ORCPT
+        with ESMTP id S229667AbiL3CYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 21:22:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E6A60F6;
-        Thu, 29 Dec 2022 18:22:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED4676195E;
-        Fri, 30 Dec 2022 02:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEABC433D2;
-        Fri, 30 Dec 2022 02:22:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672366949;
-        bh=nKnAUzAGtaNsOyNHfeMz9+XTv6Ka1NzOGQRLHLJdiVM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GNyvDKvnL39Ewu85kv9/6udSEiR8NvCQCdzF0s3O4Hm71xAQx9hSOstrw+ON9uHrf
-         TDZd5yN1KkkQ6dfMYVzhkFu2Le2e+gkIMYzQmN79S4pRP5XFE+UyEXpydCnCgd9QZI
-         Co1Ttvb3FpDDYc7L+MAxE3i1Ufe3Nt3eEqIL8cMl6V+onkHuS/mLwNaOmASqRDvbtL
-         +UZZ9rnRKAwox6RS9BJKrxnVgIWiPSiVukicDiAtFN1KAbmZZVbWeKjNyOMxFmgHPS
-         Ty0n+PM2PpNqPJ46nWa//vbe0BPI3l2n5anwkIdrBJ/8kBepZg5CF2BbCDM9nTAqOl
-         Uz0OHwkiarqEQ==
-Date:   Thu, 29 Dec 2022 18:22:27 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [RESEND PATCH net v1] drivers/net/bonding/bond_3ad: return when
- there's no aggregator
-Message-ID: <20221229182227.5de48def@kernel.org>
-In-Reply-To: <20221226084353.1914921-1-d-tatianin@yandex-team.ru>
-References: <20221226084353.1914921-1-d-tatianin@yandex-team.ru>
+        Thu, 29 Dec 2022 21:24:54 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1D5A449;
+        Thu, 29 Dec 2022 18:24:53 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id gv5-20020a17090b11c500b00223f01c73c3so19550650pjb.0;
+        Thu, 29 Dec 2022 18:24:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qVZagi5Inm8vBRKD6M4Ob3Jab/hykkOo7yIFD6FDUbk=;
+        b=SXQuGYUtC281D9JqcB98uR2U9NeB0mdrU24ULYgeonfbvQs4eU0M3dfBPvPSz0js+n
+         oKWi6kLsqO3cgqe2ld1PR3TAoM6eiBRJfjA+XwB++v9ROGWP8/OEY/AIQKq4njlp7hh8
+         n5ZHLmI3w6KKHQYXKnQQmZyQVRX97Y6rt5IinyxT6WeHtBEOz7CrQ6adeM6mptYWERiI
+         9VlpeWzWfLBqC6ROUfQaSqTRO6f4/LS1J53Q8Iw9RNBw8mxJCp8PjH+pZskzopbfLsUb
+         Wibf331CaXABWr3ttNZzaKAWao9Qr6ct07HVoaNIIlBFa9X6O72AIw5OT6W1T/w8YrN9
+         76wA==
+X-Gm-Message-State: AFqh2kq9ijPbGd2hhr2SCq5be/kmzahnLo+SKw3j/9avQfpNVyVXyYuP
+        QVZX0+34pNeVVox0xdVTtUloFnWAerd6Lw==
+X-Google-Smtp-Source: AMrXdXt7nnvR7LM+VuxWUlsr7o/pMTmikYR4YXwkhcuo7CRtuNq1zocRxPR1rEnA51tzslrRWIYdZg==
+X-Received: by 2002:a17:903:2652:b0:192:8e0a:16b with SMTP id je18-20020a170903265200b001928e0a016bmr10205168plb.14.1672367093362;
+        Thu, 29 Dec 2022 18:24:53 -0800 (PST)
+Received: from localhost ([116.128.247.22])
+        by smtp.gmail.com with ESMTPSA id n5-20020a170902e54500b0018971fba556sm10855964plf.139.2022.12.29.18.24.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 18:24:52 -0800 (PST)
+From:   Hongyu Xie <xiehongyu1@kylinos.cn>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Hongyu Xie <xiehongyu1@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH v4 -next] fs: coredump: using preprocessor directives for dump_emit_page
+Date:   Fri, 30 Dec 2022 10:24:46 +0800
+Message-Id: <20221230022446.448179-1-xiehongyu1@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Dec 2022 11:43:53 +0300 Daniil Tatianin wrote:
-> Otherwise we would dereference a NULL aggregator pointer when calling
-> __set_agg_ports_ready on the line below.
+When CONFIG_COREDUMP is set and CONFIG_ELF_CORE is not, you'll get warnings
+like:
+fs/coredump.c:841:12: error: ‘dump_emit_page’ defined but not used
+[-Werror=unused-function]
+841 | static int dump_emit_page(struct coredump_params *cprm, struct
+page *page)
 
-Fixes tag, please?
+dump_emit_page only called in dump_user_range, since dump_user_range
+using #ifdef preprocessor directives, use #ifdef for dump_emit_page too.
+
+Fixes: 06bbaa6dc53c ("[coredump] don't use __kernel_write() on kmap_local_page()")
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+---
+
+v4: modify commit msg
+
+v3: add reported by
+
+v2: change sending mail address
+ fs/coredump.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/fs/coredump.c b/fs/coredump.c
+index de78bde2991b..95390a73b912 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -838,6 +838,7 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
+ 	}
+ }
+ 
++#ifdef CONFIG_ELF_CORE
+ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+ {
+ 	struct bio_vec bvec = {
+@@ -870,6 +871,7 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+ 
+ 	return 1;
+ }
++#endif
+ 
+ int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
+ {
+-- 
+2.34.1
+
