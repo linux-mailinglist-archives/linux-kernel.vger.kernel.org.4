@@ -2,314 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCF06597BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70A36597CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234941AbiL3LeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 06:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        id S234974AbiL3Ljt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 06:39:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235042AbiL3Ldu (ORCPT
+        with ESMTP id S234877AbiL3Ljn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 06:33:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AD41ADA1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 03:32:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672399946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w4EOTaScDiWLOjXXokoUDPMj1ubuks55AAvOUz+Vx7M=;
-        b=MQ/AWFJulqeiMCXqt8Rntl9/bVSZ/uDuWmjE7SDIghg25FfkEeAk411OINlHnXtaXL1npv
-        24sX+xJJD/PZjz0Ymadzf4UjO9JNpz8k0u6f6hAa//Q4kvBChCP0aUaonZvMQg/oFsz/AT
-        yAzpnNNyI430CoGfUMB/CqE+fyzu+pk=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-218-iTzVXCrLPiSUpF9TIpJR6g-1; Fri, 30 Dec 2022 06:32:25 -0500
-X-MC-Unique: iTzVXCrLPiSUpF9TIpJR6g-1
-Received: by mail-wm1-f69.google.com with SMTP id i7-20020a05600c354700b003d62131fe46so14128053wmq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 03:32:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w4EOTaScDiWLOjXXokoUDPMj1ubuks55AAvOUz+Vx7M=;
-        b=ExPgG/QI3PPLukDzJU3MhUXPVty5ZCvIUJsCLtTfI7SER2/RyFi/AFYQOAi0c+3uOo
-         0tvxbiyTtevyZTmX82rlt2VHcSMTTygs31qYDJ3UoI6WFz/xPa/WI71Bwu7nkvXXQ8mS
-         nLlJ84MkSSaBpd46FIPLisVf0a7yt2EXFZgxPqSVu0x8lVG/bGIeWMllZGjRgGp2kPRz
-         0vNjFWbtqSgPp121eFTmP+k6m0ffvtOHTay8S2bHxFFhl+4MDFPPp/5dgBF5tmQkxt7d
-         BipMJPHasPk6I+j3pUIWQYITwGdctqUq1ucCUrIFhgOOSmAcJf/JQAMUtnpP49E8+Sgc
-         EvNQ==
-X-Gm-Message-State: AFqh2koFPL4RFy9ezSJu2V6SqKzOsYvNXB9Vxh7pNnwZGm7HrHfLzcpe
-        Osb+o8MAa6riE/M969jdhwsOhMSccyViuX8FelElTF9prqDTGWLWYe7zKV37j2anY2h4ugHeSX5
-        GuUqw16Z3YQ6VLtYoG+W5OaL3cWp/mdIm+SkvdfTHep7pwjEs0qut5e7gHCms1Wo+i5L92JSXLZ
-        I=
-X-Received: by 2002:a05:600c:b4d:b0:3d3:49db:d84 with SMTP id k13-20020a05600c0b4d00b003d349db0d84mr21984106wmr.20.1672399943578;
-        Fri, 30 Dec 2022 03:32:23 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXszsZjoNFeeeWYKKgDciXJIvKKmm+zGF6f73kyyeBdYo9aUbjRSrQkAKNWWoxHRxaiR62Fjaw==
-X-Received: by 2002:a05:600c:b4d:b0:3d3:49db:d84 with SMTP id k13-20020a05600c0b4d00b003d349db0d84mr21984072wmr.20.1672399943254;
-        Fri, 30 Dec 2022 03:32:23 -0800 (PST)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id y22-20020a1c4b16000000b003d01b84e9b2sm27638432wma.27.2022.12.30.03.32.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 03:32:22 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Kamil=20Trzci=C5=84ski?= <ayufan@ayufan.eu>,
-        Martijn Braam <martijn@brixit.nl>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Robert Mader <robert.mader@posteo.de>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
-        dri-devel@lists.freedesktop.org, Ondrej Jirman <megi@xff.cz>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Neal Gompa <ngompa13@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH v4 4/4] arm64: dts: rk3399-pinephone-pro: Add internal display support
-Date:   Fri, 30 Dec 2022 12:31:54 +0100
-Message-Id: <20221230113155.3430142-5-javierm@redhat.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221230113155.3430142-1-javierm@redhat.com>
-References: <20221230113155.3430142-1-javierm@redhat.com>
+        Fri, 30 Dec 2022 06:39:43 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C66F1ADB7
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 03:39:40 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-79-WrOCWDbRMD26Er3ijSrmqw-1; Fri, 30 Dec 2022 11:39:37 +0000
+X-MC-Unique: WrOCWDbRMD26Er3ijSrmqw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Dec
+ 2022 11:39:35 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Fri, 30 Dec 2022 11:39:35 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Holger Lubitz' <holger.lubitz@t-online.de>,
+        'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>
+Subject: RE: [PATCH v2] kbuild: treat char as always unsigned
+Thread-Topic: [PATCH v2] kbuild: treat char as always unsigned
+Thread-Index: AQHZFV6o8tF/XYcvI0qqEtVNYsUlXa55tQ3wgAMV4YCACXsZ8A==
+Date:   Fri, 30 Dec 2022 11:39:35 +0000
+Message-ID: <357cbd67260040e4bcf17d519aaafdcb@AcuMS.aculab.com>
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
+         <20221019203034.3795710-1-Jason@zx2c4.com>
+         <20221221145332.GA2399037@roeck-us.net>
+         <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
+         <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
+         <20221221155641.GB2468105@roeck-us.net>
+         <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
+         <b2144334261246aa8dc5004c5f1a58c9@AcuMS.aculab.com>
+ <f02e0ac7f2d805020a7ba66803aaff3e31b5eeff.camel@t-online.de>
+In-Reply-To: <f02e0ac7f2d805020a7ba66803aaff3e31b5eeff.camel@t-online.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Jirman <megi@xff.cz>
-
-The phone's display is using Hannstar LCD panel, and Goodix based
-touchscreen. Support it.
-
-Signed-off-by: Ondrej Jirman <megi@xff.cz>
-Co-developed-by: Martijn Braam <martijn@brixit.nl>
-Signed-off-by: Martijn Braam <martijn@brixit.nl>
-Co-developed-by: Kamil Trzciński <ayufan@ayufan.eu>
-Signed-off-by: Kamil Trzciński <ayufan@ayufan.eu>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Tested-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
----
-
-Changes in v4:
-- Add Tom Fitzhenry's Tested-by tag.
-- Keep the DTS nodes sorted alphabetically (Tom Fitzhenry).
-
-Changes in v2:
-- Fix regulator node names (Maya Matuszczyk).
-- Drop non-existent "poweroff-in-suspend" property (Maya Matuszczyk).
-- Remove unnecessary comments in panel node (Maya Matuszczyk).
-
- .../dts/rockchip/rk3399-pinephone-pro.dts     | 123 ++++++++++++++++++
- 1 file changed, 123 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-index 04403a76238b..0d48fbc5dbe4 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-@@ -25,6 +25,12 @@ aliases {
- 		mmc2 = &sdhci;
- 	};
- 
-+	backlight: backlight {
-+		compatible = "pwm-backlight";
-+		pwms = <&pwm0 0 1000000 0>;
-+		pwm-delay-us = <10000>;
-+	};
-+
- 	chosen {
- 		stdout-path = "serial2:115200n8";
- 	};
-@@ -82,6 +88,32 @@ vcc1v8_codec: vcc1v8-codec-regulator {
- 		vin-supply = <&vcc3v3_sys>;
- 	};
- 
-+	/* MIPI DSI panel 1.8v supply */
-+	vcc1v8_lcd: vcc1v8-lcd-regulator {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		regulator-name = "vcc1v8_lcd";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vcc3v3_sys>;
-+		gpio = <&gpio3 RK_PA5 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&display_pwren1>;
-+	};
-+
-+	/* MIPI DSI panel 2.8v supply */
-+	vcc2v8_lcd: vcc2v8-lcd-regulator {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		regulator-name = "vcc2v8_lcd";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		vin-supply = <&vcc3v3_sys>;
-+		gpio = <&gpio3 RK_PA1 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&display_pwren>;
-+	};
-+
- 	wifi_pwrseq: sdio-wifi-pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		clocks = <&rk818 1>;
-@@ -132,6 +164,11 @@ &emmc_phy {
- 	status = "okay";
- };
- 
-+&gpu {
-+	mali-supply = <&vdd_gpu>;
-+	status = "okay";
-+};
-+
- &i2c0 {
- 	clock-frequency = <400000>;
- 	i2c-scl-rising-time-ns = <168>;
-@@ -214,6 +251,9 @@ vcc3v0_touch: LDO_REG2 {
- 				regulator-name = "vcc3v0_touch";
- 				regulator-min-microvolt = <3000000>;
- 				regulator-max-microvolt = <3000000>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
- 			};
- 
- 			vcca1v8_codec: LDO_REG3 {
-@@ -347,6 +387,25 @@ opp07 {
- 	};
- };
- 
-+&i2c3 {
-+	i2c-scl-rising-time-ns = <450>;
-+	i2c-scl-falling-time-ns = <15>;
-+	status = "okay";
-+
-+	touchscreen@14 {
-+		compatible = "goodix,gt917s";
-+		reg = <0x14>;
-+		interrupt-parent = <&gpio3>;
-+		interrupts = <RK_PB5 IRQ_TYPE_EDGE_RISING>;
-+		irq-gpios = <&gpio3 RK_PB5 GPIO_ACTIVE_HIGH>;
-+		reset-gpios = <&gpio3 RK_PB4 GPIO_ACTIVE_HIGH>;
-+		AVDD28-supply = <&vcc3v0_touch>;
-+		VDDIO-supply = <&vcc3v0_touch>;
-+		touchscreen-size-x = <720>;
-+		touchscreen-size-y = <1440>;
-+	};
-+};
-+
- &io_domains {
- 	bt656-supply = <&vcc1v8_dvp>;
- 	audio-supply = <&vcca1v8_codec>;
-@@ -355,6 +414,40 @@ &io_domains {
- 	status = "okay";
- };
- 
-+&mipi_dsi {
-+	status = "okay";
-+	clock-master;
-+
-+	ports {
-+		mipi_out: port@1 {
-+			#address-cells = <0>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+
-+			mipi_out_panel: endpoint {
-+				remote-endpoint = <&mipi_in_panel>;
-+			};
-+		};
-+	};
-+
-+	panel@0 {
-+		compatible = "hannstar,hsd060bhw4", "himax,hx8394";
-+		reg = <0>;
-+		backlight = <&backlight>;
-+		reset-gpios = <&gpio4 RK_PD1 GPIO_ACTIVE_LOW>;
-+		vcc-supply = <&vcc2v8_lcd>;
-+		iovcc-supply = <&vcc1v8_lcd>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&display_rst_l>;
-+
-+		port {
-+			mipi_in_panel: endpoint {
-+				remote-endpoint = <&mipi_out_panel>;
-+			};
-+		};
-+	};
-+};
-+
- &pmu_io_domains {
- 	pmu1830-supply = <&vcc_1v8>;
- 	status = "okay";
-@@ -367,6 +460,20 @@ pwrbtn_pin: pwrbtn-pin {
- 		};
- 	};
- 
-+	dsi {
-+		display_rst_l: display-rst-l {
-+			rockchip,pins = <4 RK_PD1 RK_FUNC_GPIO &pcfg_pull_down>;
-+		};
-+
-+		display_pwren: display-pwren {
-+			rockchip,pins = <3 RK_PA1 RK_FUNC_GPIO &pcfg_pull_down>;
-+		};
-+
-+		display_pwren1: display-pwren1 {
-+			rockchip,pins = <3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_down>;
-+		};
-+	};
-+
- 	pmic {
- 		pmic_int_l: pmic-int-l {
- 			rockchip,pins = <1 RK_PC5 RK_FUNC_GPIO &pcfg_pull_up>;
-@@ -408,6 +515,10 @@ bt_reset_pin: bt-reset-pin {
- 	};
- };
- 
-+&pwm0 {
-+	status = "okay";
-+};
-+
- &sdio0 {
- 	bus-width = <4>;
- 	cap-sd-highspeed;
-@@ -472,3 +583,15 @@ bluetooth {
- &uart2 {
- 	status = "okay";
- };
-+
-+&vopb {
-+	status = "okay";
-+	assigned-clocks = <&cru DCLK_VOP0_DIV>, <&cru DCLK_VOP0>,
-+			  <&cru ACLK_VOP0>, <&cru HCLK_VOP0>;
-+	assigned-clock-rates = <0>, <0>, <400000000>, <100000000>;
-+	assigned-clock-parents = <&cru PLL_CPLL>, <&cru DCLK_VOP0_FRAC>;
-+};
-+
-+&vopb_mmu {
-+	status = "okay";
-+};
--- 
-2.38.1
+RnJvbTogSG9sZ2VyIEx1Yml0eg0KPiBTZW50OiAyNCBEZWNlbWJlciAyMDIyIDA5OjM0DQo+IA0K
+PiBPbiBUaHUsIDIwMjItMTItMjIgYXQgMTA6NDEgKzAwMDAsIERhdmlkIExhaWdodCB3cm90ZToN
+Cj4gPiBJIHdvbmRlciBob3cgbXVjaCBzbG93ZXIgaXQgaXMgLSBtNjhrIGlzIGxpa2VseSB0byBi
+ZSBtaWNyb2NvZGVkDQo+ID4gYW5kIEkgZG9uJ3QgdGhpbmsgaW5zdHJ1Y3Rpb24gdGltaW5ncyBh
+cmUgYWN0dWFsbHkgYXZhaWxhYmxlLg0KPiANCj4gTm90IHN1cmUgaWYgdGhlc2UgYXJlIGluIGFu
+eSB3YXkgb2ZmaWNpYWwsIGJ1dA0KPiBodHRwOi8vb2xkd3d3Lm52Zy5udG51Lm5vL2FtaWdhL01D
+NjgweDBfU2VjdGlvbnMvbWM2ODAzMHRpbWluZy5IVE1MDQoNCkkgdGhvdWdodCBhYm91dCB0aGF0
+IHNvbWUgbW9yZSBhbmQgcmVtZW1iZXIgc2VlaW5nIG1lbW9yeSB0aW1pbmdzDQpvbiBhIGxvZ2lj
+IGFuYWx5c2VyIC0gYW5kIGdldHRpbmcgdGltaW5ncyB0aGF0IChtb3JlIG9yIGxlc3MpDQppbXBs
+aWVkIHNlcXVlbnRpYWwgZXhlY3V0aW9uIGxpbWl0ZWQgYnkgdGhlIG9idmlvdXMgbWVtb3J5IChj
+YWNoZSkNCmFjY2Vzc2VzLg0KDQpUaGUgbWljcm9jb2RpbmcgaXMgbW9yZSBhcHBhcmVudCBpbiB0
+aGUgbGFyZ2UgbWlkLWluc3RydWN0aW9uDQppbnRlcnJ1cHQgc3RhY2sgZnJhbWVzIC0gZWcgZm9y
+IHBhZ2UgZmF1bHRzLg0KDQoNCj4gDQo+IChUaGVyZSdzIGFsc28NCj4gaHR0cDovL29sZHd3dy5u
+dmcubnRudS5uby9hbWlnYS9NQzY4MHgwX1NlY3Rpb25zL21jNjgwMDB0aW1pbmcuSFRNTA0KPiBi
+dXQgdGhhdCBpcyBwcm9iYWJseSBvbmx5IGludGVyZXN0aW5nIHRvIGRlbW8gY29kZXJzIGJ5IG5v
+dykNCj4gDQo+ID4gVGhlIGZhc3Rlc3QgdmVyc2lvbiBwcm9iYWJseSB1c2VzIHN1YnggKHdpdGgg
+Y2FycnkpIHRvIGdlbmVyYXRlDQo+ID4gMC8tMSBhbmQgbGVhdmVzICtkZWx0YSBmb3IgdGhlIG90
+aGVyIHJlc3VsdCAtIGJ1dCBnZXR0aW5nIHRoZQ0KPiA+IGNvbXBhcmVzIGFuZCBicmFuY2hlcyBp
+biB0aGUgcmlnaHQgb3JkZXIgaXMgaGFyZC4NCj4gDQo+IEd1ZXNzIGl0IG11c3QgaGF2ZSBiZWVu
+IG92ZXIgMjAgeWVhcnMgc2luY2UgSSB3cm90ZSBhbnkgNjhrIGFzbSwgYnV0DQo+IG5vdyBJIGFj
+dHVhbGx5IGVuZGVkIHVwIGluc3RhbGxpbmcgRGViaWFuIG9uIHFlbXUgdG8gZXhwZXJpbWVudC4N
+Cj4gDQo+IFRoZXJlIGFyZSB0d28gaW50ZXJlc3RpbmcgZGlmZmVyZW5jZXMgYmV0d2VlbiA2OGsg
+YW5kIHg4NiB0aGF0IGNhbiBiZQ0KPiB1c2VmdWwgaGVyZTogVW5saWtlIHg4NiwgTU9WIG9uIDY4
+ayBzZXRzIHRoZSBmbGFncy4gQW5kIGFsc28sIHN1YngNCj4gZGlmZmVycyBmcm9tIHNiYiBpbiB0
+aGF0IGl0IHJlc2V0cyB0aGUgemVybyBmbGFnIG9uIGEgbm9uLXplcm8gcmVzdWx0LA0KPiBidXQg
+ZG9lcyBub3Qgc2V0IGl0IG9uIGEgemVybyByZXN1bHQuIFNvIGlmIGl0IGlzIHNldCwgaXQgbXVz
+dCBoYXZlDQo+IGJlZW4gc2V0IGJlZm9yZS4NCj4gDQo+IEhlcmUgYXJlIHRoZSB0d28gZnVuY3Rp
+b25zIEkgY2FtZSB1cCB3aXRoICh0ZXN0ZWQgb25seSBzdGFuZC1hbG9uZSwgbm90DQo+IGluIGEg
+a2VybmVsIGJ1aWxkLiBBbHNvIG5vIGJlbmNobWFya3MgYmVjYXVzZSB0aGlzIDY4MDQwIGlzIG9u
+bHkNCj4gZW11bGF0ZWQpDQo+ICMxIChvcHRpbWl6ZWQgZm9yIG1pbmltdW0gaW5zdHJ1Y3Rpb24g
+Y291bnQgaW4gbG9vcCwNCj4gICAgIDY4ayArIENvbGRmaXJlIElTQV9CKQ0KPiANCj4gaW50IHN0
+cmNtcDEoY29uc3QgY2hhciAqY3MsIGNvbnN0IGNoYXIgKmN0KQ0KPiB7DQo+ICAgICAgICAgaW50
+IHJlczsNCj4gDQo+ICAgICAgICAgYXNtICgiXG4iDQo+ICAgICAgICAgICAgICAgICAiMTogbW92
+ZS5iICAoJTApKywlMlxuIiAgLyogZ2V0ICpjcyAqLw0KPiAgICAgICAgICAgICAgICAgIiAgIGpl
+cSAgICAgMmZcbiIgICAgICAgIC8qIGVuZCBvZiBmaXJzdCBzdHJpbmc/ICovDQo+ICAgICAgICAg
+ICAgICAgICAiICAgY21wLmIgICAoJTEpKywlMlxuIiAgLyogY29tcGFyZSAqY3QgKi8NCj4gICAg
+ICAgICAgICAgICAgICIgICBqZXEgICAgIDFiXG4iICAgICAgICAvKiBpZiBlcXVhbCwgY29udGlu
+dWUgKi8NCj4gICAgICAgICAgICAgICAgICIgICBqcmEgICAgIDNmXG4iICAgICAgICAvKiBlbHNl
+IHNraXAgdG8gdGFpbCAqLw0KPiAgICAgICAgICAgICAgICAgIjI6IGNtcC5iICAgKCUxKSssJTJc
+biIgIC8qIGNvbXBhcmUgb25lIGxhc3QgYnl0ZSAqLw0KPiAgICAgICAgICAgICAgICAgIjM6IHN1
+YngubCAgJTIsICUyXG4iICAgIC8qIC0xIGlmIGJvcnJvdywgMCBpZiBub3QgKi8NCj4gICAgICAg
+ICAgICAgICAgICIgICBqbHMgICAgIDRmXG4iICAgICAgICAvKiBpZiBzZXQsIHogaXMgZnJvbSBz
+dWIuYiAqLw0KDQpUaGUgc3VieCB3aWxsIHNldCBaIHVubGVzcyBDIHdhcyBzZXQuDQpTbyB0aGF0
+IGRvZXNuJ3Qgc2VlbSByaWdodC4NCg0KPiAgICAgICAgICAgICAgICAgIiAgIG1vdmVxLmwgIzEs
+ICUyXG4iICAgIC8qIDEgaWYgIWJvcnJvdyAgKi8NCj4gICAgICAgICAgICAgICAgICI0OiINCj4g
+ICAgICAgICAgICAgICAgIDogIithIiAoY3MpLCAiK2EiIChjdCksICI9ZCIgKHJlcykpOw0KPiAg
+ICAgICAgIHJldHVybiByZXM7DQo+IH0NCg0KSSB0aGluayB0aGlzIHNob3VsZCB3b3JrOg0KKEJ1
+dCB0aGUgamMgbWlnaHQgbmVlZCB0byBiZSBqbmMuKQ0KDQogICAgICAgICAgICAgICAgICIgICBt
+b3ZlcS5sICMwLCUyXG4iICAgICAvKiB6ZXJvIGhpZ2ggYml0cyBvZiByZXN1bHQgKi8NCiAgICAg
+ICAgICAgICAgICAgIjE6IG1vdmUuYiAgKCUxKSssJTJcbiIgIC8qIGdldCAqY3QgKi8NCiAgICAg
+ICAgICAgICAgICAgIiAgIGplcSAgICAgMmZcbiIgICAgICAgIC8qIGVuZCBvZiBzZWNvbmQgc3Ry
+aW5nPyAqLw0KICAgICAgICAgICAgICAgICAiICAgY21wLmIgICAoJTApKywlMlxuIiAgLyogY29t
+cGFyZSAqY3MgKi8NCiAgICAgICAgICAgICAgICAgIiAgIGplcSAgICAgMWJcbiIgICAgICAgIC8q
+IGlmIGVxdWFsLCBjb250aW51ZSAqLw0KICAgICAgICAgICAgICAgICAiICAgamMgICAgICA0ZiAg
+ICAgICAgICAgLyogcmV0dXJuICt2ZSAqLw0KICAgICAgICAgICAgICAgICAiICAgbW92ZXEubCAj
+LTEsICUyXG4iICAgLyogcmV0dXJuIC12ZSAqLw0KICAgICAgICAgICAgICAgICAiICAganJhICAg
+ICA0ZlxuIg0KICAgICAgICAgICAgICAgICAiMjogbW92ZS5iICAoJTApLCUyXG4iICAgLyogY2hl
+Y2sgZm9yIG1hdGNoaW5nIHN0cmluZ3MgKi8NCiAgICAgICAgICAgICAgICAgIjQ6Ig0KDQoNCj4g
+IzIgKG9wdGltaXplZCBmb3IgbWluaW11bSBjb2RlIHNpemUsDQo+ICAgICBDb2xkZmlyZSBJU0Ff
+QSBjb21wYXRpYmxlKQ0KPiANCj4gaW50IHN0cmNtcDIoY29uc3QgY2hhciAqY3MsIGNvbnN0IGNo
+YXIgKmN0KQ0KPiB7DQo+ICAgICAgICAgaW50IHJlcyA9IDAsIHRtcCA9IDA7DQo+IA0KPiAgICAg
+ICAgIGFzbSAoIlxuIg0KPiAgICAgICAgICAgICAgICAgIjE6IG1vdmUuYiAoJTApKywlMlxuIiAv
+KiBnZXQgKmNzICovDQo+ICAgICAgICAgICAgICAgICAiICAgbW92ZS5iICglMSkrLCUzXG4iIC8q
+IGdldCAqY3QgKi8NCj4gICAgICAgICAgICAgICAgICIgICBzdWJ4LmwgJTMsJTJcbiIgICAgLyog
+Y29tcGFyZSBhIGJ5dGUgKi8NCj4gICAgICAgICAgICAgICAgICIgICBqZXEgICAgMmZcbiIgICAg
+ICAgLyogYm90aCBpbnB1dHMgd2VyZSB6ZXJvICovDQoNClRoYXQgZG9lc24ndCBzZWVtIHJpZ2h0
+Lg0KWiB3aWxsIGJlIHNldCBpZiBlaXRoZXIgKmN0IGlzIHplcm8gb3IgdGhlIGJ5dGVzIG1hdGNo
+Lg0KDQo+ICAgICAgICAgICAgICAgICAiICAgdHN0LmwgICUyXG4iICAgICAgIC8qIGNoZWNrIHJl
+c3VsdCAqLw0KDQpUaGlzIG9ubHkgc2V0cyBaIHdoZW4gaXQgd2FzIGFscmVhZHkgc2V0IGJ5IHRo
+ZSBzdWJ4Lg0KDQo+ICAgICAgICAgICAgICAgICAiICAgamVxICAgIDFiXG4iICAgICAgIC8qIGlm
+IHplcm8sIGNvbnRpbnVlICovDQo+ICAgICAgICAgICAgICAgICAiMjoiDQo+ICAgICAgICAgICAg
+ICAgICA6ICIrYSIgKGNzKSwgIithIiAoY3QpLCAiK2QiIChyZXMpLCAiK2QiICh0bXApKTsNCj4g
+ICAgICAgICByZXR1cm4gcmVzOw0KPiB9DQo+IA0KPiBIb3dldmVyLCB0aGlzIG9uZSBuZWVkcyBy
+ZXMgYW5kIHRtcCB0byBiZSBzZXQgdG8gemVybywgYmVjYXVzZSB3ZSByZWFkDQo+IG9ubHkgYnl0
+ZXMgKG5vIGF1dG9tYXRpYyB6ZXJvLWV4dGVuZCBvbiA2OGspLCBidXQgdGhlbiBkbyBhIGxvbmcN
+Cj4gb3BlcmF0aW9uIG9uIHRoZW0uIENvbGRmaXJlIElTQV9BIGRyb3BwZWQgY21wYiwgaXQgb25s
+eSByZWFwcGVhcmVkIGluDQo+IElTQV9CLg0KPiANCj4gU28gdGhlIHJlYWwgaW5zdHJ1Y3Rpb24g
+Y291bnQgaXMgbGlrZWx5IHRvIGJlIHR3byBtb3JlLCB1bmxlc3MgZ2NjDQo+IGhhcHBlbnMgdG8g
+aGF2ZSBvbmUgb3IgdHdvIHplcm9zIGl0IGNhbiByZXVzZS4NCj4gDQo+ID4gSSBiZWxpZXZlIHNv
+bWUgb2YgdGhlIG90aGVyIG02OGsgYXNtIGZ1bmN0aW9ucyBhcmUgYWxzbyBtaXNzaW5nDQo+ID4g
+dGhlICJtZW1vcnkiICdjbG9iYmVyJyBhbmQgc28gY291bGQgZ2V0IG1pcy1vcHRpbWlzZWQuDQo+
+IA0KPiBJbiB3aGljaCBjYXNlIHdvdWxkIHRoYXQgaGFwcGVuPyBUaGlzIGZ1bmN0aW9uIGRvZXNu
+J3QgY2xvYmJlciBtZW1vcnkNCj4gYW5kIGl0cyByZXN1bHQgZG9lcyBnZXQgdXNlZC4gSWYgZ2Nj
+IG1pc3Rha2VubHkgdGhpbmtzIHRoZSBwYXJhbWV0ZXJzDQo+IGhhdmVuJ3QgY2hhbmdlZCBhbmQg
+dXNlcyBhIHByZXZpb3VzbHkgY2FjaGVkIHJlc3VsdCwgd291bGRuJ3QgdGhhdA0KPiBhcHBseSB0
+byBhIEMgZnVuY3Rpb24gdG9vPw0KDQpZb3UgbmVlZCBhIG1lbW9yeSAnY2xvYmJlcicgb24gYW55
+dGhpbmcgdGhhdCBSRUFEUyBtZW1vcnkgYXMgd2VsbA0KYXMgd3JpdGVzIGl0Lg0KDQo+ID4gV2hp
+bGUgSSBjYW4gd3JpdGUgKG9yIHJhdGhlciBoYXZlIHdyaXR0ZW4pIG02OGsgYXNtIEkgZG9uJ3Qg
+aGF2ZQ0KPiA+IGEgY29tcGlsZXIuDQo+IA0KPiBXZWxsLCBJIG5vdyBoYXZlIGFuIGVtdWxhdGVk
+IFF1YWRyYSA4MDAgcnVubmluZyBEZWJpYW4gNjhrLihHZXR0aW5nIHRoZQ0KPiBlbXVsYXRlZCBu
+ZXR3b3JraW5nIHRvIHdvcmsgcmVsaWFibHkgd2FzIGEgYml0IHByb2JsZW1hdGljLCB0aG91Z2gu
+IEJ1dA0KPiBub3cgaXQgcnVucyBLZXJuZWwgNi4wKSBxZW11IGNvdWxkIGVtdWxhdGUgQ29sZGZp
+cmUgdG9vLCBidXQgSSBhbSBub3QNCj4gc3VyZSB3aGVyZSBJIHdvdWxkIGZpbmQgYSBkaXN0cmli
+dXRpb24gZm9yIHRoYXQuDQo+IA0KPiBJIGRpZCBub3QgYXR0YWNoIGEgcGF0Y2ggYmVjYXVzZSBp
+dCBzZWVtcyBhbHJlYWR5IHRvIGJlIGRlY2lkZWQgdGhhdA0KPiB0aGUgZnVuY3Rpb24gaXMgZ29u
+ZS4gQnV0IHNob3VsZCBhbnlvbmUgc3RpbGwgd2FudCB0byBpbmNsdWRlIG9uZSAob3INCj4gYm90
+aCkgb2YgdGhlc2UgZnVuY3Rpb25zLCBqdXN0IGdpdmUgY3JlZGl0IHRvIG1lIGFuZCBJJ20gZmlu
+ZS4NCg0KVGhpbmtpbmcgZnVydGhlciB0aGUgZmFzdGVzdCBzdHJjbXAoKSBwcm9iYWJseSB1c2Vz
+IGJpZy1lbmRpYW4gd29yZCBjb21wYXJlcw0Kd2l0aCBhIGNoZWNrIGZvciBhIHplcm8gYnl0ZS4N
+CkVzcGVjaWFsbHkgb24gNjQgYml0IHN5c3RlbXMgdGhhdCBzdXBwb3J0IG1pc2FsaWduZWQgbG9h
+ZHMuDQpCdXQgSSdkIG5lZWQgdG8gdGhpbmsgaGFyZCBhYm91dCB0aGUgYWN0dWFsIGRldGFpbHMu
+DQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9h
+ZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBO
+bzogMTM5NzM4NiAoV2FsZXMpDQo=
 
