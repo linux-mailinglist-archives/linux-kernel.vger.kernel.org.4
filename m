@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330CB6599BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 16:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB606599C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 16:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiL3Pdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 10:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
+        id S235152AbiL3Pdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 10:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiL3Pd2 (ORCPT
+        with ESMTP id S235150AbiL3Pdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 10:33:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5711B1E2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 07:32:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672414361;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=feZ5hwjDZqG9+vMkKLDMh4mCqDRJ9BgRHgD4LRZUVhU=;
-        b=buPEZ12kDLPYAN+vwxdP0jF7FJgxiLdspEG3jinG1CxSEKkk4cXb2mh6cD9Pl+cNfG02lw
-        9PwSd8xbtf1Ln1N5hzXlBZ/zP3u6o30xxyf3eSCCG9ImrTBGoEwCChs4SrsL2VIBDrFiAf
-        LM/a0XSDR+mW7ECuMdQ/vk300T7/pRg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-397-8UIeCCqsOZWYN3Xstv0c3Q-1; Fri, 30 Dec 2022 10:32:38 -0500
-X-MC-Unique: 8UIeCCqsOZWYN3Xstv0c3Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 47DAF1C05EB9;
-        Fri, 30 Dec 2022 15:32:37 +0000 (UTC)
-Received: from llong.com (unknown [10.22.32.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A0B6F40C2005;
-        Fri, 30 Dec 2022 15:32:36 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     Phil Auld <pauld@redhat.com>,
-        Wenjie Li <wenjieli@qti.qualcomm.com>,
-        =?UTF-8?q?David=20Wang=20=E7=8E=8B=E6=A0=87?= 
-        <wangbiao3@xiaomi.com>, Quentin Perret <qperret@google.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v5 2/2] sched: Use kfree_rcu() in do_set_cpus_allowed()
-Date:   Fri, 30 Dec 2022 10:32:18 -0500
-Message-Id: <20221230153218.354214-3-longman@redhat.com>
-In-Reply-To: <20221230153218.354214-1-longman@redhat.com>
-References: <20221230153218.354214-1-longman@redhat.com>
+        Fri, 30 Dec 2022 10:33:47 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980DF1B1F7;
+        Fri, 30 Dec 2022 07:33:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1672414384;
+        bh=QZE1xIk/afkLkABE1owXrClFFZNx+podxLmjY101Hfk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=eNpLyuzVNMFXZMewJo8kzGCwOGNZvNglAloAWOco3CBBzSPZZztz+c61Ds8igR8cu
+         MMwsZFQ0NBvivkqTzJcBr2pSZEK5HSVsRETf7n8NSYI7BZLCeSdowIwagcNgfINKLO
+         mXcChc8mWMO1j+mSlZ54VWq9DUKi6KqeGndN6YkYNyUwpaaZxHT/NijkCCiCy4A5mQ
+         KGb6+CeGycQWk6pCBVJl8ta3jycju7+MURcevDqjX8J7BsD1bvvCZ+wuNQ9bqFfyIt
+         vyj1hyhlm4N/ChyDxFRj5jfYDoca8aTpgn/TcCAh5aJEipQo7S6ttUfQY+BH1A385p
+         HkbLUYMZ50zSQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.149.221] ([217.61.149.221]) by web-mail.gmx.net
+ (3c-app-gmx-bap18.server.lan [172.19.172.88]) (via HTTP); Fri, 30 Dec 2022
+ 16:33:04 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Message-ID: <trinity-b52833dd-883d-4f5e-b221-29bb4d942873-1672414384681@3c-app-gmx-bap18>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Aw: Re:  Re: [PATCH net v3 4/5] net: ethernet: mtk_eth_soc: drop
+ generic vlan rx offload, only use DSA untagging
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 30 Dec 2022 16:33:04 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <fc09b981-282e-26cd-661e-86fdc72bedf9@nbd.name>
+References: <20221230073145.53386-1-nbd@nbd.name>
+ <20221230073145.53386-4-nbd@nbd.name>
+ <trinity-a07d48f4-11cf-4a24-a797-03ad4b1150d9-1672400818371@3c-app-gmx-bap18>
+ <82821d48-9259-9508-cc80-fc07f4d3ba14@nbd.name>
+ <trinity-ace28b50-2929-4af3-9dd2-765f848c4d99-1672408565903@3c-app-gmx-bap18>
+ <fc09b981-282e-26cd-661e-86fdc72bedf9@nbd.name>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:XFhZcwksdIibuOGNbKGPYa7y7vlWTRF7XmjcL9Tj/sqTwG5Lp8E2VOOkpLaaUEdHEDrlW
+ 96f0LKzWfYZHUzhiX2p+ht+6iwzS1wPAvY5q7b3IspA5FlcqIh6MkJSWJgPkx98HMt91juGfgTz9
+ hIWXfNRn7gBPG8uUHPsUDtFkDq9vjsY+moqxqGhAjXFbjfXljxcYeS+Lfp+QjnTaIvtVrXjxwAdL
+ 3ReynmuimXUYYCr6+t84RL1imkWLFp6XU5v0FkNQ+TLknfy5/r0L1f40Fw7/DmEjieG170YICoCg
+ pM=
+UI-OutboundReport: notjunk:1;M01:P0:QnKiiIhgdmI=;c5RDmf75ZJavF8y4QKelpEKszc7
+ 3LFhndG3xZFde00fvl53n28ablLgi4kaEd0AAfY7ELLpRyDRoNqxX/629P6gSyMd/XsuCvW/N
+ um+JQnGvcVQou6de2sKSlXQTQbgFkhZzlkN0ow9RY+pcZBapPDIpVUz2Zni95l5TaV82ezgZV
+ UYYrRi625N6uvvL6G7Mv/ISkHw+iEYEeE/hDwVsJt7Dg7Hg0adtpjmfSatpwdvXeMuyBhm7t6
+ ayKeCsIWTLO8a8rbFCeppH4obCiAlLHrbQArCPOcpps/SVLcqyZ1MtDez4U/BX3f4MCRE67ww
+ kCsUXuBf1bd+OoqEhZSrS1BOt7t0vFBm8wB/pmN4+7nJS39DPfvPWF2c6fQaeC6ICwCwWK4NZ
+ 3y3uXDwpO7moqSpz7gZzzAvEL1WRwAX0u16bILvL3yYFRfN5hq9M4ApEl0tiQhgKq6hZrzBMF
+ B2Ugz3Se6YCPZNONPBlbap9EkTXQcyVqJeH4Y2GkTA9YPohK7vwsMBbPPedNIgLhQ8rVhU/tb
+ V7+EmY+KXaQnpXuUc3I8i6tk6AKV4IXm9j2hgEJJmgZf3294le+avFhpgEQ6EXJkHNiYkMW0X
+ Rj352jskxQjiGRKCU3rW1xWs8x9Z43H11uItCx78BvXg16aSoYmN06iTcElifWN+tkFmXkgMC
+ 6KcoU5J0lsFtECYG6280H/ghK4oJItOL2CE4mK+Q0CYn+Vp+FXUSdoEHxYwtNgFAuJBFRboXj
+ Y0ZoDswXQCdvtyQHwhomg11Btnd/06unUBiKTK+VoP2+wAPoxk+lv4L1dhEkjrvKTPQ/2LRtN
+ P8cBKXXl+qo5XwaTyYVCHVwg==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,79 +89,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
-do_set_cpus_allowed()") may call kfree() if user_cpus_ptr was previously
-set. Unfortunately, some of the callers of do_set_cpus_allowed()
-may have pi_lock held when calling it. So the following splats may be
-printed especially when running with a PREEMPT_RT kernel:
+Hi
 
-   WARNING: possible circular locking dependency detected
-   BUG: sleeping function called from invalid context
+> Gesendet: Freitag, 30. Dezember 2022 um 15:58 Uhr
+> Von: "Felix Fietkau" <nbd@nbd.name>
 
-To avoid these problems, kfree_rcu() is used instead. An internal
-cpumask_rcuhead union is created for the sole purpose of facilitating
-the use of kfree_rcu() to free the cpumask.
+> Does this help?
+> ---
+> --- a/net/dsa/tag_mtk.c
+> +++ b/net/dsa/tag_mtk.c
+> @@ -25,6 +25,14 @@ static struct sk_buff *mtk_tag_xmit(stru
+>   	u8 xmit_tpid;
+>   	u8 *mtk_tag;
+>
+> +	/* The Ethernet switch we are interfaced with needs packets to be at
+> +	 * least 64 bytes (including FCS) otherwise their padding might be
+> +	 * corrupted. With tags enabled, we need to make sure that packets are
+> +	 * at least 68 bytes (including FCS and tag).
+> +	 */
+> +	if (__skb_put_padto(skb, ETH_ZLEN + MTK_HDR_LEN, false))
+> +		return NULL;
+> +
+>   	/* Build the special tag after the MAC Source Address. If VLAN header
+>   	 * is present, it's required that VLAN header and special tag is
+>   	 * being combined. Only in this way we can allow the switch can parse
 
-Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/sched/core.c | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
+no, i verified my vlan-setup ist right by adding additional device (my r2)=
+ into the same 2 vlans. My Laptop can ping both vlans of R2, but on r3/mt7=
+986 only vlan500 (on eth1) works, not 600 on wan-port of mt7986.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index b93d030b9fd5..31a14650bd7e 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2604,9 +2604,29 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
- 		.user_mask = NULL,
- 		.flags     = SCA_USER,	/* clear the user requested mask */
- 	};
-+	union cpumask_rcuhead {
-+		cpumask_t cpumask;
-+		struct rcu_head rcu;
-+	};
- 
- 	__do_set_cpus_allowed(p, &ac);
--	kfree(ac.user_mask);
-+
-+	/*
-+	 * Because this is called with p->pi_lock held, it is not possible
-+	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
-+	 * kfree_rcu().
-+	 */
-+	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
-+}
-+
-+static cpumask_t *alloc_user_cpus_ptr(int node)
-+{
-+	/*
-+	 * See do_set_cpus_allowed() above for the rcu_head usage.
-+	 */
-+	int size = max_t(int, cpumask_size(), sizeof(struct rcu_head));
-+
-+	return kmalloc_node(size, GFP_KERNEL, node);
- }
- 
- int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
-@@ -2629,7 +2649,7 @@ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
- 	if (data_race(!src->user_cpus_ptr))
- 		return 0;
- 
--	user_mask = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
-+	user_mask = alloc_user_cpus_ptr(node);
- 	if (!user_mask)
- 		return -ENOMEM;
- 
-@@ -8263,7 +8283,7 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
- 	if (retval)
- 		goto out_put_task;
- 
--	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
-+	user_mask = alloc_user_cpus_ptr(NUMA_NO_NODE);
- 	if (!user_mask) {
- 		retval = -ENOMEM;
- 		goto out_put_task;
--- 
-2.31.1
+see arp going out on r3, but not received in the other side (laptop/r2)...=
+.
 
+any debug i can add for this? ethtool does not show stats for vlans, for w=
+an i see no CRC/drops
+
+regards Frank
