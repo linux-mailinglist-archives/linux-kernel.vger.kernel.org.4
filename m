@@ -2,156 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773046595F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 08:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7964E6595EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 08:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234607AbiL3Hxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 02:53:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S234409AbiL3HuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 02:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234521AbiL3Hxf (ORCPT
+        with ESMTP id S229477AbiL3HuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 02:53:35 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C83E101CE;
-        Thu, 29 Dec 2022 23:53:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672386814; x=1703922814;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=YyVqNVBwJftkdK1pN7st5AJ5/f39dEx8duN3uP+aAUI=;
-  b=M/vIwaNkqLlWyRyPl2vGYjm/6A/altS7cSbujuGBQfZLL+T8SlOsvWuI
-   fHU7e56diX4dHwLOup9JVydC7FdHzQQFgka2vPh8SDicErzh6ADiApMWk
-   itAeto3BDKDD3gyVch8lmrxXm76EQD03AY7fbk33czvWIMAvbFE2GDUD5
-   5iSKsLHACEzsfb78WgincPQEmX4Wgq/0ErVA8I4JjeLPJwIwDHtDdjgC6
-   42PPz+0XYIbtNr4GyVwF8y19NiTOF7WA4Pj/GXcf+/DyRNnTmz1QcXQGt
-   Tc2rd4mgEGeoQSmgVhBJc73yAzBqv2NNa/tFFVgAbyDaJiUwzLSLtp+EW
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="322413447"
-X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
-   d="scan'208";a="322413447"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 23:53:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="982599073"
-X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
-   d="scan'208";a="982599073"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Dec 2022 23:53:31 -0800
-Date:   Fri, 30 Dec 2022 15:43:23 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     linux-fpga@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v4 2/3] fpga: microchip-spi: rewrite status polling in a
- time measurable way
-Message-ID: <Y66Wmxh0vWBMNMBU@yilunxu-OptiPlex-7050>
-References: <20221229104604.2496-1-i.bornyakov@metrotek.ru>
- <20221229104604.2496-3-i.bornyakov@metrotek.ru>
+        Fri, 30 Dec 2022 02:50:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D68210040;
+        Thu, 29 Dec 2022 23:50:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3172F61A70;
+        Fri, 30 Dec 2022 07:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8659DC433F0;
+        Fri, 30 Dec 2022 07:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672386616;
+        bh=dRfTWcimoeqlfeLamBb9cWZ6GOHkUMpkXehBHdmtwRY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VVwuxewveMRJzUbh8pVe0MWtSe8wqghtsvSQoHOQorsGNuqUpKxNB7uorMGS8GD2l
+         eeze9+I8snNlegixBx34poMh/DL4PyKo4gcOg9rotS2Ii850ayem870eXCJBA2Ye9H
+         JGknydqJMt4o1D/CINVICIM7xq4ZLkTr+5h0TQ9mli6r98QcN/EEZhcaSvv1r1o0sK
+         kDfetqRnrf7R19pAvgXJ74Pz2iuwrvy/rG+gko6JryDIDEgde4un+kU7ok0PgG74+k
+         iqhUAOkX+ruocAsgn1a7TTJj7ThJa6V3Pu+M5NfW2kKq2UIqPuf1cIEDMqnVUZ4k40
+         NAnARFZBVc9xQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6C42AC395DF;
+        Fri, 30 Dec 2022 07:50:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221229104604.2496-3-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] net: phy: xgmiitorgmii: Fix refcount leak in
+ xgmiitorgmii_probe
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167238661644.5828.309710303192630633.git-patchwork-notify@kernel.org>
+Date:   Fri, 30 Dec 2022 07:50:16 +0000
+References: <20221229062925.1372931-1-linmq006@gmail.com>
+In-Reply-To: <20221229062925.1372931-1-linmq006@gmail.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, michal.simek@xilinx.com, f.fainelli@gmail.com,
+        brandon.maier@rockwellcollins.com, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-29 at 13:46:03 +0300, Ivan Bornyakov wrote:
-> Original busy loop with retries count in mpf_poll_status() is not too
-> reliable, as it takes different times on different systems. Replace it
-> with read_poll_timeout() macro.
-> 
-> While at it, fix polling stop condition to met function's original
-> intention declared in the comment. The issue with original polling stop
-> condition is that it stops if any of mask bits is set, while intention
-> was to stop if all mask bits is set. This was not noticible because only
-> MPF_STATUS_READY is passed as mask argument and it is BIT(1).
-> 
-> Fixes: 5f8d4a900830 ("fpga: microchip-spi: add Microchip MPF FPGA manager")
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Hello:
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
+On Thu, 29 Dec 2022 10:29:25 +0400 you wrote:
+> of_phy_find_device() return device node with refcount incremented.
+> Call put_device() to relese it when not needed anymore.
+> 
+> Fixes: ab4e6ee578e8 ("net: phy: xgmiitorgmii: Check phy_driver ready before accessing")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 > ---
->  drivers/fpga/microchip-spi.c | 32 +++++++++++++++++---------------
->  1 file changed, 17 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-> index e72fedd93a27..995b1964e0fe 100644
-> --- a/drivers/fpga/microchip-spi.c
-> +++ b/drivers/fpga/microchip-spi.c
-> @@ -6,6 +6,7 @@
->  #include <asm/unaligned.h>
->  #include <linux/delay.h>
->  #include <linux/fpga/fpga-mgr.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/spi/spi.h>
-> @@ -33,7 +34,7 @@
->  
->  #define	MPF_BITS_PER_COMPONENT_SIZE	22
->  
-> -#define	MPF_STATUS_POLL_RETRIES		10000
-> +#define	MPF_STATUS_POLL_TIMEOUT		(2 * USEC_PER_SEC)
->  #define	MPF_STATUS_BUSY			BIT(0)
->  #define	MPF_STATUS_READY		BIT(1)
->  #define	MPF_STATUS_SPI_VIOLATION	BIT(2)
-> @@ -194,24 +195,25 @@ static int mpf_ops_parse_header(struct fpga_manager *mgr,
->  	return 0;
->  }
->  
-> -/* Poll HW status until busy bit is cleared and mask bits are set. */
->  static int mpf_poll_status(struct mpf_priv *priv, u8 mask)
->  {
-> -	int status, retries = MPF_STATUS_POLL_RETRIES;
-> +	int ret, status;
->  
-> -	while (retries--) {
-> -		status = mpf_read_status(priv);
-> -		if (status < 0)
-> -			return status;
-> -
-> -		if (status & MPF_STATUS_BUSY)
-> -			continue;
-> -
-> -		if (!mask || (status & mask))
-> -			return status;
-> -	}
-> +	/*
-> +	 * Busy poll HW status. Polling stops if any of the following
-> +	 * conditions are met:
-> +	 *  - timeout is reached
-> +	 *  - mpf_read_status() returns an error
-> +	 *  - busy bit is cleared AND mask bits are set
-> +	 */
-> +	ret = read_poll_timeout(mpf_read_status, status,
-> +				(status < 0) ||
-> +				((status & (MPF_STATUS_BUSY | mask)) == mask),
-> +				0, MPF_STATUS_POLL_TIMEOUT, false, priv);
-> +	if (ret < 0)
-> +		return ret;
->  
-> -	return -EBUSY;
-> +	return status;
->  }
->  
->  static int mpf_spi_write(struct mpf_priv *priv, const void *buf, size_t buf_size)
-> -- 
-> 2.39.0
-> 
-> 
+>  drivers/net/phy/xilinx_gmii2rgmii.c | 1 +
+>  1 file changed, 1 insertion(+)
+
+Here is the summary with links:
+  - net: phy: xgmiitorgmii: Fix refcount leak in xgmiitorgmii_probe
+    https://git.kernel.org/netdev/net/c/d039535850ee
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
