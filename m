@@ -2,86 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7964E6595EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 08:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12E565960C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 09:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbiL3HuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 02:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S234621AbiL3ICG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 03:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiL3HuS (ORCPT
+        with ESMTP id S229876AbiL3ICC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 02:50:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D68210040;
-        Thu, 29 Dec 2022 23:50:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3172F61A70;
-        Fri, 30 Dec 2022 07:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8659DC433F0;
-        Fri, 30 Dec 2022 07:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672386616;
-        bh=dRfTWcimoeqlfeLamBb9cWZ6GOHkUMpkXehBHdmtwRY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VVwuxewveMRJzUbh8pVe0MWtSe8wqghtsvSQoHOQorsGNuqUpKxNB7uorMGS8GD2l
-         eeze9+I8snNlegixBx34poMh/DL4PyKo4gcOg9rotS2Ii850ayem870eXCJBA2Ye9H
-         JGknydqJMt4o1D/CINVICIM7xq4ZLkTr+5h0TQ9mli6r98QcN/EEZhcaSvv1r1o0sK
-         kDfetqRnrf7R19pAvgXJ74Pz2iuwrvy/rG+gko6JryDIDEgde4un+kU7ok0PgG74+k
-         iqhUAOkX+ruocAsgn1a7TTJj7ThJa6V3Pu+M5NfW2kKq2UIqPuf1cIEDMqnVUZ4k40
-         NAnARFZBVc9xQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6C42AC395DF;
-        Fri, 30 Dec 2022 07:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 30 Dec 2022 03:02:02 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8451BEB;
+        Fri, 30 Dec 2022 00:01:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672387317; x=1703923317;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Oi/+rIcqkcv+04p/Hg1B3NjYbcWcYaKfRFTSbgBAmnU=;
+  b=E+OA2B0jutpCkg6Zn8i/R8WQu4vshXtrHgYfhIzWP1n7VIA9fe0ryvlG
+   1jRJ2J5C3omCQdDvz680SKxDwxplD0nIgSUbmDVT/G1qmHOdWzrfJNY8y
+   uJpPbdi9Xqk9QFJnbaA3G6xW+D7dbHqZv3FiDVsa8SrJpP4GCZ2tbmuZ2
+   HUfkNiz7ZWl8cHSoKKRFvGUMbeQl/HnFp9Rl/E6twpchR5CqIQSs0RwBq
+   IVZSVIV+VVHXCjnvPJHgrNVO0JvLtvrFxWCmQlgrxV98QngY62xgZL618
+   eWkn+fAjUP4oXRjXm6j4Ke8WHZK+rNEPxro/ay4h8vhzhUwMZLRzhZ/5e
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="319891596"
+X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
+   d="scan'208";a="319891596"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 00:01:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="653822337"
+X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
+   d="scan'208";a="653822337"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga002.jf.intel.com with ESMTP; 30 Dec 2022 00:01:53 -0800
+Date:   Fri, 30 Dec 2022 15:51:45 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     linux-fpga@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v4 3/3] fpga: microchip-spi: separate data frame write
+ routine
+Message-ID: <Y66YkbQwQl74lmWt@yilunxu-OptiPlex-7050>
+References: <20221229104604.2496-1-i.bornyakov@metrotek.ru>
+ <20221229104604.2496-4-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: phy: xgmiitorgmii: Fix refcount leak in
- xgmiitorgmii_probe
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167238661644.5828.309710303192630633.git-patchwork-notify@kernel.org>
-Date:   Fri, 30 Dec 2022 07:50:16 +0000
-References: <20221229062925.1372931-1-linmq006@gmail.com>
-In-Reply-To: <20221229062925.1372931-1-linmq006@gmail.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, michal.simek@xilinx.com, f.fainelli@gmail.com,
-        brandon.maier@rockwellcollins.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221229104604.2496-4-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 29 Dec 2022 10:29:25 +0400 you wrote:
-> of_phy_find_device() return device node with refcount incremented.
-> Call put_device() to relese it when not needed anymore.
+On 2022-12-29 at 13:46:04 +0300, Ivan Bornyakov wrote:
+> mpf_ops_write() function writes bitstream data to the FPGA by a smaller
+> frames. Introduce mpf_spi_frame_write() function which is for writing a
+> single data frame and use it in mpf_ops_write().
 > 
-> Fixes: ab4e6ee578e8 ("net: phy: xgmiitorgmii: Check phy_driver ready before accessing")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> No functional changes intended.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+
 > ---
->  drivers/net/phy/xilinx_gmii2rgmii.c | 1 +
->  1 file changed, 1 insertion(+)
-
-Here is the summary with links:
-  - net: phy: xgmiitorgmii: Fix refcount leak in xgmiitorgmii_probe
-    https://git.kernel.org/netdev/net/c/d039535850ee
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>  drivers/fpga/microchip-spi.c | 36 +++++++++++++++++++++++-------------
+>  1 file changed, 23 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> index 995b1964e0fe..8a541986f6f2 100644
+> --- a/drivers/fpga/microchip-spi.c
+> +++ b/drivers/fpga/microchip-spi.c
+> @@ -280,9 +280,30 @@ static int mpf_ops_write_init(struct fpga_manager *mgr,
+>  	return 0;
+>  }
+>  
+> +static int mpf_spi_frame_write(struct mpf_priv *priv, const char *buf)
+> +{
+> +	struct spi_transfer xfers[2] = {
+> +		{
+> +			.tx_buf = &priv->tx,
+> +			.len = 1,
+> +		}, {
+> +			.tx_buf = buf,
+> +			.len = MPF_SPI_FRAME_SIZE,
+> +		},
+> +	};
+> +	int ret;
+> +
+> +	ret = mpf_poll_status(priv, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	priv->tx = MPF_SPI_FRAME;
+> +
+> +	return spi_sync_transfer(priv->spi, xfers, ARRAY_SIZE(xfers));
+> +}
+> +
+>  static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
+>  {
+> -	struct spi_transfer xfers[2] = { 0 };
+>  	struct mpf_priv *priv = mgr->priv;
+>  	struct device *dev = &mgr->dev;
+>  	int ret, i;
+> @@ -293,19 +314,8 @@ static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count
+>  		return -EINVAL;
+>  	}
+>  
+> -	xfers[0].tx_buf = &priv->tx;
+> -	xfers[0].len = 1;
+> -
+>  	for (i = 0; i < count / MPF_SPI_FRAME_SIZE; i++) {
+> -		xfers[1].tx_buf = buf + i * MPF_SPI_FRAME_SIZE;
+> -		xfers[1].len = MPF_SPI_FRAME_SIZE;
+> -
+> -		ret = mpf_poll_status(priv, 0);
+> -		if (ret >= 0) {
+> -			priv->tx = MPF_SPI_FRAME;
+> -			ret = spi_sync_transfer(priv->spi, xfers, ARRAY_SIZE(xfers));
+> -		}
+> -
+> +		ret = mpf_spi_frame_write(priv, buf + i * MPF_SPI_FRAME_SIZE);
+>  		if (ret) {
+>  			dev_err(dev, "Failed to write bitstream frame %d/%zu\n",
+>  				i, count / MPF_SPI_FRAME_SIZE);
+> -- 
+> 2.39.0
+> 
+> 
