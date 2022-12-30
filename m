@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5239F659759
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0637B65976C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbiL3KfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 05:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
+        id S234592AbiL3KlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 05:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234667AbiL3Ke7 (ORCPT
+        with ESMTP id S234572AbiL3KlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 05:34:59 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF5819C32
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:34:58 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id bn6so11864280ljb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:34:58 -0800 (PST)
+        Fri, 30 Dec 2022 05:41:15 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35049BC14
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:41:14 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id z26so31219755lfu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:41:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4gZZiGQ+xFONbkR4CIrEsTxT504WgQCnXV2mN31jYnM=;
-        b=ZieVv/XajF8WcLke51z9UL9xLXnO6yPGYeZ1sAnknxajcy8CtxONvzg71hHfrWp1VF
-         afe/qJvMx53OPPDBTLU+KBPdyZXvlC99rmPZR2vPt8e1gg1SE0Au+XN1LUtoSI+XcZOe
-         TKBZQbK5tglBFbUT0Av8/WlLY3OWQctjym6STjgeUVvXtHQSYHHlrG1+TTiyejHLxyg+
-         E0fAKenwqhoqV06lFIGt4kBVIs4UewJhQPSq8PgOYt/QQZrsPPyjLu0gID6xXCU62fPe
-         gjriEDf99TKGTpSz9GcVP8qHRHhGxvQ3l1vAyIkkhbgxdua1T6SYhEz/jLqttY67XPiF
-         KK3g==
+        bh=LAt50/c1XxD+d5an6LMQKbLUUo7P/Ao2RnbkovM7714=;
+        b=nocHCo/Y60JUaApj7QepMG0/BYQpgVEBD6JFQe6EwJv1va+ujnkO/ott5KiRJK8wTx
+         cEX+4mxaieGqL/opS5CimllxoYV67A0PseukhIpmcozAa/CluPUE/r8wH7ZEln0JnKS/
+         8cBBgeYSiza1ZiGU+Qdjaef7neIOkScslIwcWLz7pWe2FYI7B7dlMjeMbGeAfJUAVFMn
+         o4mODUay6zb/zWlwgmi6acNiPB+Zz+3wO/hxaIyPFdXhlOV7JA8zvaWnOTENJK9RIDhE
+         IXfb9ESaNYl+NlZaZ22hKIdagv3GnxY+mDhkYz9SKMf3h8xcs+ya+jbtqxjBIiXPB2E2
+         s43A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4gZZiGQ+xFONbkR4CIrEsTxT504WgQCnXV2mN31jYnM=;
-        b=2zYbC0Q/rtFtQ9JRdCsz8DYHuQxk01ojmOp6vscAuU6pxCLEa8eAPFEk14u/CJadxa
-         ZqcdXCs702craa9N1pmaVkDLBeF0yPgLq1RTnxWG1RL0Uzfxdvmi+8/71/AG0mAtSlKT
-         +OS4pDLOic2gy1g7FM9ZcHPNTtGbem5CjYXOin0/1JVUxJiOHO8X2DdfydCU9D+Ib79n
-         KbKV4jB+MLBVFnYMOgXMkBFuZglboT4zgD9qOexppGfpFe8u0CID9ZvkkaW5WXR4wCk+
-         643pYKW/1r23Odx92p1ASwX8PRC8oJGDE7i2JnmJBu9+obdFjxwd3lqrxvYwoeQdJfP6
-         DpXw==
-X-Gm-Message-State: AFqh2kr0PtJNNumhMs98v7uoV9MBPZlzBXpwDW9wEwN9ecb8RQ/yXRdo
-        2Z2nifcQ4PX0Nx14ZQDp6rp8qQ==
-X-Google-Smtp-Source: AMrXdXvzF8oYbHVC+IVUBfdVwMBkjkv7OIATsoaATU44WqsdaR+oea3Fo0kgBAOv9WJknPjgOyGm0Q==
-X-Received: by 2002:a2e:553:0:b0:27e:521c:92c8 with SMTP id 80-20020a2e0553000000b0027e521c92c8mr9407978ljf.7.1672396496325;
-        Fri, 30 Dec 2022 02:34:56 -0800 (PST)
+        bh=LAt50/c1XxD+d5an6LMQKbLUUo7P/Ao2RnbkovM7714=;
+        b=hpBNuyddqiXLq/jzhcdw3V0a5WhVTi1+qdjBUSEpAoXw9Q6wdOrM8H5dMD8XOCUWYu
+         wHfpRkOOgpv0dIaeD5/i8lG7Tm2SKYCru7XMGveQDezfTOMp7qh2Q+QPgB+cW5dt5tvh
+         CAQS65j1RZMmoliyivDEnB1jgTBL604Dz8y0Ivo06GydZyOxbBymzQmYvPorYPfEF5d2
+         WueVBYk37a8d4QRBlqXXfTpPMfEOG2VCZTyF7HvoxSzjoFqu1H1ffwMh8Kto1ME7Vygt
+         RBnWLXhxMPG/SpxCaQkTh/f7DPZX/AWKTS9gr0RRgyLQ/72uXfnnnX4gT288mTJX63IA
+         0UQQ==
+X-Gm-Message-State: AFqh2kqSeEK8rBpCYJhzrAa9y98m256HmAmrLAbA4RJBJUngK5DzTRoM
+        fWmEHyzSV/fgpOhj8pq9NE6ztg==
+X-Google-Smtp-Source: AMrXdXsSkyaGu9E9QH7yKdMdxqcdZNJgrJO39Y3lFx2Nl+hw+pOn8KhPjTbifaGpSB/RJyJAiyU9Vg==
+X-Received: by 2002:ac2:5604:0:b0:4ba:83f3:fb36 with SMTP id v4-20020ac25604000000b004ba83f3fb36mr8239472lfd.9.1672396872059;
+        Fri, 30 Dec 2022 02:41:12 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q18-20020a2eb4b2000000b0027713ef5360sm2579821ljm.71.2022.12.30.02.34.54
+        by smtp.gmail.com with ESMTPSA id n20-20020a05651203f400b004a44ffb1023sm3436267lfq.57.2022.12.30.02.41.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Dec 2022 02:34:55 -0800 (PST)
-Message-ID: <aa0de3c8-d783-f8cc-42a9-7988acd6ab87@linaro.org>
-Date:   Fri, 30 Dec 2022 11:34:53 +0100
+        Fri, 30 Dec 2022 02:41:11 -0800 (PST)
+Message-ID: <33196eef-b1d5-8dd2-7c59-16a73327e8c0@linaro.org>
+Date:   Fri, 30 Dec 2022 11:41:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH V8 5/5] ASoC: dt-bindings: Add schema for "awinic,aw883xx"
-To:     wangweidong.a@awinic.com, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        perex@perex.cz, tiwai@suse.com, ckeepax@opensource.cirrus.com,
-        rf@opensource.cirrus.com, povik+lin@cutebit.org,
-        pierre-louis.bossart@linux.intel.com, james.schulman@cirrus.com,
-        flatmax@flatmax.com, cezary.rojewski@intel.com,
-        srinivas.kandagatla@linaro.org, tanureal@opensource.cirrus.com,
-        steve@sk2.org, stephan@gerhold.net, zhuning0077@gmail.com,
-        shumingf@realtek.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zhaolei@awinic.com, liweilei@awinic.com, yijiangtao@awinic.com,
-        duanyibo@awinic.com
-References: <20221230093454.190579-1-wangweidong.a@awinic.com>
- <20221230093454.190579-6-wangweidong.a@awinic.com>
+Subject: Re: [PATCH v3 01/19] dt-bindings: ARM: MediaTek: Add new document
+ bindings of MT8188 clock
 Content-Language: en-US
+To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+References: <20221230073357.18503-1-Garmin.Chang@mediatek.com>
+ <20221230073357.18503-2-Garmin.Chang@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221230093454.190579-6-wangweidong.a@awinic.com>
+In-Reply-To: <20221230073357.18503-2-Garmin.Chang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,93 +85,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/12/2022 10:34, wangweidong.a@awinic.com wrote:
-> From: Weidong Wang <wangweidong.a@awinic.com>
+On 30/12/2022 08:33, Garmin.Chang wrote:
+> Add the new binding documentation for system clock
+> and functional clock on MediaTek MT8188.
 > 
-> Add a DT schema for describing Awinic AW883xx audio amplifiers. They are
-> controlled using I2C.
-> 
-> Signed-off-by: Weidong Wang <wangweidong.a@awinic.com>
+
+Subject: drop second, redundant "document bindings of".
+
+> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
 > ---
->  .../bindings/sound/awinic,aw883xx.yaml        | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/awinic,aw883xx.yaml
+>  .../arm/mediatek/mediatek,mt8188-clock.yaml   |  71 ++
+>  .../mediatek/mediatek,mt8188-sys-clock.yaml   |  55 ++
+>  .../dt-bindings/clock/mediatek,mt8188-clk.h   | 733 ++++++++++++++++++
+>  3 files changed, 859 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
+>  create mode 100644 include/dt-bindings/clock/mediatek,mt8188-clk.h
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/awinic,aw883xx.yaml b/Documentation/devicetree/bindings/sound/awinic,aw883xx.yaml
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
 > new file mode 100644
-> index 000000000000..b677427ebcd1
+> index 000000000000..6654cead71f6
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/awinic,aw883xx.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
+
+Clock controllers do not go to arm but to clock. It's so suprising
+directory that I missed to notice it in v1... Why putting it in some
+totally irrelevant directory?
+
+
+> @@ -0,0 +1,71 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/sound/awinic,aw883xx.yaml#
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-clock.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Awinic AW883xx Smart Audio Amplifier
+> +title: MediaTek Functional Clock Controller for MT8188
 > +
 > +maintainers:
-> +  - Stephan Weidong Wang <wangweidong.a@awinic.com>
+> +  - Garmin Chang <garmin.chang@mediatek.com>
 > +
-> +description:
-> +  The Awinic AW883XX is an I2S/TDM input, high efficiency
-> +  digital Smart K audio amplifier with an integrated 10.25V
-> +  smart boost convert.
+> +description: |
+> +  The clock architecture in MediaTek like below
+> +  PLLs -->
+> +          dividers -->
+> +                      muxes
+> +                           -->
+> +                              clock gate
 > +
-> +allOf:
-> +  - $ref: dai-common.yaml#
+> +  The devices provide clock gate control in different IP blocks.
 > +
 > +properties:
 > +  compatible:
-> +    const: awinic,aw883xx
-
-Now the question what does "xx" stand for? I cannot find such product on
-awinic website:
-https://www.awinic.com/En/Index/queryAll/wd/aw883xx.html
-
+> +    enum:
+> +      - mediatek,mt8188-adsp-audio26m
+> +      - mediatek,mt8188-imp-iic-wrap-c
+> +      - mediatek,mt8188-imp-iic-wrap-en
+> +      - mediatek,mt8188-imp-iic-wrap-w
+> +      - mediatek,mt8188-mfgcfg
+> +      - mediatek,mt8188-vppsys0
+> +      - mediatek,mt8188-wpesys
+> +      - mediatek,mt8188-wpesys-vpp0
+> +      - mediatek,mt8188-vppsys1
+> +      - mediatek,mt8188-imgsys
+> +      - mediatek,mt8188-imgsys-wpe1
+> +      - mediatek,mt8188-imgsys-wpe2
+> +      - mediatek,mt8188-imgsys-wpe3
+> +      - mediatek,mt8188-imgsys1-dip-top
+> +      - mediatek,mt8188-imgsys1-dip-nr
+> +      - mediatek,mt8188-ipesys
+> +      - mediatek,mt8188-camsys
+> +      - mediatek,mt8188-camsys-rawa
+> +      - mediatek,mt8188-camsys-yuva
+> +      - mediatek,mt8188-camsys-rawb
+> +      - mediatek,mt8188-camsys-yuvb
+> +      - mediatek,mt8188-ccusys
+> +      - mediatek,mt8188-vdecsys-soc
+> +      - mediatek,mt8188-vdecsys
+> +      - mediatek,mt8188-vencsys
 > +
 > +  reg:
 > +    maxItems: 1
 > +
-> +  reset-gpios:
-> +    maxItems: 1
-> +
-
-Why there is no sound-dai-cells?
-
-
-> +  sound-name-prefix: true
-
-Drop it.
-
+> +  '#clock-cells':
+> +    const: 1
 > +
 > +required:
 > +  - compatible
 > +  - reg
-> +  - reset-gpios
+> +  - '#clock-cells'
 > +
 > +additionalProperties: false
-
-Instead:
-unevaluatedProperties: false
-
-unless this is not a codec and sound-dai-cells cannot be used?
-
 > +
 > +examples:
 > +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        audio-codec@34 {
-> +            compatible = "awinic,aw883xx";
-> +            reg = <0x34>;
-> +            reset-gpios = <&gpio 10 GPIO_ACTIVE_LOW>;
+> +    clock-controller@11283000 {
+> +        compatible = "mediatek,mt8188-imp-iic-wrap-c";
+> +        reg = <0x11283000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
+> new file mode 100644
+> index 000000000000..2b28df1ff895
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Wrong directory.
+
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-sys-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek System Clock Controller for MT8188
+> +
+> +maintainers:
+> +  - Garmin Chang <garmin.chang@mediatek.com>
+> +
+> +description: |
+> +  The clock architecture in MediaTek like below
+> +  PLLs -->
+> +          dividers -->
+> +                      muxes
+> +                           -->
+> +                              clock gate
+> +
+> +  The apmixedsys provides most of PLLs which generated from SoC 26m.
+> +  The topckgen provides dividers and muxes which provide the clock source to other IP blocks.
+> +  The infracfg_ao provides clock gate in peripheral and infrastructure IP blocks.
+> +  The mcusys provides mux control to select the clock source in AP MCU.
+> +  The device nodes also provide the system control capacity for configuration.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - mediatek,mt8188-topckgen
+> +          - mediatek,mt8188-infracfg-ao
+> +          - mediatek,mt8188-apmixedsys
+> +          - mediatek,mt8188-pericfg-ao
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    syscon@10000000 {
+
+clock-controller
+
+> +        compatible = "mediatek,mt8188-topckgen", "syscon";
+> +        reg = <0x10000000 0x1000>;
+> +        #clock-cells = <1>;
+
+
 
 Best regards,
 Krzysztof
