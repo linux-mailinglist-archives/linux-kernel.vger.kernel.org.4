@@ -2,74 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBC6659893
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B88659896
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234892AbiL3NM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 08:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S234938AbiL3NOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 08:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiL3NMX (ORCPT
+        with ESMTP id S229746AbiL3NOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 08:12:23 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEC51A052
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:12:22 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id b77-20020a6bb250000000b006e4ec8b2364so6613192iof.20
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:12:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aOyXb6XekkEj9NSf9pTRX0h4vJFQ+YhjmmSQ9RBSD/w=;
-        b=e7ivGUtTv4B10J1dSoWuV7Ng4TSPSEJNzdMROOz1tvr0rNcmA8CEpiKV/WnAEfAwxE
-         ixfEDnpLcBb2Y39/iXrO8FplrRim3drpetkYXlB0BuHDT18juMq7GIFG3YEOK6EcaygT
-         VQcdLF+9BASBcGb4fuI+ksmJujnsr5uXEPbzlCgOvcp416NMvJ1q+cWz830Kp6zz32bQ
-         gfEBQ1MOHYf2F3GNyPcknfh9Dbp9gXDytSj3GzmJtVyN32FWu7Fx/k9PcoC6ogMK65vG
-         83zqVMBQNZlyLvebgx1c24RJzibUTKwiDlecvKDEC+7KvZd4ZS2KqCk7QWJlv1C/GWnE
-         0Gxw==
-X-Gm-Message-State: AFqh2kp673/leUasVUPsUwfasOFflLxdwRMjpYWTLHjUev33vqJCUH4I
-        sfsdW0bpTXQ8Qya0UhEcpJSZbEMm7YGYpoR3LGsngolPXKGl
-X-Google-Smtp-Source: AMrXdXsC9GTH11Mx+a+LFj8XQdxirbDNp6aSz7CDjkAsV0BTeq4cpIa5zCd11viPWp9l7vMsUqR+1lcY4tM6XM7xW4E0VYSvPGVF
+        Fri, 30 Dec 2022 08:14:01 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E0F1A05B
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:14:00 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-123-ujNxs6XjNyOZnr5eFmPVlQ-1; Fri, 30 Dec 2022 13:13:57 +0000
+X-MC-Unique: ujNxs6XjNyOZnr5eFmPVlQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Dec
+ 2022 13:13:55 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Fri, 30 Dec 2022 13:13:55 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Holger Lubitz' <holger.lubitz@t-online.de>,
+        'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>
+Subject: RE: [PATCH v2] kbuild: treat char as always unsigned
+Thread-Topic: [PATCH v2] kbuild: treat char as always unsigned
+Thread-Index: AQHZFV6o8tF/XYcvI0qqEtVNYsUlXa55tQ3wgAMV4YCACXsZ8IAAL/vQ
+Date:   Fri, 30 Dec 2022 13:13:55 +0000
+Message-ID: <a296bd41278d4bd4a4e9f0d31a540613@AcuMS.aculab.com>
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
+         <20221019203034.3795710-1-Jason@zx2c4.com>
+         <20221221145332.GA2399037@roeck-us.net>
+         <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
+         <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
+         <20221221155641.GB2468105@roeck-us.net>
+         <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
+         <b2144334261246aa8dc5004c5f1a58c9@AcuMS.aculab.com>
+ <f02e0ac7f2d805020a7ba66803aaff3e31b5eeff.camel@t-online.de>
+ <357cbd67260040e4bcf17d519aaafdcb@AcuMS.aculab.com>
+In-Reply-To: <357cbd67260040e4bcf17d519aaafdcb@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-Received: by 2002:a92:c98d:0:b0:30b:b810:8a57 with SMTP id
- y13-20020a92c98d000000b0030bb8108a57mr2803366iln.276.1672405941825; Fri, 30
- Dec 2022 05:12:21 -0800 (PST)
-Date:   Fri, 30 Dec 2022 05:12:21 -0800
-In-Reply-To: <20221230125241.3152-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001539e805f10b5a78@google.com>
-Subject: Re: [syzbot] BUG: corrupted list in nfc_llcp_unregister_device
-From:   syzbot <syzbot+81232c4a81a886e2b580@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
-
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5544 } 2636 jiffies s: 2861 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
-
-
-Tested on:
-
-commit:         2258c2dc Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a33938480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=555d27e379d75ff1
-dashboard link: https://syzkaller.appspot.com/bug?extid=81232c4a81a886e2b580
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1341acbc480000
+Li4uLg0KPiA+IGludCBzdHJjbXAxKGNvbnN0IGNoYXIgKmNzLCBjb25zdCBjaGFyICpjdCkNCj4g
+PiB7DQo+ID4gICAgICAgICBpbnQgcmVzOw0KPiA+DQo+ID4gICAgICAgICBhc20gKCJcbiINCj4g
+PiAgICAgICAgICAgICAgICAgIjE6IG1vdmUuYiAgKCUwKSssJTJcbiIgIC8qIGdldCAqY3MgKi8N
+Cj4gPiAgICAgICAgICAgICAgICAgIiAgIGplcSAgICAgMmZcbiIgICAgICAgIC8qIGVuZCBvZiBm
+aXJzdCBzdHJpbmc/ICovDQo+ID4gICAgICAgICAgICAgICAgICIgICBjbXAuYiAgICglMSkrLCUy
+XG4iICAvKiBjb21wYXJlICpjdCAqLw0KPiA+ICAgICAgICAgICAgICAgICAiICAgamVxICAgICAx
+YlxuIiAgICAgICAgLyogaWYgZXF1YWwsIGNvbnRpbnVlICovDQo+ID4gICAgICAgICAgICAgICAg
+ICIgICBqcmEgICAgIDNmXG4iICAgICAgICAvKiBlbHNlIHNraXAgdG8gdGFpbCAqLw0KPiA+ICAg
+ICAgICAgICAgICAgICAiMjogY21wLmIgICAoJTEpKywlMlxuIiAgLyogY29tcGFyZSBvbmUgbGFz
+dCBieXRlICovDQo+ID4gICAgICAgICAgICAgICAgICIzOiBzdWJ4LmwgICUyLCAlMlxuIiAgICAv
+KiAtMSBpZiBib3Jyb3csIDAgaWYgbm90ICovDQo+ID4gICAgICAgICAgICAgICAgICIgICBqbHMg
+ICAgIDRmXG4iICAgICAgICAvKiBpZiBzZXQsIHogaXMgZnJvbSBzdWIuYiAqLw0KPiANCj4gVGhl
+IHN1Ynggd2lsbCBzZXQgWiB1bmxlc3MgQyB3YXMgc2V0Lg0KPiBTbyB0aGF0IGRvZXNuJ3Qgc2Vl
+bSByaWdodC4NCg0KQ2xlYXJseSBteSBicmFpbiB3YXMgYXNsZWVwIGVhcmxpZXIuDQpzdWJ4IHdp
+bGwgY2xlYXIgWiBub3Qgc2V0IGl0Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNz
+IExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAx
+UFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
