@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0900659AF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 994E2659AEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 18:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235322AbiL3RXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 12:23:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S235278AbiL3RXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 12:23:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiL3RXv (ORCPT
+        with ESMTP id S229681AbiL3RXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 12:23:51 -0500
-X-Greylist: delayed 170 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Dec 2022 09:23:48 PST
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473E6FD19;
-        Fri, 30 Dec 2022 09:23:48 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id BF6D81468;
-        Fri, 30 Dec 2022 18:23:46 +0100 (CET)
-Authentication-Results: ext-mx-out002.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        content-transfer-encoding:mime-version:message-id:date:date
-        :subject:subject:from:from:received:received:received; s=
-        dkim20160331; t=1672421024; x=1674235425; bh=fO2Ta8gQoZusE1bBuaw
-        217knTKoCUDuwlkal8bO/pZc=; b=stoRQRgUZaZP+9RRiZOa0fBrItmxqx9CpFD
-        I6GcCG1eS1EPz+dDlPs3I2IhV5jlOTR6hMT+Hphmotjah2jp6FGFIpNs5NJlilrI
-        fnKR71YKO+Wm2yQyzZraxsLQ2BBWGbHn4VrPefba196HmlFydB7dVIWW160bUc0z
-        Ssm/WZKA9etZMRwucEIZSMouYcAEvMrJXo7gVx+26ZqqM0X/c/dKwKrJOFBLmWwF
-        3GD13UMg5Ltm0JboZ3sP3kYAa0QCTwq9E7hOibOEYFBwn3dCyhz8NDtcMmUWaPFN
-        lCYXK1GS24ONpSNntsI7xKVnzd8FDbdKq4qJZ+KUSja2TIji9IX40zD98Z7vQALW
-        U7j0s5A8vgMWfV5Iq0CbC8Cyi4rfaIi/a2RSvNPutQJnmPmQ6PZf7/wXWwI99s+T
-        jpTVJs2v1YlYfCEGrZ7xSr6kugecEF9usD75FvOgha0ow+R2s9NE6PaG7LBGtWe4
-        KXrmX6tO3vFK72RBHViM/kHQmYZ6azUJSEJhYpMrvoAxRSbVFdYRCqE5l70bHGZQ
-        o9whxJ87hTD6KR7WTyViax/+GvJx/0n3NTA6MKGKUzaMMP7hQE4XKIy9pXGVgyH2
-        GewHDKBzWv3CjEDm6efgXrXySM0qPtpx4yin5Ic+9gNjjOEjMEwRXCWw10UJQ3zY
-        LGE759MY=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Score: -1.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out002.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Q2XVluE6iL6v; Fri, 30 Dec 2022 18:23:44 +0100 (CET)
-Received: from int-mx003.mykolab.com (unknown [10.9.13.3])
-        by mx.kolabnow.com (Postfix) with ESMTPS id DBE1A1467;
-        Fri, 30 Dec 2022 18:23:42 +0100 (CET)
-Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
-        by int-mx003.mykolab.com (Postfix) with ESMTPS id 922E1254E;
-        Fri, 30 Dec 2022 18:23:42 +0100 (CET)
-From:   Federico Vaga <federico.vaga@vaga.pv.it>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Federico Vaga <federico.vaga@vaga.pv.it>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2] doc: fix typo in botching up ioctls
-Date:   Fri, 30 Dec 2022 18:23:28 +0100
-Message-Id: <20221230172328.58612-1-federico.vaga@vaga.pv.it>
+        Fri, 30 Dec 2022 12:23:40 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F515FCCB;
+        Fri, 30 Dec 2022 09:23:39 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id v14so14807613qtq.3;
+        Fri, 30 Dec 2022 09:23:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9+/ml9NCLv5dDeSsbxvtQfApDnRRwzcuKMMn9TJ/VkA=;
+        b=EzlVxJMwa8DGFD84dwRkZi0wFjJOLxUtCyb1ZmHRCVmxaoRDMXHvUR4GPON95dV1Rk
+         svZWhK8ROFoTH8/JG06d6ej2uAKbh50zfMNOZHkIwixgPxBnTP9Il11UyNaUFl4+oZ+D
+         pptoTsvHpiLlsvm28MIdoVRJWyETioDkepShdLrQOhDI/VvyhWl1Sh3cLbGbT65qvGD4
+         j8Thbq9wY5Iq+C9OalLuBAYTcXffmsasz1IgCByZMGaCZdMRuw17YfF7I9gznk+DcpyI
+         9fo8W+G34UkcLvoD2S71WNrttobVB9jjNxf3OH2cbJS4MBQhBlWYBOhniHXk9TwLIeUU
+         qdeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9+/ml9NCLv5dDeSsbxvtQfApDnRRwzcuKMMn9TJ/VkA=;
+        b=HNYpDxjOJ2SIpoK4Dq+vn5vk4aDseOJ5HwqBIaD00/1drwc8G6wu1KFe64RQuoiNib
+         c2xT1HUa/FijZxrt1vxsXy0pUf+MOT+/uY3GAAv7mJI2MKA/pYgFlQatzIi3z5/iTAUe
+         hZjtKM237i0K5Ayds6vVC0tP4WawwGxsriUMObmJ9t8dbjdICwbIIFu2ajgjqXeRbsYK
+         00RAuXXs9el3DBkrzHFCM5Mv+hJy7hJ6TFnRVldFvKOz4GcHaPhDMl5HrV5gxWjjx10I
+         kgq8pAVPvOVGu/z69GLhpruGPH4qfiQe4vZKejWPCbCt4oZnnQVk5ZQxmUMu5OfnjFbN
+         eEkg==
+X-Gm-Message-State: AFqh2kr7cefZIvMJT3W9vYCPSwxw7o3U0Or9u4qVoQJGVW+28ycpTQHh
+        RihDOsDJEuCOrWWGk0iXB0sDNSk0MR8=
+X-Google-Smtp-Source: AMrXdXtyW7V+Bam3ECPKRKkNIhL5uzFNhXHjvI7hvi5I1zr6GBJfTKw8wfVeqzy3ofhsBWFy291k7A==
+X-Received: by 2002:ac8:7395:0:b0:3a7:ed31:a618 with SMTP id t21-20020ac87395000000b003a7ed31a618mr44552430qtp.7.1672421018595;
+        Fri, 30 Dec 2022 09:23:38 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id fb25-20020a05622a481900b003a5430ee366sm11995695qtb.60.2022.12.30.09.23.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Dec 2022 09:23:37 -0800 (PST)
+Message-ID: <1655572b-dee1-9e85-050c-6fb9a743a869@gmail.com>
+Date:   Fri, 30 Dec 2022 09:23:35 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221230094021.575121238@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221230094021.575121238@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The type contained a typo `uintprt` -> `uintptr`
 
-Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
----
- Documentation/process/botching-up-ioctls.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v1 -> v2 fix the typo in the commit message
+On 12/30/2022 1:49 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.86 release.
+> There are 731 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 01 Jan 2023 09:38:41 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.86-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-diff --git a/Documentation/process/botching-up-ioctls.rst b/Documentation/process/botching-up-ioctls.rst
-index ba4667ab396b..9739b88463a5 100644
---- a/Documentation/process/botching-up-ioctls.rst
-+++ b/Documentation/process/botching-up-ioctls.rst
-@@ -41,7 +41,7 @@ will need to add a 32-bit compat layer:
-    structures to the kernel, or if the kernel checks the structure size, which
-    e.g. the drm core does.
- 
-- * Pointers are __u64, cast from/to a uintprt_t on the userspace side and
-+ * Pointers are __u64, cast from/to a uintptr_t on the userspace side and
-    from/to a void __user * in the kernel. Try really hard not to delay this
-    conversion or worse, fiddle the raw __u64 through your code since that
-    diminishes the checking tools like sparse can provide. The macro
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.30.2
-
+Florian
