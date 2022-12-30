@@ -2,1177 +2,791 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528306594FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 06:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833A86594FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 06:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234560AbiL3FXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 00:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S234466AbiL3FXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 00:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234460AbiL3FV6 (ORCPT
+        with ESMTP id S234487AbiL3FWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 00:21:58 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2068.outbound.protection.outlook.com [40.107.237.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D68164AE
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 21:21:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L9m4gEkpkw9G4iUYOccQ7UXGdVy6ey2nu4pFJx2fxu/zenEzPB1IRC7JQBUgLNuyFhUAoj/4b59/uZimO64vNMEBMA7TvCzBQpQdcf81Q8+14cwramEOcmaOeFU5vNtHNd7M2MCuwcjSSWfQYMol7fOV9fZYArbtUOeql3N29WQR7MwFgCM6aDeCvxGY0E7jKxpHIdKbIvh+3AwE3FYgGmrBxaUC9An//ucTWnk3BZAgHzMRwdJXUf4VwRdLPbHbBlIqNaxmTPiM1g+JgwsF8TPKb1HDUu6oJ7qTS8zYCOI9ZJC6E0+MVdgfAEwYaA9ZTnhN8V3kQTtQvbhLo9w6zg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8nc2u+ftA6WIEJ+pKMUpPUxmDYkflFJMwxD2uyyuQgU=;
- b=I5rL8+Hy86fOC7MStbaaenP9ArZZZev58BMGqA0a3EJTGQ/NpZSG3Kd5FcFR7PyOWGQPUXDYAbOcRw7pfqlVKLcpdYvZyxc4u/Nvfd+21yaEH/Q3cFuepG5ri9ly2VwrB6H+p9ZKUaNwumYOn4UkRlkk+xsS0Ia844xu2g9nYaYEQLKEsYWByyCNJyi5GExDTMA007W6fA6+C3Y8bRTmY23/jvLIjIymcd+pYWIklMhWgPGBT9iVfWtxVR//BpnaT0iTAwB55aHUrXwmyckmMdxaI+/9AkL47iz0h2/k9dg9GZN5L7pdEhDfXThLfa1Yn0qfg3KuyoOlw8Q6n9JY5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8nc2u+ftA6WIEJ+pKMUpPUxmDYkflFJMwxD2uyyuQgU=;
- b=Dqc50prXYxF0FZizH4nxhHkqntfrdGeLRsQCIWdoe3Sc9h+jK75SuyoTAYBFDbg2st5Tr8yXOGzGXJ5u/H5UFC4a/cD6Ur7p3vpXn7il8iZVzkyuE2bk/vEY0dgqc6fRYc1aMI8ncSUqFERLtQ+OJgvmu4lLlxLR4lWlHYyTXcg=
-Received: from MW4PR03CA0339.namprd03.prod.outlook.com (2603:10b6:303:dc::14)
- by DS7PR12MB6142.namprd12.prod.outlook.com (2603:10b6:8:9a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Fri, 30 Dec
- 2022 05:21:52 +0000
-Received: from CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dc:cafe::1c) by MW4PR03CA0339.outlook.office365.com
- (2603:10b6:303:dc::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.18 via Frontend
- Transport; Fri, 30 Dec 2022 05:21:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT055.mail.protection.outlook.com (10.13.175.129) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5966.18 via Frontend Transport; Fri, 30 Dec 2022 05:21:52 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 29 Dec
- 2022 23:21:50 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Javier Martinez Canillas <javierm@redhat.com>,
-        Carlos Soriano Sanchez <csoriano@redhat.com>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>, <christian.koenig@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Subject: [PATCH v3 11/11] drm/amd: Request PSP microcode during IP discovery
-Date:   Thu, 29 Dec 2022 23:21:15 -0600
-Message-ID: <20221230052119.15096-12-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221230052119.15096-1-mario.limonciello@amd.com>
-References: <20221230052119.15096-1-mario.limonciello@amd.com>
+        Fri, 30 Dec 2022 00:22:30 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD0218E16;
+        Thu, 29 Dec 2022 21:22:10 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pB7pq-00CDa8-1t; Fri, 30 Dec 2022 13:21:39 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 30 Dec 2022 13:21:38 +0800
+Date:   Fri, 30 Dec 2022 13:21:38 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>
+Subject: [PATCH] crypto: caam - Remove GFP_DMA and add DMA alignment padding
+Message-ID: <Y651YoR58cCg3adj@gondor.apana.org.au>
+References: <Y4nDL50nToBbi4DS@gondor.apana.org.au>
+ <Y4xpGNNsfbucyUlt@infradead.org>
+ <Y47BgCuZsYLX61A9@gondor.apana.org.au>
+ <Y47g7qO8dsRdxCgf@infradead.org>
+ <Y47+gxbdKR03EYCj@gondor.apana.org.au>
+ <Y61WrVAjjtAMAvSh@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT055:EE_|DS7PR12MB6142:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4392865a-a076-4a39-150b-08daea25c298
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zw4cNgM6IPchCF2NGSs/3WwqocjrS1SKX1y8JnlDv5Sti7teT1lQiFiKAeLbO95ypgmEZac5SdVDbQkK+M4KUyezvsnpRcu/+awpAxPuU+QqnAN6zCNhDO75MbtpJnEZadng5Kow5uBc/JdMuXqKDOvRktiR0fooRMPjfG40oUCwdMfAnAr+WzMDb3QKYPwl68QQ6ZG9idpUb9PO/hVNh2ljFMwNmICBP4Z/y6hbZTTqDDXZFLzV749HaL1qOdjqo+eP1V8d9zex1DZkO7EyOS3retMaPcTP/A87lUP2vi7iJRXzaMWNexRBnnwCHBNFHzcuDP4Y4bmU6yX2laLq/+BzW57WGqxjSurv94O7LUH1IflbylYERDACpvLvuoDEfvZ43C9g1MgR7x9qnrP/PdlFtgLGtJMmGPpUW7fCWNemGuNDModcQzbRUIe0zDwBQAPLIoI4fK8jMQgIjTmQEJRws0MojcevQGuPzLI115s7l3bFaLppgQKK+h6JWVEdWj/8aN43z4hd7Z6Q6LKQ0opyUIOpG6hu/V/vn98f13exDN6PE/BzmttPMIPGQgRwtkHdlohzzA40N94y5idY/GeQx2PmcuIA2pRtkFulJJR/bg3ohh7KXoQ1E9tY+rZqKCB0EyvkRGR1BUu87nB4ktuYis16MstTqtCoPLv0CTM6fezyBZ4PKuTzscluaAwdZlJsrKMcNUel/UAV9ENaDfwB7P2lLsVm++ZNNyu8Qcw=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(376002)(346002)(451199015)(40470700004)(36840700001)(46966006)(41300700001)(86362001)(47076005)(478600001)(7696005)(6666004)(8936002)(36756003)(26005)(186003)(16526019)(316002)(40460700003)(110136005)(54906003)(70206006)(4326008)(8676002)(70586007)(1076003)(426003)(2616005)(336012)(40480700001)(44832011)(30864003)(82310400005)(2906002)(356005)(83380400001)(5660300002)(81166007)(82740400003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Dec 2022 05:21:52.4220
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4392865a-a076-4a39-150b-08daea25c298
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6142
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y61WrVAjjtAMAvSh@gondor.apana.org.au>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If PSP microcode is required but not available during early init, the
-firmware framebuffer will have already been released and the screen will
-freeze.
+GFP_DMA does not guarantee that the returned memory is aligned
+for DMA.  It should be removed where it is superfluous.
 
-Move the request for PSP microcode into the IP discovery phase
-so that if it's not available, IP discovery will fail.
+However, kmalloc may start returning DMA-unaligned memory in future
+so fix this by adding the alignment by hand.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v2->v3:
- * Only request_firmware, don't validate during discovery
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 173 +++++++++++++++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c       |  58 +-----
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.h       |  12 +-
- drivers/gpu/drm/amd/amdgpu/psp_v10_0.c        |  99 +++------
- drivers/gpu/drm/amd/amdgpu/psp_v11_0.c        | 191 +++++-------------
- drivers/gpu/drm/amd/amdgpu/psp_v12_0.c        |  98 +++------
- drivers/gpu/drm/amd/amdgpu/psp_v13_0.c        |  46 +----
- drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c      |  18 +-
- drivers/gpu/drm/amd/amdgpu/psp_v3_1.c         |  16 +-
- 9 files changed, 297 insertions(+), 414 deletions(-)
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-index ce1aa7683738..6b7dd0cf56ad 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-@@ -158,6 +158,40 @@ MODULE_FIRMWARE("amdgpu/gc_11_0_2_mes1.bin");
- MODULE_FIRMWARE("amdgpu/gc_11_0_3_mes.bin");
- MODULE_FIRMWARE("amdgpu/gc_11_0_3_mes1.bin");
- 
-+MODULE_FIRMWARE("amdgpu/aldebaran_sos.bin");
-+MODULE_FIRMWARE("amdgpu/aldebaran_ta.bin");
-+MODULE_FIRMWARE("amdgpu/aldebaran_cap.bin");
-+MODULE_FIRMWARE("amdgpu/green_sardine_asd.bin");
-+MODULE_FIRMWARE("amdgpu/green_sardine_ta.bin");
-+MODULE_FIRMWARE("amdgpu/raven_asd.bin");
-+MODULE_FIRMWARE("amdgpu/picasso_asd.bin");
-+MODULE_FIRMWARE("amdgpu/raven2_asd.bin");
-+MODULE_FIRMWARE("amdgpu/picasso_ta.bin");
-+MODULE_FIRMWARE("amdgpu/raven2_ta.bin");
-+MODULE_FIRMWARE("amdgpu/raven_ta.bin");
-+MODULE_FIRMWARE("amdgpu/renoir_asd.bin");
-+MODULE_FIRMWARE("amdgpu/renoir_ta.bin");
-+MODULE_FIRMWARE("amdgpu/yellow_carp_toc.bin");
-+MODULE_FIRMWARE("amdgpu/yellow_carp_ta.bin");
-+MODULE_FIRMWARE("amdgpu/vega10_sos.bin");
-+MODULE_FIRMWARE("amdgpu/vega10_asd.bin");
-+MODULE_FIRMWARE("amdgpu/vega10_cap.bin");
-+MODULE_FIRMWARE("amdgpu/vega12_sos.bin");
-+MODULE_FIRMWARE("amdgpu/vega12_asd.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_5_toc.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_5_ta.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_8_toc.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_8_ta.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_0_sos.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_0_ta.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_7_sos.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_7_ta.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_10_sos.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_10_ta.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_4_toc.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_4_ta.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_11_toc.bin");
-+MODULE_FIRMWARE("amdgpu/psp_13_0_11_ta.bin");
- 
- /* gfx9 */
- MODULE_FIRMWARE("amdgpu/vega10_ce.bin");
-@@ -339,6 +373,13 @@ MODULE_FIRMWARE("amdgpu/gc_11_0_4_me.bin");
- MODULE_FIRMWARE("amdgpu/gc_11_0_4_mec.bin");
- MODULE_FIRMWARE("amdgpu/gc_11_0_4_rlc.bin");
- 
-+enum amd_psp_microcode_kind {
-+	AMD_PSP_MICROCODE_SOS,
-+	AMD_PSP_MICROCODE_ASD,
-+	AMD_PSP_MICROCODE_TA,
-+	AMD_PSP_MICROCODE_TOC,
-+};
-+
- static const char *hw_id_names[HW_ID_MAX] = {
- 	[MP1_HWID]		= "MP1",
- 	[MP2_HWID]		= "MP2",
-@@ -1856,14 +1897,59 @@ static int amdgpu_discovery_set_ih_ip_blocks(struct amdgpu_device *adev)
- 	return 0;
- }
- 
-+static int amdgpu_discovery_load_psp_fw(struct amdgpu_device *adev,
-+					enum amd_psp_microcode_kind kind,
-+					const char *chip_name)
-+{
-+	char fw_name[PSP_FW_NAME_LEN];
-+
-+	switch (kind) {
-+	case AMD_PSP_MICROCODE_SOS:
-+		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_sos.bin", chip_name);
-+		return request_firmware(&adev->psp.sos_fw, fw_name, adev->dev);
-+	case AMD_PSP_MICROCODE_ASD:
-+		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_asd.bin", chip_name);
-+		return request_firmware(&adev->psp.asd_fw, fw_name, adev->dev);
-+	case AMD_PSP_MICROCODE_TA:
-+		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_ta.bin", chip_name);
-+		return request_firmware(&adev->psp.ta_fw, fw_name, adev->dev);
-+	case AMD_PSP_MICROCODE_TOC:
-+		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_toc.bin", chip_name);
-+		return request_firmware(&adev->psp.toc_fw, fw_name, adev->dev);
-+	}
-+	return -EINVAL;
-+}
-+
- static int amdgpu_discovery_set_psp_ip_blocks(struct amdgpu_device *adev)
- {
-+	char ucode_prefix[30];
-+	int r;
-+
-+	amdgpu_ucode_ip_version_decode(adev, MP0_HWIP, ucode_prefix, sizeof(ucode_prefix));
-+	adev->psp.adev = adev;
-+
- 	switch (adev->ip_versions[MP0_HWIP][0]) {
- 	case IP_VERSION(9, 0, 0):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_SOS,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_ASD,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
- 		amdgpu_device_ip_block_add(adev, &psp_v3_1_ip_block);
- 		break;
- 	case IP_VERSION(10, 0, 0):
- 	case IP_VERSION(10, 0, 1):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_ASD,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TA,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
- 		amdgpu_device_ip_block_add(adev, &psp_v10_0_ip_block);
- 		break;
- 	case IP_VERSION(11, 0, 0):
-@@ -1871,11 +1957,41 @@ static int amdgpu_discovery_set_psp_ip_blocks(struct amdgpu_device *adev)
- 	case IP_VERSION(11, 0, 4):
- 	case IP_VERSION(11, 0, 5):
- 	case IP_VERSION(11, 0, 9):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_SOS,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_ASD,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TA,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		break;
- 	case IP_VERSION(11, 0, 7):
- 	case IP_VERSION(11, 0, 11):
- 	case IP_VERSION(11, 0, 12):
- 	case IP_VERSION(11, 0, 13):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_SOS,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TA,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		break;
- 	case IP_VERSION(11, 5, 0):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_ASD,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TOC,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
- 		amdgpu_device_ip_block_add(adev, &psp_v11_0_ip_block);
- 		break;
- 	case IP_VERSION(11, 0, 8):
-@@ -1883,20 +1999,69 @@ static int amdgpu_discovery_set_psp_ip_blocks(struct amdgpu_device *adev)
- 		break;
- 	case IP_VERSION(11, 0, 3):
- 	case IP_VERSION(12, 0, 1):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_ASD,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TA,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
- 		amdgpu_device_ip_block_add(adev, &psp_v12_0_ip_block);
- 		break;
--	case IP_VERSION(13, 0, 0):
--	case IP_VERSION(13, 0, 1):
- 	case IP_VERSION(13, 0, 2):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_SOS,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		/* It's not necessary to load ras ta on Guest side */
-+		if (!amdgpu_sriov_vf(adev)) {
-+			r = amdgpu_discovery_load_psp_fw(adev,
-+							 AMD_PSP_MICROCODE_TA,
-+							 ucode_prefix);
-+			if (r)
-+				return r;
-+		}
-+		amdgpu_device_ip_block_add(adev, &psp_v13_0_ip_block);
-+		break;
-+	case IP_VERSION(13, 0, 1):
- 	case IP_VERSION(13, 0, 3):
- 	case IP_VERSION(13, 0, 5):
--	case IP_VERSION(13, 0, 7):
- 	case IP_VERSION(13, 0, 8):
--	case IP_VERSION(13, 0, 10):
- 	case IP_VERSION(13, 0, 11):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TOC,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TA,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		amdgpu_device_ip_block_add(adev, &psp_v13_0_ip_block);
-+		break;
-+	case IP_VERSION(13, 0, 0):
-+	case IP_VERSION(13, 0, 7):
-+	case IP_VERSION(13, 0, 10):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_SOS,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TA,
-+						 ucode_prefix);
-+
-+		if (r)
-+			return r;
- 		amdgpu_device_ip_block_add(adev, &psp_v13_0_ip_block);
- 		break;
- 	case IP_VERSION(13, 0, 4):
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TOC,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
-+		r = amdgpu_discovery_load_psp_fw(adev, AMD_PSP_MICROCODE_TA,
-+						 ucode_prefix);
-+		if (r)
-+			return r;
- 		amdgpu_device_ip_block_add(adev, &psp_v13_0_4_ip_block);
- 		break;
- 	default:
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-index 7a2fc920739b..0aabf8d5a457 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-@@ -371,7 +371,7 @@ static int psp_init_sriov_microcode(struct psp_context *psp)
- 	case IP_VERSION(13, 0, 2):
- 		adev->virt.autoload_ucode_id = AMDGPU_UCODE_ID_CP_MEC2;
- 		ret = psp_init_cap_microcode(psp, "aldebaran");
--		ret &= psp_init_ta_microcode(psp, "aldebaran");
-+		ret &= psp_init_ta_microcode(psp);
- 		break;
- 	case IP_VERSION(13, 0, 0):
- 		adev->virt.autoload_ucode_id = 0;
-@@ -2908,24 +2908,12 @@ int psp_ring_cmd_submit(struct psp_context *psp,
- 	return 0;
- }
- 
--int psp_init_asd_microcode(struct psp_context *psp,
--			   const char *chip_name)
-+int psp_init_asd_microcode(struct psp_context *psp)
- {
- 	struct amdgpu_device *adev = psp->adev;
--	char fw_name[PSP_FW_NAME_LEN];
- 	const struct psp_firmware_header_v1_0 *asd_hdr;
- 	int err = 0;
- 
--	if (!chip_name) {
--		dev_err(adev->dev, "invalid chip name for asd microcode\n");
--		return -EINVAL;
--	}
--
--	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_asd.bin", chip_name);
--	err = request_firmware(&adev->psp.asd_fw, fw_name, adev->dev);
--	if (err)
--		goto out;
--
- 	err = amdgpu_ucode_validate(adev->psp.asd_fw);
- 	if (err)
- 		goto out;
-@@ -2944,24 +2932,12 @@ int psp_init_asd_microcode(struct psp_context *psp,
- 	return err;
- }
- 
--int psp_init_toc_microcode(struct psp_context *psp,
--			   const char *chip_name)
-+int psp_init_toc_microcode(struct psp_context *psp)
- {
- 	struct amdgpu_device *adev = psp->adev;
--	char fw_name[PSP_FW_NAME_LEN];
- 	const struct psp_firmware_header_v1_0 *toc_hdr;
- 	int err = 0;
- 
--	if (!chip_name) {
--		dev_err(adev->dev, "invalid chip name for toc microcode\n");
--		return -EINVAL;
--	}
--
--	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_toc.bin", chip_name);
--	err = request_firmware(&adev->psp.toc_fw, fw_name, adev->dev);
--	if (err)
--		goto out;
--
- 	err = amdgpu_ucode_validate(adev->psp.toc_fw);
- 	if (err)
- 		goto out;
-@@ -3107,11 +3083,9 @@ static int psp_init_sos_base_fw(struct amdgpu_device *adev)
- 	return 0;
- }
- 
--int psp_init_sos_microcode(struct psp_context *psp,
--			   const char *chip_name)
-+int psp_init_sos_microcode(struct psp_context *psp)
- {
- 	struct amdgpu_device *adev = psp->adev;
--	char fw_name[PSP_FW_NAME_LEN];
- 	const struct psp_firmware_header_v1_0 *sos_hdr;
- 	const struct psp_firmware_header_v1_1 *sos_hdr_v1_1;
- 	const struct psp_firmware_header_v1_2 *sos_hdr_v1_2;
-@@ -3121,16 +3095,6 @@ int psp_init_sos_microcode(struct psp_context *psp,
- 	uint8_t *ucode_array_start_addr;
- 	int fw_index = 0;
- 
--	if (!chip_name) {
--		dev_err(adev->dev, "invalid chip name for sos microcode\n");
--		return -EINVAL;
--	}
--
--	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_sos.bin", chip_name);
--	err = request_firmware(&adev->psp.sos_fw, fw_name, adev->dev);
--	if (err)
--		goto out;
--
- 	err = amdgpu_ucode_validate(adev->psp.sos_fw);
- 	if (err)
- 		goto out;
-@@ -3272,25 +3236,13 @@ static int parse_ta_bin_descriptor(struct psp_context *psp,
- 	return 0;
- }
- 
--int psp_init_ta_microcode(struct psp_context *psp,
--			  const char *chip_name)
-+int psp_init_ta_microcode(struct psp_context *psp)
- {
- 	struct amdgpu_device *adev = psp->adev;
--	char fw_name[PSP_FW_NAME_LEN];
- 	const struct ta_firmware_header_v2_0 *ta_hdr;
- 	int err = 0;
- 	int ta_index = 0;
- 
--	if (!chip_name) {
--		dev_err(adev->dev, "invalid chip name for ta microcode\n");
--		return -EINVAL;
--	}
--
--	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_ta.bin", chip_name);
--	err = request_firmware(&adev->psp.ta_fw, fw_name, adev->dev);
--	if (err)
--		goto out;
--
- 	err = amdgpu_ucode_validate(adev->psp.ta_fw);
- 	if (err)
- 		goto out;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.h
-index cf4f60c66122..530e9ec1e263 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.h
-@@ -502,14 +502,10 @@ int psp_ring_cmd_submit(struct psp_context *psp,
- 			uint64_t cmd_buf_mc_addr,
- 			uint64_t fence_mc_addr,
- 			int index);
--int psp_init_asd_microcode(struct psp_context *psp,
--			   const char *chip_name);
--int psp_init_toc_microcode(struct psp_context *psp,
--			   const char *chip_name);
--int psp_init_sos_microcode(struct psp_context *psp,
--			   const char *chip_name);
--int psp_init_ta_microcode(struct psp_context *psp,
--			  const char *chip_name);
-+int psp_init_asd_microcode(struct psp_context *psp);
-+int psp_init_toc_microcode(struct psp_context *psp);
-+int psp_init_sos_microcode(struct psp_context *psp);
-+int psp_init_ta_microcode(struct psp_context *psp);
- int psp_init_cap_microcode(struct psp_context *psp,
- 			  const char *chip_name);
- int psp_get_fw_attestation_records_addr(struct psp_context *psp,
-diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v10_0.c b/drivers/gpu/drm/amd/amdgpu/psp_v10_0.c
-index 9de46fa8f46c..4357e6fbfe40 100644
---- a/drivers/gpu/drm/amd/amdgpu/psp_v10_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/psp_v10_0.c
-@@ -37,79 +37,45 @@
- #include "gc/gc_9_1_offset.h"
- #include "sdma0/sdma0_4_1_offset.h"
- 
--MODULE_FIRMWARE("amdgpu/raven_asd.bin");
--MODULE_FIRMWARE("amdgpu/picasso_asd.bin");
--MODULE_FIRMWARE("amdgpu/raven2_asd.bin");
--MODULE_FIRMWARE("amdgpu/picasso_ta.bin");
--MODULE_FIRMWARE("amdgpu/raven2_ta.bin");
--MODULE_FIRMWARE("amdgpu/raven_ta.bin");
--
- static int psp_v10_0_init_microcode(struct psp_context *psp)
- {
- 	struct amdgpu_device *adev = psp->adev;
--	const char *chip_name;
--	char fw_name[30];
- 	int err = 0;
- 	const struct ta_firmware_header_v1_0 *ta_hdr;
- 	DRM_DEBUG("\n");
- 
--	switch (adev->asic_type) {
--	case CHIP_RAVEN:
--		if (adev->apu_flags & AMD_APU_IS_RAVEN2)
--			chip_name = "raven2";
--		else if (adev->apu_flags & AMD_APU_IS_PICASSO)
--			chip_name = "picasso";
--		else
--			chip_name = "raven";
--		break;
--	default: BUG();
--	}
--
--	err = psp_init_asd_microcode(psp, chip_name);
-+	err = psp_init_asd_microcode(psp);
- 	if (err)
- 		goto out;
- 
--	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_ta.bin", chip_name);
--	err = request_firmware(&adev->psp.ta_fw, fw_name, adev->dev);
--	if (err) {
--		release_firmware(adev->psp.ta_fw);
--		adev->psp.ta_fw = NULL;
--		dev_info(adev->dev,
--			 "psp v10.0: Failed to load firmware \"%s\"\n",
--			 fw_name);
--	} else {
--		err = amdgpu_ucode_validate(adev->psp.ta_fw);
--		if (err)
--			goto out2;
--
--		ta_hdr = (const struct ta_firmware_header_v1_0 *)
--				 adev->psp.ta_fw->data;
--		adev->psp.hdcp_context.context.bin_desc.fw_version =
--			le32_to_cpu(ta_hdr->hdcp.fw_version);
--		adev->psp.hdcp_context.context.bin_desc.size_bytes =
--			le32_to_cpu(ta_hdr->hdcp.size_bytes);
--		adev->psp.hdcp_context.context.bin_desc.start_addr =
--			(uint8_t *)ta_hdr +
--			le32_to_cpu(ta_hdr->header.ucode_array_offset_bytes);
--
--		adev->psp.dtm_context.context.bin_desc.fw_version =
--			le32_to_cpu(ta_hdr->dtm.fw_version);
--		adev->psp.dtm_context.context.bin_desc.size_bytes =
--			le32_to_cpu(ta_hdr->dtm.size_bytes);
--		adev->psp.dtm_context.context.bin_desc.start_addr =
--			(uint8_t *)adev->psp.hdcp_context.context.bin_desc.start_addr +
--			le32_to_cpu(ta_hdr->dtm.offset_bytes);
--
--		adev->psp.securedisplay_context.context.bin_desc.fw_version =
--			le32_to_cpu(ta_hdr->securedisplay.fw_version);
--		adev->psp.securedisplay_context.context.bin_desc.size_bytes =
--			le32_to_cpu(ta_hdr->securedisplay.size_bytes);
--		adev->psp.securedisplay_context.context.bin_desc.start_addr =
--			(uint8_t *)adev->psp.hdcp_context.context.bin_desc.start_addr +
--			le32_to_cpu(ta_hdr->securedisplay.offset_bytes);
--
--		adev->psp.ta_fw_version = le32_to_cpu(ta_hdr->header.ucode_version);
--	}
-+	err = amdgpu_ucode_validate(adev->psp.ta_fw);
-+	if (err)
-+		goto out2;
-+
-+	ta_hdr = (const struct ta_firmware_header_v1_0 *)
-+			 adev->psp.ta_fw->data;
-+	adev->psp.hdcp_context.context.bin_desc.fw_version =
-+		le32_to_cpu(ta_hdr->hdcp.fw_version);
-+	adev->psp.hdcp_context.context.bin_desc.size_bytes =
-+		le32_to_cpu(ta_hdr->hdcp.size_bytes);
-+	adev->psp.hdcp_context.context.bin_desc.start_addr =
-+		(uint8_t *)ta_hdr +
-+		le32_to_cpu(ta_hdr->header.ucode_array_offset_bytes);
-+	adev->psp.dtm_context.context.bin_desc.fw_version =
-+		le32_to_cpu(ta_hdr->dtm.fw_version);
-+	adev->psp.dtm_context.context.bin_desc.size_bytes =
-+		le32_to_cpu(ta_hdr->dtm.size_bytes);
-+	adev->psp.dtm_context.context.bin_desc.start_addr =
-+		(uint8_t *)adev->psp.hdcp_context.context.bin_desc.start_addr +
-+		le32_to_cpu(ta_hdr->dtm.offset_bytes);
-+	adev->psp.securedisplay_context.context.bin_desc.fw_version =
-+		le32_to_cpu(ta_hdr->securedisplay.fw_version);
-+	adev->psp.securedisplay_context.context.bin_desc.size_bytes =
-+		le32_to_cpu(ta_hdr->securedisplay.size_bytes);
-+	adev->psp.securedisplay_context.context.bin_desc.start_addr =
-+		(uint8_t *)adev->psp.hdcp_context.context.bin_desc.start_addr +
-+		le32_to_cpu(ta_hdr->securedisplay.offset_bytes);
-+	adev->psp.ta_fw_version = le32_to_cpu(ta_hdr->header.ucode_version);
- 
- 	return 0;
- 
-@@ -117,11 +83,8 @@ static int psp_v10_0_init_microcode(struct psp_context *psp)
- 	release_firmware(adev->psp.ta_fw);
- 	adev->psp.ta_fw = NULL;
- out:
--	if (err) {
--		dev_err(adev->dev,
--			"psp v10.0: Failed to load firmware \"%s\"\n",
--			fw_name);
--	}
-+	if (err)
-+		dev_err(adev->dev, "psp v10.0: Failed to load firmware");
- 
- 	return err;
- }
-diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c b/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
-index bd3e3e23a939..34e93232f3e4 100644
---- a/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
-@@ -41,34 +41,6 @@
- #include "oss/osssys_4_0_offset.h"
- #include "oss/osssys_4_0_sh_mask.h"
- 
--MODULE_FIRMWARE("amdgpu/vega20_sos.bin");
--MODULE_FIRMWARE("amdgpu/vega20_asd.bin");
--MODULE_FIRMWARE("amdgpu/vega20_ta.bin");
--MODULE_FIRMWARE("amdgpu/navi10_sos.bin");
--MODULE_FIRMWARE("amdgpu/navi10_asd.bin");
--MODULE_FIRMWARE("amdgpu/navi10_ta.bin");
--MODULE_FIRMWARE("amdgpu/navi14_sos.bin");
--MODULE_FIRMWARE("amdgpu/navi14_asd.bin");
--MODULE_FIRMWARE("amdgpu/navi14_ta.bin");
--MODULE_FIRMWARE("amdgpu/navi12_sos.bin");
--MODULE_FIRMWARE("amdgpu/navi12_asd.bin");
--MODULE_FIRMWARE("amdgpu/navi12_ta.bin");
--MODULE_FIRMWARE("amdgpu/navi12_cap.bin");
--MODULE_FIRMWARE("amdgpu/arcturus_sos.bin");
--MODULE_FIRMWARE("amdgpu/arcturus_asd.bin");
--MODULE_FIRMWARE("amdgpu/arcturus_ta.bin");
--MODULE_FIRMWARE("amdgpu/sienna_cichlid_sos.bin");
--MODULE_FIRMWARE("amdgpu/sienna_cichlid_ta.bin");
--MODULE_FIRMWARE("amdgpu/sienna_cichlid_cap.bin");
--MODULE_FIRMWARE("amdgpu/navy_flounder_sos.bin");
--MODULE_FIRMWARE("amdgpu/navy_flounder_ta.bin");
--MODULE_FIRMWARE("amdgpu/vangogh_asd.bin");
--MODULE_FIRMWARE("amdgpu/vangogh_toc.bin");
--MODULE_FIRMWARE("amdgpu/dimgrey_cavefish_sos.bin");
--MODULE_FIRMWARE("amdgpu/dimgrey_cavefish_ta.bin");
--MODULE_FIRMWARE("amdgpu/beige_goby_sos.bin");
--MODULE_FIRMWARE("amdgpu/beige_goby_ta.bin");
--
- /* address block */
- #define smnMP1_FIRMWARE_FLAGS		0x3010024
- /* navi10 reg offset define */
-@@ -88,147 +60,89 @@ MODULE_FIRMWARE("amdgpu/beige_goby_ta.bin");
- static int psp_v11_0_init_microcode(struct psp_context *psp)
- {
- 	struct amdgpu_device *adev = psp->adev;
--	const char *chip_name;
--	char fw_name[PSP_FW_NAME_LEN];
- 	int err = 0;
- 	const struct ta_firmware_header_v1_0 *ta_hdr;
- 
- 	DRM_DEBUG("\n");
- 
--	switch (adev->ip_versions[MP0_HWIP][0]) {
--	case IP_VERSION(11, 0, 2):
--		chip_name = "vega20";
--		break;
--	case IP_VERSION(11, 0, 0):
--		chip_name = "navi10";
--		break;
--	case IP_VERSION(11, 0, 5):
--		chip_name = "navi14";
--		break;
--	case IP_VERSION(11, 0, 9):
--		chip_name = "navi12";
--		break;
--	case IP_VERSION(11, 0, 4):
--		chip_name = "arcturus";
--		break;
--	case IP_VERSION(11, 0, 7):
--		chip_name = "sienna_cichlid";
--		break;
--	case IP_VERSION(11, 0, 11):
--		chip_name = "navy_flounder";
--		break;
--	case IP_VERSION(11, 5, 0):
--		chip_name = "vangogh";
--		break;
--	case IP_VERSION(11, 0, 12):
--		chip_name = "dimgrey_cavefish";
--		break;
--	case IP_VERSION(11, 0, 13):
--		chip_name = "beige_goby";
--		break;
--	default:
--		BUG();
--	}
--
--
- 	switch (adev->ip_versions[MP0_HWIP][0]) {
- 	case IP_VERSION(11, 0, 2):
- 	case IP_VERSION(11, 0, 4):
--		err = psp_init_sos_microcode(psp, chip_name);
-+		err = psp_init_sos_microcode(psp);
- 		if (err)
- 			return err;
--		err = psp_init_asd_microcode(psp, chip_name);
-+		err = psp_init_asd_microcode(psp);
- 		if (err)
- 			return err;
--		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_ta.bin", chip_name);
--		err = request_firmware(&adev->psp.ta_fw, fw_name, adev->dev);
--		if (err) {
--			release_firmware(adev->psp.ta_fw);
--			adev->psp.ta_fw = NULL;
--			dev_info(adev->dev,
--				 "psp v11.0: Failed to load firmware \"%s\"\n", fw_name);
--		} else {
--			err = amdgpu_ucode_validate(adev->psp.ta_fw);
--			if (err)
--				goto out2;
--
--			ta_hdr = (const struct ta_firmware_header_v1_0 *)adev->psp.ta_fw->data;
--			adev->psp.xgmi_context.context.bin_desc.fw_version =
--				le32_to_cpu(ta_hdr->xgmi.fw_version);
--			adev->psp.xgmi_context.context.bin_desc.size_bytes =
--				le32_to_cpu(ta_hdr->xgmi.size_bytes);
--			adev->psp.xgmi_context.context.bin_desc.start_addr =
--				(uint8_t *)ta_hdr +
--				le32_to_cpu(ta_hdr->header.ucode_array_offset_bytes);
--			adev->psp.ta_fw_version = le32_to_cpu(ta_hdr->header.ucode_version);
--			adev->psp.ras_context.context.bin_desc.fw_version =
--				le32_to_cpu(ta_hdr->ras.fw_version);
--			adev->psp.ras_context.context.bin_desc.size_bytes =
--				le32_to_cpu(ta_hdr->ras.size_bytes);
--			adev->psp.ras_context.context.bin_desc.start_addr =
--				(uint8_t *)adev->psp.xgmi_context.context.bin_desc.start_addr +
--				le32_to_cpu(ta_hdr->ras.offset_bytes);
--		}
-+		err = amdgpu_ucode_validate(adev->psp.ta_fw);
-+		if (err)
-+			return err;
-+
-+		ta_hdr = (const struct ta_firmware_header_v1_0 *)adev->psp.ta_fw->data;
-+		adev->psp.xgmi_context.context.bin_desc.fw_version =
-+			le32_to_cpu(ta_hdr->xgmi.fw_version);
-+		adev->psp.xgmi_context.context.bin_desc.size_bytes =
-+			le32_to_cpu(ta_hdr->xgmi.size_bytes);
-+		adev->psp.xgmi_context.context.bin_desc.start_addr =
-+			(uint8_t *)ta_hdr +
-+			le32_to_cpu(ta_hdr->header.ucode_array_offset_bytes);
-+		adev->psp.ta_fw_version = le32_to_cpu(ta_hdr->header.ucode_version);
-+		adev->psp.ras_context.context.bin_desc.fw_version =
-+			le32_to_cpu(ta_hdr->ras.fw_version);
-+		adev->psp.ras_context.context.bin_desc.size_bytes =
-+			le32_to_cpu(ta_hdr->ras.size_bytes);
-+		adev->psp.ras_context.context.bin_desc.start_addr =
-+			(uint8_t *)adev->psp.xgmi_context.context.bin_desc.start_addr +
-+			le32_to_cpu(ta_hdr->ras.offset_bytes);
- 		break;
- 	case IP_VERSION(11, 0, 0):
- 	case IP_VERSION(11, 0, 5):
- 	case IP_VERSION(11, 0, 9):
--		err = psp_init_sos_microcode(psp, chip_name);
-+		err = psp_init_sos_microcode(psp);
- 		if (err)
- 			return err;
--		err = psp_init_asd_microcode(psp, chip_name);
-+		err = psp_init_asd_microcode(psp);
- 		if (err)
- 			return err;
--		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_ta.bin", chip_name);
--		err = request_firmware(&adev->psp.ta_fw, fw_name, adev->dev);
--		if (err) {
--			release_firmware(adev->psp.ta_fw);
--			adev->psp.ta_fw = NULL;
--			dev_info(adev->dev,
--				 "psp v11.0: Failed to load firmware \"%s\"\n", fw_name);
--		} else {
--			err = amdgpu_ucode_validate(adev->psp.ta_fw);
--			if (err)
--				goto out2;
--
--			ta_hdr = (const struct ta_firmware_header_v1_0 *)adev->psp.ta_fw->data;
--			adev->psp.hdcp_context.context.bin_desc.fw_version =
--				le32_to_cpu(ta_hdr->hdcp.fw_version);
--			adev->psp.hdcp_context.context.bin_desc.size_bytes =
--				le32_to_cpu(ta_hdr->hdcp.size_bytes);
--			adev->psp.hdcp_context.context.bin_desc.start_addr =
--				(uint8_t *)ta_hdr +
--				le32_to_cpu(
--					ta_hdr->header.ucode_array_offset_bytes);
--
--			adev->psp.ta_fw_version = le32_to_cpu(ta_hdr->header.ucode_version);
--
--			adev->psp.dtm_context.context.bin_desc.fw_version =
--				le32_to_cpu(ta_hdr->dtm.fw_version);
--			adev->psp.dtm_context.context.bin_desc.size_bytes =
--				le32_to_cpu(ta_hdr->dtm.size_bytes);
--			adev->psp.dtm_context.context.bin_desc.start_addr =
--				(uint8_t *)adev->psp.hdcp_context.context
--					.bin_desc.start_addr +
--				le32_to_cpu(ta_hdr->dtm.offset_bytes);
--		}
-+		err = amdgpu_ucode_validate(adev->psp.ta_fw);
-+		if (err)
-+			return err;
-+
-+		ta_hdr = (const struct ta_firmware_header_v1_0 *)adev->psp.ta_fw->data;
-+		adev->psp.hdcp_context.context.bin_desc.fw_version =
-+			le32_to_cpu(ta_hdr->hdcp.fw_version);
-+		adev->psp.hdcp_context.context.bin_desc.size_bytes =
-+			le32_to_cpu(ta_hdr->hdcp.size_bytes);
-+		adev->psp.hdcp_context.context.bin_desc.start_addr =
-+			(uint8_t *)ta_hdr +
-+			le32_to_cpu(
-+				ta_hdr->header.ucode_array_offset_bytes);
-+		adev->psp.ta_fw_version = le32_to_cpu(ta_hdr->header.ucode_version);
-+		adev->psp.dtm_context.context.bin_desc.fw_version =
-+			le32_to_cpu(ta_hdr->dtm.fw_version);
-+		adev->psp.dtm_context.context.bin_desc.size_bytes =
-+			le32_to_cpu(ta_hdr->dtm.size_bytes);
-+		adev->psp.dtm_context.context.bin_desc.start_addr =
-+			(uint8_t *)adev->psp.hdcp_context.context
-+				.bin_desc.start_addr +
-+			le32_to_cpu(ta_hdr->dtm.offset_bytes);
- 		break;
- 	case IP_VERSION(11, 0, 7):
- 	case IP_VERSION(11, 0, 11):
- 	case IP_VERSION(11, 0, 12):
- 	case IP_VERSION(11, 0, 13):
--		err = psp_init_sos_microcode(psp, chip_name);
-+		err = psp_init_sos_microcode(psp);
- 		if (err)
- 			return err;
--		err = psp_init_ta_microcode(psp, chip_name);
-+		err = psp_init_ta_microcode(psp);
- 		if (err)
- 			return err;
- 		break;
- 	case IP_VERSION(11, 5, 0):
--		err = psp_init_asd_microcode(psp, chip_name);
-+		err = psp_init_asd_microcode(psp);
- 		if (err)
- 			return err;
--		err = psp_init_toc_microcode(psp, chip_name);
-+		err = psp_init_toc_microcode(psp);
- 		if (err)
- 			return err;
- 		break;
-@@ -237,11 +151,6 @@ static int psp_v11_0_init_microcode(struct psp_context *psp)
+diff --git a/drivers/crypto/caam/blob_gen.c b/drivers/crypto/caam/blob_gen.c
+index 1f65df489847..0c347ba6e692 100644
+--- a/drivers/crypto/caam/blob_gen.c
++++ b/drivers/crypto/caam/blob_gen.c
+@@ -83,7 +83,7 @@ int caam_process_blob(struct caam_blob_priv *priv,
+ 		output_len = info->input_len - CAAM_BLOB_OVERHEAD;
  	}
  
- 	return 0;
--
--out2:
--	release_firmware(adev->psp.ta_fw);
--	adev->psp.ta_fw = NULL;
--	return err;
+-	desc = kzalloc(CAAM_BLOB_DESC_BYTES_MAX, GFP_KERNEL | GFP_DMA);
++	desc = kzalloc(CAAM_BLOB_DESC_BYTES_MAX, GFP_KERNEL);
+ 	if (!desc)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/crypto/caam/caamalg.c b/drivers/crypto/caam/caamalg.c
+index ecc15bc521db..4a9b998a8d26 100644
+--- a/drivers/crypto/caam/caamalg.c
++++ b/drivers/crypto/caam/caamalg.c
+@@ -59,6 +59,8 @@
+ #include <crypto/engine.h>
+ #include <crypto/xts.h>
+ #include <asm/unaligned.h>
++#include <linux/dma-mapping.h>
++#include <linux/kernel.h>
+ 
+ /*
+  * crypto alg
+@@ -1379,8 +1381,7 @@ static struct aead_edesc *aead_edesc_alloc(struct aead_request *req,
+ 	sec4_sg_bytes = sec4_sg_len * sizeof(struct sec4_sg_entry);
+ 
+ 	/* allocate space for base edesc and hw desc commands, link tables */
+-	edesc = kzalloc(sizeof(*edesc) + desc_bytes + sec4_sg_bytes,
+-			GFP_DMA | flags);
++	edesc = kzalloc(sizeof(*edesc) + desc_bytes + sec4_sg_bytes, flags);
+ 	if (!edesc) {
+ 		caam_unmap(jrdev, req->src, req->dst, src_nents, dst_nents, 0,
+ 			   0, 0, 0);
+@@ -1608,6 +1609,7 @@ static struct skcipher_edesc *skcipher_edesc_alloc(struct skcipher_request *req,
+ 	u8 *iv;
+ 	int ivsize = crypto_skcipher_ivsize(skcipher);
+ 	int dst_sg_idx, sec4_sg_ents, sec4_sg_bytes;
++	unsigned int aligned_size;
+ 
+ 	src_nents = sg_nents_for_len(req->src, req->cryptlen);
+ 	if (unlikely(src_nents < 0)) {
+@@ -1681,15 +1683,18 @@ static struct skcipher_edesc *skcipher_edesc_alloc(struct skcipher_request *req,
+ 	/*
+ 	 * allocate space for base edesc and hw desc commands, link tables, IV
+ 	 */
+-	edesc = kzalloc(sizeof(*edesc) + desc_bytes + sec4_sg_bytes + ivsize,
+-			GFP_DMA | flags);
+-	if (!edesc) {
++	aligned_size = ALIGN(ivsize, __alignof__(*edesc));
++	aligned_size += sizeof(*edesc) + desc_bytes + sec4_sg_bytes;
++	aligned_size = ALIGN(aligned_size, dma_get_cache_alignment());
++	iv = kzalloc(aligned_size, flags);
++	if (!iv) {
+ 		dev_err(jrdev, "could not allocate extended descriptor\n");
+ 		caam_unmap(jrdev, req->src, req->dst, src_nents, dst_nents, 0,
+ 			   0, 0, 0);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
++	edesc = (void *)(iv + ALIGN(ivsize, __alignof__(*edesc)));
+ 	edesc->src_nents = src_nents;
+ 	edesc->dst_nents = dst_nents;
+ 	edesc->mapped_src_nents = mapped_src_nents;
+@@ -1701,7 +1706,6 @@ static struct skcipher_edesc *skcipher_edesc_alloc(struct skcipher_request *req,
+ 
+ 	/* Make sure IV is located in a DMAable area */
+ 	if (ivsize) {
+-		iv = (u8 *)edesc->sec4_sg + sec4_sg_bytes;
+ 		memcpy(iv, req->iv, ivsize);
+ 
+ 		iv_dma = dma_map_single(jrdev, iv, ivsize, DMA_BIDIRECTIONAL);
+diff --git a/drivers/crypto/caam/caamalg_qi.c b/drivers/crypto/caam/caamalg_qi.c
+index c37b67be0492..5e218bf20d5b 100644
+--- a/drivers/crypto/caam/caamalg_qi.c
++++ b/drivers/crypto/caam/caamalg_qi.c
+@@ -20,6 +20,8 @@
+ #include "caamalg_desc.h"
+ #include <crypto/xts.h>
+ #include <asm/unaligned.h>
++#include <linux/dma-mapping.h>
++#include <linux/kernel.h>
+ 
+ /*
+  * crypto alg
+@@ -959,7 +961,7 @@ static struct aead_edesc *aead_edesc_alloc(struct aead_request *req,
+ 		return (struct aead_edesc *)drv_ctx;
+ 
+ 	/* allocate space for base edesc and hw desc commands, link tables */
+-	edesc = qi_cache_alloc(GFP_DMA | flags);
++	edesc = qi_cache_alloc(flags);
+ 	if (unlikely(!edesc)) {
+ 		dev_err(qidev, "could not allocate extended descriptor\n");
+ 		return ERR_PTR(-ENOMEM);
+@@ -1317,8 +1319,9 @@ static struct skcipher_edesc *skcipher_edesc_alloc(struct skcipher_request *req,
+ 		qm_sg_ents = 1 + pad_sg_nents(qm_sg_ents);
+ 
+ 	qm_sg_bytes = qm_sg_ents * sizeof(struct qm_sg_entry);
+-	if (unlikely(offsetof(struct skcipher_edesc, sgt) + qm_sg_bytes +
+-		     ivsize > CAAM_QI_MEMCACHE_SIZE)) {
++	if (unlikely(ALIGN(ivsize, __alignof__(*edesc)) +
++		     offsetof(struct skcipher_edesc, sgt) + qm_sg_bytes >
++		     CAAM_QI_MEMCACHE_SIZE)) {
+ 		dev_err(qidev, "No space for %d S/G entries and/or %dB IV\n",
+ 			qm_sg_ents, ivsize);
+ 		caam_unmap(qidev, req->src, req->dst, src_nents, dst_nents, 0,
+@@ -1327,17 +1330,18 @@ static struct skcipher_edesc *skcipher_edesc_alloc(struct skcipher_request *req,
+ 	}
+ 
+ 	/* allocate space for base edesc, link tables and IV */
+-	edesc = qi_cache_alloc(GFP_DMA | flags);
+-	if (unlikely(!edesc)) {
++	iv = qi_cache_alloc(flags);
++	if (unlikely(!iv)) {
+ 		dev_err(qidev, "could not allocate extended descriptor\n");
+ 		caam_unmap(qidev, req->src, req->dst, src_nents, dst_nents, 0,
+ 			   0, DMA_NONE, 0, 0);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
++	edesc = (void *)(iv + ALIGN(ivsize, __alignof__(*edesc)));
++
+ 	/* Make sure IV is located in a DMAable area */
+ 	sg_table = &edesc->sgt[0];
+-	iv = (u8 *)(sg_table + qm_sg_ents);
+ 	memcpy(iv, req->iv, ivsize);
+ 
+ 	iv_dma = dma_map_single(qidev, iv, ivsize, DMA_BIDIRECTIONAL);
+diff --git a/drivers/crypto/caam/caamalg_qi2.c b/drivers/crypto/caam/caamalg_qi2.c
+index 1b0dd742c53f..0ddef9a033a1 100644
+--- a/drivers/crypto/caam/caamalg_qi2.c
++++ b/drivers/crypto/caam/caamalg_qi2.c
+@@ -16,7 +16,9 @@
+ #include "caamalg_desc.h"
+ #include "caamhash_desc.h"
+ #include "dpseci-debugfs.h"
++#include <linux/dma-mapping.h>
+ #include <linux/fsl/mc.h>
++#include <linux/kernel.h>
+ #include <soc/fsl/dpaa2-io.h>
+ #include <soc/fsl/dpaa2-fd.h>
+ #include <crypto/xts.h>
+@@ -370,7 +372,7 @@ static struct aead_edesc *aead_edesc_alloc(struct aead_request *req,
+ 	struct dpaa2_sg_entry *sg_table;
+ 
+ 	/* allocate space for base edesc, link tables and IV */
+-	edesc = qi_cache_zalloc(GFP_DMA | flags);
++	edesc = qi_cache_zalloc(flags);
+ 	if (unlikely(!edesc)) {
+ 		dev_err(dev, "could not allocate extended descriptor\n");
+ 		return ERR_PTR(-ENOMEM);
+@@ -1189,7 +1191,7 @@ static struct skcipher_edesc *skcipher_edesc_alloc(struct skcipher_request *req)
+ 	}
+ 
+ 	/* allocate space for base edesc, link tables and IV */
+-	edesc = qi_cache_zalloc(GFP_DMA | flags);
++	edesc = qi_cache_zalloc(flags);
+ 	if (unlikely(!edesc)) {
+ 		dev_err(dev, "could not allocate extended descriptor\n");
+ 		caam_unmap(dev, req->src, req->dst, src_nents, dst_nents, 0,
+@@ -3220,14 +3222,14 @@ static int hash_digest_key(struct caam_hash_ctx *ctx, u32 *keylen, u8 *key,
+ 	int ret = -ENOMEM;
+ 	struct dpaa2_fl_entry *in_fle, *out_fle;
+ 
+-	req_ctx = kzalloc(sizeof(*req_ctx), GFP_KERNEL | GFP_DMA);
++	req_ctx = kzalloc(sizeof(*req_ctx), GFP_KERNEL);
+ 	if (!req_ctx)
+ 		return -ENOMEM;
+ 
+ 	in_fle = &req_ctx->fd_flt[1];
+ 	out_fle = &req_ctx->fd_flt[0];
+ 
+-	flc = kzalloc(sizeof(*flc), GFP_KERNEL | GFP_DMA);
++	flc = kzalloc(sizeof(*flc), GFP_KERNEL);
+ 	if (!flc)
+ 		goto err_flc;
+ 
+@@ -3316,7 +3318,13 @@ static int ahash_setkey(struct crypto_ahash *ahash, const u8 *key,
+ 	dev_dbg(ctx->dev, "keylen %d blocksize %d\n", keylen, blocksize);
+ 
+ 	if (keylen > blocksize) {
+-		hashed_key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
++		unsigned int aligned_len =
++			ALIGN(keylen, dma_get_cache_alignment());
++
++		if (aligned_len < keylen)
++			return -EOVERFLOW;
++
++		hashed_key = kmemdup(key, aligned_len, GFP_KERNEL);
+ 		if (!hashed_key)
+ 			return -ENOMEM;
+ 		ret = hash_digest_key(ctx, &keylen, hashed_key, digestsize);
+@@ -3560,7 +3568,7 @@ static int ahash_update_ctx(struct ahash_request *req)
+ 		}
+ 
+ 		/* allocate space for base edesc and link tables */
+-		edesc = qi_cache_zalloc(GFP_DMA | flags);
++		edesc = qi_cache_zalloc(flags);
+ 		if (!edesc) {
+ 			dma_unmap_sg(ctx->dev, req->src, src_nents,
+ 				     DMA_TO_DEVICE);
+@@ -3654,7 +3662,7 @@ static int ahash_final_ctx(struct ahash_request *req)
+ 	int ret;
+ 
+ 	/* allocate space for base edesc and link tables */
+-	edesc = qi_cache_zalloc(GFP_DMA | flags);
++	edesc = qi_cache_zalloc(flags);
+ 	if (!edesc)
+ 		return -ENOMEM;
+ 
+@@ -3743,7 +3751,7 @@ static int ahash_finup_ctx(struct ahash_request *req)
+ 	}
+ 
+ 	/* allocate space for base edesc and link tables */
+-	edesc = qi_cache_zalloc(GFP_DMA | flags);
++	edesc = qi_cache_zalloc(flags);
+ 	if (!edesc) {
+ 		dma_unmap_sg(ctx->dev, req->src, src_nents, DMA_TO_DEVICE);
+ 		return -ENOMEM;
+@@ -3836,7 +3844,7 @@ static int ahash_digest(struct ahash_request *req)
+ 	}
+ 
+ 	/* allocate space for base edesc and link tables */
+-	edesc = qi_cache_zalloc(GFP_DMA | flags);
++	edesc = qi_cache_zalloc(flags);
+ 	if (!edesc) {
+ 		dma_unmap_sg(ctx->dev, req->src, src_nents, DMA_TO_DEVICE);
+ 		return ret;
+@@ -3913,7 +3921,7 @@ static int ahash_final_no_ctx(struct ahash_request *req)
+ 	int ret = -ENOMEM;
+ 
+ 	/* allocate space for base edesc and link tables */
+-	edesc = qi_cache_zalloc(GFP_DMA | flags);
++	edesc = qi_cache_zalloc(flags);
+ 	if (!edesc)
+ 		return ret;
+ 
+@@ -4012,7 +4020,7 @@ static int ahash_update_no_ctx(struct ahash_request *req)
+ 		}
+ 
+ 		/* allocate space for base edesc and link tables */
+-		edesc = qi_cache_zalloc(GFP_DMA | flags);
++		edesc = qi_cache_zalloc(flags);
+ 		if (!edesc) {
+ 			dma_unmap_sg(ctx->dev, req->src, src_nents,
+ 				     DMA_TO_DEVICE);
+@@ -4125,7 +4133,7 @@ static int ahash_finup_no_ctx(struct ahash_request *req)
+ 	}
+ 
+ 	/* allocate space for base edesc and link tables */
+-	edesc = qi_cache_zalloc(GFP_DMA | flags);
++	edesc = qi_cache_zalloc(flags);
+ 	if (!edesc) {
+ 		dma_unmap_sg(ctx->dev, req->src, src_nents, DMA_TO_DEVICE);
+ 		return ret;
+@@ -4230,7 +4238,7 @@ static int ahash_update_first(struct ahash_request *req)
+ 		}
+ 
+ 		/* allocate space for base edesc and link tables */
+-		edesc = qi_cache_zalloc(GFP_DMA | flags);
++		edesc = qi_cache_zalloc(flags);
+ 		if (!edesc) {
+ 			dma_unmap_sg(ctx->dev, req->src, src_nents,
+ 				     DMA_TO_DEVICE);
+@@ -4926,6 +4934,7 @@ static int dpaa2_dpseci_congestion_setup(struct dpaa2_caam_priv *priv,
+ {
+ 	struct dpseci_congestion_notification_cfg cong_notif_cfg = { 0 };
+ 	struct device *dev = priv->dev;
++	unsigned int alignmask;
+ 	int err;
+ 
+ 	/*
+@@ -4936,13 +4945,14 @@ static int dpaa2_dpseci_congestion_setup(struct dpaa2_caam_priv *priv,
+ 	    !(priv->dpseci_attr.options & DPSECI_OPT_HAS_CG))
+ 		return 0;
+ 
+-	priv->cscn_mem = kzalloc(DPAA2_CSCN_SIZE + DPAA2_CSCN_ALIGN,
+-				 GFP_KERNEL | GFP_DMA);
++	alignmask = DPAA2_CSCN_ALIGN - 1;
++	alignmask |= dma_get_cache_alignment() - 1;
++	priv->cscn_mem = kzalloc(ALIGN(DPAA2_CSCN_SIZE, alignmask + 1),
++				 GFP_KERNEL);
+ 	if (!priv->cscn_mem)
+ 		return -ENOMEM;
+ 
+-	priv->cscn_mem_aligned = PTR_ALIGN(priv->cscn_mem, DPAA2_CSCN_ALIGN);
+-	priv->cscn_dma = dma_map_single(dev, priv->cscn_mem_aligned,
++	priv->cscn_dma = dma_map_single(dev, priv->cscn_mem,
+ 					DPAA2_CSCN_SIZE, DMA_FROM_DEVICE);
+ 	if (dma_mapping_error(dev, priv->cscn_dma)) {
+ 		dev_err(dev, "Error mapping CSCN memory area\n");
+@@ -5174,7 +5184,7 @@ static int dpaa2_caam_probe(struct fsl_mc_device *dpseci_dev)
+ 	priv->domain = iommu_get_domain_for_dev(dev);
+ 
+ 	qi_cache = kmem_cache_create("dpaa2_caamqicache", CAAM_QI_MEMCACHE_SIZE,
+-				     0, SLAB_CACHE_DMA, NULL);
++				     0, 0, NULL);
+ 	if (!qi_cache) {
+ 		dev_err(dev, "Can't allocate SEC cache\n");
+ 		return -ENOMEM;
+@@ -5451,7 +5461,7 @@ int dpaa2_caam_enqueue(struct device *dev, struct caam_request *req)
+ 		dma_sync_single_for_cpu(priv->dev, priv->cscn_dma,
+ 					DPAA2_CSCN_SIZE,
+ 					DMA_FROM_DEVICE);
+-		if (unlikely(dpaa2_cscn_state_congested(priv->cscn_mem_aligned))) {
++		if (unlikely(dpaa2_cscn_state_congested(priv->cscn_mem))) {
+ 			dev_dbg_ratelimited(dev, "Dropping request\n");
+ 			return -EBUSY;
+ 		}
+diff --git a/drivers/crypto/caam/caamalg_qi2.h b/drivers/crypto/caam/caamalg_qi2.h
+index d35253407ade..abb502bb675c 100644
+--- a/drivers/crypto/caam/caamalg_qi2.h
++++ b/drivers/crypto/caam/caamalg_qi2.h
+@@ -7,13 +7,14 @@
+ #ifndef _CAAMALG_QI2_H_
+ #define _CAAMALG_QI2_H_
+ 
++#include <crypto/internal/skcipher.h>
++#include <linux/compiler_attributes.h>
+ #include <soc/fsl/dpaa2-io.h>
+ #include <soc/fsl/dpaa2-fd.h>
+ #include <linux/threads.h>
+ #include <linux/netdevice.h>
+ #include "dpseci.h"
+ #include "desc_constr.h"
+-#include <crypto/skcipher.h>
+ 
+ #define DPAA2_CAAM_STORE_SIZE	16
+ /* NAPI weight *must* be a multiple of the store size. */
+@@ -36,8 +37,6 @@
+  * @tx_queue_attr: array of Tx queue attributes
+  * @cscn_mem: pointer to memory region containing the congestion SCN
+  *	it's size is larger than to accommodate alignment
+- * @cscn_mem_aligned: pointer to congestion SCN; it is computed as
+- *	PTR_ALIGN(cscn_mem, DPAA2_CSCN_ALIGN)
+  * @cscn_dma: dma address used by the QMAN to write CSCN messages
+  * @dev: device associated with the DPSECI object
+  * @mc_io: pointer to MC portal's I/O object
+@@ -58,7 +57,6 @@ struct dpaa2_caam_priv {
+ 
+ 	/* congestion */
+ 	void *cscn_mem;
+-	void *cscn_mem_aligned;
+ 	dma_addr_t cscn_dma;
+ 
+ 	struct device *dev;
+@@ -158,7 +156,7 @@ struct ahash_edesc {
+ struct caam_flc {
+ 	u32 flc[16];
+ 	u32 sh_desc[MAX_SDLEN];
+-} ____cacheline_aligned;
++} __aligned(CRYPTO_DMA_ALIGN);
+ 
+ enum optype {
+ 	ENCRYPT = 0,
+@@ -180,7 +178,7 @@ enum optype {
+  * @edesc: extended descriptor; points to one of {skcipher,aead}_edesc
+  */
+ struct caam_request {
+-	struct dpaa2_fl_entry fd_flt[2];
++	struct dpaa2_fl_entry fd_flt[2] __aligned(CRYPTO_DMA_ALIGN);
+ 	dma_addr_t fd_flt_dma;
+ 	struct caam_flc *flc;
+ 	dma_addr_t flc_dma;
+diff --git a/drivers/crypto/caam/caamhash.c b/drivers/crypto/caam/caamhash.c
+index 1050e965a438..1f357f48c473 100644
+--- a/drivers/crypto/caam/caamhash.c
++++ b/drivers/crypto/caam/caamhash.c
+@@ -66,6 +66,8 @@
+ #include "key_gen.h"
+ #include "caamhash_desc.h"
+ #include <crypto/engine.h>
++#include <linux/dma-mapping.h>
++#include <linux/kernel.h>
+ 
+ #define CAAM_CRA_PRIORITY		3000
+ 
+@@ -365,7 +367,7 @@ static int hash_digest_key(struct caam_hash_ctx *ctx, u32 *keylen, u8 *key,
+ 	dma_addr_t key_dma;
+ 	int ret;
+ 
+-	desc = kmalloc(CAAM_CMD_SZ * 8 + CAAM_PTR_SZ * 2, GFP_KERNEL | GFP_DMA);
++	desc = kmalloc(CAAM_CMD_SZ * 8 + CAAM_PTR_SZ * 2, GFP_KERNEL);
+ 	if (!desc) {
+ 		dev_err(jrdev, "unable to allocate key input memory\n");
+ 		return -ENOMEM;
+@@ -432,7 +434,13 @@ static int ahash_setkey(struct crypto_ahash *ahash,
+ 	dev_dbg(jrdev, "keylen %d\n", keylen);
+ 
+ 	if (keylen > blocksize) {
+-		hashed_key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
++		unsigned int aligned_len =
++			ALIGN(keylen, dma_get_cache_alignment());
++
++		if (aligned_len < keylen)
++			return -EOVERFLOW;
++
++		hashed_key = kmemdup(key, keylen, GFP_KERNEL);
+ 		if (!hashed_key)
+ 			return -ENOMEM;
+ 		ret = hash_digest_key(ctx, &keylen, hashed_key, digestsize);
+@@ -702,7 +710,7 @@ static struct ahash_edesc *ahash_edesc_alloc(struct ahash_request *req,
+ 	struct ahash_edesc *edesc;
+ 	unsigned int sg_size = sg_num * sizeof(struct sec4_sg_entry);
+ 
+-	edesc = kzalloc(sizeof(*edesc) + sg_size, GFP_DMA | flags);
++	edesc = kzalloc(sizeof(*edesc) + sg_size, flags);
+ 	if (!edesc) {
+ 		dev_err(ctx->jrdev, "could not allocate extended descriptor\n");
+ 		return NULL;
+diff --git a/drivers/crypto/caam/caampkc.c b/drivers/crypto/caam/caampkc.c
+index aef031946f33..e40614fef39d 100644
+--- a/drivers/crypto/caam/caampkc.c
++++ b/drivers/crypto/caam/caampkc.c
+@@ -16,6 +16,8 @@
+ #include "desc_constr.h"
+ #include "sg_sw_sec4.h"
+ #include "caampkc.h"
++#include <linux/dma-mapping.h>
++#include <linux/kernel.h>
+ 
+ #define DESC_RSA_PUB_LEN	(2 * CAAM_CMD_SZ + SIZEOF_RSA_PUB_PDB)
+ #define DESC_RSA_PRIV_F1_LEN	(2 * CAAM_CMD_SZ + \
+@@ -310,8 +312,7 @@ static struct rsa_edesc *rsa_edesc_alloc(struct akcipher_request *req,
+ 	sec4_sg_bytes = sec4_sg_len * sizeof(struct sec4_sg_entry);
+ 
+ 	/* allocate space for base edesc, hw desc commands and link tables */
+-	edesc = kzalloc(sizeof(*edesc) + desclen + sec4_sg_bytes,
+-			GFP_DMA | flags);
++	edesc = kzalloc(sizeof(*edesc) + desclen + sec4_sg_bytes, flags);
+ 	if (!edesc)
+ 		goto dst_fail;
+ 
+@@ -898,7 +899,7 @@ static u8 *caam_read_rsa_crt(const u8 *ptr, size_t nbytes, size_t dstlen)
+ 	if (!nbytes)
+ 		return NULL;
+ 
+-	dst = kzalloc(dstlen, GFP_DMA | GFP_KERNEL);
++	dst = kzalloc(dstlen, GFP_KERNEL);
+ 	if (!dst)
+ 		return NULL;
+ 
+@@ -910,7 +911,7 @@ static u8 *caam_read_rsa_crt(const u8 *ptr, size_t nbytes, size_t dstlen)
+ /**
+  * caam_read_raw_data - Read a raw byte stream as a positive integer.
+  * The function skips buffer's leading zeros, copies the remained data
+- * to a buffer allocated in the GFP_DMA | GFP_KERNEL zone and returns
++ * to a buffer allocated in the GFP_KERNEL zone and returns
+  * the address of the new buffer.
+  *
+  * @buf   : The data to read
+@@ -923,7 +924,7 @@ static inline u8 *caam_read_raw_data(const u8 *buf, size_t *nbytes)
+ 	if (!*nbytes)
+ 		return NULL;
+ 
+-	return kmemdup(buf, *nbytes, GFP_DMA | GFP_KERNEL);
++	return kmemdup(buf, *nbytes, GFP_KERNEL);
  }
  
- static int psp_v11_0_wait_for_bootloader(struct psp_context *psp)
-diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c b/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-index 8ed2281b6557..4fa0cd6d5df9 100644
---- a/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-@@ -37,94 +37,52 @@
- #include "oss/osssys_4_0_offset.h"
- #include "oss/osssys_4_0_sh_mask.h"
+ static int caam_rsa_check_key_length(unsigned int len)
+@@ -949,13 +950,13 @@ static int caam_rsa_set_pub_key(struct crypto_akcipher *tfm, const void *key,
+ 		return ret;
  
--MODULE_FIRMWARE("amdgpu/renoir_asd.bin");
--MODULE_FIRMWARE("amdgpu/renoir_ta.bin");
--MODULE_FIRMWARE("amdgpu/green_sardine_asd.bin");
--MODULE_FIRMWARE("amdgpu/green_sardine_ta.bin");
--
- /* address block */
- #define smnMP1_FIRMWARE_FLAGS		0x3010024
+ 	/* Copy key in DMA zone */
+-	rsa_key->e = kmemdup(raw_key.e, raw_key.e_sz, GFP_DMA | GFP_KERNEL);
++	rsa_key->e = kmemdup(raw_key.e, raw_key.e_sz, GFP_KERNEL);
+ 	if (!rsa_key->e)
+ 		goto err;
  
- static int psp_v12_0_init_microcode(struct psp_context *psp)
+ 	/*
+ 	 * Skip leading zeros and copy the positive integer to a buffer
+-	 * allocated in the GFP_DMA | GFP_KERNEL zone. The decryption descriptor
++	 * allocated in the GFP_KERNEL zone. The decryption descriptor
+ 	 * expects a positive integer for the RSA modulus and uses its length as
+ 	 * decryption output length.
+ 	 */
+@@ -983,6 +984,7 @@ static void caam_rsa_set_priv_key_form(struct caam_rsa_ctx *ctx,
+ 	struct caam_rsa_key *rsa_key = &ctx->key;
+ 	size_t p_sz = raw_key->p_sz;
+ 	size_t q_sz = raw_key->q_sz;
++	unsigned aligned_size;
+ 
+ 	rsa_key->p = caam_read_raw_data(raw_key->p, &p_sz);
+ 	if (!rsa_key->p)
+@@ -994,11 +996,13 @@ static void caam_rsa_set_priv_key_form(struct caam_rsa_ctx *ctx,
+ 		goto free_p;
+ 	rsa_key->q_sz = q_sz;
+ 
+-	rsa_key->tmp1 = kzalloc(raw_key->p_sz, GFP_DMA | GFP_KERNEL);
++	aligned_size = ALIGN(raw_key->p_sz, dma_get_cache_alignment());
++	rsa_key->tmp1 = kzalloc(aligned_size, GFP_KERNEL);
+ 	if (!rsa_key->tmp1)
+ 		goto free_q;
+ 
+-	rsa_key->tmp2 = kzalloc(raw_key->q_sz, GFP_DMA | GFP_KERNEL);
++	aligned_size = ALIGN(raw_key->q_sz, dma_get_cache_alignment());
++	rsa_key->tmp2 = kzalloc(aligned_size, GFP_KERNEL);
+ 	if (!rsa_key->tmp2)
+ 		goto free_tmp1;
+ 
+@@ -1051,17 +1055,17 @@ static int caam_rsa_set_priv_key(struct crypto_akcipher *tfm, const void *key,
+ 		return ret;
+ 
+ 	/* Copy key in DMA zone */
+-	rsa_key->d = kmemdup(raw_key.d, raw_key.d_sz, GFP_DMA | GFP_KERNEL);
++	rsa_key->d = kmemdup(raw_key.d, raw_key.d_sz, GFP_KERNEL);
+ 	if (!rsa_key->d)
+ 		goto err;
+ 
+-	rsa_key->e = kmemdup(raw_key.e, raw_key.e_sz, GFP_DMA | GFP_KERNEL);
++	rsa_key->e = kmemdup(raw_key.e, raw_key.e_sz, GFP_KERNEL);
+ 	if (!rsa_key->e)
+ 		goto err;
+ 
+ 	/*
+ 	 * Skip leading zeros and copy the positive integer to a buffer
+-	 * allocated in the GFP_DMA | GFP_KERNEL zone. The decryption descriptor
++	 * allocated in the GFP_KERNEL zone. The decryption descriptor
+ 	 * expects a positive integer for the RSA modulus and uses its length as
+ 	 * decryption output length.
+ 	 */
+@@ -1185,8 +1189,7 @@ int caam_pkc_init(struct device *ctrldev)
+ 		return 0;
+ 
+ 	/* allocate zero buffer, used for padding input */
+-	zero_buffer = kzalloc(CAAM_RSA_MAX_INPUT_SIZE - 1, GFP_DMA |
+-			      GFP_KERNEL);
++	zero_buffer = kzalloc(CAAM_RSA_MAX_INPUT_SIZE - 1, GFP_KERNEL);
+ 	if (!zero_buffer)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/crypto/caam/caamprng.c b/drivers/crypto/caam/caamprng.c
+index 4839e66300a2..6e4c1191cb28 100644
+--- a/drivers/crypto/caam/caamprng.c
++++ b/drivers/crypto/caam/caamprng.c
+@@ -8,6 +8,8 @@
+ 
+ #include <linux/completion.h>
+ #include <crypto/internal/rng.h>
++#include <linux/dma-mapping.h>
++#include <linux/kernel.h>
+ #include "compat.h"
+ #include "regs.h"
+ #include "intern.h"
+@@ -75,6 +77,7 @@ static int caam_prng_generate(struct crypto_rng *tfm,
+ 			     const u8 *src, unsigned int slen,
+ 			     u8 *dst, unsigned int dlen)
  {
- 	struct amdgpu_device *adev = psp->adev;
--	const char *chip_name;
--	char fw_name[30];
- 	int err = 0;
- 	const struct ta_firmware_header_v1_0 *ta_hdr;
- 	DRM_DEBUG("\n");
++	unsigned int aligned_dlen = ALIGN(dlen, dma_get_cache_alignment());
+ 	struct caam_prng_ctx ctx;
+ 	struct device *jrdev;
+ 	dma_addr_t dst_dma;
+@@ -82,7 +85,10 @@ static int caam_prng_generate(struct crypto_rng *tfm,
+ 	u8 *buf;
+ 	int ret;
  
--	switch (adev->asic_type) {
--	case CHIP_RENOIR:
--		if (adev->apu_flags & AMD_APU_IS_RENOIR)
--			chip_name = "renoir";
--		else
--			chip_name = "green_sardine";
--		break;
--	default:
--		BUG();
--	}
-+	err = psp_init_asd_microcode(psp);
-+	if (err)
-+		return err;
+-	buf = kzalloc(dlen, GFP_KERNEL);
++	if (aligned_dlen < dlen)
++		return -EOVERFLOW;
++
++	buf = kzalloc(aligned_dlen, GFP_KERNEL);
+ 	if (!buf)
+ 		return -ENOMEM;
  
--	err = psp_init_asd_microcode(psp, chip_name);
-+	err = amdgpu_ucode_validate(adev->psp.ta_fw);
- 	if (err)
- 		return err;
+@@ -94,7 +100,7 @@ static int caam_prng_generate(struct crypto_rng *tfm,
+ 		return ret;
+ 	}
  
--	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_ta.bin", chip_name);
--	err = request_firmware(&adev->psp.ta_fw, fw_name, adev->dev);
--	if (err) {
--		release_firmware(adev->psp.ta_fw);
--		adev->psp.ta_fw = NULL;
--		dev_info(adev->dev,
--			 "psp v12.0: Failed to load firmware \"%s\"\n",
--			 fw_name);
--	} else {
--		err = amdgpu_ucode_validate(adev->psp.ta_fw);
--		if (err)
--			goto out;
--
--		ta_hdr = (const struct ta_firmware_header_v1_0 *)
--				 adev->psp.ta_fw->data;
--		adev->psp.hdcp_context.context.bin_desc.fw_version =
--			le32_to_cpu(ta_hdr->hdcp.fw_version);
--		adev->psp.hdcp_context.context.bin_desc.size_bytes =
--			le32_to_cpu(ta_hdr->hdcp.size_bytes);
--		adev->psp.hdcp_context.context.bin_desc.start_addr =
--			(uint8_t *)ta_hdr +
--			le32_to_cpu(ta_hdr->header.ucode_array_offset_bytes);
--
--		adev->psp.ta_fw_version = le32_to_cpu(ta_hdr->header.ucode_version);
--
--		adev->psp.dtm_context.context.bin_desc.fw_version =
--			le32_to_cpu(ta_hdr->dtm.fw_version);
--		adev->psp.dtm_context.context.bin_desc.size_bytes =
--			le32_to_cpu(ta_hdr->dtm.size_bytes);
--		adev->psp.dtm_context.context.bin_desc.start_addr =
-+	ta_hdr = (const struct ta_firmware_header_v1_0 *)
-+			 adev->psp.ta_fw->data;
-+	adev->psp.hdcp_context.context.bin_desc.fw_version =
-+		le32_to_cpu(ta_hdr->hdcp.fw_version);
-+	adev->psp.hdcp_context.context.bin_desc.size_bytes =
-+		le32_to_cpu(ta_hdr->hdcp.size_bytes);
-+	adev->psp.hdcp_context.context.bin_desc.start_addr =
-+		(uint8_t *)ta_hdr +
-+		le32_to_cpu(ta_hdr->header.ucode_array_offset_bytes);
-+	adev->psp.ta_fw_version = le32_to_cpu(ta_hdr->header.ucode_version);
-+	adev->psp.dtm_context.context.bin_desc.fw_version =
-+		le32_to_cpu(ta_hdr->dtm.fw_version);
-+	adev->psp.dtm_context.context.bin_desc.size_bytes =
-+		le32_to_cpu(ta_hdr->dtm.size_bytes);
-+	adev->psp.dtm_context.context.bin_desc.start_addr =
-+		(uint8_t *)adev->psp.hdcp_context.context.bin_desc.start_addr +
-+		le32_to_cpu(ta_hdr->dtm.offset_bytes);
-+	if (adev->apu_flags & AMD_APU_IS_RENOIR) {
-+		adev->psp.securedisplay_context.context.bin_desc.fw_version =
-+			le32_to_cpu(ta_hdr->securedisplay.fw_version);
-+		adev->psp.securedisplay_context.context.bin_desc.size_bytes =
-+			le32_to_cpu(ta_hdr->securedisplay.size_bytes);
-+		adev->psp.securedisplay_context.context.bin_desc.start_addr =
- 			(uint8_t *)adev->psp.hdcp_context.context.bin_desc.start_addr +
--			le32_to_cpu(ta_hdr->dtm.offset_bytes);
--
--		if (adev->apu_flags & AMD_APU_IS_RENOIR) {
--			adev->psp.securedisplay_context.context.bin_desc.fw_version =
--				le32_to_cpu(ta_hdr->securedisplay.fw_version);
--			adev->psp.securedisplay_context.context.bin_desc.size_bytes =
--				le32_to_cpu(ta_hdr->securedisplay.size_bytes);
--			adev->psp.securedisplay_context.context.bin_desc.start_addr =
--				(uint8_t *)adev->psp.hdcp_context.context.bin_desc.start_addr +
--				le32_to_cpu(ta_hdr->securedisplay.offset_bytes);
-+			le32_to_cpu(ta_hdr->securedisplay.offset_bytes);
- 		}
--	}
+-	desc = kzalloc(CAAM_PRNG_MAX_DESC_LEN, GFP_KERNEL | GFP_DMA);
++	desc = kzalloc(CAAM_PRNG_MAX_DESC_LEN, GFP_KERNEL);
+ 	if (!desc) {
+ 		ret = -ENOMEM;
+ 		goto out1;
+@@ -156,7 +162,7 @@ static int caam_prng_seed(struct crypto_rng *tfm,
+ 		return ret;
+ 	}
  
- 	return 0;
--
--out:
--	release_firmware(adev->psp.ta_fw);
--	adev->psp.ta_fw = NULL;
--	if (err) {
--		dev_err(adev->dev,
--			"psp v12.0: Failed to load firmware \"%s\"\n",
--			fw_name);
--	}
--
--	return err;
- }
+-	desc = kzalloc(CAAM_PRNG_MAX_DESC_LEN, GFP_KERNEL | GFP_DMA);
++	desc = kzalloc(CAAM_PRNG_MAX_DESC_LEN, GFP_KERNEL);
+ 	if (!desc) {
+ 		caam_jr_free(jrdev);
+ 		return -ENOMEM;
+diff --git a/drivers/crypto/caam/caamrng.c b/drivers/crypto/caam/caamrng.c
+index 1f0e82050976..1fd8ff965006 100644
+--- a/drivers/crypto/caam/caamrng.c
++++ b/drivers/crypto/caam/caamrng.c
+@@ -12,6 +12,8 @@
+ #include <linux/hw_random.h>
+ #include <linux/completion.h>
+ #include <linux/atomic.h>
++#include <linux/dma-mapping.h>
++#include <linux/kernel.h>
+ #include <linux/kfifo.h>
  
- static int psp_v12_0_bootloader_load_sysdrv(struct psp_context *psp)
-diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v13_0.c b/drivers/gpu/drm/amd/amdgpu/psp_v13_0.c
-index e6a26a7e5e5e..44026f7f60f2 100644
---- a/drivers/gpu/drm/amd/amdgpu/psp_v13_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/psp_v13_0.c
-@@ -31,24 +31,6 @@
- #include "mp/mp_13_0_2_offset.h"
- #include "mp/mp_13_0_2_sh_mask.h"
+ #include "compat.h"
+@@ -176,17 +178,18 @@ static int caam_init(struct hwrng *rng)
+ 	int err;
  
--MODULE_FIRMWARE("amdgpu/aldebaran_sos.bin");
--MODULE_FIRMWARE("amdgpu/aldebaran_ta.bin");
--MODULE_FIRMWARE("amdgpu/aldebaran_cap.bin");
--MODULE_FIRMWARE("amdgpu/yellow_carp_toc.bin");
--MODULE_FIRMWARE("amdgpu/yellow_carp_ta.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_5_toc.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_5_ta.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_8_toc.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_8_ta.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_0_sos.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_0_ta.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_7_sos.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_7_ta.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_10_sos.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_10_ta.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_11_toc.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_11_ta.bin");
--
- /* For large FW files the time to complete can be very long */
- #define USBC_PD_POLLING_LIMIT_S 240
+ 	ctx->desc_sync = devm_kzalloc(ctx->ctrldev, CAAM_RNG_DESC_LEN,
+-				      GFP_DMA | GFP_KERNEL);
++				      GFP_KERNEL);
+ 	if (!ctx->desc_sync)
+ 		return -ENOMEM;
  
-@@ -70,32 +52,16 @@ MODULE_FIRMWARE("amdgpu/psp_13_0_11_ta.bin");
- static int psp_v13_0_init_microcode(struct psp_context *psp)
- {
- 	struct amdgpu_device *adev = psp->adev;
--	const char *chip_name;
--	char ucode_prefix[30];
- 	int err = 0;
+ 	ctx->desc_async = devm_kzalloc(ctx->ctrldev, CAAM_RNG_DESC_LEN,
+-				       GFP_DMA | GFP_KERNEL);
++				       GFP_KERNEL);
+ 	if (!ctx->desc_async)
+ 		return -ENOMEM;
  
- 	switch (adev->ip_versions[MP0_HWIP][0]) {
- 	case IP_VERSION(13, 0, 2):
--		chip_name = "aldebaran";
--		break;
--	case IP_VERSION(13, 0, 1):
--	case IP_VERSION(13, 0, 3):
--		chip_name = "yellow_carp";
--		break;
--	default:
--		amdgpu_ucode_ip_version_decode(adev, MP0_HWIP, ucode_prefix, sizeof(ucode_prefix));
--		chip_name = ucode_prefix;
--		break;
--	}
--
--	switch (adev->ip_versions[MP0_HWIP][0]) {
--	case IP_VERSION(13, 0, 2):
--		err = psp_init_sos_microcode(psp, chip_name);
-+		err = psp_init_sos_microcode(psp);
- 		if (err)
- 			return err;
- 		/* It's not necessary to load ras ta on Guest side */
- 		if (!amdgpu_sriov_vf(adev)) {
--			err = psp_init_ta_microcode(&adev->psp, chip_name);
-+			err = psp_init_ta_microcode(&adev->psp);
- 			if (err)
- 				return err;
- 		}
-@@ -105,21 +71,21 @@ static int psp_v13_0_init_microcode(struct psp_context *psp)
- 	case IP_VERSION(13, 0, 5):
- 	case IP_VERSION(13, 0, 8):
- 	case IP_VERSION(13, 0, 11):
--		err = psp_init_toc_microcode(psp, chip_name);
-+		err = psp_init_toc_microcode(psp);
- 		if (err)
- 			return err;
--		err = psp_init_ta_microcode(psp, chip_name);
-+		err = psp_init_ta_microcode(psp);
- 		if (err)
- 			return err;
- 		break;
- 	case IP_VERSION(13, 0, 0):
- 	case IP_VERSION(13, 0, 7):
- 	case IP_VERSION(13, 0, 10):
--		err = psp_init_sos_microcode(psp, chip_name);
-+		err = psp_init_sos_microcode(psp);
- 		if (err)
- 			return err;
- 		/* It's not necessary to load ras ta on Guest side */
--		err = psp_init_ta_microcode(psp, chip_name);
-+		err = psp_init_ta_microcode(psp);
- 		if (err)
- 			return err;
- 		break;
-diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c b/drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c
-index 9d4e24e518e8..cef3848cd6a3 100644
---- a/drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c
-+++ b/drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c
-@@ -29,31 +29,17 @@
- #include "mp/mp_13_0_4_offset.h"
- #include "mp/mp_13_0_4_sh_mask.h"
+-	if (kfifo_alloc(&ctx->fifo, CAAM_RNG_MAX_FIFO_STORE_SIZE,
+-			GFP_DMA | GFP_KERNEL))
++	if (kfifo_alloc(&ctx->fifo, ALIGN(CAAM_RNG_MAX_FIFO_STORE_SIZE,
++					  dma_get_cache_alignment()),
++			GFP_KERNEL))
+ 		return -ENOMEM;
  
--MODULE_FIRMWARE("amdgpu/psp_13_0_4_toc.bin");
--MODULE_FIRMWARE("amdgpu/psp_13_0_4_ta.bin");
--
- static int psp_v13_0_4_init_microcode(struct psp_context *psp)
- {
- 	struct amdgpu_device *adev = psp->adev;
--	const char *chip_name;
--	char ucode_prefix[30];
- 	int err = 0;
+ 	INIT_WORK(&ctx->worker, caam_rng_worker);
+diff --git a/drivers/crypto/caam/ctrl.c b/drivers/crypto/caam/ctrl.c
+index 32253a064d0f..6278afb951c3 100644
+--- a/drivers/crypto/caam/ctrl.c
++++ b/drivers/crypto/caam/ctrl.c
+@@ -199,7 +199,7 @@ static int deinstantiate_rng(struct device *ctrldev, int state_handle_mask)
+ 	u32 *desc, status;
+ 	int sh_idx, ret = 0;
  
- 	switch (adev->ip_versions[MP0_HWIP][0]) {
- 	case IP_VERSION(13, 0, 4):
--		amdgpu_ucode_ip_version_decode(adev, MP0_HWIP, ucode_prefix, sizeof(ucode_prefix));
--		chip_name = ucode_prefix;
--		break;
--	default:
--		BUG();
--	}
--
--	switch (adev->ip_versions[MP0_HWIP][0]) {
--	case IP_VERSION(13, 0, 4):
--		err = psp_init_toc_microcode(psp, chip_name);
-+		err = psp_init_toc_microcode(psp);
- 		if (err)
- 			return err;
--		err = psp_init_ta_microcode(psp, chip_name);
-+		err = psp_init_ta_microcode(psp);
- 		if (err)
- 			return err;
- 		break;
-diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v3_1.c b/drivers/gpu/drm/amd/amdgpu/psp_v3_1.c
-index 157147c6c94e..d20e69e4c17b 100644
---- a/drivers/gpu/drm/amd/amdgpu/psp_v3_1.c
-+++ b/drivers/gpu/drm/amd/amdgpu/psp_v3_1.c
-@@ -56,27 +56,15 @@ static int psp_v3_1_ring_stop(struct psp_context *psp,
+-	desc = kmalloc(CAAM_CMD_SZ * 3, GFP_KERNEL | GFP_DMA);
++	desc = kmalloc(CAAM_CMD_SZ * 3, GFP_KERNEL);
+ 	if (!desc)
+ 		return -ENOMEM;
  
- static int psp_v3_1_init_microcode(struct psp_context *psp)
- {
--	struct amdgpu_device *adev = psp->adev;
--	const char *chip_name;
- 	int err = 0;
+@@ -276,7 +276,7 @@ static int instantiate_rng(struct device *ctrldev, int state_handle_mask,
+ 	int ret = 0, sh_idx;
  
- 	DRM_DEBUG("\n");
+ 	ctrl = (struct caam_ctrl __iomem *)ctrlpriv->ctrl;
+-	desc = kmalloc(CAAM_CMD_SZ * 7, GFP_KERNEL | GFP_DMA);
++	desc = kmalloc(CAAM_CMD_SZ * 7, GFP_KERNEL);
+ 	if (!desc)
+ 		return -ENOMEM;
  
--	switch (adev->asic_type) {
--	case CHIP_VEGA10:
--		chip_name = "vega10";
--		break;
--	case CHIP_VEGA12:
--		chip_name = "vega12";
--		break;
--	default: BUG();
--	}
--
--	err = psp_init_sos_microcode(psp, chip_name);
-+	err = psp_init_sos_microcode(psp);
- 	if (err)
- 		return err;
+diff --git a/drivers/crypto/caam/key_gen.c b/drivers/crypto/caam/key_gen.c
+index b0e8a4939b4f..88cc4fe2a585 100644
+--- a/drivers/crypto/caam/key_gen.c
++++ b/drivers/crypto/caam/key_gen.c
+@@ -64,7 +64,7 @@ int gen_split_key(struct device *jrdev, u8 *key_out,
+ 	if (local_max > max_keylen)
+ 		return -EINVAL;
  
--	err = psp_init_asd_microcode(psp, chip_name);
-+	err = psp_init_asd_microcode(psp);
- 	if (err)
- 		return err;
+-	desc = kmalloc(CAAM_CMD_SZ * 6 + CAAM_PTR_SZ * 2, GFP_KERNEL | GFP_DMA);
++	desc = kmalloc(CAAM_CMD_SZ * 6 + CAAM_PTR_SZ * 2, GFP_KERNEL);
+ 	if (!desc) {
+ 		dev_err(jrdev, "unable to allocate key input memory\n");
+ 		return ret;
+diff --git a/drivers/crypto/caam/qi.c b/drivers/crypto/caam/qi.c
+index c36f27376d7e..4c52c9365558 100644
+--- a/drivers/crypto/caam/qi.c
++++ b/drivers/crypto/caam/qi.c
+@@ -614,7 +614,7 @@ static int alloc_rsp_fq_cpu(struct device *qidev, unsigned int cpu)
+ 	struct qman_fq *fq;
+ 	int ret;
  
+-	fq = kzalloc(sizeof(*fq), GFP_KERNEL | GFP_DMA);
++	fq = kzalloc(sizeof(*fq), GFP_KERNEL);
+ 	if (!fq)
+ 		return -ENOMEM;
+ 
+@@ -756,7 +756,7 @@ int caam_qi_init(struct platform_device *caam_pdev)
+ 	}
+ 
+ 	qi_cache = kmem_cache_create("caamqicache", CAAM_QI_MEMCACHE_SIZE, 0,
+-				     SLAB_CACHE_DMA, NULL);
++				     0, NULL);
+ 	if (!qi_cache) {
+ 		dev_err(qidev, "Can't allocate CAAM cache\n");
+ 		free_rsp_fqs();
+diff --git a/drivers/crypto/caam/qi.h b/drivers/crypto/caam/qi.h
+index 5894f16f8fe3..a96e3d213c06 100644
+--- a/drivers/crypto/caam/qi.h
++++ b/drivers/crypto/caam/qi.h
+@@ -9,6 +9,8 @@
+ #ifndef __QI_H__
+ #define __QI_H__
+ 
++#include <crypto/algapi.h>
++#include <linux/compiler_attributes.h>
+ #include <soc/fsl/qman.h>
+ #include "compat.h"
+ #include "desc.h"
+@@ -58,8 +60,10 @@ enum optype {
+  * @qidev: device pointer for CAAM/QI backend
+  */
+ struct caam_drv_ctx {
+-	u32 prehdr[2];
+-	u32 sh_desc[MAX_SDLEN];
++	struct {
++		u32 prehdr[2];
++		u32 sh_desc[MAX_SDLEN];
++	} __aligned(CRYPTO_DMA_ALIGN);
+ 	dma_addr_t context_a;
+ 	struct qman_fq *req_fq;
+ 	struct qman_fq *rsp_fq;
+@@ -67,7 +71,7 @@ struct caam_drv_ctx {
+ 	int cpu;
+ 	enum optype op_type;
+ 	struct device *qidev;
+-} ____cacheline_aligned;
++};
+ 
+ /**
+  * caam_drv_req - The request structure the driver application should fill while
+@@ -88,7 +92,7 @@ struct caam_drv_req {
+ 	struct caam_drv_ctx *drv_ctx;
+ 	caam_qi_cbk cbk;
+ 	void *app_ctx;
+-} ____cacheline_aligned;
++} __aligned(CRYPTO_DMA_ALIGN);
+ 
+ /**
+  * caam_drv_ctx_init - Initialise a CAAM/QI driver context
 -- 
-2.34.1
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
