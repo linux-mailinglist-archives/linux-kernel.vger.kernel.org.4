@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79396596A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 10:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2CA65969B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 10:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbiL3JRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 04:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S234410AbiL3JQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 04:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234764AbiL3JRF (ORCPT
+        with ESMTP id S231130AbiL3JQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 04:17:05 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94D612AD6;
-        Fri, 30 Dec 2022 01:17:03 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pBBUj-00CILa-7B; Fri, 30 Dec 2022 17:16:06 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 30 Dec 2022 17:16:05 +0800
-Date:   Fri, 30 Dec 2022 17:16:05 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-crypto@vger.kernel.org,
-        corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, joro@8bytes.org,
-        suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-        dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        Arnd Bergmann <arnd@arndb.de>, penberg@kernel.org,
-        rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 3/3] crypto: x86/ghash - add comment and fix broken link
-Message-ID: <Y66sVbBVtYu8Jll5@gondor.apana.org.au>
-References: <20221220054042.188537-1-ebiggers@kernel.org>
- <20221220054042.188537-4-ebiggers@kernel.org>
- <Y6GJzD9PLKj+Ocr2@hirez.programming.kicks-ass.net>
+        Fri, 30 Dec 2022 04:16:30 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC07DF4F
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 01:16:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6GJzD9PLKj+Ocr2@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1672391787;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W0YVvYHzhfhVLC1h+Hk5/AdGM7+lfwHu5eJUyiyijxE=;
+        b=fXxK0Zq/6DQtLZRcmVE5W9LLUbEXWe8PezyuDVSm/8JdKiAEyRTU03Kf9iliXuOLvfnWyf
+        6Vvb0K0EeDyAJxvpVM7rb4Vh8mCLK+LqvLeprkxclueO/0kQZUz0QSu1jL+OKxK2GuCGU1
+        3bHSlqdpY5/+Tl3nq3FwR3eaK7+r9Mo=
+Date:   Fri, 30 Dec 2022 09:16:26 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <fc13e5c0dba372ddb1435c959e7dc41f@linux.dev>
+Subject: Re: [PATCH] ARM: Remove redundant arch_cpu_idle_prepare()
+To:     rmk+kernel@armlinux.org.uk, keescook@chromium.org,
+        gregkh@linuxfoundation.org, Jason@zx2c4.com, djwong@kernel.org,
+        ebiederm@xmission.com, thunder.leizhen@huawei.com, ardb@kernel.org,
+        wangkefeng.wang@huawei.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221201031306.2782204-1-yajun.deng@linux.dev>
+References: <20221201031306.2782204-1-yajun.deng@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 11:09:16AM +0100, Peter Zijlstra wrote:
-> On Mon, Dec 19, 2022 at 09:40:42PM -0800, Eric Biggers wrote:
->
-> > - * http://software.intel.com/en-us/articles/carry-less-multiplication-and-its-usage-for-computing-the-gcm-mode/
-> > + * https://www.intel.com/content/dam/develop/external/us/en/documents/clmul-wp-rev-2-02-2014-04-20.pdf
-> 
-> Since these things have a habbit if changing, we tend to prefer to host
-> a copy on kernel.org somewhere (used to be bugzilla, but perhaps there's
-> a better places these days).
-
-Alternatively just save a copy at web.archive.org when you submit
-the patch and use that link.  In fact it seems that the original
-link is still available via web.archive.org (sans pictures).
-
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+December 1, 2022 11:13 AM, "Yajun Deng" <yajun.deng@linux.dev> wrote:=0A=
+=0A> arch_cpu_idle_prepare() was only called by cpu_startup_entry() and i=
+t is=0A> just a wrapper for local_fiq_enable().=0A> =0A> The local_fiq_en=
+able() was already called before cpu_startup_entry().=0A> =0A> So remove =
+redundant arch_cpu_idle_prepare().=0A> =0A> Signed-off-by: Yajun Deng <ya=
+jun.deng@linux.dev>=0A> ---=0A> arch/arm/kernel/process.c | 5 -----=0A> 1=
+ file changed, 5 deletions(-)=0A> =0A> diff --git a/arch/arm/kernel/proce=
+ss.c b/arch/arm/kernel/process.c=0A> index f811733a8fc5..e3f490ab95f4 100=
+644=0A> --- a/arch/arm/kernel/process.c=0A> +++ b/arch/arm/kernel/process=
+.c=0A> @@ -81,11 +81,6 @@ void arch_cpu_idle(void)=0A> raw_local_irq_enab=
+le();=0A> }=0A> =0A> -void arch_cpu_idle_prepare(void)=0A> -{=0A> - local=
+_fiq_enable();=0A> -}=0A> -=0A> void arch_cpu_idle_enter(void)=0A> {=0A> =
+ledtrig_cpu(CPU_LED_IDLE_START);=0A> -- =0A> 2.25.1=0A=0APing.
