@@ -2,223 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C826A65974D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5009C659756
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234653AbiL3Kah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 05:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S234643AbiL3Kej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 05:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234529AbiL3Kae (ORCPT
+        with ESMTP id S229485AbiL3Kef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 05:30:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D001D1A078
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:30:27 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pBCef-0006oC-Vy; Fri, 30 Dec 2022 11:30:26 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pBCeZ-002geM-QW; Fri, 30 Dec 2022 11:30:19 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pBCeZ-008xeU-4o; Fri, 30 Dec 2022 11:30:19 +0100
-Date:   Fri, 30 Dec 2022 11:30:16 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: linux-next: Tree for Dec 30
-Message-ID: <20221230103016.ebcjz7lky7wfkz6h@pengutronix.de>
+        Fri, 30 Dec 2022 05:34:35 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FA813F37
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:34:35 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id h24-20020a056e021d9800b0030be8a5dd68so11766168ila.13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:34:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l1+xVltypcnxAkvWPCQxFM0n2XimN1lwperOL1Mtxsc=;
+        b=dq4fyprvZbJP0ZwpuksQzY6NSbjtTasfqo+9N+EIxamIcOAAJXPCq38dI3DhEvMjze
+         QJfOkqvTEY+VWFbt/DUfG9kCgztP1rMpY+H+nNjskCSvFQ3puNPIVmTjsr0ySU4CqQza
+         IOjdsoz2ZthGyomkRdspYm0jSjiov+htAWH5p/wklxwokv+H9/pr6MBvYzL5tVJ/9c8i
+         6o2tLpfQKahk/I5Pn2xy+NBwfsuoGkD5FyRptaIfKVcm3NkUT1dqTD7Ks6Rc74Zm+biA
+         xLiwl/02xOp3H67tQ578xMARl2QEuYcd+ItGl+OTnkWJEl29XqGblK0xOxuRvyvKxKY8
+         /O0w==
+X-Gm-Message-State: AFqh2kqSqteXuhxPSNX/PD/1VW72d+FquDZK8mjnNNxucZNGlojlK/UV
+        QKsMbpsNZmTsdoUUBD4mwfaujrZFPLL2lbYcOcCpgggntqJB
+X-Google-Smtp-Source: AMrXdXuCVhfuhDVOVDBO2QEW3ZsUFRaZINtASNymA6eBjtRAhCOlpvlwUqMjxK5NbcRex/8HxlW2bK/0gq0OxTMGvKNDTLJeZwSu
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="arwubzpzgnalgtaf"
-Content-Disposition: inline
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,LOCALPART_IN_SUBJECT,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:cb44:0:b0:6df:b793:35ac with SMTP id
+ h4-20020a5ecb44000000b006dfb79335acmr2257037iok.33.1672396474461; Fri, 30 Dec
+ 2022 02:34:34 -0800 (PST)
+Date:   Fri, 30 Dec 2022 02:34:34 -0800
+In-Reply-To: <00000000000015ac7905e97ebaed@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c8b66105f1092536@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
+From:   syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, dan.carpenter@oracle.com,
+        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
+        kuba@kernel.org, leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This bug is marked as fixed by commit:
+9p: client_create/destroy: only call trans_mod->close after create
 
---arwubzpzgnalgtaf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-Hello,
+#syz fix: exact-commit-title
 
-As there is no next tree since a few days and this will continue to be true=
- for
-a few days, I tried to create my own next.
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
 
-I did
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=67d13108d855f451cafc
 
-	git show next/master:Next/Trees | sed 1,4d > trees
-	git checkout linus/master
+---
+[1] I expect the commit to be present in:
 
-And then repeatedly run:
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
 
-	while read rname protocol repohashbranch; do
-		repo=3D"${repohashbranch%#*}"
-		branch=3D"${repohashbranch#*#}"
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
 
-		# git:// seems to be ratelimited at github
-		repo=3D"${repo/#git:\/\/github.com\//https:\/\/github.com\/}"
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
 
-		case "$repo" in
-		*git.libc.org*)
-			# if repo it on git.libc.org, skip it "Name or service not known"
-			continue
-			;;
-		esac
-		echo "fetch $repo $branch"
-		rev=3D"$(git ls-remote "$repo" "$branch" | awk '{ print $1 }')" || contin=
-ue
-		echo $rev
-		if git merge-base --is-ancestor "$rev" HEAD 2>/dev/null; then
-			continue
-		fi
-		pgit pull "$repo" "$branch" || break
-	done < trees
+4. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
 
-and fixed merge conflicts in between.
-
-I was so bold to tag the result as next-20221230, it's available from
-
-	https://git.pengutronix.de/git/ukl/linux tags/next-20221230
-
-It doesn't contain the usual meta-data in the top commit (as I didn't
-find the scripts next is usually created with) and I didn't do any build
-tests.
-
-There were a few conflicts:
-
- - In drivers/dma-buf/dma-buf.c between
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-	f728a5ea27c9 ("dma-buf: fix dma_buf_export init order v2")
-
-   and
-
-	git://anongit.freedesktop.org/drm/drm-misc for-linux-next-fixes
-	28743e25fa1c ("dma-buf: Remove obsoleted internal lock")
-
- - In arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts between
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-	62d127eeac27 ("ARM: dts: nuvoton,wpcm450-supermicro-x9sci-ln4f: Add GPIO l=
-ine names")
-
-   and
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc for-next
-	220a041d4cca ("ARM: dts: nuvoton,wpcm450-supermicro-x9sci-ln4f: Add GPIO l=
-ine names")
-=09
-   which is a problem because both commits are identical but the second tre=
-e has
-   some more commits touching the file.
-
- - In drivers/gpu/drm/amd/amdgpu/amdgpu_device.c between
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-	afa6646b1c5d ("drm/amdgpu: skip MES for S0ix as well since it's part of GF=
-X")
-
-   and
-
-	https://gitlab.freedesktop.org/agd5f/linux drm-next
-	5620a1889e4c ("drm/amdgpu: skip MES for S0ix as well since it's part of GF=
-X")
-
-   which is a problem because both commits are identical but the second tre=
-e has
-   some more commits touching the file.
-
- - In drivers/gpu/drm/i915/i915_drv.h between
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-	8f70f1ec587d ("drm/i915/mtl: Add Wa_14017073508 for SAMedia")
-
-   and
-
-	git://anongit.freedesktop.org/drm-intel for-linux-next
-	2357f2b271ad ("drm/i915/mtl: Initial display workarounds")
-
- - In arch/arm64/kernel/stacktrace.c between
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-	0fbcd8abf337 ("arm64: Prohibit instrumentation on arch_stack_walk()")
-
-   and
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-	c2530a04a73e ("arm64: efi: Account for the EFI runtime stack in stack unwi=
-nder")
-
- - In various files below mm/ between
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-	???
-
-   and
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git for-next
-	???
-
-   I didn't feel confident to fix this conflict correctly and skipped mergi=
-ng the slab tree.
-=09
- - In various files belwo mm/ between
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-	???
-
-   and
-
-	git://git.infradead.org/users/willy/pagecache.git for-next
-	???
-
-   As above I didn't even try to fix these up and skipped merging the folio=
- tree
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---arwubzpzgnalgtaf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOuvbUACgkQwfwUeK3K
-7Allygf6A4wVxCcx7EmnM8esM7pAIBa2XJPKY6d+FMktPBawfPkyUjwkEZNIsqZ9
-or8azeJHgxumCV38giCEMRnI3zdCR9evuKdP7v8NNwR9AduptH71fJCus6t1/mGS
-vY4RVWd0DTOQad0NWkJmieGYpTb8lB0bzdxlUtu8GccQgRx9P88/VyLbRML+c+0t
-rGL6nnLc3AdW+mkYu/30vOtF19xhAky2072D5Y4CZxacndRXVvLwo+sBpG9BBu0l
-VXBJcdiRTlhq9JVbJ8KGlgI9QSQc7HeKMjkhjnA50fPubQIyYmWyS6oMQgZSGbwk
-SqqxBQcndw1e/AaevSDBCQOZt9H/Ng==
-=O/rT
------END PGP SIGNATURE-----
-
---arwubzpzgnalgtaf--
+The full list of 10 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
