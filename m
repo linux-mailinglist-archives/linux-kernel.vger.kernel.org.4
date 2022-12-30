@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFAD6597DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 036B26597DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbiL3Lqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 06:46:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
+        id S234994AbiL3LsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 06:48:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234736AbiL3LqZ (ORCPT
+        with ESMTP id S235103AbiL3Lre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 06:46:25 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1545B101CD;
-        Fri, 30 Dec 2022 03:46:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672400784; x=1703936784;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Qkr8VlMp1FCP45ObtIhRsGdRw0bmPjZ8QjRvKFCk7e0=;
-  b=Xa0KgrGSugxiXwQtstjFsb5OoS/9NgbTCxE2pO/M/JXKjMuOD8ERG1dL
-   +mBc2LKFcppO7F597APoMdkgpk0R7DHiEaZOuk35MCU00/SH/UK+MKbsS
-   xZTVGxHp+89T5EDBUUfkwO1GqxE5XB7inaKY5Iqu2hn/AV9vlsLY1Sp4W
-   1Z3b6eWNoxoLQFRRufkAYIlxb79GrAajqj9I3QtMJ1iQfrxmg7in3x1q9
-   1XMsiZkk7ZdA3gfgoBLk79wJD18bHRmZRzzidnn3MkbjDVktbAYWVzUze
-   t1rvduEIP1/G4Milv0SEoqsrwLGMGyrroaTHTFw4RZTyZ9ssp0awrXnTw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="301568014"
-X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
-   d="scan'208";a="301568014"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 03:46:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="653865361"
-X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
-   d="scan'208";a="653865361"
-Received: from vsemouch-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.41.102])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 03:46:21 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     inux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 3/3] serial: 8250_rt288x: Remove unnecessary UART_REG_UNMAPPED
-Date:   Fri, 30 Dec 2022 13:46:03 +0200
-Message-Id: <20221230114603.16946-4-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221230114603.16946-1-ilpo.jarvinen@linux.intel.com>
-References: <20221230114603.16946-1-ilpo.jarvinen@linux.intel.com>
+        Fri, 30 Dec 2022 06:47:34 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52ACD15F1E;
+        Fri, 30 Dec 2022 03:47:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1672400818;
+        bh=SCjTfzTmeWy9n8dw4GQW7kp4u3L3AAf/DvNOBU2t9cE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=TCZgW7Jz2UMLmD1MvJS6LSHAcB66OPer/q7uju6GiGdk8LcQp9j0Jio99KmybXOdy
+         BF0710uw0BeOWcY3uAyQLcOmGKkwkpYU00v9hcks1n60XP+uv5pkf9jel9PSSPU8Qh
+         qQIjxbF5tF5GWQNjb6g6ntqTkO4kMWGU9ljbiMWwRh2H4bm57N7Yj6dQ/2dkLZRSN8
+         V4ZR+PAvBsgF36rnm0LmIRt9QSsgKIKHfZf3+M1DvuIDHkusEjtMjw7t0W4rxs4DcC
+         JQ5CX79VY4tyJJw00afd00hIgFyvCMRKXZJ3gDlla/kBO04aGRneE+ODbVgEDgPONL
+         9vpDAyNGxB1Zg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.149.221] ([217.61.149.221]) by web-mail.gmx.net
+ (3c-app-gmx-bap18.server.lan [172.19.172.88]) (via HTTP); Fri, 30 Dec 2022
+ 12:46:58 +0100
 MIME-Version: 1.0
+Message-ID: <trinity-a07d48f4-11cf-4a24-a797-03ad4b1150d9-1672400818371@3c-app-gmx-bap18>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Aw: [PATCH net v3 4/5] net: ethernet: mtk_eth_soc: drop generic
+ vlan rx offload, only use DSA untagging
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 30 Dec 2022 12:46:58 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20221230073145.53386-4-nbd@nbd.name>
+References: <20221230073145.53386-1-nbd@nbd.name>
+ <20221230073145.53386-4-nbd@nbd.name>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:pBNX6Fm1zCmCsuMmsd1KSJ5HZYIqM0xAkIkqg2IFo2qZR7S6v3CdQN4iioTk9cBQFBIM2
+ NG2WoYifTmk82CZEkXlsSpNNdrr9dzS0svrYVuFUFFf4PUGZfgOH9K358SuF+TatXMpr7NGE51oO
+ Sq+nuKq39CEgTBTLblkL2dn2pXy6MVVc6CCUqIuZnvJJ5OvyiQ+kux0+kPI3Ha/qh7Fvs6Rnygje
+ WJAlu2zIuQE44I0N7WrPlr5nBXDghvR7abfXc8uTiQ/qKJi3RJrNPuf38w7x064KN7oTQ5V00uDI
+ DY=
+UI-OutboundReport: notjunk:1;M01:P0:s55aR2gjtdA=;MoY7pO6ZbycU6xxZxfaR/brva33
+ 7eL872kep8tdBUIoc4USr2MnC3XvpnKVTvuzumL8rmH175hu/mOA0s1Nc6ltGIzqyUdJhDi4P
+ zRMyVSOiHDZ8YVFK6LC0NE0rqnrMCBh+Myu+ajV3K8UsqwntNMNXLAB7k5UGbUKQWHdJjoTrA
+ /prcZJlwDyRnLrRs4pQU6UwVUNVf+jyrH/0Ix5LW7wsf/m+Pquyax7N3HfldP4H/SK8a95P8o
+ xrImIyU7zozpM+uxBgkNK4BjlAgqy2TXMHFOfbkXccUF+UsiKGkS7Z3is9GFqv20Ytnytlpf7
+ lkiGMJLU32H1GfLL2lV8/zaqngjXD4NMz3n1kDdNLfCZmNMntfAPYO9ZBKEYZyGIWe9W3wIvZ
+ 4VHVOi6rCDwvBWhekeBNg4uHkXAyo9FB1O/9W4wdlPIh70zOaJoHTrwsrJdeSnnXYRsmKUndU
+ 9a6F2xLcKaUIl/QPvR+b0QFBSiqvW0cVzO5n+MiIwbyLF9JyM4ejOFxBq4YYMq0hURjN3wMkG
+ dOmoWqBaXTX7UwcHf10wlMUfyvqeK2hd9T0gDdKyJrGBH/Til3dteI41yyR2RnCTpPywo5PxF
+ Z1+l0gnFXFRDeZCz/2009y4sVZFU8zQVVWibHHVOMdZzNzArhSfFLFGV1oogj2Nu0XR7sYVFU
+ ekRhSSd6rIFCJqCPoj08FyLNyCq+4T2skuKjn55yjXGazLPnrmcLZKsPtLn5vnB5KlujQpTc/
+ jP6tAcIQBIgF12oSKl1ukKKCulwghowd1BFI869uFLcFIE+e1rGjhIeEYWXtjXyXpUxqFi8Ot
+ tQy7pZ+PZxtJSAC2WX7K9wyg==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As unmapped registers are at the tail of the array, the ARRAY_SIZE()
-condition will catch them just fine. No need to define special
-value for them.
+Hi,
 
-Also, let the compiler to calculate the size of the array instead of
-providing it manually.
+v2 or v3 seems to break vlan on mt7986 over eth0 (mt7531 switch). v1 was working on next from end of November. But my rebased tree with v1 on 6.2-rc1 has same issue, so something after next 2711 was added which break vlan over mt7531.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/8250/8250_rt288x.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+Directly over eth1 it works (was not working before).
 
-diff --git a/drivers/tty/serial/8250/8250_rt288x.c b/drivers/tty/serial/8250/8250_rt288x.c
-index 3015afb99722..da8be9a802c1 100644
---- a/drivers/tty/serial/8250/8250_rt288x.c
-+++ b/drivers/tty/serial/8250/8250_rt288x.c
-@@ -14,10 +14,8 @@
- 
- #define RT288X_DL	0x28
- 
--#define UART_REG_UNMAPPED	-1
--
- /* Au1x00/RT288x UART hardware has a weird register layout */
--static const s8 au_io_in_map[8] = {
-+static const s8 au_io_in_map[] = {
- 	[UART_RX]	= 0,
- 	[UART_IER]	= 2,
- 	[UART_IIR]	= 3,
-@@ -25,18 +23,14 @@ static const s8 au_io_in_map[8] = {
- 	[UART_MCR]	= 6,
- 	[UART_LSR]	= 7,
- 	[UART_MSR]	= 8,
--	[UART_SCR]	= UART_REG_UNMAPPED,
- };
- 
--static const s8 au_io_out_map[8] = {
-+static const s8 au_io_out_map[] = {
- 	[UART_TX]	= 1,
- 	[UART_IER]	= 2,
- 	[UART_FCR]	= 4,
- 	[UART_LCR]	= 5,
- 	[UART_MCR]	= 6,
--	[UART_LSR]	= UART_REG_UNMAPPED,
--	[UART_MSR]	= UART_REG_UNMAPPED,
--	[UART_SCR]	= UART_REG_UNMAPPED,
- };
- 
- static unsigned int au_serial_in(struct uart_port *p, int offset)
-@@ -44,8 +38,7 @@ static unsigned int au_serial_in(struct uart_port *p, int offset)
- 	if (offset >= ARRAY_SIZE(au_io_in_map))
- 		return UINT_MAX;
- 	offset = au_io_in_map[offset];
--	if (offset == UART_REG_UNMAPPED)
--		return UINT_MAX;
-+
- 	return __raw_readl(p->membase + (offset << p->regshift));
- }
- 
-@@ -54,8 +47,7 @@ static void au_serial_out(struct uart_port *p, int offset, int value)
- 	if (offset >= ARRAY_SIZE(au_io_out_map))
- 		return;
- 	offset = au_io_out_map[offset];
--	if (offset == UART_REG_UNMAPPED)
--		return;
-+
- 	__raw_writel(value, p->membase + (offset << p->regshift));
- }
- 
--- 
-2.30.2
+if i made no mistake there is still something wrong.
 
+btw. mt7622/r64 can also use second gmac (over vlan aware bridge with aux-port of switch to wan-port) it is only not default in mainline. But maybe this should not be used as decision for dropping "dsa-tag" (wrongly vlan-tag).
+
+regards Frank
