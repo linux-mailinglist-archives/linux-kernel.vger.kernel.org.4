@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC9F65988F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A687F659892
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiL3NHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 08:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
+        id S234859AbiL3NJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 08:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiL3NHp (ORCPT
+        with ESMTP id S229746AbiL3NJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 08:07:45 -0500
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35E5186CD
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:07:43 -0800 (PST)
-Received: by mail-vs1-xe2e.google.com with SMTP id i188so21199390vsi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:07:43 -0800 (PST)
+        Fri, 30 Dec 2022 08:09:23 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C104D186CD
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:09:21 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id p30so15585226vsr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:09:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cD1BXfDtBVxLcOf4ZmyaQgx1rXbmgMgEvuAGP5dPHMY=;
-        b=BiKf70pxBwv00QdFOssZW6OcQpVLksnJhhaQWAsQ9zQm3P1IDZf7BpM3T6WWOSzBGf
-         y4l+eJKpSJqLqdOmLmtdwg2EQF0j+4fYuGvB0ylNNgzMQqK6SMu9/FWvCW9GeFLnwB0x
-         zvnP1jjRRNUrcLiGkGlySKOjD9aivH+3+nr1HE4AlDJJ6ZQNYERJfWyR1NNp3DgzXWTe
-         e6jo7CZTscEDLwRuHut4f+UYz00I/SHLJN5f0gUWjucpdrQOpGb5HlN6hllqWxnfSdn0
-         4AJF8CnrDVozrCo8NELzFS01adTG2v8BUs7u4TCBomMAP2G2/kH+/HMjvZswwxxbcTvW
-         G7kg==
+        bh=E52pxg0Ieuxx94IUZMALcwMIHlB9oJ0ae6r7GhsPesE=;
+        b=qOYzZ22PlOTxy5rz+2Jr6vOdX7lOUg0qaafPHrEjHG5f40E6RiScGPuGIEoUXr/2PH
+         +oGvuptZsVJRju9ipSuVycuQ2W1ky3QRWi8zYzVx1KdMuC/JFOidxN1UJUimAjP1fsmn
+         tm5Ny181bxJ6l/v6HbNscM306YS/OExwGnUmed+ZTlFqqct6x37nTtKHAO0ERc9MyPuo
+         EVizILuGKO2iB6xrLdsaHGozVKQ+DAXtMH9IsOyRbgKGplHS4KROXebu2krcdX8gRcfe
+         cFsAcKxLqZyiI1fpvuURw+3uSV1kv/KUBupXD4MMlFdCULnNBm1KUN2XFRlWZhdejD5I
+         SUjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cD1BXfDtBVxLcOf4ZmyaQgx1rXbmgMgEvuAGP5dPHMY=;
-        b=0aUWMc7xqfbqK22xwZVEv/2EaHXn9eCw+S9yo4CLvgXpKUizOn9bNwmVgOx/HWrOW3
-         yeWrbOKe/jNVue9oniGE14n0WtdTJYe4nBKHaKsaTXYj/ie0ONAYDwyQk6yTefQciKWN
-         Yh8fNJl38fyq/wSFp0efm46yG4qP2cLeo1PaR5RBQ89wGvmcAG/hrr55/TB4lBWunfDR
-         WWkPGIS5faFEg8AdIU021VnA+qAxHYoL7/fi1L5LHTkzaRuMF9Ze5J3QCdsht4pgHgAY
-         TjKMRsONPLOqNR4FfigapyYJrxBnsHjetMlReyKUA1khqn5GRYICBn8EOwZhQ1K0mnyl
-         yhMA==
-X-Gm-Message-State: AFqh2krN8m9FZVtURjQoQEwTseulozHMtO6Vh6/GB7xsnBVPdKwE8gzk
-        Ka1A2FaaCyjAfhP1uGLtKm01294YrBO30ZNwd/o96Q==
-X-Google-Smtp-Source: AMrXdXuTK/xRoExGyM0EfLIR3lCsir3rCmp/aeu/DKKLpe+7/Kg32KnlL4f/vLb32N6E7iEKuNfl0xQaHrKkjEZeGnE=
-X-Received: by 2002:a67:df8c:0:b0:3c5:1ac1:bf38 with SMTP id
- x12-20020a67df8c000000b003c51ac1bf38mr3005136vsk.78.1672405663040; Fri, 30
- Dec 2022 05:07:43 -0800 (PST)
+        bh=E52pxg0Ieuxx94IUZMALcwMIHlB9oJ0ae6r7GhsPesE=;
+        b=TJYcmeiaW4GAkPWDsy0o/ZLvetLyqMfYFcuyhn8qmiF8gmTig0JVJE+KUAnbQ6ki9C
+         BHo61xt9emVrmuZ1Pxn9RiV35y0sm7rkJuKxGfGFvOQf5OHW4QGRkW5QuOiqBn2Qcu/U
+         q2b0s+ZI22HS3Rz6KdgfOY95lOAg5Dyugw5IhAlI7uSmX4wwrIlwaxoAy2Svuoea5h+H
+         lS14GtQMR12Zheq45kiXglv8Ry6izUtcvmiHnQu7HWvy2MucIPGPbRd91tzczrEA3ePg
+         n7gEvEwtK3eZx66mpp2XYONftczEDnLSSpX+z7gxdQXYCgrIF2V/SjK8fuJEdZqaofxs
+         nNrw==
+X-Gm-Message-State: AFqh2kptfRL1Zzj0o0r/KHt3OW/SLWsx6xbT25xppeIEWBFSFFVzTpG2
+        /j6LxTdZL3wf/Tb2+7Rm8cbhOUTDpfxyF0j4i6qr0Q==
+X-Google-Smtp-Source: AMrXdXuiIsORfdwTU8aiPfidGRU10vfw7irJHhwQafIrscv2Z2093Jcg+5ApA5mnSo+X462x4xJnegGVTE5BWClrxZ0=
+X-Received: by 2002:a05:6102:3d9f:b0:3c4:4918:80c with SMTP id
+ h31-20020a0561023d9f00b003c44918080cmr2749753vsv.9.1672405760903; Fri, 30 Dec
+ 2022 05:09:20 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1672149007.git.william.gray@linaro.org>
-In-Reply-To: <cover.1672149007.git.william.gray@linaro.org>
+References: <20221209171629.3351420-1-robh@kernel.org>
+In-Reply-To: <20221209171629.3351420-1-robh@kernel.org>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 30 Dec 2022 14:07:31 +0100
-Message-ID: <CAMRc=MdgQUvjKxr7GTpbq0AzSmhiOHvRmCx7UbiqF__w8Y+P7Q@mail.gmail.com>
-Subject: Re: [PATCH v5 0/8] Migrate i8255 GPIO drivers to regmap API
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, andriy.shevchenko@linux.intel.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc
+Date:   Fri, 30 Dec 2022 14:09:10 +0100
+Message-ID: <CAMRc=MeVNcaGdZE-JUAA9EZDUwAn4yhicgHZHizEsugecWj+GA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: gpio: Convert Fujitsu MB86S7x GPIO to DT schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -67,71 +71,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 3:32 PM William Breathitt Gray
-<william.gray@linaro.org> wrote:
+On Fri, Dec 9, 2022 at 6:16 PM Rob Herring <robh@kernel.org> wrote:
 >
-> Changes in v5:
->  - Add REGMAP_MMIO Kconfig selection for GPIO_104_DIO_48E,
->    GPIO_104_IDI_48, and GPIO_GPIO_MM
->  - Replace magic number 0x3 with GENMASK(1, 0) to make intent clear in
->    the dio48e_handle_mask_sync() function
->  - Write (instead of read) to clear interrupts on unmask; although the
->    datasheet lists the respective register as read/write, all other
->    references state that this should be a write operation to clear
+> Convert the Fujitsu MB86S7x GPIO binding to DT schema format.
 >
-> The regmap API supports IO port accessors so we can take advantage of
-> regmap abstractions rather than handling access to the device registers
-> directly in the driver. The 104-dio-48e and gpio-mm modules depend on
-> the i8255 library and are thus updated accordingly.
+> The "socionext,synquacer-gpio" compatible was not documented, but is
+> compatible with "fujitsu,mb86s70-gpio" and is in use (in u-boot
+> Synquacer dts).
 >
-> The 104-IDI-48 is hardwired as an input-only device. Because the i8255
-> control registers are not exposed on the 104-IDI-48, the i8255 library
-> doesn't provide much benefit here. In this case it's simpler to utilize
-> the gpio_regmap API directly, so this patch series does such and removes
-> the i8255 library dependency from the 104-idi-48 module.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/gpio/fujitsu,mb86s70-gpio.txt    | 20 --------
+>  .../bindings/gpio/fujitsu,mb86s70-gpio.yaml   | 50 +++++++++++++++++++
+>  2 files changed, 50 insertions(+), 20 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.txt
+>  create mode 100644 Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.yaml
 >
-> The first patch in this series adjusts gpio_regmap to always set
-> gpio_chip get_direction. This patch is mostly independent of the rest of
-> the patches in the series and can be picked up separately if desired.
-> I'm including it here because it allows the input-only 104-idi-48 driver
-> to continue reporting offset directions after migrating to gpio_regmap.
->
-> By leveraging the gpio_regmap API, the i8255 library is reduced to
-> simply a devm_i8255_regmap_register() function, a configuration
-> structure struct i8255_regmap_config, and a helper macro
-> i8255_volatile_regmap_range() provided to simplify volatile PPI register
-> hinting for the regmap.
->
-> The regmap_irq API is leveraged by the 104-idi-48 and 104-dio-48e
-> modules to support their IRQ functionality. Do their respective regmap
-> configurations need use_hwlock set to true in this case, or is adequate
-> locking already handled by the regmap_irq API?
->
-> William Breathitt Gray (8):
->   gpio: regmap: Always set gpio_chip get_direction
->   gpio: 104-dio-48e: Migrate to the regmap-irq API
->   gpio: 104-idi-48: Migrate to the regmap-irq API
->   gpio: 104-idi-48: Migrate to gpio-regmap API
->   gpio: i8255: Migrate to gpio-regmap API
->   gpio: 104-dio-48e: Migrate to regmap API
->   gpio: gpio-mm: Migrate to regmap API
->   gpio: i8255: Remove unused legacy interface
->
->  drivers/gpio/Kconfig            |   8 +-
->  drivers/gpio/gpio-104-dio-48e.c | 398 +++++++++++---------------------
->  drivers/gpio/gpio-104-idi-48.c  | 336 +++++++++------------------
->  drivers/gpio/gpio-gpio-mm.c     | 154 +++---------
->  drivers/gpio/gpio-i8255.c       | 320 +++++++------------------
->  drivers/gpio/gpio-i8255.h       |  54 ++---
->  drivers/gpio/gpio-regmap.c      |   7 +-
->  7 files changed, 390 insertions(+), 887 deletions(-)
->
->
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> diff --git a/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.txt b/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.txt
+> deleted file mode 100644
+> index bef353f370d8..000000000000
+> --- a/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.txt
+> +++ /dev/null
+> @@ -1,20 +0,0 @@
+> -Fujitsu MB86S7x GPIO Controller
+> --------------------------------
+> -
+> -Required properties:
+> -- compatible: Should be "fujitsu,mb86s70-gpio"
+> -- reg: Base address and length of register space
+> -- clocks: Specify the clock
+> -- gpio-controller: Marks the device node as a gpio controller.
+> -- #gpio-cells: Should be <2>. The first cell is the pin number and the
+> -  second cell is used to specify optional parameters:
+> -   - bit 0 specifies polarity (0 for normal, 1 for inverted).
+> -
+> -Examples:
+> -       gpio0: gpio@31000000 {
+> -               compatible = "fujitsu,mb86s70-gpio";
+> -               reg = <0 0x31000000 0x10000>;
+> -               gpio-controller;
+> -               #gpio-cells = <2>;
+> -               clocks = <&clk 0 2 1>;
+> -       };
+> diff --git a/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.yaml b/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.yaml
+> new file mode 100644
+> index 000000000000..d18d95285465
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/fujitsu,mb86s70-gpio.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/fujitsu,mb86s70-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Fujitsu MB86S7x GPIO Controller
+> +
+> +maintainers:
+> +  - Jassi Brar <jaswinder.singh@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: socionext,synquacer-gpio
+> +          - const: fujitsu,mb86s70-gpio
+> +      - const: fujitsu,mb86s70-gpio
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +  gpio-line-names: true
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#gpio-cells'
+> +  - gpio-controller
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    gpio@31000000 {
+> +        compatible = "fujitsu,mb86s70-gpio";
+> +        reg = <0x31000000 0x10000>;
+> +        gpio-controller;
+> +        #gpio-cells = <2>;
+> +        clocks = <&clk 0 2 1>;
+> +    };
+> +...
 > --
-> 2.38.1
+> 2.35.1
 >
 
-Series applied, thanks!
+Applied, thanks!
 
 Bart
