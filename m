@@ -2,82 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0637B65976C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D699765976E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234592AbiL3KlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 05:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S234849AbiL3Klu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 05:41:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234572AbiL3KlP (ORCPT
+        with ESMTP id S234889AbiL3Klp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 05:41:15 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35049BC14
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:41:14 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id z26so31219755lfu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:41:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LAt50/c1XxD+d5an6LMQKbLUUo7P/Ao2RnbkovM7714=;
-        b=nocHCo/Y60JUaApj7QepMG0/BYQpgVEBD6JFQe6EwJv1va+ujnkO/ott5KiRJK8wTx
-         cEX+4mxaieGqL/opS5CimllxoYV67A0PseukhIpmcozAa/CluPUE/r8wH7ZEln0JnKS/
-         8cBBgeYSiza1ZiGU+Qdjaef7neIOkScslIwcWLz7pWe2FYI7B7dlMjeMbGeAfJUAVFMn
-         o4mODUay6zb/zWlwgmi6acNiPB+Zz+3wO/hxaIyPFdXhlOV7JA8zvaWnOTENJK9RIDhE
-         IXfb9ESaNYl+NlZaZ22hKIdagv3GnxY+mDhkYz9SKMf3h8xcs+ya+jbtqxjBIiXPB2E2
-         s43A==
+        Fri, 30 Dec 2022 05:41:45 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A32140D4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:41:43 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id be25-20020a056602379900b006f166af94d6so6386147iob.8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:41:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LAt50/c1XxD+d5an6LMQKbLUUo7P/Ao2RnbkovM7714=;
-        b=hpBNuyddqiXLq/jzhcdw3V0a5WhVTi1+qdjBUSEpAoXw9Q6wdOrM8H5dMD8XOCUWYu
-         wHfpRkOOgpv0dIaeD5/i8lG7Tm2SKYCru7XMGveQDezfTOMp7qh2Q+QPgB+cW5dt5tvh
-         CAQS65j1RZMmoliyivDEnB1jgTBL604Dz8y0Ivo06GydZyOxbBymzQmYvPorYPfEF5d2
-         WueVBYk37a8d4QRBlqXXfTpPMfEOG2VCZTyF7HvoxSzjoFqu1H1ffwMh8Kto1ME7Vygt
-         RBnWLXhxMPG/SpxCaQkTh/f7DPZX/AWKTS9gr0RRgyLQ/72uXfnnnX4gT288mTJX63IA
-         0UQQ==
-X-Gm-Message-State: AFqh2kqSeEK8rBpCYJhzrAa9y98m256HmAmrLAbA4RJBJUngK5DzTRoM
-        fWmEHyzSV/fgpOhj8pq9NE6ztg==
-X-Google-Smtp-Source: AMrXdXsSkyaGu9E9QH7yKdMdxqcdZNJgrJO39Y3lFx2Nl+hw+pOn8KhPjTbifaGpSB/RJyJAiyU9Vg==
-X-Received: by 2002:ac2:5604:0:b0:4ba:83f3:fb36 with SMTP id v4-20020ac25604000000b004ba83f3fb36mr8239472lfd.9.1672396872059;
-        Fri, 30 Dec 2022 02:41:12 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id n20-20020a05651203f400b004a44ffb1023sm3436267lfq.57.2022.12.30.02.41.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Dec 2022 02:41:11 -0800 (PST)
-Message-ID: <33196eef-b1d5-8dd2-7c59-16a73327e8c0@linaro.org>
-Date:   Fri, 30 Dec 2022 11:41:10 +0100
+        bh=U751i9cY6TeoWaPae69g7NjvC/WLPbyn2lFLGzvEkj4=;
+        b=f7zbb/376kWK1lMEfFGiLhqiTAv+k4BEMiIzX24EA67kCCjINSYUifMIZ2nxIRaewu
+         Efnb5v3qGsaZzdqjzcqim3uqE0ujiDEghnwPJ43KFLrPyUUtskgP1dwqpQPFpjLEjIWh
+         ezzZSfu4Ypeg8wYOoo1Uo6OsPeQRz9hYk8VTCuSN35CLtAKsRCu3WEu1fq8lR6NtWb7z
+         78B6PetzfRHLHqNmly2alrhsLMcCpZ/YUeIa9nLXhoHXkkKe3YqyvQi10oJ7npeD1BSi
+         gtODigbNlEihfiucRe38oQIusZRCW/DO+3aeDsC4HmO73SrR5RzC5SHCmyvC9pq1H0Di
+         VCGw==
+X-Gm-Message-State: AFqh2krCrXjLdi7temRWRBfqiCRXUy0mKMt3x7jciZ/93BrWXQ4X6SCy
+        TSoglQ6gAZEg9MgxiRedpG+kc1lQ03FAC1hBc3kWb+Q07B2t
+X-Google-Smtp-Source: AMrXdXuP89fWY9Xs8EKSitggFjgcZ9inravJ86p5PyqrrrjZMMKnm7GFYXm+CpdTGQETSXp5uv3VDVzxpy/gYifMar6mungK+DcS
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 01/19] dt-bindings: ARM: MediaTek: Add new document
- bindings of MT8188 clock
-Content-Language: en-US
-To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org
-References: <20221230073357.18503-1-Garmin.Chang@mediatek.com>
- <20221230073357.18503-2-Garmin.Chang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221230073357.18503-2-Garmin.Chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a02:a482:0:b0:38a:5b26:8cf8 with SMTP id
+ d2-20020a02a482000000b0038a5b268cf8mr2577760jam.82.1672396902597; Fri, 30 Dec
+ 2022 02:41:42 -0800 (PST)
+Date:   Fri, 30 Dec 2022 02:41:42 -0800
+In-Reply-To: <0000000000006f759505ee84d8d7@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004d893c05f1093ff1@google.com>
+Subject: Re: [syzbot] BUG: corrupted list in nfc_llcp_unregister_device
+From:   syzbot <syzbot+81232c4a81a886e2b580@syzkaller.appspotmail.com>
+To:     309386628@qq.com, davem@davemloft.net,
+        dominic.coppola@gatoradeadvert.com, dvyukov@google.com,
+        edumazet@google.com, krzysztof.kozlowski@linaro.org,
+        kuba@kernel.org, linma@zju.edu.cn, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, zahiabdelmalak0@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,175 +59,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/12/2022 08:33, Garmin.Chang wrote:
-> Add the new binding documentation for system clock
-> and functional clock on MediaTek MT8188.
-> 
+syzbot has found a reproducer for the following issue on:
 
-Subject: drop second, redundant "document bindings of".
+HEAD commit:    2258c2dc850b Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13c52432480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=555d27e379d75ff1
+dashboard link: https://syzkaller.appspot.com/bug?extid=81232c4a81a886e2b580
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=170f1214480000
 
-> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
-> ---
->  .../arm/mediatek/mediatek,mt8188-clock.yaml   |  71 ++
->  .../mediatek/mediatek,mt8188-sys-clock.yaml   |  55 ++
->  .../dt-bindings/clock/mediatek,mt8188-clk.h   | 733 ++++++++++++++++++
->  3 files changed, 859 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
->  create mode 100644 include/dt-bindings/clock/mediatek,mt8188-clk.h
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
-> new file mode 100644
-> index 000000000000..6654cead71f6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c7ce28c7893b/disk-2258c2dc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/467de08be04b/vmlinux-2258c2dc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d5b6a70e73f2/bzImage-2258c2dc.xz
 
-Clock controllers do not go to arm but to clock. It's so suprising
-directory that I missed to notice it in v1... Why putting it in some
-totally irrelevant directory?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+81232c4a81a886e2b580@syzkaller.appspotmail.com
 
+==================================================================
+BUG: KASAN: use-after-free in nfc_llcp_unregister_device+0x65/0x1b0 net/nfc/llcp_core.c:1610
+Read of size 8 at addr ffff88802ca38000 by task syz-executor.1/6961
 
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Functional Clock Controller for MT8188
-> +
-> +maintainers:
-> +  - Garmin Chang <garmin.chang@mediatek.com>
-> +
-> +description: |
-> +  The clock architecture in MediaTek like below
-> +  PLLs -->
-> +          dividers -->
-> +                      muxes
-> +                           -->
-> +                              clock gate
-> +
-> +  The devices provide clock gate control in different IP blocks.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8188-adsp-audio26m
-> +      - mediatek,mt8188-imp-iic-wrap-c
-> +      - mediatek,mt8188-imp-iic-wrap-en
-> +      - mediatek,mt8188-imp-iic-wrap-w
-> +      - mediatek,mt8188-mfgcfg
-> +      - mediatek,mt8188-vppsys0
-> +      - mediatek,mt8188-wpesys
-> +      - mediatek,mt8188-wpesys-vpp0
-> +      - mediatek,mt8188-vppsys1
-> +      - mediatek,mt8188-imgsys
-> +      - mediatek,mt8188-imgsys-wpe1
-> +      - mediatek,mt8188-imgsys-wpe2
-> +      - mediatek,mt8188-imgsys-wpe3
-> +      - mediatek,mt8188-imgsys1-dip-top
-> +      - mediatek,mt8188-imgsys1-dip-nr
-> +      - mediatek,mt8188-ipesys
-> +      - mediatek,mt8188-camsys
-> +      - mediatek,mt8188-camsys-rawa
-> +      - mediatek,mt8188-camsys-yuva
-> +      - mediatek,mt8188-camsys-rawb
-> +      - mediatek,mt8188-camsys-yuvb
-> +      - mediatek,mt8188-ccusys
-> +      - mediatek,mt8188-vdecsys-soc
-> +      - mediatek,mt8188-vdecsys
-> +      - mediatek,mt8188-vencsys
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clock-controller@11283000 {
-> +        compatible = "mediatek,mt8188-imp-iic-wrap-c";
-> +        reg = <0x11283000 0x1000>;
-> +        #clock-cells = <1>;
-> +    };
-> +
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
-> new file mode 100644
-> index 000000000000..2b28df1ff895
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
+CPU: 1 PID: 6961 Comm: syz-executor.1 Not tainted 6.2.0-rc1-syzkaller-00043-g2258c2dc850b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2d0 lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:306
+ print_report+0x107/0x220 mm/kasan/report.c:417
+ kasan_report+0x139/0x170 mm/kasan/report.c:517
+ nfc_llcp_unregister_device+0x65/0x1b0 net/nfc/llcp_core.c:1610
+ nfc_unregister_device+0x18a/0x290 net/nfc/core.c:1179
+ virtual_ncidev_close+0x55/0x90 drivers/nfc/virtual_ncidev.c:163
+ __fput+0x3ba/0x880 fs/file_table.c:320
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x134/0x160 kernel/entry/common.c:171
+ exit_to_user_mode_prepare+0xad/0x110 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x2e/0x60 kernel/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd45fe3df5b
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007ffd4c417c70 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000004 RCX: 00007fd45fe3df5b
+RDX: 0000001b2e720000 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 00007fd45ffad980 R08: 0000000000000000 R09: 0000000000000010
+R10: 00007ffd4c55f0b8 R11: 0000000000000293 R12: 000000000018c31c
+R13: 00007ffd4c417d70 R14: 00007fd45ffac120 R15: 0000000000000032
+ </TASK>
 
-Wrong directory.
+Allocated by task 6975:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ __kasan_kmalloc+0x97/0xb0 mm/kasan/common.c:380
+ kmalloc include/linux/slab.h:580 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ nfc_llcp_register_device+0x51/0x800 net/nfc/llcp_core.c:1566
+ nfc_register_device+0x68/0x320 net/nfc/core.c:1124
+ nci_register_device+0x7c7/0x900 net/nfc/nci/core.c:1257
+ virtual_ncidev_open+0x138/0x1b0 drivers/nfc/virtual_ncidev.c:148
+ misc_open+0x346/0x3c0 drivers/char/misc.c:165
+ chrdev_open+0x5fb/0x680 fs/char_dev.c:414
+ do_dentry_open+0x85f/0x11b0 fs/open.c:882
+ do_open fs/namei.c:3557 [inline]
+ path_openat+0x25cc/0x2de0 fs/namei.c:3714
+ do_filp_open+0x275/0x500 fs/namei.c:3741
+ do_sys_openat2+0x13b/0x500 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __x64_sys_openat+0x243/0x290 fs/open.c:1337
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-sys-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek System Clock Controller for MT8188
-> +
-> +maintainers:
-> +  - Garmin Chang <garmin.chang@mediatek.com>
-> +
-> +description: |
-> +  The clock architecture in MediaTek like below
-> +  PLLs -->
-> +          dividers -->
-> +                      muxes
-> +                           -->
-> +                              clock gate
-> +
-> +  The apmixedsys provides most of PLLs which generated from SoC 26m.
-> +  The topckgen provides dividers and muxes which provide the clock source to other IP blocks.
-> +  The infracfg_ao provides clock gate in peripheral and infrastructure IP blocks.
-> +  The mcusys provides mux control to select the clock source in AP MCU.
-> +  The device nodes also provide the system control capacity for configuration.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - mediatek,mt8188-topckgen
-> +          - mediatek,mt8188-infracfg-ao
-> +          - mediatek,mt8188-apmixedsys
-> +          - mediatek,mt8188-pericfg-ao
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    syscon@10000000 {
+Freed by task 6966:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
+ kasan_save_free_info+0x27/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ __kmem_cache_free+0x71/0x110 mm/slub.c:3800
+ local_release net/nfc/llcp_core.c:173 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ nfc_llcp_local_put+0x209/0x230 net/nfc/llcp_core.c:181
+ nfc_unregister_device+0x18a/0x290 net/nfc/core.c:1179
+ virtual_ncidev_close+0x55/0x90 drivers/nfc/virtual_ncidev.c:163
+ __fput+0x3ba/0x880 fs/file_table.c:320
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x134/0x160 kernel/entry/common.c:171
+ exit_to_user_mode_prepare+0xad/0x110 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x2e/0x60 kernel/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-clock-controller
+The buggy address belongs to the object at ffff88802ca38000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 0 bytes inside of
+ 2048-byte region [ffff88802ca38000, ffff88802ca38800)
 
-> +        compatible = "mediatek,mt8188-topckgen", "syscon";
-> +        reg = <0x10000000 0x1000>;
-> +        #clock-cells = <1>;
+The buggy address belongs to the physical page:
+page:ffffea0000b28e00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x2ca38
+head:ffffea0000b28e00 order:3 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
+anon flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff888012842000 0000000000000000 dead000000000001
+raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 26, tgid 26 (kworker/1:1), ts 13630378390, free_ts 0
+ prep_new_page mm/page_alloc.c:2531 [inline]
+ get_page_from_freelist+0x72b/0x7a0 mm/page_alloc.c:4283
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
+ alloc_slab_page+0xbd/0x190 mm/slub.c:1851
+ allocate_slab+0x5e/0x3c0 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0x7f4/0xeb0 mm/slub.c:3193
+ __slab_alloc mm/slub.c:3292 [inline]
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ __kmem_cache_alloc_node+0x25b/0x340 mm/slub.c:3491
+ kmalloc_trace+0x26/0x60 mm/slab_common.c:1062
+ kmalloc include/linux/slab.h:580 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ fw_create_instance+0x59/0x180 drivers/base/firmware_loader/sysfs.c:402
+ fw_load_from_user_helper+0xcb/0x1f0 drivers/base/firmware_loader/fallback.c:151
+ _request_firmware+0x44b/0x6a0 drivers/base/firmware_loader/main.c:856
+ request_firmware_work_func+0x125/0x270 drivers/base/firmware_loader/main.c:1105
+ process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+page_owner free stack trace missing
 
-
-
-Best regards,
-Krzysztof
+Memory state around the buggy address:
+ ffff88802ca37f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff88802ca37f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff88802ca38000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff88802ca38080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88802ca38100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
