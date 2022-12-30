@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B88659896
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2E8659899
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234938AbiL3NOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 08:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
+        id S234383AbiL3NOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 08:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiL3NOB (ORCPT
+        with ESMTP id S230056AbiL3NOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 08:14:01 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E0F1A05B
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:14:00 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-123-ujNxs6XjNyOZnr5eFmPVlQ-1; Fri, 30 Dec 2022 13:13:57 +0000
-X-MC-Unique: ujNxs6XjNyOZnr5eFmPVlQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Dec
- 2022 13:13:55 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 30 Dec 2022 13:13:55 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Holger Lubitz' <holger.lubitz@t-online.de>,
-        'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>
-Subject: RE: [PATCH v2] kbuild: treat char as always unsigned
-Thread-Topic: [PATCH v2] kbuild: treat char as always unsigned
-Thread-Index: AQHZFV6o8tF/XYcvI0qqEtVNYsUlXa55tQ3wgAMV4YCACXsZ8IAAL/vQ
-Date:   Fri, 30 Dec 2022 13:13:55 +0000
-Message-ID: <a296bd41278d4bd4a4e9f0d31a540613@AcuMS.aculab.com>
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
-         <20221019203034.3795710-1-Jason@zx2c4.com>
-         <20221221145332.GA2399037@roeck-us.net>
-         <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
-         <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
-         <20221221155641.GB2468105@roeck-us.net>
-         <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
-         <b2144334261246aa8dc5004c5f1a58c9@AcuMS.aculab.com>
- <f02e0ac7f2d805020a7ba66803aaff3e31b5eeff.camel@t-online.de>
- <357cbd67260040e4bcf17d519aaafdcb@AcuMS.aculab.com>
-In-Reply-To: <357cbd67260040e4bcf17d519aaafdcb@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 30 Dec 2022 08:14:34 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4998E1ADA3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:14:33 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id bs20so17785950wrb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZODiERr2nILpNR045ZQJNrA0TwmM8JmrarYNMEwpKfw=;
+        b=PcuU+Eu2EzRD/xeuVTSTpoXSI9BqWaqrPLjBZrA7RN4y/D6His70PGn3AtCaURZWhJ
+         HBKmIoZkRErlH9ZynGnGyymXGZQBF/0pqn1zrLxXKZa8g2D52VQ0o3JCeeiJEPMF0yQ5
+         +DUe9e8HQhp1+9zYN1EWYL8VAeKnXjFqIUoDCZpizC7yQg5oKsFZrXNEhlBOxVf+6BPY
+         pi8R91e3j3D4zGFgo8552jJXJuL5smd/q2VBfSLPinHl6HCSb/ZgKZAE8mQkl/lhNMXX
+         f45kvYIn+SITtTYonQzqJS/QHu6iPDYEP0VxHwMaySnLhHoXZBLle2CniH3S6Feaoytf
+         M3kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZODiERr2nILpNR045ZQJNrA0TwmM8JmrarYNMEwpKfw=;
+        b=aNQdgO1k1u19j9DkFtOXp9G5b4Ct/Yi7r6zMCcRphGJArDBl1JiZ8p/whU/wJQ+4AN
+         b8V3b38QdcKNiONnHtU7DCYEac3uBwXqP0gI/ASWqv39Lm9FC/D2e/hMW7V9XB4n6xEl
+         eksNQMw8tCwpZxXUz1NtgBYsoHq7YsdurA+85vfUcn0ljZJfZTKqiivZjfSst7S6vAFu
+         Kf2YEPqEVH0ZFgzDZJxPc2O1IzLcQ7pVMPAkP5FVg9jmVnLIAOtlsdbm7SbKCewU2V+O
+         yYCIzeytXMAuFHlab0qFoVPs+ExHzFkBgNWOUkujBdk0yCEB+mjC4mmPzC1mY1DEgPSa
+         ZjNA==
+X-Gm-Message-State: AFqh2koXKQxBuh6yKSCKnBASD3KuA3yjkhCPqlPW8SZR1ewgM8sgiISp
+        Qap4YRCs1n1cuJitLnEiclr3oH0Fp/AD4KB5
+X-Google-Smtp-Source: AMrXdXtW/nGYu4K7UXZK7l+hzu45xTsVCAYKoS4RQEPtXBP8fMRfHqA5H7N4MOQWXQqL9qaYgLMXBA==
+X-Received: by 2002:adf:e383:0:b0:242:3cb6:36b8 with SMTP id e3-20020adfe383000000b002423cb636b8mr21138209wrm.44.1672406071838;
+        Fri, 30 Dec 2022 05:14:31 -0800 (PST)
+Received: from [192.168.30.216] ([81.0.6.76])
+        by smtp.gmail.com with ESMTPSA id j13-20020a5d618d000000b002425dc49024sm20519086wru.43.2022.12.30.05.14.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Dec 2022 05:14:30 -0800 (PST)
+Message-ID: <9ad399f9-7d27-b541-2379-355f3a8258ae@linaro.org>
+Date:   Fri, 30 Dec 2022 14:14:29 +0100
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH 3/3] serial: 8250_rt288x: Remove unnecessary
+ UART_REG_UNMAPPED
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     inux-kernel@vger.kernel.org
+References: <20221230114603.16946-1-ilpo.jarvinen@linux.intel.com>
+ <20221230114603.16946-4-ilpo.jarvinen@linux.intel.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221230114603.16946-4-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +80,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Li4uLg0KPiA+IGludCBzdHJjbXAxKGNvbnN0IGNoYXIgKmNzLCBjb25zdCBjaGFyICpjdCkNCj4g
-PiB7DQo+ID4gICAgICAgICBpbnQgcmVzOw0KPiA+DQo+ID4gICAgICAgICBhc20gKCJcbiINCj4g
-PiAgICAgICAgICAgICAgICAgIjE6IG1vdmUuYiAgKCUwKSssJTJcbiIgIC8qIGdldCAqY3MgKi8N
-Cj4gPiAgICAgICAgICAgICAgICAgIiAgIGplcSAgICAgMmZcbiIgICAgICAgIC8qIGVuZCBvZiBm
-aXJzdCBzdHJpbmc/ICovDQo+ID4gICAgICAgICAgICAgICAgICIgICBjbXAuYiAgICglMSkrLCUy
-XG4iICAvKiBjb21wYXJlICpjdCAqLw0KPiA+ICAgICAgICAgICAgICAgICAiICAgamVxICAgICAx
-YlxuIiAgICAgICAgLyogaWYgZXF1YWwsIGNvbnRpbnVlICovDQo+ID4gICAgICAgICAgICAgICAg
-ICIgICBqcmEgICAgIDNmXG4iICAgICAgICAvKiBlbHNlIHNraXAgdG8gdGFpbCAqLw0KPiA+ICAg
-ICAgICAgICAgICAgICAiMjogY21wLmIgICAoJTEpKywlMlxuIiAgLyogY29tcGFyZSBvbmUgbGFz
-dCBieXRlICovDQo+ID4gICAgICAgICAgICAgICAgICIzOiBzdWJ4LmwgICUyLCAlMlxuIiAgICAv
-KiAtMSBpZiBib3Jyb3csIDAgaWYgbm90ICovDQo+ID4gICAgICAgICAgICAgICAgICIgICBqbHMg
-ICAgIDRmXG4iICAgICAgICAvKiBpZiBzZXQsIHogaXMgZnJvbSBzdWIuYiAqLw0KPiANCj4gVGhl
-IHN1Ynggd2lsbCBzZXQgWiB1bmxlc3MgQyB3YXMgc2V0Lg0KPiBTbyB0aGF0IGRvZXNuJ3Qgc2Vl
-bSByaWdodC4NCg0KQ2xlYXJseSBteSBicmFpbiB3YXMgYXNsZWVwIGVhcmxpZXIuDQpzdWJ4IHdp
-bGwgY2xlYXIgWiBub3Qgc2V0IGl0Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNz
-IExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAx
-UFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Hi Ilpo,
 
+On 30/12/22 12:46, Ilpo Järvinen wrote:
+> As unmapped registers are at the tail of the array, the ARRAY_SIZE()
+> condition will catch them just fine. No need to define special
+> value for them.
+
+True but fragile example...
+
+> Also, let the compiler to calculate the size of the array instead of
+> providing it manually.
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>   drivers/tty/serial/8250/8250_rt288x.c | 16 ++++------------
+>   1 file changed, 4 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_rt288x.c b/drivers/tty/serial/8250/8250_rt288x.c
+> index 3015afb99722..da8be9a802c1 100644
+> --- a/drivers/tty/serial/8250/8250_rt288x.c
+> +++ b/drivers/tty/serial/8250/8250_rt288x.c
+> @@ -14,10 +14,8 @@
+>   
+>   #define RT288X_DL	0x28
+>   
+> -#define UART_REG_UNMAPPED	-1
+
+
+> -static const s8 au_io_out_map[8] = {
+> +static const s8 au_io_out_map[] = {
+>   	[UART_TX]	= 1,
+>   	[UART_IER]	= 2,
+>   	[UART_FCR]	= 4,
+>   	[UART_LCR]	= 5,
+>   	[UART_MCR]	= 6,
+> -	[UART_LSR]	= UART_REG_UNMAPPED,
+> -	[UART_MSR]	= UART_REG_UNMAPPED,
+> -	[UART_SCR]	= UART_REG_UNMAPPED,
+
+If someone were to re-add an unlikely single
+
+         [UART_SCR] = 42,
+
+The array will also contain these hidden entries:
+
+         [UART_LSR] = 0,
+         [UART_MSR] = 0,
+
+And these 2 registers end mapped.
+
+>   };
+
+Trying to 'optimize' array size when the array is index-initialized
+can be bug-prone.
+
+>   static unsigned int au_serial_in(struct uart_port *p, int offset)
+> @@ -44,8 +38,7 @@ static unsigned int au_serial_in(struct uart_port *p, int offset)
+>   	if (offset >= ARRAY_SIZE(au_io_in_map))
+>   		return UINT_MAX;
+>   	offset = au_io_in_map[offset];
+> -	if (offset == UART_REG_UNMAPPED)
+> -		return UINT_MAX;
+> +
+>   	return __raw_readl(p->membase + (offset << p->regshift));
+>   }
+Regards,
+
+Phil.
