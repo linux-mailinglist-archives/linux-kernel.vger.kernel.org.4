@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82E5659A95
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D6E659A89
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbiL3Qeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 11:34:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiL3Qef (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234982AbiL3Qef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 30 Dec 2022 11:34:35 -0500
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31DBFDF;
-        Fri, 30 Dec 2022 08:34:33 -0800 (PST)
-Received: by mail-il1-f180.google.com with SMTP id o8so11531934ilq.6;
-        Fri, 30 Dec 2022 08:34:33 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229464AbiL3Qec (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 30 Dec 2022 11:34:32 -0500
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62B4FDF;
+        Fri, 30 Dec 2022 08:34:31 -0800 (PST)
+Received: by mail-io1-f49.google.com with SMTP id n63so11335704iod.7;
+        Fri, 30 Dec 2022 08:34:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=aIAHarDIoUwGLglqR9Cq1cAuIikz32MrjOcIZVaihrc=;
-        b=V6AZ5ocKh0eNnT3Qd9nfa0lh3a3HmgoLG4WUSEd2LF4Y+9Msz6ylO9qnAx+XiHSVH1
-         Wmy/rLGuqGn8IV0abi7m+3DgrD/XXtJ/WEy1gtlgrG87MxnihZf2i5Pkw14O/46iz3cT
-         xFiKQroZlN2joqGC2tJxhzsZjewGeYH05LbJoGOb5HeZ94YxRqQ0KzAeCdKDDB0AnAv0
-         SOo+lN1gpljIfsKJXnQdb7Bvz5wq3+XN4SBL67yf6Bz/JXih2X8TQ29tPba52omHySbI
-         EWBeMd0EFMFOtR77WriprNdSg8yuaJrYE3lVF24nplYcMFKk9JNXw/FS/adf2Tlo3CXy
-         Y4WA==
-X-Gm-Message-State: AFqh2kp6PfLJ25X7Y+jKcB19kyR8eLRBNQ2Y2+4mnrSsr7o6XU7bvdhn
-        mQOOA/QCuQc5ciwJ0XRo/Q==
-X-Google-Smtp-Source: AMrXdXv29Iz5nqn62So3TGHNqf5f780laIw1LKCUEjLN91zFX93RB1b6KXQjmbZTq1l6jHQbsWKKpQ==
-X-Received: by 2002:a92:bf0c:0:b0:30c:3c0:7a56 with SMTP id z12-20020a92bf0c000000b0030c03c07a56mr10099325ilh.5.1672418073087;
-        Fri, 30 Dec 2022 08:34:33 -0800 (PST)
+        bh=p0lVTJW+o2MV1Wr+rp1DHYDL0BIjyZC98wPp6+2qLBY=;
+        b=Blv0c2NOZ4OhnqrDgn0Y9E55t2meW1oNIAwnyodpAkCjIvVwngE1F1mPzDQRRAn5ze
+         FXI665GGAt476RIyI2hqw00bimH3NPhAOADGBfL/dtYLeLUUsbz+9VMt46Nc0wC/0/Db
+         RTkc/QSRs6pX23UgHqpH6Avi6HB2RyNaJu/mKSmH1K9IwQK54FSWeBuv6f1K5VlZR6FX
+         +KVbmQGhNq1khEQxjgFg0YvvdARcRWaubw7qLQlRb+d9595cL/NiNXw3wJMeTvLnsIMH
+         PWLekwBMCg6W/QKmz0JDxGeFpWJrmf2MOADDer/qeP5BKF4Ji2cQYlm5s6k5zgCVjgXU
+         +TcQ==
+X-Gm-Message-State: AFqh2kr4EjfKzX9luQmTnY52rq9aTKL8gv9L06WtPbihCKlZmuJh8raW
+        /suBz9bB/MMHS0IVOA7WPQt2TWZCnA==
+X-Google-Smtp-Source: AMrXdXtmmwEiDuX/16L//5BcoPYSJ1o3moPc/QYb+10ZKGI08/ULjxqkJC1zOa3EBVcJCs6vhnYQfg==
+X-Received: by 2002:a5d:928e:0:b0:6e0:7dd:59ac with SMTP id s14-20020a5d928e000000b006e007dd59acmr22689251iom.14.1672418071006;
+        Fri, 30 Dec 2022 08:34:31 -0800 (PST)
 Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id u4-20020a02cb84000000b003762308fe54sm6928229jap.93.2022.12.30.08.34.31
+        by smtp.gmail.com with ESMTPSA id x6-20020a056602160600b006e00556dc9esm7676832iow.16.2022.12.30.08.34.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 08:34:32 -0800 (PST)
-Received: (nullmailer pid 1935055 invoked by uid 1000);
+        Fri, 30 Dec 2022 08:34:30 -0800 (PST)
+Received: (nullmailer pid 1935050 invoked by uid 1000);
         Fri, 30 Dec 2022 16:34:28 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        phone-devel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        Iskren Chernev <me@iskren.info>
-In-Reply-To: <20221209-dt-binding-ufs-v2-3-dc7a04699579@fairphone.com>
-References: <20221209-dt-binding-ufs-v2-0-dc7a04699579@fairphone.com>
- <20221209-dt-binding-ufs-v2-3-dc7a04699579@fairphone.com>
-Message-Id: <167241769341.1925758.17856681634949446114.robh@kernel.org>
-Subject: Re: [PATCH v2 3/3] dt-bindings: ufs: qcom: Fix sm8450 bindings
+To:     Daehwan Jung <dh10.jung@samsung.com>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        jh0801.jung@samsung.com, sc.suh@samsung.com,
+        taehyun.cho@samsung.com, Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        eomji.oh@samsung.com, Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org
+In-Reply-To: <1672307866-25839-4-git-send-email-dh10.jung@samsung.com>
+References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>        
+ =?utf-8?q?=3CCGME20221229100416epcas2p18f7600737b8f4149a1d75d2d8db3317a=40e?=
+ =?utf-8?q?pcas2p1=2Esamsung=2Ecom=3E?=
+ <1672307866-25839-4-git-send-email-dh10.jung@samsung.com>
+Message-Id: <167241769120.1925686.13640146638423143826.robh@kernel.org>
+Subject: Re: [RFC PATCH v2 3/3] dt-bindings: usb: snps,dwc3: add generic-xhci as child
 Date:   Fri, 30 Dec 2022 10:34:28 -0600
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -73,14 +73,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 30 Dec 2022 08:42:07 +0100, Luca Weiss wrote:
-> SM8450 actually supports ICE (Inline Crypto Engine) so adjust the
-> bindings and the example to match.
+On Thu, 29 Dec 2022 18:57:46 +0900, Daehwan Jung wrote:
+> Currently, dwc3 invokes just xhci platform driver(generic-xhci) without
+> DT schema even though xhci works as child of dwc3. It makes sense to add
+> xhci as child of dwc3 with DT schema. It also supports to use another
+> compatible in xhci platform driver.
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
 > ---
->  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
+>  .../devicetree/bindings/usb/snps,dwc3.yaml    | 29 +++++++++++++++++++
+>  1 file changed, 29 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -89,12 +91,12 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: Unevaluated properties are not allowed ('reg-names' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a200000: #size-cells:0:0: 0 was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221209-dt-binding-ufs-v2-3-dc7a04699579@fairphone.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1672307866-25839-4-git-send-email-dh10.jung@samsung.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
