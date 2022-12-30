@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFF66598C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6BD6598C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 14:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234798AbiL3NfT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Dec 2022 08:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S235035AbiL3NhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 08:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiL3NfP (ORCPT
+        with ESMTP id S229456AbiL3Ng7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 08:35:15 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F370193E7
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 05:35:12 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-314-HWfElW15Mq-_iaahh_74GQ-1; Fri, 30 Dec 2022 13:35:09 +0000
-X-MC-Unique: HWfElW15Mq-_iaahh_74GQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Dec
- 2022 13:35:07 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 30 Dec 2022 13:35:07 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Roberto Sassu' <roberto.sassu@huaweicloud.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
-Thread-Topic: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
-Thread-Index: AQHZGf+Li10Ctze9/ky4tLizwqJmjK6Gb6hQ
-Date:   Fri, 30 Dec 2022 13:35:07 +0000
-Message-ID: <6949ced7c1014488b2d00ff26eba6b6b@AcuMS.aculab.com>
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
- <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 30 Dec 2022 08:36:59 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59844DE8D;
+        Fri, 30 Dec 2022 05:36:58 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0BCBE2F5;
+        Fri, 30 Dec 2022 14:36:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672407416;
+        bh=wv1AV7X/uWKMU9wRGXYtfli0dTrUxZJgNcnxbZIPMXw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JA/F++lUFbYj5/xuzDD3FHhbE5B10JhVIpFjw3sYsQbkEs1PmdzEaIq2/j6I72GQo
+         3CNbYv9oWbQlzvuQivJ2i/DR8SSFxnka6Os+eSSy2LXUvMvND7ZqtA8ksyuKba3wST
+         QeXWozDmsYuiN1jn1utg0zlDGcZEFmC/SpYQ5yGE=
+Date:   Fri, 30 Dec 2022 15:36:51 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 1/8] media: uvc: Extend documentation of
+ uvc_video_clock_decode()
+Message-ID: <Y67pc3ZEoteZ0S2l@pendragon.ideasonboard.com>
+References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
+ <20220920-resend-hwtimestamp-v2-1-0d7978a817cc@chromium.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-hwtimestamp-v2-1-0d7978a817cc@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu
-> Sent: 27 December 2022 14:28
-> 
-> From: Herbert Xu <herbert@gondor.apana.org.au>
-> 
-> The helper mpi_read_raw_from_sgl sets the number of entries in
-> the SG list according to nbytes.  However, if the last entry
-> in the SG list contains more data than nbytes, then it may overrun
-> the buffer because it only allocates enough memory for nbytes.
-> 
-> Fixes: 2d4d1eea540b ("lib/mpi: Add mpi sgl helpers")
-> Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Hi Ricardo,
+
+Thank you for the patch.
+
+s/uvc/uvcvideo/ in the subject line.
+
+On Fri, Dec 02, 2022 at 06:02:41PM +0100, Ricardo Ribalda wrote:
+> Make a explicit reference to uvc 1.5, explaining how the algorithm
+
+s/a explicit/an explicit/
+s/uvc/UVC/
+
+> supports the different behaviour of uvc 1.1 and 1.5.
+
+Ditto.
+
+> Tested-by: HungNien Chen <hn.chen@sunplusit.com>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 > ---
->  lib/mpi/mpicoder.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/media/usb/uvc/uvc_video.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/lib/mpi/mpicoder.c b/lib/mpi/mpicoder.c
-> index 39c4c6731094..3cb6bd148fa9 100644
-> --- a/lib/mpi/mpicoder.c
-> +++ b/lib/mpi/mpicoder.c
-> @@ -504,7 +504,8 @@ MPI mpi_read_raw_from_sgl(struct scatterlist *sgl, unsigned int nbytes)
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index 170a008f4006..ab56e65ca324 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -517,6 +517,9 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
+>  	/*
+>  	 * To limit the amount of data, drop SCRs with an SOF identical to the
+>  	 * previous one.
+> +	 * This filtering is also needed for supporting UVC 1.5. Where all the
+> +	 * data packages of the same frame contains the same sof. In that case
+> +	 * only the first one will match the host_sof.
+
+  	 * To limit the amount of data, drop SCRs with an SOF identical to the
+  	 * previous one. This filtering is also needed to support UVC 1.5, where
+	 * all the data packets of the same frame contains the same SOF. In that
+	 * case only the first one will match the host_sof.
+
+Conditionally-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+I can fix this when applying if there's no other need to submit a v3.
+
+>  	 */
+>  	dev_sof = get_unaligned_le16(&data[header_size - 2]);
+>  	if (dev_sof == stream->clock.last_sof)
 > 
->  	while (sg_miter_next(&miter)) {
->  		buff = miter.addr;
-> -		len = miter.length;
-> +		len = min_t(unsigned, miter.length, nbytes);
 
-Technically that min_t() is incorrect.
-miter.length is size_t (unsigned long on 64bit) and nbytes unsigned int.
-Any cast needs to force the smaller type to the larger one.
-(Clearly here the domain of the values is probably than 4G - but that isn't
-the point. There must be some places where the sg length needs to
-be size_t because 32 bits isn't enough.)
+-- 
+Regards,
 
-In reality min() is being completely over-zealous in its checking and
-should allow comparisons where the signed-ness of the two values matches.
-Search for the patch I posted before xmas.
-
-	David
-
-
-> +		nbytes -= len;
-> 
->  		for (x = 0; x < len; x++) {
->  			a <<= 8;
-> --
-> 2.25.1
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Laurent Pinchart
