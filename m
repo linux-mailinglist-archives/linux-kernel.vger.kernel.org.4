@@ -2,186 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D41F659BCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 21:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7A1659BCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 21:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235393AbiL3UCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 15:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S235415AbiL3UHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 15:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiL3UCt (ORCPT
+        with ESMTP id S229464AbiL3UHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 15:02:49 -0500
-Received: from ryne.moe (ryne.moe [157.90.134.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0774E1261F;
-        Fri, 30 Dec 2022 12:02:45 -0800 (PST)
-Received: from adrastea.localnet (unknown [170.55.83.2])
-        by ryne.moe (Postfix) with ESMTPSA id 17F211900338;
-        Fri, 30 Dec 2022 20:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=redstrate.com;
-        s=default; t=1672430564;
-        bh=aveChmaN8G/lMNf9XyNe+rnT8SmfSevZ+682G76lGMI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Royo1aU9SSa+p3/9rlt7WqnN1oCpG/U8J+FsoGcN5Nwz2qgsYuKnZyhE/187uR3p0
-         JNChiHC0p7OCwF4yjQBJiS47Qfk4gJ7RqOz42pDKEgSBVTmpJ0b6YvyUZRhzZfPmhL
-         NjTpV/Ocu4sR6O0cTdn2DVhDvi1yeAgFRsJgTPsw=
-From:   redstrate <josh@redstrate.com>
-To:     =?ISO-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Cc:     benjamin.tissoires@redhat.com, jikos@kernel.org,
-        kurikaesu@users.noreply.github.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: uclogic: Add support for XP-PEN Artist 22R Pro
-Date:   Fri, 30 Dec 2022 15:02:41 -0500
-Message-ID: <3448509.5fSG56mABF@adrastea>
-In-Reply-To: <20221229190648.69040-1-jose.exposito89@gmail.com>
-References: <2068502.VLH7GnMWUR@adrastea>
- <20221229190648.69040-1-jose.exposito89@gmail.com>
+        Fri, 30 Dec 2022 15:07:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29D21A83E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 12:07:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3061261B9C
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 20:07:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D650C433EF;
+        Fri, 30 Dec 2022 20:06:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672430819;
+        bh=yMfmMH1jzs1567jiXoyHPShvjpYvp6CVpm66CnnU34A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TKq3zOov0qD+YUgVczWfQ1BNVXT8J4sx/9YqbGUsvUMXlFwA1HogL/MJbSgrxh1Ck
+         kMotFLlxfKRFPjyNgtLtOAux9ZF0R0H0LYx8FH4GSgJsXQUiMLeQZMhdUXSjMBoygp
+         24k2pAb69BS11fACrLc2dJG315rOLRnEyYI0rRjUdtFxplbF6AXz/eYQEDdomthGrc
+         o4wZRWQiezzPdWyN8KQwDGVoRxi62FPCOYpygQo8mcahqZOOskrXZVC0Hu7SaWlMGs
+         SRmpCprNjpDffA5Me726P8EcDQ/mvXMiUeRtpRi+el9bhG9RslTkuc4EYbTPrtMtQ4
+         5V9VBxicUl31g==
+Date:   Fri, 30 Dec 2022 22:06:41 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Cc:     jan.kiszka@siemens.com, kbingham@kernel.org,
+        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        mingo@redhat.com, x86@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz
+Subject: Re: [PATCH] scripts/gdb: add mm introspection utils
+Message-ID: <Y69E0diWostgY2pj@kernel.org>
+References: <20221230163512.23736-1-dmitrii.bundin.a@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221230163512.23736-1-dmitrii.bundin.a@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Joshua,
+On Fri, Dec 30, 2022 at 07:35:12PM +0300, Dmitrii Bundin wrote:
+> This command provides a way to traverse the entire page hierarchy by a
+> given virtual address. In addition to qemu's commands info tlb/info mem
+> it provides the complete information about the paging structure for an
+> arbitrary virtual address. It supports 4Kb/2MB/1GB and 5 level paging.
+
+The commit message does not mention it's x86-specific.
+Not sure how gdb scripts handle per-arch functionality, but at the very
+least this should be stated in the commit message.
+ 
+> Here is an example output for 2MB success translation:
 > 
-> Thanks a lot for your patch!
+> CR3:
+>     CR3 BINARY DATA: 0x10c1d2002
+>     NEXT ENTRY PHYSICALL ADDRESS: 0x10c1d2000
+>     ---
+>     PAGE LEVEL WRITE THROUGH(bit 3): False
+>     PAGE LEVEL CACHE DISABLED(bit 4): False
+
+Any particular reason to make it ALL CAPS?
+
+> LEVEL 4:
+>     ENTRY ADDRESS: 0xffff88810c1d27f0
+>     PAGE ENTRY BINARY DATA: 0x8000000105dca067
+>     NEXT ENTRY PHYSICALL ADDRESS: 0x105dca000
+>     ---
+>     ENTRY PRESENT(bit 0):      True
+>     READ/WRITE ACCESS ALLOWED(bit 1): True
+>     USER ACCESS ALLOWED(bit 2): True
+>     PAGE LEVEL WRITE THROUGH(bit 3): False
+>     PAGE LEVEL CACHE DISABLED(bit 4): False
+>     ENTRY HAS BEEN ACCESSED(bit 5): True
+>     PAGE SIZE(bit 7): False
+>     RESTART TO ORDINARY(bit 11): False
+>     EXECUTE DISABLE(bit 63): True
+> LEVEL 3:
+>     ENTRY ADDRESS: 0xffff888105dca9d0
+>     PAGE ENTRY BINARY DATA: 0x105c87067
+>     NEXT ENTRY PHYSICALL ADDRESS: 0x105c87000
+>     ---
+>     ENTRY PRESENT(bit 0):      True
+>     READ/WRITE ACCESS ALLOWED(bit 1): True
+>     USER ACCESS ALLOWED(bit 2): True
+>     PAGE LEVEL WRITE THROUGH(bit 3): False
+>     PAGE LEVEL CACHE DISABLED(bit 4): False
+>     ENTRY HAS BEEN ACCESSED(bit 5): True
+>     PAGE SIZE(bit 7): False
+>     RESTART TO ORDINARY(bit 11): False
+>     EXECUTE DISABLE(bit 63): False
+> LEVEL 2:
+>     ENTRY ADDRESS: 0xffff888105c87698
+>     PAGE ENTRY BINARY DATA: 0x80000001622008e7
+>     PAGE SIZE: 2MB
+>     PAGE PHYSICALL ADDRESS: 0x162200000
+>     ---
+>     ENTRY PRESENT(bit 0):      True
+>     READ/WRITE ACCESS ALLOWED(bit 1): True
+>     USER ACCESS ALLOWED(bit 2): True
+>     PAGE LEVEL WRITE THROUGH(bit 3): False
+>     PAGE LEVEL CACHE DISABLED(bit 4): False
+>     ENTRY HAS BEEN ACCESSED(bit 5): True
+>     PAGE DIRTY(bit 6): True
+>     PAGE SIZE(bit 7): True
+>     GLOBAL TRANSLATION(bit 8): False
+>     RESTART TO ORDINARY(bit 11): True
+>     PAT(bit 12): False
+>     PROTECTION KEY(bits (62, 59)): 0
+>     EXECUTE DISABLE(bit 63): True
 > 
-> It might cause conflicts with [1] and [2], so we'll need to rebase on
-> top of each other work at some point.
+> Signed-off-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+> ---
+>  scripts/gdb/linux/mm.py    | 220 +++++++++++++++++++++++++++++++++++++
+>  scripts/gdb/vmlinux-gdb.py |   1 +
+>  2 files changed, 221 insertions(+)
+>  create mode 100644 scripts/gdb/linux/mm.py
 > 
-> [1]
-> https://lore.kernel.org/linux-input/20221226123456.14822-1-jose.exposito89@
-> gmail.com/T/ [2]
-> https://lore.kernel.org/linux-input/20221226125454.16106-1-jose.exposito89@
-> gmail.com/T/
+> diff --git a/scripts/gdb/linux/mm.py b/scripts/gdb/linux/mm.py
+> new file mode 100644
+> index 000000000000..c6f04e74edbd
+> --- /dev/null
+> +++ b/scripts/gdb/linux/mm.py
+> @@ -0,0 +1,220 @@
+> +#
+> +# gdb helper commands and functions for Linux kernel debugging
+> +#
+> +#  routines to introspect virtual memory
 
-I've seen those patches in the mailing list (and I thought they already got 
-merged heh) so I'll keep a close eye and rebase as needed.
+These routines introspect page tables rather than virtual memory
 
+> +#
+> +# Authors:
+> +#  Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+> +#
+> +# This work is licensed under the terms of the GNU GPL version 2.
+> +#
+> +
+> +import gdb
+> +
+> +from linux import utils
+> +
+> +PHYSICAL_ADDRESS_MASK = gdb.parse_and_eval('0xfffffffffffff')
+> +
+> +
+> +def page_mask(level=1):
+> +    # 4KB
+> +    if level == 1:
+> +        return gdb.parse_and_eval('(u64) ~0xfff')
+> +    # 2MB
+> +    elif level == 2:
+> +        return gdb.parse_and_eval('(u64) ~0x1fffff')
+> +    # 1GB
+> +    elif level == 3:
+> +        return gdb.parse_and_eval('(u64) ~0x3fffffff')
+
+What will happen here with 5-level paging?
+
+> +    else:
+> +        raise Exception(f'Unknown page level: {level}')
+> +
+> +
+> +def _page_offset_base():
+> +    pob_symbol = gdb.lookup_global_symbol('page_offset_base')
+> +    pob = pob_symbol.name if pob_symbol else '0xffff888000000000'
+
+Please don't use magic numbers.
+
+> +    return gdb.parse_and_eval(pob)
+> +
+> +
+> +def is_bit_defined_tupled(data, offset):
+> +    return offset, bool(data >> offset & 1)
+> +
+> +def content_tupled(data, bit_start, bit_end):
+> +    return (bit_end, bit_start), data >> bit_start & ((1 << (1 + bit_end - bit_start)) - 1)
+> +
+> +def entry_va(level, phys_addr, translating_va):
+> +        def start_bit(level):
+> +            if level == 5:
+> +                return 48
+> +            elif level == 4:
+> +                return 39
+> +            elif level == 3:
+> +                return 30
+> +            elif level == 2:
+> +                return 21
+> +            elif level == 1:
+> +                return 12
+> +            else:
+> +                raise Exception(f'Unknown level {level}')
+> +
+> +        entry_offset =  ((translating_va >> start_bit(level)) & 511) * 8
+> +        entry_va = _page_offset_base() + phys_addr + entry_offset
+> +        return entry_va
+> +
+> +class Cr3():
+> +    def __init__(self, cr3, page_levels):
+> +        self.cr3 = cr3
+> +        self.page_levels = page_levels
+> +        self.page_level_write_through = is_bit_defined_tupled(cr3, 3)
+> +        self.page_level_cache_disabled = is_bit_defined_tupled(cr3, 4)
+> +        self.next_entry_physical_address = cr3 & PHYSICAL_ADDRESS_MASK & page_mask()
+> +
+> +    def next_entry(self, va):
+> +        next_level = self.page_levels
+> +        return PageHierarchyEntry(entry_va(next_level, self.next_entry_physical_address, va), next_level)
+> +
+> +    def mk_string(self):
+> +            return f"""\
+> +CR3:
+> +    CR3 BINARY DATA: {hex(self.cr3)}
+> +    NEXT ENTRY PHYSICALL ADDRESS: {hex(self.next_entry_physical_address)}
+> +    ---
+> +    PAGE LEVEL WRITE THROUGH(bit {self.page_level_write_through[0]}): {self.page_level_write_through[1]}
+> +    PAGE LEVEL CACHE DISABLED(bit {self.page_level_cache_disabled[0]}): {self.page_level_cache_disabled[1]}
+> +"""
+> +
+> +
+> +class PageHierarchyEntry():
+> +    def __init__(self, address, level):
+> +        data = int.from_bytes(
+> +            memoryview(gdb.selected_inferior().read_memory(address, 8)),
+> +            "little"
+> +        )
+> +        if level == 1:
+> +            self.is_page = True
+> +            self.entry_present = is_bit_defined_tupled(data, 0)
+> +            self.read_write = is_bit_defined_tupled(data, 1)
+> +            self.user_access_allowed = is_bit_defined_tupled(data, 2)
+> +            self.page_level_write_through = is_bit_defined_tupled(data, 3)
+> +            self.page_level_cache_disabled = is_bit_defined_tupled(data, 4)
+> +            self.entry_was_accessed = is_bit_defined_tupled(data, 5)
+> +            self.dirty = is_bit_defined_tupled(data, 6)
+> +            self.pat = is_bit_defined_tupled(data, 7)
+> +            self.global_translation = is_bit_defined_tupled(data, 8)
+> +            self.page_physical_address = data & PHYSICAL_ADDRESS_MASK & page_mask(level)
+> +            self.next_entry_physical_address = None
+> +            self.hlat_restart_with_ordinary = is_bit_defined_tupled(data, 11)
+> +            self.protection_key = content_tupled(data, 59, 62)
+> +            self.executed_disable = is_bit_defined_tupled(data, 63)
+> +        else:
+> +            page_size = is_bit_defined_tupled(data, 7)
+> +            page_size_bit = page_size[1]
+> +            self.is_page = page_size_bit
+> +            self.entry_present = is_bit_defined_tupled(data, 0)
+> +            self.read_write = is_bit_defined_tupled(data, 1)
+> +            self.user_access_allowed = is_bit_defined_tupled(data, 2)
+> +            self.page_level_write_through = is_bit_defined_tupled(data, 3)
+> +            self.page_level_cache_disabled = is_bit_defined_tupled(data, 4)
+> +            self.entry_was_accessed = is_bit_defined_tupled(data, 5)
+> +            self.page_size = page_size
+> +            self.dirty = is_bit_defined_tupled(
+> +                data, 6) if page_size_bit else None
+> +            self.global_translation = is_bit_defined_tupled(
+> +                data, 8) if page_size_bit else None
+> +            self.pat = is_bit_defined_tupled(
+> +                data, 12) if page_size_bit else None
+> +            self.page_physical_address = data & PHYSICAL_ADDRESS_MASK & page_mask(level) if page_size_bit else None
+> +            self.next_entry_physical_address = None if page_size_bit else data & PHYSICAL_ADDRESS_MASK & page_mask()
+> +            self.hlat_restart_with_ordinary = is_bit_defined_tupled(data, 11)
+> +            self.protection_key = content_tupled(data, 59, 62) if page_size_bit else None
+> +            self.executed_disable = is_bit_defined_tupled(data, 63)
+> +        self.address = address
+> +        self.page_entry_binary_data = data
+> +        self.page_hierarchy_level = level
+> +
+> +    def next_entry(self, va):
+> +        if self.is_page or not self.entry_present[1]:
+> +            return None
+> +
+> +        next_level = self.page_hierarchy_level - 1
+> +        return PageHierarchyEntry(entry_va(next_level, self.next_entry_physical_address, va), next_level)
+> +
+> +
+> +    def mk_string(self):
+> +        if not self.entry_present[1]:
+> +            return f"""\
+> +LEVEL {self.page_hierarchy_level}:
+> +    ENTRY ADDRESS: {hex(self.address)}
+> +    PAGE ENTRY BINARY DATA: {hex(self.page_entry_binary_data)}
+> +    ---
+> +    PAGE ENTRY IS NOT PRESENT!
+> +"""
+> +        elif self.is_page:
+> +            return f"""\
+> +LEVEL {self.page_hierarchy_level}:
+> +    ENTRY ADDRESS: {hex(self.address)}
+> +    PAGE ENTRY BINARY DATA: {hex(self.page_entry_binary_data)}
+> +    PAGE SIZE: {'1GB' if self.page_hierarchy_level == 3 else '2MB' if self.page_hierarchy_level == 2 else '4KB' if self.page_hierarchy_level == 1 else 'Unknown page size for level:' + self.page_hierarchy_level}
+> +    PAGE PHYSICALL ADDRESS: {hex(self.page_physical_address)}
+> +    ---
+> +    ENTRY PRESENT(bit {self.entry_present[0]}):      {self.entry_present[1]}
+> +    READ/WRITE ACCESS ALLOWED(bit {self.read_write[0]}): {self.read_write[1]}
+> +    USER ACCESS ALLOWED(bit {self.user_access_allowed[0]}): {self.user_access_allowed[1]}
+> +    PAGE LEVEL WRITE THROUGH(bit {self.page_level_write_through[0]}): {self.page_level_write_through[1]}
+> +    PAGE LEVEL CACHE DISABLED(bit {self.page_level_cache_disabled[0]}): {self.page_level_cache_disabled[1]}
+> +    ENTRY HAS BEEN ACCESSED(bit {self.entry_was_accessed[0]}): {self.entry_was_accessed[1]}
+> +    PAGE DIRTY(bit {self.dirty[0]}): {self.dirty[1]}
+> +    """ + \
+> +    ("" if self.page_hierarchy_level == 1 else f"""PAGE SIZE(bit {self.page_size[0]}): {self.page_size[1]}
+> +    """) + \
+> +    f"""GLOBAL TRANSLATION(bit {self.global_translation[0]}): {self.global_translation[1]}
+> +    RESTART TO ORDINARY(bit {self.hlat_restart_with_ordinary[0]}): {self.hlat_restart_with_ordinary[1]}
+> +    PAT(bit {self.pat[0]}): {self.pat[1]}
+> +    PROTECTION KEY(bits {self.protection_key[0]}): {self.protection_key[1]}
+> +    EXECUTE DISABLE(bit {self.executed_disable[0]}): {self.executed_disable[1]}
+> +"""
+> +        else:
+> +            return f"""\
+> +LEVEL {self.page_hierarchy_level}:
+> +    ENTRY ADDRESS: {hex(self.address)}
+> +    PAGE ENTRY BINARY DATA: {hex(self.page_entry_binary_data)}
+> +    NEXT ENTRY PHYSICALL ADDRESS: {hex(self.next_entry_physical_address)}
+> +    ---
+> +    ENTRY PRESENT(bit {self.entry_present[0]}):      {self.entry_present[1]}
+> +    READ/WRITE ACCESS ALLOWED(bit {self.read_write[0]}): {self.read_write[1]}
+> +    USER ACCESS ALLOWED(bit {self.user_access_allowed[0]}): {self.user_access_allowed[1]}
+> +    PAGE LEVEL WRITE THROUGH(bit {self.page_level_write_through[0]}): {self.page_level_write_through[1]}
+> +    PAGE LEVEL CACHE DISABLED(bit {self.page_level_cache_disabled[0]}): {self.page_level_cache_disabled[1]}
+> +    ENTRY HAS BEEN ACCESSED(bit {self.entry_was_accessed[0]}): {self.entry_was_accessed[1]}
+> +    PAGE SIZE(bit {self.page_size[0]}): {self.page_size[1]}
+> +    RESTART TO ORDINARY(bit {self.hlat_restart_with_ordinary[0]}): {self.hlat_restart_with_ordinary[1]}
+> +    EXECUTE DISABLE(bit {self.executed_disable[0]}): {self.executed_disable[1]}
+> +"""
+> +
+> +
+> +class TranslateVM(gdb.Command):
+> +    """Prints the entire paging structure used to translate a given virtual address.
+> +
+> +Having an address space of the currently executed process translates the virtual address
+> +and prints detailed information of all paging structure levels used for the transaltion."""
+> +
+> +    def __init__(self):
+> +        super(TranslateVM, self).__init__('translate-vm', gdb.COMMAND_USER)
+> +
+> +    def invoke(self, arg, from_tty):
+> +        if utils.is_target_arch("x86"):
+> +            vm_address = gdb.parse_and_eval(f'{arg}')
+> +            cr3_data = gdb.parse_and_eval('$cr3')
+> +            cr4 = gdb.parse_and_eval('$cr4')
+> +            page_levels = 5 if cr4 & (1 << 12) else 4
+> +            page_entry = Cr3(cr3_data, page_levels)
+> +            while page_entry:
+> +                gdb.write(page_entry.mk_string())
+> +                page_entry = page_entry.next_entry(vm_address)
+> +        else:
+> +            gdb.GdbError("Virtual address translation is not"
+> +                         "supported for this arch")
+> +
+> +
+> +
+> +TranslateVM()
+> diff --git a/scripts/gdb/vmlinux-gdb.py b/scripts/gdb/vmlinux-gdb.py
+> index 4136dc2c59df..27bd7339bccc 100644
+> --- a/scripts/gdb/vmlinux-gdb.py
+> +++ b/scripts/gdb/vmlinux-gdb.py
+> @@ -37,3 +37,4 @@ else:
+>      import linux.clk
+>      import linux.genpd
+>      import linux.device
+> +    import linux.mm
+> -- 
+> 2.17.1
 > 
-> Sparse nitpick: "uclogic_extra_input_mapping" can be made static.
 > 
 
-I somehow missed that, will change.
-
-> 
-> Is it possible to receive a report with information from both dials at
-> the same time?
-> 
-> I'm asking because I'm trying to understand what is the meaning of the
-> 0x10 and 0x20 values and I wonder if they are generated when both dials
-> are used at the same time.
-> 
-
-According to Aren's reference sheet he wrote up for this tablet, the 0x10 and 
-0x20 values are reported by the right dial (left frame: 
-02:f0:00:00:00:00:00:20:00:14, right frame: 02:f0:00:00:00:00:00:10:00:14). 
-Dumping the contents of data[frame->bitmap_dial_byte] yields the same result. 
-The left dial works like usual, 02 for left and 01 for right.
-
-As for recieving reports of the two dials turning at the same time... I can't 
-seem to make it do that. This tablet is pretty big, and I can't turn the dials 
-fast enough.
-
-> 
-> You can probably reuse uclogic_params_ugee_v2_init() or at least reuse
-> uclogic_probe_interface() and uclogic_params_parse_ugee_v2_desc() if
-> for some reason we need custom logic for this tablet.
-> 
-
-I actually looked a little into the UGEE v2 init functions to see if I could 
-reuse anything (but to be honest, I really just skimmed) but I will take a 
-second look to see if I can consolidate it.
-
-> 
-> Is this value 8? In all the models I have seen so far this is indeed
-> the number of buttons.
-> 
-> Also, what's the value of buf[6]? As you can see in
-> uclogic_params_parse_ugee_v2_desc(), this field is the frame type. I'd be
-> nice to know whether a different frame type is reported when 2 dials are
-> present or not.
-> 
-> Could you attach the contents of the 14 bytes of "buf", please? I'd be
-> nice to have a look and see if we can reuse as much code as possible.
-> 
-
-Yeah here's the 14 bytes of "buf" here:
-buf[0] = 000c
-buf[1] = 0003
-buf[2] = 0030
-buf[3] = 00ba
-buf[4] = 009a
-buf[5] = 0068
-buf[6] = 0006
-buf[7] = 0000
-buf[8] = 00ff
-buf[9] = 001f
-buf[10] = 00ec
-buf[11] = 0009
-buf[12] = 0080
-buf[13] = 0072
-
-I'm not sure you made a typo, but buf[6] in uclogic_params_parse_ugee_v2_desc 
-is reading the button count, which reports as 6 for some reason. buf[7] is 0 
-though, so it appears that its still reporting as UCLOGIC_PARAMS_FRAME_BUTTONS 
-(I could just be misunderstanding the strdescs) or the frames are completely 
-different.
-
->
-> Ideally, we should be able to handle this tablet with the other UGEE v2
-> tablets.
-> 
-
-Yeah I will consolidate this case if I manage to merge this with the other 
-UGEE v2 tablet support.
-
-> 
-> This array is already declared in uclogic_params_ugee_v2_init(), which,
-> hopefully, we will be able to reuse. Otherwise, you might be interested
-> in this commit (not merged yet):
-> https://lore.kernel.org/linux-input/20221226125454.16106-4-jose.exposito89@g
-> mail.com/T/#u
-
-I didn't see that array in ugee_v2_init, what I'll do is match the variables 
-defined in your cleanup patch (I believe it's closely identical already), so it 
-makes rebasing easier no matter what order they're merged in.
-
-> 
-> Can't "uclogic_rdesc_ugee_v2_pen_template_arr" be used instead?
-> 
-
-Yeah I think so, at first I didn't consider it but on closer inspection - the 
-offsets are the same (just for some reason, out of order). I'll be looking into 
-testing the pen using this descriptor on the second revision, maybe Pro-series 
-and UGEE v2 aren't so different after all!
-
-> 
-> Have a look to "uclogic_rdesc_ugee_v2_frame_dial_template_arr", I don't
-> know if it could be used for your tablet.
-> 
-
-Same as above, same structure - different order (but it's all semantic, same 
-offsets) so I'll be consolidating if it works out.
-
->
-> If your tablet reports its number of buttons, UCLOGIC_RDESC_FRAME_PH_BTN
-> can be used here.
-> 
-
-I'll be reviewing the descriptor data, ideally it should but I don't have high 
-hopes (as shown above) but I'm going to be testing it more.
-
-Thank you for the review! I'll be resubmitting a second version of the patch 
-with your suggestions and making sure the kernel test bot is happy - and 
-hopefully there will be a lot less duplication structure-wise.
-
-
-
-
+-- 
+Sincerely yours,
+Mike.
