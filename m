@@ -2,136 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EFA65974A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C826A65974D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234484AbiL3KaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 05:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S234653AbiL3Kah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 05:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiL3KaO (ORCPT
+        with ESMTP id S234529AbiL3Kae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 05:30:14 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2102.outbound.protection.outlook.com [40.107.95.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDB812AD1;
-        Fri, 30 Dec 2022 02:30:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ki0QrJOv5h+5BUeDXLRpI4Ps/nMIqvMBfqDFVoI6ErHj9KRAYJ1NnXXVv6zXD24dskbHuDnYSEwS8MO3qCNzRFAWCDzOFstTbnq67OIWDtoX3pvr5JMpkUNstFDWQxQJFmhUBuhL5QRJVQaYkZyvANwSWRnOKXNR1D7TRUR5oieQawy+vM01xbRL1Y6maJldlcCJZwKnxzc467lSwmV14xN6EPsHrrnHGrs7GXaB0CJzOOyplPefgFcqx5/1YOOQpkefB3c0B2nPcMZGjmYAs6QcG/xKIh6sQWOJ9mh0C7fJoGGlBLrhQY+brG9jfkj3GO69P4DR+evQ5UPPAVRYhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=taovbouu108n5VI1EzSPP2cb45zY6lqkPZ+FdUcrIA0=;
- b=gGahexYhoS1y0uy7UnFMQGvUTIsHQMu/a7RxXVR14QrcRJ43t/Z3Bu30YW1a1eg9TB8aAF8cNWRAbyVQHNl6ZLE/zY1od4CJGu/MGpiEpLeqh+/WfFLJIdP5NETu2ZAR3MxkhGh4PGiLvuBttsg+I1wOa8LX28OoZghdZrfQSdODhTDnFWtdYeXnnXNa4MFjmMeTREGmDDqNTeOae/XEQDsCXHyjP88r1fGZXBpfI2AjDaTmjr7GTzZ7qfU8XVwsmbdR9xtEWSiC+tmgjGB+oUhIMENy/g1AAGvXuMWZBqYWk4Nxpm7N7sc/7WjsO9Iw7eN6QDbjarwprmtv4cAxag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=taovbouu108n5VI1EzSPP2cb45zY6lqkPZ+FdUcrIA0=;
- b=EflMe4PgSn1WBtNEvtaPIBb3qlPNxunM/erFq/jv4Lm8MlMIGJWSll7XQxoUxLERB4ifFoRbqXoYrlrk19s0DqBaTn9AJq1CSyhQWpQ7OCN9+lJuJzrfhfjIIHYjORN7JScYmWEdnG7vwjDIHxOsWSjOwE58t8HUlqkpjuhOPNw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from SN6PR01MB4973.prod.exchangelabs.com (2603:10b6:805:c4::13) by
- MW4PR01MB6177.prod.exchangelabs.com (2603:10b6:303:76::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.14; Fri, 30 Dec 2022 10:30:08 +0000
-Received: from SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::1e67:38ac:ed37:be1c]) by SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::1e67:38ac:ed37:be1c%3]) with mapi id 15.20.5944.016; Fri, 30 Dec 2022
- 10:30:08 +0000
-Message-ID: <56b0f4ad-9194-eb20-cffd-79c57171163b@amperemail.onmicrosoft.com>
-Date:   Fri, 30 Dec 2022 17:29:57 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2] USB: gadget: Add ID numbers to configfs-gadget driver
- names
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Chanh Nguyen <chanh@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Li <frank.li@nxp.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Rondreis <linhaoguo86@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>
-References: <20221221091317.19380-1-chanh@os.amperecomputing.com>
- <f7067028-9662-7776-80a5-3bbe046c92e0@collabora.com>
-Content-Language: en-US
-From:   Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
-In-Reply-To: <f7067028-9662-7776-80a5-3bbe046c92e0@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR02CA0030.apcprd02.prod.outlook.com
- (2603:1096:3:18::18) To SN6PR01MB4973.prod.exchangelabs.com
- (2603:10b6:805:c4::13)
+        Fri, 30 Dec 2022 05:30:34 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D001D1A078
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:30:27 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pBCef-0006oC-Vy; Fri, 30 Dec 2022 11:30:26 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pBCeZ-002geM-QW; Fri, 30 Dec 2022 11:30:19 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pBCeZ-008xeU-4o; Fri, 30 Dec 2022 11:30:19 +0100
+Date:   Fri, 30 Dec 2022 11:30:16 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: linux-next: Tree for Dec 30
+Message-ID: <20221230103016.ebcjz7lky7wfkz6h@pengutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR01MB4973:EE_|MW4PR01MB6177:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03c84aba-0817-4d55-7c84-08daea50d27b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tlOl7snkP445WH+YlL3vZwv8n3B2aaHioRmHXhOiiwcd5d5+uHkklHMAAgRZMTmj+Cc+MPh5xkRSaNia7XELyh9dQzCvp8S8JDDrKDB0R2YcHeFSJo/S1/FmTwcTd001i4zV8zhULTY0P2X/x8JrKJr9wnHfkQh6SzvKpHJA2Id3XWnCFG/FFD+WETSru4mJtJLvoF0RPDpcVvjXrPmgK3X7qV5cO0c78ZHTAZ1Fnnn9MJFKui8PkURgeq7ggJdmZB9xGaGPAaBFcKS36CCZx8CtjjonYLipdr0j5mRQuLa9tDuipL0xoiBH4U1a8AnG7PLcpYQ3Ynecmzp93M4eDu430wYi1aDKx+a5+jeQaqja6P1zGEg8T99zGgajZjzCH2jC0sqdri3IG3b6E83PDb42fnAbEXMiOe11CLlQLOA5l0c5LZeuCYis7orPt1zgrvmZzbmIZzAlYvgh/FsoFsMmhU67YNe7rmovyoX0mpRQAoen3Y4jHxp2PYRhauOCddf0znIO+zT40o6nFUm2Lq1wjYEDybkkRb/KE4IL1unsEwV/v8YopD57jwrVuLiHRccGUVcbOiWpUls5/ZYLyiksUDjJYpjuRVpo8N37/CRv/u+uHkQivzFs/BtpyDw24PV7BQJqTF/B7RG3uID3FPD52euCFyQOKFGAk+SOHuUKWpTMq8YV05ORxU5eNoGgCXVcilkr6SH+rT2BLBwJUQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4973.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(366004)(136003)(39850400004)(346002)(451199015)(53546011)(6506007)(2616005)(42882007)(6512007)(186003)(478600001)(6486002)(316002)(2906002)(6666004)(31696002)(110136005)(26005)(31686004)(41300700001)(38100700002)(7416002)(66946007)(5660300002)(66556008)(83170400001)(921005)(8676002)(66476007)(83380400001)(8936002)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1B2eDlYbE53TXpFN1N4bkxaUjJFUzFnbjNyclNXbklJS05tdDdJWFovWEd4?=
- =?utf-8?B?K2VVYkxSTmVya0twRndRSHRRMjN0YUtiSEZFK2kzRHIzL1hCcHBVSFhwdXky?=
- =?utf-8?B?UGROanRxODhVSER1Vk9rdy9keWJta0pramRwbU56Vy9iL05KcVdGakJ4ZmE1?=
- =?utf-8?B?Q0xnOFNkSnl4aTltK29kTFU3cldoUFc3T040aXcyVDE0b0h3UjNZSzNhOU5x?=
- =?utf-8?B?NnBHeGRKWUZOZmhuVnJGVjN3c2xSaVI2UnJuTzZXaWpIWG5HYTUrRXhpalFR?=
- =?utf-8?B?REpBV0RYOCtkK1hrd1UrM3VtTjl5aWRDUDZzaVQ5dFlWSGw4aHRwZktId2tt?=
- =?utf-8?B?S2pxNzFqRWZsYXZIeGJWdlZKVXlpVXRuSC81aTliaHo4QXY4ZytsZXNNd2lv?=
- =?utf-8?B?L2pBWEhkR0F1L1pOMi93Z2tpRStIT2JGcTA4ejZCcCtnaW5SWlNpeDBScWVI?=
- =?utf-8?B?S0YxdEFWRVdKS1pibUozdnVtV29ZMlJ5dTNQQkduMUhUTXUwaFdVQUlqcTQz?=
- =?utf-8?B?SDZhbFBiMXRTWmdQSFQ4cmpPUXNud1dleHdXMzczcWRmdXBLUUlmc1Nac3Rr?=
- =?utf-8?B?MUdPSDJzSWQyTU81d2s2NXpxbDRhbGhPS2czTXBvYXJNbEtQS1RSRFNsd2xh?=
- =?utf-8?B?dURvVmN5T3VPZUk1dytUUUJCRHhXMy9QK0hLeWpBazB3a3UyWUV0MWNCVkc4?=
- =?utf-8?B?aWpkNTFuQldPbENQZmc5c010MGVaT1kzZVUwQXpuczBBN1llU0RwbmNpME9x?=
- =?utf-8?B?dE0zM2ZKdVNzZkpaZURyWW1qdFhlYXRXcER1YVIxcDdSYWh6aURUcUJ3RUVH?=
- =?utf-8?B?eUo3Qzc3U3B6TDlvTEFnK29qWnZ0aFh1b3FoYUs0NWZybGJ4bzdTbnVSeEpO?=
- =?utf-8?B?d1FKK0s2eWtMc1hnSC9lT1NsUWNZMzNnZlNtL0VNU3hEZzVOZzNRbENZU3JJ?=
- =?utf-8?B?bmRkRklQaVlBak1KQXZ3ODQwTjhidGcwQjBFTGhIY3o3K2lCa0dGM3BtL2p5?=
- =?utf-8?B?RE5NQXFOZDJzVS9HbzhCYU5JZXJOTng4ampXU3VaK2ZWNkh6VVArZklmZkZr?=
- =?utf-8?B?ZHl4ZTlJejdqdE00RVhCSGVVa0RobTIrdFcwcHdZTXFlcWp5Wit3OW1YcnNL?=
- =?utf-8?B?azJObmJPekNPM29KNW95V1FUc0NHMTRjWk1HNE1kQi9FcTcvbE05TXpDd1Zy?=
- =?utf-8?B?RXVDb2ZaYlVvZjRUaVJNMEo5QlZDVGowN3R5ZTgvUU9XaDhiZUtLQm05WEh6?=
- =?utf-8?B?VkxLQ1ovYmtOMlMybzFWQzAwOVg3SjVnclljZGovS1hpNjViNmxpcHIvYy9p?=
- =?utf-8?B?QW9HNFN0SGVnQ0tZOUFnVncrbks4YnpzSzZyY3oyKzdMb3hBV2YyVUVrdkFT?=
- =?utf-8?B?R09VaW55bEJQRkZka3E5MTMvQjQ2NG1SYkVkOWFWcTV4UXlLNDRsNEZveWVN?=
- =?utf-8?B?dnJhUVlRS2tZVVJjV2ZTeTN3NEtOZHVWTDdxTnVaL214NUhWMzZManBJZW9x?=
- =?utf-8?B?aXN0MWt6WnozczdiY0Z1ME5YZnVOZTR6WHNpRU9sS3pNRjJsekNxYnB4elZZ?=
- =?utf-8?B?cTlPNnVOdEQ4QVBvMWxWc1lqajFVSGFyWE9xdHkyQWpsOWVJTDdCaDc5ekVi?=
- =?utf-8?B?TWdQTldHVE13b0M0ZDV3T1FHMVNhV0x4MkdLdllRdXhpZUZPM0d3UGY1T1gw?=
- =?utf-8?B?Y2FWTjFkazlkZEw4UlVYVkRSM09LRGRjQXdaUXlFendpMHJTVlU0dFBiZTNM?=
- =?utf-8?B?RG9UVHB5Z0FIWUNrK0lKc3FYSDd6YXIxWVNxZllod0xGNUtCV3FvclpkM1RF?=
- =?utf-8?B?Vmh3bHArRWhsUGxRdHBjQytseERYcTNJVXd2cGZYVW55U0UwODFzTnA1N2Ru?=
- =?utf-8?B?UHVNM2RQWmVPUDJITkdnRkVjQmtTMmMzWXdWRVhJS0hqdEdkT0htTVB4YnZm?=
- =?utf-8?B?RCtaZXBlbzVrNk5ocEFvRUxqM0pKd1A0bGRKV1BzWXBuN0NWTWVjK2czdVRG?=
- =?utf-8?B?aTc1MjJhaTR2TFBsb3p4N21Ec3ora1dKL1FQdTBxeUx4M3lSRDNkRlgyVzFo?=
- =?utf-8?B?UlgxTmZsekJoRysyejNzY0N3K1NwaFBjN0ovZWUrQ0ZaczFhR2JXUldsVlov?=
- =?utf-8?B?M2MrclRJazFGYzZWeW5XaE51Ry94UkEzQmxMaFJLcWtVR0N5cFppd0dMcEFa?=
- =?utf-8?Q?ViQ4urgtxwfNm5FG42mBs0Y=3D?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03c84aba-0817-4d55-7c84-08daea50d27b
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR01MB4973.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Dec 2022 10:30:08.0312
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E222KNA0yqEtURyXmN3mrx8P33y6LbNBRyZNIDXp35YnFonX8Qhl/yFGFh/fHQ3aJLKc3JughOwnpkxqWalSyL3zhHgRA2YcPUbnTci/7cjYHmIMSrnX1mWfsOwh5ISL
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6177
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="arwubzpzgnalgtaf"
+Content-Disposition: inline
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,LOCALPART_IN_SUBJECT,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -140,136 +57,168 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--arwubzpzgnalgtaf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 22/12/2022 22:20, Andrzej Pietrasiewicz wrote:
-> Hi,
-> 
-> W dniu 21.12.2022 o 10:13, Chanh Nguyen pisze:
->> It is unable to use configfs to attach more than one gadget. When
->> attaching the second gadget, it always fails and the kernel message
->> prints out:
->>
->> Error: Driver 'configfs-gadget' is already registered, aborting...
->> UDC core: g1: driver registration failed: -16
->>
-> 
-> I assume you are interested in a scenario where there is more than one
-> UDC available which means you can have more than one active gadget?
-> 
+Hello,
 
-Yes, I'd like to have more active gadgets. For example, mass_storage and 
-ecm usb, ...
+As there is no next tree since a few days and this will continue to be true=
+ for
+a few days, I tried to create my own next.
 
->> This commit fixes the problem by a ".N" suffix added to each
->> configfs_gadget's driver name (where N is a unique ID number),
->> thus making the names distinct.
->>
->> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
->> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
->>
->> ---
->> Changes in v2:
->>    - Replace scnprintf() by kasprintf() to simplify the code [CJ]
->>    - Move the clean up code from gadgets_drop() to
->>      gadget_info_attr_release()                        [Frank Li]
->>    - Correct the resource free up in gadges_make()   [Alan Stern]
->>    - Remove the unnecessary variable in gadgets_make()    [Chanh]
->>    - Fixes minor grammar issue in commit message          [Chanh]
->> ---
->>   drivers/usb/gadget/configfs.c | 25 ++++++++++++++++++++++++-
->>   1 file changed, 24 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/gadget/configfs.c 
->> b/drivers/usb/gadget/configfs.c
->> index 96121d1c8df4..7faf68bfa716 100644
->> --- a/drivers/usb/gadget/configfs.c
->> +++ b/drivers/usb/gadget/configfs.c
->> @@ -3,6 +3,7 @@
->>   #include <linux/module.h>
->>   #include <linux/slab.h>
->>   #include <linux/device.h>
->> +#include <linux/idr.h>
->>   #include <linux/kstrtox.h>
->>   #include <linux/nls.h>
->>   #include <linux/usb/composite.h>
->> @@ -11,6 +12,8 @@
->>   #include "u_f.h"
->>   #include "u_os_desc.h"
->> +static DEFINE_IDA(driver_id_numbers);
->> +
->>   int check_user_usb_string(const char *name,
->>           struct usb_gadget_strings *stringtab_dev)
->>   {
->> @@ -52,6 +55,9 @@ struct gadget_info {
->>       char qw_sign[OS_STRING_QW_SIGN_LEN];
->>       spinlock_t spinlock;
->>       bool unbind;
->> +
->> +    /* Make driver names unique */
->> +    int driver_id_number;
->>   };
->>   static inline struct gadget_info *to_gadget_info(struct config_item 
->> *item)
->> @@ -393,6 +399,8 @@ static void gadget_info_attr_release(struct 
->> config_item *item)
->>       WARN_ON(!list_empty(&gi->string_list));
->>       WARN_ON(!list_empty(&gi->available_func));
->>       kfree(gi->composite.gadget_driver.function);
->> +    kfree(gi->composite.gadget_driver.driver.name);
->> +    ida_free(&driver_id_numbers, gi->driver_id_number);
->>       kfree(gi);
->>   }
->> @@ -1623,13 +1631,28 @@ static struct config_group *gadgets_make(
->>       gi->composite.gadget_driver = configfs_driver_template;
->> +    gi->driver_id_number = ida_alloc(&driver_id_numbers, GFP_KERNEL);
->> +    if (gi->driver_id_number < 0)
->> +        goto err;
->> +
->> +    gi->composite.gadget_driver.driver.name = kasprintf(GFP_KERNEL,
->> +                                "configfs-gadget.%d",
->> +                                gi->driver_id_number);
-> 
-> I'm wondering if it maybe makes more sense to use the gadget name as a 
-> suffix
-> instead?
-> 
->      gi->composite.gadget_driver.driver.name =
->          kasprintf(GFP_KERNEL, "configfs-gadget.%s" name);
-> 
-> So that when you
-> 
-> mkdir g1
-> 
-> you will ultimately see /sys/bus/gadget/drivers/configfs-gadget.g1
-> 
-> instead of /sys/bus/gadget/drivers/configfs-gadget.0
-> 
-> Gadget names are guaranteed to be unique because they are created
-> as sibling subdirectories in configfs. Your patch would then be greatly
-> simplified (no need for ida).
-> 
-> Regards,
-> 
-> Andrzej
-> 
+I did
 
-Thanks, Andrzej! I'll update that in patch v3
+	git show next/master:Next/Trees | sed 1,4d > trees
+	git checkout linus/master
 
->> +    if (!gi->composite.gadget_driver.driver.name)
->> +        goto out_free_driver_id_number;
->> +
->>       gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->>       gi->composite.name = gi->composite.gadget_driver.function;
->>       if (!gi->composite.gadget_driver.function)
->> -        goto err;
->> +        goto out_free_driver_name;
->>       return &gi->group;
->> +
->> +out_free_driver_name:
->> +    kfree(gi->composite.gadget_driver.driver.name);
->> +out_free_driver_id_number:
->> +    ida_free(&driver_id_numbers, gi->driver_id_number);
->>   err:
->>       kfree(gi);
->>       return ERR_PTR(-ENOMEM);
-> 
+And then repeatedly run:
+
+	while read rname protocol repohashbranch; do
+		repo=3D"${repohashbranch%#*}"
+		branch=3D"${repohashbranch#*#}"
+
+		# git:// seems to be ratelimited at github
+		repo=3D"${repo/#git:\/\/github.com\//https:\/\/github.com\/}"
+
+		case "$repo" in
+		*git.libc.org*)
+			# if repo it on git.libc.org, skip it "Name or service not known"
+			continue
+			;;
+		esac
+		echo "fetch $repo $branch"
+		rev=3D"$(git ls-remote "$repo" "$branch" | awk '{ print $1 }')" || contin=
+ue
+		echo $rev
+		if git merge-base --is-ancestor "$rev" HEAD 2>/dev/null; then
+			continue
+		fi
+		pgit pull "$repo" "$branch" || break
+	done < trees
+
+and fixed merge conflicts in between.
+
+I was so bold to tag the result as next-20221230, it's available from
+
+	https://git.pengutronix.de/git/ukl/linux tags/next-20221230
+
+It doesn't contain the usual meta-data in the top commit (as I didn't
+find the scripts next is usually created with) and I didn't do any build
+tests.
+
+There were a few conflicts:
+
+ - In drivers/dma-buf/dma-buf.c between
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+	f728a5ea27c9 ("dma-buf: fix dma_buf_export init order v2")
+
+   and
+
+	git://anongit.freedesktop.org/drm/drm-misc for-linux-next-fixes
+	28743e25fa1c ("dma-buf: Remove obsoleted internal lock")
+
+ - In arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts between
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+	62d127eeac27 ("ARM: dts: nuvoton,wpcm450-supermicro-x9sci-ln4f: Add GPIO l=
+ine names")
+
+   and
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc for-next
+	220a041d4cca ("ARM: dts: nuvoton,wpcm450-supermicro-x9sci-ln4f: Add GPIO l=
+ine names")
+=09
+   which is a problem because both commits are identical but the second tre=
+e has
+   some more commits touching the file.
+
+ - In drivers/gpu/drm/amd/amdgpu/amdgpu_device.c between
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+	afa6646b1c5d ("drm/amdgpu: skip MES for S0ix as well since it's part of GF=
+X")
+
+   and
+
+	https://gitlab.freedesktop.org/agd5f/linux drm-next
+	5620a1889e4c ("drm/amdgpu: skip MES for S0ix as well since it's part of GF=
+X")
+
+   which is a problem because both commits are identical but the second tre=
+e has
+   some more commits touching the file.
+
+ - In drivers/gpu/drm/i915/i915_drv.h between
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+	8f70f1ec587d ("drm/i915/mtl: Add Wa_14017073508 for SAMedia")
+
+   and
+
+	git://anongit.freedesktop.org/drm-intel for-linux-next
+	2357f2b271ad ("drm/i915/mtl: Initial display workarounds")
+
+ - In arch/arm64/kernel/stacktrace.c between
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+	0fbcd8abf337 ("arm64: Prohibit instrumentation on arch_stack_walk()")
+
+   and
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
+	c2530a04a73e ("arm64: efi: Account for the EFI runtime stack in stack unwi=
+nder")
+
+ - In various files below mm/ between
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+	???
+
+   and
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git for-next
+	???
+
+   I didn't feel confident to fix this conflict correctly and skipped mergi=
+ng the slab tree.
+=09
+ - In various files belwo mm/ between
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+	???
+
+   and
+
+	git://git.infradead.org/users/willy/pagecache.git for-next
+	???
+
+   As above I didn't even try to fix these up and skipped merging the folio=
+ tree
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--arwubzpzgnalgtaf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOuvbUACgkQwfwUeK3K
+7Allygf6A4wVxCcx7EmnM8esM7pAIBa2XJPKY6d+FMktPBawfPkyUjwkEZNIsqZ9
+or8azeJHgxumCV38giCEMRnI3zdCR9evuKdP7v8NNwR9AduptH71fJCus6t1/mGS
+vY4RVWd0DTOQad0NWkJmieGYpTb8lB0bzdxlUtu8GccQgRx9P88/VyLbRML+c+0t
+rGL6nnLc3AdW+mkYu/30vOtF19xhAky2072D5Y4CZxacndRXVvLwo+sBpG9BBu0l
+VXBJcdiRTlhq9JVbJ8KGlgI9QSQc7HeKMjkhjnA50fPubQIyYmWyS6oMQgZSGbwk
+SqqxBQcndw1e/AaevSDBCQOZt9H/Ng==
+=O/rT
+-----END PGP SIGNATURE-----
+
+--arwubzpzgnalgtaf--
