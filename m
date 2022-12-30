@@ -2,107 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F122B659549
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 06:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DE265954F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 07:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234513AbiL3F7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 00:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
+        id S234474AbiL3GEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 01:04:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiL3F7k (ORCPT
+        with ESMTP id S229557AbiL3GEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 00:59:40 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0636BDA6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 21:59:38 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id r72so10691669iod.5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 21:59:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fusetak.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+yI8IXYC+g9VQSXXRePDAV8T9sfECoiHVCxWFbYMy90=;
-        b=L8FlM01Qw+KPRAq4TQYCzNv9OqjVHphSzOsoBQTg8uYqT5Al8JvAZ63zYrQ3vm8FkG
-         iDt8wlJygbG85G5Zheyj2p9VAy0VBe/zmzMIMZiLbSBneeCXrBLEvloTaNJxur6awAwT
-         3dwBbgn+ro659MhTRaJLNktDJEQFkLYTCqLRdyEj8TmlpfB7Wruh1kS6QEe1iB34UFwI
-         9d4WzBD4+7hdFBPKzEQQDCnnQCS6UxnGmklE91wF4rEY9+PE/hh9rVIzSsvB8QsB+Wry
-         bPEAhUdfTDczcwOwTfE2ILpr72aiYxm1/0/Mox8e2ff3xOhCYix0h1HsFXl+mVAkbrJt
-         WUgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+yI8IXYC+g9VQSXXRePDAV8T9sfECoiHVCxWFbYMy90=;
-        b=xXuSrsCKq3eCUFKbOyRHDJQnylpI7ZMwkHw9oaNtRW0WKI8fV4eaN5D6rW8Ik3jIkx
-         rQupwCcPS5rQoldVijzXlKuZyq6tk65tT1VyWISQm1vA+iIqhRxj52UtJKSBtkdJQXCo
-         eurkNWoFdsIpkU1SfZ3YiizJRuJdpAOb/LYjW0pg6lqKUDXMJUxq9gRxPZEUnY72fCS6
-         WzRrrV0+noGBoorh0aZk39kh66rhYmyoyD0Fktfz+Bmi6ZO/SthJoBPkigC3uvBEHx9n
-         ZlQZOXJkWW4Bf4Xa8PO1rh/fBjFgUnhByBOKsa9FYedjh+xYpBzogGENEbZn935NndG2
-         zHFg==
-X-Gm-Message-State: AFqh2koxrw3d/cNwZAiH6qp0qRFaNAppdI5vA5FgvZ6h0SlO8FiXLeD0
-        Q2XlCnXbUubGVkhzAYgCfk/KOA==
-X-Google-Smtp-Source: AMrXdXuM4etmGmDpYZ0xl/zWaBGf+MDv8vaf/sF8eU6r33RNdz7gKwKotRJ9yx5DUxVI0nm1uMf+cA==
-X-Received: by 2002:a6b:6310:0:b0:6d6:4daf:623f with SMTP id p16-20020a6b6310000000b006d64daf623fmr19420602iog.6.1672379978278;
-        Thu, 29 Dec 2022 21:59:38 -0800 (PST)
-Received: from fusetakDesktop.internal.fusetak.net ([99.247.2.235])
-        by smtp.gmail.com with ESMTPSA id u4-20020a02cb84000000b003762308fe54sm6558942jap.93.2022.12.29.21.59.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 21:59:37 -0800 (PST)
-From:   Tamim Khan <tamim@fusetak.com>
-To:     linux-acpi@vger.kernel.org
-Cc:     rafael@kernel.org, lenb@kernel.org, linux-kernel@vger.kernel.org,
-        Tamim Khan <tamim@fusetak.com>, zelenat <zelenat@gmail.com>
-Subject: [PATCH] ACPI: resource: Skip IRQ override on Asus Expertbook B2402CBA
-Date:   Fri, 30 Dec 2022 00:58:39 -0500
-Message-Id: <20221230055839.80885-1-tamim@fusetak.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 30 Dec 2022 01:04:35 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879D92705;
+        Thu, 29 Dec 2022 22:04:33 -0800 (PST)
+X-UUID: b010f305589044018866764ff239394a-20221230
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=HZ1UEuoswFV91eUeLIRJsGfxTtDFlYQbel62pi18o2U=;
+        b=OBWfK1V22CSmR5yTHA99TwuXBwEX0VQUzqsi4Pj33nUywBueYO3lOMuInfXj5jE9BWhE5H8QP9KRMWnDC1I4ZkzlbEeAg+uoan/2dhHot6TnxhXms2W2z58fS4CvzRhJDFFx2L2aLW47pQmnlX4tjbteYXeXaqo1m3n/lifhJiA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.16,REQID:d932d63d-87bf-4f90-9edf-125800eae4c7,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:09771b1,CLOUDID:943f60f4-ff42-4fb0-b929-626456a83c14,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 1,FCT|NGT
+X-UUID: b010f305589044018866764ff239394a-20221230
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 349687402; Fri, 30 Dec 2022 14:04:27 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 30 Dec 2022 14:04:27 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 30 Dec 2022 14:04:27 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <angelogioacchino.delregno@collabora.com>
+CC:     <chun-jie.chen@mediatek.com>, <daniel@makrotopia.org>,
+        <devicetree@vger.kernel.org>, <fparent@baylibre.com>,
+        <ikjn@chromium.org>, <johnson.wang@mediatek.com>,
+        <jose.exposito89@gmail.com>, <kernel@collabora.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <msp@baylibre.com>,
+        <mturquette@baylibre.com>, <nfraprado@collabora.com>,
+        <pablo.sun@mediatek.com>, <rex-bc.chen@mediatek.com>,
+        <robh+dt@kernel.org>, <ryder.lee@kernel.org>,
+        <sam.shih@mediatek.com>, <sboyd@kernel.org>,
+        <weiyi.lu@mediatek.com>, <wenst@chromium.org>,
+        <y.oudjana@protonmail.com>, <yangyingliang@huawei.com>
+Subject: Re: [PATCH v2 22/23] clk: mediatek: clk-mt7986-topckgen: Properly keep some clocks enabled
+Date:   Fri, 30 Dec 2022 14:04:26 +0800
+Message-ID: <20221230060426.16415-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20221223094259.87373-23-angelogioacchino.delregno@collabora.com>
+References: <20221223094259.87373-23-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like the Asus Expertbook B2502CBA and various Asus Vivobook laptops,
-the Asus Expertbook B2402CBA has an ACPI DSDT table that describes IRQ 1
-as ActiveLow while the kernel overrides it to Edge_High. This prevents the 
-keyboard from working. To fix this issue, add this laptop to the 
-skip_override_table so that the kernel does not override IRQ 1.
+> Instead of calling clk_prepare_enable() on a bunch of clocks at probe
+> time, set the CLK_IS_CRITICAL flag to the same as these are required
+> to be always on, and this is the right way of achieving that.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216864
-Tested-by: zelenat <zelenat@gmail.com>
-Signed-off-by: Tamim Khan <tamim@fusetak.com>
----
-This patch is very similar to 7203481fd12b1257938519efb2460ea02b9236ee
-(ACPI: resource: Add Asus ExpertBook B2502 to Asus quirks) and just adds
-another ExpertBook that has the same IRQ override problem to the quirks list.
-
- drivers/acpi/resource.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-index 16dcd31d124f..153e3f8b446f 100644
---- a/drivers/acpi/resource.c
-+++ b/drivers/acpi/resource.c
-@@ -432,6 +432,13 @@ static const struct dmi_system_id asus_laptop[] = {
- 			DMI_MATCH(DMI_BOARD_NAME, "S5602ZA"),
- 		},
- 	},
-+	{
-+		.ident = "Asus ExpertBook B2402CBA",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+			DMI_MATCH(DMI_BOARD_NAME, "B2402CBA"),
-+		},
-+	},
- 	{
- 		.ident = "Asus ExpertBook B2502",
- 		.matches = {
--- 
-2.38.1
-
+Reviewed-by: Miles Chen <miles.chen@mediatek.com> 
