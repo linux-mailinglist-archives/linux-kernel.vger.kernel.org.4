@@ -2,506 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179C06594A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 05:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A94966594B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 05:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbiL3EWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 23:22:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S234327AbiL3Eme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 23:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiL3EVn (ORCPT
+        with ESMTP id S229507AbiL3Ema (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 23:21:43 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A43D2AC1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 20:21:30 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id D719A5C0152;
-        Thu, 29 Dec 2022 23:21:29 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 29 Dec 2022 23:21:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=russell.cc; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672374089; x=1672460489; bh=0i
-        I9uNdg7u1ePhdspj7we44nPvxltr5QTxIUnJs5cyw=; b=HV9Y+VHz/hw9hsNd8a
-        GjV+n/geKnOOrEBHJCKY+KmwR79ocUyaqRjQKFoFCoVy1dc8pqWvBMjHVzPb3+Tq
-        RHVGWd+otuR5m47PWFCDRaNlVEYwwXbsRNzffL1vFuGmpqRWSOL1YwnifHYbg4vZ
-        3MPQVfwOgbQSh8wVsjil0GAEsjr+1INSx2NkRyYFl9LYdJknutL0iG141LPAvfiE
-        F28cbJDzmievZ+le/d+/qLRKK4DD2G0TriuIuhizzxcnN/EwLPXzOsWgBZ/VzPRv
-        EYs1otARvtlkuWFe8ZGempb+hkxS93QYmDVS5Qyh/Pmwfu+yiYEAplsT17DIpl03
-        jrOg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672374089; x=1672460489; bh=0iI9uNdg7u1eP
-        hdspj7we44nPvxltr5QTxIUnJs5cyw=; b=NAwPkQR6lKwHXKbbSKwIyb51J5VoC
-        vBU0urw9GrjR8cdiSzhXzL8XHk0HTYRKJhCKsbyFjiuqAuMn3xsTSdixZGukPaP9
-        z62dk/Qgcd5zB3MXmQ/uUei2WV+Q6Nc9BByWrmGrIAOcxJ0n4WSsPADULaXyGgIi
-        q0SgAJm2IUGz76cw0xlGik8UsWMMKKXNO5YSWkm4d7edkTReQPBymhb4JKrpyBXq
-        6zkMub6iZX8Bsdh0ZeZScQSJvqiZ6raq833GhF2O4BpKOK19EzZ3h1Xg8xNqxtfn
-        THh1EJFHAy/qaiDcVjNH7HI0A1jPo6uVl43TlAPHrB5B976AmLWSu3r9g==
-X-ME-Sender: <xms:SWeuYwcV4kvJeVwXG0-yIqCHF-MEaAAxhcZOaA3vt7WDUQHYQdsh9A>
-    <xme:SWeuYyNakSr5eWgtwnWQuOwIhgfnni_kR7g2lYOtTJuQSLzLcmJnwMvD075THVs3S
-    4wpms-3arFR8MgniQ>
-X-ME-Received: <xmr:SWeuYxgrgyAkhvW4bAnanFFjxaUHkaOr4f0VdmJm_OCzflJy9-zoKFeyl1XsmNSnEjJmbN8BoH-yuyURxzTwMkefLwNIlDDkRVbd0yMZXNVmUA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieehgdejtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdduhedmnecujfgurhephffvve
-    fufffkofgjfhgggfestdekredtredttdenucfhrhhomheptfhushhsvghllhcuvehurhhr
-    vgihuceorhhushgtuhhrsehruhhsshgvlhhlrdgttgeqnecuggftrfgrthhtvghrnhephf
-    dvuefgtddvieeigefffeffkeeigedvgfeitdejteffveefhfdtheejffeiiedvnecuvehl
-    uhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprhhushgtuhhrse
-    hruhhsshgvlhhlrdgttg
-X-ME-Proxy: <xmx:SWeuY19VlH8HkCqz7O5ZbpTcZ26jtykPFAOWfjrAum4ibky1G5j83g>
-    <xmx:SWeuY8t3s-iffYqPm7Gp1AvED778L4SfSh-z-Q9ydeds-ceZZcwivw>
-    <xmx:SWeuY8H_FEyqzjB96hvNvhP0oCpWfbSicn53RFp_dQIHNfFddZwHsw>
-    <xmx:SWeuYx-z4dv94oCeOej-l_kxwWlC7STz0MHr1Uuy8flNI0UEUrClgw>
-Feedback-ID: i4421424f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Dec 2022 23:21:26 -0500 (EST)
-From:   Russell Currey <ruscur@russell.cc>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
-        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
-        ajd@linux.ibm.com, zohar@linux.ibm.com, mpe@ellerman.id.au,
-        Russell Currey <ruscur@russell.cc>
-Subject: [PATCH v2 7/7] powerpc/pseries: Implement secvars for dynamic secure boot
-Date:   Fri, 30 Dec 2022 15:20:14 +1100
-Message-Id: <20221230042014.154483-8-ruscur@russell.cc>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221230042014.154483-1-ruscur@russell.cc>
-References: <20221230042014.154483-1-ruscur@russell.cc>
+        Thu, 29 Dec 2022 23:42:30 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7951C15F31;
+        Thu, 29 Dec 2022 20:42:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672375349; x=1703911349;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=PZiCmLeeMbq3pMzx8fofsCRedSWFTN74SC61n5l1MvQ=;
+  b=PsO0OT4pZNzGEm65qLs4FmkihtMRBD3K9AlWDMCqy+AOmofLleP1BfzI
+   B/Kkg9l0Erkp8MvMvqlb24jPViXaGP+sPRKKW3/OPYznAlAF7xenY7MsY
+   6SSxJ2demEDqIRiQ4uTqXcCsKNraULrZ9yBHC4WFSOte9DJ3/zhl7jgzP
+   Ns0dyL4LX5dGUMHRTkyRvo62U6LGqAivms7WWmk+5TJE92iz2lpP7xHEa
+   /sL0LXmtCJFC6028hJ/CsfChIKKvsAobgQ80qcpLlx6FcHeTCeFyGNlX1
+   UjP3O492MYRjJSU9I38jkzfSu8Jm9mzsw4hwWLHgaksaSkkjw7devZJws
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="318852386"
+X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
+   d="scan'208";a="318852386"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 20:42:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="777870625"
+X-IronPort-AV: E=Sophos;i="5.96,286,1665471600"; 
+   d="scan'208";a="777870625"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2022 20:42:25 -0800
+Date:   Fri, 30 Dec 2022 12:32:18 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 08/10] fpga: m10bmc-sec: Differentiate rsu status from
+ doorbell in csr map
+Message-ID: <Y65p0kEZjyVt2pgr@yilunxu-OptiPlex-7050>
+References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com>
+ <20221226175849.13056-9-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221226175849.13056-9-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pseries platform can support dynamic secure boot (i.e. secure boot
-using user-defined keys) using variables contained with the PowerVM LPAR
-Platform KeyStore (PLPKS).  Using the powerpc secvar API, expose the
-relevant variables for pseries dynamic secure boot through the existing
-secvar filesystem layout.
+On 2022-12-26 at 19:58:47 +0200, Ilpo Järvinen wrote:
+> The rsu_status field moves from the doorbell register to the auth
+> result register in the PMCI implementation of the MAX10 BMC. Refactor
+> the sec update driver code to handle two distinct registers (rsu_status
+> field was added into csr map already when it was introduced but it was
+> unused until now).
+> 
+> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/fpga/intel-m10-bmc-sec-update.c | 68 ++++++++++++++++---------
+>  include/linux/mfd/intel-m10-bmc.h       |  2 +-
+>  2 files changed, 46 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> index 6e58a463619c..1fe8b7ff594c 100644
+> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> @@ -251,7 +251,7 @@ static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
+>  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+>  	u32 auth_result;
+>  
+> -	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
+> +	dev_err(sec->dev, "Doorbell: 0x%08x\n", doorbell);
+>  
+>  	if (!m10bmc_sys_read(sec->m10bmc, csr_map->auth_result, &auth_result))
+>  		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
+> @@ -279,6 +279,30 @@ static bool rsu_progress_busy(u32 progress)
+>  		progress == RSU_PROG_PROGRAM_KEY_HASH);
+>  }
+>  
+> +static int m10bmc_sec_progress_status(struct m10bmc_sec *sec, u32 *doorbell,
 
-The relevant variables for dynamic secure boot are signed in the
-keystore, and can only be modified using the H_PKS_SIGNED_UPDATE hcall.
-Object labels in the keystore are encoded using ucs2 format.  With our
-fixed variable names we don't have to care about encoding outside of the
-necessary byte padding.
+Please try to rename the parameters, to indicate u32 *doorbell is the
+raw value from doorbell register, and u32 *progress & status are
+software managed info.
 
-When a user writes to a variable, the first 8 bytes of data must contain
-the signed update flags as defined by the hypervisor.
+> +				      u32 *progress, u32 *status)
+> +{
+> +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> +	u32 status_reg;
+> +	int ret;
+> +
+> +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, doorbell);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (csr_map->doorbell != csr_map->rsu_status) {
 
-When a user reads a variable, the first 4 bytes of data contain the
-policies defined for the object.
+I prefer not to complicate the csr map filling in intel-m10-bmc, just invalid
+the addr value if there is no such register for the board.
 
-Limitations exist due to the underlying implementation of sysfs binary
-attributes, as is the case for the OPAL secvar implementation -
-partial writes are unsupported and writes cannot be larger than PAGE_SIZE.
+> +		ret = m10bmc_sys_read(sec->m10bmc, csr_map->rsu_status, &status_reg);
+> +		if (ret)
+> +			return ret;
+> +		*status = rsu_stat(status_reg);
+> +	} else {
+> +		*status = rsu_stat(*doorbell);
+> +	}
+> +	*progress = rsu_prog(*doorbell);
+> +
+> +	return 0;
+> +}
+> +
+>  static enum fw_upload_err rsu_check_idle(struct m10bmc_sec *sec)
+>  {
+>  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> @@ -297,18 +321,14 @@ static enum fw_upload_err rsu_check_idle(struct m10bmc_sec *sec)
+>  	return FW_UPLOAD_ERR_NONE;
+>  }
+>  
+> -static inline bool rsu_start_done(u32 doorbell)
+> +static inline bool rsu_start_done(u32 doorbell, u32 progress, u32 status)
 
-Co-developed-by: Nayna Jain <nayna@linux.ibm.com>
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
-Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-Signed-off-by: Russell Currey <ruscur@russell.cc>
----
-v2: Remove unnecessary config vars from sysfs and document the others,
-    thanks to review from Greg.  If we end up needing to expose more, we
-    can add them later and update the docs.
+Same concern for the naming, some more below I didn't list.
 
-    Use sysfs_emit() instead of sprintf(), thanks to Greg.
+>  {
+> -	u32 status, progress;
+> -
+>  	if (doorbell & DRBL_RSU_REQUEST)
+>  		return false;
+>  
+> -	status = rsu_stat(doorbell);
+>  	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
+>  		return true;
+>  
+> -	progress = rsu_prog(doorbell);
+>  	if (!rsu_progress_done(progress))
+>  		return true;
+>  
+> @@ -318,8 +338,8 @@ static inline bool rsu_start_done(u32 doorbell)
+>  static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
+>  {
+>  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> -	u32 doorbell, status;
+> -	int ret;
+> +	u32 doorbell, progress, status;
+> +	int ret, err;
+>  
+>  	ret = regmap_update_bits(sec->m10bmc->regmap,
+>  				 csr_map->base + csr_map->doorbell,
+> @@ -330,21 +350,20 @@ static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
+>  	if (ret)
+>  		return FW_UPLOAD_ERR_RW_ERROR;
+>  
+> -	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
+> -				       csr_map->base + csr_map->doorbell,
+> -				       doorbell,
+> -				       rsu_start_done(doorbell),
+> -				       NIOS_HANDSHAKE_INTERVAL_US,
+> -				       NIOS_HANDSHAKE_TIMEOUT_US);
+> +	ret = read_poll_timeout(m10bmc_sec_progress_status, err,
+> +				err < 0 || rsu_start_done(doorbell, progress, status),
+> +				NIOS_HANDSHAKE_INTERVAL_US,
+> +				NIOS_HANDSHAKE_TIMEOUT_US,
+> +				false,
+> +				sec, &doorbell, &progress, &status);
+>  
+>  	if (ret == -ETIMEDOUT) {
+>  		log_error_regs(sec, doorbell);
+>  		return FW_UPLOAD_ERR_TIMEOUT;
+> -	} else if (ret) {
+> +	} else if (err) {
+>  		return FW_UPLOAD_ERR_RW_ERROR;
+>  	}
+>  
+> -	status = rsu_stat(doorbell);
+>  	if (status == RSU_STAT_WEAROUT) {
+>  		dev_warn(sec->dev, "Excessive flash update count detected\n");
+>  		return FW_UPLOAD_ERR_WEAROUT;
+> @@ -393,7 +412,7 @@ static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
+>  static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
+>  {
+>  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> -	u32 doorbell;
+> +	u32 doorbell, status;
+>  	int ret;
+>  
+>  	ret = regmap_update_bits(sec->m10bmc->regmap,
+> @@ -418,7 +437,10 @@ static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
+>  		return FW_UPLOAD_ERR_RW_ERROR;
+>  	}
+>  
+> -	if (!rsu_status_ok(rsu_stat(doorbell))) {
+> +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->rsu_status, &status);
 
-    Change the size of the sysfs binary attributes to include the 8-byte
-    flags header, preventing truncation of large writes.
+Same as above, please just handle the detailed register definition differences
+in this driver, not in csr map.
 
- Documentation/ABI/testing/sysfs-secvar        |  67 ++++-
- arch/powerpc/platforms/pseries/Kconfig        |  13 +
- arch/powerpc/platforms/pseries/Makefile       |   4 +-
- arch/powerpc/platforms/pseries/plpks-secvar.c | 245 ++++++++++++++++++
- 4 files changed, 326 insertions(+), 3 deletions(-)
- create mode 100644 arch/powerpc/platforms/pseries/plpks-secvar.c
+Thanks,
+Yilun
 
-diff --git a/Documentation/ABI/testing/sysfs-secvar b/Documentation/ABI/testing/sysfs-secvar
-index feebb8c57294..466a8cb92b92 100644
---- a/Documentation/ABI/testing/sysfs-secvar
-+++ b/Documentation/ABI/testing/sysfs-secvar
-@@ -34,7 +34,7 @@ Description:	An integer representation of the size of the content of the
- 
- What:		/sys/firmware/secvar/vars/<variable_name>/data
- Date:		August 2019
--Contact:	Nayna Jain h<nayna@linux.ibm.com>
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
- Description:	A read-only file containing the value of the variable. The size
- 		of the file represents the maximum size of the variable data.
- 
-@@ -44,3 +44,68 @@ Contact:	Nayna Jain <nayna@linux.ibm.com>
- Description:	A write-only file that is used to submit the new value for the
- 		variable. The size of the file represents the maximum size of
- 		the variable data that can be written.
-+
-+What:		/sys/firmware/secvar/config
-+Date:		December 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	This optional directory contains read-only config attributes as
-+		defined by the secure variable implementation.  All data is in
-+		ASCII format. The directory is only created if the backing
-+		implementation provides variables to populate it, which at
-+		present is only PLPKS on the pseries platform.
-+
-+What:		/sys/firmware/secvar/config/version
-+Date:		December 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	RO file, only present if the secvar implementation is PLPKS.
-+
-+		Contains the config version as reported by the hypervisor in
-+		ASCII decimal format.
-+
-+What:		/sys/firmware/secvar/config/max_object_size
-+Date:		December 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	RO file, only present if the secvar implementation is PLPKS.
-+
-+		Contains the maximum allowed size of objects in the keystore
-+		in bytes, represented in ASCII decimal format.
-+
-+		This is not necessarily the same as the max size that can be
-+		written to an update file as writes can contain more than
-+		object data, you should use the size of the update file for
-+		that purpose.
-+
-+What:		/sys/firmware/secvar/config/total_size
-+Date:		December 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	RO file, only present if the secvar implementation is PLPKS.
-+
-+		Contains the total size of the PLPKS in bytes, represented in
-+		ASCII decimal format.
-+
-+What:		/sys/firmware/secvar/config/used_space
-+Date:		December 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	RO file, only present if the secvar implementation is PLPKS.
-+
-+		Contains the current space consumed of the PLPKS in bytes,
-+		represented in ASCII decimal format.
-+
-+What:		/sys/firmware/secvar/config/supported_policies
-+Date:		December 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	RO file, only present if the secvar implementation is PLPKS.
-+
-+		Contains a bitmask of supported policy flags by the hypervisor,
-+		represented as an 8 byte hexadecimal ASCII string.  Consult the
-+		hypervisor documentation for what these flags are.
-+
-+What:		/sys/firmware/secvar/config/signed_update_algorithms
-+Date:		December 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	RO file, only present if the secvar implementation is PLPKS.
-+
-+		Contains a bitmask of flags indicating which algorithms the
-+		hypervisor supports objects to be signed with when modifying
-+		secvars, represented as a 16 byte hexadecimal ASCII string.
-+		Consult the hypervisor documentation for what these flags mean.
-diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platforms/pseries/Kconfig
-index a3b4d99567cb..94e08c405d50 100644
---- a/arch/powerpc/platforms/pseries/Kconfig
-+++ b/arch/powerpc/platforms/pseries/Kconfig
-@@ -162,6 +162,19 @@ config PSERIES_PLPKS
- 
- 	  If unsure, select N.
- 
-+config PSERIES_PLPKS_SECVAR
-+	depends on PSERIES_PLPKS
-+	depends on PPC_SECURE_BOOT
-+	bool "Support for the PLPKS secvar interface"
-+	help
-+	  PowerVM can support dynamic secure boot with user-defined keys
-+	  through the PLPKS. Keystore objects used in dynamic secure boot
-+	  can be exposed to the kernel and userspace through the powerpc
-+	  secvar infrastructure. Select this to enable the PLPKS backend
-+	  for secvars for use in pseries dynamic secure boot.
-+
-+	  If unsure, select N.
-+
- config PAPR_SCM
- 	depends on PPC_PSERIES && MEMORY_HOTPLUG && LIBNVDIMM
- 	tristate "Support for the PAPR Storage Class Memory interface"
-diff --git a/arch/powerpc/platforms/pseries/Makefile b/arch/powerpc/platforms/pseries/Makefile
-index 92310202bdd7..807756991f9d 100644
---- a/arch/powerpc/platforms/pseries/Makefile
-+++ b/arch/powerpc/platforms/pseries/Makefile
-@@ -27,8 +27,8 @@ obj-$(CONFIG_PAPR_SCM)		+= papr_scm.o
- obj-$(CONFIG_PPC_SPLPAR)	+= vphn.o
- obj-$(CONFIG_PPC_SVM)		+= svm.o
- obj-$(CONFIG_FA_DUMP)		+= rtas-fadump.o
--obj-$(CONFIG_PSERIES_PLPKS) += plpks.o
--
-+obj-$(CONFIG_PSERIES_PLPKS)	+= plpks.o
-+obj-$(CONFIG_PSERIES_PLPKS_SECVAR)	+= plpks-secvar.o
- obj-$(CONFIG_SUSPEND)		+= suspend.o
- obj-$(CONFIG_PPC_VAS)		+= vas.o vas-sysfs.o
- 
-diff --git a/arch/powerpc/platforms/pseries/plpks-secvar.c b/arch/powerpc/platforms/pseries/plpks-secvar.c
-new file mode 100644
-index 000000000000..8298f039bef4
---- /dev/null
-+++ b/arch/powerpc/platforms/pseries/plpks-secvar.c
-@@ -0,0 +1,245 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Secure variable implementation using the PowerVM LPAR Platform KeyStore (PLPKS)
-+ *
-+ * Copyright 2022, IBM Corporation
-+ * Authors: Russell Currey
-+ *          Andrew Donnellan
-+ *          Nayna Jain
-+ */
-+
-+#define pr_fmt(fmt) "secvar: "fmt
-+
-+#include <linux/printk.h>
-+#include <linux/init.h>
-+#include <linux/types.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+#include <linux/kobject.h>
-+#include <asm/secvar.h>
-+#include "plpks.h"
-+
-+// Config attributes for sysfs
-+#define PLPKS_CONFIG_ATTR(name, fmt, func)			\
-+	static ssize_t name##_show(struct kobject *kobj,	\
-+				   struct kobj_attribute *attr,	\
-+				   char *buf)			\
-+	{							\
-+		return sysfs_emit(buf, fmt, func());		\
-+	}							\
-+	static struct kobj_attribute attr_##name = __ATTR_RO(name)
-+
-+PLPKS_CONFIG_ATTR(version, "%u\n", plpks_get_version);
-+PLPKS_CONFIG_ATTR(max_object_size, "%u\n", plpks_get_maxobjectsize);
-+PLPKS_CONFIG_ATTR(total_size, "%u\n", plpks_get_totalsize);
-+PLPKS_CONFIG_ATTR(used_space, "%u\n", plpks_get_usedspace);
-+PLPKS_CONFIG_ATTR(supported_policies, "%08x\n", plpks_get_supportedpolicies);
-+PLPKS_CONFIG_ATTR(signed_update_algorithms, "%016llx\n", plpks_get_signedupdatealgorithms);
-+
-+static const struct attribute *config_attrs[] = {
-+	&attr_version.attr,
-+	&attr_max_object_size.attr,
-+	&attr_total_size.attr,
-+	&attr_used_space.attr,
-+	&attr_supported_policies.attr,
-+	&attr_signed_update_algorithms.attr,
-+	NULL,
-+};
-+
-+static u16 get_ucs2name(const char *name, uint8_t **ucs2_name)
-+{
-+	int namelen = strlen(name) * 2;
-+	*ucs2_name = kzalloc(namelen, GFP_KERNEL);
-+
-+	if (!*ucs2_name)
-+		return 0;
-+
-+	for (int i = 0; name[i]; i++) {
-+		(*ucs2_name)[i * 2] = name[i];
-+		(*ucs2_name)[i * 2 + 1] = '\0';
-+	}
-+
-+	return namelen;
-+}
-+
-+static u32 get_policy(const char *name)
-+{
-+	if ((strcmp(name, "db") == 0) ||
-+	    (strcmp(name, "dbx") == 0) ||
-+	    (strcmp(name, "grubdb") == 0) ||
-+	    (strcmp(name, "sbat") == 0))
-+		return (WORLDREADABLE | SIGNEDUPDATE);
-+	else
-+		return SIGNEDUPDATE;
-+}
-+
-+#define PLPKS_SECVAR_COUNT 8
-+static char *var_names[PLPKS_SECVAR_COUNT] = {
-+	"PK",
-+	"KEK",
-+	"db",
-+	"dbx",
-+	"grubdb",
-+	"sbat",
-+	"moduledb",
-+	"trustedcadb",
-+};
-+
-+static int plpks_get_variable(const char *key, uint64_t key_len,
-+			      u8 *data, uint64_t *data_size)
-+{
-+	struct plpks_var var = {0};
-+	u16 ucs2_namelen;
-+	u8 *ucs2_name;
-+	int rc = 0;
-+
-+	ucs2_namelen = get_ucs2name(key, &ucs2_name);
-+	if (!ucs2_namelen)
-+		return -ENOMEM;
-+
-+	var.name = ucs2_name;
-+	var.namelen = ucs2_namelen;
-+	var.os = PLPKS_VAR_LINUX;
-+	rc = plpks_read_os_var(&var);
-+
-+	if (rc)
-+		goto err;
-+
-+	*data_size = var.datalen + sizeof(var.policy);
-+
-+	// We can be called with data = NULL to just get the object size.
-+	if (data) {
-+		memcpy(data, &var.policy, sizeof(var.policy));
-+		memcpy(data + sizeof(var.policy), var.data, var.datalen);
-+	}
-+
-+	kfree(var.data);
-+err:
-+	kfree(ucs2_name);
-+	return rc;
-+}
-+
-+static int plpks_set_variable(const char *key, uint64_t key_len,
-+			      u8 *data, uint64_t data_size)
-+{
-+	struct plpks_var var = {0};
-+	u16 ucs2_namelen;
-+	u8 *ucs2_name;
-+	int rc = 0;
-+	u64 flags;
-+
-+	// Secure variables need to be prefixed with 8 bytes of flags.
-+	// We only want to perform the write if we have at least one byte of data.
-+	if (data_size <= sizeof(flags))
-+		return -EINVAL;
-+
-+	ucs2_namelen = get_ucs2name(key, &ucs2_name);
-+	if (!ucs2_namelen)
-+		return -ENOMEM;
-+
-+	memcpy(&flags, data, sizeof(flags));
-+
-+	var.datalen = data_size - sizeof(flags);
-+	var.data = kzalloc(var.datalen, GFP_KERNEL);
-+	if (!var.data) {
-+		rc = -ENOMEM;
-+		goto err;
-+	}
-+
-+	memcpy(var.data, data + sizeof(flags), var.datalen);
-+
-+	var.name = ucs2_name;
-+	var.namelen = ucs2_namelen;
-+	var.os = PLPKS_VAR_LINUX;
-+	var.policy = get_policy(key);
-+
-+	rc = plpks_signed_update_var(var, flags);
-+
-+	kfree(var.data);
-+err:
-+	kfree(ucs2_name);
-+	return rc;
-+}
-+
-+/*
-+ * get_next() in the secvar API is designed for the OPAL API.
-+ * If *key is 0, it returns the first variable in the keystore.
-+ * Otherwise, you pass the name of a key and it returns next in line.
-+ *
-+ * We're going to cheat here - since we have fixed keys and don't care about
-+ * key_len, we can just use it as an index.
-+ */
-+static int plpks_get_next_variable(const char *key, uint64_t *key_len, uint64_t keybufsize)
-+{
-+	if (!key || !key_len)
-+		return -EINVAL;
-+
-+	if (*key_len >= PLPKS_SECVAR_COUNT)
-+		return -ENOENT;
-+
-+	if (strscpy((char *)key, var_names[(*key_len)++], keybufsize) < 0)
-+		return -E2BIG;
-+
-+	return 0;
-+}
-+
-+// PLPKS dynamic secure boot doesn't give us a format string in the same way OPAL does.
-+// Instead, report the format using the SB_VERSION variable in the keystore.
-+static ssize_t plpks_secvar_format(char *buf)
-+{
-+	struct plpks_var var = {0};
-+	ssize_t ret;
-+
-+	var.component = NULL;
-+	// Only the signed variables have ucs2-encoded names, this one doesn't
-+	var.name = "SB_VERSION";
-+	var.namelen = 10;
-+	var.datalen = 0;
-+	var.data = NULL;
-+
-+	// Unlike the other vars, SB_VERSION is owned by firmware instead of the OS
-+	ret = plpks_read_fw_var(&var);
-+	if (ret) {
-+		if (ret == -ENOENT)
-+			return sysfs_emit(buf, "ibm,plpks-sb-unknown\n");
-+
-+		pr_err("Error %ld reading SB_VERSION from firmware\n", ret);
-+		return ret;
-+	}
-+
-+	// Hypervisor defines SB_VERSION as a "1 byte unsigned integer value"
-+	ret = sysfs_emit(buf, "ibm,plpks-sb-%hhu\n", var.data[0]);
-+
-+	kfree(var.data);
-+	return ret;
-+}
-+
-+static int plpks_max_size(uint64_t *max_size)
-+{
-+	// The max object size reported by the hypervisor is accurate for the
-+	// object itself, but we use the first 8 bytes of data on write as the
-+	// signed update flags, so the max size a user can write is larger.
-+	*max_size = (uint64_t)plpks_get_maxobjectsize() + 8;
-+
-+	return 0;
-+}
-+
-+
-+static const struct secvar_operations plpks_secvar_ops = {
-+	.get = plpks_get_variable,
-+	.get_next = plpks_get_next_variable,
-+	.set = plpks_set_variable,
-+	.format = plpks_secvar_format,
-+	.max_size = plpks_max_size,
-+};
-+
-+static int plpks_secvar_init(void)
-+{
-+	if (!plpks_is_available())
-+		return -ENODEV;
-+
-+	set_secvar_ops(&plpks_secvar_ops);
-+	set_secvar_config_attrs(config_attrs);
-+	return 0;
-+}
-+device_initcall(plpks_secvar_init);
--- 
-2.38.1
-
+> +	if (ret)
+> +		return ret;
+> +	if (!rsu_status_ok(rsu_stat(status))) {
+>  		log_error_regs(sec, doorbell);
+>  		return FW_UPLOAD_ERR_HW_ERROR;
+>  	}
+> @@ -428,18 +450,18 @@ static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
+>  
+>  static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
+>  {
+> -	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> +	u32 progress, status;
+>  
+> -	if (m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, doorbell))
+> +	if (m10bmc_sec_progress_status(sec, doorbell, &progress, &status))
+>  		return -EIO;
+>  
+> -	if (!rsu_status_ok(rsu_stat(*doorbell)))
+> +	if (!rsu_status_ok(status))
+>  		return -EINVAL;
+>  
+> -	if (rsu_progress_done(rsu_prog(*doorbell)))
+> +	if (rsu_progress_done(progress))
+>  		return 0;
+>  
+> -	if (rsu_progress_busy(rsu_prog(*doorbell)))
+> +	if (rsu_progress_busy(progress))
+>  		return -EAGAIN;
+>  
+>  	return -EINVAL;
+> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> index 42e2ce7fe439..cc2d9eb597b0 100644
+> --- a/include/linux/mfd/intel-m10-bmc.h
+> +++ b/include/linux/mfd/intel-m10-bmc.h
+> @@ -58,7 +58,7 @@
+>  #define HOST_STATUS_ABORT_RSU		0x2
+>  
+>  #define rsu_prog(doorbell)	FIELD_GET(DRBL_RSU_PROGRESS, doorbell)
+> -#define rsu_stat(doorbell)	FIELD_GET(DRBL_RSU_STATUS, doorbell)
+> +#define rsu_stat(status_reg)	FIELD_GET(DRBL_RSU_STATUS, status_reg)
+>  
+>  /* interval 100ms and timeout 5s */
+>  #define NIOS_HANDSHAKE_INTERVAL_US	(100 * 1000)
+> -- 
+> 2.30.2
+> 
