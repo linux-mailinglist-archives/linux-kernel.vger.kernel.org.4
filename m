@@ -2,45 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC54659617
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 09:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3785D65961C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 09:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbiL3IJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 03:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
+        id S234716AbiL3IKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 03:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbiL3IJB (ORCPT
+        with ESMTP id S234544AbiL3IKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 03:09:01 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81326183BC
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 00:09:00 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pBARm-0001HW-3W; Fri, 30 Dec 2022 09:08:58 +0100
-Message-ID: <bebd692d-7d21-6648-6b7a-c91063bb51c2@leemhuis.info>
-Date:   Fri, 30 Dec 2022 09:08:57 +0100
+        Fri, 30 Dec 2022 03:10:11 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE194183B9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 00:10:10 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id m2so20582857vsv.9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 00:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6m26YMbks5w9j7aA1kyB8fHaCoQJomo7rPAPrntLOog=;
+        b=da0u9H3i2xBt3fWJah+Dv2qxTKOgSPA3AOzUFkMKqyZBIZZP1P0UGdJuaICzOxt4fH
+         Mm1wEa0yAJTOmV4DWB4J14oTVDAi63M5Vz3MP/SaMgYICVkVtF/81mtEBJvcpGuYIkY9
+         crEd8lqVWmWgaSLClDuFEAsKqpu5aflcbck8I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6m26YMbks5w9j7aA1kyB8fHaCoQJomo7rPAPrntLOog=;
+        b=2rJnPO0VXWsFwjd+J8JloIw79xHpYn0xeQbiPMf6lQHk7tVX6mKGzIdXJvtf3Pscrm
+         7IjKTiaMjWfyvlEBAu0NqaJU1CAZwZiGXdz6hixxhs+zRUdWl+SaD+3TFZOoO+kdowCK
+         qb2wv3JrTJv9Q0A/tauD1MLLtaI01G400Mzjopxl1Ce/hlf4o2EEEE9eojJmIDbxDTIM
+         TA1hE2KRCUSI+hjr8xv6WOEKBc+7Y60ShvQtKBbZ/ZiJzWtewkDZlJ2j4I66t4TB9gt4
+         vsFST7iXq7asvlJR4IMHjt/f67dVTZjaln3jktZEn7xhnGosE9dTLnbTnWwNiIFYYRk2
+         CV4w==
+X-Gm-Message-State: AFqh2koTy5KZP5bXmxqNU0+C+nM2jod4Y9dVXuUdJmQSB4QmcjJA0zMM
+        SCCdbyiESMFrB65/IUl0sSKFLfauU+gJFeGqZDeO2w==
+X-Google-Smtp-Source: AMrXdXu42OIXcFU1BSE54ydAcv7zw3Gqh5WM+YiUnvG/dZqYgZpVZP5X5dL1GmIq2Knsf9WEE8McGyC3+t2WX/bbKjs=
+X-Received: by 2002:a67:fbc2:0:b0:3cc:fb59:8c71 with SMTP id
+ o2-20020a67fbc2000000b003ccfb598c71mr21878vsr.65.1672387810048; Fri, 30 Dec
+ 2022 00:10:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Sergey <zagagyka@basealt.ru>,
-        Alsa-devel <alsa-devel@alsa-project.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Mark Brown <broonie@kernel.org>
-Subject: =?UTF-8?Q?=5bregression=2c_5=2e10=2ey=5d_Bug=c2=a0216861_-_sound_di?=
- =?UTF-8?Q?sappearance_on_Acer_Swift_3_SF314-59-78UR_after_update_to_5=2e10?=
- =?UTF-8?Q?=2e157?=
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1672387740;d7edfec5;
-X-HE-SMSGID: 1pBARm-0001HW-3W
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+References: <20221223094259.87373-16-angelogioacchino.delregno@collabora.com> <20221228083123.15298-1-miles.chen@mediatek.com>
+In-Reply-To: <20221228083123.15298-1-miles.chen@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 30 Dec 2022 16:09:59 +0800
+Message-ID: <CAGXv+5Hp3MFjLcP5z0t6QnYHN3VvVg_Og_HhvWNxm5o1q20B=g@mail.gmail.com>
+Subject: Re: [PATCH v2 15/23] clk: mediatek: mt8192: Join top_adj_divs and top_muxes
+To:     Miles Chen <miles.chen@mediatek.com>
+Cc:     angelogioacchino.delregno@collabora.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        devicetree@vger.kernel.org, fparent@baylibre.com,
+        ikjn@chromium.org, johnson.wang@mediatek.com,
+        jose.exposito89@gmail.com, kernel@collabora.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        matthias.bgg@gmail.com, msp@baylibre.com, mturquette@baylibre.com,
+        nfraprado@collabora.com, pablo.sun@mediatek.com,
+        rex-bc.chen@mediatek.com, robh+dt@kernel.org, ryder.lee@kernel.org,
+        sam.shih@mediatek.com, sboyd@kernel.org, weiyi.lu@mediatek.com,
+        y.oudjana@protonmail.com, yangyingliang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,67 +74,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
+On Wed, Dec 28, 2022 at 4:31 PM Miles Chen <miles.chen@mediatek.com> wrote:
+>
+> Hi,
+>
+> > These two are both mtk_composite arrays, one dependent on another, but
+> > that's something that the clock framework is supposed to sort out and
+> > anyway registering them separately isn't going to ease the framework's
+> > job in checking dependencies.
+> >
+> > Put the contents of top_adj_divs in top_muxes to join them together
+> > and register them in one shot.
+> >
+>
+> In mt8192, we can join top_adj_divs and top_muxes:
+>
+> mtk_clk_register_composites(top_muxes, ARRAY_SIZE(top_muxes), base, &mt8192_clk_lock,
+>                 top_clk_data);
+> mtk_clk_register_composites(top_adj_divs, ARRAY_SIZE(top_adj_divs), base, &mt8192_clk_lock,
+>                 top_clk_data);
+>
+> However, there are other top_adj_divs[] and top_muxes[] in different types so
+> we cannot join them.
+>
+> For example:
+> in drivers/clk/mediatek/clk-mt8167.c:mtk_topckgen_init():
+>
+> mtk_clk_register_composites(top_muxes, ARRAY_SIZE(top_muxes), base,
+>                 &mt8167_clk_lock, clk_data);
+> mtk_clk_register_dividers(top_adj_divs, ARRAY_SIZE(top_adj_divs),
+>                 base, &mt8167_clk_lock, clk_data);
+>
+> So we can join top_adj_divs and top_muxes in some platforms, but we
+> cannot join top_adj_divs and top_muxes in some other platforms.
+>
+> I'm afraid that this will confuses people.
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developer don't keep an eye on it, I decided to forward it by
-mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216861 :
+I think the confusion comes from the macro names. It's not exactly clear that
+DIV_GATE is for composite clocks, while DIV_ADJ is for divider clocks.
+Doubly so for the mux related types.
 
->  Sergey 2022-12-29 10:07:51 UTC
-> 
-> Created attachment 303497 [details]
-> pulseaudio.log
-> 
-> Sudden sound disappearance was reported for some laptops, e.g.
-> 
-> Acer Swift 3 SF314-59-78UR 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
-> 
-> # lspci
-> 0000:00:1f.3 Multimedia audio controller: Intel Corporation Tiger Lake-LP Smart Sound Technology Audio Controller (rev 20)
->         Subsystem: Acer Incorporated [ALI] Device 148c
->         Flags: bus master, fast devsel, latency 32, IRQ 197, IOMMU group 12
->         Memory at 601f270000 (64-bit, non-prefetchable) [size=16K]
->         Memory at 601f000000 (64-bit, non-prefetchable) [size=1M]
->         Capabilities: [50] Power Management version 3
->         Capabilities: [80] Vendor Specific Information: Len=14 <?>
->         Capabilities: [60] MSI: Enable+ Count=1/1 Maskable- 64bit+
->         Kernel driver in use: sof-audio-pci
-> 
-> I am attaching the pulseaudio and dmesg logs
-> 
-> This bug started reproducing after updating the kernel from 5.10.156 to 5.10.157
-> 
-> Bisection revealed the commit being reverted:
-> 
-> c34db0d6b88b1da95e7ab3353e674f4f574cccee is the first bad commit
-> commit c34db0d6b88b1da95e7ab3353e674f4f574cccee
-> Author: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Date:   Fri Nov 4 13:22:13 2022 +0000
-> 
->     ASoC: soc-pcm: Don't zero TDM masks in __soc_pcm_open()
->     
->     [ Upstream commit 39bd801d6908900e9ab0cdc2655150f95ddd4f1a ]
->     
->     The DAI tx_mask and rx_mask are set by snd_soc_dai_set_tdm_slot()
->     and used by later code that depends on the TDM settings. So
->     __soc_pcm_open() should not be obliterating those mask values.
->     
-> [...]
-> Original bug report: https://bugzilla.altlinux.org/44690
+Either way, using the wrong macro or the wrong type will cause the compiler
+to complain, so I think it's something we can live with. If it's still not
+working out, maybe we should rethink the naming.
 
-See the ticket for more details.
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: c34db0d6b88b1d
-https://bugzilla.kernel.org/show_bug.cgi?id=216861
-#regzbot title: sound: asoc: sudden sound disappearance
-#regzbot ignore-activity
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+ChenYu
