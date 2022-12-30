@@ -2,95 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05174659C85
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 22:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EE7659C86
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 22:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235426AbiL3Vgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 16:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
+        id S235457AbiL3Vhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 16:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiL3Vgq (ORCPT
+        with ESMTP id S229519AbiL3Vha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 16:36:46 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D67BDE9A;
-        Fri, 30 Dec 2022 13:36:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672436205; x=1703972205;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hhmLOiAZf7BxRbrYtXcXiCs8onuPuJHs5gnpEYdvPwU=;
-  b=ZgDrcwUi5dXMC5Q/1+w3CHoJDLt4qWXUNMGIDICzXrU5vnOUBNBITBQg
-   BG4G6/Fw2wJFQ/abg27pN0YNj/+nlpQa32vmlFJzB0loaT7PKGo0T4q09
-   MAtNpq0I8cbp5RD5MU3rsD8nf09BncEoJwTuyp8i5EDwFURTFceiNgVkB
-   GlNDdd63uQ1bUtS29GT6Jfd9Ko3TFV5pyawCyL1dRxrKcCJSF/3bUm8Wl
-   62oMBvI1l/QB4uDst/6uvzc8HrjbBEynmM6XK9ob9DgbamN3eOWkKjFUs
-   DBGLIV7WHwjNAmz3oSBbvxVsm+VW1sJh23rQzRN2aD0uX2GYf8GhelKXx
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10576"; a="309022250"
-X-IronPort-AV: E=Sophos;i="5.96,288,1665471600"; 
-   d="scan'208";a="309022250"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 13:36:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10576"; a="982742689"
-X-IronPort-AV: E=Sophos;i="5.96,288,1665471600"; 
-   d="scan'208";a="982742689"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Dec 2022 13:36:42 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pBN3Q-001thA-2g;
-        Fri, 30 Dec 2022 23:36:40 +0200
-Date:   Fri, 30 Dec 2022 23:36:40 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Haibo Chen <haibo.chen@nxp.com>
-Subject: Re: [PATCH v2 1/4] gpio: pca953x: avoid to use uninitialized value
- pinctrl
-Message-ID: <Y69Z6FhmypFASRyX@smile.fi.intel.com>
-References: <20221210220601.77648-1-andriy.shevchenko@linux.intel.com>
- <Y67T2u0VfSnq48KQ@smile.fi.intel.com>
- <CAMRc=MdZ4RN=EFS0Brf0Avis9FOVh9+8x5rB52b8eO_Ln+CGiA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=MdZ4RN=EFS0Brf0Avis9FOVh9+8x5rB52b8eO_Ln+CGiA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Dec 2022 16:37:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C26183B1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 13:37:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B460E61A04
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 21:37:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9109C433EF;
+        Fri, 30 Dec 2022 21:37:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1672436248;
+        bh=RZWdt4XB8oEYqOJ7TLXEfy6u/9vVjgHGC22vojYrKuU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RGUPm78EnqTjCsNChvzK/JAJLkKHy/pRjs2cDdrWEYOCcRMiT+bxuyebdvT5v2H1B
+         Ucreh0yjL2j9LcCuoTQyKje3u4cvxCg9M2BRFt99vYpnVPl2QpvsRhwTLq9T/dH1Aj
+         bZ5+NJ9xelnti/PLqfPQmzxYCRWc8GwbloqVhF6k=
+Date:   Fri, 30 Dec 2022 13:37:26 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Cc:     jan.kiszka@siemens.com, kbingham@kernel.org,
+        gregkh@linuxfoundation.org, mingo@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, vbabka@suse.cz
+Subject: Re: [PATCH] scripts/gdb: add mm introspection utils
+Message-Id: <20221230133726.4c2e7e148a8a6627cd621e0f@linux-foundation.org>
+In-Reply-To: <20221230163512.23736-1-dmitrii.bundin.a@gmail.com>
+References: <20221230163512.23736-1-dmitrii.bundin.a@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 01:48:20PM +0100, Bartosz Golaszewski wrote:
-> On Fri, Dec 30, 2022 at 1:04 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Sun, Dec 11, 2022 at 12:05:58AM +0200, Andy Shevchenko wrote:
-> > > From: Haibo Chen <haibo.chen@nxp.com>
-> > >
-> > > There is a variable pinctrl declared without initializer. And then
-> > > has the case (switch operation chose the default case) to directly
-> > > use this uninitialized value, this is not a safe behavior. So here
-> > > initialize the pinctrl as 0 to avoid this issue.
-> > > This is reported by Coverity.
-> >
-> > Bart, any comments on the series?
-> 
-> Now applied. I just got back from Christmas break, give me a moment. :)
+On Fri, 30 Dec 2022 19:35:12 +0300 Dmitrii Bundin <dmitrii.bundin.a@gmail.com> wrote:
 
-Sure and thank you! Merry xmas!
+> This command provides a way to traverse the entire page hierarchy by a
+> given virtual address. In addition to qemu's commands info tlb/info mem
+> it provides the complete information about the paging structure for an
+> arbitrary virtual address. It supports 4Kb/2MB/1GB and 5 level paging.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Seems neat.  Should it have a check that it's being run on the supported
+architecture?  Or do we just rely on non-x86_64 users learning not to
+do that.
