@@ -2,81 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2499659AA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6C1659AAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234906AbiL3QnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 11:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S231258AbiL3Qrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 11:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiL3QnA (ORCPT
+        with ESMTP id S229671AbiL3Qrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 11:43:00 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122CA12A80;
-        Fri, 30 Dec 2022 08:42:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672418577; bh=e0P6eeby/jXuaq4qykOZsW6E67jOj2VFHjq5q5H3kIQ=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=ueq7xfWQNL1aqI4sE16+M5GMJIqBaYdUCArmdmiH+yi9uacUX7g3sh/ZlXrQ7xYHG
-         6+s9FY85GqVp6SZAsJG55mcLG+B2w3MBhs+GDm2fp2z1VlvFjQYj5yQ2uAqLRd+H1n
-         UDwCb7e19r6XtQGbKsrvGPbDpOi2CEpLyoickOpgKfVPZUwqNdN09DGvBM6N+zQMPI
-         wpjnQ7eW2b/vJ20+MOGp327KLE+PkHvck55G25td4psKRmvh8B2BO/+HPWRXfpljMg
-         ya9oWq+fZf1Pmhilkgx8rE5kqyMBCimQ2Ybr/tQQhaD6dhS4emhRvdyPJrnyqAzC0S
-         OIkgV+4CgIkeA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.34.18]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYvcG-1pOaAL1Jg0-00UvFq; Fri, 30
- Dec 2022 17:42:57 +0100
-Message-ID: <09f5b49a-d3e7-5204-8dbf-f6bcd05a3f56@gmx.de>
-Date:   Fri, 30 Dec 2022 17:42:56 +0100
+        Fri, 30 Dec 2022 11:47:46 -0500
+Received: from smtp-out-03.comm2000.it (smtp-out-03.comm2000.it [212.97.32.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1952860D5;
+        Fri, 30 Dec 2022 08:47:44 -0800 (PST)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-03.comm2000.it (Postfix) with ESMTPSA id DD4DEB430A9;
+        Fri, 30 Dec 2022 17:47:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1672418862;
+        bh=c3P4lCjJNZBw8UIuQuy6pV3vXeur7ECF48PTfAAiNCw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=rVSovNySFghkv9kL++eKyzGJ+d8OQYzt5dflvSRL1J9vJlCiFFQkDsJaVo897dXFf
+         z/B9wmQuRabQihyOkxLmWiE50OQ8Z6E8CoJ7Sv1TB+pAlw+QF6ZkDy1S2VCbsviIyC
+         nedHX8JoS8QAywy9oe9upqaadxA+IfSgR+TQOrs3tMolDUyRenNpzXZJD79YuXJwHu
+         SXNhfB+Sp0pgAe8e5aj1oWb1VcXrb02F9KpgJXHAttdtQ0rTaqM7ryHwiPedkS7jLj
+         h2MJpAd81VrVHwpzIblCwNJPaO7vK4VVFBfPCTWJwSuqzYF/gqQOsicdmtzEyh0Bwl
+         pGT+ctGOjFvaQ==
+Date:   Fri, 30 Dec 2022 17:47:21 +0100
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        Primoz Fiser <primoz.fiser@norik.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        upstream@lists.phytec.de, Marco Felsch <m.felsch@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        francesco.dolcini@toradex.com, wsa@kernel.org
+Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
+Message-ID: <Y68WGcdQNQkD0vfa@francesco-nb.int.toradex.com>
+References: <20221216084511.2576786-1-primoz.fiser@norik.com>
+ <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
+ <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
+ <20221216110227.GA12327@pengutronix.de>
+ <20221216111308.wckibotr5d3q6ree@pengutronix.de>
+ <5c2e0531-e7c3-1b37-35ed-c8e9795a0d18@norik.com>
+ <Y5xpt6J01Boec6Xr@francesco-nb.int.toradex.com>
+ <41991ce2-3e88-5afc-6def-6e718d624768@norik.com>
+ <Y674eoNsHtAeG7IP@francesco-nb.int.toradex.com>
+ <20221230161209.GA14776@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE, en-US
-Subject: Re: [PATCH 6.1 0000/1140] 6.1.2-rc2 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:VWy3G785yCgEywHVVtHz2asgHYTFietZKsNOxay1dHfUhp3KyyI
- r9TJeM++ddSTx92Z0Iu6fSNeW/r7ZWoW1cCQz6Kh8Z9XdmpekelkXCgglh0zk+sLu00P/4l
- i5pzTatpArUZjubv6OMXplhHG9AwilADLSG5tfH5Fs4kX9YQ+m52sOIP499lPEFHPfep7gM
- IL6QUmXl5wC/OEWdo4rxQ==
-UI-OutboundReport: notjunk:1;M01:P0:tTYO5NCxEfw=;Bq6tr/lZ7kRnLkh5djpx2lvmOZK
- ZqAJ9+iLVrM5XUb+lcU9sUENBfm1Byu2Af2Mh1mXrdwy1iNheXpd7iAHguTTdQAuP3+LHURNF
- a3SDl5AA7Z/9IyCU7S3dLKQxGXKqecy3kmS+4mFXSJsWFRmFj1pGrhHiYhe74DUn2/5smbAWh
- M4fnCmihsj5lNFr8UQdQ6vM4oQhH0QFUKFjYrK0TAYRZrET61KPos2uBYiARkAe0G+eRKi3B7
- xB2yZxU34BEN/Igko4EJbEMTGeKmLdJeVEWvZST+Ogfl4uDHDviTyVBgqtiH25KPRczfE+gV1
- 3l8rLkxzbpm7QqyAZ3JCpMvuIqmSPHb7K8e6hhJb2z7WE3reBI3WjC0ZenZgwfC0FqMWTtHwM
- vX2aa0NrH7nmOaSEc891YhkjdLmwmDJG0huy6HNzALSqnJKqR0jWaxeb++rZDdkCTjcbEMOJT
- mvKIj9CYssIgjj9lt+arr9j/Z90aypMSs6j7sw2wI+wxQsTCfCBU//Za3cDHYWnPQsYSAef4W
- 2AYOfbo45Xf04ItXZ+H2oiZLKxkDeoml65+xppiJhwIjjRKqvhpSBOd1/hI3vOkbajOvB2p/q
- SX9S+jZmjWm4ci+F/bH2c3Od8/ouovzhYxcPVg7T7PMRkI9QE/Hwl+5WJ4St36gaq5tKszB0r
- BKoRP2vPHsQIo+SGUX//jBGBw3hGB7rkwq5938zjA1WZvRUY9mPNh+F2I6PCoGqsDCBNyBgeR
- cyCJzdBsMYzNi+6+aY2G+Mx7qHa0UrWxhSNTvhHJg5vFApbfOY41KldGLTVx3fcugG0tsqA1f
- U3PGU4CAusCr+5upILINnHschBWHhUFTFQYSwysB8DDmseBB+31FDwMlwQsqix5tNFIuqesOm
- Va0CS6AuXAl5VoRcc0UJvn5j2/AekEJ+0RZLQ+EgBBYasYXJtELCqytEapjnxVO4TiyF+bEWx
- +rF+wA==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221230161209.GA14776@pengutronix.de>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Fri, Dec 30, 2022 at 05:12:09PM +0100, Oleksij Rempel wrote:
+> On Fri, Dec 30, 2022 at 03:40:58PM +0100, Francesco Dolcini wrote:
+> > +Wolfram
+> > 
+> > On Wed, Dec 28, 2022 at 09:01:46AM +0100, Primoz Fiser wrote:
+> > > On 16. 12. 22 13:51, Francesco Dolcini wrote:
+> > > > On Fri, Dec 16, 2022 at 01:23:29PM +0100, Primoz Fiser wrote:
+> > > > > The only solid point in the thread seems to be that in that case we are not
+> > > > > covering up the potential i2c hardware issues?
+> > > > 
+> > > > I believe that in this case we should just have a warning in the kernel.
+> > > > The retry potentially work-around a transient issue and we do not hide any hardware
+> > > > issue at the same time. It seems an easy win-win solution.
+> > > 
+> > > I would agree about throwing a warning message in retry case.
+> > > 
+> > > Not sure how would it affect other i2c bus drivers using retries > 0.
+> > > Retries might be pretty rare with i2c-imx but some other drivers set this to
+> > > 5 for example. At least using _ratelimited printk is a must using this
+> > > approach.
+> > 
+> > Wolfram, Uwe, Oleksij
+> > 
+> > Would it be acceptable to have a warning when we have I2C retries, and
+> > with that in place enabling retries on the imx driver?
+> > 
+> > It exists hardware that requires this to work correctly,
+> 
+> Well, this is persistent confusion in this monolog. It will not make it
+> correctly.
+> 
+> > and at a
+> > minimum setting the retry count from user space is not going to solve
+> > potential issues during initial driver probe.
+> 
+> I assume it is not clear from programmer point of view. Lets try other way:
+> 
+> - The I2C slave could not correctly interpret the data on SDA because the SDA
+>   high or low-level voltages do not reach its appropriate input
+>   thresholds.
+> 
+> This means:
+> 
+> You have this:
+> 
+>     /-\    /-\ ----- 2.5Vcc
+> ___/   \__/   \___
+> 
+> Instead of this:
+> 
+>      /-\     /-\ ----- 3.3Vcc
+>     /  \    /   \
+> ___/    \__/     \___
+> 
+> This is bad, because master or slave will not be able to interpret the pick level
+> correctly. It may see some times 0 instead of 1. This means, what ever we are
+> writing we are to the slave or reading from the slave is potentially corrupt
+> and only __sometimes__ the master was able to detect it. 
+> 
+> - The I2C slave missed an SCL cycle because the SCL high or low-level voltages
+>   do not reach its appropriate input thresholds.
+> 
+> This means, the bus frequency is too high for current configured or physical PCB
+> designed. So, you will have different kind of corruptions and some times they
+> will be detected. 
+> 
+> - The I2C slave accidently interpreted a spike etc. as an SCL cycle.
+> 
+> This means the noise level is to high. The driver strange should be increased
+> or PCB redesign should be made. May be there are more options. If not done,
+> data corruption can be expected.
+> 
+> None of this issue can be "fixed" by retries or made more "robust".
+> Doing more retries means: we do what ever we do until the system was not able to
+> detect the error.
 
-6.1.2-rc2
+Hello Oleksij,
+thanks for the detailed explanation, appreciated.
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37)
+Given that is it correct that the i2c imx driver return EAGAIN in such a
+case (arbitration error)? You made it crystal clear that there is no
+such thing as try again for this error, I would be inclined to prepare a
+patch to fix this.
 
-Thanks
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index cf5bacf3a488..a2a581c8ae07 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -492,7 +492,7 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool a
+                /* check for arbitration lost */
+                if (temp & I2SR_IAL) {
+                        i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
+-                       return -EAGAIN;
++                       return -EIO;
+                }
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+                if (for_busy && (temp & I2SR_IBB)) {
+
+
+In addition to that is there any valid use case of the i2c retry
+mechanism? Is possible for an I2C controller to report anything that can
+be recovered with a retry?
+
+Francesco
 
