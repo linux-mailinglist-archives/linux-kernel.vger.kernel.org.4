@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAD865978C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1108665978E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 12:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234573AbiL3LWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 06:22:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S234727AbiL3LXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 06:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiL3LWg (ORCPT
+        with ESMTP id S230250AbiL3LXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 06:22:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB291AA3D;
-        Fri, 30 Dec 2022 03:22:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1152608C1;
-        Fri, 30 Dec 2022 11:22:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F67C433D2;
-        Fri, 30 Dec 2022 11:22:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672399355;
-        bh=fXGX+rVN/2M3LX+qEmoSlls8HDkI0APVmNRSO9nEZYA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FqbDqN10WTtYRybV3WGvvakdF9k2Jp+c5eFcC1t7F6I/UpBHCj7Eb3Bpeahn14dCM
-         P9LfENqp5mfTZEJoRltznE27I985gapulfIbcqm2sImJ5tUPiJT/hmGBoQAkr75f4d
-         3VOXGKc4fiqrwIG4qltvIw7zkWRTZp2I0ucphPeXJuobvIx5K9TNY86dzjSCBbeIId
-         Vgq24pf6pm1C3AVbtx1mrDVUS40y7u0HhxBwEZM7v9XBjMUmJdLFgd5QCWYQkHMPnj
-         gD837S5sZeEnmzkF1n0xqk03zCxMHgycHHvGYGs4tbHjSR1a5xoKeJBGZY17ehhYhV
-         WDYCf7gaOZP4Q==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] PCI: switchtec: Trivial cleanups
-Date:   Fri, 30 Dec 2022 12:22:29 +0100
-Message-Id: <167239933784.745134.2151976451267200665.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221216162126.207863-1-helgaas@kernel.org>
-References: <20221216162126.207863-1-helgaas@kernel.org>
+        Fri, 30 Dec 2022 06:23:08 -0500
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB18E1A046;
+        Fri, 30 Dec 2022 03:23:07 -0800 (PST)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 121FD20EE;
+        Fri, 30 Dec 2022 11:19:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1672399173;
+        bh=kP3p0IoMx80T17qzhnWU9PKl5JGLg67woKpu7rEhMmc=;
+        h=Date:To:CC:From:Subject;
+        b=CJ4gVNh0O4UUY+5ERNg+11nhkKZjGEqv9wR/7zghoNf0tn44DTmX9RAsSpa2BE5KO
+         vUU1yozoCH0Gm6ltvVmjizQd0VQQJy4FKZ0aQP5KbybUziwjfASyJnqxyweucbWBjf
+         hNeUFtchLJzfsmna803ccgqaVFcFzRu8yz2a1qIo=
+Received: from [192.168.211.146] (192.168.211.146) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 30 Dec 2022 14:23:05 +0300
+Message-ID: <b06828df-f9b9-1c5d-d6db-05839bad7016@paragon-software.com>
+Date:   Fri, 30 Dec 2022 15:23:04 +0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH 0/5] fs/ntfs3: Refactoring and bugfix
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [192.168.211.146]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 10:21:24 -0600, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Simplify switchtec_dma_mrpc_isr() slightly and return the right
-> copy_to_user() error code from switchtec_dev_read().
-> 
-> Bjorn Helgaas (2):
->   PCI: switchtec: Simplify switchtec_dma_mrpc_isr()
->   PCI: switchtec: Return -EFAULT for copy_to_user() errors
-> 
-> [...]
+This series contains various fixes and refactoring for ntfs3.
 
-Applied to pci/switchtec, thanks!
+Konstantin Komarov (5):
+   fs/ntfs3: Add null pointer checks
+   fs/ntfs3: Improved checking of attribute's name length
+   fs/ntfs3: Check for extremely large size of $AttrDef
+   fs/ntfs3: Restore overflow checking for attr size in mi_enum_attr
+   fs/ntfs3: Refactoring of various minor issues
 
-[1/2] PCI: switchtec: Simplify switchtec_dma_mrpc_isr()
-      https://git.kernel.org/lpieralisi/pci/c/1a810b9bb681
-[2/2] PCI: switchtec: Return -EFAULT for copy_to_user() errors
-      https://git.kernel.org/lpieralisi/pci/c/fbc855bce49e
+  fs/ntfs3/bitmap.c  |  3 ++-
+  fs/ntfs3/frecord.c |  2 +-
+  fs/ntfs3/fsntfs.c  | 22 ++++++++++++++--------
+  fs/ntfs3/index.c   | 10 ++++++----
+  fs/ntfs3/inode.c   |  8 +++++++-
+  fs/ntfs3/namei.c   |  2 +-
+  fs/ntfs3/ntfs.h    |  3 ---
+  fs/ntfs3/record.c  |  5 +++++
+  fs/ntfs3/super.c   | 10 +++++++++-
+  9 files changed, 45 insertions(+), 20 deletions(-)
 
-Thanks,
-Lorenzo
+-- 
+2.34.1
+
