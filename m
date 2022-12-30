@@ -2,83 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCC4659869
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 13:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFEE659873
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 13:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiL3Mqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 07:46:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S234415AbiL3Msp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 07:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiL3Mqw (ORCPT
+        with ESMTP id S234348AbiL3Msf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 07:46:52 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A8C12614
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 04:46:51 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CA7841BF203;
-        Fri, 30 Dec 2022 12:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1672404409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OBAWrHGDoneNwgVavowtFEiZqaQWcMW84NmbAGpQ9ds=;
-        b=ijPM2fanJBYP6mqQvoTSnKJSCYm3sLIPwyXvj5kOeVPOUaQTXcOEQZ4VRw+h8lnPZmz8Qz
-        nmWwQhM2sMmSYEQ+l28aumtHlf7Fo6OVWzx9QmXJbh6zGW5fM523TZeRTZ87mvH5yS4q/1
-        9pLSSA2/UaNVT4UJByLCfxjR13h2xJWVi4SqUqSCwJPiBwpoSTqwJQOlHDP6MUbfYI/L9k
-        ARB4Wo0c5oA7tjD0TCISsX2JWrNna0LJcyuawW5aypYdWiUp/6iaD8xZl9+EAqCEB8LVLb
-        N7ph1jO+OV9Du/maWujc7FgDP4qF71xIG1enwtYlqeU7MwDUtRHC3i4CtWtdCA==
-Date:   Fri, 30 Dec 2022 13:46:46 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] mtd: rawnand: hynix: Add support for
- H27UCG8T2FTR-BC MLC NAND
-Message-ID: <20221230134646.2e07bcc6@xps-13>
-In-Reply-To: <20221230134507.719edeae@xps-13>
-References: <20221229190906.6467-1-samuel@sholland.org>
-        <20221229190906.6467-2-samuel@sholland.org>
-        <20221230134507.719edeae@xps-13>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 30 Dec 2022 07:48:35 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B0112AC8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 04:48:32 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id i188so21158387vsi.8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 04:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=28ae5aprnMvG9EIDp12Nc2gkTPr7Zgogv/Cw+P2D0o4=;
+        b=jO0PHXBfOJCKtK8hSx9u/RA3qhmJol7gY5kYjJMWyMFX7VyBFEN6QnhhK88D034q0s
+         tSFnN5tG1povXjsITXAD25Vr19Dcawd/JSlDMb1exxUZ5ctXXRHW7WXkePllfPgZeI/S
+         oE40rBD3G5FGZTA8E3Ow2pyCoGazQ26as531BgENMEBIvlbx2ROAuPwK4jDDm+VSJ3uo
+         j7UimB64wP3ilr1mp+C0r6YllZ9FIQsy0zmFShD7F6NJitOQcj83gdNmkLh5kt5Krw6L
+         iuZoGkFkNmxMjSqZoG9iteEIdtMwQGl/8IqHW3gDczrb2C7OYiwQzwOJxtPRHPpGE4HP
+         hQfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=28ae5aprnMvG9EIDp12Nc2gkTPr7Zgogv/Cw+P2D0o4=;
+        b=6zYstbK9n9VoUSnLqAwGuuNOnr6F6/26kn0O83Pq3LNyuDiTfdwlWAA0qWWDnlRRSn
+         a93+2jppkOwcB4ajufYmgeCMam/sFECkabzNEIqb4j8KA4pa6a1dnobvj8ZLOO3eS3mS
+         QPR9RK++qFDfVASw0w+6lPCxK6vxEyarxiuSWzVUZr5ywuXdVBVjbRdvrDgQWnkHOS2u
+         lWix634NV8Pel89CW+IrPQrrmqFfCMOO1CXDVjYb9iv+/SpRjl9VQDMRUkAjcnbqqIyq
+         JG7A16e1/ME1eFwCuY11rlomb/CNgyYsTXnOwhWqho7MLeBcqBDyaYboEK2GA1ZNQq8o
+         OZGA==
+X-Gm-Message-State: AFqh2kp9YaHe66TSyYJJs6BNLrMT0FEqSlHjb+CXUpBiUb7NJYMdXPkQ
+        XVuMqG39FIHyT9xcfBt6HzZ/0hsEufNxnl5EEk35Gg==
+X-Google-Smtp-Source: AMrXdXvukYgv1bjyiEgT6uh9dsGIpfq0l4WOQ7H2D5ik9FyF1BMGQ+Yd3Lb67/ZrAoUcfLBORjE5zFSoGFNKoGi65Fc=
+X-Received: by 2002:a67:f756:0:b0:3b1:13ee:4bf7 with SMTP id
+ w22-20020a67f756000000b003b113ee4bf7mr4033109vso.62.1672404511164; Fri, 30
+ Dec 2022 04:48:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221210220601.77648-1-andriy.shevchenko@linux.intel.com> <Y67T2u0VfSnq48KQ@smile.fi.intel.com>
+In-Reply-To: <Y67T2u0VfSnq48KQ@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 30 Dec 2022 13:48:20 +0100
+Message-ID: <CAMRc=MdZ4RN=EFS0Brf0Avis9FOVh9+8x5rB52b8eO_Ln+CGiA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] gpio: pca953x: avoid to use uninitialized value pinctrl
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Haibo Chen <haibo.chen@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again,
+On Fri, Dec 30, 2022 at 1:04 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Sun, Dec 11, 2022 at 12:05:58AM +0200, Andy Shevchenko wrote:
+> > From: Haibo Chen <haibo.chen@nxp.com>
+> >
+> > There is a variable pinctrl declared without initializer. And then
+> > has the case (switch operation chose the default case) to directly
+> > use this uninitialized value, this is not a safe behavior. So here
+> > initialize the pinctrl as 0 to avoid this issue.
+> > This is reported by Coverity.
+>
+> Bart, any comments on the series?
+>
 
-miquel.raynal@bootlin.com wrote on Fri, 30 Dec 2022 13:45:07 +0100:
+Now applied. I just got back from Christmas break, give me a moment. :)
 
-> Hi Samuel,
->=20
-> samuel@sholland.org wrote on Thu, 29 Dec 2022 13:09:03 -0600:
->=20
-> > H27UCG8T2FTR-BC is similar to the already-supported H27UCG8T2ETR-BC, but
-> > reports a different ID.
->=20
-> Can you provide a datasheet for this part? I am surprised by the page
-> size. In general anyway, it's best to provide a link when adding
-> support for a new component.
->=20
-> Also, for your two series, no need to resend this time, but please use
-> git-format-patch and git-send-email to create your series, so that all
-> the patches are answers of the cover letter. It helps keeping all
-> patches and answers in the series packed together.
-
-You can ignore this, I did momentarily change the display inadvertently
-on my side, your series are perfectly fine.
-
-Sorry for the noise.
-Miqu=C3=A8l
+Bart
