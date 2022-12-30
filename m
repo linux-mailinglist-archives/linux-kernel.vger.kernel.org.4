@@ -2,87 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC1C659C04
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 21:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4699659C09
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 21:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235617AbiL3UXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 15:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S235248AbiL3UbV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Dec 2022 15:31:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbiL3UWz (ORCPT
+        with ESMTP id S229527AbiL3UbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 15:22:55 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AD91B9C6;
-        Fri, 30 Dec 2022 12:22:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=VNS6f3OvTSGCAOQIBsZyhnlAHMi3sUvuzkVH6AUStJw=; b=m7NlslhTSfDZ4ZmUtfxp/Xnu39
-        wcMW9Fs6D61tkVOkb9aNJzUeDxCMFpfhokxj4Iw7og/X9ymIO6TuAPxilfBxTro6vt5RwDuOQ06Nx
-        cTa2IDxucTDOSrb+D2KAysnWe4vtMRZLRo6gt4jaePiEqE0AB1wKXuKcjAJLcXNjPAy7GoWLUJaqa
-        F0r5pTDYKbUyvnHoBH6rutQ+T1fLyCK+3HoWkT1ZXczYLvKri+ToDnSC/pBUiSuQ2JeCRURvOoWQj
-        VtyOJlOHwCn8iJV5S7avqZR8wVgsOBaoTwrFSSfs8tjHpUS0NGxrX3LuodOWmnERikKe7sCEbh9L8
-        v1hkV1Mg==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pBLty-00DF6m-Ka; Fri, 30 Dec 2022 20:22:50 +0000
-Message-ID: <855df2ca-0760-2106-4e3b-2af7ce15b9eb@infradead.org>
-Date:   Fri, 30 Dec 2022 12:22:50 -0800
+        Fri, 30 Dec 2022 15:31:19 -0500
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5958A1BEAF
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 12:31:16 -0800 (PST)
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id 91D838062C;
+        Fri, 30 Dec 2022 20:31:15 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id 8E4A417;
+        Fri, 30 Dec 2022 20:31:13 +0000 (UTC)
+Message-ID: <f932082c38d8b67fd15e08c2f4f5eee8e4519291.camel@perches.com>
+Subject: Re: [PATCH] checkpatch: Ignore ETHTOOL_LINK_MODE_ enum values
+From:   Joe Perches <joe@perches.com>
+To:     Gerhard Engleder <gerhard@engleder-embedded.com>,
+        linux-kernel@vger.kernel.org
+Cc:     apw@canonical.com, dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com
+Date:   Fri, 30 Dec 2022 12:31:12 -0800
+In-Reply-To: <20221230195907.3959-1-gerhard@engleder-embedded.com>
+References: <20221230195907.3959-1-gerhard@engleder-embedded.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V2] doc: fix typo in botching up ioctls
-To:     Federico Vaga <federico.vaga@vaga.pv.it>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221230172328.58612-1-federico.vaga@vaga.pv.it>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20221230172328.58612-1-federico.vaga@vaga.pv.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 8E4A417
+X-Stat-Signature: 6c7kbpugjqrakk77jerpgxpnqceyn17h
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18WaoOBECKN3jdCj3OziHkn6rV+G7XoXbc=
+X-HE-Tag: 1672432273-637006
+X-HE-Meta: U2FsdGVkX18b2nRnj0EOYK/YS7XaZAovrA0BZ1YscJryBYS1IdAZypfZ2zC1/sci4qGDvIcoDZTE2r3YnhBk7g==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/30/22 09:23, Federico Vaga wrote:
-> The type contained a typo `uintprt` -> `uintptr`
+On Fri, 2022-12-30 at 20:59 +0100, Gerhard Engleder wrote:
+> Since commit 4104a20646 enum values like
+> ETHTOOL_LINK_MODE_Asym_Pause_BIT are ignored. But there are other enums
+> like ETHTOOL_LINK_MODE_1000baseT_Full_BIT, which are not ignored
+> because of the not matching '1000baseT' substring.
 > 
-> Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
+> Extend regex to match also substrings like '1000baseT'.
+[]
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+[]
+> @@ -5780,7 +5780,7 @@ sub process {
+>  			if ($var !~ /^$Constant$/ &&
+>  			    $var =~ /[A-Z][a-z]|[a-z][A-Z]/ &&
+>  #Ignore some autogenerated defines and enum values
+> -			    $var !~ /^(?:[A-Z]+_){1,5}[A-Z]{1,3}[a-z]/ &&
+> +			    $var !~ /^(?:[A-Z]+_){1,5}([A-Z]{1,3}[a-z]|[0-9]+[a-z]+[A-Z])/ &&
 
+NAK.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+This introduces an unnecessary capture group and as well it would also
+allow too many other variants that should get a warning.
 
-Thanks.
+Try a git grep using that pattern and see if all the matches are
+actually what you want to allow
 
-> ---
->  Documentation/process/botching-up-ioctls.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> v1 -> v2 fix the typo in the commit message
-> 
-> diff --git a/Documentation/process/botching-up-ioctls.rst b/Documentation/process/botching-up-ioctls.rst
-> index ba4667ab396b..9739b88463a5 100644
-> --- a/Documentation/process/botching-up-ioctls.rst
-> +++ b/Documentation/process/botching-up-ioctls.rst
-> @@ -41,7 +41,7 @@ will need to add a 32-bit compat layer:
->     structures to the kernel, or if the kernel checks the structure size, which
->     e.g. the drm core does.
->  
-> - * Pointers are __u64, cast from/to a uintprt_t on the userspace side and
-> + * Pointers are __u64, cast from/to a uintptr_t on the userspace side and
->     from/to a void __user * in the kernel. Try really hard not to delay this
->     conversion or worse, fiddle the raw __u64 through your code since that
->     diminishes the checking tools like sparse can provide. The macro
+$ git grep -Poh '\b(?:[A-Z]+_){1,5}([A-Z]{1,3}[a-z]|[0-9]+[a-z]+[A-Z])\w*\b' -- '*.[ch]' | \
+  sort | uniq -c | sort -rn
+...
 
--- 
-~Randy
