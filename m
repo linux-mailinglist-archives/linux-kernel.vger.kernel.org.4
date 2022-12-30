@@ -2,163 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DC6659C96
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 22:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE51659C98
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 22:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235497AbiL3V7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 16:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S235493AbiL3V7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 16:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiL3V65 (ORCPT
+        with ESMTP id S229536AbiL3V7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 16:58:57 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBFE1CFE8
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 13:58:56 -0800 (PST)
-Received: from [127.0.0.1] ([50.193.22.81])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BULwdhn1419253
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Fri, 30 Dec 2022 13:58:40 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BULwdhn1419253
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022120601; t=1672437521;
-        bh=5mHwRJkoGXPFOj6AeA/b5ADGAertCv6FWoM0j9lKKqY=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=I6m/C03GS8+E25iheyQCyVkw8i6FbDwXumhf0zJmMDwhc9pfcFtFXbsclwH7xqxcy
-         OV5iuevn4x9Ep/0FoiYh9pK4LRCA2I4LY/4DXqfFkFaJ+flRX9Neg8qmBgLvzjcXiQ
-         VBlS22tCpkVY2/PplcRMyM9iY7K+RjFL3d26xuMShQJSfgfLa7aRV8QJC9X1l4PPK2
-         yWGAXpgWNu8ZvUKhaOr4SUQFPYbRnedWD5b+ml1uC/KMMqlOqEZUt0Q9QeRTuYnvwT
-         Q5GpJIXzDvBk0Zz7/a38pOS+p0fcfRv/dlUQCnH1BzISEksRyMfzi2kIahrcA/1Kt4
-         nq4Jau4ML+Ecg==
-Date:   Fri, 30 Dec 2022 13:58:39 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        ardb@kernel.org, kraxel@redhat.com, philmd@linaro.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_qemu=5D_x86=3A_don=27t_let_decomp?= =?US-ASCII?Q?ressed_kernel_image_clobber_setup=5Fdata?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y69B40T9kWfxZpmf@zn.tnic>
-References: <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org> <Y6xvJheSYC83voCZ@zx2c4.com> <Y6x1knb8udpSyMSp@zx2c4.com> <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com> <Y6z765zHrQ6Rl/0o@zx2c4.com> <AF921575-0968-434A-8B46-095B78C209C1@zytor.com> <Y62MdawGaasXmoVL@zn.tnic> <Y68Js5b0jW/2nLU4@zx2c4.com> <Y68Zf/MKmX3Rr18E@zn.tnic> <CAHmME9oPUJemVRvO3HX0q4BJGTFuzbLYANeizuRcNq2=Ykk1Gg@mail.gmail.com> <Y69B40T9kWfxZpmf@zn.tnic>
-Message-ID: <E5D0A77E-5ABC-4978-9A66-37B60DA43869@zytor.com>
+        Fri, 30 Dec 2022 16:59:46 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322611CFE1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 13:59:45 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id d185so22509733vsd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 13:59:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ojCvjpUwmQcpqlhAqAXahIQg5LmJzJtnHdnov88yJMs=;
+        b=ZlXVJI2uLZhNL3WGmXGzQbeJ+Y9BZcsePf40pR3SW0CbR6qoB+Ce9wZvSMjvacx3TK
+         VR5gqxU9e5BtU360p9T8tGR3aNMt1abiiG2Jos2ghZFmXEx9eNiH0NPr7FFwacW5i3f8
+         xhBbOGNegv3yvGegSG6BZ3za7+mvKWD4+06557JEYa7qjgszntkNt+84dhY/IVM6mvU2
+         r40JZJrBvzdHysFXwtHNOfp6D6MKTqhP9bdDEegX21uONIX6QXjLNSuMXlchC/xHRCkK
+         6EgsbOyze+/xSUh7Wz7F+op/f7aIKl09JEg1qD5+llHkHvYUHWTQYEJe/OjXIbaQ1ynR
+         sjVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ojCvjpUwmQcpqlhAqAXahIQg5LmJzJtnHdnov88yJMs=;
+        b=OXe9D5qicTrMh2US4+UAmi5r/zcWUQWHP1Rwk5BQmjWeMm/BsfIUwxSpzUHlNaU0cK
+         uBQxZ6Gq4sKF/+6XmrEz8uAS+2fgKkd9HWi7iKhnDPT0BBakIo02Y2Er1qS0qOyeOEYz
+         HcE5/G/VJm5IBnRPjAOS9RphroBQ6IS3Gfz67AkJI+8QNP2kmT9j5ltnhIblApIGgARt
+         owrYFUzUplBJkaSl37HZ1q16tmVVQJ54mLZ4p9+M6YBSCfkT4dL++K8y62fCSlJSAI4e
+         hBHzzO4ywNnSx+3aHzlfD4PNn8OgOdACIql2YoyrT7ztjd2ZJDJR7yqygWQLbq2GD/hR
+         II/g==
+X-Gm-Message-State: AFqh2kpto/rH9Q6Yzv362P+3leUIqp35ecocf+TjtxqfUej617kGlsp0
+        oc5qsjytxDK8SnlasBYMQb37h1QxMw6OsYnAjJ4zAw==
+X-Google-Smtp-Source: AMrXdXsMbDKNYMIrLNNEHL37FFgKk2+piZDk5e8JDw1OEPqIetTy7RlBmJ1yAcxxST6OWGS2se4bKXJHEFqLA2nsLdU=
+X-Received: by 2002:a05:6102:3d9f:b0:3c4:4918:80c with SMTP id
+ h31-20020a0561023d9f00b003c44918080cmr2914595vsv.9.1672437584212; Fri, 30 Dec
+ 2022 13:59:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221222061341.381903-1-yuanchu@google.com> <20221222104937.795d2a134ac59c8244d9912c@linux-foundation.org>
+ <CAOUHufZpbfTCeqteEZt5k-kFZh3-++Gm0Wnc0-O=RFT-K9kzkw@mail.gmail.com> <20221222122937.06b9e9f3765e287b91b14954@linux-foundation.org>
+In-Reply-To: <20221222122937.06b9e9f3765e287b91b14954@linux-foundation.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Fri, 30 Dec 2022 14:59:08 -0700
+Message-ID: <CAOUHufYYoJJmDE3Y0r8p_BqGG5Cgig=Ntuz9ThEnfvkxqL_ZLw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm: add vma_has_locality()
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yuanchu Xie <yuanchu@google.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Steven Barrett <steven@liquorix.net>,
+        Brian Geffon <bgeffon@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, Peter Xu <peterx@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On December 30, 2022 11:54:11 AM PST, Borislav Petkov <bp@alien8=2Ede> wrot=
-e:
->On Fri, Dec 30, 2022 at 06:07:24PM +0100, Jason A=2E Donenfeld wrote:
->> Look closer at the boot process=2E The compressed image is initially at
->> 0x100000, but it gets relocated to a safer area at the end of
->> startup_64:
+On Thu, Dec 22, 2022 at 1:29 PM Andrew Morton <akpm@linux-foundation.org> wrote:
 >
->That is the address we're executing here from, rip here looks like 0x100x=
-xx=2E
+> On Thu, 22 Dec 2022 12:44:35 -0700 Yu Zhao <yuzhao@google.com> wrote:
 >
->> /*
->>  * Copy the compressed kernel to the end of our buffer
->>  * where decompression in place becomes safe=2E
->>  */
->>         pushq   %rsi
->>         leaq    (_bss-8)(%rip), %rsi
->>         leaq    rva(_bss-8)(%rbx), %rdi
+> > On Thu, Dec 22, 2022 at 11:49 AM Andrew Morton
+> > <akpm@linux-foundation.org> wrote:
+> > >
+> > > On Wed, 21 Dec 2022 22:13:40 -0800 Yuanchu Xie <yuanchu@google.com> wrote:
+> > >
+> > > > From: Yu Zhao <yuzhao@google.com>
+> >
+> > This works; suggested-by probably works even better, since I didn't do
+> > the follow-up work.
+> >
+> > > > Currently in vm_flags in vm_area_struct, both VM_SEQ_READ and
+> > > > VM_RAND_READ indicate a lack of locality in accesses to the vma. Some
+> > > > places that check for locality are missing one of them. We add
+> > > > vma_has_locality to replace the existing locality checks for clarity.
+> > >
+> > > I'm all confused.  Surely VM_SEQ_READ implies locality and VM_RAND_READ
+> > > indicates no-locality?
+> >
+> > Spatially, yes. But we focus more on the temporal criteria here, i.e.,
+> > the reuse of an area within a relatively small duration. Both the
+> > active/inactive LRU and MGLRU rely on this.
 >
->when you get to here, it looks something like this:
+> Oh.  Why didn't it say that ;)
 >
->        leaq    (_bss-8)(%rip), %rsi		# 0x9e7ff8
->        leaq    rva(_bss-8)(%rbx), %rdi		# 0xc6eeff8
->
->so the source address is that _bss thing and we copy=2E=2E=2E
->
->>         movl    $(_bss - startup_32), %ecx
->>         shrl    $3, %ecx
->>         std
->
->=2E=2E=2E backwards since DF=3D1=2E
->
->Up to:
->
-># rsi =3D 0xffff8
-># rdi =3D 0xbe06ff8
->
->Ok, so the source address is 0x100000=2E Good=2E
->
->> HOWEVER, qemu currently appends setup_data to the end of the
->> compressed kernel image,
->
->Yeah, you mean the kernel which starts executing at 0x100000, i=2Ee=2E, t=
-hat part
->which is compressed/head_64=2ES and which does the above and the relocati=
-on etc=2E
->
->> and this part isn't moved, and setup_data links aren't walked/relocated=
-=2E So
->> that means the original address remains, of 0x100000=2E
->
->See above: when it starts copying the kernel image backwards to a higher
->address, that last byte is at 0x9e7ff8 so I'm guessing qemu has put setup=
-_data
->*after* that address=2E And that doesn't get copied ofc=2E
->
->So far, so good=2E
->
->Now later, we extract the compressed kernel created with the mkpiggy magi=
-c:
->
->input_data:
->=2Eincbin "arch/x86/boot/compressed/vmlinux=2Ebin=2Egz"
->input_data_end:
->
->by doing
->
->/*
-> * Do the extraction, and jump to the new kernel=2E=2E
-> */
->
->        pushq   %rsi                    /* Save the real mode argument */=
-	0x13d00
->        movq    %rsi, %rdi              /* real mode address */			0x13d00
->        leaq    boot_heap(%rip), %rsi   /* malloc area for uncompression =
-*/	0xc6ef000
->        leaq    input_data(%rip), %rdx  /* input_data */			0xbe073a8
->        movl    input_len(%rip), %ecx   /* input_len */				0x8cfe13
->        movq    %rbp, %r8               /* output target address */		0x10=
-00000
->        movl    output_len(%rip), %r9d  /* decompressed length, end of re=
-locs */
->        call    extract_kernel          /* returns kernel location in %ra=
-x */
->        popq    %rsi
->
->(actual addresses at the end=2E)
->
->Now, when you say you triplefault somewhere in initialize_identity_maps()=
- when
->trying to access setup_data, then if you look a couple of lines before th=
-at call
->we do
->
->	call load_stage2_idt
->
->which sets up a boottime #PF handler do_boot_page_fault() and it actually=
- does
->call kernel_add_identity_map() so *actually* it should map any unmapped
->setup_data addresses=2E
->
->So why doesn't it do that and why do you triplefault?
->
->Hmmm=2E
->
+> How about s/locality/recency/g?
 
-See the other thread fork=2E They have identified the problem already=2E
+Thanks. I've done this, and posted the v2 which includes much better
+commit messages.
