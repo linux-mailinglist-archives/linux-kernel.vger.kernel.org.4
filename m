@@ -2,131 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3535765938E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 01:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA746593A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 01:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234329AbiL3AHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 19:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S234085AbiL3AMJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Dec 2022 19:12:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiL3AHB (ORCPT
+        with ESMTP id S229650AbiL3AMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 19:07:01 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38D7E12AEB;
-        Thu, 29 Dec 2022 16:07:00 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BU05qhyE007943, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BU05qhyE007943
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Fri, 30 Dec 2022 08:05:52 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Fri, 30 Dec 2022 08:06:46 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 30 Dec 2022 08:06:46 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Fri, 30 Dec 2022 08:06:46 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>
-CC:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "neojou@gmail.com" <neojou@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "macroalpha82@gmail.com" <macroalpha82@gmail.com>,
-        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
-        "nitin.gupta981@gmail.com" <nitin.gupta981@gmail.com>
-Subject: Re: [RFC PATCH v1 00/19] rtw88: Add SDIO support
-Thread-Topic: [RFC PATCH v1 00/19] rtw88: Add SDIO support
-Thread-Index: AQHZGks+1Xp5+2HTNk6lcrww/IAcmq6EK72QgADRVICAAA1igA==
-Date:   Fri, 30 Dec 2022 00:06:46 +0000
-Message-ID: <a681e5a2b660be3de96985628f1ab3a8acfa593f.camel@realtek.com>
-References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
-         <8fe9b10318994be18934ec41e792af56@realtek.com>
-         <CAFBinCBcurqiHJRSyaFpweYmrgaaUhpy632QQNWcrd3UHRtZbQ@mail.gmail.com>
-In-Reply-To: <CAFBinCBcurqiHJRSyaFpweYmrgaaUhpy632QQNWcrd3UHRtZbQ@mail.gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [172.16.22.50]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEyLzI5IOS4i+WNiCAxMDozODowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <424B7CB421765E4AB163B8D90C048094@realtek.com>
-Content-Transfer-Encoding: base64
+        Thu, 29 Dec 2022 19:12:06 -0500
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7755F13D55
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 16:12:05 -0800 (PST)
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 62EC6140A6D;
+        Fri, 30 Dec 2022 00:12:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 40C5A20027;
+        Fri, 30 Dec 2022 00:12:01 +0000 (UTC)
+Message-ID: <50adab03166b69077ca49c74b40fffea60adb807.camel@perches.com>
+Subject: Re: [PATCH v2] checkpatch: Mark kunmap() and kunmap_atomic()
+ deprecated
+From:   Joe Perches <joe@perches.com>
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Date:   Thu, 29 Dec 2022 16:12:00 -0800
+In-Reply-To: <20221229-kmap-checkpatch-v2-1-919fc4d4e3c2@intel.com>
+References: <20221229-kmap-checkpatch-v2-1-919fc4d4e3c2@intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: 40C5A20027
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Rspamd-Server: rspamout03
+X-Stat-Signature: m86ueskwm7kxgo1aooht5e7ffwj76jb1
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19n9z4HD4n9VZfqcmfnVAcCP0urPuFU6PQ=
+X-HE-Tag: 1672359121-153747
+X-HE-Meta: U2FsdGVkX1/bf+rgnuLPnahfxAG7rn+Oa6tHBiTsaD56jN4VL+nY3cXXgAptEEcGl75HeGW9QDrLyHaSXdoiKg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTEyLTMwIGF0IDAwOjE4ICswMTAwLCBNYXJ0aW4gQmx1bWVuc3RpbmdsIHdy
-b3RlOg0KPiBIaSBQaW5nLUtlLA0KPiANCj4gdGhhbmtzIGFnYWluIGZvciBhbGwgeW91ciBpbnB1
-dCENCj4gDQo+IE9uIFRodSwgRGVjIDI5LCAyMDIyIGF0IDU6MTkgQU0gUGluZy1LZSBTaGloIDxw
-a3NoaWhAcmVhbHRlay5jb20+IHdyb3RlOg0KPiBbLi4uXQ0KPiA+ID4gLSBSWCB0aHJvdWdocHV0
-IG9uIGEgNUdIeiBuZXR3b3JrIGlzIGF0IDE5IE1iaXQvcw0KPiA+IA0KPiA+IEkgaGF2ZSBhIHN1
-Z2dlc3Rpb24gYWJvdXQgUlggdGhyb3VnaHB1dCwgcGxlYXNlIGNoZWNrIGJlbG93IHJlZ2lzdGVy
-cyB3aXRoDQo+ID4gdmVuZG9yIGRyaXZlcjoNCj4gPiANCj4gPiBSRUdfUlhETUFfQUdHX1BHX1RI
-DQo+ID4gUkVHX1RYRE1BX1BRX01BUCgweDEwYykgQklUX1JYRE1BX0FHR19FTiAoYml0MikNCj4g
-PiBSRUdfUlhETUFfTU9ERSgwMjkwKSAgQklUX0RNQV9NT0RFIChiaXQxKQ0KPiBVbmZvcnR1bmF0
-ZWx5IEkgZGlkbid0IG1hbmFnZSB0byBnZXQgdGhlIHZlbmRvciBkcml2ZXIgdG8gd29yayB3aXRo
-DQo+IG1haW5saW5lIExpbnV4Lg0KPiBUaGUgQW5kcm9pZCBpbnN0YWxsYXRpb24gb24gbXkgYm9h
-cmQgKHdoaWNoIGlzIGhvdyBpdCB3YXMgc2hpcHBlZCkNCj4gdXNlcyB0aGUgdmVuZG9yIGRyaXZl
-ciBidXQgdW5saWtlIHNvbWUgQW1sb2dpYyBjb2RlIHRoZSBSZWFsdGVrDQo+ICh2ZW5kb3IpIHdp
-cmVsZXNzIGRyaXZlciBkb2VzIG5vdCBhbGxvdyByZWFkaW5nIGFyYml0cmFyeSByZWdpc3RlcnMN
-Cj4gdGhyb3VnaCBzeXNmcy4NCj4gU28gSSBjYW4ndCBjaGVjayB0aGUgdmFsdWVzIHRoYXQgdGhl
-IHZlbmRvciBkcml2ZXIgdXNlcy4NCj4gDQo+ID4gVHJ5IHRvIGFkanVzdCBBR0dfUEdfVEggdG8g
-c2VlIGlmIGl0IGNhbiBoZWxwLg0KPiBJIHRyaWVkIGEgZmV3IHZhbHVlcyBhbmQgSSBjYW4gc2F5
-IHRoYXQgaXQgZG9lcyBjaGFuZ2UgdGhlIFJYDQo+IHRocm91Z2hwdXQsIGJ1dCB0aGUgcmVzdWx0
-IGlzIGFsd2F5cyBsb3dlciB0aGFuIDE5IE1iaXQvcywgbWVhbmluZw0KPiB0aGF0IGl0J3Mgd29y
-c2UgdGhhbiBSWCBhZ2dyZWdhdGlvbiBkaXNhYmxlZCAob24gbXkgUlRMODgyMkNTKS4NCj4gQ3Vy
-cmVudGx5IHdlJ3JlIGRpc2FibGluZyBSWCBhZ2dyZWdhdGlvbiBpbiB0aGUgZHJpdmVyLiBCdXQg
-SmVybmVqDQo+IG1lbnRpb25lZCBwcmV2aW91c2x5IHRoYXQgZm9yIGhpcyBSVEw4ODIyQlMgaGUg
-Zm91bmQgdGhhdCBSWA0KPiBhZ2dyZWdhdGlvbiBzZWVtcyB0byBpbXByb3ZlIHBlcmZvcm1hbmNl
-Lg0KPiANCj4gSW5kZXBlbmRlbnQgb2YgdGhpcyBJIGRpZCBzb21lIGludmVzdGlnYXRpb24gb24g
-bXkgb3duIGFuZCBmb3VuZCB0aGF0DQo+IHdoZW4gcmVkdWNpbmcgdGhlIFRYIHRocm91Z2hwdXQg
-dGhlIFJYIHRocm91Z2hwdXQgaW5jcmVhc2VzLg0KPiBGb3IgdGhpcyBJIHRyaWVkIHVzaW5nIGll
-ZWU4MDIxMV97c3RvcCx3YWtlfV9xdWV1ZSgpIGluIHRoZSBzZGlvLmMgSENJDQo+IHN1Yi1kcml2
-ZXIuDQo+IFJYIHRocm91Z2hwdXQgaXMgbm93IGF0IDIzLjUgTWJpdC9zICh0aGF0ICsyNSUgY29t
-cGFyZWQgdG8gYmVmb3JlKSBvbg0KPiBteSBSVEw4ODIyQ1MgKHdpdGggUlggYWdncmVnYXRpb24g
-c3RpbGwgZGlzYWJsZWQsIGp1c3QgbGlrZSBpbiB0aGUgMTkNCj4gTWJpdC9zIHRlc3QpLg0KPiBV
-bmZvcnR1bmF0ZWx5IFRYIHRocm91Z2hwdXQgaXMgbm93IHdheSBiZWxvdyAxMCBNYml0L3MuDQo+
-IA0KPiBBZGRpdGlvbmFsbHkgSSB0aGluayB0aGF0IHRoZSBhbnRlbm5hIG9mIG15IGJvYXJkIGlz
-IHdvcnNlIHRoYW4gbXkNCj4gYWNjZXNzIHBvaW50J3MgYW50ZW5uYS4gU28gVFggZnJvbSBydHc4
-OCB0byBteSBBUCBtYXkgYmUgZmFzdGVyDQo+IChiZWNhdXNlIHRoZSBBUCBjYW4gImhlYXIgYmV0
-dGVyIikgdGhhbiBSWCAocnR3ODggImhlYXJpbmcgaXMgd29yc2UiKS4NCj4gDQoNCldpdGhvdXQg
-ZXF1aXBtZW50IGxpa2UgQ0FULUMsIGl0IGlzIGhhcmQgdG8gaW52ZXN0aWdhdGUgU0RJTyB1c2IN
-CmFnZ3JlZ2F0aW9uLCBzbyBJIHN1Z2dlc3QgdG8gY2FwdHVyZSBXaUZpIHBhY2tldHMgaW4gdGhl
-IGFpciB0byBtYWtlDQpzdXJlIHRoaW5ncyB3b3JrIGFzIGV4cGVjdGVkLiBBZnRlciB0aGF0LCB3
-ZSBjYW4gZm9jdXMgb24gYnVzDQphZ2dyZWdhdGlvbiB0dW5pbmcuDQoNClRoZSBpbnN0cnVjdGlv
-bnMgdG8gdXNlIGFub3RoZXIgV2lGaSBjYXJkIHRvIGNhcHR1cmUgcGFja2V0cyBhcmU6DQoxLiBz
-dWRvIGl3IGRldiB3bGFuMCBpbnRlcmZhY2UgYWRkIG1vbjAgdHlwZSBtb25pdG9yDQoyLiBzdWRv
-IHdpcmVzaGFyayAgLy8gc2VsZWN0IG1vbjAgdG8gY2FwdHVyZQ0KDQpQbGVhc2UgY2hlY2sgQU1Q
-RFUgYW5kIEFNU0RVIHNpemUgZHVyaW5nIGRvaW5nIFRYL1JYIHRocm91Z2hwdXQgdGVzdC4NCk5v
-cm1hbGx5LCBleHBlY3RlZCBBTVNEVSBzaXplIGlzIDMwMDArIGJ5dGVzLCBhbmQgQU1QRFUgbnVt
-YmVyIGlzDQphcm91bmQgMzIgTVNEVXMuIElmIFJYIGlzIHRvbyBzbG93IHJlc3VsdGluZyBpbiBi
-dWZmZXIgb3ZlcmZsb3csIA0KQVAgY291bGQgcmVzZW5kIChjaGVjayBzZXF1ZW5jZSBudW1iZXIg
-YW5kICdSJyBiaXQsIG9yIEJBIG9mIDg4MjJDUykuDQoNCkFsc28sIGNoZWNrIFRYL1JYIHJhdGVz
-IHRvIGtub3cgaWYgUkYgY2FsaWJyYXRpb24gYW5kIFBIWSBkeW5hbWljDQptZWNoYW5pc20gd29y
-ayB3ZWxsLiBOb3JtYWxseSwgd2l0aCA1MGNtIGRpc3RhbmNlIGxvbmcgZnJvbSBBUCwNCml0IG11
-c3QgeWllbGQgdGhlIGhpZ2hlc3QgcmF0ZSwgbm8gZG91YnQuDQoNCkkgaG9wZSB0aGlzIGNhbiBu
-YXJyb3cgZG93biB0aGUgcHJvYmxlbXMgeW91IG1ldC4gDQoNCi0tLQ0KUGluZy1LZQ0KDQo=
+On Thu, 2022-12-29 at 14:17 -0800, Ira Weiny wrote:
+> It was suggested by Fabio that kunmap() be marked deprecated in
+> checkpatch.[1]  This did not seem necessary until an invalid conversion
+> of kmap_local_page() appeared in mainline.[2][3]  The introduction of
+> this bug would have been flagged with kunmap() being marked deprecated.
+> 
+> Add kunmap() and kunmap_atomic() to checkpatch to help prevent further
+> confusion.
+
+Acked-by: Joe Perches <joe@perches.com>
+
+> 
+> [1] https://lore.kernel.org/all/1884934.6tgchFWduM@suse/
+> [2] d406d26745ab ("cifs: skip alloc when request has no pages")
+> [3] https://lore.kernel.org/r/20221229-cifs-kmap-v1-1-c70d0e9a53eb@intel.com
+> 
+> Cc: Andy Whitcroft <apw@canonical.com>
+> Cc: Joe Perches <joe@perches.com>
+> Suggested-by: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> ---
+> Changes in v2:
+> - Add LKML and send directly to Andy and Joe (I'm still learning b4 send...)
+> - Link to v1: https://lore.kernel.org/r/20221229-kmap-checkpatch-v1-1-6b86bcf5080a@intel.com
+> ---
+>  scripts/checkpatch.pl | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 78cc595b98ce..a6d6d7e1d0cf 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -823,7 +823,9 @@ our %deprecated_apis = (
+>  	"get_state_synchronize_sched"		=> "get_state_synchronize_rcu",
+>  	"cond_synchronize_sched"		=> "cond_synchronize_rcu",
+>  	"kmap"					=> "kmap_local_page",
+> +	"kunmap"				=> "kunmap_local",
+>  	"kmap_atomic"				=> "kmap_local_page",
+> +	"kunmap_atomic"				=> "kunmap_local",
+>  );
+>  
+>  #Create a search pattern for all these strings to speed up a loop below
+> 
+> ---
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> change-id: 20221229-kmap-checkpatch-763cc2ace8e5
+> 
+> Best regards,
+
