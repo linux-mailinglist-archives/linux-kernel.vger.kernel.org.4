@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F42D659CEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 23:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D98659D10
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 23:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235628AbiL3WdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 17:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
+        id S235594AbiL3WlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 17:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiL3WdL (ORCPT
+        with ESMTP id S235541AbiL3WlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 17:33:11 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A021C90C
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 14:33:09 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id i83so11745191ioa.11
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 14:33:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VopeNteg8qTfq7SnHIn61T/3OkDE4RtaebULuCvY+/I=;
-        b=PriBcqBUPdb+qVozoBjNUwxgXonhwruGyDKU3JkS9eAI5UkdJ8Fc0mWlxMhg3pCT5b
-         fRFHhGikYFTealH91qzl3EeX2n+QgLmFNIP7ykLLma+AWephk3mmGktXHAVyEoRQWCyj
-         XsD7TvbIRx/mUAVEIALc/1U8BsuQos0gPfqsa2s/+6G5qmPAjO6nffVhAGNqeMCi9r3f
-         9bhJ2TqLmFZo3LML57XI97HeBdtuCQz+Cm3WJQtfK+w/y20rB4cPFbioA7d6n7orvdlu
-         5PECM5sUmZU1FnaX53WTbwWvm5TiWSmZGM1l5mIPWwdUX2NW/YceCUCX/FzyFlxF5Rru
-         bO9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VopeNteg8qTfq7SnHIn61T/3OkDE4RtaebULuCvY+/I=;
-        b=wJU0eFXlkFPJofXcxNDKwXBHRftH8DH5lCF6Gzowd9mHyFiFcDVA8j+Mq+6TeEbFi4
-         Lb2cqNq+uaMVeoQ5oVfF1cQ5EjEKlv2jFXaGUlWolC3lBdvj8Jd/a2Y4SnzIZnYAwbRq
-         a9eC1Ct2EblfQwCzOc2k6KkZDQ51VZnFoO5voQnX7qkOSyJ2u1corORme5XgXaHbpGDB
-         MkDEhaI6UTMC0mogzkxnt7Eg2o7gngW/1OtgYgdZU9sbHxUvRcPwQO4nNPSEaFL1LZRR
-         dpeIvknFSJmMxtH7nF+IoYy5uS7B0peD56WfQ9mjO2EO/ad73k45w4D6ZSjR1ubO4QFf
-         qwzA==
-X-Gm-Message-State: AFqh2koaaI63sA8d6yRKlc2yiZUJf3RfL31B0x99xLkbSPIHir75AozH
-        2uZuwLrx4VcLBO1zxc3WOGV20kMVJf77X0VS
-X-Google-Smtp-Source: AMrXdXtgcBNmHjgIGJqtfF0s5UCY0VKKpQfiu8K1qA4fIm76Ej3VBVtySDwOWxgdId+GEfMtA0JpnA==
-X-Received: by 2002:a6b:8f82:0:b0:6eb:da60:be0b with SMTP id r124-20020a6b8f82000000b006ebda60be0bmr22779039iod.4.1672439588657;
-        Fri, 30 Dec 2022 14:33:08 -0800 (PST)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id k130-20020a6bba88000000b006e0577610e2sm8269658iof.45.2022.12.30.14.33.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 14:33:08 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: ipa: use proper endpoint mask for suspend
-Date:   Fri, 30 Dec 2022 16:33:04 -0600
-Message-Id: <20221230223304.2137471-1-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Fri, 30 Dec 2022 17:41:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24B7F78;
+        Fri, 30 Dec 2022 14:41:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ED3BB81C06;
+        Fri, 30 Dec 2022 22:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32887C433EF;
+        Fri, 30 Dec 2022 22:41:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672440060;
+        bh=modTSy1vCT2gxH29EjhljDH3rQB/B9z2JuOf7c3W/Vs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P9PsFTGCH8xdqF06N8P2gxEMkzdfo/EXRCu7Yg6ul/QolpSWDtq0nxMgLzDEDR1E5
+         D6rIzfd31blvFPlHkMdN+aXVbqpAg+e9ZQLqSbb/AxLEpK7JMOAuleJ22B6RzgM/At
+         nEItP74/XPAUXP887dP8FsW/fD/5/h50Ux/QjSutfOq+gS8utrEWVIHs1mNY/YI2tH
+         e7XhH1MX9xLKdGwXlDHmm1WcWTo5XMQw/0yJASZQ2K69WYAy68TwtB92NbcMDJ5PFZ
+         ux+uwNR+k8wNyFsgO4PR5HrVkO2HljdO1TvnAe5i++JtGOc2XqxnqGK69plZ0p/4kH
+         0Q2Nlwl1ARJ5Q==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pBO3d-00FxL1-Ot;
+        Fri, 30 Dec 2022 22:40:57 +0000
+Date:   Fri, 30 Dec 2022 22:39:36 +0000
+Message-ID: <87v8lsect3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bernhard =?UTF-8?B?Um9zZW5rcsOkbnplcg==?= <bero@baylibre.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        chunfeng.yun@mediatek.com, linus.walleij@linaro.org,
+        lee@kernel.org, tglx@linutronix.de,
+        angelogioacchino.delregno@collabora.com
+Subject: Re: [PATCH v6 7/7] arm64: dts: mediatek: Initial mt8365-evk support
+In-Reply-To: <20221230203541.146807-8-bero@baylibre.com>
+References: <20221230203541.146807-1-bero@baylibre.com>
+        <20221230203541.146807-8-bero@baylibre.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: bero@baylibre.com, linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, gregkh@linuxfoundation.org, chunfeng.yun@mediatek.com, linus.walleij@linaro.org, lee@kernel.org, tglx@linutronix.de, angelogioacchino.delregno@collabora.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,44 +73,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is now possible for a system to have more than 32 endpoints.  As
-a result, registers related to endpoint suspend are parameterized,
-with 32 endpoints represented in one more registers.
+On Fri, 30 Dec 2022 20:35:41 +0000,
+Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com> wrote:
+>=20
+> From: Fabien Parent <fparent@baylibre.com>
+>=20
+> This adds minimal support for the Mediatek 8365 SOC and the EVK reference
+> board, allowing the board to boot to initramfs with serial port I/O.
+>=20
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> [bero@baylibre.com: Removed parts depending on drivers that aren't upstre=
+am yet, cleanups, add CPU cache layout, add systimer]
+> Signed-off-by: Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com>
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
 
-In ipa_interrupt_suspend_control(), the IPA_SUSPEND_EN register
-offset is determined properly, but the bit mask used still assumes
-the number of enpoints won't exceed 32.  This is a bug.  Fix it.
+[...]
 
-Fixes: f298ba785e2d ("net: ipa: add a parameter to suspend registers")
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_interrupt.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> +	soc {
+> +		#address-cells =3D <2>;
+> +		#size-cells =3D <2>;
+> +		compatible =3D "simple-bus";
+> +		ranges;
+> +
+> +		gic: interrupt-controller@c000000 {
+> +			compatible =3D "arm,gic-v3";
+> +			#interrupt-cells =3D <4>;
 
-diff --git a/drivers/net/ipa/ipa_interrupt.c b/drivers/net/ipa/ipa_interrupt.c
-index a49f66efacb87..d458a35839cce 100644
---- a/drivers/net/ipa/ipa_interrupt.c
-+++ b/drivers/net/ipa/ipa_interrupt.c
-@@ -132,10 +132,10 @@ static void ipa_interrupt_suspend_control(struct ipa_interrupt *interrupt,
- 					  u32 endpoint_id, bool enable)
- {
- 	struct ipa *ipa = interrupt->ipa;
-+	u32 mask = BIT(endpoint_id % 32);
- 	u32 unit = endpoint_id / 32;
- 	const struct ipa_reg *reg;
- 	u32 offset;
--	u32 mask;
- 	u32 val;
- 
- 	WARN_ON(!test_bit(endpoint_id, ipa->available));
-@@ -148,7 +148,6 @@ static void ipa_interrupt_suspend_control(struct ipa_interrupt *interrupt,
- 	offset = ipa_reg_n_offset(reg, unit);
- 	val = ioread32(ipa->reg_virt + offset);
- 
--	mask = BIT(endpoint_id);
- 	if (enable)
- 		val |= mask;
- 	else
--- 
-2.34.1
+Why 4 cells? All the SPIs routed via sysirq are perfectly happy with 3
+cells, and all the PPIs have 0 for the 4th cell (none of them use any
+form of partitioning that'd require 4 cells). So where is this coming
+from?
 
+> +			interrupt-parent =3D <&gic>;
+> +			interrupt-controller;
+> +			reg =3D <0 0x0c000000 0 0x80000>, <0 0x0c080000 0 0x80000>;
+> +
+
+The first region is obviously wrong (512kB for the distributor?
+that's... most generous, but the architecture states that it is 64kB,
+and that's wasteful enough).
+
+This is also missing the GICC/GICH/GICV regions that Cortex-A53
+implements, and that must be provided as per the binding.
+
+> +			interrupts =3D <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
+> +		};
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
