@@ -2,101 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402FE659719
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C343B659715
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 11:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234837AbiL3KBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 05:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S234978AbiL3KBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 05:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbiL3KA4 (ORCPT
+        with ESMTP id S234745AbiL3KBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 05:00:56 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77E219282
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 02:00:54 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pBCC4-000086-SX; Fri, 30 Dec 2022 11:00:52 +0100
-Message-ID: <1c8b2b1b-d6bd-91f4-fec5-47ad3619205e@leemhuis.info>
-Date:   Fri, 30 Dec 2022 11:00:52 +0100
+        Fri, 30 Dec 2022 05:01:36 -0500
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9939519C32;
+        Fri, 30 Dec 2022 02:01:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/XXcsqpwwhzC7dXBuKnRV/g66zh19Xq0hf1OrfkeqS8=; b=UMpUouaYbyb6lFYmh/OQDwAWoM
+        z/4Kej+eMAG6ox29+YT0uvZDThoK9B8F99YFJ+n2HNmAZKuL9DjKA9jQKHkRXs0tG/n1/yU/ud2zI
+        q0xfsvK//rj6alYEdenP3OWbjVcTQverVSA1oLylSuExwD2GUiQgvEeRHqzL21bHCNMX28zkR2H54
+        Fn/Lj9I7d08086BNegBI2vqxhButaW9+XoTwmV8Ez9bg/WWQ/bgwQ8F8UuMDp3QT3ZcFKDiVLHNVh
+        cA62BwI7m5UF67tlE+z1pWKD4gpcEN3ikiaqcaufGkPosrY9+5o9G56c6+VbnVgJebp6I3u/97RQ8
+        dZuyc4KA==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1pBCCa-00Gqsu-51; Fri, 30 Dec 2022 12:01:24 +0200
+Message-ID: <65468c84-fc40-e4e1-0adb-ddfc23ec4fb9@kapsi.fi>
+Date:   Fri, 30 Dec 2022 12:01:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] Revert "ASoC: soc-pcm: Don't zero TDM masks in
- __soc_pcm_open()"
-Content-Language: en-US, de-DE
-To:     nickel@altlinux.org
-Cc:     linux-kernel@vger.kernel.org, Oleg Obidin <obidinog@basealt.ru>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20221230093454.468857-1-nickel@altlinux.org>
- <20221230093454.468857-2-nickel@altlinux.org> <Y661FSRlfUFeXB26@kroah.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <Y661FSRlfUFeXB26@kroah.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] drm/tegra: submit: No need for Null pointer check before
+ kfree
+Content-Language: en-US
+To:     Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc:     Deepak R Varma <drv@mailo.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-tegra@vger.kernel.org
+References: <Y6sn7XptKyk5cbrA@qemulion>
+ <864f2fdd-4289-a178-bbf1-c2a6a579c58c@kapsi.fi> <Y6w/4IzoMFsVnCmu@qemulion>
+ <280170a7-de12-f362-cda3-11208ead0a88@kapsi.fi>
+ <20221230091501.GA1285371@linux.intel.com>
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+In-Reply-To: <20221230091501.GA1285371@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1672394454;95d74a0b;
-X-HE-SMSGID: 1pBCC4-000086-SX
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30.12.22 10:53, Greg KH wrote:
-> On Fri, Dec 30, 2022 at 12:30:53PM +0300, nickel@altlinux.org wrote:
->> From: Nikolai Kostrigin <nickel@altlinux.org>
+On 12/30/22 11:15, Stanislaw Gruszka wrote:
+> On Wed, Dec 28, 2022 at 03:17:59PM +0200, Mikko Perttunen wrote:
+>> On 12/28/22 15:08, Deepak R Varma wrote:
+>>> On Wed, Dec 28, 2022 at 02:28:54PM +0200, Mikko Perttunen wrote:
+>>>> On 12/27/22 19:14, Deepak R Varma wrote:
+>>>>> kfree() & vfree() internally perform NULL check on the pointer handed
+>>>>> to it and take no action if it indeed is NULL. Hence there is no need
+>>>>> for a pre-check of the memory pointer before handing it to
+>>>>> kfree()/vfree().
+>>>>>
+>>>>> Issue reported by ifnullfree.cocci Coccinelle semantic patch script.
+>>>>>
+>>>>> Signed-off-by: Deepak R Varma <drv@mailo.com>
+>>>>> ---
+>>>>>     drivers/gpu/drm/tegra/submit.c | 4 ++--
+>>>>>     1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/tegra/submit.c b/drivers/gpu/drm/tegra/submit.c
+>>>>> index 066f88564169..06f836db99d0 100644
+>>>>> --- a/drivers/gpu/drm/tegra/submit.c
+>>>>> +++ b/drivers/gpu/drm/tegra/submit.c
+>>>>> @@ -680,8 +680,8 @@ int tegra_drm_ioctl_channel_submit(struct drm_device *drm, void *data,
+>>>>>     		kfree(job_data->used_mappings);
+>>>>>     	}
+>>>>>
+>>>>> -	if (job_data)
+>>>>> -		kfree(job_data);
+>>>>> +	kfree(job_data);
+>>>>> +
+>>>>>     put_bo:
+>>>>>     	gather_bo_put(&bo->base);
+>>>>>     unlock:
+>>>>> --
+>>>>> 2.34.1
+>>>>>
+>>>>>
+>>>>>
+>>>>
+>>>> It continues to be the case that I think this transform is bad. Same applies
+>>>> to the host1x patch.
+>>>
+>>> Hello Mikko,
+>>> Thank you for responding to the patch proposal. Could you please explain why is
+>>> this bad?
+>>>
+>>> Regards,
+>>> ./drv
+>>>
+>>>>
+>>>> Mikko
+>>>
+>>>
 >>
->> This reverts commit c34db0d6b88b1da95e7ab3353e674f4f574cccee.
+>> Hi,
 >>
->> Sudden sound disappearance was reported for some laptops, e.g.
->> Acer Swift 3 SF314-59-78UR 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+>> it gets rid of visual hints on code paths indicating the possible liveness
+>> of pointer variables. I.e., after the change, whether the pointer can be
+>> NULL or not is more difficult to reason about locally, instead requiring
+>> more global reasoning which is mentally more taxing.
 >>
->> lspci
->> 0000:00:1f.3 Multimedia audio controller: Intel Corporation Tiger Lake-LP Smart Sound Technology Audio Controller (rev 20)
->>         Subsystem: Acer Incorporated [ALI] Device 148c
->>         Flags: bus master, fast devsel, latency 32, IRQ 197, IOMMU group 12
->>         Memory at 601f270000 (64-bit, non-prefetchable) [size=16K]
->>         Memory at 601f000000 (64-bit, non-prefetchable) [size=1M]
->>         Capabilities: [50] Power Management version 3
->>         Capabilities: [80] Vendor Specific Information: Len=14 <?>
->>         Capabilities: [60] MSI: Enable+ Count=1/1 Maskable- 64bit+
->>         Kernel driver in use: sof-audio-pci
->>
->> Bisection revealed the commit being reverted.
->>
->> Reported-by: Oleg Obidin <obidinog@basealt.ru>
->> Link: https://bugzilla.altlinux.org/44690
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216861
->> Signed-off-by: Nikolai Kostrigin <nickel@altlinux.org>
->> ---
->>  sound/soc/soc-pcm.c | 5 +++++
->>  1 file changed, 5 insertions(+)
+>> Since C's type system doesn't help with tracking these kinds of things, I
+>> believe it is important to have these kinds of local contextual cues to help
+>> the programmer.
 > 
-> <formletter>
+> I agree with your point of view. But regarding this particular patch,
+> at least on code base I can see, after free_job_data label job_done
+> can not be NULL. So patch seems to be ok, but maybe changelog need to
+> be different
 > 
-> This is not the correct way to submit patches for inclusion in the
-> stable kernel tree.  Please read:
->     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-> for how to do this properly.
-> 
-> </formletter>
+> Regards
+> Stanislaw
 
-Also FWIW & FYI: I earlier today brought the regression in question to
-the attention of the people that are responsible to fix this issue:
-https://lore.kernel.org/all/bebd692d-7d21-6648-6b7a-c91063bb51c2@leemhuis.info/
+It can be NULL; see:
 
-With a bit of luck they will soon look into this and fix it, but given
-the time of year it might take a day or two longer than usual...
+         job->user_data = job_data;
+         job->release = release_job;
+         job->timeout = 10000;
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+         /*
+          * job_data is now part of job reference counting, so don't release
+          * it from here.
+          */
+         job_data = NULL;
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+If we go into free_job_data after this code (which happens if there is 
+no error, or if host1x_job_submit fails), job_data will be NULL.
+
+The memory is instead released in the 'put_job' label; host1x_job_put 
+ends up calling release_job, which does the kfree.
+
+(Yes, it is rather complicated..)
+
+Thanks,
+Mikko
