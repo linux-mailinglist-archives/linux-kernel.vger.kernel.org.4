@@ -2,47 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1DB659B82
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 19:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FF8659B88
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 19:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235071AbiL3SuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 13:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S235449AbiL3SvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 13:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235450AbiL3SuK (ORCPT
+        with ESMTP id S235408AbiL3SvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 13:50:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B261AD82;
-        Fri, 30 Dec 2022 10:50:09 -0800 (PST)
+        Fri, 30 Dec 2022 13:51:05 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02E25F85;
+        Fri, 30 Dec 2022 10:51:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C80DD61B76;
-        Fri, 30 Dec 2022 18:50:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02AC7C433EF;
-        Fri, 30 Dec 2022 18:50:07 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 080AFCE1752;
+        Fri, 30 Dec 2022 18:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 484AAC433EF;
+        Fri, 30 Dec 2022 18:51:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672426208;
-        bh=6U1QtAg/fnbIKQ7BjeKrptun4t3AzEhRj/fvZlEBeLI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ruzzPgB/hftcNihTSwd6QXLW3eZ4j2qvaXJ6TT/58/btkPBGLMAf4RvsKNAPkUydQ
-         1ux+MCf0l1qJOduK5fib2ajmotTx0dgj+YWoYVJW/ZAsvFwAM37geSwptqdKP6Q0Cj
-         GJuIgP1LnWCPusb80b85g6dlxneTqy8oeSaLyUiXEV18YKv+G5bAt+IdEzkadxoBhp
-         5T/xTM/UJVLd2GrEsuAAlcKbqgSiSGfO1/wyMegRrbuJHLV87l2nNtAPf/bn0tyARj
-         9sNNb+2VrX6WcATjN9rbQGkLmB3XfWImPVTm1smlRm6baHT5kZNF0A2DT22wFITeJ/
-         eC5aEI0x7XJgg==
-Date:   Fri, 30 Dec 2022 12:50:06 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Zeno Davatz <zdavatz@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bruno Moreira-Guedes <brunodout.dev@gmail.com>
-Subject: Re: [Bug 216859] New: PCI bridge to bus boot hang at enumeration
-Message-ID: <20221230185006.GA695815@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221228184234.GA530399@bhelgaas>
+        s=k20201202; t=1672426260;
+        bh=1gkjexlbXixD/Ce8m9KezHD+yhOtdTHY76LnIQuHK9o=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=PjMP7l74/gH0jQwNw8DM5o31c5fQ2WSLCjA5f1pgVfUq3g+EgmcWr/evqxAz7R9fO
+         dkpff5MFeK8rxWb27pY+YYnKPDPlPOm9rZ0G6PY7jVYMOpnnjzvzgu1upAopGbiAY1
+         Q0/b1HxHlFH6mRUcLV77dWQ2YNkK1zzMRs+Zn9rvpBU99OxPgb32cp3dfwqunW8XDX
+         fcm8yHvzl1vi+Xb+fyvz0A33fKaL++WhqphCvcvNFbHAuRDGXZcn9K9/EWm8yRI/yL
+         drz56D8WlXICaRMa4mXY1fhwOPZkDrCxLodNE1OTWv97dcwrhnnv8lcZLgFa7vk0Io
+         sy3/mYgm9RFYg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3172EC395DF;
+        Fri, 30 Dec 2022 18:51:00 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI fixes for v6.2-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0iP4EgejNBO8EXejaSObSbpeuOh+vTz8CAvfu8bMXXTOQ@mail.gmail.com>
+References: <CAJZ5v0iP4EgejNBO8EXejaSObSbpeuOh+vTz8CAvfu8bMXXTOQ@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0iP4EgejNBO8EXejaSObSbpeuOh+vTz8CAvfu8bMXXTOQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.2-rc2
+X-PR-Tracked-Commit-Id: 0948a9ef1d59d1bc7fae29f32058e463bbff4a6c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c8451c141e07a8d05693f6c8d0e418fbb4b68bb7
+Message-Id: <167242626019.31406.3835683663655257393.pr-tracker-bot@kernel.org>
+Date:   Fri, 30 Dec 2022 18:51:00 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,45 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Bruno, to include you here as well as the bugzilla]
+The pull request you sent on Fri, 30 Dec 2022 17:34:40 +0100:
 
-On Wed, Dec 28, 2022 at 12:42:34PM -0600, Bjorn Helgaas wrote:
-> On Wed, Dec 28, 2022 at 06:42:38PM +0100, Zeno Davatz wrote:
-> > On Wed, Dec 28, 2022 at 1:02 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Wed, Dec 28, 2022 at 08:37:52AM +0000, bugzilla-daemon@kernel.org wrote:
-> > > > https://bugzilla.kernel.org/show_bug.cgi?id=216859
-> > >
-> > > >            Summary: PCI bridge to bus boot hang at enumeration
-> > > >     Kernel Version: 6.1-rc1
-> > > > ...
-> > >
-> > > > With Kernel 6.1-rc1 the enumeration process stopped working for me,
-> > > > see attachments.
-> > > >
-> > > > The enumeration works fine with Kernel 6.0 and below.
-> > > >
-> > > > Same problem still exists with v6.1. and v6.2.-rc1
-> > >
-> > > Thank you very much for your report, Zeno!
-> > >
-> > > v6.0 works, v6.1-rc1 fails.  Would you mind booting v6.1-rc1 with the
-> > > "ignore_loglevel initcall_debug" kernel parameters and taking a photo
-> > > when it hangs?
-> > 
-> > I will try this after Januar 7th 2023.
-> 
-> Sounds good, thanks!
-> 
-> > > How did you conclude that the hang is related to a PCI bridge?  I see
-> > > recent PCI messages in the photo, but it looks like the last message
-> > > is from NFS, so I'm wondering if I'm missing some context.  The v6.0
-> > > dmesg shows several other ntfs, fuse, JFS, etc messages before more
-> > > PCI-related things.  Anyway, the "initcall_debug" might help us narrow
-> > > it down a bit.
-> > 
-> > I did not really conclude that. I just saw "PCI" as one of the last
-> > messages being outputted before the boot process stopped.
-> 
-> OK.  We'll figure it out!
-> 
-> Bjorn
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.2-rc2
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c8451c141e07a8d05693f6c8d0e418fbb4b68bb7
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
