@@ -2,119 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F006659A67
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F05659A6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 17:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiL3QK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 11:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
+        id S235140AbiL3QMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 11:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiL3QKX (ORCPT
+        with ESMTP id S234982AbiL3QMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 11:10:23 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B701BEA2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:10:22 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id p36so32242745lfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:10:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7VpJq3uaQ6VSJbXoQmKZPgl7VgJ9y1FhwzpD47l7pvg=;
-        b=PNDQXlY9X0Hd72HAFMeIHDHE6+sS8CQHIpzf8ZXYIZKGTGCbYCoVPAzOFvUcqza6Z4
-         y702O9KuZMyH43HsAUOwEienG9YdpZUrmlHfcKE2FNh0LF1U31wp1qGAyvgM/AaPfHon
-         2uPBS96XOxmRILId/f7fzKBJ5/sxOWTlcSWynziJefvXNVF41ZotLGsywCJKDO4Lb6mm
-         veXmoJw483pUePpvkCXRfmeT44hsI6ckhXPx85Z0t01MtGDVUjI0jwvTSbOYq6/9DqUG
-         bK/4SdJp1x8u7WzgA+/CMwqXw5ej6C+XwzIDKh8XRjgyVrvY86vte8bu9gcvZ1wzBVJy
-         AZjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7VpJq3uaQ6VSJbXoQmKZPgl7VgJ9y1FhwzpD47l7pvg=;
-        b=NLMWdCrZST5uWwl9Oy0doNncPrXoPpaz55JVE8ECfJBqe6JKt9eciHUVO6Qgo1l38I
-         ymp1KrrFBnCf0vOo30a5drAAOX+RFt86Hp68oJCUhwhH/6p8LPhMvz0ROBh7MjRtFCI8
-         SnCLMhxfGVeycEYiyzkmXyG773z+Z4piNbq90Nh6eDuFnWXFDcQWgCsF+Xtff9Tzt9zy
-         6YsYGMsIVXnQ36sgnsoKVlbFdCbgjf/GtVBbBeoZEiwl9QbbI7pfVGQagVG4y5DYNUQv
-         nKAVYge/xqaELVyYMwRfleA+YW+3hsCJbwD+uOc0+HwNeMJ3sSAfGF5y5gTFe7bongmF
-         VfJA==
-X-Gm-Message-State: AFqh2koHr5x9/1/SLIWY4uFc/dY2NgVCbUHdqXZcx/97VteQ91CGFxjM
-        //ysyDjYwBWLAGiKCwzfjH/Nfw==
-X-Google-Smtp-Source: AMrXdXsDKIiMJXFKJxuCcmocpg4ulyZr2lszHJLW+UVp83brU2ok80VlZpbYNRKg95MOqvX87HQWvQ==
-X-Received: by 2002:ac2:59c9:0:b0:4c4:6a8e:24 with SMTP id x9-20020ac259c9000000b004c46a8e0024mr9537798lfn.5.1672416620742;
-        Fri, 30 Dec 2022 08:10:20 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id u13-20020a2e9f0d000000b0027fe42c38f7sm120950ljk.134.2022.12.30.08.10.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Dec 2022 08:10:20 -0800 (PST)
-Message-ID: <99f07cb2-b299-f4ac-f479-177090a2c541@linaro.org>
-Date:   Fri, 30 Dec 2022 17:10:19 +0100
+        Fri, 30 Dec 2022 11:12:33 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF7B1AA18
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 08:12:32 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pBHzS-0006uc-RL; Fri, 30 Dec 2022 17:12:14 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pBHzN-0000y1-JX; Fri, 30 Dec 2022 17:12:09 +0100
+Date:   Fri, 30 Dec 2022 17:12:09 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Primoz Fiser <primoz.fiser@norik.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        upstream@lists.phytec.de, Marco Felsch <m.felsch@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        francesco.dolcini@toradex.com, wsa@kernel.org
+Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
+Message-ID: <20221230161209.GA14776@pengutronix.de>
+References: <20221216084511.2576786-1-primoz.fiser@norik.com>
+ <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
+ <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
+ <20221216110227.GA12327@pengutronix.de>
+ <20221216111308.wckibotr5d3q6ree@pengutronix.de>
+ <5c2e0531-e7c3-1b37-35ed-c8e9795a0d18@norik.com>
+ <Y5xpt6J01Boec6Xr@francesco-nb.int.toradex.com>
+ <41991ce2-3e88-5afc-6def-6e718d624768@norik.com>
+ <Y674eoNsHtAeG7IP@francesco-nb.int.toradex.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8250: Sort audio hw nodes
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221230135044.287874-1-konrad.dybcio@linaro.org>
- <20221230135044.287874-3-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221230135044.287874-3-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y674eoNsHtAeG7IP@francesco-nb.int.toradex.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/12/2022 14:50, Konrad Dybcio wrote:
-> Half of the audio hardware nodes were not sorted properly. Fix that.
+On Fri, Dec 30, 2022 at 03:40:58PM +0100, Francesco Dolcini wrote:
+> +Wolfram
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
+> On Wed, Dec 28, 2022 at 09:01:46AM +0100, Primoz Fiser wrote:
+> > On 16. 12. 22 13:51, Francesco Dolcini wrote:
+> > > On Fri, Dec 16, 2022 at 01:23:29PM +0100, Primoz Fiser wrote:
+> > > > The only solid point in the thread seems to be that in that case we are not
+> > > > covering up the potential i2c hardware issues?
+> > > 
+> > > I believe that in this case we should just have a warning in the kernel.
+> > > The retry potentially work-around a transient issue and we do not hide any hardware
+> > > issue at the same time. It seems an easy win-win solution.
+> > 
+> > I would agree about throwing a warning message in retry case.
+> > 
+> > Not sure how would it affect other i2c bus drivers using retries > 0.
+> > Retries might be pretty rare with i2c-imx but some other drivers set this to
+> > 5 for example. At least using _ratelimited printk is a must using this
+> > approach.
+> 
+> Wolfram, Uwe, Oleksij
+> 
+> Would it be acceptable to have a warning when we have I2C retries, and
+> with that in place enabling retries on the imx driver?
+> 
+> It exists hardware that requires this to work correctly,
 
+Well, this is persistent confusion in this monolog. It will not make it
+correctly.
 
-Just a note:
+> and at a
+> minimum setting the retry count from user space is not going to solve
+> potential issues during initial driver probe.
 
-> +		wsamacro: codec@3240000 {
-> +			compatible = "qcom,sm8250-lpass-wsa-macro";
-> +			reg = <0 0x03240000 0 0x1000>;
-> +			clocks = <&audiocc LPASS_CDC_WSA_MCLK>,
-> +				 <&audiocc LPASS_CDC_WSA_NPL>,
-> +				 <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&aoncc LPASS_CDC_VA_MCLK>,
-> +				 <&vamacro>;
-> +			clock-names = "mclk",
-> +				      "npl",
-> +				      "macro",
-> +				      "dcodec",
-> +				      "va",
-> +				      "fsgen";
-> +
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&wsa_swr_active>;
-> +
-> +			#clock-cells = <0>;
-> +			clock-frequency = <9600000>;
+I assume it is not clear from programmer point of view. Lets try other way:
 
-This will conflict:
-https://lore.kernel.org/all/20221224154255.43499-3-krzysztof.kozlowski@linaro.org/
+- The I2C slave could not correctly interpret the data on SDA because the SDA
+  high or low-level voltages do not reach its appropriate input
+  thresholds.
 
-https://lore.kernel.org/all/20221225115844.55126-3-krzysztof.kozlowski@linaro.org/
+This means:
 
-Best regards,
-Krzysztof
+You have this:
 
+    /-\    /-\ ----- 2.5Vcc
+___/   \__/   \___
+
+Instead of this:
+
+     /-\     /-\ ----- 3.3Vcc
+    /  \    /   \
+___/    \__/     \___
+
+This is bad, because master or slave will not be able to interpret the pick level
+correctly. It may see some times 0 instead of 1. This means, what ever we are
+writing we are to the slave or reading from the slave is potentially corrupt
+and only __sometimes__ the master was able to detect it. 
+
+- The I2C slave missed an SCL cycle because the SCL high or low-level voltages
+  do not reach its appropriate input thresholds.
+
+This means, the bus frequency is too high for current configured or physical PCB
+designed. So, you will have different kind of corruptions and some times they
+will be detected. 
+
+- The I2C slave accidently interpreted a spike etc. as an SCL cycle.
+
+This means the noise level is to high. The driver strange should be increased
+or PCB redesign should be made. May be there are more options. If not done,
+data corruption can be expected.
+
+None of this issue can be "fixed" by retries or made more "robust".
+Doing more retries means: we do what ever we do until the system was not able to
+detect the error.
+
+> To me the only reasonable solution is to have the retry enabled with a
+> sensible number (3? 5?), however there is a concern that this might
+> hide real hardware issues.
+ 
+There is real hardware issue. 
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
