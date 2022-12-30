@@ -2,156 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B265659BC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 20:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CD5659BD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 21:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiL3TyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 14:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
+        id S235064AbiL3UJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 15:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiL3TyT (ORCPT
+        with ESMTP id S231210AbiL3UJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 14:54:19 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A273B11A1F
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 11:54:17 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 38F521EC0453;
-        Fri, 30 Dec 2022 20:54:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672430056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4d9mZokcf7UfkVL0VJHyHQx1vADaAzgo+xzFXO0gE5U=;
-        b=W3nWTuFC4+SoGZ4dg81fPRaAAOUn4LHr8f0gnB3ufyE6nEkFfLvxLQNpkbhC44gAyUUF6Z
-        7mUlobY/V4ClDBHLImUQq70yjMtiydadbCZ+vL782EL3ew4sB2C7+rqkiqROk6kI48xHlF
-        Y9y8ACSasRhvBCzpFWIu1WVIfz2q/vk=
-Date:   Fri, 30 Dec 2022 20:54:11 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, pbonzini@redhat.com,
-        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
-        philmd@linaro.org
-Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
- setup_data
-Message-ID: <Y69B40T9kWfxZpmf@zn.tnic>
-References: <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org>
- <Y6xvJheSYC83voCZ@zx2c4.com>
- <Y6x1knb8udpSyMSp@zx2c4.com>
- <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com>
- <Y6z765zHrQ6Rl/0o@zx2c4.com>
- <AF921575-0968-434A-8B46-095B78C209C1@zytor.com>
- <Y62MdawGaasXmoVL@zn.tnic>
- <Y68Js5b0jW/2nLU4@zx2c4.com>
- <Y68Zf/MKmX3Rr18E@zn.tnic>
- <CAHmME9oPUJemVRvO3HX0q4BJGTFuzbLYANeizuRcNq2=Ykk1Gg@mail.gmail.com>
+        Fri, 30 Dec 2022 15:09:21 -0500
+X-Greylist: delayed 594 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Dec 2022 12:09:18 PST
+Received: from mx07lb.world4you.com (mx07lb.world4you.com [81.19.149.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A74D1AA2E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 12:09:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5LxiZbNutuBjQgn8LK2YxJds1kf/AkLT+85DSs2psfU=; b=slM+tjtkNgHxIJb0pFROt0dcTI
+        YY4MxdTwbEJSsfWAQPGB/dxsQIbdKAc1GV40dWnoLdjzx2CLwfXbRWd/t9JT9IQohVSSwsYBtlRr6
+        NdrSd1LRlR2OKkmolnw5zfO7foYzAPSXYfQ1t+lJK2tLQN7HOZvdR/YGO4pUe6YB+6nk=;
+Received: from [88.117.53.17] (helo=hornet.engleder.at)
+        by mx07lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gerhard@engleder-embedded.com>)
+        id 1pBLXF-0003ry-QX; Fri, 30 Dec 2022 20:59:21 +0100
+From:   Gerhard Engleder <gerhard@engleder-embedded.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     apw@canonical.com, joe@perches.com, dwaipayanray1@gmail.com,
+        lukas.bulwahn@gmail.com,
+        Gerhard Engleder <gerhard@engleder-embedded.com>
+Subject: [PATCH] checkpatch: Ignore ETHTOOL_LINK_MODE_ enum values
+Date:   Fri, 30 Dec 2022 20:59:07 +0100
+Message-Id: <20221230195907.3959-1-gerhard@engleder-embedded.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9oPUJemVRvO3HX0q4BJGTFuzbLYANeizuRcNq2=Ykk1Gg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-AV-Do-Run: Yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 06:07:24PM +0100, Jason A. Donenfeld wrote:
-> Look closer at the boot process. The compressed image is initially at
-> 0x100000, but it gets relocated to a safer area at the end of
-> startup_64:
+Since commit 4104a20646 enum values like
+ETHTOOL_LINK_MODE_Asym_Pause_BIT are ignored. But there are other enums
+like ETHTOOL_LINK_MODE_1000baseT_Full_BIT, which are not ignored
+because of the not matching '1000baseT' substring.
 
-That is the address we're executing here from, rip here looks like 0x100xxx.
+Extend regex to match also substrings like '1000baseT'.
 
-> /*
->  * Copy the compressed kernel to the end of our buffer
->  * where decompression in place becomes safe.
->  */
->         pushq   %rsi
->         leaq    (_bss-8)(%rip), %rsi
->         leaq    rva(_bss-8)(%rbx), %rdi
+Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
+---
+ scripts/checkpatch.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-when you get to here, it looks something like this:
-
-        leaq    (_bss-8)(%rip), %rsi		# 0x9e7ff8
-        leaq    rva(_bss-8)(%rbx), %rdi		# 0xc6eeff8
-
-so the source address is that _bss thing and we copy...
-
->         movl    $(_bss - startup_32), %ecx
->         shrl    $3, %ecx
->         std
-
-... backwards since DF=1.
-
-Up to:
-
-# rsi = 0xffff8
-# rdi = 0xbe06ff8
-
-Ok, so the source address is 0x100000. Good.
-
-> HOWEVER, qemu currently appends setup_data to the end of the
-> compressed kernel image,
-
-Yeah, you mean the kernel which starts executing at 0x100000, i.e., that part
-which is compressed/head_64.S and which does the above and the relocation etc.
-
-> and this part isn't moved, and setup_data links aren't walked/relocated. So
-> that means the original address remains, of 0x100000.
-
-See above: when it starts copying the kernel image backwards to a higher
-address, that last byte is at 0x9e7ff8 so I'm guessing qemu has put setup_data
-*after* that address. And that doesn't get copied ofc.
-
-So far, so good.
-
-Now later, we extract the compressed kernel created with the mkpiggy magic:
-
-input_data:
-.incbin "arch/x86/boot/compressed/vmlinux.bin.gz"
-input_data_end:
-
-by doing
-
-/*
- * Do the extraction, and jump to the new kernel..
- */
-
-        pushq   %rsi                    /* Save the real mode argument */	0x13d00
-        movq    %rsi, %rdi              /* real mode address */			0x13d00
-        leaq    boot_heap(%rip), %rsi   /* malloc area for uncompression */	0xc6ef000
-        leaq    input_data(%rip), %rdx  /* input_data */			0xbe073a8
-        movl    input_len(%rip), %ecx   /* input_len */				0x8cfe13
-        movq    %rbp, %r8               /* output target address */		0x1000000
-        movl    output_len(%rip), %r9d  /* decompressed length, end of relocs */
-        call    extract_kernel          /* returns kernel location in %rax */
-        popq    %rsi
-
-(actual addresses at the end.)
-
-Now, when you say you triplefault somewhere in initialize_identity_maps() when
-trying to access setup_data, then if you look a couple of lines before that call
-we do
-
-	call load_stage2_idt
-
-which sets up a boottime #PF handler do_boot_page_fault() and it actually does
-call kernel_add_identity_map() so *actually* it should map any unmapped
-setup_data addresses.
-
-So why doesn't it do that and why do you triplefault?
-
-Hmmm.
-
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 78cc595b98ce..861fa547001e 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -5780,7 +5780,7 @@ sub process {
+ 			if ($var !~ /^$Constant$/ &&
+ 			    $var =~ /[A-Z][a-z]|[a-z][A-Z]/ &&
+ #Ignore some autogenerated defines and enum values
+-			    $var !~ /^(?:[A-Z]+_){1,5}[A-Z]{1,3}[a-z]/ &&
++			    $var !~ /^(?:[A-Z]+_){1,5}([A-Z]{1,3}[a-z]|[0-9]+[a-z]+[A-Z])/ &&
+ #Ignore Page<foo> variants
+ 			    $var !~ /^(?:Clear|Set|TestClear|TestSet|)Page[A-Z]/ &&
+ #Ignore SI style variants like nS, mV and dB
 -- 
-Regards/Gruss,
-    Boris.
+2.30.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
