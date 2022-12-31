@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A390765A753
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 23:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0908865A757
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 23:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235843AbiLaWCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 17:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S235926AbiLaWCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 17:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiLaWB5 (ORCPT
+        with ESMTP id S231986AbiLaWB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 31 Dec 2022 17:01:57 -0500
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C7264C6;
-        Sat, 31 Dec 2022 14:01:53 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 20D4F5C00AF;
-        Sat, 31 Dec 2022 17:01:52 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2227864D0;
+        Sat, 31 Dec 2022 14:01:54 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 64E305C00B7;
+        Sat, 31 Dec 2022 17:01:53 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 31 Dec 2022 17:01:52 -0500
+  by compute2.internal (MEProxy); Sat, 31 Dec 2022 17:01:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672524112; x=1672610512; bh=Of
-        0xMXPiylA4jEfEw42JIYQDYz/9F74OJjr6iVQvau4=; b=ZtVwNinm/RpM0BF/8n
-        PJsJKk0KygymBCIAtE3iFPJgywtNXNjJHhXRmg2JPeUpEQUlHn2MGHyOYURQdEDz
-        qC7f20sSNOczGEi0szqVyko9sKEw8IXB7Da5HSJC2iCvBdbZzm2qobf/y8QM8Dge
-        8EVfYoqn28YJ8HkEtuIKvaPX7TXQBHcf9E+uY67NZk/4Dv4y3g5H+v0BKh8CyWJf
-        uDAwFpO+XTi+5rpxtoSv5ka7qg0VESI5FqLH/ljKqtdrtiQ0Dv/k2hPVRfQOUrD+
-        747ghfg/q89gUP5a0xKVxVjqL/CEdgd59goHus+aH7G8U6W2xhIDYoeq/+O3+h2T
-        MBDA==
+        :subject:subject:to:to; s=fm3; t=1672524113; x=1672610513; bh=6y
+        DoLylCXIBG0JOPVXlZF0Hhucnb5FXKeM+guk0B0B8=; b=Zaz55lY9MrczFzGGGz
+        aSKEyyEdQNL6Mzo6N/ym7i5SQ7CXCSX7f4uq+JGxciPCNX81t2/Fjr+9cfd7a2ND
+        kx/Ynj8z7LZhAlJNJcYV0kKBbjppDwhsD7YZ6dEKFzYlCq1dpIuLRh5HWcFiUNiT
+        1xu4Gvw745IMQB4bsGRa14pXq+tZz6KtMRHecqNLZx6MiR0QFDp+baylhko6uezf
+        xY1LfcDUANe0eX9I5Ll4htcecsz32WwT5VYKaFfZnNkjlunJLuJMowylkp+PRGTL
+        kpEIbCTi8hnSg71iMANKdJlS+avLDt3gdPWYnJ9PQqzD+MomI7EZ3lnnG6jUqATO
+        jB2g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672524112; x=1672610512; bh=Of0xMXPiylA4j
-        EfEw42JIYQDYz/9F74OJjr6iVQvau4=; b=OwHK5qO2/4aDZGB5DGZ/hUW7iIeNu
-        RtZV5v/8WuTM+DRux4vF1WzAs2Lsg2+dqHQXo3Egd8vlSicV6k8xE5dTTveBecY/
-        xAfGfWvG02dPvxhZ5+B5l59J+Cs7waj4GCYAFlvTAwekKnumOGd3b2Whn7EiOtNN
-        64HXNlvklQ+vvBr6QiPiGIPJUjeahO1G2wenG2JBhvkyfROXKWdyf/NG2HfWgHoE
-        KbLfubEzbHYBINk7cDcU9n8Qe2jy2n/nahB19neL5c+gmvf9XCVb6hamqjvimtm8
-        QuHvWcIP0P9ABaiQ46tumgR3jeYEG8zSZj5He7vLdyyZXN17mOCHgnq+g==
-X-ME-Sender: <xms:T7GwYzB1Rg8xL_sl_VbihINQ2TubtreQHmZ8My0MBoscDJUgZEcU0A>
-    <xme:T7GwY5ghf74rrxuSMHU7XqTTrWoYp_6PJbFUvt02MQNRzyFXWmwZ0SMc0UzvN6qHs
-    oRXGHS8IzSLTZE-eQ>
-X-ME-Received: <xmr:T7GwY-k10BMt7a-shmDDSnQvIyb4HVD5dCqbKcfvg3IfPR-PYWw84pIFJgWM9tKoU06AQ-ZybdQun4ZfKoFAcyjceuveQN7V8vGbvTpOQSwo6svZwfHQE3b900WScr4K2gRKqA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieekgdduheehucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm2; t=1672524113; x=1672610513; bh=6yDoLylCXIBG0
+        JOPVXlZF0Hhucnb5FXKeM+guk0B0B8=; b=KRfKr7LE3X9tHXYLtaBKaLo3vPm+B
+        5nIl5lxJqXFKG/580orp3Mn1EFPbqEK1k4mmkOuhNNdsZtLIl0c9a40BAggjphrB
+        TpTN1pV400ET6sZEaBGc3mJgIvDzvo4fGBKOIzmBQBp45f5WwsxH21yQpp//bQT0
+        rJy1J/Qjch9v/Xys6cBrLfNvgkdbg+FtOQV5sDneKFz7C46J+lZ/s6Auu5slTb3e
+        4/n3EM2c8VjyguWyPtnooCxWq2cx5OURH7Xy+LwxZ6xtdHdBarebV+gR9c671mta
+        e3WFcBv7J4Zdf250gL/kmlkR8Bs5EIr34sale+k0nJHhZFi3ai3FGKCuA==
+X-ME-Sender: <xms:UbGwY4RdQfj7YC0F-1ekEVPy4HYBzF71loVn3qmXoskBuvbG_zoPbA>
+    <xme:UbGwY1yFf2P7DlIu1XaTnY1z6lSM83Byg5G64DaNqUShR1X0NDoj7XSKzx9_95SSC
+    c2pMyih7neskaKnpA>
+X-ME-Received: <xmr:UbGwY13ITJ9iQj4vaNYQDd8TklAOnlwvgIDK1sLtir9KPHA02e9vP-uIgBH8YZxqd61d-E7hixpjT_6l8s-c9TI9cw6aedF_NEWqv2tAXZyIch8QeP8TASssqy6sUjazbDVlfA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieekgdduheeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieekgdduheehucetufdoteggod
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
     udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:ULGwY1y2xYVyqhRfrpWaB8QXB6YMR0XVv2daCa8Um0xl2Tk6FnPb7A>
-    <xmx:ULGwY4QRGbj-wZhVYzaONRqkcdTwzMCV9QNZVdkl8HqbkJjCwva8kw>
-    <xmx:ULGwY4ap_waPZDn8ytvxG5Mf8NJIhA7tvAqy-E-VdH1apWdfFpkR7A>
-    <xmx:ULGwYxAamVEpoRXdVh6rpqbWNtg5Q8tQQD2DRrTCxwq0leGQQh7khg>
+X-ME-Proxy: <xmx:UbGwY8BJVHB7kW-5GWp8mYXnYlfm9uOiaOByuUl5piLfUS5cqD7xQA>
+    <xmx:UbGwYxiraUe2TccaxQu7wil5NxSK0wsbjefgJ5H6BBIjfM3ELcfc7Q>
+    <xmx:UbGwY4oFvGKGj5DudnKSG2SZF9roAD9tsM7FGhsubFVmfu1J6-mGJA>
+    <xmx:UbGwYwQsB4UHJAaidenD0qNrDXGtNy89VTTs1prTnynqXKndGP4OHw>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 31 Dec 2022 17:01:51 -0500 (EST)
+ 31 Dec 2022 17:01:52 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
@@ -78,9 +78,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 2/3] crypto: sun8i-ce - Add TRNG clock to the D1 variant
-Date:   Sat, 31 Dec 2022 16:01:44 -0600
-Message-Id: <20221231220146.646-3-samuel@sholland.org>
+Subject: [PATCH v2 3/3] riscv: dts: allwinner: d1: Add crypto engine node
+Date:   Sat, 31 Dec 2022 16:01:45 -0600
+Message-Id: <20221231220146.646-4-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221231220146.646-1-samuel@sholland.org>
 References: <20221231220146.646-1-samuel@sholland.org>
@@ -96,14 +96,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At least the D1 variant requires a separate clock for the TRNG.
-Without this clock enabled, reading from /dev/hwrng reports:
-
-   sun8i-ce 3040000.crypto: DMA timeout for TRNG (tm=96) on flow 3
-
-Experimentation shows that the necessary clock is the SoC's internal
-RC oscillator. This makes sense, as noise from the oscillator can be
-used as a source of entropy.
+D1 contains a crypto engine which is supported by the sun8i-ce driver.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
@@ -111,35 +104,32 @@ Signed-off-by: Samuel Holland <samuel@sholland.org>
 Changes in v2:
  - New patch for v2
 
- drivers/crypto/allwinner/sun8i-ce/sun8i-ce-core.c | 1 +
- drivers/crypto/allwinner/sun8i-ce/sun8i-ce.h      | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-core.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-core.c
-index 9f6594699835..a6865ff4d400 100644
---- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-core.c
-+++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-core.c
-@@ -118,6 +118,7 @@ static const struct ce_variant ce_d1_variant = {
- 		{ "bus", 0, 200000000 },
- 		{ "mod", 300000000, 0 },
- 		{ "ram", 0, 400000000 },
-+		{ "trng", 0, 0 },
- 		},
- 	.esr = ESR_D1,
- 	.prng = CE_ALG_PRNG,
-diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce.h b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce.h
-index 8177aaba4434..27029fb77e29 100644
---- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce.h
-+++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce.h
-@@ -105,7 +105,7 @@
+diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+index dff363a3c934..b30b4b1465f6 100644
+--- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
++++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+@@ -378,6 +378,18 @@ sid: efuse@3006000 {
+ 			#size-cells = <1>;
+ 		};
  
- #define MAX_SG 8
- 
--#define CE_MAX_CLOCKS 3
-+#define CE_MAX_CLOCKS 4
- 
- #define MAXFLOW 4
- 
++		crypto: crypto@3040000 {
++			compatible = "allwinner,sun20i-d1-crypto";
++			reg = <0x3040000 0x800>;
++			interrupts = <SOC_PERIPHERAL_IRQ(52) IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_CE>,
++				 <&ccu CLK_CE>,
++				 <&ccu CLK_MBUS_CE>,
++				 <&rtc CLK_IOSC>;
++			clock-names = "bus", "mod", "ram", "trng";
++			resets = <&ccu RST_BUS_CE>;
++		};
++
+ 		mbus: dram-controller@3102000 {
+ 			compatible = "allwinner,sun20i-d1-mbus";
+ 			reg = <0x3102000 0x1000>,
 -- 
 2.37.4
 
