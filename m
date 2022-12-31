@@ -2,151 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D32565A498
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C1165A4A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235605AbiLaNUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 08:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
+        id S235714AbiLaNXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 08:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiLaNT7 (ORCPT
+        with ESMTP id S229905AbiLaNXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 08:19:59 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1D02630
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 05:19:58 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id v3so15716417pgh.4
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 05:19:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z0TzfLVblu11BnOZpdHUHkIFyZ4wNC2FWblphcv+5ss=;
-        b=PUf1gptAuaeOnX85qX4xCkwWEmpJcjpOVT4ZdjI009BSDbgRE3NnmeiYX/rbTw3op7
-         BzCKY1/t7zWqtac7WiKyPVmXDVzm3UdsGSHKWLjynPWFbHrrBBrWvJpqVESbU23BVx2s
-         7/XLXxtrNuWV8nY18BfWA5usXBKhncMfszrp0ZtUFRj7hlgUn7dGMgzePFROIAEPY5ix
-         f/KJcZW576QMIZ6WuJ1tCwCTyKunqjkpgJV/cNK3mtdizH8jD/Tu2zXf2yVEhYeEWUG6
-         ldLY/8prpW8OqsNT/TbVO5etFv9ml0d+ud1gEwWFjNbPDyBlfaAIWK5VSq+IyDBiBNLU
-         2j5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z0TzfLVblu11BnOZpdHUHkIFyZ4wNC2FWblphcv+5ss=;
-        b=TMKtFgsACbQhcpu6bSZAVztU4E6sDUmjJLQ72bROL3JgSwSNjxfHoQGRsWx2l8AMfk
-         rNz2bBnLusHVFwArRwDqFIdN37/45+6CVDYWjz5RuFD65vinkGkSBHUW5qqyHlWWjDKW
-         fmPWlwxrq5mZN+ZrbwKTsB3pZ14uGlf265Keg17HF0eHx5ubBAOwWAFT+Dajqhdditnc
-         OZZrp3rcuqATWtoKa49bVlPOJoA1Tila14OU8hklqUrv2x8zeNJYRkJVhr1ZdYL5FI4E
-         kVpok/D2mjJkKu2NSO6EBVAcRl6fmefuE+rVPcMyL+tlFI31wIZUKqB3SKPwzN954NlF
-         Z37Q==
-X-Gm-Message-State: AFqh2kpm67dFdJAnDWPDSoGr3fWtZjOJn3zoVkAK565338GKMPTReWzZ
-        NHFBY3xhJoKh56tRLBzdIoD06A==
-X-Google-Smtp-Source: AMrXdXsnGhpNhIwF6+O73w+A/1aIoKIM3XFd9Yup95Om3nfHxq99XvBNmmPmfJmkvzRMybJTzURmUA==
-X-Received: by 2002:a62:ae0f:0:b0:577:15e:d9eb with SMTP id q15-20020a62ae0f000000b00577015ed9ebmr54163124pff.1.1672492797674;
-        Sat, 31 Dec 2022 05:19:57 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:1c5e:e3b5:c341:16de:ce17:b857])
-        by smtp.gmail.com with ESMTPSA id i27-20020aa796fb000000b00581a5fd4fa7sm6133415pfq.212.2022.12.31.05.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 05:19:57 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     quic_schowdhu@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, bhupesh.sharma@linaro.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3 connector
-Date:   Sat, 31 Dec 2022 18:49:45 +0530
-Message-Id: <20221231131945.3286639-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        Sat, 31 Dec 2022 08:23:35 -0500
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A68B4A3;
+        Sat, 31 Dec 2022 05:23:33 -0800 (PST)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 2BVDNC0T024452;
+        Sat, 31 Dec 2022 22:23:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2BVDNC0T024452
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1672492993;
+        bh=hA5JdMstmYILZuTW3S9yvFg3QCQeMln5UE4GkP/2L6g=;
+        h=From:Date:Subject:To:Cc:From;
+        b=sNdPxAJdaC1SeWjuMYNaD1mdVNytr2PsZg2rMt8KUnYJ2WqGIdPnaQszY2a929ZJt
+         CfJfT4PDKr4+AWXmtZg4DMcYQqV6rTG5lyL1XPK+mFXF2iXRiSVqPUHqZJBd7dDJn9
+         4TdOyosaSuRGZbgm6k7ovmEX9lC+PCshyI09CDYt3x6KuSGvlRt7OWFqHi2/uwXfCs
+         QdjKejpURuVF2ZDE7QzRk6loy9fnX51N5s5wg8SuCY5aoGc0MvRXGSwGOZALYohnhq
+         ZVwnA0lEELW+4yldIZgK/OUHSygEKAVoYWNzhXji0YrqC3p1ecU2pxuiToH84nHiAd
+         d1OOHeQQck2uQ==
+X-Nifty-SrcIP: [209.85.208.182]
+Received: by mail-lj1-f182.google.com with SMTP id p2so9071213ljn.7;
+        Sat, 31 Dec 2022 05:23:13 -0800 (PST)
+X-Gm-Message-State: AFqh2kopTYYrvrJkSlWoASS+AcFqRtMbIIfB+V4eF8EeFFkAUAKcauvR
+        AaZEV+y7bvUcXt7Jm1eXg+lKL9mp5zNj/220mxM=
+X-Google-Smtp-Source: AMrXdXu6q1r471sijjQKqWZ8qj1JQk/QXWP/iOhLV7Epa+V01RHD3VEjqbyWe7/YzLiKYdPhtgebkJUBL/6nLrbGCnM=
+X-Received: by 2002:a2e:bf18:0:b0:27f:bcdf:453a with SMTP id
+ c24-20020a2ebf18000000b0027fbcdf453amr1682720ljr.116.1672492991686; Sat, 31
+ Dec 2022 05:23:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 31 Dec 2022 22:22:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ66CwHVH+vvqkaRqEn8M46bOSFhyEAOdQfcKeWLxUTUA@mail.gmail.com>
+Message-ID: <CAK7LNAQ66CwHVH+vvqkaRqEn8M46bOSFhyEAOdQfcKeWLxUTUA@mail.gmail.com>
+Subject: [GIT PULL] Kbuild fixes for v6.2-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Embedded USB Debugger(EUD) device tree node for
-SM6115 / SM4250 SoC.
+Hello Linus,
 
-The node contains EUD base register region and EUD mode
-manager register regions along with the interrupt entry.
+Please pull some Kbuild fixes.
 
-Also add the typec connector node for EUD which is attached to
-EUD node via port. EUD is also attached to DWC3 node via port.
+Thank you.
 
-Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
-- This patch is based on my earlier sm6115 usb related changes, which can
-  be seen here:
-  https://lore.kernel.org/linux-arm-msm/20221215094532.589291-1-bhupesh.sharma@linaro.org/
-- This patch is also dependent on my sm6115 eud dt-binding and driver changes
-  sent earlier, which can be seen here:
-  https://lore.kernel.org/linux-arm-msm/20221231130743.3285664-1-bhupesh.sharma@linaro.org/
 
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 37 ++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 030763187cc3f..c775f7fdb7015 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -565,6 +565,37 @@ gcc: clock-controller@1400000 {
- 			#power-domain-cells = <1>;
- 		};
- 
-+		eud: eud@1610000 {
-+			compatible = "qcom,sm6115-eud","qcom,eud";
-+			reg = <0x01610000 0x2000>,
-+			      <0x01612000 0x1000>,
-+			      <0x003e5018 0x4>;
-+			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
-+			ports {
-+				port@0 {
-+					eud_ep: endpoint {
-+						remote-endpoint = <&usb2_role_switch>;
-+					};
-+				};
-+				port@1 {
-+					eud_con: endpoint {
-+						remote-endpoint = <&con_eud>;
-+					};
-+				};
-+			};
-+		};
-+
-+		eud_typec: connector {
-+			compatible = "usb-c-connector";
-+			ports {
-+				port@0 {
-+					con_eud: endpoint {
-+						remote-endpoint = <&eud_con>;
-+					};
-+				};
-+			};
-+		};
-+
- 		usb_hsphy: phy@1613000 {
- 			compatible = "qcom,sm6115-qusb2-phy";
- 			reg = <0x01613000 0x180>;
-@@ -1064,6 +1095,12 @@ usb_dwc3: usb@4e00000 {
- 				snps,has-lpm-erratum;
- 				snps,hird-threshold = /bits/ 8 <0x10>;
- 				snps,usb3_lpm_capable;
-+				usb-role-switch;
-+				port {
-+					usb2_role_switch: endpoint {
-+						remote-endpoint = <&eud_ep>;
-+					};
-+				};
- 			};
- 		};
- 
--- 
-2.38.1
 
+
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+tags/kbuild-fixes-v6.2
+
+for you to fetch changes up to 6a5e25fc3e0b94301734e8abb1d311a1e02d360d:
+
+  fixdep: remove unneeded <stdarg.h> inclusion (2022-12-30 17:26:19 +0900)
+
+----------------------------------------------------------------
+Kbuild fixes for v6.2
+
+ - Fix broken BuildID
+
+ - Add srcrpm-pkg to the help message
+
+ - Fix the option order for modpost built with musl libc
+
+ - Fix the build dependency of rpm-pkg for openSUSE
+
+----------------------------------------------------------------
+Bhaskar Chowdhury (1):
+      kconfig: Add static text for search information in help menu
+
+Jun ASAKA (1):
+      kbuild: add a missing line for help message
+
+Masahiro Yamada (5):
+      arch: fix broken BuildID for arm64 and riscv
+      .gitignore: ignore *.rpm
+      kbuild: rpm-pkg: add libelf-devel as alternative for BuildRequires
+      kbuild: sort single-targets alphabetically again
+      fixdep: remove unneeded <stdarg.h> inclusion
+
+Samuel Holland (1):
+      kbuild: Fix running modpost with musl libc
+
+ .gitignore                        |  1 +
+ Makefile                          |  2 +-
+ include/asm-generic/vmlinux.lds.h |  5 +++++
+ scripts/Makefile.modpost          | 22 +++++++++++-----------
+ scripts/Makefile.package          |  1 +
+ scripts/basic/fixdep.c            |  1 -
+ scripts/kconfig/mconf.c           |  6 ++++++
+ scripts/package/mkspec            |  3 ++-
+ 8 files changed, 27 insertions(+), 14 deletions(-)
+
+
+
+Best Regards
+Masahiro Yamada
