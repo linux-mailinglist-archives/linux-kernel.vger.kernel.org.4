@@ -2,155 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F0D65A491
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B781D65A492
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235791AbiLaNKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 08:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S235794AbiLaNO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 08:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235707AbiLaNKC (ORCPT
+        with ESMTP id S235614AbiLaNOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 08:10:02 -0500
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEB16266;
-        Sat, 31 Dec 2022 05:10:00 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 3EA6C14F3;
-        Sat, 31 Dec 2022 14:09:59 +0100 (CET)
-Authentication-Results: ext-mx-out002.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received; s=dkim20160331; t=
-        1672492196; x=1674306597; bh=86F8i+swfGUSse77eSUBIUmqadoRU+Zu6kC
-        CWs1ZFNM=; b=WRXoM6mHpoL8RVfq+FZMHaBtldLabg6n6ot5DSsHL7o40Yr8ClE
-        Av5SOyG2lH5I2q+0eBJ2xPN6oFO4stSUM0Q08OYbqbOPoYiXVebHLXNnmR2iJrwN
-        x0rp/j7hERSDOJwecRTfJlVWivH2gfuf6Sxo3IqVwaF9cJ6V8uTfYZ/uEP23pH+S
-        zPZs9BwsGQKv6tZUDYLn5wqDGewqOBxofLrjPwaNW37OFlC9bwjxd6OIOyPRGNMz
-        RNx4coJ6ZXafdpSJTTFj9si0oQhYBMvRHX+m5s8Q+O3RaCUMShzJOA9gVT+wHdfy
-        cGZdZlPNFIEmjF3aJIHaIIBB6hNQwU8qS8a6Cl8yfYYV67K9tztg8EYiSK01bhWz
-        g16OlidjE0Mxsq/1qfeuNSOIu81ofaS44KsaQw72O2u0sZQiuJM3SzPAr9XDjM/Q
-        2U1OHkjhlHYNi+fHkogTWU6uvSLhUAXp1Wu+FzYYMa44b0/y9d3roUJ1DQpX/uPy
-        jV+bbAB1VyltBvPqWOIFIUjitYXvBWqwL/2QcyRtt1Ws0B/Oa2QJxuvArkaJfXCu
-        sQbkejeoWo/nSxC0ZRWhqhaT4j69W0oWP5PsMGjFhbuuueupFO7dwyHdapQTymif
-        OuuwXucBJimBgURx78wMKtfKkQQhrAUbfMbhbnbINx3MSQFY/XW/9/Q8=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Score: -1.899
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out002.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9g1yDPVIblbg; Sat, 31 Dec 2022 14:09:56 +0100 (CET)
-Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
-        by mx.kolabnow.com (Postfix) with ESMTPS id B86C36C8;
-        Sat, 31 Dec 2022 14:09:55 +0100 (CET)
-Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
-        by int-mx002.mykolab.com (Postfix) with ESMTPS id 4732D224E;
-        Sat, 31 Dec 2022 14:09:55 +0100 (CET)
-Date:   Sat, 31 Dec 2022 14:09:52 +0100
-From:   Federico Vaga <federico.vaga@vaga.pv.it>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] doc:it_IT: align Italian documentation
-Message-ID: <20221231130952.4rynxmoaliwfgntb@numero-86.vaga.pv.it>
-References: <20221230173127.59553-1-federico.vaga@vaga.pv.it>
- <3e30ecf7-ebf5-c2cd-f6b6-dc5d6e5cdb71@gmail.com>
+        Sat, 31 Dec 2022 08:14:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BC86380
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 05:14:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C328560B7A
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 13:14:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A0EC433EF;
+        Sat, 31 Dec 2022 13:14:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672492461;
+        bh=XNRMJvnnR/ANOsRJUu6Glk+gUbvgn+2ncoVIUKNjtFQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XA/8HwSnkjsK3fCMK1XBjH5gzIezRCshaoWtysH4KxuWPAlCzJV462vpY/BbwKjxe
+         RQURyNmaEGgEv+ao/n4VrD97GLko1OecxJTF9TfsFKsnF3MlM0jUgjBwEMq7lbBJQ8
+         B5TSB7s2aLX32w3vbs95+2HJHmCv9reCylj5kjuWQMm1cqYbA9bMsdlU7ePxYNFuN3
+         rgT6cI1zizvtt4LPtanhOd6bzp9v094hBJc44wrJZHB91MU8KmO/WFunOSuyNGvb8F
+         T3aak0BmPpkwS1+h71CaXYeTZ5jCY0ni97LNullMNxzC0RmVmvhLe0z/o3NoJRn5Eh
+         BaRFOwaq7zXZA==
+Date:   Sat, 31 Dec 2022 21:14:13 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/1] ARM: imx: add missing of_node_put()
+Message-ID: <20221231131412.GB6112@T480>
+References: <20221208165404.1512014-1-dario.binacchi@amarulasolutions.com>
+ <20221208165404.1512014-2-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3e30ecf7-ebf5-c2cd-f6b6-dc5d6e5cdb71@gmail.com>
+In-Reply-To: <20221208165404.1512014-2-dario.binacchi@amarulasolutions.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 09:17:22AM +0900, Akira Yokosawa wrote:
->Hi Federico,
->Minor nit on embedded latex code. Please see below.
->
->On Fri, 30 Dec 2022 18:31:27 +0100, Federico Vaga wrote:
->> Translation for the following patches
->>
->> commit da4288b95baa ("scripts/check-local-export: avoid 'wait $!' for process substitution")
->> commit 5372de4e4545 ("docs/doc-guide: Put meta title for kernel-doc HTML page")
->> commit 4d627ef12b40 ("docs/doc-guide: Mention make variable SPHINXDIRS")
->> commit 7c43214dddfd ("docs/doc-guide: Add footnote on Inkscape for better images in PDF documents")
->> commit 615041d42a1a ("docs: kernel-docs: shorten the lengthy doc title")
->> commit cbf4adfd4d19 ("Documentation: process: Update email client instructions for Thunderbird")
->> commit e72b3b9810dd ("maintainer-pgp-guide: minor wording tweaks")
->> commit ea522496afa1 ("Documentation: process: replace outdated LTS table w/ link")
->> commit 93431e0607e5 ("Replace HTTP links with HTTPS ones: documentation")
->> commit e648174b53f1 ("Documentation: Fix spelling mistake in hacking.rst")
->> commit 602684adb42a ("docs: Update version number from 5.x to 6.x in README.rst")
->> commit 489876063fb1 ("docs: add a man-pages link to the front page")
->> commit 0c7b4366f1ab ("docs: Rewrite the front page")
->>
->> Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
->> ---
->> V1 -> V2 fix typo in footnote link
->>
->>  .../translations/it_IT/admin-guide/README.rst |  2 +-
->>  .../it_IT/doc-guide/kernel-doc.rst            |  2 +
->>  .../translations/it_IT/doc-guide/sphinx.rst   | 14 ++-
->>  Documentation/translations/it_IT/index.rst    | 93 +++++++++----------
->>  .../it_IT/kernel-hacking/hacking.rst          |  2 +-
->>  .../translations/it_IT/process/2.Process.rst  | 15 +--
->>  .../it_IT/process/7.AdvancedTopics.rst        |  8 +-
->>  .../translations/it_IT/process/changes.rst    | 11 +++
->>  .../it_IT/process/email-clients.rst           | 67 ++++++++-----
->>  .../it_IT/process/kernel-docs.rst             |  4 +-
->>  .../it_IT/process/maintainer-pgp-guide.rst    |  4 +-
->>  11 files changed, 127 insertions(+), 95 deletions(-)
->>
->
->[...]
->
->> diff --git a/Documentation/translations/it_IT/index.rst b/Documentation/translations/it_IT/index.rst
->> index e80a3097aa57..5dd751349adc 100644
->> --- a/Documentation/translations/it_IT/index.rst
->> +++ b/Documentation/translations/it_IT/index.rst
->> @@ -1,13 +1,11 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->>  .. _it_linux_doc:
->>
->>  ===================
->>  Traduzione italiana
->>  ===================
->>
->> -.. raw:: latex
->> -
->> -	\kerneldocCJKoff
->> -
->
->Removing this latex code would make Italian translation pages in
->translations.pdf one-half spacing (when built on systems with
->necessary packages for CJK translations), which would make them
->look sparse.
->
->Please keep it.
+On Thu, Dec 08, 2022 at 05:54:03PM +0100, Dario Binacchi wrote:
+> Calling of_find_compatible_node() returns a node pointer with refcount
+> incremented. Use of_node_put() on it when done.
+> The patch fixes the same problem on different i.MX platforms.
+> 
+> Fixes: 8b88f7ef31dde ("ARM: mx25: Retrieve IIM base from dt")
+> Fixes: 94b2bec1b0e05 ("ARM: imx27: Retrieve the SYSCTRL base address from devicetree")
+> Fixes: 3172225d45bd9 ("ARM: imx31: Retrieve the IIM base address from devicetree")
+> Fixes: f68ea682d1da7 ("ARM: imx35: Retrieve the IIM base address from devicetree")
+> Fixes: ee18a7154ee08 ("ARM: imx5: retrieve iim base from device tree")
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-My mistake. I've sent a V4
-
->For your reference, here is a list of related commits in this are:
->
->  - f7ebe6b76940 ("docs: Activate exCJK only in CJK chapters")
->  - 77abc2c230b1 ("docs: pdfdocs: One-half spacing for CJK translations")
->
->        Thanks, Akira
->
->>  :manutentore: Federico Vaga <federico.vaga@vaga.pv.it>
->>
->>  .. _it_disclaimer:
->
->[...]
-
--- 
-Federico Vaga
+Applied, thanks!
