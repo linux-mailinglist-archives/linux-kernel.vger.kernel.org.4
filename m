@@ -2,106 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24A265A3B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 12:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8A165A3BF
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 12:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235541AbiLaLOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 06:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S235603AbiLaLWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 06:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiLaLOg (ORCPT
+        with ESMTP id S232014AbiLaLW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 06:14:36 -0500
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A090363F9
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 03:14:35 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id BZoupLWNG8ao3BZovp4Bzp; Sat, 31 Dec 2022 12:14:33 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 31 Dec 2022 12:14:33 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH] watchdog: loongson1: Use devm_clk_get_enabled() helper
-Date:   Sat, 31 Dec 2022 12:14:30 +0100
-Message-Id: <624106aa86ef7e49f16b11b229528eabd63de8f7.1672485257.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 31 Dec 2022 06:22:28 -0500
+Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A800B631B
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 03:22:27 -0800 (PST)
+Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
+        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 3CAC08032E3B
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 11:22:17 +0000 (UTC)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 5452B1004810C
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 11:21:06 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id BZvGp4fq3Cmv8BZvGpbTfT; Sat, 31 Dec 2022 11:21:06 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=OtqKdwzt c=1 sm=1 tr=0 ts=63b01b22
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=sHyYjHe8cH0A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mJSAg3IabCGIB+57I2qq1aCdKB0NnfTDFPvtnRbIJlE=; b=mXrADpuzxG+0f3Wk1WtvSWGcUs
+        FkRClisxm9SC3HndIpWdGPfaBjFeNVMa9EBunJxwvbebAGBcoJOI2fXL0DFZhNNzjMimLX83MobAq
+        3vMwjPOIPXBojWq8C3+xBqJmAPMrmFMs4Wu9UIQ5I+VM8C/+TRiQOTuwpfAfKiyt6SO10R9vcKrDC
+        212aZxNIFbJrRMTqsdpFDUJ/ZfulywTmcOPMFdi0LzKw1K8iCs1mODmzqRbxsQfaFR/TZCpBGsW9B
+        tWR+CUsbwL7S7F0OVj4Y9N7OPvHMExMxg3RCeXuaR0ohq3ch56fStbdFxQ/t5LXx5EUgQlUL4+f34
+        1JklDPyQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:38960 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pBZvE-001iYr-B8;
+        Sat, 31 Dec 2022 04:21:04 -0700
+Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221230094021.575121238@linuxfoundation.org>
+In-Reply-To: <20221230094021.575121238@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <2441e639-ca79-4d45-ace2-10431e7883da@w6rz.net>
+Date:   Sat, 31 Dec 2022 03:20:58 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pBZvE-001iYr-B8
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:38960
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 20
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The devm_clk_get_enabled() helper:
-   - calls devm_clk_get()
-   - calls clk_prepare_enable() and registers what is needed in order to
-     call clk_disable_unprepare() when needed, as a managed resource.
+On 12/30/22 1:49 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.86 release.
+> There are 731 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 01 Jan 2023 09:38:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.86-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This simplifies the code and avoids the need of a dedicated function used
-with devm_add_action_or_reset().
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Note that I get a compilation error because <loongson1.h> is not found on
-my system (x86_64).
-So I think that a "depends on LOONG<something>" in missing in a KConfig
-file.
-
-Fixing it could help compilation farms build-bots.
----
- drivers/watchdog/loongson1_wdt.c | 17 +----------------
- 1 file changed, 1 insertion(+), 16 deletions(-)
-
-diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-index bb3d075c0633..c55656cfb403 100644
---- a/drivers/watchdog/loongson1_wdt.c
-+++ b/drivers/watchdog/loongson1_wdt.c
-@@ -79,11 +79,6 @@ static const struct watchdog_ops ls1x_wdt_ops = {
- 	.set_timeout = ls1x_wdt_set_timeout,
- };
- 
--static void ls1x_clk_disable_unprepare(void *data)
--{
--	clk_disable_unprepare(data);
--}
--
- static int ls1x_wdt_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -100,20 +95,10 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(drvdata->base))
- 		return PTR_ERR(drvdata->base);
- 
--	drvdata->clk = devm_clk_get(dev, pdev->name);
-+	drvdata->clk = devm_clk_get_enabled(dev, pdev->name);
- 	if (IS_ERR(drvdata->clk))
- 		return PTR_ERR(drvdata->clk);
- 
--	err = clk_prepare_enable(drvdata->clk);
--	if (err) {
--		dev_err(dev, "clk enable failed\n");
--		return err;
--	}
--	err = devm_add_action_or_reset(dev, ls1x_clk_disable_unprepare,
--				       drvdata->clk);
--	if (err)
--		return err;
--
- 	clk_rate = clk_get_rate(drvdata->clk);
- 	if (!clk_rate)
- 		return -EINVAL;
--- 
-2.34.1
+Tested-by: Ron Economos <re@w6rz.net>
 
