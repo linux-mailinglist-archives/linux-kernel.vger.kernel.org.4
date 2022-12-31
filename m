@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8341365A608
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 19:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B9F65A609
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 19:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbiLaSW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 13:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        id S232258AbiLaSYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 13:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLaSW6 (ORCPT
+        with ESMTP id S229628AbiLaSY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 13:22:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596E4E9E
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 10:22:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD466B808C6
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 18:22:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3627DC433D2;
-        Sat, 31 Dec 2022 18:22:53 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Zbi0+zXE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672510970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KstZBdcZcqbHkQ2CxwtPc1Y6fLGICRufWpnz600OBT4=;
-        b=Zbi0+zXEV/ee3LPUBCqdMKlQr8LNUJlwOflP3uriV2i5PKPGOGXCFqDh1mr+tcJcUpSYBA
-        9SChpE00VU5jNJokTJrAOAgb4B9McJdrzcmggb6HFsqcDcxSx6ZN96cvVeyMdFEIlPycHJ
-        BR2AIN6LhrSrmZMcTtXDixHLBfLZ1dc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3f12f758 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 31 Dec 2022 18:22:49 +0000 (UTC)
-Date:   Sat, 31 Dec 2022 19:22:47 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, pbonzini@redhat.com,
-        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
-        philmd@linaro.org
-Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
- setup_data
-Message-ID: <Y7B993P1+jYB/etX@zx2c4.com>
-References: <CAHmME9oPUJemVRvO3HX0q4BJGTFuzbLYANeizuRcNq2=Ykk1Gg@mail.gmail.com>
- <Y69B40T9kWfxZpmf@zn.tnic>
- <E5D0A77E-5ABC-4978-9A66-37B60DA43869@zytor.com>
- <Y69h6ur79SMhu61F@zx2c4.com>
- <46466e54-25c3-3194-8546-a57cd4a80d9d@zytor.com>
- <Y7A76+IBS4fnucrW@zn.tnic>
- <Y7A8qP05B0YRbQIN@zx2c4.com>
- <Y7A9nBud6UeH+wYd@zn.tnic>
- <Y7A+YELM7m5E2PUQ@zx2c4.com>
- <Y7BGIAL4z6o6FEI5@zn.tnic>
+        Sat, 31 Dec 2022 13:24:28 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D6DE9E;
+        Sat, 31 Dec 2022 10:24:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672511068; x=1704047068;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=feTp/WmicBThxgI8tutjgB6YS3nkwvOhGW7b7yJzpIg=;
+  b=P9BiFDRLUX/+2qbcR0jf/TUc3AWWla7evV5VIY1dBEPC5Dr405ee2d2S
+   H4JU97yQh7S77bEg48vRrWOnD9AK1QdzHvlG+c1XYyCpjSHwzbjm7j0KY
+   yD5UmxJlbTFxKdVs4zfLEXza7rFA85egtoV+QOy8oGQlIbiwmf/2aFozy
+   ng1HuIXtzQjjpvyrkfKSUIRA7eQsjoPQVpie94c8T5DjHrb0GP2JXKawY
+   H0CQhNl05xIl1hSFnZ3uZX1DpeO/4lMBwc1losHY/4rHGmii3sbOhCiZc
+   KojtMGEcWINC0hFWoUBS8Nf3x1+ejlXZj94vKvQ2mKYRt3EjsWnMMMtvV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10577"; a="319021498"
+X-IronPort-AV: E=Sophos;i="5.96,290,1665471600"; 
+   d="scan'208";a="319021498"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2022 10:24:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10577"; a="899505083"
+X-IronPort-AV: E=Sophos;i="5.96,290,1665471600"; 
+   d="scan'208";a="899505083"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Dec 2022 10:24:26 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pBgWv-002PH3-0m;
+        Sat, 31 Dec 2022 20:24:25 +0200
+Date:   Sat, 31 Dec 2022 20:24:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/2] iio: adc: ti-adc128s052: Switch to use
+ spi_get_device_match_data()
+Message-ID: <Y7B+WK9Qqth+j85X@smile.fi.intel.com>
+References: <20221214114944.83790-1-andriy.shevchenko@linux.intel.com>
+ <20221223152242.2ee926eb@jic23-huawei>
+ <20221223154450.458771b8@jic23-huawei>
+ <Y6wTmapfACknDKO8@smile.fi.intel.com>
+ <20221231144558.44720f4d@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7BGIAL4z6o6FEI5@zn.tnic>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221231144558.44720f4d@jic23-huawei>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 03:24:32PM +0100, Borislav Petkov wrote:
-> On Sat, Dec 31, 2022 at 02:51:28PM +0100, Jason A. Donenfeld wrote:
-> > That failure is unrelated to the ident mapping issue Peter and
-> > I discussed. The original failure is described in the commit message:
-> > decompression clobbers the data, so sd->next points to garbage.
+On Sat, Dec 31, 2022 at 02:45:58PM +0000, Jonathan Cameron wrote:
+> On Wed, 28 Dec 2022 11:59:53 +0200
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+...
+
+> I should have been more specific though I do mention rebasing to get the
+> patch above.. Doesn't build with it.
 > 
-> Right
+> Signature of spi_get_device_match_data is:
+> extern const void *
+> spi_get_device_match_data(const struct spi_device *sdev);
+> 
+> and you are passing it a struct device * which rather implies you didn't
+> successfully build test this.
 
-So with that understanding confirmed, I'm confused at your surprise that
-hpa's unrelated fix to the different issue didn't fix this issue.
+Definitely. Thanks for spotting this, I'll investigate what happened on my side
+that it wasn't built.
 
-> and the fact that the kernel overwrites it still feels kinda wrong: the
-> kernel knows where setup_data is - the address is in the setup header so
-> *actually*, it should take care of not to clobber it.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Yea, technically the bootloader could relocate all the setup_data links
-by copying them and updating ->next. This wouldn't be so hard to do.
-(Special care would have to be taken, though, to zero out
-SETUP_RNG_SEED, though, for forward secrecy and such.)
 
-But since the kernel doesn't do this now, and the 62MiB bug also seems
-to apply to existing kernels, for the purposes of QEMU for now, I think
-the v3 patch is probably best, since it'll handle existing kernels.
-Alternatively, setup_data could be relocated, the boot param protocol
-could be bumped, and then QEMU could conditionalized it's use of
-setup_data based on that protocol version. That'd work, but seems a bit
-more involved.
-
-So maybe for now, v3 works? Hopefully that looks like a correct approach
-to hpa, anyhow:
-https://lore.kernel.org/lkml/20221230220725.618763-1-Jason@zx2c4.com/
-I think it should fit with what he described would work.
-
-Jason
