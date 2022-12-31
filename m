@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF54765A4EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 15:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A6F65A4EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 15:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbiLaO1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 09:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
+        id S235673AbiLaO1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 09:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiLaO1c (ORCPT
+        with ESMTP id S232090AbiLaO1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 31 Dec 2022 09:27:32 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BA2D2FD
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 06:27:30 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so20638587wma.1
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 06:27:30 -0800 (PST)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDF2B865
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 06:27:31 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso10772560wms.5
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 06:27:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VtovjFbpNrrJC+tTeD4MlQddSoN69F0yZoac9F9bQi0=;
-        b=Lrr38/Y60W7DN0if/geXJh4j+Q2PtT7ixBA/cqXrBamdfKn2j2bmYI5vxaYiYamg/U
-         3uLGuOdR8zup6qsxsjKqvKyRUD6v9mTEfuyT1hi8qdQEaXgRyqxMX+Vm4VFqkclLaCZm
-         kGUm7pxiCZMHc9KF0lvw6DNKKTAh/+GD5+SfvXuPqLv+MTYu7NadpC67tpKo30YJ7eKj
-         m7LumKtae0WgD1Wk90nRpxJRi2VyrYuX199pdZT94ScZTPcXumfuvWPYplv2lLsEw9c5
-         eQrf2gXRA7+rMwZykIjlh5xgsQDBcszS/Gsd86uWrxA/VLqXHrgaF5IktNN9Tk1G5WOk
-         qRuA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hd5g8d3ixy4rfchNDpoUI/MxiC/emRj5/xYKLqgTVlY=;
+        b=BNYa/FLPffd46n9JpUJdEOWUyrXAOrmOFXidPVoecV7IrhrJw6fKrbagZj4IDAUyss
+         fQj9j7y8jAaRLATolaTYHrpKXBq2PfzgcIVsYp6YkwmY9DWeklXsCCgqvtQx8Y90nogB
+         gYJ5SOIa7hkwq8KlOUKWyrS2fDEeVGyMX1FDO8JsQ++Kq5geP+qyw/BsakmdeiAoyegN
+         pJNDKcRmgA54GnNM3shvAao0mytXCs1Df5QiOhHbV6TuCr0qmBa7jCBDoXQFoOZMTn1K
+         UgQ7Q9VVuxROsPmKAraL5qddDFa6LpCZNbGyma7nA3TnWVAynw29hWIJJlIxq2UaJEwq
+         WiVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VtovjFbpNrrJC+tTeD4MlQddSoN69F0yZoac9F9bQi0=;
-        b=QzeA2isrcfVEhxpO3b7BigRpoppLrXgA02Y3+Fh6XlKWoRCQhIAZFBfGcK2hIz4RuK
-         Q+jxuQJzoU2t3TbyRr5x50dKAZCE02Oe7RxDj+yoWnGmJ5U06kh1t/AO2Pkc6O+l4a+7
-         0BPDGAwiDPsYdQV2tWbnLWwD8+wmsOdN0+hHOczxJDiTv09Fu0jFMHqgkVRZGayFFLLh
-         M3qN82T1+/nvbpNf3qzzTSDjsSGfsqsukFjH6NSOBiRpXDDOKh1f2LWH912QJy3/0Hyw
-         FEOJ2tAnPEg119STX0bYs8NyhT4e3nXleuJsItYZz+ia+DChWED38eRz6VpvpqcHTRl/
-         uyPA==
-X-Gm-Message-State: AFqh2kome0ywA5kkxfmqC8fY+Qe8FVUs6EyV6eJyJTKOt/+BSSMlouul
-        6JUvdYRgyzg2wv73c4hRyb20dw==
-X-Google-Smtp-Source: AMrXdXsGss0K1YKS6YAbGVQWHOwoui+21Zkk8ItLoec+rqhWxAjmZGtnSMSeaj3ter0pA7UCOFpnPg==
-X-Received: by 2002:a1c:790a:0:b0:3d6:b691:b814 with SMTP id l10-20020a1c790a000000b003d6b691b814mr24817611wme.1.1672496849351;
-        Sat, 31 Dec 2022 06:27:29 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hd5g8d3ixy4rfchNDpoUI/MxiC/emRj5/xYKLqgTVlY=;
+        b=N6lTU9cHxC/g3hJRYbuGXCGAeGfchlfgEoQFLGbiJyOMuWTVvW0fKl5i8lZ5cE4w4S
+         ygDPIDj7LcPB38MAc8z4RmoWR/t93h7+SRhK3lk2i/eBeVmzXrwoPYo4ucFUf8+W/XEO
+         Vuy0OAI4428CS5NiD4T1V847EKzM5GsOFT9YpQq4I7bBOZWc8YjCzhvha0j4chEPfTcJ
+         PCnejMK3WD4I28s/j1qd9ODaQHrA6tkYhKg6wx6fI9mNT3OUHoUQSIeEhv4C4b68mUd7
+         il4l6A8JdQmuvqUw00/UufDBudEprySEJNoIO96L/NNWkhWvr0esaihL/TNmovtllgtB
+         qWRA==
+X-Gm-Message-State: AFqh2kqW09rDyDFZvAKGIkWFN09mTIEWIb0gfSXHrwqDR3Msk2L/LM4r
+        t1aOtDdo9aWIxrXQhWTzc1c/bw==
+X-Google-Smtp-Source: AMrXdXtseuqYPXQxTs5caeLPdGtmfYeH6wwfdU+JM+levjI0aFf9RqIZxQfn28A28kJ17SQ9pJto+w==
+X-Received: by 2002:a05:600c:1f12:b0:3cf:a851:d2f2 with SMTP id bd18-20020a05600c1f1200b003cfa851d2f2mr25029036wmb.21.1672496850337;
+        Sat, 31 Dec 2022 06:27:30 -0800 (PST)
 Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id bg12-20020a05600c3c8c00b003d1e34bcbb2sm35729697wmb.13.2022.12.31.06.27.28
+        by smtp.gmail.com with ESMTPSA id bg12-20020a05600c3c8c00b003d1e34bcbb2sm35729697wmb.13.2022.12.31.06.27.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 06:27:28 -0800 (PST)
+        Sat, 31 Dec 2022 06:27:30 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Douglas Anderson <dianders@chromium.org>,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -58,10 +59,12 @@ To:     Douglas Anderson <dianders@chromium.org>,
         Steev Klimaszewski <steev@kali.org>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH 1/2] drm/panel-edp: fix name for IVO product id 854b
-Date:   Sat, 31 Dec 2022 16:27:20 +0200
-Message-Id: <20221231142721.338643-1-abel.vesa@linaro.org>
+Subject: [PATCH 2/2] drm/panel-edp: add IVO M133NW4J panel entry
+Date:   Sat, 31 Dec 2022 16:27:21 +0200
+Message-Id: <20221231142721.338643-2-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221231142721.338643-1-abel.vesa@linaro.org>
+References: <20221231142721.338643-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,31 +76,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The actual name is R133NW4K-R0.
+Add an eDP panel entry for IVO M133NW4J.
 
-Fixes: 0f9fa5f58c784 ("drm/panel-edp: add IVO M133NW4J-R3 panel entry")
+Due to lack of documentation, use the delay_200_500_p2e100 timings like
+some other IVO entries for now.
+
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
 
 Assuming the information from here is correct:
 https://raw.githubusercontent.com/linuxhw/EDID/master/DigitalDisplay.md
 
- drivers/gpu/drm/panel/panel-edp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This fixes the following WARN_ON on my X13s:
+
+[    2.194973] CPU: 5 PID: 186 Comm: kworker/u16:6 Not tainted 6.2.0-rc1-00075-g5136d9aa278f-dirty #26
+[    2.195409] Hardware name: LENOVO 21BX000WRI/21BX000WRI, BIOS N3HET44W (1.16 ) 05/27/2022
+[    2.195820] Workqueue: events_unbound deferred_probe_work_func
+[    2.196234] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    2.196639] pc : panel_edp_probe+0x3d4/0x520 [panel_edp]
+[    2.197036] lr : panel_edp_probe+0x37c/0x520 [panel_edp]
+[    2.197435] sp : ffff80000970b3b0
+[    2.197833] x29: ffff80000970b3b0 x28: ffff0e0a80b7f760 x27: 0000000000000001
+[    2.198231] x26: ffff0e11fe0e1b50 x25: ffffa8f9f585e0c8 x24: 0000000000000000
+[    2.198630] x23: ffff0e0a81a39c80 x22: ffffa8f9f58c7638 x21: 0000000000000000
+[    2.199032] x20: ffff0e0a8d1b0000 x19: ffff0e0a820fea80 x18: 0000000000000000
+[    2.199576] x17: 0000000000000000 x16: ffffa8fa5e097080 x15: 0000000000000000
+[    2.199969] x14: 0000000000000003 x13: 0000000000000059 x12: 0000000000000066
+[    2.200360] x11: 0000000000000001 x10: 00000000000009e0 x9 : 0000000000000001
+[    2.200748] x8 : ffff80000970b340 x7 : 0000000000000000 x6 : 0000000000000000
+[    2.201132] x5 : 0000000000000049 x4 : 0000000000000056 x3 : 000000000000004f
+[    2.201512] x2 : 0000000000000000 x1 : ffffa8f9f58c7a00 x0 : 000000000000854a
+[    2.201888] Call trace:
+[    2.202261]  panel_edp_probe+0x3d4/0x520 [panel_edp]
+[    2.202636]  panel_edp_dp_aux_ep_probe+0x38/0x50 [panel_edp]
+[    2.203009]  dp_aux_ep_probe+0x34/0xf4 [drm_dp_aux_bus]
+[    2.203379]  really_probe+0xc0/0x3dc
+[    2.203739]  __driver_probe_device+0x7c/0x190
+[    2.204096]  driver_probe_device+0x3c/0x110
+[    2.204448]  __device_attach_driver+0xbc/0x160
+[    2.204795]  bus_for_each_drv+0x7c/0xd4
+[    2.205136]  __device_attach+0x9c/0x1c0
+[    2.205439]  device_initial_probe+0x14/0x20
+[    2.205717]  bus_probe_device+0x9c/0xa4
+[    2.205995]  device_add+0x3c4/0x8cc
+[    2.206270]  device_register+0x20/0x30
+[    2.206543]  of_dp_aux_populate_bus+0xe0/0x1bc [drm_dp_aux_bus]
+[    2.206817]  msm_dp_modeset_init+0x1d8/0x274 [msm]
+[    2.207096]  _dpu_kms_drm_obj_init+0x128/0x670 [msm]
+[    2.207370]  dpu_kms_hw_init+0x540/0x640 [msm]
+[    2.207645]  msm_drm_bind+0x18c/0x61c [msm]
+[    2.207917]  try_to_bring_up_aggregate_device+0x1dc/0x2d0
+[    2.208186]  __component_add+0xa4/0x190
+[    2.208454]  component_add+0x14/0x20
+[    2.208720]  dp_display_probe+0x29c/0x454 [msm]
+[    2.208989]  platform_probe+0x68/0xc0
+[    2.209252]  really_probe+0xc0/0x3dc
+[    2.209511]  __driver_probe_device+0x7c/0x190
+[    2.209767]  driver_probe_device+0x3c/0x110
+[    2.210022]  __device_attach_driver+0xbc/0x160
+[    2.210275]  bus_for_each_drv+0x7c/0xd4
+[    2.210528]  __device_attach+0x9c/0x1c0
+[    2.210781]  device_initial_probe+0x14/0x20
+[    2.211032]  bus_probe_device+0x9c/0xa4
+[    2.211280]  deferred_probe_work_func+0x9c/0xf0
+[    2.211525]  process_one_work+0x1c4/0x320
+[    2.211768]  worker_thread+0x6c/0x430
+[    2.212012]  kthread+0x108/0x10c
+[    2.212251]  ret_from_fork+0x10/0x20
+[    2.212488] ---[ end trace 0000000000000000 ]---
+[    2.212755] panel-simple-dp-aux aux-aea0000.displayport-controller: Unknown panel IVO 0x854a, using conservative timings
+
+ drivers/gpu/drm/panel/panel-edp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index 5cb8dc2ebe18..ef70928c3ccb 100644
+index ef70928c3ccb..bef5cdf6a582 100644
 --- a/drivers/gpu/drm/panel/panel-edp.c
 +++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -1891,7 +1891,7 @@ static const struct edp_panel_entry edp_panels[] = {
+@@ -1891,6 +1891,7 @@ static const struct edp_panel_entry edp_panels[] = {
  	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1247, &delay_200_500_e80_d50, "N120ACA-EA1"),
  
  	EDP_PANEL_ENTRY('I', 'V', 'O', 0x057d, &delay_200_500_e200, "R140NWF5 RH"),
--	EDP_PANEL_ENTRY('I', 'V', 'O', 0x854b, &delay_200_500_p2e100, "M133NW4J-R3"),
-+	EDP_PANEL_ENTRY('I', 'V', 'O', 0x854b, &delay_200_500_p2e100, "R133NW4K-R0"),
++	EDP_PANEL_ENTRY('I', 'V', 'O', 0x854a, &delay_200_500_p2e100, "M133NW4J"),
+ 	EDP_PANEL_ENTRY('I', 'V', 'O', 0x854b, &delay_200_500_p2e100, "R133NW4K-R0"),
  
  	EDP_PANEL_ENTRY('K', 'D', 'B', 0x0624, &kingdisplay_kd116n21_30nv_a010.delay, "116N21-30NV-A010"),
- 	EDP_PANEL_ENTRY('K', 'D', 'B', 0x1120, &delay_200_500_e80_d50, "116N29-30NK-C007"),
 -- 
 2.34.1
 
