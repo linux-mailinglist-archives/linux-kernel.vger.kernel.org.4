@@ -2,178 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C477365A306
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 08:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BAB565A310
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 08:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiLaHIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 02:08:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        id S231164AbiLaHS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 02:18:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLaHIi (ORCPT
+        with ESMTP id S229523AbiLaHSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 02:08:38 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E97E13D41
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 23:08:36 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id g3-20020a056e021a2300b00305e3da9585so14581374ile.16
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 23:08:36 -0800 (PST)
+        Sat, 31 Dec 2022 02:18:24 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B617640;
+        Fri, 30 Dec 2022 23:18:22 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id co23so21882128wrb.4;
+        Fri, 30 Dec 2022 23:18:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zP8aN8F1TFjp+QyRXOKBu1FOqjclgtUNuKrVJaJr4Rw=;
+        b=dm4su3njwGwZGWwqjbznPCls0FteayWvKX5jqOMfvGKvh7tDtrn0UXmiSDjtClC5te
+         5zUPByBodYNbFzVGzYV2CRMtub9BIBJ0kLYfNk5o3hhmA/fJjrKz5CdBM+hH+RHUyY3r
+         UYPWFhLXdDKeqzmrs2ROclpml8xTUiT1mMG5BA3OKHI4Z3PRuN3wOfh3kWVFv8co/i+Z
+         iqsj9EPNIXKl4xua9MXGjOuseWQmF95SPxo4wfrFWSZNfwk0k+ZPzdwnGFuxnuYlTpFr
+         DqxWFFKKckE6ieIjl04LVxAXngnHfsQzGygctv6h96xfTVJNPWHmvtvG7Rdf1dadC4Eq
+         kdhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0pGYmnK5Em3omduAmXAUIIsSu268FxWvkMKl6w5XXOc=;
-        b=y4UI/3v4Ta9d8X8sHf1anPFPg2Nb5EMsrCcW+TXgkEAg98CXLNLo1pqRuYxXb4J2os
-         7FizHIeLz4GmTx/xJ0IRi0he381T/68YtybA2bKDiSjOaU3uJygv2ClxxjA7zcqolZa/
-         0MeYO2emVju6qd4lxJ58PIiHEEGjR2WHefZMUeAQ2rrlggNefQ28xv58MjTNdYAxB4qU
-         OMjl4rlKNa5bSyspL6iEIVW45yv1N4PrUD4f6WAqI57PGw2+J5CBnQrXxAkeZhKhdnVI
-         w3VlKQ48V0wZiXRiHHRlqW2o1XwK7NHpZiksC+y3A56gsH1Vl54Ae2apNkK52riVR4CU
-         mNDg==
-X-Gm-Message-State: AFqh2kpjiy+Sb6FDXfV9vFJxryewWUzdHkm2htS/JXXO6ByDDBNWDVrS
-        +dER/IIPNMhBWYFyHKI2dPJU3eXTF2j8ir2Azfww7RGQv7Bb
-X-Google-Smtp-Source: AMrXdXuZ+of9Gf5Vq6qlxEV8vcJv5Jixun0gVyBHkfiUkxE8DjEcGFm9waVwnkCd8+i6v0zzI9ejCDmbTlU94iALKjDt9Ix2VV39
-MIME-Version: 1.0
-X-Received: by 2002:a92:ad0e:0:b0:30c:2e5a:3b74 with SMTP id
- w14-20020a92ad0e000000b0030c2e5a3b74mr504255ilh.286.1672470515614; Fri, 30
- Dec 2022 23:08:35 -0800 (PST)
-Date:   Fri, 30 Dec 2022 23:08:35 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fb09de05f11a626d@google.com>
-Subject: [syzbot] [ext4?] KASAN: use-after-free Read in ext4_find_extent (2)
-From:   syzbot <syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+        bh=zP8aN8F1TFjp+QyRXOKBu1FOqjclgtUNuKrVJaJr4Rw=;
+        b=noFYAdSTei1Jy0lo0j+90cgM5eXBh981um3Jgk1At7cfzLtrwGvvnpOXtCsu4AmKEZ
+         sdyrMazKFurG+6vG0c2wfKSKynUPN9lsuB5d9E537y06agqa7F6TDV2U6HSKwkOjJeqM
+         1Qd575teNdJtKHF2CXFxC/zStJGPam74Ro99LXhjKy9HPgNKWFNjld/jjGljiKLWJc+C
+         TiRwMDJFAikupMTcMddVktGOVSuoGa/DJ5VPFme6y0+n6xwSUGfmW9ueo7Lp2TwUP11B
+         JwrlGnYg8NvpUIwxVKD7tmhSHhoWCQnGgZSA1iYQW4hwQdREWISxmhxVfVb8COULHYYG
+         YrQg==
+X-Gm-Message-State: AFqh2kotMwwEk71kQYUjJlPPNh9M/nzIOZCId4Ei5gOf0Ffg+6dLzi2e
+        cbo7fBzpSkjw6Zr2B9G6PWs=
+X-Google-Smtp-Source: AMrXdXuCCt0wQVgUtfQuQ9SZ7/ciRJpO65NWMFaoA3CHYaZppGjTvJUmcfvIslP74yfUBnoXfpLXhg==
+X-Received: by 2002:a05:6000:501:b0:26b:8177:a5e6 with SMTP id a1-20020a056000050100b0026b8177a5e6mr20053277wrf.51.1672471100771;
+        Fri, 30 Dec 2022 23:18:20 -0800 (PST)
+Received: from ?IPv6:2a02:168:6806:0:70ad:9f34:9d41:ef2c? ([2a02:168:6806:0:70ad:9f34:9d41:ef2c])
+        by smtp.gmail.com with ESMTPSA id s13-20020adfdb0d000000b002420dba6447sm22928907wri.59.2022.12.30.23.18.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Dec 2022 23:18:20 -0800 (PST)
+Message-ID: <46438c4880373193ba7e11cbdf0fa4e1be12ab31.camel@gmail.com>
+Subject: Re: [PATCH v2 3/4] ARM: dts: armada-38x: Fix compatible string for
+ gpios
+From:   Klaus Kudielka <klaus.kudielka@gmail.com>
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Pali =?ISO-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Marek =?ISO-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc:     linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Sat, 31 Dec 2022 08:18:19 +0100
+In-Reply-To: <87wn7g7xku.fsf@BL-laptop>
+References: <20220714115515.5748-1-pali@kernel.org>
+         <20220714183328.4137-1-pali@kernel.org>
+         <20220714183328.4137-3-pali@kernel.org> <87wn7g7xku.fsf@BL-laptop>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.2-1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+T24gTW9uLCAyMDIyLTExLTI4IGF0IDAxOjA1ICswMTAwLCBHcmVnb3J5IENMRU1FTlQgd3JvdGU6
+Cj4gUGFsaSBSb2jDoXIgPHBhbGlAa2VybmVsLm9yZz4gd3JpdGVzOgo+IAo+ID4gQXJtYWRhIDM4
+eCBzdXBwb3J0cyBwZXIgQ1BVIGludGVycnVwdHMgZm9yIGdwaW9zLCBsaWtlIEFybWFkYSBYUC4g
+UHJlLVhQCj4gPiB2YXJpYW50cyBsaWtlIEFybWFkYSAzNzAgZG8gbm90IHN1cHBvcnQgcGVyIENQ
+VSBpbnRlcnJ1cHRzIGZvciBncGlvcy4KPiA+IAo+ID4gU28gY2hhbmdlIGNvbXBhdGlibGUgc3Ry
+aW5nIGZvciBBcm1hZGEgMzh4IGZyb20gIm1hcnZlbGwsYXJtYWRhLTM3MC1ncGlvIgo+ID4gd2hp
+Y2ggaW5kaWNhdGVzIHByZS1YUCB2YXJpYW50IHRvICJtYXJ2ZWxsLGFybWFkYXhwLWdwaW8iIHdo
+aWNoIGluZGljYXRlcwo+ID4gWFAgdmFyaWFudCBvciBuZXcuCj4gPiAKPiA+IERyaXZlciBncGlv
+LW12ZWJ1LmMgd2hpY2ggaGFuZGxlcyBib3RoIHByZS1YUCBhbmQgWFAgdmFyaWFudHMgYWxyZWFk
+eQo+ID4gcHJvdmlkZXMgc3VwcG9ydCBmb3IgcGVyIENQVSBpbnRlcnJ1cHRzIG9uIFhQIGFuZCBu
+ZXdlciB2YXJpYW50cy4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogUGFsaSBSb2jDoXIgPHBhbGlA
+a2VybmVsLm9yZz4KPiA+IEZpeGVzOiA3Y2IyYWNiM2ZiYWUgKCJBUk06IGR0czogbXZlYnU6IEFk
+ZCBQV00gcHJvcGVydGllcyBmb3IgYXJtYWRhLTM4eCIpCj4gCj4gQXBwbGllZCBvbiBtdmVidS9k
+dAo+IAo+IFRoYW5rcywKPiAKPiBHcmVnb3J5CgpUaGlzIHBhdGNoIG1hZGUgaXQgaW50byBtYWlu
+bGluZSwgYnV0IHVuZm9ydHVuYXRlbHkgYnJva2UgZ3BpbyBpbnRlcnJ1cHRzIG9uClR1cnJpcyBP
+bW5pYSAoQXJtYWRhIDM4NSksIHdpdGggcmF0aGVyIGJhZCBjb25zZXF1ZW5jZXMuIEkgaGF2ZSBz
+dWJtaXR0ZWQgYQpyZWdyZXNzaW9uIHJlcG9ydC4KCkxpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwu
+b3JnL3IvZjI0NDc0ZTcwYzFhNGU5NjkyYmQ1OTZlZjZkOTdjZWRhOTUxMTI0NS5jYW1lbEBnbWFp
+bC5jb20vCgpJIGFtIGhhcHB5IHRvIHRlc3QgcG90ZW50aWFsIGZpeGVzLiBUaGUgdHJpdmlhbCBv
+bmUgKGdldHRpbmcgdGhlICJyZWciCnByb3BlcnRpZXMgcmlnaHQsIGFzIHN0YXRlZCBieSBDaHJp
+cyBQYWNraGFtKSBkb2Vzbid0IHdvcmssIGVpdGhlci4KCkEgcmV2ZXJ0IHdvdWxkIHNvbHZlIHRo
+ZSBwcm9ibGVtIG9uIHRoZSBPbW5pYSwgZm9yIHRoZSB0aW1lIGJlaW5nLgoKUmVnYXJkcywgS2xh
+dXMKCj4gPiAtLS0KPiA+IMKgYXJjaC9hcm0vYm9vdC9kdHMvYXJtYWRhLTM4eC5kdHNpIHwgNCAr
+Ky0tCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0p
+Cj4gPiAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9hcm1hZGEtMzh4LmR0c2kg
+Yi9hcmNoL2FybS9ib290L2R0cy9hcm1hZGEtMzh4LmR0c2kKPiA+IGluZGV4IGRmM2M4ZDFkOGY2
+NC4uOTM0M2RlNjk0N2IzIDEwMDY0NAo+ID4gLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvYXJtYWRh
+LTM4eC5kdHNpCj4gPiArKysgYi9hcmNoL2FybS9ib290L2R0cy9hcm1hZGEtMzh4LmR0c2kKPiA+
+IEBAIC0yOTIsNyArMjkyLDcgQEAKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoH07Cj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgZ3BpbzA6IGdwaW9AMTgxMDAgewo+ID4gLcKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29tcGF0
+aWJsZSA9ICJtYXJ2ZWxsLGFybWFkYS0zNzAtZ3BpbyIsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0g
+Im1hcnZlbGwsYXJtYWRheHAtZ3BpbyIsCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgICJtYXJ2ZWxsLG9yaW9uLWdwaW8iOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZyA9IDwweDE4MTAwIDB4NDA+
+LCA8MHgxODFjMCAweDA4PjsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZWctbmFtZXMgPSAiZ3BpbyIsICJwd20iOwo+
+ID4gQEAgLTMxMCw3ICszMTAsNyBAQAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBncGlvMTogZ3Bpb0AxODE0MCB7Cj4gPiAtwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21w
+YXRpYmxlID0gIm1hcnZlbGwsYXJtYWRhLTM3MC1ncGlvIiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbXBhdGlibGUg
+PSAibWFydmVsbCxhcm1hZGF4cC1ncGlvIiwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgIm1hcnZlbGwsb3Jpb24tZ3BpbyI7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmVnID0gPDB4MTgxNDAgMHg0
+MD4sIDwweDE4MWM4IDB4MDg+Owo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZy1uYW1lcyA9ICJncGlvIiwgInB3bSI7
+Cj4gPiAtLSAKPiA+IDIuMjAuMQo+ID4gCj4gCgo=
 
-syzbot found the following issue on:
-
-HEAD commit:    1b929c02afd3 Linux 6.2-rc1
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16ad35e4480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=68e0be42c8ee4bb4
-dashboard link: https://syzkaller.appspot.com/bug?extid=bf4bb7731ef73b83a3b4
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109a70f4480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1200b8f4480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2d8c5072480f/disk-1b929c02.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/46687f1395db/vmlinux-1b929c02.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/26f1afa5ec00/bzImage-1b929c02.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/e23e9197fa8a/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 2048
-EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
-==================================================================
-BUG: KASAN: use-after-free in ext4_ext_binsearch_idx fs/ext4/extents.c:768 [inline]
-BUG: KASAN: use-after-free in ext4_find_extent+0x76e/0xd90 fs/ext4/extents.c:931
-Read of size 4 at addr ffff888073644750 by task syz-executor420/5067
-
-CPU: 0 PID: 5067 Comm: syz-executor420 Not tainted 6.2.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:306
- print_report+0x107/0x1f0 mm/kasan/report.c:417
- kasan_report+0xcd/0x100 mm/kasan/report.c:517
- ext4_ext_binsearch_idx fs/ext4/extents.c:768 [inline]
- ext4_find_extent+0x76e/0xd90 fs/ext4/extents.c:931
- ext4_clu_mapped+0x117/0x970 fs/ext4/extents.c:5809
- ext4_insert_delayed_block fs/ext4/inode.c:1696 [inline]
- ext4_da_map_blocks fs/ext4/inode.c:1806 [inline]
- ext4_da_get_block_prep+0x9e8/0x13c0 fs/ext4/inode.c:1870
- ext4_block_write_begin+0x6a8/0x2290 fs/ext4/inode.c:1098
- ext4_da_write_begin+0x539/0x760 fs/ext4/inode.c:3082
- generic_perform_write+0x2e4/0x5e0 mm/filemap.c:3772
- ext4_buffered_write_iter+0x122/0x3a0 fs/ext4/file.c:285
- ext4_file_write_iter+0x1d0/0x18f0
- call_write_iter include/linux/fs.h:2186 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4b7a9737b9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc5cac3668 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4b7a9737b9
-RDX: 00000000175d9003 RSI: 0000000020000200 RDI: 0000000000000004
-RBP: 00007f4b7a933050 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000000079f R11: 0000000000000246 R12: 00007f4b7a9330e0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-The buggy address belongs to the physical page:
-page:ffffea0001cd9100 refcount:0 mapcount:0 mapping:0000000000000000 index:0x2 pfn:0x73644
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 ffffea0001cd9148 ffffea0001cd90c8 0000000000000000
-raw: 0000000000000002 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-page last allocated via order 0, migratetype Movable, gfp_mask 0x8(__GFP_MOVABLE), pid 1, tgid 1 (swapper/0), ts 12379768059, free_ts 13547634018
- split_map_pages+0x25b/0x540 mm/compaction.c:97
- isolate_freepages_range+0x4ac/0x510 mm/compaction.c:735
- alloc_contig_range+0x6a9/0x980 mm/page_alloc.c:9363
- __alloc_contig_pages mm/page_alloc.c:9386 [inline]
- alloc_contig_pages+0x3c8/0x4e0 mm/page_alloc.c:9463
- debug_vm_pgtable_alloc_huge_page+0xcd/0x120 mm/debug_vm_pgtable.c:1065
- init_args+0xa3a/0xdc0 mm/debug_vm_pgtable.c:1188
- debug_vm_pgtable+0x9a/0x4a0 mm/debug_vm_pgtable.c:1226
- do_one_initcall+0x1d1/0x410 init/main.c:1306
- do_initcall_level+0x168/0x220 init/main.c:1379
- do_initcalls+0x43/0x90 init/main.c:1395
- kernel_init_freeable+0x428/0x5e0 init/main.c:1634
- kernel_init+0x19/0x2b0 init/main.c:1522
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1446 [inline]
- free_pcp_prepare+0x751/0x780 mm/page_alloc.c:1496
- free_unref_page_prepare mm/page_alloc.c:3369 [inline]
- free_unref_page+0x19/0x4c0 mm/page_alloc.c:3464
- free_contig_range+0xa3/0x160 mm/page_alloc.c:9485
- destroy_args+0xfe/0x940 mm/debug_vm_pgtable.c:998
- debug_vm_pgtable+0x43d/0x4a0 mm/debug_vm_pgtable.c:1318
- do_one_initcall+0x1d1/0x410 init/main.c:1306
- do_initcall_level+0x168/0x220 init/main.c:1379
- do_initcalls+0x43/0x90 init/main.c:1395
- kernel_init_freeable+0x428/0x5e0 init/main.c:1634
- kernel_init+0x19/0x2b0 init/main.c:1522
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-Memory state around the buggy address:
- ffff888073644600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff888073644680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff888073644700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                                 ^
- ffff888073644780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff888073644800: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
