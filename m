@@ -2,94 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E691B65A817
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 00:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DBB65A81A
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 00:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiLaXPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 18:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S235856AbiLaXPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 18:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235903AbiLaXOl (ORCPT
+        with ESMTP id S235980AbiLaXPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 18:14:41 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DA7C3E;
-        Sat, 31 Dec 2022 15:14:39 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5CAEF5C00B3;
-        Sat, 31 Dec 2022 18:14:39 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sat, 31 Dec 2022 18:14:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672528479; x=1672614879; bh=pg
-        xRkLVAeO8dCA2lni0EjX3wjL3SuhpZ2d2IUeSoyX4=; b=uWwnaU0FUJybKnzekx
-        7GvVkb3zmMP4lUfD0rIW437xXNPx7wE2O1L6nz/EySfo0VwTMGjqO/ocDYxdNxi8
-        oeCP4A9XYFE6Od+lEqwukZawvIsD7h509NdAqQAJctJC0chA+2o6BsojKgXoAash
-        afSzVaecBM+sicUFhSaqHB1ewgIOdSXGJaDZyiDiP27vEf0yXAFQ9cJQGDkkXhTz
-        srCcKzxomOKUpwbEKgU2L69cbislukLbTXC7+golOfuW9NuDqNBHslubAjDi3leI
-        P2A9uMecpGzMJRfK4Pdc46zrrrQu9/VfL5eUkH/RpfCYm5s/sxTvWAi+SsBmMZ8l
-        pXIQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672528479; x=1672614879; bh=pgxRkLVAeO8dC
-        A2lni0EjX3wjL3SuhpZ2d2IUeSoyX4=; b=l/TuFeE4R9matdLE6FArCbqPjLdac
-        P6b8eiEbMOTVxvW5InqH9CjNuzr9UzoAHkBRqcCrOPcXvN/NIsa/hYjNkffExMRm
-        xdmL0MA022oOvU8WJ0K/q7LiGdW06AbGo+u2+vOsTs5ED39SEpaoJn72PXscQQfa
-        ViJeRm2/yj/vDgBbkDgQu0ti062iPfZ8hp9Ri2MlCUcx6Yy7/9qoNSo89ly6itmq
-        OFjiGEfCeNGehKlx1t0/lVMv0RrDXUdbzIn8jvvk/wo5OQ1XmXbMNaSUWuoIuIcK
-        PWh2RGIICUwSqW6LJ55pPmAmil9No4rV6wCnVJld/EjSNORKN41vAY8Kg==
-X-ME-Sender: <xms:X8KwYwxWQ_Y1KxWOhITxlHfDBkj4Ib9nXYl6bVjussY-LVpmIlwtfA>
-    <xme:X8KwY0SHAF2XW6O4DkDDGOXH0iTpG1hurMyATF3N6fpaVZ5ET_yPVtc2I_X_UR_3S
-    o1xxajGRpDIhmM4cg>
-X-ME-Received: <xmr:X8KwYyUI0bTe8GZTuXIS3ZRvb7pl4TlSGIRzErK4tgMwC968K7wovob4JnWYo6xXv3QnhKth-4_nMR2qo4thidrFySqYubRyO--kg-SjvCnOFMNmn_ter1cFMHXS0ID_mhauAw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieelgddtkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:X8KwY-ghUad1MtJqSqSQ4IiLKhSCXRd2kHBBvOp83BdSpB8nsS5Q-w>
-    <xmx:X8KwYyCkJdDpKZLYRLjWbrEvrVSA14fQBoW0deVIa4uRthTYNMCBMQ>
-    <xmx:X8KwY_I94v9zX9kps3R65XN5zCRri19Z_kVEbGLJBkqIeOx0eq9KUw>
-    <xmx:X8KwY62yi8Uez1pwDpsdEOr1hky3CoSnMhWwAf2iL0XUegc9hp4C6A>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 31 Dec 2022 18:14:38 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Fabien Poussin <fabien.poussin@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>
-Subject: [PATCH v2 6/6] clk: sunxi-ng: d1: Add CAN bus gates and resets
-Date:   Sat, 31 Dec 2022 17:14:29 -0600
-Message-Id: <20221231231429.18357-7-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221231231429.18357-1-samuel@sholland.org>
-References: <20221231231429.18357-1-samuel@sholland.org>
+        Sat, 31 Dec 2022 18:15:00 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24ABA1A9;
+        Sat, 31 Dec 2022 15:14:53 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id j130so16570425oif.4;
+        Sat, 31 Dec 2022 15:14:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZDleaKjLD/Qhd9h4aoa9p72UIb8nR7MniYX4gWrbZJ0=;
+        b=fvljcvxNh25c4C4r8wjp9qbv8SnqWuMLLk2PQnHdVmrzc4V10Dpo2YaG6RIPvfSyti
+         6G/wSVQr4nHyu5tL/t5m6QCNt9GdoL93d7xQovRDTO0fh45rKWFiNBYXRRbYOeqPxMVu
+         TSJ2M818/a/cQ9S6bgKMV5tDxtb8T/Y9/KyWg2lCKEV4i1k+rcPytpzW1qvnQqFTxp2n
+         kqhVSkSJSbAtarW8bT1D5FhAsIoWS0pugA74rdoptF7xmZlpt9jvDaOEKQvkyHAO6nG+
+         ayCo1LVnXK4hnESVGn26XYv0qYoIok4sAb0OXJzygzGWptz+pEO8YPdAkAG8+m9+KkQS
+         RwTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZDleaKjLD/Qhd9h4aoa9p72UIb8nR7MniYX4gWrbZJ0=;
+        b=4DKm3zU6o0d8b+7VDWqGxySi/mQA7wmeuUI/lm6Wy1M5mz22VVuAZyNNemSuXnhsf6
+         l6wgELrCUeLs2dV60TCNMA0Z0NQ12P/cC/gF+wUtlwam+vhv781QXZxHQMaS993/rJXr
+         H1laI+WZcfxbN3V49p/cD8xQ9+c37JKv8BpjMxVP07o9WvOPheTLB/GZthd2AWXX0pUh
+         /Wb1+d8YhmTvONObdtiqknjV71RwQUJLkHOQEp/EOPGoVOH8Bay54BN7vzFs2u1IRK++
+         DpZ2ciKOsEsy7pETOaGNy/kqkAY4ghP4u5Lj5UPHoSKWfB8RD9FB5gVVhcOeo/BLJdRR
+         31wQ==
+X-Gm-Message-State: AFqh2kpnB8A0Z88F27rNlg6UFaJuJcDbUe7hCAtfeRmavmizq5WO0dOR
+        c4CeIxObMsCCkzbGqXyMAZY=
+X-Google-Smtp-Source: AMrXdXvbeWxhfQuo5xiDU/qMBeTB4+1RFn1jBaNc8KUAdE+pwSdb7RD5B9ynzZc+vV5I1SyO3Tfx7Q==
+X-Received: by 2002:a05:6808:2206:b0:361:2c10:fb53 with SMTP id bd6-20020a056808220600b003612c10fb53mr20261279oib.44.1672528493074;
+        Sat, 31 Dec 2022 15:14:53 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j6-20020aca1706000000b0035a64076e0bsm10541481oii.37.2022.12.31.15.14.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 15:14:52 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 31 Dec 2022 15:14:51 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] watchdog: ixp4xx: Use devm_clk_get_enabled() helper
+Message-ID: <20221231231451.GD2706156@roeck-us.net>
+References: <5d04e453a4da5cfafb56695a17157fa3ea296511.1672484831.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d04e453a4da5cfafb56695a17157fa3ea296511.1672484831.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,79 +75,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabien Poussin <fabien.poussin@gmail.com>
+On Sat, Dec 31, 2022 at 12:07:27PM +0100, Christophe JAILLET wrote:
+> The devm_clk_get_enabled() helper:
+>    - calls devm_clk_get()
+>    - calls clk_prepare_enable() and registers what is needed in order to
+>      call clk_disable_unprepare() when needed, as a managed resource.
+> 
+> This simplifies the code and avoids the need of a dedicated function used
+> with devm_add_action_or_reset().
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Note that I get a compilation error because read_cpuid_id() is not defined
+> on my system (x86_64).
+> So I think that a "depends on ARM<something>" in missing in a KConfig file.
 
-The D1 CCU contains gates and resets for two CAN buses. While the CAN
-bus controllers are only documented for the T113 SoC, the CCU is the
-same across all SoC variants.
+It has
 
-Signed-off-by: Fabien Poussin <fabien.poussin@gmail.com>
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+	depends on ARCH_IXP4XX
 
-Changes in v2:
- - Move dt-bindings header changes to a separate patch
+and CONFIG_IXP4XX_WATCHDOG is not set for me after "make allmodconfig".
 
- drivers/clk/sunxi-ng/ccu-sun20i-d1.c | 11 +++++++++++
- drivers/clk/sunxi-ng/ccu-sun20i-d1.h |  2 +-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+> 
+> Fixing it could help compilation farms build-bots.
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun20i-d1.c b/drivers/clk/sunxi-ng/ccu-sun20i-d1.c
-index c5a7df93602c..48a8fb2c43b7 100644
---- a/drivers/clk/sunxi-ng/ccu-sun20i-d1.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun20i-d1.c
-@@ -469,6 +469,11 @@ static SUNXI_CCU_GATE_HWS(bus_i2c2_clk, "bus-i2c2", apb1_hws,
- static SUNXI_CCU_GATE_HWS(bus_i2c3_clk, "bus-i2c3", apb1_hws,
- 			  0x91c, BIT(3), 0);
- 
-+static SUNXI_CCU_GATE_HWS(bus_can0_clk, "bus-can0", apb1_hws,
-+			  0x92c, BIT(0), 0);
-+static SUNXI_CCU_GATE_HWS(bus_can1_clk, "bus-can1", apb1_hws,
-+			  0x92c, BIT(1), 0);
-+
- static const struct clk_parent_data spi_parents[] = {
- 	{ .fw_name = "hosc" },
- 	{ .hw = &pll_periph0_clk.hw },
-@@ -997,6 +1002,8 @@ static struct ccu_common *sun20i_d1_ccu_clks[] = {
- 	&bus_i2c1_clk.common,
- 	&bus_i2c2_clk.common,
- 	&bus_i2c3_clk.common,
-+	&bus_can0_clk.common,
-+	&bus_can1_clk.common,
- 	&spi0_clk.common,
- 	&spi1_clk.common,
- 	&bus_spi0_clk.common,
-@@ -1147,6 +1154,8 @@ static struct clk_hw_onecell_data sun20i_d1_hw_clks = {
- 		[CLK_BUS_I2C1]		= &bus_i2c1_clk.common.hw,
- 		[CLK_BUS_I2C2]		= &bus_i2c2_clk.common.hw,
- 		[CLK_BUS_I2C3]		= &bus_i2c3_clk.common.hw,
-+		[CLK_BUS_CAN0]		= &bus_can0_clk.common.hw,
-+		[CLK_BUS_CAN1]		= &bus_can1_clk.common.hw,
- 		[CLK_SPI0]		= &spi0_clk.common.hw,
- 		[CLK_SPI1]		= &spi1_clk.common.hw,
- 		[CLK_BUS_SPI0]		= &bus_spi0_clk.common.hw,
-@@ -1252,6 +1261,8 @@ static struct ccu_reset_map sun20i_d1_ccu_resets[] = {
- 	[RST_BUS_I2C1]		= { 0x91c, BIT(17) },
- 	[RST_BUS_I2C2]		= { 0x91c, BIT(18) },
- 	[RST_BUS_I2C3]		= { 0x91c, BIT(19) },
-+	[RST_BUS_CAN0]		= { 0x92c, BIT(16) },
-+	[RST_BUS_CAN1]		= { 0x92c, BIT(17) },
- 	[RST_BUS_SPI0]		= { 0x96c, BIT(16) },
- 	[RST_BUS_SPI1]		= { 0x96c, BIT(17) },
- 	[RST_BUS_EMAC]		= { 0x97c, BIT(16) },
-diff --git a/drivers/clk/sunxi-ng/ccu-sun20i-d1.h b/drivers/clk/sunxi-ng/ccu-sun20i-d1.h
-index e303176f0d4e..b14da36e2537 100644
---- a/drivers/clk/sunxi-ng/ccu-sun20i-d1.h
-+++ b/drivers/clk/sunxi-ng/ccu-sun20i-d1.h
-@@ -10,6 +10,6 @@
- #include <dt-bindings/clock/sun20i-d1-ccu.h>
- #include <dt-bindings/reset/sun20i-d1-ccu.h>
- 
--#define CLK_NUMBER		(CLK_FANOUT2 + 1)
-+#define CLK_NUMBER		(CLK_BUS_CAN1 + 1)
- 
- #endif /* _CCU_SUN20I_D1_H_ */
--- 
-2.37.4
+Mine doesn't see a problem, and I don't recall ever being alerted about
+one. What am I missing ? Do you see a problem reported anywhere ?
 
+Guenter
+
+> ---
+>  drivers/watchdog/ixp4xx_wdt.c | 18 +++---------------
+>  1 file changed, 3 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
+> index 281a48d9889f..607ce4b8df57 100644
+> --- a/drivers/watchdog/ixp4xx_wdt.c
+> +++ b/drivers/watchdog/ixp4xx_wdt.c
+> @@ -112,12 +112,6 @@ static const struct watchdog_info ixp4xx_wdt_info = {
+>  	.identity = KBUILD_MODNAME,
+>  };
+>  
+> -/* Devres-handled clock disablement */
+> -static void ixp4xx_clock_action(void *d)
+> -{
+> -	clk_disable_unprepare(d);
+> -}
+> -
+>  static int ixp4xx_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -139,16 +133,10 @@ static int ixp4xx_wdt_probe(struct platform_device *pdev)
+>  	 * Retrieve rate from a fixed clock from the device tree if
+>  	 * the parent has that, else use the default clock rate.
+>  	 */
+> -	clk = devm_clk_get(dev->parent, NULL);
+> -	if (!IS_ERR(clk)) {
+> -		ret = clk_prepare_enable(clk);
+> -		if (ret)
+> -			return ret;
+> -		ret = devm_add_action_or_reset(dev, ixp4xx_clock_action, clk);
+> -		if (ret)
+> -			return ret;
+> +	clk = devm_clk_get_enabled(dev->parent, NULL);
+> +	if (!IS_ERR(clk))
+>  		iwdt->rate = clk_get_rate(clk);
+> -	}
+> +
+>  	if (!iwdt->rate)
+>  		iwdt->rate = IXP4XX_TIMER_FREQ;
+>  
+> -- 
+> 2.34.1
+> 
