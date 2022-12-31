@@ -2,78 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FAB65A802
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 00:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1794465A80E
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 00:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiLaXKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 18:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S232539AbiLaXOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 18:14:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiLaXKr (ORCPT
+        with ESMTP id S230520AbiLaXOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 18:10:47 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCE4225;
-        Sat, 31 Dec 2022 15:10:45 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id r205so22194701oib.9;
-        Sat, 31 Dec 2022 15:10:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ENlX3FFLDh3wgIqc1xOaPfINmD8K7dyU0rKdck6ROU0=;
-        b=f7PW5ybJLRiB8vmAXUU+uUkbVNqLKLTLhyZnRpg+brWw5jTGMotKpTe0nT7ceOyt8b
-         PPFN0Co3fxC4Gml2QP2c0SViYwHvRzgNHQgqZ6csUsxzby+RwyQRLr3+punM7S/IPW5D
-         +J4PLjmOAHdSV2AQh64NupVZnLOOk3LBW8sJdnFeVYLIYpNrOaONr6Nwoj70lMGTSQdY
-         3KsyWEmxsDCkM96Cso/0WmL1RJJBEedJ2QGma6xW6FwPPIR4xnso5rBvoQBvnJLsU2QJ
-         xeEXJCfmDCYQpXuzniw6CSb/UQKwxDu5mGi5XlympEmtwFxbrk3KXTymr0ltlJAHHALa
-         H85A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ENlX3FFLDh3wgIqc1xOaPfINmD8K7dyU0rKdck6ROU0=;
-        b=G9Mj6az8aIDj6lcN7R1qIi3J3TPI2j5q/KhAnhvHMI2vHCNZJIcXXquYrqzEfbC3yg
-         O1IURo7cl3enh/vBMseDWJrtal9OK93LkfBcrofKnZWySHjECxd87RBVhir1Swtrb6YZ
-         KaeRNQ1CTa9IRqPZvwhlng9iufhuY+wcEf5nhWRn6lB0pMcIwc/JWNP74q/lm0XFWdTK
-         OrUhAzJVdM09LgP2sY04ffw8LAS4IA6F43tQTXJJ071ffGnMHw3A1ISHCr+WXuqFSD5G
-         2398GB7NjL24hmI32d0c4ZbBrSsQ7ov6Nx90yqs6IC2qprt263AkEaZmycyeJxY9y2qq
-         Szvw==
-X-Gm-Message-State: AFqh2kq3A602upa8710oEOuCMEl/RTxpjCyImhGeagmLj7VdTEY8OVtN
-        71Zbe3QUqVtn4rfvazpLpWk=
-X-Google-Smtp-Source: AMrXdXtB6FJbs/Eg7M6yUNzJnYKHs+CJuGkyrQPItYsePzPx90UMgLXajyUofCmzi+BUxnNTQMRHYw==
-X-Received: by 2002:a05:6808:290f:b0:360:f286:820b with SMTP id ev15-20020a056808290f00b00360f286820bmr16110211oib.2.1672528244844;
-        Sat, 31 Dec 2022 15:10:44 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e11-20020a056808148b00b00342eade43d4sm10628577oiw.13.2022.12.31.15.10.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 15:10:44 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 31 Dec 2022 15:10:43 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] watchdog: imx7ulp: Use devm_clk_get_enabled() helper
-Message-ID: <20221231231043.GC2706156@roeck-us.net>
-References: <f23a2cf84958adca255b82fd688e7cee0461760f.1672484376.git.christophe.jaillet@wanadoo.fr>
+        Sat, 31 Dec 2022 18:14:35 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D824CF9;
+        Sat, 31 Dec 2022 15:14:33 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 16F435C00B4;
+        Sat, 31 Dec 2022 18:14:31 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 31 Dec 2022 18:14:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1672528471; x=1672614871; bh=CLyRJuU5Gp
+        42q8xKUuOHFJyhAzWE0gbLmmfwQ+yR6RM=; b=sND/yvJN90kEWak4oJKkGgYl+6
+        1M8k31rA6aBsLQzt+QO+WBqpol4njSNBAbgwX+Bbnk9vmIQLz1WC4iKBuPWfbukO
+        rBI6YqV2OHJkUuxn8RL1AeG2RAAr3dnN/uuPK5GBMIDk18Ke95LjYx/lsCacDeGN
+        PBvy0VmNoxw9jXzKiLCc7DkY4v/HScgTKtmRvyBm/TUZ8W7ioVPxHrxtuuQp450k
+        xdcPIaBlILMioDmy2Y1mvRVO0LCZzlsLxYTcTeTkzYK1rhH872JLfgwaRh4H1JDk
+        uthbRI2BUJAkAdAB8zrbqepaQSkfiD7b4SI8YNiFzO8aJ1Rp16UKy37HXmkA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1672528471; x=1672614871; bh=CLyRJuU5Gp42q
+        8xKUuOHFJyhAzWE0gbLmmfwQ+yR6RM=; b=CwmaOVuDAxje46IPRtmGqnCNeVpij
+        1V2xBgx6sadZZciNP5AZbCnCzjMutysvahJXOz7V2UKZG9m3g+U8hbVltJGBEofE
+        e7Nj8omH2hVnwSL+YkN955ZusXxBu/LGoilUaJ4Rs0FPUra7T9+ko/KApoAkFsv4
+        t9mi6wHBE92NsEa/8iR1oMgDp02x389nxcB02H+uwhyb/i1ok9uIZ2YW6ZYCWUHs
+        p34b7b8awAOakqVW4cI6dRpykICCL4eC+77bmEvSmUMC5XXb9qGHxz9GJc1i9Hpp
+        DyahcES8r8O7CyJcgM0ZWrGzfjFWxFPDZHWXIuNPFXxbS3a/PqllzolDg==
+X-ME-Sender: <xms:VsKwY2CEebTacyCxkyiApgYo9TiwS0lkrTBl1wQ_ockyy56ACbqaaw>
+    <xme:VsKwYwi5IZVw04wRjfrVRlZWhr_ADxfUlBWtz4uq26AXCXvOdLUh7W2iyVsRTGoNC
+    fZQkHeX6XjSYh2TdA>
+X-ME-Received: <xmr:VsKwY5lQWUYrXzDFIqWpNvs8cWkITLtrD24msoUFPHUFr8b8REHtPF_3VpPTa0vmCpkWCaOjkbdvivP6ElJ5oAmqi8FZrHR-MLIoC-pKFhfn_fSmJWcyIOPav6mJmuhLhRaY4A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieelgddtlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepueevhfevkeeiffevieelhedtudelffevhefgudfgtdekheetfffflefh
+    feetvddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:VsKwY0wzYHJA_6CiHYEjdXdmc0JvA62iuwIygHOmRMhvRZwUVQ_Rcw>
+    <xmx:VsKwY7TjX4_KrQ4PDQC_nMuBOas97R27aCH6qjZ_C88otSXULnZyFA>
+    <xmx:VsKwY_ZHPrV2EGTgsJv6bKIaKZOqs70rViHY50ALDG6BZLBAOaVsmg>
+    <xmx:V8KwY8iF5VSXS85weF33WvOoQMtovtaG02aPEMa7zuyJUNJy05_PPA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 31 Dec 2022 18:14:29 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH v2 0/6] clk: sunxi-ng: Allwinner R528/T113 clock support
+Date:   Sat, 31 Dec 2022 17:14:23 -0600
+Message-Id: <20221231231429.18357-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f23a2cf84958adca255b82fd688e7cee0461760f.1672484376.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,63 +93,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 11:59:57AM +0100, Christophe JAILLET wrote:
-> The devm_clk_get_enabled() helper:
->    - calls devm_clk_get()
->    - calls clk_prepare_enable() and registers what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
-> 
-> This simplifies the code and avoids the need of a dedicated function used
-> with devm_add_action_or_reset().
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+R528 and T113 are SoCs based on the same design as D1/D1s, but with ARM
+CPUs instead of RISC-V. They use the same CCU implementation, meaning
+the CCU has gates/resets for all peripherals present on any SoC in this
+family. I verified the CAN bus bits are also present on D1/D1s.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Patches 1-2 clean up the Kconfig in preparation for patch 3, which
+allows building the driver. Patches 4-6 add the missing binding header
+and driver bits.
 
-> ---
->  drivers/watchdog/imx7ulp_wdt.c | 15 +--------------
->  1 file changed, 1 insertion(+), 14 deletions(-)
-> 
-> diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
-> index 2897902090b3..7ca486794ba7 100644
-> --- a/drivers/watchdog/imx7ulp_wdt.c
-> +++ b/drivers/watchdog/imx7ulp_wdt.c
-> @@ -299,11 +299,6 @@ static int imx7ulp_wdt_init(struct imx7ulp_wdt_device *wdt, unsigned int timeout
->  	return ret;
->  }
->  
-> -static void imx7ulp_wdt_action(void *data)
-> -{
-> -	clk_disable_unprepare(data);
-> -}
-> -
->  static int imx7ulp_wdt_probe(struct platform_device *pdev)
->  {
->  	struct imx7ulp_wdt_device *imx7ulp_wdt;
-> @@ -321,7 +316,7 @@ static int imx7ulp_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(imx7ulp_wdt->base))
->  		return PTR_ERR(imx7ulp_wdt->base);
->  
-> -	imx7ulp_wdt->clk = devm_clk_get(dev, NULL);
-> +	imx7ulp_wdt->clk = devm_clk_get_enabled(dev, NULL);
->  	if (IS_ERR(imx7ulp_wdt->clk)) {
->  		dev_err(dev, "Failed to get watchdog clock\n");
->  		return PTR_ERR(imx7ulp_wdt->clk);
-> @@ -336,14 +331,6 @@ static int imx7ulp_wdt_probe(struct platform_device *pdev)
->  		dev_info(dev, "imx7ulp wdt probe\n");
->  	}
->  
-> -	ret = clk_prepare_enable(imx7ulp_wdt->clk);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = devm_add_action_or_reset(dev, imx7ulp_wdt_action, imx7ulp_wdt->clk);
-> -	if (ret)
-> -		return ret;
-> -
->  	wdog = &imx7ulp_wdt->wdd;
->  	wdog->info = &imx7ulp_wdt_info;
->  	wdog->ops = &imx7ulp_wdt_ops;
-> -- 
-> 2.34.1
-> 
+Changes in v2:
+ - Expand commit message
+ - Move dt-bindings header changes to a separate patch
+
+András Szemző (1):
+  clk: sunxi-ng: d1: Mark cpux clock as critical
+
+Fabien Poussin (1):
+  clk: sunxi-ng: d1: Add CAN bus gates and resets
+
+Samuel Holland (4):
+  clk: sunxi-ng: Remove duplicate ARCH_SUNXI dependencies
+  clk: sunxi-ng: Move SoC driver conditions to dependencies
+  clk: sunxi-ng: d1: Allow building for R528/T113
+  dt-bindings: clock: Add D1 CAN bus gates and resets
+
+ drivers/clk/sunxi-ng/Kconfig              | 71 ++++++++++++-----------
+ drivers/clk/sunxi-ng/ccu-sun20i-d1.c      | 13 ++++-
+ drivers/clk/sunxi-ng/ccu-sun20i-d1.h      |  2 +-
+ include/dt-bindings/clock/sun20i-d1-ccu.h |  2 +
+ include/dt-bindings/reset/sun20i-d1-ccu.h |  2 +
+ 5 files changed, 53 insertions(+), 37 deletions(-)
+
+-- 
+2.37.4
+
