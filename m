@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D105765A2DF
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 07:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA2F65A2E2
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 07:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbiLaGHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 01:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S235569AbiLaGIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 01:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235436AbiLaGHs (ORCPT
+        with ESMTP id S235484AbiLaGII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 01:07:48 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35D413CE1;
-        Fri, 30 Dec 2022 22:07:47 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id c133so20951347oif.1;
-        Fri, 30 Dec 2022 22:07:47 -0800 (PST)
+        Sat, 31 Dec 2022 01:08:08 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE85CB4A8;
+        Fri, 30 Dec 2022 22:08:07 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id b10-20020a4a9fca000000b004e6f734c6b4so503291oom.9;
+        Fri, 30 Dec 2022 22:08:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d092Pq0ceVkxiOdSKMnf5fA3NMBl2SWRNXgwb3nxm08=;
-        b=PshJv3v3/1C249BVwiQBxYK/N/2jl74FKn+Sc+Ac2U2P3hLfO5yeTvmG9OYXHnIZCg
-         KNT2dQAln/dE5tuCvx7kVVTRrgPHJ8GDSP52gKe4Hv7tGy4MNf8oq+0GduxZZNE82FJU
-         emQgJ9P29Rm90KD8GqsXzPKvaKvjw7NZlCUsHSa6OtELCday0wRjHO3NiY3BD/8fsW3y
-         mHJY6cOmChjJPXaH5skhPfOYVBeEzhKzJVqGUXo4Y4b/wOz5N5SdvkG2GmKXO60t6D9V
-         +FAeZve0q8Un4TsTSRH0wXrH4uXGZZGymiD2xaD/K1Bad2kHrtCqKVxZTUIk72/VcWCq
-         xWiA==
+        bh=UPFaitZsnWnz75ly8AVu9W3WrCBoFnTi3sspHqtEc2w=;
+        b=SlG5MgNsVw+diW4ZltLgj+u+vifKXqRFIO/yxM8Ddp7OnQEJAr1acBA5W/gTQlWCq6
+         iY+4fm4XjITwM2Xh6WDbhrQKIVWGbGVc840QNG0I5jqbbvkLrl+VNLijaCKMCovpH4/L
+         8TlSrepQWPoRzB1Elf1vBHmdr/3ADCAXc35FQcrhA8bRNIvlmEHb4eAJOLZXP6PNaxqH
+         bpr/yWAWyQH0RBtNAwbsW0gVF+f5EtOz5Rq6rSB6Yshx/KpX6TJTlHVERxIkJvbiNqad
+         v1IRji8OErIZehjXkgiZcaMuAz0o/U/mkIVAaXfLF3AQBUNIMbGIdS22fvFyLOpo0/6g
+         dmrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=d092Pq0ceVkxiOdSKMnf5fA3NMBl2SWRNXgwb3nxm08=;
-        b=jYltN0MCC3kHc8Hrpfvc5dwuIa8UFxHT/liEYRDyvzUyf0qw6QU3tWAYvd3X8vwxvb
-         OtR1I2f/zVhGPpkF3qD26wE/W9lx1zwlDi9H7MoxwN5IohFwjJ4Vl0nTZ6GlPC7kQ9HF
-         D5r7CuB/x0T3S9aWiOL9dwTRD2AWPdxXwFr2ZYVryNrcAf/WVIUP5RPUMW/pQIPzajaA
-         DzNVfq84KDXTWw1cVH0hIOXuRXm6KqTXGFFQXnvHR22WnUgHyZ7X3IU5OHnvreKQT6t+
-         +h+I8yMyY67vhK2tALsOsGhkXQwtLtIwkoRedXs+pMSrvHLs7onRooMtyJ61d0gOYFqs
-         FOhQ==
-X-Gm-Message-State: AFqh2kpuRaC1flhh5a2EDdxioWLcHFbWsmbl/rZIxm/nAuAbhOUIy0No
-        nagSUgPfC3m0OBFJaJ2wd2Tl47+mQWM=
-X-Google-Smtp-Source: AMrXdXvBT7MBaWHFmV5boliYhJ0C8GZgddfn0IuspRQ/RH2ei8BjDPNALXfcJIboh73oa+ve2IOIZQ==
-X-Received: by 2002:a54:480e:0:b0:361:8fa:1a97 with SMTP id j14-20020a54480e000000b0036108fa1a97mr20489918oij.3.1672466866988;
-        Fri, 30 Dec 2022 22:07:46 -0800 (PST)
+        bh=UPFaitZsnWnz75ly8AVu9W3WrCBoFnTi3sspHqtEc2w=;
+        b=pqUDAyxh+d0ICcTIwXGj+See+PQTHEgkhU/SCGnOVeAbHtBbPWabW7Dpp9Ta9pLIyR
+         sg8G+ARWjlAHpugxuC9LqBU1Jj4RrVVKRQQVTnIjArOTbLsRIykudmAbAANOmAQy3FYa
+         hXkBNpNJnP8ANZijz1uBG0jnhh3hkrtkuVTqdRishgOfi99Iv88qkzzPcQIkd0iQJDCN
+         m0qMstAVKGtUabfL+b4HPa4pESr/azjJQ09tlXNrni5us9iv9TZ/ln6kVnySpW1RdeJX
+         Vdch/2hcJEGcZwYjnuRY2Z8DUv51+mi0oMfcEeBaDXXlDE4loL+YsAtEUrL79tpfKTae
+         xlHQ==
+X-Gm-Message-State: AFqh2kqd34KVn/SRn2WULrLmJBurZFVw80ldrg3axBjJHjyK/2GtORaT
+        aNXXFJgLpgqA00iaXHYVue13guxA4L4=
+X-Google-Smtp-Source: AMrXdXtGzXsY/si6/5IXp2Jxpf/kOzjFgo5hb3fIRQm0efhAQGxbVy9XxsfYBPl8Z5yMPY7Wa5qdyQ==
+X-Received: by 2002:a4a:d0b5:0:b0:4ad:ae22:beee with SMTP id t21-20020a4ad0b5000000b004adae22beeemr15961052oor.4.1672466887311;
+        Fri, 30 Dec 2022 22:08:07 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h187-20020acab7c4000000b0035468f2d410sm10012488oif.55.2022.12.30.22.07.46
+        by smtp.gmail.com with ESMTPSA id p66-20020a4a4845000000b004908a9542f8sm9222929ooa.31.2022.12.30.22.08.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 22:07:46 -0800 (PST)
+        Fri, 30 Dec 2022 22:08:06 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 30 Dec 2022 22:07:45 -0800
+Date:   Fri, 30 Dec 2022 22:08:05 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] watchdog: rzn1: Use devm_clk_get_enabled() helper
-Message-ID: <20221231060745.GB2927444@roeck-us.net>
-References: <b1f8b5453791035ad534bd5ed36b49798ff4d9b2.1672418166.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] watchdog: rtd119x: Use devm_clk_get_enabled() helper
+Message-ID: <20221231060805.GC2927444@roeck-us.net>
+References: <14b521b821279bc5111dc80b55d0936c5767c737.1672418470.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b1f8b5453791035ad534bd5ed36b49798ff4d9b2.1672418166.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <14b521b821279bc5111dc80b55d0936c5767c737.1672418470.git.christophe.jaillet@wanadoo.fr>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -75,7 +75,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 05:36:20PM +0100, Christophe JAILLET wrote:
+On Fri, Dec 30, 2022 at 05:41:31PM +0100, Christophe JAILLET wrote:
 > The devm_clk_get_enabled() helper:
 >    - calls devm_clk_get()
 >    - calls clk_prepare_enable() and registers what is needed in order to
@@ -89,50 +89,50 @@ On Fri, Dec 30, 2022 at 05:36:20PM +0100, Christophe JAILLET wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/rzn1_wdt.c | 18 +-----------------
->  1 file changed, 1 insertion(+), 17 deletions(-)
+>  drivers/watchdog/rtd119x_wdt.c | 16 +---------------
+>  1 file changed, 1 insertion(+), 15 deletions(-)
 > 
-> diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
-> index 55ab384b9965..980c1717adb5 100644
-> --- a/drivers/watchdog/rzn1_wdt.c
-> +++ b/drivers/watchdog/rzn1_wdt.c
-> @@ -98,11 +98,6 @@ static const struct watchdog_ops rzn1_wdt_ops = {
->  	.ping = rzn1_wdt_ping,
+> diff --git a/drivers/watchdog/rtd119x_wdt.c b/drivers/watchdog/rtd119x_wdt.c
+> index 834b94ff3f90..95c8d7abce42 100644
+> --- a/drivers/watchdog/rtd119x_wdt.c
+> +++ b/drivers/watchdog/rtd119x_wdt.c
+> @@ -94,16 +94,10 @@ static const struct of_device_id rtd119x_wdt_dt_ids[] = {
+>  	 { }
 >  };
 >  
-> -static void rzn1_wdt_clk_disable_unprepare(void *data)
+> -static void rtd119x_clk_disable_unprepare(void *data)
 > -{
 > -	clk_disable_unprepare(data);
 > -}
 > -
->  static int rzn1_wdt_probe(struct platform_device *pdev)
+>  static int rtd119x_wdt_probe(struct platform_device *pdev)
 >  {
 >  	struct device *dev = &pdev->dev;
-> @@ -132,23 +127,12 @@ static int rzn1_wdt_probe(struct platform_device *pdev)
->  		return ret;
->  	}
+>  	struct rtd119x_watchdog_device *data;
+> -	int ret;
 >  
-> -	clk = devm_clk_get(dev, NULL);
-> +	clk = devm_clk_get_enabled(dev, NULL);
->  	if (IS_ERR(clk)) {
->  		dev_err(dev, "failed to get the clock\n");
->  		return PTR_ERR(clk);
->  	}
+>  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+> @@ -113,18 +107,10 @@ static int rtd119x_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(data->base))
+>  		return PTR_ERR(data->base);
 >  
-> -	ret = clk_prepare_enable(clk);
-> -	if (ret) {
-> -		dev_err(dev, "failed to prepare/enable the clock\n");
+> -	data->clk = devm_clk_get(dev, NULL);
+> +	data->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(data->clk))
+>  		return PTR_ERR(data->clk);
+>  
+> -	ret = clk_prepare_enable(data->clk);
+> -	if (ret)
 > -		return ret;
-> -	}
-> -
-> -	ret = devm_add_action_or_reset(dev, rzn1_wdt_clk_disable_unprepare,
-> -				       clk);
+> -	ret = devm_add_action_or_reset(dev, rtd119x_clk_disable_unprepare,
+> -				       data->clk);
 > -	if (ret)
 > -		return ret;
 > -
->  	clk_rate = clk_get_rate(clk);
->  	if (!clk_rate) {
->  		dev_err(dev, "failed to get the clock rate\n");
+>  	data->wdt_dev.info = &rtd119x_wdt_info;
+>  	data->wdt_dev.ops = &rtd119x_wdt_ops;
+>  	data->wdt_dev.timeout = 120;
 > -- 
 > 2.34.1
 > 
