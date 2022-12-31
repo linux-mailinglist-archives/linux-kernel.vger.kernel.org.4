@@ -2,95 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2DF65A5E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 18:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C825465A5EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 18:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbiLaROo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 12:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        id S232031AbiLaRVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 12:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiLaROn (ORCPT
+        with ESMTP id S230053AbiLaRVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 12:14:43 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8AD1090
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 09:14:42 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id g4so26428412ybg.7
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 09:14:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ibcFxu0r5aq7fCHqB6aB5eCpGsM5NrAZ+yiZYLfhytk=;
-        b=FqC5ZHepDUgE405pYH8EmwSWX1cJpDrq3DsvdLz05MSCJG4wA3RlisgtkAmUyfwTz3
-         5P3zJs6ZtJOWLsticvL2lWfgRwwHBj2Jb28Mfgn8imbegCKA84hF8QLuG9VW6o2xRjbz
-         92MGLlU8JTrAjRuECvpmdNjQL+6Dn++LhP76w4/uRrAvgZlUIKjwadjk1iMnJLrUv8cH
-         13DamiJZWSUQ57VYq7pZYjQyFJYwbfXI3i7aoAhDa30HQyLr/bWbampPjAxjr5g0i2aU
-         ixMjDtu4n/iNapU6JiiDS/NOwiV5v2MyCULU97sRKi6gCRr4uKc/OHLlUifI6rui5Txh
-         m2Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ibcFxu0r5aq7fCHqB6aB5eCpGsM5NrAZ+yiZYLfhytk=;
-        b=DJrYVmeccNgILD2OL5gAi/gyUuysYO4XsZaD9GGOXxmnZiMbAbiLpQar/XEiPOt78W
-         y1DJ8gOt5GQM+Ko6q9wGZ/eab4Fh6gPCme7DC2IvBuR/iBEl2AONmzgxvQkW9mPIjDTL
-         siQKsZCZtx0IBxvGnl7Bi3LjHurvwkJeLHv4Pk7+qpwli6bV8gIWdeiYW1LHgOxyl/Kg
-         j/7fKoREcP3M22gz3bGmO8yq3CzcSg9IOiN/+iReX+sfiUBqwsry4XvfDIf1YV/O6e1V
-         slUL4x+1IPnO+2ycPj9oTicra5x2k+MPflkE43pUPC0xQLK2HniWJnjw0URNFJOhw6tJ
-         1Gfw==
-X-Gm-Message-State: AFqh2ko7PVQL3lPjXdsaHnKJPyxmmum4Jg+iNzF6paE474gAJn7sz0hG
-        BYaCMqdkKJCPwtVzTJ3+SlqRW7br6lki0SOvQyQ=
-X-Google-Smtp-Source: AMrXdXuslAzvIwIYCQUhi4DGuPioVVUYKYBx8ue+3JA7sF5tKjP2nd+0zRsqz7Ruq1y66L0EPiynhlaxPJ4owVG1JZY=
-X-Received: by 2002:a25:4c81:0:b0:6f9:ece2:7b87 with SMTP id
- z123-20020a254c81000000b006f9ece27b87mr4093697yba.485.1672506881526; Sat, 31
- Dec 2022 09:14:41 -0800 (PST)
+        Sat, 31 Dec 2022 12:21:47 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA51360D3;
+        Sat, 31 Dec 2022 09:21:46 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 506DA5C008F;
+        Sat, 31 Dec 2022 12:21:44 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sat, 31 Dec 2022 12:21:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672507304; x=
+        1672593704; bh=MwNzCwU4y8oThA8LV/hj9QJkdII91FpQFynEsjgAkEs=; b=u
+        wd8/4THVCiCZ6yOyZOn3iXMMSxbkDpU9Wp7C2rtX3lqNkbWiBmU65vxHibpimtqB
+        FDIGsvSPXwv9KADS4yI/eDIDD86qI6xUOOAMb0L8FaAUcZ4quFIXVHergOPZtKMJ
+        kWawKPRGGdwDob4TCmYe7lKGKaxLbNwT+qJTuqRzqyL6N3sQCRn+xBgmSX5+oLX8
+        s/nK3Yr6qF3/R8U102D61tMXDRWwwvElUeePjCCBVuUqxS0yLhohEb+1iTsY1apV
+        EApGYAWweeOfGOFHr3oFf2VgHBtsdb57nhe7HZI4t/OSezyici3xKyc4NfwsW4mv
+        jhidEBGvIrz+WbnDURkwg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672507304; x=
+        1672593704; bh=MwNzCwU4y8oThA8LV/hj9QJkdII91FpQFynEsjgAkEs=; b=B
+        gE5QA+b/pAmKjQguidTWRC9uBV1l4TMzpXmujhet+PWepsARa7E6ruY2DMuXslBF
+        3pmBD36JHLIVLJws70LfVYM6CHAk+GdfaWJVF9+b1CVKBLZIpFHw5Q1lDNx/JLVF
+        lwLeOPsDPTdI0UpB4YO29sV0tVoxZCj1Nizot8DT2rkB4tuwFgwijI3DUV6gGA4J
+        Z4F1uACXhKEalZJcLybrbt+07awvDb/irYwAWcXS4yG8z0vogrOLq2LNjLqtNsHk
+        W6YsB4eC3bz6qHkeNDyq1q0ihrHSIzHbtuT16WTu2NdCHugjhdHbvraeSLI7SiKV
+        h8Qh/tExDj8XH++gdyDSA==
+X-ME-Sender: <xms:qG-wY7IbT_mbKLffc_Ju0N9wBXQfmqPZh18jde16jSPVDaEm_XDY6g>
+    <xme:qG-wY_LSnmX4xZOIoY107V4Mt0bSK1zOG1mQalsWq9N-rfnI5cBxJlQuIptTyrTt-
+    y0bAZrU96osaPipqw>
+X-ME-Received: <xmr:qG-wYzuVnUCIzrhHPqEDyLmpcFJ6fU6h64rZsjcEXIqg7ZaVfDje_KEn3BF9jnFg2pKkANAqm9j-RByQI2JftbC_W15m5H6kHcJbU1e9Hka1TMkU27NQJqH5bw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieekgddutddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeejgfffhfdujeeftdeuudeguedttefgieetffffheejuefguedv
+    heejteeftdfftdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:qG-wY0b4chipnTOVdIIS5QxMreekr0uDBgf3a1PqrHtSnPeE4aOtRw>
+    <xmx:qG-wYyZezoSnuelG5C4nWmQSTb6uJzdcD4TmaQ_81o6-kvBioDzhUQ>
+    <xmx:qG-wY4DWYjS_6v7885Gs3pTj7OF5X-URBeWMHx9j6jrg1Lj73qVAqg>
+    <xmx:qG-wY3PRYuPFLlZSgRnNVkmAq1WeV89QTlav3lQJXSmmJqJ0C5mtXg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 31 Dec 2022 12:21:43 -0500 (EST)
+Message-ID: <ed4a1b6d-3979-652e-0181-c34bb5a40d5d@sholland.org>
+Date:   Sat, 31 Dec 2022 11:21:43 -0600
 MIME-Version: 1.0
-References: <20221230163512.23736-1-dmitrii.bundin.a@gmail.com> <Y69E0diWostgY2pj@kernel.org>
-In-Reply-To: <Y69E0diWostgY2pj@kernel.org>
-From:   Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-Date:   Sat, 31 Dec 2022 20:14:30 +0300
-Message-ID: <CANXV_XzMVGHy5SP-2=QyO6YvpZAzLU4ZwFL3b8KOucr9rwkzhg@mail.gmail.com>
-Subject: Re: [PATCH] scripts/gdb: add mm introspection utils
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     jan.kiszka@siemens.com, kbingham@kernel.org,
-        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
-        mingo@redhat.com, x86@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, vbabka@suse.cz
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <20220810014024.27568-1-samuel@sholland.org>
+ <20220815172653.51C41C433D7@smtp.kernel.org>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH] clk: sunxi-ng: mp: Avoid computing the rate twice
+In-Reply-To: <20220815172653.51C41C433D7@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 11:07 PM Mike Rapoport <rppt@kernel.org> wrote:
->
-> The commit message does not mention it's x86-specific.
-> Not sure how gdb scripts handle per-arch functionality, but at the very
-> least this should be stated in the commit message.
->
-Thanks for pointing this out. Will fix it. I put the command's code
-under the if utils.is_target_arch("x86") ... else
-gdb.GdbError("Virtual address translation is not supported for this
-arch") as it's done in other scripts and have plans to implement the
-same functionality for ARM in the foreseeable future.
+Hi Stephen,
 
-On Fri, Dec 30, 2022 at 11:07 PM Mike Rapoport <rppt@kernel.org> wrote:
-> Any particular reason to make it ALL CAPS?
-Actually, no. Do you propose to reformat the output with a lower case?
+On 8/15/22 12:26, Stephen Boyd wrote:
+> Quoting Samuel Holland (2022-08-09 18:40:24)
+>> ccu_mp_find_best() already computes a best_rate at the same time as the
+>> best m and p factors. Return it so the caller does not need to duplicate
+>> the division.
+> 
+> Did the compiler figure this out and thus this patch makes no difference
+> to the final object code?
 
-On Fri, Dec 30, 2022 at 11:07 PM Mike Rapoport <rppt@kernel.org> wrote:
-> What will happen here with 5-level paging?
-This is safe to do since the PS bit of PML5/PML4 is reserved and it's
-not possible that a 5 or 4 level entry maps a page.
+It makes a difference at least on my gcc version 11.1.0.
 
-On Fri, Dec 30, 2022 at 11:07 PM Mike Rapoport <rppt@kernel.org> wrote:
-> Please don't use magic numbers.
-This was actually a page_offset_base in case the
-CONFIG_DYNAMIC_MEMORY_LAYOUT option is disabled. Will fix it.
+Before:
+   text    data     bss     dec     hex filename
+  18257      12       0   18269    475d drivers/clk/sunxi-ng/sunxi-ccu.o
+
+After:
+   text    data     bss     dec     hex filename
+  18083      12       0   18095    46af drivers/clk/sunxi-ng/sunxi-ccu.o
+
+I will send a v2 covering all of the CCU clock types.
+
+Regards,
+Samuel
+
