@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701B765A36F
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 10:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BE065A370
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 11:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbiLaJ7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 04:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S231733AbiLaKFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 05:05:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLaJ7C (ORCPT
+        with ESMTP id S229514AbiLaKFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 04:59:02 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC4AE0C6
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:59:01 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id b145so11710759pfb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:59:01 -0800 (PST)
+        Sat, 31 Dec 2022 05:05:51 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9139026D6
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 02:05:49 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id x37so17477376ljq.1
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 02:05:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=c+mH6yo9QDzH3j2h09MnjaYAWpR4f/pKw+YySSE9cdM=;
-        b=fRK/PdfPbHcHarX93IwTpy/Ytq/F07RTxGR6RD/gj/F9Sxo+MKI9gDZ4FA2FOxsRPq
-         VPo4+eZzOMMydHrWh+mBvPP4NY6L9kj0/WMcG/yW10m3NaMKnsyIy7tZ+uNzqFZ8PqkN
-         KzrLBw9BMP8p3fXse0VXng/zXsJ2JSc+nCv3MSShNjrR/Ye4wtm/al5QoRQ85eNZSz+t
-         W7hUDVpUhmQ0VhW7mD+d5uKpxJTKPOWvPo6gFDNK2cWb9kClTn8DHNSD2e5ubcC8OPCi
-         zxtKsaeRe8RCeEUQtrfZJLcgzxNbV3M/rTrhTFtE0OXB2lMrvNPWMfRtXtla1jhObyYF
-         krGA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W4oCVQWoL+YrgdFs4cASqQgdeV4AqJ33Y5f9pTDYOCE=;
+        b=Uew+N6ZmTVWEy7vOkDvVjRkhVtXKmBeASt6IKSh96LvmQed9qcQQQJG0elt7FqyvqA
+         9x3tquD8kjnX+3xaEMV/kS5u4Rj97xHL0Iiew0zIWcm99LYUQaj1UzesRy/3u60OLLo/
+         PLJfDsTbkBy4Ap4YIXHmqQC12RI7o2Bk1L83d1Q5ghA006JhH7hr6KCRQj9o9pk9g7vb
+         WDNICQiimP6IiGeeoFd/IAd4NBRYQYoeBuMUtWYIdEch5vE0eY1ZFfVAJMvVQbj8kTMR
+         NLjk3YLyYVb97bf3URnnsaNR7jzYTELNl44ritJNS4GSOa+sxGIPiTl7md31qopNGivH
+         mYrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c+mH6yo9QDzH3j2h09MnjaYAWpR4f/pKw+YySSE9cdM=;
-        b=O1HROAe28jp/cqCeBjNrn7YWNE4J1VUcX3UTEJcTAQZwglE1sRRTxkwkcjW3iesCuB
-         vSeWDa6yDsdSQWkHc8zGPcTjd979MUnLIZLhjNfW5N25bFMKcA9UIqUv2EwlKanVr3xt
-         Cn+h0WcJNIOVsH6xZJU+nisVry1Y08KKBo3EnHnI0KSxYJVE704E9mtmS+HMO8Jnwpgz
-         asFnK6+6p0ej5vWHtdQr3pbRKlaCwmaMdoF0ApKOwo/zn+ZWBJksM6ilzXEap4vaiiKO
-         qjvtzfu0gQLwltFRV+vRO9X/pbhrF3a45hrb9FR5edzswPQccMZ4cOgMJkf0hrAZZQ7+
-         LkCw==
-X-Gm-Message-State: AFqh2koKU64EQys2QEqKMZ8b80QCQxs7pH6SyNhl0hR9U+I9+YVNBY4k
-        j87VfYmmHdKkgIr9ETMyvr0=
-X-Google-Smtp-Source: AMrXdXur7RrG2roADR6sHAZPDR/bZV5urMU1ARSL4dBcVxSS+Mh4meOvFZJXX6xPGKJv8iacJWcjVg==
-X-Received: by 2002:aa7:960d:0:b0:56c:3fba:c5ca with SMTP id q13-20020aa7960d000000b0056c3fbac5camr52384277pfg.16.1672480741039;
-        Sat, 31 Dec 2022 01:59:01 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id i128-20020a626d86000000b005768b4f2d0dsm15128137pfc.64.2022.12.31.01.58.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 01:59:00 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Xiaolei Wang <xiaolei.wang@windriver.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: imx8m: Fix incorrect check for of_clk_get_by_name()
-Date:   Sat, 31 Dec 2022 13:58:48 +0400
-Message-Id: <20221231095851.2573710-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W4oCVQWoL+YrgdFs4cASqQgdeV4AqJ33Y5f9pTDYOCE=;
+        b=Sz6LcszfNpwp9Hzskdn+t0LwBlfyg+WJ1Gs1iyq70VDEAILw7uoeMtvHTn9zeyjcgJ
+         hwXoHDgeevcJPjxgNy5mP0RbndOUFA/9tjxaGn+QgBY9DnKQaDy7yb69lWzWnjGoQPTJ
+         D3pAvUY/dsCVi6JTWg0KZ4Yq18+yuAQDYQOBJ8HZfx0Wrjb6UHHd2nx1tbwfrrThyq3S
+         goEm7vf8YO5sjhZnxQN5nL627ACs6LIEUFA6tfCn/L1KcJ9XHhHc8w5FMtrTM+EG4H0E
+         6jzacElQWFNWIlLSnCmgi7XLkLfC3zPDKJtZwhL1O0FYfNljPNIIGpfGIjTYx1NHRzSP
+         /pYA==
+X-Gm-Message-State: AFqh2kotW3/L/sp9T9oCtFTs1Is/f3IpE94N2ry1v2EDfVQVcpMT3ceG
+        gZqktn5FwbEUfCxUSWn8WepBHa0d+4wT0QcD/fM=
+X-Google-Smtp-Source: AMrXdXsgZEU2nIeOADj6o7xR+s+oxvkrLjezwO8SnFv9c/g+WOImxkEC3K928QKoan4WXXq5+33pAwy7x0tiOi25fbI=
+X-Received: by 2002:a2e:5405:0:b0:27f:b2cf:710 with SMTP id
+ i5-20020a2e5405000000b0027fb2cf0710mr1076089ljb.263.1672481147751; Sat, 31
+ Dec 2022 02:05:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221231055310.2040648-1-yoochan1026@gmail.com> <Y7AHvYfZreO/G/kT@kroah.com>
+In-Reply-To: <Y7AHvYfZreO/G/kT@kroah.com>
+From:   Yoochan Lee <yoochan1026@gmail.com>
+Date:   Sat, 31 Dec 2022 19:05:36 +0900
+Message-ID: <CALQpDLfMjAE9_VtMO6e_iiPrciFNbksLQT3AB3QTGwZCNf5=sA@mail.gmail.com>
+Subject: Re: [PATCH] misc: hpilo: Fix use-after-free in ilo_open
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     matt.hsiao@hpe.com, arnd@arndb.de, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,30 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_clk_get_by_name() returns error pointers instead of NULL.
-Use IS_ERR() checks the return value to catch errors.
+Hi,
 
-Fixes: 836fb30949d9 ("soc: imx8m: Enable OCOTP clock before reading the register")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/soc/imx/soc-imx8m.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I haven't tested with a physical device cause I don't have a real device.
+I found this bug through static analysis.
 
-diff --git a/drivers/soc/imx/soc-imx8m.c b/drivers/soc/imx/soc-imx8m.c
-index 28144c699b0c..32ed9dc88e45 100644
---- a/drivers/soc/imx/soc-imx8m.c
-+++ b/drivers/soc/imx/soc-imx8m.c
-@@ -66,8 +66,8 @@ static u32 __init imx8mq_soc_revision(void)
- 	ocotp_base = of_iomap(np, 0);
- 	WARN_ON(!ocotp_base);
- 	clk = of_clk_get_by_name(np, NULL);
--	if (!clk) {
--		WARN_ON(!clk);
-+	if (IS_ERR(clk)) {
-+		WARN_ON(IS_ERR(clk));
- 		return 0;
- 	}
- 
--- 
-2.25.1
+This type of bug is similar to [1] and [2].
 
+And I'm sorry that my patch is incorrect.
+It's my first time patching a Linux kernel myself.
+So I'm not familiar with how to patch it well (For this reason, my
+patches are referred to [1] and [2]).
+Then, how should I patch it?
+
+[1] https://lore.kernel.org/lkml/20220919040457.GA302681@ubuntu/
+[2] https://lore.kernel.org/lkml/20220919101825.GA313940@ubuntu/
+
+2022=EB=85=84 12=EC=9B=94 31=EC=9D=BC (=ED=86=A0) =EC=98=A4=ED=9B=84 6:58, =
+Greg KH <gregkh@linuxfoundation.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On Sat, Dec 31, 2022 at 02:53:10PM +0900, Yoochan Lee wrote:
+> > --- a/drivers/misc/hpilo.h
+> > +++ b/drivers/misc/hpilo.h
+> > @@ -62,6 +62,7 @@ struct ilo_hwinfo {
+> >       spinlock_t fifo_lock;
+> >
+> >       struct cdev cdev;
+> > +     struct kref refcnt;
+>
+> This is obviously incorrect, please never have 2 reference counts for
+> the same structure.
+>
+> greg k-h
