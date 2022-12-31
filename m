@@ -2,112 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6770265A3D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 12:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DC365A3DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 12:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiLaL6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 06:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
+        id S231887AbiLaL7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 06:59:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLaL6M (ORCPT
+        with ESMTP id S229486AbiLaL7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 06:58:12 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016BD6456
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 03:58:09 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id s127so9622312vsb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 03:58:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cOrnvI0ab6Sjve5sOQHxemo9n/r3kg6EiJp9vkQUJjM=;
-        b=MtKezjvPIsHhRoyFqHNbSAluvUbAQU6kH+LAM/3u5vWixb6DiaWyZerKZFFQAg0LTQ
-         fuO9GKZZprt6hTT+8iQS2E4OTIg0FmmmGdjk4MehZlxsd+OTZe+QYa9n10Skw5HAJUfA
-         mQ5C1IIVo/HURbj1GJZ3nezHvleoDkvknhKsnHKiof3DXn/DfRQSAF0VpY1sCLZgXzv5
-         9U/uasy4pimNgWibwyjcskQFYzAKTU+GKJyPr1S4MVedrfCugz67m6ao+9ukPscUHInX
-         GCg8NoPMirml/W5MORry72hXqJDdQgWYsFNtsjNv0MkAdEVCvZ2WwUSbC7P/mCGKSRlN
-         hFbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cOrnvI0ab6Sjve5sOQHxemo9n/r3kg6EiJp9vkQUJjM=;
-        b=s/3aYjlEoIDTdTbgJ+jTj7MYC67UZ4QESKHcnqe9XeoXwo2cC1qbuXroRUBkQEOJLK
-         IEgOhDGpDueEP7Sn0ZJpgHOIx+Qn/Mc/QwvxWRdR/VJovQM++xRM5HIESq0OwjWIm5LP
-         EbztMzeAg6OMFMqcSqU17ZoOiUo7QlD7BwAqE+sDe8zAFs6+u5sTVpxZUp5tbF7j1RFA
-         P2vpArLx1TprFHfrMK1TNTNU3MwSr7keXhwO7QzxyMEsNz2BhD3Z9WILPemnS6YinLSP
-         t7CcBllSVVsSNV3HoiIHfMPqc3xmLQp7mwS4yIN+/MAdwBoePDUSoQrGWZy01CQntbJm
-         wV4A==
-X-Gm-Message-State: AFqh2kquoBs8A4kKyQRBiVMRGPA9PDiMLXkBPBHhO9rP+LMQXt8PDlI0
-        fvP5zwoNhHkz3EBK+L/kJ0V7FpPd+1cEJ9on0SwRMTpe
-X-Google-Smtp-Source: AMrXdXvmrFy/BahM6IhJ/dZcwp0qFkpovr9HhfOLOhDeYWbvUZXOjO5a/9D8fhZSd28YTNZEJ7ujRNGogWc/fSYVlSE=
-X-Received: by 2002:a67:ee93:0:b0:3b2:a92d:a1f0 with SMTP id
- n19-20020a67ee93000000b003b2a92da1f0mr4111536vsp.46.1672487888989; Sat, 31
- Dec 2022 03:58:08 -0800 (PST)
+        Sat, 31 Dec 2022 06:59:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E026456;
+        Sat, 31 Dec 2022 03:59:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EF19B803F1;
+        Sat, 31 Dec 2022 11:59:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9892DC433EF;
+        Sat, 31 Dec 2022 11:59:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672487971;
+        bh=Gs4ZkzVyXRuKmG/lF2hfGkbXm+2s/h1Gfg9Lxqkrbb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hVS9cbz4Z1axK7wYw9co/mIJDHxqB23QOnGwcDQ0Ah2PlzpvdUpD3mGPTHEZwU4MF
+         LV36JPBBZ3e7rSc4X3rq+2/qL1VDibJ3pwqh3JtYfYFP1tt0ArO9fflCl98zNu8KOw
+         hni/7N9mhJ/VQrzXErparEm8Y0azaIV3uxrSNN2DiDpo3D4WMjGRblmeuistFLZkwD
+         zM0z71jeDfVcKx+o/X9IM0fqBRxfiEA2sUDyP4BwzhKn/ZK0zgNzeZyzwCkzde/bDQ
+         FYU3ooY+uxnhD0TO34KPBMFaRjaPoeoQz4NlL5JSEx8pOTn1+MMzQhnoefSVMPy9Au
+         VtttVR5TENsXA==
+Date:   Sat, 31 Dec 2022 19:59:22 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Frieder Schrempf <frieder@fris.de>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH] arm64: dts: imx8mm-kontron: Add RTC aliases
+Message-ID: <20221231115922.GP6112@T480>
+References: <20221130111357.585560-1-frieder@fris.de>
 MIME-Version: 1.0
-References: <CAAJw_Ztzyh-GNTJYpXbA0CeJv2Rz=fLZKE6_Q=7JMmM+s9yHXQ@mail.gmail.com>
- <CAAJw_Ztb0mJVkHtBhryf=9g8CA0fZZRa8HVio8GCGUSLOvqa7A@mail.gmail.com>
- <Y6bz4wOC0nwu2yGU@debian.me> <0c70ba66-ef00-7242-d198-844f803662fa@gmail.com>
- <CAAJw_Zv0iBg4rkzxQ2UOOLS9JQZ4cCmM7gSoDXec_gm-GggB6A@mail.gmail.com>
- <f500d64b-c26d-ee34-092a-421c64c69f9e@leemhuis.info> <Y66Hk6waTeXQDz1/@sol.localdomain>
- <3dd9808e-ffbd-7959-2111-a9f13f2031f1@kernel.org>
-In-Reply-To: <3dd9808e-ffbd-7959-2111-a9f13f2031f1@kernel.org>
-From:   Jeff Chua <jeff.chua.linux@gmail.com>
-Date:   Sat, 31 Dec 2022 19:57:58 +0800
-Message-ID: <CAAJw_ZsLjw=+_oju-8Mxy-nEErUYc9ZPfDyX204yiJ7mA8u5gA@mail.gmail.com>
-Subject: Re: Fwd: f2fs write error Linux v6.2
-To:     Chao Yu <chao@kernel.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Eric Biggers <ebiggers@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        F2FS Development <linux-f2fs-devel@lists.sourceforge.net>,
-        Linux Regressions <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130111357.585560-1-frieder@fris.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 10:51 AM Chao Yu <chao@kernel.org> wrote:
->
-> Hi Jeff,
->
-> On 2022/12/30 14:39, Eric Biggers wrote:
-> > If you could provide the mkfs and mount options you are using, and any other
-> > relevant details, that would be helpful.  Bisection would also be very helpful,
-> > as Thorsten mentioned.
+On Wed, Nov 30, 2022 at 12:13:49PM +0100, Frieder Schrempf wrote:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+> 
+> Add aliases for the RTCs on the board and on the SoC. This ensures that
+> the primary RTC is always the one on the board that has a buffered supply
+> and maximum accuracy.
+> 
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-I was just preparing my environment so I could hit the same issue
-before I go for the bisect, so I don't need to reboot every time. Got
-to a point where I could just qemu kvm + initrd ramdisk with / (f2fs)
-and I could hit the problem almost every 8/10 runs just by doing
-"mount -o remount /" and the system would freeze. That's good. I've a
-good test case! ... and then I see Chao Yu's patch ...
-
-> Other than that, I found some cases which can cause similar issue, so I figure
-> out a patch for possible fixing, if you can have a try with it to check whether
-> it can fix your issue, that would be helpful as well.
->
-> https://lore.kernel.org/linux-f2fs-devel/20221230154332.5082-1-chao@kernel.org/T/#u
-
-Ok, the patch seems to fix the problem. I'll run my qemu kvm
-environment a few more times before I switch the real system. Because
-it's not a that I could cause a real "mount -o remount /" freeze or
-"vi /etc/passwd" fault all the time,
-
-Will feedback soon. This would a very nice year end celebration so I
-could move to 6.2.0-rc1.
-
-Thank you!
-
-Jeff
+Applied, thanks!
