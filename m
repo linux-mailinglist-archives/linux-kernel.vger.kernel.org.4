@@ -2,96 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4867565A431
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8C465A434
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbiLaMtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 07:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
+        id S232045AbiLaMva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 07:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbiLaMtT (ORCPT
+        with ESMTP id S231878AbiLaMv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 07:49:19 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B1810540
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:49:02 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id 124so15979857pfy.0
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:49:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=q8DXWGlRQXwEWsvjY0axdM/4CSvGdmhgjoXDmsx5XAE=;
-        b=GKHfIO5/zPApXtAUOUA0aOVIZUwLAURpCXBHgDj1NR1eDpPZ8kJqGc9kYxtnJ8J6n0
-         G7VioD9KKPNReKRZffb5YWGKGrwy7MKl3bL1EccIOeRJVGChBnOjTxOTdKusj1dAVoka
-         lOL7EYDnoTSZwvhuUp0IvnnoufI2Gr390XZrZpzt8yzHrOuSQG1e2YC56zmxhAYmVTkA
-         E3+HowNHFYPE/naF/0ShWsCbZHz2o5P478U7NMHJ17JVORUMQtc0IwnOS0FdMIDjmkQS
-         +eFhB5UlvXPh8sHVCVIEuVaWIp38bOx52PZLr62+JWbPvPc/wGIH1Wbbq4N/oAOAGnp4
-         csUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q8DXWGlRQXwEWsvjY0axdM/4CSvGdmhgjoXDmsx5XAE=;
-        b=fxFfszKEcRYniqwaElWaMfbg/9y1fG/5a62CKSdX7FjUuwRj5GmZ5dbaqbWcjD8r23
-         GLBTPQ1v2/ByYrBJiSZaRHVlADn+482BjIYv4aHWabjv6yHb2kiXZETcHK3geX+i0s5e
-         +1g97fC/hagXZ+RdsE1JP+jeY/ItE4bYs9UrJFiDKc7XmNH9/cR01MhphV7IVW6HLnr1
-         WebFO99LVrZOda7m3jQaF3G82WmBpXrEmerTLJ7EumKVimPv2ByobeG99yevJu+MTzuW
-         z4KVsPig+j/VvoOdgxL/wieW2zB18HFy4Y19+1TfsqiO5JYkR/N7LpytBAcJP/OB/Ob9
-         k5XQ==
-X-Gm-Message-State: AFqh2krpIA2M9MWabiXWEJqS4pS27RGBGE9ytnpDx3+0nVgmrz91nNCL
-        AtDWUeGLgUr4vNc3GxQ0yzlLuQ==
-X-Google-Smtp-Source: AMrXdXt4c0FpjWbTrXvCfeqQQBQwRmV7yv8JVygcOx12CA48lg1ae5I7PrwtSe5VDyzE/rqRXF7cSQ==
-X-Received: by 2002:a62:b619:0:b0:574:3cde:385a with SMTP id j25-20020a62b619000000b005743cde385amr32875759pff.32.1672490942302;
-        Sat, 31 Dec 2022 04:49:02 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:1c5e:e3b5:c341:16de:ce17:b857])
-        by smtp.gmail.com with ESMTPSA id r29-20020aa7963d000000b005750d6b4761sm10337204pfg.168.2022.12.31.04.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 04:49:01 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, soc@kernel.org,
+        Sat, 31 Dec 2022 07:51:28 -0500
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF95B632F
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:51:26 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id BbKbp3t8uexdxBbKcp9m3w; Sat, 31 Dec 2022 13:51:25 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 31 Dec 2022 13:51:25 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Cc:     arnd@arndb.de, agross@kernel.org, bhupesh.sharma@linaro.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        will@kernel.org, konrad.dybcio@somainline.org,
-        catalin.marinas@arm.com, krzysztof.kozlowski@linaro.org
-Subject: [PATCH] arm64: defconfig: Enable Qualcomm EUD
-Date:   Sat, 31 Dec 2022 18:18:52 +0530
-Message-Id: <20221231124852.3283597-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
+Subject: [PATCH] watchdog: of_xilinx_wdt: Use devm_clk_get_enabled() helper
+Date:   Sat, 31 Dec 2022 13:51:20 +0100
+Message-Id: <71551233b18f57037be9e75d2d6428534d7572d3.1672491065.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the EUD (Embedded USB Debugger) block is supported on
-several Qualcomm SoCs upstream, enable the same as a module in
-the arm64 defconfig as a module.
+The devm_clk_get_enabled() helper:
+   - calls devm_clk_get()
+   - calls clk_prepare_enable() and registers what is needed in order to
+     call clk_disable_unprepare() when needed, as a managed resource.
 
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+This simplifies the code and avoids the need of a dedicated function used
+with devm_add_action_or_reset().
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Note that the order of operations is slightly modified by this patch. The
+clk is now prepare_enable()'ed before calling clk_get_rate().
+---
+ drivers/watchdog/of_xilinx_wdt.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 851e8f9be06da..c43aeb936d9ad 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -922,6 +922,7 @@ CONFIG_USB_SERIAL=m
- CONFIG_USB_SERIAL_CP210X=m
- CONFIG_USB_SERIAL_FTDI_SIO=m
- CONFIG_USB_SERIAL_OPTION=m
-+CONFIG_USB_QCOM_EUD=m
- CONFIG_USB_HSIC_USB3503=y
- CONFIG_NOP_USB_XCEIV=y
- CONFIG_USB_GADGET=y
+diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+index 3318544366b8..f184843380a3 100644
+--- a/drivers/watchdog/of_xilinx_wdt.c
++++ b/drivers/watchdog/of_xilinx_wdt.c
+@@ -193,7 +193,7 @@ static int xwdt_probe(struct platform_device *pdev)
+ 
+ 	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
+ 
+-	xdev->clk = devm_clk_get(dev, NULL);
++	xdev->clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(xdev->clk)) {
+ 		if (PTR_ERR(xdev->clk) != -ENOENT)
+ 			return PTR_ERR(xdev->clk);
+@@ -211,15 +211,6 @@ static int xwdt_probe(struct platform_device *pdev)
+ 				 "The watchdog clock freq cannot be obtained\n");
+ 	} else {
+ 		pfreq = clk_get_rate(xdev->clk);
+-		rc = clk_prepare_enable(xdev->clk);
+-		if (rc) {
+-			dev_err(dev, "unable to enable clock\n");
+-			return rc;
+-		}
+-		rc = devm_add_action_or_reset(dev, xwdt_clk_disable_unprepare,
+-					      xdev->clk);
+-		if (rc)
+-			return rc;
+ 	}
+ 
+ 	/*
 -- 
-2.38.1
+2.34.1
 
