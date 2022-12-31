@@ -2,279 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F2665A748
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 22:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA76265A756
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 23:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235678AbiLaVxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 16:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S235831AbiLaWCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 17:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiLaVw7 (ORCPT
+        with ESMTP id S229823AbiLaWB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 16:52:59 -0500
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C70647F
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 13:52:57 -0800 (PST)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 58B023EBAF;
-        Sat, 31 Dec 2022 22:52:55 +0100 (CET)
-Date:   Sat, 31 Dec 2022 22:52:54 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Kalyan Thota <quic_kalyant@quicinc.com>
-Subject: Re: [RFC PATCH 3/7] drm/msm/dpu: Disable MDP vsync source selection
- on DPU 5.0.0 and above
-Message-ID: <20221231215254.pqaegrmldufi7ugo@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>, Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Kalyan Thota <quic_kalyant@quicinc.com>
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-4-marijn.suijten@somainline.org>
+        Sat, 31 Dec 2022 17:01:57 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927B55F84;
+        Sat, 31 Dec 2022 14:01:53 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7B5BA5C00AB;
+        Sat, 31 Dec 2022 17:01:49 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 31 Dec 2022 17:01:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1672524109; x=1672610509; bh=uEGwd78iouIBfqIK3t/RRS7S+
+        +4GQDRNvKIt4E61Pgc=; b=T7zIRNB7y343XX5YH2dmlezUMp+hc2shyHwqMfd6S
+        1lRhKykBUE5ynNXNfY5JEe56s6/drHw+pGSUWkE30nl/ZE7BjxuTi5voaPkt70CJ
+        ytfzZVNPmpj8xqNPeUrAjULzx5LYcCaT9cheOg9D9dRMRjb7aHF6rHFSxiVIJ4uO
+        PcRgBeEwpo4KeKwZyM1KWq7cRPAt5KxcPw8WkILDzgbEss7HBo++dng4FFxEgBiH
+        2UBozlU6oBiaCg0r4gk57NeugKJh39z5y2IOMZCF9saG6WRfLCLNpmCMorA5G4tj
+        re2w/xl9lN8pfGajmfyomJtp9GpbsWu3Ksqgr/vMKTCNQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1672524109; x=1672610509; bh=uEGwd78iouIBfqIK3t/RRS7S++4GQDRNvKI
+        t4E61Pgc=; b=G7lOHcQgKBoGMWpvwy6cOD6JEJzXzdc26/du93Hn6fwYmzDaDlr
+        QPjwWVFCfcp8vmAiEjaOzQzVEms/AVZKoHZMM9q4sTRBQ3LaFHgQBdj/9CumLqdK
+        uYkPcmFH1xVWJygQww7+4smC3sAohtXsoVjhj0HPo0G4G+ti88CXmWNV72OIq3bq
+        er2bcNVxlWhNbGiwvclg0eD/rZItnLeqlk0A5nQ4Lozr5apJjgzLaf94cKhbQuZZ
+        pLyKfNMHofkpryOUCxQt97KxY8wg8cmkvZr/X+RmhEJCrQQZIqILYFYDNzKOhRvb
+        fI/EUNWStiEPWV7unPNGqe/1ZbB1L6jALkg==
+X-ME-Sender: <xms:S7GwY6FQd6hZJEG4YIRcIq-0J7QcwvL0LZI70BYVYc3sxQ5CaG67yA>
+    <xme:S7GwY7UWoCcAeDdOarYJoHUhTzBufT8U8e9bojz6NlbeU6DrQDZ3kELA9yWsF_5sX
+    GXokwZPxn3ATtiNlw>
+X-ME-Received: <xmr:S7GwY0KhzI81Va4aLI6SCksAv4w2zCruZVNDjyS8wGmNIMaxrAtvTtE7KgRV9sLctzbxhNXDCDUtxg0Y3iGqdWyEwT5uH4I7CIPYKjetMZDxlmvcBf1_u_7pMwhDY75qamkWpA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieekgdduheehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeehffethedtteffgfefteetjedvfeelueevudffgfeutdejvdehledv
+    vdffhfevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgu
+    rdhorhhg
+X-ME-Proxy: <xmx:S7GwY0FhvTw1JxpLhzraacJm7Uby1ptVkwc_xqWU9fHGEpq9z-zbhw>
+    <xmx:S7GwYwWTMkRDvIzRhCJu-8q8ysKNwu74KYpBwJQrYIhJGIqbLazqiQ>
+    <xmx:S7GwY3OzIdkhZUpR--lWaCybgzz0u19jz3uHkb0XbYVgW8hzb72-mQ>
+    <xmx:TbGwY8mHggTyKBxh-0GO0wvPyIIv5VTAA1jdtcrZpLAzkGYZQShSQQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 31 Dec 2022 17:01:46 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH v2 0/3] crypto: Allwinner D1 crypto support
+Date:   Sat, 31 Dec 2022 16:01:42 -0600
+Message-Id: <20221231220146.646-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221231215006.211860-4-marijn.suijten@somainline.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-31 22:50:02, Marijn Suijten wrote:
-> Since hardware revision 5.0.0 the TE configuration moved out of the
-> PINGPONG block into the INTF block, including vsync source selection
-> that was previously part of MDP top.  Writing to the MDP_VSYNC_SEL
-> register has no effect anymore and is omitted downstream via the
-> DPU/SDE_MDP_VSYNC_SEL feature flag.  This flag is only added to INTF
-> blocks used by hardware prior to 5.0.0.
-> 
-> The code that writes to these registers in the INTF block will follow in
-> subsequent patches.
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 33 ++++++++++--
->  .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  1 +
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c    | 52 +++++++++++++------
->  3 files changed, 66 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 39d4b293710c..1cfe94494135 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -407,7 +407,7 @@ static const struct dpu_mdp_cfg msm8998_mdp[] = {
->  	{
->  	.name = "top_0", .id = MDP_TOP,
->  	.base = 0x0, .len = 0x458,
-> -	.features = 0,
-> +	.features = BIT(DPU_MDP_VSYNC_SEL),
->  	.highest_bank_bit = 0x2,
->  	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
->  			.reg_off = 0x2AC, .bit_off = 0},
-> @@ -436,7 +436,7 @@ static const struct dpu_mdp_cfg sdm845_mdp[] = {
->  	{
->  	.name = "top_0", .id = MDP_TOP,
->  	.base = 0x0, .len = 0x45C,
-> -	.features = BIT(DPU_MDP_AUDIO_SELECT),
-> +	.features = BIT(DPU_MDP_AUDIO_SELECT) | BIT(DPU_MDP_VSYNC_SEL),
->  	.highest_bank_bit = 0x2,
->  	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
->  			.reg_off = 0x2AC, .bit_off = 0},
-> @@ -512,6 +512,31 @@ static const struct dpu_mdp_cfg sm6115_mdp[] = {
->  	},
->  };
->  
-> +static const struct dpu_mdp_cfg sdm8150_mdp[] = {
+This series finishes adding crypto support for the Allwinner D1 SoC. The
+driver patch from v1 was merged, but not the binding[1]. This turned out
+to be a good thing, because I later found that the TRNG needed another
+clock reference in the devicetree. That is fixed in v2. I include the DT
+update here too, since the SoC DT has been on the list for a while[2].
 
-Sometimes it is only possible to spot such things _after_ sending,
-probably the thing that makes us human :)
+[1]: https://lore.kernel.org/all/20211119051026.13049-1-samuel@sholland.org/T/
+[2]: https://lore.kernel.org/lkml/20221208090237.20572-1-samuel@sholland.org/
 
-sm8150_mdp*, not sdm.
+Changes in v2:
+ - Add TRNG clock
 
-- Marijn
+Samuel Holland (3):
+  dt-bindings: crypto: sun8i-ce: Add compatible for D1
+  crypto: sun8i-ce - Add TRNG clock to the D1 variant
+  riscv: dts: allwinner: d1: Add crypto engine node
 
-> +	{
-> +	.name = "top_0", .id = MDP_TOP,
-> +	.base = 0x0, .len = 0x45C,
-> +	.features = BIT(DPU_MDP_AUDIO_SELECT),
-> +	.highest_bank_bit = 0x2,
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
-> +			.reg_off = 0x2AC, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
-> +			.reg_off = 0x2B4, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
-> +			.reg_off = 0x2BC, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
-> +			.reg_off = 0x2C4, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
-> +			.reg_off = 0x2AC, .bit_off = 8},
-> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
-> +			.reg_off = 0x2B4, .bit_off = 8},
-> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
-> +			.reg_off = 0x2BC, .bit_off = 8},
-> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
-> +			.reg_off = 0x2C4, .bit_off = 8},
-> +	},
-> +};
-> +
->  static const struct dpu_mdp_cfg sm8250_mdp[] = {
->  	{
->  	.name = "top_0", .id = MDP_TOP,
-> @@ -1901,8 +1926,8 @@ static const struct dpu_mdss_cfg sm6115_dpu_cfg = {
->  
->  static const struct dpu_mdss_cfg sm8150_dpu_cfg = {
->  	.caps = &sm8150_dpu_caps,
-> -	.mdp_count = ARRAY_SIZE(sdm845_mdp),
-> -	.mdp = sdm845_mdp,
-> +	.mdp_count = ARRAY_SIZE(sdm8150_mdp),
-> +	.mdp = sdm8150_mdp,
->  	.ctl_count = ARRAY_SIZE(sm8150_ctl),
->  	.ctl = sm8150_ctl,
->  	.sspp_count = ARRAY_SIZE(sdm845_sspp),
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> index 3b645d5aa9aa..e0e153889ab7 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> @@ -93,6 +93,7 @@ enum {
->  	DPU_MDP_UBWC_1_0,
->  	DPU_MDP_UBWC_1_5,
->  	DPU_MDP_AUDIO_SELECT,
-> +	DPU_MDP_VSYNC_SEL,
->  	DPU_MDP_MAX
->  };
->  
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
-> index c3110a25a30d..2e699c9ad13c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
-> @@ -151,28 +151,16 @@ static void dpu_hw_get_danger_status(struct dpu_hw_mdp *mdp,
->  	status->sspp[SSPP_CURSOR1] = (value >> 26) & 0x3;
->  }
->  
-> -static void dpu_hw_setup_vsync_source(struct dpu_hw_mdp *mdp,
-> +static void dpu_hw_setup_vsync_source_v1(struct dpu_hw_mdp *mdp,
->  		struct dpu_vsync_source_cfg *cfg)
->  {
->  	struct dpu_hw_blk_reg_map *c;
-> -	u32 reg, wd_load_value, wd_ctl, wd_ctl2, i;
-> -	static const u32 pp_offset[PINGPONG_MAX] = {0xC, 0x8, 0x4, 0x13, 0x18};
-> +	u32 reg, wd_load_value, wd_ctl, wd_ctl2;
->  
-> -	if (!mdp || !cfg || (cfg->pp_count > ARRAY_SIZE(cfg->ppnumber)))
-> +	if (!mdp || !cfg)
->  		return;
->  
->  	c = &mdp->hw;
-> -	reg = DPU_REG_READ(c, MDP_VSYNC_SEL);
-> -	for (i = 0; i < cfg->pp_count; i++) {
-> -		int pp_idx = cfg->ppnumber[i] - PINGPONG_0;
-> -
-> -		if (pp_idx >= ARRAY_SIZE(pp_offset))
-> -			continue;
-> -
-> -		reg &= ~(0xf << pp_offset[pp_idx]);
-> -		reg |= (cfg->vsync_source & 0xf) << pp_offset[pp_idx];
-> -	}
-> -	DPU_REG_WRITE(c, MDP_VSYNC_SEL, reg);
->  
->  	if (cfg->vsync_source >= DPU_VSYNC_SOURCE_WD_TIMER_4 &&
->  			cfg->vsync_source <= DPU_VSYNC_SOURCE_WD_TIMER_0) {
-> @@ -219,6 +207,33 @@ static void dpu_hw_setup_vsync_source(struct dpu_hw_mdp *mdp,
->  	}
->  }
->  
-> +static void dpu_hw_setup_vsync_source(struct dpu_hw_mdp *mdp,
-> +		struct dpu_vsync_source_cfg *cfg)
-> +{
-> +	struct dpu_hw_blk_reg_map *c;
-> +	u32 reg, i;
-> +	static const u32 pp_offset[PINGPONG_MAX] = {0xC, 0x8, 0x4, 0x13, 0x18};
-> +
-> +	if (!mdp || !cfg || (cfg->pp_count > ARRAY_SIZE(cfg->ppnumber)))
-> +		return;
-> +
-> +	c = &mdp->hw;
-> +
-> +	reg = DPU_REG_READ(c, MDP_VSYNC_SEL);
-> +	for (i = 0; i < cfg->pp_count; i++) {
-> +		int pp_idx = cfg->ppnumber[i] - PINGPONG_0;
-> +
-> +		if (pp_idx >= ARRAY_SIZE(pp_offset))
-> +			continue;
-> +
-> +		reg &= ~(0xf << pp_offset[pp_idx]);
-> +		reg |= (cfg->vsync_source & 0xf) << pp_offset[pp_idx];
-> +	}
-> +	DPU_REG_WRITE(c, MDP_VSYNC_SEL, reg);
-> +
-> +	dpu_hw_setup_vsync_source_v1(mdp, cfg);
-> +}
-> +
->  static void dpu_hw_get_safe_status(struct dpu_hw_mdp *mdp,
->  		struct dpu_danger_safe_status *status)
->  {
-> @@ -266,7 +281,12 @@ static void _setup_mdp_ops(struct dpu_hw_mdp_ops *ops,
->  	ops->setup_split_pipe = dpu_hw_setup_split_pipe;
->  	ops->setup_clk_force_ctrl = dpu_hw_setup_clk_force_ctrl;
->  	ops->get_danger_status = dpu_hw_get_danger_status;
-> -	ops->setup_vsync_source = dpu_hw_setup_vsync_source;
-> +
-> +	if (cap & BIT(DPU_MDP_VSYNC_SEL))
-> +		ops->setup_vsync_source = dpu_hw_setup_vsync_source;
-> +	else
-> +		ops->setup_vsync_source = dpu_hw_setup_vsync_source_v1;
-> +
->  	ops->get_safe_status = dpu_hw_get_safe_status;
->  
->  	if (cap & BIT(DPU_MDP_AUDIO_SELECT))
-> -- 
-> 2.39.0
-> 
+ .../bindings/crypto/allwinner,sun8i-ce.yaml   | 33 ++++++++++++++-----
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 12 +++++++
+ .../crypto/allwinner/sun8i-ce/sun8i-ce-core.c |  1 +
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce.h  |  2 +-
+ 4 files changed, 39 insertions(+), 9 deletions(-)
+
+-- 
+2.37.4
+
