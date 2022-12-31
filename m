@@ -2,149 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B9B65A2B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 05:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F1165A2B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 06:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbiLaEgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 23:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        id S231466AbiLaE7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 23:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiLaEgh (ORCPT
+        with ESMTP id S229519AbiLaE66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 23:36:37 -0500
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B13713F81
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 20:36:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1672461372; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=JQdUWp1o75bn5Cm6C7l8IRKkaAqi68sc936SBl6G1IK4mNvCmGGe/lPLTCja8CWImORj2rOE0TowDYRu/AGGfHyYyDlQduBx00MeCWbHJLkAEYoG6sK5hpG7G0ZFD9Pc/HUwd+OftRioA9bKt7NLhm4niKFF5ZV53GeWwWh0Qio=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1672461372; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=UZUtlTKpQdPfubcQzf2LyoQlsOR8ISvYrlk080SW5kw=; 
-        b=VNykuMGWFgnD0l92ENbYSiYzHz3Hn2xd2Wqxp30ctE6hHvcp3KSwbala7ssa7VoNe6o1MXE/hoHkFI+eZ40V/ctlXQ96VahywGYcGfIUtKzC9OtMaUKaM9FD9VaJ9g0eA961RoBSO0rCHXxS7C0D+aaS3YDiOMJAHXl12Q69Osg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672461372;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=UZUtlTKpQdPfubcQzf2LyoQlsOR8ISvYrlk080SW5kw=;
-        b=Z3C94yCn3uAtN7rcoUjw4ddTfVUjfEroMCME1T4QtV0QWBmFJaPJlqr3CysNZB7C
-        kwXV5U1l6R5QdCnc7y8eHmkBqIgnKffQvTfNAZwBSt0ey4MDnnGvNP1QlHKPCZcCYSl
-        Sz7rtFnSzGHFVnf1+Is5f6nAArDfCAKQ/pQE6H/4=
-Received: from edelgard.fodlan.icenowy.me (120.85.97.2 [120.85.97.2]) by mx.zohomail.com
-        with SMTPS id 1672461369384205.65724335826928; Fri, 30 Dec 2022 20:36:09 -0800 (PST)
-Message-ID: <5818a83e644eb9c868d4cf65117983e08ba1c17f.camel@icenowy.me>
-Subject: Re: [PATCH 1/2] riscv: errata: fix T-Head dcache.cva encoding
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Sergey Matyukevich <geomatsi@gmail.com>
-Cc:     Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Sat, 31 Dec 2022 12:36:04 +0800
-In-Reply-To: <Y69iNMQ60gXYkKus@curiosity>
-References: <20221227020258.303900-1-uwu@icenowy.me>
-         <CAJF2gTSGvEnTqEqR9f+zU8T3VS8FoCtsgSk=9hz6cWxAL630zQ@mail.gmail.com>
-         <Y69iNMQ60gXYkKus@curiosity>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        Fri, 30 Dec 2022 23:58:58 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A94D1758A;
+        Fri, 30 Dec 2022 20:58:57 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so23251421pjh.5;
+        Fri, 30 Dec 2022 20:58:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EufWqX9dCf4XvIcCUQnzSLEMVyrkjkBbjT33Bi0xc4k=;
+        b=XTAYg1K7y9zz+zvCq04/V+eRrhtZBomSsUX1Nm5yKxVlRM8dnJDRGcG8W4MnDyiUcN
+         yx3CqRn+AHyy/ldze3hahHmxcr9deIy1CTFnucHQYBfKToTtzNTvXJE3Ql5pSx0CBoGy
+         35nuEM4qMb8lR+wwH7VSYbxZu25sa8EJvqZvi6QbnfHmlDfA057L5kgmXmIqsOkCD727
+         dt5HhmFCHvn35m6JzK0ovS4ReLMS6NSIIQ8/0p22BuyiKifhltM7tQZICK7DNBn0mNCh
+         ZadSXaop5ZPC+Ve9AI8z3mqT1jPZ29uE/aN7tF4YwHEJgdK2jHL7pPuw6ddYikjGRZfz
+         VaMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EufWqX9dCf4XvIcCUQnzSLEMVyrkjkBbjT33Bi0xc4k=;
+        b=3N7dbLR6lQAL7AgvNmn4S2cxFsZADreahDrj0yE6eboOqCFz1PDdyjJDGu5rxpGCzp
+         8hyZtYkMgrQIIrnaBoFEWIo6jnbvQTBLo8fVFmAjNho1cteirWl1TjhOV0i//jy/Njua
+         /tjBayk7mXKbt2+0nGWEvjp5BmZFxZbe3VyIX6ZAjL0+cbJgIGrntbtwvflqAqXpf/wS
+         s0gnjrxaqm9vqORy5kWhFdMASodKBuP7q81HQirfywt5olpQyv/yYkBybos+3/a6IsaU
+         cJpbGuN7dzYfmscoR7AciL+b9YfyRbfpYDKugfyKGVVcuVIVZ+UJR0OFdYoTcWM8vtu6
+         +lAg==
+X-Gm-Message-State: AFqh2kp6ZrBVjlvIIZYXlLRdDSACQVhyb6xpQ/nA44/h1ZlNdhtr/INa
+        AJREMhzXv2fulRpX80Eh6h+2fOrv+7PCRA==
+X-Google-Smtp-Source: AMrXdXs/vhTNrZ2Ilqc5t+CAO4dzCU+sKSGLufrR6xnnVh/kfGbMn7U08f1CSndDocrR6Mn92ZNawg==
+X-Received: by 2002:a17:902:8f87:b0:189:2688:c97f with SMTP id z7-20020a1709028f8700b001892688c97fmr38074576plo.50.1672462736876;
+        Fri, 30 Dec 2022 20:58:56 -0800 (PST)
+Received: from localhost.localdomain (kayle.snu.ac.kr. [147.46.126.79])
+        by smtp.gmail.com with ESMTPSA id 2-20020a170902c20200b00190f5e3bcd9sm15861251pll.23.2022.12.30.20.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Dec 2022 20:58:56 -0800 (PST)
+From:   Yoochan Lee <yoochan1026@gmail.com>
+To:     davem@davemloft.net
+Cc:     sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yoochan Lee <yoochan1026@gmail.com>
+Subject: [PATCH] \sbus: char: uctrl: Fix use-after-free in uctrl_open
+Date:   Sat, 31 Dec 2022 13:58:44 +0900
+Message-Id: <20221231045844.2038042-1-yoochan1026@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-12-31=E6=98=9F=E6=9C=9F=E5=85=AD=E7=9A=84 01:12 +0300=EF=BC=
-=8CSergey Matyukevich=E5=86=99=E9=81=93=EF=BC=9A
-> > > The dcache.cva encoding shown in the comments are wrong, it's for
-> > > dcache.cval1 (which is restricted to L1) instead.
-> > >=20
-> > > Fix this in the comment and in the hardcoded instruction.
-> > >=20
-> > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > > ---
-> > > The code is tested on a LiteX SoC with OpenC906 core, and it
-> > > successfully boots to Systemd on a SD card connected to
-> > > LiteSDCard.
-> > >=20
-> > > This change should be not noticable on C906, but on multi-core
-> > > C910
-> > > cluster it should fixes something. Unfortunately TH1520 seems to
-> > > be not
-> > > so ready to test mainline patches on.
-> > >=20
-> > > =C2=A0arch/riscv/include/asm/errata_list.h | 4 ++--
-> > > =C2=A01 file changed, 2 insertions(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/arch/riscv/include/asm/errata_list.h
-> > > b/arch/riscv/include/asm/errata_list.h
-> > > index 4180312d2a70..605800bd390e 100644
-> > > --- a/arch/riscv/include/asm/errata_list.h
-> > > +++ b/arch/riscv/include/asm/errata_list.h
-> > > @@ -102,7 +102,7 @@ asm
-> > > volatile(ALTERNATIVE(=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
-> > > =C2=A0 * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > > =C2=A0 *=C2=A0=C2=A0 0000001=C2=A0=C2=A0=C2=A0 01001=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 rs1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 000=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 00000=C2=A0 0001011
-> > > =C2=A0 * dcache.cva rs1 (clean, virtual address)
-> > > - *=C2=A0=C2=A0 0000001=C2=A0=C2=A0=C2=A0 00100=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 rs1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 000=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 00000=C2=A0 0001011
-> > > + *=C2=A0=C2=A0 0000001=C2=A0=C2=A0=C2=A0 00101=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 rs1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 000=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 00000=C2=A0 0001011
-> > > =C2=A0 *
-> > > =C2=A0 * dcache.cipa rs1 (clean then invalidate, physical address)
-> > > =C2=A0 * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > > @@ -115,7 +115,7 @@ asm
-> > > volatile(ALTERNATIVE(=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
-> > > =C2=A0 *=C2=A0=C2=A0 0000000=C2=A0=C2=A0=C2=A0 11001=C2=A0=C2=A0=C2=
-=A0=C2=A0 00000=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 000=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 00000=C2=A0 0001011
-> > > =C2=A0 */
-> > > =C2=A0#define THEAD_inval_A0 ".long 0x0265000b"
-> > > -#define THEAD_clean_A0 ".long 0x0245000b"
-> > > +#define THEAD_clean_A0 ".long 0x0255000b"
-> > > =C2=A0#define THEAD_flush_A0 ".long 0x0275000b"
-> > > =C2=A0#define THEAD_SYNC_S=C2=A0=C2=A0 ".long 0x0190000b"
->=20
-> Nice catch ! I experimented with T-Head RVB-ICE board on the up-to-
-> date
-> upstream kernel, using device tree and some other bits from the
-> vendor
-> kernel [1]. Without this patch, emmc on this board does not work
-> since
-> noncoherent dma sync operations use incorrect 'clean' instruction.
-> Applying this patch fixes emmc operations, so
+A race condition may occur if the user physically removes the
+uctrl device while calling open().
 
-Thanks for testing on C910! I don't think this patch will make a
-significant difference on C906, so it's valuable!
+This is a race condition between uctrl_open() function and
+the uctrl_remove() function, which may lead to Use-After-Free.
 
->=20
-> Tested-by: Sergey Matyukevich <sergey.matyukevich@syntacore.com>
->=20
-> [1] https://github.com/T-head-Semi/linux/tree/linux-5.10.4
->=20
-> Regards,
-> Sergey
+Therefore, add a kref when open() uctrl driver and decrement
+the kref when close() and uctrl_remove() so that the race
+condition is not occured.
+
+---------------CPU 0--------------------CPU 1-----------------
+                              | p = dev_get_drvdata(&op->dev);
+                              | ...
+                              | kfree(p); -- (1)
+uctrl_get_event_status(global
+_driver); — (2)
+
+Signed-off-by: Yoochan Lee <yoochan1026@gmail.com>
+---
+ drivers/sbus/char/uctrl.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/sbus/char/uctrl.c b/drivers/sbus/char/uctrl.c
+index 05de0ce79cb9..17a8acdfc03a 100644
+--- a/drivers/sbus/char/uctrl.c
++++ b/drivers/sbus/char/uctrl.c
+@@ -189,6 +189,7 @@ static struct uctrl_driver {
+ 	int irq;
+ 	int pending;
+ 	struct uctrl_status status;
++	struct kref *refcnt;
+ } *global_driver;
+ 
+ static void uctrl_get_event_status(struct uctrl_driver *);
+@@ -204,12 +205,28 @@ uctrl_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	return 0;
+ }
+ 
++static void uctrl_delete(struct kref *kref)
++{
++	struct uctrl_driver *p = container_of(kref, struct uctrl_driver, refcnt);
++
++	misc_deregister(&uctrl_dev);
++	free_irq(p->irq, p);
++	of_iounmap(&op->resource[0], p->regs, resource_size(&op->resource[0]));
++	kfree(p);
++}
++
++static int uctrl_close(struct inode *inode, struct file *file)
++{
++	kref_put(&global_driver->refcnt, uctrl_delete);
++}
++
+ static int
+ uctrl_open(struct inode *inode, struct file *file)
+ {
+ 	mutex_lock(&uctrl_mutex);
+ 	uctrl_get_event_status(global_driver);
+ 	uctrl_get_external_status(global_driver);
++	kref_get(&global_driver->refcnt);
+ 	mutex_unlock(&uctrl_mutex);
+ 	return 0;
+ }
+@@ -224,6 +241,7 @@ static const struct file_operations uctrl_fops = {
+ 	.llseek =	no_llseek,
+ 	.unlocked_ioctl =	uctrl_ioctl,
+ 	.open =		uctrl_open,
++	.release =	uctrl_close,
+ };
+ 
+ static struct miscdevice uctrl_dev = {
+@@ -404,10 +422,7 @@ static int uctrl_remove(struct platform_device *op)
+ 	struct uctrl_driver *p = dev_get_drvdata(&op->dev);
+ 
+ 	if (p) {
+-		misc_deregister(&uctrl_dev);
+-		free_irq(p->irq, p);
+-		of_iounmap(&op->resource[0], p->regs, resource_size(&op->resource[0]));
+-		kfree(p);
++		kref_put(&p->refcnt, uctrl_delete);
+ 	}
+ 	return 0;
+ }
+-- 
+2.39.0
 
