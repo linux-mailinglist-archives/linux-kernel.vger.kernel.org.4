@@ -2,135 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2268765A63B
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 20:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3790B65A649
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 20:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbiLaTMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 14:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
+        id S232323AbiLaT2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 14:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLaTMg (ORCPT
+        with ESMTP id S229595AbiLaT23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 14:12:36 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FF560F5;
-        Sat, 31 Dec 2022 11:12:35 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 537605C006E;
-        Sat, 31 Dec 2022 14:12:32 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sat, 31 Dec 2022 14:12:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672513952; x=
-        1672600352; bh=HHwFSzhmhIiAgDL5hBXf37YFQCuiHuO5p0U4EW3wAx8=; b=V
-        WeqovfpPdFmBhGmEQD5h3drvcmV5ssytOYssZ/BKcWxVYRuQK8sa2tiT4o1JQJNQ
-        lfhuIl7PvtNeZ5HwC4xXsS3RihF6BrHsrm32/sSAbCb8RWsniz0DEzsCg7oaa4YN
-        ugld2286ow2ioLdq/yBkg8rhqXdr7HlmJyVGaOtFEeqF8P89Nz/W6Y2uw+GyhKAv
-        pdwTkH/0UuUVtNQX8Sisrt55hPJfiBetWxxFSMZZhvtFjp8sTEjuhobxM3xpqP79
-        1zlKWvvKJWLYEK7DjgkUSMZZYasrXAjvUcinmvfzg6jHWCKIB1EuafaGTft8lcMr
-        TrP1hp4liYtrk9uf8W93w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672513952; x=
-        1672600352; bh=HHwFSzhmhIiAgDL5hBXf37YFQCuiHuO5p0U4EW3wAx8=; b=c
-        ivXP4CFRjwGlmbcHS5kB9EwAExLnIq+CT0cF+5WeDiovq9WIGVa0RWMrbVS0UTGT
-        WO0qesh3quQpWxDeJ9BnZqFNB8j2aQicdv3xuU4fTue7VlcZly5rlLBLFyqjs2vL
-        lWoMIABUIPPUWB+DaYkvawPL95id2rBOgrT/h/+abIoMpnjOEmVH4lhjD3knKU5T
-        vGBelDhuEoEVCeEAxU6XoXnXDzmEpeoAxCRNojnRuVN1eG0mV6nrr2+o4gPvCVjy
-        k9CKPxZUTbC1xcDNs0eXJGfoCx+EvxoLjf8lVjblvFMUBZr6lTETa1mdVYaJFO6A
-        a2mV94i+CNDdPn4svAWFA==
-X-ME-Sender: <xms:n4mwY8vh5UG0-q_64t3UOe9SvqPX-SI2OvMoC-nMcyg7XaHgWpi2OA>
-    <xme:n4mwY5eh1xCi7BGEs0LY15eHB6DWqTWx00lxAnqStebKfK533-iSF0yjmviUrQBVr
-    NbJXuvIpW1xZHiPsA>
-X-ME-Received: <xmr:n4mwY3zPkceXdffHBnlTdP6UBMTcgg41VTeHK-wXnKj-OhCnI0tTXYVF-POMgt8FG2QdK7VZAwYq84D_QOf8vlLrw0YIhOlEK8qhFFyCBcFdTVqRdn1IwBzJYQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieekgdduvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeegteekvefhgefhgfeigeejffejvdeihedvfefgtedvjeeiudet
-    teeihfffgfeugfenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehs
-    hhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:n4mwY_MrsgxFUNbHQUPM0rmn3enNPZsq9R9QUwQRjaJaXKWsMY56gA>
-    <xmx:n4mwY8_MoPVQ0qMucFc89pSo1WvcL3b9eOzxcrMWCAm1o8kXYkzlTA>
-    <xmx:n4mwY3XKM9-VY_CkUvEtfl_UVl67ZVu5RlTUG7tvvCH1ry2pwIHVfg>
-    <xmx:oImwYwSPg4u3dImYw_gCexNr_AFFsMCDsXSokGyvFZnklAjTSK8eiw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 31 Dec 2022 14:12:31 -0500 (EST)
-Message-ID: <b63e8e05-6ca0-ea77-bfb8-f9ecca2ebdcc@sholland.org>
-Date:   Sat, 31 Dec 2022 13:12:30 -0600
+        Sat, 31 Dec 2022 14:28:29 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A9F6548;
+        Sat, 31 Dec 2022 11:28:28 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1442977d77dso28280065fac.6;
+        Sat, 31 Dec 2022 11:28:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AacQ+BIU1NHX+HGWy2UaEC3c651ZlmPMNCs6AfkyBMA=;
+        b=LqUva2Wm6OqLHlGRHfJtVRhZrWxYiPRL2PgvFyNsRS9LfPLwk4r+mb+eCVA1IbmWok
+         jSzNxXaWnbVuk8gW8xx6VR38r8sFGvl/gnEM9+DRzCYJpdvCbS1fo2kobZ6aTJy8E2sS
+         o7xTqo17U7F0tFcsN53l8V9+Jp0rNNUTtRbNvo51ySrqZhQIdLDLjZgO8Rpp8wvddf22
+         dDb+JwjVZAZx73vhLoPEDlgQkW/7KmSCttf58SjBSiW5WHhZ0t8dBKjjEvO/VGit2nIG
+         JU9cVvyR4VM9puBYZty1mqbjWLkxuZHB5MaXK0X3zM2NQy7/KaFSNOE9htsluCzrc/bs
+         Xeog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AacQ+BIU1NHX+HGWy2UaEC3c651ZlmPMNCs6AfkyBMA=;
+        b=m8w/VK6ejU4cIoFiTZBHi4U7HmSlTuCCuhxWRnmBDVqnhviBpVqkVolXkorf+i/m7l
+         f8WSYv+R+VRsIuPNB/guhAjUFEj2ain7PyzyOjb5Tz9pOLA+eJl/P0bJR/USjmmb/1Ss
+         0r+SVNt6Jz7XtyeF2jhKekYd1dtaYhIT5Oy6YtvjprHEaTNFZmRlqUJ0Guku4JMGEsn0
+         ZEYoYYTqfytalZFv8+j6ZgvRZ7RfycP+vcO7vEZlvA+N4l74dwPVe7geG2sMXYnV9L1e
+         D4DrnS1Wxq4RkQ0wcQklt65JGgXXhukliYDSBaATdWJ9HMcqPeLo+xvTjjeDxhsn09PT
+         e67w==
+X-Gm-Message-State: AFqh2krnkBzf0gBBidZ5irglDbRMJvOZQTHPWm0FvxF2ipABvHVCAtfk
+        KDpgKRNeDeLuNDXSvASPLnEt1N4wXxY=
+X-Google-Smtp-Source: AMrXdXubNlFqmaDlYAzmKzsC5OUs7R1upuNYVGc/H7bns+wwN16DlMUT8Pojeg0Zofrpfj+0Y3fw2w==
+X-Received: by 2002:a05:6870:1b09:b0:144:c28c:f7da with SMTP id hl9-20020a0568701b0900b00144c28cf7damr17978434oab.39.1672514907251;
+        Sat, 31 Dec 2022 11:28:27 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y12-20020a4a9c0c000000b004a09df5a1dbsm9693998ooj.8.2022.12.31.11.28.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 11:28:26 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 31 Dec 2022 11:28:24 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] watchdog: apple: Use devm_clk_get_enabled() helper
+Message-ID: <20221231192824.GA3434944@roeck-us.net>
+References: <6f312af6160d1e10b616c9adbd1fd8f822db964d.1672473415.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-References: <20221231160402.16157-1-samuel@sholland.org>
- <20221231160402.16157-2-samuel@sholland.org>
- <92dbd096-b02f-b5e5-6275-a37a3d582685@linaro.org>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 1/2] dt-bindings: power: Add Allwinner D1 PPU
-In-Reply-To: <92dbd096-b02f-b5e5-6275-a37a3d582685@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6f312af6160d1e10b616c9adbd1fd8f822db964d.1672473415.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/31/22 12:58, Krzysztof Kozlowski wrote:
-> On 31/12/2022 17:04, Samuel Holland wrote:
->> The Allwinner D1 family of SoCs contain a "PPU" power domain controller
->> separate from the PRCM. It can power down the video engine and DSP, and
->> it contains special logic for hardware-assisted CPU idle. Other recent
->> Allwinner SoCs (e.g. TV303) have a PPU with a different set of domains.
->>
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->>  .../power/allwinner,sun20i-d1-ppu.yaml        | 54 +++++++++++++++++++
->>  .../power/allwinner,sun20i-d1-ppu.h           | 10 ++++
->>  2 files changed, 64 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
->>  create mode 100644 include/dt-bindings/power/allwinner,sun20i-d1-ppu.h
->>
->> diff --git a/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml b/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
->> new file mode 100644
->> index 000000000000..64c9a9f398a2
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
->> @@ -0,0 +1,54 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/allwinner,sun20i-d1-ppu.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Allwinner SoCs "PPU" power domain controller
+On Sat, Dec 31, 2022 at 08:57:22AM +0100, Christophe JAILLET wrote:
+> The devm_clk_get_enabled() helper:
+>    - calls devm_clk_get()
+>    - calls clk_prepare_enable() and registers what is needed in order to
+>      call clk_disable_unprepare() when needed, as a managed resource.
 > 
-> Drop quotes over "PPU" - it's not some nickname, alias, but acronym.
-> Explain the acronym in description.
+> This simplifies the code and avoids the need of a dedicated function used
+> with devm_add_action_or_reset().
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-I don't know what the acronym stands for; it is never spelled out in the
-vendor code. I will drop the quotes in v2, but I can't give an explanation.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Regards,
-Samuel
-
+> ---
+>  drivers/watchdog/apple_wdt.c | 18 +-----------------
+>  1 file changed, 1 insertion(+), 17 deletions(-)
+> 
+> diff --git a/drivers/watchdog/apple_wdt.c b/drivers/watchdog/apple_wdt.c
+> index 16aca21f13d6..eddeb0fede89 100644
+> --- a/drivers/watchdog/apple_wdt.c
+> +++ b/drivers/watchdog/apple_wdt.c
+> @@ -136,11 +136,6 @@ static int apple_wdt_restart(struct watchdog_device *wdd, unsigned long mode,
+>  	return 0;
+>  }
+>  
+> -static void apple_wdt_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static struct watchdog_ops apple_wdt_ops = {
+>  	.owner = THIS_MODULE,
+>  	.start = apple_wdt_start,
+> @@ -162,7 +157,6 @@ static int apple_wdt_probe(struct platform_device *pdev)
+>  	struct apple_wdt *wdt;
+>  	struct clk *clk;
+>  	u32 wdt_ctrl;
+> -	int ret;
+>  
+>  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>  	if (!wdt)
+> @@ -172,19 +166,9 @@ static int apple_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(wdt->regs))
+>  		return PTR_ERR(wdt->regs);
+>  
+> -	clk = devm_clk_get(dev, NULL);
+> +	clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(clk))
+>  		return PTR_ERR(clk);
+> -
+> -	ret = clk_prepare_enable(clk);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = devm_add_action_or_reset(dev, apple_wdt_clk_disable_unprepare,
+> -				       clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	wdt->clk_rate = clk_get_rate(clk);
+>  	if (!wdt->clk_rate)
+>  		return -EINVAL;
+> -- 
+> 2.34.1
+> 
