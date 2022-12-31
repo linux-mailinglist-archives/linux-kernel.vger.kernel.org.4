@@ -2,55 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74D365A3C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 12:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D69265A3C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 12:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbiLaLny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 06:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S231767AbiLaLrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 06:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiLaLnx (ORCPT
+        with ESMTP id S229451AbiLaLq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 06:43:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803246585;
-        Sat, 31 Dec 2022 03:43:51 -0800 (PST)
+        Sat, 31 Dec 2022 06:46:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9D87658
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 03:46:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09823B8037A;
-        Sat, 31 Dec 2022 11:43:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA35C433D2;
-        Sat, 31 Dec 2022 11:43:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672487028;
-        bh=2BRHVCnJSCiNgdpz8pKFueVlfuaotxlZrd19TYFK35o=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 813DF60A0A
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 11:46:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED01C433EF;
+        Sat, 31 Dec 2022 11:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1672487215;
+        bh=mLNAW/smzliujmTg5b8GKyjVLPSUZjsS30P+w5eM0jA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YMuSquco7gBP+J0YHBdGMkYhxpHBiX2ox61JPfmtbNIbGCtkEU6FjeoTu+ovMHkZA
-         LA3lnDWI28Q91jvK/MtTNcsSwxOjr047/7zULiY89b8XRf456JRLwrsAQ5V7d9LPKD
-         pbs3k8F9l5Sku4IrixPb7vrjzY8sU44HPvU5iQiXIXIKI7HDrVRAnOjTT9qJhhAw81
-         qrREB0zNyInbkea8U32SGsldrBGcRzlY3JikKKP9Vazz/VqrS9jkfqxArtxShTEtb9
-         N4o57Ocaa0/pd8m9f57q7Mmq4+GUuQqLO0ZF6kU4kWSKWV1Y6iojTSv9hEx1uiljSp
-         MBAdMmjgOZEoQ==
-Date:   Sat, 31 Dec 2022 19:43:41 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Stefan Agner <stefan@agner.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] arm64: dts: imx: align LED node names with dtschema
-Message-ID: <20221231114340.GN6112@T480>
-References: <20221125144223.477376-1-krzysztof.kozlowski@linaro.org>
+        b=tdAjGap5Yh22z/adVbMCPUPadCUn9ZkY+5KidVfV2/DKDI9zUMU14NinbsHcDV1sk
+         aH9yExfncgeDF4hTthetm1ah51CvZYAg09jmEEDv8GnNYpvW1lJZ6QAUAJfbGUOd2k
+         35vMUrtJ4kmEHFZiOapSloQ0YipllTHDvqTft1C8=
+Date:   Sat, 31 Dec 2022 12:46:53 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yoochan Lee <yoochan1026@gmail.com>
+Cc:     matt.hsiao@hpe.com, arnd@arndb.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] misc: hpilo: Fix use-after-free in ilo_open
+Message-ID: <Y7AhLWSPE+2hnZ2I@kroah.com>
+References: <20221231055310.2040648-1-yoochan1026@gmail.com>
+ <Y7AHvYfZreO/G/kT@kroah.com>
+ <CALQpDLfMjAE9_VtMO6e_iiPrciFNbksLQT3AB3QTGwZCNf5=sA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221125144223.477376-1-krzysztof.kozlowski@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CALQpDLfMjAE9_VtMO6e_iiPrciFNbksLQT3AB3QTGwZCNf5=sA@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,11 +51,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 03:42:21PM +0100, Krzysztof Kozlowski wrote:
-> The node names should be generic and DT schema expects certain pattern:
+On Sat, Dec 31, 2022 at 07:05:36PM +0900, Yoochan Lee wrote:
+> Hi,
 > 
->   freescale/imx8mm-emcon-avari.dtb: leds: 'green', 'red' do not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> I haven't tested with a physical device cause I don't have a real device.
+> I found this bug through static analysis.
 
-Applied all, thanks!
+Then please verify that it actually is a bug and that you have fixed it
+properly.  To send patches that are broken wastes everyone's time :(
+
+Also, you did not properly describe how the static analysis happened or
+what tools reported it as is required.
+
+> This type of bug is similar to [1] and [2].
+> 
+> And I'm sorry that my patch is incorrect.
+> It's my first time patching a Linux kernel myself.
+
+I suggest taking the tutorial on kernelnewbies.org and working in the
+drivers/staging/* portion of the kernel first, so that you can learn how
+this all works.  Do not dive in and assume that fixing issues that a
+random tool spits out is even correct to do.
+
+good luck!
+
+greg k-h
