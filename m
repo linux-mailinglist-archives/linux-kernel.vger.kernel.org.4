@@ -2,341 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F2F659F9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 01:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673A3659FD9
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 01:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiLaA1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 19:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
+        id S235858AbiLaAm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 19:42:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235615AbiLaA1Y (ORCPT
+        with ESMTP id S235615AbiLaAmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 19:27:24 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E331EAC2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 16:27:22 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id u8so12123631ilq.13
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 16:27:22 -0800 (PST)
+        Fri, 30 Dec 2022 19:42:24 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6843D1D0C8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 16:42:23 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id c11so18238530qtn.11
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 16:42:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XU58kPYl9n82LN59dtODH7bg7cp4BHh6YJsgbAZI+Ks=;
-        b=t33hWfZzTekkZPTFN2v5aPWvOuFLfga2yWC4R7FZG8dbJx7MhhspkKC7sJuV91HXqT
-         Kj0ycqZbQ4hEI5eJCuElLowh9uqaq0CodlclWiDUxMDqRRtaUt3/9C10f/QdXOlPRNZ3
-         vbVPBopwb1/J8mSRK2UwHSgay1yNWNw8mHbX1OyJuf5pB3cfbDnsZzoEKE91UicPM4RL
-         zCXVkJ9ntM1DKfm1dPzhMwYAt6xABnuSX7jBuqRUB/xETiblYVOTozLdHcpHSHt57ldB
-         9Vrf98DgKz6EFdjcn9NUPEPTqNJjNcKqDTfXqQKUwvnLGJ3gPUxRk47EGNmagTKUeNP5
-         Qc9Q==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hv+uaGor/dFf3uRzSMPbhI3giYMYL0ciKPN6qVvhgew=;
+        b=LsSISpjXK233Q0blGUZutaAad5E4+i3r2l4D42x2x/B+rH8n6gvjqZwzOzYl/H0A30
+         VGvGb7nxNEAsKTTG7LZ71NbJ5dy9UpZ+ro21VXi+94QTdWrOiNAzyoWKqjWwuG+5dJlM
+         DjL9rf9apjZU3onlhTlbeMwh0E7vsnOhLmbVA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XU58kPYl9n82LN59dtODH7bg7cp4BHh6YJsgbAZI+Ks=;
-        b=pc0obiEHzVIHNChqSlJ81lwUOI1rA6Wtb1KCGr7zxbmi15PpthH0S2OW9chKQBCU95
-         qr0TPx3I8cmyFUzH4L1BZzP7DAgNI9xbLsTBQBy0ag2LBl3L+/SMIBd7g9D1evaQoknt
-         1CMG1XiG2P+eJaSvKcTG47IA+XFxZQT9FcwtkfvetSWh2s+hQE6gDghQ1sxZWUHixQZq
-         V/NLcW6O5WxT075QkRz6tM9b4Crck1Mt8eKbxNBHpaF1PDzpoEYV9UG36aSgmqytnB0o
-         ISggBVliCqUnoexttwQI+rdrCJ2XZ0MuMWrr+q5k91SnL5ei4U36kqTo74lgv+knQG+s
-         KdLw==
-X-Gm-Message-State: AFqh2koToLkjCLSWj4eYEkzfOvcXVQ8PnDqK5ciuzqYcSjr91UhTJljg
-        G0QAxDhY/6lNoi8+q/2SdU6z8w==
-X-Google-Smtp-Source: AMrXdXvlUHSbyBgmovCj8d/Gsd+ikI6F8/sKZNwvtCWADE61C7G94gt6YYrfNdLgtRqs5HeMKAZj+g==
-X-Received: by 2002:a92:d950:0:b0:30c:2ff1:c8d7 with SMTP id l16-20020a92d950000000b0030c2ff1c8d7mr2910385ilq.0.1672446441882;
-        Fri, 30 Dec 2022 16:27:21 -0800 (PST)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id t4-20020a922c04000000b002f9f7d24d78sm6969279ile.76.2022.12.30.16.27.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 16:27:21 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org
-Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: qcom: use qcom,gsi-loader for IPA
-Date:   Fri, 30 Dec 2022 18:27:16 -0600
-Message-Id: <20221231002716.2367375-3-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221231002716.2367375-1-elder@linaro.org>
-References: <20221231002716.2367375-1-elder@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hv+uaGor/dFf3uRzSMPbhI3giYMYL0ciKPN6qVvhgew=;
+        b=q9+Bbc9cRtvBTFq/GkdWallg0c+PTmJIGCvOSt2zr2QeTnWfTLQGUVoG9t2HuDHw6M
+         cKfE8b0KvbOw6nd4xZkR+UdTJlUk8bXzOMKzmEPLgjNbS47vhTIYcZX/XSx/O0K2jHFD
+         Vmbpg6evIziHXcZ8ogesw6ZTKCOIhkwZVZ9yYbrQQ1gJkG7MHkR6nwf8EurPJ90IKkB2
+         DuyJqmsaUDoTA+7dpUim84fXul2bmDk7jtQ+SmraGJeClCgRLO/2hSfhOjvjPOU3D7N7
+         Sw1OS5ATt31ZopHYmjnjM3dQDxalw/9oQLhyywVL2LNMu/EgM5NRGB9VR/KWcwrSkAnl
+         +NWA==
+X-Gm-Message-State: AFqh2krrblVOZfl+fFo+tHfuZY0JGZ7W5YmFkiGmiW384Et4arpJ8WTV
+        FcA9ThRq+C+vDFp4o6CFsi2SBSscnFg8TVGR
+X-Google-Smtp-Source: AMrXdXuKfKmUUKl4RzC2EXbrW5BL8+eWmJ+E1f+YknrMgGNx5mFQcN3Q+F+9AutGMG3MnrMV0vf7hw==
+X-Received: by 2002:ac8:524c:0:b0:3a9:7dd5:6a33 with SMTP id y12-20020ac8524c000000b003a97dd56a33mr52932299qtn.64.1672447342183;
+        Fri, 30 Dec 2022 16:42:22 -0800 (PST)
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com. [209.85.222.176])
+        by smtp.gmail.com with ESMTPSA id h11-20020a05620a244b00b006cebda00630sm16314506qkn.60.2022.12.30.16.42.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Dec 2022 16:42:21 -0800 (PST)
+Received: by mail-qk1-f176.google.com with SMTP id h8so10968034qkk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 16:42:21 -0800 (PST)
+X-Received: by 2002:a05:620a:4720:b0:6ff:cbda:a128 with SMTP id
+ bs32-20020a05620a472000b006ffcbdaa128mr1591268qkb.697.1672447340840; Fri, 30
+ Dec 2022 16:42:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
+ <20221227030829.12508-6-kirill.shutemov@linux.intel.com> <CAHk-=wgKTcOx1hhWAGJ-g9_9o7xiGJ9v9n2RskBSCkaUMBxDkw@mail.gmail.com>
+ <20221231001029.5nckrhtmwahb65jo@box>
+In-Reply-To: <20221231001029.5nckrhtmwahb65jo@box>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 30 Dec 2022 16:42:05 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgmGqwDD0kvjZxekU6uYR2x6+QgRHeMKy3snL2XYEzwEw@mail.gmail.com>
+Message-ID: <CAHk-=wgmGqwDD0kvjZxekU6uYR2x6+QgRHeMKy3snL2XYEzwEw@mail.gmail.com>
+Subject: Re: [PATCHv13 05/16] x86/uaccess: Provide untagged_addr() and remove
+ tags before address check
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Depending on the platform, either the modem or the AP must load GSI
-firmware for IPA before it can be used.  To date, this has been
-indicated by the presence or absence of a "modem-init" property.
+On Fri, Dec 30, 2022 at 4:10 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
+>
+> I made it a per-cpu variable (outside struct tlb_state to be visible in
+> modules). __get/put_user_X() now have a single instruction to untag the
+> address and it is gated by X86_FEATURE_LAM.
 
-That mechanism has been deprecated.  Instead, we indicate how GSI
-firmware should be loaded by the value of the "qcom,gsi-loader"
-property.
+Yeah, that looks more reasonable to me.
 
-Update all arm64 platforms that use IPA to use the "qcom,gsi-loader"
-property to specify how the GSI firmware is loaded.
+> BTW, am I blind or we have no infrastructure to hookup static branches
+> from assembly?
 
-Update the affected nodes so the status property is last.
+I think you're right.
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi         | 5 ++---
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi                     | 2 +-
- arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi                   | 2 +-
- arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi                   | 2 +-
- arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi               | 2 +-
- arch/arm64/boot/dts/qcom/sdm845-mtp.dts                      | 3 ++-
- arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi          | 4 ++--
- arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts            | 4 ++--
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi | 3 ++-
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts           | 1 +
- arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts         | 3 ++-
- arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts             | 3 ++-
- arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts   | 4 ++--
- arch/arm64/boot/dts/qcom/sm8350-mtp.dts                      | 4 ++--
- arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi      | 3 ++-
- 15 files changed, 25 insertions(+), 20 deletions(-)
+> I would be a better fit than ALTERNATIVE here. It would allow to defer
+> overhead until the first user of the feature.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
-index fd4b712037542..bffcbd141bd7c 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
-@@ -19,12 +19,11 @@ &remoteproc_mpss {
- };
- 
- &ipa {
--	status = "okay";
--
- 	/*
- 	 * Trogdor doesn't have QHEE (Qualcomm's EL2 blob), so the
- 	 * modem needs to cover certain init steps (GSI init), and
- 	 * the AP needs to wait for it.
- 	 */
--	modem-init;
-+	qcom,gsi-loader = "modem";
-+	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index f7efb9966afd1..5ad97cd5f1b75 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -377,8 +377,8 @@ &gpi_dma1 {
- };
- 
- &ipa {
-+	qcom,gsi-loader = "modem";
- 	status = "okay";
--	modem-init;
- };
- 
- &lpass_cpu {
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-index df49564ae6dc1..6d80c64097e97 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-@@ -337,8 +337,8 @@ vreg_bob: bob {
- /* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
- 
- &ipa {
-+	qcom,gsi-loader = "modem";
- 	status = "okay";
--	modem-init;
- };
- 
- &lpass_va_macro {
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-index ca676e04687b0..c194a88f91fd1 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-@@ -756,8 +756,8 @@ &gpu {
- };
- 
- &ipa {
-+	qcom,gsi-loader = "modem";
- 	status = "okay";
--	modem-init;
- };
- 
- &lpasscc {
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
-index 1eb423e4be24c..b62beffc27bf7 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
-@@ -474,8 +474,8 @@ zap-shader {
- };
- 
- &ipa {
-+	qcom,gsi-loader = "modem";
- 	status = "okay";
--	modem-init;
- };
- 
- &mss_pil {
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-index de2d10e0315af..f5a186fd7c72b 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-@@ -518,8 +518,9 @@ &i2c10 {
- };
- 
- &ipa {
--	status = "okay";
-+	qcom,gsi-loader = "self";
- 	memory-region = <&ipa_fw_mem>;
-+	status = "okay";
- };
- 
- &mdss {
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-index 42cf4dd5ea284..d8a601d36c6df 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-@@ -424,10 +424,10 @@ rmi4_f12: rmi4-f12@12 {
- };
- 
- &ipa {
--	status = "okay";
--
-+	qcom,gsi-loader = "self";
- 	memory-region = <&ipa_fw_mem>;
- 	firmware-name = "qcom/sdm845/oneplus6/ipa_fws.mbn";
-+	status = "okay";
- };
- 
- &mdss {
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-index bb77ccfdc68c0..fcd401f460456 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-@@ -495,10 +495,10 @@ touchscreen@38 {
- };
- 
- &ipa {
--	status = "okay";
--
-+	qcom,gsi-loader = "self";
- 	memory-region = <&ipa_fw_mem>;
- 	firmware-name = "qcom/sdm845/axolotl/ipa_fws.mbn";
-+	status = "okay";
- };
- 
- &mdss {
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-index eb6b2b676eca4..d6b11d56ebb37 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-@@ -299,9 +299,10 @@ &mss_pil {
- };
- 
- &ipa {
--	status = "okay";
-+	qcom,gsi-loader = "self";
- 	memory-region = <&ipa_fw_mem>;
- 	firmware-name = "qcom/sdm845/beryllium/ipa_fws.mbn";
-+	status = "okay";
- };
- 
- &pm8998_gpio {
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-index 38ba809a95cd6..9ca4682aea1b2 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-@@ -449,6 +449,7 @@ &ibb {
- };
- 
- &ipa {
-+	qcom,gsi-loader = "self";
- 	memory-region = <&ipa_fw_mem>;
- 	firmware-name = "qcom/sdm845/polaris/ipa_fws.mbn";
- 	status = "okay";
-diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-index f32b7445f7c96..15da94808b21d 100644
---- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-@@ -465,8 +465,9 @@ ecsh: hid@5c {
- };
- 
- &ipa {
--	status = "okay";
-+	qcom,gsi-loader = "self";
- 	memory-region = <&ipa_fw_mem>;
-+	status = "okay";
- };
- 
- &mdss {
-diff --git a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-index daca1e0ad62ad..15f6059b75757 100644
---- a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-@@ -383,9 +383,10 @@ digitizer@9 {
- };
- 
- &ipa {
--	status = "okay";
-+	qcom,gsi-loader = "self";
- 	memory-region = <&ipa_fw_mem>;
- 	firmware-name = "qcom/sdm850/samsung/w737/ipa_fws.elf";
-+	status = "okay";
- };
- 
- /* No idea why it causes an SError when enabled */
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-index 9c4cfd995ff29..00f16cde6c4ac 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-@@ -290,9 +290,9 @@ &i2c11 {
- };
- 
- &ipa {
--	status = "okay";
--
-+	qcom,gsi-loader = "self";
- 	memory-region = <&pil_ipa_fw_mem>;
-+	status = "okay";
- };
- 
- &mpss {
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-mtp.dts b/arch/arm64/boot/dts/qcom/sm8350-mtp.dts
-index 52cf3045602f9..f70e0de0509c5 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8350-mtp.dts
-@@ -376,7 +376,7 @@ &usb_2_qmpphy {
- };
- 
- &ipa {
--	status = "okay";
--
-+	qcom,gsi-loader = "self";
- 	memory-region = <&pil_ipa_fw_mem>;
-+	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-index 1f2d660f8f86c..d00e8d922ceeb 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-@@ -524,9 +524,10 @@ &i2c17 {
- };
- 
- &ipa {
--	status = "okay";
-+	qcom,gsi-loader = "self";
- 	memory-region = <&pil_ipa_fw_mem>;
- 	firmware-name = "qcom/sm8350/Sony/sagami/ipa_fws.mbn";
-+	status = "okay";
- };
- 
- &mpss {
--- 
-2.34.1
+Well, it would make the overhead worse once people actually start
+using it. So it's not obvious that a static branch is really the right
+thing to do.
 
+That said, while I think that UNTAG_ADDR is quite reasonable now, the
+more I look at getuser.S and putuser.S, the more I'm thinking that
+getting rid of the TASK_SIZE comparison entirely is the right thing to
+do on x86-64.
+
+It's really rather nasty, with not just that whole LA57 alternative,
+but it's doing a large 64-bit constant too.
+
+Now, on 32-bit, we do indeed have to compare against TASK_SIZE
+explicitly, but on 32-bit we could just use an immediate for the cmp
+instruction, so even there that whole "load constant" isn't really
+optimal.
+
+And on 64-bit, we really only need to check the high bit.
+
+In fact, we don't even want to *check* it, because then we need to do
+that disgusting array_index_mask_nospec thing to mask the bits for it,
+so it would be even better to use purely arithmetic with no
+conditionals anywhere.
+
+And that's exactly what we could do on x86-64:
+
+        movq %rdx,%rax
+        shrq $63,%rax
+        orq %rax,%rdx
+
+would actually be noticeably better than what we do now for for
+TASK_SIZE checking _and_ for the array index masking (for putuser.S,
+we'd use %rbx instead of %rax in that sequence).
+
+The above three simple instructions would replace all of the games we
+now play with
+
+        LOAD_TASK_SIZE_MINUS_N(0)
+        cmp %_ASM_DX,%_ASM_AX
+        jae bad_get_user
+        sbb %_ASM_DX, %_ASM_DX          /* array_index_mask_nospec() */
+        and %_ASM_DX, %_ASM_AX
+
+entirely.
+
+It would just turn all kernel addresses into all ones, which is then
+guaranteed to fault. So no need for any conditional that never
+triggers in real life anyway.
+
+On 32-bit, we'd still have to do that old sequence, but we'd replace the
+
+        LOAD_TASK_SIZE_MINUS_N(0)
+        cmp %_ASM_DX,%_ASM_AX
+
+with just the simpler
+
+        cmp $TASK_SIZE_MAX-(n),%_ASM_AX
+
+since the only reason we do that immediate load is because there si no
+64-bit immediate compare instruction.
+
+And once we don't test against TASK_SIZE, the need for UNTAG_ADDR just
+goes away, so now LAM is better too.
+
+In other words, we could actually improve on our current code _and_
+simplify the LAM situation. Win-win.
+
+Anyway, I do not hate the version of the patch you posted, but I do
+think that the win-win of just making LAM not _have_ this issue in the
+first place might be the preferable one.
+
+The one thing that that "shift by 63 and bitwise or" trick does
+require is that the _ASM_EXTABLE_UA() thing for getuser/putuser would
+have to have an extra annotation to shut up the
+
+        WARN_ONCE(trapnr == X86_TRAP_GP, "General protection fault in
+user access. Non-canonical address?");
+
+in ex_handler_uaccess() for the GP trap that users can now cause by
+giving a non-canonical address with the high bit clear. So we'd
+probably just want a new EX_TYPE_* for these cases, but that still
+looks fairly straightforward.
+
+Hmm?
+
+              Linus
