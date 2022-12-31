@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E658465A853
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 00:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BEA65A856
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 00:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbiLaX4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 18:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        id S236029AbiLaX4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 18:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbiLaXzw (ORCPT
+        with ESMTP id S232530AbiLaXzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 18:55:52 -0500
+        Sat, 31 Dec 2022 18:55:53 -0500
 Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E1025C4;
-        Sat, 31 Dec 2022 15:55:50 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7BE4A5818F5;
-        Sat, 31 Dec 2022 18:55:49 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C356E71;
+        Sat, 31 Dec 2022 15:55:51 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id DA6CC5818F8;
+        Sat, 31 Dec 2022 18:55:50 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sat, 31 Dec 2022 18:55:49 -0500
+  by compute3.internal (MEProxy); Sat, 31 Dec 2022 18:55:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672530949; x=1672538149; bh=3l
-        UzKMMvF7vk9xmGqukiUQTKJhZZpCfvn0wSoYuZP9A=; b=BVkco794bS3VyPN8pf
-        40Gap/hkUSZFoR3L103zIUWpJl8AoX565M2YqTlwVWeD26wbd+DIw3aiy0uyIO1/
-        B+4pyZvJqM1br3j6qEoWeYonS0pD4eegMPXwrgg0lxm2NI6YdcLtT8Bqhr17P26N
-        6U4buAijem2cFkaVR8DGhPlTes6j0nEvspNHT7xx1cIDW7ko9PqlinuhZkMALpXl
-        caYEqxzYUxwNpTQC2+XHuTC2mLaVTcto7IkbOr92KXoibgMDsX1pi8epGuZBgzQS
-        dyqRed8X/307JlyLWtFsTQNUncZoMF1iPLxAJbzgVFFXXvJPLIySJHxl9xt+rnFf
-        CUCg==
+        :subject:subject:to:to; s=fm3; t=1672530950; x=1672538150; bh=wn
+        k0fQbI6LUgf3REBg+Sy4nR0IreskH+9S4EM6UJtpU=; b=shCDSFTvEqAHOEyrxt
+        Pv2aJGNrDPL5wlUYOjMbwrsiWrgpNDy5CV0rJO+edySI3WEC8ZLAQLg3kWkVBqLh
+        pvV6pwWFqKC+AtpKWV9q0Rbu/c/QQHVPZzCX5882xFFgUWLSMIeTWMrY7kiOMQHy
+        +zu22cxq+E6Ictnf8TmIjzjkiCLOfJiZKEVjY/IIO/hX8QMxx4jXOvX1kXEuL+//
+        kx06iM7lO16wjzV2XeXgcm7JYWp1faW+emkMFgmRzZgvIUKCJVuBk8Eiid09Tk/t
+        r22ZTrRmSRZmCV1Bv+9EYptLJfW/2pmFwdbOepcUqHCqBOeyJDO6lv8qxrr1aybS
+        I0Bw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672530949; x=1672538149; bh=3lUzKMMvF7vk9
-        xmGqukiUQTKJhZZpCfvn0wSoYuZP9A=; b=lYDxZJIRxJ15BiBXVJx+vsb/INpLX
-        jt9nueLiX2E8jwMiIIPxnJPCk/HH2NbjWn3riyPUFOSWzOQQcm0uvIZfK52HGKFH
-        TASwbpUWzADSv3fB/4Xgh0OfxVaWtxbTb8H36wUaD0nRZ1hBjDyi7ORPglPc+dEI
-        qq70A19UuQuvJFW0CVyT7oXdlq6sTgCqY1suCSp5K9Lt8sx3Mux/kuD/4EBodiLG
-        wMGqMTgANLXNhJRXAm7s1WtW608DggvepNKLWmfrLsY2snS4O7GEFfJqmHdIrFNd
-        USFW7QdxgXAR5SCzc69799OUUY5lH66EkPgrMdxucHcJU4Gh4B70kdwGw==
-X-ME-Sender: <xms:BcywYxZAy2VdNn-y2Oo6zaKQX9SJyrm8r8qjMBv0_cEYWOBiEh4hnA>
-    <xme:BcywY4YpXGPZzOCF3zgsEPSw_qCjaxXdJahcFCenyEH2HX6dL9zIhRY4qD2U9vqwO
-    Z90zh_bPh9yoJikug>
-X-ME-Received: <xmr:BcywYz9qdI79EpKu1S3e1R2JY2Mycq-7p-kNBfrJT0st3IwIuWmbEDeaIFdeLkEIi5JNI8yeqGKFz-Pvk_Djb_wuykldBMfIBqW2G_Ge6BaZaIY9NMrpXpUqPr6kcfa7RBuMrQ>
+        :x-sasl-enc; s=fm2; t=1672530950; x=1672538150; bh=wnk0fQbI6LUgf
+        3REBg+Sy4nR0IreskH+9S4EM6UJtpU=; b=nbjip5LZ5R6aeAqtNWwTmofZixgFu
+        6U3fvstgZfGHgnPvbfNqMTGcZ5MWUc5miBWpnoeS4Pe6rHnxRCysjumqYtl757rz
+        lVl07D+DvN21gy6et+K+/SD34odTQwz6V2TnVffkxZvl13/KuRJNubBWWcJyU76L
+        1xBboRkdvk1FW+dt1pEksyHVa6DOuD0rePjUbYaOvTMhFKx4C575CvtSIVLNFHMK
+        scJRXRQ+nVWs61DflCRYV0iuQZXe7Ybe9Ovva6W2kQUH7QbtrMUR1EU/I/aVIVrI
+        sX9oHy7OJ0fogO/3X5/RJwfvsyq97levbS1Lno2PXdc69mWTzdX1+Sv+Q==
+X-ME-Sender: <xms:BsywY6ANxssPWxs22Fyrmt3KU_SYDinXh2TaSUoy2xdScLg5wRqLjg>
+    <xme:BsywY0ipB0vqj3DWy6FOm-klDMCp-hR7PmoKu_vF8SMJZ_Kw0kQQsm8J2y9nTEoZj
+    n-tlF_eTJh-oR7Ikg>
+X-ME-Received: <xmr:BsywY9kbGkrBgommwN5XWzsNBT1zCZYWBI11ylVMGxw7jBpjZb6Lurb2WREaQth236EoXTcS6WHUeSbQM-uugFnmBbvgUTdxiidvFkOig7I2tpqEbXiS_NpJlqdnBJsP1_oKuA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieelgddujecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieelgddujecutefuodetggdote
     frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
     feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:BcywY_pC_Reu3FX_Y42ZJXyw6WHRIHeqXYeROWIM7jTUIYm5_BfkrQ>
-    <xmx:BcywY8rkvYem8Tgu2YYXFPpTzTBE6E0bTXmwevCtVCJsbhnr-0pXRA>
-    <xmx:BcywY1SChv5KQcI_gchdR-ISeNI13wQBfZFl8tZhP7GEOM-_JtiDhw>
-    <xmx:BcywYwoeGPjalucCOXbZdNgk8oIaXk7UaYQGK1149wJvw817GhxTJA>
+X-ME-Proxy: <xmx:BsywY4w9EiFMZb_QViO-CKldIjqzfnJXLYvFiIPAgNnGhcwailXlKQ>
+    <xmx:BsywY_TAY9neLTaqZFM-fbUhyuHWM3EY6Af3YC05UAr1VZJyFiJ9DA>
+    <xmx:BsywYzb8qiir7hkec5zegEXUQS53hF8jAwX6SQPmlkEnJWBnvURoqA>
+    <xmx:BsywYwTPWDH1o83qYidISamGkTdIAfN_Ny1PeFVS8gFgj0zvw1NSsA>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 31 Dec 2022 18:55:48 -0500 (EST)
+ 31 Dec 2022 18:55:49 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
         linux-leds@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
@@ -79,9 +79,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [RESEND PATCH v7 4/5] riscv: dts: allwinner: d1: Add LED controller node
-Date:   Sat, 31 Dec 2022 17:55:39 -0600
-Message-Id: <20221231235541.13568-5-samuel@sholland.org>
+Subject: [RESEND PATCH v7 5/5] riscv: dts: allwinner: d1: Add RGB LEDs to boards
+Date:   Sat, 31 Dec 2022 17:55:40 -0600
+Message-Id: <20221231235541.13568-6-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221231235541.13568-1-samuel@sholland.org>
 References: <20221231235541.13568-1-samuel@sholland.org>
@@ -96,10 +96,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allwinner D1 contains an LED controller. Add its devicetree node, as
-well as the pinmux used by the reference board design.
+Some D1-based boards feature an onboard RGB LED. Enable them.
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
@@ -108,53 +107,64 @@ Signed-off-by: Samuel Holland <samuel@sholland.org>
 Changes in v5:
  - New patch for v5
 
- arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi      |  6 ++++++
- arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 15 +++++++++++++++
- 2 files changed, 21 insertions(+)
+ .../boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts | 12 ++++++++++++
+ arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts   | 13 +++++++++++++
+ 2 files changed, 25 insertions(+)
 
-diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi b/arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi
-index 97e7cbb32597..28a6df83ec08 100644
---- a/arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi
-@@ -58,6 +58,12 @@ i2c2_pb0_pins: i2c2-pb0-pins {
- 		function = "i2c2";
- 	};
+diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
+index 52b91e1affed..7efcec906a71 100644
+--- a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
++++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
+@@ -59,6 +59,18 @@ &ehci1 {
+ 	status = "okay";
+ };
  
-+	/omit-if-no-ref/
-+	ledc_pc0_pin: ledc-pc0-pin {
-+		pins = "PC0";
-+		function = "ledc";
++&ledc {
++	pinctrl-0 = <&ledc_pc0_pin>;
++	pinctrl-names = "default";
++	status = "okay";
++
++	multi-led@0 {
++		reg = <0x0>;
++		color = <LED_COLOR_ID_RGB>;
++		function = LED_FUNCTION_STATUS;
 +	};
++};
 +
- 	/omit-if-no-ref/
- 	uart0_pb8_pins: uart0-pb8-pins {
- 		pins = "PB8", "PB9";
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index dff363a3c934..6b70b3cf4965 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -138,6 +138,21 @@ ccu: clock-controller@2001000 {
- 			#reset-cells = <1>;
- 		};
+ &mmc1 {
+ 	bus-width = <4>;
+ 	mmc-pwrseq = <&wifi_pwrseq>;
+diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
+index a0769185be97..2e5be1bbb00f 100644
+--- a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
++++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
+@@ -3,6 +3,7 @@
  
-+		ledc: led-controller@2008000 {
-+			compatible = "allwinner,sun20i-d1-ledc",
-+				     "allwinner,sun50i-a100-ledc";
-+			reg = <0x2008000 0x400>;
-+			interrupts = <SOC_PERIPHERAL_IRQ(20) IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_LEDC>, <&ccu CLK_LEDC>;
-+			clock-names = "bus", "mod";
-+			resets = <&ccu RST_BUS_LEDC>;
-+			dmas = <&dma 42>;
-+			dma-names = "tx";
-+			status = "disabled";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
+ 
+ /dts-v1/;
+ 
+@@ -93,6 +94,18 @@ pcf8574a: gpio@38 {
+ 	};
+ };
+ 
++&ledc {
++	pinctrl-0 = <&ledc_pc0_pin>;
++	pinctrl-names = "default";
++	status = "okay";
 +
- 		dmic: dmic@2031000 {
- 			compatible = "allwinner,sun20i-d1-dmic",
- 				     "allwinner,sun50i-h6-dmic";
++	multi-led@0 {
++		reg = <0x0>;
++		color = <LED_COLOR_ID_RGB>;
++		function = LED_FUNCTION_STATUS;
++	};
++};
++
+ &mdio {
+ 	ext_rgmii_phy: ethernet-phy@1 {
+ 		compatible = "ethernet-phy-ieee802.3-c22";
 -- 
 2.37.4
 
