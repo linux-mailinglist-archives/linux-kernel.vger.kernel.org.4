@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FF965A396
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 11:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED00065A399
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 11:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235568AbiLaKs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 05:48:28 -0500
+        id S235631AbiLaKtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 05:49:01 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiLaKsH (ORCPT
+        with ESMTP id S231922AbiLaKsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 05:48:07 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05CFDECA
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 02:48:03 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id u9so56514081ejo.0
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 02:48:03 -0800 (PST)
+        Sat, 31 Dec 2022 05:48:09 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557F1DFCA
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 02:48:06 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id t17so56349660eju.1
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 02:48:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2nmJF3bEeRxJYrFQdgL7c1Fy/VFwyyC/ez/jfHGKmTk=;
-        b=EIHtuJl7Px5jzWvOr0qcRutxwgf6dnRNYLj1qy6cx/ApezQRL7YwyNkTmofDy153pm
-         WUyMaeEYCyXqFkvC13Jq7KilR7OTFSYZqtQCj+EEoZUdG6tHVy8Gn/pzaZUiKv9CihUW
-         tEAOczd8T+FnFe18k9Ndsdg31yarDkD8InlzQ=
+        bh=UYCjumJKIVpNgaprHBc6yiaBNx3uDiRwwnz6NjNAOKQ=;
+        b=d5Oo3F4xNBaZibu3GdHQEpk4dkNY4Pe366qqIdofJdaLCS+j6pM2KVNUMIuD5drl9r
+         K8X2cHKHQQ+AiqT3GelAdpGQuM+r19m0Sjwswemw88PZ1BvN/N5IqaS2xTE9ynUfvZXZ
+         c2joIXIGAeXGqiD24N+PjjWBoTshwF/8Q85Q8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2nmJF3bEeRxJYrFQdgL7c1Fy/VFwyyC/ez/jfHGKmTk=;
-        b=zJyG5pKHZa8sqca8qCFh3mhuDIKpsPtdoketo1Fyrp9TIDLUeG63mwH7wo+M14uBD2
-         dA5SV9gm0k0glj9SLiIqSFBh4kXhRTRBw7CUz+ECrV22cJNNSvhLZNxl35QeXTLI9gjN
-         9srudeq79JNwmi7//UbvCJEWtKHaSmc+bjdZfl6t566+4ZGjcT/Up71UOqr5qTMGz7cK
-         YIDLgR2lqyhq8Y2KbXN1h89bToX31o/E9KESWfoJDLRNHU/uBfh3KxypPh6G3ErmUW0g
-         qx4fJSI3fxuBpjmfPVcMwqmr/Ws86mJUlAneUAgWTCdfbek1bko88RE8hIK4nWaFIM5T
-         kxPA==
-X-Gm-Message-State: AFqh2krDwjIBsm5yeqAuL4UR4KqNDph5FEBNb97zb6j6gqgDGrnGJPJ9
-        v6KAwFLzk4GDkjnaoBmePuVgoovNRocc0SCzZk8=
-X-Google-Smtp-Source: AMrXdXt6n3gAYNVwmlTeUuEyNQjyNuRze77+SuBFtaIQ4NFBo1ogkhxz0e9wcjVJCxQcH9XfPsY5nA==
-X-Received: by 2002:a17:907:8c08:b0:7c1:65d1:c4ca with SMTP id ta8-20020a1709078c0800b007c165d1c4camr10045321ejc.33.1672483682160;
-        Sat, 31 Dec 2022 02:48:02 -0800 (PST)
+        bh=UYCjumJKIVpNgaprHBc6yiaBNx3uDiRwwnz6NjNAOKQ=;
+        b=y/LvylplgyHzjdFlnHcvXtgtepqXfUHqtMEdQDVCiq75Phr9LtpM3pwSJwW3VgP4os
+         yfRgg3ZhJm5ta2SfLOh0HXlcQD8MRk2ptF3YVWtY80y58MOy+LLcwAcBGKfCyWRD1pGR
+         Lv6QNiY3c32YgWjwj6Gt3FcGZMNP1eHohVAMvo+bN3SZjMKTLfF+I8DRuCKWKs/Tqxpi
+         909OCrYbp4l2eGQCC6wO5Qjhqrhp7cYN/+B9nEd0Sgga5NbpfrYf95W88yzhnHxUJjtu
+         GrpUrhchbC5tjOICSG3KuvoWr3Orux38zIINdk8E0o1gyvhfLog4jH6JxFTuHi4fQe79
+         I0aw==
+X-Gm-Message-State: AFqh2koWpNbJOcBbAHMOPFkkQc5Kx6D2MSn6QRQ9gVb7SymTJIs9mzHk
+        gVr+KHplgn/dliL3l1n1kVB88JcPMN5zoxYA4+A=
+X-Google-Smtp-Source: AMrXdXtFkf58R6L2JoTSx+H966u4VmYCHQHiNSic8sWnTUPLX+LR1HTP5V2dYJh1wIFNGVun0uh00g==
+X-Received: by 2002:a17:907:6f19:b0:818:3ef8:f2fc with SMTP id sy25-20020a1709076f1900b008183ef8f2fcmr28135996ejc.5.1672483684723;
+        Sat, 31 Dec 2022 02:48:04 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-180-23-57.retail.telecomitalia.it. [80.180.23.57])
-        by smtp.gmail.com with ESMTPSA id z4-20020a17090655c400b0083ffb81f01esm10765438ejp.136.2022.12.31.02.48.00
+        by smtp.gmail.com with ESMTPSA id z4-20020a17090655c400b0083ffb81f01esm10765438ejp.136.2022.12.31.02.48.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 02:48:01 -0800 (PST)
+        Sat, 31 Dec 2022 02:48:04 -0800 (PST)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     tommaso.merciai@amarulasolutions.com,
@@ -64,9 +64,9 @@ Cc:     tommaso.merciai@amarulasolutions.com,
         Shawn Guo <shawnguo@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: [RFC PATCH 08/11] clk: imx: gate2: add device tree support
-Date:   Sat, 31 Dec 2022 11:47:33 +0100
-Message-Id: <20221231104736.12635-9-dario.binacchi@amarulasolutions.com>
+Subject: [RFC PATCH 09/11] clk: imx: cpu: add device tree support
+Date:   Sat, 31 Dec 2022 11:47:34 +0100
+Message-Id: <20221231104736.12635-10-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20221231104736.12635-1-dario.binacchi@amarulasolutions.com>
 References: <20221231104736.12635-1-dario.binacchi@amarulasolutions.com>
@@ -88,113 +88,71 @@ clock directly from the device tree.
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
 
- drivers/clk/imx/clk-gate2.c | 86 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
+ drivers/clk/imx/clk-cpu.c | 54 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/drivers/clk/imx/clk-gate2.c b/drivers/clk/imx/clk-gate2.c
-index f16c4019f402..b28150bf1ff6 100644
---- a/drivers/clk/imx/clk-gate2.c
-+++ b/drivers/clk/imx/clk-gate2.c
-@@ -12,9 +12,26 @@
- #include <linux/slab.h>
- #include <linux/io.h>
- #include <linux/err.h>
-+#include <linux/of.h>
-+#include <linux/of_address.h>
- #include <linux/string.h>
- #include "clk.h"
- 
-+#define CLK_GATE2_CGR_DISABLED 0
-+#define CLK_GATE2_CGR_RUN 1
-+#define CLK_GATE2_CGR_RUN_WAIT 2
-+#define CLK_GATE2_CGR_RUN_WAIT_STOP 3
-+#define CLK_GATE2_CGR_MASK 3
-+
-+#define CLK_GATE2_MAX_GROUPS    16
-+
-+struct clk_gate2_group {
-+	const char *name;
-+	unsigned int share_count;
-+};
-+
-+static struct clk_gate2_group clk_gate2_groups[CLK_GATE2_MAX_GROUPS];
-+
- /**
-  * DOC: basic gateable clock which can gate and ungate its output
-  *
-@@ -175,3 +192,72 @@ struct clk_hw *clk_hw_register_gate2(struct device *dev, const char *name,
+diff --git a/drivers/clk/imx/clk-cpu.c b/drivers/clk/imx/clk-cpu.c
+index cb6ca4cf0535..28fb75c6ecea 100644
+--- a/drivers/clk/imx/clk-cpu.c
++++ b/drivers/clk/imx/clk-cpu.c
+@@ -106,3 +106,57 @@ struct clk_hw *imx_clk_hw_cpu(const char *name, const char *parent_name,
  	return hw;
  }
- EXPORT_SYMBOL_GPL(clk_hw_register_gate2);
+ EXPORT_SYMBOL_GPL(imx_clk_hw_cpu);
 +
 +/**
-+ * of_imx_gate2_clk_setup() - Setup function for imx low power gate
++ * of_imx_cpu_clk_setup - Setup function for imx low power gate
 + *                            clock
 + * @node:	device node for the clock
 + */
-+static void __init of_imx_gate2_clk_setup(struct device_node *node)
++static void __init of_imx_cpu_clk_setup(struct device_node *node)
 +{
-+	void __iomem *reg;
-+	u8 i, bit_idx = 0;
-+	u8 cgr_val = CLK_GATE2_CGR_RUN_WAIT_STOP;
-+	u8 cgr_mask = CLK_GATE2_CGR_MASK;
-+	unsigned long flags = CLK_OPS_PARENT_ENABLE | CLK_SET_RATE_PARENT;
-+	u8 gate2_flags = 0;
-+	unsigned int *share_count = NULL;
-+	const char *name = node->name, *parent_name;
-+	const char *str;
 +	struct clk_hw *hw;
-+	u32 val;
++	struct clk *parent_clk, *div, *mux, *pll, *step;
++	const char *name = node->name, *parent_name;
 +
-+	reg = of_iomap(node, 0);
-+	if (IS_ERR(reg)) {
-+		pr_err("failed to get reg address for %pOFn\n", node);
++	parent_clk = of_clk_get_by_name(node, "fck");
++	if (IS_ERR(parent_clk)) {
++		pr_err("failed to get parent clock for %pOFn\n", node);
 +		return;
 +	}
 +
-+	if (!of_property_read_u32(node, "fsl,bit-shift", &val))
-+		bit_idx = val;
-+
-+	if (of_clk_get_parent_count(node) != 1) {
-+		pr_err("%pOFn must have 1 parent clock\n", node);
++	div = of_clk_get_by_name(node, "div-clk");
++	if (IS_ERR(div)) {
++		pr_err("failed to get div clock for %pOFn\n", node);
 +		return;
 +	}
 +
-+	if (!of_property_read_string(node, "sharing-group", &str)) {
-+		for (i = 0; clk_gate2_groups[i].name &&
-+			     i < ARRAY_SIZE(clk_gate2_groups); i++) {
-+			if (!strcmp(clk_gate2_groups[i].name, str)) {
-+				share_count = &clk_gate2_groups[i].share_count;
-+				break;
-+			}
-+		}
-+
-+		if (i == ARRAY_SIZE(clk_gate2_groups)) {
-+			pr_err("failed to get shared count for %pOFn\n", node);
-+			return;
-+		}
-+
-+		if (!share_count) {
-+			clk_gate2_groups[i].name =
-+				kstrdup_const(str, GFP_KERNEL);
-+			share_count = &clk_gate2_groups[i].share_count;
-+		}
++	mux = of_clk_get_by_name(node, "mux-clk");
++	if (IS_ERR(div)) {
++		pr_err("failed to get mux clock for %pOFn\n", node);
++		return;
 +	}
 +
-+	parent_name = of_clk_get_parent_name(node, 0);
++	pll = of_clk_get_by_name(node, "pll-clk");
++	if (IS_ERR(div)) {
++		pr_err("failed to get pll clock for %pOFn\n", node);
++		return;
++	}
++
++	step = of_clk_get_by_name(node, "step-clk");
++	if (IS_ERR(div)) {
++		pr_err("failed to get step clock for %pOFn\n", node);
++		return;
++	}
++
++	parent_name = __clk_get_name(parent_clk);
 +	of_property_read_string(node, "clock-output-names", &name);
 +
-+	hw = clk_hw_register_gate2(NULL, name, parent_name, flags, reg, bit_idx,
-+				   cgr_val, cgr_mask, gate2_flags,
-+				   &imx_ccm_lock, share_count);
++	hw = imx_clk_hw_cpu(name, parent_name, div, mux, pll, step);
 +	if (!IS_ERR(hw))
 +		of_clk_add_hw_provider(node, of_clk_hw_simple_get, hw);
 +
-+	pr_debug("name: %s, parent: %s, enable-bit: %d, flags: 0x%lx, gate2_flags: 0x%x\n",
-+		 name, parent_name, bit_idx, flags, gate2_flags);
++	pr_debug("name: %s, parent: %s, div: %s, mux: %s, pll: %s, step: %s\n",
++		 name, parent_name, __clk_get_name(div), __clk_get_name(mux),
++		 __clk_get_name(pll), __clk_get_name(step));
 +}
-+CLK_OF_DECLARE(fsl_imx8mn_gate2_clk, "fsl,imx8mn-low-power-gate-clock",
-+	       of_imx_gate2_clk_setup);
++CLK_OF_DECLARE(fsl_cpu_clk, "fsl,cpu-clock", of_imx_cpu_clk_setup);
 -- 
 2.32.0
 
