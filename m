@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F4265A2AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 05:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B5265A2AC
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 05:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiLaEMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 23:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S231282AbiLaEMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 23:12:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbiLaEMV (ORCPT
+        with ESMTP id S229514AbiLaEMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 23:12:21 -0500
+        Fri, 30 Dec 2022 23:12:14 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD1E1570D
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 20:11:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD19140FB
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 20:11:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672459893;
+        s=mimecast20190719; t=1672459890;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SQesEpyQ/TOk4+yr8stV7fGWHioPa/8NhDL6gLzIvW8=;
-        b=RGM4nh/ydrCVH/KRWM+vA7Q4D/52qjZf4r3xQHiwXeLGokMkqob9KsZRq4g++9qVVj+2+c
-        5pqNOeUf4tjp4HwhKcBT39dogI8AYp24m2+z6NyliUqKQozcOQ6Aez/tkUsfGll9TR4+tk
-        WgbkqWn28hwG34M4fdqot3eDuAckAWs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=SqGhzvoo07gfp1jTcFm+aPK7AgypGl91Poc4CFu8RI0=;
+        b=N5paTAKAN81ujASAlESqoKkkF8751QG1hqjP5nv3k75OJKi6A0q4bGXii0Lckbu3ElTFQK
+        2CEfqqbBFdZNbLP3FYGNavkzQaW/lLOxHmH4qxhJMKf8NxKDhrBDIT+1w722EBj8HawJuj
+        B76vWpVyciH8H3haSK/ZwEcFRZq+Oy0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-Vp0ft221P5K_uDtK9pMJXQ-1; Fri, 30 Dec 2022 23:11:28 -0500
-X-MC-Unique: Vp0ft221P5K_uDtK9pMJXQ-1
+ us-mta-439-rUVrCvvwONGWQ91rnyjeBw-1; Fri, 30 Dec 2022 23:11:29 -0500
+X-MC-Unique: rUVrCvvwONGWQ91rnyjeBw-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF9EF3C0DDB7;
-        Sat, 31 Dec 2022 04:11:27 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8920085C6E2;
+        Sat, 31 Dec 2022 04:11:28 +0000 (UTC)
 Received: from llong.com (unknown [10.22.32.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 23755492B00;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DC64C492B00;
         Sat, 31 Dec 2022 04:11:27 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Ingo Molnar <mingo@redhat.com>,
@@ -53,14 +53,13 @@ Cc:     Phil Auld <pauld@redhat.com>,
         =?UTF-8?q?David=20Wang=20=E7=8E=8B=E6=A0=87?= 
         <wangbiao3@xiaomi.com>, Quentin Perret <qperret@google.com>,
         Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Waiman Long <longman@redhat.com>, stable@vger.kernel.org
-Subject: [PATCH v6 1/2] sched: Fix use-after-free bug in dup_user_cpus_ptr()
-Date:   Fri, 30 Dec 2022 23:11:19 -0500
-Message-Id: <20221231041120.440785-2-longman@redhat.com>
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v6 2/2] sched: Use kfree_rcu() in do_set_cpus_allowed()
+Date:   Fri, 30 Dec 2022 23:11:20 -0500
+Message-Id: <20221231041120.440785-3-longman@redhat.com>
 In-Reply-To: <20221231041120.440785-1-longman@redhat.com>
 References: <20221231041120.440785-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -73,92 +72,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 07ec77a1d4e8 ("sched: Allow task CPU affinity to be
-restricted on asymmetric systems"), the setting and clearing of
-user_cpus_ptr are done under pi_lock for arm64 architecture. However,
-dup_user_cpus_ptr() accesses user_cpus_ptr without any lock
-protection. Since sched_setaffinity() can be invoked from another
-process, the process being modified may be undergoing fork() at
-the same time.  When racing with the clearing of user_cpus_ptr in
-__set_cpus_allowed_ptr_locked(), it can lead to user-after-free and
-possibly double-free in arm64 kernel.
+Commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
+do_set_cpus_allowed()") may call kfree() if user_cpus_ptr was previously
+set. Unfortunately, some of the callers of do_set_cpus_allowed()
+may have pi_lock held when calling it. So the following splats may be
+printed especially when running with a PREEMPT_RT kernel:
 
-Commit 8f9ea86fdf99 ("sched: Always preserve the user requested
-cpumask") fixes this problem as user_cpus_ptr, once set, will never
-be cleared in a task's lifetime. However, this bug was re-introduced
-in commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
-do_set_cpus_allowed()") which allows the clearing of user_cpus_ptr in
-do_set_cpus_allowed(). This time, it will affect all arches.
+   WARNING: possible circular locking dependency detected
+   BUG: sleeping function called from invalid context
 
-Fix this bug by always clearing the user_cpus_ptr of the newly
-cloned/forked task before the copying process starts and check the
-user_cpus_ptr state of the source task under pi_lock.
+To avoid these problems, kfree_rcu() is used instead. An internal
+cpumask_rcuhead union is created for the sole purpose of facilitating
+the use of kfree_rcu() to free the cpumask.
 
-Note to stable, this patch won't be applicable to stable releases.
-Just copy the new dup_user_cpus_ptr() function over.
+Since user_cpus_ptr is not being used in non-SMP configs, the newly
+introduced alloc_user_cpus_ptr() helper will return NULL in this case
+and sched_setaffinity() is modified to handle this special case.
 
-Fixes: 07ec77a1d4e8 ("sched: Allow task CPU affinity to be restricted on asymmetric systems")
 Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-CC: stable@vger.kernel.org
-Reported-by: David Wang 王标 <wangbiao3@xiaomi.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/sched/core.c | 34 +++++++++++++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 5 deletions(-)
+ kernel/sched/core.c | 33 +++++++++++++++++++++++++++++----
+ 1 file changed, 29 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 25b582b6ee5f..b93d030b9fd5 100644
+index b93d030b9fd5..dc68c9a54a71 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -2612,19 +2612,43 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
- int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
- 		      int node)
- {
-+	cpumask_t *user_mask;
- 	unsigned long flags;
+@@ -2604,9 +2604,29 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+ 		.user_mask = NULL,
+ 		.flags     = SCA_USER,	/* clear the user requested mask */
+ 	};
++	union cpumask_rcuhead {
++		cpumask_t cpumask;
++		struct rcu_head rcu;
++	};
  
--	if (!src->user_cpus_ptr)
-+	/*
-+	 * Always clear dst->user_cpus_ptr first as their user_cpus_ptr's
-+	 * may differ by now due to racing.
-+	 */
-+	dst->user_cpus_ptr = NULL;
+ 	__do_set_cpus_allowed(p, &ac);
+-	kfree(ac.user_mask);
 +
 +	/*
-+	 * This check is racy and losing the race is a valid situation.
-+	 * It is not worth the extra overhead of taking the pi_lock on
-+	 * every fork/clone.
++	 * Because this is called with p->pi_lock held, it is not possible
++	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
++	 * kfree_rcu().
 +	 */
-+	if (data_race(!src->user_cpus_ptr))
- 		return 0;
- 
--	dst->user_cpus_ptr = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
--	if (!dst->user_cpus_ptr)
-+	user_mask = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
-+	if (!user_mask)
- 		return -ENOMEM;
- 
--	/* Use pi_lock to protect content of user_cpus_ptr */
++	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
++}
++
++static cpumask_t *alloc_user_cpus_ptr(int node)
++{
 +	/*
-+	 * Use pi_lock to protect content of user_cpus_ptr
-+	 *
-+	 * Though unlikely, user_cpus_ptr can be reset to NULL by a concurrent
-+	 * do_set_cpus_allowed().
++	 * See do_set_cpus_allowed() above for the rcu_head usage.
 +	 */
- 	raw_spin_lock_irqsave(&src->pi_lock, flags);
--	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
-+	if (src->user_cpus_ptr) {
-+		swap(dst->user_cpus_ptr, user_mask);
-+		cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
-+	}
- 	raw_spin_unlock_irqrestore(&src->pi_lock, flags);
++	int size = max_t(int, cpumask_size(), sizeof(struct rcu_head));
 +
-+	if (unlikely(user_mask))
-+		kfree(user_mask);
-+
- 	return 0;
++	return kmalloc_node(size, GFP_KERNEL, node);
  }
  
+ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+@@ -2629,7 +2649,7 @@ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+ 	if (data_race(!src->user_cpus_ptr))
+ 		return 0;
+ 
+-	user_mask = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
++	user_mask = alloc_user_cpus_ptr(node);
+ 	if (!user_mask)
+ 		return -ENOMEM;
+ 
+@@ -3605,6 +3625,11 @@ static inline bool rq_has_pinned_tasks(struct rq *rq)
+ 	return false;
+ }
+ 
++static inline cpumask_t *alloc_user_cpus_ptr(int node)
++{
++	return NULL;
++}
++
+ #endif /* !CONFIG_SMP */
+ 
+ static void
+@@ -8263,8 +8288,8 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
+ 	if (retval)
+ 		goto out_put_task;
+ 
+-	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
+-	if (!user_mask) {
++	user_mask = alloc_user_cpus_ptr(NUMA_NO_NODE);
++	if (IS_ENABLED(CONFIG_SMP) && !user_mask) {
+ 		retval = -ENOMEM;
+ 		goto out_put_task;
+ 	}
 -- 
 2.31.1
 
