@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5E665A658
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 20:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E495765A659
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 20:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiLaTn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 14:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
+        id S232134AbiLaToV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 14:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiLaTn5 (ORCPT
+        with ESMTP id S232382AbiLaToS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 14:43:57 -0500
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2122.outbound.protection.outlook.com [40.107.11.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42283892;
-        Sat, 31 Dec 2022 11:43:55 -0800 (PST)
+        Sat, 31 Dec 2022 14:44:18 -0500
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2107.outbound.protection.outlook.com [40.107.11.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADFC5581;
+        Sat, 31 Dec 2022 11:44:16 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F2W/pm3jKoehYHhPMu6wRrkk4f8v8+fJ5egZzZIzkyA3yAqG1EtQHfK/EAQo5yQIXE3X15E2rVWWTx9OnwlzErtq7pcFiF3PU7AZLk6lagOn2b62xTBsVkJtiTYBiwqvoeJAdvVGJvHP+HWT98nklLsT/sngSwYmo61aPRL5gfhWb3SK4YiVxwstezvPoTUgcUC6pSDlczNTv2VlUXRoDwIfHZDyrtjgZF2eM/3vzDwxKvoQoECqbttL6PMsaGqfEPXi8UUky+BBczgspS2G/Fr9KoCdGx3Qp9yI3qPWCDBRtAcnGGEQhXbydgIR1/b6r8/sfwMzUc3Ic9qKCdd5ZQ==
+ b=iercTrTs/e94+oCNe5Y9XZyq07Ry0vO8Hm0Y4qaw6iEFvOKp+pqDuOcntj1Ps/Vyt9ZOEtadkPgh2utWVyetWEJ7KoIOQbmDM8Qd8AOBm+dU/N1CzyTtQGMFhz4fU2WWOJWlBX97dJLjaXVWg4OGE9SnzP75DkngXlUdsYaHiBOyNE0h55DOTy0/RYSiHYn/5cT+mjzcNjw88ifCHd8FSSwTnDcowGhYxObNxk0wBqYYNsZY6IAqyPSfsEGAH4T9Oh6Ubo9y/K7nv1aUJA3vf2Eb5CTGQmbpx3laQkFZ25PeFIVC3s32dlcQT3h5wEDPDZf5qApOfOLzec1ucB4ARw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SPTUG3bd3H9TxEaw9kqwQrG9CjHWqV/yDCcquQRWfkw=;
- b=eFlk7OtuYaa2fE1m5JoAg7fGikRKgpcd4I8TNoO3IheaA7YqRlQti1az/01gbp6gmuxw+z4hPfMxIrMq+6O/SSGAqpTKOYMU/N+xwuqhMxGsSYKJ3h9idWSHY+hZmby5mgwhng+7rf8Bu9ImVHnYrsprkmZBD++z48fA/RY0Vb2fsA1ZTh3vpUtJc0x0SdbHp4T/r+Z4VzSS7RfdlsPSHwAgvfm0i1pOaLd+vWWYPf8BaiatbYkLivophezZKZqB4qSnhUnmqeXVB9P5w8WzCtlAZFUdJZJmGeugyczRBRZYhgkVzWp/W7jN6LhAO7UQ7XableAm5f9lijlej6CJWA==
+ bh=naNmoFFCnHryiWah+9xPm7ecd2I5OBm81O4dYwxmo+s=;
+ b=T94pC/ulD/WJ+Ffh1erLyCt7d1oc0pH81U847U2Oqrag/+QeUA+wEihbl8981ehLft7osuuXfcNshzM6JyMCuToDmI2kCBj+0zekUCdm444f90Dg+BlNOtkBpvQ9IE1TDa83OclQTMG9JHqAU6/3ODG3nk/yVhs5JODAKXjtxhUsYP0GiP1BfReKqvp08AhUX+8KKtOqjW2jwnhScEosna4nNwTs5qV+DvK/eZNyJp+FRCUA11AG8NC9xxyWHRA2ZoqsHsrOlGvrurroH6KHOQWsumZxml3OOha8VWzQABHTLv1Ad11RQ3MWQnF9MBLryL9iAxhJxSZAa1lWjOWf2A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
  dkim=pass header.d=garyguo.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SPTUG3bd3H9TxEaw9kqwQrG9CjHWqV/yDCcquQRWfkw=;
- b=lKrf83Y2kuDU7veGln0PRzYAvsM+JfncVZiiI+GyI5OMFXpyncBnWW0Iu/eyKaTxOAS0RB2Fa4hySqfAVi+Ex2zvtO7D5JRRzYrQ8VkNV93EPbI77AlE0ccfKIRf1vEILIPsQwqMBDIkGDNhPqGFr8prhc/2NV38fr2NW9ruUo0=
+ bh=naNmoFFCnHryiWah+9xPm7ecd2I5OBm81O4dYwxmo+s=;
+ b=Xad4kA9ngkOlqWr0cE6m9spij8HjeovhYrKWrUjieH73xIX6qOT1IKjbKx003OR0eLruWxSoCx7pJwz3/cfjeFX2/mzvzM5EoJrkMd5nFKpatPBWVg2zcfn0clzPFnQ2G1XSPwpnADcuJW7SLZi73+yqkR6BBy6Wrlm4CREriBc=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=garyguo.net;
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
  by LO6P265MB6473.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2dd::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.18; Sat, 31 Dec
- 2022 19:43:53 +0000
+ 2022 19:44:15 +0000
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::2f24:8099:5588:8ba8]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::2f24:8099:5588:8ba8%8]) with mapi id 15.20.5944.018; Sat, 31 Dec 2022
- 19:43:53 +0000
-Date:   Sat, 31 Dec 2022 19:43:52 +0000
+ 19:44:15 +0000
+Date:   Sat, 31 Dec 2022 19:44:14 +0000
 From:   Gary Guo <gary@garyguo.net>
 To:     Wedson Almeida Filho <wedsonaf@gmail.com>
 Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
@@ -49,221 +49,127 @@ Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] rust: sync: introduce `ArcBorrow`
-Message-ID: <20221231194352.55cf0a26.gary@garyguo.net>
-In-Reply-To: <20221228060346.352362-4-wedsonaf@gmail.com>
+Subject: Re: [PATCH 5/7] rust: sync: allow type of `self` to be
+ `ArcBorrow<T>`
+Message-ID: <20221231194414.3f66d8af.gary@garyguo.net>
+In-Reply-To: <20221228060346.352362-5-wedsonaf@gmail.com>
 References: <20221228060346.352362-1-wedsonaf@gmail.com>
-        <20221228060346.352362-4-wedsonaf@gmail.com>
+        <20221228060346.352362-5-wedsonaf@gmail.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0593.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:295::8) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+X-ClientProxiedBy: LO2P123CA0045.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600::33)
+ To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO6P265MB6473:EE_
-X-MS-Office365-Filtering-Correlation-Id: dcdaabfa-6cba-4b88-29e9-08daeb67590a
+X-MS-Office365-Filtering-Correlation-Id: 6187456e-47bc-46df-39aa-08daeb6765e2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aU/wlqbM6DGqiNO5dfVSnGzwwRwUPnFEdMWooA+mXzCRoUWfOoIgGa1umtXPsoi5U+aUlOlyy2hpYi2z3eQZUoH7xVaus6CQZz5hnMOJcEg0ltiTCAjVqMebtY+byM9koaOaKIbW8nkTTkkXETSa5ecf8jedLqF9XQuPatWEkzCVHhRDYE45ZIpxEYFpbJksD2BQ6efrDctvjjpagCI2Ktu5AWjGpqbc2GMUEb07bciVcFHh+bpu945u6qQo33Itk1DvDRBSF1BIncLMOd0/DK++hC+4oWMv6HmP7ObRcsINepcY5rx4lUJSY8BDqksDjUFZ6YObaq6QbPHYQAjhBa18o2XOxZ4iTKz9xgZR+prK5/1N9v+r7/R8yzMAIUolfIcOLTWe2K3idBM47iDqwkLdvjzALkjtTmuWHotr4jA3v16gE1Rql5Wq5582UeqWOq3MVuotLClvdiEAvTcPk2wu+Wt55ESeMSfTydYOuxI+VyK7bDKQO5KmlfchT4mjs6qJSoO4Fq2OmnlQyPD2x2o0vdE0mVETui2Em2Woo8wZcrpcQX93p7GBwfbZQ/eiM6nlMpSjpFmKrZd3oadnal3vNiZNlsEClD6QQb2Z12vu9ZB1zroi5nwSI40fLroIOD6jesXd8HkSH4/4qppR86/co9f8ff8VNRZPwS2AZiMt4P74X8LTOdzDZkrEn+dJ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(396003)(376002)(136003)(39830400003)(451199015)(83380400001)(26005)(186003)(6512007)(2616005)(1076003)(55236004)(6506007)(86362001)(36756003)(38100700002)(8936002)(4326008)(8676002)(41300700001)(2906002)(5660300002)(6486002)(478600001)(66946007)(316002)(66476007)(66556008)(54906003)(6916009)(81973001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 5ExK5cm0dM9X6Sfb8zSFKOZgxmBTgI6yyDhVjiy/eyVAWvG/KxjTYCSerZvyPamE/tBfXvcBbI0XdEA7OAKPakOxY5Z+jrlWOaHTOCYEgenxsiYpcinBd7a4bae5+bR/yGhQfZr9RkUIVuyyUc9QYAZ8BXW+YorWFZd6EU0OrRqDDvM4eusGH2sSzma66PYrLIIKva//ZnYTXhWXIvp/PbUNZb6GkYNu1dm7iBmtEgQEIinx92vPSw/b+ZGbIFeirQ/7YK8buv2wg2ZH5NoVMc2O+wHy40BtE6D2Q4q5fr1ehGr+LWNcxaaQLt2nNLm9JaEjrAxtR5iZ/RSHUbQ09qMMks/1u3MR/kasbHtmvz9iVVTbkpU+6o0AsJ7p8mxFSGyOOc/QWA65qJV2MkA+9kH7EkWC9A+a8gByf93uK25RzZaWuPgmeCy56hBS2Ia6cb+nHNHV8CPRRala3AOGvjlYjf9CnTsRZSS/LWO1n+v9M2CA4j4cgVjXSVsRJWuhhqXF9i7d2aUZsRzaUOQ8XQ6loLdCebmsMGrvFpyLRxbpW+1MicROHik+3Iek7yp4ypa8DDP1pPm7SQfJ+7zT4PbEkzZKR0oQ041zGvlV7A5i0HHbuc4tC94xjSudI14GyQlLezUncuxiHbrq/3ztbSW3H7+jhyv8aZueJRj4LDwUqXm5g6VTrnwaU3qKyqpd
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(396003)(376002)(136003)(39830400003)(451199015)(26005)(186003)(6512007)(2616005)(1076003)(55236004)(6506007)(86362001)(36756003)(38100700002)(8936002)(4326008)(8676002)(41300700001)(2906002)(5660300002)(6486002)(478600001)(66946007)(316002)(66476007)(66556008)(54906003)(6916009)(81973001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TbMf7+2Y6fmAnnCQPqR+NUq0JUeOpIe4BW6aoQErubG8jVgyn9X+0RzkqyXx?=
- =?us-ascii?Q?5oXsKp2/2934p3s1WGFShleBhae7iOtWwVGUK08mOptakuMWM2zYtAUf/Ue7?=
- =?us-ascii?Q?yf7MUHmabIvp5FZ1cn4B6DNkx0yr8MxNnvTGYsni8ocpp5u8nqJ5tm4XuA3U?=
- =?us-ascii?Q?2tIU7XS/HfBVsxBPflRs4++zRthoVYAVw3AHR8Ja4vq/NF3/iYalAjU5iCbT?=
- =?us-ascii?Q?a0182RcK93sQZVuyW+rn2ypiPvYcNaDwb1U3kAGcBV5KnBUhzb7MBeOsD/Mx?=
- =?us-ascii?Q?M8sgUzUrXX/Pocj7YaqbS21o1bLLYxQyvFWNoka7mt82NZ7eiDuf5l1XkfxO?=
- =?us-ascii?Q?DPA7ukPuWqhzsTj2zVmEGw238/oG9TJRmG+srEfUoRHRnQx/MXkf8YspCpam?=
- =?us-ascii?Q?+Je4V88A6CsDeytPXDBvaeJs9KmiQvTDGItTzd4kHAIzUUhzwsF0FBUlReB+?=
- =?us-ascii?Q?m25OIY73u17JM2ruDrZYhH/DhasEC0H/itSZJVvUAd+quBUqTL6zlj+Q/Vsb?=
- =?us-ascii?Q?mxfAvhFWv6jn77DGwSTKyohDdFbr2eplNPbf3lyZzFOihy84L3o2nYjKP873?=
- =?us-ascii?Q?HUAYK1lywdQWvkGTmzCWk4VEhq7HRQ84I54+mrb5skrUJVGPFvLUL3LWl+hR?=
- =?us-ascii?Q?DZP5EcYrhc0FbpervUCuuNFwnO9yzha4/hbthuhnAdcZ1ytiYIy5tUW/rUmL?=
- =?us-ascii?Q?rhx9pN4tdj1mx7W3WZv8N2Zn1Sq83sJzZGaGJGYXnHKgvyFphGGhZI5nkJWS?=
- =?us-ascii?Q?K1D6zMVG7TbkgaZnJ9fjJsmoAdwWHUd1ElnvHyBHTTQK8RAvkjRh0rE33ggZ?=
- =?us-ascii?Q?P9PRyAWa+Hgw2ryPMrOov2ddUvE2bWE9PfQzKvA+J6q3xfZk8C0mJfc/nohK?=
- =?us-ascii?Q?P/OcI2iNdfwKxawGG7QmEKZ1MfAsD0PCaVtGSkeKIoVqVecQBJ6RcAsePdqM?=
- =?us-ascii?Q?W0GMbkw/MlnRrLJPlzVLHbL64qa/g5YAd6lodKwJMZLablr0TPflDkIgiHJy?=
- =?us-ascii?Q?i52dCEx9Yjjo07zw11ZxMP2YfcCgMhz2NRqSlyNbW6HEMJdV2I080p/YDVne?=
- =?us-ascii?Q?4Ft9USv7iPGRKtxtfbcRYf/Xtpq1U2j92KeHoqk5eaahzK9FDrabS175ZA0L?=
- =?us-ascii?Q?N7KVi/gYmVC8mN2A7T6HfQJz+vo44T7LwMmLhpS8i1t1zHoaicvY8oSsETIH?=
- =?us-ascii?Q?M9n+IjmorcJfA1/njDLzMfWSvzyk2rGEkofYFgSW0rW+EW35HxpxRrZVBfp2?=
- =?us-ascii?Q?1M1JJRCNJ6e7mjC2c0/QiKyq/HcEaGGe1SBL22UVgtoNNKqaBSY31v+kKKWn?=
- =?us-ascii?Q?bxDo/dlMa1EZXHAVwknekd1eY1BLnaN7vHMgv6QfrFXcq5OVHiwzvBUqqbKK?=
- =?us-ascii?Q?wpiLOW3BXzgs+ivXJahaBfCvXQTix3fTBPXnLk1WL+MkPCElpoujE+qc15y8?=
- =?us-ascii?Q?qFhQGNFzfdO5dZKUDIrgCrbGciVlkG71CnP9KScYpL55mgJg4HdqpokUme3/?=
- =?us-ascii?Q?0J8bL70Sz8+GSzY+ztpXQwjmOJXXDNXjuO/I91jiJ0AelmPemBeGKhjZNbzi?=
- =?us-ascii?Q?RUZcDqOUdPDjSwQVmOY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HN2tZEM7soJAPmgBoMyhoQkzoilYpe88//3VMYVUYFu0CUcYwnpL+isb63Bn?=
+ =?us-ascii?Q?5oosSYAvtvALAfvNB/D65GCFKswbXm1PiDoW+yPbVuU5wdd9Q6MQrVwiEQnO?=
+ =?us-ascii?Q?kEL2Te9oIO7DU5679P0p0gkP+QQW9jxjJlh/l2qvLObZMbltKHkLUnw9sjsU?=
+ =?us-ascii?Q?zCMfXkxFrU9mErQnfR0xQeWxZ5I9yHFZuL1weNt9BdTWT+gPhNBqFerUlg8O?=
+ =?us-ascii?Q?RRIgPwQKMLyJ0Eb9E4zUtA1BmxbxSWbdDmyE25vw6Jbwsswjj+EEY5m7WK22?=
+ =?us-ascii?Q?AnUVydqESVBCmus2jl6aAcdx2I6cny5QlzDGphczZPcT5J1m6yQde1JPpSF6?=
+ =?us-ascii?Q?ZJeSL+lmODZcdjCLKlDv0SdweHp1JmanSfaI26oUZUhatgDdM+BnqsezY6Qs?=
+ =?us-ascii?Q?eNkveufnvYqua2+syIEwzoXBvuUW4sa4K2jctrbrJNERx/AoR0elQ9+GowVE?=
+ =?us-ascii?Q?vVVdOMJ7LAG/PXYadfp/9rdiltsjysCwi9yRr9OEEduVAQyIl1UBr1HykIsw?=
+ =?us-ascii?Q?UMrEbCUHXpqNNd03/jOqAVQZ9MEksOAKaUaxIoV3xPzKxugZS89qkWlpat2M?=
+ =?us-ascii?Q?/161fLB8SaQY1nCKbwcK4nNvn1lQMWMbV5xcuAoAfedwtlVhN0yZzSV8xMYT?=
+ =?us-ascii?Q?cgnDGBKl8oxHk71lyQo+5WoHEKWfw9tmAQ8PaIQ6VkLf67uIYKGGyZ189Ddp?=
+ =?us-ascii?Q?Xu8SY0mVaI7OXABqDZ9DpFtyvIaASsejlCM0aVSTad+k7MKu81Ip67K7wYtX?=
+ =?us-ascii?Q?30f/pp3shJJ8n596SYgb2NLYQZRs8dWUUomNQlY3wJL+lFMySH7tTSkRt2H2?=
+ =?us-ascii?Q?q/SNlEcLiiK3GQtMar42Nm5SsX9N13cs6xVfToDO1/FWiWsvBV+O1ZIg0z9Z?=
+ =?us-ascii?Q?5286kGZxaouIKmEqKLb2x8kZSoC6LI0gOcZNaBoJJeMAmJAhi7jRNcBRxdd4?=
+ =?us-ascii?Q?aYX1oCO9H5Ib5wVdfnPIR0gJeSDoLfyNH9eOPib2GvBzFUDR2ZqJQlqsj6J9?=
+ =?us-ascii?Q?qQvgZqV7P1YzC+I/mpu5JUIjYSKEq9aDzZNRFkWfuDnarUQe4BrdWAnZndri?=
+ =?us-ascii?Q?j6G1ToI8i31ZGcY+BsU5Db7uyp6ld6ckbS2oJwZgkU2V/OOS5AtKaZfgSmYf?=
+ =?us-ascii?Q?4WbjAEVoHyVypzRRou0UBuux7q/LjJdTu3F9b1XjfBsCHEDMe+4kPtLUwQlc?=
+ =?us-ascii?Q?aQuUjaA33zb/K4rBsSw9zQthYa5VSgpL0HSXqB0WLE4YKEYGPJaFFXRMuEjc?=
+ =?us-ascii?Q?IR6kc6whXe4CIqwzHYa4ZwCzYbcselclMlDhNqvkkZTvpLFnjm6mQHeGrzez?=
+ =?us-ascii?Q?cilKCX8THRsFjVTHS8z1nj/mC2yzjqSNpdAZFjzaSJ0kyEMVNfZevGDbiph+?=
+ =?us-ascii?Q?7Niq4h8QKXFI1Nj+G7ETCJ8DqrRKexeEKd884SdQ0xgKl8rTHfaps9Km4LCg?=
+ =?us-ascii?Q?z8XimJx6muF/seZlLxDLPwEp6oLtmzM1WKr71/LxUnVgRTk7AXAVuyOENIa4?=
+ =?us-ascii?Q?sIDzVpIE7z/DcY4gPnsKl79lAqiNwltC+7vk/tPt4rzJsk2iiYc3ZU21FlAk?=
+ =?us-ascii?Q?4McbMOoy/l06HwPiG0U=3D?=
 X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: dcdaabfa-6cba-4b88-29e9-08daeb67590a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6187456e-47bc-46df-39aa-08daeb6765e2
 X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Dec 2022 19:43:53.5594
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Dec 2022 19:44:15.0923
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: majo5l7LRsL5oQIcEhI3euYY5FPUSeN+Cf2SJgGTasrHyx07cGxeRMDp81PIU0+5+q+3heT/r89PJi333E6ZjA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: UTgtFbIeR+r2r6sgsT0/Y+IzKvxwuji6+N2t7gEByWpsEh5yegiWQRT5fIdzxbxPzicOWzF2z/b4jBiAkk5tdw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB6473
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Dec 2022 06:03:43 +0000
+On Wed, 28 Dec 2022 06:03:44 +0000
 Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
 
-> This allows us to create references to a ref-counted allocation without
-> double-indirection and that still allow us to increment the refcount to
-> a new `Arc<T>`.
+> This allows associated functions whose `self` argument has
+> `ArcBorrow<T>` as their type. This, in turn, allows callers to use the
+> dot syntax to make calls.
 > 
 > Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+
+Reviewed-by: Gary Guo <gary@garyguo.net>
+
 > ---
->  rust/kernel/sync.rs     |  2 +-
->  rust/kernel/sync/arc.rs | 97 +++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 98 insertions(+), 1 deletion(-)
+>  rust/kernel/sync/arc.rs | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 > 
-> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-> index 39b379dd548f..5de03ea83ea1 100644
-> --- a/rust/kernel/sync.rs
-> +++ b/rust/kernel/sync.rs
-> @@ -7,4 +7,4 @@
->  
->  mod arc;
->  
-> -pub use arc::Arc;
-> +pub use arc::{Arc, ArcBorrow};
 > diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index dbc7596cc3ce..f68bfc02c81a 100644
+> index f68bfc02c81a..84f31c85a513 100644
 > --- a/rust/kernel/sync/arc.rs
 > +++ b/rust/kernel/sync/arc.rs
-> @@ -19,6 +19,7 @@ use crate::{bindings, error::Result, types::Opaque};
->  use alloc::boxed::Box;
->  use core::{
->      marker::{PhantomData, Unsize},
-> +    mem::ManuallyDrop,
->      ops::Deref,
->      ptr::NonNull,
->  };
-> @@ -164,6 +165,18 @@ impl<T: ?Sized> Arc<T> {
->              _p: PhantomData,
->          }
->      }
-> +
-> +    /// Returns an [`ArcBorrow`] from the given [`Arc`].
-> +    ///
-> +    /// This is useful when the argument of a function call is an [`ArcBorrow`] (e.g., in a method
-> +    /// receiver), but we have an [`Arc`] instead. Getting an [`ArcBorrow`] is free when optimised.
-> +    #[inline]
-> +    pub fn as_arc_borrow(&self) -> ArcBorrow<'_, T> {
-> +        // SAFETY: The constraint that the lifetime of the shared reference must outlive that of
-> +        // the returned `ArcBorrow` ensures that the object remains alive and that no mutable
-> +        // reference can be created.
-> +        unsafe { ArcBorrow::new(self.ptr) }
-> +    }
->  }
->  
->  impl<T: ?Sized> Deref for Arc<T> {
-> @@ -208,3 +221,87 @@ impl<T: ?Sized> Drop for Arc<T> {
->          }
->      }
->  }
-> +
-> +/// A borrowed reference to an [`Arc`] instance.
+> @@ -255,11 +255,34 @@ impl<T: ?Sized> Drop for Arc<T> {
+>  /// // Assert that both `obj` and `cloned` point to the same underlying object.
+>  /// assert!(core::ptr::eq(&*obj, &*cloned));
+>  /// ```
 > +///
-> +/// For cases when one doesn't ever need to increment the refcount on the allocation, it is simpler
-> +/// to use just `&T`, which we can trivially get from an `Arc<T>` instance.
-> +///
-> +/// However, when one may need to increment the refcount, it is preferable to use an `ArcBorrow<T>`
-> +/// over `&Arc<T>` because the latter results in a double-indirection: a pointer (shared reference)
-> +/// to a pointer (`Arc<T>`) to the object (`T`). An [`ArcBorrow`] eliminates this double
-> +/// indirection while still allowing one to increment the refcount and getting an `Arc<T>` when/if
-> +/// needed.
-> +///
-> +/// # Invariants
-> +///
-> +/// There are no mutable references to the underlying [`Arc`], and it remains valid for the
-> +/// lifetime of the [`ArcBorrow`] instance.
-> +///
-> +/// # Example
+> +/// Using `ArcBorrow<T>` as the type of `self`:
 > +///
 > +/// ```
 > +/// use crate::sync::{Arc, ArcBorrow};
 > +///
-> +/// struct Example;
-> +///
-> +/// fn do_something(e: ArcBorrow<'_, Example>) -> Arc<Example> {
-> +///     e.into()
+> +/// struct Example {
+> +///     a: u32,
+> +///     b: u32,
 > +/// }
 > +///
-> +/// let obj = Arc::try_new(Example)?;
-> +/// let cloned = do_something(obj.as_arc_borrow());
+> +/// impl Example {
+> +///     fn use_reference(self: ArcBorrow<'_, Self>) {
+> +///         // ...
+> +///     }
+> +/// }
 > +///
-> +/// // Assert that both `obj` and `cloned` point to the same underlying object.
-> +/// assert!(core::ptr::eq(&*obj, &*cloned));
+> +/// let obj = Arc::try_new(Example { a: 10, b: 20 })?;
+> +/// obj.as_arc_borrow().use_reference();
 > +/// ```
-> +pub struct ArcBorrow<'a, T: ?Sized + 'a> {
-> +    inner: NonNull<ArcInner<T>>,
-> +    _p: PhantomData<&'a ()>,
-> +}
+>  pub struct ArcBorrow<'a, T: ?Sized + 'a> {
+>      inner: NonNull<ArcInner<T>>,
+>      _p: PhantomData<&'a ()>,
+>  }
+>  
+> +// This is to allow [`ArcBorrow`] (and variants) to be used as the type of `self`.
+> +impl<T: ?Sized> core::ops::Receiver for ArcBorrow<'_, T> {}
 > +
-> +impl<T: ?Sized> Clone for ArcBorrow<'_, T> {
-> +    fn clone(&self) -> Self {
-> +        *self
-> +    }
-> +}
-> +
-> +impl<T: ?Sized> Copy for ArcBorrow<'_, T> {}
+>  impl<T: ?Sized> Clone for ArcBorrow<'_, T> {
+>      fn clone(&self) -> Self {
+>          *self
 
-Couldn't this just be derived `Clone` and `Copy`?
-
-> +
-> +impl<T: ?Sized> ArcBorrow<'_, T> {
-> +    /// Creates a new [`ArcBorrow`] instance.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// Callers must ensure the following for the lifetime of the returned [`ArcBorrow`] instance:
-> +    /// 1. That `inner` remains valid;
-> +    /// 2. That no mutable references to `inner` are created.
-> +    unsafe fn new(inner: NonNull<ArcInner<T>>) -> Self {
-> +        // INVARIANT: The safety requirements guarantee the invariants.
-> +        Self {
-> +            inner,
-> +            _p: PhantomData,
-> +        }
-> +    }
-> +}
-> +
-> +impl<T: ?Sized> From<ArcBorrow<'_, T>> for Arc<T> {
-> +    fn from(b: ArcBorrow<'_, T>) -> Self {
-> +        // SAFETY: The existence of `b` guarantees that the refcount is non-zero. `ManuallyDrop`
-> +        // guarantees that `drop` isn't called, so it's ok that the temporary `Arc` doesn't own the
-> +        // increment.
-> +        ManuallyDrop::new(unsafe { Arc::from_inner(b.inner) })
-> +            .deref()
-> +            .clone()
-> +    }
-> +}
-
-It might be easier to follow if this is jsut `bindings::refcount_inc`
-followed by `Arc::from_inner`?
-
-> +
-> +impl<T: ?Sized> Deref for ArcBorrow<'_, T> {
-> +    type Target = T;
-> +
-> +    fn deref(&self) -> &Self::Target {
-> +        // SAFETY: By the type invariant, the underlying object is still alive with no mutable
-> +        // references to it, so it is safe to create a shared reference.
-> +        unsafe { &self.inner.as_ref().data }
-> +    }
-> +}
