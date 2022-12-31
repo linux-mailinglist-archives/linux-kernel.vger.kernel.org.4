@@ -2,221 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E3865A601
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 18:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8341365A608
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 19:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiLaRyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 12:54:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        id S232196AbiLaSW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 13:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLaRyV (ORCPT
+        with ESMTP id S229628AbiLaSW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 12:54:21 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA902E92
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 09:54:19 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so15337452wmb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 09:54:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bstpBOOSd0DT3nc8s3SZIuNiRah6+MZ2rvRQNSJbqJs=;
-        b=ajFc5K3t88by6XJm6IH40aReNT+PHPOtEzGSUV0Qh7eZbArNm55/uu+j5nOgxIaIVr
-         lbYtsJSU68UMSqc8OXyI7KGEE5dGjh8u2TZwdpzyFjT+YbkpdflzCwm5ipJM00+uJre/
-         y6oQpwlzYu1OHWWYiBuhm6NkyIc4hG+4xceEJVANqiuYkw+t75G5DbhV5guK/HfuLGjM
-         IP+clM91zaYEVr6GomSGwAqNkXM/tkAclArOntJ7KwuObuBFEZrQLQPIa4p+Wsgmjvjb
-         hgjKgep4bZNMxUPq5710YGkvdbmTKkeb5u+2dqTfEAFnHcBgSKCbMiQlVqtWrOhmZ412
-         5/UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bstpBOOSd0DT3nc8s3SZIuNiRah6+MZ2rvRQNSJbqJs=;
-        b=eb7dFt98Bdo7EinSegmyFWMWlVqlzlePhk6FXq+88BhUjMTH3XTSzmJdBr/HMDBPJm
-         j+MJ5yIKdyD4hySWgCJ+iSmmL8m59FkdSp11oZRX3AnrogaAZCE59EFmYf/tbeMOAqlo
-         5/AnjW9RPZ1FhqCCEgd3/vW6kHVq7QFJ9Nty4cnmo7woYiV5ACZ45G3e1ItyHalNml62
-         7rTvAYT8XlpIAtjDFnMpPwwrSpbXnM+P2hnHj4kSSrALPdUYSskgH0CW3aLDCVnAyssK
-         vy9ePx6Sf/Hz+XALecY+TIqlfMOK9VOURLk8821jrle9WwhYUkJerawjeQG94AIE5hgG
-         Htkw==
-X-Gm-Message-State: AFqh2koZ17WZs1T5UIglxqXn3WnztSrE4v5e/K4MWQJ08jitHty/39Qm
-        gYXwp0HPpJtk3nfhWMotS7QTDg==
-X-Google-Smtp-Source: AMrXdXv1/1nMohXx+41x9jHD9YLT8il4N6q53avu52Mp+hqW9IBxXFQvYiGvRzCDmk04HbGlKX8yHQ==
-X-Received: by 2002:a05:600c:1da3:b0:3d0:965f:63ed with SMTP id p35-20020a05600c1da300b003d0965f63edmr25492302wms.23.1672509258225;
-        Sat, 31 Dec 2022 09:54:18 -0800 (PST)
-Received: from [192.168.1.25] (host-92-24-101-87.as13285.net. [92.24.101.87])
-        by smtp.gmail.com with ESMTPSA id o6-20020adfa106000000b002423620d356sm24249945wro.35.2022.12.31.09.54.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Dec 2022 09:54:17 -0800 (PST)
-Message-ID: <de723e81-f3ba-19f3-827f-28134e904c97@linaro.org>
-Date:   Sat, 31 Dec 2022 17:56:33 +0000
+        Sat, 31 Dec 2022 13:22:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596E4E9E
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 10:22:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD466B808C6
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 18:22:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3627DC433D2;
+        Sat, 31 Dec 2022 18:22:53 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Zbi0+zXE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672510970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KstZBdcZcqbHkQ2CxwtPc1Y6fLGICRufWpnz600OBT4=;
+        b=Zbi0+zXEV/ee3LPUBCqdMKlQr8LNUJlwOflP3uriV2i5PKPGOGXCFqDh1mr+tcJcUpSYBA
+        9SChpE00VU5jNJokTJrAOAgb4B9McJdrzcmggb6HFsqcDcxSx6ZN96cvVeyMdFEIlPycHJ
+        BR2AIN6LhrSrmZMcTtXDixHLBfLZ1dc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3f12f758 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 31 Dec 2022 18:22:49 +0000 (UTC)
+Date:   Sat, 31 Dec 2022 19:22:47 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, pbonzini@redhat.com,
+        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
+        philmd@linaro.org
+Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
+ setup_data
+Message-ID: <Y7B993P1+jYB/etX@zx2c4.com>
+References: <CAHmME9oPUJemVRvO3HX0q4BJGTFuzbLYANeizuRcNq2=Ykk1Gg@mail.gmail.com>
+ <Y69B40T9kWfxZpmf@zn.tnic>
+ <E5D0A77E-5ABC-4978-9A66-37B60DA43869@zytor.com>
+ <Y69h6ur79SMhu61F@zx2c4.com>
+ <46466e54-25c3-3194-8546-a57cd4a80d9d@zytor.com>
+ <Y7A76+IBS4fnucrW@zn.tnic>
+ <Y7A8qP05B0YRbQIN@zx2c4.com>
+ <Y7A9nBud6UeH+wYd@zn.tnic>
+ <Y7A+YELM7m5E2PUQ@zx2c4.com>
+ <Y7BGIAL4z6o6FEI5@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH net-next 3/6] net: ipa: enable IPA interrupt handlers
- separate from registration
-To:     Alex Elder <elder@linaro.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221230232230.2348757-1-elder@linaro.org>
- <20221230232230.2348757-4-elder@linaro.org>
-Content-Language: en-US
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20221230232230.2348757-4-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y7BGIAL4z6o6FEI5@zn.tnic>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30/12/2022 23:22, Alex Elder wrote:
-> Expose ipa_interrupt_enable() and have functions that register
-> IPA interrupt handlers enable them directly, rather than having the
-> registration process do that.  Do the same for disabling IPA
-> interrupt handlers.
-
-Hi,
+On Sat, Dec 31, 2022 at 03:24:32PM +0100, Borislav Petkov wrote:
+> On Sat, Dec 31, 2022 at 02:51:28PM +0100, Jason A. Donenfeld wrote:
+> > That failure is unrelated to the ident mapping issue Peter and
+> > I discussed. The original failure is described in the commit message:
+> > decompression clobbers the data, so sd->next points to garbage.
 > 
-> Signed-off-by: Alex Elder <elder@linaro.org>
-> ---
->   drivers/net/ipa/ipa_interrupt.c |  8 ++------
->   drivers/net/ipa/ipa_interrupt.h | 14 ++++++++++++++
->   drivers/net/ipa/ipa_power.c     |  6 +++++-
->   drivers/net/ipa/ipa_uc.c        |  4 ++++
->   4 files changed, 25 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/net/ipa/ipa_interrupt.c b/drivers/net/ipa/ipa_interrupt.c
-> index 7b7388c14806f..87f4b94d02a3f 100644
-> --- a/drivers/net/ipa/ipa_interrupt.c
-> +++ b/drivers/net/ipa/ipa_interrupt.c
-> @@ -135,7 +135,7 @@ static void ipa_interrupt_enabled_update(struct ipa *ipa)
->   }
->   
->   /* Enable an IPA interrupt type */
-> -static void ipa_interrupt_enable(struct ipa *ipa, enum ipa_irq_id ipa_irq)
-> +void ipa_interrupt_enable(struct ipa *ipa, enum ipa_irq_id ipa_irq)
->   {
->   	/* Update the IPA interrupt mask to enable it */
->   	ipa->interrupt->enabled |= BIT(ipa_irq);
-> @@ -143,7 +143,7 @@ static void ipa_interrupt_enable(struct ipa *ipa, enum ipa_irq_id ipa_irq)
->   }
->   
->   /* Disable an IPA interrupt type */
-> -static void ipa_interrupt_disable(struct ipa *ipa, enum ipa_irq_id ipa_irq)
-> +void ipa_interrupt_disable(struct ipa *ipa, enum ipa_irq_id ipa_irq)
->   {
->   	/* Update the IPA interrupt mask to disable it */
->   	ipa->interrupt->enabled &= ~BIT(ipa_irq);
-> @@ -232,8 +232,6 @@ void ipa_interrupt_add(struct ipa_interrupt *interrupt,
->   		return;
->   
->   	interrupt->handler[ipa_irq] = handler;
-> -
-> -	ipa_interrupt_enable(interrupt->ipa, ipa_irq);
->   }
->   
->   /* Remove the handler for an IPA interrupt type */
-> @@ -243,8 +241,6 @@ ipa_interrupt_remove(struct ipa_interrupt *interrupt, enum ipa_irq_id ipa_irq)
->   	if (WARN_ON(ipa_irq >= IPA_IRQ_COUNT))
->   		return;
->   
-> -	ipa_interrupt_disable(interrupt->ipa, ipa_irq);
-> -
->   	interrupt->handler[ipa_irq] = NULL;
->   }
->   
-> diff --git a/drivers/net/ipa/ipa_interrupt.h b/drivers/net/ipa/ipa_interrupt.h
-> index f31fd9965fdc6..5f7d2e90ea337 100644
-> --- a/drivers/net/ipa/ipa_interrupt.h
-> +++ b/drivers/net/ipa/ipa_interrupt.h
-> @@ -85,6 +85,20 @@ void ipa_interrupt_suspend_clear_all(struct ipa_interrupt *interrupt);
->    */
->   void ipa_interrupt_simulate_suspend(struct ipa_interrupt *interrupt);
->   
-> +/**
-> + * ipa_interrupt_enable() - Enable an IPA interrupt type
-> + * @ipa:	IPA pointer
-> + * @ipa_irq:	IPA interrupt ID
-> + */
-> +void ipa_interrupt_enable(struct ipa *ipa, enum ipa_irq_id ipa_irq);
+> Right
 
-I think you forgot a forward declaration for enum ipa_irq_id
+So with that understanding confirmed, I'm confused at your surprise that
+hpa's unrelated fix to the different issue didn't fix this issue.
 
-Kind Regards,
-Caleb
-> +
-> +/**
-> + * ipa_interrupt_disable() - Disable an IPA interrupt type
-> + * @ipa:	IPA pointer
-> + * @ipa_irq:	IPA interrupt ID
-> + */
-> +void ipa_interrupt_disable(struct ipa *ipa, enum ipa_irq_id ipa_irq);
-> +
->   /**
->    * ipa_interrupt_config() - Configure the IPA interrupt framework
->    * @ipa:	IPA pointer
-> diff --git a/drivers/net/ipa/ipa_power.c b/drivers/net/ipa/ipa_power.c
-> index 8420f93128a26..9148d606d5fc2 100644
-> --- a/drivers/net/ipa/ipa_power.c
-> +++ b/drivers/net/ipa/ipa_power.c
-> @@ -337,10 +337,13 @@ int ipa_power_setup(struct ipa *ipa)
->   
->   	ipa_interrupt_add(ipa->interrupt, IPA_IRQ_TX_SUSPEND,
->   			  ipa_suspend_handler);
-> +	ipa_interrupt_enable(ipa, IPA_IRQ_TX_SUSPEND);
->   
->   	ret = device_init_wakeup(&ipa->pdev->dev, true);
-> -	if (ret)
-> +	if (ret) {
-> +		ipa_interrupt_disable(ipa, IPA_IRQ_TX_SUSPEND);
->   		ipa_interrupt_remove(ipa->interrupt, IPA_IRQ_TX_SUSPEND);
-> +	}
->   
->   	return ret;
->   }
-> @@ -348,6 +351,7 @@ int ipa_power_setup(struct ipa *ipa)
->   void ipa_power_teardown(struct ipa *ipa)
->   {
->   	(void)device_init_wakeup(&ipa->pdev->dev, false);
-> +	ipa_interrupt_disable(ipa, IPA_IRQ_TX_SUSPEND);
->   	ipa_interrupt_remove(ipa->interrupt, IPA_IRQ_TX_SUSPEND);
->   }
->   
-> diff --git a/drivers/net/ipa/ipa_uc.c b/drivers/net/ipa/ipa_uc.c
-> index 0a890b44c09e1..af541758d047f 100644
-> --- a/drivers/net/ipa/ipa_uc.c
-> +++ b/drivers/net/ipa/ipa_uc.c
-> @@ -187,7 +187,9 @@ void ipa_uc_config(struct ipa *ipa)
->   	ipa->uc_powered = false;
->   	ipa->uc_loaded = false;
->   	ipa_interrupt_add(interrupt, IPA_IRQ_UC_0, ipa_uc_interrupt_handler);
-> +	ipa_interrupt_enable(ipa, IPA_IRQ_UC_0);
->   	ipa_interrupt_add(interrupt, IPA_IRQ_UC_1, ipa_uc_interrupt_handler);
-> +	ipa_interrupt_enable(ipa, IPA_IRQ_UC_1);
->   }
->   
->   /* Inverse of ipa_uc_config() */
-> @@ -195,7 +197,9 @@ void ipa_uc_deconfig(struct ipa *ipa)
->   {
->   	struct device *dev = &ipa->pdev->dev;
->   
-> +	ipa_interrupt_disable(ipa, IPA_IRQ_UC_1);
->   	ipa_interrupt_remove(ipa->interrupt, IPA_IRQ_UC_1);
-> +	ipa_interrupt_disable(ipa, IPA_IRQ_UC_0);
->   	ipa_interrupt_remove(ipa->interrupt, IPA_IRQ_UC_0);
->   	if (ipa->uc_loaded)
->   		ipa_power_retention(ipa, false);
+> and the fact that the kernel overwrites it still feels kinda wrong: the
+> kernel knows where setup_data is - the address is in the setup header so
+> *actually*, it should take care of not to clobber it.
+
+Yea, technically the bootloader could relocate all the setup_data links
+by copying them and updating ->next. This wouldn't be so hard to do.
+(Special care would have to be taken, though, to zero out
+SETUP_RNG_SEED, though, for forward secrecy and such.)
+
+But since the kernel doesn't do this now, and the 62MiB bug also seems
+to apply to existing kernels, for the purposes of QEMU for now, I think
+the v3 patch is probably best, since it'll handle existing kernels.
+Alternatively, setup_data could be relocated, the boot param protocol
+could be bumped, and then QEMU could conditionalized it's use of
+setup_data based on that protocol version. That'd work, but seems a bit
+more involved.
+
+So maybe for now, v3 works? Hopefully that looks like a correct approach
+to hpa, anyhow:
+https://lore.kernel.org/lkml/20221230220725.618763-1-Jason@zx2c4.com/
+I think it should fit with what he described would work.
+
+Jason
