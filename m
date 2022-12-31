@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FFB65A31D
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 08:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BF565A31F
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 08:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiLaHkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 02:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
+        id S230021AbiLaH51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 02:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbiLaHks (ORCPT
+        with ESMTP id S229536AbiLaH5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 02:40:48 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29091099;
-        Fri, 30 Dec 2022 23:40:45 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id bn26so2453281wrb.0;
-        Fri, 30 Dec 2022 23:40:45 -0800 (PST)
+        Sat, 31 Dec 2022 02:57:25 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84A033F;
+        Fri, 30 Dec 2022 23:57:23 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m3so7895995wmq.0;
+        Fri, 30 Dec 2022 23:57:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BRto61P8hgbUD9Adp/jPx7dLuXOhVXQgxTy/8DMBdG8=;
-        b=hWggnJs4RDX4JorexSlF3c14+vA2UoPxtxFB0RJIPz9SA1NiL9MrdaAngRiE3LDjLZ
-         qkguJw6zfWXDU8GLghPpp7mr0ZQtnQIlRffkaU2oajBYOWE1Ttfy3eKtXz/sZUZySXCw
-         f3/rjUOjGHfaD2R6O8QnKYf/Gvh7B8wfpwfSTzvmDP8Ya5SMfNwNwdO35zQDU59Hleiw
-         Finqu5bU4Yokky+rZLeXWBFxforL8pZ9hK+7UBqcgD+3dCr9AUShp81FKx6G25q0EW0I
-         TSiVM/NsliJxpxrhCZR7zTMx00X+ABuKyUnpYBHQh9k4TlZ0OJPn/sNXLL5Ipz7Pias/
-         yiwA==
+        bh=kckosCj7pS5VlSv2D9XB8a7P6gG7tisCAhaL+kMfg8Q=;
+        b=HlUdlkkYBD1VrxQRDfo1VaZXwBxEhqFntD0ER6wxsm9EPnpFBodFw6lecFIvjXyuIR
+         NvlJ+xTT8t5F/CFGZO9yoHc4nShURA0oe928dBFywR+fuk2LacZRyP5xOi1S8f09QeOw
+         atnvqpN+T60933kWUqTyILbW1GvjmMweIsr16n9Ge0QBUBgCn8xgVhjOaPbBENfxh4gB
+         NYicAYWQ/nElKqI/kXLdxKxwvWyKS/OprnFp6ejkj4kCZX3HhcV0CI7PyUZHVb81lIOU
+         wbppN/+NbT9RUXKTXaJ+dluuRsgiP7nJ05RDYrLpbYwbMSzD3B+8qWafZu78UsSje+jj
+         EZmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BRto61P8hgbUD9Adp/jPx7dLuXOhVXQgxTy/8DMBdG8=;
-        b=PDImDCAhGEr6lXR2Ggqoo8zpIgnvr3Je0E3o2dValvNQO/GflrzX/eNqCqYY43bkvB
-         dsKo+fatCJxXfCZXFWmcXkq+EghDN+NJUP31+A9vFGTj8hjhJi4TyBMzEn+g25T7mZUP
-         slnhfhYq0SKgaX7BAVLEYAOo2PiOvMhTGv+6fOcvengyn16h9O4JtLxaQ8xXEpcoLUsj
-         AVtD0VhBJhu4R+Nh/5e8YK859/UDHyYRugcjysNaaXchtRlLptgWqklt+F4Ww6MUoPwN
-         AyikApp9/yqPytZwb417l6hKmYKISkktNf7jgMx2b3ptWaOASWqL2RX5ksWuD/orjlKt
-         /F8Q==
-X-Gm-Message-State: AFqh2kptuuC7DkvFzUctnhb4zoM1AqQsn9LzQdgLVjI87vM2ep1Yzpxf
-        Bg7ZzVKEdhazNrzKQhvDjgMj8mjToq4=
-X-Google-Smtp-Source: AMrXdXtNyEy/kq+4DO3eJhYC03SqtSgnCMH+g/BnSE57S1IHRmKQXC5nIJo41AAnmMjNJb4XFdK68A==
-X-Received: by 2002:a05:6000:1c05:b0:261:d8be:3046 with SMTP id ba5-20020a0560001c0500b00261d8be3046mr22534292wrb.0.1672472444106;
-        Fri, 30 Dec 2022 23:40:44 -0800 (PST)
-Received: from localhost.localdomain (188.red-88-10-59.dynamicip.rima-tde.net. [88.10.59.188])
-        by smtp.gmail.com with ESMTPSA id x2-20020adfec02000000b0025e86026866sm27194005wrn.0.2022.12.30.23.40.42
+        bh=kckosCj7pS5VlSv2D9XB8a7P6gG7tisCAhaL+kMfg8Q=;
+        b=clkMb0TNWR9WFAm4GC0nDXre9XX5im+fATJrauXSCm3et5GHiWjIozZIdfh2RVxdYO
+         EYCwrnmBJx7duxt13zoflMiWSlr1YFc3t8EZqYQCU+WbubN90UqOzVSi2KEX2/HXnwYN
+         3B9dTuyUHVbSQ3tqA2rcrwoYCA9906Np6J0XtnrS+GVYFHELjC0MaCLfqyKYra/QAwwd
+         lPUidvuH72z0kx2FRJWu0w9bcOHgXCDOSM4Li2vlVIOPmVucXTmDT7UFS/0OSluK6LzR
+         CL3xPATWfGIW0Ksi5p226EU28bHmupUNAZCk3OwUO5txkaXB2Nil1dpfKJeqfqlMj3Kd
+         q0aw==
+X-Gm-Message-State: AFqh2krn8SBa7mMh0/TxwgEYfMIM1BdI2kxpo5rcS6N0/aYbpC1s1dIc
+        QxUtnTI9p/UPZCLB9N4JtCE=
+X-Google-Smtp-Source: AMrXdXtin+pL4n/6G7Y4U1HqpRy2k/RScc2MrKN/HNMs21aam1to4ODLQetyUfhtICbK1/SxdlqEOw==
+X-Received: by 2002:a05:600c:154b:b0:3cf:674a:aefe with SMTP id f11-20020a05600c154b00b003cf674aaefemr24413674wmg.22.1672473442218;
+        Fri, 30 Dec 2022 23:57:22 -0800 (PST)
+Received: from localhost.localdomain (host-79-56-217-20.retail.telecomitalia.it. [79.56.217.20])
+        by smtp.gmail.com with ESMTPSA id l42-20020a05600c1d2a00b003d23928b654sm39389232wms.11.2022.12.30.23.57.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 23:40:43 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-pci@vger.kernel.org
-Cc:     bhelgaas@google.com, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, matthias.bgg@gmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] PCI: mt7621: Sleep a bit after power on the PCIs phy ports
-Date:   Sat, 31 Dec 2022 08:40:41 +0100
-Message-Id: <20221231074041.264738-1-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 30 Dec 2022 23:57:21 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH 0/4] fs/sysv: Replace kmap() with kmap_local_page() 
+Date:   Sat, 31 Dec 2022 08:57:13 +0100
+Message-Id: <20221231075717.10258-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -69,61 +72,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices like ZBT WE1326 and ZBT WF3526-P and some Netgear models need
-to sleep a bit after call to mt7621_pcie_init_port() driver function to get
-into reliable boots for both warm and hard resets. The needed time for these
-devices to always detect the ports seems to be from 75 to 100 milliseconds.
-There is no datasheet or something similar to really understand why this
-extra time is needed in these devices but not in most of the boards which
-use mt7621 SoC. This issue has been reported by openWRT community and the
-complete discussion is in [0]. The selected time of 100 milliseconds has
-been also tested in these devices ending up in an always working platform.
-Hence, properly add the extra 100 milliseconds msleep() function call to make
-also these devices work.
+kmap() is deprecated in favor of kmap_local_page().
 
-[0]: https://github.com/openwrt/openwrt/pull/11220
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
-Hi Bjorn / Lorenzo,
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
-As per Lorenzo comments in v1[0] here it is the patch with changes in commit
-message and introducing a new definition for this needed extra delay time.
-I wish you the best new year for you both.
+kmap_local_page() in fs/sysv does not violate any of the strict rules of
+its use, therefore it should be preferred.
 
-Changes in v2:
-- Add a new define 'INIT_PORTS_DELAY_MS' avoiding to reuse 'PERST_DELAY_MS'.
-- Rewrite commit message and add a link to openWRT discussion.
+Therefore, replace kmap() with kmap_local_page() in fs/sysv. kunmap_local()
+requires the mapping address, so return that address from dir_get_page()
+to be used in dir_put_page().
 
-Previous patch lore link:
-[0]: https://lore.kernel.org/lkml/20221209071703.2891714-1-sergio.paracuellos@gmail.com/T/
+I had submitted a patch with the same purpose but it has been replaced
+by this series.[1] This is based on a long series of very appreciated
+comments and suggestions kindly provided by Al Viro (again thanks!).[2][3][4]
 
-Thanks,
-    Sergio Paracuellos
+Since this is a very different thing, versioning restarts from scratch.
 
- drivers/pci/controller/pcie-mt7621.c | 2 ++
- 1 file changed, 2 insertions(+)
+[1] https://lore.kernel.org/lkml/20221016164636.8696-1-fmdefrancesco@gmail.com/
+[2] https://lore.kernel.org/lkml/Y4E++JERgUMoqfjG@ZenIV/#t
+[3] https://lore.kernel.org/lkml/Y4FG0O7VWTTng5yh@ZenIV/#t
+[4] https://lore.kernel.org/lkml/Y4ONIFJatIGsVNpf@ZenIV/#t
 
-diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
-index ee7aad09d627..63a5f4463a9f 100644
---- a/drivers/pci/controller/pcie-mt7621.c
-+++ b/drivers/pci/controller/pcie-mt7621.c
-@@ -60,6 +60,7 @@
- #define PCIE_PORT_LINKUP		BIT(0)
- #define PCIE_PORT_CNT			3
- 
-+#define INIT_PORTS_DELAY_MS		100
- #define PERST_DELAY_MS			100
- 
- /**
-@@ -369,6 +370,7 @@ static int mt7621_pcie_init_ports(struct mt7621_pcie *pcie)
- 		}
- 	}
- 
-+	msleep(INIT_PORTS_DELAY_MS);
- 	mt7621_pcie_reset_ep_deassert(pcie);
- 
- 	tmp = NULL;
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+
+Fabio M. De Francesco (4):
+  fs/sysv: Use the offset_in_page() helper
+  fs/sysv: Change the signature of dir_get_page()
+  fs/sysv: Use dir_put_page() in sysv_rename()
+  fs/sysv: Replace kmap() with kmap_local_page()
+
+ fs/sysv/dir.c   | 117 +++++++++++++++++++++++++++---------------------
+ fs/sysv/namei.c |   9 ++--
+ fs/sysv/sysv.h  |   1 +
+ 3 files changed, 71 insertions(+), 56 deletions(-)
+
 -- 
-2.25.1
+2.39.0
 
