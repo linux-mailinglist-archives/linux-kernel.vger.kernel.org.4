@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064AE659F6B
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 01:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8109659F93
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 01:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235920AbiLaAS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 19:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
+        id S235647AbiLaA1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 19:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235908AbiLaAS4 (ORCPT
+        with ESMTP id S235834AbiLaA1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 19:18:56 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4401E3F0;
-        Fri, 30 Dec 2022 16:18:55 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-14fb3809eaeso20360789fac.1;
-        Fri, 30 Dec 2022 16:18:55 -0800 (PST)
+        Fri, 30 Dec 2022 19:27:21 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E541EAC1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 16:27:20 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id c20so8315944ilj.10
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 16:27:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U65gfQUYRoplG6TAS3ktSDbsYgSOOmACnI2ukxtDlsY=;
-        b=IlemQu/qq80xBMvKyMaTOjQE4pvyH4fOBgWLG50ekYVT6p6q7zpu43bRoyO56pMJQG
-         V3YKsSwgwYhq4CIXVF6HYvb7N+VF3N6/tbg5YoLclz8LRzGRSivcoPXubM5SE313qEkn
-         s6A75rM//ch5SkaMcC/6Am5saNT6HojhWrrdoGBoObGoSK5Wp/H92ZudbGvuNzNtxyB6
-         pB+MuR2//GRg8Z3rYO2/qYe7ygLoMH7cYQhlONcEXUJQUKlPcTJCO7m6QNExtC6q9M+5
-         7rh03WBRhPPitZk/I75C6pgA9myx1BeTDr2xkmRp2JzzsTXhFV5jOgIxbDs3ibdOX8im
-         1LSg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FxYmD3MKNHGkzolG6Z5MV/mrr6zFi3TuI0Acg35raUw=;
+        b=uH5i5hxS2db0gl9TP2bZAQjpr0wfz5+0z84KT2RLjdV1BAd1e7QrWes04UwlOg7Pb2
+         pWJoAaIEKJKcvq4vSjaqB15CMNGFrhFFc7A9m/0TZJdtBedFFMVSzZPhxHExISzk9RkO
+         KjZ66UVJs0iJpxUIKLLLtn1TgEzImPwgFNXq05e70860m4CtLGzivCbf22RGKYd5QDjl
+         YhaZ77wnUxflEAEX0Hr4G+gg3IQpyWMXTSJdQWQq8YWQRWqxcUZ4Y0YtPDPbTFKzl2lz
+         jpoZh8gXtiJ9zpsiwfYCO4DJGDsWETWLDnN1y9DmWXT6bLynaMK+o5ixfeYiTKH2+JJ1
+         jIcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U65gfQUYRoplG6TAS3ktSDbsYgSOOmACnI2ukxtDlsY=;
-        b=w2Y6igYhRZ3QpGmaXSYtTKWLmh6+GNqpIfKREYr0lRYbJHxZRhcEwYDWK2cny8fCFY
-         nywSeyTCyoQFBiGifEpKOf2YEMQc94H98YSa7US7oOfGtrpj/mmHvEt1KrEYyBRF1Bfh
-         2thwQnvFz77PJpgYK7P8Fsrt0uHaOuWjDJZ/ObRG0DVm19VXopKySZJWw7GBdoSM+ek6
-         JaOHH8Op0Id5SaBjQy1GpU0IrASa1EqGAM5K0t/gmeD8GYdjDqjWPbbQf6hSLwu0X5zQ
-         toheVfEoDaBfjp4ks/X/MTyF3Fsg9qKTY995+5uOCpWRzEHog+OzTt6kVlpLvK0iS30d
-         eNzw==
-X-Gm-Message-State: AFqh2koZNZvzhe5GJe9OKHO4s4AKo2Rq6AWMQ3nKjjNrQ7msYkiWeEMI
-        OkFlDu1GH56rIIjR7Je48D0=
-X-Google-Smtp-Source: AMrXdXsWY3VWmDmV6hLbhsL6BYH2lvTNsv8dDWthRzf7qn5EoGWPcHNEPSMYBz/yEiSMMnYwpQ2gvg==
-X-Received: by 2002:a05:6870:8a21:b0:14c:8b5d:493c with SMTP id p33-20020a0568708a2100b0014c8b5d493cmr18225299oaq.0.1672445934915;
-        Fri, 30 Dec 2022 16:18:54 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id eo32-20020a056870eca000b00130d060ce80sm10440198oab.31.2022.12.30.16.18.54
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FxYmD3MKNHGkzolG6Z5MV/mrr6zFi3TuI0Acg35raUw=;
+        b=68NOEPsCr2WFD3F2vo1mar0bc93AqaFvu9d3hWPPVmvHuTbu2ApQxtksuxcWisWNS1
+         MEpnIJ2VzlgnF/ZuIICVkG1DNvUKqOn7EJZWJ4AvrFGGn48NUXaNISkqGPehgFcFfOmt
+         1jNVu35yrzdlCKB6qOCtx5nBp7iqw/Ymr2+heT6MuEIflQflvFxKbqZrlbONWNAP7etZ
+         WOMABmoN3zAhjWHXRuKEOP1eYohTVMxFGAoopgC7ge07HFdhK2Rst/vPJIG0Rgd90SJP
+         oUz3lPuduWlnL56SPnbBmtAClm1PfkSPfs4eiFAOYLxQddbWe7bKkKEBbN12nKCf2e/P
+         2NmQ==
+X-Gm-Message-State: AFqh2ko2lFCEUy/uemb8BZVt1W2cj2aC+oWlNeIkbJLU/mdPFS6IqJqN
+        3jlGNm4qYfqo86Vc8aN+lZf9nw==
+X-Google-Smtp-Source: AMrXdXvZ55pFDq6DptGgKckLQ6pfj0htYFe28lUwLhD6q6rCjSIi+aLk+JnD/4J9yvM1q4EKXyW0Rw==
+X-Received: by 2002:a05:6e02:5a6:b0:30b:ce86:ce4b with SMTP id k6-20020a056e0205a600b0030bce86ce4bmr23190411ils.8.1672446439727;
+        Fri, 30 Dec 2022 16:27:19 -0800 (PST)
+Received: from presto.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id t4-20020a922c04000000b002f9f7d24d78sm6969279ile.76.2022.12.30.16.27.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 16:18:54 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 30 Dec 2022 16:18:53 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 0000/1140] 6.1.2-rc2 review
-Message-ID: <20221231001853.GC2916712@roeck-us.net>
-References: <20221230094107.317705320@linuxfoundation.org>
+        Fri, 30 Dec 2022 16:27:19 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org
+Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] dts: qcom: use "qcom,gsi-loader"
+Date:   Fri, 30 Dec 2022 18:27:14 -0600
+Message-Id: <20221231002716.2367375-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221230094107.317705320@linuxfoundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 10:49:32AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.2 release.
-> There are 1140 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 01 Jan 2023 09:38:41 +0000.
-> Anything received after that time might be too late.
-> 
+IPA hardware has a GSI component that needs firmware loaded.
+Recently, the way to specify how this firmware is loaded has
+been changed.  As a result, indicating this via the presence or
+absence of a "modem-init" property is now deprecated.  Instead,
+a new "qcom,gsi-loader" property is used; this permits a third
+method of loading GSI firmware to be supported.
+  https://lore.kernel.org/netdev/20221116073257.34010-1-elder@linaro.org/
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 500 pass: 500 fail: 0
+This series updates all of the exiting ARM and arm64 DTS files for
+platforms implementing IPA so they specify the GSI loader using the
+new property.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+					-Alex
 
-Guenter
+Alex Elder (2):
+  ARM: dts: qcom: use qcom,gsi-loader for IPA
+  arm64: dts: qcom: use qcom,gsi-loader for IPA
+
+ arch/arm/boot/dts/qcom-sdx55-t55.dts                         | 4 ++--
+ arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts             | 4 ++--
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi         | 5 ++---
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi                     | 2 +-
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi                   | 2 +-
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi                   | 2 +-
+ arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi               | 2 +-
+ arch/arm64/boot/dts/qcom/sdm845-mtp.dts                      | 3 ++-
+ arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi          | 4 ++--
+ arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts            | 4 ++--
+ arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi | 3 ++-
+ arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts           | 1 +
+ arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts         | 3 ++-
+ arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts             | 3 ++-
+ arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts   | 4 ++--
+ arch/arm64/boot/dts/qcom/sm8350-mtp.dts                      | 4 ++--
+ arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi      | 3 ++-
+ 17 files changed, 29 insertions(+), 24 deletions(-)
+
+-- 
+2.34.1
+
