@@ -2,169 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BEA65A856
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 00:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8170765A861
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 00:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236029AbiLaX4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 18:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
+        id S232547AbiLaX6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 18:58:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiLaXzx (ORCPT
+        with ESMTP id S232530AbiLaX6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 18:55:53 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C356E71;
-        Sat, 31 Dec 2022 15:55:51 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DA6CC5818F8;
-        Sat, 31 Dec 2022 18:55:50 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 31 Dec 2022 18:55:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672530950; x=1672538150; bh=wn
-        k0fQbI6LUgf3REBg+Sy4nR0IreskH+9S4EM6UJtpU=; b=shCDSFTvEqAHOEyrxt
-        Pv2aJGNrDPL5wlUYOjMbwrsiWrgpNDy5CV0rJO+edySI3WEC8ZLAQLg3kWkVBqLh
-        pvV6pwWFqKC+AtpKWV9q0Rbu/c/QQHVPZzCX5882xFFgUWLSMIeTWMrY7kiOMQHy
-        +zu22cxq+E6Ictnf8TmIjzjkiCLOfJiZKEVjY/IIO/hX8QMxx4jXOvX1kXEuL+//
-        kx06iM7lO16wjzV2XeXgcm7JYWp1faW+emkMFgmRzZgvIUKCJVuBk8Eiid09Tk/t
-        r22ZTrRmSRZmCV1Bv+9EYptLJfW/2pmFwdbOepcUqHCqBOeyJDO6lv8qxrr1aybS
-        I0Bw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672530950; x=1672538150; bh=wnk0fQbI6LUgf
-        3REBg+Sy4nR0IreskH+9S4EM6UJtpU=; b=nbjip5LZ5R6aeAqtNWwTmofZixgFu
-        6U3fvstgZfGHgnPvbfNqMTGcZ5MWUc5miBWpnoeS4Pe6rHnxRCysjumqYtl757rz
-        lVl07D+DvN21gy6et+K+/SD34odTQwz6V2TnVffkxZvl13/KuRJNubBWWcJyU76L
-        1xBboRkdvk1FW+dt1pEksyHVa6DOuD0rePjUbYaOvTMhFKx4C575CvtSIVLNFHMK
-        scJRXRQ+nVWs61DflCRYV0iuQZXe7Ybe9Ovva6W2kQUH7QbtrMUR1EU/I/aVIVrI
-        sX9oHy7OJ0fogO/3X5/RJwfvsyq97levbS1Lno2PXdc69mWTzdX1+Sv+Q==
-X-ME-Sender: <xms:BsywY6ANxssPWxs22Fyrmt3KU_SYDinXh2TaSUoy2xdScLg5wRqLjg>
-    <xme:BsywY0ipB0vqj3DWy6FOm-klDMCp-hR7PmoKu_vF8SMJZ_Kw0kQQsm8J2y9nTEoZj
-    n-tlF_eTJh-oR7Ikg>
-X-ME-Received: <xmr:BsywY9kbGkrBgommwN5XWzsNBT1zCZYWBI11ylVMGxw7jBpjZb6Lurb2WREaQth236EoXTcS6WHUeSbQM-uugFnmBbvgUTdxiidvFkOig7I2tpqEbXiS_NpJlqdnBJsP1_oKuA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieelgddujecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:BsywY4w9EiFMZb_QViO-CKldIjqzfnJXLYvFiIPAgNnGhcwailXlKQ>
-    <xmx:BsywY_TAY9neLTaqZFM-fbUhyuHWM3EY6Af3YC05UAr1VZJyFiJ9DA>
-    <xmx:BsywYzb8qiir7hkec5zegEXUQS53hF8jAwX6SQPmlkEnJWBnvURoqA>
-    <xmx:BsywYwTPWDH1o83qYidISamGkTdIAfN_Ny1PeFVS8gFgj0zvw1NSsA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 31 Dec 2022 18:55:49 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        linux-leds@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [RESEND PATCH v7 5/5] riscv: dts: allwinner: d1: Add RGB LEDs to boards
-Date:   Sat, 31 Dec 2022 17:55:40 -0600
-Message-Id: <20221231235541.13568-6-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221231235541.13568-1-samuel@sholland.org>
-References: <20221231235541.13568-1-samuel@sholland.org>
+        Sat, 31 Dec 2022 18:58:01 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89FE25C4
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 15:57:59 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id o15so17880206wmr.4
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 15:57:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ixsystems.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WccIxo2DJfoEJ5YBwAHVUk30lKwL/NF6q/shqTsMJ/g=;
+        b=PYD6Et/bUEgVTRKONHNLIX7Br1SoQK0HjrzczFsh/b64dhdRb+RXa2lfP3U09MVjh+
+         8QvH+g41Y2eOOAKAHLMfJ+0olZNzOtxWFnihyy1LZLSoYKVhClQRxA52aiPbQ27h192s
+         QBfqv4MetVxeBXsMm8vag5d/5f/MJqZP7H5aDFsTYgX5YJ/wQLScyVt2wkejd1j8LntM
+         RZFxnBqLX9DNcuZv3h+buaEphFbigGVSzE3/CMre5MTrICibRgCwDYsXcuINNxPWnZ83
+         Fvh3siYDtPPUe9Uh8YVHebdfiqSQruf8lAjV5jEU4PTxkGytB4uw5H/eO+ns1vWfe9Sb
+         xhDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WccIxo2DJfoEJ5YBwAHVUk30lKwL/NF6q/shqTsMJ/g=;
+        b=KJeL4gdjN0CiMwFYb+lGXnh9h7gw95SRh8Iu58TexWMVSSGnqtapdaFK/9tUXGU1xi
+         DA2CCewIZ42HwpNqlg5iPZTQqmWY1yBYe57rDfYtwf5cue/CrskaC1kqJxaivoJu1MOL
+         fMyLapgutSPs9LdOZP4g5yCQ+LCFcxLy+Ek1danIQc405XPfILkftx9eslgEJSYxRTxk
+         oW8jnb7gE+fQAKGyVtfD6D/pOwVnjnFoeAhxmPd/qm2gAqKqaVMzN0tL/8c0LnKnPGW8
+         3A/QwxnaWsLIWnqrAKsKSX9A0Tww9bf5YsJcwB0zD04hYPNMgf2COt+qowDkVlpIbF/a
+         Q9QQ==
+X-Gm-Message-State: AFqh2ko4GauOKFjhSB1zN1P89vPyJBtNAf/APd2cqQuVoKfDLTGbSXmj
+        tTRSRU2uZ7TmnSkJDW6gKN6pCQ==
+X-Google-Smtp-Source: AMrXdXtRNBDndHkFdZDBELgeq2/SNgFiLZ/gcwKGh8wlH1+fUQyak3Pd1DeT6ZQr37/CBJzorwy7xA==
+X-Received: by 2002:a05:600c:3509:b0:3cf:ae53:9193 with SMTP id h9-20020a05600c350900b003cfae539193mr25892482wmq.39.1672531078140;
+        Sat, 31 Dec 2022 15:57:58 -0800 (PST)
+Received: from localhost.localdomain ([2400:adc1:158:c700:fcdc:d674:179b:c287])
+        by smtp.googlemail.com with ESMTPSA id l42-20020a05600c1d2a00b003cfbbd54178sm56066592wms.2.2022.12.31.15.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 15:57:57 -0800 (PST)
+From:   Ameer Hamza <ahamza@ixsystems.com>
+To:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
+        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
+        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, davem@davemloft.net
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, ahamza@ixsystems.com,
+        awalker@ixsystems.com, sparclinux@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-alpha@vger.kernel.org
+Subject: [PATCH v2] Add new open(2) flag - O_EMPTY_PATH
+Date:   Sun,  1 Jan 2023 04:56:18 +0500
+Message-Id: <20221231235618.117201-1-ahamza@ixsystems.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <202212310842.ysbymPHY-lkp@intel.com>
+References: <202212310842.ysbymPHY-lkp@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some D1-based boards feature an onboard RGB LED. Enable them.
+This patch adds a new flag O_EMPTY_PATH that allows openat and open
+system calls to open a file referenced by fd if the path is empty,
+and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
+beneficial in some cases since it would avoid having to grant /proc
+access to things like samba containers for reopening files to change
+flags in a race-free way.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
+
 ---
+Change in v2:
+add nonconflicting values for O_EMPTY_PATH on architectures
+where default conflicts with existing flags.
+---
+---
+ arch/alpha/include/uapi/asm/fcntl.h    | 1 +
+ arch/parisc/include/uapi/asm/fcntl.h   | 1 +
+ arch/sparc/include/uapi/asm/fcntl.h    | 1 +
+ fs/fcntl.c                             | 2 +-
+ fs/namei.c                             | 4 ++--
+ fs/open.c                              | 2 +-
+ include/linux/fcntl.h                  | 2 +-
+ include/uapi/asm-generic/fcntl.h       | 4 ++++
+ tools/include/uapi/asm-generic/fcntl.h | 4 ++++
+ 9 files changed, 16 insertions(+), 5 deletions(-)
 
-(no changes since v5)
-
-Changes in v5:
- - New patch for v5
-
- .../boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts | 12 ++++++++++++
- arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts   | 13 +++++++++++++
- 2 files changed, 25 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
-index 52b91e1affed..7efcec906a71 100644
---- a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
-+++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
-@@ -59,6 +59,18 @@ &ehci1 {
- 	status = "okay";
- };
+diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/uapi/asm/fcntl.h
+index 50bdc8e8a271..ea08341bb9fe 100644
+--- a/arch/alpha/include/uapi/asm/fcntl.h
++++ b/arch/alpha/include/uapi/asm/fcntl.h
+@@ -34,6 +34,7 @@
  
-+&ledc {
-+	pinctrl-0 = <&ledc_pc0_pin>;
-+	pinctrl-names = "default";
-+	status = "okay";
+ #define O_PATH		040000000
+ #define __O_TMPFILE	0100000000
++#define O_EMPTY_PATH	0200000000
+ 
+ #define F_GETLK		7
+ #define F_SETLK		8
+diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/parisc/include/uapi/asm/fcntl.h
+index 03dee816cb13..e6144823ee5b 100644
+--- a/arch/parisc/include/uapi/asm/fcntl.h
++++ b/arch/parisc/include/uapi/asm/fcntl.h
+@@ -19,6 +19,7 @@
+ 
+ #define O_PATH		020000000
+ #define __O_TMPFILE	040000000
++#define O_EMPTY_PATH	0100000000
+ 
+ #define F_GETLK64	8
+ #define F_SETLK64	9
+diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/uapi/asm/fcntl.h
+index 67dae75e5274..08aed1e2b32d 100644
+--- a/arch/sparc/include/uapi/asm/fcntl.h
++++ b/arch/sparc/include/uapi/asm/fcntl.h
+@@ -37,6 +37,7 @@
+ 
+ #define O_PATH		0x1000000
+ #define __O_TMPFILE	0x2000000
++#define O_EMPTY_PATH	0x4000000
+ 
+ #define F_GETOWN	5	/*  for sockets. */
+ #define F_SETOWN	6	/*  for sockets. */
+diff --git a/fs/fcntl.c b/fs/fcntl.c
+index 146c9ab0cd4b..7aac650e16e2 100644
+--- a/fs/fcntl.c
++++ b/fs/fcntl.c
+@@ -1027,7 +1027,7 @@ static int __init fcntl_init(void)
+ 	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+ 	 * is defined as O_NONBLOCK on some platforms and not on others.
+ 	 */
+-	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
++	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
+ 		HWEIGHT32(
+ 			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+ 			__FMODE_EXEC | __FMODE_NONOTIFY));
+diff --git a/fs/namei.c b/fs/namei.c
+index 309ae6fc8c99..2b2735af6d03 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -192,7 +192,7 @@ getname_flags(const char __user *filename, int flags, int *empty)
+ 	if (unlikely(!len)) {
+ 		if (empty)
+ 			*empty = 1;
+-		if (!(flags & LOOKUP_EMPTY)) {
++		if (!(flags & (LOOKUP_EMPTY | O_EMPTY_PATH))) {
+ 			putname(result);
+ 			return ERR_PTR(-ENOENT);
+ 		}
+@@ -2347,7 +2347,7 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
+ 	if ((flags & (LOOKUP_RCU | LOOKUP_CACHED)) == LOOKUP_CACHED)
+ 		return ERR_PTR(-EAGAIN);
+ 
+-	if (!*s)
++	if (!*s && unlikely(!(flags & O_EMPTY_PATH)))
+ 		flags &= ~LOOKUP_RCU;
+ 	if (flags & LOOKUP_RCU)
+ 		rcu_read_lock();
+diff --git a/fs/open.c b/fs/open.c
+index 82c1a28b3308..b4ec054a418f 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1301,7 +1301,7 @@ static long do_sys_openat2(int dfd, const char __user *filename,
+ 	if (fd)
+ 		return fd;
+ 
+-	tmp = getname(filename);
++	tmp = getname_flags(filename, how->flags & O_EMPTY_PATH, NULL);
+ 	if (IS_ERR(tmp))
+ 		return PTR_ERR(tmp);
+ 
+diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+index a332e79b3207..bf8467bb0bd2 100644
+--- a/include/linux/fcntl.h
++++ b/include/linux/fcntl.h
+@@ -10,7 +10,7 @@
+ 	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | \
+ 	 O_APPEND | O_NDELAY | O_NONBLOCK | __O_SYNC | O_DSYNC | \
+ 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+-	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
++	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_EMPTY_PATH)
+ 
+ /* List of all valid flags for the how->resolve argument: */
+ #define VALID_RESOLVE_FLAGS \
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index 1ecdb911add8..a03f4275517b 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
 +
-+	multi-led@0 {
-+		reg = <0x0>;
-+		color = <LED_COLOR_ID_RGB>;
-+		function = LED_FUNCTION_STATUS;
-+	};
-+};
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+index b02c8e0f4057..f32a81604296 100644
+--- a/tools/include/uapi/asm-generic/fcntl.h
++++ b/tools/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
 +
- &mmc1 {
- 	bus-width = <4>;
- 	mmc-pwrseq = <&wifi_pwrseq>;
-diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
-index a0769185be97..2e5be1bbb00f 100644
---- a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
-+++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
-@@ -3,6 +3,7 @@
- 
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
- 
- /dts-v1/;
- 
-@@ -93,6 +94,18 @@ pcf8574a: gpio@38 {
- 	};
- };
- 
-+&ledc {
-+	pinctrl-0 = <&ledc_pc0_pin>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	multi-led@0 {
-+		reg = <0x0>;
-+		color = <LED_COLOR_ID_RGB>;
-+		function = LED_FUNCTION_STATUS;
-+	};
-+};
-+
- &mdio {
- 	ext_rgmii_phy: ethernet-phy@1 {
- 		compatible = "ethernet-phy-ieee802.3-c22";
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
 -- 
-2.37.4
+2.25.1
 
