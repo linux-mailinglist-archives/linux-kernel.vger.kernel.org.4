@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD7765A463
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D1C65A478
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235808AbiLaNAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 08:00:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S235887AbiLaNAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 08:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235717AbiLaM7d (ORCPT
+        with ESMTP id S235694AbiLaM7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 31 Dec 2022 07:59:33 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45ACF59F
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:59:30 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id g13so35149205lfv.7
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:59:30 -0800 (PST)
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793A4E009
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:59:32 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id cf42so35169600lfb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:59:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iOBtY/5KLzv3pd6FD2rBqtPQmNoLaC+FYAfgDPpsDhk=;
-        b=GCZSnJqWgbCvHjaI0qPUmLwqihW0u+qhzjVRcBkk3yYOQ4RhmRqc684PkuIKb3BpfM
-         3FsA/RoCsGScNUsl7ALVoOyCP85EekcmqZBScTQQx5PQ3t0Pq/kArPFLeZkrM4X4/MOT
-         qwj03lFCoKczQCF3rzVPrHPPTUVmCaRDliBKQOPIQfOco5tf7t/0r5NrN0LefQpGTw8T
-         7+Yo/P+gzelwObklgrRZuuINxJ0vTgzUgLjmOQFD/RaFENhYDDvsvz5vShbF8OtTtdxQ
-         qZVEMGG5axNTlNEhTaFVDnhhswIkjkA0CEKhVaHIPmIFjULIewgnpPb4RB2xOMT12r6i
-         Wr3A==
+        bh=lJ65VvJ3kX6hIqWv3QscxYLubIMP/hUfG0etyqa3ojA=;
+        b=mLFszxd4SPFPh374U3JH7uBBtWxMGVgC6RCcebQF1fDqGQO4Koy6w2oIDwdpSKb5TD
+         hXvzpKnX8pOd8vwMZrNNypAKV2Ury4MfRcZSgSoyAlRDfLdKh7nHzMQj5qgKtGB7Ui7d
+         Xa55xMixcUjU8DyJdfkKSiLg7sbX6+lIX+/KY6jNs+zJuIZd7PYe0MpBZ3U3AtshadRg
+         /HSzRK1hnSMEKDVpJiH8BW3lF8dbtDG9t5wC5PThO9TOd55sfd+9Q5l64tAwtGq0qU5V
+         AZROCZa+2t1KzDwy38pGF3nLkofBpnk+sXUO8vAiej04H3hQapX45yE3+kUOXyK3yOFE
+         zN0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iOBtY/5KLzv3pd6FD2rBqtPQmNoLaC+FYAfgDPpsDhk=;
-        b=Hxy1Ao45LdihcrnDsip1QpCoImdcXcrvsnSF6YP2eEpI/O4lPsXABjJiPctwq3n62e
-         BeWBoVyVAnOymCMKFC3Bo9C84UleyjngOUAZdOskkQT1Hw0QMeDeqmPE03Ln4K/AQjdX
-         SzKBU6KHFqS6x5iDUM9FkFeQecueirXfA3XGWyKKV6KDjxmq2s+jHdumTQHEtxWhH8oP
-         sLDcpKdJNSmxNMJf/iGcE3mWYRUhPToaLRepwH5fra05rGARRAMQiQfOeC4dZI7QgpDm
-         9NrIyn+9FmV5uUICYg2MBlwAX+nqrMAJsmd6fMWurbbmbZB9Lm/4xmnkmUyZOeKSzvsb
-         rUhQ==
-X-Gm-Message-State: AFqh2kq0h5UflB+G6UpmXR0GoCRRl4ReMNofXdm+rs91+wWWDuRLc7fX
-        9f+pUqrwEj4yEE/kI1AdLmplVg==
-X-Google-Smtp-Source: AMrXdXtQ8mAEEtBkaOq60V5KxCv1v9MsfmZDQ8rYeiJj36mFeGiNgxjiKEhvF26b7GWjvUO3cLID8w==
-X-Received: by 2002:a05:6512:2390:b0:4b5:649a:9105 with SMTP id c16-20020a056512239000b004b5649a9105mr12268434lfv.65.1672491570304;
-        Sat, 31 Dec 2022 04:59:30 -0800 (PST)
+        bh=lJ65VvJ3kX6hIqWv3QscxYLubIMP/hUfG0etyqa3ojA=;
+        b=CGTJ6Gc6udV/xwL1F+eV8MH6WN4Y5qlydJ5vOmll3noblbwLB7J35dS09iWqqVADXw
+         0oPWs7LSRlH/5z1IbLwYPt5Etma9KDoUcNtgJwna8xF1TM8gQ+PLDSfkcVB83LdLbWNW
+         I4FDLvJQi5L9j5dM7FNobVjmKr/DwT/oyciqH6UvI6cOZFfbqve/K132RKwq6XZ6jtAR
+         FoF4CHdA0IRm46RqX2El1ZVhgavfg7uQXqTS7E3iFV+FViM928LKqZovU3e7CHAyMrKH
+         +LZu/RZah6IcrQx3NfGP5ULEWfxrOHqZSL7z9s9bnPcd3GUIC7hgcZ1hnVD8OB85Z+oz
+         dt9A==
+X-Gm-Message-State: AFqh2kpzs7hga+QhO5/XQN6giCYA5PYL56C3ex/1JqXzEOHhDxAMe63E
+        2x0S9f6cqJKZqnq5Xp8Z9/86NA==
+X-Google-Smtp-Source: AMrXdXtJ0klYzHg3MKA8fKVpqNLbFhOl8cqg7IPnVLjRcgUJvXuSG/kLhnPqE7AenUNFrIIst0I8Tw==
+X-Received: by 2002:ac2:59c9:0:b0:4a4:68b7:d621 with SMTP id x9-20020ac259c9000000b004a468b7d621mr9742325lfn.8.1672491572006;
+        Sat, 31 Dec 2022 04:59:32 -0800 (PST)
 Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id d10-20020a0565123d0a00b004cb344a8c77sm22266lfv.54.2022.12.31.04.59.29
+        by smtp.gmail.com with ESMTPSA id d10-20020a0565123d0a00b004cb344a8c77sm22266lfv.54.2022.12.31.04.59.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 04:59:29 -0800 (PST)
+        Sat, 31 Dec 2022 04:59:31 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -58,9 +58,9 @@ Cc:     marijn.suijten@somainline.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 10/18] arm64: dts: qcom: sdm845: Pad addresses to 8 hex digits
-Date:   Sat, 31 Dec 2022 13:59:03 +0100
-Message-Id: <20221231125911.437599-11-konrad.dybcio@linaro.org>
+Subject: [PATCH 11/18] arm64: dts: qcom: sm8250: Pad addresses to 8 hex digits
+Date:   Sat, 31 Dec 2022 13:59:04 +0100
+Message-Id: <20221231125911.437599-12-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221231125911.437599-1-konrad.dybcio@linaro.org>
 References: <20221231125911.437599-1-konrad.dybcio@linaro.org>
@@ -79,101 +79,102 @@ Some addresses were 7-hex-digits long, or less. Fix that.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 46 ++++++++++++++--------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 54 ++++++++++++++--------------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 154f5054a200..44bb3509df62 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2585,9 +2585,9 @@ ipa: ipa@1e40000 {
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 0b6a6a809503..a642ff1af094 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -1899,10 +1899,10 @@ pcie0_phy: phy@1c06000 {
+ 			status = "disabled";
  
- 			iommus = <&apps_smmu 0x720 0x0>,
- 				 <&apps_smmu 0x722 0x0>;
--			reg = <0 0x1e40000 0 0x7000>,
--			      <0 0x1e47000 0 0x2000>,
--			      <0 0x1e04000 0 0x2c000>;
-+			reg = <0 0x01e40000 0 0x7000>,
-+			      <0 0x01e47000 0 0x2000>,
-+			      <0 0x01e04000 0 0x2c000>;
- 			reg-names = "ipa-reg",
- 				    "ipa-shared",
- 				    "gsi";
-@@ -4237,16 +4237,16 @@ videocc: clock-controller@ab00000 {
- 		camss: camss@a00000 {
- 			compatible = "qcom,sdm845-camss";
+ 			pcie0_lane: phy@1c06200 {
+-				reg = <0 0x1c06200 0 0x170>, /* tx */
+-				      <0 0x1c06400 0 0x200>, /* rx */
+-				      <0 0x1c06800 0 0x1f0>, /* pcs */
+-				      <0 0x1c06c00 0 0xf4>; /* "pcs_lane" same as pcs_misc? */
++				reg = <0 0x01c06200 0 0x170>, /* tx */
++				      <0 0x01c06400 0 0x200>, /* rx */
++				      <0 0x01c06800 0 0x1f0>, /* pcs */
++				      <0 0x01c06c00 0 0xf4>; /* "pcs_lane" same as pcs_misc? */
+ 				clocks = <&gcc GCC_PCIE_0_PIPE_CLK>;
+ 				clock-names = "pipe0";
  
--			reg = <0 0xacb3000 0 0x1000>,
--				<0 0xacba000 0 0x1000>,
--				<0 0xacc8000 0 0x1000>,
--				<0 0xac65000 0 0x1000>,
--				<0 0xac66000 0 0x1000>,
--				<0 0xac67000 0 0x1000>,
--				<0 0xac68000 0 0x1000>,
--				<0 0xacaf000 0 0x4000>,
--				<0 0xacb6000 0 0x4000>,
--				<0 0xacc4000 0 0x4000>;
-+			reg = <0 0x0acb3000 0 0x1000>,
-+				<0 0x0acba000 0 0x1000>,
-+				<0 0x0acc8000 0 0x1000>,
-+				<0 0x0ac65000 0 0x1000>,
-+				<0 0x0ac66000 0 0x1000>,
-+				<0 0x0ac67000 0 0x1000>,
-+				<0 0x0ac68000 0 0x1000>,
-+				<0 0x0acaf000 0 0x4000>,
-+				<0 0x0acb6000 0 0x4000>,
-+				<0 0x0acc4000 0 0x4000>;
- 			reg-names = "csid0",
- 				"csid1",
- 				"csid2",
-@@ -4575,11 +4575,11 @@ mdss_dp: displayport-controller@ae90000 {
- 				status = "disabled";
- 				compatible = "qcom,sdm845-dp";
+@@ -2005,12 +2005,12 @@ pcie1_phy: phy@1c0e000 {
+ 			status = "disabled";
  
--				reg = <0 0xae90000 0 0x200>,
--				      <0 0xae90200 0 0x200>,
--				      <0 0xae90400 0 0x600>,
--				      <0 0xae90a00 0 0x600>,
--				      <0 0xae91000 0 0x600>;
-+				reg = <0 0x0ae90000 0 0x200>,
-+				      <0 0x0ae90200 0 0x200>,
-+				      <0 0x0ae90400 0 0x600>,
-+				      <0 0x0ae90a00 0 0x600>,
-+				      <0 0x0ae91000 0 0x600>;
+ 			pcie1_lane: phy@1c0e200 {
+-				reg = <0 0x1c0e200 0 0x170>, /* tx0 */
+-				      <0 0x1c0e400 0 0x200>, /* rx0 */
+-				      <0 0x1c0ea00 0 0x1f0>, /* pcs */
+-				      <0 0x1c0e600 0 0x170>, /* tx1 */
+-				      <0 0x1c0e800 0 0x200>, /* rx1 */
+-				      <0 0x1c0ee00 0 0xf4>; /* "pcs_com" same as pcs_misc? */
++				reg = <0 0x01c0e200 0 0x170>, /* tx0 */
++				      <0 0x01c0e400 0 0x200>, /* rx0 */
++				      <0 0x01c0ea00 0 0x1f0>, /* pcs */
++				      <0 0x01c0e600 0 0x170>, /* tx1 */
++				      <0 0x01c0e800 0 0x200>, /* rx1 */
++				      <0 0x01c0ee00 0 0xf4>; /* "pcs_com" same as pcs_misc? */
+ 				clocks = <&gcc GCC_PCIE_1_PIPE_CLK>;
+ 				clock-names = "pipe0";
  
- 				interrupt-parent = <&mdss>;
- 				interrupts = <12>;
-@@ -4788,7 +4788,7 @@ dsi1_phy: phy@ae96400 {
- 		gpu: gpu@5000000 {
- 			compatible = "qcom,adreno-630.2", "qcom,adreno";
+@@ -2094,7 +2094,7 @@ pcie2: pci@1c10000 {
  
--			reg = <0 0x5000000 0 0x40000>, <0 0x509e000 0 0x10>;
-+			reg = <0 0x05000000 0 0x40000>, <0 0x509e000 0 0x10>;
- 			reg-names = "kgsl_3d0_reg_memory", "cx_mem";
+ 		pcie2_phy: phy@1c16000 {
+ 			compatible = "qcom,sm8250-qmp-modem-pcie-phy";
+-			reg = <0 0x1c16000 0 0x1c0>;
++			reg = <0 0x01c16000 0 0x1c0>;
+ 			#address-cells = <2>;
+ 			#size-cells = <2>;
+ 			ranges;
+@@ -2113,12 +2113,12 @@ pcie2_phy: phy@1c16000 {
+ 			status = "disabled";
  
- 			/*
-@@ -4858,7 +4858,7 @@ opp-257000000 {
+ 			pcie2_lane: phy@1c16200 {
+-				reg = <0 0x1c16200 0 0x170>, /* tx0 */
+-				      <0 0x1c16400 0 0x200>, /* rx0 */
+-				      <0 0x1c16a00 0 0x1f0>, /* pcs */
+-				      <0 0x1c16600 0 0x170>, /* tx1 */
+-				      <0 0x1c16800 0 0x200>, /* rx1 */
+-				      <0 0x1c16e00 0 0xf4>; /* "pcs_com" same as pcs_misc? */
++				reg = <0 0x01c16200 0 0x170>, /* tx0 */
++				      <0 0x01c16400 0 0x200>, /* rx0 */
++				      <0 0x01c16a00 0 0x1f0>, /* pcs */
++				      <0 0x01c16600 0 0x170>, /* tx1 */
++				      <0 0x01c16800 0 0x200>, /* rx1 */
++				      <0 0x01c16e00 0 0xf4>; /* "pcs_com" same as pcs_misc? */
+ 				clocks = <&gcc GCC_PCIE_2_PIPE_CLK>;
+ 				clock-names = "pipe0";
  
- 		adreno_smmu: iommu@5040000 {
- 			compatible = "qcom,sdm845-smmu-v2", "qcom,adreno-smmu", "qcom,smmu-v2";
--			reg = <0 0x5040000 0 0x10000>;
-+			reg = <0 0x05040000 0 0x10000>;
- 			#iommu-cells = <1>;
- 			#global-interrupts = <2>;
- 			interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
-@@ -4881,9 +4881,9 @@ adreno_smmu: iommu@5040000 {
- 		gmu: gmu@506a000 {
- 			compatible = "qcom,adreno-gmu-630.2", "qcom,adreno-gmu";
+@@ -3792,16 +3792,16 @@ camss: camss@ac6a000 {
+ 			compatible = "qcom,sm8250-camss";
+ 			status = "disabled";
  
--			reg = <0 0x506a000 0 0x30000>,
--			      <0 0xb280000 0 0x10000>,
--			      <0 0xb480000 0 0x10000>;
-+			reg = <0 0x0506a000 0 0x30000>,
-+			      <0 0x0b280000 0 0x10000>,
-+			      <0 0x0b480000 0 0x10000>;
- 			reg-names = "gmu", "gmu_pdc", "gmu_pdc_seq";
- 
- 			interrupts = <GIC_SPI 304 IRQ_TYPE_LEVEL_HIGH>,
+-			reg = <0 0xac6a000 0 0x2000>,
+-			      <0 0xac6c000 0 0x2000>,
+-			      <0 0xac6e000 0 0x1000>,
+-			      <0 0xac70000 0 0x1000>,
+-			      <0 0xac72000 0 0x1000>,
+-			      <0 0xac74000 0 0x1000>,
+-			      <0 0xacb4000 0 0xd000>,
+-			      <0 0xacc3000 0 0xd000>,
+-			      <0 0xacd9000 0 0x2200>,
+-			      <0 0xacdb200 0 0x2200>;
++			reg = <0 0x0ac6a000 0 0x2000>,
++			      <0 0x0ac6c000 0 0x2000>,
++			      <0 0x0ac6e000 0 0x1000>,
++			      <0 0x0ac70000 0 0x1000>,
++			      <0 0x0ac72000 0 0x1000>,
++			      <0 0x0ac74000 0 0x1000>,
++			      <0 0x0acb4000 0 0xd000>,
++			      <0 0x0acc3000 0 0xd000>,
++			      <0 0x0acd9000 0 0x2200>,
++			      <0 0x0acdb200 0 0x2200>;
+ 			reg-names = "csiphy0",
+ 				    "csiphy1",
+ 				    "csiphy2",
 -- 
 2.39.0
 
