@@ -2,122 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D8B65A3A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 12:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D47065A3AC
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 12:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiLaLEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 06:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
+        id S231963AbiLaLHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 06:07:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiLaLEp (ORCPT
+        with ESMTP id S231958AbiLaLHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 06:04:45 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F306CE04
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 03:04:43 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id k4so19420458vsc.4
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 03:04:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+8s9I1GFb9vnJYgyzF3LyGBW5PFYtk5cyL1Hz3ZGmM0=;
-        b=uPbAiz2zy95lZywFI2dEhF9ilRfpoGzunGA9KXqogD3RSi1/EWRrzJIM1vxnoNcLG/
-         wMRaS1tQFpJ7O0CHd/bAPop9GTEtzSq+ihpNxkWVTggDztMR/1EXThpUR0ma8qZJpsuB
-         +5yopTeCpNY32IXV+4QsqVei184W34IOQPvkTMRWarGgU0k+TufPQ88LiZSurlfnqkX6
-         KRIFSPPBLf6EptkgSOxoFOiyEIMfI/QcBcuaaIWPxbLUpy+3cnBLS+aMbHAYPhmjaAnx
-         npwb2foOdUX54K4VR7+ilQVPV5z+1Xq4kcwyWf9l/m8oVjIevhw4iLAXcvJOe3LN1w60
-         E41Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+8s9I1GFb9vnJYgyzF3LyGBW5PFYtk5cyL1Hz3ZGmM0=;
-        b=Yo+jcxX4vYix+yj+ZAPrkv/xO4eX8waSWuAGDoh4hQnXucQejr+1Yc2mmDa/QgyJM0
-         Itvdl0SQeYUjOijIxe2M2MB+RUR3+WgA0W59Dul8Zb/xXcC32vWGnEbS1Gvy64Wtugcj
-         AM7oZXESSXjjiiplDIdzlptJNLcStK2tI1gW2w4SFDFvtG9AuRHhZyWBDNRUaFl2wjOh
-         oyXXMBobhlZvqXo9zDu+PYYjitzgW0LvDG3nctEPjEhgfpovILLYBega1/sEv/U6OsKV
-         b4+dmNQ+d7RoeNyPSet1LfTqR29bFBCYVsTATJJdsRuHJTbdtqw8T67iIIiqJDLedjBT
-         fcFw==
-X-Gm-Message-State: AFqh2kpTH150gSZS5mY9zQugPyKuXHawLH609UMfwxjGabMJzHjuz36M
-        6piS1oQ+lUxLMjou+/phKCW3wB/dOd73sm+YDjbBew==
-X-Google-Smtp-Source: AMrXdXsxTLOmViWobRZ2Cuj/KRsod18koNJDIh7HfLSsbcb9G+N+RMccym1kxCwlWb0RlW42UqAhlI3ZMJlpVGWDkK4=
-X-Received: by 2002:a67:fad7:0:b0:3b1:5690:a240 with SMTP id
- g23-20020a67fad7000000b003b15690a240mr3963799vsq.68.1672484682183; Sat, 31
- Dec 2022 03:04:42 -0800 (PST)
+        Sat, 31 Dec 2022 06:07:31 -0500
+Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AA2DF55
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 03:07:30 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id BZi4pTIC3Rn9tBZi4pP7i0; Sat, 31 Dec 2022 12:07:29 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 31 Dec 2022 12:07:29 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH] watchdog: ixp4xx: Use devm_clk_get_enabled() helper
+Date:   Sat, 31 Dec 2022 12:07:27 +0100
+Message-Id: <5d04e453a4da5cfafb56695a17157fa3ea296511.1672484831.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221230160103.250996-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221230160103.250996-1-krzysztof.kozlowski@linaro.org>
-From:   "Bryan O'Donoghue" <pure.logic@nexus-software.ie>
-Date:   Sat, 31 Dec 2022 11:04:30 +0000
-Message-ID: <CAJB8c06F8MaDWEgNOVgL51NG3vgnxcuC2ta2UpbyrG2BqcOVfQ@mail.gmail.com>
-Subject: Re: [PATCH 1/7] arm64: dts: qcom: sc8280xp: remove GCC from CX power domain
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        TVD_SUBJ_WIPE_DEBT autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 4:04 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Bindings do not allow power-domain property in GCC clock controller and
-> documentation does not indicate that GCC is part of VDD_CX.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> ---
->
-> Maybe the bindings should be fixed? Maybe this was added as workaround?
-> Anyway looking at documentation I do not see such relation, except
-> downstream vdd_cx-supply (which is the same as in other SoCs and we do
-> not represent it in upstream).
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 1d1420c8720c..d14663c9f34c 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -799,7 +799,6 @@ gcc: clock-controller@100000 {
->                                  <&pcie4_phy>,
->                                  <0>,
->                                  <0>;
-> -                       power-domains = <&rpmhpd SC8280XP_CX>;
->                 };
->
->                 ipcc: mailbox@408000 {
-> --
-> 2.34.1
->
+The devm_clk_get_enabled() helper:
+   - calls devm_clk_get()
+   - calls clk_prepare_enable() and registers what is needed in order to
+     call clk_disable_unprepare() when needed, as a managed resource.
 
-You'd be better off adding the documentation. The CX rail is required
-to power the clock controller.
-If you are pulling this out and finding nothing breaks, its probably
-because the bootloader left it on.
+This simplifies the code and avoids the need of a dedicated function used
+with devm_add_action_or_reset().
 
-Per my understanding of what dts is though, we ought to be
-representing the hardware dependency.
-
-gcc is a root clock for just about every peripheral so, you can be
-sure it is on when you boot.
-
-Seems to me as if the right thing to do is to retain the dts and
-update the documentation.
-
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-bod
+Note that I get a compilation error because read_cpuid_id() is not defined
+on my system (x86_64).
+So I think that a "depends on ARM<something>" in missing in a KConfig file.
+
+Fixing it could help compilation farms build-bots.
+---
+ drivers/watchdog/ixp4xx_wdt.c | 18 +++---------------
+ 1 file changed, 3 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
+index 281a48d9889f..607ce4b8df57 100644
+--- a/drivers/watchdog/ixp4xx_wdt.c
++++ b/drivers/watchdog/ixp4xx_wdt.c
+@@ -112,12 +112,6 @@ static const struct watchdog_info ixp4xx_wdt_info = {
+ 	.identity = KBUILD_MODNAME,
+ };
+ 
+-/* Devres-handled clock disablement */
+-static void ixp4xx_clock_action(void *d)
+-{
+-	clk_disable_unprepare(d);
+-}
+-
+ static int ixp4xx_wdt_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -139,16 +133,10 @@ static int ixp4xx_wdt_probe(struct platform_device *pdev)
+ 	 * Retrieve rate from a fixed clock from the device tree if
+ 	 * the parent has that, else use the default clock rate.
+ 	 */
+-	clk = devm_clk_get(dev->parent, NULL);
+-	if (!IS_ERR(clk)) {
+-		ret = clk_prepare_enable(clk);
+-		if (ret)
+-			return ret;
+-		ret = devm_add_action_or_reset(dev, ixp4xx_clock_action, clk);
+-		if (ret)
+-			return ret;
++	clk = devm_clk_get_enabled(dev->parent, NULL);
++	if (!IS_ERR(clk))
+ 		iwdt->rate = clk_get_rate(clk);
+-	}
++
+ 	if (!iwdt->rate)
+ 		iwdt->rate = IXP4XX_TIMER_FREQ;
+ 
+-- 
+2.34.1
+
