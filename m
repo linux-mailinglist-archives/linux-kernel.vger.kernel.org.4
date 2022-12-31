@@ -2,103 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAC465A4A2
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC5F65A4A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbiLaNX0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 31 Dec 2022 08:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
+        id S231989AbiLaNZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 08:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbiLaNXX (ORCPT
+        with ESMTP id S229546AbiLaNZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 08:23:23 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA94665C9
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 05:23:21 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-54-12njZMflPrOHOWWm3UOPXQ-1; Sat, 31 Dec 2022 13:23:15 +0000
-X-MC-Unique: 12njZMflPrOHOWWm3UOPXQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 31 Dec
- 2022 13:23:14 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Sat, 31 Dec 2022 13:23:14 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Herbert Xu' <herbert@gondor.apana.org.au>
-CC:     'Roberto Sassu' <roberto.sassu@huaweicloud.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
-Thread-Topic: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
-Thread-Index: AQHZGf+Li10Ctze9/ky4tLizwqJmjK6Gb6hQgAAmKQCAAWpJUA==
-Date:   Sat, 31 Dec 2022 13:23:14 +0000
-Message-ID: <0d5fda5b25b8467c860d625116dac1d2@AcuMS.aculab.com>
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
- <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
- <6949ced7c1014488b2d00ff26eba6b6b@AcuMS.aculab.com>
- <Y68GMsGKROsgDbcs@gondor.apana.org.au>
-In-Reply-To: <Y68GMsGKROsgDbcs@gondor.apana.org.au>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 31 Dec 2022 08:25:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D38B4A3;
+        Sat, 31 Dec 2022 05:25:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 962C560B8F;
+        Sat, 31 Dec 2022 13:25:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF85C433EF;
+        Sat, 31 Dec 2022 13:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672493101;
+        bh=5PZPgJEHktYRM/SPSh0nVBX31Neelz4nDGmyzaBTmME=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VcpGpEnKlMOFN6PPzrYgB/NdvxWt5L9UGKIrB23YV/jr4lyNxwzbZgeDFuD9+Z/X8
+         hSt/055NezQFRS+RJPsf5yAkSei3HAL5ToxIS2ggfAQKsgy2q6TzgLjSbaN83RE3iI
+         Iu7ZZo80eAp7zGuf1L7ZFQ6Tcas9y4Ma0RjE9MrmE3bFqNOic1cg5UpX2usrt5kskK
+         B9As6kQiCfUNTDvT5dw9mxFhpQi/CYUPBc7tCv4JGk1bvD57Lm+DUmgMbAyLwAl7nI
+         7HsApOrzq/ngQzQqc5o6Pb7C4Z2Q8AKI5PRngLNySb0+TgJQ8phErfbQRrwp/c4NoI
+         KjA+EbsDMTq0w==
+Date:   Sat, 31 Dec 2022 21:24:52 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Bough Chen <haibo.chen@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jesse Taube <mr.bossman075@gmail.com>
+Subject: Re: [PATCH v4] ARM: dts: imxrt1050: increase mmc max-frequency
+ property
+Message-ID: <20221231132451.GE6112@T480>
+References: <20221214163817.55909-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214163817.55909-1-giulio.benetti@benettiengineering.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herbert Xu
-> Sent: 30 December 2022 15:40
+On Wed, Dec 14, 2022 at 05:38:17PM +0100, Giulio Benetti wrote:
+> According to i.MXRT1050 Datasheet usdhc supports up to 200Mhz clock so
+> let's increase max-frequency property to 200Mhz.
 > 
-> On Fri, Dec 30, 2022 at 01:35:07PM +0000, David Laight wrote:
-> >
-> > miter.length is size_t (unsigned long on 64bit) and nbytes unsigned int.
-> 
-> miter.length is bounded by sg->length which is unsigned int.
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Acked-by: Jesse Taube <mr.bossman075@gmail.com>
 
-I did say 'technically' :-)
-
-Should there be a sg_miter_stop() before the return at the bottom?
-Care seems to have been taken to add one before an earlier error return.
-(The logic in that function is very strange...)
-
-Indeed other parts of the file are equally strange.
-The big multi-line if-else in twocompl() is just:
-	p[i] = (p[1] ^ 0xff) + 1;
-or even:
-	p[i] = -p[i];
-That function could also return the 'zero status' to correct
-for -0 (rather than the extra check earlier in the caller).
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Applied, thanks!
