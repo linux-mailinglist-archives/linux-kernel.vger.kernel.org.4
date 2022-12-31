@@ -2,242 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9F965A351
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 10:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DFE65A354
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 10:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbiLaJMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 04:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S231674AbiLaJRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 04:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLaJMs (ORCPT
+        with ESMTP id S229563AbiLaJRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 04:12:48 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11C2B1EE
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:12:47 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id n205so4042623vkf.13
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:12:47 -0800 (PST)
+        Sat, 31 Dec 2022 04:17:47 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141235FC0
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:17:46 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id x37so17405546ljq.1
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:17:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e7nZRxEKSVk0taYN2kEmqLsK8D/a7ZjrzRfmuGsGVgo=;
-        b=BCG98/thMeSUuI8QudtVR9vY3JQGMQf+poWtQgCqt/vkbqnBJqCAtDnMq/uMIJn8RO
-         ZhzEFiWHgtPNATlh52XgAlCTPrkTB1Gcg/jn2Yx20iRN5OWa7AtjQ7riuMnH1vUO9P4r
-         Z7wNQLi9dDy+o9TxKvtKl32v4l3ZJejLvE3ZPojCA3MzsdkymeQ6F47twuNBtWTbC0BI
-         CJLznK+oHuXQydVqNISGQNaZk6NjL4kEmElCv45/WJS4EMEcr4iwrJ4gyJApbkCmc0ij
-         hv6Ustkl6L87RsVnqqVjGCD3nM2KWOMGJesqWK/w5VsHWtkFMOk+HUO9wePKxELC54vD
-         sM5A==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vxCpl0YoEChLON3RwXmdSKop5AoTZZptT3NhkKbnI3c=;
+        b=IKCFduhp6xQ+Em5nBIBlTGJXJuQ+tqLH3ePjakyfanO9YFUqCHn2PGO1YAlTBZv7GJ
+         7Q2hxvdRGIQAz+RGkcu2xdY9kPOHDasAMzKK0EyBW5y+8pepAen3XQ+qiAv6WSsIFtAE
+         UXwBFzvx6k+f49BZr8LzCnc7lFPwpVDb/5ZOuR9Bv71eCXCIZViRZKGU89ud/2Aoqubr
+         YzpV01vgtnf13UD2GiChB8AyTFzLcXGcfVid4nZc2EyW/2mrN/FdhxvZaXt8RQo6Od9b
+         i7KV0elOg+dPglADhwUEfwas041wfcz4w1fOcyJwS21NAVSyWnM9747LqWkJG6Nf+TF9
+         GSeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e7nZRxEKSVk0taYN2kEmqLsK8D/a7ZjrzRfmuGsGVgo=;
-        b=h0fCQ2dUt0x5oYyB8VQECaBWsnlobRA0klOaGk92sDP+YryuzHVU62jzx+TVgJwGcZ
-         orardatTo/c0LcyKpuT1n8t1oh1RPWMs9V8WfIZNTQvPG2je7r3fjitj0dI6x+ObWVYB
-         9N+Qxz8HkbyqdrZyS55pJ8FcQFqdCOffxJecXKc3UdS30usL4OpeY+gxN7zJBgYUu80n
-         S4Z0SLe9uUXPhV2JHnMeaARxYjykoJ9rtvr186W1wd/E68AVniAjRerynKLpqYNULNAE
-         ZnyKIwZABEVC0blkjmO84rKEUG6cilanIELTLjFj+sQXPLc3v7oDVNDCr62Lh0VP1JRf
-         VQrA==
-X-Gm-Message-State: AFqh2kpiqmcLLmNbODffbaRT6pJ78DL2wN6se3TCAiEYSYZZ/jxU86Kt
-        ZqGBneViGENdcDhIZ9BenQbRIELcK7/hLCi60SIAAA==
-X-Google-Smtp-Source: AMrXdXuZl5Fg9dS/lm6Xwp0v0J1CunPxyffU28ZabuI7HLyOGnaBDj5/d+WeKrmMhhPp+Is1KyQw/S1VtfVD4avzeBM=
-X-Received: by 2002:a1f:3215:0:b0:3d5:86ff:6638 with SMTP id
- y21-20020a1f3215000000b003d586ff6638mr1125362vky.30.1672477966697; Sat, 31
- Dec 2022 01:12:46 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vxCpl0YoEChLON3RwXmdSKop5AoTZZptT3NhkKbnI3c=;
+        b=QbsxxkrTbzPgopg2uyr69On1WBcZIRAN/i26KPK1SIRqgo0kHLytEA1+OYB1TFAc3y
+         306xrqQjYHiJROxaq49JSN/gqJYcdFfwt13/o1Ac4YgwESsWOX+n8UOFXNsI0aArNLwj
+         MBgMwt/DgGdkXq3yC6zSXihspHDN8bYwvDolH57U7vNyGxwQmFT5XMA1i9xY4qXDhWi/
+         qEZYdyQvhnui4oGnqoyV2uPg98rc0vjw2tdHZgK/vbI0cSmZmzPO1zh4nYOo4miDmVvP
+         tSEtr1wX/Ykqla3Rt5C72ZYQwYUNOrMbip4oE9ySjnyvGiELstSFG+Okkc2lO3KiKjBE
+         emlw==
+X-Gm-Message-State: AFqh2koFEEg9D6Sc+sAyl9L0M1k8xWCUUH66twWABaKUtuOT02cRLufZ
+        e8CrYmeH75beN7pXUGEg7mU=
+X-Google-Smtp-Source: AMrXdXvgB7luwJVYxUdOyfTRh2AbrHR7D0SzwZVboOhFm3jHh2F5jZ22Tkj6hWKLEmumIO5H9d/zhQ==
+X-Received: by 2002:a2e:bf2a:0:b0:27f:a95e:94ba with SMTP id c42-20020a2ebf2a000000b0027fa95e94bamr10419415ljr.33.1672478264293;
+        Sat, 31 Dec 2022 01:17:44 -0800 (PST)
+Received: from pc636 (host-217-213-136-176.mobileonline.telia.com. [217.213.136.176])
+        by smtp.gmail.com with ESMTPSA id x12-20020a2e880c000000b0027fe97a7f40sm99286ljh.61.2022.12.31.01.17.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 01:17:43 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Sat, 31 Dec 2022 10:17:40 +0100
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v3 2/3] mm: vmalloc: Switch to find_unlink_vmap_area() in
+ vm_unmap_ram()
+Message-ID: <Y6/+NK6gPbn2dLwx@pc636>
+References: <20221222190022.134380-1-urezki@gmail.com>
+ <20221222190022.134380-2-urezki@gmail.com>
+ <Y6VlA8Mbbv7Ug6tW@infradead.org>
+ <Y6XaTM+xSlGNjo0e@pc636>
+ <20221228154707.432e8900855122712f98037c@linux-foundation.org>
+ <Y62Mb8NtZQkTmlfV@pc636>
+ <20221229151706.da16baab4cb6c2bc30e3061a@linux-foundation.org>
 MIME-Version: 1.0
-References: <20221230094059.698032393@linuxfoundation.org>
-In-Reply-To: <20221230094059.698032393@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 31 Dec 2022 14:42:35 +0530
-Message-ID: <CA+G9fYv8nE=1TZUFopiG9msoBExkkcGWyLTokiO79-JQFwMUNg@mail.gmail.com>
-Subject: Re: [PATCH 6.0 0000/1066] 6.0.16-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221229151706.da16baab4cb6c2bc30e3061a@linux-foundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Dec 2022 at 15:19, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.16 release.
-> There are 1066 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 01 Jan 2023 09:38:41 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.0.16-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Thu, Dec 29, 2022 at 03:17:06PM -0800, Andrew Morton wrote:
+> On Thu, 29 Dec 2022 13:47:43 +0100 Uladzislau Rezki <urezki@gmail.com> wrote:
+> 
+> > [2]
+> > commit 8a85ea97b35924ee39d51e00ecb3f6d07f748a36
+> > Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > Date:   Wed Dec 21 18:44:53 2022 +0100
+> > 
+> >     mm: vmalloc: switch to find_unlink_vmap_area() in vm_unmap_ram()
+> > 
+> > [3]
+> > commit a7c84c673c71cdfad20fe25e5d2051ed229859f7
+> > Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > Date:   Wed Dec 21 18:44:52 2022 +0100
+> > 
+> >     mm: vmalloc: avoid calling __find_vmap_area() twise in __vunmap()
+> > <snip>
+> > 
+> > It would be good if you could fold [2] into [3] making it as one
+> > patch. The problem is that, if we leave it as it is, the bisection
+> > mechanism would consider [3] as a buggy patch, because it is not
+> > fully accomplished and depends on [2].
+> > 
+> > Is that OK for you, i mean to squash on your own? 
+> 
+> I did that.  I updated the "mm: vmalloc: avoid calling
+> __find_vmap_area() twice in __vunmap()" accordingly, thanks.
+> 
+At least bisection part will not detect anything wrong now.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.0.16-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.0.y
-* git commit: f54b936f8ec726a772a7c0ca5c77583bd0f90b7e
-* git describe: v6.0.15-1067-gf54b936f8ec7
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.1=
-5-1067-gf54b936f8ec7
-
-## Test Regressions (compared to v6.0.14-29-g65f3ab07fb24)
-
-## Metric Regressions (compared to v6.0.14-29-g65f3ab07fb24)
-
-## Test Fixes (compared to v6.0.14-29-g65f3ab07fb24)
-
-## Metric Fixes (compared to v6.0.14-29-g65f3ab07fb24)
-
-## Test result summary
-total: 147899, pass: 131296, fail: 2681, skip: 13616, xfail: 306
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 146 passed, 5 failed
-* arm64: 49 total, 47 passed, 2 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 32 passed, 6 failed
-* riscv: 16 total, 14 passed, 2 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 39 passed, 3 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ip
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
+Happy New Year and thank you!
 
 --
-Linaro LKFT
-https://lkft.linaro.org
+Uladzislau Rezki
