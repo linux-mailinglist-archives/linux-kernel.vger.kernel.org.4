@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDB165A4D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 15:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8332965A4DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 15:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiLaOXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 09:23:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S231977AbiLaOYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 09:24:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiLaOXC (ORCPT
+        with ESMTP id S229748AbiLaOYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 09:23:02 -0500
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F112D10A4
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 06:23:00 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id BclGp4iYmTOlqBclGpfRCi; Sat, 31 Dec 2022 15:22:59 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 31 Dec 2022 15:22:59 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH] watchdog: pic32-wdt: Use devm_clk_get_enabled() helper
-Date:   Sat, 31 Dec 2022 15:22:57 +0100
-Message-Id: <4335b4201b535ebc749a98bad0b99e3cb5317c39.1672496563.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 31 Dec 2022 09:24:38 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6A910A3
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 06:24:37 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1B2001EC01E0;
+        Sat, 31 Dec 2022 15:24:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672496676;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=XSRYAEgw00hfGYGFyTs9QzvEt1IVj0uy86Sl3MJzWNo=;
+        b=hRYLjF3LQ72BqRPTIm/21vylTA8dAoZkS23G+BhIpgmeca8+mXlaruNqX7NzKxB7Ue9E8H
+        Ly/yPURcM1ogoeJQM/ZkNXuXmQNE9EyIeh1wePILlzj0LhoNAo0JXOncEtPNgLhaBe7d6v
+        qSSdKsP5bHFSQW0D5LGdCC/FVLHAdls=
+Date:   Sat, 31 Dec 2022 15:24:32 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
+        ardb@kernel.org, kraxel@redhat.com, philmd@linaro.org
+Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
+ setup_data
+Message-ID: <Y7BGIAL4z6o6FEI5@zn.tnic>
+References: <Y68Zf/MKmX3Rr18E@zn.tnic>
+ <CAHmME9oPUJemVRvO3HX0q4BJGTFuzbLYANeizuRcNq2=Ykk1Gg@mail.gmail.com>
+ <Y69B40T9kWfxZpmf@zn.tnic>
+ <E5D0A77E-5ABC-4978-9A66-37B60DA43869@zytor.com>
+ <Y69h6ur79SMhu61F@zx2c4.com>
+ <46466e54-25c3-3194-8546-a57cd4a80d9d@zytor.com>
+ <Y7A76+IBS4fnucrW@zn.tnic>
+ <Y7A8qP05B0YRbQIN@zx2c4.com>
+ <Y7A9nBud6UeH+wYd@zn.tnic>
+ <Y7A+YELM7m5E2PUQ@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y7A+YELM7m5E2PUQ@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The devm_clk_get_enabled() helper:
-   - calls devm_clk_get()
-   - calls clk_prepare_enable() and registers what is needed in order to
-     call clk_disable_unprepare() when needed, as a managed resource.
+On Sat, Dec 31, 2022 at 02:51:28PM +0100, Jason A. Donenfeld wrote:
+> That failure is unrelated to the ident mapping issue Peter and
+> I discussed. The original failure is described in the commit message:
+> decompression clobbers the data, so sd->next points to garbage.
 
-This simplifies the code and avoids the need of a dedicated function used
-with devm_add_action_or_reset().
+Right, and the fact that the kernel overwrites it still feels kinda wrong: the
+kernel knows where setup_data is - the address is in the setup header so
+*actually*, it should take care of not to clobber it.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/watchdog/pic32-wdt.c | 17 +----------------
- 1 file changed, 1 insertion(+), 16 deletions(-)
+But hpa would correct me if I'm missing an aspect about whose responsibility it
+is to do what here...
 
-diff --git a/drivers/watchdog/pic32-wdt.c b/drivers/watchdog/pic32-wdt.c
-index 41715d68d9e9..6d1a00222991 100644
---- a/drivers/watchdog/pic32-wdt.c
-+++ b/drivers/watchdog/pic32-wdt.c
-@@ -162,11 +162,6 @@ static const struct of_device_id pic32_wdt_dt_ids[] = {
- };
- MODULE_DEVICE_TABLE(of, pic32_wdt_dt_ids);
- 
--static void pic32_clk_disable_unprepare(void *data)
--{
--	clk_disable_unprepare(data);
--}
--
- static int pic32_wdt_drv_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -186,22 +181,12 @@ static int pic32_wdt_drv_probe(struct platform_device *pdev)
- 	if (!wdt->rst_base)
- 		return -ENOMEM;
- 
--	wdt->clk = devm_clk_get(dev, NULL);
-+	wdt->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(wdt->clk)) {
- 		dev_err(dev, "clk not found\n");
- 		return PTR_ERR(wdt->clk);
- 	}
- 
--	ret = clk_prepare_enable(wdt->clk);
--	if (ret) {
--		dev_err(dev, "clk enable failed\n");
--		return ret;
--	}
--	ret = devm_add_action_or_reset(dev, pic32_clk_disable_unprepare,
--				       wdt->clk);
--	if (ret)
--		return ret;
--
- 	if (pic32_wdt_is_win_enabled(wdt)) {
- 		dev_err(dev, "windowed-clear mode is not supported.\n");
- 		return -ENODEV;
+Thx.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
