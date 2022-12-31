@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE8B65A53E
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 16:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0091665A540
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 16:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbiLaPGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 10:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S235712AbiLaPGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 10:06:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbiLaPGK (ORCPT
+        with ESMTP id S235694AbiLaPGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 10:06:10 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DC2633D;
-        Sat, 31 Dec 2022 07:06:06 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id gh17so57303819ejb.6;
-        Sat, 31 Dec 2022 07:06:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lzYjYdq3xhU62h8W3pOQxyN7ezBIV3BgXZrEWlF2bCg=;
-        b=GfB8ursNzsjfWnx4xvs9KHA3kXC8jlEJ2KnWNC1cRFH8U65NUwEc7VZafWB5Jwaprw
-         bM3sgTMddtKM5nVzSIzdGFA40NYgtkWmSAnD48YuwdesfX+/gnEf8ogWTTb9Mk0lmH62
-         vmmVE0xDQan39jpJ5kJ0K9TnpFYQlc08h5lc70C8391C/9JSV1jb8w7dd5T6H8dEXQDC
-         KamdEW0fP1eCWg2GyBoa1ZvqpVYPpAOAwUFVMOz1We4cuE8+kLm4nrEW4tkZegr0ylDk
-         uvh4ZHnE49EEg6GZ+ymT7ErbcOyKTja6cc5EUhtBmOOkUqnv03Janj/NbM4K2pnHhT+g
-         hPPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lzYjYdq3xhU62h8W3pOQxyN7ezBIV3BgXZrEWlF2bCg=;
-        b=GRfJfMYIPCuDiZ68BLQ6n7V/KExaEXvulHHd/BFkamwzy3Xj3luugtexpi3BZN60gX
-         u0yZyNkqQBSYT7kyS59NVeSYK7wp9odA+ElEYGB1Pw+kyGIztDpFSw0uSwqrtpw3KM9e
-         kk+2pxVmq4nV5UhV8q2LOQENaZspFHML4qYXotpM0A2fuMMxAp9VN3n2IC4KOqA2Szz6
-         RvjaGzKiY/5xI3uAbfNSH0dVf4HrvBcPQY4rDX5YcNJY3viB0UEZHd4AGSjxrN5SzoSj
-         Bulycu8wNq8cP7uXCWxqBfYAWJmnHv0hEVg8yBx2Kx5TGGSC1mM2jnw8aFjL3+761iA3
-         c0RQ==
-X-Gm-Message-State: AFqh2krNrqtwcdfAD6JNKYI2vGgeLgLG9S7i5ifepXvhEQQSsYM/SNFe
-        plW+qtwVrJq6+l821mmOWfs=
-X-Google-Smtp-Source: AMrXdXvnaYtFzmsRpzx5SCdvWGNhmpoITkEaXaOCK0nNZx15cdCF9cNxCU9OflwQyNeQdIEu+m7CSQ==
-X-Received: by 2002:a17:906:fb18:b0:82d:1d5f:2617 with SMTP id lz24-20020a170906fb1800b0082d1d5f2617mr31713646ejb.69.1672499165142;
-        Sat, 31 Dec 2022 07:06:05 -0800 (PST)
-Received: from Tanmay.. (ip5f5ad5e4.dynamic.kabel-deutschland.de. [95.90.213.228])
-        by smtp.gmail.com with ESMTPSA id v9-20020a170906292900b0073dd8e5a39fsm10798278ejd.156.2022.12.31.07.06.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 07:06:04 -0800 (PST)
-From:   Tanmay Bhushan <007047221b@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Tanmay Bhushan <007047221b@gmail.com>
-Subject: [PATCH] btrfs: Fix ASSERT of em->len when getting extent
-Date:   Sat, 31 Dec 2022 16:05:01 +0100
-Message-Id: <20221231150501.123205-1-007047221b@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 31 Dec 2022 10:06:44 -0500
+X-Greylist: delayed 550 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 31 Dec 2022 07:06:43 PST
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0E2633D;
+        Sat, 31 Dec 2022 07:06:42 -0800 (PST)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 2BVF6OKl011333;
+        Sun, 1 Jan 2023 00:06:25 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2BVF6OKl011333
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1672499186;
+        bh=cPtMT1ikPVY2628/xD0d9Qu971vGxgBBHmwX2fGx46Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qPAUxth/qw93T8XlinZlEZ+TtBTGrTRnuDsJdNUzVpdsp79Wj4a6z1A87z3mzozPt
+         0UquscrCLavkcY+JH7G9wbZgurvCypaS+DZC5LhcsESGmZy7EcSXSyUD9wv5C7d5yj
+         YtDFTO+wWVQ5GrXmObd4LFoaXqPX4u70KP8jc5f0pgnvS2mY/bZm+afIC8bD1lk2Ow
+         ViS+oB1EV39yLPK/1q1ouLVUexfkn37JJmyWNSBKK64z4tt+/YiR4kCb6PHaXT1XJX
+         dug5fLPI7Cv47T/mbXjN2okCfZbfOnMQSNrobrLFpaxPqf+OI4yNuFZO/rKCFz1zoo
+         DECTpZM+99qww==
+X-Nifty-SrcIP: [209.85.167.48]
+Received: by mail-lf1-f48.google.com with SMTP id bt23so18879785lfb.5;
+        Sat, 31 Dec 2022 07:06:25 -0800 (PST)
+X-Gm-Message-State: AFqh2kpirrrAwdxsXfsI+/So7SN5rKV1l7Xca+SmhpO1HRA3evplFyP4
+        S3gcF12J34MCvrI4XJz/Z5siN8+Y69YtLq1Qkek=
+X-Google-Smtp-Source: AMrXdXtV2tGXh1jtska7YrD89aDiR/6tpAp7znMYCCa6K7MzJDPvlhi8f3ERlPs23u5zAoXo/qR0Ug1SeDa+LVKrW5E=
+X-Received: by 2002:a05:6512:462:b0:4b5:706c:ab80 with SMTP id
+ x2-20020a056512046200b004b5706cab80mr1681418lfd.226.1672499183563; Sat, 31
+ Dec 2022 07:06:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221231064203.1623793-1-masahiroy@kernel.org> <CANiq72m5E1MehfqdrkmJt43fAzUMc9kEKu7x4WaALdgDGJ30-g@mail.gmail.com>
+In-Reply-To: <CANiq72m5E1MehfqdrkmJt43fAzUMc9kEKu7x4WaALdgDGJ30-g@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 1 Jan 2023 00:05:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQOaLHizg24CrMUz7veX0fa0QYwgJzAi5tOT+-CDCmUzw@mail.gmail.com>
+Message-ID: <CAK7LNAQOaLHizg24CrMUz7veX0fa0QYwgJzAi5tOT+-CDCmUzw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] kbuild: fix dep-file processing for rust
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        llvm@lists.linux.dev, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-em->len is incorrectly asserted which is leading to it's
-assignment to sectorsize instead of being check for it.
+On Sat, Dec 31, 2022 at 10:34 PM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Sat, Dec 31, 2022 at 7:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Masahiro Yamada (6):
+> >   kbuild: specify output names separately for each emission type from
+> >     rustc
+> >   fixdep: parse Makefile more correctly to handle comments etc.
+> >   kbuild: remove sed commands after rustc rules
+> >   fixdep: refactor hash table lookup
+> >   fixdep: avoid parsing the same file over again
+> >   fixdep: do not parse *.so, *.rmeta, *.rlib
+>
+> These cleanups are great, and it is a pleasure to see proper
+> integration with `fixdep` -- thanks a ton! :)
+>
+> Will you want to take them through the kbuild tree? (I guess so, given
+> the bulk of it is on `fixdep`)
 
-Signed-off-by: Tanmay Bhushan <007047221b@gmail.com>
----
- fs/btrfs/inode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index 8bcad9940154..e49358048a98 100644
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -7092,7 +7092,7 @@ struct extent_map *btrfs_get_extent(struct btrfs_inode *inode,
- 		 * Other members are not utilized for inline extents.
- 		 */
- 		ASSERT(em->block_start == EXTENT_MAP_INLINE);
--		ASSERT(em->len = fs_info->sectorsize);
-+		ASSERT(em->len == fs_info->sectorsize);
- 
- 		ret = read_inline_extent(inode, path, page);
- 		if (ret < 0)
+Yes, my plan is to get it in the kbuild tree with your ack.
+
+
+
+
+> Cheers,
+> Miguel
+
+
+
 -- 
-2.34.1
-
+Best Regards
+Masahiro Yamada
