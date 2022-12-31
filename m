@@ -2,103 +2,531 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4C365A45E
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0086365A47D
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235943AbiLaNAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 08:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S235880AbiLaNET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 08:04:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235786AbiLaM7s (ORCPT
+        with ESMTP id S235852AbiLaNEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 07:59:48 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B28E0A8
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:59:44 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id 1so35161592lfz.4
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:59:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=irSxaIcjW3n1PCvBEUpCzHQASe7UMs9Blgt3PcMzjTI=;
-        b=VgaVL9fw/qliJ4/NI+fc3fd7xyitgX6Y35L2vtGZBZItbkzTbac7VKdBTRpZJP+bZf
-         9zTU/nsHMsj5dy9dWMwMcf5nSH6+rmlkuJSFzm/DDe4s7mt78smBq+T/6xhbLFsIv7xg
-         H/uOizGGPH/W0atLrqY594yzj9Iuofy9YDcA1VyQENCdAX2PPtjMMZd8kraOS/CHS6KT
-         pGN+5Pt9o+p2oB1xT7csaVgOPFhjNL+qMe9PHj8HDGHRtoLPuh2VKqxji0Qv3xZHDqDK
-         JNZD7ljwddNc0cyUrBY2RNb3kM6UCb25xqBsloyfNX1Yjw63eC6UtDHxjeu2PUdCRNYn
-         ORSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=irSxaIcjW3n1PCvBEUpCzHQASe7UMs9Blgt3PcMzjTI=;
-        b=v5yEzvYQqsweNNvvnJqTEeSPugHetlc7gSGqW42bf55whR2iFjz4bVERTUL94yI2zg
-         MDOAKx8MdKQeUAGVVI8N8jRvV2DSvy2aQZg2wKuWwRRnmho4y2+XriRmNlStNoMO4rLg
-         15MsEthO5xR7V8tiMP4rFzrxPDA2dYKG3Bi2Z0+USYRON2brC7Eh984EmRBdQfhX4jBp
-         fqPh525yzi82NRCiAt34Q7V8t08i6a2jS+Doa0Hi+bNSzw8p78ktv3CvdeHX05kNh2Sn
-         1P34nKAtVj3IsYCFszk6CNsbJczPwBpsQ3o+h3lusCPMQfu18TJoLG+w+RwABvMeKpzz
-         lv1w==
-X-Gm-Message-State: AFqh2kqzSzcUQ+gYnA3Ce1wbEWnTTZoz4sMDd1o5stmQ+q8crWul2mKO
-        d8h9BGZjA639eP3xV8HAyxqQ+Q==
-X-Google-Smtp-Source: AMrXdXvALujMJGMrmv+KDLKv+DuGNj2hOF15E9ai+k2KXulrtY1gZWnm7caYvRmdK8SYnmTaSBM08A==
-X-Received: by 2002:a05:6512:1054:b0:4bb:70b2:6f50 with SMTP id c20-20020a056512105400b004bb70b26f50mr10911154lfb.52.1672491583603;
-        Sat, 31 Dec 2022 04:59:43 -0800 (PST)
-Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id d10-20020a0565123d0a00b004cb344a8c77sm22266lfv.54.2022.12.31.04.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 04:59:43 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 18/18] arm64: dts: qcom: sm6115: Pad addresses to 8 hex digits
-Date:   Sat, 31 Dec 2022 13:59:11 +0100
-Message-Id: <20221231125911.437599-19-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221231125911.437599-1-konrad.dybcio@linaro.org>
-References: <20221231125911.437599-1-konrad.dybcio@linaro.org>
+        Sat, 31 Dec 2022 08:04:04 -0500
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A5E13FBE;
+        Sat, 31 Dec 2022 05:02:30 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id 896BC14F3;
+        Sat, 31 Dec 2022 14:02:11 +0100 (CET)
+Authentication-Results: ext-mx-out002.mykolab.com (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        content-transfer-encoding:content-type:content-type:mime-version
+        :message-id:date:date:subject:subject:from:from:received
+        :received:received; s=dkim20160331; t=1672491727; x=1674306128;
+         bh=ZEAoF02XsN6AY9EmvBheHpwhBaPkCGq6X2gleTDw4cc=; b=5bJzPBaTnPnK
+        8C4aRxMZI7hFiXEe1CS4qs1jfW8ECstX2UwzTAiqjJiOn+PCnKIGovttyQwsT2Dl
+        KOpQB9/t7hDJhAWu9He2gJ9d6ontpnoytRf8GJLsGvK0VRD5iwp7aSYxiw1pBoof
+        CpUCwNTPaZBip1c0JF/LmT643V8i39QI2DrzKF7ZF5xZHXDjHzK63uJppxJaUFcW
+        /GIo5iAQiGf4f6/oFJTIKgXSRgAKr0dlC7eYir9cqZhzlkrByZXRiIITWEvoBP3M
+        Tl8oNLdMhl10Sh+uqhUiLiIa1SFxXVGm5lVl5Ywvu/9xFRVLTc2Cp/8qFg2kWNdp
+        HC1k8jc/Z2fewBJ+XpfuXQuF2Y9JVtEIhf3LsHq0gTUvXw3d9FUTq1NeFu12ctHV
+        YmW04nXYJtj2EUlIhpih9dd4XLiKDAHYv6Adias4s3krKMmMeY8d52qYGVZda63o
+        uAVM5Q+xx2Z+gwoLFkEhaD1A9vaKxSyg+7HAafgv8zTXXH13Q7a1DWWED57RXvmP
+        3ErlRHbwreqYLe6xOypmIMhj3Wp3teinpWnb1yTpIkzxfYRrJrd+GikznRoOkkvP
+        xgY6KyQul1MPgdpZiMzAfm6K5/wgLAKJZ3EgGisaZGw+ADITV/ZxkcBjxST6H8Lv
+        3MwKWsBtCFr3ufSA8Zi0JBr2x+0bpzM=
+X-Virus-Scanned: amavisd-new at mykolab.com
+X-Spam-Score: -1.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
+Received: from mx.kolabnow.com ([127.0.0.1])
+        by localhost (ext-mx-out002.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LSicD94b9p7b; Sat, 31 Dec 2022 14:02:07 +0100 (CET)
+Received: from int-mx003.mykolab.com (unknown [10.9.13.3])
+        by mx.kolabnow.com (Postfix) with ESMTPS id B7491BB0;
+        Sat, 31 Dec 2022 14:02:06 +0100 (CET)
+Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
+        by int-mx003.mykolab.com (Postfix) with ESMTPS id 63771261F;
+        Sat, 31 Dec 2022 14:02:06 +0100 (CET)
+From:   Federico Vaga <federico.vaga@vaga.pv.it>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Federico Vaga <federico.vaga@vaga.pv.it>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V3] doc:it_IT: align Italian documentation
+Date:   Sat, 31 Dec 2022 14:01:35 +0100
+Message-Id: <20221231130135.3358-1-federico.vaga@vaga.pv.it>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some addresses were 7-hex-digits long, or less. Fix that.
+Translation for the following patches
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+commit da4288b95baa ("scripts/check-local-export: avoid 'wait $!' for process substitution")
+commit 5372de4e4545 ("docs/doc-guide: Put meta title for kernel-doc HTML page")
+commit 4d627ef12b40 ("docs/doc-guide: Mention make variable SPHINXDIRS")
+commit 7c43214dddfd ("docs/doc-guide: Add footnote on Inkscape for better images in PDF documents")
+commit 615041d42a1a ("docs: kernel-docs: shorten the lengthy doc title")
+commit cbf4adfd4d19 ("Documentation: process: Update email client instructions for Thunderbird")
+commit e72b3b9810dd ("maintainer-pgp-guide: minor wording tweaks")
+commit ea522496afa1 ("Documentation: process: replace outdated LTS table w/ link")
+commit 93431e0607e5 ("Replace HTTP links with HTTPS ones: documentation")
+commit e648174b53f1 ("Documentation: Fix spelling mistake in hacking.rst")
+commit 602684adb42a ("docs: Update version number from 5.x to 6.x in README.rst")
+commit 489876063fb1 ("docs: add a man-pages link to the front page")
+commit 0c7b4366f1ab ("docs: Rewrite the front page")
+
+Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
 ---
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index b3ed6ec16205..76dab4c2e8ed 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -831,9 +831,9 @@ ufs_mem_phy: phy@4807000 {
- 			status = "disabled";
+V1 -> V2 fix typo in footnote link
+V2 -> V3 restore latex directive to disable CJK
+
+ .../translations/it_IT/admin-guide/README.rst |  2 +-
+ .../it_IT/doc-guide/kernel-doc.rst            |  2 +
+ .../translations/it_IT/doc-guide/sphinx.rst   | 14 ++-
+ Documentation/translations/it_IT/index.rst    | 91 +++++++++----------
+ .../it_IT/kernel-hacking/hacking.rst          |  2 +-
+ .../translations/it_IT/process/2.Process.rst  | 15 +--
+ .../it_IT/process/7.AdvancedTopics.rst        |  8 +-
+ .../translations/it_IT/process/changes.rst    | 11 +++
+ .../it_IT/process/email-clients.rst           | 67 +++++++++-----
+ .../it_IT/process/kernel-docs.rst             |  4 +-
+ .../it_IT/process/maintainer-pgp-guide.rst    |  4 +-
+ 11 files changed, 128 insertions(+), 92 deletions(-)
+
+diff --git a/Documentation/translations/it_IT/admin-guide/README.rst b/Documentation/translations/it_IT/admin-guide/README.rst
+index b37166817842..c874586a9af9 100644
+--- a/Documentation/translations/it_IT/admin-guide/README.rst
++++ b/Documentation/translations/it_IT/admin-guide/README.rst
+@@ -4,7 +4,7 @@
  
- 			ufs_mem_phy_lanes: phy@4807400 {
--				reg = <0 0x4807400 0 0x098>,
--				      <0 0x4807600 0 0x130>,
--				      <0 0x4807c00 0 0x16c>;
-+				reg = <0 0x04807400 0 0x098>,
-+				      <0 0x04807600 0 0x130>,
-+				      <0 0x04807c00 0 0x16c>;
- 				#phy-cells = <0>;
- 			};
- 		};
+ .. _it_readme:
+ 
+-Rilascio del kernel Linux  5.x <http://kernel.org/>
++Rilascio del kernel Linux  6.x <http://kernel.org/>
+ ===================================================
+ 
+ .. warning::
+diff --git a/Documentation/translations/it_IT/doc-guide/kernel-doc.rst b/Documentation/translations/it_IT/doc-guide/kernel-doc.rst
+index 78082281acf9..5cece223b46b 100644
+--- a/Documentation/translations/it_IT/doc-guide/kernel-doc.rst
++++ b/Documentation/translations/it_IT/doc-guide/kernel-doc.rst
+@@ -3,6 +3,8 @@
+ .. note:: Per leggere la documentazione originale in inglese:
+ 	  :ref:`Documentation/doc-guide/index.rst <doc_guide>`
+ 
++.. title:: Commenti in kernel-doc
++
+ .. _it_kernel_doc:
+ 
+ =================================
+diff --git a/Documentation/translations/it_IT/doc-guide/sphinx.rst b/Documentation/translations/it_IT/doc-guide/sphinx.rst
+index 64528790dc34..1f513bc33618 100644
+--- a/Documentation/translations/it_IT/doc-guide/sphinx.rst
++++ b/Documentation/translations/it_IT/doc-guide/sphinx.rst
+@@ -151,7 +151,8 @@ Ovviamente, per generare la documentazione, Sphinx (``sphinx-build``)
+ dev'essere installato. Se disponibile, il tema *Read the Docs* per Sphinx
+ verrà utilizzato per ottenere una documentazione HTML più gradevole.
+ Per la documentazione in formato PDF, invece, avrete bisogno di ``XeLaTeX`
+-e di ``convert(1)`` disponibile in ImageMagick (https://www.imagemagick.org).
++e di ``convert(1)`` disponibile in ImageMagick
++(https://www.imagemagick.org). \ [#ink]_
+ Tipicamente, tutti questi pacchetti sono disponibili e pacchettizzati nelle
+ distribuzioni Linux.
+ 
+@@ -162,9 +163,20 @@ la generazione potete usare il seguente comando ``make SPHINXOPTS=-v htmldocs``.
+ Potete anche personalizzare l'ouptut html passando un livello aggiuntivo
+ DOCS_CSS usando la rispettiva variabile d'ambiente ``DOCS_CSS``.
+ 
++La variable make ``SPHINXDIRS`` è utile quando si vuole generare solo una parte
++della documentazione. Per esempio, si possono generare solo di documenti in
++``Documentation/doc-guide`` eseguendo ``make SPHINXDIRS=doc-guide htmldocs``. La
++sezione dedicata alla documentazione di ``make help`` vi mostrerà quali sotto
++cartelle potete specificare.
++
+ Potete eliminare la documentazione generata tramite il comando
+ ``make cleandocs``.
+ 
++.. [#ink] Avere installato anche ``inkscape(1)`` dal progetto Inkscape ()
++          potrebbe aumentare la qualità delle immagini che verranno integrate
++          nel documento PDF, specialmente per quando si usando rilasci del
++          kernel uguali o superiori a 5.18
++
+ Scrivere la documentazione
+ ==========================
+ 
+diff --git a/Documentation/translations/it_IT/index.rst b/Documentation/translations/it_IT/index.rst
+index e80a3097aa57..56c9f63b1042 100644
+--- a/Documentation/translations/it_IT/index.rst
++++ b/Documentation/translations/it_IT/index.rst
+@@ -1,3 +1,5 @@
++.. SPDX-License-Identifier: GPL-2.0
++
+ .. _it_linux_doc:
+ 
+ ===================
+@@ -6,7 +8,7 @@ Traduzione italiana
+ 
+ .. raw:: latex
+ 
+-	\kerneldocCJKoff
++     \kerneldocCJKoff
+ 
+ :manutentore: Federico Vaga <federico.vaga@vaga.pv.it>
+ 
+@@ -67,75 +69,68 @@ I miglioramenti alla documentazione sono sempre i benvenuti; per cui,
+ se vuoi aiutare, iscriviti alla lista di discussione linux-doc presso
+ vger.kernel.org.
+ 
+-Documentazione sulla licenza dei sorgenti
+------------------------------------------
+-
+-I seguenti documenti descrivono la licenza usata nei sorgenti del kernel Linux
+-(GPLv2), come licenziare i singoli file; inoltre troverete i riferimenti al
+-testo integrale della licenza.
++Lavorare con la comunità di sviluppo
++------------------------------------
+ 
+-* :ref:`it_kernel_licensing`
++Le guide fondamentali per l'interazione con la comunità di sviluppo del kernel e
++su come vedere il proprio lavoro integrato.
+ 
+-Documentazione per gli utenti
+------------------------------
+-
+-I seguenti manuali sono scritti per gli *utenti* del kernel - ovvero,
+-coloro che cercano di farlo funzionare in modo ottimale su un dato sistema
+-
+-.. warning::
++.. toctree::
++   :maxdepth: 1
+ 
+-    TODO ancora da tradurre
++   process/development-process
++   process/submitting-patches
++   Code of conduct <process/code-of-conduct>
++   All development-process docs <process/index>
+ 
+-Documentazione per gli sviluppatori di applicazioni
+----------------------------------------------------
+ 
+-Il manuale delle API verso lo spazio utente è una collezione di documenti
+-che descrivono le interfacce del kernel viste dagli sviluppatori
+-di applicazioni.
++Manuali sull'API interna
++------------------------
+ 
+-.. warning::
++Di seguito una serie di manuali per gli sviluppatori che hanno bisogno di
++interfacciarsi con il resto del kernel.
+ 
+-    TODO ancora da tradurre
++.. toctree::
++   :maxdepth: 1
+ 
++   core-api/index
+ 
+-Introduzione allo sviluppo del kernel
+--------------------------------------
++Strumenti e processi per lo sviluppo
++------------------------------------
+ 
+-Questi manuali contengono informazioni su come contribuire allo sviluppo
+-del kernel.
+-Attorno al kernel Linux gira una comunità molto grande con migliaia di
+-sviluppatori che contribuiscono ogni anno. Come in ogni grande comunità,
+-sapere come le cose vengono fatte renderà il processo di integrazione delle
+-vostre modifiche molto più semplice
++Di seguito una serie di manuali contenenti informazioni utili a tutti gli
++sviluppatori del kernel.
+ 
+ .. toctree::
+-   :maxdepth: 2
++   :maxdepth: 1
+ 
+-   process/index
++   process/license-rules
+    doc-guide/index
+    kernel-hacking/index
+ 
+-Documentazione della API del kernel
+------------------------------------
++Documentazione per gli utenti
++-----------------------------
+ 
+-Questi manuali forniscono dettagli su come funzionano i sottosistemi del
+-kernel dal punto di vista degli sviluppatori del kernel. Molte delle
+-informazioni contenute in questi manuali sono prese direttamente dai
+-file sorgenti, informazioni aggiuntive vengono aggiunte solo se necessarie
+-(o almeno ci proviamo — probabilmente *non* tutto quello che è davvero
+-necessario).
++Di seguito una serie di manuali per gli *utenti* del kernel - ovvero coloro che
++stanno cercando di farlo funzionare al meglio per un dato sistema, ma anche
++coloro che stanno sviluppando applicazioni che sfruttano l'API verso lo
++spazio-utente.
+ 
+-.. toctree::
+-   :maxdepth: 2
++Consultate anche `Linux man pages <https://www.kernel.org/doc/man-pages/>`_, che
++vengono mantenuti separatamente dalla documentazione del kernel Linux
++
++Documentazione relativa ai firmware
++-----------------------------------
++Di seguito informazioni sulle aspettative del kernel circa i firmware.
+ 
+-   core-api/index
+ 
+ Documentazione specifica per architettura
+ -----------------------------------------
+ 
+-Questi manuali forniscono dettagli di programmazione per le diverse
+-implementazioni d'architettura.
+ 
+-.. warning::
++Documentazione varia
++--------------------
+ 
+-    TODO ancora da tradurre
++Ci sono documenti che sono difficili da inserire nell'attuale organizzazione
++della documentazione; altri hanno bisogno di essere migliorati e/o convertiti
++nel formato *ReStructured Text*; altri sono semplicamente troppo vecchi.
+diff --git a/Documentation/translations/it_IT/kernel-hacking/hacking.rst b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
+index 560f1d0482d2..dd06bfc1a050 100644
+--- a/Documentation/translations/it_IT/kernel-hacking/hacking.rst
++++ b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
+@@ -137,7 +137,7 @@ macro :c:func:`in_softirq()` (``include/linux/preempt.h``).
+ .. warning::
+ 
+     State attenti che questa macro ritornerà un falso positivo
+-    se :ref:`botton half lock <it_local_bh_disable>` è bloccato.
++    se :ref:`bottom half lock <it_local_bh_disable>` è bloccato.
+ 
+ Alcune regole basilari
+ ======================
+diff --git a/Documentation/translations/it_IT/process/2.Process.rst b/Documentation/translations/it_IT/process/2.Process.rst
+index 62826034e0b2..25cd00351c03 100644
+--- a/Documentation/translations/it_IT/process/2.Process.rst
++++ b/Documentation/translations/it_IT/process/2.Process.rst
+@@ -136,18 +136,11 @@ Quindi, per esempio, la storia del kernel 5.2 appare così (anno 2019):
+ La 5.2.21 fu l'aggiornamento finale per la versione 5.2.
+ 
+ Alcuni kernel sono destinati ad essere kernel a "lungo termine"; questi
+-riceveranno assistenza per un lungo periodo di tempo.  Al momento in cui
+-scriviamo, i manutentori dei kernel stabili a lungo termine sono:
+-
+-	======  ================================  ==========================================
+-	3.16	Ben Hutchings			  (kernel stabile molto più a lungo termine)
+-	4.4	Greg Kroah-Hartman e Sasha Levin  (kernel stabile molto più a lungo termine)
+-	4.9	Greg Kroah-Hartman e Sasha Levin
+-	4.14	Greg Kroah-Hartman e Sasha Levin
+-	4.19	Greg Kroah-Hartman e Sasha Levin
+-	5.4i	Greg Kroah-Hartman e Sasha Levin
+-	======  ================================  ==========================================
++riceveranno assistenza per un lungo periodo di tempo. Consultate il seguente
++collegamento per avere la lista delle versioni attualmente supportate e i
++relativi manutentori:
+ 
++       https://www.kernel.org/category/releases.html
+ 
+ Questa selezione di kernel di lungo periodo sono puramente dovuti ai loro
+ manutentori, alla loro necessità e al tempo per tenere aggiornate proprio
+diff --git a/Documentation/translations/it_IT/process/7.AdvancedTopics.rst b/Documentation/translations/it_IT/process/7.AdvancedTopics.rst
+index cc1cff5d23ae..dffd813a0910 100644
+--- a/Documentation/translations/it_IT/process/7.AdvancedTopics.rst
++++ b/Documentation/translations/it_IT/process/7.AdvancedTopics.rst
+@@ -35,9 +35,9 @@ git è parte del processo di sviluppo del kernel.  Gli sviluppatori che
+ desiderassero diventare agili con git troveranno più informazioni ai
+ seguenti indirizzi:
+ 
+-	http://git-scm.com/
++	https://git-scm.com/
+ 
+-	http://www.kernel.org/pub/software/scm/git/docs/user-manual.html
++	https://www.kernel.org/pub/software/scm/git/docs/user-manual.html
+ 
+ e su varie guide che potrete trovare su internet.
+ 
+@@ -63,7 +63,7 @@ eseguire git-daemon è relativamente semplice .  Altrimenti, iniziano a
+ svilupparsi piattaforme che offrono spazi pubblici, e gratuiti (Github,
+ per esempio).  Gli sviluppatori permanenti possono ottenere un account
+ su kernel.org, ma non è proprio facile da ottenere; per maggiori informazioni
+-consultate la pagina web http://kernel.org/faq/.
++consultate la pagina web https://kernel.org/faq/.
+ 
+ In git è normale avere a che fare con tanti rami.  Ogni linea di sviluppo
+ può essere separata in "rami per argomenti" e gestiti indipendentemente.
+@@ -137,7 +137,7 @@ vostri rami.  Citando Linus
+ 	facendo, e ho bisogno di fidarmi *senza* dover passare tutte
+ 	le modifiche manualmente una per una.
+ 
+-(http://lwn.net/Articles/224135/).
++(https://lwn.net/Articles/224135/).
+ 
+ Per evitare queste situazioni, assicuratevi che tutte le patch in un ramo
+ siano strettamente correlate al tema delle modifiche; un ramo "driver fixes"
+diff --git a/Documentation/translations/it_IT/process/changes.rst b/Documentation/translations/it_IT/process/changes.rst
+index 10e0ef9c34b7..473ec2cc558e 100644
+--- a/Documentation/translations/it_IT/process/changes.rst
++++ b/Documentation/translations/it_IT/process/changes.rst
+@@ -35,6 +35,7 @@ PC Card, per esempio, probabilmente non dovreste preoccuparvi di pcmciautils.
+ GNU C                  5.1                gcc --version
+ Clang/LLVM (optional)  11.0.0             clang --version
+ GNU make               3.81               make --version
++bash                   4.2                bash --version
+ binutils               2.23               ld -v
+ flex                   2.5.35             flex --version
+ bison                  2.0                bison --version
+@@ -88,6 +89,11 @@ Make
+ 
+ Per compilare il kernel vi servirà GNU make 3.81 o successivo.
+ 
++Bash
++----
++Per generare il kernel vengono usati alcuni script per bash.
++Questo richiede bash 4.2 o successivo.
++
+ Binutils
+ --------
+ 
+@@ -370,6 +376,11 @@ Make
+ 
+ - <ftp://ftp.gnu.org/gnu/make/>
+ 
++Bash
++----
++
++- <ftp://ftp.gnu.org/gnu/bash/>
++
+ Binutils
+ --------
+ 
+diff --git a/Documentation/translations/it_IT/process/email-clients.rst b/Documentation/translations/it_IT/process/email-clients.rst
+index b792f2f06a74..970671cd91af 100644
+--- a/Documentation/translations/it_IT/process/email-clients.rst
++++ b/Documentation/translations/it_IT/process/email-clients.rst
+@@ -288,37 +288,62 @@ Thunderbird (GUI)
+ Thunderbird è un clone di Outlook a cui piace maciullare il testo, ma esistono
+ modi per impedirglielo.
+ 
++Dopo la configurazione, inclusa l'installazione delle estenzioni, dovrete
++riavviare Thunderbird.
++
+ - permettere l'uso di editor esterni:
++
+   La cosa più semplice da fare con Thunderbird e le patch è quello di usare
+-  l'estensione "external editor" e di usare il vostro ``$EDITOR`` preferito per
+-  leggere/includere patch nel vostro messaggio.  Per farlo, scaricate ed
+-  installate l'estensione e aggiungete un bottone per chiamarla rapidamente
+-  usando :menuselection:`Visualizza-->Barra degli strumenti-->Personalizza...`;
+-  una volta fatto potrete richiamarlo premendo sul bottone mentre siete nella
+-  finestra :menuselection:`Scrivi`
+-
+-  Tenete presente che "external editor" richiede che il vostro editor non
+-  faccia alcun fork, in altre parole, l'editor non deve ritornare prima di
+-  essere stato chiuso.  Potreste dover passare dei parametri aggiuntivi al
+-  vostro editor oppure cambiargli la configurazione.  Per esempio, usando
+-  gvim dovrete aggiungere l'opzione -f ``/usr/bin/gvim -f`` (Se il binario
+-  si trova in ``/usr/bin``) nell'apposito campo nell'interfaccia di
+-  configurazione di  :menuselection:`external editor`.  Se usate altri editor
+-  consultate il loro  manuale per sapere come configurarli.
++  estensioni che permettano di aprire il vostro editor preferito.
++
++  Di seguito alcune estensioni che possono essere utili al caso.
++
++  - "External Editor Revived"
++
++    https://github.com/Frederick888/external-editor-revived
++
++    https://addons.thunderbird.net/en-GB/thunderbird/addon/external-editor-revived/
++
++    L'estensione richiede l'installazione di "native messaging host". Date
++    un'occhiata alla seguente wiki:
++    https://github.com/Frederick888/external-editor-revived/wiki
++
++  - "External Editor"
++
++    https://github.com/exteditor/exteditor
++
++    Per usarlo, scaricate ed installate l'applicazione. Poi aprite la finestra
++    :menuselection:`Scrivi` e a seguire aggiungete un bottone per eseguirlo
++    `Visualizza-->Barra degli strumenti-->Personalizza...`. Infine, premente
++    questo nuovo bottone tutte le volte che volete usare l'editor esterno.
++
++    Tenete presente che "external editor" richiede che il vostro editor non
++    faccia alcun fork, in altre parole, l'editor non deve ritornare prima di
++    essere stato chiuso.  Potreste dover passare dei parametri aggiuntivi al
++    vostro editor oppure cambiargli la configurazione.  Per esempio, usando
++    gvim dovrete aggiungere l'opzione -f ``/usr/bin/gvim -f`` (Se il binario
++    si trova in ``/usr/bin``) nell'apposito campo nell'interfaccia di
++    configurazione di  :menuselection:`external editor`.  Se usate altri editor
++    consultate il loro  manuale per sapere come configurarli.``)``
+ 
+ Per rendere l'editor interno un po' più sensato, fate così:
+ 
+-- Modificate le impostazioni di Thunderbird per far si che non usi
+-  ``format=flowed``. Andate in :menuselection:`Modifica-->Preferenze-->Avanzate-->Editor di configurazione`
++- Modificate le impostazioni di Thunderbird per far si che non usi ``format=flowed``!
++  Andate sulla finestra principale e cercate il bottone per il menu a tendina principale.
++  Poi :menuselection:`Modifica-->Preferenze-->Avanzate-->Editor di configurazione`
+   per invocare il registro delle impostazioni.
+ 
+-- impostate ``mailnews.send_plaintext_flowed`` a ``false``
++  - impostate ``mailnews.send_plaintext_flowed`` a ``false``
+ 
+-- impostate ``mailnews.wraplength`` da ``72`` a ``0``
++  - impostate ``mailnews.wraplength`` da ``72`` a ``0``
+ 
+-- :menuselection:`Visualizza-->Corpo del messaggio come-->Testo semplice`
++- Non scrivete messaggi HTML! Andate sulla finestra principale ed aprite la
++  schermata :menuselection:`Menu principale-->Impostazioni account-->nome@unserver.ovunque-->Composizioni e indirizzi`.
++  Qui potrete disabilitare l'opzione "Componi i messaggi in HTML"
+ 
+-- :menuselection:`Visualizza-->Codifica del testo-->Unicode`
++- Aprite i messaggi solo in formato testo! Andate sulla finestra principale e
++  selezionate
++  :menuselection:`Menu principale-->Visualizza-->Copro del messaggio come-->Testo semplice`
+ 
+ 
+ TkRat (GUI)
+diff --git a/Documentation/translations/it_IT/process/kernel-docs.rst b/Documentation/translations/it_IT/process/kernel-docs.rst
+index 38e0a955121a..eadcbf50a1b5 100644
+--- a/Documentation/translations/it_IT/process/kernel-docs.rst
++++ b/Documentation/translations/it_IT/process/kernel-docs.rst
+@@ -6,8 +6,8 @@
+ 
+ .. _it_kernel_docs:
+ 
+-Indice di documenti per le persone interessate a capire e/o scrivere per il kernel Linux
+-========================================================================================
++Ulteriore Documentazione Del Kernel Linux
++=========================================
+ 
+ .. note::
+    Questo documento contiene riferimenti a documenti in lingua inglese; inoltre
+diff --git a/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst b/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
+index a1e98ec9532e..4bd7a8a66904 100644
+--- a/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
++++ b/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
+@@ -286,9 +286,7 @@ magari in una cassetta di sicurezza in banca.
+     Probabilmente la vostra stampante non è più quello stupido dispositivo
+     connesso alla porta parallela, ma dato che il suo output è comunque
+     criptato con la passphrase, eseguire la stampa in un sistema "cloud"
+-    moderno dovrebbe essere comunque relativamente sicuro. Un'opzione potrebbe
+-    essere quella di cambiare la passphrase della vostra chiave primaria
+-    subito dopo aver finito con paperkey.
++    moderno dovrebbe essere comunque relativamente sicuro.
+ 
+ Copia di riserva di tutta la cartella GnuPG
+ -------------------------------------------
 -- 
-2.39.0
+2.30.2
 
