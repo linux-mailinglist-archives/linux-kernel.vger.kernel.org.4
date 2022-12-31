@@ -2,97 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608EA65A3E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9104665A3EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbiLaMVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 07:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
+        id S229975AbiLaM0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 07:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLaMVI (ORCPT
+        with ESMTP id S229560AbiLaM0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 07:21:08 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498168FC9
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:21:04 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id u8so12607326ilq.13
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:21:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eHyvwjFgtUAVt21YsLkg4uXGhQ3k3u+3P7bUVoiseTg=;
-        b=PNYwRvN67KohL7ytiDP6pZKZozIdVGKqddCyJ8x8xS1CvkG963uhzVPanfgNRudAdC
-         FyjLtV/eoJsG6/LiGDJ1HCVwrWluabbWyjoQOKzC9sw/H0W2PbCgQUxBzWrvtevLicPj
-         +LKz+CgSTLfYpxbsq7V9xRp4p173EPhzMHwGWYn1KC3t6VjBpOU1Hd6Mhvmv3BjtOmWI
-         o3uwTRxRrh8tsjFJYAIXFpUnSPv2qNVybDMbUZYMKtCRF5/5CItL32Qx868BC87vgig8
-         TiK+pxwJRJ5mKz5CtN1DotJfA0pY3dDgTdhWWxDozhYRWQ866mJQVh0pwX+7TPpkPiAx
-         oFJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eHyvwjFgtUAVt21YsLkg4uXGhQ3k3u+3P7bUVoiseTg=;
-        b=tO0/VweNfjG24uB4/vpEJS8+wXr+4AB/GxzRWP7GC2VoLvVGz/8dJYTHqiTNbSnof+
-         WCYmmImzj5I44L6zC74fsqKPzVLBdwOn/0J1BQ5UxvHS57laATItARPhGZRM+Api17Yx
-         ihf2jE8Jmx2f1g5cvIOObe8hJNFLxQIuDi9vwlcuU1lfuRIucsVmw9zLwNNT4o07mO5+
-         taikLapxgHu31fkm2sg0chxITP1qhLEC9BWgAXK5IE/4PP2sgZv4UfuzOf525DuTaJua
-         XOZv6Qx8mu7pMUSHGJ2sNYi8OO17KyOJn/k/Slc2LDBZtmyz75xm/utVc787w9YVYBbU
-         15qA==
-X-Gm-Message-State: AFqh2krKJayn29ohzJs67s34wdnt0/45e0qBANn6WDRaz1V0xbGLpZRW
-        At2hSc/e6QF94fo2GjzRZdqHew==
-X-Google-Smtp-Source: AMrXdXs1PloNm8WS1dZpxGaleJqB1vINRpBdIbKv4RjigCCTdRdhZmGlECyuJcz2RbPovIFXGk6xTw==
-X-Received: by 2002:a92:bf0c:0:b0:30c:3c0:7a56 with SMTP id z12-20020a92bf0c000000b0030c03c07a56mr11491172ilh.5.1672489263551;
-        Sat, 31 Dec 2022 04:21:03 -0800 (PST)
-Received: from [10.211.55.3] ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id az36-20020a05663841a400b0039db6cffcbasm5956607jab.71.2022.12.31.04.21.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Dec 2022 04:21:02 -0800 (PST)
-Message-ID: <e72955ce-5c0c-f335-8deb-8a2893c842b5@linaro.org>
-Date:   Sat, 31 Dec 2022 06:21:01 -0600
+        Sat, 31 Dec 2022 07:26:17 -0500
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62941265E
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:26:15 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id BawFpjtO2fxUsBawFpvF3E; Sat, 31 Dec 2022 13:26:13 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 31 Dec 2022 13:26:13 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Vladimir Zapolskiy <vz@mleia.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] watchdog: lpc18xx: Use devm_clk_get_enabled() helper
+Date:   Sat, 31 Dec 2022 13:26:09 +0100
+Message-Id: <d4c675190d3ddfbba5c354edb4274757f9117304.1672489554.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next 0/6] net: ipa: simplify IPA interrupt handling
-To:     Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221230232230.2348757-1-elder@linaro.org>
- <20221230195218.65eaaf92@kernel.org>
-Content-Language: en-US
-From:   Alex Elder <alex.elder@linaro.org>
-In-Reply-To: <20221230195218.65eaaf92@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/30/22 9:52 PM, Jakub Kicinski wrote:
-> On Fri, 30 Dec 2022 17:22:24 -0600 Alex Elder wrote:
->> [PATCH net-next 0/6] net: ipa: simplify IPA interrupt handling
-> 
-> We kept net-next closed for an extra week due to end-of-the-year
-> festivities, back in business next week, sorry.
+The devm_clk_get_enabled() helper:
+   - calls devm_clk_get()
+   - calls clk_prepare_enable() and registers what is needed in order to
+     call clk_disable_unprepare() when needed, as a managed resource.
 
-No, *I* am sorry.  I forgot to even check this time, and I normally do.
-   http://vger.kernel.org/~davem/net-next.html
+This simplifies the code and avoids the need of a dedicated function used
+with devm_add_action_or_reset().
 
-It's perfectly fine, I'll wait.  I won't re-send next week unless it
-becomes obvious I should.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Note that the order of operations is slightly modified by this patch. The
+"reg" clk is now prepare_enable()'ed before clk_get("wdtclk").
+---
+ drivers/watchdog/lpc18xx_wdt.c | 30 ++----------------------------
+ 1 file changed, 2 insertions(+), 28 deletions(-)
 
-Thanks, and happy new year!
+diff --git a/drivers/watchdog/lpc18xx_wdt.c b/drivers/watchdog/lpc18xx_wdt.c
+index 60b6d74f267d..1b9b5f21a0df 100644
+--- a/drivers/watchdog/lpc18xx_wdt.c
++++ b/drivers/watchdog/lpc18xx_wdt.c
+@@ -197,16 +197,10 @@ static const struct watchdog_ops lpc18xx_wdt_ops = {
+ 	.restart        = lpc18xx_wdt_restart,
+ };
+ 
+-static void lpc18xx_clk_disable_unprepare(void *data)
+-{
+-	clk_disable_unprepare(data);
+-}
+-
+ static int lpc18xx_wdt_probe(struct platform_device *pdev)
+ {
+ 	struct lpc18xx_wdt_dev *lpc18xx_wdt;
+ 	struct device *dev = &pdev->dev;
+-	int ret;
+ 
+ 	lpc18xx_wdt = devm_kzalloc(dev, sizeof(*lpc18xx_wdt), GFP_KERNEL);
+ 	if (!lpc18xx_wdt)
+@@ -216,38 +210,18 @@ static int lpc18xx_wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(lpc18xx_wdt->base))
+ 		return PTR_ERR(lpc18xx_wdt->base);
+ 
+-	lpc18xx_wdt->reg_clk = devm_clk_get(dev, "reg");
++	lpc18xx_wdt->reg_clk = devm_clk_get_enabled(dev, "reg");
+ 	if (IS_ERR(lpc18xx_wdt->reg_clk)) {
+ 		dev_err(dev, "failed to get the reg clock\n");
+ 		return PTR_ERR(lpc18xx_wdt->reg_clk);
+ 	}
+ 
+-	lpc18xx_wdt->wdt_clk = devm_clk_get(dev, "wdtclk");
++	lpc18xx_wdt->wdt_clk = devm_clk_get_enabled(dev, "wdtclk");
+ 	if (IS_ERR(lpc18xx_wdt->wdt_clk)) {
+ 		dev_err(dev, "failed to get the wdt clock\n");
+ 		return PTR_ERR(lpc18xx_wdt->wdt_clk);
+ 	}
+ 
+-	ret = clk_prepare_enable(lpc18xx_wdt->reg_clk);
+-	if (ret) {
+-		dev_err(dev, "could not prepare or enable sys clock\n");
+-		return ret;
+-	}
+-	ret = devm_add_action_or_reset(dev, lpc18xx_clk_disable_unprepare,
+-				       lpc18xx_wdt->reg_clk);
+-	if (ret)
+-		return ret;
+-
+-	ret = clk_prepare_enable(lpc18xx_wdt->wdt_clk);
+-	if (ret) {
+-		dev_err(dev, "could not prepare or enable wdt clock\n");
+-		return ret;
+-	}
+-	ret = devm_add_action_or_reset(dev, lpc18xx_clk_disable_unprepare,
+-				       lpc18xx_wdt->wdt_clk);
+-	if (ret)
+-		return ret;
+-
+ 	/* We use the clock rate to calculate timeouts */
+ 	lpc18xx_wdt->clk_rate = clk_get_rate(lpc18xx_wdt->wdt_clk);
+ 	if (lpc18xx_wdt->clk_rate == 0) {
+-- 
+2.34.1
 
-					-Alex
