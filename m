@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E38165A5CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 17:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D338A65A5CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 17:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235636AbiLaQqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 11:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S235657AbiLaQqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 11:46:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232021AbiLaQqf (ORCPT
+        with ESMTP id S232078AbiLaQqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 11:46:35 -0500
+        Sat, 31 Dec 2022 11:46:36 -0500
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795842CB;
-        Sat, 31 Dec 2022 08:46:34 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id E78D55C00C9;
-        Sat, 31 Dec 2022 11:46:33 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE72A60D0;
+        Sat, 31 Dec 2022 08:46:35 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5CE985C009C;
+        Sat, 31 Dec 2022 11:46:35 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sat, 31 Dec 2022 11:46:33 -0500
+  by compute6.internal (MEProxy); Sat, 31 Dec 2022 11:46:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672505193; x=1672591593; bh=UI
-        LhNGgAzXEExQUtc1nNgyH89N42rlAHuhv77zefq20=; b=wxutMGFlw5JuLTULHY
-        ICfG5YZe8MGmJd13HbOs49Rwr1BTJMYmTJF7RanCKX5v/pIkIolcu+XB0QPs1t0p
-        aF1VCBdvM5FTYjuOr32gnnPH6li9riPD1+THcukilntiAQM5f8Lr1V0asrRbTZuX
-        ebwljvg691LN4J1kTgjOnbCXV1NQKfkd92CxbDamvNCeUlwEmAdtzD2N6zKInssO
-        zZsFCInQpe9DcmlIqrTgNkWTPvyhDM7vCdXwvAGRXvBBLriK/BOTb+UqDASfw4Sx
-        t8OwQAxuKX6DgWip+gW/dAQ7cNeHxVrfpQW4AJYAz6v2WSPCe/SpXivmILbW5q/H
-        K2KQ==
+        :subject:subject:to:to; s=fm3; t=1672505195; x=1672591595; bh=vE
+        ylqdPcoZ0euJOiHbHp34nwz64q54ysKO9PHy+mOik=; b=1rPKUsxgmjqpFZdAfi
+        a3OPrH3yZL9jXRY32T0irAR/mW9JrzsVFHMTs4wS1TTBaAScL4NRv+FRu/6aqzZg
+        KaKcIqdsK9o+Q6uDBMPGCetRpHL3rY+6NNGDuLcfIFtcDly/XnEBlntPQ5suVzxP
+        8ohCJq2ioga4MSmhHkNlIHJKH1gW1RTx2h0be6Bid1jgoXk0d9m91BATEY/uU9+r
+        FbyzufJrJFRRELVwD9aMsm7lRHgG1431KxLxivrxuSACB8wCeH9Vl+4197TigYFa
+        QBIZ5wB11Q2M2WhcdNAkdKaDamGnCxS5PeREAM0gELUHqUJ7uiTNbnZVpwU8qOir
+        WlFQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672505193; x=1672591593; bh=UILhNGgAzXEEx
-        QUtc1nNgyH89N42rlAHuhv77zefq20=; b=W2R7B7UuVmY4PqOUJ+Pl+jCR/n30I
-        VMu3xI5IzfzIP6Lrql/4T/GS/1dlwjRt94y+iiHvd4lcQwmvbxQpSkBxUp031GmL
-        /IKlHLiSH0FzMOhe0/7UEVELnuabns1r3GcAqNE6nNlI7Hx9SxAIoi4yxeXbX255
-        frFsMCHFdpXim881nK1biCZ1t3+rG7KtP2bAR20b+jZS0zmTUEF6YgE2eXtey12x
-        c43W9rNxo3KgHruxdCOekj4cZ4LKsYriH58CU3YQIBtGhNpoiTfB6qVcmQBKQy8j
-        izezOOA7eQxXFQrrecJONMccXkb/YqLk95Eyl8p3KeqCnhoqkCWMXPAjA==
-X-ME-Sender: <xms:aWewYwmnzfLZgQzcm3nf__685uZkbcKHVWv_anSvtZJzwLzUGdn2XQ>
-    <xme:aWewY_1Q5Dc31wrZg7_KgDv9iTJWJkjkIGgzroXCl-TKOpfVqF-mDRAFNia7O45l8
-    xNEsUZBUaBwsAmg6w>
-X-ME-Received: <xmr:aWewY-ohlvMzAoDd_F8B7RyDXya3X5II5SGadfvb3PQL_62ouHdj99VDXX_Qv5DkRHTGNx3FUiLgN4f6x1IdIKfZTRbi90IP2vHV0sqeokFUhrjt1GHGbzZoVV-VHyYydqbivg>
+        :x-sasl-enc; s=fm2; t=1672505195; x=1672591595; bh=vEylqdPcoZ0eu
+        JOiHbHp34nwz64q54ysKO9PHy+mOik=; b=dM6ESZzOqo3QpkRhPj0cexpFFM+QN
+        qFoHLzZo6/l1TtN2trAen82Y1JOQUfWLhvVQms4inKKS2PWH7+KckhL8YrWhiNkU
+        V3eSIky9nSyfFbBrQnGW8lrJPQm4VGGW3Tcez3KNuvFfPBE8eewZuH3o7FU6kSq0
+        +I8L9DGHEtLApZDbHZkOT+lME2kzTmQjdcwrz70Z2gXb7tA73mbsB0+gQ3iw/HbR
+        UItu3LEfHsYCoCzTRBNEJRfVMRR9AY7zRce97J2wkksxmpwshN5IahK/NC9antDY
+        R2vmeBzMXKqKoU/YiGQTivbT17QJ2GvicLQdZh63vAZOCeQwCrNzviiYg==
+X-ME-Sender: <xms:a2ewY9cmL_dKrM9irEQfRcZcxZsYZS4WM8iCUjSHoAIVCFX6qlP2_w>
+    <xme:a2ewY7PPIiScSxUaz9veZGEIGRxogu2Ctuvlmc-pvQ9hRV7ab9uc_yghpUZ3Sr2Mu
+    5nnGTRIBdh5O7MHlA>
+X-ME-Received: <xmr:a2ewY2iZ0VPLnbvRFdFYfx7COZk6i_k879ld-Zep9vJpsH9TCwJGQpgitZmOiicUrM_pVu9TbfkF_gyjuRz7VDqNcVF39FHRJk19DcFEDzaFiMiOM-NtPEAe-nzP-YORhfXlLA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieekgdelvdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieekgdelvdcutefuodetggdote
     frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
     feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:aWewY8kYAA4LnC0T8wuzl6f9IgSvnl4T3d1e8hmiNx1tmxB5_XSiiA>
-    <xmx:aWewY-3n3m_muuWkRR1FDc0Yqyaa45FxoB1Usrxu74aWcDsNfRW_Ug>
-    <xmx:aWewYztKqru5VnxSO6czmIVMtDtyUnPGX5vd6PiXAtdFBAZCesJ-Iw>
-    <xmx:aWewY1uVhnRUWthpZvDARZ3F6H_BxiJh74M-E_-FvdTWnMhKDjAnQg>
+X-ME-Proxy: <xmx:a2ewY28t1eAnWEhOQwggTbIIFtstW7qRSw4S6RgXsdRn7-DsZmTg4g>
+    <xmx:a2ewY5vWLaIfG5o9d6bAzvRajKdViiqOCvTCIQodqrgoWM8HNFyQdw>
+    <xmx:a2ewY1E-Hv5TlgTo46ufI9apB9MorSw4wL9j7eeRyaFSc9NaStRUsg>
+    <xmx:a2ewY0nj0fcA6jli-MEERMn9d4J2sqV5BIiW65e4esUsu69xyJ2erg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 31 Dec 2022 11:46:32 -0500 (EST)
+ 31 Dec 2022 11:46:34 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -80,9 +80,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH 2/4] media: dt-bindings: cedrus: Make allwinner,sram optional
-Date:   Sat, 31 Dec 2022 10:46:25 -0600
-Message-Id: <20221231164628.19688-3-samuel@sholland.org>
+Subject: [PATCH 3/4] media: cedrus: Make SRAM section claiming optional
+Date:   Sat, 31 Dec 2022 10:46:26 -0600
+Message-Id: <20221231164628.19688-4-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221231164628.19688-1-samuel@sholland.org>
 References: <20221231164628.19688-1-samuel@sholland.org>
@@ -98,33 +98,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allwinner SoCs can remap some bits of peripheral SRAM to a contiguous
-range of addresses for use by early boot software. Usually the video
-engine's SRAM is used for this purpose, so its mapping must be switched
-back before the hardware can be used.
-
-However, the D1 and related SoCs use the DSP SRAM for this purpose. As a
-result, the video engine SRAM is not switchable, and there is no need
-for an allwinner,sram reference in the devicetree.
+The video engine in the D1 family of SoCs does not have a switchable
+SRAM section. Allow the driver to probe even when the SRAM section
+reference is missing.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- .../bindings/media/allwinner,sun4i-a10-video-engine.yaml         | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
-index d5be7f604e8c..74363b242fff 100644
---- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
-@@ -73,7 +73,6 @@ required:
-   - clocks
-   - clock-names
-   - resets
--  - allwinner,sram
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+index fa86a658fdc6..11e859617932 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+@@ -257,7 +257,7 @@ int cedrus_hw_probe(struct cedrus_dev *dev)
+ 	}
  
- additionalProperties: false
+ 	ret = sunxi_sram_claim(dev->dev);
+-	if (ret) {
++	if (ret && ret != -ENOENT) {
+ 		dev_err(dev->dev, "Failed to claim SRAM\n");
  
+ 		goto err_mem;
 -- 
 2.37.4
 
