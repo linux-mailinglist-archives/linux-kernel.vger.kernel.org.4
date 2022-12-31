@@ -2,208 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE63465A35D
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 10:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F4E65A367
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 10:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiLaJam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 04:30:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S230117AbiLaJnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 04:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiLaJak (ORCPT
+        with ESMTP id S229536AbiLaJnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 04:30:40 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C349DECA
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:30:39 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id s22-20020a6bdc16000000b006e2d7c78010so7032826ioc.21
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:30:39 -0800 (PST)
+        Sat, 31 Dec 2022 04:43:16 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A51B7661
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:43:15 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id s127so9434278vsb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 01:43:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KUHzJPivSYkoSKk7/BszI2rb7/a++4r23bXKXJQyalk=;
+        b=Z77WbFj1n+mP6hWxI2pZUFjCsU4Shh+doZDgnhymxNkLnZxKuI2nX5a0F9k8BvwlQA
+         1vPv32jixPXBC9uL2VXmCDOduvMthIAn52IhBZy9ZPiUDJrMZCfPXJErjn24Ozps83Ty
+         8kKzOC+eOeA8zV/eSfbLsaZvuxj3ODsd5sxzRHrojnacfHBRTAL21dfx3rxLIJJOAVan
+         QCPeB+rN+2rqal5KjtPG9udt6IsAXDRGgb4K2lxemHDeORfHxl77hOWe1y6o/Gxz5VZf
+         I3bla3MSbHBGaE4By+WXQvg+Eexe7cdgo/Z9oT+A7Gm+ZTCFScV4Rh7zQfM1bLiwFnuM
+         +S8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ffGl+WxU+tblGo+bWMzEOKa8UNXKtH4WBKL6LgGNwKg=;
-        b=dpdB8FxRnDccDNEnEo0m7TOMqCAPxTYQelSOQk7DMDnA/uxW6pe4t+4RWJyb+SdbRL
-         xj1+xlPcmqg61cUr49PyJISkDZXsn15FMpKecqp3Ojsui0kjLSqWnag3+YksvQi3qSLQ
-         KmJ6ju1zFAGyrnhhZm4vCTOInvLbBLs+NanXwm659JDh8vOyUwXpJ93wwk8emdUbAdvA
-         Gh1KC8QAV6j8vNDppA1Xs046HGhDtiItCDTZO+ZLh/bzBLWJBvPDqASIXyhY/lSwoCUr
-         YUA2HyRylk2POUPONB6+SfDVvIzX5Gzpbr7RNzem5bDkqSHTbm3Fk3uxnGdyjRJ172rS
-         mi8w==
-X-Gm-Message-State: AFqh2kr4VpuAFjYx2zH5AsWpfg8BYa/u0E414kEibOVFB+yia7EuG+QF
-        SPvAH8Yf9sbJtJqxAOCKzsZgsF+X++nL0ypz1SvYgxZoWKde
-X-Google-Smtp-Source: AMrXdXsgKiJyrvKp4c2xREuWsViOkCBeNlF1gvvRjuAE6ErZ1F8PbXrnaOg9mjJ7bsEFFrCbOzy6tjURtC6u7ekmAzEBcl6J2Q5C
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KUHzJPivSYkoSKk7/BszI2rb7/a++4r23bXKXJQyalk=;
+        b=50RUPGdSgHM0Eh5UFIBX15tmFsa50xuFAKQR9q85bjQ7omGnfL2jh66VzmUIqfhf4G
+         BAHtxqIzy51qz52Mu4XYXTxcpmHSAr58VeZNo0ZChzuo6uginQ/JZFWLiyDUJ7I2sHyU
+         5ivGQxBrxu5rP5lcWLru8FuKKJw8Plobx0lkRFySCwkZo4uhckSs6HqcaJgFJJNFJqva
+         3l4DS4T16mnvPkShFIoSGDBK1OYE4YxEp+baTz0p0Bi9eQUSwv8H5iL2HalfU7Lal00J
+         3OqAEi5098inmv/Mla1S4LbB4rqsPV6o7HecxV/XvDkjDnkC7eZKK4oOcLlFBOHccmGd
+         2Yiw==
+X-Gm-Message-State: AFqh2kpehUZ7pDB2Vy/QLhKaKQaZifMMVaeD2wmoz63KctOLRF0xHVjW
+        jz+HxmXhb6FUJaAzsv2d1MxqMUc2wPVyTelOvEtcjA==
+X-Google-Smtp-Source: AMrXdXtjF15kV8Ipy8gA4oLc16rYWjg0mqiwtoH0uD0FRorfiOu15S8AXAmVQrh49Tmxtru+Sm4FgXRFX9FGfR7K/aw=
+X-Received: by 2002:a05:6102:c4e:b0:3c8:c513:197 with SMTP id
+ y14-20020a0561020c4e00b003c8c5130197mr1989630vss.9.1672479794147; Sat, 31 Dec
+ 2022 01:43:14 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1206:b0:304:bf1f:d72c with SMTP id
- a6-20020a056e02120600b00304bf1fd72cmr3007491ilq.69.1672479038993; Sat, 31 Dec
- 2022 01:30:38 -0800 (PST)
-Date:   Sat, 31 Dec 2022 01:30:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000037f2205f11c5fde@google.com>
-Subject: [syzbot] [reiserfs?] possible deadlock in vfs_setxattr
-From:   syzbot <syzbot+2c493ef16c1927e777f8@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20221230094107.317705320@linuxfoundation.org>
+In-Reply-To: <20221230094107.317705320@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 31 Dec 2022 15:13:03 +0530
+Message-ID: <CA+G9fYuNoor9tmoj5pm9yHGCbH_Ljh=LiipZ3CmqWrzSXsj1Cw@mail.gmail.com>
+Subject: Re: [PATCH 6.1 0000/1140] 6.1.2-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 30 Dec 2022 at 15:19, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.2 release.
+> There are 1140 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 01 Jan 2023 09:38:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.2-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-syzbot found the following issue on:
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-HEAD commit:    1b929c02afd3 Linux 6.2-rc1
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11fc3d44480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=555d27e379d75ff1
-dashboard link: https://syzkaller.appspot.com/bug?extid=2c493ef16c1927e777f8
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Unfortunately, I don't have any reproducer for this issue yet.
+## Build
+* kernel: 6.1.2-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 9c94d2e408abdf4ca5bdc1d79598dc6cbfab7345
+* git describe: v6.1.1-1141-g9c94d2e408ab
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.1=
+-1141-g9c94d2e408ab
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2824225be62b/disk-1b929c02.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ff607a05be90/vmlinux-1b929c02.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c0b523d63d64/bzImage-1b929c02.xz
+## Test Regressions (compared to v6.1-26-g4478ff938eb5)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2c493ef16c1927e777f8@syzkaller.appspotmail.com
+## Metric Regressions (compared to v6.1-26-g4478ff938eb5)
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.2.0-rc1-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor.2/20058 is trying to acquire lock:
-ffff88809c454bc0 (&type->i_mutex_dir_key#13){++++}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
-ffff88809c454bc0 (&type->i_mutex_dir_key#13){++++}-{3:3}, at: vfs_setxattr+0x1e8/0x450 fs/xattr.c:322
+## Test Fixes (compared to v6.1-26-g4478ff938eb5)
 
-but task is already holding lock:
-ffff8880238a0460 (sb_writers#25){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:508
+## Metric Fixes (compared to v6.1-26-g4478ff938eb5)
 
-which lock already depends on the new lock.
+## Test result summary
+total: 165215, pass: 147553, fail: 3250, skip: 14412, xfail: 0
 
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 146 passed, 5 failed
+* arm64: 51 total, 50 passed, 1 failed
+* i386: 39 total, 36 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 32 passed, 6 failed
+* riscv: 16 total, 15 passed, 1 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 44 total, 44 passed, 0 failed
 
-the existing dependency chain (in reverse order) is:
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
 
--> #2 (sb_writers#25){.+.+}-{0:0}:
-       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1811 [inline]
-       sb_start_write+0x4d/0x1a0 include/linux/fs.h:1886
-       mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:552
-       reiserfs_ioctl+0x16e/0x340 fs/reiserfs/ioctl.c:103
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (&sbi->lock){+.+.}-{3:3}:
-       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1de/0x26c0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-       reiserfs_lookup+0x15a/0x4a0 fs/reiserfs/namei.c:364
-       __lookup_slow+0x286/0x3e0 fs/namei.c:1685
-       lookup_one_len+0x430/0x690 fs/namei.c:2711
-       reiserfs_lookup_privroot+0x85/0x1e0 fs/reiserfs/xattr.c:973
-       reiserfs_fill_super+0x1964/0x2620 fs/reiserfs/super.c:2192
-       mount_bdev+0x26c/0x3a0 fs/super.c:1359
-       legacy_get_tree+0xea/0x180 fs/fs_context.c:610
-       vfs_get_tree+0x88/0x270 fs/super.c:1489
-       do_new_mount+0x289/0xad0 fs/namespace.c:3145
-       do_mount fs/namespace.c:3488 [inline]
-       __do_sys_mount fs/namespace.c:3697 [inline]
-       __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3674
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&type->i_mutex_dir_key#13){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x184a/0x6470 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
-       down_write+0x9c/0x270 kernel/locking/rwsem.c:1562
-       inode_lock include/linux/fs.h:756 [inline]
-       vfs_setxattr+0x1e8/0x450 fs/xattr.c:322
-       do_setxattr fs/xattr.c:608 [inline]
-       setxattr fs/xattr.c:631 [inline]
-       path_setxattr+0x393/0x4c0 fs/xattr.c:650
-       __do_sys_setxattr fs/xattr.c:666 [inline]
-       __se_sys_setxattr fs/xattr.c:662 [inline]
-       __x64_sys_setxattr+0xb7/0xd0 fs/xattr.c:662
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  &type->i_mutex_dir_key#13 --> &sbi->lock --> sb_writers#25
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(sb_writers#25);
-                               lock(&sbi->lock);
-                               lock(sb_writers#25);
-  lock(&type->i_mutex_dir_key#13);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.2/20058:
- #0: ffff8880238a0460 (sb_writers#25){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:508
-
-stack backtrace:
-CPU: 1 PID: 20058 Comm: syz-executor.2 Not tainted 6.2.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2d0 lib/dump_stack.c:106
- check_noncircular+0x2f9/0x3b0 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x184a/0x6470 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
- down_write+0x9c/0x270 kernel/locking/rwsem.c:1562
- inode_lock include/linux/fs.h:756 [inline]
- vfs_setxattr+0x1e8/0x450 fs/xattr.c:322
- do_setxattr fs/xattr.c:608 [inline]
- setxattr fs/xattr.c:631 [inline]
- path_setxattr+0x393/0x4c0 fs/xattr.c:650
- __do_sys_setxattr fs/xattr.c:666 [inline]
- __se_sys_setxattr fs/xattr.c:662 [inline]
- __x64_sys_setxattr+0xb7/0xd0 fs/xattr.c:662
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f153aa8c0a9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f153139b168 EFLAGS: 00000246 ORIG_RAX: 00000000000000bc
-RAX: ffffffffffffffda RBX: 00007f153abac1f0 RCX: 00007f153aa8c0a9
-RDX: 0000000020000280 RSI: 0000000020000240 RDI: 0000000020000200
-RBP: 00007f153aae7ae9 R08: 0000000000000002 R09: 0000000000000000
-R10: 000000000000010c R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe487bc7ef R14: 00007f153139b300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--
+Linaro LKFT
+https://lkft.linaro.org
