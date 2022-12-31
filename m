@@ -2,214 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2D065A2C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 06:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091FA65A2C3
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 06:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbiLaFUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 00:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S231524AbiLaFUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 00:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiLaFUB (ORCPT
+        with ESMTP id S231520AbiLaFUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 00:20:01 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30775140B6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 21:20:00 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id n4so23824782plp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 21:20:00 -0800 (PST)
+        Sat, 31 Dec 2022 00:20:34 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509EF14D02
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 21:20:33 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id fc4so55402455ejc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 21:20:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aZJQjCfX4+prwQo4OFfcSE3byIBK/JnH4yyvcjyPNLU=;
-        b=HMb71ZYgOKteEc/FlAVyhvgMPeYEWos1QHLEjPEFFhlMwJXMSBTrwmIwzczcaDKoNZ
-         XWzx5ikTnh4ln38bjFWqQcaZcH9ijWfh57WDbNBgaop6di1+jbG/bEjGVzQ1/6ftQri6
-         0nXCJ8HTH+RjQCzO5UeIM0/G9rRCj0f+hj9DfDmgv+fIA4vNod7tY4Er72nqGC4o4Sp8
-         U2N0pXNGsM/KDW8uLco/1ylKQX7YdaX1MnaPCD66+FxUuDcvoBmujfE+LtULTj6XrxXN
-         NHt/S+JrCVSZeX7+lSRhYIv45UXqAI3/xlXSnlirdNAokOzAHkMTv/epfah4mJzu8/Bw
-         9hCg==
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=g0fwp/1dRrfu0peS245FaVJCgMkFwHN9i+GNg2CO1KA=;
+        b=nbPio/74ReqykLw+aKKuac5Mbxhr/fsvIdi6kD41Za+AFq/HDZfrc+xvVs4AU08EVm
+         2FPDF2yuTJxNbPH5JfCaiTbmPelzaWPMcApfz3vQZKUPvMWYVl7ODmsFrgcINBaFrJ9o
+         duLnhS1DYnLyOyNhbM12OIbvviCt6YbmNIfxeetJgeNQj8zhB4t2rdo+6ZDwmi11BzhX
+         Lu6tZJnWoxg2p9CMnTxwkyhjO9H3dThqnWOG93vHGzTN1CrSwWi2+U1x3aTNuTOM+JCF
+         iEA80T0g3vlsi8ZU0/lUOvs58oZdPEyiX40dhOiO7K6IFqME5/gRjyrVVcgrvZ5tgq3J
+         C6lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aZJQjCfX4+prwQo4OFfcSE3byIBK/JnH4yyvcjyPNLU=;
-        b=L/piy8dB3oNt4Zo2AfIXIEmo65FYHBhAYdY4v7GuOfvCXnKZua9dcKpgrWJQj1qUiS
-         pI4teZJ0Esrtzr+fYdt+c9jr/3/CrQse7Vmb671WdVICfn7S/VXKKzwlXL2Z3cH/8ucO
-         mTSrAy7TBdUfEigYMmvbyi172I0rRvoJ5WkOQSOL3ENckYqFUZOAEoy7xJbkZwCGGTaw
-         /N+5Ef9FD814MQJ6LM9oh+ZKW9wmoHnx6oUsxzrDfsHpZAgm6tloCceR9Yz6Oz/Mt+G0
-         TcaWEzVCR+FLkmyTEerughSBE7jUypMFAn+o4m8hHgQulJgh9LyHJxbFTSuXzGgKLGIb
-         1RaA==
-X-Gm-Message-State: AFqh2kqLOCgpxRrjYo2ZOtC7nk74smtPkFOoZSKKnA9MOwn3yjIslLs/
-        09J8TIcINgmSAwAfuXW7q+YAHa0XjP4AMg==
-X-Google-Smtp-Source: AMrXdXtgt2OOUmoafU5fhU4CEP3qm0CJnEDfr5aXHfUbRGMJfGmZw9Sfwzs8A86qu6NrMwk1s+pNWA==
-X-Received: by 2002:a17:902:dad0:b0:191:3ec0:9166 with SMTP id q16-20020a170902dad000b001913ec09166mr56404941plx.6.1672463999649;
-        Fri, 30 Dec 2022 21:19:59 -0800 (PST)
-Received: from localhost.localdomain (kayle.snu.ac.kr. [147.46.126.79])
-        by smtp.gmail.com with ESMTPSA id i18-20020a17090332d200b00174c1855cd9sm15904431plr.267.2022.12.30.21.19.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 21:19:59 -0800 (PST)
-From:   Yoochan Lee <yoochan1026@gmail.com>
-To:     jens.wiklander@linaro.org
-Cc:     op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
-        Yoochan Lee <yoochan1026@gmail.com>
-Subject: [PATCH] tee: optee: smc_abi: Fix use-after-free in optee_smc_open
-Date:   Sat, 31 Dec 2022 14:19:54 +0900
-Message-Id: <20221231051954.2038772-1-yoochan1026@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g0fwp/1dRrfu0peS245FaVJCgMkFwHN9i+GNg2CO1KA=;
+        b=iAV/Cz2IZJWVcPeHvFKvVkFIgTZM0BLXRFXOiTPP731MpBdCirbMUUXdztM45kVHSm
+         LMdQqAIOm/waI8S97UHSlvIT7/+FKvqORx4f4/jKIPUpWHLJDOuTq4fnx0JCzUB7CAcT
+         QZdXrHU5ELT6CVhIsFwIdgjaKZuvIv9KMQdrbFL4FnmQ0vV08uh8jQsF1Braar8GkWgb
+         Mvdx+EsmtfnS+ooa6rD+EhHUPGYwxEtVxKtEWOkysl2AOoF9tAi3xhXWPhH2fhZ343P4
+         Xm7lRWHxeTKMdyqBMYBf9ywPosOaV5icUk+GJIMDXhIVtYg68IQpL3AJf2qhR4p4oRPd
+         5KpA==
+X-Gm-Message-State: AFqh2kripcrog7dVFiiIfuCKsON42VAokG4WkWXS5a67YUmasRh/y8Ri
+        Fk25wj1mhGLC/khit4CNFdodZlNt4hv8nt1XB4I=
+X-Google-Smtp-Source: AMrXdXvHclCcwzUuTFVQ4paYw4JhZ4tt7AstLkROap1ktXZBjcqQdB3faliGjsGgPemKkHRfQCeydjAcMXok4tb5Pd8=
+X-Received: by 2002:a17:907:d48a:b0:7c1:10b6:3ea0 with SMTP id
+ vj10-20020a170907d48a00b007c110b63ea0mr2970547ejc.132.1672464031760; Fri, 30
+ Dec 2022 21:20:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a98:a10f:0:b0:19d:fbb9:be5c with HTTP; Fri, 30 Dec 2022
+ 21:20:31 -0800 (PST)
+From:   ryan johnson <bosranjo670@gmail.com>
+Date:   Fri, 30 Dec 2022 21:20:31 -0800
+Message-ID: <CAL-LBhBvQ72eehYVpoYSnRUkHUHK8HhDdMOd6CPXjsevMjaGmQ@mail.gmail.com>
+Subject: Good day
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
+        NA_DOLLARS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY,
+        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:629 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [bosranjo670[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [bosranjo670[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.4 NA_DOLLARS BODY: Talks about a million North American dollars
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A race condition may occur if the user physically removes the
-smc_abi device while calling open().
+Hello,
 
-This is a race condition between optee_smc_open() function and
-the optee_smc_remove() function, which may lead to Use-After-Free.
+I am Mr.Alfa Nuru I have investment project of $58.7Million Us Dollars
+which I will like you to support me so that the fund will be transfer
+into your bank  account.
 
-Therefore, add a refcount check to optee_smc_remove() function
-to free the "optee" structure after the device is close()d.
+Please if you are capable and willing , kindly reply back to me so
+that i will give more details about this project. my private e-mail at
+(mr.alfanuru01@gmail.com)
 
----------------CPU 0--------------------CPU 1-----------------
-         optee_smc_open()     |     optee_smc_remove()
---------------------------------------------------------------
-struct optee *optee = tee_get_|
-drvdata(ctx->teedev); — (1)   |
-                              | struct optee *optee = platform_
-                              | get_drvdata(pdev);
-                              | ...
-                              | kfree(optee); — (2)
-u32 sec_caps = optee->smc.sec_|
-caps; — (3)
+Sorry if you received this letter in your spam or junk Email, is due to
+recent  connection error here in the country.
 
-Signed-off-by: Yoochan Lee <yoochan1026@gmail.com>
----
- drivers/tee/optee/optee_private.h |  1 +
- drivers/tee/optee/smc_abi.c       | 66 ++++++++++++++++++++++---------
- 2 files changed, 48 insertions(+), 19 deletions(-)
+further details of the Project will be forwarded to you as soon as I
+receive your wiliness to join hand with me.
 
-diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-index 04ae58892608..f52b1cf20eab 100644
---- a/drivers/tee/optee/optee_private.h
-+++ b/drivers/tee/optee/optee_private.h
-@@ -175,6 +175,7 @@ struct optee {
- 	bool   scan_bus_done;
- 	struct workqueue_struct *scan_bus_wq;
- 	struct work_struct scan_bus_work;
-+	struct kref refcnt;
- };
- 
- struct optee_session {
-diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index a1c1fa1a9c28..4fbec2acc255 100644
---- a/drivers/tee/optee/smc_abi.c
-+++ b/drivers/tee/optee/smc_abi.c
-@@ -1077,18 +1077,61 @@ static void optee_get_version(struct tee_device *teedev,
- 	*vers = v;
- }
- 
-+static void optee_smc_delete(struct kref *kref)
-+{
-+	struct optee *optee = container_of(kref, struct optee, refcnt);
-+
-+	/*
-+	 * Ask OP-TEE to free all cached shared memory objects to decrease
-+	 * reference counters and also avoid wild pointers in secure world
-+	 * into the old shared memory range.
-+	 */
-+	if (!optee->rpc_param_count)
-+		optee_disable_shm_cache(optee);
-+
-+	optee_smc_notif_uninit_irq(optee);
-+
-+	optee_remove_common(optee);
-+
-+	if (optee->smc.memremaped_shm)
-+		memunmap(optee->smc.memremaped_shm);
-+
-+	kfree(optee);
-+}
-+
-+static void optee_smc_release_supp(struct tee_context *ctx)
-+{
-+	struct optee *optee = tee_get_drvdata(ctx->teedev);
-+
-+	optee_release_helper(ctx, optee_close_session_helper);
-+	if (optee->scan_bus_wq) {
-+		destroy_workqueue(optee->scan_bus_wq);
-+		optee->scan_bus_wq = NULL;
-+	}
-+	optee_supp_release(&optee->supp);
-+	kref_put(&optee->refcnt, optee_smc_delete);
-+}
-+
-+static void optee_smc_release(struct tee_context *ctx)
-+{
-+	struct optee *optee = tee_get_drvdata(ctx->teedev);
-+
-+	optee_release_helper(ctx, optee_close_session_helper);
-+	kref_put(&optee->refcnt, optee_smc_delete);
-+}
-+
- static int optee_smc_open(struct tee_context *ctx)
- {
- 	struct optee *optee = tee_get_drvdata(ctx->teedev);
- 	u32 sec_caps = optee->smc.sec_caps;
--
-+	kref_get(&optee->refcnt);
- 	return optee_open(ctx, sec_caps & OPTEE_SMC_SEC_CAP_MEMREF_NULL);
- }
- 
- static const struct tee_driver_ops optee_clnt_ops = {
- 	.get_version = optee_get_version,
- 	.open = optee_smc_open,
--	.release = optee_release,
-+	.release = optee_smc_release,
- 	.open_session = optee_open_session,
- 	.close_session = optee_close_session,
- 	.invoke_func = optee_invoke_func,
-@@ -1106,7 +1149,7 @@ static const struct tee_desc optee_clnt_desc = {
- static const struct tee_driver_ops optee_supp_ops = {
- 	.get_version = optee_get_version,
- 	.open = optee_smc_open,
--	.release = optee_release_supp,
-+	.release = optee_smc_release_supp,
- 	.supp_recv = optee_supp_recv,
- 	.supp_send = optee_supp_send,
- 	.shm_register = optee_shm_register_supp,
-@@ -1319,22 +1362,7 @@ static int optee_smc_remove(struct platform_device *pdev)
- {
- 	struct optee *optee = platform_get_drvdata(pdev);
- 
--	/*
--	 * Ask OP-TEE to free all cached shared memory objects to decrease
--	 * reference counters and also avoid wild pointers in secure world
--	 * into the old shared memory range.
--	 */
--	if (!optee->rpc_param_count)
--		optee_disable_shm_cache(optee);
--
--	optee_smc_notif_uninit_irq(optee);
--
--	optee_remove_common(optee);
--
--	if (optee->smc.memremaped_shm)
--		memunmap(optee->smc.memremaped_shm);
--
--	kfree(optee);
-+	kref_put(&optee->refcnt, optee_smc_delete);
- 
- 	return 0;
- }
--- 
-2.39.0
+Am awaiting your urgent response with this information
 
+
+Have a nice day!!
+
+Mr.Alfa Nuru
