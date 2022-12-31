@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE85765A43A
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3591465A43B
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235580AbiLaMzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 07:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235583AbiLaMzq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235595AbiLaMzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 31 Dec 2022 07:55:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790B4131
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:55:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26357B80759
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 12:55:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF2C3C433D2;
-        Sat, 31 Dec 2022 12:55:39 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Zj+6Yeu6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672491338;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WtAEE7+A30698oarN7kLZng0aHalPx3eHSCK0c4NZ4Q=;
-        b=Zj+6Yeu6IKHkbjh3w8ulIKp0JX/VtWBFOj14CAflyHJ+n8iXBigBmLi7IeaTq0LN/SwKvo
-        TV9V5xhqF6m/qbS4UeCrqxRQdy4gg7/2lkMvFtOC395/Sk28Aolfo81AtWtFKmIOux4I0i
-        ZyK6onKXNIvl4UIycmmga0mTpmPM5oM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3a678b71 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 31 Dec 2022 12:55:38 +0000 (UTC)
-Date:   Sat, 31 Dec 2022 13:55:32 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Borislav Petkov <bp@alien8.de>, pbonzini@redhat.com,
-        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
-        philmd@linaro.org
-Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
- setup_data
-Message-ID: <Y7AxRMn7l8J512eZ@zx2c4.com>
-References: <Y6z765zHrQ6Rl/0o@zx2c4.com>
- <AF921575-0968-434A-8B46-095B78C209C1@zytor.com>
- <Y62MdawGaasXmoVL@zn.tnic>
- <Y68Js5b0jW/2nLU4@zx2c4.com>
- <Y68Zf/MKmX3Rr18E@zn.tnic>
- <CAHmME9oPUJemVRvO3HX0q4BJGTFuzbLYANeizuRcNq2=Ykk1Gg@mail.gmail.com>
- <Y69B40T9kWfxZpmf@zn.tnic>
- <E5D0A77E-5ABC-4978-9A66-37B60DA43869@zytor.com>
- <Y69h6ur79SMhu61F@zx2c4.com>
- <46466e54-25c3-3194-8546-a57cd4a80d9d@zytor.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232041AbiLaMzo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 31 Dec 2022 07:55:44 -0500
+Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD516584
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:55:40 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id BbOjpHciEYnG1BbOjpSbRh; Sat, 31 Dec 2022 13:55:39 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 31 Dec 2022 13:55:39 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <b34f4f8a-f169-a634-c2b9-1ac7d2ba7fb8@wanadoo.fr>
+Date:   Sat, 31 Dec 2022 13:55:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <46466e54-25c3-3194-8546-a57cd4a80d9d@zytor.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] watchdog: of_xilinx_wdt: Use devm_clk_get_enabled()
+ helper
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <71551233b18f57037be9e75d2d6428534d7572d3.1672491065.git.christophe.jaillet@wanadoo.fr>
+Content-Language: fr, en-GB
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <71551233b18f57037be9e75d2d6428534d7572d3.1672491065.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 05:06:55PM -0800, H. Peter Anvin wrote:
+Le 31/12/2022 à 13:51, Christophe JAILLET a écrit :
+> The devm_clk_get_enabled() helper:
+>     - calls devm_clk_get()
+>     - calls clk_prepare_enable() and registers what is needed in order to
+>       call clk_disable_unprepare() when needed, as a managed resource.
 > 
+> This simplifies the code and avoids the need of a dedicated function used
+> with devm_add_action_or_reset().
 > 
-> On 12/30/22 14:10, Jason A. Donenfeld wrote:
-> > On Fri, Dec 30, 2022 at 01:58:39PM -0800, H. Peter Anvin wrote:
-> >> See the other thread fork. They have identified the problem already.
-> > 
-> > Not sure I follow. Is there another thread where somebody worked out why
-> > this 62meg limit was happening?
-> > 
-> > Note that I sent v2/v3, to fix the original problem in a different way,
-> > and if that looks good to the QEMU maintainers, then we can all be happy
-> > with that. But I *haven't* addressed and still don't fully understand
-> > why the 62meg limit applied to my v1 in the way it does. Did you find a
-> > bug there to fix? If so, please do CC me.
-> > 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Note that the order of operations is slightly modified by this patch. The
+> clk is now prepare_enable()'ed before calling clk_get_rate().
+> ---
+>   drivers/watchdog/of_xilinx_wdt.c | 11 +----------
+>   1 file changed, 1 insertion(+), 10 deletions(-)
 > 
-> Yes, you yourself posted the problem:
-> 
-> > Then build qemu. Run it with `-kernel bzImage`, based on the kernel
-> > built with the .config I attached.
-> > 
-> > You'll see that the CPU triple faults when hitting this line:
-> > 
-> >         sd = (struct setup_data *)boot_params->hdr.setup_data;
-> >         while (sd) {
-> >                 unsigned long sd_addr = (unsigned long)sd;
-> > 
-> >                 kernel_add_identity_map(sd_addr, sd_addr + sizeof(*sd) + sd->len);  <----
-> >                 sd = (struct setup_data *)sd->next;
-> >         }
-> > 
-> > , because it dereferences *sd. This does not happen if the decompressed
-> > size of the kernel is < 62 megs.
-> > 
-> > So that's the "big and pretty serious" bug that might be worthy of
-> > investigation.
-> 
-> This needs to be something like:
-> 
-> kernel_add_identity_map(sd_addr, sd_addr + sizeof(*sd));
-> kernel_add_identity_map(sd_addr + sizeof(*sd),
-> 	sd_addr + sizeof(*sd) + sd->len);
-> 
+> diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+> index 3318544366b8..f184843380a3 100644
+> --- a/drivers/watchdog/of_xilinx_wdt.c
+> +++ b/drivers/watchdog/of_xilinx_wdt.c
+> @@ -193,7 +193,7 @@ static int xwdt_probe(struct platform_device *pdev)
+>   
+>   	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
+>   
+> -	xdev->clk = devm_clk_get(dev, NULL);
+> +	xdev->clk = devm_clk_get_enabled(dev, NULL);
+>   	if (IS_ERR(xdev->clk)) {
+>   		if (PTR_ERR(xdev->clk) != -ENOENT)
+>   			return PTR_ERR(xdev->clk);
+> @@ -211,15 +211,6 @@ static int xwdt_probe(struct platform_device *pdev)
+>   				 "The watchdog clock freq cannot be obtained\n");
+>   	} else {
+>   		pfreq = clk_get_rate(xdev->clk);
+> -		rc = clk_prepare_enable(xdev->clk);
+> -		if (rc) {
+> -			dev_err(dev, "unable to enable clock\n");
+> -			return rc;
+> -		}
+> -		rc = devm_add_action_or_reset(dev, xwdt_clk_disable_unprepare,
+> -					      xdev->clk);
+> -		if (rc)
+> -			return rc;
+>   	}
+>   
+>   	/*
 
-Oh, right, duh. Thanks for spelling it out.
+NACK.
 
-Jason
+This one is incomplet, xwdt_clk_disable_unprepare() should be removed 
+as-well.
+
+I'll send a v2.
+
+CJ
