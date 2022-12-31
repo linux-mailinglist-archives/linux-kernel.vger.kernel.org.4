@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013D265A2E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 07:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF73565A2E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 07:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbiLaGIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 01:08:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S231556AbiLaGP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 01:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbiLaGIl (ORCPT
+        with ESMTP id S229560AbiLaGPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 01:08:41 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FD7178A5;
-        Fri, 30 Dec 2022 22:08:41 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id y18-20020a0568301d9200b0067082cd4679so14230951oti.4;
-        Fri, 30 Dec 2022 22:08:41 -0800 (PST)
+        Sat, 31 Dec 2022 01:15:52 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25B82184;
+        Fri, 30 Dec 2022 22:15:50 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso27609028pjp.4;
+        Fri, 30 Dec 2022 22:15:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PB6nkYHwbeEU6BoPVup3kf2+k4tTb4RworfRekHpADE=;
-        b=kc6hmVULeBL/e4hBDUH8LlEO9h96/31TrQkGWpCU+BfBNu5COmTRSYoIiD5+XqrMSQ
-         6DhITkG8rzvzqPUja2u7q6gGtde27nXAqdZtOSa43QeWBsdnGAc5UQTsAlENzWeRpwgF
-         77gXfop2J4KwekCDszlMxreXl07Po8PHbEwLM1uXFQudtbTWdy6PpPkCTMajXkJjTuVp
-         hXRK8NOZ7Sx5eBlvfEstLgQ5O4NjkMCvzPStsjIlUgWLSso5ZcR5sHE+/8EO+M6S5vMP
-         Yxlqsm1Z7hm9WU8AvNhnybPfFoOsUUoC/du52jiT3EbvqCO+fI9wJtgszqcFQ0LDA4lL
-         eOcg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XTxSay/i9WQ4dxCAUT2dz6zIVT7ol76fefUCP0UN/RM=;
+        b=Nt1W8xTdkGOYoPUijeeuX8s4YIjNS2wjWPGIyapdWzeqemIj3EnvavGfK5yJYT95i0
+         q1Xb2UUL+WsnClwsFDvV/I3ww6sSYUid/tq0a8c4Z6jFPSvFDF3G8izJLvOTJumsio9R
+         sdmxRR6yFMPHG+TwKlpBCuXpxbtw42seDida5Km+OW13zKdEYsXfd3PmlKEleJPTnfIz
+         ga1fdyNStt2/EP2zhi+2CKsjxd9mLyMwrqIQH0IKDEvtosZ6EEji1Z8vHEp1GnBGBJNi
+         MwIh80/BKyODFDtbBPp98hZrRpU2CRAcGSnpGmIlOJwmLjyu1PRC1o7Lvp3LlDxPVT7c
+         rZdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PB6nkYHwbeEU6BoPVup3kf2+k4tTb4RworfRekHpADE=;
-        b=Qj/8b7v5lCeZAv82nZLwQy+keP7Ft6s5XwB+SdPw4MO2xRtpHNI5dY2HYMT0VdOMk1
-         QLyTBsbSiN90ctc2lZkt7mKbtx9c0OVOlCMJm8dWCa9rEot+c6SD0Iva8xQVHPuelq3B
-         xIE/YG9LvtQg+xX5weoP3Gp5I0Zx2wUd6C1OlYxrETQlK8CJ6xfplF8TTow+AZIcNIE/
-         RqjUoOZzSaM+ozUP6EKPeJnMxT/ZV/ESG1tFa5jFLL8/vhNSCOi/D+tY8EHtLkEGOSQd
-         +kLhsDbplFOCEHvemgRzxj8YvPDgdEm4YAtOwjtEOhJtxsvQXbGubsQ85C0EXKm46rXS
-         F/TA==
-X-Gm-Message-State: AFqh2koDVR+Npo4DH5Fp/aKRMsQ7aXx9sCxMW81j5/fO5VQUGJLkUVGs
-        +Yo4S2BBnLqYlw8ANwKU81QRjdzfWX8=
-X-Google-Smtp-Source: AMrXdXsc/45o+KW09Y2iUOhPUGyGhuiWnuGz2IAoXrcdgIlgurZ4WbOG4MbtpI7kwS75UX8RS5GAGA==
-X-Received: by 2002:a05:6830:1459:b0:66e:7442:7d2c with SMTP id w25-20020a056830145900b0066e74427d2cmr25376611otp.30.1672466920541;
-        Fri, 30 Dec 2022 22:08:40 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k25-20020a056830151900b0066e873e4c2csm11401715otp.45.2022.12.30.22.08.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 22:08:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 30 Dec 2022 22:08:38 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] watchdog: qcom: Use devm_clk_get_enabled() helper
-Message-ID: <20221231060838.GD2927444@roeck-us.net>
-References: <7c2d5f3815949faf6d3a0237a7b5f272f00a7ae9.1672418969.git.christophe.jaillet@wanadoo.fr>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XTxSay/i9WQ4dxCAUT2dz6zIVT7ol76fefUCP0UN/RM=;
+        b=gqzO0BrLa8tIzycQN8xRLrUOAp17rExvmbWOcHCNBoAI6guNlaevDtooh9U1Sva/L8
+         a9V0m4POyJZhF6VWM2pmlguPm2q162oCZame28pqM2l3MB5HM2rLmc1beEzpDTbA3m9E
+         4BYpJ83w7uza5Xa7gmDI5eDdllPESrKF64fMOLTBkqK0NUllh82D4Gvwcw+Kfs4Z0nnR
+         eCrvwMrMonte/wISK1NDterty3hg+4fplFd8M3nBJWs3SioTB1f0kGxv4mX7SmV2L57y
+         wfOhx2jZlXKhQjcnxvbMe+RyvwkvY195ELJjpHOH1BbfU2zhofJLAMryt6UwogUs2UXG
+         sqEA==
+X-Gm-Message-State: AFqh2komzmfTtLwqJGsAkwlIMikbRZp0DDkR5booalo2YzLbWEEA4k6J
+        N0SwlIrXOF44obmvJN/0V9Xd3nMOK70=
+X-Google-Smtp-Source: AMrXdXuuW8jn2iRfFI4TbEOIbR62mXJMnebxxJCl1+fnOSYBovjnIRVBN5Woet1CD1g0lWPR63lybQ==
+X-Received: by 2002:a17:902:c382:b0:191:4378:ec06 with SMTP id g2-20020a170902c38200b001914378ec06mr40443201plg.61.1672467350329;
+        Fri, 30 Dec 2022 22:15:50 -0800 (PST)
+Received: from localhost ([2600:1700:38c1:1d7f:f66d:4ff:fe3c:3ceb])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902e74400b00176dc67df44sm15977840plf.132.2022.12.30.22.15.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 30 Dec 2022 22:15:49 -0800 (PST)
+From:   Brian Norris <computersforpeace@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, <linux-kernel@vger.kernel.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] ASoC: qcom: lpass-cpu: Fix fallback SD line index handling
+Date:   Fri, 30 Dec 2022 22:15:45 -0800
+Message-Id: <20221231061545.2110253-1-computersforpeace@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7c2d5f3815949faf6d3a0237a7b5f272f00a7ae9.1672418969.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,62 +73,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 05:49:47PM +0100, Christophe JAILLET wrote:
-> The devm_clk_get_enabled() helper:
->    - calls devm_clk_get()
->    - calls clk_prepare_enable() and registers what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
-> 
-> This simplifies the code and avoids the need of a dedicated function used
-> with devm_add_action_or_reset().
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+These indices should reference the ID placed within the dai_driver
+array, not the indices of the array itself.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This fixes commit 4ff028f6c108 ("ASoC: qcom: lpass-cpu: Make I2S SD
+lines configurable"), which among others, broke IPQ8064 audio
+(sound/soc/qcom/lpass-ipq806x.c) because it uses ID 4 but we'd stop
+initializing the mi2s_playback_sd_mode and mi2s_capture_sd_mode arrays
+at ID 0.
 
-> ---
->  drivers/watchdog/qcom-wdt.c | 16 +---------------
->  1 file changed, 1 insertion(+), 15 deletions(-)
-> 
-> diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
-> index 0d2209c5eaca..d776474dcdf3 100644
-> --- a/drivers/watchdog/qcom-wdt.c
-> +++ b/drivers/watchdog/qcom-wdt.c
-> @@ -175,11 +175,6 @@ static const struct watchdog_info qcom_wdt_pt_info = {
->  	.identity	= KBUILD_MODNAME,
->  };
->  
-> -static void qcom_clk_disable_unprepare(void *data)
-> -{
-> -	clk_disable_unprepare(data);
-> -}
-> -
->  static const struct qcom_wdt_match_data match_data_apcs_tmr = {
->  	.offset = reg_offset_data_apcs_tmr,
->  	.pretimeout = false,
-> @@ -226,21 +221,12 @@ static int qcom_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(wdt->base))
->  		return PTR_ERR(wdt->base);
->  
-> -	clk = devm_clk_get(dev, NULL);
-> +	clk = devm_clk_get_enabled(dev, NULL);
->  	if (IS_ERR(clk)) {
->  		dev_err(dev, "failed to get input clock\n");
->  		return PTR_ERR(clk);
->  	}
->  
-> -	ret = clk_prepare_enable(clk);
-> -	if (ret) {
-> -		dev_err(dev, "failed to setup clock\n");
-> -		return ret;
-> -	}
-> -	ret = devm_add_action_or_reset(dev, qcom_clk_disable_unprepare, clk);
-> -	if (ret)
-> -		return ret;
-> -
->  	/*
->  	 * We use the clock rate to calculate the max timeout, so ensure it's
->  	 * not zero to avoid a divide-by-zero exception.
-> -- 
-> 2.34.1
-> 
+Fixes: 4ff028f6c108 ("ASoC: qcom: lpass-cpu: Make I2S SD lines configurable")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Brian Norris <computersforpeace@gmail.com>
+---
+ sound/soc/qcom/lpass-cpu.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/qcom/lpass-cpu.c b/sound/soc/qcom/lpass-cpu.c
+index 54353842dc07..dbdaaa85ce48 100644
+--- a/sound/soc/qcom/lpass-cpu.c
++++ b/sound/soc/qcom/lpass-cpu.c
+@@ -1037,10 +1037,11 @@ static void of_lpass_cpu_parse_dai_data(struct device *dev,
+ 					struct lpass_data *data)
+ {
+ 	struct device_node *node;
+-	int ret, id;
++	int ret, i, id;
+ 
+ 	/* Allow all channels by default for backwards compatibility */
+-	for (id = 0; id < data->variant->num_dai; id++) {
++	for (i = 0; i < data->variant->num_dai; i++) {
++		id = data->variant->dai_driver[i].id;
+ 		data->mi2s_playback_sd_mode[id] = LPAIF_I2SCTL_MODE_8CH;
+ 		data->mi2s_capture_sd_mode[id] = LPAIF_I2SCTL_MODE_8CH;
+ 	}
+-- 
+2.39.0
+
