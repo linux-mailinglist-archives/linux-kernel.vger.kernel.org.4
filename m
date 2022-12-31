@@ -2,126 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED79659FE6
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 01:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12B365A03E
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 02:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235917AbiLaAp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 19:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
+        id S235991AbiLaBHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 20:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235868AbiLaApY (ORCPT
+        with ESMTP id S235933AbiLaBHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 19:45:24 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C101DDE2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 16:45:23 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d15so23425007pls.6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 16:45:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rdAX1tY2lgADZc9s6/5hpXkndV7lITnERV5/PWeUdiA=;
-        b=Vao5WWjd1UgEofNPl1aierPhd/Cf1oGIeB6WQ9d9vhsZoWu8Xp9LutRYsWog343BPK
-         e4qPkflbnKppzaeWiaY5dK2guRg59JsriCyVrwJ1j9sFkU1ZWOwu3HClzSPPIIxuBwVb
-         Nc7AdXh9W4cXIJ70U8zeTGhuVfgAU1GsjLaZnQwx1ogp9zmdnpflWkr3aoxfih7PNKwX
-         uRTXmClZjmp+6QQjgdU/nMvQnr/ebIDie/33pSULnWCsRosbUqtLhdcjDfROo6HgsU5W
-         JjaTiWMC/A0KU6jNO96q+UoG2TfV+RvhO0SEzeum8fGw/2RJm+0WHvcbVAik5PnsEHmB
-         cv3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rdAX1tY2lgADZc9s6/5hpXkndV7lITnERV5/PWeUdiA=;
-        b=FrMZcV8yfSCLTNnxPkiCqxR5D2YdazGnq5l887sO8eK+RZTr7SU0vHZgzWfL4ZoKVg
-         93FliWTq/aiceqDB776UneaD5SH8bhbgNA2sOF4bTjTGS7dSY3+9vBklII9JhwspPTUY
-         IrfGwyK5CfHO5QkTvWHKqYh7dSHANFahDBRwZw5w+M61DxmMNOSLD6zkcjp+R87Gfcrq
-         OwVXBhQBNjq5qNzIBPA9aDbpjwacG78g8HY+yhkemeIzIAOm5qAIhxQfPHw0xQTVrt2Y
-         H0aGQobi+0nH8PZkpBZyAiibZwhS8Y+vOY+wD4EiXvB8hsOybJJi0LbZ5jcOs5ImrrzP
-         mLIg==
-X-Gm-Message-State: AFqh2kpplL0F8g9g2N415LO9XcQSwaiDPJfJ17trFBBVSftpDVxaEbPf
-        T1XS3sGHPxtvkPtvV0G/jBY=
-X-Google-Smtp-Source: AMrXdXuyApOuv5qCY8J2FgzYJc+bsRBanaTsj6EkHsFM+4+zkcC2mJp3YMio9MIcmFroPRZRqf6lyw==
-X-Received: by 2002:a17:902:c948:b0:188:c395:1756 with SMTP id i8-20020a170902c94800b00188c3951756mr47555051pla.41.1672447522835;
-        Fri, 30 Dec 2022 16:45:22 -0800 (PST)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:499d:36bb:724c:bd6e])
-        by smtp.gmail.com with ESMTPSA id e7-20020a17090301c700b00186c3af9644sm15573030plh.273.2022.12.30.16.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 16:45:22 -0800 (PST)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH v2] kcsan: test: don't put the expect array on the stack
-Date:   Fri, 30 Dec 2022 16:45:14 -0800
-Message-Id: <20221231004514.317809-1-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 30 Dec 2022 20:07:19 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945341573A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 17:07:18 -0800 (PST)
+Received: from [IPV6:2601:646:8600:40c1:5967:deb4:a714:2940] ([IPv6:2601:646:8600:40c1:5967:deb4:a714:2940])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BV170UU1463000
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 30 Dec 2022 17:07:01 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BV170UU1463000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022120601; t=1672448823;
+        bh=u08p8tRZoIJ4p+ilvqUkzflwpfqtfcHjfr46xtIIqN4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=klQ791Lknjvg8C6br7VX3DtRnuY/spsJ6m5ccDf8RiJMLdEZIn4gbvrNf1vbZHcYf
+         qkNzO2Q3QS/Snu5vC19/e2q8STbS6eDFZ2oo27TUacT+RkbL7k6E72WTsH8gZJ6pcu
+         ag6Mz5Cfec2Oj6QiJXK705bGSgS4ZCvZ9IyJF9Zc0H4y2PIGjmfkIA31yyoYzQQy/s
+         QzUdhVuv2vySfRcXPlcQjEnvPGkvWKxsDOfVI9TIlKXzTmHkPRO0jLboYRwO8tZCEr
+         OMl6jMfUqXUyXx5KhvuhRSZtPoQIcED+tBFnc9XbjTlhQ+3yyaKJtw3tWrkeiVUm4E
+         oJr3N2riwE94Q==
+Message-ID: <46466e54-25c3-3194-8546-a57cd4a80d9d@zytor.com>
+Date:   Fri, 30 Dec 2022 17:06:55 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
+ setup_data
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Borislav Petkov <bp@alien8.de>, pbonzini@redhat.com,
+        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
+        philmd@linaro.org
+References: <Y6x1knb8udpSyMSp@zx2c4.com>
+ <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com> <Y6z765zHrQ6Rl/0o@zx2c4.com>
+ <AF921575-0968-434A-8B46-095B78C209C1@zytor.com> <Y62MdawGaasXmoVL@zn.tnic>
+ <Y68Js5b0jW/2nLU4@zx2c4.com> <Y68Zf/MKmX3Rr18E@zn.tnic>
+ <CAHmME9oPUJemVRvO3HX0q4BJGTFuzbLYANeizuRcNq2=Ykk1Gg@mail.gmail.com>
+ <Y69B40T9kWfxZpmf@zn.tnic> <E5D0A77E-5ABC-4978-9A66-37B60DA43869@zytor.com>
+ <Y69h6ur79SMhu61F@zx2c4.com>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <Y69h6ur79SMhu61F@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Size of the 'expect' array in the __report_matches is 1536 bytes, which
-is exactly the default frame size warning limit of the xtensa
-architecture.
-As a result allmodconfig xtensa kernel builds with the gcc that does not
-support the compiler plugins (which otherwise would push the said
-warning limit to 2K) fail with the following message:
 
-  kernel/kcsan/kcsan_test.c:257:1: error: the frame size of 1680 bytes
-    is larger than 1536 bytes
 
-Fix it by dynamically alocating the 'expect' array.
+On 12/30/22 14:10, Jason A. Donenfeld wrote:
+> On Fri, Dec 30, 2022 at 01:58:39PM -0800, H. Peter Anvin wrote:
+>> See the other thread fork. They have identified the problem already.
+> 
+> Not sure I follow. Is there another thread where somebody worked out why
+> this 62meg limit was happening?
+> 
+> Note that I sent v2/v3, to fix the original problem in a different way,
+> and if that looks good to the QEMU maintainers, then we can all be happy
+> with that. But I *haven't* addressed and still don't fully understand
+> why the 62meg limit applied to my v1 in the way it does. Did you find a
+> bug there to fix? If so, please do CC me.
+> 
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
-Changes v1->v2:
-- add WARN_ON in case of kmalloc failure
+Yes, you yourself posted the problem:
 
- kernel/kcsan/kcsan_test.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+> Then build qemu. Run it with `-kernel bzImage`, based on the kernel
+> built with the .config I attached.
+> 
+> You'll see that the CPU triple faults when hitting this line:
+> 
+>         sd = (struct setup_data *)boot_params->hdr.setup_data;
+>         while (sd) {
+>                 unsigned long sd_addr = (unsigned long)sd;
+> 
+>                 kernel_add_identity_map(sd_addr, sd_addr + sizeof(*sd) + sd->len);  <----
+>                 sd = (struct setup_data *)sd->next;
+>         }
+> 
+> , because it dereferences *sd. This does not happen if the decompressed
+> size of the kernel is < 62 megs.
+> 
+> So that's the "big and pretty serious" bug that might be worthy of
+> investigation.
 
-diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
-index dcec1b743c69..a60c561724be 100644
---- a/kernel/kcsan/kcsan_test.c
-+++ b/kernel/kcsan/kcsan_test.c
-@@ -159,7 +159,7 @@ static bool __report_matches(const struct expect_report *r)
- 	const bool is_assert = (r->access[0].type | r->access[1].type) & KCSAN_ACCESS_ASSERT;
- 	bool ret = false;
- 	unsigned long flags;
--	typeof(observed.lines) expect;
-+	typeof(*observed.lines) *expect;
- 	const char *end;
- 	char *cur;
- 	int i;
-@@ -168,6 +168,10 @@ static bool __report_matches(const struct expect_report *r)
- 	if (!report_available())
- 		return false;
- 
-+	expect = kmalloc(sizeof(observed.lines), GFP_KERNEL);
-+	if (WARN_ON(!expect))
-+		return false;
-+
- 	/* Generate expected report contents. */
- 
- 	/* Title */
-@@ -253,6 +257,7 @@ static bool __report_matches(const struct expect_report *r)
- 		strstr(observed.lines[2], expect[1])));
- out:
- 	spin_unlock_irqrestore(&observed.lock, flags);
-+	kfree(expect);
- 	return ret;
- }
- 
--- 
-2.30.2
+This needs to be something like:
 
+kernel_add_identity_map(sd_addr, sd_addr + sizeof(*sd));
+kernel_add_identity_map(sd_addr + sizeof(*sd),
+	sd_addr + sizeof(*sd) + sd->len);
+
+
+TThe 62 MB limit mentioned in boot.rst is unrelated, and only applies to 
+very, very old kernels that used INT 15h, AH=88h to probe memory.
+
+	-hpa
