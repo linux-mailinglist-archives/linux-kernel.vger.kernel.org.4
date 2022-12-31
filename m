@@ -2,217 +2,523 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E28465A48D
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D9465A48F
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235722AbiLaNIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 08:08:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S232100AbiLaNJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 08:09:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235707AbiLaNIG (ORCPT
+        with ESMTP id S231970AbiLaNJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 08:08:06 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A4263E9
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 05:08:04 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id 20so11028907plo.3
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 05:08:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X0IXPVtq9K1twOTm6NDDEYDtsm5gy6I4CxkJN0usls4=;
-        b=NPUExoCXn3bv8cVrXHBiUZJGue0soQHb0G96tLN0n+eLz1Y50SDNQycB5NyZt/PrWK
-         I5k3uGeMmYGPn1HASohpdtr4BCdHvND+EgsZkkoIajo6b7Ztmme+b2k2ill/YfPT5Vgq
-         EfCjIyK+VBql5cb4wXG3/pVmg0ymjASCkQQ4M1ZtolzRnpmqpwFzt+5hsu/as449mZEO
-         6qQBkj9ToM7FtoEqQNAjSDdGT50UpqLY6z4xjbUuCGrcJKQXYbz7IBEcFYKsCMp4Yl+Y
-         bT6BjZrOhtvlvJSlellsMcOE9bf4raX5DDV3/RIxUwn00hSGiHO/ZbLvDHkPGHNR9dTB
-         ShOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X0IXPVtq9K1twOTm6NDDEYDtsm5gy6I4CxkJN0usls4=;
-        b=OHJp/yH6NhVRcQrg5aByplmTnwvVZwo5yLG4wOB0UgNo3t/CdnbbFlnbr9mN7NQvfs
-         F3Hdm2pdze9A44Wv9UfZAqvSYQ9h4f1i/x/nsWIfjKQkOHnYEZyDOWJ+PPjURkAozL7K
-         93l3vWePS1xGy5zM1m6POLIrKibDVRMDbSFcxAT0vfsvlj2ZaigbcwuvzKB08nIGyQs8
-         d5y130NZsZbUDxMvnHsuffHBj7grjWf4QSbGtLmLZwz3XJZLtFLPY7bOA40duFb0EtDt
-         bXwmJJT88JHYfyP0xD9f63w3qqM9b/vNUKo947gbd2Hxc+LYsuLOETyNsZ9yObJhTOPb
-         EdQw==
-X-Gm-Message-State: AFqh2kpvTLIBhs/QkWoU6/kidGTxVT13n1idJLH/lMMNeRf6c0HFxkPl
-        RuwaTg/WHotPHNZpNVV90pnu9A==
-X-Google-Smtp-Source: AMrXdXuqJjc0Lfay/2Vg+JTsADhCB4qlilRKlTowJFlv2eMMxqzXbSnqX9K3pDAVuk7FzJ9S2PurLg==
-X-Received: by 2002:a17:90a:1bc7:b0:223:b680:d78b with SMTP id r7-20020a17090a1bc700b00223b680d78bmr36330841pjr.37.1672492083968;
-        Sat, 31 Dec 2022 05:08:03 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:1c5e:e3b5:c341:16de:ce17:b857])
-        by smtp.gmail.com with ESMTPSA id d7-20020a17090ab30700b0021904307a53sm14568161pjr.19.2022.12.31.05.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 05:08:03 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     quic_schowdhu@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        bhupesh.sharma@linaro.org, robh+dt@kernel.org
-Subject: [PATCH 2/2] usb: misc: eud: Add driver support for SM6115 / SM4250
-Date:   Sat, 31 Dec 2022 18:37:43 +0530
-Message-Id: <20221231130743.3285664-3-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221231130743.3285664-1-bhupesh.sharma@linaro.org>
-References: <20221231130743.3285664-1-bhupesh.sharma@linaro.org>
+        Sat, 31 Dec 2022 08:09:13 -0500
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915A8625C;
+        Sat, 31 Dec 2022 05:09:09 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id 306C514E8;
+        Sat, 31 Dec 2022 14:09:08 +0100 (CET)
+Authentication-Results: ext-mx-out001.mykolab.com (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        content-transfer-encoding:content-type:content-type:mime-version
+        :message-id:date:date:subject:subject:from:from:received
+        :received:received; s=dkim20160331; t=1672492144; x=1674306545;
+         bh=YOOiMVI+YJfPJn05MLBgtE14A8ubRE6O7hwdrnaWcYE=; b=Xm/yHTeuwG70
+        3sW+I6TRSXb3Zkbesc60iDiLD1RiCLXKooLpbmKQc+GKxuDbL/m9iDZGkdEgcceM
+        ylIC8A2NO+TaygMMM0odsALYYFtDTKUYUoSN0Fi7jzPZr44M4gRbjeFTYNU8tve/
+        j+Wm3Yt2JU22fQ9i+QMgzg8bOkZqHYBujF61MiaRuwxf7EV+vBju49xRmwdTVPkb
+        8e/rHCpPmmb1ZoT6zwflNDkUQ44ezV04xh6cL10p8QpDii/lFA5kUrrH4XnspMUS
+        Z5TJN8chpA0KSxnpxmbN+Bro1+4rCYC9/Q/KRXbELzf9YL2sMxmuFAlnKCbBLBc2
+        LOJE33ovwDK4h5yXlmUasO0cpjSfgiJBlTR2BbXOXtjhP8KhPBR6mOTTIfxCumIQ
+        HM6xO+OTLEz0cpKe5tecpBzFzRq1F75F+CKM7lBIm3tWqF3nBHtVzsJ57sq1wkgC
+        Yyvq+hf6XFv8/sbpMzhJ+Tl+iWYBAlPJxPKwAdJwYQWS3UXbu1hi2u593lH3YrVF
+        RaAMMek2ZLSyEm8V5bckFBSmgwcF/XkCB13o5F89sQMQsc/GYu4MJSPU9sC3ZTq5
+        VOh1Dw0OTpVoBoYVjgouZ3aID2iBXtlBkMCILGtqU9uf0PCEzuLWHaDPZloIe9/h
+        3nJuOEwAEyEbjBL+dizM2C9glAUSiWc=
+X-Virus-Scanned: amavisd-new at mykolab.com
+X-Spam-Score: -1.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+Received: from mx.kolabnow.com ([127.0.0.1])
+        by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id l7I7eI3ZZRmn; Sat, 31 Dec 2022 14:09:04 +0100 (CET)
+Received: from int-mx001.mykolab.com (unknown [10.9.13.1])
+        by mx.kolabnow.com (Postfix) with ESMTPS id 4DF8814D3;
+        Sat, 31 Dec 2022 14:09:04 +0100 (CET)
+Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
+        by int-mx001.mykolab.com (Postfix) with ESMTPS id CCC0B5E6;
+        Sat, 31 Dec 2022 14:09:03 +0100 (CET)
+From:   Federico Vaga <federico.vaga@vaga.pv.it>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Federico Vaga <federico.vaga@vaga.pv.it>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V4] doc:it_IT: align Italian documentation
+Date:   Sat, 31 Dec 2022 14:08:49 +0100
+Message-Id: <20221231130849.4675-1-federico.vaga@vaga.pv.it>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
+Translation for the following patches
 
-On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-needs to be accessed only via the secure world (through 'scm'
-calls).
+commit da4288b95baa ("scripts/check-local-export: avoid 'wait $!' for process substitution")
+commit 5372de4e4545 ("docs/doc-guide: Put meta title for kernel-doc HTML page")
+commit 4d627ef12b40 ("docs/doc-guide: Mention make variable SPHINXDIRS")
+commit 7c43214dddfd ("docs/doc-guide: Add footnote on Inkscape for better images in PDF documents")
+commit 615041d42a1a ("docs: kernel-docs: shorten the lengthy doc title")
+commit cbf4adfd4d19 ("Documentation: process: Update email client instructions for Thunderbird")
+commit e72b3b9810dd ("maintainer-pgp-guide: minor wording tweaks")
+commit ea522496afa1 ("Documentation: process: replace outdated LTS table w/ link")
+commit 93431e0607e5 ("Replace HTTP links with HTTPS ones: documentation")
+commit e648174b53f1 ("Documentation: Fix spelling mistake in hacking.rst")
+commit 602684adb42a ("docs: Update version number from 5.x to 6.x in README.rst")
+commit 489876063fb1 ("docs: add a man-pages link to the front page")
+commit 0c7b4366f1ab ("docs: Rewrite the front page")
 
-Also, the enable bit inside 'tcsr_check_reg' needs to be set
-first to set the eud in 'enable' mode on these SoCs.
-
-Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
 ---
- drivers/usb/misc/qcom_eud.c | 49 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 46 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-index b7f13df007646..a96ca28a4899b 100644
---- a/drivers/usb/misc/qcom_eud.c
-+++ b/drivers/usb/misc/qcom_eud.c
-@@ -11,7 +11,9 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
-+#include <linux/qcom_scm.h>
- #include <linux/slab.h>
- #include <linux/sysfs.h>
- #include <linux/usb/role.h>
-@@ -30,15 +32,24 @@
- #define EUD_INT_SAFE_MODE	BIT(4)
- #define EUD_INT_ALL		(EUD_INT_VBUS | EUD_INT_SAFE_MODE)
+V1 -> V2 fix typo in footnote link
+V2 -> V3 restore latex directive to disable CJK
+V3 -> V4 really restore latex directive with its original indentation
+
+ .../translations/it_IT/admin-guide/README.rst |  2 +-
+ .../it_IT/doc-guide/kernel-doc.rst            |  2 +
+ .../translations/it_IT/doc-guide/sphinx.rst   | 14 ++-
+ Documentation/translations/it_IT/index.rst    | 89 +++++++++----------
+ .../it_IT/kernel-hacking/hacking.rst          |  2 +-
+ .../translations/it_IT/process/2.Process.rst  | 15 +---
+ .../it_IT/process/7.AdvancedTopics.rst        |  8 +-
+ .../translations/it_IT/process/changes.rst    | 11 +++
+ .../it_IT/process/email-clients.rst           | 67 +++++++++-----
+ .../it_IT/process/kernel-docs.rst             |  4 +-
+ .../it_IT/process/maintainer-pgp-guide.rst    |  4 +-
+ 11 files changed, 127 insertions(+), 91 deletions(-)
+
+diff --git a/Documentation/translations/it_IT/admin-guide/README.rst b/Documentation/translations/it_IT/admin-guide/README.rst
+index b37166817842..c874586a9af9 100644
+--- a/Documentation/translations/it_IT/admin-guide/README.rst
++++ b/Documentation/translations/it_IT/admin-guide/README.rst
+@@ -4,7 +4,7 @@
  
-+struct eud_soc_data {
-+	bool secure_eud_en;
-+	bool tcsr_check_enable;
-+};
-+
- struct eud_chip {
- 	struct device			*dev;
- 	struct usb_role_switch		*role_sw;
-+	const struct eud_soc_data	*eud_data;
- 	void __iomem			*base;
- 	void __iomem			*mode_mgr;
- 	unsigned int			int_status;
- 	int				irq;
- 	bool				enabled;
- 	bool				usb_attached;
-+	phys_addr_t			mode_mgr_phys_base;
-+	phys_addr_t			tcsr_check_phys_base;
-+
- };
+ .. _it_readme:
  
- static int enable_eud(struct eud_chip *priv)
-@@ -46,7 +57,11 @@ static int enable_eud(struct eud_chip *priv)
- 	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
- 	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
- 			priv->base + EUD_REG_INT1_EN_MASK);
--	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-+
-+	if (priv->eud_data->secure_eud_en)
-+		qcom_scm_io_writel(priv->mode_mgr_phys_base + EUD_REG_EUD_EN2, BIT(0));
-+	else
-+		writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
+-Rilascio del kernel Linux  5.x <http://kernel.org/>
++Rilascio del kernel Linux  6.x <http://kernel.org/>
+ ===================================================
  
- 	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
- }
-@@ -54,7 +69,11 @@ static int enable_eud(struct eud_chip *priv)
- static void disable_eud(struct eud_chip *priv)
- {
- 	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
--	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-+
-+	if (priv->eud_data->secure_eud_en)
-+		qcom_scm_io_writel(priv->mode_mgr_phys_base + EUD_REG_EUD_EN2, 0);
-+	else
-+		writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
- }
+ .. warning::
+diff --git a/Documentation/translations/it_IT/doc-guide/kernel-doc.rst b/Documentation/translations/it_IT/doc-guide/kernel-doc.rst
+index 78082281acf9..5cece223b46b 100644
+--- a/Documentation/translations/it_IT/doc-guide/kernel-doc.rst
++++ b/Documentation/translations/it_IT/doc-guide/kernel-doc.rst
+@@ -3,6 +3,8 @@
+ .. note:: Per leggere la documentazione originale in inglese:
+ 	  :ref:`Documentation/doc-guide/index.rst <doc_guide>`
  
- static ssize_t enable_show(struct device *dev,
-@@ -178,12 +197,15 @@ static void eud_role_switch_release(void *data)
- static int eud_probe(struct platform_device *pdev)
- {
- 	struct eud_chip *chip;
-+	struct resource *res;
- 	int ret;
- 
- 	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
- 	if (!chip)
- 		return -ENOMEM;
- 
-+	chip->eud_data = of_device_get_match_data(&pdev->dev);
++.. title:: Commenti in kernel-doc
 +
- 	chip->dev = &pdev->dev;
+ .. _it_kernel_doc:
  
- 	chip->role_sw = usb_role_switch_get(&pdev->dev);
-@@ -200,10 +222,25 @@ static int eud_probe(struct platform_device *pdev)
- 	if (IS_ERR(chip->base))
- 		return PTR_ERR(chip->base);
+ =================================
+diff --git a/Documentation/translations/it_IT/doc-guide/sphinx.rst b/Documentation/translations/it_IT/doc-guide/sphinx.rst
+index 64528790dc34..1f513bc33618 100644
+--- a/Documentation/translations/it_IT/doc-guide/sphinx.rst
++++ b/Documentation/translations/it_IT/doc-guide/sphinx.rst
+@@ -151,7 +151,8 @@ Ovviamente, per generare la documentazione, Sphinx (``sphinx-build``)
+ dev'essere installato. Se disponibile, il tema *Read the Docs* per Sphinx
+ verrà utilizzato per ottenere una documentazione HTML più gradevole.
+ Per la documentazione in formato PDF, invece, avrete bisogno di ``XeLaTeX`
+-e di ``convert(1)`` disponibile in ImageMagick (https://www.imagemagick.org).
++e di ``convert(1)`` disponibile in ImageMagick
++(https://www.imagemagick.org). \ [#ink]_
+ Tipicamente, tutti questi pacchetti sono disponibili e pacchettizzati nelle
+ distribuzioni Linux.
  
--	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-+	chip->mode_mgr = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
- 	if (IS_ERR(chip->mode_mgr))
- 		return PTR_ERR(chip->mode_mgr);
+@@ -162,9 +163,20 @@ la generazione potete usare il seguente comando ``make SPHINXOPTS=-v htmldocs``.
+ Potete anche personalizzare l'ouptut html passando un livello aggiuntivo
+ DOCS_CSS usando la rispettiva variabile d'ambiente ``DOCS_CSS``.
  
-+	if (chip->eud_data->secure_eud_en)
-+		chip->mode_mgr_phys_base = res->start;
++La variable make ``SPHINXDIRS`` è utile quando si vuole generare solo una parte
++della documentazione. Per esempio, si possono generare solo di documenti in
++``Documentation/doc-guide`` eseguendo ``make SPHINXDIRS=doc-guide htmldocs``. La
++sezione dedicata alla documentazione di ``make help`` vi mostrerà quali sotto
++cartelle potete specificare.
 +
-+	if (chip->eud_data->tcsr_check_enable) {
-+		res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
-+		if (!res)
-+			return dev_err_probe(chip->dev, -ENODEV, "failed to get tcsr reg base\n");
-+
-+		chip->tcsr_check_phys_base = res->start;
-+
-+		ret = qcom_scm_io_writel(chip->tcsr_check_phys_base, BIT(0));
-+		if (ret)
-+			return dev_err_probe(chip->dev, ret, "failed to write tcsr check reg\n");
-+	}
-+
- 	chip->irq = platform_get_irq(pdev, 0);
- 	ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
- 			handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
-@@ -230,8 +267,14 @@ static int eud_remove(struct platform_device *pdev)
- 	return 0;
- }
+ Potete eliminare la documentazione generata tramite il comando
+ ``make cleandocs``.
  
-+static const struct eud_soc_data sm6115_eud_data = {
-+	.secure_eud_en = true,
-+	.tcsr_check_enable = true,
-+};
++.. [#ink] Avere installato anche ``inkscape(1)`` dal progetto Inkscape ()
++          potrebbe aumentare la qualità delle immagini che verranno integrate
++          nel documento PDF, specialmente per quando si usando rilasci del
++          kernel uguali o superiori a 5.18
 +
- static const struct of_device_id eud_dt_match[] = {
- 	{ .compatible = "qcom,sc7280-eud" },
-+	{ .compatible = "qcom,sm6115-eud", .data = &sm6115_eud_data },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, eud_dt_match);
+ Scrivere la documentazione
+ ==========================
+ 
+diff --git a/Documentation/translations/it_IT/index.rst b/Documentation/translations/it_IT/index.rst
+index e80a3097aa57..fc5f39814e83 100644
+--- a/Documentation/translations/it_IT/index.rst
++++ b/Documentation/translations/it_IT/index.rst
+@@ -1,3 +1,5 @@
++.. SPDX-License-Identifier: GPL-2.0
++
+ .. _it_linux_doc:
+ 
+ ===================
+@@ -67,75 +69,68 @@ I miglioramenti alla documentazione sono sempre i benvenuti; per cui,
+ se vuoi aiutare, iscriviti alla lista di discussione linux-doc presso
+ vger.kernel.org.
+ 
+-Documentazione sulla licenza dei sorgenti
+------------------------------------------
+-
+-I seguenti documenti descrivono la licenza usata nei sorgenti del kernel Linux
+-(GPLv2), come licenziare i singoli file; inoltre troverete i riferimenti al
+-testo integrale della licenza.
++Lavorare con la comunità di sviluppo
++------------------------------------
+ 
+-* :ref:`it_kernel_licensing`
++Le guide fondamentali per l'interazione con la comunità di sviluppo del kernel e
++su come vedere il proprio lavoro integrato.
+ 
+-Documentazione per gli utenti
+------------------------------
+-
+-I seguenti manuali sono scritti per gli *utenti* del kernel - ovvero,
+-coloro che cercano di farlo funzionare in modo ottimale su un dato sistema
+-
+-.. warning::
++.. toctree::
++   :maxdepth: 1
+ 
+-    TODO ancora da tradurre
++   process/development-process
++   process/submitting-patches
++   Code of conduct <process/code-of-conduct>
++   All development-process docs <process/index>
+ 
+-Documentazione per gli sviluppatori di applicazioni
+----------------------------------------------------
+ 
+-Il manuale delle API verso lo spazio utente è una collezione di documenti
+-che descrivono le interfacce del kernel viste dagli sviluppatori
+-di applicazioni.
++Manuali sull'API interna
++------------------------
+ 
+-.. warning::
++Di seguito una serie di manuali per gli sviluppatori che hanno bisogno di
++interfacciarsi con il resto del kernel.
+ 
+-    TODO ancora da tradurre
++.. toctree::
++   :maxdepth: 1
+ 
++   core-api/index
+ 
+-Introduzione allo sviluppo del kernel
+--------------------------------------
++Strumenti e processi per lo sviluppo
++------------------------------------
+ 
+-Questi manuali contengono informazioni su come contribuire allo sviluppo
+-del kernel.
+-Attorno al kernel Linux gira una comunità molto grande con migliaia di
+-sviluppatori che contribuiscono ogni anno. Come in ogni grande comunità,
+-sapere come le cose vengono fatte renderà il processo di integrazione delle
+-vostre modifiche molto più semplice
++Di seguito una serie di manuali contenenti informazioni utili a tutti gli
++sviluppatori del kernel.
+ 
+ .. toctree::
+-   :maxdepth: 2
++   :maxdepth: 1
+ 
+-   process/index
++   process/license-rules
+    doc-guide/index
+    kernel-hacking/index
+ 
+-Documentazione della API del kernel
+------------------------------------
++Documentazione per gli utenti
++-----------------------------
+ 
+-Questi manuali forniscono dettagli su come funzionano i sottosistemi del
+-kernel dal punto di vista degli sviluppatori del kernel. Molte delle
+-informazioni contenute in questi manuali sono prese direttamente dai
+-file sorgenti, informazioni aggiuntive vengono aggiunte solo se necessarie
+-(o almeno ci proviamo — probabilmente *non* tutto quello che è davvero
+-necessario).
++Di seguito una serie di manuali per gli *utenti* del kernel - ovvero coloro che
++stanno cercando di farlo funzionare al meglio per un dato sistema, ma anche
++coloro che stanno sviluppando applicazioni che sfruttano l'API verso lo
++spazio-utente.
+ 
+-.. toctree::
+-   :maxdepth: 2
++Consultate anche `Linux man pages <https://www.kernel.org/doc/man-pages/>`_, che
++vengono mantenuti separatamente dalla documentazione del kernel Linux
++
++Documentazione relativa ai firmware
++-----------------------------------
++Di seguito informazioni sulle aspettative del kernel circa i firmware.
+ 
+-   core-api/index
+ 
+ Documentazione specifica per architettura
+ -----------------------------------------
+ 
+-Questi manuali forniscono dettagli di programmazione per le diverse
+-implementazioni d'architettura.
+ 
+-.. warning::
++Documentazione varia
++--------------------
+ 
+-    TODO ancora da tradurre
++Ci sono documenti che sono difficili da inserire nell'attuale organizzazione
++della documentazione; altri hanno bisogno di essere migliorati e/o convertiti
++nel formato *ReStructured Text*; altri sono semplicamente troppo vecchi.
+diff --git a/Documentation/translations/it_IT/kernel-hacking/hacking.rst b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
+index 560f1d0482d2..dd06bfc1a050 100644
+--- a/Documentation/translations/it_IT/kernel-hacking/hacking.rst
++++ b/Documentation/translations/it_IT/kernel-hacking/hacking.rst
+@@ -137,7 +137,7 @@ macro :c:func:`in_softirq()` (``include/linux/preempt.h``).
+ .. warning::
+ 
+     State attenti che questa macro ritornerà un falso positivo
+-    se :ref:`botton half lock <it_local_bh_disable>` è bloccato.
++    se :ref:`bottom half lock <it_local_bh_disable>` è bloccato.
+ 
+ Alcune regole basilari
+ ======================
+diff --git a/Documentation/translations/it_IT/process/2.Process.rst b/Documentation/translations/it_IT/process/2.Process.rst
+index 62826034e0b2..25cd00351c03 100644
+--- a/Documentation/translations/it_IT/process/2.Process.rst
++++ b/Documentation/translations/it_IT/process/2.Process.rst
+@@ -136,18 +136,11 @@ Quindi, per esempio, la storia del kernel 5.2 appare così (anno 2019):
+ La 5.2.21 fu l'aggiornamento finale per la versione 5.2.
+ 
+ Alcuni kernel sono destinati ad essere kernel a "lungo termine"; questi
+-riceveranno assistenza per un lungo periodo di tempo.  Al momento in cui
+-scriviamo, i manutentori dei kernel stabili a lungo termine sono:
+-
+-	======  ================================  ==========================================
+-	3.16	Ben Hutchings			  (kernel stabile molto più a lungo termine)
+-	4.4	Greg Kroah-Hartman e Sasha Levin  (kernel stabile molto più a lungo termine)
+-	4.9	Greg Kroah-Hartman e Sasha Levin
+-	4.14	Greg Kroah-Hartman e Sasha Levin
+-	4.19	Greg Kroah-Hartman e Sasha Levin
+-	5.4i	Greg Kroah-Hartman e Sasha Levin
+-	======  ================================  ==========================================
++riceveranno assistenza per un lungo periodo di tempo. Consultate il seguente
++collegamento per avere la lista delle versioni attualmente supportate e i
++relativi manutentori:
+ 
++       https://www.kernel.org/category/releases.html
+ 
+ Questa selezione di kernel di lungo periodo sono puramente dovuti ai loro
+ manutentori, alla loro necessità e al tempo per tenere aggiornate proprio
+diff --git a/Documentation/translations/it_IT/process/7.AdvancedTopics.rst b/Documentation/translations/it_IT/process/7.AdvancedTopics.rst
+index cc1cff5d23ae..dffd813a0910 100644
+--- a/Documentation/translations/it_IT/process/7.AdvancedTopics.rst
++++ b/Documentation/translations/it_IT/process/7.AdvancedTopics.rst
+@@ -35,9 +35,9 @@ git è parte del processo di sviluppo del kernel.  Gli sviluppatori che
+ desiderassero diventare agili con git troveranno più informazioni ai
+ seguenti indirizzi:
+ 
+-	http://git-scm.com/
++	https://git-scm.com/
+ 
+-	http://www.kernel.org/pub/software/scm/git/docs/user-manual.html
++	https://www.kernel.org/pub/software/scm/git/docs/user-manual.html
+ 
+ e su varie guide che potrete trovare su internet.
+ 
+@@ -63,7 +63,7 @@ eseguire git-daemon è relativamente semplice .  Altrimenti, iniziano a
+ svilupparsi piattaforme che offrono spazi pubblici, e gratuiti (Github,
+ per esempio).  Gli sviluppatori permanenti possono ottenere un account
+ su kernel.org, ma non è proprio facile da ottenere; per maggiori informazioni
+-consultate la pagina web http://kernel.org/faq/.
++consultate la pagina web https://kernel.org/faq/.
+ 
+ In git è normale avere a che fare con tanti rami.  Ogni linea di sviluppo
+ può essere separata in "rami per argomenti" e gestiti indipendentemente.
+@@ -137,7 +137,7 @@ vostri rami.  Citando Linus
+ 	facendo, e ho bisogno di fidarmi *senza* dover passare tutte
+ 	le modifiche manualmente una per una.
+ 
+-(http://lwn.net/Articles/224135/).
++(https://lwn.net/Articles/224135/).
+ 
+ Per evitare queste situazioni, assicuratevi che tutte le patch in un ramo
+ siano strettamente correlate al tema delle modifiche; un ramo "driver fixes"
+diff --git a/Documentation/translations/it_IT/process/changes.rst b/Documentation/translations/it_IT/process/changes.rst
+index 10e0ef9c34b7..473ec2cc558e 100644
+--- a/Documentation/translations/it_IT/process/changes.rst
++++ b/Documentation/translations/it_IT/process/changes.rst
+@@ -35,6 +35,7 @@ PC Card, per esempio, probabilmente non dovreste preoccuparvi di pcmciautils.
+ GNU C                  5.1                gcc --version
+ Clang/LLVM (optional)  11.0.0             clang --version
+ GNU make               3.81               make --version
++bash                   4.2                bash --version
+ binutils               2.23               ld -v
+ flex                   2.5.35             flex --version
+ bison                  2.0                bison --version
+@@ -88,6 +89,11 @@ Make
+ 
+ Per compilare il kernel vi servirà GNU make 3.81 o successivo.
+ 
++Bash
++----
++Per generare il kernel vengono usati alcuni script per bash.
++Questo richiede bash 4.2 o successivo.
++
+ Binutils
+ --------
+ 
+@@ -370,6 +376,11 @@ Make
+ 
+ - <ftp://ftp.gnu.org/gnu/make/>
+ 
++Bash
++----
++
++- <ftp://ftp.gnu.org/gnu/bash/>
++
+ Binutils
+ --------
+ 
+diff --git a/Documentation/translations/it_IT/process/email-clients.rst b/Documentation/translations/it_IT/process/email-clients.rst
+index b792f2f06a74..970671cd91af 100644
+--- a/Documentation/translations/it_IT/process/email-clients.rst
++++ b/Documentation/translations/it_IT/process/email-clients.rst
+@@ -288,37 +288,62 @@ Thunderbird (GUI)
+ Thunderbird è un clone di Outlook a cui piace maciullare il testo, ma esistono
+ modi per impedirglielo.
+ 
++Dopo la configurazione, inclusa l'installazione delle estenzioni, dovrete
++riavviare Thunderbird.
++
+ - permettere l'uso di editor esterni:
++
+   La cosa più semplice da fare con Thunderbird e le patch è quello di usare
+-  l'estensione "external editor" e di usare il vostro ``$EDITOR`` preferito per
+-  leggere/includere patch nel vostro messaggio.  Per farlo, scaricate ed
+-  installate l'estensione e aggiungete un bottone per chiamarla rapidamente
+-  usando :menuselection:`Visualizza-->Barra degli strumenti-->Personalizza...`;
+-  una volta fatto potrete richiamarlo premendo sul bottone mentre siete nella
+-  finestra :menuselection:`Scrivi`
+-
+-  Tenete presente che "external editor" richiede che il vostro editor non
+-  faccia alcun fork, in altre parole, l'editor non deve ritornare prima di
+-  essere stato chiuso.  Potreste dover passare dei parametri aggiuntivi al
+-  vostro editor oppure cambiargli la configurazione.  Per esempio, usando
+-  gvim dovrete aggiungere l'opzione -f ``/usr/bin/gvim -f`` (Se il binario
+-  si trova in ``/usr/bin``) nell'apposito campo nell'interfaccia di
+-  configurazione di  :menuselection:`external editor`.  Se usate altri editor
+-  consultate il loro  manuale per sapere come configurarli.
++  estensioni che permettano di aprire il vostro editor preferito.
++
++  Di seguito alcune estensioni che possono essere utili al caso.
++
++  - "External Editor Revived"
++
++    https://github.com/Frederick888/external-editor-revived
++
++    https://addons.thunderbird.net/en-GB/thunderbird/addon/external-editor-revived/
++
++    L'estensione richiede l'installazione di "native messaging host". Date
++    un'occhiata alla seguente wiki:
++    https://github.com/Frederick888/external-editor-revived/wiki
++
++  - "External Editor"
++
++    https://github.com/exteditor/exteditor
++
++    Per usarlo, scaricate ed installate l'applicazione. Poi aprite la finestra
++    :menuselection:`Scrivi` e a seguire aggiungete un bottone per eseguirlo
++    `Visualizza-->Barra degli strumenti-->Personalizza...`. Infine, premente
++    questo nuovo bottone tutte le volte che volete usare l'editor esterno.
++
++    Tenete presente che "external editor" richiede che il vostro editor non
++    faccia alcun fork, in altre parole, l'editor non deve ritornare prima di
++    essere stato chiuso.  Potreste dover passare dei parametri aggiuntivi al
++    vostro editor oppure cambiargli la configurazione.  Per esempio, usando
++    gvim dovrete aggiungere l'opzione -f ``/usr/bin/gvim -f`` (Se il binario
++    si trova in ``/usr/bin``) nell'apposito campo nell'interfaccia di
++    configurazione di  :menuselection:`external editor`.  Se usate altri editor
++    consultate il loro  manuale per sapere come configurarli.``)``
+ 
+ Per rendere l'editor interno un po' più sensato, fate così:
+ 
+-- Modificate le impostazioni di Thunderbird per far si che non usi
+-  ``format=flowed``. Andate in :menuselection:`Modifica-->Preferenze-->Avanzate-->Editor di configurazione`
++- Modificate le impostazioni di Thunderbird per far si che non usi ``format=flowed``!
++  Andate sulla finestra principale e cercate il bottone per il menu a tendina principale.
++  Poi :menuselection:`Modifica-->Preferenze-->Avanzate-->Editor di configurazione`
+   per invocare il registro delle impostazioni.
+ 
+-- impostate ``mailnews.send_plaintext_flowed`` a ``false``
++  - impostate ``mailnews.send_plaintext_flowed`` a ``false``
+ 
+-- impostate ``mailnews.wraplength`` da ``72`` a ``0``
++  - impostate ``mailnews.wraplength`` da ``72`` a ``0``
+ 
+-- :menuselection:`Visualizza-->Corpo del messaggio come-->Testo semplice`
++- Non scrivete messaggi HTML! Andate sulla finestra principale ed aprite la
++  schermata :menuselection:`Menu principale-->Impostazioni account-->nome@unserver.ovunque-->Composizioni e indirizzi`.
++  Qui potrete disabilitare l'opzione "Componi i messaggi in HTML"
+ 
+-- :menuselection:`Visualizza-->Codifica del testo-->Unicode`
++- Aprite i messaggi solo in formato testo! Andate sulla finestra principale e
++  selezionate
++  :menuselection:`Menu principale-->Visualizza-->Copro del messaggio come-->Testo semplice`
+ 
+ 
+ TkRat (GUI)
+diff --git a/Documentation/translations/it_IT/process/kernel-docs.rst b/Documentation/translations/it_IT/process/kernel-docs.rst
+index 38e0a955121a..eadcbf50a1b5 100644
+--- a/Documentation/translations/it_IT/process/kernel-docs.rst
++++ b/Documentation/translations/it_IT/process/kernel-docs.rst
+@@ -6,8 +6,8 @@
+ 
+ .. _it_kernel_docs:
+ 
+-Indice di documenti per le persone interessate a capire e/o scrivere per il kernel Linux
+-========================================================================================
++Ulteriore Documentazione Del Kernel Linux
++=========================================
+ 
+ .. note::
+    Questo documento contiene riferimenti a documenti in lingua inglese; inoltre
+diff --git a/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst b/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
+index a1e98ec9532e..4bd7a8a66904 100644
+--- a/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
++++ b/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
+@@ -286,9 +286,7 @@ magari in una cassetta di sicurezza in banca.
+     Probabilmente la vostra stampante non è più quello stupido dispositivo
+     connesso alla porta parallela, ma dato che il suo output è comunque
+     criptato con la passphrase, eseguire la stampa in un sistema "cloud"
+-    moderno dovrebbe essere comunque relativamente sicuro. Un'opzione potrebbe
+-    essere quella di cambiare la passphrase della vostra chiave primaria
+-    subito dopo aver finito con paperkey.
++    moderno dovrebbe essere comunque relativamente sicuro.
+ 
+ Copia di riserva di tutta la cartella GnuPG
+ -------------------------------------------
 -- 
-2.38.1
+2.30.2
 
