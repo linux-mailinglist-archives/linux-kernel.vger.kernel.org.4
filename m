@@ -2,108 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D570065A440
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C41965A446
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235583AbiLaM55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 07:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
+        id S235621AbiLaM70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 07:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbiLaM5z (ORCPT
+        with ESMTP id S235614AbiLaM7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 07:57:55 -0500
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9462960E0
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:57:54 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id BbQup0AJWtht4BbQupzILR; Sat, 31 Dec 2022 13:57:53 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 31 Dec 2022 13:57:53 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] watchdog: of_xilinx_wdt: Use devm_clk_get_enabled() helper
-Date:   Sat, 31 Dec 2022 13:57:49 +0100
-Message-Id: <2b041dc8230a4ed255051bb2d323da8a51a8d0be.1672491445.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 31 Dec 2022 07:59:19 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF1A95B5
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:59:18 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id y25so35166360lfa.9
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:59:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xNv+AayRgEP2hIxnzst42s6qKfcZMM4RXSAyHy1K9G4=;
+        b=iiOrpMY3w/TTbypkaSZHyRFyhzS5ObSH/eR4zV4HAkNCnI9zY+xVtU/3LS6fknbrH3
+         piIXpyKIXMTWjG2G0HnDdHFozuY5+ftZ0MXoesnv0Q7oEhVn9mUOql2sjj/nQd1SABgE
+         +DnTu54G5rxwyfGD8/qKs17b4ufqhApFyT7Un/PTw3v23DDi4fBpvLRz6UsrHGeoBvk+
+         XlOgnJHlTQM/ui//CCF7vc9lAvAt2T5ZTWOShtwXKy8R/LoX7gZhdFoil7H+UmL9tUeM
+         gEio07V6A9BY63LuGs5sEI2eVwPEzE4BOYyoQolmnLC1bSyIpXfgL8fpVIloM2Bsl5St
+         hQ7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xNv+AayRgEP2hIxnzst42s6qKfcZMM4RXSAyHy1K9G4=;
+        b=xDdhQ6uatIU3ACTn5cDnjG26pojctj4R7K3olccpJhrKbWo8Je+2Sg5rWILh3RY96I
+         1W52+sgJC1bvg3w+RJUoQ/Rq5/5mWP3vkRxYO3Xj/jIy/XEXtDscZea482bZhw08Sw6l
+         zTSfYrUJLSksmgH9BNPlP0C646kd6tbjhni2/Bg0SXNDYgVUsT8KfXIz49cBq+vz/wz7
+         osiP93pl+VNSJpwzvWYEFdyP77LQMVlf6LrvUq5epOQtVmXze+zhD06i0oCJXb5izmzk
+         9SuRXXRNgRltcuPOmbYL45p3C6ROCZQWAvf/8z7jeO0pzZyrKYgLPetLynPb5vB8i4YD
+         iglg==
+X-Gm-Message-State: AFqh2kpPFn5VHrzVp1jgMaxvZ7bSG3OzFcauEp8Sse4girqqCgbYWntx
+        efgWFy+Asw+EgzNZigwhl/0W/w==
+X-Google-Smtp-Source: AMrXdXvBXBFn0BdIQmVWY9ZjxUjycuef0AXYuWEwfXq/BVNQwH7N1rqZ8Lf4kRvdHoR76cuuimycnw==
+X-Received: by 2002:a05:6512:695:b0:4b5:8502:efb4 with SMTP id t21-20020a056512069500b004b58502efb4mr12175038lfe.69.1672491556888;
+        Sat, 31 Dec 2022 04:59:16 -0800 (PST)
+Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id d10-20020a0565123d0a00b004cb344a8c77sm22266lfv.54.2022.12.31.04.59.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 04:59:16 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 01/18] arm64: dts: qcom: ipq6018: Pad addresses to 8 hex digits
+Date:   Sat, 31 Dec 2022 13:58:54 +0100
+Message-Id: <20221231125911.437599-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221231125911.437599-1-konrad.dybcio@linaro.org>
+References: <20221231125911.437599-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The devm_clk_get_enabled() helper:
-   - calls devm_clk_get()
-   - calls clk_prepare_enable() and registers what is needed in order to
-     call clk_disable_unprepare() when needed, as a managed resource.
+Some addresses were 7-hex-digits long, or less. Fix that.
 
-This simplifies the code and avoids the need of a dedicated function used
-with devm_add_action_or_reset().
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-V2: remove xwdt_clk_disable_unprepare() as-well
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi | 67 ++++++++++++++++++++++-----
+ 1 file changed, 55 insertions(+), 12 deletions(-)
 
-Note that the order of operations is slightly modified by this patch. The
-clk is now prepare_enable()'ed before calling clk_get_rate().
----
- drivers/watchdog/of_xilinx_wdt.c | 16 +---------------
- 1 file changed, 1 insertion(+), 15 deletions(-)
-
-diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
-index 3318544366b8..2a079ca04aa3 100644
---- a/drivers/watchdog/of_xilinx_wdt.c
-+++ b/drivers/watchdog/of_xilinx_wdt.c
-@@ -154,11 +154,6 @@ static u32 xwdt_selftest(struct xwdt_device *xdev)
- 		return XWT_TIMER_FAILED;
- }
+diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+index 2ceae73a6069..17e15a06254f 100644
+--- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+@@ -146,7 +146,7 @@ reserved-memory {
+ 		ranges;
  
--static void xwdt_clk_disable_unprepare(void *data)
--{
--	clk_disable_unprepare(data);
--}
--
- static int xwdt_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -193,7 +188,7 @@ static int xwdt_probe(struct platform_device *pdev)
+ 		rpm_msg_ram: memory@60000 {
+-			reg = <0x0 0x60000 0x0 0x6000>;
++			reg = <0x0 0x00060000 0x0 0x6000>;
+ 			no-map;
+ 		};
  
- 	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
+@@ -181,7 +181,7 @@ soc: soc {
  
--	xdev->clk = devm_clk_get(dev, NULL);
-+	xdev->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(xdev->clk)) {
- 		if (PTR_ERR(xdev->clk) != -ENOENT)
- 			return PTR_ERR(xdev->clk);
-@@ -211,15 +206,6 @@ static int xwdt_probe(struct platform_device *pdev)
- 				 "The watchdog clock freq cannot be obtained\n");
- 	} else {
- 		pfreq = clk_get_rate(xdev->clk);
--		rc = clk_prepare_enable(xdev->clk);
--		if (rc) {
--			dev_err(dev, "unable to enable clock\n");
--			return rc;
--		}
--		rc = devm_add_action_or_reset(dev, xwdt_clk_disable_unprepare,
--					      xdev->clk);
--		if (rc)
--			return rc;
- 	}
+ 		prng: qrng@e1000 {
+ 			compatible = "qcom,prng-ee";
+-			reg = <0x0 0xe3000 0x0 0x1000>;
++			reg = <0x0 0x000e3000 0x0 0x1000>;
+ 			clocks = <&gcc GCC_PRNG_AHB_CLK>;
+ 			clock-names = "core";
+ 		};
+@@ -366,6 +366,49 @@ qpic_nand: nand-controller@79b0000 {
+ 			status = "disabled";
+ 		};
  
- 	/*
++		usb3: usb@8af8800 {
++			compatible = "qcom,ipq6018-dwc3", "qcom,dwc3";
++			reg = <0x0 0x08af8800 0x0 0x400>;
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges;
++
++			clocks = <&gcc GCC_SYS_NOC_USB0_AXI_CLK>,
++				 <&gcc GCC_USB0_MASTER_CLK>,
++				 <&gcc GCC_USB0_SLEEP_CLK>,
++				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
++			clock-names = "cfg_noc",
++				      "core",
++				      "sleep",
++				      "mock_utmi";
++
++			assigned-clocks = <&gcc GCC_SYS_NOC_USB0_AXI_CLK>,
++					  <&gcc GCC_USB0_MASTER_CLK>,
++					  <&gcc GCC_USB0_MOCK_UTMI_CLK>;
++			assigned-clock-rates = <133330000>,
++					       <133330000>,
++					       <20000000>;
++
++			resets = <&gcc GCC_USB0_BCR>;
++			status = "disabled";
++
++			dwc_0: usb@8a00000 {
++				compatible = "snps,dwc3";
++				reg = <0x0 0x08a00000 0x0 0xcd00>;
++				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
++				phys = <&qusb_phy_0>, <&usb0_ssphy>;
++				phy-names = "usb2-phy", "usb3-phy";
++				clocks = <&xo>;
++				clock-names = "ref";
++				tx-fifo-resize;
++				snps,is-utmi-l1-suspend;
++				snps,hird-threshold = /bits/ 8 <0x0>;
++				snps,dis_u2_susphy_quirk;
++				snps,dis_u3_susphy_quirk;
++				dr_mode = "host";
++			};
++		};
++
+ 		intc: interrupt-controller@b000000 {
+ 			compatible = "qcom,msm-qgic2";
+ 			#address-cells = <2>;
+@@ -388,7 +431,7 @@ v2m@0 {
+ 
+ 		pcie_phy: phy@84000 {
+ 			compatible = "qcom,ipq6018-qmp-pcie-phy";
+-			reg = <0x0 0x84000 0x0 0x1bc>; /* Serdes PLL */
++			reg = <0x0 0x00084000 0x0 0x1bc>; /* Serdes PLL */
+ 			status = "disabled";
+ 			#address-cells = <2>;
+ 			#size-cells = <2>;
+@@ -404,10 +447,10 @@ pcie_phy: phy@84000 {
+ 				      "common";
+ 
+ 			pcie_phy0: phy@84200 {
+-				reg = <0x0 0x84200 0x0 0x16c>, /* Serdes Tx */
+-				      <0x0 0x84400 0x0 0x200>, /* Serdes Rx */
+-				      <0x0 0x84800 0x0 0x1f0>, /* PCS: Lane0, COM, PCIE */
+-				      <0x0 0x84c00 0x0 0xf4>; /* pcs_misc */
++				reg = <0x0 0x00084200 0x0 0x16c>, /* Serdes Tx */
++				      <0x0 0x00084400 0x0 0x200>, /* Serdes Rx */
++				      <0x0 0x00084800 0x0 0x1f0>, /* PCS: Lane0, COM, PCIE */
++				      <0x0 0x00084c00 0x0 0xf4>; /* pcs_misc */
+ 				#phy-cells = <0>;
+ 
+ 				clocks = <&gcc GCC_PCIE0_PIPE_CLK>;
+@@ -623,7 +666,7 @@ mdio: mdio@90000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 			compatible = "qcom,ipq6018-mdio", "qcom,ipq4019-mdio";
+-			reg = <0x0 0x90000 0x0 0x64>;
++			reg = <0x0 0x00090000 0x0 0x64>;
+ 			clocks = <&gcc GCC_MDIO_AHB_CLK>;
+ 			clock-names = "gcc_mdio_ahb_clk";
+ 			status = "disabled";
+@@ -631,7 +674,7 @@ mdio: mdio@90000 {
+ 
+ 		qusb_phy_1: qusb@59000 {
+ 			compatible = "qcom,ipq6018-qusb2-phy";
+-			reg = <0x0 0x059000 0x0 0x180>;
++			reg = <0x0 0x00059000 0x0 0x180>;
+ 			#phy-cells = <0>;
+ 
+ 			clocks = <&gcc GCC_USB1_PHY_CFG_AHB_CLK>,
+@@ -664,7 +707,7 @@ usb2: usb@70f8800 {
+ 
+ 			dwc_1: usb@7000000 {
+ 			       compatible = "snps,dwc3";
+-			       reg = <0x0 0x7000000 0x0 0xcd00>;
++			       reg = <0x0 0x07000000 0x0 0xcd00>;
+ 			       interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>;
+ 			       phys = <&qusb_phy_1>;
+ 			       phy-names = "usb2-phy";
+@@ -679,7 +722,7 @@ dwc_1: usb@7000000 {
+ 
+ 		ssphy_0: ssphy@78000 {
+ 			compatible = "qcom,ipq6018-qmp-usb3-phy";
+-			reg = <0x0 0x78000 0x0 0x1c4>;
++			reg = <0x0 0x00078000 0x0 0x1c4>;
+ 			#address-cells = <2>;
+ 			#size-cells = <2>;
+ 			ranges;
+@@ -708,7 +751,7 @@ usb0_ssphy: phy@78200 {
+ 
+ 		qusb_phy_0: qusb@79000 {
+ 			compatible = "qcom,ipq6018-qusb2-phy";
+-			reg = <0x0 0x079000 0x0 0x180>;
++			reg = <0x0 0x00079000 0x0 0x180>;
+ 			#phy-cells = <0>;
+ 
+ 			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
 -- 
-2.34.1
+2.39.0
 
