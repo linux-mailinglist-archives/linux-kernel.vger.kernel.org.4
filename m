@@ -2,122 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0214365A28C
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 04:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227BA65A28E
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 04:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236391AbiLaD2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 22:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S236398AbiLaD2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 22:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236230AbiLaD2H (ORCPT
+        with ESMTP id S236401AbiLaD2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 22:28:07 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECD513D49
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 19:28:06 -0800 (PST)
-Received: from letrec.thunk.org (host-67-21-23-146.mtnsat.com [67.21.23.146] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BV3RefF015247
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Dec 2022 22:27:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1672457272; bh=BTAKOd2LPUGHXwNVn+DXIErixQd93y9EvomSdt1rsN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=hJeOMeWOsiAOtZWWnamZKpLO6Su8pL5DMfaddPr+W0iDN6qepkXdkLBwtl3pTyY03
-         pQCSJ+0g3ZHVvItEYtPfISiv8OWHYVFOQm0/hHVi8WdI2y7Thmi7uga966OiAipsgs
-         cbeQJ0P4Vy5bLdqM/GBIWAH/G17r/FSL8QAVTcVtdTLA995Nlng0/5UM/a+pLLkp/w
-         x0mEst6onQj7KqHZlcr4buqShKWRxh1Z+DSIoDXbGiXwRXR79Jtn88fXLrHb56DTMK
-         ATYQNIlNF5ohmxDPnmAIdQm+vWnKjopk6Oa8z7Qe2/QvmpUhWHokNm3VdkvWPPhGoI
-         25LQ6cUGKj66g==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id 7BE608C0A02; Fri, 30 Dec 2022 22:27:37 -0500 (EST)
-Date:   Fri, 30 Dec 2022 22:27:37 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Jun Nie <jun.nie@linaro.org>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tudor.ambarus@linaro.org
-Subject: Re: [PATCH 2/2] ext4: refuse to create ea block when umounted
-Message-ID: <Y6+sKX4bgSZ3RNrk@mit.edu>
-References: <20221230110016.476621-1-jun.nie@linaro.org>
- <20221230110016.476621-2-jun.nie@linaro.org>
- <Y69GZdLcWkCvZhq1@sol.localdomain>
+        Fri, 30 Dec 2022 22:28:32 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49D3167CC
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 19:28:31 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id d15so23664508pls.6
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 19:28:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FTh4/VPoY0Y+tcQiq17QyW1yR5LQfa4ihly8Ebe6C0g=;
+        b=DR6VSTHgseHJY8A6zGjLo2veIL1kfyYqgdS5tlocHEV/PzzNhR7FqnfTCKRWTFgKa6
+         qVCWMC7V3rwMOiNZ+OXLcdgvlIjsvdV9vwU0N69eTLM+zx74M//mxcj8ifLrI6C6f8O8
+         hFCL4zejYMVxZKpJst3fPpOLiL01tqgby304mbxkDYsIJV5Nj0o/BzGFI/rrXn9uP+sz
+         Z0OnRkdGqL95Wfw0/fMoRIJru9jgPI6i8yL3zDVTPB5Pc8eMB+IHEEDj4EYcpp+1AhPl
+         4p64Og2Pii2tzTgcnUYWa4ahlejK3t3VAooafOPRuoDbYX3IqcnkL0rxabSmeUVMKeJv
+         7COg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FTh4/VPoY0Y+tcQiq17QyW1yR5LQfa4ihly8Ebe6C0g=;
+        b=wAFPVAUFsGdMhpqOBnVHCjlUnY6lNaeCr7zagUvlSREccEC5GqVUmL01O7VwmDJ68J
+         /nVPqyitrsx54aFvlSlhAAvenw4hwtgHO+ELzafQzOaf4vdYBqfp3JSQnmvOl35pjPXM
+         fN3q8awuey7tLfhNBlQ19hIhKsp2q/lhP05YntY8XYzMAA4qf+Exb7zkU/LRi6U7826V
+         1mh3LM5p7en25/7J176eD/gQx7mu6jifXN0AQheVk1HD2F/aWsHNy7nhQQZPwzvietpV
+         J0BtjC55yebOkmQKD5esc0JVpwqaOMFV18966iwsKj66TRVydmmwusoqLgq+sFijxzRw
+         0d/w==
+X-Gm-Message-State: AFqh2koe16FNS9kjyigbZPxyIbNrB7HJ9oG0QalajuMnJLseztREY84S
+        D5LcVhfbAzV1j5AE1PNU/8I=
+X-Google-Smtp-Source: AMrXdXvBlrh8HET1Kivz9ZfOXEsbkdmp8jvFw5uJDJ2AETLeDF+MaHJxjFoPhthrhmXIQxB5y1iQyA==
+X-Received: by 2002:a17:903:3111:b0:192:5c3e:894e with SMTP id w17-20020a170903311100b001925c3e894emr24359844plc.16.1672457311084;
+        Fri, 30 Dec 2022 19:28:31 -0800 (PST)
+Received: from localhost.localdomain (kayle.snu.ac.kr. [147.46.126.79])
+        by smtp.gmail.com with ESMTPSA id u2-20020a170902e80200b0016f196209c9sm15627207plg.123.2022.12.30.19.28.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Dec 2022 19:28:30 -0800 (PST)
+From:   Yoochan Lee <yoochan1026@gmail.com>
+To:     arnd@arndb.de
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yoochan Lee <yoochan1026@gmail.com>
+Subject: [PATCH] char: xilinx_hwicap: xilinx_hwicap: Fix use-after-free in hwicap_open
+Date:   Sat, 31 Dec 2022 12:28:26 +0900
+Message-Id: <20221231032826.2034288-1-yoochan1026@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y69GZdLcWkCvZhq1@sol.localdomain>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,MAY_BE_FORGED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 12:13:25PM -0800, Eric Biggers wrote:
-> > diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-> > index 235a517d9c17..ac58494e49b6 100644
-> > --- a/fs/ext4/xattr.c
-> > +++ b/fs/ext4/xattr.c
-> > @@ -1422,6 +1422,12 @@ static struct inode *ext4_xattr_inode_create(handle_t *handle,
-> >  	uid_t owner[2] = { i_uid_read(inode), i_gid_read(inode) };
-> >  	int err;
-> >  
-> > +	if (inode->i_sb->s_root == NULL) {
-> > +		ext4_error(inode->i_sb,
-> > +			   "refuse to create EA inode when umounting");
-> > +		return ERR_PTR(-EINVAL);
-> > +	}
+A race condition may occur if the user physically removes the
+xilinx_hwicap device while calling open().
 
-This should not be an ext4_error() since this is not a file system
-corruption issue, but rather a kernel bug.  (With the one known
-example being corrected by the first patch in this patch series.
-Thanks Jun for working on a patch to things!)
+This is a race condition between hwicap_open() function and
+the hwicap_remove() function, which may lead to Use-After-Free.
 
-This should be replaced by an ext4_warning() followed by a WARN_ON(1),
-so we can get the stack trace.
+Therefore, add a refcount check to hwicap_remove() to free the
+"hwicap_drvdata" structure after the device is closed.
 
-> Why is an xattr being set during unmount?
+Signed-off-by: Yoochan Lee <yoochan1026@gmail.com>
+---
+ drivers/char/xilinx_hwicap/xilinx_hwicap.c | 27 +++++++++++++++-------
+ drivers/char/xilinx_hwicap/xilinx_hwicap.h |  1 +
+ 2 files changed, 20 insertions(+), 8 deletions(-)
 
-The scenario was discovered by syzbot; the reproducer did the moral
-equivalent of this (attached) shell script.  It required the
-combination of lazytime and the debug_want_extra_isize mount options,
-with a file system with (non-default) ea_inode feature enabled; so it
-was highly unlikely to happen in real life.
+diff --git a/drivers/char/xilinx_hwicap/xilinx_hwicap.c b/drivers/char/xilinx_hwicap/xilinx_hwicap.c
+index 74a4928aea1d..d93abd99bd37 100644
+--- a/drivers/char/xilinx_hwicap/xilinx_hwicap.c
++++ b/drivers/char/xilinx_hwicap/xilinx_hwicap.c
+@@ -553,6 +553,7 @@ static int hwicap_open(struct inode *inode, struct file *file)
+ 	drvdata->write_buffer_in_use = 0;
+ 	drvdata->read_buffer_in_use = 0;
+ 	drvdata->is_open = 1;
++	kref_get(&drvdata->refcnt);
+ 
+  error:
+ 	mutex_unlock(&drvdata->sem);
+@@ -583,6 +584,7 @@ static int hwicap_release(struct inode *inode, struct file *file)
+ 	status = hwicap_command_desync(drvdata);
+ 	if (status)
+ 		goto error;
++	kref_put(&drvdata->refcnt, hwicap_delete);
+ 
+  error:
+ 	drvdata->is_open = 0;
+@@ -672,6 +674,7 @@ static int hwicap_setup(struct device *dev, int id,
+ 	drvdata->config_regs = config_regs;
+ 
+ 	mutex_init(&drvdata->sem);
++	kref_init(&drvdata->refcnt);
+ 	drvdata->is_open = 0;
+ 
+ 	dev_info(dev, "ioremap %llx to %p with size %llx\n",
+@@ -730,15 +733,8 @@ static int hwicap_remove(struct device *dev)
+ 	if (!drvdata)
+ 		return 0;
+ 
+-	device_destroy(icap_class, drvdata->devt);
+-	cdev_del(&drvdata->cdev);
+-	iounmap(drvdata->base_address);
+-	release_mem_region(drvdata->mem_start, drvdata->mem_size);
+-	kfree(drvdata);
++	kref_put(&drvdata->refcnt, hwicap_delete);
+ 
+-	mutex_lock(&icap_sem);
+-	probed_devices[MINOR(dev->devt)-XHWICAP_MINOR] = 0;
+-	mutex_unlock(&icap_sem);
+ 	return 0;		/* success */
+ }
+ 
+@@ -830,6 +826,21 @@ static int hwicap_drv_remove(struct platform_device *pdev)
+ 	return hwicap_remove(&pdev->dev);
+ }
+ 
++static void hwicap_delete(struct kref *kref)
++{
++	struct hwicap_drvdata *drvdata = container_of(kref, struct hwicap_drvdata, refcnt);
++
++	device_destroy(icap_class, drvdata->devt);
++	cdev_del(&drvdata->cdev);
++	iounmap(drvdata->base_address);
++	release_mem_region(drvdata->mem_start, drvdata->mem_size);
++	kfree(drvdata);
++
++	mutex_lock(&icap_sem);
++	probed_devices[MINOR(dev->devt)-XHWICAP_MINOR] = 0;
++	mutex_unlock(&icap_sem);
++}
++
+ #ifdef CONFIG_OF
+ /* Match table for device tree binding */
+ static const struct of_device_id hwicap_of_match[] = {
+diff --git a/drivers/char/xilinx_hwicap/xilinx_hwicap.h b/drivers/char/xilinx_hwicap/xilinx_hwicap.h
+index 6b963d1c8ba3..9ea3a98ea600 100644
+--- a/drivers/char/xilinx_hwicap/xilinx_hwicap.h
++++ b/drivers/char/xilinx_hwicap/xilinx_hwicap.h
+@@ -58,6 +58,7 @@ struct hwicap_drvdata {
+ 	void *private_data;
+ 	bool is_open;
+ 	struct mutex sem;
++	struct kref refcnt;
+ };
+ 
+ struct hwicap_driver_config {
+-- 
+2.39.0
 
-For the detailed analysis, see [1]
-
-[1] https://lore.kernel.org/all/Y5wGZG05uicAPscI@mit.edu
-
-					- Ted
-
-P.S.  Converting this into an xfstests test script to test for a
-regression of this bug (or a failure to backport this into various
-stable kernels) is also left as an exercise to the reader.  :-)
-
-#!/bin/bash -vx
-#
-# This reproduces an ext4 bug caused by an unfortunate interaction
-# between lazytime updates happening when a file system is being
-# unmounted and expand_extra_isize
-#
-# Initially discovered via syzkaller:
-# https://syzkaller.appspot.com/bug?id=3613786cb88c93aa1c6a279b1df6a7b201347d08
-#
-
-img=/tmp/foo.img
-dir=/mnt
-file=$dir/file0
-
-rm -f $img
-mke2fs -Fq -t ext4 -I 256 -O ea_inode -b 1024 $img 200k
-mount $img $dir
-v=$(dd if=/dev/zero bs=2000 count=1 2>/dev/null | tr '\0' =)
-touch $file
-attr -q -s test -V $v $file
-umount $dir
-mount -o debug_want_extra_isize=128,lazytime /tmp/foo.img $dir
-cat $file
-umount $dir
