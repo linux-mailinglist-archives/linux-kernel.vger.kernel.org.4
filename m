@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C1165A4A0
+	by mail.lfdr.de (Postfix) with ESMTP id CBAC465A4A2
 	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 14:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235714AbiLaNXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 08:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S231773AbiLaNX0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 31 Dec 2022 08:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiLaNXf (ORCPT
+        with ESMTP id S231539AbiLaNXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 08:23:35 -0500
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A68B4A3;
-        Sat, 31 Dec 2022 05:23:33 -0800 (PST)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 2BVDNC0T024452;
-        Sat, 31 Dec 2022 22:23:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2BVDNC0T024452
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1672492993;
-        bh=hA5JdMstmYILZuTW3S9yvFg3QCQeMln5UE4GkP/2L6g=;
-        h=From:Date:Subject:To:Cc:From;
-        b=sNdPxAJdaC1SeWjuMYNaD1mdVNytr2PsZg2rMt8KUnYJ2WqGIdPnaQszY2a929ZJt
-         CfJfT4PDKr4+AWXmtZg4DMcYQqV6rTG5lyL1XPK+mFXF2iXRiSVqPUHqZJBd7dDJn9
-         4TdOyosaSuRGZbgm6k7ovmEX9lC+PCshyI09CDYt3x6KuSGvlRt7OWFqHi2/uwXfCs
-         QdjKejpURuVF2ZDE7QzRk6loy9fnX51N5s5wg8SuCY5aoGc0MvRXGSwGOZALYohnhq
-         ZVwnA0lEELW+4yldIZgK/OUHSygEKAVoYWNzhXji0YrqC3p1ecU2pxuiToH84nHiAd
-         d1OOHeQQck2uQ==
-X-Nifty-SrcIP: [209.85.208.182]
-Received: by mail-lj1-f182.google.com with SMTP id p2so9071213ljn.7;
-        Sat, 31 Dec 2022 05:23:13 -0800 (PST)
-X-Gm-Message-State: AFqh2kopTYYrvrJkSlWoASS+AcFqRtMbIIfB+V4eF8EeFFkAUAKcauvR
-        AaZEV+y7bvUcXt7Jm1eXg+lKL9mp5zNj/220mxM=
-X-Google-Smtp-Source: AMrXdXu6q1r471sijjQKqWZ8qj1JQk/QXWP/iOhLV7Epa+V01RHD3VEjqbyWe7/YzLiKYdPhtgebkJUBL/6nLrbGCnM=
-X-Received: by 2002:a2e:bf18:0:b0:27f:bcdf:453a with SMTP id
- c24-20020a2ebf18000000b0027fbcdf453amr1682720ljr.116.1672492991686; Sat, 31
- Dec 2022 05:23:11 -0800 (PST)
+        Sat, 31 Dec 2022 08:23:23 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA94665C9
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 05:23:21 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-54-12njZMflPrOHOWWm3UOPXQ-1; Sat, 31 Dec 2022 13:23:15 +0000
+X-MC-Unique: 12njZMflPrOHOWWm3UOPXQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 31 Dec
+ 2022 13:23:14 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Sat, 31 Dec 2022 13:23:14 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Herbert Xu' <herbert@gondor.apana.org.au>
+CC:     'Roberto Sassu' <roberto.sassu@huaweicloud.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
+Thread-Topic: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
+Thread-Index: AQHZGf+Li10Ctze9/ky4tLizwqJmjK6Gb6hQgAAmKQCAAWpJUA==
+Date:   Sat, 31 Dec 2022 13:23:14 +0000
+Message-ID: <0d5fda5b25b8467c860d625116dac1d2@AcuMS.aculab.com>
+References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
+ <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
+ <6949ced7c1014488b2d00ff26eba6b6b@AcuMS.aculab.com>
+ <Y68GMsGKROsgDbcs@gondor.apana.org.au>
+In-Reply-To: <Y68GMsGKROsgDbcs@gondor.apana.org.au>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 31 Dec 2022 22:22:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ66CwHVH+vvqkaRqEn8M46bOSFhyEAOdQfcKeWLxUTUA@mail.gmail.com>
-Message-ID: <CAK7LNAQ66CwHVH+vvqkaRqEn8M46bOSFhyEAOdQfcKeWLxUTUA@mail.gmail.com>
-Subject: [GIT PULL] Kbuild fixes for v6.2-rc2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,68 +73,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+From: Herbert Xu
+> Sent: 30 December 2022 15:40
+> 
+> On Fri, Dec 30, 2022 at 01:35:07PM +0000, David Laight wrote:
+> >
+> > miter.length is size_t (unsigned long on 64bit) and nbytes unsigned int.
+> 
+> miter.length is bounded by sg->length which is unsigned int.
 
-Please pull some Kbuild fixes.
+I did say 'technically' :-)
 
-Thank you.
+Should there be a sg_miter_stop() before the return at the bottom?
+Care seems to have been taken to add one before an earlier error return.
+(The logic in that function is very strange...)
 
+Indeed other parts of the file are equally strange.
+The big multi-line if-else in twocompl() is just:
+	p[i] = (p[1] ^ 0xff) + 1;
+or even:
+	p[i] = -p[i];
+That function could also return the 'zero status' to correct
+for -0 (rather than the extra check earlier in the caller).
 
+	David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-fixes-v6.2
-
-for you to fetch changes up to 6a5e25fc3e0b94301734e8abb1d311a1e02d360d:
-
-  fixdep: remove unneeded <stdarg.h> inclusion (2022-12-30 17:26:19 +0900)
-
-----------------------------------------------------------------
-Kbuild fixes for v6.2
-
- - Fix broken BuildID
-
- - Add srcrpm-pkg to the help message
-
- - Fix the option order for modpost built with musl libc
-
- - Fix the build dependency of rpm-pkg for openSUSE
-
-----------------------------------------------------------------
-Bhaskar Chowdhury (1):
-      kconfig: Add static text for search information in help menu
-
-Jun ASAKA (1):
-      kbuild: add a missing line for help message
-
-Masahiro Yamada (5):
-      arch: fix broken BuildID for arm64 and riscv
-      .gitignore: ignore *.rpm
-      kbuild: rpm-pkg: add libelf-devel as alternative for BuildRequires
-      kbuild: sort single-targets alphabetically again
-      fixdep: remove unneeded <stdarg.h> inclusion
-
-Samuel Holland (1):
-      kbuild: Fix running modpost with musl libc
-
- .gitignore                        |  1 +
- Makefile                          |  2 +-
- include/asm-generic/vmlinux.lds.h |  5 +++++
- scripts/Makefile.modpost          | 22 +++++++++++-----------
- scripts/Makefile.package          |  1 +
- scripts/basic/fixdep.c            |  1 -
- scripts/kconfig/mconf.c           |  6 ++++++
- scripts/package/mkspec            |  3 ++-
- 8 files changed, 27 insertions(+), 14 deletions(-)
-
-
-
-Best Regards
-Masahiro Yamada
