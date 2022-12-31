@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEFF659F62
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 01:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DB4659F63
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 01:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235890AbiLaARb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 19:17:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S235898AbiLaARy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 19:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235885AbiLaAR2 (ORCPT
+        with ESMTP id S235885AbiLaARw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 19:17:28 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA16E0C6;
-        Fri, 30 Dec 2022 16:17:27 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id n12so10948346pjp.1;
-        Fri, 30 Dec 2022 16:17:27 -0800 (PST)
+        Fri, 30 Dec 2022 19:17:52 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DCED2FB;
+        Fri, 30 Dec 2022 16:17:52 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-14fb3809eaeso20358403fac.1;
+        Fri, 30 Dec 2022 16:17:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BBVDRYvlIyw7nKQw7Az4PKfCh+WoofTwZ7w2r+i0doA=;
-        b=M6mLM319O5fKXRxTYtRN9WEsWSN1euXSHYTidNuE0VT5NvTeacEin18hX4kaNqoQ+g
-         3nqlxsIfvGbT7TlB3HnnqBwqzyuZP3zk85aGb/zKzZcGNF/Ryr5YQPbQy+GqF0WKgWIR
-         3uz9QYq4qMUqFt7UhtkOo8Nt91+KnpIjd1FBCiwQpGim8sxv0rxku1EqAT2NgbnRj2JH
-         K7QEclKt0rSzPF3/DcKcQPOUyW8dErzhhe9D5z1subrhV/TaerLGiVu0av2+hxHekvFc
-         yacpJ7XeLUKNoKkpjIisc0YcRiSOT45eeTejuEW0NoCsEEBqmf7Qfg5yVWibt4yxB/XU
-         EC3Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aD2pyMO7OOE2EFdyuJsS7VOYOnoYMeTk7hsW83uEvV8=;
+        b=naU9FPp37XrnNa1LOC35fGfJk80sHKGQCuzXDNRYqJXgI1kVhvEP309ieCEzfPyTla
+         cnyM6S1EhgpJL2Is1X9OPvDnCirALAPvmjRa0ull3F7uhgzDf73J3ZFg6MQV905EBljF
+         30afWCE9plt0QpWPrGygfk9QFCsJGfgVBfVSa9ndoOij1YenmFJXOPTiALviGFasnCZc
+         0hUSucO2ERDG6bJxbVDt518wAo2SyWEcwPXxXCTe4O/ErDsFaKFWXgi0xQBz0yOTO/3/
+         6JIsssM8a6i0vWTQazva+9JgiwqrjnmZVsCLSRfrdOE7y2zB9QEbdir8NOlJf4xYQHK8
+         /ySQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BBVDRYvlIyw7nKQw7Az4PKfCh+WoofTwZ7w2r+i0doA=;
-        b=JZO9z90dhGO1M4O+z4A9kFU8eauNZ/ofgRmMhBrR290ZwCh1GaZiu3tgr+VuNfrv09
-         3xz3UQc+vPz6idEE9tkSvcVuCsyY2BFFjgiI367Arr1nc5Ah8EH2/B3bdFJHo3K2t1ti
-         Aj+M3Op7fIlVYFKhfZYM4kJuoQkhXhRjyTPNTgwyuNfW8K9dHPmgMGWfTkGIvmCmOnBn
-         jFk2Op3/qJ9+jYzBhQczYJUukI4TvnqX7kOrAwmUPwXRYsmhfIm6k9ttxXthiDtCojVx
-         hHqcQIB+240+JBJChUogV9Sno7/x03DlFlYNtT0UstXa8fS1cm5hf2Ou8J5rIGIyX8Cd
-         4btQ==
-X-Gm-Message-State: AFqh2krx7jBO2/M/2yWyGturdo1VLanORttBMnCpoPGHzzJudd/CybxS
-        bORcpJpAli5ZPh9IeWwI5ic=
-X-Google-Smtp-Source: AMrXdXvbAEFVLVZ6LKXesNGWNHPSmy7dg7XURIB/+rOZlKPnHOzg4jJ2hGoXKdpzMTNefsSn//z62g==
-X-Received: by 2002:a17:903:48b:b0:192:84aa:a247 with SMTP id jj11-20020a170903048b00b0019284aaa247mr17051088plb.30.1672445847371;
-        Fri, 30 Dec 2022 16:17:27 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170903120600b00188a908cbddsm15458823plh.302.2022.12.30.16.17.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Dec 2022 16:17:27 -0800 (PST)
-Message-ID: <3e30ecf7-ebf5-c2cd-f6b6-dc5d6e5cdb71@gmail.com>
-Date:   Sat, 31 Dec 2022 09:17:22 +0900
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aD2pyMO7OOE2EFdyuJsS7VOYOnoYMeTk7hsW83uEvV8=;
+        b=DtbY6RLkl4rL2Vqptf/T97svjPLYK5+HnJNr+TOnRAe1DQ/MW3Kk9qh/bApUiFtLXu
+         4ylx8FkloPzQIok3kwxcbQnt9VMQgD4T26lukfSG74XMsxytxLcAhYABiBCT6sCYS7Kb
+         pzEFMwqkZCZkGqT3awdDXQpdt83Got7HpbnTOyt2493iU8rfqT8G5TGwslYU8CL8LaHs
+         mlZ5JtFvvbip0l6umqUIqI/gJ4WbH2zvtYTskbDlI/CVyTHvHomA6Ti+O5+Tlu3Ccl5H
+         OyM36ti+FvgtLnazJHpv9R0pQCwGSJdiRaNd87aWUTqbpnf+aCxvDcPcPt8ZF1YBW0nr
+         uuEg==
+X-Gm-Message-State: AFqh2kroTh0B+nFKN3CXfIdVwWGQTLz3KTQmvs9pkFzN5CS997Vt4WPQ
+        cqk8ScWPfhNe/sb7SBbbN2I=
+X-Google-Smtp-Source: AMrXdXvh5c6ArRE4hrT8wtp4YdQBLc8YF1onZBgvBw65Z0PgjH0Lio4pTH+xarRBf+MVDtEy/kGqAg==
+X-Received: by 2002:a05:6870:3c0f:b0:14f:7a46:74f6 with SMTP id gk15-20020a0568703c0f00b0014f7a4674f6mr15625758oab.33.1672445871378;
+        Fri, 30 Dec 2022 16:17:51 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z13-20020a05687041cd00b001431bf4e5a0sm10407602oac.38.2022.12.30.16.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Dec 2022 16:17:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 30 Dec 2022 16:17:49 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 0000/1066] 6.0.16-rc2 review
+Message-ID: <20221231001749.GA2916712@roeck-us.net>
+References: <20221230094059.698032393@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-To:     Federico Vaga <federico.vaga@vaga.pv.it>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <20221230173127.59553-1-federico.vaga@vaga.pv.it>
-Subject: Re: [PATCH V2] doc:it_IT: align Italian documentation
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20221230173127.59553-1-federico.vaga@vaga.pv.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221230094059.698032393@linuxfoundation.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,80 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Federico,
-Minor nit on embedded latex code. Please see below.
-
-On Fri, 30 Dec 2022 18:31:27 +0100, Federico Vaga wrote:
-> Translation for the following patches
+On Fri, Dec 30, 2022 at 10:49:23AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.16 release.
+> There are 1066 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> commit da4288b95baa ("scripts/check-local-export: avoid 'wait $!' for process substitution")
-> commit 5372de4e4545 ("docs/doc-guide: Put meta title for kernel-doc HTML page")
-> commit 4d627ef12b40 ("docs/doc-guide: Mention make variable SPHINXDIRS")
-> commit 7c43214dddfd ("docs/doc-guide: Add footnote on Inkscape for better images in PDF documents")
-> commit 615041d42a1a ("docs: kernel-docs: shorten the lengthy doc title")
-> commit cbf4adfd4d19 ("Documentation: process: Update email client instructions for Thunderbird")
-> commit e72b3b9810dd ("maintainer-pgp-guide: minor wording tweaks")
-> commit ea522496afa1 ("Documentation: process: replace outdated LTS table w/ link")
-> commit 93431e0607e5 ("Replace HTTP links with HTTPS ones: documentation")
-> commit e648174b53f1 ("Documentation: Fix spelling mistake in hacking.rst")
-> commit 602684adb42a ("docs: Update version number from 5.x to 6.x in README.rst")
-> commit 489876063fb1 ("docs: add a man-pages link to the front page")
-> commit 0c7b4366f1ab ("docs: Rewrite the front page")
-> 
-> Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
-> ---
-> V1 -> V2 fix typo in footnote link
-> 
->  .../translations/it_IT/admin-guide/README.rst |  2 +-
->  .../it_IT/doc-guide/kernel-doc.rst            |  2 +
->  .../translations/it_IT/doc-guide/sphinx.rst   | 14 ++-
->  Documentation/translations/it_IT/index.rst    | 93 +++++++++----------
->  .../it_IT/kernel-hacking/hacking.rst          |  2 +-
->  .../translations/it_IT/process/2.Process.rst  | 15 +--
->  .../it_IT/process/7.AdvancedTopics.rst        |  8 +-
->  .../translations/it_IT/process/changes.rst    | 11 +++
->  .../it_IT/process/email-clients.rst           | 67 ++++++++-----
->  .../it_IT/process/kernel-docs.rst             |  4 +-
->  .../it_IT/process/maintainer-pgp-guide.rst    |  4 +-
->  11 files changed, 127 insertions(+), 95 deletions(-)
+> Responses should be made by Sun, 01 Jan 2023 09:38:41 +0000.
+> Anything received after that time might be too late.
 > 
 
-[...]
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 500 pass: 500 fail: 0
 
-> diff --git a/Documentation/translations/it_IT/index.rst b/Documentation/translations/it_IT/index.rst
-> index e80a3097aa57..5dd751349adc 100644
-> --- a/Documentation/translations/it_IT/index.rst
-> +++ b/Documentation/translations/it_IT/index.rst
-> @@ -1,13 +1,11 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
->  .. _it_linux_doc:
->  
->  ===================
->  Traduzione italiana
->  ===================
->  
-> -.. raw:: latex
-> -
-> -	\kerneldocCJKoff
-> -
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Removing this latex code would make Italian translation pages in
-translations.pdf one-half spacing (when built on systems with
-necessary packages for CJK translations), which would make them
-look sparse.
-
-Please keep it.
-
-For your reference, here is a list of related commits in this are:
-
-  - f7ebe6b76940 ("docs: Activate exCJK only in CJK chapters")
-  - 77abc2c230b1 ("docs: pdfdocs: One-half spacing for CJK translations")
-
-        Thanks, Akira 
-
->  :manutentore: Federico Vaga <federico.vaga@vaga.pv.it>
->  
->  .. _it_disclaimer:
-
-[...]
+Guenter
