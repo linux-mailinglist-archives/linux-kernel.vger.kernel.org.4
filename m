@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F1165A2B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 06:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2D065A2C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 06:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231466AbiLaE7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 23:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
+        id S231503AbiLaFUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 00:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiLaE66 (ORCPT
+        with ESMTP id S229519AbiLaFUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 23:58:58 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A94D1758A;
-        Fri, 30 Dec 2022 20:58:57 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so23251421pjh.5;
-        Fri, 30 Dec 2022 20:58:57 -0800 (PST)
+        Sat, 31 Dec 2022 00:20:01 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30775140B6
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 21:20:00 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id n4so23824782plp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 21:20:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EufWqX9dCf4XvIcCUQnzSLEMVyrkjkBbjT33Bi0xc4k=;
-        b=XTAYg1K7y9zz+zvCq04/V+eRrhtZBomSsUX1Nm5yKxVlRM8dnJDRGcG8W4MnDyiUcN
-         yx3CqRn+AHyy/ldze3hahHmxcr9deIy1CTFnucHQYBfKToTtzNTvXJE3Ql5pSx0CBoGy
-         35nuEM4qMb8lR+wwH7VSYbxZu25sa8EJvqZvi6QbnfHmlDfA057L5kgmXmIqsOkCD727
-         dt5HhmFCHvn35m6JzK0ovS4ReLMS6NSIIQ8/0p22BuyiKifhltM7tQZICK7DNBn0mNCh
-         ZadSXaop5ZPC+Ve9AI8z3mqT1jPZ29uE/aN7tF4YwHEJgdK2jHL7pPuw6ddYikjGRZfz
-         VaMA==
+        bh=aZJQjCfX4+prwQo4OFfcSE3byIBK/JnH4yyvcjyPNLU=;
+        b=HMb71ZYgOKteEc/FlAVyhvgMPeYEWos1QHLEjPEFFhlMwJXMSBTrwmIwzczcaDKoNZ
+         XWzx5ikTnh4ln38bjFWqQcaZcH9ijWfh57WDbNBgaop6di1+jbG/bEjGVzQ1/6ftQri6
+         0nXCJ8HTH+RjQCzO5UeIM0/G9rRCj0f+hj9DfDmgv+fIA4vNod7tY4Er72nqGC4o4Sp8
+         U2N0pXNGsM/KDW8uLco/1ylKQX7YdaX1MnaPCD66+FxUuDcvoBmujfE+LtULTj6XrxXN
+         NHt/S+JrCVSZeX7+lSRhYIv45UXqAI3/xlXSnlirdNAokOzAHkMTv/epfah4mJzu8/Bw
+         9hCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EufWqX9dCf4XvIcCUQnzSLEMVyrkjkBbjT33Bi0xc4k=;
-        b=3N7dbLR6lQAL7AgvNmn4S2cxFsZADreahDrj0yE6eboOqCFz1PDdyjJDGu5rxpGCzp
-         8hyZtYkMgrQIIrnaBoFEWIo6jnbvQTBLo8fVFmAjNho1cteirWl1TjhOV0i//jy/Njua
-         /tjBayk7mXKbt2+0nGWEvjp5BmZFxZbe3VyIX6ZAjL0+cbJgIGrntbtwvflqAqXpf/wS
-         s0gnjrxaqm9vqORy5kWhFdMASodKBuP7q81HQirfywt5olpQyv/yYkBybos+3/a6IsaU
-         cJpbGuN7dzYfmscoR7AciL+b9YfyRbfpYDKugfyKGVVcuVIVZ+UJR0OFdYoTcWM8vtu6
-         +lAg==
-X-Gm-Message-State: AFqh2kp6ZrBVjlvIIZYXlLRdDSACQVhyb6xpQ/nA44/h1ZlNdhtr/INa
-        AJREMhzXv2fulRpX80Eh6h+2fOrv+7PCRA==
-X-Google-Smtp-Source: AMrXdXs/vhTNrZ2Ilqc5t+CAO4dzCU+sKSGLufrR6xnnVh/kfGbMn7U08f1CSndDocrR6Mn92ZNawg==
-X-Received: by 2002:a17:902:8f87:b0:189:2688:c97f with SMTP id z7-20020a1709028f8700b001892688c97fmr38074576plo.50.1672462736876;
-        Fri, 30 Dec 2022 20:58:56 -0800 (PST)
+        bh=aZJQjCfX4+prwQo4OFfcSE3byIBK/JnH4yyvcjyPNLU=;
+        b=L/piy8dB3oNt4Zo2AfIXIEmo65FYHBhAYdY4v7GuOfvCXnKZua9dcKpgrWJQj1qUiS
+         pI4teZJ0Esrtzr+fYdt+c9jr/3/CrQse7Vmb671WdVICfn7S/VXKKzwlXL2Z3cH/8ucO
+         mTSrAy7TBdUfEigYMmvbyi172I0rRvoJ5WkOQSOL3ENckYqFUZOAEoy7xJbkZwCGGTaw
+         /N+5Ef9FD814MQJ6LM9oh+ZKW9wmoHnx6oUsxzrDfsHpZAgm6tloCceR9Yz6Oz/Mt+G0
+         TcaWEzVCR+FLkmyTEerughSBE7jUypMFAn+o4m8hHgQulJgh9LyHJxbFTSuXzGgKLGIb
+         1RaA==
+X-Gm-Message-State: AFqh2kqLOCgpxRrjYo2ZOtC7nk74smtPkFOoZSKKnA9MOwn3yjIslLs/
+        09J8TIcINgmSAwAfuXW7q+YAHa0XjP4AMg==
+X-Google-Smtp-Source: AMrXdXtgt2OOUmoafU5fhU4CEP3qm0CJnEDfr5aXHfUbRGMJfGmZw9Sfwzs8A86qu6NrMwk1s+pNWA==
+X-Received: by 2002:a17:902:dad0:b0:191:3ec0:9166 with SMTP id q16-20020a170902dad000b001913ec09166mr56404941plx.6.1672463999649;
+        Fri, 30 Dec 2022 21:19:59 -0800 (PST)
 Received: from localhost.localdomain (kayle.snu.ac.kr. [147.46.126.79])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170902c20200b00190f5e3bcd9sm15861251pll.23.2022.12.30.20.58.55
+        by smtp.gmail.com with ESMTPSA id i18-20020a17090332d200b00174c1855cd9sm15904431plr.267.2022.12.30.21.19.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 20:58:56 -0800 (PST)
+        Fri, 30 Dec 2022 21:19:59 -0800 (PST)
 From:   Yoochan Lee <yoochan1026@gmail.com>
-To:     davem@davemloft.net
-Cc:     sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     jens.wiklander@linaro.org
+Cc:     op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
         Yoochan Lee <yoochan1026@gmail.com>
-Subject: [PATCH] \sbus: char: uctrl: Fix use-after-free in uctrl_open
-Date:   Sat, 31 Dec 2022 13:58:44 +0900
-Message-Id: <20221231045844.2038042-1-yoochan1026@gmail.com>
+Subject: [PATCH] tee: optee: smc_abi: Fix use-after-free in optee_smc_open
+Date:   Sat, 31 Dec 2022 14:19:54 +0900
+Message-Id: <20221231051954.2038772-1-yoochan1026@gmail.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -71,86 +71,143 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 A race condition may occur if the user physically removes the
-uctrl device while calling open().
+smc_abi device while calling open().
 
-This is a race condition between uctrl_open() function and
-the uctrl_remove() function, which may lead to Use-After-Free.
+This is a race condition between optee_smc_open() function and
+the optee_smc_remove() function, which may lead to Use-After-Free.
 
-Therefore, add a kref when open() uctrl driver and decrement
-the kref when close() and uctrl_remove() so that the race
-condition is not occured.
+Therefore, add a refcount check to optee_smc_remove() function
+to free the "optee" structure after the device is close()d.
 
 ---------------CPU 0--------------------CPU 1-----------------
-                              | p = dev_get_drvdata(&op->dev);
+         optee_smc_open()     |     optee_smc_remove()
+--------------------------------------------------------------
+struct optee *optee = tee_get_|
+drvdata(ctx->teedev); — (1)   |
+                              | struct optee *optee = platform_
+                              | get_drvdata(pdev);
                               | ...
-                              | kfree(p); -- (1)
-uctrl_get_event_status(global
-_driver); — (2)
+                              | kfree(optee); — (2)
+u32 sec_caps = optee->smc.sec_|
+caps; — (3)
 
 Signed-off-by: Yoochan Lee <yoochan1026@gmail.com>
 ---
- drivers/sbus/char/uctrl.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+ drivers/tee/optee/optee_private.h |  1 +
+ drivers/tee/optee/smc_abi.c       | 66 ++++++++++++++++++++++---------
+ 2 files changed, 48 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/sbus/char/uctrl.c b/drivers/sbus/char/uctrl.c
-index 05de0ce79cb9..17a8acdfc03a 100644
---- a/drivers/sbus/char/uctrl.c
-+++ b/drivers/sbus/char/uctrl.c
-@@ -189,6 +189,7 @@ static struct uctrl_driver {
- 	int irq;
- 	int pending;
- 	struct uctrl_status status;
-+	struct kref *refcnt;
- } *global_driver;
- 
- static void uctrl_get_event_status(struct uctrl_driver *);
-@@ -204,12 +205,28 @@ uctrl_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	return 0;
- }
- 
-+static void uctrl_delete(struct kref *kref)
-+{
-+	struct uctrl_driver *p = container_of(kref, struct uctrl_driver, refcnt);
-+
-+	misc_deregister(&uctrl_dev);
-+	free_irq(p->irq, p);
-+	of_iounmap(&op->resource[0], p->regs, resource_size(&op->resource[0]));
-+	kfree(p);
-+}
-+
-+static int uctrl_close(struct inode *inode, struct file *file)
-+{
-+	kref_put(&global_driver->refcnt, uctrl_delete);
-+}
-+
- static int
- uctrl_open(struct inode *inode, struct file *file)
- {
- 	mutex_lock(&uctrl_mutex);
- 	uctrl_get_event_status(global_driver);
- 	uctrl_get_external_status(global_driver);
-+	kref_get(&global_driver->refcnt);
- 	mutex_unlock(&uctrl_mutex);
- 	return 0;
- }
-@@ -224,6 +241,7 @@ static const struct file_operations uctrl_fops = {
- 	.llseek =	no_llseek,
- 	.unlocked_ioctl =	uctrl_ioctl,
- 	.open =		uctrl_open,
-+	.release =	uctrl_close,
+diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+index 04ae58892608..f52b1cf20eab 100644
+--- a/drivers/tee/optee/optee_private.h
++++ b/drivers/tee/optee/optee_private.h
+@@ -175,6 +175,7 @@ struct optee {
+ 	bool   scan_bus_done;
+ 	struct workqueue_struct *scan_bus_wq;
+ 	struct work_struct scan_bus_work;
++	struct kref refcnt;
  };
  
- static struct miscdevice uctrl_dev = {
-@@ -404,10 +422,7 @@ static int uctrl_remove(struct platform_device *op)
- 	struct uctrl_driver *p = dev_get_drvdata(&op->dev);
+ struct optee_session {
+diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+index a1c1fa1a9c28..4fbec2acc255 100644
+--- a/drivers/tee/optee/smc_abi.c
++++ b/drivers/tee/optee/smc_abi.c
+@@ -1077,18 +1077,61 @@ static void optee_get_version(struct tee_device *teedev,
+ 	*vers = v;
+ }
  
- 	if (p) {
--		misc_deregister(&uctrl_dev);
--		free_irq(p->irq, p);
--		of_iounmap(&op->resource[0], p->regs, resource_size(&op->resource[0]));
--		kfree(p);
-+		kref_put(&p->refcnt, uctrl_delete);
- 	}
++static void optee_smc_delete(struct kref *kref)
++{
++	struct optee *optee = container_of(kref, struct optee, refcnt);
++
++	/*
++	 * Ask OP-TEE to free all cached shared memory objects to decrease
++	 * reference counters and also avoid wild pointers in secure world
++	 * into the old shared memory range.
++	 */
++	if (!optee->rpc_param_count)
++		optee_disable_shm_cache(optee);
++
++	optee_smc_notif_uninit_irq(optee);
++
++	optee_remove_common(optee);
++
++	if (optee->smc.memremaped_shm)
++		memunmap(optee->smc.memremaped_shm);
++
++	kfree(optee);
++}
++
++static void optee_smc_release_supp(struct tee_context *ctx)
++{
++	struct optee *optee = tee_get_drvdata(ctx->teedev);
++
++	optee_release_helper(ctx, optee_close_session_helper);
++	if (optee->scan_bus_wq) {
++		destroy_workqueue(optee->scan_bus_wq);
++		optee->scan_bus_wq = NULL;
++	}
++	optee_supp_release(&optee->supp);
++	kref_put(&optee->refcnt, optee_smc_delete);
++}
++
++static void optee_smc_release(struct tee_context *ctx)
++{
++	struct optee *optee = tee_get_drvdata(ctx->teedev);
++
++	optee_release_helper(ctx, optee_close_session_helper);
++	kref_put(&optee->refcnt, optee_smc_delete);
++}
++
+ static int optee_smc_open(struct tee_context *ctx)
+ {
+ 	struct optee *optee = tee_get_drvdata(ctx->teedev);
+ 	u32 sec_caps = optee->smc.sec_caps;
+-
++	kref_get(&optee->refcnt);
+ 	return optee_open(ctx, sec_caps & OPTEE_SMC_SEC_CAP_MEMREF_NULL);
+ }
+ 
+ static const struct tee_driver_ops optee_clnt_ops = {
+ 	.get_version = optee_get_version,
+ 	.open = optee_smc_open,
+-	.release = optee_release,
++	.release = optee_smc_release,
+ 	.open_session = optee_open_session,
+ 	.close_session = optee_close_session,
+ 	.invoke_func = optee_invoke_func,
+@@ -1106,7 +1149,7 @@ static const struct tee_desc optee_clnt_desc = {
+ static const struct tee_driver_ops optee_supp_ops = {
+ 	.get_version = optee_get_version,
+ 	.open = optee_smc_open,
+-	.release = optee_release_supp,
++	.release = optee_smc_release_supp,
+ 	.supp_recv = optee_supp_recv,
+ 	.supp_send = optee_supp_send,
+ 	.shm_register = optee_shm_register_supp,
+@@ -1319,22 +1362,7 @@ static int optee_smc_remove(struct platform_device *pdev)
+ {
+ 	struct optee *optee = platform_get_drvdata(pdev);
+ 
+-	/*
+-	 * Ask OP-TEE to free all cached shared memory objects to decrease
+-	 * reference counters and also avoid wild pointers in secure world
+-	 * into the old shared memory range.
+-	 */
+-	if (!optee->rpc_param_count)
+-		optee_disable_shm_cache(optee);
+-
+-	optee_smc_notif_uninit_irq(optee);
+-
+-	optee_remove_common(optee);
+-
+-	if (optee->smc.memremaped_shm)
+-		memunmap(optee->smc.memremaped_shm);
+-
+-	kfree(optee);
++	kref_put(&optee->refcnt, optee_smc_delete);
+ 
  	return 0;
  }
 -- 
