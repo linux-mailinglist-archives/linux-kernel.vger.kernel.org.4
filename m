@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E3965A548
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 16:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713C465A566
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 16:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235763AbiLaPIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 10:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
+        id S229748AbiLaPLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 10:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235694AbiLaPIE (ORCPT
+        with ESMTP id S235749AbiLaPLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 10:08:04 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E69763B1;
-        Sat, 31 Dec 2022 07:08:02 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-46198b81e5eso333475687b3.4;
-        Sat, 31 Dec 2022 07:08:02 -0800 (PST)
+        Sat, 31 Dec 2022 10:11:12 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BA33884
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 07:11:10 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id s22so24823285ljp.5
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 07:11:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=twLNZ5dF3uUkYx3D2ftZufmrlbnxR2cyL777pTO1PI0=;
-        b=LxePxxMkWCk+99u7qDLqrYjNmY+364ybIOtB6ESq1r73+lFr23/RTBoOLkNs/MmFWS
-         el6X61EQD++vuM7NR/QMk4Yql/losA1bRvmSnVhZ7vPcujfBztvkRPiAMXaqdtD7o2Pq
-         6yMbCbu7+qlPFLO+W+aESL2s6h3TKQ7owLAeQ+++q49CPnXic2u8zXw/U5Q5sahZTw3+
-         cZFlnIItk8UPCdYGofXYZg8UecDVDFLMi+kjS/bmWL98JQVaaRYpbWSj/zZsfMZ5o008
-         yPd63lVYvb4X/cjrMGDM58mN5GoqNAGoGSXDMY3Em3l0u4avHtHJbueUZKMsfSg7IaRN
-         J7rw==
+        d=profian-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zOGMiLTaD/ff59Zq6QF9yZlPHAdc4cQYNGmMJ/5IKpI=;
+        b=jmDeKlzi/wQxFVcNgcstF7XUmY7Ghr2l6PD8MtLnUH+iyUul0nFn5XopqdIyaoS/ed
+         sTDoDjzBz1o2Bx4/57G9oU+gW6j+g3BdFHJStYfjpWoepOFnESibkoUFtF9jIbHR4atg
+         OffUA0LAatZei3U1yh4Q94IF2UJjeEn6+7OrXI0WoK6r95o6yC3ZzWFPMGpnO+nOLWzR
+         cKsNCMq5b6UfYjfhvtfxSJfC57zAlS77Mpq2hv0/MScWtnhxsG84W4e52TE+HZQWHQG+
+         CtBT46WXyTs+k2sQMnmd2+DfT6Cod9aU/qLkHHWlQV22s2DgSzVZnSuKwmP7ZvJwuaG0
+         1kPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=twLNZ5dF3uUkYx3D2ftZufmrlbnxR2cyL777pTO1PI0=;
-        b=u8YiNEbHaPEuxAbeKelxK2ZjfAQ56eed9pfo7tF3ZDMuAInJoAq/q0y3u6lhgRsmtC
-         y9dQVGOnbtAAkNF8Y7+vBFyXA0Z9TLuZGTjGGC+0jeAquLakNiv2nXhKXsvyK/niyvKF
-         vI/5NLjdQ5xXWF68cOk5gBbR6rLrl0HWOKQ4hWrrzy2oPBrkpf+KJA3021avb06d5AKA
-         v9a2Vj38L3hoQY3YxMCH2kcl09oN2ogNyul1UvseETV2OcelhviJbSJsr/RzGsZFX52E
-         orSRpQgob+VPf/lEmgUO/3iVb3wGStU3RCLPR6wSTsMIo8ZtARiu6ngMclvYwCwizQUz
-         i9ZA==
-X-Gm-Message-State: AFqh2krQCZIseR7Ak4PE2x7BfibiRaSPjyHuqPoOWdHV9biYXkyVdDiT
-        z3vtDuNYn37U/L1eTU4unlTQyJ3FnX9igyeAj8w=
-X-Google-Smtp-Source: AMrXdXuOslSTjl7hXGpJN1LRXd+1/2vgbb+tAz606pZMIFj/QJYpTHq1mxR+XNkrxcA6eVkJgndgKrWvH2Zu6xLRJ5w=
-X-Received: by 2002:a0d:fc83:0:b0:3ed:90d2:2ab8 with SMTP id
- m125-20020a0dfc83000000b003ed90d22ab8mr3204530ywf.67.1672499281573; Sat, 31
- Dec 2022 07:08:01 -0800 (PST)
+        bh=zOGMiLTaD/ff59Zq6QF9yZlPHAdc4cQYNGmMJ/5IKpI=;
+        b=idyru/VtHukYdL5dLKat92GbUtpqwkM+w0H/9yvv1aOdwuEfjuRSG+kF1ahUxO7GL+
+         cG19fQu6NoQ8YDJEWTkFhfDGwwuzR+hhtNul+Q5k5rbaz5gThyK+SUirwGpJwhG6xqom
+         SRAwU2qWWYVNDYJDS8PBH0SSKTiAh3hgQA0ZUTcYCLpqYbRwXVlG9JS+zRusOSPUFZyB
+         jaxsRLYrdDx+XAtjTo32aPaFCheE1yHY/TLo920FzBb1x3U2QORUSB1NrQXUg/2et4Zz
+         hyCQ0grQDU8TESpNhN1lVrAsInkYw3OW/tlqlXs70WwvrJJLjTueezzSEes/w/6j3rEL
+         C1/A==
+X-Gm-Message-State: AFqh2kqFSg8SvBgOrS3Nldu49WCLZSPUPv0kE27A2l28FHE/9t+yMDUs
+        NkzW5uLnqUGwa9XXTqyZL/T15w==
+X-Google-Smtp-Source: AMrXdXu8DhLPFAw7oUek3zlieSKDARu2n7hXzH+Ij0UQWj7dK+aNwWXLTUhUKEb4ViEkYoBk97o8Wg==
+X-Received: by 2002:a05:651c:38f:b0:27f:d2d2:cef2 with SMTP id e15-20020a05651c038f00b0027fd2d2cef2mr3195192ljp.46.1672499468984;
+        Sat, 31 Dec 2022 07:11:08 -0800 (PST)
+Received: from localhost (83-245-197-49.elisa-laajakaista.fi. [83.245.197.49])
+        by smtp.gmail.com with ESMTPSA id z4-20020a2ebe04000000b0027fd65e4faesm927131ljq.108.2022.12.31.07.11.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 07:11:08 -0800 (PST)
+From:   Jarkko Sakkinen <jarkko@profian.com>
+To:     linux-crypto@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Jarkko Sakkinen <jarkko@profian.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto: ccp: Improve sev_platform_init() error messages
+Date:   Sat, 31 Dec 2022 15:11:06 +0000
+Message-Id: <20221231151106.143121-1-jarkko@profian.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221231083028.1635698-1-masahiroy@kernel.org>
- <CANiq72n3Hs3T5uFXBBCapnopp_EOwkc7n9QVtP3DguEytU9WKg@mail.gmail.com> <CAK7LNARkyqwEf=xte8Q2BjPkkrvO2-c5_6dmrh=MP527TocuLQ@mail.gmail.com>
-In-Reply-To: <CAK7LNARkyqwEf=xte8Q2BjPkkrvO2-c5_6dmrh=MP527TocuLQ@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 31 Dec 2022 16:07:50 +0100
-Message-ID: <CANiq72=vgQRsBQO8Wwucj2aEout4hzbecgZcgg-W+e5s2WyaDQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: rust: move rust/target.json to scripts/
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Borislav Petkov <bp@suse.de>, David Gow <davidgow@google.com>,
-        Helge Deller <deller@gmx.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,16 +72,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 3:57 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> No.
-> scripts/target.json is a generated file.
-> It is generated in objtree, not in srctree.
+The following functions end up calling sev_platform_init() or
+__sev_platform_init_locked():
 
-I meant `$(objtree)`, i.e. I meant if we should use a $(...)` prefix
-for clarity/consistency (even if it is just `.`).
+* sev_guest_init()
+* sev_ioctl_do_pek_csr
+* sev_ioctl_do_pdh_export()
+* sev_ioctl_do_pek_import()
+* sev_ioctl_do_pek_pdh_gen()
+* sev_pci_init()
 
-Happy New Year!
+However, only sev_pci_init() prints out the failed command error code, and
+even there the error message does not specify, SEV which command failed.
 
-Cheers,
-Miguel
+Address this by printing out the SEV command errors inside
+__sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
+INIT_EX commands.
+
+This extra information is particularly useful if firmware loading and/or
+initialization is going to be made more robust, e.g. by allowing
+firmware loading to be postponed.
+
+Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
+---
+ drivers/crypto/ccp/sev-dev.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 5350eacaba3a..ac7385c12091 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -963,6 +963,7 @@ static int __sev_init_ex_locked(int *error)
+ 
+ static int __sev_platform_init_locked(int *error)
+ {
++	const char *cmd = sev_init_ex_buffer ? "SEV_CMD_INIT_EX" : "SEV_CMD_INIT";
+ 	struct psp_device *psp = psp_master;
+ 	struct sev_device *sev;
+ 	int rc = 0, psp_ret = -1;
+@@ -1008,18 +1009,23 @@ static int __sev_platform_init_locked(int *error)
+ 	if (error)
+ 		*error = psp_ret;
+ 
+-	if (rc)
++	if (rc) {
++		dev_err(sev->dev, "SEV: %s failed error %#x", cmd, psp_ret);
+ 		return rc;
++	}
+ 
+ 	sev->state = SEV_STATE_INIT;
+ 
+ 	/* Prepare for first SEV guest launch after INIT */
+ 	wbinvd_on_all_cpus();
+-	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, error);
+-	if (rc)
+-		return rc;
++	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, &psp_ret);
++	if (error)
++		*error = psp_ret;
+ 
+-	dev_dbg(sev->dev, "SEV firmware initialized\n");
++	if (rc) {
++		dev_err(sev->dev, "SEV: SEV_CMD_DF_FLUSH failed error %#x", psp_ret);
++		return rc;
++	}
+ 
+ 	dev_info(sev->dev, "SEV API:%d.%d build:%d\n", sev->api_major,
+ 		 sev->api_minor, sev->build);
+@@ -2354,8 +2360,7 @@ void sev_pci_init(void)
+ 	/* Initialize the platform */
+ 	rc = sev_platform_init(&error);
+ 	if (rc)
+-		dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
+-			error, rc);
++		dev_err(sev->dev, "SEV: failed to INIT rc %d\n", rc);
+ 
+ skip_legacy:
+ 	dev_info(sev->dev, "SEV%s API:%d.%d build:%d\n", sev->snp_initialized ?
+-- 
+2.38.1
+
