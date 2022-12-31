@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11A265A530
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 15:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C30A65A533
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 15:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbiLaOwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 09:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
+        id S232085AbiLaO5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 09:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiLaOwP (ORCPT
+        with ESMTP id S229889AbiLaO5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 09:52:15 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A02F6B;
-        Sat, 31 Dec 2022 06:52:14 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1433ef3b61fso27644451fac.10;
-        Sat, 31 Dec 2022 06:52:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T0+WY80iRNDRnBXULmWsIfhdxD6/IuyE4kKVn64bZwI=;
-        b=AO+uJi5Hmp6EvZfQOpRmI8uZGusZ5/Dq5ZSow+WUVpzzGIyI86x8vvTIAjXVFR4j3+
-         cMP9PqNf5mopJieq3i581RBK6ZnnI6c/OKKLKAFjxQuvbm81ASAIF/8sqc5WhCd+WcYD
-         IH7E7KGOhK0gtJY41qnbMY0xJFlmUpI0gaa71OasAuzSCyolqrP4JTqg4sZvYzrxy/lm
-         2wh0ihm8SQ1VUKdT1noDl/9yb/qLpFwKUfiaxN6dGxzJ4nuWxk7kg0Ob7NZA7YIEhP0N
-         MwvZpVrK9vojVVTKvme07bxNHheWqH+GcLYEwK+qVIUV9WhiKoaka+TW+UA1sVpgcgrk
-         TTgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T0+WY80iRNDRnBXULmWsIfhdxD6/IuyE4kKVn64bZwI=;
-        b=jfvNpCmcO7YqUqoaydrcTKv0JJGRqpwD5+ObaGDSPnjNNn3zY3r079h76U+QJix8pN
-         rUHKxP2zPB/Jb7xyGZIhT+8o18iU19gzp5MQa7oN6fxUR5LMCi8HwO0fSNveUoUCthhM
-         i7eqYok1MjaYsz4yVzI8X/H793yqy+SPYrksqUpMZfL2ocM0YskBKJ9abu28eFwSJRZ1
-         FPB9vGgFrE2+0eXVrI8KjceMRpPdFjeiE+vYWIm+engSKVO93fZJnyJbAiIX4V1oRMIc
-         RY5Dicyhx3iyVe8eSHF0DsL/IS4wJ7I+jRq92SeDJ/q6dmPdSArqxeARRc29uPbq5Wbu
-         Jszw==
-X-Gm-Message-State: AFqh2koyRA9H0wIZWxfIrvC/5xBPgv55AeQ17ovBHEy9wzWWu05U5Oeq
-        onC56aD1/TQ6h7Oy4/N/ZxnJhpS8SVw=
-X-Google-Smtp-Source: AMrXdXuMLhzij7G+M/SPNFxDi03oNaeY/vu44Eci1RsUHllyC29l9Bn4hqDxz2+wy7hoh8GEj/YNKw==
-X-Received: by 2002:a05:6870:3d95:b0:14f:7756:1cbd with SMTP id lm21-20020a0568703d9500b0014f77561cbdmr15415000oab.26.1672498334004;
-        Sat, 31 Dec 2022 06:52:14 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n38-20020a05687055a600b0013b9ee734dcsm10933245oao.35.2022.12.31.06.52.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 06:52:13 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 31 Dec 2022 06:52:11 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] hwmon: (ftsteutates) Convert to
- devm_hwmon_device_register_with_info()
-Message-ID: <20221231145211.GA2280076@roeck-us.net>
-References: <20221224041855.83981-1-W_Armin@gmx.de>
- <20221224041855.83981-3-W_Armin@gmx.de>
- <20221224151835.GA569106@roeck-us.net>
- <b0bfb455-f702-7ac8-230f-01c8e4aa2be3@gmx.de>
+        Sat, 31 Dec 2022 09:57:35 -0500
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A0A558D;
+        Sat, 31 Dec 2022 06:57:32 -0800 (PST)
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 2BVEv9mc003442;
+        Sat, 31 Dec 2022 23:57:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2BVEv9mc003442
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1672498630;
+        bh=LSGiHg65ifG+RmjaaeVV6Q4NYUPKWN/WkVFe4vplLb4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cTwr8IdXBUzAEgDwSWmjv9gvPE3l1OukBMpzW/AcWilGLdbFVZ6+XYVgAh8vDWFfm
+         TK+Vc525N29Ii6c0HJ86txZeXWyS7zrUBj+g/Xe90sBK5fIPvvU2BVEJnJTpZuOsWs
+         d3jaxm1a7ji0z3RZxyCH5CNetQS3UCjh0aNHu5V5n0Zyx0oO8OwW24pyEM9kCiD9WY
+         ADhvrtBSD5C5HMARaz80fqcIENlnoEZzlQGjhRhapY+urC0C/ef7xLMJQj89XyMCZ4
+         s5wzBAqx9KKO/EaqGZ0fAvS2Aor1kAH4YgtyUimOHpJY7U+X29JAbvLVF2yvBOn+we
+         mt1sEEtV1O5uQ==
+X-Nifty-SrcIP: [209.85.160.51]
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-12c8312131fso27710487fac.4;
+        Sat, 31 Dec 2022 06:57:09 -0800 (PST)
+X-Gm-Message-State: AFqh2kqRgcxtKjpthNuWqembr5UXn/es/ITw4Hfg+Lm9Fbih8dI13Hts
+        98GoPkpG5NsCMenZzRMzyk9OS41KEQPXfPzWHbs=
+X-Google-Smtp-Source: AMrXdXs0ztrHKUs6v7D4aVG8Hi0+Of/8FSGQ9UYNv1GI8nMFG2bmiAsYYhyImtgecHymbooNmPPwWWaXlGl5t3FkiB0=
+X-Received: by 2002:a05:6870:cc89:b0:150:39e2:c688 with SMTP id
+ ot9-20020a056870cc8900b0015039e2c688mr765921oab.287.1672498628907; Sat, 31
+ Dec 2022 06:57:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b0bfb455-f702-7ac8-230f-01c8e4aa2be3@gmx.de>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221231083028.1635698-1-masahiroy@kernel.org> <CANiq72n3Hs3T5uFXBBCapnopp_EOwkc7n9QVtP3DguEytU9WKg@mail.gmail.com>
+In-Reply-To: <CANiq72n3Hs3T5uFXBBCapnopp_EOwkc7n9QVtP3DguEytU9WKg@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 31 Dec 2022 23:56:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARkyqwEf=xte8Q2BjPkkrvO2-c5_6dmrh=MP527TocuLQ@mail.gmail.com>
+Message-ID: <CAK7LNARkyqwEf=xte8Q2BjPkkrvO2-c5_6dmrh=MP527TocuLQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: rust: move rust/target.json to scripts/
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     linux-kbuild@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Borislav Petkov <bp@suse.de>, David Gow <davidgow@google.com>,
+        Helge Deller <deller@gmx.de>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,47 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 12:40:40PM +0100, Armin Wolf wrote:
-> Am 24.12.22 um 16:18 schrieb Guenter Roeck:
-> 
-> > On Sat, Dec 24, 2022 at 05:18:54AM +0100, Armin Wolf wrote:
-> > > Convert driver to use devm_hwmon_device_register_with_info()
-> > > to reduce module size by 40%. The non-standard fan_source
-> > > attribute is replaced with the standard pwmX_auto_channels_temp
-> > > attribute and its special behaviour being documented.
-> > > Also export fan present status as fanX_fault.
-> > There are multiple changes in this patch which are not related
-> > to the actual conversion. Please split into separate patches for
-> > each functional change.
-> > 
-> > While I agree with the fan_source -> pwmX_auto_channels_temp
-> > change, it needs to be done separately after the conversion,
-> > because it is an ABI change which we may have to undo if someone
-> > complains.
-> > 
-> > "export fan present status as fanX_fault" also needs to be a
-> > separate patch.
-> > 
-> > In this context, normally alarms are supposed to auto-clear
-> > after reading an attribute, if the condition no longer exists.
-> > Is it really necessary to explicitly clear the condition, or
-> > would it be possible to auto-clear it after reading the attribute ?
-> > 
-> > Thanks,
-> > Guenter
-> 
-> According to the datasheet, the alarm flags are "sticky" and need to
-> be reset explicitly. Unfortunately, the BMC does not immediately reassign
-> those flags in case of the alarm condition being present, but does this at
-> the next "poll cycle". In order to emulate auto-clearable alarms, the driver
-> would have to constantly poll the BMC, which would still glitch since we do
-> not know the duration of a "poll cycle".
+On Sat, Dec 31, 2022 at 11:25 PM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Sat, Dec 31, 2022 at 9:30 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > scripts/ is a better place to generate files used treewide.
+>
+> Agreed, and its generator is in `scripts/` already anyway.
+>
+> > You do not need to add target.json to no-clean-files or MRPROER_FILES.
+>
+> Maybe adding something like "If moved to `scripts/`, then (...)" would
+> make the sentence a bit more clear.
 
-Many chips have that problem. The solution is to either accept it
-(which many drivers do) or to work around it by cashing reported alarms
-and only clearing the alarm bit form the cache after a poll cycle.
-The lm90 driver is probably the most sophisticated of those.
-There is no need to do anything special, much less anything that prevents
-standard applications such as "sensors" from working.
 
-Guenter
+OK, i will rephrase it in v2.
+
+
+> (Also, typo: `MRPROPER`)
+>
+> > -$(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs $(obj)/target.json FORCE
+> > +$(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs scripts/target.json FORCE
+>
+> Should this be `$(srctree)/scripts...` for clarity/consistency? (I see
+> most instances like that elsewhere too)
+
+
+No.
+scripts/target.json is a generated file.
+It is generated in objtree, not in srctree.
+
+
+
+
+
+> Cheers,
+> Miguel
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
