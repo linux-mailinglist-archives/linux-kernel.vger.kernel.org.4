@@ -2,55 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706B865A3E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608EA65A3E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 13:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235435AbiLaMBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 07:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
+        id S231522AbiLaMVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 07:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbiLaMBu (ORCPT
+        with ESMTP id S229486AbiLaMVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 07:01:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D68DF0C;
-        Sat, 31 Dec 2022 04:01:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 279CF60AF7;
-        Sat, 31 Dec 2022 12:01:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF360C433D2;
-        Sat, 31 Dec 2022 12:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672488108;
-        bh=qxHjy+zKK9wtZ6F9aaLA1vU4VqtvVsM+K7aYfjSbsd0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fl+Xqq+za4DdxLdF/ED08Y8aaYK7tnfVaWeEiqwkqRRh/nezleEiJEolg4jhIFXhY
-         49NVpLVqQlMG/JLwrPmYaDeznGneb+okUL/HVMRxhJetN+5AcvrtcrKPvc9lE6GLu4
-         QI4JsW5qrqBgLWgTG6Z9rqsaYutwMr0CbjOnKdO3UN6TMDmizwm/8tLgZXfEOfDfaj
-         mcm9uIfkAy9CEpoMHPc2B3K4P6+/COcolgKKRTjErMLSZJGr97Tkt76KuCKQYj5P4d
-         xm2jlcoA0nM4J+gkRggDB2Uv3aGDh7Z5ybx7/gl/5xUJAOTxbZ7AAAMps7yjn4d/7n
-         0uV0YjmvTdQ3g==
-Date:   Sat, 31 Dec 2022 20:01:42 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, kernel@puri.sm, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] arm64: dts: imx8mq-librem5: use multicolor leds
- description for RGB led
-Message-ID: <20221231120141.GQ6112@T480>
-References: <20221130113124.1558335-1-martin.kepplinger@puri.sm>
+        Sat, 31 Dec 2022 07:21:08 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498168FC9
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:21:04 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id u8so12607326ilq.13
+        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 04:21:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eHyvwjFgtUAVt21YsLkg4uXGhQ3k3u+3P7bUVoiseTg=;
+        b=PNYwRvN67KohL7ytiDP6pZKZozIdVGKqddCyJ8x8xS1CvkG963uhzVPanfgNRudAdC
+         FyjLtV/eoJsG6/LiGDJ1HCVwrWluabbWyjoQOKzC9sw/H0W2PbCgQUxBzWrvtevLicPj
+         +LKz+CgSTLfYpxbsq7V9xRp4p173EPhzMHwGWYn1KC3t6VjBpOU1Hd6Mhvmv3BjtOmWI
+         o3uwTRxRrh8tsjFJYAIXFpUnSPv2qNVybDMbUZYMKtCRF5/5CItL32Qx868BC87vgig8
+         TiK+pxwJRJ5mKz5CtN1DotJfA0pY3dDgTdhWWxDozhYRWQ866mJQVh0pwX+7TPpkPiAx
+         oFJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eHyvwjFgtUAVt21YsLkg4uXGhQ3k3u+3P7bUVoiseTg=;
+        b=tO0/VweNfjG24uB4/vpEJS8+wXr+4AB/GxzRWP7GC2VoLvVGz/8dJYTHqiTNbSnof+
+         WCYmmImzj5I44L6zC74fsqKPzVLBdwOn/0J1BQ5UxvHS57laATItARPhGZRM+Api17Yx
+         ihf2jE8Jmx2f1g5cvIOObe8hJNFLxQIuDi9vwlcuU1lfuRIucsVmw9zLwNNT4o07mO5+
+         taikLapxgHu31fkm2sg0chxITP1qhLEC9BWgAXK5IE/4PP2sgZv4UfuzOf525DuTaJua
+         XOZv6Qx8mu7pMUSHGJ2sNYi8OO17KyOJn/k/Slc2LDBZtmyz75xm/utVc787w9YVYBbU
+         15qA==
+X-Gm-Message-State: AFqh2krKJayn29ohzJs67s34wdnt0/45e0qBANn6WDRaz1V0xbGLpZRW
+        At2hSc/e6QF94fo2GjzRZdqHew==
+X-Google-Smtp-Source: AMrXdXs1PloNm8WS1dZpxGaleJqB1vINRpBdIbKv4RjigCCTdRdhZmGlECyuJcz2RbPovIFXGk6xTw==
+X-Received: by 2002:a92:bf0c:0:b0:30c:3c0:7a56 with SMTP id z12-20020a92bf0c000000b0030c03c07a56mr11491172ilh.5.1672489263551;
+        Sat, 31 Dec 2022 04:21:03 -0800 (PST)
+Received: from [10.211.55.3] ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id az36-20020a05663841a400b0039db6cffcbasm5956607jab.71.2022.12.31.04.21.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 31 Dec 2022 04:21:02 -0800 (PST)
+Message-ID: <e72955ce-5c0c-f335-8deb-8a2893c842b5@linaro.org>
+Date:   Sat, 31 Dec 2022 06:21:01 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130113124.1558335-1-martin.kepplinger@puri.sm>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next 0/6] net: ipa: simplify IPA interrupt handling
+To:     Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221230232230.2348757-1-elder@linaro.org>
+ <20221230195218.65eaaf92@kernel.org>
+Content-Language: en-US
+From:   Alex Elder <alex.elder@linaro.org>
+In-Reply-To: <20221230195218.65eaaf92@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,10 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 12:31:24PM +0100, Martin Kepplinger wrote:
-> As Documentation/leds/well-known-leds.txt says, "Phones usually have
-> multi-color status LED." Fix that for the Librem 5 mobile phone board.
+On 12/30/22 9:52 PM, Jakub Kicinski wrote:
+> On Fri, 30 Dec 2022 17:22:24 -0600 Alex Elder wrote:
+>> [PATCH net-next 0/6] net: ipa: simplify IPA interrupt handling
 > 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> We kept net-next closed for an extra week due to end-of-the-year
+> festivities, back in business next week, sorry.
 
-Applied, thanks!
+No, *I* am sorry.  I forgot to even check this time, and I normally do.
+   http://vger.kernel.org/~davem/net-next.html
+
+It's perfectly fine, I'll wait.  I won't re-send next week unless it
+becomes obvious I should.
+
+Thanks, and happy new year!
+
+					-Alex
