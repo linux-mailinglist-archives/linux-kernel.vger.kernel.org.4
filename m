@@ -2,158 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE4365A045
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 02:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D73765A05E
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 02:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236009AbiLaBIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Dec 2022 20:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        id S236033AbiLaBO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Dec 2022 20:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235811AbiLaBIq (ORCPT
+        with ESMTP id S236028AbiLaBO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Dec 2022 20:08:46 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFE71573A
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 17:08:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672448925; x=1703984925;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=K1jtPn7+jthkpSMD+6OfXRvwubiu7Ke+2saNndR5h6w=;
-  b=BgFuMrCYhXhmaeb3uyin+dV4sg5NO9PsjxFeZ7XHkgqzo0X5Wo/7fnAW
-   BAFmPcjr4sBgvgAQnrD/bntsTe1Ag2wTAAK5WXU1feK9JzNTSslr5BTpV
-   KuJPzWMXShokF5/jxJ5lPzBYFklXYZYhej2WbqPiNS5EWZX3v6F2qLnvi
-   eGq4r9rP3A2PrAT10/ml+a0EeGQgl6J+2sJewakYyFOBuFZ1K86s2E/5T
-   LvI+cyYAsLeUDBf/zkA00sNSZyFduxzsHjBIuirBP9FbDyccQhwDieXGL
-   L3LxT/9WCo7T81Pko/TcEbAINA3/T6zlFt0dYCeUQ4UqLLb9DCjbhQeI0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10576"; a="309038698"
-X-IronPort-AV: E=Sophos;i="5.96,288,1665471600"; 
-   d="scan'208";a="309038698"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 17:08:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10576"; a="899376524"
-X-IronPort-AV: E=Sophos;i="5.96,288,1665471600"; 
-   d="scan'208";a="899376524"
-Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Dec 2022 17:08:43 -0800
-Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pBQMc-000MjS-18;
-        Sat, 31 Dec 2022 01:08:42 +0000
-Date:   Sat, 31 Dec 2022 09:07:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- fdcbb2aa95b584bf189401bd3072b4bc0de4d52f
-Message-ID: <63af8b69.9bh1fbKr7m4CPOrQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 30 Dec 2022 20:14:56 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506C8178B4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Dec 2022 17:14:56 -0800 (PST)
+Received: from [IPV6:2601:646:8600:40c1:5967:deb4:a714:2940] ([IPv6:2601:646:8600:40c1:5967:deb4:a714:2940])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BV1EVmS1463922
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 30 Dec 2022 17:14:32 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BV1EVmS1463922
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022120601; t=1672449273;
+        bh=p758Zgd+yGDuok+ksdSxE2idQGSI127bm719tcowUaE=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=G4LeLSN1au620qGat9Nr+WlKrYb7uSchs4cjj5ly0FiMkE05k6lizUbSIlwEBhEI7
+         w+kdSn+PABHB9xif38RY+Vt10NnD9unHylbnxZnZ87bqtWrwGBZxtAk0jS7Jn/WHzr
+         oc5/PdIRZ8o6PVFPfme08Ihme5BC2aHQftb1nYb6lVOECNg9d21n9nE7eJgw/in88R
+         FYfBTgAypVgCc1Fvqd2QayztYKT2cqjxFjY+fodRgQbu+B0C/jwmJj71Wl/2thAyQC
+         2HncnwoI+KOaHMwZgSQ0rXJ86AQzrJ1MQRbmk4UOf+auLmv94S6xThtlWKI5pNiChR
+         6CYFmtuhbDQpg==
+Message-ID: <7dc37024-5bdd-1206-020b-5072629b80dd@zytor.com>
+Date:   Fri, 30 Dec 2022 17:14:26 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
+ setup_data
+Content-Language: en-US
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Borislav Petkov <bp@alien8.de>, pbonzini@redhat.com,
+        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
+        philmd@linaro.org
+References: <Y6x1knb8udpSyMSp@zx2c4.com>
+ <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com> <Y6z765zHrQ6Rl/0o@zx2c4.com>
+ <AF921575-0968-434A-8B46-095B78C209C1@zytor.com> <Y62MdawGaasXmoVL@zn.tnic>
+ <Y68Js5b0jW/2nLU4@zx2c4.com> <Y68Zf/MKmX3Rr18E@zn.tnic>
+ <CAHmME9oPUJemVRvO3HX0q4BJGTFuzbLYANeizuRcNq2=Ykk1Gg@mail.gmail.com>
+ <Y69B40T9kWfxZpmf@zn.tnic> <E5D0A77E-5ABC-4978-9A66-37B60DA43869@zytor.com>
+ <Y69h6ur79SMhu61F@zx2c4.com> <46466e54-25c3-3194-8546-a57cd4a80d9d@zytor.com>
+In-Reply-To: <46466e54-25c3-3194-8546-a57cd4a80d9d@zytor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: fdcbb2aa95b584bf189401bd3072b4bc0de4d52f  Merge branch into tip/master: 'x86/microcode'
+On 12/30/22 17:06, H. Peter Anvin wrote
+> 
+> TThe 62 MB limit mentioned in boot.rst is unrelated, and only applies to 
+> very, very old kernels that used INT 15h, AH=88h to probe memory.
+> 
 
-elapsed time: 723m
+I am 88% sure this was fixed long before setup_data was created, as it 
+was created originally to carry e820 info for more than 128(!) memory 
+segments. However, as we see here, it is never certain that bugs didn't 
+creep in in the meantime...
 
-configs tested: 75
-configs skipped: 2
+	-hpa
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-powerpc                           allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-sh                               allmodconfig
-arc                                 defconfig
-mips                             allyesconfig
-alpha                               defconfig
-powerpc                          allmodconfig
-ia64                             allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-i386                                defconfig
-s390                             allmodconfig
-s390                                defconfig
-x86_64                           rhel-8.3-bpf
-x86_64                              defconfig
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-kvm
-x86_64                         rhel-8.3-kunit
-x86_64               randconfig-a014-20221226
-x86_64               randconfig-a013-20221226
-x86_64               randconfig-a011-20221226
-x86_64               randconfig-a012-20221226
-s390                             allyesconfig
-x86_64                               rhel-8.3
-x86_64                    rhel-8.3-kselftests
-x86_64               randconfig-a016-20221226
-arm                                 defconfig
-x86_64               randconfig-a015-20221226
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-arm64                            allyesconfig
-i386                 randconfig-a013-20221226
-arm                              allyesconfig
-i386                 randconfig-a014-20221226
-i386                 randconfig-a012-20221226
-i386                 randconfig-a011-20221226
-i386                             allyesconfig
-i386                 randconfig-a015-20221226
-i386                 randconfig-a016-20221226
-arm                  randconfig-r046-20221225
-arc                  randconfig-r043-20221225
-arc                  randconfig-r043-20221227
-arm                  randconfig-r046-20221227
-arc                  randconfig-r043-20221226
-riscv                randconfig-r042-20221226
-s390                 randconfig-r044-20221226
-x86_64                            allnoconfig
-i386                          randconfig-c001
-
-clang tested configs:
-x86_64                          rhel-8.3-rust
-x86_64               randconfig-a002-20221226
-i386                 randconfig-a003-20221226
-x86_64               randconfig-a003-20221226
-x86_64               randconfig-a001-20221226
-x86_64               randconfig-a004-20221226
-i386                 randconfig-a001-20221226
-x86_64               randconfig-a005-20221226
-x86_64               randconfig-a006-20221226
-i386                 randconfig-a005-20221226
-i386                 randconfig-a004-20221226
-i386                 randconfig-a006-20221226
-i386                 randconfig-a002-20221226
-hexagon              randconfig-r045-20221225
-riscv                randconfig-r042-20221227
-hexagon              randconfig-r041-20221225
-s390                 randconfig-r044-20221227
-hexagon              randconfig-r041-20221227
-hexagon              randconfig-r041-20221226
-arm                  randconfig-r046-20221226
-s390                 randconfig-r044-20221225
-hexagon              randconfig-r045-20221226
-riscv                randconfig-r042-20221225
-hexagon              randconfig-r045-20221227
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
