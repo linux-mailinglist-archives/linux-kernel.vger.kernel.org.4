@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BB865A59F
-	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 17:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BBF65A5A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 31 Dec 2022 17:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbiLaQCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 11:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
+        id S232173AbiLaQEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 11:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiLaQCV (ORCPT
+        with ESMTP id S231901AbiLaQEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 11:02:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FF838A0
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 08:01:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672502492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OVTkT6J2Hrxy6D3i2AFBcsY5vLlTPz0/Nv+lU2zXc/I=;
-        b=dHypmf1RkvDOF1EV5a5jjEIWfeCCwDVHyzWEbH/Y/+zebxKrtoYSzme0gu0bFwvmmWiTeV
-        reRF7O+wZusAccWFllEeoNeuuU+iwn8ZlidXSjyipbhF47BNQO1Q6XnokK8GoInK6nNnZq
-        JdV1TQ3ZXEwqTOurAxxYMyHGoPVk+6g=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-607-kybYcjFYM-eM_ygBPJjIKw-1; Sat, 31 Dec 2022 11:01:29 -0500
-X-MC-Unique: kybYcjFYM-eM_ygBPJjIKw-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-14fa3e986a2so9039199fac.17
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 08:01:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OVTkT6J2Hrxy6D3i2AFBcsY5vLlTPz0/Nv+lU2zXc/I=;
-        b=0rQlUABZZP1jdWlJRVe2P8waL8lrs1FhIKhrdR5t3mh90ERCyVpRjICIHey48zR5fy
-         IUGE1xTBbSBQpCPf6N4X9ZE5weArZD+g8YxSGizxLB6tVMCClMHAFOCdfWC7IREZj+py
-         UMadNVoqCDu6W8iDaRkdrHeyhLOdnsm/I/hFiXS8Mg+0uqXzQcEkGn7Sbab8Qa1OfJLo
-         rXLkgpXV7EYyvAtDIAg5qFnTNwr4kqFqPx2HDoe3uvaPlYxMq7PRDi270Wk8WPUUiyST
-         rarF31J8x5TE/AWtE08AwmZqWP846N+Ac+2LQpU6/KsEo9f7aBCGQ8hZCFoRvuUVi32t
-         jUVQ==
-X-Gm-Message-State: AFqh2kpKvpxuMY5CFZp0sbVK2VQkDENkBqsN1ntlpoJHsdfREWe2fpCg
-        XQJV0ZVWAUCi51SiDpQq8XFiq9o1r4Hp3PcIjw32/UJ1LD2D3q/PDiXhHNyPfZGAh9pgjYDYmAY
-        oxq+7MvyxlxJwhg7POn/wxyok
-X-Received: by 2002:a05:6870:1b87:b0:148:25f1:bf35 with SMTP id hm7-20020a0568701b8700b0014825f1bf35mr17865910oab.28.1672502488377;
-        Sat, 31 Dec 2022 08:01:28 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsSM/oqnmzUCIQJkwhDRJi02tD3ISDY+eIi3zQNdrKd2rTGfyr/RZxYwiuZlE+NJ0nqAP3tgw==
-X-Received: by 2002:a05:6870:1b87:b0:148:25f1:bf35 with SMTP id hm7-20020a0568701b8700b0014825f1bf35mr17865888oab.28.1672502488165;
-        Sat, 31 Dec 2022 08:01:28 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id b23-20020ac87557000000b003a5c60686b0sm14601158qtr.22.2022.12.31.08.01.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 08:01:27 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, rric@kernel.org
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] EDAC: add parameters to edac stub macros
-Date:   Sat, 31 Dec 2022 11:01:19 -0500
-Message-Id: <20221231160119.2994264-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 31 Dec 2022 11:04:09 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193F6E36;
+        Sat, 31 Dec 2022 08:04:08 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id E17505C00CA;
+        Sat, 31 Dec 2022 11:04:04 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 31 Dec 2022 11:04:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1672502644; x=1672589044; bh=xWE0lT6NaS/AHVoUWn03I8qZ2
+        RF4KER8K841iF6ca5E=; b=ERRgjIq669xz32IXLnN4VpdajHn1WgfVzs/8rY3NO
+        bjeZ/v3UgLJYT/qISuvf8LbiCetSVa9p3FeVfQ2pWvXZ/cJw63MLSTGoC4WrIRZ3
+        hUlHZvG61TgTFaO7MfOnmTj9/a4G+EAmEcS+ZYHK5uMrZuFmWlp0P9Q8Gs8HdrMM
+        kFCn3iQckWrV8BNjmx+KNDUN2Qo5AXHcMEWpkETFFfJgQK8rk+dEGOZLOJZ4gmxi
+        UWhr/TzdqFDlu76w7ZqWMUISlR8AsMCp9pCjacF6A/j+MoNFz4R+AgEk481QfbOm
+        DN7Y8QdOQ5Xin5ql4hiOZtfkrh+rHK8lY2Lr+lkz+4dEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1672502644; x=1672589044; bh=xWE0lT6NaS/AHVoUWn03I8qZ2RF4KER8K84
+        1iF6ca5E=; b=YoEROOA9LgPRbDQQqDVGZ8OGREl/8S4SZ0324CF/Z4piDyCosbs
+        9/OHg+kyevz6h0cMSJQ0JOfsiU2s9QVU6339P0XU9PNY7Z1BUi3dmE+jc9iECMz5
+        njOzNrwXqIz4iBNfDblH77GGBgp9hjEQ6UUb0X0H3cqgqxHUijyoQH0OwK1K4gkM
+        MpU30CchqyVVlIYghdlMmx51luUnWdXTb2pO+F71owsGG56aP4QLaMSS0hXrAAPm
+        Fx9cG2EcPKY2//lnR90tB4DQuiV39l4BPVRURJrzSxXaVxoBzKdKn54V9bgIbENw
+        x0mD+9TUsO7pb8JNO7wsTSrmjQj+BUTcHLQ==
+X-ME-Sender: <xms:dF2wY_7_Mf68KkLvmZC2aN7VDfUnfEBu_x-cb9raTV03acELQNws3Q>
+    <xme:dF2wY05PZrHxy_Ox3iLcP296ICPJAKO6e-wMsSEJUZMox13hAHLlQ0XFYcOJXIBST
+    s6JPvi8pjFdKmcIrA>
+X-ME-Received: <xmr:dF2wY2cwGCsgDO7o-sQpUZVKVFDtzipr09zOhWJZ53A1X2ouI07uc3RMauwmv_M1VHN38-bt_V-k_BUNpVR8Xjun8cTEoWpSxS1uvMe8B1VT5VfpNxYyR9djkCV8oCfDaPcRqA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieekgdekfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpedvtdelueegfeejtedujedvudejteetheevleekvdfgteegtddvieekudfh
+    leegveenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdr
+    ohhrgh
+X-ME-Proxy: <xmx:dF2wYwKSoEqCMqsBPfG1Q37erLSM6cFyWf7WUMjmUpT6vIqCpCwZsg>
+    <xmx:dF2wYzK7p5v0UsIVKOms0fu1AEnqfJhIJIHikPBjqXdtA7IRJfEXug>
+    <xmx:dF2wY5w8mGeSa6wEjy-sz9s7wqvjSfEI4LQTjlSJtnLaGpjpAIhlzw>
+    <xmx:dF2wY68A4Oc5AsQeFMiZBXnqpUl9_Z1lb-AarT-6xdPVc6PjT-wOWg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 31 Dec 2022 11:04:03 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH 0/2] Allwinner power domain support
+Date:   Sat, 31 Dec 2022 10:04:00 -0600
+Message-Id: <20221231160402.16157-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cppcheck reports this error
-[drivers/edac/amd8111_edac.c:175]: (error) failed to expand 'edac_pci_handle_npe',
-  Wrong number of parameters for macro 'edac_pci_handle_npe'.
+This series adds support for the power controller found in D1 and other
+recent Allwinner SoCs. There is no first-party documentation, but there
+are a couple of vendor drivers for different hardware revisions[1][2],
+and the register definitions were easy to verify empirically.
 
-cppcheck is testing the stubs which do not have parameters.
-Add parameters to match function call.
+I have tested this driver on D1 with the video engine. There is no DT
+update patch here to avoid dependencies between series. The example in
+the binding is what will go in the D1 DT.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/edac/edac_module.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[1]: https://github.com/mangopi-sbc/tina-linux-5.4/blob/main/drivers/soc/sunxi/gpu_domain.c
+[1]: https://github.com/mangopi-sbc/tina-linux-5.4/blob/main/drivers/soc/sunxi/pm_domains.c
 
-diff --git a/drivers/edac/edac_module.h b/drivers/edac/edac_module.h
-index 50ed9f2425bb..fe6b4e004432 100644
---- a/drivers/edac/edac_module.h
-+++ b/drivers/edac/edac_module.h
-@@ -117,8 +117,8 @@ extern void edac_pci_handle_npe(struct edac_pci_ctl_info *pci,
- #define edac_sysfs_pci_teardown()
- #define edac_pci_get_check_errors()
- #define edac_pci_get_poll_msec()
--#define edac_pci_handle_pe()
--#define edac_pci_handle_npe()
-+#define edac_pci_handle_pe(pci, msg)
-+#define edac_pci_handle_npe(pci, msg)
- #endif				/* CONFIG_PCI */
- 
- #endif				/* __EDAC_MODULE_H__ */
+
+Samuel Holland (2):
+  dt-bindings: power: Add Allwinner D1 PPU
+  soc: sunxi: Add Allwinner D1 PPU driver
+
+ .../power/allwinner,sun20i-d1-ppu.yaml        |  54 +++++
+ drivers/soc/sunxi/Kconfig                     |   9 +
+ drivers/soc/sunxi/Makefile                    |   1 +
+ drivers/soc/sunxi/sun20i-ppu.c                | 207 ++++++++++++++++++
+ .../power/allwinner,sun20i-d1-ppu.h           |  10 +
+ 5 files changed, 281 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml
+ create mode 100644 drivers/soc/sunxi/sun20i-ppu.c
+ create mode 100644 include/dt-bindings/power/allwinner,sun20i-d1-ppu.h
+
 -- 
-2.27.0
+2.37.4
 
