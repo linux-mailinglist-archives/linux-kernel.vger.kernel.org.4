@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B187165AADE
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 18:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E6B65AAE0
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 18:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbjAAR6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 12:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
+        id S231574AbjAAR6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 12:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbjAAR5y (ORCPT
+        with ESMTP id S230505AbjAAR5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 12:57:54 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A7A2DC6
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 09:57:53 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id t17so62195089eju.1
-        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 09:57:53 -0800 (PST)
+        Sun, 1 Jan 2023 12:57:55 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF8226F3
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 09:57:54 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id u19so62202011ejm.8
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 09:57:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oblVMZgZfte7LXSyrB/POmBldgu6kOYgd6zW5q8+W0Y=;
-        b=WnAI8GzdY3F+kPow26vjxB05/NUELNhF4b/lyGEm2/q1L5Ydpkp4dbTQvP3xcXBjBQ
-         KWf/cVWJyVBfa5Pe3RGt2OaO6ST9YHba6ZhKrp02waugj1f8HBkMLgxgrevwXI1ixRlC
-         //9HkRm5WYGzLDOhEXlQcqzH59VG6LD0ZfmqA=
+        bh=SzWgtinayzWqOkE2ijmFHmqOXIKDSib2Is7Zd5a35gQ=;
+        b=EM/uGHg2iYqIbRUhx0y9T0X9TCSTDyC4lib+zCHiZaCDLXVtUn4+nGN6OCYp+Zq0Zu
+         wQYz67wT2i0DIFarnzNY3xkk/gfFjvP6BjiDenOX+PeFdg5f6ocLZ0RLtt52kWyEx7KK
+         3hkBMVPRt1+K+/cTaZM30hxlJ2KUehDqTEJIw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oblVMZgZfte7LXSyrB/POmBldgu6kOYgd6zW5q8+W0Y=;
-        b=Ju8oMInlcNTYU+6vB+iqfAF7d4dXWz1RYxZ725b8EmdvpTsa2C3t2lZAmRh5xhNkeU
-         bCspWciWbqoZFDXFdtOuaRHO2kFv9Tx3Z5ULgLM9XmYq9d5SIBc9GWv5aPk0G/y2hRYM
-         bxBM/paR1Fok92JUGWJS9559rUUOOiWPs27ZOr+0/piQKaJwL0ejcSCvXZCDMkS8tGLv
-         Y4NOuXp08kUO4ORWH09YvZ41agKhNPkcelMMNDufEcmi8S3NIktxHIj4a5TWYFG3t40v
-         tkGb36AWZCDZqndzH9wicLclajTM3nhbOqsMTK5JacOab9+4fRIg4FQy+aFLHQmk0yuJ
-         cpCw==
-X-Gm-Message-State: AFqh2kozAHV0J0KzJ/HX6MWhhOyGuGAdw0yIEEtM63O1tLLJ5YiBN7bf
-        IiTLKsex2hE1pyXTJ/MtV13Za4Fx0zwdetMKYa4=
-X-Google-Smtp-Source: AMrXdXv959ouvFb59L0yRtBCOCDcQZJT/7xjFOoD9JH1Rtl5aw9YuHks7ermR0EpSjEc3aFwnVrlPA==
-X-Received: by 2002:a17:907:11cf:b0:7c2:3b8a:9f0d with SMTP id va15-20020a17090711cf00b007c23b8a9f0dmr33781690ejb.51.1672595871493;
-        Sun, 01 Jan 2023 09:57:51 -0800 (PST)
+        bh=SzWgtinayzWqOkE2ijmFHmqOXIKDSib2Is7Zd5a35gQ=;
+        b=5RG4ztHTtTQmXq69KDUME5nMHP5Tqhaq7AkqG/pv/WQjB+4ufPDelUoogTrifhva3t
+         vEw8B/hNM3TX9N6LMSGtjHPEWIRszpCZppd8vCAgcBRSCaJaQxCG0GLAopciBy2TKnXf
+         U2As5awd959cXe9DtW7fcfbXAXAAIiKlFnwU/TqMKDFj+OIwEA/EzOeEhQGt1G3UfPiJ
+         LEUVu6OTOdsU4ciAS4trELVVriiSmLIOl8JgSnNC9RMtir+JpMk+LCqLbkL/DXJ5I8gn
+         sfRnLVelOby6Qh2GKiMQmvg0wysUqCwjStmUGpkZnVeCwEL+p6MuRZisWrtXEbezd1Ci
+         n4bw==
+X-Gm-Message-State: AFqh2kqp/th5tWttvigXjr52NpuPzsxe05jRON34DtR94pLDNY1sCA8B
+        qftJ5UAcn0szUEfXzQAl1mtkNemKgZxXup6KhJg=
+X-Google-Smtp-Source: AMrXdXtXQXtP+JRZ2PCIzEppWci1rqIph2WNNWQGjgW1m5qyvhjqMjB2g1RBlEZ/fryZ0lH5A+bnYA==
+X-Received: by 2002:a17:906:38d9:b0:84b:8885:9868 with SMTP id r25-20020a17090638d900b0084b88859868mr31536688ejd.58.1672595872816;
+        Sun, 01 Jan 2023 09:57:52 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-180-23-57.retail.telecomitalia.it. [80.180.23.57])
-        by smtp.gmail.com with ESMTPSA id q2-20020a1709063d4200b0082ddfb47d06sm12273018ejf.148.2023.01.01.09.57.50
+        by smtp.gmail.com with ESMTPSA id q2-20020a1709063d4200b0082ddfb47d06sm12273018ejf.148.2023.01.01.09.57.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Jan 2023 09:57:51 -0800 (PST)
+        Sun, 01 Jan 2023 09:57:52 -0800 (PST)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     angelo@amarulasolutions.com, michael@amarulasolutions.com,
@@ -64,9 +64,9 @@ Cc:     angelo@amarulasolutions.com, michael@amarulasolutions.com,
         Shawn Guo <shawnguo@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: [RFC PATCH v2 03/11] clk: imx8mn: add gate driver
-Date:   Sun,  1 Jan 2023 18:57:32 +0100
-Message-Id: <20230101175740.1010258-4-dario.binacchi@amarulasolutions.com>
+Subject: [RFC PATCH v2 04/11] clk: imx8mn: add mux driver
+Date:   Sun,  1 Jan 2023 18:57:33 +0100
+Message-Id: <20230101175740.1010258-5-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230101175740.1010258-1-dario.binacchi@amarulasolutions.com>
 References: <20230101175740.1010258-1-dario.binacchi@amarulasolutions.com>
@@ -82,24 +82,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch adds support for imx8mn gate clocks to be initialized directly
-from the device tree. Currently all i.MX gate clocks are initialized by
-legacy code with hardwired parameters. This approach has generated a
-proliferation of setup functions with unclear names:
+The patch adds support for imx8mn mux clocks to be initialized directly
+from the device tree. Currently all i.MX mux clocks are initialized by
+legacy code with hardwired parameters. This approach has generated setup
+functions with unclear names:
 
-git grep "#define imx_clk_hw_gate" drivers/clk/imx/clk.h
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate(name, parent, reg, shift) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate2(name, parent, reg, shift) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate_dis(name, parent, reg, shift) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate_dis_flags(name, parent, reg, shift, flags) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate_flags(name, parent, reg, shift, flags) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate2_flags(name, parent, reg, shift, flags) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate2_shared(name, parent, reg, shift, shared_count) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate2_shared2(name, parent, reg, shift, shared_count) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate3(name, parent, reg, shift) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate3_flags(name, parent, reg, shift, flags) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate4(name, parent, reg, shift) \
-drivers/clk/imx/clk.h:#define imx_clk_hw_gate4_flags(name, parent, reg, shift, flags) \
+git grep "#define imx_clk_hw_mux" drivers/clk/imx/clk.h
+drivers/clk/imx/clk.h:#define imx_clk_hw_mux2(name, reg, shift, width, parents, num_parents) \
+drivers/clk/imx/clk.h:#define imx_clk_hw_mux(name, reg, shift, width, parents, num_parents) \
+drivers/clk/imx/clk.h:#define imx_clk_hw_mux_flags(name, reg, shift, width, parents, num_parents, flags) \
+drivers/clk/imx/clk.h:#define imx_clk_hw_mux_ldb(name, reg, shift, width, parents, num_parents) \
+drivers/clk/imx/clk.h:#define imx_clk_hw_mux2_flags(name, reg, shift, width, parents, num_parents, flags) \
 
 So, let's start with this specific clock driver and hope that other
 variants can be handled in the future, causing the legacy code to be
@@ -110,29 +103,29 @@ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 (no changes since v1)
 
- drivers/clk/imx/Makefile   |   1 +
- drivers/clk/imx/clk-gate.c | 156 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 157 insertions(+)
- create mode 100644 drivers/clk/imx/clk-gate.c
+ drivers/clk/imx/Makefile  |   1 +
+ drivers/clk/imx/clk-mux.c | 258 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 259 insertions(+)
+ create mode 100644 drivers/clk/imx/clk-mux.c
 
 diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-index e8aacb0ee6ac..72e1f08d49dc 100644
+index 72e1f08d49dc..1cffc5bebbe1 100644
 --- a/drivers/clk/imx/Makefile
 +++ b/drivers/clk/imx/Makefile
-@@ -11,6 +11,7 @@ mxc-clk-objs += clk-divider-gate.o
- mxc-clk-objs += clk-fixup-div.o
- mxc-clk-objs += clk-fixup-mux.o
- mxc-clk-objs += clk-frac-pll.o
-+mxc-clk-objs += clk-gate.o
+@@ -15,6 +15,7 @@ mxc-clk-objs += clk-gate.o
  mxc-clk-objs += clk-gate2.o
  mxc-clk-objs += clk-gate-93.o
  mxc-clk-objs += clk-gate-exclusive.o
-diff --git a/drivers/clk/imx/clk-gate.c b/drivers/clk/imx/clk-gate.c
++mxc-clk-objs += clk-mux.o
+ mxc-clk-objs += clk-pfd.o
+ mxc-clk-objs += clk-pfdv2.o
+ mxc-clk-objs += clk-pllv1.o
+diff --git a/drivers/clk/imx/clk-mux.c b/drivers/clk/imx/clk-mux.c
 new file mode 100644
-index 000000000000..841ff9a37f30
+index 000000000000..426738d25582
 --- /dev/null
-+++ b/drivers/clk/imx/clk-gate.c
-@@ -0,0 +1,156 @@
++++ b/drivers/clk/imx/clk-mux.c
+@@ -0,0 +1,258 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2022 Amarula Solutions
@@ -153,87 +146,158 @@ index 000000000000..841ff9a37f30
 +#undef pr_fmt
 +#define pr_fmt(fmt) "%s: " fmt, __func__
 +
-+#define to_clk_imx_gate(_hw) container_of(_hw, struct clk_imx_gate, hw)
++#define to_clk_imx_mux(_hw) container_of(_hw, struct clk_imx_mux, hw)
 +
-+struct clk_imx_gate {
++struct clk_imx_mux {
 +	struct clk_hw hw;
 +	struct imx_clk_reg reg;
-+	u32 enable_mask;
++	u32 mask;
++	u8 shift;
++	u8 saved_parent;
 +};
 +
-+static int imx_clk_gate_enable(struct clk_hw *hw)
++static int imx_clk_mux_write(const struct imx_clk_reg *reg, u32 val)
 +{
-+	struct clk_imx_gate *gate = to_clk_imx_gate(hw);
-+	struct imx_clk_reg *reg = &gate->reg;
++	int ret = 0;
 +
-+	return regmap_update_bits(reg->regmap, reg->offset, gate->enable_mask,
-+				  gate->enable_mask);
++	if (reg->base) {
++		writel(val, reg->base + reg->offset);
++	} else if (reg->regmap) {
++		ret = regmap_write(reg->regmap, reg->offset, val);
++	} else {
++		pr_err("memory address not set\n");
++		ret = -EIO;
++	}
++
++	return ret;
 +}
 +
-+static void imx_clk_gate_disable(struct clk_hw *hw)
++static int imx_clk_mux_read(const struct imx_clk_reg *reg, u32 *val)
 +{
-+	struct clk_imx_gate *gate = to_clk_imx_gate(hw);
-+	struct imx_clk_reg *reg = &gate->reg;
++	int ret = 0;
 +
-+	regmap_update_bits(reg->regmap, reg->offset, gate->enable_mask, 0);
++	if (reg->base) {
++		*val = readl(reg->base + reg->offset);
++	} else if (reg->regmap) {
++		ret = regmap_read(reg->regmap, reg->offset, val);
++	} else {
++		pr_err("memory address not set\n");
++		ret = -EIO;
++	}
++
++	return ret;
 +}
 +
-+static int imx_clk_gate_is_enabled(struct clk_hw *hw)
++static u8 imx_clk_mux_get_parent(struct clk_hw *hw)
 +{
-+	struct clk_imx_gate *gate = to_clk_imx_gate(hw);
-+	struct imx_clk_reg *reg = &gate->reg;
++
++	struct clk_imx_mux *mux = to_clk_imx_mux(hw);
++	int num_parents = clk_hw_get_num_parents(hw);
 +	unsigned int val;
-+
-+	if (regmap_read(reg->regmap, reg->offset, &val))
-+		return -EIO;
-+
-+	return !!(val & gate->enable_mask);
-+}
-+
-+const struct clk_ops imx_clk_gate_ops = {
-+	.enable	= &imx_clk_gate_enable,
-+	.disable = &imx_clk_gate_disable,
-+	.is_enabled = &imx_clk_gate_is_enabled,
-+};
-+
-+static void imx_clk_hw_unregister_gate(struct clk_hw *hw)
-+{
-+	struct clk_imx_gate *gate = to_clk_imx_gate(hw);
-+
-+	clk_hw_unregister(hw);
-+	kfree(gate);
-+}
-+
-+static struct clk_hw *imx_clk_hw_register_gate(struct device_node *node,
-+					       const char *name,
-+					       unsigned long flags,
-+					       struct imx_clk_reg *reg,
-+					       u8 enable_bit)
-+{
-+	struct clk_parent_data pdata = { .index = 0 };
-+	struct clk_init_data init = { NULL };
-+	struct clk_imx_gate *gate;
-+	struct clk_hw *hw;
 +	int ret;
 +
-+	gate = kzalloc(sizeof(*gate), GFP_KERNEL);
-+	if (!gate)
++	ret = imx_clk_mux_read(&mux->reg, &val);
++	if (ret)
++		return ret;
++
++	val = (val >> mux->shift) && mux->mask;
++
++	if (val >= num_parents)
++		return -EINVAL;
++
++	return val;
++}
++
++static int imx_clk_mux_set_parent(struct clk_hw *hw, u8 index)
++{
++	struct clk_imx_mux *mux = to_clk_imx_mux(hw);
++	unsigned int val;
++	int ret;
++
++	ret = imx_clk_mux_read(&mux->reg, &val);
++	if (ret)
++		return ret;
++
++	val &= ~(mux->mask << mux->shift);
++	val |= index << mux->shift;
++	return imx_clk_mux_write(&mux->reg, val);
++}
++
++/**
++ * imx_clk_mux_save_context - Save the parent selcted in the mux
++ * @hw: pointer  struct clk_hw
++ *
++ * Save the parent mux value.
++ */
++static int imx_clk_mux_save_context(struct clk_hw *hw)
++{
++	struct clk_imx_mux *mux = to_clk_imx_mux(hw);
++
++	mux->saved_parent = imx_clk_mux_get_parent(hw);
++	return 0;
++}
++
++/**
++ * imx_clk_mux_restore_context - Restore the parent in the mux
++ * @hw: pointer  struct clk_hw
++ *
++ * Restore the saved parent mux value.
++ */
++static void imx_clk_mux_restore_context(struct clk_hw *hw)
++{
++	struct clk_imx_mux *mux = to_clk_imx_mux(hw);
++
++	imx_clk_mux_set_parent(hw, mux->saved_parent);
++}
++
++const struct clk_ops imx_clk_mux_ops = {
++	.get_parent = imx_clk_mux_get_parent,
++	.set_parent = imx_clk_mux_set_parent,
++	.determine_rate = __clk_mux_determine_rate,
++	.save_context = imx_clk_mux_save_context,
++	.restore_context = imx_clk_mux_restore_context,
++};
++
++static void imx_clk_hw_unregister_mux(struct clk_hw *hw)
++{
++	struct clk_imx_mux *mux = to_clk_imx_mux(hw);
++
++	clk_hw_unregister(hw);
++	kfree(mux);
++}
++
++static struct clk_hw *imx_clk_hw_register_mux(struct device_node *node,
++					      const char *name,
++					      const char * const *parent_names,
++					      u8 num_parents,
++					      unsigned long flags,
++					      struct imx_clk_reg *reg, u8 shift,
++					      u32 mask)
++{
++	struct clk_init_data init = { NULL };
++	struct clk_imx_mux *mux;
++	struct clk_hw *hw;
++
++	int ret;
++
++	mux = kzalloc(sizeof(*mux), GFP_KERNEL);
++	if (!mux)
 +		return ERR_PTR(-ENOMEM);
 +
 +	init.name = name;
 +	init.flags = flags;
-+	init.ops = &imx_clk_gate_ops;
-+	init.parent_data = &pdata;
-+	init.num_parents = 1;
++	init.ops = &imx_clk_mux_ops;
++	init.parent_names = parent_names;
++	init.num_parents = num_parents;
 +
-+	memcpy(&gate->reg, reg, sizeof(*reg));
-+	gate->enable_mask = BIT(enable_bit);
-+	gate->hw.init = &init;
++	/* struct clk_mux assignments */
++	memcpy(&mux->reg, reg, sizeof(*reg));
++	mux->hw.init = &init;
 +
-+	hw = &gate->hw;
++	hw = &mux->hw;
 +	ret = of_clk_hw_register(node, hw);
 +	if (ret) {
-+		kfree(gate);
++		kfree(mux);
 +		return ERR_PTR(ret);
 +	}
 +
@@ -241,54 +305,85 @@ index 000000000000..841ff9a37f30
 +}
 +
 +/**
-+ * of_imx_gate_clk_setup() - Setup function for imx gate clock
++ * of_imx_mux_clk_setup() - Setup function for imx mux clock
 + * @node:	device node for the clock
 + */
-+static void __init of_imx_gate_clk_setup(struct device_node *node)
++static void __init of_imx_mux_clk_setup(struct device_node *node)
 +{
 +	struct clk_hw *hw;
-+	struct imx_clk_reg reg;
++	unsigned int num_parents;
++	const char **parent_names;
 +	const char *name = node->name;
-+	u8 enable_bit = 0;
++	struct imx_clk_reg reg = {};
++	u32 shift = 0;
++	u32 flags = CLK_SET_RATE_NO_REPARENT;
 +	u32 val;
++	u32 mask;
 +
 +	reg.regmap = syscon_regmap_lookup_by_phandle(node, "fsl,anatop");
-+	if (IS_ERR(reg.regmap)) {
-+		pr_err("missing regmap for %pOFn\n", node);
++	if (!IS_ERR(reg.regmap)) {
++		if (of_property_read_u32_index(node, "fsl,anatop", 1, &val)) {
++			pr_err("missing register offset for %pOFn\n", node);
++			return;
++		}
++
++		reg.offset = val;
++	} else {
++		reg.base = of_iomap(node, 0);
++		if (IS_ERR(reg.base)) {
++			pr_err("failed to get register address for %pOFn\n",
++			       node);
++			return;
++		}
++	}
++
++	num_parents = of_clk_get_parent_count(node);
++	if (num_parents < 2) {
++		pr_err("%pOFn must have parents\n", node);
 +		return;
 +	}
 +
-+	if (of_property_read_u32_index(node, "fsl,anatop", 1, &val)) {
-+		pr_err("missing register offset for %pOFn\n", node);
++	parent_names = kzalloc((sizeof(char *) * num_parents), GFP_KERNEL);
++	if (!parent_names)
 +		return;
-+	}
 +
-+	reg.offset = val;
++	of_clk_parent_fill(node, parent_names, num_parents);
 +
-+	if (!of_property_read_u32(node, "fsl,bit-shift", &val))
-+		enable_bit = val;
++	of_property_read_u32(node, "fsl,bit-shift", &shift);
 +
-+	if (of_clk_get_parent_count(node) != 1) {
-+		pr_err("%pOFn must have 1 parent clock\n", node);
-+		return;
-+	}
++	if (of_property_read_bool(node, "fsl,is-critical"))
++		flags |= CLK_IS_CRITICAL;
++
++	if (of_property_read_bool(node, "fsl,ops-parent-enable"))
++		flags |= CLK_OPS_PARENT_ENABLE;
++
++	if (of_property_read_bool(node, "fsl,set-rate-parent"))
++		flags |= CLK_SET_RATE_PARENT;
++
++	/* Generate bit-mask based on parent info */
++	mask = num_parents - 1;
++	mask = (1 << fls(mask)) - 1;
 +
 +	of_property_read_string(node, "clock-output-names", &name);
 +
-+	hw = imx_clk_hw_register_gate(node, name, 0, &reg, enable_bit);
++	hw = imx_clk_hw_register_mux(node, name, parent_names, num_parents,
++				     flags, &reg, shift, mask);
 +	if (IS_ERR(hw))
-+		return;
++		goto free_parent_names;
 +
 +	if (of_clk_add_hw_provider(node, of_clk_hw_simple_get, hw)) {
-+		imx_clk_hw_unregister_gate(hw);
-+		return;
++		imx_clk_hw_unregister_mux(hw);
++		goto free_parent_names;
 +	}
 +
-+	pr_debug("name: %s, offset: 0x%x, enable-bit: %d\n", name, reg.offset,
-+		 enable_bit);
++	pr_debug("name: %s, offset: 0x%x, shift: %d, mask: 0x%x\n", name,
++		 reg.offset, shift, mask);
++
++free_parent_names:
++	kfree(parent_names);
 +}
-+CLK_OF_DECLARE(fsl_imx8mn_gate_clk, "fsl,imx8mn-gate-clock",
-+	       of_imx_gate_clk_setup);
++CLK_OF_DECLARE(fsl_imx8mn_mux_clk, "fsl,imx8mn-mux-clock",
++	       of_imx_mux_clk_setup);
 -- 
 2.32.0
 
