@@ -2,128 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BCC65AB34
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 20:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C1365AB79
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 21:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjAATgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 14:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
+        id S229635AbjAAUHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 15:07:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjAATgJ (ORCPT
+        with ESMTP id S229453AbjAAUG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 14:36:09 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33791009;
-        Sun,  1 Jan 2023 11:36:08 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id E85083200564;
-        Sun,  1 Jan 2023 14:36:06 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 01 Jan 2023 14:36:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1672601766; x=1672688166; bh=9W/vOLrywVvKMEM2uXRK7f90y
-        c2YFYC7zHPiaMO2kvI=; b=MTgHuoFOyP2Q7o25ivfGtCeyUEUurVIftwEy4KFRx
-        noEyaoZj2SnW6rhnJGCshxZBXYReF/wLx6ZrirDJIOGSOJP9LKgOaStNgydRbIbP
-        1dUjVGjzkSmY/EscHg+IUjLju7T2TA9NgBaK+/qcMQJ5lXCI2UfgQaDbHic38ciw
-        JAZTxtG6jHFU/zvwkHSx9iV+1JNLcn+CkmDl4916cvV/KvINbgel81UdBDPEGImt
-        /He5xtoODZLmFr6iwtqn9hWKxmdvC/Y1nELdNgPfUKOajfHfylc7jn9wr3YpV55t
-        T3T/KFDYJEDkJOdXti3371TfTh6b1GKPUrHVN1VC4+DfQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1672601766; x=1672688166; bh=9W/vOLrywVvKMEM2uXRK7f90yc2YFYC7zHP
-        iaMO2kvI=; b=UU9AeY6IbGbUKbLkNsnZny/m407i0I3VPsquPDrDm2uATAKhGep
-        i59KtZrzEKIZpKMalqWOvDPeiS+jULOhkT5lG30e7ep/CRrwKjPamrbCahSlNP9i
-        lYgkOv8Ggy20oTRPG6bhej1aZbW/wTPMOwlGa2qn0ugfVnVBOyKCjc1V3SqlXtzc
-        0GfxxYybkikcLlO3+Ids2m3vSPG/fdPtZI8wkHWOy7iDBUkfPsUspa1WwukZkNii
-        UTAaSj6TykvPVIJqplO+O6YNKniiqm4SRbfrGdfBTalo4vgWhTl7/fFdGc1MF8Vm
-        FYQjY4DYWXsOj+kc+dWVGZXINF2AZFyZktA==
-X-ME-Sender: <xms:puCxYwIvA2nnXIPC9gdiLsM22_XYmEl63OyI8UuAsFJSGcjPAAi7fw>
-    <xme:puCxYwLsZOw6yGEjP0Cg3mpMyfpbp7Hvi_sV_Zs8bAg3KdWjO_NO9Uo7jtbjLpc5S
-    I51dQeJiy3ON9nQpQ>
-X-ME-Received: <xmr:puCxYwuhOpiEf9fonovirX0i3wRvNI_7mx4sy6H7ZpQWKI_8xwpCzZbpSpwKmAY4fVvPAruS0JYhNr-3xuszyj0TQR_5MLB4eVIOLuYHAuJgazn-mzR4tEWEO-iJ0ByGW0LF0g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedtgdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
-    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:puCxY9bfrcKoyLBNKERtrf6nMoUdv8I9OPsPA_hfjQYSWecJWX3BGA>
-    <xmx:puCxY3ZWrkSGD_XL0AYcUCazhcq_LCkc_jhQ3S16dApFZET4iiZV7w>
-    <xmx:puCxY5Bwl2nPjqLjehc83FmOeDVIsfBirPCVilMgcYzFMFaOB7JDzg>
-    <xmx:puCxY8NYgmjdBWYfo6AhkwkC0KYRj79vuxHyXVgh7XEEHitZLMVI3A>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 1 Jan 2023 14:36:05 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v2] dmaengine: sun6i: Set the maximum segment size
-Date:   Sun,  1 Jan 2023 13:36:04 -0600
-Message-Id: <20230101193605.50285-1-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
+        Sun, 1 Jan 2023 15:06:58 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17883273C
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 12:06:57 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id 17so27501361pll.0
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 12:06:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:content-id:mime-version:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1kEiydM5yX9mGNKZNo9VbGZ3GJG1b/7455PknoIlaOY=;
+        b=A+Gvn529sQZPGyhUNrTQFOuM6yvKC+bWeSG0esm3BIpXCybQQhhYHUBC5vWBUzRz5I
+         HUFiqTpp9IPEsBmx4RKv91kHbiFvs1c4lzTfqo9iylIEtXw3gZF4di08c4xM8PNm7U5y
+         0A1g0KDb6y6Af+BQY22f/jFm4EmOpegnXPIibIkWnpoCGUk2BjCMgmMG6hfCq+iW3nf3
+         POifhRz4h6DF4hZa++Sez/HqT80V/1DFhlGbvLR2PH6qVhhjGJ1Rmls1TqI1A4zqRqOc
+         IyFYt3IuIR9vyWO++KULqAO/AFN2okDHWGO7qJt9EVXPXChIYtPBlH0l6LH+KRuA5Dk0
+         eoBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:content-id:mime-version:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1kEiydM5yX9mGNKZNo9VbGZ3GJG1b/7455PknoIlaOY=;
+        b=S0WmgABCj0zy//0xfZgPNzWre/+4T+GiG1Q1JLmJcg7Kh2EcnunXiEYF5d7GJ+i1WO
+         67uYLw2tvMf0E9at6v296gmDS+goREm2yv0AAWrXjBecExjJrXO70eW5X97v3Wz9lt37
+         FKfxj8/5RX3ZqwjgLgZfB+D2d7DyuRf6xyOdug1eSjel4TkzWLZAcbAzxL/kvvfid8lg
+         gWchUU57MnfKmyWZPpbZNBfUWivCaFkQj4c+Ydb2fKAGM0mLol2U9zArt5PlwS6FzE8o
+         ksGQV/H5VYoIz3Z6uLyxvucZBJ+k0QgESgxtn0UosRfghrGJXKBtiQw0w3LiCwveJc5U
+         I/Pg==
+X-Gm-Message-State: AFqh2kpWCj6gHeoTxH/We17uAdKhTVz1AzLbm75Jj9YK/PfSth02tRt+
+        wiCBrAuuf5H963LjxYi+7WpMSpc3hOQ=
+X-Google-Smtp-Source: AMrXdXsvlsSdlGip6cO7305mZ5+UpDE8482lu1/S/pkqKJAS8Erxaj0nZguamoc8GDHxpakoQej/Qw==
+X-Received: by 2002:a17:902:ec89:b0:18b:ed3f:c6ca with SMTP id x9-20020a170902ec8900b0018bed3fc6camr56857397plg.12.1672603615895;
+        Sun, 01 Jan 2023 12:06:55 -0800 (PST)
+Received: from jromail.nowhere (h219-110-108-104.catv02.itscom.jp. [219.110.108.104])
+        by smtp.gmail.com with ESMTPSA id f6-20020a170902ce8600b00186e34524e3sm18554059plg.136.2023.01.01.12.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Jan 2023 12:06:55 -0800 (PST)
+Received: from localhost ([127.0.0.1] helo=jrobl) by jrobl id 1pC4bd-0006kp-GB ; Mon, 02 Jan 2023 05:06:53 +0900
+From:   "J. R. Okajima" <hooanon05g@gmail.com>
+To:     masahiroy@kernel.org, mcgrof@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: how to build a single module
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <25965.1672603613.1@jrobl>
+Date:   Mon, 02 Jan 2023 05:06:53 +0900
+Message-ID: <25966.1672603613@jrobl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sun6i DMA engine supports segment sizes up to 2^25-1 bytes. This is
-explicitly stated in newer SoC documentation (H6, D1), and it is implied
-in older documentation by the 25-bit width of the "bytes left in the
-current segment" register field.
+Hello,
 
-Exposing the real segment size limit (instead of the 64k default)
-reduces the number of SG list segments needed for a transaction.
+In linux-v6.2-rc1, "make brabra/module.ko" to build a single module
+doesn't work. It compiles the C source files and produces .o, but the
+final 'modpost' returns an error.
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
-Tested on A64, verified that the maximum ALSA PCM period increased, and
-that audio playback still worked.
+$ make fs/aufs/aufs.ko
+	:::
+  LD [M]  fs/aufs/aufs.o
+  MODPOST Module.symvers
+ERROR: modpost: fs/aufs/aufs.ko: filename must be suffixed with .o
+make[2]: *** [/proj/aufs/aufs6-linux.git/scripts/Makefile.modpost:137: Module.symvers] Error 1
+make[1]: *** [/proj/aufs/aufs6-linux.git/Makefile:1996: single_modules] Error 2
+make: *** [/proj/aufs/aufs6-linux.git/Makefile:373: __build_one_by_one] Error 2
+Command exited with non-zero status 2
 
-Changes in v2:
- - Use SZ_32M instead of DMA_BIT_MASK to make the limit more obvious
 
- drivers/dma/sun6i-dma.c | 3 +++
- 1 file changed, 3 insertions(+)
+Is it related to this commit?
+	f65a486821cf 2022-12-14 kbuild: change module.order to list *.o instead of *.ko
 
-diff --git a/drivers/dma/sun6i-dma.c b/drivers/dma/sun6i-dma.c
-index b7557f437936..30667d251e97 100644
---- a/drivers/dma/sun6i-dma.c
-+++ b/drivers/dma/sun6i-dma.c
-@@ -9,6 +9,7 @@
- 
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/dma-mapping.h>
- #include <linux/dmaengine.h>
- #include <linux/dmapool.h>
- #include <linux/interrupt.h>
-@@ -1334,6 +1335,8 @@ static int sun6i_dma_probe(struct platform_device *pdev)
- 	INIT_LIST_HEAD(&sdc->pending);
- 	spin_lock_init(&sdc->lock);
- 
-+	dma_set_max_seg_size(&pdev->dev, SZ_32M - 1);
-+
- 	dma_cap_set(DMA_PRIVATE, sdc->slave.cap_mask);
- 	dma_cap_set(DMA_MEMCPY, sdc->slave.cap_mask);
- 	dma_cap_set(DMA_SLAVE, sdc->slave.cap_mask);
--- 
-2.37.4
 
+J. R. Okajima
