@@ -2,109 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A93165AB1A
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 20:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350C065AB1F
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 20:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjAATGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 14:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S230209AbjAATJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 14:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjAATGM (ORCPT
+        with ESMTP id S229496AbjAATJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 14:06:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2573D8A;
-        Sun,  1 Jan 2023 11:06:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E8BAB80918;
-        Sun,  1 Jan 2023 19:06:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0BBCC433EF;
-        Sun,  1 Jan 2023 19:06:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672599968;
-        bh=v/48WLw5b9kHI2kBsC/V9/Y84M/neLQ2uytuy7oB0VI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TAQlHQcAO2ymuKtvY8X2iXDJhTb4aTx6YfvnhiN4t078LjJS2ZMy70d35wI75fOD/
-         3N39Oz/uxWUEskqh+cuzeKsIedWy4zDW9Btd6OsQ98jeVgHEM4Jf5rFj2EQDOcHlR7
-         130NwIOTnc9dMTuSiuuqv7CxR2bly7G6Bl3w5rgYpqbo84jgs0z7janVUjVFrrFP86
-         s9wW+DobPPZ1/GLdUQ7+gCBgBoO6qLHEaezhfTYVn6sJHRZPmolXsq/KGkeq/rr8z5
-         Om5U3ZpV0WWV6S8nf0X96KPEMoEHpEn2+i60dvjZ9PKLDds7ZjHkuSwsfOaWhccxu9
-         SmcOY0oAdxN8A==
-Received: by pali.im (Postfix)
-        id DD34C884; Sun,  1 Jan 2023 20:06:05 +0100 (CET)
-Date:   Sun, 1 Jan 2023 20:06:05 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Kari Argillander <kari.argillander@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, linux-cifs@vger.kernel.org,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jan Kara <jack@suse.cz>, "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Luis de Bethencourt <luisbg@kernel.org>,
-        Salah Triki <salah.triki@gmail.com>,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, Dave Kleikamp <shaggy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Christoph Hellwig <hch@infradead.org>,
-        Viacheslav Dubeyko <slava@dubeyko.com>
-Subject: Re: [RFC PATCH v2 03/18] ntfs: Undeprecate iocharset= mount option
-Message-ID: <20230101190605.s7jyf3umgubwrk3i@pali>
-References: <20221226142150.13324-1-pali@kernel.org>
- <20221226142150.13324-4-pali@kernel.org>
- <CAC=eVgS7weRq7S16MpTyx9eZm=2s+OZhm6Ko75Z6bmjsHH-7Yw@mail.gmail.com>
+        Sun, 1 Jan 2023 14:09:50 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64A3D9E;
+        Sun,  1 Jan 2023 11:09:47 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id qb7so3606499qvb.5;
+        Sun, 01 Jan 2023 11:09:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nh1q6xtrBgKc1fDe5/d8D5jFIgt5LSbfJ1iE1tY4NY0=;
+        b=UwnH9hRCSaQXMD1ekBRj4n3jdugn6p5ha+kj9QMceWZP0PAzvDMSmcio2VlXTquVF/
+         6BRBS7KRqzFq4u1ymXaetY42vnR/h/VUewl41NzcwBzQXsc7CpxR47vXsClj5Fm4wAkh
+         T3awI2+sJTn6bFCvwm0K+GDxNW2l2VmI+Ea5W9ASfOVEwW7XpPMyIxyLGnEJnf7ONsF4
+         YMV9b1otZKL/jxE9pnEEFRge+Uh3wwh4ZyXXqKBE8+LtlP0uU+iHMu0HrhSl06mS5ekt
+         w+jfvwtfh6VGcX4EGVkaVBTtwnW3bgYOYlVy5Y8hxCwRZ0FIx2g75vOqkZdE3A+YL7kf
+         iTrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nh1q6xtrBgKc1fDe5/d8D5jFIgt5LSbfJ1iE1tY4NY0=;
+        b=FfszfJVKGHDvEsFDGxHdY9x70C6lWugbxyAOoQ1rmnGwUPqrpXMLYIr79IbRrNrWxC
+         5g+GDkT40pxB26yMXNOSleCXHFLbQLsOu2P7jeJStb8JtbuEsyAqE0BRXdOxgfZDoia7
+         lY5glvMm/lA/w1y7vtYyWotfQBNfzaIwd3WYFHyJ6+QpxvSDiljvb9jJEQE1t/aGFfJs
+         aiGCP02T9gcp90hHZ3kBUm5hBWtAvH7PdIP1upI2SvskSdkrNiWieiZcIsW4z+GgyouW
+         /DEA7rh7fGXs6oue60bfbHhd7K554f6b4eC9y7TsSlir0/pXd6DDjzdCfLqIv2fue/9X
+         dQHg==
+X-Gm-Message-State: AFqh2kpB+a+TYtdqB1eIwkwy+cOtfv1AKJn9B6QwP7W7f5VPSGa5eT8q
+        XgtUp2+pr8lLx+qda5q7l3U=
+X-Google-Smtp-Source: AMrXdXuRwZ8m1kj+aK33hY6Z1Z1I7ASwAwEcox5pdWzF+iOPu8vspUPvseIArGH7bK8IissbSDrhsg==
+X-Received: by 2002:a05:6214:3713:b0:531:bb5a:3418 with SMTP id np19-20020a056214371300b00531bb5a3418mr9262906qvb.13.1672600187088;
+        Sun, 01 Jan 2023 11:09:47 -0800 (PST)
+Received: from localhost ([2600:1700:65a0:ab60:bccc:52d4:da14:f94d])
+        by smtp.gmail.com with ESMTPSA id p18-20020ac87412000000b003a4c3c4d2d4sm16459391qtq.49.2023.01.01.11.09.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Jan 2023 11:09:46 -0800 (PST)
+Date:   Sun, 1 Jan 2023 11:09:45 -0800
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Yunhui Cui <cuiyunhui@bytedance.com>
+Cc:     edumazet@google.com, rostedt@goodmis.org, mhiramat@kernel.org,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, duanxiongchun@bytedance.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] tcp/udp: add tracepoint for send recv length
+Message-ID: <Y7HaeTkNtfb3oIP4@pop-os.localdomain>
+References: <20221229080207.1029-1-cuiyunhui@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAC=eVgS7weRq7S16MpTyx9eZm=2s+OZhm6Ko75Z6bmjsHH-7Yw@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221229080207.1029-1-cuiyunhui@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sunday 01 January 2023 21:02:46 Kari Argillander wrote:
-> 26.12.2022 klo 16.22 Pali Rohár (pali@kernel.org) wrote:
-> >
-> > Other fs drivers are using iocharset= mount option for specifying charset.
-> > So mark iocharset= mount option as preferred and deprecate nls= mount
-> > option.
+On Thu, Dec 29, 2022 at 04:02:07PM +0800, Yunhui Cui wrote:
+> From: Xiongchun Duan <duanxiongchun@bytedance.com>
 > 
-> snip.
-> 
-> > diff --git a/fs/ntfs/super.c b/fs/ntfs/super.c
-> 
-> snip.
-> 
-> > @@ -218,10 +213,10 @@ static bool parse_options(ntfs_volume *vol, char *opt)
-> >                 } else if (!strcmp(p, "utf8")) {
-> >                         bool val = false;
-> >                         ntfs_warning(vol->sb, "Option utf8 is no longer "
-> > -                                  "supported, using option nls=utf8. Please "
-> > -                                  "use option nls=utf8 in the future and "
-> > -                                  "make sure utf8 is compiled either as a "
-> > -                                  "module or into the kernel.");
-> > +                                  "supported, using option iocharset=utf8. "
-> > +                                  "Please use option iocharset=utf8 in the "
-> > +                                  "future and make sure utf8 is compiled "
-> > +                                  "either as a module or into the kernel.");
-> 
-> We do not have to make sure utf8 is compiled anymore as it "always is" right?
+> Add a tracepoint for capturing TCP segments with
+> a send or receive length. This makes it easy to obtain
+> the packet sending and receiving information of each process
+> in the user mode, such as the netatop tool.
 
-Yes, right, we have always utf8 support compiled-in.
-Second part of that warning message should be dropped.
+You can obtain the same information with kretprobe:
+https://www.gcardone.net/2020-07-31-per-process-bandwidth-monitoring-on-Linux-with-bpftrace/
 
-> >                         if (!v || !*v)
-> >                                 val = true;
-> >                         else if (!simple_getbool(v, &val))
+Thanks.
