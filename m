@@ -2,302 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3359065A8D4
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 05:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E42265A8D6
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 05:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjAAE2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 31 Dec 2022 23:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
+        id S231152AbjAAEd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 31 Dec 2022 23:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjAAE22 (ORCPT
+        with ESMTP id S229554AbjAAEdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 31 Dec 2022 23:28:28 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747506367
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 20:28:26 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id g13so37261907lfv.7
-        for <linux-kernel@vger.kernel.org>; Sat, 31 Dec 2022 20:28:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oH8K9f7UyJRuodGJ3yPCdaObtlNSOzXxH0uzeAO3bPo=;
-        b=Ai8jQqzHZ/LlGgMhch3jtj6uaayE2qcuJ/awNPLcOAGYEutF/BCD/xQ4x9QmWBbMsM
-         NNsbwmrdzyV5c1AOzeCM0PlMw7PYo7mb2RI7VSAIdhkzOv34o9lmx3SnTH955c5q/WK6
-         jMYvr4atUtZLWFb4O3qwdUO56X/5UXfWbkx56FoJufUfjwMDvPfDT0DYnndlzw2MP21S
-         weVijkSrjak1l122uNmTlM+8NLna10CIXMSBaMsysgZ0mmgHOJluexlb17P3x9D4UJ3c
-         BAmwlcXQy6NRS8KYMu1xR2XgQUNtR0dMX3fuhuMRTP7SL04dXgFI+oRf/lgohIMuailC
-         OHvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oH8K9f7UyJRuodGJ3yPCdaObtlNSOzXxH0uzeAO3bPo=;
-        b=WEddjvhQ5sryyyNexh8BnM9zkkUyyphvmWHBBai4hVRd1HuBI31YS6H1fr+BWr6oJb
-         V/jmSy1bDb588MAik299oKI0ms5n52HiTpJ/WQjYfGrt/h2xf6jhQNcxCFgF6UHp7x5r
-         iLwROYEy3r180CrhC6KNzumBis60QiDZh33TnysPbuauyxJopR3DFssPzt5lmjPuz+VW
-         b4LoX/ppzmKol+WqjVHRgf6caLHO+PwBctQXBFTvcj/z2uf1w+307obkGX6TkT3o1ApR
-         w+AGKvK608ETYC7nL9J7HADQmgINxbpDcuAlVxeICIDGNNhOf8kRY30OUpW/mNxe8ANf
-         JqoA==
-X-Gm-Message-State: AFqh2kpn+orWlPpJMSL0QYdmZRyrsTWCFudTPXUJtOpzCcutrlamCNGc
-        6wyljbI9gmBQ+ScrPQXZ78SZdw==
-X-Google-Smtp-Source: AMrXdXvo4ZJmLN9FDqA8FOdIn63YSqaUle9vpmVE/whEmg6m1YU/5EVmBxKcIamme2TyWCUSLBEWBw==
-X-Received: by 2002:ac2:4894:0:b0:4bb:710e:bf8 with SMTP id x20-20020ac24894000000b004bb710e0bf8mr10208282lfc.16.1672547304783;
-        Sat, 31 Dec 2022 20:28:24 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id v20-20020ac258f4000000b004cb23904bd9sm971539lfo.144.2022.12.31.20.28.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Dec 2022 20:28:24 -0800 (PST)
-Message-ID: <925e8214-4193-bee3-c26b-f7679a60484e@linaro.org>
-Date:   Sun, 1 Jan 2023 06:28:23 +0200
+        Sat, 31 Dec 2022 23:33:55 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E721311;
+        Sat, 31 Dec 2022 20:33:49 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nl5jM6Ts8z4xwv;
+        Sun,  1 Jan 2023 15:33:43 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1672547624;
+        bh=UejO2L/LFa0oi0WTQr18IUKuQjzDNjc3EZbDW5L0VqE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SPktc+wC6NjlIKs+sKihNgIw/r3c2dXV97VX4LmZQMZqLTTiFLrOrxJoeHtQ7wQgO
+         P/24t/aL99tmMceLCERsd44UAOcpDmsV4zsBfIbbVX8K0rr9LJNwWPrmeh8Ek811W+
+         Dvg7+yYTEAxjuUMnoQe94U7LFFeUwbpTQv4xX/n3Q+yVOyQLxErhVzz+CZiq1u0V/7
+         Kor1Zd1LorBNrWzJT/4uTYBkRjiANVg25Oa322v8c7W1v6QByb0kHoQ5cETIRL3Hz1
+         zkKEDtPzzjxuErUeKuR8y3Vj+UlMIbcOBh6WqTDhe5CqmGqfMFI9fHgcGczNUODnRc
+         20kDv1jM7uBjw==
+Date:   Sun, 1 Jan 2023 15:33:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: please clean up the folio tree
+Message-ID: <20230101153330.7bf359af@canb.auug.org.au>
+In-Reply-To: <20221215105539.72da7ceb@canb.auug.org.au>
+References: <20221215105539.72da7ceb@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 2/7] drm/msm/dpu: Disable pingpong TE on DPU 5.0.0 and
- above
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-3-marijn.suijten@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221231215006.211860-3-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/LPv.oYnYy=Fk=g3pPX26Qat";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/12/2022 23:50, Marijn Suijten wrote:
-> Since hardware revision 5.0.0 the TE configuration moved out of the
-> PINGPONG block into the INTF block.  Writing these registers has no
-> effect, and is omitted downstream via the DPU/SDE_PINGPONG_TE feature
-> flag.  This flag is only added to PINGPONG blocks used by hardware prior
-> to 5.0.0.
-> 
-> The code that writes to these registers in the INTF block will follow in
-> subsequent patches.
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   .../drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c  |  5 +-
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 53 +++++++++++--------
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 18 ++++---
->   3 files changed, 44 insertions(+), 32 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> index ae28b2b93e69..7e5ba52197cd 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> @@ -582,7 +582,7 @@ static bool dpu_encoder_phys_cmd_is_ongoing_pptx(
->   {
->   	struct dpu_hw_pp_vsync_info info;
->   
-> -	if (!phys_enc)
-> +	if (!phys_enc || !phys_enc->hw_pp->ops.get_vsync_info)
->   		return false;
->   
->   	phys_enc->hw_pp->ops.get_vsync_info(phys_enc->hw_pp, &info);
-> @@ -607,6 +607,9 @@ static void dpu_encoder_phys_cmd_prepare_commit(
+--Sig_/LPv.oYnYy=Fk=g3pPX26Qat
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This function works only with the hw_pp and if I'm not mistaken it 
-becomes void for newer platforms. Please consider moving completely to 
-the dpu_hw_pp.c Then we'd have a single optional callback instead of 
-having a pile of them.
+Hi Willy,
 
->   	if (!dpu_encoder_phys_cmd_is_master(phys_enc))
->   		return;
->   
-> +	if (!phys_enc->hw_pp->ops.get_autorefresh || !phys_enc->hw_pp->ops.setup_autorefresh)
-> +		return;
-> +
->   	/* If autorefresh is already disabled, we have nothing to do */
->   	if (!phys_enc->hw_pp->ops.get_autorefresh(phys_enc->hw_pp, NULL))
->   		return;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 9814ad52cc04..39d4b293710c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -59,11 +59,18 @@
->   #define MIXER_SC7180_MASK \
->   	(BIT(DPU_DIM_LAYER) | BIT(DPU_MIXER_COMBINED_ALPHA))
->   
-> -#define PINGPONG_SDM845_MASK BIT(DPU_PINGPONG_DITHER)
-> +#define PINGPONG_SDM845_MASK \
-> +	(BIT(DPU_PINGPONG_DITHER) | BIT(DPU_PINGPONG_TE))
->   
-> -#define PINGPONG_SDM845_SPLIT_MASK \
-> +#define PINGPONG_SDM845_TE2_MASK \
->   	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
->   
-> +#define PINGPONG_SM8150_MASK \
-> +	(BIT(DPU_PINGPONG_DITHER))
-> +
-> +#define PINGPONG_SM8150_TE2_MASK \
-> +	(PINGPONG_SM8150_MASK | BIT(DPU_PINGPONG_TE2))
-> +
->   #define CTL_SC7280_MASK \
->   	(BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG))
->   
-> @@ -1156,21 +1163,21 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
->   	.len = 0x20, .version = 0x20000},
->   };
->   
-> -#define PP_BLK_TE(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
-> +#define PP_BLK_TE(_name, _id, _base, _features, _merge_3d, _sblk, _done, _rdptr) \
->   	{\
->   	.name = _name, .id = _id, \
->   	.base = _base, .len = 0xd4, \
-> -	.features = PINGPONG_SDM845_SPLIT_MASK, \
-> +	.features = _features, \
->   	.merge_3d = _merge_3d, \
->   	.sblk = &_sblk, \
->   	.intr_done = _done, \
->   	.intr_rdptr = _rdptr, \
->   	}
-> -#define PP_BLK(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
-> +#define PP_BLK(_name, _id, _base, _features, _merge_3d, _sblk, _done, _rdptr) \
->   	{\
->   	.name = _name, .id = _id, \
->   	.base = _base, .len = 0xd4, \
-> -	.features = PINGPONG_SDM845_MASK, \
-> +	.features = _features, \
->   	.merge_3d = _merge_3d, \
->   	.sblk = &_sblk, \
->   	.intr_done = _done, \
-> @@ -1178,55 +1185,55 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
->   	}
->   
->   static const struct dpu_pingpong_cfg sdm845_pp[] = {
-> -	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te,
-> +	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SDM845_TE2_MASK, 0, sdm845_pp_sblk_te,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
-> -	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te,
-> +	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SDM845_TE2_MASK, 0, sdm845_pp_sblk_te,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
-> -	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, PINGPONG_SDM845_MASK, 0, sdm845_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
-> -	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, PINGPONG_SDM845_MASK, 0, sdm845_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->   };
->   
->   static struct dpu_pingpong_cfg sc7180_pp[] = {
-> -	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te, -1, -1),
-> -	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te, -1, -1),
-> +	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_TE2_MASK, 0, sdm845_pp_sblk_te, -1, -1),
-> +	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_TE2_MASK, 0, sdm845_pp_sblk_te, -1, -1),
->   };
->   
->   static const struct dpu_pingpong_cfg sm8150_pp[] = {
-> -	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, sdm845_pp_sblk_te,
-> +	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_TE2_MASK, MERGE_3D_0, sdm845_pp_sblk_te,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
-> -	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, sdm845_pp_sblk_te,
-> +	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_TE2_MASK, MERGE_3D_0, sdm845_pp_sblk_te,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
-> -	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
-> -	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
-> -	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
->   			-1),
-> -	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
->   			-1),
->   };
->   
->   static const struct dpu_pingpong_cfg sc7280_pp[] = {
-> -	PP_BLK("pingpong_0", PINGPONG_0, 0x59000, 0, sc7280_pp_sblk, -1, -1),
-> -	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, 0, sc7280_pp_sblk, -1, -1),
-> -	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, 0, sc7280_pp_sblk, -1, -1),
-> -	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
-> +	PP_BLK("pingpong_0", PINGPONG_0, 0x59000, PINGPONG_SM8150_MASK, 0, sc7280_pp_sblk, -1, -1),
-> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, PINGPONG_SM8150_MASK, 0, sc7280_pp_sblk, -1, -1),
-> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, PINGPONG_SM8150_MASK, 0, sc7280_pp_sblk, -1, -1),
-> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, PINGPONG_SM8150_MASK, 0, sc7280_pp_sblk, -1, -1),
->   };
->   
->   static struct dpu_pingpong_cfg qcm2290_pp[] = {
-> -	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
->   		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->   		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->   };
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> index 0fcad9760b6f..30896c057f87 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> @@ -274,14 +274,16 @@ static int dpu_hw_pp_setup_dsc(struct dpu_hw_pingpong *pp)
->   static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
->   				unsigned long features)
->   {
-> -	c->ops.setup_tearcheck = dpu_hw_pp_setup_te_config;
-> -	c->ops.enable_tearcheck = dpu_hw_pp_enable_te;
-> -	c->ops.connect_external_te = dpu_hw_pp_connect_external_te;
-> -	c->ops.get_vsync_info = dpu_hw_pp_get_vsync_info;
-> -	c->ops.setup_autorefresh = dpu_hw_pp_setup_autorefresh_config;
-> -	c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
-> -	c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
-> -	c->ops.get_line_count = dpu_hw_pp_get_line_count;
-> +	if (test_bit(DPU_PINGPONG_TE, &features)) {
-> +		c->ops.setup_tearcheck = dpu_hw_pp_setup_te_config;
-> +		c->ops.enable_tearcheck = dpu_hw_pp_enable_te;
-> +		c->ops.connect_external_te = dpu_hw_pp_connect_external_te;
-> +		c->ops.get_vsync_info = dpu_hw_pp_get_vsync_info;
-> +		c->ops.setup_autorefresh = dpu_hw_pp_setup_autorefresh_config;
-> +		c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
-> +		c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
-> +		c->ops.get_line_count = dpu_hw_pp_get_line_count;
-> +	}
->   	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
->   	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
->   	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+On Thu, 15 Dec 2022 10:55:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> The folio tree seems to contain a number of commits that duplicate
+> commits in Linus' tree.
 
--- 
-With best wishes
-Dmitry
+I fact, all but the first commit in the folio tree were merged by Linus
+in v6.0-rc1.  And the folio tree has not bee updates since mid June ...
 
+$ git cherry -v v6.0-rc1 folio/for-next
++ 964688b32d9ada55a7fce2e650d85ef24188f73f btrfs: Use a folio in wait_dev_s=
+upers()
+- ba457436991abc8e3cc830cfc91e9f54b53a07ed buffer: Don't test folio error i=
+n block_read_full_folio()
+- 2c62b172802a648cb9bad9b1ad2415a8ecbb7f41 squashfs: Return the actual erro=
+r from squashfs_read_folio()
+- 4188e3e2860d65a43397d4658f74136bf3297808 hostfs: Handle page write errors=
+ correctly
+- 437084d7c5b825e714d0b50ba6624e6ba840fa32 ocfs2: Use filemap_write_and_wai=
+t_range() in ocfs2_cow_sync_writeback()
+- 0ba02b002594cc1809da3a05a44bb5b9654448f6 cramfs: read_mapping_page() is s=
+ynchronous
+- 1cf29f882fa8e28e18cccc9b0a7e94e391b3291f block: Simplify read_part_sector=
+()
+- a340b79b299109ded6928157dc24cf0fb6a90823 block: Handle partition read err=
+ors more consistently
+- 4639d0da923efd6704974893ba19eb1aaf396538 block: Use PAGE_SECTORS_SHIFT
+- 5b15f72a828b44a06d50ab739e89ac492298bec4 block: Convert read_part_sector(=
+) to use a folio
+- fa19fbd23186e43714bf7694ec83b7a519e618c0 befs: Convert befs_symlink_read_=
+folio() to use a folio
+- 1a6b7e5cb5504bf4f0f4e63b8bedaff8aad5798b coda: Convert coda_symlink_fille=
+r() to use a folio
+- 6e2a48222bc97d4028b1ff8b8bfdfadec7a72923 freevxfs: Convert vxfs_immed_rea=
+d_folio() to use a folio
+- 71864cbf4617f06ff2434235049e9c3daa2806a6 ocfs2: Convert ocfs2_read_folio(=
+) to use a folio
+- d862e2d593685f8a895202493f1a059932cdb0e0 gfs2: Convert gfs2_jhead_process=
+_page() to use a folio
+- 1662afcecae535147b1cb143fde8d99a6a98d8fe ext2: Use a folio in ext2_get_pa=
+ge()
+- 1a22e12f94c9f647cdd8e4e56bc313043e9eb5c2 secretmem: Remove isolate_page
+- b361f39863ed2d6ca644a2d53638c3fd87d32d14 mm: Convert all PageMovable user=
+s to movable_operations
+- 662389777689c17a77849af822bac1677be56e37 fs: Add aops->migrate_folio
+- 765acf9085a1188244ec6294e3039637685c209e mm/migrate: Convert fallback_mig=
+rate_page() to fallback_migrate_folio()
+- 7d474706ff4fb035f896710fa1274e3050afb461 mm/migrate: Convert writeout() t=
+o take a folio
+- e267a3198014ec93389b1930b776047082bb271f mm/migrate: Convert buffer_migra=
+te_page() to buffer_migrate_folio()
+- 55553f3437c8b185b71fe4bd8106141a4e4192de mm/migrate: Convert expected_pag=
+e_refs() to folio_expected_refs()
+- e8172b8e1728b41160dc8fef7fdd9ffbcaa152c6 btrfs: Convert btree_migratepage=
+ to migrate_folio
+- 27826326e888a185d7d191670cf445dec88e9218 nfs: Convert to migrate_folio
+- af9c33968b722c5871974541067dc180377501df mm/migrate: Convert migrate_page=
+() to migrate_folio()
+- 441b3afcb2e31aca89f6e2cd6642f141c7bbe142 mm/migrate: Add filemap_migrate_=
+folio()
+- 9c5161d1eefb24389a077b43e8e11322f2e4cd42 btrfs: Convert btrfs_migratepage=
+ to migrate_folio
+- 9f11d68b27211e6a73b0540dc757c91c01ae74bf ubifs: Convert to filemap_migrat=
+e_folio()
+- 9c16c4c68213afc512aadb854c9603f4eff6b977 f2fs: Convert to filemap_migrate=
+_folio()
+- 9b553d25025600ecaeb903b9250279b50c1c6054 aio: Convert to migrate_folio
+- 5567427fd70edcd4809a5b1df03f363e72f997bf hugetlb: Convert to migrate_folio
+- 48e7ede1b860e44edfd0231f888a7f16af86d6a0 secretmem: Convert to migrate_fo=
+lio
+- c33b866a97842ac96f4373f737ba608dd157f08a fs: Remove aops->migratepage()
+- 84578adbb0e0657003e646e0af699ef74b99386e mm/folio-compat: Remove migratio=
+n compatibility functions
+- 9594da4cec1db0491d35b38d5988eb989720d6f4 ntfs3: refactor ntfs_writepages
+- 8862fa5da9f144d0554c2177aea7ce0b6f97d8c0 ext2: remove nobh support
+- 3f05372ce9ddbd643a763f60c0d2a115cb2de008 jfs: stop using the nobh helper
+- 215e71b6ee7ad3363c6e6bd979adbb56e070f6de fs: remove the nobh helpers
+- cf95d50205f62c4f5f538676def847292cf39fa9 fs: don't call ->writepage from =
+__mpage_writepage
+- 03b33c09ea22fa89dd204ad0a2058e512c691b9f fs: remove the NULL get_block ca=
+se in mpage_writepages
+
+And the presence of these commits in the folio tree produces the
+following output when I merge it:
+
+Auto-merging Documentation/filesystems/locking.rst
+Auto-merging Documentation/filesystems/vfs.rst
+Auto-merging block/fops.c
+Auto-merging block/partitions/core.c
+Auto-merging drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+Auto-merging drivers/misc/vmw_balloon.c
+Auto-merging drivers/virtio/virtio_balloon.c
+Auto-merging fs/aio.c
+Auto-merging fs/btrfs/disk-io.c
+Auto-merging fs/btrfs/inode.c
+Auto-merging fs/buffer.c
+Auto-merging fs/ext2/dir.c
+Auto-merging fs/ext2/inode.c
+Auto-merging fs/ext2/namei.c
+Auto-merging fs/ext2/super.c
+Auto-merging fs/ext4/inode.c
+Auto-merging fs/f2fs/checkpoint.c
+Auto-merging fs/f2fs/data.c
+Auto-merging fs/f2fs/f2fs.h
+Auto-merging fs/f2fs/node.c
+Auto-merging fs/gfs2/aops.c
+Auto-merging fs/gfs2/lops.c
+Auto-merging fs/hostfs/hostfs_kern.c
+Auto-merging fs/hugetlbfs/inode.c
+CONFLICT (content): Merge conflict in fs/hugetlbfs/inode.c
+Auto-merging fs/iomap/buffered-io.c
+Auto-merging fs/jfs/inode.c
+Auto-merging fs/mpage.c
+Auto-merging fs/nfs/file.c
+Auto-merging fs/nfs/internal.h
+Auto-merging fs/nfs/write.c
+Auto-merging fs/ntfs/aops.c
+Auto-merging fs/ntfs3/inode.c
+Auto-merging fs/ocfs2/aops.c
+Auto-merging fs/ocfs2/refcounttree.c
+Auto-merging fs/squashfs/file.c
+Auto-merging fs/ubifs/file.c
+Auto-merging fs/xfs/xfs_aops.c
+Auto-merging fs/zonefs/super.c
+Auto-merging include/linux/buffer_head.h
+Auto-merging include/linux/fs.h
+Auto-merging include/linux/iomap.h
+Auto-merging include/linux/migrate.h
+CONFLICT (content): Merge conflict in include/linux/migrate.h
+Auto-merging include/linux/page-flags.h
+Auto-merging include/linux/pagemap.h
+Auto-merging mm/compaction.c
+Auto-merging mm/folio-compat.c
+Auto-merging mm/ksm.c
+Auto-merging mm/migrate.c
+CONFLICT (content): Merge conflict in mm/migrate.c
+Auto-merging mm/migrate_device.c
+CONFLICT (content): Merge conflict in mm/migrate_device.c
+Auto-merging mm/secretmem.c
+Auto-merging mm/shmem.c
+Auto-merging mm/swap_state.c
+Auto-merging mm/util.c
+Auto-merging mm/z3fold.c
+Auto-merging mm/zsmalloc.c
+CONFLICT (content): Merge conflict in mm/zsmalloc.c
+Resolved 'fs/hugetlbfs/inode.c' using previous resolution.
+Resolved 'include/linux/migrate.h' using previous resolution.
+Resolved 'mm/migrate.c' using previous resolution.
+Resolved 'mm/migrate_device.c' using previous resolution.
+Resolved 'mm/zsmalloc.c' using previous resolution.
+Automatic merge failed; fix conflicts and then commit the result.
+$ git commit --no-edit -v -a
+[master 5d9bea6f818b] Merge branch 'for-next' of git://git.infradead.org/us=
+ers/willy/pagecache.git
+$ git diff -M --stat --summary HEAD^..
+ fs/btrfs/disk-io.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LPv.oYnYy=Fk=g3pPX26Qat
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOxDRoACgkQAVBC80lX
+0GzB7gf+ItJ3qc/78raBG1/3jKOhEEzC7EGbrlZ5U+12GEW55jJ9IGfoicQSt07i
+YpHyDDqCA8Dkn8qB773DQUzD0K951+dzQJwkCukic8lpjsRSaCO03aG4XBSpOs+1
+MxcOdtksiOMvSqRcWHBNHbd+eXjGss8CH4h6CqqrSPA6uFjcKl+See32gSEah65A
+MnQPMvuGk/HDTnJ3sM4mJg6g+tRFgLYomCiIKwZ9AdBiJreKYAyAlnmLbZTGLVPA
+vUsnp0qUbH8CPi7JausPBvrpvovl8qru5knmV4enlYA89uGPwzyeaxvk5Y+sTl7z
+qYgwEYGRzYfGgRfVVa4IOKd73Hveew==
+=JBAB
+-----END PGP SIGNATURE-----
+
+--Sig_/LPv.oYnYy=Fk=g3pPX26Qat--
