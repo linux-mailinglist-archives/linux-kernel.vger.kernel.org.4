@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06AD65AA40
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 16:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FCA65AA41
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 16:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjAAPAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 10:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
+        id S229922AbjAAPAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 10:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjAAPAE (ORCPT
+        with ESMTP id S229836AbjAAPAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 10:00:04 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175B1D5B
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 07:00:03 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Sun, 1 Jan 2023 10:00:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC84B38AD;
+        Sun,  1 Jan 2023 07:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9D9CF1EC0104;
-        Sun,  1 Jan 2023 16:00:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672585201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=/U8OrUDqmDmDYNaR7ObxZo1L2SJaapyWaOwdL7xPmwE=;
-        b=C43WTrGUdEUEGryrxYXiVVTSoEDcrUbM/2v8UDCJ7zjzWbuyi4BiE7U7hgpIaWxVwoVXKP
-        baT/3XsUMTUpmVsHKgZ5wZIJxxuHubhN+hzSANIHFLtiF0JIhliKK1Yn38yA7Y16Y8t1xc
-        5nkfzJwOXktGfP6RflPsTmkATKQZK34=
-Date:   Sun, 1 Jan 2023 15:59:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] locking/urgent for v6.2-rc2
-Message-ID: <Y7Gf65Z5S++WefTw@zn.tnic>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00034B80B4D;
+        Sun,  1 Jan 2023 15:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 88490C433F0;
+        Sun,  1 Jan 2023 15:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672585215;
+        bh=AdABbiK8La2IZNdmjy2lEpsrgzzj+C1zEfL7CbSljFA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=kFMVwgGyPp8rTiEKwPkqUjO7cXoXJIRtYWe5AUHgdYU566ZRG0FfcdDPaUuXueOFb
+         E5T1A9RS0WDCjsYwo7bG6T9Q2mZtQfpREMcXSGHvWExXObKqavxiNWTSBnn5wj9H/G
+         AaM+/wbuHNq2QdbnCmHF7ZKxoN9eU30Ti3fK4o9i+JD9LiZDklv6DIyAqQMwTsFNSP
+         4530jmGBaY9AVrcR3KeSXlbV8niiydzIvD9cz4zSf8I5b0+b+cjK9DdXZbCyitSDUI
+         TeLy72z103WdrLIB4icAJzZR07mOT9V0FMtDyWGR9I1XRu19fa65Y5zERaYkkMa2Sc
+         fNE6lXn70gLFA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6E49BC197B4;
+        Sun,  1 Jan 2023 15:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [RESEND PATCH net v2] dt-bindings: net: sun8i-emac: Add phy-supply
+ property
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167258521544.10293.9609750669288869867.git-patchwork-notify@kernel.org>
+Date:   Sun, 01 Jan 2023 15:00:15 +0000
+References: <20221231220546.1188-1-samuel@sholland.org>
+In-Reply-To: <20221231220546.1188-1-samuel@sholland.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh@kernel.org, andre.przywara@arm.com,
+        wens@csie.org, jernej.skrabec@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, clabbe.montjoie@gmail.com,
+        mripard@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hello:
 
-please pull a couple of urgent locking fixes for 6.2.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Thx.
+On Sat, 31 Dec 2022 16:05:46 -0600 you wrote:
+> This property has always been supported by the Linux driver; see
+> commit 9f93ac8d4085 ("net-next: stmmac: Add dwmac-sun8i"). In fact, the
+> original driver submission includes the phy-supply code but no mention
+> of it in the binding, so the omission appears to be accidental. In
+> addition, the property is documented in the binding for the previous
+> hardware generation, allwinner,sun7i-a20-gmac.
+> 
+> [...]
 
----
+Here is the summary with links:
+  - [RESEND,net,v2] dt-bindings: net: sun8i-emac: Add phy-supply property
+    https://git.kernel.org/netdev/net/c/a3542b0ccd58
 
-The following changes since commit 830b3c68c1fb1e9176028d02ef86f3cf76aa2476:
-
-  Linux 6.1 (2022-12-11 14:15:18 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/locking_urgent_for_v6.2_rc2
-
-for you to fetch changes up to 94cd8fa09f5f1ebdd4e90964b08b7f2cc4b36c43:
-
-  futex: Fix futex_waitv() hrtimer debug object leak on kcalloc error (2022-12-27 12:52:02 +0100)
-
-----------------------------------------------------------------
-- Prevent the leaking of a debug timer in futex_waitv()
-
-- A preempt-RT mutex locking fix, adding the proper acquire semantics
-
-----------------------------------------------------------------
-Mathieu Desnoyers (1):
-      futex: Fix futex_waitv() hrtimer debug object leak on kcalloc error
-
-Mel Gorman (1):
-      rtmutex: Add acquire semantics for rtmutex lock acquisition slow path
-
- kernel/futex/syscalls.c      | 11 +++++----
- kernel/locking/rtmutex.c     | 55 ++++++++++++++++++++++++++++++++++++--------
- kernel/locking/rtmutex_api.c |  6 ++---
- 3 files changed, 56 insertions(+), 16 deletions(-)
-
+You are awesome, thank you!
 -- 
-Regards/Gruss,
-    Boris.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
