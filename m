@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD26B65AAB8
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 17:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB6B65AABB
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 17:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjAAQme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 11:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
+        id S231515AbjAAQnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 11:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjAAQmc (ORCPT
+        with ESMTP id S229447AbjAAQnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 11:42:32 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF2E2621
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 08:42:28 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id n1so27079110ljg.3
-        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 08:42:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DyHmJqMwBFUTDUCLBa6xYcpZiFOVVP1mRqK8f17ZqlQ=;
-        b=nlo6vvboC1gDKb90dwiGsoLvLW04p9t5Iuivx1rAOrJQ6IdEGnrYpwh7jiDBPfE/3D
-         /SMwuvv2zdSpkX3dgprB2gdElbPIkRczorWVOEB821htUEsSZdQlXni1KB2PltWAtEiU
-         duBP9BJ+ZUkQTfY3MHdF5GDxVfYlrnXii5Fe+uSAh2XXhhXWVppStGOaYMrQ0N3kRayx
-         uDlPAxzZyXRVO7PyNKmoKgq2xT3baa+YWX5aLoMUFQ32mQGvmiqRLJqeQMA+YQ/0kBGG
-         nG4V/dc/WuOXxNT7AqOKI3SGw0IDcnnOmQUljoQy3JwlvVxahlXdRn5EAaePVMzvq6E9
-         Ga5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DyHmJqMwBFUTDUCLBa6xYcpZiFOVVP1mRqK8f17ZqlQ=;
-        b=YPq12QYosrCoxsR0CKHP/RirKZH+FTR/cJrRGQenfrawHUUs6vq9P7Q+fNSdXlxCE7
-         dZf4/sq3SRTig7FacLXlhL544HJahDXSHS8387cJLEmauHw7p8czhi4sxKjIkJXrZry0
-         9H7D/PpbvcJ16chBZ4jEMY8U7vPru6uBErT+z9x3m+wIfDAbUHBpNkJ4yYTNEkV907GT
-         1FJ1ny8EdCkOwWiuf6zwm15UJ5OUQDzGS2J3hirV60LvV/X3uLfD6Mv/+XfAAjb7Rj3A
-         YuSZMppolN2gSgx5ydhhPv1KZeQ1Q8IF5DUHHszh36L/qbSq6VNUloBxMqNdPoNbYD1u
-         t7ew==
-X-Gm-Message-State: AFqh2kqSthGA3u3M5ZcdkxI3ULge7kCilmhhKQ3WZLKxxVKXEjDALtI8
-        zBXg6QX83XCV3vevmVtM4c6+rg==
-X-Google-Smtp-Source: AMrXdXtaUkfXq3/pXQqKV7l0Qid+mJyMwHrwTgiPlwkTGs86H4Do7vJZvJh904esgyxZHUHgnau53Q==
-X-Received: by 2002:a2e:a54d:0:b0:27f:bc58:3926 with SMTP id e13-20020a2ea54d000000b0027fbc583926mr8113638ljn.43.1672591346531;
-        Sun, 01 Jan 2023 08:42:26 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id s9-20020a2eb8c9000000b00267232d0652sm3055761ljp.46.2023.01.01.08.42.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Jan 2023 08:42:25 -0800 (PST)
-Message-ID: <3dceb85f-1c1c-e8c6-1cc7-3c75f3f4c0b7@linaro.org>
-Date:   Sun, 1 Jan 2023 18:42:25 +0200
+        Sun, 1 Jan 2023 11:43:35 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C992621;
+        Sun,  1 Jan 2023 08:43:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1672591398; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=ZdIco5S82jNZcc1SWnPRd9xwdwZWsyVleYrPay2ObR9BIbNwK3tGvTKj69THN6c6AZaif6T0N8hTYwPSY2bYu93xo/BQFYSoeu9T0u5PtdF2AO+Rq+fAgxOpeR1tHAkuwF+RxNOC60Mpg9HtP1oLD/NQrIViRmJ083HGbSmVKH8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1672591398; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=TEeQeO6TY4vFIEf1eZcrDvhLFzRqjIwITXNArJVWYK8=; 
+        b=AChNHaZE9bbaU5N5xZO4gGMZbyn5tqD4JqMlQiEHXIEawuuyhj9tia+JxH8wpnM/OdncsLEaH/5BSQZ2fZYG3diUPxLMChDS9Os3sJLuZ6OH9kChfyR6WyktOy7bjDVJ5cJR63h2XLV+fLpMYR5/HW7p0bh2xwyaMwqMsX+dPOk=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672591398;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:MIME-Version:To:To:Cc:Cc:References:Subject:Subject:From:From:Message-ID:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=TEeQeO6TY4vFIEf1eZcrDvhLFzRqjIwITXNArJVWYK8=;
+        b=ai6IJ/on+tf3CDg14Kv9rbf6CiaO2Lm588IUYEabXutLxkedrJKgDQFd2Y/gGnET
+        HKFXJF8qmJUk2PGLvHdE8mlNYgDj+NT+PfuIQbDeVxAH8QCjE8jMWcFAo+kltd73ogc
+        I8rOyGNT5hDLijqFIAVht3fqu/LtksI1yOsfTxb0=
+Received: from [192.168.1.9] (110.226.31.37 [110.226.31.37]) by mx.zoho.in
+        with SMTPS id 1672591395924950.1870279856462; Sun, 1 Jan 2023 22:13:15 +0530 (IST)
+Date:   Sun, 1 Jan 2023 22:13:14 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/msm/adreno: Make adreno quirks not overwrite each
- other
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Emma Anholt <emma@anholt.net>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20221229101846.981223-1-konrad.dybcio@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221229101846.981223-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Christian Brauner <brauner@kernel.org>,
+        Seth Forshee <sforshee@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kselftests <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20221211092820.85527-1-code@siddh.me>
+Subject: Re: [PATCH] selftests/mount_setattr: Remove redefinition of struct
+ mount_attr
+Content-Language: en-US, en-GB, hi-IN
+From:   Siddh Raman Pant <code@siddh.me>
+Message-ID: <24a4ca6b-8e05-b45b-5cbc-1a470051f1d3@siddh.me>
+In-Reply-To: <20221211092820.85527-1-code@siddh.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/12/2022 12:18, Konrad Dybcio wrote:
-> So far the adreno quirks have all been assigned with an OR operator,
-> which is problematic, because they were assigned consecutive integer
-> values, which makes checking them with an AND operator kind of no bueno..
-> 
-> Switch to using BIT(n) so that only the quirks that the programmer chose
-> are taken into account when evaluating info->quirks & ADRENO_QUIRK_...
-> 
-> Fixes: b5f103ab98c7 ("drm/msm: gpu: Add A5XX target support")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
+On Sun, 11 Dec 2022 14:58:20 +0530, Siddh Raman Pant wrote:
+> It is already included via sys/mount.h on line 10.
+>=20
+> GCC error reproducible by: make kselftest TARGETS=3D"mount_setattr"
+>=20
+> mount_setattr_test.c:107:8: error: redefinition of =E2=80=98struct mount_=
+attr=E2=80=99
+>   107 | struct mount_attr {
+>       |        ^~~~~~~~~~
+> In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
+>                  from mount_setattr_test.c:10:
+> ../../../../usr/include/linux/mount.h:129:8: note: originally defined her=
+e
+>   129 | struct mount_attr {
+>       |        ^~~~~~~~~~
+>=20
+> Signed-off-by: Siddh Raman Pant <code@siddh.me>
 > ---
->   drivers/gpu/drm/msm/adreno/adreno_gpu.h | 10 ++++------
->   1 file changed, 4 insertions(+), 6 deletions(-)-- 
-With best wishes
-Dmitry
+>  tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
+>  1 file changed, 7 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b=
+/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+> index 8c5fea68ae67..582669ca38e9 100644
+> --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+> +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+> @@ -103,13 +103,6 @@
+>   #else
+>     #define __NR_mount_setattr 442
+>   #endif
+> -
+> -struct mount_attr {
+> - __u64 attr_set;
+> - __u64 attr_clr;
+> - __u64 propagation;
+> - __u64 userns_fd;
+> -};
+>  #endif
+ >=20
+>  #ifndef __NR_open_tree
+> --=20
+> 2.35.1
+
+Hi,
+
+Please review the above patch, which can be found on the link below:
+https://lore.kernel.org/all/20221211092820.85527-1-code@siddh.me
+
+This was encountered before the patch adding missing <sys/syscall.h>
+was applied, which just means that I went into the code path under
+#ifndef __NR_mount_setattr, and encountered the error.
+
+Thanks,
+Siddh
 
