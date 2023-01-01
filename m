@@ -2,178 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C5465AA77
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 16:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F2465AA7A
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 16:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbjAAPtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 10:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
+        id S231538AbjAAPxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 10:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjAAPtI (ORCPT
+        with ESMTP id S229452AbjAAPxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 10:49:08 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B16B54
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 07:49:07 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id g13so38391840lfv.7
-        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 07:49:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gb6XglI1fED0fL7pjVB3dDglcOozlQzsZ5vAYulGpKU=;
-        b=xSnFTJp57tAHeSA3XQAXatgzTSJRFKFpUXXcB6PsSFYj1XRN1Qq8FXzEolByoHhajK
-         59H2Yy7YNBKzkHbw2aXlE2XVpnN4ygjn/vQm4qe1nnH1USl3iSK/PyGyElk0pSLnj/06
-         kqkdi6Wqewhy19j1fUpg0MzdCNduD/e9dqY3+LnjZ3zRM085JEdDcU2sxgvdVTt4szi+
-         vUbnzCL0cUQCCZKuQLeHT+hMvJrzBwRZhxfnAceQU46UjdTa8L9WraWojz6BvlhnBqkI
-         cE1wexVGS92IW0EJdQAbFRyyEu3Fu2e1yxWQOdAD9yR35vPWR0tplPWxePA5IVYWpvpt
-         G2/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gb6XglI1fED0fL7pjVB3dDglcOozlQzsZ5vAYulGpKU=;
-        b=mIriOLjTlpINjJs1X/e7AiB+GQZuWFMas9Cuslk5EZ1ivKVHUTWXsOteAdancJqILu
-         NS6SrmPSoI7PvB349j7NROteVdv9sUq4INRI00t4asK3GrPhXTKv7MYWSD4XdCk1uYoe
-         V5jIhUTswFpwC61IwJ4fKbO7cNwVPZLh0hruwfD9BB4I33T1ek/FecaLLNb0GHomi6I3
-         9apYxETbptRN6E7WmtJ64ywytpHDHCPOpoPGzwwrIxJsEbdWC/R06KIyb96xXXX6K0tU
-         M8+7sIrCK8SEp4ZcuLUZAasDnFSL/A28OMJ0nlFq8NVshU6pimrSDHRP1t2FWMU3i/SZ
-         NNvQ==
-X-Gm-Message-State: AFqh2kqB9X5MbYxvo3XYig97e88xxPITeX6p9PxaB8QzGT5THBBY5Edq
-        KZG54/nWNdqUZC5xu2B1mBqt/A==
-X-Google-Smtp-Source: AMrXdXvTEpmjOAE8ruMv7Z4jW+vI7unK1ZXvCqAwJt+Oko1tewzBJufCT4Aw0PSo4TWz1dRdphWTRA==
-X-Received: by 2002:a05:6512:2528:b0:4b6:f22c:7dc9 with SMTP id be40-20020a056512252800b004b6f22c7dc9mr10666239lfb.57.1672588145653;
-        Sun, 01 Jan 2023 07:49:05 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z5-20020ac24f85000000b004b5480edf67sm4176567lfs.36.2023.01.01.07.49.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Jan 2023 07:49:05 -0800 (PST)
-Message-ID: <ec43c40d-66fc-b4e3-273c-c21e1418ddab@linaro.org>
-Date:   Sun, 1 Jan 2023 16:49:03 +0100
+        Sun, 1 Jan 2023 10:53:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E14F7C;
+        Sun,  1 Jan 2023 07:53:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C27160DDD;
+        Sun,  1 Jan 2023 15:53:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C939C433D2;
+        Sun,  1 Jan 2023 15:53:29 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Q1YDlcfG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672588406;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w7UU0k0+xf0ESl7F6PUtPt9RVh2TOoL9Y1ZzrlTOJWs=;
+        b=Q1YDlcfGuFuaizpFcR+VS2iOzsWuc2XGQ76b6FNCb2ve/qXwRXskQpzX6fe4dIo2VSXGvd
+        AdPTIU8dkipKeO4rB7O0ciD4YfWuRcp+GKIEgSeayokyTiP+/QQIQDuMuA7o8csFfoQsbY
+        qSSJWB4ppa4BwJ+XjwIaflxTe1okobo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7183c114 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 1 Jan 2023 15:53:26 +0000 (UTC)
+Date:   Sun, 1 Jan 2023 16:53:22 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v13 6/7] random: introduce generic vDSO getrandom()
+ implementation
+Message-ID: <Y7GschU1qZPFZAhm@zx2c4.com>
+References: <20221221142327.126451-1-Jason@zx2c4.com>
+ <20221221142327.126451-7-Jason@zx2c4.com>
+ <Y6OHa196S8e1mImg@sol.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v8 02/10] arm64: dts: qcom: Add base SM8550 dtsi
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-References: <20221230202230.2493494-1-abel.vesa@linaro.org>
- <20221230202230.2493494-3-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221230202230.2493494-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y6OHa196S8e1mImg@sol.localdomain>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/12/2022 21:22, Abel Vesa wrote:
-> Add base dtsi for SM8550 SoC and includes base description of
-> CPUs, GCC, RPMHCC, UART, interrupt controller, TLMM, reserved
-> memory, RPMh PD, TCSRCC, ITS, IPCC, AOSS QMP, LLCC, cpufreq,
-> interconnect, thermal sensor, cpu cooling maps and SMMU nodes
-> which helps boot to shell with console on boards with this SoC.
+On Wed, Dec 21, 2022 at 02:23:39PM -0800, Eric Biggers wrote:
+> On Wed, Dec 21, 2022 at 03:23:26PM +0100, Jason A. Donenfeld wrote:
+> > diff --git a/drivers/char/random.c b/drivers/char/random.c
+> > index 6425f5f838e0..660cd15b6228 100644
+> > --- a/drivers/char/random.c
+> > +++ b/drivers/char/random.c
+> > @@ -60,6 +60,7 @@
+> >  #include <crypto/blake2s.h>
+> >  #ifdef CONFIG_VDSO_GETRANDOM
+> >  #include <vdso/getrandom.h>
+> > +#include <vdso/datapage.h>
+> >  #endif
+> >  #include <asm/archrandom.h>
+> >  #include <asm/processor.h>
+> > @@ -407,6 +408,9 @@ static void crng_reseed(struct work_struct *work)
+> >	/*
+> >	 * We copy the new key into the base_crng, overwriting the old one,
+> >	 * and update the generation counter. We avoid hitting ULONG_MAX,
+> >	 * because the per-cpu crngs are initialized to ULONG_MAX, so this
+> >	 * forces new CPUs that come online to always initialize.
+> >	 */
+> >	spin_lock_irqsave(&base_crng.lock, flags);
+> >	memcpy(base_crng.key, key, sizeof(base_crng.key));
+> >	next_gen = base_crng.generation + 1;
+> >  	if (next_gen == ULONG_MAX)
+> >  		++next_gen;
+> >  	WRITE_ONCE(base_crng.generation, next_gen);
+> > +#ifdef CONFIG_VDSO_GETRANDOM
+> > +	smp_store_release(&_vdso_rng_data.generation, next_gen + 1);
+> > +#endif
 > 
-> Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sm8550.dtsi | 3519 ++++++++++++++++++++++++++
->  1 file changed, 3519 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sm8550.dtsi
+> It's confusing that "uninitialized generation" is ULONG_MAX in the per-cpu
+> crngs, but 0 in the vdso_rng_data.  That results in a weird off-by one thing,
+> where the vdso_rng_data generation number has to be 1 higher.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> new file mode 100644
-> index 000000000000..a9514fcd6109
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -0,0 +1,3519 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2022, Linaro Limited
-> + */
-> +
-> +#include <dt-bindings/clock/qcom,rpmh.h>
-> +#include <dt-bindings/clock/qcom,sm8550-gcc.h>
-> +#include <dt-bindings/clock/qcom,sm8550-tcsr.h>
-> +#include <dt-bindings/dma/qcom-gpi.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/interconnect/qcom,sm8550-rpmh.h>
-> +#include <dt-bindings/mailbox/qcom-ipcc.h>
-> +#include <dt-bindings/power/qcom-rpmpd.h>
-> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
-> +#include <dt-bindings/thermal/thermal.h>
-> +
-> +/ {
-> +	interrupt-parent = <&intc>;
-> +
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	chosen { };
-> +
-> +	clocks {
-> +		xo_board: xo-board {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		sleep_clk: sleep-clk {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +		};
-> +	};
-> +
-> +	cpus {
-> +		#address-cells = <2>;
-> +		#size-cells = <0>;
-> +
-> +		CPU0: cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "qcom,kryo";
-> +			reg = <0 0>;
-> +			enable-method = "psci";
-> +			next-level-cache = <&L2_0>;
-> +			power-domains = <&CPU_PD0>;
-> +			power-domain-names = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
-> +			capacity-dmips-mhz = <1024>;
-> +			dynamic-power-coefficient = <100>;
-> +			#cooling-cells = <2>;
-> +			L2_0: l2-cache {
-> +			      compatible = "cache";
+> Would it be possible to use 0 for both?
 
-You miss cache-level properties in all cache nodes.
+It might be, but this will involve some changes to how the batching
+works too, so I think I'd like to do that separately, if at all.
+However, I'll add a comment there noting what's happening so it's a bit
+less confusing.
 
-> +			      next-level-cache = <&L3_0>;
-> +				L3_0: l3-cache {
-
-Messed indentation,
-
-> +					compatible = "cache";
-> +				};
-> +			};
-> +		};
-> +
-
-
-Best regards,
-Krzysztof
-
+Jason
