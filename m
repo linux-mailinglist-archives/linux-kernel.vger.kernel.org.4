@@ -2,183 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C1D65AB32
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 20:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BCC65AB34
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 20:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjAATb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 14:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S229847AbjAATgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 14:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjAATbX (ORCPT
+        with ESMTP id S229496AbjAATgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 14:31:23 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7C81D0;
-        Sun,  1 Jan 2023 11:31:21 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id r205so23507932oib.9;
-        Sun, 01 Jan 2023 11:31:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bUsoeI0t+F0M1VicIeLkR8DGI83Y71KjS4VXtx/g3NI=;
-        b=hts3Wm8n/WK1pYKdiL3FrX04vC+q8tQUpRqhXr0ztW4WB+usmv6ChqbjKkmO/76521
-         rj9/blMBQvHvvR4n/805KqvJD+6lodQeM9oJBT7q7ww0r19bbt9Lp63Xk6Db01dKFf1E
-         P4CaIWzc7c8kqAIU1Kvu0ZiCSZtkyNLOihAtaDM51iq5JdMS95V5qqSDPcMmmEfcaak2
-         mz4gEEq3HmLfZiogSR7UqeMm6d9WIUaAeTSe/azUc0OkS2v99ylnPd5pkk93zP4b7fjM
-         3BLMr974OisdvJ8bJHMZqcrxSbMlGMyKdKtpm/t6FncGTxzFoa4vFYo7vrHVdBc2vjWJ
-         xZDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bUsoeI0t+F0M1VicIeLkR8DGI83Y71KjS4VXtx/g3NI=;
-        b=l+AkB0NzlP+C5M3aF31MORSA/QlAIuqsoZMYpQNR9GJakaspqZhcYTe0uk/iqjdtGe
-         ZgW2101Cz9h4kopzYu2HE9uQh6rwm2qQODfyPR2tFs4nCkGK93yOcXeCPHlGk9+veeyk
-         0e8Z3zFqF3JqYnsqSryN/8lkHP4rBts0DbyDuF9/cwA+rYcnqMbUlsPzrQK45FdFihQl
-         SOkD1v3LlyhXGYzFPPxdB23a4YWwgXFPXZt0R7q/707UeQ2oJduiqiDY5H+CVulAFkhd
-         FSzeNaZVVc+VlKEnUlqToaqlbxR8hwibGgh+viOzBMNsPJOMcUnEUVvza7FJjPLx+S1p
-         4ASA==
-X-Gm-Message-State: AFqh2kqrLY9jqLMXGZ709SPOJyoTzyCkhupDHeXdtNohXXOVDOi2Uf80
-        uppDAsJ3X3POCIh15kPaf1TS61UJJqw=
-X-Google-Smtp-Source: AMrXdXvl4B0hCCQFzARIcVmNWlWCWYFsxyxu/AwNnyDzovJoD5nMsH8TMYWShFZ4ij7asuvXLhzewQ==
-X-Received: by 2002:a05:6808:107:b0:360:fce9:a7f7 with SMTP id b7-20020a056808010700b00360fce9a7f7mr16393660oie.45.1672601480721;
-        Sun, 01 Jan 2023 11:31:20 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e9-20020a544f09000000b0035aa617156bsm11392294oiy.17.2023.01.01.11.31.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Jan 2023 11:31:20 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 1 Jan 2023 11:31:18 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH] watchdog: ixp4xx: Use devm_clk_get_enabled() helper
-Message-ID: <20230101193118.GA2769955@roeck-us.net>
-References: <5d04e453a4da5cfafb56695a17157fa3ea296511.1672484831.git.christophe.jaillet@wanadoo.fr>
- <20221231231451.GD2706156@roeck-us.net>
- <40718555-3c2e-f6b5-889a-0a1817ad39a0@wanadoo.fr>
- <20230101150758.GA2736217@roeck-us.net>
- <401d3328-8da0-056b-8b32-d890bd5508b4@wanadoo.fr>
+        Sun, 1 Jan 2023 14:36:09 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33791009;
+        Sun,  1 Jan 2023 11:36:08 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id E85083200564;
+        Sun,  1 Jan 2023 14:36:06 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sun, 01 Jan 2023 14:36:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1672601766; x=1672688166; bh=9W/vOLrywVvKMEM2uXRK7f90y
+        c2YFYC7zHPiaMO2kvI=; b=MTgHuoFOyP2Q7o25ivfGtCeyUEUurVIftwEy4KFRx
+        noEyaoZj2SnW6rhnJGCshxZBXYReF/wLx6ZrirDJIOGSOJP9LKgOaStNgydRbIbP
+        1dUjVGjzkSmY/EscHg+IUjLju7T2TA9NgBaK+/qcMQJ5lXCI2UfgQaDbHic38ciw
+        JAZTxtG6jHFU/zvwkHSx9iV+1JNLcn+CkmDl4916cvV/KvINbgel81UdBDPEGImt
+        /He5xtoODZLmFr6iwtqn9hWKxmdvC/Y1nELdNgPfUKOajfHfylc7jn9wr3YpV55t
+        T3T/KFDYJEDkJOdXti3371TfTh6b1GKPUrHVN1VC4+DfQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1672601766; x=1672688166; bh=9W/vOLrywVvKMEM2uXRK7f90yc2YFYC7zHP
+        iaMO2kvI=; b=UU9AeY6IbGbUKbLkNsnZny/m407i0I3VPsquPDrDm2uATAKhGep
+        i59KtZrzEKIZpKMalqWOvDPeiS+jULOhkT5lG30e7ep/CRrwKjPamrbCahSlNP9i
+        lYgkOv8Ggy20oTRPG6bhej1aZbW/wTPMOwlGa2qn0ugfVnVBOyKCjc1V3SqlXtzc
+        0GfxxYybkikcLlO3+Ids2m3vSPG/fdPtZI8wkHWOy7iDBUkfPsUspa1WwukZkNii
+        UTAaSj6TykvPVIJqplO+O6YNKniiqm4SRbfrGdfBTalo4vgWhTl7/fFdGc1MF8Vm
+        FYQjY4DYWXsOj+kc+dWVGZXINF2AZFyZktA==
+X-ME-Sender: <xms:puCxYwIvA2nnXIPC9gdiLsM22_XYmEl63OyI8UuAsFJSGcjPAAi7fw>
+    <xme:puCxYwLsZOw6yGEjP0Cg3mpMyfpbp7Hvi_sV_Zs8bAg3KdWjO_NO9Uo7jtbjLpc5S
+    I51dQeJiy3ON9nQpQ>
+X-ME-Received: <xmr:puCxYwuhOpiEf9fonovirX0i3wRvNI_7mx4sy6H7ZpQWKI_8xwpCzZbpSpwKmAY4fVvPAruS0JYhNr-3xuszyj0TQR_5MLB4eVIOLuYHAuJgazn-mzR4tEWEO-iJ0ByGW0LF0g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedtgdduvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
+    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:puCxY9bfrcKoyLBNKERtrf6nMoUdv8I9OPsPA_hfjQYSWecJWX3BGA>
+    <xmx:puCxY3ZWrkSGD_XL0AYcUCazhcq_LCkc_jhQ3S16dApFZET4iiZV7w>
+    <xmx:puCxY5Bwl2nPjqLjehc83FmOeDVIsfBirPCVilMgcYzFMFaOB7JDzg>
+    <xmx:puCxY8NYgmjdBWYfo6AhkwkC0KYRj79vuxHyXVgh7XEEHitZLMVI3A>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 1 Jan 2023 14:36:05 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH v2] dmaengine: sun6i: Set the maximum segment size
+Date:   Sun,  1 Jan 2023 13:36:04 -0600
+Message-Id: <20230101193605.50285-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <401d3328-8da0-056b-8b32-d890bd5508b4@wanadoo.fr>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_PORT autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 01, 2023 at 06:52:35PM +0100, Christophe JAILLET wrote:
-[ ... ]
-> > > 
-> > > Here is what  do.
-> > > 
-> > > make allmodconfig
-> > > make -j8 drivers/watchdog/ixp4xx_wdt.o
-> > > 
-> > > And I get:
-> > >    DESCEND objtool
-> > >    CALL    scripts/checksyscalls.sh
-> > >    CC      drivers/watchdog/ixp4xx_wdt.o
-> > > drivers/watchdog/ixp4xx_wdt.c: In function ‘ixp4xx_wdt_probe’:
-> > > drivers/watchdog/ixp4xx_wdt.c:122:15: error: implicit declaration of
-> > > function ‘read_cpuid_id’ [-Werror=implicit-function-declaration]
-> > >    122 |         if (!(read_cpuid_id() & 0xf) && !cpu_is_ixp46x()) {
-> > >        |               ^~~~~~~~~~~~~
-> > > cc1: all warnings being treated as errors
-> > > make[3]: *** [scripts/Makefile.build:252 : drivers/watchdog/ixp4xx_wdt.o]
-> > > Erreur 1
-> > > make[2]: *** [scripts/Makefile.build:504 : drivers/watchdog] Erreur 2
-> > > make[1]: *** [scripts/Makefile.build:504 : drivers] Erreur 2
-> > > make: *** [Makefile:2011 : .] Erreur 2
-> > > 
-> > > 
-> > > I do agree with you that:
-> > > 
-> > >     - Kconfig looks fine
-> > > config IXP4XX_WATCHDOG
-> > > 	tristate "IXP4xx Watchdog"
-> > > 	depends on ARCH_IXP4XX
-> > > 
-> > >    - Makefile looks fine
-> > > obj-$(CONFIG_IXP4XX_WATCHDOG) += ixp4xx_wdt.o
-> > > 
-> > >    - .config looks fine
-> > > IXP4XX_WATCHDOG is NOT defined
-> > > 
-> > >    - make drivers/watchdog/ looks fine
-> > > No error and ixp4xx_wdt.o is NOT built.
-> > > 
-> > > 
-> > > However, in the past (if I recollect correctly :) ), a "make <something_that
-> > > depends_on_a_config_variable_that_is_not_defined>" returned an error stating
-> > > that no rule existed to build the specified target.
-> > > 
-> > 
-> > This is not correct. It only applies if the target directory Makefile is
-> > excluded by the make flags, or possibly if the target file is a complex
-> > one build from various source files.
-> > 
-> > > I sometimes needed to tweak the Kconfig files to force some compilation when
-> > > I didn't have the right tool chain or configuration.
-> > > It was maybe not the best practice, but it worked most of the time.
-> > > 
-> > > 
-> > > Now, with the example above, such a compilation attempt is possible. It is
-> > > maybe normal (because of a change somewhere in the way the kernel is built,
-> > > because of an updated toolchain on my machine, ...)
-> > > This is just fine for me, but looked really surprising.
-> > > 
-> > > That is why I first thought that something was missing in a Kconfig file.
-> > > 
-> > > 
-> > > So my comments are just a surprise to me to something that seems not to
-> > > behave the same as before.
-> > > 
-> > I don't think anything changed. It always worked like that for me.
-> > I would suggest to go back to an older kernel and try it there.
-> > You'll see exactly the same error. Maybe you just never encountered
-> > a file like that.
-> 
-> git reset --hard next-20210111			(randomly chosen date)
-> make allmodconfig
-> make clean
-> make -j7 drivers/watchdog/ixp4xx_wdt.o		(too build most of the needed stuff
-> to build a kernel)
-> touch drivers/watchdog/ixp4xx_wdt.c
-> make -j7 drivers/watchdog/ixp4xx_wdt.o		(too build this file only)
-> 
->   DESCEND  objtool
->   CALL    scripts/atomic/check-atomics.sh
->   CALL    scripts/checksyscalls.sh
-> make[3]: *** Aucune règle pour fabriquer la cible «
-> drivers/watchdog/ixp4xx_wdt.o ». Arrêt.
-> make[2]: *** [scripts/Makefile.build:471 : __build] Erreur 2
-> make[1]: *** [scripts/Makefile.build:496 : drivers/watchdog] Erreur 2
-> make: *** [Makefile:1805 : drivers] Erreur 2
-> 
+The sun6i DMA engine supports segment sizes up to 2^25-1 bytes. This is
+explicitly stated in newer SoC documentation (H6, D1), and it is implied
+in older documentation by the 25-bit width of the "bytes left in the
+current segment" register field.
 
-Turns out the behavior preferred by you was introduced in v5.4 with
-commit 394053f4a4b3 ("kbuild: make single targets work more correctly")
-and undone with commit cc306abd19e8 ("kbuild: fix and refactor single
-target build") in v6.1. As for what is the expected behavior, I can't say.
-I for my part had not noticed that the behavior had changed between v5.4
-and v6.0.
+Exposing the real segment size limit (instead of the 64k default)
+reduces the number of SG list segments needed for a transaction.
 
-I would suggest to discuss details with Yamada-san.
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+Tested on A64, verified that the maximum ALSA PCM period increased, and
+that audio playback still worked.
 
-Thanks,
-Guenter
+Changes in v2:
+ - Use SZ_32M instead of DMA_BIT_MASK to make the limit more obvious
+
+ drivers/dma/sun6i-dma.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/dma/sun6i-dma.c b/drivers/dma/sun6i-dma.c
+index b7557f437936..30667d251e97 100644
+--- a/drivers/dma/sun6i-dma.c
++++ b/drivers/dma/sun6i-dma.c
+@@ -9,6 +9,7 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
++#include <linux/dma-mapping.h>
+ #include <linux/dmaengine.h>
+ #include <linux/dmapool.h>
+ #include <linux/interrupt.h>
+@@ -1334,6 +1335,8 @@ static int sun6i_dma_probe(struct platform_device *pdev)
+ 	INIT_LIST_HEAD(&sdc->pending);
+ 	spin_lock_init(&sdc->lock);
+ 
++	dma_set_max_seg_size(&pdev->dev, SZ_32M - 1);
++
+ 	dma_cap_set(DMA_PRIVATE, sdc->slave.cap_mask);
+ 	dma_cap_set(DMA_MEMCPY, sdc->slave.cap_mask);
+ 	dma_cap_set(DMA_SLAVE, sdc->slave.cap_mask);
+-- 
+2.37.4
+
