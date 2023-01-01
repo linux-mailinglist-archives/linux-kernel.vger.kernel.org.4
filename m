@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FAC65AA26
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 15:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FC765AA29
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 15:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjAAOPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 09:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
+        id S230014AbjAAOQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 09:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjAAOPp (ORCPT
+        with ESMTP id S229599AbjAAOQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 09:15:45 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C51C27
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 06:15:44 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id s127so12197511vsb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 06:15:44 -0800 (PST)
+        Sun, 1 Jan 2023 09:16:36 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AC8263C
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 06:16:34 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id v14so17905456qtq.3
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 06:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
          :from:content-transfer-encoding:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BuFZ44C0YwmT4jbmclaWDxvon1oy7DdQSZfYjsKH4cQ=;
-        b=N/kMHF5WTq1tgq6B6XOEexI/55/xBznFtAd9XO0WI7UFrpGg5jrceQTb4WWWvkgq1J
-         3jm1ENfR8nC+z0+2ne3yaBWnozUf1UwIyA5wttlGrhpzYeP407LzjxzXi/nP4L2vgZF7
-         QKqIviE0B9miQXRUhXy89dN4RxHx6Bb1fAKT0=
+        bh=RW5jWyZz8/3sO2rr7DBwG5+wsjocCd9/cH402FJ/K7M=;
+        b=iBp2mi+JxiKIZPj5QLWfDaCUG6AcKXfXKyxNV9DmV4pgBPOu3McO5qJsqP/h2zFy3C
+         9cLWSN8d21RXJ8z9cEyQtI4tV2rh//zYszg9I/KW6k0BJS4/xNW1ivvAe9bsLHET8pie
+         GFZ/HT/uyzORGR28uNy8j6ULZjIOMSsKRGJIo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
          :from:content-transfer-encoding:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BuFZ44C0YwmT4jbmclaWDxvon1oy7DdQSZfYjsKH4cQ=;
-        b=GqQBZZUnPFndFJzB6sFvTKpeg+Sqqo6Krs+xiiXYnTOuSUXYQZw+Eec+eRN8dpcYdU
-         6Kf52GaByPVQqxFzay2NU8++kHrfinpvxBXKgoAYqiPgzYX+aGfEeplnaC2thCo19Y9V
-         LE2rOnnyu9JyEhPG9sOUoGwD7t+cmjgrRhFEBeHlLUzGM/JbLEmN0Gktr0D3k+wqq1bs
-         3Q3o6RBPHGSSvVzaP46a4GuhP2x9RfZfDO0TfCaqCf1GXSu7djs+nopbyzsQ9ZmZiAJO
-         5f1s+iWs14g0qJG8EI7jJjBp0FNk40kBEdYolLcks/X9LSkoDCxMDXQGbSvmXcPCQ9SR
-         cOfw==
-X-Gm-Message-State: AFqh2krwjUTpcxnd74YUnIDocQbAmNrlRELx7YnCujfeLEPV+hyA/LHF
-        p/tq7OZxNR4gxJrJ2TqWGr+r6g==
-X-Google-Smtp-Source: AMrXdXsbE1ujfH3UvrOCh00ab4c+8GIQ8cVkAOHEyemQY3k8lu28j2I94hTI3D8EXeSJ7XVxY0VDFQ==
-X-Received: by 2002:a05:6102:3138:b0:3cd:b27:ed75 with SMTP id f24-20020a056102313800b003cd0b27ed75mr3121359vsh.10.1672582543570;
-        Sun, 01 Jan 2023 06:15:43 -0800 (PST)
+        bh=RW5jWyZz8/3sO2rr7DBwG5+wsjocCd9/cH402FJ/K7M=;
+        b=Qi6fj4NJuDWnzESQBJKozeeFzdXviPgskcetZB8sdrljpPCPyHNZHzw4e0m4umbDcv
+         b3RX6cqxWDmgoEHltif+Y88Vm9o47FrBfJ0sT6/tKwCAA/Z5yH661JPsxRXemlhEOFmu
+         gG0T9QN5DYY2plFiDx0iUBXUsFqKLojIkAAyO2g7yNF5+0EXnjXalKdrRK0QCTVsG8tv
+         kTugjODq/XfWpCrUIN/BGmQpTc+yeB1dcN+a/OL//qQpuxEoIH6Lc7fT0nhdQU/KTqm0
+         N/0QERK6wdnw7phsPHSR58S96B3nPg/1yO6tyfdYmPHv6O0WWv+VQc3Q+qI2ssDn1oY0
+         Hylg==
+X-Gm-Message-State: AFqh2kqvljvMaBHw0O5r8HUhQlGVj95T8Cg+DmhBVxyIqNzuuoytJO1R
+        TWgUX3DUWV/V5dD6RUiQJApN8w==
+X-Google-Smtp-Source: AMrXdXsnD4zrvDHsbXWTWGOn+OQhNfENC3iogKE8eMX0iVwSRWIaQERdmCYzhlasmrkyK2VaLGHpQw==
+X-Received: by 2002:ac8:5453:0:b0:3a8:25be:ba5b with SMTP id d19-20020ac85453000000b003a825beba5bmr47765354qtq.23.1672582593718;
+        Sun, 01 Jan 2023 06:16:33 -0800 (PST)
 Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id c15-20020ae9ed0f000000b006ff8a122a1asm18504012qkg.78.2023.01.01.06.15.42
+        by smtp.gmail.com with ESMTPSA id x10-20020a05620a448a00b006ea7f9d8644sm19157688qkp.96.2023.01.01.06.16.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Jan 2023 06:15:42 -0800 (PST)
+        Sun, 01 Jan 2023 06:16:32 -0800 (PST)
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 From:   Joel Fernandes <joel@joelfernandes.org>
 Mime-Version: 1.0 (1.0)
 Subject: Re: [PATCH] torture: Fix hang during kthread shutdown phase
-Date:   Sun, 1 Jan 2023 09:15:31 -0500
-Message-Id: <6630F427-88C6-4DEE-B069-35B81835E387@joelfernandes.org>
-References: <Y7FI71mW7ZJZDiTI@kroah.com>
+Date:   Sun, 1 Jan 2023 09:16:22 -0500
+Message-Id: <C3D1D5E5-B6A7-4D40-B920-8E2AE9BFE22C@joelfernandes.org>
+References: <CAABZP2wSoEzfMWRdxGb6TmWVeN4xDUu5qjnG0d8RfaO7AovGZQ@mail.gmail.com>
 Cc:     linux-kernel@vger.kernel.org, Paul McKenney <paulmck@kernel.org>,
         Frederic Weisbecker <fweisbec@gmail.com>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, stable@vger.kernel.org,
-        Davidlohr Bueso <dave@stgolabs.net>,
+        stable@vger.kernel.org, Davidlohr Bueso <dave@stgolabs.net>,
         Josh Triplett <josh@joshtriplett.org>
-In-Reply-To: <Y7FI71mW7ZJZDiTI@kroah.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
+In-Reply-To: <CAABZP2wSoEzfMWRdxGb6TmWVeN4xDUu5qjnG0d8RfaO7AovGZQ@mail.gmail.com>
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
 X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,26 +74,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-> On Jan 1, 2023, at 3:48 AM, Greg KH <gregkh@linuxfoundation.org> wrote:
+> On Jan 1, 2023, at 8:02 AM, Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
 >=20
-> =EF=BB=BFOn Sun, Jan 01, 2023 at 01:20:01AM -0500, Joel Fernandes wrote:
->> On Sun, Jan 1, 2023 at 1:16 AM Joel Fernandes (Google)
->>> Cc: Paul McKenney <paulmck@kernel.org>
->>> Cc: Frederic Weisbecker <fweisbec@gmail.com>
->>> Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
->>> Cc: <stable@vger.kernel.org> # 6.0.x
+> =EF=BB=BFOn Sun, Jan 1, 2023 at 2:16 PM Joel Fernandes (Google)
+> <joel@joelfernandes.org> wrote:
 >>=20
->> Question for stable maintainers:
->> This patch is for mainline and 6.0 stable. However, it should also go
->> to 6.1 stable. How do we tag it to do that? I did not know how to tag
->> 2 stable versions. I guess the above implies > 6.0 ?
+>> During shutdown of rcutorture, the shutdown thread in
+>> rcu_torture_cleanup() calls torture_cleanup_begin() which sets fullstop
+>> to FULLSTOP_RMMOD. This is enough to cause the rcutorture threads for
+>> readers and fakewriters to breakout of their main while loop and start
+>> shutting down.
+>>=20
+>> Once out of their main loop, they then call torture_kthread_stopping()
+>> which in turn waits for kthread_stop() to be called, however
+>> rcu_torture_cleanup() has not even called kthread_stop() on those
+>> threads yet, it does that a bit later.  However, before it gets a chance
+>> to do so, torture_kthread_stopping() calls
+>> schedule_timeout_interruptible(1) in a tight loop. Tracing confirmed
+>> this makes the timer softirq constantly execute timer callbacks, while
+>> never returning back to the softirq exit path and is essentially "locked
+>> up" because of that. If the softirq preempts the shutdown thread,
+>> kthread_stop() may never be called.
+>>=20
+>> This commit improves the situation dramatically, by increasing timeout
+>> passed to schedule_timeout_interruptible() 1/20th of a second. This
+>> causes the timer softirq to not lock up a CPU and everything works fine.
+>> Testing has shown 100 runs of TREE07 passing reliably, which was not the
+>> case before because of RCU stalls.
+> On my Dell PowerEdge R720 with two Intel(R) Xeon(R) CPU E5-2660 128G memor=
+y:
+> 1) before this patch:
+> 3 of 80 rounds failed with "rcu: INFO: rcu_sched detected stalls on
+> CPUs/tasks" [1]
+> 2) after this patch
+> all 80 rounds passed
 >=20
-> The above implies 6.0 and newer already which included 6.1, so all is
-> good.
-
-Thanks a lot for clarification,
-
- - Joel=20
-
-
+> Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
 >=20
+
+Thanks! Glad to see your tests look good now.
+
+ - Joel
+
+
+> Thanks
+> Zhouyi
+>=20
+> [1] http://154.220.3.115/logs/20230101/console.log
+>>=20
+>> Cc: Paul McKenney <paulmck@kernel.org>
+>> Cc: Frederic Weisbecker <fweisbec@gmail.com>
+>> Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
+>> Cc: <stable@vger.kernel.org> # 6.0.x
+>> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+>> ---
+>> kernel/torture.c | 2 +-
+>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>=20
+>> diff --git a/kernel/torture.c b/kernel/torture.c
+>> index 29afc62f2bfe..d024f3b7181f 100644
+>> --- a/kernel/torture.c
+>> +++ b/kernel/torture.c
+>> @@ -915,7 +915,7 @@ void torture_kthread_stopping(char *title)
+>>        VERBOSE_TOROUT_STRING(buf);
+>>        while (!kthread_should_stop()) {
+>>                torture_shutdown_absorb(title);
+>> -               schedule_timeout_uninterruptible(1);
+>> +               schedule_timeout_uninterruptible(HZ/20);
+>>        }
+>> }
+>> EXPORT_SYMBOL_GPL(torture_kthread_stopping);
+>> --
+>> 2.39.0.314.g84b9a713c41-goog
+>>=20
