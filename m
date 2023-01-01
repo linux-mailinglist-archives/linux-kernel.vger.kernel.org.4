@@ -2,88 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B6365AA7C
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 16:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E6465AA84
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 16:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjAAP4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 10:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
+        id S229678AbjAAP6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 10:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjAAP4N (ORCPT
+        with ESMTP id S231543AbjAAP57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 10:56:13 -0500
-Received: from smtp.tiscali.it (santino-notr.mail.tiscali.it [213.205.33.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C35C6B44
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 07:56:10 -0800 (PST)
-Received: from localhost.localdomain ([95.236.88.218])
-        by santino.mail.tiscali.it with 
-        id 3Tw62900u4ifYS701Tw7rk; Sun, 01 Jan 2023 15:56:07 +0000
-X-Spam-Final-Verdict: clean
-X-Spam-State: 0
-X-Spam-Score: 0
-X-Spam-Verdict: clean
-x-auth-user: fantonifabio@tiscali.it
-From:   Fabio Fantoni <fantonifabio@tiscali.it>
-To:     corbet@lwn.net
-Cc:     federico.vaga@vaga.pv.it, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Fabio Fantoni <fantonifabio@tiscali.it>
-Subject: [PATCH] doc:it_IT: fix of 2 typos
-Date:   Sun,  1 Jan 2023 16:55:48 +0100
-Message-Id: <20230101155548.12350-1-fantonifabio@tiscali.it>
-X-Mailer: git-send-email 2.25.1
+        Sun, 1 Jan 2023 10:57:59 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178A2D7F
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 07:57:58 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id bt23so21775084lfb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 07:57:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nT/wNs755CbJKKo2LqAykZZrkcpLMwiTj6TNgle5VUo=;
+        b=eo2daS8tNzHeAfX1ggtEjRelM1E2AF/hZuQKDrbXvG1nlNzr7BJmfDltGHTHO0zhhA
+         pEwxywhyUViXLBBhaaJne7jZg4rbdon105hNzvzu1hDwdJ1FPuSnCUD99OjEwXnqu1xu
+         qd4fLi8h7SEG+geon3hCdA1oARaMljmezubuIdioM/6Hxbfih/IGvbaRb4jLzsJeRBIo
+         QJtULYJpdbgUz8q4AL2fOnfpO3f92H0Xb1W0bIKcmz4Kksztm0XFozAwUtafmUVViydn
+         79Gza9o6Jxy3UzLBA1F65XWVPsK3VDfRXMFwwWGaPwxoYOrXuWFwoMya2wCXReopzVSy
+         7+Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nT/wNs755CbJKKo2LqAykZZrkcpLMwiTj6TNgle5VUo=;
+        b=EZRx1LaLW38uCCHzu94xKtYvViZm2HzR1PPwgXfBbMOibbFDWwLy9lDyXJEBs0UZMY
+         sst7qxWnr6Xl8nXy1kyB/XsGMQ7BOKtRf5d3AVF9I3Na6SYliAqwwCrx6rPWmfbhMgLD
+         viNQPw5gbZCLswmyzN0Y+IXoFd3q/k9sI1MEQKlBmEDr1q1X8iHeyM1GgFi+gZvEQWc/
+         VL8mmeBNVPnp/2REQPuBHho/roYDTw4T8JTsCf3FwkDURDutFUE8nLGiGdMkOSvLi2XW
+         iazTOamCiX7LtKbk4V/Ch8bKAJbEBYu451C553IlUbwom7bwUqbHVXABCmiP1vPSTGhW
+         nKYA==
+X-Gm-Message-State: AFqh2kqDR5nx3wa3/dL732frixgqDOMQCJWYiewmdEQ8s4Fw5pd4kRP0
+        Fylu8yumCJRT1/z/uRt/StaZJw==
+X-Google-Smtp-Source: AMrXdXvmDgwvA1xnXZ9dJ32ybmiv38vs5VFBCn8qj8MqbxNP93P9wdvJlMzbkINyTln+UR426UlIWw==
+X-Received: by 2002:ac2:58d4:0:b0:4b5:9e70:ca6e with SMTP id u20-20020ac258d4000000b004b59e70ca6emr10831226lfo.17.1672588676468;
+        Sun, 01 Jan 2023 07:57:56 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 7-20020ac25f47000000b0049482adb3basm4199109lfz.63.2023.01.01.07.57.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 Jan 2023 07:57:55 -0800 (PST)
+Message-ID: <ce838de7-4dfc-4631-8f87-1fb311dcc739@linaro.org>
+Date:   Sun, 1 Jan 2023 16:57:54 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: crypto: sun8i-ce: Add compatible for
+ D1
+Content-Language: en-US
+To:     Samuel Holland <samuel@sholland.org>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20221231220146.646-1-samuel@sholland.org>
+ <20221231220146.646-2-samuel@sholland.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221231220146.646-2-samuel@sholland.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tiscali.it; s=smtp;
-        t=1672588567; bh=UgaiJxiMPovoFF2XoBdbAEToxfBelkU9Vdzn09r5cgY=;
-        h=From:To:Cc:Subject:Date;
-        b=LIMItimcBLdyG6CTb2MpFyiAQIx26TzMyfYjSQS+wP1JbUGwEwP2StoVrYsJn8bBs
-         SON7wsKafxY3ofCGE8hAI2jFEeWsE9gqrNygiOqP20jh6I4llcgD7+//gStyyqFccd
-         ivXvhbI5LrymgalT+n5SM5oG31nV5tqvssf9LACc=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix of 2 typos spotted reading documentation in italian
+On 31/12/2022 23:01, Samuel Holland wrote:
+> D1 has a crypto engine similar to the one in other Allwinner SoCs.
+> Like H6, it has a separate MBUS clock gate.
+> 
+> It also requires the internal RC oscillator to be enabled for the TRNG
+> to return data, presumably because noise from the oscillator is used as
+> an entropy source. This is likely the case for earlier variants as well,
+> but it really only matters for H616 and newer SoCs, as H6 provides no
+> way to disable the internal oscillator.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
 
-Signed-off-by: Fabio Fantoni <fantonifabio@tiscali.it>
----
- .../translations/it_IT/process/maintainer-pgp-guide.rst         | 2 +-
- Documentation/translations/it_IT/process/submitting-patches.rst | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst b/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
-index a1e98ec9532e..37a8ecb00af2 100644
---- a/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
-+++ b/Documentation/translations/it_IT/process/maintainer-pgp-guide.rst
-@@ -163,7 +163,7 @@ chiave principale attraverso firme certificate. È quindi importante
- comprendere i seguenti punti:
- 
- 1. Non ci sono differenze tecniche tra la chiave principale e la sottochiave.
--2. In fesa di creazione, assegniamo limitazioni funzionali ad ogni chiave
-+2. In fase di creazione, assegniamo limitazioni funzionali ad ogni chiave
-    assegnando capacità specifiche.
- 3. Una chiave PGP può avere 4 capacità:
- 
-diff --git a/Documentation/translations/it_IT/process/submitting-patches.rst b/Documentation/translations/it_IT/process/submitting-patches.rst
-index a3bb0008837a..c2cfa0948b2b 100644
---- a/Documentation/translations/it_IT/process/submitting-patches.rst
-+++ b/Documentation/translations/it_IT/process/submitting-patches.rst
-@@ -340,7 +340,7 @@ Assicuratevi di dire ai revisori quali cambiamenti state facendo e di
- ringraziarli per il loro tempo.  Revisionare codice è un lavoro faticoso e che
- richiede molto tempo, e a volte i revisori diventano burberi. Tuttavia, anche in
- questo caso, rispondete con educazione e concentratevi sul problema che hanno
--evidenziato. Quando inviate una version successiva ricordatevi di aggiungere un
-+evidenziato. Quando inviate una versione successiva ricordatevi di aggiungere un
- ``patch changelog`` alla email di intestazione o ad ogni singola patch spiegando
- le differenze rispetto a sottomissioni precedenti (vedere
- :ref:`it_the_canonical_patch_format`).
--- 
-2.25.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
