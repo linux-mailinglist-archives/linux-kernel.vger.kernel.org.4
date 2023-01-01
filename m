@@ -2,107 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E6465AA84
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 16:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3373C65AA8E
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 17:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjAAP6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 10:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S230026AbjAAQVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 11:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjAAP57 (ORCPT
+        with ESMTP id S229445AbjAAQVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 10:57:59 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178A2D7F
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 07:57:58 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id bt23so21775084lfb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 07:57:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nT/wNs755CbJKKo2LqAykZZrkcpLMwiTj6TNgle5VUo=;
-        b=eo2daS8tNzHeAfX1ggtEjRelM1E2AF/hZuQKDrbXvG1nlNzr7BJmfDltGHTHO0zhhA
-         pEwxywhyUViXLBBhaaJne7jZg4rbdon105hNzvzu1hDwdJ1FPuSnCUD99OjEwXnqu1xu
-         qd4fLi8h7SEG+geon3hCdA1oARaMljmezubuIdioM/6Hxbfih/IGvbaRb4jLzsJeRBIo
-         QJtULYJpdbgUz8q4AL2fOnfpO3f92H0Xb1W0bIKcmz4Kksztm0XFozAwUtafmUVViydn
-         79Gza9o6Jxy3UzLBA1F65XWVPsK3VDfRXMFwwWGaPwxoYOrXuWFwoMya2wCXReopzVSy
-         7+Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nT/wNs755CbJKKo2LqAykZZrkcpLMwiTj6TNgle5VUo=;
-        b=EZRx1LaLW38uCCHzu94xKtYvViZm2HzR1PPwgXfBbMOibbFDWwLy9lDyXJEBs0UZMY
-         sst7qxWnr6Xl8nXy1kyB/XsGMQ7BOKtRf5d3AVF9I3Na6SYliAqwwCrx6rPWmfbhMgLD
-         viNQPw5gbZCLswmyzN0Y+IXoFd3q/k9sI1MEQKlBmEDr1q1X8iHeyM1GgFi+gZvEQWc/
-         VL8mmeBNVPnp/2REQPuBHho/roYDTw4T8JTsCf3FwkDURDutFUE8nLGiGdMkOSvLi2XW
-         iazTOamCiX7LtKbk4V/Ch8bKAJbEBYu451C553IlUbwom7bwUqbHVXABCmiP1vPSTGhW
-         nKYA==
-X-Gm-Message-State: AFqh2kqDR5nx3wa3/dL732frixgqDOMQCJWYiewmdEQ8s4Fw5pd4kRP0
-        Fylu8yumCJRT1/z/uRt/StaZJw==
-X-Google-Smtp-Source: AMrXdXvmDgwvA1xnXZ9dJ32ybmiv38vs5VFBCn8qj8MqbxNP93P9wdvJlMzbkINyTln+UR426UlIWw==
-X-Received: by 2002:ac2:58d4:0:b0:4b5:9e70:ca6e with SMTP id u20-20020ac258d4000000b004b59e70ca6emr10831226lfo.17.1672588676468;
-        Sun, 01 Jan 2023 07:57:56 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 7-20020ac25f47000000b0049482adb3basm4199109lfz.63.2023.01.01.07.57.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Jan 2023 07:57:55 -0800 (PST)
-Message-ID: <ce838de7-4dfc-4631-8f87-1fb311dcc739@linaro.org>
-Date:   Sun, 1 Jan 2023 16:57:54 +0100
+        Sun, 1 Jan 2023 11:21:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEECDF4;
+        Sun,  1 Jan 2023 08:21:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2939860DB6;
+        Sun,  1 Jan 2023 16:21:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0BDDC433D2;
+        Sun,  1 Jan 2023 16:21:29 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="B7fXcrzD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672590087;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zgzwF4VoLQnS0Fhvwjzy5nnGU3HAw7Tv8mnPH+MHVYA=;
+        b=B7fXcrzDtFe0E6aOSojyhoQ+zHfjlKZUEbLQpak5PFpzMuR6OhQ6NxVHT1k5S+/URafa+E
+        /xLrpCuWjGNnff90wj7EXRhlp1/R5fIq2NmJWbZxiHyR6DAn4SfzD/0elrf7T9I6E6NWzs
+        dLqoU1+To/CumIEdvGAfJoc5tu127xw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a210ec61 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 1 Jan 2023 16:21:27 +0000 (UTC)
+Date:   Sun, 1 Jan 2023 17:21:24 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Samuel Neves <sneves@dei.uc.pt>
+Subject: Re: [PATCH v13 7/7] x86: vdso: Wire up getrandom() vDSO
+ implementation
+Message-ID: <Y7GzBAt3uUhpfEJD@zx2c4.com>
+References: <20221221142327.126451-1-Jason@zx2c4.com>
+ <20221221142327.126451-8-Jason@zx2c4.com>
+ <Y6OWSM18QL977nbC@sol.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/3] dt-bindings: crypto: sun8i-ce: Add compatible for
- D1
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20221231220146.646-1-samuel@sholland.org>
- <20221231220146.646-2-samuel@sholland.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221231220146.646-2-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y6OWSM18QL977nbC@sol.localdomain>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/12/2022 23:01, Samuel Holland wrote:
-> D1 has a crypto engine similar to the one in other Allwinner SoCs.
-> Like H6, it has a separate MBUS clock gate.
+On Wed, Dec 21, 2022 at 03:27:04PM -0800, Eric Biggers wrote:
+> On Wed, Dec 21, 2022 at 03:23:27PM +0100, Jason A. Donenfeld wrote:
+> > diff --git a/arch/x86/entry/vdso/vgetrandom-chacha.S b/arch/x86/entry/vdso/vgetrandom-chacha.S
+> > new file mode 100644
+> > index 000000000000..91fbb7ac7af4
+> > --- /dev/null
+> > +++ b/arch/x86/entry/vdso/vgetrandom-chacha.S
+> > @@ -0,0 +1,177 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+> > + */
+> > +
+> > +#include <linux/linkage.h>
+> > +#include <asm/frame.h>
+> > +
+> > +.section	.rodata.cst16.CONSTANTS, "aM", @progbits, 16
+> > +.align 16
+> > +CONSTANTS:	.octa 0x6b20657479622d323320646e61707865
+> > +.text
 > 
-> It also requires the internal RC oscillator to be enabled for the TRNG
-> to return data, presumably because noise from the oscillator is used as
-> an entropy source. This is likely the case for earlier variants as well,
-> but it really only matters for H616 and newer SoCs, as H6 provides no
-> way to disable the internal oscillator.
+> For simplicity, maybe leave off the section mergeability stuff and just have
+> plain ".section .rodata"?
+
+I guess nothing is going to get merged anyway, so sure, why not.
+
+> It would be worth mentioning in the function comment that none of the xmm
+> registers are callee-save.  That was not obvious to me.  I know that on arm64,
+> *kernel* code doesn't need to save/restore NEON registers, so it's not something
+> that arch/arm64/crypto/ does.  But, it *is* needed in arm64 userspace code.  So
+> I was worried that something similar would apply to x86_64, but it seems not.
+
+I'll add a comment.
+
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
+> > +	/* state1[0,1,2,3] = state1[0,3,2,1] */
+> > +	pshufd		$0x39,state1,state1
+> > +	/* state2[0,1,2,3] = state2[1,0,3,2] */
+> > +	pshufd		$0x4e,state2,state2
+> > +	/* state3[0,1,2,3] = state3[2,1,0,3] */
+> > +	pshufd		$0x93,state3,state3
+> 
+> The comments don't match the pshufd constants.  The code is correct but the
+> comments are not.  They should be:
 
+Er, I swapped the endian when writing the comment. The code is fine
+though, yea. Fixed, thanks.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> The above sequence of 24 instructions is repeated twice, so maybe it should be a
+> macro (".chacha_round"?).
 
-Best regards,
-Krzysztof
+Not really a fan of the indirection when reading for something simple
+like this.
 
+Thanks for the review.
+
+Jason
