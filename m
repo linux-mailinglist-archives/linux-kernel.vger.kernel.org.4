@@ -2,134 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E85365AAFE
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 19:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 672E765AB09
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 19:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbjAASd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 13:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S229574AbjAASy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 13:54:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjAASdY (ORCPT
+        with ESMTP id S229521AbjAASy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 13:33:24 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C89270A
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 10:33:23 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id E1C8732005D8;
-        Sun,  1 Jan 2023 13:33:22 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sun, 01 Jan 2023 13:33:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672598002; x=1672684402; bh=gF
-        Jp7uQ/NboepQjd9pK1M3B4deROdXdMSMySU0IDyhg=; b=G1bvr603ZRIBxeV9ii
-        m58ikTrF4KFUEqluhod1Z/SP4WP3s3e0+HpMPwYpBpHjugkRcKJ9H6/QM8LM1vO/
-        t65lRFm0gp516OYvHDF4bhIF3tMKL56T6xTTK6DcTMqZ1Jc5qwnuG1gG5n0NzBZT
-        cibCNXixttIgZFKmbYzm5YHHZuc58Qoy+SYXR1zB1fvF2F5dc6Il1MTWOoOs5BEa
-        yfK4Hl4eJ+/NpQ7lkKHCr+l4Eu89ZDs9KUh3SExnvD/CBVV5Lu0nRfYeEIFDAuHA
-        t2/2JwrusTQY5YxN0vzsqQ19APKtSxA1URgJ6IfB1lHAuqbljGIN0E6U7YckN2+I
-        6UPw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672598002; x=1672684402; bh=gFJp7uQ/Nboep
-        Qjd9pK1M3B4deROdXdMSMySU0IDyhg=; b=BZLrHMJ6yNFS7YrUYJCIPzaX6nal2
-        AMdi5SKhAF0Z9Q8BF4euGd7iHadoJcWrME+6pWsPsHiP9nI7LMUFetM5rRxFuzPP
-        b8pGjO4O1lidzz9cE7bqiZ+gKvQD6DGEju61PJZlfAKmWFqtemQPs0IrDrp92Na5
-        ZAZ7xYo5C3a89CS1KaHrqMQgq1pq3muJ6rTqZae8riVC4ltNP6aiHYVQ4dC9e1IG
-        AqyAfT1zsDvEJRe5hdYHuXWqNElxq9bu8k8/MlHzyqahGeUhjwXYZY6xVFrh/ckh
-        HXKN3xJ7u/AS8CvWlqutSz9DKH4T/CahaFt8Cgnla40JYl03cmdI+HVKQ==
-X-ME-Sender: <xms:8tGxY0SakjOvHmM5SKs8Qi8fhCiwDfKQMjjS0eR6WlftX1F2j2iWow>
-    <xme:8tGxYxzjqiJdtEsWKIRwrspndXbu1uywSw6qpO-34D-j1_PT5Y686WumlPHkCPeTT
-    St_vQ-eZGwz8zURwQ>
-X-ME-Received: <xmr:8tGxYx0z_udRp-YiU4bSKMojRABeqmCIPUw7LEGneAHjc-fIDrd20KaZNwMknWZkje3raYCimCinwABjap0qNO0AOwdiUVtoJKO-ohOJYMlh5BdzIpDu7hSjKTRikklgEt8Dgg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedtgdduudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:8tGxY4A9x7JO-g2spHjr5Jy9xTmyxSYd-abGNhDo-2gUUD48eBeLEQ>
-    <xmx:8tGxY9jzWQ4V8yiHCFP8Mw42kmDsT2oh7tGlk4lDTacBqJFcqkZDqg>
-    <xmx:8tGxY0p_Z4kOk_kUZtN4EI6xurfx-d_mCftAXO7ZFHt5GJRRWWSoJQ>
-    <xmx:8tGxY4UYq08Blbikvwzp5R-AMEcI97oNES8B-f27YfmGK5VRmVu8vA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 1 Jan 2023 13:33:21 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 2/2] nvmem: sunxi_sid: Drop the workaround on A64
-Date:   Sun,  1 Jan 2023 12:33:16 -0600
-Message-Id: <20230101183316.43642-3-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20230101183316.43642-1-samuel@sholland.org>
-References: <20230101183316.43642-1-samuel@sholland.org>
+        Sun, 1 Jan 2023 13:54:27 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D682BDE
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 10:54:26 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4NlSpT4dMXz1S5F0
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 13:54:25 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:content-type:in-reply-to:subject:from
+        :references:to:content-language:user-agent:mime-version:date
+        :message-id; s=dkim; t=1672599264; x=1673463265; bh=aHoMEFVYcc5h
+        zi9Wovp2SCXPkQhWsvSGGsCRhogEuRM=; b=zBhwQ1MZ9KLaVEJgio2S6ChBOZyS
+        Zw74t2X/ymhAsr1mtVNDCklAQZn4OJTxyyULnGvJ2zfHlUTXj2GhaWEGbYOnqpT4
+        Ifv+s77Jt6VuuShMp59Z35J2mO22kYfrm7+da39eqWjbS1/6+CG2FkcBqgj9xCuP
+        BCXPs9wYk1l+nGQg2wBUFLj77c6KQM8hzHbXWbN/S1EqXzp6vxcxga+1wHwxJgU1
+        2CE4q99hacGWazvNWTfGTFzr75gpmB4jqUBUbmvsJkEtnIki+mHQDyzWuCwzoGnx
+        5nZDXPQWgpqaOnvpC2m3YWzBUwDCEXCi8y9JL5KttXC5AaOIU5oB5wXeDQ==
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id V0mClkSP5AAO for <linux-kernel@vger.kernel.org>;
+        Sun,  1 Jan 2023 13:54:24 -0500 (EST)
+Received: from [192.168.4.25] (unknown [190.196.92.66])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4NlSpM0GkHz1S52G;
+        Sun,  1 Jan 2023 13:54:18 -0500 (EST)
+Message-ID: <42958395-7e91-b7ed-c623-286f4c38c829@mint.lgbt>
+Date:   Sun, 1 Jan 2023 15:54:14 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     Martin Botka <martin.botka@somainline.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        marijn.suijten@somainline.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221231222420.75233-1-they@mint.lgbt>
+ <20221231222420.75233-6-they@mint.lgbt> <942SNR.IMR405HRPE6J@somainline.org>
+From:   Lux Aliaga <they@mint.lgbt>
+Subject: Re: [PATCH v5 5/6] dt-bindings: arm: qcom: Document
+ xiaomi,laurel-sprout board
+In-Reply-To: <942SNR.IMR405HRPE6J@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the SRAM readout code is fixed by using 32-bit accesses, it
-always returns the same values as register readout, so the A64 variant
-no longer needs the workaround. This makes the D1 variant structure
-redundant, so remove it.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+On 31/12/2022 19:50, Martin Botka wrote:
+>
+>
+> On Sat, Dec 31 2022 at 07:24:19 PM -03:00:00, Lux Aliaga=20
+> <they@mint.lgbt> wrote:
+>> Document the Xiaomi Mi A3 (xiaomi-laurel-sprout) smartphone which is
+>> based on the Snapdragon 665 SoC.
+>>
+>> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+>> ---
+>> =C2=A0Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+>> =C2=A01 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml=20
+>> b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> index 27063a045bd0..4923dafb5d7a 100644
+>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> @@ -793,6 +793,7 @@ properties:
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 - sony,pdx201
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 - xiaomi,laurel-sprout
+> From what i can see laurel_sprout is the correct and official codename=20
+> for the device.
+>
+> Not sure here at all but should we maybe use that as it is the=20
+> official codename ?
+>
+> -Martin
+I defined it as shown due to the following comment.=20
+https://lore.kernel.org/linux-devicetree/c4bf26a4-16bb-6ed8-ae70-1947998e=
+32cc@linaro.org/
 
-(no changes since v1)
-
- drivers/nvmem/sunxi_sid.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/drivers/nvmem/sunxi_sid.c b/drivers/nvmem/sunxi_sid.c
-index 92dfe4cb10e3..a970f1741cc6 100644
---- a/drivers/nvmem/sunxi_sid.c
-+++ b/drivers/nvmem/sunxi_sid.c
-@@ -197,15 +197,9 @@ static const struct sunxi_sid_cfg sun8i_h3_cfg = {
- 	.need_register_readout = true,
- };
- 
--static const struct sunxi_sid_cfg sun20i_d1_cfg = {
--	.value_offset = 0x200,
--	.size = 0x100,
--};
--
- static const struct sunxi_sid_cfg sun50i_a64_cfg = {
- 	.value_offset = 0x200,
- 	.size = 0x100,
--	.need_register_readout = true,
- };
- 
- static const struct sunxi_sid_cfg sun50i_h6_cfg = {
-@@ -218,7 +212,7 @@ static const struct of_device_id sunxi_sid_of_match[] = {
- 	{ .compatible = "allwinner,sun7i-a20-sid", .data = &sun7i_a20_cfg },
- 	{ .compatible = "allwinner,sun8i-a83t-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun8i-h3-sid", .data = &sun8i_h3_cfg },
--	{ .compatible = "allwinner,sun20i-d1-sid", .data = &sun20i_d1_cfg },
-+	{ .compatible = "allwinner,sun20i-d1-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-a64-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h5-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h6-sid", .data = &sun50i_h6_cfg },
--- 
-2.37.4
+--=20
+Lux Aliaga
+https://nixgoat.me/
 
