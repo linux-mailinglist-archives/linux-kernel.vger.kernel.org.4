@@ -2,120 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9F365A97C
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 10:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD0F65A981
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 10:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjAAJWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 04:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S229540AbjAAJgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 04:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjAAJWl (ORCPT
+        with ESMTP id S229479AbjAAJgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 04:22:41 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A786250;
-        Sun,  1 Jan 2023 01:22:38 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=yang.su@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VYU0kJC_1672564955;
-Received: from localhost(mailfrom:yang.su@linux.alibaba.com fp:SMTPD_---0VYU0kJC_1672564955)
-          by smtp.aliyun-inc.com;
-          Sun, 01 Jan 2023 17:22:36 +0800
-From:   Yang Su <yang.su@linux.alibaba.com>
-To:     bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, alex.williamson@redhat.com,
-        matthew@wil.cx, jbarnes@virtuousgeek.org, rjw@sisk.pl,
-        greg@kroah.com, patchwork-bot@kernel.org, andrew.murray@arm.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] PCI: Tune secondary bus reset time for PCIe
-Date:   Sun,  1 Jan 2023 17:22:33 +0800
-Message-Id: <03c5388700f8b0db95ede6084eaa6e59b84a23bf.1672563632.git.yang.su@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <cover.1672563632.git.yang.su@linux.alibaba.com>
-References: <cover.1672563632.git.yang.su@linux.alibaba.com>
+        Sun, 1 Jan 2023 04:36:05 -0500
+Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263282727
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 01:36:02 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id Bul5pYI66Rn9tBul5pQ6t3; Sun, 01 Jan 2023 10:36:00 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 01 Jan 2023 10:36:00 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <40718555-3c2e-f6b5-889a-0a1817ad39a0@wanadoo.fr>
+Date:   Sun, 1 Jan 2023 10:35:59 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] watchdog: ixp4xx: Use devm_clk_get_enabled() helper
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <5d04e453a4da5cfafb56695a17157fa3ea296511.1672484831.git.christophe.jaillet@wanadoo.fr>
+ <20221231231451.GD2706156@roeck-us.net>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221231231451.GD2706156@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On PCI Express, there will be cases where the new code sleeps far less
-than the 1s being replaced by this patch. This should be okay, because
-PCI Express Base Specification Revision 5.0 Version 1.0 (May 22, 2019)
-in Section 6.6.1 "Conventional Reset" only notes 100ms as the minimum
-waiting time. After this time, the OS is permitted to issue
-Configuration Requests, but it is possible that the device responds
-with Configuration Request Retry Status (CRS) Completions, rather than
-Successful Completion. Returning CRS can go on for up to 1 second after
-a Conventional Reset (such as SBR) before the OS can consider the device
-broken. This additional wait is handled by pci_dev_wait. Besides,
-this patch also cover PCI and PCI-X after device reset waiting Tpvrh 1000ms.
+Le 01/01/2023 à 00:14, Guenter Roeck a écrit :
+> On Sat, Dec 31, 2022 at 12:07:27PM +0100, Christophe JAILLET wrote:
+>> The devm_clk_get_enabled() helper:
+>>     - calls devm_clk_get()
+>>     - calls clk_prepare_enable() and registers what is needed in order to
+>>       call clk_disable_unprepare() when needed, as a managed resource.
+>>
+>> This simplifies the code and avoids the need of a dedicated function used
+>> with devm_add_action_or_reset().
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> Note that I get a compilation error because read_cpuid_id() is not defined
+>> on my system (x86_64).
+>> So I think that a "depends on ARM<something>" in missing in a KConfig file.
+> 
+> It has
+> 
+> 	depends on ARCH_IXP4XX
+> 
+> and CONFIG_IXP4XX_WATCHDOG is not set for me after "make allmodconfig".
 
-Currently, the only callchain that lands in the function modified by
-this patch which invokes one out of two versions of pcibios_reset_secondary_bus
-that both end with a call to pci_reset_secondary_bus.
+Here is what  do.
 
-Afterwards, pci_reset_secondary_bus always invokes pci_dev_wait
-which wait for the device to return a non-CRS completion.
+make allmodconfig
+make -j8 drivers/watchdog/ixp4xx_wdt.o
 
-Signed-off-by: Yang Su <yang.su@linux.alibaba.com>
----
- drivers/pci/pci.c | 36 +++++++++++++++++++++++++++++++++---
- 1 file changed, 33 insertions(+), 3 deletions(-)
+And I get:
+   DESCEND objtool
+   CALL    scripts/checksyscalls.sh
+   CC      drivers/watchdog/ixp4xx_wdt.o
+drivers/watchdog/ixp4xx_wdt.c: In function ‘ixp4xx_wdt_probe’:
+drivers/watchdog/ixp4xx_wdt.c:122:15: error: implicit declaration of 
+function ‘read_cpuid_id’ [-Werror=implicit-function-declaration]
+   122 |         if (!(read_cpuid_id() & 0xf) && !cpu_is_ixp46x()) {
+       |               ^~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:252 : 
+drivers/watchdog/ixp4xx_wdt.o] Erreur 1
+make[2]: *** [scripts/Makefile.build:504 : drivers/watchdog] Erreur 2
+make[1]: *** [scripts/Makefile.build:504 : drivers] Erreur 2
+make: *** [Makefile:2011 : .] Erreur 2
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index fba95486caaf..8e4899755718 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -5063,10 +5063,40 @@ void pci_reset_secondary_bus(struct pci_dev *dev)
- 	 * Trhfa for conventional PCI is 2^25 clock cycles.
- 	 * Assuming a minimum 33MHz clock this results in a 1s
- 	 * delay before we can consider subordinate devices to
--	 * be re-initialized.  PCIe has some ways to shorten this,
--	 * but we don't make use of them yet.
-+	 * be re-initialized.
-+	 *
-+	 * For conventional PCI needing 1s delay after bus reset.
-+	 * Using pci_is_pcie to judge the bus is pci or pcie.
-+	 * If the bus is pci, sleeping 1s to wait device is ready.
-+	 *
-+	 * And if the bus is pcie, PCI Express Base Specification Revision 2.0
-+	 * (December 20, 2006) in Section 6.6.1 "Conventional Reset" only notes
-+	 * 100ms as the minimum waiting time, the same as the newer PCIe spec
-+	 * PCI Express Base Specification Revision 3.0 Version 1.a (December 7, 2015)
-+	 * and PCI Express Base Specification Revision 5.0 Version 1.0 (May 22, 2019).
-+	 * With a Downstream Port that supports Link speeds greater than 5.0 GT/s,
-+	 * software must wait a minimum of 100 ms after Link training completes before
-+	 * sending a Configuration Request to the device immediately below that Port.
-+	 * After this time, the OS is permitted to issue Configuration Requests,
-+	 * but it is possible that the device responds with Configuration Request
-+	 * Retry Status (CRS) Completions, rather than Successful Completion.
-+	 * Returning CRS can go on for up to 1 second after a Conventional Reset
-+	 * (such as SBR) before the OS can consider the device. This additional
-+	 * wait is handled by pci_dev_wait.
-+	 *
-+	 * Currently, the only callchain that lands in the function modified by
-+	 * this patch starts at pci_bridge_secondary_bus_reset which invokes
-+	 * one out of two versions of pcibios_reset_secondary_bus that both end
-+	 * with a call to pci_reset_secondary_bus.
-+	 * Afterwards, pci_bridge_secondary_bus_reset always invokes pci_dev_wait.
- 	 */
--	ssleep(1);
-+	if (pci_is_pcie(dev))
-+		if (pcie_get_speed_cap(dev) <= PCIE_SPEED_5_0GT)
-+			msleep(100);
-+		else
-+			pcie_wait_for_link(dev, true);
-+	else
-+		ssleep(1);
- }
- 
- void __weak pcibios_reset_secondary_bus(struct pci_dev *dev)
--- 
-2.19.1.6.gb485710b
+
+I do agree with you that:
+
+    - Kconfig looks fine
+config IXP4XX_WATCHDOG
+	tristate "IXP4xx Watchdog"
+	depends on ARCH_IXP4XX
+
+   - Makefile looks fine
+obj-$(CONFIG_IXP4XX_WATCHDOG) += ixp4xx_wdt.o
+
+   - .config looks fine
+IXP4XX_WATCHDOG is NOT defined
+
+   - make drivers/watchdog/ looks fine
+No error and ixp4xx_wdt.o is NOT built.
+
+
+However, in the past (if I recollect correctly :) ), a "make 
+<something_that depends_on_a_config_variable_that_is_not_defined>" 
+returned an error stating that no rule existed to build the specified 
+target.
+
+I sometimes needed to tweak the Kconfig files to force some compilation 
+when I didn't have the right tool chain or configuration.
+It was maybe not the best practice, but it worked most of the time.
+
+
+Now, with the example above, such a compilation attempt is possible. It 
+is maybe normal (because of a change somewhere in the way the kernel is 
+built, because of an updated toolchain on my machine, ...)
+This is just fine for me, but looked really surprising.
+
+That is why I first thought that something was missing in a Kconfig file.
+
+
+So my comments are just a surprise to me to something that seems not to 
+behave the same as before.
+
+As far a just a 'make' works as expected, I won't dig further if this 
+behavior is expected or not.
+It should be a corner case anyway, and for my own use, I would even call 
+it a feature :) (i.e. it saves me some Kconfig modification to test things)
+
+CJ
+
+> 
+>>
+>> Fixing it could help compilation farms build-bots.
+> 
+> Mine doesn't see a problem, and I don't recall ever being alerted about
+> one. What am I missing ? Do you see a problem reported anywhere ?
+> 
+> Guenter
+> 
+>> ---
+>>   drivers/watchdog/ixp4xx_wdt.c | 18 +++---------------
+>>   1 file changed, 3 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
+>> index 281a48d9889f..607ce4b8df57 100644
+>> --- a/drivers/watchdog/ixp4xx_wdt.c
+>> +++ b/drivers/watchdog/ixp4xx_wdt.c
+>> @@ -112,12 +112,6 @@ static const struct watchdog_info ixp4xx_wdt_info = {
+>>   	.identity = KBUILD_MODNAME,
+>>   };
+>>   
+>> -/* Devres-handled clock disablement */
+>> -static void ixp4xx_clock_action(void *d)
+>> -{
+>> -	clk_disable_unprepare(d);
+>> -}
+>> -
+>>   static int ixp4xx_wdt_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device *dev = &pdev->dev;
+>> @@ -139,16 +133,10 @@ static int ixp4xx_wdt_probe(struct platform_device *pdev)
+>>   	 * Retrieve rate from a fixed clock from the device tree if
+>>   	 * the parent has that, else use the default clock rate.
+>>   	 */
+>> -	clk = devm_clk_get(dev->parent, NULL);
+>> -	if (!IS_ERR(clk)) {
+>> -		ret = clk_prepare_enable(clk);
+>> -		if (ret)
+>> -			return ret;
+>> -		ret = devm_add_action_or_reset(dev, ixp4xx_clock_action, clk);
+>> -		if (ret)
+>> -			return ret;
+>> +	clk = devm_clk_get_enabled(dev->parent, NULL);
+>> +	if (!IS_ERR(clk))
+>>   		iwdt->rate = clk_get_rate(clk);
+>> -	}
+>> +
+>>   	if (!iwdt->rate)
+>>   		iwdt->rate = IXP4XX_TIMER_FREQ;
+>>   
+>> -- 
+>> 2.34.1
+>>
+> 
 
