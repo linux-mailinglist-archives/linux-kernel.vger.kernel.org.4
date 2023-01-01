@@ -2,119 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776B865AA09
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 13:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D79C065AA0D
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 14:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjAAMha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 07:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S229885AbjAAM5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 07:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjAAMh2 (ORCPT
+        with ESMTP id S229447AbjAAM5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 07:37:28 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A288726F8
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 04:37:27 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id bt23so21450854lfb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 04:37:27 -0800 (PST)
+        Sun, 1 Jan 2023 07:57:13 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAB538E
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 04:57:11 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id h16so23963322wrz.12
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 04:57:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jUwhBT0HEy+w8/7x0rV0cF/18t9AsTlAgTmMKYlGiAA=;
-        b=NwRWs9TNy3ZZTSkNCG3P6pyld0/m0H/Z/q8+dt6x7LRWUC6KnUIKc5Q44yzkGoKqhs
-         XVFgW08IJ9Y494napjEdx2NoHgVvkWKOhMc8YEJlpkdvzq8Vd2vs4tyQnCGbQmxe7YFH
-         mR326j4DTaQgQvVLxeCjGYriBQkBHJFBjrBo+vw8t8SwIV7BIDwEFdL/tQkzgSJtUt8q
-         xdLCJGfF3qVVmTw6bfakiwdWQExuNLK0I9nryCgSbIGo4fyoIVZGVfdZReI7d5Bqh1Dv
-         kWkA4lN6jQ03peh/qdQZH4EA0HnO31Q9du4ONyg0QwmMkmg5jmWSd4uGBwwzsyFape+4
-         rSMA==
+        d=ffwll.ch; s=google;
+        h=content-disposition:mime-version:mail-followup-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/WjNoY5IEvjPDMwxYOjVr5XNJFzUvkwo/1gPfAgJB4E=;
+        b=DrgbVEQWkHJ03XjgEctC2zPckZT+MASF608kCD+Vp1xLbX2ED4+fcuAk+FfvqcuRYX
+         nC6bmfBnM1IZgrsHkt9Nb0L0htIxO49GpsG13w9tcbjXYocCwsf9indzKDZC6a1DfDc/
+         Wcqv7szwb2FOk/im0eVEUxhWPCf6lv573+rbs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jUwhBT0HEy+w8/7x0rV0cF/18t9AsTlAgTmMKYlGiAA=;
-        b=kBHOeeRdHQqA7y4GwXRNJpqLvwpiF1FpqvEg2ymn9QTfZVIFJtq2lGhV4tO7D4wCIi
-         TAq4BZtrHSQHMZnp4Qqn6TBCPldZMDQijH0VGwEpXAf0UoACveiSaFgoREbBE2pwYwr5
-         2DrQJtXVr187tLv2FDdhLcJoLwckDIG/fOABuMQjfjC5Z4ndp4Q0MEPQ7uuSGOVJ+ET1
-         CKdk6siTDcKx3aWJxGRUDnwC61W87OgrsMlz7qjqT8Tf7vewj7rNxTGAXJGQEL1RGgCz
-         2BT1yTMVWSwX7e9bHL4BoKYixv06iEnB8w6xqROHYF3unxY6oDWcWqyeLI4CS29htFgf
-         Gh6w==
-X-Gm-Message-State: AFqh2kqZY3SnmoyvVpHT/RIL43CgwmQ3MND6pZHacQEP9ud2uYRR9+J2
-        snNT8FDKy74oLvvmf5Jv9ZZ8nA==
-X-Google-Smtp-Source: AMrXdXurlJQff+dDmDW8g3Xq0c5Fk0JYKoF6Cfb6PWUPzdD8nLmpEu/D4fuNrfY4vVcD7AtoHVFEuA==
-X-Received: by 2002:ac2:528f:0:b0:4b5:6504:a556 with SMTP id q15-20020ac2528f000000b004b56504a556mr9877674lfm.61.1672576645937;
-        Sun, 01 Jan 2023 04:37:25 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056512361100b004caf42eb04csm4049513lfs.138.2023.01.01.04.37.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Jan 2023 04:37:25 -0800 (PST)
-Message-ID: <0ac4e53b-069e-a9b1-bfd2-2e62325182c1@linaro.org>
-Date:   Sun, 1 Jan 2023 14:37:24 +0200
+        h=content-disposition:mime-version:mail-followup-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/WjNoY5IEvjPDMwxYOjVr5XNJFzUvkwo/1gPfAgJB4E=;
+        b=kbfQZhwVUweKOfCdFvM5Erq/cP4z3VI8GiofXmyHAuxRvpiC9isjWtjacxixq+oljN
+         y5aeqBeDNyRHOBEgNSx8iFz6e75Bz4m0CRjMomjHD8MDMnpkOZmsLFjJtbdDU9r0jsmw
+         7cCzDQeMzmyMxDPa3pvG7bNgppkCfjonvOdfcoj3SpvAwIaGFlMmXoRtsSn9hWsLdwbz
+         li4GAH3Q6awgldWhLyT2NNMZCO+1NZgyX5mDwKQhQvNwTW3J28L52HnRvm9O3mp4Ym3q
+         uZQsQx6oUk7W+4sJ8pb3LkcSphYgvrNLe6aSD78WcQG+tz/pjjIKpwFhcTZdOtZW9/7i
+         jxiA==
+X-Gm-Message-State: AFqh2krS+Doae7SPp3B9c5kAJe4Fa8kwDJDW++ZTD9CeWboaL+hcguOS
+        SMpNOevx7UdDuCG5c1dCz7ppDQ==
+X-Google-Smtp-Source: AMrXdXt1E3ETMbDctbRzRx440fhfbrWCKkb7RItk0UiOw+sLyqbmBqJ7Nh/P50kfa6iIzKQuaNHopA==
+X-Received: by 2002:a5d:624d:0:b0:242:4d70:7882 with SMTP id m13-20020a5d624d000000b002424d707882mr23439872wrv.15.1672577829594;
+        Sun, 01 Jan 2023 04:57:09 -0800 (PST)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id f8-20020adff8c8000000b00282194eaf7bsm15732516wrq.71.2023.01.01.04.57.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Jan 2023 04:57:08 -0800 (PST)
+Date:   Sun, 1 Jan 2023 13:57:06 +0100
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [PULL] drm-fixes for -rc2 if I'm not too late :-)
+Message-ID: <Y7GDIi18rJ/YgbYn@phenom.ffwll.local>
+Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dave Airlie <airlied@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 4/7] drm/msm/dpu: Move
- dpu_hw_{tear_check,pp_vsync_info} to dpu_hw_mdss.h
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-5-marijn.suijten@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221231215006.211860-5-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/12/2022 23:50, Marijn Suijten wrote:
-> From: Konrad Dybcio <konrad.dybcio@somainline.org>
-> 
-> Now that newer SoCs since DPU 5.0.0 manage tearcheck in the INTF instead
-> of PINGPONG block, move the struct definition to a common file. Also,
-> bring in documentation from msm-4.19 techpack while at it.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> [Marijn: Also move dpu_hw_pp_vsync_info]
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h   | 46 +++++++++++++++++++
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 22 ---------
->   2 files changed, 46 insertions(+), 22 deletions(-)
+Hi Linus,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I'm just back from the mountains, and Dave is out at the beach and should
+be back in a week again. Just i915 fixes and since Rodrigo bothered to
+make the pull last week I figured I should warm up gpg and forward this in
+a nice signed tag as a new years present! Hopefully still in time for
+-rc2.
+
+I'm expecting there will be more for -rc3 when I do the usual -fixes pull
+on Fri or so.
+
+Happy new year!
+-Daniel
+
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-01
+
+for you to fetch changes up to a9f5a752e86f1897c3b377b6b861576a4c1a2ff0:
+
+  Merge tag 'drm-intel-fixes-2022-12-30' of git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2023-01-01 11:52:11 +0100)
+
+----------------------------------------------------------------
+drm-fixes for 6.2-rc2
+
+- i915 fixes for newer platforms
+- i915 locking rework to not give up in vm eviction fallback path too
+  early
+
+----------------------------------------------------------------
+Andrzej Hajda (1):
+      drm/i915: fix TLB invalidation for Gen12.50 video and compute engines
+
+Daniel Vetter (1):
+      Merge tag 'drm-intel-fixes-2022-12-30' of git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+
+Jani Nikula (2):
+      drm/i915/dsi: add support for ICL+ native MIPI GPIO sequence
+      drm/i915/dsi: fix MIPI_BKLT_EN_1 native GPIO index
+
+John Harrison (1):
+      drm/i915/uc: Fix two issues with over-size firmware files
+
+Lucas De Marchi (1):
+      drm/i915: Remove __maybe_unused from mtl_info
+
+Matthew Auld (1):
+      drm/i915: improve the catch-all evict to handle lock contention
+
+ drivers/gpu/drm/i915/display/intel_dsi_vbt.c    | 94 ++++++++++++++++++++++++-
+ drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c  | 59 +++++++++++++---
+ drivers/gpu/drm/i915/gem/i915_gem_mman.c        |  2 +-
+ drivers/gpu/drm/i915/gt/intel_gt.c              |  8 ++-
+ drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c        | 42 +++++++----
+ drivers/gpu/drm/i915/i915_gem_evict.c           | 37 +++++++---
+ drivers/gpu/drm/i915/i915_gem_evict.h           |  4 +-
+ drivers/gpu/drm/i915/i915_irq.c                 |  3 +
+ drivers/gpu/drm/i915/i915_pci.c                 |  1 -
+ drivers/gpu/drm/i915/i915_reg.h                 |  1 +
+ drivers/gpu/drm/i915/i915_vma.c                 |  2 +-
+ drivers/gpu/drm/i915/selftests/i915_gem_evict.c |  4 +-
+ 12 files changed, 212 insertions(+), 45 deletions(-)
 
 -- 
-With best wishes
-Dmitry
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
