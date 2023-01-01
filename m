@@ -2,77 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C414365AC11
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 23:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C918865AC1A
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 23:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbjAAW2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 17:28:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
+        id S230371AbjAAWqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 17:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjAAW2g (ORCPT
+        with ESMTP id S229447AbjAAWqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 17:28:36 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7092A26FB
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 14:28:35 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso16922433ilj.17
-        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 14:28:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NzXoGRNXiCRuamX9tCo8Tl0xkN8+BazcxOMPlU5aEdI=;
-        b=XXfzHuvtpM/MQWuhKNUiMujnO9iEOTmtaxpDmyYqFwmnXhdLfbCq2GfqzhDjz+8Oq/
-         nOdW8GNZ0UdGeh61scIbEn1D7BkPVnr0BpdX2AW8LKmUya4h+pC48byYyxprkt/hXP5Q
-         jV51S8FAXHLoP6Yy0xHMlY/b90byzAwTmLe7C5o+v5UA+FW4lKQFps8bfdTBeMhLmagj
-         JAMGVw+cYqmnA0//EoblZNBrPbAMwX8/H7tT7nGMHvn3D60dmkLQ8K/Q7jLexCDFJUEr
-         rf3m5TuVDPUblLr6DuaBS3nzUDCuFf3SW3PzpwGtLWxFkEnhfv9P1KvIZKH6FA4jwOio
-         eQBw==
-X-Gm-Message-State: AFqh2koqpnU73CBrK+IzzCec01NGgBD1orjb1V56I8MqtpYAlu4YYHGB
-        plAw15NRRryj487QMhJVHLMBM5ptJluO/2mnHaWmpMEod5Pd
-X-Google-Smtp-Source: AMrXdXsq/MoZdz+RrWCh2FeqhRA3f2NJfAESSum8zzyd3dnsW1E9i5XEg95OPhdghnXvDOb8Pp1WQp26fIyV4cRbWk5NpvOmnZur
-MIME-Version: 1.0
-X-Received: by 2002:a02:cd06:0:b0:376:21c3:23fe with SMTP id
- g6-20020a02cd06000000b0037621c323femr3039101jaq.192.1672612114793; Sun, 01
- Jan 2023 14:28:34 -0800 (PST)
-Date:   Sun, 01 Jan 2023 14:28:34 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f30d5305f13b5a9b@google.com>
-Subject: [syzbot] bpf-next build error (5)
-From:   syzbot <syzbot+cb02a28d8c55b86bb096@syzkaller.appspotmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Sun, 1 Jan 2023 17:46:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3591B1144;
+        Sun,  1 Jan 2023 14:45:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6E7860E83;
+        Sun,  1 Jan 2023 22:45:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05DBBC433D2;
+        Sun,  1 Jan 2023 22:45:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672613157;
+        bh=puCrFpi65CZPLTug1sTI/K7FXDEL7ysdynSiNUjiHjM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lLuv2sI0twxXXwFtob+q3T/m/TaGKcrYXNijV3Yd+gxuCFoTlwB4RqPisvZ8VjxmT
+         +KBsHScrw7VSVqr/YaZPUB26i9YBmBMeonrZOZNCWQapTLT2PryaksSlfu9P3w9JLr
+         XVFvBCAjOFlMoQaPwqJBDN9z2c3aNlyTJu30Meg/9AFlRKZ+Oob1jYFMz5iXcUZFJ2
+         glY/2+LvhrNXADNQIAroHgiiSCo6CAsX8aabbdOynUdlG6xkcqypvupo5h9/vlN2q7
+         gjbKK4wxKab8YVZYIbelu350fB+b2nefUkky888RkJouJkQ1koy4ZcFd2Ct8o/kBti
+         48PFeHB2b/ZgA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pC75W-00GEJt-OM;
+        Sun, 01 Jan 2023 22:45:54 +0000
+Date:   Sun, 01 Jan 2023 22:44:39 +0000
+Message-ID: <87sfgteuy0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bernhard =?UTF-8?B?Um9zZW5rcsOkbnplcg==?= <bero@baylibre.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        chunfeng.yun@mediatek.com, linus.walleij@linaro.org,
+        lee@kernel.org, tglx@linutronix.de,
+        angelogioacchino.delregno@collabora.com
+Subject: Re: [PATCH v6 7/7] arm64: dts: mediatek: Initial mt8365-evk support
+In-Reply-To: <CAP2ifjMkKJbE_+B=XaxzXoALrc5+FUb7TKpPJQBLV3-3xqVh=g@mail.gmail.com>
+References: <20221230203541.146807-1-bero@baylibre.com>
+        <20221230203541.146807-8-bero@baylibre.com>
+        <87v8lsect3.wl-maz@kernel.org>
+        <CAP2ifjMkKJbE_+B=XaxzXoALrc5+FUb7TKpPJQBLV3-3xqVh=g@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: bero@baylibre.com, linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, gregkh@linuxfoundation.org, chunfeng.yun@mediatek.com, linus.walleij@linaro.org, lee@kernel.org, tglx@linutronix.de, angelogioacchino.delregno@collabora.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, 01 Jan 2023 21:57:58 +0000,
+Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com> wrote:
+>=20
+> On Fri, Dec 30, 2022 at 11:41 PM Marc Zyngier <maz@kernel.org> wrote:
+> > > +             gic: interrupt-controller@c000000 {
+> > > +                     compatible =3D "arm,gic-v3";
+> > > +                     #interrupt-cells =3D <4>;
+> >
+> > Why 4 cells? All the SPIs routed via sysirq are perfectly happy with 3
+> > cells, and all the PPIs have 0 for the 4th cell (none of them use any
+> > form of partitioning that'd require 4 cells). So where is this coming
+> > from?
+>=20
+> It's coming from the SoC vendor kernel (and went unnoticed because
+> it happens to work).  Will send an updated version that does the
+> right thing instead. I've been running it most of the day, so far
+> looking good.
+>=20
+> > > +                     interrupt-parent =3D <&gic>;
+> > > +                     interrupt-controller;
+> > > +                     reg =3D <0 0x0c000000 0 0x80000>, <0 0x0c080000=
+ 0 0x80000>;
+> > > +
+> >
+> > The first region is obviously wrong (512kB for the distributor?
+> > that's... most generous, but the architecture states that it is 64kB,
+> > and that's wasteful enough).
+> >
+> > This is also missing the GICC/GICH/GICV regions that Cortex-A53
+> > implements, and that must be provided as per the binding.
+>=20
+> This was also taken from the vendor kernel; unfortunately neiter the
+> datasheet for the SoC not the vendor kernel specifies the addresses
+> for GICC/GICH/GICV.
+> I've "guessed" based on what's in similar SoCs (MT8183, MT7986a) in
+> v7; this seems to work (boots, kvm initializes hyp mode properly).
 
-syzbot found the following issue on:
+Please don't "guess", because this adds zero value, and we might as
+well run with the vendor crap instead.
 
-HEAD commit:    07453245620c libbpf: fix errno is overwritten after being ..
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=109a2568480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b0e91ad4b5f69c47
-dashboard link: https://syzkaller.appspot.com/bug?extid=cb02a28d8c55b86bb096
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Read CBAR_EL1, and use this value to construct the memory map, as per
+the A53 TRM. Just booting with KVM enabled means nothing, as this is
+solely used at VM run time. You need run a full VM with GIC-2
+emulation.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cb02a28d8c55b86bb096@syzkaller.appspotmail.com
+	M.
 
-failed to run ["make" "-j" "64" "ARCH=x86_64" "bzImage"]: exit status 2
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Without deviation from the norm, progress is not possible.
