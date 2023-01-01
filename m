@@ -2,231 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2CF65AA57
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 16:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F80F65AA63
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 16:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbjAAPeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 10:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S231455AbjAAPid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 10:38:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjAAPeD (ORCPT
+        with ESMTP id S231433AbjAAPi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 10:34:03 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DEE2DD3;
-        Sun,  1 Jan 2023 07:34:02 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id bn26so4723760wrb.0;
-        Sun, 01 Jan 2023 07:34:02 -0800 (PST)
+        Sun, 1 Jan 2023 10:38:28 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E485589
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 07:38:25 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id l26so16999544wme.5
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 07:38:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zyql/ql31MrMiVenPPWixFjfQxaA/GXi4qA/mUssQCA=;
-        b=XcldlBRq3hlCFz/bA8Cb3n/IBBocsWlT2pw9cwt90DMWSevCytY89OB1njE7BhCd/u
-         neyFbo+dsh+O7c4KKZ9KjnIzfRkRRohCYG6wceemsQ+05bHkgYLNDodMV6n1MjIbAbRz
-         dIrI68nbIyzIPOgtKuQYH60wjgFG6aQraNegS1jUV969r3T96c/3extP0KavdX/59RIJ
-         EPz39pTul1Ez9rZPJPuj8RvF/7tiuWZQrMHpCpxsSzuFdqRaNzB8YDBn2nI5M3pRM26/
-         ZHjefVad6U+Mf8hx3GFK/XTwvnRlshXRZJeOWfN6GZTGIeAIQH4DuiT8O7R6sYGga0wC
-         lKTg==
+        d=ixsystems.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4e5rsOVvoPsB8/0IGCnvHUCFwzCz86SgBX4arQD6Bsk=;
+        b=iIz+0dD+Xqd9D7Aclt4WbtMz7FB/uNMAN19vTh+6DwoOScIf+jA5tIb6pl1sZbrOaW
+         XlLYQHnQ/0PyPvz0qvTAbzXKi09qSjTBYmGSnxvzBbdFRVbIvsgwji7HfzL/dg1Gk0Y+
+         V3CYrx7vxebfUhVMmDvLcttZh71xYJ2bXwn2IQvA2brc4xEH/FpvfiNOKwmIE+3+/3a3
+         aGxfOrAg6fPjQzN7n5StTR3W7Zq9HRIvBP9hKK/qbFPVmelZ5Bqrz5fO21NfQtRIVsHM
+         2C27VpRX929Xk3Bf3fEht9dzD2A4sp2tATdthjFDTt8SQ6Z6iV058eZOPa8Nj3UL5qEA
+         EvOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zyql/ql31MrMiVenPPWixFjfQxaA/GXi4qA/mUssQCA=;
-        b=elqI3kMlKacy5/4e7OFwG4PPIyV5LxvMHVPUf70jdP6OBJab4CK0ZpzzpWkuXlJ4C4
-         ESgTwIlx7ji7HyS2GLZor6ZlHkXSyk2ca4LytXQto/BRhCmv02az7CFErPLzFPv1LcoV
-         EmU9EY5r6I1ZN2H/sPX1oBdOpWshDFhIEIcUXoAXnDiODZ7MxCo6mf8ym3baeTQmzBF/
-         n/ljcqLu9khhXLhAcMfWd+/EA2AYdIqwOJmmNBGJ8ET4ogzgBkWb+jmW0DZpWaKZnUu/
-         c+Mlwd5Ke0ran1rEzW/GFhaZx198Y14zUv7eslsHxQMTSiGODu9hef8rYq2AH1zxkYtu
-         prIQ==
-X-Gm-Message-State: AFqh2koYeBSyciiIo2GWOJh6hHgcY+toZpKSsQ+pvtkqpDjzky/+V5NL
-        DiCerV0cTlqi3oTOYj39Kgp+kJawkmo=
-X-Google-Smtp-Source: AMrXdXsAXtxQE8ZyOQIH8VzJVjwWquAzVdFkoCkC9qLipG7q5SHwLFgIXbJRnPHQnkmXTqQVau8xSw==
-X-Received: by 2002:a5d:5b1a:0:b0:249:3f48:6040 with SMTP id bx26-20020a5d5b1a000000b002493f486040mr28656083wrb.21.1672587240658;
-        Sun, 01 Jan 2023 07:34:00 -0800 (PST)
-Received: from fedora ([94.73.32.212])
-        by smtp.gmail.com with ESMTPSA id z3-20020adff1c3000000b00273cd321a1bsm24886126wro.107.2023.01.01.07.33.56
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4e5rsOVvoPsB8/0IGCnvHUCFwzCz86SgBX4arQD6Bsk=;
+        b=DJYC7xCQ9VKJ1LlCPj4uYr6hDC/803y+OvoeatgayQVq6+sHcggSwcJkrEdyu8paGf
+         eCQwrsnJBjom6mSbOFXPwttbbhmlr9sEcfw91YMMIJQdKBNqvN0lY0cDqKv0STT5cqF0
+         suaFRPlTrKoP5FnqN2R03ikEu8d5JJaGtwAAyN5jiRMJ2MVnOu1Tu5kePHm6xaiesClx
+         IAGmxlEE8mL2Ih4+SaVGoAjPXKNUFyDMg2TslE1DD6o0ahwHF92vrSrkoN2bS60d1VQ/
+         vx5n+bC5kTUpwgSSXFMB56JftPvh4j1GWAcWMLsXyaheL8sTXtc1cDSetn2Mwt9jw/Rc
+         1mMA==
+X-Gm-Message-State: AFqh2kpHl1ogVv0Y2WGcvv10By9DnuBJSRTNyP4rJPDRJtkVHWVkGnn6
+        TsLq67X3o0H+EkhTVbSDqcIoJw==
+X-Google-Smtp-Source: AMrXdXvmgsB9mkhQhPLutjUrJsEcNZBj3ZzRuTx0yHaXlM7F4s4uXk1dMC6Vuz5WxgOhV0eMYtO5Qw==
+X-Received: by 2002:a05:600c:4998:b0:3cf:68d3:3047 with SMTP id h24-20020a05600c499800b003cf68d33047mr26779179wmp.41.1672587503834;
+        Sun, 01 Jan 2023 07:38:23 -0800 (PST)
+Received: from localhost.localdomain ([2400:adc1:158:c700:ab52:9bd1:ee17:5669])
+        by smtp.googlemail.com with ESMTPSA id c4-20020a05600c0a4400b003cf75213bb9sm46153975wmq.8.2023.01.01.07.38.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Jan 2023 07:34:00 -0800 (PST)
-Date:   Sun, 1 Jan 2023 16:33:55 +0100
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     redstrate <josh@redstrate.com>
-Cc:     benjamin.tissoires@redhat.com, jikos@kernel.org,
-        kurikaesu@users.noreply.github.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: uclogic: Add support for XP-PEN Artist 22R Pro
-Message-ID: <Y7Gn4wVx3CgGYSeA@fedora>
-References: <2068502.VLH7GnMWUR@adrastea>
- <20221229190648.69040-1-jose.exposito89@gmail.com>
- <3448509.5fSG56mABF@adrastea>
+        Sun, 01 Jan 2023 07:38:23 -0800 (PST)
+From:   Ameer Hamza <ahamza@ixsystems.com>
+To:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
+        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
+        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, davem@davemloft.net
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, ahamza@ixsystems.com,
+        awalker@ixsystems.com, sparclinux@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-alpha@vger.kernel.org
+Subject: [PATCH v3] Add new open(2) flag - O_EMPTY_PATH
+Date:   Sun,  1 Jan 2023 20:37:52 +0500
+Message-Id: <20230101153752.20165-1-ahamza@ixsystems.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <202301011901.GyiYVRyd-lkp@intel.com>
+References: <202301011901.GyiYVRyd-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3448509.5fSG56mABF@adrastea>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+This patch adds a new flag O_EMPTY_PATH that allows openat and open
+system calls to open a file referenced by fd if the path is empty,
+and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
+beneficial in some cases since it would avoid having to grant /proc
+access to things like samba containers for reopening files to change
+flags in a race-free way.
 
-On Fri, Dec 30, 2022 at 03:02:41PM -0500, redstrate wrote:
-> > Hi Joshua,
-> > 
-> > Thanks a lot for your patch!
-> > 
-> > It might cause conflicts with [1] and [2], so we'll need to rebase on
-> > top of each other work at some point.
-> > 
-> > [1]
-> > https://lore.kernel.org/linux-input/20221226123456.14822-1-jose.exposito89@
-> > gmail.com/T/ [2]
-> > https://lore.kernel.org/linux-input/20221226125454.16106-1-jose.exposito89@
-> > gmail.com/T/
-> 
-> I've seen those patches in the mailing list (and I thought they already got 
-> merged heh) so I'll keep a close eye and rebase as needed.
-> 
-> > 
-> > Sparse nitpick: "uclogic_extra_input_mapping" can be made static.
-> > 
-> 
-> I somehow missed that, will change.
-> 
-> > 
-> > Is it possible to receive a report with information from both dials at
-> > the same time?
-> > 
-> > I'm asking because I'm trying to understand what is the meaning of the
-> > 0x10 and 0x20 values and I wonder if they are generated when both dials
-> > are used at the same time.
-> > 
-> 
-> According to Aren's reference sheet he wrote up for this tablet, the 0x10 and 
-> 0x20 values are reported by the right dial (left frame: 
-> 02:f0:00:00:00:00:00:20:00:14, right frame: 02:f0:00:00:00:00:00:10:00:14). 
-> Dumping the contents of data[frame->bitmap_dial_byte] yields the same result. 
-> The left dial works like usual, 02 for left and 01 for right.
-> 
-> As for recieving reports of the two dials turning at the same time... I can't 
-> seem to make it do that. This tablet is pretty big, and I can't turn the dials 
-> fast enough.
+Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
 
-Ah cool, then I guess we can remove the cases for "4" and "8"? I'd be
-nice to stick with decimal numbers in all cases for consistency.
+---
+Change in v3:
+resolve O_EMPTY_PATH conflict with __FMODE_NONOTIFY for sparc.
+
+Change in v2:
+add nonconflicting values for O_EMPTY_PATH on architectures
+where default conflicts with existing flags.
+---
+---
+ arch/alpha/include/uapi/asm/fcntl.h    | 1 +
+ arch/parisc/include/uapi/asm/fcntl.h   | 1 +
+ arch/sparc/include/uapi/asm/fcntl.h    | 1 +
+ fs/fcntl.c                             | 2 +-
+ fs/namei.c                             | 4 ++--
+ fs/open.c                              | 2 +-
+ include/linux/fcntl.h                  | 2 +-
+ include/uapi/asm-generic/fcntl.h       | 4 ++++
+ tools/include/uapi/asm-generic/fcntl.h | 4 ++++
+ 9 files changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/uapi/asm/fcntl.h
+index 50bdc8e8a271..ea08341bb9fe 100644
+--- a/arch/alpha/include/uapi/asm/fcntl.h
++++ b/arch/alpha/include/uapi/asm/fcntl.h
+@@ -34,6 +34,7 @@
  
-> > 
-> > You can probably reuse uclogic_params_ugee_v2_init() or at least reuse
-> > uclogic_probe_interface() and uclogic_params_parse_ugee_v2_desc() if
-> > for some reason we need custom logic for this tablet.
-> > 
-> 
-> I actually looked a little into the UGEE v2 init functions to see if I could 
-> reuse anything (but to be honest, I really just skimmed) but I will take a 
-> second look to see if I can consolidate it.
-> 
-> > 
-> > Is this value 8? In all the models I have seen so far this is indeed
-> > the number of buttons.
-> > 
-> > Also, what's the value of buf[6]? As you can see in
-> > uclogic_params_parse_ugee_v2_desc(), this field is the frame type. I'd be
-> > nice to know whether a different frame type is reported when 2 dials are
-> > present or not.
-> > 
-> > Could you attach the contents of the 14 bytes of "buf", please? I'd be
-> > nice to have a look and see if we can reuse as much code as possible.
-> > 
-> 
-> Yeah here's the 14 bytes of "buf" here:
-> buf[0] = 000c
-> buf[1] = 0003
-> buf[2] = 0030
-> buf[3] = 00ba
-> buf[4] = 009a
-> buf[5] = 0068
-> buf[6] = 0006
-> buf[7] = 0000
-> buf[8] = 00ff
-> buf[9] = 001f
-> buf[10] = 00ec
-> buf[11] = 0009
-> buf[12] = 0080
-> buf[13] = 0072
-> 
-> I'm not sure you made a typo, but buf[6] in uclogic_params_parse_ugee_v2_desc 
-> is reading the button count, which reports as 6 for some reason. buf[7] is 0 
-> though, so it appears that its still reporting as UCLOGIC_PARAMS_FRAME_BUTTONS 
-> (I could just be misunderstanding the strdescs) or the frames are completely 
-> different.
+ #define O_PATH		040000000
+ #define __O_TMPFILE	0100000000
++#define O_EMPTY_PATH	0200000000
+ 
+ #define F_GETLK		7
+ #define F_SETLK		8
+diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/parisc/include/uapi/asm/fcntl.h
+index 03dee816cb13..e6144823ee5b 100644
+--- a/arch/parisc/include/uapi/asm/fcntl.h
++++ b/arch/parisc/include/uapi/asm/fcntl.h
+@@ -19,6 +19,7 @@
+ 
+ #define O_PATH		020000000
+ #define __O_TMPFILE	040000000
++#define O_EMPTY_PATH	0100000000
+ 
+ #define F_GETLK64	8
+ #define F_SETLK64	9
+diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/uapi/asm/fcntl.h
+index 67dae75e5274..ed99e4e4a717 100644
+--- a/arch/sparc/include/uapi/asm/fcntl.h
++++ b/arch/sparc/include/uapi/asm/fcntl.h
+@@ -37,6 +37,7 @@
+ 
+ #define O_PATH		0x1000000
+ #define __O_TMPFILE	0x2000000
++#define O_EMPTY_PATH	0x8000000
+ 
+ #define F_GETOWN	5	/*  for sockets. */
+ #define F_SETOWN	6	/*  for sockets. */
+diff --git a/fs/fcntl.c b/fs/fcntl.c
+index 146c9ab0cd4b..7aac650e16e2 100644
+--- a/fs/fcntl.c
++++ b/fs/fcntl.c
+@@ -1027,7 +1027,7 @@ static int __init fcntl_init(void)
+ 	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+ 	 * is defined as O_NONBLOCK on some platforms and not on others.
+ 	 */
+-	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
++	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
+ 		HWEIGHT32(
+ 			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+ 			__FMODE_EXEC | __FMODE_NONOTIFY));
+diff --git a/fs/namei.c b/fs/namei.c
+index 309ae6fc8c99..2b2735af6d03 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -192,7 +192,7 @@ getname_flags(const char __user *filename, int flags, int *empty)
+ 	if (unlikely(!len)) {
+ 		if (empty)
+ 			*empty = 1;
+-		if (!(flags & LOOKUP_EMPTY)) {
++		if (!(flags & (LOOKUP_EMPTY | O_EMPTY_PATH))) {
+ 			putname(result);
+ 			return ERR_PTR(-ENOENT);
+ 		}
+@@ -2347,7 +2347,7 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
+ 	if ((flags & (LOOKUP_RCU | LOOKUP_CACHED)) == LOOKUP_CACHED)
+ 		return ERR_PTR(-EAGAIN);
+ 
+-	if (!*s)
++	if (!*s && unlikely(!(flags & O_EMPTY_PATH)))
+ 		flags &= ~LOOKUP_RCU;
+ 	if (flags & LOOKUP_RCU)
+ 		rcu_read_lock();
+diff --git a/fs/open.c b/fs/open.c
+index 82c1a28b3308..b4ec054a418f 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1301,7 +1301,7 @@ static long do_sys_openat2(int dfd, const char __user *filename,
+ 	if (fd)
+ 		return fd;
+ 
+-	tmp = getname(filename);
++	tmp = getname_flags(filename, how->flags & O_EMPTY_PATH, NULL);
+ 	if (IS_ERR(tmp))
+ 		return PTR_ERR(tmp);
+ 
+diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+index a332e79b3207..bf8467bb0bd2 100644
+--- a/include/linux/fcntl.h
++++ b/include/linux/fcntl.h
+@@ -10,7 +10,7 @@
+ 	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | \
+ 	 O_APPEND | O_NDELAY | O_NONBLOCK | __O_SYNC | O_DSYNC | \
+ 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+-	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
++	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_EMPTY_PATH)
+ 
+ /* List of all valid flags for the how->resolve argument: */
+ #define VALID_RESOLVE_FLAGS \
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index 1ecdb911add8..a03f4275517b 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+index b02c8e0f4057..f32a81604296 100644
+--- a/tools/include/uapi/asm-generic/fcntl.h
++++ b/tools/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+-- 
+2.25.1
 
-Yes, my bad, I meant buf[7]. For the tablets I added so far it
-indicated the frame type. However, it doesn't seem to be the case for
-your tablet.
-
-Also, buf[6] does not indicate the number of buttons (20?).
-
-Did you check with Wireshark if the Windows driver is doing something
-different for your tablet? It'd be nice to avoid adding quirks but it
-might not be possible :S
-
-We can ignore buf[12] and buf[14]. buf[0] indicates the size of the
-descriptor (12), so the last two bytes are random memory.
-
-> >
-> > Ideally, we should be able to handle this tablet with the other UGEE v2
-> > tablets.
-> > 
-> 
-> Yeah I will consolidate this case if I manage to merge this with the other 
-> UGEE v2 tablet support.
-> 
-> > 
-> > This array is already declared in uclogic_params_ugee_v2_init(), which,
-> > hopefully, we will be able to reuse. Otherwise, you might be interested
-> > in this commit (not merged yet):
-> > https://lore.kernel.org/linux-input/20221226125454.16106-4-jose.exposito89@g
-> > mail.com/T/#u
-> 
-> I didn't see that array in ugee_v2_init, what I'll do is match the variables 
-> defined in your cleanup patch (I believe it's closely identical already), so it 
-> makes rebasing easier no matter what order they're merged in.
-> 
-> > 
-> > Can't "uclogic_rdesc_ugee_v2_pen_template_arr" be used instead?
-> > 
-> 
-> Yeah I think so, at first I didn't consider it but on closer inspection - the 
-> offsets are the same (just for some reason, out of order). I'll be looking into 
-> testing the pen using this descriptor on the second revision, maybe Pro-series 
-> and UGEE v2 aren't so different after all!
-> 
-> > 
-> > Have a look to "uclogic_rdesc_ugee_v2_frame_dial_template_arr", I don't
-> > know if it could be used for your tablet.
-> > 
-> 
-> Same as above, same structure - different order (but it's all semantic, same 
-> offsets) so I'll be consolidating if it works out.
-> 
-> >
-> > If your tablet reports its number of buttons, UCLOGIC_RDESC_FRAME_PH_BTN
-> > can be used here.
-> > 
-> 
-> I'll be reviewing the descriptor data, ideally it should but I don't have high 
-> hopes (as shown above) but I'm going to be testing it more.
-> 
-> Thank you for the review! I'll be resubmitting a second version of the patch 
-> with your suggestions and making sure the kernel test bot is happy - and 
-> hopefully there will be a lot less duplication structure-wise.
-> 
-> 
-> 
-> 
