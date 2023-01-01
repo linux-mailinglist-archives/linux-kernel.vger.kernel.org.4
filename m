@@ -2,65 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3373C65AA8E
+	by mail.lfdr.de (Postfix) with ESMTP id 8304B65AA8F
 	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 17:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjAAQVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 11:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
+        id S230267AbjAAQVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 11:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjAAQVe (ORCPT
+        with ESMTP id S229883AbjAAQVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 11:21:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEECDF4;
-        Sun,  1 Jan 2023 08:21:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2939860DB6;
-        Sun,  1 Jan 2023 16:21:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0BDDC433D2;
-        Sun,  1 Jan 2023 16:21:29 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="B7fXcrzD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672590087;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zgzwF4VoLQnS0Fhvwjzy5nnGU3HAw7Tv8mnPH+MHVYA=;
-        b=B7fXcrzDtFe0E6aOSojyhoQ+zHfjlKZUEbLQpak5PFpzMuR6OhQ6NxVHT1k5S+/URafa+E
-        /xLrpCuWjGNnff90wj7EXRhlp1/R5fIq2NmJWbZxiHyR6DAn4SfzD/0elrf7T9I6E6NWzs
-        dLqoU1+To/CumIEdvGAfJoc5tu127xw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a210ec61 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 1 Jan 2023 16:21:27 +0000 (UTC)
-Date:   Sun, 1 Jan 2023 17:21:24 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Samuel Neves <sneves@dei.uc.pt>
-Subject: Re: [PATCH v13 7/7] x86: vdso: Wire up getrandom() vDSO
- implementation
-Message-ID: <Y7GzBAt3uUhpfEJD@zx2c4.com>
-References: <20221221142327.126451-1-Jason@zx2c4.com>
- <20221221142327.126451-8-Jason@zx2c4.com>
- <Y6OWSM18QL977nbC@sol.localdomain>
+        Sun, 1 Jan 2023 11:21:35 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 57834DFC
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 08:21:34 -0800 (PST)
+Received: (qmail 386026 invoked by uid 1000); 1 Jan 2023 11:21:33 -0500
+Date:   Sun, 1 Jan 2023 11:21:33 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1] usb: gadget: add WebUSB support
+Message-ID: <Y7GzDRxyH9x2Shf1@rowland.harvard.edu>
+References: <7615b2ac-a849-94a7-94a5-fb1c2075d7db@wanadoo.fr>
+ <Y69F/5+DLAEqujXC@jo-einhundert>
+ <Y7CR30YUj2znMDm7@rowland.harvard.edu>
+ <CAMUOyH29XnTGO-LbJj5Hh9nzvT6aKNZH+ykvpBfq-PqyQFwioQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y6OWSM18QL977nbC@sol.localdomain>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMUOyH29XnTGO-LbJj5Hh9nzvT6aKNZH+ykvpBfq-PqyQFwioQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,60 +42,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 03:27:04PM -0800, Eric Biggers wrote:
-> On Wed, Dec 21, 2022 at 03:23:27PM +0100, Jason A. Donenfeld wrote:
-> > diff --git a/arch/x86/entry/vdso/vgetrandom-chacha.S b/arch/x86/entry/vdso/vgetrandom-chacha.S
-> > new file mode 100644
-> > index 000000000000..91fbb7ac7af4
-> > --- /dev/null
-> > +++ b/arch/x86/entry/vdso/vgetrandom-chacha.S
-> > @@ -0,0 +1,177 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-> > + */
-> > +
-> > +#include <linux/linkage.h>
-> > +#include <asm/frame.h>
-> > +
-> > +.section	.rodata.cst16.CONSTANTS, "aM", @progbits, 16
-> > +.align 16
-> > +CONSTANTS:	.octa 0x6b20657479622d323320646e61707865
-> > +.text
+On Sat, Dec 31, 2022 at 09:26:44PM +0100, Jó Ágila Bitsch wrote:
+> On Sat, Dec 31, 2022 at 8:47 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Fri, Dec 30, 2022 at 09:11:43PM +0100, Jó Ágila Bitsch wrote:
+> > >
+> > > During device enumeration, a host recognizes that the announced
+> > > USB version is at least 2.01, which means, that there are BOS
+> >
+> > Where is this 2.01 value specified?  I don't remember seeing it in the
+> > usual USBIF documents.
 > 
-> For simplicity, maybe leave off the section mergeability stuff and just have
-> plain ".section .rodata"?
-
-I guess nothing is going to get merged anyway, so sure, why not.
-
-> It would be worth mentioning in the function comment that none of the xmm
-> registers are callee-save.  That was not obvious to me.  I know that on arm64,
-> *kernel* code doesn't need to save/restore NEON registers, so it's not something
-> that arch/arm64/crypto/ does.  But, it *is* needed in arm64 userspace code.  So
-> I was worried that something similar would apply to x86_64, but it seems not.
-
-I'll add a comment.
-
+> This is actually from the backport of BOS descriptors to USB 2
 > 
-> > +	/* state1[0,1,2,3] = state1[0,3,2,1] */
-> > +	pshufd		$0x39,state1,state1
-> > +	/* state2[0,1,2,3] = state2[1,0,3,2] */
-> > +	pshufd		$0x4e,state2,state2
-> > +	/* state3[0,1,2,3] = state3[2,1,0,3] */
-> > +	pshufd		$0x93,state3,state3
+> Citing Randy Aull from
+> https://community.osr.com/discussion/comment/249742/#Comment_249742
+> >  There is no specification called USB 2.1, however there is such a thing as a USB 2.1 device.
+> > The USB 2.0 ECN for LPM introduced a new descriptor request to the enumeration process
+> > for USB 2 devices (the BOS descriptor set). The problem is that software can't request a new
+> > descriptor type to old devices that don't understand it without introducing compatibility issues
+> > with some devices (more than you would probably expect). So, software needed a way to
+> > identify whether a device could support the host requesting a BOS descriptor set. The solution
+> > in this ECN was to require devices supporting the ECN to set their bcdUSB to 0x0201 (2.01).
+> >
+> > Now, when we created the USB 3.0 spec, we again wanted to leverage the BOS descriptor, not
+> > only because we wanted to mandate USB 2 LPM in 3.0 devices when operating at high-speed,
+> > but also so the device can indicate to a host that it can operate at SuperSpeed (to support
+> > everyone's favorite "your device can perform faster" popup). Knowing that when operating at
+> > high-speed these devices needed to report the BOS descriptor set, we knew that it couldn't
+> > set the bcdUSB to 0x0200. We mistakenly wrote it down as 0x0210 instead of 0x0201 in the
+> > 3.0 spec (perhaps we just said "two point one" which might have been ambiguous) when we
+> > were trying to just be consistent with the requirement from the LPM ECN. So, rather than
+> > changing it back to 0x0201 in the USB 3.0 spec, we just ran with it.
+> >
+> > So, there are USB 2.0 devices, USB 2.01 devices and USB 2.1 devices, even though the latest
+> > revision of the USB 2 spec is USB 2.0. I have recommended that the USB-IF actually create a
+> > USB 2.1 specification that captures all of the various errata, ECNs, etc from over the years, but
+> > it hasn't happened yet.
+
+Interesting history.  And now that you point it out, I do see at the end 
+of section 3 of the USB 2.0 Link Power Management ECN:
+
+	Devices that support the BOS descriptor must have a bcdUSB value 
+	of 0201H or larger.
+
+> Btw, configfs already includes these version codes to support Link
+> Power Management (LPM) and
+> the associated BOS descriptor, so I didn't add that part, I only added
+> webusb as a condition as to
+> when to send BOS descriptors.
+
+Right.
+
+> > > @@ -713,14 +714,16 @@ static int bos_desc(struct usb_composite_dev *cdev)
+> > >        * A SuperSpeed device shall include the USB2.0 extension descriptor
+> > >        * and shall support LPM when operating in USB2.0 HS mode.
+> > >        */
+> > > -     usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+> > > -     bos->bNumDeviceCaps++;
+> > > -     le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
+> > > -     usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
+> > > -     usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+> > > -     usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
+> > > -     usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
+> > > -                                         USB_BESL_SUPPORT | besl);
+> > > +     if (cdev->gadget->lpm_capable) {
+> >
+> > This change doesn't seem to be related to the purpose of this patch.
 > 
-> The comments don't match the pshufd constants.  The code is correct but the
-> comments are not.  They should be:
+> Actually, it is.
+> 
+> Previously, BOS descriptors would only ever be sent if the device was
+> lpm_capable.
+> For this reason, this descriptor was previously sent unconditionally.
+> 
+> With my patch in place, it could be that a device is not lpm_capable, but still
+> wants to send BOS descriptors to announce its WebUSB capability,
+> therefore I added
+> this condition.
 
-Er, I swapped the endian when writing the comment. The code is fine
-though, yea. Fixed, thanks.
+Okay.  It would be good to explain this in the patch description.
 
-> The above sequence of 24 instructions is repeated twice, so maybe it should be a
-> macro (".chacha_round"?).
-
-Not really a fan of the indirection when reading for something simple
-like this.
-
-Thanks for the review.
-
-Jason
+Alan Stern
