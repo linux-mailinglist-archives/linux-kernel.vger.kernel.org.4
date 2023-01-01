@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7294865A98C
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 10:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CE165A98D
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 10:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjAAJpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 04:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S229714AbjAAJ47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 04:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjAAJpr (ORCPT
+        with ESMTP id S229472AbjAAJ45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 04:45:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48B010F3;
-        Sun,  1 Jan 2023 01:45:45 -0800 (PST)
+        Sun, 1 Jan 2023 04:56:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1605F43
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 01:56:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72D5760DB5;
-        Sun,  1 Jan 2023 09:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3E4C433EF;
-        Sun,  1 Jan 2023 09:45:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88EBF60D57
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 09:56:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1959C43396
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 09:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672566344;
-        bh=z9ZwLSxEOQtQ4Tc0WdCONTBI1jDHqtWw3QNCo6jVUzo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=miH+Hc20PPolZmCQ2J/uZ75viTP9KDzs1oLdt/pGRcUGzJykZLwj4t5sL6Z04nnFy
-         uMa37kQwe/2Z7mCHfg3n4QByXMf8xkHAYWpVGH3qPKW2uAxpT15WuZQH9ivGpcktCG
-         xRaW//DXutO/6t1HWXrAEO2auMgGoIjr2vWCFYvcgp5cCTmuhtA/tqWKV3ZGgKEzPV
-         afB2mnk8tC5hTTePaW7Td+YrvHVK+UFuGCYp0DNX4pC2EY/ztnV1H2xt9jmxbPYGjS
-         OLd+gGr1XDj6235aFJrynf9vbWtnldM6Qbu5OKATWciK1fjIeBDY/6NBYPN6OhjGAo
-         E12pBydo9mtHg==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 2/2] docs/mm: Physical Memory: add structure, introduction and nodes description
-Date:   Sun,  1 Jan 2023 11:45:23 +0200
-Message-Id: <20230101094523.1522109-3-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230101094523.1522109-1-rppt@kernel.org>
-References: <20230101094523.1522109-1-rppt@kernel.org>
+        s=k20201202; t=1672567012;
+        bh=f+3uIqYqOnqdOCtR9DouquvxHEGsouXcB7Kv+q56PhM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eV98uX4W/rM4foyjT9K2DLGsqFj6zbfJfOqVHNMlYafRFBTyW6kUf0oE2S4ir2DdW
+         /yDPB2jz7GaiEMeQCAUQSGs/U9pFMGC1bAYzNi3u/Z/ZGBEP8ViRHYBzpd8K/pxb/b
+         YVNucQSeHgvdD04lfmsMynBX26c2K0BiNrSZ8cpv/pQRRpBBrvVVBz4iNrDSWrKcfx
+         +HjhuV3DPDW8Nr4B4Vk45V/7tPauK9AegJNwvC8gvI9dQKwUIiByUdHhYrs84w1/fI
+         r+QwjKwQN8OcN/x1nJ5X8HThOfGUPpuVahnImQkCq15VIfSjUirmezZjUUoJ07hvk4
+         oJcWPJYXSCd0A==
+Received: by mail-ed1-f47.google.com with SMTP id c34so29777115edf.0
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 01:56:52 -0800 (PST)
+X-Gm-Message-State: AFqh2kqhObXi7PWfg6WJIM7f7CXISDP8cAR3oHTYhmIOWVbnQPvkpPQu
+        6bWbKVs9jTzptyEOScVBEe9Ac7IpJ3/co+KssfQ=
+X-Google-Smtp-Source: AMrXdXudhmAYCXsBRoBIStCfvCRwRnf9rdlrAfAvxK8ivcU4HlP5VcdNQmeNf3XS7GSj//sGX436tK2QwKLRqFKq6UU=
+X-Received: by 2002:a05:6402:299:b0:483:fee2:74e8 with SMTP id
+ l25-20020a056402029900b00483fee274e8mr2837465edv.366.1672567010780; Sun, 01
+ Jan 2023 01:56:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20221229061516.31671-1-hejinyang@loongson.cn> <20221229061516.31671-5-hejinyang@loongson.cn>
+In-Reply-To: <20221229061516.31671-5-hejinyang@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sun, 1 Jan 2023 17:56:45 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7J7yWpM-xLpK38gwEw3cMNU-BaxF3atVmDLyRxBcVrLg@mail.gmail.com>
+Message-ID: <CAAhV-H7J7yWpM-xLpK38gwEw3cMNU-BaxF3atVmDLyRxBcVrLg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] LoongArch: Strip guess_unwinder out from prologue_unwinder
+To:     Jinyang He <hejinyang@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Qing Zhang <zhangqing@loongson.cn>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,343 +64,448 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Hi, Jinyang,
 
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- Documentation/mm/physical_memory.rst | 322 +++++++++++++++++++++++++++
- 1 file changed, 322 insertions(+)
+On Thu, Dec 29, 2022 at 2:15 PM Jinyang He <hejinyang@loongson.cn> wrote:
+>
+> The prolugue unwinder rely on symbol info. When PC is not in kernel
+> text address, it cannot find relative symbol info and it will be broken.
+> The guess unwinder will be used in this case. And the guess unwinder
+> codes in prolugue unwinder is redundant. Strip it out and set the
+> unwinder info in unwind_state.
+>
+> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+> ---
+>  arch/loongarch/include/asm/unwind.h     |  26 ++++-
+>  arch/loongarch/kernel/Makefile          |   3 +-
+>  arch/loongarch/kernel/traps.c           |   3 -
+>  arch/loongarch/kernel/unwind.c          |  52 +++++++++
+>  arch/loongarch/kernel/unwind_guess.c    |  41 ++------
+>  arch/loongarch/kernel/unwind_prologue.c | 133 +++++++++---------------
+>  6 files changed, 132 insertions(+), 126 deletions(-)
+>  create mode 100644 arch/loongarch/kernel/unwind.c
+>
+> diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
+> index 6ece48f0ff77..4a55fd7b77ad 100644
+> --- a/arch/loongarch/include/asm/unwind.h
+> +++ b/arch/loongarch/include/asm/unwind.h
+> @@ -13,20 +13,30 @@
+>  #include <asm/ptrace.h>
+>  #include <asm/stacktrace.h>
+>
+> -enum unwinder_type {
+> -       UNWINDER_GUESS,
+> -       UNWINDER_PROLOGUE,
+> -};
+> +struct unwinder_ops;
+>
+>  struct unwind_state {
+> -       char type; /* UNWINDER_XXX */
+>         struct stack_info stack_info;
+>         struct task_struct *task;
+>         bool first, error, is_ftrace;
+>         int graph_idx;
+>         unsigned long sp, pc, ra;
+> +       const struct unwinder_ops *ops;
+> +};
+> +
+> +struct unwinder_ops {
+> +       void (*unwind_start)(struct unwind_state *state,
+> +                            struct task_struct *task, struct pt_regs *regs);
+> +       bool (*unwind_next_frame)(struct unwind_state *state);
+> +       unsigned long (*unwind_get_return_address)(struct unwind_state *state);
+>  };
+>
+> +extern const struct unwinder_ops *default_unwinder;
+> +extern const struct unwinder_ops unwinder_guess;
+> +#ifdef CONFIG_UNWINDER_PROLOGUE
+> +extern const struct unwinder_ops unwinder_prologue;
+> +#endif
+> +
+>  void unwind_start(struct unwind_state *state,
+>                   struct task_struct *task, struct pt_regs *regs);
+>  bool unwind_next_frame(struct unwind_state *state);
+> @@ -49,4 +59,10 @@ static inline unsigned long unwind_graph_addr(struct unwind_state *state,
+>         return ftrace_graph_ret_addr(state->task, &state->graph_idx,
+>                                      pc, (unsigned long *)(cfa - GRAPH_FAKE_OFFSET));
+>  }
+> +
+> +static inline void unwind_register_unwinder(struct unwind_state *state,
+> +                                         const struct unwinder_ops *unwinder)
+> +{
+> +       state->ops = unwinder;
+> +}
+>  #endif /* _ASM_UNWIND_H */
+> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+> index 7ca65195f7f8..cb6029ea3ea9 100644
+> --- a/arch/loongarch/kernel/Makefile
+> +++ b/arch/loongarch/kernel/Makefile
+> @@ -8,7 +8,7 @@ extra-y         := vmlinux.lds
+>  obj-y          += head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
+>                    traps.o irq.o idle.o process.o dma.o mem.o io.o reset.o switch.o \
+>                    elf.o syscall.o signal.o time.o topology.o inst.o ptrace.o vdso.o \
+> -                  alternative.o unaligned.o
+> +                  alternative.o unaligned.o unwind.o unwind_guess.o
+>
+>  obj-$(CONFIG_ACPI)             += acpi.o
+>  obj-$(CONFIG_EFI)              += efi.o
+> @@ -42,7 +42,6 @@ obj-$(CONFIG_MAGIC_SYSRQ)     += sysrq.o
+>  obj-$(CONFIG_KEXEC)            += machine_kexec.o relocate_kernel.o
+>  obj-$(CONFIG_CRASH_DUMP)       += crash_dump.o
+>
+> -obj-$(CONFIG_UNWINDER_GUESS)   += unwind_guess.o
+>  obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
+We do have CONFIG_UNWINDER_GUESS and I don't like to build guess
+unwinder unconditionally, maybe we can refactor it to make the
+unwinder still user selectable.
 
-diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
-index 2ab7b8c1c863..fcf52f1db16b 100644
---- a/Documentation/mm/physical_memory.rst
-+++ b/Documentation/mm/physical_memory.rst
-@@ -3,3 +3,325 @@
- ===============
- Physical Memory
- ===============
-+
-+Linux is available for a wide range of architectures so there is a need for an
-+architecture-independent abstraction to represent the physical memory. This
-+chapter describes the structures used to manage physical memory in a running
-+system.
-+
-+The first principal concept prevalent in the memory management is
-+`Non-Uniform Memory Access (NUMA)
-+<https://en.wikipedia.org/wiki/Non-uniform_memory_access>`_.
-+With multi-core and multi-socket machines, memory may be arranged into banks
-+that incur a different cost to access depending on the “distance” from the
-+processor. For example, there might be a bank of memory assigned to each CPU or
-+a bank of memory very suitable for DMA near peripheral devices.
-+
-+Each bank is called a node and the concept is represented under Linux by a
-+``struct pglist_data`` even if the architecture is UMA. This structure is
-+always referenced to by it's typedef ``pg_data_t``. A pg_data_t structure
-+for a particular node can be referenced by ``NODE_DATA(nid)`` macro where
-+``nid`` is the ID of that node.
-+
-+For NUMA architectures, the node structures are allocated by the architecture
-+specific code early during boot. Usually, these structures are allocated
-+locally on the memory bank they represent. For UMA architectures, only one
-+static pg_data_t structure called ``contig_page_data`` is used. Nodes will
-+be discussed further in Section :ref:`Nodes <nodes>`
-+
-+Each node may be divided up into a number of blocks called zones which
-+represent ranges within memory. These ranges are usually determined by
-+architectural constraints for accessing the physical memory. A zone is
-+described by a ``struct zone_struct``, typedeffed to ``zone_t`` and each zone
-+has one of the types described below.
-+
-+`ZONE_DMA` and `ZONE_DMA32`
-+  represent memory suitable for DMA by peripheral devices that cannot
-+  access all of the addressable memory. Depending on the architecture,
-+  either of these zone types or even they both can be disabled at build
-+  time using ``CONFIG_ZONE_DMA`` and ``CONFIG_ZONE_DMA32`` configuration
-+  options. Some 64-bit platforms may need both zones as they support
-+  peripherals with different DMA addressing limitations.
-+
-+`ZONE_NORMAL`
-+  is for normal memory that can be accessed by the kernel all the time. DMA
-+  operations can be performed on pages in this zone if the DMA devices support
-+  transfers to all addressable memory. ZONE_NORMAL is always enabled.
-+
-+`ZONE_HIGHMEM`
-+  is the part of the physical memory that is not covered by a permanent mapping
-+  in the kernel page tables. The memory in this zone is only accessible to the
-+  kernel using temporary mappings. This zone is available only some 32-bit
-+  architectures and is enabled with ``CONFIG_HIGHMEM``.
-+
-+`ZONE_MOVABLE`
-+  is for normal accessible memory, just like ZONE_NORMAL. The difference is
-+  that most pages in ZONE_MOVABLE are movable. That means that while virtual
-+  addresses of these pages do not change, their content may move between
-+  different physical pages. ZONE_MOVABLE is only enabled when one of
-+  `kernelcore`, `movablecore` and `movable_node` parameters is present in the
-+  kernel command line. See :ref:`Page migration <page_migration>` for
-+  additional details.
-+
-+`ZONE_DEVICE`
-+  represents memory residing on devices such as PMEM and GPU. It has different
-+  characteristics than RAM zone types and it exists to provide :ref:`struct
-+  page <Pages>` and memory map services for device driver identified physical
-+  address ranges. ZONE_DEVICE is enabled with configuration option
-+  ``CONFIG_ZONE_DEVICE``.
-+
-+It is important to note that many kernel operations can only take place using
-+ZONE_NORMAL so it is the most performance critical zone. Zones are discussed
-+further in Section :ref:`Zones <zones>`.
-+
-+The relation between node and zone extents is determined by the physical memory
-+map reported by the firmware, architectural constraints for memory addressing
-+and certain parameters in the kernel command line.
-+
-+For example, with 32-bit kernel on an x86 UMA machine with 2 Gbytes of RAM the
-+entire memory will be on node 0 and there will be three zones: ZONE_DMA,
-+ZONE_NORMAL and ZONE_HIGHMEM::
-+
-+  0                                                            2G
-+  +-------------------------------------------------------------+
-+  |                            node 0                           |
-+  +-------------------------------------------------------------+
-+
-+  0         16M                    896M                        2G
-+  +----------+-----------------------+--------------------------+
-+  | ZONE_DMA |      ZONE_NORMAL      |       ZONE_HIGHMEM       |
-+  +----------+-----------------------+--------------------------+
-+
-+
-+With a kernel built with ZONE_DMA disabled and ZONE_DMA32 enabled and booted
-+with `movablecore=80%` parameter on an arm64 machine with 16 Gbytes of RAM
-+equally split between two nodes, there will be ZONE_DMA32, ZONE_NORMAL and
-+ZONE_MOVABLE on node 0, and ZONE_NORMAL and ZONE_MOVABLE on node 1::
-+
-+
-+  1G                                9G                         17G
-+  +--------------------------------+ +--------------------------+
-+  |              node 0            | |          node 1          |
-+  +--------------------------------+ +--------------------------+
-+
-+  1G       4G        4200M          9G          9320M          17G
-+  +---------+----------+-----------+ +------------+-------------+
-+  |  DMA32  |  NORMAL  |  MOVABLE  | |   NORMAL   |   MOVABLE   |
-+  +---------+----------+-----------+ +------------+-------------+
-+
-+.. _nodes:
-+
-+Nodes
-+=====
-+
-+As we have mentioned, each node in memory is described by a ``pg_data_t`` which
-+is a typedef for a ``struct pglist_data``. When allocating a page, by default
-+Linux uses a node-local allocation policy to allocate memory from the node
-+closest to the running CPU. As processes tend to run on the same CPU, it is
-+likely the memory from the current node will be used. The allocation policy can
-+be controlled by users as described in
-+`Documentation/admin-guide/mm/numa_memory_policy.rst`.
-+
-+Most NUMA architectures maintain an array of pointers to the node
-+structures. The actual structures are allocated early during boot when
-+architecture specific code parses the physical memory map reported by the
-+firmware. The bulk of the node initialization happens slightly later in the
-+boot process by free_area_init() function, described later in Section
-+:ref:`Initialization <initialization>`.
-+
-+
-+Along with the node structures, kernel maintains an array of ``nodemask_t``
-+bitmasks called `node_states`. Each bitmask in this array represents a set of
-+nodes with particular properties as defined by `enum node_states`:
-+
-+`N_POSSIBLE`
-+  The node could become online at some point.
-+`N_ONLINE`
-+  The node is online.
-+`N_NORMAL_MEMORY`
-+  The node has regular memory.
-+`N_HIGH_MEMORY`
-+  The node has regular or high memory. When ``CONFIG_HIGHMEM`` is disabled
-+  aliased to `N_NORMAL_MEMORY`.
-+`N_MEMORY`
-+  The node has memory(regular, high, movable)
-+`N_CPU`
-+  The node has one or more CPUs
-+
-+For each node that has a property described above, the bit corresponding to the
-+node ID in the ``node_states[<property>]`` bitmask is set.
-+
-+For example, for node 2 with normal memory and CPUs, bit 2 will be set in ::
-+
-+  node_states[N_POSSIBLE]
-+  node_states[N_ONLINE]
-+  node_states[N_NORMAL_MEMORY]
-+  node_states[N_MEMORY]
-+  node_states[N_CPU]
-+
-+For various operations possible with nodemasks please refer to
-+`include/linux/nodemask.h
-+<https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/nodemask.h>`_.
-+
-+Among other things, nodemasks are used to provide macros for node traversal,
-+namely `for_each_node()` and `for_each_online_node()`.
-+
-+For instance, to call a function foo() for each online node::
-+
-+	for_each_online_node(nid) {
-+		pg_data_t *pgdat = NODE_DATA(nid);
-+
-+		foo(pgdat);
-+	}
-+
-+Node structure
-+--------------
-+
-+The struct pglist_data is declared in `include/linux/mmzone.h
-+<https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/mmzone.h>`_.
-+Here we briefly describe fields of this structure:
-+
-+General
-+~~~~~~~
-+
-+`node_zones`
-+  The zones for this node.  Not all of the zones may be populated, but it is
-+  the full list. It is referenced by this node's node_zonelists as well as
-+  other node's node_zonelists.
-+
-+`node_zonelists` The list of all zones in all nodes. This list defines the
-+  order of zones that allocations are preferred from. The `node_zonelists` is
-+  set up by build_zonelists() in mm/page_alloc.c during the initialization of
-+  core memory management structures.
-+
-+`nr_zones`
-+  Number of populated zones in this node.
-+
-+`node_mem_map`
-+  For UMA systems that use FLATMEM memory model the 0's node (and the only)
-+  `node_mem_map` is array of struct pages representing each physical frame.
-+
-+`node_page_ext`
-+  For UMA systems that use FLATMEM memory model the 0's (and the only) node
-+  `node_mem_map` is array of extensions of struct pages. Available only in the
-+  kernels built with ``CONFIG_PAGE_EXTENTION`` enabled.
-+
-+`node_start_pfn`
-+  The page frame number of the starting page frame in this node.
-+
-+`node_present_pages`
-+  Total number of physical pages present in this node.
-+
-+`node_spanned_pages`
-+  Total size of physical page range, including holes.
-+
-+`node_size_lock`
-+  A lock that protects the fields defining the node extents. Only defined when
-+  at least one of ``CONFIG_MEMORY_HOTPLUG`` or
-+  ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` configuration options are enabled.
-+
-+  pgdat_resize_lock() and pgdat_resize_unlock() are provided to manipulate
-+  node_size_lock without checking for CONFIG_MEMORY_HOTPLUG or
-+  CONFIG_DEFERRED_STRUCT_PAGE_INIT.
-+
-+`node_id`
-+  The Node ID (NID) of the node, starts at 0.
-+
-+`totalreserve_pages`
-+  This is a per~node reserve of pages that are not available to userspace
-+  allocations.
-+
-+`first_deferred_pfn`
-+  If memory initialization on large machines is deferred then this is the first
-+  PFN that needs to be initialized. Defined only when
-+  ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` is enabled
-+
-+`deferred_split_queue`
-+  Per-node queue of huge pages that their split was deferred. Defined only when ``CONFIG_TRANSPARENT_HUGEPAGE`` is enabled.
-+
-+`__lruvec`
-+  Per-node lruvec holding LRU lists and related parameters. Used only when memory cgroups are disabled. Should not be accessed directly, use mem_cgroup_lruvec() to look up lruvecs instead.
-+
-+Reclaim control
-+~~~~~~~~~~~~~~~
-+
-+See also :ref:`Page Reclaim <page_reclaim>`.
-+
-+`kswapd`
-+  Per-node instance of kswapd kernel thread.
-+
-+`kswapd_wait`, `pfmemalloc_wait`, `reclaim_wait`
-+  Workqueues used to synchronize memory reclaim tasks
-+
-+`nr_writeback_throttled`
-+  Number of tasks that are throttled waiting on dirty pages to clean.
-+
-+`nr_reclaim_start`
-+  Number of pages written while reclaim is throttled waiting for writeback.
-+
-+`kswapd_order`
-+  Controls the order kswapd tries to reclaim
-+
-+`kswapd_highest_zoneidx`
-+  The highest zone index to be reclaimed by kswapd
-+
-+`kswapd_failures`
-+  Number of runs kswapd was unable to reclaim any pages
-+
-+`min_unmapped_pages`
-+  Minimal number of unmapped file backed pages that cannot be reclaimed. Determined by vm.min_unmapped_ratio sysctl.
-+  Only defined when ``CONFIG_NUMA`` is enabled.
-+
-+`min_slab_pages`
-+  Minimal number of SLAB pages that cannot be reclaimed. Determined by vm.min_slab_ratio sysctl.
-+  Only defined when ``CONFIG_NUMA`` is enabled
-+
-+`flags`
-+  Flags controlling reclaim behavior.
-+
-+Compaction control
-+~~~~~~~~~~~~~~~~~~
-+
-+`kcompactd_max_order`
-+  Page order that kcompactd should try to achieve.
-+
-+`kcompactd_highest_zoneidx`
-+  The highest zone index to be compacted by kcompactd.
-+
-+`kcompactd_wait`
-+  Workqueue used to synchronizes memory compaction tasks.
-+
-+`kcompactd`
-+  Per-node instance of kcompactd kernel thread.
-+
-+`proactive_compact_trigger`
-+  Determines if proactive compaction is enabled. Controlled by vm.compaction_proactiveness sysctl.
-+
-+Statistics
-+~~~~~~~~~~
-+
-+`per_cpu_nodestats`
-+  Per-CPU VM statistics for the node
-+
-+`vm_stat`
-+  VM statistics for the node.
-+
-+.. _zones:
-+
-+Zones
-+=====
-+
-+.. _pages:
-+
-+Pages
-+=====
-+
-+.. _folios:
-+
-+Folios
-+======
-+
-+.. _initialization:
-+
-+Initialization
-+==============
--- 
-2.35.1
-
+Huacai
+>
+>  obj-$(CONFIG_PERF_EVENTS)      += perf_event.o perf_regs.o
+> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+> index 3adc44832205..1ea14f6c18d3 100644
+> --- a/arch/loongarch/kernel/traps.c
+> +++ b/arch/loongarch/kernel/traps.c
+> @@ -72,9 +72,6 @@ static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
+>         if (!task)
+>                 task = current;
+>
+> -       if (user_mode(regs))
+> -               state.type = UNWINDER_GUESS;
+> -
+>         printk("%sCall Trace:", loglvl);
+>         for (unwind_start(&state, task, pregs);
+>               !unwind_done(&state); unwind_next_frame(&state)) {
+> diff --git a/arch/loongarch/kernel/unwind.c b/arch/loongarch/kernel/unwind.c
+> new file mode 100644
+> index 000000000000..24d2cf99bfb6
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/unwind.c
+> @@ -0,0 +1,52 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+> + */
+> +#include <asm/unwind.h>
+> +
+> +#if defined(CONFIG_UNWINDER_GUESS)
+> +const struct unwinder_ops *default_unwinder = &unwinder_guess;
+> +#elif defined(CONFIG_UNWINDER_PROLOGUE)
+> +const struct unwinder_ops *default_unwinder = &unwinder_prologue;
+> +#endif
+> +
+> +unsigned long unwind_get_return_address(struct unwind_state *state)
+> +{
+> +       if (!state->ops || unwind_done(state))
+> +               return 0;
+> +       return state->ops->unwind_get_return_address(state);
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_get_return_address);
+> +
+> +void unwind_start(struct unwind_state *state, struct task_struct *task,
+> +                   struct pt_regs *regs)
+> +{
+> +       memset(state, 0, sizeof(*state));
+> +       unwind_register_unwinder(state, default_unwinder);
+> +       if (regs) {
+> +               state->sp = regs->regs[3];
+> +               state->pc = regs->csr_era;
+> +               state->ra = regs->regs[1];
+> +       } else if (task == current || task == NULL) {
+> +               state->sp = (unsigned long)__builtin_frame_address(0);
+> +               state->pc = (unsigned long)__builtin_return_address(0);
+> +               state->ra = 0;
+> +       } else {
+> +               state->sp = thread_saved_fp(task);
+> +               state->pc = thread_saved_ra(task);
+> +               state->ra = 0;
+> +       }
+> +       state->task = task;
+> +       get_stack_info(state->sp, state->task, &state->stack_info);
+> +       state->pc = unwind_graph_addr(state, state->pc, state->sp);
+> +       state->ops->unwind_start(state, task, regs);
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_start);
+> +
+> +bool unwind_next_frame(struct unwind_state *state)
+> +{
+> +       if (!state->ops || unwind_done(state))
+> +               return false;
+> +       return state->ops->unwind_next_frame(state);
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_next_frame);
+> diff --git a/arch/loongarch/kernel/unwind_guess.c b/arch/loongarch/kernel/unwind_guess.c
+> index 935d24f8c95c..b7ca2b88ac63 100644
+> --- a/arch/loongarch/kernel/unwind_guess.c
+> +++ b/arch/loongarch/kernel/unwind_guess.c
+> @@ -7,51 +7,23 @@
+>
+>  #include <asm/unwind.h>
+>
+> -unsigned long unwind_get_return_address(struct unwind_state *state)
+> +static unsigned long get_return_address(struct unwind_state *state)
+>  {
+> -       if (unwind_done(state))
+> -               return 0;
+>         return state->pc;
+>  }
+> -EXPORT_SYMBOL_GPL(unwind_get_return_address);
+>
+> -void unwind_start(struct unwind_state *state, struct task_struct *task,
+> +static void start(struct unwind_state *state, struct task_struct *task,
+>                     struct pt_regs *regs)
+>  {
+> -       memset(state, 0, sizeof(*state));
+> -
+> -       if (regs) {
+> -               state->sp = regs->regs[3];
+> -               state->pc = regs->csr_era;
+> -       } else if (task == current || task == NULL) {
+> -               state->sp = (unsigned long)__builtin_frame_address(0);
+> -               state->pc = (unsigned long)__builtin_return_address(0);
+> -       } else {
+> -               state->sp = thread_saved_fp(task);
+> -               state->pc = thread_saved_ra(task);
+> -       }
+> -
+> -       state->task = task;
+> -       state->first = true;
+> -       state->pc = unwind_graph_addr(state, state->pc, state->sp);
+> -       get_stack_info(state->sp, state->task, &state->stack_info);
+> -
+>         if (!unwind_done(state) && !__kernel_text_address(state->pc))
+>                 unwind_next_frame(state);
+>  }
+> -EXPORT_SYMBOL_GPL(unwind_start);
+>
+> -bool unwind_next_frame(struct unwind_state *state)
+> +static bool next_frame(struct unwind_state *state)
+>  {
+>         struct stack_info *info = &state->stack_info;
+>         unsigned long addr;
+>
+> -       if (unwind_done(state))
+> -               return false;
+> -
+> -       if (state->first)
+> -               state->first = false;
+> -
+>         do {
+>                 for (state->sp += sizeof(unsigned long);
+>                      state->sp < info->end;
+> @@ -68,4 +40,9 @@ bool unwind_next_frame(struct unwind_state *state)
+>
+>         return false;
+>  }
+> -EXPORT_SYMBOL_GPL(unwind_next_frame);
+> +
+> +const struct unwinder_ops unwinder_guess = {
+> +       .unwind_start = start,
+> +       .unwind_next_frame = next_frame,
+> +       .unwind_get_return_address = get_return_address,
+> +};
+> diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
+> index f7994ed05f04..beb57ea24da2 100644
+> --- a/arch/loongarch/kernel/unwind_prologue.c
+> +++ b/arch/loongarch/kernel/unwind_prologue.c
+> @@ -19,31 +19,19 @@ static inline void unwind_state_fixup(struct unwind_state *state)
+>  #endif
+>  }
+>
+> -unsigned long unwind_get_return_address(struct unwind_state *state)
+> +static unsigned long get_return_address(struct unwind_state *state)
+>  {
+> -       if (unwind_done(state))
+> -               return 0;
+>         return state->pc;
+>  }
+> -EXPORT_SYMBOL_GPL(unwind_get_return_address);
+> -
+> -static bool unwind_by_guess(struct unwind_state *state)
+> -{
+> -       struct stack_info *info = &state->stack_info;
+> -       unsigned long addr;
+> -
+> -       for (state->sp += sizeof(unsigned long);
+> -            state->sp < info->end;
+> -            state->sp += sizeof(unsigned long)) {
+> -               addr = *(unsigned long *)(state->sp);
+> -               state->pc = unwind_graph_addr(state, addr, state->sp + 8);
+> -               if (__kernel_text_address(state->pc))
+> -                       return true;
+> -       }
+> -
+> -       return false;
+> -}
+>
+> +/*
+> + * LoongArch function prologue like follows,
+> + *     [others instructions not use stack var]
+> + *     addi.d sp, sp, -imm
+> + *     st.d   xx, sp, offset <- save callee saved regs and
+> + *     st.d   yy, sp, offset    save ra if function is nest.
+> + *     [others instructions]
+> + */
+>  static bool unwind_by_prologue(struct unwind_state *state)
+>  {
+>         long frame_ra = -1;
+> @@ -89,6 +77,10 @@ static bool unwind_by_prologue(struct unwind_state *state)
+>                 ip++;
+>         }
+>
+> +       /*
+> +        * Not find stack alloc action, PC may be in a leaf function. Only the
+> +        * first being true is reasonable, otherwise indicate analysis is broken.
+> +        */
+>         if (!frame_size) {
+>                 if (state->first)
+>                         goto first;
+> @@ -106,6 +98,7 @@ static bool unwind_by_prologue(struct unwind_state *state)
+>                 ip++;
+>         }
+>
+> +       /* Not find save $ra action, PC may be in a leaf function, too. */
+>         if (frame_ra < 0) {
+>                 if (state->first) {
+>                         state->sp = state->sp + frame_size;
+> @@ -114,96 +107,63 @@ static bool unwind_by_prologue(struct unwind_state *state)
+>                 return false;
+>         }
+>
+> -       if (state->first)
+> -               state->first = false;
+> -
+>         state->pc = *(unsigned long *)(state->sp + frame_ra);
+>         state->sp = state->sp + frame_size;
+>         goto out;
+>
+>  first:
+> -       state->first = false;
+> -       if (state->pc == state->ra)
+> -               return false;
+> -
+>         state->pc = state->ra;
+>
+>  out:
+> +       state->first = false;
+>         unwind_state_fixup(state);
+>         return !!__kernel_text_address(state->pc);
+>  }
+>
+> -void unwind_start(struct unwind_state *state, struct task_struct *task,
+> +static void start(struct unwind_state *state, struct task_struct *task,
+>                     struct pt_regs *regs)
+>  {
+> -       memset(state, 0, sizeof(*state));
+> -       state->type = UNWINDER_PROLOGUE;
+> -
+> -       if (regs) {
+> -               state->sp = regs->regs[3];
+> -               state->pc = regs->csr_era;
+> -               state->ra = regs->regs[1];
+> -               if (!__kernel_text_address(state->pc))
+> -                       state->type = UNWINDER_GUESS;
+> -       } else if (task == current || task == NULL) {
+> -               state->sp = (unsigned long)__builtin_frame_address(0);
+> -               state->pc = (unsigned long)__builtin_return_address(0);
+> -               state->ra = 0;
+> -       } else {
+> -               state->sp = thread_saved_fp(task);
+> -               state->pc = thread_saved_ra(task);
+> -               state->ra = 0;
+> -       }
+> -
+> -       state->task = task;
+>         state->first = true;
+> -       state->pc = unwind_graph_addr(state, state->pc, state->sp);
+> -       get_stack_info(state->sp, state->task, &state->stack_info);
+>
+> -       if (!unwind_done(state) && !__kernel_text_address(state->pc))
+> -               unwind_next_frame(state);
+> +       /*
+> +        * The current PC is not kernel text address, we cannot find its
+> +        * relative symbol. Thus, prologue analysis will be broken. Luckly,
+> +        * we can use the guess unwinder.
+> +        */
+> +       if (!__kernel_text_address(state->pc)) {
+> +               unwind_register_unwinder(state, &unwinder_guess);
+> +               if (!unwind_done(state))
+> +                       unwind_next_frame(state);
+> +       }
+>  }
+> -EXPORT_SYMBOL_GPL(unwind_start);
+>
+> -bool unwind_next_frame(struct unwind_state *state)
+> +static bool next_frame(struct unwind_state *state)
+>  {
+>         struct stack_info *info = &state->stack_info;
+>         struct pt_regs *regs;
+>         unsigned long pc;
+>
+> -       if (unwind_done(state))
+> -               return false;
+> -
+>         do {
+> -               switch (state->type) {
+> -               case UNWINDER_GUESS:
+> -                       state->first = false;
+> -                       if (unwind_by_guess(state))
+> -                               return true;
+> -                       break;
+> -
+> -               case UNWINDER_PROLOGUE:
+> -                       if (unwind_by_prologue(state)) {
+> -                               state->pc = unwind_graph_addr(state, state->pc, state->sp);
+> -                               return true;
+> -                       }
+> +               if (unwind_by_prologue(state)) {
+> +                       state->pc = unwind_graph_addr(state, state->pc, state->sp);
+> +                       return true;
+> +               }
+>
+> -                       if (info->type == STACK_TYPE_IRQ &&
+> -                               info->end == state->sp) {
+> -                               regs = (struct pt_regs *)info->next_sp;
+> -                               pc = regs->csr_era;
+> +               if (info->type == STACK_TYPE_IRQ &&
+> +                   info->end == state->sp) {
+> +                       regs = (struct pt_regs *)info->next_sp;
+> +                       pc = regs->csr_era;
+>
+> -                               if (user_mode(regs) || !__kernel_text_address(pc))
+> -                                       return false;
+> +                       if (user_mode(regs) || !__kernel_text_address(pc))
+> +                               return false;
+>
+> -                               state->first = true;
+> -                               state->ra = regs->regs[1];
+> -                               state->sp = regs->regs[3];
+> -                               state->pc = pc;
+> -                               get_stack_info(state->sp, state->task, info);
+> +                       state->first = true;
+> +                       state->ra = regs->regs[1];
+> +                       state->sp = regs->regs[3];
+> +                       state->pc = pc;
+> +                       get_stack_info(state->sp, state->task, info);
+>
+> -                               return true;
+> -                       }
+> +                       return true;
+>                 }
+>
+>                 state->sp = info->next_sp;
+> @@ -212,4 +172,9 @@ bool unwind_next_frame(struct unwind_state *state)
+>
+>         return false;
+>  }
+> -EXPORT_SYMBOL_GPL(unwind_next_frame);
+> +
+> +const struct unwinder_ops unwinder_prologue = {
+> +       .unwind_start = start,
+> +       .unwind_next_frame = next_frame,
+> +       .unwind_get_return_address = get_return_address,
+> +};
+> --
+> 2.34.3
+>
+>
