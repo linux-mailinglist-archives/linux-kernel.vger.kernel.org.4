@@ -2,192 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C55765AA11
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 14:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5710165AA13
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 14:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjAANJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 08:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S231350AbjAANMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 08:12:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjAANJZ (ORCPT
+        with ESMTP id S230442AbjAANMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 08:09:25 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01F6B1088;
-        Sun,  1 Jan 2023 05:09:19 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 301D7sitE025943, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 301D7sitE025943
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Sun, 1 Jan 2023 21:07:54 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Sun, 1 Jan 2023 21:08:49 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sun, 1 Jan 2023 21:08:49 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Sun, 1 Jan 2023 21:08:48 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "David.Laight@ACULAB.COM" <David.Laight@ACULAB.COM>
-CC:     "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tehuang@realtek.com" <tehuang@realtek.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
-Thread-Topic: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
-Thread-Index: AQHZGsFtJHlbRNsmYUOpTa0F4ufSPq6EmMnggAOg+qCAALbHgIAAiEwg//+P14A=
-Date:   Sun, 1 Jan 2023 13:08:48 +0000
-Message-ID: <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
-References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
-         <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
-         <92eb7dfa8b7d447e966a2751e174b642@realtek.com>
-         <87da8c82dec749dc826b5a1b4c4238aa@AcuMS.aculab.com>
-         <eee17e2f4e44a2f38021a839dc39fedc1c1a4141.camel@realtek.com>
-         <a86893f11fe64930897473a38226a9a8@AcuMS.aculab.com>
-In-Reply-To: <a86893f11fe64930897473a38226a9a8@AcuMS.aculab.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [111.252.181.16]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzEvMSDkuIrljYggMDk6MDE6MDA=?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <89194A346201C548A306FA16203AA520@realtek.com>
-Content-Transfer-Encoding: base64
+        Sun, 1 Jan 2023 08:12:42 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486C42613
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 05:12:38 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id p36so38152960lfa.12
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 05:12:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QVXOGsSEFWDc/rgEWF6ke2jDVluPykhI1l0rnmmQ59I=;
+        b=EG1XyayUuHAYff1qHrxdteoEJ5VmOZrWnUYktFQT7fWaS2YnZq/RF799eQ1wQbuVcB
+         9NNju3jejs/sLKhNTFbhL2dQOMJ4piehT+nivj6C/WgFwHrkuLyx/1dcwjsSosHkkpxU
+         /n3aLiPiYsGEnX9GKQdoBTd9fsj/Y+GcXMbyGwTpkkBYy8MHjyT0A7at6K1gvztAKyPg
+         sJsAxsHU17P9ff1gcZU1/AQldYmUFrAtcPuCAS35o5GfDZKYJT3ro2ejckEjCqWtnCR4
+         r4ivMMR0X3y+jPFkSxKbXbVeKC7NFPXUaENU2QNmpf0yreZnwTHvu9UcgyihaErq/A3Z
+         z1Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QVXOGsSEFWDc/rgEWF6ke2jDVluPykhI1l0rnmmQ59I=;
+        b=tRFDezwqGcEWv9V9fnPaJguXvSsYY9ib63u16WI0Rd0IbF3jHO+J/uAG5ZRpFVJxoR
+         uvYJP+7U7iqUzn8bh7YDnDz9EPM1Yrl+bzacFNfN3ydVrjs/Tzu/HBAmWSNKid5XtjZK
+         KrJO5bt4g+QJ0w7fuD0nLyBuoDTjitjjB4MwOlQfIWHx89oUWveegknvCV6XGpThKfKh
+         nA+fMyE8BX3ER/SPeE1PQ/d5kQbnMv1fqwfdSGrX3exXi76cKW15EENdqfqBPTwP/GTz
+         JpaZqH9iDJhPsi6f40aXxhQXHAgeMEI0x+evWeWEQayKm59d2kfi/RQUF9Aqt9Wa2q57
+         Jp7Q==
+X-Gm-Message-State: AFqh2kpmIlw95TqkSOAHvcKqmRjnkM0v/KurdfzTLGZyQNfPvsa0dNnR
+        HJyIRdDUmop97v8unPHpDdq+Xw==
+X-Google-Smtp-Source: AMrXdXved5Y9cZQHX3+CPnnCir6y4RqhhGepHV70Lo3Sb7jV/wJqh46CqOXwCx4ipthbTKPgGMYZUA==
+X-Received: by 2002:a05:6512:3d9e:b0:4c0:2b07:e6e7 with SMTP id k30-20020a0565123d9e00b004c02b07e6e7mr13892907lfv.58.1672578756438;
+        Sun, 01 Jan 2023 05:12:36 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id j24-20020a19f518000000b004b5b16c3e8asm4131459lfb.164.2023.01.01.05.12.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 Jan 2023 05:12:35 -0800 (PST)
+Message-ID: <ccd35acf-15b5-91c7-606a-b327229cb255@linaro.org>
+Date:   Sun, 1 Jan 2023 15:12:35 +0200
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH 5/7] drm/msm/dpu: Document and enable TEAR interrupts
+ on DSI interfaces
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221231215006.211860-1-marijn.suijten@somainline.org>
+ <20221231215006.211860-6-marijn.suijten@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221231215006.211860-6-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU3VuLCAyMDIzLTAxLTAxIGF0IDExOjU0ICswMDAwLCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+
-IEZyb206IFBpbmctS2UgU2hpaA0KPiA+IFNlbnQ6IDAxIEphbnVhcnkgMjAyMyAxMTo0Mg0KPiA+
-IA0KPiA+IE9uIFNhdCwgMjAyMi0xMi0zMSBhdCAxNjo1NyArMDAwMCwgRGF2aWQgTGFpZ2h0IHdy
-b3RlOg0KPiA+ID4gRnJvbTogUGluZy1LZSBTaGloDQo+ID4gPiA+IFNlbnQ6IDI5IERlY2VtYmVy
-IDIwMjIgMDk6MjUNCj4gPiA+ID4gDQo+ID4gPiA+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
-LS0NCj4gPiA+ID4gPiBGcm9tOiBNYXJ0aW4gQmx1bWVuc3RpbmdsIDxtYXJ0aW4uYmx1bWVuc3Rp
-bmdsQGdvb2dsZW1haWwuY29tPg0KPiA+ID4gPiA+IFNlbnQ6IFdlZG5lc2RheSwgRGVjZW1iZXIg
-MjgsIDIwMjIgOTozNiBQTQ0KPiA+ID4gPiA+IFRvOiBsaW51eC13aXJlbGVzc0B2Z2VyLmtlcm5l
-bC5vcmcNCj4gPiA+ID4gPiBDYzogdG9ueTA2MjBlbW1hQGdtYWlsLmNvbTsga3ZhbG9Aa2VybmVs
-Lm9yZzsgUGluZy1LZSBTaGloIDxwa3NoaWhAcmVhbHRlay5jb20+Ow0KPiA+ID4gPiB0ZWh1YW5n
-QHJlYWx0ZWsuY29tOw0KPiA+ID4gPiA+IHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGU7IG5ldGRldkB2
-Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IE1hcnRpbg0KPiA+
-ID4gPiA+IEJsdW1lbnN0aW5nbA0KPiA+ID4gPiA+IDxtYXJ0aW4uYmx1bWVuc3RpbmdsQGdvb2ds
-ZW1haWwuY29tPg0KPiA+ID4gPiA+IFN1YmplY3Q6IFtQQVRDSCAxLzRdIHJ0dzg4OiBBZGQgcGFj
-a2VkIGF0dHJpYnV0ZSB0byB0aGUgZUZ1c2Ugc3RydWN0cw0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+
-IFRoZSBlRnVzZSBkZWZpbml0aW9ucyBpbiB0aGUgcnR3ODggYXJlIHVzaW5nIHN0cnVjdHMgdG8g
-ZGVzY3JpYmUgdGhlDQo+ID4gPiA+ID4gZUZ1c2UgY29udGVudHMuIEFkZCB0aGUgcGFja2VkIGF0
-dHJpYnV0ZSB0byBhbGwgc3RydWN0cyB1c2VkIGZvciB0aGUNCj4gPiA+ID4gPiBlRnVzZSBkZXNj
-cmlwdGlvbiBzbyB0aGUgY29tcGlsZXIgZG9lc24ndCBhZGQgZ2FwcyBvciByZS1vcmRlcg0KPiA+
-ID4gPiA+IGF0dHJpYnV0ZXMuDQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gQWxzbyBjaGFuZ2UgdGhl
-IHR5cGUgb2YgdGhlIHJlczIuLnJlczMgZUZ1c2UgZmllbGRzIHRvIHUxNiB0byBhdm9pZCB0aGUN
-Cj4gPiA+ID4gPiBmb2xsb3dpbmcgd2FybmluZywgbm93IHRoYXQgdGhlaXIgc3Vycm91bmRpbmcg
-c3RydWN0IGhhcyB0aGUgcGFja2VkDQo+ID4gPiA+ID4gYXR0cmlidXRlOg0KPiA+ID4gPiA+ICAg
-bm90ZTogb2Zmc2V0IG9mIHBhY2tlZCBiaXQtZmllbGQgJ3JlczInIGhhcyBjaGFuZ2VkIGluIEdD
-QyA0LjQNCj4gPiA+ID4gPiANCj4gPiA+ID4gPiBGaXhlczogZTMwMzc0ODVjNjhlICgicnR3ODg6
-IG5ldyBSZWFsdGVrIDgwMi4xMWFjIGRyaXZlciIpDQo+ID4gPiA+ID4gRml4ZXM6IGFiMGEwMzFl
-Y2YyOSAoInJ0dzg4OiA4NzIzZDogQWRkIHJlYWRfZWZ1c2UgdG8gcmVjb2duaXplIGVmdXNlIGlu
-Zm8gZnJvbSBtYXAiKQ0KPiA+ID4gPiA+IEZpeGVzOiA3NjlhMjljZTJhZjQgKCJydHc4ODogODgy
-MWM6IGFkZCBiYXNpYyBmdW5jdGlvbnMiKQ0KPiA+ID4gPiA+IEZpeGVzOiA4N2NhZWVmMDMyZmMg
-KCJ3aWZpOiBydHc4ODogQWRkIHJ0dzg3MjNkdSBjaGlwc2V0IHN1cHBvcnQiKQ0KPiA+ID4gPiA+
-IEZpeGVzOiBhZmY1ZmZkNzE4ZGUgKCJ3aWZpOiBydHc4ODogQWRkIHJ0dzg4MjFjdSBjaGlwc2V0
-IHN1cHBvcnQiKQ0KPiA+ID4gPiA+IFNpZ25lZC1vZmYtYnk6IE1hcnRpbiBCbHVtZW5zdGluZ2wg
-PG1hcnRpbi5ibHVtZW5zdGluZ2xAZ29vZ2xlbWFpbC5jb20+DQo+ID4gPiA+ID4gLS0tDQo+ID4g
-PiA+ID4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvbWFpbi5oICAgICB8ICA2
-ICsrKy0tLQ0KPiA+ID4gPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3J0
-dzg3MjNkLmggfCAgNiArKystLS0NCj4gPiA+ID4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVh
-bHRlay9ydHc4OC9ydHc4ODIxYy5oIHwgMjAgKysrKysrKysrLS0tLS0tLS0tLQ0KPiA+ID4gPiA+
-ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3J0dzg4MjJiLmggfCAyMCArKysr
-KysrKystLS0tLS0tLS0tDQo+ID4gPiA+ID4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsv
-cnR3ODgvcnR3ODgyMmMuaCB8IDIwICsrKysrKysrKy0tLS0tLS0tLS0NCj4gPiA+ID4gPiAgNSBm
-aWxlcyBjaGFuZ2VkLCAzNiBpbnNlcnRpb25zKCspLCAzNiBkZWxldGlvbnMoLSkNCj4gPiA+ID4g
-PiANCj4gPiA+ID4gDQo+ID4gPiA+IFsuLi5dDQo+ID4gPiA+IA0KPiA+ID4gPiA+IEBAIC00Mywx
-MyArNDMsMTMgQEAgc3RydWN0IHJ0dzg4MjFjZV9lZnVzZSB7DQo+ID4gPiA+ID4gIAl1OCBsaW5r
-X2NhcFs0XTsNCj4gPiA+ID4gPiAgCXU4IGxpbmtfY29udHJvbFsyXTsNCj4gPiA+ID4gPiAgCXU4
-IHNlcmlhbF9udW1iZXJbOF07DQo+ID4gPiA+ID4gLQl1OCByZXMwOjI7CQkJLyogMHhmNCAqLw0K
-PiA+ID4gPiA+IC0JdTggbHRyX2VuOjE7DQo+ID4gPiA+ID4gLQl1OCByZXMxOjI7DQo+ID4gPiA+
-ID4gLQl1OCBvYmZmOjI7DQo+ID4gPiA+ID4gLQl1OCByZXMyOjM7DQo+ID4gPiA+ID4gLQl1OCBv
-YmZmX2NhcDoyOw0KPiA+ID4gPiA+IC0JdTggcmVzMzo0Ow0KPiA+ID4gPiA+ICsJdTE2IHJlczA6
-MjsJCQkvKiAweGY0ICovDQo+ID4gPiA+ID4gKwl1MTYgbHRyX2VuOjE7DQo+ID4gPiA+ID4gKwl1
-MTYgcmVzMToyOw0KPiA+ID4gPiA+ICsJdTE2IG9iZmY6MjsNCj4gPiA+ID4gPiArCXUxNiByZXMy
-OjM7DQo+ID4gPiA+ID4gKwl1MTYgb2JmZl9jYXA6MjsNCj4gPiA+ID4gPiArCXUxNiByZXMzOjQ7
-DQo+ID4gPiA+IA0KPiA+ID4gPiBUaGVzZSBzaG91bGQgYmUgX19sZTE2LiBUaG91Z2ggYml0IGZp
-ZWxkcyBhcmUgc3VpdGFibGUgdG8gZWZ1c2UgbGF5b3V0LA0KPiA+ID4gPiB3ZSBkb24ndCBhY2Nl
-c3MgdGhlc2UgZmllbGRzIGZvciBub3cuIEl0IHdvdWxkIGJlIHdlbGwuDQo+ID4gDQo+ID4gVWgu
-IEkgdHlwbyB0aGUgc2VudGVuY2UuIE9yaWdpbmFsbHksIEkgd291bGQgbGlrZSB0byB0eXBlDQo+
-ID4gIi4uLmJpdCBmaWVsZHMgYXJlIE5PVCBzdWl0YWJsZS4uLiIuDQo+ID4gDQo+ID4gSW4gdGhp
-cyBkcml2ZXIsIGVmdXNlIGlzIHJlYWQgaW50byBhIHU4IGFycmF5LCBhbmQgY2FzdCB0byB0aGlz
-IHN0cnVjdA0KPiA+IHBvaW50ZXIgdG8gYWNjZXNzIHRoZSBmaWVsZC4NCj4gDQo+IFRoZW4gZGVm
-aW5lIGl0IGFzIHN1Y2guDQo+IFRoZSAxNmJpdCBlbmRpYW5uZXNzIGFuZCBiaXQtb3JkZXIgZGVw
-ZW5kYW50IGJpdGZpZWxkcyBzZXJ2ZQ0KPiBubyBwdXJwb3NlLiANCj4gDQo+ID4gPiBJSVJDIHRo
-ZSBhc3NpZ25tZW50IG9mIGFjdHVhbCBiaXRzIHRvIGJpdC1maWVsZHMgaXMgKGF0IGJlc3QpDQo+
-ID4gPiBhcmNoaXRlY3R1cmFsbHkgZGVmaW5lZCAtIHNvIGlzbid0IHJlYWxseSBzdWl0YWJsZSBm
-b3IgYW55dGhpbmcNCj4gPiA+IHdoZXJlIHRoZSBiaXRzIGhhdmUgdG8gbWF0Y2ggYSBwb3J0YWJs
-ZSBtZW1vcnkgYnVmZmVyLg0KPiA+ID4gVGhlIGJpdCBhbGxvY2F0aW9uIGlzbid0IHRpZWQgdG8g
-dGhlIGJ5dGUgZW5kaWFubmVzcy4NCj4gPiANCj4gPiBZZXMsIHRoaXMga2luZCBvZiBzdHJ1Y3Qg
-aGFzIGVuZGlhbiBwcm9ibGVtLiBGb3J0dW5hdGVseSwgd2UgZG9uJ3QNCj4gPiBhY3R1YWxseSBh
-Y2Nlc3MgdmFsdWVzIHZpYSBiaXQgZmllbGRzLg0KPiA+IA0KPiA+ID4gVG8gZ2V0IGFuIGV4cGxp
-Y2l0IGxheW91dCB5b3UgaGF2ZSB0byBkbyBleHBsaWNpdCBtYXNraW5nLg0KPiA+IA0KPiA+IElm
-IHdlIGFjdHVhbGx5IHdhbnQgdG8gYWNjZXNzIHRoZXNlIHZhbHVlcywgd2Ugd2lsbCBkZWZpbmUg
-bWFza3MNCj4gPiBhbmQgdXNlIHt1OCxfbGUxNixsZTMyfV9nZXRfYml0cygpIG9yIGJhcmUgJyYn
-IGJpdCBvcGVyYXRpb24gdG8gYWNjZXNzDQo+ID4gdGhlbS4NCj4gDQo+IEJ1dCB5b3UgY2FuJ3Qg
-dGFrZSB0aGUgYWRkcmVzcyBvZiBiaXRmaWVsZCBtZW1iZXJzLg0KPiBEZWZpbmUgdGhlIGRhdGEg
-cHJvcGVybHkuDQoNClllcywgaXQgc2hvdWxkIG5vdCB1c2UgYml0IGZpbGVkLiBJbnN0ZWFkLCB1
-c2UgYSBfX2xlMTYgZm9yIGFsbCBmaWVsZHMsIHN1Y2ggYXMNCg0Kc3RydWN0IHJ0dzg4MjFjZV9l
-ZnVzZSB7DQogICAgLi4uDQogICAgX19sZTE2IGNhcHM7DQogICAgLi4uDQp9DQoNCg0KI2RlZmlu
-ZSBDQVBTX1JFUzAgR0VOTUFTSygxLCAwKQ0KI2RlZmluZSBDQVBTX0xUUl9FTiBCSVQoMikNCiNk
-ZWZpbmUgQ0FQU19SRVMxIEdFTk1BU0soNCwgMykNCiNkZWZpbmUgQ0FQU19PQkZGIEdFTk1BU0so
-NiwgNSkNCi4uLg0KDQoNCkFzc3VtZSB0aGUgcG9pbnRlciBvZiBlZnVzZSBjb250ZW50IGlzICdj
-b25zdCB1OCAqZWZ1c2VfcmF3OycNCg0KICAgY29uc3Qgc3RydWN0IHJ0dzg4MjFjZV9lZnVzZSAq
-ZWZ1c2UgPSAoY29uc3Qgc3RydWN0IHJ0dzg4MjFjZV9lZnVzZSAqKWVmdXNlX3JhdzsNCg0KVGhl
-biwgZ2V0IGx0cl9lbg0KDQogICBsdHJfZW4gPSBsZTE2X2dldF9iaXRzKGVmdXNlLT5jYXBzLCBD
-QVBTX0xUUl9FTik7DQoNCg0KPiANCj4gPiA+IFlvdSBhbHNvIGRvbid0IG5lZWQgX19wYWNrZWQg
-dW5sZXNzIHRoZSAnbmF0dXJhbCcgYWxpZ25tZW50DQo+ID4gPiBvZiBmaWVsZHMgd291bGQgbmVl
-ZCBnYXBzIG9yIHRoZSBhY3R1YWwgc3RydWN0dXJlIGl0c2VsZiBtaWdodA0KPiA+ID4gYmUgbWlz
-YWxpZ25lZCBpbiBtZW1vcnkuDQo+ID4gPiBXaGlsZSBDIGNvbXBpbGVycyBhcmUgYWxsb3dlZCB0
-byBhZGQgYXJiaXRyYXJ5IHBhZGRpbmcgdGhlIExpbnV4IGtlcm5lbA0KPiA+ID4gcmVxdWlyZXMg
-dGhhdCB0aGV5IGRvbid0Lg0KPiA+ID4gSSdtIGFsc28gcHJldHR5IHN1cmUgdGhhdCBjb21waWxl
-cnMgYXJlIG5vdCBhbGxvd2VkIHRvIHJlb3JkZXIgZmllbGRzLg0KPiA+ID4gDQo+ID4gPiBTcGVj
-aWZ5aW5nIF9fcGFja2VkIGNhbiBhZGQgY29uc2lkZXJhYmxlIHJ1bi10aW1lIChhbmQgY29kZSBz
-aXplKQ0KPiA+ID4gb3ZlcmhlYWQgb24gc29tZSBhcmNoaXRlY3R1cmVzIC0gaXQgc2hvdWxkIG9u
-bHkgYmUgdXNlZCBpZiBhY3R1YWxseQ0KPiA+ID4gbmVlZGVkLg0KPiA+ID4gDQo+ID4gDQo+ID4g
-VW5kZXJzdG9vZC4gV2Ugb25seSBhZGQgX19wYWNrZWQgdG8gdGhlIHN0cnVjdCB3aGljaCBpcyB1
-c2VkIHRvDQo+ID4gYWNjZXNzIHByZWRlZmluZWQgZm9ybWF0LCBsaWtlIGVmdXNlIGNvbnRlbnQg
-ZGVmaW5lZCBieSB2ZW5kb3IuDQo+IA0KPiBObyAtIHRoYXQgZG9lc24ndCBtZWFuIHlvdSBuZWVk
-IHRvIHVzZSBfX3BhY2tlZC4NCj4gSXQgZG9lcyBtZWFuIHRoYXQgeW91IHNob3VsZG4ndCB1c2Ug
-Yml0ZmllbGRzLg0KPiBMb29rIGF0IGFsbCB0aGUgaGFyZHdhcmUgZHJpdmVycywgdGhleSB1c2Ug
-c3RydWN0cyB0byBtYXAgZGV2aWNlDQo+IHJlZ2lzdGVycyBhbmQgYWJzb2x1dGVseSByZXF1aXJl
-IHRoZSBjb21waWxlIG5vdCBhZGQgcGFkZGluZy4NCj4gDQoNCkkgdGhpbmsgdGhlIG9yaWdpbmFs
-IHN0cnVjdCBoYXMgdHdvIHByb2JsZW0gLS0gZW5kaWFuIGFuZCBfX3BhY2tlZC4NCg0KSSBtZW50
-aW9uZWQgZW5kaWFuIHBhcnQgYWJvdmUuIA0KDQpUYWtpbmcgYmVsb3cgYXMgZXhhbXBsZSB0byBl
-eHBsYWluIHdoeSBJIG5lZWQgX19wYWNrZWQsIA0KDQpzdHJ1Y3QgcnR3ODgyMWNlX2VmdXNlIHsN
-CiAgIC4uLg0KICAgdTggZGF0YTE7ICAgICAgIC8vIG9mZnNldCAweDEwMA0KICAgX19sZTE2IGRh
-dGEyOyAgIC8vIG9mZnNldCAweDEwMS0weDEwMg0KICAgLi4uDQp9IF9fcGFja2VkOw0KDQpXaXRo
-b3V0IF9fcGFja2VkLCBjb21waWxlciBjb3VsZCBoYXMgcGFkIGJldHdlZW4gZGF0YTEgYW5kIGRh
-dGEyLA0KYW5kIHRoZW4gZ2V0IHdyb25nIHJlc3VsdC4NCg0KSW4gdGhpcyBwYXRjaCwgc3RydWN0
-IGlzbid0IHRvIG1hcCByZWdpc3RlcnMuIEluc3RlYWQgaXQgaXMgdXNlZCB0bw0KYWNjZXNzIGVm
-dXNlIGNvbnRlbnQgb2YgYSB1OCBhcnJheSBleGlzdGluZyBpbiBtZW1vcnkuDQoNClBpbmctS2UN
-Cg0KDQo=
+On 31/12/2022 23:50, Marijn Suijten wrote:
+> All SoCs since DPU 5.0.0 (and seemingly up until and including 6.0.0,
+> but excluding 7.x.x) have the tear interrupt and control registers moved
+> out of the PINGPONG block and into the INTF block.  Wire up the
+> necessary interrupts and IRQ masks on all supported hardware.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 78 +++++++++++--------
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  6 +-
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 12 +++
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h      |  3 +
+>   5 files changed, 68 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 1cfe94494135..b9b9b5b0b615 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -86,6 +86,15 @@
+>   
+>   #define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
+>   
+> +#define IRQ_MSM8998_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+> +			 BIT(MDP_SSPP_TOP0_INTR2) | \
+> +			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> +			 BIT(MDP_INTF0_INTR) | \
+> +			 BIT(MDP_INTF1_INTR) | \
+> +			 BIT(MDP_INTF2_INTR) | \
+> +			 BIT(MDP_INTF3_INTR) | \
+> +			 BIT(MDP_INTF4_INTR))
+> +
+>   #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>   			 BIT(MDP_SSPP_TOP0_INTR2) | \
+>   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> @@ -100,13 +109,15 @@
+>   #define IRQ_QCM2290_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>   			 BIT(MDP_SSPP_TOP0_INTR2) | \
+>   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> -			 BIT(MDP_INTF1_INTR))
+> +			 BIT(MDP_INTF1_INTR) | \
+> +			 BIT(MDP_INTF1_TEAR_INTR))
+>   
+>   #define IRQ_SC7180_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>   			 BIT(MDP_SSPP_TOP0_INTR2) | \
+>   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>   			 BIT(MDP_INTF0_INTR) | \
+> -			 BIT(MDP_INTF1_INTR))
+> +			 BIT(MDP_INTF1_INTR) | \
+> +			 BIT(MDP_INTF1_TEAR_INTR))
+>   
+>   #define IRQ_SC7280_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>   			 BIT(MDP_SSPP_TOP0_INTR2) | \
+> @@ -120,7 +131,9 @@
+>   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>   			 BIT(MDP_INTF0_INTR) | \
+>   			 BIT(MDP_INTF1_INTR) | \
+> +			 BIT(MDP_INTF1_TEAR_INTR) | \
+>   			 BIT(MDP_INTF2_INTR) | \
+> +			 BIT(MDP_INTF2_TEAR_INTR) | \
+>   			 BIT(MDP_INTF3_INTR) | \
+>   			 BIT(MDP_INTF4_INTR))
+>   
+> @@ -129,7 +142,9 @@
+>   			  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>   			  BIT(MDP_INTF0_INTR) | \
+>   			  BIT(MDP_INTF1_INTR) | \
+> +			  BIT(MDP_INTF1_TEAR_INTR) | \
+>   			  BIT(MDP_INTF2_INTR) | \
+> +			  BIT(MDP_INTF2_TEAR_INTR) | \
+>   			  BIT(MDP_INTF3_INTR) | \
+>   			  BIT(MDP_INTF4_INTR) | \
+>   			  BIT(MDP_INTF5_INTR) | \
+> @@ -1300,63 +1315,64 @@ static struct dpu_dsc_cfg sdm845_dsc[] = {
+>   /*************************************************************
+>    * INTF sub blocks config
+>    *************************************************************/
+> -#define INTF_BLK(_name, _id, _base, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit) \
+> +#define INTF_BLK(_name, _id, _base, _len, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit, _tear_reg, _tear_rd_ptr_bit) \
+>   	{\
+>   	.name = _name, .id = _id, \
+> -	.base = _base, .len = 0x280, \
+> +	.base = _base, .len = _len, \
+
+Please move .len setting to a separate patch, it is not direclty related 
+to tear interrupt addition.
+
+>   	.features = _features, \
+>   	.type = _type, \
+>   	.controller_id = _ctrl_id, \
+>   	.prog_fetch_lines_worst_case = _progfetch, \
+>   	.intr_underrun = DPU_IRQ_IDX(_reg, _underrun_bit), \
+>   	.intr_vsync = DPU_IRQ_IDX(_reg, _vsync_bit), \
+> +	.intr_tear_rd_ptr = DPU_IRQ_IDX(_tear_reg, _tear_rd_ptr_bit), \
+
+Initially I added separate _reg and _bit settings because reg was common 
+to both interrupts. However now as tear interrups use different reg it 
+might be better to first move DPU_IRQ_IDX out of this macro () and then 
+to add your tear_rd_ptr_intr as a single intr_idx.
+
+>   	}
+>   
+>   static const struct dpu_intf_cfg msm8998_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> -	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_HDMI, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x268, INTF_DP, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x268, INTF_DSI, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27, -1, -1),
+> +	INTF_BLK("intf_2", INTF_2, 0x6B000, 0x268, INTF_DSI, 1, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29, -1, -1),
+> +	INTF_BLK("intf_3", INTF_3, 0x6B800, 0x268, INTF_HDMI, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg sdm845_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> -	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 1, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, 0, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x280, INTF_DSI, 0, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27, -1, -1),
+> +	INTF_BLK("intf_2", INTF_2, 0x6B000, 0x280, INTF_DSI, 1, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29, -1, -1),
+> +	INTF_BLK("intf_3", INTF_3, 0x6B800, 0x280, INTF_DP, 1, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg sc7180_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x2b8, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF1_TEAR_INTR, 2),
+>   };
+>   
+>   static const struct dpu_intf_cfg sm8150_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> -	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x2b8, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF1_TEAR_INTR, 2),
+> +	INTF_BLK("intf_2", INTF_2, 0x6B000, 0x2b8, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29, MDP_INTF2_TEAR_INTR, 2),
+> +	INTF_BLK("intf_3", INTF_3, 0x6B800, 0x280, INTF_DP, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg sc7280_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x34000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x35000, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+> +	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x35000, 0x2b8, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF1_TEAR_INTR, 2),
+> +	INTF_BLK("intf_5", INTF_5, 0x39000, 0x280, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg sc8180x_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x2b8, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF1_TEAR_INTR, 2),
+> +	INTF_BLK("intf_2", INTF_2, 0x6B000, 0x2b8, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29, MDP_INTF2_TEAR_INTR, 2),
+>   	/* INTF_3 is for MST, wired to INTF_DP 0 and 1, use dummy index until this is supported */
+> -	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> -	INTF_BLK("intf_4", INTF_4, 0x6C000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
+> -	INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+> +	INTF_BLK("intf_3", INTF_3, 0x6B800, 0x280, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31, -1, -1),
+> +	INTF_BLK("intf_4", INTF_4, 0x6C000, 0x280, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21, -1, -1),
+> +	INTF_BLK("intf_5", INTF_5, 0x6C800, 0x280, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg qcm2290_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x00000, INTF_NONE, 0, 0, 0, 0, 0, 0),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> +	INTF_BLK("intf_0", INTF_0, 0x00000, 0x2b8, INTF_NONE, 0, 0, 0, 0, 0, 0, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x2b8, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF2_TEAR_INTR, 2),
+>   };
+>   
+>   /*************************************************************
+> @@ -1849,7 +1865,7 @@ static const struct dpu_mdss_cfg msm8998_dpu_cfg = {
+>   	.vbif = msm8998_vbif,
+>   	.reg_dma_count = 0,
+>   	.perf = &msm8998_perf_data,
+> -	.mdss_irqs = IRQ_SM8250_MASK,
+> +	.mdss_irqs = IRQ_MSM8998_MASK,
+>   };
+>   
+>   static const struct dpu_mdss_cfg sdm845_dpu_cfg = {
+> @@ -1947,7 +1963,7 @@ static const struct dpu_mdss_cfg sm8150_dpu_cfg = {
+>   	.reg_dma_count = 1,
+>   	.dma_cfg = &sm8150_regdma,
+>   	.perf = &sm8150_perf_data,
+> -	.mdss_irqs = IRQ_SDM845_MASK,
+> +	.mdss_irqs = IRQ_SM8250_MASK,
+>   };
+>   
+>   static const struct dpu_mdss_cfg sc8180x_dpu_cfg = {
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index e0e153889ab7..2ea17e4ef3e5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -638,8 +638,9 @@ struct dpu_dsc_cfg {
+>    * @type:              Interface type(DSI, DP, HDMI)
+>    * @controller_id:     Controller Instance ID in case of multiple of intf type
+>    * @prog_fetch_lines_worst_case	Worst case latency num lines needed to prefetch
+> - * @intr_underrun:	index for INTF underrun interrupt
+> - * @intr_vsync:	        index for INTF VSYNC interrupt
+> + * @intr_underrun:     index for INTF underrun interrupt
+> + * @intr_vsync:        index for INTF VSYNC interrupt
+> + * @intr_tear_rd_ptr:  index for INTF TEAR_RD_PTR interrupt
+>    */
+>   struct dpu_intf_cfg  {
+>   	DPU_HW_BLK_INFO;
+> @@ -648,6 +649,7 @@ struct dpu_intf_cfg  {
+>   	u32 prog_fetch_lines_worst_case;
+>   	s32 intr_underrun;
+>   	s32 intr_vsync;
+> +	s32 intr_tear_rd_ptr;
+>   };
+>   
+>   /**
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+> index cf1b6d84c18a..044136a97fac 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+> @@ -24,6 +24,8 @@
+>   #define MDP_INTF_3_OFF			0x6B800
+>   #define MDP_INTF_4_OFF			0x6C000
+>   #define MDP_INTF_5_OFF			0x6C800
+> +#define MDP_INTF_1_TEAR_OFF		0x6D800
+> +#define MDP_INTF_2_TEAR_OFF		0x6D900
+>   #define MDP_AD4_0_OFF			0x7C000
+>   #define MDP_AD4_1_OFF			0x7D000
+>   #define MDP_AD4_INTR_EN_OFF		0x41c
+> @@ -99,6 +101,16 @@ static const struct dpu_intr_reg dpu_intr_set[] = {
+>   		MDP_INTF_5_OFF+INTF_INTR_EN,
+>   		MDP_INTF_5_OFF+INTF_INTR_STATUS
+>   	},
+> +	[MDP_INTF1_TEAR_INTR] = {
+> +		MDP_INTF_1_TEAR_OFF+INTF_INTR_TEAR_CLEAR,
+> +		MDP_INTF_1_TEAR_OFF+INTF_INTR_TEAR_EN,
+> +		MDP_INTF_1_TEAR_OFF+INTF_INTR_TEAR_STATUS
+> +	},
+> +	[MDP_INTF2_TEAR_INTR] = {
+> +		MDP_INTF_2_TEAR_OFF+INTF_INTR_TEAR_CLEAR,
+> +		MDP_INTF_2_TEAR_OFF+INTF_INTR_TEAR_EN,
+> +		MDP_INTF_2_TEAR_OFF+INTF_INTR_TEAR_STATUS
+> +	},
+>   	[MDP_AD4_0_INTR] = {
+>   		MDP_AD4_0_OFF + MDP_AD4_INTR_CLEAR_OFF,
+>   		MDP_AD4_0_OFF + MDP_AD4_INTR_EN_OFF,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
+> index 46443955443c..b447e4a1d9f4 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
+> @@ -23,6 +23,8 @@ enum dpu_hw_intr_reg {
+>   	MDP_INTF3_INTR,
+>   	MDP_INTF4_INTR,
+>   	MDP_INTF5_INTR,
+> +	MDP_INTF1_TEAR_INTR,
+> +	MDP_INTF2_TEAR_INTR,
+>   	MDP_AD4_0_INTR,
+>   	MDP_AD4_1_INTR,
+>   	MDP_INTF0_7xxx_INTR,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
+> index c8156ed4b7fb..6bdac515fd54 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
+> @@ -10,6 +10,9 @@
+>   /**
+>    * MDP TOP block Register and bit fields and defines
+>    */
+> +#define INTF_INTR_TEAR_EN               0x000
+> +#define INTF_INTR_TEAR_STATUS           0x004
+> +#define INTF_INTR_TEAR_CLEAR            0x008
+>   #define DISP_INTF_SEL                   0x004
+>   #define INTR_EN                         0x010
+>   #define INTR_STATUS                     0x014
+
+-- 
+With best wishes
+Dmitry
+
