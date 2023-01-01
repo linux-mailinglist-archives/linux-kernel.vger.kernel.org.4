@@ -2,80 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87A465A9AB
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 12:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0F465A9AE
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 12:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjAALGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 06:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S229723AbjAALJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 06:09:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjAALGP (ORCPT
+        with ESMTP id S229472AbjAALJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 06:06:15 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BA4B31;
-        Sun,  1 Jan 2023 03:06:11 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m3so9469176wmq.0;
-        Sun, 01 Jan 2023 03:06:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2el4ERZcTPvT5uDL3i+6aihFwH/fGE4CQf4W9vHimzQ=;
-        b=YkZiALNfP2gR4Q5166RBKDAnad46y624pvaubO214ZDA57xbHJacl4PceATZ4Gw2RY
-         MVhgmoKxsP+pKWtXx2ewu3b1XU3UbJiBinwfo9oPSaCGt+/6ULpFRFy+KRXzMPG0K7M7
-         JiWirnLkTBqQ+TBWjMxaTkije/QrskG3zGqur64/aCZReOr8R7Vop4mzJoAN0JvV2gl2
-         6MhFXw2/uesWGF69cw4i0oqqqN9VleXElN3WY/hrGKoEm0mHoNVEHdRz+0XivGf80h+B
-         J/rTvzbIGm91aOdxrSbAjFNoEFr+ZIK5kg2Ps2FD6FzNDoO6UxN+Oio51V84UcVqa5nF
-         n4bA==
+        Sun, 1 Jan 2023 06:09:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF801161
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 03:08:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672571296;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fBBKzqii62ZjxIZ4kMasNOVjJLy5rfIiuLe5QumouC4=;
+        b=RcstqxMXBNJbrmLaq4hpKlB9efVb/C6TaeJc3Ru43/hyuPoX411nG5EOPgYv3YiJWKeXYR
+        9LL4qLdOGWLNKnEhCX/5w3w/2sEJ0axmOTrd0QLWP/k/Fpo6cvLfMbZEKxxt3Zg0jH3lMk
+        h3gvGbhk1M+WxUHMaWvmSVoYZ9y/QPw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-671-wfjEV4yHMj6M8_-EBnQPLQ-1; Sun, 01 Jan 2023 06:08:15 -0500
+X-MC-Unique: wfjEV4yHMj6M8_-EBnQPLQ-1
+Received: by mail-wm1-f72.google.com with SMTP id l17-20020a05600c1d1100b003d9a145366cso3502690wms.4
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 03:08:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
+        h=content-transfer-encoding:mime-version:user-agent:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2el4ERZcTPvT5uDL3i+6aihFwH/fGE4CQf4W9vHimzQ=;
-        b=lpCprTkILZW908FIig9R1wLio/X5nRKmHKaIDC3RT3o+WnA8kvqi3mdAyRmLEwGugz
-         Q/BDEVmVDSSpqbtJZievUzPr8DwdtC8QxkSM8YhN6KBTsWgKk78xlPONZaoV9by1d2F5
-         soemYmQvDbc/o7ngOnaPbdGOhtD2MTslo4a60OyivS2C/PEObYvHYsryrCqPXiyYXPs/
-         wa0whrkleGURM/5lzZUK+Y+w6mIdQ5UtKOz6Prbl/v9wnyXnykIEv1D57oR4O0/p8f8/
-         3FS66TUDXyTjbzTS7ki+NsRmdCrlqdTOq3/axGzU48brT/rZSCna0qf821m0fOXyJ8wn
-         xzAQ==
-X-Gm-Message-State: AFqh2krw9DDX8HOTAkLJ5xeYGfqR3lFztfZvgmhnK+AeKLwNwIcmpyCL
-        GnipQEhNQEcc1GuQ3JSiVTM=
-X-Google-Smtp-Source: AMrXdXtyQk1vTMr5CSacubfp/46/bASOgXI0uOL1B/tQiMxaYAjHIcahGPAXBmV/xE+ynuuQJJfaxg==
-X-Received: by 2002:a05:600c:348b:b0:3d1:f16b:30e6 with SMTP id a11-20020a05600c348b00b003d1f16b30e6mr27020040wmq.28.1672571170358;
-        Sun, 01 Jan 2023 03:06:10 -0800 (PST)
-Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003d96efd09b7sm35795713wmp.19.2023.01.01.03.06.09
+        bh=fBBKzqii62ZjxIZ4kMasNOVjJLy5rfIiuLe5QumouC4=;
+        b=xXP1K8zvkABZVtIx22aZZ85daRpW+3Hscw6vLZMaxjX7ZDPcDoEXxNXH9Xcb2upcYz
+         3Xf+EmfZjLw/joM5wvXGO9buh1rP8gOd4GgtKQuixQNpiuJ8CgdN5j+hr5JrnURBT9nF
+         dlklnnmsWBbfiFeygpfwLiUvyK3mVkxkgRRN9qq+K4Z60/uAKiljT+W6b/1DYxhn/m19
+         BlGOU9VGfsMNjDKCBuQkgSQPuojUkJEvJDEKl2ndH8jEre6Q7ytZ84Cz5xlsHg1YqZKB
+         iOLhki7yV/N6lanKNpUP+gEAfuVwZ5Rek+6oN3UFT1PiDojnHWPryFwethpragVVlojp
+         z+pg==
+X-Gm-Message-State: AFqh2krhAFtR1TTZckiS3HkVQnl4bNMUYlstbeLRMx5OUcdzxfgCgYJq
+        q87Pt5ah+JDKjNegPJHi6ta376NuF5Jqd9xKUavBiojOziMb2irb5zElNOPfjEmKofnck9FNtCH
+        pHVz6pWPYCccpEmgR+grULsr+
+X-Received: by 2002:a05:600c:41c2:b0:3d3:5565:3617 with SMTP id t2-20020a05600c41c200b003d355653617mr30193550wmh.24.1672571291059;
+        Sun, 01 Jan 2023 03:08:11 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXv3H1oBhA10tTYm0SEh9kpFSr3kuZ1y9+L8b22gb0VvrfW/7eer/yg4p3C3Kirc5w3npOjo+A==
+X-Received: by 2002:a05:600c:41c2:b0:3d3:5565:3617 with SMTP id t2-20020a05600c41c200b003d355653617mr30193528wmh.24.1672571290802;
+        Sun, 01 Jan 2023 03:08:10 -0800 (PST)
+Received: from starship ([89.237.103.62])
+        by smtp.gmail.com with ESMTPSA id q2-20020a1cf302000000b003d1cc0464a2sm34525487wmq.8.2023.01.01.03.08.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Jan 2023 03:06:10 -0800 (PST)
-Message-ID: <a46de52484ee62e073c80d0f2ddeebdcf8308c07.camel@gmail.com>
-Subject: Re: [PATCH v2 2/5] iio: pressure: bmp280: Add preinit callback
-From:   Angel Iglesias <ang.iglesiasg@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 01 Jan 2023 12:06:08 +0100
-In-Reply-To: <Y6tmcRlHCZTgT9jS@smile.fi.intel.com>
-References: <cover.1672062380.git.ang.iglesiasg@gmail.com>
-         <724e92e64e6d91d48d762e804b430c716679bccb.1672062380.git.ang.iglesiasg@gmail.com>
-         <Y6tmcRlHCZTgT9jS@smile.fi.intel.com>
+        Sun, 01 Jan 2023 03:08:10 -0800 (PST)
+Message-ID: <451187de09e9a80f73a0588da65d55d4a8da6552.camel@redhat.com>
+Subject: Re: supervisor write access in kernel mode in
+ __pv_queued_spin_unlock_slowpath
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Mike Rapoport <rppt@linux.ibm.com>,
+        Christoph Lameter <cl@linux.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>
+Date:   Sun, 01 Jan 2023 13:08:07 +0200
+In-Reply-To: <Y7E4OZUmvI97tTw7@hyeyoo>
+References: <202212312021.bc1efe86-oliver.sang@intel.com>
+         <Y7EtNNzfxuiX/VEg@hyeyoo> <Y7E4OZUmvI97tTw7@hyeyoo>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.2 (by Flathub.org) 
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,40 +91,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTEyLTI3IGF0IDIzOjQxICswMjAwLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6
-Cj4gT24gTW9uLCBEZWMgMjYsIDIwMjIgYXQgMDM6Mjk6MjFQTSArMDEwMCwgQW5nZWwgSWdsZXNp
-YXMgd3JvdGU6Cj4gPiBBZGRzIHByZWluaXQgY2FsbGJhY2sgdG8gZXhlY3V0ZSBvcGVyYXRpb25z
-IG9uIHByb2JlIGJlZm9yZSBhcHBseWluZwo+ID4gaW5pdGlhbCBjb25maWd1cmF0aW9uLgo+IAo+
-IC4uLgo+IAo+ID4gQEAgLTkzNSw2ICs5MzYsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGJtcDI4
-MF9jaGlwX2luZm8gYm1wMjgwX2NoaXBfaW5mbyA9Cj4gPiB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
-LnJlYWRfdGVtcCA9IGJtcDI4MF9yZWFkX3RlbXAsCj4gPiDCoMKgwqDCoMKgwqDCoMKgLnJlYWRf
-cHJlc3MgPSBibXAyODBfcmVhZF9wcmVzcywKPiA+IMKgwqDCoMKgwqDCoMKgwqAucmVhZF9jYWxp
-YiA9IGJtcDI4MF9yZWFkX2NhbGliLAo+ID4gK8KgwqDCoMKgwqDCoMKgLnByZWluaXQgPSBOVUxM
-LAo+ID4gwqB9Owo+ID4gwqAKPiA+IMKgc3RhdGljIGludCBibWUyODBfY2hpcF9jb25maWcoc3Ry
-dWN0IGJtcDI4MF9kYXRhICpkYXRhKQo+ID4gQEAgLTk3OSw2ICs5ODEsNyBAQCBzdGF0aWMgY29u
-c3Qgc3RydWN0IGJtcDI4MF9jaGlwX2luZm8gYm1lMjgwX2NoaXBfaW5mbyA9Cj4gPiB7Cj4gPiDC
-oMKgwqDCoMKgwqDCoMKgLnJlYWRfcHJlc3MgPSBibXAyODBfcmVhZF9wcmVzcywKPiA+IMKgwqDC
-oMKgwqDCoMKgwqAucmVhZF9odW1pZCA9IGJtcDI4MF9yZWFkX2h1bWlkLAo+ID4gwqDCoMKgwqDC
-oMKgwqDCoC5yZWFkX2NhbGliID0gYm1lMjgwX3JlYWRfY2FsaWIsCj4gPiArwqDCoMKgwqDCoMKg
-wqAucHJlaW5pdCA9IE5VTEwsCj4gPiDCoH07Cj4gCj4gVXNlbGVzcyBjaGFuZ2VzLgo+IAo+IC4u
-Lgo+IAo+ID4gQEAgLTE2MDQsNiArMTYxNCw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgYm1wMjgw
-X2NoaXBfaW5mbyBibXAxODBfY2hpcF9pbmZvCj4gPiA9IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqAu
-cmVhZF90ZW1wID0gYm1wMTgwX3JlYWRfdGVtcCwKPiA+IMKgwqDCoMKgwqDCoMKgwqAucmVhZF9w
-cmVzcyA9IGJtcDE4MF9yZWFkX3ByZXNzLAo+ID4gwqDCoMKgwqDCoMKgwqDCoC5yZWFkX2NhbGli
-ID0gYm1wMTgwX3JlYWRfY2FsaWIsCj4gPiArwqDCoMKgwqDCoMKgwqAucHJlaW5pdCA9IE5VTEws
-Cj4gPiDCoH07Cj4gCj4gRGl0dG8uCj4gCj4gLi4uCj4gCj4gPiArwqDCoMKgwqDCoMKgwqAvKgo+
-ID4gK8KgwqDCoMKgwqDCoMKgICogU29tZSBjaGlwcyBsaWtlIHRoZSBCTVAzeHggaGF2ZSBwcmVp
-bml0IHRhc2tzIHRvIHJ1bgo+ID4gK8KgwqDCoMKgwqDCoMKgICogYmVmb3JlIGFwcGx5aW5nIHRo
-ZSBpbml0aWFsIGNvbmZpZ3VyYXRpb24uCj4gPiArwqDCoMKgwqDCoMKgwqAgKi8KPiA+ICvCoMKg
-wqDCoMKgwqDCoGlmIChkYXRhLT5jaGlwX2luZm8tPnByZWluaXQpIHsKPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSBkYXRhLT5jaGlwX2luZm8tPnByZWluaXQoZGF0YSk7
-Cj4gCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2X2VycihkZXYsICJlcnJv
-ciBydW5uaW5nIHByZWluaXQgdGFza3MiKTsKPiAKPiBIdWg/ISBJIGd1ZXNzIHlvdSB3YW50ZWQK
-ClRoZSBkYW5nZXJzIG9mIGNvcHlpbmcgcGFzdGUgYW5kIHJ1c2hpbmcgdGhpbmdzIGV0Yy4gU29y
-cnkgZm9yIHRoaXMgYnJhaW4gZmFydCEKClRoYW5rcyBmb3IgeW91ciB0aW1lLApBbmdlbAoKPiA+
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCA8IDApCj4gPiDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcmV0Owo+IAo+
-IMKgwqDCoMKgwqDCoMKgwqBpZiAocmV0IDwgMCkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHJldHVybiBkZXZfZXJyX3Byb2JlKC4uLik7Cj4gCj4gPiDCoMKgwqDCoMKgwqDCoMKg
-fQo+IAoK
+On Sun, 2023-01-01 at 16:37 +0900, Hyeonggon Yoo wrote:
+> On Sun, Jan 01, 2023 at 03:50:28PM +0900, Hyeonggon Yoo wrote:
+> > On Sat, Dec 31, 2022 at 11:26:25PM +0800, kernel test robot wrote:
+> > > Greeting,
+> > > 
+> > > FYI, we noticed kernel_BUG_at_include/linux/mm.h due to commit (built with gcc-11):
+> > > 
+> > > commit: 0af8489b0216fa1dd83e264bef8063f2632633d7 ("mm, slub: remove percpu slabs with CONFIG_SLUB_TINY")
+> > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> > > 
+> > > [test failed on linux-next/master c76083fac3bae1a87ae3d005b5cb1cbc761e31d5]
+> > > 
+> > > in testcase: rcutorture
+> > > version: 
+> > > with following parameters:
+> > > 
+> > > 	runtime: 300s
+> > > 	test: default
+> > > 	torture_type: tasks-tracing
+> > > 
+> > > test-description: rcutorture is rcutorture kernel module load/unload test.
+> > > test-url: https://www.kernel.org/doc/Documentation/RCU/torture.txt
+> > > 
+> > > 
+> > > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> > > 
+> > > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> > > 
+> > > 
+> > > If you fix the issue, kindly add following tag
+> > > > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > > > Link: https://lore.kernel.org/oe-lkp/202212312021.bc1efe86-oliver.sang@intel.com
+> > 
+> > <snip>
+> > 
+> > > 
+> > > To reproduce:
+> > > 
+> > >         # build kernel
+> > > 	cd linux
+> > > 	cp config-6.1.0-rc2-00014-g0af8489b0216 .config
+> > > 	make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 olddefconfig prepare modules_prepare bzImage modules
+> > > 	make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+> > > 	cd <mod-install-dir>
+> > > 	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+> > > 
+> > > 
+> > >         git clone https://github.com/intel/lkp-tests.git
+> > >         cd lkp-tests
+> > >         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+> > > 
+> > >         # if come across any failure that blocks the test,
+> > >         # please remove ~/.lkp and /lkp dir to run from a clean state.
+> > 
+> > I was unable to reproduce in the same way as described above
+> > because some files referenced in job-script couldn't be downloaded from
+> > download.01.org/0day :(
+> > 
+> > So I just built rcutorture module as builtin
+> > and I got weird spinlock bug on commit: 0af8489b0216
+> > ("mm, slub: remove percpu slabs with CONFIG_SLUB_TINY")
+> 
+> (+Cc KVM/Paravirt experts)
+> 
+> > full dmesg added as attachment
+> > 
+> > [ 1387.564837][   T57] BUG: unable to handle page fault for address: c108f5f4
+> > [ 1387.566649][   T57] #PF: supervisor write access in kernel mode
+> > [ 1387.567965][   T57] #PF: error_code(0x0003) - permissions violation
+> > [ 1387.569439][   T57] *pde = 010001e1 
+> > [ 1387.570276][   T57] Oops: 0003 [#1] SMP
+> > [ 1387.571149][   T57] CPU: 2 PID: 57 Comm: rcu_torture_rea Tainted: G S                 6.1.0-rc2-00010-g0af8489b0216 #2130 63d19ac2b985fca570c354d8750f489755de37ed
+> > [ 1387.574673][   T57] EIP: kvm_kick_cpu+0x54/0x90
+> > [ 1387.575802][   T57] Code: 2f c5 01 8b 04 9d e0 d4 4e c4 83 15 14 7b 2f c5 00 83 05 08 6d 2f c5 01 0f b7 0c 30 b8 05 00 00 00 83 15 0c 6d 2f c5 00 31 db <0f> 01 c1 83 05 10 6d 2f c5 01 8b 5d f8 8b 75 fc 83 15 14 6d 2f c5
+
+																				^^^^^^
+Yes this is the unfamous hypercall patching bug....
+
+> > 
+
+So what is happening is that Intel and AMD has a *slightly* different instruction reserved for hypercalls
+(paravirt calls from guest to host hypervisor).
+
+KVM developers made a mistake to be 'nice' to the guests and if the guest uses the wrong hypercall instruction
+the KVM attempts to rewrite it with the right instruction.
+
+That can fail, because to avoid security issues, KVM uses the exact same security context as the instruction itself
+(it is as if the instruction was defined such as it overwrote itself)
+This means that is the guest memory is marked read-only in the guest paging, then the write will fail and #PF
+will happen on the wrong hypercall instruction.
+
+Here we have the Intel's instruction (VMCALL, 0f 01 C1), and the host machine is likely AMD which uses VMMCALL instruction
+which is (0F 01 D9)
+
+
+Now any recent Linux guest is supposed to use a right instruction using the alternatives mechanism, but it can if
+the hypervisor passes 'non native' vendor id, like GenunineIntel on AMD machine.
+
+In my testing using named CPU models like you do '-cpu SandyBridge' still passes through host vendor ID (that is the guest
+will see Intel's cpu but with vendor='AutheticAMD') but nobody confirmed me that this is a bug or a feature and I am not
+sure if older qemu versions also did this.
+
+
+Assuming that your host machine is AMD,
+your best bet to check if my theory is right is to boot the guest without triggering the bug, 
+and check in /proc/cpuinfo if the vendor string is 'GenuineIntel'
+
+
+Best regards,
+	Maxim Levitsky
+
+
+[ 1387.580456][   T57] EAX: 00000005 EBX: 00000000 ECX: 00000003 EDX: c108f5a0
+> > [ 1387.582071][   T57] ESI: c5153580 EDI: 00000046 EBP: c69cddf8 ESP: c69cddf0
+> > [ 1387.583775][   T57] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010046
+> > [ 1387.585643][   T57] CR0: 80050033 CR2: c108f5f4 CR3: 0776b000 CR4: 00350e90
+> > [ 1387.587492][   T57] Call Trace:
+> > [ 1387.588365][   T57]  __pv_queued_spin_unlock_slowpath+0x66/0x110
+> > [ 1387.589898][   T57]  __pv_queued_spin_unlock+0x4b/0x60
+> > [ 1387.591040][   T57]  __raw_callee_save___pv_queued_spin_unlock+0x9/0x10
+> > [ 1387.592771][   T57]  do_raw_spin_unlock+0x49/0xa0
+> > [ 1387.593805][   T57]  _raw_spin_unlock_irqrestore+0x53/0xd0
+> > [ 1387.594927][   T57]  swake_up_one+0x4f/0x70
+> > [ 1387.595739][   T57]  __rcu_report_exp_rnp+0x26b/0x470
+> > [ 1387.596730][   T57]  rcu_report_exp_cpu_mult+0x82/0x2f0
+> > [ 1387.597770][   T57]  rcu_qs+0xac/0x160
+> > [ 1387.598503][   T57]  rcu_note_context_switch+0x31/0x1e0
+> > [ 1387.599460][   T57]  __schedule+0xc5/0x770
+> > [ 1387.600195][   T57]  __cond_resched+0x7a/0x100
+> > [ 1387.600996][   T57]  stutter_wait+0x9e/0x2c0
+> > [ 1387.601956][   T57]  rcu_torture_reader+0x162/0x3e0
+> > [ 1387.603048][   T57]  ? rcu_torture_reader+0x3e0/0x3e0
+> > [ 1387.604269][   T57]  ? __kthread_parkme+0xab/0xf0
+> > [ 1387.605420][   T57]  kthread+0x167/0x1d0
+> > [ 1387.606383][   T57]  ? rcu_torture_read_exit_child+0xa0/0xa0
+> > [ 1387.607516][   T57]  ? kthread_exit+0x50/0x50
+> > [ 1387.608517][   T57]  ret_from_fork+0x19/0x24
+> > [ 1387.609548][   T57] Modules linked in:
+> > [ 1387.610187][   T57] CR2: 00000000c108f5f4
+> > [ 1387.610873][   T57] ---[ end trace 0000000000000000 ]---
+> > [ 1387.611829][   T57] EIP: kvm_kick_cpu+0x54/0x90
+> > [ 1387.612653][   T57] Code: 2f c5 01 8b 04 9d e0 d4 4e c4 83 15 14 7b 2f c5 00 83 05 08 6d 2f c5 01 0f b7 0c 30 b8 05 00 00 00 83 15 0c 6d 2f c5 00 31 db <0f> 01 c1 83 05 10 6d 2f c5 01 8b 5d f8 8b 75 fc 83 15 14 6d 2f c5
+> > [ 1387.616715][   T57] EAX: 00000005 EBX: 00000000 ECX: 00000003 EDX: c108f5a0
+> > [ 1387.618242][   T57] ESI: c5153580 EDI: 00000046 EBP: c69cddf8 ESP: c69cddf0
+> > [ 1387.619912][   T57] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010046
+> > [ 1387.621666][   T57] CR0: 80050033 CR2: c108f5f4 CR3: 0776b000 CR4: 00350e90
+> > [ 1387.623128][   T57] Kernel panic - not syncing: Fatal exception
+> > [ 1389.285045][   T57] Shutting down cpus with NMI
+> > [ 1389.297949][   T57] Kernel Offset: disabled
+> > [ 1389.299174][   T57] ---[ end Kernel panic - not syncing: Fatal exception ]---
+
 
