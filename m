@@ -2,88 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0F465A9AE
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 12:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075B165A9B1
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 12:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjAALJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 06:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
+        id S230057AbjAALJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 06:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjAALJJ (ORCPT
+        with ESMTP id S230055AbjAALJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 06:09:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF801161
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 03:08:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672571296;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fBBKzqii62ZjxIZ4kMasNOVjJLy5rfIiuLe5QumouC4=;
-        b=RcstqxMXBNJbrmLaq4hpKlB9efVb/C6TaeJc3Ru43/hyuPoX411nG5EOPgYv3YiJWKeXYR
-        9LL4qLdOGWLNKnEhCX/5w3w/2sEJ0axmOTrd0QLWP/k/Fpo6cvLfMbZEKxxt3Zg0jH3lMk
-        h3gvGbhk1M+WxUHMaWvmSVoYZ9y/QPw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-671-wfjEV4yHMj6M8_-EBnQPLQ-1; Sun, 01 Jan 2023 06:08:15 -0500
-X-MC-Unique: wfjEV4yHMj6M8_-EBnQPLQ-1
-Received: by mail-wm1-f72.google.com with SMTP id l17-20020a05600c1d1100b003d9a145366cso3502690wms.4
-        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 03:08:14 -0800 (PST)
+        Sun, 1 Jan 2023 06:09:30 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050E56177;
+        Sun,  1 Jan 2023 03:09:25 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id l26so16792435wme.5;
+        Sun, 01 Jan 2023 03:09:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=j5PT8q9BxmBpzjhbUsqPnpb+0zMREfMJNYd0Y1lM8e8=;
+        b=fIj7I5D4IRn7p+KGxQY9FI6KOOZaTS+kio1/Q5hNgKVzNgKQs7S+s0c8AS/XWoX6Y0
+         yYfQC46/mvfC9XZFFkjVHcyDyA8iKuaPeS+aGRksLaPDnYwg99Jy+RHh6cJ+r90M9AZ2
+         ak8TEVYm7beWCuJhkcSjYX9LQNOWuw716ih7/1LTkGL/qXjwQKwn8CQJ0GUDEsRWBRZP
+         Redp6ovsDSd5rbozT6NDz2lTac6c1jiFchtgSq/mY71hxRSriEccqkLB3taXRsnL2RRu
+         VK1djaIXyCnVJG28NcrjbKBG1wA+ltUgppwdXXrZH9g0EtItZngPBeo76cvtMHZIqHVw
+         5w8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
+        h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fBBKzqii62ZjxIZ4kMasNOVjJLy5rfIiuLe5QumouC4=;
-        b=xXP1K8zvkABZVtIx22aZZ85daRpW+3Hscw6vLZMaxjX7ZDPcDoEXxNXH9Xcb2upcYz
-         3Xf+EmfZjLw/joM5wvXGO9buh1rP8gOd4GgtKQuixQNpiuJ8CgdN5j+hr5JrnURBT9nF
-         dlklnnmsWBbfiFeygpfwLiUvyK3mVkxkgRRN9qq+K4Z60/uAKiljT+W6b/1DYxhn/m19
-         BlGOU9VGfsMNjDKCBuQkgSQPuojUkJEvJDEKl2ndH8jEre6Q7ytZ84Cz5xlsHg1YqZKB
-         iOLhki7yV/N6lanKNpUP+gEAfuVwZ5Rek+6oN3UFT1PiDojnHWPryFwethpragVVlojp
-         z+pg==
-X-Gm-Message-State: AFqh2krhAFtR1TTZckiS3HkVQnl4bNMUYlstbeLRMx5OUcdzxfgCgYJq
-        q87Pt5ah+JDKjNegPJHi6ta376NuF5Jqd9xKUavBiojOziMb2irb5zElNOPfjEmKofnck9FNtCH
-        pHVz6pWPYCccpEmgR+grULsr+
-X-Received: by 2002:a05:600c:41c2:b0:3d3:5565:3617 with SMTP id t2-20020a05600c41c200b003d355653617mr30193550wmh.24.1672571291059;
-        Sun, 01 Jan 2023 03:08:11 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv3H1oBhA10tTYm0SEh9kpFSr3kuZ1y9+L8b22gb0VvrfW/7eer/yg4p3C3Kirc5w3npOjo+A==
-X-Received: by 2002:a05:600c:41c2:b0:3d3:5565:3617 with SMTP id t2-20020a05600c41c200b003d355653617mr30193528wmh.24.1672571290802;
-        Sun, 01 Jan 2023 03:08:10 -0800 (PST)
-Received: from starship ([89.237.103.62])
-        by smtp.gmail.com with ESMTPSA id q2-20020a1cf302000000b003d1cc0464a2sm34525487wmq.8.2023.01.01.03.08.08
+        bh=j5PT8q9BxmBpzjhbUsqPnpb+0zMREfMJNYd0Y1lM8e8=;
+        b=e0P35g7arFSCYKVfSuZPTSusov+P5fnSHhfH+X+v0hybSBEcd1JjdDOcaXVBHCh6HP
+         sPk+b0jIPcYET1GcuJ8kts+jkrPrdhlyG9FtJSr8LP+foJKcDxrBqoMusk54HwWWN8Pm
+         BbLHMnEwjC4ST+r2OZqs1LX9J0hEC3uNbh3DIJGY5erQy67a562NbmJKkfjmCJNFXQjY
+         1QXcWkPNIa+d5l4zoZL8xHWHGeUZq5C/xugldsr6JJpMrQFZgPHa5iNGDqf8wQwV80Vn
+         ESaENut8lr2Fl+5eMC/HjDbQnT7ysyhzaXixiWGTe+rr1IHRochunYN3A+JstC0i5rsF
+         nx8w==
+X-Gm-Message-State: AFqh2krCSiY4OldliUAJ/VHrfS/E5DwwlM0DvqbRXEdNbqN1bOESa6+G
+        guL5kteJUoAncuWnidvnIUgXozY0fM8=
+X-Google-Smtp-Source: AMrXdXvhUTRGyN7tu1CC8JDlHkNZNkArT47HdE2XJJk6hcK5yi6Wf+ZWV/0OVa6mMVQ90kjiXMgucg==
+X-Received: by 2002:a05:600c:ace:b0:3d1:fe0a:f134 with SMTP id c14-20020a05600c0ace00b003d1fe0af134mr26566718wmr.19.1672571364600;
+        Sun, 01 Jan 2023 03:09:24 -0800 (PST)
+Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
+        by smtp.gmail.com with ESMTPSA id l27-20020a05600c1d1b00b003cfd4e6400csm37758452wms.19.2023.01.01.03.09.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Jan 2023 03:08:10 -0800 (PST)
-Message-ID: <451187de09e9a80f73a0588da65d55d4a8da6552.camel@redhat.com>
-Subject: Re: supervisor write access in kernel mode in
- __pv_queued_spin_unlock_slowpath
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Mike Rapoport <rppt@linux.ibm.com>,
-        Christoph Lameter <cl@linux.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>
-Date:   Sun, 01 Jan 2023 13:08:07 +0200
-In-Reply-To: <Y7E4OZUmvI97tTw7@hyeyoo>
-References: <202212312021.bc1efe86-oliver.sang@intel.com>
-         <Y7EtNNzfxuiX/VEg@hyeyoo> <Y7E4OZUmvI97tTw7@hyeyoo>
+        Sun, 01 Jan 2023 03:09:24 -0800 (PST)
+Message-ID: <c8e312d7584a0c4d42264a2dbeeccb9adb676dd6.camel@gmail.com>
+Subject: Re: [PATCH v2 2/5] iio: pressure: bmp280: Add preinit callback
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 01 Jan 2023 12:09:23 +0100
+In-Reply-To: <20221230181839.43191be2@jic23-huawei>
+References: <cover.1672062380.git.ang.iglesiasg@gmail.com>
+         <724e92e64e6d91d48d762e804b430c716679bccb.1672062380.git.ang.iglesiasg@gmail.com>
+         <20221230181839.43191be2@jic23-huawei>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.2 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,155 +83,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-01-01 at 16:37 +0900, Hyeonggon Yoo wrote:
-> On Sun, Jan 01, 2023 at 03:50:28PM +0900, Hyeonggon Yoo wrote:
-> > On Sat, Dec 31, 2022 at 11:26:25PM +0800, kernel test robot wrote:
-> > > Greeting,
-> > > 
-> > > FYI, we noticed kernel_BUG_at_include/linux/mm.h due to commit (built with gcc-11):
-> > > 
-> > > commit: 0af8489b0216fa1dd83e264bef8063f2632633d7 ("mm, slub: remove percpu slabs with CONFIG_SLUB_TINY")
-> > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> > > 
-> > > [test failed on linux-next/master c76083fac3bae1a87ae3d005b5cb1cbc761e31d5]
-> > > 
-> > > in testcase: rcutorture
-> > > version: 
-> > > with following parameters:
-> > > 
-> > > 	runtime: 300s
-> > > 	test: default
-> > > 	torture_type: tasks-tracing
-> > > 
-> > > test-description: rcutorture is rcutorture kernel module load/unload test.
-> > > test-url: https://www.kernel.org/doc/Documentation/RCU/torture.txt
-> > > 
-> > > 
-> > > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> > > 
-> > > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> > > 
-> > > 
-> > > If you fix the issue, kindly add following tag
-> > > > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > > > Link: https://lore.kernel.org/oe-lkp/202212312021.bc1efe86-oliver.sang@intel.com
-> > 
-> > <snip>
-> > 
-> > > 
-> > > To reproduce:
-> > > 
-> > >         # build kernel
-> > > 	cd linux
-> > > 	cp config-6.1.0-rc2-00014-g0af8489b0216 .config
-> > > 	make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 olddefconfig prepare modules_prepare bzImage modules
-> > > 	make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 INSTALL_MOD_PATH=<mod-install-dir> modules_install
-> > > 	cd <mod-install-dir>
-> > > 	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
-> > > 
-> > > 
-> > >         git clone https://github.com/intel/lkp-tests.git
-> > >         cd lkp-tests
-> > >         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
-> > > 
-> > >         # if come across any failure that blocks the test,
-> > >         # please remove ~/.lkp and /lkp dir to run from a clean state.
-> > 
-> > I was unable to reproduce in the same way as described above
-> > because some files referenced in job-script couldn't be downloaded from
-> > download.01.org/0day :(
-> > 
-> > So I just built rcutorture module as builtin
-> > and I got weird spinlock bug on commit: 0af8489b0216
-> > ("mm, slub: remove percpu slabs with CONFIG_SLUB_TINY")
-> 
-> (+Cc KVM/Paravirt experts)
-> 
-> > full dmesg added as attachment
-> > 
-> > [ 1387.564837][   T57] BUG: unable to handle page fault for address: c108f5f4
-> > [ 1387.566649][   T57] #PF: supervisor write access in kernel mode
-> > [ 1387.567965][   T57] #PF: error_code(0x0003) - permissions violation
-> > [ 1387.569439][   T57] *pde = 010001e1 
-> > [ 1387.570276][   T57] Oops: 0003 [#1] SMP
-> > [ 1387.571149][   T57] CPU: 2 PID: 57 Comm: rcu_torture_rea Tainted: G S                 6.1.0-rc2-00010-g0af8489b0216 #2130 63d19ac2b985fca570c354d8750f489755de37ed
-> > [ 1387.574673][   T57] EIP: kvm_kick_cpu+0x54/0x90
-> > [ 1387.575802][   T57] Code: 2f c5 01 8b 04 9d e0 d4 4e c4 83 15 14 7b 2f c5 00 83 05 08 6d 2f c5 01 0f b7 0c 30 b8 05 00 00 00 83 15 0c 6d 2f c5 00 31 db <0f> 01 c1 83 05 10 6d 2f c5 01 8b 5d f8 8b 75 fc 83 15 14 6d 2f c5
-
-																				^^^^^^
-Yes this is the unfamous hypercall patching bug....
-
-> > 
-
-So what is happening is that Intel and AMD has a *slightly* different instruction reserved for hypercalls
-(paravirt calls from guest to host hypervisor).
-
-KVM developers made a mistake to be 'nice' to the guests and if the guest uses the wrong hypercall instruction
-the KVM attempts to rewrite it with the right instruction.
-
-That can fail, because to avoid security issues, KVM uses the exact same security context as the instruction itself
-(it is as if the instruction was defined such as it overwrote itself)
-This means that is the guest memory is marked read-only in the guest paging, then the write will fail and #PF
-will happen on the wrong hypercall instruction.
-
-Here we have the Intel's instruction (VMCALL, 0f 01 C1), and the host machine is likely AMD which uses VMMCALL instruction
-which is (0F 01 D9)
-
-
-Now any recent Linux guest is supposed to use a right instruction using the alternatives mechanism, but it can if
-the hypervisor passes 'non native' vendor id, like GenunineIntel on AMD machine.
-
-In my testing using named CPU models like you do '-cpu SandyBridge' still passes through host vendor ID (that is the guest
-will see Intel's cpu but with vendor='AutheticAMD') but nobody confirmed me that this is a bug or a feature and I am not
-sure if older qemu versions also did this.
-
-
-Assuming that your host machine is AMD,
-your best bet to check if my theory is right is to boot the guest without triggering the bug, 
-and check in /proc/cpuinfo if the vendor string is 'GenuineIntel'
-
-
-Best regards,
-	Maxim Levitsky
-
-
-[ 1387.580456][   T57] EAX: 00000005 EBX: 00000000 ECX: 00000003 EDX: c108f5a0
-> > [ 1387.582071][   T57] ESI: c5153580 EDI: 00000046 EBP: c69cddf8 ESP: c69cddf0
-> > [ 1387.583775][   T57] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010046
-> > [ 1387.585643][   T57] CR0: 80050033 CR2: c108f5f4 CR3: 0776b000 CR4: 00350e90
-> > [ 1387.587492][   T57] Call Trace:
-> > [ 1387.588365][   T57]  __pv_queued_spin_unlock_slowpath+0x66/0x110
-> > [ 1387.589898][   T57]  __pv_queued_spin_unlock+0x4b/0x60
-> > [ 1387.591040][   T57]  __raw_callee_save___pv_queued_spin_unlock+0x9/0x10
-> > [ 1387.592771][   T57]  do_raw_spin_unlock+0x49/0xa0
-> > [ 1387.593805][   T57]  _raw_spin_unlock_irqrestore+0x53/0xd0
-> > [ 1387.594927][   T57]  swake_up_one+0x4f/0x70
-> > [ 1387.595739][   T57]  __rcu_report_exp_rnp+0x26b/0x470
-> > [ 1387.596730][   T57]  rcu_report_exp_cpu_mult+0x82/0x2f0
-> > [ 1387.597770][   T57]  rcu_qs+0xac/0x160
-> > [ 1387.598503][   T57]  rcu_note_context_switch+0x31/0x1e0
-> > [ 1387.599460][   T57]  __schedule+0xc5/0x770
-> > [ 1387.600195][   T57]  __cond_resched+0x7a/0x100
-> > [ 1387.600996][   T57]  stutter_wait+0x9e/0x2c0
-> > [ 1387.601956][   T57]  rcu_torture_reader+0x162/0x3e0
-> > [ 1387.603048][   T57]  ? rcu_torture_reader+0x3e0/0x3e0
-> > [ 1387.604269][   T57]  ? __kthread_parkme+0xab/0xf0
-> > [ 1387.605420][   T57]  kthread+0x167/0x1d0
-> > [ 1387.606383][   T57]  ? rcu_torture_read_exit_child+0xa0/0xa0
-> > [ 1387.607516][   T57]  ? kthread_exit+0x50/0x50
-> > [ 1387.608517][   T57]  ret_from_fork+0x19/0x24
-> > [ 1387.609548][   T57] Modules linked in:
-> > [ 1387.610187][   T57] CR2: 00000000c108f5f4
-> > [ 1387.610873][   T57] ---[ end trace 0000000000000000 ]---
-> > [ 1387.611829][   T57] EIP: kvm_kick_cpu+0x54/0x90
-> > [ 1387.612653][   T57] Code: 2f c5 01 8b 04 9d e0 d4 4e c4 83 15 14 7b 2f c5 00 83 05 08 6d 2f c5 01 0f b7 0c 30 b8 05 00 00 00 83 15 0c 6d 2f c5 00 31 db <0f> 01 c1 83 05 10 6d 2f c5 01 8b 5d f8 8b 75 fc 83 15 14 6d 2f c5
-> > [ 1387.616715][   T57] EAX: 00000005 EBX: 00000000 ECX: 00000003 EDX: c108f5a0
-> > [ 1387.618242][   T57] ESI: c5153580 EDI: 00000046 EBP: c69cddf8 ESP: c69cddf0
-> > [ 1387.619912][   T57] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010046
-> > [ 1387.621666][   T57] CR0: 80050033 CR2: c108f5f4 CR3: 0776b000 CR4: 00350e90
-> > [ 1387.623128][   T57] Kernel panic - not syncing: Fatal exception
-> > [ 1389.285045][   T57] Shutting down cpus with NMI
-> > [ 1389.297949][   T57] Kernel Offset: disabled
-> > [ 1389.299174][   T57] ---[ end Kernel panic - not syncing: Fatal exception ]---
-
+T24gRnJpLCAyMDIyLTEyLTMwIGF0IDE4OjE4ICswMDAwLCBKb25hdGhhbiBDYW1lcm9uIHdyb3Rl
+Ogo+IE9uIE1vbiwgMjYgRGVjIDIwMjIgMTU6Mjk6MjEgKzAxMDAKPiBBbmdlbCBJZ2xlc2lhcyA8
+YW5nLmlnbGVzaWFzZ0BnbWFpbC5jb20+IHdyb3RlOgo+IAo+ID4gQWRkcyBwcmVpbml0IGNhbGxi
+YWNrIHRvIGV4ZWN1dGUgb3BlcmF0aW9ucyBvbiBwcm9iZSBiZWZvcmUgYXBwbHlpbmcKPiA+IGlu
+aXRpYWwgY29uZmlndXJhdGlvbi4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogQW5nZWwgSWdsZXNp
+YXMgPGFuZy5pZ2xlc2lhc2dAZ21haWwuY29tPgo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9paW8vcHJlc3N1cmUvYm1wMjgwLWNvcmUuYwo+ID4gYi9kcml2ZXJzL2lpby9wcmVzc3VyZS9i
+bXAyODAtY29yZS5jCj4gPiBpbmRleCA0Njk1OWE5MTQwOGYuLmMzN2NmMmNhZWM2OCAxMDA2NDQK
+PiA+IC0tLSBhL2RyaXZlcnMvaWlvL3ByZXNzdXJlL2JtcDI4MC1jb3JlLmMKPiA+ICsrKyBiL2Ry
+aXZlcnMvaWlvL3ByZXNzdXJlL2JtcDI4MC1jb3JlLmMKPiA+IEBAIC0yMTcsNiArMjE3LDcgQEAg
+c3RydWN0IGJtcDI4MF9jaGlwX2luZm8gewo+ID4gwqDCoMKgwqDCoMKgwqDCoGludCAoKnJlYWRf
+cHJlc3MpKHN0cnVjdCBibXAyODBfZGF0YSAqLCBpbnQgKiwgaW50ICopOwo+ID4gwqDCoMKgwqDC
+oMKgwqDCoGludCAoKnJlYWRfaHVtaWQpKHN0cnVjdCBibXAyODBfZGF0YSAqLCBpbnQgKiwgaW50
+ICopOwo+ID4gwqDCoMKgwqDCoMKgwqDCoGludCAoKnJlYWRfY2FsaWIpKHN0cnVjdCBibXAyODBf
+ZGF0YSAqKTsKPiA+ICvCoMKgwqDCoMKgwqDCoGludCAoKnByZWluaXQpKHN0cnVjdCBibXAyODBf
+ZGF0YSAqKTsKPiA+IMKgfTsKPiA+IMKgCj4gPiDCoC8qCj4gPiBAQCAtOTM1LDYgKzkzNiw3IEBA
+IHN0YXRpYyBjb25zdCBzdHJ1Y3QgYm1wMjgwX2NoaXBfaW5mbyBibXAyODBfY2hpcF9pbmZvID0K
+PiA+IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqAucmVhZF90ZW1wID0gYm1wMjgwX3JlYWRfdGVtcCwK
+PiA+IMKgwqDCoMKgwqDCoMKgwqAucmVhZF9wcmVzcyA9IGJtcDI4MF9yZWFkX3ByZXNzLAo+ID4g
+wqDCoMKgwqDCoMKgwqDCoC5yZWFkX2NhbGliID0gYm1wMjgwX3JlYWRfY2FsaWIsCj4gPiArwqDC
+oMKgwqDCoMKgwqAucHJlaW5pdCA9IE5VTEwsCj4gQyBzdGFuZGFyZCBndWFyYW50ZWVzIHRob3Nl
+IGFyZSBzZXQgdG8gTlVMTCBhbnl3YXkgKyB0aGUgZGVmYXVsdCBpcyBvYnZpb3VzLgo+IEhlbmNl
+IGRvbid0IHNldCB0aGVtIHRvIE5VTEwsIGp1c3QgbGVhdmUgdGhlIGF1dG9tYXRpYyBpbml0aWFs
+aXphdGlvbiBvZgo+IHVuc3BlY2lmaWVkIHN0cnVjdHVyZSBlbGVtZW50cyB0byBoYW5kbGUgaXQg
+Zm9yIHlvdS4KCk9LISBOb3RlIHRvIHNlbGY6IGNvbXBpbGVyIGtub3dzIGJlc3QhCgo+ID4gwqB9
+Owo+ID4gwqAKPiA+IMKgc3RhdGljIGludCBibWUyODBfY2hpcF9jb25maWcoc3RydWN0IGJtcDI4
+MF9kYXRhICpkYXRhKQo+ID4gQEAgLTk3OSw2ICs5ODEsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0
+IGJtcDI4MF9jaGlwX2luZm8gYm1lMjgwX2NoaXBfaW5mbyA9Cj4gPiB7Cj4gPiDCoMKgwqDCoMKg
+wqDCoMKgLnJlYWRfcHJlc3MgPSBibXAyODBfcmVhZF9wcmVzcywKPiA+IMKgwqDCoMKgwqDCoMKg
+wqAucmVhZF9odW1pZCA9IGJtcDI4MF9yZWFkX2h1bWlkLAo+ID4gwqDCoMKgwqDCoMKgwqDCoC5y
+ZWFkX2NhbGliID0gYm1lMjgwX3JlYWRfY2FsaWIsCj4gPiArwqDCoMKgwqDCoMKgwqAucHJlaW5p
+dCA9IE5VTEwsCj4gPiDCoH07Cj4gPiDCoAo+ID4gwqAvKgo+ID4gQEAgLTEyMjAsNiArMTIyMywx
+MiBAQCBzdGF0aWMgY29uc3QgaW50IGJtcDM4MF9vZHJfdGFibGVbXVsyXSA9IHsKPiA+IMKgwqDC
+oMKgwqDCoMKgwqBbQk1QMzgwX09EUl8wXzAwMTVIWl3CoMKgwqA9IHswLCAxNTI2fSwKPiA+IMKg
+fTsKPiA+IMKgCj4gPiArc3RhdGljIGludCBibXAzODBfcHJlaW5pdChzdHJ1Y3QgYm1wMjgwX2Rh
+dGEgKmRhdGEpCj4gPiArewo+ID4gK8KgwqDCoMKgwqDCoMKgLyogQk1QM3h4IHJlcXVpcmVzIHNv
+ZnQtcmVzZXQgYXMgcGFydCBvZiBpbml0aWFsaXphdGlvbiAqLwo+ID4gK8KgwqDCoMKgwqDCoMKg
+cmV0dXJuIGJtcDM4MF9jbWQoZGF0YSwgQk1QMzgwX0NNRF9TT0ZUX1JFU0VUKTsKPiA+ICt9Cj4g
+PiArCj4gPiDCoHN0YXRpYyBpbnQgYm1wMzgwX2NoaXBfY29uZmlnKHN0cnVjdCBibXAyODBfZGF0
+YSAqZGF0YSkKPiA+IMKgewo+ID4gwqDCoMKgwqDCoMKgwqDCoGJvb2wgY2hhbmdlID0gZmFsc2Us
+IGF1eDsKPiA+IEBAIC0xMzQ5LDYgKzEzNTgsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGJtcDI4
+MF9jaGlwX2luZm8gYm1wMzgwX2NoaXBfaW5mbwo+ID4gPSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
+LnJlYWRfdGVtcCA9IGJtcDM4MF9yZWFkX3RlbXAsCj4gPiDCoMKgwqDCoMKgwqDCoMKgLnJlYWRf
+cHJlc3MgPSBibXAzODBfcmVhZF9wcmVzcywKPiA+IMKgwqDCoMKgwqDCoMKgwqAucmVhZF9jYWxp
+YiA9IGJtcDM4MF9yZWFkX2NhbGliLAo+ID4gK8KgwqDCoMKgwqDCoMKgLnByZWluaXQgPSBibXAz
+ODBfcHJlaW5pdCwKPiA+IMKgfTsKPiA+IMKgCj4gPiDCoHN0YXRpYyBpbnQgYm1wMTgwX21lYXN1
+cmUoc3RydWN0IGJtcDI4MF9kYXRhICpkYXRhLCB1OCBjdHJsX21lYXMpCj4gPiBAQCAtMTYwNCw2
+ICsxNjE0LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBibXAyODBfY2hpcF9pbmZvIGJtcDE4MF9j
+aGlwX2luZm8KPiA+ID0gewo+ID4gwqDCoMKgwqDCoMKgwqDCoC5yZWFkX3RlbXAgPSBibXAxODBf
+cmVhZF90ZW1wLAo+ID4gwqDCoMKgwqDCoMKgwqDCoC5yZWFkX3ByZXNzID0gYm1wMTgwX3JlYWRf
+cHJlc3MsCj4gPiDCoMKgwqDCoMKgwqDCoMKgLnJlYWRfY2FsaWIgPSBibXAxODBfcmVhZF9jYWxp
+YiwKPiA+ICvCoMKgwqDCoMKgwqDCoC5wcmVpbml0ID0gTlVMTCwKPiA+IMKgfTsKPiA+IMKgCj4g
+PiDCoHN0YXRpYyBpcnFyZXR1cm5fdCBibXAwODVfZW9jX2lycShpbnQgaXJxLCB2b2lkICpkKQo+
+ID4gQEAgLTE3NjIsOSArMTc3MywxMyBAQCBpbnQgYm1wMjgwX2NvbW1vbl9wcm9iZShzdHJ1Y3Qg
+ZGV2aWNlICpkZXYsCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAt
+RUlOVkFMOwo+ID4gwqDCoMKgwqDCoMKgwqDCoH0KPiA+IMKgCj4gPiAtwqDCoMKgwqDCoMKgwqAv
+KiBCTVAzeHggcmVxdWlyZXMgc29mdC1yZXNldCBhcyBwYXJ0IG9mIGluaXRpYWxpemF0aW9uICov
+Cj4gPiAtwqDCoMKgwqDCoMKgwqBpZiAoY2hpcF9pZCA9PSBCTVAzODBfQ0hJUF9JRCkgewo+ID4g
+LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldCA9IGJtcDM4MF9jbWQoZGF0YSwgQk1Q
+MzgwX0NNRF9TT0ZUX1JFU0VUKTsKPiA+ICvCoMKgwqDCoMKgwqDCoC8qCj4gPiArwqDCoMKgwqDC
+oMKgwqAgKiBTb21lIGNoaXBzIGxpa2UgdGhlIEJNUDN4eCBoYXZlIHByZWluaXQgdGFza3MgdG8g
+cnVuCj4gPiArwqDCoMKgwqDCoMKgwqAgKiBiZWZvcmUgYXBwbHlpbmcgdGhlIGluaXRpYWwgY29u
+ZmlndXJhdGlvbi4KPiA+ICvCoMKgwqDCoMKgwqDCoCAqLwo+IEkgd291bGQgZHJvcCB0aGlzIGNv
+bW1lbnQuIEl0J3Mga2luZCBvZiBvYnZpb3VzIHRoYXQgc29tZSBkZXZpY2VzIG5lZWQgeW91Cj4g
+dG8gY2FsbCBzb21ldGhpbmcgaGVyZSAtIG90aGVyd2lzZSB3aHkgaGF2ZSB0aGUgY2xlYXJseSBv
+cHRpb25hbCBjYWxsYmFjaz8KPiBUaGUgc3BlY2lmaWMgQk1QM3h4IHJlcXVpcmVtZW50cyBhcmUg
+d2VsbCBjb21tZW50ZWQgaW4geW91ciBuZXcgY2FsbGJhY2sgYWJvdmUKPiBzbyBkb24ndCB3YW50
+IHRvIGJlIGhlcmUgYXMgd2VsbC4KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChkYXRhLT5jaGlw
+X2luZm8tPnByZWluaXQpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQg
+PSBkYXRhLT5jaGlwX2luZm8tPnByZWluaXQoZGF0YSk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgZGV2X2VycihkZXYsICJlcnJvciBydW5uaW5nIHByZWluaXQgdGFza3MiKTsK
+PiAKPiBFcnJvciBtZXNzYWdlIHByaW50ZWQgb24gc3VjY2Vzcy4uLgoKWXVwLCBzb3JyeSBhYm91
+dCB0aGF0Li4uCgo+IAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAocmV0
+IDwgMCkKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oHJldHVybiByZXQ7Cj4gCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCByZXQsICJlcnJvciBydW5uaW5nIHBy
+ZWluaXQKPiB0YXNrcyIpOwo+IAo+ID4gwqDCoMKgwqDCoMKgwqDCoH0KPiAKVGhhbmtzIGZvciB5
+b3VyIHRpbWUhCkFuZ2VsCg==
 
