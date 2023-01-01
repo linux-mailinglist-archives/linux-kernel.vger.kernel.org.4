@@ -2,141 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D5265AACE
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 18:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F8265AAD2
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 18:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjAARfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 12:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S229792AbjAARwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 12:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjAARfA (ORCPT
+        with ESMTP id S229789AbjAARwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 12:35:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56A22AF7;
-        Sun,  1 Jan 2023 09:34:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA35DB80B26;
-        Sun,  1 Jan 2023 17:34:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D138C433EF;
-        Sun,  1 Jan 2023 17:34:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672594496;
-        bh=0/el2/T4xzlbCGvHgu+q4C1W53UanMaCbjlDHFu8n6U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V00Iw1yW7RG+TP19hINITpmArgkSsJkF3hIkQaSADgYnbGt2VhBz7oZEOk+lzDgZE
-         MlUz0G1ZWH/yZTpi+ysh6eD/ynvq7QViTHKxc9+rSX/4qekX1nvK4Bpof6zK80KC3z
-         OEY0mjAT3zkuluJXCnCY/08bL+KsCkIicZsbjj/IigbYO749qH/zUb0SwNMplMKXGT
-         IUuy72OqnZlhggOYrxbMVW/xIoAR3yy0fpepzGDcYFf4mv/Wd5ZfzmgFLrEcLJgrnw
-         ehaHgbhx152A3HqAzXEZf4ivT5eCeAjnzbTCJWP7PhGCmu7WNrEACuWJ1a+ToXIE2H
-         puNOtQy41RFuw==
-Date:   Sun, 1 Jan 2023 12:34:54 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Samuel Holland <samuel@sholland.org>, stable@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>, kishon@kernel.org,
-        wens@csie.org, jernej.skrabec@gmail.com,
-        wsa+renesas@sang-engineering.com, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.10 1/7] phy: sun4i-usb: Add support for the
- H616 USB PHY
-Message-ID: <Y7HEPphR2cZePsBz@sashalap>
-References: <20221227203512.1214527-1-sashal@kernel.org>
- <530561e9-9ef8-7c8c-8e73-838c86a92266@sholland.org>
- <20221227222330.5ebdf780@slackpad.lan>
+        Sun, 1 Jan 2023 12:52:40 -0500
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62412619
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 09:52:38 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id C2VfpT5rJ8ao3C2Vfp6RdP; Sun, 01 Jan 2023 18:52:36 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 01 Jan 2023 18:52:36 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <401d3328-8da0-056b-8b32-d890bd5508b4@wanadoo.fr>
+Date:   Sun, 1 Jan 2023 18:52:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221227222330.5ebdf780@slackpad.lan>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] watchdog: ixp4xx: Use devm_clk_get_enabled() helper
+Content-Language: fr, en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <5d04e453a4da5cfafb56695a17157fa3ea296511.1672484831.git.christophe.jaillet@wanadoo.fr>
+ <20221231231451.GD2706156@roeck-us.net>
+ <40718555-3c2e-f6b5-889a-0a1817ad39a0@wanadoo.fr>
+ <20230101150758.GA2736217@roeck-us.net>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230101150758.GA2736217@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,WEIRD_PORT autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 10:23:30PM +0000, Andre Przywara wrote:
->On Tue, 27 Dec 2022 15:58:16 -0600
->Samuel Holland <samuel@sholland.org> wrote:
->
->> Hi Sasha,
+Le 01/01/2023 à 16:07, Guenter Roeck a écrit :
+> On Sun, Jan 01, 2023 at 10:35:59AM +0100, Christophe JAILLET wrote:
+>> Le 01/01/2023 à 00:14, Guenter Roeck a écrit :
+>>> On Sat, Dec 31, 2022 at 12:07:27PM +0100, Christophe JAILLET wrote:
+>>>> The devm_clk_get_enabled() helper:
+>>>>      - calls devm_clk_get()
+>>>>      - calls clk_prepare_enable() and registers what is needed in order to
+>>>>        call clk_disable_unprepare() when needed, as a managed resource.
+>>>>
+>>>> This simplifies the code and avoids the need of a dedicated function used
+>>>> with devm_add_action_or_reset().
+>>>>
+>>>> Signed-off-by: Christophe JAILLET <christophe.jaillet-39ZsbGIQGT5GWvitb5QawA@public.gmane.org>
+>>>> ---
+>>>> Note that I get a compilation error because read_cpuid_id() is not defined
+>>>> on my system (x86_64).
+>>>> So I think that a "depends on ARM<something>" in missing in a KConfig file.
+>>>
+>>> It has
+>>>
+>>> 	depends on ARCH_IXP4XX
+>>>
+>>> and CONFIG_IXP4XX_WATCHDOG is not set for me after "make allmodconfig".
 >>
->> On 12/27/22 14:35, Sasha Levin wrote:
->> > From: Andre Przywara <andre.przywara@arm.com>
->> >
->> > [ Upstream commit 0f607406525d25019dd9c498bcc0b42734fc59d5 ]
->> >
->> > The USB PHY used in the Allwinner H616 SoC inherits some traits from its
->> > various predecessors: it has four full PHYs like the H3, needs some
->> > extra bits to be set like the H6, and puts SIDDQ on a different bit like
->> > the A100. Plus it needs this weird PHY2 quirk.
->> >
->> > Name all those properties in a new config struct and assign a new
->> > compatible name to it.
->> >
->> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
->> > Reviewed-by: Samuel Holland <samuel@sholland.org>
->> > Link: https://lore.kernel.org/r/20221031111358.3387297-5-andre.przywara@arm.com
->> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
->> > Signed-off-by: Sasha Levin <sashal@kernel.org>
->> > ---
->> >  drivers/phy/allwinner/phy-sun4i-usb.c | 12 ++++++++++++
->> >  1 file changed, 12 insertions(+)
->> >
->> > diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
->> > index 651d5e2a25ce..230987e55ece 100644
->> > --- a/drivers/phy/allwinner/phy-sun4i-usb.c
->> > +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
->> > @@ -974,6 +974,17 @@ static const struct sun4i_usb_phy_cfg sun50i_h6_cfg = {
->> >  	.missing_phys = BIT(1) | BIT(2),
->> >  };
->> >
->> > +static const struct sun4i_usb_phy_cfg sun50i_h616_cfg = {
->> > +	.num_phys = 4,
->> > +	.type = sun50i_h6_phy,
->> > +	.disc_thresh = 3,
->> > +	.phyctl_offset = REG_PHYCTL_A33,
->> > +	.dedicated_clocks = true,
->> > +	.phy0_dual_route = true,
->> > +	.hci_phy_ctl_clear = PHY_CTL_SIDDQ,
->> > +	.needs_phy2_siddq = true,
+>> Here is what  do.
 >>
->> This will fail to compile without b45c6d80325b ("phy: sun4i-usb:
->> Introduce port2 SIDDQ quirk"). However, like Andre mentioned in
->> reference to the devicetree updates[1], we were not expecting any of
->> these patches to be backported. Since you already dropped the DT
->> portion, there is no need to bother with these two patches either.
->
->Well, definitely not for 5.4 and 5.10, since the essential pinctrl and
->clock patches for the H616 were only added in 5.12, so there is no
->point in having USB support.
->
->I don't know how useful it is for 6.0, but having both patches in 6.1
->would make some sense, since it's an LTS kernel. The H616 SoC became
->usable in 6.0, with the USB patches being delayed back then. And it's
->only those two that are missing from enabling USB support, IIRC.
->The DT part is not really relevant, since you can always use U-Boot's
->DT (recommended) or the DT from any newer kernel.
->
->So from an user's perspective, it would be very helpful to just have:
->- [PATCH AUTOSEL 6.1 12/28]
->- [PATCH AUTOSEL 6.1 13/28]
->Personally I would support this, since it makes all H616 based devices
->much more usable with next year's distribution kernels.
->
->I don't know if this fulfils the stable kernel rules, though, since
->strictly speaking they don't fix anything, but add (USB) support to a
->new SoC. Then again they are little risk, since most of the code is
->guarded by H616 filters, so wouldn't be used by other SoCs.
+>> make allmodconfig
+>> make -j8 drivers/watchdog/ixp4xx_wdt.o
+>>
+>> And I get:
+>>    DESCEND objtool
+>>    CALL    scripts/checksyscalls.sh
+>>    CC      drivers/watchdog/ixp4xx_wdt.o
+>> drivers/watchdog/ixp4xx_wdt.c: In function ‘ixp4xx_wdt_probe’:
+>> drivers/watchdog/ixp4xx_wdt.c:122:15: error: implicit declaration of
+>> function ‘read_cpuid_id’ [-Werror=implicit-function-declaration]
+>>    122 |         if (!(read_cpuid_id() & 0xf) && !cpu_is_ixp46x()) {
+>>        |               ^~~~~~~~~~~~~
+>> cc1: all warnings being treated as errors
+>> make[3]: *** [scripts/Makefile.build:252 : drivers/watchdog/ixp4xx_wdt.o]
+>> Erreur 1
+>> make[2]: *** [scripts/Makefile.build:504 : drivers/watchdog] Erreur 2
+>> make[1]: *** [scripts/Makefile.build:504 : drivers] Erreur 2
+>> make: *** [Makefile:2011 : .] Erreur 2
+>>
+>>
+>> I do agree with you that:
+>>
+>>     - Kconfig looks fine
+>> config IXP4XX_WATCHDOG
+>> 	tristate "IXP4xx Watchdog"
+>> 	depends on ARCH_IXP4XX
+>>
+>>    - Makefile looks fine
+>> obj-$(CONFIG_IXP4XX_WATCHDOG) += ixp4xx_wdt.o
+>>
+>>    - .config looks fine
+>> IXP4XX_WATCHDOG is NOT defined
+>>
+>>    - make drivers/watchdog/ looks fine
+>> No error and ixp4xx_wdt.o is NOT built.
+>>
+>>
+>> However, in the past (if I recollect correctly :) ), a "make <something_that
+>> depends_on_a_config_variable_that_is_not_defined>" returned an error stating
+>> that no rule existed to build the specified target.
+>>
+> 
+> This is not correct. It only applies if the target directory Makefile is
+> excluded by the make flags, or possibly if the target file is a complex
+> one build from various source files.
+> 
+>> I sometimes needed to tweak the Kconfig files to force some compilation when
+>> I didn't have the right tool chain or configuration.
+>> It was maybe not the best practice, but it worked most of the time.
+>>
+>>
+>> Now, with the example above, such a compilation attempt is possible. It is
+>> maybe normal (because of a change somewhere in the way the kernel is built,
+>> because of an updated toolchain on my machine, ...)
+>> This is just fine for me, but looked really surprising.
+>>
+>> That is why I first thought that something was missing in a Kconfig file.
+>>
+>>
+>> So my comments are just a surprise to me to something that seems not to
+>> behave the same as before.
+>>
+> I don't think anything changed. It always worked like that for me.
+> I would suggest to go back to an older kernel and try it there.
+> You'll see exactly the same error. Maybe you just never encountered
+> a file like that.
 
-Quirks and new device ids are accepted in the stable trees. I'll leave
-those two patches on 6.1. Thanks!
+git reset --hard next-20210111			(randomly chosen date)
+make allmodconfig
+make clean
+make -j7 drivers/watchdog/ixp4xx_wdt.o		(too build most of the needed 
+stuff to build a kernel)
+touch drivers/watchdog/ixp4xx_wdt.c
+make -j7 drivers/watchdog/ixp4xx_wdt.o		(too build this file only)
 
--- 
-Thanks,
-Sasha
+   DESCEND  objtool
+   CALL    scripts/atomic/check-atomics.sh
+   CALL    scripts/checksyscalls.sh
+make[3]: *** Aucune règle pour fabriquer la cible « 
+drivers/watchdog/ixp4xx_wdt.o ». Arrêt.
+make[2]: *** [scripts/Makefile.build:471 : __build] Erreur 2
+make[1]: *** [scripts/Makefile.build:496 : drivers/watchdog] Erreur 2
+make: *** [Makefile:1805 : drivers] Erreur 2
+
+
+This is what I had in mind.
+(Aucune règle pour fabriquer la cible... = no rule to build...)
+
+
+So something changed somewhere. Maybe in the way Makefile are now 
+included or not in the build process, as you suggest above.
+
+> 
+> So, in other words, what you should have said is "not compile tested".
+> Alternatively, you could install cross compilers and compile test the
+> patches with those.
+>
+
+No. The patches HAVE been cross compiled after my initial attempt with 
+my default x86_64 failing built.
+
+
+This one was successfully built using:
+   make ARCH=arm CROSS_COMPILE=/usr/bin/arm-linux-gnueabi- allmodconfig
+   make ARCH=arm CROSS_COMPILE=/usr/bin/arm-linux-gnueabi- -j7 
+drivers/watchdog/ixp4xx_wdt.o
+
+
+The other one was successfully built using:
+   make ARCH=mips CROSS_COMPILE=mips64-linux-gnuabi64- allmodconfig
+   Changing CONFIG_MACH_LOONGSON32 to y, instead of 
+CONFIG_MIPS_GENERIC_KERNEL
+   make ARCH=mips CROSS_COMPILE=mips64-linux-gnuabi64- -j7 
+drivers/watchdog/loongson1_wdt.o
+
+I've long been reluctant to use cross-compiler because of low disk space 
+on my system. But I've changed my mind recently and now I do cross 
+compile. (see [1] if needed as example also with ARCH=arm)
+
+
+My comments below the --- in the patches should not be taken as "I've 
+not managed to build with the patch", but "I've been surprised to get an 
+issue with x86_64, then cross-compiled with the relevant toolchain. 
+Then, I reported what looked like a potential issue when building with 
+x86_64."
+
+CJ
+
+[1]: 
+https://lore.kernel.org/all/dc5a2157-19c8-4498-6288-d7513ad3dde2@wanadoo.fr/
+
+> 
+> Thanks,
+> Guenter
+> 
+
