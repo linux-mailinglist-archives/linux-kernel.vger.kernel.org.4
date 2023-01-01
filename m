@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91AEA65AAF4
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 19:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E697965AAF2
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 19:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjAASRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 13:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
+        id S230009AbjAASR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 13:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjAASRY (ORCPT
+        with ESMTP id S229604AbjAASRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 1 Jan 2023 13:17:24 -0500
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358D92AFD
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D012BC3
         for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 10:17:22 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id D4DBF5C002F;
-        Sun,  1 Jan 2023 13:17:19 -0500 (EST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 731815C0039;
+        Sun,  1 Jan 2023 13:17:21 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 01 Jan 2023 13:17:19 -0500
+  by compute5.internal (MEProxy); Sun, 01 Jan 2023 13:17:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672597039; x=1672683439; bh=hv
-        kPrr/ZBNzTZaPvAZqJb8WYe/S8XnUo9LM54WyjUhs=; b=faR80+YKxD7OBgqVfS
-        GBWa1BvGuSV6B8ExirQNn27xe2gal16pNpGEgUjS22yAUQGhEBa3qQWVg4GYIJJU
-        AiS9PKe4GrU++FSe1nSZWWqbMR6ZmdoIMGieoljSG4FjXOaWBuMk9FUaYl3Bhc2V
-        PLscU0ydkDPmse2p6DX5ukW+i1QoKc2R+ZGlaZr+W/7cY6+uwVVs6NWR55GzSfWU
-        Me459g7vOiaS+8bBk4yNqRju44/xhaGR9oTCP8mF47kIb7p3uBpKLgtUv3XhlpzK
-        6s9mlIxCvp5zarhvnTe2ebw/CoYO7ZmryRiWOrnNIVHRHYlIx5fX2bvFdgP7toPM
-        9OHQ==
+        :subject:subject:to:to; s=fm3; t=1672597041; x=1672683441; bh=E0
+        6gK8B1k5R+4obR/pb85rIU152DGA90BBobWIrecS8=; b=0Ln4PadVciBogZjekQ
+        2pS+AmcHB3Z/l6e+7rIqjIB1Ssvq2CPP9JIv3KgdkWVpWx6y3N1yTgkX9h+6OY7+
+        HW9L/p+8GM5YwcNe4q+ymkSZIqzqhaiUF6iFiH6ZlbYkTcGOdr2gAqNLzApOExY7
+        t4ODXJgoMa0zqp37nj5D9Q2WONTWYkBP5jWrw2G5yqCEJviHU+OyfSqUzZ0R6P/b
+        ZRd1RQMhbixVW8rZmOcW4BTz28NpNrOUZiRr1dv3eR1OhEBJUIvcfV9/r1w1B1qQ
+        6D1SfKlxAadkQThAzExq/M7hRYv2N4MtHXP/TD2dy7HmYBGbGdQs4ylf4nAOWYU5
+        r9rQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672597039; x=1672683439; bh=hvkPrr/ZBNzTZ
-        aPvAZqJb8WYe/S8XnUo9LM54WyjUhs=; b=OfZwvdM/YIE2s+Lc5c3u3DmUlD8jI
-        5CbVZKrgVeynAkzMfxw2nRN3uKTpVs8FX8FJqDMhDcQgj1/BcZabK6+FlTRH13KQ
-        2aCXyuUtBbO9/4RF5RbOn5EXdC0TOTcQENCNmwGnEGL80D/EOIXkkGsPL/dolAP/
-        WtPzqUhEBwgbM+lAcd4NxTwzmGRVikN4gyhNZXFkMab/zUwNIQWA/dvhm9zi5BQl
-        IUELh9ZIuBCDjTHPDzy/++W+JoqExea/8z4RbQ9hT17FOJYXs8jfUIDbBaz+9gVv
-        H/APnztMrdWhGQYCbkeiDOuok8J3O8YM7j42p4iTX5HOxVXe8BxuiVa0g==
-X-ME-Sender: <xms:L86xY2Dw5jbcnl7mI6RB1vUMFZKApB-0zYUx6BtyHNqmIgUg_kEzzw>
-    <xme:L86xYwi1wPw8qBTrTAiaw4Ett6L8sheU4ARJp5VQcbJ9V0klBFKlhR5KXUNk8VkjQ
-    qWfiK_pjBe5clr6WA>
-X-ME-Received: <xmr:L86xY5mccovdYGvzJdRSVYzaR2nTHxdteHwz2Fkw-RwD2-t28aMQKd2Pr7NdnwzHMeFhwJwibIV5f-k95f22pKJtreuV_RGoRFZguiKEa3CIRA-H83_50Cfks2KedID9s6uCQA>
+        :x-sasl-enc; s=fm2; t=1672597041; x=1672683441; bh=E06gK8B1k5R+4
+        obR/pb85rIU152DGA90BBobWIrecS8=; b=D5gzXsaYc/R85U8dvuMeHjfDFIJ/v
+        VQGQAZppwsjhHP9B4u/ijxQXtOxc7S8Nodp/K5uN7ggP6w7adlq3Qz1A2C7YcveP
+        ikUcAJfVVl/FHkxO7MWOw6bQUPc6kWZeQYJcBNitjSqZGLwlyd1xQZ+3hU/+hOFH
+        slR7xlmlrsGyWimgPppH3IuyDDaOXp17lOn99TRWeMWmKLKriTiSn8wjw5IRg3bX
+        XEHtGiz6YXRQLjBce3NTgP/ZdQ8Hkulix9+8wCh92E5aNakx6G0sd8eAkw0JcjKk
+        Lh3IZk80esbjQYk2xSIGJvRHU7VbxpsV87CECfwN4sMD5TRapmzyJQ9RA==
+X-ME-Sender: <xms:MM6xYwQFLyjDCUgASPQ4s01wyatskScV_mbldqOrnbINYd1gzyFOaQ>
+    <xme:MM6xY9zWLLrrZOZghmP-wkYP767NH79R88KUzUkjYWMVGQeZQgdUO25eZmk-u77ug
+    M8XHtVf4a9yUz1rEw>
+X-ME-Received: <xmr:MM6xY917UWDGPfTd-J5kJBsKOcxipSXlCiqBJYBYwpYG-JZWTcD0jGo9UFK42DoCMd4nS_BrsfqHSmtD-ILYvfBre3p6_2cwCN0KrFa6vBHQTI2lbUhSimXzYXNmC8UWuunlBA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedtgddutdekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedtgddutdekucetufdoteggod
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
     udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:L86xY0yPbaje1rcdSIxdm8d4JijfwW2JRG1-xbetbqTntr04sBm-Ng>
-    <xmx:L86xY7QPuGOFJC_eZ8z3Dufjh0aE9yYYKTYFENR55-C0iVaN_wcJgw>
-    <xmx:L86xY_YDUeZg7CSIH-92rE-VMqXQK2XVO_dxQ0_qZOvG8_hZbn0l-w>
-    <xmx:L86xY6IeS5R1J8IAigzbxeyiz5GrwYA5qRgqty0_Vx2iWks9b69Ljg>
+X-ME-Proxy: <xmx:MM6xY0C3mVJ90UiUoy1Xt1i52eBfnLGHtkNJNPyQMVbnMwuj5ffddw>
+    <xmx:MM6xY5hKWvFiX9NykCt5QWG93QhCHxectXwkHoPF0DMwRKn6FRpVBQ>
+    <xmx:MM6xYwrvfPelMtC4L_KLju_OTBOjY2bPJfTdLY4Of-pEonQXcWFZiA>
+    <xmx:Mc6xYyYXVXMfCbmI87tafHWH3zhGEZ9dEEdK47uq4MFjII2Y404oag>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 1 Jan 2023 13:17:18 -0500 (EST)
+ 1 Jan 2023 13:17:20 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         YueHaibing <yuehaibing@huawei.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH v2 1/2] kernel/reboot: Use the static sys-off handler for any priority
-Date:   Sun,  1 Jan 2023 12:17:14 -0600
-Message-Id: <20230101181715.42199-2-samuel@sholland.org>
+Subject: [PATCH v2 2/2] firmware/psci: Switch to the sys-off handler API
+Date:   Sun,  1 Jan 2023 12:17:15 -0600
+Message-Id: <20230101181715.42199-3-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20230101181715.42199-1-samuel@sholland.org>
 References: <20230101181715.42199-1-samuel@sholland.org>
@@ -94,73 +94,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 587b9bfe0668 ("kernel/reboot: Use static handler for
-register_platform_power_off()") addded a statically-allocated handler
-so register_sys_off_handler() could be called before the slab allocator
-is available.
+Any other poweroff handlers registered at the default priority will
+run before the legacy pm_power_off() function. Register the PSCI
+poweroff handler with the correct priority to ensure it runs first.
 
-That behavior was limited to the SYS_OFF_PRIO_PLATFORM priority.
-However, it is also required for handlers such as PSCI on ARM and SBI on
-RISC-V, which should be registered at SYS_OFF_PRIO_FIRMWARE. Currently,
-this call stack crashes:
+PSCI_0_2_FN_SYSTEM_OFF never returns, so the value returned from
+psci_sys_poweroff() is meaningless, but that function must return
+some value to have the right prototype for a notifier callback.
 
-  start_kernel()
-    setup_arch()
-      psci_dt_init()
-        psci_0_2_init()
-          register_sys_off_handler()
-            kmem_cache_alloc()
-
-Generalize the code to use the statically-allocated handler for the
-first registration, regardless of priority. Check .sys_off_cb for
-conflicts instead of .cb_data; some callbacks (e.g. firmware drivers)
-do not need any per-instance data, so .cb_data could be NULL.
-
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
 Changes in v2:
  - Update commit messages
 
- kernel/reboot.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/firmware/psci/psci.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index 3bba88c7ffc6..38c18d4f0a36 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -327,7 +327,7 @@ static int sys_off_notify(struct notifier_block *nb,
- 	return handler->sys_off_cb(&data);
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index e7bcfca4159f..6d528021925d 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -13,7 +13,6 @@
+ #include <linux/errno.h>
+ #include <linux/linkage.h>
+ #include <linux/of.h>
+-#include <linux/pm.h>
+ #include <linux/printk.h>
+ #include <linux/psci.h>
+ #include <linux/reboot.h>
+@@ -322,9 +321,11 @@ static struct notifier_block psci_sys_reset_nb = {
+ 	.priority = 129,
+ };
+ 
+-static void psci_sys_poweroff(void)
++static int psci_sys_poweroff(struct sys_off_data *data)
+ {
+ 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
++
++	return NOTIFY_DONE;
  }
  
--static struct sys_off_handler platform_sys_off_handler;
-+static struct sys_off_handler early_sys_off_handler;
+ static int psci_features(u32 psci_func_id)
+@@ -603,7 +604,9 @@ static void __init psci_0_2_set_functions(void)
  
- static struct sys_off_handler *alloc_sys_off_handler(int priority)
- {
-@@ -338,10 +338,8 @@ static struct sys_off_handler *alloc_sys_off_handler(int priority)
- 	 * Platforms like m68k can't allocate sys_off handler dynamically
- 	 * at the early boot time because memory allocator isn't available yet.
- 	 */
--	if (priority == SYS_OFF_PRIO_PLATFORM) {
--		handler = &platform_sys_off_handler;
--		if (handler->cb_data)
--			return ERR_PTR(-EBUSY);
-+	if (!early_sys_off_handler.sys_off_cb) {
-+		handler = &early_sys_off_handler;
- 	} else {
- 		if (system_state > SYSTEM_RUNNING)
- 			flags = GFP_ATOMIC;
-@@ -358,7 +356,7 @@ static struct sys_off_handler *alloc_sys_off_handler(int priority)
+ 	register_restart_handler(&psci_sys_reset_nb);
  
- static void free_sys_off_handler(struct sys_off_handler *handler)
- {
--	if (handler == &platform_sys_off_handler)
-+	if (handler == &early_sys_off_handler)
- 		memset(handler, 0, sizeof(*handler));
- 	else
- 		kfree(handler);
+-	pm_power_off = psci_sys_poweroff;
++	register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
++				 SYS_OFF_PRIO_FIRMWARE,
++				 psci_sys_poweroff, NULL);
+ }
+ 
+ /*
 -- 
 2.37.4
 
