@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF37165A9F2
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 13:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF5D65A9F8
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 Jan 2023 13:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjAAMKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 07:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        id S230088AbjAAMYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 07:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbjAAMKT (ORCPT
+        with ESMTP id S229447AbjAAMYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 07:10:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC5E2BCF;
-        Sun,  1 Jan 2023 04:10:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63C33B80B44;
-        Sun,  1 Jan 2023 12:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E4A4BC433F0;
-        Sun,  1 Jan 2023 12:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672575016;
-        bh=aInGmOOkvL14/uFCkax5wGfoGW9I+nHkivTy0GUUHzI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=vLBfdkZw/qNqsYyRTtL8+exW6aKf2E340dEc5Dw654mvDfes3Wrl+oXH4wqujb6yh
-         qzeaveSn1DQktWhCKmAx96hrZyyk2zewH8Wj2b9UC5w+RSDsrfDhZPor7QJNOeyAWe
-         /pMUmTHua/pB6wblkCBu+V+1flvbAdbRRCmb779Sv7I1dCiaaelWpmH8PiPVwvu6AU
-         T+5zSSubGTrUFkV9OQu95UklsvuK4Mk9J/xgeFdHFeJdyuB95jx8QBSp08aoPw3Un7
-         jJcajkeu07q5JjiBYBCX89X9KKfu14caBK0PZJhSxSG2/X6yq6nSwA43rQj1Mq4gi2
-         7Lknpttgp/q0w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C88A6C395E0;
-        Sun,  1 Jan 2023 12:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 1 Jan 2023 07:24:34 -0500
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9060EB2D;
+        Sun,  1 Jan 2023 04:24:32 -0800 (PST)
+Received: by mail-qt1-f176.google.com with SMTP id j16so20579060qtv.4;
+        Sun, 01 Jan 2023 04:24:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WU4mZYTUdP8Bxx/sJlJybQ4hqWHwyg4u2SGVhjlH2Cc=;
+        b=wU/CG4TabFTYmmJ1pD8z/qhh49MZPZZO2u1BgiLrq70h2T717iYIVaRV4FlToJC1W+
+         /zI8tdz3FtTzIO6nWZXoP1Kh8VPMV25kwWIJ2k1bwq4QM7SyfxyH/1ixc++PUqLnUm81
+         n3KmU8MuXCIRPKWXeGbbog2EdQX864bUqkqb6zl/U6moeT4iLHbNcZflUBf5KwsIzxjm
+         HkZCUDFvqAg92gmSVSWUisx7DLkg/Dd48kThZcfVIL9oGj0W3pAQJPXBeSdmM6AJ3Gl1
+         bPXtVmNbYJRRkzfxjX1qGP1wG+yfgdjaws4RR72wEyoP8PSz0c1k/EF5EQ66hCKmSuDJ
+         CfHw==
+X-Gm-Message-State: AFqh2kpch8SdU2xc66Z76BvnVi6u6dw+pWmBaxxA/oyeGE0CJ7CYWh38
+        ahlkPPj/4INM5AxJBUGKP0pxgFpeZ9AcMQ==
+X-Google-Smtp-Source: AMrXdXt8+2A2+spLle73KkjUVhNnLC0+ybEtCWAamfYqgp0xlDVpuKlQkHq1hLS4BqaeFfEpIKe9/g==
+X-Received: by 2002:a05:622a:5144:b0:3a5:ad81:8aff with SMTP id ew4-20020a05622a514400b003a5ad818affmr58326519qtb.55.1672575871257;
+        Sun, 01 Jan 2023 04:24:31 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id r19-20020ac87953000000b00342f8d4d0basm16095352qtt.43.2023.01.01.04.24.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 Jan 2023 04:24:31 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id e141so27917016ybh.3;
+        Sun, 01 Jan 2023 04:24:30 -0800 (PST)
+X-Received: by 2002:a25:d103:0:b0:75d:3ecb:1967 with SMTP id
+ i3-20020a25d103000000b0075d3ecb1967mr3169037ybg.604.1672575870549; Sun, 01
+ Jan 2023 04:24:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: ipa: use proper endpoint mask for suspend
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167257501581.16085.16985413103568586770.git-patchwork-notify@kernel.org>
-Date:   Sun, 01 Jan 2023 12:10:15 +0000
-References: <20221230223304.2137471-1-elder@linaro.org>
-In-Reply-To: <20221230223304.2137471-1-elder@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, caleb.connolly@linaro.org, mka@chromium.org,
-        evgreen@chromium.org, andersson@kernel.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20221227082932.798359-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
+ <397291cd-4953-8b47-6021-228c9eb38361@landley.net>
+In-Reply-To: <397291cd-4953-8b47-6021-228c9eb38361@landley.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 1 Jan 2023 13:24:19 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVX4Yz-zHvnwB0oCuLfiNAiEsSupcyjfeH+1oKTfQKC9A@mail.gmail.com>
+Message-ID: <CAMuHMdVX4Yz-zHvnwB0oCuLfiNAiEsSupcyjfeH+1oKTfQKC9A@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v6.2-rc1
+To:     Rob Landley <rob@landley.net>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        kasan-dev@googlegroups.com,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Rob,
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+On Sun, Jan 1, 2023 at 2:22 AM Rob Landley <rob@landley.net> wrote:
+> On 12/27/22 02:35, Geert Uytterhoeven wrote:
+> > sh4-gcc11/sh-allmodconfig (ICE = internal compiler error)
+>
+> What's your actual test config here? Because when I try make ARCH=sh
+> allmodconfig; make ARCH=sh it dies in arch/sh/kernel/cpu/sh2/setup-sh7619.c with:
 
-On Fri, 30 Dec 2022 16:33:04 -0600 you wrote:
-> It is now possible for a system to have more than 32 endpoints.  As
-> a result, registers related to endpoint suspend are parameterized,
-> with 32 endpoints represented in one more registers.
-> 
-> In ipa_interrupt_suspend_control(), the IPA_SUSPEND_EN register
-> offset is determined properly, but the bit mask used still assumes
-> the number of enpoints won't exceed 32.  This is a bug.  Fix it.
-> 
-> [...]
+[re-adding the URL you deleted]
 
-Here is the summary with links:
-  - [net] net: ipa: use proper endpoint mask for suspend
-    https://git.kernel.org/netdev/net/c/d9d71a89f28d
+> > [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Following to
+http://kisskb.ellerman.id.au/kisskb/target/212841/ and
+http://kisskb.ellerman.id.au/kisskb/buildresult/14854440/
+gives you a page with a link to the config.
 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
