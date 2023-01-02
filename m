@@ -2,98 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FE965AE19
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BA465AE1D
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbjABI2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 03:28:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S231817AbjABI3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 03:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbjABI20 (ORCPT
+        with ESMTP id S231785AbjABI3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 03:28:26 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1392186
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:28:20 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so27642257pjh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 00:28:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tWYzTA7raDtUxD/VqUrbyJ284rX1lgj8dyWdOkvF1/E=;
-        b=NYz9nZkWD8n7Y+KSMqiNTxN+6FhHH3GXtAGRsxrjjih7ndCEXFdM0rMvMEySOwDxA+
-         xLqAKs8/8C+3uIu3WtNB+TCcHonmimcA2f/gaJAfiM/o+UQJqULcllRH2j5x6uzkHuE+
-         zi9stt2ateVWUyHyovEc8o+r6aK+n9fO8Gtui/6sTy97uwfctvBGAeiySoOVgtzFrZ7r
-         UXbZWKKKQc8nm/FjDKa3hwczLw3X6cthv3U1qN1VeNoRyVc4g7U7ivYqFWYec66nYCPm
-         oqEmqO6U2QYkouRMyzxijwLYxDbjTxWITCxbmd3eE4kXcyeQEbDNR3K9TonsB4XLjABS
-         k8jg==
+        Mon, 2 Jan 2023 03:29:18 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D52111A;
+        Mon,  2 Jan 2023 00:29:17 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id x11so21999960qtv.13;
+        Mon, 02 Jan 2023 00:29:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tWYzTA7raDtUxD/VqUrbyJ284rX1lgj8dyWdOkvF1/E=;
-        b=HGldbAa3dmOsEnsGtyJwEJYRtSLKqCKGdA3GcHKMC4rcGdrlWJA299H/Ln6JwpNx0x
-         biNLeMRDSXOAJ5dNNXMBeX1PwveCuT80cfvybgiFjxvjD9upiPG6Hk9fyDXgG7AMFGI8
-         LlMFIfln+q1TGgw6sbSDCV7/802Saejb3DayuimCZVpN/yCfc0/ic5VIfKha/JF4Fw/T
-         HsjF7y93jy+N/Es7VGlqEfZGgvaxK4XV+4HMamvqGp1DuY1QB2DCgLyfbxP7ca9e4TFe
-         Kuj10EhTlpaS8cF0peyCXxqkd9BMsuW/k4WH4oT1YLL4nPNXPNghuWh+0Il6skeT4EWz
-         Y1ig==
-X-Gm-Message-State: AFqh2kobRmKInL0t3Fy655KnZp7fDVw49SQMn5sL5H2anyXc3Gq9vDKD
-        3xgq/Ba2vuddu/rSZOgRl5Y8O2sCyuxgAaSb
-X-Google-Smtp-Source: AMrXdXuCvB4Q/rCA0blb/+/pytP9qgF48OIE+yOs+ZahyOcj0vAEeerV/ZscDpOywoT65AXgLJwZjg==
-X-Received: by 2002:a05:6a20:13a6:b0:af:9c75:6699 with SMTP id w38-20020a056a2013a600b000af9c756699mr67051926pzh.1.1672648099525;
-        Mon, 02 Jan 2023 00:28:19 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id q6-20020a655246000000b004468cb97c01sm16697724pgp.56.2023.01.02.00.28.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 00:28:18 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Tsahee Zidenberg <tsahee@annapurnalabs.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] irqchip/alpine-msi: Fix refcount leak in alpine_msix_init_domains
-Date:   Mon,  2 Jan 2023 12:28:10 +0400
-Message-Id: <20230102082811.3947760-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=/zbtsyLDE+wPwkATs9/xlAjvp9QCBVfBrqTl0t3/H28=;
+        b=zfVJfUjJxfNZFm+fOAIIQDoF1RPJiXlZlW5r2BTlyzO27voUQ1/MPbJNKpkgQZHYO6
+         ncitw7pzRBRkH+7xZXhcuAdhUcoA1Yt//GUvpWoSth7622YCysgcJEFnP8uZIrnZ8WkB
+         bIfHd49SB8mvX/npu9WpCbqWqjS+6g5UH1HiZhcSQgdlozlYX4bI5rpOQeUXTv+ab3Vm
+         hawHhN3d4s0h9Nsoh2c1BbsiDMK+hi2Dbjz0tuK4mZOWKSX4JM5slFQqwLAs9w3G9Ls0
+         TXT+jqRAoNulOGJousjyr7NWO7Si4V5jPvSO4ZJwn0gh+Q1zNepILDCldod8iDUt4Z1R
+         zL5w==
+X-Gm-Message-State: AFqh2kowEi0V7KhonuEmjBN822pb4/zLjbhXewOD8EPMI5cH4xYw5PoF
+        tM536n18Pl7EYrhg9a9uctC54z4i5EnsnA==
+X-Google-Smtp-Source: AMrXdXt5NNg88dVwyDDq9UVgnkvvrW5e4RSfkCI0CSHATZNQdL+Ckbog6yU9V7eC2vg3rUrjCTHTcA==
+X-Received: by 2002:ac8:7389:0:b0:3a5:264c:5f38 with SMTP id t9-20020ac87389000000b003a5264c5f38mr64140324qtp.63.1672648155889;
+        Mon, 02 Jan 2023 00:29:15 -0800 (PST)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id z18-20020ac875d2000000b003995f6513b9sm17131473qtq.95.2023.01.02.00.29.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 00:29:15 -0800 (PST)
+Received: by mail-yb1-f171.google.com with SMTP id 188so13214228ybi.9;
+        Mon, 02 Jan 2023 00:29:14 -0800 (PST)
+X-Received: by 2002:a25:aae1:0:b0:6fc:1c96:c9fe with SMTP id
+ t88-20020a25aae1000000b006fc1c96c9femr5228868ybi.36.1672648154519; Mon, 02
+ Jan 2023 00:29:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com> <20221019203034.3795710-1-Jason@zx2c4.com>
+ <20221221145332.GA2399037@roeck-us.net> <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
+ <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk> <20221221155641.GB2468105@roeck-us.net>
+ <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
+ <b2144334261246aa8dc5004c5f1a58c9@AcuMS.aculab.com> <f02e0ac7f2d805020a7ba66803aaff3e31b5eeff.camel@t-online.de>
+ <357cbd67260040e4bcf17d519aaafdcb@AcuMS.aculab.com>
+In-Reply-To: <357cbd67260040e4bcf17d519aaafdcb@AcuMS.aculab.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 2 Jan 2023 09:29:02 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWP2GoBU8nwwDP2m_SUxV2sD67nTPyKjQ0Skjc7q7bcNw@mail.gmail.com>
+Message-ID: <CAMuHMdWP2GoBU8nwwDP2m_SUxV2sD67nTPyKjQ0Skjc7q7bcNw@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Holger Lubitz <holger.lubitz@t-online.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_irq_find_parent() returns a node pointer with refcount incremented,
-We should use of_node_put() on it when not needed anymore.
-Add missing of_node_put() to avoid refcount leak.
+Hi David,
 
-Fixes: e6b78f2c3e14 ("irqchip: Add the Alpine MSIX interrupt controller")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/irqchip/irq-alpine-msi.c | 1 +
- 1 file changed, 1 insertion(+)
+On Fri, Dec 30, 2022 at 12:39 PM David Laight <David.Laight@aculab.com> wrote:
+> Thinking further the fastest strcmp() probably uses big-endian word compares
+> with a check for a zero byte.
+> Especially on 64 bit systems that support misaligned loads.
+> But I'd need to think hard about the actual details.
 
-diff --git a/drivers/irqchip/irq-alpine-msi.c b/drivers/irqchip/irq-alpine-msi.c
-index 5ddb8e578ac6..fc1ef7de3797 100644
---- a/drivers/irqchip/irq-alpine-msi.c
-+++ b/drivers/irqchip/irq-alpine-msi.c
-@@ -199,6 +199,7 @@ static int alpine_msix_init_domains(struct alpine_msix_data *priv,
- 	}
- 
- 	gic_domain = irq_find_host(gic_node);
-+	of_node_put(gic_node);
- 	if (!gic_domain) {
- 		pr_err("Failed to find the GIC domain\n");
- 		return -ENXIO;
--- 
-2.25.1
+arch/arc/lib/strcmp-archs.S
+arch/csky/abiv2/strcmp.S
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
