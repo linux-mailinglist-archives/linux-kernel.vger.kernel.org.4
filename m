@@ -2,119 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABE565B1A8
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5BB65B180
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235973AbjABL5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S232501AbjABLvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbjABL45 (ORCPT
+        with ESMTP id S232662AbjABLuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:56:57 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC65C2DF0;
-        Mon,  2 Jan 2023 03:56:56 -0800 (PST)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 50919119FCEB;
-        Mon,  2 Jan 2023 12:49:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1672660161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ajhGT9QUg+fbKi5W35a5UF/UZ/AD4ae8TaelrcZEChk=;
-        b=psmkqCbUvHaHLoK0A2BOLekypB7LQEEptw3268Tf7MqJgJOg/mJaft8W9y8+V5+yVA0jVZ
-        gqqxciVgmCjK1wl8L45I5ln8pPAp/J8k400EluhE0OTmu3lgTkLRyHJsHZJi3FkU1OjU8i
-        y6fA4CPl/VXyq8WXpd4WsqklpQwv45U=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     linux-kernel@vger.kernel.org
-Cc:     Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
-Subject: Re: BUG: KFENCE: use-after-free read in bfq_exit_icq_bfqq+0x132/0x270
-Date:   Mon, 02 Jan 2023 12:49:19 +0100
-Message-ID: <1842801.CQOukoFCf9@natalenko.name>
-In-Reply-To: <8202004.NyiUUSuA9g@natalenko.name>
-References: <8202004.NyiUUSuA9g@natalenko.name>
+        Mon, 2 Jan 2023 06:50:46 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4C263C6;
+        Mon,  2 Jan 2023 03:50:45 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id qk9so66109151ejc.3;
+        Mon, 02 Jan 2023 03:50:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XiRDUPHQfJKrh1tv7ySme3BRWwotcQPxzDkvFbZofLA=;
+        b=hzCiH0BUxJMKBvB2Z9EyQmXK6dDRsa7ZpCuTT4xPyBDVy+ovurNFPaP64wyhjBQ44Q
+         IAiab6WKo0rs0hGg/YSO93LryQBOJudHoKhiYG1OHc2cF2q1wTysVeYqu7MQNL4KWra2
+         ICrjhxzSo4T5LwA4HOvKQs8BJehlMPNBaw3p+5QRyZkfIc0XTt369sCjZOeLCCgv31al
+         Z8y7f+WEtSG+aWxZUxS7mlszVCg+1KLpg0y0CCnseEPcBcdZsXeajUZ+RgiNLLB8UCEW
+         6mNC5h85zyq+aNNYm6Jebizlivyh3AXCBlDyaF3+vmvG8zdTzyaP4lJ2xLTzAhSg3ppG
+         Kw1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XiRDUPHQfJKrh1tv7ySme3BRWwotcQPxzDkvFbZofLA=;
+        b=sp2SxBL7q4H6fq5TVcW3dwFibTcbH6uh24bJbTQnwGKJtop64oQ3lC8hzrhfg0H7Kq
+         tD2iUJX2W9qG0ep3j2Ljn0n7VoKIGN1pi+Rof8DsaL7GHyHclJAqlEYlcsz2DLc5jMqN
+         90vagcSYeDBBrkEhMXEwcOoftrvCu7Iw7quiLxZ0ajEEjKU4TN4WxNLy8n1tC6VKy2d1
+         vh9kaf2YI0KLVHENZgsyiC5UBZ1I2AsQjDmwJ0cM79976tXpre/Ft12Mw6/6zmzY/hoF
+         sLBQaLXggaU8r/fwtehncAzrSCyef+e4hJQl2j0qP7+zuQONSnxr0EiiyPKDz1zOv5w/
+         RsXA==
+X-Gm-Message-State: AFqh2kpYozakRx1re3uiR8AW05LlsPhG0psa/ZmM8kYv3uh35iEDEM0+
+        AHm7rDlJ5vTmPOIeP8N6uLqveOIiBbJ4cdkrT0E=
+X-Google-Smtp-Source: AMrXdXvB1EQn1hP5gfze1tQPXFIa+8YuBSvBWMo3uE7lpj1qTrzRRi89RdK1emE1whGtefCku3/G/RZhWTwe9rN1UL0=
+X-Received: by 2002:a17:906:708f:b0:7c4:e857:e0b8 with SMTP id
+ b15-20020a170906708f00b007c4e857e0b8mr2656948ejk.603.1672660243906; Mon, 02
+ Jan 2023 03:50:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20221214033512.659913-1-xiubli@redhat.com>
+In-Reply-To: <20221214033512.659913-1-xiubli@redhat.com>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Mon, 2 Jan 2023 12:50:32 +0100
+Message-ID: <CAOi1vP8v_ggvwA+FwctU-97a89KU-wrSPz0oMuNdMQU8gFeT7g@mail.gmail.com>
+Subject: Re: [PATCH v5 0/2] ceph: fix the use-after-free bug for file_lock
+To:     xiubli@redhat.com
+Cc:     jlayton@kernel.org, ceph-devel@vger.kernel.org,
+        mchangir@redhat.com, lhenriques@suse.de, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On pond=C4=9Bl=C3=AD 2. ledna 2023 12:45:30 CET Oleksandr Natalenko wrote:
-> This is a sudden splash I've got while just using my workstation:
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> BUG: KFENCE: use-after-free read in bfq_exit_icq_bfqq+0x132/0x270
-> Use-after-free read at 0x00000000e57c579c (in kfence-#173):
->  bfq_exit_icq_bfqq+0x132/0x270
->  bfq_exit_icq+0x5e/0x80
->  exit_io_context+0x88/0xb0
->  do_exit+0x66c/0xb80
->  kthread_exit+0x29/0x30
->  kthread+0xbd/0x110
->  ret_from_fork+0x22/0x30
->=20
-> kfence-#173: 0x000000005d7be631-0x000000006ad0b684, size=3D568, cache=3Db=
-fq_queue
-> allocated by task 40147 on cpu 16 at 13975.114285s:
->  bfq_get_queue+0xdf/0x4e0
->  bfq_get_bfqq_handle_split+0x75/0x170
->  bfq_insert_requests+0x832/0x2580
->  blk_mq_sched_insert_requests+0x63/0x150
->  blk_mq_flush_plug_list+0x122/0x360
->  __blk_flush_plug+0x106/0x160
->  blk_finish_plug+0x29/0x40
->  dm_bufio_prefetch+0x108/0x4d0 [dm_bufio]
->  dm_tm_issue_prefetches+0x44/0x70 [dm_persistent_data]
->  dm_pool_issue_prefetches+0x39/0x43 [dm_thin_pool]
->  do_worker+0x4c/0xd60 [dm_thin_pool]
->  process_one_work+0x258/0x410
->  worker_thread+0x55/0x4c0
->  kthread+0xde/0x110
->  ret_from_fork+0x22/0x30
->=20
-> freed by task 40147 on cpu 20 at 14500.096700s:
->  bfq_put_queue+0x185/0x2d0
->  bfq_exit_icq_bfqq+0x129/0x270
->  bfq_exit_icq+0x5e/0x80
->  exit_io_context+0x88/0xb0
->  do_exit+0x66c/0xb80
->  kthread_exit+0x29/0x30
->  kthread+0xbd/0x110
->  ret_from_fork+0x22/0x30
->=20
-> CPU: 20 PID: 40147 Comm: kworker/dying Tainted: G        W          6.1.0=
-=2Dpf2 #1 ff5dbde5ea280110a73397797e059b8558cda111
-> Hardware name: ASUS System Product Name/Pro WS X570-ACE, BIOS 4304 12/12/=
-2022
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20
-> I'm using v6.1.2, never experienced this before and cannot reproduce it a=
-t will. This kernel does not have any extra patches for the block layer on =
-top of v6.1.2.
->=20
-> In case you know what's going on, please let me know.
+On Wed, Dec 14, 2022 at 4:35 AM <xiubli@redhat.com> wrote:
+>
+> From: Xiubo Li <xiubli@redhat.com>
+>
+> Changed in V5:
+> - s/fl_inode/inode/
+>
+> Changed in V4:
+> - repeat the afs in fs.h instead of adding ceph specific header file
+>
+> Changed in V3:
+> - switched to vfs_inode_has_locks() helper to fix another ceph file lock
+> bug, thanks Jeff!
+> - this patch series is based on Jeff's previous VFS lock patch:
+>   https://patchwork.kernel.org/project/ceph-devel/list/?series=695950
+>
+> Changed in V2:
+> - switch to file_lock.fl_u to fix the race bug
+> - and the most code will be in the ceph layer
+>
+>
+> Xiubo Li (2):
+>   ceph: switch to vfs_inode_has_locks() to fix file lock bug
+>   ceph: add ceph specific member support for file_lock
+>
+>  fs/ceph/caps.c     |  2 +-
+>  fs/ceph/locks.c    | 24 ++++++++++++++++++------
+>  fs/ceph/super.h    |  1 -
+>  include/linux/fs.h |  3 +++
+>  4 files changed, 22 insertions(+), 8 deletions(-)
+>
+> --
+> 2.31.1
+>
 
-I assume 246cf66e30 ("block, bfq: fix uaf for bfqq in bfq_exit_icq_bfqq") m=
-ay have fixed the issue. This commit is pending for upcoming v6.1.3.
+Hi Xiubo,
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
+I have adjusted the title of the second patch to actually reflect its
+purpose: "ceph: avoid use-after-free in ceph_fl_release_lock()".  With
+that:
 
+Reviewed-by: Ilya Dryomov <idryomov@gmail.com>
 
+Thanks,
+
+                Ilya
