@@ -2,86 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FEE65AF61
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9395F65AF65
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjABKMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
+        id S230076AbjABKRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:17:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbjABKMP (ORCPT
+        with ESMTP id S232267AbjABKRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:12:15 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D296C5
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:12:13 -0800 (PST)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 2 Jan 2023 05:17:09 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEED8F2F;
+        Mon,  2 Jan 2023 02:17:07 -0800 (PST)
+Received: from [192.168.1.22] (cst-prg-44-69.cust.vodafone.cz [46.135.44.69])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B4DD93EF61;
-        Mon,  2 Jan 2023 11:12:09 +0100 (CET)
-Date:   Mon, 2 Jan 2023 11:12:08 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/7] drm/msm/dpu: Remove unused INTF0 interrupt mask
- from sm6115/qcm2290
-Message-ID: <20230102101208.75qvr4wsomvx35eb@SoMainline.org>
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-2-marijn.suijten@somainline.org>
- <62310fb8-4159-36e1-07cc-21b248daf198@linaro.org>
+        (Authenticated sender: tomeu)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 297726602CC1;
+        Mon,  2 Jan 2023 10:17:05 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1672654625;
+        bh=UKxDeH1K51ACF0O8y96Cck/rYbvF8NIxVYbACECak6Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LrlZI2puL6mGNOLF2of8embHNkndRivYQ6iU07VV5uWc+WZuX3EZ350ZQ+Ber/rz3
+         QRIzJkH5rG++FIZ3VQj8XP45T5G3xNjIoxoM9pntjKF+OpPb91iDof1q4JGJGNrXlF
+         mOqYHM/67IPG5udaxMu3BuwRax17mB6/jkNqa2ubBc5c5CgjNfHWVk+cfb4fS2j64j
+         Pv1NDmi9aEnYZK4Zr+EifkExxbeLzpMA6ucN9LtMvT+vTO1vnidDta4hrd1UNXVono
+         VmSfu26P4q4xdEGInSZZZiUOyLweaBZHZ6tlzJsgedCk/OhcE9vEzFJaCaur1YgmKB
+         2ewvgJQyfZUNw==
+Message-ID: <8cfe8595-79de-5980-d503-36847069940f@collabora.com>
+Date:   Mon, 2 Jan 2023 11:17:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62310fb8-4159-36e1-07cc-21b248daf198@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v6 4/8] arm64: dts: Add DT node for the VIPNano-QI on the
+ A311D
+To:     neil.armstrong@linaro.org
+Cc:     italonicola@collabora.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Amlogic Meson SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson SoC support" 
+        <linux-amlogic@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221202115223.39051-1-tomeu.vizoso@collabora.com>
+ <20221202115223.39051-5-tomeu.vizoso@collabora.com>
+ <5e5babae-224d-51cf-4eac-6272df87a8e7@linaro.org>
+Content-Language: en-US
+From:   Tomeu Vizoso <tomeu.vizoso@collabora.com>
+In-Reply-To: <5e5babae-224d-51cf-4eac-6272df87a8e7@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-02 10:29:03, Konrad Dybcio wrote:
+On 1/2/23 10:53, Neil Armstrong wrote:
+> On 02/12/2022 12:52, Tomeu Vizoso wrote:
+>> This "NPU" is very similar to the Vivante GPUs and Etnaviv works well
+>> with it with just a few small changes.
+>>
+>> v2: Add reference to RESET_NNA (Neil)
+>> v3: Fix indentation (Neil)
+>>
+>> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+>> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi     | 11 +++++++++++
+>>   .../boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts |  4 ++++
+>>   2 files changed, 15 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi 
+>> b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+>> index 45947c1031c4..61c8461df614 100644
+>> --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+>> +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+>> @@ -11,6 +11,7 @@
+>>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>   #include <dt-bindings/reset/amlogic,meson-g12a-reset.h>
+>>   #include <dt-bindings/thermal/thermal.h>
+>> +#include <dt-bindings/power/meson-g12a-power.h>
+>>   / {
+>>       interrupt-parent = <&gic>;
+>> @@ -2484,4 +2485,14 @@ xtal: xtal-clk {
+>>           #clock-cells = <0>;
+>>       };
+>> +    npu: npu@ff100000 {
+>> +        compatible = "vivante,gc";
+>> +        reg = <0x0 0xff100000 0x0 0x20000>;
+>> +        interrupts = <0 147 4>;
+>> +        clocks = <&clkc CLKID_NNA_CORE_CLK>,
+>> +             <&clkc CLKID_NNA_AXI_CLK>;
+>> +        clock-names = "core", "bus";
+>> +        resets = <&reset RESET_NNA>;
+>> +        power-domains = <&pwrc PWRC_G12A_NNA_ID>;
 > 
+> A status = "disable" is missing here.
 > 
-> On 31.12.2022 22:50, Marijn Suijten wrote:
-> > Neither of these SoCs has INTF0, they only have a DSI interface on index
-> > 1.  Stop enabling an interrupt that can't fire.
-> Double space.
+>> +    };
+>>   };
+>> diff --git 
+>> a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts 
+>> b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts
+>> index 124a80901084..73f3d87dcefd 100644
+>> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts
+>> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts
+>> @@ -15,6 +15,10 @@ / {
+>>       compatible = "khadas,vim3", "amlogic,a311d", "amlogic,g12b";
+>>   };
+>> +&npu {
+>> +    status = "okay";
+> 
+> Tomeu, I think until the user-space stack is clean this should be removed
+> and left disabled.
 
-In case you hadn't noticed I'm employing this habit for quite some time
-now: after ending a sentence with a period, use a double space.  The
-likes of GKH do it too.
+Sounds good to me, we can easily carry a patch in Mesa CI in the meantime.
 
-It may look a bit off though with 1. at the beginning of the sentence
-resembling the start of an ordered list.
+> I can fix this while applying if you want,
 
-- Marijn
+I would appreciate it, thanks!
 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Konrad
+Tomeu
+
+> Neil
+> 
+>> +};
+>> +
+>>   /*
+>>    * The VIM3 on-board  MCU can mux the PCIe/USB3.0 shared differential
+>>    * lines using a FUSB340TMX USB 3.1 SuperSpeed Data Switch between
+> 
