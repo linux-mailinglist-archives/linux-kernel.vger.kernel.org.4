@@ -2,98 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D3265B310
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC09D65B313
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbjABOBu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 2 Jan 2023 09:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S232856AbjABOCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 09:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbjABOBq (ORCPT
+        with ESMTP id S232479AbjABOCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 09:01:46 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6B06547
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 06:01:44 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-312-47WmmqTFMC28WcHHaiOhtA-1; Mon, 02 Jan 2023 14:01:41 +0000
-X-MC-Unique: 47WmmqTFMC28WcHHaiOhtA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 2 Jan
- 2023 14:01:38 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Mon, 2 Jan 2023 14:01:38 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Ameer Hamza' <ahamza@ixsystems.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "palmer@rivosinc.com" <palmer@rivosinc.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "slark_xiao@163.com" <slark_xiao@163.com>,
-        "richard.henderson@linaro.org" <richard.henderson@linaro.org>,
-        "ink@jurassic.park.msu.ru" <ink@jurassic.park.msu.ru>,
-        "mattst88@gmail.com" <mattst88@gmail.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "awalker@ixsystems.com" <awalker@ixsystems.com>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>
-Subject: RE: [PATCH v2] Add new open(2) flag - O_EMPTY_PATH
-Thread-Topic: [PATCH v2] Add new open(2) flag - O_EMPTY_PATH
-Thread-Index: AQHZHXO7YJxmMel9jU25EiVio9tPeK6LKkFQ
-Date:   Mon, 2 Jan 2023 14:01:38 +0000
-Message-ID: <4b39cf528148470c934fb5823b35e9d5@AcuMS.aculab.com>
-References: <202212310842.ysbymPHY-lkp@intel.com>
- <20221231235618.117201-1-ahamza@ixsystems.com>
-In-Reply-To: <20221231235618.117201-1-ahamza@ixsystems.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 2 Jan 2023 09:02:31 -0500
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8735F656E;
+        Mon,  2 Jan 2023 06:02:28 -0800 (PST)
+Received: from handsomejack.molgen.mpg.de (handsomejack.molgen.mpg.de [141.14.17.248])
+        by mx.molgen.mpg.de (Postfix) with ESMTP id 0274460027FCD;
+        Mon,  2 Jan 2023 15:02:27 +0100 (CET)
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Helge Deller <deller@gmx.de>, "Z. Liu" <liuzx@knownsec.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, it+linux-fbdev@molgen.mpg.de,
+        Rich Felker <dalias@aerifal.cx>, stable@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
+Date:   Mon,  2 Jan 2023 15:02:07 +0100
+Message-Id: <20230102140206.6778-1-pmenzel@molgen.mpg.de>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ameer Hamza
-> Sent: 31 December 2022 23:56
-> 
-> This patch adds a new flag O_EMPTY_PATH that allows openat and open
-> system calls to open a file referenced by fd if the path is empty,
-> and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
-> beneficial in some cases since it would avoid having to grant /proc
-> access to things like samba containers for reopening files to change
-> flags in a race-free way.
-> 
+Commit 62d89a7d49af ("video: fbdev: matroxfb: set maxvram of vbG200eW to
+the same as vbG200 to avoid black screen") accidently decreases the
+maximum memory size for the Matrox G200eW (102b:0532) from 8 MB to 1 MB
+by missing one zero. This caused the driver initialization to fail with
+the messages below, as the minimum required VRAM size is 2 MB:
 
-But what does it do?
-(Apart from add code to a common kernel code path.)
+     [    9.436420] matroxfb: Matrox MGA-G200eW (PCI) detected
+     [    9.444502] matroxfb: cannot determine memory size
+     [    9.449316] matroxfb: probe of 0000:0a:03.0 failed with error -1
 
-	David
+So, add the missing 0 to make it the intended 16 MB. Successfully tested on
+the Dell PowerEdge R910/0KYD3D, BIOS 2.10.0 08/29/2013, that the warning is
+gone.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+While at it, add a leading 0 to the maxdisplayable entry, so it’s aligned
+properly. The value could probably also be increased from 8 MB to 16 MB, as
+the G200 uses the same values, but I have not checked any datasheet.
+
+Note, matroxfb is obsolete and superseded by the maintained DRM driver
+mga200, which is used by default on most systems where both drivers are
+available. Therefore, on most systems it was only a cosmetic issue.
+
+Fixes: 62d89a7d49af ("video: fbdev: matroxfb: set maxvram of vbG200eW to the same as vbG200 to avoid black screen")
+Link: https://lore.kernel.org/linux-fbdev/972999d3-b75d-5680-fcef-6e6905c52ac5@suse.de/T/#mb6953a9995ebd18acc8552f99d6db39787aec775
+Cc: it+linux-fbdev@molgen.mpg.de
+Cc: Z. Liu <liuzx@knownsec.com>
+Cc: Rich Felker <dalias@aerifal.cx>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
+Update Rich’s address.
+
+ drivers/video/fbdev/matrox/matroxfb_base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/fbdev/matrox/matroxfb_base.c
+index 0d3cee7ae7268..a043a737ea9f7 100644
+--- a/drivers/video/fbdev/matrox/matroxfb_base.c
++++ b/drivers/video/fbdev/matrox/matroxfb_base.c
+@@ -1378,8 +1378,8 @@ static struct video_board vbG200 = {
+ 	.lowlevel = &matrox_G100
+ };
+ static struct video_board vbG200eW = {
+-	.maxvram = 0x100000,
+-	.maxdisplayable = 0x800000,
++	.maxvram = 0x1000000,
++	.maxdisplayable = 0x0800000,
+ 	.accelID = FB_ACCEL_MATROX_MGAG200,
+ 	.lowlevel = &matrox_G100
+ };
+-- 
+2.39.0
 
