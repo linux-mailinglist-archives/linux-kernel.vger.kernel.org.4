@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B1465B3E4
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3819665B3EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236258AbjABPKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
+        id S236265AbjABPNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236207AbjABPKE (ORCPT
+        with ESMTP id S236231AbjABPMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:10:04 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2D595AA
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:10:03 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id s22so29254054ljp.5
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:10:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F51K2k1UqyDsMK9Y8htUZq3ZisZ/a1NgKWMO6hVgpG4=;
-        b=D0Pb3yiEiAm96gLXnuPr8iBw0kUz7Oxz429nZBJ660QLCv279EabwyTWwKKc9ZfvtK
-         TdwoAMn0oeW5jwSBhpyGV/6LqnQcgPhYVqYlgiHP6B3C+mK7ZJtx+Mm906zQ4JWo5Aes
-         ohvbIUMnqw+zLzRm5NSBVGgQ5b0w3yad42GYrtk8k/iDzaykxWUclTWvSanyj8tc36uD
-         /LA4lhBwp/r+KrKqx/SXpy9FxhUmEqpMi7PEgeFsFRFQCuYyMpG3wdkQqzsPSMBhVvJy
-         IweujxddqAaftDETIvl5p7br9iJT66w/dB1gYk6VyAICFy1OymW4xVSMD2CTXM9Ab151
-         DTZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F51K2k1UqyDsMK9Y8htUZq3ZisZ/a1NgKWMO6hVgpG4=;
-        b=lPdugU0hbPBIsLLwU2j5iQOvXr1cRlQ6KUPqFhBtw+YhAAIG1syYBR9CzfHvG0rGKp
-         O43l6OqWutHmY0kVLXu9w/1n4eBYBVCOA3BZsNlFbH7nd12JKNmbhaWKMtPABFfV8oLs
-         kadi1HNrN1naOEcf1th61s5DtSqF1aPTMNbc27k7Qg7JQbEXfRHs3IlxBSV3UorCew0V
-         RhsUK16aVhxyDWEZdHJ/yEVaDJO0iNKIcZPARaETiwyIF9/Oz/on7xOFTl/e1HipBBAT
-         GwUWQxmCrvC5pPF7PnCR4vutECW1vX3ZSW2nEyyYj1wMCcZ5afP3O5M+QT0JVF6QjZ9N
-         3mXg==
-X-Gm-Message-State: AFqh2kp8Tb5f0D32dLkf/paVtz6ppxNHwqje0/DB1Fy7Wm7vMWndc3Xr
-        us/Uj1q/juPuxuk3vmwbWgMNQQ==
-X-Google-Smtp-Source: AMrXdXusj4s5bqU1bs/9C17CH0pow47iKrbQsKBGBcYyBzOSj/b8dymnUIz/0LTx/VbKu6EQRcDhVg==
-X-Received: by 2002:a05:651c:c90:b0:27f:f740:8260 with SMTP id bz16-20020a05651c0c9000b0027ff7408260mr499772ljb.45.1672672201461;
-        Mon, 02 Jan 2023 07:10:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z2-20020a2eb522000000b0027fdee02c66sm904604ljm.95.2023.01.02.07.10.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 07:10:00 -0800 (PST)
-Message-ID: <e57164f6-7dcf-5139-1b4f-6b63f9fd7786@linaro.org>
-Date:   Mon, 2 Jan 2023 16:09:59 +0100
+        Mon, 2 Jan 2023 10:12:49 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C338FE6;
+        Mon,  2 Jan 2023 07:12:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1672672364;
+        bh=NXjw6+rKKlfiUhcOC13HUdlVvOIiNsxG9TWj+5AVcIw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=r5UT4MIPL/pFPmCMszOD5+rkZ6FAF+gPIqMWw+xNObFLDXaU5dEIECX4G5qNxSVou
+         NRrFMJn9sf9dZRb4/DWw/tKk75H3GzNRczXAfQFZr1EWlVPXUKvXxjPqJB4BR4jgU5
+         1MfD5fEv8tS1THB/ulXN+i+K+t3qmETRwq7N5grONjL2C8qIsnOSxEr3NIm673R383
+         AOv1kKzusKsqYGOfLqwfMGm04BF4bQTWPPTy0VNkRuztC0WxSJH9eivZsCkPDeHAF9
+         fdyaKiYvdlV84k3Sziil0EEjY46KIxZQAaOwuoE4mRMwJdizSESccDpu9hSW9me0wT
+         h0mN/nL29MJVg==
+Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NlzrC6lcrzd3y;
+        Mon,  2 Jan 2023 10:12:43 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        kernel test robot <yujie.liu@intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: [RFC PATCH for tip] sched: Fix concurrency ID handling of usermodehelper kthreads
+Date:   Mon,  2 Jan 2023 10:12:16 -0500
+Message-Id: <20230102151216.328117-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 6/6] arm64: dts: qcom: sm8450-hdk: fix wcd938x codec node
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230102105038.8074-1-johan+linaro@kernel.org>
- <20230102105038.8074-7-johan+linaro@kernel.org>
- <c2a32bd3-90cf-6d1b-1ca7-76071232c81b@linaro.org>
- <791c0e37-f825-c324-7a99-163b0566c758@linaro.org>
- <Y7Ly1wlft4Y6VfIG@hovoldconsulting.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y7Ly1wlft4Y6VfIG@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/01/2023 16:05, Johan Hovold wrote:
-> On Mon, Jan 02, 2023 at 01:24:34PM +0100, Krzysztof Kozlowski wrote:
->> On 02/01/2023 13:23, Krzysztof Kozlowski wrote:
->>> On 02/01/2023 11:50, Johan Hovold wrote:
->>>> The wcd938x codec is not a memory-mapped device and does not belong
->>>> under the soc node.
->>>>
->>>> Move the node to the root node to avoid DT validation failures.
->>>>
->>>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>>> ---
->>>>  arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 52 ++++++++++++-------------
->>>>  1 file changed, 25 insertions(+), 27 deletions(-)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->>>> index 4de3e1f1c39c..217b2c654745 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->>>> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->>>> @@ -17,6 +17,31 @@ aliases {
->>>>  		serial0 = &uart7;
->>>>  	};
->>>>  
->>>> +	wcd938x: codec {
->>>
->>> Let's call it audio-codec and put it somewhere ordered alphabetically.
->>> This avoids useless reshuffles immediately. Moving things back and forth
->>> does not make sense.
->>
->> Eh, on the other hand SM8250-MTP uses name codec so maybe the rename in
->> SC8280xp should be dropped.
-> 
-> Nah, let's go with audio-codec. Your MTP change hasn't been merged yet
-> so we can still drop or respin that one.
+sched_mm_cid_after_execve does not expect NULL t->mm, but it may happen
+if a usermodehelper kthread fails when attempting to execute a binary.
 
-It was, ~5 days ago, so please rebase.
+sched_mm_cid_fork can be issued from a usermodehelper kthread, which has
+t->flags PF_KTHREAD set.
 
-Best regards,
-Krzysztof
+Fixes: af7f588d8f73 ("sched: Introduce per-memory-map concurrency ID")
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Link: https://lore.kernel.org/oe-lkp/202212301353.5c959d72-yujie.liu@intel.com
+Reported-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ kernel/sched/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 048ec2417990..f99ee69867e3 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -11343,8 +11343,8 @@ void sched_mm_cid_after_execve(struct task_struct *t)
+ 	struct mm_struct *mm = t->mm;
+ 	unsigned long flags;
+ 
+-	WARN_ON_ONCE((t->flags & PF_KTHREAD) || !t->mm);
+-
++	if (!mm)
++		return;
+ 	local_irq_save(flags);
+ 	t->mm_cid = mm_cid_get(mm);
+ 	t->mm_cid_active = 1;
+@@ -11354,7 +11354,7 @@ void sched_mm_cid_after_execve(struct task_struct *t)
+ 
+ void sched_mm_cid_fork(struct task_struct *t)
+ {
+-	WARN_ON_ONCE((t->flags & PF_KTHREAD) || !t->mm || t->mm_cid != -1);
++	WARN_ON_ONCE(!t->mm || t->mm_cid != -1);
+ 	t->mm_cid_active = 1;
+ }
+ #endif
+-- 
+2.25.1
 
