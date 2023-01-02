@@ -2,149 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1BC65B51A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7E665B51C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234695AbjABQbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
+        id S236262AbjABQc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbjABQbg (ORCPT
+        with ESMTP id S232596AbjABQc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:31:36 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91331090;
-        Mon,  2 Jan 2023 08:31:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672677096; x=1704213096;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jxPL4ZWd87JdmRzXlFCwvVerbRVrIW34N3tcLFvjMNM=;
-  b=Twyoi/cJ/KiLGryNvU+Sc1LKkSSHFzNCS65788nuBiYaN6cBLDnPjS5S
-   ORZ7QCEwD+BHTD6QKelnAGOL6TA9t8dHphnxsWM/GahwhYnWyOUYfL3M7
-   3hESljtix6G8+74XhN6rf7MHME+Z3ZI6o0GmZGXJ4ZnClzkAwAdZXsh84
-   xE5hXijDmrZD90nSRQFq8etnXKtOQXrng/IJb04q96XKVIJ/gDTcrDUZq
-   dcrPnG+F+M9PJVRmocgLFvxP+9XXZ0uCbWN5GyeJuk8zRA4Vy/gXLAEp9
-   MRBs7LWUjuMQ/iO6B7wOD47vryBfqJOIZZbqfx1XnHD3zKl7o/pABTLpN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="301197631"
-X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="301197631"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 08:31:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="686940992"
-X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="686940992"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga001.jf.intel.com with ESMTP; 02 Jan 2023 08:31:09 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 302GV7DR021496;
-        Mon, 2 Jan 2023 16:31:07 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/9] bitops: always define asm-generic non-atomic bitops
-Date:   Mon,  2 Jan 2023 17:30:59 +0100
-Message-Id: <20230102163059.3556962-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <Y7MC5/wxgGZz/met@boxer>
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com> <20220624121313.2382500-3-alexandr.lobakin@intel.com> <Y7MC5/wxgGZz/met@boxer>
+        Mon, 2 Jan 2023 11:32:26 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A871F2641
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:32:25 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bt23so25555163lfb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:32:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OPOWYK4xS+6xhzOdhfTnsSnUcVxUYMBnV8hiXVR43SI=;
+        b=WuNHynlhNUkJUcD6KxjstzrRlxBGV8jbuBJ/hrag17I5q4FZ19LDt1kUasU+Mf/ow1
+         JBdFdf/Q0EPoES9VCm0vib2w7JjQ6b0vOTXDcL9B89agvmmRsdc/EE+vKc/H2Lep6lT7
+         kvujpwUNElUfG8MRBS8uQJjwjOD3nhMAo9M0FcLNOllZ8+YQVMk5PaCE3nKmji6OVgcG
+         IIz+6L5GswHwQziHEeMp6UDveSxrLnfs0llc1Zs1AvixoQrFZYbEhPSGKbxY3n135fNu
+         jgyNdng/nhQCdHUrDtQKR65iViyWju50338n/pJMMU4qhyrO6wxw1rk0Q8wo/7AJuJQa
+         yEkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OPOWYK4xS+6xhzOdhfTnsSnUcVxUYMBnV8hiXVR43SI=;
+        b=pGWT+2h5oOWybQfxD5PY+s0cBei+6VpLaLTpnqAIic+v6jiNSxcicCrpX3f64LZLVf
+         ACUaVogVeOn3YUypcoJjw6HCtXHvxWbA+LyzM1Iszzvs2a4wxgMnxXq5T5RqQzyiSZeK
+         fp5Lf40e1MapnUZs9XBKuGaa0mMsJu7mVvfkjAF8dZ04UF+BrQ4bNqsrsGlfg/34Kist
+         hGnzVHxqNcwuhShX/H60TxJF4E7X3+mQ2uMkS1QH/Dz/souwNNQT+UhYOPRpEKig/HeP
+         frc5gdPYCCOCNePyHocdznpVddOPMFdRhrXAOMlDTaala/CpxwbTNmLsKKuPwGl0tK2+
+         SsnA==
+X-Gm-Message-State: AFqh2koYL5YEYWrtyzbN3i63/Kjx459GPI0PfpHBFa3784By2epbMcTl
+        W1a0guU/ifcpPoZRi04/Pe0Xkg==
+X-Google-Smtp-Source: AMrXdXtWnVOJrl54acwW1/P+lvWqyeGREQQIrliL5JrxuI2mDuRvgOBvBPJG9vCCGvebf+wH1RlFEw==
+X-Received: by 2002:ac2:5fcf:0:b0:4b5:5f97:6a16 with SMTP id q15-20020ac25fcf000000b004b55f976a16mr11197018lfg.43.1672677144056;
+        Mon, 02 Jan 2023 08:32:24 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05651234cc00b0047f7722b73csm4481991lfr.142.2023.01.02.08.32.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 08:32:23 -0800 (PST)
+Message-ID: <a885bf4b-253d-75fe-0224-02f8dfb44006@linaro.org>
+Date:   Mon, 2 Jan 2023 17:32:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 13/13] dt-bindings: mediatek: mt8188: add mt8188-mt6359
+ document
+Content-Language: en-US
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de
+Cc:     angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221230055443.16024-1-trevor.wu@mediatek.com>
+ <20221230055443.16024-14-trevor.wu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221230055443.16024-14-trevor.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Date: Mon, 2 Jan 2023 17:14:31 +0100
+On 30/12/2022 06:54, Trevor Wu wrote:
+> Add document for mt8188 board with mt6359.
 
-> On Fri, Jun 24, 2022 at 02:13:06PM +0200, Alexander Lobakin wrote:
-> > Move generic non-atomic bitops from the asm-generic header which
-> > gets included only when there are no architecture-specific
-> > alternatives, to a separate independent file to make them always
-> > available.
-> > Almost no actual code changes, only one comment added to
-> > generic_test_bit() saying that it's an atomic operation itself
-> > and thus `volatile` must always stay there with no cast-aways.
-> > 
-> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com> # comment
-> > Suggested-by: Marco Elver <elver@google.com> # reference to kernel-doc
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Reviewed-by: Marco Elver <elver@google.com>
-> > ---
-> >  .../asm-generic/bitops/generic-non-atomic.h   | 130 ++++++++++++++++++
-> >  include/asm-generic/bitops/non-atomic.h       | 110 ++-------------
-> >  2 files changed, 138 insertions(+), 102 deletions(-)
-> >  create mode 100644 include/asm-generic/bitops/generic-non-atomic.h
-> > 
-> 
-> Hi,
-> 
-> this patch gives me a headache when trying to run sparse against a module.
-> 
-> Olek please help :D
-
-It was fixed shortly after the build bots turned on on the original
-series with [0]. Hovewer, no release tag's been made after the fix.
-There's also a short discussion regarding packaging Sparse 0.6.4 for
-Debian with that fix cherry-picked[1], not sure if it led anywhere.
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching).
 
 > 
-> $ sudo make C=2 -C . M=drivers/net/ethernet/intel/ice/
-> make: Entering directory '/home/mfijalko/bpf-next'
->   CHECK   drivers/net/ethernet/intel/ice/ice_main.c
-> drivers/net/ethernet/intel/ice/ice_main.c: note: in included file (through include/linux/bitops.h, include/linux/kernel.h, drivers/net/ethernet/intel/ice/ice.h):
-> ./arch/x86/include/asm/bitops.h:66:1: warning: unreplaced symbol 'return'
-
-[...]
-
-> drivers/net/ethernet/intel/ice/ice_main.c: note: in included file (through arch/x86/include/asm/bitops.h, include/linux/bitops.h, include/linux/kernel.h, drivers/net/ethernet/intel/ice/ice.h):
-> ./include/asm-generic/bitops/instrumented-non-atomic.h:142:9: warning: unreplaced symbol 'return'
-> ./include/asm-generic/bitops/instrumented-non-atomic.h:139:1: warning: unreplaced symbol 'return'
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+> ---
+>  .../sound/mediatek,mt8188-mt6359.yaml         | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
 > 
-> that's for a single file, there's no point in including same output for
-> every other file being checked.
-> 
-> Thanks,
-> Maciej
+> diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
+> new file mode 100644
+> index 000000000000..5754c1d460db
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
+> @@ -0,0 +1,93 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/mediatek,mt8188-mt6359.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MT8188 ASoC sound card
+> +
+> +maintainers:
+> +  - Trevor Wu <trevor.wu@mediatek.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt8188-mt6359-evb
+> +
+> +  model:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: User specified audio sound card name
+> +
+> +  audio-routing:
+> +    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
+> +    description:
+> +      A list of the connections between audio components. Each entry is a
+> +      sink/source pair of strings. Valid names could be the input or output
+> +      widgets of audio components, power supplies, MicBias of codec and the
+> +      software switch.
+> +
+> +  mediatek,platform:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: The phandle of MT8188 ASoC platform.
+> +
+> +patternProperties:
+> +  "^dai-link-[0-9]+$":
+> +    type: object
 
-[0] https://git.kernel.org/pub/scm/devel/sparse/sparse.git/commit/?id=0e1aae55e49cad7ea43848af5b58ff0f57e7af99
-[1] https://lore.kernel.org/all/Yr7kPM1wLZnOqxOA@smile.fi.intel.com
+On this level:
+additionalProperties: false
 
-Thanks,
-Olek
+> +    description: |
+> +      Container for dai-link level properties and CODEC sub-nodes.
+> +
+> +    properties:
+> +      dai-link-name:
+
+Instead:
+link-name
+> +        description: |
+> +          This property corresponds to the name of the BE dai-link to which
+> +          we are going to update parameters in this node.
+> +        items:
+> +          enum:
+> +            - ADDA_BE
+> +            - DPTX_BE
+> +            - ETDM1_IN_BE
+> +            - ETDM2_IN_BE
+> +            - ETDM1_OUT_BE
+> +            - ETDM2_OUT_BE
+> +            - ETDM3_OUT_BE
+> +            - PCM1_BE
+> +
+> +      codec:
+> +        description: Holds subnode which indicates codec dai.
+> +        type: object
+> +        additionalProperties: false
+> +        properties:
+> +          sound-dai:
+> +            minItems: 1
+> +            maxItems: 2
+
+required sound-dai
+
+> +
+> +    required:
+> +      - dai-link-name
+> +      - codec
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - mediatek,platform
+> +
+
+Your example looks pretty straightforward. Maybe you can use
+simple-card.yaml?	
+
+
+Best regards,
+Krzysztof
+
