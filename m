@@ -2,381 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EF665B620
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 339BF65B623
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236372AbjABSB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 13:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
+        id S233371AbjABSCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 13:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbjABSBk (ORCPT
+        with ESMTP id S236275AbjABSCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 13:01:40 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D16D5FEF
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:01:29 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bs20so24892269wrb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 10:01:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HMLGEkEBbCyAG46RbAdRIZrpI31jaD7n2sQxNUO8dTY=;
-        b=cX/asn3NFckwhcGeaaJddKfmfLVzyv8ZWOtQok353aZ2w0O/Z1BDVJvSYo8z6eT81G
-         1IHGqKs9z67ljkC6GSKHM4Z3dD3EhExNKbv8l/s9ZsZUZoG6cUhcs8sDR+GWOaRrpp7g
-         aH4IBL/svRrD38M+ov1m3uG7yJrsexIIjxXIrPqw7sB501ICk3KO9qDIJXCkc9Hyka4B
-         CJWIOPUHhlxdjUnA3FVmTj9GJg4sFJnaEpBgKVrIlzHUU9bPF6l1TC90peuTWr4S/GOK
-         0T6bd62gDTUaE9G3KBBmxwRe4ql6RNnrEZXe5HB8YIP5axO5gZz1fCzZ864BJFNu7Oxj
-         1sRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HMLGEkEBbCyAG46RbAdRIZrpI31jaD7n2sQxNUO8dTY=;
-        b=rdpv2Wo0dPmErzID5ioJfPhV2dMwiLV9Y/zgu4syHO8ipop7MRvj+bMtypqPM3AqpT
-         sm/NS138NXkW7oJ8vYPXnRrQ78AnUvf/YOtrIUR3ouaPBn/RLo+fZ+8MsmkFc5Kk/i2Q
-         XC/6JXXDqFh0SZvgiVS1iRK/dq6IH3W3M7z76x//rSF7qXniQ+mi+bp3XLhXz8q6/MwK
-         0ipePKEK/Sipb9dNa85pzn5EvRmXL61wuySf7+mwmDhdecnv3KGLFVextFA2306XuTFM
-         MUtpPJgnGBOaujs9ozqsci3Fg/aCxHhAXzXUF4bugFXnAfAIKa8twFT3DYTpqdCDNpiS
-         3zYQ==
-X-Gm-Message-State: AFqh2koXAeb4RWdL3NMCKaN4G0loh8dfFJQB6WPExcQ9xkKY5K+m5Nit
-        uamok0XRwVZMrxgLRXWddjSCxg==
-X-Google-Smtp-Source: AMrXdXvRu4zS2fvwqMwIUbFde598qoF2AggHMIq9h4NLjRsqC4qrLpAUPgNjerxzRXy14jV8CC7Kig==
-X-Received: by 2002:adf:fe87:0:b0:274:fae4:a512 with SMTP id l7-20020adffe87000000b00274fae4a512mr20980823wrr.71.1672682488069;
-        Mon, 02 Jan 2023 10:01:28 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id c17-20020adffb51000000b0027cb20605e3sm21375588wrs.105.2023.01.02.10.01.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 10:01:27 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-X-Google-Original-From: Daniel Lezcano <daniel.lezcano@kernel.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org,
-        srinivas.pandruvada@linux.intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, rui.zhang@intel.com,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v2 3/3] thermal/drivers/intel: Use generic trip points int340x
-Date:   Mon,  2 Jan 2023 19:01:12 +0100
-Message-Id: <20230102180112.1954082-4-daniel.lezcano@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230102180112.1954082-1-daniel.lezcano@kernel.org>
-References: <20230102180112.1954082-1-daniel.lezcano@kernel.org>
+        Mon, 2 Jan 2023 13:02:20 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75FFB7E0;
+        Mon,  2 Jan 2023 10:02:18 -0800 (PST)
+Received: from mercury (dyndsl-091-096-062-126.ewe-ip-backbone.de [91.96.62.126])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7890E6600366;
+        Mon,  2 Jan 2023 18:02:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1672682536;
+        bh=rCN0bORNHGMMvVYTDOpdREa4PfuJcHc63quH0/3CZXo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KqKNgmMIZRyfV2jyPLqo19uy9KoJXpgTYomeh7/vxhrMQCBV0rgSkAnNJ16gKOspI
+         PHk6gLLUp52WSPxOCdOhd9bdpM3BtdnNIfVOjKaunQ+fFYlbwXYWkLDM3Gj9ilhHem
+         2/YQvN241nqcej1tk1ieVkk6QSOwDX+AGSlDP3pn40yxcjph78bcvgRipUUG8/o93R
+         Llny5qpJEC/Nno5nXRk2uaBKWzjopkzzy/lA/0nyiXLL6UWKmqW/dGIAeJHlhMRR5+
+         AbElKwZmxeRAn07Cxj+vRmHqRaMDk54XjQ2b/zFn8ef14wPP8Pe27KK7wqzIyGSQy5
+         yhWJGGstc5VUg==
+Received: by mercury (Postfix, from userid 1000)
+        id 6F46310606C9; Mon,  2 Jan 2023 19:02:13 +0100 (CET)
+Date:   Mon, 2 Jan 2023 19:02:13 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     ye.xingchen@zte.com.cn
+Cc:     linus.walleij@linaro.org, krzysztof.kozlowski@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux-next v2] power: supply: use sysfs_emit() to instead
+ of scnprintf()
+Message-ID: <20230102180213.h5mbyyqnmpgaf3br@mercury.elektranox.org>
+References: <202212061114083350005@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w4bxyprcvdwgi7zj"
+Content-Disposition: inline
+In-Reply-To: <202212061114083350005@zte.com.cn>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
+--w4bxyprcvdwgi7zj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Convert the ops content logic into generic trip points and register
-them with the thermal zone.
+Hi,
 
-In order to consolidate the code, use the ACPI thermal framework API
-to fill the generic trip point from the ACPI tables.
+On Tue, Dec 06, 2022 at 11:14:08AM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>=20
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
+>=20
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> v1 -> v2
+> Convert to use sysfs_emit_at() API in power/supply/twl4030_charger.c.
+> ---
 
-It has been tested on a Intel i7-8650U - x280 with the INT3400, the
-PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
+Thanks, queued. I fixed up the commit message. The changelog should
+be below the ---.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
----
- .../int340x_thermal/int340x_thermal_zone.c    | 175 ++++--------------
- .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
- 2 files changed, 40 insertions(+), 145 deletions(-)
+-- Sebastian
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-index 228f44260b27..4f2e518caf8d 100644
---- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -37,65 +37,6 @@ static int int340x_thermal_get_zone_temp(struct thermal_zone_device *zone,
- 	return 0;
- }
- 
--static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
--					 int trip, int *temp)
--{
--	struct int34x_thermal_zone *d = zone->devdata;
--	int i;
--
--	if (trip < d->aux_trip_nr)
--		*temp = d->aux_trips[trip];
--	else if (trip == d->crt_trip_id)
--		*temp = d->crt_temp;
--	else if (trip == d->psv_trip_id)
--		*temp = d->psv_temp;
--	else if (trip == d->hot_trip_id)
--		*temp = d->hot_temp;
--	else {
--		for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--			if (d->act_trips[i].valid &&
--			    d->act_trips[i].id == trip) {
--				*temp = d->act_trips[i].temp;
--				break;
--			}
--		}
--		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
--			return -EINVAL;
--	}
--
--	return 0;
--}
--
--static int int340x_thermal_get_trip_type(struct thermal_zone_device *zone,
--					 int trip,
--					 enum thermal_trip_type *type)
--{
--	struct int34x_thermal_zone *d = zone->devdata;
--	int i;
--
--	if (trip < d->aux_trip_nr)
--		*type = THERMAL_TRIP_PASSIVE;
--	else if (trip == d->crt_trip_id)
--		*type = THERMAL_TRIP_CRITICAL;
--	else if (trip == d->hot_trip_id)
--		*type = THERMAL_TRIP_HOT;
--	else if (trip == d->psv_trip_id)
--		*type = THERMAL_TRIP_PASSIVE;
--	else {
--		for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--			if (d->act_trips[i].valid &&
--			    d->act_trips[i].id == trip) {
--				*type = THERMAL_TRIP_ACTIVE;
--				break;
--			}
--		}
--		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
--			return -EINVAL;
--	}
--
--	return 0;
--}
--
- static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
- 				      int trip, int temp)
- {
-@@ -109,25 +50,6 @@ static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
- 	if (ACPI_FAILURE(status))
- 		return -EIO;
- 
--	d->aux_trips[trip] = temp;
--
--	return 0;
--}
--
--
--static int int340x_thermal_get_trip_hyst(struct thermal_zone_device *zone,
--		int trip, int *temp)
--{
--	struct int34x_thermal_zone *d = zone->devdata;
--	acpi_status status;
--	unsigned long long hyst;
--
--	status = acpi_evaluate_integer(d->adev->handle, "GTSH", NULL, &hyst);
--	if (ACPI_FAILURE(status))
--		*temp = 0;
--	else
--		*temp = hyst * 100;
--
- 	return 0;
- }
- 
-@@ -138,58 +60,36 @@ static void int340x_thermal_critical(struct thermal_zone_device *zone)
- 
- static struct thermal_zone_device_ops int340x_thermal_zone_ops = {
- 	.get_temp       = int340x_thermal_get_zone_temp,
--	.get_trip_temp	= int340x_thermal_get_trip_temp,
--	.get_trip_type	= int340x_thermal_get_trip_type,
- 	.set_trip_temp	= int340x_thermal_set_trip_temp,
--	.get_trip_hyst =  int340x_thermal_get_trip_hyst,
- 	.critical	= int340x_thermal_critical,
- };
- 
--static int int340x_thermal_get_trip_config(acpi_handle handle, char *name,
--				      int *temp)
--{
--	unsigned long long r;
--	acpi_status status;
--
--	status = acpi_evaluate_integer(handle, name, NULL, &r);
--	if (ACPI_FAILURE(status))
--		return -EIO;
--
--	*temp = deci_kelvin_to_millicelsius(r);
--
--	return 0;
--}
--
- int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
- {
--	int trip_cnt = int34x_zone->aux_trip_nr;
--	int i;
-+	int trip_cnt;
-+	int i, ret;
- 
--	int34x_zone->crt_trip_id = -1;
--	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_CRT",
--					     &int34x_zone->crt_temp))
--		int34x_zone->crt_trip_id = trip_cnt++;
-+	trip_cnt = int34x_zone->aux_trip_nr;
-+	
-+	ret = thermal_acpi_trip_crit(int34x_zone->adev, &int34x_zone->trips[trip_cnt]);
-+	if (!ret)
-+		trip_cnt++;
- 
--	int34x_zone->hot_trip_id = -1;
--	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_HOT",
--					     &int34x_zone->hot_temp))
--		int34x_zone->hot_trip_id = trip_cnt++;
-+	ret = thermal_acpi_trip_hot(int34x_zone->adev, &int34x_zone->trips[trip_cnt]);
-+	if (!ret)
-+		trip_cnt++;
- 
--	int34x_zone->psv_trip_id = -1;
--	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_PSV",
--					     &int34x_zone->psv_temp))
--		int34x_zone->psv_trip_id = trip_cnt++;
-+	ret = thermal_acpi_trip_psv(int34x_zone->adev, &int34x_zone->trips[trip_cnt]);
-+	if (!ret)
-+		trip_cnt++;
- 
- 	for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--		char name[5] = { '_', 'A', 'C', '0' + i, '\0' };
- 
--		if (int340x_thermal_get_trip_config(int34x_zone->adev->handle,
--					name,
--					&int34x_zone->act_trips[i].temp))
-+		ret = thermal_acpi_trip_act(int34x_zone->adev, &int34x_zone->trips[trip_cnt], i);
-+		if (ret)
- 			break;
- 
--		int34x_zone->act_trips[i].id = trip_cnt++;
--		int34x_zone->act_trips[i].valid = true;
-+		trip_cnt++;
- 	}
- 
- 	return trip_cnt;
-@@ -208,7 +108,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- 	acpi_status status;
- 	unsigned long long trip_cnt;
- 	int trip_mask = 0;
--	int ret;
-+	int i, ret;
- 
- 	int34x_thermal_zone = kzalloc(sizeof(*int34x_thermal_zone),
- 				      GFP_KERNEL);
-@@ -228,32 +128,33 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- 		int34x_thermal_zone->ops->get_temp = get_temp;
- 
- 	status = acpi_evaluate_integer(adev->handle, "PATC", NULL, &trip_cnt);
--	if (ACPI_FAILURE(status))
--		trip_cnt = 0;
--	else {
--		int i;
--
--		int34x_thermal_zone->aux_trips =
--			kcalloc(trip_cnt,
--				sizeof(*int34x_thermal_zone->aux_trips),
--				GFP_KERNEL);
--		if (!int34x_thermal_zone->aux_trips) {
--			ret = -ENOMEM;
--			goto err_trip_alloc;
--		}
--		trip_mask = BIT(trip_cnt) - 1;
-+	if (!ACPI_FAILURE(status)) {
- 		int34x_thermal_zone->aux_trip_nr = trip_cnt;
--		for (i = 0; i < trip_cnt; ++i)
--			int34x_thermal_zone->aux_trips[i] = THERMAL_TEMP_INVALID;
-+		trip_mask = BIT(trip_cnt) - 1;
- 	}
- 
-+	int34x_thermal_zone->trips = kzalloc(sizeof(*int34x_thermal_zone->trips) *
-+					     (INT340X_THERMAL_MAX_TRIP_COUNT + trip_cnt),
-+					      GFP_KERNEL);
-+	if (!int34x_thermal_zone->trips) {
-+		ret = -ENOMEM;
-+		goto err_trips_alloc;
-+	}
-+
-+	for (i = 0; i < trip_cnt; ++i) {
-+		int34x_thermal_zone->trips[i].hysteresis = thermal_acpi_trip_gtsh(adev);
-+		int34x_thermal_zone->trips[i].type = THERMAL_TRIP_PASSIVE;
-+		int34x_thermal_zone->trips[i].temperature = THERMAL_TEMP_INVALID;
-+	}
-+	
- 	trip_cnt = int340x_thermal_read_trips(int34x_thermal_zone);
- 
- 	int34x_thermal_zone->lpat_table = acpi_lpat_get_conversion_table(
- 								adev->handle);
- 
--	int34x_thermal_zone->zone = thermal_zone_device_register(
-+	int34x_thermal_zone->zone = thermal_zone_device_register_with_trips(
- 						acpi_device_bid(adev),
-+						int34x_thermal_zone->trips,
- 						trip_cnt,
- 						trip_mask, int34x_thermal_zone,
- 						int34x_thermal_zone->ops,
-@@ -272,9 +173,9 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- err_enable:
- 	thermal_zone_device_unregister(int34x_thermal_zone->zone);
- err_thermal_zone:
-+	kfree(int34x_thermal_zone->trips);
- 	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
--	kfree(int34x_thermal_zone->aux_trips);
--err_trip_alloc:
-+err_trips_alloc:
- 	kfree(int34x_thermal_zone->ops);
- err_ops_alloc:
- 	kfree(int34x_thermal_zone);
-@@ -287,7 +188,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
- {
- 	thermal_zone_device_unregister(int34x_thermal_zone->zone);
- 	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
--	kfree(int34x_thermal_zone->aux_trips);
-+	kfree(int34x_thermal_zone->trips);
- 	kfree(int34x_thermal_zone->ops);
- 	kfree(int34x_thermal_zone);
- }
-diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-index e28ab1ba5e06..0c2c8de92014 100644
---- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-+++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-@@ -10,6 +10,7 @@
- #include <acpi/acpi_lpat.h>
- 
- #define INT340X_THERMAL_MAX_ACT_TRIP_COUNT	10
-+#define INT340X_THERMAL_MAX_TRIP_COUNT INT340X_THERMAL_MAX_ACT_TRIP_COUNT + 3
- 
- struct active_trip {
- 	int temp;
-@@ -19,15 +20,8 @@ struct active_trip {
- 
- struct int34x_thermal_zone {
- 	struct acpi_device *adev;
--	struct active_trip act_trips[INT340X_THERMAL_MAX_ACT_TRIP_COUNT];
--	unsigned long *aux_trips;
-+	struct thermal_trip *trips;
- 	int aux_trip_nr;
--	int psv_temp;
--	int psv_trip_id;
--	int crt_temp;
--	int crt_trip_id;
--	int hot_temp;
--	int hot_trip_id;
- 	struct thermal_zone_device *zone;
- 	struct thermal_zone_device_ops *ops;
- 	void *priv_data;
--- 
-2.34.1
+>  drivers/power/supply/ab8500_fg.c        | 18 +++++++++---------
+>  drivers/power/supply/bq24190_charger.c  |  2 +-
+>  drivers/power/supply/bq24257_charger.c  |  8 +++-----
+>  drivers/power/supply/lp8788-charger.c   |  7 +++----
+>  drivers/power/supply/max14577_charger.c |  2 +-
+>  drivers/power/supply/max77693_charger.c |  6 +++---
+>  drivers/power/supply/twl4030_charger.c  |  6 ++----
+>  7 files changed, 22 insertions(+), 27 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
+00_fg.c
+> index c6c9804280db..d989eadaa933 100644
+> --- a/drivers/power/supply/ab8500_fg.c
+> +++ b/drivers/power/supply/ab8500_fg.c
+> @@ -2594,7 +2594,7 @@ static ssize_t ab8505_powercut_flagtime_read(struct=
+ device *dev,
+>  		goto fail;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7F));
+> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x7F));
+>=20
+>  fail:
+>  	return ret;
+> @@ -2644,7 +2644,7 @@ static ssize_t ab8505_powercut_maxtime_read(struct =
+device *dev,
+>  		goto fail;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7F));
+> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x7F));
+>=20
+>  fail:
+>  	return ret;
+> @@ -2695,7 +2695,7 @@ static ssize_t ab8505_powercut_restart_read(struct =
+device *dev,
+>  		goto fail;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0xF));
+> +	return sysfs_emit(buf, "%d\n", (reg_value & 0xF));
+>=20
+>  fail:
+>  	return ret;
+> @@ -2746,7 +2746,7 @@ static ssize_t ab8505_powercut_timer_read(struct de=
+vice *dev,
+>  		goto fail;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7F));
+> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x7F));
+>=20
+>  fail:
+>  	return ret;
+> @@ -2769,7 +2769,7 @@ static ssize_t ab8505_powercut_restart_counter_read=
+(struct device *dev,
+>  		goto fail;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0xF0) >> 4);
+> +	return sysfs_emit(buf, "%d\n", (reg_value & 0xF0) >> 4);
+>=20
+>  fail:
+>  	return ret;
+> @@ -2790,7 +2790,7 @@ static ssize_t ab8505_powercut_read(struct device *=
+dev,
+>  	if (ret < 0)
+>  		goto fail;
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x1));
+> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x1));
+>=20
+>  fail:
+>  	return ret;
+> @@ -2841,7 +2841,7 @@ static ssize_t ab8505_powercut_flag_read(struct dev=
+ice *dev,
+>  		goto fail;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", ((reg_value & 0x10) >> 4));
+> +	return sysfs_emit(buf, "%d\n", ((reg_value & 0x10) >> 4));
+>=20
+>  fail:
+>  	return ret;
+> @@ -2864,7 +2864,7 @@ static ssize_t ab8505_powercut_debounce_read(struct=
+ device *dev,
+>  		goto fail;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7));
+> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x7));
+>=20
+>  fail:
+>  	return ret;
+> @@ -2914,7 +2914,7 @@ static ssize_t ab8505_powercut_enable_status_read(s=
+truct device *dev,
+>  		goto fail;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", ((reg_value & 0x20) >> 5));
+> +	return sysfs_emit(buf, "%d\n", ((reg_value & 0x20) >> 5));
+>=20
+>  fail:
+>  	return ret;
+> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/suppl=
+y/bq24190_charger.c
+> index 2b2c3a4391c1..be34b9848450 100644
+> --- a/drivers/power/supply/bq24190_charger.c
+> +++ b/drivers/power/supply/bq24190_charger.c
+> @@ -463,7 +463,7 @@ static ssize_t bq24190_sysfs_show(struct device *dev,
+>  	if (ret)
+>  		count =3D ret;
+>  	else
+> -		count =3D scnprintf(buf, PAGE_SIZE, "%hhx\n", v);
+> +		count =3D sysfs_emit(buf, "%hhx\n", v);
+>=20
+>  	pm_runtime_mark_last_busy(bdi->dev);
+>  	pm_runtime_put_autosuspend(bdi->dev);
+> diff --git a/drivers/power/supply/bq24257_charger.c b/drivers/power/suppl=
+y/bq24257_charger.c
+> index ab4c49788c58..103ddc2b3def 100644
+> --- a/drivers/power/supply/bq24257_charger.c
+> +++ b/drivers/power/supply/bq24257_charger.c
+> @@ -767,8 +767,7 @@ static ssize_t bq24257_show_ovp_voltage(struct device=
+ *dev,
+>  	struct power_supply *psy =3D dev_get_drvdata(dev);
+>  	struct bq24257_device *bq =3D power_supply_get_drvdata(psy);
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> -			 bq24257_vovp_map[bq->init_data.vovp]);
+> +	return sysfs_emit(buf, "%u\n", bq24257_vovp_map[bq->init_data.vovp]);
+>  }
+>=20
+>  static ssize_t bq24257_show_in_dpm_voltage(struct device *dev,
+> @@ -778,8 +777,7 @@ static ssize_t bq24257_show_in_dpm_voltage(struct dev=
+ice *dev,
+>  	struct power_supply *psy =3D dev_get_drvdata(dev);
+>  	struct bq24257_device *bq =3D power_supply_get_drvdata(psy);
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> -			 bq24257_vindpm_map[bq->init_data.vindpm]);
+> +	return sysfs_emit(buf, "%u\n", bq24257_vindpm_map[bq->init_data.vindpm]=
+);
+>  }
+>=20
+>  static ssize_t bq24257_sysfs_show_enable(struct device *dev,
+> @@ -800,7 +798,7 @@ static ssize_t bq24257_sysfs_show_enable(struct devic=
+e *dev,
+>  	if (ret < 0)
+>  		return ret;
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", ret);
+> +	return sysfs_emit(buf, "%d\n", ret);
+>  }
+>=20
+>  static ssize_t bq24257_sysfs_set_enable(struct device *dev,
+> diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply=
+/lp8788-charger.c
+> index f5f47a0aa1e3..755b6a4379b8 100644
+> --- a/drivers/power/supply/lp8788-charger.c
+> +++ b/drivers/power/supply/lp8788-charger.c
+> @@ -602,7 +602,7 @@ static ssize_t lp8788_show_charger_status(struct devi=
+ce *dev,
+>  	lp8788_read_byte(pchg->lp, LP8788_CHG_STATUS, &data);
+>  	state =3D (data & LP8788_CHG_STATE_M) >> LP8788_CHG_STATE_S;
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%s\n", desc[state]);
+> +	return sysfs_emit(buf, "%s\n", desc[state]);
+>  }
+>=20
+>  static ssize_t lp8788_show_eoc_time(struct device *dev,
+> @@ -618,8 +618,7 @@ static ssize_t lp8788_show_eoc_time(struct device *de=
+v,
+>  	lp8788_read_byte(pchg->lp, LP8788_CHG_EOC, &val);
+>  	val =3D (val & LP8788_CHG_EOC_TIME_M) >> LP8788_CHG_EOC_TIME_S;
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "End Of Charge Time: %s\n",
+> -			stime[val]);
+> +	return sysfs_emit(buf, "End Of Charge Time: %s\n", stime[val]);
+>  }
+>=20
+>  static ssize_t lp8788_show_eoc_level(struct device *dev,
+> @@ -642,7 +641,7 @@ static ssize_t lp8788_show_eoc_level(struct device *d=
+ev,
+>  	val =3D (val & LP8788_CHG_EOC_LEVEL_M) >> LP8788_CHG_EOC_LEVEL_S;
+>  	level =3D mode ? abs_level[val] : relative_level[val];
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "End Of Charge Level: %s\n", level);
+> +	return sysfs_emit(buf, "End Of Charge Level: %s\n", level);
+>  }
+>=20
+>  static DEVICE_ATTR(charger_status, S_IRUSR, lp8788_show_charger_status, =
+NULL);
+> diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supp=
+ly/max14577_charger.c
+> index f244cd902eb9..96f9de775043 100644
+> --- a/drivers/power/supply/max14577_charger.c
+> +++ b/drivers/power/supply/max14577_charger.c
+> @@ -532,7 +532,7 @@ static ssize_t show_fast_charge_timer(struct device *=
+dev,
+>  		break;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
+> +	return sysfs_emit(buf, "%u\n", val);
+>  }
+>=20
+>  static ssize_t store_fast_charge_timer(struct device *dev,
+> diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supp=
+ly/max77693_charger.c
+> index a2c5c9858639..794c8c054450 100644
+> --- a/drivers/power/supply/max77693_charger.c
+> +++ b/drivers/power/supply/max77693_charger.c
+> @@ -296,7 +296,7 @@ static ssize_t fast_charge_timer_show(struct device *=
+dev,
+>  		break;
+>  	}
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
+> +	return sysfs_emit(buf, "%u\n", val);
+>  }
+>=20
+>  static int max77693_set_fast_charge_timer(struct max77693_charger *chg,
+> @@ -357,7 +357,7 @@ static ssize_t top_off_threshold_current_show(struct =
+device *dev,
+>  	else
+>  		val =3D data * 50000;
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
+> +	return sysfs_emit(buf, "%u\n", val);
+>  }
+>=20
+>  static int max77693_set_top_off_threshold_current(struct max77693_charge=
+r *chg,
+> @@ -405,7 +405,7 @@ static ssize_t top_off_timer_show(struct device *dev,
+>=20
+>  	val =3D data * 10;
+>=20
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
+> +	return sysfs_emit(buf, "%u\n", val);
+>  }
+>=20
+>  static int max77693_set_top_off_timer(struct max77693_charger *chg,
+> diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/suppl=
+y/twl4030_charger.c
+> index 1bc49b2e12e8..53a0ea5a61da 100644
+> --- a/drivers/power/supply/twl4030_charger.c
+> +++ b/drivers/power/supply/twl4030_charger.c
+> @@ -726,11 +726,9 @@ twl4030_bci_mode_show(struct device *dev,
+>=20
+>  	for (i =3D 0; i < ARRAY_SIZE(modes); i++)
+>  		if (mode =3D=3D i)
+> -			len +=3D scnprintf(buf+len, PAGE_SIZE-len,
+> -					"[%s] ", modes[i]);
+> +			len +=3D sysfs_emit_at(buf, len, "[%s] ", modes[i]);
+>  		else
+> -			len +=3D scnprintf(buf+len, PAGE_SIZE-len,
+> -					"%s ", modes[i]);
+> +			len +=3D sysfs_emit_at(buf, len, "%s ", modes[i]);
+>  	buf[len-1] =3D '\n';
+>  	return len;
+>  }
+> --=20
+> 2.25.1
 
+--w4bxyprcvdwgi7zj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOzHA4ACgkQ2O7X88g7
++pqmYxAAg7vFX2NI07MtNId6zrrChtgIzTO/Tc2x0p+1EAjTcfkf2CtjbemfsDwK
+qZs1jyaUkTODJGARjtuv/mi1jevh7QJM9517s45BuHMBK6u9Qb75WIosF9X4qW8w
+GDbgsD5iG67xPkFt+JJ6qsKT4BLANbKqJu+nbFeflKk9SzKUXsH6DGPO3rZTLTwQ
+fochOkjrBDbxfdfx31v7xCX+TPMYVIN6oUceUkplmbL+QmHDDpo58GmWedfSiXfw
+SVXE2S3TcGVpP9uBCKqRukRT7tPrhzvtLq0WfhHIcbaV+1loG9LEXuGnZyxArOJ7
+jRAXFMZvxM1/+UTOHnrHFrg59ufN//VeZ62jf42ASz7hkfvGGjWOJhYgYivP2kWh
+8tXSLikyhefDdlhPxKmnkVBIiu9ygg8n9Jdt5LN72yvh8Jwn+YWWuatYT9lq1Hkl
++bqDaolRfR6QJYJhAWVGfyRKOnVCc6GMaqZIF1qMaWBIjeSms/eswDDYWsOC3N7U
+E/byA44isyPlGaCDOZUqlMvgGgWeFxmPQqrRLiLCzUov7AckuM7o5lwdm85k9g28
+XCXSsotxLSJkIHKKsY1H7ZnYu4Uz8FN4Rm+Cc7JY7pQQEdadXkUDx8XqCbbf0Xnj
+gEG8ihm2TtOjL9LzUuMRcKnSaOKST6jbJYbETIgViH72ERxXrEQ=
+=KhCT
+-----END PGP SIGNATURE-----
+
+--w4bxyprcvdwgi7zj--
