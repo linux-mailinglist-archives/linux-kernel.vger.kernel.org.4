@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1A265B47A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1FF65B47E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236314AbjABPx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
+        id S236427AbjABPyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:54:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbjABPxZ (ORCPT
+        with ESMTP id S233865AbjABPyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:53:25 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3809AB82;
-        Mon,  2 Jan 2023 07:53:24 -0800 (PST)
-Date:   Mon, 02 Jan 2023 15:53:20 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672674801;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 2 Jan 2023 10:54:18 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3924FF6E;
+        Mon,  2 Jan 2023 07:54:18 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BD38133E13;
+        Mon,  2 Jan 2023 15:54:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672674856; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3P5pISwMYBYCrQ8Yr86Uym3gj8BN/L8IIlaMxfkhy08=;
-        b=WDIaj39zarkxIy3RcXAEsQNsau423KjE7KQGAePWyn2aHanx9EtNzS9QA/UuUQq7qwccw7
-        zbvJ3sYAi4ReSi1N+H3FOs+IAyQo97tSiIkkNz8wtGdinUMWLFRWxGuq1b5DDSGpfUbCQW
-        kFaVmDr39u610okCyxBAKADRvr6VS7khx2vYx5SU/tTS1orbO/QKjbV0DHkpPd+KBvDxeW
-        aFMf66M+Mq0US/F/6+GR7INgIMoFzP5wlyLNbRoyYANMt+u+TvJFXhws8VZl2ZmejV1DEL
-        DOMX6XAgG8CQZGlgvhmopnzgEJAzbBzwROZZSpTIzoIlOgMarV//96i9wekTxA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672674801;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        bh=Zuod7z+5UPCG454P5NyNY251FiSdc6kVNmMzVnEJn7U=;
+        b=Sf8atC5GTLPoKO/IsmR7Sdu4UIOzsLK1m316FJ92+qJNBOAUU/GbHR/ii7MmC0wachcTBB
+        9Y68PNxHvJ/9PkBLc+drC8mq0FHxElYyBwty0anFs8ySYEXgNWjQ9zQBYgLWbG6rLKXV0j
+        OCzg1VUs+G4wvvxpqH9wRc3lRFbkdEw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672674856;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3P5pISwMYBYCrQ8Yr86Uym3gj8BN/L8IIlaMxfkhy08=;
-        b=lXFeWHI9Gp0KHaqnUtDDEMeHEE750GwMn4AA+3SZWgZVPNAov8+TElRUZJGJyihCOvdXq6
-        8anhNCCiB1WxDABQ==
-From:   "tip-bot2 for Mathieu Desnoyers" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/rseq: Fix concurrency ID handling of
- usermodehelper kthreads
-Cc:     kernel test robot <yujie.liu@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <202212301353.5c959d72-yujie.liu@intel.com>
-References: <202212301353.5c959d72-yujie.liu@intel.com>
+        bh=Zuod7z+5UPCG454P5NyNY251FiSdc6kVNmMzVnEJn7U=;
+        b=qodcG15AMrzWKSWHeNJCLjZ+i3Vt83QcINgNUOKWNHMW9CDo+hqo8eZmLw/7ov+pDi2vaQ
+        csGnpujTUC6PUJBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 98C94139C8;
+        Mon,  2 Jan 2023 15:54:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tl1DJSj+smOKdQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 02 Jan 2023 15:54:16 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 661B2A0742; Mon,  2 Jan 2023 16:54:15 +0100 (CET)
+Date:   Mon, 2 Jan 2023 16:54:15 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, hch@lst.de, damien.lemoal@wdc.com
+Subject: Re: [PATCH RESEND v2 06/10] block, bfq: remove redundant
+ bfqd->rq_in_driver > 0 check in bfq_add_request
+Message-ID: <20230102155415.pvl57qtzjk2acwf6@quack3>
+References: <20221222191641.1643117-1-shikemeng@huaweicloud.com>
+ <20221222191641.1643117-7-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-Message-ID: <167267480086.4906.14665352998737768536.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221222191641.1643117-7-shikemeng@huaweicloud.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,54 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+On Fri 23-12-22 03:16:37, Kemeng Shi wrote:
+> The bfqd->rq_in_driver > 0 check is along with previous
+> "bfqd->rq_in_driver == 0 ||" check, so no need to re-check
+> bfqd->rq_in_driver > 0.
+> 
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 
-Commit-ID:     bbd0b031509b880b4e9a880bb27ca2a30ad081ab
-Gitweb:        https://git.kernel.org/tip/bbd0b031509b880b4e9a880bb27ca2a30ad081ab
-Author:        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-AuthorDate:    Mon, 02 Jan 2023 10:12:16 -05:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 02 Jan 2023 16:34:12 +01:00
+I have nothing against this but OTOH in this complex condition the original
+version looks more readable than the new one to me.
 
-sched/rseq: Fix concurrency ID handling of usermodehelper kthreads
+								Honza
 
-sched_mm_cid_after_execve() does not expect NULL t->mm, but it may happen
-if a usermodehelper kthread fails when attempting to execute a binary.
-
-sched_mm_cid_fork() can be issued from a usermodehelper kthread, which
-has t->flags PF_KTHREAD set.
-
-Fixes: af7f588d8f73 ("sched: Introduce per-memory-map concurrency ID")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Reported-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/oe-lkp/202212301353.5c959d72-yujie.liu@intel.com
----
- kernel/sched/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 048ec24..f99ee69 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11343,8 +11343,8 @@ void sched_mm_cid_after_execve(struct task_struct *t)
- 	struct mm_struct *mm = t->mm;
- 	unsigned long flags;
- 
--	WARN_ON_ONCE((t->flags & PF_KTHREAD) || !t->mm);
--
-+	if (!mm)
-+		return;
- 	local_irq_save(flags);
- 	t->mm_cid = mm_cid_get(mm);
- 	t->mm_cid_active = 1;
-@@ -11354,7 +11354,7 @@ void sched_mm_cid_after_execve(struct task_struct *t)
- 
- void sched_mm_cid_fork(struct task_struct *t)
- {
--	WARN_ON_ONCE((t->flags & PF_KTHREAD) || !t->mm || t->mm_cid != -1);
-+	WARN_ON_ONCE(!t->mm || t->mm_cid != -1);
- 	t->mm_cid_active = 1;
- }
- #endif
+> ---
+>  block/bfq-iosched.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index ebcafe3c4c3b..7c91d16dbf6f 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -2204,8 +2204,7 @@ static void bfq_add_request(struct request *rq)
+>  		 */
+>  		if (bfqq == bfqd->in_service_queue &&
+>  		    (bfqd->rq_in_driver == 0 ||
+> -		     (bfqq->last_serv_time_ns > 0 &&
+> -		      bfqd->rqs_injected && bfqd->rq_in_driver > 0)) &&
+> +		     (bfqq->last_serv_time_ns > 0 && bfqd->rqs_injected)) &&
+>  		    time_is_before_eq_jiffies(bfqq->decrease_time_jif +
+>  					      msecs_to_jiffies(10))) {
+>  			bfqd->last_empty_occupied_ns = ktime_get_ns();
+> -- 
+> 2.30.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
