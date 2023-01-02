@@ -2,198 +2,390 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6003465B696
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E15B65B698
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbjABS1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 13:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
+        id S233960AbjABS2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 13:28:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbjABS1g (ORCPT
+        with ESMTP id S232735AbjABS2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 13:27:36 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1887CF43
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:27:35 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id gh17so68338999ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 10:27:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:subject:user-agent:references:in-reply-to:message-id
-         :date:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BuinR1n7gd8Q3SzKAQ6WQrwGR8n9/4oxmmrneMJdvco=;
-        b=eAleCktC30ne1WG3/xjo/bFDXCjd/kaegU3waSVZdZDHPUP0qp31Xv/yq+pTVuVp7l
-         7vfBpNhYaFeNQKqBLVwdRbNCiLdRQoIGkGATEMi6Eca7PfDt7mSBn+yvgDPU+I4wLZAZ
-         sg+BAXv2zS9r6Dc5pNYP9Fd0f0tnD572hNgV4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:subject:user-agent:references:in-reply-to:message-id
-         :date:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BuinR1n7gd8Q3SzKAQ6WQrwGR8n9/4oxmmrneMJdvco=;
-        b=iQAjFnZwWQfLaJSInEHKXaAn/9udgY2+WBhsjc2zt4Ki4d33OvG3wTS9ajTWP0Xfkd
-         NtX8de7qsX4Ulg9aMsejDnwJGdiWLOwbUtpKdCuTLTDh2RKQ/U7K1SfM+OfxjMrXB1Lx
-         V8h0Ac0vl9+FkdgrjeJOLsZkKKH0A6GbomsluBEKZRZOMzJMLQ7pbTeDAuLzCIXtRLaE
-         iDdvAkeAU5tXtLo4tqkRsIqPZ1vPj8QGkkn9EYXKFr4pHG8U7d0OpjqYFyOpP0e4m87w
-         CEt6wTG41RgfsUwxi6hFbknbOPPB5kqXc7ytynXzWjB6v8m9mfwPttDQxaAtMBxYjGfI
-         dbHQ==
-X-Gm-Message-State: AFqh2krGj+/Nf7J3O9KlJZs2585Bkbm28IShsTeYTN7i35aEhKuIDkzu
-        YBHj5C5Ick/N58odZzd0X0ikmg==
-X-Google-Smtp-Source: AMrXdXuPdtJjvNeBLkhHExgDD6sthU5G5noinCFOqYgjyR0ccIJ4ls8gwh35k3Bmu8a3ba/EWhkIqQ==
-X-Received: by 2002:a17:907:9b09:b0:849:e96f:521b with SMTP id kn9-20020a1709079b0900b00849e96f521bmr31430902ejc.32.1672684053670;
-        Mon, 02 Jan 2023 10:27:33 -0800 (PST)
-Received: from [192.168.178.38] (f215227.upc-f.chello.nl. [80.56.215.227])
-        by smtp.gmail.com with ESMTPSA id lb2-20020a170907784200b0084aade9d6b5sm12205006ejc.17.2023.01.02.10.27.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 02 Jan 2023 10:27:32 -0800 (PST)
-From:   Arend Van Spriel <arend.vanspriel@broadcom.com>
-To:     Hector Martin <marcan@marcan.st>,
-        Aditya Garg <gargaditya08@live.com>, <aspriel@gmail.com>,
-        <hante.meuleman@broadcom.com>, <kvalo@kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <lina@asahilina.net>,
-        <franky.lin@broadcom.com>
-CC:     Orlando Chamberlain <redecorating@protonmail.com>,
-        <brcm80211-dev-list@broadcom.com>,
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Asahi Linux <asahi@lists.linux.dev>
-Date:   Mon, 02 Jan 2023 19:27:31 +0100
-Message-ID: <18573bd1a38.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-In-Reply-To: <9c5bdb0a-0877-ed16-f09f-164a9dab16d4@marcan.st>
-References: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
- <f36dd8e3-9905-f04a-ed34-4be91ed1fec6@marcan.st>
- <F9EFCCD1-4407-42CC-8316-2F58AAC1AE7F@live.com>
- <ACC0D1F6-7857-4FF0-A474-4EC699572E1B@live.com>
- <9c5bdb0a-0877-ed16-f09f-164a9dab16d4@marcan.st>
-User-Agent: AquaMail/1.41.0 (build: 104100234)
-Subject: Re: [PATCH 1/2] brcmfmac: Use separate struct to declare firmware names for Apple OTP chips
+        Mon, 2 Jan 2023 13:28:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B9760C8
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:28:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C619A6108E
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 18:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 799A9C433D2;
+        Mon,  2 Jan 2023 18:28:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672684111;
+        bh=2a9uzKR0n09mmWGQyJOGrrefLSxI5SYy96xORGgaEXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qaZCK9e2Fjr5OnPBVBy7I2gq1IjI4vG1csgP9RyPox3ikCLhmDozZ3FfvLhn24GnR
+         QLvw3ITiy1LobakiXVTjcLUGrRsRgjwQd6dtq0DWLD2pPqmAnn6LgGuArwWIkSAEf+
+         b7rlqgdiGvgCGITJS2Oi5BNyjFTdzXgGW78mECNm2IjWpyGN9bffkRz1/kS6ddeH/o
+         lqg2b6AXi44ZuSWvKej8VmTcjo3mtGQ1ZiFJzAnFCRMCbcOmiwvt2DPbz1LZ0Yey9r
+         lqbvRPbl3vZnMjUx+6fhKmC5mMVhR/YrqX1vWHJrIBNafVyptsEYSjUWKREyBsy0px
+         xhaNg2Z9/Q+6A==
+Date:   Mon, 2 Jan 2023 20:28:15 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Cc:     jan.kiszka@siemens.com, akpm@linux-foundation.org,
+        gregkh@linuxfoundation.org, kbingham@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mingo@redhat.com,
+        vbabka@suse.cz, x86@kernel.org
+Subject: Re: [PATCH v4] scripts/gdb: add mm introspection utils
+Message-ID: <Y7MiP9oTpnRReiiQ@kernel.org>
+References: <16280f8e-31c9-7b0b-b0c1-4d180c4d0045@siemens.com>
+ <20230102171014.31408-1-dmitrii.bundin.a@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d9dd1305f14c1a9c"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230102171014.31408-1-dmitrii.bundin.a@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000d9dd1305f14c1a9c
-Content-Type: text/plain; format=flowed; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+On Mon, Jan 02, 2023 at 08:10:14PM +0300, Dmitrii Bundin wrote:
+> This command provides a way to traverse the entire page hierarchy by a
+> given virtual address on x86. In addition to qemu's commands info
+> tlb/info mem it provides the complete information about the paging
+> structure for an arbitrary virtual address. It supports 4KB/2MB/1GB and
+> 5 level paging.
+> 
+> Here is an example output for 2MB success translation:
+> 
+> (gdb) translate-vm address
+> cr3:
+>     cr3 binary data                0x10a1f8004
+>     next entry physicall address   0x10a1f8000
+>     ---
+>     bit  3          page level write through       False
+>     bit  4          page level cache disabled      False
+> level 4:
+>     entry address                  0xffff88810a1f87f0
+>     page entry binary data         0x8000000109042067
+>     next entry physicall address   0x109042000
+>     ---
+>     bit  0          entry present                  True
+>     bit  1          read/write access allowed      True
+>     bit  2          user access allowed            True
+>     bit  3          page level write through       False
+>     bit  4          page level cache disabled      False
+>     bit  5          entry has been accessed        True
+>     bit  7          page size                      False
+>     bit  11         restart to ordinary            False
+>     bit  63         execute disable                True
+> level 3:
+>     entry address                  0xffff888109042e40
+>     page entry binary data         0x10ec93067
+>     next entry physicall address   0x10ec93000
+>     ---
+>     bit  0          entry present                  True
+>     bit  1          read/write access allowed      True
+>     bit  2          user access allowed            True
+>     bit  3          page level write through       False
+>     bit  4          page level cache disabled      False
+>     bit  5          entry has been accessed        True
+>     bit  7          page size                      False
+>     bit  11         restart to ordinary            False
+>     bit  63         execute disable                False
+> level 2:
+>     entry address                  0xffff88810ec939a8
+>     page entry binary data         0x800000012b6008e7
+>     page size                      2MB
+>     page physicall address         0x12b600000
+>     ---
+>     bit  0          entry present                  True
+>     bit  1          read/write access allowed      True
+>     bit  2          user access allowed            True
+>     bit  3          page level write through       False
+>     bit  4          page level cache disabled      False
+>     bit  5          entry has been accessed        True
+>     bit  6          page dirty                     True
+>     bit  7          page size                      True
+>     bit  8          global translation             False
+>     bit  11         restart to ordinary            True
+>     bit  12         pat                            False
+>     bits (59, 62)   protection key                 0
+>     bit  63         execute disable                True
+> 
+> Signed-off-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
 
-On January 2, 2023 4:15:41 PM Hector Martin <marcan@marcan.st> wrote:
+FWIW,
 
-> On 02/01/2023 23.40, Aditya Garg wrote:
->> From: Aditya Garg <gargaditya08@live.com>
->>
->> Commit 'dce45ded7619' added support for 89459 chip pcie device. It uses the
->> BRCM4355 chip which is also found in Apple hardware. However this commit
->> causes conflicts in the firmware naming between Apple hardware, which
->> supports OTP and other non-Apple hardwares. So, this patch makes these
->> Apple chips use their own firmware table so as to avoid possible conflicts
->> like these in the future.
->
-> I think my reply to Arend flew over your head.
->
-> My point was that I'd rather have the Broadcom/Cypress people actually
-> answer my question so we can figure out how to do this *properly*,
-> instead of doing "safer-but-dumb" things (like this patch) because we
-> just don't have the information to do it properly.
+Acked by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+> 
+> Changes in v2: https://lore.kernel.org/all/20221230163512.23736-1-dmitrii.bundin.a@gmail.com/
+>     - Fix commit message to mention x86 explicitly
+>     - Assign page_offset_base to a constant in case
+>       CONFIG_DYNAMIC_MEMORY_LAYOUT is disabled
+> 
+> Changes in v3: https://lore.kernel.org/all/20221231171258.7907-1-dmitrii.bundin.a@gmail.com/
+>     - Make debug output lower case and column aligned
+> 
+> Changes in v4: https://lore.kernel.org/all/20230101172312.21452-1-dmitrii.bundin.a@gmail.com/
+>     - Added currently supported archs in the command help
+>     - Remove excessive newline
+> 
+>  scripts/gdb/linux/mm.py    | 223 +++++++++++++++++++++++++++++++++++++
+>  scripts/gdb/vmlinux-gdb.py |   1 +
+>  2 files changed, 224 insertions(+)
+>  create mode 100644 scripts/gdb/linux/mm.py
+> 
+> diff --git a/scripts/gdb/linux/mm.py b/scripts/gdb/linux/mm.py
+> new file mode 100644
+> index 000000000000..2a0b6cb6a1f8
+> --- /dev/null
+> +++ b/scripts/gdb/linux/mm.py
+> @@ -0,0 +1,223 @@
+> +#
+> +# gdb helper commands and functions for Linux kernel debugging
+> +#
+> +#  routines to introspect page table
+> +#
+> +# Authors:
+> +#  Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+> +#
+> +# This work is licensed under the terms of the GNU GPL version 2.
+> +#
+> +
+> +import gdb
+> +
+> +from linux import utils
+> +
+> +PHYSICAL_ADDRESS_MASK = gdb.parse_and_eval('0xfffffffffffff')
+> +
+> +
+> +def page_mask(level=1):
+> +    # 4KB
+> +    if level == 1:
+> +        return gdb.parse_and_eval('(u64) ~0xfff')
+> +    # 2MB
+> +    elif level == 2:
+> +        return gdb.parse_and_eval('(u64) ~0x1fffff')
+> +    # 1GB
+> +    elif level == 3:
+> +        return gdb.parse_and_eval('(u64) ~0x3fffffff')
+> +    else:
+> +        raise Exception(f'Unknown page level: {level}')
+> +
+> +
+> +#page_offset_base in case CONFIG_DYNAMIC_MEMORY_LAYOUT is disabled
+> +POB_NO_DYNAMIC_MEM_LAYOUT = '0xffff888000000000'
+> +def _page_offset_base():
+> +    pob_symbol = gdb.lookup_global_symbol('page_offset_base')
+> +    pob = pob_symbol.name if pob_symbol else POB_NO_DYNAMIC_MEM_LAYOUT
+> +    return gdb.parse_and_eval(pob)
+> +
+> +
+> +def is_bit_defined_tupled(data, offset):
+> +    return offset, bool(data >> offset & 1)
+> +
+> +def content_tupled(data, bit_start, bit_end):
+> +    return (bit_start, bit_end), data >> bit_start & ((1 << (1 + bit_end - bit_start)) - 1)
+> +
+> +def entry_va(level, phys_addr, translating_va):
+> +        def start_bit(level):
+> +            if level == 5:
+> +                return 48
+> +            elif level == 4:
+> +                return 39
+> +            elif level == 3:
+> +                return 30
+> +            elif level == 2:
+> +                return 21
+> +            elif level == 1:
+> +                return 12
+> +            else:
+> +                raise Exception(f'Unknown level {level}')
+> +
+> +        entry_offset =  ((translating_va >> start_bit(level)) & 511) * 8
+> +        entry_va = _page_offset_base() + phys_addr + entry_offset
+> +        return entry_va
+> +
+> +class Cr3():
+> +    def __init__(self, cr3, page_levels):
+> +        self.cr3 = cr3
+> +        self.page_levels = page_levels
+> +        self.page_level_write_through = is_bit_defined_tupled(cr3, 3)
+> +        self.page_level_cache_disabled = is_bit_defined_tupled(cr3, 4)
+> +        self.next_entry_physical_address = cr3 & PHYSICAL_ADDRESS_MASK & page_mask()
+> +
+> +    def next_entry(self, va):
+> +        next_level = self.page_levels
+> +        return PageHierarchyEntry(entry_va(next_level, self.next_entry_physical_address, va), next_level)
+> +
+> +    def mk_string(self):
+> +            return f"""\
+> +cr3:
+> +    {'cr3 binary data': <30} {hex(self.cr3)}
+> +    {'next entry physicall address': <30} {hex(self.next_entry_physical_address)}
+> +    ---
+> +    {'bit' : <4} {self.page_level_write_through[0]: <10} {'page level write through': <30} {self.page_level_write_through[1]}
+> +    {'bit' : <4} {self.page_level_cache_disabled[0]: <10} {'page level cache disabled': <30} {self.page_level_cache_disabled[1]}
+> +"""
+> +
+> +
+> +class PageHierarchyEntry():
+> +    def __init__(self, address, level):
+> +        data = int.from_bytes(
+> +            memoryview(gdb.selected_inferior().read_memory(address, 8)),
+> +            "little"
+> +        )
+> +        if level == 1:
+> +            self.is_page = True
+> +            self.entry_present = is_bit_defined_tupled(data, 0)
+> +            self.read_write = is_bit_defined_tupled(data, 1)
+> +            self.user_access_allowed = is_bit_defined_tupled(data, 2)
+> +            self.page_level_write_through = is_bit_defined_tupled(data, 3)
+> +            self.page_level_cache_disabled = is_bit_defined_tupled(data, 4)
+> +            self.entry_was_accessed = is_bit_defined_tupled(data, 5)
+> +            self.dirty = is_bit_defined_tupled(data, 6)
+> +            self.pat = is_bit_defined_tupled(data, 7)
+> +            self.global_translation = is_bit_defined_tupled(data, 8)
+> +            self.page_physical_address = data & PHYSICAL_ADDRESS_MASK & page_mask(level)
+> +            self.next_entry_physical_address = None
+> +            self.hlat_restart_with_ordinary = is_bit_defined_tupled(data, 11)
+> +            self.protection_key = content_tupled(data, 59, 62)
+> +            self.executed_disable = is_bit_defined_tupled(data, 63)
+> +        else:
+> +            page_size = is_bit_defined_tupled(data, 7)
+> +            page_size_bit = page_size[1]
+> +            self.is_page = page_size_bit
+> +            self.entry_present = is_bit_defined_tupled(data, 0)
+> +            self.read_write = is_bit_defined_tupled(data, 1)
+> +            self.user_access_allowed = is_bit_defined_tupled(data, 2)
+> +            self.page_level_write_through = is_bit_defined_tupled(data, 3)
+> +            self.page_level_cache_disabled = is_bit_defined_tupled(data, 4)
+> +            self.entry_was_accessed = is_bit_defined_tupled(data, 5)
+> +            self.page_size = page_size
+> +            self.dirty = is_bit_defined_tupled(
+> +                data, 6) if page_size_bit else None
+> +            self.global_translation = is_bit_defined_tupled(
+> +                data, 8) if page_size_bit else None
+> +            self.pat = is_bit_defined_tupled(
+> +                data, 12) if page_size_bit else None
+> +            self.page_physical_address = data & PHYSICAL_ADDRESS_MASK & page_mask(level) if page_size_bit else None
+> +            self.next_entry_physical_address = None if page_size_bit else data & PHYSICAL_ADDRESS_MASK & page_mask()
+> +            self.hlat_restart_with_ordinary = is_bit_defined_tupled(data, 11)
+> +            self.protection_key = content_tupled(data, 59, 62) if page_size_bit else None
+> +            self.executed_disable = is_bit_defined_tupled(data, 63)
+> +        self.address = address
+> +        self.page_entry_binary_data = data
+> +        self.page_hierarchy_level = level
+> +
+> +    def next_entry(self, va):
+> +        if self.is_page or not self.entry_present[1]:
+> +            return None
+> +
+> +        next_level = self.page_hierarchy_level - 1
+> +        return PageHierarchyEntry(entry_va(next_level, self.next_entry_physical_address, va), next_level)
+> +
+> +
+> +    def mk_string(self):
+> +        if not self.entry_present[1]:
+> +            return f"""\
+> +level {self.page_hierarchy_level}:
+> +    {'entry address': <30} {hex(self.address)}
+> +    {'page entry binary data': <30} {hex(self.page_entry_binary_data)}
+> +    ---
+> +    PAGE ENTRY IS NOT PRESENT!
+> +"""
+> +        elif self.is_page:
+> +            def page_size_line(ps_bit, ps, level):
+> +                return "" if level == 1 else f"{'bit': <3} {ps_bit: <5} {'page size': <30} {ps}"
+> +
+> +            return f"""\
+> +level {self.page_hierarchy_level}:
+> +    {'entry address': <30} {hex(self.address)}
+> +    {'page entry binary data': <30} {hex(self.page_entry_binary_data)}
+> +    {'page size': <30} {'1GB' if self.page_hierarchy_level == 3 else '2MB' if self.page_hierarchy_level == 2 else '4KB' if self.page_hierarchy_level == 1 else 'Unknown page size for level:' + self.page_hierarchy_level}
+> +    {'page physicall address': <30} {hex(self.page_physical_address)}
+> +    ---
+> +    {'bit': <4} {self.entry_present[0]: <10} {'entry present': <30} {self.entry_present[1]}
+> +    {'bit': <4} {self.read_write[0]: <10} {'read/write access allowed': <30} {self.read_write[1]}
+> +    {'bit': <4} {self.user_access_allowed[0]: <10} {'user access allowed': <30} {self.user_access_allowed[1]}
+> +    {'bit': <4} {self.page_level_write_through[0]: <10} {'page level write through': <30} {self.page_level_write_through[1]}
+> +    {'bit': <4} {self.page_level_cache_disabled[0]: <10} {'page level cache disabled': <30} {self.page_level_cache_disabled[1]}
+> +    {'bit': <4} {self.entry_was_accessed[0]: <10} {'entry has been accessed': <30} {self.entry_was_accessed[1]}
+> +    {"" if self.page_hierarchy_level == 1 else f"{'bit': <4} {self.page_size[0]: <10} {'page size': <30} {self.page_size[1]}"}
+> +    {'bit': <4} {self.dirty[0]: <10} {'page dirty': <30} {self.dirty[1]}
+> +    {'bit': <4} {self.global_translation[0]: <10} {'global translation': <30} {self.global_translation[1]}
+> +    {'bit': <4} {self.hlat_restart_with_ordinary[0]: <10} {'restart to ordinary': <30} {self.hlat_restart_with_ordinary[1]}
+> +    {'bit': <4} {self.pat[0]: <10} {'pat': <30} {self.pat[1]}
+> +    {'bits': <4} {str(self.protection_key[0]): <10} {'protection key': <30} {self.protection_key[1]}
+> +    {'bit': <4} {self.executed_disable[0]: <10} {'execute disable': <30} {self.executed_disable[1]}
+> +"""
+> +        else:
+> +            return f"""\
+> +level {self.page_hierarchy_level}:
+> +    {'entry address': <30} {hex(self.address)}
+> +    {'page entry binary data': <30} {hex(self.page_entry_binary_data)}
+> +    {'next entry physicall address': <30} {hex(self.next_entry_physical_address)}
+> +    ---
+> +    {'bit': <4} {self.entry_present[0]: <10} {'entry present': <30} {self.entry_present[1]}
+> +    {'bit': <4} {self.read_write[0]: <10} {'read/write access allowed': <30} {self.read_write[1]}
+> +    {'bit': <4} {self.user_access_allowed[0]: <10} {'user access allowed': <30} {self.user_access_allowed[1]}
+> +    {'bit': <4} {self.page_level_write_through[0]: <10} {'page level write through': <30} {self.page_level_write_through[1]}
+> +    {'bit': <4} {self.page_level_cache_disabled[0]: <10} {'page level cache disabled': <30} {self.page_level_cache_disabled[1]}
+> +    {'bit': <4} {self.entry_was_accessed[0]: <10} {'entry has been accessed': <30} {self.entry_was_accessed[1]}
+> +    {'bit': <4} {self.page_size[0]: <10} {'page size': <30} {self.page_size[1]}
+> +    {'bit': <4} {self.hlat_restart_with_ordinary[0]: <10} {'restart to ordinary': <30} {self.hlat_restart_with_ordinary[1]}
+> +    {'bit': <4} {self.executed_disable[0]: <10} {'execute disable': <30} {self.executed_disable[1]}
+> +"""
+> +
+> +
+> +class TranslateVM(gdb.Command):
+> +    """Prints the entire paging structure used to translate a given virtual address.
+> +
+> +Having an address space of the currently executed process translates the virtual address
+> +and prints detailed information of all paging structure levels used for the transaltion.
+> +Currently supported arch: x86"""
+> +
+> +    def __init__(self):
+> +        super(TranslateVM, self).__init__('translate-vm', gdb.COMMAND_USER)
+> +
+> +    def invoke(self, arg, from_tty):
+> +        if utils.is_target_arch("x86"):
+> +            vm_address = gdb.parse_and_eval(f'{arg}')
+> +            cr3_data = gdb.parse_and_eval('$cr3')
+> +            cr4 = gdb.parse_and_eval('$cr4')
+> +            page_levels = 5 if cr4 & (1 << 12) else 4
+> +            page_entry = Cr3(cr3_data, page_levels)
+> +            while page_entry:
+> +                gdb.write(page_entry.mk_string())
+> +                page_entry = page_entry.next_entry(vm_address)
+> +        else:
+> +            gdb.GdbError("Virtual address translation is not"
+> +                         "supported for this arch")
+> +
+> +
+> +TranslateVM()
+> diff --git a/scripts/gdb/vmlinux-gdb.py b/scripts/gdb/vmlinux-gdb.py
+> index 4136dc2c59df..27bd7339bccc 100644
+> --- a/scripts/gdb/vmlinux-gdb.py
+> +++ b/scripts/gdb/vmlinux-gdb.py
+> @@ -37,3 +37,4 @@ else:
+>      import linux.clk
+>      import linux.genpd
+>      import linux.device
+> +    import linux.mm
+> -- 
+> 2.17.1
+> 
 
-Fair enough. Can you accurately (re)state your question and I will try to 
-answer it.
-
-Regards,
-Arend
-
-> - Hector
-
-
-
-
---000000000000d9dd1305f14c1a9c
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-2Gzj3QNJRLsZu1TLyOyBBIr/BE7UiY3RabgRzknBGAPmzhS+fmyM8OtM5BYBsFBrSUFtZZO2p/tf
-Nbc24J2zf2peoZ8MK+7WQqummYlOnz+FyDkA9EybeNMcS5C+xi/PAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFIikAXd8CEtv
-ZbDflDRnf3tuStPuMA0GCSqGSIb3DQEBCwUAA4IBAQCdS5XCYx6k2GGZui9DlFsFm75khkqAU7rT
-zBX04sJU1+B1wtgmWTVIzW7ugdtDZ4gzaV0S9xRhpDErjJaltxPbCylb1DEsLj+AIvBR34caW6ZG
-sQk444t0HPb29HnWYj+OllIGMbdJWr0/P95ZrKk2bP24ub3ZP/8SyzrohfIba9WZKMq6g2nTLZE3
-BtkeSGJx/8dy0h8YmRn+adOrxKXHxhSL8BNn8wsmIZyYWe6fRcBtO3Ks2DOLyHCdkoFlN8x9VUQF
-N2ulEgqCbRKkx+qNirW86eF138lr1gRxzclu/38ko//MmkAYR/+hP3WnBll7zbpIt0jc9wyFkSqH
-p8a1MYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMTv1t
-bpIzNUky46LXMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBYC8y+Pd6rsqYcGrld
-sRAuLT6oT4u6pwom0HIjNJ0+2TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMzAxMDIxODI3MzNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEASWHzsKxnNHmGpkxdEAQ+z/MMOendn9aP6kRV
-2Jceo91TOVxkxesvbuZc3PXz8dbfMND4T2Urde+z2sDa9LCJ9tgbK7+pND9Ch1IR7MxQ/9KvYany
-GIJDW9GjBGfE/iIPMqBwL6OmUfLO1wKZh3fqzItbjY/HZoC7rSgBFZtSXLXHT43vpQijw45igGcr
-ttETLesdItM71OALgTrQZFeT6iRvHuvCxf3qh/epWRj0NFzpYgnz8BazeMNtQbR8ssROZbWKR87o
-15YZyBhn3TdrcdXTxiG301jO6F17OVOXbtwtLf/HsOxqdGQndiQrVmhrToWLKALJWFW4OYpBIz+g
-qw==
---000000000000d9dd1305f14c1a9c--
+-- 
+Sincerely yours,
+Mike.
