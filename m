@@ -2,1133 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5C565B2D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B3C65B2D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235964AbjABNm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S235990AbjABNmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbjABNmP (ORCPT
+        with ESMTP id S232976AbjABNmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:42:15 -0500
-Received: from mx0b-0039f301.pphosted.com (mx0b-0039f301.pphosted.com [148.163.137.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0B663DA;
-        Mon,  2 Jan 2023 05:42:12 -0800 (PST)
-Received: from pps.filterd (m0174682.ppops.net [127.0.0.1])
-        by mx0b-0039f301.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302Bx46F011991;
-        Mon, 2 Jan 2023 13:41:53 GMT
-Received: from eur04-he1-obe.outbound.protection.outlook.com (mail-he1eur04lp2054.outbound.protection.outlook.com [104.47.13.54])
-        by mx0b-0039f301.pphosted.com (PPS) with ESMTPS id 3mtd0uv746-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 13:41:53 +0000
+        Mon, 2 Jan 2023 08:42:18 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA3063AB;
+        Mon,  2 Jan 2023 05:42:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672666938; x=1704202938;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=J7xkNIQzzgDCVvL5DMEDTfOrVUQflU+RR1Gp6KwWTrs=;
+  b=UmfrTPB2NurVTgrYa4YANB9+diTrPXoGkHHcfl6i4WKNr6F+KMceVtdR
+   zkxQWp6o7LBZrghSa0RxEYUN7S/gY62HCh0fQ+yg/dNuc39yBn3SpMT4D
+   TuMxxIGdRPOss8tbNudPqOZJ+kd3raeUXkji/KWTWlmB1a+BhsgO8zi1H
+   0TyrmyauTKMII0pYRSBtw7fUbaNRJpOeJSnw02ZLFMFWOcu6NE3tLTOT1
+   Jbme6b2JDtiTTSj6b8uF1gzys/cBWXi6sUyVGQmsgx3aBKbAmk0Tn/Yd8
+   tu+bQ2X5XOlSAn0B5zFJvgI8Ur07LrNV5oU1NBcvcRhHqgTHaclE/gOzm
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="320197987"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="320197987"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 05:42:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="604536032"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="604536032"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga003.jf.intel.com with ESMTP; 02 Jan 2023 05:42:15 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 2 Jan 2023 05:42:14 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 2 Jan 2023 05:42:14 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.172)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 2 Jan 2023 05:42:14 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NkZR2Py/TQGVGAtl5cGJv1VL4Uut2A5KCLn+PZA2+PahhoQxhJfFgBzXYobMhmnvwoQDDf1UPAPIAsKYUVz2VtVdIH28gm/63gX/KGa92kpexRt8qfbuTm34A0hcnDAxdR3W6kdBSPBZqNMgPNjRu2WYbg0v7Syvo3liHnR6TW/SE8iib0z9Sw/KFwelpQnen+080mK/wfas635JZy9b9xApywDMGlZkRkTdPYpRlX8Nm/NZaxuqr2yVOV9MmxM5C1mAOKUzmQPZl0TwKMZuWvxauR0Mfuj07U7Cojj0W3nnNCqaogfpxk4gdAMbLrJtjBAekEAGo+k1yWs189e3FA==
+ b=HCcByUthVRIYxkjAr9qbNlEmtArlo+pDIZ2M8/7FWvJCYckn969X7NILfp+HUnSkQUBMux0Lw6lprN7YoxB12bxukmFwt2LhPqRalF5v2sAWNBI0RA+nMmtb5trZuU+5c+b6FicZClN3+XuKD2RD+LKWmA3ghoUDHgK4+qTrUAtMkkxkkT+sLijHpnOzSgkVldpZE2wafMAvRojQ8+Fk33gtdGtpvFHzNFh6M8NJKGzsejRtnhkJ3f5U/O3SZsfwZuFvL+Nsi0KNjini0/GYQXOWXhaj5JcW5LALWU85sv8mh6y5v8yOpbjYUNvfV97vPaQebqW9KGHynGxIw6GSEw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cpM/GTVcMI8fqBjEBRN4Lty7tXpejC9G2s04LY0mrJs=;
- b=EEzdH3VRQ7JISgO3Pm+5rcqC6ss0N1f4FcqAxW5dcJmGSxaDB859fVc3LQ4f/Bdr/tnhen8I3FfVCcbqmj4jZcqPajiIzCpxry/oXPoEV0z5xjKCX7l14AxanffYJW4YyyyFc5GVBWXjPPe/okzQ13nsZtVgMFZLkT4Vn99ZKoslkVtzmHX4HT2psk9WzwNbrWZ8bsjeX4dXB6/EMstLiL2hL+7+PZPjMKBKcM4ziGsPKYhrIepHW4hk2BS1RHoRBE/4jhbMW8Sg6NyTh3fw6w5QTxvmQd3PBLTEmWgOKkn5syANpoOidPdWqXNii+7QS0dKLeR3Byexzhx0mamHnw==
+ bh=J7xkNIQzzgDCVvL5DMEDTfOrVUQflU+RR1Gp6KwWTrs=;
+ b=HeoeNzjjmgRccsFVNRaTgYR7YtImPBsEWigo+CY9mIv9uEB4Btvv8fJayewUXxGdbCxrTjXbSNCowMbS78Is4FJUmTFUCb1m7PqoQpg7VQB2WcuX6TVuPjLZWBY1eAREO7Se0m9QJfOOsfnDZ2x1XIhIpPjG3WPj2xZG0bOfThf1X2NxDnCVKjqxvt53HwjsiNZWWuX+gsTAxsaBMlN95mUTmaiJDYFVRe54ehcg45k5xY1FHtuKbPB7F2PSnPQM9PsaFlouupmK2WexFb+KIzW5Y4dOgTFrDp8IjO89bnHNpS4Z3YeXN0fCsAzSZui+8ZzFPkgyvIuik9tkygPIYg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
- dkim=pass header.d=epam.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cpM/GTVcMI8fqBjEBRN4Lty7tXpejC9G2s04LY0mrJs=;
- b=kyQSl3x6MrFAKpRga7jcWIrq4nfcd2PTWuhf4JjUdeSs3A7u8UN/ApDCsby083Ir7XLZ+4/4TJk9cCjrP/GxTX5sgqaDOnWgFWTeLQlciVCtrrIU9pCMA23IbTFnhZ1Y9G6bm/KJmVZ3iu+UpdaWL9iFvia+lrRYtvBGAO38poY+SDZbV+O3I2s+FFLzBv7h3mLk/JKYnPqFVfsjwJs3OJO+GPDZ5MHfjwP+PgouVa5bO1H+usu3J8P0l2Bb6bff0Xqpc8ACHazLsRrSugtkfpgMaEueGGmNh0ogmvkswRXcxd3Wgnmg1WTU3ZKQ80uBwG1qlMtPzVYPlhE1D5YRMw==
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
- by DB9PR03MB9709.eurprd03.prod.outlook.com (2603:10a6:10:459::22) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ0PR11MB6622.namprd11.prod.outlook.com (2603:10b6:a03:478::6)
+ by DM4PR11MB7183.namprd11.prod.outlook.com (2603:10b6:8:111::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Mon, 2 Jan
- 2023 13:41:49 +0000
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::2da6:6d63:389b:3552]) by PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::2da6:6d63:389b:3552%9]) with mapi id 15.20.5944.019; Mon, 2 Jan 2023
- 13:41:49 +0000
-From:   Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-To:     "jgross@suse.com" <jgross@suse.com>
-CC:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+ 2023 13:42:12 +0000
+Received: from SJ0PR11MB6622.namprd11.prod.outlook.com
+ ([fe80::e30c:74f4:5052:6fd2]) by SJ0PR11MB6622.namprd11.prod.outlook.com
+ ([fe80::e30c:74f4:5052:6fd2%6]) with mapi id 15.20.5944.019; Mon, 2 Jan 2023
+ 13:42:12 +0000
+From:   "Zhang, Rui" <rui.zhang@intel.com>
+To:     "zh.nvgt@gmail.com" <zh.nvgt@gmail.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+CC:     "lenb@kernel.org" <lenb@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>
-Subject: [PATCH v1 3/3] xen/grant-table: add new ioctls to map dmabuf to
- existing fd
-Thread-Topic: [PATCH v1 3/3] xen/grant-table: add new ioctls to map dmabuf to
- existing fd
-Thread-Index: AQHZHq/2ph/BnX8oTk+YEfKPDbopCA==
-Date:   Mon, 2 Jan 2023 13:41:49 +0000
-Message-ID: <157bd897b4dd50b3c724722090b804440914c3cf.1672666311.git.oleksii_moisieiev@epam.com>
-References: <cover.1672666311.git.oleksii_moisieiev@epam.com>
-In-Reply-To: <cover.1672666311.git.oleksii_moisieiev@epam.com>
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH] ACPI: custom_method: fix potential use-after-free issues
+Thread-Topic: [PATCH] ACPI: custom_method: fix potential use-after-free issues
+Thread-Index: AQHZGb1QetPbVOMpVkW9t0fR2xIkiq6GxkwAgARmQgA=
+Date:   Mon, 2 Jan 2023 13:42:12 +0000
+Message-ID: <c052bf9dd21df44dfa3161bb94544559a41ab17e.camel@intel.com>
+References: <20221227063335.61474-1-zh.nvgt@gmail.com>
+         <CAJZ5v0jmOMHHXvRnDcetDbh+0CySh5ddZJx1g3xTXPzCHokZRg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jmOMHHXvRnDcetDbh+0CySh5ddZJx1g3xTXPzCHokZRg@mail.gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.5-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PA4PR03MB7136:EE_|DB9PR03MB9709:EE_
-x-ms-office365-filtering-correlation-id: 1c96edab-5a77-4b99-3495-08daecc71979
+x-ms-traffictypediagnostic: SJ0PR11MB6622:EE_|DM4PR11MB7183:EE_
+x-ms-office365-filtering-correlation-id: c1b1fde3-faf1-4c07-ca3a-08daecc7272c
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fAYApRAI95RYBFTJ84xgUdQh8nwOqFcHmW6e4jmqZfdGqkMYneO/J61PZb2X53TTM6IsMtxHGOWXEqjpiqfknllLuklpWu8+7hYEAIReTjLzdPBw7upIOsmejItupVabytOWiyZW6TaLvjx1JDH0tZAe0l595aaVxXTGY8oWDpWF+DH94QgzqoscUNVHVEnHUkdz/xhybEd/v71F5nppfdeMgkuRe6djsWI+ApEJeTAymu9ZnmblPV7+JKY1ZdC9v62fsjVBAHoQ9tw04K3Q7JCSvkgA+E412eAh1E6Yo3tIUn6ITiNi5fGjl91fd38YanuTYZodEJ1Kvhvx57fwfs4xKi+zE1BnI6dW8qPPkyRbl5vMWmD/85BH+l7GJYhekfbTvTiGswc6TpVAL8xx8Fo5iLfe0TRK/uSR+a7pDH6cWYrCXvP24qt7DAWQSmC3C5INOs/QB3zuUHWDSIKOvQdq7eSKNzmR9LvWq/HKAZZcVWvJOsEIvb2d+UawzAr8uUrmwfu8XMIANhyFi1wqFwHwBu5FrLbNQ77b7PsiTaulriuKWMHaoX7jsdXu0l8AhhQx65Bb4zacsTMoO3KC9mN9Fb+ibKRsFXsd3AeGw/zDJJivIVsXKdmbti7VDsidzp1Z3st1VJq/VscBwS98eiQkWEC1TGm3Tvps7Fum1qqh9SklgWuLpcCNS31PfOZA5l9XgjNLuRI0xWKQYd1IN+qQEZTvASbhQPgP6eYm4J8Oi3QHsmx37Vp/EGJC+gyD
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(136003)(376002)(39860400002)(366004)(451199015)(38100700002)(122000001)(86362001)(8676002)(38070700005)(66476007)(76116006)(66946007)(64756008)(66446008)(66556008)(6916009)(91956017)(4326008)(41300700001)(54906003)(316002)(2906002)(5660300002)(8936002)(30864003)(2616005)(83380400001)(6512007)(478600001)(71200400001)(6486002)(6506007)(26005)(55236004)(186003)(36756003)(22166006)(21314003)(579004)(559001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 3SF6+I+B+vBU2bweItMXt1FvYnGaC1xVhWRuRlpKK31+nUHI0zvfizVkiV1xkYcwiiBFng5S/4UB1WqIYim4H8w3W1TxvDH5QH6m1bb78Oy+v6tkDWaj98Bk9iWMZEq3AMF4Pf3SJeHrpP8CuI3Zy+HllZNnPryvwYxZJomZwJ2IonqcL/UC9llftFojxfLIUHN92LaF8OXSroaFfTuhmfsn6kOvvNjcqGYAeq0k26U0crCQ2GS7oU6fqsocS+d+amv5SoCAozt6UQbBr26D8DKoOxyrply2S/Dud1sCs1vr9yAazYtLJdttaTDuPcbS2ZqEcAva8LNhniMVvtX52BAfQYsXy0cpd4iMQHo2aFeqJgqpM4dqSRHSqvxpoDbHpqRvxFVeRCyix3hwEJImsZmw3pVO7wvko1V36+QD97zn9n4H4yRI6pngHFZY19Lr1jNWnAdTAmoj5iJvWXs0q4Pf4OEVWxHPfWJHtw9W8NPDbzmCHHs7OgUfVsF9XwdyB2H2u0LkP2GJE6x3IbF4w3IwUgECWSmN80ko268J3d0hZPhrI/B7KzAbOr7kZGlIbyOvyCLiDz1HHGJwFXFlhW+8X9qYQwpaJ4RHtPe2NFlfkA7OpqxWEM3D1CQzzh5g7pLbp3VLx41o7QLfVPzXFGxZh09//GyfxeU+wA3BK2VCH7mNcMMg6e8MrfD3FJS3jtBBLX6AwnOkTMoB6WMfy2WrGHtLFD7jxEK5hv1DDULsMeevR06I14yoV0PC8pJB
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB6622.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(136003)(346002)(39860400002)(396003)(451199015)(53546011)(6506007)(478600001)(110136005)(71200400001)(6486002)(36756003)(86362001)(82960400001)(122000001)(38100700002)(38070700005)(6512007)(26005)(186003)(2616005)(83380400001)(966005)(91956017)(5660300002)(76116006)(4326008)(66556008)(66476007)(8676002)(64756008)(66446008)(66946007)(8936002)(41300700001)(54906003)(2906002)(316002)(4001150100001)(22166006);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?SiGlTnYNPDw2YpnUzSo6FpTU+eS1V6Hg5OD2RkL6vKuPrNo8IBCWnG0z7S?=
- =?iso-8859-1?Q?WBGx1espg5fyI3QzgfX7olheSlizTxfW5qdDpIqsJimXnwH3rfIvoNXkoy?=
- =?iso-8859-1?Q?XqJtIIiE/3ToUosbcI0LXN+Q5AvOheCg35ov2CL/As8sv/vvSALHr0TFnd?=
- =?iso-8859-1?Q?UlmStJ9KuIBsmPqwOcunDnRWvkBgUcUgZMtVKWqXMFexIhhKwQl4XjTxSE?=
- =?iso-8859-1?Q?r2zwAt7JGRGSx0VhqhFyd+socMt5My6h4oP07SGvxnKj7TSqym8MjXUv/+?=
- =?iso-8859-1?Q?DI4d69HysRmUpP0uFgfrxfVsAdbOcrDkSgSkOsURxE7SiqrFm+PWG9mNxH?=
- =?iso-8859-1?Q?SCPmqQOOaRLDx7sOpZ7+K9B+gvahNYRBndIht8m09aSlOPWueDGUU/4uH9?=
- =?iso-8859-1?Q?+XIP19g8B9ry2b83Zy6bIA3Liun1+RLJLqZ9HrZrq2rOY5E6RSVkimzM+l?=
- =?iso-8859-1?Q?nzHtvxx/F3OfFMbFcWEk0jDZEQcdwqFUQMFISGmU2S+kU37B98UPtBTAVD?=
- =?iso-8859-1?Q?4XdR2IEguZN5MBtVIXdUEpb7hNu0aB6o/9jWtA3em9NdPDionCaIw1z1Il?=
- =?iso-8859-1?Q?oDGQ693RDtgG7v+tsPRC96iYJkaUzqIVxz4hrDgeOcOV+CoV3bOacyrv/y?=
- =?iso-8859-1?Q?ylKYGU7eyVj0bbDqf46aUj2IVlq4wviiGk3fEYuCcnQbuOro+LWP2jJoYi?=
- =?iso-8859-1?Q?+F78DqHY8TKbvvlFTPEi4kaLysLqIMg8KRk2KQBNRGx+v94swe5jw0uebs?=
- =?iso-8859-1?Q?GjNsf3PG0fmBYyjT7rG9+Ya8YCKDUcUB7pm19dcg95Gi4rmiX9Yo8pkdHr?=
- =?iso-8859-1?Q?0sOY7Szifb2rXh5AbbhKG5bETxeamg0F/vGjgCrALjwY7A2ifW9URopXeu?=
- =?iso-8859-1?Q?6sBlEfCl2VwIxGmwmWUXryiZgRlklZ/VFmx9Ww0KqF9ukVWKtOnGcm6vca?=
- =?iso-8859-1?Q?3Xwt8TtNQQxDtWZhiUpJZvFdF4SwkCP48qmGo5DwsDL4EFzGvGvIc9/2iu?=
- =?iso-8859-1?Q?LrEW+9HObIFTZPLEEwX8KSXSsChpxzrKhADvZws56emjs0GieP45wR4sfu?=
- =?iso-8859-1?Q?0Mqr5KdqXaDg9mr9wtjpc194o7WNZqGdKADYa1yvwDGdd2mOV6AG6t3FdG?=
- =?iso-8859-1?Q?OOw2l9KFW4giqjZONbNPCRDdXOlQ+mBI7UyoYc5UkuE+L/1VPBvwLTniNO?=
- =?iso-8859-1?Q?YzJAs4W6Lf+p4zePK7D4v2AVf0Tv5HO/5Fm0hfy7a9Wm6KJ4QaVyyKa9An?=
- =?iso-8859-1?Q?8/mLO5BpQrzdo/9zLsTDjnoF7jZVGaPkzLQ8IBDY+nVN6xmzZFRtyq+R0j?=
- =?iso-8859-1?Q?pcjxgUPYZx/PieIoKhbcg8feNMUG/gk3+VtGsDsH/xXhrlEk/CCPl3+df5?=
- =?iso-8859-1?Q?KuAPCG4bLtvxrdnotVskz37kiofFcIhmpfbdbBjihdv2REoVwJO5CFMbRc?=
- =?iso-8859-1?Q?roAx6vDRp6jZ2PTddgCwlU3Lx/8G/2tibtqfLIXq5y7LDLPBeYrXEC4W13?=
- =?iso-8859-1?Q?qqjZ9aQhOQdlU/vGbjsjuW4PsPHIPng7Syi4Hpl92p/1P4a/RxQKSuY56M?=
- =?iso-8859-1?Q?UZmIBd2cDqkhqUQWFXWqcFLR2n32uaQvyG7q60eb5CEdymGDbPlYbPw3FA?=
- =?iso-8859-1?Q?2+SDqBbY+WHRph7Lg7/ZyTLn04nfk2kZ0IGbKXItgLvqXWr9osn9ygoA?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OGpGbWFrSGV6OTJzclV4VGtHM0hzM0RpdjNibmxORnR6WnpmR05qK3N3WmVL?=
+ =?utf-8?B?eXVVSG5JMmFwaWFKNmNEaTZmTm1ydDlkNWVQc25xYVNzbEt1K3VpUWxSSVB3?=
+ =?utf-8?B?OGkwNVBWS2NFbmczMmtRUFRQQVYyQUFGeWNaeWhjKzk5SUttcUpoVTZwYVRq?=
+ =?utf-8?B?U1dwdG5sREtpRUxFa2N4YndxamJSOU1xL2ZlKzhBdXVRejJIejVXZy9DeGtj?=
+ =?utf-8?B?SUpmTmRPbkNtUy95ckN5VHlock5sOWlwMDR4N1lubVVKQUxPMC91RVlJc083?=
+ =?utf-8?B?NUlXTThxZUpPN3FBY3cxRkEvVkdFOGhaWi9DYklmcXd6T3JMSFpUbDY4Mkpt?=
+ =?utf-8?B?dTcybkYyTlIraCt1QWlLdm1LS216MlBEMHUwUUZyRUtxY3RGaDAvZWQzUFp1?=
+ =?utf-8?B?cG9LdVArMzdsaC82djRHUnR2VnRXZ2g4VHgyTlJ6Tk90RDZ1WEMwZk1PNmFM?=
+ =?utf-8?B?VE0xZGcyR0JrYXRORWlhOWFYbFhVeWgxek15d1N1NkV3MUY3cmpEcVAvSGpn?=
+ =?utf-8?B?SmV4WkRJMzlZRWdJWFZoM2t4TFNJbjgwNGFQdzBCd2l2V0F1QTlJNk1LYnFV?=
+ =?utf-8?B?SVRLbXE5dUEyYldGRVF1MG5OVEJhK01oYzl5RUFsT1JUQklTdDE4QmhDZGY4?=
+ =?utf-8?B?aWt1aDVVWWlia3RNaVJFU3BiRm50TjhXeEc1TU1ySHJJRGJTem9lUU9JRU5E?=
+ =?utf-8?B?NktMelNjUXppbisvVHJaL0ErUDZHSTEyaEtiWEJzaHhNcndjd2dLZU01UnJw?=
+ =?utf-8?B?SDZtZC9SelBYZVVwNzFPdnBNZjA1dy81b1ZkR2J2TXNSc3ZlTElNZHVMVlRO?=
+ =?utf-8?B?ZGZVb25ZVHNaTVBJblloTTdKKzVPMzJmR3VlNVN3QUh2QldSMlhHb1lML3l0?=
+ =?utf-8?B?TW9mRHp3cVdzVVhnREM4Q2xjNDg5a2FGcTRJSmErbGNPbVI1aEhzYkRjQkxI?=
+ =?utf-8?B?OHRKRk1sTE1yYTRPZ0FDcUhsSU5rRnpmSDJIN3BqSUJBV3lnMFFWYzIvVjJs?=
+ =?utf-8?B?RTRMWkdBWE1QTzhZdzlsb29FaXRJVThubzdNa2tOTnV4eUlLMkt2SzNpdm42?=
+ =?utf-8?B?NjFCbnV0VUU3Y0xFRlVmWkFYY08yUmJvM2JjcUhER2ZDRDZZYndqVk51TTJX?=
+ =?utf-8?B?eTA0NFJKY0VWUEQ0VFpseVF0SXNQM1RJUnJLekxNeVBpUENJSUhHckF5b1Jw?=
+ =?utf-8?B?RTc4U3dnTzNUQXI5d0hPQTBXaXZ6amNnS0VBTS9qOHRiR0h1VU1za2pUYkVl?=
+ =?utf-8?B?SnhMZjAzMTZGTElzc1pwVXc1NkpCQ0kvQTRrbGN2YnN0cHZzVTQ2OFJDamc5?=
+ =?utf-8?B?N2ZZRkRWTUxvYU5ueFFNa1RLcjBQVStUN2cxVjZJQS9WeVl2V09OU2xFUnBG?=
+ =?utf-8?B?dnRWMmZ4QTBlRjJyNU5pa290M2VHemVacHh6cEZGa28wSnE5OFhFZGQwV0RF?=
+ =?utf-8?B?OS9MSjhtcWtPbXQzY09FMHRIWllCUnJVTitjWnZYYVFoeWIyQW1VUVNBTkE3?=
+ =?utf-8?B?dWlyWFVTYWl2VzdJdWtJRjFSR0pyYVFiRzQvWGErU2NMNWJiVWdjaUV0VUpY?=
+ =?utf-8?B?b2wyYWU5VTRKOGEyQk5Rb3dWM3hWelVYTnVPUXRmanJFUEpEN2NSc3lvZ2d0?=
+ =?utf-8?B?SWVBVkUrQ1dYRFBSanl6SENNTlkwVGc4L3NhRFV5MlVLelMxMldZdmI1Rkdy?=
+ =?utf-8?B?OVVUWFJNWnZQL2JnY3V3Ti85ZDNGaEhOc3dwN0ZOZnBXRmtyUW5IMm8xaGZN?=
+ =?utf-8?B?SER5bjRaSXJDU0NwSjNOd1FERFJBNWFVRXdiTkttS1VsT25nOUFRNzlZNUpv?=
+ =?utf-8?B?SitBMnVPSEJ3NkZ2OHRlVDNWdlp3c054dzNoTUdwWmtnVHBnaHhoejJlc0Yz?=
+ =?utf-8?B?b2tWQkFCRjI1SllMS3ZGNkRjcTVDY0M3R1VUK2FsMWFYWGhyNWFPa1JkdDNX?=
+ =?utf-8?B?TVF5Y2YrRnNKQnVIUmtVZG9oUGZkODFmcUY5N3F6d081RU1PRkEyeUZXMnZ5?=
+ =?utf-8?B?YXFYVllJSllGRUEwOGI3VjA0akxRS0IwcHo4Wnl6TTBlbTZsNkFURzk5V1Zz?=
+ =?utf-8?B?cnJhNmRaaTBLOExEeGloSDg1RmQxdTNkUFhQSVZSWVdFc0VxZmFsbFZ0a2Jm?=
+ =?utf-8?Q?Qpsc5d/dgHOyvppfb4V6vtHjE?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1A7E6FEDD7330B46B3FEC1A726794535@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: epam.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7136.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c96edab-5a77-4b99-3495-08daecc71979
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2023 13:41:49.5742
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB6622.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1b1fde3-faf1-4c07-ca3a-08daecc7272c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2023 13:42:12.5772
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kgZ/vtfEM6LlGzuqzZbCumY3cAdnlx9y0l19k7z+nFTx/NM3mYE1FHEWj5HVsRXv4EsKbXXLQ6aU7sRFK9pQuJq363AyXdHlrfgtaAbpv0w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB9709
-X-Proofpoint-GUID: zqExVzAwob7QUgCeIbSNQg5wp2GNIpKB
-X-Proofpoint-ORIG-GUID: zqExVzAwob7QUgCeIbSNQg5wp2GNIpKB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_08,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 bulkscore=0 impostorscore=0 spamscore=0
- priorityscore=1501 adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301020124
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: VUT7OfaHthUSCT3XArTsDAND7A4aEUwBrsXN/o4uO2xCM6z0bqZxTdi6dp0NOcw/PAUMv97Z8mWxFADjUZK6Zw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7183
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new ioctls to allow gntdev to map scatter-gather table on
-top of the existing dmabuf, referenced by file descriptor.
-
-When using dma-buf exporter to create dma-buf with backing storage and
-map it to the grant refs, provided from the domain, we've met a problem,
-that several HW (i.MX8 gpu in our case) do not support external buffer
-and requires backing storage to be created using it's native tools.
-That's why new ioctls were added to be able to pass existing dma-buffer
-fd as input parameter and use it as backing storage to export to refs.
-
-Following calls were added:
-IOCTL_GNTDEV_DMABUF_MAP_REFS_TO_BUF - map existing buffer as the backing
-storage and export it to the provided grant refs;
-IOCTL_GNTDEV_DMABUF_MAP_RELEASE - detach buffer from the grant table and
-set notification to unmap grant refs before releasing the external
-buffer. After this call the external buffer should be detroyed.
-IOCTL_GNTDEV_DMABUF_MAP_WAIT_RELEASED - wait for timeout until buffer is
-completely destroyed and gnt refs unmapped so domain could free grant
-pages.
-
-Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
----
- drivers/xen/gntdev-common.h |   8 +-
- drivers/xen/gntdev-dmabuf.c | 416 +++++++++++++++++++++++++++++++++++-
- drivers/xen/gntdev-dmabuf.h |   7 +
- drivers/xen/gntdev.c        | 101 ++++++++-
- drivers/xen/grant-table.c   |  57 +++--
- include/uapi/xen/gntdev.h   |  62 ++++++
- include/xen/grant_table.h   |   5 +
- 7 files changed, 626 insertions(+), 30 deletions(-)
-
-diff --git a/drivers/xen/gntdev-common.h b/drivers/xen/gntdev-common.h
-index 9c286b2a1900..3b6980df3f9d 100644
---- a/drivers/xen/gntdev-common.h
-+++ b/drivers/xen/gntdev-common.h
-@@ -61,6 +61,10 @@ struct gntdev_grant_map {
- 	bool *being_removed;
- 	struct page **pages;
- 	unsigned long pages_vm_start;
-+	unsigned int preserve_pages;
-+
-+	/* Needed to avoid allocation in gnttab_dma_free_pages(). */
-+	xen_pfn_t *frames;
-=20
- #ifdef CONFIG_XEN_GRANT_DMA_ALLOC
- 	/*
-@@ -73,8 +77,6 @@ struct gntdev_grant_map {
- 	int dma_flags;
- 	void *dma_vaddr;
- 	dma_addr_t dma_bus_addr;
--	/* Needed to avoid allocation in gnttab_dma_free_pages(). */
--	xen_pfn_t *frames;
- #endif
-=20
- 	/* Number of live grants */
-@@ -85,6 +87,8 @@ struct gntdev_grant_map {
-=20
- struct gntdev_grant_map *gntdev_alloc_map(struct gntdev_priv *priv, int co=
-unt,
- 					  int dma_flags);
-+struct gntdev_grant_map *gntdev_get_alloc_from_fd(struct gntdev_priv *priv=
-,
-+					  struct sg_table *sgt, int count, int dma_flags);
-=20
- void gntdev_add_map(struct gntdev_priv *priv, struct gntdev_grant_map *add=
-);
-=20
-diff --git a/drivers/xen/gntdev-dmabuf.c b/drivers/xen/gntdev-dmabuf.c
-index 940e5e9e8a54..71d3bfee72aa 100644
---- a/drivers/xen/gntdev-dmabuf.c
-+++ b/drivers/xen/gntdev-dmabuf.c
-@@ -10,14 +10,18 @@
-=20
- #include <linux/kernel.h>
- #include <linux/errno.h>
-+#include <linux/delay.h>
- #include <linux/dma-buf.h>
-+#include <linux/dma-resv.h>
- #include <linux/slab.h>
- #include <linux/types.h>
- #include <linux/uaccess.h>
- #include <linux/module.h>
-+#include <linux/notifier.h>
-=20
- #include <xen/xen.h>
- #include <xen/grant_table.h>
-+#include <xen/mem-reservation.h>
-=20
- #include "gntdev-common.h"
- #include "gntdev-dmabuf.h"
-@@ -46,6 +50,18 @@ struct gntdev_dmabuf {
- 			/* dma-buf attachment of the imported buffer. */
- 			struct dma_buf_attachment *attach;
- 		} imp;
-+		struct {
-+			/* Scatter-gather table of the mapped buffer. */
-+			struct sg_table *sgt;
-+			/* dma-buf attachment of the mapped buffer. */
-+			struct dma_buf_attachment *attach;
-+			/* map table */
-+			struct gntdev_grant_map *map;
-+			/* frames table for memory reservation */
-+			xen_pfn_t *frames;
-+
-+			struct gntdev_priv *priv;
-+		} map;
- 	} u;
-=20
- 	/* Number of pages this buffer has. */
-@@ -57,6 +73,7 @@ struct gntdev_dmabuf {
- struct gntdev_dmabuf_wait_obj {
- 	struct list_head next;
- 	struct gntdev_dmabuf *gntdev_dmabuf;
-+	int fd;
- 	struct completion completion;
- };
-=20
-@@ -72,6 +89,10 @@ struct gntdev_dmabuf_priv {
- 	struct list_head exp_wait_list;
- 	/* List of imported DMA buffers. */
- 	struct list_head imp_list;
-+	/* List of mapped DMA buffers. */
-+	struct list_head map_list;
-+	/* List of wait objects. */
-+	struct list_head map_wait_list;
- 	/* This is the lock which protects dma_buf_xxx lists. */
- 	struct mutex lock;
- 	/*
-@@ -88,6 +109,64 @@ struct gntdev_dmabuf_priv {
-=20
- static void dmabuf_exp_release(struct kref *kref);
-=20
-+static struct gntdev_dmabuf_wait_obj *
-+dmabuf_map_wait_obj_find(struct gntdev_dmabuf_priv *priv, int fd)
-+{
-+	struct gntdev_dmabuf_wait_obj *obj, *ret =3D ERR_PTR(-ENOENT);
-+
-+	mutex_lock(&priv->lock);
-+	list_for_each_entry(obj, &priv->map_wait_list, next)
-+		if (obj->fd =3D=3D fd) {
-+			pr_debug("Found gntdev_dmabuf in the wait list\n");
-+			ret =3D obj;
-+			break;
-+		}
-+	mutex_unlock(&priv->lock);
-+
-+	return ret;
-+}
-+
-+static void dmabuf_exp_wait_obj_free(struct gntdev_dmabuf_priv *priv,
-+			struct gntdev_dmabuf_wait_obj *obj);
-+
-+static int
-+dmabuf_map_wait_obj_set(struct gntdev_dmabuf_priv *priv,
-+			struct gntdev_dmabuf *gntdev_dmabuf, int fd)
-+{
-+	struct gntdev_dmabuf_wait_obj *obj;
-+
-+	obj =3D dmabuf_map_wait_obj_find(gntdev_dmabuf->priv, fd);
-+	if ((!obj) || (PTR_ERR(obj) =3D=3D -ENOENT)) {
-+		obj =3D kzalloc(sizeof(*obj), GFP_KERNEL);
-+		if (!obj)
-+			return -ENOMEM;
-+	}
-+
-+	init_completion(&obj->completion);
-+	obj->gntdev_dmabuf =3D gntdev_dmabuf;
-+	obj->fd =3D fd;
-+	mutex_lock(&priv->lock);
-+	list_add(&obj->next, &priv->map_wait_list);
-+	mutex_unlock(&priv->lock);
-+	return 0;
-+}
-+
-+static void dmabuf_map_wait_obj_signal(struct gntdev_dmabuf_priv *priv,
-+				       struct gntdev_dmabuf *gntdev_dmabuf)
-+{
-+	struct gntdev_dmabuf_wait_obj *obj;
-+
-+	mutex_lock(&priv->lock);
-+	list_for_each_entry(obj, &priv->map_wait_list, next)
-+		if (obj->gntdev_dmabuf =3D=3D gntdev_dmabuf) {
-+			pr_debug("Found gntdev_dmabuf in the wait list, wake\n");
-+			complete_all(&obj->completion);
-+			break;
-+		}
-+
-+	mutex_unlock(&priv->lock);
-+}
-+
- static struct gntdev_dmabuf_wait_obj *
- dmabuf_exp_wait_obj_new(struct gntdev_dmabuf_priv *priv,
- 			struct gntdev_dmabuf *gntdev_dmabuf)
-@@ -410,6 +489,18 @@ static int dmabuf_exp_from_pages(struct gntdev_dmabuf_=
-export_args *args)
- 	return ret;
- }
-=20
-+static void dmabuf_map_free_gntdev_dmabuf(struct gntdev_dmabuf *gntdev_dma=
-buf)
-+{
-+	if (!gntdev_dmabuf)
-+		return;
-+
-+	kfree(gntdev_dmabuf->pages);
-+
-+	kvfree(gntdev_dmabuf->u.map.frames);
-+	kfree(gntdev_dmabuf);
-+	gntdev_dmabuf =3D NULL;
-+}
-+
- static struct gntdev_grant_map *
- dmabuf_exp_alloc_backing_storage(struct gntdev_priv *priv, int dmabuf_flag=
-s,
- 				 int count)
-@@ -432,6 +523,113 @@ dmabuf_exp_alloc_backing_storage(struct gntdev_priv *=
-priv, int dmabuf_flags,
- 	return map;
- }
-=20
-+static void dmabuf_map_remove(struct gntdev_priv *priv,
-+		  struct gntdev_dmabuf *gntdev_dmabuf)
-+{
-+	dmabuf_exp_remove_map(priv, gntdev_dmabuf->u.map.map);
-+	dmabuf_map_free_gntdev_dmabuf(gntdev_dmabuf);
-+}
-+
-+static struct gntdev_dmabuf *
-+dmabuf_alloc_gntdev_from_buf(struct gntdev_priv *priv, int fd, int dmabuf_=
-flags,
-+						 int count, unsigned int data_ofs)
-+{
-+	struct gntdev_dmabuf *gntdev_dmabuf;
-+	struct dma_buf_attachment *attach;
-+	struct dma_buf *dma_buf;
-+	struct sg_table *sgt;
-+	int ret =3D 0;
-+
-+	gntdev_dmabuf =3D kzalloc(sizeof(*gntdev_dmabuf), GFP_KERNEL);
-+	if (!gntdev_dmabuf)
-+		return ERR_PTR(-ENOMEM);
-+
-+	gntdev_dmabuf->pages =3D kcalloc(count,
-+		sizeof(gntdev_dmabuf->pages[0]), GFP_KERNEL);
-+
-+	if (!gntdev_dmabuf->pages) {
-+		ret =3D -ENOMEM;
-+		goto free;
-+	}
-+
-+	gntdev_dmabuf->u.map.frames =3D kvcalloc(count,
-+		sizeof(gntdev_dmabuf->u.map.frames[0]), GFP_KERNEL);
-+	if (!gntdev_dmabuf->u.map.frames) {
-+		ret =3D -ENOMEM;
-+		goto free;
-+	}
-+
-+	if (gntdev_test_page_count(count)) {
-+		ret =3D -EINVAL;
-+		goto free;
-+	}
-+
-+	dma_buf =3D dma_buf_get(fd);
-+	if (IS_ERR_OR_NULL(dma_buf)) {
-+		pr_debug("Unable to get dmabuf from fd\n");
-+		ret =3D PTR_ERR(dma_buf);
-+		goto free;
-+	}
-+
-+	attach =3D dma_buf_attach(dma_buf, priv->dma_dev);
-+	if (IS_ERR_OR_NULL(attach)) {
-+		ret =3D PTR_ERR(attach);
-+		goto fail_put;
-+	}
-+
-+	sgt =3D dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
-+	if (IS_ERR_OR_NULL(sgt)) {
-+		ret =3D PTR_ERR(sgt);
-+		goto fail_detach;
-+	}
-+
-+	if (sgt->sgl->offset !=3D data_ofs) {
-+		pr_debug("DMA buffer offset %d, user-space expects %d\n",
-+			 sgt->sgl->offset, data_ofs);
-+		ret =3D -EINVAL;
-+		goto fail_unmap;
-+	}
-+
-+	/* Check number of pages that imported buffer has. */
-+	if (attach->dmabuf->size < count << PAGE_SHIFT) {
-+		pr_debug("DMA buffer has %zu pages, user-space expects %d\n",
-+			 attach->dmabuf->size, count << PAGE_SHIFT);
-+		ret =3D -EINVAL;
-+		goto fail_unmap;
-+	}
-+
-+	gntdev_dmabuf->u.map.map =3D gntdev_get_alloc_from_fd(priv, sgt, count,
-+									dmabuf_flags);
-+	if (IS_ERR_OR_NULL(gntdev_dmabuf->u.map.map)) {
-+		ret =3D -ENOMEM;
-+		goto fail_unmap;
-+	};
-+
-+	gntdev_dmabuf->priv =3D priv->dmabuf_priv;
-+	gntdev_dmabuf->fd =3D fd;
-+	gntdev_dmabuf->u.map.attach =3D attach;
-+	gntdev_dmabuf->u.map.sgt =3D sgt;
-+	gntdev_dmabuf->dmabuf =3D dma_buf;
-+	gntdev_dmabuf->nr_pages =3D count;
-+	gntdev_dmabuf->u.map.priv =3D priv;
-+
-+	memcpy(gntdev_dmabuf->pages, gntdev_dmabuf->u.map.map->pages, count *
-+			sizeof(gntdev_dmabuf->u.map.map->pages[0]));
-+	memcpy(gntdev_dmabuf->u.map.frames, gntdev_dmabuf->u.map.map->frames, cou=
-nt *
-+			sizeof(gntdev_dmabuf->u.map.map->frames[0]));
-+
-+	return gntdev_dmabuf;
-+fail_unmap:
-+	dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
-+fail_detach:
-+	dma_buf_detach(dma_buf, attach);
-+fail_put:
-+	dma_buf_put(dma_buf);
-+free:
-+	dmabuf_map_free_gntdev_dmabuf(gntdev_dmabuf);
-+	return ERR_PTR(ret);
-+}
-+
- static int dmabuf_exp_from_refs(struct gntdev_priv *priv, int flags,
- 				int count, u32 domid, u32 *refs, u32 *fd)
- {
-@@ -481,6 +679,117 @@ static int dmabuf_exp_from_refs(struct gntdev_priv *p=
-riv, int flags,
- 	return ret;
- }
-=20
-+static void dmabuf_release_notifier_cb(struct dma_buf *dmabuf, void *priv)
-+{
-+	struct gntdev_dmabuf *gntdev_dmabuf =3D priv;
-+
-+	if (!gntdev_dmabuf)
-+		return;
-+
-+	dmabuf_map_remove(gntdev_dmabuf->u.map.priv, gntdev_dmabuf);
-+	dmabuf_map_wait_obj_signal(gntdev_dmabuf->priv, gntdev_dmabuf);
-+}
-+
-+static int dmabuf_detach_map(struct gntdev_dmabuf *gntdev_dmabuf)
-+{
-+	struct dma_buf *dma_buf =3D gntdev_dmabuf->dmabuf;
-+	long lret;
-+
-+	/* Wait on any implicit fences */
-+	lret =3D dma_resv_wait_timeout(dma_buf->resv,
-+					dma_resv_usage_rw(true), true,
-+					MAX_SCHEDULE_TIMEOUT);
-+	if (lret =3D=3D 0)
-+		return -ETIME;
-+	else if (lret < 0)
-+		return lret;
-+
-+	if (gntdev_dmabuf->u.map.sgt) {
-+		dma_buf_unmap_attachment(gntdev_dmabuf->u.map.attach,
-+				gntdev_dmabuf->u.map.sgt, DMA_BIDIRECTIONAL);
-+	}
-+
-+	dma_buf_detach(dma_buf, gntdev_dmabuf->u.map.attach);
-+	dma_buf_put(dma_buf);
-+
-+	return 0;
-+}
-+
-+static int dmabuf_map_release(struct gntdev_dmabuf *gntdev_dmabuf, bool sy=
-nc)
-+{
-+	int ret;
-+
-+	if (!sync) {
-+		ret =3D dmabuf_map_wait_obj_set(gntdev_dmabuf->priv, gntdev_dmabuf,
-+					gntdev_dmabuf->fd);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret =3D dmabuf_detach_map(gntdev_dmabuf);
-+	if (ret)
-+		return ret;
-+
-+	if (!sync) {
-+		ret =3D dma_buf_register_release_notifier(gntdev_dmabuf->dmabuf,
-+						  &dmabuf_release_notifier_cb, gntdev_dmabuf);
-+		if (ret)
-+			return ret;
-+	} else {
-+		dmabuf_map_remove(gntdev_dmabuf->u.map.priv, gntdev_dmabuf);
-+	}
-+
-+	return 0;
-+}
-+
-+static int dmabuf_map_refs_to_fd(struct gntdev_priv *priv, int flags,
-+			int count, u32 domid, u32 *refs, u32 fd,
-+				unsigned int data_ofs)
-+{
-+	struct gntdev_dmabuf *gntdev_dmabuf;
-+	int i, ret;
-+
-+	gntdev_dmabuf =3D dmabuf_alloc_gntdev_from_buf(priv, fd, flags, count,
-+						data_ofs);
-+
-+	if (IS_ERR_OR_NULL(gntdev_dmabuf)) {
-+		ret =3D PTR_ERR(gntdev_dmabuf);
-+		goto fail_gntdev;
-+	}
-+
-+	for (i =3D 0; i < count; i++) {
-+		gntdev_dmabuf->u.map.map->grants[i].domid =3D domid;
-+		gntdev_dmabuf->u.map.map->grants[i].ref =3D refs[i];
-+	}
-+
-+	mutex_lock(&priv->lock);
-+	gntdev_add_map(priv, gntdev_dmabuf->u.map.map);
-+	mutex_unlock(&priv->lock);
-+
-+	gntdev_dmabuf->u.map.map->flags |=3D GNTMAP_host_map;
-+#if defined(CONFIG_X86)
-+	gntdev_dmabuf->u.map.map->flags |=3D GNTMAP_device_map;
-+#endif
-+
-+	ret =3D gntdev_map_grant_pages(gntdev_dmabuf->u.map.map);
-+	if (ret < 0)
-+		goto fail;
-+
-+	mutex_lock(&priv->lock);
-+	list_add(&gntdev_dmabuf->next, &priv->dmabuf_priv->map_list);
-+	mutex_unlock(&priv->lock);
-+
-+	return 0;
-+fail:
-+	mutex_lock(&priv->lock);
-+	list_del(&gntdev_dmabuf->u.map.map->next);
-+	mutex_unlock(&priv->lock);
-+	dmabuf_detach_map(gntdev_dmabuf);
-+	dmabuf_map_free_gntdev_dmabuf(gntdev_dmabuf);
-+fail_gntdev:
-+	return ret;
-+}
-+
- /* DMA buffer import support. */
-=20
- static int
-@@ -673,14 +982,15 @@ dmabuf_imp_to_refs(struct gntdev_dmabuf_priv *priv, s=
-truct device *dev,
-  * it from the buffer's list.
-  */
- static struct gntdev_dmabuf *
--dmabuf_imp_find_unlink(struct gntdev_dmabuf_priv *priv, int fd)
-+dmabuf_list_find_unlink(struct gntdev_dmabuf_priv *priv, struct list_head =
-*list,
-+		int fd)
- {
- 	struct gntdev_dmabuf *q, *gntdev_dmabuf, *ret =3D ERR_PTR(-ENOENT);
-=20
- 	mutex_lock(&priv->lock);
--	list_for_each_entry_safe(gntdev_dmabuf, q, &priv->imp_list, next) {
-+	list_for_each_entry_safe(gntdev_dmabuf, q, list, next) {
- 		if (gntdev_dmabuf->fd =3D=3D fd) {
--			pr_debug("Found gntdev_dmabuf in the import list\n");
-+			pr_debug("Found gntdev_dmabuf in the list\n");
- 			ret =3D gntdev_dmabuf;
- 			list_del(&gntdev_dmabuf->next);
- 			break;
-@@ -696,7 +1006,7 @@ static int dmabuf_imp_release(struct gntdev_dmabuf_pri=
-v *priv, u32 fd)
- 	struct dma_buf_attachment *attach;
- 	struct dma_buf *dma_buf;
-=20
--	gntdev_dmabuf =3D dmabuf_imp_find_unlink(priv, fd);
-+	gntdev_dmabuf =3D dmabuf_list_find_unlink(priv, &priv->imp_list, fd);
- 	if (IS_ERR(gntdev_dmabuf))
- 		return PTR_ERR(gntdev_dmabuf);
-=20
-@@ -726,6 +1036,21 @@ static void dmabuf_imp_release_all(struct gntdev_dmab=
-uf_priv *priv)
- 		dmabuf_imp_release(priv, gntdev_dmabuf->fd);
- }
-=20
-+static void dmabuf_map_release_all(struct gntdev_dmabuf_priv *priv)
-+{
-+	struct gntdev_dmabuf *q, *gntdev_dmabuf;
-+	struct gntdev_dmabuf_wait_obj *o, *obj;
-+
-+	list_for_each_entry_safe(obj, o, &priv->map_wait_list, next) {
-+		dmabuf_exp_wait_obj_free(priv, obj);
-+	}
-+
-+	list_for_each_entry_safe(gntdev_dmabuf, q, &priv->map_list, next) {
-+		dmabuf_map_release(gntdev_dmabuf, true);
-+	}
-+
-+}
-+
- /* DMA buffer IOCTL support. */
-=20
- long gntdev_ioctl_dmabuf_exp_from_refs(struct gntdev_priv *priv, int use_p=
-temod,
-@@ -769,6 +1094,47 @@ long gntdev_ioctl_dmabuf_exp_from_refs(struct gntdev_=
-priv *priv, int use_ptemod,
- 	return ret;
- }
-=20
-+long gntdev_ioctl_dmabuf_map_refs_to_buf(struct gntdev_priv *priv, int use=
-_ptemod,
-+					  struct ioctl_gntdev_dmabuf_map_refs_to_buf __user *u)
-+{
-+	struct ioctl_gntdev_dmabuf_map_refs_to_buf op;
-+	u32 *refs;
-+	long ret;
-+
-+	if (use_ptemod) {
-+		pr_debug("Cannot provide dma-buf: use_ptemode %d\n",
-+			 use_ptemod);
-+		return -EINVAL;
-+	}
-+
-+	if (copy_from_user(&op, u, sizeof(op)) !=3D 0)
-+		return -EFAULT;
-+
-+	if (op.count <=3D 0)
-+		return -EINVAL;
-+
-+	refs =3D kcalloc(op.count, sizeof(*refs), GFP_KERNEL);
-+	if (!refs)
-+		return -ENOMEM;
-+
-+	if (copy_from_user(refs, u->refs, sizeof(*refs) * op.count) !=3D 0) {
-+		ret =3D -EFAULT;
-+		goto out;
-+	}
-+
-+	ret =3D dmabuf_map_refs_to_fd(priv, op.flags, op.count,
-+				   op.domid, refs, op.fd, op.data_ofs);
-+	if (ret)
-+		goto out;
-+
-+	if (copy_to_user(u, &op, sizeof(op)) !=3D 0)
-+		ret =3D -EFAULT;
-+
-+out:
-+	kfree(refs);
-+	return ret;
-+}
-+
- long gntdev_ioctl_dmabuf_exp_wait_released(struct gntdev_priv *priv,
- 					   struct ioctl_gntdev_dmabuf_exp_wait_released __user *u)
- {
-@@ -823,6 +1189,45 @@ long gntdev_ioctl_dmabuf_imp_release(struct gntdev_pr=
-iv *priv,
- 	return dmabuf_imp_release(priv->dmabuf_priv, op.fd);
- }
-=20
-+long gntdev_ioctl_dmabuf_map_release(struct gntdev_priv *priv,
-+				     struct ioctl_gntdev_dmabuf_map_release __user *u)
-+{
-+	struct ioctl_gntdev_dmabuf_map_release op;
-+	struct gntdev_dmabuf *gntdev_dmabuf;
-+
-+	if (copy_from_user(&op, u, sizeof(op)) !=3D 0)
-+		return -EFAULT;
-+
-+	gntdev_dmabuf =3D dmabuf_list_find_unlink(priv->dmabuf_priv,
-+			&priv->dmabuf_priv->map_list, op.fd);
-+	if (IS_ERR(gntdev_dmabuf))
-+		return PTR_ERR(gntdev_dmabuf);
-+
-+	return dmabuf_map_release(gntdev_dmabuf, false);
-+}
-+
-+long gntdev_ioctl_dmabuf_map_wait_released(struct gntdev_priv *priv,
-+				     struct ioctl_gntdev_dmabuf_map_wait_released __user *u)
-+{
-+	struct ioctl_gntdev_dmabuf_map_wait_released op;
-+	struct gntdev_dmabuf_wait_obj *obj;
-+	int ret =3D 0;
-+
-+	if (copy_from_user(&op, u, sizeof(op)) !=3D 0)
-+		return -EFAULT;
-+
-+	obj =3D dmabuf_map_wait_obj_find(priv->dmabuf_priv, op.fd);
-+	if (IS_ERR_OR_NULL(obj))
-+		return (PTR_ERR(obj) =3D=3D -ENOENT) ? 0 : PTR_ERR(obj);
-+
-+	if (!completion_done(&obj->completion))
-+		ret =3D dmabuf_exp_wait_obj_wait(obj, op.wait_to_ms);
-+
-+	if (!ret && ret !=3D -ETIMEDOUT)
-+		dmabuf_exp_wait_obj_free(priv->dmabuf_priv, obj);
-+	return ret;
-+}
-+
- struct gntdev_dmabuf_priv *gntdev_dmabuf_init(struct file *filp)
- {
- 	struct gntdev_dmabuf_priv *priv;
-@@ -835,6 +1240,8 @@ struct gntdev_dmabuf_priv *gntdev_dmabuf_init(struct f=
-ile *filp)
- 	INIT_LIST_HEAD(&priv->exp_list);
- 	INIT_LIST_HEAD(&priv->exp_wait_list);
- 	INIT_LIST_HEAD(&priv->imp_list);
-+	INIT_LIST_HEAD(&priv->map_list);
-+	INIT_LIST_HEAD(&priv->map_wait_list);
-=20
- 	priv->filp =3D filp;
-=20
-@@ -844,5 +1251,6 @@ struct gntdev_dmabuf_priv *gntdev_dmabuf_init(struct f=
-ile *filp)
- void gntdev_dmabuf_fini(struct gntdev_dmabuf_priv *priv)
- {
- 	dmabuf_imp_release_all(priv);
-+	dmabuf_map_release_all(priv);
- 	kfree(priv);
- }
-diff --git a/drivers/xen/gntdev-dmabuf.h b/drivers/xen/gntdev-dmabuf.h
-index 3d9b9cf9d5a1..07301f12ac52 100644
---- a/drivers/xen/gntdev-dmabuf.h
-+++ b/drivers/xen/gntdev-dmabuf.h
-@@ -21,6 +21,9 @@ void gntdev_dmabuf_fini(struct gntdev_dmabuf_priv *priv);
- long gntdev_ioctl_dmabuf_exp_from_refs(struct gntdev_priv *priv, int use_p=
-temod,
- 				       struct ioctl_gntdev_dmabuf_exp_from_refs __user *u);
-=20
-+long gntdev_ioctl_dmabuf_map_refs_to_buf(struct gntdev_priv *priv, int use=
-_ptemod,
-+					   struct ioctl_gntdev_dmabuf_map_refs_to_buf __user *u);
-+
- long gntdev_ioctl_dmabuf_exp_wait_released(struct gntdev_priv *priv,
- 					   struct ioctl_gntdev_dmabuf_exp_wait_released __user *u);
-=20
-@@ -30,4 +33,8 @@ long gntdev_ioctl_dmabuf_imp_to_refs(struct gntdev_priv *=
-priv,
- long gntdev_ioctl_dmabuf_imp_release(struct gntdev_priv *priv,
- 				     struct ioctl_gntdev_dmabuf_imp_release __user *u);
-=20
-+long gntdev_ioctl_dmabuf_map_release(struct gntdev_priv *priv,
-+				     struct ioctl_gntdev_dmabuf_map_release __user *u);
-+long gntdev_ioctl_dmabuf_map_wait_released(struct gntdev_priv *priv,
-+				     struct ioctl_gntdev_dmabuf_map_wait_released __user *u);
- #endif
-diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
-index 4d9a3050de6a..677a51244bb2 100644
---- a/drivers/xen/gntdev.c
-+++ b/drivers/xen/gntdev.c
-@@ -22,6 +22,7 @@
-=20
- #define pr_fmt(fmt) "xen:" KBUILD_MODNAME ": " fmt
-=20
-+#include <linux/dma-buf.h>
- #include <linux/dma-mapping.h>
- #include <linux/module.h>
- #include <linux/kernel.h>
-@@ -43,6 +44,7 @@
- #include <xen/gntdev.h>
- #include <xen/events.h>
- #include <xen/page.h>
-+#include <xen/mem-reservation.h>
- #include <asm/xen/hypervisor.h>
- #include <asm/xen/hypercall.h>
-=20
-@@ -96,7 +98,11 @@ static void gntdev_free_map(struct gntdev_grant_map *map=
-)
- 		return;
-=20
- #ifdef CONFIG_XEN_GRANT_DMA_ALLOC
--	if (map->dma_vaddr) {
-+	if (map->pages && map->preserve_pages) {
-+		gnttab_dma_clean_page_reservation(map->count, map->pages,
-+				map->frames);
-+
-+	} else if (map->dma_vaddr) {
- 		struct gnttab_dma_alloc_args args;
-=20
- 		args.dev =3D map->dma_dev;
-@@ -216,6 +222,82 @@ struct gntdev_grant_map *gntdev_alloc_map(struct gntde=
-v_priv *priv, int count,
- 	return NULL;
- }
-=20
-+struct gntdev_grant_map *gntdev_get_alloc_from_fd(struct gntdev_priv *priv=
-,
-+					  struct sg_table *sgt, int count, int dma_flags)
-+{
-+	struct gntdev_grant_map *add;
-+	int i =3D 0;
-+	struct sg_page_iter sg_iter;
-+
-+	add =3D kzalloc(sizeof(*add), GFP_KERNEL);
-+	if (!add)
-+		return NULL;
-+
-+	add->grants    =3D kvcalloc(count, sizeof(add->grants[0]), GFP_KERNEL);
-+	add->map_ops   =3D kvcalloc(count, sizeof(add->map_ops[0]), GFP_KERNEL);
-+	add->unmap_ops =3D kvcalloc(count, sizeof(add->unmap_ops[0]), GFP_KERNEL)=
-;
-+	add->pages     =3D kvcalloc(count, sizeof(add->pages[0]), GFP_KERNEL);
-+	add->frames    =3D kvcalloc(count, sizeof(add->frames[0]),
-+			       GFP_KERNEL);
-+	add->being_removed =3D
-+		kvcalloc(count, sizeof(add->being_removed[0]), GFP_KERNEL);
-+	add->preserve_pages =3D 1;
-+
-+	if (add->grants =3D=3D NULL    ||
-+		add->map_ops =3D=3D NULL   ||
-+		add->unmap_ops =3D=3D NULL ||
-+		add->pages =3D=3D NULL     ||
-+		add->frames =3D=3D NULL    ||
-+		add->being_removed =3D=3D NULL)
-+		goto err;
-+
-+	if (use_ptemod) {
-+		add->kmap_ops   =3D kvmalloc_array(count, sizeof(add->kmap_ops[0]),
-+						 GFP_KERNEL);
-+		add->kunmap_ops =3D kvmalloc_array(count, sizeof(add->kunmap_ops[0]),
-+						 GFP_KERNEL);
-+		if (NULL =3D=3D add->kmap_ops || NULL =3D=3D add->kunmap_ops)
-+			goto err;
-+	}
-+
-+	for_each_sgtable_page(sgt, &sg_iter, 0) {
-+		struct page *page =3D sg_page_iter_page(&sg_iter);
-+
-+		add->pages[i] =3D page;
-+		add->frames[i] =3D xen_page_to_gfn(page);
-+		i++;
-+		if (i >=3D count)
-+			break;
-+	}
-+
-+	if (i < count) {
-+		pr_debug("Provided buffer is too small");
-+		goto err;
-+	}
-+
-+	if (gnttab_dma_reserve_pages(count, add->pages, add->frames))
-+		goto err;
-+
-+	for (i =3D 0; i < count; i++) {
-+		add->map_ops[i].handle =3D -1;
-+		add->unmap_ops[i].handle =3D -1;
-+		if (use_ptemod) {
-+			add->kmap_ops[i].handle =3D -1;
-+			add->kunmap_ops[i].handle =3D -1;
-+		}
-+	}
-+
-+	add->index =3D 0;
-+	add->count =3D count;
-+	refcount_set(&add->users, 1);
-+
-+	return add;
-+
-+err:
-+	gntdev_free_map(add);
-+	return NULL;
-+}
-+
- void gntdev_add_map(struct gntdev_priv *priv, struct gntdev_grant_map *add=
-)
- {
- 	struct gntdev_grant_map *map;
-@@ -610,6 +692,9 @@ static int gntdev_release(struct inode *inode, struct f=
-ile *flip)
- 	struct gntdev_grant_map *map;
-=20
- 	pr_debug("priv %p\n", priv);
-+#ifdef CONFIG_XEN_GNTDEV_DMABUF
-+	gntdev_dmabuf_fini(priv->dmabuf_priv);
-+#endif
-=20
- 	mutex_lock(&priv->lock);
- 	while (!list_empty(&priv->maps)) {
-@@ -620,10 +705,6 @@ static int gntdev_release(struct inode *inode, struct =
-file *flip)
- 	}
- 	mutex_unlock(&priv->lock);
-=20
--#ifdef CONFIG_XEN_GNTDEV_DMABUF
--	gntdev_dmabuf_fini(priv->dmabuf_priv);
--#endif
--
- 	kfree(priv);
- 	return 0;
- }
-@@ -1020,6 +1101,16 @@ static long gntdev_ioctl(struct file *flip,
-=20
- 	case IOCTL_GNTDEV_DMABUF_IMP_RELEASE:
- 		return gntdev_ioctl_dmabuf_imp_release(priv, ptr);
-+
-+	case IOCTL_GNTDEV_DMABUF_MAP_REFS_TO_BUF:
-+		return gntdev_ioctl_dmabuf_map_refs_to_buf(priv, use_ptemod, ptr);
-+
-+	case IOCTL_GNTDEV_DMABUF_MAP_RELEASE:
-+		return gntdev_ioctl_dmabuf_map_release(priv, ptr);
-+
-+	case IOCTL_GNTDEV_DMABUF_MAP_WAIT_RELEASED:
-+		return gntdev_ioctl_dmabuf_map_wait_released(priv, ptr);
-+
- #endif
-=20
- 	default:
-diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
-index d6576c8b6f0f..257e335bc65b 100644
---- a/drivers/xen/grant-table.c
-+++ b/drivers/xen/grant-table.c
-@@ -1036,6 +1036,40 @@ void gnttab_free_pages(int nr_pages, struct page **p=
-ages)
- }
- EXPORT_SYMBOL_GPL(gnttab_free_pages);
-=20
-+int gnttab_dma_reserve_pages(int nr_pages, struct page **pages,
-+		    xen_pfn_t *frames)
-+{
-+	int ret, i;
-+
-+	for (i =3D 0; i < nr_pages; i++)
-+		xenmem_reservation_scrub_page(pages[i]);
-+
-+	xenmem_reservation_va_mapping_reset(nr_pages, pages);
-+
-+	ret =3D xenmem_reservation_decrease(nr_pages, frames);
-+	if (ret !=3D nr_pages)
-+		return ret;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(gnttab_dma_reserve_pages);
-+
-+int gnttab_dma_clean_page_reservation(int nr_pages, struct page **pages,
-+		    xen_pfn_t *frames)
-+{
-+	int ret;
-+
-+	ret =3D xenmem_reservation_increase(nr_pages, frames);
-+	if (ret !=3D nr_pages) {
-+		pr_debug("Failed to increase reservation for DMA buffer\n");
-+		return -EFAULT;
-+	}
-+
-+	xenmem_reservation_va_mapping_update(nr_pages, pages, frames);
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(gnttab_dma_clean_page_reservation);
-+
- #ifdef CONFIG_XEN_GRANT_DMA_ALLOC
- /**
-  * gnttab_dma_alloc_pages - alloc DMAable pages suitable for grant mapping=
- into
-@@ -1071,17 +1105,11 @@ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_=
-args *args)
-=20
- 		args->pages[i] =3D page;
- 		args->frames[i] =3D xen_page_to_gfn(page);
--		xenmem_reservation_scrub_page(page);
- 	}
-=20
--	xenmem_reservation_va_mapping_reset(args->nr_pages, args->pages);
--
--	ret =3D xenmem_reservation_decrease(args->nr_pages, args->frames);
--	if (ret !=3D args->nr_pages) {
--		pr_debug("Failed to decrease reservation for DMA buffer\n");
--		ret =3D -EFAULT;
-+	ret =3D gnttab_dma_reserve_pages(args->nr_pages, args->pages, args->frame=
-s);
-+	if (ret)
- 		goto fail;
--	}
-=20
- 	ret =3D gnttab_pages_set_private(args->nr_pages, args->pages);
- 	if (ret < 0)
-@@ -1109,17 +1137,8 @@ int gnttab_dma_free_pages(struct gnttab_dma_alloc_ar=
-gs *args)
- 	for (i =3D 0; i < args->nr_pages; i++)
- 		args->frames[i] =3D page_to_xen_pfn(args->pages[i]);
-=20
--	ret =3D xenmem_reservation_increase(args->nr_pages, args->frames);
--	if (ret !=3D args->nr_pages) {
--		pr_debug("Failed to increase reservation for DMA buffer\n");
--		ret =3D -EFAULT;
--	} else {
--		ret =3D 0;
--	}
--
--	xenmem_reservation_va_mapping_update(args->nr_pages, args->pages,
--					     args->frames);
--
-+	ret =3D gnttab_dma_clean_page_reservation(args->nr_pages, args->pages,
-+			  args->frames);
- 	size =3D args->nr_pages << PAGE_SHIFT;
- 	if (args->coherent)
- 		dma_free_coherent(args->dev, size,
-diff --git a/include/uapi/xen/gntdev.h b/include/uapi/xen/gntdev.h
-index 7a7145395c09..cadc7fd9bc9c 100644
---- a/include/uapi/xen/gntdev.h
-+++ b/include/uapi/xen/gntdev.h
-@@ -312,4 +312,66 @@ struct ioctl_gntdev_dmabuf_imp_release {
- 	__u32 reserved;
- };
-=20
-+/*
-+ * Fd mapping ioctls allows to map @fd to @refs.
-+ *
-+ * Allows gntdev to map scatter-gather table to the existing dma-buf
-+ * file destriptor. It provides the same functionality as
-+ * DMABUF_EXP_FROM_REFS_V2 ioctls,
-+ * but maps sc table on top of the existing buffer memory, instead of
-+ * allocting memory. This is useful when exporter should work with externa=
-l
-+ * buffer.
-+ */
-+
-+#define IOCTL_GNTDEV_DMABUF_MAP_REFS_TO_BUF \
-+	_IOC(_IOC_NONE, 'G', 15, \
-+	  sizeof(struct ioctl_gntdev_dmabuf_map_refs_to_buf))
-+struct ioctl_gntdev_dmabuf_map_refs_to_buf {
-+	/* IN parameters. */
-+	/* Specific options for this dma-buf: see GNTDEV_DMA_FLAG_XXX. */
-+	__u32 flags;
-+	/* Number of grant references in @refs array. */
-+	__u32 count;
-+	/* Offset of the data in the dma-buf. */
-+	__u32 data_ofs;
-+	/* File descriptor of the dma-buf. */
-+	__u32 fd;
-+	/* The domain ID of the grant references to be mapped. */
-+	__u32 domid;
-+	/* Variable IN parameter. */
-+	/* Array of grant references of size @count. */
-+	__u32 refs[1];
-+};
-+
-+/*
-+ * This will release gntdev attachment to the provided buffer with file
-+ * descriptor @fd, so it can be released by the owner. This is only valid
-+ * for buffers created with IOCTL_GNTDEV_DMABUF_EXP_REFS_TO_BUF.
-+ * Returns 0 on success, -ETIME when waiting dma_buffer fences to clean
-+ * reached timeout. In this case release call should be repeated after
-+ * releasing dma_buffer fences.
-+ */
-+#define IOCTL_GNTDEV_DMABUF_MAP_RELEASE \
-+	_IOC(_IOC_NONE, 'G', 16, \
-+	     sizeof(struct ioctl_gntdev_dmabuf_map_release))
-+struct ioctl_gntdev_dmabuf_map_release {
-+	/* IN parameters */
-+	__u32 fd;
-+	__u32 reserved;
-+};
-+
-+/*
-+ * This will wait until gntdev release procedure is finished and buffer wa=
-s
-+ * released completely. This is only valid for buffers created with
-+ * IOCTL_GNTDEV_DMABUF_EXP_REFS_TO_BUF.
-+ */
-+#define IOCTL_GNTDEV_DMABUF_MAP_WAIT_RELEASED \
-+	_IOC(_IOC_NONE, 'G', 17, \
-+	     sizeof(struct ioctl_gntdev_dmabuf_map_wait_released))
-+struct ioctl_gntdev_dmabuf_map_wait_released {
-+	/* IN parameters */
-+	__u32 fd;
-+	__u32 wait_to_ms;
-+};
-+
- #endif /* __LINUX_PUBLIC_GNTDEV_H__ */
-diff --git a/include/xen/grant_table.h b/include/xen/grant_table.h
-index 8e220edf44ab..73b473474ac9 100644
---- a/include/xen/grant_table.h
-+++ b/include/xen/grant_table.h
-@@ -250,6 +250,11 @@ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_arg=
-s *args);
- int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args);
- #endif
-=20
-+int gnttab_dma_reserve_pages(int nr_pages, struct page **pages,
-+		    xen_pfn_t *frames);
-+int gnttab_dma_clean_page_reservation(int nr_pages, struct page **pages,
-+		    xen_pfn_t *frames);
-+
- int gnttab_pages_set_private(int nr_pages, struct page **pages);
- void gnttab_pages_clear_private(int nr_pages, struct page **pages);
-=20
---=20
-2.25.1
+T24gRnJpLCAyMDIyLTEyLTMwIGF0IDE5OjMxICswMTAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
+ZToNCj4gT24gVHVlLCBEZWMgMjcsIDIwMjIgYXQgNzozNCBBTSBIYW5nIFpoYW5nIDx6aC5udmd0
+QGdtYWlsLmNvbT4gd3JvdGU6DQo+ID4gY21fd3JpdGUoKSBpcyB0aGUgLndyaXRlIGNhbGxiYWNr
+IG9mIHRoZSBjdXN0b21fbWV0aG9kIGRlYnVnZnMNCj4gPiBpbnRlcmZhY2UsIGl0IG9wZXJhdGVz
+IG9uIGEgZ2xvYmFsIHBvaW50ZXIgImJ1ZiIgKGUuZy4sDQo+ID4gZGVyZWZlcmVuY2UsDQo+ID4g
+YWxsb2NhdGUsIGZyZWUsIGFuZCBudWxsaWZpY2F0aW9uKSwgdGhlIHByb2JsZW0gaXMgdGhhdCBj
+bV93cml0ZSgpDQo+ID4gaXMgbm90IHByb3RlY3RlZCBieSBhbnkgbG9ja3MsIHNvIGNvbmN1cnJl
+bnQgaW52b2NhdGlvbnMgb2YgaXQNCj4gPiBtYXkgY2F1c2UgdXNlLWFmdGVyLWZyZWUgaXNzdWVz
+IGZvciAiYnVmIiwgZS5nLiwgb25lIGludm9jYXRpb24NCj4gPiBtYXkgaGF2ZSBqdXN0IGZyZWVk
+ICJidWYiIHdoaWxlIGJlaW5nIHByZWVtcHRlZCBiZWZvcmUgbnVsbGlmeWluZw0KPiA+IHRoZSBw
+b2ludGVyLCB0aGVuIGFub3RoZXIgaW52b2NhdGlvbiBjYW4gZGVyZWZlcmVuY2UgdGhlIG5vdw0K
+PiA+IGRhbmdsaW5nDQo+ID4gImJ1ZiIgcG9pbnRlci4NCj4gPiANCj4gPiBGaXggdGhlIGlzc3Vl
+IGJ5IHByb3RlY3RpbmcgdGhlICJidWYiIG9wZXJhdGlvbnMgaW4gY21fd3JpdGUoKSB3aXRoDQo+
+ID4gdGhlIGlub2RlIHdyaXRlIGxvY2suIE5vdGUgdGhhdCB0aGUgLmxsc2VlayBjYWxsYmFjayBv
+ZiB0aGUgZGVidWdmcw0KPiA+IGludGVyZmFjZSBoYXMgYmVlbiBwcm90ZWN0ZWQgYnkgdGhlIHNh
+bWUgbG9jaywgdGhpcyBwYXRjaCBiYXNpY2FsbHkNCj4gPiBpbnRyb2R1Y2VzIGl0IHRvIHRoZSAu
+d3JpdGUgY2FsbGJhY2sgYXMgd2VsbC4NCj4gDQo+IFRoZSBwcm9ibGVtIGlzIHRoZXJlLCBidXQg
+dGhlIHdob2xlIHN0YXRlIGlzIG5vdCBwcm90ZWN0ZWQgZnJvbQ0KPiBjb25jdXJyZW50IHVzZSBh
+bmQgdGhlIGZpeCBkb2Vzbid0IGxvb2sgc3VmZmljaWVudCB0byBtZSAoZm9yDQo+IGV4YW1wbGUs
+DQo+IGEgZGlmZmVyZW50IHdyaXRlciBtYXkgc3RhcnQgd3JpdGluZyBpbnRvIHRoZSBmaWxlIGJl
+Zm9yZSB0aGUNCj4gcHJldmlvdXMNCj4gb25lIGhhcyBmaW5pc2hlZCBhbmQgdGhlIHJlc3VsdCB3
+aWxsIHN0aWxsIGJlIGJyb2tlbiBBRkFJQ1MpLg0KPiANCj4gSXQgbG9va3MgbGlrZSB0aGUgZmls
+ZSBzaG91bGQgYmUgcHJldmVudGVkIGZyb20gYmVpbmcgb3BlbmVkIGJ5IG1vcmUNCj4gdGhhbiBv
+bmUgd3JpdGVyIGF0IGEgdGltZS4NCj4gDQo+IE9yIG1heWJlIGl0J3MgdGltZSB0byBkcm9wIHRo
+aXMgaW50ZXJmYWNlIGZyb20gdGhlIGtlcm5lbCBhbHRvZ2V0aGVyLg0KPiANCkkgc3RpbGwgdXNl
+IHRoaXMgaW50ZXJmYWNlIGZvciBkZWJ1Z2dpbmcgQU1MIGlzc3VlcyBvY2Nhc2lvbmFsbHkuIFNh
+eSwNCmR1bXBpbmcgdGhlIHZhbHVlIG9mIHNvbWUga2V5IG9iamVjdHMgdG8gc2VlIHRoZSBBTUwg
+Y29kZSBwYXRoLg0KDQpJJ20gbm90IHN1cmUgaWYgdGhlcmUgaXMgYW55IGFsdGVybmF0aXZlIHdh
+eSB0byBkbyB0aGlzLCBlc3BlY2lhbGx5IGluDQpyZW1vdGUgZGVidWcgY2FzZS4gKFRoaXMgY2Fu
+IGJlIGRvbmUgdmlhIERTRFQgb3ZlcnJpZGUsIGJ1dCBub3QgYWxsDQp1c2VycyBoYXZlIHRoZSBr
+bm93bGVkZ2Ugb2YgYnVpbGRpbmcgYSBjdXN0b21pemVkIGtlcm5lbCkNCg0KSWYgdGhpcyBpcyBu
+b3QgYSBwcm9ibGVtLCB0aGVuIEkgdGhpbmsgaXQgaXMgc2FmZSB0byByZW1vdmUgdGhpcw0KaW50
+ZXJmYWNlIGJlY2F1c2UgSSBzdXNwZWN0IEkgYW0gdGhlIG9ubHkgdXNlciBvZiB0aGlzIGludGVy
+ZmFjZS4NCkJlY2F1c2UgdGhlcmUgYXJlIHNvbWUgc3BlY2lhbCB0cmlja3MgSSBnb3QgZnJvbSBF
+cmlrLCB0byBtYWtlIGl0IGZ1bGx5DQp3b3JrIGFmdGVyIHNvbWUgY2VydGFpbiBBQ1BJQ0EgcmVs
+ZWFzZS4gQW5kIHRoaXMgaXMgbm90IGRvY3VtZW50ZWQgaW4NCmh0dHBzOi8vZ2l0Lmtlcm5lbC5v
+cmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVlL0RvY3Vt
+ZW50YXRpb24vZmlybXdhcmUtZ3VpZGUvYWNwaS9tZXRob2QtY3VzdG9taXppbmcucnN0I241OA0K
+U2F5LCB0byBnZW5lcmF0ZSB0aGUgQU1MIGNvZGUgb2YgdGhlIG1ldGhvZCwgd2UgbmVlZCB0bw0K
+MS4gY29tcGlsZSB0aGUgdGFibGUgd2l0aCBleHRlcm5hbCBkZWNsYXJhdGlvbnMuDQoyLiBJZiBz
+dGVwIDEgY29tcGlsZXMgc3VjY2Vzc2Z1bGx5LCByZW1vdmUgdGhlIGV4dGVybmFsIGRlY2xhcmF0
+aW9ucw0KZnJvbSB0aGUgdGFibGUgYW5kIGNvbXBpbGUgd2l0aCAtZi4NCg0KdGhhbmtzLA0KcnVp
+DQoNCj4gPiBTaWduZWQtb2ZmLWJ5OiBIYW5nIFpoYW5nIDx6aC5udmd0QGdtYWlsLmNvbT4NCj4g
+PiAtLS0NCj4gPiAgZHJpdmVycy9hY3BpL2N1c3RvbV9tZXRob2QuYyB8IDQzICsrKysrKysrKysr
+KysrKysrKysrKysrKystLS0tLS0tDQo+ID4gLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMzAg
+aW5zZXJ0aW9ucygrKSwgMTMgZGVsZXRpb25zKC0pDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvYWNwaS9jdXN0b21fbWV0aG9kLmMNCj4gPiBiL2RyaXZlcnMvYWNwaS9jdXN0b21fbWV0
+aG9kLmMNCj4gPiBpbmRleCBkMzlhOWI0NzQ3MjcuLmUzZGU1YTA2ZDkwMyAxMDA2NDQNCj4gPiAt
+LS0gYS9kcml2ZXJzL2FjcGkvY3VzdG9tX21ldGhvZC5jDQo+ID4gKysrIGIvZHJpdmVycy9hY3Bp
+L2N1c3RvbV9tZXRob2QuYw0KPiA+IEBAIC0yOSwyOCArMjksMzggQEAgc3RhdGljIHNzaXplX3Qg
+Y21fd3JpdGUoc3RydWN0IGZpbGUgKmZpbGUsDQo+ID4gY29uc3QgY2hhciBfX3VzZXIgKnVzZXJf
+YnVmLA0KPiA+ICAgICAgICAgc3RydWN0IGFjcGlfdGFibGVfaGVhZGVyIHRhYmxlOw0KPiA+ICAg
+ICAgICAgYWNwaV9zdGF0dXMgc3RhdHVzOw0KPiA+ICAgICAgICAgaW50IHJldDsNCj4gPiArICAg
+ICAgIHN0cnVjdCBpbm9kZSAqaW5vZGUgPSBmaWxlX2lub2RlKGZpbGUpOw0KPiA+IA0KPiA+ICAg
+ICAgICAgcmV0ID0gc2VjdXJpdHlfbG9ja2VkX2Rvd24oTE9DS0RPV05fQUNQSV9UQUJMRVMpOw0K
+PiA+ICAgICAgICAgaWYgKHJldCkNCj4gPiAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4g
+PiANCj4gPiArICAgICAgIGlub2RlX2xvY2soaW5vZGUpOw0KPiA+ICAgICAgICAgaWYgKCEoKnBw
+b3MpKSB7DQo+ID4gICAgICAgICAgICAgICAgIC8qIHBhcnNlIHRoZSB0YWJsZSBoZWFkZXIgdG8g
+Z2V0IHRoZSB0YWJsZSBsZW5ndGgNCj4gPiAqLw0KPiA+IC0gICAgICAgICAgICAgICBpZiAoY291
+bnQgPD0gc2l6ZW9mKHN0cnVjdCBhY3BpX3RhYmxlX2hlYWRlcikpDQo+ID4gLSAgICAgICAgICAg
+ICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+ID4gKyAgICAgICAgICAgICAgIGlmIChjb3Vu
+dCA8PSBzaXplb2Yoc3RydWN0IGFjcGlfdGFibGVfaGVhZGVyKSkgew0KPiA+ICsgICAgICAgICAg
+ICAgICAgICAgICAgIHJldCA9IC1FSU5WQUw7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+Z290byBlcnI7DQo+ID4gKyAgICAgICAgICAgICAgIH0NCj4gPiAgICAgICAgICAgICAgICAgaWYg
+KGNvcHlfZnJvbV91c2VyKCZ0YWJsZSwgdXNlcl9idWYsDQo+ID4gLSAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBzaXplb2Yoc3RydWN0DQo+ID4gYWNwaV90YWJsZV9oZWFkZXIpKSkN
+Cj4gPiAtICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gLUVGQVVMVDsNCj4gPiArICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNpemVvZihzdHJ1Y3QNCj4gPiBhY3BpX3RhYmxl
+X2hlYWRlcikpKSB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gLUVGQVVMVDsN
+Cj4gPiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVycjsNCj4gPiArICAgICAgICAgICAg
+ICAgfQ0KPiA+ICAgICAgICAgICAgICAgICB1bmNvcGllZF9ieXRlcyA9IG1heF9zaXplID0gdGFi
+bGUubGVuZ3RoOw0KPiA+ICAgICAgICAgICAgICAgICAvKiBtYWtlIHN1cmUgdGhlIGJ1ZiBpcyBu
+b3QgYWxsb2NhdGVkICovDQo+ID4gICAgICAgICAgICAgICAgIGtmcmVlKGJ1Zik7DQo+ID4gICAg
+ICAgICAgICAgICAgIGJ1ZiA9IGt6YWxsb2MobWF4X3NpemUsIEdGUF9LRVJORUwpOw0KPiA+IC0g
+ICAgICAgICAgICAgICBpZiAoIWJ1ZikNCj4gPiAtICAgICAgICAgICAgICAgICAgICAgICByZXR1
+cm4gLUVOT01FTTsNCj4gPiArICAgICAgICAgICAgICAgaWYgKCFidWYpIHsNCj4gPiArICAgICAg
+ICAgICAgICAgICAgICAgICByZXQgPSAtRU5PTUVNOw0KPiA+ICsgICAgICAgICAgICAgICAgICAg
+ICAgIGdvdG8gZXJyOw0KPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4gICAgICAgICB9DQo+ID4g
+DQo+ID4gLSAgICAgICBpZiAoYnVmID09IE5VTEwpDQo+ID4gLSAgICAgICAgICAgICAgIHJldHVy
+biAtRUlOVkFMOw0KPiA+ICsgICAgICAgaWYgKGJ1ZiA9PSBOVUxMKSB7DQo+ID4gKyAgICAgICAg
+ICAgICAgIHJldCA9IC1FSU5WQUw7DQo+ID4gKyAgICAgICAgICAgICAgIGdvdG8gZXJyOw0KPiA+
+ICsgICAgICAgfQ0KPiA+IA0KPiA+ICAgICAgICAgaWYgKCgqcHBvcyA+IG1heF9zaXplKSB8fA0K
+PiA+ICAgICAgICAgICAgICgqcHBvcyArIGNvdW50ID4gbWF4X3NpemUpIHx8DQo+ID4gQEAgLTU4
+LDEzICs2OCwxNSBAQCBzdGF0aWMgc3NpemVfdCBjbV93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwN
+Cj4gPiBjb25zdCBjaGFyIF9fdXNlciAqdXNlcl9idWYsDQo+ID4gICAgICAgICAgICAgKGNvdW50
+ID4gdW5jb3BpZWRfYnl0ZXMpKSB7DQo+ID4gICAgICAgICAgICAgICAgIGtmcmVlKGJ1Zik7DQo+
+ID4gICAgICAgICAgICAgICAgIGJ1ZiA9IE5VTEw7DQo+ID4gLSAgICAgICAgICAgICAgIHJldHVy
+biAtRUlOVkFMOw0KPiA+ICsgICAgICAgICAgICAgICByZXQgPSAtRUlOVkFMOw0KPiA+ICsgICAg
+ICAgICAgICAgICBnb3RvIGVycjsNCj4gPiAgICAgICAgIH0NCj4gPiANCj4gPiAgICAgICAgIGlm
+IChjb3B5X2Zyb21fdXNlcihidWYgKyAoKnBwb3MpLCB1c2VyX2J1ZiwgY291bnQpKSB7DQo+ID4g
+ICAgICAgICAgICAgICAgIGtmcmVlKGJ1Zik7DQo+ID4gICAgICAgICAgICAgICAgIGJ1ZiA9IE5V
+TEw7DQo+ID4gLSAgICAgICAgICAgICAgIHJldHVybiAtRUZBVUxUOw0KPiA+ICsgICAgICAgICAg
+ICAgICByZXQgPSAtRUZBVUxUOw0KPiA+ICsgICAgICAgICAgICAgICBnb3RvIGVycjsNCj4gPiAg
+ICAgICAgIH0NCj4gPiANCj4gPiAgICAgICAgIHVuY29waWVkX2J5dGVzIC09IGNvdW50Ow0KPiA+
+IEBAIC03NCwxMiArODYsMTcgQEAgc3RhdGljIHNzaXplX3QgY21fd3JpdGUoc3RydWN0IGZpbGUg
+KmZpbGUsDQo+ID4gY29uc3QgY2hhciBfX3VzZXIgKnVzZXJfYnVmLA0KPiA+ICAgICAgICAgICAg
+ICAgICBzdGF0dXMgPSBhY3BpX2luc3RhbGxfbWV0aG9kKGJ1Zik7DQo+ID4gICAgICAgICAgICAg
+ICAgIGtmcmVlKGJ1Zik7DQo+ID4gICAgICAgICAgICAgICAgIGJ1ZiA9IE5VTEw7DQo+ID4gLSAg
+ICAgICAgICAgICAgIGlmIChBQ1BJX0ZBSUxVUkUoc3RhdHVzKSkNCj4gPiAtICAgICAgICAgICAg
+ICAgICAgICAgICByZXR1cm4gLUVJTlZBTDsNCj4gPiArICAgICAgICAgICAgICAgaWYgKEFDUElf
+RkFJTFVSRShzdGF0dXMpKSB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gLUVJ
+TlZBTDsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVycjsNCj4gPiArICAgICAg
+ICAgICAgICAgfQ0KPiA+ICAgICAgICAgICAgICAgICBhZGRfdGFpbnQoVEFJTlRfT1ZFUlJJRERF
+Tl9BQ1BJX1RBQkxFLA0KPiA+IExPQ0tERVBfTk9XX1VOUkVMSUFCTEUpOw0KPiA+ICAgICAgICAg
+fQ0KPiA+IA0KPiA+IC0gICAgICAgcmV0dXJuIGNvdW50Ow0KPiA+ICsgICAgICAgcmV0ID0gY291
+bnQ7DQo+ID4gK2VycjoNCj4gPiArICAgICAgIGlub2RlX3VubG9jayhpbm9kZSk7DQo+ID4gKyAg
+ICAgICByZXR1cm4gcmV0Ow0KPiA+ICB9DQo+ID4gDQo+ID4gIHN0YXRpYyBjb25zdCBzdHJ1Y3Qg
+ZmlsZV9vcGVyYXRpb25zIGNtX2ZvcHMgPSB7DQo+ID4gLS0NCj4gPiAyLjM5LjANCj4gPiANCg==
