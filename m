@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD3265B251
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD2D65B25C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbjABMr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 07:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S232952AbjABMt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 07:49:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbjABMrZ (ORCPT
+        with ESMTP id S232841AbjABMtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 07:47:25 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9483B3
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:47:24 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id b3so41449094lfv.2
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 04:47:24 -0800 (PST)
+        Mon, 2 Jan 2023 07:49:45 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5811FC2
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:49:44 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id k19so10906483pfg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 04:49:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7W3g6H5+/AUufZzgxrgv5aroav6W5CJ7ZUXKABlB1O4=;
-        b=jN44ekuYAVrvPJw2oJbJZ0mmGlp2fCsKZwgEldCFihbQ8lUlR8vhzaMtfIbrxz2NUT
-         z2d5788oGk6GCFfme7o+tfap0719H8ePCJMq7MpcwBupFBzsoeCaFqQbbMlqgpTayqXC
-         GBHgZhBftHipZhuYthASYTzTUPmwbAaM+K5dq+2wVnO3KBU+6CPH5pzFyTZ0CSLv6Gz5
-         6L3kLhdhK3UqQ1akCdW1Nv+AKanbqs4BDDEbuPVd1u3ZIW6ioRG7sFT83ZVEPjxP11zd
-         7canjmM4buLqqoXq9UwpNOnc56l8pIoeele8sNoep2XCFri6nx0OMjQ1985wuMC7pGMw
-         AcKg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TMEbty0JviNpn+Yg5A0C6kfJvNq8b2Lmd3piEj6ZucM=;
+        b=xNxnlhnsuQeYEWCioPL1Rr8t7KdGqG8JqqAo1ZY4yCPqKI1ekX1RVvn6hfY6VcXbiQ
+         bhLkJpVx4XcTjJcJd3vHyyi1bBw02wB8HWKsF1+Kfe8CWyQXlb45h2DrifhTSLj1n6fO
+         0TCR8WkxW9vO4Uqxw/deI2DBs6S4lAgTSbURM/T1FoIr/N1C8/cra+0sXxD2P1wY6nI2
+         6ZwBR6i3mC/5uT1JKqyCyGCWn99hhfFaXpMF1PvYDPaVu36RVyAw+LFmAW4AoRfzS8I7
+         gBflxdrFhwI0/xQ4z1/s4+NvgfWQamHqiYlKidycHuMaMN4Fq01IcacExFziiS0cb/Lj
+         OnqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7W3g6H5+/AUufZzgxrgv5aroav6W5CJ7ZUXKABlB1O4=;
-        b=wFyoT4yYHP3AOaoQarRuNr9xTEIj+CzI5b7bKrU9j0oY77psXcArC6KvzeWL7m92rW
-         0HTkd1tR6hKhmKZqFIvsMw65IqJtLW+5OynS849ERSHgTmKzJaGstCl5Dh6u8y/+ESWB
-         yDRrVfbB3boeceFs70PuBkZJh+gfkDKeHPZ0m5U1zpwEzkrdT8y3g3Q+Ur7KW+Ud8r5a
-         JB97TMuKUSVuQ8w/HFpyFe8RDXgqsdBZPe/zqcm6dZtoTiRrY6pVZm9JnL1KGVR4hAt1
-         lMJQhcLb9PTJ72lUPTmXIBhrukcj2dUJdTLAESMVkoGKnHSHZt7MwX8zEXFJzvT7Rl9e
-         CXHQ==
-X-Gm-Message-State: AFqh2kq5QI5gqgxc7RKU36lIEZ/gxaFUONqYQnFDqDy2E3AZwF6pIJ++
-        9xXPzhTcnxOZtYblH8Llv1GZaw==
-X-Google-Smtp-Source: AMrXdXs4jw47G7Ax0iFfxEdq8+zmqxDWql5d1xIlpfJ9HAQgQJP+0oekXlTaVzmLoS49G9TJCroZZA==
-X-Received: by 2002:ac2:5088:0:b0:4a4:7be4:9baf with SMTP id f8-20020ac25088000000b004a47be49bafmr12347564lfm.59.1672663642548;
-        Mon, 02 Jan 2023 04:47:22 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z8-20020a056512370800b004b55b404d36sm4441185lfr.156.2023.01.02.04.47.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 04:47:22 -0800 (PST)
-Message-ID: <8b844f3a-e9b0-28d5-200a-611fe3068bc0@linaro.org>
-Date:   Mon, 2 Jan 2023 13:47:20 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TMEbty0JviNpn+Yg5A0C6kfJvNq8b2Lmd3piEj6ZucM=;
+        b=U6eNJtKhtG0dKrWxz1soszoFEx+EXjk/azfbq4BFX60d61xvw2fu8X1I5tmZkU1ox4
+         NSRxCDGyftqy3YuqGl+jsIFGKKulwFMniVidRNrF20WrM8fBwtToDdGVRAHPiQwJf/Q+
+         6svjfZ3FFCKu7+Ay4ngIAXgdHa+gRyg6rYUgC3+bOWSq9HXP2c3IMsBVNJ/2VHw8lsVo
+         u8k/HqDs8bf7s3mE47wvtdEhwEkt33ioZFKVoI/LH7d9fMEkK+cnbgZKHRsNc3JKocE2
+         2MuwG30sAZSzoU2dxRMQwE7DoeWbUu8xlUmNiOqH59idCmOL2i5lNWguYDNnBMPyyt/n
+         8yuQ==
+X-Gm-Message-State: AFqh2krqBvOXjMYMueQtVf9u0G5jWjPUv8M0zHTwtHrZrietAvjuvT+U
+        J+9l3LtFGu3aYGqEwEwPiOAwsdPrnBcP7imBT4CBfA==
+X-Google-Smtp-Source: AMrXdXvzgF7HAsl+aefGp8qa6WXa410ObFc+WdoziWwxlwHOMP/uW5ZYac6nTWvIBRT8mIXKtl58wGKLROQKlWPQDzE=
+X-Received: by 2002:a63:5841:0:b0:477:b650:494b with SMTP id
+ i1-20020a635841000000b00477b650494bmr2384311pgm.434.1672663784228; Mon, 02
+ Jan 2023 04:49:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: RFC on drivers/memory vs drivers/edac memory mapping for DDR
- Controller
-Content-Language: en-US
-To:     "Shenhar, Talel" <talel@amazon.com>, bp@alien8.de
-Cc:     talelshenhar@gmail.com, shellykz@amazon.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <2511c7aa-8ce6-a803-a1ea-6121df79c677@amazon.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2511c7aa-8ce6-a803-a1ea-6121df79c677@amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <7c686fecb11b4ec1f55cd7075dc7cfcdd9b445ba.1670697358.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <7c686fecb11b4ec1f55cd7075dc7cfcdd9b445ba.1670697358.git.christophe.jaillet@wanadoo.fr>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 2 Jan 2023 13:49:08 +0100
+Message-ID: <CAPDyKFo7W3EVCFjACB+zaMi8O-wTmCX2winydAB_XtxfnA0Qiw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mmc: sunlpus: Fix an error handling path in spmmc_drv_probe()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Tony Huang <tonyhuang.sunplus@gmail.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,60 +68,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/01/2023 13:17, Shenhar, Talel wrote:
-> Hi,
-> 
-> Want to consult on a topic that involve both drivers/memory and 
-> drivers/edac.
-> 
-> * We want to introduce driver that reads DDR controller RAS register and 
-> notify for ECC errors by using EDAC MC API found in drivers/edac.
-> * We also want to have a capability to dynamically change DDR refresh 
-> rate based on thermal values (best to be done in drivers/memory ?).
-> 
-> The pain point here is that both capabilities are controlled from the 
-> DDR controller.
-> This create issue while using 
-> devm_platform_ioremap_resource*->devm_request_mem_region which prevent 
-> two mapping of same area.
+On Sat, 10 Dec 2022 at 19:36, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> If an error occurs after successful clk_prepare_enable() call in the probe,
+> the clk is not clk_disable_unprepare()'ed.
+>
+> Use devm_clk_get_enabled() instead of devm_clk_get() to fix, and simplify
+> the probe and the remove function accordingly.
+>
+> Fixes: 4e268fed8b18 ("mmc: Add mmc driver for Sunplus SP7021")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This changes the order of resource releasing when the driver is removed,
+> but it looks ok to me.
+> ---
+>  drivers/mmc/host/sunplus-mmc.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+>
+> diff --git a/drivers/mmc/host/sunplus-mmc.c b/drivers/mmc/host/sunplus-mmc.c
+> index db5e0dcdfa7f..3e8856a82188 100644
+> --- a/drivers/mmc/host/sunplus-mmc.c
+> +++ b/drivers/mmc/host/sunplus-mmc.c
+> @@ -878,7 +878,7 @@ static int spmmc_drv_probe(struct platform_device *pdev)
+>         if (IS_ERR(host->base))
+>                 return PTR_ERR(host->base);
+>
+> -       host->clk = devm_clk_get(&pdev->dev, NULL);
+> +       host->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+>         if (IS_ERR(host->clk))
+>                 return dev_err_probe(&pdev->dev, PTR_ERR(host->clk), "clk get fail\n");
+>
+> @@ -896,10 +896,6 @@ static int spmmc_drv_probe(struct platform_device *pdev)
+>         if (ret)
+>                 return ret;
+>
+> -       ret = clk_prepare_enable(host->clk);
+> -       if (ret)
+> -               return dev_err_probe(&pdev->dev, ret, "failed to enable clk\n");
+> -
+>         ret = mmc_of_parse(mmc);
+>         if (ret)
+>                 goto probe_free_host;
+> @@ -944,7 +940,6 @@ static int spmmc_drv_remove(struct platform_device *dev)
+>
+>         mmc_remove_host(host->mmc);
+>         pm_runtime_get_sync(&dev->dev);
+> -       clk_disable_unprepare(host->clk);
 
-This could be avoided but the true problem is that you have two devices
-for same memory mapping. Devicetree does not allow it and it points to
-some wrong hardware representation in DTS.
+I don't think this improves code quality, but rather the opposite.
 
-> 
-> It seems to be expected problem as we have 2 "framework" (edac and 
-> memory) split while both aim for same HW unit.
-> What is the recommended way to face such conflicts?
+Removing the call to clk_disable_unprepare() here, makes the untrained
+eye, to believe that the calls to pm_runtime_get_sync() and
+pm_runtime_put_noidle() are redundant, while they aren't.
 
-You now mix Devicetree and Linux drivers. You can have same IO address
-space used by multiple drivers, even though it is not always good
-approach (concurrent and conflicting change of same settings).
+Instead, I suggest we add a call to clk_disable_unprepare() in the
+error path in ->probe(), rather than using devm_clk_get_enabled().
 
-HW description is irrelevant to this.
+>         pm_runtime_put_noidle(&dev->dev);
+>         pm_runtime_disable(&dev->dev);
+>         platform_set_drvdata(dev, NULL);
 
-> 
-> We had several concept in mind but would love to get your point of view 
-> first.
-
-Describe hardware accurately and completely. This solves all the
-problems, doesn't it? Linux drivers do not depend on it and you can make
-it differently.
-
-> 
-> Things we had in mind:
-> 1) map more specific region to avoid conflict (we don't need the same 
-> registers on both entity so if we do very specific multiple mapping this 
-> shall be resolved)
-> 2) use other kernel API for mapping that doesn't do request_mem_region 
-> (or use the reserve only for one of them)
-> 3) have single driver (edac mc) handle also the refresh rate
-> 4) export edac_mc.h and have the drivers/memory have all the needed code 
-> to do both edac and refresh rate under drivers/memory
-
-None of these address the core problem - possibly inaccurate hardware
-description...
-
-Best regards,
-Krzysztof
-
+Kind regards
+Uffe
