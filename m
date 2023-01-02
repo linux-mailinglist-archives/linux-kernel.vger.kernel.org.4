@@ -2,229 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4002C65B394
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFAB65B393
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236228AbjABOtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 09:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S236062AbjABOtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 09:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236229AbjABOsS (ORCPT
+        with ESMTP id S232942AbjABOss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 09:48:18 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2084.outbound.protection.outlook.com [40.92.103.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9E664C3;
-        Mon,  2 Jan 2023 06:48:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d0YoIITDLyrNGrj8xAKrfXESo+c6zwprN5HiuRIhI43ndH9VxkTxvDjzSO9rgZ3OXsmzsP4SBu1D1dZgxPfFEbKIGpbVMSpZ+f1u9JaWVyfm0UsXxL5UxjnRoM9C75Rk1RDq9VRCJnIdJZ363DFitxGEn/+vp4G6PwfHUzEz3KYwUs2pF7466WXE2fIyvViJ7943McAyHhNMGXvkfqNWkFSjq+lp4ldPXbB1B4DJR1PONsGmrFKefgEFDhKViHO7Od5hBR1awfr5NUP7msDUM6Vn1KJ03uNkps9kikCnI/zrKvf8Tn3p1/psuTkFrd+56hIlgcsRLKuZ10aui0FI6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=skyvdBEDYmt/Zi08JNadOVLtRCZvwbGI5nWOljrU7EM=;
- b=C7G4lMkXcEtd4FbuSdVtyceZuUiF9SxsiSle3c0C3vWrMkvEpoV28OK0JJr+e3bDRgW7eTva4VzLQcwGBWpRBbptpC/GRiQoTBX0QALssh0egX1b/uRoO5WU/FSaWhaE2/Cs03VMI+3h+QY6aruVebSEd3xUG1hWkG3unjIiF4CggCZygeny65uFoEzMpIhWcuyDAYgYYQc/orSKUV4QO0ynlXtOafo40DgosRwEe/pi91o5CojQT9oE+3WJdYiIxfRD5Ttk8DlIHjOCbuNIesvHweN7MAfh0MDNbnIwuG4yjiWEGGdUG2woEAdnKfr6jiIVZGCjldSi8/JBgLZKqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=skyvdBEDYmt/Zi08JNadOVLtRCZvwbGI5nWOljrU7EM=;
- b=TaPApGWDWvBrKIii0rm7qwJBZtMuuEM6we+5rO7plevG8YeLvw2YOsp95r9pV8dNK9Yp2MzRfaig3e/uF74UehjfiIawWHslcymznmr7F/vE2yLcHTvrbd/D3pQFszJVb3hSnCZGja6Qlx2De4dnO4TPfLNKIxPG/Rog9EVXWgXRwztPoIojyTIWYr0zfD+80fxQXlkEfYu9qJ6WwD73KjSt8B0gK8CIkhfWKKbYFxYE4TeF310kTlTszEOuc1KBDXzEwsdzES54zo8oN6m37rYQeSqEVJtghO6tkBG9oaPK0n1iPqQmwrhX3wsk0Q/uLSYbgS+PFyFdvPhkYK/iGw==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- PN2PR01MB9277.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:117::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Mon, 2 Jan 2023 14:48:10 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f90e:46bc:7a0f:23bc]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f90e:46bc:7a0f:23bc%7]) with mapi id 15.20.5944.019; Mon, 2 Jan 2023
- 14:48:10 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Hector Martin <marcan@marcan.st>,
-        "aspriel@gmail.com" <aspriel@gmail.com>,
-        "hante.meuleman@broadcom.com" <hante.meuleman@broadcom.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lina@asahilina.net" <lina@asahilina.net>,
-        "franky.lin@broadcom.com" <franky.lin@broadcom.com>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-CC:     Orlando Chamberlain <redecorating@protonmail.com>,
-        "brcm80211-dev-list@broadcom.com" <brcm80211-dev-list@broadcom.com>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Asahi Linux <asahi@lists.linux.dev>
-Subject: [PATCH v2 2/2] brcmfmac: Add PCIe ID of BCM4355 chip found on T2 Macs
-Thread-Topic: [PATCH v2 2/2] brcmfmac: Add PCIe ID of BCM4355 chip found on T2
- Macs
-Thread-Index: AQHZHrk7yHCvvY2IKkSePRpXpxxfUA==
-Date:   Mon, 2 Jan 2023 14:48:10 +0000
-Message-ID: <276EA85B-22FF-4446-969D-11437AB28867@live.com>
-References: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
- <f36dd8e3-9905-f04a-ed34-4be91ed1fec6@marcan.st>
- <F9EFCCD1-4407-42CC-8316-2F58AAC1AE7F@live.com>
- <ACC0D1F6-7857-4FF0-A474-4EC699572E1B@live.com>
- <E376F3F1-CA88-47B3-B3D1-EEF0B283D25D@live.com>
-In-Reply-To: <E376F3F1-CA88-47B3-B3D1-EEF0B283D25D@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [+pHvtqqyl7QFG7YyyBcyJTGW7Jtif9kFEC2W0TId2Xrz1AR487/kxkEgiyFvsTbU]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN2PR01MB9277:EE_
-x-ms-office365-filtering-correlation-id: aaa3c956-b433-4654-1e18-08daecd05e73
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4fTFGqE6NxmoAh7Kl6S6+xWCiPXUjeoZFqr6mm76eiJc0NbaVDWfljrE7aHcEDRIJ6MFOdInTXyC+YlB7e3IA16/XG2hucE6wpFIvhh8ge/tr8lGwTJbA3T0f1l2cnzvtzyhH6qJ5w4KnH5cluA5sRJyEIxlzrmSFFl3ni7DrJ8IJOvgVlxYd52pkqjfYxdxaU17IDSES5Kvcq8LjSHZGVHGTY1eGjpcd1DbNUluKOmSl78qbdLIGfXjbB/yOuK0nCRgB3GvO39diX9MixyaXlFkp9atMlyzlfqCRLcEc3NJ5XzF8s3UsKCCq6ye38u5GMAw05dtZ4Vxa+ZjoYRuP+8CtByekMtoqQ0RitPZtJMy2tYhbmnzsGNmJdSxYzXbHWdgcE0T0/SfBcCZKt1O845HBS2/2QyffJqzaBJgI+wcKwx0GZ49Cb9IoUny16jmExy/HdeII/Almh6KYTUR6lrxF+H+p6WwOcvy3B9NY98fOwNWzM+ze0prgT6q7kz/OSZAL7Xv/FTRJTp0HL6a42ZKdBa7W133y5y/tk8SFRw16emBABmbmex2Bpxwk3Tn9Lp6nQ0sxr+oOwQhwHUkmeekb+1ceIuTORw4AOmH1XE=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vgU3CHkcQFiiOnq64+JL1TKbn6+fES1/GZk1WB9X0TPsBA/0upb08aWES4eq?=
- =?us-ascii?Q?enl2TSVvh/dgUj5TGqzccLrGbCfqe1wIroxVY+vtk5V/bCLMin6LCDImJMtY?=
- =?us-ascii?Q?h+sdS6n2I1bwLZlokXnSEt0CkLkKqbROCASBF0O7cQPIBNqpbsWzqkmoOc3J?=
- =?us-ascii?Q?RE3xikWQjEEuJWahLfIEpV5OEq8F04sq1yI2/FAx1CEu/piOzx7v8T6sgluG?=
- =?us-ascii?Q?g2v7fqrsms+U2JjTX2sU3fmdqrgl3eTOLWCaLyd1diw5edTX32rWR+n6LcC3?=
- =?us-ascii?Q?r2UyGckS89k9CZBTzooCWqh52tKef2w7/VGMkRoHzNT/zK/JpbuVqzDz3GmZ?=
- =?us-ascii?Q?O/7pvbvK1amu98yf5nCi/+K9p+y/fSIG1zqukQITZSPG6AyYKzfgL0wFeyW7?=
- =?us-ascii?Q?4mNeVohVCgy9BjgpWpaDAeXXi1gikPwo7RFLvRE8+MBduXz4B9Na2QePg3gQ?=
- =?us-ascii?Q?KnH+fvFXcUYUkdWx2RpHA85dLa5GWmtGYtjG4JRwjhoEx6U/e93/a7lirLtV?=
- =?us-ascii?Q?y964UXa7PVgKmCRuFx+UtIT9uloqQpz19MOfYrbSAMuIyU6JqanCocqXSrWX?=
- =?us-ascii?Q?ut7Zra6c7VdMvvLMFpe3YCETiF+UYCSwUAaWzP8SRE/WnrFsGNPgloG5jRkL?=
- =?us-ascii?Q?ijkWoQXBpSQuIkjiP2CzoIJnREXCS5Gw8Z6yCm6IV1syYexdm3bw4/mXRtTB?=
- =?us-ascii?Q?4if599f950OBETYx6NxQ1ejC2cB8agdlPD8w2iGuzEnkRP6c99BDQPKjLmgz?=
- =?us-ascii?Q?kGWjUtpw9XD0h3BwB5MpCPPeDGTb4TDUSGsUT9oy/gNP0SUhVVTKBrJSSaKi?=
- =?us-ascii?Q?Ph2FCZLoYNBmnULE2pIVyh9kcK+LWg2wGercTdR/ZCLPC+guLrzYb2pj1zJx?=
- =?us-ascii?Q?ZkNKNXQ9jE0a23+T8DhiyazwJAYVOQoUelF8+m1Vv7ADgDId5btIzWO7UyER?=
- =?us-ascii?Q?k8kLAhFChZdoJqgyIkrEz/9SbXGin9c+Y6WWDOVl6/ayRpZHly9iJgSgK/MQ?=
- =?us-ascii?Q?LNCAyP/oTBZggh1k+6zISUptKXS6Dv+dNxQYZ/eaHimUKvjWdWOL6lbnBv+6?=
- =?us-ascii?Q?KZKCNCyqgaDkeoBdh9WVfAkDamB0pBnQzhFlT2OF/2iqPoMErIv+R+GpNe2m?=
- =?us-ascii?Q?+4bAVcycRQzz80ejXqrZ61lkkGPvZzy/ZMhl1hVRzms/JN3fMVqWZn066YUN?=
- =?us-ascii?Q?YMBGZ9Oo1DMx2bl7Y/QVl3/rPmstH5lwtrnXoUViA+spYIu5hSH1txAite+h?=
- =?us-ascii?Q?KOpshpeJmj+OExQBvZwZQswb05IvHz3j00QwjYokVT7QP0kqZ7BdkC7dzmVa?=
- =?us-ascii?Q?7qkeQrt2edpAWQT/vY/1qYMwYzwqwciiCviyJ2ume7Ju9g=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9744C1DFC5CCED44A42AEFBDDD3D4E87@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        Mon, 2 Jan 2023 09:48:48 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84966465;
+        Mon,  2 Jan 2023 06:48:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1672670903; bh=cUUTc8Fvgowvs3kRn4xQ5Ko18CAYd2NLfEAuO5+9Il0=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=sD1gBsVq08UZG71PKBLJYyt449w8RFoLAtADqA7lKzYYXIiP4q1IrLsA5nsx/puCh
+         PbP1yLh92PZwboVF6SaxJ7E8Z8XfthrzMjOyHyKrShzBin83Pw1HHow18vG8r4NTZy
+         wwRq7pVdKlZMMHb/+CbolLS51iG0mTestS/4NWMMs4AZHVffTQrA9wtfCzMM0lqOcT
+         BEUCVlutiiFB2krRoHQJuTKTEWQhksOw/IMNR02m2b4TV70Yxr/W9ulk0zT7wNLWm4
+         jthcfUy3hDU+57pjRq8sAWQAYlTt9SQdB7D4QDQskV4H4+jcRQCFflgApd6EDXNomR
+         pHT/4H+IRSLDg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.130.137]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MN5if-1pVG2U07HB-00J0eB; Mon, 02
+ Jan 2023 15:48:23 +0100
+Message-ID: <17a2982e-f4e8-f8bd-db8f-dd14bf27b4e7@gmx.de>
+Date:   Mon, 2 Jan 2023 15:48:21 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: aaa3c956-b433-4654-1e18-08daecd05e73
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2023 14:48:10.7676
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2PR01MB9277
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>, "Z. Liu" <liuzx@knownsec.com>
+Cc:     it+linux-fbdev@molgen.mpg.de, Rich Felker <dalias@libc.org>,
+        stable@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230102135731.6487-1-pmenzel@molgen.mpg.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230102135731.6487-1-pmenzel@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:8eWfw4Opnqkzxf+1Ev79iySp2RH8FDZc46AiwNc3lV8sHnsUFte
+ xLvNG2vJLuvr5TD3q2zUoVnuIq62vEur8NRiJq7o4pib6toIMrTia5S6gTslmF9e9CS4Kkj
+ HoI5n5TbXYIczVViYf5cM7e/w7ekz6GH2UW0641AnDFWTzy5+QEwQ/R+2lpRDKrnXP9YFlS
+ 0mt/7r2YOVGS30eLPCKhA==
+UI-OutboundReport: notjunk:1;M01:P0:z6gzU0P4Vkk=;dQYG9VM4sTyZ0ppmp5CCsi7GSut
+ GDuitMne9sLdvy5EKVAwni+274uOK1jvMkCfssSsjpDCpi6YHvBXUoFGQVaT/QEYP0IFyGGae
+ Fh2UXq9hv2FXUFokyhxP6OmbELq6G5IotwKXCHszdU9o9zrR+Cu/USPuaftynrVEA+LdpOv8M
+ QrFtSHKUF4Bz7ZmAZiVBE581Yn8P/0Nf2khlAu8lP283SeeCXrljHkYKsiV9deECUZSnYQAXG
+ Pz0UzlJoFKLGMO/LaQQ8AfYCgn7M0UFSlDDC2AtS/u4NNjHmMkXoi88YALov9VEiqwhTmMygb
+ 0zj6knzAXWC35VkDnS0e7hFbF5f0Wlw1HwFDxsJLDMTYvuVu+VVlJkzaIDvxQW5/d5g4m60EP
+ WNJKvPath2U1ux8m9zvBPgQOxrJA1G15KG994xSAMX1orJ6sKFjyKmbTV8k+wpEvfdFyB0K94
+ 8V4R6bm9MXAB6RGQ3KJhgVnrxCr4xlTXefRxwCQzTD+iZ9pI4Jp/xbCMmEBNcNZvu8TQzp+ZM
+ rtsJ75tShkzjvJ6HJkMhe3wjTG+vWnnVYGy086+iR4b6un5nu1OtPeCILB2fg/i8NJodIKAaV
+ YJRACTjwiQr9wfgm5Swh1tFo6Sauv4oLp4HV5cAsOREDkXrHX4mZZ6ZoObWM1gBWlKGV9xAcY
+ VXIbLv+y6y88/8E5+c6V5qsdSf7bNgPqkTsOJxAmx229irjZxSXI0nascGN/ceffp//chH/pZ
+ ck0vA7oYg6L6AZeGp47MPzBy30LRRs2dg0t7TXyqwFeBzFKDD6tdJ4Ix+4Uxa4hcyzBysdZSh
+ kEsw1UzKOOhcVCD/5W2hR7pwVVO79jBs5hxciNYe1zTMdGXV18cQYWDhJkGycY/4FMGguvYDa
+ HGQwEcdA3cISEpcezc1sE1IW2VoGozI7w93+vS0VYCV31i/DC1QaEsCWDBgR4MVjQy/j0JNsm
+ 0cvPRuBttroAuvFizkPwr2NbmPY=
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+On 1/2/23 14:57, Paul Menzel wrote:
+> Commit 62d89a7d49af ("video: fbdev: matroxfb: set maxvram of vbG200eW to
+> the same as vbG200 to avoid black screen") accidently decreases the
+> maximum memory size for the Matrox G200eW (102b:0532) from 8 MB to 1 MB
+> by missing one zero. This caused the driver initialization to fail with
+> the messages below, as the minimum required VRAM size is 2 MB:
+>
+>       [    9.436420] matroxfb: Matrox MGA-G200eW (PCI) detected
+>       [    9.444502] matroxfb: cannot determine memory size
+>       [    9.449316] matroxfb: probe of 0000:0a:03.0 failed with error -=
+1
+>
+> So, add the missing 0 to make it the intended 16 MB. Successfully tested=
+ on
+> the Dell PowerEdge R910/0KYD3D, BIOS 2.10.0 08/29/2013, that the warning=
+ is
+> gone.
+>
+> While at it, add a leading 0 to the maxdisplayable entry, so it=E2=80=99=
+s aligned
+> properly. The value could probably also be increased from 8 MB to 16 MB,=
+ as
+> the G200 uses the same values, but I have not checked any datasheet.
+>
+> Note, matroxfb is obsolete and superseded by the maintained DRM driver
+> mga200, which is used by default on most systems where both drivers are
+> available. Therefore, on most systems it was only a cosmetic issue.
+>
+> Fixes: 62d89a7d49af ("video: fbdev: matroxfb: set maxvram of vbG200eW to=
+ the same as vbG200 to avoid black screen")
+> Link: https://lore.kernel.org/linux-fbdev/972999d3-b75d-5680-fcef-6e6905=
+c52ac5@suse.de/T/#mb6953a9995ebd18acc8552f99d6db39787aec775
+> Cc: it+linux-fbdev@molgen.mpg.de
+> Cc: Z. Liu <liuzx@knownsec.com>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
-Commit 'dce45ded7619' added the BCM4355 chip support. This chip is also
-found in MacBookAir8,1 and MacBookAir8,2. This patch adds necessary pcie
-IDs to add support for the same.
+applied this v1 version to the fbdev git tree.
+Thanks!
+Helge
 
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
----
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c       | 4 ++--
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c       | 3 ++-
- drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c b/driv=
-ers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
-index 121893bba..2f338c5d9 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
-@@ -735,7 +735,7 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_pri=
-v *ci)
- 		return 0x170000;
- 	case BRCM_CC_4378_CHIP_ID:
- 		return 0x352000;
--	case CY_CC_89459_CHIP_ID:
-+	case BRCM_CC_4355_CHIP_ID:
- 		return ((ci->pub.chiprev < 9) ? 0x180000 : 0x160000);
- 	default:
- 		brcmf_err("unknown chip: %s\n", ci->pub.name);
-@@ -1427,7 +1427,7 @@ bool brcmf_chip_sr_capable(struct brcmf_chip *pub)
- 		reg =3D chip->ops->read32(chip->ctx, addr);
- 		return reg !=3D 0;
- 	case CY_CC_4373_CHIP_ID:
--	case CY_CC_89459_CHIP_ID:
-+	case BRCM_CC_4355_CHIP_ID:
- 		/* explicitly check SR engine enable bit */
- 		addr =3D CORE_CC_REG(base, sr_control0);
- 		reg =3D chip->ops->read32(chip->ctx, addr);
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/driv=
-ers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index ad7a780cd..0a7410196 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -78,6 +78,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwn=
-ames[] =3D {
- 	BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0x000000FF, 4350C),
- 	BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0xFFFFFF00, 4350),
- 	BRCMF_FW_ENTRY(BRCM_CC_43525_CHIP_ID, 0xFFFFFFF0, 4365C),
-+	BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0xFFFFFFFF, 4355),
- 	BRCMF_FW_ENTRY(BRCM_CC_4356_CHIP_ID, 0xFFFFFFFF, 4356),
- 	BRCMF_FW_ENTRY(BRCM_CC_43567_CHIP_ID, 0xFFFFFFFF, 43570),
- 	BRCMF_FW_ENTRY(BRCM_CC_43569_CHIP_ID, 0xFFFFFFFF, 43570),
-@@ -92,7 +93,6 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwn=
-ames[] =3D {
- 	BRCMF_FW_ENTRY(BRCM_CC_43664_CHIP_ID, 0xFFFFFFF0, 4366C),
- 	BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
- 	BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
--	BRCMF_FW_ENTRY(CY_CC_89459_CHIP_ID, 0xFFFFFFFF, 4355),
- };
-=20
- static const struct brcmf_firmware_mapping brcmf_pcie_otp_fwnames[] =3D {
-@@ -2599,6 +2599,7 @@ static const struct pci_device_id brcmf_pcie_devid_ta=
-ble[] =3D {
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4350_DEVICE_ID, WCC),
- 	BRCMF_PCIE_DEVICE_SUB(0x4355, BRCM_PCIE_VENDOR_ID_BROADCOM, 0x4355, WCC),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4354_RAW_DEVICE_ID, WCC),
-+	BRCMF_PCIE_DEVICE(BRCM_PCIE_4355_DEVICE_ID, WCC),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4356_DEVICE_ID, WCC),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43567_DEVICE_ID, WCC),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43570_DEVICE_ID, WCC),
-diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h =
-b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-index f4939cf62..fee1ff526 100644
---- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-+++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-@@ -37,6 +37,7 @@
- #define BRCM_CC_4350_CHIP_ID		0x4350
- #define BRCM_CC_43525_CHIP_ID		43525
- #define BRCM_CC_4354_CHIP_ID		0x4354
-+#define BRCM_CC_4355_CHIP_ID		0x4355
- #define BRCM_CC_4356_CHIP_ID		0x4356
- #define BRCM_CC_43566_CHIP_ID		43566
- #define BRCM_CC_43567_CHIP_ID		43567
-@@ -56,7 +57,6 @@
- #define CY_CC_43012_CHIP_ID		43012
- #define CY_CC_43439_CHIP_ID		43439
- #define CY_CC_43752_CHIP_ID		43752
--#define CY_CC_89459_CHIP_ID		0x4355
-=20
- /* USB Device IDs */
- #define BRCM_USB_43143_DEVICE_ID	0xbd1e
-@@ -72,6 +72,7 @@
- #define BRCM_PCIE_4350_DEVICE_ID	0x43a3
- #define BRCM_PCIE_4354_DEVICE_ID	0x43df
- #define BRCM_PCIE_4354_RAW_DEVICE_ID	0x4354
-+#define BRCM_PCIE_4355_DEVICE_ID	0x43dc
- #define BRCM_PCIE_4356_DEVICE_ID	0x43ec
- #define BRCM_PCIE_43567_DEVICE_ID	0x43d3
- #define BRCM_PCIE_43570_DEVICE_ID	0x43d9
---=20
-2.34.1
+> ---
+>   drivers/video/fbdev/matrox/matroxfb_base.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/=
+fbdev/matrox/matroxfb_base.c
+> index 0d3cee7ae7268..a043a737ea9f7 100644
+> --- a/drivers/video/fbdev/matrox/matroxfb_base.c
+> +++ b/drivers/video/fbdev/matrox/matroxfb_base.c
+> @@ -1378,8 +1378,8 @@ static struct video_board vbG200 =3D {
+>   	.lowlevel =3D &matrox_G100
+>   };
+>   static struct video_board vbG200eW =3D {
+> -	.maxvram =3D 0x100000,
+> -	.maxdisplayable =3D 0x800000,
+> +	.maxvram =3D 0x1000000,
+> +	.maxdisplayable =3D 0x0800000,
+>   	.accelID =3D FB_ACCEL_MATROX_MGAG200,
+>   	.lowlevel =3D &matrox_G100
+>   };
 
