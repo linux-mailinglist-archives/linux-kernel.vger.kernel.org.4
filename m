@@ -2,62 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260D365AF1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6989A65AF22
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbjABJ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 04:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S232376AbjABKAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjABJ6q (ORCPT
+        with ESMTP id S230451AbjABKAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 04:58:46 -0500
-Received: from mx1.veeam.com (mx1.veeam.com [216.253.77.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5F8DCB
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:58:45 -0800 (PST)
-Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.veeam.com (Postfix) with ESMTPS id 7966941C5B;
-        Mon,  2 Jan 2023 04:58:44 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx1-2022; t=1672653524;
-        bh=mlXog09AD8tM0bQkT/5+11IIdnU/V0C6NIq/OIo3ZEo=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
-        b=vQPvKDGx+dsUeqmwAS+yOXVPKMcvM7wStjooOWRzEzrg/UB+mX8h56lFKyTsNPVCX
-         JwvhpibEdb16uEneUnBdkadywuPo40/DkqR7ekLOqxAsUCXfYbngxTrbBwoowg7VHh
-         CempMb+YVloI7Z+xzB4NUBz4/7/pQUGlsEkCWTDM+pW59CTWoG8rWY0ZbyHXpzGUJW
-         2C4mN0CtZj3O8l1qbT73cZS7PYv3jM0aNMq7fqZYjDcSVW/g0wEOapsghFCduvFDsF
-         ZCnnRMPt6nOaxtU1F9p92FX69Yn8mHwrUoX1qWAWNRs+vm6x1slsbYiy9CEKzMSkcy
-         WQc6D4TaKsv1Q==
-Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
- (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 2 Jan
- 2023 10:58:40 +0100
-Message-ID: <974ffb8c-8623-d249-f69f-ac5cfd498950@veeam.com>
-Date:   Mon, 2 Jan 2023 10:58:38 +0100
+        Mon, 2 Jan 2023 05:00:47 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9759EA6
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:00:45 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id y8so25852855wrl.13
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 02:00:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=194dBh8yd73feKUfQT2LX9SH0xX4MSntnyEqmQlb6pA=;
+        b=ruc8j5Ryqx9/8iW4g1lGyVxZF6emec3HcXUP796DX5VPP+bRoFbDMWZQEy2+Pqk3c9
+         IaV4CCVjtRmACtI/DG5xfLyaqdbMDt+uGGQ+sRtPEkgXjtiqL86SYw5yzJK06AnuUmtU
+         fXHt7avuDKzfFDtjOU+s3IWRsfFaBWCU4e859NCfaJ2L4lzTwI78xOSewjKoYpy0lHJv
+         6OsBS30koGaH0Wf1gCpLReuhwVdHDghtdjEzA27PFnO8IjnBHiC1ShzkOMnIJWQLucs7
+         Tj9MSWi2+rAAyGLUiDYZ6jY53mEn23QdgsIVVTG35DIUXjMbmRnYNhe6Qwd9hHcbUc9b
+         UTdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=194dBh8yd73feKUfQT2LX9SH0xX4MSntnyEqmQlb6pA=;
+        b=U52X3MkWJcoWWENOqpnyrsTYXg4wx74IW6+g8fVFIWYBcis+jwp731uz70rsWQiTcm
+         7DSwkQnT4ePTCwA5EQjUOYg+7QpKmtiJGBW6VcZpk8WLhZadMWqQofKx6C+V4OXLpTm0
+         YWO21hhI7XtiF4GuPZkjXT+HsviPOMNCLOumb4XZdj651snQp3n1O95VlyETDotE3zcp
+         dm2F3ueyY/b+wjnTWI93b2gooKuQ+B1L/7VZAaMDk10whO5VaUrENFMRdAIQTZ23tM7F
+         EhyLvajMxk8iCyby6WcZ5ZrfUV7glwBTG4FxPcJRbWZ1MRF+EoPJr3AUfkfYNUoygF2v
+         V/OQ==
+X-Gm-Message-State: AFqh2kpQes2idHjhTJKfwJXmRClN0O72XfKq7jiel+ysn69Rd3NcufDs
+        JXDF6W5tvIo9e6X8U4oSeqOfZw==
+X-Google-Smtp-Source: AMrXdXuIEK0IbdioJa+9RZomGbTgk+DyCuImUKGU1H/zzftZI7i9mNdxXkCyEwZXmAVJq7oTBjE1Iw==
+X-Received: by 2002:adf:f187:0:b0:296:4854:2c6d with SMTP id h7-20020adff187000000b0029648542c6dmr3145509wro.32.1672653644337;
+        Mon, 02 Jan 2023 02:00:44 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id h9-20020adffd49000000b00242209dd1ffsm28056871wrs.41.2023.01.02.02.00.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 02:00:44 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Carlo Caione <ccaione@baylibre.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221216-afbc_s905x-v1-0-033bebf780d9@baylibre.com>
+References: <20221216-afbc_s905x-v1-0-033bebf780d9@baylibre.com>
+Subject: Re: [PATCH] drm/meson: Reduce the FIFO lines held when AFBC is not used
+Message-Id: <167265364359.326489.7829360920975044539.b4-ty@linaro.org>
+Date:   Mon, 02 Jan 2023 11:00:43 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 18/21] block, blksnap: snapshot
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-CC:     <axboe@kernel.dk>, <corbet@lwn.net>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
- <20230101110542.3395-1-hdanton@sina.com>
-From:   Sergei Shtepa <sergei.shtepa@veeam.com>
-In-Reply-To: <20230101110542.3395-1-hdanton@sina.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.24.10.107]
-X-ClientProxiedBy: colmbx02.amust.local (172.18.0.172) To prgmbx01.amust.local
- (172.24.128.102)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2924031555657167
-X-Veeam-MMEX: True
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,107 +78,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On Mon, 19 Dec 2022 09:43:05 +0100, Carlo Caione wrote:
+> Having a bigger number of FIFO lines held after vsync is only useful to
+> SoCs using AFBC to give time to the AFBC decoder to be reset, configured
+> and enabled again.
+> 
+> For SoCs not using AFBC this, on the contrary, is causing on some
+> displays issues and a few pixels vertical offset in the displayed image.
+> 
+> [...]
 
-On 1/1/23 12:05, Hillf Danton wrote:
-> Subject:
-> Re: [PATCH v2 18/21] block, blksnap: snapshot
-> From:
-> Hillf Danton <hdanton@sina.com>
-> Date:
-> 1/1/23, 12:05
-> 
-> To:
-> Sergei Shtepa <sergei.shtepa@veeam.com>
-> CC:
-> axboe@kernel.dk, corbet@lwn.net, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-> 
-> 
-> On 9 Dec 2022 15:23:28 +0100 Sergei Shtepa <sergei.shtepa@veeam.com>
->> +int snapshot_create(struct blk_snap_dev *dev_id_array, unsigned int count,
->> +		    uuid_t *id)
->> +{
->> +	struct snapshot *snapshot = NULL;
->> +	int ret;
->> +	unsigned int inx;
->> +
->> +	pr_info("Create snapshot for devices:\n");
->> +	for (inx = 0; inx < count; ++inx)
->> +		pr_info("\t%u:%u\n", dev_id_array[inx].mj,
->> +			dev_id_array[inx].mn);
->> +
->> +	ret = check_same_devices(dev_id_array, count);
->> +	if (ret)
->> +		return ret;
->> +
->> +	snapshot = snapshot_new(count);
->> +	if (IS_ERR(snapshot)) {
->> +		pr_err("Unable to create snapshot: failed to allocate snapshot structure\n");
->> +		return PTR_ERR(snapshot);
->> +	}
->> +
->> +	ret = -ENODEV;
->> +	for (inx = 0; inx < count; ++inx) {
->> +		dev_t dev_id =
->> +			MKDEV(dev_id_array[inx].mj, dev_id_array[inx].mn);
->> +		struct tracker *tracker;
->> +
->> +		tracker = tracker_create_or_get(dev_id);
->> +		if (IS_ERR(tracker)) {
->> +			pr_err("Unable to create snapshot\n");
->> +			pr_err("Failed to add device [%u:%u] to snapshot tracking\n",
->> +			       MAJOR(dev_id), MINOR(dev_id));
->> +			ret = PTR_ERR(tracker);
->> +			goto fail;
->> +		}
->> +
->> +		snapshot->tracker_array[inx] = tracker;
->> +		snapshot->count++;
->> +	}
->> +
->> +	down_write(&snapshots_lock);
->> +	list_add_tail(&snapshots, &snapshot->link);
->> +	up_write(&snapshots_lock);
-> Given list_for_each_entry below, typo wrt &snapshots found in the fresh 2023?
-> 
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-fixes)
 
-Thanks.
-It seems I just swapped the parameters by mistake.
-It should be better:
-```
-	down_write(&snapshots_lock);
-	list_add_tail(&snapshot->link, &snapshots);
-	up_write(&snapshots_lock);
-```
+[1/1] drm/meson: Reduce the FIFO lines held when AFBC is not used
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=3b754ed6d1cd90017e66e5cc16f3923e4a952ffc
 
->> +
->> +	uuid_copy(id, &snapshot->id);
->> +	pr_info("Snapshot %pUb was created\n", &snapshot->id);
->> +	return 0;
->> +fail:
->> +	pr_err("Snapshot cannot be created\n");
->> +
->> +	snapshot_put(snapshot);
->> +	return ret;
->> +}
->> +
->> +static struct snapshot *snapshot_get_by_id(uuid_t *id)
->> +{
->> +	struct snapshot *snapshot = NULL;
->> +	struct snapshot *s;
->> +
->> +	down_read(&snapshots_lock);
->> +	if (list_empty(&snapshots))
->> +		goto out;
->> +
->> +	list_for_each_entry(s, &snapshots, link) {
->> +		if (uuid_equal(&s->id, id)) {
->> +			snapshot = s;
->> +			snapshot_get(snapshot);
->> +			break;
->> +		}
->> +	}
->> +out:
->> +	up_read(&snapshots_lock);
->> +	return snapshot;
->> +}
+-- 
+Neil
