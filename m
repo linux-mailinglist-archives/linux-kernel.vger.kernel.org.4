@@ -2,155 +2,476 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405B565B6C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C166365B6BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbjABSwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 13:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S233835AbjABSvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 13:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjABSv7 (ORCPT
+        with ESMTP id S230120AbjABSvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 13:51:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACC526E4
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672685472;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IEBrukFBGp6hybe2G68udkPzWSggmxuhkhbF0JC3TdM=;
-        b=encyUlNiZqrQilqvPHDcxFexwDNUeiHv9f8QEw6Qp/jE8rGuEHNONLUKSTMvlIXls1CNFL
-        p7KYgkenuIFl4owP2woovJAOt5q14cqHK4qst1bZSMGjyA1ql2SqABvbnMfhN1GPNtM9Zd
-        Kqb2okVaBNyAllqoNF3SH7E+uy9DOkE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-630-gpHydpP7MgqOPXDuNG3q1g-1; Mon, 02 Jan 2023 13:51:11 -0500
-X-MC-Unique: gpHydpP7MgqOPXDuNG3q1g-1
-Received: by mail-wr1-f70.google.com with SMTP id h24-20020adfaa98000000b0028abfe5b8d9so1075967wrc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 10:51:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IEBrukFBGp6hybe2G68udkPzWSggmxuhkhbF0JC3TdM=;
-        b=TsgFpMbj1ZWslEgoLAuP/7bzXUudxLJBo4l/QPMpX3iqoN+M2eVYnY/Y1zmIPBKIjs
-         ZwSnoEtlBQs0RTOwJrJiXgLYKjJnStFryvtak+5C/H6hqAvF7yMFriyr4cj6WdhYAJQg
-         pqitN6oll6fE9DdHIckHyADI1kUj7KpQJHkyT5EHQcxbxvoLXErn3KMWKNuubA9G7PHG
-         9uct9aOyH8tJbJ6C1bQrrdLSXutUnINBYUl059dIwQWcQ9pE4znMJ2h6VUZt0fDbPGs3
-         Pile4hoJj9mCKP/tMnqHzhYtfq7O8ljYTT2zMUlvX2ZR15hA0UYETJYIkaWeB2bbu38W
-         IbEg==
-X-Gm-Message-State: AFqh2ko8wGNj/e0YkFiZ0JDd7iT0H3SUZjYgmumwB2nMwsqUb9GjOFJz
-        nyHl0OiW0m5kBNaQ25/UXRJXbp+BdD4w+YMQgENfg1x7wc+vA36+K1UusrHeCIgHem9TqHDhFNV
-        ceSBXcftdpBibw+dIZZPFeega
-X-Received: by 2002:a05:600c:c0d:b0:3d9:7667:c0e4 with SMTP id fm13-20020a05600c0c0d00b003d97667c0e4mr21144511wmb.31.1672685470457;
-        Mon, 02 Jan 2023 10:51:10 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvp2sP5F4qJR+gLqHpo+Zpkru9OLDJeTxpx+iJMU4nUmeUljLJQnIVw0WwpC9JObG0zQnguIg==
-X-Received: by 2002:a05:600c:c0d:b0:3d9:7667:c0e4 with SMTP id fm13-20020a05600c0c0d00b003d97667c0e4mr21144497wmb.31.1672685470243;
-        Mon, 02 Jan 2023 10:51:10 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003d9bd56e9c1sm2356977wmo.11.2023.01.02.10.51.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 10:51:09 -0800 (PST)
-Message-ID: <da5c9ec8-da44-3dff-11c7-2160e335227f@redhat.com>
-Date:   Mon, 2 Jan 2023 19:51:08 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 2/4] drm: panel: Add Himax HX8394 panel controller
- driver
-Content-Language: en-US
-To:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megi@xff.cz>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Kamil_Trzci=c5=84ski?= <ayufan@ayufan.eu>,
-        Martijn Braam <martijn@brixit.nl>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Robert Mader <robert.mader@posteo.de>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
-        dri-devel@lists.freedesktop.org,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Neal Gompa <ngompa13@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
+        Mon, 2 Jan 2023 13:51:47 -0500
+Received: from mailrelay3-1.pub.mailoutpod2-cph3.one.com (mailrelay3-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:402::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E47A180
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:51:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=die8rj2zsA0MWNvmIToudq84zr52SSRtsS4zKPJloKE=;
+        b=kthLbfRuWUZz/q0IAnLP3ZXidolhiNT9Utn19plNmHGI71c496kzHe8KfG5rT1RcRTR5SptsWNG19
+         BKVZJ/qUnnJdo7M8bcUiK5+2jwdq935MOYp4dPCZ4v+f2J5ozn+tTCJYnM8OTkLYpQnUVROs6avHaC
+         +IffYOhiMUopCRkKXymqm5B+b679d8kY5Wk4G0NeBFA0yvTDy4lb6dcGgLrP4/yd+bxJrYxu/V4QeE
+         8VeVkzkWnXTd+8FuQcTOUyV78aKB7fYYc5Azhm6mWl89Ffb6UywtyKH2rbc4II6u1/fv2fRxQ3YG/T
+         nhgZfT64CSEPqtr7WQkZOKXQHPHAUmw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=die8rj2zsA0MWNvmIToudq84zr52SSRtsS4zKPJloKE=;
+        b=gmF9pYLJfLmCw0IwpEgyFq6kvaPnDuDGEBPXqcP9seqzZzyzqOkJymmh2/arTTFP7HATl3G+NXj2F
+         blkbqQUAA==
+X-HalOne-ID: 7e11684a-8ace-11ed-b450-ede074c87fad
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay3 (Halon) with ESMTPSA
+        id 7e11684a-8ace-11ed-b450-ede074c87fad;
+        Mon, 02 Jan 2023 18:51:42 +0000 (UTC)
+Date:   Mon, 2 Jan 2023 19:51:41 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         Thierry Reding <thierry.reding@gmail.com>
-References: <20221230113155.3430142-1-javierm@redhat.com>
- <20221230113155.3430142-3-javierm@redhat.com>
- <20221230154043.7v3zmzqdrnouqzd2@core>
- <7120dfd4-305f-69ac-fee8-123196ed06a9@redhat.com>
- <20230102105915.gbfhletcm4dunrlf@core>
- <eead4707-e73f-f648-edc6-8415bbb25b8b@redhat.com>
- <20230102152041.7rc2uts7o37fnsen@core>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20230102152041.7rc2uts7o37fnsen@core>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 13/14] drm/panel-sony-tulip-truly-nt35521: Drop custom
+ DSI write macro
+Message-ID: <Y7MnvR9/KcJTXCBi@ravnborg.org>
+References: <20221228014757.3170486-1-javierm@redhat.com>
+ <20221228014757.3170486-14-javierm@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221228014757.3170486-14-javierm@redhat.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/2/23 16:20, Ondřej Jirman wrote:
-> On Mon, Jan 02, 2023 at 02:51:42PM +0100, Javier Martinez Canillas wrote:
->> Hello Ondřej,
->>
->> [...]
->>
->> My goal was to have some initial support in mainline even if there could be some
->> issues. IMO it is better to use upstream as a baseline and attempt to support the
->> PPP incrementally.
->>
->> But since you are aware of the issues and know what are the available fixes, I'll
->> let you continue with the effort and take care of the patches. Hopefully there may
->> be things that will be helpful, such as the binding schema patch and the collected
->> tags. I can also take care of pushing the DRM bits to the drm-misc-next tree once
->> you feel that those are ready to get merged.
+Hi Javier,
+
+On Wed, Dec 28, 2022 at 02:47:56AM +0100, Javier Martinez Canillas wrote:
+> There is a macro for this already in the <drm/drm_mipi_dsi.h> header, use
+> that instead and delete the custom DSI write macro defined in the driver.
 > 
-> Ok. The panel driver itself works fine with some changes in other DRM drivers.
-> In fact, it will not need any changes, assuming the to be proposed fixes to
-> dw-mipi-dsi will pass, too. So I don't have many objections against this driver
-> itself.
->
-
-Exactly, that is what I was trying to say. Awesome that you agree with that.
-
-> I'm not sure I should be giving reviewed-by to driver I co-wrote. :) Anyway,
-
-Indeed :)
-
-> I checked it again, and only issue I found was that shutdown callback tries
-> to disable the panel even if it may already be disabled, which will lead to
-> unbalanced calls to regulator_disable functions, which may produce some needless
-> warnings on shutdown/reboot.
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
 > 
-> So if you want to commit this driver now, go ahead. DT will need one more round.
+>  .../panel/panel-sony-tulip-truly-nt35521.c    | 348 +++++++++---------
+>  1 file changed, 170 insertions(+), 178 deletions(-)
 > 
-> As you say, the overall usable support for Pinephone Pro in mainline is still
-> way off into the future, so I agree it's not necessary to get hung up on these
-> issues. I can do a DT revision + add in the other suggested DRM patches, so that
-> there's at least a searchable public record of the remaining issues.
-> 
-
-Perfect, sounds like a plan. I'll re-spin a v5 that only includes the panel
-patches then and drop the DTS. Thanks again for your feedback and comments!
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+> diff --git a/drivers/gpu/drm/panel/panel-sony-tulip-truly-nt35521.c b/drivers/gpu/drm/panel/panel-sony-tulip-truly-nt35521.c
+> index fa9be3c299c0..a0661576acff 100644
+> --- a/drivers/gpu/drm/panel/panel-sony-tulip-truly-nt35521.c
+> +++ b/drivers/gpu/drm/panel/panel-sony-tulip-truly-nt35521.c
+> @@ -33,14 +33,6 @@ struct truly_nt35521 *to_truly_nt35521(struct drm_panel *panel)
+>  	return container_of(panel, struct truly_nt35521, panel);
+>  }
+>  
+> -#define dsi_generic_write_seq(dsi, seq...) do {				\
+> -		static const u8 d[] = { seq };				\
+> -		int ret;						\
+> -		ret = mipi_dsi_generic_write(dsi, d, ARRAY_SIZE(d));	\
+> -		if (ret < 0)						\
+> -			return ret;					\
+> -	} while (0)
+> -
+>  static void truly_nt35521_reset(struct truly_nt35521 *ctx)
+>  {
+>  	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+> @@ -59,200 +51,200 @@ static int truly_nt35521_on(struct truly_nt35521 *ctx)
+>  
+>  	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>  
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xff, 0xaa, 0x55, 0xa5, 0x80);
+> -	dsi_generic_write_seq(dsi, 0x6f, 0x11, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xf7, 0x20, 0x00);
+> -	dsi_generic_write_seq(dsi, 0x6f, 0x01);
+> -	dsi_generic_write_seq(dsi, 0xb1, 0x21);
+> -	dsi_generic_write_seq(dsi, 0xbd, 0x01, 0xa0, 0x10, 0x08, 0x01);
+> -	dsi_generic_write_seq(dsi, 0xb8, 0x01, 0x02, 0x0c, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xbb, 0x11, 0x11);
+> -	dsi_generic_write_seq(dsi, 0xbc, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xb6, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x01);
+> -	dsi_generic_write_seq(dsi, 0xb0, 0x09, 0x09);
+> -	dsi_generic_write_seq(dsi, 0xb1, 0x09, 0x09);
+> -	dsi_generic_write_seq(dsi, 0xbc, 0x8c, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xbd, 0x8c, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xca, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xc0, 0x04);
+> -	dsi_generic_write_seq(dsi, 0xbe, 0xb5);
+> -	dsi_generic_write_seq(dsi, 0xb3, 0x35, 0x35);
+> -	dsi_generic_write_seq(dsi, 0xb4, 0x25, 0x25);
+> -	dsi_generic_write_seq(dsi, 0xb9, 0x43, 0x43);
+> -	dsi_generic_write_seq(dsi, 0xba, 0x24, 0x24);
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xee, 0x03);
+> -	dsi_generic_write_seq(dsi, 0xb0,
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xff, 0xaa, 0x55, 0xa5, 0x80);
+> +	mipi_dsi_generic_write_seq(dsi, 0x6f, 0x11, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf7, 0x20, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0x6f, 0x01);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb1, 0x21);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbd, 0x01, 0xa0, 0x10, 0x08, 0x01);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb8, 0x01, 0x02, 0x0c, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbb, 0x11, 0x11);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbc, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb6, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x01);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb0, 0x09, 0x09);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb1, 0x09, 0x09);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbc, 0x8c, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbd, 0x8c, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xca, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc0, 0x04);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbe, 0xb5);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb3, 0x35, 0x35);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb4, 0x25, 0x25);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb9, 0x43, 0x43);
+> +	mipi_dsi_generic_write_seq(dsi, 0xba, 0x24, 0x24);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xee, 0x03);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb0,
+>  			      0x00, 0xb2, 0x00, 0xb3, 0x00, 0xb6, 0x00, 0xc3,
+>  			      0x00, 0xce, 0x00, 0xe1, 0x00, 0xf3, 0x01, 0x11);
+Fix indent - here and elsewhere.
+With this fixed:
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+> -	dsi_generic_write_seq(dsi, 0xb1,
+> +	mipi_dsi_generic_write_seq(dsi, 0xb1,
+>  			      0x01, 0x2e, 0x01, 0x5c, 0x01, 0x82, 0x01, 0xc3,
+>  			      0x01, 0xfe, 0x02, 0x00, 0x02, 0x37, 0x02, 0x77);
+> -	dsi_generic_write_seq(dsi, 0xb2,
+> +	mipi_dsi_generic_write_seq(dsi, 0xb2,
+>  			      0x02, 0xa1, 0x02, 0xd7, 0x02, 0xfe, 0x03, 0x2c,
+>  			      0x03, 0x4b, 0x03, 0x63, 0x03, 0x8f, 0x03, 0x90);
+> -	dsi_generic_write_seq(dsi, 0xb3, 0x03, 0x96, 0x03, 0x98);
+> -	dsi_generic_write_seq(dsi, 0xb4,
+> +	mipi_dsi_generic_write_seq(dsi, 0xb3, 0x03, 0x96, 0x03, 0x98);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb4,
+>  			      0x00, 0x81, 0x00, 0x8b, 0x00, 0x9c, 0x00, 0xa9,
+>  			      0x00, 0xb5, 0x00, 0xcb, 0x00, 0xdf, 0x01, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xb5,
+> +	mipi_dsi_generic_write_seq(dsi, 0xb5,
+>  			      0x01, 0x1f, 0x01, 0x51, 0x01, 0x7a, 0x01, 0xbf,
+>  			      0x01, 0xfa, 0x01, 0xfc, 0x02, 0x34, 0x02, 0x76);
+> -	dsi_generic_write_seq(dsi, 0xb6,
+> +	mipi_dsi_generic_write_seq(dsi, 0xb6,
+>  			      0x02, 0x9f, 0x02, 0xd7, 0x02, 0xfc, 0x03, 0x2c,
+>  			      0x03, 0x4a, 0x03, 0x63, 0x03, 0x8f, 0x03, 0xa2);
+> -	dsi_generic_write_seq(dsi, 0xb7, 0x03, 0xb8, 0x03, 0xba);
+> -	dsi_generic_write_seq(dsi, 0xb8,
+> +	mipi_dsi_generic_write_seq(dsi, 0xb7, 0x03, 0xb8, 0x03, 0xba);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb8,
+>  			      0x00, 0x01, 0x00, 0x02, 0x00, 0x0e, 0x00, 0x2a,
+>  			      0x00, 0x41, 0x00, 0x67, 0x00, 0x87, 0x00, 0xb9);
+> -	dsi_generic_write_seq(dsi, 0xb9,
+> +	mipi_dsi_generic_write_seq(dsi, 0xb9,
+>  			      0x00, 0xe2, 0x01, 0x22, 0x01, 0x54, 0x01, 0xa3,
+>  			      0x01, 0xe6, 0x01, 0xe7, 0x02, 0x24, 0x02, 0x67);
+> -	dsi_generic_write_seq(dsi, 0xba,
+> +	mipi_dsi_generic_write_seq(dsi, 0xba,
+>  			      0x02, 0x93, 0x02, 0xcd, 0x02, 0xf6, 0x03, 0x31,
+>  			      0x03, 0x6c, 0x03, 0xe9, 0x03, 0xef, 0x03, 0xf4);
+> -	dsi_generic_write_seq(dsi, 0xbb, 0x03, 0xf6, 0x03, 0xf7);
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x03);
+> -	dsi_generic_write_seq(dsi, 0xb0, 0x22, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xb1, 0x22, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xb2, 0x05, 0x00, 0x60, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xb3, 0x05, 0x00, 0x60, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xb4, 0x05, 0x00, 0x60, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xb5, 0x05, 0x00, 0x60, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xba, 0x53, 0x00, 0x60, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xbb, 0x53, 0x00, 0x60, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xbc, 0x53, 0x00, 0x60, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xbd, 0x53, 0x00, 0x60, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xc0, 0x00, 0x34, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xc1, 0x00, 0x00, 0x34, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xc2, 0x00, 0x00, 0x34, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xc3, 0x00, 0x00, 0x34, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xc4, 0x60);
+> -	dsi_generic_write_seq(dsi, 0xc5, 0xc0);
+> -	dsi_generic_write_seq(dsi, 0xc6, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xc7, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x05);
+> -	dsi_generic_write_seq(dsi, 0xb0, 0x17, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xb1, 0x17, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xb2, 0x17, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xb3, 0x17, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xb4, 0x17, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xb5, 0x17, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xb6, 0x17, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xb7, 0x17, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xb8, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xb9, 0x00, 0x03);
+> -	dsi_generic_write_seq(dsi, 0xba, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xbb, 0x02, 0x03);
+> -	dsi_generic_write_seq(dsi, 0xbc, 0x02, 0x03);
+> -	dsi_generic_write_seq(dsi, 0xbd, 0x03, 0x03, 0x00, 0x03, 0x03);
+> -	dsi_generic_write_seq(dsi, 0xc0, 0x0b);
+> -	dsi_generic_write_seq(dsi, 0xc1, 0x09);
+> -	dsi_generic_write_seq(dsi, 0xc2, 0xa6);
+> -	dsi_generic_write_seq(dsi, 0xc3, 0x05);
+> -	dsi_generic_write_seq(dsi, 0xc4, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xc5, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xc6, 0x22);
+> -	dsi_generic_write_seq(dsi, 0xc7, 0x03);
+> -	dsi_generic_write_seq(dsi, 0xc8, 0x07, 0x20);
+> -	dsi_generic_write_seq(dsi, 0xc9, 0x03, 0x20);
+> -	dsi_generic_write_seq(dsi, 0xca, 0x01, 0x60);
+> -	dsi_generic_write_seq(dsi, 0xcb, 0x01, 0x60);
+> -	dsi_generic_write_seq(dsi, 0xcc, 0x00, 0x00, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xcd, 0x00, 0x00, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xce, 0x00, 0x00, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xcf, 0x00, 0x00, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xd1, 0x00, 0x05, 0x01, 0x07, 0x10);
+> -	dsi_generic_write_seq(dsi, 0xd2, 0x10, 0x05, 0x05, 0x03, 0x10);
+> -	dsi_generic_write_seq(dsi, 0xd3, 0x20, 0x00, 0x43, 0x07, 0x10);
+> -	dsi_generic_write_seq(dsi, 0xd4, 0x30, 0x00, 0x43, 0x07, 0x10);
+> -	dsi_generic_write_seq(dsi, 0xd0,
+> +	mipi_dsi_generic_write_seq(dsi, 0xbb, 0x03, 0xf6, 0x03, 0xf7);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x03);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb0, 0x22, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb1, 0x22, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb2, 0x05, 0x00, 0x60, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb3, 0x05, 0x00, 0x60, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb4, 0x05, 0x00, 0x60, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb5, 0x05, 0x00, 0x60, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xba, 0x53, 0x00, 0x60, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbb, 0x53, 0x00, 0x60, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbc, 0x53, 0x00, 0x60, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbd, 0x53, 0x00, 0x60, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc0, 0x00, 0x34, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc1, 0x00, 0x00, 0x34, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc2, 0x00, 0x00, 0x34, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc3, 0x00, 0x00, 0x34, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc4, 0x60);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc5, 0xc0);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc6, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc7, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x05);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb0, 0x17, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb1, 0x17, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb2, 0x17, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb3, 0x17, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb4, 0x17, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb5, 0x17, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb6, 0x17, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb7, 0x17, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb8, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb9, 0x00, 0x03);
+> +	mipi_dsi_generic_write_seq(dsi, 0xba, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbb, 0x02, 0x03);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbc, 0x02, 0x03);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbd, 0x03, 0x03, 0x00, 0x03, 0x03);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc0, 0x0b);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc1, 0x09);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc2, 0xa6);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc3, 0x05);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc4, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc5, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc6, 0x22);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc7, 0x03);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc8, 0x07, 0x20);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc9, 0x03, 0x20);
+> +	mipi_dsi_generic_write_seq(dsi, 0xca, 0x01, 0x60);
+> +	mipi_dsi_generic_write_seq(dsi, 0xcb, 0x01, 0x60);
+> +	mipi_dsi_generic_write_seq(dsi, 0xcc, 0x00, 0x00, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xcd, 0x00, 0x00, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xce, 0x00, 0x00, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xcf, 0x00, 0x00, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd1, 0x00, 0x05, 0x01, 0x07, 0x10);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd2, 0x10, 0x05, 0x05, 0x03, 0x10);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd3, 0x20, 0x00, 0x43, 0x07, 0x10);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd4, 0x30, 0x00, 0x43, 0x07, 0x10);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd0,
+>  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xd5,
+> +	mipi_dsi_generic_write_seq(dsi, 0xd5,
+>  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+>  			      0x00, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xd6,
+> +	mipi_dsi_generic_write_seq(dsi, 0xd6,
+>  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+>  			      0x00, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xd7,
+> +	mipi_dsi_generic_write_seq(dsi, 0xd7,
+>  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+>  			      0x00, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xd8, 0x00, 0x00, 0x00, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xe5, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xe6, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xe7, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xe8, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xe9, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xea, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xeb, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xec, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xed, 0x30);
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x06);
+> -	dsi_generic_write_seq(dsi, 0xb0, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xb1, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xb2, 0x2d, 0x2e);
+> -	dsi_generic_write_seq(dsi, 0xb3, 0x31, 0x34);
+> -	dsi_generic_write_seq(dsi, 0xb4, 0x29, 0x2a);
+> -	dsi_generic_write_seq(dsi, 0xb5, 0x12, 0x10);
+> -	dsi_generic_write_seq(dsi, 0xb6, 0x18, 0x16);
+> -	dsi_generic_write_seq(dsi, 0xb7, 0x00, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xb8, 0x08, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xb9, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xba, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xbb, 0x31, 0x08);
+> -	dsi_generic_write_seq(dsi, 0xbc, 0x03, 0x01);
+> -	dsi_generic_write_seq(dsi, 0xbd, 0x17, 0x19);
+> -	dsi_generic_write_seq(dsi, 0xbe, 0x11, 0x13);
+> -	dsi_generic_write_seq(dsi, 0xbf, 0x2a, 0x29);
+> -	dsi_generic_write_seq(dsi, 0xc0, 0x34, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xc1, 0x2e, 0x2d);
+> -	dsi_generic_write_seq(dsi, 0xc2, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xc3, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xc4, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xc5, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xc6, 0x2e, 0x2d);
+> -	dsi_generic_write_seq(dsi, 0xc7, 0x31, 0x34);
+> -	dsi_generic_write_seq(dsi, 0xc8, 0x29, 0x2a);
+> -	dsi_generic_write_seq(dsi, 0xc9, 0x17, 0x19);
+> -	dsi_generic_write_seq(dsi, 0xca, 0x11, 0x13);
+> -	dsi_generic_write_seq(dsi, 0xcb, 0x03, 0x01);
+> -	dsi_generic_write_seq(dsi, 0xcc, 0x08, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xcd, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xce, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xcf, 0x31, 0x08);
+> -	dsi_generic_write_seq(dsi, 0xd0, 0x00, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xd1, 0x12, 0x10);
+> -	dsi_generic_write_seq(dsi, 0xd2, 0x18, 0x16);
+> -	dsi_generic_write_seq(dsi, 0xd3, 0x2a, 0x29);
+> -	dsi_generic_write_seq(dsi, 0xd4, 0x34, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xd5, 0x2d, 0x2e);
+> -	dsi_generic_write_seq(dsi, 0xd6, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xd7, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xe5, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xe6, 0x31, 0x31);
+> -	dsi_generic_write_seq(dsi, 0xd8, 0x00, 0x00, 0x00, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xd9, 0x00, 0x00, 0x00, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xe7, 0x00);
+> -	dsi_generic_write_seq(dsi, 0x6f, 0x02);
+> -	dsi_generic_write_seq(dsi, 0xf7, 0x47);
+> -	dsi_generic_write_seq(dsi, 0x6f, 0x0a);
+> -	dsi_generic_write_seq(dsi, 0xf7, 0x02);
+> -	dsi_generic_write_seq(dsi, 0x6f, 0x17);
+> -	dsi_generic_write_seq(dsi, 0xf4, 0x60);
+> -	dsi_generic_write_seq(dsi, 0x6f, 0x01);
+> -	dsi_generic_write_seq(dsi, 0xf9, 0x46);
+> -	dsi_generic_write_seq(dsi, 0x6f, 0x11);
+> -	dsi_generic_write_seq(dsi, 0xf3, 0x01);
+> -	dsi_generic_write_seq(dsi, 0x35, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xd9, 0x02, 0x03, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x00);
+> -	dsi_generic_write_seq(dsi, 0xb1, 0x6c, 0x21);
+> -	dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, 0x35, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd8, 0x00, 0x00, 0x00, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xe5, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xe6, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xe7, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xe8, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xe9, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xea, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xeb, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xec, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xed, 0x30);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x06);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb0, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb1, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb2, 0x2d, 0x2e);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb3, 0x31, 0x34);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb4, 0x29, 0x2a);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb5, 0x12, 0x10);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb6, 0x18, 0x16);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb7, 0x00, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb8, 0x08, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb9, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xba, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbb, 0x31, 0x08);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbc, 0x03, 0x01);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbd, 0x17, 0x19);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbe, 0x11, 0x13);
+> +	mipi_dsi_generic_write_seq(dsi, 0xbf, 0x2a, 0x29);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc0, 0x34, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc1, 0x2e, 0x2d);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc2, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc3, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc4, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc5, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc6, 0x2e, 0x2d);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc7, 0x31, 0x34);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc8, 0x29, 0x2a);
+> +	mipi_dsi_generic_write_seq(dsi, 0xc9, 0x17, 0x19);
+> +	mipi_dsi_generic_write_seq(dsi, 0xca, 0x11, 0x13);
+> +	mipi_dsi_generic_write_seq(dsi, 0xcb, 0x03, 0x01);
+> +	mipi_dsi_generic_write_seq(dsi, 0xcc, 0x08, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xcd, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xce, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xcf, 0x31, 0x08);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd0, 0x00, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd1, 0x12, 0x10);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd2, 0x18, 0x16);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd3, 0x2a, 0x29);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd4, 0x34, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd5, 0x2d, 0x2e);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd6, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd7, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xe5, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xe6, 0x31, 0x31);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd8, 0x00, 0x00, 0x00, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd9, 0x00, 0x00, 0x00, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xe7, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0x6f, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf7, 0x47);
+> +	mipi_dsi_generic_write_seq(dsi, 0x6f, 0x0a);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf7, 0x02);
+> +	mipi_dsi_generic_write_seq(dsi, 0x6f, 0x17);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf4, 0x60);
+> +	mipi_dsi_generic_write_seq(dsi, 0x6f, 0x01);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf9, 0x46);
+> +	mipi_dsi_generic_write_seq(dsi, 0x6f, 0x11);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf3, 0x01);
+> +	mipi_dsi_generic_write_seq(dsi, 0x35, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xd9, 0x02, 0x03, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x08, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0xb1, 0x6c, 0x21);
+> +	mipi_dsi_generic_write_seq(dsi, 0xf0, 0x55, 0xaa, 0x52, 0x00, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, 0x35, 0x00);
+>  
+>  	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+>  	if (ret < 0) {
+> @@ -268,7 +260,7 @@ static int truly_nt35521_on(struct truly_nt35521 *ctx)
+>  	}
+>  	usleep_range(1000, 2000);
+>  
+> -	dsi_generic_write_seq(dsi, 0x53, 0x24);
+> +	mipi_dsi_generic_write_seq(dsi, 0x53, 0x24);
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.38.1
