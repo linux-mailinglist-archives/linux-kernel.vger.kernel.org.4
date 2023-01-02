@@ -2,195 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F307D65B84C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 00:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5B965B849
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 00:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbjABXye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 18:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
+        id S231160AbjABXyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 18:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjABXyb (ORCPT
+        with ESMTP id S229587AbjABXyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 18:54:31 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF959593
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 15:54:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672703669; x=1704239669;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=aR3K3ex1SxuJ6C4KEDB9xBXcz30I39NL7soRBCm7lKo=;
-  b=aanDE+h4kQdXdVWdWmUwHNjzkKBzqJi9j5CkwVJfZghitnzfXv0qFlBj
-   9KYxqEn046vpI9mMMYkvCehUeFRlI1+ZskshN37vsE0YplZTaBthcnE95
-   q4clMPnKRh1CG0L7KgLGYVH+Odk3pX8CuWr4GpfSDJ0S//J5Tvn5ls3DF
-   AY+7TdYxcyy7JbA0mYuCksQN8KSzyptXXPSLCoJIJPzroa+44udVE02Dm
-   H9m4NkqD3OR48WNovj+tL7NxJb7gz1Z/FVdGE2uXJT1M67YQkRGb0w8eh
-   IRHIV5zYwx+69f7Fm5PUjoBSy20YDO/PSoVXqloozGk2dpTXUsYCLSpfn
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="383850910"
-X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
-   d="scan'208";a="383850910"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 15:54:28 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="685197615"
-X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
-   d="scan'208";a="685197615"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 15:54:25 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Bharata B Rao <bharata@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        haoxin <xhao@linux.alibaba.com>
-Subject: Re: [PATCH 2/8] migrate_pages: separate hugetlb folios migration
-References: <20221227002859.27740-1-ying.huang@intel.com>
-        <20221227002859.27740-3-ying.huang@intel.com>
-        <20221228151735.e855bde30c1782bb45b97930@linux-foundation.org>
-Date:   Tue, 03 Jan 2023 07:53:31 +0800
-In-Reply-To: <20221228151735.e855bde30c1782bb45b97930@linux-foundation.org>
-        (Andrew Morton's message of "Wed, 28 Dec 2022 15:17:35 -0800")
-Message-ID: <87a630xzlw.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 2 Jan 2023 18:54:01 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4133060DE;
+        Mon,  2 Jan 2023 15:54:00 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id C62372C8;
+        Mon,  2 Jan 2023 23:53:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C62372C8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1672703639; bh=avP7SOJdHkgVb2BCcWl6rx6zsHzyw9Bd6lyElnyQWOM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=gz3B5hm3TeOraHRKWG6FsC7XiGNBc4bA09r1Gj8iDH5nt19gd+TlPX//MhQTbNERV
+         tYtFEJCk+kXdFmCx3qcnFn9eN2gVvyRcT3bpLResS87vWLl0X4H3rnYc9GIBJrArH3
+         3hRqIGkyuqMaPD19JUa/G/RjQjQr4S3Y3ffOSlq9qbCxogtmg4kKQC4XEyrHKOGulJ
+         e4qZLd/Puo/5LEuSSLWQgvZeEcfiIvmeKPuLL18fJpbz7ISXi8HV6rOZ3I2JmIygdw
+         6GvXns3XolOJ8/5dxjCoWzJAHWn3YPf47lob/9g5JtZilw4Q8nnQ+VotyZHbGwItlV
+         +Oo63s6zO86yw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org,
+        akiyks@gmail.com, jani.nikula@linux.intel.com,
+        rdunlap@infradead.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        konstantin@linuxfoundation.org,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: Re: [PATCH v5 0/2] docs: Integrate rustdoc into Rust documentation
+In-Reply-To: <20221228174623.144199-1-carlos.bilbao@amd.com>
+References: <20221207173053.1463800-1-carlos.bilbao@amd.com>
+ <20221228174623.144199-1-carlos.bilbao@amd.com>
+Date:   Mon, 02 Jan 2023 16:53:58 -0700
+Message-ID: <87wn64fq7d.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Morton <akpm@linux-foundation.org> writes:
+Carlos Bilbao <carlos.bilbao@amd.com> writes:
 
-> On Tue, 27 Dec 2022 08:28:53 +0800 Huang Ying <ying.huang@intel.com> wrote:
+> Include HTML output generated with rustdoc into the Linux kernel
+> documentation on Rust.
 >
->> This is a preparation patch to batch the folio unmapping and moving
->> for the non-hugetlb folios.  Based on that we can batch the TLB
->> shootdown during the folio migration and make it possible to use some
->> hardware accelerator for the folio copying.
->> 
->> In this patch the hugetlb folios and non-hugetlb folios migration is
->> separated in migrate_pages() to make it easy to change the non-hugetlb
->> folios migration implementation.
->> 
->> ...
->>
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1404,6 +1404,87 @@ struct migrate_pages_stats {
->>  	int nr_thp_split;
->>  };
->>  
->> +static int migrate_hugetlbs(struct list_head *from, new_page_t get_new_page,
->> +			    free_page_t put_new_page, unsigned long private,
->> +			    enum migrate_mode mode, int reason,
->> +			    struct migrate_pages_stats *stats,
->> +			    struct list_head *ret_folios)
->> +{
->> +	int retry = 1;
->> +	int nr_failed = 0;
->> +	int nr_retry_pages = 0;
->> +	int pass = 0;
->> +	struct folio *folio, *folio2;
->> +	int rc = 0, nr_pages;
->> +
->> +	for (pass = 0; pass < 10 && retry; pass++) {
->
-> Why 10?
+> Carlos Bilbao:
+>  docs: Move rustdoc output, cross-reference it
+>  docs: Integrate rustdoc generation into htmldocs
 
-This is inherited from the original max pass number from
-migrate_pages().  Which is introduced in commit 49d2e9cc4544 ("[PATCH]
-Swap Migration V5: migrate_pages() function").  From the code and commit
-message, I don't find out why.  I guess that we need some magic number
-anyway.
+OK, so I just gave this a try...
 
-Now, because the magic number is used in 2 places (migrate_pages() and
-migrate_hugetlbs()), it's better to define it as a constant macro?
+- It forces the generation of a kernel configuration, something that the
+  docs build has never done until now.  What are our changes of
+  eliminating that?
 
->> +		retry = 0;
->> +		nr_retry_pages = 0;
->> +
->> +		list_for_each_entry_safe(folio, folio2, from, lru) {
->> +			if (!folio_test_hugetlb(folio))
->> +				continue;
->> +
->> +			nr_pages = folio_nr_pages(folio);
->> +
->> +			cond_resched();
->> +
->> +			rc = unmap_and_move_huge_page(get_new_page,
->> +						      put_new_page, private,
->> +						      &folio->page, pass > 2, mode,
->> +						      reason, ret_folios);
->> +			/*
->> +			 * The rules are:
->> +			 *	Success: hugetlb folio will be put back
->> +			 *	-EAGAIN: stay on the from list
->> +			 *	-ENOMEM: stay on the from list
->> +			 *	-ENOSYS: stay on the from list
->> +			 *	Other errno: put on ret_folios list
->> +			 */
->> +			switch(rc) {
->> +			case -ENOSYS:
->> +				/* Hugetlb migration is unsupported */
->> +				nr_failed++;
->> +				stats->nr_failed_pages += nr_pages;
->> +				list_move_tail(&folio->lru, ret_folios);
->> +				break;
->> +			case -ENOMEM:
->> +				/*
->> +				 * When memory is low, don't bother to try to migrate
->> +				 * other folios, just exit.
->> +				 */
->> +				nr_failed++;
->> +				stats->nr_failed_pages += nr_pages;
->> +				goto out;
->> +			case -EAGAIN:
->> +				retry++;
->> +				nr_retry_pages += nr_pages;
->> +				break;
->> +			case MIGRATEPAGE_SUCCESS:
->> +				stats->nr_succeeded += nr_pages;
->> +				break;
->> +			default:
->> +				/*
->> +				 * Permanent failure (-EBUSY, etc.):
->> +				 * unlike -EAGAIN case, the failed folio is
->> +				 * removed from migration folio list and not
->> +				 * retried in the next outer loop.
->> +				 */
->> +				nr_failed++;
->> +				stats->nr_failed_pages += nr_pages;
->> +				break;
->> +			}
->> +		}
->> +	}
->> +out:
->> +	nr_failed += retry;
->> +	stats->nr_failed_pages += nr_retry_pages;
->> +	if (rc != -ENOMEM)
->> +		rc = nr_failed;
->> +
->> +	return rc;
->> +}
->
-> The interpretation of the return value of this function is somewhat
-> unobvious.
->
-> I suggest that this function be fully commented.
->
-> Why does a retry contribute to nr_failed.  What is the interpretation
-> of nr_failed.  etcetera.
+- It did a bunch of other building, starting with objtool - again, never
+  needed for the docs build before.
 
-Sure.  Will do that in the next version.
+In the end, it died with:
 
-Best Regards,
-Huang, Ying
+> BINDGEN rust/bindings/bindings_generated.rs
+> Failed to run rustfmt: No such file or directory (os error 2) (non-fatal, continuing)
+>   BINDGEN rust/bindings/bindings_helpers_generated.rs
+> error: Found argument '--blacklist-type' which wasn't expected, or isn't valid in this context
+> 
+> 	Did you mean '--blocklist-type'?
+
+Perhaps this is because I ignored the warnings about my Rust toolchain
+being too new? (Rust 1.65.0, bindgen 0.63.0).  I get that only one
+version is really supported, but it would be nice to fail a bit more
+gracefully if at all possible.
+
+Anyway, I've unapplied these for now; thoughts on all this?
+
+Thanks,
+
+jon
