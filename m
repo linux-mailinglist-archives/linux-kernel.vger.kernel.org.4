@@ -2,166 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B919A65AE75
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F0465AE77
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjABIzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 03:55:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
+        id S230438AbjABI4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 03:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjABIzC (ORCPT
+        with ESMTP id S229941AbjABI4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 03:55:02 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1462ACA
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:55:01 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id cf42so40770491lfb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 00:55:00 -0800 (PST)
+        Mon, 2 Jan 2023 03:56:21 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FC8289
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:56:20 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so27676860pjj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 00:56:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0xd4pU6bNJXAmA0DRMKbQh8++iQzAoVOYwtwMn3h+yQ=;
-        b=HSduBPi6SnT0EJdkWTEwds2p7S+I5laQ6jab5j/hZ9qZSa9MVsVd8OncWrFQo67YCj
-         VA7yJMnZxmJlPVGAniDfNDwMMf/QNOuUCQMmbmhg4ZiuDu9mnIyc6+r040pIjZL3KiXK
-         Xl/wqpcdlNf5E69kxsnT5v5/VVH4SsRYLWpshWOsxP2RVPHyC4iWB2Fhms2onsUAvmiV
-         YPrJlh/3NhTXpkXTpml/iPO1bEqS4/I6nWW2R7Ot6pK9ODMvMYwdHP9qA/MnCfiY700D
-         6+JlWEte7lO/NU87OJ7IuTTPuzQWWxKjYcPXnYvur0q3HCuaiifxPQQDVaF+C0M42x3A
-         8EcQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RM8oIGfMWpApShjFHib1CmVTv++qNr1Lw9sTv4BtaVA=;
+        b=V9ypSvZ98gXL/PrKDa1RGlnpbLcL1VjaZuZ5Adl/U6mRPQ4gDH1S/hySpgBm2eNPLt
+         Y8f+BIa7gfiuZCQU8vqF/tsBa1WyMMzEleXv6rojrP78BFCKJo7NVQaN8fkxrmWOvPMz
+         KU/HismQqUH8T81DPJdtrJdx0aT7niW5LDGFGLYtwP85uNJ1MaZjmYShozBwoxisis+Z
+         B4os0aIgCF4h7wQp+Wg7dRBrqZm8vCKFGBtGo/YZQ2xJB9mxkSemu95Wn4bx7NGcUPst
+         EA09LTtbDD1IsDYv66gE3lQd49zWqYZ7kh8Q/UQUvjqm1HWcdIBx+NiyYSZyV6RRX75U
+         dkQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0xd4pU6bNJXAmA0DRMKbQh8++iQzAoVOYwtwMn3h+yQ=;
-        b=soNLQHrMQZu+sK+CpE2quFxLNopug863EVPQYGftna1JzgBCdrjmxIuVsDiUM7LAtM
-         nbVX2ubamrQKaTVV2RYNCPcXhLq4sGeMZrqF8qrPnDVtZfOpY43xozGagVZA4unN0I+4
-         cHd9SOkxEJmMY5FjL/JsMkUWhDiLj9i7cgOi7+k62Fg0Y6rNaWb4z/cjAaObC76TVOit
-         McKcYD9dSGRQvmSVxiO7auenJqVnMbW4LQdnjTZC/a99OjZ3OG8CPqPxIgys1mEKsfbn
-         fk7oIM+X1NPKIa6M0GZOi++X3KOV1YLpBO58EWnOV9gtQxjbehg5oeyCpsuHENRT/fc7
-         EojQ==
-X-Gm-Message-State: AFqh2kqmVJwskd5cuCfP/fLOhCq4edtdakFFMQdY4r/j2O/QU1axJvqV
-        JJfdr07WzsoL63LsN0G3THDA1A==
-X-Google-Smtp-Source: AMrXdXuhL0542tuDQfgRQDDyiAxKhZETN6HWCegQdVorrthr90sRPjxVKD8rdU1HgmNdHyk2RacDCg==
-X-Received: by 2002:a05:6512:3fa7:b0:4b5:cda:44cf with SMTP id x39-20020a0565123fa700b004b50cda44cfmr13568210lfa.67.1672649699420;
-        Mon, 02 Jan 2023 00:54:59 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q8-20020ac25108000000b004aac23e0dd6sm4408815lfb.29.2023.01.02.00.54.58
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RM8oIGfMWpApShjFHib1CmVTv++qNr1Lw9sTv4BtaVA=;
+        b=N4NmVE9ganeoH9wjpINBq5qjE61xjCpBJCF9nKXLj+eGp/skVNe7Fpo/9Y6/utRoCM
+         n+jMVCrzG8LMOkmDTp6McdR2ZYxhxFBDVHA++V8+X0mUU1XwaazI4pGHxMWsYNZTVwpG
+         d+2wHeVorGGVQYfSykvIJ1yKlOmKjfqNtg9b57RDPbX58Aa67KWv1MNG13b1sU4Zv9R9
+         HynRNVd8nVrsDbj7pL6km/5FQegZo2Yfg0zKS5ZMZxcu7aNROVcI+V7dOXJEiFykjM0x
+         P36mSJtUu9+yT6D2m0elUR30br6xMenBmnAU3vJufMBXB5rs5o9FGbTt2i1RQtr6VY3p
+         mNsw==
+X-Gm-Message-State: AFqh2kqZoCgki1umAqEUB3U3DKVoszHjU4eA4JD1eUXXNS/Pzy33D274
+        JvkjIN48fBhXO1927Y6V36o=
+X-Google-Smtp-Source: AMrXdXuFB/vgOIi+voy9S2CaZE9FNISrdfrdKC4DSQrkF9VlXL1hqCx6CpKLUZUe2DGsbSvyTPK2BQ==
+X-Received: by 2002:a17:90a:bd95:b0:225:a202:5fb5 with SMTP id z21-20020a17090abd9500b00225a2025fb5mr43073574pjr.44.1672649780366;
+        Mon, 02 Jan 2023 00:56:20 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id pf18-20020a17090b1d9200b002260b06befbsm9896028pjb.16.2023.01.02.00.56.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 00:54:59 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 6/6] arm64: dts: qcom: sm8450: align PSCI domain names with DT schema
-Date:   Mon,  2 Jan 2023 09:54:52 +0100
-Message-Id: <20230102085452.10753-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230102085452.10753-1-krzysztof.kozlowski@linaro.org>
-References: <20230102085452.10753-1-krzysztof.kozlowski@linaro.org>
+        Mon, 02 Jan 2023 00:56:19 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] irqchip/ti-sci: Fix refcount leak in ti_sci_intr_irq_domain_probe
+Date:   Mon,  2 Jan 2023 12:56:10 +0400
+Message-Id: <20230102085611.3955984-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bindings expect power domains to follow generic naming pattern:
+of_irq_find_parent() returns a node pointer with refcount incremented,
+We should use of_node_put() on it when not needed anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-  sm8450-qrd.dtb: psci: 'cpu-cluster0', 'cpu0', 'cpu1', 'cpu2', 'cpu3', 'cpu4', 'cpu5', 'cpu6',
-    'cpu7' do not match any of the regexes: '^power-domain-', 'pinctrl-[0-9]+'
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
+Fixes: cd844b0715ce ("irqchip/ti-sci-intr: Add support for Interrupt Router driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
+ drivers/irqchip/irq-ti-sci-intr.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes since v1:
-1. Add Rb tag.
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 9f6b689c0edd..61575f6fab0b 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -302,55 +302,55 @@ psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
+diff --git a/drivers/irqchip/irq-ti-sci-intr.c b/drivers/irqchip/irq-ti-sci-intr.c
+index fe8fad22bcf9..020ddf29efb8 100644
+--- a/drivers/irqchip/irq-ti-sci-intr.c
++++ b/drivers/irqchip/irq-ti-sci-intr.c
+@@ -236,6 +236,7 @@ static int ti_sci_intr_irq_domain_probe(struct platform_device *pdev)
+ 	}
  
--		CPU_PD0: cpu0 {
-+		CPU_PD0: power-domain-cpu0 {
- 			#power-domain-cells = <0>;
- 			power-domains = <&CLUSTER_PD>;
- 			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
- 		};
- 
--		CPU_PD1: cpu1 {
-+		CPU_PD1: power-domain-cpu1 {
- 			#power-domain-cells = <0>;
- 			power-domains = <&CLUSTER_PD>;
- 			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
- 		};
- 
--		CPU_PD2: cpu2 {
-+		CPU_PD2: power-domain-cpu2 {
- 			#power-domain-cells = <0>;
- 			power-domains = <&CLUSTER_PD>;
- 			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
- 		};
- 
--		CPU_PD3: cpu3 {
-+		CPU_PD3: power-domain-cpu3 {
- 			#power-domain-cells = <0>;
- 			power-domains = <&CLUSTER_PD>;
- 			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
- 		};
- 
--		CPU_PD4: cpu4 {
-+		CPU_PD4: power-domain-cpu4 {
- 			#power-domain-cells = <0>;
- 			power-domains = <&CLUSTER_PD>;
- 			domain-idle-states = <&BIG_CPU_SLEEP_0>;
- 		};
- 
--		CPU_PD5: cpu5 {
-+		CPU_PD5: power-domain-cpu5 {
- 			#power-domain-cells = <0>;
- 			power-domains = <&CLUSTER_PD>;
- 			domain-idle-states = <&BIG_CPU_SLEEP_0>;
- 		};
- 
--		CPU_PD6: cpu6 {
-+		CPU_PD6: power-domain-cpu6 {
- 			#power-domain-cells = <0>;
- 			power-domains = <&CLUSTER_PD>;
- 			domain-idle-states = <&BIG_CPU_SLEEP_0>;
- 		};
- 
--		CPU_PD7: cpu7 {
-+		CPU_PD7: power-domain-cpu7 {
- 			#power-domain-cells = <0>;
- 			power-domains = <&CLUSTER_PD>;
- 			domain-idle-states = <&BIG_CPU_SLEEP_0>;
- 		};
- 
--		CLUSTER_PD: cpu-cluster0 {
-+		CLUSTER_PD: power-domain-cpu-cluster0 {
- 			#power-domain-cells = <0>;
- 			domain-idle-states = <&CLUSTER_SLEEP_0>, <&CLUSTER_SLEEP_1>;
- 		};
+ 	parent_domain = irq_find_host(parent_node);
++	of_node_put(parent_node);
+ 	if (!parent_domain) {
+ 		dev_err(dev, "Failed to find IRQ parent domain\n");
+ 		return -ENODEV;
 -- 
-2.34.1
+2.25.1
 
