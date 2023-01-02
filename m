@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3415C65B367
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB5465B368
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbjABOg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 09:36:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
+        id S236180AbjABOhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 09:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbjABOf7 (ORCPT
+        with ESMTP id S236183AbjABOhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 09:35:59 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1BC29A;
-        Mon,  2 Jan 2023 06:35:58 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id h185so2560554oif.5;
-        Mon, 02 Jan 2023 06:35:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oldXDimbyQpQ7zpEgLfAQ9A9jkVkeyPyVeSx90WR90g=;
-        b=AFap4DC2gK8aOZIgTD18L6fjbI1+0XDHkm9J6PTAyE4o7S59mu9inc4lkWxtnZKy1D
-         CNl9KAp2hyPvEbQxgiBRoNKLqxZhP+F6rwP/BIUrNtLnR2T3N7mRjMbeTSB6boUsyQBl
-         /pXdP0pM1yY97dR9YT+xRZa3nS7bWJsN4EN6f8QuTH4FCAFfquLALhf1NUi53/QKFzxs
-         2MtuIdZNsPKoCxMXt4OMbdPXjZSn/9F0McFdukOEvVZrQBcCQF6AUCu27IKdYPTE9KwQ
-         5N8RhfMPGykJ235lQVhg/zs633WCx80WjzYRPx/gEavvLUHuCNIRb932N47a84UP0Sq9
-         3oqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oldXDimbyQpQ7zpEgLfAQ9A9jkVkeyPyVeSx90WR90g=;
-        b=KEb0yV0RBv3FMRq0YrSEpWpCwiimOS2sMQ61Q9vdrCEPFb0JiQKNmfawBNXh9GCtjk
-         Lmln1frdRM9qXACP5XBPrZfkJrS5resd3c3FecgdyKRXuGk8NK29hsy8f4lm8tMjR1/N
-         GYURELZmIorHsxMzzJ1MmSusGtRySbIxPQ8PoZe+yzG+x6/uyqcxV+O7mUXI7Rx9cEcU
-         qrEf+qCTJORm+yKLi5hAffImgVwgaXnj0TjAiunI9mjZU02xLgBg2heBJvcllG5t9qhY
-         2KE+tA+FdnVFnDWDRuHsDZW0NMWoxS5pp9QSfxyKfaXqo+fR1/xA26RENMz396LyYZgW
-         PK8w==
-X-Gm-Message-State: AFqh2ko8N4TUrq6zWD2eXywvtUWWjnM+xmy7XismslCV94Pbv7z+Mycm
-        /d7RkmcJdwc3hxgDCn39UWqnYudiuQ8=
-X-Google-Smtp-Source: AMrXdXt8niPHIGc7xRuIs3/6sCnds5wMxcVVOZD0/L9VpRGvlsiVzdjOPRi0lH58mzrLIq8DNj5bqg==
-X-Received: by 2002:a05:6808:2c9:b0:35e:b231:1a27 with SMTP id a9-20020a05680802c900b0035eb2311a27mr16695489oid.33.1672670157909;
-        Mon, 02 Jan 2023 06:35:57 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:e082:9c8d:c88c:a11? ([2600:1700:2442:6db0:e082:9c8d:c88c:a11])
-        by smtp.gmail.com with ESMTPSA id r204-20020aca44d5000000b00354d9b9f6b4sm12015179oia.27.2023.01.02.06.35.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 06:35:57 -0800 (PST)
-Message-ID: <a7e15b62-8929-b76e-77d7-42d78aaa02e1@gmail.com>
-Date:   Mon, 2 Jan 2023 08:35:56 -0600
+        Mon, 2 Jan 2023 09:37:12 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED6D300
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 06:37:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IHJbXSStoTOW1TXphXY3233q5587iv+dojH9JRS4b8Y=; b=QUih8KNnF4kH+vRtjaGFtkBLuH
+        MbB3v3V26JuxZSmYx6Dy7uAi0QLvocEqVUwx2EvpvGDRzPpItDue6/4aCsjlPiZrbE8Bj17mzGVTR
+        EtBlzaG9hKTvWDND3awzE6yfycMcaVfV1pyz2RiB3eHGvP6Vte49xtWNgWJka4g/1nkaXIuxYGsLe
+        i1J3vWgwk6RoRU6q5t6aj7QIXiOLoQWUC2xqxZyphwn1B90KfcL1SOQwcnldjZxxblpu1TXF1gY3p
+        JLBc9TVTsgCY3OmpksAeKpiV2XrWUyd2QunTEpnu8Si/hruDP06mcucZpY/jWSP7VqvksLWJbfDYf
+        hhSm9S0A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pCLvz-00DEAH-0q; Mon, 02 Jan 2023 14:37:03 +0000
+Date:   Mon, 2 Jan 2023 14:37:02 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, liam.howlett@oracle.com, surenb@google.com,
+        ldufour@linux.ibm.com, michel@lespinasse.org, vbabka@suse.cz,
+        linux-kernel@vger.kernel.org
+Subject: Re: [QUESTION] about the maple tree and current status of mmap_lock
+ scalability
+Message-ID: <Y7LsDgMxHh8NHzDY@casper.infradead.org>
+References: <EC51CFA7-2BC8-4F72-A7D4-3B1A778EDB37@gmail.com>
+ <Y6ysHNPvKayTfeq8@casper.infradead.org>
+ <Y62ipKlWGEbJZKXv@hyeyoo>
+ <Y63FmaNoLAcdsLaU@casper.infradead.org>
+ <Y7LIPOc/ESmhRzYk@hyeyoo>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] of: overlay: fix warning being reported as error in
- add_changeset_property
-Content-Language: en-US
-To:     "Ankit 16. Kumar (Nokia)" <ankit.16.kumar@nokia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1671195782-23078-1-git-send-email-ankit.16.kumar@nokia.com>
- <VI1PR0701MB68298749C8133A7D69CFDBBFC9F09@VI1PR0701MB6829.eurprd07.prod.outlook.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <VI1PR0701MB68298749C8133A7D69CFDBBFC9F09@VI1PR0701MB6829.eurprd07.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7LIPOc/ESmhRzYk@hyeyoo>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/30/22 02:40, Ankit 16. Kumar (Nokia) wrote:
+On Mon, Jan 02, 2023 at 09:04:12PM +0900, Hyeonggon Yoo wrote:
+> > https://www.infradead.org/~willy/linux/store-free-page-faults.html
+> > outlines how I intend to proceed from Suren's current scheme (where
+> > RCU is only used to protect the tree walk) to using RCU for the
+> > entire page fault.
 > 
-> The print causes false reporting of the issue which actually is a warning
-
-How did you select the commit in this Fixes tag?
-
-> Fixes: 2fe0e8769df9 ("of: overlay: check prevents multiple fragments touching same property")
+> Thank you for sharing this your outlines.
+> Okay, so the planned scheme is:
 > 
-> Signed-off-by: Ankit Kumar <ankit.16.kumar@nokia.com>
-> ---
->  drivers/of/overlay.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> 	1. Try to process entire page fault under RCU protection
+> 		- if failed, goto 2. if succeeded, goto 4.
 > 
-> diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c index ed4e6c144a68..0da39b8461e7 100644
-> --- a/drivers/of/overlay.c
-> +++ b/drivers/of/overlay.c
-> @@ -358,7 +358,7 @@ static int add_changeset_property(struct overlay_changeset *ovcs,
->  	}
->  
->  	if (!of_node_check_flag(target->np, OF_OVERLAY))
-> -		pr_err("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
-> +		pr_warn("WARNING: memory leak will occur if overlay removed, 
-> +property: %pOF/%s\n",
->  		       target->np, new_prop->name);
->  
->  	if (ret) {
-> --
-> 2.30.1
+> 	2. Fall back to Suren's scheme (try to take VMA rwsem)
+> 		- if failed, goto 3. if succeeded, goto 4.
+
+Right.  The question is whether to restart the page fault under Suren's
+scheme, or just grab the VMA rwsem and continue.  Experimentation
+needed.
+
+It's also worth noting that Michel has an alternative proposal, which
+is to drop out of RCU protection before trying to allocate memory, then
+re-enter RCU mode and check the sequence count hasn't changed on the
+entire MM.  His proposal has the advantage of not trying to allocate
+memory while holding the RCU read lock, but the disadvantage of having
+to retry the page fault if anyone has called mmap() or munmap().  Which
+alternative is better is going to depend on the workload; do we see more
+calls to mmap()/munmap(), or do we need to enter page reclaim more often?
+I think they're largely equivalent performance-wise in the fast path.
+Another metric to consider is code complexity; he thinks his method
+is easier to understand and I think mine is easier.  To be expected,
+I suppose ;-)
+
+> 	3. Fall back to mmap_lock
+> 		- goto 4.
 > 
+> 	4. Finish page fault.
+> 
+> To implement 1, __p*d_alloc() need to take gfp flags
+> not to sleep in RCU read-side critical section.
+> 
+> What about introducing PF_MEMALLOC_NOWAIT process flag forcing
+> GFP_NOWAIT | __GFP_NOWARN
+> 
+> similar to PF_MEMALLOC_NO{FS,IO}, looking like this?
+> 
+> Will be less churn.
 
-NACK.  This patch is incorrect.  The reported memory leak is a bug, not a warning.
-
-I'll write up some information about why the memory leak occurs, then reply to this
-email with the additional info.
-
--Frank
+Certainly less churn, but also far more risky.  All of a sudden,
+codepaths which used to always succeed will now start failing, and
+either there aren't checks for memory allocation failures or those
+paths have never been tested before.
