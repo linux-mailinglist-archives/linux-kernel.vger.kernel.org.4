@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1798B65AE5B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F026565AE5E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbjABIrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 03:47:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
+        id S232009AbjABIre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 03:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbjABIrP (ORCPT
+        with ESMTP id S231844AbjABIrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 03:47:15 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295BA21BA
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:47:14 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id n4so29015331plp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 00:47:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tkq2fYPAAfCT6CmgtdbmFTqHCyc6irGoNXfZDkU6fuw=;
-        b=p93mZ34atd0r0rIEpm6svkrRZ9FPVeK8Dv9EYEQJHXFoyIEM7K6vf2gGV60goJnIc9
-         HevkH6rQ2a+EMePniVp0o2vvM0xSld1KA+S6zcwr1Nzqijv0jpTc9u2vNON/jc0RM2TX
-         IgRGoM+k6l4pwYnEABIPni9VfHqCtZFhetDOjA8nbxvJ306OXVIKSSj5UrlgtJhcJK3v
-         U7Y1JyH0OO2PGyVm8ZyD9fLPcDxj7G19HzjE469P537WGdBJjYFke8rz+zg9U9hHu/+D
-         CEcIS6MDBoo0znvZwNvz6lotdJRJPIqcws6AcGj29i8n8MCQfTafeaku7BXtHTy6LmNP
-         oSbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tkq2fYPAAfCT6CmgtdbmFTqHCyc6irGoNXfZDkU6fuw=;
-        b=K7ZDZN9DKptAjMzurP9k7lo4pfOOJXqmESfV4AMlupSeY3h+eJ9Uw0pW7ZfN//VQkV
-         k54U5ECylr/hayppOqUO1Sexm7e35/KB0wiDr8eg5NCo6BE8NS4nfaQ1OsfIgVKrMXwY
-         xp8GKqpc9hDPdv/iddwTfc28eHypEIJiTtKeSmFDEK10Q6Rg+89bm/zVfogLqVy4UtO1
-         w94R794v+Em7GtXDbbXneoZIqRbb1rAYywzVDxJqOggfbFZihgrLkuv+TjkVAtXA1Z8p
-         Ve1RHy4GAxctre4c7fgK5QypEOpDz66F4TPp7fA3+obkIT74lXEdEVxfpbIEa5YkD0Sj
-         1wVQ==
-X-Gm-Message-State: AFqh2kpRu6IgPHoUncKxJEY9v+z/mxNVcJKzHefLHI7RGUB82PVz7YAv
-        tBQCxRcGnp+gdRl/zwI/+UjE
-X-Google-Smtp-Source: AMrXdXs4EMX0rX34O8k6lqYjXiFN2NlmyBxs4ZAhDFblSqzK9GJaN+YN/7NTn4wtD7Cl5I+616O4mw==
-X-Received: by 2002:a17:90a:b10b:b0:225:cc25:802f with SMTP id z11-20020a17090ab10b00b00225cc25802fmr33334186pjq.28.1672649233597;
-        Mon, 02 Jan 2023 00:47:13 -0800 (PST)
-Received: from thinkpad ([220.158.158.187])
-        by smtp.gmail.com with ESMTPSA id q7-20020a17090a430700b0020bfd6586c6sm16618209pjg.7.2023.01.02.00.47.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 00:47:12 -0800 (PST)
-Date:   Mon, 2 Jan 2023 14:17:07 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     jejb@linux.ibm.com, andersson@kernel.org, vkoul@kernel.org,
-        quic_cang@quicinc.com, quic_asutoshd@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, ahalaney@redhat.com,
-        abel.vesa@linaro.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
-        bvanassche@acm.org
-Subject: Re: [PATCH v5 00/23] ufs: qcom: Add HS-G4 support
-Message-ID: <20230102084707.GA16638@thinkpad>
-References: <20221222141001.54849-1-manivannan.sadhasivam@linaro.org>
- <yq17cy84gqc.fsf@ca-mkp.ca.oracle.com>
+        Mon, 2 Jan 2023 03:47:32 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAED9D94;
+        Mon,  2 Jan 2023 00:47:29 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 7DC38447CB;
+        Mon,  2 Jan 2023 08:47:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1672649247; bh=Iri98/XMHObCV5g8WvmFmk4VxFpmQL0oBfMhS83NGLg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=YLfaPGXQTYRmSqpJc4E1KludjXTBHczwtN754lSF6OSVK8P4DQhkZc8CpUB28EQz6
+         c+fPiyvquZZzesUxEcUWqV4ywwIfvU5+9C5uIU6Z/gWKCWC8AlNCpp4njyo9YbYtpw
+         bE6UR1EAVkIFKgE0CTaDc/HmZ0IzcuI05L+80+N9Zs2zrMXID/b2e2p7+Ke0U9bXXn
+         tkNvrVLEdRFpZCR7ngNNe66uyaEwfdoo1jy2v7n9J5rrF8coWU64nCEcJ85R1HCaUd
+         xTuIe1/tpjF9wT2tlMoQL5rgMjavKMqqqWB/MkSHUnzgMDedC2rVwHxStZoXssJBzx
+         IJf4HgKPGOo0A==
+Message-ID: <f36dd8e3-9905-f04a-ed34-4be91ed1fec6@marcan.st>
+Date:   Mon, 2 Jan 2023 17:47:21 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <yq17cy84gqc.fsf@ca-mkp.ca.oracle.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [REGRESSION] Wi-Fi fails to work on BCM4364B2 chips since kernel
+ 6.1
+Content-Language: en-US
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        "arend.vanspriel@broadcom.com" <arend.vanspriel@broadcom.com>,
+        "aspriel@gmail.com" <aspriel@gmail.com>,
+        "ranky.lin@broadcom.com" <ranky.lin@broadcom.com>,
+        "hante.meuleman@broadcom.com" <hante.meuleman@broadcom.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lina@asahilina.net" <lina@asahilina.net>
+References: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
-
-On Fri, Dec 30, 2022 at 06:29:24PM -0500, Martin K. Petersen wrote:
+On 2023/01/02 16:46, Aditya Garg wrote:
+> Since kernel 6.1, Wi-Fi is failing to work on Macs with the BCM4364 rev 3 chips and journalctl reports that the firmware has crashed.
 > 
-> Manivannan,
+> The complete journalctl is given here :- https://gist.github.com/AdityaGarg8/a25b187e7f1462798de87e048f4840db
 > 
-> >   scsi: ufs: core: Add reinit_notify() callback
-> >   scsi: ufs: core: Add support for reinitializing the UFS device
-> 
-> I would like to see some reviews of the proposed core changes.
-> 
+> This bug has been reported by users of iMac19,1 as well as Macmini8,1.
 
-Both patches are reviewed by Bart now.
+You are using a downstream patched tree, specifically one with further
+Broadcom patches not yet upstream from my Asahi Linux tree and probably
+others.
 
-Thanks,
-Mani
+Please do not spam upstream developers with issues from downstream
+trees. If you have an issue with my tree, you can report it on GitHub.
+If you are using another tree, report it to its maintainer. If you can
+reproduce this with *vanilla* 6.1 then you can report it upstream.
 
-> -- 
-> Martin K. Petersen	Oracle Linux Engineering
-
--- 
-மணிவண்ணன் சதாசிவம்
+- Hector
