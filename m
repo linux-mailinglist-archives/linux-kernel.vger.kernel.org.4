@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6828665B604
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8980E65B609
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbjABRlN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 2 Jan 2023 12:41:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S229494AbjABRn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 12:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235372AbjABRlH (ORCPT
+        with ESMTP id S230120AbjABRnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 12:41:07 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB6710B8
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 09:41:06 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pCOo0-00054t-FH; Mon, 02 Jan 2023 18:41:00 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pCOnz-003OR5-N1; Mon, 02 Jan 2023 18:40:59 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pCOnz-000ELv-22; Mon, 02 Jan 2023 18:40:59 +0100
-Message-ID: <af5dd2c21d7805315e719f8b0fd163bcaa6aea39.camel@pengutronix.de>
-Subject: Re: [PATCH 1/2] dt-bindings: net: Add rfkill-gpio binding
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        kernel@pengutronix.de
-Date:   Mon, 02 Jan 2023 18:40:58 +0100
-In-Reply-To: <e99d6756-e275-7dd6-a57f-1c9a120b4ef3@kernel.org>
-References: <20221221104803.1693874-1-p.zabel@pengutronix.de>
-         <e99d6756-e275-7dd6-a57f-1c9a120b4ef3@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        Mon, 2 Jan 2023 12:43:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CFEA187;
+        Mon,  2 Jan 2023 09:43:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21F86B80D09;
+        Mon,  2 Jan 2023 17:43:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CFCC433EF;
+        Mon,  2 Jan 2023 17:43:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672681400;
+        bh=eeGID9WmDRN6FuuErqklRn+h70OeSzjZBAKTjhskM+o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=luxdFTD+QXYVTSa7Nduryhj6TpxluC4iF/W9vgyottAV562iYTJTOkLeL+Pt0hWhC
+         jLULQzDynK9ABKhZjLXajlqGpCzKq412I9cdY5vCmOfxJ+TTJylPS6xvHPuLLTyKPy
+         NXvXIrg9XtA/rKf6AmFoVNNmJAns6no8UjmeV0D0unDpqkxatQ8LgwDiVdbPTv0K+W
+         9bRTATKLTgpNcIeXPoXVrH7jdAU9sH/7Y0nhTgYqbqgZytbCaa1CQFcC11OYdCbeTg
+         +Xul8nMEeHAPmdGPeLY7U/y9pixCBG4Sbc7oI8qlDUJGwK4uGtrLjGwEN2L0IpNuus
+         /Gv0759iieMLw==
+Date:   Mon, 2 Jan 2023 23:13:13 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] PCI: qcom: Fix host-init error handling
+Message-ID: <20230102174313.GC16638@thinkpad>
+References: <20221017114705.8277-1-johan+linaro@kernel.org>
+ <20221017114705.8277-2-johan+linaro@kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221017114705.8277-2-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Do, 2022-12-22 at 11:20 +0100, Krzysztof Kozlowski wrote:
-> On 21/12/2022 11:48, Philipp Zabel wrote:
-> > Add a device tree binding document for GPIO controlled rfkill switches.
-> > The name, type, shutdown-gpios and reset-gpios properties are the same
-> > as defined for ACPI.
-> > 
-> > Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+On Mon, Oct 17, 2022 at 01:47:04PM +0200, Johan Hovold wrote:
+> Implement the new host_deinit() callback so that the PHY is powered off
+> and regulators and clocks are disabled also on late host-init errors.
 > 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC.  It might happen, that command when run on an older
-> kernel, gives you outdated entries.  Therefore please be sure you base
-> your patches on recent Linux kernel.
+> Fixes: 82a823833f4e ("PCI: qcom: Add Qualcomm PCIe controller driver")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+Thanks,
+Mani
+
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
 > 
-> You missed several maintainers. Resend.
-
-Thank you for the review, I've sent a v2:
-
-https://lore.kernel.org/all/20230102-rfkill-gpio-dt-v2-0-d1b83758c16d@pengutronix.de/T
-
-[...]
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 0c13f976626f..417be4d225ed 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1534,8 +1534,19 @@ static int qcom_pcie_host_init(struct dw_pcie_rp *pp)
+>  	return ret;
+>  }
+>  
+> +static void qcom_pcie_host_deinit(struct dw_pcie_rp *pp)
+> +{
+> +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> +	struct qcom_pcie *pcie = to_qcom_pcie(pci);
+> +
+> +	qcom_ep_reset_assert(pcie);
+> +	phy_power_off(pcie->phy);
+> +	pcie->cfg->ops->deinit(pcie);
+> +}
+> +
+>  static const struct dw_pcie_host_ops qcom_pcie_dw_ops = {
+> -	.host_init = qcom_pcie_host_init,
+> +	.host_init	= qcom_pcie_host_init,
+> +	.host_deinit	= qcom_pcie_host_deinit,
+>  };
+>  
+>  /* Qcom IP rev.: 2.1.0	Synopsys IP rev.: 4.01a */
+> -- 
+> 2.37.3
 > 
-> 
-> > +  shutdown-gpios:
-> > +    maxItems: 1
-> > +
-> > +  reset-gpios:
-> > +    maxItems: 1
-> 
-> Reset of rfkill? It seems entire binding is a workaround of missing
-> reset in your device. I don't think this is suitable for binding.
 
-I've dropped the reset-gpios property. The device I would like to
-control with this is the 'wireless disable' pin of an M.2 connector.
-
-regards
-Philipp
+-- 
+மணிவண்ணன் சதாசிவம்
