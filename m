@@ -2,36 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8852865B2F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95BD65B2FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjABN6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S236063AbjABN6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:58:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232531AbjABN6C (ORCPT
+        with ESMTP id S233028AbjABN6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:58:02 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DE026A;
-        Mon,  2 Jan 2023 05:58:00 -0800 (PST)
-Received: from handsomejack.molgen.mpg.de (handsomejack.molgen.mpg.de [141.14.17.248])
-        by mx.molgen.mpg.de (Postfix) with ESMTP id 5E15B60027FC1;
-        Mon,  2 Jan 2023 14:57:57 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Helge Deller <deller@gmx.de>, "Z. Liu" <liuzx@knownsec.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, it+linux-fbdev@molgen.mpg.de,
-        Rich Felker <dalias@libc.org>, stable@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
-Date:   Mon,  2 Jan 2023 14:57:30 +0100
-Message-Id: <20230102135731.6487-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.39.0
+        Mon, 2 Jan 2023 08:58:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ECBD6A;
+        Mon,  2 Jan 2023 05:58:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3EEAB80D3D;
+        Mon,  2 Jan 2023 13:58:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB838C433EF;
+        Mon,  2 Jan 2023 13:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672667888;
+        bh=JIYbF5LXM59r0MW5XyyTv1fzDEtrT9phK9DtFS9rHPI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CvbTqQFJYz3KyOeequ7tIHBiktauX4rr8jCsJcWnwXQC/V1oLCQIN80IqiY7SxxWc
+         Ru5+9joAKHoJkWslTr6NH//0Nv6LVCa68kicbWXA3fq6YSw0GsF4nxfqGvGx7bVLBw
+         IJ79K8yO2cUrtqta+v1/NNY1NvnpZvJX6JMrVSdGdUnWQZ0pudYPGpFa0poQ2t7rky
+         sgEBfYL2FXovBaNkVpvoklCWxEpAi9fRK2DSGpzxQPikudbsmmhUhyLzpzppBClR3i
+         pNZ2NIYcNFsR91ivAHyMwm1TQLdILEuNXkuz03eutp90N70j4pmrgpVjbtQavyhvWp
+         4Q//MzrmvFs8w==
+Date:   Mon, 2 Jan 2023 07:58:05 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v3 2/2] pinctrl: qcom: Add SM8550 pinctrl driver
+Message-ID: <20230102135805.vw6bv236soxj5lbs@builder.lan>
+References: <20221230194459.2370924-1-abel.vesa@linaro.org>
+ <20221230194459.2370924-3-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221230194459.2370924-3-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,54 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 62d89a7d49af ("video: fbdev: matroxfb: set maxvram of vbG200eW to
-the same as vbG200 to avoid black screen") accidently decreases the
-maximum memory size for the Matrox G200eW (102b:0532) from 8 MB to 1 MB
-by missing one zero. This caused the driver initialization to fail with
-the messages below, as the minimum required VRAM size is 2 MB:
+On Fri, Dec 30, 2022 at 09:44:59PM +0200, Abel Vesa wrote:
+> Add pinctrl driver for TLMM block found in SM8550 SoC.
+> 
+> Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-     [    9.436420] matroxfb: Matrox MGA-G200eW (PCI) detected
-     [    9.444502] matroxfb: cannot determine memory size
-     [    9.449316] matroxfb: probe of 0000:0a:03.0 failed with error -1
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-So, add the missing 0 to make it the intended 16 MB. Successfully tested on
-the Dell PowerEdge R910/0KYD3D, BIOS 2.10.0 08/29/2013, that the warning is
-gone.
-
-While at it, add a leading 0 to the maxdisplayable entry, so it’s aligned
-properly. The value could probably also be increased from 8 MB to 16 MB, as
-the G200 uses the same values, but I have not checked any datasheet.
-
-Note, matroxfb is obsolete and superseded by the maintained DRM driver
-mga200, which is used by default on most systems where both drivers are
-available. Therefore, on most systems it was only a cosmetic issue.
-
-Fixes: 62d89a7d49af ("video: fbdev: matroxfb: set maxvram of vbG200eW to the same as vbG200 to avoid black screen")
-Link: https://lore.kernel.org/linux-fbdev/972999d3-b75d-5680-fcef-6e6905c52ac5@suse.de/T/#mb6953a9995ebd18acc8552f99d6db39787aec775
-Cc: it+linux-fbdev@molgen.mpg.de
-Cc: Z. Liu <liuzx@knownsec.com>
-Cc: Rich Felker <dalias@libc.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
- drivers/video/fbdev/matrox/matroxfb_base.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/fbdev/matrox/matroxfb_base.c
-index 0d3cee7ae7268..a043a737ea9f7 100644
---- a/drivers/video/fbdev/matrox/matroxfb_base.c
-+++ b/drivers/video/fbdev/matrox/matroxfb_base.c
-@@ -1378,8 +1378,8 @@ static struct video_board vbG200 = {
- 	.lowlevel = &matrox_G100
- };
- static struct video_board vbG200eW = {
--	.maxvram = 0x100000,
--	.maxdisplayable = 0x800000,
-+	.maxvram = 0x1000000,
-+	.maxdisplayable = 0x0800000,
- 	.accelID = FB_ACCEL_MATROX_MGAG200,
- 	.lowlevel = &matrox_G100
- };
--- 
-2.39.0
-
+Regards,
+Bjorn
