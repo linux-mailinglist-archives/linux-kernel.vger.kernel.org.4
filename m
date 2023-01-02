@@ -2,132 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6EB65B5C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2BA65B576
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236184AbjABRRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 12:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
+        id S235119AbjABRDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 12:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbjABRRA (ORCPT
+        with ESMTP id S234924AbjABRDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 12:17:00 -0500
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F3EAE4D;
-        Mon,  2 Jan 2023 09:16:57 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id A91EE5C1492;
-        Mon,  2 Jan 2023 17:08:41 +0000 (UTC)
-Received: from pdx1-sub0-mail-a228.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 25DAE5C1421;
-        Mon,  2 Jan 2023 17:08:41 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1672679321; a=rsa-sha256;
-        cv=none;
-        b=CevlhpuvCBq2jFVL33vVTBEDTBVQF5cgs+s8EdRIzoR3Z5WnewBk5+DuOZvPk+zH7A3aqo
-        ORrraxSe84STSKu9qmbO/NlhF+OMS1P8Rb7gbXQlcCWRVwd17MR4g7RuFUEIwjiP7zyb59
-        l92kscaxN8BRjVwSRcBKMTC7cd/e4rAsNhUQGesz3SNKgB4gYvG53HLIsMjCZgmEY36Duo
-        ZiV9UDl5oYjtilZPiPZNsuTgjJUw+X1oUoYkBA77lowTmqBvu9jMRBKcf9IAcxxXObHMOe
-        7HOKuNXXWJMZtkla4R/RxonqemmT/e7K0Yl5/Fd89An5xCVvQ5f1ew27+d9dMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1672679321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=k2XYrG/4ynVE5z72/2qZf7cunlpfjJffh3IPZEvyC2s=;
-        b=E7Dr26F8gR6way9QfDzz/uab3qvYWbVN3BDKSW2m5IqH61q8EnM6yxGfJjVOATRdCP3tCu
-        nCWIKOrUzq7DZdyrC7tfmL8uNdg3eBLOufobKubNiOsIQzSQ8J5oQNIAmsv0cwHuTcFdXe
-        35voTCzTuYun5TBt70gIf5My+S6UqHi4AB2676iS2yuuOGSk7avoYp/KprTAClF0Tqu0DF
-        9un16KBeHGTk0aQoDkhea0RJR8G4ankPG7dicZWvOcBVVU7ixYZKLD046g2hdv8gRRUrhh
-        3vIoQXCIEjurYiEWmSDFXOfW+h0JkD5GLoN6FP8xTtqOwsWevZPmWFjrTHJ/nw==
-ARC-Authentication-Results: i=1;
-        rspamd-698c4479bb-f67sb;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Chief-Gusty: 0777170e5748b443_1672679321469_2243893718
-X-MC-Loop-Signature: 1672679321469:3072549138
-X-MC-Ingress-Time: 1672679321469
-Received: from pdx1-sub0-mail-a228.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.109.138.37 (trex/6.7.1);
-        Mon, 02 Jan 2023 17:08:41 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a228.dreamhost.com (Postfix) with ESMTPSA id 4Nm2Q02clQz4h;
-        Mon,  2 Jan 2023 09:08:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1672679320;
-        bh=k2XYrG/4ynVE5z72/2qZf7cunlpfjJffh3IPZEvyC2s=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=p17bCY0abgPnjRp/skiQ/ES/my3kDU9tHhi5HI5npaTR6FhNZ64unY1eJt7ws9kPa
-         BoeP0RNH1orK+qj5SAu3L4yWbnTYdohVY7x62P7gj+mIHSPehkQ9MC9wkyqi4jLXGn
-         M/2nWceKXlMjekdiCNCk488ToRGzMr3mwOq+PJ+iBzVP0RQuqBkF4gQESFwLYH1we6
-         HMEZt9chRaRQ4hpzOo3yziWdFj2e74AhrcYwYHraYjGfBL5U3wwDKTLG92gHhGP9LY
-         6nXefglPg1E9uOmP3/h0BeQOnDS8HCxMNJzzqPNmT4Jv8QgST4L8k6vK0kyfMed1st
-         1wKKHIRfALVCw==
-Date:   Mon, 2 Jan 2023 08:43:10 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Paul McKenney <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, stable@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>
-Subject: Re: [PATCH] torture: Fix hang during kthread shutdown phase
-Message-ID: <20230102164310.2olg7xhwwhzmzg24@offworld>
-References: <20230101061555.278129-1-joel@joelfernandes.org>
+        Mon, 2 Jan 2023 12:03:21 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D68108
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 09:03:20 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id i19so16595485ljg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 09:03:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XAb11NzFdj96+lfo1VeQmioTPUWCbc0ODMFTO7/S5J0=;
+        b=Hg+EI41mgcDsbbBfYl+TSIpkQFZiYq88kVkHMZdb2twZw6KpWypaVKN333xxa4bOWT
+         uuo6ge7f8pFJHcW0/DNsMjnCosH4+jhNjI7ZPxGBmN72pXbLjRWfAiddIEgi+Zl3Pnx2
+         YRZ/N0k3CihHyL9bCII3QaE1C5GUBhxoNtEnqjgzaPweU6KIlDa0OY6KKdUtn1jrObVe
+         6qPpR/kbSgJ7cGEvOQIjYTDDM1cjnoxLESBOInZhTJFWV8AQOjYRLTDHGl9qc7DAAgdZ
+         mSSTAwsCxJlCTKinByq9JUI9INZRMRJ9KiWMsFzQSPp3IDK3+ANxyXflA86eEAEa7foe
+         ET5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XAb11NzFdj96+lfo1VeQmioTPUWCbc0ODMFTO7/S5J0=;
+        b=cbioRUPVi/QUm1e23v3LR+RozlEHxAPdlTMwTz1xEDpNXRlXPbcU8UpZMTe9gFgRer
+         VjZBglKRZJ60x/ntlgmU3HnoXYhhY++4LE4+tGjC4pw3WOCRIGon3KWQXDutAPKNlthL
+         gr6s6WirCM284vegRCBBZ+7SPBHaJMSSHT8YjmXpraam3czGg96YMVjJLGHH/CtCKKZ7
+         2cV758wc/uT+YzXaRVH0dnj6xXT9eoCTul2sapM65R0dJkKL2MbgWWO61Q7ISb/KpPbM
+         KaXcz/OZ0+2HDLrnYVvpiiEBUQJYV6/kAjvUjQJgH6FUrId8QrA5oafRMJKeJKR7JBFC
+         6OdA==
+X-Gm-Message-State: AFqh2kqwXuKN34/TBc059+3xKePKYbAZferX0PrGzS3VdbJyWVe+aFbg
+        hjBf/Ho4VTNZtMP4piIxtPUncw==
+X-Google-Smtp-Source: AMrXdXuNL9Bem4Nk6LUw8GOS0oXi7frZUgAlWKl7ONHd632dNyN/0Roas1jfPgfWc2fae2QGC7BBHQ==
+X-Received: by 2002:a2e:8e78:0:b0:27f:afe3:48b0 with SMTP id t24-20020a2e8e78000000b0027fafe348b0mr8194199ljk.48.1672678995669;
+        Mon, 02 Jan 2023 09:03:15 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id f1-20020a05651c03c100b0027d75b38fd6sm3303478ljp.43.2023.01.02.09.03.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 09:03:15 -0800 (PST)
+Message-ID: <abbaa799-c7a9-e4cd-cd81-3cf3f0d83110@linaro.org>
+Date:   Mon, 2 Jan 2023 18:03:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230101061555.278129-1-joel@joelfernandes.org>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3
+ connector
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     quic_schowdhu@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+References: <20221231131945.3286639-1-bhupesh.sharma@linaro.org>
+ <514482a4-614c-d6b8-ec7c-0e69fff72295@linaro.org>
+ <016e9b47-35b4-2110-bbef-ddfd0abc6a8d@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <016e9b47-35b4-2110-bbef-ddfd0abc6a8d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 01 Jan 2023, Joel Fernandes (Google) wrote:
 
->During shutdown of rcutorture, the shutdown thread in
->rcu_torture_cleanup() calls torture_cleanup_begin() which sets fullstop
->to FULLSTOP_RMMOD. This is enough to cause the rcutorture threads for
->readers and fakewriters to breakout of their main while loop and start
->shutting down.
->
->Once out of their main loop, they then call torture_kthread_stopping()
->which in turn waits for kthread_stop() to be called, however
->rcu_torture_cleanup() has not even called kthread_stop() on those
->threads yet, it does that a bit later.  However, before it gets a chance
->to do so, torture_kthread_stopping() calls
->schedule_timeout_interruptible(1) in a tight loop. Tracing confirmed
->this makes the timer softirq constantly execute timer callbacks, while
->never returning back to the softirq exit path and is essentially "locked
->up" because of that. If the softirq preempts the shutdown thread,
->kthread_stop() may never be called.
->
->This commit improves the situation dramatically, by increasing timeout
->passed to schedule_timeout_interruptible() 1/20th of a second. This
->causes the timer softirq to not lock up a CPU and everything works fine.
->Testing has shown 100 runs of TREE07 passing reliably, which was not the
->case before because of RCU stalls.
->
->Cc: Paul McKenney <paulmck@kernel.org>
->Cc: Frederic Weisbecker <fweisbec@gmail.com>
->Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
->Cc: <stable@vger.kernel.org> # 6.0.x
->Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+On 2.01.2023 17:54, Bhupesh Sharma wrote:
+> 
+> On 1/2/23 4:16 PM, Konrad Dybcio wrote:
+>>
+>>
+>> On 31.12.2022 14:19, Bhupesh Sharma wrote:
+>>> Add the Embedded USB Debugger(EUD) device tree node for
+>>> SM6115 / SM4250 SoC.
+>>>
+>>> The node contains EUD base register region and EUD mode
+>>> manager register regions along with the interrupt entry.
+>>>
+>>> Also add the typec connector node for EUD which is attached to
+>>> EUD node via port. EUD is also attached to DWC3 node via port.
+>>>
+>>> Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>>> ---
+>>> - This patch is based on my earlier sm6115 usb related changes, which can
+>>>    be seen here:
+>>>    https://lore.kernel.org/linux-arm-msm/20221215094532.589291-1-bhupesh.sharma@linaro.org/
+>>> - This patch is also dependent on my sm6115 eud dt-binding and driver changes
+>>>    sent earlier, which can be seen here:
+>>>    https://lore.kernel.org/linux-arm-msm/20221231130743.3285664-1-bhupesh.sharma@linaro.org/
+>>>
+>>>   arch/arm64/boot/dts/qcom/sm6115.dtsi | 37 ++++++++++++++++++++++++++++
+>>>   1 file changed, 37 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+>>> index 030763187cc3f..c775f7fdb7015 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+>>> @@ -565,6 +565,37 @@ gcc: clock-controller@1400000 {
+>>>               #power-domain-cells = <1>;
+>>>           };
+>>>   +        eud: eud@1610000 {
+>>> +            compatible = "qcom,sm6115-eud","qcom,eud";
+>> Missing space between entries.
+>>
+>>> +            reg = <0x01610000 0x2000>,
+>>> +                  <0x01612000 0x1000>,
+>>> +                  <0x003e5018 0x4>;
+>>> +            interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
+>>> +            ports {
+>> Newline before ports {}.
+>>
+>> Not sure if debugging hardware should be enabled by default..
+>>> +                port@0 {
+>>> +                    eud_ep: endpoint {
+>>> +                        remote-endpoint = <&usb2_role_switch>;
+>>> +                    };
+>>> +                };
+>> Newline between subsequent nodes.
+>>
+>>> +                port@1 {
+>>> +                    eud_con: endpoint {
+>>> +                        remote-endpoint = <&con_eud>;
+>>> +                    };
+>>> +                };
+>>> +            };
+>>> +        };
+>>> +
+>>> +        eud_typec: connector {
+>> Non-MMIO nodes don't belong under /soc.
+>>
+>>> +            compatible = "usb-c-connector";
+>> Newline between properties and subnode.
+>>
+>>
+>>> +            ports {
+>>> +                port@0 {
+>>> +                    con_eud: endpoint {
+>>> +                        remote-endpoint = <&eud_con>;
+>>> +                    };
+>>> +                };
+>>> +            };
+>>> +        };
+>>> +
+>>>           usb_hsphy: phy@1613000 {
+>>>               compatible = "qcom,sm6115-qusb2-phy";
+>>>               reg = <0x01613000 0x180>;
+>>> @@ -1064,6 +1095,12 @@ usb_dwc3: usb@4e00000 {
+>>>                   snps,has-lpm-erratum;
+>>>                   snps,hird-threshold = /bits/ 8 <0x10>;
+>>>                   snps,usb3_lpm_capable;
+>>> +                usb-role-switch;
+>> Same here.
+> 
+> For all the above points, the format is same as suggested in [1] and already used in existing dts [2].
+> 
+> [1]. https://www.kernel.org/doc/Documentation/devicetree/bindings/soc/qcom/qcom%2Ceud.yaml
+> [2]. https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sc7280.dtsi#L3587
+The fact that it's landed does not necessarily imply it's 100% correct..
+That one seems to have slipped through review and could use some fixing up.
+
+> 
+>> On a note, this commit + driver-side changes give me a:
+>>
+>> 1610000.eud     qcom_eud: failed to get role switch
+> 
+> You need to set dr_mode = "otg", for 'usb_dwc3' to make the role switch work.
+Thanks, couldn't find that anywhere. This however kicks me into EDL,
+so that's one more reason to disable it by default.
+
+Konrad> 
+> Thanks,
+> Bhupesh
+> 
+>>> +                port {
+>>> +                    usb2_role_switch: endpoint {
+>>> +                        remote-endpoint = <&eud_ep>;
+>>> +                    };
+>>> +                };
+>>>               };
+>>>           };
+>>>   
