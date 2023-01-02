@@ -2,176 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A53F65B213
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3443B65B20F
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbjABMae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 07:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S232784AbjABM3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 07:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjABMab (ORCPT
+        with ESMTP id S229583AbjABM3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 07:30:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C409625C3
+        Mon, 2 Jan 2023 07:29:43 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4443F21BC
         for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:29:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672662582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SsQgSClMPCuWXDoBAs08rfcVfM2ikXYgEDtEpVkmjqs=;
-        b=PsuNdicKWG9b/mCCc0QDAO+CLdvr14zEP1SkEURQTSytIV7N1SpKHh3eqAp5AIgSu4QUmU
-        XXWm5cx74OuFfJG592RrzT9OB6/Que8dcOiVcBgtnicTI2F1Lu3BQm/Z2WYasesrVYBHkf
-        DNe73FDZv/mcOiQRuTFNvxL3zP5GKwo=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-653-uryQ8AkDNyCd-0peVaOUbA-1; Mon, 02 Jan 2023 07:29:40 -0500
-X-MC-Unique: uryQ8AkDNyCd-0peVaOUbA-1
-Received: by mail-wr1-f72.google.com with SMTP id r10-20020adfa14a000000b0025ba73dff40so3172631wrr.12
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 04:29:40 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id bp15so41367800lfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 04:29:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UrmyD+yeEypXFGliWFBiobSabgzh0OfQJe501KhQ4mI=;
+        b=B5e6QzsFoEjobWW8AR0ZUHzPGVwg5XYmx7gsJ+uhZqvwHlAyHoCuxJiR3piBH9tjc6
+         z/pzMmVvpyzxKSU0ja/VAIGd5F80vKJFhkSzhQlANp7k8Fsz/NvhhssgHbi8xO/EPxBJ
+         xNKJMkM0Etz+7uONqk5OeuVwpu3+k8XYU89hgViUKWvAfLbJsK72WSx+ZKIHXO2jVqkP
+         5GfWy2R+U9RO0LhkzPLQ2hvuz2N8+gjNEPHd1SM4DV6wwx2uCzVcMvOG4C1qComX2AoN
+         +hxPpayHM68FqahH9iCoru/99jnqvAC6yvN6Dq3gYTBOevpCjJE5x6hfHw4677KRF7qY
+         1glA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SsQgSClMPCuWXDoBAs08rfcVfM2ikXYgEDtEpVkmjqs=;
-        b=yGqKeBsl38zKhYFcQCtVSd3HMHeIf9zJfEzjDGtUCg+KBF3y+WFTMJevltWF9xfVG8
-         6JZR4Mfud7EhDcUK1/yos4fmg5Km1xaUqqt7Me3ERzN4daNZ+M+JGvCXGqBdAo0hzqYU
-         MTjRPFwOfTZXHCo7r8NhebIHF/rvR7GiGknAVYLde2ucMmDqMNegi/cgnmozXB5o8v7s
-         5Lhc/wKiSy6DdoQiMLgfTPWIyf+vWBlLP66D50vCoj32DrzHAPwAn9tuzzL2e7dVNF+G
-         1KRZ6XW7jWuLz2+EmGozjNpXxET19ideSZaxeDLkltDgm65hnKlWTTtAORjsJ+5MFaIY
-         Q3Ow==
-X-Gm-Message-State: AFqh2kocSISsEOY0eZSPSApH7jYKTr1dDEoLVnlvOamGAQXvm1CmZYZB
-        yIvWt93XeMFihFdbSe7p1mpdx/n104onZgAbNO99syje1AwCpEJ9X2eCTWuDc6u1kSi4Is+l8v+
-        pzopG70p9Ic+6MKsIb4zH1k1e
-X-Received: by 2002:a5d:4244:0:b0:268:d5af:66dc with SMTP id s4-20020a5d4244000000b00268d5af66dcmr24978219wrr.68.1672662579427;
-        Mon, 02 Jan 2023 04:29:39 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu+tTkmy+8dDuXq3ZCkiQC/4wDsyInMKvU7jFQ8qpCPA3OEuu8gZfGHnTqc0LbQHeZkuaJfOg==
-X-Received: by 2002:a5d:4244:0:b0:268:d5af:66dc with SMTP id s4-20020a5d4244000000b00268d5af66dcmr24978202wrr.68.1672662579114;
-        Mon, 02 Jan 2023 04:29:39 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:500:9382:2e5a:fea:8889? (p200300cbc703050093822e5a0fea8889.dip0.t-ipconnect.de. [2003:cb:c703:500:9382:2e5a:fea:8889])
-        by smtp.gmail.com with ESMTPSA id t18-20020a5d42d2000000b00288a3fd9248sm14298080wrr.91.2023.01.02.04.29.38
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UrmyD+yeEypXFGliWFBiobSabgzh0OfQJe501KhQ4mI=;
+        b=FB3uPSG9+DeZ17OXdWZ+gVvsHb22w8Y0bhzkX7B+rsgG6OCKzOWiWvT57j3ZiV0Xa6
+         u9/TsM6oZ4hr6vK/4bdl7kSmN7hyDSILvkNuxfIHAs9W7npguXOBnBZK1Fj9UVQwxOJ4
+         FzQHjBqqQe3ZVcDORAuJYQP5uwiLMCoo10NS+TSev2FGjEaq3mqBYASOx3t4KDGTeiNK
+         b5+OPOTPoHx6mgP/71wrFTBFWiD82ZZIrkq4+YV8y/uvT427Ugz2piBmJXxN/sVPsDjO
+         xLH7RcLEQyJhnLGz5azi1dhsVMgaO2zaIlphC/SCiBttsJ4pa4Zj+we+3xiezEEwLJ9+
+         5n3A==
+X-Gm-Message-State: AFqh2krWNfA+lJoJdR1FYyXEWUE7kcT2wl7Lp/9pN5Q3d+77/n3hP49i
+        hfEQi1hcl82e8AjxTg06RYfX3w==
+X-Google-Smtp-Source: AMrXdXsx5mCGN8UMr3Ql3HUAIKU4KIpnHdu3wa79g+pHAORTCKkwcePmenuwD7asNpWn8+ARUxxW+A==
+X-Received: by 2002:a05:6512:202c:b0:4a4:68b9:19f1 with SMTP id s12-20020a056512202c00b004a468b919f1mr10750929lfs.25.1672662580655;
+        Mon, 02 Jan 2023 04:29:40 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id i40-20020a0565123e2800b004b0b131453csm4483320lfv.49.2023.01.02.04.29.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 04:29:38 -0800 (PST)
-Message-ID: <57f7576b-542b-6ec0-fc5b-5a8c3bed5868@redhat.com>
-Date:   Mon, 2 Jan 2023 13:29:37 +0100
+        Mon, 02 Jan 2023 04:29:40 -0800 (PST)
+Message-ID: <82ac16e1-6c8a-b050-d627-535b4562a422@linaro.org>
+Date:   Mon, 2 Jan 2023 13:29:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 2/6] arm64: dts: qcom: sc8280xp: disable sound nodes
 Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kernel@collabora.com, Peter Xu <peterx@redhat.com>,
-        Paul Gofman <pgofman@codeweavers.com>
-References: <20220725142048.30450-1-peterx@redhat.com>
- <20220725142048.30450-2-peterx@redhat.com>
- <b75653b8-5264-ca03-bf5c-671e07e7fdd8@collabora.com> <Y3gRy8pUiYWFGqcI@x1n>
- <a9984aa6-41bc-17c3-b564-87b997c0f2d0@collabora.com> <Y3vq18eTOE0e7I1+@x1n>
- <e3c26b56-5458-eb25-c753-fc4c058ba1b1@collabora.com>
- <40cc5f89-fa10-e107-671e-84bdcf7a4430@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v4 1/3] mm/mprotect: Fix soft-dirty check in
- can_change_pte_writable()
-In-Reply-To: <40cc5f89-fa10-e107-671e-84bdcf7a4430@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230102105038.8074-1-johan+linaro@kernel.org>
+ <20230102105038.8074-3-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230102105038.8074-3-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.12.22 15:14, Muhammad Usama Anjum wrote:
-> On 12/19/22 5:19 PM, Muhammad Usama Anjum wrote:
->> Addition of vma_soft_dirty_enabled() has tinkered with the soft-dirty PTE
->> bit status setting. The internal behavior has changed. The test case was
->> shared by David
->> (https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/).
->> The explanation is as following:
->>
->> _Before_ addition of this patch(76aefad628aae),
->> m = mmap(2 pages)
->> clear_softdirty()
->> mremap(m + pag_size)
->> mprotect(READ)
->> mprotect(READ | WRITE);
->> memset(m)
->> After memset(),
->> 			PAGE-1		PAGE-2
->> VM_SOFTDIRTY		set		set
->> PTE softdirty flag	set		set
->> /proc//pagemap view	set		set
->>
->>
->> _After_ addition of this patch(76aefad628aae)
->> m = mmap(2 pages)
->> clear_softdirty()
->> mremap(m + page_size)
->> mprotect(READ)
->> mprotect(READ | WRITE);
->> memset(m)
->> After memset(),
->> 			PAGE-1		PAGE-2
->> VM_SOFTDIRTY		set		set
->> PTE softdirty flag	*not set*	set
->> /proc//pagemap view	set		set
->>
->> The user's point of view hasn't changed. But internally after this patch,
->> the soft-dirty tracking in PTEs gets turn off if VM_SOFTDIRTY is set. The
->> soft-dirty tracking in the PTEs shouldn't be just turned off when mprotect
->> is used. Why? Because soft-dirty tracking in the PTEs is always enabled
->> regardless of VM_SOFTDIRTY is set or not. Example:
->>
->> m = mem(2 pages)
->> At this point:
->> 			PAGE-1		PAGE-2
->> VM_SOFTDIRTY		set		set
->> PTE softdirty flag	not set		not set
->> /proc//pagemap view	set		set
->> memset(m)
->> At this point:
->> 			PAGE-1		PAGE-2
->> VM_SOFTDIRTY		set		set
->> PTE softdirty flag	set		set
->> /proc//pagemap view	set		set
->>
->> This example proves that soft-dirty flag on the PTE is set regardless of
->> the VM_SOFTDIRTY.
+On 02/01/2023 11:50, Johan Hovold wrote:
+> The sound nodes in the SoC dtsi should be disabled by default.
 > 
-> Hi Andrew and Cyrill,
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
-> Peter doesn't agree with me here that this change in behavior should be
-> reverted etc. Please comment.
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index ed1e2bee86ee..c1ce2d7b3675 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1733,6 +1733,8 @@ rxmacro: rxmacro@3200000 {
+>  
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&rx_swr_default>;
+> +
+> +			status = "disabled";
 
-For the records, I agree with Peter: As 76aefad628aa ("mm/mprotect: fix 
-soft-dirty check in can_change_pte_writable()") documents, this patch 
-fixed real problems.
+There is no reason this should be disabled by default. No external (per
+board) configuration is needed and by default SoC components should be
+enabled if they do not need anything from the board.
 
-/proc/pagemap works as expected right now such that we don't have an 
-under-indication. Internal representation is an implementation detail.
+>  		};
+>  
+>  		/* RX */
+> @@ -1760,6 +1762,8 @@ swr1: soundwire-controller@3210000 {
+>  			#sound-dai-cells = <1>;
+>  			#address-cells = <2>;
+>  			#size-cells = <0>;
+> +
+> +			status = "disabled";
 
-Whatever we do, there must not be an under-indication of softdirty. That 
-is the ABI guaranteed (especially for anonymous memory). "No 
-over-indication" was never the ABI guarantee.
+For soundwires disabling makes sense - these are busses so they need to
+be explicitly enabled and populated with children.
 
-For your use case, you want to reduce over-indication. I suggested 
-looked into alternatives.
+>  		};
+>  
+>  		txmacro: txmacro@3220000 {
+> @@ -1783,6 +1787,8 @@ txmacro: txmacro@3220000 {
+>  			#address-cells = <2>;
+>  			#size-cells = <2>;
+>  			#sound-dai-cells = <1>;
+> +
+> +			status = "disabled";
+>  		};
+>  
+>  		wsamacro: codec@3240000 {
+> @@ -1804,6 +1810,8 @@ wsamacro: codec@3240000 {
+>  
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&wsa_swr_default>;
+> +
+> +			status = "disabled";
+>  		};
+>  
+>  		/* WSA */
+> @@ -1830,6 +1838,8 @@ swr0: soundwire-controller@3250000 {
+>  			#sound-dai-cells = <1>;
+>  			#address-cells = <2>;
+>  			#size-cells = <0>;
+> +
+> +			status = "disabled";
+>  		};
+>  
+>  		/* TX */
+> @@ -1858,6 +1868,8 @@ swr2: soundwire-controller@3330000 {
+>  			qcom,ports-word-length =	/bits/ 8 <0xff 0x00 0xff 0xff>;
+>  			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff>;
+>  			qcom,ports-lane-control =	/bits/ 8 <0x00 0x01 0x00 0x00>;
+> +
+> +			status = "disabled";
+>  		};
+>  
+>  		vamacro: codec@3370000 {
+> @@ -1874,6 +1886,8 @@ vamacro: codec@3370000 {
+>  			#clock-cells = <0>;
+>  			clock-output-names = "fsgen";
+>  			#sound-dai-cells = <1>;
+> +
+> +			status = "disabled";
 
--- 
-Thanks,
+vamacro needs supply from the board so this one also makes sense.
 
-David / dhildenb
+Best regards,
+Krzysztof
 
