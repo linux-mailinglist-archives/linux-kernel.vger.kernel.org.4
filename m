@@ -2,89 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D80B65B55B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB9365B55C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236453AbjABQxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:53:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S236535AbjABQyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:54:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbjABQxi (ORCPT
+        with ESMTP id S234033AbjABQx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:53:38 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C311E1C
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:53:37 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id jn22so29999549plb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:53:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T/cxfl/LR9GgO9ZvS/ZvJXYf6jxwd1F3cUMP6lmAYpI=;
-        b=mmntdGgr7TfOTVqLvYs4G7k/SpKn+gpvtuPloVB2LEPAIA+WeUZgVv1UjLHQFhAj6O
-         aQG7pGbwezQRE2dvn/5uJuKj3TNPdQz9AvtTKU1+w/2xP2EX+l+22ByQGP8K8rF7Bohc
-         KXSzXT3cCYHoRTiyB89cG7QRHYY94dWjERbfKCB1t9VnhudXvC7ZAwcSI/9T0M44wjwi
-         Ky1fjOjgleVLQxUHdP7DUpxdtqnzCvEXDa7Lk7YRrH5id+eeKzA+C3CCna96yQX8hEVQ
-         m+9m4uReFdr62USHq4yMpdQRaQadH8nWpCDquQ+OGt7CZdDW/z/zoF17/hK/lblsTiQa
-         9f+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T/cxfl/LR9GgO9ZvS/ZvJXYf6jxwd1F3cUMP6lmAYpI=;
-        b=cvy9NDXoVZo7zwmcqfZCPa6+wCJ1XWrOrq1ROzIh3q42KCT18JqsEzRxV3b2VwQ1bM
-         urbUEnuzAUn6a/FnTQj9483P4nR2u9IZsoshfMiXpIoS3if24OcbmLKGmQcliRNNi5Bv
-         fJ2G2qVmD6mNiglahB2T7iLF4L6eHB/NujBhgX8H12AdWgLK5lB7F8GEJA1DX9hTuOlX
-         cHSmVvokcX/NUlUiv91YV98QBwP4BBDfV3obvHZKC5z2oaVMQTgvHQmmUndq/jx+YGnU
-         J3P7Gh1IgBUXoJJ5QCKdO18wTjnQGHnyUueeSdrHd5ePSqOUZLH1EMhsjD/J00tvaXfh
-         vD8w==
-X-Gm-Message-State: AFqh2kqNZC1r2KZK8VvyOd+gtSnvJTrBigLuQrAwTeJowW6kirvfgbtj
-        OtRXU5TrOuUoNzL4iwGZSGqnZA==
-X-Google-Smtp-Source: AMrXdXuDyzl3mRGjAOUDPdqwWXpAqM8HKZ629fDDGtE4QLCE/aeGvJpusjDyAqhHyPpCbS6gvzZQkw==
-X-Received: by 2002:a05:6a21:398b:b0:ab:9997:8ee2 with SMTP id ad11-20020a056a21398b00b000ab99978ee2mr12332900pzc.6.1672678416492;
-        Mon, 02 Jan 2023 08:53:36 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id v63-20020a626142000000b005828071bf7asm1924910pfb.22.2023.01.02.08.53.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 08:53:35 -0800 (PST)
-Message-ID: <9a01e386-0fb5-b074-a7b1-7e4bcf1ca204@kernel.dk>
-Date:   Mon, 2 Jan 2023 09:53:34 -0700
+        Mon, 2 Jan 2023 11:53:57 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D81C16
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:53:56 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 80EF8240003;
+        Mon,  2 Jan 2023 16:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672678435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l16kCBmaT+/ZiyhWXb1vgoNulB2WuFRSgnM49QIaZko=;
+        b=bVuZLKex0L4H4p9/bMfQIwC8+jwMOvF5KOOqk7RNiVVHrCuWFqYevj9GYCCh0mBUyNNkE3
+        cQsM0W533TGPROxUnQjlsm4U9vyGFi3AVwMAfJ3a/4TsGlhe2ji5m3Xq3n1KuSbvcDmhlL
+        +j9oqyluN5dC7Dkr3g7ZAXUJoil+d9WqW5If7uoos7wuOX9354GyYw9oFnrwiEYYBS+cV7
+        l0o3o9X2kaGF0hPjPL7kb4WVyQQoBhBYsyl8iN5jTHWlLq5fkP//yqkIIjkw3txystbLUg
+        dsggDttEC5ykV5wlsrDkvAQBrVjvjvbGR1ye1rV1RDd5t2iary3gUcA7VcRT+Q==
+Date:   Mon, 2 Jan 2023 17:53:51 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 6/7] mtd: rawnand: sunxi: Update OOB layout to match
+ hardware
+Message-ID: <20230102175351.64690aaf@xps-13>
+In-Reply-To: <e21aba9f-1afd-2615-fe00-3ee4176b9080@sholland.org>
+References: <20221229181526.53766-1-samuel@sholland.org>
+        <20221229181526.53766-7-samuel@sholland.org>
+        <20230102102123.511d337d@xps-13>
+        <e21aba9f-1afd-2615-fe00-3ee4176b9080@sholland.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH V13 0/8] block, bfq: extend bfq to support multi-actuator
- drives
-Content-Language: en-US
-To:     Paolo Valente <paolo.valente@linaro.org>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
-        glen.valante@linaro.org, damien.lemoal@opensource.wdc.com
-References: <20221229203707.68458-1-paolo.valente@linaro.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20221229203707.68458-1-paolo.valente@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/29/22 1:36 PM, Paolo Valente wrote:
-> Hi,
-> here is the V13, it differs from V12 in that it applies the
-> recommendation by Damien in [2].
+Hi Samuel,
 
-This doesn't apply to current master. Can you send one that
-does?
+samuel@sholland.org wrote on Mon, 2 Jan 2023 10:26:48 -0600:
 
--- 
-Jens Axboe
+> Hi Miqu=C3=A8l,
+>=20
+> On 1/2/23 03:21, Miquel Raynal wrote:
+> > Hi Samuel,
+> >=20
+> > samuel@sholland.org wrote on Thu, 29 Dec 2022 12:15:25 -0600:
+> >  =20
+> >> When using the hardware ECC engine, the OOB data is made available in
+> >> the NFC_REG_USER_DATA registers, one 32-bit word per ECC step. Any
+> >> additional bytes are only accessible through raw reads and software
+> >> descrambling. For efficiency, and to match the vendor driver, ignore
+> >> these extra bytes.
+> >>
+> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> >> ---
+> >>
+> >>  drivers/mtd/nand/raw/sunxi_nand.c | 7 +++++++
+> >>  1 file changed, 7 insertions(+)
+> >>
+> >> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/=
+sunxi_nand.c
+> >> index 8e873f4fec9a..a3bc9f7f9e5a 100644
+> >> --- a/drivers/mtd/nand/raw/sunxi_nand.c
+> >> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
+> >> @@ -1604,6 +1604,13 @@ static int sunxi_nand_ooblayout_free(struct mtd=
+_info *mtd, int section,
+> >>  		return 0;
+> >>  	}
+> >> =20
+> >> +	/*
+> >> +	 * The controller does not provide access to OOB bytes
+> >> +	 * past the end of the ECC data.
+> >> +	 */
+> >> +	if (section =3D=3D ecc->steps && ecc->engine_type =3D=3D NAND_ECC_EN=
+GINE_TYPE_ON_HOST)
+> >> +		return -ERANGE; =20
+> >=20
+> > Again, I am sorry but I cannot take this change, it would typically
+> > break jffs2 users (if any?) :( =20
+>=20
+> Considering the bug I fixed in the previous patch, and the fact that
+> mtd_ooblayout_free() zeroes out the structure before calling the .free
+> callback, that region was being reported with a length of zero already.
+> So I don't think anyone could have been using those bytes anyway.
+>=20
+> I am looking for a solution here because the ECC/scrambling engine
+> really provides no way to access these bytes. Reading them requires
+> turning off the ECC engine, performing another read command, and then
+> descrambling in software. So we are sort of lying when we claim those
+> bytes are available with hardware ECC enabled.
+>=20
+> If this change cannot be made as-is, is there any way the user could opt
+> in to the new layout, to get the improved performance?
 
+Actually that's true, you fixed the reporting of the free area which
+was set to 0 until then, which means there cannot be any upstream user.
+So knowing that, preventing the accesses to the end of the area seems
+acceptable when using HW ECC. Please mention it in the commit log.
 
+Thanks,
+Miqu=C3=A8l
