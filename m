@@ -2,64 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2EE965B683
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF47865B685
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbjABSSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 13:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S232808AbjABSTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 13:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjABSSc (ORCPT
+        with ESMTP id S230127AbjABSTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 13:18:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96612C8;
-        Mon,  2 Jan 2023 10:18:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C46E61093;
-        Mon,  2 Jan 2023 18:18:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 591AEC433EF;
-        Mon,  2 Jan 2023 18:18:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672683510;
-        bh=89S45z/8Tm/wRkpmUZ1bW+UDgb3zPm1RefIO82Il6MQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QN/9HLIBOoPzp3rwuXEcMvcqkyeoiHhfTryjSCgsvA2U7HG/MXUsjnzGIoWv96o8R
-         C0nyz8ubHwMVLSUe9nSv14vlM5UPjz+S6Mosv9hYUmrtuEVxNo2qmxoU2LlWD+MQLE
-         0XKEctxnBRFp4BE8j7xvY4lCTNBFuxKIVe8y65RcQ0QPSpWm6XSGSqZHd4FcJQSbqL
-         /hgcKJ0Wd7nKQY6eA1zsgw6ZCzKfuuVj58vduDL0I56WTLH5l3yL/xx1IfNKJOnA7h
-         Tt/w8bHVhD6sKoZpeVuWOC2m+5rHivfzkhAwdVZDXTa63Wy1psN/BAC71zo3n+47Fy
-         eFBWobXg5eeQA==
-Date:   Mon, 2 Jan 2023 18:17:45 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 6/9] dt-bindings: Add RISC-V advanced PLIC bindings
-Message-ID: <Y7MfyZBAErYGMZBK@spud>
-References: <20221111044207.1478350-1-apatel@ventanamicro.com>
- <20221111044207.1478350-7-apatel@ventanamicro.com>
- <Y3EQ4JU7uGbIMGiW@spud>
- <CAAhSdy2UAMmX+W5Cm3DuTJzZ0jJ3=CW4PhjctQNdfeS+4hqWqg@mail.gmail.com>
+        Mon, 2 Jan 2023 13:19:00 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05AE55BB;
+        Mon,  2 Jan 2023 10:18:59 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302HgSIQ017358;
+        Mon, 2 Jan 2023 18:18:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2z05DTzHOpLFw6IuTCQkPT7RUluh0jzgEGXbXpVeEEs=;
+ b=SvtOu2MSlCcEkdjwLX0Y3gir3Ej+8A76ygY8ENxIiQ0dpnaCfRqJEBYAwglz8jqveQ/K
+ vQDfgnUQ/pKWlStRh3dMPDzWJWPepyd8ARCnZ9ZV9VonW/n3mzCi2MDFPMdLHQXUWq8A
+ nh4Z/ZV5DRiw0k4D0YzTTtSmhR2m8/7w4wL0sbYT4GAJgEkmz7wtdLz8uU9UWFqJyAVo
+ GD78Q3eMfK+2tkOizaN1rUw4v98QJytv3S7U3ptmtNQsOTMfqYWvEP0Jxsbnhx/Uq9zy
+ BEIrrkk0MZIyQ5cuq6gAiHk+YtYJBooK9Ug5tvuJV7J/3v5gdqVkTfST8zlGuLB9IIL0 FQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mv3w40fxu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 18:18:28 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 302AnnS8001864;
+        Mon, 2 Jan 2023 18:18:25 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mtcbfarru-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 18:18:25 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 302IIMpS39256432
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Jan 2023 18:18:22 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1115820043;
+        Mon,  2 Jan 2023 18:18:22 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 182FC20040;
+        Mon,  2 Jan 2023 18:18:21 +0000 (GMT)
+Received: from [9.179.24.9] (unknown [9.179.24.9])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  2 Jan 2023 18:18:21 +0000 (GMT)
+Message-ID: <c735459b-ba25-d1e5-b20f-4205fab67060@linux.ibm.com>
+Date:   Mon, 2 Jan 2023 19:18:20 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="TQVrb+7+nS5b2faU"
-Content-Disposition: inline
-In-Reply-To: <CAAhSdy2UAMmX+W5Cm3DuTJzZ0jJ3=CW4PhjctQNdfeS+4hqWqg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v3 1/7] s390/ism: Set DMA coherent mask
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+References: <20230102115619.2088685-1-schnelle@linux.ibm.com>
+ <20230102115619.2088685-2-schnelle@linux.ibm.com>
+From:   Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <20230102115619.2088685-2-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Oh-ja7qq8HR7pI-VfiU-hLrZ5Id4osJl
+X-Proofpoint-ORIG-GUID: Oh-ja7qq8HR7pI-VfiU-hLrZ5Id4osJl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-02_11,2022-12-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ mlxscore=0 adultscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ impostorscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=932
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301020162
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,134 +98,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---TQVrb+7+nS5b2faU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 02, 2023 at 10:20:48PM +0530, Anup Patel wrote:
-> On Sun, Nov 13, 2022 at 9:14 PM Conor Dooley <conor@kernel.org> wrote:
+On 02.01.23 12:56, Niklas Schnelle wrote:
+> A future change will convert the DMA API implementation from the
+> architecture specific arch/s390/pci/pci_dma.c to using the common code
+> drivers/iommu/dma-iommu.c which the utilizes the same IOMMU hardware
+> through the s390-iommu driver. Unlike the s390 specific DMA API this
+> requires devices to correctly call set the coherent mask to be allowed
+			^^^correctly set ^^^	
+> to use IOVAs >2^32 in dma_alloc_coherent(). This was however not done
+> for ISM devices. ISM requires such addresses since currently the DMA
+> aperture for PCI devices starts at 2^32 and all calls to
+> dma_alloc_coherent() would thus fail.
+> 
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+> v1 -> v2:
+> - Use dma_set_mask_and_coherent() (Christoph Hellwig)
+> 
+>  drivers/s390/net/ism_drv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/s390/net/ism_drv.c b/drivers/s390/net/ism_drv.c
+> index dfd401d9e362..aba03b613296 100644
+> --- a/drivers/s390/net/ism_drv.c
+> +++ b/drivers/s390/net/ism_drv.c
+> @@ -557,7 +557,7 @@ static int ism_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  	if (ret)
+>  		goto err_disable;
+>  
+> -	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+> +	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+>  	if (ret)
+>  		goto err_resource;
+>  
 
-> > > +  domain.
-> > > +
-> > > +allOf:
-> > > +  - $ref: /schemas/interrupt-controller.yaml#
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    items:
-> > > +      - enum:
-> > > +          - vendor,chip-aplic
-> >
-> > Same comment here about the validity of this placeholder.
->=20
-> Okay, I will add "riscv,qemu-aplic" as QEMU specific compatible string.
-
-Ah neat. I think that's a fair compromise.
-
-> > > +      - const: riscv,aplic
-
-> > > +  msi-parent:
-> > > +    description:
-> > > +      The presence of this property implies that given APLIC domain =
-forwards
-> > > +      wired interrupts as MSIs to a AIA incoming message signaled in=
-terrupt
-> > > +      controller (IMSIC). This property should be considered only wh=
-en the
-> > > +      interrupts-extended property is absent.
-> >
-> > This mutual exclusion can be represented, can't it?
-> > IIRC it is some sort of oneOf thing, somewhat like below:
-> > oneOf:
-> >   - required:
-> >       - msi-parent
-> >   - required:
-> >       - interrupts-extended
-> >
-> > AFAIR from doing the i2c ocores binding, this will force the addition of
-> > one, but not both, to a node.
-> >
-> > Or is this not actually mutually exclusive & the msi-parent property is
-> > permitted but just left unused if interrupts-extended is present?
->=20
-> If both are present then interrupts-extended is preferred.
-
-Perhaps I am making a fool of myself here, but why would someone include
-both of them at once, if only one is going to be used?
-It would appear that making them explicitly mutually exclusive would
-make the binding easier to understand.
-What am I missing?
-
-> > > +  riscv,children:
-> > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> > > +    minItems: 1
-> > > +    maxItems: 1024
-> > > +    description:
-> > > +      This property represents a list of child APLIC domains for the=
- given
-> > > +      APLIC domain. Each child APLIC domain is assigned child index =
-in
-> > > +      increasing order with the first child APLIC domain assigned ch=
-ild
-> > > +      index 0. The APLIC domain child index is used by firmware to d=
-elegate
-> > > +      interrupts from the given APLIC domain to a particular child A=
-PLIC
-> > > +      domain.
-> > > +
-> > > +  riscv,delegate:
-> > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> > > +    minItems: 1
-> > > +    maxItems: 1024
-> > > +    description:
-> > > +      This property represents a interrupt delegation list where eac=
-h entry
-> > > +      is a triple consisting of child APLIC domain phandle, first in=
-terrupt
-> > > +      number, and last interrupt number. The firmware will configure=
- interrupt
-> > > +      delegation registers based on interrupt delegation list.
-> >
-> > What is the inter dependence of the children and delegate?
-> > Is it valid to have a delegate property without children?
-> > Can the firmware delegate interrupts without the delegation list, based
-> > on the children property alone? Or is it effectively useless without a
-> > children property?
->=20
-> Both properties convey different information. The "riscv,childen" describ=
-es
-> the association of child indexes with child APLIC domains whereas the
-> "riscv,delegate" describes the interrupt delegation to few of the child
-> APLIC domains.
->=20
->=20
-> >
-> > In your examples, the second has msi-parent but neither of these custom
-> > properties. Do the children/delegate properties have a meaning in the
-> > msi-parent case?
->=20
-> The "riscv,childern" and "riscv,delegate" are only useful when we have
-> hierarchy of multiple APLIC domains. The second example only has
-> one APLIC domain hence these custom properties are absent.
-
-It'd be great if you could include an example that explains the
-difference as, IIRC, both Rob and I both were kinda confused as to how
-the properties differ.
-
-Thanks,
-Conor.
-
-
---TQVrb+7+nS5b2faU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7MfyQAKCRB4tDGHoIJi
-0thjAP99pOOK7i02KGfJvyYLevP0789k8SS2zN0cOk0Ie++/vwEA1hE5jLKlaIxR
-MNgh209EnpK++6FWUk87WgaAxdmY0gg=
-=gLSk
------END PGP SIGNATURE-----
-
---TQVrb+7+nS5b2faU--
+Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
