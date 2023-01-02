@@ -2,510 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24DA65B048
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A88B65B049
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjABLKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S231898AbjABLKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjABLKH (ORCPT
+        with ESMTP id S229997AbjABLKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:10:07 -0500
+        Mon, 2 Jan 2023 06:10:09 -0500
 Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78235E6E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A3BE45
         for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:10:05 -0800 (PST)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:513e:34db:6493:4ef7])
         by andre.telenet-ops.be with bizsmtp
-        id 3nA22900q2Ef9QR01nA2kY; Mon, 02 Jan 2023 12:10:03 +0100
+        id 3nA22900p2Ef9QR01nA2kX; Mon, 02 Jan 2023 12:10:03 +0100
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1pCIhe-001qS0-KY; Mon, 02 Jan 2023 12:10:02 +0100
+        id 1pCIhe-001qS0-Is
+        for linux-kernel@vger.kernel.org; Mon, 02 Jan 2023 12:10:02 +0100
 Received: from geert by rox.of.borg with local (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1pCHui-0019kp-Og; Mon, 02 Jan 2023 11:19:28 +0100
+        id 1pCHw9-0019n4-V7
+        for linux-kernel@vger.kernel.org; Mon, 02 Jan 2023 11:20:57 +0100
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-m68k@lists.linux-m68k.org
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] m68k: defconfig: Update defconfigs for v6.2-rc1
-Date:   Mon,  2 Jan 2023 11:19:26 +0100
-Message-Id: <fdd3b827ebc5abea6c295df4121048a6a03b698a.1672654705.git.geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v6.2-rc2
+Date:   Mon,  2 Jan 2023 11:20:57 +0100
+Message-Id: <20230102102057.275919-1-geert@linux-m68k.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAHk-=wim8DMRzjyYTJ3UbdqZ26keQyZSU02NZb-JY1=9OpcO1w@mail.gmail.com>
+References: <CAHk-=wim8DMRzjyYTJ3UbdqZ26keQyZSU02NZb-JY1=9OpcO1w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  - Drop CONFIG_NFT_OBJREF=m (removed in commit d037abc2414b4539
-    ("netfilter: nft_objref: make it builtin")),
-  - Drop CONFIG_CDROM_PKTCDVD=m (removed in commit f40eb99897af665f
-    ("pktcdvd: remove driver.")),
-  - Drop CONFIG_TEST_STRSCPY=m (replaced by auto-modular
-    CONFIG_STRSCPY_KUNIT_TEST in commit 41eefc46a3a46829 ("string:
-    Convert strscpy() self-test to KUnit")),
-  - Drop CONFIG_TEST_SIPHASH=m (replaced by auto-modular
-    CONFIG_SIPHASH_KUNIT_TEST in commit fb3d88ab354b3b07 ("siphash:
-    Convert selftest to KUnit")).
+Below is the list of build error/warning regressions/improvements in
+v6.2-rc2[1] compared to v6.1[2].
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
-To be queued in the m68k for-v6.3 branch.
+Summarized:
+  - build errors: +10/-13
+  - build warnings: +13/-10
 
- arch/m68k/configs/amiga_defconfig    | 4 ----
- arch/m68k/configs/apollo_defconfig   | 4 ----
- arch/m68k/configs/atari_defconfig    | 4 ----
- arch/m68k/configs/bvme6000_defconfig | 4 ----
- arch/m68k/configs/hp300_defconfig    | 4 ----
- arch/m68k/configs/mac_defconfig      | 4 ----
- arch/m68k/configs/multi_defconfig    | 4 ----
- arch/m68k/configs/mvme147_defconfig  | 4 ----
- arch/m68k/configs/mvme16x_defconfig  | 4 ----
- arch/m68k/configs/q40_defconfig      | 4 ----
- arch/m68k/configs/sun3_defconfig     | 4 ----
- arch/m68k/configs/sun3x_defconfig    | 4 ----
- 12 files changed, 48 deletions(-)
+JFYI, when comparing v6.2-rc2[1] to v6.2-rc1[3], the summaries are:
+  - build errors: +0/-1
+  - build warnings: +0/-0
 
-diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
-index 7b49fe6f7cb305d3..eaee93393fadfaed 100644
---- a/arch/m68k/configs/amiga_defconfig
-+++ b/arch/m68k/configs/amiga_defconfig
-@@ -108,7 +108,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -313,7 +312,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -630,7 +628,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -638,7 +635,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
-index 656a06d97d4c156e..b600370853be75e5 100644
---- a/arch/m68k/configs/apollo_defconfig
-+++ b/arch/m68k/configs/apollo_defconfig
-@@ -104,7 +104,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -303,7 +302,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -586,7 +584,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -594,7 +591,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
-index d3078eecf4efefed..d1b7ad44535579eb 100644
---- a/arch/m68k/configs/atari_defconfig
-+++ b/arch/m68k/configs/atari_defconfig
-@@ -111,7 +111,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -314,7 +313,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -618,7 +616,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -626,7 +623,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
-index 7b86e1277a1a5085..14c2c602c452d6db 100644
---- a/arch/m68k/configs/bvme6000_defconfig
-+++ b/arch/m68k/configs/bvme6000_defconfig
-@@ -101,7 +101,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -300,7 +299,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -578,7 +576,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -586,7 +583,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
-index d0d5c0a9aee60a6e..3bf51c3ac62d7514 100644
---- a/arch/m68k/configs/hp300_defconfig
-+++ b/arch/m68k/configs/hp300_defconfig
-@@ -103,7 +103,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -302,7 +301,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -588,7 +586,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -596,7 +593,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
-index ac1d0c86b6ff53ee..c839c27eeb6efade 100644
---- a/arch/m68k/configs/mac_defconfig
-+++ b/arch/m68k/configs/mac_defconfig
-@@ -102,7 +102,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -305,7 +304,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -609,7 +607,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -617,7 +614,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
-index c5f7603c98308ed0..a78031c43e63606c 100644
---- a/arch/m68k/configs/multi_defconfig
-+++ b/arch/m68k/configs/multi_defconfig
-@@ -122,7 +122,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -334,7 +333,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -695,7 +693,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -703,7 +700,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
-index 26f5b59e3bc02926..241358f64d8f4a0c 100644
---- a/arch/m68k/configs/mvme147_defconfig
-+++ b/arch/m68k/configs/mvme147_defconfig
-@@ -100,7 +100,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -299,7 +298,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -577,7 +575,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -585,7 +582,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
-index 3045c7f0bde3507f..3382fe16d7f31b11 100644
---- a/arch/m68k/configs/mvme16x_defconfig
-+++ b/arch/m68k/configs/mvme16x_defconfig
-@@ -101,7 +101,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -300,7 +299,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -578,7 +576,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -586,7 +583,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
-index f2a486be651b5412..6137020556c8346e 100644
---- a/arch/m68k/configs/q40_defconfig
-+++ b/arch/m68k/configs/q40_defconfig
-@@ -102,7 +102,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -304,7 +303,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -596,7 +594,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -604,7 +601,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
-index 8a7db7be10c03ccc..087505407a0b3e08 100644
---- a/arch/m68k/configs/sun3_defconfig
-+++ b/arch/m68k/configs/sun3_defconfig
-@@ -98,7 +98,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -297,7 +296,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -576,7 +574,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -584,7 +581,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
-index 7ed49ee0b9e011ed..a0e0fa8fbd504295 100644
---- a/arch/m68k/configs/sun3x_defconfig
-+++ b/arch/m68k/configs/sun3x_defconfig
-@@ -98,7 +98,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -297,7 +296,6 @@ CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
--CONFIG_CDROM_PKTCDVD=m
- CONFIG_ATA_OVER_ETH=m
- CONFIG_DUMMY_IRQ=m
- CONFIG_RAID_ATTRS=m
-@@ -576,7 +574,6 @@ CONFIG_ASYNC_RAID6_TEST=m
- CONFIG_TEST_HEXDUMP=m
- CONFIG_STRING_SELFTEST=m
- CONFIG_TEST_STRING_HELPERS=m
--CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_KSTRTOX=m
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
-@@ -584,7 +581,6 @@ CONFIG_TEST_BITMAP=m
- CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
--- 
-2.25.1
+Happy fixing! ;-)
 
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/88603b6dc419445847923fcb7fe5080067a30f98/ (all 152 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1b929c02afd37871d5afb9d498426f83432e71c2/ (all 152 configs)
+
+
+*** ERRORS ***
+
+10 error regressions:
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7082:1
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7127:1
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overflow' declared with attribute error: value doesn't fit into mask:  => 151:3
+  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_263' declared with attribute error: Unsupported access size for {READ,WRITE}_ONCE().:  => 358:45
+  + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy' offset [0, 127] is out of the bounds [0, 0] [-Werror=array-bounds]:  => 57:33
+  + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]:  => 59:33
+  + /kisskb/src/kernel/kcsan/kcsan_test.c: error: the frame size of 1680 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]:  => 257:1
+  + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  => 1718
+
+13 error improvements:
+  - /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 239:34 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
+  - /kisskb/src/drivers/net/ethernet/marvell/prestera/prestera_flower.c: error: 'rule' is used uninitialized [-Werror=uninitialized]: 480:34 => 
+  - {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field: 2286 => 
+  - {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field : 2302 => 
+  - {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field : 2213 => 
+  - {standard input}: Error: pcrel too far: 2274, 2232, 2204, 2217, 2293, 2248, 2206, 2229, 2261, 2221, 2215, 2247, 2262, 2216, 2209, 2249, 2231, 2259 => 
+  - {standard input}: Error: unknown pseudo-op: `.l': 2305 => 
+
+
+*** WARNINGS ***
+
+13 warning regressions:
+  + modpost: WARNING: modpost: "__ndelay" [drivers/gpio/gpio-latch.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max11410.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/tegra-kbc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mfd/axp20x.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunplus-mmc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/rswitch_drv.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852b.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/phy/renesas/r8a779f0-ether-serdes.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_idt82p33.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/usb/fotg210/fotg210.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [fs/xfs/xfs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "empty_zero_page" [net/rxrpc/rxperf.ko] has no CRC!:  => N/A
+
+10 warning improvements:
+  - modpost: WARNING: modpost: "__ashldi3" [lib/zstd/zstd_compress.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/pch_can.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fealnx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc911x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/pcs/pcs-altera-tse.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/fotg210-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata): N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata): N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o: section mismatch in reference: qede_forced_speed_maps (section: .data) -> qede_forced_speed_100000 (section: .init.rodata): N/A => 
+  - modpost: WARNING: modpost: vmlinux.o: section mismatch in reference: __trace_event_discard_commit (section: .text.unlikely) -> initcall_level_names (section: .init.data): N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
