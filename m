@@ -2,90 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947CF65B39E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD90765B39F
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbjABOzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 09:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S232858AbjABO41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 09:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjABOzN (ORCPT
+        with ESMTP id S229583AbjABO4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 09:55:13 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725A264C9
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 06:55:12 -0800 (PST)
-Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 302EsvxN094457;
-        Mon, 2 Jan 2023 23:54:57 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
- Mon, 02 Jan 2023 23:54:56 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
-Received: from [192.168.1.20] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 302Erfpe094241
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 2 Jan 2023 23:53:41 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <7b10c1aa-0b3a-da0d-ea0e-b135cffc3491@I-love.SAKURA.ne.jp>
-Date:   Mon, 2 Jan 2023 23:53:40 +0900
+        Mon, 2 Jan 2023 09:56:25 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D188AB0B
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 06:56:24 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id u1-20020a5d8181000000b006ee29a8c421so7712422ion.19
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 06:56:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WbLOW9xzFnV6xde18RxTRBV2jx9u4A4nHG/+gWbGcDA=;
+        b=UUcB/Pgff6I4UsCVZMsKspxtse438L0gEooUI3lPsNXgAmrxAovLgxQCE8z7DCi639
+         UgNcAOUcBX+acjpQlJTjNCCgx3mwXEaqquWD73l0vuqmueObkFpA1vCz2/gVoGEr14I/
+         fyt/8nj/YNNCXPlQyq8ZWvJ63VVLlbChrLx0onNH990X96tPZZJOARVZa6hwfX0CH7ej
+         qqgrS3W7JXrtESWh4udH8O8EP4262UAADaOss0TVO2EBm43yj5i0xviBZRp4raO/7HqW
+         pXcFMSG+sjTtCEC3OJ5NMtANOmwaLtXFgS8MxPWHBvk6TK9Mkq2VLwtqEKd1jhzWLSkf
+         Z/Mw==
+X-Gm-Message-State: AFqh2koGtab2f5Zqd0+4seBP3tz+mI9lHpw6enQNfc9+hKwaaw4IIUou
+        40AwVv5LMML+Ds+ZC4aDL9OmkRiGpDmyJceB6UXUmVqVqbKW
+X-Google-Smtp-Source: AMrXdXv1TGibfk+8X1HKQZP4CF2YpNSpPFHawYMixbTiRWBC4tjfCtnN7lOkwISlfBnI9zFze6JYKIn5EoqYAAPDKrNgiXiyijFw
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: [PATCH] fs/ntfs3: Use __GFP_NOWARN allocation at
- ntfs_load_attr_list()
-Content-Language: en-US
-To:     almaz.alexandrovich@paragon-software.com, ntfs3@lists.linux.dev
-References: <00000000000027524405f1452ea8@google.com>
-Cc:     syzbot <syzbot+89dbb3a789a5b9711793@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <00000000000027524405f1452ea8@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:10da:b0:38a:b159:7b9c with SMTP id
+ q26-20020a05663810da00b0038ab1597b9cmr3315807jad.77.1672671384204; Mon, 02
+ Jan 2023 06:56:24 -0800 (PST)
+Date:   Mon, 02 Jan 2023 06:56:24 -0800
+In-Reply-To: <20230102094125.3552-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ae803005f149272b@google.com>
+Subject: Re: [syzbot] [ntfs3?] INFO: task hung in do_user_addr_fault (3)
+From:   syzbot <syzbot+bed15dbf10294aa4f2ae@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        longman@redhat.com, penguin-kernel@i-love.sakura.ne.jp,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
+        willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot is reporting too large allocation at ntfs_load_attr_list() [1], for
-a crafted filesystem can have huge data_size.
+Hello,
 
-Link: https://syzkaller.appspot.com/bug?extid=89dbb3a789a5b9711793 [1]
-Reported-by: syzbot <syzbot+89dbb3a789a5b9711793@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
- fs/ntfs3/attrlist.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-diff --git a/fs/ntfs3/attrlist.c b/fs/ntfs3/attrlist.c
-index c0c6bcbc8c05..81c22df27c72 100644
---- a/fs/ntfs3/attrlist.c
-+++ b/fs/ntfs3/attrlist.c
-@@ -52,7 +52,7 @@ int ntfs_load_attr_list(struct ntfs_inode *ni, struct ATTRIB *attr)
- 
- 	if (!attr->non_res) {
- 		lsize = le32_to_cpu(attr->res.data_size);
--		le = kmalloc(al_aligned(lsize), GFP_NOFS);
-+		le = kmalloc(al_aligned(lsize), GFP_NOFS | __GFP_NOWARN);
- 		if (!le) {
- 			err = -ENOMEM;
- 			goto out;
-@@ -80,7 +80,7 @@ int ntfs_load_attr_list(struct ntfs_inode *ni, struct ATTRIB *attr)
- 		if (err < 0)
- 			goto out;
- 
--		le = kmalloc(al_aligned(lsize), GFP_NOFS);
-+		le = kmalloc(al_aligned(lsize), GFP_NOFS | __GFP_NOWARN);
- 		if (!le) {
- 			err = -ENOMEM;
- 			goto out;
--- 
-2.34.1
+Reported-and-tested-by: syzbot+bed15dbf10294aa4f2ae@syzkaller.appspotmail.com
 
+Tested on:
 
+commit:         88603b6d Linux 6.2-rc2
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1508687c480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdb1e7bec4b955a
+dashboard link: https://syzkaller.appspot.com/bug?extid=bed15dbf10294aa4f2ae
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=162634e0480000
+
+Note: testing is done by a robot and is best-effort only.
