@@ -2,180 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7DA65B79E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 23:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C09DA65B7A2
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 23:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbjABWWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 17:22:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S232218AbjABWWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 17:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjABWVv (ORCPT
+        with ESMTP id S230464AbjABWWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 17:21:51 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C66C266;
-        Mon,  2 Jan 2023 14:21:47 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 19EA260003;
-        Mon,  2 Jan 2023 22:21:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1672698106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R5DrDO09m6WnwQyi2kay4oAXjZqJHjCaf1rEMgSoC5c=;
-        b=OHPPWtAX9RLWTA/5LDUrbvji9uaDWVUYsPhSl5kHTOzmdzXh/9MH93Hz0UCo5hkqCiX7xF
-        mD0Wm/nkSVyY0SLpaxW1137+HQjzV/91HLhQv1/bAjla26HtmCaYWM+u4AvfSRdgxew/1H
-        bQ3e50GZ/kTUR4S333if6PNiiM27dp2jpgN2uBrnND0MdzZQNnUSxTRDj8Dsj37MAaHEEp
-        cj+txXbbi1GoILCGv+Gm3HFvRe/zsv3hpkp/YmoIN87mO+UwbO6Y1ax4ZUc+mL4jY+lptZ
-        Fy8J7JoLDEida52Xa07dJ4EbKzEfkCym+sonr7ux3JVbI9NMCgWgNJiaVBC6xA==
-Date:   Mon, 2 Jan 2023 23:21:45 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Shanker Donthineni <sdonthineni@nvidia.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Subject: Re: [PATCH 1/1] efi: rtc: Enable SET/GET WAKEUP services as optional
-Message-ID: <Y7NY+ba2USk7hEAx@mail.local>
-References: <20221227040925.1619833-1-sdonthineni@nvidia.com>
- <CAMj1kXG79-MxGJEwvnekqbVyeEMVHBfhNjwZkz91mMwv4-vT3Q@mail.gmail.com>
+        Mon, 2 Jan 2023 17:22:50 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A611913E;
+        Mon,  2 Jan 2023 14:22:49 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id g10so7647212wmo.1;
+        Mon, 02 Jan 2023 14:22:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hzAhGjXaHPnQR3DC+YI7zHhPYNDOaj+LjnPkK+FZLFE=;
+        b=j0ZQqW2uJDkWbhQ45/bqKldlVp4tBWD6gzWQPbPpR1V6AFZ5Ihrs4OZNBzpQgps/m4
+         rTXaS/c0hFcCPZ4WfkHw/8Fqj/GQW3bwjF0yKbbdbo2f4nsXaGbw4firdjzZa6aHeiCq
+         H0BUBRvG5b6LlzAwcmLoAOXuThD9YsZyLMnTEaIUqrKhc5bbDJy6jCSgD+z411j9YKZw
+         eaVjDBNtWH27us9LIe1++zF0/urLoVxZYOsx/BNrxcXNyW2E3DWYJ1WZRyi6kR91zuXe
+         yU1X4KVExp5RBj5pYF+QZPiIP5/Kz1guSKUYVWW6EFB+SWEAwa1qhY3K2NWgmlRhQvCw
+         DiKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hzAhGjXaHPnQR3DC+YI7zHhPYNDOaj+LjnPkK+FZLFE=;
+        b=t0lWQegmx4Fhts6VFmvmtSjcTspnD2YESLLuQTgxsfGuoGA6dRvDvNygIqnFm4ztj+
+         KrEL6j0KlpROQ38owBKx5k7auj0W+b8vgxCxtdfKbXmsZSACwbCl9W29Vxr6g3Vtm7YC
+         6V5PKfcHZwtM1kkZXuSQmjvU4/Z7zS1ynvQq6bsXghNuaD4o7g8r4equULk10VCTMWDN
+         noYJ/vUd15J2KOVdj8ji56/R0NvJjlpNJj5Ps1U4SN4MYw5tSra/BPD1QKDydQfpndOj
+         TthKU+9qN0sVf6T1G3NF4+e4uC12Uf9/RVwxBD7cCLe6lOIv+4tauPShqpwAgZXvPZXf
+         Uz7A==
+X-Gm-Message-State: AFqh2kqiGee8/LJ2ZKIu8/LEr4XQpPyOvMWFGxZp16/xY+i1+dy5lgf8
+        RbUjCIWYxlyr+OOCBVxxTz4=
+X-Google-Smtp-Source: AMrXdXvs149q2RLwB0ZezqErfp0NhNZDzNbvUCbH1XcRYTqw/I6EeHFpBoeR9KbtNh2ItGEhDMU+3Q==
+X-Received: by 2002:a05:600c:510e:b0:3d3:5885:4d21 with SMTP id o14-20020a05600c510e00b003d358854d21mr29134502wms.17.1672698168250;
+        Mon, 02 Jan 2023 14:22:48 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:8a7:e535:b020:566a])
+        by smtp.gmail.com with ESMTPSA id f18-20020a05600c4e9200b003d35c845cbbsm50341636wmq.21.2023.01.02.14.22.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 14:22:47 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2] riscv: dts: renesas: rzfive-smarc-som: Enable OSTM nodes
+Date:   Mon,  2 Jan 2023 22:22:33 +0000
+Message-Id: <20230102222233.274021-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXG79-MxGJEwvnekqbVyeEMVHBfhNjwZkz91mMwv4-vT3Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/01/2023 11:47:11+0100, Ard Biesheuvel wrote:
-> On Tue, 27 Dec 2022 at 05:09, Shanker Donthineni <sdonthineni@nvidia.com> wrote:
-> >
-> > The current implementation of rtc-efi is expecting all the 4
-> > time services GET{SET}_TIME{WAKEUP} must be supported by UEFI
-> > firmware. As per the EFI_RT_PROPERTIES_TABLE, the platform
-> > specific implementations can choose to enable selective time
-> > services based on the RTC device capabilities.
-> >
-> > This patch does the following changes to provide GET/SET RTC
-> > services on platforms that do not support the WAKEUP feature.
-> >
-> > 1) Relax time services cap check when creating a platform device.
-> > 2) Clear RTC_FEATURE_ALARM bit in the absence of WAKEUP services.
-> > 3) Conditional alarm entries in '/proc/driver/rtc'.
-> >
-> > Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
-> 
-> Queued as a fix in efi/urgent, thanks.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-This rather seems like an rtc heavy patch and the subject line is
-misleading. This should be rtc: efi:
-Also, I'm pretty sure this doesn't qualify as an urgent fix.
+Enable OSTM{1,2} nodes on RZ/Five SMARC SoM.
 
-> 
-> 
-> > ---
-> >  drivers/rtc/rtc-efi.c | 48 ++++++++++++++++++++++++-------------------
-> >  include/linux/efi.h   |  3 ++-
-> >  2 files changed, 29 insertions(+), 22 deletions(-)
-> >
-> > diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
-> > index e991cccdb6e9c..1e8bc6cc1e12d 100644
-> > --- a/drivers/rtc/rtc-efi.c
-> > +++ b/drivers/rtc/rtc-efi.c
-> > @@ -188,9 +188,10 @@ static int efi_set_time(struct device *dev, struct rtc_time *tm)
-> >
-> >  static int efi_procfs(struct device *dev, struct seq_file *seq)
-> >  {
-> > -       efi_time_t      eft, alm;
-> > -       efi_time_cap_t  cap;
-> > -       efi_bool_t      enabled, pending;
-> > +       efi_time_t        eft, alm;
-> > +       efi_time_cap_t    cap;
-> > +       efi_bool_t        enabled, pending;
-> > +       struct rtc_device *rtc = dev_get_drvdata(dev);
-> >
-> >         memset(&eft, 0, sizeof(eft));
-> >         memset(&alm, 0, sizeof(alm));
-> > @@ -213,23 +214,25 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
-> >                 /* XXX fixme: convert to string? */
-> >                 seq_printf(seq, "Timezone\t: %u\n", eft.timezone);
-> >
-> > -       seq_printf(seq,
-> > -                  "Alarm Time\t: %u:%u:%u.%09u\n"
-> > -                  "Alarm Date\t: %u-%u-%u\n"
-> > -                  "Alarm Daylight\t: %u\n"
-> > -                  "Enabled\t\t: %s\n"
-> > -                  "Pending\t\t: %s\n",
-> > -                  alm.hour, alm.minute, alm.second, alm.nanosecond,
-> > -                  alm.year, alm.month, alm.day,
-> > -                  alm.daylight,
-> > -                  enabled == 1 ? "yes" : "no",
-> > -                  pending == 1 ? "yes" : "no");
-> > -
-> > -       if (eft.timezone == EFI_UNSPECIFIED_TIMEZONE)
-> > -               seq_puts(seq, "Timezone\t: unspecified\n");
-> > -       else
-> > -               /* XXX fixme: convert to string? */
-> > -               seq_printf(seq, "Timezone\t: %u\n", alm.timezone);
-> > +       if (test_bit(RTC_FEATURE_ALARM, rtc->features)) {
-> > +               seq_printf(seq,
-> > +                          "Alarm Time\t: %u:%u:%u.%09u\n"
-> > +                          "Alarm Date\t: %u-%u-%u\n"
-> > +                          "Alarm Daylight\t: %u\n"
-> > +                          "Enabled\t\t: %s\n"
-> > +                          "Pending\t\t: %s\n",
-> > +                          alm.hour, alm.minute, alm.second, alm.nanosecond,
-> > +                          alm.year, alm.month, alm.day,
-> > +                          alm.daylight,
-> > +                          enabled == 1 ? "yes" : "no",
-> > +                          pending == 1 ? "yes" : "no");
-> > +
-> > +               if (eft.timezone == EFI_UNSPECIFIED_TIMEZONE)
-> > +                       seq_puts(seq, "Timezone\t: unspecified\n");
-> > +               else
-> > +                       /* XXX fixme: convert to string? */
-> > +                       seq_printf(seq, "Timezone\t: %u\n", alm.timezone);
-> > +       }
-> >
-> >         /*
-> >          * now prints the capabilities
-> > @@ -269,7 +272,10 @@ static int __init efi_rtc_probe(struct platform_device *dev)
-> >
-> >         rtc->ops = &efi_rtc_ops;
-> >         clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
-> > -       set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, rtc->features);
-> > +       if (efi_rt_services_supported(EFI_RT_SUPPORTED_WAKEUP_SERVICES))
-> > +               set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, rtc->features);
-> > +       else
-> > +               clear_bit(RTC_FEATURE_ALARM, rtc->features);
-> >
-> >         device_init_wakeup(&dev->dev, true);
-> >
-> > diff --git a/include/linux/efi.h b/include/linux/efi.h
-> > index 4b27519143f56..98598bd1d2fa5 100644
-> > --- a/include/linux/efi.h
-> > +++ b/include/linux/efi.h
-> > @@ -668,7 +668,8 @@ extern struct efi {
-> >
-> >  #define EFI_RT_SUPPORTED_ALL                                   0x3fff
-> >
-> > -#define EFI_RT_SUPPORTED_TIME_SERVICES                         0x000f
-> > +#define EFI_RT_SUPPORTED_TIME_SERVICES                         0x0003
-> > +#define EFI_RT_SUPPORTED_WAKEUP_SERVICES                       0x000c
-> >  #define EFI_RT_SUPPORTED_VARIABLE_SERVICES                     0x0070
-> >
-> >  extern struct mm_struct efi_mm;
-> > --
-> > 2.25.1
-> >
+Note, OSTM{1,2} nodes are enabled in the RZ/G2UL SMARC SoM DTSI [0] hence
+deleting the disabled nodes from RZ/Five SMARC SoM DTSI enables it here
+too as we include [0] in RZ/Five SMARC SoM DTSI.
 
+[0] arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+v1->v2
+* Rebased patch on top of [0]
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-riscv-dt-for-v6.3
+---
+ arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
+index fdfd7cd2792b..73941a5f844d 100644
+--- a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
++++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
+@@ -30,14 +30,6 @@ &eth1 {
+ 	status = "disabled";
+ };
+ 
+-&ostm1 {
+-	status = "disabled";
+-};
+-
+-&ostm2 {
+-	status = "disabled";
+-};
+-
+ &sdhi0 {
+ 	status = "disabled";
+ };
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
