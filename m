@@ -2,273 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7E865B301
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD9165B305
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236053AbjABN61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        id S232769AbjABN7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236057AbjABN6U (ORCPT
+        with ESMTP id S232919AbjABN7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:58:20 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1785654C;
-        Mon,  2 Jan 2023 05:58:17 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id j17so20981793wrr.7;
-        Mon, 02 Jan 2023 05:58:17 -0800 (PST)
+        Mon, 2 Jan 2023 08:59:13 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CAD65C4
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 05:59:10 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b3so41667247lfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 05:59:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nphmtWm1iGTaK7XYzssdMMXgZVHnsgqaAFS3kznMFEA=;
-        b=qm0uQwkivEm3WjQSYHXx+e/k9LfmnHS3X0LeE9N8GAMvTjcUemkm/eNEtZFY7EK8Pe
-         gMMqRqHG99iQ+gbKTqQjLBAn4uuiJJHp779KhANWDk7eVJZ7VL5TCJhYKf0jWhbnYuQT
-         X/DNMCmJK+RsjJJxlKnrLaCrBfmk504y8/ZJwkIA3NZKX6tk+FKo9ByX1HYzPmoBbVz2
-         xq6fYsCymVN9wvkCWvHqsew7asFjsPFByFPjcEZpvZH2jaAgFJiPpFtVfHYJyRJjKG6e
-         A0IRb7oWeu5DBXMYvyJzahrU8gw1ua9pYzp/0EiJJORUqcp1Ihq94AHw+e/IlfaEg5Zt
-         b4aw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CYUw4Ow/UYF3HeKOgD5K67nNVV6dcsvzhajlvBseawk=;
+        b=fLakEGh+EuC4FktCd11+6EbqiUlz9zYovZEBDMewyaZfCYkBPaeEvfFsR1sU3zHD2n
+         otJumu/l7IPQR5vblfN1EElLgocHKRZAaRTzzG3xX+YIPM9FW2nqVedLUk/5hxp3TnSg
+         aRnqDZWzP2QHk1jpnG41eBGddhV3lOP/6HrMwEpmpQzs4pDipVX+27zZRJ0ClntbkFAc
+         milZ3xwFQyzb/abtq7fmv3B/CwPQmjqI4twPSYuZMLYJtURV36Wdym64Mp9dB/kpTBye
+         G8rYfn08DQkP5ck8shYdLkoB343oEXoZnRT/r8PtFSaqdpx8RDE/Kxkyo5A+Bqn373OR
+         2hbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nphmtWm1iGTaK7XYzssdMMXgZVHnsgqaAFS3kznMFEA=;
-        b=E52Ss9dK4cXqVTQen5NmMPFOyxl4KnHUTqvKHgqc6BAo0lwOHmJRnfLfaC6t6MnxVT
-         yq3Iz4jEg5s8kfZIJenkHZ2wf1LV+vpKSCl8HM46B09tA6m9F2hEawm5P/4/3QhXAmQi
-         XL0xQAsy1hOBMIK4PrtrNjYVaU9RGTxq+51/pauDs/squv64OGifhyDkODK/MM8QJwcJ
-         TMrmL63rAc+R6zPp/6Da0tnGZ5iHbSbARH/IzWrKfua8Z8l+cim7EvTT9DoSmeJ/wdhl
-         984SztXC5rkM5K8hX30+oVF7T4rGFy2GfaSt8uOcswQ9YXMPS7TCx+1lsSZEhcWFoltX
-         7YtQ==
-X-Gm-Message-State: AFqh2kr8t1T+3bJ4u5y5itRmYvbMd17H7YQf/NJvAJ0QXBqDy5Q3/dc+
-        Nroozcg+ucr3H8Wq96i1k1A=
-X-Google-Smtp-Source: AMrXdXtCrOpTOIXnqtvQiMQt1xQE46H9qxE/PMCzdC55OKumJTn9GnX7xKApfCKs1HkgLcxv/0StFg==
-X-Received: by 2002:a5d:4b11:0:b0:242:29e9:184c with SMTP id v17-20020a5d4b11000000b0024229e9184cmr24103953wrq.29.1672667895995;
-        Mon, 02 Jan 2023 05:58:15 -0800 (PST)
-Received: from localhost ([2a01:4c8:469:341:d1e1:a149:58ed:f096])
-        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b002709e616fa2sm28560707wru.64.2023.01.02.05.58.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 05:58:15 -0800 (PST)
-Date:   Mon, 2 Jan 2023 13:58:14 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        Jakub Matena <matenajakub@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@kernel.org>
-Subject: Re: [PATCH] selftest/vm: add mremap expand merge offset test
-Message-ID: <Y7Li9kZmQ3qPRjj2@lucifer>
-References: <20221216214436.405071-1-lstoakes@gmail.com>
- <d394c380-8f2c-7b8d-3915-7b8b201bb7de@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CYUw4Ow/UYF3HeKOgD5K67nNVV6dcsvzhajlvBseawk=;
+        b=LwLxTEyy5Ghq7hTTV3/z6PbYdh/KAher5NVtELwm6VBJB0Y5Xv0cm7wtjcna+R1H64
+         uDI7ma14rb9zMtdhhml4ZRC2E8mNw750kA8SONVPqKOqc1PwbyOueAZlEZyIc6Rc3ODf
+         gSPqxMj2iA2N9eZ2mMKUYdDYXYcM4Iaxyu3QZhPg+OUnQHaVq3+LQ0KlfgJY7WO3C3/Y
+         IlRXdnK7yVe2IzuvllyqFn2rMaZ0Xl8nkCoOoabioQ8kY+dJIxzJxSpklGf/jmS+X4m4
+         6KFxtR+OfDihyP4wdwltxwJusPpNZMhGKA/1RUYt/Y0xZQAB5lq+L8rxoh3Ob9k4RqR7
+         sY0w==
+X-Gm-Message-State: AFqh2kqv4Vxyh4JgPQ9UBx/nyfo/Kf2SENf/A32+bhtzUYAXw/I0ujh9
+        Tnjq4wYSI0e83wkiimS9H3EcJg==
+X-Google-Smtp-Source: AMrXdXvt47iRm5eGMaxejAQ2r6gZrvDKE4wOMaN78STYhja4LDlre8j80VkD3jebySE40a6UVh1Ciw==
+X-Received: by 2002:a05:6512:3fa7:b0:4b5:cda:44cf with SMTP id x39-20020a0565123fa700b004b50cda44cfmr13845049lfa.67.1672667948935;
+        Mon, 02 Jan 2023 05:59:08 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id l9-20020a056512110900b004cb2a786cc6sm1137967lfg.105.2023.01.02.05.59.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 05:59:08 -0800 (PST)
+Message-ID: <21c6dd41-3e6f-26c6-d6ca-25102e992c18@linaro.org>
+Date:   Mon, 2 Jan 2023 14:59:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d394c380-8f2c-7b8d-3915-7b8b201bb7de@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: RFC on drivers/memory vs drivers/edac memory mapping for DDR
+ Controller
+Content-Language: en-US
+To:     "Shenhar, Talel" <talel@amazon.com>, bp@alien8.de
+Cc:     talelshenhar@gmail.com, shellykz@amazon.com,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <2511c7aa-8ce6-a803-a1ea-6121df79c677@amazon.com>
+ <8b844f3a-e9b0-28d5-200a-611fe3068bc0@linaro.org>
+ <4bd90224-d09a-1f21-92e6-51c967d68a39@amazon.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4bd90224-d09a-1f21-92e6-51c967d68a39@amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 02:32:55PM +0100, David Hildenbrand wrote:
-> On 16.12.22 22:44, Lorenzo Stoakes wrote:
-> > Add a test to assert that we can mremap() and expand a mapping starting
-> > from an offset within an existing mapping. We unmap the last page in a 3
-> > page mapping to ensure that the remap should always succeed, before
-> > remapping from the 2nd page.
-> >
-> > This is additionally a regression test for the issue solved in "mm, mremap:
-> > fix mremap() expanding vma with addr inside vma" and confirmed to fail
-> > prior to the change and pass after it.
-> >
-> > Finally, this patch updates the existing mremap expand merge test to check
-> > error conditions and reduce code duplication between the two tests.
-> >
-> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> > ---
-> >   tools/testing/selftests/vm/mremap_test.c | 111 +++++++++++++++++++----
-> >   1 file changed, 93 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
-> > index 9496346973d4..28a17d4e8afd 100644
-> > --- a/tools/testing/selftests/vm/mremap_test.c
-> > +++ b/tools/testing/selftests/vm/mremap_test.c
-> > @@ -119,30 +119,19 @@ static unsigned long long get_mmap_min_addr(void)
-> >   }
-> >
-> >   /*
-> > - * This test validates that merge is called when expanding a mapping.
-> > - * Mapping containing three pages is created, middle page is unmapped
-> > - * and then the mapping containing the first page is expanded so that
-> > - * it fills the created hole. The two parts should merge creating
-> > - * single mapping with three pages.
-> > + * Using /proc/self/maps, assert that the specified address range is contained
-> > + * within a single mapping.
-> >    */
-> > -static void mremap_expand_merge(unsigned long page_size)
-> > +static bool is_range_mapped(void *start, void *end)
-> >   {
-> > -	char *test_name = "mremap expand merge";
-> >   	FILE *fp;
-> >   	char *line = NULL;
-> >   	size_t len = 0;
-> >   	bool success = false;
-> > -	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
-> > -			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> > -
-> > -	munmap(start + page_size, page_size);
-> > -	mremap(start, page_size, 2 * page_size, 0);
-> >
-> >   	fp = fopen("/proc/self/maps", "r");
-> > -	if (fp == NULL) {
-> > -		ksft_test_result_fail("%s\n", test_name);
-> > -		return;
-> > -	}
-> > +	if (fp == NULL)
-> > +		return false;
->
-> This is unexpected. It would be valuable to ksft_print_msg("[INFO] .."
-> something, indicating that we don't know because we cannot access that info.
->
-> ksft_print_msg("[INFO] Opening /proc/self/maps failed"
->
->
-> But I'd even suggest opening "/proc/self/maps" once in main() and failing
-> directly there. Then we don't have to worry about it here.
->
-> >
-> >   	while (getline(&line, &len, fp) != -1) {
-> >   		char *first = strtok(line, "- ");
-> > @@ -150,16 +139,101 @@ static void mremap_expand_merge(unsigned long page_size)
-> >   		char *second = strtok(NULL, "- ");
-> >   		void *second_val = (void *) strtol(second, NULL, 16);
-> >
-> > -		if (first_val == start && second_val == start + 3 * page_size) {
-> > +		if (first_val <= start && second_val >= end) {
-> >   			success = true;
-> >   			break;
-> >   		}
-> >   	}
-> > +
-> > +	fclose(fp);
-> > +	return success;
-> > +}
-> > +
-> > +/*
-> > + * This test validates that merge is called when expanding a mapping.
-> > + * Mapping containing three pages is created, middle page is unmapped
-> > + * and then the mapping containing the first page is expanded so that
-> > + * it fills the created hole. The two parts should merge creating
-> > + * single mapping with three pages.
-> > + */
-> > +static void mremap_expand_merge(unsigned long page_size)
-> > +{
-> > +	char *test_name = "mremap expand merge";
-> > +	bool success = false;
-> > +	int errsv = 0;
-> > +	char *remap;
-> > +	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
-> > +			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->
-> I'd suggest
->
->
-> 	char *remap, *start;
->
-> 	start = mmap()
-> 	if (start == MAP_FAILED) { ...
->
-> to make this easier to read.
->
-> > +
-> > +	if (start == MAP_FAILED) {
-> > +		errsv = errno;
-> > +		goto error;
-> > +	}
-> > +
-> > +	munmap(start + page_size, page_size);
-> > +	remap = mremap(start, page_size, 2 * page_size, 0);
-> > +	if (remap == MAP_FAILED) {
-> > +		errsv = errno;
-> > +		munmap(start, page_size);
-> > +		munmap(start + 2 * page_size, page_size);
-> > +		goto error;
-> > +	}
-> > +
-> > +	success = is_range_mapped(start, start + 3 * page_size);
-> > +
-> > +	munmap(start, 3 * page_size);
-> > +	goto out;
-> > +
-> > +error:
-> > +	ksft_print_msg("Unexpected mapping/remapping error: %s\n",
-> > +		       strerror(errsv));
->
-> Please avoid the "error" label and just print proper errors directly at the
-> two callsites. Then, remove the "goto out".
->
-> > +out:
-> > +	if (success)
-> > +		ksft_test_result_pass("%s\n", test_name);
-> > +	else
-> > +		ksft_test_result_fail("%s\n", test_name);
-> > +}
-> > +
-> > +/*
-> > + * Similar to mremap_expand_merge() except instead of removing the middle page,
-> > + * we remove the last then attempt to remap offset from the second page. This
-> > + * should result in the mapping being restored to its former state.
-> > + */
-> > +static void mremap_expand_merge_offset(unsigned long page_size)
-> > +{
-> > +
-> > +	char *test_name = "mremap expand merge offset";
-> > +	bool success = false;
-> > +	int errsv = 0;
-> > +	char *remap;
-> > +	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
-> > +			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->
-> Dito.
->
-> > +
-> > +	if (start == MAP_FAILED) {
-> > +		errsv = errno;
-> > +		goto error;
-> > +	}
-> > +
-> > +	/* Unmap final page to ensure we have space to expand. */
-> > +	munmap(start + 2 * page_size, page_size);
-> > +	remap = mremap(start + page_size, page_size, 2 * page_size, 0);
-> > +	if (remap == MAP_FAILED) {
-> > +		errsv = errno;
-> > +		munmap(start, 2 * page_size);
-> > +		goto error;
-> > +	}
-> > +
-> > +	success = is_range_mapped(start, start + 3 * page_size);
-> > +	goto out;
-> > +
-> > +error:
-> > +	ksft_print_msg("Unexpected mapping/remapping error: %s\n",
-> > +		       strerror(errsv));
->
-> Dito.
->
-> > +out:
->
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+On 02/01/2023 14:44, Shenhar, Talel wrote:
+> 
+> On 1/2/2023 2:47 PM, Krzysztof Kozlowski wrote:
+>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+>>
+>>
+>>
+>> On 02/01/2023 13:17, Shenhar, Talel wrote:
+>>> Hi,
+>>>
+>>> Want to consult on a topic that involve both drivers/memory and
+>>> drivers/edac.
+>>>
+>>> * We want to introduce driver that reads DDR controller RAS register and
+>>> notify for ECC errors by using EDAC MC API found in drivers/edac.
+>>> * We also want to have a capability to dynamically change DDR refresh
+>>> rate based on thermal values (best to be done in drivers/memory ?).
+>>>
+>>> The pain point here is that both capabilities are controlled from the
+>>> DDR controller.
+>>> This create issue while using
+>>> devm_platform_ioremap_resource*->devm_request_mem_region which prevent
+>>> two mapping of same area.
+>> This could be avoided but the true problem is that you have two devices
+>> for same memory mapping. Devicetree does not allow it and it points to
+>> some wrong hardware representation in DTS.
+>>
+>>> It seems to be expected problem as we have 2 "framework" (edac and
+>>> memory) split while both aim for same HW unit.
+>>> What is the recommended way to face such conflicts?
+>> You now mix Devicetree and Linux drivers. You can have same IO address
+>> space used by multiple drivers, even though it is not always good
+>> approach (concurrent and conflicting change of same settings).
+>>
+>> HW description is irrelevant to this.
+>>
+>>> We had several concept in mind but would love to get your point of view
+>>> first.
+>> Describe hardware accurately and completely. This solves all the
+>> problems, doesn't it? Linux drivers do not depend on it and you can make
+>> it differently.
+> 
+> Describing the hardware accurately and completely means to have multiple 
+> reg property in the device-tree, right?
 
-Ack on all, will spin a v2. Thanks for review!
+Not necessarily. It means to describe the devices, the hardware, not
+drivers.
+
+> 
+> That way we will split the HW description to smaller bits rather then 
+> just big "ddrc", and that shall allow us to have two drivers and each 
+> one will get its own share of the split, right?
+
+Not necessarily. If you have one hardware, why would you split it? It's
+only one memory controller, not two.
+
+> That was the intent of solution 1 below.
+> 
+>>
+>>> Things we had in mind:
+>>> 1) map more specific region to avoid conflict (we don't need the same
+>>> registers on both entity so if we do very specific multiple mapping this
+>>> shall be resolved)
+>>> 2) use other kernel API for mapping that doesn't do request_mem_region
+>>> (or use the reserve only for one of them)
+>>> 3) have single driver (edac mc) handle also the refresh rate
+>>> 4) export edac_mc.h and have the drivers/memory have all the needed code
+>>> to do both edac and refresh rate under drivers/memory
+>> None of these address the core problem - possibly inaccurate hardware
+>> description...
+> 
+> Can you elaborate on this inaccurate hardware description?
+
+I explained - using same IO address suggests you used Linux driver
+structure in your hardware description. I assume we talk here about
+Devicetree. If not, that's quite different case... then I guess ACPI,
+which I do not care - I am not it's maintainer.
+
+> Also, I'd like to write down my understanding of your response from above:
+> 
+> it seems you see as possible solution both using different API that 
+> allow overlapping (solution 2) and also for splitting the IO address 
+> space to finer pieces to achieve full HW description (solution 1)
+
+No. Sorry, we probably talk about two different things.
+
+You started writing that you have a hardware described as one IO address
+space and now have a problem developing drivers for it.
+
+The driver model for this is entirely different problem than problem of
+accurate hardware description. Whether you described HW correct or not,
+I don't know. You did not provide any details here, like DTS or bindings
+(if we talk about Devicetree).
+
+Having multiple drivers using similar resources is already solved many
+times (MFD, syscon).
+
+Whether the solution is correct or not is one more (third) topic: poking
+to same IO address space from two different drivers is error-prone. This
+one is solvable with splitting IO address space.
+
+Best regards,
+Krzysztof
+
