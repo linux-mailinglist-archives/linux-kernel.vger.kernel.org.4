@@ -2,86 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8BA65B62E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C704E65B67A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbjABSFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 13:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S234434AbjABSJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 13:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236346AbjABSEi (ORCPT
+        with ESMTP id S236324AbjABSJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 13:04:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BFCBF47
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:04:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D35F16108F
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 18:04:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9AD2C433D2;
-        Mon,  2 Jan 2023 18:04:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672682670;
-        bh=4eYs7pQIcAtCjsCXv0XY68Jnt7bhsT57ASNk+HbciSo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=WYqp8Bl67P24FgUZakX+lC8wlpPHHT4udHxXh9Tv1xIqBr+BU7T2jCIwUKYl+R3Bb
-         Q9CKr4VfSMsO2rdZjJtjyBJM/ZxpeEXsqD50RNOGc/Y5G7kEtWBlFFtdYgU4Y0Kxqj
-         yH7D35TKKpdUDnkKnteNQxy68RhmEaXILW0cdnWVnoURaIDCUH3eyidkh7d2CynOi+
-         a4aEqXBqwcyJdA/EP2lMY9Bdwo8lNVLfbXo0k3dKMwkLNhYlhMjiVYhI0fCCcUFJ7q
-         RGvsqC4WwI/hVcy5NXIzPE3DmkquimZxCRNXAxgXN51FOPXOFCzZPe/bUBGjqfJfNL
-         /rMmZxiWBGQCw==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, rostedt@goodmis.org, mingo@redhat.com,
-        sfr@canb.auug.org.au
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        liaochang1@huawei.com, Chen Guokai <chenguokai17@mails.ucas.ac.cn>
-Subject: Re: [PATCH v5 9/9] riscv/kprobe: Search free registers from unused
- caller-saved ones
-In-Reply-To: <20221224114315.850130-10-chenguokai17@mails.ucas.ac.cn>
-References: <20221224114315.850130-1-chenguokai17@mails.ucas.ac.cn>
- <20221224114315.850130-10-chenguokai17@mails.ucas.ac.cn>
-Date:   Mon, 02 Jan 2023 19:04:28 +0100
-Message-ID: <87pmbwvmmr.fsf@all.your.base.are.belong.to.us>
+        Mon, 2 Jan 2023 13:09:30 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3EBA464;
+        Mon,  2 Jan 2023 10:09:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672682969; x=1704218969;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=u0cKWq5UhALwaWgyRXoKx+AMTrECSa5KGHsicEUKVqU=;
+  b=ZzyH9Hyu9pwVzzKnwpCVHaEe1zppWmCNHqz9bz+RsMLVqlh9a/TD+DlR
+   2Dzij87CpvlxaB13RhVrZksC9OynJdnh2J2cCINGj9XRRt9bKPMymzx1H
+   qvPsr2AlJvfpDaOOIBYsPkIhethifL6jy+oq4LqHSCmNkR9EFvbIw/Nmu
+   ksxZfgx1KcLmA1xqbKISCi5m9b1Fy8GFcvn6xax+2bwUpBL6KRb/9w42E
+   47xFxgP6Nbndkv+HB95HRU1ZjEyvYdHFmE1Fnz67H/+A6G58bhlf9YVR1
+   1wpocqfr1cmfuBKrTj45oBgIyfnocbJuQLuVqVcHKTkjc00wGvS362jNQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="323515068"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="323515068"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 10:09:29 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="828629888"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="828629888"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 10:09:25 -0800
+Date:   Mon, 2 Jan 2023 10:09:45 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     Tom Rix <trix@redhat.com>, hao.wu@intel.com, yilun.xu@intel.com,
+        russell.h.weight@intel.com, basheer.ahmed.muddebihal@intel.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v8 3/4] fpga: dfl: add basic support for DFHv1
+In-Reply-To: <Y7MUOQ/X/ls5/+RP@smile.fi.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2301020955550.2536944@rhweight-WRK1>
+References: <20221228181624.1793433-1-matthew.gerlach@linux.intel.com> <20221228181624.1793433-4-matthew.gerlach@linux.intel.com> <628c125a-5a84-e1bd-7724-2637315cc35e@redhat.com> <Y637aBTrbRloUtvD@smile.fi.intel.com> <alpine.DEB.2.22.394.2301020852500.2516029@rhweight-WRK1>
+ <Y7MT6e8c2VLCjZuw@smile.fi.intel.com> <Y7MUOQ/X/ls5/+RP@smile.fi.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chen Guokai <chenguokai17@mails.ucas.ac.cn> writes:
-
-> diff --git a/arch/riscv/kernel/probes/opt.c b/arch/riscv/kernel/probes/op=
-t.c
-> index 1c0e9d218f6f..884e77d2df4c 100644
-> --- a/arch/riscv/kernel/probes/opt.c
-> +++ b/arch/riscv/kernel/probes/opt.c
-> @@ -12,6 +12,7 @@
->  #include <asm/kprobes.h>
->  #include <asm/patch.h>
->  #include <asm/asm-offsets.h>
-> +#include <linux/extable.h>
->=20=20
->  #include "simulate-insn.h"
->  #include "decode-insn.h"
-> @@ -130,7 +131,7 @@ static void prepare_detour_buffer(kprobe_opcode_t *co=
-de, kprobe_opcode_t *slot,
->   * as a destination register before any branch or jump instruction.
->   */
->  static void find_register(unsigned long start, unsigned long end,
-> -			       unsigned long *write, unsigned long *read)
-> +			  unsigned long *write, unsigned long *read)
-
-Probably a patch messup; This makes the series no apply fully.
 
 
-Bj=C3=B6rn
+On Mon, 2 Jan 2023, Andy Shevchenko wrote:
+
+> On Mon, Jan 02, 2023 at 07:27:06PM +0200, Andy Shevchenko wrote:
+>> On Mon, Jan 02, 2023 at 08:54:48AM -0800, matthew.gerlach@linux.intel.com wrote:
+>>> On Thu, 29 Dec 2022, Andy Shevchenko wrote:
+>>>> On Thu, Dec 29, 2022 at 08:18:03AM -0800, Tom Rix wrote:
+>>>>> On 12/28/22 10:16 AM, matthew.gerlach@linux.intel.com wrote:
+>
+> ...
+>
+>>>>>> +	u64 params[];
+>>>>> u64 *params
+>>
+>>>> This will break the overflow.h macros, no?
+>>>> Besides that it will break the code for sure as it's not an equivalent.
+>>
+>>> I don't understand how this will break the overflow.h macros. The definition
+>>> of struct dfl_feature_info and all of its uses are in a single file, dfl.c.
+>>
+>> Hint: __must_be_array()
+>>
+>> As I said, the proposed change is not acceptable since it's not an equivalent.
+>
+> Ah, you meant that there is no use of macros from overflow in the dfl.c?
+> IIRC we discussed that some of the code may make use of them, or am I
+> mistaken?
+
+There currently is one usage of struct_size() from overflow.h in dfl.c, 
+and my patch adds another usage of struct_size(). struct dfl_feature_info 
+ends with a trailing array of u64.
+
+I think the confusion is with struct dfl_feature and/or struct struct 
+dfl_device. Those structs don't end with a trailing array, and those 
+structs are not used with macros from overview.h.
+
+Thanks for the feedback,
+Matthew Gerlach
+
+>
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+>
