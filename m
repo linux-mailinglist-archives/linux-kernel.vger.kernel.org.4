@@ -2,175 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2531865B2EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E474765B2E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbjABNwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S229526AbjABNwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:52:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjABNwe (ORCPT
+        with ESMTP id S229583AbjABNwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:52:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D30E27C
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 05:51:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672667506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yafyz4ioVVvoQAhwV2aIRVvfD9yfwhAh4dPTo7SXFJY=;
-        b=SbGAmqTDs85+QPY3fBBL8d/iNFN4cm2IWZKLg9uuJg/weKA3lzN6OvBzxT9mZhlhlec8Cu
-        wQnCr8s4zvY+cyu9VSA2SlIhPQf9/jOk26S4CQD22xJPFaKYejt8sa8P21BlYe9MjtmrN6
-        xao+EqKb6r1TfWyT6OVMTAzsVNhFAMo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-271-5vB_hWsAOcm81gDbS3WFhg-1; Mon, 02 Jan 2023 08:51:45 -0500
-X-MC-Unique: 5vB_hWsAOcm81gDbS3WFhg-1
-Received: by mail-wm1-f70.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso6356738wml.9
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 05:51:44 -0800 (PST)
+        Mon, 2 Jan 2023 08:52:14 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC56764D0;
+        Mon,  2 Jan 2023 05:52:13 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id vm8so59790201ejc.2;
+        Mon, 02 Jan 2023 05:52:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yafyz4ioVVvoQAhwV2aIRVvfD9yfwhAh4dPTo7SXFJY=;
-        b=Y0G6kTxp0DpQsWB+eV9qffr2euFtJ/PF3ThS/DQ65na7jg48rgWuEb56+tvCcoBgfw
-         CxdLuVFXkSNadd1dndSR8rSXhzXoolLpsBLt/nzz0Tu04mFaMDrSl4VLcGTYw19+6jC0
-         QNWsEGEGKSHpPgmgu6JqrllB7HwqC1fKupxgI1G40P/tnA91c1ysca+ZLxS2X/svuywy
-         Ml/6oPsuWTsrgjZV2hCVATdtw0tun+EwNRKr6OYVihw3GCx4AhtBFon0cqc2YiR3ffre
-         tFPOVIcpzWPmAasw65iuvtNBYwPtHAMkNcAHA5BrDwpufadxoez69uWnn6SeoFqaRKdB
-         XkGA==
-X-Gm-Message-State: AFqh2ko1zojzoET5Hj1TxSkHmnuvcgtZAdKfpvRJJU8J/tRP+X9c3Pqt
-        V8fc+VTLbRqe2Sg8xApqhKBbi0KP6kjIAWklL5UDJOGftg2jVVIoGC+hLbVt5lGv0ZFy3qobdGI
-        4/pw9Yz/tYVye8LSzn0iqwU90
-X-Received: by 2002:a05:600c:3d0e:b0:3d2:3ca2:2d4f with SMTP id bh14-20020a05600c3d0e00b003d23ca22d4fmr31097440wmb.36.1672667503873;
-        Mon, 02 Jan 2023 05:51:43 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvbJtUehka09TTHzpZ3/tNKAm+H+SNwIOl23IORGJcibzel5onetyN+N+qYZrSa/x/EZ634SA==
-X-Received: by 2002:a05:600c:3d0e:b0:3d2:3ca2:2d4f with SMTP id bh14-20020a05600c3d0e00b003d23ca22d4fmr31097417wmb.36.1672667503668;
-        Mon, 02 Jan 2023 05:51:43 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id f18-20020a05600c4e9200b003d35c845cbbsm48786206wmq.21.2023.01.02.05.51.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 05:51:43 -0800 (PST)
-Message-ID: <eead4707-e73f-f648-edc6-8415bbb25b8b@redhat.com>
-Date:   Mon, 2 Jan 2023 14:51:42 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R3W4+ksuOVHUCy1L+lhRp/DeX8Vdu8Jq70C3FaXeug8=;
+        b=NI0bfNXXcEDv6d4qzR61+G93n7EHTma0EkyKAZTK4a/WH5Mr1AMUXGYHvdLwAbS6ID
+         81WoKFaWqOMjGVZ/+Z55GuMxE8ZqtdooMnxvkoAaIwehrA1Z1jpvGPQOV2innqLZXbtl
+         DsjLYsr3rENj9dUgTkFwksf9F+3KHAU5+acAxBVPksP+gSgppvtOboc0J+Qt2Svlj+gQ
+         /vEQNbWqHwW6k2GZwnlWsxALNVXf0aoPqjwgm3NJ7KRc+v4dXnzPa2vVYnwY87Na6cys
+         faTohqGdRfSbDiYx5wsxafRmT5wZe9G+7B+4kqAm6hyHVJRG6PxsBIRhgoInu+PHc26X
+         +mIA==
+X-Gm-Message-State: AFqh2kq9BseAMOtuL8+RhbFP+3gfiyvMJBJVflaxQb/Cz01BtLXbRmhM
+        xgMQinG7reLosg3Fko1uDSeG8UkPD+tBGyo//wc=
+X-Google-Smtp-Source: AMrXdXti9vVzhdz/YtR3PSNgmrerBqIbE0uHmN7mGNhLzAsA7ZYjRMQRfyLHyc9MLTwQNpTEVlHesw5iwmqBt638Up8=
+X-Received: by 2002:a17:906:bce8:b0:7c4:fe2d:afd3 with SMTP id
+ op8-20020a170906bce800b007c4fe2dafd3mr2556869ejb.390.1672667532437; Mon, 02
+ Jan 2023 05:52:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 2/4] drm: panel: Add Himax HX8394 panel controller
- driver
-Content-Language: en-US
-To:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megi@xff.cz>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Kamil_Trzci=c5=84ski?= <ayufan@ayufan.eu>,
-        Martijn Braam <martijn@brixit.nl>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Robert Mader <robert.mader@posteo.de>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
-        dri-devel@lists.freedesktop.org,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Neal Gompa <ngompa13@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-References: <20221230113155.3430142-1-javierm@redhat.com>
- <20221230113155.3430142-3-javierm@redhat.com>
- <20221230154043.7v3zmzqdrnouqzd2@core>
- <7120dfd4-305f-69ac-fee8-123196ed06a9@redhat.com>
- <20230102105915.gbfhletcm4dunrlf@core>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20230102105915.gbfhletcm4dunrlf@core>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221227063335.61474-1-zh.nvgt@gmail.com> <CAJZ5v0jmOMHHXvRnDcetDbh+0CySh5ddZJx1g3xTXPzCHokZRg@mail.gmail.com>
+ <c052bf9dd21df44dfa3161bb94544559a41ab17e.camel@intel.com>
+In-Reply-To: <c052bf9dd21df44dfa3161bb94544559a41ab17e.camel@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 2 Jan 2023 14:51:56 +0100
+Message-ID: <CAJZ5v0g8Kd7DNUQ4xdx8h2DgxX09tU_o6tpEgiPT9ogM1QOgLg@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: custom_method: fix potential use-after-free issues
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "zh.nvgt@gmail.com" <zh.nvgt@gmail.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Ondřej,
-
-On 1/2/23 11:59, Ondřej Jirman wrote:
-
-[...]
-
->> Yes, because as you said were debug printks. Feel free to propose adding the
->> debug printks if you consider useful for normal usage and not just for devel
->> purposes.
-> 
-> I already did, and used them do debug and fix the issues. This submission just
-> doesn't include the fixes.
+On Mon, Jan 2, 2023 at 2:42 PM Zhang, Rui <rui.zhang@intel.com> wrote:
 >
-
-I missed the fixes, I think that cherry-picked and squashed from your tree
-before you added commit f19ce7bb7d72 ("arm64: dts: rk3399-pinephone-pro:
-Use unused GPLL for VOPs DCLK") at least.
- 
->>> hooks. Have you tested the driver thoroughly with various DRM apps,
->>> with DPM/suspend/resume, etc.?
->>>
->>
->> I did not. I wasn't expecting suspend and resume to work on the PPP given its
->> support is quite minimal currently.
-> 
-> System suspend/resume works and is used by distributions. Display blanking is
-> also used by normal distros, even if you don't use system suspend/resume.
+> On Fri, 2022-12-30 at 19:31 +0100, Rafael J. Wysocki wrote:
+> > On Tue, Dec 27, 2022 at 7:34 AM Hang Zhang <zh.nvgt@gmail.com> wrote:
+> > > cm_write() is the .write callback of the custom_method debugfs
+> > > interface, it operates on a global pointer "buf" (e.g.,
+> > > dereference,
+> > > allocate, free, and nullification), the problem is that cm_write()
+> > > is not protected by any locks, so concurrent invocations of it
+> > > may cause use-after-free issues for "buf", e.g., one invocation
+> > > may have just freed "buf" while being preempted before nullifying
+> > > the pointer, then another invocation can dereference the now
+> > > dangling
+> > > "buf" pointer.
+> > >
+> > > Fix the issue by protecting the "buf" operations in cm_write() with
+> > > the inode write lock. Note that the .llseek callback of the debugfs
+> > > interface has been protected by the same lock, this patch basically
+> > > introduces it to the .write callback as well.
+> >
+> > The problem is there, but the whole state is not protected from
+> > concurrent use and the fix doesn't look sufficient to me (for
+> > example,
+> > a different writer may start writing into the file before the
+> > previous
+> > one has finished and the result will still be broken AFAICS).
+> >
+> > It looks like the file should be prevented from being opened by more
+> > than one writer at a time.
+> >
+> > Or maybe it's time to drop this interface from the kernel altogether.
+> >
+> I still use this interface for debugging AML issues occasionally. Say,
+> dumping the value of some key objects to see the AML code path.
 >
+> I'm not sure if there is any alternative way to do this, especially in
+> remote debug case. (This can be done via DSDT override, but not all
+> users have the knowledge of building a customized kernel)
+>
+> If this is not a problem, then I think it is safe to remove this
+> interface because I suspect I am the only user of this interface.
+> Because there are some special tricks I got from Erik, to make it fully
+> work after some certain ACPICA release. And this is not documented in
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/firmware-guide/acpi/method-customizing.rst#n58
+> Say, to generate the AML code of the method, we need to
+> 1. compile the table with external declarations.
+> 2. If step 1 compiles successfully, remove the external declarations
+> from the table and compile with -f.
 
-I know but my point was that the PPP mainline support isn't ready to be used
-as a daily driver in practice. So I didn't consider susped/resume or display
-blank as a requirement to upstream an initial support for the panel driver.
+Interesting.
 
-[...]
+This basically means that ACPICA broke backwards compatibility with
+this interface at one point and it's been necessary to work around
+that manually since then and nobody cared to update the documentation.
 
->>> Also, have you checked the clocks are actually configured correctly by the
->>> rk3399 cru driver? I have a lot of trouble with that, too. clk driver sometimes
->>> selects the fractional clock, but does not give it the necessary >20x difference
->>> between input/output clock rates. You'll only notice if you measure clock rates
->>> directly, by looking at actual refresh rate, by using some testing DRM app.
->>> Clock subsystem sometimes shuffles things around if you switch VOPs and use big
->>> VOP for mipi-dsi display, instead of the default small VOP.
->>>
->>
->> I have not. Just verified that the display was working on my PPP and could start
->> a mutter wayland session. We could fix the clock configuration as follow-up IMO.
-> 
-> The display output will be broken after you fix the assigned-clocks in DT to
-> expected values (use GPLL parent, to make the HW generate the exact pixel clock
-> defined in the display mode). So this needs to be dealt with now, not later.
-> 
-> 
-> The driver issues are all known at this time and have fixes available, unlike
-> a year ago:
-> 
+Oh well.
 
-My goal was to have some initial support in mainline even if there could be some
-issues. IMO it is better to use upstream as a baseline and attempt to support the
-PPP incrementally.
-
-But since you are aware of the issues and know what are the available fixes, I'll
-let you continue with the effort and take care of the patches. Hopefully there may
-be things that will be helpful, such as the binding schema patch and the collected
-tags. I can also take care of pushing the DRM bits to the drm-misc-next tree once
-you feel that those are ready to get merged.
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Let me send a patch to remove it then and we'll see what happens.
