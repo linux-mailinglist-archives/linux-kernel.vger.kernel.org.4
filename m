@@ -2,174 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774CD65ADC4
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 08:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7AF65ADD0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 08:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjABHnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 02:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        id S230002AbjABHqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 02:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjABHnt (ORCPT
+        with ESMTP id S229447AbjABHqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 02:43:49 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 253C91121
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 23:43:46 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.12.77.33])
-        by mail-app3 (Coremail) with SMTP id cC_KCgB3Xagsi7Jj6Xt5Cw--.5552S4;
-        Mon, 02 Jan 2023 15:43:40 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     jan.kiszka@siemens.com, kbingham@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH] scripts/gdb: fix 'lx-timerlist' on newer kernel
-Date:   Mon,  2 Jan 2023 15:43:40 +0800
-Message-Id: <20230102074340.17459-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgB3Xagsi7Jj6Xt5Cw--.5552S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxur45CFW3WFW7trWkJry5Jwb_yoWrCr4Up3
-        y5CFW3KrZ7tr1fKayfJ3Wvgry5JanYyr4aqF90krs0yr17W3y09a17KFy5tFy7G3W2vay3
-        K3s5Z3W5CF4jyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 2 Jan 2023 02:46:48 -0500
+Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2020.outbound.protection.outlook.com [40.92.102.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5BABAF;
+        Sun,  1 Jan 2023 23:46:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R9njF6cz62kCV+70nAvB6D+bIUzZb1J5sWx/J/ppRGa4Kufjz4HDDqVCMxd65y7ARkjK2iOnPu2rLgXW6BkLkHSPyv1Ys58fOltPJcoWbn3gEiFfl4C1zV7Ne4f/TGctlq5V4Cs+Btq2O6eDzTrv9rOfrbk2Cv+d3T9tP+Bvp1Gi8xcOZvzg53eML8xuDq5G3vHITeTkbSTJ26Uub7j4SZVGxlavM9zQVKAGsN+3hX/donYTmMP5Af9JMm4UmUot9UqXeuk5zyqVvyDneJpUZw+RRwoF2nbZKbrfBXunX5WCO5nxUcQ1VH2nX7JPqpZN8qjw40QVRw3J6O73RAtd0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vLqmp8WlamHTHwZyc5tRYRrb7qs0L5jW+tpjWn7btBE=;
+ b=dJCLgDueI24nUG5HQTJIf4vuBdNlaFF2CjGiS6k2ijKdcvNeH8uVhyNSwS50hKhrizQEvRfpHsVbc9BKLwGv7V4/C2rZAeQMaMaT4zDyKt4WNUe6jPt/EgS6Ba7AWEPh2tfEi1N741qgpv8U918NowfnjIxPd1Efdcz1/6uIqOjE3iFr3UBiG8Krt11kpXLqwJo+3y15shK/RMVuPYjkLIpPE8jragyFx1sBsGAGqziLPOyqBfG0hniTE0HtaUQ/rPi4RpKOhejUHVhlDnxDU3CKc+V9tyet/qyYfbzp8pNDvWrY+IHo5hNPT86boNvgRsEkx8iLNvvxBHMqLGDtdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vLqmp8WlamHTHwZyc5tRYRrb7qs0L5jW+tpjWn7btBE=;
+ b=a6Dsy2nqCoerdHhODT5UvjCi5rhG0/+8IECGl9QCSc+pigEK9SqJhnDnnPZjqDiy5KEVljEbkPOpoPjcDRMpoAZ3Qu+TLKwubZ/YqxNmVhJHpN/x0K55LX4xEjfttHYK1ysVsVl8Us3KODChlkxW+sOMalwisa5Rl7Rh170RSNED/Wb6t/vnvbAs+qb1DgtFQ3HZrM2QdrJezONht/S/tNSykV4k5N3buUz5tFQMZ1m8JtDpjSZaP3qYNNo+l++Mz2L+6punKRDWcFkMbT6Oi7+xR+G9NOs8mRmjaBGO4ECOF9rffe0LJE7vSueJ4LwUUcWxVoCQ1/QomwBbnZ40wA==
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
+ PN0PR01MB5552.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:63::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.19; Mon, 2 Jan 2023 07:46:39 +0000
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::f90e:46bc:7a0f:23bc]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::f90e:46bc:7a0f:23bc%7]) with mapi id 15.20.5944.019; Mon, 2 Jan 2023
+ 07:46:39 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     "arend.vanspriel@broadcom.com" <arend.vanspriel@broadcom.com>,
+        "aspriel@gmail.com" <aspriel@gmail.com>,
+        "ranky.lin@broadcom.com" <ranky.lin@broadcom.com>,
+        "hante.meuleman@broadcom.com" <hante.meuleman@broadcom.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lina@asahilina.net" <lina@asahilina.net>,
+        "marcan@marcan.st" <marcan@marcan.st>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>
+Subject: [REGRESSION] Wi-Fi fails to work on BCM4364B2 chips since kernel 6.1
+Thread-Topic: [REGRESSION] Wi-Fi fails to work on BCM4364B2 chips since kernel
+ 6.1
+Thread-Index: AQHZHn5ZYiR/LeXaDESiGnD9Ztj3ew==
+Date:   Mon, 2 Jan 2023 07:46:39 +0000
+Message-ID: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [S0qBGJax/08tnA+IMQjRoOgQe/jBv6/1NalR/Yk+ZTkaJ5lY9htks7riqLbCQu3d]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN0PR01MB5552:EE_
+x-ms-office365-filtering-correlation-id: da144f34-a6e6-407d-270c-08daec957ba1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jH3kB0YMJo/8DN/yhrXGCsbDHUfLNlYrVN2YKzNbiGNYbmVDWGqiSHmijXIl6s2Z9dppkThbZBr4apLsYZEkDOqtNK0r+xGvfrGs9gw03MKZvkGAitWO+GeeAWGUrGmvVe7aPL4T4bm5F/AA7tXfxBDJOBzGQbstkD/odmvxE4ZAPLdeKhMhGYkGCAYo7c/HmFgzNb38P3b0X467r/Oh1n5vHMm3HlyAmz2MgBhtl1mNEe9+jswY39DGglmiN2sNhaW6ouMp+GPIj3gr2GqAZz58tybuTvSOm/kG5ebRPN8nLS36aDmr+KiEheeLrQLDeJfbTVUrhydEzH0BIhVRM0TTtWFGYORXvPBZ+D4JwkJHsbknvPKaxbUJz5eqozZRURCdU6S4ovVaw07SpK34L+qxyPXR50pjjGwJbb1CLISHspjZpZXQsjSd5MTY6FKo6EkYfHv3kBHGmFYaPuxsznrJ1+JqwzIsqZSKTSOt1zVo7Ay9XelrdyjrmrhovyvFQIWtJQRYxUawlfUG3nCH/D5hkraYYzGHl2a27riWl/qeHap6961RaGy+Nvd5hOCC3AdzBsWMJ6aPGL8DKuQSNg==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iO/QzIoGZBif6NoG+LPh6UuhVwgBkaH0fX+59Vlac/cmjrckAgqzh9xLkwjT?=
+ =?us-ascii?Q?sCDX6JqoO0PEXL0szDElzUREXwpPScbNRI1f15LoMOaS2SMn5p75dFDoeHgx?=
+ =?us-ascii?Q?5gvPQQMWBq0wa6RdutAMDEusJip/lm64kjAY6iIuQv8m1gFvYOYgk3G6oUbt?=
+ =?us-ascii?Q?VFjRuYte0kY9v3i1WhASxvV5oDAaaCuo9Cf10yM/mPtncxxh18uL2J3oVAqT?=
+ =?us-ascii?Q?LI60ujoUqkf50GtYTrNyLBpnHB0vz+tFCIAEzx2VWslzEs5MgCOqwpjy6B7G?=
+ =?us-ascii?Q?IyEFdKNfx5W+lLyAGenxa2YVG0JgazG+/Eq7xPWNXWL8NQ1nMq0iN2mEpkhT?=
+ =?us-ascii?Q?TJJEcJWhLcgozUCeSLTFoayrzqVL8EzD3O5219axp87sx+FMfYUzLsfMYX2K?=
+ =?us-ascii?Q?VHsPKBzjd8yG/2gHxppVGcjliCM5uNL2otTu5FuMms9LLp/B8iD7+18NU7an?=
+ =?us-ascii?Q?Sffj/sLRJ6uSghLXYvUEtqdgFQsNxTBjkAoCq8BgpbzMjauOXAtB7nDrejsi?=
+ =?us-ascii?Q?ABVixpsKu0EiBAvhc22RE0TCvV9f1vg797FC/jrh/+EA/2geT5CuCAiRrmMs?=
+ =?us-ascii?Q?KH1cpNk8O9NF3xiGwK1QOsYbKl9WFA9tPSH5h1/ARtHHFR0RuCHzk8pt+34H?=
+ =?us-ascii?Q?TxWhxDeQJswUW2oF9M+SJR84dJul3/0HyQE2m31i+cwY4lEBAhyYehY4w+WU?=
+ =?us-ascii?Q?S5ylodt/CFYu+wlIbWn6BX3ygW07wG2x5CoKNilq18CSo20ddU7liS7PNQqy?=
+ =?us-ascii?Q?n9QvTl3oLe5UYVo51ZK8vokO25B7R/K3mUMGB7Lym9nijcCzEdVLHrfnEifL?=
+ =?us-ascii?Q?SlDZsuFpLvdngVJIElpKCjojuaAm9NN5icOxw+qcPJeRoCoKuY417XwnWK8S?=
+ =?us-ascii?Q?1mOl37JJoIwKXF135gQpbbgfcjdzXVYCP6+6EBktV0gTcTpAmjj6sLUkNYLd?=
+ =?us-ascii?Q?a7FUC9VEvBNLzLb69gkja+gSupOvqR7xeoiVVbV3Zxc8O9ZVaIMDJjnnOyFm?=
+ =?us-ascii?Q?VpExTtTIlBCUbI+ACtv8CZnLkrI+SJI+ZfQfavQWLoaI1utcZwCnZcbb+Qfd?=
+ =?us-ascii?Q?27iCS0VTZDd0MbMGzoEL4gm/OgmsnpOX24tx6pyiy/o92OqzueimuGWX45EG?=
+ =?us-ascii?Q?S1XEOaUEcji2pU8Z52dTkMqanLMdqXkWi/qdlnXqFj7PJ0lW2ymUcQ5yjDJw?=
+ =?us-ascii?Q?hV3LOY1MYI5Xi+zMiO7RiQ1YXPLy132qLkvhbYTFcufOEe/3jU9q0EEthqw4?=
+ =?us-ascii?Q?zqtc5bzJSjftYYQS8Hj4yEZ+92bLtDsWkXw8aJ+veopsuvwPbs2KLG3E7Iyi?=
+ =?us-ascii?Q?ic+EcejnXu+wmXyNHssZWSlSkbWkpcma7avZiZ1ZXTUSxw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1E6F69AD0FEA754F988B9B111EE9A5FB@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: da144f34-a6e6-407d-270c-08daec957ba1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2023 07:46:39.4318
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0PR01MB5552
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 511885d7061e ("lib/timerqueue: Rely on rbtree semantics for
-next timer"), the struct timerqueue_head changes internal field hence
-causes the old lx-timerlist command keeps reporting errors.
+Since kernel 6.1, Wi-Fi is failing to work on Macs with the BCM4364 rev 3 c=
+hips and journalctl reports that the firmware has crashed.
 
-This fix addes a simple version comparison and necessary code for
-traversing timerqueue on a newer kernel. Moreover, it fixes some
-python 3.X compatibility bugs.
+The complete journalctl is given here :- https://gist.github.com/AdityaGarg=
+8/a25b187e7f1462798de87e048f4840db
 
-Test with python 2.7 and python 3.6
-Test with 
-* commit 442284a89a65 ("scripts/gdb: add a timer list command") and 
-* commit 88603b6dc419 ("Linux 6.2-rc2") kernel
-
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
----
- scripts/gdb/linux/timerlist.py | 41 ++++++++++++++++++++++------------
- 1 file changed, 27 insertions(+), 14 deletions(-)
-
-diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
-index 071d0dd5a634..65d035df253d 100644
---- a/scripts/gdb/linux/timerlist.py
-+++ b/scripts/gdb/linux/timerlist.py
-@@ -4,6 +4,7 @@
- 
- import binascii
- import gdb
-+import re
- 
- from linux import constants
- from linux import cpus
-@@ -42,9 +43,15 @@ def print_timer(rb_node, idx):
-     return text
- 
- 
--def print_active_timers(base):
--    curr = base['active']['next']['node']
--    curr = curr.address.cast(rbtree.rb_node_type.get_type().pointer())
-+def print_active_timers(base, oldver):
-+    # 511885d7061e ("lib/timerqueue: Rely on rbtree semantics for next timer")
-+    if oldver:
-+        curr = base['active']['next']['node']
-+        curr = curr.address.cast(rbtree.rb_node_type.get_type().pointer())
-+    else:
-+        leftmost = base['active']['rb_root']['rb_leftmost']
-+        curr = leftmost.cast(rbtree.rb_node_type.get_type().pointer())
-+
-     idx = 0
-     while curr:
-         yield print_timer(curr, idx)
-@@ -52,7 +59,7 @@ def print_active_timers(base):
-         idx += 1
- 
- 
--def print_base(base):
-+def print_base(base, oldver):
-     text = " .base:       {}\n".format(base.address)
-     text += " .index:      {}\n".format(base['index'])
- 
-@@ -62,21 +69,20 @@ def print_base(base):
-     if constants.LX_CONFIG_HIGH_RES_TIMERS:
-         text += "  .offset:     {} nsecs\n".format(base['offset'])
-     text += "active timers:\n"
--    text += "".join([x for x in print_active_timers(base)])
-+    text += "".join([x for x in print_active_timers(base, oldver)])
-     return text
- 
- 
--def print_cpu(hrtimer_bases, cpu, max_clock_bases):
-+def print_cpu(hrtimer_bases, cpu, max_clock_bases, oldver):
-     cpu_base = cpus.per_cpu(hrtimer_bases, cpu)
-     jiffies = gdb.parse_and_eval("jiffies_64")
-     tick_sched_ptr = gdb.parse_and_eval("&tick_cpu_sched")
-     ts = cpus.per_cpu(tick_sched_ptr, cpu)
- 
-     text = "cpu: {}\n".format(cpu)
--    for i in xrange(max_clock_bases):
-+    for i in range(max_clock_bases):
-         text += " clock {}:\n".format(i)
--        text += print_base(cpu_base['clock_base'][i])
--
-+        text += print_base(cpu_base['clock_base'][i], oldver)
-         if constants.LX_CONFIG_HIGH_RES_TIMERS:
-             fmts = [("  .{}   : {} nsecs", 'expires_next'),
-                     ("  .{}    : {}", 'hres_active'),
-@@ -165,7 +171,7 @@ def pr_cpumask(mask):
-         i -= 1
-         start = i * 2
-         end = start + 2
--        chunks.append(buf[start:end])
-+        chunks.append(str(buf[start:end]))
-         if i != 0 and i % 4 == 0:
-             chunks.append(',')
- 
-@@ -184,14 +190,21 @@ class LxTimerList(gdb.Command):
- 
-     def invoke(self, arg, from_tty):
-         hrtimer_bases = gdb.parse_and_eval("&hrtimer_bases")
--        max_clock_bases = gdb.parse_and_eval("HRTIMER_MAX_CLOCK_BASES")
--
--        text = "Timer List Version: gdb scripts\n"
-+        max_clock_bases = gdb.parse_and_eval("(int)HRTIMER_MAX_CLOCK_BASES")
-+        banner = gdb.parse_and_eval("(char *)linux_banner").string()
-+        r = re.match(r"^Linux version (.+) \(.*@.*$", banner)
-+        if not r:
-+            gdb.write("failed to load image version")
-+            return
-+        lver = r.group(1)
-+        oldver = lver < '5.3.0-rc1'
-+
-+        text = "Timer List Version: gdb scripts, old version: {}\n".format(oldver)
-         text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(max_clock_bases)
-         text += "now at {} nsecs\n".format(ktime_get())
- 
-         for cpu in cpus.each_online_cpu():
--            text += print_cpu(hrtimer_bases, cpu, max_clock_bases)
-+            text += print_cpu(hrtimer_bases, cpu, max_clock_bases, oldver)
- 
-         if constants.LX_CONFIG_GENERIC_CLOCKEVENTS:
-             if constants.LX_CONFIG_GENERIC_CLOCKEVENTS_BROADCAST:
--- 
-2.17.1
-
+This bug has been reported by users of iMac19,1 as well as Macmini8,1.=
