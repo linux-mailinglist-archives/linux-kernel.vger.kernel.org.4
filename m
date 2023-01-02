@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057BD65B2CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46FC65B2CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232948AbjABNmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S232851AbjABNmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbjABNmN (ORCPT
+        with ESMTP id S231445AbjABNmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 2 Jan 2023 08:42:13 -0500
 Received: from mx0b-0039f301.pphosted.com (mx0b-0039f301.pphosted.com [148.163.137.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F2963CE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B914463AB;
         Mon,  2 Jan 2023 05:42:11 -0800 (PST)
 Received: from pps.filterd (m0174682.ppops.net [127.0.0.1])
-        by mx0b-0039f301.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302Bx46D011991;
-        Mon, 2 Jan 2023 13:41:52 GMT
+        by mx0b-0039f301.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302Bx46C011991;
+        Mon, 2 Jan 2023 13:41:51 GMT
 Received: from eur04-he1-obe.outbound.protection.outlook.com (mail-he1eur04lp2054.outbound.protection.outlook.com [104.47.13.54])
-        by mx0b-0039f301.pphosted.com (PPS) with ESMTPS id 3mtd0uv746-2
+        by mx0b-0039f301.pphosted.com (PPS) with ESMTPS id 3mtd0uv746-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Mon, 02 Jan 2023 13:41:51 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EH7Q1ygdq8hb6QLZQg+FO3oVGM0vm/dgC8rYDMaCGbqIzXkBuWvCcCjEkT9BLFqskHwaumIyq3O3nt6S5Lv7I20UGLq5EbJEuzTyi4uAGvxCefF2eJ+MLBNKzcGQCMf99/O6b+D/cvmd1SOTEBLp7S5aSdrAICK71R/mpn+6dPMsNBX9SvNqhNas0XK59rwP+6JqZz6b8q8+ito9T2Q97MSKzUYHfnpWR1KMBwizuOo6HjMPZZL6snO3eWsUlI+d3zRu+9cGTFheT0qcGXU+/YLlh1I79DJOB+VbOub05RYYlQ3TvBxRSNAp4DZQG2EoyCpsMwrK/QjvIfQcEebgkg==
+ b=ABPLD1J8Kgnw715Dt1/2KX2dbDeje4uBexVMcbPScdgoa5Ic6kYbKvXO+cui/dem3U9LADmf/iKoHKFFeXuMfbZPp3U8KglwR5PTslS7OJkTJdQp1K0l5J+ufIDB1UpU6afpou/jC8ue08RNNHJqG+UAqfB0oXgLWtTqx2eFp0IugPVZKZxp2KBA9mz0yGdAbrY47e1FKNCJUk+PR/jWpeFBu6UTOMc5t9USRBdxJNGM5Tea+l/KV9Gzy0alkFTwZSbun43ey5NU6CC0bpzw1G5HdvUI5+hyMm0a08yqFJ66FNIlODhiPyNcLXPPdnwYy+pjje5Yu5kS8FKcst9ovQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=upLENppnbaOJqNZ7wAgRPaS772ApiRNNpeCnQADukok=;
- b=h+zfyrOORIykAmzlkpyogetoAix8Ex/PKUn+FKR/CFwgSrN2riv/nmkccGuDkFF3iiK9iWQe4JH40PFdW3gVJQEqnW3kaaGslapFEmRK/TraLd/VkjPYvKzhHc9aCfG7l/LljrHRLbsIZN4YNplomA3lqaUPLyMRuTyv39tjSkBm4Ko4k2vNmtjtlXIBF4EDigFUpgo5qiSl30DEz2m9ro3GF2XAHRxccHCCeMtd+eeMWzpe7xFrvksY2hejLBl8G0Lkv2341IL6xZ1hUE+aloTtaisvD3JqTfwBOK8rQ+DZVOtP83gFWo1r5OFzyV+B5k7px/Hh7RzcV7YOA9L8ww==
+ bh=iuEwZFP31bPDffsqU14aI2kPMruZO5ACTYwm5FDPm60=;
+ b=B9R/I6QLYSiJU+rii9DHveI07cMZtlbZXngAXR/puw/cgHHwLp5JGWxVLrg+b3BTF2Q7WU4Z/DObyL6xLwXHlx5G4RAV2k2bKDhbyidMnRDo5sq8xCD15iFtpVjzL3tC2L3q7Qgy14QvilN3S7zgyf1O/3oP9sfwKGFY9V3w8iyghobsDLk5DlQiHN1H45QBzs6GaUwrXSaCRNBbehQ+mmg04w0fAWeuJ85YUoLzIy7XP1+qOwq4Uj5eTTpGWKuLuT6iO52xYVsv/P8iPYqExb6tmrAToRvAPHfOpeb8SW2sjIPtgQpKRfXvVk0CEXx3Y1mVGn8A6C2/v6RKrCdi1Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
  dkim=pass header.d=epam.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=upLENppnbaOJqNZ7wAgRPaS772ApiRNNpeCnQADukok=;
- b=T3oL8E80Zu6y5uljNdl6ASKZKYjjEA7AvCxRY+i21xtxiBfvjMG6/xT7U1cxnRV8lE86tjF/e6m7K0WSOpKufW2F26xxojhuABWsRb9Rdktjhc9cFPEfgcVpTiLOWy350xpe2P9Tb2eXTIs7kvUmoOuOUXre2jiercXn7OwfUsXdDUa48eBYSKuWR4trfV7gAhRp6gSvM8JJhEtgWUpo/9Y71yLuG4xGOvkI1CvXsSA2dU0+dGAeyRGFM6zAuqb440w9PlqSo0KFmegGnGw7qbB41zxXhotEha0P45ur/8uCbWEGqGTmJVe3xyippsarZ1xnEtawF+otzRYHSeUnlg==
+ bh=iuEwZFP31bPDffsqU14aI2kPMruZO5ACTYwm5FDPm60=;
+ b=Fj64byEjy6KUX0YgNrwxi4w4yTqByFsOVPSfZxAYH/vd6Q4mO6K0I929JQcT0CGUSh1iLJ6OVIt03Hl0cStQ0yQ2hhePHeIwmn19mSxc9aCbP25w3FPYsWgvVm19EMr7G5NnbGkWJW7LQe2uejzlWo8014RWSliHs/GLKMs60J++lOEHifxY81phUlClQxIRKuWZBr9pKxptY6IbkuS9T2dM5jEMgIOYRwsrBv1nc7DmGbBw5TfeFPY55tieXLeAmWgIvmVtzouTWQTpHKx0rAYrYA3eT5h88OeQjYD6iAV/jIgdyGWp0cAMtdP9mOVsKmFLBusZfvIdGW39WVP9WA==
 Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
  by DB9PR03MB9709.eurprd03.prod.outlook.com (2603:10a6:10:459::22) with
  Microsoft SMTP Server (version=TLS1_2,
@@ -57,56 +57,54 @@ CC:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
         "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
         "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
         "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>
-Subject: [PATCH v1 1/3] xen/grant-table: save page_count on map and use if
- during async unmapping
-Thread-Topic: [PATCH v1 1/3] xen/grant-table: save page_count on map and use
- if during async unmapping
-Thread-Index: AQHZHq/2VrVTMTTaekaw3MeMlNz4/w==
+Subject: [PATCH v1 0/3] Add ioctls to map grant refs on the external backing
+ storage
+Thread-Topic: [PATCH v1 0/3] Add ioctls to map grant refs on the external
+ backing storage
+Thread-Index: AQHZHq/2qxwFjlIdpkaeJi9xnPE21Q==
 Date:   Mon, 2 Jan 2023 13:41:48 +0000
-Message-ID: <e58e80d2856cb4656ec76409c2db75652865e2ed.1672666311.git.oleksii_moisieiev@epam.com>
-References: <cover.1672666311.git.oleksii_moisieiev@epam.com>
-In-Reply-To: <cover.1672666311.git.oleksii_moisieiev@epam.com>
+Message-ID: <cover.1672666311.git.oleksii_moisieiev@epam.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: PA4PR03MB7136:EE_|DB9PR03MB9709:EE_
-x-ms-office365-filtering-correlation-id: 01aafa7a-9d3f-4d4e-013e-08daecc718ea
+x-ms-office365-filtering-correlation-id: d61e592b-7ca9-4505-ba47-08daecc7189d
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qufCfaYw3n7K5GBDOfPY8lJ0s2EbpdNaaVh1FB2Pw+YoK5QwbfcpPET4AXM5Toz2dzO9dIr+DdNC4joci4/RzuhGLqi21535Yz3P3srG6Lpcnh7CUF2hJv/HHJIo0FYK7JNW0GwdhZT8nsBTZUNHceKZjm5bn/VOJRDshf278kimt9ZzSTXviP06ZWob69c/WnQGL5BMf34w91h10zbmqzZwUdRBsgn44uTXvUfabiQWwUdSUvqiZfxXh7MADOPECKVxUZpOM+ev0TJxcSh9SFuc2DE9zKdog0Ikyu9z+yKmTFvPtmmAb5B+PqNXAtO8c/7NqDZLxOjEnXUq1yJO00YW3fodzAxmUGKLwvsS0s1kIr3BsboABlbV5GsHXpJlano+8KhyfZYdjFzYqPFo21E+sg5CTewTHHOL7kLIJkwQEpAJaC4XCTxhA/SLDVpj6ZCCnAzR89BcHAbZeXMQyB2Hjwi+q+/YDnZix3Vsht6ar5afyQ0WGDdtD08a3BCnkOAZ3g+WgyqselwMRSFAVdlRLIVolZKEsWGR8iwB3eEXrak1oySjbeKAjKnaVScUQDaILO8fZ/9v6KZQz/ic05R5cFDigD6yCyMTnU6xaQWRkCEakZ/7/gyGCyVciq/zys1pLiMmM3pGFA4XlGHpy9WESyonSwVWHzF22oyBXuxZC+T/5ValxPLViewW81d699ESQS/SFiQXon855al4XyCzxm+4AUow5YOHP5/f9ao=
+x-microsoft-antispam-message-info: K//txomNbdnSgoB7Ft87gMsqzlplA7ByfPveZH2lOQbvzABfonhwPmW8pHTNVcWTtxhsA5pikAmzM4H43dTGp5i67FfOE6KrsVW/xqecWgvPNpwRErzxifu/6Dh7LMSihwMtaA4ZNSJsAR5Bh7Ofo8G9TJ4zwgbQxcC+i8EvuQn5oFj41yWqthGpy5doxFGUZsePuUZrrZJURNp7H9wTJfZPr9M66lcICykSQJtytLyBXnYk4VFdf3OuCKWUkxXPLnhzpdAgsil+oTjBXbDQ5TEacgQB4Y6L9lt59W8/XuaaHqPUVUE96QFFTMU4tASrqj1T5GqGgxNvbMo05ijG7i5rDAUW8galctv+eyyR2EF1ygZBYj9ce+q4rmgE9g6b7MPadEhwy1bAhh52OVhgqA4UaaTD0ffgE6xLbwm8J2FoadXZY4dxq54JF8XrbLVHAxiEPseciaNfVFWVKslvmPS105pRW1ZRN2d0X8DLzQN9SGU40rj4rgm40/KDPDoS9wBlsa9fJwktvRREvui4tdnsPGj4DuhJzy42AsxUQ12Kz21QKNgm4rpEdmCSgXz/Q8KAFDQWpEqY7Jn2dfTwQw/X/ubqmjfaWPQx0nOFRjjwxO9qfOMc6BFaJ2V9qABylklJMBrGgAt3QNQ/5tlqJRftRFbfu0Dm0EyOIIUqZq61zsUty87JKWX/ln3ZTgwBGU35xLvoW+hkIb0dRxV2XLtAlHyksYaGai0kIpUbyHk=
 x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(136003)(376002)(39860400002)(366004)(451199015)(38100700002)(122000001)(86362001)(8676002)(38070700005)(66476007)(76116006)(66946007)(64756008)(66446008)(66556008)(6916009)(91956017)(4326008)(41300700001)(54906003)(316002)(2906002)(5660300002)(8936002)(2616005)(83380400001)(6512007)(478600001)(71200400001)(6486002)(6506007)(26005)(55236004)(186003)(36756003)(22166006);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?dANsysGQdFemPfZPLN3R5/iueQyffU7Aefc222DGZ8engqUXxDYFqDhhWs?=
- =?iso-8859-1?Q?klXBmUqO8vdTsG9eOYChTyQ3+PL/+hhuseX0TkGSJKfjWL5yL1FxZI3DLL?=
- =?iso-8859-1?Q?LNWx8q2ucibwxBygufAWID7zKm+cikKSS2rG1pejj+wR1TIuu+K4jplG65?=
- =?iso-8859-1?Q?gFh/+hDBrmYEOHMFr+uTX/Lh8QwwaB/6qHCUjgRwIdlHc3a3UYM96ErdWU?=
- =?iso-8859-1?Q?QOvxwx+ofVp73MmjqxruCfkoSXCYr6T3sXHXGJRNK6L5zKsa8qmeIqt7Zb?=
- =?iso-8859-1?Q?ZwrLGQMJPVB0+P6bg4yghqhyj69aQHwy0x6O94ezPzNMmQYcIMdO+ekY3u?=
- =?iso-8859-1?Q?TKEWrbhJMy+Smzzu52UFjuCq5NTQdEoX1mhiEvnomzVaryP9ZqHooMRPTT?=
- =?iso-8859-1?Q?2p9XEorxFULahLRpfxbZUE28+dnNoLxy3DwrzLfP2YecjeBmwxewRXbxMl?=
- =?iso-8859-1?Q?Q3g+1N68v6lKIRYINDvORC2v7aSOodhMMxcd1Fto72kkDvuQgDrnY27u55?=
- =?iso-8859-1?Q?8OmEd4flK0bQ2jx2sFB5LzGQFN6jUcJIKVIoUyM0lSuHQY+/6PKUKfp/IT?=
- =?iso-8859-1?Q?hCgXV/xWkEELFj5S8nu+/znOyxSwEWeXHshjI5VUt45VhiCvHaHNFzkoQM?=
- =?iso-8859-1?Q?VCcKqsJpv+w8qy4aC+O/zHSn88lQWNbMgd8YYWfRgM75keJMuZbWA1lHQr?=
- =?iso-8859-1?Q?DOnSVB7uyVzulo/R3rWzsTR6oXTE7k3smf49EChQUJRzono5yFwXGDKCfZ?=
- =?iso-8859-1?Q?Sw4/+83oz2cTfxyPYnd/AFfj+M5himSq/t282B5M00TU4Xz3b8YgeDs3Qg?=
- =?iso-8859-1?Q?J3ZBI/2oaAh5nWD9Y+7758VlM/ANYR9Aj46qDx+FOZzJN0cE/xwggKnVDT?=
- =?iso-8859-1?Q?0lX616JttIsRpZ0MYz0cDn+Z388IrOdy9tqgiGe3wvEZFujLz3XRxnyVlz?=
- =?iso-8859-1?Q?xRHIhUGyj6ii4r+jvD2KA8nvMV1mcxtbHkcKlzG9O5dn7+w1/pvVF8f8tI?=
- =?iso-8859-1?Q?nCJ/1SG18OlFiPoUQkKNXYi0gcjEdnxlIQ9Jp+Bt+NKwn9zr1VtjovfjPh?=
- =?iso-8859-1?Q?Rzun/CuzGk/fh2uuaVEadwIcntMwSGXrroTPLOiB17mDlUqd86F+lC/615?=
- =?iso-8859-1?Q?wEzM4vFGJo1gN5F/PmMfolS1kGUcXjVYdYC0wnTFtFlfW1BEZE9EW8MWmT?=
- =?iso-8859-1?Q?dQ/4u6JIBk/Kn8b9cXEOqmg2mcP6yGcIfARxp9CgDU9v9Zuwqe4Ut9v0iF?=
- =?iso-8859-1?Q?Q8QR4DIedxMgyTZPc6wfygq0+Prcu3CzYyAahoY7BAAROmXxKXvIuHxlx+?=
- =?iso-8859-1?Q?tWyMROlWn5GapUZEH34JKeVSD0H9TdnrT7yvsTncF5KCNdKVCtpOuoM+L1?=
- =?iso-8859-1?Q?PgL62+5zHNaB7PqzKmXwB0nwr9yOPIgblcWs1df9/tVt1syoCdf0YNcayZ?=
- =?iso-8859-1?Q?6706N9LqTL7QejzPhha14Lqym3usffPv8FSd80TdfyRJ5wv0ICxWXp8D/Y?=
- =?iso-8859-1?Q?gIqGHet/mIPyvNR10HTpJVUT1rXskt0g3Dc5EPWVM637dWaMp0SfhwOfT0?=
- =?iso-8859-1?Q?zyufy/nezBU2LaSsW2RaKNfl2Gp4tzoSSO3uoJzsHiIDy0pwY1tGcqeB1H?=
- =?iso-8859-1?Q?f/0OgvjdnGNOcLr6n/E1H018gdiz50V/9uefCUfa6ecGjGARXGxbNAOw?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?PimHRKzqh67sap2y2kDEW/CM2rd3FBGTTabLIqTqSyMy/RLiHOm+gXm8aG?=
+ =?iso-8859-1?Q?Hnuj2k+DTRaDD5ESNOehMMM846HY5OaQIkW3l4pjaaUfzUEhxjby2Ac1xK?=
+ =?iso-8859-1?Q?XeDLrvdsSK+2BnhMlDHiXB7MTLeSE2E8GriDNay6Rg0zoIhthgVUqQAUbt?=
+ =?iso-8859-1?Q?ifrpBbeO/oc3ErtvBDnbAFM1svMTk3dXPcybVgnRTXTuDoFieCZawXZrWe?=
+ =?iso-8859-1?Q?ZiT5Dm3BVL0nXr2lRJ1ze8mcYM+OHSEtZirldOJoduV6vXz552ddktFqz7?=
+ =?iso-8859-1?Q?qg1SsTjGNJtSLptzQ88HYATYXZHeeWJgzEEHwX6IpOVxazUWzHnKpwEtBW?=
+ =?iso-8859-1?Q?4HnbQnEZy49jw28MWMsy8UYmt71KYKShDc+uBjCDTp1Xqdh1WLU5mxP5ZE?=
+ =?iso-8859-1?Q?ViFQvCbsLM0jx67476k8SJMC4ZZOzupO0AZPMa29Z9R1RzyaTXiOCa9zHH?=
+ =?iso-8859-1?Q?AjNR19bieXK/4dylgt4UGDyCQOrBWxDbRG4y64SljszHiGtZ4iZdzu1aA6?=
+ =?iso-8859-1?Q?0nVLEhmpk2KtQKqjBA+HYQZXrX8sg2SWXEa3pObkLtxAjdoWmWdiuT8SKY?=
+ =?iso-8859-1?Q?nb7gq3NO+o9syurpCfSjxqvCParte6GjpYJP91ItCJUWb0HPFJg1GFPAHv?=
+ =?iso-8859-1?Q?DZNEQhimJzXKW+p/BQmdN9DWNWpSYInuTnWDuvGXyeRp0ixOGNlVMN5ycw?=
+ =?iso-8859-1?Q?wKHcsMv+1ZTyraq8NgL04IkkQSlJ/dPTWNM0lOvwa9I1TCDBO+iW6xcrj1?=
+ =?iso-8859-1?Q?9TPM3lLQ/b4SiGmGBXAJyffCCzdPXwgTAJjduf934bZ+IXPuYjit60YIgT?=
+ =?iso-8859-1?Q?uU/nZSyrDoULkQvFArILSSEL5c9jcLUsfZcmVffEdFEY+YcRwcGHv/u51+?=
+ =?iso-8859-1?Q?bUgdaaeju+jdcGFFla8Zc8BL3iO6Ynct9KpP3l4mXy4iLZfzq0nwnYvUXC?=
+ =?iso-8859-1?Q?U/G7PVhp4Eut8dTLf/wY39NNhX/zHGA75m88nLBe2yPe2MyxG9ssZ6Wk8K?=
+ =?iso-8859-1?Q?RmDJZGV4PU4yLtxVmusqZc62cZrGMo/cny0W0qRTdIUpgb+N+5X6ixu2ZI?=
+ =?iso-8859-1?Q?Xi9Rqpi7hgThw7GA9fQQwFo0nPS2MTvZNZQuSLpL5qanaJgdK1AKEbQktO?=
+ =?iso-8859-1?Q?j8/STEsx9CHPtOWCR7CpiuWyH3Y6/OqH5p6XGUTmAb0ze1SeXzhG7QBolX?=
+ =?iso-8859-1?Q?R8xTxyYn+m+qG7LLIuP+UGb7cSmDAs3LyhMVgrNyQiclf2p2K/jcRGv9yx?=
+ =?iso-8859-1?Q?HSYQlHoHpZbTRfNaCMoH2WupqAIzLrMOMa3Q6OgL81qXj7ydI40/Zh0FXb?=
+ =?iso-8859-1?Q?6++sxxXzVIa9XxOvFpibW8O9W29l2taYNnkbZHadC+ar1SOrgcjNrAbxBU?=
+ =?iso-8859-1?Q?p807cTlttC2AxOaZcT5VthKfvSpUCFZVO5p0x+cHDTqKJxYW6+2ppy+JRA?=
+ =?iso-8859-1?Q?g6wcVY/lZqgSPKXiaZYcKebfU7b/MotBTCi098JvAYW6rSYr7+w4faH7gg?=
+ =?iso-8859-1?Q?UkIsQyvfEd4FtBRbX6cQU7/ttc64DTWCP2jkhAxZZUytHjdFVd5cZCn1pC?=
+ =?iso-8859-1?Q?ScOhRLV3Dk9VrgJk2kF/BpuUaTBBMFK6+3S4QQd6NZkPdieiAP7Gj6yzAD?=
+ =?iso-8859-1?Q?mZbzlbnUSocfa+hX+HGmntj5hKBCpd0H0n7CK5Sv0tJkYz6ImXTtQyIw?=
  =?iso-8859-1?Q?=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -114,23 +112,23 @@ MIME-Version: 1.0
 X-OriginatorOrg: epam.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7136.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01aafa7a-9d3f-4d4e-013e-08daecc718ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2023 13:41:48.6825
+X-MS-Exchange-CrossTenant-Network-Message-Id: d61e592b-7ca9-4505-ba47-08daecc7189d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2023 13:41:48.1514
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kI1NPR1PtH+s/DzX1W50xaAwDmqfN4R/xQrpV0d+2vI3yUPaymI20bn90qI3J/4UWEJxnW+SL0clikRBIlzGek+KvB6SWXedvjDmoLuBIUU=
+X-MS-Exchange-CrossTenant-userprincipalname: v8p9FkNMGcd+IAcNLFIF+4SgKpMOoAi7zGCwL0Q8hm7GPRWT8c9uD3HtozKM872KL0egO8w00Y3Y/YZBdiHg4+4C35ro1kP5trBmjT97ZdU=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB9709
-X-Proofpoint-GUID: mk6-_2x5bNgRKHNXlG71jmOCVvk0mvbE
-X-Proofpoint-ORIG-GUID: mk6-_2x5bNgRKHNXlG71jmOCVvk0mvbE
+X-Proofpoint-GUID: xU2f70Y-pvWxurXYXUo2TyiosKfNjL_N
+X-Proofpoint-ORIG-GUID: xU2f70Y-pvWxurXYXUo2TyiosKfNjL_N
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-02_08,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=902 phishscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=835 phishscore=0
  lowpriorityscore=0 bulkscore=0 impostorscore=0 spamscore=0
  priorityscore=1501 adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2301020124
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -141,113 +139,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Save the reference count of the page before mapping and use this
-value in gntdev_unmap_refs_async() call.
-This is the enhancement of the
-commit 3f9f1c67572f5e5e6dc84216d48d1480f3c4fcf6 ("xen/grant-table: add a
-mechanism to safely unmap pages that are in use").
-Safe unmapping mechanism defers page that may being use (ref count > 1).
+Hello,
 
-This is needed to allow to map/unmap pages, which have more than 1
-reference. For example, DRM_IOCTL_MODE_CREATE_DUMB creates dma buffer
-with page_count =3D 2, which unmap call would be deferred while buffer
-exists because ref count will never equals 1.
-This means the buffer remains mapped during DRM_IOCTL_MODE_DESTROY_DUMB
-call which causes an error:
+Let me introduce the new ioctls, which are intended to allow gntdev to
+map scatter-gather table on top of the existing dmabuf, referenced by
+file descriptor.
 
-Unable to handle kernel paging request at virtual address <addr>
-....
-Call trace:
-  check_move_unevictable_folios+0xb8/0x4d0
-  check_move_unevictable_pages+0x8c/0x110
-  drm_gem_put_pages+0x118/0x198
-  drm_gem_shmem_put_pages_locked+0x4c/0x70
-  drm_gem_shmem_unpin+0x30/0x50
-  virtio_gpu_cleanup_object+0x84/0x130
-  virtio_gpu_cmd_unref_cb+0x18/0x2c
-  virtio_gpu_dequeue_ctrl_func+0x124/0x290
-  process_one_work+0x1d0/0x320
-  worker_thread+0x14c/0x444
-  kthread+0x10c/0x110
+When using dma-buf exporter to create dma-buf with backing storage and
+map it to the grant refs, provided from the domain, we've met a problem,
+that several HW (i.MX8 gpu in our case) do not support external buffer
+and requires backing storage to be created using it's native tools.
+That's why new ioctls were added to be able to pass existing dma-buffer
+fd as input parameter and use it as backing storage to export to refs.
 
-This enhancement allows to provide the expected page_count during
-map call so refs could be unmapped properly without unneeded defers.
+Following calls were added:
+IOCTL_GNTDEV_DMABUF_MAP_REFS_TO_BUF - map existing buffer as the backing
+storage and export it to the provided grant refs;
+IOCTL_GNTDEV_DMABUF_MAP_RELEASE - detach buffer from the grant table and
+set notification to unmap grant refs before releasing the external
+buffer. After this call the external buffer should be detroyed.
+IOCTL_GNTDEV_DMABUF_MAP_WAIT_RELEASED - wait for timeout until buffer is
+completely destroyed and gnt refs unmapped so domain could free grant
+pages. Should be called after buffer was destoyed.
 
-Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+Our setup is based on IMX8QM board. We're trying to implement zero-copy
+support for DomU graphics using Wayland zwp_linux_dmabuf_v1_interface
+implementation.
+
+For dma-buf exporter we used i.MX8 gpu native tools to create backing
+storage grant-refs, received from DomU. Buffer for the backing storage was
+allocated using gbm_bo_create call because gpu do not support external
+buffer and requires backing storage to be created using it's native tools
+(eglCreateImageKHR returns EGL_NO_IMAGE_KHR for buffers, which were not
+created using gbm_bo_create).
+
+This behaviour was also tested on Qemu setup using
+DRM_IOCTL_MODE_CREATE_DUMB call to create backing storage buffer.
+
 ---
- drivers/xen/grant-table.c | 16 +++++++++++++++-
- include/xen/grant_table.h |  3 +++
- 2 files changed, 18 insertions(+), 1 deletion(-)
+Oleksii Moisieiev (3):
+  xen/grant-table: save page_count on map and use if during async
+    unmapping
+  dma-buf: add dma buffer release notifier callback
+  xen/grant-table: add new ioctls to map dmabuf to existing fd
 
-diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
-index e1ec725c2819..d6576c8b6f0f 100644
---- a/drivers/xen/grant-table.c
-+++ b/drivers/xen/grant-table.c
-@@ -1241,11 +1241,23 @@ int gnttab_map_refs(struct gnttab_map_grant_ref *ma=
-p_ops,
- 		case GNTST_okay:
- 		{
- 			struct xen_page_foreign *foreign;
-+			int page_cnt;
-=20
- 			SetPageForeign(pages[i]);
- 			foreign =3D xen_page_foreign(pages[i]);
- 			foreign->domid =3D map_ops[i].dom;
- 			foreign->gref =3D map_ops[i].ref;
-+			page_cnt =3D page_count(pages[i]);
-+			if (page_cnt > FOREIGN_MAX_PAGE_COUNT) {
-+				/* foreign structure can't hold more than FOREIGN_MAX_PAGE_COUNT.
-+				 * That's why we save page_count =3D 1 so safe unmap mechanism will
-+				 * defer unmapping until all users stops using this page and let
-+				 * caller handle page users.
-+				 */
-+				pr_warn_ratelimited("page have too many users. Will wait for 0 on umap=
-\n");
-+				foreign->private =3D 1;
-+			} else
-+				foreign->private =3D page_cnt;
- 			break;
- 		}
-=20
-@@ -1308,9 +1320,11 @@ static void __gnttab_unmap_refs_async(struct gntab_u=
-nmap_queue_data* item)
- {
- 	int ret;
- 	int pc;
-+	struct xen_page_foreign *foreign;
-=20
- 	for (pc =3D 0; pc < item->count; pc++) {
--		if (page_count(item->pages[pc]) > 1) {
-+		foreign =3D xen_page_foreign(item->pages[pc]);
-+		if (page_count(item->pages[pc]) > foreign->private) {
- 			unsigned long delay =3D GNTTAB_UNMAP_REFS_DELAY * (item->age + 1);
- 			schedule_delayed_work(&item->gnttab_work,
- 					      msecs_to_jiffies(delay));
-diff --git a/include/xen/grant_table.h b/include/xen/grant_table.h
-index e279be353e3f..8e220edf44ab 100644
---- a/include/xen/grant_table.h
-+++ b/include/xen/grant_table.h
-@@ -49,6 +49,7 @@
- #include <linux/mm_types.h>
- #include <linux/page-flags.h>
- #include <linux/kernel.h>
-+#include <linux/limits.h>
-=20
- /*
-  * Technically there's no reliably invalid grant reference or grant handle=
-,
-@@ -274,9 +275,11 @@ int gnttab_unmap_refs_sync(struct gntab_unmap_queue_da=
-ta *item);
- void gnttab_batch_map(struct gnttab_map_grant_ref *batch, unsigned count);
- void gnttab_batch_copy(struct gnttab_copy *batch, unsigned count);
-=20
-+#define FOREIGN_MAX_PAGE_COUNT       U16_MAX
-=20
- struct xen_page_foreign {
- 	domid_t domid;
-+	uint16_t private;
- 	grant_ref_t gref;
- };
-=20
+ drivers/dma-buf/dma-buf.c   |  44 ++++
+ drivers/xen/gntdev-common.h |   8 +-
+ drivers/xen/gntdev-dmabuf.c | 416 +++++++++++++++++++++++++++++++++++-
+ drivers/xen/gntdev-dmabuf.h |   7 +
+ drivers/xen/gntdev.c        | 101 ++++++++-
+ drivers/xen/grant-table.c   |  73 +++++--
+ include/linux/dma-buf.h     |  15 ++
+ include/uapi/xen/gntdev.h   |  62 ++++++
+ include/xen/grant_table.h   |   8 +
+ 9 files changed, 703 insertions(+), 31 deletions(-)
+
 --=20
 2.25.1
