@@ -2,55 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D1965B6EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 20:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3514D65B6F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 20:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235261AbjABTWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 14:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
+        id S236293AbjABTYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 14:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjABTWv (ORCPT
+        with ESMTP id S229740AbjABTXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 14:22:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEFBB7EE;
-        Mon,  2 Jan 2023 11:22:50 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 567766600366;
-        Mon,  2 Jan 2023 19:22:49 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672687369;
-        bh=pIy7CdocbAmO6g0Vpge6r8RkPfNWteN8URfk7q7yXMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dEFz7JzK+aMwEhaSRndT85vi7jwp9cKOPrayU6NmWxFncKZ4fnZT2R2h+rLFoesP1
-         FoFURBAj2js3Bkyg9l1s2/lAiDzph4zvCEYehBJctxM/UTV7HU3HhpK6+eI3jUAbdH
-         vNhCS/Cgg8MV1a1ayCbbfxwedjQD/O6GELPzTSjx4bh8UX8I8UuRE0xcpE2CfcskjU
-         f5h/W+cM8YvF/ciVY1pIf9Wnv2pKLqPo9ItN/oZ4c8f/R/wKzXJ9FKZ35EYbmoMR5p
-         pzisrjIojPLowxji0vNj62yi9+OsCRv2aHdCoLApAj66FIgvKHJ4gW7/WzINDnLGwj
-         vWX/UIxdq16SQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 14B0B106076E; Mon,  2 Jan 2023 20:22:47 +0100 (CET)
-Date:   Mon, 2 Jan 2023 20:22:47 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Support Opensource <support.opensource@diasemi.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: Re: [PATCH] power: supply: da9150: Remove redundant error logging
-Message-ID: <20230102192247.rgqcmuyqpultvwsx@mercury.elektranox.org>
-References: <Y6SRZZUDoiIKJ0rJ@qemulion>
+        Mon, 2 Jan 2023 14:23:44 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11DEB7EE;
+        Mon,  2 Jan 2023 11:23:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672687423; x=1704223423;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gu+Dt/OpMWKrwg8VxAt76Mz52M2Dfk6IjKqn21EscSM=;
+  b=cf/yVat8r7Cw12YKdWEiFL36x91ZlTuON6WXYwtyU48GbZ6JtXUV67FP
+   Cv6TwvUgLtxF5uWK3xXGx5qzJ8naIDbRrZCgxOPk0Zv1RQ9luGFSR0bMF
+   RVYdc5q4szYx6D7AE0jb9FED/q7lU1FbB5qRr9WSzUx+o4EMr8txrHe25
+   yUhTW7jy/JDdkrWHImNsymbvGV8LC0VaKLtXmNzALSKazMp36Zltbjj8e
+   w6NYCW1FRlNdYu3iDhUAxm3JiMR/nDKjdrWzPpffXj5Go6zf+Z92eqq7k
+   N5AjMsx9RCM4N9dHd+6OqNHhv6De6dGrMIkAK1BkgYgxSQaqUO7E1J5ez
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="305040242"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="305040242"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 11:23:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="778638990"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="778638990"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 02 Jan 2023 11:23:41 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6438FF4; Mon,  2 Jan 2023 21:24:13 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] thunderbolt: Refactor tb_acpi_add_link()
+Date:   Mon,  2 Jan 2023 21:24:04 +0200
+Message-Id: <20230102192404.88076-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yhmmz776lzybvn6w"
-Content-Disposition: inline
-In-Reply-To: <Y6SRZZUDoiIKJ0rJ@qemulion>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,95 +63,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert while loop into do-while with only a single call to
+acpi_get_first_physical_node(). No functional change intended.
 
---yhmmz776lzybvn6w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/thunderbolt/acpi.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-Hi,
+diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+index 317e4f5fdb97..628225deb8fe 100644
+--- a/drivers/thunderbolt/acpi.c
++++ b/drivers/thunderbolt/acpi.c
+@@ -36,16 +36,13 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 	 * We need to do this because the xHCI driver might not yet be
+ 	 * bound so the USB3 SuperSpeed ports are not yet created.
+ 	 */
+-	dev = acpi_get_first_physical_node(adev);
+-	while (!dev) {
+-		adev = acpi_dev_parent(adev);
+-		if (!adev)
+-			break;
++	do {
+ 		dev = acpi_get_first_physical_node(adev);
+-	}
++		if (dev)
++			break;
+ 
+-	if (!dev)
+-		goto out_put;
++		adev = acpi_dev_parent(adev);
++	} while (adev);
+ 
+ 	/*
+ 	 * Check that the device is PCIe. This is because USB3
+-- 
+2.35.1
 
-On Thu, Dec 22, 2022 at 10:48:29PM +0530, Deepak R Varma wrote:
-> A call to platform_get_irq_byname() already prints an error on failure
-> within its own implementation. So printing another error based on its
-> return value in the caller is redundant and should be removed. The
-> clean up also makes if condition block braces and the device pointer
-> variable dev unnecessary. Remove those as well.
->=20
-> Issue identified using platform_get_irq.cocci coccinelle semantic patch.
->=20
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
-
-Thanks, queued.
-
--- Sebastian
-
-> Note: The change was build tested using ARM64 defconfig.
->=20
->  drivers/power/supply/da9150-charger.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/power/supply/da9150-charger.c b/drivers/power/supply=
-/da9150-charger.c
-> index f9314cc0cd75..14da5c595dd9 100644
-> --- a/drivers/power/supply/da9150-charger.c
-> +++ b/drivers/power/supply/da9150-charger.c
-> @@ -466,10 +466,8 @@ static int da9150_charger_register_irq(struct platfo=
-rm_device *pdev,
->  	int irq, ret;
->=20
->  	irq =3D platform_get_irq_byname(pdev, irq_name);
-> -	if (irq < 0) {
-> -		dev_err(dev, "Failed to get IRQ CHG_STATUS: %d\n", irq);
-> +	if (irq < 0)
->  		return irq;
-> -	}
->=20
->  	ret =3D request_threaded_irq(irq, NULL, handler, IRQF_ONESHOT, irq_name,
->  				   charger);
-> @@ -482,15 +480,12 @@ static int da9150_charger_register_irq(struct platf=
-orm_device *pdev,
->  static void da9150_charger_unregister_irq(struct platform_device *pdev,
->  					  const char *irq_name)
->  {
-> -	struct device *dev =3D &pdev->dev;
->  	struct da9150_charger *charger =3D platform_get_drvdata(pdev);
->  	int irq;
->=20
->  	irq =3D platform_get_irq_byname(pdev, irq_name);
-> -	if (irq < 0) {
-> -		dev_err(dev, "Failed to get IRQ CHG_STATUS: %d\n", irq);
-> +	if (irq < 0)
->  		return;
-> -	}
->=20
->  	free_irq(irq, charger);
->  }
-> --
-> 2.34.1
->=20
->=20
->=20
-
---yhmmz776lzybvn6w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOzLwYACgkQ2O7X88g7
-+ppQfg//edSdOgWKgG0oZOTII18b+uYQwQw5SZgEHaaQeLcOnWJSJ/3A9HKFHXRH
-KmBJrGYVcizG85rIqLA+OyK7RNbt+c4AcbF633uoB4lHQhtcjctimx+rMo1DSwt9
-bUsOtyqQw8jVefbHwsuuDGQ8o9tOh4TTH3wT1oHNoZ6wsmDCVI1GOi2jLjjjQbyi
-2/TaFs+eosRF7s/tSrDSC5TwlQKtPF2s7emHmDKaQfOqB5WBVV0amisF00lEK7M2
-jq6nUQrzoyVg4yaBnblHb41cmIbKSfDUEYfD47rQO7wCtg7k2fr48yPq5dOxqFf1
-aOPw1DI3xNLLcFxn/4P50J86Bhirn7k/KbTlNxw4uT25Ht6L45mPOLreUIRBA1s7
-x/gRc0hScu/ZubsQMfvfbDzvdVED2kFel04DR1Gr1Z11fJzVInxRltLcfrgcY+Rz
-S5p3VF1lxy2YhZIVDb615d9XcV//UJk+UF9soOQVIhyMtQ4wR2Y4PUNAUW18rNUt
-7W/XxLPcXNYmhyuJQnC4k6fnpAl7V5QZVrJ6+SH2GFqzeVAYMfvEqOma365OAHHd
-moSZaaYEc9rlIwMyK9fOYmSWeKFRR8bWQYV2W8rQqltyQ7a/wx6MX/HPc31Khbhx
-qq96F7zhex9kP/K6YMZquQ1qU9EV0e/iKd9O8QP1e6uccoYZJQY=
-=JV7R
------END PGP SIGNATURE-----
-
---yhmmz776lzybvn6w--
