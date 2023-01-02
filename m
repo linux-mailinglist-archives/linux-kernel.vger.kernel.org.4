@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A1365B5B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4112D65B5B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236686AbjABRL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 12:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
+        id S236708AbjABRMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 12:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236601AbjABRLH (ORCPT
+        with ESMTP id S236633AbjABRLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 12:11:07 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6FBAE5B
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 09:11:01 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id j130so19732537oif.4
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 09:11:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fkrlTW01QZiW+rfRh4HCDBkrk4FHHNPvdhykJiEQI9E=;
-        b=PSrfo52rXafgrME6wfouzPUZakPSi4zMi0esKLyfcUTdw3ZaLwczE7cqwq4+MAKDTp
-         OPl7k/UcH/KvwiuB2Ijya3ZTt/RKJkdMX+lFk1LSSQFO/zSpVva0jt/XMT+DFhJyXmtv
-         Dlg+29EtE39mSsu0+YR5gcVXPIgrI3oD6ZWMXHSW6Ja0FiNjgFuWd/WMvpBPRYm+Y2/M
-         58YQCvE3Lxv7wYTUSWuWAcFMnMtr18bpUR8C+elEZ83RfcTyOs+rzRY011f1EPN5s+pi
-         XWz0wLru8QmRF8N+6vF7Vn/3sS3eBC51zuFFPivBzOGyGSRasKOasO1UrkShD5TdzviP
-         m9HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fkrlTW01QZiW+rfRh4HCDBkrk4FHHNPvdhykJiEQI9E=;
-        b=rtucMb+H+pwZW3rPB5JVOAKg9rZNhnL3PK9R3pjAN0GiTq8nZ8HEehbEPYxOVZrYOC
-         QNpS9DPdqMyfuySZnNmAuOvqnMy9wcopAPvFd5uNopMKnBQy0QfNabSyNJT16KORCYrV
-         qB9eOylbaN4vSv3ND/2DeyVEnmtEK0+yDrDoaO5hwFvZkuhGebUN7llRrf54LEfoKlhK
-         K5wjM3qeDhZrOZWs7rP0jsaY+mGC5VM39/2I6Clbx9h/Iq+xFNxVWRZ8Z2B2tO4FnabT
-         DUckE2ncN0GTf+z2TZNSWW4w4M4vTnBiL+y3XpGbZNVMB8UpUGMmahOoUXSEvECTOixB
-         5rZQ==
-X-Gm-Message-State: AFqh2kpsGkvhAugHZJ0NyM/3BInMXnbQBrKpYqEsk+vrKX58r9yOZWAa
-        aGOuTUch/fL0BYffg9M4aVbjN5APgViT4cwfxbLk4g==
-X-Google-Smtp-Source: AMrXdXudAWzRSkReGXrlA2k8y1GjMgzJ0Sqz2gL9E0bvitUpLzt30zx7sw5KpOjYmAMpIKholY97galZNRmQhhE4MY4=
-X-Received: by 2002:a05:6808:3090:b0:35e:5a1b:825c with SMTP id
- bl16-20020a056808309000b0035e5a1b825cmr2536418oib.155.1672679460249; Mon, 02
- Jan 2023 09:11:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20221230153554.105856-1-robert.foss@linaro.org>
- <20221230153554.105856-9-robert.foss@linaro.org> <deb17787-1a5a-89a3-3ecf-7690b4149f5c@linaro.org>
-In-Reply-To: <deb17787-1a5a-89a3-3ecf-7690b4149f5c@linaro.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 2 Jan 2023 18:10:49 +0100
-Message-ID: <CAG3jFysU84LRcqQOspub+9vtsP3syiksrGX6D7i3ff+X6+mbTA@mail.gmail.com>
-Subject: Re: [PATCH v4 08/11] arm64: dts: qcom: sm8350: Use 2 interconnect cells
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        quic_jesszhan@quicinc.com,
-        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
-        vkoul@kernel.org, a39.skl@gmail.com, quic_khsieh@quicinc.com,
-        quic_vpolimer@quicinc.com, swboyd@chromium.org,
-        dianders@chromium.org, liushixin2@huawei.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
-        vinod.koul@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Mon, 2 Jan 2023 12:11:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A8022F
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 09:11:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A40EE6104F
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 17:11:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15BE3C433D2;
+        Mon,  2 Jan 2023 17:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672679489;
+        bh=07+EHvzGMPhTI3jKP4wAD216rtYg1mS6oVU/MupYWV8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KBf1cKpR1l3dAZYzbrY/dRpVgoaQV4HWXCtiLpn6B4w2xkfIBtmRAzG+nwws9zadx
+         1zTV0vyOvqkMOnd81xMgPQs2FZtkFBIgWx5jwQZgPQjsZl2iyx9Z2hypNHjLIwJZuf
+         SQZ33u1IpU1jaqZ0zt7NZ7b/y7zrP6cX5/LLHPYMR/Mz36G1z/e+LoYkZLEo7jI3Zo
+         5MJZa0DeOW8mvMUan86k2qS98r/CKgSPehIWqDARMNbcal5T7ZjJF7IQsd5sC2eUBM
+         d0El69doIPporsnP45PUFtIAJJj+Ltuc+NP+/Yv/KU/TPzVAsDYgEIt0/fD27xl+Y3
+         JICPXdj5pUoeg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pCOLO-00GMc8-Vf;
+        Mon, 02 Jan 2023 17:11:27 +0000
+Date:   Mon, 02 Jan 2023 17:11:19 +0000
+Message-ID: <86zgb07tfs.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>
+Subject: Re: Query about IPI as NMI (pseudo-NMI) support patches
+In-Reply-To: <5bed08c5-8663-4e68-27b4-8b6d3957a880@quicinc.com>
+References: <5bed08c5-8663-4e68-27b4-8b6d3957a880@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_mojha@quicinc.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,31 +64,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Dec 2022 at 17:12, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 30/12/2022 16:35, Robert Foss wrote:
-> > Use two interconnect cells in order to optionally
-> > support a path tag.
-> >
-> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm8350.dtsi | 28 ++++++++++++++--------------
-> >  1 file changed, 14 insertions(+), 14 deletions(-)
-> >
->
-> I think you need to rebase to include:
-> https://lore.kernel.org/all/167233461761.1099840.5517525898039031248.b4-ty@kernel.org/
+Hi Mukesh,
 
-Ah, I see. Functionally I seemed to do fine without those commits.
+On Mon, 02 Jan 2023 16:44:59 +0000,
+Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+> 
+> Hi Marc,
+> 
+> I was looking similar support mentioned in below patch series.
+> 
+> https://lore.kernel.org/lkml/CAFA6WYO0+LQ=mB1spCstt0cNZ0G+sZu_+Wrv6BKSeXqF5SRq4A@mail.gmail.com/#t
+> 
+> Wanted to check if there is chance of these patches to land in
+> mainline ?
 
->
-> On which tree/revision did you base this?
+I certainly have no intention to merge it as is, specially as there is
+no good usage model for it other than "but think of debug!".
 
-msm/drm-msm-display-for-6.2
+We have exactly *one* SGI left. If we are going to lose it over such a
+feature, I'd want a description of how we are going to share it
+between potential users, and how we claw some currently used SGIs
+back.
 
->
-> Best regards,
-> Krzysztof
->
+Until then, this is a proof of concept, and not much else.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
