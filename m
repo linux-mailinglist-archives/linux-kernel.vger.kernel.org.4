@@ -2,177 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C0465AEB7
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D4565AEC0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjABJfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 04:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
+        id S231576AbjABJhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 04:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjABJfA (ORCPT
+        with ESMTP id S229470AbjABJhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 04:35:00 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C903E2DEA;
-        Mon,  2 Jan 2023 01:34:59 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3027vqTB023461;
-        Mon, 2 Jan 2023 09:34:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=0sH2OClJMuiQ+Q3697XUzelUOPV7noQzi+3Z+aWXozA=;
- b=hc17bzfSEH/73n9N3pG/VH0OwnOOa7SecEKz6rPhcjSgM43QBJ+U2KqB6RDy1bNRw5Qq
- EJXl/qKrvpoMJFs6OsukytDOTPECyyKlsgHUd4F1J3/Bn8xJymonzsw+oIam+6Cd8w7b
- V5aM+hW0F9CIcVMC+/8vRhG72Ielq2aTbf2UQhUdzfu1NGxEK5XsDqOh/AR9v8pPXTGj
- a/jtpMQMR3UGcMyzkl4dWEUro1qgG5IXdhWEynJ6jOb+ITTbEFJOoDWyUMSpRW4wpb8a
- YJNiy8olmb61rL6p8T0UdTHGboxVka17vdglL4u0m2GCbyDuK0BJDNBxXYQDZtvbqK/4 Aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mtxrk5k5c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 09:34:58 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30290OSK006031;
-        Mon, 2 Jan 2023 09:34:58 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mtxrk5k4v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 09:34:58 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 301LdM9m010837;
-        Mon, 2 Jan 2023 09:34:56 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6hmjt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 09:34:56 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3029YqQ846530832
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 Jan 2023 09:34:52 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA3F320040;
-        Mon,  2 Jan 2023 09:34:52 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 956CF2004D;
-        Mon,  2 Jan 2023 09:34:52 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  2 Jan 2023 09:34:52 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        =?UTF-8?q?Christian=20Borntr=C3=A4ger?= <borntraeger@linux.ibm.com>
-Subject: [PATCH 1/1] vfio/type1: Respect IOMMU reserved regions in vfio_test_domain_fgsp()
-Date:   Mon,  2 Jan 2023 10:34:52 +0100
-Message-Id: <20230102093452.761185-2-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230102093452.761185-1-schnelle@linux.ibm.com>
-References: <20230102093452.761185-1-schnelle@linux.ibm.com>
+        Mon, 2 Jan 2023 04:37:45 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9838B4;
+        Mon,  2 Jan 2023 01:37:44 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id u18so37851665eda.9;
+        Mon, 02 Jan 2023 01:37:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XzIKgubKsbYp6CHbNgEC7oTL3o/23K1nX1884mvfwHU=;
+        b=G19KnHZkfpxRRK8GEtPuLli3UOIw8JaGumkCm3OfvuuGgyvVoIItwF9UL+YKeEoziV
+         tVaLLp6LncTO3aVNx9fajlVFGGY7KPLBg9VJc5aEjDTIbcKpgiC20I7uipBOUNWxxKrm
+         7sp0QkboCr+8Ff/nn9QaP4Aj+bjlHzvfmjUG+/BPqrAI85dL9RC7fFT8iT78Y37gCR8G
+         4Trio+r7k/Xog96G03l5kDStW939gVOFO6X8zHcaM+ChvSCsr1iwZDqg6bBklfD5R3KL
+         TNn7fidXDuMzE2IAC671VcdQmkt2pAoq1Qw5K9XVeS9rMR/iCoCi45F1zjojjcYdLJ0I
+         jweg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XzIKgubKsbYp6CHbNgEC7oTL3o/23K1nX1884mvfwHU=;
+        b=cf3O3hKxmNtt1XVIiwnhY7EDyaK3ZUgi0ihwgHOOEXsrwcuaZc14ZK8AIimftCacVx
+         RiPW4jCKJN/mzay1ndUJkC+/udS0xyy+nO32BK0QTy22cEpYXj7JwT/PrvRx/VmSxKXo
+         gLml51v/fvd9XkxtsfD3FwaG+d41YQvI6/I5X+X0GzwozqlSCIBoAqGeTTJNrCOy4HCF
+         Qko8QjxliqOx5S80iRSWCEtMqn1NiWzgu9BM07UreBjfk8xREV1z5/mlqq0CNDbWPb2N
+         X+csXZGmk/bcGfmkOQU1e+cjogOKaECgQAHvZLFayHu7/0ACUiHw6zRMCx7DltqQU5fQ
+         7/LQ==
+X-Gm-Message-State: AFqh2koanBu6ko70polwwFJTfZjZGdt/bVA95np0bp/KEsO4uRm6Q4KJ
+        kX8sX4puA46XcxP9IJ+F600=
+X-Google-Smtp-Source: AMrXdXuS1dQR4WrrMJ2ZYnuZUsvK51zUK97T9LdHUD8iN13xlT2i9x/voG32HeRtdP8fLD4ew6NlcQ==
+X-Received: by 2002:a05:6402:b3c:b0:47f:ab65:b3ff with SMTP id bo28-20020a0564020b3c00b0047fab65b3ffmr30127650edb.35.1672652262900;
+        Mon, 02 Jan 2023 01:37:42 -0800 (PST)
+Received: from [192.168.0.104] ([82.77.81.242])
+        by smtp.gmail.com with ESMTPSA id bo6-20020a0564020b2600b0048ca2b6c370sm2385835edb.29.2023.01.02.01.37.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 01:37:42 -0800 (PST)
+Message-ID: <28da9e33-57e8-7ac1-7e6c-13c297a945d6@gmail.com>
+Date:   Mon, 2 Jan 2023 11:37:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 07p5n3680Fn2fYulR3YsSrKIJk7VNA_1
-X-Proofpoint-ORIG-GUID: 3CS8UoRij973fcADqOuihuhWfA0a1F9j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_05,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- phishscore=0 spamscore=0 impostorscore=0 suspectscore=0 mlxlogscore=999
- mlxscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301020086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/8] spi: dt-bindings: Introduce spi-cs-setup-ns property
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>, Michael Walle <michael@walle.cc>
+Cc:     tudor.ambarus@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        nicolas.ferre@microchip.com, robh+dt@kernel.org
+References: <20221117105249.115649-2-tudor.ambarus@microchip.com>
+ <20221118141458.954646-1-michael@walle.cc> <Y3elIdM3Xz1H4kKk@sirena.org.uk>
+From:   Tudor Ambarus <tudor.ambarus@gmail.com>
+In-Reply-To: <Y3elIdM3Xz1H4kKk@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit cbf7827bc5dc ("iommu/s390: Fix potential s390_domain
-aperture shrinking") the s390 IOMMU driver uses a reserved region
-instead of an artificially shrunk aperture to restrict IOMMU use based
-on the system provided DMA ranges of devices. In particular on current
-machines this prevents use of DMA addresses below 2^32 for all devices.
-While usually just IOMMU mapping below these addresses is
-harmless. However our virtual ISM PCI device looks at new mappings on
-IOTLB flush and immediately goes into the error state if such a mapping
-violates its allowed DMA ranges. This then breaks pass-through of the
-ISM device to a KVM guest.
+Hi,
 
-Analysing this we found that vfio_test_domain_fgsp() maps 2 pages at DMA
-address 0 irrespective of the IOMMUs reserved regions. Even if usually
-harmless this seems wrong in the general case so instead go through the
-freshly updated IOVA list and try to find a range that isn't reserved
-and fits 2 pages and use that for testing for fine grained super pages.
+On 18.11.2022 17:30, Mark Brown wrote:
+> On Fri, Nov 18, 2022 at 03:14:58PM +0100, Michael Walle wrote:
+>> From: Tudor Ambarus <tudor.ambarus@microchip.com>
+> 
+>>> +  spi-cs-setup-ns:
+>>> +    description:
+>>> +      Delay in nanosecods to be introduced by the controller after CS is
+>>> +      asserted.
+> 
+>> Does this need a type as the spi-cs-setup-ns is apparently just 16bit? At
+>> least the driver uses it that way.
+> 
+>> But IMHO this should just be a normal uint32 value to be consistent with
+>> all the other properties. Also the max value with 16bit will be 'just'
+>> 65us.
+> 
+> Making it 32 bit does seem safer.  I've applied the series
 
-Fixes: 6fe1010d6d9c ("vfio/type1: DMA unmap chunking")
-Reported-by: Matthew Rosato <mjrosato@linux.ibm.com>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- drivers/vfio/vfio_iommu_type1.c | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+Thanks. There are few implications to consider before making this prop a
+u32, and I'd like to check them with you.
 
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index 23c24fe98c00..9395097897b8 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -1856,24 +1856,31 @@ static int vfio_iommu_replay(struct vfio_iommu *iommu,
-  * significantly boosts non-hugetlbfs mappings and doesn't seem to hurt when
-  * hugetlbfs is in use.
-  */
--static void vfio_test_domain_fgsp(struct vfio_domain *domain)
-+static void vfio_test_domain_fgsp(struct vfio_domain *domain, struct list_head *regions)
- {
--	struct page *pages;
- 	int ret, order = get_order(PAGE_SIZE * 2);
-+	struct vfio_iova *region;
-+	struct page *pages;
- 
- 	pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, order);
- 	if (!pages)
- 		return;
- 
--	ret = iommu_map(domain->domain, 0, page_to_phys(pages), PAGE_SIZE * 2,
--			IOMMU_READ | IOMMU_WRITE | IOMMU_CACHE);
--	if (!ret) {
--		size_t unmapped = iommu_unmap(domain->domain, 0, PAGE_SIZE);
-+	list_for_each_entry(region, regions, list) {
-+		if (region->end - region->start < PAGE_SIZE * 2)
-+			continue;
- 
--		if (unmapped == PAGE_SIZE)
--			iommu_unmap(domain->domain, PAGE_SIZE, PAGE_SIZE);
--		else
--			domain->fgsp = true;
-+		ret = iommu_map(domain->domain, region->start, page_to_phys(pages), PAGE_SIZE * 2,
-+				IOMMU_READ | IOMMU_WRITE | IOMMU_CACHE);
-+		if (!ret) {
-+			size_t unmapped = iommu_unmap(domain->domain, region->start, PAGE_SIZE);
-+
-+			if (unmapped == PAGE_SIZE)
-+				iommu_unmap(domain->domain, region->start + PAGE_SIZE, PAGE_SIZE);
-+			else
-+				domain->fgsp = true;
-+		}
-+		break;
- 	}
- 
- 	__free_pages(pages, order);
-@@ -2326,7 +2333,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
- 		}
- 	}
- 
--	vfio_test_domain_fgsp(domain);
-+	vfio_test_domain_fgsp(domain, &iova_copy);
- 
- 	/* replay mappings on new domains */
- 	ret = vfio_iommu_replay(iommu, domain);
--- 
-2.34.1
+struct spi_delay will have to be updated to have a u32 value, now it's a
+u16. This means that we'll have to update spi_delay_to_ns() to either
+return a s64 or to add a u64 *delay parameter to the function so that we
+can still handle the conversions from usecs and the error codes in the
+SPI_DELAY_UNIT_SCK case. Then all its callers have to be updated to
+consider the u64 delay.
 
+I don't know what to say, I'm in between. 65us delays are improbable,
+but I'm fine to update this as well. Let me know your preference.
+
+Thanks,
+ta
