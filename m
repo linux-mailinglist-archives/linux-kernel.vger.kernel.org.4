@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7688B65B3A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82FA65B3A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235955AbjABO7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 09:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
+        id S233006AbjABO7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 09:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbjABO7p (ORCPT
+        with ESMTP id S229583AbjABO7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 09:59:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD0A641E
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 06:58:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672671538;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=FH/Lp9MlKLCKaZbT73kzq05x4X87GgNm5ap75FWZ5H4=;
-        b=FVpgLhlSJkKdJ1Gvo4o2uj33PiBkFDYYxJx1F4xXM7IRAoQACJbkwDhNft7OI/4HBlZLH0
-        9mqw0GxhHeqqSKvMMVnPdbJFfJUmV249DADFI29Uf1rfEW21La6n177E5IyFVIRZIwRWNG
-        w0+UCB6ZLXHtvOHTaCPqTTyyCNNb5o4=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-611-xjxFSBZ3N7inYxqTvNjKHQ-1; Mon, 02 Jan 2023 09:58:57 -0500
-X-MC-Unique: xjxFSBZ3N7inYxqTvNjKHQ-1
-Received: by mail-pf1-f197.google.com with SMTP id a1-20020a056a001d0100b0057a6f74d7bcso12978531pfx.1
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 06:58:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FH/Lp9MlKLCKaZbT73kzq05x4X87GgNm5ap75FWZ5H4=;
-        b=Z5DxEQJvjiAA6b+EFgYSeFxbfgGZ4itPKLjxbXeWLKu2HX5d/2/Fnk53WfaS9EytJc
-         B0Mb2A2ZDHwNm90nR+e1UB4CViqYnQY0enDU9MgHuLnbqAjV0WDzBzNdFPyk3YITBRFD
-         0S8V/hs+ur/vXaNK/WF51VlYfc3+nNQOa/oPxL7TzvG+biKfahKVqv2jZRlS+h+qKqUv
-         bQXbdxoqwmOLW3SiEijoNMSEEPY6tgpnUN7nguXZVlf+0dhCuCHALbpt0nI9GnE0M52/
-         IVR4GCi1NnsliyI5jyX8ysIwsCQzBEPzX5uG15bV2LmbK81/+JR7bjj5daN9tCcSSYli
-         5M/g==
-X-Gm-Message-State: AFqh2kqlgeYSCiTk8YpyMoz/nL1Fr9Vj/hBQE8viuGW9Xf6JybEQC8jQ
-        EHcrRZTodSJLiZJOp5ZNQrSmPk2KJdN7HQml4zgGgjIQK41sn1G5sFPz9FYglLd31j2J0QOtR6F
-        ovyNuOEJoRJRCm2ZIDvGcApFZ
-X-Received: by 2002:aa7:90d9:0:b0:580:df2d:47c4 with SMTP id k25-20020aa790d9000000b00580df2d47c4mr32414670pfk.19.1672671536545;
-        Mon, 02 Jan 2023 06:58:56 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu/jU0eyfX/7zCrMxSUEB4WmKwgUUKrVBc8mnkQozOF8ZixobVxmpjajys62AXlefjhUtgIVA==
-X-Received: by 2002:aa7:90d9:0:b0:580:df2d:47c4 with SMTP id k25-20020aa790d9000000b00580df2d47c4mr32414652pfk.19.1672671536244;
-        Mon, 02 Jan 2023 06:58:56 -0800 (PST)
-Received: from localhost.localdomain ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
-        by smtp.gmail.com with ESMTPSA id w18-20020aa79a12000000b00581816425f3sm10503683pfj.112.2023.01.02.06.58.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 06:58:55 -0800 (PST)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shigeru Yoshida <syoshida@redhat.com>,
-        syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com
-Subject: [PATCH] ext4: Verify extent header in ext4_find_extent()
-Date:   Mon,  2 Jan 2023 14:58:33 +0000
-Message-Id: <20230102145833.2758-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.39.0
+        Mon, 2 Jan 2023 09:59:19 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C229B65BD
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 06:59:18 -0800 (PST)
+Received: from [192.168.2.142] (109-252-113-89.nat.spd-mgts.ru [109.252.113.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B000B660036F;
+        Mon,  2 Jan 2023 14:59:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1672671557;
+        bh=P6twPSAUn14MSaKncu4Q5IlCvYzqCSUxPdVT3emjtIs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eiXb/uNl6OdbnvNa1TpajuzdJTUnkviFtgSQlA83EuxsK0IBdsUCmfw6IuWDgqUG2
+         Oi7wbyVkaTjS0/dea17uYhzclwCCmSikoLYL6S8V7dt0Bubdr5i90byVz9vLAhpy81
+         Pw62KiRi1wJ9V8r0buOko4jUYqMht+rORRSmf7fGgInJwMw5ymBUaQK0Hy/leBDTvA
+         4FqRur1eWIW0yQ5GFwLPkktC0M8AB8UIQvgLCP+u5OtUajINEDZ6Ht8l+BQNdvfiBD
+         IRm0jLGXv31e9nTg4NVMSZ0733UfC8YLxl7KffBhO5Rkq2UfOPYy4TsYFovQPWzQGb
+         2fwc7RossPKXQ==
+Message-ID: <f7bd13b1-67f1-da42-6bac-aa26ab309b5e@collabora.com>
+Date:   Mon, 2 Jan 2023 17:59:14 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] drm/virtio: Spiff out cmd queue/response traces
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221130000841.318037-1-robdclark@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20221130000841.318037-1-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot reported use-after-free in ext4_find_extent() [1].  If there is
-a corrupted file system, this can cause invalid memory access.
+On 11/30/22 03:08, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> Add a sequence # for more easily matching up cmd/resp, and the # of free
+> slots in the virtqueue to more easily see starvation issues.
+> 
+> v2: Fix handling of string fields as well
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>  drivers/gpu/drm/virtio/virtgpu_drv.h   |  3 +++
+>  drivers/gpu/drm/virtio/virtgpu_trace.h | 26 +++++++++++++++-----------
+>  drivers/gpu/drm/virtio/virtgpu_vq.c    | 13 ++++++++++---
+>  3 files changed, 28 insertions(+), 14 deletions(-)
 
-This patch fixes the issue by verifying extent header.
+Applied to drm-misc-next
 
-Reported-by: syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?id=cd95cb722bfa1234ac4c78345c8953ee2e7170d0 [1]
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- fs/ext4/extents.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index 9de1c9d1a13d..79bfa583ab1d 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -901,6 +901,9 @@ ext4_find_extent(struct inode *inode, ext4_lblk_t block,
- 		ret = -EFSCORRUPTED;
- 		goto err;
- 	}
-+	ret = ext4_ext_check(inode, eh, depth, 0);
-+	if (ret)
-+		goto err;
- 
- 	if (path) {
- 		ext4_ext_drop_refs(path);
 -- 
-2.38.1
+Best regards,
+Dmitry
 
