@@ -2,193 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7E665B51C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EABC765B51E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236262AbjABQc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:32:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
+        id S236357AbjABQdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbjABQc0 (ORCPT
+        with ESMTP id S236202AbjABQdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:32:26 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A871F2641
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:32:25 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bt23so25555163lfb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:32:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OPOWYK4xS+6xhzOdhfTnsSnUcVxUYMBnV8hiXVR43SI=;
-        b=WuNHynlhNUkJUcD6KxjstzrRlxBGV8jbuBJ/hrag17I5q4FZ19LDt1kUasU+Mf/ow1
-         JBdFdf/Q0EPoES9VCm0vib2w7JjQ6b0vOTXDcL9B89agvmmRsdc/EE+vKc/H2Lep6lT7
-         kvujpwUNElUfG8MRBS8uQJjwjOD3nhMAo9M0FcLNOllZ8+YQVMk5PaCE3nKmji6OVgcG
-         IIz+6L5GswHwQziHEeMp6UDveSxrLnfs0llc1Zs1AvixoQrFZYbEhPSGKbxY3n135fNu
-         jgyNdng/nhQCdHUrDtQKR65iViyWju50338n/pJMMU4qhyrO6wxw1rk0Q8wo/7AJuJQa
-         yEkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OPOWYK4xS+6xhzOdhfTnsSnUcVxUYMBnV8hiXVR43SI=;
-        b=pGWT+2h5oOWybQfxD5PY+s0cBei+6VpLaLTpnqAIic+v6jiNSxcicCrpX3f64LZLVf
-         ACUaVogVeOn3YUypcoJjw6HCtXHvxWbA+LyzM1Iszzvs2a4wxgMnxXq5T5RqQzyiSZeK
-         fp5Lf40e1MapnUZs9XBKuGaa0mMsJu7mVvfkjAF8dZ04UF+BrQ4bNqsrsGlfg/34Kist
-         hGnzVHxqNcwuhShX/H60TxJF4E7X3+mQ2uMkS1QH/Dz/souwNNQT+UhYOPRpEKig/HeP
-         frc5gdPYCCOCNePyHocdznpVddOPMFdRhrXAOMlDTaala/CpxwbTNmLsKKuPwGl0tK2+
-         SsnA==
-X-Gm-Message-State: AFqh2koYL5YEYWrtyzbN3i63/Kjx459GPI0PfpHBFa3784By2epbMcTl
-        W1a0guU/ifcpPoZRi04/Pe0Xkg==
-X-Google-Smtp-Source: AMrXdXtWnVOJrl54acwW1/P+lvWqyeGREQQIrliL5JrxuI2mDuRvgOBvBPJG9vCCGvebf+wH1RlFEw==
-X-Received: by 2002:ac2:5fcf:0:b0:4b5:5f97:6a16 with SMTP id q15-20020ac25fcf000000b004b55f976a16mr11197018lfg.43.1672677144056;
-        Mon, 02 Jan 2023 08:32:24 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05651234cc00b0047f7722b73csm4481991lfr.142.2023.01.02.08.32.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 08:32:23 -0800 (PST)
-Message-ID: <a885bf4b-253d-75fe-0224-02f8dfb44006@linaro.org>
-Date:   Mon, 2 Jan 2023 17:32:22 +0100
+        Mon, 2 Jan 2023 11:33:31 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900C1260A
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:33:30 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 077A75C00E6;
+        Mon,  2 Jan 2023 11:33:30 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 02 Jan 2023 11:33:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672677210; x=
+        1672763610; bh=lW9PYRq8hEEy7w1UqEtS4QDO9L0cWWs67YIW+dtEdaY=; b=B
+        RkpY+kAF2QTi0ZgltGOQaeJDhKWQLffArckWBtJWTklXFYJnlUgij7zXdC1uJBQM
+        0HEiAFbgIp/z/kXY2zmJEpAAg3rPsI9r3dGP/2qbKnYwPpYFkD9ph2auBcG++9BS
+        ylm2QQWgW3SIZDapmFdP5ZV1PcBWfsh9i9tFh+ue3KaPVNOfSrbqGsxNb4b/wXuo
+        FBSxQ+B0lgLLUcnSRAVZmU3M6h04YSFv1tHe1KAd1nv05N0scujtpPTkV521thN9
+        7Q1inUaEHMN3LHQKstqg60FKGiPz0171z2/KmuK2bxVxEFkovAsg5refAv37dFDm
+        wTWz9AiUH8oDszaLvWSig==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672677210; x=
+        1672763610; bh=lW9PYRq8hEEy7w1UqEtS4QDO9L0cWWs67YIW+dtEdaY=; b=M
+        b+cqviA9jseC+d/2FEVkSsWh89W63Pkp7wcpou8Unkx+hYZc2nnvCLVz7d+CBAaS
+        VXjNaEaJPZdsPILrLMmK7WE0GEYKn2PkQpM2OrWt2I/OwnwBRQg8rhoKWHyWO2ta
+        cu+pn/X4vxps37j12qDnxp3+pL9IpGBSsc6LkLxOzd5HlufJ59bew7KNNTlCa3yG
+        REBEq/Hw/xPsX9U0rDQe3cCOJ5z05wKpNerwh8dDG5dqaNKku4DZiJiZe11ruJbR
+        Unw9lZtRBSfK31xMWsR25X8bNGKTXKbJRy39/BezIzcRfCWfTFdiCTiHuol9IcEP
+        sgZ4wB+3ITjMCAaK2gWfg==
+X-ME-Sender: <xms:WQezYweTvXtjB1-0bxZCC5gpgRsaVWE3fffpv2EiKs9jMaPpnbpZbg>
+    <xme:WQezYyMAOubGvRpN_GUVt2-UZnVyl2ARTVJ8mFNsmIjr4SsS7z76iH96yV-XJMfvY
+    qC-jROxzt0FMoac8A>
+X-ME-Received: <xmr:WQezYxjZdZTjAQxdqVWPV2sFwGdOCbDMuSs1q0r1A04TjuJH_L16_RMX6DIQWreuDHCkOkYtmZuCNxakU9AlxGB9tT1oFW6PUVpeuX-dj7ftUiKRy2pyEQnMJA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedvgdeltdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgfdtgfelffekveelvdeuteetfefgleelhfejteeiuefhheetueef
+    fefgheefveefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:WQezY19rPE58Eo6mreQdNkjbSxcaVE-723Z31FXgwISYRoUZWUckog>
+    <xmx:WQezY8vVCDLqiier_tpnhHfq_TIKdUZb_biotPYRKIt7zV_zT95uaQ>
+    <xmx:WQezY8EF4t9-v3rq5zv-sNNyA7BAgBTVh4-nkF9ChMcygEivskPAdg>
+    <xmx:WgezY-IhT7pcbj65kUwLOaW4pnZmyxOvcoNFZE-li8kPKr_JwZwAww>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 2 Jan 2023 11:33:29 -0500 (EST)
+Message-ID: <91a7f7c0-9be3-9cac-c2d8-a34563bc4410@sholland.org>
+Date:   Mon, 2 Jan 2023 10:33:28 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 13/13] dt-bindings: mediatek: mt8188: add mt8188-mt6359
- document
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 7/7] mtd: rawnand: sunxi: Precompute the ECC_CTL register
+ value
 Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de
-Cc:     angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Brian Norris <computersforpeace@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221230055443.16024-1-trevor.wu@mediatek.com>
- <20221230055443.16024-14-trevor.wu@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221230055443.16024-14-trevor.wu@mediatek.com>
+        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20221229181526.53766-1-samuel@sholland.org>
+ <20221229181526.53766-8-samuel@sholland.org> <20230102103009.00486aa3@xps-13>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20230102103009.00486aa3@xps-13>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/12/2022 06:54, Trevor Wu wrote:
-> Add document for mt8188 board with mt6359.
+Hi Miquèl,
 
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
-
+On 1/2/23 03:30, Miquel Raynal wrote:
+> Hi Samuel,
 > 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> ---
->  .../sound/mediatek,mt8188-mt6359.yaml         | 93 +++++++++++++++++++
->  1 file changed, 93 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
+> samuel@sholland.org wrote on Thu, 29 Dec 2022 12:15:26 -0600:
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
-> new file mode 100644
-> index 000000000000..5754c1d460db
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
-> @@ -0,0 +1,93 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/mediatek,mt8188-mt6359.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek MT8188 ASoC sound card
-> +
-> +maintainers:
-> +  - Trevor Wu <trevor.wu@mediatek.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8188-mt6359-evb
-> +
-> +  model:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: User specified audio sound card name
-> +
-> +  audio-routing:
-> +    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-> +    description:
-> +      A list of the connections between audio components. Each entry is a
-> +      sink/source pair of strings. Valid names could be the input or output
-> +      widgets of audio components, power supplies, MicBias of codec and the
-> +      software switch.
-> +
-> +  mediatek,platform:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of MT8188 ASoC platform.
-> +
-> +patternProperties:
-> +  "^dai-link-[0-9]+$":
-> +    type: object
+>> This removes an unnecessary memory allocation, and avoids recomputing
+>> the same register value every time ECC is enabled.
+> 
+> I am fine with the "let's not recompute the register value each time"
+> idea, but I like having a dedicated object reserved for the ECC
+> engine, that is separated from the main controller structure (both
+> are two different things, even though they are usually well
+> integrated).
+> 
+> If it's actually useless you can still get rid of the allocation and in
+> the structure you can save the ecc_ctrl reg value instead of mode.
 
-On this level:
-additionalProperties: false
+OK, I will do this, and split it into two patches: one for replacing
+mode with ecc_ctrl, and the second to keep the structure but get rid of
+the allocation.
 
-> +    description: |
-> +      Container for dai-link level properties and CODEC sub-nodes.
-> +
-> +    properties:
-> +      dai-link-name:
+Regards,
+Samuel
 
-Instead:
-link-name
-> +        description: |
-> +          This property corresponds to the name of the BE dai-link to which
-> +          we are going to update parameters in this node.
-> +        items:
-> +          enum:
-> +            - ADDA_BE
-> +            - DPTX_BE
-> +            - ETDM1_IN_BE
-> +            - ETDM2_IN_BE
-> +            - ETDM1_OUT_BE
-> +            - ETDM2_OUT_BE
-> +            - ETDM3_OUT_BE
-> +            - PCM1_BE
-> +
-> +      codec:
-> +        description: Holds subnode which indicates codec dai.
-> +        type: object
-> +        additionalProperties: false
-> +        properties:
-> +          sound-dai:
-> +            minItems: 1
-> +            maxItems: 2
-
-required sound-dai
-
-> +
-> +    required:
-> +      - dai-link-name
-> +      - codec
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - mediatek,platform
-> +
-
-Your example looks pretty straightforward. Maybe you can use
-simple-card.yaml?	
-
-
-Best regards,
-Krzysztof
+> The other patches in the series look good to me.
+> 
+> Thanks,
+> Miquèl
+> 
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>>  drivers/mtd/nand/raw/sunxi_nand.c | 75 ++++++-------------------------
+>>  1 file changed, 13 insertions(+), 62 deletions(-)
+>>
+>> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sunxi_nand.c
+>> index a3bc9f7f9e5a..5c5a567d8870 100644
+>> --- a/drivers/mtd/nand/raw/sunxi_nand.c
+>> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
+>> @@ -169,22 +169,13 @@ struct sunxi_nand_chip_sel {
+>>  	s8 rb;
+>>  };
+>>  
+>> -/**
+>> - * struct sunxi_nand_hw_ecc - stores information related to HW ECC support
+>> - *
+>> - * @mode: the sunxi ECC mode field deduced from ECC requirements
+>> - */
+>> -struct sunxi_nand_hw_ecc {
+>> -	int mode;
+>> -};
+>> -
+>>  /**
+>>   * struct sunxi_nand_chip - stores NAND chip device related information
+>>   *
+>>   * @node: used to store NAND chips into a list
+>>   * @nand: base NAND chip structure
+>> - * @ecc: ECC controller structure
+>>   * @clk_rate: clk_rate required for this NAND chip
+>> + * @ecc_ctl: ECC_CTL register value for this NAND chip
+>>   * @timing_cfg: TIMING_CFG register value for this NAND chip
+>>   * @timing_ctl: TIMING_CTL register value for this NAND chip
+>>   * @nsels: number of CS lines required by the NAND chip
+>> @@ -193,8 +184,8 @@ struct sunxi_nand_hw_ecc {
+>>  struct sunxi_nand_chip {
+>>  	struct list_head node;
+>>  	struct nand_chip nand;
+>> -	struct sunxi_nand_hw_ecc *ecc;
+>>  	unsigned long clk_rate;
+>> +	u32 ecc_ctl;
+>>  	u32 timing_cfg;
+>>  	u32 timing_ctl;
+>>  	int nsels;
+>> @@ -689,26 +680,15 @@ static void sunxi_nfc_hw_ecc_enable(struct nand_chip *nand)
+>>  {
+>>  	struct sunxi_nand_chip *sunxi_nand = to_sunxi_nand(nand);
+>>  	struct sunxi_nfc *nfc = to_sunxi_nfc(nand->controller);
+>> -	u32 ecc_ctl;
+>> -
+>> -	ecc_ctl = readl(nfc->regs + NFC_REG_ECC_CTL);
+>> -	ecc_ctl &= ~(NFC_ECC_MODE_MSK | NFC_ECC_PIPELINE |
+>> -		     NFC_ECC_BLOCK_SIZE_MSK);
+>> -	ecc_ctl |= NFC_ECC_EN | NFC_ECC_MODE(sunxi_nand->ecc->mode) |
+>> -		   NFC_ECC_EXCEPTION | NFC_ECC_PIPELINE;
+>> -
+>> -	if (nand->ecc.size == 512)
+>> -		ecc_ctl |= NFC_ECC_BLOCK_512;
+>>  
+>> -	writel(ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
+>> +	writel(sunxi_nand->ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
+>>  }
+>>  
+>>  static void sunxi_nfc_hw_ecc_disable(struct nand_chip *nand)
+>>  {
+>>  	struct sunxi_nfc *nfc = to_sunxi_nfc(nand->controller);
+>>  
+>> -	writel(readl(nfc->regs + NFC_REG_ECC_CTL) & ~NFC_ECC_EN,
+>> -	       nfc->regs + NFC_REG_ECC_CTL);
+>> +	writel(0, nfc->regs + NFC_REG_ECC_CTL);
+>>  }
+>>  
+>>  static inline void sunxi_nfc_user_data_to_buf(u32 user_data, u8 *buf)
+>> @@ -1626,11 +1606,6 @@ static const struct mtd_ooblayout_ops sunxi_nand_ooblayout_ops = {
+>>  	.free = sunxi_nand_ooblayout_free,
+>>  };
+>>  
+>> -static void sunxi_nand_hw_ecc_ctrl_cleanup(struct sunxi_nand_chip *sunxi_nand)
+>> -{
+>> -	kfree(sunxi_nand->ecc);
+>> -}
+>> -
+>>  static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+>>  				       struct nand_ecc_ctrl *ecc,
+>>  				       struct device_node *np)
+>> @@ -1641,7 +1616,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+>>  	struct mtd_info *mtd = nand_to_mtd(nand);
+>>  	struct nand_device *nanddev = mtd_to_nanddev(mtd);
+>>  	int nsectors;
+>> -	int ret;
+>>  	int i;
+>>  
+>>  	if (nanddev->ecc.user_conf.flags & NAND_ECC_MAXIMIZE_STRENGTH) {
+>> @@ -1675,10 +1649,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+>>  	if (ecc->size != 512 && ecc->size != 1024)
+>>  		return -EINVAL;
+>>  
+>> -	sunxi_nand->ecc = kzalloc(sizeof(*sunxi_nand->ecc), GFP_KERNEL);
+>> -	if (!sunxi_nand->ecc)
+>> -		return -ENOMEM;
+>> -
+>>  	/* Prefer 1k ECC chunk over 512 ones */
+>>  	if (ecc->size == 512 && mtd->writesize > 512) {
+>>  		ecc->size = 1024;
+>> @@ -1699,12 +1669,9 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+>>  
+>>  	if (i >= ARRAY_SIZE(strengths)) {
+>>  		dev_err(nfc->dev, "unsupported strength\n");
+>> -		ret = -ENOTSUPP;
+>> -		goto err;
+>> +		return -ENOTSUPP;
+>>  	}
+>>  
+>> -	sunxi_nand->ecc->mode = i;
+>> -
+>>  	/* HW ECC always request ECC bytes for 1024 bytes blocks */
+>>  	ecc->bytes = DIV_ROUND_UP(ecc->strength * fls(8 * 1024), 8);
+>>  
+>> @@ -1713,10 +1680,14 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+>>  
+>>  	nsectors = mtd->writesize / ecc->size;
+>>  
+>> -	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors)) {
+>> -		ret = -EINVAL;
+>> -		goto err;
+>> -	}
+>> +	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors))
+>> +		return -EINVAL;
+>> +
+>> +	sunxi_nand->ecc_ctl = NFC_ECC_MODE(i) | NFC_ECC_EXCEPTION |
+>> +			      NFC_ECC_PIPELINE | NFC_ECC_EN;
+>> +
+>> +	if (ecc->size == 512)
+>> +		sunxi_nand->ecc_ctl |= NFC_ECC_BLOCK_512;
+>>  
+>>  	ecc->read_oob = sunxi_nfc_hw_ecc_read_oob;
+>>  	ecc->write_oob = sunxi_nfc_hw_ecc_write_oob;
+>> @@ -1739,25 +1710,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+>>  	ecc->write_oob_raw = nand_write_oob_std;
+>>  
+>>  	return 0;
+>> -
+>> -err:
+>> -	kfree(sunxi_nand->ecc);
+>> -
+>> -	return ret;
+>> -}
+>> -
+>> -static void sunxi_nand_ecc_cleanup(struct sunxi_nand_chip *sunxi_nand)
+>> -{
+>> -	struct nand_ecc_ctrl *ecc = &sunxi_nand->nand.ecc;
+>> -
+>> -	switch (ecc->engine_type) {
+>> -	case NAND_ECC_ENGINE_TYPE_ON_HOST:
+>> -		sunxi_nand_hw_ecc_ctrl_cleanup(sunxi_nand);
+>> -		break;
+>> -	case NAND_ECC_ENGINE_TYPE_NONE:
+>> -	default:
+>> -		break;
+>> -	}
+>>  }
+>>  
+>>  static int sunxi_nand_attach_chip(struct nand_chip *nand)
+>> @@ -1970,7 +1922,6 @@ static void sunxi_nand_chips_cleanup(struct sunxi_nfc *nfc)
+>>  		ret = mtd_device_unregister(nand_to_mtd(chip));
+>>  		WARN_ON(ret);
+>>  		nand_cleanup(chip);
+>> -		sunxi_nand_ecc_cleanup(sunxi_nand);
+>>  		list_del(&sunxi_nand->node);
+>>  	}
+>>  }
 
