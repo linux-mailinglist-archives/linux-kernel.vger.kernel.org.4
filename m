@@ -2,173 +2,552 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083B265B45D
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAB565B460
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236172AbjABPqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S236415AbjABPqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjABPqX (ORCPT
+        with ESMTP id S236287AbjABPqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:46:23 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4975F9C;
-        Mon,  2 Jan 2023 07:46:21 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 99E0D3422B;
-        Mon,  2 Jan 2023 15:46:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672674380;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0kN36fAD79xDzKSoBM4U+uzPuosajOxFlniG0gS5LyA=;
-        b=ZopZ4CUmVga5lv464LF1TUu8UCiC7r2z9ymVssakAccU/zxO6UZheMw68mebZfSj/s+K+M
-        ie9YIBn8/DRK7rBPVIiNUyIwoE3cqtZ9Rs1ek7XjPT92N6wfIp6bhHpPjuLI2Eivi+HEHZ
-        0Fko/gBYP8/vBKR8mP/XJloZFjG6LGw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672674380;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0kN36fAD79xDzKSoBM4U+uzPuosajOxFlniG0gS5LyA=;
-        b=GS8HodUsTgfnZh5Ka1S+69/0SQ1LuXvc/vmXYpqz3T3/T6ctI7U37wurwG1rtmDPe6LLn2
-        cEJKTKGcwJYjCICQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D41213427;
-        Mon,  2 Jan 2023 15:46:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bJLJFUz8smONcQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 02 Jan 2023 15:46:20 +0000
-Date:   Mon, 2 Jan 2023 16:40:50 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     linux-btrfs <linux-btrfs@vger.kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Subject: Re: [regression] =?iso-8859-1?Q?Bug=A02168?= =?iso-8859-1?Q?51?= -
- btrfs write time corrupting for log tree
-Message-ID: <20230102154050.GJ11562@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <ae169fc6-f504-28f0-a098-6fa6a4dfb612@leemhuis.info>
+        Mon, 2 Jan 2023 10:46:34 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BBFA451
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:46:32 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso14345777wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:46:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KV4l1PZvtI/O0whJ9bApwDMsPvefMK+G8FG3GsRq98o=;
+        b=M60Q3/0uBdWA0S+Tn70fRisxEI7FsEe7EbJbu06TKVycKn3MmDmRhd7+x75BA70GyI
+         Et1m+gk9GxwSC2LmSGkINcuQ250VnvmobG9oCJJfqXrtyi1gfX5lkjqqZaHtA9Plcr4/
+         DNsExlRZfSt3v+C1Q5SatTqOXRcMKkvO8Bq9pfvSETf9RcHSX+6DKaeXk/4PBp7kqcXZ
+         bSlOGjpCnCA9t26zBO6cXE5HZ2C8h1aupHFezw0FiDIV13d9dxicTs/AP9ohcCPM5Iv2
+         DoYDVx7sA8NxDUJksUm7M8LCA+NMjOKbFPI0XZtQXMtOntvC98KMgB/gy5twSYH/BdZh
+         cD/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KV4l1PZvtI/O0whJ9bApwDMsPvefMK+G8FG3GsRq98o=;
+        b=wy02RDasyb718mo5yzfsnv4N/uPr3BxYMKT+LfUk59SRvMB7heh5jR5A3pL10jrz0y
+         5VB2VYrHvaOilvL69rhQNvBXThlQ9nweUXnwBPN+2OVAYA0wRxY9gz+wPY27ZU4YD1RA
+         zsuuFFWUeVIYbOkMM2nbEIDS8jp1x/qvRaFpJHNy64l7kaKGFK017ity4as5wmGIxeX9
+         4GO+cSzIcpzoupUgiNMpZf/x2+mbCstxzznfKEV3/gZndaIv3+8wkLX201C6Y5p1oy3g
+         XwnqPxbiqOptwYfecfmDw7pCA06SPAHBTvR/d22sW888E3C++lqknQqP9rAQeXGRTJPK
+         OlCw==
+X-Gm-Message-State: AFqh2ko1eejxYMfLkp81WS/vqZb2DOHavUoVfb+kW4HUz63fQF6g8nuK
+        U4rmqvrHKWTFrUrgA8luhDY=
+X-Google-Smtp-Source: AMrXdXsQ81BRul2q2Jf6iyqzFnhMK8415HhqzggvxHDLMLgqrT92MfTHQSvlBcOjoZVmVxqJkGJk2w==
+X-Received: by 2002:a05:600c:54c2:b0:3d3:3c74:dbd0 with SMTP id iw2-20020a05600c54c200b003d33c74dbd0mr29031123wmb.13.1672674390957;
+        Mon, 02 Jan 2023 07:46:30 -0800 (PST)
+Received: from ?IPV6:2a02:908:1256:79a0:8d77:4e27:bb99:9a97? ([2a02:908:1256:79a0:8d77:4e27:bb99:9a97])
+        by smtp.gmail.com with ESMTPSA id n20-20020a05600c4f9400b003d9b351de26sm6282138wmq.9.2023.01.02.07.46.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 07:46:30 -0800 (PST)
+Message-ID: <748c7a8f-38e1-53de-27f4-7550cc8c8e4d@gmail.com>
+Date:   Mon, 2 Jan 2023 16:46:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae169fc6-f504-28f0-a098-6fa6a4dfb612@leemhuis.info>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 05/11] drm/amd: Request SDMA microcode during IP
+ discovery
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Carlos Soriano Sanchez <csoriano@redhat.com>,
+        David Airlie <airlied@gmail.com>, christian.koenig@amd.com
+References: <20221230052119.15096-1-mario.limonciello@amd.com>
+ <20221230052119.15096-6-mario.limonciello@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20221230052119.15096-6-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 03:01:34PM +0100, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker speaking.
-> 
-> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> kernel developer don't keep an eye on it, I decided to forward it by
-> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216851 :
-> 
-> > I am experiencing btrfs file system errors followed by a switch to readony with kernel 6.1 and 6.1.1. It never happened with kernel versions before.
-> > 
-> > A btrfs scrub and a btrfs check --readonly returned 0 errors.
-> > 
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS critical (device sda2): corrupt leaf: root=18446744073709551610 block=203366612992 slot=73, bad key order, prev (484119 96 1312873) current (484119 96 1312849)
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS info (device sda2): leaf 203366612992 gen 5068802 total ptrs 105 free space 10820 owner 18446744073709551610
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 0 key (484119 1 0) itemoff 16123 itemsize 160
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09inode generation 45 size 2250 mode 40700
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 1 key (484119 12 484118) itemoff 16097 itemsize 26
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 2 key (484119 72 15) itemoff 16089 itemsize 8
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 3 key (484119 72 20) itemoff 16081 itemsize 8
-> > ...
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 82 key (484119 96 1312873) itemoff 14665 itemsize 51
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 83 key (484119 96 1312877) itemoff 14609 itemsize 56
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 84 key (484128 1 0) itemoff 14449 itemsize 160
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09inode generation 45 size 98304 mode 100644
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 85 key (484128 108 0) itemoff 14396 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10674830381056 nr 65536
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 65536 ram 65536
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 86 key (484129 1 0) itemoff 14236 itemsize 160
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09inode generation 45 size 26214400 mode 100644
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 87 key (484129 108 589824) itemoff 14183 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665699962880 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 88 key (484129 108 2850816) itemoff 14130 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665848733696 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 89 key (484129 108 11042816) itemoff 14077 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10660869349376 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 90 key (484129 108 13402112) itemoff 14024 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10660207378432 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 91 key (484129 108 19628032) itemoff 13971 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665835618304 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 92 key (484129 108 21266432) itemoff 13918 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10661222666240 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 93 key (484129 108 22740992) itemoff 13865 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665565814784 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 94 key (484129 108 23101440) itemoff 13812 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665836371968 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 95 key (484129 108 24084480) itemoff 13759 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665836404736 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 96 key (484129 108 24150016) itemoff 13706 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665849159680 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 97 key (484129 108 24313856) itemoff 13653 itemsize 53
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665849192448 nr 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 98 key (484147 1 0) itemoff 13493 itemsize 160
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09inode generation 45 size 886 mode 40755
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 99 key (484147 72 4) itemoff 13485 itemsize 8
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 100 key (484147 72 27) itemoff 13477 itemsize 8
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 101 key (484147 72 35) itemoff 13469 itemsize 8
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 102 key (484147 72 40) itemoff 13461 itemsize 8
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 103 key (484147 72 45) itemoff 13453 itemsize 8
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 104 key (484147 72 52) itemoff 13445 itemsize 8
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS error (device sda2): block=203366612992 write time tree block corruption detected
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS: error (device sda2: state AL) in free_log_tree:3284: errno=-5 IO failure
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS info (device sda2: state EAL): forced readonly
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS warning (device sda2: state EAL): Skipping commit of aborted transaction.
-> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS: error (device sda2: state EAL) in cleanup_transaction:1958: errno=-5 IO failure
-> > 
-> > 
-> > There are no SSD access errors in the kernel logs. Smart data for the SSD is normal. I also did a 12 hour memtest to rule out bad RAM.
-> > 
-> > The filesystem consists of a single 480GB SATA SSD (Corsair Neutron XTI). The problems occurs only on one machine.
-> > 
-> > The error appears about every few days and seems to be triggered by a cspecially under high cpu utilization combined with some disk IO. CPU temperature never exceeds 60 degrees.
-> 
-> See the ticket for more details.
-> 
-> For the record, the issue is apparently different from the 6.2-rc
-> regression currently discussed, as stated here:
-> https://lore.kernel.org/lkml/462e7bd3-d1f2-3718-fde9-77b418e9fd91@gmx.com/
-> 
-> BTW, let me use this mail to also add the report to the list of tracked
-> regressions to ensure it's doesn't fall through the cracks:
-> 
-> #regzbot introduced: v6.0..v6.1
-> https://bugzilla.kernel.org/show_bug.cgi?id=216851
-> #regzbot title: btrfs: write time corrupting for log tree in 6.1
-> #regzbot ignore-activity
 
-#regzbot fix: 'btrfs: fix false alert on bad tree level check'
+
+Am 30.12.22 um 06:21 schrieb Mario Limonciello:
+> If SDMA microcode is not available during early init, the firmware
+> framebuffer will have already been released and the screen will
+> freeze.
+>
+> Move the request from SDMA microcode into the IP discovery phase
+> so that if it's not available, IP discovery will fail.
+>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v2->v3:
+>   * Fix dGPU naming scheme
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 57 ++++++++++++++++
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c      |  9 +--
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h      |  2 +-
+>   drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c        | 61 +----------------
+>   drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c        | 42 +-----------
+>   drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c        | 65 +------------------
+>   drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c        | 30 +--------
+>   7 files changed, 66 insertions(+), 200 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
+> index b719852daa07..24d54ab0963a 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
+> @@ -90,6 +90,40 @@ MODULE_FIRMWARE(FIRMWARE_IP_DISCOVERY);
+>   #define mmMM_INDEX_HI		0x6
+>   #define mmMM_DATA		0x1
+>   
+> +MODULE_FIRMWARE("amdgpu/navi10_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/navi10_sdma1.bin");
+> +MODULE_FIRMWARE("amdgpu/navi14_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/navi14_sdma1.bin");
+> +MODULE_FIRMWARE("amdgpu/navi12_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/navi12_sdma1.bin");
+> +MODULE_FIRMWARE("amdgpu/cyan_skillfish2_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/cyan_skillfish2_sdma1.bin");
+> +MODULE_FIRMWARE("amdgpu/vega10_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/vega10_sdma1.bin");
+> +MODULE_FIRMWARE("amdgpu/vega12_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/vega12_sdma1.bin");
+> +MODULE_FIRMWARE("amdgpu/vega20_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/vega20_sdma1.bin");
+> +MODULE_FIRMWARE("amdgpu/raven_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/picasso_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/raven2_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/arcturus_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/renoir_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/green_sardine_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/aldebaran_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/sienna_cichlid_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/navy_flounder_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/dimgrey_cavefish_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/beige_goby_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/vangogh_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/yellow_carp_sdma.bin");
+> +MODULE_FIRMWARE("amdgpu/sdma_5_2_6.bin");
+> +MODULE_FIRMWARE("amdgpu/sdma_5_2_7.bin");
+> +MODULE_FIRMWARE("amdgpu/sdma_6_0_0.bin");
+> +MODULE_FIRMWARE("amdgpu/sdma_6_0_1.bin");
+> +MODULE_FIRMWARE("amdgpu/sdma_6_0_2.bin");
+> +MODULE_FIRMWARE("amdgpu/sdma_6_0_3.bin");
+
+If we centralize the MODULE_FIRMWARE() requests I think we should rather 
+move that to amdgpu_ucode.c instead.
+
+One minor problem is that we considered adding support for disabling 
+some hw generations during compilation, but since this never 
+materialized we are probably never going to need it.
+
+With the MODULE_FIRMWARE() requests moved feel free to add an Acked-by: 
+Christian König <christian.koenig@amd.com> to the series.
+
+Regards,
+Christian.
+
+> +
+>   static const char *hw_id_names[HW_ID_MAX] = {
+>   	[MP1_HWID]		= "MP1",
+>   	[MP2_HWID]		= "MP2",
+> @@ -1821,8 +1855,26 @@ static int amdgpu_discovery_set_gc_ip_blocks(struct amdgpu_device *adev)
+>   	return 0;
+>   }
+>   
+> +static int amdgpu_discovery_load_sdma_fw(struct amdgpu_device *adev, u32 instance,
+> +					 const char *chip_name)
+> +{
+> +	char fw_name[40];
+> +
+> +	if (instance == 0)
+> +		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s.bin", chip_name);
+> +	else
+> +		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s1.bin", chip_name);
+> +
+> +	return request_firmware(&adev->sdma.instance[instance].fw, fw_name, adev->dev);
+> +}
+> +
+>   static int amdgpu_discovery_set_sdma_ip_blocks(struct amdgpu_device *adev)
+>   {
+> +	char ucode_prefix[30];
+> +	int i, r;
+> +
+> +	amdgpu_ucode_ip_version_decode(adev, SDMA0_HWIP, ucode_prefix, sizeof(ucode_prefix));
+> +
+>   	switch (adev->ip_versions[SDMA0_HWIP][0]) {
+>   	case IP_VERSION(4, 0, 0):
+>   	case IP_VERSION(4, 0, 1):
+> @@ -1862,6 +1914,11 @@ static int amdgpu_discovery_set_sdma_ip_blocks(struct amdgpu_device *adev)
+>   			adev->ip_versions[SDMA0_HWIP][0]);
+>   		return -EINVAL;
+>   	}
+> +	for (i = 0; i < adev->sdma.num_instances; i++) {
+> +		r = amdgpu_discovery_load_sdma_fw(adev, i, ucode_prefix);
+> +		if (r)
+> +			return r;
+> +	}
+>   	return 0;
+>   }
+>   
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c
+> index ea5278f094c0..9e46d8034c03 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c
+> @@ -205,8 +205,7 @@ void amdgpu_sdma_destroy_inst_ctx(struct amdgpu_device *adev,
+>   }
+>   
+>   int amdgpu_sdma_init_microcode(struct amdgpu_device *adev,
+> -			       char *fw_name, u32 instance,
+> -			       bool duplicate)
+> +			       u32 instance, bool duplicate)
+>   {
+>   	struct amdgpu_firmware_info *info = NULL;
+>   	const struct common_firmware_header *header = NULL;
+> @@ -214,10 +213,6 @@ int amdgpu_sdma_init_microcode(struct amdgpu_device *adev,
+>   	const struct sdma_firmware_header_v2_0 *sdma_hdr;
+>   	uint16_t version_major;
+>   
+> -	err = request_firmware(&adev->sdma.instance[instance].fw, fw_name, adev->dev);
+> -	if (err)
+> -		goto out;
+> -
+>   	header = (const struct common_firmware_header *)
+>   		adev->sdma.instance[instance].fw->data;
+>   	version_major = le16_to_cpu(header->header_version_major);
+> @@ -280,7 +275,7 @@ int amdgpu_sdma_init_microcode(struct amdgpu_device *adev,
+>   
+>   out:
+>   	if (err) {
+> -		DRM_ERROR("SDMA: Failed to init firmware \"%s\"\n", fw_name);
+> +		DRM_ERROR("SDMA: Failed to init sdma firmware\n");
+>   		amdgpu_sdma_destroy_inst_ctx(adev, duplicate);
+>   	}
+>   	return err;
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h
+> index 7d99205c2e01..07b375e89e83 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h
+> @@ -125,7 +125,7 @@ int amdgpu_sdma_process_ecc_irq(struct amdgpu_device *adev,
+>   				      struct amdgpu_irq_src *source,
+>   				      struct amdgpu_iv_entry *entry);
+>   int amdgpu_sdma_init_microcode(struct amdgpu_device *adev,
+> -        char *fw_name, u32 instance, bool duplicate);
+> +	u32 instance, bool duplicate);
+>   void amdgpu_sdma_destroy_inst_ctx(struct amdgpu_device *adev,
+>           bool duplicate);
+>   void amdgpu_sdma_unset_buffer_funcs_helper(struct amdgpu_device *adev);
+> diff --git a/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c b/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
+> index 4d780e4430e7..bbaee1cfc92d 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
+> @@ -58,20 +58,6 @@
+>   #include "amdgpu_ras.h"
+>   #include "sdma_v4_4.h"
+>   
+> -MODULE_FIRMWARE("amdgpu/vega10_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/vega10_sdma1.bin");
+> -MODULE_FIRMWARE("amdgpu/vega12_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/vega12_sdma1.bin");
+> -MODULE_FIRMWARE("amdgpu/vega20_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/vega20_sdma1.bin");
+> -MODULE_FIRMWARE("amdgpu/raven_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/picasso_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/raven2_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/arcturus_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/renoir_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/green_sardine_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/aldebaran_sdma.bin");
+> -
+>   #define SDMA0_POWER_CNTL__ON_OFF_CONDITION_HOLD_TIME_MASK  0x000000F8L
+>   #define SDMA0_POWER_CNTL__ON_OFF_STATUS_DURATION_TIME_MASK 0xFC000000L
+>   
+> @@ -575,60 +561,17 @@ static void sdma_v4_0_setup_ulv(struct amdgpu_device *adev)
+>   // vega10 real chip need to use PSP to load firmware
+>   static int sdma_v4_0_init_microcode(struct amdgpu_device *adev)
+>   {
+> -	const char *chip_name;
+> -	char fw_name[30];
+>   	int ret, i;
+>   
+> -	DRM_DEBUG("\n");
+> -
+> -	switch (adev->ip_versions[SDMA0_HWIP][0]) {
+> -	case IP_VERSION(4, 0, 0):
+> -		chip_name = "vega10";
+> -		break;
+> -	case IP_VERSION(4, 0, 1):
+> -		chip_name = "vega12";
+> -		break;
+> -	case IP_VERSION(4, 2, 0):
+> -		chip_name = "vega20";
+> -		break;
+> -	case IP_VERSION(4, 1, 0):
+> -	case IP_VERSION(4, 1, 1):
+> -		if (adev->apu_flags & AMD_APU_IS_RAVEN2)
+> -			chip_name = "raven2";
+> -		else if (adev->apu_flags & AMD_APU_IS_PICASSO)
+> -			chip_name = "picasso";
+> -		else
+> -			chip_name = "raven";
+> -		break;
+> -	case IP_VERSION(4, 2, 2):
+> -		chip_name = "arcturus";
+> -		break;
+> -	case IP_VERSION(4, 1, 2):
+> -		if (adev->apu_flags & AMD_APU_IS_RENOIR)
+> -			chip_name = "renoir";
+> -		else
+> -			chip_name = "green_sardine";
+> -		break;
+> -	case IP_VERSION(4, 4, 0):
+> -		chip_name = "aldebaran";
+> -		break;
+> -	default:
+> -		BUG();
+> -	}
+> -
+>   	for (i = 0; i < adev->sdma.num_instances; i++) {
+> -		if (i == 0)
+> -			snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_sdma.bin", chip_name);
+> -		else
+> -			snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_sdma%d.bin", chip_name, i);
+>   		if (adev->ip_versions[SDMA0_HWIP][0] == IP_VERSION(4, 2, 2) ||
+>                       adev->ip_versions[SDMA0_HWIP][0] == IP_VERSION(4, 4, 0)) {
+>   			/* Acturus & Aldebaran will leverage the same FW memory
+>   			   for every SDMA instance */
+> -			ret = amdgpu_sdma_init_microcode(adev, fw_name, 0, true);
+> +			ret = amdgpu_sdma_init_microcode(adev, 0, true);
+>   			break;
+>   		} else {
+> -			ret = amdgpu_sdma_init_microcode(adev, fw_name, i, false);
+> +			ret = amdgpu_sdma_init_microcode(adev, i, false);
+>   			if (ret)
+>   				return ret;
+>   		}
+> diff --git a/drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c b/drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c
+> index d4d9f196db83..4154b511ae94 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c
+> @@ -42,18 +42,6 @@
+>   #include "sdma_common.h"
+>   #include "sdma_v5_0.h"
+>   
+> -MODULE_FIRMWARE("amdgpu/navi10_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/navi10_sdma1.bin");
+> -
+> -MODULE_FIRMWARE("amdgpu/navi14_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/navi14_sdma1.bin");
+> -
+> -MODULE_FIRMWARE("amdgpu/navi12_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/navi12_sdma1.bin");
+> -
+> -MODULE_FIRMWARE("amdgpu/cyan_skillfish2_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/cyan_skillfish2_sdma1.bin");
+> -
+>   #define SDMA1_REG_OFFSET 0x600
+>   #define SDMA0_HYP_DEC_REG_START 0x5880
+>   #define SDMA0_HYP_DEC_REG_END 0x5893
+> @@ -237,39 +225,13 @@ static void sdma_v5_0_init_golden_registers(struct amdgpu_device *adev)
+>   // emulation only, won't work on real chip
+>   // navi10 real chip need to use PSP to load firmware
+>   static int sdma_v5_0_init_microcode(struct amdgpu_device *adev)
+> -{
+> -	const char *chip_name;
+> -	char fw_name[40];
+> -	int ret, i;
+> +{	int ret, i;
+>   
+>   	if (amdgpu_sriov_vf(adev) && (adev->ip_versions[SDMA0_HWIP][0] == IP_VERSION(5, 0, 5)))
+>   		return 0;
+>   
+> -	DRM_DEBUG("\n");
+> -
+> -	switch (adev->ip_versions[SDMA0_HWIP][0]) {
+> -	case IP_VERSION(5, 0, 0):
+> -		chip_name = "navi10";
+> -		break;
+> -	case IP_VERSION(5, 0, 2):
+> -		chip_name = "navi14";
+> -		break;
+> -	case IP_VERSION(5, 0, 5):
+> -		chip_name = "navi12";
+> -		break;
+> -	case IP_VERSION(5, 0, 1):
+> -		chip_name = "cyan_skillfish2";
+> -		break;
+> -	default:
+> -		BUG();
+> -	}
+> -
+>   	for (i = 0; i < adev->sdma.num_instances; i++) {
+> -		if (i == 0)
+> -			snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_sdma.bin", chip_name);
+> -		else
+> -			snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_sdma1.bin", chip_name);
+> -		ret = amdgpu_sdma_init_microcode(adev, fw_name, i, false);
+> +		ret = amdgpu_sdma_init_microcode(adev, i, false);
+>   		if (ret)
+>   			return ret;
+>   	}
+> diff --git a/drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c b/drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c
+> index 65e7a710298d..4757c119cdfe 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c
+> @@ -44,16 +44,6 @@
+>   #include "sdma_common.h"
+>   #include "sdma_v5_2.h"
+>   
+> -MODULE_FIRMWARE("amdgpu/sienna_cichlid_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/navy_flounder_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/dimgrey_cavefish_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/beige_goby_sdma.bin");
+> -
+> -MODULE_FIRMWARE("amdgpu/vangogh_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/yellow_carp_sdma.bin");
+> -MODULE_FIRMWARE("amdgpu/sdma_5_2_6.bin");
+> -MODULE_FIRMWARE("amdgpu/sdma_5_2_7.bin");
+> -
+>   #define SDMA1_REG_OFFSET 0x600
+>   #define SDMA3_REG_OFFSET 0x400
+>   #define SDMA0_HYP_DEC_REG_START 0x5880
+> @@ -89,59 +79,6 @@ static u32 sdma_v5_2_get_reg_offset(struct amdgpu_device *adev, u32 instance, u3
+>   	return base + internal_offset;
+>   }
+>   
+> -/**
+> - * sdma_v5_2_init_microcode - load ucode images from disk
+> - *
+> - * @adev: amdgpu_device pointer
+> - *
+> - * Use the firmware interface to load the ucode images into
+> - * the driver (not loaded into hw).
+> - * Returns 0 on success, error on failure.
+> - */
+> -
+> -// emulation only, won't work on real chip
+> -// navi10 real chip need to use PSP to load firmware
+> -static int sdma_v5_2_init_microcode(struct amdgpu_device *adev)
+> -{
+> -	const char *chip_name;
+> -	char fw_name[40];
+> -
+> -	DRM_DEBUG("\n");
+> -
+> -	switch (adev->ip_versions[SDMA0_HWIP][0]) {
+> -	case IP_VERSION(5, 2, 0):
+> -		chip_name = "sienna_cichlid_sdma";
+> -		break;
+> -	case IP_VERSION(5, 2, 2):
+> -		chip_name = "navy_flounder_sdma";
+> -		break;
+> -	case IP_VERSION(5, 2, 1):
+> -		chip_name = "vangogh_sdma";
+> -		break;
+> -	case IP_VERSION(5, 2, 4):
+> -		chip_name = "dimgrey_cavefish_sdma";
+> -		break;
+> -	case IP_VERSION(5, 2, 5):
+> -		chip_name = "beige_goby_sdma";
+> -		break;
+> -	case IP_VERSION(5, 2, 3):
+> -		chip_name = "yellow_carp_sdma";
+> -		break;
+> -	case IP_VERSION(5, 2, 6):
+> -		chip_name = "sdma_5_2_6";
+> -		break;
+> -	case IP_VERSION(5, 2, 7):
+> -		chip_name = "sdma_5_2_7";
+> -		break;
+> -	default:
+> -		BUG();
+> -	}
+> -
+> -	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s.bin", chip_name);
+> -
+> -	return amdgpu_sdma_init_microcode(adev, fw_name, 0, true);
+> -}
+> -
+>   static unsigned sdma_v5_2_ring_init_cond_exec(struct amdgpu_ring *ring)
+>   {
+>   	unsigned ret;
+> @@ -1288,7 +1225,7 @@ static int sdma_v5_2_sw_init(void *handle)
+>   			return r;
+>   	}
+>   
+> -	r = sdma_v5_2_init_microcode(adev);
+> +	r = amdgpu_sdma_init_microcode(adev, 0, true);
+>   	if (r) {
+>   		DRM_ERROR("Failed to load sdma firmware!\n");
+>   		return r;
+> diff --git a/drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c b/drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c
+> index 049c26a45d85..9c65e2f98d44 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c
+> @@ -44,11 +44,6 @@
+>   #include "sdma_v6_0.h"
+>   #include "v11_structs.h"
+>   
+> -MODULE_FIRMWARE("amdgpu/sdma_6_0_0.bin");
+> -MODULE_FIRMWARE("amdgpu/sdma_6_0_1.bin");
+> -MODULE_FIRMWARE("amdgpu/sdma_6_0_2.bin");
+> -MODULE_FIRMWARE("amdgpu/sdma_6_0_3.bin");
+> -
+>   #define SDMA1_REG_OFFSET 0x600
+>   #define SDMA0_HYP_DEC_REG_START 0x5880
+>   #define SDMA0_HYP_DEC_REG_END 0x589a
+> @@ -78,29 +73,6 @@ static u32 sdma_v6_0_get_reg_offset(struct amdgpu_device *adev, u32 instance, u3
+>   	return base + internal_offset;
+>   }
+>   
+> -/**
+> - * sdma_v6_0_init_microcode - load ucode images from disk
+> - *
+> - * @adev: amdgpu_device pointer
+> - *
+> - * Use the firmware interface to load the ucode images into
+> - * the driver (not loaded into hw).
+> - * Returns 0 on success, error on failure.
+> - */
+> -static int sdma_v6_0_init_microcode(struct amdgpu_device *adev)
+> -{
+> -	char fw_name[30];
+> -	char ucode_prefix[30];
+> -
+> -	DRM_DEBUG("\n");
+> -
+> -	amdgpu_ucode_ip_version_decode(adev, SDMA0_HWIP, ucode_prefix, sizeof(ucode_prefix));
+> -
+> -	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s.bin", ucode_prefix);
+> -
+> -	return amdgpu_sdma_init_microcode(adev, fw_name, 0, true);
+> -}
+> -
+>   static unsigned sdma_v6_0_ring_init_cond_exec(struct amdgpu_ring *ring)
+>   {
+>   	unsigned ret;
+> @@ -1260,7 +1232,7 @@ static int sdma_v6_0_sw_init(void *handle)
+>   	if (r)
+>   		return r;
+>   
+> -	r = sdma_v6_0_init_microcode(adev);
+> +	r = amdgpu_sdma_init_microcode(adev, 0, true);
+>   	if (r) {
+>   		DRM_ERROR("Failed to load sdma firmware!\n");
+>   		return r;
+
