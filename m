@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04D265B149
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F3265B153
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbjABLmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:42:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S232789AbjABLmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjABLmA (ORCPT
+        with ESMTP id S232741AbjABLmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:42:00 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD59EE92
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:41:58 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id j17so31759325lfr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 03:41:58 -0800 (PST)
+        Mon, 2 Jan 2023 06:42:01 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DA2EBB
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:42:00 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id p36so41230634lfa.12
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 03:41:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ot07odIMBdi99ZptGGtgBesy1j3BRGxC/hcJ0N+TCxs=;
-        b=ROrZRy6C2QbxPLI+6Vx8HBTPv6HMBgAkapWo4sNLlX5XPiqHt6cS/4G2lfiTCCQmUj
-         pGJ0nRz91ehp4Po8Du+hLVqytJyUgi90OkhcfIv0jKwYu4ZfVVt8MxDUZmQH5FORMLSW
-         67wHSUpVcnXxIT0LsIhhTdu3JD/UxQ9HrbZc7Ep98ixE7tTtP3o7Xw3OSIqwMNjnf9jH
-         ZlJ3UOr7X3M/fcDlNiUneZk2HyBMw6rLHFMI1zFTWVsIrRxzWj/XJ21W8o9WqBpcVnl9
-         HcUGI6MVNFYOGKxf9p4soTjaWJKwHlvEhG+4qPrFw+/9Cz+vQ16xPrV/AjN/u1Fezuvk
-         SHvw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l5BQ+1OykJNJsHs5tcaOG30ml/uGVrBU87LMcPdV8zM=;
+        b=fRM/fxDlUALu6ECRXeB8H4JGEENdHMfeVFBr4nnIjeAV1DMReAGdy+VQmFSBnoxrR4
+         +fM6gGKxZuiN0uc1VijxgzkEIL5/4JpW/istSlmPsEsVOrtRIP71t0tzyJpfv1Mzwt0D
+         6P0SryFFkmoz9JUo24GfQq8H/ULD/8LvMiFqiM6KQeIU1uqbtpSsM0fmRB4cI5mh42Vt
+         mm6aOywOIBYU5dhjUDkfq1Hkkue6jP/8lsP04XOxCReEqu1S+8P4vXFZjk9iZ37AgMvw
+         EoiWOjGMXnPhRiEp8nIThcy7mPCsvoj5UlJHSK1OAVs3b6bxqw/AmrsBmAo19cHgym40
+         Tg7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ot07odIMBdi99ZptGGtgBesy1j3BRGxC/hcJ0N+TCxs=;
-        b=2BHo2WcrNS94lE1RkdQISZYYuNfGWTkyFbQuIt2fppTgEWewQrhCRjZPEx2QA3WaTk
-         jmcp8N4/dgMerrP5pyu8H1XDJgTLt8ec8Eycn584keqE71x4ltoxWp36BKs3golOS4q+
-         M88kqYBXZ+KGt3MFG+9psl2P6IQRlLsjeMfO0kMCj+N4UppGO7ynvGPlbvlJVQ8zSyyN
-         JIoHWU60myzO9Vpj6OwAVKaZ2VCzu/UHiy3vmYwusbNU6MF7rUAz1YCCRxdcl6RUDkSX
-         THYUBICLsNJvVLjQNh8Y92XaX7/S3DgitVQJaomt7raYs/rySmzLZlIY1kxoious+T91
-         nEhA==
-X-Gm-Message-State: AFqh2kq/Iph/WOG3aOFB/+SBxt4/9IRH6T7J9OnJpq7TMJtReKbggNZH
-        zkqqmjYy4RGluS8G9IZPT5hLdQ==
-X-Google-Smtp-Source: AMrXdXvnjqG2Y/pyr5nZjYWE9uLYb988hSA8gSfnRbitymR+6iWVJQzN6BffnHeN7xCV/A4uvftQNA==
-X-Received: by 2002:a19:f517:0:b0:4c3:35b3:9a0e with SMTP id j23-20020a19f517000000b004c335b39a0emr9440867lfb.56.1672659717229;
-        Mon, 02 Jan 2023 03:41:57 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l5BQ+1OykJNJsHs5tcaOG30ml/uGVrBU87LMcPdV8zM=;
+        b=nH07dT1wyENIU3tOFBbY+2KMaYLj+KLHdzXsBLfLRm7dHwDk4VdXWiHwVsTQw7014z
+         Boc5vT5uaTOvrdEcze3TO0P1LiNujxaFBiKSTdTfyEnsqO6yridi03xHAeUxqez5h5j6
+         dnSCmZANQjVsfssjTGTTuoXPPoRH9/p7NB91HYdE29f1WFlLBOVntumr/gj2PprGGiA4
+         swuLwDxNpN6qN+jtMBSe8jSs3FsHozfL6ZAjoG2bAWA1epjZ8hX1zGetG8OjS212FSmL
+         dL+v02agmNOoiQD8/4cWNeKvz3FV4TN8RsIy6DhNVopwHH6wW2X8W4sczIoBkz308rd4
+         qoGg==
+X-Gm-Message-State: AFqh2krhGoa7mK2ccBHWglle9iMYz1ZO1tT9NzL+2ZrRLFUdcsuJSL/N
+        nAJ3DiAt9P2d9yxKulAVKjsmhw==
+X-Google-Smtp-Source: AMrXdXuGQ9JzQqwc2ZeEFIxkrXF2oicM9ZNu1cH2soNd9yHwRX/GsnC8xzPw/8AsZ3PhXrftAw3/ag==
+X-Received: by 2002:a05:6512:b0c:b0:4b5:97cf:8f1a with SMTP id w12-20020a0565120b0c00b004b597cf8f1amr13379095lfu.40.1672659718470;
+        Mon, 02 Jan 2023 03:41:58 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c20-20020ac24154000000b0048a8c907fe9sm4356397lfi.167.2023.01.02.03.41.56
+        by smtp.gmail.com with ESMTPSA id c20-20020ac24154000000b0048a8c907fe9sm4356397lfi.167.2023.01.02.03.41.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 03:41:56 -0800 (PST)
+        Mon, 02 Jan 2023 03:41:58 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -64,15 +65,18 @@ To:     Andy Gross <agross@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         alsa-devel@alsa-project.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/8] ASoC: codecs: wsa883x: Simplify &pdev->dev in probe
-Date:   Mon,  2 Jan 2023 12:41:45 +0100
-Message-Id: <20230102114152.297305-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/8] ASoC: codecs: wsa881x: Simplify &pdev->dev in probe
+Date:   Mon,  2 Jan 2023 12:41:46 +0100
+Message-Id: <20230102114152.297305-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230102114152.297305-1-krzysztof.kozlowski@linaro.org>
+References: <20230102114152.297305-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,62 +88,47 @@ code a bit easier to read.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- sound/soc/codecs/wsa883x.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ sound/soc/codecs/wsa881x.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
-index 966ba4909204..8d69ed340e83 100644
---- a/sound/soc/codecs/wsa883x.c
-+++ b/sound/soc/codecs/wsa883x.c
-@@ -1375,7 +1375,7 @@ static int wsa883x_probe(struct sdw_slave *pdev,
+diff --git a/sound/soc/codecs/wsa881x.c b/sound/soc/codecs/wsa881x.c
+index 6c8b1db649b8..cd7be55f6a89 100644
+--- a/sound/soc/codecs/wsa881x.c
++++ b/sound/soc/codecs/wsa881x.c
+@@ -1113,20 +1113,20 @@ static int wsa881x_probe(struct sdw_slave *pdev,
+ 	struct wsa881x_priv *wsa881x;
  	struct device *dev = &pdev->dev;
- 	int ret;
  
--	wsa883x = devm_kzalloc(&pdev->dev, sizeof(*wsa883x), GFP_KERNEL);
-+	wsa883x = devm_kzalloc(dev, sizeof(*wsa883x), GFP_KERNEL);
- 	if (!wsa883x)
+-	wsa881x = devm_kzalloc(&pdev->dev, sizeof(*wsa881x), GFP_KERNEL);
++	wsa881x = devm_kzalloc(dev, sizeof(*wsa881x), GFP_KERNEL);
+ 	if (!wsa881x)
  		return -ENOMEM;
  
-@@ -1388,17 +1388,17 @@ static int wsa883x_probe(struct sdw_slave *pdev,
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to enable vdd regulator\n");
- 
--	wsa883x->sd_n = devm_gpiod_get_optional(&pdev->dev, "powerdown",
-+	wsa883x->sd_n = devm_gpiod_get_optional(dev, "powerdown",
- 						GPIOD_FLAGS_BIT_NONEXCLUSIVE | GPIOD_OUT_HIGH);
- 	if (IS_ERR(wsa883x->sd_n)) {
--		ret = dev_err_probe(&pdev->dev, PTR_ERR(wsa883x->sd_n),
-+		ret = dev_err_probe(dev, PTR_ERR(wsa883x->sd_n),
- 				    "Shutdown Control GPIO not found\n");
- 		goto err;
+-	wsa881x->sd_n = devm_gpiod_get_optional(&pdev->dev, "powerdown",
++	wsa881x->sd_n = devm_gpiod_get_optional(dev, "powerdown",
+ 						GPIOD_FLAGS_BIT_NONEXCLUSIVE);
+ 	if (IS_ERR(wsa881x->sd_n)) {
+ 		dev_err(&pdev->dev, "Shutdown Control GPIO not found\n");
+ 		return PTR_ERR(wsa881x->sd_n);
  	}
  
--	dev_set_drvdata(&pdev->dev, wsa883x);
-+	dev_set_drvdata(dev, wsa883x);
- 	wsa883x->slave = pdev;
--	wsa883x->dev = &pdev->dev;
-+	wsa883x->dev = dev;
- 	wsa883x->sconfig.ch_count = 1;
- 	wsa883x->sconfig.bps = 1;
- 	wsa883x->sconfig.direction = SDW_DATA_DIR_RX;
-@@ -1413,7 +1413,7 @@ static int wsa883x_probe(struct sdw_slave *pdev,
- 	wsa883x->regmap = devm_regmap_init_sdw(pdev, &wsa883x_regmap_config);
- 	if (IS_ERR(wsa883x->regmap)) {
- 		gpiod_direction_output(wsa883x->sd_n, 1);
--		ret = dev_err_probe(&pdev->dev, PTR_ERR(wsa883x->regmap),
-+		ret = dev_err_probe(dev, PTR_ERR(wsa883x->regmap),
- 				    "regmap_init failed\n");
- 		goto err;
- 	}
-@@ -1423,7 +1423,7 @@ static int wsa883x_probe(struct sdw_slave *pdev,
+-	dev_set_drvdata(&pdev->dev, wsa881x);
++	dev_set_drvdata(dev, wsa881x);
+ 	wsa881x->slave = pdev;
+-	wsa881x->dev = &pdev->dev;
++	wsa881x->dev = dev;
+ 	wsa881x->sconfig.ch_count = 1;
+ 	wsa881x->sconfig.bps = 1;
+ 	wsa881x->sconfig.frame_rate = 48000;
+@@ -1149,7 +1149,7 @@ static int wsa881x_probe(struct sdw_slave *pdev,
  	pm_runtime_set_active(dev);
  	pm_runtime_enable(dev);
  
--	ret = devm_snd_soc_register_component(&pdev->dev,
-+	ret = devm_snd_soc_register_component(dev,
- 					      &wsa883x_component_drv,
- 					       wsa883x_dais,
- 					       ARRAY_SIZE(wsa883x_dais));
+-	return devm_snd_soc_register_component(&pdev->dev,
++	return devm_snd_soc_register_component(dev,
+ 					       &wsa881x_component_drv,
+ 					       wsa881x_dais,
+ 					       ARRAY_SIZE(wsa881x_dais));
 -- 
 2.34.1
 
