@@ -2,145 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3908465B4F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E5465B4FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236613AbjABQTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
+        id S236624AbjABQUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236407AbjABQT3 (ORCPT
+        with ESMTP id S236479AbjABQUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:19:29 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E239B1D7
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:19:28 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id BDA5A5C543;
-        Mon,  2 Jan 2023 16:19:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672676366; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4qIPCoXXQO1R/q6GdjkJPLfVViHr04M+cPFPwgtcHJU=;
-        b=S+Sqxy0oT8dvwolCNcAMyT9rvIEecVZOmOCAIPxNjNUf87M1hrP+xAyO2OHDGlgDsbgJwh
-        NbmAUrufFVMMajcLk+rhm0npEV7QOmkOFnJuOKzjPwVHEOxZhS5MrFjHqO3UcSeg08li9p
-        gwf3DUdhFwHV9kQbMoCjIDgbQ9AUqno=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 771AD2C141;
-        Mon,  2 Jan 2023 16:19:26 +0000 (UTC)
-Date:   Mon, 2 Jan 2023 17:19:26 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v3 6/6] printk: introduce
- console_prepend_dropped() for dropped messages
-Message-ID: <Y7MEDmP1zqWblj0N@alley>
-References: <20221221202704.857925-1-john.ogness@linutronix.de>
- <20221221202704.857925-7-john.ogness@linutronix.de>
+        Mon, 2 Jan 2023 11:20:09 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1B5B1D7
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:20:07 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id 1so42149155lfz.4
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:20:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q3A8u/ZGvQ/u+zdMS+02ijfzhgqQE287Jcbfn2PLsGQ=;
+        b=nsD1fDj9r8KfUFh6NXsi0K/iHf26iPOnFBnPk1q5gNFp5rh8g50KXmXNQ2R5AGnYZ3
+         WQ58F2XqXuQRpE1bRd41laCI4AwErNQVTnvF8DAj52Hlm6r6dEuBFabHN130RNXxfKPA
+         xDCDAnbPQuNxu4xa/qXt62R4S4vJ/eUFxS75HnRQ4u+nxoqwRPokye8bYohZr/AXlAt8
+         UbcGOxld548ZSxrBbDNqBNvBUeFY50uyvZUDFF0+jF9pNGC4Y0jTAE0MGmi1vDAqcHig
+         w6zLHKSULHPUcGi4eVXVbu51dm78bwsLRnho2sb40mJkcbM0KNmx7ovKlEgL2GX5X9HY
+         9Efw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q3A8u/ZGvQ/u+zdMS+02ijfzhgqQE287Jcbfn2PLsGQ=;
+        b=p2jz/B/BGt1Aa1xCKz0VuCU0D2MxuCXhwlbv21fz+/D3TFRqZK4np55E6gxL29euvf
+         wLOzyPfQdJm2hyFyPeQwqAJej4ooQnUpl99ZWuCK7aEcGT2ShuX0JjQECE4SEAYpCztC
+         HXHp2OtoTaA76tKK9I6ePyWNs99TZiETTDQH0Bg+5O9k/YfrTU8y7pCl+U2h8pHOE6om
+         tzAIw/Lpb5KZO8WQqlMuMnb34Wdk1VatqIRvtD/Pu2bk5WCzM4POgUrDx15w7XsA9g5g
+         nGG8B2h9DODhZHatNKacDqWfDYRnMbIuUgApfjtq0teU63eDTyYtmmZy+p2b/V/bO0gz
+         PEOQ==
+X-Gm-Message-State: AFqh2krE2bhTx2LbFwF0omQ2Xc8tvwAvkZQ0LVyyB/W8ExEl4fULINYU
+        lAf/snKvtoMJnFCsUQPCRDqc5A==
+X-Google-Smtp-Source: AMrXdXufChGyPfDAtZg7eDw3Y+8UbIrIoQtz8mcF7V8z/KPz0mOltbTDF2y7e5TD5DohAD8pZKcxTg==
+X-Received: by 2002:a05:6512:3135:b0:4b6:fdbe:773d with SMTP id p21-20020a056512313500b004b6fdbe773dmr11657064lfd.43.1672676406353;
+        Mon, 02 Jan 2023 08:20:06 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q23-20020ac24a77000000b0048a982ad0a8sm4520838lfp.23.2023.01.02.08.20.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 08:20:05 -0800 (PST)
+Message-ID: <43ee7ca8-de65-8c0a-20b4-e3cb5f10a3c8@linaro.org>
+Date:   Mon, 2 Jan 2023 17:20:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221202704.857925-7-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 10/13] dt-bindings: mediatek: mt8188: add audio afe
+ document
+Content-Language: en-US
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de
+Cc:     angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221230055443.16024-1-trevor.wu@mediatek.com>
+ <20221230055443.16024-11-trevor.wu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221230055443.16024-11-trevor.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-12-21 21:33:04, John Ogness wrote:
-> Currently "dropped messages" are separately printed immediately
-> before printing the printk message. Since normal consoles are
-> now using an output buffer that is much larger than previously,
-> the "dropped message" could be prepended to the printk message
-> and output in a single call.
-> 
-> Introduce a helper function console_prepend_dropped() to prepend
-> an existing message with a "dropped message". This simplifies
-> the code by allowing all message formatting to be handled
-> together and then only requires a single write() call to output
-> the full message. And since this helper does not require any
-> locking, it can be used in the future for other console printing
-> contexts as well.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+On 30/12/2022 06:54, Trevor Wu wrote:
+> Add mt8188 audio afe document.
 
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2724,6 +2699,50 @@ static void __console_unlock(void)
->  	up_console_sem();
->  }
->  
-> +/*
-> + * Prepend the message in @cmsg->cbufs->outbuf with a "dropped message". This
-> + * is achieved by shifting the existing message over and inserting the dropped
-> + * message.
-> + *
-> + * @cmsg is the console message to prepend.
-> + *
-> + * @dropped is the dropped count to report in the dropped message.
-> + *
-> + * If the message text in @cmsg->cbufs->outbuf does not have enough space for
-> + * the dropped message, the message text will be sufficiently truncated.
-> + *
-> + * If @cmsg->cbufs->outbuf is modified, @cmsg->outbuf_len is updated.
-> + */
-> +static void console_prepend_dropped(struct console_message *cmsg, unsigned long dropped)
-> +{
-> +	struct console_buffers *cbufs = cmsg->cbufs;
-> +	const size_t scratchbuf_sz = sizeof(cbufs->scratchbuf);
-> +	const size_t outbuf_sz = sizeof(cbufs->outbuf);
-> +	char *scratchbuf = &cbufs->scratchbuf[0];
-> +	char *outbuf = &cbufs->outbuf[0];
-> +	size_t len;
-> +
-> +	len = snprintf(scratchbuf, scratchbuf_sz,
-> +		       "** %lu printk messages dropped **\n", dropped);
-> +
-> +	/*
-> +	 * Make sure outbuf is sufficiently large before prepending. Space
-> +	 * for a terminator is also counted in case truncation occurs.
-> +	 */
-> +	if (WARN_ON_ONCE(len + 1 >= outbuf_sz))
-> +		return;
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching).
 
-Strictly speaking, this should be:
+This is still not fixed and you got comments about it. I am not going to
+keep reviewing this patch. Implement the feedback.
 
-	if (WARN_ON_ONCE(len >= outbuf_sz))
-		return;
+Best regards,
+Krzysztof
 
-The trailing '\0' will fit into the buffer when len < outbuf_sz.
-
-That said, the consoles would be almost unusable when we are anywhere close this
-limit. Most messages would be truncated.
-
-> +
-> +	if (cmsg->outbuf_len + len >= outbuf_sz) {
-> +		/* Truncate the message, but keep it terminated. */
-> +		cmsg->outbuf_len = outbuf_sz - (len + 1);
-> +		outbuf[cmsg->outbuf_len] = 0;
-> +	}
-> +
-> +	memmove(outbuf + len, outbuf, cmsg->outbuf_len + 1);
-> +	memcxpy(outbuf, scratchbuf, len);
-> +	cmsg->outbuf_len += len;
-> +}
-> +
->  /*
->   * Read and format the specified record (or a later record if the specified
->   * record is not available).
-
-Otherwise, the change looks fine:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Best Regards,
-Petr
