@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC17665B6AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF3C65B6AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233286AbjABSoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 13:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
+        id S234249AbjABSo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 13:44:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjABSoL (ORCPT
+        with ESMTP id S234803AbjABSoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 13:44:11 -0500
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55664BC92;
-        Mon,  2 Jan 2023 10:44:09 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id D4BC340D72;
-        Mon,  2 Jan 2023 19:44:07 +0100 (CET)
-Authentication-Results: ext-mx-out003.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        content-transfer-encoding:mime-version:message-id:date:date
-        :subject:subject:from:from:received:received:received; s=
-        dkim20160331; t=1672685045; x=1674499446; bh=PE2QbDuec+iFICdEPvX
-        1KX5WQKys9UPqNPqt1/TRius=; b=tTVaFoqI6mGYv8yD8vJv9KQ3h+IlXVXEL89
-        74+C5z71UA5asqkUsnu8tv0nMrcVcDrDx3qsm5j9oLN+jW+DK5u3O1HIHCuBDQO8
-        xTuZakfM2KG/khjPdHSNETxJZmKGwixPFa52LIrR7sYgNooIrla5q5H1nJwdoRVk
-        SJCIGlaZXKKlbOTnoZ/pEo5izMyAzwS5XxXrhXIPqYZJ/kBV4f2omEaorXficA1M
-        Q5Bv/hJVgFPluF/+RaH7Ac8R0Lryi2qTcm70UFKFhBBDkbK3aSazVw7YQ479k5se
-        kT8rFwppx+PDcMMdkgWTgkeJMjmPGlNo0ik/m1Zx4dBxVrL/KZvHwx1q2UhoFsjI
-        LPSM16Fh6yfBXBj2NR5UFmNUTBwZz/B54d2HR3HGiFLrMkMISkNiDXVEoxHoPS5C
-        DoJMOKDX2118vMxM7nMAvBCZ15o8w7+mgSL/hBLGo1ZCxTFAd/eo+lobohXX5z0Q
-        yCfXiCyv+LNhpEVmme8iz7Z4dEupRbPcupdY/1mizkfl01nse/2rSZi73gYb+SG7
-        I4U1ATM5699hROcpsKyqyb1m0XOkjpiscKjZoUD/lw0bQZH/6fB7w2QG1h3DL61t
-        NkE2V1+TjracUomgj4UdslnTlnmkPUhnJbQVw45mEVrfpb6VRv5NZtc1wCGVNgK/
-        wQgfzKJ0=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Score: -1.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out003.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AujhSXFK8cEn; Mon,  2 Jan 2023 19:44:05 +0100 (CET)
-Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
-        by mx.kolabnow.com (Postfix) with ESMTPS id 2B2AF40CA1;
-        Mon,  2 Jan 2023 19:44:05 +0100 (CET)
-Received: from ext-subm002.mykolab.com (unknown [10.9.6.2])
-        by int-mx002.mykolab.com (Postfix) with ESMTPS id A4D311B6F;
-        Mon,  2 Jan 2023 19:44:04 +0100 (CET)
-From:   Federico Vaga <federico.vaga@vaga.pv.it>
-To:     Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Keith Busch <kbusch@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Federico Vaga <federico.vaga@vaga.pv.it>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] doc: add kernel-doc comment for u64_to_user_ptr
-Date:   Mon,  2 Jan 2023 19:43:49 +0100
-Message-Id: <20230102184349.10399-1-federico.vaga@vaga.pv.it>
+        Mon, 2 Jan 2023 13:44:46 -0500
+Received: from mailrelay6-1.pub.mailoutpod2-cph3.one.com (mailrelay6-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:405::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A15BE08
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:44:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=uEHKxfoCnx6TexhJbOGzWn9HamFVFhhnfdWyeUvLDuM=;
+        b=DlI7Vbz9YgLFBKlF/Dc8ATToeFVQYmNjnZ51aSk7mq23G0wOMc3mCf2MEhKnUwXhZl8SiQqEi/DzI
+         zgyvSR2KWU13taVEEvNSGIfAqvhgroQPdJCSVX//RpoR1Uq2yUsHJfoxhINz944XfHL2oIHIKdJ9xL
+         73OWMHF+0n0WGKvf0KPxgXbvIi681368P2CCEgLQ58cXR1qPtEnyV/FwlnuOlYv7MOFXLljnaFY4L4
+         mZVoEvFlbjKFpHISLPWMSBvar23ZVBsauXEjnd5k8sV4PLf65srbIJH1M/+PJRwu4il7g8KTfixflI
+         1++g88EKsWn+AOzs6wn06JeQkkZFbnA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=uEHKxfoCnx6TexhJbOGzWn9HamFVFhhnfdWyeUvLDuM=;
+        b=G6sXXQscTLuda+dCOxPdrk99ogcGNwABYW5nPcBxNuvRfBnHvbqxm/ryTakBqYeDxJokkMy87uVwA
+         fkTTEqYDg==
+X-HalOne-ID: 844a0a16-8acd-11ed-918d-cde5ad41a1dd
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay6 (Halon) with ESMTPSA
+        id 844a0a16-8acd-11ed-918d-cde5ad41a1dd;
+        Mon, 02 Jan 2023 18:44:42 +0000 (UTC)
+Date:   Mon, 2 Jan 2023 19:44:41 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH 05/14] drm/panel-elida-kd35t133: Drop custom DSI write
+ macro
+Message-ID: <Y7MmGVMbc4u9NYNd@ravnborg.org>
+References: <20221228014757.3170486-1-javierm@redhat.com>
+ <20221228014757.3170486-6-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221228014757.3170486-6-javierm@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a kernel-doc comment in kernel.h to document the macro
-`u64_to_user_ptr`.
+Hi Javier,
 
-As of today, this macro is mentioned in the documentation in
-'ioctl.rst' and 'botching-up-ioctls.rst'
+On Wed, Dec 28, 2022 at 02:47:48AM +0100, Javier Martinez Canillas wrote:
+> There is a macro for this already in the <drm/drm_mipi_dsi.h> header, use
+> that instead and delete the custom DSI write macro defined in the driver.
+> 
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
+> 
+>  drivers/gpu/drm/panel/panel-elida-kd35t133.c | 34 ++++++++------------
+>  1 file changed, 13 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-elida-kd35t133.c b/drivers/gpu/drm/panel/panel-elida-kd35t133.c
+> index eee714cf3f49..48535ea3f1d3 100644
+> --- a/drivers/gpu/drm/panel/panel-elida-kd35t133.c
+> +++ b/drivers/gpu/drm/panel/panel-elida-kd35t133.c
+> @@ -51,14 +51,6 @@ static inline struct kd35t133 *panel_to_kd35t133(struct drm_panel *panel)
+>  	return container_of(panel, struct kd35t133, panel);
+>  }
+>  
+> -#define dsi_dcs_write_seq(dsi, cmd, seq...) do {			\
+> -		static const u8 b[] = { cmd, seq };			\
+> -		int ret;						\
+> -		ret = mipi_dsi_dcs_write_buffer(dsi, b, ARRAY_SIZE(b));	\
+> -		if (ret < 0)						\
+> -			return ret;					\
+> -	} while (0)
+> -
+>  static int kd35t133_init_sequence(struct kd35t133 *ctx)
+>  {
+>  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
+> @@ -68,24 +60,24 @@ static int kd35t133_init_sequence(struct kd35t133 *ctx)
+>  	 * Init sequence was supplied by the panel vendor with minimal
+>  	 * documentation.
+>  	 */
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_POSITIVEGAMMA,
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_POSITIVEGAMMA,
+>  			  0x00, 0x13, 0x18, 0x04, 0x0f, 0x06, 0x3a, 0x56,
+>  			  0x4d, 0x03, 0x0a, 0x06, 0x30, 0x3e, 0x0f);
+Fix indent, here and later.
+With this fixed:
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 
-Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
----
- include/linux/kernel.h | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index fe6efb24d151..8bcd126f64f2 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -56,6 +56,10 @@
- 
- #define PTR_IF(cond, ptr)	((cond) ? (ptr) : NULL)
- 
-+/**
-+ * u64_to_user_ptr - convert an unsigned 64bit number into a user pointer
-+ * @x: the number to convert
-+ */
- #define u64_to_user_ptr(x) (		\
- {					\
- 	typecheck(u64, (x));		\
--- 
-2.30.2
-
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_NEGATIVEGAMMA,
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_NEGATIVEGAMMA,
+>  			  0x00, 0x13, 0x18, 0x01, 0x11, 0x06, 0x38, 0x34,
+>  			  0x4d, 0x06, 0x0d, 0x0b, 0x31, 0x37, 0x0f);
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_POWERCONTROL1, 0x18, 0x17);
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_POWERCONTROL2, 0x41);
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_VCOMCONTROL, 0x00, 0x1a, 0x80);
+> -	dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x48);
+> -	dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PIXEL_FORMAT, 0x55);
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_INTERFACEMODECTRL, 0x00);
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_FRAMERATECTRL, 0xa0);
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_DISPLAYINVERSIONCTRL, 0x02);
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_DISPLAYFUNCTIONCTRL,
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_POWERCONTROL1, 0x18, 0x17);
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_POWERCONTROL2, 0x41);
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_VCOMCONTROL, 0x00, 0x1a, 0x80);
+> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x48);
+> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PIXEL_FORMAT, 0x55);
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_INTERFACEMODECTRL, 0x00);
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_FRAMERATECTRL, 0xa0);
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_DISPLAYINVERSIONCTRL, 0x02);
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_DISPLAYFUNCTIONCTRL,
+>  			  0x20, 0x02);
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_SETIMAGEFUNCTION, 0x00);
+> -	dsi_dcs_write_seq(dsi, KD35T133_CMD_ADJUSTCONTROL3,
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_SETIMAGEFUNCTION, 0x00);
+> +	mipi_dsi_dcs_write_seq(dsi, KD35T133_CMD_ADJUSTCONTROL3,
+>  			  0xa9, 0x51, 0x2c, 0x82);
+>  	mipi_dsi_dcs_write(dsi, MIPI_DCS_ENTER_INVERT_MODE, NULL, 0);
+>  
+> -- 
+> 2.38.1
