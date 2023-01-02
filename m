@@ -2,165 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C792165B485
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5F365B487
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234166AbjABP6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:58:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S236436AbjABP7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjABP6S (ORCPT
+        with ESMTP id S229583AbjABP7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:58:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C679712E;
-        Mon,  2 Jan 2023 07:58:17 -0800 (PST)
+        Mon, 2 Jan 2023 10:59:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065AAA470
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:59:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 558D961015;
-        Mon,  2 Jan 2023 15:58:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C32C433EF;
-        Mon,  2 Jan 2023 15:58:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672675096;
-        bh=Tn8CE4Z5S/X7P04a19+R8hhIyimSiUh/dShOcnmOjxE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hy5Vf2lgSzExLkHQsDeA5ukKGa+WhU23EmNxrouqIxoNrsPTafX+41cdtGYRSTEHN
-         ke6E9IIABzM1bCMXyIJEV1kN9jJzSzkq36Rj8H2lj14FkkrZahA6hmnEsiunTPfq6v
-         7Cp+MizPsaR7w+khhXSCHW8D9wq06B2qKR3bNdAIo78Yo4aR+Xnz+m0BY5IpFnFprH
-         36q4XrSzy8upJlTlOKlejhhdGzZiGrXP8MU9ZlStlouKHWtQgJ++Dh+XuqLjptBEnD
-         GyDyU9y+JNF1ieHDZwiVHXxlsA8EzpQx2rwtgnCJt70smP8FT8D7KNLJMiGFxj+O3+
-         xOflAH4KzbDxw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pCNCn-0008Pz-Fj; Mon, 02 Jan 2023 16:58:30 +0100
-Date:   Mon, 2 Jan 2023 16:58:29 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] arm64: dts: qcom: sc8280xp-x13s: disable soundcard
-Message-ID: <Y7L/JbUICN0OQhaK@hovoldconsulting.com>
-References: <20230102105038.8074-1-johan+linaro@kernel.org>
- <20230102105038.8074-2-johan+linaro@kernel.org>
- <fc42801a-55d9-90b9-f7f0-48657ec7a373@linaro.org>
- <Y7LzJ+RRzDNRf3jR@hovoldconsulting.com>
- <81e3994e-49d9-ea5b-b055-cbcc737a6e37@linaro.org>
- <Y7L3OTs/u8FsH8o2@hovoldconsulting.com>
- <8bd6487a-3ae7-f7c1-e478-1effd68700d3@linaro.org>
- <Y7L6t3p57uTCECRy@hovoldconsulting.com>
- <5de95075-ca62-3cae-ce07-d263ea3aa264@linaro.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 786B5B80DA9
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 15:59:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C7AC433D2
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 15:59:13 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Wb94PjBC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672675150;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KBaZtMuASP9M2QZjnlkyVGAQ6P48cQt0rhGLMsa1ED0=;
+        b=Wb94PjBCzSmS5PLO0tLXzgtk8roC7S2llT8cVa239gLD+rA2124Kp/OJ8wVLSHMaSaY1BN
+        ELF84l9Ye01lHsiWKiIwiOjAznGyalybpbk9uVs1ERG6RPUhmR5MQtwmtTJoibJVKMJu8C
+        cir2czraBQiuP3JWOiN691iAL0TfSng=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a9033aa7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 2 Jan 2023 15:59:10 +0000 (UTC)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-4a263c4ddbaso65738557b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:59:09 -0800 (PST)
+X-Gm-Message-State: AFqh2krdlG2KSMHGRAQE/w5z7HuwqYqS1TV5c56ENu6bDcIOA/XmPXSD
+        TSuq51OhGPScJivTat6PVO87BXoiWSGQsE2iU9I=
+X-Google-Smtp-Source: AMrXdXvbDc6DrorA7hbi5PyDzu2T3tcHlzNb3J0m2+g0ZRc198h1sFNU4QtrVfxViNV7yze9SU49C04dX7L8R1H15nU=
+X-Received: by 2002:a0d:eb48:0:b0:46e:92d3:451a with SMTP id
+ u69-20020a0deb48000000b0046e92d3451amr4985546ywe.454.1672675148945; Mon, 02
+ Jan 2023 07:59:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5de95075-ca62-3cae-ce07-d263ea3aa264@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:324a:b0:1a3:8917:b60e with HTTP; Mon, 2 Jan 2023
+ 07:59:08 -0800 (PST)
+In-Reply-To: <Y7L4n0imic1ncHhe@zn.tnic>
+References: <Y5oy0vwZQAwzkDkr@zx2c4.com> <20221214203454.337299-1-Jason@zx2c4.com>
+ <20221214213015.GA16072@ranerica-svr.sc.intel.com> <Y5zRTqDmjeJzjeFf@zx2c4.com>
+ <CAHmME9ojkPUV-acD8o1rFsfR+f7URG8PW44GUUt8WUK0O=KD6w@mail.gmail.com> <Y7L4n0imic1ncHhe@zn.tnic>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 2 Jan 2023 16:59:08 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rMTNQ+hZPG1cbpP2zA6Cq3-f=gXXPF3=WYhQWicEYV4w@mail.gmail.com>
+Message-ID: <CAHmME9rMTNQ+hZPG1cbpP2zA6Cq3-f=gXXPF3=WYhQWicEYV4w@mail.gmail.com>
+Subject: Re: [PATCH v2] x86: lib: Separate instruction decoder MMIO type from
+ MMIO trace
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 04:46:40PM +0100, Krzysztof Kozlowski wrote:
-> On 02/01/2023 16:39, Johan Hovold wrote:
-> >>>>>>>  	wcd_tx: wcd9380-tx@0,3 {
-> >>>>>>>  		compatible = "sdw20217010d00";
-> >>>>>>> @@ -781,6 +787,8 @@ &vamacro {
-> >>>>>>>  	pinctrl-names = "default";
-> >>>>>>>  	vdd-micb-supply = <&vreg_s10b>;
-> >>>>>>>  	qcom,dmic-sample-rate = <600000>;
-> >>>>>>> +
-> >>>>>>> +	status = "disabled";
-> >>>>>>
-> >>>>>> That's a double disable.
-> >>>>>
-> >>>>> Yes, that's on purpose. We're temporarily disabling these nodes instead
-> >>>>> of reverting the series which should not have been merged.
-> >>>>
-> >>>> I don't get why disabling something twice is anyhow related to
-> >>>> "temporarily disable". One disable is enough for temporary or permanent
-> >>>> disables.
-> >>>
-> >>> It clearly shows that this was done on purpose and indicates which
-> >>> properties need to be changed to "okay" once we have actual support.
-> >>
-> >> No, it shows nothing clearly as from time to time we got duplicated
-> >> properties and it's a simply mistake. The double disable without any
-> >> comment looks like mistake, not intentional code.
-> > 
-> > It's not a mistake. It's intentional. And I don't want to spend hours on
-> > this because of someone else's cock-up.
-> 
-> To you it looks intentional, but for the reader of DTS which has
-> disabled node in DTSI and in DTS - so in two places - it looks like a
-> pure bug. Just because you know the reason behind the change does not
-> make the code readable.
+On 1/2/23, Borislav Petkov <bp@alien8.de> wrote:
+> On Mon, Jan 02, 2023 at 03:49:23PM +0100, Jason A. Donenfeld wrote:
+>> Do you think you could queue up this patch for 6.2 as a fix? It has
+>> basically no chance of breakage and does fix a real symbol clash.
+>>
+>> https://lore.kernel.org/lkml/20221214203454.337299-1-Jason@zx2c4.com/
+>>
+>> This doesn't fix any existing compile error that I'm aware of, but if
+>> this makes it into 6.2, it would avoid me having to carry it in a series
+>> I'm working on,...
+>
+> Our general rule for urgent fixes going through tip is that they should
+> qualify
+> to be CC:stable fixes. And this one isn't so I think you should hold on to
+> it
+> and submit it along with the whole series as it is usually done.
 
-Calling a (temporary) redundant property a 'pure bug' seems like a bit
-of stretch, and it has nothing to do with readability.
+Rest of series is intended to go through random.git tree, so it'd be
+useful to not have to carry this there -- less pain.
 
-> >>>>>
-> >>>>> Once we have driver support, these properties will be updated again.
-> >>>>
-> >>>> Linux kernel is not the only consumer of DTS, thus having or not having
-> >>>> the support in the kernel is not reason to disable pieces of it.
-> >>>> Assuming the DTS is correct, of course, because maybe that's the problem?
-> >>>
-> >>> Okay, let's revert these sound dts changes then until we have support.
-> >>> We have no idea if the dts changes are correct as sound still depends
-> >>> on out-of-tree hacks.
-> >>>
-> >>> People are using -next for development and I don't want to see them
-> >>> toast their speakers because we failed get the dependencies merged
-> >>> before merging the dts changes which is how we normally do this.
-> >>
-> >> If the error is in DTS, yeah, revert or disable is a way. But if the
-> >> issue is in the incomplete or broken Linux drivers, then these should be
-> >> changed, e.g. intentionally fail probing, skip new devices, drop new
-> >> compatible etc.
-> > 
-> > And how long does it take for that to propagate and isn't the response
-> > just going go to be "well then fix the driver".
-> > 
-> > I think you're just being unreasonable here.
-> 
-> I did not propose to fix the driver. I proposed to fail the driver's
-> probe or remove the compatible from it.
-> 
-> Such change propagate the same speed as DTS change.
-
-But the DTS changes are in Bjorn branch and Bjorn and I discussed it and
-decided to disable them temporarily instead of reverting.
-
-Now you're asking me to figure out all the dependent driver and patch
-them individually. And this may not reach next before the DTS changes
-do.
-
-> > If Bjorn could rebase his tree, he could simply drop these for now as
-> > sound support was clearly not ready. Since that isn't the case we need
-> > to at least try to be constructive and figure out a reasonable
-> > alternative. While "Linux isn't the only consumer" is a true statement,
-> > it really is not relevant just because there are some dts changes in
-> > Bjorn's tree which should not be there.
-> 
-> The SC8280XP audio DTS looks in general correct, except some style
-> issues, redundant properties and never tested against DT bindings.
-> Therefore it looks as accurate and more-or-less correct representation
-> of the hardware, unless you have some more details on this.
-
-Only that the drivers fail to probe in multiple ways, some which may
-require updating the bindings to address. There's also an indication
-that some further driver support is needed for proper speaker
-protection. That really should be in place before we enable this.
-
-Johan
+Jason
