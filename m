@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3514D65B6F0
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 20:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2B865B6F8
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 20:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbjABTYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 14:24:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S232535AbjABTmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 14:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjABTXo (ORCPT
+        with ESMTP id S229627AbjABTmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 14:23:44 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11DEB7EE;
-        Mon,  2 Jan 2023 11:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672687423; x=1704223423;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gu+Dt/OpMWKrwg8VxAt76Mz52M2Dfk6IjKqn21EscSM=;
-  b=cf/yVat8r7Cw12YKdWEiFL36x91ZlTuON6WXYwtyU48GbZ6JtXUV67FP
-   Cv6TwvUgLtxF5uWK3xXGx5qzJ8naIDbRrZCgxOPk0Zv1RQ9luGFSR0bMF
-   RVYdc5q4szYx6D7AE0jb9FED/q7lU1FbB5qRr9WSzUx+o4EMr8txrHe25
-   yUhTW7jy/JDdkrWHImNsymbvGV8LC0VaKLtXmNzALSKazMp36Zltbjj8e
-   w6NYCW1FRlNdYu3iDhUAxm3JiMR/nDKjdrWzPpffXj5Go6zf+Z92eqq7k
-   N5AjMsx9RCM4N9dHd+6OqNHhv6De6dGrMIkAK1BkgYgxSQaqUO7E1J5ez
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="305040242"
-X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="305040242"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 11:23:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="778638990"
-X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
-   d="scan'208";a="778638990"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 02 Jan 2023 11:23:41 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6438FF4; Mon,  2 Jan 2023 21:24:13 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] thunderbolt: Refactor tb_acpi_add_link()
-Date:   Mon,  2 Jan 2023 21:24:04 +0200
-Message-Id: <20230102192404.88076-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 2 Jan 2023 14:42:20 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E852B482;
+        Mon,  2 Jan 2023 11:42:18 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A74C51EC050D;
+        Mon,  2 Jan 2023 20:42:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672688536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+L+JdAD5fujGBQBI4oqQqpeb1zLWSL4pvB3LgNSB0fs=;
+        b=W5YbOv7UBgUHPOdMItwgm1S76PCy+0cPBg6pySgudrO2FeQRmqaIJlpTGuYQTUkXCNfT2W
+        GF20fbR/hMR6eRkchgSB1X/UNifSX6gsOc8lhqnPHInrA8CF8H2PDkaR1+qL/Jo+d2nacK
+        GbKA3QaraMdmtS5wg5OSmhmRMtpTBA8=
+Date:   Mon, 2 Jan 2023 20:42:11 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>
+Cc:     David Rientjes <rientjes@google.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, kvm@vger.kernel.org, mingo@redhat.com,
+        tglx@linutronix.de, dave.hansen@linux.intel.com, seanjc@google.com,
+        pbonzini@redhat.com, thomas.lendacky@amd.com, michael.roth@amd.com,
+        stable@kernel.org
+Subject: Re: [PATCH v3] x86/sev: Add SEV-SNP guest feature negotiation support
+Message-ID: <Y7Mzk3tDImk46xcu@zn.tnic>
+References: <20230102083810.71178-1-nikunj@amd.com>
+ <3169b54b-d990-7707-5ec4-cde7261318fe@google.com>
+ <45487a87-764a-7ff3-292b-4a55fe29f7ba@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <45487a87-764a-7ff3-292b-4a55fe29f7ba@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,40 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert while loop into do-while with only a single call to
-acpi_get_first_physical_node(). No functional change intended.
+On Mon, Jan 02, 2023 at 08:50:23PM +0530, Nikunj A. Dadhania wrote:
+> I think the "why" part depends on the user. Whether or not the user needs a
+> certain feature enabled for the confidential guest.
+> 
+> If the cloud provider(hypervisor) enables the feature on user request, the
+> guest terminates with GHCB_SNP_FEAT_NOT_IMPLEMENTED when guest kernel does
+> have corresponding code/implementation.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/thunderbolt/acpi.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+I think you mean "does not have" here.
 
-diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
-index 317e4f5fdb97..628225deb8fe 100644
---- a/drivers/thunderbolt/acpi.c
-+++ b/drivers/thunderbolt/acpi.c
-@@ -36,16 +36,13 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
- 	 * We need to do this because the xHCI driver might not yet be
- 	 * bound so the USB3 SuperSpeed ports are not yet created.
- 	 */
--	dev = acpi_get_first_physical_node(adev);
--	while (!dev) {
--		adev = acpi_dev_parent(adev);
--		if (!adev)
--			break;
-+	do {
- 		dev = acpi_get_first_physical_node(adev);
--	}
-+		if (dev)
-+			break;
- 
--	if (!dev)
--		goto out_put;
-+		adev = acpi_dev_parent(adev);
-+	} while (adev);
- 
- 	/*
- 	 * Check that the device is PCIe. This is because USB3
+In any case, I think this whole handling of SEV features could go both ways:
+
+* Cloud provider could say: we've enabled features X, Y and Z and if the guest
+doesn't have support for them, then it would fail booting.
+
+There would optimally be some text sowewhere in the cloud provider documentation
+stating why those features are enabled and thus required to be supported by the
+guest.
+
+* Guest owner could require a minimal subset of features which must be present
+in the HV in order to even boot on that HV.
+
+Of course, I'm only speculating here. How it ends up really playing out in
+reality we will have to see...
+
 -- 
-2.35.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
