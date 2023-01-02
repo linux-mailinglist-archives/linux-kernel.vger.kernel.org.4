@@ -2,146 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A97765AFF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7F465B003
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbjABKvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S232815AbjABKwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbjABKvO (ORCPT
+        with ESMTP id S232860AbjABKwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:51:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5404962E2;
-        Mon,  2 Jan 2023 02:50:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7047B80D07;
-        Mon,  2 Jan 2023 10:50:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C12C433B3;
-        Mon,  2 Jan 2023 10:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672656651;
-        bh=NnSjzogFraldpT+XgAkjYumPBRSVym0mp3juRqkdBpI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R9XUZ6DlHPc+bBa0ForStYZhT5tJwdXf/wFRBVQ5wdWU+fYlbl5yISWRi5rxUKSBD
-         M6jiVrGmjr3TIORGvzU+BHTsZLJdbWelF2azHeNme6dc0lY+SiV/6ner5FlG/VbY2L
-         tR40DLeW4viM5CNAn22sOvh85Kp1DHUxk60kQsLD0Wq7GAB+SArbcXJhV8WJnE9PfD
-         8RX1ee7JEDXEhC5GswkxemVwGaDvZAbLTZLe4HcBligs7MzVWyPX9dGI3oeTqBCzeo
-         nJCY7d+blk0TCw84twVzigMjo53JkEVAqDSP/lcxum4kUANFpeImylqiWmwnUfCC6Y
-         NXdcD8B2XUWzg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pCIPM-000273-Jl; Mon, 02 Jan 2023 11:51:08 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 6/6] arm64: dts: qcom: sm8450-hdk: fix wcd938x codec node
-Date:   Mon,  2 Jan 2023 11:50:38 +0100
-Message-Id: <20230102105038.8074-7-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20230102105038.8074-1-johan+linaro@kernel.org>
-References: <20230102105038.8074-1-johan+linaro@kernel.org>
+        Mon, 2 Jan 2023 05:52:07 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A6AE65;
+        Mon,  2 Jan 2023 02:52:05 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30270twx004293;
+        Mon, 2 Jan 2023 10:51:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=QItSQryhxQg5FKSbZZWkQyqWRyFL1d3h+ftPdcrjYwc=;
+ b=WP3mv8QDr/uvqw9hYPWT6ADzHxYJL7IVOFrW0ATk8nVTnUcJlVHxTP3VvyccCUAXWeA3
+ G3kQVCTgdjuOvShVQXW/afAp2tGAHb3EoM2N8SErQRVqLWfypLX1X1Ok1l6d9Z/MJemP
+ 8P6vEGDQyjdzF1KSJj/r5F+mHf94tfF5l4HkDq/kJ2VmlGDWtKHg71Z0Lvy5N8faBPq0
+ NoTw7aAJ+VgpZ5q8TRYhWfsI903lGmtSDIDhToLvXxRpZV3ZToa2kAphGysxH1UznXzc
+ jcBEBEhqgBQ9zb3aKlDQBDftJLoSSOPMOwBhMN7+no7I6pkJ/uylTl/FWtJC3sd885m8 yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mtxucxp2c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 10:51:36 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 302Ao5qC012972;
+        Mon, 2 Jan 2023 10:51:35 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mtxucxp1w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 10:51:35 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 301KpqgN030029;
+        Mon, 2 Jan 2023 10:51:33 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3mtcq6aa5b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 10:51:33 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 302ApVZ048562564
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Jan 2023 10:51:31 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4DAF20040;
+        Mon,  2 Jan 2023 10:51:30 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D19A72004D;
+        Mon,  2 Jan 2023 10:51:30 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon,  2 Jan 2023 10:51:30 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+        id 834EFE06EB; Mon,  2 Jan 2023 11:51:30 +0100 (CET)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Willy Tarreau <w@1wt.eu>, "Paul E . McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH v2 0/5] add s390 support to nolibc and rcutorture
+Date:   Mon,  2 Jan 2023 11:51:07 +0100
+Message-Id: <20230102105112.1661651-1-svens@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2aE_DMyiFErFne7HUh3ZAKK4AYJTpzJf
+X-Proofpoint-ORIG-GUID: f-zT1V4Ny3QL43YLKHZqACy-W8PY7lyD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-02_06,2022-12-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 suspectscore=0 clxscore=1015 malwarescore=0 adultscore=0
+ impostorscore=0 mlxlogscore=839 mlxscore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301020096
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wcd938x codec is not a memory-mapped device and does not belong
-under the soc node.
+Hi,
 
-Move the node to the root node to avoid DT validation failures.
+these patches add support for the s390 architecture both to nolibc
+and rcutorture. Note that this only adds support for the 64 bit
+version, no support for 31 bit (compat) is added. For nolibc it
+includes one bugfix to make the fd_set datatype match the kernel
+type.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 52 ++++++++++++-------------
- 1 file changed, 25 insertions(+), 27 deletions(-)
+Changes in v2:
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-index 4de3e1f1c39c..217b2c654745 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-@@ -17,6 +17,31 @@ aliases {
- 		serial0 = &uart7;
- 	};
- 
-+	wcd938x: codec {
-+		compatible = "qcom,wcd9380-codec";
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wcd_default>;
-+
-+		qcom,micbias1-microvolt = <1800000>;
-+		qcom,micbias2-microvolt = <1800000>;
-+		qcom,micbias3-microvolt = <1800000>;
-+		qcom,micbias4-microvolt = <1800000>;
-+		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
-+		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
-+		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
-+		qcom,rx-device = <&wcd_rx>;
-+		qcom,tx-device = <&wcd_tx>;
-+
-+		reset-gpios = <&tlmm 43 GPIO_ACTIVE_LOW>;
-+		#sound-dai-cells = <1>;
-+
-+		vdd-buck-supply = <&vreg_s10b_1p8>;
-+		vdd-rxtx-supply = <&vreg_s10b_1p8>;
-+		vdd-io-supply = <&vreg_s10b_1p8>;
-+		vdd-mic-bias-supply = <&vreg_bob>;
-+	};
-+
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
-@@ -407,33 +432,6 @@ &sdhc_2 {
- 	status = "okay";
- };
- 
--&soc {
--	wcd938x: codec {
--		compatible = "qcom,wcd9380-codec";
--
--		pinctrl-names = "default";
--		pinctrl-0 = <&wcd_default>;
--
--		qcom,micbias1-microvolt = <1800000>;
--		qcom,micbias2-microvolt = <1800000>;
--		qcom,micbias3-microvolt = <1800000>;
--		qcom,micbias4-microvolt = <1800000>;
--		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
--		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
--		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
--		qcom,rx-device = <&wcd_rx>;
--		qcom,tx-device = <&wcd_tx>;
--
--		reset-gpios = <&tlmm 43 GPIO_ACTIVE_LOW>;
--		#sound-dai-cells = <1>;
--
--		vdd-buck-supply = <&vreg_s10b_1p8>;
--		vdd-rxtx-supply = <&vreg_s10b_1p8>;
--		vdd-io-supply = <&vreg_s10b_1p8>;
--		vdd-mic-bias-supply = <&vreg_bob>;
--	};
--};
--
- &sound {
- 	compatible = "qcom,sm8450-sndcard";
- 	model = "SM8450-HDK";
+- use __attribute__((unused)) instead of __maybe_unused
+- prefer aghi over lay, as lay is not present in all architecure levels
+- add -m64 CFLAG to force 64 bit mode for compiler that can do 31bit and 64bit mode
+
+Sven Schnelle (5):
+  nolibc: fix fd_set type
+  nolibc: add support for s390
+  selftests/nolibc: add s390 support
+  rcutorture: add support for s390
+  rcutorture: build initrd for rcutorture with nolibc
+
+ tools/include/nolibc/arch-s390.h              | 213 ++++++++++++++++++
+ tools/include/nolibc/arch.h                   |   2 +
+ tools/include/nolibc/sys.h                    |   2 +
+ tools/include/nolibc/types.h                  |  53 +++--
+ tools/testing/selftests/nolibc/Makefile       |   7 +-
+ .../selftests/rcutorture/bin/functions.sh     |   6 +
+ .../selftests/rcutorture/bin/mkinitrd.sh      |   2 +-
+ 7 files changed, 260 insertions(+), 25 deletions(-)
+ create mode 100644 tools/include/nolibc/arch-s390.h
+
 -- 
-2.37.4
+2.34.1
 
