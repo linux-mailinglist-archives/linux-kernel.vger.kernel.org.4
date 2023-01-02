@@ -2,125 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BF665B262
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5865B65B264
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbjABMuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 07:50:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
+        id S232977AbjABMup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 07:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233040AbjABMuW (ORCPT
+        with ESMTP id S232988AbjABMul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 07:50:22 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DAC1095
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:50:22 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DCD2120F26;
-        Mon,  2 Jan 2023 12:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672663820; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TAgWaDyX+CD+dHh7IWXVooNTsZBsSrrFLlnSItEwsbU=;
-        b=wXVFNfsXtGEajs6z4yGHknsxESh9f+vtRtdfuP1i1X8sEVfqsAjmsjhXcqkOBacswWcYAC
-        wQ2BOUuJi9Itt5NP7/yAPNaI6/7SXFfFO8QG743qILX/sGBkk/J2q8rBALc+BV7Mv5G3i0
-        tbNre87gjI98OSElZabr5UmqBFrS6iY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672663820;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TAgWaDyX+CD+dHh7IWXVooNTsZBsSrrFLlnSItEwsbU=;
-        b=zfSV81cXHMhk0J0/H6dk+ayKCD64OqT92Ux+9hAmjxrcBV33QNIFaCJnS3t6MJckpXK0Oe
-        3X9V0pxDpVTd7ECA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C177713427;
-        Mon,  2 Jan 2023 12:50:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /EwrLwzTsmOpGwAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 02 Jan 2023 12:50:20 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 19026A073E; Mon,  2 Jan 2023 13:50:20 +0100 (CET)
-Date:   Mon, 2 Jan 2023 13:50:20 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Tom Rix <trix@redhat.com>
-Cc:     jack@suse.com, nathan@kernel.org, ndesaulniers@google.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] udf: initialize newblock to 0
-Message-ID: <20230102125020.fg5m6aqz3ca4f2mt@quack3>
-References: <20221230175341.1629734-1-trix@redhat.com>
+        Mon, 2 Jan 2023 07:50:41 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79A9636E
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:50:39 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id i188so28849958vsi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 04:50:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xMZx54Xj2ddNmH7CYT53GxPmLR4IA/SYVliSYQdrkpw=;
+        b=PvM8eQTCd7btpRU4ZlTCF4FwTkgmzS/WWSkogViUT4SQitmOmeDGaqAImpqXDZ/bY8
+         dLHKKQiFQVLZNAG2Mmg9uEIIPxtGNiy97XDqBa/o3o2u0/HIfb0uqNsE6X/EXjDfj3u8
+         bk4BrFfCqpq173Y33Qph5m+UGqQy1aNVr3SywMseBY3Z1BdR8BMm3VowUdMBX6eK791A
+         nubZzDTPaYiBJeKbyCkFpnZRqgp+TBnOSKpA0H1xBgtJsYshe4+kLQ/a92E1B5TdlR0C
+         IXpoG1QNu5LzzygGiEdtNtkbw/qsPlJFlsVsk+ohSK5YTkiKAh2v2ZREkI3hAoZrmO+x
+         STnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xMZx54Xj2ddNmH7CYT53GxPmLR4IA/SYVliSYQdrkpw=;
+        b=hNcJhMHTC3l2aKP7bC+x8vFqtARX+MvL4N0I/Nak0P7wj6pOH3/gyldvAUapYam4Ed
+         60IPQ/pCHRqRTdVqZ9dN1PQXBoFtz8I0/XrpPE+lvFA6h8bNAM2fib6aMxbOboT+bBgY
+         tG+xruuQn1QqTpm0UFi0+G6AiwXqUxa7KoamJpgMgavxMHC2BnmZI9J7QAGKV1bIEIrV
+         bm1746Nawa8LQO9aV4R23F+zRfFRWCJzaTbpfppHW4T6dtgzHkM3PM8EJreiQJyqVNBi
+         GZ35p8V5cZQEje/Zu37Hxty02eNIPtFnH0g7Sf5H6gQ7Ye7sLNTL/O0iXWsRqFzrS4c8
+         vyAw==
+X-Gm-Message-State: AFqh2kon/a4gOgdKY6MnOvK3WB1WRyhPd2fspRVpzQR/nwvzAtioAxYA
+        GToqlJyJtpac8K/7pi1vcx2JvzvN83gAmPCQUuTFyg==
+X-Google-Smtp-Source: AMrXdXuf4b3Bg22BCumrnpgf8Qq1Vd3sY7tHk7TVqhJ7KpYvOygxJe3TYd/BrwSL62GTL8cl0TxrybJiy7UffzX4Kus=
+X-Received: by 2002:a67:df8c:0:b0:3c5:1ac1:bf38 with SMTP id
+ x12-20020a67df8c000000b003c51ac1bf38mr4030319vsk.78.1672663838685; Mon, 02
+ Jan 2023 04:50:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221230175341.1629734-1-trix@redhat.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+References: <20221213224310.543243-1-fabrizio.castro.jz@renesas.com> <20221213224310.543243-5-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221213224310.543243-5-fabrizio.castro.jz@renesas.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 2 Jan 2023 13:50:27 +0100
+Message-ID: <CAMRc=MdmtzynWR22Cyzm-vzt_g0g9aAmNX4fYbnB4invDq3+Fg@mail.gmail.com>
+Subject: Re: [PATCH 4/5] gpio: Add support for Renesas RZ/V2M PWC
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 30-12-22 12:53:41, Tom Rix wrote:
-> The clang build reports this error
-> fs/udf/inode.c:805:6: error: variable 'newblock' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->         if (*err < 0)
->             ^~~~~~~~
-> newblock is never set before error handling jump.
-> Initialize newblock to 0 and remove redundant settings.
-> 
-> Fixes: d8b39db5fab8 ("udf: Handle error when adding extent to a file")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-
-Thanks! I've added the patch to my tree.
-
-								Honza
-
+On Tue, Dec 13, 2022 at 11:43 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+>
+> The RZ/V2M SoC contains an External Power Sequence Controller (PWC)
+> module. This module provides an external power supply on/off sequence,
+> on/off signal for the LPDDR4 core power supply, control signals for
+> external I/O power supplies of the SD host interfaces, and key input
+> signals.
+> PWC is essentially a Multi-Function Device (MFD).
+>
+> The driver just implements the control signals for external I/O
+> power supplies of the SD host interfaces as gpios, and it relies on
+> syscon and simple-mfd.
+>
+> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 > ---
->  fs/udf/inode.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/fs/udf/inode.c b/fs/udf/inode.c
-> index 4a912e2edcec..31965c3798f2 100644
-> --- a/fs/udf/inode.c
-> +++ b/fs/udf/inode.c
-> @@ -604,7 +604,7 @@ static sector_t inode_getblk(struct inode *inode, sector_t block,
->  	struct kernel_lb_addr eloc, tmpeloc;
->  	int c = 1;
->  	loff_t lbcount = 0, b_off = 0;
-> -	udf_pblk_t newblocknum, newblock;
-> +	udf_pblk_t newblocknum, newblock = 0;
->  	sector_t offset = 0;
->  	int8_t etype;
->  	struct udf_inode_info *iinfo = UDF_I(inode);
-> @@ -710,7 +710,6 @@ static sector_t inode_getblk(struct inode *inode, sector_t block,
->  		ret = udf_do_extend_file(inode, &prev_epos, laarr, hole_len);
->  		if (ret < 0) {
->  			*err = ret;
-> -			newblock = 0;
->  			goto out_free;
->  		}
->  		c = 0;
-> @@ -775,7 +774,6 @@ static sector_t inode_getblk(struct inode *inode, sector_t block,
->  				goal, err);
->  		if (!newblocknum) {
->  			*err = -ENOSPC;
-> -			newblock = 0;
->  			goto out_free;
->  		}
->  		if (isBeyondEOF)
-> -- 
-> 2.27.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>  drivers/gpio/Kconfig          |   8 +++
+>  drivers/gpio/Makefile         |   1 +
+>  drivers/gpio/gpio-rzv2m-pwc.c | 123 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 132 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-rzv2m-pwc.c
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index e6ebc4c90a5d..e016919b9643 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -553,6 +553,14 @@ config GPIO_ROCKCHIP
+>         help
+>           Say yes here to support GPIO on Rockchip SoCs.
+>
+> +config GPIO_RZV2M_PWC
+> +       tristate "Renesas RZ/V2M PWC GPIO support"
+> +       depends on MFD_SYSCON
+> +       depends on ARCH_R9A09G011 || COMPILE_TEST
+> +       help
+> +         Say yes here to support the External Power Sequence Controller (PWC)
+> +         GPIO controller driver for RZ/V2M devices.
+> +
+>  config GPIO_SAMA5D2_PIOBU
+>         tristate "SAMA5D2 PIOBU GPIO support"
+>         depends on MFD_SYSCON
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index 3462a138764a..5f655684603f 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -132,6 +132,7 @@ obj-$(CONFIG_GPIO_RDC321X)          += gpio-rdc321x.o
+>  obj-$(CONFIG_GPIO_REALTEK_OTTO)                += gpio-realtek-otto.o
+>  obj-$(CONFIG_GPIO_REG)                 += gpio-reg.o
+>  obj-$(CONFIG_GPIO_ROCKCHIP)    += gpio-rockchip.o
+> +obj-$(CONFIG_GPIO_RZV2M_PWC)           += gpio-rzv2m-pwc.o
+>  obj-$(CONFIG_ARCH_SA1100)              += gpio-sa1100.o
+>  obj-$(CONFIG_GPIO_SAMA5D2_PIOBU)       += gpio-sama5d2-piobu.o
+>  obj-$(CONFIG_GPIO_SCH311X)             += gpio-sch311x.o
+> diff --git a/drivers/gpio/gpio-rzv2m-pwc.c b/drivers/gpio/gpio-rzv2m-pwc.c
+> new file mode 100644
+> index 000000000000..672d868cb8c9
+> --- /dev/null
+> +++ b/drivers/gpio/gpio-rzv2m-pwc.c
+> @@ -0,0 +1,123 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 Renesas Electronics Corporation
+> + *
+> + * GPIO driver for Renesas RZ/V2M External Power Sequence Controller (PWC)
+> + */
+> +
+> +#include <linux/gpio/driver.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/spinlock.h>
+> +
+> +struct rzv2m_pwc_gpio_priv {
+> +       struct gpio_chip gp;
+> +       int offset;
+> +       struct regmap *regmap;
+> +       DECLARE_BITMAP(ch_en_bits, 2);
+> +};
+> +
+> +static void rzv2m_pwc_gpio_set(struct gpio_chip *chip, unsigned int offset,
+> +                              int value)
+> +{
+> +       struct rzv2m_pwc_gpio_priv *priv = gpiochip_get_data(chip);
+> +       u32 reg;
+> +
+> +       /* BIT 16 enables write to BIT 0, and BIT 17 enables write to BIT 1 */
+> +       reg = BIT(offset + 16);
+> +       if (value)
+> +               reg |= BIT(offset);
+> +
+> +       regmap_write(priv->regmap, priv->offset, reg);
+> +
+> +       if (value)
+> +               set_bit(offset, priv->ch_en_bits);
+> +       else
+> +               clear_bit(offset, priv->ch_en_bits);
+
+You can use assign_bit() here and pass value to it.
+
+> +}
+> +
+> +static int rzv2m_pwc_gpio_get(struct gpio_chip *chip, unsigned int offset)
+> +{
+> +       struct rzv2m_pwc_gpio_priv *priv = gpiochip_get_data(chip);
+> +
+> +       return test_bit(offset, priv->ch_en_bits);
+> +}
+> +
+> +static int rzv2m_pwc_gpio_direction_output(struct gpio_chip *gc,
+> +                                          unsigned int nr, int value)
+> +{
+> +       if (nr > 1)
+> +               return -EINVAL;
+> +
+> +       rzv2m_pwc_gpio_set(gc, nr, value);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct gpio_chip rzv2m_pwc_gc = {
+> +       .label = "rzv2m_pwc_gpio",
+> +       .owner = THIS_MODULE,
+> +       .get = rzv2m_pwc_gpio_get,
+> +       .set = rzv2m_pwc_gpio_set,
+> +       .direction_output = rzv2m_pwc_gpio_direction_output,
+> +       .can_sleep = false,
+> +       .ngpio = 2,
+> +       .base = -1,
+> +};
+> +
+> +static int rzv2m_pwc_gpio_probe(struct platform_device *pdev)
+> +{
+> +       struct rzv2m_pwc_gpio_priv *priv;
+> +       int err;
+> +
+> +       priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +       if (!priv)
+> +               return -ENOMEM;
+> +
+> +       priv->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
+> +                                                      "regmap");
+> +
+> +       if (IS_ERR(priv->regmap))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(priv->regmap),
+> +                                    "Can't find regmap property");
+> +
+> +       err = of_property_read_u32(pdev->dev.of_node, "offset", &priv->offset);
+
+Please don't use OF APIs in drivers anymore, use
+device_property_read_u32() instead.
+
+Otherwise looks pretty good!
+
+Bart
+
+> +       if (err)
+> +               return dev_err_probe(&pdev->dev, -EINVAL,
+> +                                    "Can't find offset property");
+> +
+> +       /*
+> +        * The register used by this driver cannot be read, therefore set the
+> +        * outputs to their default values and initialize priv->ch_en_bits accordingly.
+> +        * BIT 16 enables write to BIT 0, BIT 17 enables write to BIT 1, and the
+> +        * default value of both BIT 0 and BIT 1 is 0.
+> +        */
+> +       regmap_write(priv->regmap, priv->offset, BIT(17) | BIT(16));
+> +       bitmap_zero(priv->ch_en_bits, 2);
+> +
+> +       priv->gp = rzv2m_pwc_gc;
+> +       priv->gp.parent = pdev->dev.parent;
+> +       priv->gp.fwnode = dev_fwnode(&pdev->dev);
+> +
+> +       return devm_gpiochip_add_data(&pdev->dev, &priv->gp, priv);
+> +}
+> +
+> +static const struct of_device_id rzv2m_pwc_gpio_of_match[] = {
+> +       { .compatible = "renesas,rzv2m-pwc-gpio" },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, rzv2m_pwc_gpio_of_match);
+> +
+> +static struct platform_driver rzv2m_pwc_gpio_driver = {
+> +       .probe = rzv2m_pwc_gpio_probe,
+> +       .driver = {
+> +               .name = "rzv2m_pwc_gpio",
+> +               .of_match_table = of_match_ptr(rzv2m_pwc_gpio_of_match),
+> +       },
+> +};
+> +module_platform_driver(rzv2m_pwc_gpio_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Fabrizio Castro <castro.fabrizio.jz@renesas.com>");
+> +MODULE_DESCRIPTION("Renesas RZ/V2M PWC GPIO");
+> --
+> 2.34.1
+>
