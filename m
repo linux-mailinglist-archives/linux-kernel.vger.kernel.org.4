@@ -2,117 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBAB65B43E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FF165B446
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236359AbjABPbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
+        id S236425AbjABPdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232796AbjABPbh (ORCPT
+        with ESMTP id S236415AbjABPcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:31:37 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526D42AE7;
-        Mon,  2 Jan 2023 07:31:35 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9DA6E20178;
-        Mon,  2 Jan 2023 15:31:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672673494; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2F11xUiDzXli+fkwzboFgES4G1zpWWoKOQc4R+WpSds=;
-        b=cPY8bJHmi/8/Vygj6+IGupdiwuStqHqA3V8pmUkgf/EGfLl67/ILyfULN57nN/Ac4J3kjR
-        YP24cCNW2ySHsnjJk66bqsRw4t5Oqy9/kyAn78bsR8F2bSBzIr8Ja0sLXRMA1iQ4rbFKyQ
-        pOaiJnHKZwzNgREllsmP/O3wyJMInRI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672673494;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2F11xUiDzXli+fkwzboFgES4G1zpWWoKOQc4R+WpSds=;
-        b=XcDFX/EQgVgrsvTzpgeZ7NFXtCHv0ze5r6iRd/hsIcqefp47bW7oRIxC6C3Xd23EFW2YJC
-        i4ovpK6OF8TzJoAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9087213427;
-        Mon,  2 Jan 2023 15:31:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EW1JI9b4smOsagAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 02 Jan 2023 15:31:34 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 27269A0742; Mon,  2 Jan 2023 16:31:34 +0100 (CET)
-Date:   Mon, 2 Jan 2023 16:31:34 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     paolo.valente@linaro.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, hch@lst.de, damien.lemoal@wdc.com
-Subject: Re: [PATCH RESEND v2 04/10] block, bfq: use helper macro RQ_BFQQ to
- get bfqq of request
-Message-ID: <20230102153134.hifz5alouhkkxx4o@quack3>
-References: <20221222191641.1643117-1-shikemeng@huaweicloud.com>
- <20221222191641.1643117-5-shikemeng@huaweicloud.com>
+        Mon, 2 Jan 2023 10:32:55 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFC1A1BD
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:32:47 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id co23so26590114wrb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:32:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xEBNU+8ps8Gj7C3Ed4wMHWiE1HYBYnIcFkDiAaVR+W4=;
+        b=HGptD0JOXrLf4gskYQHcyvY8VV3m89e7Lguln2nBUKODrQ2XOi3vuncXMF1mQCc1t2
+         7c8ByKiSXHvjx/7zSM6Sk8xfP7iMAjkNl/ti+EMEImEoNDFjliybkpfVo79cXgb3eoCP
+         z/lD7D36lrdTENU0kgAe5vfjeTBb4B4FuwYR4n8HWpT/vuUbEDfKFFIVOBxPPcKPtBRa
+         dp67UsNzYawf8GgP/QF5rdF21PlBnSRWa4gwHd6HUKlPk01M2DJ+UOjtwHP7WT1Q8WOV
+         Vf8+kTxfgFOxDtF/qSuynsMsWR7bU/KXOJQ0SG6p45C9L2QikSV7CM0WkpxU4sjNikZL
+         DvZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xEBNU+8ps8Gj7C3Ed4wMHWiE1HYBYnIcFkDiAaVR+W4=;
+        b=V8TrPVBJ1I7fkzUOH9amjRnbu96wsUs/E5hY0tErQkOYp8T2Q3EJSuzjY9KHpcD6e2
+         sHxz5jrzTY5D3PVHF/BmFpnlqQiwTmMHkFnr2ZZ3k6XqhvzePn39pWUI7A/QNvOgULzH
+         tnQHw0casz5yQ08rI+TQlkp9ca5qXDoYYVTxJCIbxGGw3km8TTt3o1dwb0T7NUXbATJw
+         DHxQ1fxrD4NbWmxkad9/eU4sPY56cYbwZBSTqpO7x/5icvOqEYgX2pIMPbckelzatqPn
+         kJlsAvpDPCSaGxp/hqBdmWtVTWOJNrIEnQazHAS6D3KbH4QEQjq4kIjrj3//K4ECIoyX
+         75qw==
+X-Gm-Message-State: AFqh2kpEyavHaSnhujBxsXjwA1slXPBVKYkIkqUd8BWn4RHM8RGW0yBu
+        sTQny2Z92n4j64Lusp9RmqBYJQ==
+X-Google-Smtp-Source: AMrXdXt1f8rR0Ev0X21Md4F1QYaVganHgEXNcl9aqMGTs74G4OWnj3Y3/+LPz53L9A0j0GtxkFCsxQ==
+X-Received: by 2002:adf:ecc1:0:b0:26e:666:3a08 with SMTP id s1-20020adfecc1000000b0026e06663a08mr25607474wro.69.1672673566437;
+        Mon, 02 Jan 2023 07:32:46 -0800 (PST)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b002709e616fa2sm28760213wru.64.2023.01.02.07.32.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 07:32:45 -0800 (PST)
+Date:   Mon, 2 Jan 2023 16:32:44 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 00/19] rxrpc: More fixes for I/O thread
+ conversion/SACK table expansion
+Message-ID: <Y7L5HECgjPgLUQXL@nanopsycho>
+References: <167179679960.2516210.10739247907156079872.stgit@warthog.procyon.org.uk>
+ <2519213.1671798835@warthog.procyon.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221222191641.1643117-5-shikemeng@huaweicloud.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2519213.1671798835@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 23-12-22 03:16:35, Kemeng Shi wrote:
-> Use helper macro RQ_BFQQ to get bfqq of request.
-> 
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+Fri, Dec 23, 2022 at 01:33:55PM CET, dhowells@redhat.com wrote:
+>The patches should all have been labelled for net, not net-next.
 
-Yeah, why not. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  block/bfq-iosched.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 9441fc98961a..c3c4c83ee95f 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -6683,14 +6683,14 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
->  		return NULL;
->  
->  	/*
-> -	 * Assuming that elv.priv[1] is set only if everything is set
-> +	 * Assuming that RQ_BFQQ(rq) is set only if everything is set
->  	 * for this rq. This holds true, because this function is
->  	 * invoked only for insertion or merging, and, after such
->  	 * events, a request cannot be manipulated any longer before
->  	 * being removed from bfq.
->  	 */
-> -	if (rq->elv.priv[1])
-> -		return rq->elv.priv[1];
-> +	if (RQ_BFQQ(rq))
-> +		return RQ_BFQQ(rq);
->  
->  	bic = icq_to_bic(rq->elv.icq);
->  
-> -- 
-> 2.30.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+For "net"? Why? Net should only be targetted with bugfixes properly
+tagged by "Fixes:" tag.
