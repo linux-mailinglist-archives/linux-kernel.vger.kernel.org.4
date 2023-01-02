@@ -2,342 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD4965B46F
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D056365B472
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236287AbjABPsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S233094AbjABPuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236432AbjABPsJ (ORCPT
+        with ESMTP id S229447AbjABPuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:48:09 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C441A1AB
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:48:08 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id z26so42033102lfu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:48:08 -0800 (PST)
+        Mon, 2 Jan 2023 10:50:05 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C09A1AB;
+        Mon,  2 Jan 2023 07:50:00 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id z10so26621338wrh.10;
+        Mon, 02 Jan 2023 07:50:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JLhB96nzXR995vwlWtOxjtyo6Ty4CvdVwhCta/qDQVM=;
-        b=hIwLxetn6E8peUbkigA8o3oTAgx4NBrisgfst2hWtTPWYilt6McSbZCvUyBCdypeXK
-         j6EgNGXIcwUc5WldbFcp16J2vHgXNck6qVQUp57SPOEUBd8wQV7mymilxYQY3GkI3SZa
-         19YKgLJ4wlcgojJ2jzC/5ioCywWv6OqGiL+irNDNhxpU7xezLTzMwkv46thdjV7J4NvM
-         ri8Gl/kwNqmnLrJX6XYqRCN+WeYqtReIFaIvNFKbOzosJfRplWw6Bz+viGS+y9tNwljE
-         dnkGSQ7GuYIuYtzaRbMEQv3BvBjfH3KDPxGAYOeXSfJUnUhVqjaFv1cT9xwv/NCxpTHJ
-         UEEg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nWZfcM+qssrebEF6M4iZr99iAEIr6Weo0zlGmUVXXu8=;
+        b=aKhKI2lSmAEp3QUkT7GORlxGJ1l8a706SORdJiDWUfxvPW/EG03CpzXGzb7q2sG4dM
+         FfyOloQqevyPCVDKJHuXOlriqAE5nHMAvQStH82vvmP8jRjRCe8fmHcZ70QYBoARLUIK
+         tTgvgimuzgPD7c4R0/cNTrrfFl73FOm/ADUhy3KhIddRXnrTz0jojIpSBCGfeLbshEQy
+         ew9ABndIL1Cl88HRvIF7Rqh28v4Hua7CiNbUuahMdaWWL3B2uX4CgT8UAVALYTFYB49I
+         80QxDa9pk5zDBpusdCuN2Spj7+8ZZrXj9RT7Mce38GXqsU1n0v5b5uWU8DUcAkV62/tc
+         RDfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JLhB96nzXR995vwlWtOxjtyo6Ty4CvdVwhCta/qDQVM=;
-        b=C9CIzHBbyN5VRaIlGnRSNub7sGgMXFC6ejwvVRegzfzrsf7J5LvNN6N0oE2CI79qKB
-         TT0+bBcvKmFbfKmb6OOBRBetYgNk/t9kxFWKMS5Gr6PTrd5607MovtC+mZdGuSCF2PKF
-         polKMd97HoJt4w2mD/+crIKVVmVRyBdAA/VBc42egJcWkrSbbGDNirSjV+RoV5bB36qq
-         ly1vin4+FiJHEpvW9NEfCCnODMa/vLrli+Jtwq+hTju2wq2nsGvxJf7BJJNfEUmq8NAZ
-         c9TuCA4KTv1mxuixSrjO4eDoVi3ZY0F7Diq3G3ELUK5Kz0bz9oMRw0G0XrE3ZtfOeDCF
-         Hxkw==
-X-Gm-Message-State: AFqh2koFA0Gx6kCmzR7FMi0lKv3au0ITuEsh6SvRZ31FhrCh3oXB3ah2
-        /77kqJhWtj+vx5PAHfTKrMIVuw==
-X-Google-Smtp-Source: AMrXdXslp9+Rv4Ppo3PahufHoX7PDinOnA4PYnvRwT6b6QMNohNcbxo2yLRFaxhgrOI9gW54b8wgvA==
-X-Received: by 2002:a05:6512:3f9c:b0:4b6:e4e7:624c with SMTP id x28-20020a0565123f9c00b004b6e4e7624cmr12920310lfa.0.1672674486581;
-        Mon, 02 Jan 2023 07:48:06 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id y17-20020ac24e71000000b00492e3c8a986sm4514273lfs.264.2023.01.02.07.48.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 07:48:06 -0800 (PST)
-Message-ID: <2f22ea19-1b97-6a21-99c0-9ba1bb322af4@linaro.org>
-Date:   Mon, 2 Jan 2023 17:48:05 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nWZfcM+qssrebEF6M4iZr99iAEIr6Weo0zlGmUVXXu8=;
+        b=A6oipWoJvqSeJ5mXvt1qO4s9+NAb5nQjzmSjGj/rFTF5vLeK89aznW3xUrPlzg8kuV
+         l7iU0kRe8XLjZg0jCs47iEBlnW7igmQjAMUPaT1glEdpz7netDvqgHXCvWUqJTqa6Fni
+         nixey5KOUv5BF1PNsPNbZN/SMRGnpBr5Gubicvw4fHkRlasQCqPfmAMk383HGbQ4DbaP
+         Xz6qAo5tsnYIIOURH8gp1rX2qOvQPn19Ez9KsTZ69F1iVhtRFoAe37vbgSfpiDAfyXvG
+         izbRZbijFwd7qGGnNCDXKdxAeaCjXN/fiWxf7suuTxdvd9H4Fr5gPejX8Zba/9RH5CfQ
+         o74w==
+X-Gm-Message-State: AFqh2krs3DhGeXF6JSxw8lVeLUZBiHcByLv0JP20Vt5E1R9GLN//r6BR
+        wihc4eRHd4+oTFItCODCu5M=
+X-Google-Smtp-Source: AMrXdXvf+K2pZoe2fyipfAZGQZ2HEV+p006VOc8BDT93uxeYhjvQ16k0Ja1hBZakggIxAVAM+wHrgQ==
+X-Received: by 2002:adf:f0ca:0:b0:275:e426:4134 with SMTP id x10-20020adff0ca000000b00275e4264134mr21681792wro.51.1672674598885;
+        Mon, 02 Jan 2023 07:49:58 -0800 (PST)
+Received: from localhost ([2a01:4c8:469:341:d1e1:a149:58ed:f096])
+        by smtp.gmail.com with ESMTPSA id f2-20020adfdb42000000b00241d544c9b1sm14497378wrj.90.2023.01.02.07.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 07:49:58 -0800 (PST)
+Date:   Mon, 2 Jan 2023 15:49:57 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Jakub Matena <matenajakub@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>
+Subject: Re: [PATCH v2] selftest/vm: add mremap expand merge offset test
+Message-ID: <Y7L9JfyQrwIRVo2A@lucifer>
+References: <f132891530423f8bb72fde8169279b1c5967ec40.1672670177.git.lstoakes@gmail.com>
+ <3a4fbe90-b46e-aa49-9866-e2b0cf6de38d@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 6/7] drm/msm/dpu: Implement tearcheck support on INTF
- block
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-7-marijn.suijten@somainline.org>
- <593cae1c-ade3-c68a-25d3-84ba1b968175@linaro.org>
- <20230102110611.e3k36evk23ai35gg@SoMainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230102110611.e3k36evk23ai35gg@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a4fbe90-b46e-aa49-9866-e2b0cf6de38d@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/01/2023 13:06, Marijn Suijten wrote:
-> On 2023-01-01 15:32:11, Dmitry Baryshkov wrote:
->> On 31/12/2022 23:50, Marijn Suijten wrote:
->>> Since DPU 5.0.0 the TEARCHECK registers and interrupts moved out of the
->>> PINGPONG block and into the INTF.  Implement the necessary callbacks in
->>> the INTF block, and use these callbacks together with the INTF_TEAR
->>> interrupts
->>>
->>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->>
->> Generally I have the same question as for the patch 2. Can we have some
->> higher level functions in the hw_pp and hw_intf files?
-> 
-> That is mostly because patch 2 only cleaned up non-optional handling of
-> hw_pp callbacks in dpu_encoder_phys_cmd_prepare_commit, which utilizes
-> hw_intf's autorefresh callbacks since this patch.  I don't think there's
-> any logic in the encoder currently that is unique to either PP or INTF?
+On Mon, Jan 02, 2023 at 04:34:14PM +0100, David Hildenbrand wrote:
+> On 02.01.23 15:44, Lorenzo Stoakes wrote:
+> > Add a test to assert that we can mremap() and expand a mapping starting
+> > from an offset within an existing mapping. We unmap the last page in a 3
+> > page mapping to ensure that the remap should always succeed, before
+> > remapping from the 2nd page.
+> >
+> > This is additionally a regression test for the issue solved in "mm, mremap:
+> > fix mremap() expanding vma with addr inside vma" and confirmed to fail
+> > prior to the change and pass after it.
+> >
+> > Finally, this patch updates the existing mremap expand merge test to check
+> > error conditions and reduce code duplication between the two tests.
+> >
+> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > ---
+> >   tools/testing/selftests/vm/mremap_test.c | 115 ++++++++++++++++++-----
+> >   1 file changed, 93 insertions(+), 22 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
+>
+>
+> ...
+>
+> > +
+> > +	start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
+> > +		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> > +
+> > +	if (start == MAP_FAILED) {
+> > +		ksft_print_msg("mmap failed: %s\n", strerror(errno));
+>
+> I'd
+>
+> 	ksft_test_result_fail(...)
+> 	return;
+>
+> > +		goto out;
+> > +	}
+> > +
+> > +	munmap(start + page_size, page_size);
+> > +	remap = mremap(start, page_size, 2 * page_size, 0);
+> > +	if (remap == MAP_FAILED) {
+> > +		ksft_print_msg("mremap failed: %s\n", strerror(errno));
+> > +		munmap(start, page_size);
+> > +		munmap(start + 2 * page_size, page_size);
+> > +		goto out;
+>
+> dito
+>
+> 	ksft_test_result_fail(...)
+> 	...
+> 	return;
+>
+> > +	}
+> > +
+> > +	success = is_range_mapped(maps_fp, start, start + 3 * page_size);
+> > +	munmap(start, 3 * page_size);
+> > +
+> > +out:
+>
+> then you can drop the out label.
+>
 
-I think it would be better to duplicate the logic rather than having a 
-spaghetti of hw_pp and hw_intf calls.
+I have to disagree on this, to be consistent with the other tests the
+failure messages should include the test name, and putting the
+ksft_test_result_fail("test name") in each branch as well as the error
+message would just be wilful duplication.
 
-> There are quite a few functions that check for NULL hw_pp only, while -
-> especially after this patch - should also check hw_intf to raise
-> "invalid encoder".  Should I extend those checks as well?
+I do think it's a pity C lacks mechanisms such that gotos are sometimes
+necessary, but I can only right so many wrongs in this patch :)
 
-I think so. However in most of cases these checks should be void, since 
-cmd encoder can not be instantiated without intf.
+> > +	if (success)
+> > +		ksft_test_result_pass("%s\n", test_name);
+> > +	else
+> > +		ksft_test_result_fail("%s\n", test_name);
+> > +}
+> > +
+> > +/*
+> > + * Similar to mremap_expand_merge() except instead of removing the middle page,
+> > + * we remove the last then attempt to remap offset from the second page. This
+> > + * should result in the mapping being restored to its former state.
+> > + */
+> > +static void mremap_expand_merge_offset(FILE *maps_fp, unsigned long page_size)
+> > +{
+> > +
+> > +	char *test_name = "mremap expand merge offset";
+> > +	bool success = false;
+> > +	char *remap, *start;
+> > +
+> > +	start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
+> > +		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> > +
+> > +	if (start == MAP_FAILED) {
+> > +		ksft_print_msg("mmap failed: %s\n", strerror(errno));
+> > +		goto out;
+> > +	}
+> > +
+> > +	/* Unmap final page to ensure we have space to expand. */
+> > +	munmap(start + 2 * page_size, page_size);
+> > +	remap = mremap(start + page_size, page_size, 2 * page_size, 0);
+> > +	if (remap == MAP_FAILED) {
+> > +		ksft_print_msg("mremap failed: %s\n", strerror(errno));
+> > +		munmap(start, 2 * page_size);
+> > +		goto out;
+> > +	}
+> > +
+> > +	success = is_range_mapped(maps_fp, start, start + 3 * page_size);
+> > +	munmap(start, 3 * page_size);
+> > +
+> > +out:
+>
+> dito.
+>
+> >   	if (success)
+> >   		ksft_test_result_pass("%s\n", test_name);
+> >   	else
+> >   		ksft_test_result_fail("%s\n", test_name);
+> > -	fclose(fp);
+> >   }
+> >   /*
+> > @@ -385,6 +447,7 @@ int main(int argc, char **argv)
+> >   	struct test perf_test_cases[MAX_PERF_TEST];
+> >   	int page_size;
+> >   	time_t t;
+> > +	FILE *maps_fp;
+>
+> I'd simply use a global variable, same applies for page_size. But passing it
+> around is also ok.
+>
 
->> Moreover, as I
->> review your patch I have the feeling that it would make sense to have to
->> two sets of encoder callbacks, one for the hw_pp tearing handling and
->> another set for hw_intf-based one.
-> 
-> Do you mean to duplicate most phy_cmd functions and switch them based on
-> has_intf_te in dpu_encoder_phys_cmd_init_ops?  Or introduce an entirely
-> new set of callbacks that simply hide / abstract away the check on
-> has_intf_te?  The former would duplicate a bunch of code unless that is
-> abstracted away into other functions, mainly in
-> dpu_encoder_phys_cmd_tearcheck_config and
-> dpu_encoder_phys_cmd_prepare_commit.
+I am trying to keep things consistent with what's gone before in this code,
+and given page_size is being passed around I think the 'when in Rome'
+principle applies equally to passing the fp around I think.
 
+> >   	pattern_seed = (unsigned int) time(&t);
+> > @@ -458,7 +521,15 @@ int main(int argc, char **argv)
+> >   		run_mremap_test_case(test_cases[i], &failures, threshold_mb,
+> >   				     pattern_seed);
+> > -	mremap_expand_merge(page_size);
+> > +	maps_fp = fopen("/proc/self/maps", "r");
+> > +	if (maps_fp == NULL) {
+> > +		ksft_print_msg("Failed to read /proc/self/maps: %s\n", strerror(errno));
+>
+> Maybe simply fail the test completely and return -errno ?
+>
 
-For the dpu_encoder_phys_cmd_tearcheck_config() it seems logical to fill 
-in the tc_cfg and then to call either the single hw_pp callback or a 
-single hw_intf callback.
+Ack on this one, will spin a v3 with this as otherwise we might miss test
+failures here.
 
-I'd move most of the code from prepare_commit to dpu_hw_pp and then 
-duplicate it to dpu_hw_intf. This seems like the lesser evil.
-This function really stands out, since if you inline 
-_dpu_encoder_phys_cmd_connect_te() and 
-dpu_encoder_phys_cmd_is_ongoing_pptx() it becomes obvious that the whole 
-function is a mixture of linked calls to hw_pp ops. And judging from 
-your patch it doesn't make sense to check them one by one. Either we 
-have all of them, or none.
+> > +	} else {
+> > +		mremap_expand_merge(maps_fp, page_size);
+> > +		mremap_expand_merge_offset(maps_fp, page_size);
+> > +
+> > +		fclose(maps_fp);
+>
+> No need to fclose, just keep it open ...
+>
 
-> 
-> Alternatively, could we find a way where these PP and INTF ops share the
-> same struct and function signature?  That might be tricky for passing in
-> the hw_pp or hw_intf struct without leaking those details to the
-> callback and/or have the switching logic in there.
-> 
->>> ---
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c   |  11 +
->>>    .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h  |  10 +-
->>>    .../drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c  | 113 +++++++---
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c   | 206 ++++++++++++++++++
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h   |  29 +++
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h   |   2 +
->>>    6 files changed, 340 insertions(+), 31 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>> index 9c6817b5a194..8b9070220ab2 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>> @@ -673,6 +673,7 @@ static void _dpu_encoder_update_vsync_source(struct dpu_encoder_virt *dpu_enc,
->>>    	struct dpu_kms *dpu_kms;
->>>    	struct dpu_hw_mdp *hw_mdptop;
->>>    	struct drm_encoder *drm_enc;
->>> +	struct dpu_encoder_phys *phys_enc;
->>>    	int i;
->>>    
->>>    	if (!dpu_enc || !disp_info) {
->>> @@ -703,12 +704,22 @@ static void _dpu_encoder_update_vsync_source(struct dpu_encoder_virt *dpu_enc,
->>>    			vsync_cfg.ppnumber[i] = dpu_enc->hw_pp[i]->idx;
->>>    
->>>    		vsync_cfg.pp_count = dpu_enc->num_phys_encs;
->>> +		vsync_cfg.frame_rate = drm_mode_vrefresh(&dpu_enc->base.crtc->state->adjusted_mode);
->>> +
->>>    		if (disp_info->is_te_using_watchdog_timer)
->>>    			vsync_cfg.vsync_source = DPU_VSYNC_SOURCE_WD_TIMER_0;
->>>    		else
->>>    			vsync_cfg.vsync_source = DPU_VSYNC0_SOURCE_GPIO;
->>>    
->>>    		hw_mdptop->ops.setup_vsync_source(hw_mdptop, &vsync_cfg);
->>> +
->>> +		for (i = 0; i < dpu_enc->num_phys_encs; i++) {
->>> +			phys_enc = dpu_enc->phys_encs[i];
->>> +
->>> +			if (phys_enc->has_intf_te && phys_enc->hw_intf->ops.vsync_sel)
->>> +				phys_enc->hw_intf->ops.vsync_sel(phys_enc->hw_intf,
->>> +						vsync_cfg.vsync_source);
->>> +		}
->>>    	}
->>>    }
->>>    
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
->>> index f2af07d87f56..47e79401032c 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
->>> @@ -148,10 +148,10 @@ struct dpu_encoder_phys_ops {
->>>    /**
->>>     * enum dpu_intr_idx - dpu encoder interrupt index
->>>     * @INTR_IDX_VSYNC:    Vsync interrupt for video mode panel
->>> - * @INTR_IDX_PINGPONG: Pingpong done unterrupt for cmd mode panel
->>> - * @INTR_IDX_UNDERRUN: Underrun unterrupt for video and cmd mode panel
->>> - * @INTR_IDX_RDPTR:    Readpointer done unterrupt for cmd mode panel
->>> - * @INTR_IDX_WB_DONE:  Writeback fone interrupt for virtual connector
->>> + * @INTR_IDX_PINGPONG: Pingpong done interrupt for cmd mode panel
->>> + * @INTR_IDX_UNDERRUN: Underrun interrupt for video and cmd mode panel
->>> + * @INTR_IDX_RDPTR:    Readpointer done interrupt for cmd mode panel
->>> + * @INTR_IDX_WB_DONE:  Writeback done interrupt for virtual connector
->>>     */
->>>    enum dpu_intr_idx {
->>>    	INTR_IDX_VSYNC,
->>> @@ -195,6 +195,7 @@ enum dpu_intr_idx {
->>>     *                              pending.
->>>     * @pending_kickoff_wq:		Wait queue for blocking until kickoff completes
->>>     * @irq:			IRQ indices
->>> + * @has_intf_te:		Interface TE configuration support
->>>     */
->>>    struct dpu_encoder_phys {
->>>    	struct drm_encoder *parent;
->>> @@ -220,6 +221,7 @@ struct dpu_encoder_phys {
->>>    	atomic_t pending_kickoff_cnt;
->>>    	wait_queue_head_t pending_kickoff_wq;
->>>    	int irq[INTR_IDX_MAX];
->>> +	bool has_intf_te;
->>>    };
->>>    
->>>    static inline int dpu_encoder_phys_inc_pending(struct dpu_encoder_phys *phys)
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->>> index 7e5ba52197cd..ca44a8087f01 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->>> @@ -100,12 +100,12 @@ static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
->>>    	DPU_ATRACE_END("pp_done_irq");
->>>    }
->>>    
->>> -static void dpu_encoder_phys_cmd_pp_rd_ptr_irq(void *arg, int irq_idx)
->>> +static void dpu_encoder_phys_cmd_te_rd_ptr_irq(void *arg, int irq_idx)
->>>    {
->>>    	struct dpu_encoder_phys *phys_enc = arg;
->>>    	struct dpu_encoder_phys_cmd *cmd_enc;
->>>    
->>> -	if (!phys_enc->hw_pp)
->>> +	if (!phys_enc->hw_pp || !phys_enc->hw_intf)
->>>    		return;
->>>    
->>>    	DPU_ATRACE_BEGIN("rd_ptr_irq");
->>> @@ -147,11 +147,19 @@ static void dpu_encoder_phys_cmd_atomic_mode_set(
->>>    		struct drm_crtc_state *crtc_state,
->>>    		struct drm_connector_state *conn_state)
->>>    {
->>> +	if (phys_enc->has_intf_te && !phys_enc->hw_intf) {
->>> +		DPU_ERROR("invalid intf configuration\n");
->>> +		return;
->>> +	}
->>> +
->>>    	phys_enc->irq[INTR_IDX_CTL_START] = phys_enc->hw_ctl->caps->intr_start;
->>>    
->>>    	phys_enc->irq[INTR_IDX_PINGPONG] = phys_enc->hw_pp->caps->intr_done;
->>>    
->>> -	phys_enc->irq[INTR_IDX_RDPTR] = phys_enc->hw_pp->caps->intr_rdptr;
->>> +	if (phys_enc->has_intf_te)
->>> +		phys_enc->irq[INTR_IDX_RDPTR] = phys_enc->hw_intf->cap->intr_tear_rd_ptr;
->>> +	else
->>> +		phys_enc->irq[INTR_IDX_RDPTR] = phys_enc->hw_pp->caps->intr_rdptr;
->>>    
->>>    	phys_enc->irq[INTR_IDX_UNDERRUN] = phys_enc->hw_intf->cap->intr_underrun;
->>>    }
->>> @@ -264,7 +272,7 @@ static int dpu_encoder_phys_cmd_control_vblank_irq(
->>>    	if (enable && atomic_inc_return(&phys_enc->vblank_refcount) == 1)
->>>    		ret = dpu_core_irq_register_callback(phys_enc->dpu_kms,
->>>    				phys_enc->irq[INTR_IDX_RDPTR],
->>> -				dpu_encoder_phys_cmd_pp_rd_ptr_irq,
->>> +				dpu_encoder_phys_cmd_te_rd_ptr_irq,
->>>    				phys_enc);
->>>    	else if (!enable && atomic_dec_return(&phys_enc->vblank_refcount) == 0)
->>>    		ret = dpu_core_irq_unregister_callback(phys_enc->dpu_kms,
-> 
-> Fwiw looks like this function is a prime candidate to get updated with
-> hw_intf information (in error checking and logging), as this callback is
-> now shared between PP and INTF.
-> 
->>> @@ -336,10 +344,18 @@ static void dpu_encoder_phys_cmd_tearcheck_config(
->>>    
->>>    	DPU_DEBUG_CMDENC(cmd_enc, "pp %d\n", phys_enc->hw_pp->idx - PINGPONG_0);
->>>    
->>> -	if (!phys_enc->hw_pp->ops.setup_tearcheck ||
->>> -		!phys_enc->hw_pp->ops.enable_tearcheck) {
->>> -		DPU_DEBUG_CMDENC(cmd_enc, "tearcheck not supported\n");
->>> -		return;
->>> +	if (phys_enc->has_intf_te) {
->>> +		if (!phys_enc->hw_intf->ops.setup_tearcheck ||
->>> +			!phys_enc->hw_intf->ops.enable_tearcheck) {
->>> +			DPU_DEBUG_CMDENC(cmd_enc, "tearcheck not supported\n");
->>> +			return;
->>> +		}
->>> +	} else {
->>> +		if (!phys_enc->hw_pp->ops.setup_tearcheck ||
->>> +			!phys_enc->hw_pp->ops.enable_tearcheck) {
->>> +			DPU_DEBUG_CMDENC(cmd_enc, "tearcheck not supported\n");
->>> +			return;
->>> +		}
->>>    	}
->>>    
->>>    	dpu_kms = phys_enc->dpu_kms;
->>> @@ -392,8 +408,13 @@ static void dpu_encoder_phys_cmd_tearcheck_config(
->>>    		phys_enc->hw_pp->idx - PINGPONG_0, tc_cfg.sync_cfg_height,
->>>    		tc_cfg.sync_threshold_start, tc_cfg.sync_threshold_continue);
->>>    
->>> -	phys_enc->hw_pp->ops.setup_tearcheck(phys_enc->hw_pp, &tc_cfg);
->>> -	phys_enc->hw_pp->ops.enable_tearcheck(phys_enc->hw_pp, tc_enable);
->>
->> A simple random example: setup_tearcheck is always followed with the
->> enable_tearcheck. If we merge them, the code would be simpler.
-> 
-> setup_tearcheck could include this functionality, but note that
-> dpu_encoder_phys_cmd_disable currently calls enable_tearcheck(false)
-> without setup_tearcheck.
+I'd rather we did fclose() to keep things clean, as who knows what
+additional tests may be added later and to be pedantic about matching an
+fopen() with an fclose().
 
-Yes, so enable_tearcheck() and disable_tearcheck() sound more useful.
+> > +	}
+> >   	if (run_perf_tests) {
+> >   		ksft_print_msg("\n%s\n",
+>
+>
+> Acked-by: David Hildenbrand <david@redhat.com>
+>
 
-> 
-> - Marijn
-> 
->>> <snip>
+Thanks!
 
--- 
-With best wishes
-Dmitry
-
+> --
+> Thanks,
+>
+> David / dhildenb
+>
