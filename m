@@ -2,87 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABF665B1E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B104C65B1EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbjABMUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 07:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S232792AbjABMUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 07:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjABMUG (ORCPT
+        with ESMTP id S232768AbjABMUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 07:20:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FB3E12
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:20:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69A0A60F1A
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 12:20:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF496C433D2;
-        Mon,  2 Jan 2023 12:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672662004;
-        bh=btaLwKP77c2vrIksrhaCf6AXfnXi0R3vpTgMQOQzZFU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GicCVPuqMgPSRD1ofaxjiJn9wZAHZBWUGkzf5udCKW5TIAvdqkWGu8ivkGInDp+R5
-         ZYorXQFVQfDFN99L1HE82ANNeUSV5uDTDMUmgXvjqFBrVYhdy7umuX2oGj5ECAX+Ck
-         Vqu+sf8I6xSs4Xqb9vRbM4S7epG4L3RZOmo+0vnxTNFNkOhiu/E9pj2slZxdqZUvgS
-         NGD47oWTsBb5FPK+D8NaMSos0f5qsCXiwxDUcfHjoYjGiIW02OAF4iEjarlnVjC2qW
-         L+mBVKniF94IZeeW0qTYU7o2H1Vk6zzkTDuIlsjnnmh4AXUs3nKXnJgbA1mtRo4y4s
-         s5H3mLCXpwIdA==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pCJnO-00GJnn-L4;
-        Mon, 02 Jan 2023 12:20:02 +0000
+        Mon, 2 Jan 2023 07:20:07 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5D2FC1
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:20:06 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bt23so24700551lfb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 04:20:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zx4h7Eu/Z/hfAAIzZ++X/qRMCClWd1JQ6yVqol4cOQg=;
+        b=O+DoTsF2EhbsVrfsJd0sHlAy8bN1xhI5UKBv6BJ1E6hYFkHfrH3YG3YsZYgqi0A5IZ
+         J/tbyfF4kOizk/8pQpS7rGcEzrdkcRXaysrlq2wVSCOqpdbesSsYUjBszIZ7jEC7rIH2
+         RSojqQZ23NP+dr3KlCIRwWGbAYWjYGF1L52LlGUuZT7BTQUizgFU0W2X4JHLGXwK+U+O
+         uRxNA35a9P0n9qmQ/lxSk0Y5DTiznPTRFYFgzPjzrIjCLbOdLNlUs1whGCuf3ErfVf/J
+         6gk4/c392m6Tkq9dNj5xQKjB/klGSRuM1x+kcgwWTDOstdi5g5f+KtcrYesX/vQd5E5E
+         V4mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zx4h7Eu/Z/hfAAIzZ++X/qRMCClWd1JQ6yVqol4cOQg=;
+        b=QzQJ/WmWuIFiJ8XVs1S+kulbY1Bth7nJcWgwnr2I8bvTND270V0LWtsSgTX2JDG81D
+         9DfQWiH3MGHlIxvRbgfdw56vr2NwyJHcnvHtRBTP5Pyj+aC9z+Q4qUU14QF/pch/i28f
+         H0gWYKDdyJw6zsHj398d4N6stdQ4KNcgSnYxoQz+tPj9ROG+yaRy1b2Zhd5CM9OO944v
+         E3DrMd+DTFqbbeOlW0srL7dn+S9tlTzaYiT2unCa+q3qMxWUb0CPVJludeIm9reQoprF
+         KkjdDPL3KWtWvb1Do07haB9w1FuYTw149E2nrfvRiXiUxSyz1YTMiYtaIVJE1KtErxVt
+         j34Q==
+X-Gm-Message-State: AFqh2koGyZqcYbzi4x+lynTPzeo/UPUmVz2QccF020QUno1HJ6meoyUE
+        QJoUzgy7EaimjPNKiG6VBjfAog==
+X-Google-Smtp-Source: AMrXdXvREnsHDOjNMDvSmsE/b74+iIFFVAx3+KBVJKkc02n3AhsyMtiWtdyR2d9/Ccm75LdKj3vEbA==
+X-Received: by 2002:ac2:5394:0:b0:4b4:e2c9:9b25 with SMTP id g20-20020ac25394000000b004b4e2c99b25mr10850383lfh.44.1672662004622;
+        Mon, 02 Jan 2023 04:20:04 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id m14-20020a056512358e00b004a4754c5db5sm4466644lfr.244.2023.01.02.04.20.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 04:20:04 -0800 (PST)
+Message-ID: <1a8226ef-b16c-e713-94bd-807ca356ef8b@linaro.org>
+Date:   Mon, 2 Jan 2023 13:20:03 +0100
 MIME-Version: 1.0
-Date:   Mon, 02 Jan 2023 12:20:02 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Saravana Kannan <saravanak@google.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 5/6] arm64: dts: qcom: sm8250-mtp: fix wcd938x codec node
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] irqchip: Fix refcount leak in platform_irqchip_probe
-In-Reply-To: <20230102121318.3990586-1-linmq006@gmail.com>
-References: <20230102121318.3990586-1-linmq006@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <6fa4699cc0b1b17943d4c67e53c432a4@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+References: <20230102105038.8074-1-johan+linaro@kernel.org>
+ <20230102105038.8074-6-johan+linaro@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230102105038.8074-6-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: linmq006@gmail.com, tglx@linutronix.de, saravanak@google.com, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-02 12:13, Miaoqian Lin wrote:
-> of_irq_find_parent() returns a node pointer with refcount incremented,
-> We should use of_node_put() on it when not needed anymore.
-> Add missing of_node_put() to avoid refcount leak.
+On 02/01/2023 11:50, Johan Hovold wrote:
+> The wcd938x codec is not a memory-mapped device and does not belong
+> under the soc node.
 > 
-> Fixes: f8410e626569 ("irqchip: Add IRQCHIP_PLATFORM_DRIVER_BEGIN/END
-> and IRQCHIP_MATCH helper macros")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> Move the node to the root node to avoid DT validation failures.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8250-mtp.dts | 40 ++++++++++++-------------
+>  1 file changed, 19 insertions(+), 21 deletions(-)
 
-Please stop sending these patches one by one.
+Don't you base on some older tree? It was alreadt moved. Maybe other
+changes were also implemented...
 
-Send a series covering the whole of the irqchip subsystem, once
-you have looked at all the drivers.
+Best regards,
+Krzysztof
 
-Thanks,
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
