@@ -2,103 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C4765AFA6
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A3A65AFAD
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbjABKim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S232320AbjABKjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjABKij (ORCPT
+        with ESMTP id S229707AbjABKjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:38:39 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0A9EBF
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:38:38 -0800 (PST)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
+        Mon, 2 Jan 2023 05:39:37 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038791D0;
+        Mon,  2 Jan 2023 02:39:36 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 3B1ED3EE8C;
-        Mon,  2 Jan 2023 11:38:36 +0100 (CET)
-Date:   Mon, 2 Jan 2023 11:38:34 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 5/7] drm/msm/dpu: Document and enable TEAR interrupts
- on DSI interfaces
-Message-ID: <20230102103834.v37rv7i72sysruko@SoMainline.org>
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-6-marijn.suijten@somainline.org>
- <ccd35acf-15b5-91c7-606a-b327229cb255@linaro.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6936B205F5;
+        Mon,  2 Jan 2023 10:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672655975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9xe2eMFnILH/jDMx9pAFzxHyWx3I3CkIiF3DU9xLhJ8=;
+        b=0TVeymCcyKqOOeieQacnsxkc9lkFjJHsY0Bx+WH8TpER8kYx6pSvC3p95SUxNqBmRJXXZu
+        oEDQh+trA1qBRrZPcdeQ/yBTOvyd1Jd8mP0/ivtD4rN64oLaPW6fL65YsdvIr0kAcV8ns5
+        Ax0WsI+B+EeBeOWoLo8F6TaJLo9nAus=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672655975;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9xe2eMFnILH/jDMx9pAFzxHyWx3I3CkIiF3DU9xLhJ8=;
+        b=WsrHznqV/LCPAzulNABvB/gmrJzHu2rHQcOoBbLOw1q/9xrgv/YG3zOFUhtVwZhbL4Rh4E
+        j0zynpfNBY+XZ6Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3F2F013427;
+        Mon,  2 Jan 2023 10:39:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wIbCDme0smP3WgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 02 Jan 2023 10:39:35 +0000
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        patches@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] x86/kexec: fix double vfree of image->elf_headers
+Date:   Mon,  2 Jan 2023 11:39:17 +0100
+Message-Id: <20230102103917.20987-1-vbabka@suse.cz>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ccd35acf-15b5-91c7-606a-b327229cb255@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-01 15:12:35, Dmitry Baryshkov wrote:
-> On 31/12/2022 23:50, Marijn Suijten wrote:
-> > <snip>
-> > -#define INTF_BLK(_name, _id, _base, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit) \
-> > +#define INTF_BLK(_name, _id, _base, _len, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit, _tear_reg, _tear_rd_ptr_bit) \
-> >   	{\
-> >   	.name = _name, .id = _id, \
-> > -	.base = _base, .len = 0x280, \
-> > +	.base = _base, .len = _len, \
-> 
-> Please move .len setting to a separate patch, it is not direclty related 
-> to tear interrupt addition.
+An investigation of a "Trying to vfree() nonexistent vm area" bug
+occurring in arch_kimage_file_post_load_cleanup() doing a
+vfree(image->elf_headers) in our 5.14-based kernel yielded the following
+double vfree() scenario, also present in mainline:
 
-It is directly related in that the TE registers reside in the extra
-space beyond 0x280, but I can surely make that explicit in a separate
-patch.
+SYSCALL_DEFINE5(kexec_file_load)
+  kimage_file_alloc_init()
+    kimage_file_prepare_segments()
+      arch_kexec_kernel_image_probe()
+        kexec_image_load_default()
+          kexec_bzImage64_ops.load()
+            bzImage64_load()
+              crash_load_segments()
+                prepare_elf_headers(image, &kbuf.buffer, &kbuf.bufsz);
+                image->elf_headers = kbuf.buffer;
+		ret = kexec_add_buffer(&kbuf);
+		if (ret) vfree((void *)image->elf_headers); // first vfree()
+      if (ret) kimage_file_post_load_cleanup()
+        vfree(image->elf_headers);                          // second vfree()
 
-> >   	.features = _features, \
-> >   	.type = _type, \
-> >   	.controller_id = _ctrl_id, \
-> >   	.prog_fetch_lines_worst_case = _progfetch, \
-> >   	.intr_underrun = DPU_IRQ_IDX(_reg, _underrun_bit), \
-> >   	.intr_vsync = DPU_IRQ_IDX(_reg, _vsync_bit), \
-> > +	.intr_tear_rd_ptr = DPU_IRQ_IDX(_tear_reg, _tear_rd_ptr_bit), \
-> 
-> Initially I added separate _reg and _bit settings because reg was common 
-> to both interrupts. However now as tear interrups use different reg it 
-> might be better to first move DPU_IRQ_IDX out of this macro () and then 
-> to add your tear_rd_ptr_intr as a single intr_idx.
+AFAICS the scenario is possible since v5.19 commit b3e34a47f989
+("x86/kexec: fix memory leak of elf header buffer") that was marked for
+stable and also was backported to our kernel.
 
-I assumed as much; then we do get the duplication of _reg but I guess
-it's not too bad if the lines are nicely wrapped like in _pp[].  I'll do
-so in a separate patch.
+Fix the problem by setting the pointer to NULL after the first vfree().
+Also set elf_headers_sz to 0, as kimage_file_post_load_cleanup() does.
 
-- Marijn
+Fixes: b3e34a47f989 ("x86/kexec: fix memory leak of elf header buffer")
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Cc: Baoquan He <bhe@redhat.com>
+Cc: Dave Young <dyoung@redhat.com>
+Cc: <stable@vger.kernel.org>
+---
+ arch/x86/kernel/crash.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-<snip>
+diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+index 9730c88530fc..0d651c05a49e 100644
+--- a/arch/x86/kernel/crash.c
++++ b/arch/x86/kernel/crash.c
+@@ -403,6 +403,8 @@ int crash_load_segments(struct kimage *image)
+ 	ret = kexec_add_buffer(&kbuf);
+ 	if (ret) {
+ 		vfree((void *)image->elf_headers);
++		image->elf_headers = NULL;
++		image->elf_headers_sz = 0;
+ 		return ret;
+ 	}
+ 	image->elf_load_addr = kbuf.mem;
+-- 
+2.39.0
+
