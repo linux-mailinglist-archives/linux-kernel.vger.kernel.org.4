@@ -2,160 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0FA65AE20
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA0465AE21
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbjABIav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 03:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S230148AbjABIa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 03:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbjABIad (ORCPT
+        with ESMTP id S232009AbjABIar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 03:30:33 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501C625F5
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:30:31 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id C7C1E3200913;
-        Mon,  2 Jan 2023 03:30:28 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 02 Jan 2023 03:30:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1672648228; x=1672734628; bh=71n8oqUeqp
-        +nXbKCPCaVDE0spfo0v3obD01TQKeJVbg=; b=GFc0WldkoNQyEL6S5jn/xBQFyh
-        Pr/bbu+tXrSmMdkwIzvYM2uoRzZ9LTnNqtQvyf9ap5VniZn01f0xPHo2BPQqS4Aj
-        qxM6pNpcGqZvBiSLw7oyc2bUcKJFcEdJx3ehKwwdHkg5Z40T6g5dk9uCYQqwFEKH
-        mpxnPRBJrDXY0s+wkirDIuRv9XvBv41gPJrMbhRuPH9MdBbTFyp+KkSrVsTcBSUU
-        3k/6zV/NwOpFaMv4NNQg+ACu9P8mY3r81UsIUmFPeRLfkHRRMH/JtJcL27hokcW6
-        PvJva4fN2s8AUCdTQKRrjtLzOKMeCeDQGatWjhR4iVyI6p5XG5+1fA/MpTtA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672648228; x=1672734628; bh=71n8oqUeqp+nXbKCPCaVDE0spfo0
-        v3obD01TQKeJVbg=; b=KWIHl8QkHDxXsADfexp46vcydJHbvm5s4dCkLUsevXhd
-        5M1FQEKJjXNCccycAbYjLWn/xYW7HRpYMGZFmOdyUkSdhx82DfrY+MLNHNM0fxpw
-        +aWjYKHcnMZfkL8DBmrblgIAm4K6WVuMY+4E7irMZM9GAKkQceWeW1+WgKUMnPBC
-        O/YHipMSRU9/JzqH3AsgjY8FqEriU/dv53mZiOvEg5v1WvrjDk9nMb7Epd6jfyJw
-        mN6xL8GheKf0qXDZD8rsc2v2mCXF8agW2sWi42qheMfg0whxx9IaWdxoqWk5ExSz
-        6X5eVBzI8FME23sm6u0Jlsqm5LeS4hyxEJc8e6C6nw==
-X-ME-Sender: <xms:JJayY5O4_wzxw_x7hSwWeoJCYAF5nMsc0jlv83rsXwAdIcANHCoXow>
-    <xme:JJayY7_ELzJXEFJ_U3605y0_1_xniG_-6SubdiE7PmlrUTFHX_4xzSnzRUn13jFyq
-    vw7G-XmLl9EqVlv1WE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedugdduvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvufgtsehttd
-    ertderredtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegr
-    rhhnuggsrdguvgeqnecuggftrfgrthhtvghrnheptdehjeeuieejkefhgefhfeejieduhe
-    ekgeetjefgjeehleeuteejkefhgedtjedunecuffhomhgrihhnpehmohhnthhjohhivgdr
-    ohhvhhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:JJayY4S3jkLQ5lqppx74PCLQElLu-gC_V2tB4O0LIKm4CllZUjW3AA>
-    <xmx:JJayY1snOHpW-X5A1TgUROi1Hehwv252O8GerrsGBRPA9-0oz9Twlg>
-    <xmx:JJayYxdIbOvtWawAVtA-3LtA2XOA5lIAc9RW175RHIyXjzE5sOKedg>
-    <xmx:JJayYxnBweLDTn-EjHIzpPy40BazF4QE16S4EEUIZYCSNHmPW0SCJQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 230A2B60086; Mon,  2 Jan 2023 03:30:28 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <52ec1b11-4756-4396-866b-6250c6018f93@app.fastmail.com>
-In-Reply-To: <Y7HMfUTjuWC+Zudk@Red>
-References: <Y7HMfUTjuWC+Zudk@Red>
-Date:   Mon, 02 Jan 2023 09:30:07 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Corentin Labbe" <clabbe.montjoie@gmail.com>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: pcmcia: ti: regression cannot get IRQ
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 2 Jan 2023 03:30:47 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083FAE7C
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:30:44 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id b3so40721160lfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 00:30:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rtiFQpyWhpU5ex37LxYmByZTtx64yGOprdYoXMKibYc=;
+        b=n1TVVWwSUQdO4/Y6dHg574l1nbWHzqX5oWXwr1OUGxHMY+d7mxwhRUC8cPImKYCT/y
+         8xanzMicEq/864fBVGMZUtX26ZhqVicRuWkuzOsG4vNA0u1E2kOKrv9CYewbdsihSO9L
+         DoqJA1EteBJzlyeZHC6PtaiwhNAy35R5D3QZby4GchWZi7HLxJJN/DgMoViPZyrjBR8y
+         H6fyq8TnY9FVz+F4EysOmrGkzAp9oyeaOr4+dj0aYBl1RhNUUx/aJwsVRMxBJtCszwk3
+         FaiLgEXTLpoww25G0rdycB2Gfg2AgqH+gS7XNDxZoRbyjAv/ngBuXwDuJ80dJNA8290L
+         2zDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rtiFQpyWhpU5ex37LxYmByZTtx64yGOprdYoXMKibYc=;
+        b=NtvqfA7t04jBDw2d3s4DS+TP5IukHhjZh6ATBMbkzKpvAbYsOydlcTqWt9CeN+Okds
+         Le+Uj8J3yhR4ArTrBu5PfAt6hQe1Bzxd/vfZnbhDUKuYbt6Gpreb/Y7q5JY3uY2azG9K
+         /2iXH3R1xY3RRy91FoeTLEC39MSmwc9ThtXMwEQZlGwaJJfw1uUiggfr8FTyq+1JwpRP
+         PduKE+gW16QwSxe4N5hLmY/qM8bx/acwnBrinHMI8Cxa2XKc9GKceY7AzWOVK3ZFd2d0
+         LueJ5IPuA0MXEWMfePqkrN7pw9n2ac+94ymVa4WILQTBffzKoou7A5PAPp1Zrr60+2Rw
+         H3Yw==
+X-Gm-Message-State: AFqh2krmfpNN0L/WNMMTyq7vvwdpJXjN9kLbUH/J5zDB6XnIIE7FcI7p
+        RFp61Z4OS9LsuPhSOy5neHWfVA==
+X-Google-Smtp-Source: AMrXdXtHLYARNcvpffbs1r2sdcc97L2+H9iPXEjItpIwDj3p2J/1deLZLgAoR0gW2EMmnQmQT6waOQ==
+X-Received: by 2002:a05:6512:2316:b0:4b0:6023:6f6f with SMTP id o22-20020a056512231600b004b060236f6fmr13521416lfu.57.1672648242380;
+        Mon, 02 Jan 2023 00:30:42 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id d13-20020a056512368d00b0049478cc4eb9sm4363058lfs.230.2023.01.02.00.30.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 00:30:41 -0800 (PST)
+Message-ID: <6451aafa-7021-0769-d408-9dba40d58668@linaro.org>
+Date:   Mon, 2 Jan 2023 09:30:40 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH v2 1/3] usb: support Samsung Exynos xHCI Controller
+Content-Language: en-US
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
+        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
+        eomji.oh@samsung.com
+References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20221229100413epcas2p34c702faf8c96d207cf1659b1173f8858@epcas2p3.samsung.com>
+ <1672307866-25839-2-git-send-email-dh10.jung@samsung.com>
+ <bc531774-ed70-39b7-3534-5683dff20591@linaro.org>
+ <20230102062448.GC74470@ubuntu>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230102062448.GC74470@ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 1, 2023, at 19:10, Corentin Labbe wrote:
-> Hello
->
-> I was trying to boot again my old compaq armada 7400 laptop and the 
-> network card is unusable.
->
-> Last known working kernel is 4.16.18.
-> First known bad kernel is 4.17.19
->
-> The interesting log is:
-> [    3.503348] yenta_cardbus 0000:00:0c.0: ISA IRQ mask 0x0698, PCI irq 
-> 0
-> [    3.503442] yenta_cardbus 0000:00:0c.0: Socket status: 30000006
-> [    3.505250] yenta_cardbus 0000:00:0c.1: CardBus bridge found 
-> [0e11:b048]
-> [    3.505370] yenta_cardbus 0000:00:0c.1: adjusting diagnostic: 60 -> 
-> 00
-> [    3.505457] yenta_cardbus 0000:00:0c.1: Using INTVAL to route CSC 
-> interrupts to PCI
-> [    3.505554] yenta_cardbus 0000:00:0c.1: Routing CardBus interrupts 
-> to ISA
-> [    3.505556] yenta_cardbus 0000:00:0c.1: TI: mfunc 0x00000000, devctl 
-> 0x64
-> [    3.505556] yenta_cardbus 0000:00:0c.1: TI: no PCI interrupts. Fish. 
-> Please report.
-> [    3.505556] yenta_cardbus 0000:00:0c.1: no PCI IRQ, CardBus support 
-> disabled for this socket.
-> [    3.505556] yenta_cardbus 0000:00:0c.1: check your BIOS CardBus, 
-> BIOS IRQ or ACPI settings.
-> [    3.632323] yenta_cardbus 0000:00:0c.1: ISA IRQ mask 0x0698, PCI irq 
-> 0
-> [    3.632416] yenta_cardbus 0000:00:0c.1: Socket status: 30000020
->
-> Full 4.16.18 log is availlable at: 
-> http://kernel.montjoie.ovh/zoo/armada/dmesg-4.16.18.txt
-> Since 4.17 (and 4.18) is stuck sarting init, I have log for 5.0.29
-> Full 5.0.29 log is availlable at: 
-> http://kernel.montjoie.ovh/zoo/armada/dmesg-5.0.21.txt
+On 02/01/2023 07:24, Jung Daehwan wrote:
+> On Thu, Dec 29, 2022 at 11:25:58AM +0100, Krzysztof Kozlowski wrote:
+>> On 29/12/2022 10:57, Daehwan Jung wrote:
+>>> Currently, dwc3 invokes just xhci platform driver without any data.
+>>> We add xhci node as child of dwc3 node in order to get data from
+>>> device tree. It populates "xhci" child by name during initialization
+>>> of host. This patch only effects if dwc3 node has a child named "xhci"
+>>> not to disturb original path.
+>>>
+>>> We add "samsung,exynos-xhci" compatible in xhci platform driver
+>>
+>> Where? It is not documented.
+> 
+> I submitted the patch of dt bindings on same patchset.
+> Is there any missing documentation?
 
-I see you hit this code path:
+This is your first patch in the series and in this patch there is no
+such bindings. Re-order the patches to have proper order.
 
-        if (!socket->cb_irq || request_irq(socket->cb_irq, yenta_interrupt, IRQF_SHARED, "yenta", socket)) {
-                /* No IRQ or request_irq failed. Poll */
-                socket->cb_irq = 0; /* But zero is a valid IRQ number. */
-                timer_setup(&socket->poll_timer, yenta_interrupt_wrapper, 0);
-                mod_timer(&socket->poll_timer, jiffies + HZ);
-                dev_info(&dev->dev,
-                         "no PCI IRQ, CardBus support disabled for this socket.\n");
-                dev_info(&dev->dev,
-                         "check your BIOS CardBus, BIOS IRQ or ACPI settings.\n");
-        } else {
+> 
+>>
+>>> to support Exynos SOCs. 
+>>
+>> That's so not true. You do nothing to support Exynos SoC here. Please
+>> stop pasting incorrect and misleading commit msgs.
+> 
+> I agree misleading commit msgs. I will modify it.
+> 
+>>
+>>> We introduce roothub wakeup, which uses roothub
+>>> as system wakeup source. It needs xhci platform driver to override
+>>> roothub ops.
+>>
+>> You did not explain why you introduced wakelocks...
+>>
+> 
+> I'm sorry I didn't write description enough.
+> I add it below.
+> 
+>>
+>> (...)
+>>
+>>>  	if (shared_hcd) {
+>>>  		usb_remove_hcd(shared_hcd);
+>>>  		xhci->shared_hcd = NULL;
+>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>> index 79d7931c048a..693495054001 100644
+>>> --- a/drivers/usb/host/xhci.c
+>>> +++ b/drivers/usb/host/xhci.c
+>>> @@ -5502,6 +5502,10 @@ void xhci_init_driver(struct hc_driver *drv,
+>>>  			drv->check_bandwidth = over->check_bandwidth;
+>>>  		if (over->reset_bandwidth)
+>>>  			drv->reset_bandwidth = over->reset_bandwidth;
+>>> +		if (over->bus_suspend)
+>>> +			drv->bus_suspend = over->bus_suspend;
+>>> +		if (over->bus_resume)
+>>> +			drv->bus_resume = over->bus_resume;
+>>>  	}
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(xhci_init_driver);
+>>> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+>>> index c9f06c5e4e9d..cb9c54a6a22c 100644
+>>> --- a/drivers/usb/host/xhci.h
+>>> +++ b/drivers/usb/host/xhci.h
+>>> @@ -1752,6 +1752,8 @@ struct xhci_hub {
+>>>  struct xhci_hcd {
+>>>  	struct usb_hcd *main_hcd;
+>>>  	struct usb_hcd *shared_hcd;
+>>> +	struct wakeup_source *main_wakelock;
+>>> +	struct wakeup_source *shared_wakelock;
+>>
+>> Drop wakelocks. This is not related to USB and not needed here. Do you
+>> see anywhere else in core kernel code usage of the wakelocks?
+>>
+>> You got this comment already, didn't you? So why you do not address it?
+>>
+> 
+> I want to add a new feature in xhci platform driver. I want to make it
+> possible to enter system sleep while usb host connected like USB Mouse.
+> It gets system enter sleep only if there's no usb transaction at all.
+> Deciding if there's tranaction or not is in root hub because it's parent
+> of all child usb devices.
 
 
-The "socket->cb_irq" is just the device IRQ, which is originally
-set to "11", and this one appears to be shared with all the other
-PCI devices:
+I have USB mouse connected to my system and the system enters suspend,
+thus I don't think this patch solves this particular issue.
 
-[    2.402035] ACPI: PCI Interrupt Link [C168] (IRQs *11)
-[    2.403507] ACPI: PCI Interrupt Link [C16C] (IRQs *11)
-[    2.405461] ACPI: Blank _CRS EXT IRQ resource
-[    2.405546] ACPI: PCI Interrupt Link [C16D] (IRQs 11) *0, disabled.
-[    2.407578] ACPI: Blank _CRS EXT IRQ resource
-[    2.407663] ACPI: PCI Interrupt Link [C16E] (IRQs 11) *0, disabled.
-[    2.409610] ACPI: Blank _CRS EXT IRQ resource
-[    2.409695] ACPI: PCI Interrupt Link [C16F] (IRQs 11) *0, disabled.
-[    2.411647] ACPI: Blank _CRS EXT IRQ resource
-[    2.411733] ACPI: PCI Interrupt Link [C170] (IRQs 11) *0, disabled.
-[    2.413690] ACPI: Blank _CRS EXT IRQ resource
-[    2.413775] ACPI: PCI Interrupt Link [C171] (IRQs 11) *0, disabled.
-[    2.416055] ACPI: Blank _CRS EXT IRQ resource
-[    2.416140] ACPI: PCI Interrupt Link [C172] (IRQs 11) *0, disabled.
+Best regards,
+Krzysztof
 
-If any of them try to get the IRQ as non-shared, then the cardbus
-one would fail. Do you see anything suspicious in /proc/interrupts?
-
-     Arnd
