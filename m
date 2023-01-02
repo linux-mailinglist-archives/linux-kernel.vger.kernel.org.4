@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676E565B44A
+	by mail.lfdr.de (Postfix) with ESMTP id BDEC065B44B
 	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236335AbjABPfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S236405AbjABPfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjABPe5 (ORCPT
+        with ESMTP id S236348AbjABPfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:34:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0642ECEE;
-        Mon,  2 Jan 2023 07:34:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 2 Jan 2023 10:35:01 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD54CCEE;
+        Mon,  2 Jan 2023 07:35:00 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94B8B6100E;
-        Mon,  2 Jan 2023 15:34:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD14DC433EF;
-        Mon,  2 Jan 2023 15:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672673696;
-        bh=zJNTfbfKaQsZHuoRWNrWjoFueZFaKIOgRu8XXFughmo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bWeExQuNd/hxzvyL3CO6P9+LFR8lQ+6neY/BYDS73yDx+G3ax1cqa1aI/tKmTg+y2
-         cVcHSUzFfKW5D/u38jVNDecmfGJHlCWI17WfiCDD0z3/otl6393XLj2feKla1i6ptG
-         H9dbd3lLkbcHQFF3L5RwwdApJ0sLSOrQEUMv7PQ7bgz1TOn/ywwceB2FP557pPKWmb
-         EQEg28zOmJyhKRWXXl4SpHGtN0f3F9yhcJo58iFk8CQdj0Rd64k1QcySrhZJBfXIdP
-         K2HfEht4cvYZhj6eSEklbPzq+DWuSMMce6OS0DsOb4wI2AF2+npG086LQ5jSrSLnYr
-         Ov7bxE/LcTOgQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2E10C40468; Mon,  2 Jan 2023 12:34:53 -0300 (-03)
-Date:   Mon, 2 Jan 2023 12:34:53 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] perf tools: don't include signature in version
- strings
-Message-ID: <Y7L5nfcAH1aTh8po@kernel.org>
-References: <CAM9d7ciuh1H2Mfx5ToYGT1fOm8E3jrQhkzg304JKDd7BhT=h5g@mail.gmail.com>
- <7c9637711271f50ec2341fb8a7c29585335dab04.1672174189.git.nabijaczleweli@nabijaczleweli.xyz>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 918FB34215;
+        Mon,  2 Jan 2023 15:34:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672673699; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rxSU7BQCVQRZyJH13xdhDi57U6Cq3OOvoYb4SRQKQ+8=;
+        b=TqnW1VOrriFFzJX7NpbogXSbiBbUOlHR7r4zoZJvtV/a4qILbsZ06XJZxIKcvxet0hWXBM
+        13c78kbw9DgqZktNCxOEzTLLvAMu189OxtodrBtArhYEFxmcQ2JV+wjgRzgQEEXYtJ/Vua
+        /B6gIbJ3ePVkDwJmw2IxLPUH4lHypXA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672673699;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rxSU7BQCVQRZyJH13xdhDi57U6Cq3OOvoYb4SRQKQ+8=;
+        b=GDZDwgo32tSKGR0LnrYI5tHwImqQCMXJg8nveBFEEXcjPHqjqSHfrvuo72z/o4w8wf3c5X
+        YeVCQeVur6MWQuAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 823CE13427;
+        Mon,  2 Jan 2023 15:34:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PbLmH6P5smOCbAAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 02 Jan 2023 15:34:59 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C8CC1A0742; Mon,  2 Jan 2023 16:34:58 +0100 (CET)
+Date:   Mon, 2 Jan 2023 16:34:58 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, hch@lst.de, damien.lemoal@wdc.com
+Subject: Re: [PATCH RESEND v2 05/10] block, bfq: remove unnecessary
+ dereference to get async_bfqq
+Message-ID: <20230102153458.zg3ku5styjcz2gf3@quack3>
+References: <20221222191641.1643117-1-shikemeng@huaweicloud.com>
+ <20221222191641.1643117-6-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7c9637711271f50ec2341fb8a7c29585335dab04.1672174189.git.nabijaczleweli@nabijaczleweli.xyz>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221222191641.1643117-6-shikemeng@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 27, 2022 at 09:58:00PM +0100, Ahelenia Ziemiańska escreveu:
-> This explodes the build if HEAD is signed, since the generated version
-> is gpg: Signature made Mon 26 Dec 2022 20:34:48 CET, then a few more
-> lines, then the SHA.
+On Fri 23-12-22 03:16:36, Kemeng Shi wrote:
+> The async_bfqq is assigned with bfqq->bic->bfqq[0], use it directly.
 > 
-> Signed-off-by: Ahelenia Ziemiańska <nabijaczleweli@nabijaczleweli.xyz>
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 
-Thanks, applied to perf/urgent.
+Yeah, that is a more logical choice. Feel free to add:
 
-- Arnaldo
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
 
 > ---
->  tools/perf/Documentation/Makefile | 2 +-
->  tools/perf/util/PERF-VERSION-GEN  | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  block/bfq-iosched.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/perf/Documentation/Makefile b/tools/perf/Documentation/Makefile
-> index 6e7b88917ca0..ba5d942e4c6a 100644
-> --- a/tools/perf/Documentation/Makefile
-> +++ b/tools/perf/Documentation/Makefile
-> @@ -267,7 +267,7 @@ $(OUTPUT)%.xml : %.txt
->  	$(ASCIIDOC) -b docbook -d manpage \
->  		$(ASCIIDOC_EXTRA) -aperf_version=$(PERF_VERSION) \
->  		-aperf_date=$(shell git log -1 --pretty="format:%cd" \
-> -				--date=short $<) \
-> +				--date=short --no-show-signature $<) \
->  		-o $@+ $< && \
->  	mv $@+ $@
->  
-> diff --git a/tools/perf/util/PERF-VERSION-GEN b/tools/perf/util/PERF-VERSION-GEN
-> index 3cc42821d9b3..d7dc7c28508c 100755
-> --- a/tools/perf/util/PERF-VERSION-GEN
-> +++ b/tools/perf/util/PERF-VERSION-GEN
-> @@ -19,7 +19,7 @@ TAG=
->  if test -d ../../.git -o -f ../../.git
->  then
->  	TAG=$(MAKEFLAGS= make -sC ../.. kernelversion)
-> -	CID=$(git log -1 --abbrev=12 --pretty=format:"%h" 2>/dev/null) && CID="-g$CID"
-> +	CID=$(git log -1 --abbrev=12 --pretty=format:"%h" --no-show-signature 2>/dev/null) && CID="-g$CID"
->  elif test -f ../../PERF-VERSION-FILE
->  then
->  	TAG=$(cut -d' ' -f3 ../../PERF-VERSION-FILE | sed -e 's/\"//g')
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index c3c4c83ee95f..ebcafe3c4c3b 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -4835,7 +4835,7 @@ static struct bfq_queue *bfq_select_queue(struct bfq_data *bfqd)
+>  		    icq_to_bic(async_bfqq->next_rq->elv.icq) == bfqq->bic &&
+>  		    bfq_serv_to_charge(async_bfqq->next_rq, async_bfqq) <=
+>  		    bfq_bfqq_budget_left(async_bfqq))
+> -			bfqq = bfqq->bic->bfqq[0];
+> +			bfqq = async_bfqq;
+>  		else if (bfqq->waker_bfqq &&
+>  			   bfq_bfqq_busy(bfqq->waker_bfqq) &&
+>  			   bfqq->waker_bfqq->next_rq &&
 > -- 
-> 2.30.2
-
-
-
+> 2.30.0
+> 
 -- 
-
-- Arnaldo
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
