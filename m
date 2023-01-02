@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79EC65AF0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BE965AF0C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbjABJsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 04:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
+        id S232285AbjABJs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 04:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjABJrJ (ORCPT
+        with ESMTP id S232054AbjABJrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 2 Jan 2023 04:47:09 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1C4CF7
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7252ED
         for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:47:03 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id f34so40882821lfv.10
+Received: by mail-lf1-x134.google.com with SMTP id bf43so40923477lfb.6
         for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 01:47:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2ChnUQYzUlOXsitA4B/KYV/HzdtqGmDw26pxGLPhaSE=;
-        b=sp+i6SdLamsydRJ/bUanUdRmOtL4IJyx5L0f1rH/WH+MVEWO6poJ+Xe7t0RjpI2tgm
-         jeqmvfrBxocZGESpaOBefTa+OeYpgwFRL7P/VQtb1BDzHTwFovdZM9tmbSd8bZ97MixS
-         OvRLgsSnJdFk5J+PA4JD52ohXRoECS6gz5c/o1zsA17awfokaojpl6WJWSn7zapPxnNN
-         6CtYqjLQOIUMfv3STteLBXzKNsRg3oPIhU+D86oiMKuKczzDXYdeMFBjfswSnlDhZv5A
-         08qSlUrAfSqfVIpGgIKkDsG9CnO/qs4kxyyjn22b6ug9BkNYndfwT1L2/wC2aDzNLW1h
-         G1Zg==
+        bh=8nJUPyErlhKvgVgik/qDu/lu4NmYsMk/W9cFdNVa4Ys=;
+        b=GVA2tthUsy1q1Y9oUnt+aPiU9ZSQ3lx1YhiHGl2jUAvviHPo7LVa4yoRQTLsYzeJ5u
+         nAQq1cJleFBSEMarN+l5jmBVJYkmcHbdRqPBBJAlMGLRyIJHnlMrCyxbPIrlMmISs9JD
+         PiYcBLHsr67mbtDCQGrB4LKwkWv8jLynacdEFnWsWAk06tw+hrAzKIhbmHnsFO2UBmON
+         EwckjYdtjhy2wWL/Tutp/zybITjnYFGCXvGg7gRvOheeVqlppxjLig+CPU5CzV1QdjwQ
+         kFIpDfRLaAiW2oJb+n8nzjgHO80NnqhFeQdOaMseHAKQ0599KF/dXY2eW+7BJsgb4AD0
+         HGcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2ChnUQYzUlOXsitA4B/KYV/HzdtqGmDw26pxGLPhaSE=;
-        b=knRCGb9AxE191lOG+pJ3TMZkBUZ7a9+P8MRCI9isJSgYXl4tOfwDT64zOtAIpPqCHf
-         k5AwiUNneUldDZ5WJn3USvHT6lsefFHVgzzzmBSAI73/Lp0sQsj2v0FQjRrU6uv18r6H
-         99D38oF/Knt5h1jCU42pXOyhDRM64xDAc2lZzcKVq69BB4mSWYcuKugi25oeOgxUE5ai
-         6TFERw6y7e0aM6ataqSkknw1jQBzf6W+57ZfFFrhEYSvUfevD8e1YiXYEUXdjmqSqNE2
-         HKrKz5mteiYN0k+Ul9+ajQQA6HmhEVNqzNzF0fyk891LJCk2eNd6c+IxIcbXgqEt41+f
-         p7LQ==
-X-Gm-Message-State: AFqh2krZU4ccaEOzPbaasZlDwE9JI04ywMewU3lL6FePNdqJJBypmANm
-        /GPbA1/9H+cocgLEvgm5vNpXJg==
-X-Google-Smtp-Source: AMrXdXtPny9DY+8JYuYanf9tAYQiGv1uolYnYfxtmC01fJ2MI39VRURYbx3UW1/+qsVmj44on+hArg==
-X-Received: by 2002:a05:6512:2344:b0:4cb:90d:41b1 with SMTP id p4-20020a056512234400b004cb090d41b1mr7563426lfu.56.1672652822238;
-        Mon, 02 Jan 2023 01:47:02 -0800 (PST)
+        bh=8nJUPyErlhKvgVgik/qDu/lu4NmYsMk/W9cFdNVa4Ys=;
+        b=ralet5F6kJQ7XrSnKRp4/KOth/NU97GaDd6VMWfDqLGDiItrcVQGQhwWweDZfk5K9R
+         MUBQgYKTNJyQf4x/kRujTgqFitsSeDS57G82LUgzFqujE99C+WlMiT0fgSL93vy1ShbB
+         8ey867/p1z89BIb/+5MvVpoUbigj5ksDS/UoVV8XEh6zJUfdiVjSiRbVZ9iiIOLTRwPG
+         N2xWRuGct/Y135aqPy3A5qkZNRLCbMkohxFYPfujggIzee434LZFhZyjVc3Az5MxCef3
+         QajNrYJMgYp3SznxJQvNuwt42EOsWmkBBIFXLhE+p3PoBjkLg7Np8TCEbz30geXorYB/
+         EpKQ==
+X-Gm-Message-State: AFqh2kqulnVuZlQ2/ZFb3KF3LFlktsfQ7pyw3gcFNlbLyCCavfglIT9+
+        HeZOZkFF5wg/ErxVNcAyY2aQuA==
+X-Google-Smtp-Source: AMrXdXvnN4rB+6GFxNvwGABwje5jcF4d6u7W03QnhhYEzuoZkeE1WxqUv6Ve0xNJ6UQ9i4Mf/h0S+A==
+X-Received: by 2002:ac2:5394:0:b0:4b4:e2c9:9b25 with SMTP id g20-20020ac25394000000b004b4e2c99b25mr10750175lfh.44.1672652823502;
+        Mon, 02 Jan 2023 01:47:03 -0800 (PST)
 Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id x11-20020a0565123f8b00b004b5adb59ed5sm4382143lfa.297.2023.01.02.01.47.01
+        by smtp.gmail.com with ESMTPSA id x11-20020a0565123f8b00b004b5adb59ed5sm4382143lfa.297.2023.01.02.01.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 01:47:01 -0800 (PST)
+        Mon, 02 Jan 2023 01:47:03 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -58,9 +58,9 @@ Cc:     marijn.suijten@somainline.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 13/17] arm64: dts: qcom: sc7280: Pad addresses to 8 hex digits
-Date:   Mon,  2 Jan 2023 10:46:38 +0100
-Message-Id: <20230102094642.74254-14-konrad.dybcio@linaro.org>
+Subject: [PATCH v2 14/17] arm64: dts: qcom: msm8994-octagon: Pad addresses to 8 hex digits
+Date:   Mon,  2 Jan 2023 10:46:39 +0100
+Message-Id: <20230102094642.74254-15-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230102094642.74254-1-konrad.dybcio@linaro.org>
 References: <20230102094642.74254-1-konrad.dybcio@linaro.org>
@@ -68,8 +68,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,129 +82,180 @@ Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 v1 -> v2:
 No changes
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 46 ++++++++++++++--------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+ .../dts/qcom/msm8994-msft-lumia-octagon.dtsi  | 52 +++++++++----------
+ 1 file changed, 26 insertions(+), 26 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 0adf13399e64..cbf571baca9b 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2171,9 +2171,9 @@ ipa: ipa@1e40000 {
+diff --git a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
+index 9b67f0d3820c..4520a7e86d5b 100644
+--- a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
+@@ -127,98 +127,98 @@ reserved-memory {
+ 		 */
  
- 			iommus = <&apps_smmu 0x480 0x0>,
- 				 <&apps_smmu 0x482 0x0>;
--			reg = <0 0x1e40000 0 0x8000>,
--			      <0 0x1e50000 0 0x4ad0>,
--			      <0 0x1e04000 0 0x23000>;
-+			reg = <0 0x01e40000 0 0x8000>,
-+			      <0 0x01e50000 0 0x4ad0>,
-+			      <0 0x01e04000 0 0x23000>;
- 			reg-names = "ipa-reg",
- 				    "ipa-shared",
- 				    "gsi";
-@@ -2455,7 +2455,7 @@ lpass_cpu: audio@3987000 {
- 
- 		lpass_hm: clock-controller@3c00000 {
- 			compatible = "qcom,sc7280-lpasshm";
--			reg = <0 0x3c00000 0 0x28>;
-+			reg = <0 0x03c00000 0 0x28>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>;
- 			clock-names = "bi_tcxo";
- 			#clock-cells = <1>;
-@@ -3489,7 +3489,7 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
- 
- 		pmu@9091000 {
- 			compatible = "qcom,sc7280-llcc-bwmon";
--			reg = <0 0x9091000 0 0x1000>;
-+			reg = <0 0x09091000 0 0x1000>;
- 
- 			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
- 
-@@ -3571,7 +3571,7 @@ dc_noc: interconnect@90e0000 {
+ 		uefi_mem: memory@200000 {
+-			reg = <0 0x200000 0 0x100000>;
++			reg = <0 0x00200000 0 0x100000>;
+ 			no-map;
  		};
  
- 		gem_noc: interconnect@9100000 {
--			reg = <0 0x9100000 0 0xe2200>;
-+			reg = <0 0x09100000 0 0xe2200>;
- 			compatible = "qcom,sc7280-gem-noc";
- 			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
-@@ -3586,8 +3586,8 @@ system-cache-controller@9200000 {
+ 		mppark_mem: memory@300000 {
+-			reg = <0 0x300000 0 0x80000>;
++			reg = <0 0x00300000 0 0x80000>;
+ 			no-map;
+ 		};
  
- 		eud: eud@88e0000 {
- 			compatible = "qcom,sc7280-eud","qcom,eud";
--			reg = <0 0x88e0000 0 0x2000>,
--			      <0 0x88e2000 0 0x1000>;
-+			reg = <0 0x088e0000 0 0x2000>,
-+			      <0 0x088e2000 0 0x1000>;
- 			interrupts-extended = <&pdc 11 IRQ_TYPE_LEVEL_HIGH>;
- 			ports {
- 				port@0 {
-@@ -3750,7 +3750,7 @@ opp-460000048 {
+ 		fbpt_mem: memory@380000 {
+-			reg = <0 0x380000 0 0x1000>;
++			reg = <0 0x00380000 0 0x1000>;
+ 			no-map;
+ 		};
  
- 		videocc: clock-controller@aaf0000 {
- 			compatible = "qcom,sc7280-videocc";
--			reg = <0 0xaaf0000 0 0x10000>;
-+			reg = <0 0x0aaf0000 0 0x10000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>,
- 				<&rpmhcc RPMH_CXO_CLK_A>;
- 			clock-names = "bi_tcxo", "bi_tcxo_ao";
-@@ -3773,7 +3773,7 @@ camcc: clock-controller@ad00000 {
+ 		dbg2_mem: memory@381000 {
+-			reg = <0 0x381000 0 0x4000>;
++			reg = <0 0x00381000 0 0x4000>;
+ 			no-map;
+ 		};
  
- 		dispcc: clock-controller@af00000 {
- 			compatible = "qcom,sc7280-dispcc";
--			reg = <0 0xaf00000 0 0x20000>;
-+			reg = <0 0x0af00000 0 0x20000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>,
- 				 <&gcc GCC_DISP_GPLL0_CLK_SRC>,
- 				 <&mdss_dsi_phy 0>,
-@@ -4001,10 +4001,10 @@ mdss_edp: edp@aea0000 {
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&edp_hot_plug_det>;
+ 		capsule_mem: memory@385000 {
+-			reg = <0 0x385000 0 0x1000>;
++			reg = <0 0x00385000 0 0x1000>;
+ 			no-map;
+ 		};
  
--				reg = <0 0xaea0000 0 0x200>,
--				      <0 0xaea0200 0 0x200>,
--				      <0 0xaea0400 0 0xc00>,
--				      <0 0xaea1000 0 0x400>;
-+				reg = <0 0x0aea0000 0 0x200>,
-+				      <0 0x0aea0200 0 0x200>,
-+				      <0 0x0aea0400 0 0xc00>,
-+				      <0 0x0aea1000 0 0x400>;
+ 		tpmctrl_mem: memory@386000 {
+-			reg = <0 0x386000 0 0x3000>;
++			reg = <0 0x00386000 0 0x3000>;
+ 			no-map;
+ 		};
  
- 				interrupt-parent = <&mdss>;
- 				interrupts = <14>;
-@@ -4076,10 +4076,10 @@ opp-810000000 {
- 			mdss_edp_phy: phy@aec2a00 {
- 				compatible = "qcom,sc7280-edp-phy";
+ 		uefiinfo_mem: memory@389000 {
+-			reg = <0 0x389000 0 0x1000>;
++			reg = <0 0x00389000 0 0x1000>;
+ 			no-map;
+ 		};
  
--				reg = <0 0xaec2a00 0 0x19c>,
--				      <0 0xaec2200 0 0xa0>,
--				      <0 0xaec2600 0 0xa0>,
--				      <0 0xaec2000 0 0x1c0>;
-+				reg = <0 0x0aec2a00 0 0x19c>,
-+				      <0 0x0aec2200 0 0xa0>,
-+				      <0 0x0aec2600 0 0xa0>,
-+				      <0 0x0aec2000 0 0x1c0>;
+ 		reset_mem: memory@389000 {
+-			reg = <0 0x389000 0 0x1000>;
++			reg = <0 0x00389000 0 0x1000>;
+ 			no-map;
+ 		};
  
- 				clocks = <&rpmhcc RPMH_CXO_CLK>,
- 					 <&gcc GCC_EDP_CLKREF_EN>;
-@@ -4095,11 +4095,11 @@ mdss_edp_phy: phy@aec2a00 {
- 			mdss_dp: displayport-controller@ae90000 {
- 				compatible = "qcom,sc7280-dp";
+ 		resuncached_mem: memory@38e000 {
+-			reg = <0 0x38e000 0 0x72000>;
++			reg = <0 0x0038e000 0 0x72000>;
+ 			no-map;
+ 		};
  
--				reg = <0 0xae90000 0 0x200>,
--				      <0 0xae90200 0 0x200>,
--				      <0 0xae90400 0 0xc00>,
--				      <0 0xae91000 0 0x400>,
--				      <0 0xae91400 0 0x400>;
-+				reg = <0 0x0ae90000 0 0x200>,
-+				      <0 0x0ae90200 0 0x200>,
-+				      <0 0x0ae90400 0 0xc00>,
-+				      <0 0x0ae91000 0 0x400>,
-+				      <0 0x0ae91400 0 0x400>;
+ 		disp_mem: memory@400000 {
+-			reg = <0 0x400000 0 0x800000>;
++			reg = <0 0x00400000 0 0x800000>;
+ 			no-map;
+ 		};
  
- 				interrupt-parent = <&mdss>;
- 				interrupts = <12>;
+ 		uefistack_mem: memory@c00000 {
+-			reg = <0 0xc00000 0 0x40000>;
++			reg = <0 0x00c00000 0 0x40000>;
+ 			no-map;
+ 		};
+ 
+ 		cpuvect_mem: memory@c40000 {
+-			reg = <0 0xc40000 0 0x10000>;
++			reg = <0 0x00c40000 0 0x10000>;
+ 			no-map;
+ 		};
+ 
+ 		rescached_mem: memory@400000 {
+-			reg = <0 0xc50000 0 0xb0000>;
++			reg = <0 0x00c50000 0 0xb0000>;
+ 			no-map;
+ 		};
+ 
+ 		tzapps_mem: memory@6500000 {
+-			reg = <0 0x6500000 0 0x500000>;
++			reg = <0 0x06500000 0 0x500000>;
+ 			no-map;
+ 		};
+ 
+ 		smem_mem: memory@6a00000 {
+-			reg = <0 0x6a00000 0 0x200000>;
++			reg = <0 0x06a00000 0 0x200000>;
+ 			no-map;
+ 		};
+ 
+ 		hyp_mem: memory@6c00000 {
+-			reg = <0 0x6c00000 0 0x100000>;
++			reg = <0 0x06c00000 0 0x100000>;
+ 			no-map;
+ 		};
+ 
+ 		tz_mem: memory@6d00000 {
+-			reg = <0 0x6d00000 0 0x160000>;
++			reg = <0 0x06d00000 0 0x160000>;
+ 			no-map;
+ 		};
+ 
+ 		rfsa_adsp_mem: memory@6e60000 {
+-			reg = <0 0x6e60000 0 0x10000>;
++			reg = <0 0x06e60000 0 0x10000>;
+ 			no-map;
+ 		};
+ 
+ 		rfsa_mpss_mem: memory@6e70000 {
+ 			compatible = "qcom,rmtfs-mem";
+-			reg = <0 0x6e70000 0 0x10000>;
++			reg = <0 0x06e70000 0 0x10000>;
+ 			no-map;
+ 
+ 			qcom,client-id = <1>;
+@@ -229,7 +229,7 @@ rfsa_mpss_mem: memory@6e70000 {
+ 		 * MPSS_EFS / SBL
+ 		 */
+ 		mba_mem: memory@6e80000 {
+-			reg = <0 0x6e80000 0 0x180000>;
++			reg = <0 0x06e80000 0 0x180000>;
+ 			no-map;
+ 		};
+ 
+@@ -239,33 +239,33 @@ mba_mem: memory@6e80000 {
+ 		 */
+ 
+ 		mpss_mem: memory@7000000 {
+-			reg = <0 0x7000000 0 0x5a00000>;
++			reg = <0 0x07000000 0 0x5a00000>;
+ 			no-map;
+ 		};
+ 
+ 		adsp_mem: memory@ca00000 {
+-			reg = <0 0xca00000 0 0x1800000>;
++			reg = <0 0x0ca00000 0 0x1800000>;
+ 			no-map;
+ 		};
+ 
+ 		venus_mem: memory@e200000 {
+-			reg = <0 0xe200000 0 0x500000>;
++			reg = <0 0x0e200000 0 0x500000>;
+ 			no-map;
+ 		};
+ 
+ 		pil_metadata_mem: memory@e700000 {
+-			reg = <0 0xe700000 0 0x4000>;
++			reg = <0 0x0e700000 0 0x4000>;
+ 			no-map;
+ 		};
+ 
+ 		memory@e704000 {
+-			reg = <0 0xe704000 0 0x7fc000>;
++			reg = <0 0x0e704000 0 0x7fc000>;
+ 			no-map;
+ 		};
+ 		/* Peripheral Image loader region end */
+ 
+ 		cnss_mem: memory@ef00000 {
+-			reg = <0 0xef00000 0 0x300000>;
++			reg = <0 0x0ef00000 0 0x300000>;
+ 			no-map;
+ 		};
+ 	};
 -- 
 2.39.0
 
