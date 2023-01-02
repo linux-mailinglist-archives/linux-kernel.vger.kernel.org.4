@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4BC65AE49
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B3765AE4D
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjABIl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 03:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
+        id S229512AbjABIm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 03:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbjABIlw (ORCPT
+        with ESMTP id S231993AbjABImS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 03:41:52 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FC51262C
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:41:50 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 3028fMEv030128;
-        Mon, 2 Jan 2023 09:41:22 +0100
-Date:   Mon, 2 Jan 2023 09:41:22 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, hca@linux.ibm.com
-Subject: Re: [PATCH 2/5] nolibc: add support for s390
-Message-ID: <20230102084122.GB29287@1wt.eu>
-References: <20221209141939.3634586-1-svens@linux.ibm.com>
- <20221209141939.3634586-3-svens@linux.ibm.com>
- <20221227213530.GA6390@1wt.eu>
- <yt9dilhpjqpr.fsf@linux.ibm.com>
+        Mon, 2 Jan 2023 03:42:18 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD0BDF4
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:42:17 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id g16so19317950plq.12
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 00:42:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JV7mKkj4m/LbjdZ+E3y5ghBdnOoxXVhztXdDkfMjQ3Y=;
+        b=LnOdDY/x11L2fWrc3DS8NW4NDOu1PWG9qOJCbJslNnneoe+SOcgeHhjAk/sZvYewEo
+         jMlNouPohv6UO21l880LPap2L+oZ4UTjFlXLLPfEknP3pweaRshCLU8u2VIW+OG0Z6BW
+         e6dEk3rYJkyB/oqut1yL41ELcuIh8OWrwzbNvKOqasT6TQnL55IiccBWvX3Nx8C/mN6I
+         lVGCytF/KmPtFje99ltjbeW7g1XsdO17dOaOAAbd3e2K0me7ZwkmNEWtzM/BmA9OSNlG
+         WlF4eH3Zw3YzcqGLnBEKMRqklsDH+PGl6wUC18ao+0gZ6E5D4YMY3kHA91SvOotW5yLb
+         qBtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JV7mKkj4m/LbjdZ+E3y5ghBdnOoxXVhztXdDkfMjQ3Y=;
+        b=5Go3yCkNY4E10ApGFN2Fr6flFV6CXxYxSv4VmsDV8QkbZwXbIfdKiMm5GrkQwhoyLA
+         HKMmyQrQclrkbZ/e+UAGyk4ssXrNhRTeh02FQ/FIyd/wdNwttjX4oCEH3tlj7nVHi0j7
+         djUiQxI+PxoxA/i5ffO4joh5MueV5V44sqAuahqMq4+ivwR9C27qFkrdXF60yyDmGTG9
+         kMY8fj7pRjwBDe4ikTQN7HHRfvb/yuH1ljnM0wGR2Y0QFPDEEzCNs6gAJYjKVgjgc38J
+         rj9NVFukhRUd4bFOALL+em/2iOSNeGg6WUfVaZtbmFp7PvfY8ZXdNLMqAPZdhIc8qaQm
+         Zv7g==
+X-Gm-Message-State: AFqh2kq91D3E4cQN6JvVIBCM8evjcroHYpafV1B48nGLDdQdYCW9jUzT
+        dZV8LSiqONIj4JnP0RmTdqbdQR527CrlYr9+
+X-Google-Smtp-Source: AMrXdXtPxWUpseKD4UE0s2pK1XNqVl6yXxmY55pKjUBfq1N4kFubl+XKIzHqP9vXQXroG/v2yX7+EQ==
+X-Received: by 2002:a05:6a20:8f26:b0:ad:db18:6d0d with SMTP id b38-20020a056a208f2600b000addb186d0dmr62886922pzk.59.1672648937455;
+        Mon, 02 Jan 2023 00:42:17 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id t29-20020a63535d000000b004767bc37e03sm16609386pgl.39.2023.01.02.00.42.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 00:42:16 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] irqchip/irq-mvebu-gicp: Fix refcount leak in mvebu_gicp_probe
+Date:   Mon,  2 Jan 2023 12:42:08 +0400
+Message-Id: <20230102084208.3951758-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yt9dilhpjqpr.fsf@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sven,
+of_irq_find_parent() returns a node pointer with refcount incremented,
+We should use of_node_put() on it when not needed anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-On Mon, Jan 02, 2023 at 09:17:04AM +0100, Sven Schnelle wrote:
-> > But with this addressed, I'm facing this next error:
-> >
-> >   $ make nolibc-test LDFLAGS= ARCH=s390 CC=/f/tc/nolibc/gcc-12.2.0-nolibc/s390-linux/bin/s390-linux-gcc
-> >     MKDIR   sysroot/s390/include
-> >   make[1]: Entering directory '/g/public/linux/master/tools/include/nolibc'
-> >   make[2]: Entering directory '/g/public/linux/master'
-> >   make[2]: Leaving directory '/g/public/linux/master'
-> >   make[2]: Entering directory '/g/public/linux/master'
-> >     INSTALL /g/public/linux/master/tools/testing/selftests/nolibc/sysroot/sysroot/include
-> >   make[2]: Leaving directory '/g/public/linux/master'
-> >   make[1]: Leaving directory '/g/public/linux/master/tools/include/nolibc'
-> >     CC      nolibc-test
-> >   /tmp/ccCzaBgD.s: Assembler messages:
-> >   /tmp/ccCzaBgD.s:9: Error: Unrecognized opcode: `lg'
-> >   /tmp/ccCzaBgD.s:12: Error: Unrecognized opcode: `lay'
-> >   /tmp/ccCzaBgD.s:15: Error: Unrecognized opcode: `lghi'
-> >   make: *** [Makefile:108: nolibc-test] Error 1
-> >
-> > Thus I'm wondering if specific options are required for the compiler
-> > (it's gcc 12.2.0 + binutils 2.39), if I'm not using the proper compiler,
-> > or if there's anything wrong in the asm code (e.g. maybe by accident you
-> > sent the patch from an earlier development branch), or anything else ?
-> 
-> Hmm, tried this on my x86 laptop, and it looks like there are two things
-> here:
-> 
-> The cross compiler needs -m64 to compile in 64bit mode. otherwise it
-> assumes 31bit mode, where both lg and lghi are not present. The other
-> thing is that lay was introduced with later generations of the
-> z/Architecture.
+Fixes: a68a63cb4dfc ("irqchip/irq-mvebu-gicp: Add new driver for Marvell GICP")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/irqchip/irq-mvebu-gicp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ah, this explains why along my various tests at some point I managed
-to remove two of these errors (likely with -m64)!
+diff --git a/drivers/irqchip/irq-mvebu-gicp.c b/drivers/irqchip/irq-mvebu-gicp.c
+index fe88a782173d..c43a345061d5 100644
+--- a/drivers/irqchip/irq-mvebu-gicp.c
++++ b/drivers/irqchip/irq-mvebu-gicp.c
+@@ -221,6 +221,7 @@ static int mvebu_gicp_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	parent_domain = irq_find_host(irq_parent_dn);
++	of_node_put(irq_parent_dn);
+ 	if (!parent_domain) {
+ 		dev_err(&pdev->dev, "failed to find parent IRQ domain\n");
+ 		return -ENODEV;
+-- 
+2.25.1
 
-> The kernel compiles with z10 as minimum architecture, so
-> i'm leaning towards enforcing the same arch for nolibc. What do you think?
-
-Sure, as long as this works for most users, that's likely fine.
-Alternately, are there equivalent sequences of instructions that achieve
-the same on older architectures, and would that be relevant ?
-
-One future improvement I'll need will be to store the envp value into a
-global "environ" variable, and run over it to catch the pointer that
-follows the NULL and save it into the "_auxv" variable. I've done it for
-all other archs here already:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20221227-nolibc-weak-4
-
-I'll give it a try once I'm able to build and test your code, and may
-ask you for some help if I don't succeed in doing it. If you want to do
-it yourself, please have a look at the last commits adding environ and
-auxv to any arch of your choice, such as x86_64.
-
-Thanks!
-Willy
