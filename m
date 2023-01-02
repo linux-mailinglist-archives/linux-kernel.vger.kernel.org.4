@@ -2,192 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC5765B19F
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D831465B1AF
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbjABL5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S232662AbjABL7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbjABL4o (ORCPT
+        with ESMTP id S236090AbjABL6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:56:44 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31A7BE4;
-        Mon,  2 Jan 2023 03:56:42 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3028tpN8022389;
-        Mon, 2 Jan 2023 11:56:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=3UT7HoIa4Y3uSm6hd+vFRPWiBQYTDfEql+RpF8NscYc=;
- b=ha+PqKxf7OpzwkPtQ7rDDBaZh4er/Ql+4vqnSlX1Q/cz5TpeQLJRe7spEuXr7AoMfhkx
- PNftAHbQbyR5x/zoiV7kYdqmCpDneJvA0IY1K3fKNgZA33ich69osPcKVy+/jx6s/5fr
- dODvAVsQpIckoQLZPtolBjhG7m/kS1OuiDxZZvJ/OgI2BitvpSl1ABPdV5vzMAqL5UFc
- sbY8MEmT1kBOWowAmJMGJZgQ5DJmr8IYSuAnkYRsMvYa9bxVUJ5V+y2F6wfuAb3Hk/ch
- m/NLWjY0194gLCL6afIGjnSHIaNBAycYtYSCaq6mZs5Zgg/RsRl/umdWi6MocPNSw4MX FQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mty10yj3d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 11:56:28 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 301LPUpS012120;
-        Mon, 2 Jan 2023 11:56:26 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3mtcq69rjn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 11:56:26 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 302BuNpY39846372
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 Jan 2023 11:56:23 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 047CE20040;
-        Mon,  2 Jan 2023 11:56:23 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A13A82004E;
-        Mon,  2 Jan 2023 11:56:22 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  2 Jan 2023 11:56:22 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Subject: [PATCH v3 7/7] iommu/dma: Add IOMMU op to choose lazy domain type
-Date:   Mon,  2 Jan 2023 12:56:19 +0100
-Message-Id: <20230102115619.2088685-8-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230102115619.2088685-1-schnelle@linux.ibm.com>
-References: <20230102115619.2088685-1-schnelle@linux.ibm.com>
+        Mon, 2 Jan 2023 06:58:44 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1087766F
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:58:01 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id v23so18734176ljj.9
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 03:58:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IjKe+ouqFmney4gz4J6SHYPHIsLZMK7NaXVfT2avl1k=;
+        b=UXsH3GlGrxadmYWcGMJkzY/9TwX9cNQKSSHAmQtKXv56o+4NrGmfIMIUNMZJUDyFWS
+         AuBjJ1xfwD+PKs3tGYmkwKnPHTpD7c902I0UshUoiK0z9lzGusUqvgOw0PuOf62dkluF
+         2K11YJtN/z/N1nOlq5glMHUuBCgJhIVqP5FM6Ol89b0LmYOjiscxLtqRcw+4fk2a5P7e
+         JWHCgnojLPqM6eaPgQaFrH4RtCTiyfjCTNxOlpfFwIoaVUnYqX7WbH6wtzLExJ6suWZ3
+         JCXu4Rc5WT6UNid0U2wr//bz9RbuQHQEq+rh1xYPBAWhE+q9cB1srHdpa4DqcrY/N1GJ
+         h/Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IjKe+ouqFmney4gz4J6SHYPHIsLZMK7NaXVfT2avl1k=;
+        b=5zhHc10mdn19u83hDC+92iCEpIcoEtbh/z6V/CqAAFyq7fkH+TR9S9yyaHaBiIvfNS
+         njo+TcUR3AlKhBF89u+XCG0YXvYa59fX1cKvw9uOXzR6YFqkEiTgetdOjSXY9vI5pSEf
+         EZd003+AbZLJmi+TkSiG7DgYTWVBLXTWJS/0/+0mxAuU8jq20wdS2ZE5nCa1hvk/sWav
+         PfBuJSa40NGCRbyx1/XKynfyIFJEkL2Q+Wy9ds7gWuEcx7XJk+wwai4vDyUtZuJbq6h3
+         EC1y2GdR3lUB1ivizgww6J4/UtsPTH2aXmp+mmY9avCCWKCWX56Sk3yJGvwniCzjVLaW
+         IEIA==
+X-Gm-Message-State: AFqh2kpDPGHEHcvNWHk2vjs++DqVQLRxPj7v0wXXmb8S05IeBazRv2ZH
+        QjTnpVn/NOBCt0mxWcpxUmBdnA==
+X-Google-Smtp-Source: AMrXdXv6Ac5KSv29i/95NOkXLC/RJjPMui48vUFWG5eX665sqXZIN1p8SE1eDw34nZ4cVRZb124ESg==
+X-Received: by 2002:a2e:1454:0:b0:27f:b68e:8e96 with SMTP id 20-20020a2e1454000000b0027fb68e8e96mr8408806lju.26.1672660680074;
+        Mon, 02 Jan 2023 03:58:00 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id i11-20020a2ea36b000000b0027fdcc83e1fsm959520ljn.87.2023.01.02.03.57.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 03:57:59 -0800 (PST)
+Message-ID: <9f1d28d9-615d-417e-64d0-3ef2d71a9ea1@linaro.org>
+Date:   Mon, 2 Jan 2023 12:57:58 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -E4hJ5anHKMZpu8KEGM1ner0Fc_CKASE
-X-Proofpoint-ORIG-GUID: -E4hJ5anHKMZpu8KEGM1ner0Fc_CKASE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_06,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxlogscore=858 mlxscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0
- bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301020105
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0
+ and PCIe1
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     bhelgaas@google.com, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lpieralisi@kernel.org
+References: <20230102105821.28243-1-manivannan.sadhasivam@linaro.org>
+ <20230102105821.28243-4-manivannan.sadhasivam@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230102105821.28243-4-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With two flush queue variants add an IOMMU operation that allows the
-IOMMU driver to choose its preferred flush queue variant on a per device
-basis. For s390 use this callback to choose the single queue variant
-whenever the device requires explicit IOTLB flushes on map indicating
-that we're running in a paged memory guest with expensive IOTLB flushes.
 
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- drivers/iommu/iommu.c      | 13 +++++++++++++
- drivers/iommu/s390-iommu.c | 11 +++++++++++
- include/linux/iommu.h      |  5 +++++
- 3 files changed, 29 insertions(+)
 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 7ae2ff35b88e..c4699a0e5feb 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -1616,6 +1616,16 @@ static int iommu_get_def_domain_type(struct device *dev)
- 	return 0;
- }
- 
-+static int iommu_get_lazy_domain_type(struct device *dev)
-+{
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
-+
-+	if (ops->lazy_domain_type)
-+		return ops->lazy_domain_type(dev);
-+
-+	return 0;
-+}
-+
- static int iommu_group_alloc_default_domain(struct bus_type *bus,
- 					    struct iommu_group *group,
- 					    unsigned int type)
-@@ -1649,6 +1659,9 @@ static int iommu_alloc_default_domain(struct iommu_group *group,
- 
- 	type = iommu_get_def_domain_type(dev) ? : iommu_def_domain_type;
- 
-+	if (!!(type & __IOMMU_DOMAIN_DMA_LAZY))
-+		type = iommu_get_lazy_domain_type(dev) ? : type;
-+
- 	return iommu_group_alloc_default_domain(dev->bus, group, type);
- }
- 
-diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-index 122219b3e89f..2575acd081b5 100644
---- a/drivers/iommu/s390-iommu.c
-+++ b/drivers/iommu/s390-iommu.c
-@@ -459,6 +459,16 @@ static void s390_iommu_get_resv_regions(struct device *dev,
- 	}
- }
- 
-+static int s390_iommu_lazy_domain_type(struct device *dev)
-+{
-+	struct zpci_dev *zdev = to_zpci_dev(dev);
-+
-+	if (zdev->tlb_refresh)
-+		return IOMMU_DOMAIN_DMA_SQ;
-+
-+	return IOMMU_DOMAIN_DMA_FQ;
-+}
-+
- static struct iommu_device *s390_iommu_probe_device(struct device *dev)
- {
- 	struct zpci_dev *zdev;
-@@ -798,6 +808,7 @@ static const struct iommu_ops s390_iommu_ops = {
- 	.device_group = generic_device_group,
- 	.pgsize_bitmap = SZ_4K,
- 	.get_resv_regions = s390_iommu_get_resv_regions,
-+	.lazy_domain_type = s390_iommu_lazy_domain_type,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev	= s390_iommu_attach_device,
- 		.detach_dev	= s390_iommu_detach_device,
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 74cee59516aa..aec895087f63 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -250,6 +250,10 @@ struct iommu_iotlb_gather {
-  *		- IOMMU_DOMAIN_IDENTITY: must use an identity domain
-  *		- IOMMU_DOMAIN_DMA: must use a dma domain
-  *		- 0: use the default setting
-+ * @lazy_domain_type: Domain type for lazy TLB invalidation, return value:
-+ *		- IOMMU_DOMAIN_DMA_FQ: Use per-CPU flush queue
-+ *		- IOMMU_DOMAIN_DMA_SQ: Use single flush queue
-+ *		- 0: use the default setting
-  * @default_domain_ops: the default ops for domains
-  * @remove_dev_pasid: Remove any translation configurations of a specific
-  *                    pasid, so that any DMA transactions with this pasid
-@@ -283,6 +287,7 @@ struct iommu_ops {
- 			     struct iommu_page_response *msg);
- 
- 	int (*def_domain_type)(struct device *dev);
-+	int (*lazy_domain_type)(struct device *dev);
- 	void (*remove_dev_pasid)(struct device *dev, ioasid_t pasid);
- 
- 	const struct iommu_domain_ops *default_domain_ops;
--- 
-2.34.1
+On 2.01.2023 11:58, Manivannan Sadhasivam wrote:
+> Both PCIe0 and PCIe1 controllers are capable of signalling the MSIs
+> received from endpoint devices to the CPU using GIC-ITS MSI controller.
+> Add support for it.
+> 
+> Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
+> msi-map-mask of 0xff00, all the 32 devices under these two busses can
+> share the same Device ID.
+> 
+> The GIC-ITS MSI implementation provides an advantage over internal MSI
+> implementation using Locality-specific Peripheral Interrupts (LPI) that
+> would allow MSIs to be targeted for each CPU core.
+> 
+> It should be noted that the MSIs for BDF (1:0.0) only works with Device
+> ID of 0x5980 and 0x5a00. Hence, the IDs are swapped.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org> # Xperia 1 IV (WCN6855)
 
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 20 ++++++++++++++------
+>  1 file changed, 14 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 570475040d95..c4dd5838fac6 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -1733,9 +1733,13 @@ pcie0: pci@1c00000 {
+>  			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+>  				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
+>  
+> -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "msi";
+> -			#interrupt-cells = <1>;
+> +			/*
+> +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5980.
+> +			 * Hence, the IDs are swapped.
+> +			 */
+> +			msi-map = <0x0 &gic_its 0x5981 0x1>,
+> +				  <0x100 &gic_its 0x5980 0x1>;
+> +			msi-map-mask = <0xff00>;
+>  			interrupt-map-mask = <0 0 0 0x7>;
+>  			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+>  					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> @@ -1842,9 +1846,13 @@ pcie1: pci@1c08000 {
+>  			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
+>  				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
+>  
+> -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "msi";
+> -			#interrupt-cells = <1>;
+> +			/*
+> +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5a00.
+> +			 * Hence, the IDs are swapped.
+> +			 */
+> +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
+> +				  <0x100 &gic_its 0x5a00 0x1>;
+> +			msi-map-mask = <0xff00>;
+>  			interrupt-map-mask = <0 0 0 0x7>;
+>  			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+>  					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
