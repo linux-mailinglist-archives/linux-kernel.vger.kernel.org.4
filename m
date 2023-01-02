@@ -2,83 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0AE65B38D
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4002C65B394
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236218AbjABOsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 09:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S236228AbjABOtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 09:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236215AbjABOsM (ORCPT
+        with ESMTP id S236229AbjABOsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 09:48:12 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253946477
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 06:48:11 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id fc4so66935706ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 06:48:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+okEzV2zBdHwNj7DEszLP2mtdrLQi0h+BSkRAR7jQxw=;
-        b=jr6GEGlL94jU9hne/o9BdhUQYxbLmYpuFwXfDalZ88hYQ7Rx+t/AUWgckvpQ7Flugg
-         gnVca1In/VusgpJJEQjHD1UjEhz3aqK59p6fJ5QoGcp6+7lB6N/TAjX46tB53l8/kK1L
-         Lm3c85y4+eVK9CmEhV1fnZB9bqAoLefUNPbts=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+okEzV2zBdHwNj7DEszLP2mtdrLQi0h+BSkRAR7jQxw=;
-        b=uSYipyxoh2qfZbH8Duyudg3MZAcIaDN0xVsuf60uRarMURjHwuBJoKFGhCDaYifLUC
-         MY4xQuK+cIhCdACsKd7JYlUsSg6YMzyH76C/RtAiT05qefkoG6g56dhLV8NVaOSGEMnG
-         ueTFoH3iZvGetzygsWs4TdefPzvh7pZGUJq5VdZLKTYrxC9Eeqc66gNexKOPkEZKX1/S
-         uOQ4q14Gb5wbz+pHwLPZNBRzEL2zf1Ea0KcvaQ2lMbgkeUKwvChp9AMKsmAcg+iKtGFl
-         3f7zjVT4/+kXZGVOGb3/Nn6WdFvpXDRJJlpqshTO3Yq0TKGEUPAb9NU4IKQb0AT3E6B5
-         MHwA==
-X-Gm-Message-State: AFqh2kr58u6RIdsJOwa8p0R4z2hSlJFgOUL8FDGWzK0wJeGnO6S0g6jx
-        XXsIjKpntgy/xYnCXCaihhzVPQ==
-X-Google-Smtp-Source: AMrXdXvU6QFKesPnUhP8MEnmUGjftcZTE+4Kg1zLMf09kow3Ss7mrQ8yIgUiqNqzbKfpCHK2l9KQGw==
-X-Received: by 2002:a17:907:8312:b0:7fc:3fef:ab86 with SMTP id mq18-20020a170907831200b007fc3fefab86mr29857890ejc.71.1672670889731;
-        Mon, 02 Jan 2023 06:48:09 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:6ef6:ea10:76ec:977f])
-        by smtp.gmail.com with ESMTPSA id k3-20020a17090632c300b00781dbdb292asm13064795ejk.155.2023.01.02.06.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 06:48:09 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 02 Jan 2023 15:48:01 +0100
-Subject: [PATCH v6] media: uvcvideo: Fix race condition with usb_kill_urb
+        Mon, 2 Jan 2023 09:48:18 -0500
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2084.outbound.protection.outlook.com [40.92.103.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9E664C3;
+        Mon,  2 Jan 2023 06:48:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d0YoIITDLyrNGrj8xAKrfXESo+c6zwprN5HiuRIhI43ndH9VxkTxvDjzSO9rgZ3OXsmzsP4SBu1D1dZgxPfFEbKIGpbVMSpZ+f1u9JaWVyfm0UsXxL5UxjnRoM9C75Rk1RDq9VRCJnIdJZ363DFitxGEn/+vp4G6PwfHUzEz3KYwUs2pF7466WXE2fIyvViJ7943McAyHhNMGXvkfqNWkFSjq+lp4ldPXbB1B4DJR1PONsGmrFKefgEFDhKViHO7Od5hBR1awfr5NUP7msDUM6Vn1KJ03uNkps9kikCnI/zrKvf8Tn3p1/psuTkFrd+56hIlgcsRLKuZ10aui0FI6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=skyvdBEDYmt/Zi08JNadOVLtRCZvwbGI5nWOljrU7EM=;
+ b=C7G4lMkXcEtd4FbuSdVtyceZuUiF9SxsiSle3c0C3vWrMkvEpoV28OK0JJr+e3bDRgW7eTva4VzLQcwGBWpRBbptpC/GRiQoTBX0QALssh0egX1b/uRoO5WU/FSaWhaE2/Cs03VMI+3h+QY6aruVebSEd3xUG1hWkG3unjIiF4CggCZygeny65uFoEzMpIhWcuyDAYgYYQc/orSKUV4QO0ynlXtOafo40DgosRwEe/pi91o5CojQT9oE+3WJdYiIxfRD5Ttk8DlIHjOCbuNIesvHweN7MAfh0MDNbnIwuG4yjiWEGGdUG2woEAdnKfr6jiIVZGCjldSi8/JBgLZKqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=skyvdBEDYmt/Zi08JNadOVLtRCZvwbGI5nWOljrU7EM=;
+ b=TaPApGWDWvBrKIii0rm7qwJBZtMuuEM6we+5rO7plevG8YeLvw2YOsp95r9pV8dNK9Yp2MzRfaig3e/uF74UehjfiIawWHslcymznmr7F/vE2yLcHTvrbd/D3pQFszJVb3hSnCZGja6Qlx2De4dnO4TPfLNKIxPG/Rog9EVXWgXRwztPoIojyTIWYr0zfD+80fxQXlkEfYu9qJ6WwD73KjSt8B0gK8CIkhfWKKbYFxYE4TeF310kTlTszEOuc1KBDXzEwsdzES54zo8oN6m37rYQeSqEVJtghO6tkBG9oaPK0n1iPqQmwrhX3wsk0Q/uLSYbgS+PFyFdvPhkYK/iGw==
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
+ PN2PR01MB9277.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:117::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.19; Mon, 2 Jan 2023 14:48:10 +0000
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::f90e:46bc:7a0f:23bc]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::f90e:46bc:7a0f:23bc%7]) with mapi id 15.20.5944.019; Mon, 2 Jan 2023
+ 14:48:10 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Hector Martin <marcan@marcan.st>,
+        "aspriel@gmail.com" <aspriel@gmail.com>,
+        "hante.meuleman@broadcom.com" <hante.meuleman@broadcom.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lina@asahilina.net" <lina@asahilina.net>,
+        "franky.lin@broadcom.com" <franky.lin@broadcom.com>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>
+CC:     Orlando Chamberlain <redecorating@protonmail.com>,
+        "brcm80211-dev-list@broadcom.com" <brcm80211-dev-list@broadcom.com>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Asahi Linux <asahi@lists.linux.dev>
+Subject: [PATCH v2 2/2] brcmfmac: Add PCIe ID of BCM4355 chip found on T2 Macs
+Thread-Topic: [PATCH v2 2/2] brcmfmac: Add PCIe ID of BCM4355 chip found on T2
+ Macs
+Thread-Index: AQHZHrk7yHCvvY2IKkSePRpXpxxfUA==
+Date:   Mon, 2 Jan 2023 14:48:10 +0000
+Message-ID: <276EA85B-22FF-4446-969D-11437AB28867@live.com>
+References: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
+ <f36dd8e3-9905-f04a-ed34-4be91ed1fec6@marcan.st>
+ <F9EFCCD1-4407-42CC-8316-2F58AAC1AE7F@live.com>
+ <ACC0D1F6-7857-4FF0-A474-4EC699572E1B@live.com>
+ <E376F3F1-CA88-47B3-B3D1-EEF0B283D25D@live.com>
+In-Reply-To: <E376F3F1-CA88-47B3-B3D1-EEF0B283D25D@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [+pHvtqqyl7QFG7YyyBcyJTGW7Jtif9kFEC2W0TId2Xrz1AR487/kxkEgiyFvsTbU]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN2PR01MB9277:EE_
+x-ms-office365-filtering-correlation-id: aaa3c956-b433-4654-1e18-08daecd05e73
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4fTFGqE6NxmoAh7Kl6S6+xWCiPXUjeoZFqr6mm76eiJc0NbaVDWfljrE7aHcEDRIJ6MFOdInTXyC+YlB7e3IA16/XG2hucE6wpFIvhh8ge/tr8lGwTJbA3T0f1l2cnzvtzyhH6qJ5w4KnH5cluA5sRJyEIxlzrmSFFl3ni7DrJ8IJOvgVlxYd52pkqjfYxdxaU17IDSES5Kvcq8LjSHZGVHGTY1eGjpcd1DbNUluKOmSl78qbdLIGfXjbB/yOuK0nCRgB3GvO39diX9MixyaXlFkp9atMlyzlfqCRLcEc3NJ5XzF8s3UsKCCq6ye38u5GMAw05dtZ4Vxa+ZjoYRuP+8CtByekMtoqQ0RitPZtJMy2tYhbmnzsGNmJdSxYzXbHWdgcE0T0/SfBcCZKt1O845HBS2/2QyffJqzaBJgI+wcKwx0GZ49Cb9IoUny16jmExy/HdeII/Almh6KYTUR6lrxF+H+p6WwOcvy3B9NY98fOwNWzM+ze0prgT6q7kz/OSZAL7Xv/FTRJTp0HL6a42ZKdBa7W133y5y/tk8SFRw16emBABmbmex2Bpxwk3Tn9Lp6nQ0sxr+oOwQhwHUkmeekb+1ceIuTORw4AOmH1XE=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vgU3CHkcQFiiOnq64+JL1TKbn6+fES1/GZk1WB9X0TPsBA/0upb08aWES4eq?=
+ =?us-ascii?Q?enl2TSVvh/dgUj5TGqzccLrGbCfqe1wIroxVY+vtk5V/bCLMin6LCDImJMtY?=
+ =?us-ascii?Q?h+sdS6n2I1bwLZlokXnSEt0CkLkKqbROCASBF0O7cQPIBNqpbsWzqkmoOc3J?=
+ =?us-ascii?Q?RE3xikWQjEEuJWahLfIEpV5OEq8F04sq1yI2/FAx1CEu/piOzx7v8T6sgluG?=
+ =?us-ascii?Q?g2v7fqrsms+U2JjTX2sU3fmdqrgl3eTOLWCaLyd1diw5edTX32rWR+n6LcC3?=
+ =?us-ascii?Q?r2UyGckS89k9CZBTzooCWqh52tKef2w7/VGMkRoHzNT/zK/JpbuVqzDz3GmZ?=
+ =?us-ascii?Q?O/7pvbvK1amu98yf5nCi/+K9p+y/fSIG1zqukQITZSPG6AyYKzfgL0wFeyW7?=
+ =?us-ascii?Q?4mNeVohVCgy9BjgpWpaDAeXXi1gikPwo7RFLvRE8+MBduXz4B9Na2QePg3gQ?=
+ =?us-ascii?Q?KnH+fvFXcUYUkdWx2RpHA85dLa5GWmtGYtjG4JRwjhoEx6U/e93/a7lirLtV?=
+ =?us-ascii?Q?y964UXa7PVgKmCRuFx+UtIT9uloqQpz19MOfYrbSAMuIyU6JqanCocqXSrWX?=
+ =?us-ascii?Q?ut7Zra6c7VdMvvLMFpe3YCETiF+UYCSwUAaWzP8SRE/WnrFsGNPgloG5jRkL?=
+ =?us-ascii?Q?ijkWoQXBpSQuIkjiP2CzoIJnREXCS5Gw8Z6yCm6IV1syYexdm3bw4/mXRtTB?=
+ =?us-ascii?Q?4if599f950OBETYx6NxQ1ejC2cB8agdlPD8w2iGuzEnkRP6c99BDQPKjLmgz?=
+ =?us-ascii?Q?kGWjUtpw9XD0h3BwB5MpCPPeDGTb4TDUSGsUT9oy/gNP0SUhVVTKBrJSSaKi?=
+ =?us-ascii?Q?Ph2FCZLoYNBmnULE2pIVyh9kcK+LWg2wGercTdR/ZCLPC+guLrzYb2pj1zJx?=
+ =?us-ascii?Q?ZkNKNXQ9jE0a23+T8DhiyazwJAYVOQoUelF8+m1Vv7ADgDId5btIzWO7UyER?=
+ =?us-ascii?Q?k8kLAhFChZdoJqgyIkrEz/9SbXGin9c+Y6WWDOVl6/ayRpZHly9iJgSgK/MQ?=
+ =?us-ascii?Q?LNCAyP/oTBZggh1k+6zISUptKXS6Dv+dNxQYZ/eaHimUKvjWdWOL6lbnBv+6?=
+ =?us-ascii?Q?KZKCNCyqgaDkeoBdh9WVfAkDamB0pBnQzhFlT2OF/2iqPoMErIv+R+GpNe2m?=
+ =?us-ascii?Q?+4bAVcycRQzz80ejXqrZ61lkkGPvZzy/ZMhl1hVRzms/JN3fMVqWZn066YUN?=
+ =?us-ascii?Q?YMBGZ9Oo1DMx2bl7Y/QVl3/rPmstH5lwtrnXoUViA+spYIu5hSH1txAite+h?=
+ =?us-ascii?Q?KOpshpeJmj+OExQBvZwZQswb05IvHz3j00QwjYokVT7QP0kqZ7BdkC7dzmVa?=
+ =?us-ascii?Q?7qkeQrt2edpAWQT/vY/1qYMwYzwqwciiCviyJ2ume7Ju9g=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9744C1DFC5CCED44A42AEFBDDD3D4E87@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221212-uvc-race-v6-0-2a662f8de011@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Staudt <mstaudt@google.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Yunke Cao <yunkec@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, stable@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5952; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=OlBUT0d0UDR2+oDUQbmPwKuQ+fnKJ1FL06u1EsfTbt8=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjsu6ick7OJ1WRu4rYZaD1P3Xj9qmSGYqV/7icskpq
- t+TImPKJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7LuogAKCRDRN9E+zzrEiEMiD/
- 93msrnCV2Ux9hqvFn3RKES7xI+hZLJCiuw1Y9XBxrP4p6CzOjicG8ZEL5rLwB6lPfh3Ipe+T2bWESv
- OHdn12VvQ3ydnaibggh1ZBJh9FyHRyrQFoWOyy0TufwQE8d5nmwLgCHOew0dnTBa+zszwAwZcWjYOK
- tFgrw8J8mqRalRUV4JZQDdLSvjn/MVjv5hZ00iWQK8pXhrmgMkrkgScrNkBC9tngDLC9JZBeFkuyzd
- dB/ZSo0ItexKTspXMvJ25TPAkCplKvCCjc1LzMQBJYpNKKBQQ4R76+sXhjaf+D7JvqGVBsBkBV8Q9Y
- KnxKp31V8twHhhbQQOvcJiLWXp24gZOsP1CK9X8xBFTfEh1Zx4nUcIKE3eeP0ohA87d3nnVjvfc2X6
- ncJWKHZ3yq1MN2fHDIzN4L5b2EcQmMJsoO2gy3Ach/d/ItODlt0rI8up5rWuG4N2lwyBUWAib4uQZq
- eVfc96dpe0hbv2qlPS2WIw6OaERLeP831Z01NwId8S/Wj5fP7p7HgVjam1HswZutlv0q7vjTm5y7ri
- 4fceDwrlplf3gexCa7KXeie4Xqs2w95uGf+TBU91bUglNXq2MdrSbnNYyjtb7TwcU67O8vxVW0OM2Q
- EN0no2ac3JcmqZpwUbTE9kmLk0aNXeB5I9MAks4Z80rSShxE1AgN2bJcKhXw==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: aaa3c956-b433-4654-1e18-08daecd05e73
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2023 14:48:10.7676
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2PR01MB9277
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,177 +127,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-usb_kill_urb warranties that all the handlers are finished when it
-returns, but does not protect against threads that might be handling
-asynchronously the urb.
+From: Aditya Garg <gargaditya08@live.com>
 
-For UVC, the function uvc_ctrl_status_event_async() takes care of
-control changes asynchronously.
+Commit 'dce45ded7619' added the BCM4355 chip support. This chip is also
+found in MacBookAir8,1 and MacBookAir8,2. This patch adds necessary pcie
+IDs to add support for the same.
 
- If the code is executed in the following order:
-
-CPU 0					CPU 1
-===== 					=====
-uvc_status_complete()
-					uvc_status_stop()
-uvc_ctrl_status_event_work()
-					uvc_status_start() -> FAIL
-
-Then uvc_status_start will keep failing and this error will be shown:
-
-<4>[    5.540139] URB 0000000000000000 submitted while active
-drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
-
-Let's improve the current situation, by not re-submiting the urb if
-we are stopping the status event. Also process the queued work
-(if any) during stop.
-
-CPU 0					CPU 1
-===== 					=====
-uvc_status_complete()
-					uvc_status_stop()
-					uvc_status_start()
-uvc_ctrl_status_event_work() -> FAIL
-
-Hopefully, with the usb layer protection this should be enough to cover
-all the cases.
-
-Cc: stable@vger.kernel.org
-Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
-Reviewed-by: Yunke Cao <yunkec@chromium.org>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
 ---
-uvc: Fix race condition on uvc
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c       | 4 ++--
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c       | 3 ++-
+ drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 3 ++-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-Make sure that all the async work is finished when we stop the status urb.
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c b/driv=
+ers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+index 121893bba..2f338c5d9 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+@@ -735,7 +735,7 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_pri=
+v *ci)
+ 		return 0x170000;
+ 	case BRCM_CC_4378_CHIP_ID:
+ 		return 0x352000;
+-	case CY_CC_89459_CHIP_ID:
++	case BRCM_CC_4355_CHIP_ID:
+ 		return ((ci->pub.chiprev < 9) ? 0x180000 : 0x160000);
+ 	default:
+ 		brcmf_err("unknown chip: %s\n", ci->pub.name);
+@@ -1427,7 +1427,7 @@ bool brcmf_chip_sr_capable(struct brcmf_chip *pub)
+ 		reg =3D chip->ops->read32(chip->ctx, addr);
+ 		return reg !=3D 0;
+ 	case CY_CC_4373_CHIP_ID:
+-	case CY_CC_89459_CHIP_ID:
++	case BRCM_CC_4355_CHIP_ID:
+ 		/* explicitly check SR engine enable bit */
+ 		addr =3D CORE_CC_REG(base, sr_control0);
+ 		reg =3D chip->ops->read32(chip->ctx, addr);
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/driv=
+ers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+index ad7a780cd..0a7410196 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+@@ -78,6 +78,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwn=
+ames[] =3D {
+ 	BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0x000000FF, 4350C),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0xFFFFFF00, 4350),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43525_CHIP_ID, 0xFFFFFFF0, 4365C),
++	BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0xFFFFFFFF, 4355),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4356_CHIP_ID, 0xFFFFFFFF, 4356),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43567_CHIP_ID, 0xFFFFFFFF, 43570),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43569_CHIP_ID, 0xFFFFFFFF, 43570),
+@@ -92,7 +93,6 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwn=
+ames[] =3D {
+ 	BRCMF_FW_ENTRY(BRCM_CC_43664_CHIP_ID, 0xFFFFFFF0, 4366C),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
+-	BRCMF_FW_ENTRY(CY_CC_89459_CHIP_ID, 0xFFFFFFFF, 4355),
+ };
+=20
+ static const struct brcmf_firmware_mapping brcmf_pcie_otp_fwnames[] =3D {
+@@ -2599,6 +2599,7 @@ static const struct pci_device_id brcmf_pcie_devid_ta=
+ble[] =3D {
+ 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4350_DEVICE_ID, WCC),
+ 	BRCMF_PCIE_DEVICE_SUB(0x4355, BRCM_PCIE_VENDOR_ID_BROADCOM, 0x4355, WCC),
+ 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4354_RAW_DEVICE_ID, WCC),
++	BRCMF_PCIE_DEVICE(BRCM_PCIE_4355_DEVICE_ID, WCC),
+ 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4356_DEVICE_ID, WCC),
+ 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43567_DEVICE_ID, WCC),
+ 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43570_DEVICE_ID, WCC),
+diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h =
+b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+index f4939cf62..fee1ff526 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
++++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+@@ -37,6 +37,7 @@
+ #define BRCM_CC_4350_CHIP_ID		0x4350
+ #define BRCM_CC_43525_CHIP_ID		43525
+ #define BRCM_CC_4354_CHIP_ID		0x4354
++#define BRCM_CC_4355_CHIP_ID		0x4355
+ #define BRCM_CC_4356_CHIP_ID		0x4356
+ #define BRCM_CC_43566_CHIP_ID		43566
+ #define BRCM_CC_43567_CHIP_ID		43567
+@@ -56,7 +57,6 @@
+ #define CY_CC_43012_CHIP_ID		43012
+ #define CY_CC_43439_CHIP_ID		43439
+ #define CY_CC_43752_CHIP_ID		43752
+-#define CY_CC_89459_CHIP_ID		0x4355
+=20
+ /* USB Device IDs */
+ #define BRCM_USB_43143_DEVICE_ID	0xbd1e
+@@ -72,6 +72,7 @@
+ #define BRCM_PCIE_4350_DEVICE_ID	0x43a3
+ #define BRCM_PCIE_4354_DEVICE_ID	0x43df
+ #define BRCM_PCIE_4354_RAW_DEVICE_ID	0x4354
++#define BRCM_PCIE_4355_DEVICE_ID	0x43dc
+ #define BRCM_PCIE_4356_DEVICE_ID	0x43ec
+ #define BRCM_PCIE_43567_DEVICE_ID	0x43d3
+ #define BRCM_PCIE_43570_DEVICE_ID	0x43d9
+--=20
+2.34.1
 
-To: Yunke Cao <yunkec@chromium.org>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Max Staudt <mstaudt@google.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes in v6:
-- Improve comments. (Thanks Laurent).
-- Use true/false instead of 1/0 (Thanks Laurent).
-- Link to v5: https://lore.kernel.org/r/20221212-uvc-race-v5-0-3db3933d1608@chromium.org
-
-Changes in v5:
-- atomic_t do not impose barriers, use smp_mb() instead. (Thanks Laurent)
-- Add an extra cancel_work_sync().
-- Link to v4: https://lore.kernel.org/r/20221212-uvc-race-v4-0-38d7075b03f5@chromium.org
-
-Changes in v4:
-- Replace bool with atomic_t to avoid compiler reordering.
-- First complete the async work and then kill the urb to avoid race (Thanks Laurent!)
-- Link to v3: https://lore.kernel.org/r/20221212-uvc-race-v3-0-954efc752c9a@chromium.org
-
-Changes in v3:
-- Remove the patch for dev->status, makes more sense in another series, and makes
-  the zero day less nervous.
-- Update reviewed-by (thanks Yunke!).
-- Link to v2: https://lore.kernel.org/r/20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org
-
-Changes in v2:
-- Add a patch for not kalloc dev->status
-- Redo the logic mechanism, so it also works with suspend (Thanks Yunke!)
-- Link to v1: https://lore.kernel.org/r/20221212-uvc-race-v1-0-c52e1783c31d@chromium.org
----
- drivers/media/usb/uvc/uvc_ctrl.c   |  3 +++
- drivers/media/usb/uvc/uvc_status.c | 40 ++++++++++++++++++++++++++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 3 files changed, 44 insertions(+)
-
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index c95a2229f4fa..5160facc8e20 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -1442,6 +1442,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
- 
- 	uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
- 
-+	if (dev->flush_status)
-+		return;
-+
- 	/* Resubmit the URB. */
- 	w->urb->interval = dev->int_ep->desc.bInterval;
- 	ret = usb_submit_urb(w->urb, GFP_KERNEL);
-diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-index 7518ffce22ed..e457889345a3 100644
---- a/drivers/media/usb/uvc/uvc_status.c
-+++ b/drivers/media/usb/uvc/uvc_status.c
-@@ -6,6 +6,7 @@
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-  */
- 
-+#include <asm/barrier.h>
- #include <linux/kernel.h>
- #include <linux/input.h>
- #include <linux/slab.h>
-@@ -309,5 +310,44 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
- 
- void uvc_status_stop(struct uvc_device *dev)
- {
-+	struct uvc_ctrl_work *w = &dev->async_ctrl;
-+
-+	/* Prevent the asynchronous control handler from requeing the URB */
-+	dev->flush_status = true;
-+
-+	/*
-+	 * The barrier is needed so the flush_status change is visible to other
-+	 * CPUs running the asynchronous handler before usb_kill_urb() is
-+	 * called below.
-+	 */
-+	smp_mb();
-+
-+	/* If there is any status event on the queue, process it. */
-+	if (cancel_work_sync(&w->work))
-+		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-+
-+	/* Kill the urb. */
- 	usb_kill_urb(dev->int_urb);
-+
-+	/*
-+	 * The URB completion handler may have queued asynchronous work. This
-+	 * won't resubmit the URB as flush_status is set, but it needs to be
-+	 * cancelled before returning or it could then race with a future
-+	 * uvc_status_start() call.
-+	 */
-+	if (cancel_work_sync(&w->work))
-+		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-+
-+	/*
-+	 * From this point, there are no events on the queue and the status URB
-+	 * is dead, this is, no events will be queued until uvc_status_start()
-+	 * is called.
-+	 */
-+	dev->flush_status = false;
-+
-+	/*
-+	 * Write to memory the value of flush_status before uvc_status_start()
-+	 * is called again.
-+	 */
-+	smp_mb();
- }
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index df93db259312..6a9b72d6789e 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -560,6 +560,7 @@ struct uvc_device {
- 	struct usb_host_endpoint *int_ep;
- 	struct urb *int_urb;
- 	u8 *status;
-+	bool flush_status;
- 	struct input_dev *input;
- 	char input_phys[64];
- 
-
----
-base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
-change-id: 20221212-uvc-race-09276ea68bf8
-
-Best regards,
--- 
-Ricardo Ribalda <ribalda@chromium.org>
