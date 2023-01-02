@@ -2,76 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E8465B843
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 00:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F307D65B84C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 00:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236439AbjABXjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 18:39:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        id S232735AbjABXye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 18:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbjABXjc (ORCPT
+        with ESMTP id S229587AbjABXyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 18:39:32 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6563FE23
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 15:39:31 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 0EDA66D6;
-        Mon,  2 Jan 2023 23:39:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0EDA66D6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1672702771; bh=8YRBcnpHYeyj/vv1z+6HDIBo66YYk3oBWr5/pH+qKdc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=htqX12WSUGu72JcCTyiZxiR/BeZZnxOwg4winrpyf5wzWLLxlX8LdW++qry2C9+TQ
-         QP+9QR41vLxnNXEtDHLUA4vnAqMhzvOHWd/gOC833iCT1HKS81mHx8gSvrP0IQEV3v
-         P5OmfmqfBy87r6anM7yk0pSap2sI6l5GItOS9owCw5M5bPOd5Z42RFC5kZnHfrNY2U
-         OTDNySx6KuQmvdX/W3ZkneSgj36lH9dRbUG1JGC37pAxKTWtb/QJy4gPx5SaEhDsgK
-         OCujv0HyJLM1BAScoEBh4Iq25JMWHun1WE7RMTiZvfAXdPB6cn9p9aWQRkhENbuvME
-         kKogzU7VTD3xA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Wang Yong <yongw.kernel@gmail.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, changbin.du@gmail.com,
-        linux-kernel@vger.kernel.org
-Cc:     Wang Yong <yongw.kernel@gmail.com>
-Subject: Re: [PATCH] Documentation: x86: fix typo in x86_64/mm.rst
-In-Reply-To: <20221228100141.382325-1-yongw.kernel@gmail.com>
-References: <20221228100141.382325-1-yongw.kernel@gmail.com>
-Date:   Mon, 02 Jan 2023 16:39:30 -0700
-Message-ID: <871qoch5fx.fsf@meer.lwn.net>
+        Mon, 2 Jan 2023 18:54:31 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF959593
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 15:54:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672703669; x=1704239669;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=aR3K3ex1SxuJ6C4KEDB9xBXcz30I39NL7soRBCm7lKo=;
+  b=aanDE+h4kQdXdVWdWmUwHNjzkKBzqJi9j5CkwVJfZghitnzfXv0qFlBj
+   9KYxqEn046vpI9mMMYkvCehUeFRlI1+ZskshN37vsE0YplZTaBthcnE95
+   q4clMPnKRh1CG0L7KgLGYVH+Odk3pX8CuWr4GpfSDJ0S//J5Tvn5ls3DF
+   AY+7TdYxcyy7JbA0mYuCksQN8KSzyptXXPSLCoJIJPzroa+44udVE02Dm
+   H9m4NkqD3OR48WNovj+tL7NxJb7gz1Z/FVdGE2uXJT1M67YQkRGb0w8eh
+   IRHIV5zYwx+69f7Fm5PUjoBSy20YDO/PSoVXqloozGk2dpTXUsYCLSpfn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="383850910"
+X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
+   d="scan'208";a="383850910"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 15:54:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="685197615"
+X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
+   d="scan'208";a="685197615"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 15:54:25 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        haoxin <xhao@linux.alibaba.com>
+Subject: Re: [PATCH 2/8] migrate_pages: separate hugetlb folios migration
+References: <20221227002859.27740-1-ying.huang@intel.com>
+        <20221227002859.27740-3-ying.huang@intel.com>
+        <20221228151735.e855bde30c1782bb45b97930@linux-foundation.org>
+Date:   Tue, 03 Jan 2023 07:53:31 +0800
+In-Reply-To: <20221228151735.e855bde30c1782bb45b97930@linux-foundation.org>
+        (Andrew Morton's message of "Wed, 28 Dec 2022 15:17:35 -0800")
+Message-ID: <87a630xzlw.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wang Yong <yongw.kernel@gmail.com> writes:
+Andrew Morton <akpm@linux-foundation.org> writes:
 
-> change "64Gb" to "64GB".
+> On Tue, 27 Dec 2022 08:28:53 +0800 Huang Ying <ying.huang@intel.com> wrote:
 >
-> Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
-> ---
->  Documentation/x86/x86_64/mm.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>> This is a preparation patch to batch the folio unmapping and moving
+>> for the non-hugetlb folios.  Based on that we can batch the TLB
+>> shootdown during the folio migration and make it possible to use some
+>> hardware accelerator for the folio copying.
+>> 
+>> In this patch the hugetlb folios and non-hugetlb folios migration is
+>> separated in migrate_pages() to make it easy to change the non-hugetlb
+>> folios migration implementation.
+>> 
+>> ...
+>>
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1404,6 +1404,87 @@ struct migrate_pages_stats {
+>>  	int nr_thp_split;
+>>  };
+>>  
+>> +static int migrate_hugetlbs(struct list_head *from, new_page_t get_new_page,
+>> +			    free_page_t put_new_page, unsigned long private,
+>> +			    enum migrate_mode mode, int reason,
+>> +			    struct migrate_pages_stats *stats,
+>> +			    struct list_head *ret_folios)
+>> +{
+>> +	int retry = 1;
+>> +	int nr_failed = 0;
+>> +	int nr_retry_pages = 0;
+>> +	int pass = 0;
+>> +	struct folio *folio, *folio2;
+>> +	int rc = 0, nr_pages;
+>> +
+>> +	for (pass = 0; pass < 10 && retry; pass++) {
 >
-> diff --git a/Documentation/x86/x86_64/mm.rst b/Documentation/x86/x86_64/mm.rst
-> index 9798676bb0bf..35e5e18c83d0 100644
-> --- a/Documentation/x86/x86_64/mm.rst
-> +++ b/Documentation/x86/x86_64/mm.rst
-> @@ -140,7 +140,7 @@ The direct mapping covers all memory in the system up to the highest
->  memory address (this means in some cases it can also include PCI memory
->  holes).
->  
-> -We map EFI runtime services in the 'efi_pgd' PGD in a 64Gb large virtual
-> +We map EFI runtime services in the 'efi_pgd' PGD in a 64GB large virtual
->  memory window (this size is arbitrary, it can be raised later if needed).
+> Why 10?
 
-Applied, thanks.
+This is inherited from the original max pass number from
+migrate_pages().  Which is introduced in commit 49d2e9cc4544 ("[PATCH]
+Swap Migration V5: migrate_pages() function").  From the code and commit
+message, I don't find out why.  I guess that we need some magic number
+anyway.
 
-jon
+Now, because the magic number is used in 2 places (migrate_pages() and
+migrate_hugetlbs()), it's better to define it as a constant macro?
+
+>> +		retry = 0;
+>> +		nr_retry_pages = 0;
+>> +
+>> +		list_for_each_entry_safe(folio, folio2, from, lru) {
+>> +			if (!folio_test_hugetlb(folio))
+>> +				continue;
+>> +
+>> +			nr_pages = folio_nr_pages(folio);
+>> +
+>> +			cond_resched();
+>> +
+>> +			rc = unmap_and_move_huge_page(get_new_page,
+>> +						      put_new_page, private,
+>> +						      &folio->page, pass > 2, mode,
+>> +						      reason, ret_folios);
+>> +			/*
+>> +			 * The rules are:
+>> +			 *	Success: hugetlb folio will be put back
+>> +			 *	-EAGAIN: stay on the from list
+>> +			 *	-ENOMEM: stay on the from list
+>> +			 *	-ENOSYS: stay on the from list
+>> +			 *	Other errno: put on ret_folios list
+>> +			 */
+>> +			switch(rc) {
+>> +			case -ENOSYS:
+>> +				/* Hugetlb migration is unsupported */
+>> +				nr_failed++;
+>> +				stats->nr_failed_pages += nr_pages;
+>> +				list_move_tail(&folio->lru, ret_folios);
+>> +				break;
+>> +			case -ENOMEM:
+>> +				/*
+>> +				 * When memory is low, don't bother to try to migrate
+>> +				 * other folios, just exit.
+>> +				 */
+>> +				nr_failed++;
+>> +				stats->nr_failed_pages += nr_pages;
+>> +				goto out;
+>> +			case -EAGAIN:
+>> +				retry++;
+>> +				nr_retry_pages += nr_pages;
+>> +				break;
+>> +			case MIGRATEPAGE_SUCCESS:
+>> +				stats->nr_succeeded += nr_pages;
+>> +				break;
+>> +			default:
+>> +				/*
+>> +				 * Permanent failure (-EBUSY, etc.):
+>> +				 * unlike -EAGAIN case, the failed folio is
+>> +				 * removed from migration folio list and not
+>> +				 * retried in the next outer loop.
+>> +				 */
+>> +				nr_failed++;
+>> +				stats->nr_failed_pages += nr_pages;
+>> +				break;
+>> +			}
+>> +		}
+>> +	}
+>> +out:
+>> +	nr_failed += retry;
+>> +	stats->nr_failed_pages += nr_retry_pages;
+>> +	if (rc != -ENOMEM)
+>> +		rc = nr_failed;
+>> +
+>> +	return rc;
+>> +}
+>
+> The interpretation of the return value of this function is somewhat
+> unobvious.
+>
+> I suggest that this function be fully commented.
+>
+> Why does a retry contribute to nr_failed.  What is the interpretation
+> of nr_failed.  etcetera.
+
+Sure.  Will do that in the next version.
+
+Best Regards,
+Huang, Ying
