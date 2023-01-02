@@ -2,138 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F93665B037
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9271565B039
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbjABK7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S232874AbjABK7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbjABK7I (ORCPT
+        with ESMTP id S232705AbjABK7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:59:08 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3E7C71
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:59:07 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id e21so8869971pfl.1
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 02:59:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gKYbhDNGtqupbPRUKCCINaSoc+lb4pCR63iH2vtYHr8=;
-        b=Qwt4rqH5AdvU0i3hJHzjsqhvUAZrYDolSqESxZJAMmrw+VIYKJC+RbPA4QQl1QQoT2
-         jX5Eg9ekFa2WhQ7JoZ5BadUYSAblL31m5AIqWYV65kuDyMxS6xiasCLgCs0pZ77wH3t/
-         BPg4cZTrKllvZ/Yk0k7J+zDcomYD4LdfsJN6og8iuNJ9O4R6L/Gz3gw46YxYVI94T6iA
-         NNe1X2eOgBBdUF9Wf9hsey3bkjrV2pRICXhXhUKXjiIAZ7tzKzT7wimTyFk4/y+MZsTu
-         AEQBp6EIXB2bt/iAZbYmnEXSBfFbd2QykcIeD+DO9PsN17IjE7XyUYK2ApKxvADUkUpy
-         KBWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gKYbhDNGtqupbPRUKCCINaSoc+lb4pCR63iH2vtYHr8=;
-        b=JWQP5ZibgXE3TWGvs1s+Lg0P/pR/bB1W9LiAxE3QruPdPUusNqVte4FgtqfQfVfSr1
-         NiT/DP5dZMfNQpS99SXWes5t0YxM4Gapn302TmYNkTuyc68dcksmuELPB3kMPqJBDQP1
-         ViQTcyfm1hGfqFVR8IegFqRMcA6zpnnRJeTXqJQVwxYABVAD4EqX+gWHthMPO3y3bQRv
-         5g0zWD3jzkQ32eR7MOIgP0ND1glMqtKM/mdJL7Z94SPTc0UGbunB/1pPgbi9uzZ0/NOB
-         d1U7sEiHSk+y3MNzvK3B3m12Ln7VdrTYkY/a8q/g6/9sM0dgdxm1AXCD8RbF51A/uvjt
-         NiGg==
-X-Gm-Message-State: AFqh2kpHtBc7ZAMMmGzW848rXMzsQmnwm61fIXYuQQ6xvrqpgvShypwP
-        8kVkQ4Wqei2GCgdeB5B1cJTQ
-X-Google-Smtp-Source: AMrXdXs/oDbtqNDAcqgwBH/WGHqDA/PlPcKdwRPMBMnmmaFF114TWVFgqj31yZ4L/Uhz1o8JopW2Mg==
-X-Received: by 2002:aa7:8215:0:b0:580:9151:afe5 with SMTP id k21-20020aa78215000000b005809151afe5mr33795493pfi.22.1672657147061;
-        Mon, 02 Jan 2023 02:59:07 -0800 (PST)
-Received: from localhost.localdomain ([220.158.158.187])
-        by smtp.gmail.com with ESMTPSA id k26-20020aa79d1a000000b0058130f1eca1sm12756773pfp.182.2023.01.02.02.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 02:59:06 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bhelgaas@google.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lpieralisi@kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0 and PCIe1
-Date:   Mon,  2 Jan 2023 16:28:21 +0530
-Message-Id: <20230102105821.28243-4-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230102105821.28243-1-manivannan.sadhasivam@linaro.org>
-References: <20230102105821.28243-1-manivannan.sadhasivam@linaro.org>
+        Mon, 2 Jan 2023 05:59:18 -0500
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B93B7A
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:59:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1672657155; bh=QXfPTXA8nXZzmzygkWncKX/Z5d6842FAife/WSilhWU=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=TV7R2AP5aGmGLW9LhEZ2syT9g5eGvwX9cTfk750JrK1ufMfIcjBSm50HsIO+zdvXS
+         oiwFxIq6QLeBzPzlo6bdGy3APWGEYKz9VFFU6vjlLcC9P2WUGWNfa3zCs3kcwZfrxN
+         SoG6/GOzyTbbTCS7NImuIRnslgw8arRJnOoYfcTo=
+Date:   Mon, 2 Jan 2023 11:59:15 +0100
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Martijn Braam <martijn@brixit.nl>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Robert Mader <robert.mader@posteo.de>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
+        dri-devel@lists.freedesktop.org,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Neal Gompa <ngompa13@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v4 2/4] drm: panel: Add Himax HX8394 panel controller
+ driver
+Message-ID: <20230102105915.gbfhletcm4dunrlf@core>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Kamil =?utf-8?Q?Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Martijn Braam <martijn@brixit.nl>, Sam Ravnborg <sam@ravnborg.org>,
+        Robert Mader <robert.mader@posteo.de>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
+        dri-devel@lists.freedesktop.org,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Neal Gompa <ngompa13@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20221230113155.3430142-1-javierm@redhat.com>
+ <20221230113155.3430142-3-javierm@redhat.com>
+ <20221230154043.7v3zmzqdrnouqzd2@core>
+ <7120dfd4-305f-69ac-fee8-123196ed06a9@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7120dfd4-305f-69ac-fee8-123196ed06a9@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both PCIe0 and PCIe1 controllers are capable of signalling the MSIs
-received from endpoint devices to the CPU using GIC-ITS MSI controller.
-Add support for it.
+Hello Javier,
 
-Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
-msi-map-mask of 0xff00, all the 32 devices under these two busses can
-share the same Device ID.
+On Sat, Dec 31, 2022 at 04:15:24PM +0100, Javier Martinez Canillas wrote:
+> Hello Ondřej,
+> 
+> Thanks a lot for your comments.
+> 
+> On 12/30/22 16:40, Ondřej Jirman wrote:
+> > Hi Javier,
+> > 
+> > On Fri, Dec 30, 2022 at 12:31:52PM +0100, Javier Martinez Canillas wrote:
+> >> From: Kamil Trzciński <ayufan@ayufan.eu>
+> >>
+> >> The driver is for panels based on the Himax HX8394 controller, such as the
+> >> HannStar HSD060BHW4 720x1440 TFT LCD panel that uses a MIPI-DSI interface.
+> > 
+> > I see you've removed debug printks from enable/disable/prepare/unprepare
+> 
+> Yes, because as you said were debug printks. Feel free to propose adding the
+> debug printks if you consider useful for normal usage and not just for devel
+> purposes.
 
-The GIC-ITS MSI implementation provides an advantage over internal MSI
-implementation using Locality-specific Peripheral Interrupts (LPI) that
-would allow MSIs to be targeted for each CPU core.
+I already did, and used them do debug and fix the issues. This submission just
+doesn't include the fixes.
 
-It should be noted that the MSIs for BDF (1:0.0) only works with Device
-ID of 0x5980 and 0x5a00. Hence, the IDs are swapped.
+> > hooks. Have you tested the driver thoroughly with various DRM apps,
+> > with DPM/suspend/resume, etc.?
+> >
+> 
+> I did not. I wasn't expecting suspend and resume to work on the PPP given its
+> support is quite minimal currently.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+System suspend/resume works and is used by distributions. Display blanking is
+also used by normal distros, even if you don't use system suspend/resume.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 570475040d95..c4dd5838fac6 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -1733,9 +1733,13 @@ pcie0: pci@1c00000 {
- 			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
- 				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
- 
--			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "msi";
--			#interrupt-cells = <1>;
-+			/*
-+			 * MSIs for BDF (1:0.0) only works with Device ID 0x5980.
-+			 * Hence, the IDs are swapped.
-+			 */
-+			msi-map = <0x0 &gic_its 0x5981 0x1>,
-+				  <0x100 &gic_its 0x5980 0x1>;
-+			msi-map-mask = <0xff00>;
- 			interrupt-map-mask = <0 0 0 0x7>;
- 			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
- 					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-@@ -1842,9 +1846,13 @@ pcie1: pci@1c08000 {
- 			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
- 				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
- 
--			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "msi";
--			#interrupt-cells = <1>;
-+			/*
-+			 * MSIs for BDF (1:0.0) only works with Device ID 0x5a00.
-+			 * Hence, the IDs are swapped.
-+			 */
-+			msi-map = <0x0 &gic_its 0x5a01 0x1>,
-+				  <0x100 &gic_its 0x5a00 0x1>;
-+			msi-map-mask = <0xff00>;
- 			interrupt-map-mask = <0 0 0 0x7>;
- 			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
- 					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
--- 
-2.25.1
+> > The dw-mipi-dsi driver does some unorthodox things[1], that can lead to unbalanced
+> > calls to these functions in some situations, and that's why all these printks
+> > were there. To ensure the driver hooks are called correctly, while preparing
+> > the code for upstreaming. This lead to broken display in some situations during
+> > suspend/resume.
+> > 
+> > https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c#L868
+> >
+> 
+> This needs to be fixed in the dw-mipi-dsi driver then. But at least we will get
+> a panel-himax-hx8394 driver in mainline to avoid having to use downstream trees
+> for development and testing.
 
+The only thing this driver is supposed to do is to power up (+configure) and power
+down the display, the rest is boilerplate. Powercycling via suspend/resume
+and/or other means (like disabling the crtc via DRM API), has to be tested,
+to verify the driver can at least do a power down/up cycle and not just initial
+powerup.
+
+> > Also, have you checked the clocks are actually configured correctly by the
+> > rk3399 cru driver? I have a lot of trouble with that, too. clk driver sometimes
+> > selects the fractional clock, but does not give it the necessary >20x difference
+> > between input/output clock rates. You'll only notice if you measure clock rates
+> > directly, by looking at actual refresh rate, by using some testing DRM app.
+> > Clock subsystem sometimes shuffles things around if you switch VOPs and use big
+> > VOP for mipi-dsi display, instead of the default small VOP.
+> >
+> 
+> I have not. Just verified that the display was working on my PPP and could start
+> a mutter wayland session. We could fix the clock configuration as follow-up IMO.
+
+The display output will be broken after you fix the assigned-clocks in DT to
+expected values (use GPLL parent, to make the HW generate the exact pixel clock
+defined in the display mode). So this needs to be dealt with now, not later.
+
+
+The driver issues are all known at this time and have fixes available, unlike
+a year ago:
+
+- panel mode not working with actual clock rate it requests (severe image
+  corruption on some pinephone pro's)
+- no display output after suspend/resume cycle or a blanking/unblanking cycle
+
+So if you're submitting a known broken code, at least mention the issues in code
+comments, so that people that will inevitably hit the bugs will not spend large
+amount of time hunting for the cause again, when the issue and causes are known
+already.
+
+Just figuring out the image corruption took more than a year since it was
+discovered. Better not inflict that on others.
+
+regards,
+	o.
+
+> > I'll test this patchset in a few days against purely mainline code, but I'm
+> > pretty sure looking at the modes you use, that this will not work on some
+> > Pinephone Pro's, and will cause display corruption when you fix your clock
+> > setup, so that CRU actually outputs 74.25MHz as requested by the mode. (Which
+> > can be fixed by this patch https://github.com/megous/linux/commit/f7ee16f12ee8a44ee2472f2967ca27768106e00f)
+> > 
+> 
+> As mentioned, I prefer to make the support incremental. First having the panel
+> driver and then we can fix any remaining issue as follow-up patch series.
+> 
+> -- 
+> Best regards,
+> 
+> Javier Martinez Canillas
+> Core Platforms
+> Red Hat
+> 
