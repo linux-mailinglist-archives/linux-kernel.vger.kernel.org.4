@@ -2,124 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FBF65B385
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0AE65B38D
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236222AbjABOrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 09:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
+        id S236218AbjABOsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 09:48:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236205AbjABOrA (ORCPT
+        with ESMTP id S236215AbjABOsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 09:47:00 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2093.outbound.protection.outlook.com [40.92.103.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93E565E8;
-        Mon,  2 Jan 2023 06:46:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kcuc2TszlR+yah5cfqYg3cOQbMSmYp0vu4MtYcyizcBIWwO5Nyo7nnLj55s8CfiTDea6DWSUsD2pmoaLFBHmo2uniVLEX2o+IkXu6MtA53GFgRkjNwGU3bmuH5G2KHlCFna4qVBz6GDXYqj1Hc800kaREVh7rfJCCvE4Eu/ctHP6AP3ChTwBY4/rm3gViJJKOYhhY9AiFbnclOMIJSCFck3ZWZxCkocdG30dupZ6QPpt6514QMul+dDcqXc6Xum/wjWkq3cZc5k7rEmudjpU0ACxbZh5aFY+XTlWrNOlETGW+ogBknOJoZfXSfLfJbsb/z9WT5agFwPBk/9cmB24TA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QQUbrmMNNYrvHRXeGi9a9FXrDhRZ4NV7kKsuKyXQTAQ=;
- b=Lx1BD+hG+b5/zuOt/GnTBwIYRFH/fM7TeIeAHWzL0+FE6tFnsoCO8ddVPy651oO0Js9MeU9FJ4xwNKDxUKHRIKAHpDf5c4+KA/Kwac87mCx1lsvK0YH3C8fsO2SB8ySxZucvxXiFgh3vLhI3ens57xavdA8/H/wh7IxUtG7+Qmjs3y1CGL43cPRI6UpUCVvi9QglCi5tDlLpx8uGOUpdRel42nB1CX8jrM14XYkqtbDLiyBuI13TUZS5FR34AdaKq5RQ8kTGIOW6iTuO5r4yXh39/uefMjEFk2Ztu8NUnxPH9EeQxTR3lQdDRPPgY9UgCds8LLIU+Sui5BBZH5ckGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QQUbrmMNNYrvHRXeGi9a9FXrDhRZ4NV7kKsuKyXQTAQ=;
- b=Pd7ODrvbzu0GRlOSQq5fnSsloDm4EunJcFfaFPyIpCGj8GRLk8m8mKfWRW0bPUnNzbQCEtjZHayLZ31HmSSwq9n2l+mra9tHuaQRiaqf4qLRDVGLXer+Hi9/jE0i63+sS7Iqd75rtKgSJNoADQlptzJ3ASD2VTOFmFzxuBDWB2j/pt1N8KJMUq2+414uuHDuexN18Hjms1G/gyeKLoW76K25jxTmjFLACg7oNMrF7onL2BQtf2ZlmAPWIuN6Udc/aB1VeBX6G4rto/7waYGKF29b9kAQFaTKvXKiV+qi3czR5n3xXxqQvHT9/5zT8bPGQEk2yhasYmCTpvwJzsRyRA==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- PN2PR01MB9277.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:117::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Mon, 2 Jan 2023 14:46:51 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f90e:46bc:7a0f:23bc]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f90e:46bc:7a0f:23bc%7]) with mapi id 15.20.5944.019; Mon, 2 Jan 2023
- 14:46:51 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Hector Martin <marcan@marcan.st>,
-        "aspriel@gmail.com" <aspriel@gmail.com>,
-        "hante.meuleman@broadcom.com" <hante.meuleman@broadcom.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lina@asahilina.net" <lina@asahilina.net>,
-        "franky.lin@broadcom.com" <franky.lin@broadcom.com>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-CC:     Orlando Chamberlain <redecorating@protonmail.com>,
-        "brcm80211-dev-list@broadcom.com" <brcm80211-dev-list@broadcom.com>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Asahi Linux <asahi@lists.linux.dev>
-Subject: [PATCH v2 1/2] brcmfmac: Use separate struct to declare firmware
- names for Apple OTP chips
-Thread-Topic: [PATCH v2 1/2] brcmfmac: Use separate struct to declare firmware
- names for Apple OTP chips
-Thread-Index: AQHZHrkMuK4g+OysPUWm6aVQADl1dg==
-Date:   Mon, 2 Jan 2023 14:46:51 +0000
-Message-ID: <E376F3F1-CA88-47B3-B3D1-EEF0B283D25D@live.com>
-References: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
- <f36dd8e3-9905-f04a-ed34-4be91ed1fec6@marcan.st>
- <F9EFCCD1-4407-42CC-8316-2F58AAC1AE7F@live.com>
- <ACC0D1F6-7857-4FF0-A474-4EC699572E1B@live.com>
-In-Reply-To: <ACC0D1F6-7857-4FF0-A474-4EC699572E1B@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [lE+doef27XN+R3eLz67aI62vxHZFpk3vwOnVbrHr9y1HW2VNOe0cXUIxLoCQmNwl]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN2PR01MB9277:EE_
-x-ms-office365-filtering-correlation-id: fb39b637-d25a-428a-01ed-08daecd02f0f
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Oib+/PRz/NwHYRxnvymmuhQa2MWdX5195KEa32UcERqobRPvMmUoCthSJGQhrI9pV5CQH69HfDi12Cc1rjDAFIxbb53+ysETXFKvIl9IUrll1eMKvIYfsl2KOeWW1jvEo7O16AsAyn7xpzIAZ8MaDbjo2Of6zeH4Lz7VaFXixvo6xtXza6CsyCRb178kMx1ZoqQYpjNpPbrEP1lYqGYpK0OiDRu3wrdH663o8J9f04BiD0OAXf8ZSORzI/2oEDFStUReP33nKDLg7R6QjX0G0qBw6lz5/3r35lF8F+GoU6sBOErFZ/Fsv1fO4F5X9zxFNFqPFqP8fgUr1rPEOlgT3oOo1MwNKV6JSJh+NAbzD4Fxbc8odCe/lGPbXeRRgIKsjzUU/GvKKEA4RmoTLIB2YSlGktj3/6D885v4XpazxqlmQ49nd6H9mYesx+pQsku6Q2cWyvZ40Xw0snSONPZgsmaQ1pPPDGD1sf6GOZhqQltC0ULgOKKOBsY2vU5KYJZ0t4CNxqj6P5th7dLa87gkhcPFWHGgdk4Hr+dTrGoMZghs6XfxEI7IJxVgVT2S2Y9TqeG7DbJpgsnLyjheVAWJVE12K+OQYNnZh+7c1eOB13g=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RAhL63y5v4vvJ55N9R05JNum1YLBaZKXfPaZ61hfFxl4dKTW/IBBlk5C+BPl?=
- =?us-ascii?Q?dlFtj2189ETtYc4M9JHYOUCPhsD3knCXI4QRY2RVAQNEjN/lwbsFNTXbeRoQ?=
- =?us-ascii?Q?IjOediG5kMBm3KsJkRxNp5vL7IWg4OWpnxGWd8cCJRcOviaTpHaPdZtigUtq?=
- =?us-ascii?Q?26imiBTaHwY3WmwxJ7xBXismJ1GD11H+sRbqLCn6WeggA5/Jtm2wFBNU8LpU?=
- =?us-ascii?Q?KFUmrNRbhwTgUvpzTzYmng/LX+C6pfKQQRx1RD3af+p4Foi+kW8uXvkNnKd/?=
- =?us-ascii?Q?JuuqZTSIp7z8kPbbt92OtbQo9Q3m2qlxaPvaLvyj2ov3gYHCzhVRUPUQrBBb?=
- =?us-ascii?Q?99I6fCoDEhDkoo+S2Ms3/IH6XMrC56SRW1G2ywoqlFwYdwNkKlllA6v1XhY5?=
- =?us-ascii?Q?fG0aBo575OotaDkeIjcPPfFKuPSKY5cYRxc71pB1puZVkjrOnqeBBRHgu81z?=
- =?us-ascii?Q?Q5y5UC7ZEu0X2LdGosQzbeYzZviIhTW5nUo7v8/0RFZIX/2QrhuWR/AEDj3n?=
- =?us-ascii?Q?LbiGRliMgQpov360muJeNRatViZCrYfI5XFgxY8/Ley85mKPUSOBjb5XR1s3?=
- =?us-ascii?Q?kAfO3jwmD0i0bYKK2Yi5jxmoj83VPq6GsLPfNOsr66ZZYZh0O/+BWNpADK2K?=
- =?us-ascii?Q?H96lK866Z8vXH2j6MwO5GArMOlJOMM0alv8C1eBfeSYkSLOMIs9WiJhC3kh3?=
- =?us-ascii?Q?thLUvwyo9XxyYcQkREQXx5JfzmfWLy+1ax7OZtrjCaFF5gcv/RUpJtjzOg2z?=
- =?us-ascii?Q?Hxl9ixeEUrEsImHdRlSLBqK7LjuNy69QIMXXaxDw1Nbe5Gnbp5ev655PCXkW?=
- =?us-ascii?Q?bwTTcPgHfujUjWw10KHdWdeu2jdSFZsoTpCwzpEM3Nd9O6R/h8X2PC1pR0+b?=
- =?us-ascii?Q?w6iEnDuGds4NHJuU2zVVfJeCY39H/AS3c9aWZDQRUBrivgLcyS6/jPbS344M?=
- =?us-ascii?Q?yhcD9ry/ME8Jc6quzz8I26YDvWQNMmOVaioSg9QmNVQOc3FnusV28aFcZdQK?=
- =?us-ascii?Q?xNHGHkSEzg8zVeEyVwyaAcIJZrOKkB0ZL0u8hQ/sQaEywV5mf4z+TneUe5Jo?=
- =?us-ascii?Q?vkKUTn94mvvbbnFMu069oKQVxySDHtX7bgVp2mRcxJRIVHni6WJhOBsQNIm0?=
- =?us-ascii?Q?YpJx4/UxUi2+0X0pilwUyoJED7l/v+i5mpS/mn7eTNybP+NV/X18uBVLniMs?=
- =?us-ascii?Q?aZI6n9JFLDSI84hTrfolNHE0qiKPntSoNlxMQ+ZZFIQcI05LaSPNhJIwWKdr?=
- =?us-ascii?Q?uB6IJzLXHbD+96PbmJUTn9OSY08hCvxZ/yXGRyWyezFL6ElY7q1fBJG0XobV?=
- =?us-ascii?Q?QDqRvPI2OycmoEwOlBWzz6z+2QsSWzzYTwKnmkaYbWuECA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9A73CC9E09CEDA4CA13916ECCEEBD568@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        Mon, 2 Jan 2023 09:48:12 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253946477
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 06:48:11 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id fc4so66935706ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 06:48:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+okEzV2zBdHwNj7DEszLP2mtdrLQi0h+BSkRAR7jQxw=;
+        b=jr6GEGlL94jU9hne/o9BdhUQYxbLmYpuFwXfDalZ88hYQ7Rx+t/AUWgckvpQ7Flugg
+         gnVca1In/VusgpJJEQjHD1UjEhz3aqK59p6fJ5QoGcp6+7lB6N/TAjX46tB53l8/kK1L
+         Lm3c85y4+eVK9CmEhV1fnZB9bqAoLefUNPbts=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+okEzV2zBdHwNj7DEszLP2mtdrLQi0h+BSkRAR7jQxw=;
+        b=uSYipyxoh2qfZbH8Duyudg3MZAcIaDN0xVsuf60uRarMURjHwuBJoKFGhCDaYifLUC
+         MY4xQuK+cIhCdACsKd7JYlUsSg6YMzyH76C/RtAiT05qefkoG6g56dhLV8NVaOSGEMnG
+         ueTFoH3iZvGetzygsWs4TdefPzvh7pZGUJq5VdZLKTYrxC9Eeqc66gNexKOPkEZKX1/S
+         uOQ4q14Gb5wbz+pHwLPZNBRzEL2zf1Ea0KcvaQ2lMbgkeUKwvChp9AMKsmAcg+iKtGFl
+         3f7zjVT4/+kXZGVOGb3/Nn6WdFvpXDRJJlpqshTO3Yq0TKGEUPAb9NU4IKQb0AT3E6B5
+         MHwA==
+X-Gm-Message-State: AFqh2kr58u6RIdsJOwa8p0R4z2hSlJFgOUL8FDGWzK0wJeGnO6S0g6jx
+        XXsIjKpntgy/xYnCXCaihhzVPQ==
+X-Google-Smtp-Source: AMrXdXvU6QFKesPnUhP8MEnmUGjftcZTE+4Kg1zLMf09kow3Ss7mrQ8yIgUiqNqzbKfpCHK2l9KQGw==
+X-Received: by 2002:a17:907:8312:b0:7fc:3fef:ab86 with SMTP id mq18-20020a170907831200b007fc3fefab86mr29857890ejc.71.1672670889731;
+        Mon, 02 Jan 2023 06:48:09 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:6ef6:ea10:76ec:977f])
+        by smtp.gmail.com with ESMTPSA id k3-20020a17090632c300b00781dbdb292asm13064795ejk.155.2023.01.02.06.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 06:48:09 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 02 Jan 2023 15:48:01 +0100
+Subject: [PATCH v6] media: uvcvideo: Fix race condition with usb_kill_urb
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb39b637-d25a-428a-01ed-08daecd02f0f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2023 14:46:51.3055
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2PR01MB9277
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221212-uvc-race-v6-0-2a662f8de011@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Staudt <mstaudt@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Yunke Cao <yunkec@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, stable@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5952; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=OlBUT0d0UDR2+oDUQbmPwKuQ+fnKJ1FL06u1EsfTbt8=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjsu6ick7OJ1WRu4rYZaD1P3Xj9qmSGYqV/7icskpq
+ t+TImPKJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7LuogAKCRDRN9E+zzrEiEMiD/
+ 93msrnCV2Ux9hqvFn3RKES7xI+hZLJCiuw1Y9XBxrP4p6CzOjicG8ZEL5rLwB6lPfh3Ipe+T2bWESv
+ OHdn12VvQ3ydnaibggh1ZBJh9FyHRyrQFoWOyy0TufwQE8d5nmwLgCHOew0dnTBa+zszwAwZcWjYOK
+ tFgrw8J8mqRalRUV4JZQDdLSvjn/MVjv5hZ00iWQK8pXhrmgMkrkgScrNkBC9tngDLC9JZBeFkuyzd
+ dB/ZSo0ItexKTspXMvJ25TPAkCplKvCCjc1LzMQBJYpNKKBQQ4R76+sXhjaf+D7JvqGVBsBkBV8Q9Y
+ KnxKp31V8twHhhbQQOvcJiLWXp24gZOsP1CK9X8xBFTfEh1Zx4nUcIKE3eeP0ohA87d3nnVjvfc2X6
+ ncJWKHZ3yq1MN2fHDIzN4L5b2EcQmMJsoO2gy3Ach/d/ItODlt0rI8up5rWuG4N2lwyBUWAib4uQZq
+ eVfc96dpe0hbv2qlPS2WIw6OaERLeP831Z01NwId8S/Wj5fP7p7HgVjam1HswZutlv0q7vjTm5y7ri
+ 4fceDwrlplf3gexCa7KXeie4Xqs2w95uGf+TBU91bUglNXq2MdrSbnNYyjtb7TwcU67O8vxVW0OM2Q
+ EN0no2ac3JcmqZpwUbTE9kmLk0aNXeB5I9MAks4Z80rSShxE1AgN2bJcKhXw==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,67 +86,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+usb_kill_urb warranties that all the handlers are finished when it
+returns, but does not protect against threads that might be handling
+asynchronously the urb.
 
-Commit 'dce45ded7619' added support for 89459 chip pcie device. It uses the
-BRCM4355 chip which is also found in Apple hardware. However this commit
-causes conflicts in the firmware naming between Apple hardware, which
-supports OTP and other non-Apple hardwares. So, this patch makes these
-Apple chips use their own firmware table so as to avoid possible conflicts
-like these in the future.
+For UVC, the function uvc_ctrl_status_event_async() takes care of
+control changes asynchronously.
 
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
+ If the code is executed in the following order:
+
+CPU 0					CPU 1
+===== 					=====
+uvc_status_complete()
+					uvc_status_stop()
+uvc_ctrl_status_event_work()
+					uvc_status_start() -> FAIL
+
+Then uvc_status_start will keep failing and this error will be shown:
+
+<4>[    5.540139] URB 0000000000000000 submitted while active
+drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
+
+Let's improve the current situation, by not re-submiting the urb if
+we are stopping the status event. Also process the queued work
+(if any) during stop.
+
+CPU 0					CPU 1
+===== 					=====
+uvc_status_complete()
+					uvc_status_stop()
+					uvc_status_start()
+uvc_ctrl_status_event_work() -> FAIL
+
+Hopefully, with the usb layer protection this should be enough to cover
+all the cases.
+
+Cc: stable@vger.kernel.org
+Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
+Reviewed-by: Yunke Cao <yunkec@chromium.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- .../broadcom/brcm80211/brcmfmac/pcie.c        | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+uvc: Fix race condition on uvc
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/driv=
-ers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index ae57a9a3a..ad7a780cd 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -92,10 +92,13 @@ static const struct brcmf_firmware_mapping brcmf_pcie_f=
-wnames[] =3D {
- 	BRCMF_FW_ENTRY(BRCM_CC_43664_CHIP_ID, 0xFFFFFFF0, 4366C),
- 	BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
- 	BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
--	BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* revision ID =
-3 */
- 	BRCMF_FW_ENTRY(CY_CC_89459_CHIP_ID, 0xFFFFFFFF, 4355),
- };
-=20
-+static const struct brcmf_firmware_mapping brcmf_pcie_otp_fwnames[] =3D {
-+	BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* revision ID =
-3 */
-+};
+Make sure that all the async work is finished when we stop the status urb.
+
+To: Yunke Cao <yunkec@chromium.org>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Max Staudt <mstaudt@google.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v6:
+- Improve comments. (Thanks Laurent).
+- Use true/false instead of 1/0 (Thanks Laurent).
+- Link to v5: https://lore.kernel.org/r/20221212-uvc-race-v5-0-3db3933d1608@chromium.org
+
+Changes in v5:
+- atomic_t do not impose barriers, use smp_mb() instead. (Thanks Laurent)
+- Add an extra cancel_work_sync().
+- Link to v4: https://lore.kernel.org/r/20221212-uvc-race-v4-0-38d7075b03f5@chromium.org
+
+Changes in v4:
+- Replace bool with atomic_t to avoid compiler reordering.
+- First complete the async work and then kill the urb to avoid race (Thanks Laurent!)
+- Link to v3: https://lore.kernel.org/r/20221212-uvc-race-v3-0-954efc752c9a@chromium.org
+
+Changes in v3:
+- Remove the patch for dev->status, makes more sense in another series, and makes
+  the zero day less nervous.
+- Update reviewed-by (thanks Yunke!).
+- Link to v2: https://lore.kernel.org/r/20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org
+
+Changes in v2:
+- Add a patch for not kalloc dev->status
+- Redo the logic mechanism, so it also works with suspend (Thanks Yunke!)
+- Link to v1: https://lore.kernel.org/r/20221212-uvc-race-v1-0-c52e1783c31d@chromium.org
+---
+ drivers/media/usb/uvc/uvc_ctrl.c   |  3 +++
+ drivers/media/usb/uvc/uvc_status.c | 40 ++++++++++++++++++++++++++++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  1 +
+ 3 files changed, 44 insertions(+)
+
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index c95a2229f4fa..5160facc8e20 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -1442,6 +1442,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
+ 
+ 	uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+ 
++	if (dev->flush_status)
++		return;
 +
- #define BRCMF_PCIE_FW_UP_TIMEOUT		5000 /* msec */
-=20
- #define BRCMF_PCIE_REG_MAP_SIZE			(32 * 1024)
-@@ -2165,10 +2168,16 @@ brcmf_pcie_prepare_fw_request(struct brcmf_pciedev_=
-info *devinfo)
- 		{ ".clm_blob", devinfo->clm_name },
- 	};
-=20
--	fwreq =3D brcmf_fw_alloc_request(devinfo->ci->chip, devinfo->ci->chiprev,
--				       brcmf_pcie_fwnames,
--				       ARRAY_SIZE(brcmf_pcie_fwnames),
--				       fwnames, ARRAY_SIZE(fwnames));
-+	if (devinfo->otp.valid)
-+		fwreq =3D brcmf_fw_alloc_request(devinfo->ci->chip, devinfo->ci->chiprev=
-,
-+					       brcmf_pcie_otp_fwnames,
-+					       ARRAY_SIZE(brcmf_pcie_otp_fwnames),
-+					       fwnames, ARRAY_SIZE(fwnames));
-+	else
-+		fwreq =3D brcmf_fw_alloc_request(devinfo->ci->chip, devinfo->ci->chiprev=
-,
-+					       brcmf_pcie_fwnames,
-+					       ARRAY_SIZE(brcmf_pcie_fwnames),
-+					       fwnames, ARRAY_SIZE(fwnames));
- 	if (!fwreq)
- 		return NULL;
-=20
---=20
-2.34.1
+ 	/* Resubmit the URB. */
+ 	w->urb->interval = dev->int_ep->desc.bInterval;
+ 	ret = usb_submit_urb(w->urb, GFP_KERNEL);
+diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+index 7518ffce22ed..e457889345a3 100644
+--- a/drivers/media/usb/uvc/uvc_status.c
++++ b/drivers/media/usb/uvc/uvc_status.c
+@@ -6,6 +6,7 @@
+  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
+  */
+ 
++#include <asm/barrier.h>
+ #include <linux/kernel.h>
+ #include <linux/input.h>
+ #include <linux/slab.h>
+@@ -309,5 +310,44 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
+ 
+ void uvc_status_stop(struct uvc_device *dev)
+ {
++	struct uvc_ctrl_work *w = &dev->async_ctrl;
++
++	/* Prevent the asynchronous control handler from requeing the URB */
++	dev->flush_status = true;
++
++	/*
++	 * The barrier is needed so the flush_status change is visible to other
++	 * CPUs running the asynchronous handler before usb_kill_urb() is
++	 * called below.
++	 */
++	smp_mb();
++
++	/* If there is any status event on the queue, process it. */
++	if (cancel_work_sync(&w->work))
++		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
++
++	/* Kill the urb. */
+ 	usb_kill_urb(dev->int_urb);
++
++	/*
++	 * The URB completion handler may have queued asynchronous work. This
++	 * won't resubmit the URB as flush_status is set, but it needs to be
++	 * cancelled before returning or it could then race with a future
++	 * uvc_status_start() call.
++	 */
++	if (cancel_work_sync(&w->work))
++		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
++
++	/*
++	 * From this point, there are no events on the queue and the status URB
++	 * is dead, this is, no events will be queued until uvc_status_start()
++	 * is called.
++	 */
++	dev->flush_status = false;
++
++	/*
++	 * Write to memory the value of flush_status before uvc_status_start()
++	 * is called again.
++	 */
++	smp_mb();
+ }
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index df93db259312..6a9b72d6789e 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -560,6 +560,7 @@ struct uvc_device {
+ 	struct usb_host_endpoint *int_ep;
+ 	struct urb *int_urb;
+ 	u8 *status;
++	bool flush_status;
+ 	struct input_dev *input;
+ 	char input_phys[64];
+ 
 
+---
+base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
+change-id: 20221212-uvc-race-09276ea68bf8
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
