@@ -2,101 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6155C65AF10
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 506C965AF12
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjABJtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 04:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
+        id S232098AbjABJxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 04:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbjABJro (ORCPT
+        with ESMTP id S232277AbjABJwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 04:47:44 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3801210D8
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:47:41 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d15so29113872pls.6
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 01:47:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CBwV2mkPeuz+bYwsA3f6iWrfsv26cm3nPyYFJXVroCI=;
-        b=L1GQsIa5xrmYZGgAyxeLqivX7wIoYwpsiTB1C5osf6lUMQcy4xMYrCh5bGHv23iMUH
-         aYwJG9jkt3q3I/E9VTmUKmhjhcAOFwmjBu8KI8OAs8299HFjYj22ZZoV4GNm2FkfmqY0
-         eoCEB+pHOmT94kiaEoh6ga7TVlFzcWbSw+VSWFTqh+48i5TG5btjUSmi4KJnQGDImt29
-         K69yGGsiL2sgyDcwrIO+ifiX42lfgdUmp8xZdUbNACvUWoB66M9WeJibunHS792JBWaV
-         gux2K/UsBvaU7s/8ocP84EvfOO8RPG5OLAaUk6+l9NhVWHCgZ0tibJKPnkEdD0ZCiGmA
-         dkAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CBwV2mkPeuz+bYwsA3f6iWrfsv26cm3nPyYFJXVroCI=;
-        b=fGCMfcFlXDx4Y2s0wqvT6QWfk5LJyx/anGXezwNGP+UeolujRp1jO+y5XTOYmtSrro
-         oWCmqIO9ahRzHMZ2ABz6nrBshzcz1zGqf87m4L7NOdjXHscSH9xMZw+fyR7v00POPneo
-         3/WbAy1JOxvnqCUOrglIEIllJrVHE3aGcslSj4L6KY6f/lJHh+LNBfom8aMIcnKoS4ce
-         ASb3g1uSwlahdwkqo/gOy3f92dcRiCjxcn3NWWVIG2D0SvkmY6HXaDAePBvHrhwyl6qG
-         lX+0ykEllV2i1tsx02nM26orfLXv4r6EkNT7245TxtpHY0j+JMuwxIKglsgzU723aETW
-         n4DA==
-X-Gm-Message-State: AFqh2kr3gTO0rHlOCReo6h9CRm5jh3KntKQJ5styaFml5UofYjfMJFZF
-        6wzKauzlog8qVQppr0LQRfiWuoY50VF9vsHE
-X-Google-Smtp-Source: AMrXdXsyEajZruJ4/pBKSEHe8oH3jDHrxGO82t2KcRi3PuYbBkr7kDSxVYwEXn4mctn/u8h8fQzyrA==
-X-Received: by 2002:a05:6a20:3b0f:b0:af:e129:cb7 with SMTP id c15-20020a056a203b0f00b000afe1290cb7mr44296616pzh.52.1672652861448;
-        Mon, 02 Jan 2023 01:47:41 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id t66-20020a635f45000000b0046feb2754e5sm16607991pgb.28.2023.01.02.01.47.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 01:47:40 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ARM: ux500: Fix refcount leak in ux500_pm_domains_init
-Date:   Mon,  2 Jan 2023 13:47:33 +0400
-Message-Id: <20230102094733.3966825-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 2 Jan 2023 04:52:42 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5301311
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:50:58 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 3029oduU030521;
+        Mon, 2 Jan 2023 10:50:39 +0100
+Date:   Mon, 2 Jan 2023 10:50:39 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, hca@linux.ibm.com
+Subject: Re: [PATCH 2/5] nolibc: add support for s390
+Message-ID: <20230102095039.GD29287@1wt.eu>
+References: <20221209141939.3634586-1-svens@linux.ibm.com>
+ <20221209141939.3634586-3-svens@linux.ibm.com>
+ <20221227213530.GA6390@1wt.eu>
+ <yt9dilhpjqpr.fsf@linux.ibm.com>
+ <20230102084122.GB29287@1wt.eu>
+ <yt9dedsdjn6z.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUSPICIOUS_RECIPS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9dedsdjn6z.fsf@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_irq_find_parent() returns a node pointer with refcount incremented,
-We should use of_node_put() on it when not needed anymore.
-Add missing of_node_put() in the error path to avoid refcount leak.
+On Mon, Jan 02, 2023 at 10:33:08AM +0100, Sven Schnelle wrote:
+> Willy Tarreau <w@1wt.eu> writes:
+> 
+> > On Mon, Jan 02, 2023 at 09:17:04AM +0100, Sven Schnelle wrote:
+> >> The kernel compiles with z10 as minimum architecture, so
+> >> i'm leaning towards enforcing the same arch for nolibc. What do you think?
+> >
+> > Sure, as long as this works for most users, that's likely fine.
+> > Alternately, are there equivalent sequences of instructions that achieve
+> > the same on older architectures, and would that be relevant ?
+> 
+> Well, it's only one instruction that needs to be changed - we could also
+> use aghi to do the same thing. Maybe that's better.
+> 
+> Also i will add -m64 to the testing Makefile, it shouldn't hurt.
+> 
+> > One future improvement I'll need will be to store the envp value into a
+> > global "environ" variable, and run over it to catch the pointer that
+> > follows the NULL and save it into the "_auxv" variable. I've done it for
+> > all other archs here already:
+> >
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20221227-nolibc-weak-4
+> >
+> > I'll give it a try once I'm able to build and test your code, and may
+> > ask you for some help if I don't succeed in doing it. If you want to do
+> > it yourself, please have a look at the last commits adding environ and
+> > auxv to any arch of your choice, such as x86_64.
+> 
+> Ok, thanks for the Heads-Up. I'll take a look. I think i would send this
+> as a separate Patch, so we get the initial support done first if that's ok.
 
-Fixes: cd931dcfda5e ("ARM: ux500: Initial support for PM domains")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- arch/arm/mach-ux500/pm_domains.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Yes absolutely, that was also my intent. I have not yet submitted this
+series.
 
-diff --git a/arch/arm/mach-ux500/pm_domains.c b/arch/arm/mach-ux500/pm_domains.c
-index 427b9ac4af6c..01cae91854ca 100644
---- a/arch/arm/mach-ux500/pm_domains.c
-+++ b/arch/arm/mach-ux500/pm_domains.c
-@@ -65,8 +65,10 @@ int __init ux500_pm_domains_init(void)
- 		return -ENODEV;
- 
- 	genpd_data = kzalloc(sizeof(*genpd_data), GFP_KERNEL);
--	if (!genpd_data)
-+	if (!genpd_data) {
-+		of_node_put(np);
- 		return -ENOMEM;
-+	}
- 
- 	genpd_data->domains = ux500_pm_domains;
- 	genpd_data->num_domains = ARRAY_SIZE(ux500_pm_domains);
--- 
-2.25.1
-
+Thanks!
+Willy
