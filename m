@@ -2,100 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE2465AE3A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5477D65AE26
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbjABIiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 03:38:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S231909AbjABIc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 03:32:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbjABIiB (ORCPT
+        with ESMTP id S229742AbjABIcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 03:38:01 -0500
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD5FDB3;
-        Mon,  2 Jan 2023 00:38:01 -0800 (PST)
-Received: by mail-qt1-f170.google.com with SMTP id bp44so19416724qtb.0;
-        Mon, 02 Jan 2023 00:38:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jo2CI5pKv7C2jtNLeQsFhlozXL/lFYNzin08UvE0x2c=;
-        b=xbgtQV+wPHPwDIM93AuAvm6WX6cGoQ1F4KIkbImS7rbjacPg0vKFBq4dxC58yjG8Mx
-         nIUSNFYwJbl7uPNcHqSDllfZYyOy06mtvncHJc0UuhGQNBQ5JczHS9Df6w48u8eZUzSp
-         TniX6oFCsLk7mSKnIPEkCvDufW/Kl2ChooylfZBACcQhF3dfzfmp7XFudVJ0fgT1AW+w
-         olBLlM2oz9KUSJNOvkpVgkYNYhsRNWl0SRBaEvbOMlm3vNZ6L/+v1VkCVj4yBUy2T8Fm
-         06GLJ8CX/bmFj94jcWysm+KJ7cj4j1WgF9OwIub3Rqxa5Z4WDtNbYXZ7VInQqEDv3x9x
-         AJgA==
-X-Gm-Message-State: AFqh2kq6SDiiBGvB2sRSZkgkOpV7zzeXBk8WjBOEGdI/e7rV1FXYUmKh
-        02pkriV6eTwkcy3mdezcl0xJM5Cqp8oEUA==
-X-Google-Smtp-Source: AMrXdXvvdSLfHxpqthAsfcybCi8mKs5HRIENs/LRGUqFwoQGphvc9t711phFovUpA1CbhJ28EYPN5g==
-X-Received: by 2002:ac8:785:0:b0:3a7:eab2:e461 with SMTP id l5-20020ac80785000000b003a7eab2e461mr42688176qth.25.1672648680473;
-        Mon, 02 Jan 2023 00:38:00 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id fb25-20020a05622a481900b003a5430ee366sm15917725qtb.60.2023.01.02.00.38.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 00:38:00 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id e141so29641506ybh.3;
-        Mon, 02 Jan 2023 00:38:00 -0800 (PST)
-X-Received: by 2002:a25:d243:0:b0:702:90b4:2e24 with SMTP id
- j64-20020a25d243000000b0070290b42e24mr2730771ybg.365.1672648260480; Mon, 02
- Jan 2023 00:31:00 -0800 (PST)
+        Mon, 2 Jan 2023 03:32:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF2AC03
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:32:18 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0F5AC20897;
+        Mon,  2 Jan 2023 08:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672648336; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H75DFi9ruBZtmFkVkdPw0eEU2taX9Gg8XsLbPaQHEe4=;
+        b=MJPFsj0LM8oWnteJyW53u4CUKbsexOFgRTQV04ifwTmDySriYHMPDcHzvliisBgcGLUAws
+        SEnnKOo1R4BpiYbwI4kA9M2U7bNT5jvoSXF5OEBZ0CabhUxNWZyRqfBlHP7k5t8n0tbl5c
+        omMLmC4YweurOobMfALepySs0VpDzOs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672648336;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H75DFi9ruBZtmFkVkdPw0eEU2taX9Gg8XsLbPaQHEe4=;
+        b=TTQVax9agQi/0O0uIYCs4wv2f1250O6kked2hT2h/6j9UVQjlkSPohT5egknrZSKUmbTSe
+        kU26ydWBmJrQjTAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D75FC139C8;
+        Mon,  2 Jan 2023 08:32:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /JJuM4+WsmMPJQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 02 Jan 2023 08:32:15 +0000
+Message-ID: <7fb9b7cc-5c07-4b30-fa5e-6146b402f73f@suse.cz>
+Date:   Mon, 2 Jan 2023 09:32:15 +0100
 MIME-Version: 1.0
-References: <78b23407-bdd0-4b1b-bf6e-ecd4c00294ab@app.fastmail.com> <20221229113338.2436892-1-andrzej.hajda@intel.com>
-In-Reply-To: <20221229113338.2436892-1-andrzej.hajda@intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 2 Jan 2023 09:30:48 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVaq9Xg3HrqLo1x5SCuwtJBsczLjWAWmH=23ZtNf_e9hQ@mail.gmail.com>
-Message-ID: <CAMuHMdVaq9Xg3HrqLo1x5SCuwtJBsczLjWAWmH=23ZtNf_e9hQ@mail.gmail.com>
-Subject: Re: [PATCH v2] arch: rename all internal names __xchg to __arch_xchg
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [patch] mm, slab: periodically resched in drain_freelist()
+To:     David Rientjes <rientjes@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <b1808b92-86df-9f53-bfb2-8862a9c554e9@google.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <b1808b92-86df-9f53-bfb2-8862a9c554e9@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 12:34 PM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
-> __xchg will be used for non-atomic xchg macro.
->
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+On 12/28/22 07:05, David Rientjes wrote:
+> drain_freelist() can be called with a very large number of slabs to free,
+> such as for kmem_cache_shrink(), or depending on various settings of the
+> slab cache when doing periodic reaping.
+> 
+> If there is a potentially long list of slabs to drain, periodically
+> schedule to ensure we aren't saturating the cpu for too long.
+> 
+> Signed-off-by: David Rientjes <rientjes@google.com>
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> [m68k]
+Thanks, added to slab/for-6.2-rc3/fixes
 
-Gr{oetje,eeting}s,
+> ---
+>  mm/slab.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/mm/slab.c b/mm/slab.c
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -2211,6 +2211,8 @@ static int drain_freelist(struct kmem_cache *cache,
+>  		raw_spin_unlock_irq(&n->list_lock);
+>  		slab_destroy(cache, slab);
+>  		nr_freed++;
+> +
+> +		cond_resched();
+>  	}
+>  out:
+>  	return nr_freed;
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
