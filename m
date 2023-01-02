@@ -2,78 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32FF165B446
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277C265B448
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236425AbjABPdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:33:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S236254AbjABPdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236415AbjABPcz (ORCPT
+        with ESMTP id S236328AbjABPdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:32:55 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFC1A1BD
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:32:47 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id co23so26590114wrb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:32:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xEBNU+8ps8Gj7C3Ed4wMHWiE1HYBYnIcFkDiAaVR+W4=;
-        b=HGptD0JOXrLf4gskYQHcyvY8VV3m89e7Lguln2nBUKODrQ2XOi3vuncXMF1mQCc1t2
-         7c8ByKiSXHvjx/7zSM6Sk8xfP7iMAjkNl/ti+EMEImEoNDFjliybkpfVo79cXgb3eoCP
-         z/lD7D36lrdTENU0kgAe5vfjeTBb4B4FuwYR4n8HWpT/vuUbEDfKFFIVOBxPPcKPtBRa
-         dp67UsNzYawf8GgP/QF5rdF21PlBnSRWa4gwHd6HUKlPk01M2DJ+UOjtwHP7WT1Q8WOV
-         Vf8+kTxfgFOxDtF/qSuynsMsWR7bU/KXOJQ0SG6p45C9L2QikSV7CM0WkpxU4sjNikZL
-         DvZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xEBNU+8ps8Gj7C3Ed4wMHWiE1HYBYnIcFkDiAaVR+W4=;
-        b=V8TrPVBJ1I7fkzUOH9amjRnbu96wsUs/E5hY0tErQkOYp8T2Q3EJSuzjY9KHpcD6e2
-         sHxz5jrzTY5D3PVHF/BmFpnlqQiwTmMHkFnr2ZZ3k6XqhvzePn39pWUI7A/QNvOgULzH
-         tnQHw0casz5yQ08rI+TQlkp9ca5qXDoYYVTxJCIbxGGw3km8TTt3o1dwb0T7NUXbATJw
-         DHxQ1fxrD4NbWmxkad9/eU4sPY56cYbwZBSTqpO7x/5icvOqEYgX2pIMPbckelzatqPn
-         kJlsAvpDPCSaGxp/hqBdmWtVTWOJNrIEnQazHAS6D3KbH4QEQjq4kIjrj3//K4ECIoyX
-         75qw==
-X-Gm-Message-State: AFqh2kpEyavHaSnhujBxsXjwA1slXPBVKYkIkqUd8BWn4RHM8RGW0yBu
-        sTQny2Z92n4j64Lusp9RmqBYJQ==
-X-Google-Smtp-Source: AMrXdXt1f8rR0Ev0X21Md4F1QYaVganHgEXNcl9aqMGTs74G4OWnj3Y3/+LPz53L9A0j0GtxkFCsxQ==
-X-Received: by 2002:adf:ecc1:0:b0:26e:666:3a08 with SMTP id s1-20020adfecc1000000b0026e06663a08mr25607474wro.69.1672673566437;
-        Mon, 02 Jan 2023 07:32:46 -0800 (PST)
-Received: from localhost ([86.61.181.4])
-        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b002709e616fa2sm28760213wru.64.2023.01.02.07.32.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 07:32:45 -0800 (PST)
-Date:   Mon, 2 Jan 2023 16:32:44 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 00/19] rxrpc: More fixes for I/O thread
- conversion/SACK table expansion
-Message-ID: <Y7L5HECgjPgLUQXL@nanopsycho>
-References: <167179679960.2516210.10739247907156079872.stgit@warthog.procyon.org.uk>
- <2519213.1671798835@warthog.procyon.org.uk>
+        Mon, 2 Jan 2023 10:33:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87A39FE6;
+        Mon,  2 Jan 2023 07:33:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 546B260C2A;
+        Mon,  2 Jan 2023 15:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D47FC433EF;
+        Mon,  2 Jan 2023 15:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672673618;
+        bh=5pca/j7McOj+rsY0jP+gJ5eTrXjI71iO+uCVP0GTu/s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=So9KnVLK934hERY7amnug0/GLUWW74/J8OGHgxmbVmPGXQk/onUsL0SqXereLtRC5
+         YBCSulVwb+HsdkCKIk2goAc05bBrxq7u8e9CNLW4NQ1n2K8/VOLCK74QY9TEcHYg7/
+         tBYqUMCA+tJnTV7Zt6/lgwTjJvCCA6IjFn2AVO85Wl+Ud4n+ab8a9rQKnGClEhzz37
+         QBXEDi3Vuy5oVTUrR4rDYOik3HFjMlCP87Yl2e267QqKYIhXWhzqT5TGH5uI8AkH8c
+         Xpsr2Gh14ISo+7MZ2HVuWJTF9/oNlSrnr1YrUrF9emS0f3Z1rH5pH4RbXZKEobvFQr
+         nOYQXyjC7pAhw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6EBE340468; Mon,  2 Jan 2023 12:33:35 -0300 (-03)
+Date:   Mon, 2 Jan 2023 12:33:35 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Thomas Richter <tmricht@linux.ibm.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com
+Subject: Re: [PATCH] perf lock: Fix core dump in command perf lock contention
+Message-ID: <Y7L5T2IHdovfLgWp@kernel.org>
+References: <20221230102627.2410847-1-tmricht@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2519213.1671798835@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20221230102627.2410847-1-tmricht@linux.ibm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Dec 23, 2022 at 01:33:55PM CET, dhowells@redhat.com wrote:
->The patches should all have been labelled for net, not net-next.
+Em Fri, Dec 30, 2022 at 11:26:27AM +0100, Thomas Richter escreveu:
+> The test case perf lock contention dumps core on s390. Run the following
+> commands:
+>  # ./perf lock record -- ./perf bench sched messaging
+>  # Running 'sched/messaging' benchmark:
+>  # 20 sender and receiver processes per group
+>  # 10 groups == 400 processes run
+> 
+>      Total time: 2.799 [sec]
+>  [ perf record: Woken up 1 times to write data ]
+>  [ perf record: Captured and wrote 0.073 MB perf.data (100 samples) ]
+>  #
+>  # ./perf lock contention
+>  Segmentation fault (core dumped)
+>  #
+> 
+> The function call stack is lengthy, here are the top 5 functions:
+>  # gdb ./perf core.24048
+>  GNU gdb (GDB) Fedora Linux 12.1-6.fc37
+>  Copyright (C) 2022 Free Software Foundation, Inc.
+>  Core was generated by `./perf lock contention'.
+>  Program terminated with signal SIGSEGV, Segmentation fault.
+>  #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,
+>          addr=1789230) at util/machine.c:3356
+>          3356 machine->sched.text_end = kmap->unmap_ip(kmap, sym->start);
+> 
+>  (gdb) where
+>   #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,\
+>          addr=1789230) at util/machine.c:3356
+>   #1  0x000000000109f244 in callchain_id (evsel=0x30313e0,\
+>          sample=0x3ffea4f77d0) at builtin-lock.c:957
+>   #2  0x000000000109e094 in get_key_by_aggr_mode (key=0x3ffea4f7290,\
+>          addr=27758136, evsel=0x30313e0, sample=0x3ffea4f77d0) \
+>          at builtin-lock.c:586
+>   #3  0x000000000109f4d0 in report_lock_contention_begin_event \
+>          (evsel=0x30313e0, sample=0x3ffea4f77d0)
+>          at builtin-lock.c:1004
+>   #4  0x00000000010a00ae in evsel__process_contention_begin \
+>          (evsel=0x30313e0, sample=0x3ffea4f77d0)
+>          at builtin-lock.c:1254
+>   #5  0x00000000010a0e14 in process_sample_event (tool=0x3ffea4f8480, \
+>          event=0x3ff85601ef8, sample=0x3ffea4f77d0,
+>          evsel=0x30313e0, machine=0x3029e28) at builtin-lock.c:1464
+>           sample=0x3ffea4f77d0, evsel=0x30313e0, machine=0x3029e28) \
+> 	 at util/session.c:1523
+>   .....
+> 
+> The issue is in function machine__is_lock_function() in file
+> ./util/machine.c lines 3355:
+>    /* should not fail from here */
+>    sym = machine__find_kernel_symbol_by_name(machine, "__sched_text_end",
+> 		                             &kmap);
+>    machine->sched.text_end = kmap->unmap_ip(kmap, sym->start)
+> 
+> On s390 the symbol __sched_text_end is *NOT* in the symbol list and the
+> resulting pointer sym is set to NULL. The sym->start is then a NULL pointer
+> access and generates the core dump.
+> 
+> The reason why __sched_text_end is not in the symbol list on s390 is
+> simple:
+> When the symbol list is created at perf start up with function calls
+>   dso__load
+>   +--> dso__load_vmlinux_path
+>        +--> dso__load_vmlinux
+>             +--> dso__load_sym
+> 	         +--> dso__load_sym_internal (reads kernel symbols)
+> 		 +--> symbols__fixup_end
+> 		 +--> symbols__fixup_duplicate
+> 
+> The issue is in function symbols__fixup_duplicate(). It deletes all
+> symbols with have the same address. On s390
+>  # nm -g  ~/linux/vmlinux| fgrep c68390
+>  0000000000c68390 T __cpuidle_text_start
+>  0000000000c68390 T __sched_text_end
+>  #
+> two symbols have identical addresses and __sched_text_end is considered
+> duplicate (in ascending sort order) and removed from the symbol list.
+> Therefore it is missing and an invalid pointer reference occurs.
+> The code checks for symbol __sched_text_start and when it exists assumes
+> symbol __sched_text_end is also in the symbol table. However this is
+> not the case on s390.
+> 
+> Same situation exists for symbol __lock_text_start:
+> 0000000000c68770 T __cpuidle_text_end
+> 0000000000c68770 T __lock_text_start
+> This symbol is also removed from the symbol table but used in function
+> machine__is_lock_function().
+> 
+> To fix this and keep duplicate symbols in the symbol table, set
+> symbol_conf.allow_aliases to true. This prevents the removal of duplicate
+> symbols in function symbols__fixup_duplicate().
+> 
+> Output After:
+>  # ./perf lock contention
+>  contended total wait  max wait  avg wait    type   caller
+> 
+>         48   124.39 ms 123.99 ms   2.59 ms rwsem:W unlink_anon_vmas+0x24a
+>         47    83.68 ms  83.26 ms   1.78 ms rwsem:W free_pgtables+0x132
+>          5    41.22 us  10.55 us   8.24 us rwsem:W free_pgtables+0x140
+>          4    40.12 us  20.55 us  10.03 us rwsem:W copy_process+0x1ac8
+>  #
+> 
+> Fixes: cc2367eebb0c ("machine: Adopt is_lock_function() from builtin-lock.c")
 
-For "net"? Why? Net should only be targetted with bugfixes properly
-tagged by "Fixes:" tag.
+Humm, is that really the cset that introduces the problem? It just moves
+things around, the cset that introduced the is_lock_function() function,
+that assumed that __sched_text_end was always available was:
+
+commit 0d2997f750d1de394231bc22768dab94a5b5db2f
+Author: Namhyung Kim <namhyung@kernel.org>
+Date:   Wed Jun 15 09:32:22 2022 -0700
+
+    perf lock: Look up callchain for the contended locks
+
+---
+
+Right? Namhyung? Can you spot any problem in enabling duplicates as a
+fix?
+
+- Arnaldo
+
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+> ---
+>  tools/perf/builtin-lock.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+> index 718b82bfcdff..506c2fe42d52 100644
+> --- a/tools/perf/builtin-lock.c
+> +++ b/tools/perf/builtin-lock.c
+> @@ -1670,6 +1670,7 @@ static int __cmd_report(bool display_info)
+>  
+>  	/* for lock function check */
+>  	symbol_conf.sort_by_name = true;
+> +	symbol_conf.allow_aliases = true;
+>  	symbol__init(&session->header.env);
+>  
+>  	if (!data.is_pipe) {
+> @@ -1757,6 +1758,7 @@ static int __cmd_contention(int argc, const char **argv)
+>  
+>  	/* for lock function check */
+>  	symbol_conf.sort_by_name = true;
+> +	symbol_conf.allow_aliases = true;
+>  	symbol__init(&session->header.env);
+>  
+>  	if (use_bpf) {
+> -- 
+> 2.38.1
+
+-- 
+
+- Arnaldo
