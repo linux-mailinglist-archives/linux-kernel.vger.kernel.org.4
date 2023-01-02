@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E3065AFE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF2365AFE9
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbjABKuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
+        id S232698AbjABKv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbjABKuE (ORCPT
+        with ESMTP id S232626AbjABKvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:50:04 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2BAC4C;
-        Mon,  2 Jan 2023 02:50:02 -0800 (PST)
+        Mon, 2 Jan 2023 05:51:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD6062EC;
+        Mon,  2 Jan 2023 02:50:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 23B13CE0E30;
-        Mon,  2 Jan 2023 10:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E8FC433D2;
-        Mon,  2 Jan 2023 10:49:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05FA360ECA;
+        Mon,  2 Jan 2023 10:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B886C433F1;
+        Mon,  2 Jan 2023 10:50:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672656599;
-        bh=BuamJpxz7DXOVC9l0PQaBn/iD8PRHWXgD7UEhNzgLBA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FUCQAJpVkdxq7InQe+EFb+dA4UgvMdt6Ust1q4eodZdZDdJ/cCl6QJPQHfXNmbwkS
-         tdx2IYZAS+Z4g0HJIO4jsJQ/43yL5KT3Mg+ZYagb5BiZ+mSdPVxvce9qo6yMwwl5Jy
-         sQmD5m2PEXvBCGfLZG202kpYcJv+g/38fWaeRfy1JJcWA0YuEJDNHZ2D3xeFQUVX1G
-         gdxE31Z+PjWPSi7zss5Dn1ywkmERq91O2TpOxvyV0PZwPFEw1jYPDOPd5LSF/bbqf6
-         /Q2l6veHX5XeugmEZkLVOVIN7YsCD8WVw31itUWqOzoXaPPSxFMIViM0CR+0hRKHPg
-         n6k/Gm/qszO9Q==
-Received: by mail-lf1-f51.google.com with SMTP id bp15so41081740lfb.13;
-        Mon, 02 Jan 2023 02:49:59 -0800 (PST)
-X-Gm-Message-State: AFqh2kru0msKBzJJv9wOG54lOFhBUa2BimIvwvrRL/2lEBnjgY7sZSg6
-        26VrbDGabtOocgiXz5/a054TzKP+aCF4BeBOot0=
-X-Google-Smtp-Source: AMrXdXtMMKoFZhWJzoGgtUX9+6W+syj5zeF2H09icN9cF8KAMuFxzGzGmunpkUcrOtjZBGa/CyDmdlUb+fkB8aD4GR0=
-X-Received: by 2002:ac2:5dfa:0:b0:4b7:3a0:45d2 with SMTP id
- z26-20020ac25dfa000000b004b703a045d2mr2064999lfq.228.1672656597375; Mon, 02
- Jan 2023 02:49:57 -0800 (PST)
+        s=k20201202; t=1672656651;
+        bh=yGI5iSphXYrpFU5loWTxWRokLwgsxQu/6JAkUvh34PU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hYIqk8TZJJO/0wy1j2QwUfJf6OUr5w2y83+3+RzjpR7+sSGtUvn5Y/4kEcPOSHZxs
+         aHsVU0nWprWPKgVvVhrDvJmMGVVK8odvpal8sbB1yyiyGAtEhiPyZX3RDcF9yAYdIl
+         TWf+cpq+xgQ3i9NHNGQKa3ONjsq5tJezPY5Cd2nBht+4xxvD43BJy+JbMry4HUiCk6
+         b929EhSzAZJuxOIrPceDC1BvMMHvwuPv7TiS+GhX0L3l9ajZUUVzpugG1uoNgysclf
+         NZKPtQMtJs6o3eIchF46EyPXRL9/m7Xi6ZC9hYRZJZyMs/55tSDu1kBW7FxzXsKDYi
+         /k9YkFrs7EL1Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pCIPM-00026o-2X; Mon, 02 Jan 2023 11:51:08 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 0/6] arm64: dts: qcom: disable x13s sound + cleanups
+Date:   Mon,  2 Jan 2023 11:50:32 +0100
+Message-Id: <20230102105038.8074-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-References: <20221227150936.19242-1-dinghui@sangfor.com.cn>
-In-Reply-To: <20221227150936.19242-1-dinghui@sangfor.com.cn>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 2 Jan 2023 11:49:46 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFFA0SVa1_Zw+jT4Tqm2XynutN=T9BjaDxfaSR-ataoUg@mail.gmail.com>
-Message-ID: <CAMj1kXFFA0SVa1_Zw+jT4Tqm2XynutN=T9BjaDxfaSR-ataoUg@mail.gmail.com>
-Subject: Re: [PATCH] efi: fix userspace infinite retry read efivars after EFI
- runtime services page fault
-To:     Ding Hui <dinghui@sangfor.com.cn>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sai.praneeth.prakhya@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,42 +60,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Dec 2022 at 16:18, Ding Hui <dinghui@sangfor.com.cn> wrote:
->
-> After [1][2], if we catch exceptions due to EFI runtime service, we will
-> clear EFI_RUNTIME_SERVICES bit to disable EFI runtime service, then the
-> subsequent routine which invoke the EFI runtime service should fail.
->
-> But the userspace cat efivars through /sys/firmware/efi/efivars/ will stuck
-> and infinite loop calling read() due to efivarfs_file_read() return -EINTR.
->
-> The -EINTR is converted from EFI_ABORTED by efi_status_to_err(), and is
-> an improper return value in this situation, so let virt_efi_xxx() return
-> EFI_DEVICE_ERROR and converted to -EIO to invoker.
->
-> [1]: commit 3425d934fc03 ("efi/x86: Handle page faults occurring while running EFI runtime services")
-> [2]: commit 23715a26c8d8 ("arm64: efi: Recover from synchronous exceptions occurring in firmware")
->
-> Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+Apparently enabling the soundcard in the X13s devicetree was a bit
+premature so disable it for now until driver support is in place (e.g.
+to avoid probe failures during boot).
 
-Thanks for the fix, queued up in efi/urgent now.
+This series also clean up the sc8280xp sound nodes somewhat, for
+example, by making sure they are disabled by default and moving the
+wcd938x node which do not belong under 'soc' to the root node. Two other
+devicetrees had the wcd938x node under 'soc' and the fixes are also
+included here.
 
-> ---
->  drivers/firmware/efi/runtime-wrappers.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/firmware/efi/runtime-wrappers.c b/drivers/firmware/efi/runtime-wrappers.c
-> index 7feee3d9c2bf..1fba4e09cdcf 100644
-> --- a/drivers/firmware/efi/runtime-wrappers.c
-> +++ b/drivers/firmware/efi/runtime-wrappers.c
-> @@ -62,6 +62,7 @@ struct efi_runtime_work efi_rts_work;
->                                                                         \
->         if (!efi_enabled(EFI_RUNTIME_SERVICES)) {                       \
->                 pr_warn_once("EFI Runtime Services are disabled!\n");   \
-> +               efi_rts_work.status = EFI_DEVICE_ERROR;                 \
->                 goto exit;                                              \
->         }                                                               \
->                                                                         \
-> --
-> 2.17.1
->
+Johan
+
+
+Johan Hovold (6):
+  arm64: dts: qcom: sc8280xp-x13s: disable soundcard
+  arm64: dts: qcom: sc8280xp: disable sound nodes
+  arm64: dts: qcom: sc8280xp: clean up tx-macro node
+  arm64: dts: qcom: sc8280xp-x13s: fix wcd938x codec node
+  arm64: dts: qcom: sm8250-mtp: fix wcd938x codec node
+  arm64: dts: qcom: sm8450-hdk: fix wcd938x codec node
+
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 62 +++++++++++--------
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 18 +++++-
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts       | 40 ++++++------
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts       | 52 ++++++++--------
+ 4 files changed, 96 insertions(+), 76 deletions(-)
+
+-- 
+2.37.4
+
