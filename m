@@ -2,139 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF0565AF6A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7591F65AF73
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbjABKSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
+        id S232027AbjABKTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbjABKSR (ORCPT
+        with ESMTP id S232032AbjABKTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:18:17 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EDEF6F
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:18:16 -0800 (PST)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B5BC23EE91;
-        Mon,  2 Jan 2023 11:18:13 +0100 (CET)
-Date:   Mon, 2 Jan 2023 11:18:12 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Kalyan Thota <quic_kalyant@quicinc.com>
-Subject: Re: [RFC PATCH 3/7] drm/msm/dpu: Disable MDP vsync source selection
- on DPU 5.0.0 and above
-Message-ID: <20230102101812.2zo6z57mdhdjueqb@SoMainline.org>
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-4-marijn.suijten@somainline.org>
- <20221231215254.pqaegrmldufi7ugo@SoMainline.org>
- <853cbc6e-ae49-b2be-fb64-43f5171b74e8@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <853cbc6e-ae49-b2be-fb64-43f5171b74e8@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 2 Jan 2023 05:19:17 -0500
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE458FE0
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:19:15 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.12.77.33])
+        by mail-app2 (Coremail) with SMTP id by_KCgD3_fWfr7Jj3v2PCQ--.15715S4;
+        Mon, 02 Jan 2023 18:19:11 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     jan.kiszka@siemens.com, kbingham@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v3] scripts/gdb: fix 'lx-timerlist' on newer kernel
+Date:   Mon,  2 Jan 2023 18:19:11 +0800
+Message-Id: <20230102101911.12765-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgD3_fWfr7Jj3v2PCQ--.15715S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFW5JFW3KF48XF4rur4rKrg_yoW5JrW7pr
+        W5CFWakFs7tr4Fg39Fq3WIgr13Ga1vyrWfXFWDKFs8Ar9rG3y8Way2kFy5tFy7uFnIv39x
+        G39Yvwn8JF4UArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
+        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-02 10:30:58, Konrad Dybcio wrote:
-> 
-> 
-> On 31.12.2022 22:52, Marijn Suijten wrote:
-> > On 2022-12-31 22:50:02, Marijn Suijten wrote:
-> >> Since hardware revision 5.0.0 the TE configuration moved out of the
-> >> PINGPONG block into the INTF block, including vsync source selection
-> >> that was previously part of MDP top.  Writing to the MDP_VSYNC_SEL
-> >> register has no effect anymore and is omitted downstream via the
-> >> DPU/SDE_MDP_VSYNC_SEL feature flag.  This flag is only added to INTF
-> >> blocks used by hardware prior to 5.0.0.
-> >>
-> >> The code that writes to these registers in the INTF block will follow in
-> >> subsequent patches.
-> >>
-> >> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> >> ---
-> >>  .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 33 ++++++++++--
-> >>  .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  1 +
-> >>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c    | 52 +++++++++++++------
-> >>  3 files changed, 66 insertions(+), 20 deletions(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >> index 39d4b293710c..1cfe94494135 100644
-> >> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >> @@ -407,7 +407,7 @@ static const struct dpu_mdp_cfg msm8998_mdp[] = {
-> >>  	{
-> >>  	.name = "top_0", .id = MDP_TOP,
-> >>  	.base = 0x0, .len = 0x458,
-> >> -	.features = 0,
-> >> +	.features = BIT(DPU_MDP_VSYNC_SEL),
-> >>  	.highest_bank_bit = 0x2,
-> >>  	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
-> >>  			.reg_off = 0x2AC, .bit_off = 0},
-> >> @@ -436,7 +436,7 @@ static const struct dpu_mdp_cfg sdm845_mdp[] = {
-> >>  	{
-> >>  	.name = "top_0", .id = MDP_TOP,
-> >>  	.base = 0x0, .len = 0x45C,
-> >> -	.features = BIT(DPU_MDP_AUDIO_SELECT),
-> >> +	.features = BIT(DPU_MDP_AUDIO_SELECT) | BIT(DPU_MDP_VSYNC_SEL),
-> >>  	.highest_bank_bit = 0x2,
-> >>  	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
-> >>  			.reg_off = 0x2AC, .bit_off = 0},
-> >> @@ -512,6 +512,31 @@ static const struct dpu_mdp_cfg sm6115_mdp[] = {
-> >>  	},
-> >>  };
-> >>  
-> >> +static const struct dpu_mdp_cfg sdm8150_mdp[] = {
-> > 
-> > Sometimes it is only possible to spot such things _after_ sending,
-> > probably the thing that makes us human :)
-> > 
-> > sm8150_mdp*, not sdm.
-> > 
-> > - Marijn
-> > 
-> >> +	{
-> >> +	.name = "top_0", .id = MDP_TOP,
-> >> +	.base = 0x0, .len = 0x45C,
-> >> +	.features = BIT(DPU_MDP_AUDIO_SELECT),
-> >> +	.highest_bank_bit = 0x2,
-> >> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
-> >> +			.reg_off = 0x2AC, .bit_off = 0},
-> Keeping the hex values lowercase would be nice.
+After commit 511885d7061e ("lib/timerqueue: Rely on rbtree semantics for
+next timer"), the struct timerqueue_head changes the internal field hence
+causes the old lx-timerlist command keeps reporting errors.
 
-Ack, this was copied verbatim from sdm845_mdp but will cleanup as we go.
-Looks like this file has a mixed approach towards lower and uppercase,
-when does the normalization patch land?
+This fix adds a simple version comparison and necessary code for
+traversing timerqueue on a newer kernel. Moreover, it fixes some
+python 3.X compatibility bugs.
 
-- Marijn
+Test with python 2.7 and python 3.6
+Test with gdb 10.2
+
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+V1->V2: remove the support of old versions, fix typo and adjust the
+        commit message
+V2->V3: remove redundant re package
+ scripts/gdb/linux/timerlist.py | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
+index 071d0dd5a634..85072be2a196 100644
+--- a/scripts/gdb/linux/timerlist.py
++++ b/scripts/gdb/linux/timerlist.py
+@@ -43,8 +43,10 @@ def print_timer(rb_node, idx):
+ 
+ 
+ def print_active_timers(base):
+-    curr = base['active']['next']['node']
+-    curr = curr.address.cast(rbtree.rb_node_type.get_type().pointer())
++    # 511885d7061e ("lib/timerqueue: Rely on rbtree semantics for next timer")
++    leftmost = base['active']['rb_root']['rb_leftmost']
++    curr = leftmost.cast(rbtree.rb_node_type.get_type().pointer())
++
+     idx = 0
+     while curr:
+         yield print_timer(curr, idx)
+@@ -73,10 +75,9 @@ def print_cpu(hrtimer_bases, cpu, max_clock_bases):
+     ts = cpus.per_cpu(tick_sched_ptr, cpu)
+ 
+     text = "cpu: {}\n".format(cpu)
+-    for i in xrange(max_clock_bases):
++    for i in range(max_clock_bases):
+         text += " clock {}:\n".format(i)
+         text += print_base(cpu_base['clock_base'][i])
+-
+         if constants.LX_CONFIG_HIGH_RES_TIMERS:
+             fmts = [("  .{}   : {} nsecs", 'expires_next'),
+                     ("  .{}    : {}", 'hres_active'),
+@@ -165,7 +166,7 @@ def pr_cpumask(mask):
+         i -= 1
+         start = i * 2
+         end = start + 2
+-        chunks.append(buf[start:end])
++        chunks.append(str(buf[start:end]))
+         if i != 0 and i % 4 == 0:
+             chunks.append(',')
+ 
+@@ -184,7 +185,7 @@ class LxTimerList(gdb.Command):
+ 
+     def invoke(self, arg, from_tty):
+         hrtimer_bases = gdb.parse_and_eval("&hrtimer_bases")
+-        max_clock_bases = gdb.parse_and_eval("HRTIMER_MAX_CLOCK_BASES")
++        max_clock_bases = gdb.parse_and_eval("(int)HRTIMER_MAX_CLOCK_BASES")
+ 
+         text = "Timer List Version: gdb scripts\n"
+         text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(max_clock_bases)
+-- 
+2.17.1
+
