@@ -2,62 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142A365B297
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1698765B29A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjABNWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S232086AbjABNXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:23:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232631AbjABNWC (ORCPT
+        with ESMTP id S231716AbjABNXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:22:02 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CAFB66;
-        Mon,  2 Jan 2023 05:22:01 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id D997D89;
-        Mon,  2 Jan 2023 14:21:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1672665719;
+        Mon, 2 Jan 2023 08:23:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460B9634E
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 05:22:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672665750;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fFvEm4TS0m0oMTUcPbTdYrNtVbBi+eT7RCIgcBGxXUk=;
-        b=Q/IU0tbBUb3lVx+NKUnYufg7JfbR6kQfbqGofZoUs3fLrhEke7TsnNoS+yi/Yw/ONaYMC0
-        +Uhg+eP9/g+OHogid2o1V+cRdwce5mB0TTOrLf1f1XbuSffbZH9gMXajbTPDILPivYAfUf
-        2wBnuNuDueeqfFcX7BCTRLJIpCbcbWXYFVwEAbWzOaVtB3CiTxACymLERTnACkFM9J/6eo
-        nLxHYQ/xR5czBH0h8FipaWYKpc6pt0P7iBKXlqU2vEftiYYpidFsZuMcPdctpagFFkg054
-        K5gjlBhwiKRvUnlCCRoO+J2tm8eHHXezVOwK/ooDZHMfI1EGk2drC5Rj7nZDxw==
+        bh=E5JT1kd37IuRGEL37nkEW4w2qEUZx756Pop0OedkJgo=;
+        b=AMkFOpSv6jDdI0TFSZ7XpRcRTaKPc1WvXwkfH61CR1WvVQQ8ucFBk1rM2RCVdS7+B4Z0jQ
+        r8EQvZ4XybjJSZ9lgfw6nosbTUzRZvVVHaOb/8tD2qqU2HD/gzAaU2/rpfg9sBPh+dR8Sj
+        8dd4GrVI1UkWRY3J1XxTIcP/WAU++9w=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-201-lLlG-KwyO7WNKUm-7wN3ZQ-1; Mon, 02 Jan 2023 08:22:29 -0500
+X-MC-Unique: lLlG-KwyO7WNKUm-7wN3ZQ-1
+Received: by mail-wm1-f72.google.com with SMTP id l17-20020a05600c1d1100b003d9a145366cso4943599wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 05:22:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E5JT1kd37IuRGEL37nkEW4w2qEUZx756Pop0OedkJgo=;
+        b=zveQM29+OwSISaV0gZERPCZOcED6VK67vTqkP5+wDF6kwnlV943zZZG4bctWDzkjLi
+         ywEWWNqlGOHhGebZM1XzgWtBBudcxq/ZHHsFHbu8lCgOLZA1QpPetKpzkcnxZOBdl5pC
+         cm986Su6vOqoFa9qW+ocggTm99ldIfXjtJh5qaXyB4EPSXW9XmKmvc2DKYKEJ/gjIIRL
+         6BX+oVMcQ5kMDp+Hp/IAYzJxcMU11NJ4VyMYJjqUWvFa1nWM0Ij/Rum/yFA/HDPIegkv
+         gpnZh13yC9Kg+bo/Ab/t34Zfpuupwq6VCBzdfmV7F8FEavOViyRu24SDHpsPR62ZFuda
+         31zA==
+X-Gm-Message-State: AFqh2krvlMcJQoSfpNLpODtw/jlmNMVXOZ+6azo90nbyzTlrHTFsaLrx
+        3Q3nG2M09i0In5XaZ4FUVRhJLfEOBgXt27CYKHbBUjkSTa9LKqlFMMeKkZHnDpVqeAaXL0A8Mgh
+        2sNx63MHYwQmidjxIUUzCh4uQ
+X-Received: by 2002:a05:600c:3b29:b0:3cf:d18e:528b with SMTP id m41-20020a05600c3b2900b003cfd18e528bmr29332208wms.39.1672665747832;
+        Mon, 02 Jan 2023 05:22:27 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXt1MMvvBh79Ous21PvG7yDllmYOOsPELrmqqGxs09MXsS8a6IvY3cauQUjOIhzB4QrCR3A1cg==
+X-Received: by 2002:a05:600c:3b29:b0:3cf:d18e:528b with SMTP id m41-20020a05600c3b2900b003cfd18e528bmr29332197wms.39.1672665747575;
+        Mon, 02 Jan 2023 05:22:27 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:500:9382:2e5a:fea:8889? (p200300cbc703050093822e5a0fea8889.dip0.t-ipconnect.de. [2003:cb:c703:500:9382:2e5a:fea:8889])
+        by smtp.gmail.com with ESMTPSA id p19-20020a1c5453000000b003d2157627a8sm42233921wmi.47.2023.01.02.05.22.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 05:22:27 -0800 (PST)
+Message-ID: <d13ea810-e9a8-2741-11ce-5e20f1ba0334@redhat.com>
+Date:   Mon, 2 Jan 2023 14:22:26 +0100
 MIME-Version: 1.0
-Date:   Mon, 02 Jan 2023 14:21:59 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, tudor.ambarus@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        nicolas.ferre@microchip.com, robh+dt@kernel.org
-Subject: Re: [PATCH 1/8] spi: dt-bindings: Introduce spi-cs-setup-ns property
-In-Reply-To: <1ee9cf77-1ca0-6e4e-ba7d-896838bd71de@linaro.org>
-References: <20221117105249.115649-2-tudor.ambarus@microchip.com>
- <20221118141458.954646-1-michael@walle.cc> <Y3elIdM3Xz1H4kKk@sirena.org.uk>
- <28da9e33-57e8-7ac1-7e6c-13c297a945d6@gmail.com>
- <a2f58ad34ba74ff135852bc1e24da4d6@walle.cc>
- <1ee9cf77-1ca0-6e4e-ba7d-896838bd71de@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <5ed88e3c3c105fdce1bb16ff16cde32f@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 0/4] return EINVAL for illegal user memory range
+Content-Language: en-US
+To:     Wupeng Ma <mawupeng1@huawei.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kuleshovmail@gmail.com, aneesh.kumar@linux.ibm.com,
+        clameter@sgi.com
+References: <20221205034108.3365182-1-mawupeng1@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221205034108.3365182-1-mawupeng1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,67 +84,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>>> +  spi-cs-setup-ns:
->>>>>> +    description:
->>>>>> +      Delay in nanosecods to be introduced by the controller 
->>>>>> after CS is
->>>>>> +      asserted.
->>>> 
->>>>> Does this need a type as the spi-cs-setup-ns is apparently just 
->>>>> 16bit? At
->>>>> least the driver uses it that way.
->>>> 
->>>>> But IMHO this should just be a normal uint32 value to be consistent 
->>>>> with
->>>>> all the other properties. Also the max value with 16bit will be 
->>>>> 'just'
->>>>> 65us.
->>>> 
->>>> Making it 32 bit does seem safer.  I've applied the series
->>> 
->>> Thanks. There are few implications to consider before making this 
->>> prop a
->>> u32, and I'd like to check them with you.
->>> 
->>> struct spi_delay will have to be updated to have a u32 value, now 
->>> it's a
->>> u16. This means that we'll have to update spi_delay_to_ns() to either
->>> return a s64 or to add a u64 *delay parameter to the function so that 
->>> we
->>> can still handle the conversions from usecs and the error codes in 
->>> the
->>> SPI_DELAY_UNIT_SCK case. Then all its callers have to be updated to
->>> consider the u64 delay.
->> 
->> I was talking about the device tree property. Even if the driver 
->> continue
->> to use just 16bit, the DT property could be 32bit IMHO.
+On 05.12.22 04:41, Wupeng Ma wrote:
+> From: Ma Wupeng <mawupeng1@huawei.com>
 > 
-> but then you'll have an implicit cast to u16 at:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/spi/spi.c#n2314
-> which will make the u32 dt prop misleading.
-
-Nothing will prevent you from checking for a valid range and return an
-error :)
-But I agree, that converting the u16 to u32 in the driver is probably
-the better way.
-
->> At the moment, the schema says its 32bit (if I'm not mistaken, because
->> it doesn't have a type), but the driver will parse the property as
->> 16bit and your device tree also has this /bits/ thingy. So regardless
->> if the driver is using 16bit or 32bit for the value, there seems to be
->> a discrepancy between the schema and the devicetree (and driver).
+> While testing mlock, we have a problem if the len of mlock is ULONG_MAX.
+> The return value of mlock is zero. But nothing will be locked since the
+> len in do_mlock overflows to zero due to the following code in mlock:
 > 
-> okay, thanks for pointing it out. Let's decide how we fix this.
+>    len = PAGE_ALIGN(len + (offset_in_page(start)));
 > 
->> 
->> All other properties are just the regular 32bit values, thus I was
->> suggesting to change the DT property to 32bit.
+> However this problem appear in multiple syscalls.
 > 
-> If we want to change the dt prop to 32bit I think we should also handle
-> the parsed value as u32, not as u16.
+> Since TASK_SIZE is the maximum user space address. The start or len of
+> mlock shouldn't be bigger than this. Function access_ok can be used to
+> check this issue, so return -EINVAL if bigger.
 
-Strictly speaking, your device tree is wrong, because the schema
-already says it's 32bit.
+I assume this makes sure that what we document holds:
 
--michael
+EINVAL (mlock(),  mlock2(),  and  munlock()) The result of the addition
+	addr+len was less than addr (e.g., the addition may have
+	resulted in an overflow).
+
+So instead of adding access_ok() checks, wouldn't be the right think to 
+do checking for overflows?
+
+
+-- 
+Thanks,
+
+David / dhildenb
+
