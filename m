@@ -2,138 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFAB65B393
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8279F65B399
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 15:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236062AbjABOtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 09:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
+        id S236014AbjABOuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 09:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232942AbjABOss (ORCPT
+        with ESMTP id S233059AbjABOtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 09:48:48 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84966465;
-        Mon,  2 Jan 2023 06:48:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672670903; bh=cUUTc8Fvgowvs3kRn4xQ5Ko18CAYd2NLfEAuO5+9Il0=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=sD1gBsVq08UZG71PKBLJYyt449w8RFoLAtADqA7lKzYYXIiP4q1IrLsA5nsx/puCh
-         PbP1yLh92PZwboVF6SaxJ7E8Z8XfthrzMjOyHyKrShzBin83Pw1HHow18vG8r4NTZy
-         wwRq7pVdKlZMMHb/+CbolLS51iG0mTestS/4NWMMs4AZHVffTQrA9wtfCzMM0lqOcT
-         BEUCVlutiiFB2krRoHQJuTKTEWQhksOw/IMNR02m2b4TV70Yxr/W9ulk0zT7wNLWm4
-         jthcfUy3hDU+57pjRq8sAWQAYlTt9SQdB7D4QDQskV4H4+jcRQCFflgApd6EDXNomR
-         pHT/4H+IRSLDg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.130.137]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MN5if-1pVG2U07HB-00J0eB; Mon, 02
- Jan 2023 15:48:23 +0100
-Message-ID: <17a2982e-f4e8-f8bd-db8f-dd14bf27b4e7@gmx.de>
-Date:   Mon, 2 Jan 2023 15:48:21 +0100
+        Mon, 2 Jan 2023 09:49:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1066C8FE9
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 06:49:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91670B80C70
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 14:49:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7CFC433D2
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 14:49:38 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="b3JaSxn/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672670976;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FySLmRk1CkpgiQXUD8lcmRXk9llYMvDDaPAibWTajeQ=;
+        b=b3JaSxn/394OVlfIVr4GJ9ri+uzzEpn/2clCA993P0SH4RTcQhJ3W5tNKdwX86abKiXGvj
+        /SzHaIzPqU2bZM93hnRbl9iehspePjGHlxEvddtxdaXLvbnqTwimF+JZiH2xZolZ4YjYzE
+        GW3FENg1QYW52tYXgYn+7BkqYXL5ztQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 90c8ebd6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 2 Jan 2023 14:49:36 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id 186so30407027ybe.8
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 06:49:36 -0800 (PST)
+X-Gm-Message-State: AFqh2krVBQp57h9/SfiSnTg1y71N0YyEYwISTLxRCp6oib3W7f33H4PM
+        bPMczeTWjqahBMdO1hhwQOuB3n+9DPXbpObtHkw=
+X-Google-Smtp-Source: AMrXdXvCDC5wHxYTibm+MBKaGB0oa20gxNOVCCLis096x+gcsolduEJCPyou6LBDB9VJ/i7BPsOkFbv+bUG7r80TB2s=
+X-Received: by 2002:a25:d243:0:b0:702:90b4:2e24 with SMTP id
+ j64-20020a25d243000000b0070290b42e24mr2794003ybg.365.1672670974668; Mon, 02
+ Jan 2023 06:49:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>, "Z. Liu" <liuzx@knownsec.com>
-Cc:     it+linux-fbdev@molgen.mpg.de, Rich Felker <dalias@libc.org>,
-        stable@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230102135731.6487-1-pmenzel@molgen.mpg.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230102135731.6487-1-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:8eWfw4Opnqkzxf+1Ev79iySp2RH8FDZc46AiwNc3lV8sHnsUFte
- xLvNG2vJLuvr5TD3q2zUoVnuIq62vEur8NRiJq7o4pib6toIMrTia5S6gTslmF9e9CS4Kkj
- HoI5n5TbXYIczVViYf5cM7e/w7ekz6GH2UW0641AnDFWTzy5+QEwQ/R+2lpRDKrnXP9YFlS
- 0mt/7r2YOVGS30eLPCKhA==
-UI-OutboundReport: notjunk:1;M01:P0:z6gzU0P4Vkk=;dQYG9VM4sTyZ0ppmp5CCsi7GSut
- GDuitMne9sLdvy5EKVAwni+274uOK1jvMkCfssSsjpDCpi6YHvBXUoFGQVaT/QEYP0IFyGGae
- Fh2UXq9hv2FXUFokyhxP6OmbELq6G5IotwKXCHszdU9o9zrR+Cu/USPuaftynrVEA+LdpOv8M
- QrFtSHKUF4Bz7ZmAZiVBE581Yn8P/0Nf2khlAu8lP283SeeCXrljHkYKsiV9deECUZSnYQAXG
- Pz0UzlJoFKLGMO/LaQQ8AfYCgn7M0UFSlDDC2AtS/u4NNjHmMkXoi88YALov9VEiqwhTmMygb
- 0zj6knzAXWC35VkDnS0e7hFbF5f0Wlw1HwFDxsJLDMTYvuVu+VVlJkzaIDvxQW5/d5g4m60EP
- WNJKvPath2U1ux8m9zvBPgQOxrJA1G15KG994xSAMX1orJ6sKFjyKmbTV8k+wpEvfdFyB0K94
- 8V4R6bm9MXAB6RGQ3KJhgVnrxCr4xlTXefRxwCQzTD+iZ9pI4Jp/xbCMmEBNcNZvu8TQzp+ZM
- rtsJ75tShkzjvJ6HJkMhe3wjTG+vWnnVYGy086+iR4b6un5nu1OtPeCILB2fg/i8NJodIKAaV
- YJRACTjwiQr9wfgm5Swh1tFo6Sauv4oLp4HV5cAsOREDkXrHX4mZZ6ZoObWM1gBWlKGV9xAcY
- VXIbLv+y6y88/8E5+c6V5qsdSf7bNgPqkTsOJxAmx229irjZxSXI0nascGN/ceffp//chH/pZ
- ck0vA7oYg6L6AZeGp47MPzBy30LRRs2dg0t7TXyqwFeBzFKDD6tdJ4Ix+4Uxa4hcyzBysdZSh
- kEsw1UzKOOhcVCD/5W2hR7pwVVO79jBs5hxciNYe1zTMdGXV18cQYWDhJkGycY/4FMGguvYDa
- HGQwEcdA3cISEpcezc1sE1IW2VoGozI7w93+vS0VYCV31i/DC1QaEsCWDBgR4MVjQy/j0JNsm
- 0cvPRuBttroAuvFizkPwr2NbmPY=
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Y5oy0vwZQAwzkDkr@zx2c4.com> <20221214203454.337299-1-Jason@zx2c4.com>
+ <20221214213015.GA16072@ranerica-svr.sc.intel.com> <Y5zRTqDmjeJzjeFf@zx2c4.com>
+In-Reply-To: <Y5zRTqDmjeJzjeFf@zx2c4.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 2 Jan 2023 15:49:23 +0100
+X-Gmail-Original-Message-ID: <CAHmME9ojkPUV-acD8o1rFsfR+f7URG8PW44GUUt8WUK0O=KD6w@mail.gmail.com>
+Message-ID: <CAHmME9ojkPUV-acD8o1rFsfR+f7URG8PW44GUUt8WUK0O=KD6w@mail.gmail.com>
+Subject: Re: [PATCH v2] x86: lib: Separate instruction decoder MMIO type from
+ MMIO trace
+To:     bp@alien8.de
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/2/23 14:57, Paul Menzel wrote:
-> Commit 62d89a7d49af ("video: fbdev: matroxfb: set maxvram of vbG200eW to
-> the same as vbG200 to avoid black screen") accidently decreases the
-> maximum memory size for the Matrox G200eW (102b:0532) from 8 MB to 1 MB
-> by missing one zero. This caused the driver initialization to fail with
-> the messages below, as the minimum required VRAM size is 2 MB:
->
->       [    9.436420] matroxfb: Matrox MGA-G200eW (PCI) detected
->       [    9.444502] matroxfb: cannot determine memory size
->       [    9.449316] matroxfb: probe of 0000:0a:03.0 failed with error -=
-1
->
-> So, add the missing 0 to make it the intended 16 MB. Successfully tested=
- on
-> the Dell PowerEdge R910/0KYD3D, BIOS 2.10.0 08/29/2013, that the warning=
- is
-> gone.
->
-> While at it, add a leading 0 to the maxdisplayable entry, so it=E2=80=99=
-s aligned
-> properly. The value could probably also be increased from 8 MB to 16 MB,=
- as
-> the G200 uses the same values, but I have not checked any datasheet.
->
-> Note, matroxfb is obsolete and superseded by the maintained DRM driver
-> mga200, which is used by default on most systems where both drivers are
-> available. Therefore, on most systems it was only a cosmetic issue.
->
-> Fixes: 62d89a7d49af ("video: fbdev: matroxfb: set maxvram of vbG200eW to=
- the same as vbG200 to avoid black screen")
-> Link: https://lore.kernel.org/linux-fbdev/972999d3-b75d-5680-fcef-6e6905=
-c52ac5@suse.de/T/#mb6953a9995ebd18acc8552f99d6db39787aec775
-> Cc: it+linux-fbdev@molgen.mpg.de
-> Cc: Z. Liu <liuzx@knownsec.com>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Hello Borislav,
 
-applied this v1 version to the fbdev git tree.
-Thanks!
-Helge
-
-
-> ---
->   drivers/video/fbdev/matrox/matroxfb_base.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri, Dec 16, 2022 at 9:13 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
-> diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/=
-fbdev/matrox/matroxfb_base.c
-> index 0d3cee7ae7268..a043a737ea9f7 100644
-> --- a/drivers/video/fbdev/matrox/matroxfb_base.c
-> +++ b/drivers/video/fbdev/matrox/matroxfb_base.c
-> @@ -1378,8 +1378,8 @@ static struct video_board vbG200 =3D {
->   	.lowlevel =3D &matrox_G100
->   };
->   static struct video_board vbG200eW =3D {
-> -	.maxvram =3D 0x100000,
-> -	.maxdisplayable =3D 0x800000,
-> +	.maxvram =3D 0x1000000,
-> +	.maxdisplayable =3D 0x0800000,
->   	.accelID =3D FB_ACCEL_MATROX_MGAG200,
->   	.lowlevel =3D &matrox_G100
->   };
+> On Wed, Dec 14, 2022 at 01:30:15PM -0800, Ricardo Neri wrote:
+> > On Wed, Dec 14, 2022 at 01:34:54PM -0700, Jason A. Donenfeld wrote:
+> > > Both mmiotrace.h and insn-eval.h define various MMIO_ enum constants.
+> > > Rename the insn ones to have a INSN_ prefix, so that the headers can be
+> > > used from the same source file.
+> > >
+> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> >
+> > FWIW: Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+>
+> Thanks. Any chance this can get in for 6.2?
 
+Do you think you could queue up this patch for 6.2 as a fix? It has
+basically no chance of breakage and does fix a real symbol clash.
+
+https://lore.kernel.org/lkml/20221214203454.337299-1-Jason@zx2c4.com/
+
+Thanks,
+Jason
