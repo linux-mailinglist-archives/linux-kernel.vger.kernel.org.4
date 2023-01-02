@@ -2,300 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABC765B51E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500F565B521
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbjABQdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:33:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S236414AbjABQe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbjABQdb (ORCPT
+        with ESMTP id S232103AbjABQe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:33:31 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900C1260A
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:33:30 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 077A75C00E6;
-        Mon,  2 Jan 2023 11:33:30 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 02 Jan 2023 11:33:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672677210; x=
-        1672763610; bh=lW9PYRq8hEEy7w1UqEtS4QDO9L0cWWs67YIW+dtEdaY=; b=B
-        RkpY+kAF2QTi0ZgltGOQaeJDhKWQLffArckWBtJWTklXFYJnlUgij7zXdC1uJBQM
-        0HEiAFbgIp/z/kXY2zmJEpAAg3rPsI9r3dGP/2qbKnYwPpYFkD9ph2auBcG++9BS
-        ylm2QQWgW3SIZDapmFdP5ZV1PcBWfsh9i9tFh+ue3KaPVNOfSrbqGsxNb4b/wXuo
-        FBSxQ+B0lgLLUcnSRAVZmU3M6h04YSFv1tHe1KAd1nv05N0scujtpPTkV521thN9
-        7Q1inUaEHMN3LHQKstqg60FKGiPz0171z2/KmuK2bxVxEFkovAsg5refAv37dFDm
-        wTWz9AiUH8oDszaLvWSig==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672677210; x=
-        1672763610; bh=lW9PYRq8hEEy7w1UqEtS4QDO9L0cWWs67YIW+dtEdaY=; b=M
-        b+cqviA9jseC+d/2FEVkSsWh89W63Pkp7wcpou8Unkx+hYZc2nnvCLVz7d+CBAaS
-        VXjNaEaJPZdsPILrLMmK7WE0GEYKn2PkQpM2OrWt2I/OwnwBRQg8rhoKWHyWO2ta
-        cu+pn/X4vxps37j12qDnxp3+pL9IpGBSsc6LkLxOzd5HlufJ59bew7KNNTlCa3yG
-        REBEq/Hw/xPsX9U0rDQe3cCOJ5z05wKpNerwh8dDG5dqaNKku4DZiJiZe11ruJbR
-        Unw9lZtRBSfK31xMWsR25X8bNGKTXKbJRy39/BezIzcRfCWfTFdiCTiHuol9IcEP
-        sgZ4wB+3ITjMCAaK2gWfg==
-X-ME-Sender: <xms:WQezYweTvXtjB1-0bxZCC5gpgRsaVWE3fffpv2EiKs9jMaPpnbpZbg>
-    <xme:WQezYyMAOubGvRpN_GUVt2-UZnVyl2ARTVJ8mFNsmIjr4SsS7z76iH96yV-XJMfvY
-    qC-jROxzt0FMoac8A>
-X-ME-Received: <xmr:WQezYxjZdZTjAQxdqVWPV2sFwGdOCbDMuSs1q0r1A04TjuJH_L16_RMX6DIQWreuDHCkOkYtmZuCNxakU9AlxGB9tT1oFW6PUVpeuX-dj7ftUiKRy2pyEQnMJA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedvgdeltdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgfdtgfelffekveelvdeuteetfefgleelhfejteeiuefhheetueef
-    fefgheefveefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:WQezY19rPE58Eo6mreQdNkjbSxcaVE-723Z31FXgwISYRoUZWUckog>
-    <xmx:WQezY8vVCDLqiier_tpnhHfq_TIKdUZb_biotPYRKIt7zV_zT95uaQ>
-    <xmx:WQezY8EF4t9-v3rq5zv-sNNyA7BAgBTVh4-nkF9ChMcygEivskPAdg>
-    <xmx:WgezY-IhT7pcbj65kUwLOaW4pnZmyxOvcoNFZE-li8kPKr_JwZwAww>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 Jan 2023 11:33:29 -0500 (EST)
-Message-ID: <91a7f7c0-9be3-9cac-c2d8-a34563bc4410@sholland.org>
-Date:   Mon, 2 Jan 2023 10:33:28 -0600
+        Mon, 2 Jan 2023 11:34:26 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481FB26FB;
+        Mon,  2 Jan 2023 08:34:23 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id c075bf340641f3c6; Mon, 2 Jan 2023 17:34:21 +0100
+Received: from kreacher.localnet (unknown [213.134.163.167])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 42A2928C0499;
+        Mon,  2 Jan 2023 17:34:20 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power resources support D3
+Date:   Mon, 02 Jan 2023 17:34:19 +0100
+Message-ID: <8191575.T7Z3S40VBb@kreacher>
+In-Reply-To: <20221121221742.GA137841@bhelgaas>
+References: <20221121221742.GA137841@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 7/7] mtd: rawnand: sunxi: Precompute the ECC_CTL register
- value
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20221229181526.53766-1-samuel@sholland.org>
- <20221229181526.53766-8-samuel@sholland.org> <20230102103009.00486aa3@xps-13>
-From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <20230102103009.00486aa3@xps-13>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.167
+X-CLIENT-HOSTNAME: 213.134.163.167
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrjedvgdeltdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudeifedrudeijeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrdduieejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlvghnsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomhdp
+ rhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepufgrnhhjuhdrofgvhhhtrgesrghmugdrtghomhdprhgtphhtthhopehluhhkrghsseifuhhnnhgvrhdruggvpdhrtghpthhtoheprhgrfhgrvghlrdhjrdifhihsohgtkhhisehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquèl,
+On Monday, November 21, 2022 11:17:42 PM CET Bjorn Helgaas wrote:
+> On Mon, Nov 21, 2022 at 03:33:00PM +0100, Rafael J. Wysocki wrote:
+> > On Friday, November 18, 2022 10:13:39 PM CET Rafael J. Wysocki wrote:
+> > > On Fri, Nov 18, 2022 at 9:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > >
+> > > > Hi Rafael,
+> > > >
+> > > > Sorry, I'm still confused (my perpetual state :)).
+> > > 
+> > > No worries, doing my best to address that.
+> > > 
+> > > > On Fri, Nov 18, 2022 at 02:16:17PM +0100, Rafael J. Wysocki wrote:
+> > > > > On Thu, Nov 17, 2022 at 11:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > On Thu, Nov 17, 2022 at 06:01:26PM +0100, Rafael J. Wysocki wrote:
+> > > > > > > On Thu, Nov 17, 2022 at 12:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > > On Wed, Nov 16, 2022 at 01:00:36PM +0100, Rafael J. Wysocki wrote:
+> > > > > > > > > On Wed, Nov 16, 2022 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > > > > On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
+> > > > > > > > > > > On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
+> > > > > > > > > > > > > On 11/11/2022 11:41, Bjorn Helgaas wrote:
+> > > > > > > > > > > > > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
+> > > > > > > > > > > > > > > Firmware typically advertises that ACPI devices that represent PCIe
+> > > > > > > > > > > > > > > devices can support D3 by a combination of the value returned by
+> > > > > > > > > > > > > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > `acpi_pci_bridge_d3` looks for this combination but also contains
+> > > > > > > > > > > > > > > an assumption that if an ACPI device contains power resources the PCIe
+> > > > > > > > > > > > > > > device it's associated with can support D3.  This was introduced
+> > > > > > > > > > > > > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
+> > > > > > > > > > > > > > > D3 if power managed by ACPI").
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Some firmware configurations for "AMD Pink Sardine" do not support
+> > > > > > > > > > > > > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
+> > > > > > > > > > > > > > > port used for tunneling. The PCIe device will still be opted into
+> > > > > > > > > > > > > > > runtime PM in the kernel [2] because of the logic within
+> > > > > > > > > > > > > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
+> > > > > > > > > > > > > > > device contains power resources.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Wait.  Is this as simple as just recognizing that:
+> > > > > > > > > > > >
+> > > > > > > > > > > >   _PS0 means the OS has a knob to put the device in D0, but it doesn't
+> > > > > > > > > > > >   mean the device can wake itself from a low-power state.  The OS has
+> > > > > > > > > > > >   to use _S0W to learn the device's ability to wake itself.
+> > > > > > > > > > >
+> > > > > > > > > > > It is.
+> > > > > > > > > >
+> > > > > > > > > > Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
+> > > > > > > > > > web page [1] says it identifies Root Ports capable of handling hot
+> > > > > > > > > > plug events while in D3.  That sounds kind of related to _S0W: If _S0W
+> > > > > > > > > > says "I can wake myself from D3hot and D3cold", how is that different
+> > > > > > > > > > from "I can handle hotplug events in D3"?
+> > > > > > > > >
+> > > > > > > > > For native PME/hot-plug signaling there is no difference.  This is the
+> > > > > > > > > same interrupt by the spec after all IIRC.
+> > > > > > > > >
+> > > > > > > > > For GPE-based signaling, though, there is a difference, because GPEs
+> > > > > > > > > can only be used directly for wake signaling (this is related to
+> > > > > > > > > _PRW).  In particular, the only provision in the ACPI spec for device
+> > > > > > > > > hot-add are the Bus Check and Device Check notification values (0 and
+> > > > > > > > > 1) which require AML to run and evaluate Notify() on specific AML
+> > > > > > > > > objects.
+> > > > > > > > >
+> > > > > > > > > Hence, there is no spec-defined way to tell the OS that "something can
+> > > > > > > > > be hot-added under this device while in D3 and you will get notified
+> > > > > > > > > about that".
+> > > > > > > >
+> > > > > > > > So I guess acpi_pci_bridge_d3() looks for:
+> > > > > > > >
+> > > > > > > >   - "wake signaling while in D3" (_S0W) and
+> > > > > > > >   - "notification of hotplug while in D3" ("HotPlugSupportInD3")
+> > > > > > > >
+> > > > > > > > For Root Ports with both those abilities (or bridges below such Root
+> > > > > > > > Ports), we allow D3, and this patch doesn't change that.
+> > > > > > > >
+> > > > > > > > What this patch *does* change is that all bridges with _PS0 or _PR0
+> > > > > > > > previously could use D3, but now will only be able to use D3 if they
+> > > > > > > > are also (or are below) a Root Port that can signal wakeup
+> > > > > > > > (wakeup.flags.valid) and can wakeup from D3hot or D3cold (_S0W).
+> > > > > > > >
+> > > > > > > > And this fixes the Pink Sardine because it has Root Ports that do
+> > > > > > > > Thunderbolt tunneling, and they have _PS0 or _PR0 but their _S0W says
+> > > > > > > > they cannot wake from D3.  Previously we put those in D3, but they
+> > > > > > > > couldn't wake up.  Now we won't put them in D3.
+> > > > > > > >
+> > > > > > > > I guess there's a possibility that this could break or cause higher
+> > > > > > > > power consumption on systems that were fixed by c6e331312ebf
+> > > > > > > > ("PCI/ACPI: Whitelist hotplug ports for D3 if power managed by ACPI").
+> > > > > > > > I don't know enough about that scenario.  Maybe Lukas will chime in.
+> > > > > > >
+> > > > > > > Well, it is possible that some of these systems will be affected.
+> > > > > > >
+> > > > > > > One of such cases is when the port in question has _S0W which says
+> > > > > > > that wakeup from D3 is not supported.  In that case I think the kernel
+> > > > > > > should honor the _S0W input, because there may be a good reason known
+> > > > > > > to the platform integrator for it.
+> > > > > > >
+> > > > > > > The other case is when wakeup.flags.valid is unset for the port's ACPI
+> > > > > > > companion which means that the port cannot signal wakeup through
+> > > > > > > ACPI-related means at all and this may be problematic, especially in
+> > > > > > > the system-wide suspend case in which the wakeup capability is not too
+> > > > > > > relevant unless there is a system wakeup device under the port.
+> > > > > > >
+> > > > > > > I don't think that the adev->wakeup.flags.valid check has any bearing
+> > > > > > > on the _S0W check - if there is _S0W and it says "no wakeup from D3",
+> > > > > > > it should still be taken into account - so that check can be moved
+> > > > > > > past the _S0W check.
+> > > > > >
+> > > > > > So if _S0W says it can wake from D3, but wakeup.flags is not valid,
+> > > > > > it's still OK to use D3?
+> > > > >
+> > > > > No, it isn't, as per the code today and I don't think that this
+> > > > > particular part should be changed now.
+> > > >
+> > > > But the current upstream code checks acpi_pci_power_manageable(dev)
+> > > > first, so if "dev" has _PR0 or _PS0, we'll use D3 even if _S0W says it
+> > > > can wake from D3 and wakeup.flags is not valid.
+> > > 
+> > > Yes, the current code will return 'true' if _PR0 or _PS0 is present
+> > > for dev regardless of anything else.
+> > > 
+> > > The proposed change is to make that conditional on whether or not _S0W
+> > > for the root port says that wakeup from D3 is supported (or it is not
+> > > present or unusable).
+> > > 
+> > > I see that I've missed one point now which is when the root port
+> > > doesn't have an ACPI companion, in which case we should go straight
+> > > for the "dev is power manageable" check.
+> > 
+> > Moreover, it is possible that the bridge passed to acpi_pci_bridge_d3() has its
+> > own _S0W or a wakeup GPE if it is power-manageable via ACPI.  In those cases
+> > it is not necessary to ask the Root Port's _S0W about wakeup from D3, so overall
+> > I would go for the patch like the below (not really tested).
+> > 
+> > This works in the same way as the current code (unless I have missed anything)
+> > except for the case when the "target" bridge is power-manageable via ACPI, but
+> > it cannot signal wakeup via ACPI and has no _S0W.  In that case it will consult
+> > the upstream Root Port's _S0W to check whether or not wakeup from D3 is
+> > supported.
+> > 
+> > [Note that if dev_has_acpi_pm is 'true', it is kind of pointless to look for the
+> > "HotPlugSupportInD3" property of the Root Port, because the function is going to
+> > return 'true' regardless, but I'm not sure if adding an extra if () for handling
+> > this particular case is worth the hassle.]
+> 
+> I think this has a lot of potential.  I haven't tried it, but I wonder
+> if splitting out the Root Port-specific parts to a separate function
+> would be helpful, if only to make it more obvious that there may be
+> two different devices involved.
+> 
+> If there are two devices ("dev" is a bridge below a Root Port), I
+> guess support in the Root Port is not necessarily required?  E.g.,
+> could "dev" assert a wakeup GPE that's not routed through the Root
+> Port?  If Root Port support *is* required, maybe it would read more
+> clearly to test that first, before looking at the downstream device.
 
-On 1/2/23 03:30, Miquel Raynal wrote:
-> Hi Samuel,
-> 
-> samuel@sholland.org wrote on Thu, 29 Dec 2022 12:15:26 -0600:
-> 
->> This removes an unnecessary memory allocation, and avoids recomputing
->> the same register value every time ECC is enabled.
-> 
-> I am fine with the "let's not recompute the register value each time"
-> idea, but I like having a dedicated object reserved for the ECC
-> engine, that is separated from the main controller structure (both
-> are two different things, even though they are usually well
-> integrated).
-> 
-> If it's actually useless you can still get rid of the allocation and in
-> the structure you can save the ecc_ctrl reg value instead of mode.
+Sorry for the delay.
 
-OK, I will do this, and split it into two patches: one for replacing
-mode with ecc_ctrl, and the second to keep the structure but get rid of
-the allocation.
+I don't really think that Root Port support is required for a bridge below
+a Root Port if that bridge itself is power-manageable via ACPI.  Moreover,
+I don't think that the _S0W of a Root Port has any bearing on devices below
+it that have their own _S0W.
 
-Regards,
-Samuel
+So what we really want appears to be to evaluate _S0W for the target bridge,
+regardless of whether or not it is a Root Port, and return 'false' if that
+produces D2 or a shallower power state.  Otherwise, we can do what we've
+done so far.
 
-> The other patches in the series look good to me.
-> 
-> Thanks,
-> Miquèl
-> 
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->>  drivers/mtd/nand/raw/sunxi_nand.c | 75 ++++++-------------------------
->>  1 file changed, 13 insertions(+), 62 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sunxi_nand.c
->> index a3bc9f7f9e5a..5c5a567d8870 100644
->> --- a/drivers/mtd/nand/raw/sunxi_nand.c
->> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
->> @@ -169,22 +169,13 @@ struct sunxi_nand_chip_sel {
->>  	s8 rb;
->>  };
->>  
->> -/**
->> - * struct sunxi_nand_hw_ecc - stores information related to HW ECC support
->> - *
->> - * @mode: the sunxi ECC mode field deduced from ECC requirements
->> - */
->> -struct sunxi_nand_hw_ecc {
->> -	int mode;
->> -};
->> -
->>  /**
->>   * struct sunxi_nand_chip - stores NAND chip device related information
->>   *
->>   * @node: used to store NAND chips into a list
->>   * @nand: base NAND chip structure
->> - * @ecc: ECC controller structure
->>   * @clk_rate: clk_rate required for this NAND chip
->> + * @ecc_ctl: ECC_CTL register value for this NAND chip
->>   * @timing_cfg: TIMING_CFG register value for this NAND chip
->>   * @timing_ctl: TIMING_CTL register value for this NAND chip
->>   * @nsels: number of CS lines required by the NAND chip
->> @@ -193,8 +184,8 @@ struct sunxi_nand_hw_ecc {
->>  struct sunxi_nand_chip {
->>  	struct list_head node;
->>  	struct nand_chip nand;
->> -	struct sunxi_nand_hw_ecc *ecc;
->>  	unsigned long clk_rate;
->> +	u32 ecc_ctl;
->>  	u32 timing_cfg;
->>  	u32 timing_ctl;
->>  	int nsels;
->> @@ -689,26 +680,15 @@ static void sunxi_nfc_hw_ecc_enable(struct nand_chip *nand)
->>  {
->>  	struct sunxi_nand_chip *sunxi_nand = to_sunxi_nand(nand);
->>  	struct sunxi_nfc *nfc = to_sunxi_nfc(nand->controller);
->> -	u32 ecc_ctl;
->> -
->> -	ecc_ctl = readl(nfc->regs + NFC_REG_ECC_CTL);
->> -	ecc_ctl &= ~(NFC_ECC_MODE_MSK | NFC_ECC_PIPELINE |
->> -		     NFC_ECC_BLOCK_SIZE_MSK);
->> -	ecc_ctl |= NFC_ECC_EN | NFC_ECC_MODE(sunxi_nand->ecc->mode) |
->> -		   NFC_ECC_EXCEPTION | NFC_ECC_PIPELINE;
->> -
->> -	if (nand->ecc.size == 512)
->> -		ecc_ctl |= NFC_ECC_BLOCK_512;
->>  
->> -	writel(ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
->> +	writel(sunxi_nand->ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
->>  }
->>  
->>  static void sunxi_nfc_hw_ecc_disable(struct nand_chip *nand)
->>  {
->>  	struct sunxi_nfc *nfc = to_sunxi_nfc(nand->controller);
->>  
->> -	writel(readl(nfc->regs + NFC_REG_ECC_CTL) & ~NFC_ECC_EN,
->> -	       nfc->regs + NFC_REG_ECC_CTL);
->> +	writel(0, nfc->regs + NFC_REG_ECC_CTL);
->>  }
->>  
->>  static inline void sunxi_nfc_user_data_to_buf(u32 user_data, u8 *buf)
->> @@ -1626,11 +1606,6 @@ static const struct mtd_ooblayout_ops sunxi_nand_ooblayout_ops = {
->>  	.free = sunxi_nand_ooblayout_free,
->>  };
->>  
->> -static void sunxi_nand_hw_ecc_ctrl_cleanup(struct sunxi_nand_chip *sunxi_nand)
->> -{
->> -	kfree(sunxi_nand->ecc);
->> -}
->> -
->>  static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
->>  				       struct nand_ecc_ctrl *ecc,
->>  				       struct device_node *np)
->> @@ -1641,7 +1616,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
->>  	struct mtd_info *mtd = nand_to_mtd(nand);
->>  	struct nand_device *nanddev = mtd_to_nanddev(mtd);
->>  	int nsectors;
->> -	int ret;
->>  	int i;
->>  
->>  	if (nanddev->ecc.user_conf.flags & NAND_ECC_MAXIMIZE_STRENGTH) {
->> @@ -1675,10 +1649,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
->>  	if (ecc->size != 512 && ecc->size != 1024)
->>  		return -EINVAL;
->>  
->> -	sunxi_nand->ecc = kzalloc(sizeof(*sunxi_nand->ecc), GFP_KERNEL);
->> -	if (!sunxi_nand->ecc)
->> -		return -ENOMEM;
->> -
->>  	/* Prefer 1k ECC chunk over 512 ones */
->>  	if (ecc->size == 512 && mtd->writesize > 512) {
->>  		ecc->size = 1024;
->> @@ -1699,12 +1669,9 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
->>  
->>  	if (i >= ARRAY_SIZE(strengths)) {
->>  		dev_err(nfc->dev, "unsupported strength\n");
->> -		ret = -ENOTSUPP;
->> -		goto err;
->> +		return -ENOTSUPP;
->>  	}
->>  
->> -	sunxi_nand->ecc->mode = i;
->> -
->>  	/* HW ECC always request ECC bytes for 1024 bytes blocks */
->>  	ecc->bytes = DIV_ROUND_UP(ecc->strength * fls(8 * 1024), 8);
->>  
->> @@ -1713,10 +1680,14 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
->>  
->>  	nsectors = mtd->writesize / ecc->size;
->>  
->> -	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors)) {
->> -		ret = -EINVAL;
->> -		goto err;
->> -	}
->> +	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors))
->> +		return -EINVAL;
->> +
->> +	sunxi_nand->ecc_ctl = NFC_ECC_MODE(i) | NFC_ECC_EXCEPTION |
->> +			      NFC_ECC_PIPELINE | NFC_ECC_EN;
->> +
->> +	if (ecc->size == 512)
->> +		sunxi_nand->ecc_ctl |= NFC_ECC_BLOCK_512;
->>  
->>  	ecc->read_oob = sunxi_nfc_hw_ecc_read_oob;
->>  	ecc->write_oob = sunxi_nfc_hw_ecc_write_oob;
->> @@ -1739,25 +1710,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
->>  	ecc->write_oob_raw = nand_write_oob_std;
->>  
->>  	return 0;
->> -
->> -err:
->> -	kfree(sunxi_nand->ecc);
->> -
->> -	return ret;
->> -}
->> -
->> -static void sunxi_nand_ecc_cleanup(struct sunxi_nand_chip *sunxi_nand)
->> -{
->> -	struct nand_ecc_ctrl *ecc = &sunxi_nand->nand.ecc;
->> -
->> -	switch (ecc->engine_type) {
->> -	case NAND_ECC_ENGINE_TYPE_ON_HOST:
->> -		sunxi_nand_hw_ecc_ctrl_cleanup(sunxi_nand);
->> -		break;
->> -	case NAND_ECC_ENGINE_TYPE_NONE:
->> -	default:
->> -		break;
->> -	}
->>  }
->>  
->>  static int sunxi_nand_attach_chip(struct nand_chip *nand)
->> @@ -1970,7 +1922,6 @@ static void sunxi_nand_chips_cleanup(struct sunxi_nfc *nfc)
->>  		ret = mtd_device_unregister(nand_to_mtd(chip));
->>  		WARN_ON(ret);
->>  		nand_cleanup(chip);
->> -		sunxi_nand_ecc_cleanup(sunxi_nand);
->>  		list_del(&sunxi_nand->node);
->>  	}
->>  }
+The patch below implements, this - please let me know what you think.
+
+---
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH] PCI / ACPI: PM: Take _S0W of the target bridge into account in acpi_pci_bridge_d3(()
+
+It is generally questionable to allow a PCI bridge to go into D3 if
+it has _S0W returning D2 or a shallower power state, so modify
+acpi_pci_bridge_d3(() to always take the return value of _S0W for the
+target bridge into accout.  That is, make it return 'false' if _S0W
+returns D2 or a shallower power state for the target bridge regardless
+of its ancestor PCIe Root Port properties.  Of course, this also causes
+'false' to be returned if the PCIe Root Port itself is the target and
+its _S0W returns D2 or a shallower power state.
+
+However, still allow bridges without _S0W that are power-manageable via
+ACPI to enter D3 to retain the current code behavior in that case.
+
+Reported-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/pci/pci-acpi.c |   39 +++++++++++++++++++++++++++++----------
+ 1 file changed, 29 insertions(+), 10 deletions(-)
+
+Index: linux-pm/drivers/pci/pci-acpi.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-acpi.c
++++ linux-pm/drivers/pci/pci-acpi.c
+@@ -984,15 +984,33 @@ bool acpi_pci_bridge_d3(struct pci_dev *
+ 	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
+ 		return false;
+ 
+-	/* Assume D3 support if the bridge is power-manageable by ACPI. */
+-	if (acpi_pci_power_manageable(dev))
+-		return true;
++	adev = ACPI_COMPANION(&dev->dev);
++	if (adev) {
++		/*
++		 * If the bridge has _S0W, whether or not it can go into D3
++		 * depends on what is returned by that object.  In particular,
++		 * if the power state returned by _S0W is D2 or shallower,
++		 * entering D3 should not be allowed.
++		 */
++		status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
++		if (ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT)
++			return false;
++
++		/*
++		 * Otherwise, assume that the bridge can enter D3 so long as it
++		 * is power-manageable via ACPI.
++		 */
++		if (acpi_device_power_manageable(adev))
++			return true;
++	}
+ 
+ 	rpdev = pcie_find_root_port(dev);
+ 	if (!rpdev)
+ 		return false;
+ 
+-	adev = ACPI_COMPANION(&rpdev->dev);
++	if (rpdev != dev)
++		adev = ACPI_COMPANION(&rpdev->dev);
++
+ 	if (!adev)
+ 		return false;
+ 
+@@ -1005,13 +1023,14 @@ bool acpi_pci_bridge_d3(struct pci_dev *
+ 		return false;
+ 
+ 	/*
+-	 * If the Root Port cannot wake itself from D3hot or D3cold, we
+-	 * can't use D3.
++	 * In the bridge-below-a-Root-Port case, evaluate _S0W for the Root Port
++	 * to verify whether or not it can signal wakeup from D3.
+ 	 */
+-	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
+-	if (ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT)
+-		return false;
+-
++	if (rpdev != dev) {
++		status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
++		if (ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT)
++			return false;
++	}
+ 	/*
+ 	 * The "HotPlugSupportInD3" property in a Root Port _DSD indicates
+ 	 * the Port can signal hotplug events while in D3.  We assume any
+
+
 
