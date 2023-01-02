@@ -2,79 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461B965B15B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CED3A65B165
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbjABLmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S232690AbjABLns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbjABLmI (ORCPT
+        with ESMTP id S232611AbjABLnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:42:08 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751F5F0D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:42:06 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id p36so41230970lfa.12
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 03:42:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qhbiyazKqrVG6CgQo0Lo7FTo8Pu36wyTx9eEnoPfuPs=;
-        b=KPenZeSbjXIiU2I1mwvFnabRBJSzvy4GXBXa8vjN1r0VIuumtfAXVFLeumSTbBxbFD
-         qCghJbdlfn+GmQ3dym2GQW7cIVES2d/hQp6ItUTb8Ib2i/Oi4WvLcbd3dIePeuA37MNg
-         xxn8dFloOYzWkWHGCQ7dNNmrV+Q1noZsHqwrvwK583jCFzVSz9i775OMzFIjmVk0Hto4
-         8qzd9AIYtReGsWFxqfoP2MDYnbdHkqdhIzUE5Bbl33F5pHvh6KRUn3gtCAyvfChJM3Cz
-         +DtCECE6eZINTvzzrEEd+dTDTTrGcuNwIt8dIBYve1T7Dem4fFREPLPQcq7VS1IF5htf
-         nQxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qhbiyazKqrVG6CgQo0Lo7FTo8Pu36wyTx9eEnoPfuPs=;
-        b=QhH/qoxcZnoEN0aNy3fptDKhDEK5XDyevn4zaq7U9GxGL2PpQbE4fW9hGvXyEiu/bh
-         lt4fFB0k5QHnxJU7ijksw80hry5YY/8ewSTb/1X6x++svZRaYt17rK86/jef4HoaPpRY
-         kd3/mjcb7lafDX/XY25pjz2zU5z/UkgbHNpVaLoLGnrM9S+RU6MlR0/2tkFw4V2s8Usu
-         l0XqAOW1vdheKGvOQK7xCqjF4W+5Nk01lV/VsJyL34XYt0pyg0Xa6vHQ9+PZNvJnME3C
-         U/soGYkymysH4DzRiEMFqqsrsG8J2nqUmt3Lkr84z0jLrWLHuxgjesbNbUx+PTx2vhxu
-         vSPg==
-X-Gm-Message-State: AFqh2kpmp4EnaVPz0dGISDtgwTOQ8CD5o0+mDKx0kOLrkjfdYSgTQnXY
-        GRvrHlbsJ2pZ2gFkZ0/LzoCSTQ==
-X-Google-Smtp-Source: AMrXdXthvx+Tv+Pa7lEwdml7FHR3ul82K2m0m6TNS12fV3YlrUqv4uDKYlm0E/geyZfaWdwgBVRUJw==
-X-Received: by 2002:ac2:599d:0:b0:4b5:b8a9:b42c with SMTP id w29-20020ac2599d000000b004b5b8a9b42cmr10424407lfn.17.1672659725890;
-        Mon, 02 Jan 2023 03:42:05 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c20-20020ac24154000000b0048a8c907fe9sm4356397lfi.167.2023.01.02.03.42.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 03:42:05 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
+        Mon, 2 Jan 2023 06:43:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519BE65BF;
+        Mon,  2 Jan 2023 03:42:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BEC760F63;
+        Mon,  2 Jan 2023 11:42:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 696BDC433F0;
+        Mon,  2 Jan 2023 11:42:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672659758;
+        bh=EZgYMe3usUyMFxbQO7E9BDjuwI3Npx6lVTgO4/S8MFA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LdC0XrF7edjW742EQEJus7c9GnSEDTpUnIvt+fqW8TVPeNCJ5Ru6eJbNOyG0n/yjz
+         qZPEAjvcQYYx07slzR4FTxY4YQZMT2rubqAx8ZsVZPLDbIWi3nJ+UtevV09oSJ+9S3
+         MsT9WvgfNmp8M0mwW3EirCrR1f/e2o6txxiLIQ9Q2Kdtu25FRbGL/KxWvtjtWczyOo
+         Jz60kpGhFNyXQszqtsEf6t1c9K8lBRr55EUBrxMqSqYr/ACmehUlhgo+7FfSozZh3N
+         IbA9qYCtsr+4YaE68Z+fiFNj+DlBKWzOVhqufr+27YeWmnRwZk/nSwNMhVvMfq7F80
+         jzraRgyuzYwHA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pCJDS-0005PM-IM; Mon, 02 Jan 2023 12:42:55 +0100
+Date:   Mon, 2 Jan 2023 12:42:54 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 8/8] arm64: dts: qcom: qrb5165-rb5: Use proper WSA881x shutdown GPIO polarity
-Date:   Mon,  2 Jan 2023 12:41:52 +0100
-Message-Id: <20230102114152.297305-8-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230102114152.297305-1-krzysztof.kozlowski@linaro.org>
-References: <20230102114152.297305-1-krzysztof.kozlowski@linaro.org>
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] arm64: dts: qcom: sm8450-hdk: fix wcd938x codec node
+Message-ID: <Y7LDPgc+dnAMqwHU@hovoldconsulting.com>
+References: <20230102105038.8074-1-johan+linaro@kernel.org>
+ <20230102105038.8074-7-johan+linaro@kernel.org>
+ <6447bb2f-0ef1-a8a8-4b94-875e16954ca6@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6447bb2f-0ef1-a8a8-4b94-875e16954ca6@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,39 +64,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The WSA881x shutdown GPIO is active low (SD_N), but Linux driver assumed
-DTS always comes with active high.  Since Linux drivers were updated to
-handle proper flag, correct the DTS.
+On Mon, Jan 02, 2023 at 12:16:44PM +0100, Konrad Dybcio wrote:
+> 
+> 
+> On 2.01.2023 11:50, Johan Hovold wrote:
+> > The wcd938x codec is not a memory-mapped device and does not belong
+> > under the soc node.
+> > 
+> > Move the node to the root node to avoid DT validation failures.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> Third patch concerning the audio codec and third different
+> order of properties :/ Please consolidate that.
 
-The change is not backwards compatible with older Linux kernel.
+It's arguably a separate change (even if I included it for the disabled
+x13s node). I'm fixing the fact that the node should not have been added
+under 'soc' in the first place.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reordering properties can be done as a follow up if anyone cares enough,
+even if I could possibly have renamed the node when moving it.
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-index 8c64cb060e21..5c510d59c054 100644
---- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-@@ -1010,7 +1010,7 @@ &swr0 {
- 	left_spkr: speaker@0,3 {
- 		compatible = "sdw10217211000";
- 		reg = <0 3>;
--		powerdown-gpios = <&tlmm 130 GPIO_ACTIVE_HIGH>;
-+		powerdown-gpios = <&tlmm 130 GPIO_ACTIVE_LOW>;
- 		#thermal-sensor-cells = <0>;
- 		sound-name-prefix = "SpkrLeft";
- 		#sound-dai-cells = <0>;
-@@ -1019,7 +1019,7 @@ left_spkr: speaker@0,3 {
- 	right_spkr: speaker@0,4 {
- 		compatible = "sdw10217211000";
- 		reg = <0 4>;
--		powerdown-gpios = <&tlmm 130 GPIO_ACTIVE_HIGH>;
-+		powerdown-gpios = <&tlmm 130 GPIO_ACTIVE_LOW>;
- 		#thermal-sensor-cells = <0>;
- 		sound-name-prefix = "SpkrRight";
- 		#sound-dai-cells = <0>;
--- 
-2.34.1
-
+Johan
