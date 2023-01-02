@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09DA65B7A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 23:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6A665B7A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 23:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjABWWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 17:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
+        id S231796AbjABW10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 17:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjABWWu (ORCPT
+        with ESMTP id S229603AbjABW1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 17:22:50 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A611913E;
-        Mon,  2 Jan 2023 14:22:49 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id g10so7647212wmo.1;
-        Mon, 02 Jan 2023 14:22:49 -0800 (PST)
+        Mon, 2 Jan 2023 17:27:23 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA79C1B;
+        Mon,  2 Jan 2023 14:27:22 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id y8so27552830wrl.13;
+        Mon, 02 Jan 2023 14:27:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hzAhGjXaHPnQR3DC+YI7zHhPYNDOaj+LjnPkK+FZLFE=;
-        b=j0ZQqW2uJDkWbhQ45/bqKldlVp4tBWD6gzWQPbPpR1V6AFZ5Ihrs4OZNBzpQgps/m4
-         rTXaS/c0hFcCPZ4WfkHw/8Fqj/GQW3bwjF0yKbbdbo2f4nsXaGbw4firdjzZa6aHeiCq
-         H0BUBRvG5b6LlzAwcmLoAOXuThD9YsZyLMnTEaIUqrKhc5bbDJy6jCSgD+z411j9YKZw
-         eaVjDBNtWH27us9LIe1++zF0/urLoVxZYOsx/BNrxcXNyW2E3DWYJ1WZRyi6kR91zuXe
-         yU1X4KVExp5RBj5pYF+QZPiIP5/Kz1guSKUYVWW6EFB+SWEAwa1qhY3K2NWgmlRhQvCw
-         DiKw==
+        bh=7wtP7E2/yHl02046h04PnnDHRMQAylX/VciI7feb4uc=;
+        b=XYlFT3Q3gY1UCrytvXj2iKmGX3LlIliu5asqtmjrPwaXmHvtudON3zx4M+A28yNMvs
+         dRHNCj/GtDG69GekRpiGhCLUNKom1z55XXESugsG5G50xQoOkRzMijKqwxZ811lFS2Aq
+         nuz52UsvkiTUEBZt6dr8KHPJwWMGoCCzRap+ZXeOFvzDQWZRunGZ/DOAWJghLVdfN/KC
+         AANSi+CdzSqyfU6+Rmf+uaoUhrhZu9O+lcBwAAvt9L7io5sdtS1ImqbvecObwVuFfzqs
+         /8NwZ358JAO2VhODXhaOWi2wOKS2cELCLtn3HJNEVTROeWHdRS50HhRLlBH0KQ+sTtyr
+         42KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hzAhGjXaHPnQR3DC+YI7zHhPYNDOaj+LjnPkK+FZLFE=;
-        b=t0lWQegmx4Fhts6VFmvmtSjcTspnD2YESLLuQTgxsfGuoGA6dRvDvNygIqnFm4ztj+
-         KrEL6j0KlpROQ38owBKx5k7auj0W+b8vgxCxtdfKbXmsZSACwbCl9W29Vxr6g3Vtm7YC
-         6V5PKfcHZwtM1kkZXuSQmjvU4/Z7zS1ynvQq6bsXghNuaD4o7g8r4equULk10VCTMWDN
-         noYJ/vUd15J2KOVdj8ji56/R0NvJjlpNJj5Ps1U4SN4MYw5tSra/BPD1QKDydQfpndOj
-         TthKU+9qN0sVf6T1G3NF4+e4uC12Uf9/RVwxBD7cCLe6lOIv+4tauPShqpwAgZXvPZXf
-         Uz7A==
-X-Gm-Message-State: AFqh2kqiGee8/LJ2ZKIu8/LEr4XQpPyOvMWFGxZp16/xY+i1+dy5lgf8
-        RbUjCIWYxlyr+OOCBVxxTz4=
-X-Google-Smtp-Source: AMrXdXvs149q2RLwB0ZezqErfp0NhNZDzNbvUCbH1XcRYTqw/I6EeHFpBoeR9KbtNh2ItGEhDMU+3Q==
-X-Received: by 2002:a05:600c:510e:b0:3d3:5885:4d21 with SMTP id o14-20020a05600c510e00b003d358854d21mr29134502wms.17.1672698168250;
-        Mon, 02 Jan 2023 14:22:48 -0800 (PST)
+        bh=7wtP7E2/yHl02046h04PnnDHRMQAylX/VciI7feb4uc=;
+        b=LD2G+z66zy4hp9qv9d/OyBXfzL0FvbsBGPhYaTemBt+ZPhFxbWFQhmdTRQbhJHhyN6
+         EQnuIT4JZ0F5jciFoXz/Bgv2sW6PFGygqYlvBhwYqdeOmhtHFFwzilwIyIWPdQjWAR+C
+         jzrn8j1v+aLDk8Rf9nMOkqA/QWDWbXvEjHXKWJnpc9WUVeOQnqB/NhWOXRgwyNmCoI6u
+         OP9DK7xH+jAXDlZDNDGeDEv9myBXg4cNbT5JkOhW+VGKoKWULYhELliaAwGeqJwZDLP0
+         icun9tEBase/C0YvtvIK8+RAXov+ZxUtVI/MMlCVrXIJ12VSjlb5oWeoCeMn5EjGjtV+
+         a2Gg==
+X-Gm-Message-State: AFqh2kpTjucj46hmoezp0RyIRiHAMlVWT2jQSIMbBRlywzxoHJry8Uet
+        p8oeZ8WRlHkoZsfVgoHL83A=
+X-Google-Smtp-Source: AMrXdXuAdYrxMskOHbOTNuRZtKsmI9gENs7lCNTVa9gUFGSdMVP1y8CGfWRhragy70StL+hWnqdgLw==
+X-Received: by 2002:a5d:4687:0:b0:289:552f:ed13 with SMTP id u7-20020a5d4687000000b00289552fed13mr11682705wrq.25.1672698441013;
+        Mon, 02 Jan 2023 14:27:21 -0800 (PST)
 Received: from prasmi.home ([2a00:23c8:2501:c701:8a7:e535:b020:566a])
-        by smtp.gmail.com with ESMTPSA id f18-20020a05600c4e9200b003d35c845cbbsm50341636wmq.21.2023.01.02.14.22.47
+        by smtp.gmail.com with ESMTPSA id h6-20020a056000000600b002423dc3b1a9sm28298184wrx.52.2023.01.02.14.27.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 14:22:47 -0800 (PST)
+        Mon, 02 Jan 2023 14:27:20 -0800 (PST)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -65,9 +65,9 @@ Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2] riscv: dts: renesas: rzfive-smarc-som: Enable OSTM nodes
-Date:   Mon,  2 Jan 2023 22:22:33 +0000
-Message-Id: <20230102222233.274021-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] riscv: dts: renesas: rzfive-smarc-som: Drop PHY interrupt support for ETH{0,1}
+Date:   Mon,  2 Jan 2023 22:27:08 +0000
+Message-Id: <20230102222708.274369-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -83,43 +83,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Enable OSTM{1,2} nodes on RZ/Five SMARC SoM.
-
-Note, OSTM{1,2} nodes are enabled in the RZ/G2UL SMARC SoM DTSI [0] hence
-deleting the disabled nodes from RZ/Five SMARC SoM DTSI enables it here
-too as we include [0] in RZ/Five SMARC SoM DTSI.
-
-[0] arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
+IRQC support for RZ/Five is still missing so drop the interrupts and
+interrupt-parent properties from the PHY nodes of ETH{0,1}.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
-v1->v2
-* Rebased patch on top of [0]
+Hi All,
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-riscv-dt-for-v6.3
+This patch is to avoid build issues due to patch series [0]. This patch
+applies on top of [1]
+
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230102221815.273719-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+[1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20221229230300.104524-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,Prabhakar
 ---
- arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi | 8 --------
- 1 file changed, 8 deletions(-)
+ arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-index fdfd7cd2792b..73941a5f844d 100644
+index 73941a5f844d..d6f18754eb5d 100644
 --- a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
 +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-@@ -30,14 +30,6 @@ &eth1 {
+@@ -24,10 +24,20 @@ &dmac {
+ 
+ &eth0 {
  	status = "disabled";
++
++	phy0: ethernet-phy@7 {
++		/delete-property/ interrupt-parent;
++		/delete-property/ interrupts;
++	};
  };
  
--&ostm1 {
--	status = "disabled";
--};
--
--&ostm2 {
--	status = "disabled";
--};
--
- &sdhi0 {
+ &eth1 {
  	status = "disabled";
++
++	phy1: ethernet-phy@7 {
++		/delete-property/ interrupt-parent;
++		/delete-property/ interrupts;
++	};
  };
+ 
+ &sdhi0 {
 -- 
 2.25.1
 
