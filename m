@@ -2,184 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9F565B47C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1A265B47A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236366AbjABPyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:54:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S236314AbjABPx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbjABPyN (ORCPT
+        with ESMTP id S232107AbjABPxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:54:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF28AB82
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:53:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672674805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 2 Jan 2023 10:53:25 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3809AB82;
+        Mon,  2 Jan 2023 07:53:24 -0800 (PST)
+Date:   Mon, 02 Jan 2023 15:53:20 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672674801;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=08dCYsa5Ayalb0WHzc9Dc+dPt0AFb2C2DyR+UOE8zaY=;
-        b=bP892EV8QTT/5NiNugqgRK/SgdLQD23Mz4DhSqExfmGEp7CBd720jOJvuomK7n1Ih713hV
-        YKBbqtqBLfQvh/EtDPsp4YPfeSpxavVilfIBB297t4s/4juxAuuUF5OOyOZCh6dm9ZSVIw
-        hJLC9Lfu8PEgEO1HQr04FzV61tacbOY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-244-IAxPvY-KOxmyPGdQE6Whcw-1; Mon, 02 Jan 2023 10:53:22 -0500
-X-MC-Unique: IAxPvY-KOxmyPGdQE6Whcw-1
-Received: by mail-wm1-f71.google.com with SMTP id c23-20020a7bc857000000b003d97c8d4935so11000469wml.8
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:53:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=08dCYsa5Ayalb0WHzc9Dc+dPt0AFb2C2DyR+UOE8zaY=;
-        b=6j7FYiuya6916uN7F4qaIiQANrqcugmU6Gp5DKZcywLUnPaGP8+QADGK08l/OOyt8R
-         nFEKbNbEg3FmgmCT6xjFY0MQriaPIp1l5NtYH1vMJMlyEK1XRYURas2Y8vKCTpev2CmV
-         AEsp31CFZYpo48ifDCs4KkSLGbN4dbF4XcRbqxeZw71hc+SULhnJD/6n/mlT2rOC1e+S
-         QacYglAQ9Ah16IKHnXcQPUSa1ZMTUOXaOgZi7112wGH+oFOnx6jYaiEAMKSfwH1nhzqQ
-         Q3RhfzlBhcg6DzttLjb/aaYdl16EehtBj16E5ED0Wg2yTSRbQtIsD49wnpz1saBmGMnv
-         WPcg==
-X-Gm-Message-State: AFqh2kqxgUc1X/Yq5V/4vFZBLTmrg0LqEoj92yXdGSMJZl7Teh9jw/cV
-        LR64mpP5/aYczcomByYl7gn+1nUjhuTbUpC1FXYrFCCpqvNsGsibpBZxp8tHNI2dMnGVAQPO0Td
-        TDXTbyAbi0PvqqtZ+K+3HYXVb
-X-Received: by 2002:adf:cc8e:0:b0:273:75d2:8d01 with SMTP id p14-20020adfcc8e000000b0027375d28d01mr23779219wrj.26.1672674801691;
-        Mon, 02 Jan 2023 07:53:21 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvsKmOyCmw5BR6SbNL6IHnflKGvVcnU44NWhqj6A8qfHLRPHgTXjmjL32Q503GqLTl/iAl4Zg==
-X-Received: by 2002:adf:cc8e:0:b0:273:75d2:8d01 with SMTP id p14-20020adfcc8e000000b0027375d28d01mr23779202wrj.26.1672674801440;
-        Mon, 02 Jan 2023 07:53:21 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:500:9382:2e5a:fea:8889? (p200300cbc703050093822e5a0fea8889.dip0.t-ipconnect.de. [2003:cb:c703:500:9382:2e5a:fea:8889])
-        by smtp.gmail.com with ESMTPSA id j13-20020a5d618d000000b002425dc49024sm28834869wru.43.2023.01.02.07.53.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 07:53:21 -0800 (PST)
-Message-ID: <54da9c76-a506-0acd-3f97-60a0cce87c8a@redhat.com>
-Date:   Mon, 2 Jan 2023 16:53:20 +0100
+        bh=3P5pISwMYBYCrQ8Yr86Uym3gj8BN/L8IIlaMxfkhy08=;
+        b=WDIaj39zarkxIy3RcXAEsQNsau423KjE7KQGAePWyn2aHanx9EtNzS9QA/UuUQq7qwccw7
+        zbvJ3sYAi4ReSi1N+H3FOs+IAyQo97tSiIkkNz8wtGdinUMWLFRWxGuq1b5DDSGpfUbCQW
+        kFaVmDr39u610okCyxBAKADRvr6VS7khx2vYx5SU/tTS1orbO/QKjbV0DHkpPd+KBvDxeW
+        aFMf66M+Mq0US/F/6+GR7INgIMoFzP5wlyLNbRoyYANMt+u+TvJFXhws8VZl2ZmejV1DEL
+        DOMX6XAgG8CQZGlgvhmopnzgEJAzbBzwROZZSpTIzoIlOgMarV//96i9wekTxA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672674801;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3P5pISwMYBYCrQ8Yr86Uym3gj8BN/L8IIlaMxfkhy08=;
+        b=lXFeWHI9Gp0KHaqnUtDDEMeHEE750GwMn4AA+3SZWgZVPNAov8+TElRUZJGJyihCOvdXq6
+        8anhNCCiB1WxDABQ==
+From:   "tip-bot2 for Mathieu Desnoyers" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/rseq: Fix concurrency ID handling of
+ usermodehelper kthreads
+Cc:     kernel test robot <yujie.liu@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <202212301353.5c959d72-yujie.liu@intel.com>
+References: <202212301353.5c959d72-yujie.liu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] selftest/vm: add mremap expand merge offset test
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        Jakub Matena <matenajakub@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@kernel.org>
-References: <f132891530423f8bb72fde8169279b1c5967ec40.1672670177.git.lstoakes@gmail.com>
- <3a4fbe90-b46e-aa49-9866-e2b0cf6de38d@redhat.com> <Y7L9JfyQrwIRVo2A@lucifer>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y7L9JfyQrwIRVo2A@lucifer>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <167267480086.4906.14665352998737768536.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.01.23 16:49, Lorenzo Stoakes wrote:
-> On Mon, Jan 02, 2023 at 04:34:14PM +0100, David Hildenbrand wrote:
->> On 02.01.23 15:44, Lorenzo Stoakes wrote:
->>> Add a test to assert that we can mremap() and expand a mapping starting
->>> from an offset within an existing mapping. We unmap the last page in a 3
->>> page mapping to ensure that the remap should always succeed, before
->>> remapping from the 2nd page.
->>>
->>> This is additionally a regression test for the issue solved in "mm, mremap:
->>> fix mremap() expanding vma with addr inside vma" and confirmed to fail
->>> prior to the change and pass after it.
->>>
->>> Finally, this patch updates the existing mremap expand merge test to check
->>> error conditions and reduce code duplication between the two tests.
->>>
->>> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
->>> ---
->>>    tools/testing/selftests/vm/mremap_test.c | 115 ++++++++++++++++++-----
->>>    1 file changed, 93 insertions(+), 22 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
->>
->>
->> ...
->>
->>> +
->>> +	start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
->>> +		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->>> +
->>> +	if (start == MAP_FAILED) {
->>> +		ksft_print_msg("mmap failed: %s\n", strerror(errno));
->>
->> I'd
->>
->> 	ksft_test_result_fail(...)
->> 	return;
->>
->>> +		goto out;
->>> +	}
->>> +
->>> +	munmap(start + page_size, page_size);
->>> +	remap = mremap(start, page_size, 2 * page_size, 0);
->>> +	if (remap == MAP_FAILED) {
->>> +		ksft_print_msg("mremap failed: %s\n", strerror(errno));
->>> +		munmap(start, page_size);
->>> +		munmap(start + 2 * page_size, page_size);
->>> +		goto out;
->>
->> dito
->>
->> 	ksft_test_result_fail(...)
->> 	...
->> 	return;
->>
->>> +	}
->>> +
->>> +	success = is_range_mapped(maps_fp, start, start + 3 * page_size);
->>> +	munmap(start, 3 * page_size);
->>> +
->>> +out:
->>
->> then you can drop the out label.
->>
-> 
-> I have to disagree on this, to be consistent with the other tests the
-> failure messages should include the test name, and putting the
-> ksft_test_result_fail("test name") in each branch as well as the error
-> message would just be wilful duplication.
-> 
-> I do think it's a pity C lacks mechanisms such that gotos are sometimes
-> necessary, but I can only right so many wrongs in this patch :)
-> 
+The following commit has been merged into the sched/core branch of tip:
 
-Let's agree to disagree ;) Too bad we don't have prefix push/pop 
-functionality as we have in other similar testing frameworks -- to avoid 
-exactly that duplication.
+Commit-ID:     bbd0b031509b880b4e9a880bb27ca2a30ad081ab
+Gitweb:        https://git.kernel.org/tip/bbd0b031509b880b4e9a880bb27ca2a30ad081ab
+Author:        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+AuthorDate:    Mon, 02 Jan 2023 10:12:16 -05:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Mon, 02 Jan 2023 16:34:12 +01:00
 
-[...]
+sched/rseq: Fix concurrency ID handling of usermodehelper kthreads
 
->> I'd simply use a global variable, same applies for page_size. But passing it
->> around is also ok.
->>
-> 
-> I am trying to keep things consistent with what's gone before in this code,
-> and given page_size is being passed around I think the 'when in Rome'
-> principle applies equally to passing the fp around I think.
+sched_mm_cid_after_execve() does not expect NULL t->mm, but it may happen
+if a usermodehelper kthread fails when attempting to execute a binary.
 
-Other tests we have handle it "easier". :)
+sched_mm_cid_fork() can be issued from a usermodehelper kthread, which
+has t->flags PF_KTHREAD set.
 
--- 
-Thanks,
+Fixes: af7f588d8f73 ("sched: Introduce per-memory-map concurrency ID")
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Reported-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/oe-lkp/202212301353.5c959d72-yujie.liu@intel.com
+---
+ kernel/sched/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-David / dhildenb
-
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 048ec24..f99ee69 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -11343,8 +11343,8 @@ void sched_mm_cid_after_execve(struct task_struct *t)
+ 	struct mm_struct *mm = t->mm;
+ 	unsigned long flags;
+ 
+-	WARN_ON_ONCE((t->flags & PF_KTHREAD) || !t->mm);
+-
++	if (!mm)
++		return;
+ 	local_irq_save(flags);
+ 	t->mm_cid = mm_cid_get(mm);
+ 	t->mm_cid_active = 1;
+@@ -11354,7 +11354,7 @@ void sched_mm_cid_after_execve(struct task_struct *t)
+ 
+ void sched_mm_cid_fork(struct task_struct *t)
+ {
+-	WARN_ON_ONCE((t->flags & PF_KTHREAD) || !t->mm || t->mm_cid != -1);
++	WARN_ON_ONCE(!t->mm || t->mm_cid != -1);
+ 	t->mm_cid_active = 1;
+ }
+ #endif
