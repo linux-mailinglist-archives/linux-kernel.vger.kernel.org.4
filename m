@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B6D65AE13
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A833765AE15
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbjABIZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 03:25:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S231826AbjABI1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 03:27:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbjABIZR (ORCPT
+        with ESMTP id S229744AbjABI1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 03:25:17 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C2B106;
-        Mon,  2 Jan 2023 00:25:14 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id n4so28973650plp.1;
-        Mon, 02 Jan 2023 00:25:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=93nJ5Kz+BlIZ58Rw+CqZdrGFJhp2grdsPUR6i1eSHYg=;
-        b=ELMrLaaNHYA60UyumkyNKPmpsHkbWZ1wp0uePUanFKJQMdmeuiPk8xrbSiw9Qv+LWD
-         QpUGYakUN5IK62N8/Zugfgf2L61dVoVqkkp8ThHB8wAIqNZhArKbsOYJN5z0GRuzhLMv
-         MUhhXPtAAppVWP9S9sfHMghKNjcNpXb0zsOV58owX6YhEkudX4UgXdB5EqS10aFMU55A
-         EQFGS8qS7KDxfZY08122Bw6jNZ9mWxl4I8Yo+iTRFCdFuTVTHpZaoRTkzj8vg0ZN+9h/
-         QyZ7Nc2/Ifub3QekUxhDpyY8OXWu2M/WM88M9z3pFwKMGp5pIfi6KcMX25Qc1CvEAEwN
-         WjJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=93nJ5Kz+BlIZ58Rw+CqZdrGFJhp2grdsPUR6i1eSHYg=;
-        b=NFv7+Riv2cSmCMgf8G40VEx0juZE6BLSifCvwcpIgYCslVzlrKckyVkQg7VuNU/zBS
-         hX1dWmvwmMfnpvZVoLHQNDEOAohnMdcBw52FkfLVd8nOrayUL8or0kdODJsm1u8fWGJS
-         3tJO6kuhXb2ov90xJl7vq64TTLytpbtnLR7pS6A7hl0GMAb5WHCiA5frR20REicxuawS
-         MxOhrWiw+80ApiNvM6d0dmj/+oH/vOARNzv4sriXg3kGVdwLO89GCYxGX86O68ovAeGj
-         IBvWEUSlfmISg5D24atKmf8IjYEbu9hDDFhsKW0wUI/mISxd6R27H7EkKAS3MxOMuPQP
-         CmBA==
-X-Gm-Message-State: AFqh2kpF6jLtB178fhy6YfxB1zwwL5YTCqS/9ce1i4e1pFw5KF6w8nfg
-        n8lpqFFcT3kH6BTv6FwOVXo=
-X-Google-Smtp-Source: AMrXdXubgNR4C0fUl2MCMV1zJ50oUurN2jUlpFmeXREJ9xRDIHh0oonNJ3jsqTuPywljKSGeO8HlYA==
-X-Received: by 2002:a17:90a:ebc6:b0:226:5900:f2f4 with SMTP id cf6-20020a17090aebc600b002265900f2f4mr8244054pjb.4.1672647913766;
-        Mon, 02 Jan 2023 00:25:13 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id lr4-20020a17090b4b8400b001fde655225fsm11431028pjb.2.2023.01.02.00.25.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 00:25:13 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marek Vasut <marex@denx.de>, Miaoqian Lin <linmq006@gmail.com>,
-        linux-gpio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] pinctrl: stm32: Fix refcount leak in stm32_pctrl_get_irq_domain
-Date:   Mon,  2 Jan 2023 12:24:56 +0400
-Message-Id: <20230102082503.3944927-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 2 Jan 2023 03:27:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409F6223
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:27:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDDDE60ECE
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:27:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3885FC433D2;
+        Mon,  2 Jan 2023 08:27:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672648027;
+        bh=xdXxYKAZd6QpjVcR1FSXry2pfitKPL1S0xMqTVjvgYc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J9rZjoqEY/mWaZlK+30DxUhWhMtOstiVyX0Tt8wR9hx0C5EO+MULPikbUf7JSdTLG
+         H6uTjLaxtJvyzXKpteYoK/F64XQgP+w98BFmm6ubbbXjGr2hit3tNmw+17pB0uF6Ru
+         q8BwtYTAeDy4Vo90x+eHJhctCxRHZ00ghXbBxUDTyuFwhGCxM9PBhXVeyryzxDUmlA
+         c7yVwp59BoYgqGimQp26Iiig/ABaYN8DOxhflbTmjW4PYG6Fxjnwskg1Q0vG2C7sgw
+         PpqyG70aLK/DeGrkHC/Bbj2xfjYZ33tjt2R8+cUanxHwbkghms+kRyF/Q7g2vw/W9v
+         9pkBH1onRaXXw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pCGAE-0003LC-SU; Mon, 02 Jan 2023 09:27:23 +0100
+Date:   Mon, 2 Jan 2023 09:27:22 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steev Klimaszewski <steev@kali.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] drm/panel-edp: add IVO M133NW4J panel entry
+Message-ID: <Y7KVamauvz44UB/o@hovoldconsulting.com>
+References: <20221231142721.338643-1-abel.vesa@linaro.org>
+ <20221231142721.338643-2-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221231142721.338643-2-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_irq_find_parent() returns a node pointer with refcount incremented,
-We should use of_node_put() on it when not needed anymore.
-Add missing of_node_put() to avoid refcount leak.
-
-Fixes: d86f4d71e42a ("pinctrl: stm32: check irq controller availability at probe")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/pinctrl/stm32/pinctrl-stm32.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index 1cddca506ad7..cb33a23ab0c1 100644
---- a/drivers/pinctrl/stm32/pinctrl-stm32.c
-+++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -1382,6 +1382,7 @@ static struct irq_domain *stm32_pctrl_get_irq_domain(struct platform_device *pde
- 		return ERR_PTR(-ENXIO);
+On Sat, Dec 31, 2022 at 04:27:21PM +0200, Abel Vesa wrote:
+> Add an eDP panel entry for IVO M133NW4J.
+> 
+> Due to lack of documentation, use the delay_200_500_p2e100 timings like
+> some other IVO entries for now.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> Assuming the information from here is correct:
+> https://raw.githubusercontent.com/linuxhw/EDID/master/DigitalDisplay.md
  
- 	domain = irq_find_host(parent);
-+	of_node_put(parent);
- 	if (!domain)
- 		/* domain not registered yet */
- 		return ERR_PTR(-EPROBE_DEFER);
--- 
-2.25.1
+>  drivers/gpu/drm/panel/panel-edp.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+> index ef70928c3ccb..bef5cdf6a582 100644
+> --- a/drivers/gpu/drm/panel/panel-edp.c
+> +++ b/drivers/gpu/drm/panel/panel-edp.c
+> @@ -1891,6 +1891,7 @@ static const struct edp_panel_entry edp_panels[] = {
+>  	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1247, &delay_200_500_e80_d50, "N120ACA-EA1"),
+>  
+>  	EDP_PANEL_ENTRY('I', 'V', 'O', 0x057d, &delay_200_500_e200, "R140NWF5 RH"),
+> +	EDP_PANEL_ENTRY('I', 'V', 'O', 0x854a, &delay_200_500_p2e100, "M133NW4J"),
+>  	EDP_PANEL_ENTRY('I', 'V', 'O', 0x854b, &delay_200_500_p2e100, "R133NW4K-R0"),
+>  
+>  	EDP_PANEL_ENTRY('K', 'D', 'B', 0x0624, &kingdisplay_kd116n21_30nv_a010.delay, "116N21-30NV-A010"),
 
+Can you also check the edid data for the string in case there's been
+some mixup? For example,
+
+	# strings /sys/class/drm/card0-eDP-1/edid
+	...
+	B133UAN02.1
+
+Johan
