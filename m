@@ -2,146 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491B065B2DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC84D65B2E6
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235915AbjABNo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S236011AbjABNuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjABNo6 (ORCPT
+        with ESMTP id S229583AbjABNuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:44:58 -0500
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F1463EA;
-        Mon,  2 Jan 2023 05:44:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1672667097; x=1704203097;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=zzbeXhV68/mjX9Y04gKO12WzDpwgCtCqGRiwtYbgNX8=;
-  b=A3zKEEaYKEd6typiqkCj3qd+LKD96XNIZc6MyF86HQpdgjJrZ+ZhuT7t
-   KjtVLrrrmTH849vs64MPqTNjugXXeM4NZS+2Mucb4zsYP9fntosHyaFAP
-   WcaJln6wf5AVrObxzklJ+GYDQyEngyRfPAbZyGUAmUzn8YfrJ07icg0bZ
-   A=;
-X-IronPort-AV: E=Sophos;i="5.96,294,1665446400"; 
-   d="scan'208";a="252217987"
-Subject: Re: RFC on drivers/memory vs drivers/edac memory mapping for DDR Controller
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 13:44:52 +0000
-Received: from EX13D31EUA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com (Postfix) with ESMTPS id BDCC04303B;
-        Mon,  2 Jan 2023 13:44:49 +0000 (UTC)
-Received: from EX19D001EUA003.ant.amazon.com (10.252.50.232) by
- EX13D31EUA002.ant.amazon.com (10.43.165.238) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Mon, 2 Jan 2023 13:44:48 +0000
-Received: from [192.168.7.187] (10.43.162.56) by EX19D001EUA003.ant.amazon.com
- (10.252.50.232) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7; Mon, 2 Jan 2023
- 13:44:45 +0000
-Message-ID: <4bd90224-d09a-1f21-92e6-51c967d68a39@amazon.com>
-Date:   Mon, 2 Jan 2023 15:44:40 +0200
+        Mon, 2 Jan 2023 08:50:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECF422B;
+        Mon,  2 Jan 2023 05:50:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9C5D60EBA;
+        Mon,  2 Jan 2023 13:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B251C433F0;
+        Mon,  2 Jan 2023 13:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672667416;
+        bh=ciW3s8dzacHToNPw4OvYdC/uY2aoAut0zkxVNyVnPQg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rL00nTii6xsb0dajf/qS99eZFVKxppKd0Vc32WAaKuWp2E9OZKFvudOVz8xNHMKK2
+         yG1eBtjMjF+sRJKtrOC1gbxMraqN74mud1EBw/JhDgf49LyOWxaVaRoXXHx2sui+cO
+         W3YhRfm02uhp81yET09R6Au2g2Zx+xZqV5NCnfdD95WxHO4ogDb6/6am0JF2AduQCF
+         Xkl+0BfYN5spYxwBUjTpvboma8+FcT0FGXFbzKpyuOf+osnhASvBdZxw4aXhzjeuW4
+         KHugRjP4hn6e5+PpsfJn4/llAJ6pfKDWh8rtADuM00ybn/VzkPG0/VlTgP09BS31Zr
+         COozlbXd9TW5A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C1E6E5724D;
+        Mon,  2 Jan 2023 13:50:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <bp@alien8.de>
-CC:     <talel@amazon.com>, <talelshenhar@gmail.com>,
-        <shellykz@amazon.com>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <2511c7aa-8ce6-a803-a1ea-6121df79c677@amazon.com>
- <8b844f3a-e9b0-28d5-200a-611fe3068bc0@linaro.org>
-From:   "Shenhar, Talel" <talel@amazon.com>
-In-Reply-To: <8b844f3a-e9b0-28d5-200a-611fe3068bc0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D34UWC004.ant.amazon.com (10.43.162.155) To
- EX19D001EUA003.ant.amazon.com (10.252.50.232)
-X-Spam-Status: No, score=-15.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: sparx5: Fix reading of the MAC address
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167266741611.20674.15551725779256774063.git-patchwork-notify@kernel.org>
+Date:   Mon, 02 Jan 2023 13:50:16 +0000
+References: <20230102121215.2697179-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20230102121215.2697179-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+        casper.casan@gmail.com, rmk+kernel@armlinux.org.uk,
+        linqiheng@huawei.com, nathan@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
-On 1/2/2023 2:47 PM, Krzysztof Kozlowski wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->
->
->
-> On 02/01/2023 13:17, Shenhar, Talel wrote:
->> Hi,
->>
->> Want to consult on a topic that involve both drivers/memory and
->> drivers/edac.
->>
->> * We want to introduce driver that reads DDR controller RAS register and
->> notify for ECC errors by using EDAC MC API found in drivers/edac.
->> * We also want to have a capability to dynamically change DDR refresh
->> rate based on thermal values (best to be done in drivers/memory ?).
->>
->> The pain point here is that both capabilities are controlled from the
->> DDR controller.
->> This create issue while using
->> devm_platform_ioremap_resource*->devm_request_mem_region which prevent
->> two mapping of same area.
-> This could be avoided but the true problem is that you have two devices
-> for same memory mapping. Devicetree does not allow it and it points to
-> some wrong hardware representation in DTS.
->
->> It seems to be expected problem as we have 2 "framework" (edac and
->> memory) split while both aim for same HW unit.
->> What is the recommended way to face such conflicts?
-> You now mix Devicetree and Linux drivers. You can have same IO address
-> space used by multiple drivers, even though it is not always good
-> approach (concurrent and conflicting change of same settings).
->
-> HW description is irrelevant to this.
->
->> We had several concept in mind but would love to get your point of view
->> first.
-> Describe hardware accurately and completely. This solves all the
-> problems, doesn't it? Linux drivers do not depend on it and you can make
-> it differently.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Describing the hardware accurately and completely means to have multiple 
-reg property in the device-tree, right?
+On Mon, 2 Jan 2023 13:12:15 +0100 you wrote:
+> There is an issue with the checking of the return value of
+> 'of_get_mac_address', which returns 0 on success and negative value on
+> failure. The driver interpretated the result the opposite way. Therefore
+> if there was a MAC address defined in the DT, then the driver was
+> generating a random MAC address otherwise it would use address 0.
+> Fix this by checking correctly the return value of 'of_get_mac_address'
+> 
+> [...]
 
-That way we will split the HW description to smaller bits rather then 
-just big "ddrc", and that shall allow us to have two drivers and each 
-one will get its own share of the split, right?
+Here is the summary with links:
+  - [net] net: sparx5: Fix reading of the MAC address
+    https://git.kernel.org/netdev/net/c/588ab2dc25f6
 
-That was the intent of solution 1 below.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
->
->> Things we had in mind:
->> 1) map more specific region to avoid conflict (we don't need the same
->> registers on both entity so if we do very specific multiple mapping this
->> shall be resolved)
->> 2) use other kernel API for mapping that doesn't do request_mem_region
->> (or use the reserve only for one of them)
->> 3) have single driver (edac mc) handle also the refresh rate
->> 4) export edac_mc.h and have the drivers/memory have all the needed code
->> to do both edac and refresh rate under drivers/memory
-> None of these address the core problem - possibly inaccurate hardware
-> description...
 
-Can you elaborate on this inaccurate hardware description?
-
-Also, I'd like to write down my understanding of your response from above:
-
-it seems you see as possible solution both using different API that 
-allow overlapping (solution 2) and also for splitting the IO address 
-space to finer pieces to achieve full HW description (solution 1)
-
->
-> Best regards,
-> Krzysztof
->
