@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFF665AFBF
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3321E65AFC1
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjABKqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:46:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S231614AbjABKqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:46:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbjABKqH (ORCPT
+        with ESMTP id S229707AbjABKq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:46:07 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565F8B6D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:46:06 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id s22so28722356ljp.5
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 02:46:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1gsaUC0v/Cx5daJxVpaOTwcaRSbHxERH/kPKOxzGKg8=;
-        b=ySumzhfMgn3J5b1AANttX0HuNBh+TRE28mbc3axsMnBXWRt0CblRawg0KCCbs5Hes1
-         Y0CrIPjLGiyap2GE9bzcMQ5GwyMBBOCoVss1remJH70Dyv9BKOpmRKKAfVQIwpYoM+7T
-         8/QagXqqkXmSqwGgrNZ9G00Py2y4kvwtHYNZgR53ewaTYUq8lt+7DawIEHTjznWUjN2W
-         GEdWO5drD7iHWmYtlIndlqITdJXSBlMxWF5lBI/PFgIqmaRU6ZwbwNMtQVciImrG3PBy
-         1roOjvyI38f4UwGGP5/l72bjjA3TTTDfL6z2Qp47HnOx2ODhK78Yy5us+6YjzMCrub9Q
-         gQ3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1gsaUC0v/Cx5daJxVpaOTwcaRSbHxERH/kPKOxzGKg8=;
-        b=dMxF6BGbTy9LdR6d01sDKzr1mxxC2zGBosEN14SX7Y+qP561x0Ont+YaHmPjWQmD/O
-         PL9W8MF0G9GVunBLsAFzorQ2TrLrD2Ng+5LQ1dTiohmum+TnDXJuuI27uys4BDM7TUlZ
-         egxK3h67xZr417hCO0aSJr58spJvpDWAITp2dubV0cr5ekyuTuGDvT7+CtyKRiGu+Gl0
-         zuA6PFeorSbO2SncZWfd/4V4Wd04jAis0w1QLTMpGSQgeQLt0zu39JBNmPLewpQYHPnx
-         2OYuqy4oty5MmYYTtCLe35A42B1wI8LbcXhfj6Yo1TEQfietQmyyxU7soB2ze1YoEtNH
-         2qsg==
-X-Gm-Message-State: AFqh2kpADB6gAWXpY/RjOUHWMgTIl5SqHklrHDji+u5jfsrM7Mb2nnF6
-        1zN60H4CyqOA01L3RCxVwWOtEluCfbpaYuFO
-X-Google-Smtp-Source: AMrXdXuasK8L9eUYNVBhGgmy9LlpmUexMB/f0GpYDAJGhlriilXQgFqKIoDK+pbJNMPY8DBYhFDTyQ==
-X-Received: by 2002:a2e:934c:0:b0:27f:b489:d8d4 with SMTP id m12-20020a2e934c000000b0027fb489d8d4mr9907313ljh.47.1672656364664;
-        Mon, 02 Jan 2023 02:46:04 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id a24-20020a2e9818000000b0027fc11a8e1asm2090917ljj.60.2023.01.02.02.46.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 02:46:04 -0800 (PST)
-Message-ID: <514482a4-614c-d6b8-ec7c-0e69fff72295@linaro.org>
-Date:   Mon, 2 Jan 2023 11:46:03 +0100
+        Mon, 2 Jan 2023 05:46:27 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F882AF;
+        Mon,  2 Jan 2023 02:46:26 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302A9WxH011645;
+        Mon, 2 Jan 2023 10:46:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mzLGNLJpxiIxYeCOgaG6eZehc2b4S0rmBkztxRJLXAI=;
+ b=ksPeoc9iIGbViAYjqsdokF3bF8iG/a1B1HC4Eu96jXdO3NMNA7NA18qetPIsUwMa+qgx
+ nwdKPego+Se3UVTIQwqpyOYuyckrBwfkhe5LXof8wViysASmBP1oReVWKbarWG2bhWIw
+ tUBDIc9nKOXVvHu1xgagj53CEMf63guZEZ8loFP2FcYCSJjar/f8sAVv5eiKB+CO8sqZ
+ crLa5Ji+sR0FAnsMwUhE5te/m+OyeUbj70fxdmUe1bi6sFKl4dwN9XaSbPCFguBumMoG
+ gUUrQ6qU+Z9mdiIdj9F1DaDSxv1N/cQf0WZT8MK097yYeJSBtXgSr+adC/XABR0kMIDL +Q== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mtasqapcj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 10:46:16 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 302AkFLd028662
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 2 Jan 2023 10:46:15 GMT
+Received: from [10.206.28.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 2 Jan 2023
+ 02:46:12 -0800
+Message-ID: <27041361-dcbd-a50c-3f3a-f774c8cf05b8@quicinc.com>
+Date:   Mon, 2 Jan 2023 16:16:09 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3
- connector
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: usb: gadget: f_uac2: Fix incorrect increment of bNumEndpoints
 Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     quic_schowdhu@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <20221231131945.3286639-1-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221231131945.3286639-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Pavel Hofman <pavel.hofman@ivitera.com>,
+        Joe Perches <joe@perches.com>, Julian Scheel <julian@jusst.de>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1669193290-24263-1-git-send-email-quic_prashk@quicinc.com>
+ <Y6XBrF1vLclcJm3w@kroah.com>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <Y6XBrF1vLclcJm3w@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: N3afoVov4V8K6ovU28_ocuCdJ1YV9Qw-
+X-Proofpoint-GUID: N3afoVov4V8K6ovU28_ocuCdJ1YV9Qw-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-02_06,2022-12-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 mlxlogscore=327
+ priorityscore=1501 lowpriorityscore=0 adultscore=0 spamscore=0
+ impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301020098
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,100 +84,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 31.12.2022 14:19, Bhupesh Sharma wrote:
-> Add the Embedded USB Debugger(EUD) device tree node for
-> SM6115 / SM4250 SoC.
+On 23-12-22 08:26 pm, Greg Kroah-Hartman wrote:
+> On Wed, Nov 23, 2022 at 02:18:10PM +0530, Prashanth K wrote:
+>> Currently connect/disconnect of USB cable calls afunc_bind and
+>> eventually increments the bNumEndpoints. And performing multiple
+>> plugin/plugout will incorrectly increment bNumEndpoints on the
+>> next plug-in leading to invalid configuration of descriptor and
+>> hence enumeration failure.
+>>
+>> Fix this by resetting the value of bNumEndpoints to 1 on every
+>> afunc_bind call.
+>>
+>> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
 > 
-> The node contains EUD base register region and EUD mode
-> manager register regions along with the interrupt entry.
+> Who authored this, Pratham or you?
+>
+Its authored by Pratham, but I'm upstreaming it.
+> And why no "[PATCH]" in the subject line?
 > 
-> Also add the typec connector node for EUD which is attached to
-> EUD node via port. EUD is also attached to DWC3 node via port.
+I was under the impression that [PATCH] is not used for v1.
+Will fix this in next patch
+
+> What commit id does this fix?
 > 
-> Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-> - This patch is based on my earlier sm6115 usb related changes, which can
->   be seen here:
->   https://lore.kernel.org/linux-arm-msm/20221215094532.589291-1-bhupesh.sharma@linaro.org/
-> - This patch is also dependent on my sm6115 eud dt-binding and driver changes
->   sent earlier, which can be seen here:
->   https://lore.kernel.org/linux-arm-msm/20221231130743.3285664-1-bhupesh.sharma@linaro.org/
+Will add the Fixes tag also in next patch
+> thanks,
 > 
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 37 ++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 030763187cc3f..c775f7fdb7015 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -565,6 +565,37 @@ gcc: clock-controller@1400000 {
->  			#power-domain-cells = <1>;
->  		};
->  
-> +		eud: eud@1610000 {
-> +			compatible = "qcom,sm6115-eud","qcom,eud";
-Missing space between entries.
-
-> +			reg = <0x01610000 0x2000>,
-> +			      <0x01612000 0x1000>,
-> +			      <0x003e5018 0x4>;
-> +			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
-> +			ports {
-Newline before ports {}.
-
-Not sure if debugging hardware should be enabled by default..
-> +				port@0 {
-> +					eud_ep: endpoint {
-> +						remote-endpoint = <&usb2_role_switch>;
-> +					};
-> +				};
-Newline between subsequent nodes.
-
-> +				port@1 {
-> +					eud_con: endpoint {
-> +						remote-endpoint = <&con_eud>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		eud_typec: connector {
-Non-MMIO nodes don't belong under /soc.
-
-> +			compatible = "usb-c-connector";
-Newline between properties and subnode.
-
-
-> +			ports {
-> +				port@0 {
-> +					con_eud: endpoint {
-> +						remote-endpoint = <&eud_con>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->  		usb_hsphy: phy@1613000 {
->  			compatible = "qcom,sm6115-qusb2-phy";
->  			reg = <0x01613000 0x180>;
-> @@ -1064,6 +1095,12 @@ usb_dwc3: usb@4e00000 {
->  				snps,has-lpm-erratum;
->  				snps,hird-threshold = /bits/ 8 <0x10>;
->  				snps,usb3_lpm_capable;
-> +				usb-role-switch;
-Same here.
-
-On a note, this commit + driver-side changes give me a:
-
-1610000.eud     qcom_eud: failed to get role switch
-
-Konrad
-> +				port {
-> +					usb2_role_switch: endpoint {
-> +						remote-endpoint = <&eud_ep>;
-> +					};
-> +				};
->  			};
->  		};
->  
+> greg k-h
+Thanks
+Prashanth K
