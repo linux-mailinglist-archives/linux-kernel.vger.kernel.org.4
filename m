@@ -2,159 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9916165B510
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1BC65B51A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236504AbjABQ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S234695AbjABQbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbjABQ0v (ORCPT
+        with ESMTP id S232905AbjABQbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:26:51 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E12A18F
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:26:51 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6E37A5C0066;
-        Mon,  2 Jan 2023 11:26:50 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 02 Jan 2023 11:26:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672676810; x=
-        1672763210; bh=9SnjoCxG6lJy1Dd9d7mL56nMbg9UksLtOGhA65L1Kn0=; b=x
-        KrbRR/ZdOi8eGOcYKwhsEjQVptwFPha0v/MoxmypCLM+LSfQUFxTUH6Cr2we/g6N
-        IrCC71Dr0FbNtZP/uZTphJ2KAvS6euiV8S1Glfl0u5+zFiH+ak3dIhpDA3XBw9lU
-        FCIRZpDRSAuIg4gTBxU9kT6Uc4nhaNEUpo2fGK4l684MQNBnqs1XsDoG+kfP4IFC
-        hSFatowXm5ghgCMG5xEOdqpLEL3ZysR2e2qgQrZ6uWCBTxtOGpx17D5lPyAUQQiq
-        4qnuVy7H4ptjfl5DTWlSF9L0mCQgAsPZA5QpdcTCNAK/D7A+/OWgynwOdp24FwcN
-        HWejGwSsDwjmgXMSHC4MA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672676810; x=
-        1672763210; bh=9SnjoCxG6lJy1Dd9d7mL56nMbg9UksLtOGhA65L1Kn0=; b=c
-        yrsp4gZcmHkoD8wOYxkCrQQ3cqqGJ8UI6NIIfsnngQNOhlgGxLmjzFruFeXvNK+L
-        Ug49ZxUZGHAefZ4Wx9JSON3RgLxSVs3/xJo2W3BJsXlimC/0EoRTlArraaSNXFs1
-        gP43NBla16mG//viKkkbNWs9MKt5ZiXCFYqhoHzq3x6FmSQs+yZlBK+FVFGHe42b
-        8zpH2eVTk3gy2twCmwBwIplVdkFGvD2dS9hggdvtCnaMCIXmuvgaUwlZLZMWhv3E
-        KObnJpnzsEGw0PILnm1xih6rSedpuXHugMFBRk+xwBHpjP86rMPhGN0bKLMpygYI
-        UGNrVfU5xX/9899vhu0XQ==
-X-ME-Sender: <xms:yQWzY7LqfHoQPy9Uga2nhdISMaseOUnCfPj5czN5vHks-VmyWD250Q>
-    <xme:yQWzY_L1GWLESmwmONkKBkUCccwfpyoJZm8bzxVLnevLBMZoqXt0PAF0z5vvtHjAL
-    XAN3vC3d8ypmHzyKA>
-X-ME-Received: <xmr:yQWzYzt8faa2X2ClP23oFt2jsWZQUwhoU9owaqzw4INqNF56DN5iTlSIzP9gBwOgE6z4Pphu6YKafV3iOYANGgwiqD_TCWjIVa1imfcs_VNzAj10OCtkTV0pbg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedvgdeklecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfvvehfhffujggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgeeikeeufedvvdeuteeivdeiffdtgfdtfeejgfetfeefgeffgfdv
-    ffehjedvueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:yQWzY0ZTUpYipH2Wc7Tt0TqsErPiKmeLbUsObUj6R03D1zUe_GQCEQ>
-    <xmx:yQWzYyYdqqxXo98MrcGndfDopwVLohXCqTk1Zil9CZ01d3jdSuwFNQ>
-    <xmx:yQWzY4Apja5s1FHpfCdAqG-XkIRPpMQlrusIG4nUklMERkgZLW3bLA>
-    <xmx:ygWzY4nRWuhQ4U4VVcZOaCXZlsB6XDVfceKomJDPgmaWrtGamCAPiQ>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 Jan 2023 11:26:49 -0500 (EST)
-Message-ID: <e21aba9f-1afd-2615-fe00-3ee4176b9080@sholland.org>
-Date:   Mon, 2 Jan 2023 10:26:48 -0600
+        Mon, 2 Jan 2023 11:31:36 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91331090;
+        Mon,  2 Jan 2023 08:31:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672677096; x=1704213096;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jxPL4ZWd87JdmRzXlFCwvVerbRVrIW34N3tcLFvjMNM=;
+  b=Twyoi/cJ/KiLGryNvU+Sc1LKkSSHFzNCS65788nuBiYaN6cBLDnPjS5S
+   ORZ7QCEwD+BHTD6QKelnAGOL6TA9t8dHphnxsWM/GahwhYnWyOUYfL3M7
+   3hESljtix6G8+74XhN6rf7MHME+Z3ZI6o0GmZGXJ4ZnClzkAwAdZXsh84
+   xE5hXijDmrZD90nSRQFq8etnXKtOQXrng/IJb04q96XKVIJ/gDTcrDUZq
+   dcrPnG+F+M9PJVRmocgLFvxP+9XXZ0uCbWN5GyeJuk8zRA4Vy/gXLAEp9
+   MRBs7LWUjuMQ/iO6B7wOD47vryBfqJOIZZbqfx1XnHD3zKl7o/pABTLpN
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="301197631"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="301197631"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 08:31:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="686940992"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="686940992"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga001.jf.intel.com with ESMTP; 02 Jan 2023 08:31:09 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 302GV7DR021496;
+        Mon, 2 Jan 2023 16:31:07 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/9] bitops: always define asm-generic non-atomic bitops
+Date:   Mon,  2 Jan 2023 17:30:59 +0100
+Message-Id: <20230102163059.3556962-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <Y7MC5/wxgGZz/met@boxer>
+References: <20220624121313.2382500-1-alexandr.lobakin@intel.com> <20220624121313.2382500-3-alexandr.lobakin@intel.com> <Y7MC5/wxgGZz/met@boxer>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20221229181526.53766-1-samuel@sholland.org>
- <20221229181526.53766-7-samuel@sholland.org> <20230102102123.511d337d@xps-13>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 6/7] mtd: rawnand: sunxi: Update OOB layout to match
- hardware
-In-Reply-To: <20230102102123.511d337d@xps-13>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquèl,
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Date: Mon, 2 Jan 2023 17:14:31 +0100
 
-On 1/2/23 03:21, Miquel Raynal wrote:
-> Hi Samuel,
+> On Fri, Jun 24, 2022 at 02:13:06PM +0200, Alexander Lobakin wrote:
+> > Move generic non-atomic bitops from the asm-generic header which
+> > gets included only when there are no architecture-specific
+> > alternatives, to a separate independent file to make them always
+> > available.
+> > Almost no actual code changes, only one comment added to
+> > generic_test_bit() saying that it's an atomic operation itself
+> > and thus `volatile` must always stay there with no cast-aways.
+> > 
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com> # comment
+> > Suggested-by: Marco Elver <elver@google.com> # reference to kernel-doc
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Reviewed-by: Marco Elver <elver@google.com>
+> > ---
+> >  .../asm-generic/bitops/generic-non-atomic.h   | 130 ++++++++++++++++++
+> >  include/asm-generic/bitops/non-atomic.h       | 110 ++-------------
+> >  2 files changed, 138 insertions(+), 102 deletions(-)
+> >  create mode 100644 include/asm-generic/bitops/generic-non-atomic.h
+> > 
 > 
-> samuel@sholland.org wrote on Thu, 29 Dec 2022 12:15:25 -0600:
+> Hi,
 > 
->> When using the hardware ECC engine, the OOB data is made available in
->> the NFC_REG_USER_DATA registers, one 32-bit word per ECC step. Any
->> additional bytes are only accessible through raw reads and software
->> descrambling. For efficiency, and to match the vendor driver, ignore
->> these extra bytes.
->>
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->>  drivers/mtd/nand/raw/sunxi_nand.c | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sunxi_nand.c
->> index 8e873f4fec9a..a3bc9f7f9e5a 100644
->> --- a/drivers/mtd/nand/raw/sunxi_nand.c
->> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
->> @@ -1604,6 +1604,13 @@ static int sunxi_nand_ooblayout_free(struct mtd_info *mtd, int section,
->>  		return 0;
->>  	}
->>  
->> +	/*
->> +	 * The controller does not provide access to OOB bytes
->> +	 * past the end of the ECC data.
->> +	 */
->> +	if (section == ecc->steps && ecc->engine_type == NAND_ECC_ENGINE_TYPE_ON_HOST)
->> +		return -ERANGE;
+> this patch gives me a headache when trying to run sparse against a module.
 > 
-> Again, I am sorry but I cannot take this change, it would typically
-> break jffs2 users (if any?) :(
+> Olek please help :D
 
-Considering the bug I fixed in the previous patch, and the fact that
-mtd_ooblayout_free() zeroes out the structure before calling the .free
-callback, that region was being reported with a length of zero already.
-So I don't think anyone could have been using those bytes anyway.
+It was fixed shortly after the build bots turned on on the original
+series with [0]. Hovewer, no release tag's been made after the fix.
+There's also a short discussion regarding packaging Sparse 0.6.4 for
+Debian with that fix cherry-picked[1], not sure if it led anywhere.
 
-I am looking for a solution here because the ECC/scrambling engine
-really provides no way to access these bytes. Reading them requires
-turning off the ECC engine, performing another read command, and then
-descrambling in software. So we are sort of lying when we claim those
-bytes are available with hardware ECC enabled.
-
-If this change cannot be made as-is, is there any way the user could opt
-in to the new layout, to get the improved performance?
-
-Regards,
-Samuel
-
->>  	oobregion->offset = section * (ecc->bytes + 4);
->>  
->>  	if (section < ecc->steps)
 > 
+> $ sudo make C=2 -C . M=drivers/net/ethernet/intel/ice/
+> make: Entering directory '/home/mfijalko/bpf-next'
+>   CHECK   drivers/net/ethernet/intel/ice/ice_main.c
+> drivers/net/ethernet/intel/ice/ice_main.c: note: in included file (through include/linux/bitops.h, include/linux/kernel.h, drivers/net/ethernet/intel/ice/ice.h):
+> ./arch/x86/include/asm/bitops.h:66:1: warning: unreplaced symbol 'return'
+
+[...]
+
+> drivers/net/ethernet/intel/ice/ice_main.c: note: in included file (through arch/x86/include/asm/bitops.h, include/linux/bitops.h, include/linux/kernel.h, drivers/net/ethernet/intel/ice/ice.h):
+> ./include/asm-generic/bitops/instrumented-non-atomic.h:142:9: warning: unreplaced symbol 'return'
+> ./include/asm-generic/bitops/instrumented-non-atomic.h:139:1: warning: unreplaced symbol 'return'
+> 
+> that's for a single file, there's no point in including same output for
+> every other file being checked.
 > 
 > Thanks,
-> Miquèl
+> Maciej
 
+[0] https://git.kernel.org/pub/scm/devel/sparse/sparse.git/commit/?id=0e1aae55e49cad7ea43848af5b58ff0f57e7af99
+[1] https://lore.kernel.org/all/Yr7kPM1wLZnOqxOA@smile.fi.intel.com
+
+Thanks,
+Olek
