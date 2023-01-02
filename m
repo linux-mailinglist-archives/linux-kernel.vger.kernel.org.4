@@ -2,91 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918A365AF99
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBE765AF9A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbjABKeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
+        id S232208AbjABKeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbjABKeC (ORCPT
+        with ESMTP id S232107AbjABKeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:34:02 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA94B10E5
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:34:01 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id ay40so20127003wmb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 02:34:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8mgGt+WDil8dXaAkpJ8qZ0avMhy4Myb58QPGVDym6jk=;
-        b=yNsiE5cnW7N2EYqUIgR6oylWXDpokhhUBC++Hyr5GSKhbbGYxxLF6AxDzhQlxgp8bB
-         iP9FHXzLpMBT4+H0U+GeaOZgaqPkosrF71zTJbgP0DTCTH9Iep+XVGkqJPQ1AOwrWdKi
-         gyUCqDrOD0r3EbPZfuAHfx4yVfSW0Ww1GfTy/GOP7wWX+VgUzWfWDepBAvPLMOsoNCmn
-         0CJyADgaPbJFbsBqtM5gEmmtlJ+ndqG80yihZN4wiwzcNdNQv/eJbAfTVlioeKWnBQ8g
-         u7Mk+2qHk6PzpoxLBm+ikqT+ux1UVPpr6X6D0Oxepk3AV8ORdC3Fqr22906Vtn31Ju5R
-         mL3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8mgGt+WDil8dXaAkpJ8qZ0avMhy4Myb58QPGVDym6jk=;
-        b=H8KEc4cXEU2WzA+VzHVjxoiREAmrLDDlpJEq4Ehl3+otvzKCxmulVmJUAzIsdkF4rY
-         7YtbGlhpZa4sSaOg5VBtHzNnPNm6u99Ak5BtRfdycDX6l4eau6tT37ACYdDUX1SCUSn2
-         JMlGp3ErHK9fqzFFBji5VcwshLd/Bv41WEldr/W94TXKZLD7DPcvkXOrVbzTnZVDEmde
-         Qi66crTs8Pu+X8NWIY/B+OipqHJj2A2Zi2sNW9xUpGQ5GR4Vqfz2h3ae1OytrEn8Kh17
-         p8V9APaRkGeggE9QLeqBsk5kqueDhJhmaPOH3ElDzDV4vaH/s7RLkWKQem/3/U6DTjXe
-         hwOg==
-X-Gm-Message-State: AFqh2kr4kyv0iG4TJRyX5Vpv3IJLqTMnPmHnzUiXNYDbNEisByB72hLz
-        ss5Fe25o1hBLfzO+oF/a3uHLNSrrvo++d4RR
-X-Google-Smtp-Source: AMrXdXtR8Zpqr1OOrcZbsXvxGi2rMh686vRDHyobS4MDPmdqNXmhUxFGkbSoZEpsVKm7yR6UFphmcg==
-X-Received: by 2002:a05:600c:1e09:b0:3cf:b73f:bf8f with SMTP id ay9-20020a05600c1e0900b003cfb73fbf8fmr28237316wmb.7.1672655639818;
-        Mon, 02 Jan 2023 02:33:59 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003d96efd09b7sm39558447wmp.19.2023.01.02.02.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 02:33:59 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        "open list:DRM DRIVERS FOR VIVANTE GPU IP" 
-        <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        italonicola@collabora.com, Lucas Stach <l.stach@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        "open list:ARM/Amlogic Meson SoC support" 
-        <linux-amlogic@lists.infradead.org>,
-        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
-        <etnaviv@lists.freedesktop.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Amlogic Meson SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-In-Reply-To: <20221202115223.39051-1-tomeu.vizoso@collabora.com>
-References: <20221202115223.39051-1-tomeu.vizoso@collabora.com>
-Subject: Re: (subset) [PATCH v6 0/8] Support for the NPU in Vim3
-Message-Id: <167265563884.375287.14738065029964626826.b4-ty@linaro.org>
-Date:   Mon, 02 Jan 2023 11:33:58 +0100
+        Mon, 2 Jan 2023 05:34:11 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7F710F9;
+        Mon,  2 Jan 2023 02:34:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.ch; s=s31663417;
+        t=1672655640; bh=le00TsP+r/dWYsocjTldOuUeZzcZibPnf3GxCIea4CA=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=iTn9OPao7ePOAIjyccAwFpnncZZzO7FjlsLUX55IorZOF8UUcJQCCOQsjNfYbe0H7
+         NMKng8t57OaDYeRMTyYfQofrmSgyXFXDpwbQNziisTKferPjFWo5H4rATtXOqc1iGi
+         2eTHU71xOtZNaDi6Wp1D5jzzwOktVoltkQUbePXIGWreBY1AIHJbQgtO2qpzO35G+E
+         cfcr3uii80ZthHGikhaINiRgClTCCdJ9+S+wwFTLz8MLFLo9Y6DKof7OTBedcr5e3T
+         NpX9BGvMDyOKsf1WWJ+LMbpzayeZdNrrhty8TYvfgyq7IRM0bS2+B5k5Nz9cN9lN5C
+         Pc115o5H4X86Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.106] ([89.217.230.95]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MBDjA-1p6Dbi2H8A-00Clya; Mon, 02
+ Jan 2023 11:34:00 +0100
+Message-ID: <4ddb5909-0f1e-d701-5678-ce7f3a57446b@gmx.ch>
+Date:   Mon, 2 Jan 2023 11:33:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 2/2] vfio/pci: Remove console drivers
+Content-Language: en-US
+To:     "mb@lab.how" <mb@lab.how>, Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     kvm@vger.kernel.org, airlied@linux.ie,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        kraxel@redhat.com, lersek@redhat.com
+References: <CAEdEoBYXHq9cCzsbMYTpG1B41Yz=-QAjFx7bJDOnPanN5Tmo7A@mail.gmail.com>
+ <20221204175142.658d5c37.alex.williamson@redhat.com>
+ <1e4d62cf-8893-0bff-51f5-5a2e419ed5a0@suse.de>
+ <CAEdEoBYZa9cg0nq=P7EDsDS9m2EKYrd8M8ucqi8U0Csj0mtjDg@mail.gmail.com>
+ <c1c8bfa5-8ba4-c365-1663-535f656ca353@suse.de>
+ <CAEdEoBaixaTEuNfQGv1das7TwHKV9MiRMKQM0kLspveJmipzyg@mail.gmail.com>
+From:   Shawn Michaels <shawn_michaels@gmx.ch>
+In-Reply-To: <CAEdEoBaixaTEuNfQGv1das7TwHKV9MiRMKQM0kLspveJmipzyg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:qqG346XXu7KgwSPHUbVfmllcgd5cT4QzwWYi1Ot1NgviNO1WbqX
+ AeJvhaKR67wBUgK1L1PQP/ywUImVLYd3GGb/rxRGQcJGnlSz/bB/cOyUQdzx2kIgwo6DD7E
+ 12QofRuibf2Ng2c1/l6hQFoNK7Qh5rZTg6D8kgSA4EIO20aYyukUEyJ3dcAZukJ3v9fGSWI
+ nGqNJl0jPf0mBbgPXQPqg==
+UI-OutboundReport: notjunk:1;M01:P0:kXnMy45TwZM=;YdKfddT3ITGr9r4YtRKUBXCg8hC
+ K8yx3Hjh2XQPqWHG8zbACmM6bpStxyNsiPFS3Qh3J6soI3qY1s9mGOwiner5QOCvyGns0CHHp
+ YoqB4UjaXb5UKkWNIJRXE14E2Kf5WBBT+7C7l4PhQX4xCw2diiPXA9l2pYniWBbRuAATitj0K
+ f0ocDZxIHMEh1YtCInbGogPim82/8gfIzIi0pYE14dwrVyDlNZvuhAnYlCG4MyAEDVlraoVtv
+ gEQCon3XLHoE6iFwbV49ZOLo64nEpSF0InDGBW/ToTTF35QLtVevXctt0auXQQohsbilPoom2
+ 7vmQkQwblFjLniufyVRmeU6vMF6NQt4zBWd6Z+UHGQnw3MCmf5+ARMHf/aXae2C8Uyc1TKOm3
+ RI8Ey514q2k6kd9jBtYsD4eZN9UI/T+oBWSV4+lQTeblzrQ7CPYfAGkbTxtbWEoraOk10Ysyy
+ cFOhqB6rgs/QiTGv6HaPXiO3heKnQblzIimQEgEZCML6M6uHlTIGTelsWTGMxY4iEDnboVauU
+ jdleYp1IE7M+E7dUtmwT6VsieTuHMKz6kVDLNGS5QSG2b/KtFyyzjIowYbUjYq22evBnnO9qL
+ A5qatYU4hULENSLIl0dSMsEdAA7hTgMUxCWGZqy5To6nRNlflK1t4/9Fs6iieeoeaD7se2vcX
+ jYBK6SQ63K0ceGk+312Hcg8NTmfKMc5ayuiWvGUNNt/4EcPNGU4YtuA7LiTEFuyZ1QAJx02sY
+ rb6G9KHBLzex7dewBVFQwB4QHZK1zakAhquXNwQ6aWgLM8/CGzU/xW5sEXrM18S5r42aGL1rd
+ 7Fmhe226jqLtj1hALbGaF+nYd0C+M5ArnRdEDInVqBHN2CbeqF1JXPnlK54fxMMQ8yevrWfdj
+ Ao2tTRnuNhmLNAfy4QjLTVUvCWTifNFSM1QpGtkx9BcZudwKAtSSrCD+rSzL4gbtgOBrHiVVc
+ kLuXIQ4o9qqiBn1Hcm5oVtY+kBw=
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,42 +81,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Fri, 2 Dec 2022 12:52:12 +0100, Tomeu Vizoso wrote:
-> This series adds support for the Verisilicon VIPNano-QI NPU in the A311D
-> as in the VIM3 board.
-> 
-> The IP is very closely based on previous Vivante GPUs, so the etnaviv
-> kernel driver works basically unchanged.
-> 
-> The userspace part of the driver is being reviewed at:
-> 
-> [...]
+I just upgraded my system (after 7 months) and I also lost my framebuffer on boot.
+At first, I thought that my computer was freezing on startup, but it turns out
+that it is running fine (I can SSH to it and even startx remotely), only the
+framebuffer stops working very early on boot:
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.3/drivers)
+	:: running early hook [udev]
+	Starting systemd-udevd version 252.4-2-arch
+	[3.400568] VFIO - User Level meta-driver version: 0.3
+	*LOSING FRAMEBUFFER HERE*
 
-[3/8] soc: amlogic: meson-pwrc: Add NNA power domain for A311D
-      https://git.kernel.org/amlogic/c/9a217b7e895313a4d42f7a6c48b6237a595945f4
+Running startx from an SSH session starts my X server and display works again.
 
-These changes has been applied on the intermediate git tree [1].
+I have two identical GPU cards (nVidia GTX 1070). I have been using the method
+from [1] for years in order to prevent the nvidia driver from grabbing my guest
+GPU. As mb already pointed out, vfio_pci now kills the framebuffer of the host
+GPU even though it is assigned to the guest GPU. I could isolate it to the
+following line from [1]:
 
-The v6.3/drivers branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
+	echo "vfio-pci" > "$GPU/driver_override"
 
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
+I also double checked and this is correctly written to the guest GPU, and not
+to the host GPU. My kernel version is:
 
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
+	Linux cc 6.1.1-arch1-1 #1 SMP PREEMPT_DYNAMIC Wed, 21 Dec 2022 22:27:55 +0000 x86_64 GNU/Linux
 
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
+You can find people having the same issue in threads from [2] and [3]. There are
+also some reports on the VFIO discord server.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+This is a problem for people using an encrypted filesystem (password needs to be
+typed blindly) or in case boot fails for some reason (and you cannot see console
+logs). In my case, I switched from manually starting X with startx to using a
+graphical login manager. Blacklisting the vfio_pci module by passing the following
+kernel parameter brings the boot console back:
 
--- 
-Neil
+	module_blacklist=vfio_pci
+
+Happy new year everyone
+
+Shawn
+
+[1] https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Passthrough_all_GPUs_but_the_boot_GPU
+[2] https://bbs.archlinux.org/viewtopic.php?pid=2063423
+[3] https://forum.level1techs.com/t/linux-kernel-6-seems-to-be-incompatible-with-the-vfio-pci-module-needed-for-pci-passthrough/190039/11
+
