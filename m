@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5247765B3D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E0C65B3D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236201AbjABPHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:07:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S236251AbjABPHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236245AbjABPHN (ORCPT
+        with ESMTP id S236254AbjABPHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:07:13 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DD8B4D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:07:12 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id jn22so29731227plb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:07:12 -0800 (PST)
+        Mon, 2 Jan 2023 10:07:20 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AA165F8
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:07:18 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 18so6630559pfx.7
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:07:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gTUmFVkUrVVxCdL9TmMtPvZBf8ZmBmUdQovn/cWoQSs=;
-        b=J/y6pHrgolcr/idbq4kQIOcfdjv7wWo5IwW+rAF2hWtg6IUup6eb+dAOl5bprfzTbr
-         4YCR/CoV4akoRP/v9fboVdUhWM1PZd8RCsUpSZxzkvLxUqEvL7Nxi4RElJMR6L+ViC0B
-         ZkBFRlhQUYPeeTyaMalEBk1+/LsppkXpYNT5zOcYiC7wDQs5L7tb1rTNbESqCr6Fa/bG
-         vCwjNkEbPpHFyWoCZ9VMA35E4OjiANdBV3XRgVMLUv0v98dYC50eQGUX93cILW5+2YNA
-         KDrOfoea0dUcui8KrMoFzv8FXd8K/RF74tbj/ejb9k/dMDVHPxwUU2p6MX3nmqaVC3wv
-         Bq+w==
+        bh=nClTvw3x5UpoXSS3lmQgHVtktuQgAyEIPFgxXiI2CRU=;
+        b=ZAe5Zm8Lq4YLvVjJQ+pmrNnfMWOE/zOYifWmty4ralCouP2eBKqFNGGZ4YpaPydhKT
+         KNArdt0IHS/kg7wh0SHMKYo8AULNj9TjsV46Bl0jfAQGeyCNn/ChVX0SiPU0gu10cjS0
+         TOUGc9gh6LbvVw7B3lsh5n2fq3AyQnTw1bZeZGamr8wTiwdXXPyO+N+8BEspV5+JEZSG
+         3vR5jWkDHX04t2fwqUIOdFFSnkvM2eZZ0KHJAlYKAWr9aRERCGPLidIiPgV0dhSCns5p
+         TwFcDwLV4PKoEvztwG0x9EPA6GONvM8MAkux6xGTlm4rbG/8AXsGkAkpUJP8iWIbLj66
+         fDPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gTUmFVkUrVVxCdL9TmMtPvZBf8ZmBmUdQovn/cWoQSs=;
-        b=Lgc442U6b6Y2ST+F0mf28QLcLrWzwD1Kv8bnBDoOLfzE3BTC3qK7CvieFaLMwpFoyU
-         5Pl91ziTx0Hp+E6ZYyGBLFWVpGN3dgl4vJQn7Su4jlxZ1yccYiPJDsSIgXxsvLsT9rWK
-         SoYH5XoKr+TSmJc0tasAPwxEd0L+KfcQRe9O5dt87B8iVBX/BoCyerffHHl+Y1ob6kot
-         DIkmUfRdNFaTMlh3pI1kuXagdQ2jaVKhaMPnwfVhcysJ5gQ0S3RCNHUVuOpar5Fa2TCl
-         Dr9BKG1U0ClEqhkpxr88DwasPtjOZpWonQ7dHWphrDnEDa/A8eql5yGUtgIrQv3xI6+k
-         1xXg==
-X-Gm-Message-State: AFqh2koBkH3J9Md1OPDuxb8MQ5D9LHmFZuiZpOq5K5csP+1GOhMOhUUD
-        megddE5snIsK8Non5HO6hDIv85BDRygfoJ9MZpMh+Q==
-X-Google-Smtp-Source: AMrXdXv8OX9M5689SnQnaSGPrLdj9p5QLmx+kBVYmhnA495PZDaD/5bf4mxIVTxVmZLdRLzgkWlifrloH6WCSDERMeE=
-X-Received: by 2002:a17:902:e053:b0:192:8d55:4599 with SMTP id
- x19-20020a170902e05300b001928d554599mr1260768plx.165.1672672032313; Mon, 02
- Jan 2023 07:07:12 -0800 (PST)
+        bh=nClTvw3x5UpoXSS3lmQgHVtktuQgAyEIPFgxXiI2CRU=;
+        b=fydusqGZAh0xL91i0/5G9uypiKBHlKeArfwjnJkdKG6NwMRqcyWXXjCt1HY5mWr95f
+         W0sjmE76Cwen4wwhVagw6VY+Xt3yPCKiVdbjctFEaz98qOirVbfS+2beHR0PTa5oEQEv
+         s/w1GOkWeu09aXJWNZqJYfBF0sJS6iP4i3lYrvzHl4XP4jvTNEpvZyKDYJkiovR92vA9
+         C+NiMN5/0r2Ncua/AGyUaZYMK+aSdPbzU1xiTXjPFoJn1QLzbxf6uHGY1OUi2AtzqRGw
+         guimubkFhZgVZB/KYHiIjzF2Vl49eJZVLNWDJrCliFpZddclbIsY3OaDzlJmVBKieRmV
+         oVbQ==
+X-Gm-Message-State: AFqh2kqBuCWAHmktAW75ykrl1iQnfBpDQ/TPDTNDEquJ+/CXmdQzzjKP
+        TZ94D6YwOLFPplN6+bhoQltQfRLv3e0zOwJA3lZDIA==
+X-Google-Smtp-Source: AMrXdXsb2gnvbcsfCCOAD77/bs/+lKzGdoQtyiaMmxIIZCeJ99couOSFA526lQDkn6TFwYzOkRTjF+oFokHMThfLQY4=
+X-Received: by 2002:a63:ba09:0:b0:479:2227:3aa1 with SMTP id
+ k9-20020a63ba09000000b0047922273aa1mr1767902pgf.595.1672672038011; Mon, 02
+ Jan 2023 07:07:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20221213230129.549968-1-fabrizio.castro.jz@renesas.com> <20221213230129.549968-3-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221213230129.549968-3-fabrizio.castro.jz@renesas.com>
+References: <20221213230129.549968-1-fabrizio.castro.jz@renesas.com> <20221213230129.549968-4-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221213230129.549968-4-fabrizio.castro.jz@renesas.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 2 Jan 2023 16:06:36 +0100
-Message-ID: <CAPDyKFoO6pKqg2vN1fbaBE2y=1SJFJR6FByLV3Jm3r2cWR2p1g@mail.gmail.com>
-Subject: Re: [PATCH 2/4] dt-bindings: mmc: renesas,sdhi: Document RZ/V2M support
+Date:   Mon, 2 Jan 2023 16:06:41 +0100
+Message-ID: <CAPDyKFoo3G-dsdfTQ1eN8SdVSakKRi3RHbX1eFJ2=AceXMDy_w@mail.gmail.com>
+Subject: Re: [PATCH 3/4] mmc: renesas_sdhi: Add RZ/V2M compatible string
 To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -82,8 +82,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Wed, 14 Dec 2022 at 00:01, Fabrizio Castro
 <fabrizio.castro.jz@renesas.com> wrote:
 >
-> Document support for the SD Card/MMC interface on the Renesas
-> RZ/V2M (a.k.a. r9a09g011) SoC.
+> The SDHI/eMMC IPs found with the RZ/V2M (a.k.a. r9a09g011), are
+> very similar to the ones found in R-Car Gen3, but they are not
+> exactly the same, and as a result need an SoC specific compatible
+> string for fine tuning driver support.
 >
 > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
@@ -94,21 +96,45 @@ Uffe
 
 
 > ---
->  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/mmc/host/renesas_sdhi_internal_dmac.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 >
-> diff --git a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
-> index 7bfb10c62566..435773607489 100644
-> --- a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
-> @@ -59,6 +59,7 @@ properties:
->                - renesas,sdhi-r9a07g043 # RZ/G2UL
->                - renesas,sdhi-r9a07g044 # RZ/G2{L,LC}
->                - renesas,sdhi-r9a07g054 # RZ/V2L
-> +              - renesas,sdhi-r9a09g011 # RZ/V2M
->            - const: renesas,rcar-gen3-sdhi # R-Car Gen3 or RZ/G2
->        - items:
->            - enum:
+> diff --git a/drivers/mmc/host/renesas_sdhi_internal_dmac.c b/drivers/mmc/host/renesas_sdhi_internal_dmac.c
+> index 29f562115c66..f38003f6b1ca 100644
+> --- a/drivers/mmc/host/renesas_sdhi_internal_dmac.c
+> +++ b/drivers/mmc/host/renesas_sdhi_internal_dmac.c
+> @@ -210,6 +210,11 @@ static const struct renesas_sdhi_quirks sdhi_quirks_r8a77990 = {
+>         .manual_tap_correction = true,
+>  };
+>
+> +static const struct renesas_sdhi_quirks sdhi_quirks_r9a09g011 = {
+> +       .fixed_addr_mode = true,
+> +       .hs400_disabled = true,
+> +};
+> +
+>  /*
+>   * Note for r8a7796 / r8a774a1: we can't distinguish ES1.1 and 1.2 as of now.
+>   * So, we want to treat them equally and only have a match for ES1.2 to enforce
+> @@ -251,6 +256,11 @@ static const struct renesas_sdhi_of_data_with_quirks of_r8a77990_compatible = {
+>         .quirks = &sdhi_quirks_r8a77990,
+>  };
+>
+> +static const struct renesas_sdhi_of_data_with_quirks of_r9a09g011_compatible = {
+> +       .of_data = &of_data_rcar_gen3,
+> +       .quirks = &sdhi_quirks_r9a09g011,
+> +};
+> +
+>  static const struct renesas_sdhi_of_data_with_quirks of_rcar_gen3_compatible = {
+>         .of_data = &of_data_rcar_gen3,
+>  };
+> @@ -274,6 +284,7 @@ static const struct of_device_id renesas_sdhi_internal_dmac_of_match[] = {
+>         { .compatible = "renesas,sdhi-r8a77970", .data = &of_r8a77970_compatible, },
+>         { .compatible = "renesas,sdhi-r8a77990", .data = &of_r8a77990_compatible, },
+>         { .compatible = "renesas,sdhi-r8a77995", .data = &of_rcar_gen3_nohs400_compatible, },
+> +       { .compatible = "renesas,sdhi-r9a09g011", .data = &of_r9a09g011_compatible, },
+>         { .compatible = "renesas,rcar-gen3-sdhi", .data = &of_rcar_gen3_compatible, },
+>         { .compatible = "renesas,rcar-gen4-sdhi", .data = &of_rcar_gen3_compatible, },
+>         {},
 > --
 > 2.34.1
 >
