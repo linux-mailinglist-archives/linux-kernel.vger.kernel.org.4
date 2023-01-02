@@ -2,79 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3321E65AFC1
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E6865AFC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjABKqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
+        id S232464AbjABKr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjABKq1 (ORCPT
+        with ESMTP id S229470AbjABKr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:46:27 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F882AF;
-        Mon,  2 Jan 2023 02:46:26 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302A9WxH011645;
-        Mon, 2 Jan 2023 10:46:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=mzLGNLJpxiIxYeCOgaG6eZehc2b4S0rmBkztxRJLXAI=;
- b=ksPeoc9iIGbViAYjqsdokF3bF8iG/a1B1HC4Eu96jXdO3NMNA7NA18qetPIsUwMa+qgx
- nwdKPego+Se3UVTIQwqpyOYuyckrBwfkhe5LXof8wViysASmBP1oReVWKbarWG2bhWIw
- tUBDIc9nKOXVvHu1xgagj53CEMf63guZEZ8loFP2FcYCSJjar/f8sAVv5eiKB+CO8sqZ
- crLa5Ji+sR0FAnsMwUhE5te/m+OyeUbj70fxdmUe1bi6sFKl4dwN9XaSbPCFguBumMoG
- gUUrQ6qU+Z9mdiIdj9F1DaDSxv1N/cQf0WZT8MK097yYeJSBtXgSr+adC/XABR0kMIDL +Q== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mtasqapcj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 10:46:16 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 302AkFLd028662
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 2 Jan 2023 10:46:15 GMT
-Received: from [10.206.28.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 2 Jan 2023
- 02:46:12 -0800
-Message-ID: <27041361-dcbd-a50c-3f3a-f774c8cf05b8@quicinc.com>
-Date:   Mon, 2 Jan 2023 16:16:09 +0530
+        Mon, 2 Jan 2023 05:47:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D422BF9;
+        Mon,  2 Jan 2023 02:47:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18BA660F24;
+        Mon,  2 Jan 2023 10:47:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75214C433F0;
+        Mon,  2 Jan 2023 10:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672656444;
+        bh=NNLP/vZpHU+PfmdYh2ChIRutfy40ix9EsAAO6zT8okM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SXIwWe8D29pCqSG8a5My/ezyADOXWvTOmkQXd1W76hwOcZN9jCqc8nGGg+O7/PjJZ
+         miCrdP5gFreWlZhkstHX5w7FB9/2MHj67TGyK5SFJwC/C9wJctxpU1Xxwf8tJXn/ME
+         dlOD6J49sIZKCLnh0Jca58RsHJflbrQCgFg86eFycr7t3AA9RFuiye2JgaeipGazMZ
+         ioaejg2C8b8w619R0xcwKxRxFjxcpTrGHxKmjkonyYjyLP839EJGh+XgntjdQMmJRw
+         B6mR81HEgTYBmn/TSZx2g9AafD47n/fDG2GCmTc/sG439rewS/0uzIWJo+ggDPmSmO
+         zvzjXtprhdoDg==
+Received: by mail-lf1-f49.google.com with SMTP id bp15so41074706lfb.13;
+        Mon, 02 Jan 2023 02:47:24 -0800 (PST)
+X-Gm-Message-State: AFqh2koulzhqpcpFY+z33v+fta8WciZP3g0+UuhLIcc0KOnzyucBmFcy
+        OCgKMvF86231b1AODf9/XRCIiSelo8xBejxCMAM=
+X-Google-Smtp-Source: AMrXdXtWDHlASI4f5M+PVE+/cTHXGxLZaLL/htM9ePTQtpm3kxfpYjYJmSBfBJXwcde8wUb8ps2z7WzNjgqBxjTg/4s=
+X-Received: by 2002:ac2:4a72:0:b0:4b6:f37c:c123 with SMTP id
+ q18-20020ac24a72000000b004b6f37cc123mr2805183lfp.539.1672656442482; Mon, 02
+ Jan 2023 02:47:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: usb: gadget: f_uac2: Fix incorrect increment of bNumEndpoints
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Joe Perches <joe@perches.com>, Julian Scheel <julian@jusst.de>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1669193290-24263-1-git-send-email-quic_prashk@quicinc.com>
- <Y6XBrF1vLclcJm3w@kroah.com>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <Y6XBrF1vLclcJm3w@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: N3afoVov4V8K6ovU28_ocuCdJ1YV9Qw-
-X-Proofpoint-GUID: N3afoVov4V8K6ovU28_ocuCdJ1YV9Qw-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_06,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- malwarescore=0 suspectscore=0 phishscore=0 mlxlogscore=327
- priorityscore=1501 lowpriorityscore=0 adultscore=0 spamscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301020098
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <20221227040925.1619833-1-sdonthineni@nvidia.com>
+In-Reply-To: <20221227040925.1619833-1-sdonthineni@nvidia.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 2 Jan 2023 11:47:11 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG79-MxGJEwvnekqbVyeEMVHBfhNjwZkz91mMwv4-vT3Q@mail.gmail.com>
+Message-ID: <CAMj1kXG79-MxGJEwvnekqbVyeEMVHBfhNjwZkz91mMwv4-vT3Q@mail.gmail.com>
+Subject: Re: [PATCH 1/1] efi: rtc: Enable SET/GET WAKEUP services as optional
+To:     Shanker Donthineni <sdonthineni@nvidia.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,35 +63,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23-12-22 08:26 pm, Greg Kroah-Hartman wrote:
-> On Wed, Nov 23, 2022 at 02:18:10PM +0530, Prashanth K wrote:
->> Currently connect/disconnect of USB cable calls afunc_bind and
->> eventually increments the bNumEndpoints. And performing multiple
->> plugin/plugout will incorrectly increment bNumEndpoints on the
->> next plug-in leading to invalid configuration of descriptor and
->> hence enumeration failure.
->>
->> Fix this by resetting the value of bNumEndpoints to 1 on every
->> afunc_bind call.
->>
->> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
->> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> 
-> Who authored this, Pratham or you?
+On Tue, 27 Dec 2022 at 05:09, Shanker Donthineni <sdonthineni@nvidia.com> wrote:
 >
-Its authored by Pratham, but I'm upstreaming it.
-> And why no "[PATCH]" in the subject line?
-> 
-I was under the impression that [PATCH] is not used for v1.
-Will fix this in next patch
+> The current implementation of rtc-efi is expecting all the 4
+> time services GET{SET}_TIME{WAKEUP} must be supported by UEFI
+> firmware. As per the EFI_RT_PROPERTIES_TABLE, the platform
+> specific implementations can choose to enable selective time
+> services based on the RTC device capabilities.
+>
+> This patch does the following changes to provide GET/SET RTC
+> services on platforms that do not support the WAKEUP feature.
+>
+> 1) Relax time services cap check when creating a platform device.
+> 2) Clear RTC_FEATURE_ALARM bit in the absence of WAKEUP services.
+> 3) Conditional alarm entries in '/proc/driver/rtc'.
+>
+> Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
 
-> What commit id does this fix?
-> 
-Will add the Fixes tag also in next patch
-> thanks,
-> 
-> greg k-h
-Thanks
-Prashanth K
+Queued as a fix in efi/urgent, thanks.
+
+
+> ---
+>  drivers/rtc/rtc-efi.c | 48 ++++++++++++++++++++++++-------------------
+>  include/linux/efi.h   |  3 ++-
+>  2 files changed, 29 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
+> index e991cccdb6e9c..1e8bc6cc1e12d 100644
+> --- a/drivers/rtc/rtc-efi.c
+> +++ b/drivers/rtc/rtc-efi.c
+> @@ -188,9 +188,10 @@ static int efi_set_time(struct device *dev, struct rtc_time *tm)
+>
+>  static int efi_procfs(struct device *dev, struct seq_file *seq)
+>  {
+> -       efi_time_t      eft, alm;
+> -       efi_time_cap_t  cap;
+> -       efi_bool_t      enabled, pending;
+> +       efi_time_t        eft, alm;
+> +       efi_time_cap_t    cap;
+> +       efi_bool_t        enabled, pending;
+> +       struct rtc_device *rtc = dev_get_drvdata(dev);
+>
+>         memset(&eft, 0, sizeof(eft));
+>         memset(&alm, 0, sizeof(alm));
+> @@ -213,23 +214,25 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
+>                 /* XXX fixme: convert to string? */
+>                 seq_printf(seq, "Timezone\t: %u\n", eft.timezone);
+>
+> -       seq_printf(seq,
+> -                  "Alarm Time\t: %u:%u:%u.%09u\n"
+> -                  "Alarm Date\t: %u-%u-%u\n"
+> -                  "Alarm Daylight\t: %u\n"
+> -                  "Enabled\t\t: %s\n"
+> -                  "Pending\t\t: %s\n",
+> -                  alm.hour, alm.minute, alm.second, alm.nanosecond,
+> -                  alm.year, alm.month, alm.day,
+> -                  alm.daylight,
+> -                  enabled == 1 ? "yes" : "no",
+> -                  pending == 1 ? "yes" : "no");
+> -
+> -       if (eft.timezone == EFI_UNSPECIFIED_TIMEZONE)
+> -               seq_puts(seq, "Timezone\t: unspecified\n");
+> -       else
+> -               /* XXX fixme: convert to string? */
+> -               seq_printf(seq, "Timezone\t: %u\n", alm.timezone);
+> +       if (test_bit(RTC_FEATURE_ALARM, rtc->features)) {
+> +               seq_printf(seq,
+> +                          "Alarm Time\t: %u:%u:%u.%09u\n"
+> +                          "Alarm Date\t: %u-%u-%u\n"
+> +                          "Alarm Daylight\t: %u\n"
+> +                          "Enabled\t\t: %s\n"
+> +                          "Pending\t\t: %s\n",
+> +                          alm.hour, alm.minute, alm.second, alm.nanosecond,
+> +                          alm.year, alm.month, alm.day,
+> +                          alm.daylight,
+> +                          enabled == 1 ? "yes" : "no",
+> +                          pending == 1 ? "yes" : "no");
+> +
+> +               if (eft.timezone == EFI_UNSPECIFIED_TIMEZONE)
+> +                       seq_puts(seq, "Timezone\t: unspecified\n");
+> +               else
+> +                       /* XXX fixme: convert to string? */
+> +                       seq_printf(seq, "Timezone\t: %u\n", alm.timezone);
+> +       }
+>
+>         /*
+>          * now prints the capabilities
+> @@ -269,7 +272,10 @@ static int __init efi_rtc_probe(struct platform_device *dev)
+>
+>         rtc->ops = &efi_rtc_ops;
+>         clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
+> -       set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, rtc->features);
+> +       if (efi_rt_services_supported(EFI_RT_SUPPORTED_WAKEUP_SERVICES))
+> +               set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, rtc->features);
+> +       else
+> +               clear_bit(RTC_FEATURE_ALARM, rtc->features);
+>
+>         device_init_wakeup(&dev->dev, true);
+>
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index 4b27519143f56..98598bd1d2fa5 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -668,7 +668,8 @@ extern struct efi {
+>
+>  #define EFI_RT_SUPPORTED_ALL                                   0x3fff
+>
+> -#define EFI_RT_SUPPORTED_TIME_SERVICES                         0x000f
+> +#define EFI_RT_SUPPORTED_TIME_SERVICES                         0x0003
+> +#define EFI_RT_SUPPORTED_WAKEUP_SERVICES                       0x000c
+>  #define EFI_RT_SUPPORTED_VARIABLE_SERVICES                     0x0070
+>
+>  extern struct mm_struct efi_mm;
+> --
+> 2.25.1
+>
