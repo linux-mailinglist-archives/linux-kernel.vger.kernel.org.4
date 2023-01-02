@@ -2,169 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3443B65B20F
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFC765B223
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbjABM3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 07:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
+        id S232833AbjABMeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 07:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjABM3n (ORCPT
+        with ESMTP id S230260AbjABMeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 07:29:43 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4443F21BC
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:29:42 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bp15so41367800lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 04:29:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UrmyD+yeEypXFGliWFBiobSabgzh0OfQJe501KhQ4mI=;
-        b=B5e6QzsFoEjobWW8AR0ZUHzPGVwg5XYmx7gsJ+uhZqvwHlAyHoCuxJiR3piBH9tjc6
-         z/pzMmVvpyzxKSU0ja/VAIGd5F80vKJFhkSzhQlANp7k8Fsz/NvhhssgHbi8xO/EPxBJ
-         xNKJMkM0Etz+7uONqk5OeuVwpu3+k8XYU89hgViUKWvAfLbJsK72WSx+ZKIHXO2jVqkP
-         5GfWy2R+U9RO0LhkzPLQ2hvuz2N8+gjNEPHd1SM4DV6wwx2uCzVcMvOG4C1qComX2AoN
-         +hxPpayHM68FqahH9iCoru/99jnqvAC6yvN6Dq3gYTBOevpCjJE5x6hfHw4677KRF7qY
-         1glA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UrmyD+yeEypXFGliWFBiobSabgzh0OfQJe501KhQ4mI=;
-        b=FB3uPSG9+DeZ17OXdWZ+gVvsHb22w8Y0bhzkX7B+rsgG6OCKzOWiWvT57j3ZiV0Xa6
-         u9/TsM6oZ4hr6vK/4bdl7kSmN7hyDSILvkNuxfIHAs9W7npguXOBnBZK1Fj9UVQwxOJ4
-         FzQHjBqqQe3ZVcDORAuJYQP5uwiLMCoo10NS+TSev2FGjEaq3mqBYASOx3t4KDGTeiNK
-         b5+OPOTPoHx6mgP/71wrFTBFWiD82ZZIrkq4+YV8y/uvT427Ugz2piBmJXxN/sVPsDjO
-         xLH7RcLEQyJhnLGz5azi1dhsVMgaO2zaIlphC/SCiBttsJ4pa4Zj+we+3xiezEEwLJ9+
-         5n3A==
-X-Gm-Message-State: AFqh2krWNfA+lJoJdR1FYyXEWUE7kcT2wl7Lp/9pN5Q3d+77/n3hP49i
-        hfEQi1hcl82e8AjxTg06RYfX3w==
-X-Google-Smtp-Source: AMrXdXsx5mCGN8UMr3Ql3HUAIKU4KIpnHdu3wa79g+pHAORTCKkwcePmenuwD7asNpWn8+ARUxxW+A==
-X-Received: by 2002:a05:6512:202c:b0:4a4:68b9:19f1 with SMTP id s12-20020a056512202c00b004a468b919f1mr10750929lfs.25.1672662580655;
-        Mon, 02 Jan 2023 04:29:40 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id i40-20020a0565123e2800b004b0b131453csm4483320lfv.49.2023.01.02.04.29.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 04:29:40 -0800 (PST)
-Message-ID: <82ac16e1-6c8a-b050-d627-535b4562a422@linaro.org>
-Date:   Mon, 2 Jan 2023 13:29:38 +0100
+        Mon, 2 Jan 2023 07:34:14 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAB73886;
+        Mon,  2 Jan 2023 04:34:13 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8454B340E0;
+        Mon,  2 Jan 2023 12:34:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672662852; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8qf88St9DDFohARjpxMOsSqgMfS644j5Qbz1lUlEwTA=;
+        b=QbYIoA+3rISlQ6pkWz2FpTQp9Ef2cRZZmIXM1jBabftO0si6M98aY3HBkxSF4aXyQol+W+
+        vNhpG2ciOS1AV02CVUK73UIZZgQbPPJZxybdLR4k737SbSZjtwmKIzaseCQ/jJjvP1uzVw
+        P2PP7D6ZBaKg9i96FsM2bzNARfn/KaQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672662852;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8qf88St9DDFohARjpxMOsSqgMfS644j5Qbz1lUlEwTA=;
+        b=n0RiflyPoB6WlCPNWkzfRITt/7wOJIfAsiCZXXXuZDhn9VvtxEv1onmzDI0EqSr22odLRe
+        lkY9CvqZrYbF6mBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 639EF139C8;
+        Mon,  2 Jan 2023 12:34:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kmJiGETPsmO6EwAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 02 Jan 2023 12:34:12 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E2E12A073E; Mon,  2 Jan 2023 13:34:11 +0100 (CET)
+Date:   Mon, 2 Jan 2023 13:34:11 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Jan Kara <jack@suse.com>, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH] fs/ext2: Replace kmap_atomic() with kmap_local_page()
+Message-ID: <20230102123411.a7xgfocrbr56qruh@quack3>
+References: <20221231174205.8492-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/6] arm64: dts: qcom: sc8280xp: disable sound nodes
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230102105038.8074-1-johan+linaro@kernel.org>
- <20230102105038.8074-3-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230102105038.8074-3-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221231174205.8492-1-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/01/2023 11:50, Johan Hovold wrote:
-> The sound nodes in the SoC dtsi should be disabled by default.
+On Sat 31-12-22 18:42:05, Fabio M. De Francesco wrote:
+> kmap_atomic() is deprecated in favor of kmap_local_page(). Therefore,
+> replace kmap_atomic() with kmap_local_page().
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> kmap_atomic() is implemented like a kmap_local_page() which also disables
+> page-faults and preemption (the latter only for !PREEMPT_RT kernels).
+> 
+> However, the code within the mapping and un-mapping in ext2_make_empty()
+> does not depend on the above-mentioned side effects.
+> 
+> Therefore, a mere replacement of the old API with the new one is all it
+> is required (i.e., there is no need to explicitly add any calls to
+> pagefault_disable() and/or preempt_disable()).
+> 
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+
+Thanks, the patch looks good and I'll queue it in my tree. I'm not sure why
+it got missed during the initial conversion by Ira :).
+
+								Honza
+
+
 > ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index ed1e2bee86ee..c1ce2d7b3675 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -1733,6 +1733,8 @@ rxmacro: rxmacro@3200000 {
->  
->  			pinctrl-names = "default";
->  			pinctrl-0 = <&rx_swr_default>;
-> +
-> +			status = "disabled";
-
-There is no reason this should be disabled by default. No external (per
-board) configuration is needed and by default SoC components should be
-enabled if they do not need anything from the board.
-
->  		};
->  
->  		/* RX */
-> @@ -1760,6 +1762,8 @@ swr1: soundwire-controller@3210000 {
->  			#sound-dai-cells = <1>;
->  			#address-cells = <2>;
->  			#size-cells = <0>;
-> +
-> +			status = "disabled";
-
-For soundwires disabling makes sense - these are busses so they need to
-be explicitly enabled and populated with children.
-
->  		};
->  
->  		txmacro: txmacro@3220000 {
-> @@ -1783,6 +1787,8 @@ txmacro: txmacro@3220000 {
->  			#address-cells = <2>;
->  			#size-cells = <2>;
->  			#sound-dai-cells = <1>;
-> +
-> +			status = "disabled";
->  		};
->  
->  		wsamacro: codec@3240000 {
-> @@ -1804,6 +1810,8 @@ wsamacro: codec@3240000 {
->  
->  			pinctrl-names = "default";
->  			pinctrl-0 = <&wsa_swr_default>;
-> +
-> +			status = "disabled";
->  		};
->  
->  		/* WSA */
-> @@ -1830,6 +1838,8 @@ swr0: soundwire-controller@3250000 {
->  			#sound-dai-cells = <1>;
->  			#address-cells = <2>;
->  			#size-cells = <0>;
-> +
-> +			status = "disabled";
->  		};
->  
->  		/* TX */
-> @@ -1858,6 +1868,8 @@ swr2: soundwire-controller@3330000 {
->  			qcom,ports-word-length =	/bits/ 8 <0xff 0x00 0xff 0xff>;
->  			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff>;
->  			qcom,ports-lane-control =	/bits/ 8 <0x00 0x01 0x00 0x00>;
-> +
-> +			status = "disabled";
->  		};
->  
->  		vamacro: codec@3370000 {
-> @@ -1874,6 +1886,8 @@ vamacro: codec@3370000 {
->  			#clock-cells = <0>;
->  			clock-output-names = "fsgen";
->  			#sound-dai-cells = <1>;
-> +
-> +			status = "disabled";
-
-vamacro needs supply from the board so this one also makes sense.
-
-Best regards,
-Krzysztof
-
+> I tried my best to understand the code within mapping and un-mapping.
+> However, I'm not an expert. Therefore, although I'm pretty confident, I
+> cannot be 100% sure that the code between the mapping and the un-mapping
+> does not depend on pagefault_disable() and/or preempt_disable().
+> 
+> Unfortunately, I cannot currently test this changes to check the
+> above-mentioned assumptions. However, if I'm required to do the tests
+> with (x)fstests, I have no problems with doing them in the next days.
+> 
+> If so, I'll test in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
+> HIGHMEM64GB enabled.
+> 
+> I'd like to hear whether or not the maintainers require these tests
+> and/or other tests.
+> 
+>  fs/ext2/dir.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ext2/dir.c b/fs/ext2/dir.c
+> index e5cbc27ba459..0f144c5c7861 100644
+> --- a/fs/ext2/dir.c
+> +++ b/fs/ext2/dir.c
+> @@ -646,7 +646,7 @@ int ext2_make_empty(struct inode *inode, struct inode *parent)
+>  		unlock_page(page);
+>  		goto fail;
+>  	}
+> -	kaddr = kmap_atomic(page);
+> +	kaddr = kmap_local_page(page);
+>  	memset(kaddr, 0, chunk_size);
+>  	de = (struct ext2_dir_entry_2 *)kaddr;
+>  	de->name_len = 1;
+> @@ -661,7 +661,7 @@ int ext2_make_empty(struct inode *inode, struct inode *parent)
+>  	de->inode = cpu_to_le32(parent->i_ino);
+>  	memcpy (de->name, "..\0", 4);
+>  	ext2_set_de_type (de, inode);
+> -	kunmap_atomic(kaddr);
+> +	kunmap_local(kaddr);
+>  	ext2_commit_chunk(page, 0, chunk_size);
+>  	err = ext2_handle_dirsync(inode);
+>  fail:
+> -- 
+> 2.39.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
