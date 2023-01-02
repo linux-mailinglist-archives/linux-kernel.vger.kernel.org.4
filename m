@@ -2,94 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA3A65B567
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C9B65B571
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236059AbjABQ4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        id S236438AbjABRAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 12:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233528AbjABQ4i (ORCPT
+        with ESMTP id S234897AbjABQ7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:56:38 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ABC33B
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:56:36 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 186so30705585ybe.8
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:56:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wKUflxNaDzEkyY/mzA+LlW6n4mjVpXQBQ+O9ORYw2l8=;
-        b=qR9odOqKXr33I1Pul2uyRkhlTWeMYN4O3J2KjSbOijrEE1sg5N5UDAmrOtyLT8KyIU
-         1DC+g2dQ9DUN6rK2dEeEQdPf2I1GsweK6bBy9o/1boZjOh5OFb9p+k1BTwiOzy6Ijpnu
-         dVpjrwCbA6UoxQT/iQIDNw4eWdno/DRlXwC9OJs3wljgAQ11jXli4VPOXbnxmWWdoG6O
-         elOV0E304NOb69aivr0GT6zw9qqPFGXhH6MZNoPGt0KOTHAozJpgSSrMC0EBKNg0rbQ1
-         +yPEuu24esaAcyYddI9D+nxesaA2O8BoBS16HFT1ATcWLPNww1HpzRiSOE/GXoQ3615z
-         65Gg==
+        Mon, 2 Jan 2023 11:59:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7ACCD7
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:59:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672678746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nTCIZ7IHuULT6fez4X5HuU0mNTgMf9mzjRqDHXDxk7w=;
+        b=SZfMmjTk7SRxbkNQ8l/ndj7cyCKArUlV+LBkiCb/3dZf9cQqyrioLGLhiydUD2IbOBDkIA
+        /8c6oUxU1O5SZTs0Bj7VMktzMa7ea6HEf88QRLZX3vmNDDSbmr8jLNjHWfawJStq4wL8TY
+        Hsi7uPRSLlwb06RMk2vMYFoHzf9Lt+o=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-466-RaAT915kNhOxjEc0tLf9-g-1; Mon, 02 Jan 2023 11:59:04 -0500
+X-MC-Unique: RaAT915kNhOxjEc0tLf9-g-1
+Received: by mail-wm1-f72.google.com with SMTP id ay32-20020a05600c1e2000b003d9730391b5so12790377wmb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:59:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wKUflxNaDzEkyY/mzA+LlW6n4mjVpXQBQ+O9ORYw2l8=;
-        b=YhCGfCcFkKMseQ1Yey/lXKGQ7fy6ryHXfB1v6zeQrtGHiLCp3SLmGFXQ8ECBJyBmZU
-         PCHjzX3eAGoQU+BBkU4sgV3nlfG+m0INZAwmxbo8Y0GDvR7WA84YDXtYqEuALJNfnBWE
-         W4RzrLUsUp4OdnduNrkgnerQnIfO+JX9DkNKJr4DMPR/tLodbeQR3DqjtUSvpv5MSpIc
-         z2Jp88ZOObCyDyHPP+DUSB6f9aQk9E56zY9PIMWGyQOaDElZ+538bbwoCfkrHTUQ7zAs
-         i6OgfDjtqAMmxuYDbkwpbnO4B5mlZXbkVD2lN7r6MhieIkQZdQkRR5KJWdp6KCmlM9/w
-         hq6g==
-X-Gm-Message-State: AFqh2koXh4mNOjiK8oZg1h32lFtRMfE6DU21MASxLLFECVK6AUrmvAY3
-        h+LfNrK/O4XxTT4UFSLRpliPmIw2JraJrV5O7Iej2lZn
-X-Google-Smtp-Source: AMrXdXtiVaEYJev0Ttyv0djUxtirIUkM66KBNd7TvgzjvMT/amBFtknBDkktQ+s6kFzBGTm6SPlqbyLltMqZNQcH/No=
-X-Received: by 2002:a25:4c81:0:b0:6f9:ece2:7b87 with SMTP id
- z123-20020a254c81000000b006f9ece27b87mr4712634yba.485.1672678595897; Mon, 02
- Jan 2023 08:56:35 -0800 (PST)
+        bh=nTCIZ7IHuULT6fez4X5HuU0mNTgMf9mzjRqDHXDxk7w=;
+        b=iC4mNJpB0ZdsauQChR+Qhbdh28dLtq+WhzT4CyulqgAPqN+C82PMf8IByLlsTzPQA+
+         hZIhOwPR8HTHlmmugSGJmjUNYdRx3/zL+Up88agWTpSCvASYT0dDKLyy7EKNl53YjQ95
+         Kqp4q63/qV9lr2GPAlhX4Ude4jxlbtw//BwqhWWK++0iqE4YGWTfV6zrd+mbqOp6eMxJ
+         gr8kJi/vuCXHsO0unsHWkkTp1pF7C6VGPmkE+iXj6E8rVwOzCqECGk7PsT2d3+Q7SiCr
+         UqcT9Niya8b29d1BvD6ApmwDlwDb8m4NQN+S2bABD6zrkqfTy3FHdiWMr+v+uciFCROk
+         sQ7g==
+X-Gm-Message-State: AFqh2krq9W9rhbRor6aKaZAM51vZeF0RH8WVxvfMordqs14RuLbyDovC
+        aqWA8hpm23/5RWXpYiH2J9C4Yhcpp0aSNQ2XnOkhrmd4Ry2lSVyjA9rt6fsEBuw37OKNSeGYHrm
+        K/53yPR48S0P5kwAPpbUKH0Xj
+X-Received: by 2002:a5d:4406:0:b0:242:7248:fbe with SMTP id z6-20020a5d4406000000b0024272480fbemr25733631wrq.25.1672678743711;
+        Mon, 02 Jan 2023 08:59:03 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXthYoV4iOcJG3VsfRnJibfrOk5dWxFJ8qfSBsRAPuSk3V9O7Ch1N3TNdNPZBs+eSLxvRNdZCw==
+X-Received: by 2002:a5d:4406:0:b0:242:7248:fbe with SMTP id z6-20020a5d4406000000b0024272480fbemr25733620wrq.25.1672678743456;
+        Mon, 02 Jan 2023 08:59:03 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:500:9382:2e5a:fea:8889? (p200300cbc703050093822e5a0fea8889.dip0.t-ipconnect.de. [2003:cb:c703:500:9382:2e5a:fea:8889])
+        by smtp.gmail.com with ESMTPSA id m24-20020a056000181800b00296730b5c3esm5554570wrh.102.2023.01.02.08.59.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 08:59:03 -0800 (PST)
+Message-ID: <6c3725b7-53af-bcc7-2a58-a35b2bc08b4f@redhat.com>
+Date:   Mon, 2 Jan 2023 17:59:01 +0100
 MIME-Version: 1.0
-References: <20221231004514.317809-1-jcmvbkbc@gmail.com> <CANpmjNNPTT+K3CRZN+RnUbHwmtUUzqb0ZDP=M6e8PHP0=qp=Ag@mail.gmail.com>
-In-Reply-To: <CANpmjNNPTT+K3CRZN+RnUbHwmtUUzqb0ZDP=M6e8PHP0=qp=Ag@mail.gmail.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Mon, 2 Jan 2023 08:56:24 -0800
-Message-ID: <CAMo8BfJRb3aqkd6sdeT5DsDQAgZP4BBHCQgToCfN+Fxj6s-NuA@mail.gmail.com>
-Subject: Re: [PATCH v2] kcsan: test: don't put the expect array on the stack
-To:     Marco Elver <elver@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4] selftest/vm: add mremap expand merge offset test
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Jakub Matena <matenajakub@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>
+References: <02b117a8ffd52acc01dc66c2fb39754f08d92c0e.1672675824.git.lstoakes@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <02b117a8ffd52acc01dc66c2fb39754f08d92c0e.1672675824.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 1, 2023 at 11:00 PM Marco Elver <elver@google.com> wrote:
->
-> On Sat, 31 Dec 2022 at 01:45, Max Filippov <jcmvbkbc@gmail.com> wrote:
-> >
-> > Size of the 'expect' array in the __report_matches is 1536 bytes, which
-> > is exactly the default frame size warning limit of the xtensa
-> > architecture.
-> > As a result allmodconfig xtensa kernel builds with the gcc that does not
-> > support the compiler plugins (which otherwise would push the said
-> > warning limit to 2K) fail with the following message:
-> >
-> >   kernel/kcsan/kcsan_test.c:257:1: error: the frame size of 1680 bytes
-> >     is larger than 1536 bytes
-> >
-> > Fix it by dynamically alocating the 'expect' array.
-> >
-> > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
->
-> Reviewed-by: Marco Elver <elver@google.com>
-> Tested-by: Marco Elver <elver@google.com>
->
-> Can you take this through the xtensa tree?
+On 02.01.23 17:11, Lorenzo Stoakes wrote:
+> Add a test to assert that we can mremap() and expand a mapping starting
+> from an offset within an existing mapping. We unmap the last page in a 3
+> page mapping to ensure that the remap should always succeed, before
+> remapping from the 2nd page.
+> 
+> This is additionally a regression test for the issue solved in "mm, mremap:
+> fix mremap() expanding vma with addr inside vma" and confirmed to fail
+> prior to the change and pass after it.
+> 
+> Finally, this patch updates the existing mremap expand merge test to check
+> error conditions and reduce code duplication between the two tests.
+> 
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> ---
 
-Sure. Thanks for your review and testing.
+Acked-by: David Hildenbrand <david@redhat.com>
 
--- Max
+-- 
+Thanks,
+
+David / dhildenb
+
