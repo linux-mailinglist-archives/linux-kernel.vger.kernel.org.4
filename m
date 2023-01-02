@@ -2,126 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5126165B059
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9AB65B05D
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjABLNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S232361AbjABLOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbjABLNr (ORCPT
+        with ESMTP id S232263AbjABLO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:13:47 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F2D62D7
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:13:47 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 2046A32008FC;
-        Mon,  2 Jan 2023 06:13:46 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 02 Jan 2023 06:13:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1672658025; x=1672744425; bh=AeCxzdEEDX
-        jsBxrZ1LBS601ThZjz/mppC452AduVDQA=; b=XYYjydhSD7SEVV8fomPxX4DGgB
-        coW2BPhbN1WaJuTwfphNSoij6BgiV331j8h7FaeY2jI/S9aH9V7MkoM4rZTeVPqc
-        9T2rKkcTwEDrsu5p7X866NOHSN5PkfqLfIbt8SuASbOaWjvZkHpT+LlJCSd+sqlw
-        8l5atpjoL4MAMiIY0yzrpDefPcI79dQJMkGJA8XxRl3XLFxLlVr459QWi1EAgoGZ
-        eTTqXELUiph8BqWe9cTNzOBy5RnyyPDLX6XoZ9APgaRftXH1ncwb1WE0SK+LYUkG
-        DJtFHI8D1lSpyL/+dCYeHltkBw7IAOaVJzl49qTAaJhWb1gu7kfFXPDmUSaQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672658025; x=
-        1672744425; bh=AeCxzdEEDXjsBxrZ1LBS601ThZjz/mppC452AduVDQA=; b=M
-        FaytC+s6K5DUgqnI86Da9oEjmhms6gV5ELE/1vcy8XT751voH80wF/BYu5l7+PfK
-        9/gLrau3k6DTOeIhcbdoC0loEO9jORp89UyR0IyQSsCEZBbyBJ/KGSoKM4Tgm++h
-        XOnYDAbHquukWRwHbhsORlcexDk8lQ5GzIMO7flXLdiHAyy8EP3DTyaoaAVeAZza
-        N9bgN/hFsbyyv6BmelIP9i9SjY9/SRr/TQER3FBXaP7pX9EKGK/M0BWcvvEGsDMb
-        v2Eg+VaxLf4U6E3nC6uRukrbjBGSHvJyICRrFLSPEmUAzJYdMW/iu4botavSgLqj
-        PZgn5wWBK7xg6NqvXMbGw==
-X-ME-Sender: <xms:abyyYwYksfDkdpGjQr9goDw_CxQztD9EE7J9d_4UVIjrq-gb3ZhI6A>
-    <xme:abyyY7bWR1MTkiarCHjpUZWHXZRzsX_inRTNHxmrAHveP4nMDvejKS0_DJgdfqKb-
-    d_MiOGjcjuToiE0_Q>
-X-ME-Received: <xmr:abyyY69Hpru1k2QirWoIMB9X2fXNq2U1h9Mb4n6VhSZ1RReYDU7xkm0ZBPLMBAwq2qEMWm_tz-onbCjMLD-cS-ct>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedvgddviecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomhepvfhomhcu
-    hfhithiihhgvnhhrhicuoehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruhhkqe
-    enucggtffrrghtthgvrhhnpeefgfekteduffeiudegfeejfefgvddufefhvedukeeiffdu
-    gfeludfhhefgvdegffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruhhk
-X-ME-Proxy: <xmx:abyyY6ora2bXoGXBGGv1d2UetLqwfW2ndeIFTPh3r1wya0jI56PujA>
-    <xmx:abyyY7oX2M2yc5dUxrqho_kx5QiFPd2m-m7PKygEsRvQY3T_AoCZLw>
-    <xmx:abyyY4TSsXYLw9b9WZfzbC0STdDvsqtMfv82XFqMUwCD-ydl9d9X3Q>
-    <xmx:abyyY-2Kqn3BR9T06RyovQfUjJ6xfuhgy34NOcwMmxwIZJe-79zZNw>
-Feedback-ID: iefc945ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 Jan 2023 06:13:43 -0500 (EST)
-Message-ID: <aef7295e-264c-4812-06f5-b8f7a8339ed9@tom-fitzhenry.me.uk>
-Date:   Mon, 2 Jan 2023 22:13:41 +1100
+        Mon, 2 Jan 2023 06:14:29 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A63F62CB
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:14:28 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id j17so31679441lfr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 03:14:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jt0wCG03tGFVNQOZNggM83RnxWMauNZ2iVmL0QtApec=;
+        b=E/5/hfGI8HwxHW9PrjHCGcdrb54WpLWDfCkchCWa3oQyRCmkzFtj9LwmnXh37qZulx
+         OD4+MBnog8fFQ2CAvh0F0YLCTZ51mZBRVSpU2JANrDrLDw9sEg2ahTGR9HPJzP46RiAk
+         oaM1LhjZ/Wilzl4x/vI9aYGTxCn/Tra2vNEIpHKT+AcQQjUg/M9dDE7u71wUhFdtPhaX
+         WJLbQC1IFpAcZPoU1zkrAWcBQvOHTnZwmRjTjGWAJ9xW5b0Hrv/gNmp4jaq2vw6sGkd1
+         A7PMvWPZLT3McUDbTWYxAcdFkBtHq036H/eNx52Dqtm5DUxhZlIwQZS+uUimsCKAQIod
+         qqQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jt0wCG03tGFVNQOZNggM83RnxWMauNZ2iVmL0QtApec=;
+        b=jMvBRw3zgxQuKlSq2CFig4AmmB6FOlkQL91jSnzPXX4yd6WJckU/fAttkUTkGqU/st
+         2/i7ISMMqIPezqKinkrJOY/qj/StISepUr/X8NN+r+9n7MTXFrgG1TFpQ0zBQeHIPQcq
+         /kyHEWDQjhfojrw3E+L/Mf/osos/TvpV0qNL/Iqx9AUOXRSYPg596VXj5CVl46ZlwbU7
+         64t4HUjzVcljVbfBoUvPmVGUI0/csdhBPbVWmPW3tBPiQeCJraFSIUMbu45CbkriqvFI
+         5KQDotNnS1dYh+OacoDNf+Wx0t4f4Sh3sEZvCreyaSf8zdYZdlU70Y4F6mzr9RARp3uC
+         a0Yg==
+X-Gm-Message-State: AFqh2kqYWM3GcsL+/N8zJYNBp6yjjt3vuHTMApBiQt9Eok55UTv9Nhn3
+        Sjek149+DFcvlC+6IQc8ILcsBg==
+X-Google-Smtp-Source: AMrXdXvwXcOY1obeuIZVkrEgCEXjiZE0pmZkvu/ptTyd1xiaThKWMUknh+BWrHJj1FptOjObtMDIvg==
+X-Received: by 2002:ac2:5606:0:b0:4b6:e493:b798 with SMTP id v6-20020ac25606000000b004b6e493b798mr12608880lfd.68.1672658066995;
+        Mon, 02 Jan 2023 03:14:26 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id o10-20020ac24e8a000000b004cb1e2f8f4dsm1690661lfr.152.2023.01.02.03.14.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 03:14:26 -0800 (PST)
+Message-ID: <b579ea50-1edb-7291-7eb5-da6d462bbda8@linaro.org>
+Date:   Mon, 2 Jan 2023 12:14:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH] mfd: rk808: re-add rk808-clkout to RK818
-To:     neil.armstrong@linaro.org, Lee Jones <lee@kernel.org>
-Cc:     Ondrej Jirman <megi@xff.cz>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Martijn Braam <martijn@brixit.nl>,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221228140708.26431-1-tom@tom-fitzhenry.me.uk>
- <3f40e58a-dcd2-7c9a-1a9d-cae36719352f@linaro.org>
+Subject: Re: [PATCH 4/6] arm64: dts: qcom: sc8280xp-x13s: fix wcd938x codec
+ node
 Content-Language: en-US
-From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-In-Reply-To: <3f40e58a-dcd2-7c9a-1a9d-cae36719352f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230102105038.8074-1-johan+linaro@kernel.org>
+ <20230102105038.8074-5-johan+linaro@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230102105038.8074-5-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/23 21:06, Neil Armstrong wrote:
-> On 28/12/2022 15:07, Tom Fitzhenry wrote:
->> Fixes RK818 (e.g. on Pinephone Pro) to register its clock, without which
->> dependent devices (e.g. wifi/BT, via sdio-wifi-pwrseq) fail to probe.
->>
->> This line was removed in commit 3633daacea2e
->> ("mfd: rk808: Permit having multiple PMIC instances"), but only from 
->> RK818.
->>
->> Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
->> ---
->>   drivers/mfd/rk808.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk808.c
->> index f44fc3f080a8..0f22ef61e817 100644
->> --- a/drivers/mfd/rk808.c
->> +++ b/drivers/mfd/rk808.c
->> @@ -189,6 +189,7 @@ static const struct mfd_cell rk817s[] = {
->>   };
->>   static const struct mfd_cell rk818s[] = {
->> +    { .name = "rk808-clkout", .id = PLATFORM_DEVID_NONE, },
->>       { .name = "rk808-regulator", .id = PLATFORM_DEVID_NONE, },
->>       {
->>           .name = "rk808-rtc",
->>
->> base-commit: c76083fac3bae1a87ae3d005b5cb1cbc761e31d5
+
+
+On 2.01.2023 11:50, Johan Hovold wrote:
+> The wcd938x codec is not a memory-mapped device and does not belong
+> under the soc node.
 > 
-> Sorry, my bad...
+> Move the node to the root node to avoid DT validation failures.
+> 
+> While at it, clean up the node somewhat by adding newline separators,
+> reordering properties and renaming it 'audio-codec'.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-No worries!
-
-> Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
-
-Thanks, I have added this to the v2 patch.
+Konrad
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 54 ++++++++++---------
+>  1 file changed, 28 insertions(+), 26 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> index 97ff74d5095e..ae67c11bfc22 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> @@ -21,6 +21,34 @@ / {
+>  	model = "Lenovo ThinkPad X13s";
+>  	compatible = "lenovo,thinkpad-x13s", "qcom,sc8280xp";
+>  
+> +	wcd938x: audio-codec {
+> +		compatible = "qcom,wcd9380-codec";
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&wcd_default>;
+> +
+> +		reset-gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
+> +
+> +		vdd-buck-supply = <&vreg_s10b>;
+> +		vdd-rxtx-supply = <&vreg_s10b>;
+> +		vdd-io-supply = <&vreg_s10b>;
+> +		vdd-mic-bias-supply = <&vreg_bob>;
+> +
+> +		qcom,micbias1-microvolt = <1800000>;
+> +		qcom,micbias2-microvolt = <1800000>;
+> +		qcom,micbias3-microvolt = <1800000>;
+> +		qcom,micbias4-microvolt = <1800000>;
+> +		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
+> +		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
+> +		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
+> +		qcom,rx-device = <&wcd_rx>;
+> +		qcom,tx-device = <&wcd_tx>;
+> +
+> +		#sound-dai-cells = <1>;
+> +
+> +		status = "disabled";
+> +	};
+> +
+>  	backlight {
+>  		compatible = "pwm-backlight";
+>  		pwms = <&pmc8280c_lpg 3 1000000>;
+> @@ -628,32 +656,6 @@ &remoteproc_nsp0 {
+>  	status = "okay";
+>  };
+>  
+> -&soc {
+> -	wcd938x: codec {
+> -		compatible = "qcom,wcd9380-codec";
+> -		pinctrl-names = "default";
+> -		pinctrl-0 = <&wcd_default>;
+> -		reset-gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
+> -		#sound-dai-cells = <1>;
+> -
+> -		vdd-buck-supply = <&vreg_s10b>;
+> -		vdd-rxtx-supply = <&vreg_s10b>;
+> -		vdd-io-supply = <&vreg_s10b>;
+> -		vdd-mic-bias-supply = <&vreg_bob>;
+> -		qcom,micbias1-microvolt = <1800000>;
+> -		qcom,micbias2-microvolt = <1800000>;
+> -		qcom,micbias3-microvolt = <1800000>;
+> -		qcom,micbias4-microvolt = <1800000>;
+> -		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
+> -		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
+> -		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
+> -		qcom,rx-device = <&wcd_rx>;
+> -		qcom,tx-device = <&wcd_tx>;
+> -
+> -		status = "disabled";
+> -	};
+> -};
+> -
+>  &sound {
+>  	compatible = "qcom,sc8280xp-sndcard";
+>  	model = "SC8280XP-LENOVO-X13S";
