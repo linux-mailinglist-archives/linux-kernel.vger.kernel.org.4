@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD7265B4F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CABBE65B4F6
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236584AbjABQPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
+        id S236364AbjABQQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236518AbjABQPI (ORCPT
+        with ESMTP id S236705AbjABQQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:15:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14361FE
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:15:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 572D661022
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 16:15:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95999C433F0
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 16:15:06 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="E1duccYi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672676105;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8OsgB6sF+YBHghSaIglnCuwKWStFMdBBwWbUet732Y=;
-        b=E1duccYir85sL8gcOSr//g4uzwbI3/kBfMlaXA4CeQg1GAO+MhX1lY3fRuM1jfzpnXDUCx
-        u3OERWK97fgvdveZdWqHEiL6D3nNzMc+TwNOLKBi+zawAhUBqeiksknsvO6YZDImbwOVgg
-        EodByDp3JlRkxSvScMqvHm4JFP0nFAk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 39aeafe1 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 2 Jan 2023 16:15:05 +0000 (UTC)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-4a2f8ad29d5so63115767b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:15:04 -0800 (PST)
-X-Gm-Message-State: AFqh2kqyH7sLe3g7YYF57KDd1j8vzuoQxKgomMmvyjWUuJMr3jfg0tYf
-        KOhdXEZQQWFMfLqThJq0POeEYL0bWqWoEBeW+4I=
-X-Google-Smtp-Source: AMrXdXsglstfC95r3fpYAaEHUUGDq67reaILKz5VjN0bDJBFwd+RJFYrm3vTlbtvKviLO9JsIuPUxiMQV51Z/xgY+kc=
-X-Received: by 2002:a0d:f344:0:b0:3dd:bcc2:e359 with SMTP id
- c65-20020a0df344000000b003ddbcc2e359mr4358996ywf.341.1672676103499; Mon, 02
- Jan 2023 08:15:03 -0800 (PST)
+        Mon, 2 Jan 2023 11:16:32 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECE91088;
+        Mon,  2 Jan 2023 08:16:25 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id co23so26735748wrb.4;
+        Mon, 02 Jan 2023 08:16:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RKIJPYaJSdM3GKsqUf/WtIlPO2sQ0/XB3Crq4Is/cNU=;
+        b=pjHG4gCV0CBN4TWnma/ku4nCxrXwnvh5BTC/fjr42Zaw3hXIKmiAoxAn/mykTGPb9K
+         yZUfPO5KrY0IN70tJ4dfSEIXVTvHM2WFKZCddKD1Ibnq9BMJKm/lNb+knAOXtvQUcNmK
+         eYxAFY6Ju3lIZiACzT4E6SUfEzvRi0momUwjXMcspqmNP/So0K3ju1r9DTBkpx1ecU2r
+         UPMOFBzPLsAd/Yne5j1VLJesK7SiXTzXDoaniLpBXnCGv+De11zTYg0flzNlkl1sTUKs
+         PdCW+GavwtBTAwMobxuHcLuqrT6M4rziSNuxF+qZ2yXoN/loHysAObx0YgPqPVHA+xLI
+         hKJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RKIJPYaJSdM3GKsqUf/WtIlPO2sQ0/XB3Crq4Is/cNU=;
+        b=nqiWD/UR3apGucCxnWxJWUsv3a0uPZMSxH5Iu0rxoesCy19rwnIMnHjVaCpwDddDO1
+         fVS0XzGMmkbuGOodweJnXerd1PtN6m3qb16lPuCl18/yX84N3f5J9uw1mIjzlggxr1aX
+         B1C0/pqHqBVkV4XZ/tYO6GbckBlogLnuDDqlXshCU0DPDRfjy06PqFI8SQggRrSTemki
+         +Xmged/FFkD5GZvujWjtyZVwSSGtZ0UQnamLyRe/HeoSGAUCPC63R9TP3D3TdL8We0Au
+         2W9mGef4AqMITyeVc7LieVC6YfII8U2a5684yvDR7hTZ8q7cJzsdfMsp+tHSkgy3r656
+         bItQ==
+X-Gm-Message-State: AFqh2koWzfCVjbnRQuLGnEUVAOTGflbYcuWiJLhQaOZ+XOMEqYlUYCjm
+        6yg0b7ZYSyM/wWn0FTYTQkOFzrsNioU=
+X-Google-Smtp-Source: AMrXdXtCovWSnecYarAiFHu4OIRig1uH9TEdmNmBgRP5jhe4tXLG9RYBuwHMpulTDEkbZ1CdO2cREQ==
+X-Received: by 2002:a5d:4f83:0:b0:28a:8f13:dee5 with SMTP id d3-20020a5d4f83000000b0028a8f13dee5mr12188409wru.40.1672676183747;
+        Mon, 02 Jan 2023 08:16:23 -0800 (PST)
+Received: from localhost ([2a01:4c8:469:341:d1e1:a149:58ed:f096])
+        by smtp.gmail.com with ESMTPSA id b2-20020adff242000000b0023662245d3csm29275446wrp.95.2023.01.02.08.16.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 08:16:22 -0800 (PST)
+Date:   Mon, 2 Jan 2023 16:16:21 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Jakub Matena <matenajakub@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>
+Subject: Re: [PATCH v3] selftest/vm: add mremap expand merge offset test
+Message-ID: <Y7MDVT4dO2pqxJwJ@lucifer>
+References: <420e491062db9151504aef5661c8a2d928ef6bd7.1672675224.git.lstoakes@gmail.com>
+ <9d13393a-d203-23de-30ae-4d6476a94fd7@redhat.com>
+ <Y7MBqfYv54rY48Wi@lucifer>
+ <f29b6cb0-d46b-7d89-c8ad-12b9addf8ce8@redhat.com>
 MIME-Version: 1.0
-References: <Y5oy0vwZQAwzkDkr@zx2c4.com> <20221214203454.337299-1-Jason@zx2c4.com>
- <20221214213015.GA16072@ranerica-svr.sc.intel.com> <Y5zRTqDmjeJzjeFf@zx2c4.com>
- <CAHmME9ojkPUV-acD8o1rFsfR+f7URG8PW44GUUt8WUK0O=KD6w@mail.gmail.com>
- <Y7L4n0imic1ncHhe@zn.tnic> <CAHmME9rMTNQ+hZPG1cbpP2zA6Cq3-f=gXXPF3=WYhQWicEYV4w@mail.gmail.com>
- <Y7MCgS9Ix7qcLdct@zn.tnic>
-In-Reply-To: <Y7MCgS9Ix7qcLdct@zn.tnic>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 2 Jan 2023 17:14:52 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qPViOzDPUx36Xm9UBMR_mP4_NUDS1QSm0kqw8EaQiQyg@mail.gmail.com>
-Message-ID: <CAHmME9qPViOzDPUx36Xm9UBMR_mP4_NUDS1QSm0kqw8EaQiQyg@mail.gmail.com>
-Subject: Re: [PATCH v2] x86: lib: Separate instruction decoder MMIO type from
- MMIO trace
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f29b6cb0-d46b-7d89-c8ad-12b9addf8ce8@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,25 +79,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Borislav,
+On Mon, Jan 02, 2023 at 05:10:40PM +0100, David Hildenbrand wrote:
+> Maybe wait until tomorrow for feedback from others. Make sure to include my
+> acked-by.
 
-On Mon, Jan 2, 2023 at 5:12 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Mon, Jan 02, 2023 at 04:59:08PM +0100, Jason A. Donenfeld wrote:
-> > Rest of series is intended to go through random.git tree, so it'd be
-> > useful to not have to carry this there -- less pain.
->
-> Ping me when the time has come and I'll ack it so that it can go through the
-> random.git tree too. Provided there are no serious conflicts but we'll cross
-> that bridge when we get to it...
+Too late... I thought Andrew typically added these kind of things himself? As an
+Acked-by could be a reply to an unmodified patch for example. Though I guess
+it'd save you having to reply to the v4? Anyway sorry, already sent it!
 
-Alright, we'll do that then.
+It's sat in the mailing list so others can review further if required, this is a
+bank holiday in the UK, and as a part-time contributor (and otherwise distracted
+by book work) it is a rare moment to be able to respond to feedback so will tend
+to get squashed into evenings/weekends/public holidays :) If people have further
+comments I will, of course, respond as + when I can!
 
-tglx has been reviewing these -- though he's been busy as of late --
-but if you're curious, here's the series:
-https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/log/?h=vdso
-https://lore.kernel.org/lkml/20230101162910.710293-1-Jason@zx2c4.com/
-I wouldn't mind some feedback or acks on any subset of those.
-
-
-Jason
+Cheers!
