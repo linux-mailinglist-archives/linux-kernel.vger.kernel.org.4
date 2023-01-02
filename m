@@ -2,89 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4101365B457
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083B265B45D
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjABPj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
+        id S236172AbjABPqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbjABPjy (ORCPT
+        with ESMTP id S229583AbjABPqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:39:54 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEF3C0
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:39:53 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id w1so14474807wrt.8
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:39:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yMroW05oFhzknL98EQCsQ+SYSzTJ+LrSISoJgrOG1c4=;
-        b=z6lnklFSzA0EUtdobeGYXiDOCKMR83l8jJ5DsNGAUKi0waNzUooYubwdcTs3pe5VVB
-         9wGgFoHpBJXkvb9uCDCtHuhnqyYYQ1UXWu7zgGQMn4ki2w212Iz9sPYRJy/8tbD4h5Zc
-         0Fq0NEgUwH0WA2H5bBzCS4BkvR4+3F5lgSbtoirwyuhuFeLJCLjhFHagaITMSHi5LN0G
-         K69E+HsNzg0S28aO7qdYPIbL9+4Kz3w7ZCvsdzzovupAZWp7si7RhlBH4U598c41myEh
-         WIXx2CsE6cZWP42xWUFNN/L6zU1to+73+sbv/Z0xVTu88f68x6iu7R79GSAvdrCnBXEc
-         hnmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yMroW05oFhzknL98EQCsQ+SYSzTJ+LrSISoJgrOG1c4=;
-        b=ImCSxUwtGNEY2VYZW4uRi9rutAB2uvzm77jTixXkY2nn1F8FFv1UHFa4eXpMrpHXGq
-         v5oSj0B1vtspvlQdJfQYi+pVdxD8Q6MH108tyscwDE/Rms/AGbMsMRjNNP9O7Y6SCUQ8
-         KvR5CMw+VaTYe8VpfOWy/momcvO+JWCQUJYmDV5FmktWXMCJ/F/olc0RlLgct+JlV5T8
-         HbguANefuG4CmdIeO52nVqVj8oGgwrBKSiUOSui8cwDiAuAFI7uX86NE7gfUyfgywtKC
-         0c5FmkiB8C3BVt6LgdTEUKkuPVYsfDU2Y78AVBpaFAY48TvpkR5u3S3Ld3zSWogR8H2Q
-         zpvQ==
-X-Gm-Message-State: AFqh2koyIwh+cTq48CCKvIdonb0Dg4k6N86bI2kptIjTHCpxXDPR8qQK
-        7fj2iDwmM94UOcj8F3LGUcLxlQ==
-X-Google-Smtp-Source: AMrXdXt7BEAS/UD6tVnAMFCTIvKMlxBXfdrbEMQxwT2ptAJu2hH0NGuN+4l8xPhfnxBWa97PDxnFUA==
-X-Received: by 2002:a5d:4b06:0:b0:28a:87f4:b21c with SMTP id v6-20020a5d4b06000000b0028a87f4b21cmr10061768wrq.32.1672673992182;
-        Mon, 02 Jan 2023 07:39:52 -0800 (PST)
-Received: from localhost ([86.61.181.4])
-        by smtp.gmail.com with ESMTPSA id c4-20020adfe704000000b00241b5af8697sm29097757wrm.85.2023.01.02.07.39.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 07:39:51 -0800 (PST)
-Date:   Mon, 2 Jan 2023 16:39:50 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net v2] drivers/net/bonding/bond_3ad: return when there's
- no aggregator
-Message-ID: <Y7L6xl0Xa9KhfG2Z@nanopsycho>
-References: <20230102095335.94249-1-d-tatianin@yandex-team.ru>
+        Mon, 2 Jan 2023 10:46:23 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4975F9C;
+        Mon,  2 Jan 2023 07:46:21 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 99E0D3422B;
+        Mon,  2 Jan 2023 15:46:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672674380;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0kN36fAD79xDzKSoBM4U+uzPuosajOxFlniG0gS5LyA=;
+        b=ZopZ4CUmVga5lv464LF1TUu8UCiC7r2z9ymVssakAccU/zxO6UZheMw68mebZfSj/s+K+M
+        ie9YIBn8/DRK7rBPVIiNUyIwoE3cqtZ9Rs1ek7XjPT92N6wfIp6bhHpPjuLI2Eivi+HEHZ
+        0Fko/gBYP8/vBKR8mP/XJloZFjG6LGw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672674380;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0kN36fAD79xDzKSoBM4U+uzPuosajOxFlniG0gS5LyA=;
+        b=GS8HodUsTgfnZh5Ka1S+69/0SQ1LuXvc/vmXYpqz3T3/T6ctI7U37wurwG1rtmDPe6LLn2
+        cEJKTKGcwJYjCICQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D41213427;
+        Mon,  2 Jan 2023 15:46:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bJLJFUz8smONcQAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Mon, 02 Jan 2023 15:46:20 +0000
+Date:   Mon, 2 Jan 2023 16:40:50 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     linux-btrfs <linux-btrfs@vger.kernel.org>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: Re: [regression] =?iso-8859-1?Q?Bug=A02168?= =?iso-8859-1?Q?51?= -
+ btrfs write time corrupting for log tree
+Message-ID: <20230102154050.GJ11562@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <ae169fc6-f504-28f0-a098-6fa6a4dfb612@leemhuis.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230102095335.94249-1-d-tatianin@yandex-team.ru>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ae169fc6-f504-28f0-a098-6fa6a4dfb612@leemhuis.info>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Jan 02, 2023 at 10:53:35AM CET, d-tatianin@yandex-team.ru wrote:
->Otherwise we would dereference a NULL aggregator pointer when calling
->__set_agg_ports_ready on the line below.
->
->Found by Linux Verification Center (linuxtesting.org) with the SVACE
->static analysis tool.
->
->Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
->Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+On Tue, Dec 27, 2022 at 03:01:34PM +0100, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker speaking.
+> 
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216851 :
+> 
+> > I am experiencing btrfs file system errors followed by a switch to readony with kernel 6.1 and 6.1.1. It never happened with kernel versions before.
+> > 
+> > A btrfs scrub and a btrfs check --readonly returned 0 errors.
+> > 
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS critical (device sda2): corrupt leaf: root=18446744073709551610 block=203366612992 slot=73, bad key order, prev (484119 96 1312873) current (484119 96 1312849)
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS info (device sda2): leaf 203366612992 gen 5068802 total ptrs 105 free space 10820 owner 18446744073709551610
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 0 key (484119 1 0) itemoff 16123 itemsize 160
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09inode generation 45 size 2250 mode 40700
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 1 key (484119 12 484118) itemoff 16097 itemsize 26
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 2 key (484119 72 15) itemoff 16089 itemsize 8
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 3 key (484119 72 20) itemoff 16081 itemsize 8
+> > ...
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 82 key (484119 96 1312873) itemoff 14665 itemsize 51
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 83 key (484119 96 1312877) itemoff 14609 itemsize 56
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 84 key (484128 1 0) itemoff 14449 itemsize 160
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09inode generation 45 size 98304 mode 100644
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 85 key (484128 108 0) itemoff 14396 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10674830381056 nr 65536
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 65536 ram 65536
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 86 key (484129 1 0) itemoff 14236 itemsize 160
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09inode generation 45 size 26214400 mode 100644
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 87 key (484129 108 589824) itemoff 14183 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665699962880 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 88 key (484129 108 2850816) itemoff 14130 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665848733696 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 89 key (484129 108 11042816) itemoff 14077 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10660869349376 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 90 key (484129 108 13402112) itemoff 14024 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10660207378432 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 91 key (484129 108 19628032) itemoff 13971 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665835618304 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 92 key (484129 108 21266432) itemoff 13918 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10661222666240 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 93 key (484129 108 22740992) itemoff 13865 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665565814784 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 94 key (484129 108 23101440) itemoff 13812 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665836371968 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 95 key (484129 108 24084480) itemoff 13759 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665836404736 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 96 key (484129 108 24150016) itemoff 13706 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665849159680 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 97 key (484129 108 24313856) itemoff 13653 itemsize 53
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data disk bytenr 10665849192448 nr 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09extent data offset 0 nr 32768 ram 32768
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 98 key (484147 1 0) itemoff 13493 itemsize 160
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09\x09inode generation 45 size 886 mode 40755
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 99 key (484147 72 4) itemoff 13485 itemsize 8
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 100 key (484147 72 27) itemoff 13477 itemsize 8
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 101 key (484147 72 35) itemoff 13469 itemsize 8
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 102 key (484147 72 40) itemoff 13461 itemsize 8
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 103 key (484147 72 45) itemoff 13453 itemsize 8
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - \x09item 104 key (484147 72 52) itemoff 13445 itemsize 8
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS error (device sda2): block=203366612992 write time tree block corruption detected
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS: error (device sda2: state AL) in free_log_tree:3284: errno=-5 IO failure
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS info (device sda2: state EAL): forced readonly
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS warning (device sda2: state EAL): Skipping commit of aborted transaction.
+> > 2022-12-26T07:44:45.000000+01:00 server02 kernel - - - BTRFS: error (device sda2: state EAL) in cleanup_transaction:1958: errno=-5 IO failure
+> > 
+> > 
+> > There are no SSD access errors in the kernel logs. Smart data for the SSD is normal. I also did a 12 hour memtest to rule out bad RAM.
+> > 
+> > The filesystem consists of a single 480GB SATA SSD (Corsair Neutron XTI). The problems occurs only on one machine.
+> > 
+> > The error appears about every few days and seems to be triggered by a cspecially under high cpu utilization combined with some disk IO. CPU temperature never exceeds 60 degrees.
+> 
+> See the ticket for more details.
+> 
+> For the record, the issue is apparently different from the 6.2-rc
+> regression currently discussed, as stated here:
+> https://lore.kernel.org/lkml/462e7bd3-d1f2-3718-fde9-77b418e9fd91@gmx.com/
+> 
+> BTW, let me use this mail to also add the report to the list of tracked
+> regressions to ensure it's doesn't fall through the cracks:
+> 
+> #regzbot introduced: v6.0..v6.1
+> https://bugzilla.kernel.org/show_bug.cgi?id=216851
+> #regzbot title: btrfs: write time corrupting for log tree in 6.1
+> #regzbot ignore-activity
 
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+#regzbot fix: 'btrfs: fix false alert on bad tree level check'
