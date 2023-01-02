@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CD065AFDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8455665AFD6
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjABKtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
+        id S232476AbjABKtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:49:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbjABKtV (ORCPT
+        with ESMTP id S231972AbjABKtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:49:21 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CFDB87;
-        Mon,  2 Jan 2023 02:49:21 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302AAvrD012099;
-        Mon, 2 Jan 2023 10:48:51 GMT
+        Mon, 2 Jan 2023 05:49:09 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD315B79;
+        Mon,  2 Jan 2023 02:49:08 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3029fNQJ030336;
+        Mon, 2 Jan 2023 10:48:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=RSf8P3pVo0pQ3dKKyoCr9K8iN7clmptkqL8x8ilOuQk=;
- b=bSfhQs7Nwy6pULR2796STV+GUkaHZhgGYuDWmlftjVtHvy02+x6NJv1hrvip3o2MLf14
- 6oP5OL/5trRww1mu9bKTA4jmRuRfbM7peLUpVZ/Kji3K35SH0YZYrtO0t8f8TOVxBKPh
- 4/kYOkaiRvSLlTcSDNk/o21kV0vKqofbY/70IRnDQFTR6+vNMaVIhk5nf+QTDJsgCkA3
- q9qMkkKsE8N1WwIg9jqWuyRlhSjuXKBADx3/60zwFHSjZB5Ac9bVm6Bt8kTRNUtWFT2A
- n7S/e61UjwoRpd/8EAiicGSuPZzuPbTRRqofcayshjnzOiYcVBaDanuzQi1l63txT0WB dw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mtcdsjwxa-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=1ZvNNLs9YHL5F6tWfigNRJClcoTRZ+GFT3G9ZlMqXro=;
+ b=MVvKEL4eMSvojwFEC+79BZJrsV9L0eekkAFhx53Nl19RpVkiJzj1JtD4Svvd39YfeiMt
+ pH3BB2IJKjZXfy+l5DyNXXshQ/Vy07PLKxco/Or9nDnkt/6cZySHg6CZJb9ohsopDJbs
+ BRTGRgXnuysOgvmgCOWP9t0RwxqpN091QiY9NO5OuuoABJJ+2cNLa9YhJQfKS9c0uSg5
+ nmTRJCzXEChcckqnUQc4qKy04sLl239ViHl5LIDrzZe3K6rnIozbpAF6q2ChOlW+fXT+
+ XO8dyCK/lOLvDUggjMTvjXbQDiddgUwh2s/D/61i3GxqEU7yPIU2JQvLpXAzCjUrhr6i 5A== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mtc202nfg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 10:48:50 +0000
+        Mon, 02 Jan 2023 10:48:55 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 302AmnDE012583
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 302Amttv000341
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 2 Jan 2023 10:48:49 GMT
+        Mon, 2 Jan 2023 10:48:55 GMT
 Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 2 Jan 2023 02:48:40 -0800
+ 15.2.986.36; Mon, 2 Jan 2023 02:48:49 -0800
 From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
 To:     freedreno <freedreno@lists.freedesktop.org>,
         <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
@@ -47,28 +48,17 @@ To:     freedreno <freedreno@lists.freedesktop.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>
 CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Andy Gross <agross@kernel.org>, Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
         Kevin Hilman <khilman@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Len Brown" <len.brown@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Sean Paul" <sean@poorly.run>, <linux-clk@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: [PATCH v5 0/5] Improve GPU reset sequence for Adreno GPU
-Date:   Mon, 2 Jan 2023 16:18:26 +0530
-Message-ID: <1672656511-1931-1-git-send-email-quic_akhilpo@quicinc.com>
+Subject: [PATCH v5 1/5] PM: domains: Allow a genpd consumer to require a synced power off
+Date:   Mon, 2 Jan 2023 16:18:27 +0530
+Message-ID: <20230102161757.v5.1.I3e6b1f078ad0f1ca9358c573daa7b70ec132cdbe@changeid>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1672656511-1931-1-git-send-email-quic_akhilpo@quicinc.com>
+References: <1672656511-1931-1-git-send-email-quic_akhilpo@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -76,75 +66,127 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jSLXBoal9ABZNoKgyxYqjiPhCZZiQZoA
-X-Proofpoint-GUID: jSLXBoal9ABZNoKgyxYqjiPhCZZiQZoA
+X-Proofpoint-ORIG-GUID: ShIwPCzvseLWnEawiuL7o3TIhORqugrQ
+X-Proofpoint-GUID: ShIwPCzvseLWnEawiuL7o3TIhORqugrQ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-02_06,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 mlxlogscore=974 phishscore=0 suspectscore=0
- spamscore=0 adultscore=0 mlxscore=0 malwarescore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 mlxscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2301020098
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-This is a rework of [1] using genpd instead of 'reset' framework.
+Some genpd providers doesn't ensure that it has turned off at hardware.
+This is fine until the consumer really requires during some special
+scenarios that the power domain collapse at hardware before it is
+turned ON again.
 
-As per the recommended reset sequence of Adreno gpu, we should ensure that
-gpucc-cx-gdsc has collapsed at hardware to reset gpu's internal hardware states.
-Because this gdsc is implemented as 'votable', gdsc driver doesn't poll and
-wait until its hw status says OFF.
+An example is the reset sequence of Adreno GPU which requires that the
+'gpucc cx gdsc' power domain should move to OFF state in hardware at
+least once before turning in ON again to clear the internal state.
 
-So use the newly introduced genpd api (dev_pm_genpd_synced_poweroff()) to
-provide a hint to the gdsc driver to poll for the hw status and use genpd
-notifier to wait from adreno gpu driver until gdsc is turned OFF.
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+---
 
-This series is rebased on top of linux-next (20221215) since the changes span
-multiple drivers.
-
-[1] https://patchwork.freedesktop.org/series/107507/
-
-Changes in v5:
-- Capture all Reviewed-by tags
+(no changes since v4)
 
 Changes in v4:
 - Update genpd function documentation (Ulf)
 
-Changes in v3:
-- Rename the var 'force_sync' to 'wait (Stephen)
-
 Changes in v2:
 - Minor formatting fix
-- Select PM_GENERIC_DOMAINS from Kconfig
 
-Akhil P Oommen (4):
-  clk: qcom: gdsc: Support 'synced_poweroff' genpd flag
-  drm/msm/a6xx: Vote for cx gdsc from gpu driver
-  drm/msm/a6xx: Remove cx gdsc polling using 'reset'
-  drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse
+ drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
+ include/linux/pm_domain.h   |  5 +++++
+ 2 files changed, 31 insertions(+)
 
-Ulf Hansson (1):
-  PM: domains: Allow a genpd consumer to require a synced power off
-
- drivers/base/power/domain.c           | 26 ++++++++++++++++++++
- drivers/clk/qcom/gdsc.c               | 11 +++++----
- drivers/gpu/drm/msm/Kconfig           |  1 +
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 46 ++++++++++++++++++++++++++++++++---
- drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  7 ++++++
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 13 +++++++---
- drivers/gpu/drm/msm/msm_gpu.c         |  4 ---
- drivers/gpu/drm/msm/msm_gpu.h         |  4 ---
- include/linux/pm_domain.h             |  5 ++++
- 9 files changed, 97 insertions(+), 20 deletions(-)
-
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 967bcf9d415e..84662d338188 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -519,6 +519,31 @@ ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_genpd_get_next_hrtimer);
+ 
++/*
++ * dev_pm_genpd_synced_poweroff - Next power off should be synchronous
++ *
++ * @dev: A device that is attached to the genpd.
++ *
++ * Allows a consumer of the genpd to notify the provider that the next power off
++ * should be synchronous.
++ *
++ * It is assumed that the users guarantee that the genpd wouldn't be detached
++ * while this routine is getting called.
++ */
++void dev_pm_genpd_synced_poweroff(struct device *dev)
++{
++	struct generic_pm_domain *genpd;
++
++	genpd = dev_to_genpd_safe(dev);
++	if (!genpd)
++		return;
++
++	genpd_lock(genpd);
++	genpd->synced_poweroff = true;
++	genpd_unlock(genpd);
++}
++EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
++
+ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+ {
+ 	unsigned int state_idx = genpd->state_idx;
+@@ -562,6 +587,7 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+ 
+ out:
+ 	raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_ON, NULL);
++	genpd->synced_poweroff = false;
+ 	return 0;
+ err:
+ 	raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_OFF,
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 1cd41bdf73cf..f776fb93eaa0 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -136,6 +136,7 @@ struct generic_pm_domain {
+ 	unsigned int prepared_count;	/* Suspend counter of prepared devices */
+ 	unsigned int performance_state;	/* Aggregated max performance state */
+ 	cpumask_var_t cpus;		/* A cpumask of the attached CPUs */
++	bool synced_poweroff;		/* A consumer needs a synced poweroff */
+ 	int (*power_off)(struct generic_pm_domain *domain);
+ 	int (*power_on)(struct generic_pm_domain *domain);
+ 	struct raw_notifier_head power_notifiers; /* Power on/off notifiers */
+@@ -235,6 +236,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+ int dev_pm_genpd_remove_notifier(struct device *dev);
+ void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
+ ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev);
++void dev_pm_genpd_synced_poweroff(struct device *dev);
+ 
+ extern struct dev_power_governor simple_qos_governor;
+ extern struct dev_power_governor pm_domain_always_on_gov;
+@@ -300,6 +302,9 @@ static inline ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
+ {
+ 	return KTIME_MAX;
+ }
++static inline void dev_pm_genpd_synced_poweroff(struct device *dev)
++{ }
++
+ #define simple_qos_governor		(*(struct dev_power_governor *)(NULL))
+ #define pm_domain_always_on_gov		(*(struct dev_power_governor *)(NULL))
+ #endif
 -- 
 2.7.4
 
