@@ -2,497 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8DC65B246
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE6165B24A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbjABMo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 07:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        id S232719AbjABMp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 07:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjABMo0 (ORCPT
+        with ESMTP id S232721AbjABMpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 07:44:26 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AA05FE0;
-        Mon,  2 Jan 2023 04:44:23 -0800 (PST)
+        Mon, 2 Jan 2023 07:45:23 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19D06454
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:45:20 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id jn22so29432645plb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 04:45:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1672663464; x=1704199464;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ioVYIpFG8DC6v6ZQ/LA0HIv3ZhntmZW8xS8Dwp6vcB4=;
-  b=jR+wKcWlWSjlbQJYqLgQYrEQVS/zhH5PaH6Vp9i67lsocR8zpej2v11i
-   DP7B9hSg5sjA+iSdcVezEU6U4hp6HSF5a/6LdMPYrnBWJVnFZ0+F7X7Xp
-   YF4MbOBTJ3h+EvZdYKtiX/mya7sQE361c+GXLof1qsn2vaxG9Ii8Tax6I
-   YYlgj/FzUaE0GaXLnKZ7g4b6Yi0ZTu7qC6SJ2D5tNx448mYRbz5ReAqKC
-   2iVn/wL+hBBLkiUoPhPgI1VYH0P98FUQKogmsxq43rz93H6F/+QARgWOS
-   YzkGWYPRIJ6vAyeuMA+HntabzysMAxemwOmNDKgWZ1Y9pSBuN54iFpfrV
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,294,1665439200"; 
-   d="scan'208";a="28204263"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 02 Jan 2023 13:44:21 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 02 Jan 2023 13:44:21 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 02 Jan 2023 13:44:21 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1672663461; x=1704199461;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ioVYIpFG8DC6v6ZQ/LA0HIv3ZhntmZW8xS8Dwp6vcB4=;
-  b=R2nkheNI3fJ58pMHLE41u24BQONdzetUJ29PCXdIwLv0mzar1jCWEosY
-   m2BserLigf+MQx7FAPWMFj3ivGGgq/C7cv+PZ7rnOe8H6J0rrsX0TSPw+
-   7lCTkcMG8yLdT64gHJQ7PzPMT1EwOXF/6qCwq+AB7t3Hwm+NLywxEoBfR
-   mYQzBSnxcSMffBgs56AodHh1RhKeuX+O8/+yoHfwkIAvp/e0vUETDz4aw
-   95hY4o4dy2ylT+iWPj825Z+Xd6a5pgYWssWAe5kut1yD5SBscGQ/Ai5nr
-   PzLrM30/Meyu1HVJ+QtA1v/suX6jTGmtzFFDgASJSJoT7kAoNLZfzj98Y
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,294,1665439200"; 
-   d="scan'208";a="28204262"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 02 Jan 2023 13:44:21 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 2E201280056;
-        Mon,  2 Jan 2023 13:44:21 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: Re: [PATCH v7 06/11] leds: trigger: netdev: add hardware control support
-Date:   Mon, 02 Jan 2023 13:44:20 +0100
-Message-ID: <13186102.dW097sEU6C@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <639ca43c.050a0220.e6d91.9fe8@mx.google.com>
-References: <20221214235438.30271-1-ansuelsmth@gmail.com> <3770526.R56niFO833@steina-w> <639ca43c.050a0220.e6d91.9fe8@mx.google.com>
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1xpu4k2D/PU+v5nzoXzMo8V939V41siBKh6dPsyMcqc=;
+        b=nYw0ZWTkICn6x6q5dgl3GV6vwE36VwxVFH/CSeHHwpmZRFQ3sM4/VFYy2ZMDpfedcL
+         +0VBLYySSi4y5l2sDogKxZPy0WLB7/wsLLxDj5wq25JNubULbpnlklRrTFe/dvMnRH+X
+         UOFoD79JaJKH6JnsbdA1/Pw/4zeuxoCCmvpFs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1xpu4k2D/PU+v5nzoXzMo8V939V41siBKh6dPsyMcqc=;
+        b=PCS0PbUrVSNGwzmGRvQ9rI4c5VRGkLFzZT6a/6wNVI5LmnZaIwbEb0NdTvkKZ+RTgH
+         AL6oJNVY1ushqj4DOvsMLnaM2Nf5LK58Y30FyAsQMUAyyvRCrQk8cQEfP2wI4T54kXr6
+         V62VRIjdcLHk1Z7S2Y4AGRQsguLzlM5hPN3o7kOyXnZzfR8PcckUy8x2/irIMY9dYW59
+         eWtz5k/8xuoD8j4wZD4gSNXWsfd3LlXrsqTUVjcvkk+5jHu2QuGgsZgFtfmJy1v94CPI
+         MZxb+LPwuONwb2WlV8paSyldomJSBNNHQaChvz1vrvXYq9xVMc79+sLAb8WTfi41Jz3s
+         lWkQ==
+X-Gm-Message-State: AFqh2krrH7UT0v0FIkfTnry4Hc8d8BuZMmxl/j7+DH8Fuos4KFA6ZWl8
+        ZBF0DrVJud+kD4JuW/T8kEtLzf/Mu9YsaTIL
+X-Google-Smtp-Source: AMrXdXseb2rUP24zpo86iCx4NN2J4K82ddvi0Go2UKqgBHZQKH2Gfb2WDn/aIrtNmuKDihN20uOLiQ==
+X-Received: by 2002:a17:902:e5cd:b0:192:9140:ee76 with SMTP id u13-20020a170902e5cd00b001929140ee76mr31092708plf.37.1672663520253;
+        Mon, 02 Jan 2023 04:45:20 -0800 (PST)
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com. [209.85.215.177])
+        by smtp.gmail.com with ESMTPSA id z16-20020a170902d55000b00189db296776sm10925082plf.17.2023.01.02.04.45.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 04:45:18 -0800 (PST)
+Received: by mail-pg1-f177.google.com with SMTP id f3so18281636pgc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 04:45:18 -0800 (PST)
+X-Received: by 2002:a65:5b81:0:b0:49c:5d81:b628 with SMTP id
+ i1-20020a655b81000000b0049c5d81b628mr1017356pgr.213.1672663517782; Mon, 02
+ Jan 2023 04:45:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221212-uvc-race-v4-0-38d7075b03f5@chromium.org>
+ <Y6sAO7URJpSIulye@pendragon.ideasonboard.com> <Y6sDKPD8L47ce35u@pendragon.ideasonboard.com>
+In-Reply-To: <Y6sDKPD8L47ce35u@pendragon.ideasonboard.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 2 Jan 2023 13:45:06 +0100
+X-Gmail-Original-Message-ID: <CANiDSCuigeLooqRaDvzEW28pgZu1H42M+oxk_4UEZh=Jue2M8Q@mail.gmail.com>
+Message-ID: <CANiDSCuigeLooqRaDvzEW28pgZu1H42M+oxk_4UEZh=Jue2M8Q@mail.gmail.com>
+Subject: Re: [PATCH v4] media: uvcvideo: Fix race condition with usb_kill_urb
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Staudt <mstaudt@google.com>, linux-media@vger.kernel.org,
+        stable@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 16. Dezember 2022, 18:00:45 CET schrieb Christian Marangi:
-> On Thu, Dec 15, 2022 at 04:27:17PM +0100, Alexander Stein wrote:
-> > Hi,
-> > 
-> > thanks for the v7 series.
-> > 
-> > Am Donnerstag, 15. Dezember 2022, 00:54:33 CET schrieb Christian Marangi:
-> > > Add hardware control support for the Netdev trigger.
-> > > The trigger on config change will check if the requested trigger can set
-> > > to blink mode using LED hardware mode and if every blink mode is
-> > > supported,
-> > > the trigger will enable hardware mode with the requested configuration.
-> > > If there is at least one trigger that is not supported and can't run in
-> > > hardware mode, then software mode will be used instead.
-> > > A validation is done on every value change and on fail the old value is
-> > > restored and -EINVAL is returned.
-> > > 
-> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > ---
-> > > 
-> > >  drivers/leds/trigger/ledtrig-netdev.c | 155 +++++++++++++++++++++++++-
-> > >  1 file changed, 149 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/leds/trigger/ledtrig-netdev.c
-> > > b/drivers/leds/trigger/ledtrig-netdev.c index dd63cadb896e..ed019cb5867c
-> > > 100644
-> > > --- a/drivers/leds/trigger/ledtrig-netdev.c
-> > > +++ b/drivers/leds/trigger/ledtrig-netdev.c
-> > > @@ -37,6 +37,7 @@
-> > > 
-> > >   */
-> > >  
-> > >  struct led_netdev_data {
-> > > 
-> > > +	enum led_blink_modes blink_mode;
-> > > 
-> > >  	spinlock_t lock;
-> > >  	
-> > >  	struct delayed_work work;
-> > > 
-> > > @@ -53,11 +54,105 @@ struct led_netdev_data {
-> > > 
-> > >  	bool carrier_link_up;
-> > >  
-> > >  };
-> > > 
-> > > +struct netdev_led_attr_detail {
-> > > +	char *name;
-> > > +	bool hardware_only;
-> > > +	enum led_trigger_netdev_modes bit;
-> > > +};
-> > > +
-> > > +static struct netdev_led_attr_detail attr_details[] = {
-> > > +	{ .name = "link", .bit = TRIGGER_NETDEV_LINK},
-> > > +	{ .name = "tx", .bit = TRIGGER_NETDEV_TX},
-> > > +	{ .name = "rx", .bit = TRIGGER_NETDEV_RX},
-> > > +};
-> > > +
-> > > +static bool validate_baseline_state(struct led_netdev_data
-> > > *trigger_data)
-> > > +{
-> > > +	struct led_classdev *led_cdev = trigger_data->led_cdev;
-> > > +	struct netdev_led_attr_detail *detail;
-> > > +	u32 hw_blink_mode_supported = 0;
-> > > +	bool force_sw = false;
-> > > +	int i;
-> > > +
-> > > +	for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
-> > > +		detail = &attr_details[i];
-> > > +
-> > > +		/* Mode not active, skip */
-> > > +		if (!test_bit(detail->bit, &trigger_data->mode))
-> > > +			continue;
-> > > +
-> > > +		/* Hardware only mode enabled on software controlled led
-> > 
-> > */
-> > 
-> > > +		if (led_cdev->blink_mode == SOFTWARE_CONTROLLED &&
-> > > +		    detail->hardware_only)
-> > > +			return false;
-> > > +
-> > > +		/* Check if the mode supports hardware mode */
-> > > +		if (led_cdev->blink_mode != SOFTWARE_CONTROLLED) {
-> > > +			/* With a net dev set, force software mode.
-> > > +			 * With modes are handled by hardware, led will
-> > 
-> > blink
-> > 
-> > > +			 * based on his own events and will ignore any
-> > 
-> > event
-> > 
-> > > +			 * from the provided dev.
-> > > +			 */
-> > > +			if (trigger_data->net_dev) {
-> > > +				force_sw = true;
-> > > +				continue;
-> > > +			}
-> > > +
-> > > +			/* With empty dev, check if the mode is
-> > 
-> > supported */
-> > 
-> > > +			if
-> > 
-> > (led_trigger_blink_mode_is_supported(led_cdev, detail->bit))
-> > 
-> > > +				hw_blink_mode_supported |= BIT(detail-
+Hi Laurent
+
+Thanks for your review!
+
+On Tue, 27 Dec 2022 at 15:37, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> On Tue, Dec 27, 2022 at 04:25:01PM +0200, Laurent Pinchart wrote:
+> > Hi Ricardo,
+> >
+> > Thank you for the patch.
+> >
+> > On Wed, Dec 14, 2022 at 05:31:55PM +0100, Ricardo Ribalda wrote:
+> > > usb_kill_urb warranties that all the handlers are finished when it
+> > > returns, but does not protect against threads that might be handling
+> > > asynchronously the urb.
 > > >
-> > >bit);
-> > 
-> > Shouldn't this be BIT(detail->bit)?
-> 
-> I think I didn't understand?
-
-The name 'bit' indicates this is a single bit number rather than a bitmask. 
-AFAICS the value (detail->bit) passed to led_trigger_blink_mode_is_supported 
-is eventually used within test_bit inside dp83867_parse_netdev. I assume you 
-have to actually pass the bitmask with this single bit set, not the bit number 
-itself.
-
-Best regards,
-Alexander
-
-> > > +		}
-> > > +	}
+> > > For UVC, the function uvc_ctrl_status_event_async() takes care of
+> > > control changes asynchronously.
+> > >
+> > >  If the code is executed in the following order:
+> > >
+> > > CPU 0                                       CPU 1
+> > > =====                                       =====
+> > > uvc_status_complete()
+> > >                                     uvc_status_stop()
+> > > uvc_ctrl_status_event_work()
+> > >                                     uvc_status_start() -> FAIL
+> > >
+> > > Then uvc_status_start will keep failing and this error will be shown:
+> > >
+> > > <4>[    5.540139] URB 0000000000000000 submitted while active
+> > > drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
+> > >
+> > > Let's improve the current situation, by not re-submiting the urb if
+> > > we are stopping the status event. Also process the queued work
+> > > (if any) during stop.
+> > >
+> > > CPU 0                                       CPU 1
+> > > =====                                       =====
+> > > uvc_status_complete()
+> > >                                     uvc_status_stop()
+> > >                                     uvc_status_start()
+> > > uvc_ctrl_status_event_work() -> FAIL
+> > >
+> > > Hopefully, with the usb layer protection this should be enough to cover
+> > > all the cases.
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
+> > > Reviewed-by: Yunke Cao <yunkec@chromium.org>
+> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > ---
+> > > uvc: Fix race condition on uvc
+> > >
+> > > Make sure that all the async work is finished when we stop the status urb.
+> > >
+> > > To: Yunke Cao <yunkec@chromium.org>
+> > > To: Sergey Senozhatsky <senozhatsky@chromium.org>
+> > > To: Max Staudt <mstaudt@google.com>
+> > > To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > To: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > > Cc: linux-media@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > ---
+> > > Changes in v4:
+> > > - Replace bool with atomic_t to avoid compiler reordering
+> > > - First complete the async work and then kill the urb to avoid race (Thanks Laurent!)
+> > > - Link to v3: https://lore.kernel.org/r/20221212-uvc-race-v3-0-954efc752c9a@chromium.org
+> > >
+> > > Changes in v3:
+> > > - Remove the patch for dev->status, makes more sense in another series, and makes
+> > >   the zero day less nervous.
+> > > - Update reviewed-by (thanks Yunke!).
+> > > - Link to v2: https://lore.kernel.org/r/20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org
+> > >
+> > > Changes in v2:
+> > > - Add a patch for not kalloc dev->status
+> > > - Redo the logic mechanism, so it also works with suspend (Thanks Yunke!)
+> > > - Link to v1: https://lore.kernel.org/r/20221212-uvc-race-v1-0-c52e1783c31d@chromium.org
+> > > ---
+> > >  drivers/media/usb/uvc/uvc_ctrl.c   | 3 +++
+> > >  drivers/media/usb/uvc/uvc_status.c | 6 ++++++
+> > >  drivers/media/usb/uvc/uvcvideo.h   | 1 +
+> > >  3 files changed, 10 insertions(+)
+> > >
+> > > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > > index c95a2229f4fa..1be6897a7d6d 100644
+> > > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > > @@ -1442,6 +1442,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
+> > >
+> > >     uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+> > >
+> > > +   if (atomic_read(&dev->flush_status))
+> > > +           return;
 > > > +
-> > > +	/* We can't run modes handled by both software and hardware.
-> > > +	 * Check if we run hardware modes and check if all the modes
-> > > +	 * can be handled by hardware.
-> > > +	 */
-> > > +	if (hw_blink_mode_supported && hw_blink_mode_supported !=
-> > > trigger_data->mode) +		return false;
-> > > +
-> > > +	/* Modes are valid. Decide now the running mode to later
-> > > +	 * set the baseline.
-> > > +	 * Software mode is enforced with net_dev set. With an empty
-> > > +	 * one hardware mode is selected by default (if supported).
-> > > +	 */
-> > > +	if (force_sw || led_cdev->blink_mode == SOFTWARE_CONTROLLED)
-> > 
-> > IMHO '|| !hw_blink_mode_supported' should be added here for blink_modes.
-> > This might happen if a PHY LED is SOFTWARE_HARDWARE_CONTROLLED, but some
-> > blink mode is not supported by hardware, thus hw_blink_mode_supported=0.
-> 
-> Will check this and report back.
-> 
-> > Best regards,
-> > Alexander
-> > 
-> > > +		trigger_data->blink_mode = SOFTWARE_CONTROLLED;
-> > > +	else
-> > > +		trigger_data->blink_mode = HARDWARE_CONTROLLED;
-> > > +
-> > > +	return true;
-> > > +}
-> > > +
-> > > 
-> > >  static void set_baseline_state(struct led_netdev_data *trigger_data)
-> > >  {
-> > > 
-> > > +	int i;
-> > > 
-> > >  	int current_brightness;
-> > > 
-> > > +	struct netdev_led_attr_detail *detail;
-> > > 
-> > >  	struct led_classdev *led_cdev = trigger_data->led_cdev;
-> > > 
-> > > +	/* Modes already validated. Directly apply hw trigger modes */
-> > > +	if (trigger_data->blink_mode == HARDWARE_CONTROLLED) {
-> > > +		/* We are refreshing the blink modes. Reset them */
-> > > +		led_cdev->hw_control_configure(led_cdev,
-> > 
-> > BIT(TRIGGER_NETDEV_LINK),
-> > 
-> > > +					       BLINK_MODE_ZERO);
-> > > +
-> > > +		for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
-> > > +			detail = &attr_details[i];
-> > > +
-> > > +			if (!test_bit(detail->bit, &trigger_data->mode))
-> > > +				continue;
-> > > +
-> > > +			led_cdev->hw_control_configure(led_cdev,
-> > 
-> > BIT(detail->bit),
-> > 
-> > > +
-> > 
-> > BLINK_MODE_ENABLE);
-> > 
-> > Shouldn't this be BIT(detail->bit)?
-> > 
-> > > +		}
-> > > +
-> > > +		led_cdev->hw_control_start(led_cdev);
-> > > +
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	/* Handle trigger modes by software */
-> > > 
-> > >  	current_brightness = led_cdev->brightness;
-> > >  	if (current_brightness)
-> > >  	
-> > >  		led_cdev->blink_brightness = current_brightness;
-> > > 
-> > > @@ -100,10 +195,15 @@ static ssize_t device_name_store(struct device
-> > > *dev,
-> > > 
-> > >  				 size_t size)
-> > >  
-> > >  {
-> > >  
-> > >  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
-> > > 
-> > > +	struct net_device *old_net = trigger_data->net_dev;
-> > > +	char old_device_name[IFNAMSIZ];
-> > > 
-> > >  	if (size >= IFNAMSIZ)
-> > >  	
-> > >  		return -EINVAL;
-> > > 
-> > > +	/* Backup old device name */
-> > > +	memcpy(old_device_name, trigger_data->device_name, IFNAMSIZ);
-> > > +
-> > > 
-> > >  	cancel_delayed_work_sync(&trigger_data->work);
-> > >  	
-> > >  	spin_lock_bh(&trigger_data->lock);
-> > > 
-> > > @@ -122,6 +222,19 @@ static ssize_t device_name_store(struct device
-> > > *dev,
-> > > 
-> > >  		trigger_data->net_dev =
-> > >  		
-> > >  		    dev_get_by_name(&init_net, trigger_data->device_name);
-> > > 
-> > > +	if (!validate_baseline_state(trigger_data)) {
-> > > +		/* Restore old net_dev and device_name */
-> > > +		if (trigger_data->net_dev)
-> > > +			dev_put(trigger_data->net_dev);
-> > > +
-> > > +		dev_hold(old_net);
-> > > +		trigger_data->net_dev = old_net;
-> > > +		memcpy(trigger_data->device_name, old_device_name,
-> > 
-> > IFNAMSIZ);
-> > 
-> > > +
-> > > +		spin_unlock_bh(&trigger_data->lock);
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > 
-> > >  	trigger_data->carrier_link_up = false;
-> > >  	if (trigger_data->net_dev != NULL)
-> > >  	
-> > >  		trigger_data->carrier_link_up =
-> > 
-> > netif_carrier_ok(trigger_data->net_dev);
-> > 
-> > > @@ -159,7 +272,7 @@ static ssize_t netdev_led_attr_store(struct device
-> > > *dev, const char *buf, size_t size, enum led_trigger_netdev_modes attr)
-> > > 
-> > >  {
-> > >  
-> > >  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
-> > > 
-> > > -	unsigned long state;
-> > > +	unsigned long state, old_mode = trigger_data->mode;
-> > > 
-> > >  	int ret;
-> > >  	int bit;
-> > > 
-> > > @@ -184,6 +297,12 @@ static ssize_t netdev_led_attr_store(struct device
-> > > *dev, const char *buf, else
-> > > 
-> > >  		clear_bit(bit, &trigger_data->mode);
-> > > 
-> > > +	if (!validate_baseline_state(trigger_data)) {
-> > > +		/* Restore old mode on validation fail */
-> > > +		trigger_data->mode = old_mode;
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > 
-> > >  	set_baseline_state(trigger_data);
-> > >  	
-> > >  	return size;
-> > > 
-> > > @@ -220,6 +339,8 @@ static ssize_t interval_store(struct device *dev,
-> > > 
-> > >  			      size_t size)
-> > >  
-> > >  {
-> > >  
-> > >  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
-> > > 
-> > > +	int old_interval = atomic_read(&trigger_data->interval);
-> > > +	u32 old_mode = trigger_data->mode;
-> > > 
-> > >  	unsigned long value;
-> > >  	int ret;
-> > > 
-> > > @@ -228,13 +349,22 @@ static ssize_t interval_store(struct device *dev,
-> > > 
-> > >  		return ret;
-> > >  	
-> > >  	/* impose some basic bounds on the timer interval */
-> > > 
-> > > -	if (value >= 5 && value <= 10000) {
-> > > -		cancel_delayed_work_sync(&trigger_data->work);
-> > > +	if (value < 5 || value > 10000)
-> > > +		return -EINVAL;
-> > > +
-> > > +	cancel_delayed_work_sync(&trigger_data->work);
-> > > +
-> > > +	atomic_set(&trigger_data->interval, msecs_to_jiffies(value));
-> > > 
-> > > -		atomic_set(&trigger_data->interval,
-> > 
-> > msecs_to_jiffies(value));
-> > 
-> > > -		set_baseline_state(trigger_data);	/* resets timer
-> > 
-> > */
-> > 
-> > > +	if (!validate_baseline_state(trigger_data)) {
-> > > +		/* Restore old interval on validation error */
-> > > +		atomic_set(&trigger_data->interval, old_interval);
-> > > +		trigger_data->mode = old_mode;
-> > > +		return -EINVAL;
-> > > 
-> > >  	}
-> > > 
-> > > +	set_baseline_state(trigger_data);	/* resets timer */
-> > > +
-> > > 
-> > >  	return size;
-> > >  
+> > >     /* Resubmit the URB. */
+> > >     w->urb->interval = dev->int_ep->desc.bInterval;
+> > >     ret = usb_submit_urb(w->urb, GFP_KERNEL);
+> > > diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+> > > index 7518ffce22ed..4a95850cdc1b 100644
+> > > --- a/drivers/media/usb/uvc/uvc_status.c
+> > > +++ b/drivers/media/usb/uvc/uvc_status.c
+> > > @@ -304,10 +304,16 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
+> > >     if (dev->int_urb == NULL)
+> > >             return 0;
+> > >
+> > > +   atomic_set(&dev->flush_status, 0);
+> > >     return usb_submit_urb(dev->int_urb, flags);
 > > >  }
-> > > 
-> > > @@ -368,13 +498,25 @@ static int netdev_trig_activate(struct
-> > > led_classdev
-> > > *led_cdev) trigger_data->mode = 0;
-> > > 
-> > >  	atomic_set(&trigger_data->interval, msecs_to_jiffies(50));
-> > >  	trigger_data->last_activity = 0;
-> > > 
-> > > +	if (led_cdev->blink_mode != SOFTWARE_CONTROLLED) {
-> > > +		/* With hw mode enabled reset any rule set by default */
-> > > +		if (led_cdev->hw_control_status(led_cdev)) {
-> > > +			rc = led_cdev->hw_control_configure(led_cdev,
-> > 
-> > BIT(TRIGGER_NETDEV_LINK),
-> > 
+> > >
+> > >  void uvc_status_stop(struct uvc_device *dev)
+> > >  {
+> > > +   struct uvc_ctrl_work *w = &dev->async_ctrl;
 > > > +
-> > 
-> > BLINK_MODE_ZERO);
-> > 
-> > > +			if (rc)
-> > > +				goto err;
-> > > +		}
-> > > +	}
-> > > 
-> > >  	led_set_trigger_data(led_cdev, trigger_data);
-> > >  	
-> > >  	rc = register_netdevice_notifier(&trigger_data->notifier);
-> > >  	if (rc)
-> > > 
-> > > -		kfree(trigger_data);
-> > > +		goto err;
-> > > 
-> > > +	return 0;
-> > > +err:
-> > > +	kfree(trigger_data);
-> > > 
-> > >  	return rc;
-> > >  
+> > > +   atomic_set(&dev->flush_status, 1);
+> >
+> > Note that atomic_read() and atomic_set() do no imply any memory barrier
+> > on most architectures, as far as I can tell. They essentially become
+> > READ_ONCE() and WRITE_ONCE() calls, which guarantee that the compiler
+> > will not merge or split loads or stores, or reorder them with respect to
+> > load and stores to the *same* memory location, but nothing else. I think
+> > you need to add proper barriers, and you can then probably also drop
+> > usage of atomic_t.
+
+You are absolutely right! Only a subset of atomic implies memory barriers.
+
+Found this doc particularly good:
+https://www.kernel.org/doc/html/v5.10/core-api/atomic_ops.html
+
+
+> >
+> > > +   if (cancel_work_sync(&w->work))
+> > > +           uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+> > >     usb_kill_urb(dev->int_urb);
+> >
+> > This should get rid of the main race (possibly save the barrier issue),
+> > but it's not the most efficient option, and can still be problematic.
+> > Consider the following case:
+> >
+> > CPU0                                                  CPU1
+> > ----                                                  ----
+> >
+> > void uvc_status_stop(struct uvc_device *dev)          uvc_ctrl_status_event_async()
+> > {                                                     {
+> >       ...
+> >       atomic_set(&dev->flush_status, 1);                      ...
+> >       if (cancel_work_sync())
+> >               ...
+> >                                                               schedule_work();
+> >       usb_kill_urb();                                 }
+> > }
+> >
+> > The usb_kill_urb() call ensures that uvc_ctrl_status_event_async()
+> > completes before uvc_status_stop() returns, but there will still be work
+> > scheduled in that case. uvc_ctrl_status_event_work() will be run later,
+> > and as flush_status is set to 1, the function will not resubmit the URB.
+> > That fixes the main race, but leaves the asynchronous control status
+> > event handling for after uvc_status_stop() returns, which isn't great.
+> >
+> > Now, if we consider that uvc_status_start() could be called shortly
+> > after uvc_status_stop(), we may get in a situation where
+> > uvc_status_start() will reset flush_status to 0 before
+> > uvc_ctrl_status_event_async() runs. Both uvc_ctrl_status_event_async()
+> > and uvc_status_start() will thus submit the same URB.
+> >
+> > You can't fix this by first killing the URB and then cancelling the
+> > work, as there would then be a risk that uvc_ctrl_status_event_work()
+> > would be running in parallel, going past the flush_status check before
+> > flush_status gets set to 1 in uvc_status_stop(), and submitting the URB
+> > after usb_kill_urb() is called.
+> >
+> > I think a good fix would be to check flush_status in
+> > uvc_ctrl_status_event_async() and avoid the schedule_work() call in that
+> > case.
+
+If we do that, then we will be losing an event. I would rather call
+cancel_work_sync() again after usb_kill_urb().
+
+
+> >You could then also move the atomic_set(..., 0) call from
+> > uvc_status_start() to the end of uvc_status_stop() (again with proper
+> > barriers).
+
+Will do that, it is more "elegant".
+
+>
+> Also, as all of this is tricky, comments in appropriate places in the
+> code would be very helpful to avoid breaking things later.
+>
+> > Could you please check the memory barriers and test the above proposal
+> > (after double-checking it of course, I may have missed something) ?
+
+> >
 > > >  }
-> > > 
-> > > @@ -394,6 +536,7 @@ static void netdev_trig_deactivate(struct
-> > > led_classdev
-> > > *led_cdev)
-> > > 
-> > >  static struct led_trigger netdev_led_trigger = {
-> > >  
-> > >  	.name = "netdev",
-> > > 
-> > > +	.supported_blink_modes = SOFTWARE_HARDWARE,
-> > > 
-> > >  	.activate = netdev_trig_activate,
-> > >  	.deactivate = netdev_trig_deactivate,
-> > >  	.groups = netdev_trig_groups,
+> > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > > index df93db259312..1274691f157f 100644
+> > > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > > @@ -560,6 +560,7 @@ struct uvc_device {
+> > >     struct usb_host_endpoint *int_ep;
+> > >     struct urb *int_urb;
+> > >     u8 *status;
+> > > +   atomic_t flush_status;
+> > >     struct input_dev *input;
+> > >     char input_phys[64];
+> > >
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
 
 
 
-
+-- 
+Ricardo Ribalda
