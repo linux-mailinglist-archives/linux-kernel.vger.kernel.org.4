@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EE865B548
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A2165B546
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236280AbjABQpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
+        id S234352AbjABQpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbjABQpf (ORCPT
+        with ESMTP id S229691AbjABQpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:45:35 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EDBB7EB
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:45:34 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302GInMk014129;
-        Mon, 2 Jan 2023 16:45:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : to : cc : from : subject : content-type :
- content-transfer-encoding; s=qcppdkim1;
- bh=aYkK432DaDF4bT6u3BpN5HMTQcbUfQyWQBwnkZAp7yE=;
- b=XobZ6N1dIq4qvHwXuGpfYXe+c70eKKDxyQ3lgsKfpeX6Beeoo7YDtJQAhQmf3ojgaWAt
- vCwhXuBtFY8azfs2+N8cEe1dWEskqmbDwqRlHCTwtTNmGTzztYrqVp8H1wyXGbspLq/a
- K/Itj0YS+I8SXnJnTwkjU74089OoWEaQ5tHd63Gd2xnn2c9Xg7ITsqtuizG7kCEumsf4
- dhYzAjGd40CnWMRZkUAtV98awT7unSnYptQeBy3xWNE5859h6SFguopozgy6L91BExMM
- 7iZTK/uU1wOTOiyC4h+ylw5Vf4KvUueLyK6maAtDZ7YLc5ZeViYw2PcBrWOVSMFBqzxC BQ== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mtaewbeke-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 16:45:31 +0000
-Received: from nasanex01c.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 302GjUeP022928
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 2 Jan 2023 16:45:30 GMT
-Received: from [10.216.36.140] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 2 Jan 2023
- 08:45:29 -0800
-Message-ID: <5bed08c5-8663-4e68-27b4-8b6d3957a880@quicinc.com>
-Date:   Mon, 2 Jan 2023 22:14:59 +0530
+        Mon, 2 Jan 2023 11:45:14 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A124114A
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:45:13 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id j17so32767868lfr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:45:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rVqQuVQCPOiYO1dU8dGWxyFL4WN4RC04R3gc0Olsf5Q=;
+        b=P37AMU2e+Xb20EtsUCr/YG3yMoDoL6xU5CftE4/nXdb+kSfu+dNyH7+H+pwZINke25
+         Sya+e3tZzVSnVoxyXzxY0I3tR1pzlL9cvSezjxVP/CYCDVR1LvUYMnOck76/5ztUMyND
+         MCBm/AQl/jnuik1dAwrQelNEifyZa9tw+V4BuPvzaVlCS5bpXGCvsH3TPpFTt22udjTC
+         WFSsAKdEvlRZRqyJk571FqLPCsqYXWu9cGsxoq7kL8WSTYtSw3CydAdkePQZgS8mdR+P
+         yqooeer/zWGVtm0qvOgpCk82EtGDGroVlWjuBurpp9Jh/NTTjSPwhZ4rr+uhAN9cewWT
+         B+RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rVqQuVQCPOiYO1dU8dGWxyFL4WN4RC04R3gc0Olsf5Q=;
+        b=SIm9WU1BwyL+J8tbw0KpOqmkdL/jjwc8+Pj02Z7t+NCCblDR5+63T37hgHGnFlqL4I
+         CVyOqIoVeNt3K1zMVt5NNWXsxE/GBxBr1mqC8N5MpKw+/ks1iS4cs7g8+17bM8w2wc/f
+         H5nuQKFJRMXRyV7QjFVE2jdJUF/4dsgi2T6vqHH3kExDR15RxC9+4rBdHy/bt3s2O9Ws
+         Q92IQVsuZnTbGi+vZTh3LhkQgO1OAhp4aqlrogjz/eCJB4MdI2TNYlbL6dc6NDRTPtLM
+         KuRylJr7HQSAY0jKkw0j1eS5fdiOkIsN7CalRE39ypbk4z0/kh6n64udWe5iWQdWhaPm
+         8+lQ==
+X-Gm-Message-State: AFqh2kp+1yjzs2BUntsfVTGfqylmMkCTrom3Lg1wsfqqA2fOUwIr7GqK
+        3EocQxYGFfeQGNf8LMwHOU/t1Q==
+X-Google-Smtp-Source: AMrXdXtN/cSdgPJEu7Pd5yStGAsI0GmBJb6OX1v/KfqTg2vf6fL7Od4epvsjN3KjEy0KnvMEgw1LEA==
+X-Received: by 2002:a05:6512:3b22:b0:4a4:68b9:19e1 with SMTP id f34-20020a0565123b2200b004a468b919e1mr13152025lfv.9.1672677911726;
+        Mon, 02 Jan 2023 08:45:11 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id h13-20020a05651211cd00b004a2511b8224sm4455876lfr.103.2023.01.02.08.45.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 08:45:11 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     robh+dt@kernel.org, alim.akhtar@samsung.com,
+        pankaj.dubey@samsung.com, krzysztof.kozlowski+dt@linaro.org,
+        s.prashar@samsung.com,
+        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: dts: fsd: fix PUD values as per FSD HW UM
+Date:   Mon,  2 Jan 2023 17:45:09 +0100
+Message-Id: <167267790505.932878.15397748468342899542.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230102093247.59649-1-p.rajanbabu@samsung.com>
+References: <CGME20230102093302epcas5p2d48e893eb8af30e4d78b1377e022ff3a@epcas5p2.samsung.com> <20230102093247.59649-1-p.rajanbabu@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-CC:     lkml <linux-kernel@vger.kernel.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: Query about IPI as NMI (pseudo-NMI) support patches
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fhT6XmDNr73rKpCnBY6D3-A3UUCoZBRQ
-X-Proofpoint-GUID: fhT6XmDNr73rKpCnBY6D3-A3UUCoZBRQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_10,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1031 suspectscore=0
- phishscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 bulkscore=0
- impostorscore=0 mlxlogscore=671 lowpriorityscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301020152
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Mon, 2 Jan 2023 15:02:47 +0530, Padmanabhan Rajanbabu wrote:
+> PUD values used for UFS, SPI and UART are not reflecting
+> the default values recommended by FSD HW UM. Therefore,
+> changing the same to comply with HW UM recommendation.
+> 
+> 
 
-I was looking similar support mentioned in below patch series.
+Applied, thanks!
 
-https://lore.kernel.org/lkml/CAFA6WYO0+LQ=mB1spCstt0cNZ0G+sZu_+Wrv6BKSeXqF5SRq4A@mail.gmail.com/#t
+[1/1] arm64: dts: fsd: fix PUD values as per FSD HW UM
+      https://git.kernel.org/krzk/linux/c/32d0c06801172e258a66ffb5dfad7d5d2b9557a9
 
-Wanted to check if there is chance of these patches to land in
-mainline ?
-
-Thanks,
--Mukesh
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
