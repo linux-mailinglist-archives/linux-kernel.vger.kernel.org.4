@@ -2,51 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBA965B2AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571C965B2AF
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbjABNcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
+        id S232877AbjABNdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjABNcV (ORCPT
+        with ESMTP id S232830AbjABNdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:32:21 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60435F55;
-        Mon,  2 Jan 2023 05:32:19 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 91BA57C5;
-        Mon,  2 Jan 2023 14:32:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672666337;
-        bh=A67orf7q6ByW+YNHx+OBVwNHXYnYNargPHqJVzwRA/4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=va6+qFiqYjcp3QWGymAJpfKz+H2hGWYcYRNPvg4pWU9YvK5uiJ70cO4XNF/vAXd/w
-         Lc+Tlgq9U0OG2RDFum1hTYn3kESurX+eVFsaZoc9x9XX1wX1GKr8s8zZ5eVqLnpPjp
-         EKEKK1+QdBW/9yOyO0HZaWJf1TfrQirUcGqav8HU=
-Date:   Mon, 2 Jan 2023 15:32:14 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rahul T R <r-ravikumar@ti.com>
-Cc:     dri-devel@lists.freedesktop.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tomi.valkeinen@ideasonboard.com,
-        andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, jpawar@cadence.com,
-        sjakhade@cadence.com, mparab@cadence.com, a-bhatia1@ti.com,
-        devicetree@vger.kernel.org, vigneshr@ti.com, lee.jones@linaro.org
-Subject: Re: [PATCH v10 5/5] drm/bridge: cdns-dsi: Add support for J721E
- wrapper
-Message-ID: <Y7Lc3m+EatH7x2w7@pendragon.ideasonboard.com>
-References: <20230102100942.1828-1-r-ravikumar@ti.com>
- <20230102100942.1828-6-r-ravikumar@ti.com>
+        Mon, 2 Jan 2023 08:33:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C32634E
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 05:32:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672666379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jf3kR395pYwqA1hDnRNy8gcAAOWiiQwet+tWNkQj444=;
+        b=Bz6PHhbRDDZ12FGLjmSfvNfGgbyC25vWGKqxsljUHKk7HQFUk4c0iermX0nkyoVnMUb3/7
+        HT1p30iy/Bh4AEc/FybyBDJNHSlcVZ2i3Ym/KtbvlOwZopRhpuu5bH5gKppnU/dtJxWGbQ
+        6oiJV9OGW6uM+hJcaNXe/BN7Nfh2xKc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-543-gKfQilxwOEuAtb048W7J-Q-1; Mon, 02 Jan 2023 08:32:58 -0500
+X-MC-Unique: gKfQilxwOEuAtb048W7J-Q-1
+Received: by mail-wm1-f70.google.com with SMTP id c23-20020a7bc857000000b003d97c8d4935so10844313wml.8
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 05:32:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jf3kR395pYwqA1hDnRNy8gcAAOWiiQwet+tWNkQj444=;
+        b=VtALTts0MuQscI3BFMKx/WH0FCTqLxt99beDfk5xc6U+hJRxZybdPxfXYaDR82Yebp
+         Fj/2HkGs7Llfdyav8S1UjB65/Zb4hXI0KZzQFEpg3425QLz3WYkX9aRtxeFJn9zJ8AH/
+         PAZo5SXqfYJv5v2dVs33RV1h5wvbVcN1J98yC2dIwb+Yuem99oAgLMwTp+NOt+ARcv0N
+         J9p3XTOu+jgXkJNlyI1puZmU0b1w07+iKvlVB46yWtlHY+3X3UiRlbixJrbxGLBkyfNp
+         /DVG/yIVQBo1930vMY0uDlSNMW5QuQ5gPU2X9AtJwfXM8Y45xqgUhC5gPImhUR7krvBM
+         rN2w==
+X-Gm-Message-State: AFqh2kqNPvCyveAJtJCY3QkcR5eGMPcOv3dWmBQbUox6iLKlpyYHl57a
+        LwAQkyOI4sgW3q9LO344Ez7D4J97tzfBU7TZky0/DY3af5+Ms7e+mvsbRIxKTe+8zgnsH1NWClR
+        JAjUy2fHW8PObTe0iLxAO7jxs
+X-Received: by 2002:a5d:6981:0:b0:295:6a4f:4183 with SMTP id g1-20020a5d6981000000b002956a4f4183mr3892122wru.5.1672666376981;
+        Mon, 02 Jan 2023 05:32:56 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuTroukUmayWIpORUsIu0s5r1kR+m7Bbv0WwOS61I2SOMs9zaoctF+J0dg2oEIwuRTXm9+zWQ==
+X-Received: by 2002:a5d:6981:0:b0:295:6a4f:4183 with SMTP id g1-20020a5d6981000000b002956a4f4183mr3892110wru.5.1672666376656;
+        Mon, 02 Jan 2023 05:32:56 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:500:9382:2e5a:fea:8889? (p200300cbc703050093822e5a0fea8889.dip0.t-ipconnect.de. [2003:cb:c703:500:9382:2e5a:fea:8889])
+        by smtp.gmail.com with ESMTPSA id s17-20020adfea91000000b0027dcc2d6fc3sm21328801wrm.113.2023.01.02.05.32.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 05:32:56 -0800 (PST)
+Message-ID: <d394c380-8f2c-7b8d-3915-7b8b201bb7de@redhat.com>
+Date:   Mon, 2 Jan 2023 14:32:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230102100942.1828-6-r-ravikumar@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Jakub Matena <matenajakub@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>
+References: <20221216214436.405071-1-lstoakes@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] selftest/vm: add mremap expand merge offset test
+In-Reply-To: <20221216214436.405071-1-lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,286 +89,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rahul,
-
-Thank you for the patch.
-
-On Mon, Jan 02, 2023 at 03:39:42PM +0530, Rahul T R wrote:
-> Add support for wrapper settings for DSI bridge on
-> j721e. Also enable DPI0
+On 16.12.22 22:44, Lorenzo Stoakes wrote:
+> Add a test to assert that we can mremap() and expand a mapping starting
+> from an offset within an existing mapping. We unmap the last page in a 3
+> page mapping to ensure that the remap should always succeed, before
+> remapping from the 2nd page.
 > 
-> ---------------      -----------------------
-> |      -------|      |-------              |
-> | DSS  | DPI2 |----->| DPI0 |  DSI Wrapper |
-> |      -------|      |-------              |
-> ---------------      -----------------------
+> This is additionally a regression test for the issue solved in "mm, mremap:
+> fix mremap() expanding vma with addr inside vma" and confirmed to fail
+> prior to the change and pass after it.
 > 
-> As shown above DPI2 output of DSS is connected
-> to DPI0 input of DSI Wrapper, DSI wrapper
-> gives control wheather to enable/disable DPI0
-> input. In j721e above is the only configuration
-> supported
-
-You can also go up to 72 characters per line here :-)
-
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> Finally, this patch updates the existing mremap expand merge test to check
+> error conditions and reduce code duplication between the two tests.
+> 
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 > ---
->  drivers/gpu/drm/bridge/cadence/Kconfig        | 10 ++++
->  drivers/gpu/drm/bridge/cadence/Makefile       |  1 +
->  .../gpu/drm/bridge/cadence/cdns-dsi-core.c    | 35 ++++++++++++-
->  .../gpu/drm/bridge/cadence/cdns-dsi-core.h    | 13 +++++
->  .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   | 51 +++++++++++++++++++
->  .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   | 16 ++++++
->  6 files changed, 125 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
->  create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
+>   tools/testing/selftests/vm/mremap_test.c | 111 +++++++++++++++++++----
+>   1 file changed, 93 insertions(+), 18 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/bridge/cadence/Kconfig b/drivers/gpu/drm/bridge/cadence/Kconfig
-> index 8fbb46c66094..f8ea0393fe8a 100644
-> --- a/drivers/gpu/drm/bridge/cadence/Kconfig
-> +++ b/drivers/gpu/drm/bridge/cadence/Kconfig
-> @@ -36,3 +36,13 @@ config DRM_CDNS_DSI
->  	help
->  	  Support Cadence DPI to DSI bridge. This is an internal
->  	  bridge and is meant to be directly embedded in a SoC.
+> diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
+> index 9496346973d4..28a17d4e8afd 100644
+> --- a/tools/testing/selftests/vm/mremap_test.c
+> +++ b/tools/testing/selftests/vm/mremap_test.c
+> @@ -119,30 +119,19 @@ static unsigned long long get_mmap_min_addr(void)
+>   }
+> 
+>   /*
+> - * This test validates that merge is called when expanding a mapping.
+> - * Mapping containing three pages is created, middle page is unmapped
+> - * and then the mapping containing the first page is expanded so that
+> - * it fills the created hole. The two parts should merge creating
+> - * single mapping with three pages.
+> + * Using /proc/self/maps, assert that the specified address range is contained
+> + * within a single mapping.
+>    */
+> -static void mremap_expand_merge(unsigned long page_size)
+> +static bool is_range_mapped(void *start, void *end)
+>   {
+> -	char *test_name = "mremap expand merge";
+>   	FILE *fp;
+>   	char *line = NULL;
+>   	size_t len = 0;
+>   	bool success = false;
+> -	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
+> -			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> -
+> -	munmap(start + page_size, page_size);
+> -	mremap(start, page_size, 2 * page_size, 0);
+> 
+>   	fp = fopen("/proc/self/maps", "r");
+> -	if (fp == NULL) {
+> -		ksft_test_result_fail("%s\n", test_name);
+> -		return;
+> -	}
+> +	if (fp == NULL)
+> +		return false;
+
+This is unexpected. It would be valuable to ksft_print_msg("[INFO] .." 
+something, indicating that we don't know because we cannot access that info.
+
+ksft_print_msg("[INFO] Opening /proc/self/maps failed"
+
+
+But I'd even suggest opening "/proc/self/maps" once in main() and 
+failing directly there. Then we don't have to worry about it here.
+
+> 
+>   	while (getline(&line, &len, fp) != -1) {
+>   		char *first = strtok(line, "- ");
+> @@ -150,16 +139,101 @@ static void mremap_expand_merge(unsigned long page_size)
+>   		char *second = strtok(NULL, "- ");
+>   		void *second_val = (void *) strtol(second, NULL, 16);
+> 
+> -		if (first_val == start && second_val == start + 3 * page_size) {
+> +		if (first_val <= start && second_val >= end) {
+>   			success = true;
+>   			break;
+>   		}
+>   	}
 > +
-> +if DRM_CDNS_DSI
+> +	fclose(fp);
+> +	return success;
+> +}
 > +
-> +config DRM_CDNS_DSI_J721E
-> +	bool "J721E Cadence DSI wrapper support"
-> +	default y
-> +	help
-> +	  Support J721E Cadence DSI wrapper. The wrapper manages
-> +	  the routing of the DSS DPI signal to the Cadence DSI.
-> +endif
-> diff --git a/drivers/gpu/drm/bridge/cadence/Makefile b/drivers/gpu/drm/bridge/cadence/Makefile
-> index e3d8e9a40784..4cffc8ff71c4 100644
-> --- a/drivers/gpu/drm/bridge/cadence/Makefile
-> +++ b/drivers/gpu/drm/bridge/cadence/Makefile
-> @@ -4,3 +4,4 @@ cdns-mhdp8546-y := cdns-mhdp8546-core.o cdns-mhdp8546-hdcp.o
->  cdns-mhdp8546-$(CONFIG_DRM_CDNS_MHDP8546_J721E) += cdns-mhdp8546-j721e.o
->  obj-$(CONFIG_DRM_CDNS_DSI) += cdns-dsi.o
->  cdns-dsi-y := cdns-dsi-core.o
-> +cdns-dsi-$(CONFIG_DRM_CDNS_DSI_J721E) += cdns-dsi-j721e.o
-> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-> index cba91247ab26..a5b5dfbf09a0 100644
-> --- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-> +++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-> @@ -15,12 +15,16 @@
->  #include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of_address.h>
-> +#include <linux/of_device.h>
->  #include <linux/of_graph.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/reset.h>
->  
->  #include "cdns-dsi-core.h"
-> +#ifdef CONFIG_DRM_CDNS_DSI_J721E
-> +#include "cdns-dsi-j721e.h"
-> +#endif
->  
->  static inline struct cdns_dsi *input_to_dsi(struct cdns_dsi_input *input)
->  {
-> @@ -265,6 +269,10 @@ static void cdns_dsi_bridge_disable(struct drm_bridge *bridge)
->  
->  	val = readl(dsi->regs + MCTL_MAIN_EN) & ~IF_EN(input->id);
->  	writel(val, dsi->regs + MCTL_MAIN_EN);
+> +/*
+> + * This test validates that merge is called when expanding a mapping.
+> + * Mapping containing three pages is created, middle page is unmapped
+> + * and then the mapping containing the first page is expanded so that
+> + * it fills the created hole. The two parts should merge creating
+> + * single mapping with three pages.
+> + */
+> +static void mremap_expand_merge(unsigned long page_size)
+> +{
+> +	char *test_name = "mremap expand merge";
+> +	bool success = false;
+> +	int errsv = 0;
+> +	char *remap;
+> +	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
+> +			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+
+I'd suggest
+
+
+	char *remap, *start;
+
+	start = mmap()
+	if (start == MAP_FAILED) { ...
+
+to make this easier to read.
+
 > +
-> +	if (dsi->platform_ops && dsi->platform_ops->disable)
-> +		dsi->platform_ops->disable(dsi);
-> +
->  	pm_runtime_put(dsi->base.dev);
->  }
->  
-> @@ -360,6 +368,9 @@ static void cdns_dsi_bridge_enable(struct drm_bridge *bridge)
->  	if (WARN_ON(pm_runtime_get_sync(dsi->base.dev) < 0))
->  		return;
->  
-> +	if (dsi->platform_ops && dsi->platform_ops->enable)
-> +		dsi->platform_ops->enable(dsi);
-> +
->  	mode = &bridge->encoder->crtc->state->adjusted_mode;
->  	nlanes = output->dev->lanes;
->  
-> @@ -800,6 +811,8 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
->  		goto err_disable_pclk;
->  	}
->  
-> +	dsi->platform_ops = of_device_get_match_data(&pdev->dev);
-> +
->  	val = readl(dsi->regs + IP_CONF);
->  	dsi->direct_cmd_fifo_depth = 1 << (DIRCMD_FIFO_DEPTH(val) + 2);
->  	dsi->rx_fifo_depth = RX_FIFO_DEPTH(val);
-> @@ -835,14 +848,27 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
->  	dsi->base.dev = &pdev->dev;
->  	dsi->base.ops = &cdns_dsi_ops;
->  
-> +	if (dsi->platform_ops && dsi->platform_ops->init) {
-> +		ret = dsi->platform_ops->init(dsi);
-> +		if (ret != 0) {
-> +			dev_err(&pdev->dev, "platform initialization failed: %d\n",
-> +				ret);
-> +			goto err_disable_runtime_pm;
-> +		}
+> +	if (start == MAP_FAILED) {
+> +		errsv = errno;
+> +		goto error;
 > +	}
 > +
->  	ret = mipi_dsi_host_register(&dsi->base);
->  	if (ret)
-> -		goto err_disable_runtime_pm;
-> +		goto err_deinit_platform;
->  
->  	clk_disable_unprepare(dsi->dsi_p_clk);
->  
->  	return 0;
->  
-> +err_deinit_platform:
-> +	if (dsi->platform_ops && dsi->platform_ops->deinit)
-> +		dsi->platform_ops->deinit(dsi);
+> +	munmap(start + page_size, page_size);
+> +	remap = mremap(start, page_size, 2 * page_size, 0);
+> +	if (remap == MAP_FAILED) {
+> +		errsv = errno;
+> +		munmap(start, page_size);
+> +		munmap(start + 2 * page_size, page_size);
+> +		goto error;
+> +	}
 > +
->  err_disable_runtime_pm:
->  	pm_runtime_disable(&pdev->dev);
->  
-> @@ -857,6 +883,10 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
->  	struct cdns_dsi *dsi = platform_get_drvdata(pdev);
->  
->  	mipi_dsi_host_unregister(&dsi->base);
+> +	success = is_range_mapped(start, start + 3 * page_size);
 > +
-> +	if (dsi->platform_ops && dsi->platform_ops->deinit)
-> +		dsi->platform_ops->deinit(dsi);
+> +	munmap(start, 3 * page_size);
+> +	goto out;
 > +
->  	pm_runtime_disable(&pdev->dev);
->  
->  	return 0;
-> @@ -864,6 +894,9 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
->  
->  static const struct of_device_id cdns_dsi_of_match[] = {
->  	{ .compatible = "cdns,dsi" },
-> +#ifdef CONFIG_DRM_CDNS_DSI_J721E
-> +	{ .compatible = "ti,j721e-dsi", .data = &dsi_ti_j721e_ops, },
-> +#endif
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, cdns_dsi_of_match);
-> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-> index 65cc77f19b39..2b1e96440c49 100644
-> --- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-> +++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-> @@ -439,9 +439,22 @@ struct cdns_dsi_input {
->  	struct drm_bridge bridge;
->  };
->  
-> +struct cdns_dsi;
-> +
+> +error:
+> +	ksft_print_msg("Unexpected mapping/remapping error: %s\n",
+> +		       strerror(errsv));
 
-Please add kerneldoc to document the operations.
+Please avoid the "error" label and just print proper errors directly at 
+the two callsites. Then, remove the "goto out".
 
-> +struct dsi_platform_ops {
-
-Call this cdns_dsi_platform_ops, dsi_platform_ops is too generic.
-
-> +	int (*init)(struct cdns_dsi *dsi);
-> +	void (*deinit)(struct cdns_dsi *dsi);
-> +	void (*enable)(struct cdns_dsi *dsi);
-> +	void (*disable)(struct cdns_dsi *dsi);
-> +};
+> +out:
+> +	if (success)
+> +		ksft_test_result_pass("%s\n", test_name);
+> +	else
+> +		ksft_test_result_fail("%s\n", test_name);
+> +}
 > +
->  struct cdns_dsi {
->  	struct mipi_dsi_host base;
->  	void __iomem *regs;
-> +#ifdef CONFIG_DRM_CDNS_DSI_J721E
-> +	void __iomem *j721e_regs;
-> +#endif
-> +	const struct dsi_platform_ops *platform_ops;
->  	struct cdns_dsi_input input;
->  	struct cdns_dsi_output output;
->  	unsigned int direct_cmd_fifo_depth;
-> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-> new file mode 100644
-> index 000000000000..b5216acb333e
-> --- /dev/null
-> +++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-> @@ -0,0 +1,51 @@
-> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * TI j721e Cadence DSI wrapper
-> + *
-> + * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-> + * Author: Rahul T R <r-ravikumar@ti.com>
+> + * Similar to mremap_expand_merge() except instead of removing the middle page,
+> + * we remove the last then attempt to remap offset from the second page. This
+> + * should result in the mapping being restored to its former state.
 > + */
-> +
-> +#include <linux/io.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include "cdns-dsi-j721e.h"
-> +
-> +#define DSI_WRAP_REVISION		0x0
-> +#define DSI_WRAP_DPI_CONTROL		0x4
-> +#define DSI_WRAP_DSC_CONTROL		0x8
-> +#define DSI_WRAP_DPI_SECURE		0xc
-> +#define DSI_WRAP_DSI_0_ASF_STATUS	0x10
-> +
-> +#define DSI_WRAP_DPI_0_EN		BIT(0)
-> +#define DSI_WRAP_DSI2_MUX_SEL		BIT(4)
-> +
-> +static int cdns_dsi_j721e_init(struct cdns_dsi *dsi)
+> +static void mremap_expand_merge_offset(unsigned long page_size)
 > +{
-> +	struct platform_device *pdev = to_platform_device(dsi->base.dev);
 > +
-> +	dsi->j721e_regs = devm_platform_ioremap_resource(pdev, 1);
-> +	return PTR_ERR_OR_ZERO(dsi->j721e_regs);
-> +}
-> +
-> +static void cdns_dsi_j721e_enable(struct cdns_dsi *dsi)
-> +{
-> +	/*
-> +	 * Enable DPI0 as its input. DSS0 DPI2 is connected
-> +	 * to DSI DPI0. This is the only supported configuration on
-> +	 * J721E.
-> +	 */
-> +	writel(DSI_WRAP_DPI_0_EN, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-> +}
-> +
-> +static void cdns_dsi_j721e_disable(struct cdns_dsi *dsi)
-> +{
-> +	/* Put everything to defaults  */
-> +	writel(0, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-> +}
-> +
-> +const struct dsi_platform_ops dsi_ti_j721e_ops = {
-> +	.init = cdns_dsi_j721e_init,
-> +	.enable = cdns_dsi_j721e_enable,
-> +	.disable = cdns_dsi_j721e_disable,
-> +};
-> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-> new file mode 100644
-> index 000000000000..fd251c1a268b
-> --- /dev/null
-> +++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * TI j721e Cadence DSI wrapper
-> + *
-> + * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-> + * Author: Rahul T R <r-ravikumar@ti.com>
-> + */
-> +
-> +#ifndef CDNS_DSI_J721E_H
+> +	char *test_name = "mremap expand merge offset";
+> +	bool success = false;
+> +	int errsv = 0;
+> +	char *remap;
+> +	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
+> +			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
-__ prefix for header guard ?
+Dito.
 
-> +#define CDNS_DSI_J721E_H
 > +
-> +#include "cdns-dsi-core.h"
+> +	if (start == MAP_FAILED) {
+> +		errsv = errno;
+> +		goto error;
+> +	}
 > +
-> +extern const struct dsi_platform_ops dsi_ti_j721e_ops;
+> +	/* Unmap final page to ensure we have space to expand. */
+> +	munmap(start + 2 * page_size, page_size);
+> +	remap = mremap(start + page_size, page_size, 2 * page_size, 0);
+> +	if (remap == MAP_FAILED) {
+> +		errsv = errno;
+> +		munmap(start, 2 * page_size);
+> +		goto error;
+> +	}
 > +
-> +#endif /* !CDNS_DSI_J721E_H */
+> +	success = is_range_mapped(start, start + 3 * page_size);
+> +	goto out;
+> +
+> +error:
+> +	ksft_print_msg("Unexpected mapping/remapping error: %s\n",
+> +		       strerror(errsv));
+
+Dito.
+
+> +out:
+
 
 -- 
-Regards,
+Thanks,
 
-Laurent Pinchart
+David / dhildenb
+
