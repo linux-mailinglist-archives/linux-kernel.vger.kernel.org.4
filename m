@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8D965B810
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 00:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AD365B814
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 00:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232941AbjABXI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 18:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S234081AbjABXIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 18:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjABXI0 (ORCPT
+        with ESMTP id S233127AbjABXI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 18:08:26 -0500
+        Mon, 2 Jan 2023 18:08:28 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFF75FC1
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 15:07:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E7D5FF7
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 15:07:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672700862;
+        s=mimecast20190719; t=1672700864;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=obzoow7q7hWkNtg/GehYspcHRTm+nOjVwnTgRK9uS/E=;
-        b=ZsLmjGh6OvGRUUOO9nkG70WN7VQY/xGmtkmK4M6CQms9qz5U1a9Cg6EOQLKeRNR/nUM0Om
-        AkzAbCOFwnWqGcblOmRChsLlslz8Gdu+P1B14QRbiv5FodXIgJpctFkWw93iqj+aTun1Iu
-        5k+2qU7y3peuQWYaGjMKNoWZ3MZUFxM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=gSI0lg7ZHk/jHQ6XYeNCo8JAYkYpCPe3IEzZ0QU2a74=;
+        b=C4gsBEUL0dXI4mpaJy7g+DYLrXD7ztCTNynIRfmKcmKbup8xvT//7uI8Bj4kSByaIAMkzn
+        0FKSqqdArGwHGPzK3HXj4jnlEY2I3deQ6tOJJbxbPjn4A4nwlApxypuI3YuIH5mwQ4psgm
+        gMN3v+f15gm9cLJGTl+aR1dvIE9rmKM=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-448-InTt0vwINMGJS3rrGNyn1Q-1; Mon, 02 Jan 2023 18:07:41 -0500
-X-MC-Unique: InTt0vwINMGJS3rrGNyn1Q-1
-Received: by mail-wr1-f71.google.com with SMTP id r21-20020adfb1d5000000b0026e4c198a43so3331627wra.20
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 15:07:41 -0800 (PST)
+ us-mta-626-DxV2Je8ROv60qKfdMdXgEA-1; Mon, 02 Jan 2023 18:07:43 -0500
+X-MC-Unique: DxV2Je8ROv60qKfdMdXgEA-1
+Received: by mail-wm1-f72.google.com with SMTP id m8-20020a05600c3b0800b003d96bdce12fso13924237wms.9
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 15:07:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=obzoow7q7hWkNtg/GehYspcHRTm+nOjVwnTgRK9uS/E=;
-        b=Lo73al9Y6Gicp/zuKF0BNova2lGMvFOFfqYZNYzSySnKDOaDyqP8k61ayxw+miNUXv
-         IqrGoguNwVHQoYFDns778I9S1Buu9o4w4tfq3W/K8+EihGaFqJGmDifF+h1oSJwHPz8T
-         c9uSGhjMNuh9Qz0bznrnzWtEK2vqSWPX34PFfpj2qfp5cWUSzpr7LpYbKRaMwY841NBd
-         Fzu/RSZERV8gf5GXbowRjvEXQLSioRofWwfJllr6EC7Al/bnYrqZ4AclLaxYUlCjp72h
-         MPX4Kio59NjJ45Zpwt8CLFNrYavusbJrrn37lCCK12YFONNHujfRQuwmlF0t9V9rM8FI
-         pXng==
-X-Gm-Message-State: AFqh2kozsAlcR8qyZHLHpJAFzX95BOrs/1IQRFWorgyVGkFFr5pOA9fW
-        XWvC9fI8DJ2Pvk+lX4uU3JR5ymWh71CoF1qy0uz4DbMmVZ+k1A180KNvm8/waWTcJUSbghIfSj2
-        Pb95GhrIdBjz/P3QGurEgsiIJKFiS6tWpISsO/Uh5xc/phl3XO8itcKGszwtrsR0GOp+LZlQtEe
-        o=
-X-Received: by 2002:a5d:4d50:0:b0:242:7fdb:923b with SMTP id a16-20020a5d4d50000000b002427fdb923bmr23621924wru.59.1672700859841;
-        Mon, 02 Jan 2023 15:07:39 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvtjNaoQfhNkTsnfslbEr2dpmDZ3226Di9u0vHV4w4FHb+3Vt39i56vGxyttsbxwAAIkBW3Lw==
-X-Received: by 2002:a5d:4d50:0:b0:242:7fdb:923b with SMTP id a16-20020a5d4d50000000b002427fdb923bmr23621899wru.59.1672700859588;
-        Mon, 02 Jan 2023 15:07:39 -0800 (PST)
+        bh=gSI0lg7ZHk/jHQ6XYeNCo8JAYkYpCPe3IEzZ0QU2a74=;
+        b=VpDmktUAv0ANjPFjCndFZ7vfywtbqXUAA08r+gCtTRfVdAW/CkdpGFXy2maj/qDUvM
+         76noxWm72ddELWR4IKT3pJSOewMIhg5NqG/dw+lG8hUXBPWA5pGdPLPLoQfCGmOCVSeM
+         qymD1NW2yqZjfD0tMFDRB9GgeW7UAkWRCkKFiE3I7jmE5JsjYcZ7sqtLcIx/xfd6qRBI
+         jVB6TfFV0B410alUfJk69l/9ECvrjCNJwS2ifu4CiGzKYbKRSzFhJ/C7DOvtNy22cuCb
+         xcKQskhDvaRgcl6x6JhD7UHu+XrPJKHu846i96S+i9HCKeOzTcbha1g9blRKWHEnv4S8
+         u/Ag==
+X-Gm-Message-State: AFqh2kqICK6oj9eP+Pa34muFUJzLPNIULilNUFTup+R0qos8B9sYA2Sn
+        88+5+upCL1yneO8cfL5+LYRGO5yjU44JS9z5T9Tt5rmhSIi82UPwj7Tu1dCirEiuM6Bmm368Dp6
+        o5M8R4jwQaJoweR3ajyugX1N3i3xkRBM+kCC/MnGXVYMGFT158LEnw8NwTGRVTZzQfQLPvgi6Jp
+        k=
+X-Received: by 2002:a05:6000:1048:b0:279:2c67:ef6 with SMTP id c8-20020a056000104800b002792c670ef6mr18791803wrx.1.1672700861559;
+        Mon, 02 Jan 2023 15:07:41 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvK9IlnvgGSBCgmONlmyde53fu+P5OI6mq6m5q6LgQWZgxK+6ff/AoqYJSF0FeYBv4b6cI6tw==
+X-Received: by 2002:a05:6000:1048:b0:279:2c67:ef6 with SMTP id c8-20020a056000104800b002792c670ef6mr18791779wrx.1.1672700861143;
+        Mon, 02 Jan 2023 15:07:41 -0800 (PST)
 Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id h10-20020a5d4fca000000b00281eab50380sm22746906wrw.117.2023.01.02.15.07.38
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d4fca000000b00281eab50380sm22746906wrw.117.2023.01.02.15.07.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 15:07:39 -0800 (PST)
+        Mon, 02 Jan 2023 15:07:40 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Robert Mader <robert.mader@posteo.de>,
@@ -75,17 +75,15 @@ Cc:     Robert Mader <robert.mader@posteo.de>,
         Javier Martinez Canillas <javierm@redhat.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: [PATCH v5 1/3] dt-bindings: display: Add Himax HX8394 panel controller
-Date:   Tue,  3 Jan 2023 00:07:31 +0100
-Message-Id: <20230102230733.3506624-2-javierm@redhat.com>
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: [PATCH v5 2/3] drm: panel: Add Himax HX8394 panel controller driver
+Date:   Tue,  3 Jan 2023 00:07:32 +0100
+Message-Id: <20230102230733.3506624-3-javierm@redhat.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230102230733.3506624-1-javierm@redhat.com>
 References: <20230102230733.3506624-1-javierm@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -97,115 +95,535 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree bindings for panels based on the Himax HX8394 controller,
-such as the HannStar HSD060BHW4 720x1440 TFT LCD panel that is connected
-through a MIPI-DSI video interface.
+From: Kamil Trzciński <ayufan@ayufan.eu>
 
+The driver is for panels based on the Himax HX8394 controller, such as the
+HannStar HSD060BHW4 720x1440 TFT LCD panel that uses a MIPI-DSI interface.
+
+Signed-off-by: Kamil Trzciński <ayufan@ayufan.eu>
+Co-developed-by: Ondrej Jirman <megi@xff.cz>
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+Co-developed-by: Javier Martinez Canillas <javierm@redhat.com>
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+Tested-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Tested-by: Peter Robinson <pbrobinson@gmail.com>
 ---
 
 Changes in v5:
-- List Ondrej Jirman as a maintainer in the DT binding schema document.
+- Add Peter Robinson's Tested-by tag.
 
 Changes in v4:
-- Add fallback "himax,hx8394" compatible for the panel controller (Jagan Teki).
+- Add Tom Fitzhenry's Tested-by tag.
 
 Changes in v3:
-- Fix example snippet for `make dt_binding_check` to pass (Krzysztof Kozlowski).
+- Add Sam Ravnborg's reviwed-by tag.
+- Move driver patch after one introducing the DT binding (Sam Ravnborg).
 
 Changes in v2:
-- Drop redundant "bindings" in subject (Krzysztof Kozlowski).
-- Drop "device tree bindings" in title (Krzysztof Kozlowski).
-- Put port next to other "true" properties (Krzysztof Kozlowski).
-- Add Krzysztof Kozlowski's Reviewed-by tag.
+- Add year to driver's copyright notice (Sam Ravnborg)
+- Remove unused <video/display_timing.h> header include (Sam Ravnborg).
+- Use mipi_dsi_dcs_write_seq() helper and drop custom macro (Sam Ravnborg).
+- Drop unnecessary info messages and move useful one to debug (Sam Ravnborg).
 
- .../bindings/display/panel/himax,hx8394.yaml  | 76 +++++++++++++++++++
- 1 file changed, 76 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+ drivers/gpu/drm/panel/Kconfig              |  12 +
+ drivers/gpu/drm/panel/Makefile             |   1 +
+ drivers/gpu/drm/panel/panel-himax-hx8394.c | 451 +++++++++++++++++++++
+ 3 files changed, 464 insertions(+)
+ create mode 100644 drivers/gpu/drm/panel/panel-himax-hx8394.c
 
-diff --git a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+index 737edcdf9eef..7ee9c83f09a7 100644
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -154,6 +154,18 @@ config DRM_PANEL_FEIYANG_FY07024DI26A30D
+ 	  Say Y if you want to enable support for panels based on the
+ 	  Feiyang FY07024DI26A30-D MIPI-DSI interface.
+ 
++config DRM_PANEL_HIMAX_HX8394
++	tristate "HIMAX HX8394 MIPI-DSI LCD panels"
++	depends on OF
++	depends on DRM_MIPI_DSI
++	depends on BACKLIGHT_CLASS_DEVICE
++	help
++	  Say Y if you want to enable support for panels based on the
++	  Himax HX8394 controller, such as the HannStar HSD060BHW4
++	  720x1440 TFT LCD panel that uses a MIPI-DSI interface.
++
++	  If M is selected the module will be called panel-himax-hx8394.
++
+ config DRM_PANEL_ILITEK_IL9322
+ 	tristate "Ilitek ILI9322 320x240 QVGA panels"
+ 	depends on OF && SPI
+diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+index f8f9d9f6a307..84c01adafd4c 100644
+--- a/drivers/gpu/drm/panel/Makefile
++++ b/drivers/gpu/drm/panel/Makefile
+@@ -13,6 +13,7 @@ obj-$(CONFIG_DRM_PANEL_EBBG_FT8719) += panel-ebbg-ft8719.o
+ obj-$(CONFIG_DRM_PANEL_ELIDA_KD35T133) += panel-elida-kd35t133.o
+ obj-$(CONFIG_DRM_PANEL_FEIXIN_K101_IM2BA02) += panel-feixin-k101-im2ba02.o
+ obj-$(CONFIG_DRM_PANEL_FEIYANG_FY07024DI26A30D) += panel-feiyang-fy07024di26a30d.o
++obj-$(CONFIG_DRM_PANEL_HIMAX_HX8394) += panel-himax-hx8394.o
+ obj-$(CONFIG_DRM_PANEL_ILITEK_IL9322) += panel-ilitek-ili9322.o
+ obj-$(CONFIG_DRM_PANEL_ILITEK_ILI9341) += panel-ilitek-ili9341.o
+ obj-$(CONFIG_DRM_PANEL_ILITEK_ILI9881C) += panel-ilitek-ili9881c.o
+diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
 new file mode 100644
-index 000000000000..1b2a1baa26f9
+index 000000000000..d4fb5d1b295b
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/panel/himax,hx8394.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
+@@ -0,0 +1,451 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Driver for panels based on Himax HX8394 controller, such as:
++ *
++ * - HannStar HSD060BHW4 5.99" MIPI-DSI panel
++ *
++ * Copyright (C) 2021 Kamil Trzciński
++ *
++ * Based on drivers/gpu/drm/panel/panel-sitronix-st7703.c
++ * Copyright (C) Purism SPC 2019
++ */
 +
-+title: Himax HX8394 MIPI-DSI LCD panel controller
++#include <linux/delay.h>
++#include <linux/gpio/consumer.h>
++#include <linux/media-bus-format.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/regulator/consumer.h>
 +
-+maintainers:
-+  - Ondrej Jirman <megi@xff.cz>
-+  - Javier Martinez Canillas <javierm@redhat.com>
++#include <video/mipi_display.h>
 +
-+description:
-+  Device tree bindings for panels based on the Himax HX8394 controller,
-+  such as the HannStar HSD060BHW4 720x1440 TFT LCD panel connected with
-+  a MIPI-DSI video interface.
++#include <drm/drm_mipi_dsi.h>
++#include <drm/drm_modes.h>
++#include <drm/drm_panel.h>
 +
-+allOf:
-+  - $ref: panel-common.yaml#
++#define DRV_NAME "panel-himax-hx8394"
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - hannstar,hsd060bhw4
-+      - const: himax,hx8394
++/* Manufacturer specific commands sent via DSI, listed in HX8394-F datasheet */
++#define HX8394_CMD_SETSEQUENCE	  0xb0
++#define HX8394_CMD_SETPOWER	  0xb1
++#define HX8394_CMD_SETDISP	  0xb2
++#define HX8394_CMD_SETCYC	  0xb4
++#define HX8394_CMD_SETVCOM	  0xb6
++#define HX8394_CMD_SETTE	  0xb7
++#define HX8394_CMD_SETSENSOR	  0xb8
++#define HX8394_CMD_SETEXTC	  0xb9
++#define HX8394_CMD_SETMIPI	  0xba
++#define HX8394_CMD_SETOTP	  0xbb
++#define HX8394_CMD_SETREGBANK	  0xbd
++#define HX8394_CMD_UNKNOWN1	  0xc0
++#define HX8394_CMD_SETDGCLUT	  0xc1
++#define HX8394_CMD_SETID	  0xc3
++#define HX8394_CMD_SETDDB	  0xc4
++#define HX8394_CMD_UNKNOWN2	  0xc6
++#define HX8394_CMD_SETCABC	  0xc9
++#define HX8394_CMD_SETCABCGAIN	  0xca
++#define HX8394_CMD_SETPANEL	  0xcc
++#define HX8394_CMD_SETOFFSET	  0xd2
++#define HX8394_CMD_SETGIP0	  0xd3
++#define HX8394_CMD_UNKNOWN3	  0xd4
++#define HX8394_CMD_SETGIP1	  0xd5
++#define HX8394_CMD_SETGIP2	  0xd6
++#define HX8394_CMD_SETGPO	  0xd6
++#define HX8394_CMD_SETSCALING	  0xdd
++#define HX8394_CMD_SETIDLE	  0xdf
++#define HX8394_CMD_SETGAMMA	  0xe0
++#define HX8394_CMD_SETCHEMODE_DYN 0xe4
++#define HX8394_CMD_SETCHE	  0xe5
++#define HX8394_CMD_SETCESEL	  0xe6
++#define HX8394_CMD_SET_SP_CMD	  0xe9
++#define HX8394_CMD_SETREADINDEX	  0xfe
++#define HX8394_CMD_GETSPIREAD	  0xff
 +
-+  reg: true
++struct hx8394 {
++	struct device *dev;
++	struct drm_panel panel;
++	struct gpio_desc *reset_gpio;
++	struct regulator *vcc;
++	struct regulator *iovcc;
++	bool prepared;
 +
-+  reset-gpios: true
++	const struct hx8394_panel_desc *desc;
++};
 +
-+  backlight: true
++struct hx8394_panel_desc {
++	const struct drm_display_mode *mode;
++	unsigned int lanes;
++	unsigned long mode_flags;
++	enum mipi_dsi_pixel_format format;
++	int (*init_sequence)(struct hx8394 *ctx);
++};
 +
-+  port: true
++static inline struct hx8394 *panel_to_hx8394(struct drm_panel *panel)
++{
++	return container_of(panel, struct hx8394, panel);
++}
 +
-+  vcc-supply:
-+    description: Panel power supply
++static int hsd060bhw4_init_sequence(struct hx8394 *ctx)
++{
++	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
 +
-+  iovcc-supply:
-+    description: I/O voltage supply
++	/* 5.19.8 SETEXTC: Set extension command (B9h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETEXTC,
++			       0xff, 0x83, 0x94);
 +
-+required:
-+  - compatible
-+  - reg
-+  - reset-gpios
-+  - backlight
-+  - port
-+  - vcc-supply
-+  - iovcc-supply
++	/* 5.19.2 SETPOWER: Set power (B1h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETPOWER,
++			       0x48, 0x11, 0x71, 0x09, 0x32, 0x24, 0x71, 0x31, 0x55, 0x30);
 +
-+additionalProperties: false
++	/* 5.19.9 SETMIPI: Set MIPI control (BAh) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETMIPI,
++			       0x63, 0x03, 0x68, 0x6b, 0xb2, 0xc0);
 +
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
++	/* 5.19.3 SETDISP: Set display related register (B2h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETDISP,
++			       0x00, 0x80, 0x78, 0x0c, 0x07);
 +
-+    dsi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        panel@0 {
-+            compatible = "hannstar,hsd060bhw4", "himax,hx8394";
-+            reg = <0>;
-+            vcc-supply = <&reg_2v8_p>;
-+            iovcc-supply = <&reg_1v8_p>;
-+            reset-gpios = <&gpio3 13 GPIO_ACTIVE_LOW>;
-+            backlight = <&backlight>;
++	/* 5.19.4 SETCYC: Set display waveform cycles (B4h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETCYC,
++			       0x12, 0x63, 0x12, 0x63, 0x12, 0x63, 0x01, 0x0c, 0x7c, 0x55,
++			       0x00, 0x3f, 0x12, 0x6b, 0x12, 0x6b, 0x12, 0x6b, 0x01, 0x0c,
++			       0x7c);
 +
-+            port {
-+                mipi_in_panel: endpoint {
-+                    remote-endpoint = <&mipi_out_panel>;
-+                };
-+            };
-+        };
-+    };
++	/* 5.19.19 SETGIP0: Set GIP Option0 (D3h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETGIP0,
++			       0x00, 0x00, 0x00, 0x00, 0x3c, 0x1c, 0x00, 0x00, 0x32, 0x10,
++			       0x09, 0x00, 0x09, 0x32, 0x15, 0xad, 0x05, 0xad, 0x32, 0x00,
++			       0x00, 0x00, 0x00, 0x37, 0x03, 0x0b, 0x0b, 0x37, 0x00, 0x00,
++			       0x00, 0x0c, 0x40);
 +
-+...
++	/* 5.19.20 Set GIP Option1 (D5h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETGIP1,
++			       0x19, 0x19, 0x18, 0x18, 0x1b, 0x1b, 0x1a, 0x1a, 0x00, 0x01,
++			       0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x20, 0x21, 0x18, 0x18,
++			       0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18,
++			       0x24, 0x25, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18,
++			       0x18, 0x18, 0x18, 0x18, 0x18, 0x18);
++
++	/* 5.19.21 Set GIP Option2 (D6h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETGIP2,
++			       0x18, 0x18, 0x19, 0x19, 0x1b, 0x1b, 0x1a, 0x1a, 0x07, 0x06,
++			       0x05, 0x04, 0x03, 0x02, 0x01, 0x00, 0x25, 0x24, 0x18, 0x18,
++			       0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18,
++			       0x21, 0x20, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18,
++			       0x18, 0x18, 0x18, 0x18, 0x18, 0x18);
++
++	/* 5.19.25 SETGAMMA: Set gamma curve related setting (E0h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETGAMMA,
++			       0x00, 0x04, 0x0c, 0x12, 0x14, 0x18, 0x1a, 0x18, 0x31, 0x3f,
++			       0x4d, 0x4c, 0x54, 0x65, 0x6b, 0x70, 0x7f, 0x82, 0x7e, 0x8a,
++			       0x99, 0x4a, 0x48, 0x49, 0x4b, 0x4a, 0x4c, 0x4b, 0x7f, 0x00,
++			       0x04, 0x0c, 0x11, 0x13, 0x17, 0x1a, 0x18, 0x31,
++			       0x3f, 0x4d, 0x4c, 0x54, 0x65, 0x6b, 0x70, 0x7f,
++			       0x82, 0x7e, 0x8a, 0x99, 0x4a, 0x48, 0x49, 0x4b,
++			       0x4a, 0x4c, 0x4b, 0x7f);
++
++	/* 5.19.17 SETPANEL (CCh) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETPANEL,
++			       0x0b);
++
++	/* Unknown command, not listed in the HX8394-F datasheet */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_UNKNOWN1,
++			       0x1f, 0x31);
++
++	/* 5.19.5 SETVCOM: Set VCOM voltage (B6h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETVCOM,
++			       0x7d, 0x7d);
++
++	/* Unknown command, not listed in the HX8394-F datasheet */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_UNKNOWN3,
++			       0x02);
++
++	/* 5.19.11 Set register bank (BDh) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETREGBANK,
++			       0x01);
++
++	/* 5.19.2 SETPOWER: Set power (B1h) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETPOWER,
++			       0x00);
++
++	/* 5.19.11 Set register bank (BDh) */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETREGBANK,
++			       0x00);
++
++	/* Unknown command, not listed in the HX8394-F datasheet */
++	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_UNKNOWN3,
++			       0xed);
++
++	return 0;
++}
++
++static const struct drm_display_mode hsd060bhw4_mode = {
++	.hdisplay    = 720,
++	.hsync_start = 720 + 40,
++	.hsync_end   = 720 + 40 + 46,
++	.htotal	     = 720 + 40 + 46 + 40,
++	.vdisplay    = 1440,
++	.vsync_start = 1440 + 9,
++	.vsync_end   = 1440 + 9 + 7,
++	.vtotal	     = 1440 + 9 + 7 + 7,
++	.clock	     = 74250,
++	.flags	     = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
++	.width_mm    = 68,
++	.height_mm   = 136,
++};
++
++static const struct hx8394_panel_desc hsd060bhw4_desc = {
++	.mode = &hsd060bhw4_mode,
++	.lanes = 4,
++	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST,
++	.format = MIPI_DSI_FMT_RGB888,
++	.init_sequence = hsd060bhw4_init_sequence,
++};
++
++static int hx8394_enable(struct drm_panel *panel)
++{
++	struct hx8394 *ctx = panel_to_hx8394(panel);
++	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
++	int ret;
++
++	ret = ctx->desc->init_sequence(ctx);
++	if (ret) {
++		dev_err(ctx->dev, "Panel init sequence failed: %d\n", ret);
++		return ret;
++	}
++
++	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
++	if (ret) {
++		dev_err(ctx->dev, "Failed to exit sleep mode: %d\n", ret);
++		return ret;
++	}
++
++	/* Panel is operational 120 msec after reset */
++	msleep(120);
++
++	ret = mipi_dsi_dcs_set_display_on(dsi);
++	if (ret) {
++		dev_err(ctx->dev, "Failed to turn on the display: %d\n", ret);
++		goto sleep_in;
++	}
++
++	return 0;
++
++sleep_in:
++	/* This will probably fail, but let's try orderly power off anyway. */
++	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
++	if (!ret)
++		msleep(50);
++
++	return ret;
++}
++
++static int hx8394_disable(struct drm_panel *panel)
++{
++	struct hx8394 *ctx = panel_to_hx8394(panel);
++	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
++	int ret;
++
++	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
++	if (ret) {
++		dev_err(ctx->dev, "Failed to enter sleep mode: %d\n", ret);
++		return ret;
++	}
++
++	msleep(50); /* about 3 frames */
++
++	return 0;
++}
++
++static int hx8394_unprepare(struct drm_panel *panel)
++{
++	struct hx8394 *ctx = panel_to_hx8394(panel);
++
++	if (!ctx->prepared)
++		return 0;
++
++	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
++
++	regulator_disable(ctx->iovcc);
++	regulator_disable(ctx->vcc);
++
++	ctx->prepared = false;
++
++	return 0;
++}
++
++static int hx8394_prepare(struct drm_panel *panel)
++{
++	struct hx8394 *ctx = panel_to_hx8394(panel);
++	int ret;
++
++	if (ctx->prepared)
++		return 0;
++
++	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
++
++	ret = regulator_enable(ctx->vcc);
++	if (ret) {
++		dev_err(ctx->dev, "Failed to enable vcc supply: %d\n", ret);
++		return ret;
++	}
++
++	ret = regulator_enable(ctx->iovcc);
++	if (ret) {
++		dev_err(ctx->dev, "Failed to enable iovcc supply: %d\n", ret);
++		goto disable_vcc;
++	}
++
++	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
++
++	msleep(180);
++
++	ctx->prepared = true;
++
++	return 0;
++
++disable_vcc:
++	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
++	regulator_disable(ctx->vcc);
++	return ret;
++}
++
++static int hx8394_get_modes(struct drm_panel *panel,
++			    struct drm_connector *connector)
++{
++	struct hx8394 *ctx = panel_to_hx8394(panel);
++	struct drm_display_mode *mode;
++
++	mode = drm_mode_duplicate(connector->dev, ctx->desc->mode);
++	if (!mode) {
++		dev_err(ctx->dev, "Failed to add mode %ux%u@%u\n",
++			ctx->desc->mode->hdisplay, ctx->desc->mode->vdisplay,
++			drm_mode_vrefresh(ctx->desc->mode));
++		return -ENOMEM;
++	}
++
++	drm_mode_set_name(mode);
++
++	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
++	connector->display_info.width_mm = mode->width_mm;
++	connector->display_info.height_mm = mode->height_mm;
++	drm_mode_probed_add(connector, mode);
++
++	return 1;
++}
++
++static const struct drm_panel_funcs hx8394_drm_funcs = {
++	.disable   = hx8394_disable,
++	.unprepare = hx8394_unprepare,
++	.prepare   = hx8394_prepare,
++	.enable	   = hx8394_enable,
++	.get_modes = hx8394_get_modes,
++};
++
++static int hx8394_probe(struct mipi_dsi_device *dsi)
++{
++	struct device *dev = &dsi->dev;
++	struct hx8394 *ctx;
++	int ret;
++
++	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++
++	ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
++	if (IS_ERR(ctx->reset_gpio))
++		return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
++				     "Failed to get reset gpio\n");
++
++	mipi_dsi_set_drvdata(dsi, ctx);
++
++	ctx->dev = dev;
++	ctx->desc = of_device_get_match_data(dev);
++
++	dsi->mode_flags = ctx->desc->mode_flags;
++	dsi->format = ctx->desc->format;
++	dsi->lanes = ctx->desc->lanes;
++
++	ctx->vcc = devm_regulator_get(dev, "vcc");
++	if (IS_ERR(ctx->vcc))
++		return dev_err_probe(dev, PTR_ERR(ctx->vcc),
++				     "Failed to request vcc regulator\n");
++
++	ctx->iovcc = devm_regulator_get(dev, "iovcc");
++	if (IS_ERR(ctx->iovcc))
++		return dev_err_probe(dev, PTR_ERR(ctx->iovcc),
++				     "Failed to request iovcc regulator\n");
++
++	drm_panel_init(&ctx->panel, dev, &hx8394_drm_funcs,
++		       DRM_MODE_CONNECTOR_DSI);
++
++	ret = drm_panel_of_backlight(&ctx->panel);
++	if (ret)
++		return ret;
++
++	drm_panel_add(&ctx->panel);
++
++	ret = mipi_dsi_attach(dsi);
++	if (ret < 0) {
++		dev_err_probe(dev, ret, "mipi_dsi_attach failed\n");
++		drm_panel_remove(&ctx->panel);
++		return ret;
++	}
++
++	dev_dbg(dev, "%ux%u@%u %ubpp dsi %udl - ready\n",
++		ctx->desc->mode->hdisplay, ctx->desc->mode->vdisplay,
++		drm_mode_vrefresh(ctx->desc->mode),
++		mipi_dsi_pixel_format_to_bpp(dsi->format), dsi->lanes);
++
++	return 0;
++}
++
++static void hx8394_shutdown(struct mipi_dsi_device *dsi)
++{
++	struct hx8394 *ctx = mipi_dsi_get_drvdata(dsi);
++	int ret;
++
++	ret = drm_panel_disable(&ctx->panel);
++	if (ret < 0)
++		dev_err(&dsi->dev, "Failed to disable panel: %d\n", ret);
++
++	ret = drm_panel_unprepare(&ctx->panel);
++	if (ret < 0)
++		dev_err(&dsi->dev, "Failed to unprepare panel: %d\n", ret);
++}
++
++static void hx8394_remove(struct mipi_dsi_device *dsi)
++{
++	struct hx8394 *ctx = mipi_dsi_get_drvdata(dsi);
++	int ret;
++
++	hx8394_shutdown(dsi);
++
++	ret = mipi_dsi_detach(dsi);
++	if (ret < 0)
++		dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
++
++	drm_panel_remove(&ctx->panel);
++}
++
++static const struct of_device_id hx8394_of_match[] = {
++	{ .compatible = "hannstar,hsd060bhw4", .data = &hsd060bhw4_desc },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, hx8394_of_match);
++
++static struct mipi_dsi_driver hx8394_driver = {
++	.probe	= hx8394_probe,
++	.remove = hx8394_remove,
++	.shutdown = hx8394_shutdown,
++	.driver = {
++		.name = DRV_NAME,
++		.of_match_table = hx8394_of_match,
++	},
++};
++module_mipi_dsi_driver(hx8394_driver);
++
++MODULE_AUTHOR("Kamil Trzciński <ayufan@ayufan.eu>");
++MODULE_DESCRIPTION("DRM driver for Himax HX8394 based MIPI DSI panels");
++MODULE_LICENSE("GPL");
 -- 
 2.38.1
 
