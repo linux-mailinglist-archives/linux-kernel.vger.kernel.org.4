@@ -2,144 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBACE65ACE8
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 03:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E78B65ACF5
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 04:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjABCqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 Jan 2023 21:46:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S229793AbjABDSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 Jan 2023 22:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjABCqo (ORCPT
+        with ESMTP id S229447AbjABDSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 Jan 2023 21:46:44 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D772109F
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 18:46:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672627603; x=1704163603;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rm6tHu29DRSynHaxRDKpj+NTjm943vjbM7JHGwY4I8Y=;
-  b=GIV5CfGiOAuNI7qwdMUC0MD+ogUGP2XzZ7uSyuMHeJhR8r2QCuUAYeQ7
-   I/OC8PVowVa+RLNFLqpuk9hfb2vtDVaggOCatM0eAED7ARuKaFpt40xsL
-   x1EUAGzUFw/nk8nnmGaAMQ9nPoq/Z573dIDYURpurFxdhnTGO9wOHtxia
-   fGYBKATwzg3RNbP8SKC4lBfeRnns5nmmONhG5fN61uR4HRgWu7EAU77Ky
-   Mo68WFPELiKaEvXfqWkkqfaQmuKmjPgU+3rSiNm5GZpr7uSwKcFgUeJ9/
-   TxfkazGnWArzbtQqSvHxH+BHJu+exQSnrVeVVDEy5QqkdURyCn4RB2373
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10577"; a="383726282"
-X-IronPort-AV: E=Sophos;i="5.96,293,1665471600"; 
-   d="scan'208";a="383726282"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2023 18:46:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10577"; a="684983122"
-X-IronPort-AV: E=Sophos;i="5.96,293,1665471600"; 
-   d="scan'208";a="684983122"
-Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Jan 2023 18:46:41 -0800
-Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pCAqW-000QXE-2K;
-        Mon, 02 Jan 2023 02:46:40 +0000
-Date:   Mon, 02 Jan 2023 10:46:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- e2cda209b2a67d5921cf9ef4cdca57dc9eb3affe
-Message-ID: <63b24582.e8BdWnURUoOw9JTy%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 1 Jan 2023 22:18:35 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6FF21BD
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 19:18:33 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id g16so18695288plq.12
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 19:18:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vZvyGK6DxthGUsLi298pua96YvrjAlkyByXaysjEekY=;
+        b=cmP6xJtkIhwQCGVKmCN7/xe+AvuuQgBdohmEnkVX+CVpTHLSR8dTK+JQUhhcXtpLJU
+         AEn0zFdcJkcqb4sNjcnG8NibcBdmP8bO+j3hSaCZ4n1e2dkGVRabIqOK1vIG3mFXfey6
+         xEakNadOxxIXiFplCpYQgxzkCK7RFA02Bv2ycqBbRRGJeKH/OV0Mwg+K4VztgRj7rg0e
+         PbuEPtbNDqXpKbn8MZSNLoavsMXTqepweoq6QSd9evwACglxdbWRUG7hNy5XtY9KnZcE
+         F2wZdxnq/Pow9BDLjsBjKfg+sWl7lgRSpoOEOdGy1QpHDK2gcmE/mBifXtL/E/7WDZl4
+         om9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vZvyGK6DxthGUsLi298pua96YvrjAlkyByXaysjEekY=;
+        b=33QhWJvTInF83L12SlW2m5Stn3Wasmx5ykDy57Pl8ZouyS11AGgAlMHtyK54DjuIF5
+         EG/apFVDSQ1JKnJT7YnEhhGnlmG2HgjUeu544LgmiR4JPkydnECL49Ig8mAL3nwQ6tG2
+         yio5KB30my5ODRMxHg5Ptp2PSkzN7/l1BI0b3i1Drc0VhMteBFjwmjavSqroLCSFWg59
+         pFzMSF31rnp2ZvpJsYahwn+mPrgSSf4sfGLLnDvu3bj5HRfI1Dpy+5SKADSadcGIz2FD
+         Sy+KGHxsXxzlzSZOniG+1A8ulcLPEj4zhwfehPB5INHV87qiMLirfsbu5pE5B2/0iQkY
+         p8qg==
+X-Gm-Message-State: AFqh2krMVb1GBaOUngudVDub7OtPW+2ePUSHjOcNUFHQLDFe2r2R92Fh
+        8k2jZOZwRB1lCdirbltBjbQskA==
+X-Google-Smtp-Source: AMrXdXvPj8o6cK4T3w01Iw3SMa2JT66hdZ4VXWgIspXrvpNrRkrS7ttzQdxzW3nbzDECQOX/gYTa4A==
+X-Received: by 2002:a05:6a20:7f59:b0:ac:af5c:2970 with SMTP id e25-20020a056a207f5900b000acaf5c2970mr2514437pzk.3.1672629512652;
+        Sun, 01 Jan 2023 19:18:32 -0800 (PST)
+Received: from [2620:15c:29:203:20a4:1331:a6b6:c59b] ([2620:15c:29:203:20a4:1331:a6b6:c59b])
+        by smtp.gmail.com with ESMTPSA id 72-20020a63064b000000b00477602ff6a8sm15928374pgg.94.2023.01.01.19.18.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Jan 2023 19:18:31 -0800 (PST)
+Date:   Sun, 1 Jan 2023 19:18:30 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Jarkko Sakkinen <jarkko@profian.com>
+cc:     linux-crypto@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] crypto: ccp: Improve sev_platform_init() error
+ messages
+In-Reply-To: <20221231151106.143121-1-jarkko@profian.com>
+Message-ID: <6a16bbe4-4281-fb28-78c4-4ec44c8aa679@google.com>
+References: <20221231151106.143121-1-jarkko@profian.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: e2cda209b2a67d5921cf9ef4cdca57dc9eb3affe  Merge branch into tip/master: 'x86/microcode'
+On Sat, 31 Dec 2022, Jarkko Sakkinen wrote:
 
-elapsed time: 725m
+> The following functions end up calling sev_platform_init() or
+> __sev_platform_init_locked():
+> 
+> * sev_guest_init()
+> * sev_ioctl_do_pek_csr
+> * sev_ioctl_do_pdh_export()
+> * sev_ioctl_do_pek_import()
+> * sev_ioctl_do_pek_pdh_gen()
+> * sev_pci_init()
+> 
+> However, only sev_pci_init() prints out the failed command error code, and
+> even there the error message does not specify, SEV which command failed.
+> 
+> Address this by printing out the SEV command errors inside
+> __sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
+> INIT_EX commands.
+> 
+> This extra information is particularly useful if firmware loading and/or
+> initialization is going to be made more robust, e.g. by allowing
+> firmware loading to be postponed.
+> 
+> Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
+> ---
+>  drivers/crypto/ccp/sev-dev.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index 5350eacaba3a..ac7385c12091 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -963,6 +963,7 @@ static int __sev_init_ex_locked(int *error)
+>  
+>  static int __sev_platform_init_locked(int *error)
+>  {
+> +	const char *cmd = sev_init_ex_buffer ? "SEV_CMD_INIT_EX" : "SEV_CMD_INIT";
+>  	struct psp_device *psp = psp_master;
+>  	struct sev_device *sev;
+>  	int rc = 0, psp_ret = -1;
 
-configs tested: 62
-configs skipped: 2
+I think this can just be handled directly in the dev_err() since it's only 
+used once.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> @@ -1008,18 +1009,23 @@ static int __sev_platform_init_locked(int *error)
+>  	if (error)
+>  		*error = psp_ret;
+>  
+> -	if (rc)
+> +	if (rc) {
+> +		dev_err(sev->dev, "SEV: %s failed error %#x", cmd, psp_ret);
+>  		return rc;
+> +	}
+>  
+>  	sev->state = SEV_STATE_INIT;
+>  
+>  	/* Prepare for first SEV guest launch after INIT */
+>  	wbinvd_on_all_cpus();
+> -	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, error);
+> -	if (rc)
+> -		return rc;
+> +	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, &psp_ret);
+> +	if (error)
+> +		*error = psp_ret;
+>  
+> -	dev_dbg(sev->dev, "SEV firmware initialized\n");
 
-gcc tested configs:
-powerpc                           allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-alpha                               defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a013
-i386                          randconfig-a001
-x86_64                        randconfig-a011
-i386                          randconfig-a003
-i386                                defconfig
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-arm                                 defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                            allnoconfig
-x86_64                              defconfig
-x86_64                        randconfig-a015
-alpha                            allyesconfig
-ia64                             allmodconfig
-arc                  randconfig-r043-20230101
-i386                          randconfig-a014
-riscv                randconfig-r042-20230101
-s390                 randconfig-r044-20230101
-m68k                             allyesconfig
-s390                                defconfig
-sh                               allmodconfig
-s390                             allmodconfig
-i386                          randconfig-a005
-i386                          randconfig-a012
-m68k                             allmodconfig
-arc                              allyesconfig
-i386                          randconfig-a016
-x86_64                           rhel-8.3-kvm
-s390                             allyesconfig
-mips                             allyesconfig
-x86_64                               rhel-8.3
-powerpc                          allmodconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                           allyesconfig
-i386                             allyesconfig
+Any reason to remove this dbg line?  I assume the following dev_info() 
+line is deemed sufficient?
 
-clang tested configs:
-x86_64                          rhel-8.3-rust
-x86_64                        randconfig-a014
-i386                          randconfig-a002
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-hexagon              randconfig-r041-20230101
-i386                          randconfig-a004
-i386                          randconfig-a013
-hexagon              randconfig-r045-20230101
-i386                          randconfig-a006
-arm                  randconfig-r046-20230101
-i386                          randconfig-a015
-i386                          randconfig-a011
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +	if (rc) {
+> +		dev_err(sev->dev, "SEV: SEV_CMD_DF_FLUSH failed error %#x", psp_ret);
+> +		return rc;
+> +	}
+>  
+>  	dev_info(sev->dev, "SEV API:%d.%d build:%d\n", sev->api_major,
+>  		 sev->api_minor, sev->build);
+> @@ -2354,8 +2360,7 @@ void sev_pci_init(void)
+>  	/* Initialize the platform */
+>  	rc = sev_platform_init(&error);
+>  	if (rc)
+> -		dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
+> -			error, rc);
+> +		dev_err(sev->dev, "SEV: failed to INIT rc %d\n", rc);
+>  
+>  skip_legacy:
+>  	dev_info(sev->dev, "SEV%s API:%d.%d build:%d\n", sev->snp_initialized ?
