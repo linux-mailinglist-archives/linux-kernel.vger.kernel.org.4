@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E33365B540
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EE865B548
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbjABQls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        id S236280AbjABQpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:45:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjABQlp (ORCPT
+        with ESMTP id S234608AbjABQpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:41:45 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897641F1;
-        Mon,  2 Jan 2023 08:41:44 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4599E5C675;
-        Mon,  2 Jan 2023 16:41:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672677703; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2pZDrU8YJJtnMizhBEDQAko+AKSWDe4PtNFAHzaa964=;
-        b=OVd56XDdEfXoz1JgdTUwKVJgR5vYC+tqAoYI45ByZaNnUU21aACDMfzK6c4cV6S9i/Q0lK
-        BM5tX/qsS11MmYfehyv/tEp54v7RA6qnvKEbqvf7Cn5hhBCVH9O3sVSmTSl66jrl2KeD0w
-        y4nWO85wLhcjeFQ2M71VIcSJjix7qbY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672677703;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2pZDrU8YJJtnMizhBEDQAko+AKSWDe4PtNFAHzaa964=;
-        b=w3axUzyL8/+FnvvSR4G9WdygKYk/5JNwkvodx7nB2o1m5etpQ4sUCq7BEi8bWzrJ4xr2F/
-        nBltQaZmdqN+FlAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2CBB1139C8;
-        Mon,  2 Jan 2023 16:41:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 76pOCkcJs2ONDAAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 02 Jan 2023 16:41:43 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E208EA0742; Mon,  2 Jan 2023 17:41:41 +0100 (CET)
-Date:   Mon, 2 Jan 2023 17:41:41 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Tanmay Bhushan <007047221b@gmail.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: remove dead code in updating backup sb
-Message-ID: <20230102164141.sfc6ysegyksxryzn@quack3>
-References: <20221230141858.3828-1-007047221b@gmail.com>
+        Mon, 2 Jan 2023 11:45:35 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EDBB7EB
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:45:34 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302GInMk014129;
+        Mon, 2 Jan 2023 16:45:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : to : cc : from : subject : content-type :
+ content-transfer-encoding; s=qcppdkim1;
+ bh=aYkK432DaDF4bT6u3BpN5HMTQcbUfQyWQBwnkZAp7yE=;
+ b=XobZ6N1dIq4qvHwXuGpfYXe+c70eKKDxyQ3lgsKfpeX6Beeoo7YDtJQAhQmf3ojgaWAt
+ vCwhXuBtFY8azfs2+N8cEe1dWEskqmbDwqRlHCTwtTNmGTzztYrqVp8H1wyXGbspLq/a
+ K/Itj0YS+I8SXnJnTwkjU74089OoWEaQ5tHd63Gd2xnn2c9Xg7ITsqtuizG7kCEumsf4
+ dhYzAjGd40CnWMRZkUAtV98awT7unSnYptQeBy3xWNE5859h6SFguopozgy6L91BExMM
+ 7iZTK/uU1wOTOiyC4h+ylw5Vf4KvUueLyK6maAtDZ7YLc5ZeViYw2PcBrWOVSMFBqzxC BQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mtaewbeke-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 16:45:31 +0000
+Received: from nasanex01c.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 302GjUeP022928
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 2 Jan 2023 16:45:30 GMT
+Received: from [10.216.36.140] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 2 Jan 2023
+ 08:45:29 -0800
+Message-ID: <5bed08c5-8663-4e68-27b4-8b6d3957a880@quicinc.com>
+Date:   Mon, 2 Jan 2023 22:14:59 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221230141858.3828-1-007047221b@gmail.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+CC:     lkml <linux-kernel@vger.kernel.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: Query about IPI as NMI (pseudo-NMI) support patches
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fhT6XmDNr73rKpCnBY6D3-A3UUCoZBRQ
+X-Proofpoint-GUID: fhT6XmDNr73rKpCnBY6D3-A3UUCoZBRQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-02_10,2022-12-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1031 suspectscore=0
+ phishscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=671 lowpriorityscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301020152
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 30-12-22 15:18:58, Tanmay Bhushan wrote:
-> ext4_update_backup_sb checks for err having some value
-> after unlocking buffer. But err has not been updated
-> till that point in any code which will lead execution
-> of the code in question.
-> 
-> Signed-off-by: Tanmay Bhushan <007047221b@gmail.com>
+Hi Marc,
 
-Looks good to me. Feel free to add:
+I was looking similar support mentioned in below patch series.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+https://lore.kernel.org/lkml/CAFA6WYO0+LQ=mB1spCstt0cNZ0G+sZu_+Wrv6BKSeXqF5SRq4A@mail.gmail.com/#t
 
-								Honza
+Wanted to check if there is chance of these patches to land in
+mainline ?
 
-> ---
->  fs/ext4/ioctl.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
-> index 8067ccda34e4..2e8c34036313 100644
-> --- a/fs/ext4/ioctl.c
-> +++ b/fs/ext4/ioctl.c
-> @@ -155,9 +155,6 @@ static int ext4_update_backup_sb(struct super_block *sb,
->  	set_buffer_uptodate(bh);
->  	unlock_buffer(bh);
->  
-> -	if (err)
-> -		goto out_bh;
-> -
->  	if (handle) {
->  		err = ext4_handle_dirty_metadata(handle, NULL, bh);
->  		if (err)
-> -- 
-> 2.34.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Thanks,
+-Mukesh
