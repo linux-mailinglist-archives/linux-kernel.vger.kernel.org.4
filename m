@@ -2,138 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A94865B096
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2338F65B10B
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbjABL0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:26:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S236125AbjABL37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232752AbjABLZh (ORCPT
+        with ESMTP id S229447AbjABL30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:25:37 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CA4657D;
-        Mon,  2 Jan 2023 03:24:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DCF5D2256F;
-        Mon,  2 Jan 2023 11:24:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672658669; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zBBA2nzNlNZSsvXhqPF5ZZXmCuwF1QaNQRQ7CORp228=;
-        b=W+MNNtWOV2kZ3FIcdAAT9QOD4LZEnFG5CFXuF3hZd1Y1eVmqAAVMO/VRayl7Z+4qhhNfD8
-        q4X09/cdkwSAp9J3g9lhmO3rJGO3qQDIkjOFrWxltxawKTAASUepMvFCJYXLXRoBQbG2lz
-        7R1UOTRaB3ZRcf0gjxXn/kyrrBHAFU8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672658669;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zBBA2nzNlNZSsvXhqPF5ZZXmCuwF1QaNQRQ7CORp228=;
-        b=sl92HB9JIQWiy9kLRPLV1wr2nNBaENBgI88KKooa8T8gNUHfnt76oiOZQD4eH7rLUeZ3zo
-        YZ/rDaJ2pCWz05Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD36E13427;
-        Mon,  2 Jan 2023 11:24:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fYyMKe2+smNRbwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 02 Jan 2023 11:24:29 +0000
-Message-ID: <d6e965ca-a568-5193-20a0-19b1c9b42ca2@suse.cz>
-Date:   Mon, 2 Jan 2023 12:24:29 +0100
+        Mon, 2 Jan 2023 06:29:26 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E16565A5;
+        Mon,  2 Jan 2023 03:28:54 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id p24so6810910plw.11;
+        Mon, 02 Jan 2023 03:28:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kBKmxmk+PNQSBGyHxHAqURGaUcC718UdtWX3gmDzrTk=;
+        b=NAQxwnqMteNLaN4SsuUnZfL9t+D2xNfYU8o7Vk7fCwBwurFz9/zAtWZ1z3GH+hniHQ
+         JZWPH7Lw6aMPeWxoIZK51WFGGSOxbgH6V/rdZBKsQThip4qq1ZPFdx8GNjss9Hg6u6MF
+         Wztnpy+B1a+LbFU7EfQIWtXknb+b13y931EZNiwePHm3fMdZ9lAwa5z5fFpwMdeHOuBx
+         znwM7P8QSUSgkl8Y9gRV81N5iKMV294rsdiBY9u8nkXv6YiXgFKSBUTO+LT/wQAFW/wP
+         t5OfF42Wz1Cd/bXNIymbZm9NW6lIbUw4dBKQHAeeNw2p/NiNSVmWyQR6vmVaqBbFDwDL
+         dFRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kBKmxmk+PNQSBGyHxHAqURGaUcC718UdtWX3gmDzrTk=;
+        b=o/PzA33+WkQ9G+QvJfe78rHtiB4qHNPtzfJi8QbsMvehGY/mYHEGkwe+JIlGDLFxEu
+         4AKac4m3RHQJnW7bEo8RJrG5m6S9Ny7lwdo4843sI6cwifOjrRToPp5/GACdLAWaAY4N
+         342jPGPrL5cKRQ2RmnDcLwsItIRCK1xqIMGjBizRLQaEk7MPGzeh2y3gSMWGGx6MvNCi
+         ivJhZ+quP6PNC1ZMJxoipdE2dJILgdm3DtRwwZXkl1VK6Eis6BRFF1KAI8niwrNLCvYa
+         rUexpc/M+pfxgZsQjt+y9Ott9CrxZtZXiqOLl+45MicTsi7P8v+T3GHOgoOM3nCVDVQ/
+         VPcA==
+X-Gm-Message-State: AFqh2kpYVHyOfwqTud8boD0pABBl2PhPXxY/MAXpFzWvkCx19PJWaahH
+        4mQj4m6Ip9hzgXgH8zAYt8Q=
+X-Google-Smtp-Source: AMrXdXv/9sCjzggdaDkY0VUokqf3GLUZF1q5QPRnxXrit88ybAKuI94pRMqWsDHuwcHl1eRBLCOLJw==
+X-Received: by 2002:a05:6a21:3a48:b0:ad:5cde:5beb with SMTP id zu8-20020a056a213a4800b000ad5cde5bebmr49641340pzb.47.1672658933920;
+        Mon, 02 Jan 2023 03:28:53 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id on16-20020a17090b1d1000b0020b21019086sm33140160pjb.3.2023.01.02.03.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 03:28:53 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] pinctrl: rockchip: Fix refcount leak in rockchip_pinctrl_parse_groups
+Date:   Mon,  2 Jan 2023 15:28:45 +0400
+Message-Id: <20230102112845.3982407-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] x86/kexec: fix double vfree of image->elf_headers
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        patches@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        Dave Young <dyoung@redhat.com>, stable@vger.kernel.org
-References: <20230102103917.20987-1-vbabka@suse.cz>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230102103917.20987-1-vbabka@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUSPICIOUS_RECIPS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/2/23 11:39, Vlastimil Babka wrote:
-> An investigation of a "Trying to vfree() nonexistent vm area" bug
-> occurring in arch_kimage_file_post_load_cleanup() doing a
-> vfree(image->elf_headers) in our 5.14-based kernel yielded the following
-> double vfree() scenario, also present in mainline:
-> 
-> SYSCALL_DEFINE5(kexec_file_load)
->   kimage_file_alloc_init()
->     kimage_file_prepare_segments()
->       arch_kexec_kernel_image_probe()
->         kexec_image_load_default()
->           kexec_bzImage64_ops.load()
->             bzImage64_load()
->               crash_load_segments()
->                 prepare_elf_headers(image, &kbuf.buffer, &kbuf.bufsz);
->                 image->elf_headers = kbuf.buffer;
-> 		ret = kexec_add_buffer(&kbuf);
-> 		if (ret) vfree((void *)image->elf_headers); // first vfree()
->       if (ret) kimage_file_post_load_cleanup()
->         vfree(image->elf_headers);                          // second vfree()
-> 
-> AFAICS the scenario is possible since v5.19 commit b3e34a47f989
-> ("x86/kexec: fix memory leak of elf header buffer") that was marked for
-> stable and also was backported to our kernel.
-> 
-> Fix the problem by setting the pointer to NULL after the first vfree().
-> Also set elf_headers_sz to 0, as kimage_file_post_load_cleanup() does.
-> 
-> Fixes: b3e34a47f989 ("x86/kexec: fix memory leak of elf header buffer")
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Baoquan He <bhe@redhat.com>
-> Cc: Dave Young <dyoung@redhat.com>
-> Cc: <stable@vger.kernel.org>
+of_find_node_by_phandle() returns a node pointer with refcount incremented,
+We should use of_node_put() on it when not needed anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Takashi told me he sent a slightly different fix already in November:
-https://lore.kernel.org/all/20221122115122.13937-1-tiwai@suse.de/
+Fixes: d3e5116119bd ("pinctrl: add pinctrl driver for Rockchip SoCs")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/pinctrl/pinctrl-rockchip.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Seems it wasn't picked up? You might pick his then, as Baoquan acked it, and
-it's removing code, not adding it.
-
-> ---
->  arch/x86/kernel/crash.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 9730c88530fc..0d651c05a49e 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -403,6 +403,8 @@ int crash_load_segments(struct kimage *image)
->  	ret = kexec_add_buffer(&kbuf);
->  	if (ret) {
->  		vfree((void *)image->elf_headers);
-> +		image->elf_headers = NULL;
-> +		image->elf_headers_sz = 0;
->  		return ret;
->  	}
->  	image->elf_load_addr = kbuf.mem;
+diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
+index da974ff2d75d..0bc3dc2220fd 100644
+--- a/drivers/pinctrl/pinctrl-rockchip.c
++++ b/drivers/pinctrl/pinctrl-rockchip.c
+@@ -3036,6 +3036,7 @@ static int rockchip_pinctrl_parse_groups(struct device_node *np,
+ 		np_config = of_find_node_by_phandle(be32_to_cpup(phandle));
+ 		ret = pinconf_generic_parse_dt_config(np_config, NULL,
+ 				&grp->data[j].configs, &grp->data[j].nconfigs);
++		of_node_put(np_config);
+ 		if (ret)
+ 			return ret;
+ 	}
+-- 
+2.25.1
 
