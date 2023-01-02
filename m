@@ -2,91 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A2165B546
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F36065B547
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbjABQpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S234025AbjABQpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjABQpO (ORCPT
+        with ESMTP id S236163AbjABQp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:45:14 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A124114A
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:45:13 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id j17so32767868lfr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:45:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rVqQuVQCPOiYO1dU8dGWxyFL4WN4RC04R3gc0Olsf5Q=;
-        b=P37AMU2e+Xb20EtsUCr/YG3yMoDoL6xU5CftE4/nXdb+kSfu+dNyH7+H+pwZINke25
-         Sya+e3tZzVSnVoxyXzxY0I3tR1pzlL9cvSezjxVP/CYCDVR1LvUYMnOck76/5ztUMyND
-         MCBm/AQl/jnuik1dAwrQelNEifyZa9tw+V4BuPvzaVlCS5bpXGCvsH3TPpFTt22udjTC
-         WFSsAKdEvlRZRqyJk571FqLPCsqYXWu9cGsxoq7kL8WSTYtSw3CydAdkePQZgS8mdR+P
-         yqooeer/zWGVtm0qvOgpCk82EtGDGroVlWjuBurpp9Jh/NTTjSPwhZ4rr+uhAN9cewWT
-         B+RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rVqQuVQCPOiYO1dU8dGWxyFL4WN4RC04R3gc0Olsf5Q=;
-        b=SIm9WU1BwyL+J8tbw0KpOqmkdL/jjwc8+Pj02Z7t+NCCblDR5+63T37hgHGnFlqL4I
-         CVyOqIoVeNt3K1zMVt5NNWXsxE/GBxBr1mqC8N5MpKw+/ks1iS4cs7g8+17bM8w2wc/f
-         H5nuQKFJRMXRyV7QjFVE2jdJUF/4dsgi2T6vqHH3kExDR15RxC9+4rBdHy/bt3s2O9Ws
-         Q92IQVsuZnTbGi+vZTh3LhkQgO1OAhp4aqlrogjz/eCJB4MdI2TNYlbL6dc6NDRTPtLM
-         KuRylJr7HQSAY0jKkw0j1eS5fdiOkIsN7CalRE39ypbk4z0/kh6n64udWe5iWQdWhaPm
-         8+lQ==
-X-Gm-Message-State: AFqh2kp+1yjzs2BUntsfVTGfqylmMkCTrom3Lg1wsfqqA2fOUwIr7GqK
-        3EocQxYGFfeQGNf8LMwHOU/t1Q==
-X-Google-Smtp-Source: AMrXdXtN/cSdgPJEu7Pd5yStGAsI0GmBJb6OX1v/KfqTg2vf6fL7Od4epvsjN3KjEy0KnvMEgw1LEA==
-X-Received: by 2002:a05:6512:3b22:b0:4a4:68b9:19e1 with SMTP id f34-20020a0565123b2200b004a468b919e1mr13152025lfv.9.1672677911726;
-        Mon, 02 Jan 2023 08:45:11 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id h13-20020a05651211cd00b004a2511b8224sm4455876lfr.103.2023.01.02.08.45.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 08:45:11 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     robh+dt@kernel.org, alim.akhtar@samsung.com,
-        pankaj.dubey@samsung.com, krzysztof.kozlowski+dt@linaro.org,
-        s.prashar@samsung.com,
-        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: fsd: fix PUD values as per FSD HW UM
-Date:   Mon,  2 Jan 2023 17:45:09 +0100
-Message-Id: <167267790505.932878.15397748468342899542.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230102093247.59649-1-p.rajanbabu@samsung.com>
-References: <CGME20230102093302epcas5p2d48e893eb8af30e4d78b1377e022ff3a@epcas5p2.samsung.com> <20230102093247.59649-1-p.rajanbabu@samsung.com>
+        Mon, 2 Jan 2023 11:45:27 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9CBB4A6
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:45:23 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 244F7C0009;
+        Mon,  2 Jan 2023 16:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672677922;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5O8OXS7nc8duFjds7VaePab6wVG7wkizTo7pWgR7AjU=;
+        b=OBqHHGO6YyKEC+KEYE13IBtCFpLbiKK7TaqZsET9nQAswKq0CXiBI4tkhPIX67Hp3HBFDU
+        c8h3kNIAuiKq2QHFEgMZXq9HfO7H8QPChWGak6Bbnhe6EIV5NjNPWwerot7QJg3hh8hKc9
+        mhrdkTGlJ1LWSNQNuIA7dxShpjeE6in4YcAbFSM6jK144YqIuHMCKAlJWgHZbsM1rM9fpF
+        KUv0OXAhO5NwaRoQz+91haa6YXB+SFSd0VvCDSCv2gyC5ZthwtRPSEouxslpwkyw7SCcy/
+        2WjXAeHK9z8kzPMbbPTqugOS1Xi7T0InVPvYyGf34PhjA2EWB4HOwa1fhO4Uwg==
+Date:   Mon, 2 Jan 2023 17:45:17 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 4/7] mtd: rawnand: sunxi: Fix ECC strength maximization
+Message-ID: <20230102174517.1ccb3654@xps-13>
+In-Reply-To: <4207d4eb-31d5-31c0-1a7f-67ec00b63f58@sholland.org>
+References: <20221229181526.53766-1-samuel@sholland.org>
+        <20221229181526.53766-5-samuel@sholland.org>
+        <20230102101132.66aa1a1d@xps-13>
+        <4207d4eb-31d5-31c0-1a7f-67ec00b63f58@sholland.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2 Jan 2023 15:02:47 +0530, Padmanabhan Rajanbabu wrote:
-> PUD values used for UFS, SPI and UART are not reflecting
-> the default values recommended by FSD HW UM. Therefore,
-> changing the same to comply with HW UM recommendation.
-> 
-> 
+Hi Samuel,
 
-Applied, thanks!
+samuel@sholland.org wrote on Mon, 2 Jan 2023 09:59:29 -0600:
 
-[1/1] arm64: dts: fsd: fix PUD values as per FSD HW UM
-      https://git.kernel.org/krzk/linux/c/32d0c06801172e258a66ffb5dfad7d5d2b9557a9
+> Hi Miqu=C3=A8l,
+>=20
+> On 1/2/23 03:11, Miquel Raynal wrote:
+> > Hi Samuel,
+> >=20
+> > samuel@sholland.org wrote on Thu, 29 Dec 2022 12:15:23 -0600:
+> >  =20
+> >> This is already accounted for in the subtraction for OOB, since the BBM
+> >> overlaps the first OOB dword. With this change, the driver picks the
+> >> same ECC strength as the vendor driver.
+> >>
+> >> Fixes: 4796d8655915 ("mtd: nand: sunxi: Support ECC maximization")
+> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> >> ---
+> >>
+> >>  drivers/mtd/nand/raw/sunxi_nand.c | 3 +--
+> >>  1 file changed, 1 insertion(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/=
+sunxi_nand.c
+> >> index 1bddeb1be66f..1ecf2cee343b 100644
+> >> --- a/drivers/mtd/nand/raw/sunxi_nand.c
+> >> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
+> >> @@ -1643,8 +1643,7 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct na=
+nd_chip *nand,
+> >>  		ecc->size =3D 1024;
+> >>  		nsectors =3D mtd->writesize / ecc->size;
+> >> =20
+> >> -		/* Reserve 2 bytes for the BBM */
+> >> -		bytes =3D (mtd->oobsize - 2) / nsectors;
+> >> +		bytes =3D mtd->oobsize / nsectors; =20
+> >=20
+> > I'm sorry but I don't think we can make this work. This change would
+> > break all existing users... =20
+>=20
+> OK, it is not too much of an issue because I can manually specify the
+> ECC parameters in the devicetree. Do you think it makes sense to fix
+> this when adding new hardware variants/compatible strings?
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Actually, looking at the code again, I don't get how the above diff
+could be valid. The "maximize strength" logic (in which this diff is)
+looks for the biggest region to store ECC bytes. These bytes cannot
+be stored on the BBM, which "mtd->oobsize - 2" tries to avoid, so we
+cannot get rid of this.
+
+Thanks,
+Miqu=C3=A8l
