@@ -2,204 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BC665B5A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF3365B5B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236292AbjABRKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 12:10:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
+        id S236659AbjABRLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 12:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236647AbjABRKY (ORCPT
+        with ESMTP id S236596AbjABRLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 12:10:24 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54064BC19
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 09:10:22 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id ge16so26840868pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 09:10:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r9oz15QNNm81zokVTxgMCrGaFEQ0wDDWXatzQ1zjom0=;
-        b=oS1/FN4NZ+sjYZAo7wURUFJYZDgkDpAtxxwoN6oEMhdFdT7/aNZ/A5BAfE50EexvKH
-         KQuW6dCNo/SwfYqNlLHRHw4YzraEYwUlcJ2K+NAC32evuUig6RANl2prDDcuQMrNXpF4
-         8VBcOkvAqjld8+R0gWnpICAo0cGEpbmV9rTU7MGc+mcKAHKIYoJsmv4m62ksUCsk3i6Y
-         nSLIR5Y3vkub9XD4Tdu7/uBghJrMMCoqgS8r+9bc8Qz24+PIkY8hojdWlTp/xBTlr6d4
-         SOYNPRdsudruoBo9ld7piEmNUymoVAHMV0RbQF5RAB5GKGQoEruxDsMq+x3cMosgUg6X
-         4THw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r9oz15QNNm81zokVTxgMCrGaFEQ0wDDWXatzQ1zjom0=;
-        b=ZQq9SWH+KKsTGjBCw/BsJPL69pdJJmkrVElZ5PFOU6hikRFFaXYK3w5yafeMuqH1fP
-         NhwVv6JNszHXQ+F5bKIHM2+ONBhQRuk9cvs53ERb3ykPiK1bBGgjBup4URQeUwu8LPXB
-         oR/gPm3XOZclqtrzBxs52oPH5Ea/HJl7PZesz04iA/wbzXkGMtrrRq4P3vZpcGXiYX79
-         fCPmiuZRjGlSOm0Kz9q6kdbskSOQsuWzHWs3jv9SB2heBVOvGHs3mPlK4OkKgQt8HWKI
-         XsYV8/I2lElQ7UNphEUVpPvHIUYgv64m1JWw2NQaCWOLXuA4KOWsfYYLPaEUSdDZbogF
-         tOzg==
-X-Gm-Message-State: AFqh2krU/6jN9A+UkplKl9DOb7ln7GqPfwxO/5c7e6nNFZgBzEmw6ii1
-        9o2E3zJefZR10Mf9XkJ9pp4vQQ==
-X-Google-Smtp-Source: AMrXdXsyGQdA4ODoCF4RIBgtXj/wtPu77paoDFpGnXa8kMpf0OLyu42uDilhg3RA6/pxgTBf72a1UA==
-X-Received: by 2002:a17:903:451:b0:192:820d:d1 with SMTP id iw17-20020a170903045100b00192820d00d1mr30338778plb.25.1672679421704;
-        Mon, 02 Jan 2023 09:10:21 -0800 (PST)
-Received: from ?IPV6:2401:4900:1c5e:e3b5:c341:16de:ce17:b857? ([2401:4900:1c5e:e3b5:c341:16de:ce17:b857])
-        by smtp.gmail.com with ESMTPSA id r10-20020a170902c60a00b001811a197797sm20545505plr.194.2023.01.02.09.10.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 09:10:21 -0800 (PST)
-Message-ID: <cc8c5677-f2ea-c134-6539-0412ccff6bc7@linaro.org>
-Date:   Mon, 2 Jan 2023 22:40:16 +0530
+        Mon, 2 Jan 2023 12:11:07 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFBDC0C;
+        Mon,  2 Jan 2023 09:10:57 -0800 (PST)
+Received: from toolbox.int.toradex.com ([104.59.205.51]) by mrelay.perfora.net
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MdsFf-1pSgIa2fqn-00PZd1;
+ Mon, 02 Jan 2023 18:10:29 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     devicetree@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
+        Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Reinhold Mueller <reinhold.mueller@emtrion.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH v2 0/5] arm64: dts: freescale: prepare and add apalis imx8 support
+Date:   Mon,  2 Jan 2023 18:10:17 +0100
+Message-Id: <20230102171023.33853-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3
- connector
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     quic_schowdhu@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <20221231131945.3286639-1-bhupesh.sharma@linaro.org>
- <514482a4-614c-d6b8-ec7c-0e69fff72295@linaro.org>
- <016e9b47-35b4-2110-bbef-ddfd0abc6a8d@linaro.org>
- <abbaa799-c7a9-e4cd-cd81-3cf3f0d83110@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <abbaa799-c7a9-e4cd-cd81-3cf3f0d83110@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:uRrOjMZNZWBp3dUiEgiGfZiEAVN6g34QVpW+6KWVQaF6K8Hth0M
+ qoQyx7P7I7DoMwoTy8hxHi3Dnhw/O2i8qnbvObs8GEyIZnS4IJ0Uh2Ujs+DNafGIXxTua4I
+ ylLdl5MhTTWHs6XSdSeLrufTZGDtUtTQ2u/o/052x/74AeMld65XG1Nj5s8bjJ+G5nE0/qU
+ 9pUKdZcNqiCwVN6SyZZxA==
+UI-OutboundReport: notjunk:1;M01:P0:B+DowQIJX5I=;DTt9GKxRBQY8yiRmHpYcO58FYrp
+ szPDM2YIdYg1RNLC0LSqIrEYdgEH0g3KDDMxVjaylrNjytfV/7u10GXRrKhf4ywOVnQvdPtGO
+ 6yZrDA/k9vFHsub75EA/T/eUFtaUvcjJwuSh6UmF47dUYLMiPmO5pgz1+g20oXG6OasYfADqN
+ G+pCczLU5878XmH0aDxtC+ohYGgj4e2kjCSzc5jkjMLs9VSRWjEec1oGcbF8BQbFWmIvE61Bq
+ uqPs78vVzIhHR0f/vhonmWibWku7r/xKoYMK9WdK1h2f0K59rC+oBB9xOf2hPWs3LisN9cz20
+ Mvw/at/soK+TjyRLQBeV6qCz46FbZHhn4bbX0Ihypa/HsSK3CyZtpofIuXBd+IsTSbeOrcPa0
+ +0XxFyPUGRYILGagOG9IU0KX+8OH1goXweiqC3R06ypaF6BP0bV/bhLv6Fba9OOHlEwQxRXsB
+ h1fK0YmNqTAMy3e/xwyLcshFwHCNkZABjWaiAZQL1NvEB8bpPP4wVq+mj0/ziF6tQ5yN22gua
+ vMvVCY4dIYn0uNfpDMW6k6D163u5KB0KTUcPrYy968z25nsqq+aDKjFC0fff4KwSydkC2MmJN
+ wVGHgzdGSoTFeaeK60Tmp5/CDR8RaNM63s4oliBQ5hqZt+yZcpC0emfLOtaPHJidk9aUyO2Ic
+ 2bwOQ90hJ/Z8KieDrK7Ndvn2OVH+R5A2VlRspx2qow==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
 
-On 1/2/23 10:33 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 2.01.2023 17:54, Bhupesh Sharma wrote:
->>
->> On 1/2/23 4:16 PM, Konrad Dybcio wrote:
->>>
->>>
->>> On 31.12.2022 14:19, Bhupesh Sharma wrote:
->>>> Add the Embedded USB Debugger(EUD) device tree node for
->>>> SM6115 / SM4250 SoC.
->>>>
->>>> The node contains EUD base register region and EUD mode
->>>> manager register regions along with the interrupt entry.
->>>>
->>>> Also add the typec connector node for EUD which is attached to
->>>> EUD node via port. EUD is also attached to DWC3 node via port.
->>>>
->>>> Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>>> ---
->>>> - This patch is based on my earlier sm6115 usb related changes, which can
->>>>     be seen here:
->>>>     https://lore.kernel.org/linux-arm-msm/20221215094532.589291-1-bhupesh.sharma@linaro.org/
->>>> - This patch is also dependent on my sm6115 eud dt-binding and driver changes
->>>>     sent earlier, which can be seen here:
->>>>     https://lore.kernel.org/linux-arm-msm/20221231130743.3285664-1-bhupesh.sharma@linaro.org/
->>>>
->>>>    arch/arm64/boot/dts/qcom/sm6115.dtsi | 37 ++++++++++++++++++++++++++++
->>>>    1 file changed, 37 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>> index 030763187cc3f..c775f7fdb7015 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>> @@ -565,6 +565,37 @@ gcc: clock-controller@1400000 {
->>>>                #power-domain-cells = <1>;
->>>>            };
->>>>    +        eud: eud@1610000 {
->>>> +            compatible = "qcom,sm6115-eud","qcom,eud";
->>> Missing space between entries.
->>>
->>>> +            reg = <0x01610000 0x2000>,
->>>> +                  <0x01612000 0x1000>,
->>>> +                  <0x003e5018 0x4>;
->>>> +            interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
->>>> +            ports {
->>> Newline before ports {}.
->>>
->>> Not sure if debugging hardware should be enabled by default..
->>>> +                port@0 {
->>>> +                    eud_ep: endpoint {
->>>> +                        remote-endpoint = <&usb2_role_switch>;
->>>> +                    };
->>>> +                };
->>> Newline between subsequent nodes.
->>>
->>>> +                port@1 {
->>>> +                    eud_con: endpoint {
->>>> +                        remote-endpoint = <&con_eud>;
->>>> +                    };
->>>> +                };
->>>> +            };
->>>> +        };
->>>> +
->>>> +        eud_typec: connector {
->>> Non-MMIO nodes don't belong under /soc.
->>>
->>>> +            compatible = "usb-c-connector";
->>> Newline between properties and subnode.
->>>
->>>
->>>> +            ports {
->>>> +                port@0 {
->>>> +                    con_eud: endpoint {
->>>> +                        remote-endpoint = <&eud_con>;
->>>> +                    };
->>>> +                };
->>>> +            };
->>>> +        };
->>>> +
->>>>            usb_hsphy: phy@1613000 {
->>>>                compatible = "qcom,sm6115-qusb2-phy";
->>>>                reg = <0x01613000 0x180>;
->>>> @@ -1064,6 +1095,12 @@ usb_dwc3: usb@4e00000 {
->>>>                    snps,has-lpm-erratum;
->>>>                    snps,hird-threshold = /bits/ 8 <0x10>;
->>>>                    snps,usb3_lpm_capable;
->>>> +                usb-role-switch;
->>> Same here.
->>
->> For all the above points, the format is same as suggested in [1] and already used in existing dts [2].
->>
->> [1]. https://www.kernel.org/doc/Documentation/devicetree/bindings/soc/qcom/qcom%2Ceud.yaml
->> [2]. https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sc7280.dtsi#L3587
-> The fact that it's landed does not necessarily imply it's 100% correct..
-> That one seems to have slipped through review and could use some fixing up.
+Add support for lsio_pwm0-3, add io-channel-cells property for ADC
+nodes, set lpspi0 max frequency to 60MHz, add toradex,apalis-imx8 et al.
+to dt-bindings and finally, add initial support for Apalis iMX8.
 
-Fair enough. I will send a v2 with fixes for existing yaml documentation 
-and dts files.
+Changes in v2:
+- Fixed missing space in the comment V1.1Module curtsey Max.
+- Added Rob's ack.
 
->>> On a note, this commit + driver-side changes give me a:
->>>
->>> 1610000.eud     qcom_eud: failed to get role switch
->>
->> You need to set dr_mode = "otg", for 'usb_dwc3' to make the role switch work.
-> Thanks, couldn't find that anywhere. This however kicks me into EDL,
-> so that's one more reason to disable it by default.
+Marcel Ziswiler (2):
+  dt-bindings: arm: fsl: add toradex,apalis-imx8 et al.
+  arm64: dts: freescale: add initial support for apalis imx8 aka quadmax
 
-Ok. BTW it works fine on my sm6115 based board, but I agree it can be 
-left as disabled by default for now.
+Max Krummenacher (1):
+  arm64: dts: fsl-imx8qm-device.dtsi: add io-channel-cells to adc nodes
 
-Thanks.
->>>> +                port {
->>>> +                    usb2_role_switch: endpoint {
->>>> +                        remote-endpoint = <&eud_ep>;
->>>> +                    };
->>>> +                };
->>>>                };
->>>>            };
->>>>    
+Philippe Schenker (2):
+  arm64: dts: freescale: imx8-ss-lsio: add support for lsio_pwm0-3
+  arm64: dts: freescale: imx8-ss-dma: set lpspi0 max frequency to 60mhz
+
+ .../devicetree/bindings/arm/fsl.yaml          |   12 +
+ arch/arm64/boot/dts/freescale/Makefile        |    5 +
+ .../boot/dts/freescale/imx8-apalis-eval.dtsi  |  146 ++
+ .../dts/freescale/imx8-apalis-ixora-v1.1.dtsi |  214 +++
+ .../dts/freescale/imx8-apalis-ixora-v1.2.dtsi |  264 +++
+ .../boot/dts/freescale/imx8-apalis-v1.1.dtsi  | 1510 +++++++++++++++++
+ .../arm64/boot/dts/freescale/imx8-ss-dma.dtsi |    4 +-
+ .../boot/dts/freescale/imx8-ss-lsio.dtsi      |   48 +
+ .../boot/dts/freescale/imx8qm-apalis-eval.dts |   16 +
+ .../freescale/imx8qm-apalis-ixora-v1.1.dts    |   16 +
+ .../dts/freescale/imx8qm-apalis-v1.1-eval.dts |   16 +
+ .../imx8qm-apalis-v1.1-ixora-v1.1.dts         |   16 +
+ .../imx8qm-apalis-v1.1-ixora-v1.2.dts         |   16 +
+ .../dts/freescale/imx8qm-apalis-v1.1.dtsi     |   17 +
+ .../boot/dts/freescale/imx8qm-apalis.dtsi     |  340 ++++
+ 15 files changed, 2639 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-eval.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.1.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.2.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-eval.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-ixora-v1.1.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-eval.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.1.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.2.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis.dtsi
+
+-- 
+2.35.1
+
