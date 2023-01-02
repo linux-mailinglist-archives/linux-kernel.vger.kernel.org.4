@@ -2,129 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04B665AE90
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 806DB65AE94
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjABJL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 04:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
+        id S231897AbjABJOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 04:14:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbjABJLs (ORCPT
+        with ESMTP id S231890AbjABJN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 04:11:48 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFE451114
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:11:46 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.12.77.33])
-        by mail-app3 (Coremail) with SMTP id cC_KCgAHWLTNn7Jj6Bx6Cw--.23223S4;
-        Mon, 02 Jan 2023 17:11:41 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     jan.kiszka@siemens.com, kbingham@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH v2] scripts/gdb: fix 'lx-timerlist' on newer kernel
-Date:   Mon,  2 Jan 2023 17:11:37 +0800
-Message-Id: <20230102091137.11707-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgAHWLTNn7Jj6Bx6Cw--.23223S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxur4rtrWkJw4xGFWUXF1UJrb_yoW5Jw48pF
-        WYkF43CFZ7tr4rK34Sq3WIgr13Ww4vyr4fXFWDtrsxAr9rW3y0qayjkFy5tFy7uFnFva9x
-        G39Yv3s8GF4UArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 2 Jan 2023 04:13:57 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E74F21A1;
+        Mon,  2 Jan 2023 01:13:56 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso20206876wmb.0;
+        Mon, 02 Jan 2023 01:13:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ce6OmGFq9VZBpGi1vGDY3sSx/S75wdoRU07kB2bZ+9c=;
+        b=EoquokVRhdtRVmPK97+iSE9uIv6hKX8ijtFzvLhlHxCQgVpsA/Klrh3kAwvmp0I9GN
+         mT7ApOawKh6TRpw0JR23VMK8dGs77ilsEb3PxzEkGfxtB5+slDO/xkeyN5klkwApnrQ5
+         T/U5qy38glE2KT/4QQq5mMKtozmgU6fGbcY+9xx22QnRaNLD7J7YzwBosFbdUgbpXuLX
+         40NArEMJdV0GHO6ioE9Nl3NllJtW0BKD+P4AdDMfXy3BF6Ub6YYzlh9wP1QHcD0tCuH8
+         AHekCt22XUdTKCBVdjWvTrn6drZgLVRnQuEOmQdatJmCGQHTWPsosqCh7Yzj6Wlo7ueq
+         ku3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ce6OmGFq9VZBpGi1vGDY3sSx/S75wdoRU07kB2bZ+9c=;
+        b=5QaulAi87A8G3p4CQZxmJTQg8DIqZg5P1sdi5tatQdK38OjS9+WZdnfaSDqqeEYIVU
+         m63uQ9/o59WSL2Ux2vr/j5lbjn+TiFA0k6QFxekkfEmXZb/9UZUgP+ZPUP3TMn1PQdHr
+         e6Jcq9Rm6e9TGSyKH0ftC6rMoPBLe7nSmKTliwOJntAWhLoQVbeubrb1Mh4LF85SZvhd
+         TPkNtsP6Vm6Tnm4GP+vSInYu3bhb49RAzCDetNBvRXG5TQEbVr0hP/2lAYCOlcpPzEgR
+         0adZZ+ALY4QcEw6td3R+6rqi07L3fsf6TyWxbtHinM2zyGXi+Ko0qnnQNLLyGUmFTHQ2
+         UceQ==
+X-Gm-Message-State: AFqh2krPltyBo0ZSmtmPrDXq/ve0wWO5yuYoc7980jHwu0CRWAg57oJR
+        mscOgCFLT+u0Xhb6ajM+/dEmLdZe8Xitrw==
+X-Google-Smtp-Source: AMrXdXs7SCQj0wzyqzkSFxedhqj0UniP7iPuFeZsaG7t8JL9TtTJCkLv4L0H/xAJdi/B+dRMYcN/mg==
+X-Received: by 2002:a05:600c:1da3:b0:3d3:4dbc:75ef with SMTP id p35-20020a05600c1da300b003d34dbc75efmr28346951wms.17.1672650835101;
+        Mon, 02 Jan 2023 01:13:55 -0800 (PST)
+Received: from tpt440p.steeds.sam ([2602:fbf6:10:8::2])
+        by smtp.gmail.com with ESMTPSA id n36-20020a05600c3ba400b003b49bd61b19sm44700735wms.15.2023.01.02.01.13.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 01:13:54 -0800 (PST)
+From:   "Sicelo A. Mhlongo" <absicsz@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     pali@kernel.org, sre@kernel.org, brauner@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Sicelo A. Mhlongo" <absicsz@gmail.com>
+Subject: [PATCH 1/1] power: supply: bq27xxx: fix reporting critical level
+Date:   Mon,  2 Jan 2023 11:13:26 +0200
+Message-Id: <20230102091326.3959978-1-absicsz@gmail.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 511885d7061e ("lib/timerqueue: Rely on rbtree semantics for
-next timer"), the struct timerqueue_head changes the internal field hence
-causes the old lx-timerlist command keeps reporting errors.
+The EDV1/SOC1 flag is set when the battery voltage drops below the
+threshold set in EEPROM. From observing the capacity_level reported by
+the driver, and reading the datasheet, EDV1 remains set even when
+EDVF/SOCF gets set. Thus, bq27xxx_battery_capacity_level() never reaches
+the CAPACITY_LEVEL_CRITICAL code path, since CAPACITY_LEVEL_LOW takes
+precedence.
 
-This fix adds a simple version comparison and necessary code for
-traversing timerqueue on a newer kernel. Moreover, it fixes some
-python 3.X compatibility bugs.
+This commit fixes the issue by swapping the order in which the flags are
+tested. It was tested with bq27200 in the Nokia N900.
 
-Test with python 2.7 and python 3.6
-Test with gdb 10.2
-
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
 ---
-V1->V2: remove the support of old versions, fix typo and adjust the
-        commit message
+ drivers/power/supply/bq27xxx_battery.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- scripts/gdb/linux/timerlist.py | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
-index 071d0dd5a634..73534da92745 100644
---- a/scripts/gdb/linux/timerlist.py
-+++ b/scripts/gdb/linux/timerlist.py
-@@ -4,6 +4,7 @@
- 
- import binascii
- import gdb
-+import re
- 
- from linux import constants
- from linux import cpus
-@@ -43,8 +44,10 @@ def print_timer(rb_node, idx):
- 
- 
- def print_active_timers(base):
--    curr = base['active']['next']['node']
--    curr = curr.address.cast(rbtree.rb_node_type.get_type().pointer())
-+    # 511885d7061e ("lib/timerqueue: Rely on rbtree semantics for next timer")
-+    leftmost = base['active']['rb_root']['rb_leftmost']
-+    curr = leftmost.cast(rbtree.rb_node_type.get_type().pointer())
-+
-     idx = 0
-     while curr:
-         yield print_timer(curr, idx)
-@@ -73,10 +76,9 @@ def print_cpu(hrtimer_bases, cpu, max_clock_bases):
-     ts = cpus.per_cpu(tick_sched_ptr, cpu)
- 
-     text = "cpu: {}\n".format(cpu)
--    for i in xrange(max_clock_bases):
-+    for i in range(max_clock_bases):
-         text += " clock {}:\n".format(i)
-         text += print_base(cpu_base['clock_base'][i])
--
-         if constants.LX_CONFIG_HIGH_RES_TIMERS:
-             fmts = [("  .{}   : {} nsecs", 'expires_next'),
-                     ("  .{}    : {}", 'hres_active'),
-@@ -165,7 +167,7 @@ def pr_cpumask(mask):
-         i -= 1
-         start = i * 2
-         end = start + 2
--        chunks.append(buf[start:end])
-+        chunks.append(str(buf[start:end]))
-         if i != 0 and i % 4 == 0:
-             chunks.append(',')
- 
-@@ -184,7 +186,7 @@ class LxTimerList(gdb.Command):
- 
-     def invoke(self, arg, from_tty):
-         hrtimer_bases = gdb.parse_and_eval("&hrtimer_bases")
--        max_clock_bases = gdb.parse_and_eval("HRTIMER_MAX_CLOCK_BASES")
-+        max_clock_bases = gdb.parse_and_eval("(int)HRTIMER_MAX_CLOCK_BASES")
- 
-         text = "Timer List Version: gdb scripts\n"
-         text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(max_clock_bases)
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 8bf048fbd36a..5ff6f44fd47b 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -1917,10 +1917,10 @@ static int bq27xxx_battery_capacity_level(struct bq27xxx_device_info *di,
+ 	if (di->opts & BQ27XXX_O_ZERO) {
+ 		if (di->cache.flags & BQ27000_FLAG_FC)
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_FULL;
+-		else if (di->cache.flags & BQ27000_FLAG_EDV1)
+-			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
+ 		else if (di->cache.flags & BQ27000_FLAG_EDVF)
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
++		else if (di->cache.flags & BQ27000_FLAG_EDV1)
++			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
+ 		else
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
+ 	} else if (di->opts & BQ27Z561_O_BITS) {
+@@ -1933,10 +1933,10 @@ static int bq27xxx_battery_capacity_level(struct bq27xxx_device_info *di,
+ 	} else {
+ 		if (di->cache.flags & BQ27XXX_FLAG_FC)
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_FULL;
+-		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
+-			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
+ 		else if (di->cache.flags & BQ27XXX_FLAG_SOCF)
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
++		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
++			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
+ 		else
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
+ 	}
 -- 
-2.17.1
+2.39.0
 
