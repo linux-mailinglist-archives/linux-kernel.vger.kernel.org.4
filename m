@@ -2,103 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4821365AD5A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 07:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7098865AD5F
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 07:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjABGCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 01:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S230077AbjABGKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 01:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjABGCK (ORCPT
+        with ESMTP id S229453AbjABGKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 01:02:10 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF53CBF6
-        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 22:02:09 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 471CD1EC0589;
-        Mon,  2 Jan 2023 07:02:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672639328;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=A5h3QieuYYzDOmoQcc1jOMq8HxvyiZWavNMk7yqAE4w=;
-        b=RGoSnp0eXlRVYUC0SrfE1xiexYKt8xMKCv/nkL6NNJdjh3UGoyqOFoIzZ++A4AWOFbsQqd
-        Ze5d8AOzno/wRzFC18rPxdTZ4NUxtZETYjXbgO7n7wLn9qFPUdHIB4hbiZY/cy7Ms8Ikx8
-        nA0eG4icJt5H2GjDtnDw56Tj5xJ2wYI=
-Date:   Mon, 2 Jan 2023 07:01:50 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, pbonzini@redhat.com,
-        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
-        philmd@linaro.org
-Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
- setup_data
-Message-ID: <Y7JzTh8JnMXM6ZPS@zn.tnic>
-References: <46466e54-25c3-3194-8546-a57cd4a80d9d@zytor.com>
- <Y7A76+IBS4fnucrW@zn.tnic>
- <Y7A8qP05B0YRbQIN@zx2c4.com>
- <Y7A9nBud6UeH+wYd@zn.tnic>
- <Y7A+YELM7m5E2PUQ@zx2c4.com>
- <Y7BGIAL4z6o6FEI5@zn.tnic>
- <Y7B993P1+jYB/etX@zx2c4.com>
- <Y7CGzde+qPB7YJP4@zn.tnic>
- <60566f8b-c90f-12e7-c13e-94e9829eee2d@zytor.com>
- <8f072588-7d66-0932-7486-ed9159ae93ae@zytor.com>
+        Mon, 2 Jan 2023 01:10:16 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE872198
+        for <linux-kernel@vger.kernel.org>; Sun,  1 Jan 2023 22:10:13 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id w1so13373022wrt.8
+        for <linux-kernel@vger.kernel.org>; Sun, 01 Jan 2023 22:10:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rLntJQUG5K/SXDBjzoL4r+ZOXdeQgaB5Nk9W4dsNJnA=;
+        b=Q6TeT1N8x17ilJ7Bv14V3FTZmkDVoY5o+yLmyIsN6e/p8K0jy/hIHuO40LwjNvdw9m
+         cM+CuFEn8T7wKIBIuKZVKVH5zCFzgPWpi3PsVpSGeY76EbkWZLyoAJvMPIBLurDZk21O
+         D/TZL2ChcBVUu9iAUYRjWRtJyZQH4moduuUWs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rLntJQUG5K/SXDBjzoL4r+ZOXdeQgaB5Nk9W4dsNJnA=;
+        b=sX13rfxIojlKmiY7BiQvrkMqjnOUR8jg5faE3jWWb83a5J43FwWXil4wEJVaZMnvyC
+         tLZl93jp2qSMzMmX8E8NqFiLcIctbeH9Twe7yRStpYBC3wZehbk/3944VWrtoeh9D+9J
+         aYMGsMuvYFFx444RHVXyUioXF3DnlOJ7D8cXEEWP19mIji8EcJ4BydcS6aSAl+cWVtQA
+         epCs2ijL6UF1LATpJGlBVTWNsPWMheJJMwe5URUirg/Xy5sMlQaSfX8HqwSUO5ZdQZtk
+         wAq7v41e+jYuJmuP4v0JWtHYMFp1AlRsXwY4qDysu85k/8IYTgNRbGi/EO/iOJxHRc5v
+         ESug==
+X-Gm-Message-State: AFqh2kr2UHCLNo375QvYpZ62T2VZLHCOP6Pj0YAdkaAZRIkbAHXmGgkg
+        8X6l1QxOXZAMveOmpvRGkKVz4JCwvig5ZuCZRXgrzG/t046957ze
+X-Google-Smtp-Source: AMrXdXuFXNdIUUHj5L9j+mPoUGn9lTFGMXxA5oJsoaGqMX7VdTP1PTW+YSPi27ETm1AVyzLwdP9RjAscgzIXB/Q+qfA=
+X-Received: by 2002:a5d:530e:0:b0:276:4a7f:8ede with SMTP id
+ e14-20020a5d530e000000b002764a7f8edemr869594wrv.241.1672639812036; Sun, 01
+ Jan 2023 22:10:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8f072588-7d66-0932-7486-ed9159ae93ae@zytor.com>
+References: <20221215165728.2062984-1-arnd@kernel.org> <CACRpkda3V2Fv9aOxxcuQ5NKv3sWic9-skQU_z7=0S692h_WhnQ@mail.gmail.com>
+In-Reply-To: <CACRpkda3V2Fv9aOxxcuQ5NKv3sWic9-skQU_z7=0S692h_WhnQ@mail.gmail.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Mon, 2 Jan 2023 15:10:01 +0900
+Message-ID: <CAFr9PXmVXqAX73VUzAt_M2yPN93in9Y_LHyYcEA1Dfj_m_4ZHA@mail.gmail.com>
+Subject: Re: [PATCH] usb: fotg210: fix OTG-only build
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 07:31:21PM -0800, H. Peter Anvin wrote:
-> It would probably be a good idea to add a "maximum physical address for
-> initrd/setup_data/cmdline" field to struct kernel_info, though. It appears
-> right now that those fields are being identity-mapped in the decompressor,
-> and that means that if 48-bit addressing is used, physical memory may extend
-> past the addressable range.
+Hi Linus,
 
-Yeah, we will probably need that too.
+Maybe a little unrelated to this patch but this IP is also used on the
+MStar/SigmaStar chips (albeit only the host (FUSBH200) part that used
+to have its own driver that got removed at some point...) and I
+noticed this when rebasing my tree and hitting conflicts with your
+recent changes...
 
-Btw, looka here - it can't get any more obvious than that after dumping
-setup_data too:
+For what it's worth I could not get this driver to function correctly
+with UVC cameras etc and was fed up with hacking it apart to try to
+get it to work when it's mostly a copy/paste of an old copy of the
+common EHCI driver.
+So I added some extra quirks to the common EHCI driver to allow it to
+run this IP too and deleted the custom driver in my tree (hence the
+conflicts..).
 
-early console in setup code
-early console in extract_kernel
-input_data: 0x00000000040f92bf
-input_len: 0x0000000000f1c325
-output: 0x0000000001000000
-output_len: 0x0000000003c5e7d8
-kernel_total_size: 0x0000000004428000
-needed_size: 0x0000000004600000
-boot_params->hdr.setup_data: 0x00000000010203b0
-trampoline_32bit: 0x000000000009d000
+I'm not sure how using the common EHCI driver works with the OTG part
+but if it's possible to make that work maybe my way is a better
+solution than trying to maintain this driver?
 
-Decompressing Linux... Parsing ELF... done.
-Booting the kernel.
-<EOF>
+Cheers,
 
-Aligning them vertically:
-
-output:				0x0000000001000000
-output_len:			0x0000000003c5e7d8
-kernel_total_size:		0x0000000004428000
-needed_size:			0x0000000004600000
-boot_params->hdr.setup_data:	0x00000000010203b0
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Daniel
