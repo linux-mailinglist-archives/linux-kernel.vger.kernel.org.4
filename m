@@ -2,99 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCCD65B252
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8700E65B23E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbjABMsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 07:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
+        id S232176AbjABMmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 07:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbjABMsA (ORCPT
+        with ESMTP id S229494AbjABMmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 07:48:00 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A53DF8;
-        Mon,  2 Jan 2023 04:47:59 -0800 (PST)
+        Mon, 2 Jan 2023 07:42:52 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EADC49
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:42:51 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 877B020F11;
-        Mon,  2 Jan 2023 12:47:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672663678;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4524820EE5;
+        Mon,  2 Jan 2023 12:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1672663370; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8MEMF1Di8T491Z7gpFZexJEbRO0goQfo2mNNC19Dwlw=;
-        b=Bho7fl7+1m5PHrcpXO/NsKrbYso7mtiYVrhHG/e9MgYwZX6WDndeXrNDaiteUAZcQIlHMj
-        //7SRtqVs7YllEIJemwJcBVtd3kduyIRNpLdqXrdfByrnUtPXpHPpjhmNLhTeG0KNN2WFZ
-        OjPgYI7d+CY8agTHZW6WP/Phdgo6a30=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672663678;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        bh=1sg7BmNN8+RDm1eojWN+wOBEZpkzt9WjUrPrxXXU8Oo=;
+        b=Z1yYj+u7YbKVfLCniHq0g9pR1Utx3LIE2GOuUdANXf65nOnGb4Rp/dFZ2GHHU/b1+7pkRa
+        xzG7Vpw+Td3omGiMB8eoW4wcbjHlbUUj42QDQaS8ZdRcyGUWglFNYKOZjU1zhclMX6GUqx
+        Ge58qGAP+J3Hc/3l5aCgZ7c0+On+siA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1672663370;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8MEMF1Di8T491Z7gpFZexJEbRO0goQfo2mNNC19Dwlw=;
-        b=8xcIZgID6yyL8tso5U4W2aD4BOAiB5exlr0/ZLshKB9VhcA8NhPu0cpEPW7fgLIsabysDi
-        xdB7+ETNMAqJgZDw==
+        bh=1sg7BmNN8+RDm1eojWN+wOBEZpkzt9WjUrPrxXXU8Oo=;
+        b=zjGIYVhEPt+kSK4f6vsoobHVlYjiVW06dOZ5AehbDtWDjK/2X4vIXpbbU5zXsVxsF8YUW+
+        l1f0BBTSi+L+2yBg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3BFF613427;
-        Mon,  2 Jan 2023 12:47:58 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 16C0213427;
+        Mon,  2 Jan 2023 12:42:50 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id Fo+0DX7SsmNQGgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 02 Jan 2023 12:47:58 +0000
-Date:   Mon, 2 Jan 2023 13:42:28 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Josef Bacik <josef@toxicpanda.com>,
-        linux-btrfs@vger.kernel.org, kernel-team@fb.com,
-        llvm@lists.linux.dev, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: Re: [PATCH 8/8] btrfs: turn on -Wmaybe-uninitialized
-Message-ID: <20230102124228.GB11562@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <cover.1671221596.git.josef@toxicpanda.com>
- <1d9deaa274c13665eca60dee0ccbc4b56b506d06.1671221596.git.josef@toxicpanda.com>
- <Y6kgR4qnb23UdAEX@dev-arch.thelio-3990X>
- <CA+G9fYuhZzVfxXnVRMog_yv8F17NY4vHe_iafwgxpYCGfuaJqQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYuhZzVfxXnVRMog_yv8F17NY4vHe_iafwgxpYCGfuaJqQ@mail.gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        id lVXpBErRsmP2FwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 02 Jan 2023 12:42:50 +0000
+Date:   Mon, 02 Jan 2023 13:42:49 +0100
+Message-ID: <87wn65umye.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Salvatore Bonaccorso <carnil@debian.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Alsa-devel <alsa-devel@alsa-project.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        =?ISO-8859-1?Q?P=C1LFFY_D=E1niel?= <dpalffy@gmail.com>,
+        Sergey <zagagyka@basealt.ru>
+Subject: Re: [regression, 5.10.y] =?ISO-8859-1?Q?Bug=A0216861?= - sound
+ disappearance on Acer Swift 3 SF314-59-78UR after update to 5.10.157
+In-Reply-To: <Y7K1WDmPYi3EMOn1@eldamar.lan>
+References: <bebd692d-7d21-6648-6b7a-c91063bb51c2@leemhuis.info>
+        <Y7K1WDmPYi3EMOn1@eldamar.lan>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 26, 2022 at 07:34:51PM +0530, Naresh Kamboju wrote:
-> On Mon, 26 Dec 2022 at 09:47, Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Fri, Dec 16, 2022 at 03:15:58PM -0500, Josef Bacik wrote:
-> > > We had a recent bug that would have been caught by a newer compiler with
-> > > -Wmaybe-uninitialized and would have saved us a month of failing tests
-> > > that I didn't have time to investigate.
-> > >
-> > > Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-> >
-> > This needs to be moved to the condflags section, as
-> > -Wmaybe-uninitialized is a GCC only flag, so this breaks our builds with
-> > clang on next-20221226:
-> >
-> >   error: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Werror,-Wunknown-warning-option]
+On Mon, 02 Jan 2023 11:43:36 +0100,
+Salvatore Bonaccorso wrote:
 > 
-> LKFT test farm also noticed these build breaks with clang on next-20221226.
+> Hi,
+> 
+> [Adding as well Richard Fitzgerald and PÁLFFY Dániel to recipients]
+> 
+> On Fri, Dec 30, 2022 at 09:08:57AM +0100, Thorsten Leemhuis wrote:
+> > Hi, this is your Linux kernel regression tracker speaking.
+> > 
+> > I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> > kernel developer don't keep an eye on it, I decided to forward it by
+> > mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216861 :
+> > 
+> > >  Sergey 2022-12-29 10:07:51 UTC
+> > > 
+> > > Created attachment 303497 [details]
+> > > pulseaudio.log
+> > > 
+> > > Sudden sound disappearance was reported for some laptops, e.g.
+> > > 
+> > > Acer Swift 3 SF314-59-78UR 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+> > > 
+> > > # lspci
+> > > 0000:00:1f.3 Multimedia audio controller: Intel Corporation Tiger Lake-LP Smart Sound Technology Audio Controller (rev 20)
+> > >         Subsystem: Acer Incorporated [ALI] Device 148c
+> > >         Flags: bus master, fast devsel, latency 32, IRQ 197, IOMMU group 12
+> > >         Memory at 601f270000 (64-bit, non-prefetchable) [size=16K]
+> > >         Memory at 601f000000 (64-bit, non-prefetchable) [size=1M]
+> > >         Capabilities: [50] Power Management version 3
+> > >         Capabilities: [80] Vendor Specific Information: Len=14 <?>
+> > >         Capabilities: [60] MSI: Enable+ Count=1/1 Maskable- 64bit+
+> > >         Kernel driver in use: sof-audio-pci
+> > > 
+> > > I am attaching the pulseaudio and dmesg logs
+> > > 
+> > > This bug started reproducing after updating the kernel from 5.10.156 to 5.10.157
+> > > 
+> > > Bisection revealed the commit being reverted:
+> > > 
+> > > c34db0d6b88b1da95e7ab3353e674f4f574cccee is the first bad commit
+> > > commit c34db0d6b88b1da95e7ab3353e674f4f574cccee
+> > > Author: Richard Fitzgerald <rf@opensource.cirrus.com>
+> > > Date:   Fri Nov 4 13:22:13 2022 +0000
+> > > 
+> > >     ASoC: soc-pcm: Don't zero TDM masks in __soc_pcm_open()
+> > >     
+> > >     [ Upstream commit 39bd801d6908900e9ab0cdc2655150f95ddd4f1a ]
+> > >     
+> > >     The DAI tx_mask and rx_mask are set by snd_soc_dai_set_tdm_slot()
+> > >     and used by later code that depends on the TDM settings. So
+> > >     __soc_pcm_open() should not be obliterating those mask values.
+> > >     
+> > > [...]
+> > > Original bug report: https://bugzilla.altlinux.org/44690
+> > 
+> > See the ticket for more details.
+> > 
+> > BTW, let me use this mail to also add the report to the list of tracked
+> > regressions to ensure it's doesn't fall through the cracks:
+> > 
+> > #regzbot introduced: c34db0d6b88b1d
+> > https://bugzilla.kernel.org/show_bug.cgi?id=216861
+> > #regzbot title: sound: asoc: sudden sound disappearance
+> > #regzbot ignore-activity
+> 
+> FWIW, we had as well reports in Debian after having updated the kernel
+> from 5.10.149 based one to 5.10.158 based one in the last point
+> releases, they are at least:
+> 
+> https://bugs.debian.org/1027483
+> https://bugs.debian.org/1027430
 
-Fixed in our branch and for-next snapshot updated so the warnings will
-be fixed once linux-next resumes.
+I got another report while the commit was backported to 5.14-based
+openSUSE Leap kernel, and I ended up with dropping it.
+
+So, IMO, it's safer to drop this patch from the older stable trees.
+As far as I see, 5.15.y and 5.10.y got this.
+
+Unless anyone gives a better fix, I'm going to submit a revert patch
+for those trees.
+
+
+thanks,
+
+Takashi
