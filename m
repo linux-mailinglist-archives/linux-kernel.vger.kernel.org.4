@@ -2,153 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B505565B831
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 00:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C2D65B830
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 00:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236329AbjABXa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 18:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
+        id S236298AbjABXaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 18:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236498AbjABXax (ORCPT
+        with ESMTP id S229587AbjABXa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 18:30:53 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CC4C1F
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 15:30:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672702252; x=1704238252;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=GfRdTCqFw3/YOwKfNj0pyl2bOMS0Gwt3rwu1Fi2bRcM=;
-  b=NHMueCU2gurLL1Nw2Ol6qQMBuyQapTkPNFmY1OUqh+gsClaaJnoBFrbo
-   ZiuihQAa+SxKX1XJd3Eq2X2AUlppOElpkh5H+tOzEluNjX8XRKw/Q/aXW
-   5JPZ0ylwbny4y2V4BOgnZHqQIUkXk2+xqV3HW0L6ZpOEd7jDmUsnDkZwz
-   1UdKLRTHFCtomxDUJIXxEm9XVLUFolKJ4PHZuCkXoMGt9zGnrYXO9EP5O
-   tsXaiebqsh1o/sPKg6hnB3pTZFFGm6RRv7i0jMulHhHWYiNVve+8VfM2r
-   HNYoEQUsERBvDMcmLqzTucpPIwoB2l6UjaGUM2SuaIpQ9jMoNSlkwgez3
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="385985861"
-X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
-   d="scan'208";a="385985861"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 15:30:45 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="604640922"
-X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
-   d="scan'208";a="604640922"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 15:30:42 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Bharata B Rao <bharata@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        haoxin <xhao@linux.alibaba.com>
-Subject: Re: [PATCH 5/8] migrate_pages: batch _unmap and _move
-References: <20221227002859.27740-1-ying.huang@intel.com>
-        <20221227002859.27740-6-ying.huang@intel.com>
-        <20221228152206.52435aef4072c4cad9087541@linux-foundation.org>
-Date:   Tue, 03 Jan 2023 07:29:42 +0800
-In-Reply-To: <20221228152206.52435aef4072c4cad9087541@linux-foundation.org>
-        (Andrew Morton's message of "Wed, 28 Dec 2022 15:22:06 -0800")
-Message-ID: <87edscy0pl.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 2 Jan 2023 18:30:28 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E746355;
+        Mon,  2 Jan 2023 15:30:28 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id BF22D2E0;
+        Mon,  2 Jan 2023 23:30:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BF22D2E0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1672702227; bh=2rFC3aW60ZhpXACUfZv8bN1+7nPrRX+uUNMRBmIa3dk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=GVh0x0ybkzoj3+3T8abAx/SahhYeqwKZLpuDwjj0bu7Uek6TJLI9wVj7GjdPlqKza
+         ygYZt3CVyHKwAHDSC3fuHBmKP+MflFDuYAEyYSsBmOAj9vT0yq3AglO0m+spiYXhSD
+         V7vdZun4WxZRoelUfR9X16mmerEGUE2aDJiNwh2fUpm33tj+ksVbvR+RTd7kjBgw3G
+         m81MqBvjhH410kz//wGL/D3ZKpfUJ9rd1fyzJqibDDQgoA3D8X3e4lFfa2kdqVERzB
+         yoN4VJYG9t9xOzuZ+qxz1Zd2ynGEWhk+l24Z5uEsm8XOILmR4AXdbTbQKknudLhD83
+         7dRlLnAXzB7Gw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Donglin Peng <dolinux.peng@gmail.com>
+Cc:     tzanussi@gmail.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH] docs: ftrace: fix a issue with duplicated subtitle number
+In-Reply-To: <20221209164255.6c15e535@gandalf.local.home>
+References: <20221209025119.1371570-1-dolinux.peng@gmail.com>
+ <20221209164255.6c15e535@gandalf.local.home>
+Date:   Mon, 02 Jan 2023 16:30:27 -0700
+Message-ID: <87edsch5v0.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Morton <akpm@linux-foundation.org> writes:
+Steven Rostedt <rostedt@goodmis.org> writes:
 
-> On Tue, 27 Dec 2022 08:28:56 +0800 Huang Ying <ying.huang@intel.com> wrote:
+> On Thu,  8 Dec 2022 18:51:19 -0800
+> Donglin Peng <dolinux.peng@gmail.com> wrote:
 >
->> In this patch the _unmap and _move stage of the folio migration is
->> batched.  That for, previously, it is,
+>> The subtitle "5.3 Clearing filters" and "5.3 Subsystem filters" has
+>> the same index number, let's fix it.
 >> 
->>   for each folio
->>     _unmap()
->>     _move()
->> 
->> Now, it is,
->> 
->>   for each folio
->>     _unmap()
->>   for each folio
->>     _move()
->> 
->> Based on this, we can batch the TLB flushing and use some hardware
->> accelerator to copy folios between batched _unmap and batched _move
->> stages.
->> 
->> ...
->>
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1027,8 +1027,32 @@ static void __migrate_folio_extract(struct folio *dst,
->>  	dst->private = NULL;
->>  }
->>  
->> +static void migrate_folio_undo_src(struct folio *src,
->> +				   int page_was_mapped,
->> +				   struct anon_vma *anon_vma,
->> +				   struct list_head *ret)
->> +{
->> +	if (page_was_mapped)
->> +		remove_migration_ptes(src, src, false);
->> +	if (anon_vma)
->> +		put_anon_vma(anon_vma);
->> +	folio_unlock(src);
->> +	list_move_tail(&src->lru, ret);
->> +}
->> +
->> +static void migrate_folio_undo_dst(struct folio *dst,
->> +				   free_page_t put_new_page,
->> +				   unsigned long private)
->> +{
->> +	folio_unlock(dst);
->> +	if (put_new_page)
->> +		put_new_page(&dst->page, private);
->> +	else
->> +		folio_put(dst);
->> +}
+>> Fixes: 95b696088c1c ("tracing/filters: add filter Documentation")
+>> Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
 >
-> What do the above do?  Are they so obvious that no comments are needed?
-
-Thank you for reminding, will add comments.
-
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 >
->>  static int __migrate_folio_unmap(struct folio *src, struct folio *dst,
->> -				int force, enum migrate_mode mode)
->> +				 int force, bool force_lock, enum migrate_mode mode)
->>  {
->>  	int rc = -EAGAIN;
->>  	int page_was_mapped = 0;
->> @@ -1055,6 +1079,11 @@ static int __migrate_folio_unmap(struct folio *src, struct folio *dst,
->>  		if (current->flags & PF_MEMALLOC)
->>  			goto out;
->>  
->> +		if (!force_lock) {
->> +			rc = -EDEADLOCK;
->> +			goto out;
->> +		}
->
-> Please document the use of EDEADLOCK in this code.  What does it signify?
+> Jon, care to take this?
 
-Sure.  Will do that in the next version.
+Done.
 
-Best Regards,
-Huang, Ying
+Thanks,
 
->>  		folio_lock(src);
->>  	}
->>  
+jon
