@@ -2,154 +2,510 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CE565B139
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24DA65B048
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232987AbjABLcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S229923AbjABLKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:10:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235915AbjABLbk (ORCPT
+        with ESMTP id S229583AbjABLKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:31:40 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDE7387
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:31:38 -0800 (PST)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230102113135epoutp03853b757cab166faf11470216bb13022a~2epXdhg4q0780807808epoutp03G
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 11:31:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230102113135epoutp03853b757cab166faf11470216bb13022a~2epXdhg4q0780807808epoutp03G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1672659095;
-        bh=vT6IxLs7Z6EoLjlbQBcs1ppskfmHauknzyfEWkrF1nw=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=M1SgV+cBx9GPrEexhGaWS5FWb0K247unpvte5XvjbHdMcNtzOnN0o357TuF9XBRPL
-         M0QD8yDZ86kfhiLy6dOmnJ7lHqSbLjzmdHgKOJhR3+FMBgziJi4tu1Ies8vJnTOZSz
-         UMidXdhBPyKqSEebjjIfVQBE6bdE9T5UqIm+xRfs=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20230102113135epcas5p2021ed52ccc2430684e166914186a4acf~2epW-Bh8m0099400994epcas5p2w;
-        Mon,  2 Jan 2023 11:31:35 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Nltx14HmDz4x9Pt; Mon,  2 Jan
-        2023 11:31:33 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        86.DF.02301.590C2B36; Mon,  2 Jan 2023 20:31:33 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230102093538epcas5p2e311441e00f4ec7f53c2ef9f7cdf8b90~2dEIJO53B3083430834epcas5p2C;
-        Mon,  2 Jan 2023 09:35:38 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230102093538epsmtrp14c3c50bfeb512ff9c21622eca586e9f8~2dEIIjpL-0685506855epsmtrp1f;
-        Mon,  2 Jan 2023 09:35:38 +0000 (GMT)
-X-AuditID: b6c32a49-201ff700000108fd-74-63b2c0950310
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D2.B1.02211.A65A2B36; Mon,  2 Jan 2023 18:35:38 +0900 (KST)
-Received: from FDSFTE070 (unknown [107.116.189.86]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230102093537epsmtip2090604e18d0f3f19f79779de85f4c508~2dEG6kS7l0481504815epsmtip2O;
-        Mon,  2 Jan 2023 09:35:37 +0000 (GMT)
-From:   "Padmanabhan Rajanbabu" <p.rajanbabu@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <alim.akhtar@samsung.com>, <s.prashar@samsung.com>,
-        <pankaj.dubey@samsung.com>
-Cc:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <af5a7b65-9917-58d2-315e-71e902826a54@linaro.org>
-Subject: RE: [PATCH] arm64: dts: fsd: fix PUD values as per FSD HW UM
-Date:   Mon, 2 Jan 2023 15:05:35 +0530
-Message-ID: <020601d91e8d$92954b60$b7bfe220$@samsung.com>
+        Mon, 2 Jan 2023 06:10:07 -0500
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78235E6E
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:10:05 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:513e:34db:6493:4ef7])
+        by andre.telenet-ops.be with bizsmtp
+        id 3nA22900q2Ef9QR01nA2kY; Mon, 02 Jan 2023 12:10:03 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pCIhe-001qS0-KY; Mon, 02 Jan 2023 12:10:02 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pCHui-0019kp-Og; Mon, 02 Jan 2023 11:19:28 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-m68k@lists.linux-m68k.org
+Cc:     linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] m68k: defconfig: Update defconfigs for v6.2-rc1
+Date:   Mon,  2 Jan 2023 11:19:26 +0100
+Message-Id: <fdd3b827ebc5abea6c295df4121048a6a03b698a.1672654705.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQK5YmDUytel1KIanVI5IVzdrffbcwLW7lD+Auv+maysnD5vkA==
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFJsWRmVeSWpSXmKPExsWy7bCmlu7UA5uSDXb8UbB4MG8bm8X8I+dY
-        LfpePGS22Pt6K7vF5V1z2CwWbf3CbtG69wi7xbwdcxkdODw2repk87hzbQ+bR9+WVYwenzfJ
-        BbBEZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAJ2h
-        pFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkwKdArTswtLs1L18tLLbEyNDAwMgUq
-        TMjOmLL5G2vBAY6KjVN2MDYwdrB3MXJySAiYSLSe6mHrYuTiEBLYzShxbu4fJpCEkMAnRonf
-        qxQhEt8YJe6cPQPXsWXLbhaIxF6gjq9bmCGcF0AdO88wglSxCZhLLNq7FMwWETjLKPF+oWwX
-        IwcHs4CDxP17VSBhTgE7iVXX9oOVCAu4SrSfuwpmswioSByae4IVxOYVsJT41TuLCcIWlDg5
-        8wkLiM0sIC+x/e0cZoiDFCR+Pl3GCrHKSaLn8DNGiBpxiaM/e8BukxCYyCEx9/JjFogGF4mm
-        9l9QzcISr45vgfpMSuJlfxuUnS8x7WMzG4RdIdH2cQMThG0vceDKHBaIXzQl1u/ShwjLSkw9
-        tY4JYi+fRO/vJ1DlvBI75sHYqhLrl29ihLClJfZd38s4gVFpFpLXZiF5bRaSF2YhbFvAyLKK
-        UTK1oDg3PbXYtMAwL7UcHt/J+bmbGMGJVMtzB+PdBx/0DjEycTAeYpTgYFYS4b38eV2yEG9K
-        YmVValF+fFFpTmrxIUZTYHhPZJYSTc4HpvK8knhDE0sDEzMzMxNLYzNDJXHe1K3zk4UE0hNL
-        UrNTUwtSi2D6mDg4pRqY9OxMeyTmTl7dkG1h9uK0erRaR/W6l+wtZz9OXjLVyMjWMeDdOj7z
-        X9xPyx3bn6m+NrPgCyq+8sL70AuGLTHyluyP2PkL3n17JtIhfktDYuG/FocGBWvebylV8esX
-        3GY9dCDuZs2+L1IdHJGsHw3WHarY9/jtUyPrf5dPZ399GzX77ifdh4uYClu39fefltq4e1/K
-        xym7v3cFftTpkwq4V/Szb1H85q2SSY8Pdk0/LyZxP+SZ0bx6DbWjP9/kbe1cxHrqL//0C7zK
-        u35HJR5vLp3gH1/DYSObO3ch/wqP7wvfPBNmUPmalpjec+GbXk6cTsGW2uX+O9XOCJ7l/qFp
-        KLSMedviDLf/ftKzbq2qV2Ipzkg01GIuKk4EADKcZ3stBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJXjdr6aZkg2cHZSwezNvGZjH/yDlW
-        i74XD5kt9r7eym5xedccNotFW7+wW7TuPcJuMW/HXEYHDo9NqzrZPO5c28Pm0bdlFaPH501y
-        ASxRXDYpqTmZZalF+nYJXBlTNn9jLTjAUbFxyg7GBsYO9i5GTg4JAROJLVt2s3QxcnEICexm
-        lDi2aw0rREJaYnr/HjYIW1hi5b/n7BBFzxglXr08DdbNJmAusWjvUkaQhIjARUaJhe/vs4Ak
-        mAWcJCYu2QA19gCjREPXNrAEp4CdxKpr+xlBbGEBV4n2c1fBbBYBFYlDc0+AreYVsJT41TuL
-        CcIWlDg58wnUUG2J3oetjBC2vMT2t3OYIc5TkPj5dBlYrwjQ4p7Dz6BqxCWO/uxhnsAoPAvJ
-        qFlIRs1CMmoWkpYFjCyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNzNzGCY0pLcwfj9lUf
-        9A4xMnEwHmKU4GBWEuG9/HldshBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n44UE0hNLUrNT
-        UwtSi2CyTBycUg1MZxl+SxVNvle7IvJTreh33elcUdtcSjeXfZ6ywmDH/6znrZ0BZl6B9+f3
-        tx+5cuX7vJ3tRSYhmRE/0qdbRTBEJVyUfVd6It5NqXDH92bzuwcSuUS+75u496w+9+ejW3R/
-        z7j4Uk7poNOi+r9F/JX+/w0n//jKcUPy08U7phwmD+9ucGmVTnz4SkaycemrfSKv/93Nv84Q
-        G+b5JbGj0iPI8dKnjqxVM+o/lOyz3ad+znpmbbDGJr0r7u9vNAXpiiqdT5oc5WIya+tyl3c6
-        zVxzjLVWMaxTkFFordUTS8kTk/jCXJhQUSFz3KCPaUpli3rQ56+frvLPjmn60OL16qG0kXdX
-        7OS/nWfyu09u/6msxFKckWioxVxUnAgAer9/kRgDAAA=
-X-CMS-MailID: 20230102093538epcas5p2e311441e00f4ec7f53c2ef9f7cdf8b90
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221129095529epcas5p31acfecd374b59cddd2e67d2efcdd86b4
-References: <CGME20221129095529epcas5p31acfecd374b59cddd2e67d2efcdd86b4@epcas5p3.samsung.com>
-        <20221129095516.89132-1-p.rajanbabu@samsung.com>
-        <af5a7b65-9917-58d2-315e-71e902826a54@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  - Drop CONFIG_NFT_OBJREF=m (removed in commit d037abc2414b4539
+    ("netfilter: nft_objref: make it builtin")),
+  - Drop CONFIG_CDROM_PKTCDVD=m (removed in commit f40eb99897af665f
+    ("pktcdvd: remove driver.")),
+  - Drop CONFIG_TEST_STRSCPY=m (replaced by auto-modular
+    CONFIG_STRSCPY_KUNIT_TEST in commit 41eefc46a3a46829 ("string:
+    Convert strscpy() self-test to KUnit")),
+  - Drop CONFIG_TEST_SIPHASH=m (replaced by auto-modular
+    CONFIG_SIPHASH_KUNIT_TEST in commit fb3d88ab354b3b07 ("siphash:
+    Convert selftest to KUnit")).
 
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+---
+To be queued in the m68k for-v6.3 branch.
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
-> Sent: 26 December 2022 08:41 PM
-> To: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>;
-> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> alim.akhtar@samsung.com; s.prashar@samsung.com;
-> pankaj.dubey@samsung.com
-> Cc: devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH] arm64: dts: fsd: fix PUD values as per FSD HW UM
-> 
-> On 29/11/2022 10:55, Padmanabhan Rajanbabu wrote:
-> > PUD values used for UFS, SPI and UART are not reflecting the default
-> > values recommended by FSD HW UM. Therefore, changing the same to
-> > comply with HW UM recommendation.
-> >
-> > Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-> > ---
-> >  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 14 +++++++-------
-> 
-> This patch does not apply, please rebase on my for-next or linux-next (once
-> released).
+ arch/m68k/configs/amiga_defconfig    | 4 ----
+ arch/m68k/configs/apollo_defconfig   | 4 ----
+ arch/m68k/configs/atari_defconfig    | 4 ----
+ arch/m68k/configs/bvme6000_defconfig | 4 ----
+ arch/m68k/configs/hp300_defconfig    | 4 ----
+ arch/m68k/configs/mac_defconfig      | 4 ----
+ arch/m68k/configs/multi_defconfig    | 4 ----
+ arch/m68k/configs/mvme147_defconfig  | 4 ----
+ arch/m68k/configs/mvme16x_defconfig  | 4 ----
+ arch/m68k/configs/q40_defconfig      | 4 ----
+ arch/m68k/configs/sun3_defconfig     | 4 ----
+ arch/m68k/configs/sun3x_defconfig    | 4 ----
+ 12 files changed, 48 deletions(-)
 
-Okay, I've rebased on your for-next branch and posted the v2 patch.
-
-> 
-> Best regards,
-> Krzysztof
-
-Thanks,
-Padmanabhan R.
+diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
+index 7b49fe6f7cb305d3..eaee93393fadfaed 100644
+--- a/arch/m68k/configs/amiga_defconfig
++++ b/arch/m68k/configs/amiga_defconfig
+@@ -108,7 +108,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -313,7 +312,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -630,7 +628,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -638,7 +635,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
+index 656a06d97d4c156e..b600370853be75e5 100644
+--- a/arch/m68k/configs/apollo_defconfig
++++ b/arch/m68k/configs/apollo_defconfig
+@@ -104,7 +104,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -303,7 +302,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -586,7 +584,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -594,7 +591,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
+index d3078eecf4efefed..d1b7ad44535579eb 100644
+--- a/arch/m68k/configs/atari_defconfig
++++ b/arch/m68k/configs/atari_defconfig
+@@ -111,7 +111,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -314,7 +313,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -618,7 +616,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -626,7 +623,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
+index 7b86e1277a1a5085..14c2c602c452d6db 100644
+--- a/arch/m68k/configs/bvme6000_defconfig
++++ b/arch/m68k/configs/bvme6000_defconfig
+@@ -101,7 +101,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -300,7 +299,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -578,7 +576,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -586,7 +583,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
+index d0d5c0a9aee60a6e..3bf51c3ac62d7514 100644
+--- a/arch/m68k/configs/hp300_defconfig
++++ b/arch/m68k/configs/hp300_defconfig
+@@ -103,7 +103,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -302,7 +301,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -588,7 +586,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -596,7 +593,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
+index ac1d0c86b6ff53ee..c839c27eeb6efade 100644
+--- a/arch/m68k/configs/mac_defconfig
++++ b/arch/m68k/configs/mac_defconfig
+@@ -102,7 +102,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -305,7 +304,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -609,7 +607,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -617,7 +614,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
+index c5f7603c98308ed0..a78031c43e63606c 100644
+--- a/arch/m68k/configs/multi_defconfig
++++ b/arch/m68k/configs/multi_defconfig
+@@ -122,7 +122,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -334,7 +333,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -695,7 +693,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -703,7 +700,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
+index 26f5b59e3bc02926..241358f64d8f4a0c 100644
+--- a/arch/m68k/configs/mvme147_defconfig
++++ b/arch/m68k/configs/mvme147_defconfig
+@@ -100,7 +100,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -299,7 +298,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -577,7 +575,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -585,7 +582,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
+index 3045c7f0bde3507f..3382fe16d7f31b11 100644
+--- a/arch/m68k/configs/mvme16x_defconfig
++++ b/arch/m68k/configs/mvme16x_defconfig
+@@ -101,7 +101,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -300,7 +299,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -578,7 +576,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -586,7 +583,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
+index f2a486be651b5412..6137020556c8346e 100644
+--- a/arch/m68k/configs/q40_defconfig
++++ b/arch/m68k/configs/q40_defconfig
+@@ -102,7 +102,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -304,7 +303,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -596,7 +594,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -604,7 +601,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
+index 8a7db7be10c03ccc..087505407a0b3e08 100644
+--- a/arch/m68k/configs/sun3_defconfig
++++ b/arch/m68k/configs/sun3_defconfig
+@@ -98,7 +98,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -297,7 +296,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -576,7 +574,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -584,7 +581,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
+index 7ed49ee0b9e011ed..a0e0fa8fbd504295 100644
+--- a/arch/m68k/configs/sun3x_defconfig
++++ b/arch/m68k/configs/sun3x_defconfig
+@@ -98,7 +98,6 @@ CONFIG_NFT_MASQ=m
+ CONFIG_NFT_REDIR=m
+ CONFIG_NFT_NAT=m
+ CONFIG_NFT_TUNNEL=m
+-CONFIG_NFT_OBJREF=m
+ CONFIG_NFT_QUEUE=m
+ CONFIG_NFT_QUOTA=m
+ CONFIG_NFT_REJECT=m
+@@ -297,7 +296,6 @@ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+-CONFIG_CDROM_PKTCDVD=m
+ CONFIG_ATA_OVER_ETH=m
+ CONFIG_DUMMY_IRQ=m
+ CONFIG_RAID_ATTRS=m
+@@ -576,7 +574,6 @@ CONFIG_ASYNC_RAID6_TEST=m
+ CONFIG_TEST_HEXDUMP=m
+ CONFIG_STRING_SELFTEST=m
+ CONFIG_TEST_STRING_HELPERS=m
+-CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_KSTRTOX=m
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_SCANF=m
+@@ -584,7 +581,6 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_TEST_UUID=m
+ CONFIG_TEST_XARRAY=m
+ CONFIG_TEST_RHASHTABLE=m
+-CONFIG_TEST_SIPHASH=m
+ CONFIG_TEST_IDA=m
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_VMALLOC=m
+-- 
+2.25.1
 
