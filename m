@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F36065B547
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C66C065B54A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234025AbjABQpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S233004AbjABQsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236163AbjABQp1 (ORCPT
+        with ESMTP id S230127AbjABQsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:45:27 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9CBB4A6
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:45:23 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 244F7C0009;
-        Mon,  2 Jan 2023 16:45:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1672677922;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5O8OXS7nc8duFjds7VaePab6wVG7wkizTo7pWgR7AjU=;
-        b=OBqHHGO6YyKEC+KEYE13IBtCFpLbiKK7TaqZsET9nQAswKq0CXiBI4tkhPIX67Hp3HBFDU
-        c8h3kNIAuiKq2QHFEgMZXq9HfO7H8QPChWGak6Bbnhe6EIV5NjNPWwerot7QJg3hh8hKc9
-        mhrdkTGlJ1LWSNQNuIA7dxShpjeE6in4YcAbFSM6jK144YqIuHMCKAlJWgHZbsM1rM9fpF
-        KUv0OXAhO5NwaRoQz+91haa6YXB+SFSd0VvCDSCv2gyC5ZthwtRPSEouxslpwkyw7SCcy/
-        2WjXAeHK9z8kzPMbbPTqugOS1Xi7T0InVPvYyGf34PhjA2EWB4HOwa1fhO4Uwg==
-Date:   Mon, 2 Jan 2023 17:45:17 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 4/7] mtd: rawnand: sunxi: Fix ECC strength maximization
-Message-ID: <20230102174517.1ccb3654@xps-13>
-In-Reply-To: <4207d4eb-31d5-31c0-1a7f-67ec00b63f58@sholland.org>
-References: <20221229181526.53766-1-samuel@sholland.org>
-        <20221229181526.53766-5-samuel@sholland.org>
-        <20230102101132.66aa1a1d@xps-13>
-        <4207d4eb-31d5-31c0-1a7f-67ec00b63f58@sholland.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 2 Jan 2023 11:48:31 -0500
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A60243;
+        Mon,  2 Jan 2023 08:48:29 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id 98F68419AE;
+        Mon,  2 Jan 2023 17:48:27 +0100 (CET)
+Authentication-Results: ext-mx-out003.mykolab.com (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received; s=dkim20160331; t=
+        1672678107; x=1674492508; bh=hztdjnmy+E8oSCGGaVOT/eEUJOCE8+rS8Pj
+        T7AjbB3s=; b=qeJ7lVNIWbA/hNfwnbnPs7wWOIGIS0nXvuNLzDoROT8OoEBxhVf
+        wUqDUxOSnHa0AXEM1BrvuBaGsvRBUitYf36UoUJq0CmCPTvollLpnWIzBBsZhlvV
+        AErugJsW3FpnfiFzdI5RQ9PxcWc8AV8SOg0NoWvDVwxDBhj144p45iVyyyfQGt0W
+        JLMnoBBRb6oTwADvKE7bYbj5KX6/EUtGcnhz/2votIPBwzgfZaXfkYFD8UKOveUV
+        yT7+Noz5LsJe5PbhvwxaoYPXwGgvqIsdKwwT23kq+LG34RwQMCbSlCG3wvE/NZG+
+        qpoWpFsENIy8q9oLqVaSwApuSQeAG52mFYuxNUSeRkHidSrYhp+XrrcQBspqgU3O
+        ehJzrAa/IJmVJlTgLg1jncuV8Va82XbbG5Z75wVkq5eLDgCq9ZWGxXuSgrePmX63
+        Y/oZFJKeRm4Kp3Zt3HUaYAFNaJcDcE9/Md3PR4tZBNF9gFUOq5BlA66A926eTZsc
+        gk+jWmkWPyo/h4GX4bYLCoZwi+VdK84MR2XpIrWWvt4hep2ot3qrQpiXzGTiEQav
+        ZYEbYjuG5aJjcrWHDyFM/ZI9T8fWoqyjLJ+phYAkR/Nozt3bDrXRRGhnJP0FMGbK
+        bnsO+mFdRLu16pOkhQt5EZqJLz05v33EWqiYYr2/cXyn+DR1zZzasgDQ=
+X-Virus-Scanned: amavisd-new at mykolab.com
+X-Spam-Score: -1.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+Received: from mx.kolabnow.com ([127.0.0.1])
+        by localhost (ext-mx-out003.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id RQxyvTnCS89F; Mon,  2 Jan 2023 17:48:27 +0100 (CET)
+Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
+        by mx.kolabnow.com (Postfix) with ESMTPS id 5CD8E4194F;
+        Mon,  2 Jan 2023 17:48:26 +0100 (CET)
+Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
+        by int-mx002.mykolab.com (Postfix) with ESMTPS id E7DC21B67;
+        Mon,  2 Jan 2023 17:48:25 +0100 (CET)
+Date:   Mon, 2 Jan 2023 17:48:23 +0100
+From:   Federico Vaga <federico.vaga@vaga.pv.it>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] doc: monospace style for inline code in botching ioctl
+Message-ID: <20230102164823.fr5rw6idkjkxa74d@numero-86.vaga.pv.it>
+References: <20230101132758.12560-1-federico.vaga@vaga.pv.it>
+ <Y7LtxnBKkpCmx83I@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y7LtxnBKkpCmx83I@casper.infradead.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
+On Mon, Jan 02, 2023 at 02:44:22PM +0000, Matthew Wilcox wrote:
+>On Sun, Jan 01, 2023 at 02:27:58PM +0100, Federico Vaga wrote:
+>> +   that diminishes the checking tools like sparse can provide. The macro
+>> +   ``u64_to_user_ptr`` can be used in the kernel to avoid warnings about
+>
+>Should probably be u64_to_user_ptr() instead to get both the monospace &
+>the hyperlink.
 
-samuel@sholland.org wrote on Mon, 2 Jan 2023 09:59:29 -0600:
+Indeed, good point. A V2 will come
 
-> Hi Miqu=C3=A8l,
->=20
-> On 1/2/23 03:11, Miquel Raynal wrote:
-> > Hi Samuel,
-> >=20
-> > samuel@sholland.org wrote on Thu, 29 Dec 2022 12:15:23 -0600:
-> >  =20
-> >> This is already accounted for in the subtraction for OOB, since the BBM
-> >> overlaps the first OOB dword. With this change, the driver picks the
-> >> same ECC strength as the vendor driver.
-> >>
-> >> Fixes: 4796d8655915 ("mtd: nand: sunxi: Support ECC maximization")
-> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> >> ---
-> >>
-> >>  drivers/mtd/nand/raw/sunxi_nand.c | 3 +--
-> >>  1 file changed, 1 insertion(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/=
-sunxi_nand.c
-> >> index 1bddeb1be66f..1ecf2cee343b 100644
-> >> --- a/drivers/mtd/nand/raw/sunxi_nand.c
-> >> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
-> >> @@ -1643,8 +1643,7 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct na=
-nd_chip *nand,
-> >>  		ecc->size =3D 1024;
-> >>  		nsectors =3D mtd->writesize / ecc->size;
-> >> =20
-> >> -		/* Reserve 2 bytes for the BBM */
-> >> -		bytes =3D (mtd->oobsize - 2) / nsectors;
-> >> +		bytes =3D mtd->oobsize / nsectors; =20
-> >=20
-> > I'm sorry but I don't think we can make this work. This change would
-> > break all existing users... =20
->=20
-> OK, it is not too much of an issue because I can manually specify the
-> ECC parameters in the devicetree. Do you think it makes sense to fix
-> this when adding new hardware variants/compatible strings?
-
-Actually, looking at the code again, I don't get how the above diff
-could be valid. The "maximize strength" logic (in which this diff is)
-looks for the biggest region to store ECC bytes. These bytes cannot
-be stored on the BBM, which "mtd->oobsize - 2" tries to avoid, so we
-cannot get rid of this.
-
-Thanks,
-Miqu=C3=A8l
+-- 
+Federico Vaga
