@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5E865B625
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57D265B626
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236216AbjABSD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 13:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
+        id S233361AbjABSDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 13:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbjABSDV (ORCPT
+        with ESMTP id S236408AbjABSDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 13:03:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1C4625D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:03:20 -0800 (PST)
+        Mon, 2 Jan 2023 13:03:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E56C6274
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:03:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E40F6106C
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 18:03:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 691AFC433D2;
-        Mon,  2 Jan 2023 18:03:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A68DDB80DD4
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 18:03:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13BBEC433D2;
+        Mon,  2 Jan 2023 18:03:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672682599;
-        bh=xFB+pqkNVJr5d8mSMRmOujiTSNxhjU4TQhJt9Jg8R8Y=;
+        s=k20201202; t=1672682616;
+        bh=eiL9ov92ii0rNfUZ7WxyqD7kXKuY844nLoQQukaQwBg=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=nTlYO3nfkttQQtNzmo5st0FF1fLUh3JjCaVhN08ZsFu2/Ar3eRDOzfAvEQFgt7sdV
-         1VwVgLYhgywzHybz+qx+w6R3pBQQ+1xBmPecCZEksyOSyU/mqs03PuEAyj36TqyuFQ
-         ss6xPo+zvoVXRefp20KH+1Ufo3tZcQ8O9Vv2+7bUqV3SGoNlZny2fZSXbXOpKECPOs
-         o/jGZd7b8s0MUGGRqmz/VYLlCulDIq4o+VFIXkQ2rfSod0QNe338OIjxHp+4FjFRGm
-         qe+EkEmhta0pUJSsu1TMvsTcURy5os45fvHYRY7oDp/sJWrxmLQLrlV+ZO9+rH88IT
-         CenFM5oUu0BTQ==
+        b=cJIzhIrYoeZceLj1oFq0IBdCXGVFGwdlyxWjWtC7PW1im40Ah2MK80CAKQDWdvne7
+         DLZB0rMIhbCbYpckJj7ziXzs4fatXTrvnz6lIU3Dz7pYxWzwbRVfVNWiY2oP8RDEWj
+         vqeUygwfAKV+yETWlgxgkC6Y+ZFgu0gMuZokegOlDY9Sdtd5lIY0D0lKWNJbROC09Z
+         5AiHEBOuo/+5BafbU8o94y0bcGGDgEIvtpqo6YFb6rOTTm5x6W8K+fL2dDkp7pnzp0
+         eNx7ERADrC0ClivHV0UY654QqhLae6i8B1KS9+KXys+kmaMXR3A1S+A+f62sP7htbQ
+         TdveTeTVWR+1Q==
 From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To:     Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
         paul.walmsley@sifive.com, palmer@dabbelt.com,
@@ -39,13 +39,13 @@ To:     Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
         sfr@canb.auug.org.au
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         liaochang1@huawei.com, Chen Guokai <chenguokai17@mails.ucas.ac.cn>
-Subject: Re: [PATCH v5 1/9] riscv/kprobe: Prepare the skeleton to implement
- RISCV OPTPROBES feature
-In-Reply-To: <20221224114315.850130-2-chenguokai17@mails.ucas.ac.cn>
+Subject: Re: [PATCH v5 3/9] riscv/kprobe: Prepare the skeleton to prepare
+ optimized kprobe
+In-Reply-To: <20221224114315.850130-4-chenguokai17@mails.ucas.ac.cn>
 References: <20221224114315.850130-1-chenguokai17@mails.ucas.ac.cn>
- <20221224114315.850130-2-chenguokai17@mails.ucas.ac.cn>
-Date:   Mon, 02 Jan 2023 19:03:17 +0100
-Message-ID: <87wn64vmoq.fsf@all.your.base.are.belong.to.us>
+ <20221224114315.850130-4-chenguokai17@mails.ucas.ac.cn>
+Date:   Mon, 02 Jan 2023 19:03:33 +0100
+Message-ID: <87v8lovmoa.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -61,33 +61,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Chen Guokai <chenguokai17@mails.ucas.ac.cn> writes:
 
 > From: Liao Chang <liaochang1@huawei.com>
+
+>  arch/riscv/kernel/probes/opt.c | 107 ++++++++++++++++++++++++++++++++-
 >
-> Prepare skeleton to implement optimized kprobe on RISCV, it is consist
-> of Makfile, Kconfig and some architecture specific files: kprobe.h and
-> opt.c opt.c include some macro, type definition and functions required
-> by kprobe framework, opt_trampoline.S provide a piece of assembly code
-> template used to construct the detour buffer as the target of long jump
-> instruction(s) for each optimzed kprobe.
+> diff --git a/arch/riscv/kernel/probes/opt.c b/arch/riscv/kernel/probes/op=
+t.c
+> index 56c8a227c857..a4271e6033ba 100644
+> --- a/arch/riscv/kernel/probes/opt.c
+> +++ b/arch/riscv/kernel/probes/opt.c
 
-This is pretty much just reiterating what diff-stat says. Please try to
-explain why a certain change is done, instead of what. What is already
-in the patch.
+> @@ -24,7 +72,64 @@ int arch_check_optimized_kprobe(struct optimized_kprob=
+e *op)
+>  int arch_prepare_optimized_kprobe(struct optimized_kprobe *op,
+>  				  struct kprobe *orig)
+>  {
+> -	return 0;
+> +	long rel;
+> +	int rd, ra, ret;
+> +	kprobe_opcode_t *code =3D NULL, *slot =3D NULL;
+> +
+> +	if (!can_optimize((unsigned long)orig->addr, op))
+> +		return -EILSEQ;
+> +
+> +	code =3D kzalloc(MAX_OPTINSN_SIZE, GFP_KERNEL);
+> +	slot =3D get_optinsn_slot();
+> +	if (!code || !slot) {
+> +		ret =3D -ENOMEM;
+> +		goto on_error;
+> +	}
+> +
+> +	/*
+> +	 * Verify if the address gap is within 4GB range, because this uses
+> +	 * a auipc+jalr pair.
 
-> Since the jump range of PC-relative instruction JAL is +/-2M, that is
-> too small to reach the detour buffer, hence the foudamental idea to
-> address OPTPROBES on RISCV is replace 'EBREAK' with 'AUIPC/JALR'. which
-> means it needs to clobber one more instruction beside the kprobe
-> instruction, furthermore, RISCV supports hybird RVI and RVC in single
-> kernel binary, so in theory a pair of 'AUIPC/JALR' is about to clobber
-> 10 bytes(3 RVC and 1 RVI, 2 bytes is padding for alignment) at worst
-> case. The second hardsome problem is looking for one integer register as
-> the destination of 'AUIPC/JALR' without any side-effect.
+Try to be consistent. You're mixing "AUIPC/JALR" with "auipc+jalr".
 
-There are a number of spelling errors, please use a spellchecker and if
-you reference a file (e.g. Makefile), make sure it is correctly spelled
-out.
+> +	 */
+> +	rel =3D (unsigned long)slot - (unsigned long)orig->addr;
+> +	if (!in_auipc_jalr_range(rel)) {
+> +		/*
+> +		 * Different from x86, we free code buf directly instead
+> of
 
-The comments above applies to all the commit messages of this series.
+Reword for readers that are not familiar with x86.
 
 
 Bj=C3=B6rn
