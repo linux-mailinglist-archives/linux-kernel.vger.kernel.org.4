@@ -2,182 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244D165B6AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC17665B6AA
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 19:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234252AbjABSoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 13:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        id S233286AbjABSoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 13:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234249AbjABSo1 (ORCPT
+        with ESMTP id S229964AbjABSoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 13:44:27 -0500
-X-Greylist: delayed 249 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 Jan 2023 10:44:25 PST
-Received: from mailrelay2-1.pub.mailoutpod2-cph3.one.com (mailrelay2-1.pub.mailoutpod2-cph3.one.com [46.30.211.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988FDBE08
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 10:44:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=/XFSebgx2HIciu5wwjMJ8G7XT2qN1rYL+0/uj3yYc6A=;
-        b=lJCyDoNoMBcGfOR4NL7/DdlGmh5DjPP5qHDM2NeKiTttxh8NQX14zahQ7ID+Gd2+3xUyKnOcem1F9
-         1NTDQSCxvWageTQIZzFybwCPBQTg2gIhav7NzluLHkpBhcYEFt4ryO03bHugLOtyuMaxhHLXd4lkaY
-         ffDTEbmfEK5XaXsSgDhkaIlgaFhDMmkZCOTJ7AH79Ev2YCnlzPr7aKfw9GeFbfkmYy4FYxTplFNJzW
-         nM8/X5bDsJcxU3xLVJdD/dCiQ5GE192KmC0VG3RV7n3F7nPXVdZdMMbVHT+dp2pagdklEFBBJj1h0/
-         w7rl9yqB4tPg6TxvarpwwYVw4W2YklA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=/XFSebgx2HIciu5wwjMJ8G7XT2qN1rYL+0/uj3yYc6A=;
-        b=a5CtB94QuPHGQVxS6TGpO9UkcljmxBFgCopWhUosfBafSWe8klvix+HzBbUMz3OM1gHvewFYTX+3L
-         JNAYQWjBg==
-X-HalOne-ID: 533e9773-8acd-11ed-a28f-93f0a866dfbb
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay2 (Halon) with ESMTPSA
-        id 533e9773-8acd-11ed-a28f-93f0a866dfbb;
-        Mon, 02 Jan 2023 18:43:21 +0000 (UTC)
-Date:   Mon, 2 Jan 2023 19:43:19 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH 04/14] drm/panel-leadtek-ltk050h3146w: Drop custom DSI
- write macro
-Message-ID: <Y7Mlx5GRwYEaOEOR@ravnborg.org>
-References: <20221228014757.3170486-1-javierm@redhat.com>
- <20221228014757.3170486-5-javierm@redhat.com>
+        Mon, 2 Jan 2023 13:44:11 -0500
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55664BC92;
+        Mon,  2 Jan 2023 10:44:09 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id D4BC340D72;
+        Mon,  2 Jan 2023 19:44:07 +0100 (CET)
+Authentication-Results: ext-mx-out003.mykolab.com (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        content-transfer-encoding:mime-version:message-id:date:date
+        :subject:subject:from:from:received:received:received; s=
+        dkim20160331; t=1672685045; x=1674499446; bh=PE2QbDuec+iFICdEPvX
+        1KX5WQKys9UPqNPqt1/TRius=; b=tTVaFoqI6mGYv8yD8vJv9KQ3h+IlXVXEL89
+        74+C5z71UA5asqkUsnu8tv0nMrcVcDrDx3qsm5j9oLN+jW+DK5u3O1HIHCuBDQO8
+        xTuZakfM2KG/khjPdHSNETxJZmKGwixPFa52LIrR7sYgNooIrla5q5H1nJwdoRVk
+        SJCIGlaZXKKlbOTnoZ/pEo5izMyAzwS5XxXrhXIPqYZJ/kBV4f2omEaorXficA1M
+        Q5Bv/hJVgFPluF/+RaH7Ac8R0Lryi2qTcm70UFKFhBBDkbK3aSazVw7YQ479k5se
+        kT8rFwppx+PDcMMdkgWTgkeJMjmPGlNo0ik/m1Zx4dBxVrL/KZvHwx1q2UhoFsjI
+        LPSM16Fh6yfBXBj2NR5UFmNUTBwZz/B54d2HR3HGiFLrMkMISkNiDXVEoxHoPS5C
+        DoJMOKDX2118vMxM7nMAvBCZ15o8w7+mgSL/hBLGo1ZCxTFAd/eo+lobohXX5z0Q
+        yCfXiCyv+LNhpEVmme8iz7Z4dEupRbPcupdY/1mizkfl01nse/2rSZi73gYb+SG7
+        I4U1ATM5699hROcpsKyqyb1m0XOkjpiscKjZoUD/lw0bQZH/6fB7w2QG1h3DL61t
+        NkE2V1+TjracUomgj4UdslnTlnmkPUhnJbQVw45mEVrfpb6VRv5NZtc1wCGVNgK/
+        wQgfzKJ0=
+X-Virus-Scanned: amavisd-new at mykolab.com
+X-Spam-Score: -1.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+Received: from mx.kolabnow.com ([127.0.0.1])
+        by localhost (ext-mx-out003.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AujhSXFK8cEn; Mon,  2 Jan 2023 19:44:05 +0100 (CET)
+Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
+        by mx.kolabnow.com (Postfix) with ESMTPS id 2B2AF40CA1;
+        Mon,  2 Jan 2023 19:44:05 +0100 (CET)
+Received: from ext-subm002.mykolab.com (unknown [10.9.6.2])
+        by int-mx002.mykolab.com (Postfix) with ESMTPS id A4D311B6F;
+        Mon,  2 Jan 2023 19:44:04 +0100 (CET)
+From:   Federico Vaga <federico.vaga@vaga.pv.it>
+To:     Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Keith Busch <kbusch@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Federico Vaga <federico.vaga@vaga.pv.it>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] doc: add kernel-doc comment for u64_to_user_ptr
+Date:   Mon,  2 Jan 2023 19:43:49 +0100
+Message-Id: <20230102184349.10399-1-federico.vaga@vaga.pv.it>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221228014757.3170486-5-javierm@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+Add a kernel-doc comment in kernel.h to document the macro
+`u64_to_user_ptr`.
 
-On Wed, Dec 28, 2022 at 02:47:47AM +0100, Javier Martinez Canillas wrote:
-> There is a macro for this already in the <drm/drm_mipi_dsi.h> header, use
-> that instead and delete the custom DSI write macro defined in the driver.
-> 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
-> 
->  .../drm/panel/panel-leadtek-ltk050h3146w.c    | 64 ++++++++-----------
->  1 file changed, 28 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-leadtek-ltk050h3146w.c b/drivers/gpu/drm/panel/panel-leadtek-ltk050h3146w.c
-> index 5619f186d28c..525dddef4d9c 100644
-> --- a/drivers/gpu/drm/panel/panel-leadtek-ltk050h3146w.c
-> +++ b/drivers/gpu/drm/panel/panel-leadtek-ltk050h3146w.c
-> @@ -244,14 +244,6 @@ struct ltk050h3146w *panel_to_ltk050h3146w(struct drm_panel *panel)
->  	return container_of(panel, struct ltk050h3146w, panel);
->  }
->  
-> -#define dsi_dcs_write_seq(dsi, cmd, seq...) do {			\
-> -		static const u8 b[] = { cmd, seq };			\
-> -		int ret;						\
-> -		ret = mipi_dsi_dcs_write_buffer(dsi, b, ARRAY_SIZE(b));	\
-> -		if (ret < 0)						\
-> -			return ret;					\
-> -	} while (0)
-> -
->  static int ltk050h3146w_init_sequence(struct ltk050h3146w *ctx)
->  {
->  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
-> @@ -261,55 +253,55 @@ static int ltk050h3146w_init_sequence(struct ltk050h3146w *ctx)
->  	 * Init sequence was supplied by the panel vendor without much
->  	 * documentation.
->  	 */
-> -	dsi_dcs_write_seq(dsi, 0xdf, 0x93, 0x65, 0xf8);
-> -	dsi_dcs_write_seq(dsi, 0xb0, 0x01, 0x03, 0x02, 0x00, 0x64, 0x06,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x93, 0x65, 0xf8);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x01, 0x03, 0x02, 0x00, 0x64, 0x06,
->  			  0x01);
-Fix indent here and later.
-With this fixed:
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> -	dsi_dcs_write_seq(dsi, 0xb2, 0x00, 0xb5);
-> -	dsi_dcs_write_seq(dsi, 0xb3, 0x00, 0xb5);
-> -	dsi_dcs_write_seq(dsi, 0xb7, 0x00, 0xbf, 0x00, 0x00, 0xbf, 0x00);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xb2, 0x00, 0xb5);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xb3, 0x00, 0xb5);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xb7, 0x00, 0xbf, 0x00, 0x00, 0xbf, 0x00);
->  
-> -	dsi_dcs_write_seq(dsi, 0xb9, 0x00, 0xc4, 0x23, 0x07);
-> -	dsi_dcs_write_seq(dsi, 0xbb, 0x02, 0x01, 0x24, 0x00, 0x28, 0x0f,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xb9, 0x00, 0xc4, 0x23, 0x07);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xbb, 0x02, 0x01, 0x24, 0x00, 0x28, 0x0f,
->  			  0x28, 0x04, 0xcc, 0xcc, 0xcc);
-> -	dsi_dcs_write_seq(dsi, 0xbc, 0x0f, 0x04);
-> -	dsi_dcs_write_seq(dsi, 0xbe, 0x1e, 0xf2);
-> -	dsi_dcs_write_seq(dsi, 0xc0, 0x26, 0x03);
-> -	dsi_dcs_write_seq(dsi, 0xc1, 0x00, 0x12);
-> -	dsi_dcs_write_seq(dsi, 0xc3, 0x04, 0x02, 0x02, 0x76, 0x01, 0x80,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xbc, 0x0f, 0x04);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xbe, 0x1e, 0xf2);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xc0, 0x26, 0x03);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xc1, 0x00, 0x12);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xc3, 0x04, 0x02, 0x02, 0x76, 0x01, 0x80,
->  			  0x80);
-> -	dsi_dcs_write_seq(dsi, 0xc4, 0x24, 0x80, 0xb4, 0x81, 0x12, 0x0f,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xc4, 0x24, 0x80, 0xb4, 0x81, 0x12, 0x0f,
->  			  0x16, 0x00, 0x00);
-> -	dsi_dcs_write_seq(dsi, 0xc8, 0x7f, 0x72, 0x67, 0x5d, 0x5d, 0x50,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xc8, 0x7f, 0x72, 0x67, 0x5d, 0x5d, 0x50,
->  			  0x56, 0x41, 0x59, 0x57, 0x55, 0x70, 0x5b, 0x5f,
->  			  0x4f, 0x47, 0x38, 0x23, 0x08, 0x7f, 0x72, 0x67,
->  			  0x5d, 0x5d, 0x50, 0x56, 0x41, 0x59, 0x57, 0x55,
->  			  0x70, 0x5b, 0x5f, 0x4f, 0x47, 0x38, 0x23, 0x08);
-> -	dsi_dcs_write_seq(dsi, 0xd0, 0x1e, 0x1f, 0x57, 0x58, 0x48, 0x4a,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xd0, 0x1e, 0x1f, 0x57, 0x58, 0x48, 0x4a,
->  			  0x44, 0x46, 0x40, 0x1f, 0x42, 0x1f, 0x1f, 0x1f,
->  			  0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f);
-> -	dsi_dcs_write_seq(dsi, 0xd1, 0x1e, 0x1f, 0x57, 0x58, 0x49, 0x4b,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xd1, 0x1e, 0x1f, 0x57, 0x58, 0x49, 0x4b,
->  			  0x45, 0x47, 0x41, 0x1f, 0x43, 0x1f, 0x1f, 0x1f,
->  			  0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f);
-> -	dsi_dcs_write_seq(dsi, 0xd2, 0x1f, 0x1e, 0x17, 0x18, 0x07, 0x05,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xd2, 0x1f, 0x1e, 0x17, 0x18, 0x07, 0x05,
->  			  0x0b, 0x09, 0x03, 0x1f, 0x01, 0x1f, 0x1f, 0x1f,
->  			  0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f);
-> -	dsi_dcs_write_seq(dsi, 0xd3, 0x1f, 0x1e, 0x17, 0x18, 0x06, 0x04,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xd3, 0x1f, 0x1e, 0x17, 0x18, 0x06, 0x04,
->  			  0x0a, 0x08, 0x02, 0x1f, 0x00, 0x1f, 0x1f, 0x1f,
->  			  0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f);
-> -	dsi_dcs_write_seq(dsi, 0xd4, 0x00, 0x00, 0x00, 0x0c, 0x06, 0x20,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xd4, 0x00, 0x00, 0x00, 0x0c, 0x06, 0x20,
->  			  0x01, 0x02, 0x00, 0x60, 0x15, 0xb0, 0x30, 0x03,
->  			  0x04, 0x00, 0x60, 0x72, 0x0a, 0x00, 0x60, 0x08);
-> -	dsi_dcs_write_seq(dsi, 0xd5, 0x00, 0x06, 0x06, 0x00, 0x30, 0x00,
-> +	mipi_dsi_dcs_write_seq(dsi, 0xd5, 0x00, 0x06, 0x06, 0x00, 0x30, 0x00,
->  			  0x00, 0x00, 0x00, 0x00, 0xbc, 0x50, 0x00, 0x05,
->  			  0x21, 0x00, 0x60);
-> -	dsi_dcs_write_seq(dsi, 0xdd, 0x2c, 0xa3, 0x00);
-> -	dsi_dcs_write_seq(dsi, 0xde, 0x02);
-> -	dsi_dcs_write_seq(dsi, 0xb2, 0x32, 0x1c);
-> -	dsi_dcs_write_seq(dsi, 0xb7, 0x3b, 0x70, 0x00, 0x04);
-> -	dsi_dcs_write_seq(dsi, 0xc1, 0x11);
-> -	dsi_dcs_write_seq(dsi, 0xbb, 0x21, 0x22, 0x23, 0x24, 0x36, 0x37);
-> -	dsi_dcs_write_seq(dsi, 0xc2, 0x20, 0x38, 0x1e, 0x84);
-> -	dsi_dcs_write_seq(dsi, 0xde, 0x00);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xdd, 0x2c, 0xa3, 0x00);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xde, 0x02);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xb2, 0x32, 0x1c);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xb7, 0x3b, 0x70, 0x00, 0x04);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xc1, 0x11);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xbb, 0x21, 0x22, 0x23, 0x24, 0x36, 0x37);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xc2, 0x20, 0x38, 0x1e, 0x84);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xde, 0x00);
->  
->  	ret = mipi_dsi_dcs_set_tear_on(dsi, 1);
->  	if (ret < 0) {
-> -- 
-> 2.38.1
+As of today, this macro is mentioned in the documentation in
+'ioctl.rst' and 'botching-up-ioctls.rst'
+
+Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
+---
+ include/linux/kernel.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index fe6efb24d151..8bcd126f64f2 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -56,6 +56,10 @@
+ 
+ #define PTR_IF(cond, ptr)	((cond) ? (ptr) : NULL)
+ 
++/**
++ * u64_to_user_ptr - convert an unsigned 64bit number into a user pointer
++ * @x: the number to convert
++ */
+ #define u64_to_user_ptr(x) (		\
+ {					\
+ 	typecheck(u64, (x));		\
+-- 
+2.30.2
+
