@@ -2,98 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F270165B123
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0064C65B13E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236145AbjABLaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S232599AbjABLiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbjABL36 (ORCPT
+        with ESMTP id S232427AbjABLiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:29:58 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C468F6478
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:29:34 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id g16so19650295plq.12
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 03:29:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tAtfnehI+8rnCoBxh4RfuIlZeuy6v7+90sh8BNu0/0s=;
-        b=XJvzkcjJYea83efZTaMs+qIbFQCP3ZqaH/iodQ4OBvcts+9G8H/fplhxapfgjBzvAB
-         KmFuSnNwsYVKh1Cfxs0s6jgtblKgVe5ckwfOM6jjsLluJjiXTqT3PR+x2VMZkgM4E7zV
-         7bDohX4lQPa8IYcGzhSSTB4ciDlrCzRgVbzfSxiQI/X4c9dUIVNsGPdJ6PsFUW6CknzN
-         1JOXlqeNISoooH0Dc1Tow7YWmtCWzsNg3iwxtL/0WMOM5iK4VWbdRx0KU9lPlyqvsyai
-         RZFfDDe/J1NNvJHYY0vczH0d75HnhYZlLvXh8KXR8nzdwOglx0zyCGQlgLcuaLava7Ym
-         H9iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tAtfnehI+8rnCoBxh4RfuIlZeuy6v7+90sh8BNu0/0s=;
-        b=MkIVkw/JzzY2V4ndtETI9lwYt6Zxag1JW3EuuzHxDYqv8yq6kqbUKmVP8t13BoMTdq
-         YDiU0elOli9ylozelcf+zzGeLazX7EwPsca5bnmSv8bFXcFsndQw3ejQbBSIfH+l2kLe
-         LnqHjtkHIY4by6QRRlA38L+LrOMbOk4/RwE2wkTKqQjH3fYPbeGmJuY2Q7enze+xmEBd
-         gdL6e9NjhppBc5KK/z0icaCvQILiI5a9th+NOpWs7SXV1LP9BzprM9UdD7R7e+au9QOs
-         O0K+7Irx3nal0HP/aUXfwi33Hw1msjMqTsECT62nOg05px5YgBVj5nloebcjyh4pCPlr
-         nyEA==
-X-Gm-Message-State: AFqh2kpEHYtReRxYgXYHYXP9ReR5xFeaLy5BWKCwO7pmr37BNnEx6oE5
-        tvfWdL9BOwglYIWBgM8taH2V+w6eNKoWGQGtEJs=
-X-Google-Smtp-Source: AMrXdXu2ujLJHIXjlsHhPgI1mXvTtkcY6fnA8K6//w0TeSuu931U/o/pTtHEVO3JWd/LtEMxvJwgYA==
-X-Received: by 2002:a17:902:c401:b0:189:ba1f:b168 with SMTP id k1-20020a170902c40100b00189ba1fb168mr63898554plk.1.1672658974333;
-        Mon, 02 Jan 2023 03:29:34 -0800 (PST)
-Received: from localhost.localdomain ([114.249.235.208])
-        by smtp.gmail.com with ESMTPSA id x13-20020a170902a38d00b00189a50d2a38sm17119993pla.38.2023.01.02.03.29.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 02 Jan 2023 03:29:33 -0800 (PST)
-From:   wlfightup <wlfightup@gmail.com>
-To:     mike.kravetz@oracle.com, muchun.song@linux.dev,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        wangliang <wangliang40@baidu.com>,
-        wlfightup <wlfightup@gmail.com>
-Subject: [PATCH] Fixed code style, adding a blank line between functions
-Date:   Mon,  2 Jan 2023 19:29:28 +0800
-Message-Id: <20230102112928.12681-1-wlfightup@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        Mon, 2 Jan 2023 06:38:02 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154D663DC
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:37:58 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9866D34098;
+        Mon,  2 Jan 2023 11:37:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672659477; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UQAlrbzgtjeIFrA5dYab+msufJTFn2SqYAHrGprOuUs=;
+        b=P9mK4fvmIh2uDVanuyfLPeuQTR2j/z5I2y1RhIxVzoCjpjaxG+8feop9kc3ALkoGzOQWU+
+        Ivb24++c12bSPLmUIgwoiwQSS/55bX3tL/qeWiLBPQ0AvGRHd68J92SkKKe2x27/w0jFrP
+        A3gLDq6qX/uUAhOUiSNCPO+rGjn3jr4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672659477;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UQAlrbzgtjeIFrA5dYab+msufJTFn2SqYAHrGprOuUs=;
+        b=sq6z5nAtcflnEB+QOL8Nb6aH3vF3Uju5ij2YHrRX/7IBq1Ts3J6DrjNCI48TGaLXoNIlCx
+        jPUFy2o16WCB57CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6756B139C8;
+        Mon,  2 Jan 2023 11:37:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dvSHGBXCsmMTdgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 02 Jan 2023 11:37:57 +0000
+Message-ID: <0065d875-a13c-c327-7d53-d376e235bf3d@suse.cz>
+Date:   Mon, 2 Jan 2023 12:37:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] x86/kexec: Fix double-free of elf header buffer
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>, x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Baoquan He <bhe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20221122115122.13937-1-tiwai@suse.de>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221122115122.13937-1-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wangliang <wangliang40@baidu.com>
+On 11/22/22 12:51, Takashi Iwai wrote:
+> The recent fix for memory leaks forgot to clear the error path that
+> already does vfree() for the elf headers.  This may result in a
+> double-free.
+> 
+> Drop the superfluous vfree() call at the error path of
+> crash_load_segments().
+> 
+> Fixes: b3e34a47f989 ("x86/kexec: fix memory leak of elf header buffer")
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 
-The code style must uniform, and the functions cannot be
-separated without blank line
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Signed-off-by: wlfightup <wlfightup@gmail.com>
-Signed-off-by: wangliang <wangliang40@baidu.com>
----
- mm/hugetlb.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index db895230ee7e..4ad2be7f3b83 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -3213,6 +3213,7 @@ static void __init gather_bootmem_prealloc(void)
- 		cond_resched();
- 	}
- }
-+
- static void __init hugetlb_hstate_alloc_pages_onenode(struct hstate *h, int nid)
- {
- 	unsigned long i;
--- 
-2.24.3 (Apple Git-128)
+> ---
+>  arch/x86/kernel/crash.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+> index 9730c88530fc..305514431f26 100644
+> --- a/arch/x86/kernel/crash.c
+> +++ b/arch/x86/kernel/crash.c
+> @@ -401,10 +401,8 @@ int crash_load_segments(struct kimage *image)
+>  	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
+>  	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+>  	ret = kexec_add_buffer(&kbuf);
+> -	if (ret) {
+> -		vfree((void *)image->elf_headers);
+> +	if (ret)
+>  		return ret;
+> -	}
+>  	image->elf_load_addr = kbuf.mem;
+>  	pr_debug("Loaded ELF headers at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
+>  		 image->elf_load_addr, kbuf.bufsz, kbuf.memsz);
 
