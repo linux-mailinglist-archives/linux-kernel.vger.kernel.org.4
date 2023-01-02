@@ -2,116 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6400765B2F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F5165B2EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236041AbjABNzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        id S230199AbjABNyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:54:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236026AbjABNzM (ORCPT
+        with ESMTP id S229583AbjABNyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:55:12 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314CA6545
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 05:55:11 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-239-Pc-0eKEyPu6bdtk5ZckanA-1; Mon, 02 Jan 2023 13:55:08 +0000
-X-MC-Unique: Pc-0eKEyPu6bdtk5ZckanA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 2 Jan
- 2023 13:55:05 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Mon, 2 Jan 2023 13:55:05 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-CC:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Kostya Serebryany" <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        "Andrey Konovalov" <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCHv13 05/16] x86/uaccess: Provide untagged_addr() and remove
- tags before address check
-Thread-Topic: [PATCHv13 05/16] x86/uaccess: Provide untagged_addr() and remove
- tags before address check
-Thread-Index: AQHZHLDUcIP+F/h/PEiAwEZ6SoBjkq6LJK3g
-Date:   Mon, 2 Jan 2023 13:55:05 +0000
-Message-ID: <4cf29f7a1a0041da818ac7ef598d142e@AcuMS.aculab.com>
-References: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
- <20221227030829.12508-6-kirill.shutemov@linux.intel.com>
- <CAHk-=wgKTcOx1hhWAGJ-g9_9o7xiGJ9v9n2RskBSCkaUMBxDkw@mail.gmail.com>
- <20221231001029.5nckrhtmwahb65jo@box>
- <CAHk-=wgmGqwDD0kvjZxekU6uYR2x6+QgRHeMKy3snL2XYEzwEw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgmGqwDD0kvjZxekU6uYR2x6+QgRHeMKy3snL2XYEzwEw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 2 Jan 2023 08:54:16 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093C027C;
+        Mon,  2 Jan 2023 05:54:14 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 56B8F20005;
+        Mon,  2 Jan 2023 13:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672667650;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XI1jqSD80O19fS9j+6GijbwVoDQ0YZyBahVLr8QSp4A=;
+        b=XEP/DVAKSf5CmbUL+ECBUNjhk6W6ixRGlmWUIjLJKIAxMHXit+mqGsUUXNbpXf9ZxZVpXq
+        L0iDJ6F+F2yux1N3ok7LHtnVlztq/NTQ7KJk0O9xLmVgJBazVdLkc/9TCXs03q0e7z2PlP
+        C7Cghn6C+bndokE/9VH0fCchUTMXfOG/5oc/65P2+DdrTrRgvBDdUQr6P697SLlCHFxmzg
+        43PV9iSgyBEtsZrbn3sMi0KvTJBO0cRGqOD0SkpmA8EElxMkzilXrgFZo8O5aIfp14/HFw
+        Tx9WyvJ3vECiEwLwNL2UwTgVV/YM6OG/qXCCocbazR5TPmXig3/CvAq+SNXTcw==
+Date:   Mon, 2 Jan 2023 14:56:18 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Lizhi Hou <lizhi.hou@amd.com>
+Cc:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
+        <frowand.list@gmail.com>, <helgaas@kernel.org>, <max.zhen@amd.com>,
+        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>,
+        <stefano.stabellini@xilinx.com>, <trix@redhat.com>,
+        "Allan.Nielsen@microchip.com" <Allan.Nielsen@microchip.com>,
+        "Horatiu.Vultur@microchip.com" <Horatiu.Vultur@microchip.com>,
+        "Steen.Hegelund@microchip.com" <Steen.Hegelund@microchip.com>
+Subject: Re: [PATCH V5 2/3] PCI: Create device tree node for selected
+ devices
+Message-ID: <20230102145618.4b5bace8@fixe.home>
+In-Reply-To: <1671125446-57584-3-git-send-email-lizhi.hou@amd.com>
+References: <1671125446-57584-1-git-send-email-lizhi.hou@amd.com>
+        <1671125446-57584-3-git-send-email-lizhi.hou@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMzEgRGVjZW1iZXIgMjAyMiAwMDo0Mg0KPiAN
-Ci4uLg0KPiBBbmQgb24gNjQtYml0LCB3ZSByZWFsbHkgb25seSBuZWVkIHRvIGNoZWNrIHRoZSBo
-aWdoIGJpdC4NCj4gDQo+IEluIGZhY3QsIHdlIGRvbid0IGV2ZW4gd2FudCB0byAqY2hlY2sqIGl0
-LCBiZWNhdXNlIHRoZW4gd2UgbmVlZCB0byBkbw0KPiB0aGF0IGRpc2d1c3RpbmcgYXJyYXlfaW5k
-ZXhfbWFza19ub3NwZWMgdGhpbmcgdG8gbWFzayB0aGUgYml0cyBmb3IgaXQsDQo+IHNvIGl0IHdv
-dWxkIGJlIGV2ZW4gYmV0dGVyIHRvIHVzZSBwdXJlbHkgYXJpdGhtZXRpYyB3aXRoIG5vDQo+IGNv
-bmRpdGlvbmFscyBhbnl3aGVyZS4NCj4gDQo+IEFuZCB0aGF0J3MgZXhhY3RseSB3aGF0IHdlIGNv
-dWxkIGRvIG9uIHg4Ni02NDoNCj4gDQo+ICAgICAgICAgbW92cSAlcmR4LCVyYXgNCj4gICAgICAg
-ICBzaHJxICQ2MywlcmF4DQo+ICAgICAgICAgb3JxICVyYXgsJXJkeA0KPiANCj4gd291bGQgYWN0
-dWFsbHkgYmUgbm90aWNlYWJseSBiZXR0ZXIgdGhhbiB3aGF0IHdlIGRvIG5vdyBmb3IgZm9yDQo+
-IFRBU0tfU0laRSBjaGVja2luZyBfYW5kXyBmb3IgdGhlIGFycmF5IGluZGV4IG1hc2tpbmcgKGZv
-ciBwdXR1c2VyLlMsDQo+IHdlJ2QgdXNlICVyYnggaW5zdGVhZCBvZiAlcmF4IGluIHRoYXQgc2Vx
-dWVuY2UpLg0KLi4uDQo+IEl0IHdvdWxkIGp1c3QgdHVybiBhbGwga2VybmVsIGFkZHJlc3NlcyBp
-bnRvIGFsbCBvbmVzLCB3aGljaCBpcyB0aGVuDQo+IGd1YXJhbnRlZWQgdG8gZmF1bHQuIFNvIG5v
-IG5lZWQgZm9yIGFueSBjb25kaXRpb25hbCB0aGF0IG5ldmVyDQo+IHRyaWdnZXJzIGluIHJlYWwg
-bGlmZSBhbnl3YXkuDQoNCkFyZSBieXRlIGxvYWRzIGd1YXJhbnRlZWQgdG8gZmF1bHQ/DQpJIHN1
-c3BlY3QgdGhlICdhbGwgb25lcycgYWRkcmVzcyBjYW4gYmUgYXNzaWduZWQgdG8gaW8uDQpTbyBn
-ZXQvcHV0X3VzZXIgZm9yIGEgYnl0ZSBwcm9iYWJseSBuZWVkcyBhICdqcycgdGVzdCBhZnRlciB0
-aGUgJ29ycScuDQooSSBkb24ndCB0aGluayB5b3UgbmVlZCB0byB3b3JyeSBhYm91dCBhIGFwZWN1
-bGF0aXZlIGxvYWQgZnJvbSBhbg0KdW5jYWNoZWQgYWRkcmVzcy4pDQoNCi4uLg0KPiBBbmQgb25j
-ZSB3ZSBkb24ndCB0ZXN0IGFnYWluc3QgVEFTS19TSVpFLCB0aGUgbmVlZCBmb3IgVU5UQUdfQURE
-UiBqdXN0DQo+IGdvZXMgYXdheSwgc28gbm93IExBTSBpcyBiZXR0ZXIgdG9vLg0KPiANCj4gSW4g
-b3RoZXIgd29yZHMsIHdlIGNvdWxkIGFjdHVhbGx5IGltcHJvdmUgb24gb3VyIGN1cnJlbnQgY29k
-ZSBfYW5kXw0KPiBzaW1wbGlmeSB0aGUgTEFNIHNpdHVhdGlvbi4gV2luLXdpbi4NCg0KUHJlc3Vt
-YWJseSB0aGUgZmF1bHQgaGFuZGxlciBhbHJlYWR5IGhhcyB0aGUgY29kZSB0byB1bnRhZyBhZGRy
-ZXNzZXMuDQoNCkl0IGhhcyB0byBiZSBzYWlkIHRoYXQgSSBkb24ndCByZWFsbHkgc2VlIHdoeSB0
-YWdnaW5nIGFkZHJlc3NlcyBpcyBhDQpzaWduaWZpY2FudCBiZW5lZml0IHVubGVzcyB0aGUgaGFy
-ZHdhcmUgY2hlY2tzIHRoYW4gdGhlIFBURS9UTEIgaXMNCmFsc28gc2V0IHdpdGggdGhlIGNvcnJl
-Y3QgdGFnLg0KQWxsIGl0IHNlZW1zIHRvIG1lIHRoYXQgaXQgZG9lcyBpdCBtYWtlIG1vcmUgJ3Jh
-bmRvbSBhZGRyZXNzZXMnIHZhbGlkLg0KDQpDbGVhcmx5IGludGVycHJldGVycyBjYW4gc2V0IGFu
-ZCBjaGVjayB0aGUgaGlnaCBhZGRyZXNzIGJpdHMsIGJ1dCB0aGV5DQpjYW4gYWxzbyBtYXNrIHRo
-ZW0gYWZ0ZXIgdGhlIGNoZWNrcyAob3IgdXNlIHhvciB0byBmbGlwIHRoZSBiaXRzIGFuZA0KbGV0
-IHRoZSBjcHUgZmF1bHQgb24gZXJyb3JzKS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRk
-cmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBN
-SzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+Le Thu, 15 Dec 2022 09:30:45 -0800,
+Lizhi Hou <lizhi.hou@amd.com> a =C3=A9crit :
 
+> +};
+> +
+> +static int of_pci_prop_device_type(struct pci_dev *pdev,
+> +				   struct of_changeset *ocs,
+> +				   struct device_node *np)
+> +{
+> +	return of_changeset_add_prop_string(ocs, np, "device_type", "pci");
+> +}
+> +
+> +static int of_pci_prop_address_cells(struct pci_dev *pdev,
+> +				     struct of_changeset *ocs,
+> +				     struct device_node *np)
+> +{
+> +	return of_changeset_add_prop_u32(ocs, np, "#address_cells",
+> +					 OF_PCI_ADDRESS_CELLS);
+> +}
+> +
+> +static int of_pci_prop_size_cells(struct pci_dev *pdev,
+> +				  struct of_changeset *ocs,
+> +				  struct device_node *np)
+> +{
+> +	return of_changeset_add_prop_u32(ocs, np, "#size_cells",
+> +					 OF_PCI_SIZE_CELLS);
+> +}
+
+Hi Lizhi,
+
+For all these functions, the "pdev" parameter is actually unused.
+
+[snip]
+
+> +
+> +static int of_pci_prop_compatible(struct pci_dev *pdev,
+> +				  struct of_changeset *ocs,
+> +				  struct device_node *np)
+> +{
+> +	const char *compat_strs[PROP_COMPAT_NUM] =3D { 0 };
+> +	int i, ret;
+> +
+> +	compat_strs[PROP_COMPAT_PCI_VVVV_DDDD] =3D
+> +		kasprintf(GFP_KERNEL, "pci%x,%x", pdev->vendor, pdev->device);
+
+Maybe it should be better to use "pci%04x,%04x" to keep the existing
+naming.
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
