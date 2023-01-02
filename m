@@ -2,110 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5484665B3D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575A065B3D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236105AbjABPHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
+        id S236304AbjABPIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236264AbjABPHX (ORCPT
+        with ESMTP id S236242AbjABPHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:07:23 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3DA65F8
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:07:23 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id k19so11116395pfg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:07:23 -0800 (PST)
+        Mon, 2 Jan 2023 10:07:49 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF44B9585
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:07:42 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id y19so10735430plb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:07:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wEXS7nrJFORzyDPmh7+FGBbOMiQgOyBfpmUbiyI6pu4=;
-        b=ksEFKm7Ezybsf9oLGYhGyyq9SUeqw7ldNnAXgJPWsgDlHveaQG2HQ0t8A+azOrymmz
-         w6teBZkH4bQoTPToLP4aZAKnPKzAvVw7E5jIvrbL62W5AIInjy4PBUZ6NBTBGrPiuYiV
-         RdIFYU66E5/o+VSA+WhPSoh9SkbhX4w7T7UNbaYeuEPVNWifUslWMXmI7oERQrKbcjMv
-         PT6oxXLbE3yarjKVJqkY5J8FzFbcAHd8v9ycpR7cWIZ3A1XkBXIPMgT6D/0Vlrgynzjo
-         QQMmosORKY+kTsHmdxEc+mGD9mUOw9zi0/cEcif0Zb9Z7vmO8Wfo3/GjL7TAZbmS+Kxe
-         LlKQ==
+        bh=Py+mEqQrMGrkTWxmxdenUzEXoKA3++r71/dyBxZERsw=;
+        b=XqAPGNKYWKsdaCjTLnL19DjUzyvHU1zDCW+L9YztruS26V5NLRL+50aGaQ0+n4MPfH
+         qipaSASdXYBD80SNIVtmnM6eaTylCiYgyg1aO0KBSXzpYp3biaY32Ij0wynLb/ypdHyJ
+         C74mNjYFAJFiBEfm2rINUile4beFOFRNp0EB7FD9ZU64HIKoYuTJQhYMG1B7c5To2MLv
+         qENvQUSxOT2OZXLmPA6b6B4Xy6NptV0rLcYLIArt47DQJBTZP9rNvbMUHhQWyzW3LJrn
+         /lcGBkXao5Xr8s0NSyz6XskOSD1PR+WNN0EU+oWzz+6xjX8yGgBv/s7Fp6imMzA/7GDJ
+         l1cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wEXS7nrJFORzyDPmh7+FGBbOMiQgOyBfpmUbiyI6pu4=;
-        b=wdtX6Z6+WaSSCkI2daTTCLfyHwQemdlz4CsRxC4/KoGPHpDJaEz/hYmaAdYG0M6a9d
-         iEEaqZVashAro1qab58omZPDLWh0y/Kn4SWV/gOKntEgwtETEwhys8TqzoqfsFmekfGi
-         Cod+UPpmIJ4gc3j5+aFZj/UQdKnflxMuJ5XokA2cddGoTDTB4To7aVH9TNBvD9lis7x5
-         oheZ5Oqk5FsMeB4KlAUXziCqXdvvoPSbBsZRwJ650so60L8E7px1vxgsO3tdNnzFw4sY
-         T0IHpoa0eEfTot2ldECnk6vlZHx/B0O+JrSXkSBrkzyLDLAFGblLeCNC5Zm1eLmXdJAP
-         7lJQ==
-X-Gm-Message-State: AFqh2koJdwZeM9ODPN5WRH4GsxgjaN/5qGH1RiT/P01Z6Bl2WXsGEIFy
-        H/uX9rOx6GNzrYW4FHZmcMIaD7rhyluMMvQu6ZDbEA==
-X-Google-Smtp-Source: AMrXdXveB6w6ko5UpGztJDmBUhjBlHnkl7XTn0GFtvIltj3YGiKK2OxzvjEJPtgCrP69aZ6NJTh37oya64dSSpnFuxI=
-X-Received: by 2002:a63:24c4:0:b0:499:c23c:d65b with SMTP id
- k187-20020a6324c4000000b00499c23cd65bmr1292737pgk.541.1672672042769; Mon, 02
- Jan 2023 07:07:22 -0800 (PST)
+        bh=Py+mEqQrMGrkTWxmxdenUzEXoKA3++r71/dyBxZERsw=;
+        b=tLm/avK9RBtSkp3DtcMjTrWEafSGuXivhgzR5o0WDeDEsn0AMS6arFBeRGzY3upcLy
+         5BNsX5YDlOSXirLKEE/JbZRW1b4g76BWGqQaqBz5EwpygTa9PpoOVXXn+fDvSkfswR56
+         4Qj8DSmd4V9kqwRkuZ5nmV5PSGhgeheNgkYeK7EFXl/TlrTBM8Wt5WvCtYXYkxbeDXh5
+         XXYvNu5ATW49c67iMSFC/JJ5knA7/QtlYRigW1OeBCOu0u5Gk18ZxFVcTIeS7f6naddq
+         G3pkUTGWdPQrs9obt2+kwUvKTs9jEX5PguXg6QGtD/fmCRpRSj5nx5f6pxuZEtq2A4sb
+         xi+A==
+X-Gm-Message-State: AFqh2kpcylUhUqcol61KTqr2Ivg22zfFsa+WD6pCh2z70kH0vrkuCG5j
+        2dsa7GzeeVYDoQzQnO2Ck3inu0KIUJuBFgK7tARQag==
+X-Google-Smtp-Source: AMrXdXsb/89JOjMTTfy2Q3dneSOnFo/ez0oRGNhv5+8eBCdxAb2lUwf/bIShv7DuOj+vHcfQTv5jcLFKZG+LBoqY5GM=
+X-Received: by 2002:a17:902:b902:b0:190:e27b:b554 with SMTP id
+ bf2-20020a170902b90200b00190e27bb554mr2443908plb.148.1672672062362; Mon, 02
+ Jan 2023 07:07:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20221223030347.17093-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20221223030347.17093-1-peng.fan@oss.nxp.com>
+References: <20221226073908.17317-1-balamanikandan.gunasundar@microchip.com>
+ <20221226073908.17317-2-balamanikandan.gunasundar@microchip.com> <CACRpkdbORVt9sFCnBFE1U206M92u4fjk9enbDJYZw7HJyAC=ng@mail.gmail.com>
+In-Reply-To: <CACRpkdbORVt9sFCnBFE1U206M92u4fjk9enbDJYZw7HJyAC=ng@mail.gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 2 Jan 2023 16:06:46 +0100
-Message-ID: <CAPDyKFq3f+_8SqupidTqzLmJtDwVaamb-6uWrUN3isivhHZ3PQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: update binding for
- i.MX50 and i.MX7D
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Date:   Mon, 2 Jan 2023 16:07:06 +0100
+Message-ID: <CAPDyKFqRF=X755_H9418i1WZ4W-PxMwkzFnkcRco9mmycYHiPw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] mmc: atmel-mci: Convert to gpio descriptors
+To:     Balamanikandan Gunasundar 
+        <balamanikandan.gunasundar@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        hari.prasathge@microchip.com, dmitry.torokhov@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Dec 2022 at 04:02, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+On Thu, 29 Dec 2022 at 01:23, Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> From: Peng Fan <peng.fan@nxp.com>
+> Hi Balamanikandan,
 >
-> i.MX50 eSDHC is compatible with i.MX53. i.MX7D uSDHC is compatible with
-> i.MX6SL. So update for them.
+> thanks for your patch!
 >
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> On Mon, Dec 26, 2022 at 8:39 AM Balamanikandan Gunasundar
+> <balamanikandan.gunasundar@microchip.com> wrote:
+>
+> > Replace the legacy GPIO APIs with gpio descriptor consumer interface.
+> >
+> > To maintain backward compatibility, we rely on the "cd-inverted"
+> > property to manage the invertion flag instead of GPIO property.
+> >
+> > Signed-off-by: Balamanikandan Gunasundar <balamanikandan.gunasundar@microchip.com>
+>
+> Overall this looks really nice! I thought about converting this driver
+> but was a bit afraid of doing mistakes since it was a bit elaborate.
+> Nice that you use fwnode accessors!
+>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Applied for next, thanks!
+Linus, thanks for helping out by reviewing this!
+
+>
+> Improvement to consider (can also be a separate patch):
+
+I tried to apply the $subject patch as is, but it failed. It needs to
+be rebased on top of my latest next branch. Please re-spin and if
+possible, consider incorporating Linus's suggestions too as part of
+the series.
 
 Kind regards
 Uffe
 
 
-> ---
->  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+
 >
-> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> index dc6256f04b42..546ebcecaf95 100644
-> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> @@ -37,6 +37,12 @@ properties:
->            - fsl,imx8mm-usdhc
->            - fsl,imxrt1050-usdhc
->            - nxp,s32g2-usdhc
-> +      - items:
-> +          - const: fsl,imx50-esdhc
-> +          - const: fsl,imx53-esdhc
-> +      - items:
-> +          - const: fsl,imx7d-usdhc
-> +          - const: fsl,imx6sl-usdhc
->        - items:
->            - enum:
->                - fsl,imx8mq-usdhc
-> --
-> 2.37.1
+> > +       if (slot->detect_pin) {
+> > +               present = !(gpiod_get_raw_value(slot->detect_pin) ^
+> >                             slot->detect_is_active_high);
 >
+> Normally we contain all this active low/high mess in mmc_of_parse(),
+> but I guess this doesn't work here because the of node is different
+> from the device :P
+>
+> Since the code says *explicitly* "active high" not "inverted" as the
+> core code parses it, could you try just push this to gpiolib like
+> we usually do, by deleting the detect_is_active_high stuff and
+> just apply a patch like this?
+>
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index 4fff7258ee41..5979c9a75cf9 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -199,7 +199,9 @@ static void of_gpio_set_polarity_by_property(const
+> struct device_node *np,
+>                 { "fsl,imx8mm-pcie", "reset-gpio", "reset-gpio-active-high" },
+>                 { "fsl,imx8mp-pcie", "reset-gpio", "reset-gpio-active-high" },
+>  #endif
+> -
+> +#if IS_ENABLED(CONFIG_MMC_ATMELMCI)
+> +               { "atmel,hsmci", "cd-gpios", "cd-inverted" },
+> +#endif
+>                 /*
+>                  * The regulator GPIO handles are specified such that the
+>                  * presence or absence of "enable-active-high" solely controls
+>
+> (It's fine to include in your MMC patch if some GPIO maintainer like
+> me ACK it.)
+>
+> Yours,
+> Linus Walleij
