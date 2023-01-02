@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3745365B1D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E568C65B1CE
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:10:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjABMKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 07:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S232642AbjABMKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 07:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbjABMKj (ORCPT
+        with ESMTP id S232107AbjABMKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 07:10:39 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8A16246;
-        Mon,  2 Jan 2023 04:10:36 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 2 Jan 2023 07:10:04 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FAE5FFA;
+        Mon,  2 Jan 2023 04:10:03 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A6E4720D55;
-        Mon,  2 Jan 2023 12:10:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672661435;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9rYew4XXsoCgW1ul1qCY89TbND+PF+8fwJQ+0o43dLE=;
-        b=qzJtrZABDyNcM7PxoubU53A+Qffw1pFQIvwahtQEKuT4lvwkV+vRUwXIJFwllMrFy/LO+U
-        G/h/A5BTaIyShhOqptte1BDkRFEikgz+7wQL3wDnl5jY1u7KSBh6s65AkqSRV+2C/uhzPX
-        KLq0AFscLEqCsyXtIyZ0w5AzeEROSeI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672661435;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9rYew4XXsoCgW1ul1qCY89TbND+PF+8fwJQ+0o43dLE=;
-        b=HKQF8w8/aGsLHi8djqxRVgjnI5kjPUzUwPATh64ERalZltp47fzlSPYHGMlroqncc2S3vd
-        5N0TEFryNTFwzNDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3CD03139C8;
-        Mon,  2 Jan 2023 12:10:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8AgLDrvJsmM+CAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 02 Jan 2023 12:10:35 +0000
-Date:   Mon, 2 Jan 2023 13:05:05 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Tom Rix <trix@redhat.com>
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        nathan@kernel.org, ndesaulniers@google.com, wqu@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] btrfs: handle -Wmaybe-uninitialized with clang
-Message-ID: <20230102120505.GA11562@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20221230175507.1630431-1-trix@redhat.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CA1466600366;
+        Mon,  2 Jan 2023 12:09:59 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1672661401;
+        bh=lkCFrmVPcGTYnst/KLtb52ilxI3n8W6fyPATphFVFjE=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=iQ3dezdKStkSTY+iDw+xekNjCw3j3xjK3tqs70Oo5qVwqy2dSdMI6oi2ZIrMr+lt6
+         YdX4RLq+QvpLyoZLnDLmPl7eWWdRrEoH6fIK1dw+pUFSN9t8XO9QatAV4MctnpBSJv
+         2NG9bt26Ny0miIfMAKsRdmUIZarphEuG8URGcMp7tE0E/IPd/1fcxWnixOvPFLLKdu
+         vf10Ij/rMjxoXgG2qNCai3WBjrSmMlkgI7Gb2aN9sWrV9qG23xBvgPtZQLR5c9wp1r
+         Kcfj/ejgzmIvgnyFaMdKnjkwZSfioly4z44CxQXtJ72olnVXBDr/vdoQl76n2Vai7O
+         1RTBaQ3vX3UNg==
+Message-ID: <54e09399-6ad9-42ca-fc4a-0ff4723f0ab2@collabora.com>
+Date:   Mon, 2 Jan 2023 13:09:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221230175507.1630431-1-trix@redhat.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v7 3/7] dt-bindings: mfd: syscon: Add mt8365-syscfg
+Content-Language: en-US
+To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
+        linus.walleij@linaro.org, matthias.bgg@gmail.com,
+        chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
+        allen-kh.cheng@mediatek.com, nfraprado@collabora.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com
+References: <20230101220149.3035048-1-bero@baylibre.com>
+ <20230101220149.3035048-4-bero@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230101220149.3035048-4-bero@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 12:55:07PM -0500, Tom Rix wrote:
-> The clang build reports this error
-> error: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Werror,-Wunknown-warning-option]
-> make[3]: *** [scripts/Makefile.build:252: fs/btrfs/super.o] Error 1
+Il 01/01/23 23:01, Bernhard Rosenkränzer ha scritto:
+> Document Mediatek mt8365-syscfg
 > 
-> -Wmaybe-uninitialized is a gcc only flag.  Move to setting with cc-option.
-> 
-> Fixes: 1b19c4c249a1 ("btrfs: turn on -Wmaybe-uninitialized")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-Folded to the patch, thanks.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
