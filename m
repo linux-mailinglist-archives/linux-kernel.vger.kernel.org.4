@@ -2,147 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF5965B3D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014F765B3DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236243AbjABPHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
+        id S236308AbjABPIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:08:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236235AbjABPHE (ORCPT
+        with ESMTP id S236283AbjABPIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:07:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8B825D6;
-        Mon,  2 Jan 2023 07:07:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A80E660CEB;
-        Mon,  2 Jan 2023 15:07:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3EEC433F1;
-        Mon,  2 Jan 2023 15:07:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672672022;
-        bh=NElXGm6hHy6K17n7JxUOZurHu/PkYIWVK3rpp2A5LMw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MGJf2GlhoU/N7/K+xRTawCJ/1vPblYadcHWbuVkpco2hZ1ZfKwe1TgXSj0R0L5paa
-         gXG1LTxhw1Accg1+v32qDI/3/0zQPxqjRk89mcHhchxZdp6FpFblqqjlq1oPEt3BJT
-         FB0h6cWlrMhsk2ZOfjNHHegwXbIUvPIQ+npxhFQ+RVwExocOd7DQterTkMv5V/97+u
-         X07bUHsHLS3q5lff7MKTJ2QY6ProjN+QeL1eNUtwtRiJGd2qjm4eTbxIBNBnke6G7R
-         hqBXsFmgF7iUK8ydeJ+an+RVGxHnvH+fr7S/0B6r26fmtbvFqZqcYsDT3En1+SQaH9
-         r5QEunDRA1Emw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pCMPH-0007mK-4b; Mon, 02 Jan 2023 16:07:19 +0100
-Date:   Mon, 2 Jan 2023 16:07:19 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] arm64: dts: qcom: sc8280xp-x13s: disable soundcard
-Message-ID: <Y7LzJ+RRzDNRf3jR@hovoldconsulting.com>
-References: <20230102105038.8074-1-johan+linaro@kernel.org>
- <20230102105038.8074-2-johan+linaro@kernel.org>
- <fc42801a-55d9-90b9-f7f0-48657ec7a373@linaro.org>
+        Mon, 2 Jan 2023 10:08:04 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A7C95AB
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 07:07:58 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id 18so6631718pfx.7
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 07:07:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=32Padg+6hCGNbUOr+i7YKPADHH8ODZ6PAm/7FSi080w=;
+        b=o3kDDhSg/4BKw0h3LN7nnLkP5n88azR2T4lMg++jOkvPcpSodWFNVySeZn/di7Am3V
+         bqtdiloyy3vTewr7iJBrM6xBwS5XXAH2591syXmn+EhDHVviuhjY6IIA/Ds1XbPRbgC4
+         s3RtRmJAESNNku6+O0hM7I0wQtGJ9S51lfufmw1xxtCYMvjBbQ+fBDl6JPTSvjGg98x1
+         OyNFxauuEy/Tvo2N3R6gn1d8R7t+YfbbQW9ukSSYbDYYWW4sE7b6J9hwHJy+xS/f8ER8
+         9gIt1RIivbqyypaNKHlN2gqu7/JiwPoGpzlfrtZeJgQqATh/aFNzXc3Fdx0yMeBj5yxn
+         yAJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=32Padg+6hCGNbUOr+i7YKPADHH8ODZ6PAm/7FSi080w=;
+        b=6MLXpFLqna5zlMXmD4Od/fMS+z8qN0NbNgvDCDdXDrnaIsUTpMJ3DrWu/JgoRpvJI7
+         ky5rc4sDHtuXgzy+4hbKg0f25payas/BJsjMb2wPW3Kp/+hIKdr2s8k47k6apJVh6sV5
+         2xkGINl0aA+YvhRKcyOqOnw3b9nC55jnMapnwQqfomly2OVN++UCe63HFSOVfkie4dbk
+         CZ8049VoXuP6YiPEq5CgrfeJZEy8lcmb+1Ro7eG4r1/cQp6Dm8j6ei0UiLU0yb4UgIJk
+         WT5vJ024QqiscwaEzVLzVJEHARGnnAbKsFoOrS9YxAUXMOJ2OE0wPicKcKQPT84wGNpO
+         kjdg==
+X-Gm-Message-State: AFqh2ko5fQ4zalnA9eCR6dzKm+Fbz/6QsjbcpIdM3Z8HbB8ASB4Fw0vW
+        L1ouw+vgnesXrIWH6IpongjNOMxA74cgYSwR5xO+RQ==
+X-Google-Smtp-Source: AMrXdXvlgdZ1EhWM9+BrEgG6jEOHpwPMS0nCd80DKfupgv9iB+pTOd4h4gP1SRBOJ+HG1yaubXmSSDuGkMJKN2+wG9I=
+X-Received: by 2002:a63:5841:0:b0:477:b650:494b with SMTP id
+ i1-20020a635841000000b00477b650494bmr2406813pgm.434.1672672077956; Mon, 02
+ Jan 2023 07:07:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fc42801a-55d9-90b9-f7f0-48657ec7a373@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220810022509.43743-1-samuel@sholland.org> <CAPDyKFqg0BUbpQwKvZxuMrqoiwBKzZxbgP-e=50yLpKRhQ+zPw@mail.gmail.com>
+ <5a6a65c6-6df3-0d24-b28a-324b28fd4756@sholland.org>
+In-Reply-To: <5a6a65c6-6df3-0d24-b28a-324b28fd4756@sholland.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 2 Jan 2023 16:07:21 +0100
+Message-ID: <CAPDyKFpiuWY+vC1cY8xLozFucsTA0vMHVk_KTpzCfOcXntcBZg@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sunxi-mmc: Fix clock refcount imbalance during unbind
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-sunxi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 01:25:38PM +0100, Krzysztof Kozlowski wrote:
-> On 02/01/2023 11:50, Johan Hovold wrote:
-> > Driver support for the X13s soundcard is not yet in place so disable it
-> > for now to avoid probe failures such as:
-> > 
-> > [   11.077727] qcom-prm gprsvc:service:2:2: DSP returned error[100100f] 1
-> > [   11.077926] rx_macro: probe of 3200000.rxmacro failed with error -22
-> > [   21.221104] platform 3210000.soundwire-controller: deferred probe pending
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  .../boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts  | 12 ++++++++++--
-> >  1 file changed, 10 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > index 0201c6776746..97ff74d5095e 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > @@ -649,6 +649,8 @@ wcd938x: codec {
-> >  		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
-> >  		qcom,rx-device = <&wcd_rx>;
-> >  		qcom,tx-device = <&wcd_tx>;
-> > +
-> > +		status = "disabled";
-> >  	};
-> >  };
-> >  
-> > @@ -669,6 +671,8 @@ &sound {
-> >  		"TX DMIC2", "MIC BIAS3",
-> >  		"TX SWR_ADC1", "ADC2_OUTPUT";
-> >  
-> > +	status = "disabled";
-> > +
-> >  	wcd-playback-dai-link {
-> >  		link-name = "WCD Playback";
-> >  		cpu {
-> > @@ -731,6 +735,8 @@ codec {
-> >  };
-> >  
-> >  &swr0 {
-> > +	status = "disabled";
-> > +
-> >  	left_spkr: wsa8830-left@0,1 {
-> >  		compatible = "sdw10217020200";
-> >  		reg = <0 1>;
-> > @@ -757,7 +763,7 @@ right_spkr: wsa8830-right@0,2{
-> >  };
-> >  
-> >  &swr1 {
-> > -	status = "okay";
-> > +	status = "disabled";
-> >  
-> >  	wcd_rx: wcd9380-rx@0,4 {
-> >  		compatible = "sdw20217010d00";
-> > @@ -767,7 +773,7 @@ wcd_rx: wcd9380-rx@0,4 {
-> >  };
-> >  
-> >  &swr2 {
-> > -	status = "okay";
-> > +	status = "disabled";
-> 
-> That's a double disable.
-> 
-> >  
-> >  	wcd_tx: wcd9380-tx@0,3 {
-> >  		compatible = "sdw20217010d00";
-> > @@ -781,6 +787,8 @@ &vamacro {
-> >  	pinctrl-names = "default";
-> >  	vdd-micb-supply = <&vreg_s10b>;
-> >  	qcom,dmic-sample-rate = <600000>;
-> > +
-> > +	status = "disabled";
-> 
-> That's a double disable.
+On Sun, 1 Jan 2023 at 20:25, Samuel Holland <samuel@sholland.org> wrote:
+>
+> On 8/15/22 05:11, Ulf Hansson wrote:
+> > On Wed, 10 Aug 2022 at 04:25, Samuel Holland <samuel@sholland.org> wrote:
+> >>
+> >> If the controller is suspended by runtime PM, the clock is already
+> >> disabled, so do not try to disable it again during removal. Use
+> >> pm_runtime_disable() to flush any pending runtime PM transitions.
+> >>
+> >> Fixes: 9a8e1e8cc2c0 ("mmc: sunxi: Add runtime_pm support")
+> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> >> ---
+> >>
+> >>  drivers/mmc/host/sunxi-mmc.c | 8 +++++---
+> >>  1 file changed, 5 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
+> >> index b16e12e62e72..3db9f32d6a7b 100644
+> >> --- a/drivers/mmc/host/sunxi-mmc.c
+> >> +++ b/drivers/mmc/host/sunxi-mmc.c
+> >> @@ -1492,9 +1492,11 @@ static int sunxi_mmc_remove(struct platform_device *pdev)
+> >>         struct sunxi_mmc_host *host = mmc_priv(mmc);
+> >>
+> >>         mmc_remove_host(mmc);
+> >> -       pm_runtime_force_suspend(&pdev->dev);
+> >> -       disable_irq(host->irq);
+> >> -       sunxi_mmc_disable(host);
+> >
+> > Perhaps a better option than the below, would just be to drop the
+> > above calls to disable_irq() and sunxi_mmc_disable(), as that is
+> > already managed through the call to pm_runtime_force_suspend().
+>
+> I like the idea, but it will not work for !CONFIG_PM builds, which this
+> driver currently supports.
 
-Yes, that's on purpose. We're temporarily disabling these nodes instead
-of reverting the series which should not have been merged.
+Good point! I have applied the patch for fixes and added a stable tag
+to it, thanks!
 
-Once we have driver support, these properties will be updated again.
+[...]
 
-Johan
+Kind regards
+Uffe
