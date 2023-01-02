@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703F665B5B6
+	by mail.lfdr.de (Postfix) with ESMTP id C4E7E65B5B7
 	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 18:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236698AbjABRMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 12:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S236601AbjABRMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 12:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236418AbjABRLI (ORCPT
+        with ESMTP id S236620AbjABRLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 12:11:08 -0500
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A86EBEF;
-        Mon,  2 Jan 2023 09:11:00 -0800 (PST)
+        Mon, 2 Jan 2023 12:11:13 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A921DB;
+        Mon,  2 Jan 2023 09:11:09 -0800 (PST)
 Received: from toolbox.int.toradex.com ([104.59.205.51]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MOgc4-1p8Wz92vcE-00682G;
- Mon, 02 Jan 2023 18:10:33 +0100
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MZSPL-1pX68t25U5-00LBuJ;
+ Mon, 02 Jan 2023 18:10:34 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     devicetree@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-imx@nxp.com, Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Rob Herring <robh@kernel.org>,
-        Denys Drozdov <denys.drozdov@toradex.com>,
-        Fabio Estevam <festevam@denx.de>,
+        Fabio Estevam <festevam@gmail.com>,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
-        Matthias Schiffer <matthias.schiffer@tq-group.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
+        Marek Vasut <marex@denx.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Reinhold Mueller <reinhold.mueller@emtrion.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH v2 4/5] dt-bindings: arm: fsl: add toradex,apalis-imx8 et al.
-Date:   Mon,  2 Jan 2023 18:10:21 +0100
-Message-Id: <20230102171023.33853-5-marcel@ziswiler.com>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH v2 5/5] arm64: dts: freescale: add initial support for apalis imx8 aka quadmax
+Date:   Mon,  2 Jan 2023 18:10:22 +0100
+Message-Id: <20230102171023.33853-6-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230102171023.33853-1-marcel@ziswiler.com>
 References: <20230102171023.33853-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:SOWcSrb0Ud3I2qBNZXS4sTZwPznjx53p99pNnHRAOKDko7U/Zru
- soqr9PjLAb2pXcw3jTINY/l1ClP1NpnGZVgL/iIYTBLbX4NmVlxlpPJumI8zCtLMXj7FmTz
- KlTBQSlArCS9MLH3Njzo9R+obbinWUh9hh5PqpDKoc2wa/jmDOhiIxEDsxfYUoGNSUhAB2J
- g7GNldJWoK7By4h4MZGlg==
-UI-OutboundReport: notjunk:1;M01:P0:JWAvCcA/+Pc=;4zG8FX6A91eg1Z3tgPVBjKe2KdX
- 7dpcXWXMIJN8+NtCyWJjd0MWze0p92nTxwg/eDoY/BBVoq2bYsnPioNKHX/Ibz+QfnBuRrHt2
- rERvj+eukHxyya/ogoMt33iHlJlv4aJICQ21EYxESLhpw8U5Ly7I/5kHpW18w+RgNDnM9bqpm
- 0ZozuprhiNAd/wZ1mznqZ6ve4UjZavlSR7XSVcvCqImbwTn+SAfqXh/Xi6nfXi5CDsF6pAaXR
- gs5w7laOR6eixiO+9bUqIiVy6JspwzD2ucJZ4DljMMjho2FUW6hKuU066MBYIto7GjnqmhURX
- ZxLAmWDrwxa6NSSnYqOlMEwhUXup2+fEXr9iy95QvbkSwS5hfjuYgf3oojf2jeNq4rLPQVMq4
- 93R2tos+Ka/ymjRMoJNfESV4V5fjDYtiDMQ1GBYnkwGrWnIpLTQuHkZDx1Y0vuQTbH2RdmCXi
- wD0siZVSMwn3g33a0Znwfj1sDSwRvzpzscjdmxorTlOgbe+LXU4ZqOR3JYTNyv8Guwlg2AStl
- +Yu8YJwoXNVeNThrv7E+diX4ehLVoo5hh2tX928nKOg99PHSfgSZIBgGn7TM8JLuNybyo5Cnm
- z0xnyeY49JFZao8ANmHg6qTbmwhw5LuJyi8Q645XKy2o5QtxW/SQa4atSl0JcP3juoiQu/k9r
- JhwdxdtFTZ0IieBjn08W69ET0/6FowOfhEfayGbPKA==
+X-Provags-ID: V03:K1:uDunk1vFVgcL+LpdC5iWM/h60TfSxz/ZesscwM6l6kFqWrcQ7zK
+ 7jZxQLwuyJBkMPjvEcomSaZGpdT2GvqHziIZR+7CCV5ZThz29pnjVA5ocK1JnrghEb9rMRG
+ B6Aw63fodp0DAhTPYoJ2lR8NQTs/JcwNvUYDJgRJ6yNWgwt66wWRXcnJB4yX4AadGF4lS5J
+ 1b5JiKR211VbgyAPwe1Lw==
+UI-OutboundReport: notjunk:1;M01:P0:o4+O332TiUw=;2XcuzH5be7+79dud77pBH/15RW7
+ ZxUAB6e87oDf27Ms8B3Audw51xpVE2wZuVc6LE0iR3cb2TMsg/ApBd1a8GKOteIEsxvjXgxt/
+ t/Zw8i/TouTjnQ3jSUGYuLBk/jEB7o6S5pmQ9pOgTXyulEsU8b3SDmIKvCSTBb/+nbv+9w5q4
+ kt4lwz8JA5knNaSQgYsz5fwXSCJEXFlL0ALxmBL4eGqg6f6O56ieadbvoaODxDAocZ41u3Y6o
+ uIMIE3aL2ATrwNBHwKinTW9AoQwTzPXL5qTQRR13qZVArEc7WdA3afATukJW1unZnCnKNCtjL
+ Ny+b7EMv48gjUkFb2O5e6f9gSqrO1ZoDWoulSQxiPcDqz1UkROHuWVQ1c0KVr5SytRleZCZra
+ pdcFqWncVzgiMngnLu8Luc/6I+lKBqILuTtblW7amMOqpgyxXEo5ITR6IjcmwKvy7pnJGe5DH
+ ACncVGDByKkSh58X0NkUR4bKeYliJ0jzhtTL6wnvsFdmVmWQQNU6dF4KDTEmovX+ESuk212ws
+ kiYAJVzeGL1D0kndAi/u5dWL+iZ/A42lfe00jrdYnC9TGgtNM7OPaskP49zKhBRgvsU5Q4Tq1
+ glWDYtWTK+41Nl3JY0RIzfw425QhBNcB319JXOE/ZAxuQvAyjgvpSaT/7VjoO3vPuG8jyGqQ5
+ 6aHK+r0+tLcyj506sQNt090pRmJCNfgIKmBNK6Mks8ofiDc3g5uFVs/F7wM+YU4=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        WEIRD_QUOTING autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,45 +66,2717 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Add toradex,apalis-imx8 for the Apalis iMX8 aka QuadMax modules and the
-carrier boards (Apalis Evaluation board as well as Ixora V1.1 and V1.2)
-they may be mated in.
+This patch adds the device tree to support Toradex Apalis iMX8 [1] aka
+QuadMax a computer on module which can be used on different carrier
+boards.
+
+The module consists of an NXP i.MX 8 family SoC (either i.MX 8QuadMax or
+8QuadPlus), two PF8100 PMICs, a KSZ9131 Gigabit Ethernet PHY, 2, 4 or 8
+GB of LPDDR4 RAM, an eMMC, an SGTL5000 analogue audio codec, an USB3503A
+USB HSIC hub, an optional I2C EEPROM plus an optional Bluetooth/Wi-Fi
+module.
+
+Anything that is not self-contained on the module is disabled by
+default.
+
+The carrier board device trees include the module's device tree and
+enable the supported peripherals of the carrier board.
+
+Some level of display functionality just landed upstream but requires
+further integration/testing on our side. Therefore, currently only
+basic console UART, eMMC and Ethernet functionality work fine.
+
+As there is no i.MX 8QuadPlus device tree upstream those have been
+dropped. However, apart from an error message during boot about it
+failing to bring up the second Cortex-A72 core this boots fine on
+QuadPlus' as well.
+
+[1] https://www.toradex.com/computer-on-modules/apalis-arm-family/nxp-imx-8
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Acked-by: Rob Herring <robh@kernel.org>
 
 ---
 
-Changes in v2:
-- Fixed missing space in the comment V1.1Module curtsey Max.
-- Added Rob's ack.
+(no changes since v1)
 
- Documentation/devicetree/bindings/arm/fsl.yaml | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm64/boot/dts/freescale/Makefile        |    5 +
+ .../boot/dts/freescale/imx8-apalis-eval.dtsi  |  146 ++
+ .../dts/freescale/imx8-apalis-ixora-v1.1.dtsi |  214 +++
+ .../dts/freescale/imx8-apalis-ixora-v1.2.dtsi |  264 +++
+ .../boot/dts/freescale/imx8-apalis-v1.1.dtsi  | 1510 +++++++++++++++++
+ .../boot/dts/freescale/imx8qm-apalis-eval.dts |   16 +
+ .../freescale/imx8qm-apalis-ixora-v1.1.dts    |   16 +
+ .../dts/freescale/imx8qm-apalis-v1.1-eval.dts |   16 +
+ .../imx8qm-apalis-v1.1-ixora-v1.1.dts         |   16 +
+ .../imx8qm-apalis-v1.1-ixora-v1.2.dts         |   16 +
+ .../dts/freescale/imx8qm-apalis-v1.1.dtsi     |   17 +
+ .../boot/dts/freescale/imx8qm-apalis.dtsi     |  340 ++++
+ 12 files changed, 2576 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-eval.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.1.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.2.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-eval.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-ixora-v1.1.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-eval.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.1.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.2.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis.dtsi
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index 05b5276a0e14..54c030324136 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -1035,6 +1035,18 @@ properties:
-         items:
-           - enum:
-               - fsl,imx8qm-mek           # i.MX8QM MEK Board
-+              - toradex,apalis-imx8      # Apalis iMX8 Modules
-+          - const: fsl,imx8qm
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index ef6f364eaa18..c0d621d1d86e 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -112,6 +112,11 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mq-pico-pi.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-thor96.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-zii-ultra-rmb3.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-zii-ultra-zest.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8qm-apalis-eval.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8qm-apalis-ixora-v1.1.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8qm-apalis-v1.1-eval.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8qm-apalis-v1.1-ixora-v1.1.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8qm-apalis-v1.1-ixora-v1.2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8qm-mek.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8qxp-ai_ml.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8qxp-colibri-eval-v3.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8-apalis-eval.dtsi b/arch/arm64/boot/dts/freescale/imx8-apalis-eval.dtsi
+new file mode 100644
+index 000000000000..010d17fc7309
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8-apalis-eval.dtsi
+@@ -0,0 +1,146 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
 +
-+      - description: i.MX8QM Boards with Toradex Apalis iMX8 Modules
-+        items:
-+          - enum:
-+              - toradex,apalis-imx8-eval            # Apalis iMX8 Module on Apalis Evaluation Board
-+              - toradex,apalis-imx8-v1.1-eval       # Apalis iMX8 V1.1 Module on Apalis Eval. Board
-+              - toradex,apalis-imx8-ixora-v1.1      # Apalis iMX8 Module on Ixora V1.1 Carrier Board
-+              - toradex,apalis-imx8-v1.1-ixora-v1.1 # Apalis iMX8 V1.1 Module on Ixora V1.1 C. Board
-+              - toradex,apalis-imx8-v1.1-ixora-v1.2 # Apalis iMX8 V1.1 Module on Ixora V1.2 C. Board
-+          - const: toradex,apalis-imx8
-           - const: fsl,imx8qm
- 
-       - description: i.MX8QXP based Boards
++/ {
++	aliases {
++		rtc0 = &rtc_i2c;
++		rtc1 = &rtc;
++	};
++
++	reg_usb_host_vbus: regulator-usb-host-vbus {
++		regulator-name = "VCC USBH2(ABCD) / USBH(3|4)";
++	};
++};
++
++&adc0 {
++	status = "okay";
++};
++
++&adc1 {
++	status = "okay";
++};
++
++/* TODO: Audio Mixer */
++
++/* TODO: Asynchronous Sample Rate Converter (ASRC) */
++
++/* TODO: Display Controller */
++
++/* TODO: DPU */
++
++/* Apalis ETH1 */
++&fec1 {
++	status = "okay";
++};
++
++/* TODO: CAN */
++
++/* TODO: GPU */
++
++/* Apalis I2C1 */
++&i2c2 {
++	status = "okay";
++
++	atmel_mxt_ts: touch@4a {
++		compatible = "atmel,maxtouch";
++		interrupt-parent = <&lsio_gpio4>;
++		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;		/* Apalis GPIO5 */
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio5>, <&pinctrl_gpio6>;
++		reg = <0x4a>;
++		reset-gpios = <&lsio_gpio4 2 GPIO_ACTIVE_LOW>;	/* Apalis GPIO6 */
++		status = "disabled";
++	};
++
++	/* M41T0M6 real time clock on carrier board */
++	rtc_i2c: rtc@68 {
++		compatible = "st,m41t0";
++		reg = <0x68>;
++	};
++};
++
++/* Apalis I2C3 (CAM) */
++&i2c3 {
++	status = "okay";
++};
++
++/* Apalis SPI1 */
++&lpspi0 {
++	status = "okay";
++};
++
++/* Apalis SPI2 */
++&lpspi2 {
++	status = "okay";
++};
++
++/* Apalis UART3 */
++&lpuart0 {
++	status = "okay";
++};
++
++/* Apalis UART1 */
++&lpuart1 {
++	status = "okay";
++};
++
++/* Apalis UART4 */
++&lpuart2 {
++	status = "okay";
++};
++
++/* Apalis UART2 */
++&lpuart3 {
++	status = "okay";
++};
++
++/* Apalis PWM3, MXM3 pin 6 */
++&lsio_pwm0 {
++	status = "okay";
++};
++
++/* Apalis PWM4, MXM3 pin 8 */
++&lsio_pwm1 {
++	status = "okay";
++};
++
++/* Apalis PWM1, MXM3 pin 2 */
++&lsio_pwm2 {
++	status = "okay";
++};
++
++/* Apalis PWM2, MXM3 pin 4 */
++&lsio_pwm3 {
++	status = "okay";
++};
++
++/* TODO: Apalis PCIE1 */
++
++/* TODO: Apalis BKL1_PWM */
++
++/* TODO: Apalis DAP1 */
++
++/* TODO: Apalis SATA1 */
++
++/* TODO: Apalis SPDIF1 */
++
++/* TODO: Apalis USBH2, Apalis USBH3 and on-module Wi-Fi via on-module HSIC Hub */
++
++/* Apalis USBO1 */
++&usbotg1 {
++	status = "okay";
++};
++
++/* TODO: Apalis USBH4 SuperSpeed */
++
++/* Apalis MMC1 */
++&usdhc2 {
++	status = "okay";
++};
++
++/* Apalis SD1 */
++&usdhc3 {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.1.dtsi b/arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.1.dtsi
+new file mode 100644
+index 000000000000..13e745ce4ce0
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.1.dtsi
+@@ -0,0 +1,214 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/ {
++	aliases {
++		rtc0 = &rtc_i2c;
++		rtc1 = &rtc;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_leds_ixora>;
++
++		/* MXM3_188 */
++		led4-green {
++			label = "LED_4_GREEN";
++			gpios = <&lsio_gpio5 27 GPIO_ACTIVE_HIGH>;
++		};
++
++		/* MXM3_178 */
++		led4-red {
++			label = "LED_4_RED";
++			gpios = <&lsio_gpio5 29 GPIO_ACTIVE_HIGH>;
++		};
++
++		/* MXM3_152 */
++		led5-green {
++			label = "LED_5_GREEN";
++			gpios = <&lsio_gpio5 20 GPIO_ACTIVE_HIGH>;
++		};
++
++		/* MXM3_156 */
++		led5-red {
++			label = "LED_5_RED";
++			gpios = <&lsio_gpio5 21 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
++	reg_usb_host_vbus: regulator-usb-host-vbus {
++		regulator-name = "VCC_USBH(2|4)";
++	};
++};
++
++&adc0 {
++	status = "okay";
++};
++
++&adc1 {
++	status = "okay";
++};
++
++/* TODO: Audio Mixer */
++
++/* TODO: Asynchronous Sample Rate Converter (ASRC) */
++
++/* TODO: Display Controller */
++
++/* TODO: DPU */
++
++/* Apalis ETH1 */
++&fec1 {
++	status = "okay";
++};
++
++/* TODO: CAN */
++
++/* TODO: GPU */
++
++/* Apalis I2C1 */
++&i2c2 {
++	status = "okay";
++
++	atmel_mxt_ts: touch@4a {
++		compatible = "atmel,maxtouch";
++		interrupt-parent = <&lsio_gpio4>;
++		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;		/* Apalis GPIO5 */
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio5>, <&pinctrl_gpio6>;
++		reg = <0x4a>;
++		reset-gpios = <&lsio_gpio4 2 GPIO_ACTIVE_LOW>;	/* Apalis GPIO6 */
++		status = "disabled";
++	};
++
++	/* M41T0M6 real time clock on carrier board */
++	rtc_i2c: rtc@68 {
++		compatible = "st,m41t0";
++		reg = <0x68>;
++	};
++};
++
++/* Apalis I2C3 (CAM) */
++&i2c3 {
++	status = "okay";
++};
++
++&iomuxc {
++	pinctrl-0 = <&pinctrl_cam1_gpios>, <&pinctrl_dap1_gpios>,
++		    <&pinctrl_esai0_gpios>, <&pinctrl_fec2_gpios>,
++		    <&pinctrl_gpio3>, <&pinctrl_gpio4>, <&pinctrl_gpio_usbh_oc_n>,
++		    <&pinctrl_lpuart1ctrl>, <&pinctrl_lvds0_i2c0_gpio>,
++		    <&pinctrl_lvds1_i2c0_gpios>, <&pinctrl_mipi_dsi_0_1_en>,
++		    <&pinctrl_mipi_dsi1_gpios>, <&pinctrl_mlb_gpios>,
++		    <&pinctrl_qspi1a_gpios>, <&pinctrl_sata1_act>,
++		    <&pinctrl_sim0_gpios>, <&pinctrl_uart24_forceoff>,
++		    <&pinctrl_usdhc1_gpios>;
++
++	pinctrl_leds_ixora: ledsixoragrp {
++		fsl,pins =
++			<IMX8QM_USDHC2_DATA1_LSIO_GPIO5_IO27	0x06000061>, /* LED_4_GREEN */
++			<IMX8QM_USDHC2_DATA3_LSIO_GPIO5_IO29	0x06000061>, /* LED_4_RED */
++			<IMX8QM_USDHC1_DATA5_LSIO_GPIO5_IO20	0x06000061>, /* LED_5_GREEN */
++			<IMX8QM_USDHC1_DATA6_LSIO_GPIO5_IO21	0x06000061>; /* LED_5_RED */
++	};
++
++	pinctrl_uart24_forceoff: uart24forceoffgrp {
++		fsl,pins =
++			<IMX8QM_USDHC2_CMD_LSIO_GPIO5_IO25		0x00000021>;
++	};
++};
++
++/* Apalis SPI1 */
++&lpspi0 {
++	status = "okay";
++};
++
++/* Apalis SPI2 */
++&lpspi2 {
++	status = "okay";
++};
++
++/* Apalis UART3 */
++&lpuart0 {
++	status = "okay";
++};
++
++/* Apalis UART1 */
++&lpuart1 {
++	status = "okay";
++};
++
++/* Apalis UART4 */
++&lpuart2 {
++	status = "okay";
++};
++
++/* Apalis UART2 */
++&lpuart3 {
++	status = "okay";
++};
++
++&lsio_gpio5 {
++	ngpios = <32>;
++	gpio-line-names = "gpio5-00", "gpio5-01", "gpio5-02", "gpio5-03",
++			  "gpio5-04", "gpio5-05", "gpio5-06", "gpio5-07",
++			  "gpio5-08", "gpio5-09", "gpio5-10", "gpio5-11",
++			  "gpio5-12", "gpio5-13", "gpio5-14", "gpio5-15",
++			  "gpio5-16", "gpio5-17", "gpio5-18", "gpio5-19",
++			  "LED-5-GREEN", "LED-5-RED", "gpio5-22", "gpio5-23",
++			  "gpio5-24", "UART24-FORCEOFF", "gpio5-26",
++			  "LED-4-GREEN", "gpio5-28", "LED-4-RED", "gpio5-30",
++			  "gpio5-31";
++};
++
++/* Apalis PWM3, MXM3 pin 6 */
++&lsio_pwm0 {
++	status = "okay";
++};
++
++/* Apalis PWM4, MXM3 pin 8 */
++&lsio_pwm1 {
++	status = "okay";
++};
++
++/* Apalis PWM1, MXM3 pin 2 */
++&lsio_pwm2 {
++	status = "okay";
++};
++
++/* Apalis PWM2, MXM3 pin 4 */
++&lsio_pwm3 {
++	status = "okay";
++};
++
++/* TODO: Apalis PCIE1 */
++
++/* TODO: Apalis BKL1_PWM */
++
++/* TODO: Apalis DAP1 */
++
++/* TODO: Apalis SATA1 */
++
++/* TODO: Apalis SPDIF1 */
++
++/* TODO: Apalis USBH2, Apalis USBH3 and on-module Wi-Fi via on-module HSIC Hub */
++
++/* Apalis USBO1 */
++&usbotg1 {
++	status = "okay";
++};
++
++/* TODO: Apalis USBH4 SuperSpeed */
++
++/* Apalis MMC1 */
++&usdhc2 {
++	bus-width = <4>;
++	pinctrl-0 = <&pinctrl_usdhc2_4bit>, <&pinctrl_mmc1_cd>;
++	pinctrl-1 = <&pinctrl_usdhc2_4bit_100mhz>, <&pinctrl_mmc1_cd>;
++	pinctrl-2 = <&pinctrl_usdhc2_4bit_200mhz>, <&pinctrl_mmc1_cd>;
++	pinctrl-3 = <&pinctrl_usdhc2_4bit_sleep>, <&pinctrl_mmc1_cd_sleep>;
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.2.dtsi b/arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.2.dtsi
+new file mode 100644
+index 000000000000..61d83f826c3f
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.2.dtsi
+@@ -0,0 +1,264 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/ {
++	aliases {
++		rtc0 = &rtc_i2c;
++		rtc1 = &rtc;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_leds_ixora>;
++
++		/* MXM3_188 */
++		led4-green {
++			label = "LED_4_GREEN";
++			gpios = <&lsio_gpio5 27 GPIO_ACTIVE_HIGH>;
++		};
++
++		/* MXM3_178 */
++		led4-red {
++			label = "LED_4_RED";
++			gpios = <&lsio_gpio5 29 GPIO_ACTIVE_HIGH>;
++		};
++
++		/* MXM3_152 */
++		led5-green {
++			label = "LED_5_GREEN";
++			gpios = <&lsio_gpio5 20 GPIO_ACTIVE_HIGH>;
++		};
++
++		/* MXM3_156 */
++		led5-red {
++			label = "LED_5_RED";
++			gpios = <&lsio_gpio5 21 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
++	reg_3v3_vmmc: regulator-3v3-vmmc {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		/* MMC1_PWR_CTRL */
++		gpio = <&lsio_gpio5 19 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_enable_3v3_vmmc>;
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "3v3_vmmc";
++	};
++
++	reg_can1_supply: regulator-can1-supply {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&lsio_gpio5 22 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_enable_can1_power>;
++		regulator-name = "can1_supply";
++	};
++
++	reg_can2_supply: regulator-can2-supply {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&lsio_gpio2 8 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_sata1_act>;
++		regulator-name = "can2_supply";
++	};
++
++	reg_usb_host_vbus: regulator-usb-host-vbus {
++		regulator-name = "VCC_USBH(2|4)";
++	};
++};
++
++&adc0 {
++	status = "okay";
++};
++
++&adc1 {
++	status = "okay";
++};
++
++/* TODO: Audio Mixer */
++
++/* TODO: Asynchronous Sample Rate Converter (ASRC) */
++
++/* TODO: Display Controller */
++
++/* TODO: DPU */
++
++/* Apalis ETH1 */
++&fec1 {
++	status = "okay";
++};
++
++/* TODO: CAN */
++
++/* TODO: GPU */
++
++/* Apalis I2C1 */
++&i2c2 {
++	status = "okay";
++
++	atmel_mxt_ts: touch@4a {
++		compatible = "atmel,maxtouch";
++		interrupt-parent = <&lsio_gpio4>;
++		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;		/* Apalis GPIO5 */
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio5>, <&pinctrl_gpio6>;
++		reg = <0x4a>;
++		reset-gpios = <&lsio_gpio4 2 GPIO_ACTIVE_LOW>;	/* Apalis GPIO6 */
++		status = "disabled";
++	};
++
++	/* M41T0M6 real time clock on carrier board */
++	rtc_i2c: rtc@68 {
++		compatible = "st,m41t0";
++		reg = <0x68>;
++	};
++
++	eeprom: eeprom@50 {
++		compatible = "atmel,24c02";
++		pagesize = <16>;
++		reg = <0x50>;
++	};
++};
++
++/* Apalis I2C3 (CAM) */
++&i2c3 {
++	status = "okay";
++};
++
++&iomuxc {
++	pinctrl-0 = <&pinctrl_cam1_gpios>, <&pinctrl_dap1_gpios>,
++		    <&pinctrl_esai0_gpios>, <&pinctrl_fec2_gpios>,
++		    <&pinctrl_gpio3>, <&pinctrl_gpio4>, <&pinctrl_gpio_usbh_oc_n>,
++		    <&pinctrl_lpuart1ctrl>, <&pinctrl_lvds0_i2c0_gpio>,
++		    <&pinctrl_lvds1_i2c0_gpios>, <&pinctrl_mipi_dsi_0_1_en>,
++		    <&pinctrl_mipi_dsi1_gpios>, <&pinctrl_mlb_gpios>,
++		    <&pinctrl_qspi1a_gpios>, <&pinctrl_sim0_gpios>,
++		    <&pinctrl_uart24_forceoff>, <&pinctrl_usdhc1_gpios>;
++
++	/* PMIC MMC1 power-switch */
++	pinctrl_enable_3v3_vmmc: enable3v3vmmcgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_DATA4_LSIO_GPIO5_IO19	0x00000021>; /* MXM3_148, PMIC */
++	};
++
++	/* FlexCAN PMIC */
++	pinctrl_enable_can1_power: enablecan1powergrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_DATA7_LSIO_GPIO5_IO22	0x00000021>; /* MXM3_158, PMIC */
++	};
++
++	pinctrl_leds_ixora: ledsixoragrp {
++		fsl,pins =
++			<IMX8QM_USDHC2_DATA1_LSIO_GPIO5_IO27	0x06000061>, /* LED_4_GREEN */
++			<IMX8QM_USDHC2_DATA3_LSIO_GPIO5_IO29	0x06000061>, /* LED_4_RED */
++			<IMX8QM_USDHC1_DATA5_LSIO_GPIO5_IO20	0x06000061>, /* LED_5_GREEN */
++			<IMX8QM_USDHC1_DATA6_LSIO_GPIO5_IO21	0x06000061>; /* LED_5_RED */
++	};
++
++	pinctrl_uart24_forceoff: uart24forceoffgrp {
++		fsl,pins =
++			<IMX8QM_USDHC2_CMD_LSIO_GPIO5_IO25		0x00000021>;
++	};
++};
++
++/* Apalis SPI1 */
++&lpspi0 {
++	status = "okay";
++};
++
++/* Apalis SPI2 */
++&lpspi2 {
++	status = "okay";
++};
++
++/* Apalis UART3 */
++&lpuart0 {
++	status = "okay";
++};
++
++/* Apalis UART1 */
++&lpuart1 {
++	status = "okay";
++};
++
++/* Apalis UART4 */
++&lpuart2 {
++	status = "okay";
++};
++
++/* Apalis UART2 */
++&lpuart3 {
++	status = "okay";
++};
++
++&lsio_gpio5 {
++	ngpios = <32>;
++	gpio-line-names = "gpio5-00", "gpio5-01", "gpio5-02", "gpio5-03",
++			  "gpio5-04", "gpio5-05", "gpio5-06", "gpio5-07",
++			  "gpio5-08", "gpio5-09", "gpio5-10", "gpio5-11",
++			  "gpio5-12", "gpio5-13", "gpio5-14", "gpio5-15",
++			  "gpio5-16", "gpio5-17", "gpio5-18", "gpio5-19",
++			  "LED-5-GREEN", "LED-5-RED", "gpio5-22", "gpio5-23",
++			  "gpio5-24", "UART24-FORCEOFF", "gpio5-26",
++			  "LED-4-GREEN", "gpio5-28", "LED-4-RED", "gpio5-30",
++			  "gpio5-31";
++};
++
++/* Apalis PWM3, MXM3 pin 6 */
++&lsio_pwm0 {
++	status = "okay";
++};
++
++/* Apalis PWM4, MXM3 pin 8 */
++&lsio_pwm1 {
++	status = "okay";
++};
++
++/* Apalis PWM1, MXM3 pin 2 */
++&lsio_pwm2 {
++	status = "okay";
++};
++
++/* Apalis PWM2, MXM3 pin 4 */
++&lsio_pwm3 {
++	status = "okay";
++};
++
++/* TODO: Apalis PCIE1 */
++
++/* TODO: Apalis BKL1_PWM */
++
++/* TODO: Apalis DAP1 */
++
++/* TODO: Apalis SATA1 */
++
++/* TODO: Apalis SPDIF1 */
++
++/* TODO: Apalis USBH2, Apalis USBH3 and on-module Wi-Fi via on-module HSIC Hub */
++
++/* Apalis USBO1 */
++&usbotg1 {
++	status = "okay";
++};
++
++/* TODO: Apalis USBH4 SuperSpeed */
++
++/* Apalis MMC1 */
++&usdhc2 {
++	bus-width = <4>;
++	cap-power-off-card;
++	/delete-property/ no-1-8-v;
++	pinctrl-0 = <&pinctrl_usdhc2_4bit>, <&pinctrl_mmc1_cd>;
++	pinctrl-1 = <&pinctrl_usdhc2_4bit_100mhz>, <&pinctrl_mmc1_cd>;
++	pinctrl-2 = <&pinctrl_usdhc2_4bit_200mhz>, <&pinctrl_mmc1_cd>;
++	pinctrl-3 = <&pinctrl_usdhc2_4bit_sleep>, <&pinctrl_mmc1_cd_sleep>;
++	vmmc-supply = <&reg_3v3_vmmc>;
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi b/arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi
+new file mode 100644
+index 000000000000..0b6ff8c893e1
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi
+@@ -0,0 +1,1510 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++#include <dt-bindings/pwm/pwm.h>
++
++/ {
++	chosen {
++		stdout-path = &lpuart1;
++	};
++
++	/* Apalis BKL1 */
++	backlight: backlight {
++		compatible = "pwm-backlight";
++		brightness-levels = <0 45 63 88 119 158 203 255>;
++		default-brightness-level = <4>;
++		enable-gpios = <&lsio_gpio1 4 GPIO_ACTIVE_HIGH>; /* Apalis BKL1_ON */
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio_bkl_on>;
++		/* TODO: hook-up to Apalis BKL1_PWM */
++		status = "disabled";
++	};
++
++	gpio_fan: gpio-fan {
++		compatible = "gpio-fan";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio8>;
++		gpios = <&lsio_gpio3 28 GPIO_ACTIVE_HIGH>;
++		gpio-fan,speed-map = <	 0 0
++				      3000 1>;
++	};
++
++/* TODO: LVDS Panel */
++
++/* TODO: Shared PCIe/SATA Reference Clock */
++
++/* TODO: PCIe Wi-Fi Reference Clock */
++
++	/*
++	 * Power management bus used to control LDO1OUT of the
++	 * second PMIC PF8100. This is used for controlling voltage levels of
++	 * typespecific RGMII signals and Apalis UART2_RTS UART2_CTS.
++	 *
++	 * IMX_SC_R_BOARD_R1 for 3.3V
++	 * IMX_SC_R_BOARD_R2 for 1.8V
++	 * IMX_SC_R_BOARD_R3 for 2.5V
++	 * Note that for 2.5V operation the pad muxing needs to be changed,
++	 * compare with PSW_OVR field of IMX8QM_COMP_CTL_GPIO_1V8_3V3_ENET_ENETA_PAD.
++	 *
++	 * those power domains are mutually exclusive.
++	 */
++	reg_ext_rgmii: regulator-ext-rgmii {
++		compatible = "regulator-fixed";
++		regulator-name = "VDD_EXT_RGMII (LDO1)";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		power-domains = <&pd IMX_SC_R_BOARD_R1>;
++
++		regulator-state-mem {
++			regulator-off-in-suspend;
++		};
++	};
++
++	reg_module_3v3: regulator-module-3v3 {
++		compatible = "regulator-fixed";
++		regulator-name = "+V3.3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
++
++	reg_module_3v3_avdd: regulator-module-3v3-avdd {
++		compatible = "regulator-fixed";
++		regulator-name = "+V3.3_AUDIO";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
++
++	reg_module_wifi: regulator-module-wifi {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&lsio_gpio1 28 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_wifi_pdn>;
++		regulator-name = "wifi_pwrdn_fake_regulator";
++		regulator-settling-time-us = <100>;
++
++		regulator-state-mem {
++			regulator-off-in-suspend;
++		};
++	};
++
++	reg_pcie_switch: regulator-pcie-switch {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio7>;
++		enable-active-high;
++		gpio = <&lsio_gpio3 26 GPIO_ACTIVE_HIGH>;
++		regulator-name = "pcie_switch";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		startup-delay-us = <100000>;
++	};
++
++	reg_usb_host_vbus: regulator-usb-host-vbus {
++			compatible = "regulator-fixed";
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_usbh_en>;
++			regulator-min-microvolt = <5000000>;
++			regulator-max-microvolt = <5000000>;
++			enable-active-high;
++			/* Apalis USBH_EN */
++			gpio = <&lsio_gpio4 4 GPIO_ACTIVE_HIGH>;
++			regulator-always-on;
++	};
++
++	reg_usb_hsic: regulator-usb-hsic {
++		compatible = "regulator-fixed";
++		regulator-name = "usb-hsic-dummy";
++		regulator-min-microvolt = <3000000>;
++		regulator-max-microvolt = <3000000>;
++	};
++
++	reg_usb_phy: regulator-usb-hsic1 {
++		compatible = "regulator-fixed";
++		regulator-name = "usb-phy-dummy";
++		regulator-min-microvolt = <3000000>;
++		regulator-max-microvolt = <3000000>;
++	};
++
++	reg_vref_1v8: regulator-vref-1v8 {
++		compatible = "regulator-fixed";
++		regulator-name = "+V1.8";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++	};
++
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		decoder_boot: decoder_boot@84000000 {
++			no-map;
++			reg = <0 0x84000000 0 0x2000000>;
++		};
++
++		encoder1_boot: encoder1_boot@86000000 {
++			no-map;
++			reg = <0 0x86000000 0 0x200000>;
++		};
++
++		encoder2_boot: encoder2_boot@86200000 {
++			no-map;
++			reg = <0 0x86200000 0 0x200000>;
++		};
++
++		/*
++		 * reserved-memory layout
++		 * 0x8800_0000 ~ 0x8FFF_FFFF is reserved for M4
++		 * Shouldn't be used at A core and Linux side.
++		 *
++		 */
++		m4_reserved: m4@88000000 {
++			no-map;
++			reg = <0 0x88000000 0 0x8000000>;
++		};
++
++		rpmsg_reserved: rpmsg@90000000 {
++			no-map;
++			reg = <0 0x90200000 0 0x200000>;
++		};
++
++		vdevbuffer: vdevbuffer@90400000 {
++			compatible = "shared-dma-pool";
++			reg = <0 0x90400000 0 0x100000>;
++			no-map;
++		};
++
++		decoder_rpc: decoder_rpc@92000000 {
++			no-map;
++			reg = <0 0x92000000 0 0x200000>;
++		};
++
++		dsp_reserved: dsp@92400000 {
++			no-map;
++			reg = <0 0x92400000 0 0x2000000>;
++		};
++
++		encoder1_rpc: encoder1_rpc@94400000 {
++			no-map;
++			reg = <0 0x94400000 0 0x700000>;
++		};
++
++		encoder2_rpc: encoder2_rpc@94b00000 {
++			no-map;
++			reg = <0 0x94b00000 0 0x700000>;
++		};
++
++		/* global autoconfigured region for contiguous allocations */
++		linux,cma {
++			compatible = "shared-dma-pool";
++			reusable;
++			size = <0 0x3c000000>;
++			alloc-ranges = <0 0xc0000000 0 0x3c000000>;
++			linux,cma-default;
++		};
++	};
++
++	/* TODO: Apalis Analogue Audio */
++
++	/* TODO: HDMI Audio */
++
++	/* TODO: Apalis SPDIF1 */
++
++	touchscreen: vf50-touchscreen {
++		compatible = "toradex,vf50-touchscreen";
++		io-channels = <&adc1 2>,<&adc1 1>,
++			      <&adc1 0>,<&adc1 3>;
++		interrupt-parent = <&lsio_gpio3>;
++		interrupts = <22 IRQ_TYPE_LEVEL_LOW>;
++		pinctrl-names = "idle","default";
++		pinctrl-0 = <&pinctrl_touchctrl_idle>, <&pinctrl_touchctrl_gpios>;
++		pinctrl-1 = <&pinctrl_adc1>, <&pinctrl_touchctrl_gpios>;
++		vf50-ts-min-pressure = <200>;
++		xp-gpios = <&lsio_gpio2 4 GPIO_ACTIVE_LOW>;
++		xm-gpios = <&lsio_gpio2 5 GPIO_ACTIVE_HIGH>;
++		yp-gpios = <&lsio_gpio2 17 GPIO_ACTIVE_LOW>;
++		ym-gpios = <&lsio_gpio2 21 GPIO_ACTIVE_HIGH>;
++		/*
++		 * NOTE: you must remove the pinctrl-adc1 from the adc1
++		 * node below to use the touchscreen
++		 */
++		status = "disabled";
++	};
++
++};
++
++&adc0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc0>;
++	vref-supply = <&reg_vref_1v8>;
++};
++
++&adc1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc1>;
++	vref-supply = <&reg_vref_1v8>;
++};
++
++/* TODO: Asynchronous Sample Rate Converter (ASRC) */
++
++/* Apalis ETH1 */
++&fec1 {
++	fsl,magic-packet;
++	phy-handle = <&ethphy0>;
++	phy-mode = "rgmii-id";
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_fec1>;
++	pinctrl-1 = <&pinctrl_fec1_sleep>;
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ethphy0: ethernet-phy@7 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			interrupt-parent = <&lsio_gpio1>;
++			interrupts = <29 IRQ_TYPE_LEVEL_LOW>;
++			micrel,led-mode = <0>;
++			reg = <7>;
++			reset-assert-us = <2>;
++			reset-deassert-us = <2>;
++			reset-gpios = <&lsio_gpio1 11 GPIO_ACTIVE_LOW>;
++			reset-names = "phy-reset";
++		};
++	};
++};
++
++/* TODO: Apalis CAN1 (driver upstream but device tree part missing) */
++
++/* TODO: Apalis CAN2 (driver upstream but device tree part missing) */
++
++/* TODO: Apalis CAN3 (optional, driver upstream but device tree part missing) */
++
++/* TODO: Apalis HDMI1 */
++
++/* On-module I2C */
++&i2c1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <100000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpi2c1>;
++	status = "okay";
++
++	/* TODO: Audio Codec */
++
++	/* USB3503A */
++	usb3503@8 {
++		compatible = "smsc,usb3503a";
++		connect-gpios = <&lsio_gpio0 31 GPIO_ACTIVE_LOW>;
++		initial-mode = <1>;
++		intn-gpios = <&lsio_gpio1 1 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usb3503a>;
++		refclk-frequency = <25000000>;
++		reg = <0x08>;
++		reset-gpios = <&lsio_gpio1 2 GPIO_ACTIVE_LOW>;
++	};
++};
++
++/* Apalis I2C1 */
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <100000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpi2c2>;
++};
++
++/* Apalis I2C3 (CAM) */
++&i2c3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <100000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpi2c3>;
++};
++
++&jpegdec {
++	status = "okay";
++};
++
++&jpegenc {
++	status = "okay";
++};
++
++/* TODO: Apalis LVDS1 */
++
++/* Apalis SPI1 */
++&lpspi0 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	cs-gpios = <&lsio_gpio3 5 GPIO_ACTIVE_LOW>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpspi0>;
++};
++
++/* Apalis SPI2 */
++&lpspi2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	cs-gpios = <&lsio_gpio3 10 GPIO_ACTIVE_LOW>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpspi2>;
++};
++
++/* Apalis UART3 */
++&lpuart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpuart0>;
++};
++
++/* Apalis UART1 */
++&lpuart1 {
++	dma-names = "","";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpuart1>;
++};
++
++/* Apalis UART4 */
++&lpuart2 {
++	dma-names = "","";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpuart2>;
++};
++
++/* Apalis UART2 */
++&lpuart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpuart3>;
++};
++
++&lsio_gpio0 {
++	gpio-line-names = "MXM3_279",
++			  "MXM3_277",
++			  "MXM3_135",
++			  "MXM3_203",
++			  "MXM3_201",
++			  "MXM3_275",
++			  "MXM3_110",
++			  "MXM3_120",
++			  "MXM3_1/GPIO1",
++			  "MXM3_3/GPIO2",
++			  "MXM3_124",
++			  "MXM3_122",
++			  "MXM3_5/GPIO3",
++			  "MXM3_7/GPIO4",
++			  "",
++			  "",
++			  "MXM3_4",
++			  "MXM3_211",
++			  "MXM3_209",
++			  "MXM3_2",
++			  "MXM3_136",
++			  "MXM3_134",
++			  "MXM3_6",
++			  "MXM3_8",
++			  "MXM3_112",
++			  "MXM3_118",
++			  "MXM3_114",
++			  "MXM3_116";
++};
++
++&lsio_gpio1 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_286",
++			  "",
++			  "MXM3_87",
++			  "MXM3_99",
++			  "MXM3_138",
++			  "MXM3_140",
++			  "MXM3_239",
++			  "",
++			  "MXM3_281",
++			  "MXM3_283",
++			  "MXM3_126",
++			  "MXM3_132",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_173",
++			  "MXM3_175",
++			  "MXM3_123";
++
++	hdmi-ctrl-hog {
++		gpio-hog;
++		gpios = <30 GPIO_ACTIVE_HIGH>;
++		line-name = "CONNECTOR_IS_HDMI";
++		/* Set signals depending on HDP device type, 0 DP, 1 HDMI */
++		output-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_hdmi_ctrl>;
++	};
++};
++
++&lsio_gpio2 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_198",
++			  "MXM3_35",
++			  "MXM3_164",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_217",
++			  "MXM3_215",
++			  "",
++			  "",
++			  "MXM3_193",
++			  "MXM3_194",
++			  "MXM3_37",
++			  "",
++			  "MXM3_271",
++			  "MXM3_273",
++			  "MXM3_195",
++			  "MXM3_197",
++			  "MXM3_177",
++			  "MXM3_179",
++			  "MXM3_181",
++			  "MXM3_183",
++			  "MXM3_185",
++			  "MXM3_187";
++
++	/*
++	 * Add GPIO2_20 as a wakeup source:
++	 * Pin:  101	SC_P_SPI3_CS0 (MXM3_37/WAKE1_MICO)
++	 * Type: 5	SC_PAD_WAKEUP_FALL_EDGE
++	 * Line: 20
++	 */
++	 pad-wakeup = <IMX8QM_SPI3_CS0 5 20>;
++	 pad-wakeup-num = <1>;
++
++	pcie_wifi_hog {
++		gpio-hog;
++		gpios = <11 GPIO_ACTIVE_HIGH>;
++		line-name = "PCIE_WIFI_CLK";
++		output-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pcie_wifi_refclk>;
++	};
++};
++
++&lsio_gpio3 {
++	gpio-line-names = "MXM3_191",
++			  "",
++			  "MXM3_221",
++			  "MXM3_225",
++			  "MXM3_223",
++			  "MXM3_227",
++			  "MXM3_200",
++			  "MXM3_235",
++			  "MXM3_231",
++			  "MXM3_229",
++			  "MXM3_233",
++			  "MXM3_204",
++			  "MXM3_196",
++			  "",
++			  "MXM3_202",
++			  "",
++			  "",
++			  "",
++			  "MXM3_305",
++			  "MXM3_307",
++			  "MXM3_309",
++			  "MXM3_311",
++			  "MXM3_315",
++			  "MXM3_317",
++			  "MXM3_319",
++			  "MXM3_321",
++			  "MXM3_15/GPIO7",
++			  "MXM3_63",
++			  "MXM3_17/GPIO8",
++			  "MXM3_12",
++			  "MXM3_14",
++			  "MXM3_16";
++};
++
++&lsio_gpio4 {
++	gpio-line-names = "MXM3_18",
++			  "MXM3_11/GPIO5",
++			  "MXM3_13/GPIO6",
++			  "MXM3_274",
++			  "MXM3_84",
++			  "MXM3_262",
++			  "MXM3_96",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_190",
++			  "",
++			  "",
++			  "",
++			  "MXM3_269",
++			  "MXM3_251",
++			  "MXM3_253",
++			  "MXM3_295",
++			  "MXM3_299",
++			  "MXM3_301",
++			  "MXM3_297",
++			  "MXM3_293",
++			  "MXM3_291",
++			  "MXM3_289",
++			  "MXM3_287";
++
++	/* Enable pcie root / sata ref clock unconditionally */
++	pcie_sata_hog {
++		gpio-hog;
++		gpios = <11 GPIO_ACTIVE_HIGH>;
++		line-name = "PCIE_SATA_CLK";
++		output-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pcie_sata_refclk>;
++	};
++};
++
++&lsio_gpio5 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_150",
++			  "MXM3_160",
++			  "MXM3_162",
++			  "MXM3_144",
++			  "MXM3_146",
++			  "MXM3_148",
++			  "MXM3_152",
++			  "MXM3_156",
++			  "MXM3_158",
++			  "MXM3_159",
++			  "MXM3_184",
++			  "MXM3_180",
++			  "MXM3_186",
++			  "MXM3_188",
++			  "MXM3_176",
++			  "MXM3_178";
++};
++
++&lsio_gpio6 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_261",
++			  "MXM3_263",
++			  "MXM3_259",
++			  "MXM3_257",
++			  "MXM3_255",
++			  "MXM3_128",
++			  "MXM3_130",
++			  "MXM3_265",
++			  "MXM3_249",
++			  "MXM3_247",
++			  "MXM3_245",
++			  "MXM3_243";
++};
++
++/* Apalis PWM3, MXM3 pin 6 */
++&lsio_pwm0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm0>;
++	#pwm-cells = <3>;
++};
++
++/* Apalis PWM4, MXM3 pin 8 */
++&lsio_pwm1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm1>;
++	#pwm-cells = <3>;
++};
++
++/* Apalis PWM1, MXM3 pin 2 */
++&lsio_pwm2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm2>;
++	#pwm-cells = <3>;
++};
++
++/* Apalis PWM2, MXM3 pin 4 */
++&lsio_pwm3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm3>;
++	#pwm-cells = <3>;
++};
++
++/* TODO: Messaging Units */
++
++/* TODO: Apalis PCIE1 */
++
++/* TODO: On-module Wi-Fi */
++
++/* TODO: Apalis BKL1_PWM */
++
++/* TODO: Apalis DAP1 */
++
++/* TODO: Apalis SATA1 */
++
++/* TODO: Apalis SPDIF1 */
++
++/* TODO: Thermal Zones */
++
++/* TODO: Apalis USBH2, Apalis USBH3 and on-module Wi-Fi via on-module HSIC Hub */
++
++/* TODO: Apalis USBH4 */
++
++/* Apalis USBO1 */
++&usbphy1 {
++	phy-3p0-supply = <&reg_usb_phy>;
++	status = "okay";
++};
++
++&usbotg1 {
++	adp-disable;
++	ci-disable-lpm;
++	hnp-disable;
++	over-current-active-low;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usbotg1>;
++	power-active-high;
++	srp-disable;
++};
++
++/* On-module eMMC */
++&usdhc1 {
++	bus-width = <8>;
++	non-removable;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc1>;
++	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
++	status = "okay";
++};
++
++/* Apalis MMC1 */
++&usdhc2 {
++	bus-width = <8>;
++	cd-gpios = <&lsio_gpio2 9 GPIO_ACTIVE_LOW>; /* Apalis MMC1_CD# */
++	no-1-8-v;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
++	pinctrl-0 = <&pinctrl_usdhc2_4bit>,
++		    <&pinctrl_usdhc2_8bit>,
++		    <&pinctrl_mmc1_cd>;
++	pinctrl-1 = <&pinctrl_usdhc2_4bit_100mhz>,
++		    <&pinctrl_usdhc2_8bit_100mhz>,
++		    <&pinctrl_mmc1_cd>;
++	pinctrl-2 = <&pinctrl_usdhc2_4bit_200mhz>,
++		    <&pinctrl_usdhc2_8bit_200mhz>,
++		    <&pinctrl_mmc1_cd>;
++	pinctrl-3 = <&pinctrl_usdhc2_4bit_sleep>,
++		    <&pinctrl_usdhc2_8bit_sleep>,
++		    <&pinctrl_mmc1_cd_sleep>;
++};
++
++/* Apalis SD1 */
++&usdhc3 {
++	bus-width = <4>;
++	cd-gpios = <&lsio_gpio4 12 GPIO_ACTIVE_LOW>; /* Apalis SD1_CD# */
++	no-1-8-v;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc3>, <&pinctrl_sd1_cd>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>, <&pinctrl_sd1_cd>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>, <&pinctrl_sd1_cd>;
++};
++
++/* TODO: Video Processing Unit (driver upstream but device tree part missing) */
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_cam1_gpios>, <&pinctrl_dap1_gpios>,
++		    <&pinctrl_esai0_gpios>, <&pinctrl_fec2_gpios>,
++		    <&pinctrl_gpio3>, <&pinctrl_gpio4>, <&pinctrl_gpio_keys>,
++		    <&pinctrl_gpio_usbh_oc_n>, <&pinctrl_lpuart1ctrl>,
++		    <&pinctrl_lvds0_i2c0_gpio>, <&pinctrl_lvds1_i2c0_gpios>,
++		    <&pinctrl_mipi_dsi_0_1_en>, <&pinctrl_mipi_dsi1_gpios>,
++		    <&pinctrl_mlb_gpios>, <&pinctrl_qspi1a_gpios>,
++		    <&pinctrl_sata1_act>, <&pinctrl_sim0_gpios>,
++		    <&pinctrl_usdhc1_gpios>;
++
++	/* Apalis AN1_ADC */
++	pinctrl_adc0: adc0grp {
++		fsl,pins =
++			/* Apalis AN1_ADC0 */
++			<IMX8QM_ADC_IN0_DMA_ADC0_IN0				0xc0000060>,
++			/* Apalis AN1_ADC1 */
++			<IMX8QM_ADC_IN1_DMA_ADC0_IN1				0xc0000060>,
++			/* Apalis AN1_ADC2 */
++			<IMX8QM_ADC_IN2_DMA_ADC0_IN2				0xc0000060>,
++			/* Apalis AN1_TSWIP_ADC3 */
++			<IMX8QM_ADC_IN3_DMA_ADC0_IN3				0xc0000060>;
++	};
++
++	/* Apalis AN1_TS */
++	pinctrl_adc1: adc1grp {
++		fsl,pins =
++			/* Apalis AN1_TSPX */
++			<IMX8QM_ADC_IN4_DMA_ADC1_IN0				0xc0000060>,
++			/* Apalis AN1_TSMX */
++			<IMX8QM_ADC_IN5_DMA_ADC1_IN1				0xc0000060>,
++			/* Apalis AN1_TSPY */
++			<IMX8QM_ADC_IN6_DMA_ADC1_IN2				0xc0000060>,
++			/* Apalis AN1_TSMY */
++			<IMX8QM_ADC_IN7_DMA_ADC1_IN3				0xc0000060>;
++	};
++
++	/* Apalis CAM1 */
++	pinctrl_cam1_gpios: cam1gpiosgrp {
++		fsl,pins =
++			/* Apalis CAM1_D7 */
++			<IMX8QM_MIPI_DSI1_I2C0_SCL_LSIO_GPIO1_IO20		0x00000021>,
++			/* Apalis CAM1_D6 */
++			<IMX8QM_MIPI_DSI1_I2C0_SDA_LSIO_GPIO1_IO21		0x00000021>,
++			/* Apalis CAM1_D5 */
++			<IMX8QM_ESAI0_TX0_LSIO_GPIO2_IO26			0x00000021>,
++			/* Apalis CAM1_D4 */
++			<IMX8QM_ESAI0_TX1_LSIO_GPIO2_IO27			0x00000021>,
++			/* Apalis CAM1_D3 */
++			<IMX8QM_ESAI0_TX2_RX3_LSIO_GPIO2_IO28			0x00000021>,
++			/* Apalis CAM1_D2 */
++			<IMX8QM_ESAI0_TX3_RX2_LSIO_GPIO2_IO29			0x00000021>,
++			/* Apalis CAM1_D1 */
++			<IMX8QM_ESAI0_TX4_RX1_LSIO_GPIO2_IO30			0x00000021>,
++			/* Apalis CAM1_D0 */
++			<IMX8QM_ESAI0_TX5_RX0_LSIO_GPIO2_IO31			0x00000021>,
++			/* Apalis CAM1_PCLK */
++			<IMX8QM_MCLK_IN0_LSIO_GPIO3_IO00			0x00000021>,
++			/* Apalis CAM1_MCLK */
++			<IMX8QM_SPI3_SDO_LSIO_GPIO2_IO18			0x00000021>,
++			/* Apalis CAM1_VSYNC */
++			<IMX8QM_ESAI0_SCKR_LSIO_GPIO2_IO24			0x00000021>,
++			/* Apalis CAM1_HSYNC */
++			<IMX8QM_ESAI0_SCKT_LSIO_GPIO2_IO25			0x00000021>;
++	};
++
++	/* Apalis DAP1 */
++	pinctrl_dap1_gpios: dap1gpiosgrp {
++		fsl,pins =
++			/* Apalis DAP1_MCLK */
++			<IMX8QM_SPI3_SDI_LSIO_GPIO2_IO19			0x00000021>,
++			/* Apalis DAP1_D_OUT */
++			<IMX8QM_SAI1_RXC_LSIO_GPIO3_IO12			0x00000021>,
++			/* Apalis DAP1_RESET */
++			<IMX8QM_ESAI1_SCKT_LSIO_GPIO2_IO07			0x00000021>,
++			/* Apalis DAP1_BIT_CLK */
++			<IMX8QM_SPI0_CS1_LSIO_GPIO3_IO06			0x00000021>,
++			/* Apalis DAP1_D_IN */
++			<IMX8QM_SAI1_RXFS_LSIO_GPIO3_IO14			0x00000021>,
++			/* Apalis DAP1_SYNC */
++			<IMX8QM_SPI2_CS1_LSIO_GPIO3_IO11			0x00000021>,
++			/* On-module Wi-Fi_I2S_EN# */
++			<IMX8QM_ESAI1_TX5_RX0_LSIO_GPIO2_IO13			0x00000021>;
++	};
++
++	/* Apalis LCD1_G1+2 */
++	pinctrl_esai0_gpios: esai0gpiosgrp {
++		fsl,pins =
++			/* Apalis LCD1_G1 */
++			<IMX8QM_ESAI0_FSR_LSIO_GPIO2_IO22			0x00000021>,
++			/* Apalis LCD1_G2 */
++			<IMX8QM_ESAI0_FST_LSIO_GPIO2_IO23			0x00000021>;
++	};
++
++	/* On-module Gigabit Ethernet PHY Micrel KSZ9031 for Apalis GLAN */
++	pinctrl_fec1: fec1grp {
++		fsl,pins =
++			/* Use pads in 3.3V mode */
++			<IMX8QM_COMP_CTL_GPIO_1V8_3V3_ENET_ENETB_PAD			0x000014a0>,
++			<IMX8QM_ENET0_MDC_CONN_ENET0_MDC				0x06000020>,
++			<IMX8QM_ENET0_MDIO_CONN_ENET0_MDIO				0x06000020>,
++			<IMX8QM_ENET0_RGMII_TX_CTL_CONN_ENET0_RGMII_TX_CTL		0x06000020>,
++			<IMX8QM_ENET0_RGMII_TXC_CONN_ENET0_RGMII_TXC			0x06000020>,
++			<IMX8QM_ENET0_RGMII_TXD0_CONN_ENET0_RGMII_TXD0			0x06000020>,
++			<IMX8QM_ENET0_RGMII_TXD1_CONN_ENET0_RGMII_TXD1			0x06000020>,
++			<IMX8QM_ENET0_RGMII_TXD2_CONN_ENET0_RGMII_TXD2			0x06000020>,
++			<IMX8QM_ENET0_RGMII_TXD3_CONN_ENET0_RGMII_TXD3			0x06000020>,
++			<IMX8QM_ENET0_RGMII_RXC_CONN_ENET0_RGMII_RXC			0x06000020>,
++			<IMX8QM_ENET0_RGMII_RX_CTL_CONN_ENET0_RGMII_RX_CTL		0x06000020>,
++			<IMX8QM_ENET0_RGMII_RXD0_CONN_ENET0_RGMII_RXD0			0x06000020>,
++			<IMX8QM_ENET0_RGMII_RXD1_CONN_ENET0_RGMII_RXD1			0x06000020>,
++			<IMX8QM_ENET0_RGMII_RXD2_CONN_ENET0_RGMII_RXD2			0x06000020>,
++			<IMX8QM_ENET0_RGMII_RXD3_CONN_ENET0_RGMII_RXD3			0x06000020>,
++			<IMX8QM_ENET0_REFCLK_125M_25M_CONN_ENET0_REFCLK_125M_25M	0x06000020>,
++			/* On-module ETH_RESET# */
++			<IMX8QM_LVDS1_GPIO01_LSIO_GPIO1_IO11				0x06000020>,
++			/* On-module ETH_INT# */
++			<IMX8QM_MIPI_CSI1_MCLK_OUT_LSIO_GPIO1_IO29			0x04000060>;
++	};
++
++	pinctrl_fec1_sleep: fec1-sleepgrp {
++		fsl,pins =
++			<IMX8QM_COMP_CTL_GPIO_1V8_3V3_ENET_ENETB_PAD		0x000014a0>,
++			<IMX8QM_ENET0_MDC_LSIO_GPIO4_IO14			0x04000040>,
++			<IMX8QM_ENET0_MDIO_LSIO_GPIO4_IO13			0x04000040>,
++			<IMX8QM_ENET0_RGMII_TX_CTL_LSIO_GPIO5_IO31		0x04000040>,
++			<IMX8QM_ENET0_RGMII_TXC_LSIO_GPIO5_IO30			0x04000040>,
++			<IMX8QM_ENET0_RGMII_TXD0_LSIO_GPIO6_IO00		0x04000040>,
++			<IMX8QM_ENET0_RGMII_TXD1_LSIO_GPIO6_IO01		0x04000040>,
++			<IMX8QM_ENET0_RGMII_TXD2_LSIO_GPIO6_IO02		0x04000040>,
++			<IMX8QM_ENET0_RGMII_TXD3_LSIO_GPIO6_IO03		0x04000040>,
++			<IMX8QM_ENET0_RGMII_RXC_LSIO_GPIO6_IO04			0x04000040>,
++			<IMX8QM_ENET0_RGMII_RX_CTL_LSIO_GPIO6_IO05		0x04000040>,
++			<IMX8QM_ENET0_RGMII_RXD0_LSIO_GPIO6_IO06		0x04000040>,
++			<IMX8QM_ENET0_RGMII_RXD1_LSIO_GPIO6_IO07		0x04000040>,
++			<IMX8QM_ENET0_RGMII_RXD2_LSIO_GPIO6_IO08		0x04000040>,
++			<IMX8QM_ENET0_RGMII_RXD3_LSIO_GPIO6_IO09		0x04000040>,
++			<IMX8QM_ENET0_REFCLK_125M_25M_LSIO_GPIO4_IO15		0x04000040>,
++			<IMX8QM_LVDS1_GPIO01_LSIO_GPIO1_IO11			0x06000020>,
++			<IMX8QM_MIPI_CSI1_MCLK_OUT_LSIO_GPIO1_IO29		0x04000040>;
++	};
++
++	/* Apalis LCD1_ */
++	pinctrl_fec2_gpios: fec2gpiosgrp {
++		fsl,pins =
++			<IMX8QM_COMP_CTL_GPIO_1V8_3V3_ENET_ENETA_PAD		0x000014a0>,
++			/* Apalis LCD1_R1 */
++			<IMX8QM_ENET1_MDC_LSIO_GPIO4_IO18			0x00000021>,
++			/* Apalis LCD1_R0 */
++			<IMX8QM_ENET1_MDIO_LSIO_GPIO4_IO17			0x00000021>,
++			/* Apalis LCD1_G0 */
++			<IMX8QM_ENET1_REFCLK_125M_25M_LSIO_GPIO4_IO16		0x00000021>,
++			/* Apalis LCD1_R7 */
++			<IMX8QM_ENET1_RGMII_RX_CTL_LSIO_GPIO6_IO17		0x00000021>,
++			/* Apalis LCD1_DE */
++			<IMX8QM_ENET1_RGMII_RXD0_LSIO_GPIO6_IO18		0x00000021>,
++			/* Apalis LCD1_HSYNC */
++			<IMX8QM_ENET1_RGMII_RXD1_LSIO_GPIO6_IO19		0x00000021>,
++			/* Apalis LCD1_VSYNC */
++			<IMX8QM_ENET1_RGMII_RXD2_LSIO_GPIO6_IO20		0x00000021>,
++			/* Apalis LCD1_PCLK */
++			<IMX8QM_ENET1_RGMII_RXD3_LSIO_GPIO6_IO21		0x00000021>,
++			/* Apalis LCD1_R6 */
++			<IMX8QM_ENET1_RGMII_TX_CTL_LSIO_GPIO6_IO11		0x00000021>,
++			/* Apalis LCD1_R5 */
++			<IMX8QM_ENET1_RGMII_TXC_LSIO_GPIO6_IO10			0x00000021>,
++			/* Apalis LCD1_R4 */
++			<IMX8QM_ENET1_RGMII_TXD0_LSIO_GPIO6_IO12		0x00000021>,
++			/* Apalis LCD1_R3 */
++			<IMX8QM_ENET1_RGMII_TXD1_LSIO_GPIO6_IO13		0x00000021>,
++			/* Apalis LCD1_R2 */
++			<IMX8QM_ENET1_RGMII_TXD2_LSIO_GPIO6_IO14		0x00000021>;
++	};
++
++	/* Apalis CAN1 */
++	pinctrl_flexcan1: flexcan0grp {
++		fsl,pins =
++			<IMX8QM_FLEXCAN0_TX_DMA_FLEXCAN0_TX			0x00000021>,
++			<IMX8QM_FLEXCAN0_RX_DMA_FLEXCAN0_RX			0x00000021>;
++	};
++
++	/* Apalis CAN2 */
++	pinctrl_flexcan2: flexcan1grp {
++		fsl,pins =
++			<IMX8QM_FLEXCAN1_TX_DMA_FLEXCAN1_TX			0x00000021>,
++			<IMX8QM_FLEXCAN1_RX_DMA_FLEXCAN1_RX			0x00000021>;
++	};
++
++	/* Apalis CAN3 (optional) */
++	pinctrl_flexcan3: flexcan2grp {
++		fsl,pins =
++			<IMX8QM_FLEXCAN2_TX_DMA_FLEXCAN2_TX			0x00000021>,
++			<IMX8QM_FLEXCAN2_RX_DMA_FLEXCAN2_RX			0x00000021>;
++	};
++
++	/* Apalis GPIO1 */
++	pinctrl_gpio1: gpio1grp {
++		fsl,pins =
++			<IMX8QM_M40_GPIO0_00_LSIO_GPIO0_IO08			0x06000021>;
++	};
++
++	/* Apalis GPIO2 */
++	pinctrl_gpio2: gpio2grp {
++		fsl,pins =
++			<IMX8QM_M40_GPIO0_01_LSIO_GPIO0_IO09			0x06000021>;
++	};
++
++	/* Apalis GPIO3 */
++	pinctrl_gpio3: gpio3grp {
++		fsl,pins =
++			<IMX8QM_M41_GPIO0_00_LSIO_GPIO0_IO12			0x06000021>;
++	};
++
++	/* Apalis GPIO4 */
++	pinctrl_gpio4: gpio4grp {
++		fsl,pins =
++			<IMX8QM_M41_GPIO0_01_LSIO_GPIO0_IO13			0x06000021>;
++	};
++
++	/* Apalis GPIO5 */
++	pinctrl_gpio5: gpio5grp {
++		fsl,pins =
++			<IMX8QM_FLEXCAN2_RX_LSIO_GPIO4_IO01			0x06000021>;
++	};
++
++	/* Apalis GPIO6 */
++	pinctrl_gpio6: gpio6grp {
++		fsl,pins =
++			<IMX8QM_FLEXCAN2_TX_LSIO_GPIO4_IO02			0x00000021>;
++	};
++
++	/* Apalis GPIO7 */
++	pinctrl_gpio7: gpio7grp {
++		fsl,pins =
++			<IMX8QM_MLB_SIG_LSIO_GPIO3_IO26				0x00000021>;
++	};
++
++	/* Apalis GPIO8 */
++	pinctrl_gpio8: gpio8grp {
++		fsl,pins =
++			<IMX8QM_MLB_DATA_LSIO_GPIO3_IO28			0x00000021>;
++	};
++
++	/* Apalis BKL1_ON */
++	pinctrl_gpio_bkl_on: gpiobklongrp {
++		fsl,pins =
++			<IMX8QM_LVDS0_GPIO00_LSIO_GPIO1_IO04			0x00000021>;
++	};
++
++	/* Apalis WAKE1_MICO */
++	pinctrl_gpio_keys: gpiokeysgrp {
++		fsl,pins =
++			<IMX8QM_SPI3_CS0_LSIO_GPIO2_IO20			0x06700021>;
++	};
++
++	/* Apalis USBH_OC# */
++	pinctrl_gpio_usbh_oc_n: gpiousbhocngrp {
++		fsl,pins =
++			<IMX8QM_USB_SS3_TC3_LSIO_GPIO4_IO06			0x04000021>;
++	};
++
++	/* On-module HDMI_CTRL */
++	pinctrl_hdmi_ctrl: hdmictrlgrp {
++		fsl,pins =
++			<IMX8QM_MIPI_CSI1_GPIO0_00_LSIO_GPIO1_IO30		0x00000061>;
++	};
++
++	/* On-module I2C */
++	pinctrl_lpi2c1: lpi2c1grp {
++		fsl,pins =
++			<IMX8QM_GPT0_CLK_DMA_I2C1_SCL				0x04000020>,
++			<IMX8QM_GPT0_CAPTURE_DMA_I2C1_SDA			0x04000020>;
++	};
++
++	/* Apalis I2C1 */
++	pinctrl_lpi2c2: lpi2c2grp {
++		fsl,pins =
++			<IMX8QM_GPT1_CLK_DMA_I2C2_SCL				0x04000020>,
++			<IMX8QM_GPT1_CAPTURE_DMA_I2C2_SDA			0x04000020>;
++	};
++
++	/* Apalis I2C3 (CAM) */
++	pinctrl_lpi2c3: lpi2c3grp {
++		fsl,pins =
++			<IMX8QM_SIM0_PD_DMA_I2C3_SCL				0x04000020>,
++			<IMX8QM_SIM0_POWER_EN_DMA_I2C3_SDA			0x04000020>;
++	};
++
++	/* Apalis SPI1 */
++	pinctrl_lpspi0: lpspi0grp {
++		fsl,pins =
++			<IMX8QM_SPI0_SCK_DMA_SPI0_SCK				0x0600004c>,
++			<IMX8QM_SPI0_SDO_DMA_SPI0_SDO				0x0600004c>,
++			<IMX8QM_SPI0_SDI_DMA_SPI0_SDI				0x0600004c>,
++			<IMX8QM_SPI0_CS0_LSIO_GPIO3_IO05			0x0600004c>;
++	};
++
++	/* Apalis SPI2 */
++	pinctrl_lpspi2: lpspi2grp {
++		fsl,pins =
++			<IMX8QM_SPI2_SCK_DMA_SPI2_SCK				0x0600004c>,
++			<IMX8QM_SPI2_SDO_DMA_SPI2_SDO				0x0600004c>,
++			<IMX8QM_SPI2_SDI_DMA_SPI2_SDI				0x0600004c>,
++			<IMX8QM_SPI2_CS0_LSIO_GPIO3_IO10			0x0600004c>;
++	};
++
++	/* Apalis UART3 */
++	pinctrl_lpuart0: lpuart0grp {
++		fsl,pins =
++			<IMX8QM_UART0_RX_DMA_UART0_RX				0x06000020>,
++			<IMX8QM_UART0_TX_DMA_UART0_TX				0x06000020>;
++	};
++
++	/* Apalis UART1 */
++	pinctrl_lpuart1: lpuart1grp {
++		fsl,pins =
++			<IMX8QM_UART1_RX_DMA_UART1_RX				0x06000020>,
++			<IMX8QM_UART1_TX_DMA_UART1_TX				0x06000020>,
++			<IMX8QM_UART1_CTS_B_DMA_UART1_CTS_B			0x06000020>,
++			<IMX8QM_UART1_RTS_B_DMA_UART1_RTS_B			0x06000020>;
++	};
++
++	/* Apalis UART1 */
++	pinctrl_lpuart1ctrl: lpuart1ctrlgrp {
++		fsl,pins =
++			/* Apalis UART1_DTR */
++			<IMX8QM_M40_I2C0_SCL_LSIO_GPIO0_IO06			0x00000021>,
++			/* Apalis UART1_DSR */
++			<IMX8QM_M40_I2C0_SDA_LSIO_GPIO0_IO07			0x00000021>,
++			/* Apalis UART1_DCD */
++			<IMX8QM_M41_I2C0_SCL_LSIO_GPIO0_IO10			0x00000021>,
++			/* Apalis UART1_RI */
++			<IMX8QM_M41_I2C0_SDA_LSIO_GPIO0_IO11			0x00000021>;
++	};
++
++	/* Apalis UART4 */
++	pinctrl_lpuart2: lpuart2grp {
++		fsl,pins =
++			<IMX8QM_LVDS0_I2C1_SCL_DMA_UART2_TX			0x06000020>,
++			<IMX8QM_LVDS0_I2C1_SDA_DMA_UART2_RX			0x06000020>;
++	};
++
++	/* Apalis UART2 */
++	pinctrl_lpuart3: lpuart3grp {
++		fsl,pins =
++			<IMX8QM_LVDS1_I2C1_SCL_DMA_UART3_TX			0x06000020>,
++			<IMX8QM_LVDS1_I2C1_SDA_DMA_UART3_RX			0x06000020>,
++			<IMX8QM_ENET1_RGMII_TXD3_DMA_UART3_RTS_B		0x06000020>,
++			<IMX8QM_ENET1_RGMII_RXC_DMA_UART3_CTS_B			0x06000020>;
++	};
++
++	/* Apalis TS_2 */
++	pinctrl_lvds0_i2c0_gpio: lvds0i2c0gpiogrp {
++		fsl,pins =
++			<IMX8QM_LVDS0_I2C0_SCL_LSIO_GPIO1_IO06			0x00000021>;
++	};
++
++	/* Apalis LCD1_G6+7 */
++	pinctrl_lvds1_i2c0_gpios: lvds1i2c0gpiosgrp {
++		fsl,pins =
++			/* Apalis LCD1_G6 */
++			<IMX8QM_LVDS1_I2C0_SCL_LSIO_GPIO1_IO12			0x00000021>,
++			/* Apalis LCD1_G7 */
++			<IMX8QM_LVDS1_I2C0_SDA_LSIO_GPIO1_IO13			0x00000021>;
++	};
++
++	/* Apalis TS_3 */
++	pinctrl_mipi_dsi_0_1_en: mipidsi0-1engrp {
++		fsl,pins =
++			<IMX8QM_LVDS0_I2C0_SDA_LSIO_GPIO1_IO07			0x00000021>;
++	};
++
++	/* Apalis TS_4 */
++	pinctrl_mipi_dsi1_gpios: mipidsi1gpiosgrp {
++		fsl,pins =
++			<IMX8QM_MIPI_DSI1_GPIO0_00_LSIO_GPIO1_IO22		0x00000021>;
++	};
++
++	/* Apalis TS_1 */
++	pinctrl_mlb_gpios: mlbgpiosgrp {
++		fsl,pins =
++			<IMX8QM_MLB_CLK_LSIO_GPIO3_IO27				0x00000021>;
++	};
++
++	/* Apalis MMC1_CD# */
++	pinctrl_mmc1_cd: mmc1cdgrp {
++		fsl,pins =
++			<IMX8QM_ESAI1_TX1_LSIO_GPIO2_IO09			0x00000021>;
++	};
++
++	pinctrl_mmc1_cd_sleep: mmc1cdsleepgrp {
++		fsl,pins =
++			<IMX8QM_ESAI1_TX1_LSIO_GPIO2_IO09			0x04000021>;
++	};
++
++	/* On-module PCIe_Wi-Fi */
++	pinctrl_pcieb: pciebgrp {
++		fsl,pins =
++			<IMX8QM_PCIE_CTRL1_CLKREQ_B_LSIO_GPIO4_IO30		0x00000021>,
++			<IMX8QM_PCIE_CTRL1_WAKE_B_LSIO_GPIO4_IO31		0x00000021>,
++			<IMX8QM_PCIE_CTRL1_PERST_B_LSIO_GPIO5_IO00		0x00000021>;
++	};
++
++	/* On-module PCIe_CLK_EN1 */
++	pinctrl_pcie_sata_refclk: pciesatarefclkgrp {
++		fsl,pins =
++			<IMX8QM_USDHC2_WP_LSIO_GPIO4_IO11			0x00000021>;
++	};
++
++	/* On-module PCIe_CLK_EN2 */
++	pinctrl_pcie_wifi_refclk: pciewifirefclkgrp {
++		fsl,pins =
++			<IMX8QM_ESAI1_TX3_RX2_LSIO_GPIO2_IO11			0x00000021>;
++	};
++
++	/* Apalis PWM3 */
++	pinctrl_pwm0: pwm0grp {
++		fsl,pins =
++			<IMX8QM_UART0_RTS_B_LSIO_PWM0_OUT			0x00000020>;
++	};
++
++	/* Apalis PWM4 */
++	pinctrl_pwm1: pwm1grp {
++		fsl,pins =
++			<IMX8QM_UART0_CTS_B_LSIO_PWM1_OUT			0x00000020>;
++	};
++
++	/* Apalis PWM1 */
++	pinctrl_pwm2: pwm2grp {
++		fsl,pins =
++			<IMX8QM_GPT1_COMPARE_LSIO_PWM2_OUT			0x00000020>;
++	};
++
++	/* Apalis PWM2 */
++	pinctrl_pwm3: pwm3grp {
++		fsl,pins =
++			<IMX8QM_GPT0_COMPARE_LSIO_PWM3_OUT			0x00000020>;
++	};
++
++	/* Apalis BKL1_PWM */
++	pinctrl_pwm_bkl: pwmbklgrp {
++		fsl,pins =
++			<IMX8QM_LVDS1_GPIO00_LVDS1_PWM0_OUT			0x00000020>;
++	};
++
++	/* Apalis LCD1_ */
++	pinctrl_qspi1a_gpios: qspi1agpiosgrp {
++		fsl,pins =
++			/* Apalis LCD1_B0 */
++			<IMX8QM_QSPI1A_DATA0_LSIO_GPIO4_IO26			0x00000021>,
++			/* Apalis LCD1_B1 */
++			<IMX8QM_QSPI1A_DATA1_LSIO_GPIO4_IO25			0x00000021>,
++			/* Apalis LCD1_B2 */
++			<IMX8QM_QSPI1A_DATA2_LSIO_GPIO4_IO24			0x00000021>,
++			/* Apalis LCD1_B3 */
++			<IMX8QM_QSPI1A_DATA3_LSIO_GPIO4_IO23			0x00000021>,
++			/* Apalis LCD1_B5 */
++			<IMX8QM_QSPI1A_DQS_LSIO_GPIO4_IO22			0x00000021>,
++			/* Apalis LCD1_B7 */
++			<IMX8QM_QSPI1A_SCLK_LSIO_GPIO4_IO21			0x00000021>,
++			/* Apalis LCD1_B4 */
++			<IMX8QM_QSPI1A_SS0_B_LSIO_GPIO4_IO19			0x00000021>,
++			/* Apalis LCD1_B6 */
++			<IMX8QM_QSPI1A_SS1_B_LSIO_GPIO4_IO20			0x00000021>;
++	};
++
++	/* On-module RESET_MOCI#_DRV */
++	pinctrl_reset_moci: resetmocigrp {
++		fsl,pins =
++			<IMX8QM_SCU_GPIO0_02_LSIO_GPIO0_IO30			0x00000021>;
++	};
++
++	/* On-module I2S SGTL5000 for Apalis Analogue Audio */
++	pinctrl_sai1: sai1grp {
++		fsl,pins =
++			<IMX8QM_SAI1_TXD_AUD_SAI1_TXD				0xc600006c>,
++			<IMX8QM_SAI1_RXD_AUD_SAI1_RXD				0xc600004c>,
++			<IMX8QM_SAI1_TXC_AUD_SAI1_TXC				0xc600004c>,
++			<IMX8QM_SAI1_TXFS_AUD_SAI1_TXFS				0xc600004c>;
++	};
++
++	/* Apalis SATA1_ACT# */
++	pinctrl_sata1_act: sata1actgrp {
++		fsl,pins =
++			<IMX8QM_ESAI1_TX0_LSIO_GPIO2_IO08			0x00000021>;
++	};
++
++	/* Apalis SD1_CD# */
++	pinctrl_sd1_cd: sd1cdgrp {
++		fsl,pins =
++			<IMX8QM_USDHC2_CD_B_LSIO_GPIO4_IO12			0x00000021>;
++	};
++
++	/* On-module I2S SGTL5000 SYS_MCLK */
++	pinctrl_sgtl5000: sgtl5000grp {
++		fsl,pins =
++			<IMX8QM_MCLK_OUT0_AUD_ACM_MCLK_OUT0			0xc600004c>;
++	};
++
++	/* Apalis LCD1_ */
++	pinctrl_sim0_gpios: sim0gpiosgrp {
++		fsl,pins =
++			/* Apalis LCD1_G5 */
++			<IMX8QM_SIM0_CLK_LSIO_GPIO0_IO00			0x00000021>,
++			/* Apalis LCD1_G3 */
++			<IMX8QM_SIM0_GPIO0_00_LSIO_GPIO0_IO05			0x00000021>,
++			/* Apalis TS_5 */
++			<IMX8QM_SIM0_IO_LSIO_GPIO0_IO02				0x00000021>,
++			/* Apalis LCD1_G4 */
++			<IMX8QM_SIM0_RST_LSIO_GPIO0_IO01			0x00000021>;
++	};
++
++	/* Apalis SPDIF */
++	pinctrl_spdif0: spdif0grp {
++		fsl,pins =
++			<IMX8QM_SPDIF0_TX_AUD_SPDIF0_TX				0xc6000040>,
++			<IMX8QM_SPDIF0_RX_AUD_SPDIF0_RX				0xc6000040>;
++	};
++
++	pinctrl_touchctrl_gpios: touchctrlgpiosgrp {
++		fsl,pins =
++			<IMX8QM_ESAI1_FSR_LSIO_GPIO2_IO04			0x00000021>,
++			<IMX8QM_ESAI1_FST_LSIO_GPIO2_IO05			0x00000041>,
++			<IMX8QM_SPI3_SCK_LSIO_GPIO2_IO17			0x00000021>,
++			<IMX8QM_SPI3_CS1_LSIO_GPIO2_IO21			0x00000041>;
++	};
++
++	pinctrl_touchctrl_idle: touchctrlidlegrp {
++		fsl,pins =
++			<IMX8QM_ADC_IN4_LSIO_GPIO3_IO22				0x00000021>,
++			<IMX8QM_ADC_IN5_LSIO_GPIO3_IO23				0x00000021>,
++			<IMX8QM_ADC_IN6_LSIO_GPIO3_IO24				0x00000021>,
++			<IMX8QM_ADC_IN7_LSIO_GPIO3_IO25				0x00000021>;
++	};
++
++	/* On-module USB HSIC HUB (active) */
++	pinctrl_usb_hsic_active: usbh1activegrp {
++		fsl,pins =
++			<IMX8QM_USB_HSIC0_DATA_CONN_USB_HSIC0_DATA		0x000000cf>,
++			<IMX8QM_USB_HSIC0_STROBE_CONN_USB_HSIC0_STROBE		0x000000ff>;
++	};
++
++	/* On-module USB HSIC HUB (idle) */
++	pinctrl_usb_hsic_idle: usbh1idlegrp {
++		fsl,pins =
++			<IMX8QM_USB_HSIC0_DATA_CONN_USB_HSIC0_DATA		0x000000cf>,
++			<IMX8QM_USB_HSIC0_STROBE_CONN_USB_HSIC0_STROBE		0x000000cf>;
++	};
++
++	/* On-module USB HSIC HUB */
++	pinctrl_usb3503a: usb3503agrp {
++		fsl,pins =
++			/* On-module HSIC_HUB_CONNECT */
++			<IMX8QM_SCU_GPIO0_03_LSIO_GPIO0_IO31			0x00000041>,
++			/* On-module HSIC_INT_N */
++			<IMX8QM_SCU_GPIO0_05_LSIO_GPIO1_IO01			0x00000021>,
++			/* On-module HSIC_RESET_N */
++			<IMX8QM_SCU_GPIO0_06_LSIO_GPIO1_IO02			0x00000041>;
++	};
++
++	/* Apalis USBH_EN */
++	pinctrl_usbh_en: usbhengrp {
++		fsl,pins =
++			<IMX8QM_USB_SS3_TC1_LSIO_GPIO4_IO04			0x00000021>;
++	};
++
++	/* Apalis USBO1 */
++	pinctrl_usbotg1: usbotg1grp {
++		fsl,pins =
++			/* Apalis USBO1_EN */
++			<IMX8QM_USB_SS3_TC0_CONN_USB_OTG1_PWR			0x00000021>,
++			/* Apalis USBO1_OC# */
++			<IMX8QM_USB_SS3_TC2_CONN_USB_OTG1_OC			0x04000021>;
++	};
++
++	/* On-module eMMC */
++	pinctrl_usdhc1: usdhc1grp {
++		fsl,pins =
++			<IMX8QM_EMMC0_CLK_CONN_EMMC0_CLK			0x06000041>,
++			<IMX8QM_EMMC0_CMD_CONN_EMMC0_CMD			0x00000021>,
++			<IMX8QM_EMMC0_DATA0_CONN_EMMC0_DATA0			0x00000021>,
++			<IMX8QM_EMMC0_DATA1_CONN_EMMC0_DATA1			0x00000021>,
++			<IMX8QM_EMMC0_DATA2_CONN_EMMC0_DATA2			0x00000021>,
++			<IMX8QM_EMMC0_DATA3_CONN_EMMC0_DATA3			0x00000021>,
++			<IMX8QM_EMMC0_DATA4_CONN_EMMC0_DATA4			0x00000021>,
++			<IMX8QM_EMMC0_DATA5_CONN_EMMC0_DATA5			0x00000021>,
++			<IMX8QM_EMMC0_DATA6_CONN_EMMC0_DATA6			0x00000021>,
++			<IMX8QM_EMMC0_DATA7_CONN_EMMC0_DATA7			0x00000021>,
++			<IMX8QM_EMMC0_STROBE_CONN_EMMC0_STROBE			0x06000041>,
++			<IMX8QM_EMMC0_RESET_B_CONN_EMMC0_RESET_B		0x00000021>;
++	};
++
++	pinctrl_usdhc1_100mhz: usdhc1-100mhzgrp {
++		fsl,pins =
++			<IMX8QM_EMMC0_CLK_CONN_EMMC0_CLK			0x06000040>,
++			<IMX8QM_EMMC0_CMD_CONN_EMMC0_CMD			0x00000020>,
++			<IMX8QM_EMMC0_DATA0_CONN_EMMC0_DATA0			0x00000020>,
++			<IMX8QM_EMMC0_DATA1_CONN_EMMC0_DATA1			0x00000020>,
++			<IMX8QM_EMMC0_DATA2_CONN_EMMC0_DATA2			0x00000020>,
++			<IMX8QM_EMMC0_DATA3_CONN_EMMC0_DATA3			0x00000020>,
++			<IMX8QM_EMMC0_DATA4_CONN_EMMC0_DATA4			0x00000020>,
++			<IMX8QM_EMMC0_DATA5_CONN_EMMC0_DATA5			0x00000020>,
++			<IMX8QM_EMMC0_DATA6_CONN_EMMC0_DATA6			0x00000020>,
++			<IMX8QM_EMMC0_DATA7_CONN_EMMC0_DATA7			0x00000020>,
++			<IMX8QM_EMMC0_STROBE_CONN_EMMC0_STROBE			0x06000040>,
++			<IMX8QM_EMMC0_RESET_B_CONN_EMMC0_RESET_B		0x00000020>;
++	};
++
++	pinctrl_usdhc1_200mhz: usdhc1-200mhzgrp {
++		fsl,pins =
++			<IMX8QM_EMMC0_CLK_CONN_EMMC0_CLK			0x06000040>,
++			<IMX8QM_EMMC0_CMD_CONN_EMMC0_CMD			0x00000020>,
++			<IMX8QM_EMMC0_DATA0_CONN_EMMC0_DATA0			0x00000020>,
++			<IMX8QM_EMMC0_DATA1_CONN_EMMC0_DATA1			0x00000020>,
++			<IMX8QM_EMMC0_DATA2_CONN_EMMC0_DATA2			0x00000020>,
++			<IMX8QM_EMMC0_DATA3_CONN_EMMC0_DATA3			0x00000020>,
++			<IMX8QM_EMMC0_DATA4_CONN_EMMC0_DATA4			0x00000020>,
++			<IMX8QM_EMMC0_DATA5_CONN_EMMC0_DATA5			0x00000020>,
++			<IMX8QM_EMMC0_DATA6_CONN_EMMC0_DATA6			0x00000020>,
++			<IMX8QM_EMMC0_DATA7_CONN_EMMC0_DATA7			0x00000020>,
++			<IMX8QM_EMMC0_STROBE_CONN_EMMC0_STROBE			0x06000040>,
++			<IMX8QM_EMMC0_RESET_B_CONN_EMMC0_RESET_B		0x00000020>;
++	};
++
++	/* Apalis TS_6 */
++	pinctrl_usdhc1_gpios: usdhc1gpiosgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_STROBE_LSIO_GPIO5_IO23			0x00000021>;
++	};
++
++	/* Apalis MMC1 */
++	pinctrl_usdhc2_4bit: usdhc2grp4bitgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_CLK_CONN_USDHC1_CLK			0x06000041>,
++			<IMX8QM_USDHC1_CMD_CONN_USDHC1_CMD			0x00000021>,
++			<IMX8QM_USDHC1_DATA0_CONN_USDHC1_DATA0			0x00000021>,
++			<IMX8QM_USDHC1_DATA1_CONN_USDHC1_DATA1			0x00000021>,
++			<IMX8QM_USDHC1_DATA2_CONN_USDHC1_DATA2			0x00000021>,
++			<IMX8QM_USDHC1_DATA3_CONN_USDHC1_DATA3			0x00000021>,
++			/* On-module PMIC use */
++			<IMX8QM_USDHC1_VSELECT_CONN_USDHC1_VSELECT		0x00000021>;
++	};
++
++	pinctrl_usdhc2_4bit_100mhz: usdhc2-4bit100mhzgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_CLK_CONN_USDHC1_CLK			0x06000040>,
++			<IMX8QM_USDHC1_CMD_CONN_USDHC1_CMD			0x00000020>,
++			<IMX8QM_USDHC1_DATA0_CONN_USDHC1_DATA0			0x00000020>,
++			<IMX8QM_USDHC1_DATA1_CONN_USDHC1_DATA1			0x00000020>,
++			<IMX8QM_USDHC1_DATA2_CONN_USDHC1_DATA2			0x00000020>,
++			<IMX8QM_USDHC1_DATA3_CONN_USDHC1_DATA3			0x00000020>,
++			/* On-module PMIC use */
++			<IMX8QM_USDHC1_VSELECT_CONN_USDHC1_VSELECT		0x00000021>;
++	};
++
++	pinctrl_usdhc2_4bit_200mhz: usdhc2-4bit200mhzgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_CLK_CONN_USDHC1_CLK			0x06000040>,
++			<IMX8QM_USDHC1_CMD_CONN_USDHC1_CMD			0x00000020>,
++			<IMX8QM_USDHC1_DATA0_CONN_USDHC1_DATA0			0x00000020>,
++			<IMX8QM_USDHC1_DATA1_CONN_USDHC1_DATA1			0x00000020>,
++			<IMX8QM_USDHC1_DATA2_CONN_USDHC1_DATA2			0x00000020>,
++			<IMX8QM_USDHC1_DATA3_CONN_USDHC1_DATA3			0x00000020>,
++			/* On-module PMIC use */
++			<IMX8QM_USDHC1_VSELECT_CONN_USDHC1_VSELECT		0x00000021>;
++	};
++
++	pinctrl_usdhc2_8bit: usdhc2grp8bitgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_DATA4_CONN_USDHC1_DATA4			0x00000021>,
++			<IMX8QM_USDHC1_DATA5_CONN_USDHC1_DATA5			0x00000021>,
++			<IMX8QM_USDHC1_DATA6_CONN_USDHC1_DATA6			0x00000021>,
++			<IMX8QM_USDHC1_DATA7_CONN_USDHC1_DATA7			0x00000021>;
++	};
++
++	pinctrl_usdhc2_8bit_100mhz: usdhc2-8bit100mhzgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_DATA4_CONN_USDHC1_DATA4			0x00000020>,
++			<IMX8QM_USDHC1_DATA5_CONN_USDHC1_DATA5			0x00000020>,
++			<IMX8QM_USDHC1_DATA6_CONN_USDHC1_DATA6			0x00000020>,
++			<IMX8QM_USDHC1_DATA7_CONN_USDHC1_DATA7			0x00000020>;
++	};
++
++	pinctrl_usdhc2_8bit_200mhz: usdhc2-8bit200mhzgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_DATA4_CONN_USDHC1_DATA4			0x00000020>,
++			<IMX8QM_USDHC1_DATA5_CONN_USDHC1_DATA5			0x00000020>,
++			<IMX8QM_USDHC1_DATA6_CONN_USDHC1_DATA6			0x00000020>,
++			<IMX8QM_USDHC1_DATA7_CONN_USDHC1_DATA7			0x00000020>;
++	};
++
++	pinctrl_usdhc2_4bit_sleep: usdhc2-4bitsleepgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_CLK_CONN_USDHC1_CLK			0x04000061>,
++			<IMX8QM_USDHC1_CMD_CONN_USDHC1_CMD			0x04000061>,
++			<IMX8QM_USDHC1_DATA0_CONN_USDHC1_DATA0			0x04000061>,
++			<IMX8QM_USDHC1_DATA1_CONN_USDHC1_DATA1			0x04000061>,
++			<IMX8QM_USDHC1_DATA2_CONN_USDHC1_DATA2			0x04000061>,
++			<IMX8QM_USDHC1_DATA3_CONN_USDHC1_DATA3			0x04000061>,
++			/* On-module PMIC use */
++			<IMX8QM_USDHC1_VSELECT_CONN_USDHC1_VSELECT		0x00000021>;
++	};
++
++	pinctrl_usdhc2_8bit_sleep: usdhc2-8bitsleepgrp {
++		fsl,pins =
++			<IMX8QM_USDHC1_DATA4_CONN_USDHC1_DATA4			0x04000061>,
++			<IMX8QM_USDHC1_DATA5_CONN_USDHC1_DATA5			0x04000061>,
++			<IMX8QM_USDHC1_DATA6_CONN_USDHC1_DATA6			0x04000061>,
++			<IMX8QM_USDHC1_DATA7_CONN_USDHC1_DATA7			0x04000061>;
++	};
++
++	/* Apalis SD1 */
++	pinctrl_usdhc3: usdhc3grp {
++		fsl,pins =
++			<IMX8QM_USDHC2_CLK_CONN_USDHC2_CLK			0x06000041>,
++			<IMX8QM_USDHC2_CMD_CONN_USDHC2_CMD			0x00000021>,
++			<IMX8QM_USDHC2_DATA0_CONN_USDHC2_DATA0			0x00000021>,
++			<IMX8QM_USDHC2_DATA1_CONN_USDHC2_DATA1			0x00000021>,
++			<IMX8QM_USDHC2_DATA2_CONN_USDHC2_DATA2			0x00000021>,
++			<IMX8QM_USDHC2_DATA3_CONN_USDHC2_DATA3			0x00000021>,
++			/* On-module PMIC use */
++			<IMX8QM_USDHC2_VSELECT_CONN_USDHC2_VSELECT		0x00000021>;
++	};
++
++	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
++		fsl,pins =
++			<IMX8QM_USDHC2_CLK_CONN_USDHC2_CLK			0x06000041>,
++			<IMX8QM_USDHC2_CMD_CONN_USDHC2_CMD			0x00000021>,
++			<IMX8QM_USDHC2_DATA0_CONN_USDHC2_DATA0			0x00000021>,
++			<IMX8QM_USDHC2_DATA1_CONN_USDHC2_DATA1			0x00000021>,
++			<IMX8QM_USDHC2_DATA2_CONN_USDHC2_DATA2			0x00000021>,
++			<IMX8QM_USDHC2_DATA3_CONN_USDHC2_DATA3			0x00000021>,
++			/* On-module PMIC use */
++			<IMX8QM_USDHC2_VSELECT_CONN_USDHC2_VSELECT		0x00000021>;
++	};
++
++	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
++		fsl,pins =
++			<IMX8QM_USDHC2_CLK_CONN_USDHC2_CLK			0x06000041>,
++			<IMX8QM_USDHC2_CMD_CONN_USDHC2_CMD			0x00000021>,
++			<IMX8QM_USDHC2_DATA0_CONN_USDHC2_DATA0			0x00000021>,
++			<IMX8QM_USDHC2_DATA1_CONN_USDHC2_DATA1			0x00000021>,
++			<IMX8QM_USDHC2_DATA2_CONN_USDHC2_DATA2			0x00000021>,
++			<IMX8QM_USDHC2_DATA3_CONN_USDHC2_DATA3			0x00000021>,
++			/* On-module PMIC use */
++			<IMX8QM_USDHC2_VSELECT_CONN_USDHC2_VSELECT		0x00000021>;
++	};
++
++	/* On-module Wi-Fi */
++	pinctrl_wifi: wifigrp {
++		fsl,pins =
++			/* On-module Wi-Fi_SUSCLK_32k */
++			<IMX8QM_SCU_GPIO0_07_SCU_DSC_RTC_CLOCK_OUTPUT_32K	0x06000021>,
++			/* On-module Wi-Fi_PCIE_W_DISABLE */
++			<IMX8QM_MIPI_CSI0_MCLK_OUT_LSIO_GPIO1_IO24		0x06000021>;
++	};
++
++	pinctrl_wifi_pdn: wifipdngrp {
++		fsl,pins =
++			/* On-module Wi-Fi_POWER_DOWN */
++			<IMX8QM_MIPI_CSI0_GPIO0_01_LSIO_GPIO1_IO28		0x06000021>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-apalis-eval.dts b/arch/arm64/boot/dts/freescale/imx8qm-apalis-eval.dts
+new file mode 100644
+index 000000000000..5ab0921eb599
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8qm-apalis-eval.dts
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx8qm-apalis.dtsi"
++#include "imx8-apalis-eval.dtsi"
++
++/ {
++	model = "Toradex Apalis iMX8QM/QP on Apalis Evaluation Board";
++	compatible = "toradex,apalis-imx8-eval",
++		     "toradex,apalis-imx8",
++		     "fsl,imx8qm";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-apalis-ixora-v1.1.dts b/arch/arm64/boot/dts/freescale/imx8qm-apalis-ixora-v1.1.dts
+new file mode 100644
+index 000000000000..68ce58dc7102
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8qm-apalis-ixora-v1.1.dts
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx8qm-apalis.dtsi"
++#include "imx8-apalis-ixora-v1.1.dtsi"
++
++/ {
++	model = "Toradex Apalis iMX8QM/QP on Apalis Ixora V1.1 Carrier Board";
++	compatible = "toradex,apalis-imx8-ixora-v1.1",
++		     "toradex,apalis-imx8",
++		     "fsl,imx8qm";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-eval.dts b/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-eval.dts
+new file mode 100644
+index 000000000000..c8ff75831556
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-eval.dts
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx8qm-apalis-v1.1.dtsi"
++#include "imx8-apalis-eval.dtsi"
++
++/ {
++	model = "Toradex Apalis iMX8QM V1.1 on Apalis Evaluation Board";
++	compatible = "toradex,apalis-imx8-v1.1-eval",
++		     "toradex,apalis-imx8-v1.1",
++		     "fsl,imx8qm";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.1.dts b/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.1.dts
+new file mode 100644
+index 000000000000..ad7f644968fa
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.1.dts
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx8qm-apalis-v1.1.dtsi"
++#include "imx8-apalis-ixora-v1.1.dtsi"
++
++/ {
++	model = "Toradex Apalis iMX8QM V1.1 on Apalis Ixora V1.1 Carrier Board";
++	compatible = "toradex,apalis-imx8-v1.1-ixora-v1.1",
++		     "toradex,apalis-imx8-v1.1",
++		     "fsl,imx8qm";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.2.dts b/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.2.dts
+new file mode 100644
+index 000000000000..3b2e8c93b846
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.2.dts
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx8qm-apalis-v1.1.dtsi"
++#include "imx8-apalis-ixora-v1.2.dtsi"
++
++/ {
++	model = "Toradex Apalis iMX8QM V1.1 on Apalis Ixora V1.2 Carrier Board";
++	compatible = "toradex,apalis-imx8-v1.1-ixora-v1.2",
++		     "toradex,apalis-imx8-v1.1",
++		     "fsl,imx8qm";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1.dtsi b/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1.dtsi
+new file mode 100644
+index 000000000000..d6a9701efa23
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1.dtsi
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++#include <dt-bindings/pwm/pwm.h>
++#include "imx8qm.dtsi"
++#include "imx8-apalis-v1.1.dtsi"
++
++/ {
++	model = "Toradex Apalis iMX8QM V1.1";
++	compatible = "toradex,apalis-imx8-v1.1",
++		     "toradex,apalis-imx8",
++		     "fsl,imx8qm";
++};
++
++/* TODO: Cooling Maps */
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-apalis.dtsi b/arch/arm64/boot/dts/freescale/imx8qm-apalis.dtsi
+new file mode 100644
+index 000000000000..a0cc1b4c135d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8qm-apalis.dtsi
+@@ -0,0 +1,340 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++#include "imx8qm-apalis-v1.1.dtsi"
++
++/ {
++	model = "Toradex Apalis iMX8QM";
++	compatible = "toradex,apalis-imx8",
++		     "fsl,imx8qm";
++};
++
++&ethphy0 {
++	interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
++};
++
++/*
++ * Apalis iMX8QM V1.0 has PHY KSZ9031. the Micrel PHY driver
++ * doesn't support setting internal PHY delay for TXC line for
++ * this PHY model. Use delay on MAC side instead.
++ */
++&fec1 {
++	fsl,rgmii_txc_dly;
++	phy-mode = "rgmii-rxid";
++};
++
++/* TODO: Apalis HDMI1 */
++
++/* Apalis I2C2 (DDC) */
++&i2c0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpi2c0>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <100000>;
++};
++
++&lsio_gpio0 {
++	gpio-line-names = "MXM3_279",
++			  "MXM3_277",
++			  "MXM3_135",
++			  "MXM3_203",
++			  "MXM3_201",
++			  "MXM3_275",
++			  "MXM3_110",
++			  "MXM3_120",
++			  "MXM3_1/GPIO1",
++			  "MXM3_3/GPIO2",
++			  "MXM3_124",
++			  "MXM3_122",
++			  "MXM3_5/GPIO3",
++			  "MXM3_7/GPIO4",
++			  "",
++			  "",
++			  "MXM3_4",
++			  "MXM3_211",
++			  "MXM3_209",
++			  "MXM3_2",
++			  "MXM3_136",
++			  "MXM3_134",
++			  "MXM3_6",
++			  "MXM3_8",
++			  "MXM3_112",
++			  "MXM3_118",
++			  "MXM3_114",
++			  "MXM3_116";
++};
++
++&lsio_gpio1 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_286",
++			  "",
++			  "MXM3_87",
++			  "MXM3_99",
++			  "MXM3_138",
++			  "MXM3_140",
++			  "MXM3_239",
++			  "",
++			  "MXM3_281",
++			  "MXM3_283",
++			  "MXM3_126",
++			  "MXM3_132",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_173",
++			  "MXM3_175",
++			  "MXM3_123";
++};
++
++&lsio_gpio2 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_198",
++			  "MXM3_35",
++			  "MXM3_164",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_217",
++			  "MXM3_215",
++			  "",
++			  "",
++			  "MXM3_193",
++			  "MXM3_194",
++			  "MXM3_37",
++			  "",
++			  "MXM3_271",
++			  "MXM3_273",
++			  "MXM3_195",
++			  "MXM3_197",
++			  "MXM3_177",
++			  "MXM3_179",
++			  "MXM3_181",
++			  "MXM3_183",
++			  "MXM3_185",
++			  "MXM3_187";
++};
++
++&lsio_gpio3 {
++	gpio-line-names = "MXM3_191",
++			  "",
++			  "MXM3_221",
++			  "MXM3_225",
++			  "MXM3_223",
++			  "MXM3_227",
++			  "MXM3_200",
++			  "MXM3_235",
++			  "MXM3_231",
++			  "MXM3_229",
++			  "MXM3_233",
++			  "MXM3_204",
++			  "MXM3_196",
++			  "",
++			  "MXM3_202",
++			  "",
++			  "",
++			  "",
++			  "MXM3_305",
++			  "MXM3_307",
++			  "MXM3_309",
++			  "MXM3_311",
++			  "MXM3_315",
++			  "MXM3_317",
++			  "MXM3_319",
++			  "MXM3_321",
++			  "MXM3_15/GPIO7",
++			  "MXM3_63",
++			  "MXM3_17/GPIO8",
++			  "MXM3_12",
++			  "MXM3_14",
++			  "MXM3_16";
++};
++
++&lsio_gpio4 {
++	gpio-line-names = "MXM3_18",
++			  "MXM3_11/GPIO5",
++			  "MXM3_13/GPIO6",
++			  "MXM3_274",
++			  "MXM3_84",
++			  "MXM3_262",
++			  "MXM3_96",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_190",
++			  "",
++			  "",
++			  "",
++			  "MXM3_269",
++			  "MXM3_251",
++			  "MXM3_253",
++			  "MXM3_295",
++			  "MXM3_299",
++			  "MXM3_301",
++			  "MXM3_297",
++			  "MXM3_293",
++			  "MXM3_291",
++			  "MXM3_289",
++			  "MXM3_287";
++
++	/* Enable pcie root / sata ref clock unconditionally */
++	pcie_sata_hog {
++		gpios = <27 GPIO_ACTIVE_HIGH>;
++	};
++
++};
++
++&lsio_gpio5 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_150",
++			  "MXM3_160",
++			  "MXM3_162",
++			  "MXM3_144",
++			  "MXM3_146",
++			  "MXM3_148",
++			  "MXM3_152",
++			  "MXM3_156",
++			  "MXM3_158",
++			  "MXM3_159",
++			  "MXM3_184",
++			  "MXM3_180",
++			  "MXM3_186",
++			  "MXM3_188",
++			  "MXM3_176",
++			  "MXM3_178";
++};
++
++&lsio_gpio6 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "MXM3_261",
++			  "MXM3_263",
++			  "MXM3_259",
++			  "MXM3_257",
++			  "MXM3_255",
++			  "MXM3_128",
++			  "MXM3_130",
++			  "MXM3_265",
++			  "MXM3_249",
++			  "MXM3_247",
++			  "MXM3_245",
++			  "MXM3_243";
++};
++
++&pinctrl_fec1 {
++	fsl,pins =
++		/* Use pads in 1.8V mode */
++		<IMX8QM_COMP_CTL_GPIO_1V8_3V3_ENET_ENETB_PAD			0x000014a0>,
++		<IMX8QM_ENET0_MDC_CONN_ENET0_MDC				0x06000020>,
++		<IMX8QM_ENET0_MDIO_CONN_ENET0_MDIO				0x06000020>,
++		<IMX8QM_ENET0_RGMII_TX_CTL_CONN_ENET0_RGMII_TX_CTL		0x06000020>,
++		<IMX8QM_ENET0_RGMII_TXC_CONN_ENET0_RGMII_TXC			0x06000020>,
++		<IMX8QM_ENET0_RGMII_TXD0_CONN_ENET0_RGMII_TXD0			0x06000020>,
++		<IMX8QM_ENET0_RGMII_TXD1_CONN_ENET0_RGMII_TXD1			0x06000020>,
++		<IMX8QM_ENET0_RGMII_TXD2_CONN_ENET0_RGMII_TXD2			0x06000020>,
++		<IMX8QM_ENET0_RGMII_TXD3_CONN_ENET0_RGMII_TXD3			0x06000020>,
++		<IMX8QM_ENET0_RGMII_RXC_CONN_ENET0_RGMII_RXC			0x06000020>,
++		<IMX8QM_ENET0_RGMII_RX_CTL_CONN_ENET0_RGMII_RX_CTL		0x06000020>,
++		<IMX8QM_ENET0_RGMII_RXD0_CONN_ENET0_RGMII_RXD0			0x06000020>,
++		<IMX8QM_ENET0_RGMII_RXD1_CONN_ENET0_RGMII_RXD1			0x06000020>,
++		<IMX8QM_ENET0_RGMII_RXD2_CONN_ENET0_RGMII_RXD2			0x06000020>,
++		<IMX8QM_ENET0_RGMII_RXD3_CONN_ENET0_RGMII_RXD3			0x06000020>,
++		<IMX8QM_ENET0_REFCLK_125M_25M_CONN_ENET0_REFCLK_125M_25M	0x06000020>,
++		/* On-module ETH_RESET# */
++		<IMX8QM_LVDS1_GPIO01_LSIO_GPIO1_IO11				0x06000020>,
++		/* On-module ETH_INT# */
++		<IMX8QM_LVDS0_GPIO01_LSIO_GPIO1_IO05				0x04000060>;
++};
++
++&pinctrl_fec1_sleep {
++	fsl,pins =
++		<IMX8QM_COMP_CTL_GPIO_1V8_3V3_ENET_ENETB_PAD			0x000014a0>,
++		<IMX8QM_ENET0_MDC_LSIO_GPIO4_IO14				0x04000040>,
++		<IMX8QM_ENET0_MDIO_LSIO_GPIO4_IO13				0x04000040>,
++		<IMX8QM_ENET0_RGMII_TX_CTL_LSIO_GPIO5_IO31			0x04000040>,
++		<IMX8QM_ENET0_RGMII_TXC_LSIO_GPIO5_IO30				0x04000040>,
++		<IMX8QM_ENET0_RGMII_TXD0_LSIO_GPIO6_IO00			0x04000040>,
++		<IMX8QM_ENET0_RGMII_TXD1_LSIO_GPIO6_IO01			0x04000040>,
++		<IMX8QM_ENET0_RGMII_TXD2_LSIO_GPIO6_IO02			0x04000040>,
++		<IMX8QM_ENET0_RGMII_TXD3_LSIO_GPIO6_IO03			0x04000040>,
++		<IMX8QM_ENET0_RGMII_RXC_LSIO_GPIO6_IO04				0x04000040>,
++		<IMX8QM_ENET0_RGMII_RX_CTL_LSIO_GPIO6_IO05			0x04000040>,
++		<IMX8QM_ENET0_RGMII_RXD0_LSIO_GPIO6_IO06			0x04000040>,
++		<IMX8QM_ENET0_RGMII_RXD1_LSIO_GPIO6_IO07			0x04000040>,
++		<IMX8QM_ENET0_RGMII_RXD2_LSIO_GPIO6_IO08			0x04000040>,
++		<IMX8QM_ENET0_RGMII_RXD3_LSIO_GPIO6_IO09			0x04000040>,
++		<IMX8QM_ENET0_REFCLK_125M_25M_LSIO_GPIO4_IO15			0x04000040>,
++		<IMX8QM_LVDS1_GPIO01_LSIO_GPIO1_IO11				0x04000040>,
++		<IMX8QM_LVDS0_GPIO01_LSIO_GPIO1_IO05				0x04000040>;
++};
++
++&iomuxc {
++	/* Apalis I2C2 (DDC) */
++	pinctrl_lpi2c0: lpi2c0grp {
++		fsl,pins =
++			<IMX8QM_HDMI_TX0_TS_SCL_DMA_I2C0_SCL			0x04000022>,
++			<IMX8QM_HDMI_TX0_TS_SDA_DMA_I2C0_SDA			0x04000022>;
++	};
++};
++
++/* On-module PCIe_CTRL0_CLKREQ */
++&pinctrl_pcie_sata_refclk {
++	fsl,pins =
++		<IMX8QM_PCIE_CTRL0_CLKREQ_B_LSIO_GPIO4_IO27			0x00000021>;
++};
++
++/* TODO: On-module Wi-Fi */
++
++/* Apalis MMC1 */
++&usdhc2 {
++	/*
++	 * The PMIC on V1.0A HW generates 1.6V instead of 1.8V which creates
++	 * issues with certain SD cards, disable 1.8V signaling for now.
++	 */
++	no-1-8-v;
++};
++
++/* Apalis SD1 */
++&usdhc3 {
++	/*
++	 * The PMIC on V1.0A HW generates 1.6V instead of 1.8V which creates
++	 * issues with certain SD cards, disable 1.8V signaling for now.
++	 */
++	no-1-8-v;
++};
 -- 
 2.35.1
 
