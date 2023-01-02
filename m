@@ -2,213 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C34765B2C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD2065B2C7
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbjABNij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
+        id S232714AbjABNl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbjABNig (ORCPT
+        with ESMTP id S232531AbjABNl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:38:36 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62149CCC
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 05:38:35 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id bp44so19825082qtb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 05:38:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date
-         :mime-version:in-reply-to:references:user-agent:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yUeJe0drBbTMgiYkIr+hpKI3FSwnBgCuZWCVk8bkpiQ=;
-        b=sJKeU3WCdOQHKogctAuHoH1Lb5awwjpVpHefGzuQH49JgYhK41rW3ae5mHbdmBGjsY
-         UnNOamQKAW85+d3DJvYxWEY0sQwr8sxKKtQaJB5/ZBhMt7NlGdpExaGUTvd1Ym8DFBJN
-         z/E2hVpZRbW12fzg0X2Kj7ZDsGIcLif6Q2AhzKLokR+qFZiuaAbfbrrFr+unYfzjUdTo
-         IBWE8DrMPJ7CwXxGloffvAvF0SeiBqq0lV8Vq6+n+EzQHdffJcGYNIxvZMkpsWb/VBo6
-         wuXMNTIGHn3SZ4HlhcRTVEyDdo/VUZ2atZFin0VDm7biJW7nnru9XUW+S1aJ2RCzJq8Z
-         kYbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date
-         :mime-version:in-reply-to:references:user-agent:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yUeJe0drBbTMgiYkIr+hpKI3FSwnBgCuZWCVk8bkpiQ=;
-        b=RsEwflfRuEjZPP/UNM/5ULf0aD8WaTCUw7Du6OPHW2tqsSkZ2UaB1Ga5gvclSNoW58
-         ubM8hy9V5zJ1QGWl/XVDSZ+wVpFQr21tmGdIhVBWp5//7hqPL645TmA5lB2TvhnKs0Lr
-         6opmWcy/Td6qrvxMtmbHL0y5VC45x9AqnsUG7QPZQyElCnudwqbS3rS+Jragllgh3+ld
-         ZXDcrArpMfh+TH1D3IPMTreZUshiN4eqY7Gu2ZYQOHk4PceL/WtVH8D1tDUGKrzWDYvz
-         aOcjkA1PtXSpK9jLXtztc79Peqbam/4WZyxBbxiJsZIq+18KBvHkjz6XaZeZb/VjnjpZ
-         x+Mg==
-X-Gm-Message-State: AFqh2kp7mWjUi4iDx5uxCyRrJpgAxdlUwTpuc9z9WNBXGlaQu6i4xHNT
-        OoKw1ALkrDCV/VMuriHzj0BpwhyD5pZ3qw5OWjRpww==
-X-Google-Smtp-Source: AMrXdXsRzYNVZ3d4bkKeYiAZTwzM9YRTxsFtaA7lSB3wLl6IBFcwrL0JOddsqmMqIzrw5hKkoMpSWmO5PrVO7+oREAw=
-X-Received: by 2002:ac8:4d50:0:b0:3a8:a6e:1b4 with SMTP id x16-20020ac84d50000000b003a80a6e01b4mr1646554qtv.313.1672666714390;
- Mon, 02 Jan 2023 05:38:34 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 2 Jan 2023 13:38:33 +0000
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: meli 0.7.2
-References: <20220919-v3-0-a803f2660127@baylibre.com> <20220919-v3-2-a803f2660127@baylibre.com>
- <7da1e73a0cca6867a060d5b69d45e8d4dfc89748.camel@mediatek.com>
-In-Reply-To: <7da1e73a0cca6867a060d5b69d45e8d4dfc89748.camel@mediatek.com>
+        Mon, 2 Jan 2023 08:41:26 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4294D63AB;
+        Mon,  2 Jan 2023 05:41:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672666886; x=1704202886;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CX0zuNRoqPw8io4WYHuKdvqgSF3WPmb0FFc7W4rrRCY=;
+  b=JxbyP2YCRaNjv0lTwuH/Vzmel6591v3Jjf+OpBX0WNrKTbKZUvDC0+ZP
+   GSOzDDhJKgWf9Yj3XpHjiLFSjNzLqqSBO7G8Q/ZHPpyH9sFaoBUfEt4Su
+   p+NKXYpd17rrr5YH+Ff/WON3cpTqKnYPVpgm7VlPyn1B+nvMRdVFppxeP
+   ghB4CpoPjpUpxar/WjpPnzRgE7cp0B2so8jnwDWNgMSJFVih2fBv08C9K
+   7SBSKQd4tftv3H5f4lDm9ZvBylpvAAz857vGJOQ38BdKUHCKRrAKtkJjB
+   Gq3B3DQaOnZTQ4z2tutMr0FL2aQoUfvwzsT9+noMWk58KrqBSoneelmzx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="304993109"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="304993109"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 05:41:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="722976220"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="722976220"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 05:41:23 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 3A3F82017A;
+        Mon,  2 Jan 2023 15:41:21 +0200 (EET)
+Date:   Mon, 2 Jan 2023 13:41:21 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Aleksandr Burakov <a.burakov@rosalinux.ru>
+Cc:     Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] staging: media: ipu3: buffer overflow fix in
+ imgu_map_node
+Message-ID: <Y7LfAR4QdIzp81yW@paasikivi.fi.intel.com>
+References: <20221223123025.5948-1-a.burakov@rosalinux.ru>
 MIME-Version: 1.0
-Date:   Mon, 2 Jan 2023 13:38:33 +0000
-Message-ID: <CABnWg9tf8Sx8S0d8mGowZ80YmZLz6cX2iyxZyKYCGbH_RKMKyA@mail.gmail.com>
-Subject: Re: [PATCH v3 02/12] dt-bindings: display: mediatek: add MT8195 hdmi bindings
-To:     CK Hu <ck.hu@mediatek.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        Chunfeng Yun <Chunfeng.Yun@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        "rzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "koul@kernel.org" <vkoul@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "inux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Mac Shen <Mac.Shen@mediatek.com>,
-        "evicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "rzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        Stuart Lee <Stuart.Lee@mediatek.com>,
-        "ri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "inux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221223123025.5948-1-a.burakov@rosalinux.ru>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Dec 2022 06:18, CK Hu (=E8=83=A1=E4=BF=8A=E5=85=89) <ck.hu@media=
-tek.com> wrote:
->Hi, Guillaume:
->
->On Fri, 2022-11-04 at 15:09 +0100, Guillaume Ranquet wrote:
->> Add mt8195 SoC bindings for hdmi and hdmi-ddc
->>
->> On mt8195 the ddc i2c controller is part of the hdmi IP block and
->> thus has no
->> specific register range, power domain or interrupt, making it simpler
->> than its the legacy "mediatek,hdmi-ddc" binding.
->>
->> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->> ---
->>
->
->[snip]
->
->> a/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-
->> hdmi-ddc.yaml
->> b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-
->> hdmi-ddc.yaml
->> new file mode 100644
->> index 000000000000..2dc273689584
->> --- /dev/null
->> +++
->> b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-
->> hdmi-ddc.yaml
->> @@ -0,0 +1,51 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id:
->> https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediat=
-ek/mediatek,mt8195-hdmi-ddc.yaml*__;Iw!!CTRNKA9wMg0ARbw!wwVQuq5lzW0lvUFUkVX=
-PWT8cIu96xdkn4tMams1E55qyxEZmgV1i0WfpOlq57w$
->>
->> +$schema:
->> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml=
-*__;Iw!!CTRNKA9wMg0ARbw!wwVQuq5lzW0lvUFUkVXPWT8cIu96xdkn4tMams1E55qyxEZmgV1=
-i0WdSGOSxzw$
->>
->> +
->> +title: Mediatek HDMI DDC for mt8195
->> +
->> +maintainers:
->> +  - CK Hu <ck.hu@mediatek.com>
->> +  - Jitao shi <jitao.shi@mediatek.com>
->> +
->> +description: |
->> +  The HDMI DDC i2c controller is used to interface with the HDMI DDC
->> pins.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - mediatek,mt8195-hdmi-ddc
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  clock-names:
->> +    items:
->> +      - const: ddc
->> +
->> +  mediatek,hdmi:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description:
->> +      A phandle to the mt8195 hdmi controller
->> +
->> +required:
->> +  - compatible
->> +  - clocks
->> +  - clock-names
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    hdmiddc0: i2c {
->> +      compatible =3D "mediatek,mt8195-hdmi-ddc";
->> +      mediatek,hdmi =3D <&hdmi0>;
->> +      clocks =3D <&clk26m>;
->> +      clock-names =3D "ddc";
->> +    };
->
->I think we should not have a virtual device. This ddc is part of
->mt8195-hdmi device, so just keep mt8195-hdmi, and let mt8195-hdmi
->driver to probe the sub driver of ddc driver.
->
->Regards,
->CK
+Hi Aleksandr,
 
-Hi CK,
+On Fri, Dec 23, 2022 at 03:30:25PM +0300, Aleksandr Burakov wrote:
+> If imgu_node_map[i].css_queue is not equal to css_queue
+> then "i" after the loop could be equal to IMGU_NODE_NUM
+> that is more than the border value (IMGU_NODE_NUM - 1).
+> So imgu_map_node() call may return IMGU_NODE_NUM that is more
+> than expected value.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: 7fc7af649ca7 ("media: staging/intel-ipu3: Add imgu top level pci device driver")
+> Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
+> ---
+>  drivers/staging/media/ipu3/ipu3.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/media/ipu3/ipu3.c b/drivers/staging/media/ipu3/ipu3.c
+> index 0c453b37f8c4..cb09eb3cc227 100644
+> --- a/drivers/staging/media/ipu3/ipu3.c
+> +++ b/drivers/staging/media/ipu3/ipu3.c
+> @@ -60,8 +60,10 @@ unsigned int imgu_map_node(struct imgu_device *imgu, unsigned int css_queue)
+>  	for (i = 0; i < IMGU_NODE_NUM; i++)
+>  		if (imgu_node_map[i].css_queue == css_queue)
+>  			break;
+> -
+> -	return i;
+> +	if (i < IMGU_NODE_NUM)
+> +		return i;
+> +	else
+> +		return (IMGU_NODE_NUM - 1);
+>  }
+>  
+>  /**************** Dummy buffers ****************/
 
-Thx for your input.
-Though I would strongly prefer to keep the ddc as a separate "virtual devic=
-e".
+Thanks for the patch. It would require a bug elsewhere in the driver for
+this to happen. If some handling for this case is added, it shouldn't be
+hiding the issue.
 
-It aligns better with the goal of reusing as much code as possible
-from the HDMI V1 IP,
-which is something you have been advocating since V1 of this patch
-quite some time ago
-and has shaped this patch.
+One easy way could be to add WARN_ON() for this, and return some value (as
+you do). Zero would do equally well.
 
-To me we are in a state that is clean and avoids branching in the hdmi
-common code.
-Would you reconsider and allow the use of that virtual device?
+I.e.
 
-Thx,
-Guillaume.
+	return WARN_ON(i >= IMGU_NODE_NUM) ? 0 : i;
 
->
->> +
->> +...
->>
+-- 
+Sakari Ailus
