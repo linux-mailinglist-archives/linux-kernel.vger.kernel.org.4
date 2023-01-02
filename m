@@ -2,62 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90C865B4D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE78065B4CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236545AbjABQKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:10:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S236382AbjABQJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236538AbjABQJ6 (ORCPT
+        with ESMTP id S232808AbjABQJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:09:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD99E1D3
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:09:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672675752;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sh73hBCrQns8aoevVV+OOnfi6R1HtUp1NLv5DeAjtKc=;
-        b=WgybEYmh49GhZOS/zL+rI1LaVc2MXgfvdPFK7yKVQNx0fxV/z5G7MadflcnSppqdix5sRk
-        YZRmjfXqrT0OYCdSQR3LkReQwcMC65K07ZXY590GV+zFusSAolY/627G+tX6/7Hu8ybcOJ
-        7Uhdr0CpRlLI7USr9xq7XYIwuVODstg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-h6RgIbbbPnKtMqdUN9kSDg-1; Mon, 02 Jan 2023 11:09:09 -0500
-X-MC-Unique: h6RgIbbbPnKtMqdUN9kSDg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48408811E6E;
-        Mon,  2 Jan 2023 16:09:08 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.193.209])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3D18D35455;
-        Mon,  2 Jan 2023 16:09:06 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        io-uring@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Pitre <nico@fluxnic.net>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH mm-unstable v1 3/3] drivers/misc/open-dice: don't touch VM_MAYSHARE
-Date:   Mon,  2 Jan 2023 17:08:56 +0100
-Message-Id: <20230102160856.500584-4-david@redhat.com>
-In-Reply-To: <20230102160856.500584-1-david@redhat.com>
-References: <20230102160856.500584-1-david@redhat.com>
+        Mon, 2 Jan 2023 11:09:17 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E5EB1C4;
+        Mon,  2 Jan 2023 08:09:16 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id az7so2295007wrb.5;
+        Mon, 02 Jan 2023 08:09:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0f6Df5GAHRv63Ek+imSWcwMNsHw4338pqSJLA2YJouo=;
+        b=Y1fHHCtPosDd5qpxe1/lQLlPANHFOWJ3BbfB5ks2rVkHSmDmSAPNt4ZH1JrHzJsgJC
+         6rje2eLE7x4GkF9XJobFF2tdHGEcwCuFMdRfS1kRMEWhZy2Gc792lXKZ6BNXqHFQL2Eb
+         VK130PKrGGwNsc8OvPfmJ/JvF/xtpMitUFBtdHqJT+pQKj5T2ofxP73kOFOewfj4Ee/f
+         mmdUYICW3NrIR+ChcYifGTfI9fkKKpf0Sr7XZmccjIAlYSNr16uzOMOvMaw6YISoA1MQ
+         /g7rwcxr51KOmg9VXKhPB+Vl4KU32jLfWGh3tlD5yzNbu8p542D4F5MWvs7xyl2D9/xT
+         hJ1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0f6Df5GAHRv63Ek+imSWcwMNsHw4338pqSJLA2YJouo=;
+        b=Kky5sjaA9GJ+TdaY/PcZuSYQQvb2sLyh2jFFSraIz2L05TzeLivv41eQalH+rDZjjv
+         ebUIjeNQLQcNJxg5DGb1BOf9kELV1YwqtDSstG6Ba6If8KN2gEUgXSDseLiWP8DCnzVG
+         TD9eWbI9M3u1eUvYqidsvHvSGyNq3Q+m2EazFDTBDhTwCe6Z5exE6rby79HAl7fdh1dZ
+         vw9uKMRtzz8s8vHF613hgdUTRSd1skqEZFHKfYgVd6Tyw0I0B+LC27SAMbRlcb+aDL5m
+         efeLyoeCZw7yCefp1uWVPUz6meEavcyOqoJ+IB2SEEb0a4fMCdVshXSA13TiM8wJodSK
+         EcRw==
+X-Gm-Message-State: AFqh2krNari9ZXtXI68jojabQWWX3MjSGHohvsr2uuzS3docAMjkDD7N
+        rc+mScoNU2XZAQ5hTcnvDJk=
+X-Google-Smtp-Source: AMrXdXsi8RPlPraZsfzVbsmqLj0DC8LkHcsljtZkutjXXPxuT5lClS5XZH2CibGK0Yx1VJv4b6IcqA==
+X-Received: by 2002:adf:a15b:0:b0:256:ffcc:49b7 with SMTP id r27-20020adfa15b000000b00256ffcc49b7mr33710333wrr.62.1672675754790;
+        Mon, 02 Jan 2023 08:09:14 -0800 (PST)
+Received: from localhost ([2a01:4c8:469:341:d1e1:a149:58ed:f096])
+        by smtp.gmail.com with ESMTPSA id u3-20020adff883000000b002423edd7e50sm29443498wrp.32.2023.01.02.08.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 08:09:14 -0800 (PST)
+Date:   Mon, 2 Jan 2023 16:09:13 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Jakub Matena <matenajakub@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>
+Subject: Re: [PATCH v3] selftest/vm: add mremap expand merge offset test
+Message-ID: <Y7MBqfYv54rY48Wi@lucifer>
+References: <420e491062db9151504aef5661c8a2d928ef6bd7.1672675224.git.lstoakes@gmail.com>
+ <9d13393a-d203-23de-30ae-4d6476a94fd7@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d13393a-d203-23de-30ae-4d6476a94fd7@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,50 +77,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A MAP_SHARED mapping always has VM_MAYSHARE set, and writable
-(VM_MAYWRITE) MAP_SHARED mappings have VM_SHARED set as well. To
-identify a MAP_SHARED mapping, it's sufficient to look at VM_MAYSHARE.
+On Mon, Jan 02, 2023 at 05:03:31PM +0100, David Hildenbrand wrote:
 
-We cannot have VM_MAYSHARE|VM_WRITE mappings without having VM_SHARED
-set. Consequently, current code will never actually end up clearing
-VM_MAYSHARE and that code is confusing, because nobody is supposed to
-mess with VM_MAYWRITE.
+> With the exit() in place, the else branch is implicit and the else can be
+> dropped.
 
-Let's clean it up and restructure the code. No functional change intended.
+Good point, we'll go to a v4 then :) that does neaten things up
+actually. Hopefully this should suffice!
 
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- drivers/misc/open-dice.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
-index c61be3404c6f..9dda47b3fd70 100644
---- a/drivers/misc/open-dice.c
-+++ b/drivers/misc/open-dice.c
-@@ -90,15 +90,13 @@ static int open_dice_mmap(struct file *filp, struct vm_area_struct *vma)
- {
- 	struct open_dice_drvdata *drvdata = to_open_dice_drvdata(filp);
- 
--	/* Do not allow userspace to modify the underlying data. */
--	if ((vma->vm_flags & VM_WRITE) && (vma->vm_flags & VM_SHARED))
--		return -EPERM;
--
--	/* Ensure userspace cannot acquire VM_WRITE + VM_SHARED later. */
--	if (vma->vm_flags & VM_WRITE)
--		vma->vm_flags &= ~VM_MAYSHARE;
--	else if (vma->vm_flags & VM_SHARED)
-+	if (vma->vm_flags & VM_MAYSHARE) {
-+		/* Do not allow userspace to modify the underlying data. */
-+		if (vma->vm_flags & VM_WRITE)
-+			return -EPERM;
-+		/* Ensure userspace cannot acquire VM_WRITE later. */
- 		vma->vm_flags &= ~VM_MAYWRITE;
-+	}
- 
- 	/* Create write-combine mapping so all clients observe a wipe. */
- 	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
--- 
-2.39.0
-
+Agree with your previous point about tooling by the way, it would be good to
+have some more functionality in place that wraps these places where you feel the
+need to goto.
