@@ -2,110 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088DA65B482
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C792165B485
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 16:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbjABP5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 10:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        id S234166AbjABP6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 10:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjABP5d (ORCPT
+        with ESMTP id S229583AbjABP6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 10:57:33 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D68412E;
-        Mon,  2 Jan 2023 07:57:32 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 2 Jan 2023 10:58:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C679712E;
+        Mon,  2 Jan 2023 07:58:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CCA6334231;
-        Mon,  2 Jan 2023 15:57:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672675050; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ByCZbSH3Pnyrm7y6TeC3pVkXY7fG5BRTrVtla101aTk=;
-        b=ClBl1N6Z7nZhqn7P4Qqf8dd4rmSA3XmFDFccXuJmmkT99w0LIum+p6pOspjZPM2UeQfTny
-        S2p4VlzGeFTLabZbFVdH78xVyTYfk0hEnlwc7ArOicAcOKkoMGscsu326i+cnHWcTBK9CM
-        +yQKgM7TvXHwCFTsGz9rltDMtEAJ7zM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672675050;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ByCZbSH3Pnyrm7y6TeC3pVkXY7fG5BRTrVtla101aTk=;
-        b=1YEZ2wLDPTBcGHzPrJEoX3nj8VUmPI+yH+bes9TYwwOQX1lB/rqw2V7jbe6fHYugxtu/nQ
-        hWfl+FA5Px538tAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFCC4139C8;
-        Mon,  2 Jan 2023 15:57:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9A3PLur+smM5dwAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 02 Jan 2023 15:57:30 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 29502A0742; Mon,  2 Jan 2023 16:57:30 +0100 (CET)
-Date:   Mon, 2 Jan 2023 16:57:30 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     paolo.valente@linaro.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, hch@lst.de, damien.lemoal@wdc.com
-Subject: Re: [PATCH RESEND v2 07/10] block, bfq: remove redundant check in
- bfq_put_cooperator
-Message-ID: <20230102155730.hkxfmuq6do47dmfc@quack3>
-References: <20221222191641.1643117-1-shikemeng@huaweicloud.com>
- <20221222191641.1643117-8-shikemeng@huaweicloud.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 558D961015;
+        Mon,  2 Jan 2023 15:58:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C32C433EF;
+        Mon,  2 Jan 2023 15:58:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672675096;
+        bh=Tn8CE4Z5S/X7P04a19+R8hhIyimSiUh/dShOcnmOjxE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hy5Vf2lgSzExLkHQsDeA5ukKGa+WhU23EmNxrouqIxoNrsPTafX+41cdtGYRSTEHN
+         ke6E9IIABzM1bCMXyIJEV1kN9jJzSzkq36Rj8H2lj14FkkrZahA6hmnEsiunTPfq6v
+         7Cp+MizPsaR7w+khhXSCHW8D9wq06B2qKR3bNdAIo78Yo4aR+Xnz+m0BY5IpFnFprH
+         36q4XrSzy8upJlTlOKlejhhdGzZiGrXP8MU9ZlStlouKHWtQgJ++Dh+XuqLjptBEnD
+         GyDyU9y+JNF1ieHDZwiVHXxlsA8EzpQx2rwtgnCJt70smP8FT8D7KNLJMiGFxj+O3+
+         xOflAH4KzbDxw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pCNCn-0008Pz-Fj; Mon, 02 Jan 2023 16:58:30 +0100
+Date:   Mon, 2 Jan 2023 16:58:29 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] arm64: dts: qcom: sc8280xp-x13s: disable soundcard
+Message-ID: <Y7L/JbUICN0OQhaK@hovoldconsulting.com>
+References: <20230102105038.8074-1-johan+linaro@kernel.org>
+ <20230102105038.8074-2-johan+linaro@kernel.org>
+ <fc42801a-55d9-90b9-f7f0-48657ec7a373@linaro.org>
+ <Y7LzJ+RRzDNRf3jR@hovoldconsulting.com>
+ <81e3994e-49d9-ea5b-b055-cbcc737a6e37@linaro.org>
+ <Y7L3OTs/u8FsH8o2@hovoldconsulting.com>
+ <8bd6487a-3ae7-f7c1-e478-1effd68700d3@linaro.org>
+ <Y7L6t3p57uTCECRy@hovoldconsulting.com>
+ <5de95075-ca62-3cae-ce07-d263ea3aa264@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221222191641.1643117-8-shikemeng@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5de95075-ca62-3cae-ce07-d263ea3aa264@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 23-12-22 03:16:38, Kemeng Shi wrote:
-> We have already avoided a circular list in bfq_setup_merge (see comments
-> in bfq_setup_merge() for details), so bfq_queue will not appear in it's
-> new_bfqq list. Just remove this check.
+On Mon, Jan 02, 2023 at 04:46:40PM +0100, Krzysztof Kozlowski wrote:
+> On 02/01/2023 16:39, Johan Hovold wrote:
+> >>>>>>>  	wcd_tx: wcd9380-tx@0,3 {
+> >>>>>>>  		compatible = "sdw20217010d00";
+> >>>>>>> @@ -781,6 +787,8 @@ &vamacro {
+> >>>>>>>  	pinctrl-names = "default";
+> >>>>>>>  	vdd-micb-supply = <&vreg_s10b>;
+> >>>>>>>  	qcom,dmic-sample-rate = <600000>;
+> >>>>>>> +
+> >>>>>>> +	status = "disabled";
+> >>>>>>
+> >>>>>> That's a double disable.
+> >>>>>
+> >>>>> Yes, that's on purpose. We're temporarily disabling these nodes instead
+> >>>>> of reverting the series which should not have been merged.
+> >>>>
+> >>>> I don't get why disabling something twice is anyhow related to
+> >>>> "temporarily disable". One disable is enough for temporary or permanent
+> >>>> disables.
+> >>>
+> >>> It clearly shows that this was done on purpose and indicates which
+> >>> properties need to be changed to "okay" once we have actual support.
+> >>
+> >> No, it shows nothing clearly as from time to time we got duplicated
+> >> properties and it's a simply mistake. The double disable without any
+> >> comment looks like mistake, not intentional code.
+> > 
+> > It's not a mistake. It's intentional. And I don't want to spend hours on
+> > this because of someone else's cock-up.
 > 
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> To you it looks intentional, but for the reader of DTS which has
+> disabled node in DTSI and in DTS - so in two places - it looks like a
+> pure bug. Just because you know the reason behind the change does not
+> make the code readable.
 
-Looks good to me. Feel free to add:
+Calling a (temporary) redundant property a 'pure bug' seems like a bit
+of stretch, and it has nothing to do with readability.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  block/bfq-iosched.c | 2 --
->  1 file changed, 2 deletions(-)
+> >>>>>
+> >>>>> Once we have driver support, these properties will be updated again.
+> >>>>
+> >>>> Linux kernel is not the only consumer of DTS, thus having or not having
+> >>>> the support in the kernel is not reason to disable pieces of it.
+> >>>> Assuming the DTS is correct, of course, because maybe that's the problem?
+> >>>
+> >>> Okay, let's revert these sound dts changes then until we have support.
+> >>> We have no idea if the dts changes are correct as sound still depends
+> >>> on out-of-tree hacks.
+> >>>
+> >>> People are using -next for development and I don't want to see them
+> >>> toast their speakers because we failed get the dependencies merged
+> >>> before merging the dts changes which is how we normally do this.
+> >>
+> >> If the error is in DTS, yeah, revert or disable is a way. But if the
+> >> issue is in the incomplete or broken Linux drivers, then these should be
+> >> changed, e.g. intentionally fail probing, skip new devices, drop new
+> >> compatible etc.
+> > 
+> > And how long does it take for that to propagate and isn't the response
+> > just going go to be "well then fix the driver".
+> > 
+> > I think you're just being unreasonable here.
 > 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 7c91d16dbf6f..89995815dbae 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -5273,8 +5273,6 @@ void bfq_put_cooperator(struct bfq_queue *bfqq)
->  	 */
->  	__bfqq = bfqq->new_bfqq;
->  	while (__bfqq) {
-> -		if (__bfqq == bfqq)
-> -			break;
->  		next = __bfqq->new_bfqq;
->  		bfq_put_queue(__bfqq);
->  		__bfqq = next;
-> -- 
-> 2.30.0
+> I did not propose to fix the driver. I proposed to fail the driver's
+> probe or remove the compatible from it.
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> Such change propagate the same speed as DTS change.
+
+But the DTS changes are in Bjorn branch and Bjorn and I discussed it and
+decided to disable them temporarily instead of reverting.
+
+Now you're asking me to figure out all the dependent driver and patch
+them individually. And this may not reach next before the DTS changes
+do.
+
+> > If Bjorn could rebase his tree, he could simply drop these for now as
+> > sound support was clearly not ready. Since that isn't the case we need
+> > to at least try to be constructive and figure out a reasonable
+> > alternative. While "Linux isn't the only consumer" is a true statement,
+> > it really is not relevant just because there are some dts changes in
+> > Bjorn's tree which should not be there.
+> 
+> The SC8280XP audio DTS looks in general correct, except some style
+> issues, redundant properties and never tested against DT bindings.
+> Therefore it looks as accurate and more-or-less correct representation
+> of the hardware, unless you have some more details on this.
+
+Only that the drivers fail to probe in multiple ways, some which may
+require updating the bindings to address. There's also an indication
+that some further driver support is needed for proper speaker
+protection. That really should be in place before we enable this.
+
+Johan
