@@ -2,99 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD1C65B07B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CB765B07C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 12:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbjABLXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 06:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
+        id S232716AbjABLXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 06:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbjABLW5 (ORCPT
+        with ESMTP id S232752AbjABLXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 06:22:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E485F61
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 03:22:55 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pCItp-0002cs-TJ; Mon, 02 Jan 2023 12:22:37 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7091:c01f:f4cb:ae36])
+        Mon, 2 Jan 2023 06:23:04 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4C35FAB;
+        Mon,  2 Jan 2023 03:23:00 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8137314C969;
-        Mon,  2 Jan 2023 11:22:32 +0000 (UTC)
-Date:   Mon, 2 Jan 2023 12:22:23 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: Re: [PATCH] kbuild: fix single *.ko build
-Message-ID: <20230102112223.krzgmpqn4vt2jymb@pengutronix.de>
-References: <20230101060709.208512-1-masahiroy@kernel.org>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id ECDDF3407E;
+        Mon,  2 Jan 2023 11:22:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672658578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VqwR+u//1iVHsLjS8ecEfHM3m/I8nXvJ9KjV1eh5WXs=;
+        b=QhMvVVMsVf6x5AViodhwkQFpoKLW/PYRa0Ijf7o3mskGYh6S4+61ZECF9G3TYScuIp7trv
+        mK8+RjALUdvmq5ZNuTg5/Tz5jodjLfufzWzjON0Kq+iFv13oOJ9np0a2VmyjWDhzfGRKVI
+        EWhorYbh0tj61v8YqB35xiUgkTRvk6A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672658578;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VqwR+u//1iVHsLjS8ecEfHM3m/I8nXvJ9KjV1eh5WXs=;
+        b=K0tV4Q/xIo8tj99PVm3YZoJHBPvz4Lgq/VAnMDEUg/pj96U16eNquZmpyyQjnPO+/riu1/
+        l4ZdCXpQqX/S11Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9C1913427;
+        Mon,  2 Jan 2023 11:22:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jt8kNZK+smOqbgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 02 Jan 2023 11:22:58 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 4ACF3A073E; Mon,  2 Jan 2023 12:22:58 +0100 (CET)
+Date:   Mon, 2 Jan 2023 12:22:58 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jack@suse.cz, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        paolo.valente@linaro.org, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH RFC] block, bfq: switch 'bfqg->ref' to use atomic
+ refcount apis
+Message-ID: <20230102112258.3fixhuialamu6pkd@quack3>
+References: <20221227031541.2595647-1-yukuai1@huaweicloud.com>
+ <ba5e74a6-b3de-844d-16b8-84eb429c7058@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tjot2qx5fabcwhlr"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230101060709.208512-1-masahiroy@kernel.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ba5e74a6-b3de-844d-16b8-84eb429c7058@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue 27-12-22 14:09:40, Yu Kuai wrote:
+> Hi, Jan!
+> 
+> 在 2022/12/27 11:15, Yu Kuai 写道:
+> > From: Yu Kuai <yukuai3@huawei.com>
+> > 
+> > The updating of 'bfqg->ref' should be protected by 'bfqd->lock', however,
+> > during code review, we found that bfq_pd_free() update 'bfqg->ref'
+> > without holding the lock, which is problematic:
+> > 
+> > 1) bfq_pd_free() triggered by removing cgroup is called asynchronously;
+> > 2) bfqq will grab bfqg reference, and exit bfqq will drop the reference,
+> > which can concurrenty with 1).
+> > 
+> > Unfortunately, 'bfqd->lock' can't be held here because 'bfqd' might already
+> > be freed in bfq_pd_free(). Fix the problem by using atomic refcount apis.
+> > 
+> > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> > ---
+> >   block/bfq-cgroup.c  | 8 +++-----
+> >   block/bfq-iosched.h | 2 +-
+> >   2 files changed, 4 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> > index 1b2829e99dad..aa9c4f02e3a3 100644
+> > --- a/block/bfq-cgroup.c
+> > +++ b/block/bfq-cgroup.c
+> > @@ -316,14 +316,12 @@ struct bfq_group *bfqq_group(struct bfq_queue *bfqq)
+> >   static void bfqg_get(struct bfq_group *bfqg)
+> >   {
+> > -	bfqg->ref++;
+> > +	refcount_inc(&bfqg->ref);
+> >   }
+> >   static void bfqg_put(struct bfq_group *bfqg)
+> >   {
+> > -	bfqg->ref--;
+> > -
+> > -	if (bfqg->ref == 0)
+> > +	if (refcount_dec_and_test(bfqg->ref))
+> Sorry that here should be '&bfqg->ref'.
+> 
+> Anyway, I'll wait for you, and send a new version if you think this
+> patch make sense.
 
---tjot2qx5fabcwhlr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, the patch makes sense to me so feel free to send fixed version.
 
-On 01.01.2023 15:07:09, Masahiro Yamada wrote:
-> The single *.ko build is broken since commit f65a486821cf ("kbuild:
-> change module.order to list *.o instead of *.ko").
->=20
-> Fixes: f65a486821cf ("kbuild: change module.order to list *.o instead of =
-*.ko")
-> Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-
-Tested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---tjot2qx5fabcwhlr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOyvm0ACgkQrX5LkNig
-012fxgf/XmORDICRnvwSatENccvD/tAT3cHdeeJja3WQ9QAWK2800LrAbYvaevr1
-7g2lnzENm47jK3B//b8kYhg2jECjfz9a3TIApFa6uYrmOhp5Wf6kEZoc27jrFhjs
-4b6vjFdoAD0bfn5oGnlau8NqWPblRG4jWtoyBRaY7b/j6/za19gCe99nyhXOprmr
-zse6onUjx8EhAXFyrVoUpIOBm87tawd9zvZnjUAOiofFM7xGzI60g0Qj0kicjg0/
-nnH0oEN5ueCGuPLaJeWvUsS6Aiy4WWj7Yb+m/pJeKqoX8ExWNDFkbAJ3QIYt7ktm
-tB7IC2zVw0/sziaSyBLbumvaw5xWUg==
-=HwDw
------END PGP SIGNATURE-----
-
---tjot2qx5fabcwhlr--
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
