@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302CF65B72A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 21:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B67865B725
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 21:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236609AbjABUbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 15:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
+        id S236426AbjABUbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 15:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbjABUak (ORCPT
+        with ESMTP id S232366AbjABUaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 15:30:40 -0500
-Received: from mailrelay3-1.pub.mailoutpod2-cph3.one.com (mailrelay3-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:402::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDFEB845
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 12:30:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=5buzOcKEfXMw1J+rpjwmhz8fBIg+HKdCQveqaVc+Qag=;
-        b=wlwwErx5gKJ1rho9y1Z4MN+AQ8sQD7e6qxF1gc+gS7Rz7xH1W7y3bnOIbZM+TNRpP+qcIGaJnV4GJ
-         IauXD2iwu4bMuRkIq90pg0YzuKhuqUqkpMS7XeJYDqqB1tl24YgEoUo9E6CWz8nOUTUoqDSPWIHPk4
-         YQ1fXYxPkBbMLI+11jqpS84AkdOle7p9ELnbWoFK5mPcJj3bc0lqURpiRQue+a8NUDSG/npOmwJpRg
-         scmgbaZObAVycEW7bOT+xQG2Q/Wzy2goqgUG6sd3VBmDNK0wAfJGw2zJ5Qqux1dxvilOFItmVuQ7Uf
-         sYAKvATbsZod6bemETstNe1bsg+gygQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=5buzOcKEfXMw1J+rpjwmhz8fBIg+HKdCQveqaVc+Qag=;
-        b=TOCnwco+7WVQri1nQ3WNST0edj4X7dcHqS6OnfYzZsaVL/t+DFutZJGHy8hTtkII5s6di/eiqtypt
-         suj1+bwCQ==
-X-HalOne-ID: 4e57f03f-8adc-11ed-b5b5-ede074c87fad
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay3 (Halon) with ESMTPSA
-        id 4e57f03f-8adc-11ed-b5b5-ede074c87fad;
-        Mon, 02 Jan 2023 20:30:35 +0000 (UTC)
-Date:   Mon, 2 Jan 2023 21:30:34 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tom Rix <trix@redhat.com>, dri-devel@lists.freedesktop.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2 1/2] drm/mipi-dsi: Fix mipi_dsi_dcs_write_seq() macro
- definition format
-Message-ID: <Y7M+6gdQM/4DhQsP@ravnborg.org>
-References: <20230102202542.3494677-1-javierm@redhat.com>
+        Mon, 2 Jan 2023 15:30:13 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D33BE1C
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 12:30:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672691412; x=1704227412;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=aAfymOW/PhGFtC4itped/S1oIrcSAbEZCmbLAIqF9mc=;
+  b=NV7CMRfi5nn1XGhrODdveXeJKeovzp5Uw4MghwfyfhaAUrTk//AbAxg2
+   ue5RJqxAzgXf8DAVep8Csfn9L6Pik+zeRNFFjrMfTAyZhqn7X7UpV68r/
+   Hd/7I8CiStFpims29zTFPjK7dp31zOuabTWRtE8aPXkhoamRtQBILMKhC
+   AwG7DgJljlJ5UNkGeJRLnAk6nJQWdn4Olmp+ckb6Rvm1c4Lrk1n0xCEtp
+   X4Ml6c3R6Y3bWKSvVeg9lxVk7TTA2z0vYigekKQF5uFT0omkRxOMMmfGz
+   VngUY3L1+z0iSd3FKseHq7Yf9YQvqYCvBV1Zd6K2SnnzVKZAl6FKbk4hI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="322772210"
+X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
+   d="scan'208";a="322772210"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 12:30:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="686987612"
+X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
+   d="scan'208";a="686987612"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 02 Jan 2023 12:30:08 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C64E984; Mon,  2 Jan 2023 22:30:40 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH v1 2/5] ASoC: Intel: bytcht_da7213: Replace open coded acpi_dev_put()
+Date:   Mon,  2 Jan 2023 22:30:34 +0200
+Message-Id: <20230102203037.16120-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230102203037.16120-1-andriy.shevchenko@linux.intel.com>
+References: <20230102203037.16120-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230102202542.3494677-1-javierm@redhat.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 09:25:41PM +0100, Javier Martinez Canillas wrote:
-> Change made using a `clang-format -i include/drm/drm_mipi_dsi.h` command.
-> 
-> Suggested-by: Sam Ravnborg <sam@ravnborg.org>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Instead of calling put_device(&adev->dev) where adev is a pointer
+to an ACPI device, use specific call, i.e. acpi_dev_put().
 
-Thanks,
+Also move it out of the conditional to make it more visible in case
+some other code will be added which may use that pointer. We need
+to keep a reference as long as we use the pointer.
 
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> ---
-> 
-> Changes in v2:
-> - New patch in v2.
-> 
->  include/drm/drm_mipi_dsi.h | 21 ++++++++++++---------
->  1 file changed, 12 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/drm/drm_mipi_dsi.h b/include/drm/drm_mipi_dsi.h
-> index 20b21b577dea..e9d1e8a7fc7e 100644
-> --- a/include/drm/drm_mipi_dsi.h
-> +++ b/include/drm/drm_mipi_dsi.h
-> @@ -303,15 +303,18 @@ int mipi_dsi_dcs_get_display_brightness(struct mipi_dsi_device *dsi,
->   * @cmd: Command
->   * @seq: buffer containing data to be transmitted
->   */
-> -#define mipi_dsi_dcs_write_seq(dsi, cmd, seq...) do {				\
-> -		static const u8 d[] = { cmd, seq };				\
-> -		struct device *dev = &dsi->dev;	\
-> -		int ret;						\
-> -		ret = mipi_dsi_dcs_write_buffer(dsi, d, ARRAY_SIZE(d));	\
-> -		if (ret < 0) {						\
-> -			dev_err_ratelimited(dev, "sending command %#02x failed: %d\n", cmd, ret); \
-> -			return ret;						\
-> -		}						\
-> +#define mipi_dsi_dcs_write_seq(dsi, cmd, seq...)                           \
-> +	do {                                                               \
-> +		static const u8 d[] = { cmd, seq };                        \
-> +		struct device *dev = &dsi->dev;                            \
-> +		int ret;                                                   \
-> +		ret = mipi_dsi_dcs_write_buffer(dsi, d, ARRAY_SIZE(d));    \
-> +		if (ret < 0) {                                             \
-> +			dev_err_ratelimited(                               \
-> +				dev, "sending command %#02x failed: %d\n", \
-> +				cmd, ret);                                 \
-> +			return ret;                                        \
-> +		}                                                          \
->  	} while (0)
->  
->  /**
-> -- 
-> 2.38.1
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ sound/soc/intel/boards/bytcht_da7213.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/intel/boards/bytcht_da7213.c b/sound/soc/intel/boards/bytcht_da7213.c
+index a0c8f1d3f8ce..a3b0cfab17b0 100644
+--- a/sound/soc/intel/boards/bytcht_da7213.c
++++ b/sound/soc/intel/boards/bytcht_da7213.c
+@@ -256,9 +256,9 @@ static int bytcht_da7213_probe(struct platform_device *pdev)
+ 	if (adev) {
+ 		snprintf(codec_name, sizeof(codec_name),
+ 			 "i2c-%s", acpi_dev_name(adev));
+-		put_device(&adev->dev);
+ 		dailink[dai_index].codecs->name = codec_name;
+ 	}
++	acpi_dev_put(adev);
+ 
+ 	/* override platform name, if required */
+ 	platform_name = mach->mach_params.platform;
+-- 
+2.35.1
+
