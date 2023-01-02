@@ -2,167 +2,497 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8700E65B23E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8DC65B246
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 13:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbjABMmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 07:42:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
+        id S232787AbjABMo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 07:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjABMmw (ORCPT
+        with ESMTP id S229494AbjABMo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 07:42:52 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EADC49
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 04:42:51 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 2 Jan 2023 07:44:26 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AA05FE0;
+        Mon,  2 Jan 2023 04:44:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1672663464; x=1704199464;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ioVYIpFG8DC6v6ZQ/LA0HIv3ZhntmZW8xS8Dwp6vcB4=;
+  b=jR+wKcWlWSjlbQJYqLgQYrEQVS/zhH5PaH6Vp9i67lsocR8zpej2v11i
+   DP7B9hSg5sjA+iSdcVezEU6U4hp6HSF5a/6LdMPYrnBWJVnFZ0+F7X7Xp
+   YF4MbOBTJ3h+EvZdYKtiX/mya7sQE361c+GXLof1qsn2vaxG9Ii8Tax6I
+   YYlgj/FzUaE0GaXLnKZ7g4b6Yi0ZTu7qC6SJ2D5tNx448mYRbz5ReAqKC
+   2iVn/wL+hBBLkiUoPhPgI1VYH0P98FUQKogmsxq43rz93H6F/+QARgWOS
+   YzkGWYPRIJ6vAyeuMA+HntabzysMAxemwOmNDKgWZ1Y9pSBuN54iFpfrV
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,294,1665439200"; 
+   d="scan'208";a="28204263"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 02 Jan 2023 13:44:21 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 02 Jan 2023 13:44:21 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 02 Jan 2023 13:44:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1672663461; x=1704199461;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ioVYIpFG8DC6v6ZQ/LA0HIv3ZhntmZW8xS8Dwp6vcB4=;
+  b=R2nkheNI3fJ58pMHLE41u24BQONdzetUJ29PCXdIwLv0mzar1jCWEosY
+   m2BserLigf+MQx7FAPWMFj3ivGGgq/C7cv+PZ7rnOe8H6J0rrsX0TSPw+
+   7lCTkcMG8yLdT64gHJQ7PzPMT1EwOXF/6qCwq+AB7t3Hwm+NLywxEoBfR
+   mYQzBSnxcSMffBgs56AodHh1RhKeuX+O8/+yoHfwkIAvp/e0vUETDz4aw
+   95hY4o4dy2ylT+iWPj825Z+Xd6a5pgYWssWAe5kut1yD5SBscGQ/Ai5nr
+   PzLrM30/Meyu1HVJ+QtA1v/suX6jTGmtzFFDgASJSJoT7kAoNLZfzj98Y
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,294,1665439200"; 
+   d="scan'208";a="28204262"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 02 Jan 2023 13:44:21 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4524820EE5;
-        Mon,  2 Jan 2023 12:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1672663370; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1sg7BmNN8+RDm1eojWN+wOBEZpkzt9WjUrPrxXXU8Oo=;
-        b=Z1yYj+u7YbKVfLCniHq0g9pR1Utx3LIE2GOuUdANXf65nOnGb4Rp/dFZ2GHHU/b1+7pkRa
-        xzG7Vpw+Td3omGiMB8eoW4wcbjHlbUUj42QDQaS8ZdRcyGUWglFNYKOZjU1zhclMX6GUqx
-        Ge58qGAP+J3Hc/3l5aCgZ7c0+On+siA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1672663370;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1sg7BmNN8+RDm1eojWN+wOBEZpkzt9WjUrPrxXXU8Oo=;
-        b=zjGIYVhEPt+kSK4f6vsoobHVlYjiVW06dOZ5AehbDtWDjK/2X4vIXpbbU5zXsVxsF8YUW+
-        l1f0BBTSi+L+2yBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 16C0213427;
-        Mon,  2 Jan 2023 12:42:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lVXpBErRsmP2FwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 02 Jan 2023 12:42:50 +0000
-Date:   Mon, 02 Jan 2023 13:42:49 +0100
-Message-ID: <87wn65umye.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Alsa-devel <alsa-devel@alsa-project.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        =?ISO-8859-1?Q?P=C1LFFY_D=E1niel?= <dpalffy@gmail.com>,
-        Sergey <zagagyka@basealt.ru>
-Subject: Re: [regression, 5.10.y] =?ISO-8859-1?Q?Bug=A0216861?= - sound
- disappearance on Acer Swift 3 SF314-59-78UR after update to 5.10.157
-In-Reply-To: <Y7K1WDmPYi3EMOn1@eldamar.lan>
-References: <bebd692d-7d21-6648-6b7a-c91063bb51c2@leemhuis.info>
-        <Y7K1WDmPYi3EMOn1@eldamar.lan>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 2E201280056;
+        Mon,  2 Jan 2023 13:44:21 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Subject: Re: [PATCH v7 06/11] leds: trigger: netdev: add hardware control support
+Date:   Mon, 02 Jan 2023 13:44:20 +0100
+Message-ID: <13186102.dW097sEU6C@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <639ca43c.050a0220.e6d91.9fe8@mx.google.com>
+References: <20221214235438.30271-1-ansuelsmth@gmail.com> <3770526.R56niFO833@steina-w> <639ca43c.050a0220.e6d91.9fe8@mx.google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 02 Jan 2023 11:43:36 +0100,
-Salvatore Bonaccorso wrote:
-> 
-> Hi,
-> 
-> [Adding as well Richard Fitzgerald and PÁLFFY Dániel to recipients]
-> 
-> On Fri, Dec 30, 2022 at 09:08:57AM +0100, Thorsten Leemhuis wrote:
-> > Hi, this is your Linux kernel regression tracker speaking.
+Am Freitag, 16. Dezember 2022, 18:00:45 CET schrieb Christian Marangi:
+> On Thu, Dec 15, 2022 at 04:27:17PM +0100, Alexander Stein wrote:
+> > Hi,
 > > 
-> > I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> > kernel developer don't keep an eye on it, I decided to forward it by
-> > mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216861 :
+> > thanks for the v7 series.
 > > 
-> > >  Sergey 2022-12-29 10:07:51 UTC
+> > Am Donnerstag, 15. Dezember 2022, 00:54:33 CET schrieb Christian Marangi:
+> > > Add hardware control support for the Netdev trigger.
+> > > The trigger on config change will check if the requested trigger can set
+> > > to blink mode using LED hardware mode and if every blink mode is
+> > > supported,
+> > > the trigger will enable hardware mode with the requested configuration.
+> > > If there is at least one trigger that is not supported and can't run in
+> > > hardware mode, then software mode will be used instead.
+> > > A validation is done on every value change and on fail the old value is
+> > > restored and -EINVAL is returned.
 > > > 
-> > > Created attachment 303497 [details]
-> > > pulseaudio.log
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > ---
 > > > 
-> > > Sudden sound disappearance was reported for some laptops, e.g.
+> > >  drivers/leds/trigger/ledtrig-netdev.c | 155 +++++++++++++++++++++++++-
+> > >  1 file changed, 149 insertions(+), 6 deletions(-)
 > > > 
-> > > Acer Swift 3 SF314-59-78UR 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+> > > diff --git a/drivers/leds/trigger/ledtrig-netdev.c
+> > > b/drivers/leds/trigger/ledtrig-netdev.c index dd63cadb896e..ed019cb5867c
+> > > 100644
+> > > --- a/drivers/leds/trigger/ledtrig-netdev.c
+> > > +++ b/drivers/leds/trigger/ledtrig-netdev.c
+> > > @@ -37,6 +37,7 @@
 > > > 
-> > > # lspci
-> > > 0000:00:1f.3 Multimedia audio controller: Intel Corporation Tiger Lake-LP Smart Sound Technology Audio Controller (rev 20)
-> > >         Subsystem: Acer Incorporated [ALI] Device 148c
-> > >         Flags: bus master, fast devsel, latency 32, IRQ 197, IOMMU group 12
-> > >         Memory at 601f270000 (64-bit, non-prefetchable) [size=16K]
-> > >         Memory at 601f000000 (64-bit, non-prefetchable) [size=1M]
-> > >         Capabilities: [50] Power Management version 3
-> > >         Capabilities: [80] Vendor Specific Information: Len=14 <?>
-> > >         Capabilities: [60] MSI: Enable+ Count=1/1 Maskable- 64bit+
-> > >         Kernel driver in use: sof-audio-pci
+> > >   */
+> > >  
+> > >  struct led_netdev_data {
 > > > 
-> > > I am attaching the pulseaudio and dmesg logs
+> > > +	enum led_blink_modes blink_mode;
 > > > 
-> > > This bug started reproducing after updating the kernel from 5.10.156 to 5.10.157
+> > >  	spinlock_t lock;
+> > >  	
+> > >  	struct delayed_work work;
 > > > 
-> > > Bisection revealed the commit being reverted:
+> > > @@ -53,11 +54,105 @@ struct led_netdev_data {
 > > > 
-> > > c34db0d6b88b1da95e7ab3353e674f4f574cccee is the first bad commit
-> > > commit c34db0d6b88b1da95e7ab3353e674f4f574cccee
-> > > Author: Richard Fitzgerald <rf@opensource.cirrus.com>
-> > > Date:   Fri Nov 4 13:22:13 2022 +0000
+> > >  	bool carrier_link_up;
+> > >  
+> > >  };
 > > > 
-> > >     ASoC: soc-pcm: Don't zero TDM masks in __soc_pcm_open()
-> > >     
-> > >     [ Upstream commit 39bd801d6908900e9ab0cdc2655150f95ddd4f1a ]
-> > >     
-> > >     The DAI tx_mask and rx_mask are set by snd_soc_dai_set_tdm_slot()
-> > >     and used by later code that depends on the TDM settings. So
-> > >     __soc_pcm_open() should not be obliterating those mask values.
-> > >     
-> > > [...]
-> > > Original bug report: https://bugzilla.altlinux.org/44690
+> > > +struct netdev_led_attr_detail {
+> > > +	char *name;
+> > > +	bool hardware_only;
+> > > +	enum led_trigger_netdev_modes bit;
+> > > +};
+> > > +
+> > > +static struct netdev_led_attr_detail attr_details[] = {
+> > > +	{ .name = "link", .bit = TRIGGER_NETDEV_LINK},
+> > > +	{ .name = "tx", .bit = TRIGGER_NETDEV_TX},
+> > > +	{ .name = "rx", .bit = TRIGGER_NETDEV_RX},
+> > > +};
+> > > +
+> > > +static bool validate_baseline_state(struct led_netdev_data
+> > > *trigger_data)
+> > > +{
+> > > +	struct led_classdev *led_cdev = trigger_data->led_cdev;
+> > > +	struct netdev_led_attr_detail *detail;
+> > > +	u32 hw_blink_mode_supported = 0;
+> > > +	bool force_sw = false;
+> > > +	int i;
+> > > +
+> > > +	for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
+> > > +		detail = &attr_details[i];
+> > > +
+> > > +		/* Mode not active, skip */
+> > > +		if (!test_bit(detail->bit, &trigger_data->mode))
+> > > +			continue;
+> > > +
+> > > +		/* Hardware only mode enabled on software controlled led
 > > 
-> > See the ticket for more details.
+> > */
 > > 
-> > BTW, let me use this mail to also add the report to the list of tracked
-> > regressions to ensure it's doesn't fall through the cracks:
+> > > +		if (led_cdev->blink_mode == SOFTWARE_CONTROLLED &&
+> > > +		    detail->hardware_only)
+> > > +			return false;
+> > > +
+> > > +		/* Check if the mode supports hardware mode */
+> > > +		if (led_cdev->blink_mode != SOFTWARE_CONTROLLED) {
+> > > +			/* With a net dev set, force software mode.
+> > > +			 * With modes are handled by hardware, led will
 > > 
-> > #regzbot introduced: c34db0d6b88b1d
-> > https://bugzilla.kernel.org/show_bug.cgi?id=216861
-> > #regzbot title: sound: asoc: sudden sound disappearance
-> > #regzbot ignore-activity
+> > blink
+> > 
+> > > +			 * based on his own events and will ignore any
+> > 
+> > event
+> > 
+> > > +			 * from the provided dev.
+> > > +			 */
+> > > +			if (trigger_data->net_dev) {
+> > > +				force_sw = true;
+> > > +				continue;
+> > > +			}
+> > > +
+> > > +			/* With empty dev, check if the mode is
+> > 
+> > supported */
+> > 
+> > > +			if
+> > 
+> > (led_trigger_blink_mode_is_supported(led_cdev, detail->bit))
+> > 
+> > > +				hw_blink_mode_supported |= BIT(detail-
+> > >
+> > >bit);
+> > 
+> > Shouldn't this be BIT(detail->bit)?
 > 
-> FWIW, we had as well reports in Debian after having updated the kernel
-> from 5.10.149 based one to 5.10.158 based one in the last point
-> releases, they are at least:
+> I think I didn't understand?
+
+The name 'bit' indicates this is a single bit number rather than a bitmask. 
+AFAICS the value (detail->bit) passed to led_trigger_blink_mode_is_supported 
+is eventually used within test_bit inside dp83867_parse_netdev. I assume you 
+have to actually pass the bitmask with this single bit set, not the bit number 
+itself.
+
+Best regards,
+Alexander
+
+> > > +		}
+> > > +	}
+> > > +
+> > > +	/* We can't run modes handled by both software and hardware.
+> > > +	 * Check if we run hardware modes and check if all the modes
+> > > +	 * can be handled by hardware.
+> > > +	 */
+> > > +	if (hw_blink_mode_supported && hw_blink_mode_supported !=
+> > > trigger_data->mode) +		return false;
+> > > +
+> > > +	/* Modes are valid. Decide now the running mode to later
+> > > +	 * set the baseline.
+> > > +	 * Software mode is enforced with net_dev set. With an empty
+> > > +	 * one hardware mode is selected by default (if supported).
+> > > +	 */
+> > > +	if (force_sw || led_cdev->blink_mode == SOFTWARE_CONTROLLED)
+> > 
+> > IMHO '|| !hw_blink_mode_supported' should be added here for blink_modes.
+> > This might happen if a PHY LED is SOFTWARE_HARDWARE_CONTROLLED, but some
+> > blink mode is not supported by hardware, thus hw_blink_mode_supported=0.
 > 
-> https://bugs.debian.org/1027483
-> https://bugs.debian.org/1027430
+> Will check this and report back.
+> 
+> > Best regards,
+> > Alexander
+> > 
+> > > +		trigger_data->blink_mode = SOFTWARE_CONTROLLED;
+> > > +	else
+> > > +		trigger_data->blink_mode = HARDWARE_CONTROLLED;
+> > > +
+> > > +	return true;
+> > > +}
+> > > +
+> > > 
+> > >  static void set_baseline_state(struct led_netdev_data *trigger_data)
+> > >  {
+> > > 
+> > > +	int i;
+> > > 
+> > >  	int current_brightness;
+> > > 
+> > > +	struct netdev_led_attr_detail *detail;
+> > > 
+> > >  	struct led_classdev *led_cdev = trigger_data->led_cdev;
+> > > 
+> > > +	/* Modes already validated. Directly apply hw trigger modes */
+> > > +	if (trigger_data->blink_mode == HARDWARE_CONTROLLED) {
+> > > +		/* We are refreshing the blink modes. Reset them */
+> > > +		led_cdev->hw_control_configure(led_cdev,
+> > 
+> > BIT(TRIGGER_NETDEV_LINK),
+> > 
+> > > +					       BLINK_MODE_ZERO);
+> > > +
+> > > +		for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
+> > > +			detail = &attr_details[i];
+> > > +
+> > > +			if (!test_bit(detail->bit, &trigger_data->mode))
+> > > +				continue;
+> > > +
+> > > +			led_cdev->hw_control_configure(led_cdev,
+> > 
+> > BIT(detail->bit),
+> > 
+> > > +
+> > 
+> > BLINK_MODE_ENABLE);
+> > 
+> > Shouldn't this be BIT(detail->bit)?
+> > 
+> > > +		}
+> > > +
+> > > +		led_cdev->hw_control_start(led_cdev);
+> > > +
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	/* Handle trigger modes by software */
+> > > 
+> > >  	current_brightness = led_cdev->brightness;
+> > >  	if (current_brightness)
+> > >  	
+> > >  		led_cdev->blink_brightness = current_brightness;
+> > > 
+> > > @@ -100,10 +195,15 @@ static ssize_t device_name_store(struct device
+> > > *dev,
+> > > 
+> > >  				 size_t size)
+> > >  
+> > >  {
+> > >  
+> > >  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
+> > > 
+> > > +	struct net_device *old_net = trigger_data->net_dev;
+> > > +	char old_device_name[IFNAMSIZ];
+> > > 
+> > >  	if (size >= IFNAMSIZ)
+> > >  	
+> > >  		return -EINVAL;
+> > > 
+> > > +	/* Backup old device name */
+> > > +	memcpy(old_device_name, trigger_data->device_name, IFNAMSIZ);
+> > > +
+> > > 
+> > >  	cancel_delayed_work_sync(&trigger_data->work);
+> > >  	
+> > >  	spin_lock_bh(&trigger_data->lock);
+> > > 
+> > > @@ -122,6 +222,19 @@ static ssize_t device_name_store(struct device
+> > > *dev,
+> > > 
+> > >  		trigger_data->net_dev =
+> > >  		
+> > >  		    dev_get_by_name(&init_net, trigger_data->device_name);
+> > > 
+> > > +	if (!validate_baseline_state(trigger_data)) {
+> > > +		/* Restore old net_dev and device_name */
+> > > +		if (trigger_data->net_dev)
+> > > +			dev_put(trigger_data->net_dev);
+> > > +
+> > > +		dev_hold(old_net);
+> > > +		trigger_data->net_dev = old_net;
+> > > +		memcpy(trigger_data->device_name, old_device_name,
+> > 
+> > IFNAMSIZ);
+> > 
+> > > +
+> > > +		spin_unlock_bh(&trigger_data->lock);
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > 
+> > >  	trigger_data->carrier_link_up = false;
+> > >  	if (trigger_data->net_dev != NULL)
+> > >  	
+> > >  		trigger_data->carrier_link_up =
+> > 
+> > netif_carrier_ok(trigger_data->net_dev);
+> > 
+> > > @@ -159,7 +272,7 @@ static ssize_t netdev_led_attr_store(struct device
+> > > *dev, const char *buf, size_t size, enum led_trigger_netdev_modes attr)
+> > > 
+> > >  {
+> > >  
+> > >  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
+> > > 
+> > > -	unsigned long state;
+> > > +	unsigned long state, old_mode = trigger_data->mode;
+> > > 
+> > >  	int ret;
+> > >  	int bit;
+> > > 
+> > > @@ -184,6 +297,12 @@ static ssize_t netdev_led_attr_store(struct device
+> > > *dev, const char *buf, else
+> > > 
+> > >  		clear_bit(bit, &trigger_data->mode);
+> > > 
+> > > +	if (!validate_baseline_state(trigger_data)) {
+> > > +		/* Restore old mode on validation fail */
+> > > +		trigger_data->mode = old_mode;
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > 
+> > >  	set_baseline_state(trigger_data);
+> > >  	
+> > >  	return size;
+> > > 
+> > > @@ -220,6 +339,8 @@ static ssize_t interval_store(struct device *dev,
+> > > 
+> > >  			      size_t size)
+> > >  
+> > >  {
+> > >  
+> > >  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
+> > > 
+> > > +	int old_interval = atomic_read(&trigger_data->interval);
+> > > +	u32 old_mode = trigger_data->mode;
+> > > 
+> > >  	unsigned long value;
+> > >  	int ret;
+> > > 
+> > > @@ -228,13 +349,22 @@ static ssize_t interval_store(struct device *dev,
+> > > 
+> > >  		return ret;
+> > >  	
+> > >  	/* impose some basic bounds on the timer interval */
+> > > 
+> > > -	if (value >= 5 && value <= 10000) {
+> > > -		cancel_delayed_work_sync(&trigger_data->work);
+> > > +	if (value < 5 || value > 10000)
+> > > +		return -EINVAL;
+> > > +
+> > > +	cancel_delayed_work_sync(&trigger_data->work);
+> > > +
+> > > +	atomic_set(&trigger_data->interval, msecs_to_jiffies(value));
+> > > 
+> > > -		atomic_set(&trigger_data->interval,
+> > 
+> > msecs_to_jiffies(value));
+> > 
+> > > -		set_baseline_state(trigger_data);	/* resets timer
+> > 
+> > */
+> > 
+> > > +	if (!validate_baseline_state(trigger_data)) {
+> > > +		/* Restore old interval on validation error */
+> > > +		atomic_set(&trigger_data->interval, old_interval);
+> > > +		trigger_data->mode = old_mode;
+> > > +		return -EINVAL;
+> > > 
+> > >  	}
+> > > 
+> > > +	set_baseline_state(trigger_data);	/* resets timer */
+> > > +
+> > > 
+> > >  	return size;
+> > >  
+> > >  }
+> > > 
+> > > @@ -368,13 +498,25 @@ static int netdev_trig_activate(struct
+> > > led_classdev
+> > > *led_cdev) trigger_data->mode = 0;
+> > > 
+> > >  	atomic_set(&trigger_data->interval, msecs_to_jiffies(50));
+> > >  	trigger_data->last_activity = 0;
+> > > 
+> > > +	if (led_cdev->blink_mode != SOFTWARE_CONTROLLED) {
+> > > +		/* With hw mode enabled reset any rule set by default */
+> > > +		if (led_cdev->hw_control_status(led_cdev)) {
+> > > +			rc = led_cdev->hw_control_configure(led_cdev,
+> > 
+> > BIT(TRIGGER_NETDEV_LINK),
+> > 
+> > > +
+> > 
+> > BLINK_MODE_ZERO);
+> > 
+> > > +			if (rc)
+> > > +				goto err;
+> > > +		}
+> > > +	}
+> > > 
+> > >  	led_set_trigger_data(led_cdev, trigger_data);
+> > >  	
+> > >  	rc = register_netdevice_notifier(&trigger_data->notifier);
+> > >  	if (rc)
+> > > 
+> > > -		kfree(trigger_data);
+> > > +		goto err;
+> > > 
+> > > +	return 0;
+> > > +err:
+> > > +	kfree(trigger_data);
+> > > 
+> > >  	return rc;
+> > >  
+> > >  }
+> > > 
+> > > @@ -394,6 +536,7 @@ static void netdev_trig_deactivate(struct
+> > > led_classdev
+> > > *led_cdev)
+> > > 
+> > >  static struct led_trigger netdev_led_trigger = {
+> > >  
+> > >  	.name = "netdev",
+> > > 
+> > > +	.supported_blink_modes = SOFTWARE_HARDWARE,
+> > > 
+> > >  	.activate = netdev_trig_activate,
+> > >  	.deactivate = netdev_trig_deactivate,
+> > >  	.groups = netdev_trig_groups,
 
-I got another report while the commit was backported to 5.14-based
-openSUSE Leap kernel, and I ended up with dropping it.
-
-So, IMO, it's safer to drop this patch from the older stable trees.
-As far as I see, 5.15.y and 5.10.y got this.
-
-Unless anyone gives a better fix, I'm going to submit a revert patch
-for those trees.
 
 
-thanks,
 
-Takashi
