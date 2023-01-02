@@ -2,87 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F026565AE5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC0065AE6D
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjABIre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 03:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S231609AbjABIzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 03:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbjABIrc (ORCPT
+        with ESMTP id S230062AbjABIy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 03:47:32 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAED9D94;
-        Mon,  2 Jan 2023 00:47:29 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 7DC38447CB;
-        Mon,  2 Jan 2023 08:47:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1672649247; bh=Iri98/XMHObCV5g8WvmFmk4VxFpmQL0oBfMhS83NGLg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=YLfaPGXQTYRmSqpJc4E1KludjXTBHczwtN754lSF6OSVK8P4DQhkZc8CpUB28EQz6
-         c+fPiyvquZZzesUxEcUWqV4ywwIfvU5+9C5uIU6Z/gWKCWC8AlNCpp4njyo9YbYtpw
-         bE6UR1EAVkIFKgE0CTaDc/HmZ0IzcuI05L+80+N9Zs2zrMXID/b2e2p7+Ke0U9bXXn
-         tkNvrVLEdRFpZCR7ngNNe66uyaEwfdoo1jy2v7n9J5rrF8coWU64nCEcJ85R1HCaUd
-         xTuIe1/tpjF9wT2tlMoQL5rgMjavKMqqqWB/MkSHUnzgMDedC2rVwHxStZoXssJBzx
-         IJf4HgKPGOo0A==
-Message-ID: <f36dd8e3-9905-f04a-ed34-4be91ed1fec6@marcan.st>
-Date:   Mon, 2 Jan 2023 17:47:21 +0900
+        Mon, 2 Jan 2023 03:54:57 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D440826C3
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:54:55 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j17so31284507lfr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 00:54:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ghzp06ziZbCt/lg3Z90dZpRxpdba+ht3TANbdc2otI4=;
+        b=ZGtJu9MvlfktJ4IfS4zv+pTw1bOdjn+5c6xVmfBn6nD3Z9LItorWxx/cNajXpnqo2o
+         /bEasvU80GUy9xnKBxn4o6bNvqHTSul8NkhGuWXhk1ouGesyRFgZD0Sukwp5NoLKUzBz
+         G2EaPXptBbgj3By4b9G6wCTHJogNZWr31/40vcDC7jcTQEL+oWtbMti0FfYJie/MSA1A
+         vOd9LEIGCxQB/MyfPL8UdMf/xi9HONPzvRMUZbEMUVfjhcgywtby3HXNVO0wl8cUW/jn
+         KqEysV0pZzsTuwGnEiUleoFHS8u5Y2Ixbf76E0XzN5BQ40J90nNjNsiDvcMRwsQYrEk9
+         0vsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ghzp06ziZbCt/lg3Z90dZpRxpdba+ht3TANbdc2otI4=;
+        b=Hd5qzfc4/1x8XpysuIQ/VFPCNz0Xb8VKgnvuCYtGtAJcKn6ymzePhawHGe1QKCoLTK
+         ZjimP/LZ2b7QClXi0W4vnfSfLOWe9AcmY2Gooyb8bFP9wBnBxLML3FhT6EcamTckSQOY
+         bDQdK6VFBLJqpZu1dnqcdGwdGRmqjaDDeNcUC14/0HFmUJMyK8mKgc9TehsW2gIU6YlQ
+         YxKI2zerwiNBkZwDDvActjFzb2Ll4BmIKOGXfgHN0Gh/J9aaWf9UxARZsQFzq2Ny+nG+
+         42zm/p5nOM+iCQ2OiVdoeCjwXKiu8dWUr19tzlt9aizRcdxT+ASM9I613fOmacDl7xfv
+         LEyQ==
+X-Gm-Message-State: AFqh2kpetVD7jupnlST0Th0Xx5S0MxVflgucir18gnAyzSiPqHWAt0Vn
+        FtsmyQioLDkUynoQLuB+CC/joA==
+X-Google-Smtp-Source: AMrXdXvbM3W8SnMYyt7Bzk7bXkBQ6iBvdz+oDGODxQBUT4YH20+zKusZQtwQ4Om0DU8qCNx/OxpaZA==
+X-Received: by 2002:a05:6512:3b20:b0:4b5:178f:a14c with SMTP id f32-20020a0565123b2000b004b5178fa14cmr13455243lfv.16.1672649694216;
+        Mon, 02 Jan 2023 00:54:54 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q8-20020ac25108000000b004aac23e0dd6sm4408815lfb.29.2023.01.02.00.54.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 00:54:53 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/6] arm64: dts: qcom: sc8280xp: align PSCI domain names with DT schema
+Date:   Mon,  2 Jan 2023 09:54:47 +0100
+Message-Id: <20230102085452.10753-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [REGRESSION] Wi-Fi fails to work on BCM4364B2 chips since kernel
- 6.1
-Content-Language: en-US
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        "arend.vanspriel@broadcom.com" <arend.vanspriel@broadcom.com>,
-        "aspriel@gmail.com" <aspriel@gmail.com>,
-        "ranky.lin@broadcom.com" <ranky.lin@broadcom.com>,
-        "hante.meuleman@broadcom.com" <hante.meuleman@broadcom.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lina@asahilina.net" <lina@asahilina.net>
-References: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/01/02 16:46, Aditya Garg wrote:
-> Since kernel 6.1, Wi-Fi is failing to work on Macs with the BCM4364 rev 3 chips and journalctl reports that the firmware has crashed.
-> 
-> The complete journalctl is given here :- https://gist.github.com/AdityaGarg8/a25b187e7f1462798de87e048f4840db
-> 
-> This bug has been reported by users of iMac19,1 as well as Macmini8,1.
+Bindings expect power domains to follow generic naming pattern:
 
-You are using a downstream patched tree, specifically one with further
-Broadcom patches not yet upstream from my Asahi Linux tree and probably
-others.
+  sc8280xp-crd.dtb: psci: 'cpu-cluster0', 'cpu0', 'cpu1', 'cpu2', 'cpu3', 'cpu4', 'cpu5', 'cpu6',
+    'cpu7' do not match any of the regexes: '^power-domain-', 'pinctrl-[0-9]+'
 
-Please do not spam upstream developers with issues from downstream
-trees. If you have an issue with my tree, you can report it on GitHub.
-If you are using another tree, report it to its maintainer. If you can
-reproduce this with *vanilla* 6.1 then you can report it upstream.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-- Hector
+---
+
+Changes since v1:
+1. Drop first patch about CX power domain (incorrectly placed in this patchset).
+2. Add Rb tag.
+---
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index 89004cb657e0..84459dbd1604 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -537,55 +537,55 @@ psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
+ 
+-		CPU_PD0: cpu0 {
++		CPU_PD0: power-domain-cpu0 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+ 			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+ 		};
+ 
+-		CPU_PD1: cpu1 {
++		CPU_PD1: power-domain-cpu1 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+ 			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+ 		};
+ 
+-		CPU_PD2: cpu2 {
++		CPU_PD2: power-domain-cpu2 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+ 			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+ 		};
+ 
+-		CPU_PD3: cpu3 {
++		CPU_PD3: power-domain-cpu3 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+ 			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+ 		};
+ 
+-		CPU_PD4: cpu4 {
++		CPU_PD4: power-domain-cpu4 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+ 			domain-idle-states = <&BIG_CPU_SLEEP_0>;
+ 		};
+ 
+-		CPU_PD5: cpu5 {
++		CPU_PD5: power-domain-cpu5 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+ 			domain-idle-states = <&BIG_CPU_SLEEP_0>;
+ 		};
+ 
+-		CPU_PD6: cpu6 {
++		CPU_PD6: power-domain-cpu6 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+ 			domain-idle-states = <&BIG_CPU_SLEEP_0>;
+ 		};
+ 
+-		CPU_PD7: cpu7 {
++		CPU_PD7: power-domain-cpu7 {
+ 			#power-domain-cells = <0>;
+ 			power-domains = <&CLUSTER_PD>;
+ 			domain-idle-states = <&BIG_CPU_SLEEP_0>;
+ 		};
+ 
+-		CLUSTER_PD: cpu-cluster0 {
++		CLUSTER_PD: power-domain-cpu-cluster0 {
+ 			#power-domain-cells = <0>;
+ 			domain-idle-states = <&CLUSTER_SLEEP_0>;
+ 		};
+-- 
+2.34.1
+
