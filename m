@@ -2,207 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B2665AF1D
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 260D365AF1F
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbjABJ5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 04:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S232344AbjABJ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 04:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbjABJ5L (ORCPT
+        with ESMTP id S230451AbjABJ6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 04:57:11 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69294DCB;
-        Mon,  2 Jan 2023 01:57:10 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3029i4Xt024889;
-        Mon, 2 Jan 2023 09:56:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pN14Ku/R5oS6jwPsJMmldiWfAUHtnStZiqYP0Pe5dk0=;
- b=h4J2x2xyqmO3RVWDP06VfIqJ5R11gPQCYxzDnY7Qn9xKnr+k7rt1rrYXQY6+oVzCDCoZ
- cKXighasqSrlJS4UDuwy9aweVCi2smdESh7F4FIeUXuVfcYRRFTn3L0l9utXWVn63zmd
- G+LkovkxAzkdh9b30j/btU214fCxZCvoZKpEUdecC0xFJB6MlqF1afoTvJ0doAYOmDQG
- nvnOkkrlAUmj7GrQry4LMebDfJtmoO83M3zWlZcq8WdSvL9srqsf7YSpT8NCh6YZf/uE
- RfEIa5m21dOn9MQK6veew9GgpHsnIvND4qAVcAu+pSTeuGzDOuVC+9ONrctv+S+Wersl MQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mtaewb18t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 09:56:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3029umSu004946
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 2 Jan 2023 09:56:48 GMT
-Received: from [10.216.21.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 2 Jan 2023
- 01:56:43 -0800
-Message-ID: <8140a64b-3f3e-b8c7-7edc-03f5cc7d14e7@quicinc.com>
-Date:   Mon, 2 Jan 2023 15:26:39 +0530
+        Mon, 2 Jan 2023 04:58:46 -0500
+Received: from mx1.veeam.com (mx1.veeam.com [216.253.77.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5F8DCB
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:58:45 -0800 (PST)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.veeam.com (Postfix) with ESMTPS id 7966941C5B;
+        Mon,  2 Jan 2023 04:58:44 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx1-2022; t=1672653524;
+        bh=mlXog09AD8tM0bQkT/5+11IIdnU/V0C6NIq/OIo3ZEo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=vQPvKDGx+dsUeqmwAS+yOXVPKMcvM7wStjooOWRzEzrg/UB+mX8h56lFKyTsNPVCX
+         JwvhpibEdb16uEneUnBdkadywuPo40/DkqR7ekLOqxAsUCXfYbngxTrbBwoowg7VHh
+         CempMb+YVloI7Z+xzB4NUBz4/7/pQUGlsEkCWTDM+pW59CTWoG8rWY0ZbyHXpzGUJW
+         2C4mN0CtZj3O8l1qbT73cZS7PYv3jM0aNMq7fqZYjDcSVW/g0wEOapsghFCduvFDsF
+         ZCnnRMPt6nOaxtU1F9p92FX69Yn8mHwrUoX1qWAWNRs+vm6x1slsbYiy9CEKzMSkcy
+         WQc6D4TaKsv1Q==
+Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 2 Jan
+ 2023 10:58:40 +0100
+Message-ID: <974ffb8c-8623-d249-f69f-ac5cfd498950@veeam.com>
+Date:   Mon, 2 Jan 2023 10:58:38 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v4 1/5] PM: domains: Allow a genpd consumer to require a
- synced power off
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 18/21] block, blksnap: snapshot
 Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-References: <1671642843-5244-1-git-send-email-quic_akhilpo@quicinc.com>
- <20221221224338.v4.1.I3e6b1f078ad0f1ca9358c573daa7b70ec132cdbe@changeid>
- <20221228184304.4lldh7dxp2pnplzc@builder.lan>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20221228184304.4lldh7dxp2pnplzc@builder.lan>
+To:     Hillf Danton <hdanton@sina.com>
+CC:     <axboe@kernel.dk>, <corbet@lwn.net>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
+ <20230101110542.3395-1-hdanton@sina.com>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <20230101110542.3395-1-hdanton@sina.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8mlf8f69kRu3DTGol2s9lk1KbUy_9zpc
-X-Proofpoint-GUID: 8mlf8f69kRu3DTGol2s9lk1KbUy_9zpc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_06,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- phishscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 bulkscore=0
- impostorscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301020090
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [172.24.10.107]
+X-ClientProxiedBy: colmbx02.amust.local (172.18.0.172) To prgmbx01.amust.local
+ (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2924031555657167
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/29/2022 12:13 AM, Bjorn Andersson wrote:
-> On Wed, Dec 21, 2022 at 10:43:59PM +0530, Akhil P Oommen wrote:
->> From: Ulf Hansson <ulf.hansson@linaro.org>
->>
->> Some genpd providers doesn't ensure that it has turned off at hardware.
->> This is fine until the consumer really requires during some special
->> scenarios that the power domain collapse at hardware before it is
->> turned ON again.
->>
->> An example is the reset sequence of Adreno GPU which requires that the
->> 'gpucc cx gdsc' power domain should move to OFF state in hardware at
->> least once before turning in ON again to clear the internal state.
->>
->> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
->
-> @Rafael, would you be willing to share an immutable branch with this
-> change? Or would you be okay with me doing so from the qcom clock tree?
->
-> Regards,
-> Bjorn
-Rafael, gentle ping. Could you please check Bjorn's question here?
 
--Akhil.
->
->> ---
->>
->> Changes in v4:
->> - Update genpd function documentation (Ulf)
->>
->> Changes in v2:
->> - Minor formatting fix
->>
->>  drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
->>  include/linux/pm_domain.h   |  5 +++++
->>  2 files changed, 31 insertions(+)
->>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index 967bcf9d415e..84662d338188 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -519,6 +519,31 @@ ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
->>  }
->>  EXPORT_SYMBOL_GPL(dev_pm_genpd_get_next_hrtimer);
->>  
->> +/*
->> + * dev_pm_genpd_synced_poweroff - Next power off should be synchronous
->> + *
->> + * @dev: A device that is attached to the genpd.
->> + *
->> + * Allows a consumer of the genpd to notify the provider that the next power off
->> + * should be synchronous.
->> + *
->> + * It is assumed that the users guarantee that the genpd wouldn't be detached
->> + * while this routine is getting called.
->> + */
->> +void dev_pm_genpd_synced_poweroff(struct device *dev)
+
+On 1/1/23 12:05, Hillf Danton wrote:
+> Subject:
+> Re: [PATCH v2 18/21] block, blksnap: snapshot
+> From:
+> Hillf Danton <hdanton@sina.com>
+> Date:
+> 1/1/23, 12:05
+> 
+> To:
+> Sergei Shtepa <sergei.shtepa@veeam.com>
+> CC:
+> axboe@kernel.dk, corbet@lwn.net, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+> 
+> 
+> On 9 Dec 2022 15:23:28 +0100 Sergei Shtepa <sergei.shtepa@veeam.com>
+>> +int snapshot_create(struct blk_snap_dev *dev_id_array, unsigned int count,
+>> +		    uuid_t *id)
 >> +{
->> +	struct generic_pm_domain *genpd;
+>> +	struct snapshot *snapshot = NULL;
+>> +	int ret;
+>> +	unsigned int inx;
 >> +
->> +	genpd = dev_to_genpd_safe(dev);
->> +	if (!genpd)
->> +		return;
+>> +	pr_info("Create snapshot for devices:\n");
+>> +	for (inx = 0; inx < count; ++inx)
+>> +		pr_info("\t%u:%u\n", dev_id_array[inx].mj,
+>> +			dev_id_array[inx].mn);
 >> +
->> +	genpd_lock(genpd);
->> +	genpd->synced_poweroff = true;
->> +	genpd_unlock(genpd);
->> +}
->> +EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
+>> +	ret = check_same_devices(dev_id_array, count);
+>> +	if (ret)
+>> +		return ret;
 >> +
->>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->>  {
->>  	unsigned int state_idx = genpd->state_idx;
->> @@ -562,6 +587,7 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->>  
->>  out:
->>  	raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_ON, NULL);
->> +	genpd->synced_poweroff = false;
->>  	return 0;
->>  err:
->>  	raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_OFF,
->> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
->> index 1cd41bdf73cf..f776fb93eaa0 100644
->> --- a/include/linux/pm_domain.h
->> +++ b/include/linux/pm_domain.h
->> @@ -136,6 +136,7 @@ struct generic_pm_domain {
->>  	unsigned int prepared_count;	/* Suspend counter of prepared devices */
->>  	unsigned int performance_state;	/* Aggregated max performance state */
->>  	cpumask_var_t cpus;		/* A cpumask of the attached CPUs */
->> +	bool synced_poweroff;		/* A consumer needs a synced poweroff */
->>  	int (*power_off)(struct generic_pm_domain *domain);
->>  	int (*power_on)(struct generic_pm_domain *domain);
->>  	struct raw_notifier_head power_notifiers; /* Power on/off notifiers */
->> @@ -235,6 +236,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
->>  int dev_pm_genpd_remove_notifier(struct device *dev);
->>  void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
->>  ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev);
->> +void dev_pm_genpd_synced_poweroff(struct device *dev);
->>  
->>  extern struct dev_power_governor simple_qos_governor;
->>  extern struct dev_power_governor pm_domain_always_on_gov;
->> @@ -300,6 +302,9 @@ static inline ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
->>  {
->>  	return KTIME_MAX;
->>  }
->> +static inline void dev_pm_genpd_synced_poweroff(struct device *dev)
->> +{ }
+>> +	snapshot = snapshot_new(count);
+>> +	if (IS_ERR(snapshot)) {
+>> +		pr_err("Unable to create snapshot: failed to allocate snapshot structure\n");
+>> +		return PTR_ERR(snapshot);
+>> +	}
 >> +
->>  #define simple_qos_governor		(*(struct dev_power_governor *)(NULL))
->>  #define pm_domain_always_on_gov		(*(struct dev_power_governor *)(NULL))
->>  #endif
->> -- 
->> 2.7.4
->>
+>> +	ret = -ENODEV;
+>> +	for (inx = 0; inx < count; ++inx) {
+>> +		dev_t dev_id =
+>> +			MKDEV(dev_id_array[inx].mj, dev_id_array[inx].mn);
+>> +		struct tracker *tracker;
+>> +
+>> +		tracker = tracker_create_or_get(dev_id);
+>> +		if (IS_ERR(tracker)) {
+>> +			pr_err("Unable to create snapshot\n");
+>> +			pr_err("Failed to add device [%u:%u] to snapshot tracking\n",
+>> +			       MAJOR(dev_id), MINOR(dev_id));
+>> +			ret = PTR_ERR(tracker);
+>> +			goto fail;
+>> +		}
+>> +
+>> +		snapshot->tracker_array[inx] = tracker;
+>> +		snapshot->count++;
+>> +	}
+>> +
+>> +	down_write(&snapshots_lock);
+>> +	list_add_tail(&snapshots, &snapshot->link);
+>> +	up_write(&snapshots_lock);
+> Given list_for_each_entry below, typo wrt &snapshots found in the fresh 2023?
+> 
 
+Thanks.
+It seems I just swapped the parameters by mistake.
+It should be better:
+```
+	down_write(&snapshots_lock);
+	list_add_tail(&snapshot->link, &snapshots);
+	up_write(&snapshots_lock);
+```
+
+>> +
+>> +	uuid_copy(id, &snapshot->id);
+>> +	pr_info("Snapshot %pUb was created\n", &snapshot->id);
+>> +	return 0;
+>> +fail:
+>> +	pr_err("Snapshot cannot be created\n");
+>> +
+>> +	snapshot_put(snapshot);
+>> +	return ret;
+>> +}
+>> +
+>> +static struct snapshot *snapshot_get_by_id(uuid_t *id)
+>> +{
+>> +	struct snapshot *snapshot = NULL;
+>> +	struct snapshot *s;
+>> +
+>> +	down_read(&snapshots_lock);
+>> +	if (list_empty(&snapshots))
+>> +		goto out;
+>> +
+>> +	list_for_each_entry(s, &snapshots, link) {
+>> +		if (uuid_equal(&s->id, id)) {
+>> +			snapshot = s;
+>> +			snapshot_get(snapshot);
+>> +			break;
+>> +		}
+>> +	}
+>> +out:
+>> +	up_read(&snapshots_lock);
+>> +	return snapshot;
+>> +}
