@@ -2,178 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F7265B50F
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9916165B510
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbjABQ0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S236504AbjABQ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236642AbjABQZa (ORCPT
+        with ESMTP id S236536AbjABQ0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:25:30 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147F8BFA
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:25:29 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id bp15so42165041lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:25:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QCwebXWXkrMQ13JeeM+iArGWaEZiPUi0wYVUo7hFptg=;
-        b=AYZhyIf0Ijda3w83Yvv1quXMyDHCcTFeOd4hmKjjPcuy5Bxk/DJqwWBHBAPedcMvVc
-         XlABwbkXPU6HHaO/wi3hZsJnsUlxe9uBVqiRiZLqwBa1vx6oEyZaF1higTnUvGe7PuLv
-         yvLe7z8+9mReXDRpaSxeTxCiwlJ+WuxPF9YaZe2qbqnUMjajlwUyzw7EKy0agTgnZXws
-         c7HXXZHoIOUaNag8yrbRFuamyD4tHtY5LyLytS1IRERCQ87ufoHr9XFcmcHj0jdPnp8D
-         fap3Dd/kzmbEjm62PQLRotFF+nM9XWR+n+fIdq6s8BfDqckSHLmjN8VnvIrkYdizhGyG
-         BQIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QCwebXWXkrMQ13JeeM+iArGWaEZiPUi0wYVUo7hFptg=;
-        b=Z4ok2BoHotXz4840pGqIDIysbjtoA/FhdEBjPTV3QVLBQjgbhpIIRl2Q0DLNlmaCfs
-         UXUJfCHh+lro/lehpStmJvjSIA/tneT5UFCB6jwQ+quBj+0c+k6JBY90la3vIJ7BWEo8
-         jxLwv/k5UBA+8Qmpe+csMeGWYVaQfGon55vw9ENfU01FSPf3hGjJQHO3Z/1y5YLH/YBu
-         QY29nf4Mwhs5w7P0yLvLOvM2DRWfx0qq3IcN3cTUn1wD051ACUFc7qmDTWGqBR3/0RY1
-         yb0DOcGoFxoQLxUg+k2kqkEnH7bXJuCWsiOY2byC5+jbw47BsCH+Rp11kBXqVgRPUPc/
-         qZAQ==
-X-Gm-Message-State: AFqh2kqB3B5LuenGJ4tEOc/C0Nw4bjNWoigm0SwLjcKPoz8pEMXx7Te5
-        q2JdY6cHzVpn1e93CA2rUWvW0A==
-X-Google-Smtp-Source: AMrXdXsaCYJK9sCYGbd2yKAmU3AzaHCauQM8dFQuNo8yFwgzLbNKIlCiLnoga3i0KDxyZtL8ks3wrQ==
-X-Received: by 2002:a05:6512:1597:b0:4b6:f4bb:e53f with SMTP id bp23-20020a056512159700b004b6f4bbe53fmr12505234lfb.60.1672676727459;
-        Mon, 02 Jan 2023 08:25:27 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w37-20020a0565120b2500b004cb2e3089a7sm993647lfu.38.2023.01.02.08.25.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 08:25:26 -0800 (PST)
-Message-ID: <60d2899e-aed3-a98d-4f3e-8203918a23f9@linaro.org>
-Date:   Mon, 2 Jan 2023 17:25:25 +0100
+        Mon, 2 Jan 2023 11:26:51 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E12A18F
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:26:51 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6E37A5C0066;
+        Mon,  2 Jan 2023 11:26:50 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 02 Jan 2023 11:26:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672676810; x=
+        1672763210; bh=9SnjoCxG6lJy1Dd9d7mL56nMbg9UksLtOGhA65L1Kn0=; b=x
+        KrbRR/ZdOi8eGOcYKwhsEjQVptwFPha0v/MoxmypCLM+LSfQUFxTUH6Cr2we/g6N
+        IrCC71Dr0FbNtZP/uZTphJ2KAvS6euiV8S1Glfl0u5+zFiH+ak3dIhpDA3XBw9lU
+        FCIRZpDRSAuIg4gTBxU9kT6Uc4nhaNEUpo2fGK4l684MQNBnqs1XsDoG+kfP4IFC
+        hSFatowXm5ghgCMG5xEOdqpLEL3ZysR2e2qgQrZ6uWCBTxtOGpx17D5lPyAUQQiq
+        4qnuVy7H4ptjfl5DTWlSF9L0mCQgAsPZA5QpdcTCNAK/D7A+/OWgynwOdp24FwcN
+        HWejGwSsDwjmgXMSHC4MA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672676810; x=
+        1672763210; bh=9SnjoCxG6lJy1Dd9d7mL56nMbg9UksLtOGhA65L1Kn0=; b=c
+        yrsp4gZcmHkoD8wOYxkCrQQ3cqqGJ8UI6NIIfsnngQNOhlgGxLmjzFruFeXvNK+L
+        Ug49ZxUZGHAefZ4Wx9JSON3RgLxSVs3/xJo2W3BJsXlimC/0EoRTlArraaSNXFs1
+        gP43NBla16mG//viKkkbNWs9MKt5ZiXCFYqhoHzq3x6FmSQs+yZlBK+FVFGHe42b
+        8zpH2eVTk3gy2twCmwBwIplVdkFGvD2dS9hggdvtCnaMCIXmuvgaUwlZLZMWhv3E
+        KObnJpnzsEGw0PILnm1xih6rSedpuXHugMFBRk+xwBHpjP86rMPhGN0bKLMpygYI
+        UGNrVfU5xX/9899vhu0XQ==
+X-ME-Sender: <xms:yQWzY7LqfHoQPy9Uga2nhdISMaseOUnCfPj5czN5vHks-VmyWD250Q>
+    <xme:yQWzY_L1GWLESmwmONkKBkUCccwfpyoJZm8bzxVLnevLBMZoqXt0PAF0z5vvtHjAL
+    XAN3vC3d8ypmHzyKA>
+X-ME-Received: <xmr:yQWzYzt8faa2X2ClP23oFt2jsWZQUwhoU9owaqzw4INqNF56DN5iTlSIzP9gBwOgE6z4Pphu6YKafV3iOYANGgwiqD_TCWjIVa1imfcs_VNzAj10OCtkTV0pbg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjedvgdeklecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfvvehfhffujggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgeeikeeufedvvdeuteeivdeiffdtgfdtfeejgfetfeefgeffgfdv
+    ffehjedvueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:yQWzY0ZTUpYipH2Wc7Tt0TqsErPiKmeLbUsObUj6R03D1zUe_GQCEQ>
+    <xmx:yQWzYyYdqqxXo98MrcGndfDopwVLohXCqTk1Zil9CZ01d3jdSuwFNQ>
+    <xmx:yQWzY4Apja5s1FHpfCdAqG-XkIRPpMQlrusIG4nUklMERkgZLW3bLA>
+    <xmx:ygWzY4nRWuhQ4U4VVcZOaCXZlsB6XDVfceKomJDPgmaWrtGamCAPiQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 2 Jan 2023 11:26:49 -0500 (EST)
+Message-ID: <e21aba9f-1afd-2615-fe00-3ee4176b9080@sholland.org>
+Date:   Mon, 2 Jan 2023 10:26:48 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: RFC on drivers/memory vs drivers/edac memory mapping for DDR
- Controller
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
 Content-Language: en-US
-To:     "Shenhar, Talel" <talel@amazon.com>, bp@alien8.de
-Cc:     talelshenhar@gmail.com, shellykz@amazon.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <2511c7aa-8ce6-a803-a1ea-6121df79c677@amazon.com>
- <8b844f3a-e9b0-28d5-200a-611fe3068bc0@linaro.org>
- <4bd90224-d09a-1f21-92e6-51c967d68a39@amazon.com>
- <21c6dd41-3e6f-26c6-d6ca-25102e992c18@linaro.org>
- <567f14ef-7940-25c5-9323-c673b98e585a@amazon.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <567f14ef-7940-25c5-9323-c673b98e585a@amazon.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20221229181526.53766-1-samuel@sholland.org>
+ <20221229181526.53766-7-samuel@sholland.org> <20230102102123.511d337d@xps-13>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH 6/7] mtd: rawnand: sunxi: Update OOB layout to match
+ hardware
+In-Reply-To: <20230102102123.511d337d@xps-13>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/01/2023 17:21, Shenhar, Talel wrote:
-> 
-> On 1/2/2023 3:59 PM, Krzysztof Kozlowski wrote:
->>
->> On 02/01/2023 14:44, Shenhar, Talel wrote:
->>> On 1/2/2023 2:47 PM, Krzysztof Kozlowski wrote:
->>>>
->>>> On 02/01/2023 13:17, Shenhar, Talel wrote:
->>>>
->>>>> Things we had in mind:
->>>>> 1) map more specific region to avoid conflict (we don't need the same
->>>>> registers on both entity so if we do very specific multiple mapping this
->>>>> shall be resolved)
->>>>> 2) use other kernel API for mapping that doesn't do request_mem_region
->>>>> (or use the reserve only for one of them)
->>>>> 3) have single driver (edac mc) handle also the refresh rate
->>>>> 4) export edac_mc.h and have the drivers/memory have all the needed code
->>>>> to do both edac and refresh rate under drivers/memory
->>>> None of these address the core problem - possibly inaccurate hardware
->>>> description...
->>> Can you elaborate on this inaccurate hardware description?
->> I explained - using same IO address suggests you used Linux driver
->> structure in your hardware description. I assume we talk here about
->> Devicetree. If not, that's quite different case... then I guess ACPI,
->> which I do not care - I am not it's maintainer.
->>
->>> Also, I'd like to write down my understanding of your response from above:
->>>
->>> it seems you see as possible solution both using different API that
->>> allow overlapping (solution 2) and also for splitting the IO address
->>> space to finer pieces to achieve full HW description (solution 1)
->> No. Sorry, we probably talk about two different things.
->>
->> You started writing that you have a hardware described as one IO address
->> space and now have a problem developing drivers for it.
->>
->> The driver model for this is entirely different problem than problem of
->> accurate hardware description. Whether you described HW correct or not,
->> I don't know. You did not provide any details here, like DTS or bindings
->> (if we talk about Devicetree).
->>
->> Having multiple drivers using similar resources is already solved many
->> times (MFD, syscon).
->>
->> Whether the solution is correct or not is one more (third) topic: poking
->> to same IO address space from two different drivers is error-prone. This
->> one is solvable with splitting IO address space.
->>
->> Best regards,
->> Krzysztof
-> 
-> 
-> You are right.
-> 
-> Let me elaborate on this.
-> 
-> We will write down the hardware description via device tree.
-> 
-> Then we will write the driver which will honor that binding.
-> 
-> So the question is what is the best practice there assuming there is no 
-> shared registers however there is overlapping.
+Hi Miquèl,
 
-The correct solution is to describe hardware. The hardware is memory
-controller. There is no hardware called "scaller of memory controller".
-There is no hardware called "EDAC" because that's purely a Linux term.
-
-Your DTS should accurately describe the hardware, not drivers. Then
-drivers can do whatever they want with it - have safe, non-concurrent
-access or keep poking same registers and break things...
-
+On 1/2/23 03:21, Miquel Raynal wrote:
+> Hi Samuel,
 > 
-> e.g. the EDAC driver needs register 0,1,2,4,5 and refresh-rate needs 
-> register 3.
-
-I don't think there is EDAC and "refresh-rate" hardwares. There is
-memory controller.
-
+> samuel@sholland.org wrote on Thu, 29 Dec 2022 12:15:25 -0600:
 > 
-> If we would only have EDAC driver than we would do IO address mapping 
-> from 0 with size 5 (not caring mapping register 3 even that its not used).
+>> When using the hardware ECC engine, the OOB data is made available in
+>> the NFC_REG_USER_DATA registers, one 32-bit word per ECC step. Any
+>> additional bytes are only accessible through raw reads and software
+>> descrambling. For efficiency, and to match the vendor driver, ignore
+>> these extra bytes.
+>>
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>>  drivers/mtd/nand/raw/sunxi_nand.c | 7 +++++++
+>>  1 file changed, 7 insertions(+)
+>>
+>> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sunxi_nand.c
+>> index 8e873f4fec9a..a3bc9f7f9e5a 100644
+>> --- a/drivers/mtd/nand/raw/sunxi_nand.c
+>> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
+>> @@ -1604,6 +1604,13 @@ static int sunxi_nand_ooblayout_free(struct mtd_info *mtd, int section,
+>>  		return 0;
+>>  	}
+>>  
+>> +	/*
+>> +	 * The controller does not provide access to OOB bytes
+>> +	 * past the end of the ECC data.
+>> +	 */
+>> +	if (section == ecc->steps && ecc->engine_type == NAND_ECC_ENGINE_TYPE_ON_HOST)
+>> +		return -ERANGE;
 > 
-> However, with the other driver (refresh rate) that need register 3 we am 
-> facing a problem.
-> 
-> So looking for the best solution here.
-> 
-> I don't think this is a problem that is specific to drivers/edac and to 
-> drivers/memory, however, due to the nature of those two libraries this 
-> conflict is more expected.
+> Again, I am sorry but I cannot take this change, it would typically
+> break jffs2 users (if any?) :(
 
-All these problems look like started from wrong hardware description, so
-not sure if it is worth fixing something where the basis is already not
-correct.
+Considering the bug I fixed in the previous patch, and the fact that
+mtd_ooblayout_free() zeroes out the structure before calling the .free
+callback, that region was being reported with a length of zero already.
+So I don't think anyone could have been using those bytes anyway.
 
-Best regards,
-Krzysztof
+I am looking for a solution here because the ECC/scrambling engine
+really provides no way to access these bytes. Reading them requires
+turning off the ECC engine, performing another read command, and then
+descrambling in software. So we are sort of lying when we claim those
+bytes are available with hardware ECC enabled.
+
+If this change cannot be made as-is, is there any way the user could opt
+in to the new layout, to get the improved performance?
+
+Regards,
+Samuel
+
+>>  	oobregion->offset = section * (ecc->bytes + 4);
+>>  
+>>  	if (section < ecc->steps)
+> 
+> 
+> Thanks,
+> Miquèl
 
