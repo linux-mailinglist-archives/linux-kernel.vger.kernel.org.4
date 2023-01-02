@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C9C65B562
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8155B65B55F
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 17:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236055AbjABQyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 11:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
+        id S232771AbjABQya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 11:54:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236563AbjABQyk (ORCPT
+        with ESMTP id S232542AbjABQy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:54:40 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCAC6259
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 08:54:38 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d3so30026496plr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 08:54:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3r5FdCxELrIS8yVo8yWuc07nvsdkxohH/mDP56NN6/Y=;
-        b=rWv0Urzy2YIIuFuBytAQvsdJEtXTRvtYtXv7uB3quo9mB9ZIJNlmojPdYWe/H5Dw4H
-         OpuIgWKueuvWoqxwRRgZFaSbr4dDRMJNMrUeFJz0qOkGsW8pXkCYCh81w8/KoA8zdWuC
-         J1PWFrVC5SnOypntUc89A80oP60PiV8xvxjfXDYb4luNRnKyFjrZYYVLAu8O1FPd8wjm
-         HIUxBirCekuHxzK3qRsh+jL1TMaRb+pxDWS9++fHou2cwSkt5SQcyWe3Xsa2zYrl9G0z
-         Yka6Dw62/N1n8oDFvsIWYRVzYz3NpNnYp6LboDds7Yt0KbqeJI/hvZ9Bp7htt5knaXKn
-         lzTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3r5FdCxELrIS8yVo8yWuc07nvsdkxohH/mDP56NN6/Y=;
-        b=n083Hnady/cMO8zUovtxC9WzBIXePXOX44rnlUWgF0uQSfuEVLxTP4IWV668gGDTcj
-         zDXtgXFKiHWTAam2rMcfATh7vztjSITAfLUv2XVhPQsg++DwtJlwsWfggMrGrXLFg0V0
-         tCCPEdXdPT7FF80jQEJEpY7bzM6VCY9Uhjvv1/91LQE2RF6pSU1twWWAMrZT1jmxxkR6
-         j1DEcwveUncqLzMU3dQDo+uw5v53HVEGgekUkI4xQm/u5BFHUIyoxFZe5CM1xduFvoNA
-         8D5Jc2Qn3gdWMsQ0KE2N6P9VzjlcUdSbBCCnswLlZxOAdWCRB4jCp02Rw/N/xCmZmZm2
-         tPVw==
-X-Gm-Message-State: AFqh2komls+MGMmBEs5bZKhFskfWcquMIXk4B/hFzcY0jOGI2iiR3mwS
-        izZ/3N+N9Jjw+71J2WwVRA/W3g==
-X-Google-Smtp-Source: AMrXdXtbrXMQvOxeVxcXKabHrm7FhB614evDTxSot5mI7CAIbBzDsTt19LaCn32nFAI3oC/oavPY7g==
-X-Received: by 2002:a17:90a:4282:b0:223:f131:3604 with SMTP id p2-20020a17090a428200b00223f1313604mr45490827pjg.17.1672678477841;
-        Mon, 02 Jan 2023 08:54:37 -0800 (PST)
-Received: from ?IPV6:2401:4900:1c5e:e3b5:c341:16de:ce17:b857? ([2401:4900:1c5e:e3b5:c341:16de:ce17:b857])
-        by smtp.gmail.com with ESMTPSA id px12-20020a17090b270c00b0020dc318a43esm17546260pjb.25.2023.01.02.08.54.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 08:54:37 -0800 (PST)
-Message-ID: <016e9b47-35b4-2110-bbef-ddfd0abc6a8d@linaro.org>
-Date:   Mon, 2 Jan 2023 22:24:31 +0530
+        Mon, 2 Jan 2023 11:54:28 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE14B306;
+        Mon,  2 Jan 2023 08:54:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672678467; x=1704214467;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ppGkbVIp7/QGeKi51q+/ugNHd4lE+7jSrx7vbLG6VvQ=;
+  b=afRWpXUyrLxg3VHYr6pHCHSHAiS6Xn1sYSJ/4Pi08ItZTi2eucF5Kstx
+   CHR5qL3zvSfZkb67RsnkCGfxDdhv+YrdODiFZiufmmXqrG+i7bgySLZPy
+   BCLjAHt0HBobfTrJAsZarJMrrkeCmT+IU1+1Pq1KaEuPSEfKsPN0MfpsT
+   PvpdwEfilIm+gH8outCs2OxH6bnJT2RLJX7yIkmSGJQUHK+PTqN97n3BJ
+   JMV7X78yzfjuYJTlm995enH/i91B6fB0EgW8TiNLO1f7rI4w1BkKvwegT
+   CSXPDx2HJ392Zi8qNMK5AUL1FSY4oInOffCFp3+kc+a7pw6PSsBnCsEm0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="407771523"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="407771523"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 08:54:27 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="604571189"
+X-IronPort-AV: E=Sophos;i="5.96,294,1665471600"; 
+   d="scan'208";a="604571189"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 08:54:27 -0800
+Date:   Mon, 2 Jan 2023 08:54:48 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     Tom Rix <trix@redhat.com>, hao.wu@intel.com, yilun.xu@intel.com,
+        russell.h.weight@intel.com, basheer.ahmed.muddebihal@intel.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v8 3/4] fpga: dfl: add basic support for DFHv1
+In-Reply-To: <Y637aBTrbRloUtvD@smile.fi.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2301020852500.2516029@rhweight-WRK1>
+References: <20221228181624.1793433-1-matthew.gerlach@linux.intel.com> <20221228181624.1793433-4-matthew.gerlach@linux.intel.com> <628c125a-5a84-e1bd-7724-2637315cc35e@redhat.com> <Y637aBTrbRloUtvD@smile.fi.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3
- connector
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     quic_schowdhu@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <20221231131945.3286639-1-bhupesh.sharma@linaro.org>
- <514482a4-614c-d6b8-ec7c-0e69fff72295@linaro.org>
-Content-Language: en-US
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <514482a4-614c-d6b8-ec7c-0e69fff72295@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,116 +69,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 1/2/23 4:16 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 31.12.2022 14:19, Bhupesh Sharma wrote:
->> Add the Embedded USB Debugger(EUD) device tree node for
->> SM6115 / SM4250 SoC.
->>
->> The node contains EUD base register region and EUD mode
->> manager register regions along with the interrupt entry.
->>
->> Also add the typec connector node for EUD which is attached to
->> EUD node via port. EUD is also attached to DWC3 node via port.
->>
->> Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->> - This patch is based on my earlier sm6115 usb related changes, which can
->>    be seen here:
->>    https://lore.kernel.org/linux-arm-msm/20221215094532.589291-1-bhupesh.sharma@linaro.org/
->> - This patch is also dependent on my sm6115 eud dt-binding and driver changes
->>    sent earlier, which can be seen here:
->>    https://lore.kernel.org/linux-arm-msm/20221231130743.3285664-1-bhupesh.sharma@linaro.org/
->>
->>   arch/arm64/boot/dts/qcom/sm6115.dtsi | 37 ++++++++++++++++++++++++++++
->>   1 file changed, 37 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> index 030763187cc3f..c775f7fdb7015 100644
->> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> @@ -565,6 +565,37 @@ gcc: clock-controller@1400000 {
->>   			#power-domain-cells = <1>;
->>   		};
->>   
->> +		eud: eud@1610000 {
->> +			compatible = "qcom,sm6115-eud","qcom,eud";
-> Missing space between entries.
-> 
->> +			reg = <0x01610000 0x2000>,
->> +			      <0x01612000 0x1000>,
->> +			      <0x003e5018 0x4>;
->> +			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
->> +			ports {
-> Newline before ports {}.
-> 
-> Not sure if debugging hardware should be enabled by default..
->> +				port@0 {
->> +					eud_ep: endpoint {
->> +						remote-endpoint = <&usb2_role_switch>;
->> +					};
->> +				};
-> Newline between subsequent nodes.
-> 
->> +				port@1 {
->> +					eud_con: endpoint {
->> +						remote-endpoint = <&con_eud>;
->> +					};
->> +				};
->> +			};
->> +		};
->> +
->> +		eud_typec: connector {
-> Non-MMIO nodes don't belong under /soc.
-> 
->> +			compatible = "usb-c-connector";
-> Newline between properties and subnode.
-> 
-> 
->> +			ports {
->> +				port@0 {
->> +					con_eud: endpoint {
->> +						remote-endpoint = <&eud_con>;
->> +					};
->> +				};
->> +			};
->> +		};
->> +
->>   		usb_hsphy: phy@1613000 {
->>   			compatible = "qcom,sm6115-qusb2-phy";
->>   			reg = <0x01613000 0x180>;
->> @@ -1064,6 +1095,12 @@ usb_dwc3: usb@4e00000 {
->>   				snps,has-lpm-erratum;
->>   				snps,hird-threshold = /bits/ 8 <0x10>;
->>   				snps,usb3_lpm_capable;
->> +				usb-role-switch;
-> Same here.
 
-For all the above points, the format is same as suggested in [1] and 
-already used in existing dts [2].
+On Thu, 29 Dec 2022, Andy Shevchenko wrote:
 
-[1]. 
-https://www.kernel.org/doc/Documentation/devicetree/bindings/soc/qcom/qcom%2Ceud.yaml
-[2]. 
-https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sc7280.dtsi#L3587
+> On Thu, Dec 29, 2022 at 08:18:03AM -0800, Tom Rix wrote:
+>> On 12/28/22 10:16 AM, matthew.gerlach@linux.intel.com wrote:
+>
+> ...
+>
+>>>   struct dfl_feature_info {
+>>>   	u16 fid;
+>>>   	u8 revision;
+>>> +	u8 dfh_version;
+>>>   	struct resource mmio_res;
+>>>   	void __iomem *ioaddr;
+>>>   	struct list_head node;
+>>>   	unsigned int irq_base;
+>>>   	unsigned int nr_irqs;
+>>> +	unsigned int param_size;
+>>> +	u64 params[];
+>> u64 *params
+>
+> This will break the overflow.h macros, no?
+> Besides that it will break the code for sure as it's not an equivalent.
+>
+>>>   };
 
-> On a note, this commit + driver-side changes give me a:
-> 
-> 1610000.eud     qcom_eud: failed to get role switch
+I don't understand how this will break the overflow.h macros. The 
+definition of struct dfl_feature_info and all of its uses are in a single 
+file, dfl.c.
 
-You need to set dr_mode = "otg", for 'usb_dwc3' to make the role switch 
-work.
+Matthew Gerlach
 
-Thanks,
-Bhupesh
 
->> +				port {
->> +					usb2_role_switch: endpoint {
->> +						remote-endpoint = <&eud_ep>;
->> +					};
->> +				};
->>   			};
->>   		};
->>   
+>
+>
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+>
