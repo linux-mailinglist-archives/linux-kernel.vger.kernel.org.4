@@ -2,87 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC84D65B2E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB7F65B2E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 14:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236011AbjABNuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 08:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S236002AbjABNsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 08:48:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjABNuS (ORCPT
+        with ESMTP id S229526AbjABNsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 08:50:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECF422B;
-        Mon,  2 Jan 2023 05:50:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9C5D60EBA;
-        Mon,  2 Jan 2023 13:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B251C433F0;
-        Mon,  2 Jan 2023 13:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672667416;
-        bh=ciW3s8dzacHToNPw4OvYdC/uY2aoAut0zkxVNyVnPQg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rL00nTii6xsb0dajf/qS99eZFVKxppKd0Vc32WAaKuWp2E9OZKFvudOVz8xNHMKK2
-         yG1eBtjMjF+sRJKtrOC1gbxMraqN74mud1EBw/JhDgf49LyOWxaVaRoXXHx2sui+cO
-         W3YhRfm02uhp81yET09R6Au2g2Zx+xZqV5NCnfdD95WxHO4ogDb6/6am0JF2AduQCF
-         Xkl+0BfYN5spYxwBUjTpvboma8+FcT0FGXFbzKpyuOf+osnhASvBdZxw4aXhzjeuW4
-         KHugRjP4hn6e5+PpsfJn4/llAJ6pfKDWh8rtADuM00ybn/VzkPG0/VlTgP09BS31Zr
-         COozlbXd9TW5A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C1E6E5724D;
-        Mon,  2 Jan 2023 13:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 2 Jan 2023 08:48:42 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0102F22B;
+        Mon,  2 Jan 2023 05:48:39 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id DA6DC1C0007;
+        Mon,  2 Jan 2023 13:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672667318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YaEMzuEbjh8o3s0M+7BOHx2OufQjrgiQxu3MTpmKmQo=;
+        b=RYs8skZNSlrU0FeRUO2gfvSNjHAP1FKd0rcS3xEMmUqbfhhmN4+dcGALJyr8W2YJ17fDH8
+        smWMRwKBoDZfIwRHZtZYQ6PzMd7w0tZx1I0xUQqYfAXBs8FK9oVVoErMierSJsTIYmCYAa
+        0l1ZI0N61K9/XlTVwJtFNpLHAN0WdsuqMHJ2+DS0TGE1ZFezoTyfsXUkJjIZo6uTqpFk9N
+        Dz73esiK3SA2gz//uYqPqJ0b4/LPinDAzNRpvBjUbjU8wzIOaf5z9ZFzlPlo+SeRxhgMO8
+        vI+QpsMHUybHq2sQJr6VXvq/yyzvyoZ8WDTffmiK3bu9K7fy3rm+Hgu+/AA9dA==
+Date:   Mon, 2 Jan 2023 14:50:46 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Lizhi Hou <lizhi.hou@amd.com>
+Cc:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
+        <frowand.list@gmail.com>, <helgaas@kernel.org>, <max.zhen@amd.com>,
+        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>,
+        <stefano.stabellini@xilinx.com>, <trix@redhat.com>,
+        "Allan.Nielsen@microchip.com" <Allan.Nielsen@microchip.com>,
+        "Horatiu.Vultur@microchip.com" <Horatiu.Vultur@microchip.com>,
+        "Steen.Hegelund@microchip.com" <Steen.Hegelund@microchip.com>
+Subject: Re: [PATCH V5 1/3] of: dynamic: Add interfaces for creating device
+ node dynamically
+Message-ID: <20230102145046.3e1d009e@fixe.home>
+In-Reply-To: <1671125446-57584-2-git-send-email-lizhi.hou@amd.com>
+References: <1671125446-57584-1-git-send-email-lizhi.hou@amd.com>
+        <1671125446-57584-2-git-send-email-lizhi.hou@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: sparx5: Fix reading of the MAC address
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167266741611.20674.15551725779256774063.git-patchwork-notify@kernel.org>
-Date:   Mon, 02 Jan 2023 13:50:16 +0000
-References: <20230102121215.2697179-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20230102121215.2697179-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
-        daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
-        casper.casan@gmail.com, rmk+kernel@armlinux.org.uk,
-        linqiheng@huawei.com, nathan@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Le Thu, 15 Dec 2022 09:30:44 -0800,
+Lizhi Hou <lizhi.hou@amd.com> a =C3=A9crit :
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+> of_create_node() creates device node dynamically. The parent device node
+> and full name are required for creating the node. It optionally creates
+> an OF changeset and attaches the newly created node to the changeset. The
+> device node pointer and the changeset pointer can be used to add
+> properties to the device node and apply the node to the base tree.
+>=20
+> of_destroy_node() frees the device node created by of_create_node(). If
+> an OF changeset was also created for this node, it will destroy the
+> changeset before freeing the device node.
+>=20
+> Expand of_changeset APIs to handle specific types of properties.
+>     of_changeset_add_prop_string()
+>     of_changeset_add_prop_string_array()
+>     of_changeset_add_prop_u32_array()
+>=20
+> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+> Signed-off-by: Max Zhen <max.zhen@amd.com>
+> Reviewed-by: Brian Xu <brian.xu@amd.com>
+> ---
+>  drivers/of/dynamic.c | 197 +++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/of.h   |  24 ++++++
+>  2 files changed, 221 insertions(+)
+>=20
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index cd3821a6444f..067d996a9f79 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -461,6 +461,71 @@ struct device_node *__of_node_dup(const struct devic=
+e_node *np,
+>  	return NULL;
+>  }
+> =20
+> +/**
+> + * of_create_node - Dynamically create a device node
+> + *
+> + * @parent: Pointer to parent device node
+> + * @full_name: Node full name
+> + * @cset: Pointer to returning changeset
+> + *
+> + * Return: Pointer to the created device node or NULL in case of an erro=
+r.
+> + */
+> +struct device_node *of_create_node(struct device_node *parent,
+> +				   const char *full_name,
+> +				   struct of_changeset **cset)
+> +{
+> +	struct of_changeset *ocs;
+> +	struct device_node *np;
+> +	int ret;
+> +
+> +	np =3D __of_node_dup(NULL, full_name);
+> +	if (!np)
+> +		return NULL;
+> +	np->parent =3D parent;
+> +
+> +	if (!cset)
+> +		return np;
+> +
+> +	ocs =3D kmalloc(sizeof(*cset), GFP_KERNEL);
 
-On Mon, 2 Jan 2023 13:12:15 +0100 you wrote:
-> There is an issue with the checking of the return value of
-> 'of_get_mac_address', which returns 0 on success and negative value on
-> failure. The driver interpretated the result the opposite way. Therefore
-> if there was a MAC address defined in the DT, then the driver was
-> generating a random MAC address otherwise it would use address 0.
-> Fix this by checking correctly the return value of 'of_get_mac_address'
-> 
-> [...]
+I started to test this series and this sizeof(*cset) is probably wrong,
+it should be sizeof(*ocs) or it will yield the size of a struct
+of_changeset pointer and not the struct of_changeset itself.
 
-Here is the summary with links:
-  - [net] net: sparx5: Fix reading of the MAC address
-    https://git.kernel.org/netdev/net/c/588ab2dc25f6
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
