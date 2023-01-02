@@ -2,297 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A1B65AF83
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7367165AF87
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 11:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjABKZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 05:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        id S232145AbjABK0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 05:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbjABKZu (ORCPT
+        with ESMTP id S229583AbjABK0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 05:25:50 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94BE1B0
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:25:47 -0800 (PST)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 45CC23EF18;
-        Mon,  2 Jan 2023 11:25:45 +0100 (CET)
-Date:   Mon, 2 Jan 2023 11:25:43 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/7] drm/msm/dpu: Disable pingpong TE on DPU 5.0.0
- and above
-Message-ID: <20230102102543.uboz45ahy4vj6xb5@SoMainline.org>
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-3-marijn.suijten@somainline.org>
- <925e8214-4193-bee3-c26b-f7679a60484e@linaro.org>
+        Mon, 2 Jan 2023 05:26:09 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4DADAB
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 02:26:08 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id w1so13800198wrt.8
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 02:26:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=klbiEBnb9PJZJ+10dcr5TSev634cP5cWYPID/HX5Ikw=;
+        b=rx+XMqGJ2We7kpPFKmBPtnzOdzqEJpNhnF8TqFKn4sKX4kPm3Yb3v+14LTwzh+tZ1n
+         lmJQilcyPc30NiZVXRHoWBw+qHUQeGk5cQLqLWNfINDr09hSqDAsIbA0WGLb8maXl+xV
+         k0O3F4vVQck6Zbb+AuZI06FagPgUm+qPQBGKureVU2zHCveTYQMJBnPvyPioQLqbMF+A
+         2xUAXGzncdHYKr/kfKV2xBoi/z0f9vsysKYnp+CBIngO7gRq5wU3+qm86/FVgGOjctAh
+         o+iq88c7rctOIgP3zILMRS8EQfi2GG6GPSX2diL41S/JrAJjOhFmdZhwyoS+RryoNfTj
+         Idsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=klbiEBnb9PJZJ+10dcr5TSev634cP5cWYPID/HX5Ikw=;
+        b=EJOu7RT6ECaE7fVVDsRIz+1eBrjg7Lm3hX9SxaVHd6TDBYBFd3lw4fRQxLOHuW5PT1
+         teS3SnOSHzkpnLP9tm9RTLVFYMr1B0vB8IiSFQpUYz2MEfRCfcfMG+pNOQI2HpWtF591
+         iV27D8YVqEhsIAgJhY8ReVBNC2yNjDV5tnC3iHL6+0knAtZi1CwAX9boUsplylikaGEu
+         4GEJMcJxw86aCOQPdkLO6dLDxRrN9rl2gk9y36RsGSWPuCBIzk50Lka3KMfWRewMQ0jS
+         JI6Rwy+oJ96ZTm/R+/QBqvD7W37JqYpdnZVFr+uqo/7JQKfoPCN4JvMo7NLKW1tzaicj
+         ijIg==
+X-Gm-Message-State: AFqh2kp/KaEsFE86DYxrV6vDbzgwdA4bneT9vKI6ftQ5zr4R4q9ikHB7
+        jpqlVjLD/S9ytHxeiHe88qp8gQ==
+X-Google-Smtp-Source: AMrXdXtR7+gX1VjaXPb90uofXVs5xk8bBBBbjhrySBlC+cYkE+LctZl3OEJFMzJZFzK2svnx8F4SDA==
+X-Received: by 2002:adf:fa84:0:b0:28b:ca44:641f with SMTP id h4-20020adffa84000000b0028bca44641fmr8261901wrr.30.1672655167013;
+        Mon, 02 Jan 2023 02:26:07 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:4f32:f70:35be:acf9? ([2a01:e0a:982:cbb0:4f32:f70:35be:acf9])
+        by smtp.gmail.com with ESMTPSA id s18-20020adfdb12000000b00241fde8fe04sm28448546wri.7.2023.01.02.02.26.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 02:26:06 -0800 (PST)
+Message-ID: <7d734710-51dc-333f-84b8-9d9c8a76975b@linaro.org>
+Date:   Mon, 2 Jan 2023 11:26:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <925e8214-4193-bee3-c26b-f7679a60484e@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 0/3] qcom: add support for SPMI PMICs found on SM8550
+ platforms
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Lee Jones <lee@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-spmi-v2-0-b839bf2d558a@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20221114-narmstrong-sm8550-upstream-spmi-v2-0-b839bf2d558a@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-01 06:28:23, Dmitry Baryshkov wrote:
-> On 31/12/2022 23:50, Marijn Suijten wrote:
-> > Since hardware revision 5.0.0 the TE configuration moved out of the
-> > PINGPONG block into the INTF block.  Writing these registers has no
-> > effect, and is omitted downstream via the DPU/SDE_PINGPONG_TE feature
-> > flag.  This flag is only added to PINGPONG blocks used by hardware prior
-> > to 5.0.0.
-> > 
-> > The code that writes to these registers in the INTF block will follow in
-> > subsequent patches.
-> > 
-> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > ---
-> >   .../drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c  |  5 +-
-> >   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 53 +++++++++++--------
-> >   .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 18 ++++---
-> >   3 files changed, 44 insertions(+), 32 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> > index ae28b2b93e69..7e5ba52197cd 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> > @@ -582,7 +582,7 @@ static bool dpu_encoder_phys_cmd_is_ongoing_pptx(
-> >   {
-> >   	struct dpu_hw_pp_vsync_info info;
-> >   
-> > -	if (!phys_enc)
-> > +	if (!phys_enc || !phys_enc->hw_pp->ops.get_vsync_info)
-> >   		return false;
-> >   
-> >   	phys_enc->hw_pp->ops.get_vsync_info(phys_enc->hw_pp, &info);
-> > @@ -607,6 +607,9 @@ static void dpu_encoder_phys_cmd_prepare_commit(
+On 18/11/2022 09:24, Neil Armstrong wrote:
+> The SM8550 based platforms sports a bunch of new PMICs:
+> - pm8550
+> - pm8550b
+> - pm8550ve
+> - pm8550vs
+> - pmk8550
+> - pmr735d
+> - pm8010
 > 
-> This function works only with the hw_pp and if I'm not mistaken it 
-> becomes void for newer platforms. Please consider moving completely to 
-> the dpu_hw_pp.c Then we'd have a single optional callback instead of 
-> having a pile of them.
-
-It also works for hw_intf, which I'm introducing in a later patch.  This
-change is just cleaning up the fact that these are the only callbacks
-(on hw_pp->ops) that weren't considered optional yet.
-
-Even though removing these writes should not have any effect, perhaps it
-is more clear to insert this patch /after/ introducing INTF TE?  Then
-that patch will likely already include the change that makes this error
-checking consistent for both variants, as it currently has:
-
-	/* If autorefresh is already disabled, we have nothing to do */
-	if (phys_enc->has_intf_te) {
-		if (!phys_enc->hw_intf || !phys_enc->hw_intf->ops.get_autorefresh ||
-				!phys_enc->hw_intf->ops.setup_autorefresh)
-			return;
-		if (!phys_enc->hw_intf->ops.get_autorefresh(phys_enc->hw_intf, NULL))
-			return;
-	} else {
-		if (!phys_enc->hw_pp || !phys_enc->hw_pp->ops.get_autorefresh ||
-				!phys_enc->hw_pp->ops.setup_autorefresh)
-			return;
-		if (!phys_enc->hw_pp->ops.get_autorefresh(phys_enc->hw_pp, NULL))
-			return;
-	}
-
-- Marijn
-
-> >   	if (!dpu_encoder_phys_cmd_is_master(phys_enc))
-> >   		return;
-> >   
-> > +	if (!phys_enc->hw_pp->ops.get_autorefresh || !phys_enc->hw_pp->ops.setup_autorefresh)
-> > +		return;
-> > +
-> >   	/* If autorefresh is already disabled, we have nothing to do */
-> >   	if (!phys_enc->hw_pp->ops.get_autorefresh(phys_enc->hw_pp, NULL))
-> >   		return;
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> > index 9814ad52cc04..39d4b293710c 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> > @@ -59,11 +59,18 @@
-> >   #define MIXER_SC7180_MASK \
-> >   	(BIT(DPU_DIM_LAYER) | BIT(DPU_MIXER_COMBINED_ALPHA))
-> >   
-> > -#define PINGPONG_SDM845_MASK BIT(DPU_PINGPONG_DITHER)
-> > +#define PINGPONG_SDM845_MASK \
-> > +	(BIT(DPU_PINGPONG_DITHER) | BIT(DPU_PINGPONG_TE))
-> >   
-> > -#define PINGPONG_SDM845_SPLIT_MASK \
-> > +#define PINGPONG_SDM845_TE2_MASK \
-> >   	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
-> >   
-> > +#define PINGPONG_SM8150_MASK \
-> > +	(BIT(DPU_PINGPONG_DITHER))
-> > +
-> > +#define PINGPONG_SM8150_TE2_MASK \
-> > +	(PINGPONG_SM8150_MASK | BIT(DPU_PINGPONG_TE2))
-> > +
-> >   #define CTL_SC7280_MASK \
-> >   	(BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG))
-> >   
-> > @@ -1156,21 +1163,21 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
-> >   	.len = 0x20, .version = 0x20000},
-> >   };
-> >   
-> > -#define PP_BLK_TE(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
-> > +#define PP_BLK_TE(_name, _id, _base, _features, _merge_3d, _sblk, _done, _rdptr) \
-> >   	{\
-> >   	.name = _name, .id = _id, \
-> >   	.base = _base, .len = 0xd4, \
-> > -	.features = PINGPONG_SDM845_SPLIT_MASK, \
-> > +	.features = _features, \
-> >   	.merge_3d = _merge_3d, \
-> >   	.sblk = &_sblk, \
-> >   	.intr_done = _done, \
-> >   	.intr_rdptr = _rdptr, \
-> >   	}
-> > -#define PP_BLK(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
-> > +#define PP_BLK(_name, _id, _base, _features, _merge_3d, _sblk, _done, _rdptr) \
-> >   	{\
-> >   	.name = _name, .id = _id, \
-> >   	.base = _base, .len = 0xd4, \
-> > -	.features = PINGPONG_SDM845_MASK, \
-> > +	.features = _features, \
-> >   	.merge_3d = _merge_3d, \
-> >   	.sblk = &_sblk, \
-> >   	.intr_done = _done, \
-> > @@ -1178,55 +1185,55 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
-> >   	}
-> >   
-> >   static const struct dpu_pingpong_cfg sdm845_pp[] = {
-> > -	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te,
-> > +	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SDM845_TE2_MASK, 0, sdm845_pp_sblk_te,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
-> > -	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te,
-> > +	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SDM845_TE2_MASK, 0, sdm845_pp_sblk_te,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
-> > -	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
-> > +	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, PINGPONG_SDM845_MASK, 0, sdm845_pp_sblk,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
-> > -	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
-> > +	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, PINGPONG_SDM845_MASK, 0, sdm845_pp_sblk,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
-> >   };
-> >   
-> >   static struct dpu_pingpong_cfg sc7180_pp[] = {
-> > -	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te, -1, -1),
-> > -	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te, -1, -1),
-> > +	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_TE2_MASK, 0, sdm845_pp_sblk_te, -1, -1),
-> > +	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_TE2_MASK, 0, sdm845_pp_sblk_te, -1, -1),
-> >   };
-> >   
-> >   static const struct dpu_pingpong_cfg sm8150_pp[] = {
-> > -	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, sdm845_pp_sblk_te,
-> > +	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_TE2_MASK, MERGE_3D_0, sdm845_pp_sblk_te,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
-> > -	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, sdm845_pp_sblk_te,
-> > +	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_TE2_MASK, MERGE_3D_0, sdm845_pp_sblk_te,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
-> > -	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, sdm845_pp_sblk,
-> > +	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
-> > -	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, sdm845_pp_sblk,
-> > +	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
-> > -	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, sdm845_pp_sblk,
-> > +	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
-> >   			-1),
-> > -	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, sdm845_pp_sblk,
-> > +	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
-> >   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
-> >   			-1),
-> >   };
-> >   
-> >   static const struct dpu_pingpong_cfg sc7280_pp[] = {
-> > -	PP_BLK("pingpong_0", PINGPONG_0, 0x59000, 0, sc7280_pp_sblk, -1, -1),
-> > -	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, 0, sc7280_pp_sblk, -1, -1),
-> > -	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, 0, sc7280_pp_sblk, -1, -1),
-> > -	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
-> > +	PP_BLK("pingpong_0", PINGPONG_0, 0x59000, PINGPONG_SM8150_MASK, 0, sc7280_pp_sblk, -1, -1),
-> > +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, PINGPONG_SM8150_MASK, 0, sc7280_pp_sblk, -1, -1),
-> > +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, PINGPONG_SM8150_MASK, 0, sc7280_pp_sblk, -1, -1),
-> > +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, PINGPONG_SM8150_MASK, 0, sc7280_pp_sblk, -1, -1),
-> >   };
-> >   
-> >   static struct dpu_pingpong_cfg qcm2290_pp[] = {
-> > -	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
-> > +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
-> >   		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
-> >   		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
-> >   };
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> > index 0fcad9760b6f..30896c057f87 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> > @@ -274,14 +274,16 @@ static int dpu_hw_pp_setup_dsc(struct dpu_hw_pingpong *pp)
-> >   static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
-> >   				unsigned long features)
-> >   {
-> > -	c->ops.setup_tearcheck = dpu_hw_pp_setup_te_config;
-> > -	c->ops.enable_tearcheck = dpu_hw_pp_enable_te;
-> > -	c->ops.connect_external_te = dpu_hw_pp_connect_external_te;
-> > -	c->ops.get_vsync_info = dpu_hw_pp_get_vsync_info;
-> > -	c->ops.setup_autorefresh = dpu_hw_pp_setup_autorefresh_config;
-> > -	c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
-> > -	c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
-> > -	c->ops.get_line_count = dpu_hw_pp_get_line_count;
-> > +	if (test_bit(DPU_PINGPONG_TE, &features)) {
-> > +		c->ops.setup_tearcheck = dpu_hw_pp_setup_te_config;
-> > +		c->ops.enable_tearcheck = dpu_hw_pp_enable_te;
-> > +		c->ops.connect_external_te = dpu_hw_pp_connect_external_te;
-> > +		c->ops.get_vsync_info = dpu_hw_pp_get_vsync_info;
-> > +		c->ops.setup_autorefresh = dpu_hw_pp_setup_autorefresh_config;
-> > +		c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
-> > +		c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
-> > +		c->ops.get_line_count = dpu_hw_pp_get_line_count;
-> > +	}
-> >   	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
-> >   	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
-> >   	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+> With GPIO support on:
+> - pm8550
+> - pm8550b
+> - pm8550ve
+> - pm8550vs
+> - pmk8550
+> - pmr735d
 > 
-> -- 
-> With best wishes
-> Dmitry
+> This documents bindings for those SPMI PMIC and adds compatible in the
+> PMIC pinctrl driver for GPIO support.
 > 
+> To: Andy Gross <agross@kernel.org>
+> To: Bjorn Andersson <andersson@kernel.org>
+> To: Konrad Dybcio <konrad.dybcio@somainline.org>
+> To: Lee Jones <lee@kernel.org>
+> To: Rob Herring <robh+dt@kernel.org>
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: Stephen Boyd <sboyd@kernel.org>
+> To: Linus Walleij <linus.walleij@linaro.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-gpio@vger.kernel.org
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> ---
+> Changes in v2:
+> - Squashed patch 3 & 2 into 1, added Reviewed-by from Krzysztof
+> - Squashed patch 5 into 4, added Reviewed-by from Krzysztof
+> - Squashed patch 7 into 6, added Reviewed-by from Konrad
+> - Link to v1: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-spmi-v1-0-6338a2b4b241@linaro.org
+> 
+> ---
+> Neil Armstrong (3):
+>        dt-bindings: mfd: qcom,spmi-pmic: document pm8550, pm8550b, pm8550ve, pm8550vs, pmk8550, pm8010 & pmr735d
+>        dt-bindings: pinctrl: qcom,pmic-gpio: document pm8550, pm8550b, pm8550ve, pm8550vs, pmk8550 & pmr735d
+>        pinctrl: qcom: spmi-gpio: add support for pm8550 & pmr735d gpio control
+> 
+>   .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml        |  7 +++++++
+>   .../devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml    | 18 ++++++++++++++++++
+>   drivers/pinctrl/qcom/pinctrl-spmi-gpio.c               |  6 ++++++
+>   3 files changed, 31 insertions(+)
+> ---
+> base-commit: 8274e19d9db1019f8fac39cf46da6680513fd5d3
+> change-id: 20221114-narmstrong-sm8550-upstream-spmi-d2c999ec5dc1
+> 
+> Best regards,
+
+Gentle ping,
+
+Thanks,
+Neil
