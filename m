@@ -2,184 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9488665AEAE
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B9465AEB3
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjABJcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 04:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
+        id S231426AbjABJd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 04:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjABJcS (ORCPT
+        with ESMTP id S231305AbjABJdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 04:32:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8205326E2
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:32:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1552460EF7
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 09:32:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CE45C433F0
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 09:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672651936;
-        bh=Ry+t4NYxz2LnY50+lHocjvCB/yPTIKyyLB5poiRirY4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mXkQCAUXRpMx2BxXatIs9QzKh/4YtzXyuyea26MbEENziG7Yu6Lfk9u+w05FoNSfy
-         1X6iZNd+HpzprTGn+7DA9Biey2i28aBtA4qNY1pSHk6y9WgQkjX8yhl6rjZ/WYvye8
-         gpz013krvFpoHqWDhUVl/DRzNBdHBiqGR2KRWjOrCABClrr74Sl/NGB4wwlBCeTjhl
-         ntCK9Sylg6yyVEJwtGY+poDlc5+oeII0Hx6zvCrcD7jjMTJkqy/yqlyFV0R7BVD5Ue
-         ZkK9UKpLVRFUyb4sSIkkSvKy9val09B183s7D6YATCtcmbGMZrv2PSq3eMyq4PopbV
-         xJ9gydXkCBqrQ==
-Received: by mail-lj1-f174.google.com with SMTP id p2so13003071ljn.7
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 01:32:16 -0800 (PST)
-X-Gm-Message-State: AFqh2kr3eceiWAT+ucrAIW2pMAULXpC9PCPcOUyEL5IO1s878pNu0nai
-        xmHwzCSiwg2QJUUxeaBHWiTpY4UKRMrGvG4FwrA=
-X-Google-Smtp-Source: AMrXdXumaiU5c64MbvVjmQn+Emq3s+Anlwtq0//DHOL0975Aj9+8uS9+d4EPAXnlu81fcPtiuajpivRg/BklVkuooXI=
-X-Received: by 2002:a05:651c:1a25:b0:27f:5559:a998 with SMTP id
- by37-20020a05651c1a2500b0027f5559a998mr1811588ljb.69.1672651934461; Mon, 02
- Jan 2023 01:32:14 -0800 (PST)
+        Mon, 2 Jan 2023 04:33:51 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F3138B4
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:33:50 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302861DO004535;
+        Mon, 2 Jan 2023 09:33:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=pp1; bh=2uLaxQ+WrPoqDFSbkZCdMa71Obu0srQTGUQ8NnptaNQ=;
+ b=NiGsnTkwnKAd1N4nBUljTYDM5i0tYWAn6LO/zbADsAYOTW0kn6ZGFCNHZY2gngjqpeq3
+ Whd9houH4eK53uIkMUBA/Xsguh2o9u/QGyKOKCO6uw8pT+ruEA7Qc/fO00Qgyc0errQO
+ 64krV86+2mniapd66xwftEFFo/xBIzNxpGD1BZArueDZjXGrOCHmE08vn7T59znuh1oT
+ XowDD12cO/RcfMMOlDJqX7BPr7OXSOhSxXkNZlYgnovgMdRHAHT9pjr9kSTZyP6w9mlk
+ rdqSml6ueMzhvubzC5j4WxzrmnjwMQ/Bt4zEjopwDkmFMhOpsER+JLXk1jDWTZ4Zsrfr 1Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mtxucwg6v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 09:33:14 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3029SboM031751;
+        Mon, 2 Jan 2023 09:33:14 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mtxucwg6a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 09:33:14 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3020AtrT001428;
+        Mon, 2 Jan 2023 09:33:11 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mtcbfa7va-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 09:33:11 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3029X90D45023536
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Jan 2023 09:33:09 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4737F2004B;
+        Mon,  2 Jan 2023 09:33:09 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 24BBC20043;
+        Mon,  2 Jan 2023 09:33:09 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon,  2 Jan 2023 09:33:09 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, hca@linux.ibm.com
+Subject: Re: [PATCH 2/5] nolibc: add support for s390
+References: <20221209141939.3634586-1-svens@linux.ibm.com>
+        <20221209141939.3634586-3-svens@linux.ibm.com>
+        <20221227213530.GA6390@1wt.eu> <yt9dilhpjqpr.fsf@linux.ibm.com>
+        <20230102084122.GB29287@1wt.eu>
+Date:   Mon, 02 Jan 2023 10:33:08 +0100
+In-Reply-To: <20230102084122.GB29287@1wt.eu> (Willy Tarreau's message of "Mon,
+        2 Jan 2023 09:41:22 +0100")
+Message-ID: <yt9dedsdjn6z.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WvhY0Wb5WIWa3dNCtcaWOh7K_twlUgn3
+X-Proofpoint-ORIG-GUID: 0hkTxfQC_9yyEJ9l0OW8KjpLne274lSR
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <Y7A76+IBS4fnucrW@zn.tnic> <Y7A8qP05B0YRbQIN@zx2c4.com>
- <Y7A9nBud6UeH+wYd@zn.tnic> <Y7A+YELM7m5E2PUQ@zx2c4.com> <Y7BGIAL4z6o6FEI5@zn.tnic>
- <Y7B993P1+jYB/etX@zx2c4.com> <Y7CGzde+qPB7YJP4@zn.tnic> <60566f8b-c90f-12e7-c13e-94e9829eee2d@zytor.com>
- <8f072588-7d66-0932-7486-ed9159ae93ae@zytor.com> <Y7JzTh8JnMXM6ZPS@zn.tnic> <Y7J3B50kn1kWrxlk@zn.tnic>
-In-Reply-To: <Y7J3B50kn1kWrxlk@zn.tnic>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 2 Jan 2023 10:32:03 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHDw5p5yX25TnKiQ7sgqVbhEjB+=fu=7Oz67shQD-fL6Q@mail.gmail.com>
-Message-ID: <CAMj1kXHDw5p5yX25TnKiQ7sgqVbhEjB+=fu=7Oz67shQD-fL6Q@mail.gmail.com>
-Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber setup_data
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, pbonzini@redhat.com,
-        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        qemu-devel@nongnu.org, kraxel@redhat.com, philmd@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-02_05,2022-12-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 suspectscore=0 clxscore=1015 malwarescore=0 adultscore=0
+ impostorscore=0 mlxlogscore=799 mlxscore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301020086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2 Jan 2023 at 07:17, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Mon, Jan 02, 2023 at 07:01:50AM +0100, Borislav Petkov wrote:
-> > On Sat, Dec 31, 2022 at 07:31:21PM -0800, H. Peter Anvin wrote:
-> > > It would probably be a good idea to add a "maximum physical address for
-> > > initrd/setup_data/cmdline" field to struct kernel_info, though. It appears
-> > > right now that those fields are being identity-mapped in the decompressor,
-> > > and that means that if 48-bit addressing is used, physical memory may extend
-> > > past the addressable range.
-> >
-> > Yeah, we will probably need that too.
-> >
-> > Btw, looka here - it can't get any more obvious than that after dumping
-> > setup_data too:
-> >
-> > early console in setup code
-> > early console in extract_kernel
-> > input_data: 0x00000000040f92bf
-> > input_len: 0x0000000000f1c325
-> > output: 0x0000000001000000
-> > output_len: 0x0000000003c5e7d8
-> > kernel_total_size: 0x0000000004428000
-> > needed_size: 0x0000000004600000
-> > boot_params->hdr.setup_data: 0x00000000010203b0
-> > trampoline_32bit: 0x000000000009d000
-> >
-> > Decompressing Linux... Parsing ELF... done.
-> > Booting the kernel.
-> > <EOF>
-> >
-> > Aligning them vertically:
-> >
-> > output:                               0x0000000001000000
-> > output_len:                   0x0000000003c5e7d8
-> > kernel_total_size:            0x0000000004428000
-> > needed_size:                  0x0000000004600000
-> > boot_params->hdr.setup_data:  0x00000000010203b0
->
-> Ok, waait a minute:
->
-> ============    ============
-> Field name:     pref_address
-> Type:           read (reloc)
-> Offset/size:    0x258/8
-> Protocol:       2.10+
-> ============    ============
->
->   This field, if nonzero, represents a preferred load address for the
->   kernel.  A relocating bootloader should attempt to load at this
->   address if possible.
->
->   A non-relocatable kernel will unconditionally move itself and to run
->   at this address.
->
-> so a kernel loader (qemu in this case) already knows where the kernel goes:
->
-> boot_params->hdr.setup_data: 0x0000000001020450
-> boot_params->hdr.pref_address: 0x0000000001000000
->                                 ^^^^^^^^^^^^^^^^^
->
-> now, considering that same kernel loader (qemu) knows how big that kernel is:
->
-> kernel_total_size: 0x0000000004428000
->
-> should that loader *not* put anything that the kernel will use in the range
->
-> pref_addr + kernel_total_size
->
+Willy Tarreau <w@1wt.eu> writes:
 
-This seems to be related to another issue that was discussed in the
-context of this change, but affecting EFI boot not legacy BIOS boot
-[0].
+> On Mon, Jan 02, 2023 at 09:17:04AM +0100, Sven Schnelle wrote:
+>> The kernel compiles with z10 as minimum architecture, so
+>> i'm leaning towards enforcing the same arch for nolibc. What do you think?
+>
+> Sure, as long as this works for most users, that's likely fine.
+> Alternately, are there equivalent sequences of instructions that achieve
+> the same on older architectures, and would that be relevant ?
 
-So, in a nutshell, we have the following pieces:
-- QEMU, which manages a directory of files and other data blobs, and
-exposes them via its fw_cfg interface.
-- SeaBIOS, which invokes the fw_cfg interface to load the 'kernel'
-blob at its preferred address
-- The boot code in the kernel, which interprets the various fields in
-the setup header to figure out where the compressed image lives etc
+Well, it's only one instruction that needs to be changed - we could also
+use aghi to do the same thing. Maybe that's better.
 
-So the problem here, which applies to SETUP_DTB as well as
-SETUP_RNG_SEED, is that the internal file representation of the kernel
-blob (which does not have an absolute address at this point, it's just
-a file in the fw_cfg filesystem) is augmented with:
-1) setup_data linked-list entries carrying absolute addresses that are
-assumed to be valid once SeaBIOS loads the file to memory
-2) DTB and/or RNG seed blobs appended to the compressed 'kernel' blob,
-but without updating that file's internal metadata
+Also i will add -m64 to the testing Makefile, it shouldn't hurt.
 
-Issue 1) is what broke EFI boot, given that EFI interprets the kernel
-blob as a PE/COFF image and hands it to the Loadimage() boot service,
-which has no awareness of boot_params or setup_data and so just
-ignores it and loads the image at an arbitrary address, resulting in
-setup_data absolute address values pointing to bogus places.
+> One future improvement I'll need will be to store the envp value into a
+> global "environ" variable, and run over it to catch the pointer that
+> follows the NULL and save it into the "_auxv" variable. I've done it for
+> all other archs here already:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20221227-nolibc-weak-4
+>
+> I'll give it a try once I'm able to build and test your code, and may
+> ask you for some help if I don't succeed in doing it. If you want to do
+> it yourself, please have a look at the last commits adding environ and
+> auxv to any arch of your choice, such as x86_64.
 
-It seems that now, we have another issue 2), where the fw_cfg view of
-the file size goes out of sync with the compressed image's own view of
-its size.
-
-As a fix for issue 1), we explored another solution, which was to
-allocate fixed areas in memory for the RNG seed, so that the absolute
-address added to setup_data is guaranteed to be correct regardless of
-where the compressed image is loaded, but that was shot down for other
-reasons, and we ended up enabling this feature only for legacy BIOS
-boot. But apparently, this approach has other issues so perhaps it is
-better to revisit that solution again.
-
-So instead of appending data to the compressed image and assuming that
-it will stay in place, create or extend a memory reservation
-elsewhere, and refer to its absolute address in setup_data.
-
--- 
-Ard.
-
-
-[0] https://lore.kernel.org/all/CAMj1kXFr6Bv4_G0-wCTu4fp_iCrG060NHJx_j2dbnyiFJKYYeQ@mail.gmail.com/
+Ok, thanks for the Heads-Up. I'll take a look. I think i would send this
+as a separate Patch, so we get the initial support done first if that's ok.
