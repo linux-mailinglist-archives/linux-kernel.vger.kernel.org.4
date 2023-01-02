@@ -2,167 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4099065ADF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A25065AE04
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 09:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjABIRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 03:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S231707AbjABIUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 03:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjABIRl (ORCPT
+        with ESMTP id S231534AbjABIUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 03:17:41 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79E31096
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 00:17:39 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3028DQTd001953;
-        Mon, 2 Jan 2023 08:17:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=CnnKBTOrx893yNtBm6v7aNUWdAlqz/gSxaFOcZYtR5s=;
- b=tCfo+o8fBK1A5O/WPbzc2eGJzRK0g7VPA8bvACeweDvGMpiNeZMBHkxFUeeXHIFZ/4D5
- LHPa0eu4ejj1mMWTPvcQVmcSLzt5OKxOzpiljw1uBmpppBsvZ6TZA4qx+4tV73v/QQMw
- hnfQvzKhPtnajGnannd1astrTut7yzI38UumraOEmt05OnkgkHW6WbqkO3vWnHkQnAeF
- fNFSHP+yk68g/Zs7yMluLY15hiC3oj0yNEr5XtZfYdIKRiBIuRIYbkI2lYr8Mr8mJ052
- SgDQj7GqhQG1x3eLADmVIupA1MIDettUw59BRGQLbmvL242KJkx8tFNFLr7bmC/D5jd2 /w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mtxx6mc5p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 08:17:09 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3028H9X2006743;
-        Mon, 2 Jan 2023 08:17:09 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mtxx6mc4y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 08:17:09 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 301LtOdK014123;
-        Mon, 2 Jan 2023 08:17:07 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6hk9a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 08:17:07 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3028H4xq48365886
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 Jan 2023 08:17:04 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 959D020049;
-        Mon,  2 Jan 2023 08:17:04 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7106620043;
-        Mon,  2 Jan 2023 08:17:04 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon,  2 Jan 2023 08:17:04 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, hca@linux.ibm.com
-Subject: Re: [PATCH 2/5] nolibc: add support for s390
-References: <20221209141939.3634586-1-svens@linux.ibm.com>
-        <20221209141939.3634586-3-svens@linux.ibm.com>
-        <20221227213530.GA6390@1wt.eu>
-Date:   Mon, 02 Jan 2023 09:17:04 +0100
-In-Reply-To: <20221227213530.GA6390@1wt.eu> (Willy Tarreau's message of "Tue,
-        27 Dec 2022 22:35:30 +0100")
-Message-ID: <yt9dilhpjqpr.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Mon, 2 Jan 2023 03:20:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2859C1141;
+        Mon,  2 Jan 2023 00:20:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1C92B80C83;
+        Mon,  2 Jan 2023 08:20:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD2B2C433D2;
+        Mon,  2 Jan 2023 08:20:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672647631;
+        bh=8MiLsIlCg85ximPPgt6+OfpmqpnRCZNjJOkwEjVlJWc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ThpIClg38fWqbyst3BIkwjW4HDaPl07kyYYj+yb+bNaDD93FW+F35DazEXnq04Bn3
+         x+8Yztj6DKeWulW6AHXYfpY8l10ADdsoVxVNHzOV+c4LRs4K6EpAejo0JvP470jDEW
+         vowrLnAntjgHk+pUTFAdvTO1ggAaeWeIHN5IgS2zYBFa8Mb+FAcgsf6yrh7YH9FDnx
+         0PfDhzHdaaJOX8rPWEvHWLyLmNw/EGI35RKEosqfYzRYfCyiOdbluxLDjo1eu7spvG
+         uRTrOXztIvI/Wa/Pd9DcUc0AkQVN8Wt8ubqrQzB40OH61W7/Lkrd31eVnqbjVYdnsk
+         FYa4l4CTL/rUQ==
+Date:   Mon, 2 Jan 2023 16:20:21 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: cdnsp: : add scatter gather support for ISOC
+ endpoint
+Message-ID: <20230102082021.GB40748@nchen-desktop>
+References: <20221222090934.145140-1-pawell@cadence.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Mcz5OGe7JopgnIX2g4n_Zz-bfPKfC2eV
-X-Proofpoint-GUID: eBDv4SeuOGCpanI35jJFd3qCm_qc0qh9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_03,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- malwarescore=0 phishscore=0 adultscore=0 bulkscore=0 clxscore=1015
- impostorscore=0 suspectscore=0 mlxlogscore=999 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301020068
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221222090934.145140-1-pawell@cadence.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
+On 22-12-22 04:09:34, Pawel Laszczak wrote:
+> Patch implements scatter gather support for isochronous endpoint.
+> This fix is forced by 'commit e81e7f9a0eb9
+> ("usb: gadget: uvc: add scatter gather support")'.
+> After this fix CDNSP driver stop working with UVC class.
+> 
+> cc: <stable@vger.kernel.org>
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/cdnsp-gadget.c |   2 +-
+>  drivers/usb/cdns3/cdnsp-gadget.h |   4 +-
+>  drivers/usb/cdns3/cdnsp-ring.c   | 110 +++++++++++++++++--------------
+>  3 files changed, 63 insertions(+), 53 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+> index a8640516c895..e81dca0e62a8 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> @@ -382,7 +382,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
+>  		ret = cdnsp_queue_bulk_tx(pdev, preq);
+>  		break;
+>  	case USB_ENDPOINT_XFER_ISOC:
+> -		ret = cdnsp_queue_isoc_tx_prepare(pdev, preq);
+> +		ret = cdnsp_queue_isoc_tx(pdev, preq);
+>  	}
+>  
+>  	if (ret)
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
+> index f740fa6089d8..e1b5801fdddf 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.h
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
+> @@ -1532,8 +1532,8 @@ void cdnsp_queue_stop_endpoint(struct cdnsp_device *pdev,
+>  			       unsigned int ep_index);
+>  int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq);
+>  int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq);
+> -int cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
+> -				struct cdnsp_request *preq);
+> +int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
+> +			struct cdnsp_request *preq);
 
-Willy Tarreau <w@1wt.eu> writes:
+Why you re-name this function?
 
-> On Fri, Dec 09, 2022 at 03:19:36PM +0100, Sven Schnelle wrote:
->> Use arch-x86_64 as a template. Not really different, but
->> we have our own mmap syscall which takes a structure instead
->> of discrete arguments.
-> (...)
->
-> This evening I downloaded an s390 toolchain from kernel.org's nolibc
-> toolchains and expected to test the code under qemu, but I met two
-> build errors.
->
-> The first one is that __maybe_unused breaks the build below:
->
->> +static __maybe_unused
->> +void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
->> +	       off_t offset)
->
-> And indeed, __maybe_unused is not defined here in userland. The following
-> patch allows to go further:
->
->   diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
->   index 34b744e2f7d6..effae6e3d9e2 100644
->   --- a/tools/include/nolibc/arch-s390.h
->   +++ b/tools/include/nolibc/arch-s390.h
->   @@ -194,7 +194,7 @@ struct s390_mmap_arg_struct {
->           unsigned long offset;
->    };
->    
->   -static __maybe_unused
->   +static __attribute__((unused))
->    void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
->                  off_t offset)
->    {
+Other changes are ok for me.
 
-Hrm, yes. I didn't thought about this macro not being present.
+Peter
 
-> But with this addressed, I'm facing this next error:
->
->   $ make nolibc-test LDFLAGS= ARCH=s390 CC=/f/tc/nolibc/gcc-12.2.0-nolibc/s390-linux/bin/s390-linux-gcc
->     MKDIR   sysroot/s390/include
->   make[1]: Entering directory '/g/public/linux/master/tools/include/nolibc'
->   make[2]: Entering directory '/g/public/linux/master'
->   make[2]: Leaving directory '/g/public/linux/master'
->   make[2]: Entering directory '/g/public/linux/master'
->     INSTALL /g/public/linux/master/tools/testing/selftests/nolibc/sysroot/sysroot/include
->   make[2]: Leaving directory '/g/public/linux/master'
->   make[1]: Leaving directory '/g/public/linux/master/tools/include/nolibc'
->     CC      nolibc-test
->   /tmp/ccCzaBgD.s: Assembler messages:
->   /tmp/ccCzaBgD.s:9: Error: Unrecognized opcode: `lg'
->   /tmp/ccCzaBgD.s:12: Error: Unrecognized opcode: `lay'
->   /tmp/ccCzaBgD.s:15: Error: Unrecognized opcode: `lghi'
->   make: *** [Makefile:108: nolibc-test] Error 1
->
-> Thus I'm wondering if specific options are required for the compiler
-> (it's gcc 12.2.0 + binutils 2.39), if I'm not using the proper compiler,
-> or if there's anything wrong in the asm code (e.g. maybe by accident you
-> sent the patch from an earlier development branch), or anything else ?
+>  void cdnsp_queue_configure_endpoint(struct cdnsp_device *pdev,
+>  				    dma_addr_t in_ctx_ptr);
+>  void cdnsp_queue_reset_ep(struct cdnsp_device *pdev, unsigned int ep_index);
+> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> index b23e543b3a3d..07f6068342d4 100644
+> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> @@ -1333,6 +1333,20 @@ static int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
+>  					 ep_ring->dequeue, td->last_trb,
+>  					 ep_trb_dma);
+>  
+> +		desc = td->preq->pep->endpoint.desc;
+> +
+> +		if (ep_seg) {
+> +			ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma)
+> +					       / sizeof(*ep_trb)];
+> +
+> +			trace_cdnsp_handle_transfer(ep_ring,
+> +					(struct cdnsp_generic_trb *)ep_trb);
+> +
+> +			if (pep->skip && usb_endpoint_xfer_isoc(desc) &&
+> +			    td->last_trb != ep_trb)
+> +				return -EAGAIN;
+> +		}
+> +
+>  		/*
+>  		 * Skip the Force Stopped Event. The event_trb(ep_trb_dma)
+>  		 * of FSE is not in the current TD pointed by ep_ring->dequeue
+> @@ -1347,7 +1361,6 @@ static int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
+>  			goto cleanup;
+>  		}
+>  
+> -		desc = td->preq->pep->endpoint.desc;
+>  		if (!ep_seg) {
+>  			if (!pep->skip || !usb_endpoint_xfer_isoc(desc)) {
+>  				/* Something is busted, give up! */
+> @@ -1374,12 +1387,6 @@ static int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
+>  			goto cleanup;
+>  		}
+>  
+> -		ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma)
+> -				       / sizeof(*ep_trb)];
+> -
+> -		trace_cdnsp_handle_transfer(ep_ring,
+> -					    (struct cdnsp_generic_trb *)ep_trb);
+> -
+>  		if (cdnsp_trb_is_noop(ep_trb))
+>  			goto cleanup;
+>  
+> @@ -1726,11 +1733,6 @@ static unsigned int count_sg_trbs_needed(struct cdnsp_request *preq)
+>  	return num_trbs;
+>  }
+>  
+> -static unsigned int count_isoc_trbs_needed(struct cdnsp_request *preq)
+> -{
+> -	return cdnsp_count_trbs(preq->request.dma, preq->request.length);
+> -}
+> -
+>  static void cdnsp_check_trb_math(struct cdnsp_request *preq, int running_total)
+>  {
+>  	if (running_total != preq->request.length)
+> @@ -2192,28 +2194,48 @@ static unsigned int
+>  }
+>  
+>  /* Queue function isoc transfer */
+> -static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
+> -			       struct cdnsp_request *preq)
+> +int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
+> +			struct cdnsp_request *preq)
+>  {
+> -	int trb_buff_len, td_len, td_remain_len, ret;
+> +	unsigned int trb_buff_len, td_len, td_remain_len, block_len;
+>  	unsigned int burst_count, last_burst_pkt;
+>  	unsigned int total_pkt_count, max_pkt;
+>  	struct cdnsp_generic_trb *start_trb;
+> +	struct scatterlist *sg = NULL;
+>  	bool more_trbs_coming = true;
+>  	struct cdnsp_ring *ep_ring;
+> +	unsigned int num_sgs = 0;
+>  	int running_total = 0;
+>  	u32 field, length_field;
+> +	u64 addr, send_addr;
+>  	int start_cycle;
+>  	int trbs_per_td;
+> -	u64 addr;
+> -	int i;
+> +	int i, sent_len, ret;
+>  
+>  	ep_ring = preq->pep->ring;
+> +
+> +	td_len = preq->request.length;
+> +
+> +	if (preq->request.num_sgs) {
+> +		num_sgs = preq->request.num_sgs;
+> +		sg = preq->request.sg;
+> +		addr = (u64)sg_dma_address(sg);
+> +		block_len = sg_dma_len(sg);
+> +		trbs_per_td = count_sg_trbs_needed(preq);
+> +	} else {
+> +		addr = (u64)preq->request.dma;
+> +		block_len = td_len;
+> +		trbs_per_td = count_trbs_needed(preq);
+> +	}
+> +
+> +	ret = cdnsp_prepare_transfer(pdev, preq, trbs_per_td);
+> +	if (ret)
+> +		return ret;
+> +
+>  	start_trb = &ep_ring->enqueue->generic;
+>  	start_cycle = ep_ring->cycle_state;
+> -	td_len = preq->request.length;
+> -	addr = (u64)preq->request.dma;
+>  	td_remain_len = td_len;
+> +	send_addr = addr;
+>  
+>  	max_pkt = usb_endpoint_maxp(preq->pep->endpoint.desc);
+>  	total_pkt_count = DIV_ROUND_UP(td_len, max_pkt);
+> @@ -2225,11 +2247,6 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
+>  	burst_count = cdnsp_get_burst_count(pdev, preq, total_pkt_count);
+>  	last_burst_pkt = cdnsp_get_last_burst_packet_count(pdev, preq,
+>  							   total_pkt_count);
+> -	trbs_per_td = count_isoc_trbs_needed(preq);
+> -
+> -	ret = cdnsp_prepare_transfer(pdev, preq, trbs_per_td);
+> -	if (ret)
+> -		goto cleanup;
+>  
+>  	/*
+>  	 * Set isoc specific data for the first TRB in a TD.
+> @@ -2248,6 +2265,7 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
+>  
+>  		/* Calculate TRB length. */
+>  		trb_buff_len = TRB_BUFF_LEN_UP_TO_BOUNDARY(addr);
+> +		trb_buff_len = min(trb_buff_len, block_len);
+>  		if (trb_buff_len > td_remain_len)
+>  			trb_buff_len = td_remain_len;
+>  
+> @@ -2256,7 +2274,8 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
+>  					       trb_buff_len, td_len, preq,
+>  					       more_trbs_coming, 0);
+>  
+> -		length_field = TRB_LEN(trb_buff_len) | TRB_INTR_TARGET(0);
+> +		length_field = TRB_LEN(trb_buff_len) | TRB_TD_SIZE(remainder) |
+> +			TRB_INTR_TARGET(0);
+>  
+>  		/* Only first TRB is isoc, overwrite otherwise. */
+>  		if (i) {
+> @@ -2281,12 +2300,27 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
+>  		}
+>  
+>  		cdnsp_queue_trb(pdev, ep_ring, more_trbs_coming,
+> -				lower_32_bits(addr), upper_32_bits(addr),
+> +				lower_32_bits(send_addr), upper_32_bits(send_addr),
+>  				length_field, field);
+>  
+>  		running_total += trb_buff_len;
+>  		addr += trb_buff_len;
+>  		td_remain_len -= trb_buff_len;
+> +
+> +		sent_len = trb_buff_len;
+> +		while (sg && sent_len >= block_len) {
+> +			/* New sg entry */
+> +			--num_sgs;
+> +			sent_len -= block_len;
+> +			if (num_sgs != 0) {
+> +				sg = sg_next(sg);
+> +				block_len = sg_dma_len(sg);
+> +				addr = (u64)sg_dma_address(sg);
+> +				addr += sent_len;
+> +			}
+> +		}
+> +		block_len -= sent_len;
+> +		send_addr = addr;
+>  	}
+>  
+>  	/* Check TD length */
+> @@ -2324,30 +2358,6 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
+>  	return ret;
+>  }
+>  
+> -int cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
+> -				struct cdnsp_request *preq)
+> -{
+> -	struct cdnsp_ring *ep_ring;
+> -	u32 ep_state;
+> -	int num_trbs;
+> -	int ret;
+> -
+> -	ep_ring = preq->pep->ring;
+> -	ep_state = GET_EP_CTX_STATE(preq->pep->out_ctx);
+> -	num_trbs = count_isoc_trbs_needed(preq);
+> -
+> -	/*
+> -	 * Check the ring to guarantee there is enough room for the whole
+> -	 * request. Do not insert any td of the USB Request to the ring if the
+> -	 * check failed.
+> -	 */
+> -	ret = cdnsp_prepare_ring(pdev, ep_ring, ep_state, num_trbs, GFP_ATOMIC);
+> -	if (ret)
+> -		return ret;
+> -
+> -	return cdnsp_queue_isoc_tx(pdev, preq);
+> -}
+> -
+>  /****		Command Ring Operations		****/
+>  /*
+>   * Generic function for queuing a command TRB on the command ring.
+> -- 
+> 2.25.1
+> 
 
-Hmm, tried this on my x86 laptop, and it looks like there are two things
-here:
+-- 
 
-The cross compiler needs -m64 to compile in 64bit mode. otherwise it
-assumes 31bit mode, where both lg and lghi are not present. The other
-thing is that lay was introduced with later generations of the
-z/Architecture. The kernel compiles with z10 as minimum architecture, so
-i'm leaning towards enforcing the same arch for nolibc. What do you think?
+Thanks,
+Peter Chen
