@@ -2,150 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513A765AEA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C08065AEA8
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 Jan 2023 10:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjABJ3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 04:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S229982AbjABJaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 04:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjABJ3K (ORCPT
+        with ESMTP id S229640AbjABJaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 04:29:10 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1347C25D7
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:29:09 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id f20so28587998lja.4
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 01:29:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=54SvQg7V4G/yUh34P1HenewD+ErkpsXyiXw5J7ZoDjA=;
-        b=W1dFFFJQ94xENzXF4W1kr5P5CDMV8x20VuJoghbLlglWHn8ADNBIL1ONLGH6XssNvK
-         MmNu50NfeWZOPQWTnAJzGDkxCHPZwPtcZ6rNWwHAQDDmAqROm5vmUFaAQ5PFi3fKfwbA
-         xhI+mjiOf3ELU3c8DGzfPxENe1Egg34m+dkG1X/JF6XvGHU8pFJuygYiE7V8OudPWTOJ
-         lR/MDOBNGq6xFTZse/m7bzxf3Mq2fpo2qOFXFNe7BQLgz2twsRpKbgt7iKQjqihx0FR5
-         KRUq5hR4Iqz4DKedaBFWF3vDe7hwwuMA1FnJ/GwMMgzuH/YT0BK2iqDO/hO8nKQy02KO
-         s35A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=54SvQg7V4G/yUh34P1HenewD+ErkpsXyiXw5J7ZoDjA=;
-        b=Dve9v7iIX3/diMa+/zSYSyMtzx0pEO4QmPbKZ3BdzfnWJGfd+AtzMic9nGVneEt4Dw
-         Vbk8EIrHnOTrgC1QSWuFv2iZ340AH7IwWm4KW8VcgQIL6nbu7lCQmuwAVL2V0oWJA8ar
-         9lVHuIl2xbSk3ucYny6Q6xqb1a7w8nkevj4jeay97Mmbe2onFrs2dVQ0fwV7Jo1Hb25S
-         BgueTS18Mv6jC57K6ogY6dS7qv8pbBmTpY0vLzTRaMybc0W0Yn9ySPh47qvNrtaX8O9q
-         7amg4t+JH95QBzDqJJGifGJ+vjlOX54js5CpnPLDdd0dlrv2WqSZWr+pY8tm6laTKT2j
-         AE3Q==
-X-Gm-Message-State: AFqh2ko1rhWXtIsiFdh4+//ZgJj3oRiy+9P6QUvkhAb8mAf2RBVJ/3Ug
-        BNNBDNP7Hh8Kr0dqflYVLZsGAQ==
-X-Google-Smtp-Source: AMrXdXtedchdcPFKbA0yA741M6X/8cIi4PDMmyDbu2yHmKpgVk0+RWUIRZS0TRgijzMsK4XvP6/xTA==
-X-Received: by 2002:a2e:8396:0:b0:27b:5596:1e4d with SMTP id x22-20020a2e8396000000b0027b55961e4dmr9977811ljg.34.1672651746779;
-        Mon, 02 Jan 2023 01:29:06 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id h21-20020a2ea495000000b00279e41de7e6sm3216902lji.3.2023.01.02.01.29.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 01:29:06 -0800 (PST)
-Message-ID: <62310fb8-4159-36e1-07cc-21b248daf198@linaro.org>
-Date:   Mon, 2 Jan 2023 10:29:03 +0100
+        Mon, 2 Jan 2023 04:30:18 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AFE25D8
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 01:30:16 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id AE638240006;
+        Mon,  2 Jan 2023 09:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672651814;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TfPe+kgpzqsrNLM0lsYjTizOT0I17cc9ihmNZot7mDo=;
+        b=na67jTXPFjGOJo9yKW1IMOLZCDBRSYhxSkkDdqa5rv+LuIIbGFLvjknm7M7gXNci/HPTx8
+        mgAaeOyv9TIZIigUS5TfUEE8IgaWYxfJBVVZS2Ysj89naOX9bOfLeDYptHTtJ0HZ87yaoP
+        8Zbl1BdNB5wHZOXvPnZUpbycH6/Z9hx8mY8Z7bv3Q+4qKGytQN4toyQjlUsqVjCMTaqFsa
+        APMd0257i8bQZqro16cklz3uFD07+omQUxlHk0WolZbjSvViu51LUQyUxNfSgZFaquFoUM
+        AX8pETa1zv90Sq5mMf1aFNbdrBu22y0Cl3IvEOlXMSF0/CKf6+J+UGQroA+LEQ==
+Date:   Mon, 2 Jan 2023 10:30:09 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 7/7] mtd: rawnand: sunxi: Precompute the ECC_CTL
+ register value
+Message-ID: <20230102103009.00486aa3@xps-13>
+In-Reply-To: <20221229181526.53766-8-samuel@sholland.org>
+References: <20221229181526.53766-1-samuel@sholland.org>
+        <20221229181526.53766-8-samuel@sholland.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 1/7] drm/msm/dpu: Remove unused INTF0 interrupt mask
- from sm6115/qcm2290
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-2-marijn.suijten@somainline.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221231215006.211860-2-marijn.suijten@somainline.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Samuel,
 
+samuel@sholland.org wrote on Thu, 29 Dec 2022 12:15:26 -0600:
 
-On 31.12.2022 22:50, Marijn Suijten wrote:
-> Neither of these SoCs has INTF0, they only have a DSI interface on index
-> 1.  Stop enabling an interrupt that can't fire.
-Double space.
+> This removes an unnecessary memory allocation, and avoids recomputing
+> the same register value every time ECC is enabled.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Konrad
-> 
-> Fixes: 3581b7062cec ("drm/msm/disp/dpu1: add support for display on SM6115")
-> Fixes: 5334087ee743 ("drm/msm: add support for QCM2290 MDSS")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+I am fine with the "let's not recompute the register value each time"
+idea, but I like having a dedicated object reserved for the ECC
+engine, that is separated from the main controller structure (both
+are two different things, even though they are usually well
+integrated).
+
+If it's actually useless you can still get rid of the allocation and in
+the structure you can save the ecc_ctrl reg value instead of mode.
+
+The other patches in the series look good to me.
+
+Thanks,
+Miqu=C3=A8l
+
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 > ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 2196e205efa5..9814ad52cc04 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -90,6 +90,11 @@
->  			 BIT(MDP_AD4_0_INTR) | \
->  			 BIT(MDP_AD4_1_INTR))
->  
-> +#define IRQ_QCM2290_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
-> +			 BIT(MDP_SSPP_TOP0_INTR2) | \
-> +			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
-> +			 BIT(MDP_INTF1_INTR))
+>=20
+>  drivers/mtd/nand/raw/sunxi_nand.c | 75 ++++++-------------------------
+>  1 file changed, 13 insertions(+), 62 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sun=
+xi_nand.c
+> index a3bc9f7f9e5a..5c5a567d8870 100644
+> --- a/drivers/mtd/nand/raw/sunxi_nand.c
+> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
+> @@ -169,22 +169,13 @@ struct sunxi_nand_chip_sel {
+>  	s8 rb;
+>  };
+> =20
+> -/**
+> - * struct sunxi_nand_hw_ecc - stores information related to HW ECC suppo=
+rt
+> - *
+> - * @mode: the sunxi ECC mode field deduced from ECC requirements
+> - */
+> -struct sunxi_nand_hw_ecc {
+> -	int mode;
+> -};
+> -
+>  /**
+>   * struct sunxi_nand_chip - stores NAND chip device related information
+>   *
+>   * @node: used to store NAND chips into a list
+>   * @nand: base NAND chip structure
+> - * @ecc: ECC controller structure
+>   * @clk_rate: clk_rate required for this NAND chip
+> + * @ecc_ctl: ECC_CTL register value for this NAND chip
+>   * @timing_cfg: TIMING_CFG register value for this NAND chip
+>   * @timing_ctl: TIMING_CTL register value for this NAND chip
+>   * @nsels: number of CS lines required by the NAND chip
+> @@ -193,8 +184,8 @@ struct sunxi_nand_hw_ecc {
+>  struct sunxi_nand_chip {
+>  	struct list_head node;
+>  	struct nand_chip nand;
+> -	struct sunxi_nand_hw_ecc *ecc;
+>  	unsigned long clk_rate;
+> +	u32 ecc_ctl;
+>  	u32 timing_cfg;
+>  	u32 timing_ctl;
+>  	int nsels;
+> @@ -689,26 +680,15 @@ static void sunxi_nfc_hw_ecc_enable(struct nand_chi=
+p *nand)
+>  {
+>  	struct sunxi_nand_chip *sunxi_nand =3D to_sunxi_nand(nand);
+>  	struct sunxi_nfc *nfc =3D to_sunxi_nfc(nand->controller);
+> -	u32 ecc_ctl;
+> -
+> -	ecc_ctl =3D readl(nfc->regs + NFC_REG_ECC_CTL);
+> -	ecc_ctl &=3D ~(NFC_ECC_MODE_MSK | NFC_ECC_PIPELINE |
+> -		     NFC_ECC_BLOCK_SIZE_MSK);
+> -	ecc_ctl |=3D NFC_ECC_EN | NFC_ECC_MODE(sunxi_nand->ecc->mode) |
+> -		   NFC_ECC_EXCEPTION | NFC_ECC_PIPELINE;
+> -
+> -	if (nand->ecc.size =3D=3D 512)
+> -		ecc_ctl |=3D NFC_ECC_BLOCK_512;
+> =20
+> -	writel(ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
+> +	writel(sunxi_nand->ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
+>  }
+> =20
+>  static void sunxi_nfc_hw_ecc_disable(struct nand_chip *nand)
+>  {
+>  	struct sunxi_nfc *nfc =3D to_sunxi_nfc(nand->controller);
+> =20
+> -	writel(readl(nfc->regs + NFC_REG_ECC_CTL) & ~NFC_ECC_EN,
+> -	       nfc->regs + NFC_REG_ECC_CTL);
+> +	writel(0, nfc->regs + NFC_REG_ECC_CTL);
+>  }
+> =20
+>  static inline void sunxi_nfc_user_data_to_buf(u32 user_data, u8 *buf)
+> @@ -1626,11 +1606,6 @@ static const struct mtd_ooblayout_ops sunxi_nand_o=
+oblayout_ops =3D {
+>  	.free =3D sunxi_nand_ooblayout_free,
+>  };
+> =20
+> -static void sunxi_nand_hw_ecc_ctrl_cleanup(struct sunxi_nand_chip *sunxi=
+_nand)
+> -{
+> -	kfree(sunxi_nand->ecc);
+> -}
+> -
+>  static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+>  				       struct nand_ecc_ctrl *ecc,
+>  				       struct device_node *np)
+> @@ -1641,7 +1616,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_=
+chip *nand,
+>  	struct mtd_info *mtd =3D nand_to_mtd(nand);
+>  	struct nand_device *nanddev =3D mtd_to_nanddev(mtd);
+>  	int nsectors;
+> -	int ret;
+>  	int i;
+> =20
+>  	if (nanddev->ecc.user_conf.flags & NAND_ECC_MAXIMIZE_STRENGTH) {
+> @@ -1675,10 +1649,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand=
+_chip *nand,
+>  	if (ecc->size !=3D 512 && ecc->size !=3D 1024)
+>  		return -EINVAL;
+> =20
+> -	sunxi_nand->ecc =3D kzalloc(sizeof(*sunxi_nand->ecc), GFP_KERNEL);
+> -	if (!sunxi_nand->ecc)
+> -		return -ENOMEM;
+> -
+>  	/* Prefer 1k ECC chunk over 512 ones */
+>  	if (ecc->size =3D=3D 512 && mtd->writesize > 512) {
+>  		ecc->size =3D 1024;
+> @@ -1699,12 +1669,9 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand=
+_chip *nand,
+> =20
+>  	if (i >=3D ARRAY_SIZE(strengths)) {
+>  		dev_err(nfc->dev, "unsupported strength\n");
+> -		ret =3D -ENOTSUPP;
+> -		goto err;
+> +		return -ENOTSUPP;
+>  	}
+> =20
+> -	sunxi_nand->ecc->mode =3D i;
+> -
+>  	/* HW ECC always request ECC bytes for 1024 bytes blocks */
+>  	ecc->bytes =3D DIV_ROUND_UP(ecc->strength * fls(8 * 1024), 8);
+> =20
+> @@ -1713,10 +1680,14 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nan=
+d_chip *nand,
+> =20
+>  	nsectors =3D mtd->writesize / ecc->size;
+> =20
+> -	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors)) {
+> -		ret =3D -EINVAL;
+> -		goto err;
+> -	}
+> +	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors))
+> +		return -EINVAL;
 > +
->  #define IRQ_SC7180_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->  			 BIT(MDP_SSPP_TOP0_INTR2) | \
->  			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
-> @@ -1884,7 +1889,7 @@ static const struct dpu_mdss_cfg sm6115_dpu_cfg = {
->  	.vbif_count = ARRAY_SIZE(sdm845_vbif),
->  	.vbif = sdm845_vbif,
->  	.perf = &sm6115_perf_data,
-> -	.mdss_irqs = IRQ_SC7180_MASK,
-> +	.mdss_irqs = IRQ_QCM2290_MASK,
->  };
->  
->  static const struct dpu_mdss_cfg sm8150_dpu_cfg = {
-> @@ -2008,7 +2013,7 @@ static const struct dpu_mdss_cfg qcm2290_dpu_cfg = {
->  	.reg_dma_count = 1,
->  	.dma_cfg = &sdm845_regdma,
->  	.perf = &qcm2290_perf_data,
-> -	.mdss_irqs = IRQ_SC7180_MASK,
-> +	.mdss_irqs = IRQ_QCM2290_MASK,
->  };
->  
->  static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
+> +	sunxi_nand->ecc_ctl =3D NFC_ECC_MODE(i) | NFC_ECC_EXCEPTION |
+> +			      NFC_ECC_PIPELINE | NFC_ECC_EN;
+> +
+> +	if (ecc->size =3D=3D 512)
+> +		sunxi_nand->ecc_ctl |=3D NFC_ECC_BLOCK_512;
+> =20
+>  	ecc->read_oob =3D sunxi_nfc_hw_ecc_read_oob;
+>  	ecc->write_oob =3D sunxi_nfc_hw_ecc_write_oob;
+> @@ -1739,25 +1710,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand=
+_chip *nand,
+>  	ecc->write_oob_raw =3D nand_write_oob_std;
+> =20
+>  	return 0;
+> -
+> -err:
+> -	kfree(sunxi_nand->ecc);
+> -
+> -	return ret;
+> -}
+> -
+> -static void sunxi_nand_ecc_cleanup(struct sunxi_nand_chip *sunxi_nand)
+> -{
+> -	struct nand_ecc_ctrl *ecc =3D &sunxi_nand->nand.ecc;
+> -
+> -	switch (ecc->engine_type) {
+> -	case NAND_ECC_ENGINE_TYPE_ON_HOST:
+> -		sunxi_nand_hw_ecc_ctrl_cleanup(sunxi_nand);
+> -		break;
+> -	case NAND_ECC_ENGINE_TYPE_NONE:
+> -	default:
+> -		break;
+> -	}
+>  }
+> =20
+>  static int sunxi_nand_attach_chip(struct nand_chip *nand)
+> @@ -1970,7 +1922,6 @@ static void sunxi_nand_chips_cleanup(struct sunxi_n=
+fc *nfc)
+>  		ret =3D mtd_device_unregister(nand_to_mtd(chip));
+>  		WARN_ON(ret);
+>  		nand_cleanup(chip);
+> -		sunxi_nand_ecc_cleanup(sunxi_nand);
+>  		list_del(&sunxi_nand->node);
+>  	}
+>  }
