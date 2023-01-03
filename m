@@ -2,99 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2252565BFD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CF365BFD8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbjACM0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 07:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
+        id S237361AbjACM0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 07:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbjACMZ6 (ORCPT
+        with ESMTP id S237391AbjACM0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 07:25:58 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50372100A;
-        Tue,  3 Jan 2023 04:25:56 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 406F41516;
-        Tue,  3 Jan 2023 04:26:37 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5549A3F587;
-        Tue,  3 Jan 2023 04:25:54 -0800 (PST)
-Date:   Tue, 3 Jan 2023 12:25:41 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Rob Herring <rob.herring@calxeda.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC: highbank: Fix memory leak in highbank_mc_probe
-Message-ID: <20230103122541.5e5cf0dc@donnerap.cambridge.arm.com>
-In-Reply-To: <20221229054825.1361993-1-linmq006@gmail.com>
-References: <20221229054825.1361993-1-linmq006@gmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Tue, 3 Jan 2023 07:26:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507FCA1AD;
+        Tue,  3 Jan 2023 04:26:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1523611B5;
+        Tue,  3 Jan 2023 12:26:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EABEC433D2;
+        Tue,  3 Jan 2023 12:26:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672748770;
+        bh=bmxIHRqgWvKDdr1qYHBhef4wxIcwA+BuKZF9xJgM/4U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bdYg0VrWxzScm3JYYPUIpgNVGAHObvp4MumhtUcV05p8R33ATg5DIkxxM6zPM5osf
+         bg6MFP3/JGzs5rYESwi8VNaO+0Jqw43+4gV77LQQZTnOdmdowOfvjZAbGqx0FJ0mLD
+         ES8fnAZ2yba1TdLeTanwa9Ww2zhD8EMAzB3e6yIGWz+pEYuiAkPxiD5iQuyw6y3IjC
+         AhZ9Lr8O0EY75vUQ/QMHe+mw/TJksgPxuiA1L1xuEo+PXtW34iIIw5UFHwL8gEljZ+
+         F8Iz8wg5K+tz1CXPrhplHZiY6qRgHaOPUswIuudRgAshrCxSNm1GnYF9/7tmWdU9bE
+         /DMTpO4xsNBvA==
+Date:   Tue, 3 Jan 2023 12:26:05 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     jstrauss <jstrauss@mailbox.org>
+Cc:     conor@kernel.org, christophe.jaillet@wanadoo.fr,
+        jansimon.moeller@gmx.de, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, pavel@ucw.cz
+Subject: Re: [PATCH RESEND] Add multicolor support to BlinkM LED driver
+Message-ID: <Y7Qe3Rx+9jzdK1g8@google.com>
+References: <20221227223131.um6muahhxbom7crg@libretux>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221227223131.um6muahhxbom7crg@libretux>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Dec 2022 09:48:24 +0400
-Miaoqian Lin <linmq006@gmail.com> wrote:
+On Tue, 27 Dec 2022, jstrauss wrote:
 
-Hi,
-
-> edac_mc_alloc() allocates memory. The memory are not released
-> when devres_open_group() fails, which causes memory leak.
-> Call edac_mc_free() in the error handling to fix this.
-
-Yes, this looks correct.
-
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Cheers,
-Andre
-
-> Fixes: a1b01edb2745 ("edac: add support for Calxeda highbank memory controller")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> altr_sdram_probe() performs similar operations,
-> I take it as reference.
-> ---
->  drivers/edac/highbank_mc_edac.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+> Hi Conor,
 > 
-> diff --git a/drivers/edac/highbank_mc_edac.c b/drivers/edac/highbank_mc_edac.c
-> index 61b76ec226af..19fba258ae10 100644
-> --- a/drivers/edac/highbank_mc_edac.c
-> +++ b/drivers/edac/highbank_mc_edac.c
-> @@ -174,8 +174,10 @@ static int highbank_mc_probe(struct platform_device *pdev)
->  	drvdata = mci->pvt_info;
->  	platform_set_drvdata(pdev, mci);
->  
-> -	if (!devres_open_group(&pdev->dev, NULL, GFP_KERNEL))
-> -		return -ENOMEM;
-> +	if (!devres_open_group(&pdev->dev, NULL, GFP_KERNEL)) {
-> +		res = -ENOMEM;
-> +		goto free;
-> +	}
->  
->  	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	if (!r) {
-> @@ -243,6 +245,7 @@ static int highbank_mc_probe(struct platform_device *pdev)
->  	edac_mc_del_mc(&pdev->dev);
->  err:
->  	devres_release_group(&pdev->dev, NULL);
-> +free:
->  	edac_mc_free(mci);
->  	return res;
->  }
+> Thanks for the insight, I suspected it was some silent Proton issue. I
+> have switched to Mailbox.org, so all of my future emails and patches
+> will originate from this address.
 
+Thanks.
+
+Although when replying to this message, I get:
+
+  Reply to Y6slQLto568WfmfZ@spud? ([yes]/no/?):
+
+No idea what that is either.
+
+Also, you will have to resubmit your patch please.
+
+-- 
+Lee Jones [李琼斯]
