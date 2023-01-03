@@ -2,215 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7243265C34F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8D965C354
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238035AbjACPu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 10:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S238037AbjACPv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 10:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237676AbjACPup (ORCPT
+        with ESMTP id S238038AbjACPvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 10:50:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C6E12634
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 07:49:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672760994;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WC94+qRtcsQoAZV6EJBwTDdUsyIqcyvTkPy2eHYVDF8=;
-        b=Dsw+a1skJrczJSjugB4GFPkVku1KQU+pKKtHoH8KoPlUobI7sRzGiWLORGW//f1JBwGbGh
-        2j0ZsbqAF1iwbQCnVmDi7Z3YdwBIex4InD+PZsovaqcenjusr+JQKmr4rRA8n03XTSEnXO
-        D5mJlX7dtfLNXRc7IhLo+gPf1Lib6Jo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-336-z0tGoRCHOfeRal7isGK-Pg-1; Tue, 03 Jan 2023 10:49:53 -0500
-X-MC-Unique: z0tGoRCHOfeRal7isGK-Pg-1
-Received: by mail-wm1-f69.google.com with SMTP id bd6-20020a05600c1f0600b003d96f7f2396so17185968wmb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 07:49:53 -0800 (PST)
+        Tue, 3 Jan 2023 10:51:01 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E191057F
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 07:50:57 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so21006075wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 07:50:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GXXZY3HiOPqHWHEumfC48xGI6ASMZFdp2zTpaG6aNNk=;
+        b=ORhFKQtxmlddNzM+62mkWTfV5XbRIfKuGw8NDzsQMmUKCipeacJUHzzUfj6EvXS97y
+         Teh++ZFI24gTetXe+bXRLTfSSoYK9JqbY4pdWM2caGcd52JS7pd5oUKZMuPNAOb5YuBg
+         PzEjgJGzFuLt6ZbZ1uq71QvELIl7JBjFD6kqA9JI8lWnLzYekWFLRTq7Rqk984C2L5/X
+         41WQrex9WSeCNih8h4sz3vjMNXBe+QNAXlKvQefIagU9tftJ0BswaUy81ngWr8P5Dv3r
+         wZ8+It7mJWCdvA8wSKX6Aa3uSxZLQqcf1teWtehgv90VnxPzopUhpjerGiAJ0W384PWa
+         ilog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WC94+qRtcsQoAZV6EJBwTDdUsyIqcyvTkPy2eHYVDF8=;
-        b=EOdmOzJYEX9+ZTkHxV08R6u2BjEjSXqKpCp3sN/JNbeq/QUp7wRJJCBxG+LmxXTYJG
-         n6+LOLrxDuncjaFBhagiordSrp+PuEWowOLdrvHnQMBomRRei4YvbI2GslJZ5H79Fnrq
-         uFfeHH5gAC6m7UixZF7bTwvNaYABmQq/ZVEC+fALWwvSXFTSgTw+zPprbQcWjZ0685ks
-         ugKcHEiasuGy9jPQzU6rqkUL7A6r65FNy0CBKf8jbzrOYyklrKDE5h/7YrhB4N26CkvQ
-         2MknTcqPvUIVcndLuTjcWTCM43dyG9tAPZ4h+9Lk+mxtK3lHfvywV1SD/IwxeV7Wqv/o
-         DngA==
-X-Gm-Message-State: AFqh2kqDfwXlEAKLgDAN9bjgN43GkoaYj9yjWnIbT7yjpQ7YShU1+/eJ
-        KTWrsS0eGSzwZRX/vP1uCho8ees4l8/jaTPs77u6Xs2ZG77I7ZO6+0bZQY7b1yC3AcPx+2bEnLB
-        Um7G4a2azUDjLl0PbFzmnHKzA
-X-Received: by 2002:a05:600c:4fcf:b0:3d1:d396:1ade with SMTP id o15-20020a05600c4fcf00b003d1d3961ademr31416064wmq.9.1672760992125;
-        Tue, 03 Jan 2023 07:49:52 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvBokw4ntbihohzRlAT/7Kd2Eqgl7eiuIEN+Pul08FB9XjA5yr3GOYK70ZuUvwnVXP0KlLXRw==
-X-Received: by 2002:a05:600c:4fcf:b0:3d1:d396:1ade with SMTP id o15-20020a05600c4fcf00b003d1d3961ademr31416049wmq.9.1672760991925;
-        Tue, 03 Jan 2023 07:49:51 -0800 (PST)
-Received: from redhat.com ([2.52.151.85])
-        by smtp.gmail.com with ESMTPSA id r10-20020a05600c458a00b003d9a86a13bfsm15382532wmo.28.2023.01.03.07.49.47
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GXXZY3HiOPqHWHEumfC48xGI6ASMZFdp2zTpaG6aNNk=;
+        b=jZBuRcYMm4Z1um3NTK6TlzXmZr0nlYB30UbZ8sstMHRzgeRCE6YIhLQCrhlRBlsoMY
+         brasCplqD6VIylPyPu00vGQtSWTughLMHVmAQEnZDKyS8jsaewAGdYfgEim1J9SiQhQI
+         WD5StM3YMO3KXBIG7l8vbdX0vfyc/wZLP7U7TacLTxv5ZungtEG8w11zBHEbuibN3zl3
+         qIScw8hHESQXZVEHxA551WTN0lIZVqHelXApmJE38hTeVMBQP0utaVPjqo+zBQlaYUix
+         nHw+gF9zAcq6edVRVIrIJ32xdwxE3dhF8QITNjMmCBLs+rHYkjWL7X5Sf8m0Yku3JN27
+         btQg==
+X-Gm-Message-State: AFqh2kqddxhYgpHhkhFyYWbJlalhr+xGVcBmCSZiJgs22/Vq6KNZ5TRd
+        37AYfTRo1Vy15XPlb0hrQ4CC7g==
+X-Google-Smtp-Source: AMrXdXuKxgBopBOn5wDZcnN3taIktGBbhoifcXvhZmGfs4QknOhnEcJzJb3u0nfSmgTf7dlvwAZwBA==
+X-Received: by 2002:a05:600c:12c6:b0:3cf:6926:2abb with SMTP id v6-20020a05600c12c600b003cf69262abbmr34095757wmd.7.1672761056137;
+        Tue, 03 Jan 2023 07:50:56 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id e8-20020a05600c13c800b003cfd58409desm45598077wmg.13.2023.01.03.07.50.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 07:49:51 -0800 (PST)
-Date:   Tue, 3 Jan 2023 10:49:46 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        angus.chen@jaguarmicro.com, colin.i.king@gmail.com,
-        dave@stgolabs.net, dengshaomin@cdjrlc.com, dmitry.fomichev@wdc.com,
-        elic@nvidia.com, eperezma@redhat.com, gautam.dawar@xilinx.com,
-        harshit.m.mogalapalli@oracle.com, jasowang@redhat.com,
-        lulu@redhat.com, mst@redhat.com, pizhenwei@bytedance.com,
-        rafaelmendsr@gmail.com, ricardo.canuelo@collabora.com,
-        ruanjinjie@huawei.com, set_pte_at@outlook.com, sgarzare@redhat.com,
-        shaoqin.huang@intel.com, si-wei.liu@oracle.com,
-        stable@vger.kernel.org, sunnanyong@huawei.com,
-        wangjianli@cdjrlc.com, wangrong68@huawei.com,
-        weiyongjun1@huawei.com, yuancan@huawei.com
-Subject: [GIT PULL v2] virtio,vhost,vdpa: fixes, cleanups
-Message-ID: <20230103104946-mutt-send-email-mst@kernel.org>
+        Tue, 03 Jan 2023 07:50:55 -0800 (PST)
+Date:   Tue, 3 Jan 2023 17:50:54 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] regulator: qcom-rpmh: PM8550 ldo11 regulator is an nldo
+Message-ID: <Y7RO3uf0Q64ptnOT@linaro.org>
+References: <20230102-topic-sm8550-upstream-fixes-reg-l11b-nldo-v1-1-d97def246338@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230102-topic-sm8550-upstream-fixes-reg-l11b-nldo-v1-1-d97def246338@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These fixes have been in next, though not as these commits.
+On 23-01-02 12:23:20, Neil Armstrong wrote:
+> This fixes the definition of the PM8550 ldo11 regulator matching it's
+> capabilities since this LDO is designed to work between 1,2V and 1,5V.
+> 
+> Fixes: e6e3776d682d ("regulator: qcom-rpmh: Add support for PM8550 regulators")
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-I'd like to apologize again to contributors for missing the merge
-window with new features. These by necessity have been pushed out
-to the next merge window. This pull only has bugfixes.
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
-I put automation in place to help prevent missing merge window
-in the future.
-
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-
-for you to fetch changes up to a26116c1e74028914f281851488546c91cbae57d:
-
-  virtio_blk: Fix signedness bug in virtblk_prep_rq() (2022-12-28 05:28:11 -0500)
-
-----------------------------------------------------------------
-virtio,vhost,vdpa: fixes, cleanups
-
-mostly fixes all over the place, a couple of cleanups.
-
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-
-----------------------------------------------------------------
-Angus Chen (2):
-      virtio_pci: modify ENOENT to EINVAL
-      virtio_blk: use UINT_MAX instead of -1U
-
-Cindy Lu (2):
-      vhost_vdpa: fix the crash in unmap a large memory
-      vdpa_sim_net: should not drop the multicast/broadcast packet
-
-Colin Ian King (1):
-      RDMA/mlx5: remove variable i
-
-Davidlohr Bueso (2):
-      tools/virtio: remove stray characters
-      tools/virtio: remove smp_read_barrier_depends()
-
-Dawei Li (1):
-      virtio: Implementing attribute show with sysfs_emit
-
-Dmitry Fomichev (1):
-      virtio-blk: use a helper to handle request queuing errors
-
-Eli Cohen (5):
-      vdpa/mlx5: Fix rule forwarding VLAN to TIR
-      vdpa/mlx5: Return error on vlan ctrl commands if not supported
-      vdpa/mlx5: Fix wrong mac address deletion
-      vdpa/mlx5: Avoid using reslock in event_handler
-      vdpa/mlx5: Avoid overwriting CVQ iotlb
-
-Harshit Mogalapalli (1):
-      vduse: Validate vq_num in vduse_validate_config()
-
-Jason Wang (2):
-      vdpa: conditionally fill max max queue pair for stats
-      vdpasim: fix memory leak when freeing IOTLBs
-
-Rafael Mendonca (1):
-      virtio_blk: Fix signedness bug in virtblk_prep_rq()
-
-Ricardo Cañuelo (1):
-      tools/virtio: initialize spinlocks in vring_test.c
-
-Rong Wang (1):
-      vdpa/vp_vdpa: fix kfree a wrong pointer in vp_vdpa_remove
-
-Shaomin Deng (1):
-      tools: Delete the unneeded semicolon after curly braces
-
-Shaoqin Huang (2):
-      virtio_pci: use helper function is_power_of_2()
-      virtio_ring: use helper function is_power_of_2()
-
-Si-Wei Liu (1):
-      vdpa: merge functionally duplicated dev_features attributes
-
-Stefano Garzarella (4):
-      vringh: fix range used in iotlb_translate()
-      vhost: fix range used in translate_desc()
-      vhost-vdpa: fix an iotlb memory leak
-      vdpa_sim: fix vringh initialization in vdpasim_queue_ready()
-
-Wei Yongjun (1):
-      virtio-crypto: fix memory leak in virtio_crypto_alg_skcipher_close_session()
-
-Yuan Can (1):
-      vhost/vsock: Fix error handling in vhost_vsock_init()
-
-ruanjinjie (1):
-      vdpa_sim: fix possible memory leak in vdpasim_net_init() and vdpasim_blk_init()
-
-wangjianli (1):
-      tools/virtio: Variable type completion
-
- drivers/block/virtio_blk.c                         | 35 +++++-----
- .../crypto/virtio/virtio_crypto_skcipher_algs.c    |  3 +-
- drivers/vdpa/mlx5/core/mlx5_vdpa.h                 |  5 +-
- drivers/vdpa/mlx5/core/mr.c                        | 46 +++++++------
- drivers/vdpa/mlx5/net/mlx5_vnet.c                  | 78 +++++++---------------
- drivers/vdpa/vdpa.c                                | 11 ++-
- drivers/vdpa/vdpa_sim/vdpa_sim.c                   |  7 +-
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c               |  4 +-
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c               |  7 +-
- drivers/vdpa/vdpa_user/vduse_dev.c                 |  3 +
- drivers/vdpa/virtio_pci/vp_vdpa.c                  |  2 +-
- drivers/vhost/vdpa.c                               | 52 +++++++++------
- drivers/vhost/vhost.c                              |  4 +-
- drivers/vhost/vringh.c                             |  5 +-
- drivers/vhost/vsock.c                              |  9 ++-
- drivers/virtio/virtio.c                            | 12 ++--
- drivers/virtio/virtio_pci_modern.c                 |  4 +-
- drivers/virtio/virtio_ring.c                       |  2 +-
- include/uapi/linux/vdpa.h                          |  4 +-
- tools/virtio/ringtest/main.h                       | 37 +++++-----
- tools/virtio/virtio-trace/trace-agent-ctl.c        |  2 +-
- tools/virtio/virtio_test.c                         |  2 +-
- tools/virtio/vringh_test.c                         |  2 +
- 23 files changed, 173 insertions(+), 163 deletions(-)
-
+> ---
+>  drivers/regulator/qcom-rpmh-regulator.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/regulator/qcom-rpmh-regulator.c b/drivers/regulator/qcom-rpmh-regulator.c
+> index 43b5b9377714..ae6021390143 100644
+> --- a/drivers/regulator/qcom-rpmh-regulator.c
+> +++ b/drivers/regulator/qcom-rpmh-regulator.c
+> @@ -1016,7 +1016,7 @@ static const struct rpmh_vreg_init_data pm8550_vreg_data[] = {
+>  	RPMH_VREG("ldo8",   "ldo%s8",  &pmic5_pldo_lv, "vdd-l8-l9"),
+>  	RPMH_VREG("ldo9",   "ldo%s9",  &pmic5_pldo,    "vdd-l8-l9"),
+>  	RPMH_VREG("ldo10",  "ldo%s10", &pmic5_nldo,    "vdd-l1-l4-l10"),
+> -	RPMH_VREG("ldo11",  "ldo%s11", &pmic5_pldo,    "vdd-l11"),
+> +	RPMH_VREG("ldo11",  "ldo%s11", &pmic5_nldo,    "vdd-l11"),
+>  	RPMH_VREG("ldo12",  "ldo%s12", &pmic5_pldo,    "vdd-l12"),
+>  	RPMH_VREG("ldo13",  "ldo%s13", &pmic5_pldo,    "vdd-l2-l13-l14"),
+>  	RPMH_VREG("ldo14",  "ldo%s14", &pmic5_pldo,    "vdd-l2-l13-l14"),
+> 
+> ---
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> change-id: 20230102-topic-sm8550-upstream-fixes-reg-l11b-nldo-b4de2cb35d0b
+> 
+> Best regards,
+> -- 
+> Neil Armstrong <neil.armstrong@linaro.org>
