@@ -2,142 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD4765C29F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE4865C2A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbjACPAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 10:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S237781AbjACPBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 10:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbjACPAL (ORCPT
+        with ESMTP id S233197AbjACPBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 10:00:11 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2137.outbound.protection.outlook.com [40.107.114.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650FC2AEB;
-        Tue,  3 Jan 2023 07:00:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kcY5jeEb7VfBuapSgTUg2kgb+pvq0C5+fjbpUsKnAPrmexvMbRIDvZD6edvLUWYnuwOhpBpuYdontUzs3Lip479iDPH3InFSeh50Un9pfn84mDD9mc80aVveBHfsYd9VTh9mRFVJw//K8c/DKcBmF0RK4HhuhMVSiRiiq6ffZfnUzJchcX1xgQgQ/MZxhxFxklWB1CvHNCN1rseUHCzJJZm3B23aDcyw3/9ZOexkIKVKSYFp8w4iWhP4+Hz9tzmaL5aB5Fj2WKwzqFJDfPf3dzdhsQv3Qz82jLl3Bt/Nn8ttnv2xbOYFJREJiMC6+SVOjDJxkEs9TugLDjdWIGCIOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/pFHSCk/1xIoQr2ueNarb/CeyZ3i+r8e+Au02vyBma8=;
- b=g45QHay0B5qEqiPXi7pmj+Nx06s+4DK8PowaW5Ua05uA6Cpv43dzp04APu8EDeMU0FqP0jl42gfzNHZaTfynjbU/TQQvDaZ2IdW0EAcIJYgyZtrVT4RVx+SW1Tln1ckfk9YGCc/9RIIKzrPNvNMDHdSL/MWWQ1Jq5xDevjtiwoE/5NXU4pfTemS7raZohRjmZmu822jSx2okbPWoKla4fFaqBjy45v30ZMoZU5cT5nomE6+0l2x/iFL2KpBY1GO2Z1fFpXbdHYh1zNRA3HR/bsJhglsq3H79INJYZI2YT2xCoqIxhKJfCWuj1wq/VWAoUEB0EUcOrBvbrw/pOD/Azw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/pFHSCk/1xIoQr2ueNarb/CeyZ3i+r8e+Au02vyBma8=;
- b=lHQ9uz7XFYA2nQHRv8DcGsFVUxIJ8RPKdlEupjqt9HDfes7OS4rTqYyJ2bMlhHLjY+muHluo7gHA5bKzB9HpayhuE0ZLf6VJyrQCk+IOcAWf8dqiJN3MMIxTqviUCstrezPrDbwnxniAfTJqo73USvmpVXPij04P0SVU89O81A4=
-Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com (2603:1096:400:169::11)
- by TYWPR01MB9631.jpnprd01.prod.outlook.com (2603:1096:400:1a5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
- 2023 15:00:06 +0000
-Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com
- ([fe80::9459:ffa9:a884:8a8e]) by TYWPR01MB8775.jpnprd01.prod.outlook.com
- ([fe80::9459:ffa9:a884:8a8e%3]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
- 15:00:06 +0000
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lee Jones <lee@kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: RE: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
-Thread-Topic: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
-Thread-Index: AQHZFYCNlCsLkG/3E0Cexn6vTGGaoK6McgmAgAAOnPCAAC0SgIAALvHg
-Date:   Tue, 3 Jan 2023 15:00:06 +0000
-Message-ID: <TYWPR01MB8775DB97CD956756C7224440C2F49@TYWPR01MB8775.jpnprd01.prod.outlook.com>
-References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com>
- <20221221210917.458537-3-fabrizio.castro.jz@renesas.com>
- <CAMuHMdXDwEUzBpG+w_G6=CzKo=n92cdVw6v8JwOwf9o86HnOZQ@mail.gmail.com>
- <TYWPR01MB87758FB15ED12D396AE738DDC2F49@TYWPR01MB8775.jpnprd01.prod.outlook.com>
- <CAMuHMdU=Kwi80akxRUFUYz4QKQBkSog2xb4tw=DjJApAr-n5Lw@mail.gmail.com>
-In-Reply-To: <CAMuHMdU=Kwi80akxRUFUYz4QKQBkSog2xb4tw=DjJApAr-n5Lw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYWPR01MB8775:EE_|TYWPR01MB9631:EE_
-x-ms-office365-filtering-correlation-id: 11cdc64a-b4b8-4d37-e60d-08daed9b337a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JxOY/57jF/jlU7iydM5F5OzVBMOqhUIgLnO3rSa2pE1xcQv0FrxebZi/mx3ZWe1Z2XNQ+Xx06F3vBXPhc5XQHU5rt/tLhWye9DZVXkn5nHJCRkLAehLlZaQ+eCbABFd9JNX770rGH3/KDJLOimjCkgexCT/F/kPiq6f/XI7LD4b9c+QHbKAY+1kRp0z4HZdCl/71ezohNWZzCUH6oIj28Al+Bk9UI/LgLj0HvLqEinCim+W9F4vSKICdkgSHhQxga1y6fVhoV5ZBCSKW+N8URVdsh1pTcJRYlG4ddD4nKzZxNT18KlFDLuF1D3gnbhWlv9GAiShA5HSNQYEhhml7CR8BfJ9FCh5P0fBFjN+QnNzLcEruHGhccsWMAWYWr2Tc2vbzRdBCCg2UgRWfqgwTErIy2q/Lm1OCov8iAbzd0UlSkJ8XG0lyeg2EM0PUxWVyqLInoCU8mxU78Ed7LRhpXlKNPi7x+B714LHVhr8FP9LZZbZOm1xtwaWKm6Xrz0iBS1jR32bEm37SjS9n8KGgEhJ/yI6W/DM1viT922zcwlv04Z7kN2dTAATVO+lDxOkqpSA+Lb+egIvxIoX+9fsEvYR1PipF19tolbKchLK1RdfV2azj6bw4PUkElusaRD1atAd8PjRVhtqMr0UD7wa3euDu9XK7/0aX8z7Y8O+VfrUcVRjqY5eiFyxMtLfWFLU4lfWh4GGHphdKcRcwQ2QwNUkUfP9W3n3vMlMWUrENXdI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8775.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(396003)(39860400002)(366004)(451199015)(33656002)(86362001)(54906003)(6916009)(478600001)(316002)(38070700005)(55016003)(122000001)(38100700002)(6506007)(26005)(9686003)(7696005)(53546011)(186003)(2906002)(7416002)(5660300002)(71200400001)(41300700001)(4326008)(66476007)(66556008)(66446008)(64756008)(8676002)(52536014)(8936002)(66946007)(76116006)(22166006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?elJCbU1ST1VjYUZReUZSbjVzWGZPdmlTV2FmcE1UK3luUGdLazZINCtuYnNK?=
- =?utf-8?B?Uzk5QVNvUXN1UEZxSkpmdHVISDdad2JkbHpsa05sbnBnZE1SbVVqWHFWMFZp?=
- =?utf-8?B?VnVSZjQ5dk95ZGcrbDMxbFhMeXhnaU5HQ2loWUhnVHUrbjhKUjhucVNycUd2?=
- =?utf-8?B?eEFWRTg4WWdHRzNUTXNUM1UybDdOdUZwb2xjdFVSNVhRL3pPeDhLdEEzd1Ry?=
- =?utf-8?B?dEdWM2FKNjdBOGNHWTRVbmhNalRZMlI4elVKRnB1aW4vREozbExIdkROeVZU?=
- =?utf-8?B?d1pFMTFTSUNNbmgrZytyZEpxT0Y3a3ZVUWUwZnh4SDJVN1l0MjlSa0VUV1Z1?=
- =?utf-8?B?MnRTRFFxcXBFRlBSZ0lHRzUwUklZc1AvWVdIcDFuZlc1MnJQYTF2N0xRL3l4?=
- =?utf-8?B?OTlwcXlqN1NndWJrYk5wakVJMzg3ZTJDekJ5OWNwZkxyYU8rNjRJbDN4T0kx?=
- =?utf-8?B?RTdJbmFEbFdTM3BublVBQVRoMFdGNlB4Mlh5K0JIOEtsdHJKUmh3Y2tWVGhr?=
- =?utf-8?B?OE1CWjY0ZEpjMmJSamRiTFpZY1Q1R2hvTm9xQVc0MXRrRFZCditqcEFWWFk3?=
- =?utf-8?B?Y2pNYitUK080RU9BbWkvaWhQZ3NSVi8yMXY0SElLOVFmTEVxSG9jam04amdw?=
- =?utf-8?B?bVlXVVJMM0lUNkJNNFFtelFpSmN2MUJuMWVwUFlXVjNwcnVRL3R4bmxEQWt1?=
- =?utf-8?B?ZFlGd3l1WWZqV2xnZHZXOUVJNWhSY0ZDZmN5YWNNZmU3N2REeGtjNURkSHZ5?=
- =?utf-8?B?Y2VFVUhjZnBCbUpoQ3l4VTdNY0UrRHU2SkVndzhLbUNIcGo3K1RuTUR0MjRY?=
- =?utf-8?B?NEZzaGlFaU0xTzJmalhCbk0zT3lnTHhJT1p2aEo3Z3BBeWl0VTF2Nnl4OWdm?=
- =?utf-8?B?R3RsWGNhQm5NQ3NybkxVVnFPb1pLMFNMQzZYTUp5VVV4cEZkdFYxb0Z2QVpG?=
- =?utf-8?B?dTFkczJpOUdQNTUwd1hQVW1OQVJ1NVhWRkJrSkpycTdsZ1lIbjVlVjgxeDB5?=
- =?utf-8?B?dFFVYW1EK1hQMlZEV2ltVHdwWHIwc0Ewa2lXOVdKMjk5ekVmVjgyMHpNZjRk?=
- =?utf-8?B?OWlLN25vM1pSZ1orR294NDBya1dJMGxFbXlTTlpUczR3RHc3SzNmS1Joa00w?=
- =?utf-8?B?aTUwUGZsb2Qremg0aHlVenNac2lVcU80WTZrOFQ4OWJXcWw2Y3R5UC9aYTBk?=
- =?utf-8?B?cUxMcUZJVm9Pc2dkRXJHVFhKNjZjVlNKb3JMOW1JVC9oVFE5NDVpY2VBc0VP?=
- =?utf-8?B?bHRxTEgySkVlQ2d2UXJBckd4SGc5Y1I0aFVRTmRKMXc0SzY3ZWx1dTVHU0xl?=
- =?utf-8?B?S1J4Ui85SFVqRHZCcm9sSGd6Yzk4SVFhRlNkWkFDb1VpVG1DZmtHNXFmRWdw?=
- =?utf-8?B?K3ZRU2RLbCs5SUFjazU4VnowU3FwcnFPY0FZaUY5OW8vSVpwRVp5WnZUZ0NU?=
- =?utf-8?B?MEhaMTJHNzVIckFBK3hJMDFZVTVYeXJiRzlaYXh1YU9HZ2VtaGdsVUU1bjFw?=
- =?utf-8?B?QnFOVk1EMTJoUlRaVTNDZWgyVTR1NWN2amhXekZ6Y2M0TW1SVWVOR2JxbCsw?=
- =?utf-8?B?eW1zSExnQUJYTFFVRkdpaTdUY2kvMWcycGNqVi80WHM1WkRuQWNBVnN6Tmgw?=
- =?utf-8?B?Z1RqcEQ2OG5XTkNTQ3pIV3BVS2ZYMlRDVWhYNGd4RGVhZlZrWHRaMVdESnkv?=
- =?utf-8?B?Mk9nQUlFdTJsNG83WXg4V2JsRVByOGdGbTlYQXpWa0F4Zk8wQ1VsSTlVNVpn?=
- =?utf-8?B?c3ViK0krNlhuUkpoMzJGZWMxUW9vQ1NrSUlseFpCRVN0cXhtVkRxaHNSR3Z5?=
- =?utf-8?B?Rk9TMW9XTmhkbmk0NXZMVmVjNzJvbmFBT3czN2gyd1RPUTNTdmxuSVFHRHIz?=
- =?utf-8?B?Q1hFRHZPVmJJOTFvdk52Q0ZBeEViNW1DK2t6Y0VIeUtDUGdvaG1GQTZNdWZT?=
- =?utf-8?B?ckd1WUdPb0dpaG5CeXpMaFlvZzZ3dEFJdU1sbUo0SjlKaHBpaWFWZWFmeEt2?=
- =?utf-8?B?bWpzcnNIUnFZem1HSEhnOFVkMjVNK25Db3FvekNPYWNkNzlNeXVFOVNucjRP?=
- =?utf-8?B?Zlp2Ui8wdk5EQ0k3aXoyL0xKRm1WRUMyWXArcTNYemZGeUhwQlNqVnVOUkV4?=
- =?utf-8?B?U0FNcVFoRmtIMlpNbTZNaXIyZnBsWlZnbUsrL0VBNHdHWWJ6c25jeVdnSzJW?=
- =?utf-8?B?Tmc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 3 Jan 2023 10:01:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDEE6257;
+        Tue,  3 Jan 2023 07:01:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34056B80F9D;
+        Tue,  3 Jan 2023 15:01:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32045C433EF;
+        Tue,  3 Jan 2023 15:01:26 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZEU+QTFd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672758083;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Wi9ZRVeh3Pac9gdkou/v2cNOa31fCafYfyWUT3Kr3k=;
+        b=ZEU+QTFdcn8/wM4uwmRXY0iTfeJnw462+uvwVijCHAYTRzMEM9X/fGwuq4H0hB0+vdAWUN
+        0SpQRZa9aIrwhFWWESP/keVgBqliMvdVcIE7ybqRBGR/tZoWvuQL52s0/l/9CZfvo6pWQl
+        HrwsOL4AmDFm2NFf1S0OS9Y2pYyvu4s=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f7395740 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 3 Jan 2023 15:01:23 +0000 (UTC)
+Date:   Tue, 3 Jan 2023 16:01:20 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
+ lazily freeable mappings
+Message-ID: <Y7RDQLEvlLM0o4cp@zx2c4.com>
+References: <20230101162910.710293-1-Jason@zx2c4.com>
+ <20230101162910.710293-3-Jason@zx2c4.com>
+ <Y7QIg/hAIk7eZE42@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8775.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11cdc64a-b4b8-4d37-e60d-08daed9b337a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2023 15:00:06.5271
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UfT9HE7Zyiu1KnfwKA1NJ33b9rbg7eCAStAwPyfOhW2jiOVGdFGz9/L0UhiABibRChO+qmyMWNDavPo4i5IS76QKqvn/7g0CJH5k/RYoTIw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB9631
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y7QIg/hAIk7eZE42@gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -145,57 +68,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgR2VlcnQsDQoNClRoYW5rIHlvdSBmb3IgeW91ciBmZWVkYmFjayENCg0KPiBGcm9tOiBHZWVy
-dCBVeXR0ZXJob2V2ZW4gPGdlZXJ0QGxpbnV4LW02OGsub3JnPg0KPiBTZW50OiAwMyBKYW51YXJ5
-IDIwMjMgMTI6MTANCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MiAyLzRdIG1mZDogQWRkIFJaL1Yy
-TSBQV0MgY29yZSBkcml2ZXINCj4gDQo+IEhpIEZhYnJpemlvLA0KPiANCj4gT24gVHVlLCBKYW4g
-MywgMjAyMyBhdCAxOjA1IFBNIEZhYnJpemlvIENhc3Rybw0KPiA8ZmFicml6aW8uY2FzdHJvLmp6
-QHJlbmVzYXMuY29tPiB3cm90ZToNCj4gPiA+IEZyb206IEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2Vl
-cnRAbGludXgtbTY4ay5vcmc+DQo+ID4gPiBPbiBXZWQsIERlYyAyMSwgMjAyMiBhdCAxMDowOSBQ
-TSBGYWJyaXppbyBDYXN0cm8NCj4gPiA+IDxmYWJyaXppby5jYXN0cm8uanpAcmVuZXNhcy5jb20+
-IHdyb3RlOg0KPiA+ID4gPiBUaGUgRXh0ZXJuYWwgUG93ZXIgU2VxdWVuY2UgQ29udHJvbGxlciAo
-UFdDKSBJUCAoZm91bmQgaW4gdGhlDQo+ID4gPiA+IFJaL1YyTSBTb0MpIGlzIGEgY29udHJvbGxl
-ciBmb3IgZXh0ZXJuYWwgcG93ZXIgc3VwcGxpZXMgKHJlZ3VsYXRvcnMNCj4gPiA+ID4gYW5kIHBv
-d2VyIHN3aXRjaGVzKSwgYW5kIGl0IHN1cHBvcnRzIHRoZSBmb2xsb3dpbmcgZmVhdHVyZXM6IGl0
-DQo+ID4gPiA+IGdlbmVyYXRlcyBhIHBvd2VyIG9uL29mZiBzZXF1ZW5jZSBmb3IgZXh0ZXJuYWwg
-cG93ZXIgc3VwcGxpZXMsDQo+ID4gPiA+IGl0IGdlbmVyYXRlcyBhbiBvbi9vZmYgc2VxdWVuY2Ug
-Zm9yIHRoZSBMUEREUjQgY29yZSBwb3dlciBzdXBwbHkNCj4gPiA+ID4gKExQVkREKSwgaXQgY29t
-ZXMgd2l0aCBHZW5lcmFsLVB1cnBvc2UgT3V0cHV0cywgYW5kIGl0IHByb2Nlc3Nlcw0KPiA+ID4g
-PiBrZXkgaW5wdXQgc2lnbmFscy4NCj4gPiA+DQo+ID4gPiBUaGFua3MgZm9yIHlvdXIgcGF0Y2gh
-DQo+ID4gPg0KPiA+ID4gPiBUaGUgUFdDIGlzIGJhc2ljYWxseSBhIE11bHRpLUZ1bmN0aW9uIERl
-dmljZSAoTUZEKSwgaXRzIHNvZnR3YXJlDQo+ID4gPiA+IHN1cHBvcnQgY29tZXMgd2l0aCBhIGNv
-cmUgZHJpdmVyLCBhbmQgc3BlY2lhbGl6ZWQgZHJpdmVycyBmb3INCj4gPiA+ID4gaXRzIHNwZWNp
-ZmljIGZlYXR1cmVzLg0KPiA+ID4NCj4gPiA+IEkgaGF2ZSB0byBhZG1pdCBJJ20gbm90IHN1Y2gg
-YSBiaWcgZmFuIG9mIE1GRC4gIEluIHRoaXMgZHJpdmVyLA0KPiA+ID4geW91IGFyZSBub3QgZXZl
-biBzaGFyaW5nIHJlc291cmNlcyBpbiB0aGUgTUZEIGNlbGxzLCBqdXN0IHRoZSBtYXBwZWQNCj4g
-PiA+IHJlZ2lzdGVyIGJhc2UuICBTbyBJIHRoaW5rIHlvdSBjYW4gZWFzaWx5IHNhdmUgKzEwMCBM
-b0MgYW5kIHJlZHVjZQ0KPiA+ID4gbWFpbnRlbmFuY2Ugc3luY2hyb25pemF0aW9uIG92ZXJoZWFk
-IGFjcm9zcyBzdWJzeXN0ZW1zIGJ5IGp1c3QgaGF2aW5nDQo+ID4gPiBhIHNpbmdsZSBub24tTUZE
-IGRyaXZlciBpbnN0ZWFkLg0KPiA+ID4NCj4gPiA+IERpZCB5b3UgcGljayBNRkQgYmVjYXVzZSB0
-aGUgUFdDIHBvd2Vyb2ZmIGZlYXR1cmUgZGVwZW5kcyBvbiBib2FyZA0KPiA+ID4gd2lyaW5nLCBh
-bmQgdGh1cyBpcyBvcHRpb25hbD8NCj4gPg0KPiA+IEkgYW0gbm90IGEgYmlnIGZhbiBvZiBNRkQs
-IGVpdGhlci4NCj4gPiBJIHBpY2tlZCBNRkQgYmVjYXVzZSB3ZSB3ZXJlIG5vdCAxMDAlIHN1cmUg
-b2Ygd2hhdCB0aGUgSVAgY291bGQgZG8NCj4gPiB3aGVuIHdlIHN0YXJ0ZWQgd29ya2luZyBvbiBp
-dC4NCj4gPiBJIGhhdmUgcmVjZWl2ZWQgbW9yZSBpbmZvcm1hdGlvbiByZWdhcmRpbmcgdGhlIElQ
-IG5vdyAod2hpY2ggSSBkb24ndA0KPiA+IGhhdmUgdGhlIGxpYmVydHkgdG8gZGlzY3VzcyksIEkg
-YW0gc3RpbGwgbm90IDEwMCUgc3VyZSB0aGF0J3MgYWxsDQo+ID4gb2YgaXQsIGJ1dCBiYXNpY2Fs
-bHkgaXRzIHN1cHBvcnQgbWF5IHJlcXVpcmUgZXhwYW5zaW9uIGxhdGVyIG9uLg0KPiA+DQo+ID4g
-SSBsaWtlZCB0aGUgc29sdXRpb24gYmFzZWQgb24gc3lzY29uIGFuZCBzaW1wbGUtbWZkIGZvciBz
-ZXZlcmFsIHJlYXNvbnMsDQo+ID4gYnV0IGhhdmluZyBkcm9wcGVkIHN5c2NvbiBhbmQgc2ltcGxl
-LW1mZCBkdWUgdG8gaXNzdWVzIHdpdGggdGhlIGR0LQ0KPiBiaW5kaW5ncw0KPiA+IEkgaGF2ZSBt
-b3ZlZCBvbiB3aXRoIGEgY29yZSBkcml2ZXIgdG8gaW5zdGFudGlhdGUgdGhlIHJlcXVpcmVkIFNX
-DQo+IHN1cHBvcnQuDQo+ID4gV2UgY291bGQgb2YgY291cnNlIG1vdmUgdG8gYSB1bmlmaWVkIGRy
-aXZlciBpZiB0aGF0IG1ha2VzIG1vcmUgc2Vuc2U/DQo+ID4gSWYgd2Ugd2VyZSB0byBtb3ZlIHRv
-IHVuaWZpZWQgZHJpdmVyLCB1bmRlciB3aGljaCBkaXJlY3Rvcnkgd291bGQgeW91DQo+ID4gc3Vn
-Z2VzdCB3ZSBwdXQgaXQ/DQo+IA0KPiBBcyB0aGUgR1BJTyBwYXJ0IGlzIGxhcmdlciB0aGFuIHRo
-ZSBwb3dlcm9mZiBwYXJ0LCBJIHdvdWxkIHB1dCBpdCB1bmRlcg0KPiBkcml2ZXJzL2dwaW8vLiAg
-QWx0aG91Z2ggZHJpdmVycy9zb2MvcmVuZXNhcy8gY291bGQgYmUgYW4gb3B0aW9uLCB0b28uDQoN
-CkknbGwgdHJ5IHRoZSB1bmlmaWVkIGFwcHJvYWNoIHRoZW4sIHVuZGVyIGRyaXZlcnMvc29jL3Jl
-bmVzYXMgLg0KDQpUaGFua3MsDQpGYWIgDQoNCj4gDQo+IEdye29ldGplLGVldGluZ31zLA0KPiAN
-Cj4gICAgICAgICAgICAgICAgICAgICAgICAgR2VlcnQNCj4gDQo+IC0tDQo+IEdlZXJ0IFV5dHRl
-cmhvZXZlbiAtLSBUaGVyZSdzIGxvdHMgb2YgTGludXggYmV5b25kIGlhMzIgLS0gZ2VlcnRAbGlu
-dXgtDQo+IG02OGsub3JnDQo+IA0KPiBJbiBwZXJzb25hbCBjb252ZXJzYXRpb25zIHdpdGggdGVj
-aG5pY2FsIHBlb3BsZSwgSSBjYWxsIG15c2VsZiBhIGhhY2tlci4NCj4gQnV0DQo+IHdoZW4gSSdt
-IHRhbGtpbmcgdG8gam91cm5hbGlzdHMgSSBqdXN0IHNheSAicHJvZ3JhbW1lciIgb3Igc29tZXRo
-aW5nIGxpa2UNCj4gdGhhdC4NCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAtLSBM
-aW51cyBUb3J2YWxkcw0K
+On Tue, Jan 03, 2023 at 11:50:43AM +0100, Ingo Molnar wrote:
+> 
+> * Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> 
+> > The vDSO getrandom() implementation works with a buffer allocated with a
+> > new system call that has certain requirements:
+> > 
+> > - It shouldn't be written to core dumps.
+> >   * Easy: VM_DONTDUMP.
+> > - It should be zeroed on fork.
+> >   * Easy: VM_WIPEONFORK.
+> > 
+> > - It shouldn't be written to swap.
+> >   * Uh-oh: mlock is rlimited.
+> >   * Uh-oh: mlock isn't inherited by forks.
+> > 
+> > - It shouldn't reserve actual memory, but it also shouldn't crash when
+> >   page faulting in memory if none is available
+> >   * Uh-oh: MAP_NORESERVE respects vm.overcommit_memory=2.
+> >   * Uh-oh: VM_NORESERVE means segfaults.
+> > 
+> > It turns out that the vDSO getrandom() function has three really nice
+> > characteristics that we can exploit to solve this problem:
+> > 
+> > 1) Due to being wiped during fork(), the vDSO code is already robust to
+> >    having the contents of the pages it reads zeroed out midway through
+> >    the function's execution.
+> > 
+> > 2) In the absolute worst case of whatever contingency we're coding for,
+> >    we have the option to fallback to the getrandom() syscall, and
+> >    everything is fine.
+> > 
+> > 3) The buffers the function uses are only ever useful for a maximum of
+> >    60 seconds -- a sort of cache, rather than a long term allocation.
+> > 
+> > These characteristics mean that we can introduce VM_DROPPABLE, which
+> > has the following semantics:
+> > 
+> > a) It never is written out to swap.
+> > b) Under memory pressure, mm can just drop the pages (so that they're
+> >    zero when read back again).
+> > c) If there's not enough memory to service a page fault, it's not fatal,
+> >    and no signal is sent. Instead, writes are simply lost.
+> > d) It is inherited by fork.
+> > e) It doesn't count against the mlock budget, since nothing is locked.
+> > 
+> > This is fairly simple to implement, with the one snag that we have to
+> > use 64-bit VM_* flags, but this shouldn't be a problem, since the only
+> > consumers will probably be 64-bit anyway.
+> > 
+> > This way, allocations used by vDSO getrandom() can use:
+> > 
+> >     VM_DROPPABLE | VM_DONTDUMP | VM_WIPEONFORK | VM_NORESERVE
+> > 
+> > And there will be no problem with OOMing, crashing on overcommitment,
+> > using memory when not in use, not wiping on fork(), coredumps, or
+> > writing out to swap.
+> > 
+> > At the moment, rather than skipping writes on OOM, the fault handler
+> > just returns to userspace, and the instruction is retried. This isn't
+> > terrible, but it's not quite what is intended. The actual instruction
+> > skipping has to be implemented arch-by-arch, but so does this whole
+> > vDSO series, so that's fine. The following commit addresses it for x86.
+> 
+> Yeah, so VM_DROPPABLE adds a whole lot of complexity, corner cases, per 
+> arch low level work and rarely tested functionality (seriously, whose 
+> desktop system touches swap these days?), just so we can add a few pages of 
+> per thread vDSO data of a quirky type that in 99.999% of cases won't ever 
+> be 'dropped' from under the functionality that is using it and will thus 
+> bitrot fast?
+
+It sounds like you've misunderstood the issue.
+
+Firstly, the arch work is +19 lines (in the vdso branch of random.git).
+That's very small and basic. Don't misrepresent it just to make a point.
+
+Secondly, and more importantly, swapping this data is *not* permissible.
+It doesn't matter if you think that certain systems don't use swap
+anyway (you're wrong though regardless -- desktops will swap things
+pretty regularly). It simply must *not* be swapped under any
+circumstances. It's not that swapping is simply undesirable; it's
+absolutely catastrophic. Do you understand that distinction?
+
+If so, then if you don't like this solution, perhaps you could mention
+something that accomplishes the goals in the commit message.
+
+> The maintainability baby is being thrown out with the bath water IMO ...
+
+Really? Are you sure this isn't just a matter of you not having written
+it yourself or something? The commit is pretty short and basic. All the
+actual internals for this kind of thing are already in present. The
+commit just pipes it through.
+
+> And we want to add more complexity to a facility people desperately want to 
+> trust *more*? [RNG]
+
+That seems like a ridiculous rhetorical leap.
+
+> What's wrong with making mlock() more usable? Or just saying that "yeah, 
+> the vDSO can allocate a few more permanent pages outside of existing 
+> rlimits & mlock budgets"?
+
+Did you actually read the commit message?
+
+And now you're suggesting a rlimit backdoor? And adding more cases for
+fork() to fail or block? That sounds terrible.
+
+> The rest of the series looks fine to me, but this special one of a kind 
+> VM_DROPPABLE is just way over-engineered cornercase functionality that 
+> pushes us well past the maintenance_overhead<->complexity trade-off sweet spot ...
+
+I think you should reevaluate that judgement. Consider the actual
+problem. I think if you look at it carefully you'll see that this is a
+pretty straight forward solution. It's deliberately not over-engineered.
+It uses existing facilities and just does the plumbing in the right way
+to make it work. It's really not that complicated.
+
+The commit is +38, -4. The commit message has more lines than that.
+
+Jason
