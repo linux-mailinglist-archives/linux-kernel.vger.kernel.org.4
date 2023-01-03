@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE9965BE75
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5082F65BE76
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237163AbjACKyd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 3 Jan 2023 05:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S237377AbjACKyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjACKya (ORCPT
+        with ESMTP id S230124AbjACKyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:54:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243482DEB
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:54:30 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pCevy-0008N9-4j; Tue, 03 Jan 2023 11:54:18 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pCevw-003Xhj-J0; Tue, 03 Jan 2023 11:54:16 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pCevv-0004ck-W5; Tue, 03 Jan 2023 11:54:16 +0100
-Message-ID: <97983dd8404782630814a6dada2e863fe914a397.camel@pengutronix.de>
-Subject: Re: ld.lld: error: undefined symbol: devm_ti_sci_get_handle
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 03 Jan 2023 11:54:15 +0100
-In-Reply-To: <77e77c4f-0cde-090d-5918-c1a5f85ea5fb@infradead.org>
-References: <202212222201.6lgWXMZT-lkp@intel.com>
-         <77e77c4f-0cde-090d-5918-c1a5f85ea5fb@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        Tue, 3 Jan 2023 05:54:52 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D34DE0A8
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:54:51 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b3so45146108lfv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 02:54:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dBmEORUktmC2vHOscQjNLXVVbcXPef8IPSJnCs/MHUM=;
+        b=EFeCoB14ySDWcoZR6RuLaGUisduJZHnKuJDaOG0CU65D9sUaQw4mvaSUXd2LrZettN
+         OqcjWMXcBJfuQA70UbzUZ0PK62I72np9gtBPCqxxOs/v7yhhWUTCHwgR0qJhh5pmBCR8
+         LFc2jJllR8Aay07qPBefkXDr2sVihvTsCjNMk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dBmEORUktmC2vHOscQjNLXVVbcXPef8IPSJnCs/MHUM=;
+        b=vaey7sKlosToimTJ7MOuROHb5oSLHtRftWAqUbiFRCMSRwn22CBu/hJ1ttRFSYGKup
+         sK+Kfg/DWLmyKcQo8g9H3pB7bMDM9EnlQd8uUQjIF25eVJB01f4yQO6UrF1dte+LEeYP
+         wESURHdEy+3orZWlRg0ohEwD/dN3VfDJEp1fFv3fNwUJu2DkrubobNF0agBp0PJmbKeb
+         ffLrT90ic5aep/MGmz0uWBR+Q6nUiIhpxmXeFNzZX/WVh+T3UnCTQRIxk1WM/H3ZTRrW
+         zq94rtW3x7CW8mzzxXzmDFZwrU7JibgbHogc50Z0wrtEJT05NwjH3ewwBfP0ilMLpPo3
+         WoEw==
+X-Gm-Message-State: AFqh2krN60R8zZt1xViaVRQSVz4KjMcvItJHL5vpsJLQ8OcxkAafR7S6
+        kGuxcbblkUzlU7+49OauHKJO5Q==
+X-Google-Smtp-Source: AMrXdXsnsff8SCNcPGkk+I73UG73EDCiOyH4di6nrtgrbOeFou6NxpM5e2KHETmQ4OhNhCSUMXhcQA==
+X-Received: by 2002:a05:6512:2821:b0:4b5:26f3:2247 with SMTP id cf33-20020a056512282100b004b526f32247mr14287181lfb.69.1672743289288;
+        Tue, 03 Jan 2023 02:54:49 -0800 (PST)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id p2-20020ac246c2000000b004b5a85e369asm4802638lfo.252.2023.01.03.02.54.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 02:54:48 -0800 (PST)
+Message-ID: <ed79eb76-1ce9-a02d-78c6-0f9127dbc918@rasmusvillemoes.dk>
+Date:   Tue, 3 Jan 2023 11:54:47 +0100
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] Input: edt-ft5x06 - always do msleep(300) during
+ initialization
+Content-Language: en-US, da
+To:     Jeff LaBundy <jeff@labundy.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        broonie@kernel.org
+References: <20221202105800.653982-1-linux@rasmusvillemoes.dk>
+ <Y4pCtm4J3HWhYl8/@nixie71>
+ <58ec9951-32d7-6967-3571-d18c667ae478@rasmusvillemoes.dk>
+ <Y46wMrS7iN6yBsBf@nixie71>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <Y46wMrS7iN6yBsBf@nixie71>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,54 +78,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Do, 2022-12-22 at 16:40 -0800, Randy Dunlap wrote:
+On 06/12/2022 04.00, Jeff LaBundy wrote:
+> Hi Rasmus,
 > 
-> On 12/22/22 06:45, kernel test robot wrote:
-> > Hi Philipp,
-> > 
-> > FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-> > 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   9d2f6060fe4c3b49d0cdc1dce1c99296f33379c8
-> > commit: a6af504184c981efd253f986e6fc54db57b1d39f reset: ti-sci: Allow building under COMPILE_TEST
-> > date:   8 months ago
-> > config: arm-randconfig-r046-20221222
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 98b13979fb05f3ed288a900deb843e7b27589e58)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm cross compiling tool for clang build
-> >         # apt-get install binutils-arm-linux-gnueabi
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a6af504184c981efd253f986e6fc54db57b1d39f
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout a6af504184c981efd253f986e6fc54db57b1d39f
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> > > > ld.lld: error: undefined symbol: devm_ti_sci_get_handle
-> >    >>> referenced by reset-ti-sci.c:229 (drivers/reset/reset-ti-sci.c:229)
-> >    >>>               reset/reset-ti-sci.o:(ti_sci_reset_probe) in archive drivers/built-in.a
+> On Mon, Dec 05, 2022 at 09:59:08AM +0100, Rasmus Villemoes wrote:
+>> On 02/12/2022 19.23, Jeff LaBundy wrote:
+>>> + Mark
+>>>
+>>> Hi Rasmus,
+>>>
+>>> On Fri, Dec 02, 2022 at 11:57:59AM +0100, Rasmus Villemoes wrote:
+>>>> We have a board with an FT5446, which is close enough to a
+>>>> FT5506 (i.e. it also supports up to 10 touch points and has similar
+>>>> register layout) for this driver to work. However, on our board the
+>>>> iovcc and vcc regulators are indeed controllable (so not always-on),
+>>>> but there is no reset or wakeup gpio hooked up.
+>>>>
+>>>> Without a large enough delay between the regulator_enable() calls and
+>>>> edt_ft5x06_ts_identify(), the first edt_ft5x06_ts_readwrite() call
+>>>> fails with -ENXIO and thus the device fails to probe. So
+>>>> unconditionally do an mdelay(300) instead of only when a reset-gpio is
+>>>> present.
+>>>>
+>>>> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>>>
+>>> This is just my $.02, but it does not seem we are on the correct path
+>>> here. 300 ms sounds more like bulk capacitor charge time rather than
+>>> anything to do with this specific IC; is that a reasonable assumption?
+>>>
+>>> Normally, we want to do the following:
+>>>
+>>> 1. Enable regulator
+>>> 2. Wait for voltage rail to stabilize (RC time constant)
+>>> 3. Wait for any applicable POR delay (IC datasheet)
+>>> 4. Deassert reset
+>>> 5. Wait for any applicable reset delay (IC datasheet)
+>>> 6. Start communication
+>>>
+>>> Here we are dealing with step (2), 
+>>
+>> Nope, we are really essentially dealing with step 5, even if there's no
+>> reset gpio that we've flipped around. The data sheet says to wait 200 ms
+>> (and I don't know why the driver does 300, perhaps there's some other
+>> chip in the family with that value, or perhaps it was just a
+>> belt-and-suspenders choice) after releasing reset. It's just that
+>> "releasing reset" is, in my case, effectively happens at the same time
+>> as the regulators are enabled.
+>>
+>> I also played around with some smaller values. As I wrote, with no
+>> delay, I would get -ENXIO, but with both 50 and 100, the chip would
+>> "respond", but the values were essentially garbage (and not reproducible
+>> from one boot to the next). So even if it's a rather long time, it most
+>> definitely is a hard requirement to wait that long - perhaps we could
+>> make it 200, but I'd rather not reduce that time when I don't know if
+>> other variants have that 300 as a requirement.
+>>
+>> Even if we could interrogate the regulator and ask it if "are you
+>> actually always-on", I'd rather not make the delay conditional on that;
+>> we cannot know if it has been on for 300+ ms, and since the device does
+>> respond, but not correctly, we could end up with probing and
+>> initializing the device, but in a wrong state. That's a recipe for
+>> impossible debugging (add a single printk somewhere earlier and the
+>> timing changes so that suddenly it gets initialized correctly...).
 > 
-> Two (2) patches have been posted for this build error (in chronological order):
+> Thank you for these additional details, especially with my having taken
+> us on a tangent :) Perhaps the controller requires so much time because
+> it is loading firmware internally. Based on this information, the patch
+> seems reasonable to me.
 > 
-> 2022-10-29:
->   https://lore.kernel.org/lkml/20221030055636.3139-1-rdunlap@infradead.org/
-> 2022-12-15:
->   https://lore.kernel.org/all/20221215170036.2308972-1-arnd@kernel.org/
-> 
-> Can someone apply one of them or at least comment on them?
-> Philipp?
+> Reviewed-by: Jeff LaBundy <jeff@labundy.com>
 
-Sorry for the delay, I've applied your patch and will send a pull
-request shortly.
+Thanks.
 
-regards
-Philipp
+Dmitry, any chance this could get picked up? I don't see it in
+next-20221226.
+
+Rasmus
+
