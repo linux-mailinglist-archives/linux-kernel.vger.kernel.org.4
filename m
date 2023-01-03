@@ -2,1645 +2,552 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043DF65C3B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B3B65C3B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbjACQRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:17:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S237560AbjACQTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbjACQRm (ORCPT
+        with ESMTP id S231229AbjACQTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:17:42 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0500E1F;
-        Tue,  3 Jan 2023 08:17:39 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303FDNOC000552;
-        Tue, 3 Jan 2023 16:17:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Eop4zUojcw9G/ptTcfDgdTZgBO8J/C1LSHwIIm78kTI=;
- b=URVf4F5W7qP76b0SiOeG3RjqRvW4ZcuDF9BeU0gmYp8Y6qFS5jbrN49Soyb7X1HXIu+F
- Pi+2sH28W5eqxATAru6ALCFDkKe2tL2xzU7zBHuWLQwLnwOOy7/PsrhPB3RjJ6IiSCXP
- 49mmbr9xKFLXA8SjqFBWzwmcXlk+hxu/B2nmQ0MpmVLOe9oXnF1UPL4aupLC/AtRGiDD
- EC6NueBCQwqcdSwxtxrg9Y8mhhjsf+UiZF/oLRtxa4qK1Sf4LBcKYa+Lr9QSwfS3Y8ev
- 8kfuoPvWmXRQ6aW3AuQSICep2WJF4jIZE5INiCmZl2KSx7msKNXHrB/90zczi0/HMWUc 4Q== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvmkmnc5d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 16:17:33 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303Fe7Fn019425;
-        Tue, 3 Jan 2023 16:17:32 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3mtcq7jqte-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 16:17:32 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 303GHV508848042
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Jan 2023 16:17:31 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4FEC558056;
-        Tue,  3 Jan 2023 16:17:31 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 02D6D58063;
-        Tue,  3 Jan 2023 16:17:31 +0000 (GMT)
-Received: from [9.163.50.163] (unknown [9.163.50.163])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  3 Jan 2023 16:17:30 +0000 (GMT)
-Message-ID: <0077179b-ba75-8c21-5ac7-a62c54c3532f@linux.ibm.com>
-Date:   Tue, 3 Jan 2023 10:17:30 -0600
+        Tue, 3 Jan 2023 11:19:11 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D412C1A0;
+        Tue,  3 Jan 2023 08:19:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672762749; x=1704298749;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=6ICRchekVibNKGEboqQve45ZohoJ9u/XxccUeVpILZY=;
+  b=g4Lx0NGT8zyyGIq8Kh2fVSvzcYhpuSXaNEgo6B6zl18ZLjwxuks4AO6Y
+   0R4WSw/u4DKWfJBRUigcxsb7XDmtuyyfeGkqXufEG4BvI0aeH6Qs2hceL
+   3k6wMho/bief8G4e2RZR3CLf5ZNUvwc5Q46kVT8fZvG4ChOuC/b87m8Fm
+   n8y6qsz4LE4SqbOGNywkJyNOAgZLS8C3mEswyQXZEeGLHX8iXLMrdy34V
+   upKFR4Odd6r5xXsSJ9shCHK2CQA2CzEhZm+xBIcyOrhRzbtXXkyHO6qGG
+   Ym8EuG7L3eo9CFb4Qy0GkQwrtTK768dyFtarAXaxQd/S2d3yfNkM0CbMK
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="301373904"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="301373904"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 08:19:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="648264214"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="648264214"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga007.jf.intel.com with ESMTP; 03 Jan 2023 08:19:00 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 3 Jan 2023 08:18:59 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 3 Jan 2023 08:18:59 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.46) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 3 Jan 2023 08:18:58 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ThlwmwbvjBUkWkqSERNC1QQq/ZV+mLDwGGO1pqMVmqPJwUZyHxN40pp4eUxPJFzHbZSnM9m8nI+Hd6SS+P8XgpA8zNZi6qxJ6LGtJtF4SuElC/F1QK5VkYwF7gVJ8/8LiIxAdc12tM4/G2r6qdQ8fSblwZCXg0Bo2dblLHs1ZHHQMOI/SZOlyJmV9FFuVkrwTsxUE1I/D+0YiGTfksqYXvlDpeeS1A7UZOP5DYj3DCnq4R85Km5bp/QcT5TvWN4OhEpIp0HVAyw+B/xGw3ivgCnB7nbt273oH5g8ifyTB+8S9vxEs6m9MwapFOAMNLh9qi2VuTOxBYLJvOShTwamXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7qf9l08sXI2J1lHUsaQpLd83HMuKplOeVFlVAHZT/04=;
+ b=XH71oe4l5h8jku6u78wHLYQmcsA/oSIHBJQRgRXbstz6iNMefkJ84poI+rr+ioAgvo3O0QF0ExzVVaHIEcX8fY+bk7sOe13kSuQUFVkYYDNCwzV92PfTamRwf+fHzZ5vRPMlb5pfS5GDG8cKMJmQVxrNqxRnaEYcDSJBQey1LulpHyXkAw1Lw7hKPknnPQDzVD3BkBgKgobrDdl18nrmarRTr9RKWL1j3EByHXyobmFaro5TMcXhc0VL9waIPZLB8zGBjIFAfkrkin7p81BmjqBCGrrPr12l1XlLN7UHsrWszkhCxfJGL5wa59UOy6d06t6ISONQ8pbbjST5u2H7ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by PH0PR11MB5951.namprd11.prod.outlook.com (2603:10b6:510:145::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
+ 2023 16:18:55 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::499c:efe3:4397:808]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::499c:efe3:4397:808%8]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
+ 16:18:55 +0000
+Date:   Tue, 3 Jan 2023 11:18:50 -0500
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Alexey Lukyachuk <skif@skif-web.ru>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@intel.com>
+CC:     <tvrtko.ursulin@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+Subject: Re: [Intel-gfx] [PATCH v2] drm/i915: dell wyse 3040 shutdown fix
+Message-ID: <Y7RVavxGE6GDLQXJ@intel.com>
+References: <20221225184413.146916-1-skif@skif-web.ru>
+ <20221225185507.149677-1-skif@skif-web.ru>
+ <Y6sfvUJmrb73AeJh@intel.com>
+ <20221227204003.6b0abe65@alexey-Swift-SF314-42>
+ <20230102165649.2b8e69e3@alexey-Swift-SF314-42>
+ <Y7QjsNBYKumzEvBS@intel.com>
+ <20230103190920.754a7b2c@alexey-Swift-SF314-42>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230103190920.754a7b2c@alexey-Swift-SF314-42>
+X-ClientProxiedBy: SJ0PR05CA0043.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::18) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2 3/6] An accelerated AES/GCM stitched implementation.
-Content-Language: en-US
-To:     linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com
-References: <20221205003458.4182-1-dtsen@linux.ibm.com>
- <20221205003458.4182-4-dtsen@linux.ibm.com>
-From:   Danny Tsen <dtsen@linux.ibm.com>
-In-Reply-To: <20221205003458.4182-4-dtsen@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: liEZQan0sGmbyvRMrDNNqND-o5IM3cAK
-X-Proofpoint-ORIG-GUID: liEZQan0sGmbyvRMrDNNqND-o5IM3cAK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-03_05,2023-01-03_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=889
- suspectscore=0 impostorscore=0 phishscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301030136
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|PH0PR11MB5951:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0b168f11-eaab-41e1-fff4-08daeda635f3
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vuFmXbxzrUfQt+UBCE4zuqNz0K5MG+1M7kdholBmuXLmIrcy2ewg24Vgif9ZHaWQzK8N0NW5eykZc9WO/QB3kFUyi9f8lxemHNHKMZv8rwx6p8JDhOgOGPOXNwr9C7PgJBWjaOILsmvq/WJ6P5ZcweRqzwn75pb6PfOfSY/VGzJMxafrtAqjLQGBHSGZJXFGIFhVQfk+SxQYCt6Ywq50/v2/GaWsglsvQ6mZJRuCamIv5HJ3wk6nuF2scbvK0pNYLyZhudNCa66cRcfkfuC4DO/sFZqIWB4h9gsthRrSA+Megk30KRXMYHZ6VZysaiAC/rP2cAyyBVz10tP6sALofsgrMZ/pvHHPQn+dBqHfXa+1OgkhPsBU82RZLwR4gNIWpjyQhOz3tikT2z7KUSurq6fD446HEXBN80JPxTiwHEiF4vNh+HVIYSejPIOvFupZbxb7Hla5GI4b6U26dvnHx2AGbNUKdyD4cd52FJoe1zoB8Yl2FQCfDDr7Uqg7Hv5QHgDlX2RJ/tcV2pLhcb/v0s6pM5noWheUcxyCIZzVRd2+og0lokzlRCq/2sDffxHEfnaGof4Eqa1qY6QH88uvONxvGGp9pVRnHu6NUVK0R9Zap+ChVY8JWWvS8+Lx+8k7brzM4ukhFHU0ERjjYpjrlDU4KTo/igy3NRKiwUu6XIWhftdYd4rFNCW553UqEGKXIjiwFlFnE4pvYt350uTuW44C1EgOAjvFcJJ/RHTmlrLqKHLFuF5gCbgIRvdVmlx/Lwco0+NJUmoloKkLAmRi9A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(396003)(136003)(346002)(39860400002)(451199015)(5660300002)(2906002)(44832011)(8936002)(4326008)(8676002)(41300700001)(478600001)(30864003)(316002)(66476007)(66946007)(110136005)(6636002)(66556008)(45080400002)(966005)(6486002)(6666004)(26005)(6512007)(6506007)(83380400001)(66574015)(82960400001)(186003)(38100700002)(2616005)(86362001)(36756003)(22166006);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?bpAyyuKBnVJClfDxPAhDcr2A+Uvy/sPXfv+4KurJxEFeurQ1+mhcPxbSEd?=
+ =?iso-8859-1?Q?Odu1wRR77jU6HM2NefJ4VqgXBGNuKjcWdGpvgsKQMQdVsD/xPHLrPAeRHa?=
+ =?iso-8859-1?Q?rdtfWzEb/VDTeaP1bQ3RzMEz3PEHzglbx0byA4pqwc5x3D2+a5gysMF4BA?=
+ =?iso-8859-1?Q?7ktHMEpVDeuYZeLMvvC+2C4wLXQdmTWnTBT3+99G0JcvlXgdSToQyf1nUr?=
+ =?iso-8859-1?Q?ggNW8njE0SEKS0HYW8EgXky8xfvWOSHikV8vUNcC0lkPtq8JHtgKCqLg+I?=
+ =?iso-8859-1?Q?JqX2E+qvTSZV8ySs1wAo9+hSZplUY/CdZBhwdDNy2+/ZARz56AzrI602h4?=
+ =?iso-8859-1?Q?Dq371MdfcNWSQUlDLLOOR0qMbdZeAyQkw9Lb7eBc8Xd0O3GulOiKVuXqpQ?=
+ =?iso-8859-1?Q?KUmJosZczA+P9ltbETcI8Av/LQZ0HIThY+7u56Fy0Fo+YRRG6R/ihkBtuP?=
+ =?iso-8859-1?Q?obG9bt/UZJix5upFmzjBqxi3u5tqUWDb99WBlIoZ+toi0G2gAt4EbGQXIt?=
+ =?iso-8859-1?Q?VyYeTOLHF2wnd+PcDNvTrEmR7zTWDAVL8A7eQSrc4LLyi4qr0IoLzrPOl+?=
+ =?iso-8859-1?Q?ThMNV0LGnkgQk0cQ6Yrh3oYUQM7FPaTh/vI7k3F1DImq8JrFjY+ZCrriWL?=
+ =?iso-8859-1?Q?qdXF6Dd7l+6R7Meu6HBHKeGnEOOVP/tifDi2TPHeCaCDXQUFgmQi0HrQVE?=
+ =?iso-8859-1?Q?CqsXn4rMO5KrL92tS/HKMyc6wKtfg5Fh4zydIg64O2cmx/MrWxmFn1RMb2?=
+ =?iso-8859-1?Q?5fi0kgRtVISqF9uLUiXabzjzZnqkzCV+c70fXIrZ9sF6uAqtnZcAyQ1yfp?=
+ =?iso-8859-1?Q?A0U+VkZYyBLWTff5bArezNglPgoAIYwMSEvw/MBBxHzY8ejXB6U4PokXFd?=
+ =?iso-8859-1?Q?QrA94doxlBZWYBTqACrq5Pxg6LOMLqmG6fBq5EfDfHb58PJdzlOLcqYhcc?=
+ =?iso-8859-1?Q?2A5up4cFoXYaaPOj/eQyBMF0sN6EgrnpdaWF01tnyQcV/G6EfQkco1MG0B?=
+ =?iso-8859-1?Q?IG+pQqJfjCsjhDRvUOJGTIBpcHJjCGvQzggCS7buAOPZMwtVAdB9eIXJC1?=
+ =?iso-8859-1?Q?GjfdPzTBg9MP3zI5Cr13aydDy6UBOqoqI/CPW9XoPCXEgGw1bL1RgBnUHJ?=
+ =?iso-8859-1?Q?cR1aFoT5bKRUXNsz15byJ/koRzkPEkJzFaFnSbgMEgb5X97fv+6nAQSnfh?=
+ =?iso-8859-1?Q?boy8TuYZBoF87ZRsqUfOtRQ+ppSTwHPV+TuxBIcA64WWLaQ4SJrve9MxD1?=
+ =?iso-8859-1?Q?/547aj3HlC69f1lPNUQOdUMKvtl/oYzrifb/YdjgaMsknnZDwIxYGQ/bPi?=
+ =?iso-8859-1?Q?h3g2m2cLmYuAyWlljPwfdg2LDEZM5CR+Q/za5L/BBZGJtJoZqkPpuYRPtT?=
+ =?iso-8859-1?Q?6bQvV4nMMB8RZPDXFK83AcO5inZQ0aOWiVqKMoUGtn96m9TO3kciI6UlVR?=
+ =?iso-8859-1?Q?ISC+BJCGlnrPcS2NA8SpzZc8FekbpjLRuZzs0LlHTyyJkgqK3BB4ySB0ie?=
+ =?iso-8859-1?Q?mpAneapTWoA1G8wqUX09IfstP6gPd7mgfcAsSAheuoR6h9c3M/rW1w3DjY?=
+ =?iso-8859-1?Q?TzD9PtYJRTPp5DrM1YmFuPG70uZT4j1erv7bOLh43lCBEo2AG+GZuPio1n?=
+ =?iso-8859-1?Q?tphzMHPjJ/hO9TfIrCYPUW3pB7Buh629lzZLEeGNLohCfwCwUG21x8XA?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b168f11-eaab-41e1-fff4-08daeda635f3
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 16:18:55.4383
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cPlXC02Zwz8B8ELkzYKbXUQUom5KBJeUsFJ01hvxNVx77estrnUvgYqWwJghF/L0MDmP3QpPsPIsNML6q61j3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5951
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Tue, Jan 03, 2023 at 07:09:20PM +0300, Alexey Lukyachuk wrote:
+> On Tue, 3 Jan 2023 07:46:40 -0500
+> Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
+>=20
+> > On Mon, Jan 02, 2023 at 04:56:49PM +0300, Alexey Lukyachuk wrote:
+> > > On Tue, 27 Dec 2022 20:40:03 +0300
+> > > Alexey Lukyachuk <skif@skif-web.ru> wrote:
+> > >=20
+> > > > On Tue, 27 Dec 2022 11:39:25 -0500
+> > > > Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
+> > > >=20
+> > > > > On Sun, Dec 25, 2022 at 09:55:08PM +0300, Alexey Lukyanchuk wrote=
+:
+> > > > > > dell wyse 3040 doesn't peform poweroff properly, but instead re=
+mains in=20
+> > > > > > turned power on state.
+> > > > >=20
+> > > > > okay, the motivation is explained in the commit msg..
+> > > > >=20
+> > > > > > Additional mutex_lock and=20
+> > > > > > intel_crtc_wait_for_next_vblank=20
+> > > > > > feature 6.2 kernel resolve this trouble.
+> > > > >=20
+> > > > > but this why is not very clear... seems that by magic it was foun=
+d,
+> > > > > without explaining what race we are really protecting here.
+> > > > >=20
+> > > > > but even worse is:
+> > > > > what about those many random vblank waits in the code? what's the
+> > > > > reasoning?
+> > > > >=20
+> > > > > >=20
+> > > > > > cc: stable@vger.kernel.org
+> > > > > > original commit Link: https://patchwork.freedesktop.org/patch/5=
+08926/
+> > > > > > fixes: fe0f1e3bfdfeb53e18f1206aea4f40b9bd1f291c
+> > > > > > Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+> > > > > > ---
+> > > > > > I got some troubles with this device (dell wyse 3040) since ker=
+nel 5.11
+> > > > > > started to use i915_driver_shutdown function. I found solution =
+here:
+> > > > > >=20
+> > > > > > https://lore.kernel.org/dri-devel/Y1wd6ZJ8LdJpCfZL@intel.com/#r
+> > > > > >=20
+> > > > > > ---
+> > > > > >  drivers/gpu/drm/i915/display/intel_audio.c | 37 ++++++++++++++=
++-------
+> > > > > >  1 file changed, 25 insertions(+), 12 deletions(-)
+> > > > > >=20
+> > > > > > diff --git a/drivers/gpu/drm/i915/display/intel_audio.c b/drive=
+rs/gpu/drm/i915/display/intel_audio.c
+> > > > > > index aacbc6da8..44344ecdf 100644
+> > > > > > --- a/drivers/gpu/drm/i915/display/intel_audio.c
+> > > > > > +++ b/drivers/gpu/drm/i915/display/intel_audio.c
+> > > > > > @@ -336,6 +336,7 @@ static void g4x_audio_codec_disable(struct =
+intel_encoder *encoder,
+> > > > > >  				    const struct drm_connector_state *old_conn_state)
+> > > > > >  {
+> > > > > >  	struct drm_i915_private *dev_priv =3D to_i915(encoder->base.d=
+ev);
+> > > > > > +	struct intel_crtc *crtc =3D to_intel_crtc(old_crtc_state->uap=
+i.crtc);
+> > > > > >  	u32 eldv, tmp;
+> > > > > > =20
+> > > > > >  	tmp =3D intel_de_read(dev_priv, G4X_AUD_VID_DID);
+> > > > > > @@ -348,6 +349,9 @@ static void g4x_audio_codec_disable(struct =
+intel_encoder *encoder,
+> > > > > >  	tmp =3D intel_de_read(dev_priv, G4X_AUD_CNTL_ST);
+> > > > > >  	tmp &=3D ~eldv;
+> > > > > >  	intel_de_write(dev_priv, G4X_AUD_CNTL_ST, tmp);
+> > > > > > +
+> > > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > >  }
+> > > > > > =20
+> > > > > >  static void g4x_audio_codec_enable(struct intel_encoder *encod=
+er,
+> > > > > > @@ -355,12 +359,15 @@ static void g4x_audio_codec_enable(struct=
+ intel_encoder *encoder,
+> > > > > >  				   const struct drm_connector_state *conn_state)
+> > > > > >  {
+> > > > > >  	struct drm_i915_private *dev_priv =3D to_i915(encoder->base.d=
+ev);
+> > > > > > +	struct intel_crtc *crtc =3D to_intel_crtc(crtc_state->uapi.cr=
+tc);
+> > > > > >  	struct drm_connector *connector =3D conn_state->connector;
+> > > > > >  	const u8 *eld =3D connector->eld;
+> > > > > >  	u32 eldv;
+> > > > > >  	u32 tmp;
+> > > > > >  	int len, i;
+> > > > > > =20
+> > > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > > +
+> > > > > >  	tmp =3D intel_de_read(dev_priv, G4X_AUD_VID_DID);
+> > > > > >  	if (tmp =3D=3D INTEL_AUDIO_DEVBLC || tmp =3D=3D INTEL_AUDIO_D=
+EVCL)
+> > > > > >  		eldv =3D G4X_ELDV_DEVCL_DEVBLC;
+> > > > > > @@ -493,6 +500,7 @@ static void hsw_audio_codec_disable(struct =
+intel_encoder *encoder,
+> > > > > >  				    const struct drm_connector_state *old_conn_state)
+> > > > > >  {
+> > > > > >  	struct drm_i915_private *dev_priv =3D to_i915(encoder->base.d=
+ev);
+> > > > > > +	struct intel_crtc *crtc =3D to_intel_crtc(old_crtc_state->uap=
+i.crtc);
+> > > > > >  	enum transcoder cpu_transcoder =3D old_crtc_state->cpu_transc=
+oder;
+> > > > > >  	u32 tmp;
+> > > > > > =20
+> > > > > > @@ -508,6 +516,10 @@ static void hsw_audio_codec_disable(struct=
+ intel_encoder *encoder,
+> > > > > >  		tmp |=3D AUD_CONFIG_N_VALUE_INDEX;
+> > > > > >  	intel_de_write(dev_priv, HSW_AUD_CFG(cpu_transcoder), tmp);
+> > > > > > =20
+> > > > > > +
+> > > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > > +
+> > > > > >  	/* Invalidate ELD */
+> > > > > >  	tmp =3D intel_de_read(dev_priv, HSW_AUD_PIN_ELD_CP_VLD);
+> > > > > >  	tmp &=3D ~AUDIO_ELD_VALID(cpu_transcoder);
+> > > > > > @@ -633,6 +645,7 @@ static void hsw_audio_codec_enable(struct i=
+ntel_encoder *encoder,
+> > > > > >  				   const struct drm_connector_state *conn_state)
+> > > > > >  {
+> > > > > >  	struct drm_i915_private *dev_priv =3D to_i915(encoder->base.d=
+ev);
+> > > > > > +	struct intel_crtc *crtc =3D to_intel_crtc(crtc_state->uapi.cr=
+tc);
+> > > > > >  	struct drm_connector *connector =3D conn_state->connector;
+> > > > > >  	enum transcoder cpu_transcoder =3D crtc_state->cpu_transcoder=
+;
+> > > > > >  	const u8 *eld =3D connector->eld;
+> > > > > > @@ -651,12 +664,7 @@ static void hsw_audio_codec_enable(struct =
+intel_encoder *encoder,
+> > > > > >  	tmp &=3D ~AUDIO_ELD_VALID(cpu_transcoder);
+> > > > > >  	intel_de_write(dev_priv, HSW_AUD_PIN_ELD_CP_VLD, tmp);
+> > > > > > =20
+> > > > > > -	/*
+> > > > > > -	 * FIXME: We're supposed to wait for vblank here, but we have=
+ vblanks
+> > > > > > -	 * disabled during the mode set. The proper fix would be to p=
+ush the
+> > > > > > -	 * rest of the setup into a vblank work item, queued here, bu=
+t the
+> > > > > > -	 * infrastructure is not there yet.
+> > > > > > -	 */
+> > > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > > =20
+> > > > > >  	/* Reset ELD write address */
+> > > > > >  	tmp =3D intel_de_read(dev_priv, HSW_AUD_DIP_ELD_CTRL(cpu_tran=
+scoder));
+> > > > > > @@ -705,6 +713,8 @@ static void ilk_audio_codec_disable(struct =
+intel_encoder *encoder,
+> > > > > >  		aud_cntrl_st2 =3D CPT_AUD_CNTRL_ST2;
+> > > > > >  	}
+> > > > > > =20
+> > > > > > +	mutex_lock(&dev_priv->display.audio.mutex);
+> > > > > > +
+> > > > > >  	/* Disable timestamps */
+> > > > > >  	tmp =3D intel_de_read(dev_priv, aud_config);
+> > > > > >  	tmp &=3D ~AUD_CONFIG_N_VALUE_INDEX;
+> > > > > > @@ -721,6 +731,10 @@ static void ilk_audio_codec_disable(struct=
+ intel_encoder *encoder,
+> > > > > >  	tmp =3D intel_de_read(dev_priv, aud_cntrl_st2);
+> > > > > >  	tmp &=3D ~eldv;
+> > > > > >  	intel_de_write(dev_priv, aud_cntrl_st2, tmp);
+> > > > > > +	mutex_unlock(&dev_priv->display.audio.mutex);
+> > > > > > +
+> > > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > >  }
+> > > > > > =20
+> > > > > >  static void ilk_audio_codec_enable(struct intel_encoder *encod=
+er,
+> > > > > > @@ -740,12 +754,7 @@ static void ilk_audio_codec_enable(struct =
+intel_encoder *encoder,
+> > > > > >  	if (drm_WARN_ON(&dev_priv->drm, port =3D=3D PORT_A))
+> > > > > >  		return;
+> > > > > > =20
+> > > > > > -	/*
+> > > > > > -	 * FIXME: We're supposed to wait for vblank here, but we have=
+ vblanks
+> > > > > > -	 * disabled during the mode set. The proper fix would be to p=
+ush the
+> > > > > > -	 * rest of the setup into a vblank work item, queued here, bu=
+t the
+> > > > > > -	 * infrastructure is not there yet.
+> > > > > > -	 */
+> > > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > > =20
+> > > > > >  	if (HAS_PCH_IBX(dev_priv)) {
+> > > > > >  		hdmiw_hdmiedid =3D IBX_HDMIW_HDMIEDID(pipe);
+> > > > > > @@ -767,6 +776,8 @@ static void ilk_audio_codec_enable(struct i=
+ntel_encoder *encoder,
+> > > > > > =20
+> > > > > >  	eldv =3D IBX_ELD_VALID(port);
+> > > > > > =20
+> > > > > > +	mutex_lock(&dev_priv->display.audio.mutex);
+> > > > > > +
+> > > > > >  	/* Invalidate ELD */
+> > > > > >  	tmp =3D intel_de_read(dev_priv, aud_cntrl_st2);
+> > > > > >  	tmp &=3D ~eldv;
+> > > > > > @@ -798,6 +809,8 @@ static void ilk_audio_codec_enable(struct i=
+ntel_encoder *encoder,
+> > > > > >  	else
+> > > > > >  		tmp |=3D audio_config_hdmi_pixel_clock(crtc_state);
+> > > > > >  	intel_de_write(dev_priv, aud_config, tmp);
+> > > > > > +
+> > > > > > +	mutex_unlock(&dev_priv->display.audio.mutex);
+> > > > > >  }
+> > > > > > =20
+> > > > > >  /**
+> > > > > > --=20
+> > > > > > 2.25.1
+> > > > > >=20
+> > > >=20
+> > > >=20
+> > > > I would like to say, that this solution was found in drm-tip reposi=
+tory:
+> > > > link: git://anongit.freedesktop.org/drm-tip
+> > > > I will quotate original commit message from Ville Syrj=E4l=E4=20
+> > > > <ville.syrjala@linux.intel.com>: "The spec tells us to do a bunch o=
+f=20
+> > > > vblank waits in the audio enable/disable sequences. Make it so."
+> > > > So it's just a backport of accepted patch.
+> > > > Which i wanna to propagate to stable versions
+> > >=20
+> > >=20
+> > > Yes, I have checked 6.2-rc2 and everything work fine. I want to backp=
+ort
+> > > this commit to 6.0 and 6.1 because my company going to use these vers=
+ions.
+> > > Maybe it will be useful for 5.15, companies and vendors are passionat=
+e about
+> > > LTS kernel ( I am edge to make special version of this patch for 5.15
+> > > because hank 3 will be failed with it.).
+> > > I am fully supportive with you that trouble is in timings/ locking ch=
+anges.
+> > > Early in detecting process I made some sleeps and it's help but not r=
+eliable.
+> > > Regarding to your question about fdo gitlab, I went to do it. And in =
+process
+> > >  ("Before filing the bug, please try to reproduce your issue with the=
+ latest
+> > >  kernel. Use the latest drm-tip branch") I found that trouble is reso=
+lves.
+> > > Using bisect and tests, I got needed commit.
+> >=20
+> > okay, so the only commit we need is this:
+> > https://patchwork.freedesktop.org/patch/508926/
+> > ?
+> >=20
+> > and nothing else?
+>=20
+> Yes, this patch is enough.
+>=20
+> >=20
+> > If we want this to be included in older released active kernel versions=
+ we
+> > need to follow this process:
+> >=20
+> > https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> >=20
+> > We cannot create a new patch like the origin of this thread.
+> >=20
+>=20
+> May I ask you for a little additional explanation?
+> I submitted my patch with adding <stable@vger.kernel.org> to CC.
+> What else should I do?
+> Maybe I should send new thread and send it only to <stable@vger.kernel.or=
+g> ?
+> Should I make separate version for 5.15 lts?
 
-Please remove 'abiversion" from this patch file since it may not 
-compile.  Here is the git diff.
+Your patch is not the right approach. Please read the rules in the given li=
+nk.
 
-Thanks. -Danny
+But also, even if you were backporting the original patch following the wri=
+tten
+rules, it looks like Jani doesn't agree that it is a right fix, but just ma=
+sking
+the issue by coincidence apparently, if I understood him well.
 
-diff --git a/arch/powerpc/crypto/p10_aes_gcm.S 
-b/arch/powerpc/crypto/p10_aes_gcm.S
-index ab353e94c1bb..2bb095c6166b 100644
---- a/arch/powerpc/crypto/p10_aes_gcm.S
-+++ b/arch/powerpc/crypto/p10_aes_gcm.S
-@@ -39,7 +39,6 @@
-   #
+Ville, thoughts on this issue and what patches to backport?
 
-  .machine        "any"
--.abiversion     2
-  .text
-
-   # 4x loops
-
-On 12/4/22 6:34 PM, Danny Tsen wrote:
-> Improve overall performance of AES/GCM encrypt and decrypt operations
-> for Power10+ CPU.
->
-> Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
-> ---
->   arch/powerpc/crypto/p10_aes_gcm.S | 1519 +++++++++++++++++++++++++++++
->   1 file changed, 1519 insertions(+)
->   create mode 100644 arch/powerpc/crypto/p10_aes_gcm.S
->
-> diff --git a/arch/powerpc/crypto/p10_aes_gcm.S b/arch/powerpc/crypto/p10_aes_gcm.S
-> new file mode 100644
-> index 000000000000..ab353e94c1bb
-> --- /dev/null
-> +++ b/arch/powerpc/crypto/p10_aes_gcm.S
-> @@ -0,0 +1,1519 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> + #
-> + # Accelerated AES-GCM stitched implementation for ppc64le.
-> + #
-> + # Copyright 2022- IBM Inc. All rights reserved
-> + #
-> + #===================================================================================
-> + # Written by Danny Tsen <dtsen@linux.ibm.com>
-> + #
-> + # GHASH is based on the Karatsuba multiplication method.
-> + #
-> + #    Xi xor X1
-> + #
-> + #    X1 * H^4 + X2 * H^3 + x3 * H^2 + X4 * H =
-> + #      (X1.h * H4.h + xX.l * H4.l + X1 * H4) +
-> + #      (X2.h * H3.h + X2.l * H3.l + X2 * H3) +
-> + #      (X3.h * H2.h + X3.l * H2.l + X3 * H2) +
-> + #      (X4.h * H.h + X4.l * H.l + X4 * H)
-> + #
-> + # Xi = v0
-> + # H Poly = v2
-> + # Hash keys = v3 - v14
-> + #     ( H.l, H, H.h)
-> + #     ( H^2.l, H^2, H^2.h)
-> + #     ( H^3.l, H^3, H^3.h)
-> + #     ( H^4.l, H^4, H^4.h)
-> + #
-> + # v30 is IV
-> + # v31 - counter 1
-> + #
-> + # AES used,
-> + #     vs0 - vs14 for round keys
-> + #     v15, v16, v17, v18, v19, v20, v21, v22 for 8 blocks (encrypted)
-> + #
-> + # This implementation uses stitched AES-GCM approach to improve overall performance.
-> + # AES is implemented with 8x blocks and GHASH is using 2 4x blocks.
-> + #
-> + # ===================================================================================
-> + #
-> +
-> +.machine        "any"
-> +.abiversion     2
-> +.text
-> +
-> + # 4x loops
-> + # v15 - v18 - input states
-> + # vs1 - vs9 - round keys
-> + #
-> +.macro Loop_aes_middle4x
-> +	xxlor	19+32, 1, 1
-> +	xxlor	20+32, 2, 2
-> +	xxlor	21+32, 3, 3
-> +	xxlor	22+32, 4, 4
-> +
-> +	vcipher	15, 15, 19
-> +	vcipher	16, 16, 19
-> +	vcipher	17, 17, 19
-> +	vcipher	18, 18, 19
-> +
-> +	vcipher	15, 15, 20
-> +	vcipher	16, 16, 20
-> +	vcipher	17, 17, 20
-> +	vcipher	18, 18, 20
-> +
-> +	vcipher	15, 15, 21
-> +	vcipher	16, 16, 21
-> +	vcipher	17, 17, 21
-> +	vcipher	18, 18, 21
-> +
-> +	vcipher	15, 15, 22
-> +	vcipher	16, 16, 22
-> +	vcipher	17, 17, 22
-> +	vcipher	18, 18, 22
-> +
-> +	xxlor	19+32, 5, 5
-> +	xxlor	20+32, 6, 6
-> +	xxlor	21+32, 7, 7
-> +	xxlor	22+32, 8, 8
-> +
-> +	vcipher	15, 15, 19
-> +	vcipher	16, 16, 19
-> +	vcipher	17, 17, 19
-> +	vcipher	18, 18, 19
-> +
-> +	vcipher	15, 15, 20
-> +	vcipher	16, 16, 20
-> +	vcipher	17, 17, 20
-> +	vcipher	18, 18, 20
-> +
-> +	vcipher	15, 15, 21
-> +	vcipher	16, 16, 21
-> +	vcipher	17, 17, 21
-> +	vcipher	18, 18, 21
-> +
-> +	vcipher	15, 15, 22
-> +	vcipher	16, 16, 22
-> +	vcipher	17, 17, 22
-> +	vcipher	18, 18, 22
-> +
-> +	xxlor	23+32, 9, 9
-> +	vcipher	15, 15, 23
-> +	vcipher	16, 16, 23
-> +	vcipher	17, 17, 23
-> +	vcipher	18, 18, 23
-> +.endm
-> +
-> + # 8x loops
-> + # v15 - v22 - input states
-> + # vs1 - vs9 - round keys
-> + #
-> +.macro Loop_aes_middle8x
-> +	xxlor	23+32, 1, 1
-> +	xxlor	24+32, 2, 2
-> +	xxlor	25+32, 3, 3
-> +	xxlor	26+32, 4, 4
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	16, 16, 23
-> +	vcipher	17, 17, 23
-> +	vcipher	18, 18, 23
-> +	vcipher	19, 19, 23
-> +	vcipher	20, 20, 23
-> +	vcipher	21, 21, 23
-> +	vcipher	22, 22, 23
-> +
-> +	vcipher	15, 15, 24
-> +	vcipher	16, 16, 24
-> +	vcipher	17, 17, 24
-> +	vcipher	18, 18, 24
-> +	vcipher	19, 19, 24
-> +	vcipher	20, 20, 24
-> +	vcipher	21, 21, 24
-> +	vcipher	22, 22, 24
-> +
-> +	vcipher	15, 15, 25
-> +	vcipher	16, 16, 25
-> +	vcipher	17, 17, 25
-> +	vcipher	18, 18, 25
-> +	vcipher	19, 19, 25
-> +	vcipher	20, 20, 25
-> +	vcipher	21, 21, 25
-> +	vcipher	22, 22, 25
-> +
-> +	vcipher	15, 15, 26
-> +	vcipher	16, 16, 26
-> +	vcipher	17, 17, 26
-> +	vcipher	18, 18, 26
-> +	vcipher	19, 19, 26
-> +	vcipher	20, 20, 26
-> +	vcipher	21, 21, 26
-> +	vcipher	22, 22, 26
-> +
-> +	xxlor	23+32, 5, 5
-> +	xxlor	24+32, 6, 6
-> +	xxlor	25+32, 7, 7
-> +	xxlor	26+32, 8, 8
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	16, 16, 23
-> +	vcipher	17, 17, 23
-> +	vcipher	18, 18, 23
-> +	vcipher	19, 19, 23
-> +	vcipher	20, 20, 23
-> +	vcipher	21, 21, 23
-> +	vcipher	22, 22, 23
-> +
-> +	vcipher	15, 15, 24
-> +	vcipher	16, 16, 24
-> +	vcipher	17, 17, 24
-> +	vcipher	18, 18, 24
-> +	vcipher	19, 19, 24
-> +	vcipher	20, 20, 24
-> +	vcipher	21, 21, 24
-> +	vcipher	22, 22, 24
-> +
-> +	vcipher	15, 15, 25
-> +	vcipher	16, 16, 25
-> +	vcipher	17, 17, 25
-> +	vcipher	18, 18, 25
-> +	vcipher	19, 19, 25
-> +	vcipher	20, 20, 25
-> +	vcipher	21, 21, 25
-> +	vcipher	22, 22, 25
-> +
-> +	vcipher	15, 15, 26
-> +	vcipher	16, 16, 26
-> +	vcipher	17, 17, 26
-> +	vcipher	18, 18, 26
-> +	vcipher	19, 19, 26
-> +	vcipher	20, 20, 26
-> +	vcipher	21, 21, 26
-> +	vcipher	22, 22, 26
-> +
-> +	xxlor	23+32, 9, 9
-> +	vcipher	15, 15, 23
-> +	vcipher	16, 16, 23
-> +	vcipher	17, 17, 23
-> +	vcipher	18, 18, 23
-> +	vcipher	19, 19, 23
-> +	vcipher	20, 20, 23
-> +	vcipher	21, 21, 23
-> +	vcipher	22, 22, 23
-> +.endm
-> +
-> +.macro Loop_aes_middle_1x
-> +	xxlor	19+32, 1, 1
-> +	xxlor	20+32, 2, 2
-> +	xxlor	21+32, 3, 3
-> +	xxlor	22+32, 4, 4
-> +
-> +	vcipher 15, 15, 19
-> +	vcipher 15, 15, 20
-> +	vcipher 15, 15, 21
-> +	vcipher 15, 15, 22
-> +
-> +	xxlor	19+32, 5, 5
-> +	xxlor	20+32, 6, 6
-> +	xxlor	21+32, 7, 7
-> +	xxlor	22+32, 8, 8
-> +
-> +	vcipher 15, 15, 19
-> +	vcipher 15, 15, 20
-> +	vcipher 15, 15, 21
-> +	vcipher 15, 15, 22
-> +
-> +	xxlor	19+32, 9, 9
-> +	vcipher 15, 15, 19
-> +.endm
-> +
-> + #
-> + # Compute 4x hash values based on Karatsuba method.
-> + #
-> +ppc_aes_gcm_ghash:
-> +	vxor		15, 15, 0
-> +
-> +	vpmsumd		23, 12, 15		# H4.L * X.L
-> +	vpmsumd		24, 9, 16
-> +	vpmsumd		25, 6, 17
-> +	vpmsumd		26, 3, 18
-> +
-> +	vxor		23, 23, 24
-> +	vxor		23, 23, 25
-> +	vxor		23, 23, 26		# L
-> +
-> +	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
-> +	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
-> +	vpmsumd		26, 7, 17
-> +	vpmsumd		27, 4, 18
-> +
-> +	vxor		24, 24, 25
-> +	vxor		24, 24, 26
-> +	vxor		24, 24, 27		# M
-> +
-> +	# sum hash and reduction with H Poly
-> +	vpmsumd		28, 23, 2		# reduction
-> +
-> +	vxor		29, 29, 29
-> +	vsldoi		26, 24, 29, 8		# mL
-> +	vsldoi		29, 29, 24, 8		# mH
-> +	vxor		23, 23, 26		# mL + L
-> +
-> +	vsldoi		23, 23, 23, 8		# swap
-> +	vxor		23, 23, 28
-> +
-> +	vpmsumd		24, 14, 15		# H4.H * X.H
-> +	vpmsumd		25, 11, 16
-> +	vpmsumd		26, 8, 17
-> +	vpmsumd		27, 5, 18
-> +
-> +	vxor		24, 24, 25
-> +	vxor		24, 24, 26
-> +	vxor		24, 24, 27
-> +
-> +	vxor		24, 24, 29
-> +
-> +	# sum hash and reduction with H Poly
-> +	vsldoi		27, 23, 23, 8		# swap
-> +	vpmsumd		23, 23, 2
-> +	vxor		27, 27, 24
-> +	vxor		23, 23, 27
-> +
-> +	xxlor		32, 23+32, 23+32		# update hash
-> +
-> +	blr
-> +
-> + #
-> + # Combine two 4x ghash
-> + # v15 - v22 - input blocks
-> + #
-> +.macro ppc_aes_gcm_ghash2_4x
-> +	# first 4x hash
-> +	vxor		15, 15, 0		# Xi + X
-> +
-> +	vpmsumd		23, 12, 15		# H4.L * X.L
-> +	vpmsumd		24, 9, 16
-> +	vpmsumd		25, 6, 17
-> +	vpmsumd		26, 3, 18
-> +
-> +	vxor		23, 23, 24
-> +	vxor		23, 23, 25
-> +	vxor		23, 23, 26		# L
-> +
-> +	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
-> +	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
-> +	vpmsumd		26, 7, 17
-> +	vpmsumd		27, 4, 18
-> +
-> +	vxor		24, 24, 25
-> +	vxor		24, 24, 26
-> +
-> +	# sum hash and reduction with H Poly
-> +	vpmsumd		28, 23, 2		# reduction
-> +
-> +	vxor		29, 29, 29
-> +
-> +	vxor		24, 24, 27		# M
-> +	vsldoi		26, 24, 29, 8		# mL
-> +	vsldoi		29, 29, 24, 8		# mH
-> +	vxor		23, 23, 26		# mL + L
-> +
-> +	vsldoi		23, 23, 23, 8		# swap
-> +	vxor		23, 23, 28
-> +
-> +	vpmsumd		24, 14, 15		# H4.H * X.H
-> +	vpmsumd		25, 11, 16
-> +	vpmsumd		26, 8, 17
-> +	vpmsumd		27, 5, 18
-> +
-> +	vxor		24, 24, 25
-> +	vxor		24, 24, 26
-> +	vxor		24, 24, 27		# H
-> +
-> +	vxor		24, 24, 29		# H + mH
-> +
-> +	# sum hash and reduction with H Poly
-> +	vsldoi		27, 23, 23, 8		# swap
-> +	vpmsumd		23, 23, 2
-> +	vxor		27, 27, 24
-> +	vxor		27, 23, 27		# 1st Xi
-> +
-> +	# 2nd 4x hash
-> +	vpmsumd		24, 9, 20
-> +	vpmsumd		25, 6, 21
-> +	vpmsumd		26, 3, 22
-> +	vxor		19, 19, 27		# Xi + X
-> +	vpmsumd		23, 12, 19		# H4.L * X.L
-> +
-> +	vxor		23, 23, 24
-> +	vxor		23, 23, 25
-> +	vxor		23, 23, 26		# L
-> +
-> +	vpmsumd		24, 13, 19		# H4.L * X.H + H4.H * X.L
-> +	vpmsumd		25, 10, 20		# H3.L * X1.H + H3.H * X1.L
-> +	vpmsumd		26, 7, 21
-> +	vpmsumd		27, 4, 22
-> +
-> +	vxor		24, 24, 25
-> +	vxor		24, 24, 26
-> +
-> +	# sum hash and reduction with H Poly
-> +	vpmsumd		28, 23, 2		# reduction
-> +
-> +	vxor		29, 29, 29
-> +
-> +	vxor		24, 24, 27		# M
-> +	vsldoi		26, 24, 29, 8		# mL
-> +	vsldoi		29, 29, 24, 8		# mH
-> +	vxor		23, 23, 26		# mL + L
-> +
-> +	vsldoi		23, 23, 23, 8		# swap
-> +	vxor		23, 23, 28
-> +
-> +	vpmsumd		24, 14, 19		# H4.H * X.H
-> +	vpmsumd		25, 11, 20
-> +	vpmsumd		26, 8, 21
-> +	vpmsumd		27, 5, 22
-> +
-> +	vxor		24, 24, 25
-> +	vxor		24, 24, 26
-> +	vxor		24, 24, 27		# H
-> +
-> +	vxor		24, 24, 29		# H + mH
-> +
-> +	# sum hash and reduction with H Poly
-> +	vsldoi		27, 23, 23, 8		# swap
-> +	vpmsumd		23, 23, 2
-> +	vxor		27, 27, 24
-> +	vxor		23, 23, 27
-> +
-> +	xxlor		32, 23+32, 23+32		# update hash
-> +
-> +.endm
-> +
-> + #
-> + # Compute update single hash
-> + #
-> +.macro ppc_update_hash_1x
-> +	vxor		28, 28, 0
-> +
-> +	vxor		19, 19, 19
-> +
-> +	vpmsumd		22, 3, 28		# L
-> +	vpmsumd		23, 4, 28		# M
-> +	vpmsumd		24, 5, 28		# H
-> +
-> +	vpmsumd		27, 22, 2		# reduction
-> +
-> +	vsldoi		25, 23, 19, 8		# mL
-> +	vsldoi		26, 19, 23, 8		# mH
-> +	vxor		22, 22, 25		# LL + LL
-> +	vxor		24, 24, 26		# HH + HH
-> +
-> +	vsldoi		22, 22, 22, 8		# swap
-> +	vxor		22, 22, 27
-> +
-> +	vsldoi		20, 22, 22, 8		# swap
-> +	vpmsumd		22, 22, 2		# reduction
-> +	vxor		20, 20, 24
-> +	vxor		22, 22, 20
-> +
-> +	vmr		0, 22			# update hash
-> +
-> +.endm
-> +
-> +.macro SAVE_REGS
-> +	stdu 1,-640(1)
-> +	mflr 0
-> +
-> +	std	14,112(1)
-> +	std	15,120(1)
-> +	std	16,128(1)
-> +	std	17,136(1)
-> +	std	18,144(1)
-> +	std	19,152(1)
-> +	std	20,160(1)
-> +	std	21,168(1)
-> +	li	9, 256
-> +	stvx	20, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	21, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	22, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	23, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	24, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	25, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	26, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	27, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	28, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	29, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	30, 9, 1
-> +	addi	9, 9, 16
-> +	stvx	31, 9, 1
-> +	stxv	14, 464(1)
-> +	stxv	15, 480(1)
-> +	stxv	16, 496(1)
-> +	stxv	17, 512(1)
-> +	stxv	18, 528(1)
-> +	stxv	19, 544(1)
-> +	stxv	20, 560(1)
-> +	stxv	21, 576(1)
-> +	stxv	22, 592(1)
-> +	std	0, 656(1)
-> +.endm
-> +
-> +.macro RESTORE_REGS
-> +	lxv	14, 464(1)
-> +	lxv	15, 480(1)
-> +	lxv	16, 496(1)
-> +	lxv	17, 512(1)
-> +	lxv	18, 528(1)
-> +	lxv	19, 544(1)
-> +	lxv	20, 560(1)
-> +	lxv	21, 576(1)
-> +	lxv	22, 592(1)
-> +	li	9, 256
-> +	lvx	20, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	21, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	22, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	23, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	24, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	25, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	26, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	27, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	28, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	29, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	30, 9, 1
-> +	addi	9, 9, 16
-> +	lvx	31, 9, 1
-> +
-> +	ld	0, 656(1)
-> +	ld      14,112(1)
-> +	ld      15,120(1)
-> +	ld      16,128(1)
-> +	ld      17,136(1)
-> +	ld      18,144(1)
-> +	ld      19,152(1)
-> +	ld      20,160(1)
-> +	ld	21,168(1)
-> +
-> +	mtlr	0
-> +	addi	1, 1, 640
-> +.endm
-> +
-> +.macro LOAD_HASH_TABLE
-> +	# Load Xi
-> +	lxvb16x	32, 0, 8	# load Xi
-> +
-> +	# load Hash - h^4, h^3, h^2, h
-> +	li	10, 32
-> +	lxvd2x	2+32, 10, 8	# H Poli
-> +	li	10, 48
-> +	lxvd2x	3+32, 10, 8	# Hl
-> +	li	10, 64
-> +	lxvd2x	4+32, 10, 8	# H
-> +	li	10, 80
-> +	lxvd2x	5+32, 10, 8	# Hh
-> +
-> +	li	10, 96
-> +	lxvd2x	6+32, 10, 8	# H^2l
-> +	li	10, 112
-> +	lxvd2x	7+32, 10, 8	# H^2
-> +	li	10, 128
-> +	lxvd2x	8+32, 10, 8	# H^2h
-> +
-> +	li	10, 144
-> +	lxvd2x	9+32, 10, 8	# H^3l
-> +	li	10, 160
-> +	lxvd2x	10+32, 10, 8	# H^3
-> +	li	10, 176
-> +	lxvd2x	11+32, 10, 8	# H^3h
-> +
-> +	li	10, 192
-> +	lxvd2x	12+32, 10, 8	# H^4l
-> +	li	10, 208
-> +	lxvd2x	13+32, 10, 8	# H^4
-> +	li	10, 224
-> +	lxvd2x	14+32, 10, 8	# H^4h
-> +.endm
-> +
-> + #
-> + # aes_p10_gcm_encrypt (const void *inp, void *out, size_t len,
-> + #               const char *rk, unsigned char iv[16], void *Xip);
-> + #
-> + #    r3 - inp
-> + #    r4 - out
-> + #    r5 - len
-> + #    r6 - AES round keys
-> + #    r7 - iv and other data
-> + #    r8 - Xi, HPoli, hash keys
-> + #
-> + #    rounds is at offset 240 in rk
-> + #    Xi is at 0 in gcm_table (Xip).
-> + #
-> +.global aes_p10_gcm_encrypt
-> +.align 5
-> +aes_p10_gcm_encrypt:
-> +
-> +	SAVE_REGS
-> +
-> +	LOAD_HASH_TABLE
-> +
-> +	# initialize ICB: GHASH( IV ), IV - r7
-> +	lxvb16x	30+32, 0, 7	# load IV  - v30
-> +
-> +	mr	12, 5		# length
-> +	li	11, 0		# block index
-> +
-> +	# counter 1
-> +	vxor	31, 31, 31
-> +	vspltisb 22, 1
-> +	vsldoi	31, 31, 22,1	# counter 1
-> +
-> +	# load round key to VSR
-> +	lxv	0, 0(6)
-> +	lxv	1, 0x10(6)
-> +	lxv	2, 0x20(6)
-> +	lxv	3, 0x30(6)
-> +	lxv	4, 0x40(6)
-> +	lxv	5, 0x50(6)
-> +	lxv	6, 0x60(6)
-> +	lxv	7, 0x70(6)
-> +	lxv	8, 0x80(6)
-> +	lxv	9, 0x90(6)
-> +	lxv	10, 0xa0(6)
-> +
-> +	# load rounds - 10 (128), 12 (192), 14 (256)
-> +	lwz	9,240(6)
-> +
-> +	#
-> +	# vxor	state, state, w # addroundkey
-> +	xxlor	32+29, 0, 0
-> +	vxor	15, 30, 29	# IV + round key - add round key 0
-> +
-> +	cmpdi	9, 10
-> +	beq	Loop_aes_gcm_8x
-> +
-> +	# load 2 more round keys (v11, v12)
-> +	lxv	11, 0xb0(6)
-> +	lxv	12, 0xc0(6)
-> +
-> +	cmpdi	9, 12
-> +	beq	Loop_aes_gcm_8x
-> +
-> +	# load 2 more round keys (v11, v12, v13, v14)
-> +	lxv	13, 0xd0(6)
-> +	lxv	14, 0xe0(6)
-> +	cmpdi	9, 14
-> +	beq	Loop_aes_gcm_8x
-> +
-> +	b	aes_gcm_out
-> +
-> +.align 5
-> +Loop_aes_gcm_8x:
-> +	mr	14, 3
-> +	mr	9, 4
-> +
-> +	#
-> +	# check partial block
-> +	#
-> +Continue_partial_check:
-> +	ld	15, 56(7)
-> +	cmpdi	15, 0
-> +	beq	Continue
-> +	bgt	Final_block
-> +	cmpdi	15, 16
-> +	blt	Final_block
-> +
-> +Continue:
-> +	# n blcoks
-> +	li	10, 128
-> +	divdu	10, 12, 10	# n 128 bytes-blocks
-> +	cmpdi	10, 0
-> +	beq	Loop_last_block
-> +
-> +	vaddudm	30, 30, 31	# IV + counter
-> +	vxor	16, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	17, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	18, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	19, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	20, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	21, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	22, 30, 29
-> +
-> +	mtctr	10
-> +
-> +	li	15, 16
-> +	li	16, 32
-> +	li	17, 48
-> +	li	18, 64
-> +	li	19, 80
-> +	li	20, 96
-> +	li	21, 112
-> +
-> +	lwz	10, 240(6)
-> +
-> +Loop_8x_block:
-> +
-> +	lxvb16x		15, 0, 14	# load block
-> +	lxvb16x		16, 15, 14	# load block
-> +	lxvb16x		17, 16, 14	# load block
-> +	lxvb16x		18, 17, 14	# load block
-> +	lxvb16x		19, 18, 14	# load block
-> +	lxvb16x		20, 19, 14	# load block
-> +	lxvb16x		21, 20, 14	# load block
-> +	lxvb16x		22, 21, 14	# load block
-> +	addi		14, 14, 128
-> +
-> +	Loop_aes_middle8x
-> +
-> +	xxlor	23+32, 10, 10
-> +
-> +	cmpdi	10, 10
-> +	beq	Do_next_ghash
-> +
-> +	# 192 bits
-> +	xxlor	24+32, 11, 11
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	16, 16, 23
-> +	vcipher	17, 17, 23
-> +	vcipher	18, 18, 23
-> +	vcipher	19, 19, 23
-> +	vcipher	20, 20, 23
-> +	vcipher	21, 21, 23
-> +	vcipher	22, 22, 23
-> +
-> +	vcipher	15, 15, 24
-> +	vcipher	16, 16, 24
-> +	vcipher	17, 17, 24
-> +	vcipher	18, 18, 24
-> +	vcipher	19, 19, 24
-> +	vcipher	20, 20, 24
-> +	vcipher	21, 21, 24
-> +	vcipher	22, 22, 24
-> +
-> +	xxlor	23+32, 12, 12
-> +
-> +	cmpdi	10, 12
-> +	beq	Do_next_ghash
-> +
-> +	# 256 bits
-> +	xxlor	24+32, 13, 13
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	16, 16, 23
-> +	vcipher	17, 17, 23
-> +	vcipher	18, 18, 23
-> +	vcipher	19, 19, 23
-> +	vcipher	20, 20, 23
-> +	vcipher	21, 21, 23
-> +	vcipher	22, 22, 23
-> +
-> +	vcipher	15, 15, 24
-> +	vcipher	16, 16, 24
-> +	vcipher	17, 17, 24
-> +	vcipher	18, 18, 24
-> +	vcipher	19, 19, 24
-> +	vcipher	20, 20, 24
-> +	vcipher	21, 21, 24
-> +	vcipher	22, 22, 24
-> +
-> +	xxlor	23+32, 14, 14
-> +
-> +	cmpdi	10, 14
-> +	beq	Do_next_ghash
-> +	b	aes_gcm_out
-> +
-> +Do_next_ghash:
-> +
-> +	#
-> +	# last round
-> +	vcipherlast     15, 15, 23
-> +	vcipherlast     16, 16, 23
-> +
-> +	xxlxor		47, 47, 15
-> +	stxvb16x        47, 0, 9	# store output
-> +	xxlxor		48, 48, 16
-> +	stxvb16x        48, 15, 9	# store output
-> +
-> +	vcipherlast     17, 17, 23
-> +	vcipherlast     18, 18, 23
-> +
-> +	xxlxor		49, 49, 17
-> +	stxvb16x        49, 16, 9	# store output
-> +	xxlxor		50, 50, 18
-> +	stxvb16x        50, 17, 9	# store output
-> +
-> +	vcipherlast     19, 19, 23
-> +	vcipherlast     20, 20, 23
-> +
-> +	xxlxor		51, 51, 19
-> +	stxvb16x        51, 18, 9	# store output
-> +	xxlxor		52, 52, 20
-> +	stxvb16x        52, 19, 9	# store output
-> +
-> +	vcipherlast     21, 21, 23
-> +	vcipherlast     22, 22, 23
-> +
-> +	xxlxor		53, 53, 21
-> +	stxvb16x        53, 20, 9	# store output
-> +	xxlxor		54, 54, 22
-> +	stxvb16x        54, 21, 9	# store output
-> +
-> +	addi		9, 9, 128
-> +
-> +	# ghash here
-> +	ppc_aes_gcm_ghash2_4x
-> +
-> +	xxlor	27+32, 0, 0
-> +	vaddudm 30, 30, 31		# IV + counter
-> +	vmr	29, 30
-> +	vxor    15, 30, 27		# add round key
-> +	vaddudm 30, 30, 31
-> +	vxor    16, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    17, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    18, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    19, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    20, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    21, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    22, 30, 27
-> +
-> +	addi    12, 12, -128
-> +	addi    11, 11, 128
-> +
-> +	bdnz	Loop_8x_block
-> +
-> +	vmr	30, 29
-> +	stxvb16x 30+32, 0, 7		# update IV
-> +
-> +Loop_last_block:
-> +	cmpdi   12, 0
-> +	beq     aes_gcm_out
-> +
-> +	# loop last few blocks
-> +	li      10, 16
-> +	divdu   10, 12, 10
-> +
-> +	mtctr   10
-> +
-> +	lwz	10, 240(6)
-> +
-> +	cmpdi   12, 16
-> +	blt     Final_block
-> +
-> +Next_rem_block:
-> +	lxvb16x 15, 0, 14		# load block
-> +
-> +	Loop_aes_middle_1x
-> +
-> +	xxlor	23+32, 10, 10
-> +
-> +	cmpdi	10, 10
-> +	beq	Do_next_1x
-> +
-> +	# 192 bits
-> +	xxlor	24+32, 11, 11
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	15, 15, 24
-> +
-> +	xxlor	23+32, 12, 12
-> +
-> +	cmpdi	10, 12
-> +	beq	Do_next_1x
-> +
-> +	# 256 bits
-> +	xxlor	24+32, 13, 13
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	15, 15, 24
-> +
-> +	xxlor	23+32, 14, 14
-> +
-> +	cmpdi	10, 14
-> +	beq	Do_next_1x
-> +
-> +Do_next_1x:
-> +	vcipherlast     15, 15, 23
-> +
-> +	xxlxor		47, 47, 15
-> +	stxvb16x	47, 0, 9	# store output
-> +	addi		14, 14, 16
-> +	addi		9, 9, 16
-> +
-> +	vmr		28, 15
-> +	ppc_update_hash_1x
-> +
-> +	addi		12, 12, -16
-> +	addi		11, 11, 16
-> +	xxlor		19+32, 0, 0
-> +	vaddudm		30, 30, 31		# IV + counter
-> +	vxor		15, 30, 19		# add round key
-> +
-> +	bdnz	Next_rem_block
-> +
-> +	li	15, 0
-> +	std	15, 56(7)		# clear partial?
-> +	stxvb16x 30+32, 0, 7		# update IV
-> +	cmpdi	12, 0
-> +	beq	aes_gcm_out
-> +
-> +Final_block:
-> +	lwz	10, 240(6)
-> +	Loop_aes_middle_1x
-> +
-> +	xxlor	23+32, 10, 10
-> +
-> +	cmpdi	10, 10
-> +	beq	Do_final_1x
-> +
-> +	# 192 bits
-> +	xxlor	24+32, 11, 11
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	15, 15, 24
-> +
-> +	xxlor	23+32, 12, 12
-> +
-> +	cmpdi	10, 12
-> +	beq	Do_final_1x
-> +
-> +	# 256 bits
-> +	xxlor	24+32, 13, 13
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	15, 15, 24
-> +
-> +	xxlor	23+32, 14, 14
-> +
-> +	cmpdi	10, 14
-> +	beq	Do_final_1x
-> +
-> +Do_final_1x:
-> +	vcipherlast     15, 15, 23
-> +
-> +	# check partial block
-> +	li	21, 0			# encrypt
-> +	ld	15, 56(7)		# partial?
-> +	cmpdi	15, 0
-> +	beq	Normal_block
-> +	bl	Do_partial_block
-> +
-> +	cmpdi	12, 0
-> +	ble aes_gcm_out
-> +
-> +	b Continue_partial_check
-> +
-> +Normal_block:
-> +	lxvb16x	15, 0, 14		# load last block
-> +	xxlxor	47, 47, 15
-> +
-> +	# create partial block mask
-> +	li	15, 16
-> +	sub	15, 15, 12		# index to the mask
-> +
-> +	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
-> +	vspltisb	17, 0		# second 16 bytes - 0x0000...00
-> +	li	10, 192
-> +	stvx	16, 10, 1
-> +	addi	10, 10, 16
-> +	stvx	17, 10, 1
-> +
-> +	addi	10, 1, 192
-> +	lxvb16x	16, 15, 10		# load partial block mask
-> +	xxland	47, 47, 16
-> +
-> +	vmr	28, 15
-> +	ppc_update_hash_1x
-> +
-> +	# * should store only the remaining bytes.
-> +	bl	Write_partial_block
-> +
-> +	stxvb16x 30+32, 0, 7		# update IV
-> +	std	12, 56(7)		# update partial?
-> +	li	16, 16
-> +
-> +	stxvb16x	32, 0, 8		# write out Xi
-> +	stxvb16x	32, 16, 8		# write out Xi
-> +	b aes_gcm_out
-> +
-> + #
-> + # Compute data mask
-> + #
-> +.macro GEN_MASK _mask _start _end
-> +	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
-> +	vspltisb	17, 0		# second 16 bytes - 0x0000...00
-> +	li	10, 192
-> +	stxvb16x	17+32, 10, 1
-> +	add	10, 10, \_start
-> +	stxvb16x	16+32, 10, 1
-> +	add	10, 10, \_end
-> +	stxvb16x	17+32, 10, 1
-> +
-> +	addi	10, 1, 192
-> +	lxvb16x	\_mask, 0, 10		# load partial block mask
-> +.endm
-> +
-> + #
-> + # Handle multiple partial blocks for encrypt and decrypt
-> + #   operations.
-> + #
-> +Do_partial_block:
-> +	add	17, 15, 5
-> +	cmpdi	17, 16
-> +	bgt	Big_block
-> +	GEN_MASK 18, 15, 5
-> +	b	_Partial
-> +Big_block:
-> +	li	16, 16
-> +	GEN_MASK 18, 15, 16
-> +
-> +_Partial:
-> +	lxvb16x	17+32, 0, 14		# load last block
-> +	sldi	16, 15, 3
-> +	mtvsrdd	32+16, 0, 16
-> +	vsro	17, 17, 16
-> +	xxlxor	47, 47, 17+32
-> +	xxland	47, 47, 18
-> +
-> +	vxor	0, 0, 0			# clear Xi
-> +	vmr	28, 15
-> +
-> +	cmpdi	21, 0			# encrypt/decrypt ops?
-> +	beq	Skip_decrypt
-> +	xxland	32+28, 32+17, 18
-> +
-> +Skip_decrypt:
-> +
-> +	ppc_update_hash_1x
-> +
-> +	li	16, 16
-> +	lxvb16x 32+29, 16, 8
-> +	vxor	0, 0, 29
-> +	stxvb16x 32, 0, 8		# save Xi
-> +	stxvb16x 32, 16, 8		# save Xi
-> +
-> +	# store partial block
-> +	# loop the rest of the stream if any
-> +	sldi	16, 15, 3
-> +	mtvsrdd	32+16, 0, 16
-> +	vslo	15, 15, 16
-> +	#stxvb16x 15+32, 0, 9		# last block
-> +
-> +	li	16, 16
-> +	sub	17, 16, 15		# 16 - partial
-> +
-> +	add	16, 15, 5
-> +	cmpdi	16, 16
-> +	bgt	Larger_16
-> +	mr	17, 5
-> +Larger_16:
-> +
-> +	# write partial
-> +	li		10, 192
-> +	stxvb16x	15+32, 10, 1	# save current block
-> +
-> +	addi		10, 9, -1
-> +	addi		16, 1, 191
-> +	mtctr		17		# move partial byte count
-> +
-> +Write_last_partial:
-> +        lbzu		18, 1(16)
-> +	stbu		18, 1(10)
-> +        bdnz		Write_last_partial
-> +	# Complete loop partial
-> +
-> +	add	14, 14, 17
-> +	add	9, 9, 17
-> +	sub	12, 12, 17
-> +	add	11, 11, 17
-> +
-> +	add	15, 15, 5
-> +	cmpdi	15, 16
-> +	blt	Save_partial
-> +
-> +	vaddudm	30, 30, 31
-> +	stxvb16x 30+32, 0, 7		# update IV
-> +	xxlor	32+29, 0, 0
-> +	vxor	15, 30, 29		# IV + round key - add round key 0
-> +	li	15, 0
-> +	std	15, 56(7)		# partial done - clear
-> +	b	Partial_done
-> +Save_partial:
-> +	std	15, 56(7)		# partial
-> +
-> +Partial_done:
-> +	blr
-> +
-> + #
-> + # Write partial block
-> + # r9 - output
-> + # r12 - remaining bytes
-> + # v15 - partial input data
-> + #
-> +Write_partial_block:
-> +	li		10, 192
-> +	stxvb16x	15+32, 10, 1		# last block
-> +
-> +	addi		10, 9, -1
-> +	addi		16, 1, 191
-> +
-> +        mtctr		12			# remaining bytes
-> +	li		15, 0
-> +
-> +Write_last_byte:
-> +        lbzu		14, 1(16)
-> +	stbu		14, 1(10)
-> +        bdnz		Write_last_byte
-> +	blr
-> +
-> +aes_gcm_out:
-> +	# out = state
-> +	stxvb16x	32, 0, 8		# write out Xi
-> +	add	3, 11, 12		# return count
-> +
-> +	RESTORE_REGS
-> +	blr
-> +
-> + #
-> + # 8x Decrypt
-> + #
-> +.global aes_p10_gcm_decrypt
-> +.align 5
-> +aes_p10_gcm_decrypt:
-> +
-> +	SAVE_REGS
-> +
-> +	LOAD_HASH_TABLE
-> +
-> +	# initialize ICB: GHASH( IV ), IV - r7
-> +	lxvb16x	30+32, 0, 7	# load IV  - v30
-> +
-> +	mr	12, 5		# length
-> +	li	11, 0		# block index
-> +
-> +	# counter 1
-> +	vxor	31, 31, 31
-> +	vspltisb 22, 1
-> +	vsldoi	31, 31, 22,1	# counter 1
-> +
-> +	# load round key to VSR
-> +	lxv	0, 0(6)
-> +	lxv	1, 0x10(6)
-> +	lxv	2, 0x20(6)
-> +	lxv	3, 0x30(6)
-> +	lxv	4, 0x40(6)
-> +	lxv	5, 0x50(6)
-> +	lxv	6, 0x60(6)
-> +	lxv	7, 0x70(6)
-> +	lxv	8, 0x80(6)
-> +	lxv	9, 0x90(6)
-> +	lxv	10, 0xa0(6)
-> +
-> +	# load rounds - 10 (128), 12 (192), 14 (256)
-> +	lwz	9,240(6)
-> +
-> +	#
-> +	# vxor	state, state, w # addroundkey
-> +	xxlor	32+29, 0, 0
-> +	vxor	15, 30, 29	# IV + round key - add round key 0
-> +
-> +	cmpdi	9, 10
-> +	beq	Loop_aes_gcm_8x_dec
-> +
-> +	# load 2 more round keys (v11, v12)
-> +	lxv	11, 0xb0(6)
-> +	lxv	12, 0xc0(6)
-> +
-> +	cmpdi	9, 12
-> +	beq	Loop_aes_gcm_8x_dec
-> +
-> +	# load 2 more round keys (v11, v12, v13, v14)
-> +	lxv	13, 0xd0(6)
-> +	lxv	14, 0xe0(6)
-> +	cmpdi	9, 14
-> +	beq	Loop_aes_gcm_8x_dec
-> +
-> +	b	aes_gcm_out
-> +
-> +.align 5
-> +Loop_aes_gcm_8x_dec:
-> +	mr	14, 3
-> +	mr	9, 4
-> +
-> +	#
-> +	# check partial block
-> +	#
-> +Continue_partial_check_dec:
-> +	ld	15, 56(7)
-> +	cmpdi	15, 0
-> +	beq	Continue_dec
-> +	bgt	Final_block_dec
-> +	cmpdi	15, 16
-> +	blt	Final_block_dec
-> +
-> +Continue_dec:
-> +	# n blcoks
-> +	li	10, 128
-> +	divdu	10, 12, 10	# n 128 bytes-blocks
-> +	cmpdi	10, 0
-> +	beq	Loop_last_block_dec
-> +
-> +	vaddudm	30, 30, 31	# IV + counter
-> +	vxor	16, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	17, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	18, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	19, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	20, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	21, 30, 29
-> +	vaddudm	30, 30, 31
-> +	vxor	22, 30, 29
-> +
-> +	mtctr	10
-> +
-> +	li	15, 16
-> +	li	16, 32
-> +	li	17, 48
-> +	li	18, 64
-> +	li	19, 80
-> +	li	20, 96
-> +	li	21, 112
-> +
-> +	lwz	10, 240(6)
-> +
-> +Loop_8x_block_dec:
-> +
-> +	lxvb16x		15, 0, 14	# load block
-> +	lxvb16x		16, 15, 14	# load block
-> +	lxvb16x		17, 16, 14	# load block
-> +	lxvb16x		18, 17, 14	# load block
-> +	lxvb16x		19, 18, 14	# load block
-> +	lxvb16x		20, 19, 14	# load block
-> +	lxvb16x		21, 20, 14	# load block
-> +	lxvb16x		22, 21, 14	# load block
-> +	addi		14, 14, 128
-> +
-> +	Loop_aes_middle8x
-> +
-> +	xxlor	23+32, 10, 10
-> +
-> +	cmpdi	10, 10
-> +	beq	Do_next_ghash_dec
-> +
-> +	# 192 bits
-> +	xxlor	24+32, 11, 11
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	16, 16, 23
-> +	vcipher	17, 17, 23
-> +	vcipher	18, 18, 23
-> +	vcipher	19, 19, 23
-> +	vcipher	20, 20, 23
-> +	vcipher	21, 21, 23
-> +	vcipher	22, 22, 23
-> +
-> +	vcipher	15, 15, 24
-> +	vcipher	16, 16, 24
-> +	vcipher	17, 17, 24
-> +	vcipher	18, 18, 24
-> +	vcipher	19, 19, 24
-> +	vcipher	20, 20, 24
-> +	vcipher	21, 21, 24
-> +	vcipher	22, 22, 24
-> +
-> +	xxlor	23+32, 12, 12
-> +
-> +	cmpdi	10, 12
-> +	beq	Do_next_ghash_dec
-> +
-> +	# 256 bits
-> +	xxlor	24+32, 13, 13
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	16, 16, 23
-> +	vcipher	17, 17, 23
-> +	vcipher	18, 18, 23
-> +	vcipher	19, 19, 23
-> +	vcipher	20, 20, 23
-> +	vcipher	21, 21, 23
-> +	vcipher	22, 22, 23
-> +
-> +	vcipher	15, 15, 24
-> +	vcipher	16, 16, 24
-> +	vcipher	17, 17, 24
-> +	vcipher	18, 18, 24
-> +	vcipher	19, 19, 24
-> +	vcipher	20, 20, 24
-> +	vcipher	21, 21, 24
-> +	vcipher	22, 22, 24
-> +
-> +	xxlor	23+32, 14, 14
-> +
-> +	cmpdi	10, 14
-> +	beq	Do_next_ghash_dec
-> +	b	aes_gcm_out
-> +
-> +Do_next_ghash_dec:
-> +
-> +	#
-> +	# last round
-> +	vcipherlast     15, 15, 23
-> +	vcipherlast     16, 16, 23
-> +
-> +	xxlxor		47, 47, 15
-> +	stxvb16x        47, 0, 9	# store output
-> +	xxlxor		48, 48, 16
-> +	stxvb16x        48, 15, 9	# store output
-> +
-> +	vcipherlast     17, 17, 23
-> +	vcipherlast     18, 18, 23
-> +
-> +	xxlxor		49, 49, 17
-> +	stxvb16x        49, 16, 9	# store output
-> +	xxlxor		50, 50, 18
-> +	stxvb16x        50, 17, 9	# store output
-> +
-> +	vcipherlast     19, 19, 23
-> +	vcipherlast     20, 20, 23
-> +
-> +	xxlxor		51, 51, 19
-> +	stxvb16x        51, 18, 9	# store output
-> +	xxlxor		52, 52, 20
-> +	stxvb16x        52, 19, 9	# store output
-> +
-> +	vcipherlast     21, 21, 23
-> +	vcipherlast     22, 22, 23
-> +
-> +	xxlxor		53, 53, 21
-> +	stxvb16x        53, 20, 9	# store output
-> +	xxlxor		54, 54, 22
-> +	stxvb16x        54, 21, 9	# store output
-> +
-> +	addi		9, 9, 128
-> +
-> +	xxlor           15+32, 15, 15
-> +	xxlor           16+32, 16, 16
-> +	xxlor           17+32, 17, 17
-> +	xxlor           18+32, 18, 18
-> +	xxlor           19+32, 19, 19
-> +	xxlor           20+32, 20, 20
-> +	xxlor           21+32, 21, 21
-> +	xxlor           22+32, 22, 22
-> +
-> +	# ghash here
-> +	ppc_aes_gcm_ghash2_4x
-> +
-> +	xxlor	27+32, 0, 0
-> +	vaddudm 30, 30, 31		# IV + counter
-> +	vmr	29, 30
-> +	vxor    15, 30, 27		# add round key
-> +	vaddudm 30, 30, 31
-> +	vxor    16, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    17, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    18, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    19, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    20, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    21, 30, 27
-> +	vaddudm 30, 30, 31
-> +	vxor    22, 30, 27
-> +
-> +	addi    12, 12, -128
-> +	addi    11, 11, 128
-> +
-> +	bdnz	Loop_8x_block_dec
-> +
-> +	vmr	30, 29
-> +	stxvb16x 30+32, 0, 7		# update IV
-> +
-> +Loop_last_block_dec:
-> +	cmpdi   12, 0
-> +	beq     aes_gcm_out
-> +
-> +	# loop last few blocks
-> +	li      10, 16
-> +	divdu   10, 12, 10
-> +
-> +	mtctr   10
-> +
-> +	lwz	10, 240(6)
-> +
-> +	cmpdi   12, 16
-> +	blt     Final_block_dec
-> +
-> +Next_rem_block_dec:
-> +	lxvb16x 15, 0, 14		# load block
-> +
-> +	Loop_aes_middle_1x
-> +
-> +	xxlor	23+32, 10, 10
-> +
-> +	cmpdi	10, 10
-> +	beq	Do_next_1x_dec
-> +
-> +	# 192 bits
-> +	xxlor	24+32, 11, 11
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	15, 15, 24
-> +
-> +	xxlor	23+32, 12, 12
-> +
-> +	cmpdi	10, 12
-> +	beq	Do_next_1x_dec
-> +
-> +	# 256 bits
-> +	xxlor	24+32, 13, 13
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	15, 15, 24
-> +
-> +	xxlor	23+32, 14, 14
-> +
-> +	cmpdi	10, 14
-> +	beq	Do_next_1x_dec
-> +
-> +Do_next_1x_dec:
-> +	vcipherlast     15, 15, 23
-> +
-> +	xxlxor		47, 47, 15
-> +	stxvb16x	47, 0, 9	# store output
-> +	addi		14, 14, 16
-> +	addi		9, 9, 16
-> +
-> +	xxlor           28+32, 15, 15
-> +	#vmr		28, 15
-> +	ppc_update_hash_1x
-> +
-> +	addi		12, 12, -16
-> +	addi		11, 11, 16
-> +	xxlor		19+32, 0, 0
-> +	vaddudm		30, 30, 31		# IV + counter
-> +	vxor		15, 30, 19		# add round key
-> +
-> +	bdnz	Next_rem_block_dec
-> +
-> +	li	15, 0
-> +	std	15, 56(7)		# clear partial?
-> +	stxvb16x 30+32, 0, 7		# update IV
-> +	cmpdi	12, 0
-> +	beq	aes_gcm_out
-> +
-> +Final_block_dec:
-> +	lwz	10, 240(6)
-> +	Loop_aes_middle_1x
-> +
-> +	xxlor	23+32, 10, 10
-> +
-> +	cmpdi	10, 10
-> +	beq	Do_final_1x_dec
-> +
-> +	# 192 bits
-> +	xxlor	24+32, 11, 11
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	15, 15, 24
-> +
-> +	xxlor	23+32, 12, 12
-> +
-> +	cmpdi	10, 12
-> +	beq	Do_final_1x_dec
-> +
-> +	# 256 bits
-> +	xxlor	24+32, 13, 13
-> +
-> +	vcipher	15, 15, 23
-> +	vcipher	15, 15, 24
-> +
-> +	xxlor	23+32, 14, 14
-> +
-> +	cmpdi	10, 14
-> +	beq	Do_final_1x_dec
-> +
-> +Do_final_1x_dec:
-> +	vcipherlast     15, 15, 23
-> +
-> +	# check partial block
-> +	li	21, 1			# decrypt
-> +	ld	15, 56(7)		# partial?
-> +	cmpdi	15, 0
-> +	beq	Normal_block_dec
-> +	bl	Do_partial_block
-> +	cmpdi	12, 0
-> +	ble aes_gcm_out
-> +
-> +	b Continue_partial_check_dec
-> +
-> +Normal_block_dec:
-> +	lxvb16x	15, 0, 14		# load last block
-> +	xxlxor	47, 47, 15
-> +
-> +	# create partial block mask
-> +	li	15, 16
-> +	sub	15, 15, 12		# index to the mask
-> +
-> +	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
-> +	vspltisb	17, 0		# second 16 bytes - 0x0000...00
-> +	li	10, 192
-> +	stvx	16, 10, 1
-> +	addi	10, 10, 16
-> +	stvx	17, 10, 1
-> +
-> +	addi	10, 1, 192
-> +	lxvb16x	16, 15, 10		# load partial block mask
-> +	xxland	47, 47, 16
-> +
-> +	xxland	32+28, 15, 16
-> +	#vmr	28, 15
-> +	ppc_update_hash_1x
-> +
-> +	# * should store only the remaining bytes.
-> +	bl	Write_partial_block
-> +
-> +	stxvb16x 30+32, 0, 7		# update IV
-> +	std	12, 56(7)		# update partial?
-> +	li	16, 16
-> +
-> +	stxvb16x	32, 0, 8		# write out Xi
-> +	stxvb16x	32, 16, 8		# write out Xi
-> +	b aes_gcm_out
+>=20
+> > >=20
+> > > Also I add log (by netconsole) from 5.15 kernel
+> > >=20
+> > > [   60.031680] ------------[ cut here ]------------
+> > > [   60.031709] i915 0000:00:02.0: drm_WARN_ON(!intel_irqs_enabled(dev=
+_priv))
+> > > [   60.031766] WARNING: CPU: 1 PID: 1964 at drivers/gpu/drm/i915/i915=
+_irq.c:527 i915_enable_pipestat+0x1b9/0x230 [i915]
+> > > [   60.032016] Modules linked in: snd_soc_sst_cht_bsw_rt5672 snd_hdmi=
+_lpe_audio mei_hdcp intel_rapl_msr intel_powerclamp coretemp kvm_intel kvm =
+punit_atom_debug crct10dif_pclmul ghash_clmulni_intel joydev input_leds aes=
+ni_intel crypto_simd cryptd snd_sof_acpi_intel_byt intel_cstate snd_sof_int=
+el_ipc snd_sof_acpi snd_sof_intel_atom dell_wmi snd_sof_xtensa_dsp snd_sof =
+dell_smbios ledtrig_audio dcdbas snd_intel_sst_acpi nls_iso8859_1 snd_soc_a=
+cpi_intel_match sparse_keymap snd_soc_acpi i915 efi_pstore snd_intel_sst_co=
+re wmi_bmof dell_wmi_descriptor snd_soc_sst_atom_hifi2_platform snd_soc_rt5=
+670 snd_intel_dspcfg intel_chtdc_ti_pwrbtn snd_soc_rl6231 snd_intel_sdw_acp=
+i ttm drm_kms_helper snd_soc_core cec snd_compress ac97_bus rc_core process=
+or_thermal_device_pci_legacy snd_pcm_dmaengine i2c_algo_bit processor_therm=
+al_device fb_sys_fops processor_thermal_rfim snd_pcm snd_seq_midi syscopyar=
+ea processor_thermal_mbox sysfillrect processor_thermal_rapl intel_rapl_com=
+mon mei_txe intel_soc_dts_iosf
+> > > [   60.032231]  snd_seq_midi_event mei intel_xhci_usb_role_switch sys=
+imgblt snd_rawmidi snd_seq snd_seq_device snd_timer snd soundcore 8250_dw i=
+nt3406_thermal mac_hid int3403_thermal int340x_thermal_zone int3400_thermal=
+ acpi_pad intel_int0002_vgpio acpi_thermal_rel sch_fq_codel ipmi_devintf ip=
+mi_msghandler msr parport_pc ppdev lp parport drm ip_tables x_tables autofs=
+4 overlay hid_logitech_hidpp hid_logitech_dj hid_generic usbhid hid netcons=
+ole mmc_block crc32_pclmul r8169 realtek lpc_ich sdhci_pci xhci_pci cqhci x=
+hci_pci_renesas dw_dmac wmi sdhci_acpi video dw_dmac_core intel_soc_pmic_ch=
+tdc_ti sdhci
+> > > [   60.032427] CPU: 1 PID: 1964 Comm: plymouthd Not tainted 5.15.0-57=
+-generic #63~20.04.1-Ubuntu
+> > > [   60.032440] Hardware name: Dell Inc. Wyse 3040 Thin Client/0G56C0,=
+ BIOS 1.2.4 01/18/2018
+> > > [   60.032450] RIP: 0010:i915_enable_pipestat+0x1b9/0x230 [i915]
+> > > [   60.032669] Code: 89 55 cc 44 89 5d d0 44 89 4d d4 e8 c1 15 ae d8 =
+48 8b 55 c0 48 c7 c1 a8 72 b5 c0 48 c7 c7 54 b5 b8 c0 48 89 c6 e8 0e 21 f5 =
+d8 <0f> 0b 44 8b 55 cc 44 8b 5d d0 44 8b 4d d4 e9 9d fe ff ff 4c 89 f6
+> > > [   60.032682] RSP: 0018:ffffaaa50070b878 EFLAGS: 00010086
+> > > [   60.032694] RAX: 0000000000000000 RBX: ffff980ec8080000 RCX: fffff=
+fff9ab7a748
+> > > [   60.032703] RDX: 00000000ffffdfff RSI: ffffaaa50070b6b8 RDI: 00000=
+00000000001
+> > > [   60.032713] RBP: ffffaaa50070b8c0 R08: 0000000000000003 R09: 00000=
+00000000001
+> > > [   60.032721] R10: ffffffff9b21f3b6 R11: 000000009b21f38a R12: 00000=
+00000000004
+> > > [   60.032730] R13: 0000000000000000 R14: 0000000000000000 R15: ffff9=
+80ec8080000
+> > > [   60.032740] FS:  00007f0967eec740(0000) GS:ffff980f34280000(0000) =
+knlGS:0000000000000000
+> > > [   60.032752] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > [   60.032762] CR2: 00007f7f5f21eaa4 CR3: 000000000a34a000 CR4: 00000=
+000001006e0
+> > > [   60.032772] Call Trace:
+> > > [   60.032781]  <TASK>
+> > > [   60.032793]  ? drm_crtc_vblank_helper_get_vblank_timestamp_interna=
+l+0xe0/0x370 [drm]
+> > > [   60.032899]  i965_enable_vblank+0x3d/0x60 [i915]
+> > > [   60.033139]  drm_vblank_enable+0xfd/0x1a0 [drm]
+> > > [   60.033240]  drm_vblank_get+0xaf/0x100 [drm]
+> > > [   60.033335]  drm_crtc_vblank_get+0x17/0x20 [drm]
+> > > [   60.033426]  intel_pipe_update_start+0x128/0x2f0 [i915]
+> > > [   60.033689]  ? wait_woken+0x60/0x60
+> > > [   60.033710]  intel_update_crtc+0xd2/0x420 [i915]
+> > > [   60.033969]  intel_commit_modeset_enables+0x74/0xa0 [i915]
+> > > [   60.034228]  intel_atomic_commit_tail+0x587/0x14e0 [i915]
+> > > [   60.034488]  intel_atomic_commit+0x3a6/0x410 [i915]
+> > > [   60.034746]  drm_atomic_commit+0x4a/0x60 [drm]
+> > > [   60.034849]  drm_atomic_helper_set_config+0x80/0xc0 [drm_kms_helpe=
+r]
+> > > [   60.034921]  drm_mode_setcrtc+0x1ff/0x7d0 [drm]
+> > > [   60.035011]  ? drm_mode_getcrtc+0x1e0/0x1e0 [drm]
+> > > [   60.035098]  drm_ioctl_kernel+0xb2/0x100 [drm]
+> > > [   60.035182]  drm_ioctl+0x275/0x4a0 [drm]
+> > > [   60.035265]  ? drm_mode_getcrtc+0x1e0/0x1e0 [drm]
+> > > [   60.035354]  __x64_sys_ioctl+0x95/0xd0
+> > > [   60.035372]  do_syscall_64+0x5c/0xc0
+> > > [   60.035388]  ? exit_to_user_mode_prepare+0x3d/0x1c0
+> > > [   60.035404]  ? syscall_exit_to_user_mode+0x27/0x50
+> > > [   60.035418]  ? do_syscall_64+0x69/0xc0
+> > > [   60.035431]  ? syscall_exit_to_user_mode+0x27/0x50
+> > > [   60.035445]  ? do_syscall_64+0x69/0xc0
+> > > [   60.035459]  ? syscall_exit_to_user_mode+0x27/0x50
+> > > [   60.035474]  ? do_syscall_64+0x69/0xc0
+> > > [   60.035487]  ? do_syscall_64+0x69/0xc0
+> > > [   60.035501]  ? do_syscall_64+0x69/0xc0
+> > > [   60.035514]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
+> > > [   60.035528] RIP: 0033:0x7f09681aa3ab
+> > > [   60.035542] Code: 0f 1e fa 48 8b 05 e5 7a 0d 00 64 c7 00 26 00 00 =
+00 48 c7 c0 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa b8 10 00 00 00 0f =
+05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b5 7a 0d 00 f7 d8 64 89 01 48
+> > > [   60.035554] RSP: 002b:00007fff40931638 EFLAGS: 00000246 ORIG_RAX: =
+0000000000000010
+> > > [   60.035567] RAX: ffffffffffffffda RBX: 00007fff40931670 RCX: 00007=
+f09681aa3ab
+> > > [   60.035576] RDX: 00007fff40931670 RSI: 00000000c06864a2 RDI: 00000=
+00000000009
+> > > [   60.035584] RBP: 00000000c06864a2 R08: 0000000000000000 R09: 00005=
+560dd410090
+> > > [   60.035592] R10: 0000000000000000 R11: 0000000000000246 R12: 00000=
+0000000007f
+> > > [   60.035601] R13: 0000000000000009 R14: 00005560dd40ffe0 R15: 00005=
+560dd410020
+> > > [   60.035613]  </TASK>
+> > > [   60.035622] ---[ end trace a700e85625cc752d ]---
+>=20
