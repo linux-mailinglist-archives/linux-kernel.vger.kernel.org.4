@@ -2,141 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CEB65C57E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA73365C585
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238283AbjACR5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S238299AbjACR5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:57:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233441AbjACR4s (ORCPT
+        with ESMTP id S238285AbjACR5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:56:48 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B296D1147B;
-        Tue,  3 Jan 2023 09:56:46 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id j16so12413924edw.11;
-        Tue, 03 Jan 2023 09:56:46 -0800 (PST)
+        Tue, 3 Jan 2023 12:57:11 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C451057B
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:57:08 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id c7so25111418qtw.8
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 09:57:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p7a1U2/c7WJv3NEBfJYAOixnmGcKLo0CuycVU47++aQ=;
-        b=aKwytJh4KX20LXxOryZJE0HuJG5HcaCeIxX3tFX5yZz0gEhN3vG/Ugzp3jfNHHAfFZ
-         zpCCt+btieU/rdBGPWbe3sejqYvYS8FTg2R49yHZy6jaIbMe+hPE/DtWRavxYZwoIN0T
-         QVzbnO8+eVVo9l/ID7dtlfG3fmFswrJrboaiZ3nNEzQHN+QM9WO5pCpA1f5g1joQhIXW
-         l72WenGT/6K3hPFCxw3kIKLiLCVK3azdhhESTO51lnjK++sWuiMrmBZf4WNy7jNIp7fY
-         YzJXiRkbxN0lvgynjSnG5SWR5+Uu2VYbKX6KvdPUI1pO/IiTONJIZdImNLn22/Eq/9AP
-         aWWw==
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ixGyFkrV0xqrkiJ3p7VqvfkszCi48OTsH11wl3xFQLU=;
+        b=sRUosVhssD0en5joF9vLLUpX8V0Mn5UlDYOilUJ2tyvRYgMexyinwnRJCc3npDcj9I
+         geM1NnHZAfGfSpvgKWqCzimVnD6QWlnqEenqostnemsBY4KDrX8lFXhtceyrzwT9moVs
+         Jc1VYidMjKKFAdRJEyu7HFp5pWDwhhcubFJ1g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p7a1U2/c7WJv3NEBfJYAOixnmGcKLo0CuycVU47++aQ=;
-        b=Zq76Uzozq1s77vV07YW7Y6sN1jgMdeNPclu8K9ZPyDaI6RN7Hu/W869l+xUXUZ5S1+
-         1e9wimXnwxgFkkhynGFpCQXTL9w2+AbYH1j0Yhon5+3mZXBxEJXWTpR9j2wLVGt2KWko
-         gfvRSJLidEROVAIT5tzbsso/vl7s9iFCoCEfkYmqqPsuScYu89MTE25rQEMTBu33jUpN
-         +uP3rfTPFDwzfPzVLAOW6Jn2PJikXfHXmqnt+Xjeu5NDohYaOt5LF0v/pdUGDdjrh656
-         58GUpM4lQvHfDh9BBI4ZoPf914I2UPUbg0vBJQBbqPWelgMWy2KBAbGSs0oCBTCwaCFs
-         m7FA==
-X-Gm-Message-State: AFqh2kqvB2H2atkTy4ZwZqpaji8apBvIngX31LcOdnAYdmYGuCnCi3Q9
-        24xneICgEnFaU8xOPHG+57Y=
-X-Google-Smtp-Source: AMrXdXtEtXWdICTqd1aomJDuH7ZCpdFY3T3zFdVGv7z0OI1uDhXO0zYB+HaMBkbXi0VNrPwD5wFXmA==
-X-Received: by 2002:a05:6402:390b:b0:465:f6a9:cb7b with SMTP id fe11-20020a056402390b00b00465f6a9cb7bmr39249116edb.12.1672768605161;
-        Tue, 03 Jan 2023 09:56:45 -0800 (PST)
-Received: from skbuf ([188.26.185.118])
-        by smtp.gmail.com with ESMTPSA id h14-20020aa7c94e000000b0046f77031d40sm13864230edt.10.2023.01.03.09.56.43
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ixGyFkrV0xqrkiJ3p7VqvfkszCi48OTsH11wl3xFQLU=;
+        b=3c1wBVbCqNMvejTbzAfEkCyfAq60HqMju4xnOh4RhLJf45dKzS0tiQwsUBmWaGZHi1
+         /JTbc8XlSOKbb3XTTYBl7bmPJ7k0zb0owcYORNSh6YNFOtrQR+RuEMiMLy4vS3LoafPy
+         ZG+eUDNw/X+FNzDJDBtzafcIzQKsmFcg09zcB7+8RmWsGHZSiJFWvWcbkqfgK9QBV4bI
+         3i/AmfATm/XxLgu36wDSvOKrnk3Zkp7oRN+sN53Uh0ZDaCt015M1GQ6Re1bdeLW2Ys3y
+         bTXnw+tBdOF7VPYPu7fBvYJ1CR3UzuOTh5yvkxh97I7mkWHSts/lZXUQhHYRcC5hQ0rC
+         J63Q==
+X-Gm-Message-State: AFqh2koOaTLKGzZU4HMowhHfKH2K6gj40OI/Xj0E0I6byAD2hhG78PBN
+        KKNVPaRPce2lTrvyrBisFMBpt7EMHgUYKTJR
+X-Google-Smtp-Source: AMrXdXv19UfqJyggz6tYWC0TuSnV2Pq7G45UznkmBJIcBdaSQp4fc0yOJ0tlHOvTs2CpB4BwE5SVhg==
+X-Received: by 2002:ac8:4602:0:b0:3ab:6312:f306 with SMTP id p2-20020ac84602000000b003ab6312f306mr64154599qtn.4.1672768626223;
+        Tue, 03 Jan 2023 09:57:06 -0800 (PST)
+Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id d21-20020ac86695000000b0038b684a1642sm19136842qtp.32.2023.01.03.09.57.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 09:56:44 -0800 (PST)
-Date:   Tue, 3 Jan 2023 19:56:41 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v6 net-next 09/10] dt-bindings: net: add generic
- ethernet-switch-port binding
-Message-ID: <20230103175641.nqvo2gk43s3nanwg@skbuf>
-References: <20230103051401.2265961-1-colin.foster@in-advantage.com>
- <20230103051401.2265961-10-colin.foster@in-advantage.com>
+        Tue, 03 Jan 2023 09:57:05 -0800 (PST)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>, neeraj.iitr10@gmail.com
+Subject: [PATCH v3] srcu: Remove memory barrier "E" as it does not do anything
+Date:   Tue,  3 Jan 2023 17:56:54 +0000
+Message-Id: <20230103175654.1913192-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103051401.2265961-10-colin.foster@in-advantage.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 09:14:00PM -0800, Colin Foster wrote:
-> diff --git a/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
-> new file mode 100644
-> index 000000000000..126bc0c12cb8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
-> @@ -0,0 +1,25 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/ethernet-switch-port.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Generic Ethernet Switch Port
-> +
-> +maintainers:
-> +  - Andrew Lunn <andrew@lunn.ch>
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +  - Vladimir Oltean <olteanv@gmail.com>
-> +
-> +description:
-> +  Ethernet switch port Description
+During a flip, we have a full memory barrier before srcu_idx is incremented.
 
-Still doesn't look too great that the ethernet-switch-port description
-is this thing devoid of meaning. What is said about the dsa-port is what
-the description should be here, and the description of the dsa-port is
-that it's a generic Ethernet switch port plus DSA specific properties.
+The idea is we intend to order the first phase scan's read of lock
+counters with the flipping of the index.
 
-> +
-> +$ref: ethernet-controller.yaml#
-> +
-> +properties:
-> +  reg:
-> +    description: Port number
-> +
-> +additionalProperties: true
+However, such ordering is already enforced because of the
+control-dependency between the 2 scans. We would be flipping the index
+only if lock and unlock counts matched.
 
-Also, I see your patches are deferred in patchwork, and while this isn't
-really for me to say, presumably it's because there was no announcement
-so far that net-next reopened.
+But such match will not happen if there was a pending reader before the flip
+in the first place (observation courtesy Mathieu Desnoyers).
+
+The litmus test below shows this:
+(test courtesy Frederic Weisbecker, Changes for ctrldep by Boqun/me):
+
+C srcu
+(*
+ * bad condition: P0's first scan (SCAN1) saw P1's idx=0 LOCK count inc, though P1 saw flip.
+ *
+ * So basically, the ->po ordering on both P0 and P1 is enforced via ->ppo
+ * (control deps) on both sides, and both P0 and P1 are interconnected by ->rf
+ * relations. Combining the ->ppo with ->rf, a cycle is impossible.
+ *)
+
+{}
+
+// updater
+P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+{
+        int lock1;
+        int unlock1;
+        int lock0;
+        int unlock0;
+
+        // SCAN1
+        unlock1 = READ_ONCE(*UNLOCK1);
+        smp_mb(); // A
+        lock1 = READ_ONCE(*LOCK1);
+
+        // FLIP
+        if (lock1 == unlock1) {   // Control dep
+                smp_mb(); // E    // Remove E and still passes.
+                WRITE_ONCE(*IDX, 1);
+                smp_mb(); // D
+
+                // SCAN2
+                unlock0 = READ_ONCE(*UNLOCK0);
+                smp_mb(); // A
+                lock0 = READ_ONCE(*LOCK0);
+        }
+}
+
+// reader
+P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+{
+        int tmp;
+        int idx1;
+        int idx2;
+
+        // 1st reader
+        idx1 = READ_ONCE(*IDX);
+        if (idx1 == 0) {         // Control dep
+                tmp = READ_ONCE(*LOCK0);
+                WRITE_ONCE(*LOCK0, tmp + 1);
+                smp_mb(); /* B and C */
+                tmp = READ_ONCE(*UNLOCK0);
+                WRITE_ONCE(*UNLOCK0, tmp + 1);
+        } else {
+                tmp = READ_ONCE(*LOCK1);
+                WRITE_ONCE(*LOCK1, tmp + 1);
+                smp_mb(); /* B and C */
+                tmp = READ_ONCE(*UNLOCK1);
+                WRITE_ONCE(*UNLOCK1, tmp + 1);
+        }
+}
+
+exists (0:lock1=1 /\ 1:idx1=1)
+
+This commit therefore removes memory barrier E, as memory barriers are not
+free, and clarifies the old comment.
+
+Co-developed-by: Frederic Weisbecker <frederic@kernel.org>
+Co-developed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+---
+v1->v2: Update changelog, keep old comments.
+v2->v3: Moar changelog updates.
+
+
+ kernel/rcu/srcutree.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 1c304fec89c0..0f9ba0f9fd12 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -983,15 +983,15 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
+ static void srcu_flip(struct srcu_struct *ssp)
+ {
+ 	/*
+-	 * Ensure that if this updater saw a given reader's increment
+-	 * from __srcu_read_lock(), that reader was using an old value
+-	 * of ->srcu_idx.  Also ensure that if a given reader sees the
+-	 * new value of ->srcu_idx, this updater's earlier scans cannot
+-	 * have seen that reader's increments (which is OK, because this
+-	 * grace period need not wait on that reader).
++	 * Control dependencies on both reader and updater side ensures that if
++	 * this updater saw a given reader's increment from __srcu_read_lock(),
++	 * that reader was using an old value of ->srcu_idx.  Also ensures that
++	 * if a given reader sees the new value of ->srcu_idx, this updater's
++	 * earlier scans cannot have seen that reader's increments (which is
++	 * OK, because this grace period need not wait on that reader).
++	 *
++	 * So no need for an smp_mb() before incrementing srcu_idx.
+ 	 */
+-	smp_mb(); /* E */  /* Pairs with B and C. */
+-
+ 	WRITE_ONCE(ssp->srcu_idx, ssp->srcu_idx + 1);
+ 
+ 	/*
+-- 
+2.39.0.314.g84b9a713c41-goog
