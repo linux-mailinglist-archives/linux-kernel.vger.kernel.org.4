@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C296365C473
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 281D165C436
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238326AbjACRAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S238196AbjACQvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238186AbjACRAK (ORCPT
+        with ESMTP id S238219AbjACQvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:00:10 -0500
-Received: from fx302.security-mail.net (mxout.security-mail.net [85.31.212.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C632813CC2
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:00:03 -0800 (PST)
+        Tue, 3 Jan 2023 11:51:05 -0500
+Received: from fx403.security-mail.net (smtpout140.security-mail.net [85.31.212.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C0DD13CCB
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:50:32 -0800 (PST)
 Received: from localhost (localhost [127.0.0.1])
-        by fx302.security-mail.net (Postfix) with ESMTP id ECE1A1C3E485
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
+        by fx403.security-mail.net (Postfix) with ESMTP id DDE018D32D5
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:44:33 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
         s=sec-sig-email; t=1672764273;
-        bh=XmEVO/W9RCIsv+5a0Ys6Iw1YMkuCx/jMas9cClmLkO0=;
+        bh=1kZaaxZ6gf5yStx7Ne23Ql48iNtnZ3At9Rk/3OqerWE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=NJq2fIIDL/BCEz8VsXUzoCxci59UAulQ8IyGe05AGEtXd3g6CYMn/XCSoBJ4ld5vS
-         s6lAqT9gJxF8IYRyeKE7WDKTb0ZUdhSKVd7j8h/7X4QapMI2wVLOW810ngxDxfxyve
-         U+hVylbAD5O8mhfpJrcYaSY4CNQIKo4nt17EVXvE=
-Received: from fx302 (localhost [127.0.0.1]) by fx302.security-mail.net
- (Postfix) with ESMTP id C46D11C3E441; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
+        b=tsQ2VMWcT1VYSaTSjCWmlYuBQDY2oo8QnVFvRExsbTHa8ivcASYTL4rPpMyqmLXQT
+         gyqNCL2sGSz1r3E0hOEBigJH0bWCxWLPoRowmvBXCWdcPhgWY79gjVRyuaK/SVkCJe
+         sTxfjIQKoW3V6SNpL4bvqBPRQyPcIoSX8cvSQWng=
+Received: from fx403 (localhost [127.0.0.1]) by fx403.security-mail.net
+ (Postfix) with ESMTP id B8B768D3994; Tue,  3 Jan 2023 17:44:33 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx302.security-mail.net (Postfix) with ESMTPS id 401A81C3E364; Tue,  3 Jan
+ fx403.security-mail.net (Postfix) with ESMTPS id 89A708D34CF; Tue,  3 Jan
  2023 17:44:32 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id DC86027E03FE; Tue,  3 Jan 2023
- 17:44:31 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 0DAA527E03F6; Tue,  3 Jan 2023
+ 17:44:32 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id BD94927E03FB; Tue,  3 Jan 2023 17:44:31 +0100 (CET)
+ (Postfix) with ESMTP id DB97127E03FD; Tue,  3 Jan 2023 17:44:31 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- 1fSAHxuZWgbn; Tue,  3 Jan 2023 17:44:31 +0100 (CET)
+ 4-jM2mxsmxOo; Tue,  3 Jan 2023 17:44:31 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 7AEA227E03F9; Tue,  3 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 9D71E27E03F6; Tue,  3 Jan 2023
  17:44:31 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <b1bc.63b45b70.1a3a6.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu BD94927E03FB
+Secumail-id: <7de3.63b45b70.86b96.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu DB97127E03FD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
  s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672764271;
- bh=DcrML+uqKPQ0L1Tbo8/AemP2FUwa4E+/v0wOXs9cNtU=;
+ bh=HG8LGr+1n773wE39+kLlvfIP18rg/8vPB8PtcTvhDf8=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=RGksZ6yEQ6/lnsZGPPOy1+7N4GPVJFFL/FAsrLBaBoekm4XEdY24BgsumI95t0fCa
- YVACs234vk6yirfCut1AppcdShaqSvjd9nUwtHSpA+lz9Oy3Dcdo4iGBhNSZAOHW9c
- 4PeuOLaXb4uiPPljiyHEoUoLEWolGCbXm0CeGKKQ=
+ b=WJhulVPl9gHyP+hSBypDyysQ6Sj3D0U4yL768l4D95PqDH/friBRZbc1eEMfal6W2
+ +Gbt3HxzcmsU6NS/4iLOT62PbQ/YLxFJreWi/+iYfhaULjmayf4W9GNeMww95Y7Rc3
+ E0r/m7RzUZEUVU/okSWzp8Wn9uC/pcxza/CIQass=
 From:   Yann Sionneau <ysionneau@kalray.eu>
 Cc:     Yann Sionneau <ysionneau@kalray.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         Clement Leger <clement.leger@bootlin.com>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
         Julian Vetter <jvetter@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
+        Marius Gligor <mgligor@kalray.eu>,
         Vincent Chardon <vincent.chardon@elsys-design.com>
-Subject: [RFC PATCH 09/25] kvx: irqchip: Add support for irq controllers
-Date:   Tue,  3 Jan 2023 17:43:43 +0100
-Message-ID: <20230103164359.24347-10-ysionneau@kalray.eu>
+Subject: [RFC PATCH 10/25] kvx: Add process management
+Date:   Tue,  3 Jan 2023 17:43:44 +0100
+Message-ID: <20230103164359.24347-11-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
 References: <20230103164359.24347-1-ysionneau@kalray.eu>
@@ -83,1436 +84,1395 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for kvx irq controllers found in Coolidge MPPA SoC
+Add process management support for kvx, including: thread info
+definition, context switch and process tracing.
 
-The core-intc:
-
-Each kvx core includes a hardware interrupt controller (core ITC)
-with the following features:
-* 32 independent interrupt sources
-* 4-bit priotity level
-* Individual interrupt enable bit
-* Interrupt status bit displaying the pending interrupts
-* Priority management between the 32 interrupts
-
-Among those 32 interrupt sources, the first are hard-wired to hardware
-sources. The remaining interrupt sources can be triggered via software
-by directly writing to the ILR SFR.
-
-The hard-wired interrupt sources are the following:
-0: Timer 0
-1: Timer 1
-2: Watchdog
-3: Performance Monitors
-4: APIC GIC line 0
-5: APIC GIC line 1
-6: APIC GIC line 2
-7: APIC GIC line 3
-12: SECC error from memory system
-13: Arithmetic exception (carry and IEEE 754 flags)
-16: Data Asynchronous Memory Error (DAME), raised for DECC/DSYS errors
-17: CLI (Cache Line Invalidation) for L1D or L1I following DECC/DSYS/Parity
-    errors
-
-The APIC GIC lines will be used to route interrupts coming from SoC peripherals
-from outside the Cluster to the kvx core. Those peripherals include USB host
-controller, eMMC/SD host controller, i2c, spi, PCIe, IOMMUs etc...
-
-The APIC GIC:
-
-Each Cluster of the Coolidge SoC includes an APIC
-(Advanced Programmable Interrupt Controller) GIC (Generic Interrupt Controller).
-The APIC GIC acts as an intermediary interrupt controller, muxing/routing
-incoming interrupts to output interrupts connected to the kvx core ITC lines.
-The first 128 incoming interrupt lines come from the mailbox controller (itself
-containing 128 mailboxes).
-The remaining 11 interrupt lines come from external interrupt sources (NoC
-router, the 5 IOMMUs, L2$ DMA job fifo, watchdog, SECC, DECC, D NoC).
-The APIC GIC has 72 output interrupts: 4 per kvx cores in the cluster
-(1 RM and 16 PE) connected to the "APIC GIC lines" described above and 1 for the
-L2$ controller which makes 69 interrupts lines (rounded up to 72).
-
-The APIC Mailbox:
-
-The APIC includes a mailbox controller, containing 128 mailboxes.
-This hardware block is basically a 1 Kb of smart memory space.
-Each mailbox is an 8 bytes word memory location which can generate and
-interrupt.
-Each mailbox has a trigger function and an input function.
-When a mailbox is written to, if the condition described by the
-trigger function is satisfied, the corresponding interrupt
-will fire.
-Since this hardware block generates IRQs based on writes
-at some memory locations, it is both an interrupt controller
-and an MSI controller.
-
-The ITGEN:
-
-The ITGEN (InTerrupt GENerator) is an interrupt controller block.
-It's purpose is to convert IRQ lines coming from SoC peripherals
-(USB host controller for instance) into writes on the AXI bus.
-Those writes are targeting the APIC Mailboxes.
-
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Marc Zyngier <maz@kernel.org>
-CC: Rob Herring <robh+dt@kernel.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC: Oleg Nesterov <oleg@redhat.com>
+CC: Christian Brauner <brauner@kernel.org>
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: Albert Ou <aou@eecs.berkeley.edu>
 CC: linux-kernel@vger.kernel.org
-CC: devicetree@vger.kernel.org
+CC: linux-riscv@lists.infradead.org
 Co-developed-by: Clement Leger <clement.leger@bootlin.com>
 Signed-off-by: Clement Leger <clement.leger@bootlin.com>
-Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
+Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
 Co-developed-by: Julian Vetter <jvetter@kalray.eu>
 Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-Co-developed-by: Luc Michel <lmichel@kalray.eu>
-Signed-off-by: Luc Michel <lmichel@kalray.eu>
+Co-developed-by: Marius Gligor <mgligor@kalray.eu>
+Signed-off-by: Marius Gligor <mgligor@kalray.eu>
 Co-developed-by: Vincent Chardon <vincent.chardon@elsys-design.com>
 Signed-off-by: Vincent Chardon <vincent.chardon@elsys-design.com>
 Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
 Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 ---
- .../kalray,kvx-core-intc.txt                  |  22 +
- drivers/irqchip/Kconfig                       |  27 +
- drivers/irqchip/Makefile                      |   4 +
- drivers/irqchip/irq-kvx-apic-gic.c            | 349 +++++++++++++
- drivers/irqchip/irq-kvx-apic-mailbox.c        | 465 ++++++++++++++++++
- drivers/irqchip/irq-kvx-core-intc.c           |  82 +++
- drivers/irqchip/irq-kvx-itgen.c               | 224 +++++++++
- include/linux/irqchip/irq-kvx-apic-gic.h      |  21 +
- include/linux/irqchip/irq-kvx-apic-mailbox.h  |  29 ++
- include/linux/irqchip/irq-kvx-itgen.h         |  24 +
- 10 files changed, 1247 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kalray,kvx-core-intc.txt
- create mode 100644 drivers/irqchip/irq-kvx-apic-gic.c
- create mode 100644 drivers/irqchip/irq-kvx-apic-mailbox.c
- create mode 100644 drivers/irqchip/irq-kvx-core-intc.c
- create mode 100644 drivers/irqchip/irq-kvx-itgen.c
- create mode 100644 include/linux/irqchip/irq-kvx-apic-gic.h
- create mode 100644 include/linux/irqchip/irq-kvx-apic-mailbox.h
- create mode 100644 include/linux/irqchip/irq-kvx-itgen.h
+ arch/kvx/include/asm/current.h     |  22 ++
+ arch/kvx/include/asm/ptrace.h      | 217 ++++++++++++++
+ arch/kvx/include/asm/switch_to.h   |  21 ++
+ arch/kvx/include/asm/thread_info.h |  78 +++++
+ arch/kvx/include/uapi/asm/ptrace.h | 114 +++++++
+ arch/kvx/kernel/process.c          | 212 +++++++++++++
+ arch/kvx/kernel/ptrace.c           | 461 +++++++++++++++++++++++++++++
+ arch/kvx/kernel/stacktrace.c       | 173 +++++++++++
+ 8 files changed, 1298 insertions(+)
+ create mode 100644 arch/kvx/include/asm/current.h
+ create mode 100644 arch/kvx/include/asm/ptrace.h
+ create mode 100644 arch/kvx/include/asm/switch_to.h
+ create mode 100644 arch/kvx/include/asm/thread_info.h
+ create mode 100644 arch/kvx/include/uapi/asm/ptrace.h
+ create mode 100644 arch/kvx/kernel/process.c
+ create mode 100644 arch/kvx/kernel/ptrace.c
+ create mode 100644 arch/kvx/kernel/stacktrace.c
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/kalray,kvx-core-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/kalray,kvx-core-intc.txt
+diff --git a/arch/kvx/include/asm/current.h b/arch/kvx/include/asm/current.h
 new file mode 100644
-index 000000000000..503a661e1e84
+index 000000000000..b5fd0f076ec9
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/kalray,kvx-core-intc.txt
++++ b/arch/kvx/include/asm/current.h
 @@ -0,0 +1,22 @@
-+* KVX Core Interrupt controller
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
 +
-+Required properties:
++#ifndef _ASM_KVX_CURRENT_H
++#define _ASM_KVX_CURRENT_H
 +
-+- compatible: must to be "kalray,kvx-core-intc".
-+- interrupt-controller
-+- #interrupt-cells: has to be <1>: an interrupt index
-+- regs: Base address of interrupt controller registers.
++#include <asm/percpu.h>
++#include <asm/sfr.h>
 +
-+Optional properties:
++struct task_struct;
 +
-+- kalray,intc-nr-irqs: Number of irqs handled by the controller.
-+  if not given, will default to 32.
++static __always_inline struct task_struct *get_current(void)
++{
++	return (struct task_struct *) kvx_sfr_get(SR);
++}
 +
-+Example:
++#define current get_current()
 +
-+	core_intc: core_intc@0 {
-+		compatible = "kalray,kvx-core-intc";
-+		#interrupt-cells = <1>;
-+		interrupt-controller;
-+		interrupt-parent = <&core_intc>;
++#endif	/* _ASM_KVX_CURRENT_H */
+diff --git a/arch/kvx/include/asm/ptrace.h b/arch/kvx/include/asm/ptrace.h
+new file mode 100644
+index 000000000000..d1b1e0975d9e
+--- /dev/null
++++ b/arch/kvx/include/asm/ptrace.h
+@@ -0,0 +1,217 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Marius Gligor
++ *            Yann Sionneau
++ */
++
++#ifndef _ASM_KVX_PTRACE_H
++#define _ASM_KVX_PTRACE_H
++
++#include <asm/types.h>
++#include <asm/sfr.h>
++#include <uapi/asm/ptrace.h>
++
++#define GPR_COUNT	64
++#define SFR_COUNT	9
++#define VIRT_COUNT	1
++
++#define ES_SYSCALL	0x3
++
++#define KVX_HW_BREAKPOINT_COUNT		2
++#define KVX_HW_WATCHPOINT_COUNT		1
++
++#define REG_SIZE	sizeof(u64)
++
++/**
++ * When updating pt_regs structure, this size must be updated.
++ * This is the expected size of the pt_regs struct.
++ * It ensures the structure layout from gcc is the same as the one we
++ * expect in order to do packed load (load/store octuple) in assembly.
++ * Conclusion: never put sizeof(pt_regs) in here or we lose this check
++ * (build time check done in asm-offsets.c via BUILD_BUG_ON)
++ */
++#define PT_REGS_STRUCT_EXPECTED_SIZE \
++			((GPR_COUNT + SFR_COUNT + VIRT_COUNT) * REG_SIZE + \
++			2 * REG_SIZE) /* Padding for stack alignment */
++
++/**
++ * Saved register structure. Note that we should save only the necessary
++ * registers.
++ * When you modify it, please read carefully the comment above.
++ * Moreover, you will need to modify user_pt_regs to match the beginning
++ * of this struct 1:1
++ */
++struct pt_regs {
++	union {
++		struct user_pt_regs user_regs;
++		struct {
++			/* GPR */
++			uint64_t r0;
++			uint64_t r1;
++			uint64_t r2;
++			uint64_t r3;
++			uint64_t r4;
++			uint64_t r5;
++			uint64_t r6;
++			uint64_t r7;
++			uint64_t r8;
++			uint64_t r9;
++			uint64_t r10;
++			uint64_t r11;
++			union {
++				uint64_t r12;
++				uint64_t sp;
++			};
++			union {
++				uint64_t r13;
++				uint64_t tp;
++			};
++			union {
++				uint64_t r14;
++				uint64_t fp;
++			};
++			uint64_t r15;
++			uint64_t r16;
++			uint64_t r17;
++			uint64_t r18;
++			uint64_t r19;
++			uint64_t r20;
++			uint64_t r21;
++			uint64_t r22;
++			uint64_t r23;
++			uint64_t r24;
++			uint64_t r25;
++			uint64_t r26;
++			uint64_t r27;
++			uint64_t r28;
++			uint64_t r29;
++			uint64_t r30;
++			uint64_t r31;
++			uint64_t r32;
++			uint64_t r33;
++			uint64_t r34;
++			uint64_t r35;
++			uint64_t r36;
++			uint64_t r37;
++			uint64_t r38;
++			uint64_t r39;
++			uint64_t r40;
++			uint64_t r41;
++			uint64_t r42;
++			uint64_t r43;
++			uint64_t r44;
++			uint64_t r45;
++			uint64_t r46;
++			uint64_t r47;
++			uint64_t r48;
++			uint64_t r49;
++			uint64_t r50;
++			uint64_t r51;
++			uint64_t r52;
++			uint64_t r53;
++			uint64_t r54;
++			uint64_t r55;
++			uint64_t r56;
++			uint64_t r57;
++			uint64_t r58;
++			uint64_t r59;
++			uint64_t r60;
++			uint64_t r61;
++			uint64_t r62;
++			uint64_t r63;
++
++			/* SFR */
++			uint64_t lc;
++			uint64_t le;
++			uint64_t ls;
++			uint64_t ra;
++
++			uint64_t cs;
++			uint64_t spc;
++		};
 +	};
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 7ef9f5e696d3..7c7753b33d4e 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -334,6 +334,33 @@ config MIPS_GIC
- 	select IRQ_DOMAIN_HIERARCHY
- 	select MIPS_CM
- 
-+config KVX_CORE_INTC
-+	bool
-+	depends on KVX
-+	select IRQ_DOMAIN
++	uint64_t sps;
++	uint64_t es;
 +
-+config KVX_APIC_GIC
-+	bool
-+	depends on KVX
-+	select IRQ_DOMAIN
-+	select IRQ_DOMAIN_HIERARCHY
++	uint64_t ilr;
 +
-+config KVX_APIC_MAILBOX
-+	bool
-+	depends on KVX
-+	select GENERIC_IRQ_IPI if SMP
-+	select GENERIC_MSI_IRQ_DOMAIN
-+	select IRQ_DOMAIN
-+	select IRQ_DOMAIN_HIERARCHY
++	/* "Virtual" registers */
++	uint64_t orig_r0;
 +
-+config KVX_ITGEN
-+	bool
-+	depends on KVX
-+	select GENERIC_IRQ_IPI if SMP
-+	select GENERIC_MSI_IRQ_DOMAIN
-+	select IRQ_DOMAIN
-+	select IRQ_DOMAIN_HIERARCHY
++	/* Padding for stack alignment (see STACK_ALIGN) */
++	uint64_t padding[2];
 +
- config INGENIC_IRQ
- 	bool
- 	depends on MACH_INGENIC
-diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-index 87b49a10962c..4e7e374314c3 100644
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -69,6 +69,10 @@ obj-$(CONFIG_BCM7120_L2_IRQ)		+= irq-bcm7120-l2.o
- obj-$(CONFIG_BRCMSTB_L2_IRQ)		+= irq-brcmstb-l2.o
- obj-$(CONFIG_KEYSTONE_IRQ)		+= irq-keystone.o
- obj-$(CONFIG_MIPS_GIC)			+= irq-mips-gic.o
-+obj-$(CONFIG_KVX_CORE_INTC)		+= irq-kvx-core-intc.o
-+obj-$(CONFIG_KVX_APIC_GIC)		+= irq-kvx-apic-gic.o
-+obj-$(CONFIG_KVX_APIC_MAILBOX)		+= irq-kvx-apic-mailbox.o
-+obj-$(CONFIG_KVX_ITGEN)			+= irq-kvx-itgen.o
- obj-$(CONFIG_ARCH_MEDIATEK)		+= irq-mtk-sysirq.o irq-mtk-cirq.o
- obj-$(CONFIG_ARCH_DIGICOLOR)		+= irq-digicolor.o
- obj-$(CONFIG_ARCH_SA1100)		+= irq-sa11x0.o
-diff --git a/drivers/irqchip/irq-kvx-apic-gic.c b/drivers/irqchip/irq-kvx-apic-gic.c
++	/**
++	 * If you add some fields, please read carefully the comment for
++	 * PT_REGS_STRUCT_EXPECTED_SIZE.
++	 */
++};
++
++#define pl(__reg) kvx_sfr_field_val(__reg, PS, PL)
++
++#define MODE_KERNEL	0
++#define MODE_USER	1
++
++/* Privilege level is relative in $sps, so 1 indicates current PL + 1 */
++#define user_mode(regs)	(pl((regs)->sps) == MODE_USER)
++#define es_ec(regs) kvx_sfr_field_val(regs->es, ES, EC)
++#define es_sysno(regs) kvx_sfr_field_val(regs->es, ES, SN)
++
++#define debug_dc(es) kvx_sfr_field_val((es), ES, DC)
++
++/* ptrace */
++#define PTRACE_GET_HW_PT_REGS	20
++#define PTRACE_SET_HW_PT_REGS	21
++#define arch_has_single_step()	1
++
++#define DEBUG_CAUSE_BREAKPOINT	0
++#define DEBUG_CAUSE_WATCHPOINT	1
++#define DEBUG_CAUSE_STEPI	2
++#define DEBUG_CAUSE_DSU_BREAK	3
++
++static inline void enable_single_step(struct pt_regs *regs)
++{
++	regs->sps |= KVX_SFR_PS_SME_MASK;
++}
++
++static inline void disable_single_step(struct pt_regs *regs)
++{
++	regs->sps &= ~KVX_SFR_PS_SME_MASK;
++}
++
++static inline bool in_syscall(struct pt_regs const *regs)
++{
++	return es_ec(regs) == ES_SYSCALL;
++}
++
++int do_syscall_trace_enter(struct pt_regs *regs, unsigned long syscall);
++void do_syscall_trace_exit(struct pt_regs *regs);
++
++static inline unsigned long get_current_sp(void)
++{
++	register const unsigned long current_sp __asm__ ("$r12");
++
++	return current_sp;
++}
++
++extern char *user_scall_rt_sigreturn_end;
++extern char *user_scall_rt_sigreturn;
++
++static inline unsigned long instruction_pointer(struct pt_regs *regs)
++{
++	return regs->spc;
++}
++
++static inline long regs_return_value(struct pt_regs *regs)
++{
++	return regs->r0;
++}
++
++static inline unsigned long user_stack_pointer(struct pt_regs *regs)
++{
++	return regs->sp;
++}
++
++#endif	/* _ASM_KVX_PTRACE_H */
+diff --git a/arch/kvx/include/asm/switch_to.h b/arch/kvx/include/asm/switch_to.h
 new file mode 100644
-index 000000000000..42d28c8b3322
+index 000000000000..2b1fda06dea8
 --- /dev/null
-+++ b/drivers/irqchip/irq-kvx-apic-gic.c
-@@ -0,0 +1,349 @@
++++ b/arch/kvx/include/asm/switch_to.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#ifndef _ASM_KVX_SWITCH_TO_H
++#define _ASM_KVX_SWITCH_TO_H
++
++struct task_struct;
++
++/* context switching is now performed out-of-line in switch_to.S */
++extern struct task_struct *__switch_to(struct task_struct *prev,
++				       struct task_struct *next);
++
++#define switch_to(prev, next, last)					\
++	do {								\
++		((last) = __switch_to((prev), (next)));			\
++	} while (0)
++
++#endif	/* _ASM_KVX_SWITCH_TO_H */
+diff --git a/arch/kvx/include/asm/thread_info.h b/arch/kvx/include/asm/thread_info.h
+new file mode 100644
+index 000000000000..4ce0154813ef
+--- /dev/null
++++ b/arch/kvx/include/asm/thread_info.h
+@@ -0,0 +1,78 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Guillaume Thouvenin
++ */
++
++#ifndef _ASM_KVX_THREAD_INFO_H
++#define _ASM_KVX_THREAD_INFO_H
++
++#include <asm/page.h>
++
++/*
++ * Size of the kernel stack for each process.
++ */
++#define THREAD_SIZE_ORDER       2
++#define THREAD_SIZE             (PAGE_SIZE << THREAD_SIZE_ORDER)
++
++/*
++ * Thread information flags
++ *   these are process state flags that various assembly files may need to
++ *   access
++ *   - pending work-to-be-done flags are in LSW
++ *   - other flags in MSW
++ */
++#define TIF_SYSCALL_TRACE	0	/* syscall trace active */
++#define TIF_NOTIFY_RESUME	1	/* resumption notification requested */
++#define TIF_SIGPENDING		2	/* signal pending */
++#define TIF_NEED_RESCHED	3	/* rescheduling necessary */
++#define TIF_SINGLESTEP		4	/* restore singlestep on return to user mode */
++#define TIF_UPROBE		5
++#define TIF_SYSCALL_TRACEPOINT  6	/* syscall tracepoint instrumentation */
++#define TIF_SYSCALL_AUDIT	7	/* syscall auditing active */
++#define TIF_RESTORE_SIGMASK     9
++#define TIF_NOTIFY_SIGNAL	10	/* signal notifications exist */
++#define TIF_POLLING_NRFLAG	16	/* true if poll_idle() is polling TIF_NEED_RESCHED */
++#define TIF_MEMDIE              17
++
++#define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
++#define _TIF_SYSCALL_TRACEPOINT	(1 << TIF_SYSCALL_TRACEPOINT)
++#define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
++#define _TIF_POLLING_NRFLAG	(1 << TIF_POLLING_NRFLAG)
++#define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
++#define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
++#define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
++#define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
++
++#define _TIF_WORK_MASK \
++	(_TIF_NOTIFY_RESUME | _TIF_SIGPENDING | _TIF_NEED_RESCHED)
++
++#define _TIF_SYSCALL_WORK \
++	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
++
++#ifndef __ASSEMBLY__
++/*
++ * We are using THREAD_INFO_IN_TASK so this struct is almost useless
++ * please prefer adding fields in thread_struct (processor.h) rather
++ * than here.
++ * This struct is merely a remnant of distant times where it was placed
++ * on the stack to avoid large task_struct.
++ *
++ * cf https://lwn.net/Articles/700615/
++ */
++struct thread_info {
++	unsigned long flags;				/* low level flags */
++	int preempt_count;
++#ifdef CONFIG_SMP
++	u32 cpu;					/* current CPU */
++#endif
++};
++
++#define INIT_THREAD_INFO(tsk)			\
++{						\
++	.flags		= 0,			\
++	.preempt_count  = INIT_PREEMPT_COUNT,	\
++}
++#endif /* __ASSEMBLY__*/
++#endif /* _ASM_KVX_THREAD_INFO_H */
+diff --git a/arch/kvx/include/uapi/asm/ptrace.h b/arch/kvx/include/uapi/asm/ptrace.h
+new file mode 100644
+index 000000000000..f5febe830526
+--- /dev/null
++++ b/arch/kvx/include/uapi/asm/ptrace.h
+@@ -0,0 +1,114 @@
++/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Yann Sionneau
++ */
++
++#ifndef _UAPI_ASM_KVX_PTRACE_H
++#define _UAPI_ASM_KVX_PTRACE_H
++
++#include <linux/types.h>
++/*
++ * User-mode register state for core dumps, ptrace, sigcontext
++ *
++ * This decouples struct pt_regs from the userspace ABI.
++ * The struct pt_regs must start with the same layout as struct user_pt_regs.
++ */
++struct user_pt_regs {
++	/* GPR */
++	unsigned long r0;
++	unsigned long r1;
++	unsigned long r2;
++	unsigned long r3;
++	unsigned long r4;
++	unsigned long r5;
++	unsigned long r6;
++	unsigned long r7;
++	unsigned long r8;
++	unsigned long r9;
++	unsigned long r10;
++	unsigned long r11;
++	union {
++		unsigned long r12;
++		unsigned long sp;
++	};
++	union {
++		unsigned long r13;
++		unsigned long tp;
++	};
++	union {
++		unsigned long r14;
++		unsigned long fp;
++	};
++	unsigned long r15;
++	unsigned long r16;
++	unsigned long r17;
++	unsigned long r18;
++	unsigned long r19;
++	unsigned long r20;
++	unsigned long r21;
++	unsigned long r22;
++	unsigned long r23;
++	unsigned long r24;
++	unsigned long r25;
++	unsigned long r26;
++	unsigned long r27;
++	unsigned long r28;
++	unsigned long r29;
++	unsigned long r30;
++	unsigned long r31;
++	unsigned long r32;
++	unsigned long r33;
++	unsigned long r34;
++	unsigned long r35;
++	unsigned long r36;
++	unsigned long r37;
++	unsigned long r38;
++	unsigned long r39;
++	unsigned long r40;
++	unsigned long r41;
++	unsigned long r42;
++	unsigned long r43;
++	unsigned long r44;
++	unsigned long r45;
++	unsigned long r46;
++	unsigned long r47;
++	unsigned long r48;
++	unsigned long r49;
++	unsigned long r50;
++	unsigned long r51;
++	unsigned long r52;
++	unsigned long r53;
++	unsigned long r54;
++	unsigned long r55;
++	unsigned long r56;
++	unsigned long r57;
++	unsigned long r58;
++	unsigned long r59;
++	unsigned long r60;
++	unsigned long r61;
++	unsigned long r62;
++	unsigned long r63;
++
++	/* SFR */
++	unsigned long lc;
++	unsigned long le;
++	unsigned long ls;
++	unsigned long ra;
++
++	unsigned long cs;
++	unsigned long spc;
++};
++
++/* TCA registers structure exposed to user */
++struct user_tca_regs {
++	struct {
++		__u64 x;
++		__u64 y;
++		__u64 z;
++		__u64 t;
++	} regs[48];
++};
++
++#endif /* _UAPI_ASM_KVX_PTRACE_H */
+diff --git a/arch/kvx/kernel/process.c b/arch/kvx/kernel/process.c
+new file mode 100644
+index 000000000000..f9ba2571e279
+--- /dev/null
++++ b/arch/kvx/kernel/process.c
+@@ -0,0 +1,212 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Copyright (c) 2017 - 2022 Kalray Inc.
++ * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
-+ *            Julian Vetter
++ *            Guillaume Thouvenin
++ *            Marius Gligor
++ *            Yann Sionneau
 + */
 +
-+#define pr_fmt(fmt)	"kvx_apic_gic: " fmt
++#include <linux/elf.h>
++#include <linux/sched.h>
++#include <linux/ptrace.h>
++#include <linux/printk.h>
++#include <linux/sched/debug.h>
++#include <linux/sched/task_stack.h>
++#include <linux/hw_breakpoint.h>
 +
-+#include <linux/irqchip/irq-kvx-apic-gic.h>
-+#include <linux/of_address.h>
-+#include <linux/cpuhotplug.h>
-+#include <linux/interrupt.h>
-+#include <linux/irqdomain.h>
-+#include <linux/spinlock.h>
-+#include <linux/irqchip.h>
-+#include <linux/of_irq.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/of.h>
++#include <asm/ptrace.h>
++#include <asm/processor.h>
++#include <asm/ptrace.h>
++#include <asm/uaccess.h>
++#include <asm/stacktrace.h>
++#include <asm/hw_breakpoint.h>
 +
-+/* APIC is organized in 18 groups of 4 output lines
-+ * However, the two upper lines are for Secure RM and DMA engine
-+ * Thus, we do not have to use them
-+ */
-+#define GIC_CPU_OUT_COUNT	16
-+#define GIC_PER_CPU_IT_COUNT	4
++#if defined(CONFIG_STACKPROTECTOR)
++#include <linux/stackprotector.h>
++unsigned long __stack_chk_guard __read_mostly;
++EXPORT_SYMBOL(__stack_chk_guard);
++#endif
 +
-+/**
-+ * For each CPU, there is 4 output lines coming from the apic GIC.
-+ * We only use 1 line and this structure represent this line.
-+ * @base Output line base address
-+ * @cpu CPU associated to this line
-+ */
-+struct gic_out_irq_line {
-+	void __iomem *base;
-+	unsigned int cpu;
-+};
++#define SCALL_NUM_EXIT	"0xfff"
 +
-+/**
-+ * Input irq line.
-+ * This structure is used to store the status of the input line and the
-+ * associated output line.
-+ * @enabled Boolean for line status
-+ * @cpu CPU currently receiving this interrupt
-+ * @it_num Interrupt number
-+ */
-+struct gic_in_irq_line {
-+	bool enabled;
-+	struct gic_out_irq_line *out_line;
-+	unsigned int it_num;
-+};
-+
-+/**
-+ * struct kvx_apic_gic - kvx apic gic
-+ * @base: Base address of the controller
-+ * @domain Domain for this controller
-+ * @input_nr_irqs: maximum number of supported input interrupts
-+ * @cpus: Per cpu interrupt configuration
-+ * @output_irq: Array of output irq lines
-+ * @input_irq: Array of input irq lines
-+ */
-+struct kvx_apic_gic {
-+	raw_spinlock_t lock;
-+	void __iomem *base;
-+	struct irq_domain *domain;
-+	uint32_t input_nr_irqs;
-+	/* For each cpu, there is a output IT line */
-+	struct gic_out_irq_line output_irq[GIC_CPU_OUT_COUNT];
-+
-+	/* Input interrupt status */
-+	struct gic_in_irq_line input_irq[KVX_GIC_INPUT_IT_COUNT];
-+};
-+
-+static int gic_parent_irq;
-+
-+/**
-+ * Enable/Disable an output irq line
-+ * This function is used by both mask/unmask to disable/enable the line.
-+ */
-+static void irq_line_set_enable(struct gic_out_irq_line *irq_line,
-+				struct gic_in_irq_line *in_irq_line,
-+				int enable)
++void arch_cpu_idle(void)
 +{
-+	void __iomem *enable_line_addr = irq_line->base +
-+	       KVX_GIC_ENABLE_OFFSET +
-+	       in_irq_line->it_num * KVX_GIC_ENABLE_ELEM_SIZE;
-+
-+	writeb((uint8_t) enable ? 1 : 0, enable_line_addr);
-+	in_irq_line->enabled = enable;
++	wait_for_interrupt();
++	local_irq_enable();
 +}
 +
-+static void kvx_apic_gic_set_line(struct irq_data *data, int enable)
++void show_regs(struct pt_regs *regs)
 +{
-+	struct kvx_apic_gic *gic = irq_data_get_irq_chip_data(data);
-+	unsigned int in_irq = irqd_to_hwirq(data);
-+	struct gic_in_irq_line *in_line = &gic->input_irq[in_irq];
-+	struct gic_out_irq_line *out_line = in_line->out_line;
 +
-+	raw_spin_lock(&gic->lock);
-+	/* Set line enable on currently assigned cpu */
-+	irq_line_set_enable(out_line, in_line, enable);
-+	raw_spin_unlock(&gic->lock);
-+}
++	int in_kernel = 1;
++	unsigned short i, reg_offset;
++	void *ptr;
 +
-+static void kvx_apic_gic_mask(struct irq_data *data)
-+{
-+	kvx_apic_gic_set_line(data, 0);
-+}
++	show_regs_print_info(KERN_DEFAULT);
 +
-+static void kvx_apic_gic_unmask(struct irq_data *data)
-+{
-+	kvx_apic_gic_set_line(data, 1);
-+}
++	if (user_mode(regs))
++		in_kernel = 0;
 +
-+#ifdef CONFIG_SMP
++	pr_info("\nmode: %s\n"
++	       "    PC: %016llx    PS: %016llx\n"
++	       "    CS: %016llx    RA: %016llx\n"
++	       "    LS: %016llx    LE: %016llx\n"
++	       "    LC: %016llx\n\n",
++	       in_kernel ? "kernel" : "user",
++	       regs->spc, regs->sps,
++	       regs->cs, regs->ra, regs->ls, regs->le, regs->lc);
 +
-+static int kvx_apic_gic_set_affinity(struct irq_data *d,
-+				     const struct cpumask *cpumask,
-+				     bool force)
-+{
-+	struct kvx_apic_gic *gic = irq_data_get_irq_chip_data(d);
-+	unsigned int new_cpu;
-+	unsigned int hw_irq = irqd_to_hwirq(d);
-+	struct gic_in_irq_line *input_line = &gic->input_irq[hw_irq];
-+	struct gic_out_irq_line *new_out_line;
++	/* GPR */
++	ptr = regs;
++	ptr += offsetof(struct pt_regs, r0);
++	reg_offset = offsetof(struct pt_regs, r1) -
++		     offsetof(struct pt_regs, r0);
 +
-+	/* We assume there is only one cpu in the mask */
-+	new_cpu = cpumask_first(cpumask);
-+	new_out_line = &gic->output_irq[new_cpu];
-+
-+	raw_spin_lock(&gic->lock);
-+
-+	/* Nothing to do, line is the same */
-+	if (new_out_line == input_line->out_line)
-+		goto out;
-+
-+	/* If old line was enabled, enable the new one before disabling
-+	 * the old one
++	/**
++	 * Display all the 64 GPRs assuming they are ordered correctly
++	 * in the pt_regs struct...
 +	 */
-+	if (input_line->enabled)
-+		irq_line_set_enable(new_out_line, input_line, 1);
++	for (i = 0; i < GPR_COUNT; i += 2) {
++		pr_info("    R%d: %016llx    R%d: %016llx\n",
++			 i, *(uint64_t *)ptr,
++			 i + 1, *(uint64_t *)(ptr + reg_offset));
++		ptr += reg_offset * 2;
++	}
 +
-+	/* Disable it on old line */
-+	irq_line_set_enable(input_line->out_line, input_line, 0);
-+
-+	/* Assign new output line to input IRQ */
-+	input_line->out_line = new_out_line;
-+
-+out:
-+	raw_spin_unlock(&gic->lock);
-+
-+	irq_data_update_effective_affinity(d, cpumask_of(new_cpu));
-+
-+	return IRQ_SET_MASK_OK;
++	pr_info("\n\n");
 +}
-+#endif
 +
-+static struct irq_chip kvx_apic_gic_chip = {
-+	.name           = "kvx apic gic",
-+	.irq_mask	= kvx_apic_gic_mask,
-+	.irq_unmask	= kvx_apic_gic_unmask,
-+#ifdef CONFIG_SMP
-+	.irq_set_affinity = kvx_apic_gic_set_affinity,
++/**
++ * Prepare a thread to return to userspace
++ */
++void start_thread(struct pt_regs *regs,
++			unsigned long pc, unsigned long sp)
++{
++	/* Remove MMUP bit (user is not privilege in current virtual space) */
++	u64 clear_bit = KVX_SFR_PS_MMUP_MASK | KVX_SFR_PS_SME_MASK |
++			KVX_SFR_PS_SMR_MASK;
++	regs->spc = pc;
++	regs->sp = sp;
++	regs->sps = kvx_sfr_get(PS);
++
++	regs->sps &= ~clear_bit;
++
++	/* Set privilege level to +1 (relative) */
++	regs->sps &= ~KVX_SFR_PS_PL_MASK;
++	regs->sps |= (1 << KVX_SFR_PS_PL_SHIFT);
++}
++
++int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
++{
++	struct pt_regs *regs, *childregs = task_pt_regs(p);
++	unsigned long clone_flags = args->flags;
++	unsigned long usp = args->stack;
++	unsigned long tls = args->tls;
++
++	/* p->thread holds context to be restored by __switch_to() */
++	if (unlikely(args->fn)) {
++		/* Kernel thread */
++		memset(childregs, 0, sizeof(struct pt_regs));
++
++		p->thread.ctx_switch.r20 = (uint64_t)args->fn; /* fn */
++		p->thread.ctx_switch.r21 = (uint64_t)args->fn_arg;
++		p->thread.ctx_switch.ra =
++				(unsigned long) ret_from_kernel_thread;
++	} else {
++		regs = current_pt_regs();
++
++		/* Copy current process registers */
++		*childregs = *regs;
++
++		/* Store tracing status in r20 to avoid computing it
++		 * in assembly
++		 */
++		p->thread.ctx_switch.r20 =
++			task_thread_info(p)->flags & _TIF_SYSCALL_WORK;
++		p->thread.ctx_switch.ra = (unsigned long) ret_from_fork;
++
++		childregs->r0 = 0; /* Return value of fork() */
++		/* Set stack pointer if any */
++		if (usp)
++			childregs->sp = usp;
++
++		/* Set a new TLS ?  */
++		if (clone_flags & CLONE_SETTLS)
++			childregs->r13 = tls;
++	}
++	p->thread.kernel_sp =
++		(unsigned long) (task_stack_page(p) + THREAD_SIZE);
++	p->thread.ctx_switch.sp = (unsigned long) childregs;
++
++	clear_ptrace_hw_breakpoint(p);
++
++	return 0;
++}
++
++void release_thread(struct task_struct *dead_task)
++{
++}
++
++void flush_thread(void)
++{
++	/* This function should clear the values of the floating point
++	 * registers and debug registers saved in the TSS segment.
++	 */
++
++	flush_ptrace_hw_breakpoint(current);
++}
++
++/* Fill in the fpu structure for a core dump.  */
++int dump_fpu(struct pt_regs *regs, elf_fpregset_t *fpu)
++{
++	/*
++	 * On kvx, FPU uses standard registers + $cs which is a common register
++	 * also needed for non-fpu execution, so there is no additional
++	 * register to dump.
++	 */
++	return 0;
++}
++
++static bool find_wchan(unsigned long pc, void *arg)
++{
++	unsigned long *p = arg;
++
++	/*
++	 * If the pc is in a scheduler function (waiting), then, this is the
++	 * address where the process is currently stuck. Note that scheduler
++	 * functions also include lock functions. This functions are
++	 * materialized using annotation to put them is special text sections.
++	 */
++	if (!in_sched_functions(pc)) {
++		*p = pc;
++		return true;
++	}
++
++	return false;
++}
++
++/*
++ * __get_wchan is called to obtain "schedule()" caller function address.
++ */
++unsigned long __get_wchan(struct task_struct *p)
++{
++	unsigned long pc = 0;
++	struct stackframe frame;
++
++	/*
++	 * We need to obtain the task stack since we don't want the stack to
++	 * move under our feet.
++	 */
++	if (!try_get_task_stack(p))
++		return 0;
++
++	start_stackframe(&frame, thread_saved_reg(p, fp),
++			 thread_saved_reg(p, ra));
++	walk_stackframe(p, &frame, find_wchan, &pc);
++
++	put_task_stack(p);
++
++	return pc;
++}
++
+diff --git a/arch/kvx/kernel/ptrace.c b/arch/kvx/kernel/ptrace.c
+new file mode 100644
+index 000000000000..46096a3ab3e4
+--- /dev/null
++++ b/arch/kvx/kernel/ptrace.c
+@@ -0,0 +1,461 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * derived from arch/riscv/kernel/ptrace.c
++ *
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Marius Gligor
++ *            Clement Leger
++ */
++
++#include <linux/sched.h>
++#include <linux/sched.h>
++#include <linux/audit.h>
++#include <linux/irqflags.h>
++#include <linux/thread_info.h>
++#include <linux/context_tracking.h>
++#include <linux/uaccess.h>
++#include <linux/syscalls.h>
++#include <linux/signal.h>
++#include <linux/regset.h>
++#include <linux/hw_breakpoint.h>
++
++#include <asm/dame.h>
++#include <asm/ptrace.h>
++#include <asm/syscall.h>
++#include <asm/break_hook.h>
++#include <asm/debug.h>
++#include <asm/cacheflush.h>
++#include <asm/hw_breakpoint.h>
++
++#define CREATE_TRACE_POINTS
++#include <trace/events/syscalls.h>
++
++#define HW_PT_CMD_GET_CAPS	0
++#define HW_PT_CMD_GET_PT	1
++#define HW_PT_CMD_SET_RESERVE	0
++#define HW_PT_CMD_SET_ENABLE	1
++
++#define FROM_GDB_CMD_MASK 3
++#define FROM_GDB_HP_TYPE_SHIFT 2
++#define FROM_GDB_HP_TYPE_MASK 4
++#define FROM_GDB_WP_TYPE_SHIFT 3
++#define FROM_GDB_WP_TYPE_MASK 0x18
++#define FROM_GDB_HP_IDX_SHIFT 5
++
++#define hw_pt_cmd(addr) ((addr) & FROM_GDB_CMD_MASK)
++#define hw_pt_is_bkp(addr) ((((addr) & FROM_GDB_HP_TYPE_MASK) >> \
++			     FROM_GDB_HP_TYPE_SHIFT) == KVX_HW_BREAKPOINT_TYPE)
++#define get_hw_pt_wp_type(addr) ((((addr) & FROM_GDB_WP_TYPE_MASK)) >> \
++				 FROM_GDB_WP_TYPE_SHIFT)
++#define get_hw_pt_idx(addr) ((addr) >> FROM_GDB_HP_IDX_SHIFT)
++#define get_hw_pt_addr(data) ((data)[0])
++#define get_hw_pt_len(data) ((data)[1] >> 1)
++#define hw_pt_is_enabled(data) ((data)[1] & 1)
++
++enum kvx_regset {
++	REGSET_GPR,
++#ifdef CONFIG_ENABLE_TCA
++	REGSET_TCA,
 +#endif
 +};
 +
-+static int kvx_apic_gic_alloc(struct irq_domain *domain, unsigned int virq,
-+				   unsigned int nr_irqs, void *args)
++static void compute_ptrace_hw_pt_rsp(uint64_t *data, struct perf_event *bp)
 +{
-+	int i;
-+	struct irq_fwspec *fwspec = args;
-+	int hwirq = fwspec->param[0];
++	data[0] = bp->attr.bp_addr;
++	data[1] = bp->attr.bp_len >> 1;
++	if (!bp->attr.disabled)
++		data[1] |= 1;
++}
 +
-+	for (i = 0; i < nr_irqs; i++) {
-+		irq_domain_set_info(domain, virq + i, hwirq + i,
-+				    &kvx_apic_gic_chip,
-+				    domain->host_data, handle_simple_irq,
-+				    NULL, NULL);
++void ptrace_disable(struct task_struct *child)
++{
++	/* nothing to do */
++}
++
++#ifdef CONFIG_HAVE_HW_BREAKPOINT
++static void ptrace_hw_pt_triggered(struct perf_event *bp,
++				   struct perf_sample_data *data,
++				   struct pt_regs *regs)
++{
++	int i, id = 0;
++	struct arch_hw_breakpoint *bkpt = counter_arch_bp(bp);
++
++	if (bp->attr.bp_type & HW_BREAKPOINT_X) {
++		id = KVX_HW_BREAKPOINT_TYPE;
++		for (i = 0; i < KVX_HW_BREAKPOINT_COUNT; i++)
++			if (current->thread.debug.ptrace_hbp[i] == bp)
++				break;
++	} else {
++		id = KVX_HW_WATCHPOINT_TYPE;
++		for (i = 0; i < KVX_HW_WATCHPOINT_COUNT; i++)
++			if (current->thread.debug.ptrace_hwp[i] == bp)
++				break;
 +	}
++
++	id |= i << 1;
++	force_sig_ptrace_errno_trap(id, (void __user *) bkpt->addr);
++}
++
++static struct perf_event *ptrace_hw_pt_create(struct task_struct *tsk, int type)
++{
++	struct perf_event_attr attr;
++
++	ptrace_breakpoint_init(&attr);
++
++	/* Initialise fields to sane defaults. */
++	attr.bp_addr	= 0;
++	attr.bp_len	= 1;
++	attr.bp_type	= type;
++	attr.disabled	= 1;
++
++	return register_user_hw_breakpoint(&attr, ptrace_hw_pt_triggered, NULL,
++					   tsk);
++}
++
++/*
++ * Address bit 0..1: command id, bit 2: hardware breakpoint (0)
++ * or watchpoint (1), bits 63..3: register number.
++ * Both PTRACE_GET_HW_PT_REGS and PTRACE_SET_HW_PT_REGS transfer two
++ * 64-bit words: for get capabilities: number of breakpoint (0) and
++ * watchpoints (1), for hardware watchpoint/breakpoint enable: address (0)
++ * and enable + length (1)
++ */
++
++static long ptrace_get_hw_pt_pregs(struct task_struct *child, long addr,
++				   long __user *datap)
++{
++	struct perf_event *bp;
++	u64 user_data[2];
++	int cmd = hw_pt_cmd(addr);
++
++	if (cmd == HW_PT_CMD_GET_CAPS) {
++		user_data[0] = KVX_HW_BREAKPOINT_COUNT;
++		user_data[1] = KVX_HW_WATCHPOINT_COUNT;
++	} else if (cmd == HW_PT_CMD_GET_PT) {
++		int is_breakpoint = hw_pt_is_bkp(addr);
++		int idx = get_hw_pt_idx(addr);
++
++		if ((is_breakpoint && idx >= KVX_HW_BREAKPOINT_COUNT) ||
++		    (!is_breakpoint && idx >= KVX_HW_WATCHPOINT_COUNT))
++			return -EINVAL;
++
++		if (is_breakpoint)
++			bp = child->thread.debug.ptrace_hbp[idx];
++		else
++			bp = child->thread.debug.ptrace_hwp[idx];
++
++		if (bp) {
++			compute_ptrace_hw_pt_rsp(user_data, bp);
++		} else {
++			user_data[0] = 0;
++			user_data[1] = 0;
++		}
++	} else {
++		return -EINVAL;
++	}
++
++	if (copy_to_user(datap, user_data, sizeof(user_data)))
++		return -EFAULT;
 +
 +	return 0;
 +}
 +
-+static const struct irq_domain_ops kvx_apic_gic_domain_ops = {
-+	.alloc  = kvx_apic_gic_alloc,
-+	.free   = irq_domain_free_irqs_common,
-+};
-+
-+static void irq_line_get_status_lac(struct gic_out_irq_line *out_irq_line,
-+			uint64_t status[KVX_GIC_STATUS_LAC_ARRAY_SIZE])
++static long ptrace_set_hw_pt_regs(struct task_struct *child, long addr,
++				  long __user *datap)
 +{
-+	int i;
++	struct perf_event *bp;
++	struct perf_event_attr attr;
++	u64 user_data[2];
++	int is_breakpoint = hw_pt_is_bkp(addr);
++	int idx = get_hw_pt_idx(addr);
++	int cmd = hw_pt_cmd(addr);
++	int bp_type, ret;
 +
-+	for (i = 0; i < KVX_GIC_STATUS_LAC_ARRAY_SIZE; i++) {
-+		status[i] = readq(out_irq_line->base +
-+				  KVX_GIC_STATUS_LAC_OFFSET +
-+				  i * KVX_GIC_STATUS_LAC_ELEM_SIZE);
-+	}
-+}
++	if ((is_breakpoint && idx >= KVX_HW_BREAKPOINT_COUNT) ||
++	    (!is_breakpoint && idx >= KVX_HW_WATCHPOINT_COUNT))
++		return -EINVAL;
 +
-+static void kvx_apic_gic_handle_irq(struct irq_desc *desc)
-+{
-+	struct kvx_apic_gic *gic_data = irq_desc_get_handler_data(desc);
-+	struct gic_out_irq_line *out_line;
-+	uint64_t status[KVX_GIC_STATUS_LAC_ARRAY_SIZE];
-+	unsigned long irqn, cascade_irq;
-+	unsigned long cpu = smp_processor_id();
++	if (copy_from_user(user_data, datap, sizeof(user_data)))
++		return -EFAULT;
 +
-+	out_line = &gic_data->output_irq[cpu];
++	if (cmd == HW_PT_CMD_SET_RESERVE ||
++	    (cmd == HW_PT_CMD_SET_ENABLE && hw_pt_is_enabled(user_data))) {
++		if (is_breakpoint)
++			ret = ptrace_request_hw_breakpoint(idx);
++		else
++			ret = ptrace_request_hw_watchpoint(idx);
 +
-+	irq_line_get_status_lac(out_line, status);
-+
-+	for_each_set_bit(irqn, (unsigned long *) status,
-+			KVX_GIC_STATUS_LAC_ARRAY_SIZE * BITS_PER_LONG) {
-+
-+		cascade_irq = irq_find_mapping(gic_data->domain, irqn);
-+
-+		generic_handle_irq(cascade_irq);
-+	}
-+}
-+
-+static void __init apic_gic_init(struct kvx_apic_gic *gic)
-+{
-+	unsigned int cpu, line;
-+	struct gic_in_irq_line *input_irq_line;
-+	struct gic_out_irq_line *output_irq_line;
-+	uint64_t status[KVX_GIC_STATUS_LAC_ARRAY_SIZE];
-+
-+	/* Initialize all input lines (device -> )*/
-+	for (line = 0; line < KVX_GIC_INPUT_IT_COUNT; line++) {
-+		input_irq_line = &gic->input_irq[line];
-+		input_irq_line->enabled = false;
-+		/* All input lines map on output 0 */
-+		input_irq_line->out_line = &gic->output_irq[0];
-+		input_irq_line->it_num = line;
++		if (cmd == HW_PT_CMD_SET_RESERVE || ret != 0)
++			return ret;
 +	}
 +
-+	/* Clear all output lines (-> cpus) */
-+	for (cpu = 0; cpu < GIC_CPU_OUT_COUNT; cpu++) {
-+		output_irq_line = &gic->output_irq[cpu];
-+		output_irq_line->cpu = cpu;
-+		output_irq_line->base = gic->base +
-+			cpu * (KVX_GIC_ELEM_SIZE * GIC_PER_CPU_IT_COUNT);
++	if (cmd != HW_PT_CMD_SET_ENABLE)
++		return -EINVAL;
 +
-+		/* Disable all external lines on this core */
-+		for (line = 0; line < KVX_GIC_INPUT_IT_COUNT; line++)
-+			irq_line_set_enable(output_irq_line,
-+					&gic->input_irq[line], 0x0);
-+
-+		irq_line_get_status_lac(output_irq_line, status);
++	if (is_breakpoint) {
++		bp = child->thread.debug.ptrace_hbp[idx];
++		bp_type = HW_BREAKPOINT_X;
++	} else {
++		bp = child->thread.debug.ptrace_hwp[idx];
++		bp_type = get_hw_pt_wp_type(addr);
++		if (!bp_type)
++			bp_type = HW_BREAKPOINT_W;
 +	}
++
++	if (!bp) {
++		bp = ptrace_hw_pt_create(child, bp_type);
++		if (IS_ERR(bp))
++			return PTR_ERR(bp);
++		if (is_breakpoint)
++			child->thread.debug.ptrace_hbp[idx] = bp;
++		else
++			child->thread.debug.ptrace_hwp[idx] = bp;
++	}
++
++	attr = bp->attr;
++	attr.bp_addr = get_hw_pt_addr(user_data);
++	attr.bp_len = get_hw_pt_len(user_data);
++	attr.bp_type = bp_type;
++	attr.disabled = !hw_pt_is_enabled(user_data);
++
++	return modify_user_hw_breakpoint(bp, &attr);
++}
++#endif
++
++static int kvx_gpr_get(struct task_struct *target,
++			 const struct user_regset *regset,
++			 struct membuf to)
++{
++	struct user_pt_regs *regs = &task_pt_regs(target)->user_regs;
++
++	return membuf_write(&to, regs, sizeof(*regs));
 +}
 +
-+static int kvx_gic_starting_cpu(unsigned int cpu)
++static int kvx_gpr_set(struct task_struct *target,
++			 const struct user_regset *regset,
++			 unsigned int pos, unsigned int count,
++			 const void *kbuf, const void __user *ubuf)
 +{
-+	enable_percpu_irq(gic_parent_irq, IRQ_TYPE_NONE);
++	struct user_pt_regs *regs = &task_pt_regs(target)->user_regs;
 +
-+	return 0;
++	return user_regset_copyin(&pos, &count, &kbuf, &ubuf, regs, 0, -1);
 +}
 +
-+static int kvx_gic_dying_cpu(unsigned int cpu)
++#ifdef CONFIG_ENABLE_TCA
++static int kvx_tca_reg_get(struct task_struct *target,
++			 const struct user_regset *regset,
++			 struct membuf to)
 +{
-+	disable_percpu_irq(gic_parent_irq);
-+
-+	return 0;
-+}
-+
-+static int __init kvx_init_apic_gic(struct device_node *node,
-+				    struct device_node *parent)
-+{
-+	struct kvx_apic_gic *gic;
++	struct ctx_switch_regs *ctx_regs = &target->thread.ctx_switch;
++	struct tca_reg *regs = ctx_regs->tca_regs;
 +	int ret;
-+	unsigned int irq;
 +
-+	if (!parent) {
-+		pr_err("kvx apic gic does not have parent\n");
-+		return -EINVAL;
-+	}
-+
-+	gic = kzalloc(sizeof(*gic), GFP_KERNEL);
-+	if (!gic)
-+		return -ENOMEM;
-+
-+	if (of_property_read_u32(node, "kalray,intc-nr-irqs",
-+						&gic->input_nr_irqs))
-+		gic->input_nr_irqs = KVX_GIC_INPUT_IT_COUNT;
-+
-+	if (WARN_ON(gic->input_nr_irqs > KVX_GIC_INPUT_IT_COUNT)) {
-+		ret = -EINVAL;
-+		goto err_kfree;
-+	}
-+
-+	gic->base = of_io_request_and_map(node, 0, node->name);
-+	if (!gic->base) {
-+		ret = -EINVAL;
-+		goto err_kfree;
-+	}
-+
-+	raw_spin_lock_init(&gic->lock);
-+	apic_gic_init(gic);
-+
-+	gic->domain = irq_domain_add_linear(node,
-+					gic->input_nr_irqs,
-+					&kvx_apic_gic_domain_ops,
-+					gic);
-+	if (!gic->domain) {
-+		pr_err("Failed to add IRQ domain\n");
-+		ret = -EINVAL;
-+		goto err_iounmap;
-+	}
-+
-+	irq = irq_of_parse_and_map(node, 0);
-+	if (irq <= 0) {
-+		pr_err("unable to parse irq\n");
-+		ret = -EINVAL;
-+		goto err_irq_domain_remove;
-+	}
-+
-+	irq_set_chained_handler_and_data(irq, kvx_apic_gic_handle_irq,
-+								gic);
-+
-+	gic_parent_irq = irq;
-+	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-+				"kvx/gic:online",
-+				kvx_gic_starting_cpu,
-+				kvx_gic_dying_cpu);
-+	if (ret < 0) {
-+		pr_err("Failed to setup hotplug state");
-+		goto err_irq_unmap;
-+	}
-+
-+	pr_info("Initialized interrupt controller with %d interrupts\n",
-+							gic->input_nr_irqs);
-+	return 0;
-+
-+err_irq_unmap:
-+	irq_dispose_mapping(irq);
-+err_irq_domain_remove:
-+	irq_domain_remove(gic->domain);
-+err_iounmap:
-+	iounmap(gic->base);
-+err_kfree:
-+	kfree(gic);
-+
-+	return ret;
-+}
-+
-+IRQCHIP_DECLARE(kvx_apic_gic, "kalray,kvx-apic-gic", kvx_init_apic_gic);
-diff --git a/drivers/irqchip/irq-kvx-apic-mailbox.c b/drivers/irqchip/irq-kvx-apic-mailbox.c
-new file mode 100644
-index 000000000000..c279a29ee7d0
---- /dev/null
-+++ b/drivers/irqchip/irq-kvx-apic-mailbox.c
-@@ -0,0 +1,465 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2017 - 2022 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Jules Maselbas
-+ */
-+
-+#define pr_fmt(fmt)	"kvx_apic_mailbox: " fmt
-+
-+#include <linux/irqchip/irq-kvx-apic-mailbox.h>
-+#include <linux/irqchip/chained_irq.h>
-+#include <linux/of_address.h>
-+#include <linux/interrupt.h>
-+#include <linux/irqdomain.h>
-+#include <linux/iommu.h>
-+#include <linux/irqchip.h>
-+#include <linux/module.h>
-+#include <linux/of_irq.h>
-+#include <linux/init.h>
-+#include <linux/msi.h>
-+#include <linux/of.h>
-+
-+#define MAILBOXES_MAX_COUNT 128
-+
-+/* Mailboxes are 64 bits wide */
-+#define MAILBOXES_BIT_SIZE 64
-+
-+/* Maximum number of mailboxes available */
-+#define MAILBOXES_MAX_BIT_COUNT (MAILBOXES_MAX_COUNT * MAILBOXES_BIT_SIZE)
-+
-+/* Mailboxes are grouped by 8 in a single page */
-+#define MAILBOXES_BITS_PER_PAGE (8 * MAILBOXES_BIT_SIZE)
-+
-+/**
-+ * struct mb_data - per mailbox data
-+ * @cpu: CPU on which the mailbox is routed
-+ * @parent_irq: Parent IRQ on the GIC
-+ */
-+struct mb_data {
-+	unsigned int cpu;
-+	unsigned int parent_irq;
-+};
-+
-+/**
-+ * struct kvx_apic_mailbox - kvx apic mailbox
-+ * @base: base address of the controller
-+ * @device_domain: IRQ device domain for mailboxes
-+ * @msi_domain: platform MSI domain for MSI interface
-+ * @domain_info: Domain information needed for the MSI domain
-+ * @mb_count: Count of mailboxes we are handling
-+ * @available: bitmap of availables bits in mailboxes
-+ * @mailboxes_lock: lock for irq migration
-+ * @mask_lock: lock for irq masking
-+ * @mb_data: data associated to each mailbox
-+ */
-+struct kvx_apic_mailbox {
-+	void __iomem *base;
-+	phys_addr_t phys_base;
-+	struct irq_domain *device_domain;
-+	struct irq_domain *msi_domain;
-+	struct msi_domain_info domain_info;
-+	/* Start and count of device mailboxes */
-+	unsigned int mb_count;
-+	/* Bitmap of allocated bits in mailboxes */
-+	DECLARE_BITMAP(available, MAILBOXES_MAX_BIT_COUNT);
-+	spinlock_t mailboxes_lock;
-+	raw_spinlock_t mask_lock;
-+	struct mb_data mb_data[MAILBOXES_MAX_COUNT];
-+};
-+
-+/**
-+ * struct kvx_irq_data - per irq data
-+ * @mb: Mailbox structure
-+ */
-+struct kvx_irq_data {
-+	struct kvx_apic_mailbox *mb;
-+};
-+
-+static void kvx_mailbox_get_from_hwirq(unsigned int hw_irq,
-+				       unsigned int *mailbox_num,
-+				       unsigned int *mailbox_bit)
-+{
-+	*mailbox_num = hw_irq / MAILBOXES_BIT_SIZE;
-+	*mailbox_bit = hw_irq % MAILBOXES_BIT_SIZE;
-+}
-+
-+static void __iomem *kvx_mailbox_get_addr(struct kvx_apic_mailbox *mb,
-+				   unsigned int num)
-+{
-+	return mb->base + (num * KVX_MAILBOX_ELEM_SIZE);
-+}
-+
-+static phys_addr_t kvx_mailbox_get_phys_addr(struct kvx_apic_mailbox *mb,
-+				   unsigned int num)
-+{
-+	return mb->phys_base + (num * KVX_MAILBOX_ELEM_SIZE);
-+}
-+
-+static void kvx_mailbox_msi_compose_msg(struct irq_data *data,
-+					struct msi_msg *msg)
-+{
-+	struct kvx_irq_data *kd = irq_data_get_irq_chip_data(data);
-+	struct kvx_apic_mailbox *mb = kd->mb;
-+	unsigned int mb_num, mb_bit;
-+	phys_addr_t mb_addr;
-+
-+	kvx_mailbox_get_from_hwirq(irqd_to_hwirq(data), &mb_num, &mb_bit);
-+	mb_addr = kvx_mailbox_get_phys_addr(mb, mb_num);
-+
-+	msg->address_hi = upper_32_bits(mb_addr);
-+	msg->address_lo = lower_32_bits(mb_addr);
-+	msg->data = mb_bit;
-+
-+	iommu_dma_compose_msi_msg(irq_data_get_msi_desc(data), msg);
-+}
-+
-+static void kvx_mailbox_set_irq_enable(struct irq_data *data,
-+				     bool enabled)
-+{
-+	struct kvx_irq_data *kd = irq_data_get_irq_chip_data(data);
-+	struct kvx_apic_mailbox *mb = kd->mb;
-+	unsigned int mb_num, mb_bit;
-+	void __iomem *mb_addr;
-+	u64 mask_value, mb_value;
-+
-+	kvx_mailbox_get_from_hwirq(irqd_to_hwirq(data), &mb_num, &mb_bit);
-+	mb_addr = kvx_mailbox_get_addr(mb, mb_num);
-+
-+	raw_spin_lock(&mb->mask_lock);
-+	mask_value = readq(mb_addr + KVX_MAILBOX_MASK_OFFSET);
-+	if (enabled)
-+		mask_value |= BIT_ULL(mb_bit);
++	if (!ctx_regs->tca_regs_saved)
++		ret = membuf_zero(&to, sizeof(*regs));
 +	else
-+		mask_value &= ~BIT_ULL(mb_bit);
-+
-+	writeq(mask_value, mb_addr + KVX_MAILBOX_MASK_OFFSET);
-+
-+	raw_spin_unlock(&mb->mask_lock);
-+
-+	/**
-+	 * Since interrupts on mailboxes are edge triggered and are only
-+	 * triggered when writing the value, we need to trigger it manually
-+	 * after updating the mask if enabled. If the interrupt was triggered by
-+	 * the device just after the mask write, we can trigger a spurious
-+	 * interrupt but that is still better than missing one...
-+	 * Moreover, the mailbox is configured in OR mode which means that even
-+	 * if we write a single bit, all other bits will be kept intact.
-+	 */
-+	if (enabled) {
-+		mb_value = readq(mb_addr + KVX_MAILBOX_VALUE_OFFSET);
-+		if (mb_value & BIT_ULL(mb_bit))
-+			writeq(BIT_ULL(mb_bit),
-+			       mb_addr + KVX_MAILBOX_VALUE_OFFSET);
-+	}
-+}
-+
-+static void kvx_mailbox_mask(struct irq_data *data)
-+{
-+	kvx_mailbox_set_irq_enable(data, false);
-+}
-+
-+static void kvx_mailbox_unmask(struct irq_data *data)
-+{
-+	kvx_mailbox_set_irq_enable(data, true);
-+}
-+
-+static void kvx_mailbox_set_cpu(struct kvx_apic_mailbox *mb, int mb_id,
-+			       int new_cpu)
-+{
-+	irq_set_affinity(mb->mb_data[mb_id].parent_irq, cpumask_of(new_cpu));
-+	mb->mb_data[mb_id].cpu = new_cpu;
-+}
-+
-+static void kvx_mailbox_free_bit(struct kvx_apic_mailbox *mb, int hw_irq)
-+{
-+	unsigned int mb_num, mb_bit;
-+
-+	kvx_mailbox_get_from_hwirq(hw_irq, &mb_num, &mb_bit);
-+	bitmap_clear(mb->available, hw_irq, 1);
-+
-+	/* If there is no more IRQ on this mailbox, reset it to CPU 0 */
-+	if (mb->available[mb_num] == 0)
-+		kvx_mailbox_set_cpu(mb, mb_num, 0);
-+}
-+
-+struct irq_chip kvx_apic_mailbox_irq_chip = {
-+	.name = "kvx apic mailbox",
-+	.irq_compose_msi_msg = kvx_mailbox_msi_compose_msg,
-+	.irq_mask = kvx_mailbox_mask,
-+	.irq_unmask = kvx_mailbox_unmask,
-+};
-+
-+static int kvx_mailbox_allocate_bits(struct kvx_apic_mailbox *mb, int num_req)
-+{
-+	int first, align_mask = 0;
-+
-+	/* This must be a power of 2 for bitmap_find_next_zero_area to work */
-+	BUILD_BUG_ON((MAILBOXES_BITS_PER_PAGE & (MAILBOXES_BITS_PER_PAGE - 1)));
-+
-+	/*
-+	 * If user requested more than 1 mailbox, we must make sure it will be
-+	 * aligned on a page size for iommu_dma_prepare_msi to be correctly
-+	 * mapped in a single page.
-+	 */
-+	if (num_req > 1)
-+		align_mask = (MAILBOXES_BITS_PER_PAGE - 1);
-+
-+	spin_lock(&mb->mailboxes_lock);
-+
-+	first = bitmap_find_next_zero_area(mb->available,
-+			mb->mb_count * MAILBOXES_BIT_SIZE, 0,
-+			num_req, align_mask);
-+	if (first >= MAILBOXES_MAX_BIT_COUNT) {
-+		spin_unlock(&mb->mailboxes_lock);
-+		return -ENOSPC;
-+	}
-+
-+	bitmap_set(mb->available, first, num_req);
-+
-+	spin_unlock(&mb->mailboxes_lock);
-+
-+	return first;
-+}
-+
-+static int kvx_apic_mailbox_msi_alloc(struct irq_domain *domain,
-+				      unsigned int virq,
-+				      unsigned int nr_irqs, void *args)
-+{
-+	int i, err;
-+	int hwirq = 0;
-+	u64 mb_addr;
-+	struct irq_data *d;
-+	struct kvx_irq_data *kd;
-+	struct kvx_apic_mailbox *mb = domain->host_data;
-+	struct msi_alloc_info *msi_info = (struct msi_alloc_info *)args;
-+	struct msi_desc *desc = msi_info->desc;
-+	unsigned int mb_num, mb_bit;
-+
-+	/* We will not be able to guarantee page alignment ! */
-+	if (nr_irqs > MAILBOXES_BITS_PER_PAGE)
-+		return -EINVAL;
-+
-+	hwirq = kvx_mailbox_allocate_bits(mb, nr_irqs);
-+	if (hwirq < 0)
-+		return hwirq;
-+
-+	kvx_mailbox_get_from_hwirq(hwirq, &mb_num, &mb_bit);
-+	mb_addr = (u64) kvx_mailbox_get_phys_addr(mb, mb_num);
-+	err = iommu_dma_prepare_msi(desc, mb_addr);
-+	if (err)
-+		goto free_mb_bits;
-+
-+	for (i = 0; i < nr_irqs; i++) {
-+		kd = kmalloc(sizeof(*kd), GFP_KERNEL);
-+		if (!kd) {
-+			err = -ENOMEM;
-+			goto free_irq_data;
-+		}
-+
-+		kd->mb = mb;
-+		irq_domain_set_info(domain, virq + i, hwirq + i,
-+				    &kvx_apic_mailbox_irq_chip,
-+				    kd, handle_simple_irq,
-+				    NULL, NULL);
-+	}
-+
-+	return 0;
-+
-+free_irq_data:
-+	for (i--; i >= 0; i--) {
-+		d = irq_domain_get_irq_data(domain, virq + i);
-+		kd = irq_data_get_irq_chip_data(d);
-+		kfree(kd);
-+	}
-+
-+free_mb_bits:
-+	spin_lock(&mb->mailboxes_lock);
-+	bitmap_clear(mb->available, hwirq, nr_irqs);
-+	spin_unlock(&mb->mailboxes_lock);
-+
-+	return err;
-+}
-+
-+static void kvx_apic_mailbox_msi_free(struct irq_domain *domain,
-+				      unsigned int virq,
-+				      unsigned int nr_irqs)
-+{
-+	int i;
-+	struct irq_data *d;
-+	struct kvx_irq_data *kd;
-+	struct kvx_apic_mailbox *mb = domain->host_data;
-+
-+	spin_lock(&mb->mailboxes_lock);
-+
-+	for (i = 0; i < nr_irqs; i++) {
-+		d = irq_domain_get_irq_data(domain, virq + i);
-+		kd = irq_data_get_irq_chip_data(d);
-+		kfree(kd);
-+		kvx_mailbox_free_bit(mb, d->hwirq);
-+	}
-+
-+	spin_unlock(&mb->mailboxes_lock);
-+}
-+
-+static const struct irq_domain_ops kvx_apic_mailbox_domain_ops = {
-+	.alloc  = kvx_apic_mailbox_msi_alloc,
-+	.free	= kvx_apic_mailbox_msi_free
-+};
-+
-+static struct irq_chip kvx_msi_irq_chip = {
-+	.name	= "KVX MSI",
-+};
-+
-+static void kvx_apic_mailbox_handle_irq(struct irq_desc *desc)
-+{
-+	struct irq_data *data = irq_desc_get_irq_data(desc);
-+	struct kvx_apic_mailbox *mb = irq_desc_get_handler_data(desc);
-+	void __iomem *mb_addr = kvx_mailbox_get_addr(mb, irqd_to_hwirq(data));
-+	unsigned int irqn, cascade_irq, bit;
-+	u64 mask_value, masked_its;
-+	u64 mb_value;
-+	/* Since we allocate 64 interrupts for each mailbox, the scheme
-+	 * to find the hwirq associated to a mailbox irq is the
-+	 * following:
-+	 * hw_irq = mb_num * MAILBOXES_BIT_SIZE + bit
-+	 */
-+	unsigned int mb_hwirq = irqd_to_hwirq(data) * MAILBOXES_BIT_SIZE;
-+
-+	mb_value = readq(mb_addr + KVX_MAILBOX_LAC_OFFSET);
-+	mask_value = readq(mb_addr + KVX_MAILBOX_MASK_OFFSET);
-+	/* Mask any disabled interrupts */
-+	mb_value &= mask_value;
-+
-+	/**
-+	 * Write all pending ITs that are masked to process them later
-+	 * Since the mailbox is in OR mode, these bits will be merged with any
-+	 * already set bits and thus avoid losing any interrupts.
-+	 */
-+	masked_its = (~mask_value) & mb_value;
-+	if (masked_its)
-+		writeq(masked_its, mb_addr + KVX_MAILBOX_LAC_OFFSET);
-+
-+	for_each_set_bit(bit, (unsigned long *) &mb_value, BITS_PER_LONG) {
-+		irqn = bit + mb_hwirq;
-+		cascade_irq = irq_find_mapping(mb->device_domain, irqn);
-+		generic_handle_irq(cascade_irq);
-+	}
-+}
-+
-+static void __init
-+apic_mailbox_reset(struct kvx_apic_mailbox *mb)
-+{
-+	unsigned int i;
-+	unsigned int mb_end = mb->mb_count;
-+	void __iomem *mb_addr;
-+	u64 funct_val = (KVX_MAILBOX_MODE_OR << KVX_MAILBOX_FUNCT_MODE_SHIFT) |
-+		(KVX_MAILBOX_TRIG_DOORBELL << KVX_MAILBOX_FUNCT_TRIG_SHIFT);
-+
-+	for (i = 0; i < mb_end; i++) {
-+		mb_addr = kvx_mailbox_get_addr(mb, i);
-+		/* Disable all interrupts */
-+		writeq(0ULL, mb_addr + KVX_MAILBOX_MASK_OFFSET);
-+		/* Set mailbox to OR mode + trigger */
-+		writeq(funct_val, mb_addr + KVX_MAILBOX_FUNCT_OFFSET);
-+		/* Load & Clear mailbox value */
-+		readq(mb_addr + KVX_MAILBOX_LAC_OFFSET);
-+	}
-+}
-+
-+static struct msi_domain_ops kvx_msi_domain_ops = {
-+};
-+
-+static struct msi_domain_info kvx_msi_domain_info = {
-+	.flags	= (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-+	.ops	= &kvx_msi_domain_ops,
-+	.chip	= &kvx_msi_irq_chip,
-+};
-+
-+static int __init
-+kvx_init_apic_mailbox(struct device_node *node,
-+		      struct device_node *parent)
-+{
-+	struct kvx_apic_mailbox *mb;
-+	unsigned int parent_irq, irq_count;
-+	struct resource res;
-+	int ret, i;
-+
-+	mb = kzalloc(sizeof(*mb), GFP_KERNEL);
-+	if (!mb)
-+		return -ENOMEM;
-+
-+	ret = of_address_to_resource(node, 0, &res);
-+	if (ret)
-+		return -EINVAL;
-+
-+	mb->phys_base = res.start;
-+	mb->base = of_io_request_and_map(node, 0, node->name);
-+	if (!mb->base) {
-+		ret = -EINVAL;
-+		goto err_kfree;
-+	}
-+
-+	spin_lock_init(&mb->mailboxes_lock);
-+	raw_spin_lock_init(&mb->mask_lock);
-+
-+	irq_count = of_irq_count(node);
-+	if (irq_count == 0 || irq_count > MAILBOXES_MAX_COUNT) {
-+		ret = -EINVAL;
-+		goto err_kfree;
-+	}
-+	mb->mb_count = irq_count;
-+
-+	apic_mailbox_reset(mb);
-+
-+	mb->device_domain = irq_domain_add_tree(node,
-+						&kvx_apic_mailbox_domain_ops,
-+						mb);
-+	if (!mb->device_domain) {
-+		pr_err("Failed to setup device domain\n");
-+		ret = -EINVAL;
-+		goto err_iounmap;
-+	}
-+
-+	mb->msi_domain = platform_msi_create_irq_domain(of_node_to_fwnode(node),
-+						     &kvx_msi_domain_info,
-+						     mb->device_domain);
-+	if (!mb->msi_domain) {
-+		ret = -EINVAL;
-+		goto err_irq_domain_add_tree;
-+	}
-+
-+	/* Chain all interrupts from gic to mailbox */
-+	for (i = 0; i < irq_count; i++) {
-+		parent_irq = irq_of_parse_and_map(node, i);
-+		if (parent_irq == 0) {
-+			pr_err("unable to parse irq\n");
-+			ret = -EINVAL;
-+			goto err_irq_domain_msi_create;
-+		}
-+		mb->mb_data[i].parent_irq = parent_irq;
-+
-+		irq_set_chained_handler_and_data(parent_irq,
-+						 kvx_apic_mailbox_handle_irq,
-+						 mb);
-+	}
-+
-+	pr_info("Init with %d device interrupt\n",
-+					mb->mb_count * MAILBOXES_BIT_SIZE);
-+
-+	return 0;
-+
-+err_irq_domain_msi_create:
-+	irq_domain_remove(mb->msi_domain);
-+err_irq_domain_add_tree:
-+	irq_domain_remove(mb->device_domain);
-+err_iounmap:
-+	iounmap(mb->base);
-+err_kfree:
-+	kfree(mb);
++		ret = membuf_write(&to, regs, sizeof(*regs));
 +
 +	return ret;
 +}
 +
-+IRQCHIP_DECLARE(kvx_apic_mailbox, "kalray,kvx-apic-mailbox",
-+		kvx_init_apic_mailbox);
-diff --git a/drivers/irqchip/irq-kvx-core-intc.c b/drivers/irqchip/irq-kvx-core-intc.c
-new file mode 100644
-index 000000000000..4315108d563c
---- /dev/null
-+++ b/drivers/irqchip/irq-kvx-core-intc.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++static int kvx_tca_reg_set(struct task_struct *target,
++			 const struct user_regset *regset,
++			 unsigned int pos, unsigned int count,
++			 const void *kbuf, const void __user *ubuf)
++{
++	struct ctx_switch_regs *ctx_regs = &target->thread.ctx_switch;
++	struct tca_reg *regs = ctx_regs->tca_regs;
++	int ret;
++
++	if (!ctx_regs->tca_regs_saved)
++		ret = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
++						0, -1);
++	else
++		ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, regs,
++					 0, -1);
++
++	return ret;
++}
++#endif
++
++static const struct user_regset kvx_user_regset[] = {
++	[REGSET_GPR] = {
++		.core_note_type = NT_PRSTATUS,
++		.n = ELF_NGREG,
++		.size = sizeof(elf_greg_t),
++		.align = sizeof(elf_greg_t),
++		.regset_get = &kvx_gpr_get,
++		.set = &kvx_gpr_set,
++	},
++#ifdef CONFIG_ENABLE_TCA
++	[REGSET_TCA] = {
++		.core_note_type = NT_KVX_TCA,
++		.n = TCA_REG_COUNT,
++		.size = sizeof(struct tca_reg),
++		.align = sizeof(struct tca_reg),
++		.regset_get = &kvx_tca_reg_get,
++		.set = &kvx_tca_reg_set,
++	},
++#endif
++};
++
++static const struct user_regset_view user_kvx_view = {
++	.name = "kvx",
++	.e_machine = EM_KVX,
++	.regsets = kvx_user_regset,
++	.n = ARRAY_SIZE(kvx_user_regset)
++};
++
++const struct user_regset_view *task_user_regset_view(struct task_struct *task)
++{
++	return &user_kvx_view;
++}
++
++long arch_ptrace(struct task_struct *child, long request,
++		unsigned long addr, unsigned long data)
++{
++	int ret;
++	unsigned long __user *datap = (unsigned long __user *) data;
++
++	switch (request) {
++#ifdef CONFIG_HAVE_HW_BREAKPOINT
++	case PTRACE_GET_HW_PT_REGS:
++		ret = ptrace_get_hw_pt_pregs(child, addr, datap);
++		break;
++	case PTRACE_SET_HW_PT_REGS:
++		ret = ptrace_set_hw_pt_regs(child, addr, datap);
++		break;
++#endif
++	default:
++		ret = ptrace_request(child, request, addr, data);
++		break;
++	}
++
++	return ret;
++}
++
 +/*
-+ * Copyright (c) 2017 - 2022 Kalray Inc.
-+ * Author(s): Clement Leger
++ * Allows PTRACE_SYSCALL to work.  These are called from entry.S in
++ * {handle,ret_from}_syscall.
 + */
-+
-+#define pr_fmt(fmt)	"kvx_core_intc: " fmt
-+
-+#include <linux/interrupt.h>
-+#include <linux/irqdomain.h>
-+#include <linux/irqchip.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/of.h>
-+#include <asm/irq.h>
-+
-+#define KVX_CORE_INTC_IRQ	32
-+
-+
-+static void kvx_irq_mask(struct irq_data *data)
++int do_syscall_trace_enter(struct pt_regs *regs, unsigned long syscall)
 +{
-+	kvx_sfr_clear_bit(ILE, data->hwirq);
++	int ret = 0;
++
++#ifdef CONFIG_CONTEXT_TRACKING_USER
++	user_exit_callable();
++#endif
++	if (test_thread_flag(TIF_SYSCALL_TRACE))
++		ret = ptrace_report_syscall_entry(regs);
++
++#ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
++	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
++		trace_sys_enter(regs, syscall_get_nr(current, regs));
++#endif
++
++	audit_syscall_entry(syscall, regs->r0, regs->r1, regs->r2, regs->r3);
++
++	return ret;
 +}
 +
-+static void kvx_irq_unmask(struct irq_data *data)
++void do_syscall_trace_exit(struct pt_regs *regs)
 +{
-+	kvx_sfr_set_bit(ILE, data->hwirq);
++	if (test_thread_flag(TIF_SYSCALL_TRACE))
++		ptrace_report_syscall_exit(regs, 0);
++
++	audit_syscall_exit(regs);
++
++#ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
++	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
++		trace_sys_exit(regs, regs_return_value(regs));
++#endif
++
++#ifdef CONFIG_CONTEXT_TRACKING_USER
++	user_enter_callable();
++#endif
 +}
 +
-+static struct irq_chip kvx_irq_chip = {
-+	.name           = "kvx core Intc",
-+	.irq_mask	= kvx_irq_mask,
-+	.irq_unmask	= kvx_irq_unmask,
++static int kvx_bkpt_handler(struct break_hook *brk_hook, struct pt_regs *regs)
++{
++	/* Unexpected breakpoint */
++	if (!(current->ptrace & PT_PTRACED))
++		return BREAK_HOOK_ERROR;
++
++	/* deliver the signal to userspace */
++	force_sig_fault(SIGTRAP, TRAP_BRKPT, (void __user *) regs->spc);
++
++	return BREAK_HOOK_HANDLED;
++}
++
++static void kvx_stepi(struct pt_regs *regs)
++{
++	/* deliver the signal to userspace */
++	force_sig_fault(SIGTRAP, TRAP_TRACE, (void __user *) regs->spc);
++}
++
++void user_enable_single_step(struct task_struct *child)
++{
++	struct pt_regs *regs = task_pt_regs(child);
++
++	enable_single_step(regs);
++}
++
++void user_disable_single_step(struct task_struct *child)
++{
++	struct pt_regs *regs = task_pt_regs(child);
++
++	disable_single_step(regs);
++}
++
++/**
++ * Main debug handler called by the _debug_handler routine in entry.S
++ * This handler will perform the required action
++ * @es: Exception Syndrome register value
++ * @ea: Exception Address register
++ * @regs: pointer to registers saved when enter debug
++ */
++int ptrace_debug_handler(u64 ea, struct pt_regs *regs)
++{
++	int debug_cause = debug_dc(regs->es);
++
++	switch (debug_cause) {
++	case DEBUG_CAUSE_STEPI:
++		if (check_hw_watchpoint_stepped(regs))
++			user_disable_single_step(current);
++		else
++			kvx_stepi(regs);
++		break;
++	case DEBUG_CAUSE_BREAKPOINT:
++		check_hw_breakpoint(regs);
++		break;
++	case DEBUG_CAUSE_WATCHPOINT:
++		if (check_hw_watchpoint(regs, ea))
++			user_enable_single_step(current);
++		break;
++	default:
++		break;
++	}
++
++	return DEBUG_HOOK_HANDLED;
++}
++
++static struct debug_hook ptrace_debug_hook = {
++	.handler = ptrace_debug_handler,
++	.mode = MODE_USER,
 +};
 +
-+static int kvx_irq_map(struct irq_domain *d, unsigned int irq,
-+			 irq_hw_number_t hw)
++static struct break_hook bkpt_break_hook = {
++	.id = BREAK_CAUSE_BKPT,
++	.handler = kvx_bkpt_handler,
++	.mode = MODE_USER,
++};
++
++static int __init arch_init_breakpoint(void)
 +{
-+	/* All interrupts for core are per cpu */
-+	irq_set_percpu_devid(irq);
-+	irq_set_chip_and_handler(irq, &kvx_irq_chip, handle_percpu_irq);
++	break_hook_register(&bkpt_break_hook);
++	debug_hook_register(&ptrace_debug_hook);
 +
 +	return 0;
 +}
 +
-+static const struct irq_domain_ops kvx_irq_ops = {
-+	.xlate = irq_domain_xlate_onecell,
-+	.map = kvx_irq_map,
-+};
-+
-+static int __init
-+kvx_init_core_intc(struct device_node *intc, struct device_node *parent)
-+{
-+	struct irq_domain *root_domain;
-+	uint32_t core_nr_irqs;
-+
-+	if (parent)
-+		panic("DeviceTree core intc not a root irq controller\n");
-+
-+	if (of_property_read_u32(intc, "kalray,intc-nr-irqs", &core_nr_irqs))
-+		core_nr_irqs = KVX_CORE_INTC_IRQ;
-+
-+	/* We only have up to 32 interrupts, according to IRQ-domain.txt,
-+	 * linear is likely to be the best choice
-+	 */
-+	root_domain = irq_domain_add_linear(intc, core_nr_irqs,
-+						&kvx_irq_ops, NULL);
-+	if (!root_domain)
-+		panic("root irq domain not avail\n");
-+
-+	/*
-+	 * Needed for primary domain lookup to succeed
-+	 * This is a primary irqchip, and can never have a parent
-+	 */
-+	irq_set_default_host(root_domain);
-+
-+	pr_info("Initialized with %d interrupts\n", core_nr_irqs);
-+
-+	return 0;
-+}
-+
-+IRQCHIP_DECLARE(kvx_core_intc, "kalray,kvx-core-intc", kvx_init_core_intc);
-diff --git a/drivers/irqchip/irq-kvx-itgen.c b/drivers/irqchip/irq-kvx-itgen.c
++postcore_initcall(arch_init_breakpoint);
+diff --git a/arch/kvx/kernel/stacktrace.c b/arch/kvx/kernel/stacktrace.c
 new file mode 100644
-index 000000000000..1d35c2c772a0
+index 000000000000..85d52ba2d082
 --- /dev/null
-+++ b/drivers/irqchip/irq-kvx-itgen.c
-@@ -0,0 +1,224 @@
++++ b/arch/kvx/kernel/stacktrace.c
+@@ -0,0 +1,173 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Copyright (c) 2017 - 2022 Kalray Inc.
++ * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
-+ *            Julian Vetter
 + *            Vincent Chardon
 + */
 +
-+#include <linux/irqchip/irq-kvx-itgen.h>
-+#include <linux/platform_device.h>
-+#include <linux/of_platform.h>
-+#include <linux/of_address.h>
-+#include <linux/interrupt.h>
-+#include <linux/irqdomain.h>
-+#include <linux/irqchip.h>
-+#include <linux/module.h>
-+#include <linux/msi.h>
-+#include <linux/of.h>
-+#include <linux/of_irq.h>
++#include <linux/context_tracking.h>
++#include <linux/kallsyms.h>
++#include <linux/printk.h>
++#include <linux/init.h>
 +
-+#define MB_ADDR_CLUSTER_SHIFT	24
-+#define MB_ADDR_MAILBOX_SHIFT	9
++#include <asm/stacktrace.h>
++#include <asm/ptrace.h>
 +
-+/**
-+ * struct kvx_itgen - kvx interrupt generator (MSI client)
-+ * @base: base address of the itgen controller
-+ * @domain: IRQ domain of the controller
-+ * @pdev: Platform device associated to the controller
-+ */
-+struct kvx_itgen {
-+	void __iomem *base;
-+	struct irq_domain *domain;
-+	struct platform_device *pdev;
-+};
++#define STACK_SLOT_PER_LINE		4
++#define STACK_MAX_SLOT_PRINT		(STACK_SLOT_PER_LINE * 8)
 +
-+static void __iomem *get_itgen_cfg_offset(struct kvx_itgen *itgen,
-+						irq_hw_number_t hwirq)
++static int notrace unwind_frame(struct task_struct *task,
++				struct stackframe *frame)
 +{
-+	return itgen->base + KVX_ITGEN_CFG_TARGET_OFFSET +
-+				hwirq * KVX_ITGEN_CFG_ELEM_SIZE;
-+}
++	unsigned long fp = frame->fp;
 +
-+void __iomem *get_itgen_param_offset(struct kvx_itgen *itgen)
-+{
-+	return itgen->base + KVX_ITGEN_PARAM_OFFSET;
-+}
++	/* Frame pointer must be aligned on 8 bytes */
++	if (fp & 0x7)
++		return -EINVAL;
 +
-+static void kvx_itgen_enable(struct irq_data *data, u32 value)
-+{
-+	struct kvx_itgen *itgen = irq_data_get_irq_chip_data(data);
-+	void __iomem *enable_reg =
-+		get_itgen_cfg_offset(itgen, irqd_to_hwirq(data)) +
-+		KVX_ITGEN_CFG_ENABLE_OFFSET;
++	if (!task)
++		task = current;
 +
-+	dev_dbg(&itgen->pdev->dev, "%sabling hwirq %d, addr %p\n",
-+		 value ? "En" : "Dis",
-+		 (int) irqd_to_hwirq(data),
-+		 enable_reg);
-+	writel(value, enable_reg);
-+}
++	if (!on_task_stack(task, fp))
++		return -EINVAL;
 +
-+static void kvx_itgen_mask(struct irq_data *data)
-+{
-+	kvx_itgen_enable(data, 0x0);
-+	irq_chip_mask_parent(data);
-+}
++	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
++	frame->ra = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 8));
 +
-+static void kvx_itgen_unmask(struct irq_data *data)
-+{
-+	kvx_itgen_enable(data, 0x1);
-+	irq_chip_unmask_parent(data);
-+}
-+
-+#ifdef CONFIG_SMP
-+static int kvx_itgen_irq_set_affinity(struct irq_data *data,
-+				      const struct cpumask *dest, bool force)
-+{
-+	return -ENOSYS;
-+}
-+#endif
-+
-+static struct irq_chip itgen_irq_chip = {
-+	.name =			"kvx-itgen",
-+	.irq_mask =		kvx_itgen_mask,
-+	.irq_unmask =		kvx_itgen_unmask,
-+#ifdef CONFIG_SMP
-+	.irq_set_affinity =	kvx_itgen_irq_set_affinity,
-+#endif
-+};
-+
-+#define ITGEN_UNSUPPORTED_TYPES (IRQ_TYPE_LEVEL_LOW | IRQ_TYPE_EDGE_FALLING)
-+
-+static int kvx_itgen_domain_alloc(struct irq_domain *domain, unsigned int virq,
-+				   unsigned int nr_irqs, void *args)
-+{
-+	int i, err;
-+	struct irq_fwspec *fwspec = args;
-+	int hwirq = fwspec->param[0];
-+	int type = IRQ_TYPE_NONE;
-+	struct kvx_itgen *itgen;
-+
-+	if (fwspec->param_count >= 2)
-+		type = fwspec->param[1];
-+
-+	WARN_ON(type & ITGEN_UNSUPPORTED_TYPES);
-+
-+	err = platform_msi_device_domain_alloc(domain, virq, nr_irqs);
-+	if (err)
-+		return err;
-+
-+	itgen = platform_msi_get_host_data(domain);
-+
-+	for (i = 0; i < nr_irqs; i++) {
-+		irq_domain_set_hwirq_and_chip(domain, virq + i, hwirq + i,
-+				      &itgen_irq_chip, itgen);
-+		if (type == IRQ_TYPE_LEVEL_HIGH)
-+			irq_set_handler(virq + i, handle_level_irq);
-+	}
++	/*
++	 * When starting, we set the frame pointer to 0, hence end of
++	 * frame linked list is signal by that
++	 */
++	if (!frame->fp)
++		return -EINVAL;
 +
 +	return 0;
 +}
 +
-+static const struct irq_domain_ops itgen_domain_ops = {
-+	.alloc		= kvx_itgen_domain_alloc,
-+	.free		= irq_domain_free_irqs_common,
-+};
-+
-+static void kvx_itgen_write_msg(struct msi_desc *desc, struct msi_msg *msg)
++void notrace walk_stackframe(struct task_struct *task, struct stackframe *frame,
++			     bool (*fn)(unsigned long, void *), void *arg)
 +{
-+	struct irq_data *d = irq_get_irq_data(desc->irq);
-+	struct kvx_itgen *itgen = irq_data_get_irq_chip_data(d);
-+	uint32_t cfg_val = 0;
-+	uintptr_t dest_addr = ((uint64_t) msg->address_hi << 32) |
-+							msg->address_lo;
-+	void __iomem *cfg = get_itgen_cfg_offset(itgen, irqd_to_hwirq(d));
++	unsigned long addr;
++	int ret;
 +
-+	/**
-+	 * Address in the msi data is the address of the targeted mailbox.
-+	 * To save a few cells of hw, itgen configuration expects the
-+	 * target of the write using mppa id, cluster id and mailbox id instead
-+	 * of address.
-+	 * We extract these information from mailbox address.
-+	 */
++	while (1) {
++		addr = frame->ra;
 +
-+	cfg_val |= (((kvx_sfr_get(PCR) & KVX_SFR_PCR_CID_MASK) >>
-+				 KVX_SFR_PCR_CID_SHIFT)
-+				<< KVX_ITGEN_CFG_TARGET_CLUSTER_SHIFT);
-+	cfg_val |= ((dest_addr >> MB_ADDR_MAILBOX_SHIFT) &
-+		     KVX_ITGEN_CFG_TARGET_MAILBOX_MASK)
-+		    << KVX_ITGEN_CFG_TARGET_MAILBOX_SHIFT;
++		if (fn(addr, arg))
++			break;
 +
-+	/**
-+	 * msg->data contains the bit number to be written and is included in
-+	 * the itgen config
-+	 */
-+	cfg_val |= ((msg->data << KVX_ITGEN_CFG_TARGET_SELECT_BIT_SHIFT)
-+		    & KVX_ITGEN_CFG_TARGET_SELECT_BIT_MASK);
-+
-+	dev_dbg(&itgen->pdev->dev,
-+		"Writing dest_addr %lx, value %x to cfg %p\n",
-+		dest_addr, cfg_val, cfg);
-+
-+	writel(cfg_val, cfg);
++		ret = unwind_frame(task, frame);
++		if (ret)
++			break;
++	}
 +}
 +
-+static int
-+kvx_itgen_device_probe(struct platform_device *pdev)
++#ifdef CONFIG_STACKTRACE
++bool append_stack_addr(unsigned long pc, void *arg)
 +{
-+	struct kvx_itgen *itgen;
-+	u32 it_count;
-+	struct resource *mem;
++	struct stack_trace *trace;
 +
-+	itgen = devm_kzalloc(&pdev->dev, sizeof(*itgen), GFP_KERNEL);
-+	if (!itgen)
-+		return -ENOMEM;
-+
-+	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	itgen->base = devm_ioremap_resource(&pdev->dev, mem);
-+	if (IS_ERR(itgen->base)) {
-+		dev_err(&pdev->dev, "Failed to ioremap itgen\n");
-+		return PTR_ERR(itgen->base);
++	trace = (struct stack_trace *)arg;
++	if (trace->skip == 0) {
++		trace->entries[trace->nr_entries++] = pc;
++		if (trace->nr_entries == trace->max_entries)
++			return true;
++	} else {
++		trace->skip--;
 +	}
 +
-+	itgen->pdev = pdev;
-+	it_count = readl(get_itgen_param_offset(itgen) +
-+				KVX_ITGEN_PARAM_IT_NUM_OFFSET);
++	return false;
++}
 +
-+	itgen->domain = platform_msi_create_device_domain(&pdev->dev,
-+						   it_count,
-+						   kvx_itgen_write_msg,
-+						   &itgen_domain_ops,
-+						   itgen);
-+	if (!itgen->domain) {
-+		dev_err(&pdev->dev, "Failed to create device domain\n");
-+		return -ENOMEM;
++/*
++ * Save stack-backtrace addresses into a stack_trace buffer.
++ */
++void save_stack_trace(struct stack_trace *trace)
++{
++	struct stackframe frame;
++
++	trace->nr_entries = 0;
++	/* We want to skip this function and the caller */
++	trace->skip += 2;
++
++	start_stackframe(&frame, (unsigned long) __builtin_frame_address(0),
++			 (unsigned long) save_stack_trace);
++	walk_stackframe(current, &frame, append_stack_addr, trace);
++}
++EXPORT_SYMBOL(save_stack_trace);
++#endif /* CONFIG_STACKTRACE */
++
++static bool print_pc(unsigned long pc, void *arg)
++{
++	unsigned long *skip = arg;
++
++	if (*skip == 0)
++		print_ip_sym(KERN_INFO, pc);
++	else
++		(*skip)--;
++
++	return false;
++}
++
++void show_stacktrace(struct task_struct *task, struct pt_regs *regs)
++{
++	struct stackframe frame;
++	unsigned long skip = 0;
++
++	/* Obviously, we can't backtrace on usermode ! */
++	if (regs && user_mode(regs))
++		return;
++
++	if (!task)
++		task = current;
++
++	if (!try_get_task_stack(task))
++		return;
++
++	if (regs) {
++		start_stackframe(&frame, regs->fp, regs->spc);
++	} else if (task == current) {
++		/* Skip current function and caller */
++		skip = 2;
++		start_stackframe(&frame,
++				 (unsigned long) __builtin_frame_address(0),
++				 (unsigned long) show_stacktrace);
++	} else {
++		/* task blocked in __switch_to */
++		start_stackframe(&frame,
++				 thread_saved_reg(task, fp),
++				 thread_saved_reg(task, ra));
 +	}
 +
-+	dev_info(&pdev->dev, "Probed with %d interrupts\n", it_count);
++	pr_info("Call Trace:\n");
++	walk_stackframe(task, &frame, print_pc, &skip);
 +
-+	platform_set_drvdata(pdev, itgen);
-+
-+	return 0;
++	put_task_stack(task);
 +}
 +
-+static const struct of_device_id itgen_of_match[] = {
-+	{ .compatible = "kalray,kvx-itgen" },
-+	{ /* END */ }
-+};
-+MODULE_DEVICE_TABLE(of, itgen_of_match);
-+
-+static struct platform_driver itgen_platform_driver = {
-+	.driver = {
-+		.name		= "kvx-itgen",
-+		.of_match_table	= itgen_of_match,
-+	},
-+	.probe			= kvx_itgen_device_probe,
-+};
-+
-+static int __init kvx_itgen_init(void)
++/*
++ * If show_stack is called with a non-null task, then the task will have been
++ * claimed with try_get_task_stack by the caller. If task is NULL or current
++ * then there is no need to get task stack since it's our current stack...
++ */
++void show_stack(struct task_struct *task, unsigned long *sp)
 +{
-+	return platform_driver_register(&itgen_platform_driver);
++	int i = 0;
++
++	if (!sp)
++		sp = (unsigned long *) get_current_sp();
++
++	pr_info("Stack dump (@%p):\n", sp);
++	for (i = 0; i < STACK_MAX_SLOT_PRINT; i++) {
++		if (kstack_end(sp))
++			break;
++
++		if (i && (i % STACK_SLOT_PER_LINE) == 0)
++			pr_cont("\n\t");
++
++		pr_cont("%016lx ", *sp++);
++	}
++	pr_cont("\n");
++
++	show_stacktrace(task, NULL);
 +}
-+
-+arch_initcall(kvx_itgen_init);
-diff --git a/include/linux/irqchip/irq-kvx-apic-gic.h b/include/linux/irqchip/irq-kvx-apic-gic.h
-new file mode 100644
-index 000000000000..8efbcd05f3ea
---- /dev/null
-+++ b/include/linux/irqchip/irq-kvx-apic-gic.h
-@@ -0,0 +1,21 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2018-2023 Kalray Inc.
-+ * Author: Clement Leger
-+ */
-+
-+#ifndef KVX_APIC_GIC_H
-+#define KVX_APIC_GIC_H
-+
-+/* GIC enable register definitions */
-+#define KVX_GIC_ENABLE_OFFSET     0x0
-+#define KVX_GIC_ENABLE_ELEM_SIZE  0x1
-+#define KVX_GIC_INPUT_IT_COUNT 0x9D
-+#define KVX_GIC_ELEM_SIZE 0x400
-+
-+/* GIC status lac register definitions */
-+#define KVX_GIC_STATUS_LAC_OFFSET     0x120
-+#define KVX_GIC_STATUS_LAC_ELEM_SIZE  0x8
-+#define KVX_GIC_STATUS_LAC_ARRAY_SIZE 0x3
-+
-+#endif /* KVX_APIC_GIC_H */
-diff --git a/include/linux/irqchip/irq-kvx-apic-mailbox.h b/include/linux/irqchip/irq-kvx-apic-mailbox.h
-new file mode 100644
-index 000000000000..40ec60de155c
---- /dev/null
-+++ b/include/linux/irqchip/irq-kvx-apic-mailbox.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2018-2023 Kalray Inc.
-+ */
-+
-+#ifndef IRQ_KVX_APIC_MAILBOX_H
-+#define IRQ_KVX_APIC_MAILBOX_H
-+
-+#define KVX_MAILBOX_MODE_WRITE  0x0
-+#define KVX_MAILBOX_MODE_OR  0x1
-+#define KVX_MAILBOX_MODE_ADD  0x2
-+
-+#define KVX_MAILBOX_TRIG_NO_TRIG 0x0
-+#define KVX_MAILBOX_TRIG_DOORBELL 0x1
-+#define KVX_MAILBOX_TRIG_MATCH 0x2
-+#define KVX_MAILBOX_TRIG_BARRIER 0x3
-+#define KVX_MAILBOX_TRIG_THRESHOLD 0x4
-+
-+/* Mailbox defines */
-+#define KVX_MAILBOX_OFFSET 0x0
-+#define KVX_MAILBOX_ELEM_SIZE 0x200
-+#define KVX_MAILBOX_MASK_OFFSET     0x10
-+#define KVX_MAILBOX_FUNCT_OFFSET     0x18
-+#define KVX_MAILBOX_LAC_OFFSET     0x8
-+#define KVX_MAILBOX_VALUE_OFFSET     0x0
-+#define KVX_MAILBOX_FUNCT_MODE_SHIFT  0x0
-+#define KVX_MAILBOX_FUNCT_TRIG_SHIFT 0x8
-+
-+#endif /* IRQ_KVX_APIC_MAILBOX_H */
-diff --git a/include/linux/irqchip/irq-kvx-itgen.h b/include/linux/irqchip/irq-kvx-itgen.h
-new file mode 100644
-index 000000000000..6845a2509b14
---- /dev/null
-+++ b/include/linux/irqchip/irq-kvx-itgen.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2018-2023 Kalray Inc.
-+ */
-+
-+#ifndef IRQ_KVX_ITGEN_H
-+#define IRQ_KVX_ITGEN_H
-+
-+/* Parameters */
-+#define KVX_ITGEN_PARAM_OFFSET 0x1100
-+#define KVX_ITGEN_PARAM_IT_NUM_OFFSET     0x0
-+
-+/* Target configuration */
-+#define KVX_ITGEN_CFG_ENABLE_OFFSET     0x8
-+#define KVX_ITGEN_CFG_ELEM_SIZE 0x10
-+#define KVX_ITGEN_CFG_TARGET_OFFSET     0x0
-+#define KVX_ITGEN_CFG_TARGET_MAILBOX_SHIFT    0x0
-+#define KVX_ITGEN_CFG_TARGET_MAILBOX_MASK     0x7FUL
-+#define KVX_ITGEN_CFG_TARGET_CLUSTER_SHIFT    0x8
-+#define KVX_ITGEN_CFG_TARGET_CLUSTER_MASK     0x700UL
-+#define KVX_ITGEN_CFG_TARGET_SELECT_BIT_SHIFT 0x18
-+#define KVX_ITGEN_CFG_TARGET_SELECT_BIT_MASK  0x3F000000UL
-+
-+#endif /* IRQ_KVX_ITGEN_H */
 -- 
 2.37.2
-
-
 
 
 
