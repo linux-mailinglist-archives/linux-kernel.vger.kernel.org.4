@@ -2,140 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DC865BFA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 073C965BFAF
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237217AbjACMKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 07:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
+        id S237488AbjACMMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 07:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237127AbjACMKl (ORCPT
+        with ESMTP id S237343AbjACMMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 07:10:41 -0500
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA51E022;
-        Tue,  3 Jan 2023 04:10:40 -0800 (PST)
-Received: by mail-vk1-f173.google.com with SMTP id i84so8298964vke.7;
-        Tue, 03 Jan 2023 04:10:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RfaW83NGJ0rvdUnRHgSi4+IHmvqlUCSBL7ZpSjvyOw0=;
-        b=TZ3l9LHllzPPbmgla+AAsrhXvrAE9cZJnsqF7CK1KEWM9yU3nu48CWpudivVfMax9N
-         NbYNR9IqimHMkKpUezHH+Jx2z19328h0rkXl2UuTlKJQ16ZY5PdnIhBm/mWAYiEt5iW9
-         CkguWQrnSSx0YPguAKYA2ubWFPCFvCInEVbbCIR9hv5Or1kLsZlMG9UrlzxvYqBjY+E6
-         srM9+6uJKsXvbO7w7HQSwtnwotaOuM52c7uho7KPyS3KihIQLIivDjajxMqBshVjBB+1
-         P0L33aoGFGdqj9TXwUrlTr1Tp1zYn5aBpOz4RA+Ud9Yvox1TcQl87OXCLaezaDsBIuyg
-         5ACw==
-X-Gm-Message-State: AFqh2kqKrxvAgi8+nNFYWQspl6b2T7wWSYLuqL0oKTEtZeH9QRjsH3rL
-        CT1QVbGTgFrMAVlwwq8/PnW5d0/5+Rzb6g==
-X-Google-Smtp-Source: AMrXdXuWjyK2YkuczdB40iHdoO3izZreJyAW4zE3GZ+HJ4WwPPYwf39VJXhGLDLscsYOD1hS623X8Q==
-X-Received: by 2002:a1f:18cc:0:b0:3d5:6f50:3fc7 with SMTP id 195-20020a1f18cc000000b003d56f503fc7mr11859066vky.2.1672747839020;
-        Tue, 03 Jan 2023 04:10:39 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id y1-20020a37f601000000b006fa2b1c3c1esm21753222qkj.58.2023.01.03.04.10.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 04:10:38 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-4a0d6cb12c5so104363427b3.7;
-        Tue, 03 Jan 2023 04:10:37 -0800 (PST)
-X-Received: by 2002:a05:690c:c02:b0:48d:1334:6e38 with SMTP id
- cl2-20020a05690c0c0200b0048d13346e38mr2403543ywb.316.1672747837138; Tue, 03
- Jan 2023 04:10:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com>
- <20221221210917.458537-3-fabrizio.castro.jz@renesas.com> <CAMuHMdXDwEUzBpG+w_G6=CzKo=n92cdVw6v8JwOwf9o86HnOZQ@mail.gmail.com>
- <TYWPR01MB87758FB15ED12D396AE738DDC2F49@TYWPR01MB8775.jpnprd01.prod.outlook.com>
-In-Reply-To: <TYWPR01MB87758FB15ED12D396AE738DDC2F49@TYWPR01MB8775.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Jan 2023 13:10:25 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU=Kwi80akxRUFUYz4QKQBkSog2xb4tw=DjJApAr-n5Lw@mail.gmail.com>
-Message-ID: <CAMuHMdU=Kwi80akxRUFUYz4QKQBkSog2xb4tw=DjJApAr-n5Lw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tue, 3 Jan 2023 07:12:24 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFCDFAEE;
+        Tue,  3 Jan 2023 04:12:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672747943; x=1704283943;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=ypK3kprOdq+1u4Sc+7K9g6EUg4k4efMhRgGnMRZfCRI=;
+  b=f24OAfQJ9tg82p96YSFLHvq+H+xGGr3LcpLdonuGNArG0Hz7ucrtEFEH
+   acMp50HPWXyitZ/lc5EtuR0K7SzGF9ViGsWUvFcQS93NOG5T4yGNr1l79
+   /VGhQd589+oyWK9AZd+oTjsBzg8IzA6xVuLY5ldqNehwpbQ8G1yorG5dZ
+   fi5MBOYnGsXXKnTWR/qrwczfDifM1MIItAj04ZYZquEySZB31VnGeWZmD
+   8BMHaMgjoW9fq5ORUXitNsYYGQZtb2poMExGY0CM7lJSnSgcQ74+/S6TP
+   wsuvwmU9+cx/MvGYJR+cN9kZaJnzpgFwcacTyMGr2U44RLfoo5WI8eN0p
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="309416148"
+X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
+   d="scan'208";a="309416148"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 04:12:17 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="654768987"
+X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
+   d="scan'208";a="654768987"
+Received: from pdaniel-mobl1.ger.corp.intel.com ([10.252.48.214])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 04:12:14 -0800
+Date:   Tue, 3 Jan 2023 14:12:12 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
         Lee Jones <lee@kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 08/10] fpga: m10bmc-sec: Differentiate rsu status from
+ doorbell in csr map
+In-Reply-To: <Y7P2nu3Lg65kvGxH@yilunxu-OptiPlex-7050>
+Message-ID: <ae468081-32fb-97dc-a640-e9343468c751@linux.intel.com>
+References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com> <20221226175849.13056-9-ilpo.jarvinen@linux.intel.com> <Y65p0kEZjyVt2pgr@yilunxu-OptiPlex-7050> <6d9ccd20-2c13-e352-c9e9-804ea3dadf@linux.intel.com> <Y7P2nu3Lg65kvGxH@yilunxu-OptiPlex-7050>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; BOUNDARY="8323329-200732233-1672739707=:1634"
+Content-ID: <4dcd9d7a-a35a-c3b0-c5c2-be74bd176cce@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabrizio,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Tue, Jan 3, 2023 at 1:05 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> > From: Geert Uytterhoeven <geert@linux-m68k.org>
-> > On Wed, Dec 21, 2022 at 10:09 PM Fabrizio Castro
-> > <fabrizio.castro.jz@renesas.com> wrote:
-> > > The External Power Sequence Controller (PWC) IP (found in the
-> > > RZ/V2M SoC) is a controller for external power supplies (regulators
-> > > and power switches), and it supports the following features: it
-> > > generates a power on/off sequence for external power supplies,
-> > > it generates an on/off sequence for the LPDDR4 core power supply
-> > > (LPVDD), it comes with General-Purpose Outputs, and it processes
-> > > key input signals.
-> >
-> > Thanks for your patch!
-> >
-> > > The PWC is basically a Multi-Function Device (MFD), its software
-> > > support comes with a core driver, and specialized drivers for
-> > > its specific features.
-> >
-> > I have to admit I'm not such a big fan of MFD.  In this driver,
-> > you are not even sharing resources in the MFD cells, just the mapped
-> > register base.  So I think you can easily save +100 LoC and reduce
-> > maintenance synchronization overhead across subsystems by just having
-> > a single non-MFD driver instead.
-> >
-> > Did you pick MFD because the PWC poweroff feature depends on board
-> > wiring, and thus is optional?
+--8323329-200732233-1672739707=:1634
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <be1c8dac-4cce-cb78-a5c7-4abdac509f9@linux.intel.com>
+
+On Tue, 3 Jan 2023, Xu Yilun wrote:
+
+> On 2022-12-30 at 12:23:18 +0200, Ilpo Järvinen wrote:
+> > On Fri, 30 Dec 2022, Xu Yilun wrote:
+> > 
+> > > On 2022-12-26 at 19:58:47 +0200, Ilpo Järvinen wrote:
+> > > > The rsu_status field moves from the doorbell register to the auth
+> > > > result register in the PMCI implementation of the MAX10 BMC. Refactor
+> > > > the sec update driver code to handle two distinct registers (rsu_status
+> > > > field was added into csr map already when it was introduced but it was
+> > > > unused until now).
+> > > > 
+> > > > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > > > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > > ---
+> > > >  drivers/fpga/intel-m10-bmc-sec-update.c | 68 ++++++++++++++++---------
+> > > >  include/linux/mfd/intel-m10-bmc.h       |  2 +-
+> > > >  2 files changed, 46 insertions(+), 24 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > > > index 6e58a463619c..1fe8b7ff594c 100644
+> > > > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> > > > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > > > @@ -251,7 +251,7 @@ static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
+> > > >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> > > >  	u32 auth_result;
+> > > >  
+> > > > -	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
+> > > > +	dev_err(sec->dev, "Doorbell: 0x%08x\n", doorbell);
+> > > >  
+> > > >  	if (!m10bmc_sys_read(sec->m10bmc, csr_map->auth_result, &auth_result))
+> > > >  		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
+> > > > @@ -279,6 +279,30 @@ static bool rsu_progress_busy(u32 progress)
+> > > >  		progress == RSU_PROG_PROGRAM_KEY_HASH);
+> > > >  }
+> > > >  
+> > > > +static int m10bmc_sec_progress_status(struct m10bmc_sec *sec, u32 *doorbell,
+> > > 
+> > > Please try to rename the parameters, to indicate u32 *doorbell is the
+> > > raw value from doorbell register, and u32 *progress & status are
+> > > software managed info.
+> > 
+> > I'll try to do that.
+> >  
+> > > > +				      u32 *progress, u32 *status)
+> > > > +{
+> > > > +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> > > > +	u32 status_reg;
+> > > > +	int ret;
+> > > > +
+> > > > +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, doorbell);
+> > > > +	if (ret)
+> > > > +		return ret;
+> > > > +
+> > > > +	if (csr_map->doorbell != csr_map->rsu_status) {
+> > > 
+> > > I prefer not to complicate the csr map filling in intel-m10-bmc, just invalid
+> > > the addr value if there is no such register for the board.
+> > 
+> > I'm sorry but I didn't get the meaning of your comment. Could you please 
+> > rephrase?
+> > 
+> > My guess is that you might have tried to say that if there's no register 
+> > for rsu_status, mark it not existing in csr map? But the field exists in 
+> 
+> Yes, this is what I mean, but I see I was wrong.
+> 
+> > both cases, it's just part of a different register (doorbell or 
+> 
+> I was thinking there was no AUTH_RESULT for N3000, sorry for the
+> mistake.
+> 
+> > auth_result) so if I use that kind of "register doesn't exist" condition, 
+> > it would apply to both cases.
+> > 
+> > > > @@ -330,21 +350,20 @@ static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
+> > > >  	if (ret)
+> > > >  		return FW_UPLOAD_ERR_RW_ERROR;
+> > > >  
+> > > > -	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
+> > > > -				       csr_map->base + csr_map->doorbell,
+> > > > -				       doorbell,
+> > > > -				       rsu_start_done(doorbell),
+> > > > -				       NIOS_HANDSHAKE_INTERVAL_US,
+> > > > -				       NIOS_HANDSHAKE_TIMEOUT_US);
+> > > > +	ret = read_poll_timeout(m10bmc_sec_progress_status, err,
+> > > > +				err < 0 || rsu_start_done(doorbell, progress, status),
+> > > > +				NIOS_HANDSHAKE_INTERVAL_US,
+> > > > +				NIOS_HANDSHAKE_TIMEOUT_US,
+> > > > +				false,
+> > > > +				sec, &doorbell, &progress, &status);
+> > > >  
+> > > >  	if (ret == -ETIMEDOUT) {
+> > > >  		log_error_regs(sec, doorbell);
+> > > >  		return FW_UPLOAD_ERR_TIMEOUT;
+> > > > -	} else if (ret) {
+> > > > +	} else if (err) {
+> > > >  		return FW_UPLOAD_ERR_RW_ERROR;
+> > > >  	}
+> > > >  
+> > > > -	status = rsu_stat(doorbell);
+> > > >  	if (status == RSU_STAT_WEAROUT) {
+> > > >  		dev_warn(sec->dev, "Excessive flash update count detected\n");
+> > > >  		return FW_UPLOAD_ERR_WEAROUT;
+> > > > @@ -393,7 +412,7 @@ static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
+> > > >  static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
+> > > >  {
+> > > >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> > > > -	u32 doorbell;
+> > > > +	u32 doorbell, status;
+> > > >  	int ret;
+> > > >  
+> > > >  	ret = regmap_update_bits(sec->m10bmc->regmap,
+> > > > @@ -418,7 +437,10 @@ static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
+> > > >  		return FW_UPLOAD_ERR_RW_ERROR;
+> > > >  	}
+> > > >  
+> > > > -	if (!rsu_status_ok(rsu_stat(doorbell))) {
+> > > > +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->rsu_status, &status);
+> > > 
+> > > Same as above, please just handle the detailed register definition 
+> > > differences in this driver, not in csr map.
+> > 
+> > Earlier you were having the exactly opposite opinion:
+> > 
+> > https://lore.kernel.org/linux-fpga/20221108144305.45424-1-ilpo.jarvinen@linux.intel.com/T/#me2d20e60d7feeafcdeeab4d58bd82787acf3ada9
+> 
+> Ah, I'm sorry. I was thinking just move one register to another addr at
+> that time. I was not aware that actually the detailed register field
+> definitions are changed in same registers.
+> 
+> > 
+> > So which way you want it? Should I have the board types here in the sec 
+> > update drivers as a second layer of differentiation or not?
+> 
+> I think the different register field definitions for the same registers
+> are specific to secure driver. So please differentiate them in secure
+> driver.
+> 
+> But with the change, enum m10bmc_type could still be removed, is it?
 >
-> I am not a big fan of MFD, either.
-> I picked MFD because we were not 100% sure of what the IP could do
-> when we started working on it.
-> I have received more information regarding the IP now (which I don't
-> have the liberty to discuss), I am still not 100% sure that's all
-> of it, but basically its support may require expansion later on.
->
-> I liked the solution based on syscon and simple-mfd for several reasons,
-> but having dropped syscon and simple-mfd due to issues with the dt-bindings
-> I have moved on with a core driver to instantiate the required SW support.
-> We could of course move to a unified driver if that makes more sense?
-> If we were to move to unified driver, under which directory would you
-> suggest we put it?
+> And having the register addr differentiations in m10bmc mfd driver is good to
+> me, cause with a different board type, the register offsets for all subdevs
+> are often globally re-arranged. But I don't want the HW change within a
+> single IP block been specified in m10bmc mfd driver.
 
-As the GPIO part is larger than the poweroff part, I would put it under
-drivers/gpio/.  Although drivers/soc/renesas/ could be an option, too.
+Okay. I'll add ops for it then:
 
-Gr{oetje,eeting}s,
+struct m10bmc_sec_ops {
+       int (*rsu_status)(struct m10bmc_sec *sec);
+};
 
-                        Geert
+Type enum won't be necessary. Those ops will be useful for other things 
+too which are not included to this patch set.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+ i.
+--8323329-200732233-1672739707=:1634--
