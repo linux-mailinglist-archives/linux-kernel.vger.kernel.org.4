@@ -2,92 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C3E65C373
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC8765C372
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238103AbjACP67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 10:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        id S238094AbjACP6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 10:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238216AbjACP6T (ORCPT
+        with ESMTP id S238087AbjACP6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 10:58:19 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEC712751
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 07:58:18 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id y25so46204557lfa.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 07:58:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=72mA5ojFgMLVEqAkQaCbUqv8L54FnJT6kWDdtZXnH8k=;
-        b=ZR6CuU0SVs+2fa7ImRzShQIqdD+s1t0zPg6gcMOo9oHiESgjcB/fqQwwvjLmsiAFSA
-         68WEpQLvxRlO+gvNY4TGr1Rs5BUkah8JeZg2NLNTYz9vWVEUA3rJvu0kbgJ2ffRNgi6+
-         rqd4bp/32Ruz3UYGXfhr70gI7+QRLHKnlATtgvZs0x+TxiXBzysWZNrbdHYsTydJA3aI
-         lJWPx3igM7XnBHuZlt//8E9xsZWZAbRcjYyLqCBTbdl5oo40SBxRV4i4JZIffKKvxBxX
-         4m1cQxPZ99KEjBINdOjdqXU5d5X/r2nq9qJvoiJCtsYSJNEtcShPVU5LjM0ggcW/DHZ4
-         AyuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=72mA5ojFgMLVEqAkQaCbUqv8L54FnJT6kWDdtZXnH8k=;
-        b=jictosWnt8Rm3g9wOSvYtHB+8GwvtQIikx03+/IdaM6cLIixnmzCiiFBjiu+2NgNLV
-         w3ivHeQEHNhNsSJ1yD+snrsnHCpda9kUkfHWuMAJ1yQv9Tutgbfl25u8McujxxXYIgYb
-         P1SBCz8cMzMrozxKzo+qkHnQz+uzBetB/gUhJv9bkdVjTkj2B1hjuxz6gWbYcbvV8lUm
-         Po8HCZQ4x7nzReUsTnVTQgv2IHpqhxz75WTvrh7+d8VsRigTy44Aw6bW8P47H+otXVj6
-         lEghoPclMA2zPJZ0mc61MbUcOdZIZ/iOrxuM2N7RfSzQUNiojBc6C3mBVs3wtyNhlM/b
-         m7Wg==
-X-Gm-Message-State: AFqh2kpGGvrBVWFThVgLJkE2yhFokoALm1XnQlNpaFVpgFA+5IIZKyeV
-        WYdlak8rTQj1CTdTSpzSanTk8quFrqLrITfC
-X-Google-Smtp-Source: AMrXdXsJRJFmNGcdrpCX4Ew7dswqjffLVmIQHsolgx3asO447k2As8kQ4rSPO3cW12SocgcHpv/l2A==
-X-Received: by 2002:a05:6512:1597:b0:4b6:f4bb:e53f with SMTP id bp23-20020a056512159700b004b6f4bbe53fmr13398291lfb.60.1672761496628;
-        Tue, 03 Jan 2023 07:58:16 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056512202400b004b5979f9ba8sm4853215lfs.210.2023.01.03.07.58.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 07:58:16 -0800 (PST)
-Message-ID: <6e347f3f-1dd0-3c84-8156-d6d891b25b00@linaro.org>
-Date:   Tue, 3 Jan 2023 16:58:15 +0100
+        Tue, 3 Jan 2023 10:58:50 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266B012080;
+        Tue,  3 Jan 2023 07:58:48 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7BBE6E0004;
+        Tue,  3 Jan 2023 15:58:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672761527;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1PDiBU/GoIjoQMxtR9ofH4gDtLhcbGK+av0qJpmmRtU=;
+        b=gTYXjbLwQaFvz/pw/mVQUDUO3klTeU+FeYUnQeYPhNQuIZPFJoI6HJoWWmt6+U469Af/pF
+        37qKV++t0/4lnz6RieVmejbkBg4EZ+n/TP69VIUGFFvaktT91ueSF8QQEbo2u02Sb3Udhx
+        0AO9e6KUlzXudWYK9yjKSp7vWzzVN+O0R/eJAygzrwVt0V/yWWAt+vJwBAzMv0tQpxypNh
+        o3sbTwHcQUh5nfdRPpSE0csEjIlj+6xQkVmItq+GLf1DO8knrTJaY/Y+/axoaOhciZutaJ
+        nrk5LvLK3fWgKiIuWQR/zqORiwqwedREHoRhjFCix5R036aGBEkuns1egglDqg==
+Date:   Tue, 3 Jan 2023 16:58:42 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Michael Walle <michael@walle.cc>, Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH v5 00/21] nvmem: core: introduce NVMEM layouts
+Message-ID: <20230103165842.2f693bfa@xps-13>
+In-Reply-To: <cf00e248-1f2c-d4ce-868d-9f77b2c9b76f@linaro.org>
+References: <20221206200740.3567551-1-michael@walle.cc>
+        <20230103163902.218cb5c7@xps-13>
+        <cf00e248-1f2c-d4ce-868d-9f77b2c9b76f@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 0/2] Add support for Marvell MHU on CN9x and CN10x SoC
-Content-Language: en-US
-To:     Wojciech Zmuda <wzmuda@marvell.com>, linux-kernel@vger.kernel.org
-Cc:     jassisinghbrar@gmail.com, robh+dt@kernel.org, sgoutham@marvell.com,
-        devicetree@vger.kernel.org
-References: <20230103155612.6217-1-wzmuda@marvell.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230103155612.6217-1-wzmuda@marvell.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 16:56, Wojciech Zmuda wrote:
-> In order to support ARM SCMI for the Marvell CN9x, CN10x SoC, add a
-> generic platform MHU driver based loosely on arm_mhu.c and pcc.c.
-> 
-> v1->v2:
-> - Clean up
-> - Rebase on 6.1
-> - Remove PCI interrupts
+Hi Srinivas,
 
-Where is the v1?
+srinivas.kandagatla@linaro.org wrote on Tue, 3 Jan 2023 15:51:31 +0000:
 
-https://lore.kernel.org/all/?q=%22mailbox%3A+mvl-mhu%3A+add+OcteonTX2+MHU+mailbox+driver%22
+> Hi Miquel,
+>=20
+> On 03/01/2023 15:39, Miquel Raynal wrote:
+> > Hi Srinivas,
+> >=20
+> > michael@walle.cc wrote on Tue,  6 Dec 2022 21:07:19 +0100:
+> >  =20
+> >> This is now the third attempt to fetch the MAC addresses from the VPD
+> >> for the Kontron sl28 boards. Previous discussions can be found here:
+> >> https://lore.kernel.org/lkml/20211228142549.1275412-1-michael@walle.cc/
+> >>
+> >>
+> >> NVMEM cells are typically added by board code or by the devicetree. But
+> >> as the cells get more complex, there is (valid) push back from the
+> >> devicetree maintainers to not put that handling in the devicetree.
+> >>
+> >> Therefore, introduce NVMEM layouts. They operate on the NVMEM device a=
+nd
+> >> can add cells during runtime. That way it is possible to add more comp=
+lex
+> >> cells than it is possible right now with the offset/length/bits
+> >> description in the device tree. For example, you can have post process=
+ing
+> >> for individual cells (think of endian swapping, or ethernet offset
+> >> handling).
+> >>
+> >> The imx-ocotp driver is the only user of the global post processing ho=
+ok,
+> >> convert it to nvmem layouts and drop the global post pocessing hook.
+> >>
+> >> For now, the layouts are selected by the device tree. But the idea is
+> >> that also board files or other drivers could set a layout. Although no
+> >> code for that exists yet.
+> >>
+> >> Thanks to Miquel, the device tree bindings are already approved and me=
+rged.
+> >>
+> >> NVMEM layouts as modules?
+> >> While possible in principle, it doesn't make any sense because the NVM=
+EM
+> >> core can't be compiled as a module. The layouts needs to be available =
+at
+> >> probe time. (That is also the reason why they get registered with
+> >> subsys_initcall().) So if the NVMEM core would be a module, the layouts
+> >> could be modules, too. =20
+> >=20
+> > I believe this series still applies even though -rc1 (and -rc2) are out
+> > now, may we know if you consider merging it anytime soon or if there
+> > are still discrepancies in the implementation you would like to
+> > discuss? Otherwise I would really like to see this laying in -next a
+> > few weeks before being sent out to Linus, just in case. =20
+>=20
+> Thanks for the work!
+>=20
+> Lets get some testing in -next.
+>=20
+>=20
+> Applied now,
 
-Best regards,
-Krzysztof
+Excellent! Thanks a lot for the quick answer and thanks for applying,
+let's see how it behaves.
 
+Thanks,
+Miqu=C3=A8l
