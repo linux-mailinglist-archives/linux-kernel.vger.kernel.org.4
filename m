@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D2F65BD7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707F965BD81
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbjACJxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S237272AbjACJyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjACJxn (ORCPT
+        with ESMTP id S237108AbjACJyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:53:43 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B34BB5A
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:53:42 -0800 (PST)
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 3 Jan 2023 04:54:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74203B5A;
+        Tue,  3 Jan 2023 01:54:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A3029418E6
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1672739620;
-        bh=yHJKB+fSNEIK3AP5YIvFqV8vwGwGNgGxp7RxKevK/jQ=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=Hxif4Dq850RtQe/u/zmco55q/Rfo24mrhBL2Iibfzt4Z5uDu3zAZBfwsRBWl8yOJ5
-         yvHQj+3WIqqaM3drrccnK1wWnnUQfqKPNGXqlzjAzmgA5asWO5e96y/8VvS3IlHTk6
-         7pOd3oYvJjBpCd+Y7/jCkqH+NUwgw+axBvyTJwjlN61XB7yQcl+N43nE/0ea1GwE0C
-         58aaLx4Fnzs2YKo4TPa+CYaK4/XN/1ZG3WdL6Ma8mlHMw3kOp2tf/YNloJql4+YBEE
-         gIB90hYI7EE1OlWZrUIXoYL5y9urCsbXgpxrouF83zpVLEQbRfB+oahAZ7Y6oqiXf6
-         ICIwkVW3lwQnw==
-Received: by mail-pf1-f200.google.com with SMTP id k21-20020aa78215000000b00575ab46ca2cso14076335pfi.20
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:53:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yHJKB+fSNEIK3AP5YIvFqV8vwGwGNgGxp7RxKevK/jQ=;
-        b=TyrL3EguPtr/gk7Q44vEuQC0dRnNgUDIumxvbBgWMJ3y5fv0cg0DAQLiKvUMlME2nj
-         8oIpdMGW3cUrbEGGzQu4HjMacKY+8yuCIWc0eH4cgxYW7Id3uHCKCy7x7m8OPJtf6DVp
-         OgupoKSfGJV/D5nx6FjJf0dWLuZx4aIZqXg8J6SKXGN5l3GtdRar2AsjFzfNRWeWglRn
-         KkVXTEY+FwXZXbAAgais2FCagGyLgLWNPOfPcga0SKOHeKRSzdZe+PRx4HR3v7Ny+IxP
-         c1M4KYRGFKtJpMZ6tITJHg40IeAzYf/ZUKFE1c+kpyJxuW6IRQ12kEOInxrchiU2eoRR
-         7zVA==
-X-Gm-Message-State: AFqh2krElI5w7ZS3yEWXXGOqCV/FCrQLtta6lj3tRRWCUTc8depZVH8v
-        tfK4+skemgkP/kjoElESi8PCV/dFISleu5zbOGXvFHQ0dAO32TK1AI0+su8rz6INc1+4siiUybX
-        mpVpW8ayExF9S34TViLCsWm0kGaOBdrvVJVKTsOwaWw==
-X-Received: by 2002:a05:6a00:1485:b0:57f:ef11:acf6 with SMTP id v5-20020a056a00148500b0057fef11acf6mr54271125pfu.8.1672739618885;
-        Tue, 03 Jan 2023 01:53:38 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtaPaDrufHUdaK6arDfIwoov0wJ4tFTXKqQo+uUewMj+DvO4wiTj4XJGjVUYJJYVhBM0ei7SA==
-X-Received: by 2002:a05:6a00:1485:b0:57f:ef11:acf6 with SMTP id v5-20020a056a00148500b0057fef11acf6mr54271106pfu.8.1672739618339;
-        Tue, 03 Jan 2023 01:53:38 -0800 (PST)
-Received: from u-Precision-5560.mymeshdevice.home (2001-b011-3817-354b-917f-f33f-4816-b377.dynamic-ip6.hinet.net. [2001:b011:3817:354b:917f:f33f:4816:b377])
-        by smtp.gmail.com with ESMTPSA id x19-20020aa79ad3000000b005811c421e6csm15210748pfp.162.2023.01.03.01.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 01:53:37 -0800 (PST)
-From:   Chris Chiu <chris.chiu@canonical.com>
-To:     tiwai@suse.com, perex@perex.cz
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Chris Chiu <chris.chiu@canonical.com>
-Subject: [PATCH] ALSA: hda - Enable headset mic on another Dell laptop with ALC3254
-Date:   Tue,  3 Jan 2023 17:53:32 +0800
-Message-Id: <20230103095332.730677-1-chris.chiu@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11A2660E97;
+        Tue,  3 Jan 2023 09:54:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DD7C433EF;
+        Tue,  3 Jan 2023 09:54:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672739669;
+        bh=BpfDQ8HqIK6YKlZtjbbpD8Zo3Pb/8YhLfqVQpatUtt0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KxJii57/6HLZ5doJil0NXj28Kw4JpRkyPmP7KGXKsLj4q3nx9/+eBuPvve4qqAvvn
+         GMp0W+1yVkKF9vK4hhcKvKGJN3KNZaSkG+JskFvdXGm2KNMN25TM2TtDySGpOReh9w
+         etMBWuT8aISx+egjmKosD8zICLvqak10muDDkbeiLNHV6yml4gNhmf1C/hs27dC4J2
+         R0aBXrrf88B5574M0quLMUDDPuTzV6Kjz+7ONopNNM2l5C+Y8Bbgq73NXEh1SLENuo
+         exYF8Yv7UYU/BAQ76jVmo6A1LxSQ0XSdEf7PDK8idSO9P28r+jW+JdSLsVxSc7tDsa
+         rOe4mrEXoO92g==
+Date:   Tue, 3 Jan 2023 11:54:24 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
+        intel-wired-lan@lists.osuosl.org, rajat.khandelwal@intel.com,
+        jesse.brandeburg@intel.com, linux-kernel@vger.kernel.org,
+        edumazet@google.com, anthony.l.nguyen@intel.com,
+        netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
+        davem@davemloft.net, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org
+Subject: Re: [Intel-wired-lan] [PATCH] igc: Mask replay rollover/timeout
+ errors in I225_LMVP
+Message-ID: <Y7P7UKpmE8/LsmOn@unreal>
+References: <20221229122640.239859-1-rajat.khandelwal@linux.intel.com>
+ <Y7FFESJONJqGJUkb@unreal>
+ <a4216a94-72b3-4711-bc90-ad564a57b310@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a4216a94-72b3-4711-bc90-ad564a57b310@molgen.mpg.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,28 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is another Dell Latitude laptop (1028:0c03) with Realtek
-codec ALC3254 which needs the ALC269_FIXUP_DELL4_MIC_NO_PRESENCE
-instead of the default matched ALC269_FIXUP_DELL1_MIC_NO_PRESENCE.
-Apply correct fixup for this particular model to enable headset mic.
+On Sun, Jan 01, 2023 at 11:34:21AM +0100, Paul Menzel wrote:
+> [Cc: +Bjorn, +linux-pci]
+> 
+> Dear Leon, dear Rajat,
+> 
+> 
+> Am 01.01.23 um 09:32 schrieb Leon Romanovsky:
+> > On Thu, Dec 29, 2022 at 05:56:40PM +0530, Rajat Khandelwal wrote:
+> > > The CPU logs get flooded with replay rollover/timeout AER errors in
+> > > the system with i225_lmvp connected, usually inside thunderbolt devices.
+> > > 
+> > > One of the prominent TBT4 docks we use is HP G4 Hook2, which incorporates
+> > > an Intel Foxville chipset, which uses the igc driver.
+> > > On connecting ethernet, CPU logs get inundated with these errors. The point
+> > > is we shouldn't be spamming the logs with such correctible errors as it
+> > > confuses other kernel developers less familiar with PCI errors, support
+> > > staff, and users who happen to look at the logs.
+> > > 
+> > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+> > > ---
+> > >   drivers/net/ethernet/intel/igc/igc_main.c | 28 +++++++++++++++++++++--
+> > >   1 file changed, 26 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> > > index ebff0e04045d..a3a6e8086c8d 100644
+> > > --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> > > +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> > > @@ -6201,6 +6201,26 @@ u32 igc_rd32(struct igc_hw *hw, u32 reg)
+> > >   	return value;
+> > >   }
+> > > +#ifdef CONFIG_PCIEAER
+> > > +static void igc_mask_aer_replay_correctible(struct igc_adapter *adapter)
+> > > +{
+> > > +	struct pci_dev *pdev = adapter->pdev;
+> > > +	u32 aer_pos, corr_mask;
+> > > +
+> > > +	if (pdev->device != IGC_DEV_ID_I225_LMVP)
+> > > +		return;
+> > > +
+> > > +	aer_pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_ERR);
+> > > +	if (!aer_pos)
+> > > +		return;
+> > > +
+> > > +	pci_read_config_dword(pdev, aer_pos + PCI_ERR_COR_MASK, &corr_mask);
+> > > +
+> > > +	corr_mask |= PCI_ERR_COR_REP_ROLL | PCI_ERR_COR_REP_TIMER;
+> > > +	pci_write_config_dword(pdev, aer_pos + PCI_ERR_COR_MASK, corr_mask);
+> > 
+> > Shouldn't this igc_mask_aer_replay_correctible function be implemented
+> > in drivers/pci/quirks.c and not in igc_probe()?
+> 
+> Probably. Though I think, the PCI quirk file, is getting too big.
 
-Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+As long as that file is right location, we should use it.
+One can refactor quirk file later.
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 3794b522c222..f75d26acf5ee 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9239,6 +9239,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1028, 0x0b1a, "Dell Precision 5570", ALC289_FIXUP_DUAL_SPK),
- 	SND_PCI_QUIRK(0x1028, 0x0b37, "Dell Inspiron 16 Plus 7620 2-in-1", ALC295_FIXUP_DELL_INSPIRON_TOP_SPEAKERS),
- 	SND_PCI_QUIRK(0x1028, 0x0b71, "Dell Inspiron 16 Plus 7620", ALC295_FIXUP_DELL_INSPIRON_TOP_SPEAKERS),
-+	SND_PCI_QUIRK(0x1028, 0x0c03, "Dell Precision 5340", ALC269_FIXUP_DELL4_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1028, 0x0c19, "Dell Precision 3340", ALC236_FIXUP_DELL_DUAL_CODECS),
- 	SND_PCI_QUIRK(0x1028, 0x0c1a, "Dell Precision 3340", ALC236_FIXUP_DELL_DUAL_CODECS),
- 	SND_PCI_QUIRK(0x1028, 0x0c1b, "Dell Precision 3440", ALC236_FIXUP_DELL_DUAL_CODECS),
--- 
-2.25.1
+Thanks
 
+> 
+> 
+> Kind regards,
+> 
+> Paul
