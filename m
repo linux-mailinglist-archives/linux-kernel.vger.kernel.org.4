@@ -2,167 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31B765BEC1
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D1765BEC9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237303AbjACLN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 06:13:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S237346AbjACLQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 06:16:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237290AbjACLNx (ORCPT
+        with ESMTP id S236652AbjACLQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 06:13:53 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD15DEE30;
-        Tue,  3 Jan 2023 03:13:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1672744434; x=1704280434;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4FlVOPT2jOe6DTC9V9G+KJ+pzd06h+lXYhr82n7bEe0=;
-  b=OdbBXkG6dAHtvCbvvH+qfDikCJapTmtXS3r2Re4uKAkvRXDMs8fH4Xc2
-   lCaSFMEEE0gfcHioDAZKqrGkeT+fwMu5uIKIJdKxPbFEPpPRPAH7XDZw5
-   YUCgZsuhVN1+24cwHs/9rtEoMqx8nXH/pdG2uenZd/OJ7y74krewajxXL
-   E=;
-X-IronPort-AV: E=Sophos;i="5.96,296,1665446400"; 
-   d="scan'208";a="284566807"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-af372327.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 11:13:50 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-m6i4x-af372327.us-west-2.amazon.com (Postfix) with ESMTPS id 5A5C46110B;
-        Tue,  3 Jan 2023 11:13:48 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Tue, 3 Jan 2023 11:13:47 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.162.56) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
- Tue, 3 Jan 2023 11:13:43 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <mirsad.todorovac@alu.unizg.hr>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <kuniyu@amazon.co.jp>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>, <kuniyu@amazon.com>
-Subject: Re: PATCH [1/1]: Bug with sockaddr size in net/af_unix/test_unix_oob.c
-Date:   Tue, 3 Jan 2023 20:13:35 +0900
-Message-ID: <20230103111335.81600-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <9e809447-bde6-7376-5431-ea200064f957@alu.unizg.hr>
-References: <9e809447-bde6-7376-5431-ea200064f957@alu.unizg.hr>
+        Tue, 3 Jan 2023 06:16:27 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A997110B;
+        Tue,  3 Jan 2023 03:16:26 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 303BGGCi094124;
+        Tue, 3 Jan 2023 05:16:16 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672744576;
+        bh=RMcrotq/Tz8HcR5hKM3/+kFg3e7/OG5DejTKOeZFUIY=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=UCHdUPYII7rIGRosvNkBCmaLPJ9xEA6N3CJW01tt+FD6RjE4Ln/cDhk1nDAw4nNna
+         pIsxprzch6QkKVg/igc833PduYVoqfJkWpgCzRhdt4P7TUGtdegA3gmlWgaCIO/F4p
+         M40e8aWr000SyP5G/X+4a9x8RWMRCRQDoANCjy1E=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 303BGG5Y029962
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 3 Jan 2023 05:16:16 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 3
+ Jan 2023 05:16:16 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 3 Jan 2023 05:16:15 -0600
+Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 303BGBr3048662;
+        Tue, 3 Jan 2023 05:16:12 -0600
+Message-ID: <dad3aba3-a40b-8b76-c689-3dc877800263@ti.com>
+Date:   Tue, 3 Jan 2023 16:46:11 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D32UWA002.ant.amazon.com (10.43.160.230) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/1] PCI: qcom: Add support for system suspend and resume
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <lpieralisi@kernel.org>, <robh@kernel.org>
+CC:     <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_krichai@quicinc.com>, <johan+linaro@kernel.org>,
+        <steev@kali.org>
+References: <20230103074907.12784-1-manivannan.sadhasivam@linaro.org>
+ <20230103074907.12784-2-manivannan.sadhasivam@linaro.org>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20230103074907.12784-2-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Date:   Tue, 3 Jan 2023 11:28:19 +0100
-> Hi all,
+
+
+On 03/01/23 13:19, Manivannan Sadhasivam wrote:
+> During the system suspend, vote for minimal interconnect bandwidth and
+> also turn OFF the resources like clock and PHY if there are no active
+> devices connected to the controller. For the controllers with active
+> devices, the resources are kept ON as removing the resources will
+> trigger access violation during the late end of suspend cycle as kernel
+> tries to access the config space of PCIe devices to mask the MSIs.
 > 
-> There is a minor issue that prevents self test net/af_unix to run on my platform:
-
-Hi,
-
-Thanks for the report and fix.
-
-The diff looks good.
-Could you post a patch formally following these?
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/process/maintainer-netdev.rst
-  https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/process/submitting-patches.rst
-
-Subject should be like
-
-  [PATCH net v1] af_unix: Correct addr size for connect() in test_unix_oob.c.
-
-and please add this tag just before your Signed-off-by tag.
-
-  Fixes: 314001f0bf92 ("af_unix: Add OOB support")
-
-
+> Also, it is not desirable to put the link into L2/L3 state as that
+> implies VDD supply will be removed and the devices may go into powerdown
+> state. This will affect the lifetime of storage devices like NVMe.
 > 
-> # ./test_unix_oob
-> Connect failed: No such file or directory
-> Terminated
+> And finally, during resume, turn ON the resources if the controller was
+> truly suspended (resources OFF) and update the interconnect bandwidth
+> based on PCIe Gen speed.
 > 
-> Tracing reveals that bind tried to open a shorter AF_UNIX socket address:
+> Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
 
-s/bind/connect/
+Nice to have another driver added to the list of system suspend
+support!
 
+Acked-by: Dhruva Gole <d-gole@ti.com>
 
+>   drivers/pci/controller/dwc/pcie-qcom.c | 52 ++++++++++++++++++++++++++
+>   1 file changed, 52 insertions(+)
 > 
-> # strace -f ./test_unix_oob
-> .
-> .
-> .
-> socket(AF_UNIX, SOCK_STREAM, 0)         = 3
-> getpid()                                = 453059
-> unlink("unix_oob_453059")               = -1 ENOENT (No such file or directory)
-> bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
-> pipe2([4, 5], 0)                        = 0
-> listen(3, 1)                            = 0
-> clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
-> rt_sigaction(SIGURG, {sa_handler=0x5601e2d014c9, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, 
-> sa_restorer=0x7fa6a623bcf0}, NULL, 8) = 0
-> write(5, "S", 1)                        = 1
-> accept(3, strace: Process 453060 attached
->   <unfinished ...>
-> [pid 453060] set_robust_list(0x7fa6a6577a20, 24) = 0
-> [pid 453060] socket(AF_UNIX, SOCK_STREAM, 0) = 6
-> [pid 453060] read(4, "S", 5)            = 1
-> [pid 453060] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
-> .
-> .
-> .
-> 
-> NOTE: bind used UNIX_AF addr "unix_oob_453059", while producer tries to connect to "unix_oob_45305".
-> 
-> When pids were up to 5 digits it probably did not manifest, but logically the size of the
-> consumer_addr is sizeof(struct sockaddr_un).
-> 
-> Please find the patch attached:
-> 
-> Thanks,
-> Mirsad
-> 
-> ------------------------------------------------------------------------------------------------
-> diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-> index b57e91e1c3f2..7ea733239cd9 100644
-> --- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
-> +++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-> @@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
-> 
->   	wait_for_signal(pipefd[0]);
->   	if (connect(cfd, (struct sockaddr *)consumer_addr,
-> -		     sizeof(struct sockaddr)) != 0) {
-> +		     sizeof(struct sockaddr_un)) != 0) {
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 5696e327795b..48810f1f2dba 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -227,6 +227,7 @@ struct qcom_pcie {
+>   	struct gpio_desc *reset;
+>   	struct icc_path *icc_mem;
+>   	const struct qcom_pcie_cfg *cfg;qcom_pcie_icc_update
+> +	bool suspended;
+>   };
+>   
+>   #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+> @@ -1835,6 +1836,52 @@ static int qcom_pcie_remove(struct platform_device *pdev)
+>   	return 0;
+>   }
+>   
+> +static int qcom_pcie_suspend_noirq(struct device *dev)
+> +{
+> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = icc_set_bw(pcie->icc_mem, 0, 0);
+> +	if (ret) {
+> +		dev_err(pcie->pci->dev, "Failed to set interconnect bandwidth: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * Turn OFF the resources only for controllers without active PCIe devices. For controllers
+> +	 * with active devices, the resources are kept ON and the link is expected to be in L0/L1
+> +	 * (sub)states.
+> +	 *
+> +	 * Turning OFF the resources for controllers with active PCIe devices will trigger access
+> +	 * violation during the end of the suspend cycle, as kernel tries to access the PCIe devices
+> +	 * config space for masking MSIs.
+> +	 *
+> +	 * Also, it is not desirable to put the link into L2/L3 state as that implies VDD supply
+> +	 * will be removed and the devices may go into powerdown state. This will affect the
+> +	 * lifetime of the storage devices like NVMe.
+> +	 */
+> +	if (!dw_pcie_link_up(pcie->pci)) {
+> +		qcom_pcie_host_deinit(&pcie->pci->pp);
+> +		pcie->suspended = true;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_pcie_resume_noirq(struct device *dev)
+> +{
+> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +
+> +	if (pcie->suspended) {
+> +		qcom_pcie_host_init(&pcie->pci->pp);
+> +		pcie->suspended = false;
+> +	}
+> +
+> +	qcom_pcie_icc_update(pcie);
+> +
+> +	return 0;
+> +}
+> +
+>   static const struct of_device_id qcom_pcie_match[] = {
+>   	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
+>   	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
+> @@ -1870,12 +1917,17 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302, qcom_fixup_class);
+>   DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000, qcom_fixup_class);
+>   DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+>   
+> +static const struct dev_pm_ops qcom_pcie_pm_ops = {
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_suspend_noirq, qcom_pcie_resume_noirq)
+> +};
+> +
+>   static struct platform_driver qcom_pcie_driver = {
+>   	.probe = qcom_pcie_probe,
+>   	.remove = qcom_pcie_remove,
+>   	.driver = {
+>   		.name = "qcom-pcie",
+>   		.of_match_table = qcom_pcie_match,
+> +		.pm = &qcom_pcie_pm_ops,
+>   	},
+>   };
+>   module_platform_driver(qcom_pcie_driver);
 
-While at it, please fix the indent.
+Out of curiosity, were you able to measure how much power you were able
+to save after adding suspend support for PCIe? I don't know if clock
+gating really saves much amount of power, but yeah its true that we
+can't really cut off the power domain entirely in this case.
 
-
->   		perror("Connect failed");
->   		kill(0, SIGTERM);
->   		exit(1);
-> 
-> --
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
-> -- 
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
-> The European Union
+-- 
+Thanks and Regards,
+Dhruva Gole
