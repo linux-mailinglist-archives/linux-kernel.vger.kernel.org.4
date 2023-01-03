@@ -2,111 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8016565BB53
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B75E765BB50
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbjACHl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 02:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
+        id S236924AbjACHiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 02:38:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjACHlY (ORCPT
+        with ESMTP id S236912AbjACHh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 02:41:24 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0752B8
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 23:41:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672731683; x=1704267683;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KxhstbNSuFJ+RInMZSQu3SmUKm5bWQPMvSyQYhXUpk8=;
-  b=WokTHkUY3kMzFmtVEw2oJ5q7lqVwtjsYXVbFLij0vs1/gVUx4IgkL8oh
-   mItfZG2UGNrboDx3Zl+f3blGChH+msaQwBgAmgzyGmHpzDYMe1yIthoyB
-   3ETMtq5jnaXwzC010oc7p8ebr73jGWj5CmbfQv9SKnFbpEPtfz548xEc+
-   6uBGU9UpJ2aGTZlcaqVNJ1msqVTYCfpK5/gms3ZVH1XzWv0trdggWb1xh
-   dNLbIyt6fJs2nv6VCHnmrepcrkAMnTallUUmom4/FSiSUXfoNY6yrJjOU
-   9LcY0LVAN//iufvB826TiQgUH93/6RvUk15LdqbWB7vTypu2EEqXR++ll
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="348822890"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="348822890"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 23:41:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="723174876"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="723174876"
-Received: from brentlu-brix.itwn.intel.com ([10.5.253.25])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Jan 2023 23:41:20 -0800
-From:   Brent Lu <brent.lu@intel.com>
-To:     alsa-devel@alsa-project.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: Intel: sof_ssp_amp: remove unused variable
-Date:   Tue,  3 Jan 2023 15:37:04 +0800
-Message-Id: <20230103073704.722027-1-brent.lu@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 3 Jan 2023 02:37:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8476A5FF7;
+        Mon,  2 Jan 2023 23:37:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DEF9B80E52;
+        Tue,  3 Jan 2023 07:37:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81FE4C433D2;
+        Tue,  3 Jan 2023 07:37:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672731472;
+        bh=+1+K/QMGEwB/t9nyEjns1p8p9ReMrS/m95IVeeWjbDc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=X5xqNylbdKKqVQfqkbksbhlW4tsgpB0FIoJT/BVb5+jvGU0iOh7fIINlPD3cF1m89
+         QPuEUm1whigKxqMb3sONrxLlrz07QjEpyFMKU9Nj78To6LwhEoUWphYy9DfG1jf+3C
+         bbpJiEKSBrhNaAYj6o6VMfpXs/gF2igh3KRyO/Tn/cdOJj3eKZE7MiakBnq1FijBQ5
+         gi+T8NAVQJaZVz4Q16SAUyx19U76SnGrwd1rAGVFUCpk0DHlUkKWpQekv7MDI5wXFq
+         9wSNQVLbxReD9Mw0YlV3aBm86EpAryp4bz02J1aOv88rZdh+e8pK6k8DMJlC8JMRUC
+         C5wi/oOP5iOCA==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: Re: [RFC PATCH bpf-next 3/4] riscv, bpf: Add bpf_arch_text_poke
+ support for RV64
+In-Reply-To: <20221219133736.1387008-4-pulehui@huaweicloud.com>
+References: <20221219133736.1387008-1-pulehui@huaweicloud.com>
+ <20221219133736.1387008-4-pulehui@huaweicloud.com>
+Date:   Tue, 03 Jan 2023 08:37:50 +0100
+Message-ID: <87v8looypd.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable becomes useless since we moved the snd_soc_jack
-structure from a static array to sof_hdmi_pcm structure.
+Pu Lehui <pulehui@huaweicloud.com> writes:
 
-Signed-off-by: Brent Lu <brent.lu@intel.com>
----
- sound/soc/intel/boards/sof_ssp_amp.c | 4 ----
- 1 file changed, 4 deletions(-)
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
+p64.c
+> index bf4721a99a09..fa8b03c52463 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
 
-diff --git a/sound/soc/intel/boards/sof_ssp_amp.c b/sound/soc/intel/boards/sof_ssp_amp.c
-index 94d25aeb6e7c..f75800d9d6de 100644
---- a/sound/soc/intel/boards/sof_ssp_amp.c
-+++ b/sound/soc/intel/boards/sof_ssp_amp.c
-@@ -105,7 +105,6 @@ static int sof_card_late_probe(struct snd_soc_card *card)
- 	char jack_name[NAME_SIZE];
- 	struct sof_hdmi_pcm *pcm;
- 	int err;
--	int i;
- 
- 	if (!(sof_ssp_amp_quirk & SOF_HDMI_PLAYBACK_PRESENT))
- 		return 0;
-@@ -124,7 +123,6 @@ static int sof_card_late_probe(struct snd_soc_card *card)
- 		return hda_dsp_hdmi_build_controls(card, component);
- 	}
- 
--	i = 0;
- 	list_for_each_entry(pcm, &ctx->hdmi_pcm_list, head) {
- 		component = pcm->codec_dai->component;
- 		snprintf(jack_name, sizeof(jack_name),
-@@ -139,8 +137,6 @@ static int sof_card_late_probe(struct snd_soc_card *card)
- 					  &pcm->sof_hdmi);
- 		if (err < 0)
- 			return err;
--
--		i++;
- 	}
- 
- 	return hdac_hdmi_jack_port_init(component, &card->dapm);
--- 
-2.25.1
+> @@ -1266,7 +1389,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, =
+struct rv_jit_context *ctx,
+>=20=20
+>  void bpf_jit_build_prologue(struct rv_jit_context *ctx)
+>  {
+> -	int stack_adjust =3D 0, store_offset, bpf_stack_adjust;
+> +	int i, stack_adjust =3D 0, store_offset, bpf_stack_adjust;
+>  	bool is_main_prog =3D ctx->prog->aux->func_idx =3D=3D 0;
 
+This line magically appeared, and makes it hard to apply the series
+without hacking the patches manually. Going forward, please supply a
+base tree commit to the series (or a link to a complete git tree).
+
+
+Bj=C3=B6rn
