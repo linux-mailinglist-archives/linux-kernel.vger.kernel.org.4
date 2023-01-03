@@ -2,526 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B353A65C5E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8281265C5E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbjACSQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:16:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S238725AbjACSQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:16:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238730AbjACSQb (ORCPT
+        with ESMTP id S238705AbjACSP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:16:31 -0500
-Received: from mailrelay4-1.pub.mailoutpod2-cph3.one.com (mailrelay4-1.pub.mailoutpod2-cph3.one.com [46.30.211.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC77F10B50
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:16:28 -0800 (PST)
+        Tue, 3 Jan 2023 13:15:57 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01C9BE6;
+        Tue,  3 Jan 2023 10:15:54 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id fy8so12036990ejc.13;
+        Tue, 03 Jan 2023 10:15:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=71Nph4dfni/IzRzPqf+4vsvCI2cSGoRwVuL30MCKvXA=;
-        b=m6pBey9ImIKpRjjFKm24ANYOOsZAsa1yk18qIC0sP8lX6IB9PEPcvO3COQ9v/tclWjW1m7pYQPiVX
-         DVUM8KxX2h9oiDSPPTus7lJJnyGz0eysIgs4Qg+T6+VojTND87bl3FrJJ6fO27KDQZF91PvkqGckcS
-         BM+YZ6YwOJzQ61YqNJGwzHvaaIYDYpTb+JkdNtz2l6JQ9YD4hMA741oJ35L58qsVEur8Agalf5iJsk
-         /wepc82SzlwFXZHP4D8W/NF/nhhGukkBHsJIB8zjP5XUDCvs6aubKH4Vw33sd+V9MVliCJKZhYApaH
-         aPG2mrfFNYWR+IxSivNj5lxdvLg1u8g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=71Nph4dfni/IzRzPqf+4vsvCI2cSGoRwVuL30MCKvXA=;
-        b=YhStZB5WyfKcZOhMv+PYWMfP2lN6cFyGkDtky56zSqRIsRF6k40rGNt332m1MlaNJ/8VCYDs926YE
-         FR0K7DkBg==
-X-HalOne-ID: 95a2e3a9-8b92-11ed-a140-87783a957ad9
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay4 (Halon) with ESMTPSA
-        id 95a2e3a9-8b92-11ed-a140-87783a957ad9;
-        Tue, 03 Jan 2023 18:15:23 +0000 (UTC)
-Date:   Tue, 3 Jan 2023 19:15:21 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] drm/panel: add visionox vtdr6130 DSI panel driver
-Message-ID: <Y7RwuZKh1XMMuB70@ravnborg.org>
-References: <20230103-topic-sm8550-upstream-vtdr6130-panel-v1-0-9b746b858378@linaro.org>
- <20230103-topic-sm8550-upstream-vtdr6130-panel-v1-2-9b746b858378@linaro.org>
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=miPQO7iyS3ienKf9idBPEEE606/4jeUgjmeR9+HTk7Q=;
+        b=ZqEip8pDG0jjqj1ZwdnGcMq6QyiWN5RDnAQHdgahxdX8tRjPBkv7t2J7tyNrq0jnlX
+         lsy7PPudtJXMglGFHVeym7Qrr+i1IkTT5uq/ImqVn1eIkVMbgP1wN4Wzumyag5+h1ehl
+         pfUSospnNnUzNyQTmoyF86QJQS7fQI/V5PKn69aLGxR6uaik+6SylMppoZFzqhpmjM0b
+         MK/RjdLM1RAnzrgDJ47LPGvPqybqffXNuz01JFCYnU5y8Ngl/wxbmSTCwVeL86FQ2Iiw
+         gp3OHRLt3zxmHnE7YFLGB9XoI4e5QKw4y28ZiPC/jFfX64AeleVLaoMEwEe/6j9XN09I
+         FCVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=miPQO7iyS3ienKf9idBPEEE606/4jeUgjmeR9+HTk7Q=;
+        b=wdF4RVeWekQAb8VZmdD4p0LQBaoViLZfMmB4/wgFQ+BMk2fm/4fYzmGWWhVIcN8gfR
+         L0ARZk5SHDE9m/d5UuQAN/AmjKa9PBbVoP7oQIJ7Xfe8NutbIu6lkMqr+ireCxinimr+
+         z9chM50J7Nx9l5nWhZ5e9S8ADb+GWv1KrDPp/tsUslAXCVBu7hJO7vRGJX61ikhP5NeN
+         bzXfKaDB9fLQ4CPv2pudVfGsHSgZmybJnWZ46nOm1vxO23MzAFnu0DpEwBIGM24yUnbj
+         gkA4Y5HUepeFDb7awC2fZvRznS8Xv4xuN3C2S5jEphy9ikSl/f9RJ+X/MyOBqpsdXWP7
+         zb2g==
+X-Gm-Message-State: AFqh2kpFc5LvMVteD4yf1QpFNKQDx+sDKzqledQON87rhwo8RJ+ndPoX
+        N2yweyMxRqEhX15JirSj90c=
+X-Google-Smtp-Source: AMrXdXuaJ9JajfrxwPkyilr6jRFT1qpJnTZirLCHffgNrq6vaJTpOXjTiVH09Ai1mjZn+dTBYTadnA==
+X-Received: by 2002:a17:906:18e2:b0:7c1:4bb:b157 with SMTP id e2-20020a17090618e200b007c104bbb157mr46737681ejf.4.1672769753197;
+        Tue, 03 Jan 2023 10:15:53 -0800 (PST)
+Received: from gmail.com (1F2EF380.nat.pool.telekom.hu. [31.46.243.128])
+        by smtp.gmail.com with ESMTPSA id ky16-20020a170907779000b00826afe264bcsm14372976ejc.194.2023.01.03.10.15.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 10:15:52 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 3 Jan 2023 19:15:50 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
+ lazily freeable mappings
+Message-ID: <Y7Rw1plb/pqPiWgg@gmail.com>
+References: <20230101162910.710293-1-Jason@zx2c4.com>
+ <20230101162910.710293-3-Jason@zx2c4.com>
+ <Y7QIg/hAIk7eZE42@gmail.com>
+ <Y7RDQLEvlLM0o4cp@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103-topic-sm8550-upstream-vtdr6130-panel-v1-2-9b746b858378@linaro.org>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y7RDQLEvlLM0o4cp@zx2c4.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
 
-On Tue, Jan 03, 2023 at 03:22:28PM +0100, Neil Armstrong wrote:
-> Add support for the 1080x2400 Visionox VTDR6130 AMOLED DSI panel
-> found on the Qualcomm SM8550 MTP board.
+* Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+
+> On Tue, Jan 03, 2023 at 11:50:43AM +0100, Ingo Molnar wrote:
+> > 
+> > * Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > 
+> > > The vDSO getrandom() implementation works with a buffer allocated with a
+> > > new system call that has certain requirements:
+> > > 
+> > > - It shouldn't be written to core dumps.
+> > >   * Easy: VM_DONTDUMP.
+> > > - It should be zeroed on fork.
+> > >   * Easy: VM_WIPEONFORK.
+> > > 
+> > > - It shouldn't be written to swap.
+> > >   * Uh-oh: mlock is rlimited.
+> > >   * Uh-oh: mlock isn't inherited by forks.
+> > > 
+> > > - It shouldn't reserve actual memory, but it also shouldn't crash when
+> > >   page faulting in memory if none is available
+> > >   * Uh-oh: MAP_NORESERVE respects vm.overcommit_memory=2.
+> > >   * Uh-oh: VM_NORESERVE means segfaults.
+> > > 
+> > > It turns out that the vDSO getrandom() function has three really nice
+> > > characteristics that we can exploit to solve this problem:
+> > > 
+> > > 1) Due to being wiped during fork(), the vDSO code is already robust to
+> > >    having the contents of the pages it reads zeroed out midway through
+> > >    the function's execution.
+> > > 
+> > > 2) In the absolute worst case of whatever contingency we're coding for,
+> > >    we have the option to fallback to the getrandom() syscall, and
+> > >    everything is fine.
+> > > 
+> > > 3) The buffers the function uses are only ever useful for a maximum of
+> > >    60 seconds -- a sort of cache, rather than a long term allocation.
+> > > 
+> > > These characteristics mean that we can introduce VM_DROPPABLE, which
+> > > has the following semantics:
+> > > 
+> > > a) It never is written out to swap.
+> > > b) Under memory pressure, mm can just drop the pages (so that they're
+> > >    zero when read back again).
+> > > c) If there's not enough memory to service a page fault, it's not fatal,
+> > >    and no signal is sent. Instead, writes are simply lost.
+> > > d) It is inherited by fork.
+> > > e) It doesn't count against the mlock budget, since nothing is locked.
+> > > 
+> > > This is fairly simple to implement, with the one snag that we have to
+> > > use 64-bit VM_* flags, but this shouldn't be a problem, since the only
+> > > consumers will probably be 64-bit anyway.
+> > > 
+> > > This way, allocations used by vDSO getrandom() can use:
+> > > 
+> > >     VM_DROPPABLE | VM_DONTDUMP | VM_WIPEONFORK | VM_NORESERVE
+> > > 
+> > > And there will be no problem with OOMing, crashing on overcommitment,
+> > > using memory when not in use, not wiping on fork(), coredumps, or
+> > > writing out to swap.
+> > > 
+> > > At the moment, rather than skipping writes on OOM, the fault handler
+> > > just returns to userspace, and the instruction is retried. This isn't
+> > > terrible, but it's not quite what is intended. The actual instruction
+> > > skipping has to be implemented arch-by-arch, but so does this whole
+> > > vDSO series, so that's fine. The following commit addresses it for x86.
+> > 
+> > Yeah, so VM_DROPPABLE adds a whole lot of complexity, corner cases, per 
+> > arch low level work and rarely tested functionality (seriously, whose 
+> > desktop system touches swap these days?), just so we can add a few pages of 
+> > per thread vDSO data of a quirky type that in 99.999% of cases won't ever 
+> > be 'dropped' from under the functionality that is using it and will thus 
+> > bitrot fast?
 > 
-> By default the the panel is configured to work with DSI compressed
-> streams, but can work in uncompressed video mode since 1080x2400 in
-> RGB888 fits in the 4 DSI lanes bandwidth.
+> It sounds like you've misunderstood the issue.
 > 
-> While display compression is preferred for performance and power
-> reasons, let's start with the uncompressed video mode support and
-> add the DSC support later on.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Firstly, the arch work is +19 lines (in the vdso branch of random.git).
 
-a few comments in the following.
-	
-	Sam
+For a single architecture: x86.
 
-> ---
->  drivers/gpu/drm/panel/Kconfig                   |   8 +
->  drivers/gpu/drm/panel/Makefile                  |   1 +
->  drivers/gpu/drm/panel/panel-visionox-vtdr6130.c | 366 ++++++++++++++++++++++++
->  3 files changed, 375 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-> index 737edcdf9eef..fd1d7e6f536b 100644
-> --- a/drivers/gpu/drm/panel/Kconfig
-> +++ b/drivers/gpu/drm/panel/Kconfig
-> @@ -717,6 +717,14 @@ config DRM_PANEL_VISIONOX_RM69299
->  	  Say Y here if you want to enable support for Visionox
->  	  RM69299  DSI Video Mode panel.
->  
-> +config DRM_PANEL_VISIONOX_VTDR6130
-> +	tristate "Visionox VTDR6130"
-> +	depends on OF
-> +	depends on DRM_MIPI_DSI
-> +	help
-> +	  Say Y here if you want to enable support for Visionox
-> +	  VTDR6130 1080x2400 AMOLED DSI panel.
-> +
->  config DRM_PANEL_WIDECHIPS_WS2401
->  	tristate "Widechips WS2401 DPI panel driver"
->  	depends on SPI && GPIOLIB
-> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-> index f8f9d9f6a307..1966404fcf7a 100644
-> --- a/drivers/gpu/drm/panel/Makefile
-> +++ b/drivers/gpu/drm/panel/Makefile
-> @@ -73,5 +73,6 @@ obj-$(CONFIG_DRM_PANEL_TPO_TD043MTEA1) += panel-tpo-td043mtea1.o
->  obj-$(CONFIG_DRM_PANEL_TPO_TPG110) += panel-tpo-tpg110.o
->  obj-$(CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA) += panel-truly-nt35597.o
->  obj-$(CONFIG_DRM_PANEL_VISIONOX_RM69299) += panel-visionox-rm69299.o
-> +obj-$(CONFIG_DRM_PANEL_VISIONOX_VTDR6130) += panel-visionox-vtdr6130.o
->  obj-$(CONFIG_DRM_PANEL_WIDECHIPS_WS2401) += panel-widechips-ws2401.o
->  obj-$(CONFIG_DRM_PANEL_XINPENG_XPP055C272) += panel-xinpeng-xpp055c272.o
-> diff --git a/drivers/gpu/drm/panel/panel-visionox-vtdr6130.c b/drivers/gpu/drm/panel/panel-visionox-vtdr6130.c
-> new file mode 100644
-> index 000000000000..94ad2a32efc9
-> --- /dev/null
-> +++ b/drivers/gpu/drm/panel/panel-visionox-vtdr6130.c
-> @@ -0,0 +1,366 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +// Copyright (c) 2023, Linaro Limited
-> +
-> +#include <linux/backlight.h>
-> +#include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +
-> +#include <drm/drm_mipi_dsi.h>
-> +#include <drm/drm_modes.h>
-> +#include <drm/drm_panel.h>
-> +#include <drm/display/drm_dsc.h>
-> +#include <linux/regulator/consumer.h>
-Keep linux includes in one block.
+And it's only 19 lines because x86 already happens to have a bunch of 
+complexity implemented, such as a safe instruction decoder that allows the 
+skipping of an instruction - which relies on thousands of lines of 
+complexity.
 
-> +
-> +struct visionox_vtdr6130 {
-> +	struct drm_panel panel;
-> +	struct mipi_dsi_device *dsi;
-> +	struct gpio_desc *reset_gpio;
-> +	struct regulator_bulk_data supplies[3];
-> +	bool prepared;
-> +};
-> +
-> +static inline struct visionox_vtdr6130 *to_visionox_vtdr6130(struct drm_panel *panel)
-> +{
-> +	return container_of(panel, struct visionox_vtdr6130, panel);
-> +}
-> +
-> +static inline int visionox_vtdr6130_dsi_write(struct mipi_dsi_device *dsi, const void *seq,
-> +					      size_t len)
-> +{
-> +	return mipi_dsi_dcs_write_buffer(dsi, seq, len);
-> +}
-> +
-> +#define dsi_dcs_write_seq(dsi, seq...)					\
-> +	{								\
-> +		const u8 d[] = { seq };					\
-> +		visionox_vtdr6130_dsi_write(dsi, d, ARRAY_SIZE(d));	\
-> +	}
-Please use mipi_dsi_dcs_write_seq()
-No need to add your own macros here.
+On an architecture where this isn't present, it would have to be 
+implemented to support the instruction-skipping aspect of VM_DROPPABLE.
 
-This will also add a little bit of error reporting that is missing here.
+Even on x86, it's not common today for the software-decoder to be used in 
+unprivileged code - primary use was debugging & instrumentation code. So 
+your patches bring this piece of complexity to a much larger scope of 
+untrusted user-space functionality.
 
+> That's very small and basic. Don't misrepresent it just to make a point.
 
-> +
-> +static void visionox_vtdr6130_reset(struct visionox_vtdr6130 *ctx)
-> +{
-> +	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
-> +	usleep_range(10000, 11000);
-> +	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-> +	usleep_range(10000, 11000);
-> +	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
-> +	usleep_range(10000, 11000);
-> +}
-I have seen this pattern before - and I am still confused if the HW
-really requires the 0 => 1 => 0 sequence.
-I would expect writing 1 - wait and then writing 0 would do it.
+I'm not misrepresenting anything.
 
-> +
-> +static int visionox_vtdr6130_on(struct visionox_vtdr6130 *ctx)
-> +{
-> +	struct mipi_dsi_device *dsi = ctx->dsi;
-> +	struct device *dev = &dsi->dev;
-> +	int ret;
-> +
-> +	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
-> +
-> +	dsi_dcs_write_seq(dsi, 0x03, 0x01);
-MIPI_DSI_GENERIC_SHORT_WRITE_0_PARAM?
+> Secondly, and more importantly, swapping this data is *not* permissible.
 
-> +	dsi_dcs_write_seq(dsi, 0x35, 0x00);
-MIPI_DCS_SET_TEAR_ON?
-> +	dsi_dcs_write_seq(dsi, 0x53, 0x20);
-MIPI_DCS_WRITE_CONTROL_DISPLAY?
+I did not suggest to swap it: my suggestion is to just pin these vDSO data 
+pages. The per thread memory overhead is infinitesimal on the vast majority 
+of the target systems, and the complexity trade-off you are proposing is 
+poorly reasoned IMO.
 
-etc - use the MIPI_DCS commands, not just hex-values
+Anyway:
 
-> +	dsi_dcs_write_seq(dsi, 0x51, 0x00, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0x59, 0x09);
-> +	dsi_dcs_write_seq(dsi, 0x6c, 0x01);
-> +	dsi_dcs_write_seq(dsi, 0x6d, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0x6f, 0x01);
-> +	dsi_dcs_write_seq(dsi, 0x70,
-> +			  0x12, 0x00, 0x00, 0xab, 0x30, 0x80, 0x09, 0x60, 0x04,
-> +			  0x38, 0x00, 0x28, 0x02, 0x1c, 0x02, 0x1c, 0x02, 0x00,
-> +			  0x02, 0x0e, 0x00, 0x20, 0x03, 0xdd, 0x00, 0x07, 0x00,
-> +			  0x0c, 0x02, 0x77, 0x02, 0x8b, 0x18, 0x00, 0x10, 0xf0,
-> +			  0x07, 0x10, 0x20, 0x00, 0x06, 0x0f, 0x0f, 0x33, 0x0e,
-> +			  0x1c, 0x2a, 0x38, 0x46, 0x54, 0x62, 0x69, 0x70, 0x77,
-> +			  0x79, 0x7b, 0x7d, 0x7e, 0x02, 0x02, 0x22, 0x00, 0x2a,
-> +			  0x40, 0x2a, 0xbe, 0x3a, 0xfc, 0x3a, 0xfa, 0x3a, 0xf8,
-> +			  0x3b, 0x38, 0x3b, 0x78, 0x3b, 0xb6, 0x4b, 0xb6, 0x4b,
-> +			  0xf4, 0x4b, 0xf4, 0x6c, 0x34, 0x84, 0x74, 0x00, 0x00,
-> +			  0x00, 0x00, 0x00, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0xf0, 0xaa, 0x10);
-> +	dsi_dcs_write_seq(dsi, 0xb1,
-> +			  0x01, 0x38, 0x00, 0x14, 0x00, 0x1c, 0x00, 0x01, 0x66,
-> +			  0x00, 0x14, 0x00, 0x14, 0x00, 0x01, 0x66, 0x00, 0x14,
-> +			  0x05, 0xcc, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0xf0, 0xaa, 0x13);
-> +	dsi_dcs_write_seq(dsi, 0xce,
-> +			  0x09, 0x11, 0x09, 0x11, 0x08, 0xc1, 0x07, 0xfa, 0x05,
-> +			  0xa4, 0x00, 0x3c, 0x00, 0x34, 0x00, 0x24, 0x00, 0x0c,
-> +			  0x00, 0x0c, 0x04, 0x00, 0x35);
-> +	dsi_dcs_write_seq(dsi, 0xf0, 0xaa, 0x14);
-> +	dsi_dcs_write_seq(dsi, 0xb2, 0x03, 0x33);
-> +	dsi_dcs_write_seq(dsi, 0xb4,
-> +			  0x00, 0x33, 0x00, 0x00, 0x00, 0x3e, 0x00, 0x00, 0x00,
-> +			  0x3e, 0x00, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0xb5,
-> +			  0x00, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x06, 0x01);
-> +	dsi_dcs_write_seq(dsi, 0xb9, 0x00, 0x00, 0x08, 0x09, 0x09, 0x09);
-> +	dsi_dcs_write_seq(dsi, 0xbc,
-> +			  0x10, 0x00, 0x00, 0x06, 0x11, 0x09, 0x3b, 0x09, 0x47,
-> +			  0x09, 0x47, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0xbe,
-> +			  0x10, 0x10, 0x00, 0x08, 0x22, 0x09, 0x19, 0x09, 0x25,
-> +			  0x09, 0x25, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0xff, 0x5a, 0x80);
-> +	dsi_dcs_write_seq(dsi, 0x65, 0x14);
-> +	dsi_dcs_write_seq(dsi, 0xfa, 0x08, 0x08, 0x08);
-> +	dsi_dcs_write_seq(dsi, 0xff, 0x5a, 0x81);
-> +	dsi_dcs_write_seq(dsi, 0x65, 0x05);
-> +	dsi_dcs_write_seq(dsi, 0xf3, 0x0f);
-> +	dsi_dcs_write_seq(dsi, 0xf0, 0xaa, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0xff, 0x5a, 0x82);
-> +	dsi_dcs_write_seq(dsi, 0xf9, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0xff, 0x51, 0x83);
-> +	dsi_dcs_write_seq(dsi, 0x65, 0x04);
-> +	dsi_dcs_write_seq(dsi, 0xf8, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0xff, 0x5a, 0x00);
-> +	dsi_dcs_write_seq(dsi, 0x65, 0x01);
-> +	dsi_dcs_write_seq(dsi, 0xf4, 0x9a);
-> +	dsi_dcs_write_seq(dsi, 0xff, 0x5a, 0x00);
-> +
-> +	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(120);
-> +
-> +	ret = mipi_dsi_dcs_set_display_on(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set display on: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(20);
-> +
-> +	return 0;
-> +}
-> +
-> +static int visionox_vtdr6130_off(struct visionox_vtdr6130 *ctx)
-> +{
-> +	struct mipi_dsi_device *dsi = ctx->dsi;
-> +	struct device *dev = &dsi->dev;
-> +	int ret;
-> +
-> +	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-> +
-> +	ret = mipi_dsi_dcs_set_display_off(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set display off: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(20);
-> +
-> +	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(120);
-> +
-> +	return 0;
-> +}
-> +
-> +static int visionox_vtdr6130_prepare(struct drm_panel *panel)
-> +{
-> +	struct visionox_vtdr6130 *ctx = to_visionox_vtdr6130(panel);
-> +	struct device *dev = &ctx->dsi->dev;
-> +	int ret;
-> +
-> +	if (ctx->prepared)
-> +		return 0;
-> +
-> +	ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies),
-> +				    ctx->supplies);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	visionox_vtdr6130_reset(ctx);
-> +
-> +	ret = visionox_vtdr6130_on(ctx);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to initialize panel: %d\n", ret);
-> +		gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-> +		regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> +		return ret;
-> +	}
-> +
-> +	/* Explicitly disable DSC since compression is on by default on the panel */
-> +	mipi_dsi_compression_mode(ctx->dsi, false);
-> +
-> +	ctx->prepared = true;
-> +	return 0;
-> +}
-> +
-> +static int visionox_vtdr6130_unprepare(struct drm_panel *panel)
-> +{
-> +	struct visionox_vtdr6130 *ctx = to_visionox_vtdr6130(panel);
-> +	struct device *dev = &ctx->dsi->dev;
-> +	int ret;
-> +
-> +	if (!ctx->prepared)
-> +		return 0;
-> +
-> +	ret = visionox_vtdr6130_off(ctx);
-> +	if (ret < 0)
-> +		dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
-> +
-> +	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-> +
-> +	regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> +
-> +	ctx->prepared = false;
-> +	return 0;
-> +}
-> +
-> +static const struct drm_display_mode visionox_vtdr6130_mode = {
-> +	.clock = (1080 + 20 + 2 + 20) * (2400 + 20 + 2 + 18) * 144 / 1000,
-> +	.hdisplay = 1080,
-> +	.hsync_start = 1080 + 20,
-> +	.hsync_end = 1080 + 20 + 2,
-> +	.htotal = 1080 + 20 + 2 + 20,
-> +	.vdisplay = 2400,
-> +	.vsync_start = 2400 + 20,
-> +	.vsync_end = 2400 + 20 + 2,
-> +	.vtotal = 2400 + 20 + 2 + 18,
-> +	.width_mm = 0,
-> +	.height_mm = 0,
-Here height/width are set to 0.
-> +};
-> +
-> +static int visionox_vtdr6130_get_modes(struct drm_panel *panel,
-> +				       struct drm_connector *connector)
-> +{
-> +	struct drm_display_mode *mode;
-> +
-> +	mode = drm_mode_duplicate(connector->dev, &visionox_vtdr6130_mode);
-> +	if (!mode)
-> +		return -ENOMEM;
-> +
-> +	drm_mode_set_name(mode);
-> +
-> +	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
-> +	connector->display_info.width_mm = mode->width_mm;
-> +	connector->display_info.height_mm = mode->height_mm;
-Here they are used.
-This looks wrong.
+  > Don't misrepresent it just to make a point.
+  ...
+  > That seems like a ridiculous rhetorical leap.
+  ...
+  > Did you actually read the commit message?
 
-> +	drm_mode_probed_add(connector, mode);
-> +
-> +	return 1;
-> +}
-> +
-> +static const struct drm_panel_funcs visionox_vtdr6130_panel_funcs = {
-> +	.prepare = visionox_vtdr6130_prepare,
-> +	.unprepare = visionox_vtdr6130_unprepare,
-> +	.get_modes = visionox_vtdr6130_get_modes,
-> +};
-> +
-> +static int visionox_vtdr6130_bl_update_status(struct backlight_device *bl)
-> +{
-> +	struct mipi_dsi_device *dsi = bl_get_data(bl);
-> +	u16 brightness = backlight_get_brightness(bl);
-backlight_get_brightness() return an int, so maybe use an int here.
-> +	int ret;
-> +
-> +	ret = mipi_dsi_dcs_set_display_brightness(dsi, cpu_to_le16(brightness));
-mipi_dsi_dcs_set_display_brightness() take u16 as brightness - so this
-will do an implicit conversion.
+Frankly, I don't appreciate your condescending discussion style that 
+borders on the toxic, and to save time I'm nacking this technical approach 
+until both the patch-set and your reaction to constructive review feedback 
+improves:
 
-The mipi_dsi_dcs_set_display_brightness() do the necessary conversion,
-so cpu_to_le16() is not needed.
+    NAcked-by: Ingo Molnar <mingo@kernel.org>
 
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct backlight_ops visionox_vtdr6130_bl_ops = {
-> +	.update_status = visionox_vtdr6130_bl_update_status,
-> +};
-> +
-> +static struct backlight_device *
-> +visionox_vtdr6130_create_backlight(struct mipi_dsi_device *dsi)
-> +{
-> +	struct device *dev = &dsi->dev;
-> +	const struct backlight_properties props = {
-> +		.type = BACKLIGHT_RAW,
-> +		.brightness = 4095,
-> +		.max_brightness = 4095,
-> +	};
-> +
-> +	return devm_backlight_device_register(dev, dev_name(dev), dev, dsi,
-> +					      &visionox_vtdr6130_bl_ops, &props);
-> +}
-> +
-> +static int visionox_vtdr6130_probe(struct mipi_dsi_device *dsi)
-> +{
-> +	struct device *dev = &dsi->dev;
-> +	struct visionox_vtdr6130 *ctx;
-> +	int ret;
-> +
-> +	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-> +	if (!ctx)
-> +		return -ENOMEM;
-> +
-> +	ctx->supplies[0].supply = "vddio";
-> +	ctx->supplies[1].supply = "vci";
-> +	ctx->supplies[2].supply = "vdd";
-> +
-> +	ret = devm_regulator_bulk_get(&dsi->dev, ARRAY_SIZE(ctx->supplies),
-> +				      ctx->supplies);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-> +	if (IS_ERR(ctx->reset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
-> +				     "Failed to get reset-gpios\n");
-> +
-> +	ctx->dsi = dsi;
-> +	mipi_dsi_set_drvdata(dsi, ctx);
-> +
-> +	dsi->lanes = 4;
-> +	dsi->format = MIPI_DSI_FMT_RGB888;
-> +	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_NO_EOT_PACKET |
-> +			  MIPI_DSI_CLOCK_NON_CONTINUOUS;
-> +
-> +	drm_panel_init(&ctx->panel, dev, &visionox_vtdr6130_panel_funcs,
-> +		       DRM_MODE_CONNECTOR_DSI);
-> +
-> +	ctx->panel.backlight = visionox_vtdr6130_create_backlight(dsi);
-> +	if (IS_ERR(ctx->panel.backlight))
-> +		return dev_err_probe(dev, PTR_ERR(ctx->panel.backlight),
-> +				     "Failed to create backlight\n");
-> +
-> +	drm_panel_add(&ctx->panel);
-> +
-> +	ret = mipi_dsi_attach(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
-> +		drm_panel_remove(&ctx->panel);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void visionox_vtdr6130_remove(struct mipi_dsi_device *dsi)
-> +{
-> +	struct visionox_vtdr6130 *ctx = mipi_dsi_get_drvdata(dsi);
-> +	int ret;
-> +
-> +	ret = mipi_dsi_detach(dsi);
-> +	if (ret < 0)
-> +		dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
-> +
-> +	drm_panel_remove(&ctx->panel);
-> +}
-> +
-> +static const struct of_device_id visionox_vtdr6130_of_match[] = {
-> +	{ .compatible = "visionox,vtdr6130" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, visionox_vtdr6130_of_match);
-> +
-> +static struct mipi_dsi_driver visionox_vtdr6130_driver = {
-> +	.probe = visionox_vtdr6130_probe,
-> +	.remove = visionox_vtdr6130_remove,
-> +	.driver = {
-> +		.name = "panel-visionox-vtdr6130",
-> +		.of_match_table = visionox_vtdr6130_of_match,
-> +	},
-> +};
-> +module_mipi_dsi_driver(visionox_vtdr6130_driver);
-> +
-> +MODULE_AUTHOR("Neil Armstron <neil.armstrong@linaro.org>");
-> +MODULE_DESCRIPTION("Panel driver for the visionox VTDR6130 AMOLED DSI panel");
-> +MODULE_LICENSE("GPL");
-> 
-> -- 
-> 2.34.1
+I think my core point that it would be much simpler to simply pin those 
+pages and not introduce rarely-excercised 'discardable memory' semantics in 
+Linux is a fair one - so it's straightforward to lift this NAK.
+
+I'll re-evaluate the NACK on every new iteration of this patchset I see.
+
+Thanks,
+
+	Ingo
