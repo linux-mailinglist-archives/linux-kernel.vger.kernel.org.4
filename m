@@ -2,83 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2909F65BC3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D10E65BC40
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236819AbjACIaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S233167AbjACIcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237004AbjACIaK (ORCPT
+        with ESMTP id S237073AbjACIcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:30:10 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E60BDF72
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:30:09 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id k26-20020a05600c1c9a00b003d972646a7dso19369351wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:30:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SxkhIR3WdUegYdjFr6N7zZV8KkU8dbXUnACWEfDXHjA=;
-        b=U0O7Kcy3PsM1cJ4UtH003YPKItoLheviE/jyVGq0yMFPsjmCyJLCQObE1X0AKIVDEQ
-         GQcpsDATHU9RK53so6RFr7TQAnykUobhEvxc6eUT/GURAk9b8qC9DBWsfSTwpXZvJfCu
-         OtybD+KuJ5jecW4jaic4PQj2td/CSyxBScXmICI2T5Y51kM2cS/gqSeePGc7uPXVcqro
-         ercmNRbFB3EoY+vvan4/h1TEGKzXsFirX+001fb+m3aQ+TeIPcFnyA/r5+ffi65Z6n9z
-         MvoqMfezgs9eZXtOEzDqUbh28WSzkXMVVNhnV2za4dNJT4ynA1Uuj1gUzMg2eCO5NW5A
-         o0ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SxkhIR3WdUegYdjFr6N7zZV8KkU8dbXUnACWEfDXHjA=;
-        b=cXWgPLBZiE1Dvy30nphDl7R8YME9rMG4BAml9TkY53Xsjk8Q+ntth0sXFKMkIc9oXm
-         mxADrfO4fRCxcv0IjEf7CFvfjxEHC4oBaO6ZsJdlrYi9kfGGRCtWSZp1ABOJNuNWYPGm
-         krvtdKbTbFkSV7es0nx0LXWJcmaRG21WsJpWoS+R0qoaNvekmp07m2XRogJNB7CNbFr9
-         IGF1BrKAJU2nd0kkyvfE/6HWmY0gUMmRn4W6DkTCd1Z8f847kRPc1L77R0TWhKHQ0f0v
-         NLvIvuXSV/jsx1N99/k/hqOSY+F3qxwzEo/eX18+vqm0u1AgU9Z/mGglwg1KDESEuRoo
-         YKtw==
-X-Gm-Message-State: AFqh2kqJyM4QfHU90klbEtWCJAhVnyrm4GqjjST5TsTOFMOeSysJ775N
-        ujc6HqD04Wd3EXklStjJq6s=
-X-Google-Smtp-Source: AMrXdXsSKAQzDPooeHFHc9wCul2eM0IwEHdIsD8jnrUulL2L8h/jXoDmUJ8kfNBXnYvDd76ra/mKpg==
-X-Received: by 2002:a05:600c:1d89:b0:3d3:5cd6:781 with SMTP id p9-20020a05600c1d8900b003d35cd60781mr29942129wms.37.1672734608066;
-        Tue, 03 Jan 2023 00:30:08 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e16-20020a05600c4e5000b003c21ba7d7d6sm41943812wmq.44.2023.01.03.00.30.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 00:30:07 -0800 (PST)
-Date:   Tue, 3 Jan 2023 11:30:03 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] staging: rtl8192e: Rename TSSI_13dBm, Pwr_Track and
- NumTotalRFPath
-Message-ID: <Y7Pni7tvFPhcz7bu@kadam>
-References: <cover.1672330343.git.philipp.g.hortmann@gmail.com>
- <c7d3be41602e656170de46ea649b5bdf1081d5cf.1672330343.git.philipp.g.hortmann@gmail.com>
+        Tue, 3 Jan 2023 03:32:10 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9B6DF72
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:32:08 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1C41237F0D;
+        Tue,  3 Jan 2023 08:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1672734727; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=otz19k1tc7qzP2hV2fG+WMWuYfwYpYbTF6IlJwVmXWM=;
+        b=AZGQFsAC5EaiBv+XveQ+4UmNX6EaEKIH8Ux13WW/BOlmVOwcHt9N+mGVRbN5uzwCdaBuVQ
+        U3arMH591+NVs4tIRzDYGhvnHhG8azwZVlqJyWMF4qjCFmsW5X3VgA2Wh7LmcdKuYCdoT0
+        xJxUNORQmCPI/qwcwk9seLuY1Nc59WE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F1A381390C;
+        Tue,  3 Jan 2023 08:32:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xrkTOAbos2P3CAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 03 Jan 2023 08:32:06 +0000
+Date:   Tue, 3 Jan 2023 09:32:06 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?6rmA7J6s7JuQ?= <jaewon31.kim@samsung.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Subject: Re: (2) [PATCH] page_alloc: avoid the negative free for meminfo
+ available
+Message-ID: <Y7PoBkLyCaH1KHbB@dhcp22.suse.cz>
+References: <Y7PhVaqhIzs8e8mU@dhcp22.suse.cz>
+ <20230103072807.19578-1-jaewon31.kim@samsung.com>
+ <CGME20230103072834epcas1p3441ef50a6cc26ac48d184f1244b76a0e@epcms1p6>
+ <20230103082008epcms1p6f75b54cbfeba0a1ab9a8044dc650134b@epcms1p6>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c7d3be41602e656170de46ea649b5bdf1081d5cf.1672330343.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230103082008epcms1p6f75b54cbfeba0a1ab9a8044dc650134b@epcms1p6>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 05:25:46PM +0100, Philipp Hortmann wrote:
-> Rename variable TSSI_13dBm to tssi_13dbm
+On Tue 03-01-23 17:20:08, 김재원 wrote:
+> >On Tue 03-01-23 16:28:07, Jaewon Kim wrote:
+> >> The totalreserve_pages could be higher than the free because of
+> >> watermark high or watermark boost. Handle this situation and fix it to 0
+> >> free size.
+> >
+> >What is the actual problem you are trying to address by this change?
+> 
+> Hello
+> 
+> As described on the original commit,
+>   34e431b0ae39 /proc/meminfo: provide estimated available memory
+> mm is tring to provide the avaiable memory to user space.
+> 
+> But if free is negative, the available memory shown to userspace
+> would be shown smaller thatn the actual available size. The userspace
+> may do unwanted memory shrinking actions like process kills.
 
-I would probably have kept this one as-is.  It's not CamelCase, it's the
-correct way to capitalize it.
+Do you have any specific example? Have you seen this happening in
+practice or is this based on the code inspection?
 
-regards,
-dan carpenter
+Also does this patch actually fix anything? Say the system is really
+struggling and we are under min watermark. Shouldn't that lead to
+Available to be reported as 0 without even looking at other counters?
 
+> I think the logic sholud account the positive size only.
+> 
+> BR
+> 
+> >
+> >> Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
+> >> ---
+> >>  mm/page_alloc.c | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >> 
+> >> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> >> index 218b28ee49ed..e510ae83d5f3 100644
+> >> --- a/mm/page_alloc.c
+> >> +++ b/mm/page_alloc.c
+> >> @@ -5948,6 +5948,8 @@ long si_mem_available(void)
+> >>  	 * without causing swapping or OOM.
+> >>  	 */
+> >>  	available = global_zone_page_state(NR_FREE_PAGES) - totalreserve_pages;
+> >> +	if (available < 0)
+> >> +		available = 0;
+> >>  
+> >>  	/*
+> >>  	 * Not all the page cache can be freed, otherwise the system will
+> >> -- 
+> >> 2.17.1
+> >
+> >-- 
+> >Michal Hocko
+> >SUSE Labs
+> 
+> 
+> 
+>  
+> --------- Original Message ---------
+> Sender : Michal Hocko <mhocko@suse.com>
+> Date : 2023-01-03 17:03 (GMT+9)
+> Title : Re: [PATCH] page_alloc: avoid the negative free for meminfo available
+>  
+> On Tue 03-01-23 16:28:07, Jaewon Kim wrote:
+> > The totalreserve_pages could be higher than the free because of
+> > watermark high or watermark boost. Handle this situation and fix it to 0
+> > free size.
+> 
+> What is the actual problem you are trying to address by this change?
+> 
+> > Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
+> > ---
+> >  mm/page_alloc.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 218b28ee49ed..e510ae83d5f3 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -5948,6 +5948,8 @@ long si_mem_available(void)
+> >           * without causing swapping or OOM.
+> >           */
+> >          available = global_zone_page_state(NR_FREE_PAGES) - totalreserve_pages;
+> > +        if (available < 0)
+> > +                available = 0;
+> >  
+> >          /*
+> >           * Not all the page cache can be freed, otherwise the system will
+> > -- 
+> > 2.17.1
+> 
+> -- 
+> Michal Hocko
+> SUSE Labs
+> 
+
+-- 
+Michal Hocko
+SUSE Labs
