@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5334065BF2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C26A65BF33
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237387AbjACLkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 06:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S233179AbjACLnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 06:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237052AbjACLkB (ORCPT
+        with ESMTP id S237375AbjACLnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 06:40:01 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033B0B6F;
-        Tue,  3 Jan 2023 03:39:59 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VYn6leY_1672745995;
-Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VYn6leY_1672745995)
-          by smtp.aliyun-inc.com;
-          Tue, 03 Jan 2023 19:39:56 +0800
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-To:     John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v5 6/6] perf vendor events arm64: Add instruction mix metrics for neoverse-n2
-Date:   Tue,  3 Jan 2023 19:39:36 +0800
-Message-Id: <1672745976-2800146-7-git-send-email-renyu.zj@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1672745976-2800146-1-git-send-email-renyu.zj@linux.alibaba.com>
-References: <1672745976-2800146-1-git-send-email-renyu.zj@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        Tue, 3 Jan 2023 06:43:21 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83578101F3
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 03:42:15 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 79so19923823pgf.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 03:42:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RTbVdnoB1fMA8FNeVWq5aGNuZkP6XciThsh+OBKTYD4=;
+        b=W9VQjRGeE+vvNlT5VVXgPOmuDhBAg5qQKSYzDVjCoWxkxwlzsD/pGmII8Ij1CUMhZw
+         Rs3P0NkMe4HgA9P1bSFq3ejHFtGaXw34lxEWEMzPn5KOnB0xFSaWyVatxcDcnWDio9fP
+         qWNcQsua0fvBLfXj7IbIs0QSF0AzCpST0zQB4xMivizekA58MPANYowkcpUy/oWQvizC
+         zPUkQDzzK25qhOwI4qh953SY7RbswNadWp9/SifpatN2iD98LiVIsSYxgmRjJUkUotG4
+         ln7GEkrYJeqBASMLDRzbx1DjdVFOkM5GKKhI4EMvnhXp0Fcq9hxcew02DUxRRpADPAXj
+         AzQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RTbVdnoB1fMA8FNeVWq5aGNuZkP6XciThsh+OBKTYD4=;
+        b=7PgmWWbUPUst9FQiEQLr5/WKjvdXrsZZKnUklj6n/U9Ji8d2gjO2mVR/afW55BkGXz
+         MzqUIpJbdzX63dZyPK1fqo0jZjqdivrRtvuoNFvSsKKpO2UUoHh0UJeXT99fNvs3b6+7
+         g25mDdBN5MBAwqCfg/wjrBMc9hOX5oqliBNiOc1UMTIuvUl+B46ScIVeiu4Z0uYmd01+
+         1+ur7pnC/Pxp88+qpyNFjTjMnn/eGxCuHtQchw5xoLxFvpR0QVbp+0Ec9sZbqe8QDnqq
+         yCmh4DfMmUGLPW89hXhpd8v6ebssNt4S2KfdQpUKeBI91Z4AMc3sFzjwXDn6OaJyB7Nw
+         3cRg==
+X-Gm-Message-State: AFqh2krjLLVV8zVitQpTM+9BL6oiQJyry4qd3PuxOLd9QVYscOrx8GXZ
+        XhYqMPVwl8tFRtQZPY2mGvI4D4YFb4fPEmOOHkMW0Q==
+X-Google-Smtp-Source: AMrXdXuM55BejzFIXuf7gfODVrmZwD5SLGcZjDBNHOBWM5NE24dlP2dnqyG2D3P5Sc8VFW3/DJc/WoDxcsrFnm3LW0I=
+X-Received: by 2002:a62:2f07:0:b0:580:b57:f7ad with SMTP id
+ v7-20020a622f07000000b005800b57f7admr2194756pfv.28.1672746135008; Tue, 03 Jan
+ 2023 03:42:15 -0800 (PST)
+MIME-Version: 1.0
+References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com> <20221227233020.284266-6-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20221227233020.284266-6-martin.blumenstingl@googlemail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 3 Jan 2023 12:41:38 +0100
+Message-ID: <CAPDyKFqJRL8Ngh1rj=tvr142WcwqSCNTWeGDVD4vto=Y8Fvj4A@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 05/19] mmc: sdio: add Realtek SDIO vendor ID and
+ various wifi device IDs
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-wireless@vger.kernel.org,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Chris Morgan <macroalpha82@gmail.com>,
+        Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,87 +74,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add instruction mix related metrics.
+On Wed, 28 Dec 2022 at 00:30, Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+>
+> Add the SDIO vendor ID for Realtek and some device IDs extracted from
+> their GPL vendor driver. This will be useful in the future when the
+> rtw88 driver gains support for these chips.
+>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-Acked-by: Ian Rogers <irogers@google.com>
----
- .../arch/arm64/arm/neoverse-n2/metrics.json        | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+I assume it's easier if Kalle picks up this patch, along with the series. So:
 
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-index 94ca91f..3bdde8b 100644
---- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-@@ -219,5 +219,68 @@
-         "MetricGroup": "PEutilization",
-         "MetricName": "cpu_utilization",
-         "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "LD_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of load instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "load_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "ST_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of store instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "store_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "DP_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of integer data-processing instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "data_process_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "ASE_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of advanced SIMD instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "advanced_simd_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "VFP_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of floating point instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "float_point_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "CRYPTO_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of crypto instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "crypto_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "BR_IMMED_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of branch immediate instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "branch_immed_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "BR_RETURN_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of procedure return instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "branch_return_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "BR_INDIRECT_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of indirect branch instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "branch_indirect_spec_rate",
-+        "ScaleUnit": "100%"
-     }
- ]
--- 
-1.8.3.1
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
+Kind regards
+Uffe
+
+
+> ---
+>  include/linux/mmc/sdio_ids.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/include/linux/mmc/sdio_ids.h b/include/linux/mmc/sdio_ids.h
+> index 74f9d9a6d330..bba39d4565da 100644
+> --- a/include/linux/mmc/sdio_ids.h
+> +++ b/include/linux/mmc/sdio_ids.h
+> @@ -111,6 +111,15 @@
+>  #define SDIO_VENDOR_ID_MICROCHIP_WILC          0x0296
+>  #define SDIO_DEVICE_ID_MICROCHIP_WILC1000      0x5347
+>
+> +#define SDIO_VENDOR_ID_REALTEK                 0x024c
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8723BS       0xb723
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8723DS       0xd723
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8821BS       0xb821
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8821CS       0xc821
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8821DS       0xd821
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8822BS       0xb822
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8822CS       0xc822
+> +
+>  #define SDIO_VENDOR_ID_SIANO                   0x039a
+>  #define SDIO_DEVICE_ID_SIANO_NOVA_B0           0x0201
+>  #define SDIO_DEVICE_ID_SIANO_NICE              0x0202
+> --
+> 2.39.0
+>
