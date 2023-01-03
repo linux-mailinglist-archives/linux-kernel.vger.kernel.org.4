@@ -2,193 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018C065C56F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C4865C572
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238227AbjACRxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        id S238184AbjACRxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:53:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238195AbjACRxi (ORCPT
+        with ESMTP id S238137AbjACRxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:53:38 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE8E10B67
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:53:37 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id h21so25084707qta.12
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 09:53:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K3lJPOWgS9gmsVyQJhhMopaN46rhZdwXt5/TWv91+AM=;
-        b=sx78T575rkzRQ1xyJ0XJDbAOm3msaUet2neJ8FxIbPzxNm+/Pj5IJHNyWd949YDqCx
-         N/h11soxlNwdyogCcdguHHnd8pSD1NxwlN6iK5PStXTFe2mbAXRRhb6MNrgvs+ttR0f6
-         8ldUuEl3RadmySoPBmcYvN12ot2mpRUEGC+nk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K3lJPOWgS9gmsVyQJhhMopaN46rhZdwXt5/TWv91+AM=;
-        b=4s3k1UNs6ZzFd1zXGNj3dRX/V6Ouhh+Hdas0rafuHwsJK4uJgnFqEAFfvLDOuIHLTd
-         ft0yJ1wda2t2xAYC8JxddETQ7PHf5LebA/iem1dYWDt7KulYH1HmTJtpuAfd4NJaLEYi
-         mFE2SLM+oUO3M0Cu964f8D237ixoHDVAHK3Fim4PozhcJKY8exEREVb4aUEeQJVeWNhx
-         RmIiClojo1McqUnuWCe9U/Usf1PFdWbM1+wY0JeGWTUD+Jtk85spkDOPazUqhlPYpLsv
-         rItPdbrpt404FQVJcDKemSXblZqGRh7nzy+KbLq+LraboDZRDVXGPkeHbmaWc95UTBg4
-         4qYQ==
-X-Gm-Message-State: AFqh2kqaQyRnn6a1hUqOZn14EZENyHYzqwZ3grJ1GsxEQH89SAAjQs/m
-        gqotFmxNL9iu8mR5T99Zbo2Wy4pEt/ic+xEW
-X-Google-Smtp-Source: AMrXdXutdee2UENiJl42RFuOVUHGIRRJgHkozXbKmn9JZf/efMbI2kZ377ReUqxftt3A7Kc0UV6jkQ==
-X-Received: by 2002:ac8:5481:0:b0:3a7:e2df:e868 with SMTP id h1-20020ac85481000000b003a7e2dfe868mr54522820qtq.41.1672768416180;
-        Tue, 03 Jan 2023 09:53:36 -0800 (PST)
-Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id u15-20020a37ab0f000000b006fafc111b12sm22253412qke.83.2023.01.03.09.53.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 09:53:35 -0800 (PST)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>, neeraj.iitr10@gmail.com
-Subject: [PATCH v2] srcu: Remove memory barrier "E" as it does not do anything
-Date:   Tue,  3 Jan 2023 17:53:21 +0000
-Message-Id: <20230103175321.1910864-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        Tue, 3 Jan 2023 12:53:30 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACA96478;
+        Tue,  3 Jan 2023 09:53:29 -0800 (PST)
+Date:   Tue, 03 Jan 2023 17:53:27 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672768408;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gDnLwWUNhGeNTjk5dBPlG54FpWRbQwmtLIh1GZI8edI=;
+        b=ff54yNuVbe5la5TP/g6GEyikaMYYlDyZDOkYwUOnSUEUNfQWjGyM7gAGMoxhaNgFXHVBsr
+        82l11WfW1YYdKJYsYE40Y1verMUBs15Wa6PPBtpO1OLFOAjb8qf4z8GOUFGCSLxAZIVQkQ
+        B7Bgwcd3Z30F5OeNTdPmy9oMWG++a7HEoPvUT+rcFX+Sk5CUxQ3zhLSF7rRPYX9rprcStg
+        J1/DSja0PpPfmhmAuRbspdrwizkU9xEr6jrSj/0qOklqco59fCXJFnR+g1/r/l5KcchRma
+        cJns8gB9WLCm61aGeqd3zAh9wOCnul6/bjYWgKSmcGDnZ9Qn2MtNZZHFxpWAlQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672768408;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gDnLwWUNhGeNTjk5dBPlG54FpWRbQwmtLIh1GZI8edI=;
+        b=s/d4NfqvTJDoykzlfQrNJQbObkGNzB9ValgCU2jhTQzFYiABNCeALlwvdBelWjIjKjDZc0
+        9smxAT44lV6VvZBA==
+From:   "tip-bot2 for Jason A. Donenfeld" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/insn: Avoid namespace clash by separating
+ instruction decoder MMIO type from MMIO trace type
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230101162910.710293-2-Jason@zx2c4.com>
+References: <20230101162910.710293-2-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <167276840732.4906.11293412600459727136.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a flip, we have a full memory barrier before srcu_idx is incremented.
+The following commit has been merged into the x86/urgent branch of tip:
 
-The idea is we intend to order the first phase scan's read of lock
-counters with the flipping of the index.
+Commit-ID:     72bb8f8cc088730c4d84117a6906f458c2fc64bb
+Gitweb:        https://git.kernel.org/tip/72bb8f8cc088730c4d84117a6906f458c2fc64bb
+Author:        Jason A. Donenfeld <Jason@zx2c4.com>
+AuthorDate:    Sun, 01 Jan 2023 17:29:04 +01:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Tue, 03 Jan 2023 18:46:06 +01:00
 
-However, such ordering is already enforced because of the
-control-dependency between the 2 scans. We would be flipping the index
-only if lock and unlock counts matched.
+x86/insn: Avoid namespace clash by separating instruction decoder MMIO type from MMIO trace type
 
-But such match will not happen if there was a pending reader before the flip
-in the first place (observation courtesy Mathieu Desnoyers).
+Both <linux/mmiotrace.h> and <asm/insn-eval.h> define various MMIO_ enum constants,
+whose namespace overlaps.
 
-The litmus test below shows this:
-(test courtesy Frederic Weisbecker, Changes for ctrldep by Boqun/me):
+Rename the <asm/insn-eval.h> ones to have a INSN_ prefix, so that the headers can be
+used from the same source file.
 
-C srcu
-(*
- * bad condition: P0's first scan (SCAN1) saw P1's idx=0 LOCK count inc, though P1 saw flip.
- *
- * So basically, the ->po ordering on both P0 and P1 is enforced via ->ppo
- * (control deps) on both sides, and both P0 and P1 are interconnected by ->rf
- * relations. Combining the ->ppo with ->rf, a cycle is impossible.
- *)
-
-{}
-
-// updater
-P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-{
-        int lock1;
-        int unlock1;
-        int lock0;
-        int unlock0;
-
-        // SCAN1
-        unlock1 = READ_ONCE(*UNLOCK1);
-        smp_mb(); // A
-        lock1 = READ_ONCE(*LOCK1);
-
-        // FLIP
-        if (lock1 == unlock1) {   // Control dep
-                smp_mb(); // E    // Remove E and still passes.
-                WRITE_ONCE(*IDX, 1);
-                smp_mb(); // D
-
-                // SCAN2
-                unlock0 = READ_ONCE(*UNLOCK0);
-                smp_mb(); // A
-                lock0 = READ_ONCE(*LOCK0);
-        }
-}
-
-// reader
-P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-{
-        int tmp;
-        int idx1;
-        int idx2;
-
-        // 1st reader
-        idx1 = READ_ONCE(*IDX);
-        if (idx1 == 0) {         // Control dep
-                tmp = READ_ONCE(*LOCK0);
-                WRITE_ONCE(*LOCK0, tmp + 1);
-                smp_mb(); /* B and C */
-                tmp = READ_ONCE(*UNLOCK0);
-                WRITE_ONCE(*UNLOCK0, tmp + 1);
-        } else {
-                tmp = READ_ONCE(*LOCK1);
-                WRITE_ONCE(*LOCK1, tmp + 1);
-                smp_mb(); /* B and C */
-                tmp = READ_ONCE(*UNLOCK1);
-                WRITE_ONCE(*UNLOCK1, tmp + 1);
-        }
-}
-
-exists (0:lock1=1 /\ 1:idx1=1)
-
-Co-developed-by: Frederic Weisbecker <frederic@kernel.org>
-Co-developed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20230101162910.710293-2-Jason@zx2c4.com
 ---
-v1->v2: Update changelog, keep old comments.
+ arch/x86/coco/tdx/tdx.c          | 26 +++++++++++++-------------
+ arch/x86/include/asm/insn-eval.h | 18 +++++++++---------
+ arch/x86/kernel/sev.c            | 18 +++++++++---------
+ arch/x86/lib/insn-eval.c         | 20 ++++++++++----------
+ 4 files changed, 41 insertions(+), 41 deletions(-)
 
-
- kernel/rcu/srcutree.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 1c304fec89c0..0f9ba0f9fd12 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -983,15 +983,15 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
- static void srcu_flip(struct srcu_struct *ssp)
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index cfd4c95..669d9e4 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -386,8 +386,8 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
  {
- 	/*
--	 * Ensure that if this updater saw a given reader's increment
--	 * from __srcu_read_lock(), that reader was using an old value
--	 * of ->srcu_idx.  Also ensure that if a given reader sees the
--	 * new value of ->srcu_idx, this updater's earlier scans cannot
--	 * have seen that reader's increments (which is OK, because this
--	 * grace period need not wait on that reader).
-+	 * Control dependencies on both reader and updater side ensures that if
-+	 * this updater saw a given reader's increment from __srcu_read_lock(),
-+	 * that reader was using an old value of ->srcu_idx.  Also ensures that
-+	 * if a given reader sees the new value of ->srcu_idx, this updater's
-+	 * earlier scans cannot have seen that reader's increments (which is
-+	 * OK, because this grace period need not wait on that reader).
-+	 *
-+	 * So no need for an smp_mb() before incrementing srcu_idx.
- 	 */
--	smp_mb(); /* E */  /* Pairs with B and C. */
--
- 	WRITE_ONCE(ssp->srcu_idx, ssp->srcu_idx + 1);
+ 	unsigned long *reg, val, vaddr;
+ 	char buffer[MAX_INSN_SIZE];
++	enum insn_mmio_type mmio;
+ 	struct insn insn = {};
+-	enum mmio_type mmio;
+ 	int size, extend_size;
+ 	u8 extend_val = 0;
  
- 	/*
--- 
-2.39.0.314.g84b9a713c41-goog
+@@ -402,10 +402,10 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ 		return -EINVAL;
+ 
+ 	mmio = insn_decode_mmio(&insn, &size);
+-	if (WARN_ON_ONCE(mmio == MMIO_DECODE_FAILED))
++	if (WARN_ON_ONCE(mmio == INSN_MMIO_DECODE_FAILED))
+ 		return -EINVAL;
+ 
+-	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
++	if (mmio != INSN_MMIO_WRITE_IMM && mmio != INSN_MMIO_MOVS) {
+ 		reg = insn_get_modrm_reg_ptr(&insn, regs);
+ 		if (!reg)
+ 			return -EINVAL;
+@@ -426,23 +426,23 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ 
+ 	/* Handle writes first */
+ 	switch (mmio) {
+-	case MMIO_WRITE:
++	case INSN_MMIO_WRITE:
+ 		memcpy(&val, reg, size);
+ 		if (!mmio_write(size, ve->gpa, val))
+ 			return -EIO;
+ 		return insn.length;
+-	case MMIO_WRITE_IMM:
++	case INSN_MMIO_WRITE_IMM:
+ 		val = insn.immediate.value;
+ 		if (!mmio_write(size, ve->gpa, val))
+ 			return -EIO;
+ 		return insn.length;
+-	case MMIO_READ:
+-	case MMIO_READ_ZERO_EXTEND:
+-	case MMIO_READ_SIGN_EXTEND:
++	case INSN_MMIO_READ:
++	case INSN_MMIO_READ_ZERO_EXTEND:
++	case INSN_MMIO_READ_SIGN_EXTEND:
+ 		/* Reads are handled below */
+ 		break;
+-	case MMIO_MOVS:
+-	case MMIO_DECODE_FAILED:
++	case INSN_MMIO_MOVS:
++	case INSN_MMIO_DECODE_FAILED:
+ 		/*
+ 		 * MMIO was accessed with an instruction that could not be
+ 		 * decoded or handled properly. It was likely not using io.h
+@@ -459,15 +459,15 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ 		return -EIO;
+ 
+ 	switch (mmio) {
+-	case MMIO_READ:
++	case INSN_MMIO_READ:
+ 		/* Zero-extend for 32-bit operation */
+ 		extend_size = size == 4 ? sizeof(*reg) : 0;
+ 		break;
+-	case MMIO_READ_ZERO_EXTEND:
++	case INSN_MMIO_READ_ZERO_EXTEND:
+ 		/* Zero extend based on operand size */
+ 		extend_size = insn.opnd_bytes;
+ 		break;
+-	case MMIO_READ_SIGN_EXTEND:
++	case INSN_MMIO_READ_SIGN_EXTEND:
+ 		/* Sign extend based on operand size */
+ 		extend_size = insn.opnd_bytes;
+ 		if (size == 1 && val & BIT(7))
+diff --git a/arch/x86/include/asm/insn-eval.h b/arch/x86/include/asm/insn-eval.h
+index f07faa6..54368a4 100644
+--- a/arch/x86/include/asm/insn-eval.h
++++ b/arch/x86/include/asm/insn-eval.h
+@@ -32,16 +32,16 @@ int insn_fetch_from_user_inatomic(struct pt_regs *regs,
+ bool insn_decode_from_regs(struct insn *insn, struct pt_regs *regs,
+ 			   unsigned char buf[MAX_INSN_SIZE], int buf_size);
+ 
+-enum mmio_type {
+-	MMIO_DECODE_FAILED,
+-	MMIO_WRITE,
+-	MMIO_WRITE_IMM,
+-	MMIO_READ,
+-	MMIO_READ_ZERO_EXTEND,
+-	MMIO_READ_SIGN_EXTEND,
+-	MMIO_MOVS,
++enum insn_mmio_type {
++	INSN_MMIO_DECODE_FAILED,
++	INSN_MMIO_WRITE,
++	INSN_MMIO_WRITE_IMM,
++	INSN_MMIO_READ,
++	INSN_MMIO_READ_ZERO_EXTEND,
++	INSN_MMIO_READ_SIGN_EXTEND,
++	INSN_MMIO_MOVS,
+ };
+ 
+-enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes);
++enum insn_mmio_type insn_decode_mmio(struct insn *insn, int *bytes);
+ 
+ #endif /* _ASM_X86_INSN_EVAL_H */
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index a428c62..679026a 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -1536,32 +1536,32 @@ static enum es_result vc_handle_mmio_movs(struct es_em_ctxt *ctxt,
+ static enum es_result vc_handle_mmio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+ {
+ 	struct insn *insn = &ctxt->insn;
++	enum insn_mmio_type mmio;
+ 	unsigned int bytes = 0;
+-	enum mmio_type mmio;
+ 	enum es_result ret;
+ 	u8 sign_byte;
+ 	long *reg_data;
+ 
+ 	mmio = insn_decode_mmio(insn, &bytes);
+-	if (mmio == MMIO_DECODE_FAILED)
++	if (mmio == INSN_MMIO_DECODE_FAILED)
+ 		return ES_DECODE_FAILED;
+ 
+-	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
++	if (mmio != INSN_MMIO_WRITE_IMM && mmio != INSN_MMIO_MOVS) {
+ 		reg_data = insn_get_modrm_reg_ptr(insn, ctxt->regs);
+ 		if (!reg_data)
+ 			return ES_DECODE_FAILED;
+ 	}
+ 
+ 	switch (mmio) {
+-	case MMIO_WRITE:
++	case INSN_MMIO_WRITE:
+ 		memcpy(ghcb->shared_buffer, reg_data, bytes);
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, false);
+ 		break;
+-	case MMIO_WRITE_IMM:
++	case INSN_MMIO_WRITE_IMM:
+ 		memcpy(ghcb->shared_buffer, insn->immediate1.bytes, bytes);
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, false);
+ 		break;
+-	case MMIO_READ:
++	case INSN_MMIO_READ:
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, true);
+ 		if (ret)
+ 			break;
+@@ -1572,7 +1572,7 @@ static enum es_result vc_handle_mmio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+ 
+ 		memcpy(reg_data, ghcb->shared_buffer, bytes);
+ 		break;
+-	case MMIO_READ_ZERO_EXTEND:
++	case INSN_MMIO_READ_ZERO_EXTEND:
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, true);
+ 		if (ret)
+ 			break;
+@@ -1581,7 +1581,7 @@ static enum es_result vc_handle_mmio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+ 		memset(reg_data, 0, insn->opnd_bytes);
+ 		memcpy(reg_data, ghcb->shared_buffer, bytes);
+ 		break;
+-	case MMIO_READ_SIGN_EXTEND:
++	case INSN_MMIO_READ_SIGN_EXTEND:
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, true);
+ 		if (ret)
+ 			break;
+@@ -1600,7 +1600,7 @@ static enum es_result vc_handle_mmio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+ 		memset(reg_data, sign_byte, insn->opnd_bytes);
+ 		memcpy(reg_data, ghcb->shared_buffer, bytes);
+ 		break;
+-	case MMIO_MOVS:
++	case INSN_MMIO_MOVS:
+ 		ret = vc_handle_mmio_movs(ctxt, bytes);
+ 		break;
+ 	default:
+diff --git a/arch/x86/lib/insn-eval.c b/arch/x86/lib/insn-eval.c
+index 21104c4..558a605 100644
+--- a/arch/x86/lib/insn-eval.c
++++ b/arch/x86/lib/insn-eval.c
+@@ -1595,16 +1595,16 @@ bool insn_decode_from_regs(struct insn *insn, struct pt_regs *regs,
+  * Returns:
+  *
+  * Type of the instruction. Size of the memory operand is stored in
+- * @bytes. If decode failed, MMIO_DECODE_FAILED returned.
++ * @bytes. If decode failed, INSN_MMIO_DECODE_FAILED returned.
+  */
+-enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
++enum insn_mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ {
+-	enum mmio_type type = MMIO_DECODE_FAILED;
++	enum insn_mmio_type type = INSN_MMIO_DECODE_FAILED;
+ 
+ 	*bytes = 0;
+ 
+ 	if (insn_get_opcode(insn))
+-		return MMIO_DECODE_FAILED;
++		return INSN_MMIO_DECODE_FAILED;
+ 
+ 	switch (insn->opcode.bytes[0]) {
+ 	case 0x88: /* MOV m8,r8 */
+@@ -1613,7 +1613,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 	case 0x89: /* MOV m16/m32/m64, r16/m32/m64 */
+ 		if (!*bytes)
+ 			*bytes = insn->opnd_bytes;
+-		type = MMIO_WRITE;
++		type = INSN_MMIO_WRITE;
+ 		break;
+ 
+ 	case 0xc6: /* MOV m8, imm8 */
+@@ -1622,7 +1622,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 	case 0xc7: /* MOV m16/m32/m64, imm16/imm32/imm64 */
+ 		if (!*bytes)
+ 			*bytes = insn->opnd_bytes;
+-		type = MMIO_WRITE_IMM;
++		type = INSN_MMIO_WRITE_IMM;
+ 		break;
+ 
+ 	case 0x8a: /* MOV r8, m8 */
+@@ -1631,7 +1631,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 	case 0x8b: /* MOV r16/r32/r64, m16/m32/m64 */
+ 		if (!*bytes)
+ 			*bytes = insn->opnd_bytes;
+-		type = MMIO_READ;
++		type = INSN_MMIO_READ;
+ 		break;
+ 
+ 	case 0xa4: /* MOVS m8, m8 */
+@@ -1640,7 +1640,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 	case 0xa5: /* MOVS m16/m32/m64, m16/m32/m64 */
+ 		if (!*bytes)
+ 			*bytes = insn->opnd_bytes;
+-		type = MMIO_MOVS;
++		type = INSN_MMIO_MOVS;
+ 		break;
+ 
+ 	case 0x0f: /* Two-byte instruction */
+@@ -1651,7 +1651,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 		case 0xb7: /* MOVZX r32/r64, m16 */
+ 			if (!*bytes)
+ 				*bytes = 2;
+-			type = MMIO_READ_ZERO_EXTEND;
++			type = INSN_MMIO_READ_ZERO_EXTEND;
+ 			break;
+ 
+ 		case 0xbe: /* MOVSX r16/r32/r64, m8 */
+@@ -1660,7 +1660,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 		case 0xbf: /* MOVSX r32/r64, m16 */
+ 			if (!*bytes)
+ 				*bytes = 2;
+-			type = MMIO_READ_SIGN_EXTEND;
++			type = INSN_MMIO_READ_SIGN_EXTEND;
+ 			break;
+ 		}
+ 		break;
