@@ -2,125 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3F065BD1B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F4065BD1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236896AbjACJYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:24:38 -0500
+        id S237188AbjACJYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:24:42 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237075AbjACJYc (ORCPT
+        with ESMTP id S233042AbjACJYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:24:32 -0500
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4032E0A8
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:24:30 -0800 (PST)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-14fb3809eaeso30179736fac.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:24:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzcK4BlDrehna2Cf5WyLld2E+p/c7PCOy1ZvlyaJP1k=;
-        b=bR1gztSKPi5u6/qmjSq8JJxxv3wfyJmMLpirn/KjmYibxhjZo7U5fODxttptFG4MZ4
-         0IXObSQFL1xNHqEy9yAzbxhEb+FU5HZHEK34C6Ofn5xjvKJTxUVdiTMnzTXI5lLY6jmn
-         uqPKflfmFLiTiOLvpmlbSeXcHUMzp4BHwLzZ+gx+mL/n09kl/h3U90Lxgu9xZyERDy+X
-         pN+aGzLOCuL5GZJI2FeIyy8y1r7QTz61jIjmrPeSChzLCOCVEiunaEiVXRndm9YbAak0
-         tpw42Yi+0S4wXmyg/of7mbrSehHDNbYtLyhTXH05Yrk8uYo3xyuziGAMU9T+Hc9Ke44Z
-         F8MQ==
+        Tue, 3 Jan 2023 04:24:33 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A583EE03E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:24:32 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id u19so72146743ejm.8
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:24:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mzcK4BlDrehna2Cf5WyLld2E+p/c7PCOy1ZvlyaJP1k=;
-        b=QuZT/La9iQOiXOh49/F09ZIZyML6et9w3eYOt6GjRu7qfHkx31v1KqcuRV9e5FEwFm
-         xPgU6Ee6mSPz7mlAm2rE8oc6OuubzrCQJctHqVVukdPVJXo7wQeQ9CYiM2/wwKeuRpYs
-         DOz6lBOxqyl1n8F2JjJibQs6AKzmEI/Q+f3RhZCUgcy/dqbdz9+cbWCtE6Lw99XKp48s
-         rp/hB9AXgKY0Iu1bgcKi4Brj1rV8LHJ3L+sSoRZdkh6ljXUjb9gSC+1VN/Cqd8SHdMyN
-         pUjh4GQrlnWYcwOBHq2ZvcrOzFaWdbJ3LHud6Tp4+4bI/1NCSM4gUZfeWBwMqP6WAJud
-         pZrA==
-X-Gm-Message-State: AFqh2koWKnw8lho0+Cb9U1DAq0t+SsyyLfNGV7lr2JppAyI/JRpYqXgJ
-        F/lUWcKqK5696/S6QHgztMPV3zsl+4j7qJMuwAdbWg==
-X-Google-Smtp-Source: AMrXdXu7+GEt205lhs8PRbBO9C5QHjATHLZxARTl42LbFtqkt0s4GGajjKBhO17x3s7QodHXVkcp8SHp01rNiJX+xZo=
-X-Received: by 2002:a05:6870:fb90:b0:150:22dd:1f54 with SMTP id
- kv16-20020a056870fb9000b0015022dd1f54mr1713164oab.155.1672737870170; Tue, 03
- Jan 2023 01:24:30 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L4la+LntIbv1wCYTLkTP+UYU3dGRE5VO/c1OtHKRiE0=;
+        b=dtc9wzsURy93AEZtnvych+7w89vbks1rdT/ReSg/jhINa5L6u7gtsBWZHrBYiAsgWg
+         TsaLFgXmWLxYef4+M9zKRF6If+zQ7qg7k5H5nwD5rxKXyzjNhNsWa3icEVZE1aSWsIq0
+         i/CADii2DTsp+HepZ+DGenFNTulQg6cIJXt+qSd+RsVNC4qI+i5z9DVgjF9ZIOkBQYKG
+         3cg93HeoVxJHmrZb52uMnt7AsHjsf5i5g/QYZ1UJD06GOklK3h1gZlu8wme0VIjqkW5U
+         srgf9EVNSPwzFOl/LRi7MoYmcorlIU5UHCKUZryfgkI/KGaq26vQWYikkFnFR6g6MT2h
+         E6fg==
+X-Gm-Message-State: AFqh2koHpQO9UozgQaFz0pKtBX/8+meNM5/j1HLtAuFyLhgikMlA0n3+
+        Gr+V1vSYInjgWrtKQNJs/ng=
+X-Google-Smtp-Source: AMrXdXtnZPyTLylHQsusZ7+Zm/J0JZ1Bn//ViVEv2MQtpJJzq/c12HEgthTCavI8tb/CEFnpSuxM0A==
+X-Received: by 2002:a17:907:8312:b0:7fc:3fef:ab86 with SMTP id mq18-20020a170907831200b007fc3fefab86mr31571784ejc.71.1672737871164;
+        Tue, 03 Jan 2023 01:24:31 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id f11-20020a17090631cb00b0084c465709b7sm11090947ejf.74.2023.01.03.01.24.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 01:24:30 -0800 (PST)
+Message-ID: <182d36d5-df77-2479-882a-5bb588c5f170@kernel.org>
+Date:   Tue, 3 Jan 2023 10:24:28 +0100
 MIME-Version: 1.0
-References: <20221230153554.105856-1-robert.foss@linaro.org>
- <20221230153554.105856-9-robert.foss@linaro.org> <deb17787-1a5a-89a3-3ecf-7690b4149f5c@linaro.org>
- <CAG3jFysU84LRcqQOspub+9vtsP3syiksrGX6D7i3ff+X6+mbTA@mail.gmail.com> <b8a0d9c5-eb26-c41c-1190-2628977bc582@linaro.org>
-In-Reply-To: <b8a0d9c5-eb26-c41c-1190-2628977bc582@linaro.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 3 Jan 2023 10:24:19 +0100
-Message-ID: <CAG3jFyuUV79nyjnqNysDKQSyYb4HUSWu-BvxG6LAz1Uavmvkbg@mail.gmail.com>
-Subject: Re: [PATCH v4 08/11] arm64: dts: qcom: sm8350: Use 2 interconnect cells
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        quic_jesszhan@quicinc.com,
-        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
-        vkoul@kernel.org, a39.skl@gmail.com, quic_khsieh@quicinc.com,
-        quic_vpolimer@quicinc.com, swboyd@chromium.org,
-        dianders@chromium.org, liushixin2@huawei.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
-        vinod.koul@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     Hang Zhang <zh.nvgt@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Yangxi Xiang <xyangxi5@gmail.com>,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
+        Helge Deller <deller@gmx.de>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        linux-kernel@vger.kernel.org
+References: <20221229064153.23511-1-zh.nvgt@gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] tty: vt: add some NULL checks for vc_data
+In-Reply-To: <20221229064153.23511-1-zh.nvgt@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 3 Jan 2023 at 08:59, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 02/01/2023 18:10, Robert Foss wrote:
-> > On Fri, 30 Dec 2022 at 17:12, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 30/12/2022 16:35, Robert Foss wrote:
-> >>> Use two interconnect cells in order to optionally
-> >>> support a path tag.
-> >>>
-> >>> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> >>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >>> ---
-> >>>  arch/arm64/boot/dts/qcom/sm8350.dtsi | 28 ++++++++++++++--------------
-> >>>  1 file changed, 14 insertions(+), 14 deletions(-)
-> >>>
-> >>
-> >> I think you need to rebase to include:
-> >> https://lore.kernel.org/all/167233461761.1099840.5517525898039031248.b4-ty@kernel.org/
-> >
-> > Ah, I see. Functionally I seemed to do fine without those commits.
-> >
-> >>
-> >> On which tree/revision did you base this?
-> >
-> > msm/drm-msm-display-for-6.2
->
-> Then it is not a proper base for DTS changes - you will miss quite some
-> commits. The DTS patches should be based on Bjorn's SoC tree or
-> linux-next (although the latter sometimes can lead to conflicts).
+On 29. 12. 22, 7:41, Hang Zhang wrote:
+> vc_selection(), do_blank_screen() and scrollfront() all access "vc_data"
+> structures obtained from the global "vc_cons[fg_console].d", which can
+> be freed and nullified (e.g., in the error path of vc_allocate()). But
+> these functions don't have any NULL checks against the pointers before
+> dereferencing them, causing potentially use-after-free or null pointer
+> dereference.
 
-Alright, then in that case this series needs to be split into 3 parts.
+Could you elaborate under what circumstances is fg_console set to a 
+non-allocated console?
 
-The dts fixes, remaining dts changes & the remainder of code.
+> Prevent these potential issues by placing NULL checks in these functions
+> before accessing "vc_data" structures. Similar checks can be found in
+> other functions like vt_console_print() and poke_blanked_console().
+> 
+> Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
+> ---
+>   drivers/tty/vt/selection.c | 3 +++
+>   drivers/tty/vt/vt.c        | 5 +++++
+>   2 files changed, 8 insertions(+)
+> 
+> diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
+> index 6ef22f01cc51..c727fd947683 100644
+> --- a/drivers/tty/vt/selection.c
+> +++ b/drivers/tty/vt/selection.c
+> @@ -319,6 +319,9 @@ static int vc_selection(struct vc_data *vc, struct tiocl_selection *v,
+>   {
+>   	int ps, pe;
+>   
+> +	if (!vc)
+> +		return 0;
+> +
+>   	poke_blanked_console();
+>   
+>   	if (v->sel_mode == TIOCL_SELCLEAR) {
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index 981d2bfcf9a5..00f8fdc61e9f 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -1493,6 +1493,8 @@ void scrollback(struct vc_data *vc)
+>   
+>   void scrollfront(struct vc_data *vc, int lines)
+>   {
+> +	if (!vc)
+> +		return;
+>   	if (!lines)
+>   		lines = vc->vc_rows / 2;
+>   	scrolldelta(lines);
+> @@ -4346,6 +4348,9 @@ void do_blank_screen(int entering_gfx)
+>   	struct vc_data *vc = vc_cons[fg_console].d;
+>   	int i;
+>   
+> +	if (!vc)
+> +		return;
+> +
+>   	might_sleep();
+>   
+>   	WARN_CONSOLE_UNLOCKED();
 
-Is this what you'd like to see?
+thanks,
+-- 
+js
+suse labs
 
->
->
-> Best regards,
-> Krzysztof
->
