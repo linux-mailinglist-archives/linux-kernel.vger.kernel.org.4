@@ -2,132 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F3065C2CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE83465C2D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbjACPOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 10:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S237633AbjACPQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 10:16:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjACPOR (ORCPT
+        with ESMTP id S233237AbjACPQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 10:14:17 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19640FAC2;
-        Tue,  3 Jan 2023 07:14:16 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 65CA641F72;
-        Tue,  3 Jan 2023 15:14:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1672758854; bh=1PSEtOTX/u4zPRzwJty5aY47xeibawU7cSRmZalIq0s=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=PCr0/NgFTVxGU9raXFFVI2266XRVCHaknQA7vpdbmUXaotZuJwwnC8nkcZXMK2nEl
-         mxmFHfr5PFqfMLQ8LurLxeni2a+4gGZ7w4GmWARXg1pvzk1MLKVnW1TKHM4SG4P2rs
-         VGk9SvJ/Z4nOroH0eYutwJn1mTE6U9X3GUqq/hb5MWQOH4SZ6fuN58S3FS1G9uDSe5
-         wNhnSQVZ8eUx6J9IFxFjdb3awmh+6qsNreu40Ikfd19MoAqxI/hFgGtINV1ObQ158/
-         z0YRWCVva3++ezXNZqcOjAiGtt2ZhQUNTZq12zb+Y2ofFXeZ59gguwX/azbx4xP29P
-         HULXsWro1YBAw==
-Message-ID: <ec2c2712-04fa-751d-9817-23ff4e0b7fb4@marcan.st>
-Date:   Wed, 4 Jan 2023 00:14:10 +0900
+        Tue, 3 Jan 2023 10:16:05 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A42C1EA;
+        Tue,  3 Jan 2023 07:16:04 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A1F91516;
+        Tue,  3 Jan 2023 07:16:45 -0800 (PST)
+Received: from [10.57.41.181] (unknown [10.57.41.181])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A5163F587;
+        Tue,  3 Jan 2023 07:16:00 -0800 (PST)
+Message-ID: <765577d3-cbdc-1371-f33e-ef6be42139dd@arm.com>
+Date:   Tue, 3 Jan 2023 15:15:58 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Eric Curtin <ecurtin@redhat.com>
-References: <20230103114427.1825-1-marcan@marcan.st>
- <ff77ba1c-8b67-4697-d713-0392d3b1d77a@linaro.org>
- <95a4cfde-490f-d26d-163e-7ab1400e7380@marcan.st>
- <Y7REcpXjxTlxv1Fp@shell.armlinux.org.uk>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2] nvmem: core: Fix race in nvmem_register()
-In-Reply-To: <Y7REcpXjxTlxv1Fp@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v2 6/7] perf cs_etm: Record ts_source in AUXTRACE_INFO for
+ ETMv4 and ETE
+To:     James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>
+Cc:     linux-perf-users@vger.kernel.org, tanmay@marvell.com,
+        sgoutham@marvell.com, gcherian@marvell.com, lcherian@marvell.com,
+        bbhushan2@marvell.com, German Gomez <german.gomez@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221222160328.3639989-1-james.clark@arm.com>
+ <20221222160328.3639989-7-james.clark@arm.com>
+ <CAJ9a7VjbF2DFRHOtdCt=3o+iNrA++swpJBx9v5-R9Ky8tc4Mvw@mail.gmail.com>
+ <5dad3c40-d4d2-57b8-e6f5-10fa5ef1a0b8@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <5dad3c40-d4d2-57b8-e6f5-10fa5ef1a0b8@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 00.06, Russell King (Oracle) wrote:
-> Hi Hector,
+On 03/01/2023 11:49, James Clark wrote:
 > 
-> On Tue, Jan 03, 2023 at 10:48:52PM +0900, Hector Martin wrote:
->>>> @@ -822,11 +822,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>>>   		break;
->>>>   	}
->>>>
->>>> -	if (rval) {
->>>> -		ida_free(&nvmem_ida, nvmem->id);
->>>> -		kfree(nvmem);
->>>> -		return ERR_PTR(rval);
->>>> -	}
->>>> +	if (rval)
->>>> +		goto err_gpiod_put;
->>>
->>> Why was gpiod changes added to this patch, that should be a separate 
->>> patch/discussion, as this is not relevant to the issue that you are 
->>> reporting.
->>
->> Because freeing the device also does a gpiod_put in the destructor, so
->> doing this is correct in every other instance below and maintains
->> existing behavior, and it just so happens that this instance converges
->> into the same codepath so it is correct to merge it, and it just so
->> happens that the gpiod put was missing in this path to begin with so
->> this becomes a drive-by bugfix.
->>
->> If you don't like it I can remove it (i.e. reintroduce the bug for no
->> good reason) and you can submit this fix yourself, because I have no
->> incentive to waste time submitting a separate patch to fix a GPIO leak
->> in an error path corner case in a subsystem I don't own and I have much
->> bigger things to spend my (increasingly lower and lower) willingness to
->> fight for upstream submissions than this.
->>
->> Seriously, what is wrong with y'all kernel people. No other open source
->> project wastes contributors' time with stupid nitpicks like this. I
->> found a bug, I fixed it, I then fixed the issues you pointed out, and I
->> don't have the time nor energy to fight over this kind of nonsense next.
->> Do you want bugs fixed or not?
 > 
-> This is not nonsense. We have always had a policy of one fix/change
-> per patch, and in this case it makes complete and utter sense. Of
-> course, the interpretation of "one change" is a matter of opinion.
+> On 23/12/2022 09:28, Mike Leach wrote:
+>> Hi,
+>>
+>> There was a discussion some time ago in one of our coresight regular
+>> dev meetings about this.
+>>
+>> Can we just use only the necessary bits that TS source needs and leave
+>> the remaining bits from the 64 as unused  for future expansion - i..e
+>> use this as a bitfield rather than have 64 bits occupied for what is
+>> effectively a 2 bit value.
+>>
+>> Perhaps call the full value something other than TS_SOURCE and have a
+>> TS_SOURCE field with a known safe unset value.
+> 
+> If we did that, there wouldn't be any mechanism to detect if new values
+> that were added were the value 0, or just not set/implemented/saved in
+> the file. The current implementation of CS_ETM_NR_TRC_PARAMS allows us
+> to add new fields, and detect if they exist or not without bumping the
+> header version for each new sub field.
+> 
+> In this change HAS_PARAM() has been used to do this, but that can't be
+> expanded to sub fields in the same 64 bits. I don't think space or
+> performance are worth the extra complexity of dividing it up. And
+> because this is just one block saved once in the header, so I'm not sure
+> if it's worth it in this case. It would also make it harder to read the
+> values on the raw dump mode.
 
-The change here is the race condition fix. That change involves adding
-an error cleanup path that involves a gpio_put(). Therefore it seems
-logical to actually use it in that one extra case that should've used it
-anyway, a few lines above.
+I think it is fine to use the entire field for the time source, given
+the header can be extended with new fields, without breaking
+compatibility for future additions.
 
-Now,
+Suzuki
 
 > 
-> Your patch contains two bug fixes for problems:
-> 1) publication of nvmem_device before it's fully setup (leading to the
->    race) which has been around since the inception of nvmem stuff.
-> 2) fixing a memory leak for gpiod stuff, caused by a recent patch
->    5544e90c8126 ("nvmem: core: add error handling for dev_set_name")
->    from September 2022.
+> James
 
-That's a fair argument for having two patches (I didn't know the gpiod
-leak was introduced later). However, the backport is nontrivial anyway
-if you want clean code, because if we merge the codepaths the fix would
-end up being different in backports and mainline. Which means we now
-need 3 patches for them to apply properly. Which is more effort than I'm
-willing to put in for an issue I don't care about.
-
-But the bigger problem is that this isn't what Srini replied with, he's
-now saying my patch is outright broken, and I'm tired of this nonsense.
-
-- Hector
