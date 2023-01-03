@@ -2,183 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB6C65BB6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9755565BB71
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236902AbjACHto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 02:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S232845AbjACHv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 02:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjACHth (ORCPT
+        with ESMTP id S232809AbjACHu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 02:49:37 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD5FDEFD
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 23:49:36 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id h7-20020a17090aa88700b00225f3e4c992so22490505pjq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 23:49:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+UK7YFXk4569dzdxh4KbKdmm7jq8EMlrS+pPCmhUndQ=;
-        b=XDzlCQKQP7cwi2YOhJd1r6+8fWXBSxLqj1d91S6NVRw2GvouAuIrW11piBS0LbVASB
-         xhYe0r8UzoBgjuvzds8MZzmpfZr9jCHfjRcdhXOffIdKPFSAHvqTcJ99+1itBH4jCzrD
-         Gg941FAUFxgIJcvmFImp/IoLscUKwKnuKP8vzCmCAqKnf55xuF9dE9/kLxQiDHUeGZ7g
-         myJuTPLZspUnJ2QRZFDFQ+v81mzvniVeuZLDlbsRjMNPlVyGVxwylXM2ArIRXvDPvfMT
-         fQEM/uOWRB6G/PDDa/ilwX61QKrszuQXi+Vo1e7LHBGQ24J5OkIpZ1YxZcQfiFuJNGb0
-         N2mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+UK7YFXk4569dzdxh4KbKdmm7jq8EMlrS+pPCmhUndQ=;
-        b=gPR7oPJxSNCekZlIseGuD9fTrsHBSvuEkcistnGR98bEi5DwGs8D4kujcvDfKH6SP1
-         sWldF9S8hSLsvc2tcIjeslOn23slfCajvLTbB1B04C2ww+yU060kRM5TFRiKnbsHvudO
-         FlULCUOrbDJg0952pXbYYhrbL5yfIZ5ECFJ3kIXxoXST6odVZQWSQqrhvicItnaM7km4
-         jw9Nd577LF+N2vMebWtttppP0JBqwV3sLNqJii0KU/fphfxIlI9Q0P5koPkz8lJ5FJhS
-         xv2v5spO83xzmC5zdxsQAD/35CzDO7sWr3A2iUcBm6JwcN/kYqXAt3kZX1kawIrZRZHx
-         RVjA==
-X-Gm-Message-State: AFqh2kosJM8E6vGNR7toOtV08YNPESL2LEDgHAz6fJ25Ab44P0jYof6q
-        m2/y4FU0Ad4linU2DIJRBGvi
-X-Google-Smtp-Source: AMrXdXtFMktovzCOg4tFENrBTa3mQYE51u9xwXWiIO3ejRqkE6tgE2Jfd7tcUcaULuWXniEveqh/JQ==
-X-Received: by 2002:a17:902:e1ca:b0:192:caf4:4661 with SMTP id t10-20020a170902e1ca00b00192caf44661mr6241295pla.15.1672732175859;
-        Mon, 02 Jan 2023 23:49:35 -0800 (PST)
-Received: from localhost.localdomain ([220.158.158.30])
-        by smtp.gmail.com with ESMTPSA id q15-20020a17090311cf00b00189f2fdc178sm21488305plh.177.2023.01.02.23.49.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 23:49:34 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lpieralisi@kernel.org, robh@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 1/1] PCI: qcom: Add support for system suspend and resume
-Date:   Tue,  3 Jan 2023 13:19:07 +0530
-Message-Id: <20230103074907.12784-2-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230103074907.12784-1-manivannan.sadhasivam@linaro.org>
-References: <20230103074907.12784-1-manivannan.sadhasivam@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 3 Jan 2023 02:50:59 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D11DF09
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 23:50:58 -0800 (PST)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230103075056epoutp02cd15461210d13badb3eb8ba625f124f5~2vR-h44H02769227692epoutp02D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 07:50:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230103075056epoutp02cd15461210d13badb3eb8ba625f124f5~2vR-h44H02769227692epoutp02D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1672732256;
+        bh=UN+4QdP10C7vIuKX4Eh8/LWwOKBNyBebpbBsufTIiuk=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=OFk5vCvKGA3aePJKpFFuUDQEPGmWjbAtc7tx+XOCQRXK+a4q18DaLN3Hykr8DRIBw
+         lEYxJ4/+XZE5Ya8tjfqtCrNkKjJ9RMRHIx1m/wNCDF9GqOkbVyQJa0jQrA21vOv+XO
+         R/yPw9z4t/0aOj4r/DKlJrGBcxAJ+eqRlmVNM7gY=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20230103075055epcas1p400c80b8ca07cf14cdfbb4b392bd4e78c~2vR-HOCkB0794907949epcas1p4G;
+        Tue,  3 Jan 2023 07:50:55 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.249]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4NmPzz3770z4x9Px; Tue,  3 Jan
+        2023 07:50:55 +0000 (GMT)
+X-AuditID: b6c32a39-7eb28a800001a220-8f-63b3de5f1002
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D3.E5.41504.F5ED3B36; Tue,  3 Jan 2023 16:50:55 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: [PATCH] page_alloc: avoid the negative free for meminfo
+ available
+Reply-To: jaewon31.kim@samsung.com
+Sender: Jaewon Kim <jaewon31.kim@samsung.com>
+From:   Jaewon Kim <jaewon31.kim@samsung.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <Y7PaxPV3Ln7AXVSc@lucifer>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230103075054epcms1p308aa577d10429a2e0e6167de510be6b6@epcms1p3>
+Date:   Tue, 03 Jan 2023 16:50:54 +0900
+X-CMS-MailID: 20230103075054epcms1p308aa577d10429a2e0e6167de510be6b6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKJsWRmVeSWpSXmKPExsWy7bCmvm78vc3JBjuvC1rMWb+GzeLlIU2L
+        1Zt8Lbo3z2S06H3/isni8q45bBb31vxntbjzbR67xetvy5gdOD0Ov3nP7LFz1l12j02rOtk8
+        Nn2axO5xYsZvFo++LasYPT5vkgtgj8q2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0
+        MFdSyEvMTbVVcvEJ0HXLzAE6TEmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYFag
+        V5yYW1yal66Xl1piZWhgYGQKVJiQnbFleQtLwTOeik89i5gaGOdzdTFycEgImEhMPhfRxcjF
+        ISSwg1Fiw/f7TCBxXgFBib87hLsYOTmEBQIk1v+8xw5iCwkoSZz9cYUdIq4r0dS9mgXEZhPQ
+        lni/YBIrSKuIgIbEixtWICOZBbYwSVw+uocNpEZCgFdiRvtTFghbWmL78q2MIDangLrE75lH
+        oWpEJW6ufssOY78/Np8RwhaRaL13lhnCFpR48HM3VFxK4lz3cSaIVyIkXuxRhwjnSLzfOYcV
+        wjaXeLahhR3iK1+J//s8QcIsAqoSh/5egproItE3/yDYZcwC8hLb385hBilnFtCUWL9LH6JE
+        UWLn77mMMI80bPzNjs5mFuCTePe1hxUmvmPeEyYIW02i5dlXqLiMxN9/z1gnMCrNQgTzLCSL
+        ZyEsXsDIvIpRLLWgODc9tdiwwBQescn5uZsYwelTy3IH4/S3H/QOMTJxMB5ilOBgVhLhnfRi
+        U7IQb0piZVVqUX58UWlOavEhRlOglycyS4km5wMTeF5JvKGJpYGJmZGJhbGlsZmSOK9NxLpk
+        IYH0xJLU7NTUgtQimD4mDk6pBqbw7hVvroefTmg4sOxoBlv2ReMrv/VPfdn0LvrpxAWvJs1a
+        f+biwhU1tbG3Flvw7v5xPymwkOvvxuCe3itdqw2/Gkwzyz37pXN+5+mOtl8rpszzsXnjfGFy
+        yNTXTc3Tjuw03MyTtSbBPplNUnGmvt0DJU0fuUeTGFs3hL96+s18ScZ2Xg2t4o13cyPMg/c+
+        WvD1TeNFVcaFV6JCPsx13rawUS2g/fm3yas9XBny394o2tV9zPLqgde3d65tXZUZvSzlv3q7
+        /uJyiae8y24XRO3K/r3muKpF3ZU21bW/Xn1aKW/BL6h/3miG2t4DX1a0MbpypMsvO/6XZ7tS
+        3jy2KJ6fC0I8zqxkZsxNeqAoIRwWqcRSnJFoqMVcVJwIAEZ/ai8oBAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230103072834epcas1p3441ef50a6cc26ac48d184f1244b76a0e
+References: <Y7PaxPV3Ln7AXVSc@lucifer>
+        <20230103072807.19578-1-jaewon31.kim@samsung.com>
+        <CGME20230103072834epcas1p3441ef50a6cc26ac48d184f1244b76a0e@epcms1p3>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the system suspend, vote for minimal interconnect bandwidth and
-also turn OFF the resources like clock and PHY if there are no active
-devices connected to the controller. For the controllers with active
-devices, the resources are kept ON as removing the resources will
-trigger access violation during the late end of suspend cycle as kernel
-tries to access the config space of PCIe devices to mask the MSIs.
+>--------- Original Message ---------
+>Sender : Lorenzo Stoakes?<lstoakes@gmail.com>
+>Date : 2023-01-03 16:35 (GMT+9)
+>Title : Re: [PATCH] page_alloc: avoid the negative free for meminfo available
+>?
+>On Tue, Jan 03, 2023 at 04:28:07PM +0900, Jaewon Kim wrote:
+>> The totalreserve_pages could be higher than the free because of
+>> watermark high or watermark boost. Handle this situation and fix it to 0
+>> free size.
+>>
+>> Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
+>> ---
+>> ?mm/page_alloc.c | 2 ++
+>> ?1 file changed, 2 insertions(+)
+>>
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index 218b28ee49ed..e510ae83d5f3 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -5948,6 +5948,8 @@ long si_mem_available(void)
+>> ? ? ? ? ? * without causing swapping or OOM.
+>> ? ? ? ? ? */
+>> ? ? ? ? ?available = global_zone_page_state(NR_FREE_PAGES) - totalreserve_pages;
+>> + ? ? ? ?if (available < 0)
+>> + ? ? ? ? ? ? ? ?available = 0;
+>>
+>> ? ? ? ? ?/*
+>> ? ? ? ? ? * Not all the page cache can be freed, otherwise the system will
+>> --
+>> 2.17.1
+>>
+>
+>We already reset to zero at the end of the function, wouldn't resetting to zero
+>here potentially skew the result?
+>
 
-Also, it is not desirable to put the link into L2/L3 state as that
-implies VDD supply will be removed and the devices may go into powerdown
-state. This will affect the lifetime of storage devices like NVMe.
+Hello
 
-And finally, during resume, turn ON the resources if the controller was
-truly suspended (resources OFF) and update the interconnect bandwidth
-based on PCIe Gen speed.
+I did not mean the negative of the final available, we should account the actual size
+by removing some improper portion of it. The free should be not negative in that perspective.
+If negative, other parts like pagecache an reclailable would be decreased.
 
-Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 52 ++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+Actually pagecache and reclaimable are caculated with min, so I think reseting to zero
+at the end the function is not necessary.
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 5696e327795b..48810f1f2dba 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -227,6 +227,7 @@ struct qcom_pcie {
- 	struct gpio_desc *reset;
- 	struct icc_path *icc_mem;
- 	const struct qcom_pcie_cfg *cfg;
-+	bool suspended;
- };
- 
- #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-@@ -1835,6 +1836,52 @@ static int qcom_pcie_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static int qcom_pcie_suspend_noirq(struct device *dev)
-+{
-+	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = icc_set_bw(pcie->icc_mem, 0, 0);
-+	if (ret) {
-+		dev_err(pcie->pci->dev, "Failed to set interconnect bandwidth: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Turn OFF the resources only for controllers without active PCIe devices. For controllers
-+	 * with active devices, the resources are kept ON and the link is expected to be in L0/L1
-+	 * (sub)states.
-+	 *
-+	 * Turning OFF the resources for controllers with active PCIe devices will trigger access
-+	 * violation during the end of the suspend cycle, as kernel tries to access the PCIe devices
-+	 * config space for masking MSIs.
-+	 *
-+	 * Also, it is not desirable to put the link into L2/L3 state as that implies VDD supply
-+	 * will be removed and the devices may go into powerdown state. This will affect the
-+	 * lifetime of the storage devices like NVMe.
-+	 */
-+	if (!dw_pcie_link_up(pcie->pci)) {
-+		qcom_pcie_host_deinit(&pcie->pci->pp);
-+		pcie->suspended = true;
-+	}
-+
-+	return 0;
-+}
-+
-+static int qcom_pcie_resume_noirq(struct device *dev)
-+{
-+	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-+
-+	if (pcie->suspended) {
-+		qcom_pcie_host_init(&pcie->pci->pp);
-+		pcie->suspended = false;
-+	}
-+
-+	qcom_pcie_icc_update(pcie);
-+
-+	return 0;
-+}
-+
- static const struct of_device_id qcom_pcie_match[] = {
- 	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
- 	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
-@@ -1870,12 +1917,17 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302, qcom_fixup_class);
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000, qcom_fixup_class);
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
- 
-+static const struct dev_pm_ops qcom_pcie_pm_ops = {
-+	NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_suspend_noirq, qcom_pcie_resume_noirq)
-+};
-+
- static struct platform_driver qcom_pcie_driver = {
- 	.probe = qcom_pcie_probe,
- 	.remove = qcom_pcie_remove,
- 	.driver = {
- 		.name = "qcom-pcie",
- 		.of_match_table = qcom_pcie_match,
-+		.pm = &qcom_pcie_pm_ops,
- 	},
- };
- module_platform_driver(qcom_pcie_driver);
--- 
-2.25.1
-
+br
