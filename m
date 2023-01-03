@@ -2,107 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC5065B9DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 04:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 725D365B9E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 04:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236655AbjACDvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 22:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S232747AbjACDxd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 2 Jan 2023 22:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236660AbjACDvu (ORCPT
+        with ESMTP id S230050AbjACDxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 22:51:50 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5196B1AE;
-        Mon,  2 Jan 2023 19:51:49 -0800 (PST)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-        by gnuweeb.org (Postfix) with ESMTPSA id 9A1217E444;
-        Tue,  3 Jan 2023 03:51:48 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1672717908;
-        bh=QYJzaVWEN9rJqXhGfvYSckZDzJI7KSe/z6dryTHgH4k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JxqhMMS95GgOfb9fLwje/ktE3eLW6QdDFaZX5Kb1EUSkEEFHigAKR8X4gOokcDomp
-         620fDZ22zZpgsCVBJLJqXcbh03sE+5YoulmPR99WulRLeLDhAajTFK5zYkGr4O/izh
-         MMDaawc/E2/D6QQNF3gToDKdjoA7wsBDO9qPZEVlUMo604i17jYFfl+raJgluJKTON
-         MKHy+1tLTZ8kVYWyhm0DdXxz/GdHX3fcy3D18fB1A2/rRML0DNwmOeHJNIkGVbvZwi
-         inBSEbAhulZgvIMxmVLx4aCxifMrHlf0h2eTaLR07CLFMHkF2cnr7pADDlp7ZqfaUe
-         zPEMe6Xb0RWyQ==
-Received: by mail-lf1-f48.google.com with SMTP id 1so44023177lfz.4;
-        Mon, 02 Jan 2023 19:51:48 -0800 (PST)
-X-Gm-Message-State: AFqh2kpbKlRuypGvuyLb8mLEzuVN/LvqHQAGe1HKM8WGkEJb6aSQ58wc
-        BSghpxIkI+p29jAfh6aB1LhcyGwqweXnoeeSq+M=
-X-Google-Smtp-Source: AMrXdXuzaNFgikwUSNWt0817iguzQbXD08dVoevW9eoI/uBjB4kQLl4/vK0FCOJ0JrJ2xjpstQ+HSOg8ncxM52UP9t8=
-X-Received: by 2002:a05:6512:34d3:b0:4cb:c78:1895 with SMTP id
- w19-20020a05651234d300b004cb0c781895mr967155lfr.83.1672717906547; Mon, 02 Jan
- 2023 19:51:46 -0800 (PST)
+        Mon, 2 Jan 2023 22:53:31 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B68E23F
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 19:53:28 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 8B48924E1E1;
+        Tue,  3 Jan 2023 11:53:26 +0800 (CST)
+Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 3 Jan
+ 2023 11:53:26 +0800
+Received: from localhost.localdomain (202.188.176.82) by EXMBX161.cuchost.com
+ (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 3 Jan
+ 2023 11:53:23 +0800
+From:   Ley Foon Tan <leyfoon.tan@starfivetech.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        "Ley Foon Tan" <lftan.linux@gmail.com>
+Subject: [PATCH] riscv: Move call to init_cpu_topology() to later initialization stage
+Date:   Tue, 3 Jan 2023 11:53:16 +0800
+Message-ID: <20230103035316.3841303-1-leyfoon.tan@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221222035134.3467659-1-ammar.faizi@intel.com>
- <20221222043452.GB29086@1wt.eu> <20221222134615.3535422-1-ammar.faizi@intel.com>
- <20221227062640.GA5337@1wt.eu> <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
- <20221227184902.GA6287@1wt.eu> <23e84c59-4f2c-01b4-5b8a-80af39a1d761@gnuweeb.org>
- <20221228133513.GA7457@1wt.eu> <39d68044-2641-75da-929a-f5e852f0a3d0@gnuweeb.org>
-In-Reply-To: <39d68044-2641-75da-929a-f5e852f0a3d0@gnuweeb.org>
-From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Date:   Tue, 3 Jan 2023 10:51:35 +0700
-X-Gmail-Original-Message-ID: <CAOG64qOT6wa+ShCuV3wM0QYy6TBOYap8xoAbUBU5DM_bhdafYg@mail.gmail.com>
-Message-ID: <CAOG64qOT6wa+ShCuV3wM0QYy6TBOYap8xoAbUBU5DM_bhdafYg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        VNLX Kernel Department <kernel@vnlx.org>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>,
-        Muhammad Rizki <kiizuha@gnuweeb.org>,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [202.188.176.82]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX161.cuchost.com
+ (172.16.6.71)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 6:42 PM Ammar Faizi wrote:
-> On 12/28/22 8:35 PM, Willy Tarreau wrote:
-> > It gives me the correct code for x86_64 and i586. I don't know if other
-> > architectures will want to add a prologue. I tried with "naked" but it's
-> > ignored by the compiler since the function is not purely asm. Not very
-> > important but given that we already have everything to perform our calls
-> > it would make sense to stay on this. By the way, for the sake of
-> > consistency with other syscalls, I do think the function (or label if
-> > we can't do otherwise) should be called "sys_rt_sigreturn" as it just
-> > performs a syscall.
->
-> Will call that 'sys_rt_sigreturn' in the next series.
+topology_parse_cpu_capacity() is failed to allocate memory with kcalloc()
+after read "capacity-dmips-mhz" DT parameter in CPU DT nodes. This
+topology_parse_cpu_capacity() is called from init_cpu_topology(), move
+call to init_cpu_topology() to later initialization  stage (after memory
+allocation is available).
 
-From glibc source code says:
-GDB needs some intimate knowledge about it to recognize them as signal
-trampolines, and make backtraces through signal handlers work right.
-Important are both the names (__restore_rt) and the exact instruction
-sequence.
+Note, this refers to ARM64 implementation, call init_cpu_topology() in
+smp_prepare_cpus().
 
-link: https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/x86_64/sigaction.c;h=4e6d9cc32e1e18746726fa430d092de9a19ba6c6;hb=b4a5d26d8835d972995f0a0a2f805a8845bafa0b#l34
+Tested on Qemu platform.
 
-glibc does this:
+Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
 
-   "    .type __" #name ",@function\n" \
-   "__" #name ":\n"                    \
-   "    movq $" #syscall ", %rax\n"    \
-   "    syscall\n"                     \
+---
 
-where
+In drivers/base/arch_topology.c: topology_parse_cpu_capacity():
 
-   #name = "restore_rt"
-   #syscall = __NR_rt_sigreturn
+	ret = of_property_read_u32(cpu_node, "capacity-dmips-mhz",
+				   &cpu_capacity);
+	if (!ret) {
+		if (!raw_capacity) {
+			raw_capacity = kcalloc(num_possible_cpus(),
+					       sizeof(*raw_capacity),
+					       GFP_KERNEL);
+			if (!raw_capacity) {
+				cap_parsing_failed = true;
+				return false;
+			}
+---
+ arch/riscv/kernel/smpboot.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I think it should be called "__restore_rt" instead of "sys_rt_sigreturn"?
-glibc also has unwind information, but we probably don't need to care
-with that much
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index 3373df413c88..ddb2afba6d25 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -39,7 +39,6 @@ static DECLARE_COMPLETION(cpu_running);
+ 
+ void __init smp_prepare_boot_cpu(void)
+ {
+-	init_cpu_topology();
+ }
+ 
+ void __init smp_prepare_cpus(unsigned int max_cpus)
+@@ -48,6 +47,8 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+ 	int ret;
+ 	unsigned int curr_cpuid;
+ 
++	init_cpu_topology();
++
+ 	curr_cpuid = smp_processor_id();
+ 	store_cpu_topology(curr_cpuid);
+ 	numa_store_cpu_info(curr_cpuid);
+-- 
+2.25.1
+
