@@ -2,95 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA82F65BDE7
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D9865BDE9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233166AbjACKT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S237276AbjACKUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:20:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbjACKTZ (ORCPT
+        with ESMTP id S233293AbjACKUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:19:25 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F50DE9D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mQ+kH7Y1jP8FPnV3r6fvzT20qbbg9pYdOaXBVU8Mh1s=; b=VfiIGMI2Jwicl5gjt8FuQRhlgB
-        FtZPIMyWuAC4dgXlPh3TkJuEvvN+V0RWGejKvr4P5AGwseO7pDjNmN5yiVfQJmZO09UEPWc6ZtPJ+
-        ErgjrC0kT2jtz/DG0Vks/zZnVUH861EWUJBfJdRstwFZr+k0ygSCHgv/YuH6/DUIKfQlz7nI2OIUn
-        W8XAdWtdq+xUtMMDjYd+hCDMaEkA0vGy1OaFYiqzZAqXV9RTTmf9itr6fU8YLfgaRs9AMrAObCGEp
-        AiJUNANy6036vD/1GpQsBMaNjCblNsUReY/aU4OOHe0BBRA+lptViivo2TdYUITBzxOQ3iP8F6OLZ
-        2b6s46eA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35912)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pCeOA-0005Cm-J8; Tue, 03 Jan 2023 10:19:22 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pCeO8-0001yu-W1; Tue, 03 Jan 2023 10:19:21 +0000
-Date:   Tue, 3 Jan 2023 10:19:20 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Julia Lawall <julia.lawall@inria.fr>
-Subject: Re: [PATCH v2] ARM/dma-mapping: use kvcalloc for fallback memory
- allocation need
-Message-ID: <Y7QBKMzuzNQAdKyY@shell.armlinux.org.uk>
-References: <Y6HDwOyR23QPssRa@qemulion>
- <Y6wYQNvloBeW1oq4@qemulion>
+        Tue, 3 Jan 2023 05:20:20 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC18F594;
+        Tue,  3 Jan 2023 02:20:18 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 303AJvNC065995;
+        Tue, 3 Jan 2023 04:19:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672741197;
+        bh=0xN9TZmdjhOev0M52dFR/CYSWTBXVP70B4RkI64FGFs=;
+        h=From:To:CC:Subject:Date;
+        b=yz0w2TCt/j8jTwbXFCVAR4IKQtp/Tn9bTtIqJY6Pa5jMyhHrFkRIXLcIgwFedvJts
+         1AUeCaNCalu9tZT9j2PbTowjXO52yTZIFw8jCdIC+gPLRvp8k5GwObc4I3Ye2Usl+9
+         L9TSJB1GxjlHTvQT7HNZj3b3+1GBGfggsfALwtZU=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 303AJv9u028214
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 3 Jan 2023 04:19:57 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 3
+ Jan 2023 04:19:57 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 3 Jan 2023 04:19:57 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 303AJtQl032179;
+        Tue, 3 Jan 2023 04:19:56 -0600
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <dri-devel@lists.freedesktop.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
+        <robert.foss@linaro.org>, <jonas@kwiboo.se>,
+        <jernej.skrabec@gmail.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <p.zabel@pengutronix.de>, <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>,
+        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
+        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>,
+        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
+        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
+Subject: [PATCH v11 0/5] Add support for CDNS DSI J721E wrapper
+Date:   Tue, 3 Jan 2023 15:49:46 +0530
+Message-ID: <20230103101951.10963-1-r-ravikumar@ti.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6wYQNvloBeW1oq4@qemulion>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 03:49:44PM +0530, Deepak R Varma wrote:
-> On Tue, Dec 20, 2022 at 07:46:32PM +0530, Deepak R Varma wrote:
-> > Current conditional determination of whether to use kzalloc or vzalloc
-> > has known issues such as "indefinite retry" when less than PAGE_SIZE
-> > memory is needed, but is unavailable. This LWN article [1] describes
-> > these issues in greater detail. Use helper function kvcalloc() instead
-> > which is more efficient in terms of performance and security.
-> >
-> >  	[1] https://lwn.net/Articles/711653/
-> >
-> > This patch proposal is based on following Coccinelle warning using the
-> > kvmalloc.cocci semantic patch.
-> > 	arch/arm/mm/dma-mapping.c:858:28-29: WARNING opportunity for kvmalloc
-> >
-> > The semantic patch suggests using kvzalloc() helper function, however,
-> > this patch proposes to use kvcalloc instead. kvcalloc() helper function
-> > uses 2-factor argument form which is better from a security perspective
-> > as described in the following KSPP project commit.
-> >
-> > 	Commit 4e3fd7217105 ("wireguard: ratelimiter: use kvcalloc() instead of kvzalloc()")
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> 
-> Hello,
-> May I please request a review and feedback on this patch proposal?
+Following series of patches adds supports for CDNS DSI
+bridge on j721e.
 
-The DMA API on ARM has been maintained by others recently, so it's no
-longer up to me. Please include Christoph Hellwig <hch@lst.de> when
-sending changes for this. Thanks.
+v11:
+ - Wrap commmit messages at 72 chars
+ - Fix the order in Kconfig and Makefile
+ - Clean up the includes, move macros and some headers to .c file
+ - Add missing forward declarations
+ - Add __ prefix to header gaurds
+ - Change dsi_platform_ops to cdns_dsi_platform_ops
+ - Add documentation to struct cdns_dsi_platform_ops
+
+v10:
+ - Rebased to v6.2-rc1
+ - Accumulated the Reviewed-by acks
+
+v9:
+ - Fixed below based on review comments in v8
+ - Added more info on wrapper in the commit message
+ - Fixed the description in Kconfig
+ - Fixed the formatting of of_match table
+ - exit -> deinit in platform ops
+ - Remove duplicate of struct declaration in cdns-dsi-j721e.h
+
+v8:
+ - Rebased to 6.1-rc1
+
+v7:
+ - Rebased to next-20220920
+ - Accumulated the Reviewed-by acks
+
+v6:
+ - Dropped generic definations for properties like reg, resets etc..
+ - Fixed the defination for port@0 and port@1
+ - removed the ti,sn65dsi86 node from the example, which is not related
+
+v5:
+ - Remove power-domain property in the conversion commit
+ - Add power-domain only for j721e compatible
+ - Fix white space error in one of the commit
+
+v4:
+ - split conversion txt to yaml
+ - seperate commit for addinig new compatible
+ - conditionally limit the items for reg property, based on the compatible
+
+v3:
+ - Convert cdns-dsi.txt binding to yaml
+ - Move the bridge under display/bridge/cadence
+ - Add new compatible to enable the wrapper module
+
+v2:
+ - Moved setting DPI0 to bridge_enable, since it
+   should be done after pm_runtime_get
+
+Rahul T R (5):
+  dt-bindings: display: bridge: Convert cdns,dsi.txt to yaml
+  dt-bindings: display: bridge: cdns,dsi: Add compatible for dsi on
+    j721e
+  drm/bridge: cdns-dsi: Move to drm/bridge/cadence
+  drm/bridge: cdns-dsi: Create a header file
+  drm/bridge: cdns-dsi: Add support for J721E wrapper
+
+ .../bindings/display/bridge/cdns,dsi.txt      | 112 -----------
+ .../bindings/display/bridge/cdns,dsi.yaml     | 180 ++++++++++++++++++
+ drivers/gpu/drm/bridge/Kconfig                |  11 --
+ drivers/gpu/drm/bridge/Makefile               |   1 -
+ drivers/gpu/drm/bridge/cadence/Kconfig        |  21 ++
+ drivers/gpu/drm/bridge/cadence/Makefile       |   3 +
+ .../{cdns-dsi.c => cadence/cdns-dsi-core.c}   |  83 ++++----
+ .../gpu/drm/bridge/cadence/cdns-dsi-core.h    |  84 ++++++++
+ .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   |  51 +++++
+ .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   |  16 ++
+ 10 files changed, 391 insertions(+), 171 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
+ rename drivers/gpu/drm/bridge/{cdns-dsi.c => cadence/cdns-dsi-core.c} (97%)
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.39.0
+
