@@ -2,113 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA63065BC87
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E139665BC8B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237100AbjACIzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:55:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S237056AbjACI5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjACIze (ORCPT
+        with ESMTP id S236957AbjACI5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:55:34 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB6F8B7E8;
-        Tue,  3 Jan 2023 00:55:33 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 286431515;
-        Tue,  3 Jan 2023 00:56:15 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.37.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8F2E3F663;
-        Tue,  3 Jan 2023 00:55:28 -0800 (PST)
-Date:   Tue, 3 Jan 2023 08:55:26 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Dan Li <ashimida.1990@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
-Message-ID: <Y7PtfkuE3KimY4Gq@FVFF77S0Q05N>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
- <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
- <Y6B9l/aDnsek8Zyl@hirez.programming.kicks-ass.net>
+        Tue, 3 Jan 2023 03:57:08 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18EFE71
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:57:06 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id s22so31157463ljp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FVam3FPvVcVUPkFARUn9WWGX9bvQ9k6HzVFVKcvWyZE=;
+        b=tbfh3qioo77N98XjSFjd7PWy0XS7UHqQ0rnPICB/GFgnLr36lA59Nnhk2zRCgNwf3E
+         yZfUrCAVxeP05N4N6KGfR+8H84WM+ckoAFIxPQlFOhVaJEc/2zev65dxW4n2if7eR/RB
+         Q76GsIylyfR9RUSXCXRyZyyj94MSAp2Us7ZP+TTLNv+NFUfQXAzu48phTLoc2x1YxADn
+         GzPuByvzjlv2WY2cs+5nocxxigfu99C5WmdAmD3ns4tKA1CA2O5w/6BhM2lgeSCWFxiq
+         5Dv6IJ3fvjIzabxCErbEWBLQ5C5cFq6iyXb21tkmYiFFkkgIAgh4JdN/yPOb782/X7yw
+         kqtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FVam3FPvVcVUPkFARUn9WWGX9bvQ9k6HzVFVKcvWyZE=;
+        b=fWHidMiKkgzUN4EdPmA264ElA0HGSZuNbSaK881H188bbZHO3aT55e0uFUHVxuYApp
+         9oGFTygdQv6NM8r8D595fEZZSJ4fUmoIBZ7NgPYDmCvywU8xMMxRLOxPYcBmV9dpd9x5
+         3G0uDfxvC6poWv9b047OBr8qV4jgHsculK5djFxeF4NA9xpDjjyBmq9cFrEZ5iDK6jyA
+         vb4nDTO21QD/useZzoUp5P38fRIDbBKfq+i0f5Flps9rL9CVqWFJO1fS1rJH5GjJ4lDl
+         Vjb2fynHNqVPaV/ueNC42DG3J/VRQ1drp4hg91eQgbNI5Jmhdm9jzWhDDR24jYaIq2H7
+         wU+Q==
+X-Gm-Message-State: AFqh2krK4QZ2PKITk97q28q464DfQFOwCJrSG3IWKeGhdP5uvx8YCadr
+        DhboEAInnMwMGMMvr3vYUqiTBg==
+X-Google-Smtp-Source: AMrXdXsAmGHVUPFl2qLHgz7MtYi89rEbq9xWFBU46j9e11S6S1IWHRAtPUrkkcXlHtb2NXJtGJ+4xw==
+X-Received: by 2002:a2e:aa9f:0:b0:27f:cb0c:fd1b with SMTP id bj31-20020a2eaa9f000000b0027fcb0cfd1bmr7425321ljb.8.1672736225351;
+        Tue, 03 Jan 2023 00:57:05 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f13-20020a05651c03cd00b0027fea3a3318sm608902ljp.23.2023.01.03.00.57.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 00:57:04 -0800 (PST)
+Message-ID: <3267da40-5c53-0b79-fd65-3009ee17c7ee@linaro.org>
+Date:   Tue, 3 Jan 2023 09:57:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6B9l/aDnsek8Zyl@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/4] dt-bindings: clock: qcom,sc7280-lpasscc: Remove
+ qdsp6ss reg property
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        swboyd@chromium.org, agross@kernel.org, andersson@kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org, quic_plai@quicinc.com,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com
+References: <1672407799-13768-1-git-send-email-quic_srivasam@quicinc.com>
+ <1672407799-13768-2-git-send-email-quic_srivasam@quicinc.com>
+ <0d225fb0-7bc7-4de0-0f07-039502926e6b@linaro.org>
+ <ca053156-7da1-f0f4-e23c-7c515a1e6afe@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ca053156-7da1-f0f4-e23c-7c515a1e6afe@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 04:04:55PM +0100, Peter Zijlstra wrote:
-> On Mon, Dec 19, 2022 at 05:32:04AM -0800, Dan Li wrote:
-> > Hi Peter,
-> > 
-> > On 12/19, Peter Zijlstra wrote:
-> > > On Sun, Dec 18, 2022 at 10:17:58PM -0800, Dan Li wrote:
-> > > 
-> > > > 1. When a typeid mismatch is detected, the cfi_check_failed function
-> > > >    will be called instead of the brk instruction. This function needs
-> > > >    to be implemented by the compiler user.
-> > > >    If there are user mode programs or other systems that want to use
-> > > >    this feature, it may be more convenient to use a callback (so this
-> > > >    compilation option is set to -fsanitize=cfi instead of kcfi).
-> > > 
-> > > This is not going to be acceptible for x86_64.
-> > 
-> > I'm not familiar enough with the x86_64 platform, could you please
-> > tell me why this is not acceptable? Is there a similar situation
-> > on the arm64 platform?
+On 03/01/2023 06:51, Srinivasa Rao Mandadapu wrote:
 > 
-> Mostly because the call would be a 5 byte instruction while the trap
-> (UD2) is only 2 bytes.
+> On 1/2/2023 9:33 PM, Krzysztof Kozlowski wrote:
+> Thanks for Your time Krzyszto!!!
+>> On 30/12/2022 14:43, Srinivasa Rao Mandadapu wrote:
+>>> The qdsp6ss memory region is being shared by ADSP remoteproc device and
+>>> lpasscc clock device, hence causing memory conflict.
+>>> As the qdsp6ss clocks are being enabled in remoteproc driver, remove
+>>> clock controlling in the clock driver.
+>>>
+>> That's an ABI break change. You cannot just drop it because the driver
+>> will fail now to probe with old DTS.
+>>
+>> This ABI break (and Fixes tag below) requires extensive justification
+>> where is the bug and how it affects users. Otherwise, I see no reason
+>> for ABI changes.
 > 
-> I suspect Argh64 has a similar problem if the to be called function is
-> outside the immediate range (26 bits or thereabout), in which case you
-> end up with a multi-instruction sequence to construct the call target or
-> so.
+> As ADSP path is not used so far due to various vendor requirements, we 
+> haven't seen this conflict till now.
 
-Either that or a direct branc to a PLT.
+The device is used in sc7280.dtsi (and it is not disabled), thus it is
+available in every board.
 
-> A trap is always a single instruction.
+> 
+> Actually, in the below commit,  clock handling in remoteproc driver has 
+> already up-streamed by Bjorn.
+> 
+> If we add PIL device node and use remoteproc driver, qcom_q6v5_adsp.c, 
+> it's mandatory to remove it from clock
+> 
+> driver.
+> 
+> Also the memory region is used by clock driver is part of 
+> LPASS_QDSP6V67SS register region.
+> 
+> Here is the commit 0c6de4c299cc8f3283c38f3778777e00ed7e4b69 
+> ("remoteproc: qcom: qdsp6-adsp: Add support for QCS404 CDSP")
 
-Indeed.
+The commit introduces qcom,qcs404-cdsp-pil which is not used in upstream
+DTS...
 
-I strongly prefer the BRK for the reasons I've given in my other reply, which
-include code size.
+Anyway none of the reasons above explain to me why ABI has to be broken.
+To remind - valid reasons are usually only: "it never worked" or "I was
+introduced recently so there are no users".
 
-Thanks,
-Mark.
+> For ABI Break resolution shall I include, device tree changes also in 
+> this series? Or Could you please suggest better approach?
+
+Lack of DTS changes causes upstream to be broken. This is independent of
+ABI break. ABI means supporting users of the binding, so firmware, other
+OS, out-of-tree DTS users etc. All of them are broken.
+
+You need to keep backwards compatibility.
+Best regards,
+Krzysztof
+
