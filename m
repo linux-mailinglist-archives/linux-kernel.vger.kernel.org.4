@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7060065BB8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF1665BB8F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236930AbjACIBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
+        id S236946AbjACICM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236903AbjACIBb (ORCPT
+        with ESMTP id S236934AbjACICJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:01:31 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6662C39A;
-        Tue,  3 Jan 2023 00:01:29 -0800 (PST)
-Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NmQ7X0klRzJpYP;
-        Tue,  3 Jan 2023 15:57:28 +0800 (CST)
-Received: from [10.67.109.184] (10.67.109.184) by
- kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 3 Jan 2023 16:01:26 +0800
-Message-ID: <713f9f26-da42-eda8-c804-338d61b1557c@huawei.com>
-Date:   Tue, 3 Jan 2023 16:01:25 +0800
+        Tue, 3 Jan 2023 03:02:09 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407E97659
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:02:07 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id l26so20491020wme.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:02:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MnMuqxy2CFO3SUnH40zU8WEqg5m4XzWq3qxnT2ueo7Y=;
+        b=jdIjJYV7tdwaGK7GxRTTkRy3u+CQsh8RA6gl6OJtOe/+v+k2BBn8TQv0WoM7gAFB5x
+         dtIsMTP6/c82ZO7dxz/NvUWvqstg87JlZZMs2lcgzVp5mMCNfBGSEKiIlPtYhSVpmw8O
+         jQLgmX72r/fIBKOKrfXV7ka6oE3kaVhjcQPi7MfusUqVLvlRSgVJX4Vkxz1CsOy68Tsi
+         9JzxrucdJ0kJdjFJTHPEdVhEnDaPlEkF2BuVOkO3QDPiyMuMMvy7whP//B7oAhO9baAy
+         ZyWEMZeoGqi7Eqt2bHCxKLOa7ZwI8VGhC+UhVCk0XzJm6r+6IoCNeVq/dTUBm6xfXpyT
+         V8HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MnMuqxy2CFO3SUnH40zU8WEqg5m4XzWq3qxnT2ueo7Y=;
+        b=wJoI/Jl7pv5hV6m5f6DmrPcYK8Sur3T5iPem5yRcQYuQRvMQdgqsMQNce2lS8Alnie
+         nZS1/CyiTIS5qrQB/IX4eitCF/WlQlzKJAbORZeG0OtdoXgrBTTVlO+4XWHNIENxdodQ
+         yBzlWQAs0IxJtpTWfPVuC/c7bOiw6vkqEFD2sAQwRVKReuzWxtPOPzk65rhtiqJIssA8
+         bqfwJDx86OOQ7RCILDMv4lFEDM9qq9kJdsUo6zC5M2AmwJ79RUEJzhNOw4KE00E2hXmt
+         JAA8g/t7Yl1HrqABIelm+fza8MXYNUymsgn8X/0sh5UYQO4XW50VYPvYybCv/XfY8EeL
+         v4ag==
+X-Gm-Message-State: AFqh2kqQZh9simuxzUTprdcKISz5LfsNtkMryY4oaCwq+Is5bCxayWAJ
+        yZQsKQaMH14RwWU7bVw/Tfc=
+X-Google-Smtp-Source: AMrXdXshVs87qZyY8zSf13yrYubU/vGpH/nhfEuE00CGOuwwkLJ/jIpmqabSjnQh4lxvXim5RXoo9Q==
+X-Received: by 2002:a05:600c:3acd:b0:3d1:c354:77b6 with SMTP id d13-20020a05600c3acd00b003d1c35477b6mr34067793wms.29.1672732925710;
+        Tue, 03 Jan 2023 00:02:05 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id l13-20020a05600c2ccd00b003c70191f267sm48856173wmc.39.2023.01.03.00.02.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 00:02:05 -0800 (PST)
+Date:   Tue, 3 Jan 2023 11:02:01 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Ben Skeggs <bskeggs@redhat.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>
+Subject: drivers/gpu/drm/nouveau/nouveau_dp.c:237 nouveau_dp_irq() warn:
+ variable dereferenced before check 'outp' (see line 232)
+Message-ID: <202212300411.7i7D8MbF-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC PATCH bpf-next 3/4] riscv, bpf: Add bpf_arch_text_poke
- support for RV64
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Pu Lehui <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-References: <20221219133736.1387008-1-pulehui@huaweicloud.com>
- <20221219133736.1387008-4-pulehui@huaweicloud.com>
- <87v8looypd.fsf@all.your.base.are.belong.to.us>
-Content-Language: en-US
-From:   Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <87v8looypd.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500020.china.huawei.com (7.221.188.8)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,32 +69,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2258c2dc850b8605cb66b3383e50b9dddd1c6580
+commit: 773eb04d14a11552b2c3953097ed09cde2ab4831 drm/nouveau/disp: expose conn event class
+config: ia64-randconfig-m031-20221229
+compiler: ia64-linux-gcc (GCC) 12.1.0
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
-On 2023/1/3 15:37, Björn Töpel wrote:
-> Pu Lehui <pulehui@huaweicloud.com> writes:
-> 
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
->> index bf4721a99a09..fa8b03c52463 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> 
->> @@ -1266,7 +1389,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->>   
->>   void bpf_jit_build_prologue(struct rv_jit_context *ctx)
->>   {
->> -	int stack_adjust = 0, store_offset, bpf_stack_adjust;
->> +	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
->>   	bool is_main_prog = ctx->prog->aux->func_idx == 0;
-> 
-> This line magically appeared, and makes it hard to apply the series
-> without hacking the patches manually. Going forward, please supply a
-> base tree commit to the series (or a link to a complete git tree).
-> 
+smatch warnings:
+drivers/gpu/drm/nouveau/nouveau_dp.c:237 nouveau_dp_irq() warn: variable dereferenced before check 'outp' (see line 232)
 
-A rebase version has been resend as follow:
+vim +/outp +237 drivers/gpu/drm/nouveau/nouveau_dp.c
 
-https://lore.kernel.org/bpf/20221220021319.1655871-1-pulehui@huaweicloud.com/
+773eb04d14a115 Ben Skeggs 2022-06-01  225  void
+773eb04d14a115 Ben Skeggs 2022-06-01  226  nouveau_dp_irq(struct work_struct *work)
+a0922278f83eae Lyude Paul 2020-08-26  227  {
+773eb04d14a115 Ben Skeggs 2022-06-01  228  	struct nouveau_connector *nv_connector =
+773eb04d14a115 Ben Skeggs 2022-06-01  229  		container_of(work, typeof(*nv_connector), irq_work);
+a0922278f83eae Lyude Paul 2020-08-26  230  	struct drm_connector *connector = &nv_connector->base;
+a0922278f83eae Lyude Paul 2020-08-26  231  	struct nouveau_encoder *outp = find_encoder(connector, DCB_OUTPUT_DP);
+773eb04d14a115 Ben Skeggs 2022-06-01 @232  	struct nouveau_drm *drm = nouveau_drm(outp->base.base.dev);
+                                                                                      ^^^^^^
+Dereference.
 
-> 
-> Björn
+a0922278f83eae Lyude Paul 2020-08-26  233  	struct nv50_mstm *mstm;
+016dacb60e6d4b Ben Skeggs 2022-06-01  234  	u64 hpd = 0;
+a4efad354cf1b9 Lyude Paul 2020-08-26  235  	int ret;
+a0922278f83eae Lyude Paul 2020-08-26  236  
+a0922278f83eae Lyude Paul 2020-08-26 @237  	if (!outp)
+                                                     ^^^^
+Checked too late.
+
+a0922278f83eae Lyude Paul 2020-08-26  238  		return;
+a0922278f83eae Lyude Paul 2020-08-26  239  
+a0922278f83eae Lyude Paul 2020-08-26  240  	mstm = outp->dp.mstm;
+a0922278f83eae Lyude Paul 2020-08-26  241  	NV_DEBUG(drm, "service %s\n", connector->name);
+a0922278f83eae Lyude Paul 2020-08-26  242  
+a0922278f83eae Lyude Paul 2020-08-26  243  	mutex_lock(&outp->dp.hpd_irq_lock);
+a0922278f83eae Lyude Paul 2020-08-26  244  
+a0922278f83eae Lyude Paul 2020-08-26  245  	if (mstm && mstm->is_mst) {
+a0922278f83eae Lyude Paul 2020-08-26  246  		if (!nv50_mstm_service(drm, nv_connector, mstm))
+773eb04d14a115 Ben Skeggs 2022-06-01  247  			hpd |= NVIF_CONN_EVENT_V0_UNPLUG;
+a0922278f83eae Lyude Paul 2020-08-26  248  	} else {
+a0922278f83eae Lyude Paul 2020-08-26  249  		drm_dp_cec_irq(&nv_connector->aux);
+a4efad354cf1b9 Lyude Paul 2020-08-26  250  
+a4efad354cf1b9 Lyude Paul 2020-08-26  251  		if (nouveau_dp_has_sink_count(connector, outp)) {
+a4efad354cf1b9 Lyude Paul 2020-08-26  252  			ret = drm_dp_read_sink_count(&nv_connector->aux);
+a4efad354cf1b9 Lyude Paul 2020-08-26  253  			if (ret != outp->dp.sink_count)
+773eb04d14a115 Ben Skeggs 2022-06-01  254  				hpd |= NVIF_CONN_EVENT_V0_PLUG;
+a4efad354cf1b9 Lyude Paul 2020-08-26  255  			if (ret >= 0)
+a4efad354cf1b9 Lyude Paul 2020-08-26  256  				outp->dp.sink_count = ret;
+a4efad354cf1b9 Lyude Paul 2020-08-26  257  		}
+a0922278f83eae Lyude Paul 2020-08-26  258  	}
+a0922278f83eae Lyude Paul 2020-08-26  259  
+a0922278f83eae Lyude Paul 2020-08-26  260  	mutex_unlock(&outp->dp.hpd_irq_lock);
+a4efad354cf1b9 Lyude Paul 2020-08-26  261  
+773eb04d14a115 Ben Skeggs 2022-06-01  262  	nouveau_connector_hpd(nv_connector, NVIF_CONN_EVENT_V0_IRQ | hpd);
+a0922278f83eae Lyude Paul 2020-08-26  263  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
