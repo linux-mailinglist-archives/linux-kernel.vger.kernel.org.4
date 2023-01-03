@@ -2,133 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B3F65C0BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B1065C0CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237508AbjACNZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
+        id S237005AbjACN1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237372AbjACNZt (ORCPT
+        with ESMTP id S230488AbjACN1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:25:49 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 047D6CD;
-        Tue,  3 Jan 2023 05:25:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4809B2F4;
-        Tue,  3 Jan 2023 05:26:28 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.37.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA5683F587;
-        Tue,  3 Jan 2023 05:25:40 -0800 (PST)
-Date:   Tue, 3 Jan 2023 13:25:35 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, torvalds@linux-foundation.org,
-        corbet@lwn.net, will@kernel.org, catalin.marinas@arm.com,
-        dennis@kernel.org, tj@kernel.org, cl@linux.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC][PATCH 05/12] arch: Introduce
- arch_{,try_}_cmpxchg128{,_local}()
-Message-ID: <Y7QszyTEG2+WiI/C@FVFF77S0Q05N>
-References: <20221219153525.632521981@infradead.org>
- <20221219154119.154045458@infradead.org>
- <Y6DEfQXymYVgL3oJ@boqun-archlinux>
- <Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net>
+        Tue, 3 Jan 2023 08:27:43 -0500
+X-Greylist: delayed 11191 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 Jan 2023 05:27:41 PST
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0527CD62;
+        Tue,  3 Jan 2023 05:27:40 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 7D8CC75;
+        Tue,  3 Jan 2023 14:27:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1672752457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RHFL2PgwhVhLIbc4WDQ0VxcndRKF+zLEggh6iiwpmQY=;
+        b=JhiJnwoTDE7pFhG+6yV7Aq3RJmVT4t44k3691eIxRvPtUQuqII3Y4xs+bhozbQ7LmK5Av2
+        XnALDQ/hF232xKSTXjfFhkMjHwMd/c5QRHY59HMdmYmiYrZAhxpuQ+9SD/TG0R+v9srIsp
+        6sFt2FSn0JXtJs+8pd5Ykp5vlR40Ln5+jh28Zd9+qn7D70QWQBIB3bWHOtVxvHSSNM+QO9
+        7Zn/Y7jwx1JKLDaslcRR/167IzifxZuNeCxzrblRR12xpOzbwFhEVaZafELh3c+/0a6vnJ
+        sLt1tEtpRFKLBERSnf4b4UhQ79A3Sryb4YEu40MVBNv3nXhH+7zLGc/1riMTvQ==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 03 Jan 2023 14:27:37 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wei Fang <wei.fang@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH RFC net-next v2 06/12] net: mdio: mdio-bitbang: Separate
+ C22 and C45 transactions
+In-Reply-To: <20230103131555.5i4tj7sk72gmed5d@skbuf>
+References: <20221227-v6-2-rc1-c45-seperation-v2-0-ddb37710e5a7@walle.cc>
+ <20221227-v6-2-rc1-c45-seperation-v2-6-ddb37710e5a7@walle.cc>
+ <20230103131555.5i4tj7sk72gmed5d@skbuf>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <300bdff73f38b4e480d533c04126854d@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 12:08:16PM +0100, Peter Zijlstra wrote:
-> On Mon, Dec 19, 2022 at 12:07:25PM -0800, Boqun Feng wrote:
-> > On Mon, Dec 19, 2022 at 04:35:30PM +0100, Peter Zijlstra wrote:
-> > > For all architectures that currently support cmpxchg_double()
-> > > implement the cmpxchg128() family of functions that is basically the
-> > > same but with a saner interface.
-> > > 
-> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > ---
-> > >  arch/arm64/include/asm/atomic_ll_sc.h |   38 +++++++++++++++++++++++
-> > >  arch/arm64/include/asm/atomic_lse.h   |   33 +++++++++++++++++++-
-> > >  arch/arm64/include/asm/cmpxchg.h      |   26 ++++++++++++++++
-> > >  arch/s390/include/asm/cmpxchg.h       |   33 ++++++++++++++++++++
-> > >  arch/x86/include/asm/cmpxchg_32.h     |    3 +
-> > >  arch/x86/include/asm/cmpxchg_64.h     |   55 +++++++++++++++++++++++++++++++++-
-> > >  6 files changed, 185 insertions(+), 3 deletions(-)
-> > > 
-> > > --- a/arch/arm64/include/asm/atomic_ll_sc.h
-> > > +++ b/arch/arm64/include/asm/atomic_ll_sc.h
-> > > @@ -326,6 +326,44 @@ __CMPXCHG_DBL(   ,        ,  ,         )
-> > >  __CMPXCHG_DBL(_mb, dmb ish, l, "memory")
-> > >  
-> > >  #undef __CMPXCHG_DBL
-> > > +
-> > > +union __u128_halves {
-> > > +	u128 full;
-> > > +	struct {
-> > > +		u64 low, high;
-> > > +	};
-> > > +};
-> > > +
-> > > +#define __CMPXCHG128(name, mb, rel, cl)					\
-> > > +static __always_inline u128						\
-> > > +__ll_sc__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)	\
-> > > +{									\
-> > > +	union __u128_halves r, o = { .full = (old) },			\
-> > > +			       n = { .full = (new) };			\
-> > > +									\
-> > > +	asm volatile("// __cmpxchg128" #name "\n"			\
-> > > +	"	prfm	pstl1strm, %2\n"				\
-> > > +	"1:	ldxp	%0, %1, %2\n"					\
-> > > +	"	eor	%3, %0, %3\n"					\
-> > > +	"	eor	%4, %1, %4\n"					\
-> > > +	"	orr	%3, %4, %3\n"					\
-> > > +	"	cbnz	%3, 2f\n"					\
-> > > +	"	st" #rel "xp	%w3, %5, %6, %2\n"			\
-> > > +	"	cbnz	%w3, 1b\n"					\
-> > > +	"	" #mb "\n"						\
-> > > +	"2:"								\
-> > > +	: "=&r" (r.low), "=&r" (r.high), "+Q" (*(unsigned long *)ptr)	\
-> > 
-> > I wonder whether we should use "(*(u128 *)ptr)" instead of "(*(unsigned
-> > long *) ptr)"? Because compilers may think only 64bit value pointed by
-> > "ptr" gets modified, and they are allowed to do "useful" optimization.
+Am 2023-01-03 14:15, schrieb Vladimir Oltean:
+> On Wed, Dec 28, 2022 at 12:07:22AM +0100, Michael Walle wrote:
+>> From: Andrew Lunn <andrew@lunn.ch>
+>> 
+>> The bitbbanging bus driver can perform both C22 and C45 transfers.
+>> Create separate functions for each and register the C45 versions using
+>> the new driver API calls.
+>> 
+>> The SH Ethernet driver places wrappers around these functions. In
+>> order to not break boards which might be using C45, add similar
+>> wrappers for C45 operations.
+>> 
+>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
 > 
-> In this I've copied the existing cmpxchg_double() code; I'll have to let
-> the arch folks speak here, I've no clue.
+> Incomplete conversion, this breaks the build. Need to update all users
+> of the bitbang driver (also davinci_mdio). Something like the diff 
+> below
+> fixes that, but it leaves the davinci_mdio driver in a partially
+> converted state (if data->manual_mode is true, new API is used,
+> otherwise old API is used). So another patch to convert the other case
+> will likely be needed.
 
-We definitely need to ensure the compiler sees we poke the whole thing, or it
-can get this horribly wrong, so that is a latent bug.
+The intel build bot already notified me about this. Unfortunately, only
+privately as I just noticed.
 
-See commit:
+And yes, these are just the first 12 patches of a larger series.
 
-  fee960bed5e857eb ("arm64: xchg: hazard against entire exchange variable")
-
-... for examples of GCC being clever, where I overlooked the *_double() cases.
-
-I'll go spin a quick fix for that so that we can have something go to stable
-before we rejig the API.
-
-Mark.
+-michael
