@@ -2,86 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D8765C31C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5E365C31A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233567AbjACPh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 10:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
+        id S237922AbjACPhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 10:37:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjACPh4 (ORCPT
+        with ESMTP id S237979AbjACPgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 10:37:56 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F95E11A3F;
-        Tue,  3 Jan 2023 07:37:54 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303F4Bel023574;
-        Tue, 3 Jan 2023 15:37:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=1HebWWOhEKajwexBcr0WiUe2L09PFfQDiNzhHfo5DfI=;
- b=bxdsv4ZdnVzZlac375SXI2YQ7L1cT9EzBIMTScdw3o7zayPPrmQ5dVcKXNWvv5g+8nYW
- xI0auGuSa847flQ2ALN8sjjZ149HbQMbMmsS+FwDfYCzSTyeuYaQO3M8TBlLG5wOlxjO
- biHQCs20+IOkMTyQ35BOaiZkqjz0HgEIriRQeq2TA3/LWY7qqy4ms+VNKiTsanfXoi5H
- 26xpxNooShuQQcg2KyhWyhWZIQ276X0YbxPOgQiteMD2LHoFlIBKvL8k4W/JIYEUEqJ9
- tl/uR2c0Q4rVYJDffeTI3/zj0DSl+lgrTUZUeGed8HbWi3gfJmJWZgZh58TpXWJDLqXl ng== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvm41vxur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 15:37:47 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303FLxRC010240;
-        Tue, 3 Jan 2023 15:37:46 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3mtcq7ag5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 15:37:46 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 303FbjEC4129524
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Jan 2023 15:37:45 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F14CA58060;
-        Tue,  3 Jan 2023 15:37:44 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BC60C58056;
-        Tue,  3 Jan 2023 15:37:44 +0000 (GMT)
-Received: from [9.163.50.163] (unknown [9.163.50.163])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  3 Jan 2023 15:37:44 +0000 (GMT)
-Message-ID: <90e8623a-e9f4-fb41-7671-de1912d139ad@linux.ibm.com>
-Date:   Tue, 3 Jan 2023 09:37:44 -0600
+        Tue, 3 Jan 2023 10:36:54 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA8B1055B;
+        Tue,  3 Jan 2023 07:36:52 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 18868E000C;
+        Tue,  3 Jan 2023 15:36:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672760210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9KTZljicl5dwV9dTlvTkbBce651QHVSe64cnRvCpaSA=;
+        b=QPb+w4MTOITrGKzhCX32CcuzIB4z3i+eqo9ED9LMf9jByBmjhaELC7Z4gjQKRP1Bbt6IQh
+        GPGNvuDtymXIDIFTdXCbZWgnrb1I+fhtJKKX1U/Ccid8tf1z0nHtixt+PK9JstFsX2UFcO
+        fD0dUf+oM5g2dlaNe9ZyxxLuawbU8hIJe977Kxuj8QuHVOMlFSBBmtt1wlgMqwfNE5kW/N
+        /bJEPrpCgOCuxBKZkG0NYAPPuBVITfS/j5+0GMxw0/dpVAHk2aLuhGia7ltgrzfcs3YJ9E
+        Z06MuRnyj7WeTtxJacbFlAGMgyNm9drgP89G+K5e72E/szfQ+qQSCmmLJh5PRQ==
+Date:   Tue, 3 Jan 2023 16:38:58 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Lizhi Hou <lizhi.hou@amd.com>
+Cc:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
+        <frowand.list@gmail.com>, <helgaas@kernel.org>, <max.zhen@amd.com>,
+        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>,
+        <stefano.stabellini@xilinx.com>, <trix@redhat.com>,
+        "Allan.Nielsen@microchip.com" <Allan.Nielsen@microchip.com>,
+        "Horatiu.Vultur@microchip.com" <Horatiu.Vultur@microchip.com>,
+        "Steen.Hegelund@microchip.com" <Steen.Hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH V5 2/3] PCI: Create device tree node for selected
+ devices
+Message-ID: <20230103163858.5f4c0ece@fixe.home>
+In-Reply-To: <1671125446-57584-3-git-send-email-lizhi.hou@amd.com>
+References: <1671125446-57584-1-git-send-email-lizhi.hou@amd.com>
+        <1671125446-57584-3-git-send-email-lizhi.hou@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2 0/6] crypto: Accelerated AES/GCM stitched
- implementation
-Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-crypto@vger.kernel.org, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com
-References: <20221205003458.4182-1-dtsen@linux.ibm.com>
- <Y6770EmD7VN3HCn7@gondor.apana.org.au>
-From:   Danny Tsen <dtsen@linux.ibm.com>
-In-Reply-To: <Y6770EmD7VN3HCn7@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kYVjmPjO4h5UD9tZk94QPel2GEq7m4sD
-X-Proofpoint-GUID: kYVjmPjO4h5UD9tZk94QPel2GEq7m4sD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-03_05,2023-01-03_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 clxscore=1011 spamscore=0
- mlxlogscore=999 adultscore=0 suspectscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301030133
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,51 +62,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+Le Thu, 15 Dec 2022 09:30:45 -0800,
+Lizhi Hou <lizhi.hou@amd.com> a =C3=A9crit :
 
-Uh, I will fix it.  It was set to ABI v2 in assembly file.  Sorry about 
-that.
+Further comments
 
+> diff --git a/drivers/pci/of_property.c b/drivers/pci/of_property.c
+> new file mode 100644
+> index 000000000000..05c8ca05a71b
+> --- /dev/null
+> +++ b/drivers/pci/of_property.c
+> @@ -0,0 +1,222 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
+> + */
+> +
+> +#include <linux/pci.h>
+> +#include <linux/of.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/bits.h>
+> +#include <asm/unaligned.h>
+> +#include "pci.h"
+> +
+> +#define OF_PCI_ADDRESS_CELLS		3
+> +#define OF_PCI_SIZE_CELLS		2
+> +
+> +struct of_pci_addr_pair {
+> +	u32		phys_addr[OF_PCI_ADDRESS_CELLS];
+> +	u32		size[OF_PCI_SIZE_CELLS];
+> +};
+> +
+> +struct of_pci_range {
+> +	u32		child_addr[OF_PCI_ADDRESS_CELLS];
+> +	u32		parent_addr[OF_PCI_ADDRESS_CELLS];
+> +	u32		size[OF_PCI_SIZE_CELLS];
+> +};
+> +
+> +#define OF_PCI_ADDR_SPACE_CONFIG	0x0
+> +#define OF_PCI_ADDR_SPACE_IO		0x1
+> +#define OF_PCI_ADDR_SPACE_MEM32		0x2
+> +#define OF_PCI_ADDR_SPACE_MEM64		0x3
+> +
+> +#define OF_PCI_ADDR_FIELD_NONRELOC	BIT(31)
+> +#define OF_PCI_ADDR_FIELD_SS		GENMASK(25, 24)
+> +#define OF_PCI_ADDR_FIELD_PREFETCH	BIT(30)
+> +#define OF_PCI_ADDR_FIELD_BUS		GENMASK(23, 16)
+> +#define OF_PCI_ADDR_FIELD_DEV		GENMASK(15, 11)
+> +#define OF_PCI_ADDR_FIELD_FUNC		GENMASK(10, 8)
+> +#define OF_PCI_ADDR_FIELD_REG		GENMASK(7, 0)
+> +
+> +#define OF_PCI_ADDR_HI			GENMASK_ULL(63, 32)
+> +#define OF_PCI_ADDR_LO			GENMASK_ULL(31, 0)
+> +#define OF_PCI_SIZE_HI			GENMASK_ULL(63, 32)
+> +#define OF_PCI_SIZE_LO			GENMASK_ULL(31, 0)
 
-Thanks.
+This is unused.
 
--Danny
+> +
+> +enum of_pci_prop_compatible {
+> +	PROP_COMPAT_PCI_VVVV_DDDD,
+> +	PROP_COMPAT_PCICLASS_CCSSPP,
+> +	PROP_COMPAT_PCICLASS_CCSS,
+> +	PROP_COMPAT_NUM,
+> +};
+> +
+> +static int of_pci_prop_device_type(struct pci_dev *pdev,
+> +				   struct of_changeset *ocs,
+> +				   struct device_node *np)
+> +{
+> +	return of_changeset_add_prop_string(ocs, np, "device_type", "pci");
+> +}
+> +
+> +static int of_pci_prop_address_cells(struct pci_dev *pdev,
+> +				     struct of_changeset *ocs,
+> +				     struct device_node *np)
+> +{
+> +	return of_changeset_add_prop_u32(ocs, np, "#address_cells",
+> +					 OF_PCI_ADDRESS_CELLS);
+> +}
+> +
+> +static int of_pci_prop_size_cells(struct pci_dev *pdev,
+> +				  struct of_changeset *ocs,
+> +				  struct device_node *np)
+> +{
+> +	return of_changeset_add_prop_u32(ocs, np, "#size_cells",
+> +					 OF_PCI_SIZE_CELLS);
+> +}
+> +
+> +static void of_pci_set_address(u32 *prop, u64 addr, u32 flags)
+> +{
+> +	prop[0] =3D flags;
+> +	put_unaligned(addr, &prop[1]);
+> +}
+> +
+> +static int of_pci_get_addr_flags(struct resource *res, u32 *flags)
+> +{
+> +	u32 ss;
+> +
+> +	if (res->flags & IORESOURCE_IO)
+> +		ss =3D OF_PCI_ADDR_SPACE_IO;
+> +	else if (res->flags & IORESOURCE_MEM_64)
+> +		ss =3D OF_PCI_ADDR_SPACE_MEM64;
+> +	else if (res->flags & IORESOURCE_MEM)
+> +		ss =3D OF_PCI_ADDR_SPACE_MEM32;
+> +	else
+> +		return -EINVAL;
+> +
+> +	*flags &=3D ~(OF_PCI_ADDR_FIELD_SS | OF_PCI_ADDR_FIELD_PREFETCH);
+> +	if (res->flags & IORESOURCE_PREFETCH)
+> +		*flags |=3D OF_PCI_ADDR_FIELD_PREFETCH;
+> +
+> +	*flags |=3D ss;
 
-On 12/30/22 8:55 AM, Herbert Xu wrote:
-> On Sun, Dec 04, 2022 at 07:34:52PM -0500, Danny Tsen wrote:
->> This patch series enable an accelerated AES/GCM stitched implementation for
->> Power10+ CPU(ppc64le).  This module supports AEAD algorithm.  The stitched
->> implementation provides 3.5X+ better performance than the baseline.
->>
->> This patch has been tested with the kernel crypto module tcrypt.ko and has
->> passed the selftest.  The patch is also tested with
->> CONFIG_CRYPTO_MANAGER_EXTRA_TESTS enabled
->>
->> Danny Tsen (6):
->>    Patch1: Update Kconfig and Makefile.
->>    Patch2: Glue code for AES/GCM stitched implementation.
->>    Patch3: An accelerated AES/GCM stitched implementation.
->>    Patch4: Supporting functions for AES.
->>    Patch5: Supporting functions for ghash.
->>    Patch6: A perl script to process PowerPC assembler source.
->>
->>   arch/powerpc/crypto/Kconfig            |   11 +
->>   arch/powerpc/crypto/Makefile           |   10 +
->>   arch/powerpc/crypto/aesp8-ppc.pl       | 3846 ++++++++++++++++++++++++
->>   arch/powerpc/crypto/ghashp8-ppc.pl     |  370 +++
->>   arch/powerpc/crypto/p10-aes-gcm-glue.c |  345 +++
->>   arch/powerpc/crypto/p10_aes_gcm.S      | 1519 ++++++++++
->>   arch/powerpc/crypto/ppc-xlate.pl       |  229 ++
->>   7 files changed, 6330 insertions(+)
->>   create mode 100644 arch/powerpc/crypto/aesp8-ppc.pl
->>   create mode 100644 arch/powerpc/crypto/ghashp8-ppc.pl
->>   create mode 100644 arch/powerpc/crypto/p10-aes-gcm-glue.c
->>   create mode 100644 arch/powerpc/crypto/p10_aes_gcm.S
->>   create mode 100644 arch/powerpc/crypto/ppc-xlate.pl
-> I can't build this, it fails with
->
->    LD [M]  arch/powerpc/crypto/p10-aes-gcm-crypto.o
-> powerpc64le-linux-gnu-ld: arch/powerpc/crypto/p10_aes_gcm.o: ABI version 2 is not compatible with ABI version 1 output
-> powerpc64le-linux-gnu-ld: failed to merge target specific data of file arch/powerpc/crypto/p10_aes_gcm.o
->
-> Cheers,
+This seems wrong, should be:
+
+*flags |=3D FIELD_PREP(OF_PCI_ADDR_FIELD_SS, ss);
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
