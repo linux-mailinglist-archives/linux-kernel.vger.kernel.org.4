@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5369265C1CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59AAF65C1DB
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237631AbjACOW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S237866AbjACOWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238183AbjACOWY (ORCPT
+        with ESMTP id S237744AbjACOWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:22:24 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 920B025C3;
-        Tue,  3 Jan 2023 06:22:23 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 091E62F4;
-        Tue,  3 Jan 2023 06:23:05 -0800 (PST)
-Received: from e126311.manchester.arm.com (unknown [10.57.76.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECCAF3F587;
-        Tue,  3 Jan 2023 06:22:21 -0800 (PST)
-Date:   Tue, 3 Jan 2023 14:22:18 +0000
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, kajetan.puchalski@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v5 0/2] cpuidle: teo: Introduce util-awareness
-Message-ID: <Y7Q6GnjKKhCVp1Zf@e126311.manchester.arm.com>
-References: <20221130153204.2085591-1-kajetan.puchalski@arm.com>
+        Tue, 3 Jan 2023 09:22:32 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E69B25C7
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:22:31 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso21112533wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 06:22:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3FOheBM0S2+JbMMoxIwLqXXDKGtNhRlPkusnCew5bM4=;
+        b=ctNJKAEB0mC5xYQFtNHesl28Mc05r11ifa4IUriehLf+mhL5e6FKXp7H+WgunJWKUe
+         OQ+rDSbO0PXbiAUHpFZnQ5oWutvB+cQF9Z1NnrKggR8ObQ7xWhcX6jLvHkullHf8fXkO
+         GC7AQomyAL+o3uOPS74g6UEKvTm7Lr5pNhv9Tv/3fZxrX8iXMjzOjS5aIVwWEdE/OQSy
+         NODstBHDq3QhRdsw74lzoJTC3RshAplsYgqVm58vuk6I6vgxBsHKnXc6FSgjSJF4nCXs
+         BIZvyND0DA3SzfLcY57mFkwhoPs7qmRZcERRx+gYw+QJJ0kg5nFczeOUzqJnuaFlI3/8
+         igUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3FOheBM0S2+JbMMoxIwLqXXDKGtNhRlPkusnCew5bM4=;
+        b=eEqbN/tlTGlDCJLkS13DJ4eqwAarqcw2GbwoE3EDeL0X13dz+UwH314MPrWKQ4/0No
+         bHnaC2vFe9/nPa3Yt6W74UYbvIfqtmdAX2kXHKKveyRPqfV8/lNi7CgtiWfovx8FYR8i
+         GUHDr+VpM0YoCYazhvTySpJtkdzH7lm7qoU/EVIT+p9sLV3b33D+RBUyYnV5N9P0EoNb
+         KvaIbj5lyo2rcaHfi4rPNL475u9zbBgbxmXo9f7JFftCL4uDMetrT0JC9znliTu1YYUu
+         VEl1m2b3Ct5xNWkkrZUmONDmJsF3H3veLjoHUPfZeh1BVqMbvNfdlfFtk+pBXK1GF1Kd
+         +8/Q==
+X-Gm-Message-State: AFqh2koVtWrOIiUjjh0W7nr4SDEN1CQS/Q9lZWFtTdZSrrvLUzE21H/1
+        b+Qf0XyeRr/n17FCMgJeSzo8jw==
+X-Google-Smtp-Source: AMrXdXsKXqoBbrs912bxVrgViZoH9V38nCKH47rX6chFwc+h8PeTtZ9ZXS9djAEtUCr9hEqt9XJ7IA==
+X-Received: by 2002:a05:600c:1e16:b0:3d1:d1a9:efde with SMTP id ay22-20020a05600c1e1600b003d1d1a9efdemr34972107wmb.12.1672755750093;
+        Tue, 03 Jan 2023 06:22:30 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id i6-20020a5d55c6000000b00283c7b5ee3bsm20182163wrw.101.2023.01.03.06.22.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 06:22:29 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH 0/2] drm/panel: add support for the Visionox VTDR6130 AMOLED DSI panel
+Date:   Tue, 03 Jan 2023 15:22:27 +0100
+Message-Id: <20230103-topic-sm8550-upstream-vtdr6130-panel-v1-0-9b746b858378@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130153204.2085591-1-kajetan.puchalski@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACM6tGMC/x2NQQrDIBAAvxI8d0EjSdN+pfSw6qYRjJFdEwohf
+ 6/0OHOYOZUQRxL17E7FdESJW25gbp3yC+YPQQyNVa97q422ULcSPcg6DYOGvUhlwhWOGng0VkPB
+ TAnmyQQMj/uILqiWcigEjjH7pcXynlKThWmO3//79b6uH1S6CNyLAAAA
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 03:32:02PM +0000, Kajetan Puchalski wrote:
+Add support for the 1080x2400 Visionox VTDR6130 AMOLED DSI panel
+found on the Qualcomm SM8550 MTP board.
 
-Hi Rafael,
+By default the the panel is configured to work with DSI compressed
+streams, but can work in uncompressed video mode since 1080x2400 in
+RGB888 fits in the 4 DSI lanes bandwidth.
 
-As it's been a while since the last email I wanted to bump this thread
-and ask what you think about the last changes.
+While display compression is preferred for performance and power
+reasons, let's start with the uncompressed video mode support and
+add the DSC support later on.
 
-Additionally, I got some emails from the kernel test robot and noticed
-that sched_cpu_util is contingent on CONFIG_SMP so in the current form
-there's build errors on !SMP machines.
+To: Thierry Reding <thierry.reding@gmail.com>
+To: Sam Ravnborg <sam@ravnborg.org>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: dri-devel@lists.freedesktop.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-The following change should fix the problem, do you think it's all right to add?
+---
+Neil Armstrong (2):
+      dt-bindings: display: panel: document the Visionox VTDR6130 AMOLED DSI Panel bindings
+      drm/panel: add visionox vtdr6130 DSI panel driver
 
-@@ -207,10 +207,17 @@ static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
-  * @dev: Target CPU
-  * @cpu_data: Governor CPU data for the target CPU
-  */
-+#ifdef CONFIG_SMP
- static void teo_get_util(struct cpuidle_device *dev, struct teo_cpu *cpu_data)
- {
-        cpu_data->utilized = sched_cpu_util(dev->cpu) > cpu_data->util_threshold;
- }
-+#else
-+static void teo_get_util(struct cpuidle_device *dev, struct teo_cpu *cpu_data)
-+{
-+       cpu_data->utilized = false;
-+}
-+#endif
+ .../bindings/display/panel/visionox,vtdr6130.yaml  |  53 +++
+ drivers/gpu/drm/panel/Kconfig                      |   8 +
+ drivers/gpu/drm/panel/Makefile                     |   1 +
+ drivers/gpu/drm/panel/panel-visionox-vtdr6130.c    | 366 +++++++++++++++++++++
+ 4 files changed, 428 insertions(+)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230103-topic-sm8550-upstream-vtdr6130-panel-f81dad976abd
 
-Thanks in advance for your time,
-Kajetan
-
-> v4 -> v5:
-> - remove the restriction to only apply the mechanism for C1 candidate state
-> - clarify some code comments, fix comment style
-> - refactor the fast-exit path loop implementation
-> - move some cover letter information into the commit description
-> 
-> v3 -> v4:
-> - remove the chunk of code skipping metrics updates when the CPU was utilized
-> - include new test results and more benchmarks in the cover letter
-> 
-> v2 -> v3:
-> - add a patch adding an option to skip polling states in teo_find_shallower_state()
-> - only reduce the state if the candidate state is C1 and C0 is not a polling state
-> - add a check for polling states in the 2-states fast-exit path
-> - remove the ifdefs and Kconfig option
-> 
-> v1 -> v2:
-> - rework the mechanism to reduce selected state by 1 instead of directly selecting C0 (suggested by Doug Smythies)
-> - add a fast-exit path for systems with 2 idle states to not waste cycles on metrics when utilized
-> - fix typos in comments
-> - include a missing header
-> 
-> Kajetan Puchalski (2):
->   cpuidle: teo: Optionally skip polling states in teo_find_shallower_state()
->   cpuidle: teo: Introduce util-awareness
-> 
->  drivers/cpuidle/governors/teo.c | 93 +++++++++++++++++++++++++++++++--
->  1 file changed, 89 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.37.1
-> 
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
