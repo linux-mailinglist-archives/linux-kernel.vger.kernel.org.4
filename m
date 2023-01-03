@@ -2,116 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9599C65BD67
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9651265BD6A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237258AbjACJrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S237262AbjACJsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:48:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236868AbjACJq6 (ORCPT
+        with ESMTP id S237269AbjACJrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:46:58 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0357E0D4;
-        Tue,  3 Jan 2023 01:46:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9vieuoe0VgancC+Vnw4hbAtvMmDWGV3XLVPMbJmvafw=; b=DjP3AFWSIgtAoq9nrYBevpsOux
-        8+IfN83nBYtYLtUipjJF0PAXFkh4+KLpe4+C9WMwHPwnIhUNLwS8j8uzlyk2eZD/Q4R8OoaqgmKrL
-        fgjU/hxE+F90CfGSvJSNY9v7hXKqLJZTQLxfYAko6A3O7NjZ64iC5kXu+NRjoF/jG9YsQajZpRkzB
-        QqNObvOdiEpWXtfQXAsA03wndml1yT1FO3ELg7nXGGfEygUW+hG0OGKzwG3+81hyxxeNBrdR+Hvz7
-        Lo5WgayyUY7/D3N9okFGQWjhg/SsUhj9HTBvhi9d658sx/+sYwE1kxttlAKMa2WNM2ju8FwG1hb/Y
-        nlDQQ89A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35898)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pCdsa-0005AO-H6; Tue, 03 Jan 2023 09:46:44 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pCdsU-0001x7-ML; Tue, 03 Jan 2023 09:46:38 +0000
-Date:   Tue, 3 Jan 2023 09:46:38 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Clark Wang <xiaoning.wang@nxp.com>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] net: phylink: add a function to resume phy alone to
- fix resume issue with WoL enabled
-Message-ID: <Y7P5frCvcYOlzrbz@shell.armlinux.org.uk>
-References: <20221221080144.2549125-1-xiaoning.wang@nxp.com>
- <20221221080144.2549125-2-xiaoning.wang@nxp.com>
+        Tue, 3 Jan 2023 04:47:36 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9D9E0DE;
+        Tue,  3 Jan 2023 01:47:34 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8CE4B60FD9;
+        Tue,  3 Jan 2023 09:47:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1672739253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BIjLUFfj0kB7Uqvi4/DO1Qulkdn4TEAXOU07en8R1ls=;
+        b=nfuiFEuCP+s1hNMRLkKfGesRW61uLaudomobb0gnncuknFrCJ/hSrY7Sqm9iRWABGRNGE+
+        OpQ0BYe8Ie3LnCThnK1bM5eatlH5KjKN50gkxGjcmudmvxajarKkqrqwuGYeIgOZeeNz4i
+        2LmN6ZDSmgD2k8p+09JXzhlh4uI99To=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 709872C141;
+        Tue,  3 Jan 2023 09:47:33 +0000 (UTC)
+Date:   Tue, 3 Jan 2023 10:47:31 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] docs: gdbmacros: print newest record
+Message-ID: <Y7P5s+Zm+3s6g65A@alley>
+References: <20221229134339.197627-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221221080144.2549125-2-xiaoning.wang@nxp.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221229134339.197627-1-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 04:01:43PM +0800, Clark Wang wrote:
-> Issue we met:
-> On some platforms, mac cannot work after resumed from the suspend with WoL
-> enabled.
+On Thu 2022-12-29 14:49:39, John Ogness wrote:
+> @head_id points to the newest record, but the printing loop
+> exits when it increments to this value (before printing).
 > 
-> The cause of the issue:
-> 1. phylink_resolve() is in a workqueue which will not be executed immediately.
->    This is the call sequence:
->        phylink_resolve()->phylink_link_up()->pl->mac_ops->mac_link_up()
->    For stmmac driver, mac_link_up() will set the correct speed/duplex...
->    values which are from link_state.
-> 2. In stmmac_resume(), it will call stmmac_hw_setup() after called the
->    phylink_resume(), because mac need phy rx_clk to do the reset.
->    stmmac_core_init() is called in function stmmac_hw_setup(), which will
->    reset the mac and set the speed/duplex... to default value.
-> Conclusion: Because phylink_resolve() cannot determine when it is called, it
->             cannot be guaranteed to be called after stmmac_core_init().
-> 	    Once stmmac_core_init() is called after phylink_resolve(),
-> 	    the mac will be misconfigured and cannot be used.
+> Exit the printing loop after the newest record has been printed.
 > 
-> In order to avoid this problem, add a function called phylink_phy_resume()
-> to resume phy separately. This eliminates the need to call phylink_resume()
-> before stmmac_hw_setup().
+> The python-based function in scripts/gdb/linux/dmesg.py already
+> does this correctly.
 > 
-> Add another judgement before called phy_start() in phylink_start(). This way
-> phy_start() will not be called multiple times when resumes. At the same time,
-> it may not affect other drivers that do not use phylink_phy_resume().
-> 
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> ---
->  drivers/net/phy/phylink.c | 21 ++++++++++++++++++++-
->  include/linux/phylink.h   |  1 +
->  2 files changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> index 09cc65c0da93..5bab59142579 100644
-> --- a/drivers/net/phy/phylink.c
-> +++ b/drivers/net/phy/phylink.c
-> @@ -1939,7 +1939,7 @@ void phylink_start(struct phylink *pl)
->  	}
->  	if (poll)
->  		mod_timer(&pl->link_poll, jiffies + HZ);
-> -	if (pl->phydev)
-> +	if (pl->phydev && pl->phydev->state < PHY_UP)
+> Fixes: e60768311af8 ("scripts/gdb: update for lockless printk ringbuffer")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-I'm really not happy with this - not only does this subvert the checks in
-phy_start(), it's a layering violation, and it delves into internals of
-phylib in an unprotected way.
+JFYI, the patch has been committed into printk/linux.git,
+branch for-6.3.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Best Regards,
+Petr
