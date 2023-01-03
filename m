@@ -2,85 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8246465BDAC
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 486BB65BDB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236815AbjACKIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:08:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S236800AbjACKJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:09:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbjACKIH (ORCPT
+        with ESMTP id S231250AbjACKJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:08:07 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B39A134;
-        Tue,  3 Jan 2023 02:08:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78B4D1516;
-        Tue,  3 Jan 2023 02:08:46 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D97393F663;
-        Tue,  3 Jan 2023 02:08:03 -0800 (PST)
-Date:   Tue, 3 Jan 2023 10:08:01 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/5] dt-bindings: firmware: arm,scmi: Add support for
- syspower protocol
-Message-ID: <Y7P+gYRZDn9TggkK@e120937-lin>
-References: <20221222183823.518856-1-cristian.marussi@arm.com>
- <20221222183823.518856-5-cristian.marussi@arm.com>
- <3d89e135-c8e4-ede4-950f-03900a660822@kernel.org>
- <Y6WE1zQAxYYn6Ahz@e120937-lin>
- <23436455-098f-6e21-2330-d91158a591ad@kernel.org>
+        Tue, 3 Jan 2023 05:09:34 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7575D19A;
+        Tue,  3 Jan 2023 02:09:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1672740562; bh=ghGTnVbTjH8LiFna82e0PxqupzzWGkv+g5lVNa8Ra5I=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=iqIzdZ4tQYmJk5OtJ7aZApM2fdnlKovj+4vA3SW33uAS9+NTu/XMvNvuyLdWJoXYB
+         JmWffC3rZzFckNwPEyaa6tL32vZL9LLx0/0z2Dch805CAeVNGJAmYXP3LeQoE7QcHk
+         1fXy0FDM6k6z9KDZuYF1LGaCABOn2oJ5jCsI4JoE=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Tue,  3 Jan 2023 11:09:22 +0100 (CET)
+X-EA-Auth: uEjUie4sn4W6bvDFzFMTM7q+IgRB6xROsIEPD8IO5ghbYWbhFVxnAngRRwyvmwuzsbcToaSgF1rKxGg44uNLn9OhdaptVPzw
+Date:   Tue, 3 Jan 2023 15:39:17 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH v4 2/2] tty: serial: dz: convert atomic_* to refcount_*
+ APIs for irq_guard
+Message-ID: <Y7P+zZEF09YWs5yW@qemulion>
+References: <cover.1671898144.git.drv@mailo.com>
+ <51ef854f77779c82010379420139993e12c38776.1671898144.git.drv@mailo.com>
+ <3c4e744f-c313-e195-af93-a22382c81bb6@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <23436455-098f-6e21-2330-d91158a591ad@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3c4e744f-c313-e195-af93-a22382c81bb6@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 12:22:34PM +0100, Krzysztof Kozlowski wrote:
-> On 23/12/2022 11:37, Cristian Marussi wrote:
-> 
-> >>>  
-> >>> +  protocol@12:
-> >>> +    type: object
-> >>> +    properties:
-> >>> +      reg:
-> >>> +        const: 0x12
-> >>> +
-> >>
-> >> Why? It did not got lost, it's already covered by pattern. If you refer
-> >> to particular warning, please paste it in commit msg. Otherwise it looks
-> >> incorrect.
-> >>
-> > 
-> > Yes indeed, but as a matter of fact it seemed to me that we used to add an
-> > entry and an example for all the currently published standard SCMI protocols,
-> > even though already covered by the patternProp (which covers also any
-> > custom-vendor protocol in the wild) and not sporting any additional
-> > custom properties (see protocol@18), but maybe this is just a unneeded wrong
-> > habit adding only cruft to the bindings.
-> > 
-> > If you think it does not add any value I can happily drop this, or
-> > limiting the addition just to the example (and/or drop equally the unneeded
-> > protocol@18 node too in this case).
-> 
-> Duplicating the node (once in properties, second in patternProperties)
-> is not needed. I am also not sure what would be the point to add to the
-> example - example does not have to be complete DTS for all cases, but
-> illustrate the binding and allow is to test it.
-> 
+On Tue, Jan 03, 2023 at 10:00:48AM +0100, Jiri Slaby wrote:
+> On 26. 12. 22, 7:21, Deepak R Varma wrote:
+> > The refcount_* APIs are designed to address known issues with the
+> > atomic_t APIs for reference counting. They provide following distinct
+> > advantages:
+> >     - protect the reference counters from overflow/underflow
+> >     - avoid use-after-free errors
+> >     - provide improved memory ordering guarantee schemes
+> >     - neater and safer.
+> > Hence, replace the atomic_* APIs by their equivalent refcount_t
+> > API functions.
+> >
+> > This patch proposal address the following warnings generated by
+> > the atomic_as_refcounter.cocci coccinelle script
+> > atomic_add_return(-1, ...)
+> ...
+> > --- a/drivers/tty/serial/dz.c
+> > +++ b/drivers/tty/serial/dz.c
+> ...
+> > @@ -400,18 +399,16 @@ static int dz_startup(struct uart_port *uport)
+> >   	struct dz_port *dport = to_dport(uport);
+> >   	struct dz_mux *mux = dport->mux;
+> >   	unsigned long flags;
+> > -	int irq_guard;
+> >   	int ret;
+> >   	u16 tmp;
+> >
+> > -	irq_guard = atomic_add_return(1, &mux->irq_guard);
+> > -	if (irq_guard != 1)
+> > +	refcount_inc(&mux->irq_guard);
+> > +	if (refcount_read(&mux->irq_guard) != 1)
+> >   		return 0;
+> >
+> > -	ret = request_irq(dport->port.irq, dz_interrupt,
+> > -			  IRQF_SHARED, "dz", mux);
+> > +	ret = request_irq(dport->port.irq, dz_interrupt, IRQF_SHARED, "dz", mux);
+>
+> How is this related to the above described change?
 
-Thanks, I'll drop this patch.
+No, it is not. My apologies. I must have joined the lines for improved readability
+and forgot to revert. I will restore this in next revision based on the feedback
+on the other patch of this series. OR I can include this change in the current
+change log as a "while at it..." statement. Would you advise me?
 
-Cristian
+Thank you,
+./drv
+
+>
+> --
+> js
+> suse labs
+>
+
 
