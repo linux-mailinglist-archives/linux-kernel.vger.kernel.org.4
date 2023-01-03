@@ -2,147 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601D665BC30
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E237E65BC33
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236921AbjACI0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
+        id S237033AbjACI1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:27:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjACI01 (ORCPT
+        with ESMTP id S230211AbjACI1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:26:27 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8331145;
-        Tue,  3 Jan 2023 00:26:26 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id x11so24023023qtv.13;
-        Tue, 03 Jan 2023 00:26:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TxY7lYagEltChXxjXpBI7TNvNH+bp0AemQt8uZEkx4g=;
-        b=WU9iVXYQB3f+21qGwwO6qq6QQcuE0MTy5AXxBp58A7Kqiq3D3nxenRYOU55KNG4Haz
-         hxpze0FK9/BpxerOrppratUXs9SeftOAhYedp1zicx/8HbhvFT1JL78Q29gdNvTdVeya
-         Fz5YB6R09/5HOInBNtImxR+mURxaOXk4ekLUWf+AjRdVbdjxdpHBgMhyJSnd+Acp3DPe
-         ExHZ+zkZwSQ7MT5fLKiiyCgrJAzPd96yT9OpzEe36GV0e0t7nn8a01yxN6DH75HEQ+6j
-         xsHPRaGOwe2obeMRIslvLyYy2F/bRz370JufE37p5GrzlbnIADSLF4aLGeIGOCFVEn4N
-         Q22A==
-X-Gm-Message-State: AFqh2kopLq2u4jzQoWH6Tl2bvp/kihZiF/tExQbA/II4auO52PQA5iyO
-        X2l78PupZHuAHNtRJt2Z8L7mo16FMMb5qA==
-X-Google-Smtp-Source: AMrXdXsX5bpUtOjavY/iBODyUrtNmbXYW102JwUKMI3uk9w8FTabk1Brmvz93rhFuq3A83+K7R8S/w==
-X-Received: by 2002:ac8:7ef7:0:b0:3a8:1bae:4cc with SMTP id r23-20020ac87ef7000000b003a81bae04ccmr60310636qtc.55.1672734385720;
-        Tue, 03 Jan 2023 00:26:25 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05620a291000b007056237b41bsm1715551qkp.67.2023.01.03.00.26.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:26:25 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-45c11d1bfc8so427191537b3.9;
-        Tue, 03 Jan 2023 00:26:25 -0800 (PST)
-X-Received: by 2002:a81:1b0a:0:b0:37e:6806:a5f9 with SMTP id
- b10-20020a811b0a000000b0037e6806a5f9mr5025447ywb.47.1672734384919; Tue, 03
- Jan 2023 00:26:24 -0800 (PST)
+        Tue, 3 Jan 2023 03:27:06 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA8EDF87;
+        Tue,  3 Jan 2023 00:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672734425; x=1704270425;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5beijWPU1uPpW8czZDjIwlVtrcesTLaWCl4YOM+jLzw=;
+  b=IEwEQTC7arDaWA5x0kJMJ95s4YHWpIRNZljA0aq2sjxCzfscuM0Hr6Yg
+   gYjV4oelWyMyZksYdZPrx7h+Krltgp3UyXuSfgKJ7GJAR6fyT4cXUjgQd
+   xoQEWsIUnOQqfR3GswyLTvMXxIggrGYR640PPOZTuwDM36Xg/2cTyarkC
+   dVubaAziBVPjg/VkY4zSS4bKYN8DrInF3dwd3rvmw0QK6A/xoYd54BY6p
+   DtNAF2zaDKKp73B3EwjKv2hk88pGvcpkYzwPaUra4i77W+zvupOkosubq
+   ZkrLEwnOszJfdhI1bgGdjixzNlhqKST4o8RSYCx1/U4zhsxXZTYz9DQOh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="407868363"
+X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
+   d="scan'208";a="407868363"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 00:27:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="983494958"
+X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
+   d="scan'208";a="983494958"
+Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.254.213.238]) ([10.254.213.238])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 00:27:03 -0800
+Message-ID: <44e77307-8c49-e350-49e4-d5fa3261db27@intel.com>
+Date:   Tue, 3 Jan 2023 16:26:59 +0800
 MIME-Version: 1.0
-References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com> <20221221210917.458537-5-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221221210917.458537-5-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Jan 2023 09:26:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUv41kssEnat9PFTcb11sYCP3_9p=5hQFAVRqRa-G7gSg@mail.gmail.com>
-Message-ID: <CAMuHMdUv41kssEnat9PFTcb11sYCP3_9p=5hQFAVRqRa-G7gSg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] power: reset: Add new driver for RZ/V2M PWC poweroff
-To:     fabrizio.castro.jz@renesas.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: [PATCH v10 000/108] KVM TDX basic feature support
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+From:   "Wang, Lei" <lei4.wang@intel.com>
+In-Reply-To: <cover.1667110240.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabrizio,
+On 10/30/2022 2:22 PM, isaku.yamahata@intel.com wrote:
 
-On Wed, Dec 21, 2022 at 10:09 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> The RZ/V2M PWC IP controls external power supplies and therefore
-> can turn the power supplies off when powering down the system.
->
-> Add driver to poweroff the system.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> ---
->
-> v1->v2: Dropped OF match table and syscon as a result of the change in
->         DT model
+> ** Detecting the TDX module readiness.
+> TDX host patch series implements the detection of the TDX module availability
+> and its initialization so that KVM can use it.  Also it manages Host KeyID
+> (HKID) assigned to guest TD.
+> The assumed APIs the TDX host patch series provides are
+> - int seamrr_enabled()
+>   Check if required cpu feature (SEAM mode) is available. This only check CPU
+>   feature availability.  At this point, the TDX module may not be ready for KVM
+>   to use.
+> - int init_tdx(void);
+>   Initialization of TDX module so that the TDX module is ready for KVM to use.
+> - const struct tdsysinfo_struct *tdx_get_sysinfo(void);
+>   Return the system wide information about the TDX module.  NULL if the TDX
+>   isn't initialized.
+> - u32 tdx_get_global_keyid(void);
+>   Return global key id that is used for the TDX module itself.
+> - int tdx_keyid_alloc(void);
+>   Allocate HKID for guest TD.
+> - void tdx_keyid_free(int keyid);
+>   Free HKID for guest TD.
 
-Thanks for your patch!
-
-> --- /dev/null
-> +++ b/drivers/power/reset/rzv2m-pwc-poweroff.c
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2022 Renesas Electronics Corporation
-> + *
-> + * Reset driver for Renesas RZ/V2M External Power Sequence Controller (PWC)
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/io.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reboot.h>
-> +#include "../../mfd/rzv2m-pwc.h"
-> +
-> +#define PWC_PWCRST_RSTSOFTAX           0x1
-> +#define PWC_PWCCKEN_ENGCKMAIN          0x1
-> +#define PWC_PWCCTL_PWOFF               0x1
-> +
-> +struct rzv2m_pwc_poweroff_priv {
-> +       void __iomem *base;
-> +       struct device *dev;
-> +};
-> +
-> +static int rzv2m_pwc_poweroff(struct sys_off_data *data)
-> +{
-> +       struct rzv2m_pwc_poweroff_priv *priv =
-> +               (struct rzv2m_pwc_poweroff_priv *)data->cb_data;
-
-No need for this cast.
-
-> +
-> +       writel(PWC_PWCRST_RSTSOFTAX, priv->base + PWC_PWCRST);
-> +       writel(PWC_PWCCKEN_ENGCKMAIN, priv->base + PWC_PWCCKEN);
-> +       writel(PWC_PWCCTL_PWOFF, priv->base + PWC_PWCCTL);
-> +
-> +       mdelay(150);
-> +
-> +       dev_err(priv->dev, "Failed to power off the system");
-> +
-> +       return NOTIFY_DONE;
-> +}
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+tdx_enable() is introduced by TDX host patch series and used in patch 5, should
+it be added to this list too?
