@@ -2,197 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA73365C585
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF2D65C587
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238299AbjACR5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S238331AbjACR6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238285AbjACR5L (ORCPT
+        with ESMTP id S238323AbjACR5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:57:11 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C451057B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:57:08 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c7so25111418qtw.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 09:57:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ixGyFkrV0xqrkiJ3p7VqvfkszCi48OTsH11wl3xFQLU=;
-        b=sRUosVhssD0en5joF9vLLUpX8V0Mn5UlDYOilUJ2tyvRYgMexyinwnRJCc3npDcj9I
-         geM1NnHZAfGfSpvgKWqCzimVnD6QWlnqEenqostnemsBY4KDrX8lFXhtceyrzwT9moVs
-         Jc1VYidMjKKFAdRJEyu7HFp5pWDwhhcubFJ1g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ixGyFkrV0xqrkiJ3p7VqvfkszCi48OTsH11wl3xFQLU=;
-        b=3c1wBVbCqNMvejTbzAfEkCyfAq60HqMju4xnOh4RhLJf45dKzS0tiQwsUBmWaGZHi1
-         /JTbc8XlSOKbb3XTTYBl7bmPJ7k0zb0owcYORNSh6YNFOtrQR+RuEMiMLy4vS3LoafPy
-         ZG+eUDNw/X+FNzDJDBtzafcIzQKsmFcg09zcB7+8RmWsGHZSiJFWvWcbkqfgK9QBV4bI
-         3i/AmfATm/XxLgu36wDSvOKrnk3Zkp7oRN+sN53Uh0ZDaCt015M1GQ6Re1bdeLW2Ys3y
-         bTXnw+tBdOF7VPYPu7fBvYJ1CR3UzuOTh5yvkxh97I7mkWHSts/lZXUQhHYRcC5hQ0rC
-         J63Q==
-X-Gm-Message-State: AFqh2koOaTLKGzZU4HMowhHfKH2K6gj40OI/Xj0E0I6byAD2hhG78PBN
-        KKNVPaRPce2lTrvyrBisFMBpt7EMHgUYKTJR
-X-Google-Smtp-Source: AMrXdXv19UfqJyggz6tYWC0TuSnV2Pq7G45UznkmBJIcBdaSQp4fc0yOJ0tlHOvTs2CpB4BwE5SVhg==
-X-Received: by 2002:ac8:4602:0:b0:3ab:6312:f306 with SMTP id p2-20020ac84602000000b003ab6312f306mr64154599qtn.4.1672768626223;
-        Tue, 03 Jan 2023 09:57:06 -0800 (PST)
-Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id d21-20020ac86695000000b0038b684a1642sm19136842qtp.32.2023.01.03.09.57.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 09:57:05 -0800 (PST)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>, neeraj.iitr10@gmail.com
-Subject: [PATCH v3] srcu: Remove memory barrier "E" as it does not do anything
-Date:   Tue,  3 Jan 2023 17:56:54 +0000
-Message-Id: <20230103175654.1913192-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        Tue, 3 Jan 2023 12:57:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D0D11A07
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:57:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0007B8107B
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:57:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C139C433D2;
+        Tue,  3 Jan 2023 17:57:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672768658;
+        bh=hUZ2XDvLrwJ9FannznPjhaf3MRrc6OlAN+J+YQi66mg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VWe/pJ0Rk3yxk2m19wCaALmQUCxhnbQi+NVxW6/7FRhaZSCBvm1Lzy0Wa8KPVvU0E
+         4k/5NRa4jazSSKLEAl7WZl9WcA817NLvXoL8Qg6P/lV+JZhTAHwPxBRSBrdZVkm5h0
+         lrLE/k2emox8Kdejgrli77+/I+4QeUbxD06407yQIh36wEl2YZofrqKmuzEOVXeM1K
+         2vDqXCPDJEHPBhWDnBTwrXCsLKDID6l3lpS073aUw5VchrKqEAUpFfC1T9yjgdo1B1
+         7HpgObpOkDxbMW166fbPambmCw9PhWFighD1qCqobaJhhwvY/aeiJj81Dd0zfW8wzr
+         bHzVaa0m5tAOA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pClXb-00Ga8q-9m;
+        Tue, 03 Jan 2023 17:57:36 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     James Clark <james.clark@arm.com>, kvmarm@lists.linux.dev
+Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/1] KVM: arm64: PMU: Fix PMCR_EL0 reset value
+Date:   Tue,  3 Jan 2023 17:57:32 +0000
+Message-Id: <167276864513.3239355.2653412840294598299.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221209164446.1972014-1-james.clark@arm.com>
+References: <20221209164446.1972014-1-james.clark@arm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: james.clark@arm.com, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, will@kernel.org, catalin.marinas@arm.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a flip, we have a full memory barrier before srcu_idx is incremented.
+On Fri, 9 Dec 2022 16:44:45 +0000, James Clark wrote:
+> We noticed qemu failing to run because of an assert on our CI. I don't see the issue anymore with
+> this fix.
+> 
+> Applies to kvmarm/next (753d734f3f34)
+> 
+> Thanks
+> 
+> [...]
 
-The idea is we intend to order the first phase scan's read of lock
-counters with the flipping of the index.
+Applied to fixes, thanks!
 
-However, such ordering is already enforced because of the
-control-dependency between the 2 scans. We would be flipping the index
-only if lock and unlock counts matched.
+[1/1] KVM: arm64: PMU: Fix PMCR_EL0 reset value
+      commit: edb4929ea9ba48cd91e3867041f49e4c34d729ed
 
-But such match will not happen if there was a pending reader before the flip
-in the first place (observation courtesy Mathieu Desnoyers).
+Cheers,
 
-The litmus test below shows this:
-(test courtesy Frederic Weisbecker, Changes for ctrldep by Boqun/me):
-
-C srcu
-(*
- * bad condition: P0's first scan (SCAN1) saw P1's idx=0 LOCK count inc, though P1 saw flip.
- *
- * So basically, the ->po ordering on both P0 and P1 is enforced via ->ppo
- * (control deps) on both sides, and both P0 and P1 are interconnected by ->rf
- * relations. Combining the ->ppo with ->rf, a cycle is impossible.
- *)
-
-{}
-
-// updater
-P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-{
-        int lock1;
-        int unlock1;
-        int lock0;
-        int unlock0;
-
-        // SCAN1
-        unlock1 = READ_ONCE(*UNLOCK1);
-        smp_mb(); // A
-        lock1 = READ_ONCE(*LOCK1);
-
-        // FLIP
-        if (lock1 == unlock1) {   // Control dep
-                smp_mb(); // E    // Remove E and still passes.
-                WRITE_ONCE(*IDX, 1);
-                smp_mb(); // D
-
-                // SCAN2
-                unlock0 = READ_ONCE(*UNLOCK0);
-                smp_mb(); // A
-                lock0 = READ_ONCE(*LOCK0);
-        }
-}
-
-// reader
-P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-{
-        int tmp;
-        int idx1;
-        int idx2;
-
-        // 1st reader
-        idx1 = READ_ONCE(*IDX);
-        if (idx1 == 0) {         // Control dep
-                tmp = READ_ONCE(*LOCK0);
-                WRITE_ONCE(*LOCK0, tmp + 1);
-                smp_mb(); /* B and C */
-                tmp = READ_ONCE(*UNLOCK0);
-                WRITE_ONCE(*UNLOCK0, tmp + 1);
-        } else {
-                tmp = READ_ONCE(*LOCK1);
-                WRITE_ONCE(*LOCK1, tmp + 1);
-                smp_mb(); /* B and C */
-                tmp = READ_ONCE(*UNLOCK1);
-                WRITE_ONCE(*UNLOCK1, tmp + 1);
-        }
-}
-
-exists (0:lock1=1 /\ 1:idx1=1)
-
-This commit therefore removes memory barrier E, as memory barriers are not
-free, and clarifies the old comment.
-
-Co-developed-by: Frederic Weisbecker <frederic@kernel.org>
-Co-developed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-
----
-v1->v2: Update changelog, keep old comments.
-v2->v3: Moar changelog updates.
-
-
- kernel/rcu/srcutree.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 1c304fec89c0..0f9ba0f9fd12 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -983,15 +983,15 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
- static void srcu_flip(struct srcu_struct *ssp)
- {
- 	/*
--	 * Ensure that if this updater saw a given reader's increment
--	 * from __srcu_read_lock(), that reader was using an old value
--	 * of ->srcu_idx.  Also ensure that if a given reader sees the
--	 * new value of ->srcu_idx, this updater's earlier scans cannot
--	 * have seen that reader's increments (which is OK, because this
--	 * grace period need not wait on that reader).
-+	 * Control dependencies on both reader and updater side ensures that if
-+	 * this updater saw a given reader's increment from __srcu_read_lock(),
-+	 * that reader was using an old value of ->srcu_idx.  Also ensures that
-+	 * if a given reader sees the new value of ->srcu_idx, this updater's
-+	 * earlier scans cannot have seen that reader's increments (which is
-+	 * OK, because this grace period need not wait on that reader).
-+	 *
-+	 * So no need for an smp_mb() before incrementing srcu_idx.
- 	 */
--	smp_mb(); /* E */  /* Pairs with B and C. */
--
- 	WRITE_ONCE(ssp->srcu_idx, ssp->srcu_idx + 1);
- 
- 	/*
+	M.
 -- 
-2.39.0.314.g84b9a713c41-goog
+Without deviation from the norm, progress is not possible.
+
+
