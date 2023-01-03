@@ -2,232 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76ACD65C06C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B578065C071
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237019AbjACNGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
+        id S237569AbjACNGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:06:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237630AbjACNGS (ORCPT
+        with ESMTP id S237649AbjACNGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:06:18 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB4FC32;
-        Tue,  3 Jan 2023 05:06:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672751173; x=1704287173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yBgdLlMhzv1mrtl8tYaZhXUeBm8whQ2iPQRyDqANgVc=;
-  b=RPspZVpwIhZbVmn08VDAmLukQ+2VEQIzIYAWSje4hjlPFqaGywf2KsJ2
-   dsDCnxlfxfCm8MS3QbhVNCwHfcKQXBabov7NpFlj9CU8B90m26xWX6Cir
-   lbMBOq7HffsVguCsflIzJdD2Vkas8YjejZZdmFjgBd4yQa8cEd1gN8R2x
-   YmUEke2NTT0skW+8dMaizjUOIwNAS/GNf2+nFeqzO1ssP4Jcg7fxsf9tc
-   qazevkvQew6OpgPhF/cIXanjGvY7eVzn6aJ1bjOMOSYeCwwE8BIJBmef8
-   qOS9XbShTsozGuJUzDLypU6U4wabvBifLc2nxP/6EDX2iwC4+aQ+LquN+
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="305159061"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="305159061"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 05:06:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="632453505"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="632453505"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 03 Jan 2023 05:06:00 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pCgzP-003tTQ-0C;
-        Tue, 03 Jan 2023 15:05:59 +0200
-Date:   Tue, 3 Jan 2023 15:05:58 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     pavel@ucw.cz, lee@kernel.org, matthias.bgg@gmail.com,
-        chiaen_wu@richtek.com, cy_huang@richtek.com,
-        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        szunichen@gmail.com, Alice Chen <alice_chen@richtek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v15 RESEND 2/2] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-Message-ID: <Y7QoNpbFRsK3bW6V@smile.fi.intel.com>
-References: <cover.1672728620.git.chiaen_wu@richtek.com>
- <c1c6d3e51c93c15620ded0e2a53dcbe5de066ec9.1672728620.git.chiaen_wu@richtek.com>
+        Tue, 3 Jan 2023 08:06:50 -0500
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AF0267E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 05:06:49 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id c124so32939901ybb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 05:06:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cg9NBeuSYbmn+DA79/KjX0RMB03P0+uV8JtF3hf3uM8=;
+        b=3sz9FlCvhHPwLkdpXYnFPsXdtgUnAr2DElPd0GUC3tqwaQ1kQbOovSBWeNoDKcRTi3
+         fLSTrOZP28Rd0rTooBRFwk2DEgG1RxZPt1SIWJi9JofDutM0tvJrUhlqSgUUllKNbs6E
+         o8HvDuQtw8Qq9aXRcG/HQxmCEXW1J4y1AbUr8jqKFfj326YHvrldqfUrCW396gpAuxq+
+         ZXxoWPMpq2pTtkhFEphZuEVY/RO5aUlcEjxL0fj3b/RQA+unG3BKB5YH2Pdsm9hKB5I/
+         rcni2OQtmhWEazE4sO8wK/i3lNdw/BUIsFN1tHlUt/VfQv/IFX37Xxie0s7ZvZ3iRfo7
+         pYug==
+X-Gm-Message-State: AFqh2kqnUg6TLifGhC56iG8oyGyFr0mQpnmUwcfwWjL0PelY0J6SppAj
+        0EuDyuCZrF8hTgBQVETii19pKzQhmY3g0Q==
+X-Google-Smtp-Source: AMrXdXt3BIXLP6+e4et9TPLHQcFYXg4gop5FlVVZXDjYAOJq/77VIsqumXEZL+P1iTHaQjJpUP1VSw==
+X-Received: by 2002:a25:3c85:0:b0:70c:419a:faf0 with SMTP id j127-20020a253c85000000b0070c419afaf0mr36983204yba.49.1672751208437;
+        Tue, 03 Jan 2023 05:06:48 -0800 (PST)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id n78-20020a374051000000b006f9ddaaf01esm21887473qka.102.2023.01.03.05.06.47
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 05:06:48 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id b16so33050117yba.0
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 05:06:47 -0800 (PST)
+X-Received: by 2002:a25:3143:0:b0:77a:b5f3:d0ac with SMTP id
+ x64-20020a253143000000b0077ab5f3d0acmr2508697ybx.202.1672751207466; Tue, 03
+ Jan 2023 05:06:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1c6d3e51c93c15620ded0e2a53dcbe5de066ec9.1672728620.git.chiaen_wu@richtek.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221229075323.1394010-1-linmq006@gmail.com> <CAMuHMdWFyKA7nUojivvTwWcmxaiUQifRRB=Kn1q-qzmn20Xkuw@mail.gmail.com>
+ <eaedf019-349c-c686-0f23-093371b4b61f@cambridgegreys.com> <a098244c-fe15-2c88-5c02-59aaa6cc3c6d@gmail.com>
+In-Reply-To: <a098244c-fe15-2c88-5c02-59aaa6cc3c6d@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 Jan 2023 14:06:35 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVYCsGDGeub8-mduNw45qX_tMr0sZ5oMNfJ_eqFnPgs4g@mail.gmail.com>
+Message-ID: <CAMuHMdVYCsGDGeub8-mduNw45qX_tMr0sZ5oMNfJ_eqFnPgs4g@mail.gmail.com>
+Subject: Re: [PATCH] um: vector: Fix memory leak in vector_config
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Richard Weinberger <richard@nod.at>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 03:00:09PM +0800, ChiaEn Wu wrote:
-> From: Alice Chen <alice_chen@richtek.com>
-> 
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
-> LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
-> 
-> Add support for the MT6370 Flash LED driver. Flash LED in MT6370
-> has 2 channels and support torch/strobe mode.
+Hi Miaoqian,
 
-...
+On Tue, Jan 3, 2023 at 1:17 PM Miaoqian Lin <linmq006@gmail.com> wrote:
+> On 2023/1/3 18:28, Anton Ivanov wrote:
+> > On 03/01/2023 08:00, Geert Uytterhoeven wrote:
+> >> On Thu, Dec 29, 2022 at 8:53 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+> >>> kstrdup() return newly allocated copy of the string.
+> >>> Call kfree() to release the memory when after use.
+> >>>
+> >>> Fixes: 49da7e64f33e ("High Performance UML Vector Network Driver")
+> >>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> >> Thanks for your patch!
+> >>
+> >>> --- a/arch/um/drivers/vector_kern.c
+> >>> +++ b/arch/um/drivers/vector_kern.c
+> >>> @@ -765,6 +765,7 @@ static int vector_config(char *str, char **error_out)
+> >>>
+> >>>          parsed = uml_parse_vector_ifspec(params);
+> >>>
+> >>> +       kfree(params);
+> >> Are you sure the memory pointed to by "params" is no longer used?
+> >> "parsed" seems to contain pointers pointing to (parts of) the string
+> >> pointed to by "params", so it cannot be freed.
+> >
+> > +1.
+> >
+> > I was just about to send the same comment.
+> >
+> Oh yes, thanks for spotting this. We should only perform release when uml_parse_vector_ifspec() fails (returns NULL). In this situation, 'params' is no longer used. Do you agree?
 
->  obj-$(CONFIG_LEDS_RT8515)	+= leds-rt8515.o
->  obj-$(CONFIG_LEDS_SGM3140)	+= leds-sgm3140.o
-> +obj-$(CONFIG_LEDS_MT6370_FLASH)	+= leds-mt6370-flash.o
+Yes, that sounds fine to me.
 
-Can it be kept ordered?
+Gr{oetje,eeting}s,
 
-...
+                        Geert
 
-> +struct mt6370_priv {
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> +	struct device *dev;
-> +	struct regmap *regmap;
-
-Do you need both of them?
-
-> +	struct mutex lock;
-> +	unsigned int fled_strobe_used;
-> +	unsigned int fled_torch_used;
-> +	unsigned int leds_active;
-> +	unsigned int leds_count;
-> +	struct mt6370_led leds[];
-> +};
-
-...
-
-> +static int _mt6370_flash_brightness_set(struct led_classdev_flash *fl_cdev,
-> +					u32 brightness)
-> +{
-> +	struct mt6370_led *led = to_mt6370_led(fl_cdev, flash);
-> +	struct mt6370_priv *priv = led->priv;
-> +	struct led_flash_setting *setting = &fl_cdev->brightness;
-> +	u32 val = (brightness - setting->min) / setting->step;
-> +	int ret, i;
-> +
-> +	if (led->led_no == MT6370_LED_JOINT) {
-> +		u32 flevel[MT6370_MAX_LEDS];
-> +
-> +		flevel[0] = val / 2;
-> +		flevel[1] = val - flevel[0];
-> +		for (i = 0; i < MT6370_MAX_LEDS; i++) {
-> +			ret = regmap_update_bits(priv->regmap,
-> +						 MT6370_REG_FLEDISTRB(i),
-> +						 MT6370_ISTROBE_MASK, flevel[i]);
-> +			if (ret)
-> +				break;
-> +		}
-> +
-> +		return ret;
-
-> +	} else {
-
-Redundant 'else', just use }.
-
-> +		return regmap_update_bits(priv->regmap,
-> +					  MT6370_REG_FLEDISTRB(led->led_no),
-> +					  MT6370_ISTROBE_MASK, val);
-
-> +	}
-
-No need.
-
-> +}
-
-...
-
-> +	mutex_lock(&priv->lock);
-> +	ret = regmap_update_bits(priv->regmap, MT6370_REG_STRBTO,
-> +				 MT6370_STRBTO_MASK, val);
-> +	mutex_unlock(&priv->lock);
-
-I'm wondering now if you are using regmap lock, if so, what is the difference
-between it and your mutex?
-
-Depends on the answer and code flow, maybe one of them can gone.
-
-...
-
-> +	strscpy(config->dev_name, lcdev->dev->kobj.name,
-
-Is it open coded dev_name()?
-
-> +		sizeof(config->dev_name));
-
-...
-
-> +	num = fwnode_property_count_u32(init_data->fwnode, "led-sources");
-> +	if (num < 1 || num > MT6370_MAX_LEDS)
-
-Again, is the second part critical?
-
-> +		return dev_err_probe(priv->dev, -EINVAL,
-> +				     "Not specified or wrong number of led-sources\n");
-
-...
-
-> +	count = device_get_child_node_count(dev);
-> +	if (!count || count > MT6370_MAX_LEDS)
-
-Ditto.
-
-> +		return dev_err_probe(dev, -EINVAL,
-> +		       "No child node or node count over max led number %zu\n", count);
-
-...
-
-> +	device_for_each_child_node(dev, child) {
-> +		struct mt6370_led *led = priv->leds + i;
-> +		struct led_init_data init_data = { .fwnode = child, };
-> +
-> +		led->priv = priv;
-> +		led->default_state = led_init_default_state_get(init_data.fwnode);
-> +
-> +		ret = mt6370_init_flash_properties(led, &init_data);
-> +		if (ret)
-
-Mind reference count.
-
-> +			return ret;
-> +
-> +		ret = mt6370_led_register(dev, led, &init_data);
-> +		if (ret)
-
-Ditto.
-
-> +			return ret;
-> +
-> +		i++;
-> +	}
-
-...
-
-> +static const struct of_device_id mt6370_led_of_id[] = {
-> +	{ .compatible = "mediatek,mt6370-flashlight" },
-
-> +	{ /* sentinel */ },
-
-A comma is not needed at the terminating entry.
-
-> +};
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
