@@ -2,168 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6200565B9DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 04:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC5065B9DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 04:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236616AbjACDum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 22:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
+        id S236655AbjACDvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 22:51:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjACDuk (ORCPT
+        with ESMTP id S236660AbjACDvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 22:50:40 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B76E26FC;
-        Mon,  2 Jan 2023 19:50:37 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3033dwKf008462;
-        Mon, 2 Jan 2023 19:50:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0220;
- bh=Dk2UWTXHJ3uZtt1XlZoFNQHxMPmImW71MwcUgswlzaU=;
- b=I7Xo42A/f2iAumjUVtbw4ZOfPxXIzj5Q0onxDFTpsCL26A+WegGgX0qMfnbXJQQhrFLa
- Zc2PfJfHtmMTXbNxcksz64GUcdZgZnNO962bWJqxJ32li+/CBbvf90cgSAH47vrl8m0k
- k9Qyo43DqQDVdljs3YI8maF1tmHyCdd79hKSLRCYY2v/qVjarQtehDspsii7MhVwAlum
- mHMLGGVuYJ6XVuO43aEisiSMsgP8gn8sRReauJOVXtVfiqWUjLn9QDZYBA5ZgJR5l4ou
- s3mybZP42zEgZrwCdv/2zaPfGX+6QTkNoSwvdcdO97O63nyedM2MjdoIXu+xGyLwK3ln eA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3mtkauv8te-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 02 Jan 2023 19:50:23 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 2 Jan
- 2023 19:50:22 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Mon, 2 Jan 2023 19:50:22 -0800
-Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
-        by maili.marvell.com (Postfix) with ESMTP id 0FA8B3F7084;
-        Mon,  2 Jan 2023 19:50:18 -0800 (PST)
-From:   Geetha sowjanya <gakula@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <kuba@kernel.org>, <pabeni@redhat.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <sbhatta@marvell.com>, <hkelam@marvell.com>,
-        <gakula@marvell.com>, <sgoutham@marvell.com>
-Subject: [v2 PATCH net] octeontx2-pf: Fix lmtst ID used in aura free
-Date:   Tue, 3 Jan 2023 09:20:12 +0530
-Message-ID: <20230103035012.15924-1-gakula@marvell.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 2 Jan 2023 22:51:50 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5196B1AE;
+        Mon,  2 Jan 2023 19:51:49 -0800 (PST)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+        by gnuweeb.org (Postfix) with ESMTPSA id 9A1217E444;
+        Tue,  3 Jan 2023 03:51:48 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1672717908;
+        bh=QYJzaVWEN9rJqXhGfvYSckZDzJI7KSe/z6dryTHgH4k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JxqhMMS95GgOfb9fLwje/ktE3eLW6QdDFaZX5Kb1EUSkEEFHigAKR8X4gOokcDomp
+         620fDZ22zZpgsCVBJLJqXcbh03sE+5YoulmPR99WulRLeLDhAajTFK5zYkGr4O/izh
+         MMDaawc/E2/D6QQNF3gToDKdjoA7wsBDO9qPZEVlUMo604i17jYFfl+raJgluJKTON
+         MKHy+1tLTZ8kVYWyhm0DdXxz/GdHX3fcy3D18fB1A2/rRML0DNwmOeHJNIkGVbvZwi
+         inBSEbAhulZgvIMxmVLx4aCxifMrHlf0h2eTaLR07CLFMHkF2cnr7pADDlp7ZqfaUe
+         zPEMe6Xb0RWyQ==
+Received: by mail-lf1-f48.google.com with SMTP id 1so44023177lfz.4;
+        Mon, 02 Jan 2023 19:51:48 -0800 (PST)
+X-Gm-Message-State: AFqh2kpbKlRuypGvuyLb8mLEzuVN/LvqHQAGe1HKM8WGkEJb6aSQ58wc
+        BSghpxIkI+p29jAfh6aB1LhcyGwqweXnoeeSq+M=
+X-Google-Smtp-Source: AMrXdXuzaNFgikwUSNWt0817iguzQbXD08dVoevW9eoI/uBjB4kQLl4/vK0FCOJ0JrJ2xjpstQ+HSOg8ncxM52UP9t8=
+X-Received: by 2002:a05:6512:34d3:b0:4cb:c78:1895 with SMTP id
+ w19-20020a05651234d300b004cb0c781895mr967155lfr.83.1672717906547; Mon, 02 Jan
+ 2023 19:51:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: cj5fMaFhr0flZ9wZDZjuwxTV1v2A6jmF
-X-Proofpoint-ORIG-GUID: cj5fMaFhr0flZ9wZDZjuwxTV1v2A6jmF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_14,2022-12-30_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221222035134.3467659-1-ammar.faizi@intel.com>
+ <20221222043452.GB29086@1wt.eu> <20221222134615.3535422-1-ammar.faizi@intel.com>
+ <20221227062640.GA5337@1wt.eu> <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
+ <20221227184902.GA6287@1wt.eu> <23e84c59-4f2c-01b4-5b8a-80af39a1d761@gnuweeb.org>
+ <20221228133513.GA7457@1wt.eu> <39d68044-2641-75da-929a-f5e852f0a3d0@gnuweeb.org>
+In-Reply-To: <39d68044-2641-75da-929a-f5e852f0a3d0@gnuweeb.org>
+From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Date:   Tue, 3 Jan 2023 10:51:35 +0700
+X-Gmail-Original-Message-ID: <CAOG64qOT6wa+ShCuV3wM0QYy6TBOYap8xoAbUBU5DM_bhdafYg@mail.gmail.com>
+Message-ID: <CAOG64qOT6wa+ShCuV3wM0QYy6TBOYap8xoAbUBU5DM_bhdafYg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        VNLX Kernel Department <kernel@vnlx.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current code uses per_cpu pointer to get the lmtst_id mapped to
-the core on which aura_free() is executed. Using per_cpu pointer
-without preemption disable causing mismatch between lmtst_id and
-core on which pointer gets freed. This patch fixes the issue by
-disabling preemption around aura_free.
+On Thu, Dec 29, 2022 at 6:42 PM Ammar Faizi wrote:
+> On 12/28/22 8:35 PM, Willy Tarreau wrote:
+> > It gives me the correct code for x86_64 and i586. I don't know if other
+> > architectures will want to add a prologue. I tried with "naked" but it's
+> > ignored by the compiler since the function is not purely asm. Not very
+> > important but given that we already have everything to perform our calls
+> > it would make sense to stay on this. By the way, for the sake of
+> > consistency with other syscalls, I do think the function (or label if
+> > we can't do otherwise) should be called "sys_rt_sigreturn" as it just
+> > performs a syscall.
+>
+> Will call that 'sys_rt_sigreturn' in the next series.
 
-Fixes: ef6c8da71eaf ("octeontx2-pf: cn10K: Reserve LMTST lines per core")
-Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
-Signed-off-by: Geetha sowjanya <gakula@marvell.com>
----
-v1-v2:
-- Moved the RVU AF driver fix to different patch.
+From glibc source code says:
+GDB needs some intimate knowledge about it to recognize them as signal
+trampolines, and make backtraces through signal handlers work right.
+Important are both the names (__restore_rt) and the exact instruction
+sequence.
 
- .../marvell/octeontx2/nic/otx2_common.c       | 30 +++++++++++++------
- 1 file changed, 21 insertions(+), 9 deletions(-)
+link: https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/x86_64/sigaction.c;h=4e6d9cc32e1e18746726fa430d092de9a19ba6c6;hb=b4a5d26d8835d972995f0a0a2f805a8845bafa0b#l34
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index 9e10e7471b88..88f8772a61cd 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -1012,6 +1012,7 @@ static void otx2_pool_refill_task(struct work_struct *work)
- 	rbpool = cq->rbpool;
- 	free_ptrs = cq->pool_ptrs;
- 
-+	get_cpu();
- 	while (cq->pool_ptrs) {
- 		if (otx2_alloc_rbuf(pfvf, rbpool, &bufptr)) {
- 			/* Schedule a WQ if we fails to free atleast half of the
-@@ -1031,6 +1032,7 @@ static void otx2_pool_refill_task(struct work_struct *work)
- 		pfvf->hw_ops->aura_freeptr(pfvf, qidx, bufptr + OTX2_HEAD_ROOM);
- 		cq->pool_ptrs--;
- 	}
-+	put_cpu();
- 	cq->refill_task_sched = false;
- }
- 
-@@ -1368,6 +1370,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
- 	if (err)
- 		goto fail;
- 
-+	get_cpu();
- 	/* Allocate pointers and free them to aura/pool */
- 	for (qidx = 0; qidx < hw->tot_tx_queues; qidx++) {
- 		pool_id = otx2_get_pool_idx(pfvf, AURA_NIX_SQ, qidx);
-@@ -1376,18 +1379,24 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
- 		sq = &qset->sq[qidx];
- 		sq->sqb_count = 0;
- 		sq->sqb_ptrs = kcalloc(num_sqbs, sizeof(*sq->sqb_ptrs), GFP_KERNEL);
--		if (!sq->sqb_ptrs)
--			return -ENOMEM;
-+		if (!sq->sqb_ptrs) {
-+			err = -ENOMEM;
-+			goto err_mem;
-+		}
- 
- 		for (ptr = 0; ptr < num_sqbs; ptr++) {
--			if (otx2_alloc_rbuf(pfvf, pool, &bufptr))
--				return -ENOMEM;
-+			err = otx2_alloc_rbuf(pfvf, pool, &bufptr);
-+			if (err)
-+				goto err_mem;
- 			pfvf->hw_ops->aura_freeptr(pfvf, pool_id, bufptr);
- 			sq->sqb_ptrs[sq->sqb_count++] = (u64)bufptr;
- 		}
- 	}
- 
--	return 0;
-+err_mem:
-+	put_cpu();
-+	return err ? -ENOMEM : 0;
-+
- fail:
- 	otx2_mbox_reset(&pfvf->mbox.mbox, 0);
- 	otx2_aura_pool_free(pfvf);
-@@ -1426,18 +1435,21 @@ int otx2_rq_aura_pool_init(struct otx2_nic *pfvf)
- 	if (err)
- 		goto fail;
- 
-+	get_cpu();
- 	/* Allocate pointers and free them to aura/pool */
- 	for (pool_id = 0; pool_id < hw->rqpool_cnt; pool_id++) {
- 		pool = &pfvf->qset.pool[pool_id];
- 		for (ptr = 0; ptr < num_ptrs; ptr++) {
--			if (otx2_alloc_rbuf(pfvf, pool, &bufptr))
--				return -ENOMEM;
-+			err = otx2_alloc_rbuf(pfvf, pool, &bufptr);
-+			if (err)
-+				goto err_mem;
- 			pfvf->hw_ops->aura_freeptr(pfvf, pool_id,
- 						   bufptr + OTX2_HEAD_ROOM);
- 		}
- 	}
--
--	return 0;
-+err_mem:
-+	put_cpu();
-+	return err ? -ENOMEM : 0;
- fail:
- 	otx2_mbox_reset(&pfvf->mbox.mbox, 0);
- 	otx2_aura_pool_free(pfvf);
--- 
-2.25.1
+glibc does this:
 
+   "    .type __" #name ",@function\n" \
+   "__" #name ":\n"                    \
+   "    movq $" #syscall ", %rax\n"    \
+   "    syscall\n"                     \
+
+where
+
+   #name = "restore_rt"
+   #syscall = __NR_rt_sigreturn
+
+I think it should be called "__restore_rt" instead of "sys_rt_sigreturn"?
+glibc also has unwind information, but we probably don't need to care
+with that much
