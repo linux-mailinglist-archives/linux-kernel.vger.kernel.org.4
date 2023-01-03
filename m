@@ -2,119 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B36665BA98
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 07:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251B165BA9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 07:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjACGI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 01:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
+        id S236747AbjACGLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 01:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjACGI1 (ORCPT
+        with ESMTP id S230124AbjACGLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 01:08:27 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5E6B4BD
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 22:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672726106; x=1704262106;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PguATooUdI/myFRIH136evSbjRtn9H5zMiAKwOG0Ioo=;
-  b=GD5cC9BtawLKailPNUamljJCm7jYn3a3SuXpN6Fkgr8sNad9Lm6uWCJ9
-   /7HZTRm/gLiNbjnyXDx9xMCkAH/5RAD/PFfW8jOwYy8ugNNI80rBUkXKM
-   Wa1TmTXlO7/uz+vqHscLleSTgtdj1GcQqN+AehaaSYHOxOjqtoGH9tANy
-   Si+AoPd/4cxbntRycSurjuQXcSUeidqmBqWa6S+pis598ONtv0OXjeain
-   6zhdcFuvIifS9QsIo3+1SOQdNdkca17E1AeGq+jDviVkBUm7zU8cMsvTy
-   YIe0GICuixyPwmn+N3byLurMzrxumvO58GxWk5Uy5lPu+iF6COZ0WABz/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="305098561"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="305098561"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 22:08:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="983465823"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="983465823"
-Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Jan 2023 22:08:24 -0800
-Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pCaTI-000Rpx-06;
-        Tue, 03 Jan 2023 06:08:24 +0000
-Date:   Tue, 03 Jan 2023 14:07:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- d00dd2f2645dca04cf399d8fc692f3f69b6dd996
-Message-ID: <63b3c622.J6Rrl0ByF0IiwgZd%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 3 Jan 2023 01:11:08 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB2795B8
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 22:11:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1672726250; bh=0QiT1nP/zMPKUUDkAaMQ9yUdD8F2H0QNgooG7N7zyYo=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=CGYs3/tiizCf+/L3lXkL0NWpc0RhDBAuqvsTgaTwyzT14WUXuzEuZoRfol0zCB+Qw
+         4exrqcEUM+8ZxNgVz0czUIghW6dOHz87DaS152oVZ5z4bfBDeUqkwegyJxivA7oefq
+         CkWPg3CsS5yg+wqNqkjkLzZy4K9FKL3R7bh9gI8c=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Tue,  3 Jan 2023 07:10:50 +0100 (CET)
+X-EA-Auth: CzIsRrexWLW7eUEvE38Rmurn8QV0CbPV93zNoPpkz0v0X1ipkUmOKjGxx7AZJk/AO0tNh0AGIiqB5iQKzPzEPAcyxOzDhIDX
+Date:   Tue, 3 Jan 2023 11:40:44 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Nicolai Stange <nicstange@gmail.com>,
+        Julia Lawall <Julia.Lawall@lip6.fr>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] drm/i915/fbc: Avoid full proxy f_ops for FBC debug
+ attributes
+Message-ID: <Y7PG5Hx5dDE7aHSx@qemulion>
+References: <Y6qmNW6cOHjGwn03@qemulion>
+ <Y6sn1BmhFJFssW0h@intel.com>
+ <Y6s0FSK9+F+/oKSf@qemulion>
+ <Y6wl9NhYZG5RjJL7@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <Y6wl9NhYZG5RjJL7@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: d00dd2f2645dca04cf399d8fc692f3f69b6dd996  x86/kexec: Fix double-free of elf header buffer
+On Wed, Dec 28, 2022 at 06:18:12AM -0500, Rodrigo Vivi wrote:
+> On Tue, Dec 27, 2022 at 11:36:13PM +0530, Deepak R Varma wrote:
+> > On Tue, Dec 27, 2022 at 12:13:56PM -0500, Rodrigo Vivi wrote:
+> > > On Tue, Dec 27, 2022 at 01:30:53PM +0530, Deepak R Varma wrote:
+> > > > Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
+> > > > function adds the overhead of introducing a proxy file operation
+> > > > functions to wrap the original read/write inside file removal protection
+> > > > functions. This adds significant overhead in terms of introducing and
+> > > > managing the proxy factory file operations structure and function
+> > > > wrapping at runtime.
+> > > > As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
+> > > > with debugfs_create_file_unsafe() is suggested to be used instead.  The
+> > > > DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
+> > > > debugfs_file_put() wrappers to protect the original read and write
+> > > > function calls for the debug attributes. There is no need for any
+> > > > runtime proxy file operations to be managed by the debugfs core.
+> > > >
+> > > > This Change is reported by the debugfs_simple_attr.cocci Coccinelle
+> > > > semantic patch.
+> > >
+> > > I just checked here with
+> > > $ make coccicheck M=drivers/gpu/drm/i915/ MODE=context COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
+> >
+> > Hello Rodrigo,
+> > Thank you so much for your review and feedback on the patch proposal.
+> >
+> > >
+> > > The part reported by the this script is the s/SIMPLE/DEBUGFS
+> > > but the change to the unsafe option is not.
+> >
+> > If you look at the original commit of this coccinelle file, it calls out the
+> > need for pairing debugfs_create_file_unsafe() as well. Please review this
+> >
+> > commitID: 5103068eaca2: ("debugfs, coccinelle: check for obsolete DEFINE_SIMPLE_ATTRIBUTE() usage")
+>
+> +Nicolai and Julia.
+>
+> It looks like coccinelle got right the
+> - DEFINE_SIMPLE_ATTRIBUTE(dsa_fops, dsa_get, dsa_set, dsa_fmt);
+> + DEFINE_DEBUGFS_ATTRIBUTE(dsa_fops, dsa_get, dsa_set, dsa_fmt);
+>
+> but it failed badly on
+> - debugfs_create_file(name, mode, parent, data, &dsa_fops)
+> + debugfs_create_file_unsafe(name, mode, parent, data, &dsa_fops)
+>
+> >
+> > Based on my review of the code, the functions debugfs_create_file() and
+> > debugfs_create_file_unsafe(), both internally call __debugfs_create_file().
+> > However, they pass debugfs_full_proxy_file_operations and
+> > debugfs_open_proxy_file_operations respectively to it. The former represents the
+> > full proxy factory, where as the later one is lightweight open proxy
+> > implementation of the file operations structure.
+> >
+> > >
+> > > This commit message is not explaining why the unsafe is the suggested
+> > > or who suggested it.
+> >
+> > If you find the response above accurate, I will include these details about
+> > the _unsafe() function in my commit message in v2.
+> >
+> > >
+> > > If you remove the unsafe part feel free to resend adding:
+> >
+> > Please confirm you still believe switching to _unsafe() is not necessary.
+>
+> Based on the coccinelle commit it looks like you are right, but cocinelle
+> just failed to detect the case. Let's see what Nicolai and Julia respond
+> before we move with any patch here.
 
-elapsed time: 723m
+Hello Nicolai and Julia,
+Can you please review this proposed patch and the feedback comments from Rodrigo
+please?
 
-configs tested: 37
-configs skipped: 74
+Thank you,
+./drv
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>
+> >
+> > >
+> > > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> > > (to both patches, this and the drrs one.
+> > >
+> > > Also, it looks like you could contribute with other 2 patches:
+> > > drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:64:0-23: WARNING: pxp_terminate_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+> > > drivers/gpu/drm/i915/gvt/debugfs.c:150:0-23: WARNING: vgpu_scan_nonprivbb_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+> >
+> > Yes, these are on my list. Was waiting for a feedback on the first submission
+> > before I send more similar patches.
+> >
+> > Appreciate your time and the feedback.
+> >
+> >
+> > Regards,
+> > ./drv
+> >
+> > >
+> > > >
+> > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > > ---
+> > > >  drivers/gpu/drm/i915/display/intel_fbc.c | 12 ++++++------
+> > > >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > > >
+> > > > diff --git a/drivers/gpu/drm/i915/display/intel_fbc.c b/drivers/gpu/drm/i915/display/intel_fbc.c
+> > > > index b5ee5ea0d010..4b481e2f908b 100644
+> > > > --- a/drivers/gpu/drm/i915/display/intel_fbc.c
+> > > > +++ b/drivers/gpu/drm/i915/display/intel_fbc.c
+> > > > @@ -1809,10 +1809,10 @@ static int intel_fbc_debugfs_false_color_set(void *data, u64 val)
+> > > >  	return 0;
+> > > >  }
+> > > >
+> > > > -DEFINE_SIMPLE_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
+> > > > -			intel_fbc_debugfs_false_color_get,
+> > > > -			intel_fbc_debugfs_false_color_set,
+> > > > -			"%llu\n");
+> > > > +DEFINE_DEBUGFS_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
+> > > > +			 intel_fbc_debugfs_false_color_get,
+> > > > +			 intel_fbc_debugfs_false_color_set,
+> > > > +			 "%llu\n");
+> > > >
+> > > >  static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
+> > > >  				  struct dentry *parent)
+> > > > @@ -1821,8 +1821,8 @@ static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
+> > > >  			    fbc, &intel_fbc_debugfs_status_fops);
+> > > >
+> > > >  	if (fbc->funcs->set_false_color)
+> > > > -		debugfs_create_file("i915_fbc_false_color", 0644, parent,
+> > > > -				    fbc, &intel_fbc_debugfs_false_color_fops);
+> > > > +		debugfs_create_file_unsafe("i915_fbc_false_color", 0644, parent,
+> > > > +					   fbc, &intel_fbc_debugfs_false_color_fops);
+> > > >  }
+> > > >
+> > > >  void intel_fbc_crtc_debugfs_add(struct intel_crtc *crtc)
+> > > > --
+> > > > 2.34.1
+> > > >
+> > > >
+> > > >
+> >
+> >
+>
 
-gcc tested configs:
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-i386                 randconfig-a004-20230102
-i386                 randconfig-a003-20230102
-i386                 randconfig-a001-20230102
-x86_64                              defconfig
-i386                 randconfig-a002-20230102
-i386                                defconfig
-i386                 randconfig-a005-20230102
-i386                 randconfig-a006-20230102
-x86_64                               rhel-8.3
-x86_64               randconfig-a001-20230102
-x86_64               randconfig-a004-20230102
-x86_64               randconfig-a002-20230102
-x86_64               randconfig-a003-20230102
-x86_64               randconfig-a005-20230102
-x86_64               randconfig-a006-20230102
-x86_64                           allyesconfig
-i386                             allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                            allnoconfig
 
-clang tested configs:
-x86_64                          rhel-8.3-rust
-x86_64               randconfig-a011-20230102
-x86_64               randconfig-a014-20230102
-x86_64               randconfig-a012-20230102
-x86_64               randconfig-a013-20230102
-i386                 randconfig-a011-20230102
-x86_64               randconfig-a015-20230102
-x86_64               randconfig-a016-20230102
-i386                 randconfig-a014-20230102
-i386                 randconfig-a013-20230102
-i386                 randconfig-a012-20230102
-i386                 randconfig-a015-20230102
-i386                 randconfig-a016-20230102
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
