@@ -2,109 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1D465BB8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9C965BB8C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233050AbjACIBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
+        id S236894AbjACIB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236951AbjACIAy (ORCPT
+        with ESMTP id S236945AbjACIBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:00:54 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02465CF7
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:00:50 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id z12so24028224qtv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:00:50 -0800 (PST)
+        Tue, 3 Jan 2023 03:01:17 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358CEDF4C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:01:15 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso12282755wmq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:01:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AGe2dNB2O4DsKtHDiJtdu6ZDVemkFhiQQFAUL63hwnc=;
+        b=YgAGjs3aYWKp0FP4eoXSs3SrEkWUWSTVhLGesQBqLAKt2i2ZxYBIIeadHgt9Nibdo7
+         vGqtInYcEt6n2L7465PGlNGk/nMk18HMVm2LxrWDyj8yom5v4G5nr6J1BAKmKjwCD0cy
+         SQr5TWtHEvm4/qApb5VkdUYIOu1UYvDPyzSq8sldsd2h3XUfLXvOxsrLzqq5iU6+dkFy
+         97H452KhgAoQoDPhbUer4vpmjz4fC4nvjaZfj6X/16AupX5BLzxZuyjo2EBoVmSepLTz
+         NHASVhzir0UMQCHjwRDGSi/MGiKxV8tXk6eR12ohQ3qhx0F8xAGjwQmUtFawrYbA9zSD
+         eZUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LZUg7BSCdLfb7gu4C1vCLOOqdWzDawUGvWzZumrI/zw=;
-        b=hM7wt4k5vKwGl1AgvcjYkEdoeFMbqBFqPqswZVPq8hq6RidVI/mhAolXRhgZLPX5p6
-         IW8t8NX5KNuLJUa9iJTw/fiNBpnE1fMJ2GUnGbiPcPYj8Q/TpuHZyQ9rsVIEsEtYj+1s
-         8PPp14XLUHCsetlPHX9/aGPMABYVBHrzCCy3Yrz8IPPhSdKd8EKzi2VI/Tsvh6uIz+zP
-         L25DhfS7XRRUdpYWqwPD6OWFHpVvbELa9PZue8VxTptdzV8Olv7JCiF1dAs+E3GgM7DI
-         /uJSTb5hYqoxUwUNbCmCpBhMXN76BdhDdXhGT6oWkMRHfn5qAMzPK0l0Z5FYPByCejfO
-         E6pA==
-X-Gm-Message-State: AFqh2kqNdhfkRwraWeLrfQVU6DjiJqd34UVeOmL881OkKKsS7fdGRFqY
-        m5UwQjs6C+MrnHR2aLQ8qrF8QloBS4VQvg==
-X-Google-Smtp-Source: AMrXdXtx5h0s/uSmEvOhP61J/QK7g77mhJzG4u5rP1xjcamEqRAgtKaRd0ZCTWBWGPEumrQiRZgxow==
-X-Received: by 2002:ac8:7601:0:b0:3a8:199b:dcac with SMTP id t1-20020ac87601000000b003a8199bdcacmr56273152qtq.15.1672732849308;
-        Tue, 03 Jan 2023 00:00:49 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05620a0c4500b006cfc1d827cbsm21719772qki.9.2023.01.03.00.00.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:00:48 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-4a0d6cb12c5so97453077b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:00:48 -0800 (PST)
-X-Received: by 2002:a81:17ca:0:b0:46f:bd6:957d with SMTP id
- 193-20020a8117ca000000b0046f0bd6957dmr3032644ywx.383.1672732847900; Tue, 03
- Jan 2023 00:00:47 -0800 (PST)
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AGe2dNB2O4DsKtHDiJtdu6ZDVemkFhiQQFAUL63hwnc=;
+        b=fH9rgB0PqX8jJrVMJWWdAtwyuts/E5gDvxCqGQ8kV5Vo1H9jNwXyi1fwr/u5cQwF4O
+         GJfVwuMV1fnQPlo1kV4mAm2QVEGP1HFxMBu51bQJ68+BYqEFA/oWXfUsSPiy4Bdji0+8
+         Av8JuGkm76+YNln1bIQ/VlEaL1cWKB/PF6ySWu6j7eW9WliOFP00HPAa2pdd6K9891tO
+         aq6w3S+KQe35xFB3guWKneEsoCF8RMf0zeMMJCygeZvMkmsQUGhRb774biOFuyxV3AXU
+         ZmVrWGtcaOS+AsBQUReHqEKliwv6v7Hxl9qM2QWD9ze3My/NH9fP1rJF7mJs5a68UWl4
+         HP/A==
+X-Gm-Message-State: AFqh2kqMy3uvRu0UDRkyj5SAhEdwYU/37S+JgCg3Z8EAbh35S0GJ2/lc
+        OwuWwPS3VSiYhVhPA5KkP6Q=
+X-Google-Smtp-Source: AMrXdXvFtbAoAaFKpX+Rat5ImAisAP6yESMRxvuUT+kssNxjABlldmaOx3Bo/YLhHUt1xAt1Ys1BUw==
+X-Received: by 2002:a05:600c:54cb:b0:3cf:d0be:1231 with SMTP id iw11-20020a05600c54cb00b003cfd0be1231mr37428713wmb.13.1672732873668;
+        Tue, 03 Jan 2023 00:01:13 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m28-20020a05600c3b1c00b003d1e3b1624dsm49940467wms.2.2023.01.03.00.01.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 00:01:13 -0800 (PST)
+Date:   Tue, 3 Jan 2023 11:01:04 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Luben Tuikov <luben.tuikov@amd.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/amdgpu_object.c:473
+ amdgpu_bo_validate_size() error: we previously assumed 'man' could be null
+ (see line 458)
+Message-ID: <202212300020.CFmsapaG-lkp@intel.com>
 MIME-Version: 1.0
-References: <20221229075323.1394010-1-linmq006@gmail.com>
-In-Reply-To: <20221229075323.1394010-1-linmq006@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Jan 2023 09:00:36 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWFyKA7nUojivvTwWcmxaiUQifRRB=Kn1q-qzmn20Xkuw@mail.gmail.com>
-Message-ID: <CAMuHMdWFyKA7nUojivvTwWcmxaiUQifRRB=Kn1q-qzmn20Xkuw@mail.gmail.com>
-Subject: Re: [PATCH] um: vector: Fix memory leak in vector_config
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1b929c02afd37871d5afb9d498426f83432e71c2
+commit: 7554886daa31eacc8e7fac9e15bbce67d10b8f1f drm/amdgpu: Fix size validation for non-exclusive domains (v4)
+config: ia64-randconfig-m041-20221229
+compiler: ia64-linux-gcc (GCC) 12.1.0
 
-On Thu, Dec 29, 2022 at 8:53 AM Miaoqian Lin <linmq006@gmail.com> wrote:
-> kstrdup() return newly allocated copy of the string.
-> Call kfree() to release the memory when after use.
->
-> Fixes: 49da7e64f33e ("High Performance UML Vector Network Driver")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
-Thanks for your patch!
+smatch warnings:
+drivers/gpu/drm/amd/amdgpu/amdgpu_object.c:473 amdgpu_bo_validate_size() error: we previously assumed 'man' could be null (see line 458)
 
-> --- a/arch/um/drivers/vector_kern.c
-> +++ b/arch/um/drivers/vector_kern.c
-> @@ -765,6 +765,7 @@ static int vector_config(char *str, char **error_out)
->
->         parsed = uml_parse_vector_ifspec(params);
->
-> +       kfree(params);
+vim +/man +473 drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
 
-Are you sure the memory pointed to by "params" is no longer used?
-"parsed" seems to contain pointers pointing to (parts of) the string
-pointed to by "params", so it cannot be freed.
+79c631239a83ae Andrey Grodzovsky 2017-11-10  444  static bool amdgpu_bo_validate_size(struct amdgpu_device *adev,
+79c631239a83ae Andrey Grodzovsky 2017-11-10  445  					  unsigned long size, u32 domain)
+79c631239a83ae Andrey Grodzovsky 2017-11-10  446  {
+9de59bc201496f Dave Airlie       2020-08-04  447  	struct ttm_resource_manager *man = NULL;
+79c631239a83ae Andrey Grodzovsky 2017-11-10  448  
+79c631239a83ae Andrey Grodzovsky 2017-11-10  449  	/*
+79c631239a83ae Andrey Grodzovsky 2017-11-10  450  	 * If GTT is part of requested domains the check must succeed to
+7554886daa31ea Luben Tuikov      2022-12-10  451  	 * allow fall back to GTT.
+79c631239a83ae Andrey Grodzovsky 2017-11-10  452  	 */
+79c631239a83ae Andrey Grodzovsky 2017-11-10  453  	if (domain & AMDGPU_GEM_DOMAIN_GTT) {
+6c28aed6e5b7fa Dave Airlie       2020-08-04  454  		man = ttm_manager_type(&adev->mman.bdev, TTM_PL_TT);
+79c631239a83ae Andrey Grodzovsky 2017-11-10  455  
+7554886daa31ea Luben Tuikov      2022-12-10  456  		if (man && size < man->size)
+79c631239a83ae Andrey Grodzovsky 2017-11-10  457  			return true;
+7554886daa31ea Luben Tuikov      2022-12-10 @458  		else if (!man)
+7554886daa31ea Luben Tuikov      2022-12-10  459  			WARN_ON_ONCE("GTT domain requested but GTT mem manager uninitialized");
 
->         if (parsed == NULL) {
->                 *error_out = "vector_config failed to parse parameters";
->                 return -EINVAL;
+WARN()
 
-Gr{oetje,eeting}s,
+79c631239a83ae Andrey Grodzovsky 2017-11-10  460  		goto fail;
+7554886daa31ea Luben Tuikov      2022-12-10  461  	} else if (domain & AMDGPU_GEM_DOMAIN_VRAM) {
+6c28aed6e5b7fa Dave Airlie       2020-08-04  462  		man = ttm_manager_type(&adev->mman.bdev, TTM_PL_VRAM);
+79c631239a83ae Andrey Grodzovsky 2017-11-10  463  
+7554886daa31ea Luben Tuikov      2022-12-10  464  		if (man && size < man->size)
+79c631239a83ae Andrey Grodzovsky 2017-11-10  465  			return true;
+79c631239a83ae Andrey Grodzovsky 2017-11-10  466  		goto fail;
+79c631239a83ae Andrey Grodzovsky 2017-11-10  467  	}
+79c631239a83ae Andrey Grodzovsky 2017-11-10  468  
+79c631239a83ae Andrey Grodzovsky 2017-11-10  469  	/* TODO add more domains checks, such as AMDGPU_GEM_DOMAIN_CPU */
+79c631239a83ae Andrey Grodzovsky 2017-11-10  470  	return true;
+79c631239a83ae Andrey Grodzovsky 2017-11-10  471  
+79c631239a83ae Andrey Grodzovsky 2017-11-10  472  fail:
+299c776cebb01c Michel Dänzer     2017-11-15 @473  	DRM_DEBUG("BO size %lu > total memory in domain: %llu\n", size,
+4499c90e902f39 Christian König   2022-03-11  474  		  man->size);
 
-                        Geert
+Followed by crash.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+79c631239a83ae Andrey Grodzovsky 2017-11-10  475  	return false;
+79c631239a83ae Andrey Grodzovsky 2017-11-10  476  }
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
