@@ -2,236 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2E865BAA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 07:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A243565BADA
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 07:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236733AbjACGdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 01:33:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
+        id S236749AbjACGo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 01:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjACGdS (ORCPT
+        with ESMTP id S230107AbjACGo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 01:33:18 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DD56F23;
-        Mon,  2 Jan 2023 22:33:15 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.185])
-        by gateway (Coremail) with SMTP id _____8AxSukqzLNjVRAKAA--.18688S3;
-        Tue, 03 Jan 2023 14:33:14 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxPuQizLNjS7kSAA--.58939S2;
-        Tue, 03 Jan 2023 14:33:13 +0800 (CST)
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] pipe: use __pipe_{lock,unlock} instead of spinlock
-Date:   Tue,  3 Jan 2023 14:33:03 +0800
-Message-Id: <20230103063303.23345-1-zhanghongchen@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Tue, 3 Jan 2023 01:44:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0DDCFF;
+        Mon,  2 Jan 2023 22:44:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DB3AB80E15;
+        Tue,  3 Jan 2023 06:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85993C433D2;
+        Tue,  3 Jan 2023 06:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672728292;
+        bh=/5lMFYxeFk4tjVM5Sh1D4dpCcs4gKL4U7mbXKFl9Uh8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=XZ/vpsOESYRh8ZWz0uxpiUANHiIBRN71wk6PU5xY4tprr93vWqFQlUKy3GQS9ryA3
+         aN4b16a9Lo9jjGmWnl9abxUjVJzve6Rhy0a45zfdoNuJCbxvYlKH6y/8vHnTbxAHsG
+         286P8RV389ST+mFodfka7ZfNAgIko5hR6IOYE8SJRaEX/AYDFK16fXbihXO3oj/sWN
+         XvrU0EZqstjhw9egLIFzD8Wk43BXu2c3K44OvFkA7M/nQmekRyw9Y1nwnkTxGl3xKv
+         TBoMcEFYbWc62ULPdu4TWxAJ7fZl81ZX4jkP2yEKOCbbQg28N2v6p7OHSCw6j6Ckse
+         YlB7iYDZnikvg==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv, kprobes: Stricter c.jr/c.jalr decoding
+In-Reply-To: <Y7M/HlcF3u0qWIDJ@spud>
+References: <20230102160748.1307289-1-bjorn@kernel.org> <Y7M/HlcF3u0qWIDJ@spud>
+Date:   Tue, 03 Jan 2023 07:44:49 +0100
+Message-ID: <87sfgsp15q.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxPuQizLNjS7kSAA--.58939S2
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3ArW3tw1UJryUCr48Ar43Wrg_yoW7XF1kpa
-        13tFW7WrW8Ar10grW8GrsxZr13W395Wa17JrWxWF1FvFnrGrySqFs2kFyakwn5JrZ7ZryY
-        vF4jq3WFyr1UArJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
-        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
-        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use spinlock in pipe_read/write cost too much time,IMO
-pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
-On the other hand, we can use __pipe_lock/unlock to protect the
-pipe->head/tail in pipe_resize_ring and post_one_notification.
+Conor Dooley <conor@kernel.org> writes:
 
-Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
----
- fs/pipe.c                 | 24 ++++--------------------
- include/linux/pipe_fs_i.h | 12 ++++++++++++
- kernel/watch_queue.c      |  8 ++++----
- 3 files changed, 20 insertions(+), 24 deletions(-)
+> Hey Bjorn,
+>
+> On Mon, Jan 02, 2023 at 05:07:48PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
+>> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>>=20
+>> In the compressed instruction extension, c.jr, c.jalr, c.mv, and c.add
+>> is encoded the following way (each instruction is 16b):
+>>=20
+>> ---+-+-----------+-----------+--
+>> 100 0 rs1[4:0]!=3D0       00000 10 : c.jr
+>> 100 1 rs1[4:0]!=3D0       00000 10 : c.jalr
+>> 100 0  rd[4:0]!=3D0 rs2[4:0]!=3D0 10 : c.mv
+>> 100 1  rd[4:0]!=3D0 rs2[4:0]!=3D0 10 : c.add
+>>=20
+>> The following logic is used to decode c.jr and c.jalr:
+>>=20
+>>   insn & 0xf007 =3D=3D 0x8002 =3D> instruction is an c.jr
+>>   insn & 0xf007 =3D=3D 0x9002 =3D> instruction is an c.jalr
+>>=20
+>> When 0xf007 is used to mask the instruction, c.mv can be incorrectly
+>> decoded as c.jr, and c.add as c.jalr.
+>>=20
+>> Correct the decoding by changing the mask from 0xf007 to 0xf07f.
+>>=20
+>> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+>> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>> ---
+>>  arch/riscv/kernel/probes/simulate-insn.h | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>=20
+>> diff --git a/arch/riscv/kernel/probes/simulate-insn.h b/arch/riscv/kerne=
+l/probes/simulate-insn.h
+>> index cb6ff7dccb92..de8474146a9b 100644
+>> --- a/arch/riscv/kernel/probes/simulate-insn.h
+>> +++ b/arch/riscv/kernel/probes/simulate-insn.h
+>> @@ -31,9 +31,9 @@ __RISCV_INSN_FUNCS(fence,	0x7f, 0x0f);
+>>  	} while (0)
+>>=20=20
+>>  __RISCV_INSN_FUNCS(c_j,		0xe003, 0xa001);
+>> -__RISCV_INSN_FUNCS(c_jr,	0xf007, 0x8002);
+>
+> Hmm, I wonder where the mask originally came from!
 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index 42c7ff41c2db..cf449779bf71 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -98,16 +98,6 @@ void pipe_unlock(struct pipe_inode_info *pipe)
- }
- EXPORT_SYMBOL(pipe_unlock);
- 
--static inline void __pipe_lock(struct pipe_inode_info *pipe)
--{
--	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
--}
--
--static inline void __pipe_unlock(struct pipe_inode_info *pipe)
--{
--	mutex_unlock(&pipe->mutex);
--}
--
- void pipe_double_lock(struct pipe_inode_info *pipe1,
- 		      struct pipe_inode_info *pipe2)
- {
-@@ -253,8 +243,7 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
- 	 */
- 	was_full = pipe_full(pipe->head, pipe->tail, pipe->max_usage);
- 	for (;;) {
--		/* Read ->head with a barrier vs post_one_notification() */
--		unsigned int head = smp_load_acquire(&pipe->head);
-+		unsigned int head = pipe->head;
- 		unsigned int tail = pipe->tail;
- 		unsigned int mask = pipe->ring_size - 1;
- 
-@@ -322,14 +311,12 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
- 
- 			if (!buf->len) {
- 				pipe_buf_release(pipe, buf);
--				spin_lock_irq(&pipe->rd_wait.lock);
- #ifdef CONFIG_WATCH_QUEUE
- 				if (buf->flags & PIPE_BUF_FLAG_LOSS)
- 					pipe->note_loss = true;
- #endif
- 				tail++;
- 				pipe->tail = tail;
--				spin_unlock_irq(&pipe->rd_wait.lock);
- 			}
- 			total_len -= chars;
- 			if (!total_len)
-@@ -506,16 +493,13 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 			 * it, either the reader will consume it or it'll still
- 			 * be there for the next write.
- 			 */
--			spin_lock_irq(&pipe->rd_wait.lock);
- 
- 			head = pipe->head;
- 			if (pipe_full(head, pipe->tail, pipe->max_usage)) {
--				spin_unlock_irq(&pipe->rd_wait.lock);
- 				continue;
- 			}
- 
- 			pipe->head = head + 1;
--			spin_unlock_irq(&pipe->rd_wait.lock);
- 
- 			/* Insert it into the buffer array */
- 			buf = &pipe->bufs[head & mask];
-@@ -1260,14 +1244,14 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
- 	if (unlikely(!bufs))
- 		return -ENOMEM;
- 
--	spin_lock_irq(&pipe->rd_wait.lock);
-+	__pipe_lock(pipe);
- 	mask = pipe->ring_size - 1;
- 	head = pipe->head;
- 	tail = pipe->tail;
- 
- 	n = pipe_occupancy(head, tail);
- 	if (nr_slots < n) {
--		spin_unlock_irq(&pipe->rd_wait.lock);
-+		__pipe_unlock(pipe);
- 		kfree(bufs);
- 		return -EBUSY;
- 	}
-@@ -1303,7 +1287,7 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
- 	pipe->tail = tail;
- 	pipe->head = head;
- 
--	spin_unlock_irq(&pipe->rd_wait.lock);
-+	__pipe_unlock(pipe);
- 
- 	/* This might have made more room for writers */
- 	wake_up_interruptible(&pipe->wr_wait);
-diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
-index 6cb65df3e3ba..f5084daf6eaf 100644
---- a/include/linux/pipe_fs_i.h
-+++ b/include/linux/pipe_fs_i.h
-@@ -2,6 +2,8 @@
- #ifndef _LINUX_PIPE_FS_I_H
- #define _LINUX_PIPE_FS_I_H
- 
-+#include <linux/fs.h>
-+
- #define PIPE_DEF_BUFFERS	16
- 
- #define PIPE_BUF_FLAG_LRU	0x01	/* page is on the LRU */
-@@ -223,6 +225,16 @@ static inline void pipe_discard_from(struct pipe_inode_info *pipe,
- #define PIPE_SIZE		PAGE_SIZE
- 
- /* Pipe lock and unlock operations */
-+static inline void __pipe_lock(struct pipe_inode_info *pipe)
-+{
-+	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
-+}
-+
-+static inline void __pipe_unlock(struct pipe_inode_info *pipe)
-+{
-+	mutex_unlock(&pipe->mutex);
-+}
-+
- void pipe_lock(struct pipe_inode_info *);
- void pipe_unlock(struct pipe_inode_info *);
- void pipe_double_lock(struct pipe_inode_info *, struct pipe_inode_info *);
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index a6f9bdd956c3..92e46cfe9419 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -108,7 +108,7 @@ static bool post_one_notification(struct watch_queue *wqueue,
- 	if (!pipe)
- 		return false;
- 
--	spin_lock_irq(&pipe->rd_wait.lock);
-+	__pipe_lock(pipe);
- 
- 	mask = pipe->ring_size - 1;
- 	head = pipe->head;
-@@ -135,17 +135,17 @@ static bool post_one_notification(struct watch_queue *wqueue,
- 	buf->offset = offset;
- 	buf->len = len;
- 	buf->flags = PIPE_BUF_FLAG_WHOLE;
--	smp_store_release(&pipe->head, head + 1); /* vs pipe_read() */
-+	pipe->head = head + 1;
- 
- 	if (!test_and_clear_bit(note, wqueue->notes_bitmap)) {
--		spin_unlock_irq(&pipe->rd_wait.lock);
-+		__pipe_unlock(pipe);
- 		BUG();
- 	}
- 	wake_up_interruptible_sync_poll_locked(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
- 	done = true;
- 
- out:
--	spin_unlock_irq(&pipe->rd_wait.lock);
-+	__pipe_unlock(pipe);
- 	if (done)
- 		kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
- 	return done;
+I think it's just a simple bug -- missing that "rs2" must be zero.
 
-base-commit: c8451c141e07a8d05693f6c8d0e418fbb4b68bb7
--- 
-2.31.1
+> I had a look at the compressed spec, of which the version google gave to
+> me was v1.9 [1], and Table 1.6 in that (Instruction listing for RVC,
+> Quadrant 2) seems to list them all together.
+> Tedious it may be, but future instruction decoding bits probably need
+> more scrutiny as Drew found another clearly wrong bit a few weeks ago
+> [2].
+>
+> Anyways, I checked against the doc and the new versions look good to
+> me. How'd you spot this, and did you check the other masks?
 
+I got hit by it when testing the optprobe series (c.mv was rejected as
+c.jr).
+
+Skimmed the other masks quickly, but will take another look.
+
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>
+> [1] -
+> https://riscv.org/wp-content/uploads/2015/11/riscv-compressed-spec-v1.9.p=
+df
+
+C-ext is part of the unpriv spec:
+https://github.com/riscv/riscv-isa-manual/releases
+
+> [2] - https://lore.kernel.org/linux-riscv/20221223221332.4127602-2-heiko@=
+sntech.de/
+>
+>> +__RISCV_INSN_FUNCS(c_jr,	0xf07f, 0x8002);
+>>  __RISCV_INSN_FUNCS(c_jal,	0xe003, 0x2001);
+>> -__RISCV_INSN_FUNCS(c_jalr,	0xf007, 0x9002);
+>> +__RISCV_INSN_FUNCS(c_jalr,	0xf07f, 0x9002);
+>>  __RISCV_INSN_FUNCS(c_beqz,	0xe003, 0xc001);
+>>  __RISCV_INSN_FUNCS(c_bnez,	0xe003, 0xe001);
+>>  __RISCV_INSN_FUNCS(c_ebreak,	0xffff, 0x9002);
+>
+> Worth noting that this code is gone in riscv/for-next thanks to Heiko's
+> de-duplication:
+> https://lore.kernel.org/linux-riscv/20221223221332.4127602-7-heiko@sntech=
+.de/
+
+Yay!
+
+
+Bj=C3=B6rn
