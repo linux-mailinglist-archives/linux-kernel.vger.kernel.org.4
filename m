@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E5665B892
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 02:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C5E65B8A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 02:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjACBJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 20:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S236569AbjACBJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 20:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbjACBJM (ORCPT
+        with ESMTP id S236371AbjACBJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 20:09:12 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D929C6583;
-        Mon,  2 Jan 2023 17:09:10 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 6B3AA320091E;
-        Mon,  2 Jan 2023 20:09:09 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 02 Jan 2023 20:09:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672708149; x=1672794549; bh=rS
-        dD9Eyr/xiErPEA9MSXkTaUL862gDKe06QmYAccHDA=; b=bJ5mBVoE1Z3WMZTo+G
-        W4RivL6losj1Yk3heM1b+vtHt1v7g7+gzFV9eBDACr4xqZFZ2sJAqvRYyCd16V0y
-        bjqiJ2HwzctfOPdWeo+o5GpmSV9vEdN/z1OgHlrd/fzgFWDHO5mTOm1nbhG1bh+h
-        RwQhbu1+MxHnuHBwWBVbyshF2EWzsNAHZdcaOSKsCiE+MteKZBS8Lts45RlqsFS7
-        MXPyx8b8wivKv5g351huCEjoQARmd+V4LBFHuBBRWdQKwRW4emwpyWBwsuSkqOz/
-        mhf4V8BGEM8h1ytspibokGxUVlaTtYZwKmvEfwIV0a/0921RXFe8ggPVNjgm00+w
-        5Tsw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672708149; x=1672794549; bh=rSdD9Eyr/xiEr
-        PEA9MSXkTaUL862gDKe06QmYAccHDA=; b=Whxu3WgLF0P77rD14HLeM43ijeHqC
-        pjfUh17lGRnn5tjzOiWgRmun8SMHWmt9cARqW8svO2yJ6O1ZHkG0R07zyTxWjHVq
-        tB6ZXwWSBMdpP+MErqZy+qQmOZ4AK39vAm5xjFvI3p8HnjL4TlXnX0oNKagHpuQO
-        i9agxF7aOC134tzqDMrd6eb6fHuDL01r2t7j/Sxlmz7PMGiqHGq1AnKA6tLz1NiC
-        +fhAqO7qZahSUqTm02M+x5j2gVRPjGKV5sdxEiuoua4ar8yLM5TFnha50w9TEvIz
-        DsQk1ZBEFYH9AbhY85yYujm0dx3FwzAIBK+QBGvBQCyOTj9u5ywMOUAaQ==
-X-ME-Sender: <xms:NICzY14jMx27nHmvp5QXPZrFIV5SNQ4WQb5XFPS5-zr4TiOp3CkcMQ>
-    <xme:NICzYy6fKsdnVIUWSNAdi3XKAEL9INEliksrYEGiL62UL4NqBX97S6z4avqqloUQN
-    IVZyj7w5k47ensCDA>
-X-ME-Received: <xmr:NICzY8dy8bH7Al714AUXWQlJ3-My-7GKOW4jlHXNqQiDooql249NZRQNxhy0ocTG6vC3aLm1ebpbT-htsfIbVzRXLULm1rinZZTFSj0tu-O3gabfTDgtNpvXe5atmgJdhp3Cwg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeefgdeffecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:NICzY-IURFeAUznAaQ74JpkdpG2OHhjXNuwO7OU9SW6GeDVTNTBKDA>
-    <xmx:NICzY5K0W8u5t6u2nOYyZuRv82iW6F7rpbfoLMQynWz2ejCMfbhFwA>
-    <xmx:NICzY3yqxY1C2FQw3VGYOQRxsWr0w8FYZl1fjr7J2baw9mjxaugQsw>
-    <xmx:NYCzYzBJ27ooWwpSqG1j8qEkdDVKPmQHt5-ipw4qMdEbkERfOkHxoA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 Jan 2023 20:09:08 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v2 1/6] dt-bindings: iommu: sun50i: Add compatible for Allwinner D1
-Date:   Mon,  2 Jan 2023 19:08:58 -0600
-Message-Id: <20230103010903.11181-2-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20230103010903.11181-1-samuel@sholland.org>
-References: <20230103010903.11181-1-samuel@sholland.org>
+        Mon, 2 Jan 2023 20:09:17 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522ED95BD
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 17:09:13 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id vm8so63216876ejc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 17:09:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VA+8K2hv48fLrDkZSZadZsjZ4I4yG7EsHjILu1Lcy8k=;
+        b=Wss+XeFlnyffhaqysFEayCASUdOiUCysj/G4AwdIknXzjKiDrI+u2Mu+mWGLeQl/By
+         vLi0ZELEt7uaPV03lIxrPKbiFg2xh/UxaaVCn9DLiwOXLC9gXK7mSDnbU7rzSjBDA6Yw
+         6WKYJ9LIebrRDM4BW82GoeBBbd5+DncUkuZwdKFMhW3UqhWRwn+xvtJLG/tZmyS6yrpk
+         YrH3UhcSVVpojnW5HrIOhlrLlZUWeqOK0y6UPHoU1igidlNfd6eGv5YKeSQpSXO24aGT
+         x4af2T+bkNT4+wTFTJ1mCXMETidRhl3PVukhtT91So2sWhWuVeeqfEoM33zh4Q0A0VoY
+         2uKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VA+8K2hv48fLrDkZSZadZsjZ4I4yG7EsHjILu1Lcy8k=;
+        b=DfqBZam6k3VHeXMIB4ZwWwoQ1vZewGDEOkTyexOay0a+yvmhElbpn0lPbjdE/Hxa31
+         oR8qRD1DO4DJtMLhEZ0AVS/AsBh1PpvP1WZl3O2B21kbnRLU+jUjO1sp+6PtNvo4kj8o
+         pcGPjX1ZIlv+JYruAkQXYirCBJXtCdO9gLz24VxAzp+jRYKfWu6/NpMaXAqUjyPLe8aw
+         EE/Q0JhJKN0qswnHKTaiB3a3t7c15xCPsiz3obFTtQdZTjc2tNskx0B0DrrXI724wMQE
+         vM9HYpZPEYSDW2I4T2uMgqUeu2nxKmRyq8xjsHE3cipjp/fSr8LkMXsBE5UUGvr9P2xW
+         h5bQ==
+X-Gm-Message-State: AFqh2kpBCT61+RjCwUAo1w9eM758Xud4Ao3DH8lk8zZfXBLOzhtruD0s
+        L6Sl/JAiQdBLo569CrEsuaZIoQ==
+X-Google-Smtp-Source: AMrXdXtv38Mvh9+DDu01Iy912rW8xdF/I3+IYPN7USkF4WcOK19pg9rzTdweuTptiQXe8m/pAc6FRQ==
+X-Received: by 2002:a17:906:e2d3:b0:7c0:deb3:596a with SMTP id gr19-20020a170906e2d300b007c0deb3596amr39743561ejb.70.1672708151926;
+        Mon, 02 Jan 2023 17:09:11 -0800 (PST)
+Received: from planet9.chello.ie (2001-1c06-2302-5600-b443-9db7-1e5c-4fd5.cable.dynamic.v6.ziggo.nl. [2001:1c06:2302:5600:b443:9db7:1e5c:4fd5])
+        by smtp.gmail.com with ESMTPSA id q26-20020a17090676da00b008302732f569sm13564648ejn.78.2023.01.02.17.09.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 17:09:11 -0800 (PST)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     bryan.odonoghue@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org
+Subject: [PATCH v2 2/7] dt-bindings: arm: qcom: Document MSM8939 SoC binding
+Date:   Tue,  3 Jan 2023 01:08:59 +0000
+Message-Id: <20230103010904.3201835-3-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230103010904.3201835-1-bryan.odonoghue@linaro.org>
+References: <20230103010904.3201835-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-D1 contains an IOMMU similar to the one in the H6 SoC, but the D1
-variant has no external reset signal.
+Document the MSM8939 and supported boards in upstream Sony "Tulip" M4 Aqua
+and Square APQ8039 T2.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+MSM8939 is one of the older SoCs so we need to expand the list of
+qcom,board-ids to allow for the bootloader DTS board-id matching
+dependency.
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
+ Documentation/devicetree/bindings/arm/qcom.yaml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Changes in v2:
- - Disallow the 'resets' property for the D1 variant
-
- .../iommu/allwinner,sun50i-h6-iommu.yaml      | 20 +++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/iommu/allwinner,sun50i-h6-iommu.yaml b/Documentation/devicetree/bindings/iommu/allwinner,sun50i-h6-iommu.yaml
-index e20016f12017..5aeea10cf899 100644
---- a/Documentation/devicetree/bindings/iommu/allwinner,sun50i-h6-iommu.yaml
-+++ b/Documentation/devicetree/bindings/iommu/allwinner,sun50i-h6-iommu.yaml
-@@ -17,7 +17,9 @@ properties:
-       The content of the cell is the master ID.
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 27063a045bd0a..300b56718a8d3 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -35,6 +35,7 @@ description: |
+         mdm9615
+         msm8226
+         msm8916
++        msm8939
+         msm8956
+         msm8974
+         msm8976
+@@ -160,6 +161,12 @@ properties:
+               - samsung,s3ve3g
+           - const: qcom,msm8226
  
-   compatible:
--    const: allwinner,sun50i-h6-iommu
-+    enum:
-+      - allwinner,sun20i-d1-iommu
-+      - allwinner,sun50i-h6-iommu
- 
-   reg:
-     maxItems: 1
-@@ -37,7 +39,21 @@ required:
-   - reg
-   - interrupts
-   - clocks
--  - resets
++      - items:
++          - enum:
++              - sony,kanuti-tulip
++              - square,apq8039-t2
++          - const: qcom,msm8939
 +
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - allwinner,sun50i-h6-iommu
-+
-+then:
-+  required:
-+    - resets
-+
-+else:
-+  properties:
-+    resets: false
- 
- additionalProperties: false
- 
+       - items:
+           - enum:
+               - sony,kugo-row
+@@ -922,6 +929,7 @@ allOf:
+               - qcom,apq8026
+               - qcom,apq8094
+               - qcom,apq8096
++              - qcom,msm8939
+               - qcom,msm8992
+               - qcom,msm8994
+               - qcom,msm8996
 -- 
-2.37.4
+2.34.1
 
