@@ -2,214 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF8B65BBF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A616565BC0F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237137AbjACIRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
+        id S237047AbjACITw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237087AbjACIQs (ORCPT
+        with ESMTP id S236795AbjACITs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:16:48 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312F3DFAD;
-        Tue,  3 Jan 2023 00:16:43 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3037NEbt023737;
-        Tue, 3 Jan 2023 08:16:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=vE3f+g6jNIfN6+BlLEsrhzsv386gONtSa2XiID9LICU=;
- b=flBtWJaC3lfy+TcBguVOKa2SgpazpatnsR3h2bYvt1I7Mjj3BXIMITxFatW5SrTwEe+Q
- 0TZfQnowaL+KNltr9gstE8Di/y4pvKu0Gh7vkoSWimGiwGlVEKdVAOIP7CyNksOem4tK
- 2iuu/DqkanuZkBvQnjKQSQ1YAzMTLeWDadUAeq66TaEeu+yHvNOnPC6o9bs6xUNj+KaN
- lnADidQRyIBTBeYYE4eOI7fm1a7BsRI9FYknlbQt4+cUd9ktVSINtNiYTPcDEPUVG79K
- VNP4MhiH88gsQ9W2x/3TSFlr+G8Ie6xtez77ptlfctgZbwwv8UuwRTJUdupY94pJPalm XQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvfx7ru0c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 08:16:30 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3037VdQq004235;
-        Tue, 3 Jan 2023 08:16:28 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6jjd0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 08:16:28 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3038GO3I40763764
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Jan 2023 08:16:24 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18A5020043;
-        Tue,  3 Jan 2023 08:16:24 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F2A7E20049;
-        Tue,  3 Jan 2023 08:16:22 +0000 (GMT)
-Received: from [9.179.26.205] (unknown [9.179.26.205])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  3 Jan 2023 08:16:22 +0000 (GMT)
-Message-ID: <3e363da787126a4e8f779988ced92ae4624e3ec3.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/7] iommu: Allow .iotlb_sync_map to fail and handle
- s390's -ENOMEM return
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Alexandra Winter <wintera@linux.ibm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Date:   Tue, 03 Jan 2023 09:16:22 +0100
-In-Reply-To: <2f1beb15-e9e4-d8ab-1b68-c83f1a53c5c5@linux.ibm.com>
-References: <20230102115619.2088685-1-schnelle@linux.ibm.com>
-         <20230102115619.2088685-3-schnelle@linux.ibm.com>
-         <2f1beb15-e9e4-d8ab-1b68-c83f1a53c5c5@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Tue, 3 Jan 2023 03:19:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4B0DFBF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:19:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672733940;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sFAbBCJeww11W0L1auwTuI53DEHjJAchS/0bFQT4L0M=;
+        b=PqGKl9Kp+iWck8hZ5rwNYrEKvoCcT0BPR+imvwRh/fZ6uilar8j95X4twlXVX6nB6Jh4Gq
+        AvH3TBnot2vSh2lxWUBVxlE3cc+wOl2QbyO/E1x9xh1GwdORv0z2HDiyXmSLVNP5G8CGJu
+        7uE35dOKClVgrZDk68iUlJK4h4VsFvA=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-41-U2s2kDndOJ-w7qGEpIxemg-1; Tue, 03 Jan 2023 03:18:59 -0500
+X-MC-Unique: U2s2kDndOJ-w7qGEpIxemg-1
+Received: by mail-ot1-f70.google.com with SMTP id bq2-20020a056830388200b00672e4a07168so15634534otb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:18:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sFAbBCJeww11W0L1auwTuI53DEHjJAchS/0bFQT4L0M=;
+        b=uwJiJabM/8YrEo7XJURyTwSv64pd63oKeXhQmQNKeoW8N1UN1a9eksErdtoU/Umedf
+         42J/FkiFPfLbtfoVOvkfq0Bqso6P9ofDj/neENL4gDUmZFvIopHQfq5QpO4BGMmxmH4v
+         S54s0ZT5oL0Xn4UZVWGZp1oYYZcLY/zfv4yr6UNPBwOPNANnTdD8jfHS3SnwppM2xW6a
+         YHgfA6+1arkDHxKnzAPML39pqPOzZMdQi6wmdsD2wSUej/Q2igWGUhfD74z6D+3npyty
+         pGKSt2hZfV/I5LymXiS9OY2dDKPkpT/zubk8kSOgFWrbuwqGe/dbYjo8tp/YJsjD92+p
+         5OeQ==
+X-Gm-Message-State: AFqh2krDf9OoJqvP3m+lBay7ruUih7IWIWGijuMOm3QLpmSTDh08854O
+        gARNAjcQZXu/I6pl0NoxCRAAqedZQF7M8+uackWDpUWJm3FJ+bTQAqloAU3T8qdzpj8/1n2+flx
+        kz5vXc3JXUgslaAvTsfTxcbZSe6NkYEhPJAvdnr0s
+X-Received: by 2002:a05:6808:1308:b0:35a:9331:8cbb with SMTP id y8-20020a056808130800b0035a93318cbbmr3082765oiv.201.1672733937137;
+        Tue, 03 Jan 2023 00:18:57 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXshsVTw3XWKQfO7iYXsrZfi+bMC8r+qmFqrOOA2ZwLot7LV7UbzqH4Ef7T8uvkDuBhK7y9LABVYrbRa84T6gtA=
+X-Received: by 2002:a05:6808:1308:b0:35a:9331:8cbb with SMTP id
+ y8-20020a056808130800b0035a93318cbbmr3082763oiv.201.1672733936867; Tue, 03
+ Jan 2023 00:18:56 -0800 (PST)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uHRBgn4kQsM34u_CAwsP_2DzjSZW2DkT
-X-Proofpoint-ORIG-GUID: uHRBgn4kQsM34u_CAwsP_2DzjSZW2DkT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_14,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- mlxlogscore=999 spamscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0
- adultscore=0 phishscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301030071
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221201030050.978595-1-koba.ko@canonical.com>
+In-Reply-To: <20221201030050.978595-1-koba.ko@canonical.com>
+From:   Joel Savitz <jsavitz@redhat.com>
+Date:   Tue, 3 Jan 2023 10:18:40 +0200
+Message-ID: <CAL1p7m7FrQsysFq67NkZ_v1hRg8NuyHgyicBm5dp10VxMN98Aw@mail.gmail.com>
+Subject: Re: [PATCH V3] dmaengine: Fix double increment of client_count in dma_chan_get()
+To:     Koba Ko <koba.ko@canonical.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Jie Hai <haijie1@huawei.com>, Dave Jiang <dave.jiang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-02 at 19:25 +0100, Alexandra Winter wrote:
->=20
-> On 02.01.23 12:56, Niklas Schnelle wrote:
-> > On s390 .iotlb_sync_map is used to sync mappings to an underlying
-> > hypervisor by letting the hypervisor inspect the synced IOVA range and
-> > updating its shadow table. This however means that it can fail as the
-> > hypervisor may run out of resources. This can be due to the hypervisor
-> > being unable to pin guest pages, due to a limit on concurrently mapped
-> > addresses such as vfio_iommu_type1.dma_entry_limit or other resources.
-> > Either way such a failure to sync a mapping should result in
-> > a DMA_MAPPING_EROR.
-> >=20
-> > Now especially when running with batched IOTLB flushes for unmap it may
-> > be that some IOVAs have already been invalidated but not yet synced via
-> > .iotlb_sync_map. Thus if the hypervisor indicates running out of
-> > resources, first do a global flush allowing the hypervisor to free
-> > resources associated with these mappings and only if that also fails
-> > report this error to callers.
-> >=20
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > ---
-> Just a small typo, I noticed
-> [...]
+Vinod, are there any issues with this patch? It looks good to me.
 
-You mean the misspelled DMA_MAPPING_ERROR, right? Either way I did edit
-the commit message for a bit more clarity on some of the details:
+Best,
+Joel Savitz
 
-On s390 when using a paging hypervisor, .iotlb_sync_map is used to sync
-mappings by letting the hypervisor inspect the synced IOVA range and
-updating a shadow table. This however means that .iotlb_sync_map can
-fail as the hypervisor may run out of resources while doing the sync.
-This can be due to the hypervisor being unable to pin guest pages, due
-to a limit on mapped addresses such as vfio_iommu_type1.dma_entry_limit
-or lack of other resources. Either way such a failure to sync a mapping
-should result in a DMA_MAPPING_ERROR.
-
-Now especially when running with batched IOTLB flushes for unmap it may
-be that some IOVAs have already been invalidated but not yet synced via
-.iotlb_sync_map. Thus if the hypervisor indicates running out of
-resources, first do a global flush allowing the hypervisor to free
-resources associated with these mappings as well a retry creating the
-new mappings and only if that also fails report this error to callers.
-
-
-
-> > diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-> > index ed33c6cce083..6ba38b4f5b37 100644
-> > --- a/drivers/iommu/s390-iommu.c
-> > +++ b/drivers/iommu/s390-iommu.c
-> > @@ -210,6 +210,14 @@ static void s390_iommu_release_device(struct devic=
-e *dev)
-> >  		__s390_iommu_detach_device(zdev);
-> >  }
-> > =20
-> > +
-> > +static int zpci_refresh_all(struct zpci_dev *zdev)
-> > +{
-> > +	return zpci_refresh_trans((u64)zdev->fh << 32, zdev->start_dma,
-> > +				  zdev->end_dma - zdev->start_dma + 1);
-> > +
-> > +}
-> > +
-> >  static void s390_iommu_flush_iotlb_all(struct iommu_domain *domain)
-> >  {
-> >  	struct s390_domain *s390_domain =3D to_s390_domain(domain);
-> > @@ -217,8 +225,7 @@ static void s390_iommu_flush_iotlb_all(struct iommu=
-_domain *domain)
-> > =20
-> >  	rcu_read_lock();
-> >  	list_for_each_entry_rcu(zdev, &s390_domain->devices, iommu_list) {
-> > -		zpci_refresh_trans((u64)zdev->fh << 32, zdev->start_dma,
-> > -				   zdev->end_dma - zdev->start_dma + 1);
-> > +		zpci_refresh_all(zdev);
-> >  	}
-> >  	rcu_read_unlock();
-> >  }
-> > @@ -242,20 +249,32 @@ static void s390_iommu_iotlb_sync(struct iommu_do=
-main *domain,
-> >  	rcu_read_unlock();
-> >  }
-> > =20
-> > -static void s390_iommu_iotlb_sync_map(struct iommu_domain *domain,
-> > +static int s390_iommu_iotlb_sync_map(struct iommu_domain *domain,
-> >  				      unsigned long iova, size_t size)
-> >  {
-> >  	struct s390_domain *s390_domain =3D to_s390_domain(domain);
-> >  	struct zpci_dev *zdev;
-> > +	int ret =3D 0;
-> > =20
-> >  	rcu_read_lock();
-> >  	list_for_each_entry_rcu(zdev, &s390_domain->devices, iommu_list) {
-> >  		if (!zdev->tlb_refresh)
-> >  			continue;
-> > -		zpci_refresh_trans((u64)zdev->fh << 32,
-> > -				   iova, size);
-> > +		ret =3D zpci_refresh_trans((u64)zdev->fh << 32,
-> > +					 iova, size);
-> > +		/*
-> > +		 * let the hypervisor disover invalidated entries
-> 			typo: s/disover/discover/g
-> > +		 * allowing it to free IOVAs and unpin pages
-> > +		 */
-> > +		if (ret =3D=3D -ENOMEM) {
-> > +			ret =3D zpci_refresh_all(zdev);
-> > +			if (ret)
-> > +				break;
-> > +		}
-> >  	}
-> >  	rcu_read_unlock();
-> > +
-> > +	return ret;
-> >  }
-> > =20
-> >  static int s390_iommu_validate_trans(struct s390_domain *s390_domain,
-> [...]
+On Thu, Dec 1, 2022 at 5:01 AM Koba Ko <koba.ko@canonical.com> wrote:
+>
+> The first time dma_chan_get() is called for a channel the channel
+> client_count is incorrectly incremented twice for public channels,
+> first in balance_ref_count(), and again prior to returning. This
+> results in an incorrect client count which will lead to the
+> channel resources not being freed when they should be. A simple
+>  test of repeated module load and unload of async_tx on a Dell
+>  Power Edge R7425 also shows this resulting in a kref underflow
+>  warning.
+>
+> [  124.329662] async_tx: api initialized (async)
+> [  129.000627] async_tx: api initialized (async)
+> [  130.047839] ------------[ cut here ]------------
+> [  130.052472] refcount_t: underflow; use-after-free.
+> [  130.057279] WARNING: CPU: 3 PID: 19364 at lib/refcount.c:28
+> refcount_warn_saturate+0xba/0x110
+> [  130.065811] Modules linked in: async_tx(-) rfkill intel_rapl_msr
+> intel_rapl_common amd64_edac edac_mce_amd ipmi_ssif kvm_amd dcdbas kvm
+> mgag200 drm_shmem_helper acpi_ipmi irqbypass drm_kms_helper ipmi_si
+> syscopyarea sysfillrect rapl pcspkr ipmi_devintf sysimgblt fb_sys_fops
+> k10temp i2c_piix4 ipmi_msghandler acpi_power_meter acpi_cpufreq vfat
+> fat drm fuse xfs libcrc32c sd_mod t10_pi sg ahci crct10dif_pclmul
+> libahci crc32_pclmul crc32c_intel ghash_clmulni_intel igb megaraid_sas
+> i40e libata i2c_algo_bit ccp sp5100_tco dca dm_mirror dm_region_hash
+> dm_log dm_mod [last unloaded: async_tx]
+> [  130.117361] CPU: 3 PID: 19364 Comm: modprobe Kdump: loaded Not
+> tainted 5.14.0-185.el9.x86_64 #1
+> [  130.126091] Hardware name: Dell Inc. PowerEdge R7425/02MJ3T, BIOS
+> 1.18.0 01/17/2022
+> [  130.133806] RIP: 0010:refcount_warn_saturate+0xba/0x110
+> [  130.139041] Code: 01 01 e8 6d bd 55 00 0f 0b e9 72 9d 8a 00 80 3d
+> 26 18 9c 01 00 75 85 48 c7 c7 f8 a3 03 9d c6 05 16 18 9c 01 01 e8 4a
+> bd 55 00 <0f> 0b e9 4f 9d 8a 00 80 3d 01 18 9c 01 00 0f 85 5e ff ff ff
+> 48 c7
+> [  130.157807] RSP: 0018:ffffbf98898afe68 EFLAGS: 00010286
+> [  130.163036] RAX: 0000000000000000 RBX: ffff9da06028e598 RCX: 0000000000000000
+> [  130.170172] RDX: ffff9daf9de26480 RSI: ffff9daf9de198a0 RDI: ffff9daf9de198a0
+> [  130.177316] RBP: ffff9da7cddf3970 R08: 0000000000000000 R09: 00000000ffff7fff
+> [  130.184459] R10: ffffbf98898afd00 R11: ffffffff9d9e8c28 R12: ffff9da7cddf1970
+> [  130.191596] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> [  130.198739] FS:  00007f646435c740(0000) GS:ffff9daf9de00000(0000)
+> knlGS:0000000000000000
+> [  130.206832] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  130.212586] CR2: 00007f6463b214f0 CR3: 00000008ab98c000 CR4: 00000000003506e0
+> [  130.219729] Call Trace:
+> [  130.222192]  <TASK>
+> [  130.224305]  dma_chan_put+0x10d/0x110
+> [  130.227988]  dmaengine_put+0x7a/0xa0
+> [  130.231575]  __do_sys_delete_module.constprop.0+0x178/0x280
+> [  130.237157]  ? syscall_trace_enter.constprop.0+0x145/0x1d0
+> [  130.242652]  do_syscall_64+0x5c/0x90
+> [  130.246240]  ? exc_page_fault+0x62/0x150
+> [  130.250178]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [  130.255243] RIP: 0033:0x7f6463a3f5ab
+> [  130.258830] Code: 73 01 c3 48 8b 0d 75 a8 1b 00 f7 d8 64 89 01 48
+> 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00
+> 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 45 a8 1b 00 f7 d8 64 89
+> 01 48
+> [  130.277591] RSP: 002b:00007fff22f972c8 EFLAGS: 00000206 ORIG_RAX:
+> 00000000000000b0
+> [  130.285164] RAX: ffffffffffffffda RBX: 000055b6786edd40 RCX: 00007f6463a3f5ab
+> [  130.292303] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000055b6786edda8
+> [  130.299443] RBP: 000055b6786edd40 R08: 0000000000000000 R09: 0000000000000000
+> [  130.306584] R10: 00007f6463b9eac0 R11: 0000000000000206 R12: 000055b6786edda8
+> [  130.313731] R13: 0000000000000000 R14: 000055b6786edda8 R15: 00007fff22f995f8
+> [  130.320875]  </TASK>
+> [  130.323081] ---[ end trace eff7156d56b5cf25 ]---
+>
+> cat /sys/class/dma/dma0chan*/in_use would get the wrong result.
+> 2
+> 2
+> 2
+>
+> Fixes: d2f4f99db3e9 ("dmaengine: Rework dma_chan_get")
+> Signed-off-by: Koba Ko <koba.ko@canonical.com>
+> Reviewed-by: Jie Hai <haijie1@huawei.com>
+> Test-by: Jie Hai <haijie1@huawei.com>
+> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+>
+> ---
+> V2: Remove [3/3] on subject.
+> V3: Refine title and comments as per suggestions.
+> Ref: https://patchwork.kernel.org/project/linux-dmaengine/patch/20220930173652.1251349-1-koba.ko@canonical.com/
+> ---
+>  drivers/dma/dmaengine.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
+> index 2cfa8458b51be..78f8a9f3ad825 100644
+> --- a/drivers/dma/dmaengine.c
+> +++ b/drivers/dma/dmaengine.c
+> @@ -451,7 +451,8 @@ static int dma_chan_get(struct dma_chan *chan)
+>         /* The channel is already in use, update client count */
+>         if (chan->client_count) {
+>                 __module_get(owner);
+> -               goto out;
+> +               chan->client_count++;
+> +               return 0;
+>         }
+>
+>         if (!try_module_get(owner))
+> @@ -470,11 +471,11 @@ static int dma_chan_get(struct dma_chan *chan)
+>                         goto err_out;
+>         }
+>
+> +       chan->client_count++;
+> +
+>         if (!dma_has_cap(DMA_PRIVATE, chan->device->cap_mask))
+>                 balance_ref_count(chan);
+>
+> -out:
+> -       chan->client_count++;
+>         return 0;
+>
+>  err_out:
+> --
+> 2.25.1
+>
 
