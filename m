@@ -2,246 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57CD65BB9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0D265BB9D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236951AbjACIIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
+        id S236920AbjACIKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbjACIIn (ORCPT
+        with ESMTP id S230139AbjACIKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:08:43 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603592DD3
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:08:41 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso15959953wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:08:41 -0800 (PST)
+        Tue, 3 Jan 2023 03:10:07 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15D62A5;
+        Tue,  3 Jan 2023 00:10:05 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id w1so16522511wrt.8;
+        Tue, 03 Jan 2023 00:10:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MTwliKrauQumjNtvyJtaaJlzR8NJFQTmYrGQuZ3mV6o=;
-        b=HJ5Nh/gkBbPAxieY2i0xdRjATfzppgZ9Iywl2e/BN9DZyfXTNfWn9TstyEtT7IQh1z
-         cquYgBCD1/bN6cEL6eD5OWKGSGgJfJpm41vkrAEePvuEtlyW4b5Q0LFFrMwr3ko+pF+F
-         WE3Gr5aTgHMm10GXKNxW9CM7pAECq9Xz3caGh3t+nT0QmjaUtIkEEFKuMGDrnUfdzaq9
-         MAXxsGCv4Z+b8D9GxtDuA1U7814mOHj+vEBupY3QNgNDqmRW7ulMfo67mHYfexNSh88Y
-         /MR4qdDwR8LR7n8MWbPOiZ+v7/el4ij1obXqZ8LEve3D8HJeC5oJm6cegrJvSFZNa8Ws
-         Fw+Q==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rhra4FwBLg9m+4+vXc8PagED9PkYQV87HgCAw5sVyGw=;
+        b=j+XlRJVpT1qKfnC2AxhtVc/ggk7DEd8k2JQ0rMZwlNii2ZBFjUuxQR/VXHBhh91K28
+         pmEAXBb/YmxXGYFyjl4gbD4/2PiGZbvEVPByjAy5vv7bKTgI+OZ50MK1DIHMQWkxG68v
+         H5suyFrFCzmMiptA3TFpBpDZFZxLq0c8VhnPwskLzhJTKUEV+ylGogbn/CjZR5cZuthT
+         pVMKt1SlEXrQuyovEesbKcxRCVQGdPvL8buXdt7S1pv4IVDjyTsFWlIYcHIr1J6Whinn
+         DoayYibLUxXEBtLfXoLOsZXr78MEu82Goq+GVk4qOntDSCZJKfluplI1sz7LURH+J6Se
+         vGmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MTwliKrauQumjNtvyJtaaJlzR8NJFQTmYrGQuZ3mV6o=;
-        b=LDePuXR5OxcesbJDQlLMZjhDG5hGGc/XnfN8DdPGdNts6IaL4KFtCzV+6WWerwfoiu
-         z8t+TtjyMfv4bxuVyhCouOqBxlk8PCB1zY4hm0LFkTcYatFrHY8BCvunRA+1WUpHitOX
-         y833dboKETFXMoqybQkYNtGflkQrOwIoQmpBFS8KN3sqmG1ur+TSQIDaHnTi5embYnv+
-         wWMob1c3C614/V8bi63d4xmQQgfjKiQjDLERfgF8/A1kukJoda0Uas51Li4/0WitqRAN
-         vRMXSsQKxXFbQmnSHc+mfggEAu1eX+6y0FyW0eYCq/FPCjXBAH84SLQFUT5+qPb7TCeg
-         QZMQ==
-X-Gm-Message-State: AFqh2kr2tjoHue4xcqbLLO0xsWqp603gv3AOahArZk4JP5Xfp2ebgzRb
-        GCVqwtFFeMxbl3A4YHCT5cwDlt1x7ghD1d7FZ/9L3g==
-X-Google-Smtp-Source: AMrXdXt72wOgqyvi0xQOSBls64b8m/WUQsSDgIVp6L2IqkXkthXW1vd381QXl5DkooAdUWxVuzWB/CS33NGuB9dtEW4=
-X-Received: by 2002:a7b:cb97:0:b0:3c6:e1b5:71c2 with SMTP id
- m23-20020a7bcb97000000b003c6e1b571c2mr2506841wmi.94.1672733319900; Tue, 03
- Jan 2023 00:08:39 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rhra4FwBLg9m+4+vXc8PagED9PkYQV87HgCAw5sVyGw=;
+        b=ojWJLy40r7mo54wPhv8HgYSJ0ryE3wNTy4MnWZ5V24/pluTuC7fTKvJm57pWq+TGI3
+         GaceFlzI++IgKQx7QgZUni6STWRm9GftchbffgwnaiKFBqtmIll/qnvqa8VQKS1jpMKM
+         tDxJVOPGPG164iI2ImApAjFGZ2/IeUXBRU5KRsh4OweO/cUZaolWlhEUTGub5TuNb8aS
+         n/9M8XXfuhk3DgCVirwa+Lrn/P8FaoWABzo0RuZT8mMs7jvGBWpynmJsCxdTHsZ/89Ad
+         c13zvAOlGhX3E0Fn1Z8+aXfRMAhNA1qvfbieWoKWSRYvQCsHBvsgKlx6H/WcSkBh1yRt
+         3Nvg==
+X-Gm-Message-State: AFqh2krbF5BRoD4JdzAmqE/Ue+a/6Ta7P53bY5XbKAg272Zmrg/Z6ZLI
+        9YnUjIvShZdTwgMqqEjO7Po=
+X-Google-Smtp-Source: AMrXdXv/uk1zP1kYRS/c+8VoEC6y4FltnfhA/6OWf2EN57lLq/sB77bBrAkhalJ1LlxlSXxW+N8fBQ==
+X-Received: by 2002:a5d:69cd:0:b0:242:6b2f:4988 with SMTP id s13-20020a5d69cd000000b002426b2f4988mr26824641wrw.46.1672733404229;
+        Tue, 03 Jan 2023 00:10:04 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n14-20020adfe34e000000b002366dd0e030sm30838470wrj.68.2023.01.03.00.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 00:10:03 -0800 (PST)
+Date:   Tue, 3 Jan 2023 11:09:58 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c:467
+ h264_encode_frame() warn: missing error code? 'ret'
+Message-ID: <202301030703.ZBnsKl0x-lkp@intel.com>
 MIME-Version: 1.0
-References: <20221231053421.2039591-1-yoochan1026@gmail.com>
- <202301020326.pzL5zDsa-lkp@intel.com> <CALQpDLcLghTY44YumjGj8McLsTUDkcxTKMOmjA5-oqEPGBG3ww@mail.gmail.com>
-In-Reply-To: <CALQpDLcLghTY44YumjGj8McLsTUDkcxTKMOmjA5-oqEPGBG3ww@mail.gmail.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Tue, 3 Jan 2023 09:08:29 +0100
-Message-ID: <CAHUa44GDB592mgJsmYzFetM_T+VvwAn5LMoj77KnQFSNEM4nOw@mail.gmail.com>
-Subject: Re: [PATCH] tee: optee: ffa_abi: Fix use-after-free in optee_ffa_open
-To:     Yoochan Lee <yoochan1026@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, op-tee@lists.trustedfirmware.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   69b41ac87e4a664de78a395ff97166f0b2943210
+commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+config: ia64-randconfig-m041-20230101
+compiler: ia64-linux-gcc (GCC) 12.1.0
 
-On Mon, Jan 2, 2023 at 1:17 AM Yoochan Lee <yoochan1026@gmail.com> wrote:
->
-> I fix the error in the previous patch.
->
-> From fde49d86f6401789ba51f267a0d79fbe4e7ffc24 Mon Sep 17 00:00:00 2001
-> From: Yoochan Lee <yoochan1026@gmail.com>
-> Date: Mon, 2 Jan 2023 09:16:05 +0900
-> Subject: [PATCH 2/2] fix errors in previous patch
->
-> ---
->  drivers/tee/optee/ffa_abi.c | 17 ++++++-----------
->  1 file changed, 6 insertions(+), 11 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
-Please fix up the original patch and post it as a v2. By the way, have
-you tried to test this in some way?
+smatch warnings:
+drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c:467 h264_encode_frame() warn: missing error code? 'ret'
 
-Thanks,
-Jens
+vim +/ret +467 drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
 
->
-> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> index ea76d7532419..65d9463d9ed8 100644
-> --- a/drivers/tee/optee/ffa_abi.c
-> +++ b/drivers/tee/optee/ffa_abi.c
-> @@ -741,28 +741,23 @@ static void optee_ffa_delete(struct kref *kref)
->
->  static void optee_ffa_release(struct tee_context *ctx)
->  {
-> - struct optee *optee =3D tee_get_drvdata(teedev);
-> -
-> - optee_release_helper(ctx, optee_close_session_helper);
-> + struct optee *optee =3D tee_get_drvdata(ctx->teedev);
-> +
-> + optee_release(ctx);
->   kref_put(&optee->refcnt, optee_ffa_delete);
->  }
->
->  void optee_ffa_release_supp(struct tee_context *ctx)
->  {
->   struct optee *optee =3D tee_get_drvdata(ctx->teedev);
-> -
-> - optee_release_helper(ctx, optee_close_session_helper);
-> - if (optee->scan_bus_wq) {
-> - destroy_workqueue(optee->scan_bus_wq);
-> - optee->scan_bus_wq =3D NULL;
-> - }
-> - optee_supp_release(&optee->supp);
-> +
-> + optee_release_supp(ctx);
->   kref_put(&optee->refcnt, optee_ffa_delete);
->  }
->
->  static int optee_ffa_open(struct tee_context *ctx)
->  {
-> - struct optee *optee =3D tee_get_drvdata(teedev);
-> + struct optee *optee =3D tee_get_drvdata(ctx->teedev);
->   kref_get(&optee->refcnt);
->
->   return optee_open(ctx, true);
-> --
-> 2.39.0
->
-> 2023=EB=85=84 1=EC=9B=94 2=EC=9D=BC (=EC=9B=94) =EC=98=A4=EC=A0=84 5:12, =
-kernel test robot <lkp@intel.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
-> >
-> > Hi Yoochan,
-> >
-> > Thank you for the patch! Yet something to improve:
-> >
-> > [auto build test ERROR on linus/master]
-> > [also build test ERROR on v6.2-rc1 next-20221226]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Yoochan-Lee/tee-=
-optee-ffa_abi-Fix-use-after-free-in-optee_ffa_open/20221231-133611
-> > patch link:    https://lore.kernel.org/r/20221231053421.2039591-1-yooch=
-an1026%40gmail.com
-> > patch subject: [PATCH] tee: optee: ffa_abi: Fix use-after-free in optee=
-_ffa_open
-> > config: arm-randconfig-c002-20221231
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project f5=
-700e7b69048de958172fb513b336564e7f8709)
-> > reproduce (this is a W=3D1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm cross compiling tool for clang build
-> >         # apt-get install binutils-arm-linux-gnueabi
-> >         # https://github.com/intel-lab-lkp/linux/commit/3fe68a00d912f9e=
-5dbec5002a7d30cf2a0868679
-> >         git remote add linux-review https://github.com/intel-lab-lkp/li=
-nux
-> >         git fetch --no-tags linux-review Yoochan-Lee/tee-optee-ffa_abi-=
-Fix-use-after-free-in-optee_ffa_open/20221231-133611
-> >         git checkout 3fe68a00d912f9e5dbec5002a7d30cf2a0868679
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
-W=3D1 O=3Dbuild_dir ARCH=3Darm olddefconfig
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
-W=3D1 O=3Dbuild_dir ARCH=3Darm SHELL=3D/bin/bash drivers/tee/optee/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All error/warnings (new ones prefixed by >>):
-> >
-> > >> drivers/tee/optee/ffa_abi.c:744:40: error: use of undeclared identif=
-ier 'teedev'
-> >            struct optee *optee =3D tee_get_drvdata(teedev);
-> >                                                  ^
-> > >> drivers/tee/optee/ffa_abi.c:746:2: error: call to undeclared functio=
-n 'optee_release_helper'; ISO C99 and later do not support implicit functio=
-n declarations [-Wimplicit-function-declaration]
-> >            optee_release_helper(ctx, optee_close_session_helper);
-> >            ^
-> >    drivers/tee/optee/ffa_abi.c:746:2: note: did you mean 'optee_release=
-_supp'?
-> >    drivers/tee/optee/optee_private.h:258:6: note: 'optee_release_supp' =
-declared here
-> >    void optee_release_supp(struct tee_context *ctx);
-> >         ^
-> >    drivers/tee/optee/ffa_abi.c:754:2: error: call to undeclared functio=
-n 'optee_release_helper'; ISO C99 and later do not support implicit functio=
-n declarations [-Wimplicit-function-declaration]
-> >            optee_release_helper(ctx, optee_close_session_helper);
-> >            ^
-> > >> drivers/tee/optee/ffa_abi.c:750:6: warning: no previous prototype fo=
-r function 'optee_ffa_release_supp' [-Wmissing-prototypes]
-> >    void optee_ffa_release_supp(struct tee_context *ctx)
-> >         ^
-> >    drivers/tee/optee/ffa_abi.c:750:1: note: declare 'static' if the fun=
-ction is not intended to be used outside of this translation unit
-> >    void optee_ffa_release_supp(struct tee_context *ctx)
-> >    ^
-> >    static
-> >    drivers/tee/optee/ffa_abi.c:765:40: error: use of undeclared identif=
-ier 'teedev'
-> >            struct optee *optee =3D tee_get_drvdata(teedev);
-> >                                                  ^
-> >    1 warning and 4 errors generated.
-> >
-> >
-> > vim +/teedev +744 drivers/tee/optee/ffa_abi.c
-> >
-> >    741
-> >    742  static void optee_ffa_release(struct tee_context *ctx)
-> >    743  {
-> >  > 744          struct optee *optee =3D tee_get_drvdata(teedev);
-> >    745
-> >  > 746          optee_release_helper(ctx, optee_close_session_helper);
-> >    747          kref_put(&optee->refcnt, optee_ffa_delete);
-> >    748  }
-> >    749
-> >  > 750  void optee_ffa_release_supp(struct tee_context *ctx)
-> >    751  {
-> >    752          struct optee *optee =3D tee_get_drvdata(ctx->teedev);
-> >    753
-> >    754          optee_release_helper(ctx, optee_close_session_helper);
-> >    755          if (optee->scan_bus_wq) {
-> >    756                  destroy_workqueue(optee->scan_bus_wq);
-> >    757                  optee->scan_bus_wq =3D NULL;
-> >    758          }
-> >    759          optee_supp_release(&optee->supp);
-> >    760          kref_put(&optee->refcnt, optee_ffa_delete);
-> >    761  }
-> >    762
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  435  static int h264_encode_frame(struct venc_h264_inst *inst,
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  436  			     struct venc_frm_buf *frm_buf,
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  437  			     struct mtk_vcodec_mem *bs_buf,
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  438  			     unsigned int *bs_size)
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  439  {
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  440  	int ret = 0;
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  441  	unsigned int irq_status;
+0dc4b328612579 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Yunfei Dong      2020-08-21  442  	struct venc_frame_info frame_info;
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  443  
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  444  	mtk_vcodec_debug_enter(inst);
+0dc4b328612579 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Yunfei Dong      2020-08-21  445  	mtk_vcodec_debug(inst, "frm_cnt = %d\n ", inst->frm_cnt);
+0dc4b328612579 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Yunfei Dong      2020-08-21  446  	frame_info.frm_count = inst->frm_cnt;
+0dc4b328612579 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Yunfei Dong      2020-08-21  447  	frame_info.skip_frm_count = inst->skip_frm_cnt;
+0dc4b328612579 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Yunfei Dong      2020-08-21  448  	frame_info.frm_type = h264_frame_type(inst);
+0dc4b328612579 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Yunfei Dong      2020-08-21  449  	mtk_vcodec_debug(inst, "frm_count = %d,skip_frm_count =%d,frm_type=%d.\n",
+0dc4b328612579 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Yunfei Dong      2020-08-21  450  			 frame_info.frm_count, frame_info.skip_frm_count,
+0dc4b328612579 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Yunfei Dong      2020-08-21  451  			 frame_info.frm_type);
+10d0f56800b313 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Dafna Hirschfeld 2021-10-22  452  	ret = vpu_enc_encode(&inst->vpu_inst, H264_BS_MODE_FRAME, frm_buf, bs_buf, &frame_info);
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  453  	if (ret)
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  454  		return ret;
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  455  
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  456  	/*
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  457  	 * skip frame case: The skip frame buffer is composed by vpu side only,
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  458  	 * it does not trigger the hw, so skip the wait interrupt operation.
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  459  	 */
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  460  	if (inst->vpu_inst.state == VEN_IPI_MSG_ENC_STATE_SKIP) {
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  461  		*bs_size = inst->vpu_inst.bs_size;
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  462  		memcpy(bs_buf->va,
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  463  		       inst->work_bufs[VENC_H264_VPU_WORK_BUF_SKIP_FRAME].va,
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  464  		       *bs_size);
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  465  		++inst->frm_cnt;
+0dc4b328612579 drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Yunfei Dong      2020-08-21  466  		++inst->skip_frm_cnt;
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03 @467  		return ret;
+
+This seems intentional.  Just do "return 0;" here to make the code more
+readable.
+
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  468  	}
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  469  
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  470  	irq_status = h264_enc_wait_venc_done(inst);
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  471  	if (irq_status != MTK_VENC_IRQ_STATUS_FRM) {
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  472  		mtk_vcodec_err(inst, "irq_status=%d failed", irq_status);
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  473  		return -EIO;
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  474  	}
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  475  
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  476  	*bs_size = h264_read_reg(inst, VENC_PIC_BITSTREAM_BYTE_CNT);
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  477  
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  478  	++inst->frm_cnt;
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  479  	mtk_vcodec_debug(inst, "frm %d bs_size %d key_frm %d <-",
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  480  			 inst->frm_cnt, *bs_size, inst->vpu_inst.is_key_frm);
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  481  
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  482  	return ret;
+
+Here too.
+
+2cc93862d4840f drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c Tiffany Lin      2016-05-03  483  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
+
