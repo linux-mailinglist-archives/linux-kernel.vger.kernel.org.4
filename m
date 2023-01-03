@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AEE65C462
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6624A65C46F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbjACQ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
+        id S233756AbjACQ7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjACQ7E (ORCPT
+        with ESMTP id S230373AbjACQ7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:59:04 -0500
+        Tue, 3 Jan 2023 11:59:21 -0500
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C08C5B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:59:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F244CC5B
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:59:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mxDcbg9196yYDc4/nWFTQPBwp/sgfGLK/oSLrLpBDOI=; b=IGa6eXA7tCe5Q+39nOMcg2hp9j
-        4h0v2Z7M8Mpuh9jI+Ejhhzs5tTmuKOzwNU1pgJeCWtPpKJUC11fh5Jn/5YjdIqlF1X4dAsmABcdBY
-        MpQKu7kITSU1HkF5iWgjJ0zJXfNMOWQnbXAljM+4YTtBsj+6cfvRofi7JwpK7JVufP2IXy54ZFps2
-        oCq7DKnsX0WInHFkNpp44YFq66VL+O8EvUcHb3wHLDuIKE5NCKyhaJKQ5XV1rmhpkQwjtSbj5WTT1
-        0SxDD+BuMHZHgDiE/r35nHQzsT95s346bZGQ+zCfkE3twtviIVlsXz0axlp2v4CId1TuMYNeyqdUt
-        3EkVJl7w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35948)
+        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
+        In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4rZt+/ZOnctX5K9vzjEgIu7kKeqecmK58ZccPLFcCgE=; b=jrKPRdfl9oSkIlnbr1BQ99/P85
+        92wmbko73cvAHWp+40eG6orzloOXrLKx4XVkXXl3NwiReUBgRMloLinJqmxLYq5zA9lzKlGj/rU2Y
+        CLmBjhZJdROUmEmFk8mHMtadVyL2FBXhJFKuikxuOrOPdvBqrSJX8uU99bvKpnvwLTXLWjmvt64EQ
+        MEcHO/Awk5nhKCkqRHGCEc/0tUYWHrqlmhX48+9gld8Q+Qqmvwghw7/5wi8deuT9KpHUOyBq+H6Vw
+        Smd87KHfplLNrwTj8xuN1GVvUDyDx628W3Mt6t+bKpuEIod5QSxsUdEztdcSKGhdGWh9oYZ0NjY1F
+        S9jLhkNA==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:32780 helo=rmk-PC.armlinux.org.uk)
         by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pCkcr-0005bj-B9; Tue, 03 Jan 2023 16:58:56 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pCkcn-0002GF-DC; Tue, 03 Jan 2023 16:58:53 +0000
-Date:   Tue, 3 Jan 2023 16:58:53 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+        (envelope-from <rmk@armlinux.org.uk>)
+        id 1pCkdB-0005bv-TH; Tue, 03 Jan 2023 16:59:17 +0000
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+        id 1pCkdA-004huk-Ta; Tue, 03 Jan 2023 16:59:16 +0000
+In-Reply-To: <Y7RezbPSGrO37NZZ@shell.armlinux.org.uk>
+References: <Y7RezbPSGrO37NZZ@shell.armlinux.org.uk>
+From:   "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Gaosheng Cui <cuigaosheng1@huawei.com>,
@@ -44,12 +45,15 @@ Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Maxime Ripard <mripard@kernel.org>,
         Hector Martin <marcan@marcan.st>
-Subject: [PATCH v3 0/5] Fix a whole host of nvmem registration/cleanup issues
-Message-ID: <Y7RezbPSGrO37NZZ@shell.armlinux.org.uk>
+Subject: [PATCH v3 1/5] nvmem: core: remove spurious white space
+    Bartosz Golaszewski <bgolaszewski@baylibre.com>,Gaosheng Cui <cuigaosheng1@huawei.com>,Greg Kroah-Hartman <gregkh@linuxfoundation.org>,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org,Maxime Ripard <mripard@kernel.org>, Hector Martin <marcan@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1pCkdA-004huk-Ta@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date:   Tue, 03 Jan 2023 16:59:16 +0000
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -59,40 +63,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Remove a spurious white space in for the ida_alloc() call.
 
-This series fixes a whole host of nvmem registration/error cleanup
-issues that have been identified by both Hector and myself. It is a
-substantial rework of my original patch fixing the first problem.
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+ drivers/nvmem/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The first most obvious problem is the race between nvmem registration
-and use, which leads to sporadic failures of drivers to probe at boot
-time.
-
-While fixing this, it has been noticed that a recent fix to check the
-return value of dev_set_name() introduced a new bug where wp_gpio was
-not being put in that newly introduced error path.
-
-Then there's a fix for a previous fix which itself purports to fix
-another bug, but results in the allocated ID being leaked. Fix for a
-fix for a fix is not good!
-
-Then there's an error in the docbook documentation for wp_gpio (it's
-listed as wp-gpio instead) but as nothing seems to set wp_gpio, we
-might as well get rid of it - which also solves the issue that we
-call gpiod_put() on this whether we own it or not.
-
-Lastly, there's a fix for yet another spurious white-space in this
-code, one of what seems to be a long history of past white-space
-fixes.
-
-These patches have been individually build-tested in the order of
-posting, but not run-time tested except for the entire series.
-
- drivers/nvmem/core.c           | 51 ++++++++++++++++++------------------------
- include/linux/nvmem-provider.h |  2 --
- 2 files changed, 22 insertions(+), 31 deletions(-)
-
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 321d7d63e068..bf11e0c36d60 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -764,7 +764,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	if (!nvmem)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	rval  = ida_alloc(&nvmem_ida, GFP_KERNEL);
++	rval = ida_alloc(&nvmem_ida, GFP_KERNEL);
+ 	if (rval < 0) {
+ 		kfree(nvmem);
+ 		return ERR_PTR(rval);
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.30.2
+
