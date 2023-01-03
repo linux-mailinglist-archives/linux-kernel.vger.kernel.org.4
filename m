@@ -2,339 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FE765C049
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE4165C04E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237701AbjACMvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 07:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        id S237712AbjACMwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 07:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237760AbjACMvU (ORCPT
+        with ESMTP id S237732AbjACMwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 07:51:20 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DCD101DF;
-        Tue,  3 Jan 2023 04:51:04 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 300c1f581423dafe; Tue, 3 Jan 2023 13:51:02 +0100
-Received: from kreacher.localnet (unknown [213.134.163.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 3 Jan 2023 07:52:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD3BCFC;
+        Tue,  3 Jan 2023 04:52:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 774AA781235;
-        Tue,  3 Jan 2023 13:51:01 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Hang Zhang <zh.nvgt@gmail.com>
-Subject: [PATCH v2] ACPI: Drop the custom_method debugfs interface
-Date:   Tue, 03 Jan 2023 13:51:00 +0100
-Message-ID: <2667007.mvXUDI8C0e@kreacher>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 500D5B80E12;
+        Tue,  3 Jan 2023 12:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1488EC433D2;
+        Tue,  3 Jan 2023 12:52:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672750339;
+        bh=Wa6TU/u66JGcOO2l7KQC5SQzR8MRkoV+DozPJjJgvFc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZVWeXS8n9PHu8ZQP/yg3TdI1mkaBooz1jyzb/4734yf52pbUuAVqX5Rn3B08TxHWj
+         kevH5vWcWONZc/vmhRS/xaZWV6EdttNGfgZj5dtmb2cVscXVQ1bLWbrV1A5W+zwHFV
+         ksHh1iYvkF2stlaqHfcAg5kyC4zHvgwX+DW/GV73LFN8gjxhDwoWgrsoWuWJDlCKWM
+         WjruZfe3XbujcvJbZ6ZCorgUxUMxFdvsasxEt0RHXSLDDE7XXOrX1qFYvJzuMM972g
+         tWA6SVkz6FiIsRpTaJnTE7HY4CPlgBWfEventIbOxDzYpFuOLnSGqcQi4h4YmtAluJ
+         JQBzHFZ8CV27w==
+Date:   Tue, 3 Jan 2023 12:52:12 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
+Message-ID: <Y7Qk/EgOI9mkJIjn@google.com>
+References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com>
+ <20221221210917.458537-3-fabrizio.castro.jz@renesas.com>
+ <CAMuHMdXDwEUzBpG+w_G6=CzKo=n92cdVw6v8JwOwf9o86HnOZQ@mail.gmail.com>
+ <TYWPR01MB87758FB15ED12D396AE738DDC2F49@TYWPR01MB8775.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.200
-X-CLIENT-HOSTNAME: 213.134.163.200
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeggdegfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduieefrddvtddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeifedrvddttddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepiihhrdhnvhhgthesghhmrghilhdr
- tghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TYWPR01MB87758FB15ED12D396AE738DDC2F49@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, 03 Jan 2023, Fabrizio Castro wrote:
 
-The ACPI custom_method debugfs interface is security-sensitive and
-concurrent access to it is broken [1].
+> Hi Geert,
+> 
+> Thanks for your feedback!
+> 
+> > -----Original Message-----
+> > From: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Sent: 03 January 2023 08:37
+> > To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>; Bartosz Golaszewski
+> > <brgl@bgdev.pl>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > <krzysztof.kozlowski+dt@linaro.org>; Sebastian Reichel <sre@kernel.org>;
+> > Geert Uytterhoeven <geert+renesas@glider.be>; Lee Jones <lee@kernel.org>;
+> > linux-gpio@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; linux-pm@vger.kernel.org; Chris Paterson
+> > <Chris.Paterson2@renesas.com>; Biju Das <biju.das@bp.renesas.com>; linux-
+> > renesas-soc@vger.kernel.org; Laurent Pinchart
+> > <laurent.pinchart@ideasonboard.com>; Jacopo Mondi <jacopo@jmondi.org>
+> > Subject: Re: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
+> > 
+> > Hi Fabrizio,
+> > 
+> > On Wed, Dec 21, 2022 at 10:09 PM Fabrizio Castro
+> > <fabrizio.castro.jz@renesas.com> wrote:
+> > > The External Power Sequence Controller (PWC) IP (found in the
+> > > RZ/V2M SoC) is a controller for external power supplies (regulators
+> > > and power switches), and it supports the following features: it
+> > > generates a power on/off sequence for external power supplies,
+> > > it generates an on/off sequence for the LPDDR4 core power supply
+> > > (LPVDD), it comes with General-Purpose Outputs, and it processes
+> > > key input signals.
+> > 
+> > Thanks for your patch!
+> > 
+> > > The PWC is basically a Multi-Function Device (MFD), its software
+> > > support comes with a core driver, and specialized drivers for
+> > > its specific features.
+> > 
+> > I have to admit I'm not such a big fan of MFD.  In this driver,
+> > you are not even sharing resources in the MFD cells, just the mapped
+> > register base.  So I think you can easily save +100 LoC and reduce
+> > maintenance synchronization overhead across subsystems by just having
+> > a single non-MFD driver instead.
+> > 
+> > Did you pick MFD because the PWC poweroff feature depends on board
+> > wiring, and thus is optional?
+> 
+> I am not a big fan of MFD, either.
 
-Moreover, the recipe for preparing a customized version of a given
-control method has changed at one point due to ACPICA changes, which
-has not been reflected in its documentation, so whoever used it before
-has had to adapt an no problems with it have been reported.
+Interesting.
 
-The latter likely means that the number of its users is limited at best
-and attempting to fix the issues mentioned above is likely not worth the
-effort.  Moreover, if it gets broken in the process, the breakage may not
-be readily discovered, so deleting it altogheher appeares to be a better
-option.
+Could you both elaborate further please?
 
-Accordingly, drop custom_method along with its (outdated anyway)
-documentation.
+> I picked MFD because we were not 100% sure of what the IP could do
+> when we started working on it.
+> I have received more information regarding the IP now (which I don't
+> have the liberty to discuss), I am still not 100% sure that's all
+> of it, but basically its support may require expansion later on.
+> 
+> I liked the solution based on syscon and simple-mfd for several reasons,
+> but having dropped syscon and simple-mfd due to issues with the dt-bindings
+> I have moved on with a core driver to instantiate the required SW support.
+> We could of course move to a unified driver if that makes more sense?
+> If we were to move to unified driver, under which directory would you
+> suggest we put it?
 
-Link: https://lore.kernel.org/linux-acpi/20221227063335.61474-1-zh.nvgt@gmail.com/ # [1]
-Reported-by: Hang Zhang <zh.nvgt@gmail.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+If you do not have any resources to share, you can simply register each
+of the devices via Device Tree.  I do not see a valid reason to force a
+parent / child relationship for your use-case.
 
--> v2: Update index.rst too.
+Many people attempt to use MFD as a dumping ground / workaround for a
+bunch of reasons.  Some valid, others not so much.
 
----
- Documentation/firmware-guide/acpi/index.rst              |    1 
- Documentation/firmware-guide/acpi/method-customizing.rst |   89 ------------
- drivers/acpi/Kconfig                                     |   14 --
- drivers/acpi/Makefile                                    |    1 
- drivers/acpi/custom_method.c                             |  103 ---------------
- 5 files changed, 208 deletions(-)
-
-Index: linux-pm/drivers/acpi/Kconfig
-===================================================================
---- linux-pm.orig/drivers/acpi/Kconfig
-+++ linux-pm/drivers/acpi/Kconfig
-@@ -444,20 +444,6 @@ config ACPI_HED
- 	  which is used to report some hardware errors notified via
- 	  SCI, mainly the corrected errors.
- 
--config ACPI_CUSTOM_METHOD
--	tristate "Allow ACPI methods to be inserted/replaced at run time"
--	depends on DEBUG_FS
--	help
--	  This debug facility allows ACPI AML methods to be inserted and/or
--	  replaced without rebooting the system. For details refer to:
--	  Documentation/firmware-guide/acpi/method-customizing.rst.
--
--	  NOTE: This option is security sensitive, because it allows arbitrary
--	  kernel memory to be written to by root (uid=0) users, allowing them
--	  to bypass certain security measures (e.g. if root is not allowed to
--	  load additional kernel modules after boot, this feature may be used
--	  to override that restriction).
--
- config ACPI_BGRT
- 	bool "Boottime Graphics Resource Table support"
- 	depends on EFI && (X86 || ARM64)
-Index: linux-pm/drivers/acpi/Makefile
-===================================================================
---- linux-pm.orig/drivers/acpi/Makefile
-+++ linux-pm/drivers/acpi/Makefile
-@@ -101,7 +101,6 @@ obj-$(CONFIG_ACPI_SBS)		+= sbshc.o
- obj-$(CONFIG_ACPI_SBS)		+= sbs.o
- obj-$(CONFIG_ACPI_HED)		+= hed.o
- obj-$(CONFIG_ACPI_EC_DEBUGFS)	+= ec_sys.o
--obj-$(CONFIG_ACPI_CUSTOM_METHOD)+= custom_method.o
- obj-$(CONFIG_ACPI_BGRT)		+= bgrt.o
- obj-$(CONFIG_ACPI_CPPC_LIB)	+= cppc_acpi.o
- obj-$(CONFIG_ACPI_SPCR_TABLE)	+= spcr.o
-Index: linux-pm/drivers/acpi/custom_method.c
-===================================================================
---- linux-pm.orig/drivers/acpi/custom_method.c
-+++ /dev/null
-@@ -1,103 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * custom_method.c - debugfs interface for customizing ACPI control method
-- */
--
--#include <linux/init.h>
--#include <linux/module.h>
--#include <linux/kernel.h>
--#include <linux/uaccess.h>
--#include <linux/debugfs.h>
--#include <linux/acpi.h>
--#include <linux/security.h>
--
--#include "internal.h"
--
--MODULE_LICENSE("GPL");
--
--static struct dentry *cm_dentry;
--
--/* /sys/kernel/debug/acpi/custom_method */
--
--static ssize_t cm_write(struct file *file, const char __user *user_buf,
--			size_t count, loff_t *ppos)
--{
--	static char *buf;
--	static u32 max_size;
--	static u32 uncopied_bytes;
--
--	struct acpi_table_header table;
--	acpi_status status;
--	int ret;
--
--	ret = security_locked_down(LOCKDOWN_ACPI_TABLES);
--	if (ret)
--		return ret;
--
--	if (!(*ppos)) {
--		/* parse the table header to get the table length */
--		if (count <= sizeof(struct acpi_table_header))
--			return -EINVAL;
--		if (copy_from_user(&table, user_buf,
--				   sizeof(struct acpi_table_header)))
--			return -EFAULT;
--		uncopied_bytes = max_size = table.length;
--		/* make sure the buf is not allocated */
--		kfree(buf);
--		buf = kzalloc(max_size, GFP_KERNEL);
--		if (!buf)
--			return -ENOMEM;
--	}
--
--	if (buf == NULL)
--		return -EINVAL;
--
--	if ((*ppos > max_size) ||
--	    (*ppos + count > max_size) ||
--	    (*ppos + count < count) ||
--	    (count > uncopied_bytes)) {
--		kfree(buf);
--		buf = NULL;
--		return -EINVAL;
--	}
--
--	if (copy_from_user(buf + (*ppos), user_buf, count)) {
--		kfree(buf);
--		buf = NULL;
--		return -EFAULT;
--	}
--
--	uncopied_bytes -= count;
--	*ppos += count;
--
--	if (!uncopied_bytes) {
--		status = acpi_install_method(buf);
--		kfree(buf);
--		buf = NULL;
--		if (ACPI_FAILURE(status))
--			return -EINVAL;
--		add_taint(TAINT_OVERRIDDEN_ACPI_TABLE, LOCKDEP_NOW_UNRELIABLE);
--	}
--
--	return count;
--}
--
--static const struct file_operations cm_fops = {
--	.write = cm_write,
--	.llseek = default_llseek,
--};
--
--static int __init acpi_custom_method_init(void)
--{
--	cm_dentry = debugfs_create_file("custom_method", S_IWUSR,
--					acpi_debugfs_dir, NULL, &cm_fops);
--	return 0;
--}
--
--static void __exit acpi_custom_method_exit(void)
--{
--	debugfs_remove(cm_dentry);
--}
--
--module_init(acpi_custom_method_init);
--module_exit(acpi_custom_method_exit);
-Index: linux-pm/Documentation/firmware-guide/acpi/method-customizing.rst
-===================================================================
---- linux-pm.orig/Documentation/firmware-guide/acpi/method-customizing.rst
-+++ /dev/null
-@@ -1,89 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--=======================================
--Linux ACPI Custom Control Method How To
--=======================================
--
--:Author: Zhang Rui <rui.zhang@intel.com>
--
--
--Linux supports customizing ACPI control methods at runtime.
--
--Users can use this to:
--
--1. override an existing method which may not work correctly,
--   or just for debugging purposes.
--2. insert a completely new method in order to create a missing
--   method such as _OFF, _ON, _STA, _INI, etc.
--
--For these cases, it is far simpler to dynamically install a single
--control method rather than override the entire DSDT, because kernel
--rebuild/reboot is not needed and test result can be got in minutes.
--
--.. note::
--
--  - Only ACPI METHOD can be overridden, any other object types like
--    "Device", "OperationRegion", are not recognized. Methods
--    declared inside scope operators are also not supported.
--
--  - The same ACPI control method can be overridden for many times,
--    and it's always the latest one that used by Linux/kernel.
--
--  - To get the ACPI debug object output (Store (AAAA, Debug)),
--    please run::
--
--      echo 1 > /sys/module/acpi/parameters/aml_debug_output
--
--
--1. override an existing method
--==============================
--a) get the ACPI table via ACPI sysfs I/F. e.g. to get the DSDT,
--   just run "cat /sys/firmware/acpi/tables/DSDT > /tmp/dsdt.dat"
--b) disassemble the table by running "iasl -d dsdt.dat".
--c) rewrite the ASL code of the method and save it in a new file,
--d) package the new file (psr.asl) to an ACPI table format.
--   Here is an example of a customized \_SB._AC._PSR method::
--
--      DefinitionBlock ("", "SSDT", 1, "", "", 0x20080715)
--      {
--         Method (\_SB_.AC._PSR, 0, NotSerialized)
--         {
--            Store ("In AC _PSR", Debug)
--            Return (ACON)
--         }
--      }
--
--   Note that the full pathname of the method in ACPI namespace
--   should be used.
--e) assemble the file to generate the AML code of the method.
--   e.g. "iasl -vw 6084 psr.asl" (psr.aml is generated as a result)
--   If parameter "-vw 6084" is not supported by your iASL compiler,
--   please try a newer version.
--f) mount debugfs by "mount -t debugfs none /sys/kernel/debug"
--g) override the old method via the debugfs by running
--   "cat /tmp/psr.aml > /sys/kernel/debug/acpi/custom_method"
--
--2. insert a new method
--======================
--This is easier than overriding an existing method.
--We just need to create the ASL code of the method we want to
--insert and then follow the step c) ~ g) in section 1.
--
--3. undo your changes
--====================
--The "undo" operation is not supported for a new inserted method
--right now, i.e. we can not remove a method currently.
--For an overridden method, in order to undo your changes, please
--save a copy of the method original ASL code in step c) section 1,
--and redo step c) ~ g) to override the method with the original one.
--
--
--.. note:: We can use a kernel with multiple custom ACPI method running,
--   But each individual write to debugfs can implement a SINGLE
--   method override. i.e. if we want to insert/override multiple
--   ACPI methods, we need to redo step c) ~ g) for multiple times.
--
--.. note:: Be aware that root can mis-use this driver to modify arbitrary
--   memory and gain additional rights, if root's privileges got
--   restricted (for example if root is not allowed to load additional
--   modules after boot).
-Index: linux-pm/Documentation/firmware-guide/acpi/index.rst
-===================================================================
---- linux-pm.orig/Documentation/firmware-guide/acpi/index.rst
-+++ linux-pm/Documentation/firmware-guide/acpi/index.rst
-@@ -14,7 +14,6 @@ ACPI Support
-    dsd/phy
-    enumeration
-    osi
--   method-customizing
-    method-tracing
-    DSD-properties-rules
-    debug
-
-
-
+-- 
+Lee Jones [李琼斯]
