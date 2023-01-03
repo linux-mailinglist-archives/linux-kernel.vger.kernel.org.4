@@ -2,229 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8EC65C119
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B57A665C123
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237641AbjACNrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
+        id S237656AbjACNtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:49:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233370AbjACNrj (ORCPT
+        with ESMTP id S237586AbjACNtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:47:39 -0500
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092201117B;
-        Tue,  3 Jan 2023 05:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1672753658; x=1704289658;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=z/UwGeS4Qy0UO208RYamxd2niqrEHeNx9gY0U0Cd3yU=;
-  b=sG4bJXmd/fZfzkHCS7+X4Zg63lnHrqrk9d9H5Jbu/ez69kWZtSOO51/X
-   5EsM/mPovEi04pTaQqsx16CDGxQEmXc5r5VFJ5MiYMiRgnUePFIWaUDUa
-   5c141IV96kIhfHHOH4hT75Ne56DVDeBTcsYBNE0M1r5w5bptqmrcEGCMt
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.96,297,1665446400"; 
-   d="scan'208";a="279051729"
-Subject: Re: RFC on drivers/memory vs drivers/edac memory mapping for DDR Controller
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-b538c141.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 13:47:33 +0000
-Received: from EX13D42EUA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1e-m6i4x-b538c141.us-east-1.amazon.com (Postfix) with ESMTPS id DAD88A2CE8;
-        Tue,  3 Jan 2023 13:47:30 +0000 (UTC)
-Received: from EX19D001EUA003.ant.amazon.com (10.252.50.232) by
- EX13D42EUA002.ant.amazon.com (10.43.165.185) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Tue, 3 Jan 2023 13:47:29 +0000
-Received: from [192.168.14.109] (10.43.161.114) by
- EX19D001EUA003.ant.amazon.com (10.252.50.232) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
- Tue, 3 Jan 2023 13:47:26 +0000
-Message-ID: <07109746-6fba-8c66-069b-b5982f460d76@amazon.com>
-Date:   Tue, 3 Jan 2023 15:47:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <bp@alien8.de>
-CC:     <talelshenhar@gmail.com>, <shellykz@amazon.com>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <2511c7aa-8ce6-a803-a1ea-6121df79c677@amazon.com>
- <8b844f3a-e9b0-28d5-200a-611fe3068bc0@linaro.org>
- <4bd90224-d09a-1f21-92e6-51c967d68a39@amazon.com>
- <21c6dd41-3e6f-26c6-d6ca-25102e992c18@linaro.org>
- <567f14ef-7940-25c5-9323-c673b98e585a@amazon.com>
- <60d2899e-aed3-a98d-4f3e-8203918a23f9@linaro.org>
- <4c91989c-8b63-410b-e06f-99d99ddbb390@amazon.com>
- <a15335d1-fc08-a507-2365-6a14ff6154f6@linaro.org>
-From:   "Shenhar, Talel" <talel@amazon.com>
-In-Reply-To: <a15335d1-fc08-a507-2365-6a14ff6154f6@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Tue, 3 Jan 2023 08:49:14 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DC09FFE;
+        Tue,  3 Jan 2023 05:49:13 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303Dhlpb013391;
+        Tue, 3 Jan 2023 13:48:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=l+taFLKvfRB9Eu0w25rmHirDbleycD90YP7KB7wSW4k=;
+ b=dZ+ZhS73PvxPQ1QDK722mHvdmqD4vZ6Q01PHzD0N3xnY6uYMSegjtWeWFo/RKw4AHaZ1
+ 1vXqFl15j2Razdoh29oyPP0CrRDOsUoKGqevCx8g8eLgdfkf/DgnJMCzi61T9yqGIL9P
+ u1Cl/lbzreFcHjUnY1hZ66kZj7YO3kC/sg6HNHsihmtOQ8p27GW9UwFKhNPU1QSFJM9y
+ RRqPnYINrZ9gulGRi+nrE+ntCJwD1hJ7rHh8RHuKrmxPFDycym2vQW3DWutcbLuhKUnH
+ l3hz2++YbWjsEXclAeGAdP76yq4DrhYYNYa/Tdscfr/DXo50RyFztZzfOa2lJkpDWiz6 Mg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvjk23xha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 13:48:24 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 303DfH0W018652;
+        Tue, 3 Jan 2023 13:48:24 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvjk23xh3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 13:48:24 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303CnkPE030421;
+        Tue, 3 Jan 2023 13:48:23 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3mtcq7eda6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 13:48:23 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 303DmMsP21627550
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Jan 2023 13:48:22 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F300658053;
+        Tue,  3 Jan 2023 13:48:21 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 49C6B58059;
+        Tue,  3 Jan 2023 13:48:21 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.32.150])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  3 Jan 2023 13:48:21 +0000 (GMT)
+Message-ID: <f60b7949dd7c453821f99a25e243b715ac36c290.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/2] selftests/kexec: enable lockdown tests
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
+Cc:     linux-integrity@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Tue, 03 Jan 2023 08:48:20 -0500
+In-Reply-To: <20221230065850.897967-2-coxu@redhat.com>
+References: <20221230065850.897967-1-coxu@redhat.com>
+         <20221230065850.897967-2-coxu@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.43.161.114]
-X-ClientProxiedBy: EX13D45UWA001.ant.amazon.com (10.43.160.91) To
- EX19D001EUA003.ant.amazon.com (10.252.50.232)
-X-Spam-Status: No, score=-15.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: sScxwIsk9a27FAE8IhARqXbmpYNz77lF
+X-Proofpoint-GUID: bPm6wsvwDbivd2FpucRw98-4kh5RaoXf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-03_04,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 priorityscore=1501 suspectscore=0 bulkscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 clxscore=1011 spamscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301030118
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Coiby,
 
-On 1/3/2023 3:23 PM, Krzysztof Kozlowski wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->
->
->
-> On 03/01/2023 14:12, Shenhar, Talel wrote:
->> On 1/2/2023 6:25 PM, Krzysztof Kozlowski wrote:
->>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->>>
->>>
->>>
->>> On 02/01/2023 17:21, Shenhar, Talel wrote:
->>>> On 1/2/2023 3:59 PM, Krzysztof Kozlowski wrote:
->>>>> On 02/01/2023 14:44, Shenhar, Talel wrote:
->>>>>> On 1/2/2023 2:47 PM, Krzysztof Kozlowski wrote:
->>>>>>> On 02/01/2023 13:17, Shenhar, Talel wrote:
->>>>>>>
->>>>>>>> Things we had in mind:
->>>>>>>> 1) map more specific region to avoid conflict (we don't need the same
->>>>>>>> registers on both entity so if we do very specific multiple mapping this
->>>>>>>> shall be resolved)
->>>>>>>> 2) use other kernel API for mapping that doesn't do request_mem_region
->>>>>>>> (or use the reserve only for one of them)
->>>>>>>> 3) have single driver (edac mc) handle also the refresh rate
->>>>>>>> 4) export edac_mc.h and have the drivers/memory have all the needed code
->>>>>>>> to do both edac and refresh rate under drivers/memory
->>>>>>> None of these address the core problem - possibly inaccurate hardware
->>>>>>> description...
->>>>>> Can you elaborate on this inaccurate hardware description?
->>>>> I explained - using same IO address suggests you used Linux driver
->>>>> structure in your hardware description. I assume we talk here about
->>>>> Devicetree. If not, that's quite different case... then I guess ACPI,
->>>>> which I do not care - I am not it's maintainer.
->>>>>
->>>>>> Also, I'd like to write down my understanding of your response from above:
->>>>>>
->>>>>> it seems you see as possible solution both using different API that
->>>>>> allow overlapping (solution 2) and also for splitting the IO address
->>>>>> space to finer pieces to achieve full HW description (solution 1)
->>>>> No. Sorry, we probably talk about two different things.
->>>>>
->>>>> You started writing that you have a hardware described as one IO address
->>>>> space and now have a problem developing drivers for it.
->>>>>
->>>>> The driver model for this is entirely different problem than problem of
->>>>> accurate hardware description. Whether you described HW correct or not,
->>>>> I don't know. You did not provide any details here, like DTS or bindings
->>>>> (if we talk about Devicetree).
->>>>>
->>>>> Having multiple drivers using similar resources is already solved many
->>>>> times (MFD, syscon).
->>>>>
->>>>> Whether the solution is correct or not is one more (third) topic: poking
->>>>> to same IO address space from two different drivers is error-prone. This
->>>>> one is solvable with splitting IO address space.
->>>>>
->>>>> Best regards,
->>>>> Krzysztof
->>>> You are right.
->>>>
->>>> Let me elaborate on this.
->>>>
->>>> We will write down the hardware description via device tree.
->>>>
->>>> Then we will write the driver which will honor that binding.
->>>>
->>>> So the question is what is the best practice there assuming there is no
->>>> shared registers however there is overlapping.
->>> The correct solution is to describe hardware. The hardware is memory
->>> controller. There is no hardware called "scaller of memory controller".
->>> There is no hardware called "EDAC" because that's purely a Linux term.
->>>
->>> Your DTS should accurately describe the hardware, not drivers. Then
->>> drivers can do whatever they want with it - have safe, non-concurrent
->>> access or keep poking same registers and break things...
->> The way the HW shall be described in DT is tightly coupled to the way
->> the drivers will work on mapping the IO addresses.
-> No, that's not true and such DT description will get probably Rob's or
-> mine comments. The HW shall be described without tying to one, specific
-> driver implementation. Otherwise why do you make it tightly coupled to
-> Linux, but ignore BSD, firmware and bootloaders?
->
-> Don't tightly couple DT with your drivers.
+On Fri, 2022-12-30 at 14:58 +0800, Coiby Xu wrote:
+> When lockdown is enabled, kexec_load syscall should always fail.
+> 
+> For kexec_file_load, when lockdown is enabled, it should
+>  - fail of missing PE signature when KEXEC_SIG is enabled
+>  - fail of missing IMA signature when KEXEC_SIG is disabled
 
-But of course its true :)
+Appended kernel image signatures are supported, but differently on
+powerpc and s390.  For s390, KEXEC_SIG is enabled.  For completeness
+the above statements should reflect appended signatures.
 
-binding document define the reg property for drivers that do registers 
-access.
+> 
+> Before this patch, test_kexec_load.sh fails (false positive) and
+> test_kexec_file_load.sh fails without a reason when lockdown enabled and
+> KEXEC_SIG disabled,
+> 
+>     # kexec_load failed [FAIL]
+>     not ok 1 selftests: kexec: test_kexec_load.sh # exit=1
+>     # kexec_file_load failed [PASS]
+>     ok 2 selftests: kexec: test_kexec_file_load.sh
+> 
+> After this patch, test_kexec_load.sh succeeds and
+> test_kexec_file_load.sh fails with the correct reason when lockdown
+> enabled and KEXEC_SIG disabled,
+> 
+>     # kexec_load failed [PASS]
+>     ok 1 selftests: kexec: test_kexec_load.sh
+>     # kexec_file_load failed (missing IMA sig) [PASS]
+>     ok 2 selftests: kexec: test_kexec_file_load.sh
+> 
+> Cc: kexec@lists.infradead.org
+> Cc: linux-integrity@vger.kernel.org
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> ---
+>  .../selftests/kexec/kexec_common_lib.sh       | 16 +++++++++++
+>  .../selftests/kexec/test_kexec_file_load.sh   | 27 +++++++++++++++++++
+>  .../selftests/kexec/test_kexec_load.sh        | 12 ++++++---
+>  3 files changed, 52 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
+> index 641ef05863b2..06c298b46788 100755
+> --- a/tools/testing/selftests/kexec/kexec_common_lib.sh
+> +++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
+> @@ -110,6 +110,22 @@ get_secureboot_mode()
+>  	return $secureboot_mode;
+>  }
+>  
+> +is_lockdown_enabled()
+> +{
+> +	local ret=0
+> +
+> +	if [ -f /sys/kernel/security/lockdown ] \
+> +	     && ! grep -qs "\[none\]" /sys/kernel/security/lockdown; then
+> +		ret=1
+> +	fi
+> +
+> +	if [ $ret -eq 0 ]; then
+> +		log_info "lockdown not enabled"
+> +	fi
+> +
+> +	return $ret
+> +}
+> +
+>  require_root_privileges()
+>  {
+>  	if [ $(id -ru) -ne 0 ]; then
+> diff --git a/tools/testing/selftests/kexec/test_kexec_file_load.sh b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+> index c9ccb3c93d72..790f96938083 100755
+> --- a/tools/testing/selftests/kexec/test_kexec_file_load.sh
+> +++ b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+> @@ -139,6 +139,16 @@ kexec_file_load_test()
+>  			log_fail "$succeed_msg (missing IMA sig)"
+>  		fi
+>  
+> +		if [ $lockdown -eq 1 ] && [ $kexec_sig_enabled -eq 1 ] \
+> +		     && [ $pe_signed -eq 0 ]; then
+> +			log_fail "$succeed_msg (missing PE sig)"
+> +		fi
 
-If you define it one way or the other that shall change the driver 
-mapping policy/method.
+CONFIG_KEXEC_SIG being enabled does not require signature verification
+to be enforced.  When the CONFIG_IMA_ARCH_POLICY is enabled, IMA
+requires kexec signature verification.  Also on s390, CONFIG_KEXEC_SIG
+verifies an appended signature, not a PE signature.  Instead of the
+"missing PE sig" message, perhaps indicate lockdown requires kexec
+signature verification. 
 
->
->> There are 3 ways to describe the HW as far as I see it from address
->> point of view: (actually 2 as option 3 is not really sane)
->>
->> 1) one big chunk of registers
->>
->> 2) smaller chunk of registers aiming to have each chunk describe a
->> subset of the HW capablity (e.g. RAS, e.g. Refresh-rate, ...)
->>
->> 3) describe each register with its name
->>
->> Each option dictate how driver shall map the address space.
-> Again, the driver does not matter. You have one device, describe
-> properly one device. DT is not to describe drivers.
+> +
+> +		if [ $lockdown -eq 1 ] && [ $kexec_sig_enabled -eq 0 ] && [ $ima_signed -eq 0 ] \
+> +		     && [ $ima_modsig -eq 0 ]; then
+> +			log_fail "$succeed_msg (missing IMA sig)"
+> +		fi
+> +
 
-The way drivers are being probed is based on compatible found in DT.
+Similarly, only if IMA is enabled and requires the kexec signature
+verficiation should this message be emitted.  Perhaps a single generic
+lockdown message would be sufficient for both.
 
-So you only get one platform driver probe per device described in DT.
+>  		if [ $pe_sig_required -eq 0 ] && [ $ima_appraise -eq 1 ] \
+>  		    && [ $ima_sig_required -eq 0 ] && [ $ima_signed -eq 0 ] \
+>  	            && [ $ima_read_policy -eq 0 ]; then
+> @@ -181,6 +191,16 @@ kexec_file_load_test()
+>  		log_pass "$failed_msg (possibly missing IMA sig)"
+>  	fi
+>  
+> +	if [ $lockdown -eq 1 ] && [ $kexec_sig_enabled -eq 1 ] \
+> +	    && [ $pe_signed -eq 0 ]; then
+> +		log_pass "$failed_msg (missing PE sig)"
+> +	fi
+> +
+> +	if [ $lockdown -eq 1 ] && [ $kexec_sig_enabled -eq 0 ] \
+> +	    && [ $ima_signed -eq 0 ] && [ $ima_modsig -eq 0 ]; then
+> +		log_pass "$failed_msg (missing IMA sig)"
+> +	fi
+> +
 
-If we have single device described in DT then we won't have two distinct 
-platform drivers getting probe.
+Similar comments as above.
 
-(We could not have them platform driver and have them as regular module 
-which go and look "manually" for that device... but that looks too hacky).
+-- 
+thanks,
 
+Mimi
 
-As we do consider two distinct drivers the idea was to have two devices 
-described in DT. One gets the registers subset it want while the other 
-get the registers it want.
-
-
-So how would you have the DT described and how would driver/s look like 
-for cases that the unit registers are split interchangeably?
-
->
-> You did not Cc relevant here mailing addresses (DT and Rob), so this
-> discussion might miss their feedback.
->
-> How the drivers map IO address space is independent question and should
-> not determine the hardware description. You want to say that hardware
-> changes depending on OS? One OS means hardware is like that and on other
-> OS it's different?
->
->>
->> If option 1 is chosen, then we shall have 2 drivers with same reg
->> description.
-> Drivers are not related to DT bindings and DTS. Two different things.
->
->> For that case, they can both remap the whole space or each one can try
->> to map only the section it needs.
->>
->> If option 2 is chosen, then each driver can use DT to know exactly what
->> it needs to map and do it in safer manner.
->
->
->
-> Best regards,
-> Krzysztof
->
