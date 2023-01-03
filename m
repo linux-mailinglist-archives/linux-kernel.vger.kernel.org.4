@@ -2,105 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FF065C6AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD83065C6B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238638AbjACSqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
+        id S238284AbjACSsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238637AbjACSpd (ORCPT
+        with ESMTP id S238273AbjACSq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:45:33 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2063.outbound.protection.outlook.com [40.107.220.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F441276C;
-        Tue,  3 Jan 2023 10:44:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BFyNNtLHf/VYZRs0TURLLFucAxs3zSp1H5vR33TtWI/kZ6UCEQjIc0PJGMDYoXsiedLbo8Hnj0Uenge9SPDTKIuULUSYX1wlhMIOQcOnFR33UXG6HnH9i36KhxFL8mQM7mYwUeXpJu/+FKGStjqxq6PAAj04M+PE7ahIROG11cup0EhnE1f+v2hdcSZpZIn+Yru3hyLFMafWvqFHB7gcHAWkEwJEZJTDE4hWfPNzKdmZk0Ansu3GeHEQhnonkw07NWLQj/XMF5Cur2eY2VB8mtQlJ4qkBb8yiqxBVYMO6fKFsFjeeGDurQQmYcGGVBazeM04F5pFMqy0CPzYnyXqUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TAV32TvhH7B45s91Ybvd37PzXKvk1UgtFd3SuTD+aXg=;
- b=B9xuxbtTiwwOUjE7q5KEMbAKF5mIW8JxL32IRfKliUXyERtVEWcAcncl4qlvC3p0jQ7GM/jdcr8mTKqfoCMCuSQpc2x2LWw/v6+JraLrWpLyCrXvfBOUBNoZdwYAMLv8g2QAWqw5antr6WXGoMztOwFgW1XBhSUBHIbMlbks7AIn4NinThxOS6tsXTwJbD5oO4hH3ZTwtmJpzcabRZoIQf8iqpETOpMrXg/JIEL9pdxeB5OzhVEZ5CftmgqrSZiWF51LmmNgRKN0xZdsXQm0LrXXZNC0AFqaibdqIU3hJRbKFBZP+VgHKkyNw2ppneyzEG/OXANwudr/asaXpBsaeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=bootlin.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TAV32TvhH7B45s91Ybvd37PzXKvk1UgtFd3SuTD+aXg=;
- b=pZnNWlu5ItzSOlwLX0JWNkPXYmUiAqp2Yyfh6vqdocq3isLrGDusfWdoy+ypfRmfM2vRtStLYxlvnBWggjQJNH540L4yuNAifLWNt/BjQnJYBPF8eKIROLyLtepAd0aOgRV0JcbvyHXwA3YjMIzpbZXmvXpV+HoJ88MGBaABvvw=
-Received: from MW2PR16CA0048.namprd16.prod.outlook.com (2603:10b6:907:1::25)
- by DM4PR12MB6232.namprd12.prod.outlook.com (2603:10b6:8:a5::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Tue, 3 Jan 2023 18:44:41 +0000
-Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:907:1:cafe::74) by MW2PR16CA0048.outlook.office365.com
- (2603:10b6:907:1::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.19 via Frontend
- Transport; Tue, 3 Jan 2023 18:44:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5944.17 via Frontend Transport; Tue, 3 Jan 2023 18:44:40 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 3 Jan
- 2023 12:44:37 -0600
-Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Tue, 3 Jan 2023 12:44:35 -0600
-Message-ID: <b50306fe-d710-4d11-d5e2-2b9c8293e44e@amd.com>
-Date:   Tue, 3 Jan 2023 10:44:35 -0800
+        Tue, 3 Jan 2023 13:46:29 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C8111156
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:46:27 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id 188so17718861ybi.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:46:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zMM79R7cqTsBsvAEfVjTqYtKnnoyNuCArOemgcn3l64=;
+        b=fT6Nl/AR1KZXfZDfxlPsejL5yaYMUgK5QMfzbxN/9n1ShiShit9ZG9l7euKNgcC901
+         Vb+tUSGYk13dZx07tRUD5SjDjebTi84CWdLcL2AtBYsWhE0l1o3GnSwoP5s6239miwLu
+         92RPggzYMZDPgqq0PRiQSnANMXsODi81ZkykopwKCJbGDeitrTxvhiJu5FaA06ZJSa3X
+         Zca544K6Ee+bEhRgPCwXMfz5s2wLPh+W5qH2utpTrJ/AXI8wAKoOhHoyeVvJS1vZAweq
+         LAKC21Ogq5CWL/BMo3x16PrjvkET3a2z8Rol7gDG0KWnfRcYpbJ4kyUE7gRbOogtNmqw
+         C0WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zMM79R7cqTsBsvAEfVjTqYtKnnoyNuCArOemgcn3l64=;
+        b=webNeyCrLaR7TRALxkmfsD7zQbp5BTIAaYePVDdc8sO8tyPuX3IwkFEEAOKlzn2zTb
+         XoYtzU/a9sQ7kl85TCZecQFerFmoDeHEjxMgrBRxsNvDrKrP8+3BRqR9iS1HygGBmcQl
+         Y9g5/l03P9D4iVed40Gk50B4VIbkHwclEURGEIH8nYdf3lMg2pF8ELy1gEK9V89eL7Fd
+         lkLyk/ZSUhXoWHJ147WqDKAHQEZ9ZNwf4wS2bFUj+wFISnu7SkQox3B/4DcU+VXcYn5w
+         /QAIqJJLexbmlNUajbFQtX534DtM1n2LvFP62hPjPCbYGfhB1tCAZ3yxcCphtxlZmgh3
+         p/jA==
+X-Gm-Message-State: AFqh2krRp0zLCoQaypOXnrP/OpO9/aaAH52qnWYDBRUzkOuE/exmicAz
+        HHoPIMmlUDxry+OD0ZO5yGEEV+GQoGgajFKJfiG/TQ==
+X-Google-Smtp-Source: AMrXdXulrrPrKjE2OAgTgupDIPDf70WZCm+YU+d2D4nGF8mNmfmoq71cczZjfPYu2eQboFVofDZv+qAyrhDySuKPp3Q=
+X-Received: by 2002:a25:420d:0:b0:76a:701e:3972 with SMTP id
+ p13-20020a25420d000000b0076a701e3972mr4329174yba.519.1672771586618; Tue, 03
+ Jan 2023 10:46:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V5 2/3] PCI: Create device tree node for selected devices
-Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-CC:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
-        <frowand.list@gmail.com>, <helgaas@kernel.org>, <max.zhen@amd.com>,
-        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>,
-        <stefano.stabellini@xilinx.com>, <trix@redhat.com>,
-        "Allan.Nielsen@microchip.com" <Allan.Nielsen@microchip.com>,
-        "Horatiu.Vultur@microchip.com" <Horatiu.Vultur@microchip.com>,
-        "Steen.Hegelund@microchip.com" <Steen.Hegelund@microchip.com>
-References: <1671125446-57584-1-git-send-email-lizhi.hou@amd.com>
- <1671125446-57584-3-git-send-email-lizhi.hou@amd.com>
- <20230102145618.4b5bace8@fixe.home>
-From:   Lizhi Hou <lizhi.hou@amd.com>
-In-Reply-To: <20230102145618.4b5bace8@fixe.home>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT012:EE_|DM4PR12MB6232:EE_
-X-MS-Office365-Filtering-Correlation-Id: db963756-82e2-4b9b-7135-08daedba92d0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tbPy2ct/uKP0Vc0rzMG5WmWhExc0klPCkb3mKcMlBxBUtIIie/h3ExGMGCzU53hulGsMxeT+aYAXMsiuEZ7+9UzIe6ugp+Qp4ZKhyENGIQnavqUwegosQugfaVm+kJ1S8yF4xvDGnTM+dh1PLncnhzSlStTvpqHZTXXCLlxZtErB3gf4TH5WxuCjUrlYQ2Y3Az9MU/yDaCxcoPFkmX1L2LGMiOF8tQxrm6Im34GPDUnIybNldeiUZlG2T4Ur3PlBX+eg/GNs2ffZzkU/dNzj5qg7Q1UUcS4y1c6UA2gOPdW9YRmG+90RB9RmZ054lzYRVCAlN6hG90x4YPz9Z9gpSTOO7/r8wYaVi6GasQhmaqQeBkfnKHnQsxje2f6i6u1aroSZi9tMcM0NRxjpYi5jJNlgoAVwwf0ooVH6rQ0WP3TDLN502qhcmmbtxVjiKsd3Uienk/B2bC3EfHARm7GegspiXgdhmpOKTi5hP7vYsMK0v77Disyt3Su2EH6KRW3kJjViItv6YlrkLoK+a6YzWs7Db/vjCtcd4IZVlEleL8RdCgireud2ACSRTEH0UE9uwfTRzTBFUSzP6qXNG+fPC48AEIn7kqbeO5ZNABXISiVl226up9/h64MvDcN13X5vBRVRbMe2AiQkg0qRQkN+LG/BpkbH7++lbYiFDAfjq4+44JatKHRaAJSXU8hxh2oTONO0NR+6JAelxCvGeSg6KtOFTCFoR3aL5RTWW2yjg7p7q/RxYCS6AOBNVVKiXzClPGeNSXZPX4suKezgsRlFmYA43HGAi9aGcI61/vMSefj03dOfHK7TBOYMY+/MVz5X
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199015)(46966006)(40470700004)(36840700001)(66574015)(426003)(47076005)(82310400005)(336012)(186003)(26005)(2616005)(53546011)(40480700001)(31696002)(86362001)(36860700001)(36756003)(40460700003)(356005)(81166007)(82740400003)(8676002)(4326008)(41300700001)(5660300002)(7416002)(31686004)(2906002)(44832011)(8936002)(966005)(478600001)(70586007)(70206006)(16576012)(316002)(54906003)(6916009)(22166006)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 18:44:40.7774
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: db963756-82e2-4b9b-7135-08daedba92d0
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6232
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-7-vipinsh@google.com>
+ <Y64eAvm4JglT1au4@google.com> <CALzav=fGmy=YmpA6u=b0-p8zxnKbF2rt5mQUo-DWm2wYBU7dzA@mail.gmail.com>
+In-Reply-To: <CALzav=fGmy=YmpA6u=b0-p8zxnKbF2rt5mQUo-DWm2wYBU7dzA@mail.gmail.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 3 Jan 2023 10:45:50 -0800
+Message-ID: <CAHVum0fdz8HmgQd5z2n9eAzWuTjtBPA5_aVrY123K=kAMdJvhw@mail.gmail.com>
+Subject: Re: [Patch v3 6/9] KVM: Provide NUMA node support to kvm_mmu_memory_cache{}
+To:     David Matlack <dmatlack@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,69 +69,333 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/2/23 05:56, Clément Léger wrote:
-> Le Thu, 15 Dec 2022 09:30:45 -0800,
-> Lizhi Hou <lizhi.hou@amd.com> a écrit :
+On Thu, Dec 29, 2022 at 3:12 PM David Matlack <dmatlack@google.com> wrote:
 >
->> +};
->> +
->> +static int of_pci_prop_device_type(struct pci_dev *pdev,
->> +				   struct of_changeset *ocs,
->> +				   struct device_node *np)
->> +{
->> +	return of_changeset_add_prop_string(ocs, np, "device_type", "pci");
->> +}
->> +
->> +static int of_pci_prop_address_cells(struct pci_dev *pdev,
->> +				     struct of_changeset *ocs,
->> +				     struct device_node *np)
->> +{
->> +	return of_changeset_add_prop_u32(ocs, np, "#address_cells",
->> +					 OF_PCI_ADDRESS_CELLS);
->> +}
->> +
->> +static int of_pci_prop_size_cells(struct pci_dev *pdev,
->> +				  struct of_changeset *ocs,
->> +				  struct device_node *np)
->> +{
->> +	return of_changeset_add_prop_u32(ocs, np, "#size_cells",
->> +					 OF_PCI_SIZE_CELLS);
->> +}
-> Hi Lizhi,
+> On Thu, Dec 29, 2022 at 3:08 PM David Matlack <dmatlack@google.com> wrote:
+> >
+> > On Wed, Dec 21, 2022 at 06:34:54PM -0800, Vipin Sharma wrote:
+> > > Add 'node' variable in kvm_mmu_memory_cache{} to denote which NUMA node
+> > > this cache should allocate memory from. Default initialize to
+> > > NUMA_NO_NODE in all architectures.
+> > >
+> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > > ---
+> > >  arch/arm64/kvm/arm.c      |  2 +-
+> > >  arch/arm64/kvm/mmu.c      |  4 +++-
+> > >  arch/mips/kvm/mips.c      |  2 ++
+> > >  arch/riscv/kvm/mmu.c      |  2 +-
+> > >  arch/riscv/kvm/vcpu.c     |  2 +-
+> > >  arch/x86/kvm/mmu/mmu.c    | 22 ++++++++++++----------
+> > >  include/linux/kvm_host.h  |  6 ++++++
+> > >  include/linux/kvm_types.h |  2 ++
+> > >  8 files changed, 28 insertions(+), 14 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > > index 9c5573bc4614..52a41f4532e2 100644
+> > > --- a/arch/arm64/kvm/arm.c
+> > > +++ b/arch/arm64/kvm/arm.c
+> > > @@ -340,7 +340,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> > >       vcpu->arch.target = -1;
+> > >       bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
+> > >
+> > > -     vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache, NULL, NUMA_NO_NODE);
+> > >
+> > >       /*
+> > >        * Default value for the FP state, will be overloaded at load
+> > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > > index 31d7fa4c7c14..bd07155e17fa 100644
+> > > --- a/arch/arm64/kvm/mmu.c
+> > > +++ b/arch/arm64/kvm/mmu.c
+> > > @@ -894,12 +894,14 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+> > >  {
+> > >       phys_addr_t addr;
+> > >       int ret = 0;
+> > > -     struct kvm_mmu_memory_cache cache = { .gfp_zero = __GFP_ZERO };
+> > > +     struct kvm_mmu_memory_cache cache;
+> > >       struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
+> > >       enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
+> > >                                    KVM_PGTABLE_PROT_R |
+> > >                                    (writable ? KVM_PGTABLE_PROT_W : 0);
+> > >
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&cache, NULL, NUMA_NO_NODE);
+> >
+> > This is not any better than setting cache.node = NUMA_NO_NODE directly.
+> > Yes it's less lines of code, but it's harder to read (what does NULL
+> > mean here?), and every user of kvm_mmu_memory_cache still has to know to
+> > pass NUMA_NO_NODE.
+> >
+> > When I originally gave this suggestion, I intended to suggest that
+> > INIT_KVM_MMU_MEMORY_CACHE() provide just default initialization.
+> > Non-default initialization for gfp_zero, gfp_custom, kmem_cache, and
+> > node would remain as they are.
+> >
+> > Yes this adds some more lines, but keeps things readable, and doesn't
+> > every initialization site of kvm_mmu_memory_cache to know what to pass
+> > for gfp_zero, node, and kmem_cache. It only needs to set the fields
+> > *it* cares about.
 >
-> For all these functions, the "pdev" parameter is actually unused.
+> And to offset the extra lines to call INIT_KVM_MMU_MEMORY_CACHE(), we
+> could finally invert the meaning of gfp_zero so that caches use
+> __GFP_ZERO by default. The majority of caches want __GFP_ZERO, so that
+> should cut down a bunch of lines.
 >
-> [snip]
-Ok. I will remove unused pdev.
->
->> +
->> +static int of_pci_prop_compatible(struct pci_dev *pdev,
->> +				  struct of_changeset *ocs,
->> +				  struct device_node *np)
->> +{
->> +	const char *compat_strs[PROP_COMPAT_NUM] = { 0 };
->> +	int i, ret;
->> +
->> +	compat_strs[PROP_COMPAT_PCI_VVVV_DDDD] =
->> +		kasprintf(GFP_KERNEL, "pci%x,%x", pdev->vendor, pdev->device);
-> Maybe it should be better to use "pci%04x,%04x" to keep the existing
-> naming.
 
-Based on 
-https://www.devicetree.org/open-firmware/bindings/pci/pci2_1.pdf, 
-"pci%x,%x" should be used?
+Can you clarify what you mean by invert?
 
-"name" Based on the PCI Class Code register, pick a name from Table 1. 
-If none apply, generate a name of the
-form pciVVVV,DDDD as described below under "compatible".
-
-VVVV, DDDD, SSSS, ssss and RR are lower-case ASCII hexadecimal numbers 
-without leading zeroes.
+Caches which don't want __GFP_ZERO will explicitly set gfp_zero to 0.
+Is this what you intend?
 
 
-Thanks,
-
-Lizhi
-
->
+> >
+> > Here's what I mean specifically, based on INIT_LIST_HEAD. I don't think
+> > I got all the kvm_mmu_memory_cache users, but you get the point.
+> >
+> >
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 9c5573bc4614..0e138dcaf4d4 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -340,6 +340,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> >         vcpu->arch.target = -1;
+> >         bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
+> >
+> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache);
+> >         vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+> >
+> >         /*
+> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > index 31d7fa4c7c14..f5fd78a4f084 100644
+> > --- a/arch/arm64/kvm/mmu.c
+> > +++ b/arch/arm64/kvm/mmu.c
+> > @@ -894,12 +894,14 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+> >  {
+> >         phys_addr_t addr;
+> >         int ret = 0;
+> > -       struct kvm_mmu_memory_cache cache = { .gfp_zero = __GFP_ZERO };
+> > +       KVM_MMU_MEMORY_CACHE(cache);
+> >         struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
+> >         enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
+> >                                      KVM_PGTABLE_PROT_R |
+> >                                      (writable ? KVM_PGTABLE_PROT_W : 0);
+> >
+> > +       cache.gfp_zero = __GFP_ZERO;
+> > +
+> >         if (is_protected_kvm_enabled())
+> >                 return -EPERM;
+> >
+> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> > index 34b57e0be2ef..7915a5a2d104 100644
+> > --- a/arch/riscv/kvm/mmu.c
+> > +++ b/arch/riscv/kvm/mmu.c
+> > @@ -351,10 +351,11 @@ int kvm_riscv_gstage_ioremap(struct kvm *kvm, gpa_t gpa,
+> >         int ret = 0;
+> >         unsigned long pfn;
+> >         phys_addr_t addr, end;
+> > -       struct kvm_mmu_memory_cache pcache = {
+> > -               .gfp_custom = (in_atomic) ? GFP_ATOMIC | __GFP_ACCOUNT : 0,
+> > -               .gfp_zero = __GFP_ZERO,
+> > -       };
+> > +       KVM_MMU_MEMORY_CACHE(pcache);
+> > +
+> > +       pcache.gfp_zero = __GFP_ZERO;
+> > +       if (in_atomic)
+> > +               pcache.gfp_custom = GFP_ATOMIC | __GFP_ACCOUNT;
+> >
+> >         end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
+> >         pfn = __phys_to_pfn(hpa);
+> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> > index 7c08567097f0..3d73ab3ec9a4 100644
+> > --- a/arch/riscv/kvm/vcpu.c
+> > +++ b/arch/riscv/kvm/vcpu.c
+> > @@ -161,6 +161,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> >
+> >         /* Mark this VCPU never ran */
+> >         vcpu->arch.ran_atleast_once = false;
+> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache);
+> >         vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+> >         bitmap_zero(vcpu->arch.isa, RISCV_ISA_EXT_MAX);
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 254bc46234e0..d4cd8e64cc03 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -5909,14 +5909,19 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+> >  {
+> >         int ret;
+> >
+> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_pte_list_desc_cache);
+> >         vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
+> >         vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
+> >
+> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache);
+> >         vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
+> >         vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+> >
+> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache);
+> >         vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+> >
+> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadowed_info_cache);
+> > +
+> >         vcpu->arch.mmu = &vcpu->arch.root_mmu;
+> >         vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
+> >
+> > @@ -6083,11 +6088,14 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+> >         node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
+> >         kvm_page_track_register_notifier(kvm, node);
+> >
+> > +       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache);
+> >         kvm->arch.split_page_header_cache.kmem_cache = mmu_page_header_cache;
+> >         kvm->arch.split_page_header_cache.gfp_zero = __GFP_ZERO;
+> >
+> > +       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache);
+> >         kvm->arch.split_shadow_page_cache.gfp_zero = __GFP_ZERO;
+> >
+> > +       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_desc_cache);
+> >         kvm->arch.split_desc_cache.kmem_cache = pte_list_desc_cache;
+> >         kvm->arch.split_desc_cache.gfp_zero = __GFP_ZERO;
+> >
+> > diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+> > index 76de36e56cdf..eb7ff9afa5c7 100644
+> > --- a/include/linux/kvm_types.h
+> > +++ b/include/linux/kvm_types.h
+> > @@ -98,6 +98,17 @@ struct kvm_mmu_memory_cache {
+> >         int capacity;
+> >         void **objects;
+> >  };
+> > +
+> > +#define KVM_MMU_MEMORY_CACHE_INIT() (struct kvm_mmu_memory_cache) { \
+> > +}
+> > +
+> > +#define KVM_MMU_MEMORY_CACHE(_name) \
+> > +       struct kvm_mmu_memory_cache _name = KVM_MMU_MEMORY_CACHE_INIT()
+> > +
+> > +static inline void INIT_KVM_MMU_MEMORY_CACHE(struct kvm_mmu_memory_cache *cache)
+> > +{
+> > +       *cache = KVM_MMU_MEMORY_CACHE_INIT();
+> > +}
+> >  #endif
+> >
+> >  #define HALT_POLL_HIST_COUNT                   32
+> >
+> > > +
+> > >       if (is_protected_kvm_enabled())
+> > >               return -EPERM;
+> > >
+> > > diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> > > index a25e0b73ee70..b017c29a9340 100644
+> > > --- a/arch/mips/kvm/mips.c
+> > > +++ b/arch/mips/kvm/mips.c
+> > > @@ -304,6 +304,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> > >                    HRTIMER_MODE_REL);
+> > >       vcpu->arch.comparecount_timer.function = kvm_mips_comparecount_wakeup;
+> > >
+> > > +     vcpu->arch.mmu_page_cache.node = NUMA_NO_NODE;
+> > > +
+> > >       /*
+> > >        * Allocate space for host mode exception handlers that handle
+> > >        * guest mode exits
+> > > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> > > index 34b57e0be2ef..119de4520cc6 100644
+> > > --- a/arch/riscv/kvm/mmu.c
+> > > +++ b/arch/riscv/kvm/mmu.c
+> > > @@ -353,9 +353,9 @@ int kvm_riscv_gstage_ioremap(struct kvm *kvm, gpa_t gpa,
+> > >       phys_addr_t addr, end;
+> > >       struct kvm_mmu_memory_cache pcache = {
+> > >               .gfp_custom = (in_atomic) ? GFP_ATOMIC | __GFP_ACCOUNT : 0,
+> > > -             .gfp_zero = __GFP_ZERO,
+> > >       };
+> > >
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&pcache, NULL, NUMA_NO_NODE);
+> > >       end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
+> > >       pfn = __phys_to_pfn(hpa);
+> > >
+> > > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> > > index 7c08567097f0..189b14feb365 100644
+> > > --- a/arch/riscv/kvm/vcpu.c
+> > > +++ b/arch/riscv/kvm/vcpu.c
+> > > @@ -161,7 +161,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> > >
+> > >       /* Mark this VCPU never ran */
+> > >       vcpu->arch.ran_atleast_once = false;
+> > > -     vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache, NULL, NUMA_NO_NODE);
+> > >       bitmap_zero(vcpu->arch.isa, RISCV_ISA_EXT_MAX);
+> > >
+> > >       /* Setup ISA features available to VCPU */
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index 6f6a10d7a871..23a3b82b2384 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -5954,13 +5954,14 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+> > >  {
+> > >       int ret;
+> > >
+> > > -     vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
+> > > -     vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_pte_list_desc_cache,
+> > > +                               pte_list_desc_cache, NUMA_NO_NODE);
+> > >
+> > > -     vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
+> > > -     vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache,
+> > > +                               mmu_page_header_cache, NUMA_NO_NODE);
+> > >
+> > > -     vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache,
+> > > +                               NULL, NUMA_NO_NODE);
+> > >       spin_lock_init(&vcpu->arch.mmu_shadow_page_cache_lock);
+> > >
+> > >       vcpu->arch.mmu = &vcpu->arch.root_mmu;
+> > > @@ -6124,14 +6125,15 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+> > >       node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
+> > >       kvm_page_track_register_notifier(kvm, node);
+> > >
+> > > -     kvm->arch.split_page_header_cache.kmem_cache = mmu_page_header_cache;
+> > > -     kvm->arch.split_page_header_cache.gfp_zero = __GFP_ZERO;
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache,
+> > > +                               mmu_page_header_cache, NUMA_NO_NODE);
+> > >
+> > > -     kvm->arch.split_shadow_page_cache.gfp_zero = __GFP_ZERO;
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache,
+> > > +                               NULL, NUMA_NO_NODE);
+> > >       spin_lock_init(&kvm->arch.split_shadow_page_cache_lock);
+> > >
+> > > -     kvm->arch.split_desc_cache.kmem_cache = pte_list_desc_cache;
+> > > -     kvm->arch.split_desc_cache.gfp_zero = __GFP_ZERO;
+> > > +     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_desc_cache,
+> > > +                               pte_list_desc_cache, NUMA_NO_NODE);
+> > >
+> > >       return 0;
+> > >  }
+> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > > index a262e15ebd19..719687a37ef7 100644
+> > > --- a/include/linux/kvm_host.h
+> > > +++ b/include/linux/kvm_host.h
+> > > @@ -2302,4 +2302,10 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
+> > >  /* Max number of entries allowed for each kvm dirty ring */
+> > >  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
+> > >
+> > > +#define INIT_KVM_MMU_MEMORY_CACHE(_cache, _kmem_cache, _node) ({     \
+> > > +     (_cache)->kmem_cache = _kmem_cache;                             \
+> > > +     (_cache)->gfp_zero = __GFP_ZERO;                                \
+> > > +     (_cache)->node = _node;                                         \
+> > > +})
+> > > +
+> > >  #endif
+> > > diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+> > > index 76de36e56cdf..9c70ce95e51f 100644
+> > > --- a/include/linux/kvm_types.h
+> > > +++ b/include/linux/kvm_types.h
+> > > @@ -97,6 +97,8 @@ struct kvm_mmu_memory_cache {
+> > >       struct kmem_cache *kmem_cache;
+> > >       int capacity;
+> > >       void **objects;
+> > > +     /* Node on which memory should be allocated by default */
+> > > +     int node;
+> > >  };
+> > >  #endif
+> > >
+> > > --
+> > > 2.39.0.314.g84b9a713c41-goog
+> > >
