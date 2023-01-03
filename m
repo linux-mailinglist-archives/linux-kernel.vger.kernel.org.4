@@ -2,368 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6217665C0E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936EA65C0DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237576AbjACNbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S237597AbjACNbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbjACNb3 (ORCPT
+        with ESMTP id S233362AbjACNbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:31:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129012A2;
-        Tue,  3 Jan 2023 05:31:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D6961290;
-        Tue,  3 Jan 2023 13:31:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DAAC433D2;
-        Tue,  3 Jan 2023 13:31:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672752687;
-        bh=rVgsvUPobqGpUthHUs84UwOQYUNURpupUVuxV9upR4A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hwpZoj1ZrbSmq3qLfiXmSCWIMrKGhuEl6p2AkvUCh1OLUJDsKyc4D/4TKXXrVppR0
-         q9yMqxqN9xBbJbPJdlwncDCCHQIthqcKGqhMLzYY1V9z3LMIzOk6tFehwDO1ktlwyH
-         9Zey8uDEQ76Qrl9YVKuwysI9zTG8lZjxjJlkUysbKrHfDkWY9Q5pWBtKNDHs0jJ3Q/
-         FwgCxaqOE0oXWbZKNOUrmelxJjAU03TtpqPHfesORnA8x6NwuvnpU/MQEqhtGPptuD
-         DgAG6zWsazmnlr/sSFsDVr2qjpfOWvdWSDPFf4JeqMdgsjCuFW5di3fCWRBK8qyric
-         08dzg4goxbMqw==
-Date:   Tue, 3 Jan 2023 22:31:22 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Song Chen <chensong_2000@189.cn>
-Cc:     rostedt@goodmis.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] kernel/trace: Provide default impelentations
- defined in trace_probe_tmpl.h
-Message-Id: <20230103223122.e318f7589e41a92a0f17daf7@kernel.org>
-In-Reply-To: <1672382018-18347-1-git-send-email-chensong_2000@189.cn>
-References: <1672382018-18347-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 3 Jan 2023 08:31:35 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5A3331;
+        Tue,  3 Jan 2023 05:31:34 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D412B108;
+        Tue,  3 Jan 2023 14:31:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672752692;
+        bh=yNlGV98JYDrjz2RPMUriL/9rOq8JIcs4XzQg9P5ZBPU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=INoUCiTVREZqqzX095qKwFp9WzPRhFsU8T/Qp6tzEogjdtsjm6VBOjN91Wn8keOIu
+         CqIE7mUOxiBjomYfMpGEd6NZk5tj68pVIZA6DW6fSendxuJgbtRgtjUtnjNPf1vqd7
+         WqhW5X2Rw6lQRJbMLcJweLBSxT6WSf/IBJDx4hz0=
+Date:   Tue, 3 Jan 2023 15:31:28 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] media: v4l2-dev: sysfs: Support streaming attribute
+Message-ID: <Y7QuMKi3ZdMDUwCw@pendragon.ideasonboard.com>
+References: <20221223231736.2111774-1-kieran.bingham@ideasonboard.com>
+ <Y6lu14VsuH1LbqFH@pendragon.ideasonboard.com>
+ <yvFnaY1MM7I5C7H18aJdvQ6XEQn979YkGYpCjRLsnJvCRr2vYWVKorYqFXGxP3tWKeJ5B0oEA4Fn4W2-IqPd_N_wivEM4uKJD4WX53RiSmY=@protonmail.com>
+ <Y7LYp01J5co9KSfJ@paasikivi.fi.intel.com>
+ <Y7LdpQ9s7lS+x9mO@pendragon.ideasonboard.com>
+ <167273840266.530483.6812185939521706359@Monstersaurus>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <167273840266.530483.6812185939521706359@Monstersaurus>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Dec 2022 14:33:38 +0800
-Song Chen <chensong_2000@189.cn> wrote:
+Hi Kieran,
 
-> There are 6 function definitions in trace_probe_tmpl.h, they are:
+On Tue, Jan 03, 2023 at 09:33:22AM +0000, Kieran Bingham wrote:
+> Quoting Laurent Pinchart (2023-01-02 13:35:33)
+> > On Mon, Jan 02, 2023 at 01:14:15PM +0000, Sakari Ailus wrote:
+> > > On Wed, Dec 28, 2022 at 01:44:38AM +0000, Barnabás Pőcze wrote:
+> > > > On 2022. december 26., hétfő 10:52, Laurent Pinchart wrote:
+> > > > > On Fri, Dec 23, 2022 at 11:17:35PM +0000, Kieran Bingham wrote:
+> > > > > 
+> > > > > > Provide a streaming attribute to allow userspace to interogate if a device
+> > > > > > is actively streaming or not.
+> > > > > > 
+> > > > > > This will allow desktop notifications to report if a camera or device
+> > > > > > is active on the system, rather than just 'open' which can occur when
+> > > > > > configuring the device.
+> > > > > > 
+> > > > > > Bug: https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/2669
+> > > > > > Signed-off-by: Kieran Bingham kieran.bingham@ideasonboard.com
+> > > > > > ---
+> > > > > > 
+> > > > > > This is a quick POC to see if such a facility makes sense.
+> > > > > > I'm weary that not all video devices may have the queues registered on
+> > > > > > the struct video_device, but this seems like an effective way to be able
+> > > > > > to determine if a device is actively streaming on a system.
+> > > > > 
+> > > > > I can imagine multiple problems, from race conditions to permissions and
+> > > > > privacy. In order to comment on the fitness of this solution to address
+> > > > > the problem you're trying to solve, could you describe the actual
+> > > > > problem ?
+> > > > 
+> > > > The issue is explained in the following thread:
+> > > > https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/2669#note_1697388
+> > > > 
+> > > > In short, the user wants to show a "camera-in-use" indicator when the laptop camera
+> > > > is used. The script that the user previously had only checked if /dev/video0
+> > > > was open in any process, if it was, the indicator was shown. However, libcamera
+> > > > - at least at the moment - keeps the file descriptor open as long as the Camera
+> > > > object exists, which pipewire keeps alive for the entire lifetime of the device,
+> > > > therefore the "camera-in-use" indicator is always shown.
+> > > 
+> > > A sysfs attribute is not a great way to address this.
+> > > 
+> > > libcamera certainly has information on whether streaming is ongoing. The
+> > > information should come from there. Or Pipewire. Dbus perhaps?
+> > 
+> > I tend to agree, I think this is best solved in userspace where PipeWire
+> > can have a centralized view of all cameras in the system, and of their
+> > users.
 > 
-> 1, fetch_store_strlen
-> 2, fetch_store_string
-> 3, fetch_store_strlen_user
-> 4, fetch_store_string_user
-> 5, probe_mem_read
-> 6, probe_mem_read_user
+> I fear that misses the entire point I was trying to make.
 > 
-> Every C file which includes trace_probe_tmpl.h has to implement them,
-> otherwise it gets warnings and errors. However, some of them are identical,
-> like kprobe and eprobe, as a result, there is a lot redundant code in those
-> 2 files.
+> Lets say pipewire 'is' available and in use and can be used to capture
+> video streams for video calls, that's fine. But what happens if a user
+> runs a gstreamer pipeline without using the pipewire source, or a
+> suspcious process runs "yavta" and captures an image or stream
+> discreetly...
 > 
-> This patch would like to provide default behaviors for those functions
-> which kprobe and eprobe can share by just including trace_probe_kernel.h
-> with trace_probe_tmpl.h together.
-> 
-> It removes redundant code, increases readability, and more importantly,
-> makes it easier to introduce a new feature based on trace probe
-> (it's possible).
-> 
-> Signed-off-by: Song Chen <chensong_2000@189.cn>
-> Reported-by: kernel test robot <lkp@intel.com>
+> Only the kernel has a true centralised view of what devices are in use.
 
-This looks good to me.
+That's right, but at the same time, the kernel as little view of what a
+"camera" is.
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+At the beginning of V4L a video capture node was a TV capture card (soon
+with a few exceptions), then it also modelled a camera, for the past ten
+years at least it's "just" a DMA engine in many cases, and relatively
+recently even evolved to simply model a data flow endpoint with the
+addition of metadata video nodes. This doesn't even mention usage of
+video capture nodes in codecs or other memory to memory devices. Video
+devices are now in many cases just one of the many components in a
+camera pipeline.
 
-Thanks!
+In most cases drivers can reasonably decide which video devices most
+likely represent a "camera", but that an approximation in any case, and
+not a general guarantee. In userspace the situation is worse, the link
+between a video device and a camera has been long lost.  We started
+recovering it with libcamera, which is, today, the only open-source
+component available in Linux systems that has knowledge of cameras, not
+just video device nodes.
 
+> > > Alternatively libcamera could close the video devices while not streaming
+> > > but that would involve e.g. releasing possible video buffer allocations as
+> > > well, increasing streaming start latency.
+> 
+> Or is it just that in that case 'lsof' should be sufficient?
+> 
+> The problem I have with that is - just like with the issue when the
+> Privacy LED comes on during power up/probe - then any time a device is
+> opened to identify the device and not necessarily use it - the 'camera
+> in use' notification would get flashed...
 
-> 
-> ---
-> v2:
-> 1, reorganize patchset
-> 
-> v3:
-> 1, mark nokprobe_inline for get_event_field
-> 2, remove warnings reported from kernel test robot
-> 3, fix errors reported from kernel test robot
-> 
-> v4:
-> 1, reset changes in v3(2) and v3(3), they are not reasonable fix.
-> 2, fixed errors by adding "#ifdef CONFIG_HAVE_REGS_AND_STACK_ACCESS_API".
-> 
-> v5:
-> 1, move process_fetch_insn to trace_probe_tmpl.h in another patch.
-> ---
->  kernel/trace/trace_eprobe.c       | 55 ++-----------------------------
->  kernel/trace/trace_events_synth.c |  6 ++--
->  kernel/trace/trace_kprobe.c       | 54 ------------------------------
->  kernel/trace/trace_probe_kernel.h | 30 +++++++++++++----
->  4 files changed, 29 insertions(+), 116 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index bdb26eee7a0c..ca5d097eec4f 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -319,7 +319,8 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
->  	return trace_handle_return(s);
->  }
->  
-> -static unsigned long get_event_field(struct fetch_insn *code, void *rec)
-> +static nokprobe_inline unsigned long
-> +get_event_field(struct fetch_insn *code, void *rec)
->  {
->  	struct ftrace_event_field *field = code->data;
->  	unsigned long val;
-> @@ -453,58 +454,6 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
->  }
->  NOKPROBE_SYMBOL(process_fetch_insn)
->  
-> -/* Return the length of string -- including null terminal byte */
-> -static nokprobe_inline int
-> -fetch_store_strlen_user(unsigned long addr)
-> -{
-> -	return kern_fetch_store_strlen_user(addr);
-> -}
-> -
-> -/* Return the length of string -- including null terminal byte */
-> -static nokprobe_inline int
-> -fetch_store_strlen(unsigned long addr)
-> -{
-> -	return kern_fetch_store_strlen(addr);
-> -}
-> -
-> -/*
-> - * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
-> - * with max length and relative data location.
-> - */
-> -static nokprobe_inline int
-> -fetch_store_string_user(unsigned long addr, void *dest, void *base)
-> -{
-> -	return kern_fetch_store_string_user(addr, dest, base);
-> -}
-> -
-> -/*
-> - * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
-> - * length and relative data location.
-> - */
-> -static nokprobe_inline int
-> -fetch_store_string(unsigned long addr, void *dest, void *base)
-> -{
-> -	return kern_fetch_store_string(addr, dest, base);
-> -}
-> -
-> -static nokprobe_inline int
-> -probe_mem_read_user(void *dest, void *src, size_t size)
-> -{
-> -	const void __user *uaddr =  (__force const void __user *)src;
-> -
-> -	return copy_from_user_nofault(dest, uaddr, size);
-> -}
-> -
-> -static nokprobe_inline int
-> -probe_mem_read(void *dest, void *src, size_t size)
-> -{
-> -#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-> -	if ((unsigned long)src < TASK_SIZE)
-> -		return probe_mem_read_user(dest, src, size);
-> -#endif
-> -	return copy_from_kernel_nofault(dest, src, size);
-> -}
-> -
->  /* eprobe handler */
->  static inline void
->  __eprobe_trace_func(struct eprobe_data *edata, void *rec)
-> diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-> index e310052dc83c..d72916c91e24 100644
-> --- a/kernel/trace/trace_events_synth.c
-> +++ b/kernel/trace/trace_events_synth.c
-> @@ -420,12 +420,12 @@ static unsigned int trace_string(struct synth_trace_event *entry,
->  		data_offset += event->n_u64 * sizeof(u64);
->  		data_offset += data_size;
->  
-> -		len = kern_fetch_store_strlen((unsigned long)str_val);
-> +		len = fetch_store_strlen((unsigned long)str_val);
->  
->  		data_offset |= len << 16;
->  		*(u32 *)&entry->fields[*n_u64] = data_offset;
->  
-> -		ret = kern_fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
-> +		ret = fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
->  
->  		(*n_u64)++;
->  	} else {
-> @@ -473,7 +473,7 @@ static notrace void trace_event_raw_event_synth(void *__data,
->  		val_idx = var_ref_idx[field_pos];
->  		str_val = (char *)(long)var_ref_vals[val_idx];
->  
-> -		len = kern_fetch_store_strlen((unsigned long)str_val);
-> +		len = fetch_store_strlen((unsigned long)str_val);
->  
->  		fields_size += len;
->  	}
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index a4ffa864dbb7..714fe9c04eb6 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -1218,60 +1218,6 @@ static const struct file_operations kprobe_profile_ops = {
->  	.release        = seq_release,
->  };
->  
-> -/* Kprobe specific fetch functions */
-> -
-> -/* Return the length of string -- including null terminal byte */
-> -static nokprobe_inline int
-> -fetch_store_strlen_user(unsigned long addr)
-> -{
-> -	return kern_fetch_store_strlen_user(addr);
-> -}
-> -
-> -/* Return the length of string -- including null terminal byte */
-> -static nokprobe_inline int
-> -fetch_store_strlen(unsigned long addr)
-> -{
-> -	return kern_fetch_store_strlen(addr);
-> -}
-> -
-> -/*
-> - * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
-> - * with max length and relative data location.
-> - */
-> -static nokprobe_inline int
-> -fetch_store_string_user(unsigned long addr, void *dest, void *base)
-> -{
-> -	return kern_fetch_store_string_user(addr, dest, base);
-> -}
-> -
-> -/*
-> - * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
-> - * length and relative data location.
-> - */
-> -static nokprobe_inline int
-> -fetch_store_string(unsigned long addr, void *dest, void *base)
-> -{
-> -	return kern_fetch_store_string(addr, dest, base);
-> -}
-> -
-> -static nokprobe_inline int
-> -probe_mem_read_user(void *dest, void *src, size_t size)
-> -{
-> -	const void __user *uaddr =  (__force const void __user *)src;
-> -
-> -	return copy_from_user_nofault(dest, uaddr, size);
-> -}
-> -
-> -static nokprobe_inline int
-> -probe_mem_read(void *dest, void *src, size_t size)
-> -{
-> -#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-> -	if ((unsigned long)src < TASK_SIZE)
-> -		return probe_mem_read_user(dest, src, size);
-> -#endif
-> -	return copy_from_kernel_nofault(dest, src, size);
-> -}
-> -
->  /* Note that we don't verify it, since the code does not come from user space */
->  static int
->  process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-> diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
-> index 77dbd9ff9782..c4e1d4c03a85 100644
-> --- a/kernel/trace/trace_probe_kernel.h
-> +++ b/kernel/trace/trace_probe_kernel.h
-> @@ -12,7 +12,7 @@
->   */
->  /* Return the length of string -- including null terminal byte */
->  static nokprobe_inline int
-> -kern_fetch_store_strlen_user(unsigned long addr)
-> +fetch_store_strlen_user(unsigned long addr)
->  {
->  	const void __user *uaddr =  (__force const void __user *)addr;
->  	int ret;
-> @@ -29,14 +29,14 @@ kern_fetch_store_strlen_user(unsigned long addr)
->  
->  /* Return the length of string -- including null terminal byte */
->  static nokprobe_inline int
-> -kern_fetch_store_strlen(unsigned long addr)
-> +fetch_store_strlen(unsigned long addr)
->  {
->  	int ret, len = 0;
->  	u8 c;
->  
->  #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->  	if (addr < TASK_SIZE)
-> -		return kern_fetch_store_strlen_user(addr);
-> +		return fetch_store_strlen_user(addr);
->  #endif
->  
->  	do {
-> @@ -63,7 +63,7 @@ static nokprobe_inline void set_data_loc(int ret, void *dest, void *__dest, void
->   * with max length and relative data location.
->   */
->  static nokprobe_inline int
-> -kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
-> +fetch_store_string_user(unsigned long addr, void *dest, void *base)
->  {
->  	const void __user *uaddr =  (__force const void __user *)addr;
->  	int maxlen = get_loc_len(*(u32 *)dest);
-> @@ -86,7 +86,7 @@ kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
->   * length and relative data location.
->   */
->  static nokprobe_inline int
-> -kern_fetch_store_string(unsigned long addr, void *dest, void *base)
-> +fetch_store_string(unsigned long addr, void *dest, void *base)
->  {
->  	int maxlen = get_loc_len(*(u32 *)dest);
->  	void *__dest;
-> @@ -94,7 +94,7 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
->  
->  #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->  	if ((unsigned long)addr < TASK_SIZE)
-> -		return kern_fetch_store_string_user(addr, dest, base);
-> +		return fetch_store_string_user(addr, dest, base);
->  #endif
->  
->  	if (unlikely(!maxlen))
-> @@ -112,4 +112,22 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
->  	return ret;
->  }
->  
-> +static nokprobe_inline int
-> +probe_mem_read_user(void *dest, void *src, size_t size)
-> +{
-> +	const void __user *uaddr =  (__force const void __user *)src;
-> +
-> +	return copy_from_user_nofault(dest, uaddr, size);
-> +}
-> +
-> +static nokprobe_inline int
-> +probe_mem_read(void *dest, void *src, size_t size)
-> +{
-> +#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-> +	if ((unsigned long)src < TASK_SIZE)
-> +		return probe_mem_read_user(dest, src, size);
-> +#endif
-> +	return copy_from_kernel_nofault(dest, src, size);
-> +}
-> +
->  #endif /* __TRACE_PROBE_KERNEL_H_ */
-> -- 
-> 2.25.1
-> 
+Regardless of whether an open device node indication or a streaming
+status is used, you don't want to indicate a camera is used because the
+user is watching a movie and the V4L2-based codec is in use. You thus
+need to at least filter out unrelated video devices in userspace, and if
+you want to do so for privacy reasons, hardcoding in PipeWire (or
+anywhere else) a heuristic will be prone to false positives or false
+negatives. That isn't a good idea in my opinion, I believe this problem
+can only be solved by handling the concept of "camera" in userspace.
 
+> > Closing video (and subdev) nodes when the camera is not in use would be
+> > good I think. It doesn't mean we have to open them when starting
+> > capture, explicit open/close operation (or similar, maybe introducing a
+> > capture session object in the libcamera API would also make sense, it
+> > should be considered as part of the same issue) could help with this.
+> 
+> I'm not talking about libcamera in this thread. It's how does a user
+> correctly identify when a camera is in use globally in a system.
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Regards,
+
+Laurent Pinchart
