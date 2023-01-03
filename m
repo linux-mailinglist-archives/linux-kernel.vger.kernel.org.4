@@ -2,147 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D1265C0FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427FA65C107
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjACNlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
+        id S233362AbjACNmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjACNk5 (ORCPT
+        with ESMTP id S233267AbjACNmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:40:57 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70706E19;
-        Tue,  3 Jan 2023 05:40:53 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 82AA21EC034B;
-        Tue,  3 Jan 2023 14:40:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672753251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=7WZ2I/kePpaASy/qY+vLm4NwRwJ6Szd4KG46JRy26ow=;
-        b=Cd3iHtUkCRfBCwEoy0QhT1+l1dGdwcDQG6hBwbnGP/lQOiIZYKzEes5LgYqJGNpEhFgPs2
-        1qCwjW5inVX8Vtxd72WTULF82jle/+plZ1j/S4B2Y0im7H6C2907v7NpAFuL9MYPQ5vv/t
-        5GSOnpLGNWkU7BAyw6A1UJV2M0nrCaM=
-Date:   Tue, 3 Jan 2023 14:40:45 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Nikunj A Dadhania <nikunj@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        mingo@redhat.com, tglx@linutronix.de, dave.hansen@linux.intel.com,
-        seanjc@google.com, pbonzini@redhat.com, thomas.lendacky@amd.com,
-        michael.roth@amd.com, stable@kernel.org
-Subject: Re: [PATCH v3] x86/sev: Add SEV-SNP guest feature negotiation support
-Message-ID: <Y7QwXcAUmS3VZcbH@zn.tnic>
-References: <20230102083810.71178-1-nikunj@amd.com>
+        Tue, 3 Jan 2023 08:42:03 -0500
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024791114E;
+        Tue,  3 Jan 2023 05:42:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1672753322;
+  x=1704289322;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UNQnZcPD5pQpA0xMHBwIkOibtF3daXspO7fcHHlLN0E=;
+  b=JlfdQFphkIqx2cJISdbKN8POOBcpCzd1IfO96TJtTRkFBKo7R3ymtprB
+   Kigo+a6D4Exz6tIuRXszB/XDd6yGmWwrflzH5GZQBs9l8soKXHERTclDi
+   MIgcsGfm3gcrg8+/ts9GD+IcvpRg870UmA6+WH6S2/jnVT92hXC7U6g6D
+   9YdNJ2F2Au24vM3v2Eqk7GQd8yp6V9kD6Oo8SlQRu3lqLrnWePAB123Kn
+   xEWYYIkBCCFC2uFsPctgQHW4YogfvOCZkCijXfQdwWuDgkXu5sDfaMezb
+   jf/StGc1DqgWnBomJWaZ/2xQGeGgndN2nRGI/M7EGioELR5TOE0xzkWSl
+   A==;
+From:   Jiri Valek - 2N <jiriv@axis.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Jiri Valek - 2N <jiriv@axis.com>, Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
+        <linux-input@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] Input: cap11xx add support for cap1203, cap1293 and cap1298
+Date:   Tue, 3 Jan 2023 14:41:02 +0100
+Message-ID: <20230103134105.736346-1-jiriv@axis.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230102083810.71178-1-nikunj@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail03w.axis.com
+ (10.20.40.9)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 02:08:10PM +0530, Nikunj A Dadhania wrote:
-> The hypervisor can enable various new features (SEV_FEATURES[1:63])
-> and start the SNP guest. Some of these features need guest side
-> implementation. If any of these features are enabled without guest
-> side implementation, the behavior of the SNP guest will be undefined.
-> The SNP guest boot may fail in a non-obvious way making it difficult
-> to debug.
-> 
-> Instead of allowing the guest to continue and have it fail randomly
-> later, detect this early and fail gracefully.
-> 
-> SEV_STATUS MSR indicates features which hypervisor has enabled. While
-					 ^
-					 the
+PATCH 1 - add compatible string for new models
+PATCH 2 - add support for new models into driver
 
-> booting, SNP guests should ascertain that all the enabled features
-> have guest side implementation. In case any feature is not implemented
-> in the guest, the guest terminates booting with SNP feature
-> unsupported exit code.
-> 
-> More details in AMD64 APM[1] Vol 2: 15.34.10 SEV_STATUS MSR
-> 
-> [1] https://www.amd.com/system/files/TechDocs/40332_4.05.pdf
-> 
-> Fixes: cbd3d4f7c4e5 ("x86/sev: Check SEV-SNP features support")
-> CC: Borislav Petkov <bp@alien8.de>
-> CC: Michael Roth <michael.roth@amd.com>
-> CC: Tom Lendacky <thomas.lendacky@amd.com>
-> CC: <stable@kernel.org>
-> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+Jiri Valek - 2N (2):
+  dt-bindings: input: microchip,cap11xx: add cap1203, cap1293 and
+    cap1298
+  Input: cap11xx - add support for cap1203, cap1293 and cap1298
 
-...
-
-> diff --git a/Documentation/x86/amd-memory-encryption.rst b/Documentation/x86/amd-memory-encryption.rst
-> index a1940ebe7be5..b8b6b87be995 100644
-> --- a/Documentation/x86/amd-memory-encryption.rst
-> +++ b/Documentation/x86/amd-memory-encryption.rst
-> @@ -95,3 +95,38 @@ by supplying mem_encrypt=on on the kernel command line.  However, if BIOS does
->  not enable SME, then Linux will not be able to activate memory encryption, even
->  if configured to do so by default or the mem_encrypt=on command line parameter
->  is specified.
-> +
-> +Secure Nested Paging (SNP):
-
-No ":"
-
-> +===========================
-
-<---- newline here.
-
-> +SEV-SNP introduces new features (SEV_FEATURES[1:63]) which can be enabled
-> +by the hypervisor for security enhancements. Some of these features need
-> +guest side implementation to function correctly. The below table lists the
-> +expected guest behavior with various possible scenarios of guest/hypervisor
-> +SNP feature support.
-> +
-> ++---------------+---------------+---------------+---------------+
-> +|Feature Enabled|  Guest needs  |   Guest has   |  Guest boot   |
-> +|     by HV     |implementation |implementation |   behavior    |
-> ++---------------+---------------+---------------+---------------+
-> +|      No       |      No       |      No       |     Boot      |
-> +|               |               |               |               |
-> ++---------------+---------------+---------------+---------------+
-> +|      No       |      Yes      |      No       |     Boot      |
-> +|               |               |               |               |
-> ++---------------+---------------+---------------+---------------+
-> +|      No       |      Yes      |      Yes      |     Boot      |
-> +|               |               |               |               |
-> ++---------------+---------------+---------------+---------------+
-> +|      Yes      |      No       |      No       |   Boot with   |
-> +|               |               |               |feature enabled|
-> ++---------------+---------------+---------------+---------------+
-> +|      Yes      |      Yes      |      No       | Graceful Boot |
-> +|               |               |               |    Failure    |
-> ++---------------+---------------+---------------+---------------+
-> +|      Yes      |      Yes      |      Yes      |   Boot with   |
-> +|               |               |               |feature enabled|
-> ++---------------+---------------+---------------+---------------+
-
-sphinx is not happy about that table for some reason. I always find the error
-messages cryptic though:
-
-Documentation/x86/amd-memory-encryption.rst:110: WARNING: Block quote ends without a blank line; unexpected unindent.
-Documentation/x86/amd-memory-encryption.rst:110: WARNING: Block quote ends without a blank line; unexpected unindent.
-Documentation/x86/amd-memory-encryption.rst:122: WARNING: Block quote ends without a blank line; unexpected unindent.
-Documentation/x86/amd-memory-encryption.rst:128: WARNING: Block quote ends without a blank line; unexpected unindent.
-
-You can repro by doing "make htmldocs".
+ .../bindings/input/microchip,cap11xx.yaml     |  3 +++
+ drivers/input/keyboard/cap11xx.c              | 20 +++++++++++++++++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
