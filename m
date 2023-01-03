@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1137665C525
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A07565C528
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233914AbjACRem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:34:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S233374AbjACRhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbjACRei (ORCPT
+        with ESMTP id S229996AbjACRha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:34:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D803E1260C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:33:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672767235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UXDgMAks1AazXUGyay5LaZWRCzaIyOQrM1gFj8TREZA=;
-        b=ZUw5AUgg72419UyUNuvawPJnMZTPJbQLe4Dkh8ZL/K9Ouzi13KR5OVcBGcKdKq05AZWu2Z
-        2zB01tmaK067U7TKmhE6s3/24HUA6mcWRjkm7ffUBSgaK8ipGzE5JVmy7Lwh3urXvKuZrB
-        sPJRvBf0MUACXLjDQhUxMpr3s2y6doM=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-411-JyTqDRGhMjaf92-SVns-rQ-1; Tue, 03 Jan 2023 12:33:54 -0500
-X-MC-Unique: JyTqDRGhMjaf92-SVns-rQ-1
-Received: by mail-pl1-f199.google.com with SMTP id b6-20020a170902d50600b0019139834d47so21987366plg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 09:33:53 -0800 (PST)
+        Tue, 3 Jan 2023 12:37:30 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C807FEE35
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:37:28 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id n78so33853947yba.12
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 09:37:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OeWoV2jDJv8fM4Dg3JYXPgrQnOUrSK9gsg7zC/eF8E4=;
+        b=TPkqz6ugysO/Ainbe2exHeibI4ZMUjP7dUE/L2EFkFgPKqQndvZuh+xBMazTijUOHb
+         7NSgN/YiganWrWNBUfrwv4rgtGMfnQB4waNbo8b2/sIK13pbGPDaMBXBROH0UvcmVP6p
+         xzcO+i9ALp3ZzlqiEHigxO+1AZZ6O5TdrAGRYcKw0LW9W2xMa4Mw48NO7o5mssCFe3zH
+         N4CrONsXgkn2UxCZHOFXu63lYI+165i/egMXZ0yVA9oD/98AYhH3T6U1d0JIRFRavYeg
+         7cVd6wrzGUNFzZIRViTZrJtk+23qVwDMmvz65+9qPHjA5Nd2oycxhglfK2GIQNMbomfw
+         eEiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UXDgMAks1AazXUGyay5LaZWRCzaIyOQrM1gFj8TREZA=;
-        b=hsvE2CqqtZrYq74c7a4wpjRmyYCnv7+EvgeLHBn4GvTEKUSs+xyagx476C85WhP/b4
-         Ts5xLmu/R5c9GvHpsr9zI3Q2Ay+/NIf4OBd2id0HL4d+P/kYvUfOmp2UDFytTisNZXcX
-         64rrlraugifNNVqq3SToRAFiUtVm4XfvaPeFMPCrip4BNaZVNHPw4RskjbApXpymKetO
-         JEFhqMZcw81qwEfK6ouwxNaA8iwUux2tJDkBwiw6SGeRXQ1OCaF0m2aioTBXXI3+P4cj
-         l1kGqz/iddruv5NjB5siobnr169BULXjF01cllnuqU7RD0h40FZ9POpakiXlKPT5ccGf
-         gRZg==
-X-Gm-Message-State: AFqh2koP12A8IueJp+V+RI3eSPdsg92BWyA0OgDkJxO5Nu2dfcyGOuu6
-        L3g+KFWAV44o7q7/e4tRN/Bb8abNGGEQLQYOdckN4dT6/Ypts6h8t97mT3UBI6NJv70pPFo/XYl
-        0CqgjWK4/+wUFuvdt2XO6eYbJ
-X-Received: by 2002:a62:506:0:b0:56c:7216:fbc6 with SMTP id 6-20020a620506000000b0056c7216fbc6mr45392819pff.30.1672767233039;
-        Tue, 03 Jan 2023 09:33:53 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvgHh1xR0yEYEOLNIiw2a9F0DnNeFqj2kH9NAQba47uamtEX+WHHc7rIQEwtK/YqVreiCWpbA==
-X-Received: by 2002:a62:506:0:b0:56c:7216:fbc6 with SMTP id 6-20020a620506000000b0056c7216fbc6mr45392803pff.30.1672767232672;
-        Tue, 03 Jan 2023 09:33:52 -0800 (PST)
-Received: from kernel-devel ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
-        by smtp.gmail.com with ESMTPSA id x21-20020aa79575000000b005812e832087sm15452620pfq.29.2023.01.03.09.33.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 09:33:52 -0800 (PST)
-Date:   Tue, 3 Jan 2023 17:33:48 +0000
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com
-Subject: Re: [PATCH] ext4: Verify extent header in ext4_find_extent()
-Message-ID: <Y7Rm/AOlmaGp0JaL@kernel-devel>
-References: <20230102145833.2758-1-syoshida@redhat.com>
- <Y7NkW86aVcksg3i9@sol.localdomain>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OeWoV2jDJv8fM4Dg3JYXPgrQnOUrSK9gsg7zC/eF8E4=;
+        b=fM0iweDfIVQ+LWKaTmnS8xpXInj6Ow2h5TCSQDUadGcuh7WZdXDkGljwprO1aybYH6
+         2hfzKaZoVuLJp5r1K5vhScCX7fSVEPjA8Bt/VfJ1hLpPw2lx+k8sWtGSE3AZ8ague1pe
+         Yb/xkUMt/9OrJ8hX4taVtWJGSxF0NupKn5NPUaQvrVLq3JCXaOpn846qx0Xgdk8WpVAu
+         QHPhPUe+r/NbP5q7wiq8LHW6Gm0nI/QhWCq9KGcHg1cw7+LpKq8j0+6FfFKUZcXwJJpD
+         eTt+Mfzm9p50cDd/YJ/SdrW2/dcakikQ9vGB/v1ckv8vcEWHxUPU/AkfIqtGUXV1S2ls
+         kBow==
+X-Gm-Message-State: AFqh2kqA99FZuPkFgyT1VS9xFKbfuR7wYSVzIpgpMDiVDbyJAgfpAZZ5
+        QRuoZFLJHEksR8RoDb1xZZn8pd05r9KKIRYz9mkftw==
+X-Google-Smtp-Source: AMrXdXu8GSgfBPWxgydDd2VXKPn6C9kVOiid1xdDcwjSNmmaplcDYLpEMrF/beW8ri/5hqrJgbgQyQdWu2jBsgUJQkw=
+X-Received: by 2002:a25:da14:0:b0:707:34cf:b4b1 with SMTP id
+ n20-20020a25da14000000b0070734cfb4b1mr4271075ybf.123.1672767447737; Tue, 03
+ Jan 2023 09:37:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7NkW86aVcksg3i9@sol.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-7-vipinsh@google.com>
+ <CANgfPd_=WwrgVVQnooZLCSXpSnEjRVOdt6qZtrvhO_wmxc5Tzg@mail.gmail.com>
+ <CAHVum0dkqp1MnMyqoOQdGp2K74h5NFrzZ4KaT=0+ezVP-JJnVQ@mail.gmail.com> <CANgfPd8KU3pqSYu--bSP1QesmkrnLqqB8QH_8rZVS=8S4HNBDQ@mail.gmail.com>
+In-Reply-To: <CANgfPd8KU3pqSYu--bSP1QesmkrnLqqB8QH_8rZVS=8S4HNBDQ@mail.gmail.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 3 Jan 2023 09:36:51 -0800
+Message-ID: <CAHVum0c+17Z-RbGAFdU-xmRejDjDQ+MKOfN4XaObh2SwgWAjLg@mail.gmail.com>
+Subject: Re: [Patch v3 6/9] KVM: Provide NUMA node support to kvm_mmu_memory_cache{}
+To:     chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com
+Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,43 +71,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 03:10:19PM -0800, Eric Biggers wrote:
-> On Mon, Jan 02, 2023 at 02:58:33PM +0000, Shigeru Yoshida wrote:
-> > syzbot reported use-after-free in ext4_find_extent() [1].  If there is
-> > a corrupted file system, this can cause invalid memory access.
-> > 
-> > This patch fixes the issue by verifying extent header.
-> > 
-> > Reported-by: syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com
-> > Link: https://syzkaller.appspot.com/bug?id=cd95cb722bfa1234ac4c78345c8953ee2e7170d0 [1]
-> > Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
-> > ---
-> >  fs/ext4/extents.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> > index 9de1c9d1a13d..79bfa583ab1d 100644
-> > --- a/fs/ext4/extents.c
-> > +++ b/fs/ext4/extents.c
-> > @@ -901,6 +901,9 @@ ext4_find_extent(struct inode *inode, ext4_lblk_t block,
-> >  		ret = -EFSCORRUPTED;
-> >  		goto err;
-> >  	}
-> > +	ret = ext4_ext_check(inode, eh, depth, 0);
-> > +	if (ret)
-> > +		goto err;
-> 
-> This patch probably does not address the root cause of the problem.  Please see
-> the discussion on the very similar patch
-> https://lore.kernel.org/linux-ext4/20221230062931.2344157-1-tudor.ambarus@linaro.org/T/#u
+On Thu, Dec 29, 2022 at 10:22 AM Ben Gardon <bgardon@google.com> wrote:
+>
+> On Wed, Dec 28, 2022 at 2:08 PM Vipin Sharma <vipinsh@google.com> wrote:
+> >
+> > On Tue, Dec 27, 2022 at 11:10 AM Ben Gardon <bgardon@google.com> wrote:
+> > >
+> > > On Wed, Dec 21, 2022 at 6:35 PM Vipin Sharma <vipinsh@google.com> wrote:
+> > > >
+> > > > Add 'node' variable in kvm_mmu_memory_cache{} to denote which NUMA node
+> > > > this cache should allocate memory from. Default initialize to
+> > > > NUMA_NO_NODE in all architectures.
+> > > >
+> > > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > > > ---
+> > > >  arch/arm64/kvm/arm.c      |  2 +-
+> > > >  arch/arm64/kvm/mmu.c      |  4 +++-
+> > > >  arch/mips/kvm/mips.c      |  2 ++
+> > > >  arch/riscv/kvm/mmu.c      |  2 +-
+> > > >  arch/riscv/kvm/vcpu.c     |  2 +-
+> > > >  arch/x86/kvm/mmu/mmu.c    | 22 ++++++++++++----------
+> > > >  include/linux/kvm_host.h  |  6 ++++++
+> > > >  include/linux/kvm_types.h |  2 ++
+> > > >  8 files changed, 28 insertions(+), 14 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > > > index 9c5573bc4614..52a41f4532e2 100644
+> > > > --- a/arch/arm64/kvm/arm.c
+> > > > +++ b/arch/arm64/kvm/arm.c
+> > > > @@ -340,7 +340,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> > > >         vcpu->arch.target = -1;
+> > > >         bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
+> > > >
+> > > > -       vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+> > > > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache, NULL, NUMA_NO_NODE);
+> > > >
+> > > >         /*
+> > > >          * Default value for the FP state, will be overloaded at load
+> > > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > > > index 31d7fa4c7c14..bd07155e17fa 100644
+> > > > --- a/arch/arm64/kvm/mmu.c
+> > > > +++ b/arch/arm64/kvm/mmu.c
+> > > > @@ -894,12 +894,14 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+> > > >  {
+> > > >         phys_addr_t addr;
+> > > >         int ret = 0;
+> > > > -       struct kvm_mmu_memory_cache cache = { .gfp_zero = __GFP_ZERO };
+> > > > +       struct kvm_mmu_memory_cache cache;
+> > > >         struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
+> > > >         enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
+> > > >                                      KVM_PGTABLE_PROT_R |
+> > > >                                      (writable ? KVM_PGTABLE_PROT_W : 0);
+> > > >
+> > > > +       INIT_KVM_MMU_MEMORY_CACHE(&cache, NULL, NUMA_NO_NODE);
+> > > > +
+> > > >         if (is_protected_kvm_enabled())
+> > > >                 return -EPERM;
+> > > >
+> > > > diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> > > > index a25e0b73ee70..b017c29a9340 100644
+> > > > --- a/arch/mips/kvm/mips.c
+> > > > +++ b/arch/mips/kvm/mips.c
+> > > > @@ -304,6 +304,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> > > >                      HRTIMER_MODE_REL);
+> > > >         vcpu->arch.comparecount_timer.function = kvm_mips_comparecount_wakeup;
+> > > >
+> > > > +       vcpu->arch.mmu_page_cache.node = NUMA_NO_NODE;
+> > > > +
+> > >
+> > > It looks weird to have MIPS not using the initialization MACRO. Should
+> > > it just have a GFP_ZERO parameter?
+> >
+> > MIPS is not setting GFP_ZERO explicitly before my series, so, I didn't
+> > make it GFP_ZERO. I am not sure if MIPS needs it or not, I tried to
+> > keep the same functionality in my patch.
+> >
+> > May be someone from MIPS can tell more about it.
+>
+> That makes sense, I just don't want to see MIPS get left behind
+> because we move the cache init logic to a macro or function. Folks
+> might update the init function but forget to update MIPS too.
+>
 
-Thank you so much for your comment!!  I missed the discussion you
-mentioned.  I'll check that.
+Hi Huacai, Aleksandar,
 
-Regards,
-Shigeru
+I have noticed that MIPS doesn't use __GFP_ZERO flag for
+mmu_page_cache in KVM. Is it intentional? I was wondering if it will
+be useful if I add zero flag for cache in this patch for MIPS? All
+other architectures seem to use __GFP_ZERO flag for their caches.
 
-> 
-> - Eric
-> 
-
+Thanks
+Vipin
