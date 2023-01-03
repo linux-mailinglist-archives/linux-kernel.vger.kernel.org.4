@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5310065C75B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62EEF65C75E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238885AbjACTTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 14:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
+        id S238914AbjACTUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 14:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbjACTTA (ORCPT
+        with ESMTP id S238583AbjACTTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 14:19:00 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435E115FCC
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 11:16:23 -0800 (PST)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303IGIJn001055
-        for <linux-kernel@vger.kernel.org>; Tue, 3 Jan 2023 11:16:22 -0800
+        Tue, 3 Jan 2023 14:19:02 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8907B15FD6
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 11:16:25 -0800 (PST)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303IGJr4029037
+        for <linux-kernel@vger.kernel.org>; Tue, 3 Jan 2023 11:16:25 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=QzKwUsIi8fNNyxqU4gSlX689JPGZXFMKHp3FG8bPQk0=;
- b=YM/iCJ3o6HKArA7nL6LTrutZomDvnOw56HpdIUvyLO75ES706rfmrHO5dPYgK/RpfbGy
- IXnxxlaF8vptl6L8lc22Dc3vB1V0sTBxBlSuT4wWW4fyolpy5uKkojKMovhOlNIWhNTv
- hlyGuTioplr/tQW1QCKa4uR7ElS2v/d8bXVq2sOL1qaFXNB+qDLBuw2YcH3FQDeLVAiz
- +l3L2m0K0GOhGz4TeNuAUN1B6mKZHIZqQxxydgCnKzKqT8i09IXqvlutA1BIkAdC8F9l
- T3y3ch390raZME2aKn2oWOz+0fvZlW/koEJkguWmD6kv5LjW5i7sZ2J94daLuJKLpvTT ww== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mtkt0sxf9-2
+ bh=EOLA9aVIScshxrJuNiGV2+LmB+VUm+EtdNOtAx7GzaQ=;
+ b=bQWuyv+REu/rWxKIIt5pFQHfv6VkUQnqqsU4nMgd7grrG8l1JYZ/mielJCyZU59Tl9cZ
+ pY0R1Duk/8humoda1L9r263oMQV8u879tTR7ptrT+mddnnZAi5OMITLh+QeJWPbUWVZf
+ 2GfF6Mx14MV+UC/IM9Tr8V+aQA1I4ofcUzgV4KAj8u7Wv/8qup89qXTMsGKqOgll8X2P
+ HSFlJ/J8x/lkIBj/EgFKA1GH6d416ZiDx4PI/QuIno6ni/h1ind8bQBCqMJ9ymO2BYHR
+ eGBB8zjMnVuiG1wA/7eQXGdH3alHYRVOWZuR834veJNx9fRT29jp3xkrCMSfZOO6YdkG TA== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mtknw6qb0-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 11:16:22 -0800
-Received: from twshared8047.05.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 11:16:25 -0800
+Received: from twshared25601.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 3 Jan 2023 11:16:20 -0800
+ 15.1.2375.34; Tue, 3 Jan 2023 11:16:23 -0800
 Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id 4EC4BE1F5E1A; Tue,  3 Jan 2023 11:15:55 -0800 (PST)
+        id 56F0CE1F5E1C; Tue,  3 Jan 2023 11:15:55 -0800 (PST)
 From:   Keith Busch <kbusch@meta.com>
 To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         Matthew Wilcox <willy@infradead.org>,
@@ -44,9 +44,9 @@ To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
 CC:     Tony Battersby <tonyb@cybernetics.com>,
         Kernel Team <kernel-team@meta.com>,
         Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv3 09/12] dmapool: simplify freeing
-Date:   Tue, 3 Jan 2023 11:15:48 -0800
-Message-ID: <20230103191551.3254778-10-kbusch@meta.com>
+Subject: [PATCHv3 10/12] dmapool: don't memset on free twice
+Date:   Tue, 3 Jan 2023 11:15:49 -0800
+Message-ID: <20230103191551.3254778-11-kbusch@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230103191551.3254778-1-kbusch@meta.com>
 References: <20230103191551.3254778-1-kbusch@meta.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6n8oV55mLMnsH-Si-F2SnqpIsQW4iP4j
-X-Proofpoint-GUID: 6n8oV55mLMnsH-Si-F2SnqpIsQW4iP4j
+X-Proofpoint-GUID: eNpu0xlI4tvvmiLIcvbRqv1-aD1c3_DI
+X-Proofpoint-ORIG-GUID: eNpu0xlI4tvvmiLIcvbRqv1-aD1c3_DI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-03_07,2023-01-03_02,2022-06-22_01
@@ -71,69 +71,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Keith Busch <kbusch@kernel.org>
 
-The actions for busy and not busy are mostly the same, so combine these
-and remove the unnecessary function. Also, the pool is about to be freed
-so there's no need to poison the page data since we only check for
-poison on alloc, which can't be done on a freed pool.
+If debug is enabled, dmapool will poison the range, so no need to clear
+it to 0 immediately before writing over it.
 
 Signed-off-by: Keith Busch <kbusch@kernel.org>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- mm/dmapool.c | 26 +++++++-------------------
- 1 file changed, 7 insertions(+), 19 deletions(-)
+ mm/dmapool.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/mm/dmapool.c b/mm/dmapool.c
-index 6862b4e763891..4dab48e7e0d75 100644
+index 4dab48e7e0d75..d886b46c4b289 100644
 --- a/mm/dmapool.c
 +++ b/mm/dmapool.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * DMA Pool allocator
-+* DMA Pool allocator
-  *
-  * Copyright 2001 David Brownell
-  * Copyright 2007 Intel Corporation
-@@ -241,18 +241,6 @@ static inline bool is_page_busy(struct dma_page *pag=
-e)
- 	return page->in_use !=3D 0;
+@@ -408,6 +408,8 @@ static bool pool_page_err(struct dma_pool *pool, stru=
+ct dma_page *page,
+ static bool pool_page_err(struct dma_pool *pool, struct dma_page *page,
+ 			  void *vaddr, dma_addr_t dma)
+ {
++	if (want_init_on_free())
++		memset(vaddr, 0, pool->size);
+ 	return false;
  }
-=20
--static void pool_free_page(struct dma_pool *pool, struct dma_page *page)
--{
--	dma_addr_t dma =3D page->dma;
--
--#ifdef	DMAPOOL_DEBUG
--	memset(page->vaddr, POOL_POISON_FREED, pool->allocation);
--#endif
--	dma_free_coherent(pool->dev, pool->allocation, page->vaddr, dma);
--	list_del(&page->page_list);
--	kfree(page);
--}
--
- /**
-  * dma_pool_destroy - destroys a pool of dma memory blocks.
-  * @pool: dma pool that will be destroyed
-@@ -280,14 +268,14 @@ void dma_pool_destroy(struct dma_pool *pool)
- 	mutex_unlock(&pools_reg_lock);
-=20
- 	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
--		if (is_page_busy(page)) {
-+		if (!is_page_busy(page))
-+			dma_free_coherent(pool->dev, pool->allocation,
-+					  page->vaddr, page->dma);
-+		else
- 			dev_err(pool->dev, "%s %s, %p busy\n", __func__,
- 				pool->name, page->vaddr);
--			/* leak the still-in-use consistent memory */
--			list_del(&page->page_list);
--			kfree(page);
--		} else
--			pool_free_page(pool, page);
-+		list_del(&page->page_list);
-+		kfree(page);
+ #endif
+@@ -435,8 +437,6 @@ void dma_pool_free(struct dma_pool *pool, void *vaddr=
+, dma_addr_t dma)
+ 		return;
  	}
 =20
- 	kfree(pool);
+-	if (want_init_on_free())
+-		memset(vaddr, 0, pool->size);
+ 	if (pool_page_err(pool, page, vaddr, dma)) {
+ 		spin_unlock_irqrestore(&pool->lock, flags);
+ 		return;
 --=20
 2.30.2
 
