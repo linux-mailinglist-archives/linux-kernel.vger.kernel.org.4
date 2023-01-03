@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1184665C492
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA5C65C4AB
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238338AbjACRFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:05:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
+        id S238539AbjACRGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238320AbjACREY (ORCPT
+        with ESMTP id S238514AbjACRGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:04:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5856F13F17;
-        Tue,  3 Jan 2023 09:01:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26961B8103F;
-        Tue,  3 Jan 2023 17:01:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DA6C433EF;
-        Tue,  3 Jan 2023 17:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672765280;
-        bh=R1Fjj1j1N9yFgter6XWQaPhPtwjErBgobqpSpsgoeHY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ICgEsrPddkbHPGy3so0hkwuZkjNfJ6CNURrXOeHlJlDaEldln8Q+ZcBJuPFfUh2GI
-         iae1/JkF0HEgOIMSX5mwk3A0v9LZYQoLPF87ihUC30nwtIuFQvOPpshttWJSMxPC2n
-         PJ2OaCEnru0x7eKjTB5AobR2BORjg6fiGRhQF8v/Cl/hFld5ly8xfSaELHTg/riFof
-         FSw2pZwFzBBsChs3Yr1rK9A7esXsYVtgGyCebH9CQ8wBoR7Y0OkwVe+0GhUMlb7/nK
-         oQOgJWFwpozH7RMeP1ficRGUGSdgY9YgxJOIt3mJKzwGpsVEEjxxv4tW87YypzvZYA
-         U/Imny0AYn4RA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     kernel@axis.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230103152211.3034779-1-vincent.whitchurch@axis.com>
-References: <20230103152211.3034779-1-vincent.whitchurch@axis.com>
-Subject: Re: [PATCH] spi: spi-loopback-test: Allow skipping delays
-Message-Id: <167276527955.184056.18435028327533008188.b4-ty@kernel.org>
-Date:   Tue, 03 Jan 2023 17:01:19 +0000
+        Tue, 3 Jan 2023 12:06:17 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA92914082;
+        Tue,  3 Jan 2023 09:02:24 -0800 (PST)
+Date:   Tue, 03 Jan 2023 17:02:04 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672765325;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=p/JG5L2EoojYjh6GpY/ztsHyqNDX+TYGc/56wDuZiUA=;
+        b=K0QXuvKsIqSusMPHKgz+k8jEG2ZaDzm09+ARTHFc0YfmsErKjoWLDyqf0reaoVncN9xO5V
+        nrSRb9GqG3IQlpebU8zw0WXiAS2nlnF/E8H8TPIs4K4ytbtuaRD+NldkxxIhRNK2Do/MeY
+        tMdfqq/KehOOh5cfpISH0rN7tJN+P1ogTjjGNRjnOPRPdS6Yhv4skipRrrlcA31VS6L9fR
+        PCrWLMF7x++jCzK0p7coC0Lt2d+MzyXr8+ZTsAzIgW7TGZe0I1CkYKbjys/ohvZG/GhYSH
+        GVGtwfQB4Slh7rusnzF16auggAfbf2CipzgbSTLsp348cYb6j+Y59f33LWxCEA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672765325;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=p/JG5L2EoojYjh6GpY/ztsHyqNDX+TYGc/56wDuZiUA=;
+        b=2HopG3ua/Kv7hIzdUg00I934uUyxXb38G1Pqi5a5jm9HpuOakK1fcviyeYvWp8hfG8OhHt
+        SaHL1x3JNjo2ojDw==
+From:   "tip-bot2 for Mikulas Patocka" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/asm: Fix an assembler warning with current binutils
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
 MIME-Version: 1.0
+Message-ID: <167276532482.4906.17722576860770017597.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-7ab1d
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 03 Jan 2023 16:22:10 +0100, Vincent Whitchurch wrote:
-> A 100 ms delay is inserted between tests by default in order to "detect
-> the individual tests when using a logic analyzer".  However, such delays
-> are unnecessary when using this module for automated regression testing,
-> so allow them to be disabled with a module parameter.
-> 
-> 
+The following commit has been merged into the x86/urgent branch of tip:
 
-Applied to
+Commit-ID:     55d235361fccef573990dfa5724ab453866e7816
+Gitweb:        https://git.kernel.org/tip/55d235361fccef573990dfa5724ab453866e7816
+Author:        Mikulas Patocka <mpatocka@redhat.com>
+AuthorDate:    Tue, 03 Jan 2023 10:24:11 -05:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Tue, 03 Jan 2023 17:55:11 +01:00
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+x86/asm: Fix an assembler warning with current binutils
 
-Thanks!
+Fix a warning: "found `movsd'; assuming `movsl' was meant"
 
-[1/1] spi: spi-loopback-test: Allow skipping delays
-      commit: 392af84bddcc96f1546a1ca4ffa71bccce95b897
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+---
+ arch/x86/lib/iomap_copy_64.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/arch/x86/lib/iomap_copy_64.S b/arch/x86/lib/iomap_copy_64.S
+index a1f9416..6ff2f56 100644
+--- a/arch/x86/lib/iomap_copy_64.S
++++ b/arch/x86/lib/iomap_copy_64.S
+@@ -10,6 +10,6 @@
+  */
+ SYM_FUNC_START(__iowrite32_copy)
+ 	movl %edx,%ecx
+-	rep movsd
++	rep movsl
+ 	RET
+ SYM_FUNC_END(__iowrite32_copy)
