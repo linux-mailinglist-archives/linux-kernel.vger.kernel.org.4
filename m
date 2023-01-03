@@ -2,170 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D292065BE55
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A5B65BE58
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:45:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbjACKnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
+        id S237383AbjACKof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237373AbjACKmy (ORCPT
+        with ESMTP id S233033AbjACKoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:42:54 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92CBA187
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:42:53 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id ud5so72646886ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 02:42:53 -0800 (PST)
+        Tue, 3 Jan 2023 05:44:32 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB23A187
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:44:31 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id az7so4597538wrb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 02:44:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=MTCCvTLvkrq9UYZLIeqAgvmTL5kXy4L/w7DR6Wdybhw=;
-        b=AYtJ2TrgpA5J3COpcPW59lGl4mbGQQHk7avrxHfY0zCeTZ1ZVgGKtLW+Z5uLe2BxJq
-         d1g+zGq1CvsYsCH+qrik+I1PInp7bJeT5nzJEP+m9dzWYNtfS8hu8aqr6dmKJRAUKT6h
-         wScok0759OWY4NEp3XXWQfvdaj2e/fWYFs3yQ91+fRo6a2p/ChruxIYAfaOoliWqr3nf
-         CUNaDTBM2OvXdJeciGjsdV0WINKPtJbjGA6vOrpsBi2u8uy8ttI7Rlygel3rPGD3zGRW
-         dRWXgTpQJlxywVxnytjbLdvK/GwGws4OWv3kBHeRroPVGOC1GdlYjDcOPw5e+gemKSSE
-         okxA==
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wRoXjucpyLnrH29TmQH3kHfWwQiVFXi4441mn81bzmo=;
+        b=bI2vh4rxKWeKspU9/ZPqPG3vPgaWqLwxtO0SJ1dRGwpE+7+Cis5H771DOGU1PPuQn2
+         hIbb5746ZX5nA3/J6Ggh7IWv0v8BgF1VQQKiBmjGgUrHRofisEUfijOPaqUJ42m8SVBo
+         L6ocjjAF9jiM+FchSniD+aaHLwJMuqcx177gP/6p5vrCIQqDQ00CGyMyH7xixe9MxwXn
+         dwwm+WT0UaGkm2tdGOphjfMkPNuAgzvc5bRKylgoa5m6vZoQ3BJ9HG9JT5dPVrFyzJdt
+         Dejp+ZuFNM9yAnIFicyjqKnv+EOfSTtgddlYfDbuJW9Yie6O2fsNlSDF/x4it893Rs75
+         gK/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MTCCvTLvkrq9UYZLIeqAgvmTL5kXy4L/w7DR6Wdybhw=;
-        b=IoptIbOzbirrQlWksUTZudWHlz63AWfqHj4SYx2WxyATKrDdbuCXTCPmmBomP75G7j
-         vJUQsBCneL4tGj09QrtW6I5yjF5p8Peh6mxbs3xavGdlQEA22uJ2Rl0mC9NKZQ1veqvM
-         m1NBiG4NqIGmLbfAuSRmr3NAHkVC8qh3eKBojIj5rKkvum8LKMwp/jyXnJE1Zmqn+dFk
-         2h20+Vtepm7mS/7fYCheCDv6RMQqXwmrzk5QMgdMYUsHy2hG7iLss680/OFzygafqVMV
-         KRUd9HDo4Te2mMFuU2E/99WMJ6sMfV9rtVUq2O21v+gKTqv/4eX6r4xsxXzo93M5YNG+
-         t6fg==
-X-Gm-Message-State: AFqh2kp2aieH9MBpY6v+UpEYnbk2Rr5IINEJWQXYz1/YSsnucv48iaJg
-        q5V17lvM2aXiy7A2LRYomD8=
-X-Google-Smtp-Source: AMrXdXsAh7UObdy7ZWckLxIaybn6obM08nvXeefxVH68hT3Ehxco2PjCeLwxNbNb/FhznDDLcI9sEA==
-X-Received: by 2002:a17:907:a809:b0:7c1:27a:d239 with SMTP id vo9-20020a170907a80900b007c1027ad239mr36098408ejc.34.1672742571978;
-        Tue, 03 Jan 2023 02:42:51 -0800 (PST)
-Received: from [0.0.0.0] ([134.134.139.78])
-        by smtp.googlemail.com with ESMTPSA id e22-20020a170906045600b0073022b796a7sm14184184eja.93.2023.01.03.02.42.47
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wRoXjucpyLnrH29TmQH3kHfWwQiVFXi4441mn81bzmo=;
+        b=qwXXhwbsEA7Z7bUj1R/zExvFR+dVZJUYe4isuiA1atA2tWMnV2rXwFZVefoQOHxipA
+         gQINAdvEI0ZJ/frDpCExttpQmgC0lpdAh8ZjKiwQm/o16J/i1dAgv6cIZJPNgivDk96x
+         C0GuNJMDApnTrxDsJT+IFOa+NDMueUzkoXbztyqE+JvduTB6BMHHaS/7MZ8iu7w7zJIq
+         Vo5/h9AOHyg9I1bmsdEU4GwtfDRWszSw49WTo2R+YwddK3GtUH+8kGEjkZnBvYE01bd1
+         FAS0pWQMCXbz/bFIEMwwpe8agOk+X7OVZ8fMwsQg3LfaZT3NBXNonUlrm6qUjqeAF9C0
+         rQWg==
+X-Gm-Message-State: AFqh2kqbP0/keJsXr2yrkKgQ0M3pnuIuh5H/qovLtnkiGrEbUQkaSP5s
+        4UA0SC/7KKADi5M3R2dd3NDo1g==
+X-Google-Smtp-Source: AMrXdXtFSmoF42unxb1LeYspKdW6lxrRsmyrUcAh2YIgs98/DEKrf/yuN2BfXO8BdljgfVlP5eDseQ==
+X-Received: by 2002:adf:f54a:0:b0:236:611b:e8eb with SMTP id j10-20020adff54a000000b00236611be8ebmr28438067wrp.37.1672742669404;
+        Tue, 03 Jan 2023 02:44:29 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id k1-20020a5d5181000000b0024207478de3sm30751719wrv.93.2023.01.03.02.44.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 02:42:51 -0800 (PST)
-Message-ID: <8b4448d0-d9ea-95a6-83ee-513fe73c793f@gmail.com>
-Date:   Tue, 3 Jan 2023 12:42:43 +0200
+        Tue, 03 Jan 2023 02:44:29 -0800 (PST)
+Message-ID: <6eac88de-637d-468e-2119-d9cab4f8b7dc@linaro.org>
+Date:   Tue, 3 Jan 2023 11:44:27 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Reply-To: juhapekka.heikkila@gmail.com
-Subject: Re: [PATCH] drm/i915/display: Check source height is > 0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/3] thermal/acpi: Add ACPI trip point routines
 Content-Language: en-US
-To:     Drew Davenport <ddavenport@chromium.org>,
-        intel-gfx@lists.freedesktop.org
-Cc:     dri-devel@lists.freedesktop.org,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Jos=c3=a9_Roberto_de_Souza?= <jose.souza@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        =?UTF-8?Q?Juha-Pekka_Heikkil=c3=a4?= 
-        <juha-pekka.heikkila@intel.com>
-References: <20221226225246.1.I15dff7bb5a0e485c862eae61a69096caf12ef29f@changeid>
-From:   Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>
-In-Reply-To: <20221226225246.1.I15dff7bb5a0e485c862eae61a69096caf12ef29f@changeid>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>
+References: <20230102180112.1954082-1-daniel.lezcano@kernel.org>
+ <20230102180112.1954082-2-daniel.lezcano@kernel.org>
+ <CAJZ5v0hBtjkZxSN+B9WEwe4WR6+zwzY5QAPCE5Cq7ONB7x80YA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0hBtjkZxSN+B9WEwe4WR6+zwzY5QAPCE5Cq7ONB7x80YA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Drew,
-
-this is good find. I went looking where the problem is in and saw what 
-you probably also saw earlier.
-
-I was wondering if diff below would be better fix? I assume this would 
-end up with einval or erange in your case but code flow otherwise would 
-stay as is while fixing all future callers for same issue:
-
-diff --git a/drivers/gpu/drm/i915/display/intel_atomic_plane.c 
-b/drivers/gpu/drm/i915/display/intel_atomic_plane.c
-index 10e1fc9d0698..a9948e8d3543 100644
---- a/drivers/gpu/drm/i915/display/intel_atomic_plane.c
-+++ b/drivers/gpu/drm/i915/display/intel_atomic_plane.c
-@@ -144,7 +144,7 @@ unsigned int intel_adjusted_rate(const struct 
-drm_rect *src,
-                                  const struct drm_rect *dst,
-                                  unsigned int rate)
-  {
--       unsigned int src_w, src_h, dst_w, dst_h;
-+       unsigned int src_w, src_h, dst_w, dst_h, dst_wh;
-
-         src_w = drm_rect_width(src) >> 16;
-         src_h = drm_rect_height(src) >> 16;
-@@ -155,8 +155,10 @@ unsigned int intel_adjusted_rate(const struct 
-drm_rect *src,
-         dst_w = min(src_w, dst_w);
-         dst_h = min(src_h, dst_h);
-
--       return DIV_ROUND_UP_ULL(mul_u32_u32(rate, src_w * src_h),
--                               dst_w * dst_h);
-+       /* in case src contained only fractional part */
-+       dst_wh = max(dst_w * dst_h, (unsigned) 1);
-+
-+       return DIV_ROUND_UP_ULL(mul_u32_u32(rate, src_w * src_h), dst_wh);
-  }
-
-  unsigned int intel_plane_pixel_rate(const struct intel_crtc_state 
-*crtc_state,
-
-
-What do you think? I'll in any case come up with some test for this in igt.
-
-/Juha-Pekka
-
-On 27.12.2022 7.53, Drew Davenport wrote:
-> The error message suggests that the height of the src rect must be at
-> least 1. Reject source with height of 0.
+On 02/01/2023 19:22, Rafael J. Wysocki wrote:
+> On Mon, Jan 2, 2023 at 7:01 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>
+>> The ACPI specification describes the trip points, the device tree
+>> bindings as well.
+>>
+>> The OF code uses the generic trip point structures.
+>>
+>> The ACPI has their own trip points structure and uses the get_trip_*
+>> ops to retrieve them.
+>>
+>> We can do the same as the OF code and create a set of ACPI functions
+>> to retrieve a trip point description. Having a common code for ACPI
+>> will help to cleanup the remaining Intel drivers and get rid of the
+>> get_trip_* functions.
+>>
+>> These changes add the ACPI thermal calls to retrieve the basic
+>> information we need to be reused in the thermal ACPI and Intel
+>> drivers.
+>>
+>> The different ACPI functions have the generic trip point structure
+>> passed as parameter where it is filled.
+>>
+>> This structure aims to be the one used by all the thermal drivers and
+>> the thermal framework.
+>>
+>> After this series, a couple of Intel drivers and the ACPI thermal
+>> driver will still have their own trip points definition but a new
+>> series on top of this one will finish the conversion to the generic
+>> trip point handling.
+>>
+>> This series depends on the generic trip point added to the thermal
+>> framework and available in the thermal/linux-next branch.
+>>
+>>   https://lkml.org/lkml/2022/10/3/456
+>>
+>> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
+>> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
+>> ---
+>>   drivers/thermal/Kconfig        |  13 ++
+>>   drivers/thermal/Makefile       |   1 +
+>>   drivers/thermal/thermal_acpi.c | 279 +++++++++++++++++++++++++++++++++
+>>   include/linux/thermal.h        |  16 ++
+>>   4 files changed, 309 insertions(+)
+>>   create mode 100644 drivers/thermal/thermal_acpi.c
+>>
+>> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+>> index e052dae614eb..2c19bccd1223 100644
+>> --- a/drivers/thermal/Kconfig
+>> +++ b/drivers/thermal/Kconfig
+>> @@ -76,6 +76,19 @@ config THERMAL_OF
+>>            Say 'Y' here if you need to build thermal infrastructure
+>>            based on device tree.
+>>
+>> +config THERMAL_ACPI
 > 
-> Signed-off-by: Drew Davenport <ddavenport@chromium.org>
+> Not needed.
 > 
-> ---
-> I was investigating some divide-by-zero crash reports on ChromeOS which
-> pointed to the intel_adjusted_rate function. Further prodding showed
-> that I could reproduce this in a simple test program if I made src_h
-> some value less than 1 but greater than 0.
+> Or if you want it to be built only if there are any users, call it
+> ACPI_THERMAL_LIB and do
 > 
-> This seemed to be a sensible place to check that the source height is at
-> least 1. I tried to repro this issue on an amd device I had on hand, and
-> the configuration was rejected.
+> config ACPI_THERMAL_LIB
+>      depends on ACPI_THERMAL
+>      bool
 > 
-> Would it make sense to add a check that source dimensions are at least 1
-> somewhere in core, like in drm_atomic_plane_check? Or is that a valid
-> use case on some devices, and thus any such check should be done on a
-> per-driver basis?
+> and let the users select it.
+
+Yes, I think it makes more sense to not provide any option and just 
+compile the wrappers when ACPI_THERMAL is set.
+
+
+>> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+>> index 2506c6c8ca83..60f0dfa9aae2 100644
+>> --- a/drivers/thermal/Makefile
+>> +++ b/drivers/thermal/Makefile
+>> @@ -13,6 +13,7 @@ thermal_sys-$(CONFIG_THERMAL_NETLINK)         += thermal_netlink.o
+>>   # interface to/from other layers providing sensors
+>>   thermal_sys-$(CONFIG_THERMAL_HWMON)            += thermal_hwmon.o
+>>   thermal_sys-$(CONFIG_THERMAL_OF)               += thermal_of.o
+>> +thermal_sys-$(CONFIG_THERMAL_ACPI)             += thermal_acpi.o
+>>
+>>   # governors
+>>   thermal_sys-$(CONFIG_THERMAL_GOV_FAIR_SHARE)   += gov_fair_share.o
+>> diff --git a/drivers/thermal/thermal_acpi.c b/drivers/thermal/thermal_acpi.c
+>> new file mode 100644
+>> index 000000000000..28c629b4d814
+>> --- /dev/null
+>> +++ b/drivers/thermal/thermal_acpi.c
+>> @@ -0,0 +1,279 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright 2022 Linaro Limited
+>> + *
+>> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> + *
+>> + * ACPI thermal configuration
+>> + */
+>> +#include <linux/acpi.h>
+>> +#include <linux/module.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/units.h>
+>> +#include <uapi/linux/thermal.h>
+>> +
+>> +#include "thermal_core.h"
+>> +
+>> +int thermal_acpi_trip_gtsh(struct acpi_device *adev)
+>> +{
+>> +       unsigned long long hyst;
+>> +       acpi_status status;
+>> +
+>> +       status = acpi_evaluate_integer(adev->handle, "GTSH", NULL, &hyst);
+>> +       if (ACPI_FAILURE(status))
+>> +               return 0;
+>> +
+>> +       return (int)(hyst * 100);
 > 
-> Thanks.
+> What if the result is larger than INT_MAX?
+
+That would mean ACPI is returning more than 4 billions degree hysteresis 
+value.
+
+What strategy should we use in these functions? Trust the values 
+returned by ACPI or double check if they are consistent ?
+
+
+>> +}
+>> +EXPORT_SYMBOL_GPL(thermal_acpi_trip_gtsh);
+>> +
+>> +int thermal_acpi_get_tzd(struct acpi_device *adev, struct acpi_handle_list *devices)
+>> +{
+>> +       acpi_status status;
+>> +
+>> +       /*
+>> +        * _TZD (Thermal zone device): This optional object evaluates
+>> +        * to a package of device names. Each name corresponds to a
+>> +        * device in the ACPI namespace that is associated with the
+>> +        * thermal zone. The temperature reported by the thermal zone
+>> +        * is roughly correspondent to that of each of the devices.
+>> +        */
 > 
->   drivers/gpu/drm/i915/display/skl_universal_plane.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> I don't think that the comment is necessary.
 > 
-> diff --git a/drivers/gpu/drm/i915/display/skl_universal_plane.c b/drivers/gpu/drm/i915/display/skl_universal_plane.c
-> index 4b79c2d2d6177..9b172a1e90deb 100644
-> --- a/drivers/gpu/drm/i915/display/skl_universal_plane.c
-> +++ b/drivers/gpu/drm/i915/display/skl_universal_plane.c
-> @@ -1627,7 +1627,7 @@ static int skl_check_main_surface(struct intel_plane_state *plane_state)
->   	u32 offset;
->   	int ret;
->   
-> -	if (w > max_width || w < min_width || h > max_height) {
-> +	if (w > max_width || w < min_width || h > max_height || h < 1) {
->   		drm_dbg_kms(&dev_priv->drm,
->   			    "requested Y/RGB source size %dx%d outside limits (min: %dx1 max: %dx%d)\n",
->   			    w, h, min_width, max_width, max_height);
+> The spec already contains a definition of this object.
+
+Yes, this comment is the description from the spec. I put them there to 
+save time for those who are reading the code so they don't have to go 
+back and forth between the documentation and the code.
+
+Do you really want me to remove all of them ?
+
+[ ... ]
+
+
+> Overall, I'm not sure about simple wrappers around
+> acpi_evaluate_integer/reference() that effectively discard the return
+> value and don't even bother to sanitize the return value before
+> returning it to the caller.
+
+Ok, so we don't want to trust the values returned by ACPI.
+
+If all the sanity checks are done in the functions, would it make more 
+sense then ?
+
+
+> The ones that initialize a trip point make more sense IMO.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
