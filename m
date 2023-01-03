@@ -2,146 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA1665C195
+	by mail.lfdr.de (Postfix) with ESMTP id B830465C196
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237832AbjACOMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        id S237825AbjACOMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237805AbjACOMN (ORCPT
+        with ESMTP id S237833AbjACOMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:12:13 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6326411459;
-        Tue,  3 Jan 2023 06:12:09 -0800 (PST)
-Received: from [172.18.164.161] (unknown [46.183.103.8])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: rmader)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C951E6602CFA;
-        Tue,  3 Jan 2023 14:12:05 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672755127;
-        bh=QFKONSnl44fUfO33ehjMQ74G8iDnLg2h0QSpeLd9wjg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EzQ8N7bmre26Fvyo8QmIyR5itT5XXt3mTLA8kgegO0iu+h5juCFwCxDfhOPDQk/Lp
-         fJAk3z/XlRfJrXbLWY/+SRrbmihh8bnSY27EsgwILAmYv+2/A7qhM4Sjy7YxYrLJiN
-         Lq3oVHb1BU8RFtIb8kFG8dEsfvw3/iDr7xq3Y5bAOq9Ew3H4bs7J1LKwSmQzX7G+LR
-         zhvu3wChKTSyO2bhTc3lMeUYauahaZriGoiu5uTcPJvBaI8FPvDyCAnhh4mcneGaDg
-         Pa1B9SEujwIt9VV0I1SRs8QZrf0Fd/xnVYo+B9klY5Zb2TyjD6WeCANak3P+0lqJfa
-         l7jWUmcy3gMYw==
-Message-ID: <20f405f3-0a82-5d2f-2b0d-ce0d510b5098@collabora.com>
-Date:   Tue, 3 Jan 2023 15:11:44 +0100
+        Tue, 3 Jan 2023 09:12:36 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D6711806
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:12:34 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id p24so10195756plw.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 06:12:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pyb5UZmjqbSglyHq6r1Nzt+FNrL5pLsd5/wqWYrsn7o=;
+        b=MVCVmUrIbO1VkHOy6G+ik1NaYZi10V9JE3tWLEE5t0WPN2ARSCJeDL5nyw82EO2+jP
+         79mMWBQGUpAGirreRy2IrdhtviwOutMfQ3L2eFBgg1XoeU4WyFKzc/Dn1Qj3BOgv7gzA
+         uCHoxqSoHIFFLACljAcNgIbp5YCEtPz6AFbgzVmRCJAs0M1PXq9NbECEK7Sy3hyW92/n
+         xEAsv041ydx14RDSQ+VmsCyOlppIziyB5acUx4+f/jbFSj7YXiUR+G3U/YvodN6Ta+jC
+         mFCfdxkWfZy92koSHui5p97vZEcjYFjDaXb0GKkr8yB3lacxzTtlEg3aDFoFHeC0NDr4
+         hQLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pyb5UZmjqbSglyHq6r1Nzt+FNrL5pLsd5/wqWYrsn7o=;
+        b=GNZfMv99Q0fJjOVSEJfNZz+fUg+xwE268Tu0WZ3jeY1/2/WntAFFEBY3eA5r5VWofx
+         YacQ3lbwNpG2zx4IUIJP9qTyHt25DaeRcB9hpFeSIjgyA0o0dcMMQnvF9WbKE9OHg7v3
+         8f2TyTZQFztPTJwk48rv8VYhDNM9faVeX7NQRSvBMCgBzY86uQxtuhP4dzLgHZ2DJB3Q
+         6I0YIigt3nSlCmU0umHubMtjT/FCNaCAVViaokDizJ5XKqIy1rtr+/PWXJbs5NbOT4Vr
+         UCXQodFaY20/mC1T86UGqdq464/DTgfe8DCwG9IIAs+H7/vvTTtM9UxTZ/6OeGI44CPE
+         IdEw==
+X-Gm-Message-State: AFqh2krJoEo76J9cGK0pW1r/Re3+omT1oE7yMX9CZKA89ODTpdw0+8RQ
+        1aHiorJedERf8b3IdClRxL6sNw==
+X-Google-Smtp-Source: AMrXdXt9XAL8mDZKeKxm0HEUIYZpawBW2fTvd+ApDH2SU0c1SSvMhmWzoEOvZWdWMeM+TnIVtL3Rjw==
+X-Received: by 2002:a17:902:f54a:b0:191:327d:ddc0 with SMTP id h10-20020a170902f54a00b00191327dddc0mr70794879plf.21.1672755153390;
+        Tue, 03 Jan 2023 06:12:33 -0800 (PST)
+Received: from anup-ubuntu-vm.localdomain ([171.76.85.241])
+        by smtp.gmail.com with ESMTPSA id x16-20020a1709027c1000b00192b0a07891sm8598286pll.101.2023.01.03.06.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 06:12:32 -0800 (PST)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v16 0/9] RISC-V IPI Improvements
+Date:   Tue,  3 Jan 2023 19:42:12 +0530
+Message-Id: <20230103141221.772261-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] media: i2c: imx258: Parse and register properties
-Content-Language: en-US
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     linux-kernel@vger.kernel.org, nicholas@rothemail.net,
-        javierm@redhat.com, Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-References: <20221225154234.378555-1-robert.mader@collabora.com>
- <20230102140631.hadlh3stozecnzpj@uno.localdomain>
-From:   Robert Mader <robert.mader@collabora.com>
-In-Reply-To: <20230102140631.hadlh3stozecnzpj@uno.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.01.23 15:06, Jacopo Mondi wrote:
-> Hi Robert
->
-> On Sun, Dec 25, 2022 at 04:42:34PM +0100, Robert Mader wrote:
->> Analogous to e.g. the imx219. This enables propagating
->> V4L2_CID_CAMERA_SENSOR_ROTATION values so that libcamera
->> can detect the correct rotation from the device tree
->> and propagate it further to e.g. Pipewire.
->>
->> Signed-off-by: Robert Mader <robert.mader@collabora.com>
->> ---
->>   drivers/media/i2c/imx258.c | 13 ++++++++++++-
->>   1 file changed, 12 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
->> index eab5fc1ee2f7..85819043d1e3 100644
->> --- a/drivers/media/i2c/imx258.c
->> +++ b/drivers/media/i2c/imx258.c
->> @@ -9,6 +9,7 @@
->>   #include <linux/pm_runtime.h>
->>   #include <media/v4l2-ctrls.h>
->>   #include <media/v4l2-device.h>
->> +#include <media/v4l2-fwnode.h>
->>   #include <asm/unaligned.h>
->>
->>   #define IMX258_REG_VALUE_08BIT		1
->> @@ -1149,6 +1150,7 @@ static int imx258_init_controls(struct imx258 *imx258)
->>   {
->>   	struct i2c_client *client = v4l2_get_subdevdata(&imx258->sd);
->>   	struct v4l2_ctrl_handler *ctrl_hdlr;
->> +	struct v4l2_fwnode_device_properties props;
-> Might be nicer to move this one line up
+This series aims to improve IPI support in Linux RISC-V in following ways:
+ 1) Treat IPIs as normal per-CPU interrupts instead of having custom RISC-V
+    specific hooks. This also makes Linux RISC-V IPI support aligned with
+    other architectures.
+ 2) Remote TLB flushes and icache flushes should prefer local IPIs instead
+    of SBI calls whenever we have specialized hardware (such as RISC-V AIA
+    IMSIC and RISC-V SWI) which allows S-mode software to directly inject
+    IPIs without any assistance from M-mode runtime firmware.
 
-  Can you say what's your reasoning? I personally slightly prefer 
-alphabetical order, but no strong opinion :)
+These patches were originally part of the "Linux RISC-V ACLINT Support"
+series but this now a separate series so that it can be merged independently
+of the "Linux RISC-V ACLINT Support" series.
+(Refer, https://lore.kernel.org/lkml/20211007123632.697666-1-anup.patel@wdc.com/)
 
->>   	s64 vblank_def;
->>   	s64 vblank_min;
->>   	s64 pixel_rate_min;
->> @@ -1156,7 +1158,7 @@ static int imx258_init_controls(struct imx258 *imx258)
->>   	int ret;
->>
->>   	ctrl_hdlr = &imx258->ctrl_handler;
->> -	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
->> +	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
-> I count 9 controls being registered before this patch, not 8. Do I
-> count them right ?
->
-> If that's case, as v4l2_ctrl_new_fwnode_properties()
-> can register up to two controls (V4L2_CID_ROTATION and
-> V4L2_CID_ORIENTATION) I would pre-reserve 11 controls not 10 to avoid
-> relocations.
+These patches are also a preparatory patches for the up-coming:
+ 1) Linux RISC-V AIA support
+ 2) Linux RISC-V SWI support
 
-Indeed, looks like bumping this was forgotten in 
-c6f9d67e2ac625e331f6a7f5715d2f809ff0a922
+These patches can also be found in riscv_ipi_imp_v16 branch at:
+https://github.com/avpatel/linux.git
 
->>   	if (ret)
->>   		return ret;
->>
->> @@ -1232,6 +1234,15 @@ static int imx258_init_controls(struct imx258 *imx258)
->>   		goto error;
->>   	}
->>
->> +	ret = v4l2_fwnode_device_parse(&client->dev, &props);
->> +	if (ret)
->> +		goto error;
->> +
->> +	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx258_ctrl_ops,
->> +					      &props);
->> +	if (ret)
->> +		goto error;
->> +
-> The rest looks good to me!
->
-> Thanks
->     j
-Thanks!
+Changes since v15:
+ - Rebased on Linux-6.2-rc2
+ - Added Reviewed-by and Tested-by tags to some of the patches.
+
+Changes since v14:
+ - Minor fixes in commit description of PATCH3 (as suggested by tglx)
+ - Don't disable parent IPI when CPU goes offline for SBI IPI driver and
+   CLINT driver in PATCH4.
+ - Include Apple AIC driver changes from Marc Z as PATCH9
+
+Changes since v13:
+ - Included changes suggested by Marc Z in PATCH3
+ - Use chained handlers in PATCH4
+ - Added new PATCH8 to have empty irq_eoi() in RISC-V INTC driver. This
+   avoids the unnecessary mask/unmask dance at time of handling interrupts.
+
+Changes since v12:
+ - Rebased on Linux-6.1-rc7
+ - Bring-back the IPI optimization in ipi_mux_send_mask() for PATCH3
+ - Call ipi_mux_send() for one target CPU at a time in PATCH3
+
+Changes since v11:
+ - Removed ipi_mux_pre/post_handle() callbacks in PATCH3
+ - Removed sturct ipi_mux_ops in PATCH3
+ - Removed parent_virq and data pointer from everywhere in PATCH3
+ - Removed struct ipi_mux_control in PATCH3
+ - Improved function signature of ipi_mux_send() callback in PATCH3
+ - Used unsigned type with atomic operation in PATCH3
+
+Changes since v10:
+ - Rebased on Linux-6.1-rc5
+ - Drop the "!(pending & ibit)" check in ipi_mux_send_mask() of PATCH3
+ - Disable local interrupts in ipi_mux_send_mask() of PATCH3 because we
+   can be preempted while using a per-CPU temporary variable.
+
+Changes since v9:
+ - Rebased on Linux-6.1-rc3
+ - Updated header comment block of ipi-mux.c in PATCH3
+ - Use a struct for global data of ipi-mux.c in PATCH3
+ - Add per-CPU temp cpumask for sending IPIs in PATCH3
+ - Drop the use of fwspec in PATCH3
+ - Use static key for ipi_mux_pre_handle() and ipi_mux_post_handle()
+   in PATCH3
+ - Remove redundant pr_warn_ratelimited() called by ipi_mux_process()
+   in PATCH3
+ - Remove CPUHP thingy from ipi_mux_create() in PATCH3
+
+Changes since v8:
+ - Rebased on Linux-6.0-rc3
+ - Use dummy percpu data as parameter for request_percpu_irq() in PATCH4.
+
+Changes since v7:
+ - Rebased on Linux-6.0-rc1
+ - Use atomic operations to track per-CPU pending and enabled IPIs in PATCH3.
+   (Note: this is inspired from IPI muxing implemented in
+    drivers/irqchip/irq-apple-aic.c)
+ - Made "struct ipi_mux_ops" (added by PATCH3) flexible so that
+   drivers/irqchip/irq-apple-aic.c can adopt it in future.
+
+Changes since v6:
+ - Rebased on Linux-5.19-rc7
+ - Added documentation for struct ipi_mux_ops in PATCH3
+ - Dropped dummy irq_mask()/unmask() in PATCH3
+ - Added const for "ipi_mux_chip" in PATCH3
+ - Removed "type" initialization from ipi_mux_domain_alloc() in PATCH3
+ - Dropped translate() from "ipi_mux_domain_ops" in PATCH3
+ - Improved barrier documentation in ipi_mux_process() of PATCH3
+ - Added percpu check in ipi_mux_create() for parent_virq of PATCH3
+ - Added nr_ipi parameter in ipi_mux_create() of PATCH3
+
+Changes since v5:
+ - Rebased on Linux-5.18-rc3
+ - Used kernel doc style in PATCH3
+ - Removed redundant loop in ipi_mux_process() of PATCH3
+ - Removed "RISC-V" prefix form ipi_mux_chip.name of PATCH3
+ - Removed use of "this patch" in PATCH3 commit description
+ - Addressed few other nit comments in PATCH3
+
+Changes since v4:
+ - Rebased on Linux-5.17
+ - Includes new PATCH3 which adds mechanism to multiplex a single HW IPI
+
+Changes since v3:
+ - Rebased on Linux-5.17-rc6
+ - Updated PATCH2 to not export riscv_set_intc_hwnode_fn()
+ - Simplified riscv_intc_hwnode() in PATCH2
+
+Changes since v2:
+ - Rebased on Linux-5.17-rc4
+ - Updated PATCH2 to not create synthetic INTC fwnode and instead provide
+   a function which allows drivers to directly discover INTC fwnode
+
+Changes since v1:
+ - Use synthetic fwnode for INTC instead of irq_set_default_host() in PATCH2
+
+Anup Patel (8):
+  RISC-V: Clear SIP bit only when using SBI IPI operations
+  irqchip/riscv-intc: Allow drivers to directly discover INTC hwnode
+  genirq: Add mechanism to multiplex a single HW IPI
+  RISC-V: Treat IPIs as normal Linux IRQs
+  RISC-V: Allow marking IPIs as suitable for remote FENCEs
+  RISC-V: Use IPIs for remote TLB flush when possible
+  RISC-V: Use IPIs for remote icache flush when possible
+  irqchip/riscv-intc: Add empty irq_eoi() for chained irq handlers
+
+Marc Zyngier (1):
+  irqchip/apple-aic: Move over to core ipi-mux
+
+ arch/riscv/Kconfig                |   2 +
+ arch/riscv/include/asm/irq.h      |   4 +
+ arch/riscv/include/asm/sbi.h      |   9 +-
+ arch/riscv/include/asm/smp.h      |  49 +++++--
+ arch/riscv/kernel/Makefile        |   1 +
+ arch/riscv/kernel/cpu-hotplug.c   |   3 +-
+ arch/riscv/kernel/irq.c           |  21 ++-
+ arch/riscv/kernel/sbi-ipi.c       |  77 +++++++++++
+ arch/riscv/kernel/sbi.c           | 100 +++------------
+ arch/riscv/kernel/smp.c           | 171 ++++++++++++------------
+ arch/riscv/kernel/smpboot.c       |   5 +-
+ arch/riscv/mm/cacheflush.c        |   5 +-
+ arch/riscv/mm/tlbflush.c          |  93 +++++++++++---
+ drivers/clocksource/timer-clint.c |  65 +++++++---
+ drivers/irqchip/Kconfig           |   2 +
+ drivers/irqchip/irq-apple-aic.c   | 161 ++---------------------
+ drivers/irqchip/irq-riscv-intc.c  |  71 ++++++----
+ include/linux/irq.h               |   3 +
+ kernel/irq/Kconfig                |   5 +
+ kernel/irq/Makefile               |   1 +
+ kernel/irq/ipi-mux.c              | 207 ++++++++++++++++++++++++++++++
+ 21 files changed, 654 insertions(+), 401 deletions(-)
+ create mode 100644 arch/riscv/kernel/sbi-ipi.c
+ create mode 100644 kernel/irq/ipi-mux.c
 
 -- 
-Robert Mader
-Consultant Software Developer
-
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
+2.34.1
 
