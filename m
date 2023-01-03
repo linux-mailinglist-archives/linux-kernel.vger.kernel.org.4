@@ -2,111 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D2A65BC55
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A00865BC5B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236874AbjACIhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S236968AbjACIiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbjACIhv (ORCPT
+        with ESMTP id S232898AbjACIh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:37:51 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBC7D92
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:37:50 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-91-9nkBtqfRMfet6_rK_0JW4A-2; Tue, 03 Jan 2023 08:37:47 +0000
-X-MC-Unique: 9nkBtqfRMfet6_rK_0JW4A-2
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 3 Jan
- 2023 08:37:46 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Tue, 3 Jan 2023 08:37:46 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>
-CC:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCHv13 05/16] x86/uaccess: Provide untagged_addr() and remove
- tags before address check
-Thread-Topic: [PATCHv13 05/16] x86/uaccess: Provide untagged_addr() and remove
- tags before address check
-Thread-Index: AQHZHLDUcIP+F/h/PEiAwEZ6SoBjkq6LJK3ggABcQgCAAN3HwA==
-Date:   Tue, 3 Jan 2023 08:37:46 +0000
-Message-ID: <35b24dab4dc5451a86ef87f93088e0b7@AcuMS.aculab.com>
-References: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
- <20221227030829.12508-6-kirill.shutemov@linux.intel.com>
- <CAHk-=wgKTcOx1hhWAGJ-g9_9o7xiGJ9v9n2RskBSCkaUMBxDkw@mail.gmail.com>
- <20221231001029.5nckrhtmwahb65jo@box>
- <CAHk-=wgmGqwDD0kvjZxekU6uYR2x6+QgRHeMKy3snL2XYEzwEw@mail.gmail.com>
- <4cf29f7a1a0041da818ac7ef598d142e@AcuMS.aculab.com>
- <CAHk-=wgh9zNsFX0gSfMBfJBxOOTztsZ6NZc5pvzCikB1Gz8B3A@mail.gmail.com>
-In-Reply-To: <CAHk-=wgh9zNsFX0gSfMBfJBxOOTztsZ6NZc5pvzCikB1Gz8B3A@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 3 Jan 2023 03:37:57 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E007BDB1;
+        Tue,  3 Jan 2023 00:37:56 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 656C260C46;
+        Tue,  3 Jan 2023 08:37:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1672735075; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cxucqJyzfnCNVadtYHxDXtyUdE5BQ5o27Kjd3R83JAg=;
+        b=pB+jvQ4LqFEtRQBnhrTspiYshQvgyQetx3pEFEuajdpgDTi17C9MFciV3ESup3uhcsSOzj
+        /TQS3rxhGPtDbogm4hadF52JYRROPgu0QbRk5MeKfowBOv1rpXcYMrimuSK9YBgnfQRH5I
+        3l4+qWHER2nf3zdpdyBBsQePl9eBXWA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D0921390C;
+        Tue,  3 Jan 2023 08:37:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TiStDGPps2OnCwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 03 Jan 2023 08:37:55 +0000
+Date:   Tue, 3 Jan 2023 09:37:54 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mina Almasry <almasrymina@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] Revert "mm: add nodes= arg to memory.reclaim"
+Message-ID: <Y7PpYsbv1xC6m/Hu@dhcp22.suse.cz>
+References: <20221202223533.1785418-1-almasrymina@google.com>
+ <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
+ <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
+ <20221216101820.3f4a370af2c93d3c2e78ed8a@linux-foundation.org>
+ <Y52Scge3ynvn/mB4@dhcp22.suse.cz>
+ <20221219144252.f3da256e75e176905346b4d1@linux-foundation.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219144252.f3da256e75e176905346b4d1@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMDIgSmFudWFyeSAyMDIzIDE5OjA1DQouLi4N
-Cj4gPiBBcmUgYnl0ZSBsb2FkcyBndWFyYW50ZWVkIHRvIGZhdWx0Pw0KPiANCj4gWWVhaCwgd2Ug
-ZG9uJ3QgbWFwIHRoZSBoaWdoZXN0IGFkZHJlc3Mgb24geDg2LTY0LiBBbmQgd2UgZG9uJ3Qgd2Fu
-dCB0bw0KPiBpbiB0aGUgZnV0dXJlIGVpdGhlciwgYmVjYXVzZSBvZiBob3cgb3VyIGVycm9yIHBv
-aW50ZXJzIHdvcmsgKGllIGlmDQo+IHNvbWVib2R5IG1pc3NlcyBhbiAiSVNfRVJSKCkiIGNoZWNr
-IGFuZCB1c2VzIGFuIGVycm9yIHBvaW50ZXIgYXMgYQ0KPiBwb2ludGVyLCB3ZSB3YW50IHRoYXQg
-dG8gZmF1bHQsIHJhdGhlciB0aGFuIGRvIHJhbmRvbSB0aGluZ3MpLg0KPiANCj4gSXQncyBub3Qg
-YSBoYXJkIHJlcXVpcmVtZW50IGFyY2hpdGVjdHVyYWxseSAoZWl0aGVyIGhhcmR3YXJlIG9yDQo+
-IHNvZnR3YXJlKSwgYW5kIGlpcmMgb24gMzItYml0IHdlIHVzZWQgdG8gdXNlIHRoZSBsYXN0IHZp
-cnR1YWwgcGFnZSBmb3INCj4gc29tZXRoaW5nLCBzbyBtYXliZSBJJ20gbWlzc2luZyBzb21lIG9k
-ZCB1c2Ugb24gNjQtYml0IHRvbywgYnV0DQo+IGFjY2Vzc2luZyB0aGUgdG9wLW9mLXZpcnR1YWwg
-YWRkcmVzcyBzcGFjZSBvbiB4ODYtNjQgc2hvdWxkIGFsd2F5cw0KPiBjYXVzZSBhIGNsZWFyIGZh
-dWx0IGFmYWlrLg0KPiANCj4gQSBieXRlIGFjY2VzcyB3b3VsZCBhbHdheXMgYmUgYSBwYWdlIGZh
-dWx0LCB3aGlsZSBhIHdyYXBwaW5nIGFjY2Vzcw0KPiBtaWdodCB0cmlnZ2VyIGEgR1AgZmF1bHQg
-Zmlyc3QgKHByb2JhYmx5IG5vdCAtIG9uIDMyLWJpdCBpdCB3b3VsZCBiZSBhDQo+IHNlZ21lbnQg
-c2l6ZSB2aW9sYXRpb24sIG9uIDY0LWJpdCB3ZSd2ZSBsZWZ0IHRob3NlIGJhZCBvbGQgZGF5cyBi
-ZWhpbmQNCj4gYW5kIEkgZG9uJ3QgdGhpbmsgd3JhcHBpbmcgbWF0dGVycyBlaXRoZXIpDQoNCkZv
-ciBzb21lIHJlYXNvbiBJIHdhcyB0aGlua2luZyB5b3Ugd2VyZSByZWx5aW5nIG9uIHRoZSB3cmFw
-cGluZyBhY2Nlc3MuDQoNClRoZSBvdGhlciBjaGVjayBpcyBhY2Nlc3Nfb2soKSBmb3IgbG9uZ2Vy
-IGNvcGllcy4NCklmIHlvdSBtYWtlIHRoZSBhc3N1bXB0aW9uIHRoYXQgdGhlIGNvcHkgaXMgJ3Jl
-YXNvbmFibHkgc2VxdWVudGlhbCcNCnRoZW4gdGhlIGxlbmd0aCBjYW4gYmUgaWdub3JlZCBwcm92
-aWRlZCB0aGF0IHRoZSBib3R0b20gb2YgJ2tlcm5lbA0Kc3BhY2UnIGlzIHVubWFwcGVkLg0KRm9y
-IHg4Ni02NCB0cmVhdGluZyAtdmUgdmFsdWVzIGFzIGtlcm5lbCB0aGF0IGlzIHByZXR0eSB0cnVl
-Lg0KMzItYml0IHdvdWxkIG5lZWQgYXQgbGVhc3Qgb25lIHVubWFwcGVkIHBhZ2UgYmV0d2VlbiB1
-c2VyIGFuZCBrZXJuZWwuDQpJIHN1c3BlY3QgdGhlIGtlcm5lbCBpcyBsb2FkZWQgYXQgMHhjMDAw
-MDAwMCBtYWtpbmcgdGhhdCBkaWZmaWN1bHQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFk
-ZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywg
-TUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+[Sorry I was offline]
 
+On Mon 19-12-22 14:42:52, Andrew Morton wrote:
+> On Sat, 17 Dec 2022 10:57:06 +0100 Michal Hocko <mhocko@suse.com> wrote:
+> 
+> > > I think it's a bit premature to revert at this stage.  Possibly we can
+> > > get to the desired end state by modifying the existing code.  Possibly
+> > > we can get to the desired end state by reverting this and by adding
+> > > something new.
+> > 
+> > Sure if we can converge to a proper implementation during the rc phase
+> > then it would be ok. I cannot speak for others but at least for me
+> > upcoming 2 weeks would be mostly offline so I cannot really contribute
+> > much. A revert would be much more easier from the coordination POV IMHO.
+> > 
+> > Also I do not think there is any strong reason to rush this in. I do not
+> > really see any major problems to have this extension in 6.2
+> 
+> I'll queue the revert in mm-unstable with a plan to merge it upstream
+> around the -rc5 timeframe if there hasn't been resolution.
+
+Thanks! I do not really think we need to rush node based reclaim and
+better have a reasonable and more futureproof interface.
+
+> Please check Mina's issues with this revert's current changelog and
+> perhaps send along a revised one.
+
+Yes, I believe, I have addressed all the feedback but I am open to alter
+the wording of course. The biggest concern by Mina IIRC was that the
+nr_reclaimed reporting has been a pre-existing problem. And I agree with
+that. The thing is that this doesn't matter without node specification
+because the memory gets reclaimed even if the reported value is over
+accounted. With nodemask specification the value becomes bogus if no
+demotion nodes are specified because no memory gets reclaimed
+potentially while the success is still reported. Mina has tried to
+address that but I am not convinced the fix is actually future proof.
+
+This really requires more discussion.
+
+-- 
+Michal Hocko
+SUSE Labs
