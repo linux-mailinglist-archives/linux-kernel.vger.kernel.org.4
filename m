@@ -2,222 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F2065C638
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5282865C635
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233732AbjACS1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S238900AbjACS1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238955AbjACS1H (ORCPT
+        with ESMTP id S238941AbjACS1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:27:07 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA8DF023
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:26:52 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id e141so34070099ybh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:26:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pq3R+dMUCBtQBXaTENIPK+pFT96E7II7s9kyI9TK3FA=;
-        b=qtM6NgWaiVqZCrj8mlfOBfl9chZFnGk7FZeAhK0wy71zu0Jbt2DGUrwpnG+p6HliNC
-         wO2NaOlbCKIgyAgsIjNe/ikj5/5528+86PkkSkuC0kNwPWkn7sa5m7z0RYJ3nJKeFbCh
-         qKMd4AqqUqZL4N4KitDhTrxCoBKchw+0ODvu4s+qk5ApqgNxN5YNl00Xc/+j+jTj5Zf3
-         pPUGZsWkOgqVLfWCcj3yYEHcaOdmMTAoL6Jc05sJ/Hh4r2FXvyZEmzUYIWm9n0Tt0b7y
-         GzMQ8UT2wOaVw/bOcZ1dvM88egQWS4WawD4MiF/7QBnjCih+TPZ3Cy6Y3OPb5R3FTuf3
-         76FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pq3R+dMUCBtQBXaTENIPK+pFT96E7II7s9kyI9TK3FA=;
-        b=BTzc3AkHxHzgJvfRBAg12XFwTfXoWUQJL9Uu19hzf38o8G5oMyQOj5WghrvqHG/i0b
-         4DXaQqLmJplu+nio039YaCzDKve6Rd3CGeEZ9/jWcUKmpABaieHTLPifNFywi6NA7sqj
-         RCznVpG2dcpsJIZ9DXXHyT/WlcZi+UZ6n2WPiSTzWKeW23UiWvVvh26JqtRhVAFo9YgQ
-         DTNrBNdW/l2l0iuDtMABPCLn1t9SkL2rhqyO//0krlnq78F5SWH0SGprFM+ITOJBs4Id
-         1OJi/0jFDhsxDGK6IecWytfoDlqLIfLK/JOAAYjUTN4EyvojLcqfL4lZ4zwYzqgWgilP
-         n+lQ==
-X-Gm-Message-State: AFqh2ko95KTVqhmEsrFOB7x6Y2ZusQzTQWEqNAtPbxjy+mbAPH84TNGA
-        UFwptt2QUM/7oPYIcbm4gszx4yy56b3UW1neCRvG6g==
-X-Google-Smtp-Source: AMrXdXtz9fE389kox3Zm+Hqn9n1jIVfUW3PvUCQvVSXTI5E+gIl9S5H+OLruEjvmoAaAls5jjJ+8Df66Dwj9ERutr3Y=
-X-Received: by 2002:a25:da14:0:b0:707:34cf:b4b1 with SMTP id
- n20-20020a25da14000000b0070734cfb4b1mr4286913ybf.123.1672770411475; Tue, 03
- Jan 2023 10:26:51 -0800 (PST)
+        Tue, 3 Jan 2023 13:27:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F23B2AF4
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:26:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2641614C8
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 18:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B6AC433D2;
+        Tue,  3 Jan 2023 18:26:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672770400;
+        bh=jZTBCfU3n9+ttpwW+YG7BYpeGomZJDY3La4AaIwYJZQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XY68PC0ClLhYnpu6uMbY58u+2NN7AZPJp2WsvFAnkCYYO+dZ0sCm2+DgmfqjQ6noi
+         +VhQymqK+l6vuqq365F4xnRYMhRSzXvsCOcjhr6TXk5DhVAke7jTmQWnaYeaXwse0M
+         FCmBPc4VB43YCQq6FetXytUCSa8s0zmlRYNkXd6HsRd4fB0AgNoQXRogEr/uadOmJ3
+         +cYsleleG1wYSPGkWbw42a0dQkkROzqjgyQkrqUNshrmB4JNwoUNkazQjCuDRwa2mH
+         J5/Bj+Tx8I6xq+W9ACFGVIzGoWDMEqZvxX9WDrEO75LjDLkzNp2gbikuoiWY6wtgSC
+         sXQ0Lwc84337g==
+Date:   Tue, 3 Jan 2023 11:26:37 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: Linux 6.2-rc2
+Message-ID: <Y7RzXSKYmAFAXMnr@dev-arch.thelio-3990X>
+References: <CAHk-=wim8DMRzjyYTJ3UbdqZ26keQyZSU02NZb-JY1=9OpcO1w@mail.gmail.com>
+ <20230102225656.GA3532398@roeck-us.net>
+ <CAHk-=wjZPPscjDhsHQw_ttHOaQS69rADLm0KuRhbNavBiO62OQ@mail.gmail.com>
+ <20230103014535.GA313835@roeck-us.net>
+ <CAHk-=whmeBkyu3iS_s-yk0=t3GEoW3sQb-wJFHKykOjG=iQVFw@mail.gmail.com>
+ <CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-6-vipinsh@google.com>
- <Y64VG4Bl0fujE2qG@google.com>
-In-Reply-To: <Y64VG4Bl0fujE2qG@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 3 Jan 2023 10:26:15 -0800
-Message-ID: <CAHVum0eE+bJw7vaYczipR5v8h94QzAkddz6etQKYkEBz6+zZoQ@mail.gmail.com>
-Subject: Re: [Patch v3 5/9] KVM: x86/mmu: Allocate TDP page table's page on
- correct NUMA node on split
-To:     David Matlack <dmatlack@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 2:30 PM David Matlack <dmatlack@google.com> wrote:
->
-> On Wed, Dec 21, 2022 at 06:34:53PM -0800, Vipin Sharma wrote:
-> > When dirty log is enabled, huge pages are split. Page table's pages
-> > during the split are allocated based on the current thread NUMA node or
-> > mempolicy. This causes inefficient page table accesses if underlying
-> > page is on a different NUMA node
+On Tue, Jan 03, 2023 at 11:58:48AM +0100, Ard Biesheuvel wrote:
+> On Tue, 3 Jan 2023 at 03:13, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
-> > Allocate page table's pages on the same NUMA node as the underlying huge
-> > page when dirty log is enabled and huge pages are split.
+> > On Mon, Jan 2, 2023 at 5:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > ... and reverting commit 99cb0d917ff indeed fixes the problem.
 > >
-> > The performance gain during the pre-copy phase of live migrations of a
-> > 416 vCPUs and 11 TiB memory VM  on a 8 node host was seen in the range
-> > of 130% to 150%.
->
-> Can you be more specific about this. "The performance" is vague. I know
-> it's an internal workload and fully explaining it would be difficult,
-> but you can give readers a slightly more specific idea of what improved.
-> e.g.
->
->  When testing with a synthetic write-heavy workload in a 416 vCPU VM on
->  an 8 NUMA node host, the throughput increased by 150% from X to Y
->  operations per second.
->
-> It's also necessary to characterize the improvement relative to the
-> performance when dirty logging is not enabled. Whithout that information
-> it would be hard for an unfamiliar reader to understand how useful this
-> change really is.
->
-> For example, let's say the throughput of your workload is 100,000
-> operations per second before dirty logging is enabled, and that drops
-> down to 1,000 operations per second after dirty logging is enabled. This
-> commit could increase that by 150% to 2,500 operations per second, but
-> that's actually not a very meaningful improvement since, either way,
-> guest performance is degraded by 95+% during dirty logging.
->
-> On the other hand, if performance goes from 100,000 to 30,000 normally,
-> and this commit increases that 30,000 to 75,000 (150%), that's a much
-> more meaningful improvement.
->
+> > Hmm. My gut feel is that this just exposes some bug in binutils.
+> >
+> > That said, maybe that commit should not have added its own /DISCARDS/
+> > thing, and instead just added that "*(.note.GNU-stack)" to the general
+> > /DISCARDS/ thing that is defined by the
+> >
+> >   #define DISCARDS  ..
+> >
+> > a little bit later, so that we only end up with one single DISCARD
+> > list. Something like this (broken patch on purpose):
+> >
+> >   --- a/include/asm-generic/vmlinux.lds.h
+> >   +++ b/include/asm-generic/vmlinux.lds.h
+> >   @@ -897,5 +897,4 @@
+> >     */
+> >    #define NOTES                                        \
+> >   -     /DISCARD/ : { *(.note.GNU-stack) }              \
+> >         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {       \
+> >                 BOUNDED_SECTION_BY(.note.*, _notes)     \
+> >   @@ -1016,4 +1015,5 @@
+> >    #define DISCARDS                                     \
+> >         /DISCARD/ : {                                   \
+> >   +     *(.note.GNU-stack)                              \
+> >         EXIT_DISCARDS                                   \
+> >         EXIT_CALL                                       \
+> >
+> > But maybe that DISCARDS macrop ends up being used too late?
+> >
+> 
+> Masahiro's v1 did something like this, and it caused an issue on
+> RISC-V, which is why we ended up with this approach instead.
+> 
+> > It really shouldn't matter, but here we are, with a build problem with
+> > some random old binutils on an odd platform..
+> >
+> 
+> AIUI, the way ld.bfd used to combine output sections may also affect
+> the /DISCARD/ pseudo-section, and so introducing it much earlier
+> results in these discards to be interpreted in a different order.
+> 
+> The purpose of this change is to prevent .note.GNU-stack from deciding
+> the section type of the .notes output section, and so keeping it in
+> its own section should be sufficient. E.g.,
 
-Yeah, I will provide more insight in the next version.
+This appears to work for me. It fixes the build failures that
+ClangBuiltLinux's CI reported and I still see a build ID for arm64's
+vmlinux:
 
-> >
-> > Suggested-by: David Matlack <dmatlack@google.com>
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > ---
-> >  arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++----
-> >  include/linux/kvm_host.h   | 18 ++++++++++++++++++
-> >  2 files changed, 26 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > index 4974fa96deff..376b8dceb3f9 100644
-> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > @@ -1403,7 +1403,7 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
-> >       return spte_set;
-> >  }
-> >
-> > -static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
-> > +static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
-> >  {
-> >       struct kvm_mmu_page *sp;
-> >
-> > @@ -1413,7 +1413,8 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
-> >       if (!sp)
-> >               return NULL;
-> >
-> > -     sp->spt = (void *)__get_free_page(gfp);
-> > +     sp->spt = kvm_mmu_get_free_page(nid, gfp);
-> > +
-> >       if (!sp->spt) {
-> >               kmem_cache_free(mmu_page_header_cache, sp);
-> >               return NULL;
-> > @@ -1427,6 +1428,9 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
-> >                                                      bool shared)
-> >  {
-> >       struct kvm_mmu_page *sp;
-> > +     int nid;
-> > +
-> > +     nid = kvm_pfn_to_page_table_nid(spte_to_pfn(iter->old_spte));
-> >
-> >       /*
-> >        * Since we are allocating while under the MMU lock we have to be
-> > @@ -1437,7 +1441,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
-> >        * If this allocation fails we drop the lock and retry with reclaim
-> >        * allowed.
-> >        */
-> > -     sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
-> > +     sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_NOWAIT | __GFP_ACCOUNT);
-> >       if (sp)
-> >               return sp;
-> >
-> > @@ -1449,7 +1453,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
-> >               write_unlock(&kvm->mmu_lock);
-> >
-> >       iter->yielded = true;
-> > -     sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
-> > +     sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_KERNEL_ACCOUNT);
-> >
-> >       if (shared)
-> >               read_lock(&kvm->mmu_lock);
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index d48064503b88..a262e15ebd19 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -1583,6 +1583,24 @@ void kvm_arch_sync_events(struct kvm *kvm);
-> >  int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
-> >
-> >  struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn);
-> > +
-> > +/*
-> > + * Tells the appropriate NUMA node location of the page table's page based on
-> > + * pfn it will point to.
->
-> I know what you are trying to say but the wording is a bit awkward. e.g.
-> "Tells" instead of "Returns", "location" is redundant, "page table's
-> page", etc. Suggest this:
->
-> /*
->  * Returns an appropriate NUMA node on which to allocate a page table that
->  * maps @pfn.
->  */
->
-> > + *
-> > + * Return the nid of the page if pfn is valid and backed by a refcounted page,
-> > + * otherwise, return the nearest memory node for the current CPU.
->
-> I would just drop this as it's just restating the code, which is already
-> very readable.
->
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Okay.
+I will throw this into the ClangBuiltLinux CI to make sure there are no
+additional surprises but I do not expect to find anything.
 
-> > + */
-> > +static inline int kvm_pfn_to_page_table_nid(kvm_pfn_t pfn)
-> > +{
-> > +     struct page *page = kvm_pfn_to_refcounted_page(pfn);
-> > +
-> > +     if (page)
-> > +             return page_to_nid(page);
-> > +     else
-> > +             return numa_mem_id();
-> > +}
-> > +
-> >  bool kvm_is_zone_device_page(struct page *page);
-> >
-> >  struct kvm_irq_ack_notifier {
-> > --
-> > 2.39.0.314.g84b9a713c41-goog
-> >
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -896,7 +896,7 @@
+>   * Otherwise, the type of .notes section would become PROGBITS
+> instead of NOTES.
+>   */
+>  #define NOTES                                                          \
+> -       /DISCARD/ : { *(.note.GNU-stack) }                              \
+> +       .note.GNU-stack : { *(.note.GNU-stack) }                        \
+>         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {                       \
+>                 BOUNDED_SECTION_BY(.note.*, _notes)                     \
+>         } NOTES_HEADERS                                                 \
+> 
+> The .note.GNU-stack has zero size, so the result should be the same.
