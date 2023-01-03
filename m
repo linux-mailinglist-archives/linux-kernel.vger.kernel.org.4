@@ -2,201 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D9465BB59
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079F065BB6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236897AbjACHpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 02:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S236736AbjACHtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 02:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjACHpP (ORCPT
+        with ESMTP id S230478AbjACHtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 02:45:15 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AD1C77D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 23:44:52 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id n4so31811138plp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 23:44:52 -0800 (PST)
+        Tue, 3 Jan 2023 02:49:33 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC91FDEE2
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 23:49:31 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so30293115pjj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 23:49:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZhS59s2xVmfyWDuL4sjmZtVxjE4zWOLc4hNUVVYN3G0=;
-        b=URVxXuoi3wdk9I4+Q9hYRGl9nS57doHPApyHsrz+aIHn3zCO9zuSy0YT7PeUB5zp3u
-         qUtkXrnFQx1Uv6ncPTLEDdOmcdZo18t+F4V8qfStWaYeAZSiuz50j1U+0J4rl9YgeHgE
-         5KnwZuNay6V/gkGtxzRNDWF+nxXlx6hamKE0w+KKC1kfwgPvWfgi5lL49k1jbbqE0acS
-         XTG2XGZDpmDUBovhNGVOJp3J+cx5l37Ki9umy2Fcn8omvjxBhWkgKNl6isMo/4R4E0qp
-         vivP/C5OmsozVAQ93Wn9S7vVDAyLH8/1pFMz8lL+f0QNo2Rlo64XMXxg2AY8PSHGsvbx
-         2Jjg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2bQEpT5MvpfK5tRet1xVf2lC1kbc6OSmWkVz7dqkqMM=;
+        b=K53cKFoe7bZhP1UOS8i3DRf/wKlU1n8Z5hEhsZdGhtiNetXRryOIvnersLNAqAGJLR
+         W9qXHQTeW7PgVK/R2qgijHCrAHhj+hAFesxPJkKOrrG4jvOZy8v96l1SXkh6qdo5YAKP
+         veEwg33O3vv/vRitpyQDgSqfvAeiK3olVvzRxu6roN8ZLFIM1AYbPT7Bx7SVutxTy2l8
+         B/DQIOubhXSmizOsMH1G98H9ipXr7oIIB5gFxIWRMHdsbxs4EWzLXYpr0dBexvyLeT/Z
+         AwpKIKI5uPORbIe60HcBCA9uaIlo8SSxCaAKUPZ1ag4HYPMRlm7I/E2aoT5TtgYzWxcd
+         bVtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZhS59s2xVmfyWDuL4sjmZtVxjE4zWOLc4hNUVVYN3G0=;
-        b=NyfKyrdPGtnHLCTrt4K6nADIH53DAGQKaX4ag48S0lf05VLm+Heb3BOESj1FNEXwaJ
-         sPrR1NWlD58hpTB3cPerDk2eJT5NydtI0LK0SsITEDdIPF7iAmNogjsxIr2vh5e/NQgd
-         Nj2Ml5yucct1PXNQdMvMSBtqJ0Dbq5TO6Zl3/5fRG1pggbhYERje3X+9hfjej1+n7QHo
-         3Sh2h5c72b/qDI8VUPKzA+0tGeYm6HibNXuGpAa2YS0Dc1qQu6Px5B0+wNj6+b1LRRmT
-         /7SDcKOhh96NNxORFC1pl/x3qnBKPzhzsCX0kWiM/kBUs21sHBaop58Kla8nXbNJBV6O
-         GGjg==
-X-Gm-Message-State: AFqh2kpXxdwIDeXtTtGiRaiwQciFC/c0E+W+5cjUgD5+2D3AMxHjUEgu
-        5jMTmBaxNq9ilcG1yXl5NfCiQQ==
-X-Google-Smtp-Source: AMrXdXswKtWvKfNXCsgQVR4+A3uXuB36y1qN+wJlaUJhwpHfaBj2xZnDKdfNnnp8zbox6vBzzz0Eyg==
-X-Received: by 2002:a05:6a20:d398:b0:ac:1265:d5bb with SMTP id iq24-20020a056a20d39800b000ac1265d5bbmr55751366pzb.49.1672731891897;
-        Mon, 02 Jan 2023 23:44:51 -0800 (PST)
-Received: from [10.85.115.102] ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id g11-20020aa79dcb000000b00581f76c1da1sm7261837pfq.191.2023.01.02.23.44.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 23:44:51 -0800 (PST)
-Message-ID: <5a378862-874b-a210-8092-e4b45aabea2f@bytedance.com>
-Date:   Tue, 3 Jan 2023 15:44:43 +0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2bQEpT5MvpfK5tRet1xVf2lC1kbc6OSmWkVz7dqkqMM=;
+        b=qcDK1SlNfgrL5IxvEq8Nuvy9M4VFjl2uiqS49xdlr8opvj78yjhqqNjvbrSxy1zwuo
+         YwdHEZs8/Vunt2sLvepd9wNxhV6wqwzIX1U6IfJnCHzU8IQ43rIpqRKHwArowXsMlgZ1
+         v9krjHfCAdU3gewD/orXABP6WztWfz4r/zkrUkbtfZCP2bD4T2rLXdwkvTPS5Dtg7DQ+
+         wNAItk5cqY2SFg2HRGxK3873NOSndb/lmfFken4urt+CsdZTER4i0lXNMeO2b4mbbRg6
+         UQm79OvwdfZXhlHsQrbvoeqyV17DKeLf61w4NwZfsL9oQkGjXtFvOam8sIxEIcKlOfU4
+         aM2g==
+X-Gm-Message-State: AFqh2kp0tE7srOsNUe7+j5D5aG25C8fi0JI6G+29ayoB2IKPcKNPmALS
+        RCaGuP+1KUFLRuBiphQhEtmB
+X-Google-Smtp-Source: AMrXdXue3QLdlbIw5reccHBJ3tFgBJJIijQexoZo8Haz9S/OLMwrG7l5ohRBsh0N5Nbri86w+5tWUw==
+X-Received: by 2002:a17:902:7048:b0:18f:438a:cfe1 with SMTP id h8-20020a170902704800b0018f438acfe1mr47197819plt.59.1672732171238;
+        Mon, 02 Jan 2023 23:49:31 -0800 (PST)
+Received: from localhost.localdomain ([220.158.158.30])
+        by smtp.gmail.com with ESMTPSA id q15-20020a17090311cf00b00189f2fdc178sm21488305plh.177.2023.01.02.23.49.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 23:49:30 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lpieralisi@kernel.org, robh@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 0/1] PCI: qcom: Add support for system suspend and resume
+Date:   Tue,  3 Jan 2023 13:19:06 +0530
+Message-Id: <20230103074907.12784-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH] sched/core: Avoid WARN_DOUBLE_CLOCK warning when
- CONFIG_SCHED_CORE
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net
-Cc:     linux-kernel@vger.kernel.org
-References: <20221206070550.31763-1-jiahao.os@bytedance.com>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <20221206070550.31763-1-jiahao.os@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping...
+Hello,
 
-On 2022/12/6 Hao Jia wrote:
-> When we need to call update_rq_clock() to update the rq clock of
-> other CPUs on the same core, before that we need to clear RQCF_UPDATED
-> of rq->clock_update_flags to avoid the WARN_DOUBLE_CLOCK warning.
-> Because at this time the rq->clock_update_flags of other CPUs
-> may be RQCF_UPDATED.
-> 
-> Some call trace reports:
-> Call Trace 1:
-> <TASK>
-> __schedule+0x61c/0x11d0
-> schedule+0x5d/0xd0
-> worker_thread+0xb5/0x380
-> ? preempt_count_add+0x56/0xa0
-> ? rescuer_thread+0x310/0x310
-> kthread+0xe6/0x110
-> ? kthread_complete_and_exit+0x20/0x20
-> ret_from_fork+0x1f/0x30
-> </TASK>
-> 
-> Call Trace 2:
-> <TASK>
-> __schedule+0x91d/0x11d0
-> schedule+0x5d/0xd0
-> exit_to_user_mode_prepare+0xe5/0x1e0
-> syscall_exit_to_user_mode+0x17/0x30
-> do_syscall_64+0x40/0x90
-> entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Call Trace 3:
-> <IRQ>
-> __sched_core_tick+0x27/0x40
-> scheduler_tick+0x1be/0x270
-> ? tick_sched_handle.isra.18+0x60/0x60
-> update_process_times+0x6a/0x90
-> tick_sched_handle.isra.18+0x1f/0x60
-> tick_sched_timer+0x47/0x80
-> __hrtimer_run_queues+0x10a/0x280
-> hrtimer_interrupt+0x10b/0x240
-> __sysvec_apic_timer_interrupt+0x70/0x160
-> sysvec_apic_timer_interrupt+0x9a/0xd0
-> </IRQ>
-> <TASK>
-> asm_sysvec_apic_timer_interrupt+0x16/0x20
-> 
-> Steps to reproduce:
-> 1. Enable CONFIG_SCHED_DEBUG and CONFIG_SCHED_CORE when compiling
->     the kernel
-> 2. echo 1 > /sys/kernel/debug/clear_warn_once
->     echo "WARN_DOUBLE_CLOCK" > /sys/kernel/debug/sched/features
-> 3. Run the linux/tools/testing/selftests/sched/cs_prctl_test test
-> 
-> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-> ---
->   kernel/sched/core.c       |  5 ++++-
->   kernel/sched/core_sched.c |  4 +++-
->   kernel/sched/sched.h      | 10 +++++++++-
->   3 files changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index daff72f00385..fcf5e4faec34 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5951,6 +5951,7 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->   	rq->core->core_cookie = 0UL;
->   	if (rq->core->core_forceidle_count) {
->   		if (!core_clock_updated) {
-> +			rq_clock_clear_update(rq->core);
->   			update_rq_clock(rq->core);
->   			core_clock_updated = true;
->   		}
-> @@ -6007,8 +6008,10 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->   		 * pick_next_task(). If the current cpu is not the core,
->   		 * the core may also have been updated above.
->   		 */
-> -		if (i != cpu && (rq_i != rq->core || !core_clock_updated))
-> +		if (i != cpu && (rq_i != rq->core || !core_clock_updated)) {
-> +			rq_clock_clear_update(rq_i);
->   			update_rq_clock(rq_i);
-> +		}
->   
->   		p = rq_i->core_pick = pick_task(rq_i);
->   		if (!max || prio_less(max, p, fi_before))
-> diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-> index a57fd8f27498..70a6f36fd830 100644
-> --- a/kernel/sched/core_sched.c
-> +++ b/kernel/sched/core_sched.c
-> @@ -291,8 +291,10 @@ void __sched_core_tick(struct rq *rq)
->   	if (!rq->core->core_forceidle_count)
->   		return;
->   
-> -	if (rq != rq->core)
-> +	if (rq != rq->core) {
-> +		rq_clock_clear_update(rq->core);
->   		update_rq_clock(rq->core);
-> +	}
->   
->   	__sched_core_account_forceidle(rq);
->   }
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index a4a20046e586..1a2c40c413c2 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -2544,8 +2544,16 @@ static inline void double_rq_clock_clear_update(struct rq *rq1, struct rq *rq2)
->   	rq2->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
->   #endif
->   }
-> -#else
-> +
-> +#ifdef CONFIG_SCHED_CORE
-> +static inline void rq_clock_clear_update(struct rq *rq)
-> +{
-> +	rq->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-> +}
-> +#endif
-> +#else /* CONFIG_SCHED_DEBUG */
->   static inline void double_rq_clock_clear_update(struct rq *rq1, struct rq *rq2) {}
-> +static inline void rq_clock_clear_update(struct rq *rq) {}
->   #endif
->   
->   #ifdef CONFIG_SMP
+This series (a single patch) adds the system suspend and resume support
+to the Qualcomm PCIe RC controller.
+
+Background
+==========
+
+There were previous attempts [1][2] to add system suspend and resume
+support to this driver.
+
+In previous versions, the controller was put into low power mode by turning
+OFF the resources even if there were active PCIe devices connected. Thanks
+to Qualcomm's internal power topology, the link did not enter L2/L3 state
+and the devices were still powered ON. But during very late end of suspend
+cycle, kernel tried to disable MSIs of the PCIe devices. This caused access
+violations as the resources needed to access the PCIe devices config space
+were turned OFF. Series [1] worked around this issue by not accessing the
+PCIe config space if the link was down in dw_msi_{un}mask_irq() functions.
+But that approach was not accepted.
+
+Then, series [2] implemented the suspend and resume operations using the
+syscore framework that disabled the resources at the end of the suspend
+cycle. But that approach also did not get much acceptance.
+
+Proposal
+========
+
+So the proposal here is to just vote for minimal interconnect bandwidth and
+not turn OFF the resources if there are active PCIe devices connected to
+the controllers. This avoids the access violation issue during suspend and
+also saves some power due to the lower interconnect bandwidth used.
+
+Then if there are no active PCIe devices connected to the controller,
+the resources are turned OFF completely and brought back during resume.
+This also saves power if there are controllers in a system without any
+devices connected.
+
+Testing
+=======
+
+This series has been tested on Lenovo Thinkpad X13s.
+
+Dependency
+==========
+
+This series depends on the host_deinit() callback patch [3] submitted by
+Johan.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/linux-pci/1656055682-18817-1-git-send-email-quic_krichai@quicinc.com/
+[2] https://lore.kernel.org/linux-pci/1663669347-29308-1-git-send-email-quic_krichai@quicinc.com/
+[3] https://lore.kernel.org/linux-pci/20230102174313.GC16638@thinkpad/
+
+Manivannan Sadhasivam (1):
+  PCI: qcom: Add support for system suspend and resume
+
+ drivers/pci/controller/dwc/pcie-qcom.c | 52 ++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+
+-- 
+2.25.1
+
