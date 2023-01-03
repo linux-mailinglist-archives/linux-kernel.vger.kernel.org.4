@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C649A65C20B
+	by mail.lfdr.de (Postfix) with ESMTP id 7A57F65C20A
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237807AbjACOiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:38:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S238066AbjACOic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238008AbjACOhC (ORCPT
+        with ESMTP id S238064AbjACOiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:37:02 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D6AFD3F
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:36:58 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 22B653EE9E;
-        Tue,  3 Jan 2023 14:36:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672756617; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bxhFS7I2ISoqjLRhc7J0LagWlzINz+tb8rFIcAjGTX0=;
-        b=24UqXN8rZGqaZh//q7UjI5E04o6yRatG16Cr7x7D0/TjxBvFMwnYnTDMhrImH02s2AyeFc
-        KtV4/FZq1WUw4w4Yq7RJ9tmPlBbviakfBkdv+xuBhZ1DwI7kyQuNOWwe+h5EH4qElIKrU1
-        tR4g8tVUJDWD/eVkZ3eFYNVFS9dAHdE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672756617;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bxhFS7I2ISoqjLRhc7J0LagWlzINz+tb8rFIcAjGTX0=;
-        b=rOXhukERf7zQ/Sho+7sdLPsIsufjxM1JR5DVj/6pO0bbb1E5O0Gce4I4PHjuFGy3pV/r2U
-        1Fzos6SCJ8LRqLDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E12271392B;
-        Tue,  3 Jan 2023 14:36:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WYEBNog9tGMtTQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 03 Jan 2023 14:36:56 +0000
-Message-ID: <8097505c-66a6-f60d-d8aa-2c36062813ff@suse.cz>
-Date:   Tue, 3 Jan 2023 15:36:56 +0100
+        Tue, 3 Jan 2023 09:38:16 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9FC12741
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:37:34 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id 60-20020a17090a0fc200b002264ebad204so9674729pjz.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 06:37:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wqfFFHAyvqsLmgM2yfmYHneo/JOpztsRLGoLHK+NPXk=;
+        b=Kf+xME4jFYtJHUyw0Rj1pQ/k7YhClO3rP3zHIsOqtyOwpdSzxKuEyv72mo9f2TcBM7
+         M3WBbHt0oyL6J5PFuOGFGOGOTrXJdzJ4DjmD7CsfbVW39Nb2wZzlCuOtW79GbjbwUY9l
+         so7LUtmcurnCRYUzrGgCjWilqJf5Okl3Heutk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wqfFFHAyvqsLmgM2yfmYHneo/JOpztsRLGoLHK+NPXk=;
+        b=GusbdVH0/o3IruNW55dTNcgo41zxCrFajKi+CWgeqHvY52ei5G9EiJb3PJ0UWaLC4Z
+         1HQUyQk0cgLyJUMOjigbBmd1h4u/BNxf+kKJeGXxAkT5CQNvEHYlKpWVhqWTVL0zRJP8
+         h/dm0RuG5TNhMuqvtz3PHd/JZJnXZjEGlOM2fj2QeGdly/tUofokrsm3znZR3AdzO64I
+         qnvKWv2vUh5Y2lR0bBgvRW9pajorUuvEHjkT5OqM6P2laApkPbG8vwEDyH2PtoLJXF2e
+         trmJXGP7zLwSOccGqwzC9ZfrJWEzNsK78p9Sv8NAHGmAAkU2c2T97meB8jzxQSSIaVhG
+         1Xgg==
+X-Gm-Message-State: AFqh2kpogRc9MC8KbNCJIJaWJEsqDb5r7XBKyKRMy6POUbIiVM/DkUpL
+        u6LmycvxgMm7KVzmYAaClqTrju86gL7gj70AIYI=
+X-Google-Smtp-Source: AMrXdXt3mgmP4RCED61YGBCzhwapmJxwhOa+X43EZfVsLLb/Q9h/sOH7hdvfKEubWo6ffVfloGCKhA==
+X-Received: by 2002:a05:6a21:1649:b0:ad:d197:59c7 with SMTP id no9-20020a056a21164900b000add19759c7mr53425857pzb.46.1672756653933;
+        Tue, 03 Jan 2023 06:37:33 -0800 (PST)
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com. [209.85.215.178])
+        by smtp.gmail.com with ESMTPSA id i126-20020a625484000000b00576d76c9927sm20528090pfb.106.2023.01.03.06.37.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 06:37:33 -0800 (PST)
+Received: by mail-pg1-f178.google.com with SMTP id v3so20240120pgh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 06:37:32 -0800 (PST)
+X-Received: by 2002:aa7:99cd:0:b0:581:3f7a:8ad0 with SMTP id
+ v13-20020aa799cd000000b005813f7a8ad0mr1778045pfi.21.1672756652431; Tue, 03
+ Jan 2023 06:37:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [linus:master] [mm, slub] 0af8489b02:
- kernel_BUG_at_include/linux/mm.h
-To:     Oliver Sang <oliver.sang@intel.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Mike Rapoport <rppt@linux.ibm.com>,
-        Christoph Lameter <cl@linux.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
-References: <202212312021.bc1efe86-oliver.sang@intel.com>
- <41276905-b8a5-76ae-8a17-a8ec6558e988@suse.cz>
- <Y7Qxucg5le7WOzr7@xsang-OptiPlex-9020>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y7Qxucg5le7WOzr7@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20220920-resend-v4l2-compliance-v2-0-b0ceb15353ac@chromium.org> <Y64Q/yRRzxt8IByG@pendragon.ideasonboard.com>
+In-Reply-To: <Y64Q/yRRzxt8IByG@pendragon.ideasonboard.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 3 Jan 2023 15:37:21 +0100
+X-Gmail-Original-Message-ID: <CANiDSCsQ=1fem5MD3273_xGzd8gKuAh3T_UvWhAHCpQHN3AkbA@mail.gmail.com>
+Message-ID: <CANiDSCsQ=1fem5MD3273_xGzd8gKuAh3T_UvWhAHCpQHN3AkbA@mail.gmail.com>
+Subject: Re: [PATCH RESEND v2 0/7] Follow-up patches for uvc v4l2-compliance
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,51 +76,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/3/23 14:46, Oliver Sang wrote:
-> hi,
-> 
->> 
->> Yet the page owner info tells us, 0x2daee was most recently used as order-1,
->> and now it seems to be (based on the raw struct page dump) sitting on a pcplist.
->> 
->> So the events leading up to this could be something like:
->> 
->> - 0x2daee is order-1 slab folio of the inode cache, sitting on the partial list
->> - despite being on partial list, it's freed ???
->> - somebody else allocates order-2 page 0x2daec and uses it for whatever,
->> then frees it
->> - 0x2daec is reallocated as order-1 slab from names_cache, then freed
->> - we try to allocate from the slab page 0x2daee and trip on the PageTail
->> 
->> Except, the freeing of order-2 page would have reset the PageTail and
->> compound_head in 0x2daec, so this is even more complicated or involves some
->> extra race?
-> 
-> FYI, we ran tests more up to 500 times, then saw different issues but rate is
-> actually low
-> 
-> 56d5a2b9ba85a390 0af8489b0216fa1dd83e264bef8
-> ---------------- ---------------------------
->        fail:runs  %reproduction    fail:runs
->            |             |             |
->            :500         12%          61:500   dmesg.invalid_opcode:#[##]
->            :500          3%          14:500   dmesg.kernel_BUG_at_include/linux/mm.h
->            :500          3%          17:500   dmesg.kernel_BUG_at_include/linux/page-flags.h
->            :500          5%          26:500   dmesg.kernel_BUG_at_lib/list_debug.c
->            :500          0%           2:500   dmesg.kernel_BUG_at_mm/page_alloc.c
->            :500          0%           2:500   dmesg.kernel_BUG_at_mm/usercopy.c
+Hi Laurent
 
-Hm even if rate is low, the different kinds of reports could be useful to
-see, if all of that is caused by the commit.
+On Thu, 29 Dec 2022 at 23:13, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Ricardo,
+>
+> On Fri, Dec 02, 2022 at 06:21:34PM +0100, Ricardo Ribalda wrote:
+> > This patchset contains the fixes for the comments on "v10 of Fix
+> > v4l2-compliance errors series". In particular to the patches
+> >
+> > -uvcvideo: uvc_ctrl_is_accessible: check for INACTIVE
+> > -uvcvideo: improve error handling in uvc_query_ctrl()
+> >
+> > And the patch:
+> > -uvcvideo: Fix handling on Bitmask controls
+>
+> Patches 1/7, 3/7, 4/7 and 6/7 are fine (possibly with changes mentioned
+> in my review comments that I can handle when applying). I can apply them
+> to my tree already (with a minor conflict resolution between 2/7 and
+> 3/7), but it may be easier for you to send a v3 of the whole series.
+> Please let me know what you'd prefer.
 
->> 
->> In any case, this is something a debug_pagealloc kernel could have a chance
->> of catching earlier. Would it be possible to enable CONFIG_DEBUG_PAGEALLOC
->> and DEBUG_PAGEALLOC_ENABLE_DEFAULT additionally to the rest of the
->> configuration, and repeat the test?
-> 
-> ok, we are starting to test by these 2 additional configs now.
+Just sent a v3 of the patchset. If 1-8 are OK, feel free to to merge
+them in your tree, we can add
+"Use-standard-names-for-menus" later. It is not needed to pass the
+compliance. It is on this set just because it depends on this set.
 
-Great, thanks!
+Thanks!
+
+> > To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > To: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Cc: linux-media@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: Hans Verkuil <hans.verkuil@cisco.com>
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> >
+> > ---
+> > Changes in v2:
+> > - Include "Get menu names from framework series"
+> >   https://lore.kernel.org/r/20220920-standard-menues-v2-0-a35af3243c2f@chromium.org
+> > - Link to v1: https://lore.kernel.org/r/20220920-resend-v4l2-compliance-v1-0-81364c15229b@chromium.org
+> >
+> > ---
+> > Hans Verkuil (2):
+> >       media: uvcvideo: uvc_ctrl_is_accessible: check for INACTIVE
+> >       media: uvcvideo: improve error logging in uvc_query_ctrl()
+> >
+> > Ricardo Ribalda (5):
+> >       media: uvcvideo: Return -EACCES for Wrong state error
+> >       media: uvcvideo: Do not return positive errors in uvc_query_ctrl()
+> >       media: uvcvideo: Fix handling on Bitmask controls
+> >       media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
+> >       media: uvcvideo: Use standard names for menus
+> >
+> >  drivers/media/usb/uvc/uvc_ctrl.c   | 230 ++++++++++++++++++++++++++++---------
+> >  drivers/media/usb/uvc/uvc_driver.c |   9 +-
+> >  drivers/media/usb/uvc/uvc_v4l2.c   |  85 ++++++++++----
+> >  drivers/media/usb/uvc/uvc_video.c  |  15 +--
+> >  drivers/media/usb/uvc/uvcvideo.h   |   8 +-
+> >  include/uapi/linux/uvcvideo.h      |   3 +-
+> >  6 files changed, 258 insertions(+), 92 deletions(-)
+> > ---
+> > base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+> > change-id: 20220920-resend-v4l2-compliance-4fdbe4fbd7b5
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
 
 
+
+-- 
+Ricardo Ribalda
