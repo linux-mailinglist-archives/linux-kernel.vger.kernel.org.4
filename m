@@ -2,178 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07D465BAD7
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 07:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0455165BA2A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 06:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbjACGmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 01:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S230519AbjACFK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 00:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236843AbjACGlu (ORCPT
+        with ESMTP id S230159AbjACFKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 01:41:50 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5914D2E0
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 22:41:48 -0800 (PST)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230103064147epoutp039e0965c9b487b2f94cef71afaed1d91f~2uVnfvVk62514625146epoutp035
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:41:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230103064147epoutp039e0965c9b487b2f94cef71afaed1d91f~2uVnfvVk62514625146epoutp035
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1672728107;
-        bh=nhdfKuY6VgLCY5Ul25sLP3BbNNJgGEW2tayYvQfRUgw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ph+LWPskbfKUGO7UY177YNtMXlsarDPEKm0qoeptwGP03qRqOk1cIPs4aU9+Cn0Fw
-         Z4WJeBcBUzT/fU335RV8+E9K91tKsQbCr0MtdufKkVIGq+g2eG0C0kdgLbdPiC832Z
-         U9XmmXhK3PBZ+sY7XJIMRejShQFFHAriw9K7oUno=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20230103064146epcas5p3421ed7c35cbbedafdc426bd54dfb8356~2uVm5944U0590305903epcas5p3g;
-        Tue,  3 Jan 2023 06:41:46 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4NmNS818Gcz4x9Q4; Tue,  3 Jan
-        2023 06:41:44 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0E.E0.62806.72EC3B36; Tue,  3 Jan 2023 15:41:44 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230103045706epcas5p14f2f951d162899234c7f5f7a0998ab6b~2s6Of__Ck2038120381epcas5p1b;
-        Tue,  3 Jan 2023 04:57:06 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230103045706epsmtrp21d91195338b2a9b7de0c58c4d8ae04ac~2s6Oak1wS0749107491epsmtrp2-;
-        Tue,  3 Jan 2023 04:57:06 +0000 (GMT)
-X-AuditID: b6c32a4a-c43ff7000000f556-17-63b3ce27ec1d
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E1.15.10542.2A5B3B36; Tue,  3 Jan 2023 13:57:06 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230103045704epsmtip27788c0c81554ab6969b69128dd45d984~2s6MNWlBL3215832158epsmtip2O;
-        Tue,  3 Jan 2023 04:57:04 +0000 (GMT)
-From:   Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
-        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
-        alim.akhtar@samsung.com, rcsekar@samsung.com,
-        aswani.reddy@samsung.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-Subject: [PATCH v2 5/5] arm64: dts: fsd: Add sound card node for Tesla FSD
-Date:   Tue,  3 Jan 2023 10:26:13 +0530
-Message-Id: <20230103045613.100309-6-p.rajanbabu@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230103045613.100309-1-p.rajanbabu@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLJsWRmVeSWpSXmKPExsWy7bCmpq7Guc3JBttnMlk8mLeNzeLKxUNM
-        Foc2b2W3mPrwCZvF/CPnWC36Xjxktvh2pYPJ4vKuOWwWM87vY7I4ujHYYtHWL+wWnbv6WS1m
-        XdjBatG69wi7xeE37awWG76vZXQQ8NjwuYnNY+esu+wem1Z1snncubaHzWPf22VsHn1bVjF6
-        rN9ylcXj8ya5AI6obJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUX
-        nwBdt8wcoA+UFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUpOQUmBXrFibnFpXnpenmp
-        JVaGBgZGpkCFCdkZ02ZMYis4x1Wxpm8mWwPjAo4uRk4OCQETic1NLaxdjFwcQgK7GSU+PX3F
-        BOF8YpRYN/k9O4TzmVHi/o4jrDAtX0+3QFXtYpSYMe8dE0hCSKCVSeLAqUQQm03AVGLVnEaw
-        uSICTUwSbW8msoA4zAIbGSVOH3sI1iEs4CXx+cEaRhCbRUBVYsf6HWA2r4CtxN6FJ5gg1slL
-        rN5wgBnE5hSwk/jTcQFstYTAXA6Jz6fXMUIUuUgs2PIF6j5hiVfHt7BD2FISn9/tZYOw8yWm
-        fWyGsisk2j5ugFpgL3Hgyhyg6ziArtOUWL9LHyIsKzH11DqwEmYBPone30+gynkldsyDsVUl
-        1i/fBHWCtMS+63uhbA+J7hePGSFBNJFR4vGWP4wTGOVmIaxYwMi4ilEytaA4Nz212LTAKC+1
-        HB5vyfm5mxjB6VTLawfjwwcf9A4xMnEwHmKU4GBWEuGd9GJTshBvSmJlVWpRfnxRaU5q8SFG
-        U2AATmSWEk3OByb0vJJ4QxNLAxMzMzMTS2MzQyVx3tSt85OFBNITS1KzU1MLUotg+pg4OKUa
-        mDQ4TTevOt2g8bh04/tcSa39ERXvWnqtAjz3aLC7NNXPqvso/9K9by+zpznXP/kT6xoLblfN
-        eady6tGn0ls+y85u+GsXUyB5VCgkxcTjeFn8rrmZvV6xvcerWe+re5S/y9pUV+az9smsiNWr
-        f4Q5FK84E6CcURWu0uq6x2uHxWe2LpcZG8t5v2s7/I7fGa0r1SenKNPpoW785fgjpR+V53em
-        X/zutjEocZa8Y0eLmMj/jN6zVw7131Mya41ma/wiYafwTriv/qnxsph7wXMTTh4rO8z7cv9j
-        wVd3etTMT0q2le+qtio9dOHPPzOuM7OWJp21tc0Oeeunx5ImJz1f7+KfhfuuVR9jytbod5un
-        xFKckWioxVxUnAgAoVMNajAEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMLMWRmVeSWpSXmKPExsWy7bCSvO6irZuTDd791rZ4MG8bm8WVi4eY
-        LA5t3spuMfXhEzaL+UfOsVr0vXjIbPHtSgeTxeVdc9gsZpzfx2RxdGOwxaKtX9gtOnf1s1rM
-        urCD1aJ17xF2i8Nv2lktNnxfy+gg4LHhcxObx85Zd9k9Nq3qZPO4c20Pm8e+t8vYPPq2rGL0
-        WL/lKovH501yARxRXDYpqTmZZalF+nYJXBnTZkxiKzjHVbGmbyZbA+MCji5GTg4JAROJr6db
-        mLoYuTiEBHYwSjRuWc8CkZCWmN6/hw3CFpZY+e85O0RRM5PE1sZTYAk2AVOJVXMaWUESIgIT
-        mCROvjsG1s0ssJVRYupnIxBbWMBL4vODNYwgNouAqsSO9TvAbF4BW4m9C08wQWyQl1i94QAz
-        iM0pYCfxp+MCWFwIqGZ7wyfmCYx8CxgZVjFKphYU56bnFhsWGOWllusVJ+YWl+al6yXn525i
-        BIe7ltYOxj2rPugdYmTiYDzEKMHBrCTCO+nFpmQh3pTEyqrUovz4otKc1OJDjNIcLErivBe6
-        TsYLCaQnlqRmp6YWpBbBZJk4OKUamOaW1l0LXR7OxP7ssHXN05mCAl8+tjXWePuVu1oZF+jk
-        mMtt/+Jjs2VDfOIkYb4v3jcqvPUe/Wef22jMwtw180eV09vY2dYPHxQp3WjJPL9LzlG6fL/E
-        v6fu79QFDp21vDafSeOyR9jRwrCmmV+und+T1dB3bcWLt+su2V1SmLJXbgOHwtO7IZclHj14
-        tOJK+2WmIvn792adzNeamrnY9XtW2Z19c+6sjy36fKVIwcKysd8toV++sjNi3+nrRy76My82
-        mXhFJu3HRNWOlp3ntp3v4do47a9dvaGj16R7jXvTL6+VW2TRYLAkN6M+g3959M1bmf/c2jyr
-        OVT5VAT9Vi2xPGIllBPm4B+5U2PfZyWW4oxEQy3mouJEAJT4uDvmAgAA
-X-CMS-MailID: 20230103045706epcas5p14f2f951d162899234c7f5f7a0998ab6b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230103045706epcas5p14f2f951d162899234c7f5f7a0998ab6b
-References: <20230103045613.100309-1-p.rajanbabu@samsung.com>
-        <CGME20230103045706epcas5p14f2f951d162899234c7f5f7a0998ab6b@epcas5p1.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 Jan 2023 00:10:50 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B35243
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 21:10:49 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id t2so4964548vkk.9
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 21:10:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=G1lF+uQj+FQsqhODd3DjLZyHBCSILu/V4r6YB+47iCA=;
+        b=R4naHoGAnjr4w90CecJAm62X3fhC3J8oS6g5fRqtT1ap4xcepx+v9BGDMaDsVmDhnd
+         f8W68HvcCLB/Vp8eyQgnfImvPKFqYlk2bBC8fUb09rqHRbt1U4nMEYhLBhrx+2gGQxWg
+         CcDFDyLGVSLsMxP4Ad9Q9/e7MWD5LMYYtDRe81pBL0eC8ywRV5Y7m/G2x9+UKNNYrhuP
+         3zAbZtisGYN4olRPjtBtEifauiPo1D1PD7EyI1zbJrI3elFDblsyP45oXXD6c5Z/CY2Y
+         f0C+6adIEZfc8qfFOIEhm9OoyiWKdM1/HNQSOm3387gm9czDviOvHcT7EVCV39Vm70nh
+         DPcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G1lF+uQj+FQsqhODd3DjLZyHBCSILu/V4r6YB+47iCA=;
+        b=WdV86evHuXWmzCffoR9buaj215NEDi3u7ssOynfInw9tyVOfG/DMIf/7mI13SmCZcP
+         xGYv4HyipjIaNpUyLjWmDRZm/V8DaBYpRAwiIgfvD0ZMcX7nOumYYfLBN6BkNTXJIvCG
+         Fm0r4sgJdu2m78BTL7WKcuVO14CYm5iJFWB3dU85lLONzNlhiwW1P/Mfie3Kg/HuBl15
+         X6Yk+dY25zwjJn/edlR8J0bMBhjy9XcGYlpXt8MjDvmAGQm5nTQq5jLHXPWh0AHkUNGv
+         jOOwgKVHdzyrKEzyJCMVA3qM4RB7uwwzo5JAxwkORKDgyh4X2G6aeW5lAqWUnlt2PzWv
+         I1jQ==
+X-Gm-Message-State: AFqh2kouXdj/cpKZ26gU5AlyRdYW6534/pgmGFzdv8vZznJ5Q3pBhwhv
+        VdXkgc8A3s6UVFcKAz1AdBF6esIXM2bJmA+z7cMDdQ==
+X-Google-Smtp-Source: AMrXdXslkxL7UBNfkOhYC3B8zZdJn9HFotr+MwajcwvZmQTG61DbbRtZtGg7pjiZG0uYr4oy2I+EySvFDHjgctf1gGI=
+X-Received: by 2002:a1f:c345:0:b0:3b8:2d76:434d with SMTP id
+ t66-20020a1fc345000000b003b82d76434dmr4520082vkf.31.1672722648007; Mon, 02
+ Jan 2023 21:10:48 -0800 (PST)
+MIME-Version: 1.0
+References: <20221111044207.1478350-1-apatel@ventanamicro.com>
+ <20221111044207.1478350-7-apatel@ventanamicro.com> <Y3EQ4JU7uGbIMGiW@spud>
+ <CAAhSdy2UAMmX+W5Cm3DuTJzZ0jJ3=CW4PhjctQNdfeS+4hqWqg@mail.gmail.com> <Y7MfyZBAErYGMZBK@spud>
+In-Reply-To: <Y7MfyZBAErYGMZBK@spud>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Tue, 3 Jan 2023 10:40:35 +0530
+Message-ID: <CAK9=C2WoFZBmnqpNGUZWATMqd22TiHpQehAYbW+DNX8ejHU=RA@mail.gmail.com>
+Subject: Re: [PATCH 6/9] dt-bindings: Add RISC-V advanced PLIC bindings
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree node support for sound card on Tesla FSD board
+On Mon, Jan 2, 2023 at 11:48 PM Conor Dooley <conor@kernel.org> wrote:
+>
+> On Mon, Jan 02, 2023 at 10:20:48PM +0530, Anup Patel wrote:
+> > On Sun, Nov 13, 2022 at 9:14 PM Conor Dooley <conor@kernel.org> wrote:
+>
+> > > > +  domain.
+> > > > +
+> > > > +allOf:
+> > > > +  - $ref: /schemas/interrupt-controller.yaml#
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    items:
+> > > > +      - enum:
+> > > > +          - vendor,chip-aplic
+> > >
+> > > Same comment here about the validity of this placeholder.
+> >
+> > Okay, I will add "riscv,qemu-aplic" as QEMU specific compatible string.
+>
+> Ah neat. I think that's a fair compromise.
+>
+> > > > +      - const: riscv,aplic
+>
+> > > > +  msi-parent:
+> > > > +    description:
+> > > > +      The presence of this property implies that given APLIC domain forwards
+> > > > +      wired interrupts as MSIs to a AIA incoming message signaled interrupt
+> > > > +      controller (IMSIC). This property should be considered only when the
+> > > > +      interrupts-extended property is absent.
+> > >
+> > > This mutual exclusion can be represented, can't it?
+> > > IIRC it is some sort of oneOf thing, somewhat like below:
+> > > oneOf:
+> > >   - required:
+> > >       - msi-parent
+> > >   - required:
+> > >       - interrupts-extended
+> > >
+> > > AFAIR from doing the i2c ocores binding, this will force the addition of
+> > > one, but not both, to a node.
+> > >
+> > > Or is this not actually mutually exclusive & the msi-parent property is
+> > > permitted but just left unused if interrupts-extended is present?
+> >
+> > If both are present then interrupts-extended is preferred.
+>
+> Perhaps I am making a fool of myself here, but why would someone include
+> both of them at once, if only one is going to be used?
+> It would appear that making them explicitly mutually exclusive would
+> make the binding easier to understand.
+> What am I missing?
 
-Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
----
- arch/arm64/boot/dts/tesla/fsd-evb.dts | 37 +++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+If both "interrupts-extended" and "msi-parent" are present then it means
+the APLIC domain supports both MSI mode and Direct mode in HW. In this
+case, the APLIC driver has to choose between MSI mode or Direct mode.
 
-diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-index e2fd49774f15..ce726bddfb50 100644
---- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
-+++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-@@ -29,6 +29,43 @@
- 		device_type = "memory";
- 		reg = <0x0 0x80000000 0x2 0x00000000>;
- 	};
-+
-+	sound {
-+		compatible = "simple-audio-card";
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		simple-audio-card,name = "FSD Audio Card";
-+		simple-audio-card,widgets =
-+			"Line", "Line Out",
-+			"Line", "Line In";
-+		simple-audio-card,routing =
-+			"Line Out", "LLOUT",
-+			"Line Out", "RLOUT",
-+			"MIC2L", "Line In",
-+			"MIC2R", "Line In";
-+
-+		status = "okay";
-+
-+		simple-audio-card,dai-link@0 {
-+			reg = <0>;
-+			format = "i2s";
-+			bitclock-master = <&tlv320aic3x>;
-+			frame-master = <&tlv320aic3x>;
-+
-+			cpu0 {
-+				sound-dai = <&i2s_0 0>;
-+			};
-+			cpu1 {
-+				sound-dai = <&i2s_0 1>;
-+			};
-+			codec {
-+				sound-dai = <&tlv320aic3x>;
-+				system-clock-frequency = <33000000>;
-+			};
-+		};
-+	};
- };
- 
- &fin_pll {
--- 
-2.17.1
+>
+> > > > +  riscv,children:
+> > > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> > > > +    minItems: 1
+> > > > +    maxItems: 1024
+> > > > +    description:
+> > > > +      This property represents a list of child APLIC domains for the given
+> > > > +      APLIC domain. Each child APLIC domain is assigned child index in
+> > > > +      increasing order with the first child APLIC domain assigned child
+> > > > +      index 0. The APLIC domain child index is used by firmware to delegate
+> > > > +      interrupts from the given APLIC domain to a particular child APLIC
+> > > > +      domain.
+> > > > +
+> > > > +  riscv,delegate:
+> > > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> > > > +    minItems: 1
+> > > > +    maxItems: 1024
+> > > > +    description:
+> > > > +      This property represents a interrupt delegation list where each entry
+> > > > +      is a triple consisting of child APLIC domain phandle, first interrupt
+> > > > +      number, and last interrupt number. The firmware will configure interrupt
+> > > > +      delegation registers based on interrupt delegation list.
+> > >
+> > > What is the inter dependence of the children and delegate?
+> > > Is it valid to have a delegate property without children?
+> > > Can the firmware delegate interrupts without the delegation list, based
+> > > on the children property alone? Or is it effectively useless without a
+> > > children property?
+> >
+> > Both properties convey different information. The "riscv,childen" describes
+> > the association of child indexes with child APLIC domains whereas the
+> > "riscv,delegate" describes the interrupt delegation to few of the child
+> > APLIC domains.
+> >
+> >
+> > >
+> > > In your examples, the second has msi-parent but neither of these custom
+> > > properties. Do the children/delegate properties have a meaning in the
+> > > msi-parent case?
+> >
+> > The "riscv,childern" and "riscv,delegate" are only useful when we have
+> > hierarchy of multiple APLIC domains. The second example only has
+> > one APLIC domain hence these custom properties are absent.
+>
+> It'd be great if you could include an example that explains the
+> difference as, IIRC, both Rob and I both were kinda confused as to how
+> the properties differ.
 
+Okay, I will try to improve the examples.
+
+Regards,
+Anup
