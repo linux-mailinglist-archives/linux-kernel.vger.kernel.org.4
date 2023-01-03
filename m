@@ -2,125 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1318F65BEB5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAFC65BEB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236887AbjACLLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 06:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S237203AbjACLM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 06:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237290AbjACLLI (ORCPT
+        with ESMTP id S236916AbjACLMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 06:11:08 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6222CBC86
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 03:11:04 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id y25so45183219lfa.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 03:11:04 -0800 (PST)
+        Tue, 3 Jan 2023 06:12:54 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A00A7652
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 03:12:53 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id c9so15416381pfj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 03:12:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9D5LFOOL7M248RT3YKkgzKFTBRXhYh2dkwaJ1IaRHxA=;
-        b=EnOEatK+DA5jF5hkgO1d9SjyfsSx+JiDXvYMOfqMv+LZMR6PCSVgIVzkVR58uboHuD
-         qeDlDmM7YhSAjXKD0MUkL+bsKd0nAjQoXKlLEliz8pFBAu894A9JJjYiW/y4VrnhYdlT
-         Rya9NYCDUqRobuLp/HaPfCwfndMc56IcsUPtfQXI0zmqc3/AD+cnQ1uBizkLuNQUFOEb
-         xnjtEH8onQteF23DbXjfYq48XFV+OUj5/QKDmNKebwbWMX3qAYAYjk9P8m2c5sSsPCoo
-         jsk98/REB0LQ3eeGj2WJhFRdl+vP5GHD//P2d+bCyvIZhsLlujymbK5JPJH7YOhoh7si
-         vz5A==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zV1fKa5X+fJOsn4eYW6XzdvCXBtHTAKTAI3MhIsCmO4=;
+        b=SGzEEFR+GoTUobK0+7F9Kmyzh1nbOZpcTxLxEGTAPc5W/w0fxNKhwo1nh6zq/xemqV
+         ZGZ88mIku/BfHh17O2Wgn6emQ2eBVdJ7cGebWAzFiwJ/o4ao/6HOwZOhOU1B0b+ZVck9
+         37oxkqjsaL9GRNItnkGyo48OeswFAI+ihuNgg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9D5LFOOL7M248RT3YKkgzKFTBRXhYh2dkwaJ1IaRHxA=;
-        b=binmDDFcMl3adedLLI/9EtBkex8D6eXFBFoId0d5Rvn9a+cqzPGjnDYbOgXo/mWMo6
-         w+WFSAF0JoOV0piYRBAbRXk4nDtyDurNB4NcUTCJA0lJki8JHXLE3X/JvxWaajmdHOFS
-         nC4G87h0wFM5CwnjG/K1/5GiTOiFlGk1OuzzMb68MhhLlFFgT0zYLAe5LOvFa+EuMWAN
-         Rxq8n3alPeVM5KgzWeyZyCssgnDvbVsD+48c3qRKWPn1OZmpqd/vgIYaviWIJxr9fCQb
-         wRtPsGSqA2s5xcGXgD5dHPBPoD1FvBV1N/KhofYVxazOEIjWgqqSv6pxl3HIPKuncpvK
-         22/g==
-X-Gm-Message-State: AFqh2korUfyH0BFW6LDxFNGINqk7TqrNVSDLQC5V05KpJQzBrteeK01A
-        cBTsagz/ISa7JZbAM8U1Evcp5g==
-X-Google-Smtp-Source: AMrXdXuAKQ0YTIV1hBpWs/3wrPMP3yAYJaFJ9eyf/qO07z2O81ePy+C/Oezlg0JBhGYsf5BvJNWYhA==
-X-Received: by 2002:ac2:5b41:0:b0:4a4:68b9:66dd with SMTP id i1-20020ac25b41000000b004a468b966ddmr12722492lfp.40.1672744262769;
-        Tue, 03 Jan 2023 03:11:02 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w16-20020a05651234d000b004b57a253deasm4792967lfr.162.2023.01.03.03.11.01
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zV1fKa5X+fJOsn4eYW6XzdvCXBtHTAKTAI3MhIsCmO4=;
+        b=xKXnP8oyNSCFzYty7/bHUREOXxWlZP7wTDL25RSTfmvOrbKKPx/L/NuWumN4/BkN2X
+         059aVHVwSuUkZQ57B8Mq5plwKSh+jx82bsHHt1l/pGgtb7F0FA6EZMjLvkjcAwsbdtHp
+         eOcLBoovys4qo5tK5H4WqTVs0udYgwYGIkOFdOnUd4PafOxLGvDKcJAW7fijMBwRGvsE
+         LRz4O7NQE7OqCcaSW5X85Qn+PHPXcA2d+dcauc8j6i9QYL01LkhURIv/o4R02Fy0Tv9A
+         NamvMUufBQziqjn3+W41Kv/fUdFQQOmHs96tmID/CgxcF+ypfBPoXBDSxyTR8Eabbh+H
+         gvAg==
+X-Gm-Message-State: AFqh2kpWhDCDc4c+KDV2LbM7NMJTC2jimvveUgicQvQoMnNHGQ2EiIWp
+        BH6ZYWThztM+IvsjPeuYXfv4zw==
+X-Google-Smtp-Source: AMrXdXvsFr/twvKjLq5UpMvFhw7+7+tn3FPr9WEIq3WQJd/RgAMu6NwsTl3OZzqe1dl8lc45CCUSPw==
+X-Received: by 2002:a05:6a00:84c:b0:581:1ee0:75a with SMTP id q12-20020a056a00084c00b005811ee0075amr36871808pfk.32.1672744373075;
+        Tue, 03 Jan 2023 03:12:53 -0800 (PST)
+Received: from localhost (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
+        by smtp.gmail.com with UTF8SMTPSA id k187-20020a6284c4000000b005769b23260fsm20829792pfd.18.2023.01.03.03.12.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 03:11:02 -0800 (PST)
-Message-ID: <b3ec1abe-7fb4-0c12-33b6-9f4e8d03f8b2@linaro.org>
-Date:   Tue, 3 Jan 2023 12:11:00 +0100
+        Tue, 03 Jan 2023 03:12:52 -0800 (PST)
+From:   Ying Hsu <yinghsu@chromium.org>
+To:     linux-bluetooth@vger.kernel.org
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        Ying Hsu <yinghsu@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] Bluetooth: Fix possible deadlock in rfcomm_sk_state_change
+Date:   Tue,  3 Jan 2023 11:12:46 +0000
+Message-Id: <20230103111221.1.I1f29bb547a03e9adfe2e6754212f9d14a2e39c4b@changeid>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 4/5] arm64: dts: fsd: Add codec node for Tesla FSD
-Content-Language: en-US
-To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
-        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
-        alim.akhtar@samsung.com, rcsekar@samsung.com,
-        aswani.reddy@samsung.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20230103045613.100309-1-p.rajanbabu@samsung.com>
- <CGME20230103045703epcas5p2344520777efa3c06321732e2784e6c6c@epcas5p2.samsung.com>
- <20230103045613.100309-5-p.rajanbabu@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230103045613.100309-5-p.rajanbabu@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 05:56, Padmanabhan Rajanbabu wrote:
-> Add device tree node support for codec on Tesla FSD platform.
-> 
-> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-> ---
->  arch/arm64/boot/dts/tesla/fsd-evb.dts | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> index cf5f2ce4d2a7..e2fd49774f15 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> @@ -10,6 +10,7 @@
->  
->  /dts-v1/;
->  #include "fsd.dtsi"
-> +#include <dt-bindings/gpio/gpio.h>
->  
->  / {
->  	model = "Tesla Full Self-Driving (FSD) Evaluation board";
-> @@ -34,6 +35,18 @@
->  	clock-frequency = <24000000>;
->  };
->  
-> +&hsi2c_5 {
-> +	status = "okay";
-> +
-> +	tlv320aic3x: codec@18 {
-> +		#sound-dai-cells = <0>;
-> +		compatible = "ti,tlv320aic3104";
-> +		reg = <0x18>;
+There's a possible deadlock when two processes are connecting
+and closing concurrently:
+  + CPU0: __rfcomm_dlc_close locks rfcomm and then calls
+  rfcomm_sk_state_change which locks the sock.
+  + CPU1: rfcomm_sock_connect locks the socket and then calls
+  rfcomm_dlc_open which locks rfcomm.
 
-First compatible, then reg, then the rest.
+Here's the call trace:
 
-> +		reset-gpios = <&gpg1 6 GPIO_ACTIVE_LOW>;
-> +		status = "okay";
+-> #2 (&d->lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock0x12f/0x1360 kernel/locking/mutex.c:747
+       __rfcomm_dlc_close+0x15d/0x890 net/bluetooth/rfcomm/core.c:487
+       rfcomm_dlc_close+1e9/0x240 net/bluetooth/rfcomm/core.c:520
+       __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
+       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
+       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
+       __sock_release+0xcd/0x280 net/socket.c:650
+       sock_close+0x1c/0x20 net/socket.c:1365
+       __fput+0x27c/0xa90 fs/file_table.c:320
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       exit_task_work include/linux/task_work.h:38 [inline]
+       do_exit+0xaa8/0x2950 kernel/exit.c:867
+       do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+       get_signal+0x21c3/0x2450 kernel/signal.c:2859
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-It's by default. Why do you need it?
+-> #1 (rfcomm_mutex){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1360 kernel/locking/mutex.c:747
+       rfcomm_dlc_open+0x93/0xa80 net/bluetooth/rfcomm/core.c:425
+       rfcomm_sock_connect+0x329/0x450 net/bluetooth/rfcomm/sock.c:413
+       __sys_connect_file+0x153/0x1a0 net/socket.c:1976
+       __sys_connect+0x165/0x1a0 net/socket.c:1993
+       __do_sys_connect net/socket.c:2003 [inline]
+       __se_sys_connect net/socket.c:2000 [inline]
+       __x64_sys_connect+0x73/0xb0 net/socket.c:2000
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Best regards,
-Krzysztof
+-> #0 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+       lock_acquire kernel/locking/lockdep.c:5668 [inline]
+       lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+       lock_sock_nested+0x3a/0xf0 net/core/sock.c:3470
+       lock_sock include/net/sock.h:1725 [inline]
+       rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
+       __rfcomm_dlc_close+0x1b1/0x890 net/bluetooth/rfcomm/core.c:489
+       rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:520
+       __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
+       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
+       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
+       __sock_release+0xcd/0x280 net/socket.c:650
+       sock_close+0x1c/0x20 net/socket.c:1365
+       __fput+0x27c/0xa90 fs/file_table.c:320
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       exit_task_work include/linux/task_work.h:38 [inline]
+       do_exit+0xaa8/0x2950 kernel/exit.c:867
+       do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+       get_signal+0x21c3/0x2450 kernel/signal.c:2859
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+---
+This commit has been tested with a C reproducer on qemu-x86_64.
+
+ net/bluetooth/rfcomm/sock.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
+index 21e24da4847f..29f9a88a3dc8 100644
+--- a/net/bluetooth/rfcomm/sock.c
++++ b/net/bluetooth/rfcomm/sock.c
+@@ -410,8 +410,10 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
+ 	d->sec_level = rfcomm_pi(sk)->sec_level;
+ 	d->role_switch = rfcomm_pi(sk)->role_switch;
+ 
++	release_sock(sk);
+ 	err = rfcomm_dlc_open(d, &rfcomm_pi(sk)->src, &sa->rc_bdaddr,
+ 			      sa->rc_channel);
++	lock_sock(sk);
+ 	if (!err)
+ 		err = bt_sock_wait_state(sk, BT_CONNECTED,
+ 				sock_sndtimeo(sk, flags & O_NONBLOCK));
+-- 
+2.39.0.314.g84b9a713c41-goog
 
