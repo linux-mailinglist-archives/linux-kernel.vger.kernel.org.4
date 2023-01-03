@@ -2,165 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3CB65CA83
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E79465CA7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233982AbjACXqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 18:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S230397AbjACXqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 18:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjACXqr (ORCPT
+        with ESMTP id S230352AbjACXq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 18:46:47 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C3FAE65;
-        Tue,  3 Jan 2023 15:46:46 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303NM1Ag015232;
-        Tue, 3 Jan 2023 23:45:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=bqX0P8LAkS0qn7kAaiRMBmXDNABlm+TdaaE/onDLB+g=;
- b=JC3J+JjzHaOU0LdltrzzwMCeADJSYLFTh1fPZO/8CWFy3YKTLIsOq4q7GCrJANiAglSp
- YeCJfjtbMOKMUev+fkNF0qR8FqEgsdYnTpTbtembCGDSr8oJgIJT6w45fPwVgYJXRN9B
- 4QXr4k6fFfo/vKTaO51qCrkMub7Ky7510O9Ers6Yi/IDou/jwIQVPneYYm5ZqbVyc+Xj
- 5IfwDEFjcneILweu2DifDZJh9GHmq/VnqNpANgYRd3ZgS+hKb/cSJNzR5RXs6o1ycJ/X
- lK59JBAP2N6gPsrvlBlGj9TQwDxwWq2r0pBlmtUCwE194IlwLeCsaIr08uKV4fzDAWRd Mw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvurdp2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 23:45:42 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 303NjfWH001230
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 3 Jan 2023 23:45:41 GMT
-Received: from [10.110.47.113] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 3 Jan 2023
- 15:45:40 -0800
-Message-ID: <54f36fe7-c590-3d5c-58dc-c5a02c412487@quicinc.com>
-Date:   Tue, 3 Jan 2023 15:45:27 -0800
+        Tue, 3 Jan 2023 18:46:26 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CE1393
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:46:25 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d9so17536336pll.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:46:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=euRwx6QF/OV6RpXiKr7BIdAc00ukRSAUiOkpbL7iCKU=;
+        b=XjKNtQpNLJ8aqo7xjHoll4+DdwZrxKRZXlYp6JqqXGXYzu6avm3dJLbOsMQuy89EdG
+         OIWBFWbEMo8JNz8qp4S5dPsIzqCFDBkzKAK65Fd3iUKktYjLfZgxonKbHUMSqauJ6Kyx
+         kSt3wX07D1moGHhO+wh5Wh7DHypEKw3VjuYS0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=euRwx6QF/OV6RpXiKr7BIdAc00ukRSAUiOkpbL7iCKU=;
+        b=WgWoUAH03MaeeyFG1fWWl6puGNk7O4qlNIOx/zfT0TWFgi+tluXzY+Wl3jJ8K3VPj8
+         A0sjcNift34lbkeFa7jof9HHU6l7Q6KW0dJl5v79+ADInOq8V70uoDNO45YHXQemBF1f
+         cAHLTGzYcYiVbRWOJmb2pcBFlCuntaP7Q0h009RtpWSqfnQ7j0YNP/Txg4QbMG+/4d2k
+         5z4yOYcy+QRYZh+dndez6/V5cE64sENypHMfza3OcVrpKPVNiwyEqpkYRbTQOi620vAV
+         h93plsqCgNz0igB4XkD+8BP2BFbkMBClO68xCU9AN4GgXYIEg26NV9OUnSge9qPjMIMT
+         Jj1w==
+X-Gm-Message-State: AFqh2kqKLYuWkfI2AxF+Fb+AEr7rkzVmaM/fPlq6mJnvfkiL21Sicz+a
+        5yP2DQlBLUjFb8whmlybpmKqEw==
+X-Google-Smtp-Source: AMrXdXv/JNePduRY0txUDdRCt5JhRSIR6DrhMpv75pkJ3d4K/8KqbSdJC4O5iyMFwg38vN8/tHD1Kg==
+X-Received: by 2002:a05:6a20:bf19:b0:af:dc62:8abd with SMTP id gc25-20020a056a20bf1900b000afdc628abdmr50713685pzb.0.1672789584914;
+        Tue, 03 Jan 2023 15:46:24 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a23-20020aa794b7000000b00582729b7032sm4793752pfl.97.2023.01.03.15.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 15:46:24 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     tytso@mit.edu
+Cc:     Kees Cook <keescook@chromium.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] ext4: Fix function prototype mismatch for ext4_feat_ktype
+Date:   Tue,  3 Jan 2023 15:46:20 -0800
+Message-Id: <20230103234616.never.915-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 04/14] sound: usb: card: Introduce USB SND vendor op
- callbacks
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>, Oliver Neukum <oneukum@suse.com>
-CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, <quic_plai@quicinc.com>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-5-quic_wcheng@quicinc.com>
- <80f92635-6d14-8ff3-17ac-de2e5b977947@suse.com> <87lemqxpet.wl-tiwai@suse.de>
- <ec632e64-2d9c-3f71-4fe7-e1c6acb81393@quicinc.com>
- <465bb512-2ea3-ebfc-4b21-7b493f019fc3@suse.com> <87v8lnrde2.wl-tiwai@suse.de>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <87v8lnrde2.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1630; h=from:subject:message-id; bh=EPPA4fAFZuWB5pdzvby7FTtYsOyM2XQPaphR85N5tMQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjtL5MF54NCvmDQY0Dd7rNnLX1L0GvWxEKudKalV75 pS6Nr92JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7S+TAAKCRCJcvTf3G3AJjndD/ 47MN61Dsc0UtJKECZp7gwKoY73Pw3qTWJzGhEO8zpglulKrzEkZeTmPqhCIiQ7U8fC9E6hyPMOvGkR JL3zryAjWLo9eGZSahA3Hd7tbnnwYZ/ZF2iKqEhnkRF/dnXpC5Pa1QozMpdidQ6rZO5/v9dnLQDW0w Xi98Dw0EjbPMvKQnM7L+uJoYyyiI7kBjsYAePwWSerOGNflmjK7jj+RLCAZgdRUMgPdvSSm/BCLYqg kDeTUx8FPOHowELmcRgHBexBBzvFKb65KXlUBj4hndW/bMUjLR2s9VTm09L3DeILJrL9iH6sNLRyjL ADKZtflw7g7rUxaQX3RIK5ML2pcj/272P3g/5uNtCyBkOkNgKWsAqedOsIP4goqWAI0QCMsKY3RIm2 7du4nSWz7sQdkpIIVqNJfHoKbtKKrkjwN552ikIhXKWsDOsjDzFzi0VbHikZiWupfdcX3Yl8JIeKvW BpVAP83s1pbJS54o4CwGMT+1M/K0iX1xNpYhaieiJfX6qePvsAdYLNmi2KmdDrPVNmDv7Lp8tCudP8 NKdrr8dUolvQoy3K9oBsuxGUcStGfPSaiMfyIhuAuGaPJbXjLMpTjkygqQBdEmRgYh3HSnPqeLNyQi EeXk5XyMYgH2WqJLhtBB1KTJuOLGoSuBDmmUvEPBF5znyJD3023rRY+4SY8w==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 94uUE7f83JPt0O_oswNAVd_rJb-Y--0T
-X-Proofpoint-ORIG-GUID: 94uUE7f83JPt0O_oswNAVd_rJb-Y--0T
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-03_07,2023-01-03_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 adultscore=0 priorityscore=1501 impostorscore=0
- spamscore=0 suspectscore=0 bulkscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301030200
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed.
 
-On 1/3/2023 4:49 AM, Takashi Iwai wrote:
-> On Tue, 03 Jan 2023 13:20:48 +0100,
-> Oliver Neukum wrote:
->>
->>
->>
->> On 30.12.22 08:10, Wesley Cheng wrote:
->>
->>> It may depend on how the offloading is implemented, but we do have a mechanism to force the audio stream off from the qc_usb_audio_offload. Regardless of if the UDEV is suspended first, or the USB backend, as long as we ensure that the offloading is disabled before entering suspend, I think that should be sufficient.
->>
->> You would presumably output garbage, if the UDEV is asleep but the backend is not.
->>
+ext4_feat_ktype was setting the "release" handler to "kfree", which
+doesn't have a matching function prototype. Add a simple wrapper
+with the correct prototype.
 
-As long as the stream is halted, i.e. the audio DSP doesn't execute 
-further transfers on the bus, there shouldn't be any noise/static that 
-will continue to be outputted.  When I mentioned that we have a 
-mechanism to force for the offloading to be disabled to the audio DSP 
-side, it will no longer submit any audio data to the USB bus.
+This was found as a result of Clang's new -Wcast-function-type-strict
+flag, which is more sensitive than the simpler -Wcast-function-type,
+which only checks for type width mismatches.
 
->>   
->>> The reset_resume() path is fine.  Bus reset is going to cause a disconnect() callback in the offload driver, in which we already have the proper handling for ensuring the offload path is halted, and we reject any incoming stream start requests.
->>
->> How? If we go the reset_resume() code path, we find that usb-audio does not make
->> a difference between regular resume() and reset_resume()
-> 
-> Note that, for USB audio, there is no much difference between resume()
-> and reset_resume(), especially about the PCM stream handling that is
-> the main target for the offload (the mixer isn't handled there).
-> And for the PCM, we just set the power state for UAC3, and that's
-> all.  All the rest is handled by the PCM core handler as usual.
-> 
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ fs/ext4/sysfs.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Sorry, I was under the impression that the USB SND class driver didn't 
-register a reset_resume() callback, which Takashi helped clarify that it 
-does indeed do.  (if no callback is registered, then USB interface is 
-re-binded in the resume path)  However, it doesn't explicitly treat the 
-reset_resume differently than a normal resume.
+diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
+index d233c24ea342..83cf8b5afb54 100644
+--- a/fs/ext4/sysfs.c
++++ b/fs/ext4/sysfs.c
+@@ -491,6 +491,11 @@ static void ext4_sb_release(struct kobject *kobj)
+ 	complete(&sbi->s_kobj_unregister);
+ }
+ 
++static void ext4_kobject_release(struct kobject *kobj)
++{
++	kfree(kobj);
++}
++
+ static const struct sysfs_ops ext4_attr_ops = {
+ 	.show	= ext4_attr_show,
+ 	.store	= ext4_attr_store,
+@@ -505,7 +510,7 @@ static struct kobj_type ext4_sb_ktype = {
+ static struct kobj_type ext4_feat_ktype = {
+ 	.default_groups = ext4_feat_groups,
+ 	.sysfs_ops	= &ext4_attr_ops,
+-	.release	= (void (*)(struct kobject *))kfree,
++	.release	= ext4_kobject_release,
+ };
+ 
+ void ext4_notify_error_sysfs(struct ext4_sb_info *sbi)
+-- 
+2.34.1
 
-For the offload path, we don't need to do anything special either - if 
-we have ensured that the stream was stopped in the suspend path. (to be 
-added) It would be up to the userspace to restart the ASoC PCM stream, 
-which would cause another stream request enable QMI command handshake to 
-happen before any transfers would start.
-
-One thing that I could add to protect the situation where the USB ASoC 
-backend is resumed before UDEV, is to check the chip->system_suspend 
-state.  Normally, the offload driver needs to ensure the bus is in U0 
-before starting the audio stream, but it is done using runtime PM:
-
-static int enable_audio_stream(struct snd_usb_substream *subs,
-				snd_pcm_format_t pcm_format,
-				unsigned int channels, unsigned int cur_rate,
-				int datainterval)
-{
-...
-	pm_runtime_barrier(&chip->intf[0]->dev);
-	snd_usb_autoresume(chip);
-
-In case we're in the PM resume path, I don't believe PM runtime can be 
-triggered to resume a device.  In this case, the snd_usb_autoresume() 
-would return w/o ensuring the USB SND device is fully exited from PM 
-suspend.  Although, this situation would be a corner case, as userspace 
-entities (userspace ALSA) are going to be unfrozen after kernel devices 
-are resumed, so most likely there should be no request to enable the 
-audio stream if kernel devices are still resuming.
-
-I don't see an issue with the sequence of UDEV being resumed before USB 
-backend.  In this case, the USB bus is ready to go, and able to handle 
-stream enable requests.
-
-Thanks
-Wesley Cheng
