@@ -2,94 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D18365BFFC
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A664965C05E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237433AbjACMiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 07:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
+        id S229584AbjACNAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjACMiu (ORCPT
+        with ESMTP id S230207AbjACNAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 07:38:50 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573502BF2;
-        Tue,  3 Jan 2023 04:38:48 -0800 (PST)
-Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NmXLl092KzJqsQ;
-        Tue,  3 Jan 2023 20:37:35 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 3 Jan
- 2023 20:38:45 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <rafael@kernel.org>, <srinivas.pandruvada@linux.intel.com>,
-        <jacob.jun.pan@linux.intel.com>, <gregkh@linuxfoundation.org>
-Subject: [PATCH] powercap: fix possible name leak in powercap_register_zone()
-Date:   Tue, 3 Jan 2023 20:57:26 +0800
-Message-ID: <20230103125726.681099-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 3 Jan 2023 08:00:32 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D0C1BA;
+        Tue,  3 Jan 2023 05:00:31 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id c5c15f71b261e711; Tue, 3 Jan 2023 14:00:30 +0100
+Received: from kreacher.localnet (unknown [213.134.163.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id A6ED2781239;
+        Tue,  3 Jan 2023 14:00:29 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "zh.nvgt@gmail.com" <zh.nvgt@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ACPI: Drop the custom_method debugfs interface
+Date:   Tue, 03 Jan 2023 14:00:29 +0100
+Message-ID: <5639784.DvuYhMxLoT@kreacher>
+In-Reply-To: <c26f6cbc705a939c31c6da96a8100c7e6a02d30c.camel@intel.com>
+References: <7499491.EvYhyI6sBW@kreacher> <c26f6cbc705a939c31c6da96a8100c7e6a02d30c.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.200
+X-CLIENT-HOSTNAME: 213.134.163.200
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeggdegiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeefudduuedtuefgleffudeigeeitdeufeelvdejgefftdethffhhfethfeljefgteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduieefrddvtddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeifedrvddttddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepiihhrdhnvhhgthesghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgv
+ lhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the error path after calling dev_set_name(), the device
-name is leaked. To fix this, calling dev_set_name() before
-device_register(), and call put_device() if it returns error.
-All the resources is released in powercap_release(), so it
-can return from powercap_register_zone() directly.
+On Tuesday, January 3, 2023 3:17:43 AM CET Zhang, Rui wrote:
+> On Mon, 2023-01-02 at 18:05 +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > 
+> > The ACPI custom_method debugfs interface is security-sensitive and
+> > concurrent access to it is broken [1].
+> > 
+> > Moreover, the recipe for preparing a customized version of a given
+> > control method has changed at one point due to ACPICA changes, which
+> > has not been reflected in its documentation, so whoever used it
+> > before
+> > has had to adapt an no problems with it have been reported.
+> > 
+> > The latter likely means that the number of its users is limited at
+> > best
+> > and attempting to fix the issues mentioned above is likely not worth
+> > the
+> > effort.  Moreover, if it gets broken in the process, the breakage may
+> > not
+> > be readily discovered, so deleting it altogheher appeares to be a
+> > better
+> > option.
+> > 
+> > Accordingly, drop custom_method along with its (outdated anyway)
+> > documentation.
+> > 
+> > Link: 
+> > https://lore.kernel.org/linux-acpi/20221227063335.61474-1-zh.nvgt@gmail.com/
+> > # [1]
+> > Reported-by: Hang Zhang <zh.nvgt@gmail.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  Documentation/firmware-guide/acpi/method-customizing.rst |   89 ----
+> > --------
+> 
+> Documentation/firmware-guide/acpi/index.rst
+> needs to be updated as well.
 
-Fixes: 75d2364ea0ca ("PowerCap: Add class driver")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/powercap/powercap_sys.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+Right, thanks!
 
-diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
-index 1f968353d479..e180dee0f83d 100644
---- a/drivers/powercap/powercap_sys.c
-+++ b/drivers/powercap/powercap_sys.c
-@@ -530,9 +530,6 @@ struct powercap_zone *powercap_register_zone(
- 	power_zone->name = kstrdup(name, GFP_KERNEL);
- 	if (!power_zone->name)
- 		goto err_name_alloc;
--	dev_set_name(&power_zone->dev, "%s:%x",
--					dev_name(power_zone->dev.parent),
--					power_zone->id);
- 	power_zone->constraints = kcalloc(nr_constraints,
- 					  sizeof(*power_zone->constraints),
- 					  GFP_KERNEL);
-@@ -555,9 +552,16 @@ struct powercap_zone *powercap_register_zone(
- 	power_zone->dev_attr_groups[0] = &power_zone->dev_zone_attr_group;
- 	power_zone->dev_attr_groups[1] = NULL;
- 	power_zone->dev.groups = power_zone->dev_attr_groups;
-+	dev_set_name(&power_zone->dev, "%s:%x",
-+					dev_name(power_zone->dev.parent),
-+					power_zone->id);
- 	result = device_register(&power_zone->dev);
--	if (result)
--		goto err_dev_ret;
-+	if (result) {
-+		put_device(&power_zone->dev);
-+		mutex_unlock(&control_type->lock);
-+
-+		return ERR_PTR(result);
-+	}
- 
- 	control_type->nr_zones++;
- 	mutex_unlock(&control_type->lock);
--- 
-2.25.1
+I've just sent a v2 of the patch with that fixed.
+
+
 
