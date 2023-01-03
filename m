@@ -2,69 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3362D65BB8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1D465BB8A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbjACIAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        id S233050AbjACIBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:01:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236915AbjACIAX (ORCPT
+        with ESMTP id S236951AbjACIAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:00:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4931D9F
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:00:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62773611E4
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3CCFC433EF;
-        Tue,  3 Jan 2023 08:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672732821;
-        bh=k+5wi5z9frX8sOYIkPjKZiglFoyuOXXDW+MWwVdUbPA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R5FKI09JvGgOigo3vzIz9sHQOHNRub6zl08HPrxrK4Mk6wZRiBo3oWrBdWy8KRAW/
-         q+/I8JGXse7e7bZu3gLM25doB8xjp3VIHoSU0fAln4SW/fprJ69Cp2b2SpwnHeh6e0
-         J8gRPt5ADquRhLVuRUNUPXoeyuwYy1QrwGJUTRZ+VCI9prDo3CrbLhBIh3fw3lVGqG
-         9Egvd0N9upyg0FPnoc58c1KsajFHiV3ELH8L38mu97CFM/LvPF97hrTG0jNozm3k5O
-         sa7PT+f9NB6K/0Rxfj5Njc41r5IlYiucbQS4ufFiL/4VoHf0wttmfNTNhCLgvsDpiZ
-         roD1MSB6g1BTg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pCcDr-0005fU-JS; Tue, 03 Jan 2023 09:00:35 +0100
-Date:   Tue, 3 Jan 2023 09:00:35 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steev Klimaszewski <steev@kali.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm/panel-edp: fix name for IVO product id 854b
-Message-ID: <Y7PgoyhKLKCLvgR8@hovoldconsulting.com>
-References: <20221231142721.338643-1-abel.vesa@linaro.org>
+        Tue, 3 Jan 2023 03:00:54 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02465CF7
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:00:50 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id z12so24028224qtv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:00:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LZUg7BSCdLfb7gu4C1vCLOOqdWzDawUGvWzZumrI/zw=;
+        b=hM7wt4k5vKwGl1AgvcjYkEdoeFMbqBFqPqswZVPq8hq6RidVI/mhAolXRhgZLPX5p6
+         IW8t8NX5KNuLJUa9iJTw/fiNBpnE1fMJ2GUnGbiPcPYj8Q/TpuHZyQ9rsVIEsEtYj+1s
+         8PPp14XLUHCsetlPHX9/aGPMABYVBHrzCCy3Yrz8IPPhSdKd8EKzi2VI/Tsvh6uIz+zP
+         L25DhfS7XRRUdpYWqwPD6OWFHpVvbELa9PZue8VxTptdzV8Olv7JCiF1dAs+E3GgM7DI
+         /uJSTb5hYqoxUwUNbCmCpBhMXN76BdhDdXhGT6oWkMRHfn5qAMzPK0l0Z5FYPByCejfO
+         E6pA==
+X-Gm-Message-State: AFqh2kqNdhfkRwraWeLrfQVU6DjiJqd34UVeOmL881OkKKsS7fdGRFqY
+        m5UwQjs6C+MrnHR2aLQ8qrF8QloBS4VQvg==
+X-Google-Smtp-Source: AMrXdXtx5h0s/uSmEvOhP61J/QK7g77mhJzG4u5rP1xjcamEqRAgtKaRd0ZCTWBWGPEumrQiRZgxow==
+X-Received: by 2002:ac8:7601:0:b0:3a8:199b:dcac with SMTP id t1-20020ac87601000000b003a8199bdcacmr56273152qtq.15.1672732849308;
+        Tue, 03 Jan 2023 00:00:49 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id u5-20020a05620a0c4500b006cfc1d827cbsm21719772qki.9.2023.01.03.00.00.48
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 00:00:48 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-4a0d6cb12c5so97453077b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:00:48 -0800 (PST)
+X-Received: by 2002:a81:17ca:0:b0:46f:bd6:957d with SMTP id
+ 193-20020a8117ca000000b0046f0bd6957dmr3032644ywx.383.1672732847900; Tue, 03
+ Jan 2023 00:00:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221231142721.338643-1-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221229075323.1394010-1-linmq006@gmail.com>
+In-Reply-To: <20221229075323.1394010-1-linmq006@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 Jan 2023 09:00:36 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWFyKA7nUojivvTwWcmxaiUQifRRB=Kn1q-qzmn20Xkuw@mail.gmail.com>
+Message-ID: <CAMuHMdWFyKA7nUojivvTwWcmxaiUQifRRB=Kn1q-qzmn20Xkuw@mail.gmail.com>
+Subject: Re: [PATCH] um: vector: Fix memory leak in vector_config
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 04:27:20PM +0200, Abel Vesa wrote:
-> The actual name is R133NW4K-R0.
-> 
-> Fixes: 0f9fa5f58c784 ("drm/panel-edp: add IVO M133NW4J-R3 panel entry")
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Hi Miaoqian,
 
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+On Thu, Dec 29, 2022 at 8:53 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+> kstrdup() return newly allocated copy of the string.
+> Call kfree() to release the memory when after use.
+>
+> Fixes: 49da7e64f33e ("High Performance UML Vector Network Driver")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+
+Thanks for your patch!
+
+> --- a/arch/um/drivers/vector_kern.c
+> +++ b/arch/um/drivers/vector_kern.c
+> @@ -765,6 +765,7 @@ static int vector_config(char *str, char **error_out)
+>
+>         parsed = uml_parse_vector_ifspec(params);
+>
+> +       kfree(params);
+
+Are you sure the memory pointed to by "params" is no longer used?
+"parsed" seems to contain pointers pointing to (parts of) the string
+pointed to by "params", so it cannot be freed.
+
+>         if (parsed == NULL) {
+>                 *error_out = "vector_config failed to parse parameters";
+>                 return -EINVAL;
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
