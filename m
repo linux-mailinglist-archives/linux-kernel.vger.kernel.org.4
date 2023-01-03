@@ -2,137 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F9D65C204
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C7465C208
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237777AbjACOei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S237935AbjACOgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:36:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjACOed (ORCPT
+        with ESMTP id S233197AbjACOgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:34:33 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6725EE27
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:34:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QMZBZ22IGBh45Cf/NuWC5djX29Cio7BfdtoICqFLw8c=; b=vzoZM0xwgbok6IYxVXqs12zdCr
-        TuabIQ9nU3oiOJcpn9227fxmFE4ePZADHDcPzbXP9D4grvwld0YCZER64IK63BKVAL5Nri8yfouF5
-        UozlfO+LfJiiOOCzwcuhQ0Ps85nz22Bii8JwmXzQW8TZ8xzxRI145iD+s2S50qh/ed/fZsjfhukqA
-        84NvaCAM9zCsi2EUdYd+esPEM1WXtvVCvi15lC30pD97myua40DT4pM/82lz/YSb781nVP3v28Qts
-        C5hg2a5MKZeQNYrm7Z+LdV3NhgU71wYvzsi2WgPF14ceGCYvTa6HYqdghaNekCBRPW2nt7hPI1NMv
-        60ptpCyA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35932)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pCiN2-0005QQ-2I; Tue, 03 Jan 2023 14:34:27 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pCiMz-00028E-7l; Tue, 03 Jan 2023 14:34:25 +0000
-Date:   Tue, 3 Jan 2023 14:34:25 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Hui Tang <tanghui20@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [bug-report] possible performance problem in ret_to_user_from_irq
-Message-ID: <Y7Q88aBpxfWRqzTe@shell.armlinux.org.uk>
-References: <7ecb8f3c-2aeb-a905-0d4a-aa768b9649b5@huawei.com>
- <Y7P+MjPNA6Tg8JBr@shell.armlinux.org.uk>
- <50a5ebdb-4107-26cc-a2f6-da551d99ff38@kernel.dk>
+        Tue, 3 Jan 2023 09:36:46 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEBAFCC5
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:36:44 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id z11so28191005ede.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 06:36:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=bQLJIF5vy6+GHX5o/6FOMmbiOn2O8W3BvocWFKR+0zs=;
+        b=HiU9qv2UwS+gm1ITFwOMhSvhztleGatSztz4iLC0dw9gNdgpguiOFoR5rf6tgfVk2i
+         CbW4Z5sLQsnFWGZlzjwlziX2EXI7R3yBSj6rpQo0fFuzwiFgRajFw2Ez9jhf+iZelvtM
+         hJS4MVcXCTO4/pCppR+TDsNJedxCzDx6OMihY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bQLJIF5vy6+GHX5o/6FOMmbiOn2O8W3BvocWFKR+0zs=;
+        b=Ag3/DJFQM748fsGplBqohDinF3RrqHVjp3Ng/4uotcrBf0JozMRNvcVMPc/pBGirUx
+         0OJ0O4qy0zCVqKcV5ysAanv5JHdvVE2CuKyEi2R3+N119S6KEoTDn4/LAYzyJExdz7lb
+         yaSAf0MJtORT1dJWdIxcYYGyYxZzEpYqS5sgOH8IKNzTPmNy01O/yccRQRmWz4iV7Rhc
+         YlJh4aQPbudS1GCfoXGdUapwsohDEUDi7Sgo7HJ1WyAstKUBtVSENG8Vg3TLXkCqWPIO
+         NwDH7a4ukk4CGC6xEb15yBMu8v+y2YL5kgmrTxngaND4xjaMRd+pFjC5l+tNCC1mkywQ
+         d3qQ==
+X-Gm-Message-State: AFqh2koTq0sUbk1LHmljuQL8TZ6R3Zop/yXAAiZRJc+J+t8VSHtI+gy1
+        uz7x3xCdDW2rLJ1/6HZTQ9SYAvYVRi3Dm/fZgp8=
+X-Google-Smtp-Source: AMrXdXuR86mJY8EWv7/0juuqHXymeKVYrcIuQfVtyPn4DMnXqCc0wQHCfiskr9QKwC+5foub/Pi4kg==
+X-Received: by 2002:a05:6402:1caa:b0:46f:a73d:367c with SMTP id cz10-20020a0564021caa00b0046fa73d367cmr34359462edb.34.1672756603397;
+        Tue, 03 Jan 2023 06:36:43 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:9789:8e2b:74ac:a9a0])
+        by smtp.gmail.com with ESMTPSA id p14-20020a05640243ce00b0048ebf8a5736sm877245edc.21.2023.01.03.06.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 06:36:42 -0800 (PST)
+Subject: [PATCH v3 0/8] Follow-up patches for uvc v4l2-compliance
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50a5ebdb-4107-26cc-a2f6-da551d99ff38@kernel.dk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGI9tGMC/43NwQ6CMAwG4FchOzvTlSHiyfcwHtgosGRsZpMlhv
+ DuNh696Kn52/xfN5EpOcriUm0iUXHZxcChPlTCzn2YSLqBs0BAhA5BJsoUBlm0R2nj8vCuD5akHg
+ dDejRDaxrBZdNnkibxbeZ6WL3n5ezyM6bX51lRPG4/3aIkyLOqT9qqBrEzVzunuLh1OcY0iTurBf
+ +TkKXWQqcRNADoL2nf9zeOgp1jDgEAAA==
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 03 Jan 2023 15:36:18 +0100
+Message-Id: <20220920-resend-v4l2-compliance-v3-0-598d33a15815@chromium.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2837; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=vKvmLcxuc2nhyZmIFds/cTOVNUVZGR27hg3cdx6vtU8=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtD1lvOQH9GQnmKx8nTiQPN27ataN1Lx8oOhVq//+
+ txFjF1WJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7Q9ZQAKCRDRN9E+zzrEiE64D/
+ 4u3lmLINT08iWDzuFNXp4oFu2i7pcPGED45veSMDpp2EHLvS/x92YUwn5jcMej1ucOvNfmfihgnPHf
+ JM849JwuWOOI63ZlNgwjaLiUD/A5O/ZF5RGQP5p46uBm3ZhvCXpO+FjnjGAqvNkjeqGkZ1HvJ7Lvu/
+ uYlcuQHCCd0fiptNDGsFxbRpaTkUpUeP4fq2s1cQoxrcRRD0R2J0apUOJDGsUDsmUETRnmbM8NDs+3
+ jqi+CMIwVzgNoWJ7MKrKqxa0qvohI1WxuahQW70FMbc903W9ANrziIFy0V39wXF9DQSKXVBnjzqXl/
+ N4w7jxVlW85cmCESpYLjnRjTPqfgIn74h+2DXdUPsZyTiX7brNFbVPOuGO7xMIegKrVdQ6TM+pobJW
+ r1M6QhB6BWcCp11Tw3LOxO1cJXh4h84MRK85IE9C2s3ejAr8b6kz4d0IPCYLikT4NidWSksMX1bg1z
+ Sl5ThJplSs+k0OtXG02trWrpRNIJzf0PJGIPipD1k+44bCsUhIK3B7j/cw5s9m35dI3t5iWUdW0s81
+ pjNTzZ6aPfTB+Y41x86IhDs8jed5gHxVegeoT5Ck5WU3Za8sjzCmemzpEskVbkNupDZXaWUjFrONAq
+ 5ff3OUz3HxdIeH/bShwoOuXEEz2Q7PRp7x8lVqMMRUvzGXtSjU1/DbUiIVIA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 07:25:26AM -0700, Jens Axboe wrote:
-> On 1/3/23 3:06?AM, Russell King (Oracle) wrote:
-> > On Mon, Dec 26, 2022 at 04:45:20PM +0800, Hui Tang wrote:
-> >> hi folks.
-> >>
-> >> I found a performance problem which is introduced by commit
-> >> 32d59773da38 ("arm: add support for TIF_NOTIFY_SIGNAL").
-> >> After the commit,  any bit in the range of 0..15 will cause
-> >> do_work_pending() to be invoked. More frequent do_work_pending()
-> >> invoked possible result in worse performance.
-> >>
-> >> Some of the tests I've done? as follows:
-> >> lmbench test			base		with patch
-> >> ./lat_ctx -P 1 -s 0  2		7.3167		11.04
-> >> ./lat_ctx -P 1 -s 16 2          8.0467		14.5367
-> >> ./lat_ctx -P 1 -s 64 2		7.8667		11.43
-> >> ./lat_ctx -P 1 -s 16 16		16.47		18.3667
-> >> ./lat_pipe -P 1			28.1671		44.7904
-> >>
-> >> libMicro-0.4.1 test		base		with patch
-> >> ./cascade_cond -E -C 200\
-> >>  -L -S -W -N "c_cond_1" -I 100	286.3333	358
-> >>
-> >> When I adjust test bit, the performance problem gone.
-> >> -	movs	r1, r1, lsl #16
-> >> +	ldr	r2, =#_TIF_WORK_MASK
-> >> +	tst	r1, r2
-> >>
-> >> Does anyone have a good suggestion for this problem?
-> >> should just test _TIF_WORK_MASK, as before?
-> > 
-> > I think it should be fine - but I would suggest re-organising the
-> > TIF definitions so that those TIF bits that shouldn't trigger
-> > do_work_pending are not in the first 16 bits.
-> > 
-> > Note that all four bits in _TIF_SYSCALL_WORK need to stay within
-> > an 8-bit even-bit-aligned range, so the value is suitable for an
-> > immediate assembly constant.
-> > 
-> > I'd suggest moving the TIF definitions for 20 to 19, and 4..7 to
-> > 20..23, and then 8 to 4.
-> 
-> Like this?
-> 
-> diff --git a/arch/arm/include/asm/thread_info.h b/arch/arm/include/asm/thread_info.h
-> index aecc403b2880..7f092cb55a41 100644
-> --- a/arch/arm/include/asm/thread_info.h
-> +++ b/arch/arm/include/asm/thread_info.h
-> @@ -128,15 +128,16 @@ extern int vfp_restore_user_hwstate(struct user_vfp *,
->  #define TIF_NEED_RESCHED	1	/* rescheduling necessary */
->  #define TIF_NOTIFY_RESUME	2	/* callback before returning to user */
->  #define TIF_UPROBE		3	/* breakpointed or singlestepping */
-> -#define TIF_SYSCALL_TRACE	4	/* syscall trace active */
-> -#define TIF_SYSCALL_AUDIT	5	/* syscall auditing active */
-> -#define TIF_SYSCALL_TRACEPOINT	6	/* syscall tracepoint instrumentation */
-> -#define TIF_SECCOMP		7	/* seccomp syscall filtering active */
-> -#define TIF_NOTIFY_SIGNAL	8	/* signal notifications exist */
-> +#define TIF_NOTIFY_SIGNAL	4	/* signal notifications exist */
->  
->  #define TIF_USING_IWMMXT	17
->  #define TIF_MEMDIE		18	/* is terminating due to OOM killer */
-> -#define TIF_RESTORE_SIGMASK	20
-> +#define TIF_RESTORE_SIGMASK	19
-> +#define TIF_SYSCALL_TRACE	20	/* syscall trace active */
-> +#define TIF_SYSCALL_AUDIT	21	/* syscall auditing active */
-> +#define TIF_SYSCALL_TRACEPOINT	22	/* syscall tracepoint instrumentation */
-> +#define TIF_SECCOMP		23	/* seccomp syscall filtering active */
-> +
->  
->  #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
->  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+This patchset contains the fixes for the comments on "v10 of Fix
+v4l2-compliance errors series". In particular to the patches
 
-Yep, LGTM, thanks.
+-uvcvideo: uvc_ctrl_is_accessible: check for INACTIVE
+-uvcvideo: improve error handling in uvc_query_ctrl()
 
+And the patch:
+-uvcvideo: Fix handling on Bitmask controls
+
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Hans Verkuil <hans.verkuil@cisco.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+---
+Changes in v3 (Thanks Laurent):
+- Add a new patch for refactoring __uvc_ctrl_add_mapping
+- Use standard names for menus
+  - Return error on uvc_mapping_get_menu_value
+  - Add const
+  - StyLe!
+- Do not return positive errors in uvc_query_ctrl()
+   - Improve commit message
+- improve error logging in uvc_query_ctrl()
+   - Fix comment
+   - Improve doc
+- Fix handling on Bitmask controls
+   - s/uvc/UVC
+   - Reflow comments to 80 chars
+   - Test with GET_RES first
+   - Remove clamp to (0,..)
+- Return -EACCES for Wrong state error
+   - Full rewrite of commit message
+- uvc_ctrl_is_accessible: check for INACTIVE
+   - Update commit message
+   - Remove try variable
+   - Update documentation
+- Implement mask for V4L2_CTRL_TYPE_MENU
+   - Include linux/bits.h
+- Link to v2: https://lore.kernel.org/r/20220920-resend-v4l2-compliance-v2-0-7c0942040004@chromium.org
+
+Changes in v2:
+- Include "Get menu names from framework series"
+  https://lore.kernel.org/r/20220920-standard-menues-v2-0-a35af3243c2f@chromium.org
+- Link to v1: https://lore.kernel.org/r/20220920-resend-v4l2-compliance-v1-0-81364c15229b@chromium.org
+
+---
+Hans Verkuil (2):
+      media: uvcvideo: Check for INACTIVE in uvc_ctrl_is_accessible()
+      media: uvcvideo: improve error logging in uvc_query_ctrl()
+
+Ricardo Ribalda (6):
+      media: uvcvideo: Return -EACCES for Wrong state error
+      media: uvcvideo: Do not return positive errors in uvc_query_ctrl()
+      media: uvcvideo: Fix handling on Bitmask controls
+      media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
+      media: uvcvideo: Refactor __uvc_ctrl_add_mapping
+      media: uvcvideo: Use standard names for menus
+
+ drivers/media/usb/uvc/uvc_ctrl.c   | 238 ++++++++++++++++++++++++++++---------
+ drivers/media/usb/uvc/uvc_driver.c |  10 +-
+ drivers/media/usb/uvc/uvc_v4l2.c   | 108 ++++++++++++-----
+ drivers/media/usb/uvc/uvc_video.c  |  15 +--
+ drivers/media/usb/uvc/uvcvideo.h   |   8 +-
+ include/uapi/linux/uvcvideo.h      |   4 +-
+ 6 files changed, 281 insertions(+), 102 deletions(-)
+---
+base-commit: 69b41ac87e4a664de78a395ff97166f0b2943210
+change-id: 20220920-resend-v4l2-compliance-4fdbe4fbd7b5
+
+Best regards,
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Ricardo Ribalda <ribalda@chromium.org>
