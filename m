@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14F165C547
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D17665C54D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbjACRob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:44:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
+        id S238129AbjACRpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjACRo2 (ORCPT
+        with ESMTP id S231270AbjACRps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:44:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EB52A5;
-        Tue,  3 Jan 2023 09:44:27 -0800 (PST)
+        Tue, 3 Jan 2023 12:45:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263E58E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:45:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC29AB81037;
-        Tue,  3 Jan 2023 17:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D47C433D2;
-        Tue,  3 Jan 2023 17:44:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B731A614A9
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27AA7C433EF;
+        Tue,  3 Jan 2023 17:45:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672767864;
-        bh=LckIA+Gz2HvlJFTUCOOcP66kxq0hG8yz1WKdpVjE/xw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rLEnW9wGp3Z6Q59S+JwrZph3YhZJJVqowPqSQECJuDE53pVqR/Sj0YqQz83zB2pUZ
-         ZbkfXfocDWExQhS3inMdUczLRARUe1uRPhv1pTUPdSRnG8TsIAUtUywxr3sr4YHHlw
-         lyxc4zcrcw9ngl/94/71H4KNflC5V3CAQIWzX9D+SXYgLoQgLiCtHHyUxMQf5VRkg+
-         +U+1wOq7+laGbKtBvXTanpclz8SXgPneLrrqey3/x/j26PvxByRzmp9y321SFi5dz4
-         WO5Xt28gURXGYgIhhCFMgvTjhUDWKbDu+Ub6HuavuP8YYAIPK/THmyS1asBEZ+2lNC
-         fMf8njjTLVF9w==
-Date:   Tue, 3 Jan 2023 17:44:17 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [RFC PATCH 12/14] sound: soc: qcom: qusb6: Ensure PCM format is
- supported by USB audio device
-Message-ID: <Y7RpcfWG5yrd6J3X@sirena.org.uk>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-13-quic_wcheng@quicinc.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hij50yuqfbUKxTCY"
-Content-Disposition: inline
-In-Reply-To: <20221223233200.26089-13-quic_wcheng@quicinc.com>
-X-Cookie: So many men
+        s=k20201202; t=1672767946;
+        bh=3H6ZMjrHwXOXpPIiCTPQRckd0GNsBoWDroI24tfL8jo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g+4JQKE3Y98/Rjt49s2XeO4S875QW9jEuAJdtduU5js9tpaFrXSyM1xuyXsPrTDz3
+         /dGj5CevpXiFC93nlr9aqQPRt8yTjd9+A0KFq7vGTuLmWxbE9oYzOI/qwwEZaIKa3p
+         kW5CbCTrSMyRXtKlv+bNxtipTmuwpSm1CprXAJCkCss1aSZr9oHHioZrXNnAHFhMI6
+         zje1bK9xc/38TQtYYLqkXT/BZ2WULexizhgxJlZ4joVAdlbZP5hYd8wpR9cQIEsGgH
+         jW2XFtFk63cJ0bZac6UN2EJzCWS145CRZhaqSyQa1M81f5ItQ3qiFRu6nYg703uuia
+         9ji6DOo1hv0eQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pClM7-00GZvp-SC;
+        Tue, 03 Jan 2023 17:45:44 +0000
+Date:   Tue, 03 Jan 2023 17:45:43 +0000
+Message-ID: <86v8ln7bqw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>
+Subject: Re: Query about IPI as NMI (pseudo-NMI) support patches
+In-Reply-To: <a20a9592-05e7-c529-5ab1-d7d52fffa59a@quicinc.com>
+References: <5bed08c5-8663-4e68-27b4-8b6d3957a880@quicinc.com>
+        <86zgb07tfs.wl-maz@kernel.org>
+        <a20a9592-05e7-c529-5ab1-d7d52fffa59a@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_mojha@quicinc.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,36 +66,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 03 Jan 2023 16:45:04 +0000,
+Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+> 
+> Hi,
+> 
+> Thanks for your reply.
+> 
+> On 1/2/2023 10:41 PM, Marc Zyngier wrote:
+> > Hi Mukesh,
+> > 
+> > On Mon, 02 Jan 2023 16:44:59 +0000,
+> > Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+> >> 
+> >> Hi Marc,
+> >> 
+> >> I was looking similar support mentioned in below patch series.
+> >> 
+> >> https://lore.kernel.org/lkml/CAFA6WYO0+LQ=mB1spCstt0cNZ0G+sZu_+Wrv6BKSeXqF5SRq4A@mail.gmail.com/#t
+> >> 
+> >> Wanted to check if there is chance of these patches to land in
+> >> mainline ?
+> > 
+> > I certainly have no intention to merge it as is, specially as there is
+> > no good usage model for it other than "but think of debug!".
+> > 
+> > We have exactly *one* SGI left. If we are going to lose it over such a
+> > feature, I'd want a description of how we are going to share it
+> > between potential users, and how we claw some currently used SGIs
+> > back.
+> 
+> 
+> But, looks like patch will fail if SGI is not available.
+> 
+> https://lore.kernel.org/lkml/1604317487-14543-4-git-send-email-sumit.garg@linaro.org/
+> 
+> 
+> 
+> set_smp_ipi_range(base_sgi, 8);
+> 
+> +	if (n > nr_ipi)
+> +		set_smp_dynamic_ipi(ipi_base + nr_ipi);
+> +
+> 
+> So, static SGI allocation still has higher priority than dynamic
+> one.  Would you be accepting if we keep it under some
+> CONFIG_ARM64_IPI_NMI_DEBUG ?
 
---hij50yuqfbUKxTCY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+But why should this thing have priority over other potential features?
+As I said above, there are two requirements:
 
-On Fri, Dec 23, 2022 at 03:31:58PM -0800, Wesley Cheng wrote:
+- being able to share a single NMI SGI amongst multiple users
 
-> Check for if the PCM format is supported during the hw_params callback.  If
-> the profile is not supported then the userspace ALSA entity will receive an
-> error, and can take further action.
+- being able to free existing SGIs in case we absolutely need an SGI
+  for some other purposes
 
-Ideally we'd wire up constraints for this but that gets complicated with
-DPCM so it's probably disproportionate effort.  Otherwise other than the
-subject lines not using ASoC on this and the previous change I don't
-have any issues that other people didn't raise, but then most of the
-complication is in the USB bits.
+In both cases, this is about making the SGI space scale *beyond* the 8
+possible interrupts that we have. This needs to be solved to get
+something like this in.
 
---hij50yuqfbUKxTCY
-Content-Type: application/pgp-signature; name="signature.asc"
+And I don't think hiding this behind an obscure "debug" configuration
+option that will get abused with out of tree stuff is a good move.
+Quite the opposite.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO0aXAACgkQJNaLcl1U
-h9D1xQf+LwgGcwM55I9NHiwQ3ebZ4m7VhjDLgWvKR107h7Duq8GctdogaoB5LvTP
-O9xWQH1QhvotKZf1j+Wn0NoYxROayG9QPwht4tIGzQmAhgq72kfiSZ6IiETIW+IP
-K58dG61EXGWBLniqpXQNpxnqL1XeW9wHfSwuVOqN1Or0XoOCyjGupDURXP4Uau6z
-AJ5cGhqW3cd2xobybkD7asnAvDniZokvV0sreSFRYy4a/vNm4cVe5WRhibUh+S7K
-K7akWpFDvsOAobbQvGkEkeCvltQMkZxYbtm6av1vQBI6j7kQ5WXw9G72a2AX8VbR
-I8ILJBI6jfDXIjH8Fnc/L23TEnwfPw==
-=p0V6
------END PGP SIGNATURE-----
+	M.
 
---hij50yuqfbUKxTCY--
+-- 
+Without deviation from the norm, progress is not possible.
