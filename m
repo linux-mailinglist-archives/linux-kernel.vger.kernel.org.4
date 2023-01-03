@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C3E65C628
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F8365C613
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238859AbjACSZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S238852AbjACSYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:24:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238892AbjACSZC (ORCPT
+        with ESMTP id S238826AbjACSY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:25:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63B613EBF
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:23:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672770183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tt+pdRFwqN8VH88+PGfu+O8CtSAML4FLnYQjY76G08c=;
-        b=b3Y6f9iAYvpSxvDVxjtsWJs2A99IqNS13jY0X6vTOe8qnHCTyc5DmpFgRvt0wiELJhnSBI
-        PIFqYZbbLZZlLKn5BYWwuiQaR9UR18dBhsQmHI5JHVpa1oHURqoTaJcSJacycoPwwGfx4B
-        Vksoj+LHAAaI0EDPdxWKWSqeIXS/Mlo=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-606-gDRIZObwMmuM-9zAGfcK_A-1; Tue, 03 Jan 2023 13:23:02 -0500
-X-MC-Unique: gDRIZObwMmuM-9zAGfcK_A-1
-Received: by mail-qt1-f199.google.com with SMTP id fp22-20020a05622a509600b003ab920c4c89so6547161qtb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:23:02 -0800 (PST)
+        Tue, 3 Jan 2023 13:24:29 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B0413D4C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:24:25 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id i20so25168167qtw.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:24:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gyzUkUkRXrWbqnLogkn/YRgVffpdv0ujzVAsh7a/y2U=;
+        b=PeHOAO+KzAkwqiZ5CIjYlPexV4+nLZ+6gAwssCwloHRSHxpFDT34fBE7TkPvC2+Zjm
+         T5XFy06pckwsXDQ12aOxAR2xOZAAFXCxFa9lEeFtPvnzrnVJe2yVd/gRHmbnCvJ8Gs2q
+         n5ePob1ghM++0Gd6+hwa73lRqWY+rsP3+Ptb4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tt+pdRFwqN8VH88+PGfu+O8CtSAML4FLnYQjY76G08c=;
-        b=zT6UJ8dfDSXNA5zzefWosH8zJOljWvKDvfgG1yqGLBU3toWZw0ktuOp+V3gcSd8a6F
-         ZVo+vzQ+24Gip7vQdTcwKjohaZxkIRtTVoEkxlmd4n+WSVUP9bTBunoXgVrbWch1PDki
-         aEZ4RDX1vSeDF9ijUGIb1B4dd4YZktPb75k5nUJKvDUS0DkZCUMQdYcr4dy1dLL7Eqtp
-         O+hBMBnFzJReOTHR0FEBoakwxaRQjSDgA41snYFSSK6vUBZYhd8dYOPw2o6yZ4xyyvzf
-         7EqAjjUNwKkmrARi3XWJ6k5BN5wP0vIKMzi318Ol6a/Nfh4AJIQaCRC208RIQIfra5bD
-         uoWg==
-X-Gm-Message-State: AFqh2krOig/Tsdd9GzrSfnpyjEk8J/8FMS5P+ikvBXYNJo8BvwJbx1pA
-        4+1Vglozk0x1iy3jEH9vg19XNsj/rzenfFVBUfBkUkOSChccPb/6HFBMzS6QVv8rVRfiGByLe8Q
-        gD/Yz4bLAfeOQONgeAh3NcxAN
-X-Received: by 2002:ac8:7598:0:b0:3a5:63ef:cf4e with SMTP id s24-20020ac87598000000b003a563efcf4emr68534226qtq.16.1672770182230;
-        Tue, 03 Jan 2023 10:23:02 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXujwLFY/CRb243+DbBgit9aoC27M7uLVbd8/5ea/dPxHl86nTLOIaT52IuagtOHBBdSQJ8RLg==
-X-Received: by 2002:ac8:7598:0:b0:3a5:63ef:cf4e with SMTP id s24-20020ac87598000000b003a563efcf4emr68534207qtq.16.1672770182018;
-        Tue, 03 Jan 2023 10:23:02 -0800 (PST)
-Received: from x1.. (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id t13-20020a05620a450d00b006fba0a389a4sm22819675qkp.88.2023.01.03.10.22.59
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gyzUkUkRXrWbqnLogkn/YRgVffpdv0ujzVAsh7a/y2U=;
+        b=tuEr8ZUHTp6H6nD1A5eN8zbSUedW3fxTJxrJ8kpuvJSV3ulW4rKMiJehEt+ZqL4oWB
+         N9Nuh1aygCmOtfIk8ZiyHXvIVyDTmEtRAbLhlrH544WW0xPPUKJYHeVtVDQKAJ8T5CNP
+         iRU8kInADkHjwTWRiqMDse9Kt1N/xqeJHTfEoHxHo3ldQypwMJTvBus/gRJS0P2qgOrz
+         Q+dB3rHZ4im9gyBXQIpcCHMdxpPlWS9AOpDvPJ0jMENJQppIMwyWDqeqF0EMQZLjqD3g
+         OQPQaK/ppK1C4+jkltxObUaXl9wVGgrenpitJa197zqYZZTlM4ZJuENqUc+SU3H53Bth
+         gwtw==
+X-Gm-Message-State: AFqh2krWY13u2UWevGk6Bvxnms0ZkLRMXiBFyZeTYnarBTcYkHO2G0Yd
+        5dz9MUMoSkHhZRcQI+5PNH5NbA==
+X-Google-Smtp-Source: AMrXdXul9oA+pYoIrGwSof8bvXuSYPQIF8PvW/t01f3pc3Rc3QgzAMbTE3o+cWaad98PHcO+FNiRFA==
+X-Received: by 2002:ac8:534c:0:b0:3a9:8183:6a04 with SMTP id d12-20020ac8534c000000b003a981836a04mr72845793qto.54.1672770264535;
+        Tue, 03 Jan 2023 10:24:24 -0800 (PST)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id u2-20020ac80502000000b003a81eef14efsm19111867qtg.45.2023.01.03.10.24.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 10:23:01 -0800 (PST)
-From:   Brian Masney <bmasney@redhat.com>
-To:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     quic_shazhuss@quicinc.com, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, johan+linaro@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
-        echanude@redhat.co
-Subject: [PATCH v4 10/10] arm64: dts: qcom: sc8280xp: add rng device tree node
-Date:   Tue,  3 Jan 2023 13:22:29 -0500
-Message-Id: <20230103182229.37169-11-bmasney@redhat.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230103182229.37169-1-bmasney@redhat.com>
-References: <20230103182229.37169-1-bmasney@redhat.com>
+        Tue, 03 Jan 2023 10:24:23 -0800 (PST)
+Date:   Tue, 3 Jan 2023 18:24:23 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>, linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>, stable@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org
+Subject: Re: [PATCH] torture: Fix hang during kthread shutdown phase
+Message-ID: <Y7Ry1yTT/mltqSUI@google.com>
+References: <20230101061555.278129-1-joel@joelfernandes.org>
+ <20230102164310.2olg7xhwwhzmzg24@offworld>
+ <20230103180404.GA4028633@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-type: text/plain
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <20230103180404.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,WEIRD_PORT autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,36 +74,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the necessary device tree node for qcom,prng-ee so we can use the
-hardware random number generator. This functionality was tested on a
-SA8540p automotive development board using kcapi-rng from libkcapi.
+On Tue, Jan 03, 2023 at 10:04:04AM -0800, Paul E. McKenney wrote:
+> On Mon, Jan 02, 2023 at 08:43:10AM -0800, Davidlohr Bueso wrote:
+> > On Sun, 01 Jan 2023, Joel Fernandes (Google) wrote:
+> > 
+> > > During shutdown of rcutorture, the shutdown thread in
+> > > rcu_torture_cleanup() calls torture_cleanup_begin() which sets fullstop
+> > > to FULLSTOP_RMMOD. This is enough to cause the rcutorture threads for
+> > > readers and fakewriters to breakout of their main while loop and start
+> > > shutting down.
+> > > 
+> > > Once out of their main loop, they then call torture_kthread_stopping()
+> > > which in turn waits for kthread_stop() to be called, however
+> > > rcu_torture_cleanup() has not even called kthread_stop() on those
+> > > threads yet, it does that a bit later.  However, before it gets a chance
+> > > to do so, torture_kthread_stopping() calls
+> > > schedule_timeout_interruptible(1) in a tight loop. Tracing confirmed
+> > > this makes the timer softirq constantly execute timer callbacks, while
+> > > never returning back to the softirq exit path and is essentially "locked
+> > > up" because of that. If the softirq preempts the shutdown thread,
+> > > kthread_stop() may never be called.
+> > > 
+> > > This commit improves the situation dramatically, by increasing timeout
+> > > passed to schedule_timeout_interruptible() 1/20th of a second. This
+> > > causes the timer softirq to not lock up a CPU and everything works fine.
+> > > Testing has shown 100 runs of TREE07 passing reliably, which was not the
+> > > case before because of RCU stalls.
+> > > 
+> > > Cc: Paul McKenney <paulmck@kernel.org>
+> > > Cc: Frederic Weisbecker <fweisbec@gmail.com>
+> > > Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > Cc: <stable@vger.kernel.org> # 6.0.x
+> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > 
+> > Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> 
+> Queued for further review and testing, thank you all!
+> 
+> One thing still puzzles me.  Assuming HZ=1000 and given 16 CPUs, each
+> timer hander must have consumed many tens of microseconds in order
+> to keep the system busy, which seems a bit longer than it should be.
+> Or am I underestimating the number of tasks involved?
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
-No changes in v4
+Here are the traces between successive calls to process_timeout() which is the timer callback handler:
 
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+[ 1320.444210]   <idle>-0         0dNs.. 314229620us : __run_timers: Calling timerfn 5: process_timeout
+[ 1320.444215]   <idle>-0         0dNs.. 314229620us : sched_waking: comm=rcu_torture_fak pid=145 prio=139 target_cpu=008
+[ 1320.463393]   <idle>-0         7d.... 314229655us : sched_switch: prev_comm=swapper/7 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_wri next_pid=144 next_prio=120
+[ 1320.478870] rcu_tort-144       7d.... 314229658us : sched_switch: prev_comm=rcu_torture_wri prev_pid=144 prev_prio=120 prev_state=D ==> next_comm=swapper/7 next_pid=0 next_prio=120
+[ 1320.494324]   <idle>-0         0dNs.. 314229738us : __run_timers: Calling timerfn 6: process_timeout
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 7f316c3918bd..b713c0126164 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1626,6 +1626,13 @@ spi15: spi@a9c000 {
- 			};
- 		};
- 
-+		rng: rng@10d3000 {
-+			compatible = "qcom,prng-ee";
-+			reg = <0 0x010d3000 0 0x1000>;
-+			clocks = <&rpmhcc RPMH_HWKM_CLK>;
-+			clock-names = "core";
-+		};
-+
- 		pcie4: pcie@1c00000 {
- 			device_type = "pci";
- 			compatible = "qcom,pcie-sc8280xp";
--- 
-2.39.0
+It appears the time delta in the above occurrence is 118 micro seconds
+between 2 timer callbacks. It does appear to be doing a cross-CPU wake up.
+Maybe that adds to the long time?
+
+Here are the full logs with traces (in case it helps, search for "=D" for the
+D-state sched_switch event before the "panic now" trace happens):
+http://box.joelfernandes.org:9080/job/rcutorture_stable/job/linux-6.0.y/26/artifact/tools/testing/selftests/rcutorture/res/2022.12.31-23.04.42/TREE07.2/console.log
+
+thanks,
+
+ - Joel
 
