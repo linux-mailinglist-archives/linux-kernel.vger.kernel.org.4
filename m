@@ -2,78 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D8E65BDF6
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4002E65BE05
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjACKYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S232990AbjACK1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:27:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjACKYl (ORCPT
+        with ESMTP id S233310AbjACK13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:24:41 -0500
-Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D476CF597;
-        Tue,  3 Jan 2023 02:24:38 -0800 (PST)
-Received: from myt6-65ee53fe8ed8.qloud-c.yandex.net (myt6-65ee53fe8ed8.qloud-c.yandex.net [IPv6:2a02:6b8:c12:1d8e:0:640:65ee:53fe])
-        by forward500c.mail.yandex.net (Yandex) with ESMTP id 91D055EB13;
-        Tue,  3 Jan 2023 13:24:28 +0300 (MSK)
-Received: by myt6-65ee53fe8ed8.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id ROTZMa0ZMGk1-Nd5t1DAM;
-        Tue, 03 Jan 2023 13:24:28 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skif-web.ru; s=mail; t=1672741468;
-        bh=Htu8XEzBUxxl6I2Gtq9JSZxi+WwMB2ca8r0VPmnTRUw=;
-        h=Message-ID:Subject:References:To:From:In-Reply-To:Cc:Date;
-        b=kQ157ioro3rrM9veYvSdWGEbX1HSxsVNLE5wsR8kQgX4gSUXfFwdHI5d8j5dDRWzh
-         Sl6PH00T+L2gj/EddRXuUKzkFwoLuMdTyxDtKZ7WI3EcGjRyPgsnuIxL4AHwA5NDbH
-         Cp5LH/A8P3axuoZw88JfvVVmHusuXB8R9XQERs08=
-Authentication-Results: myt6-65ee53fe8ed8.qloud-c.yandex.net; dkim=pass header.i=@skif-web.ru
-Date:   Tue, 3 Jan 2023 13:24:26 +0300
-From:   Alexey Lukyachuk <skif@skif-web.ru>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>
-Subject: Re: [Intel-gfx] [PATCH v2] drm/i915: dell wyse 3040 shutdown fix
-Message-ID: <20230103132426.0c6d144f@alexey-Swift-SF314-42>
-In-Reply-To: <87a630ylg5.fsf@intel.com>
-References: <20221225184413.146916-1-skif@skif-web.ru>
-        <20221225185507.149677-1-skif@skif-web.ru>
-        <Y6sfvUJmrb73AeJh@intel.com>
-        <20221227204003.6b0abe65@alexey-Swift-SF314-42>
-        <20230102165649.2b8e69e3@alexey-Swift-SF314-42>
-        <87a630ylg5.fsf@intel.com>
+        Tue, 3 Jan 2023 05:27:29 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A951510AA;
+        Tue,  3 Jan 2023 02:27:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5kukGlDFMSVA3hFPcBY5jEpdLjtGj3Dwb3Kj2ab+XKA=; b=ie5QquIbDqicHFURbmXb6WUsmw
+        NZvGSKX0/By0EFHDK5VxPEqe3mzTrHLKxLfdSrh5PF1oLA7jBHlrSySJW/gIm650pUZr7VjWueQpm
+        /sExjorFqiPboDwQOB9tZ+O52KwBTgR4BLg5t8AmwFOG3SL6ydWkEJgf51xA2Mc4gCF+hJ4fKNsT7
+        sgDcHaOyg9KJmG5O4J1TzcT+kHnZ5uP//nt712trd5IM1DtmYisnkPaH20knWxZ9+UGjI/cHVel0S
+        /CRU305Sbox5JIxnw/Qq+5PQ2vHoG46wGZXDYqZGhKsnUq0PzUsdmMtJ6zNdlIE9vy4TxehQJWVnF
+        NUzaLjlg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35914)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pCeVu-0005DT-GP; Tue, 03 Jan 2023 10:27:22 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pCeVs-0001z2-QU; Tue, 03 Jan 2023 10:27:20 +0000
+Date:   Tue, 3 Jan 2023 10:27:20 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Michael Walle <michael@walle.cc>, Xu Liang <lxu@maxlinear.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next v2 1/2] net: phy: allow a phy to opt-out of
+ interrupt handling
+Message-ID: <Y7QDCJyyJQBoaGl4@shell.armlinux.org.uk>
+References: <20221228164008.1653348-1-michael@walle.cc>
+ <20221228164008.1653348-2-michael@walle.cc>
+ <f547b3b9-4c8f-b370-471a-0a7b5f025e50@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f547b3b9-4c8f-b370-471a-0a7b5f025e50@gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NO_DNS_FOR_FROM,SPF_HELO_NONE,
-        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 03 Jan 2023 12:14:02 +0200
-Jani Nikula <jani.nikula@linux.intel.com> wrote:
-
-> On Mon, 02 Jan 2023, Alexey Lukyachuk <skif@skif-web.ru> wrote:
-> > Regarding to your question about fdo gitlab, I went to do it.
+On Wed, Dec 28, 2022 at 08:49:35AM -0800, Florian Fainelli wrote:
 > 
-> What's the URL for the issue?
 > 
-> BR,
-> Jani.
+> On 12/28/2022 8:40 AM, Michael Walle wrote:
+> > Until now, it is not possible for a PHY driver to disable interrupts
+> > during runtime. If a driver offers the .config_intr() as well as the
+> > .handle_interrupt() ops, it is eligible for interrupt handling.
+> > Introduce a new flag for the dev_flags property of struct phy_device, which
+> > can be set by PHY driver to skip interrupt setup and fall back to polling
+> > mode.
+> > 
+> > At the moment, this is used for the MaxLinear PHY which has broken
+> > interrupt handling and there is a need to disable interrupts in some
+> > cases.
+> > 
+> > Signed-off-by: Michael Walle <michael@walle.cc>
+> > ---
+> >   drivers/net/phy/phy_device.c | 7 +++++++
+> >   include/linux/phy.h          | 2 ++
+> >   2 files changed, 9 insertions(+)
+> > 
+> > diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+> > index 716870a4499c..e4562859ac00 100644
+> > --- a/drivers/net/phy/phy_device.c
+> > +++ b/drivers/net/phy/phy_device.c
+> > @@ -1487,6 +1487,13 @@ int phy_attach_direct(struct net_device *dev, struct phy_device *phydev,
+> >   	phydev->interrupts = PHY_INTERRUPT_DISABLED;
+> > +	/* PHYs can request to use poll mode even though they have an
+> > +	 * associated interrupt line. This could be the case if they
+> > +	 * detect a broken interrupt handling.
+> > +	 */
+> > +	if (phydev->dev_flags & PHY_F_NO_IRQ)
+> > +		phydev->irq = PHY_POLL;
 > 
+> Cannot you achieve the same thing with the PHY driver mangling phydev->irq
+> to a negative value, or is that too later already by the time your phy
+> driver's probe function is running?
+> 
+> > +
+> >   	/* Port is set to PORT_TP by default and the actual PHY driver will set
+> >   	 * it to different value depending on the PHY configuration. If we have
+> >   	 * the generic PHY driver we can't figure it out, thus set the old
+> > diff --git a/include/linux/phy.h b/include/linux/phy.h
+> > index 71eeb4e3b1fd..f1566c7e47a8 100644
+> > --- a/include/linux/phy.h
+> > +++ b/include/linux/phy.h
+> > @@ -82,6 +82,8 @@ extern const int phy_10gbit_features_array[1];
+> >   #define PHY_POLL_CABLE_TEST	0x00000004
+> >   #define MDIO_DEVICE_IS_PHY	0x80000000
+> > +#define PHY_F_NO_IRQ		0x80000000
+> 
+> Kudos for using the appropriate namespace for dev_flags :)
 
-I have not submited issue in bug tracker because I found solution in git.
-("Before filing the bug, please try to reproduce your issue with the 
-latest kernel. Use the latest drm-tip branch from 
-http://cgit.freedesktop.org/drm-tip and build as instructed on 
-our Build Guide.")
+But eww for placement.
 
-Should I do it?
+PHY_IS_INTERNAL, PHY_RST_AFTER_CLK_EN, PHY_POLL_CABLE_TEST and
+MDIO_DEVICE_IS_PHY are all used for the MDIO driver's flags
+member.
+
+This new flag is used for the .dev_flags of phy_device - I feel
+that it should be separated from the above definitions. I also
+think it could do with a comment, because it's not obvious for
+future changes that PHY_F_NO_IRQ is used with .dev_flags.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
