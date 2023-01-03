@@ -2,102 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC7365C427
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC1B65C429
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237968AbjACQph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S238092AbjACQpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237907AbjACQpf (ORCPT
+        with ESMTP id S237978AbjACQps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:45:35 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09B8DA0
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:45:34 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:f1ca:ff0d:9dea:806e])
-        by michel.telenet-ops.be with bizsmtp
-        id 4GlY2900w2YHDVW06GlYRb; Tue, 03 Jan 2023 17:45:33 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pCkPs-00203S-LF; Tue, 03 Jan 2023 17:45:32 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pCkPs-001TJk-68; Tue, 03 Jan 2023 17:45:32 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] clk: microchip: mpfs-ccc: Use devm_kasprintf() for allocating formatted strings
-Date:   Tue,  3 Jan 2023 17:45:30 +0100
-Message-Id: <f904fd28b2087d1463ea65f059924e3b1acc193c.1672764239.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Tue, 3 Jan 2023 11:45:48 -0500
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F671146C;
+        Tue,  3 Jan 2023 08:45:46 -0800 (PST)
+Received: by mail-io1-f42.google.com with SMTP id h6so16844931iof.9;
+        Tue, 03 Jan 2023 08:45:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q1rae2sovsy4pVfWNcl3s6hzHd+0nxeCVKITXKTuZ3A=;
+        b=SwWWixmSvpl7f59doik++DBsw/B6PQpBlhuTApcJVcrb94mOS4CMZ6sVrrtg0hcM1c
+         iBCylW46uqohLWqLtjrnXuU1h/8p5PcxJltLP7D6AZ4QfmMWlPoOxNIMpPJAPtHcXpCn
+         6r4iwFzY15Liekobp8pAhAycdhcKFKUSXZ0hIpuEPHl3sLg5SsNdyBkCentkbuLKrWKL
+         MTwF5b6WROyyHAeHRclqrUDSbvrHHvGXOd9q2Oob4P7ah7V05p68je6oTmkOHm/qZF/2
+         iSdKCXTvKfSr4Z3KhH7bGJGG/1tkz7pnaPlFAcSSgYNRhaQMBsekOSVBi9AMuNdJLWOQ
+         vhEg==
+X-Gm-Message-State: AFqh2kpO3P+LyyjElmS+pfU7iUFysgp3RzXfnc+8GUSsV+0EGG2vcuis
+        Pr11KOiGLbzoMeqjj3wTM+/r4an0YXs2upghtt1keVfGCik=
+X-Google-Smtp-Source: AMrXdXtHKgaYWT2qEMFhluIo+RK1qYHhyBBIM/vJuc9zfTT/hZCAkFH1zyiZoKOtnb/4inv4dtr/1WEPR79q1mqyJgk=
+X-Received: by 2002:a02:6005:0:b0:38a:3421:f2cb with SMTP id
+ i5-20020a026005000000b0038a3421f2cbmr2988404jac.308.1672764345961; Tue, 03
+ Jan 2023 08:45:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221230102627.2410847-1-tmricht@linux.ibm.com> <Y7L5T2IHdovfLgWp@kernel.org>
+In-Reply-To: <Y7L5T2IHdovfLgWp@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 3 Jan 2023 08:45:34 -0800
+Message-ID: <CAM9d7ch98dRk85DYF-okD4_VsU_A+EkkVOkW1-1X7GMLao0mwg@mail.gmail.com>
+Subject: Re: [PATCH] perf lock: Fix core dump in command perf lock contention
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In various places, string buffers of a fixed size are allocated, and
-filled using snprintf() with the same fixed size, which is error-prone.
+Hi Arnaldo,
 
-Replace this by calling devm_kasprintf() instead, which always uses the
-appropriate size.
+On Mon, Jan 2, 2023 at 7:33 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+>
+> Em Fri, Dec 30, 2022 at 11:26:27AM +0100, Thomas Richter escreveu:
+> > The test case perf lock contention dumps core on s390. Run the following
+> > commands:
+> >  # ./perf lock record -- ./perf bench sched messaging
+> >  # Running 'sched/messaging' benchmark:
+> >  # 20 sender and receiver processes per group
+> >  # 10 groups == 400 processes run
+> >
+> >      Total time: 2.799 [sec]
+> >  [ perf record: Woken up 1 times to write data ]
+> >  [ perf record: Captured and wrote 0.073 MB perf.data (100 samples) ]
+> >  #
+> >  # ./perf lock contention
+> >  Segmentation fault (core dumped)
+> >  #
+> >
+> > The function call stack is lengthy, here are the top 5 functions:
+> >  # gdb ./perf core.24048
+> >  GNU gdb (GDB) Fedora Linux 12.1-6.fc37
+> >  Copyright (C) 2022 Free Software Foundation, Inc.
+> >  Core was generated by `./perf lock contention'.
+> >  Program terminated with signal SIGSEGV, Segmentation fault.
+> >  #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,
+> >          addr=1789230) at util/machine.c:3356
+> >          3356 machine->sched.text_end = kmap->unmap_ip(kmap, sym->start);
+> >
+> >  (gdb) where
+> >   #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,\
+> >          addr=1789230) at util/machine.c:3356
+> >   #1  0x000000000109f244 in callchain_id (evsel=0x30313e0,\
+> >          sample=0x3ffea4f77d0) at builtin-lock.c:957
+> >   #2  0x000000000109e094 in get_key_by_aggr_mode (key=0x3ffea4f7290,\
+> >          addr=27758136, evsel=0x30313e0, sample=0x3ffea4f77d0) \
+> >          at builtin-lock.c:586
+> >   #3  0x000000000109f4d0 in report_lock_contention_begin_event \
+> >          (evsel=0x30313e0, sample=0x3ffea4f77d0)
+> >          at builtin-lock.c:1004
+> >   #4  0x00000000010a00ae in evsel__process_contention_begin \
+> >          (evsel=0x30313e0, sample=0x3ffea4f77d0)
+> >          at builtin-lock.c:1254
+> >   #5  0x00000000010a0e14 in process_sample_event (tool=0x3ffea4f8480, \
+> >          event=0x3ff85601ef8, sample=0x3ffea4f77d0,
+> >          evsel=0x30313e0, machine=0x3029e28) at builtin-lock.c:1464
+> >           sample=0x3ffea4f77d0, evsel=0x30313e0, machine=0x3029e28) \
+> >        at util/session.c:1523
+> >   .....
+> >
+> > The issue is in function machine__is_lock_function() in file
+> > ./util/machine.c lines 3355:
+> >    /* should not fail from here */
+> >    sym = machine__find_kernel_symbol_by_name(machine, "__sched_text_end",
+> >                                            &kmap);
+> >    machine->sched.text_end = kmap->unmap_ip(kmap, sym->start)
+> >
+> > On s390 the symbol __sched_text_end is *NOT* in the symbol list and the
+> > resulting pointer sym is set to NULL. The sym->start is then a NULL pointer
+> > access and generates the core dump.
+> >
+> > The reason why __sched_text_end is not in the symbol list on s390 is
+> > simple:
+> > When the symbol list is created at perf start up with function calls
+> >   dso__load
+> >   +--> dso__load_vmlinux_path
+> >        +--> dso__load_vmlinux
+> >             +--> dso__load_sym
+> >                +--> dso__load_sym_internal (reads kernel symbols)
+> >                +--> symbols__fixup_end
+> >                +--> symbols__fixup_duplicate
+> >
+> > The issue is in function symbols__fixup_duplicate(). It deletes all
+> > symbols with have the same address. On s390
+> >  # nm -g  ~/linux/vmlinux| fgrep c68390
+> >  0000000000c68390 T __cpuidle_text_start
+> >  0000000000c68390 T __sched_text_end
+> >  #
+> > two symbols have identical addresses and __sched_text_end is considered
+> > duplicate (in ascending sort order) and removed from the symbol list.
+> > Therefore it is missing and an invalid pointer reference occurs.
+> > The code checks for symbol __sched_text_start and when it exists assumes
+> > symbol __sched_text_end is also in the symbol table. However this is
+> > not the case on s390.
+> >
+> > Same situation exists for symbol __lock_text_start:
+> > 0000000000c68770 T __cpuidle_text_end
+> > 0000000000c68770 T __lock_text_start
+> > This symbol is also removed from the symbol table but used in function
+> > machine__is_lock_function().
+> >
+> > To fix this and keep duplicate symbols in the symbol table, set
+> > symbol_conf.allow_aliases to true. This prevents the removal of duplicate
+> > symbols in function symbols__fixup_duplicate().
+> >
+> > Output After:
+> >  # ./perf lock contention
+> >  contended total wait  max wait  avg wait    type   caller
+> >
+> >         48   124.39 ms 123.99 ms   2.59 ms rwsem:W unlink_anon_vmas+0x24a
+> >         47    83.68 ms  83.26 ms   1.78 ms rwsem:W free_pgtables+0x132
+> >          5    41.22 us  10.55 us   8.24 us rwsem:W free_pgtables+0x140
+> >          4    40.12 us  20.55 us  10.03 us rwsem:W copy_process+0x1ac8
+> >  #
+> >
+> > Fixes: cc2367eebb0c ("machine: Adopt is_lock_function() from builtin-lock.c")
+>
+> Humm, is that really the cset that introduces the problem? It just moves
+> things around, the cset that introduced the is_lock_function() function,
+> that assumed that __sched_text_end was always available was:
+>
+> commit 0d2997f750d1de394231bc22768dab94a5b5db2f
+> Author: Namhyung Kim <namhyung@kernel.org>
+> Date:   Wed Jun 15 09:32:22 2022 -0700
+>
+>     perf lock: Look up callchain for the contended locks
+>
+> ---
+>
+> Right? Namhyung? Can you spot any problem in enabling duplicates as a
+> fix?
 
-While at it, remove an unneeded intermediate variable, which allows us
-to drop a cast as a bonus.
+Yep, I think that's the cset introduced the problem.
+I'm fine with the fix.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/clk/microchip/clk-mpfs-ccc.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-diff --git a/drivers/clk/microchip/clk-mpfs-ccc.c b/drivers/clk/microchip/clk-mpfs-ccc.c
-index 32aae880a14f3b1c..0ddc73e07be42973 100644
---- a/drivers/clk/microchip/clk-mpfs-ccc.c
-+++ b/drivers/clk/microchip/clk-mpfs-ccc.c
-@@ -164,12 +164,11 @@ static int mpfs_ccc_register_outputs(struct device *dev, struct mpfs_ccc_out_hw_
- 
- 	for (unsigned int i = 0; i < num_clks; i++) {
- 		struct mpfs_ccc_out_hw_clock *out_hw = &out_hws[i];
--		char *name = devm_kzalloc(dev, 23, GFP_KERNEL);
-+		char *name = devm_kasprintf(dev, GFP_KERNEL, "%s_out%u", parent->name, i);
- 
- 		if (!name)
- 			return -ENOMEM;
- 
--		snprintf(name, 23, "%s_out%u", parent->name, i);
- 		out_hw->divider.hw.init = CLK_HW_INIT_HW(name, &parent->hw, &clk_divider_ops, 0);
- 		out_hw->divider.reg = data->pll_base[i / MPFS_CCC_OUTPUTS_PER_PLL] +
- 			out_hw->reg_offset;
-@@ -201,14 +200,13 @@ static int mpfs_ccc_register_plls(struct device *dev, struct mpfs_ccc_pll_hw_clo
- 
- 	for (unsigned int i = 0; i < num_clks; i++) {
- 		struct mpfs_ccc_pll_hw_clock *pll_hw = &pll_hws[i];
--		char *name = devm_kzalloc(dev, 18, GFP_KERNEL);
- 
--		if (!name)
-+		pll_hw->name = devm_kasprintf(dev, GFP_KERNEL, "ccc%s_pll%u",
-+					      strchrnul(dev->of_node->full_name, '@'), i);
-+		if (!pll_hw->name)
- 			return -ENOMEM;
- 
- 		pll_hw->base = data->pll_base[i];
--		snprintf(name, 18, "ccc%s_pll%u", strchrnul(dev->of_node->full_name, '@'), i);
--		pll_hw->name = (const char *)name;
- 		pll_hw->hw.init = CLK_HW_INIT_PARENTS_DATA_FIXED_SIZE(pll_hw->name,
- 								      pll_hw->parents,
- 								      &mpfs_ccc_pll_ops, 0);
--- 
-2.25.1
-
+Thanks,
+Namhyung
