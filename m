@@ -2,110 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B89665C89B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0069665C89E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbjACVGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 16:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S233135AbjACVHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 16:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233586AbjACVFI (ORCPT
+        with ESMTP id S230431AbjACVGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:05:08 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A541408A;
-        Tue,  3 Jan 2023 13:05:07 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id q3so6334528uao.2;
-        Tue, 03 Jan 2023 13:05:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1BpgH2JExWhLYwx16JSRZTh0GkhP5q2EUrahmB7s1do=;
-        b=ccvD8F2bv5jXTZjdbF27x/Y8owkiRaw/1iscjN3qC4sSz+hZsjSgXf2x5o8nJw4WJI
-         OtEfcSpQuOYVVmXAskTxFHOBPDQEYe8GABS/3WsemdAF9MtmyJezankDZN+WUvxMPTHO
-         dyXoaaAx9Fnu+nlFasNQSoTbQ8Z5TPgi+lbSH7mv5SnGIL9tQ0XTCehCcUmky5D3ZqvT
-         VmJeB8iV4NemPjLnFfCiR1WXra6OaQtMt4mR4s+aYcGsXkYw4pqK8Qj99fOY6Cz/XKDh
-         FphiQZxROts6gnWx223bixxdk3hht4OLI439WOy85ZRi3o61bE4QN/RkbOKLy8f4mjZV
-         /5KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1BpgH2JExWhLYwx16JSRZTh0GkhP5q2EUrahmB7s1do=;
-        b=N+EIL9xPQ/Ior0sXRBS/IAbiH634MF1o1L3UjnztFpKt/Lp8yO8ig6fpNG96c9h14O
-         EEN10VgfFzpPS8msVdJbR/KqjQOF6Gap6ka7g6fnGKyuqs77W3f99PVWCC3MzFZh7RzO
-         kfE13ES68CFp8k6Ikx7E9xYpIClijhrQpdXhQ6/oN+P6/1yTy+XDvWWonGT331Q6WpvG
-         EHDTj43+hoSqY5lpmqvnT22P98st8/NiP1rx3kMVQliA3LxOUtwaelLxdSwXyIzl2VFs
-         rZKXKtZCQQ2mRXk6dDienzsMon9iTjaWmgn1MObDCbFTsqRq/ITYvRS3hzf65ZbeeIPm
-         8lGQ==
-X-Gm-Message-State: AFqh2krNEQ2eMIN7LiiSTAXYIHkx/6QMlN5oZL7L8aAjdKZFdon1eTRi
-        ITRrEZhYIxcc9tdPbbhshmTb76ghdPJ9STNTT1A=
-X-Google-Smtp-Source: AMrXdXvnFOqsyc/ytllllcjQjhKZoHWk94A3zikvtODEWsLFPjX3cxdD5uVhmOezj6h7ULdkTTxyei6MoednrJmmo5U=
-X-Received: by 2002:ab0:7a61:0:b0:4c2:5fc2:47fb with SMTP id
- c1-20020ab07a61000000b004c25fc247fbmr3089670uat.58.1672779906917; Tue, 03 Jan
- 2023 13:05:06 -0800 (PST)
+        Tue, 3 Jan 2023 16:06:14 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6692E14D2E;
+        Tue,  3 Jan 2023 13:06:13 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 507FF108;
+        Tue,  3 Jan 2023 22:06:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672779971;
+        bh=+aDZNTXe2PPDjTmLCglr6MqZJ+xkLWv0E9JnBAc5lYY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vD8Vbho+G8SPqlP4FQcJUzeOCq/VVTXUzTxubn7/6qtv6p8OOWrLdKsz1P9x+YxnO
+         5hpqJylLW8YYlLpXBseTe66NkbyxY5lQTkZECmiCP1E0/jTUwJ6iuuuwc20q8m3p57
+         2ckBT4cOhHdMv1oj/6+R5J+vPJEJ0vhjlFLfrT5w=
+Date:   Tue, 3 Jan 2023 23:06:06 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v3 2/3] media: uvcvideo: Fix power line control for
+ Lenovo Integrated Camera
+Message-ID: <Y7SYviXPM9bpTgE8@pendragon.ideasonboard.com>
+References: <20221101-easycam-v3-0-2c9881a7a4f7@chromium.org>
+ <20221101-easycam-v3-2-2c9881a7a4f7@chromium.org>
 MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
-In-Reply-To: <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
-From:   William Roberts <bill.c.roberts@gmail.com>
-Date:   Tue, 3 Jan 2023 15:04:55 -0600
-Message-ID: <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-To:     Matthew Garrett <mgarrett@aurora.tech>
-Cc:     jejb@linux.ibm.com, Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, jarkko@kernel.org,
-        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221101-easycam-v3-2-2c9881a7a4f7@chromium.org>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        SUBJECT_DRUG_GAP_L autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 2:43 PM Matthew Garrett <mgarrett@aurora.tech> wrote:
->
-> On Mon, Nov 14, 2022 at 9:11 AM James Bottomley <jejb@linux.ibm.com> wrote:
-> >
-> > On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
-> > > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
-> > > restricts usermode's ability to extend or reset PCR 23.
-> >
-> > Could I re ask the question here that I asked of Matthew's patch set:
-> >
-> > https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
-> >
-> > Which was could we use an NVRAM index in the TPM instead of a PCR?  The
-> > reason for asking was that PCRs are rather precious and might get more
-> > so now that Lennart has some grand scheme for using more of them in his
-> > unified boot project.  Matthew promised to play with the idea but never
-> > got back to the patch set to say whether he investigated this or not.
->
-> Is there any way to get key creation data to include NV indexes?
+Hi Ricardo,
 
-Not that I am aware of and the spec seems to be a no.
+Thank you for the patch.
 
-> If not, no, we can't use NVRAM.
+On Tue, Jan 03, 2023 at 12:01:22PM +0100, Ricardo Ribalda wrote:
+> The device does not implement the power line control correctly. It is
+> a UVC 1.5 device, but implements the PLC control as a UVC 1.1 device.
+> 
+> Add the corresponding control mapping override.
+> 
+> Bus 003 Device 002: ID 30c9:0093 Lenovo Integrated Camera
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               2.01
+>   bDeviceClass          239 Miscellaneous Device
+>   bDeviceSubClass         2
+>   bDeviceProtocol         1 Interface Association
+>   bMaxPacketSize0        64
+>   idVendor           0x30c9
+>   idProduct          0x0093
+>   bcdDevice            0.07
+>   iManufacturer           3 Lenovo
+>   iProduct                1 Integrated Camera
+>   iSerial                 2 8SSC21J75356V1SR2830069
+>   bNumConfigurations      1
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c   | 24 +++++++++++++-----------
+>  drivers/media/usb/uvc/uvc_driver.c | 16 ++++++++++++++++
+>  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+>  3 files changed, 30 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index c95a2229f4fa..d8283d71bc96 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -721,18 +721,20 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
+>  	},
+>  };
+>  
+> +const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
+> +	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
+> +	.entity		= UVC_GUID_UVC_PROCESSING,
+> +	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
+> +	.size		= 2,
+> +	.offset		= 0,
+> +	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
+> +	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
+> +	.menu_info	= power_line_frequency_controls,
+> +	.menu_count	= ARRAY_SIZE(power_line_frequency_controls) - 1,
+> +};
+> +
+>  static const struct uvc_control_mapping uvc_ctrl_mappings_uvc11[] = {
+> -	{
+> -		.id		= V4L2_CID_POWER_LINE_FREQUENCY,
+> -		.entity		= UVC_GUID_UVC_PROCESSING,
+> -		.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
+> -		.size		= 2,
+> -		.offset		= 0,
+> -		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
+> -		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
+> -		.menu_info	= power_line_frequency_controls,
+> -		.menu_count	= ARRAY_SIZE(power_line_frequency_controls) - 1,
+> -	},
+> +	uvc_ctrl_power_line_mapping_uvc11,
 
-What's the use case of using the creation data and ticket in this
-context? Who gets the
-creationData and the ticket?
-Could a user supplied outsideInfo work? IIRC I saw some patches flying around
-where the sessions will get encrypted and presumably correctly as well. This
-would allow the transfer of that outsideInfo, like the NV Index PCR value to
-be included and integrity protected by the session HMAC.
+This conflicts with your v4l2-compliance fixes series that I have
+applied to my tree. I have fixed the conflict locally and pushed the
+result to
+https://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git/log/?h=next/uvc,
+could you check that I got it right ?
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+>  };
+>  
+>  static const struct uvc_control_mapping uvc_ctrl_mappings_uvc15[] = {
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index f2abd9d0c717..9c09bc988278 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2370,6 +2370,13 @@ MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
+>   * Driver initialization and cleanup
+>   */
+>  
+> +static const struct uvc_device_info uvc_ctrl_power_line_uvc11 = {
+> +	.mappings = (const struct uvc_control_mapping *[]) {
+> +		&uvc_ctrl_power_line_mapping_uvc11,
+> +		NULL, /* Sentinel */
+> +	},
+> +};
+> +
+>  static const struct uvc_menu_info power_line_frequency_controls_limited[] = {
+>  	{ 1, "50 Hz" },
+>  	{ 2, "60 Hz" },
+> @@ -2973,6 +2980,15 @@ static const struct usb_device_id uvc_ids[] = {
+>  	  .bInterfaceSubClass	= 1,
+>  	  .bInterfaceProtocol	= 0,
+>  	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
+> +	/* Lenovo Integrated Camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x30c9,
+> +	  .idProduct		= 0x0093,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
+> +	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_uvc11 },
+>  	/* Sonix Technology USB 2.0 Camera */
+>  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+>  				| USB_DEVICE_ID_MATCH_INT_INFO,
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index df93db259312..bcb0b0c101c8 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -728,6 +728,7 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags);
+>  void uvc_status_stop(struct uvc_device *dev);
+>  
+>  /* Controls */
+> +extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11;
+>  extern const struct v4l2_subscribed_event_ops uvc_ctrl_sub_ev_ops;
+>  
+>  int uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+
+-- 
+Regards,
+
+Laurent Pinchart
