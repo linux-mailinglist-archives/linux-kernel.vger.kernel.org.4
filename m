@@ -2,126 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17BA65C88A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EC765C88B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjACVCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 16:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
+        id S233896AbjACVCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 16:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238641AbjACVCT (ORCPT
+        with ESMTP id S230166AbjACVCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:02:19 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2078.outbound.protection.outlook.com [40.107.94.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0432314026;
-        Tue,  3 Jan 2023 13:02:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B4x2ejntCzSjmNB1zZ59Ypq/JbinX7uaB669IcD2DMlaZly+orfSf9J7ymUVdRDAi2tZXYkmXjPRS0ZirKxiZneW3H8113RYKjrt+iqutPXOJ+ZMmH+5YFhBdq9wwVCCIKELdW35/VPRrdKY4sfrNHZ3Yk7c6+aRwxtaeL/PMVbAjvKDYMzB2Md84ZO71EHD60znPknZJMY0+yZR2FMGQjr4SkO0zLm/mmaB95V5Y9A+zilTwFRrZUec7Z9/1DB5Ryg5nTo2HC8YGhdtsdAQ/67BuwMiUUUnaqv+fqAtWHRX2BwDiswUDjYZ/gIsGK0Z+bPUMpOVzfzAa7ekEJVOmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gDvo+Yo3SgHnW+TkukKTvC6Z7O38C34tarW/+4dD2n4=;
- b=gJVtcKFB5bBn6oYT1GxYV8xzdbm8CtSnbn0qFNWTO0t3iGSxzE1ikYZR5ufLpKvShOW2Z87qt89Wv4D/Qp3h6U9pkg8R96Sk6cTqKHKYYz0DkBLINoHHca/a7h9DB/Aqq/cM460Sc61bXtQiQxhTB/9QSp90WYjQwJ0NcWw1Z19Y6QwS/TMw91DiLWwz7zeiRiucOGIrhNBoeeeiGwf8/IGXOFyuANbFj59CCqAg+sqDs0TL/VVvmFGuHU880BXpDfWayq2ywHsL1FFGDawiZXl5OzygG9Sk1KN0SZ7AsVUOfY7aonRjZ61j1s3bJq0bTD6Wd0fx4CQUfSElWw9z4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gDvo+Yo3SgHnW+TkukKTvC6Z7O38C34tarW/+4dD2n4=;
- b=gQOJ1lWKOtqEvshSepf7UqS+PcON3oTiqU96AyCVHfT0S6YT5kbSQ6M9noXcxfTXjQOSTiN7oFTMAUBD55vUJW4PzOj/d38FCHF5c9hi3F8rSYIsF4GYMCctjfeTmGiXvMdLdKfD5CofX7Af45lCiZpiAOQTx225nF1Q2khdy6U=
-Received: from DM6PR13CA0014.namprd13.prod.outlook.com (2603:10b6:5:bc::27) by
- PH7PR12MB8179.namprd12.prod.outlook.com (2603:10b6:510:2b8::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
- 2023 21:02:13 +0000
-Received: from DM6NAM11FT070.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:bc:cafe::18) by DM6PR13CA0014.outlook.office365.com
- (2603:10b6:5:bc::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.14 via Frontend
- Transport; Tue, 3 Jan 2023 21:02:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT070.mail.protection.outlook.com (10.13.173.51) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5966.17 via Frontend Transport; Tue, 3 Jan 2023 21:02:13 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 3 Jan
- 2023 15:02:10 -0600
-From:   Robert Richter <rrichter@amd.com>
-To:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Robert Richter <rrichter@amd.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] cxl/pci: Show opcode in debug messages when sending a command
-Date:   Tue, 3 Jan 2023 22:01:50 +0100
-Message-ID: <20230103210151.1126873-1-rrichter@amd.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 3 Jan 2023 16:02:32 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C0C1403E;
+        Tue,  3 Jan 2023 13:02:27 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 48E9A5C0095;
+        Tue,  3 Jan 2023 16:02:25 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 03 Jan 2023 16:02:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1672779745; x=1672866145; bh=l3fhFm5wNV
+        naqbRR/9HpNGMBygavHOCjj/CdRd0rsOQ=; b=BoSM0PmPkhufXvVBq8cNerqD3b
+        79aIgWxnn9tTG3cKldcPlJ9OImJhzMNp1xwoPtBdx3harr+m9N/fQDec0v4H8Ltp
+        3n+Gv7bGP2feEmqbzkVPEHQu+B2pJoPe3h5zlPZBFN7INrhtcGctYbjMiIXzNs9d
+        W+eYUAXy56BFMjjARc8Y1SYJ38MfCo1ePccqdE47qZL5b6lFs48g1qn9CgYXkBt8
+        7HTMs3jLRlIoaAWZIH7yBf0gtls5tZYOC3g/rSBxVLTC/iQ62TnuD9dy9BJmIrtA
+        N27ogenRUWjsaMixi2E8N1TA9nKEqD8sqdjCkcfIY0D27SGwO81/EIgQAyAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672779745; x=1672866145; bh=l3fhFm5wNVnaqbRR/9HpNGMBygav
+        HOCjj/CdRd0rsOQ=; b=VsQWifXL6kSDZDK7srAE0w1cVIIZ2vEkGMrSiQxvS8ef
+        IkeqpW6JPXW0YtEUMT4Z8nMrl6PFLSLaFj5ux5RI+680mUpFZm505DAmGnItGI6s
+        ExR3GMpGYlSnie1aX70UU8IXmdBQkAxliVlk5LQE4RBnQX47uNxBFYIfelBvPdes
+        COwwQtshEJAKgOpqOprAa4n0MIoetIKEk8+LYEj31mwPPAtfiiFQA7IRW5d4cP9+
+        JpG1+yM+8N/lnJgBWBwSO8otjrxZbr3fGs0YOZuMYA0xSYqcR731yWxB1PoMNgIY
+        /ta5H7D+xrxpviAT710uHr9zv2chOLH8TWv1taK2qw==
+X-ME-Sender: <xms:4Ze0Y9cssxilvmBx7brIVPs4bobhF1YuIev83RLRMmJpVWzS5ovmVw>
+    <xme:4Ze0Y7NdvY5yWRzyeLxWliPexq3lkJD3ozIrzTsuJo9uAYVCX3RP7qIdJtbORmFSF
+    56njbvkawNCKk8EBXc>
+X-ME-Received: <xmr:4Ze0Y2gPNHsWysOTdIQwkhR6ObvMvM0KbRn1lN0OhfxDDubekyUfbtIKZtf0KLESyHTYSO2RJsPTk-dde08qIWVqRL0LdgnEQWI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeggddugeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtuggjsehgtderredt
+    tddvnecuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghkse
+    hsthiftgigrdighiiiqeenucggtffrrghtthgvrhhnpeehfeejheeftdejiedvfeekffeh
+    ledukeduleelffekgfdtleduledvtdegtdehkeenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
+X-ME-Proxy: <xmx:4Ze0Y29rxeMb9IQfFS9bvTE7uuTQnU2N6hf9wPFvYPuLdNJAqhXXvA>
+    <xmx:4Ze0Y5s8LOICB_2jrLlnwZpNmcCunIR3b2IoyUQrYovj1hw9tox8DA>
+    <xmx:4Ze0Y1GsE9VkJ83rLhP99Wbargk5qPPGe6MI3tVccxgpgFe11imZvA>
+    <xmx:4Ze0Y6-6VUD9ds0ZT_YNvjizHRn2-auXuzcQZWlgIoZsGeFlfEePxA>
+Feedback-ID: i68a1478a:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 Jan 2023 16:02:24 -0500 (EST)
+Date:   Tue, 3 Jan 2023 15:02:21 -0600
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] ARM: dts: aspeed: bletchley: enable wdtrst1
+Message-ID: <Y7SX3XQdRKcVFwSe@heinlein.taila677.ts.net>
+References: <20221226054535.2836110-1-potin.lai.pt@gmail.com>
+ <20221226054535.2836110-3-potin.lai.pt@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT070:EE_|PH7PR12MB8179:EE_
-X-MS-Office365-Filtering-Correlation-Id: a390916f-4d18-459a-bb60-08daedcdc99a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rWdLhmBaW0En1600fQ3SF9bkGlJyGg8CpekmW5va+oIcAM7i5Vw5pVg08vQ5TaOWlW4zYTTTGEPqh9YsjSSDgrW5fXktOgpOGabC8a2CEeWOMS4DH0r0ZlfPWH3tGP6Cfnvwft3gUS5RtgqVpp02DgOJK4+1foIyrLL5rRbLIOV3hqmWZSxMXR5yTgo3q4TYVT7ggab2wOZgCSO4vGENo2Kuw/pTjkGZeLGM/fRRv+4oMqkz5UesCY71ZLuTKPiWLvLbR+E+S25ZSCJ54NrkWXEl+AvSxCKG8Zcj0v2cDKlaOERe6ywAIld/T11uj0t/dUkndKkrctC/VMSq6KJaoKbosh17GU3XmfsIB8yNTqafoHdknZg0Deen2jPeGXD7t1ZEq9t5oe5nDm4rf94Dy3NPVG4tfrn3YRDoskyZ4W3x1PWzpKAJSLjifptPH5AYvnvBzGm+hqgUquEoXPrJMnpCTUvut6ib4U2eNAVX/JXI2OzYe+/MIilnlIq7vCXh+6qXJYZJ2ss9SH+WCRDNt7wy0JWr1Fb1yI6WLKFVQ8dmgiFf+5WMw7pQq97/IFn7tBl3gMsfA2YtVavxhr977gCiaHBFyZyVgIbUOGbUThkzKf8x+a02d3EwheFgCBFtflQARqtVkOAlemjUljbT08V9ISeZbI8sCTJhprvx4HAh6v6a0HW5qk6ZbYkveefqTIV5lIHFHLpkkYPcEgGskVGiowFX6p/iQu0b1FyF6mwHjWIiGmhtktDg7tHz4SElis+JfdbVruUqkpph/ScaRQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(136003)(376002)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(83380400001)(47076005)(426003)(1076003)(336012)(16526019)(26005)(82310400005)(6666004)(40480700001)(40460700003)(36860700001)(36756003)(81166007)(82740400003)(356005)(2616005)(186003)(478600001)(15650500001)(41300700001)(8676002)(4326008)(2906002)(5660300002)(8936002)(4744005)(316002)(70586007)(70206006)(110136005)(54906003)(22166006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 21:02:13.2161
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a390916f-4d18-459a-bb60-08daedcdc99a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT070.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8179
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ITHc4yLppOjAfL7f"
+Content-Disposition: inline
+In-Reply-To: <20221226054535.2836110-3-potin.lai.pt@gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For debugging it is very helpful to see which commands are sent. Add
-it to the debug message.
 
-Signed-off-by: Robert Richter <rrichter@amd.com>
----
- drivers/cxl/pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--ITHc4yLppOjAfL7f
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-index 33083a522fd1..316089a393d0 100644
---- a/drivers/cxl/pci.c
-+++ b/drivers/cxl/pci.c
-@@ -162,7 +162,7 @@ static int __cxl_pci_mbox_send_cmd(struct cxl_dev_state *cxlds,
- 	writeq(cmd_reg, cxlds->regs.mbox + CXLDEV_MBOX_CMD_OFFSET);
- 
- 	/* #4 */
--	dev_dbg(dev, "Sending command\n");
-+	dev_dbg(dev, "Sending command: 0x%04x\n", mbox_cmd->opcode);
- 	writel(CXLDEV_MBOX_CTRL_DOORBELL,
- 	       cxlds->regs.mbox + CXLDEV_MBOX_CTRL_OFFSET);
- 
--- 
-2.30.2
+On Mon, Dec 26, 2022 at 01:45:35PM +0800, Potin Lai wrote:
+> Enable WDTRST1 external signal to send a reset pluse to peripherals while
+> BMC reset.
 
+nit: s/pluse/pulse
+
+>=20
+> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+> ---
+>  arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>=20
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/a=
+rm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+> index 791f83aaac50..050ed7e810fa 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+> @@ -1064,3 +1064,14 @@ pinctrl_gpiov2_unbiased_default: gpiov2 {
+>  		bias-disable;
+>  	};
+>  };
+> +
+> +&wdt1 {
+> +	status =3D "okay";
+> +	pinctrl-names =3D "default";
+> +	pinctrl-0 =3D <&pinctrl_wdtrst1_default>;
+> +	aspeed,reset-type =3D "soc";
+> +	aspeed,external-signal;
+> +	aspeed,ext-push-pull;
+> +	aspeed,ext-active-high;
+> +	aspeed,ext-pulse-duration =3D <256>;
+> +};
+> --=20
+> 2.31.1
+>=20
+
+--=20
+Patrick Williams
+
+--ITHc4yLppOjAfL7f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmO0l9wACgkQqwNHzC0A
+wRkgiA//UrzR+v+5K+T7IFxmx79HdNHqHfgdU4GzaO9vwcKDdzXzEYcKVhXzuLxq
+g9GW4vTBXFMu2pKSnRYIV0wtc5/ErCYU35brT3+cAtxUj9r0ZdhzeE/9a53Zxux/
+1b24AmsKXdpDDGMVjZy3YX92phB3j554GMnRjEprlmdGRTVQ45/gbJfdsRXY8DC+
+nXCeMgFODQ7PCJI4Yf2XkCT4N8ofFzxRBdJ41of3RBpnsYiwMBfVynVXOPWtrqOO
+Ustf/xTTSFDKwkWdQnm5/cwsewCMdHHsft0qGJKIyBBYYJxk4p/MmFAi915HHqI6
+Jomvuc+g7djUAfBxOVh2PdfK7TGXbai/daee8eafavsBcI0YOuQnqYSWz4vwaEMC
+pd/urmf4UznlLsa5NZlrqjyJ+65JIOJKqx7xCJ33JPSiu32LBjXq1rFdGbSKykrr
+W/GmnY+vcA6o5g9A9x7DIxLlizQa2DTocfPWcus0cRbUnGe/0/lIutDenU+FfUGj
+jq7/BvF5DxfEOfcdoqv1WZfSHnAZD6Xc+pbUmQAEx1rvhdR0Gn7pYfcA3JEVgxMM
+6HMWtBZEV5MzKrzlky990o6wNZITEhBNJHK38Av82yloSb+5ntqtwdYdOuEQIirz
+XRVuun3b9pfA/cxbbexa8qq+Tkn06VBL/Jxeb4ip6NJZ7AOf8C4=
+=0zi4
+-----END PGP SIGNATURE-----
+
+--ITHc4yLppOjAfL7f--
