@@ -2,198 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604E865C128
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6063D65C122
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237557AbjACNtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S237588AbjACNtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237436AbjACNtA (ORCPT
+        with ESMTP id S237476AbjACNtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 3 Jan 2023 08:49:00 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B22BF6E;
-        Tue,  3 Jan 2023 05:48:59 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 4E4D641F72;
-        Tue,  3 Jan 2023 13:48:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1672753737; bh=8n36c0uhPa4GCq6GVU7dGRSTlMsuFomxAw3sKvckInY=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=N4WeXIoirWV56nCuevFVZCXoBP7Bhe5UCd8MonyZBTYWqe4d+y1+1vpD6DtlP2Lcz
-         8V8bUAMNVqiPX2nDmloA7C4nHLZj6xQDZgr2yTVK7VTVPheNAk2iOXNhuLCFiP6eug
-         FFZZpYD++qHNUajSW4LXk3gndefvulixTChPJlqDl1AnJ1Tf8VDQbxLg2qzbuhVxYz
-         mr/D0AyZIJuFk+4WpE0ZOwx0eIARXniRjd5D95enrDhLeh/7EEc61MOXHcUvJBGafS
-         3SZhNdF38qS35kP0Mr7JGphCs69D/NGer8dkoiYbTRMLDTE/txEqUoCnYupPmJbmkN
-         0QN+DAl4xH0Iw==
-Message-ID: <95a4cfde-490f-d26d-163e-7ab1400e7380@marcan.st>
-Date:   Tue, 3 Jan 2023 22:48:52 +0900
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FD39D2EF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 05:48:59 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE2F5152B
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 05:49:40 -0800 (PST)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D837A3F587
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 05:48:58 -0800 (PST)
+Date:   Tue, 3 Jan 2023 13:48:54 +0000
+From:   Liviu Dudau <liviu.dudau@arm.com>
+To:     =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Emma Anholt <emma@anholt.net>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        etnaviv@lists.freedesktop.org,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Melissa Wen <mwen@igalia.com>, noralf@tronnes.org,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        David Airlie <airlied@redhat.com>
+Subject: Re: [PATCH 3/9] drm/arm/hdlcd: use new debugfs device-centered
+ functions
+Message-ID: <Y7QyRlrZ2hwnZ+aU@e110455-lin.cambridge.arm.com>
+References: <20221226155029.244355-1-mcanal@igalia.com>
+ <20221226155029.244355-4-mcanal@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Eric Curtin <ecurtin@redhat.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-References: <20230103114427.1825-1-marcan@marcan.st>
- <ff77ba1c-8b67-4697-d713-0392d3b1d77a@linaro.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2] nvmem: core: Fix race in nvmem_register()
-In-Reply-To: <ff77ba1c-8b67-4697-d713-0392d3b1d77a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221226155029.244355-4-mcanal@igalia.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 21.41, Srinivas Kandagatla wrote:
+On Mon, Dec 26, 2022 at 12:50:23PM -0300, Maíra Canal wrote:
+> Replace the use of drm_debugfs_create_files() with the new
+> drm_debugfs_add_files() function, which center the debugfs files
+> management on the drm_device instead of drm_minor. Moreover, remove the
+> debugfs_init hook and add the debugfs files directly on hdlcd_drm_bind(),
+> before drm_dev_register().
 > 
+> Signed-off-by: Maíra Canal <mcanal@igalia.com>
+
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+
+Best regards,
+Liviu
+
+> ---
+>  drivers/gpu/drm/arm/hdlcd_drv.c | 24 +++++++++---------------
+>  1 file changed, 9 insertions(+), 15 deletions(-)
 > 
-> On 03/01/2023 11:44, Hector Martin wrote:
->> nvmem_register() currently registers the device before adding the nvmem
->> cells, which creates a race window where consumers may find the nvmem
->> device (and not get PROBE_DEFERred), but then fail to find the cells and
->> error out.
->>
->> Move device registration to the end of nvmem_register(), to close the
->> race.
->>
->> Observed when the stars line up on Apple Silicon machines with the (not
->> yet upstream, but trivial) spmi nvmem driver and the macsmc-rtc client:
->>
->> [    0.487375] macsmc-rtc macsmc-rtc: error -ENOENT: Failed to get rtc_offset NVMEM cell
->>
->> Fixes: eace75cfdcf7 ("nvmem: Add a simple NVMEM framework for nvmem providers")
->> Cc: stable@vger.kernel.org
->> Reviewed-by: Eric Curtin <ecurtin@redhat.com>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> ---
-> 
-> What has changed since v1?
-
-What you told me to. I'm trying to get a silly bug fixed after you
-ignored my original patch until Russell independently discovered and
-submitted a fix for the same thing. I think we've wasted enough
-developer time here already.
-
-> 
->>   drivers/nvmem/core.c | 32 +++++++++++++++++---------------
->>   1 file changed, 17 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
->> index 321d7d63e068..606f428d6292 100644
->> --- a/drivers/nvmem/core.c
->> +++ b/drivers/nvmem/core.c
->> @@ -822,11 +822,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>   		break;
->>   	}
->>
->> -	if (rval) {
->> -		ida_free(&nvmem_ida, nvmem->id);
->> -		kfree(nvmem);
->> -		return ERR_PTR(rval);
->> -	}
->> +	if (rval)
->> +		goto err_gpiod_put;
-> 
-> Why was gpiod changes added to this patch, that should be a separate 
-> patch/discussion, as this is not relevant to the issue that you are 
-> reporting.
-
-Because freeing the device also does a gpiod_put in the destructor, so
-doing this is correct in every other instance below and maintains
-existing behavior, and it just so happens that this instance converges
-into the same codepath so it is correct to merge it, and it just so
-happens that the gpiod put was missing in this path to begin with so
-this becomes a drive-by bugfix.
-
-If you don't like it I can remove it (i.e. reintroduce the bug for no
-good reason) and you can submit this fix yourself, because I have no
-incentive to waste time submitting a separate patch to fix a GPIO leak
-in an error path corner case in a subsystem I don't own and I have much
-bigger things to spend my (increasingly lower and lower) willingness to
-fight for upstream submissions than this.
-
-Seriously, what is wrong with y'all kernel people. No other open source
-project wastes contributors' time with stupid nitpicks like this. I
-found a bug, I fixed it, I then fixed the issues you pointed out, and I
-don't have the time nor energy to fight over this kind of nonsense next.
-Do you want bugs fixed or not?
-
->>
->>   	nvmem->read_only = device_property_present(config->dev, "read-only") ||
->>   			   config->read_only || !nvmem->reg_write;
->> @@ -837,20 +834,16 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>
->>   	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
->>
->> -	rval = device_register(&nvmem->dev);
->> -	if (rval)
->> -		goto err_put_device;
->> -
->>   	if (nvmem->nkeepout) {
->>   		rval = nvmem_validate_keepouts(nvmem);
->>   		if (rval)
->> -			goto err_device_del;
->> +			goto err_gpiod_put;
->>   	}
->>
->>   	if (config->compat) {
->>   		rval = nvmem_sysfs_setup_compat(nvmem, config);
->>   		if (rval)
->> -			goto err_device_del;
->> +			goto err_gpiod_put;
->>   	}
->>
->>   	if (config->cells) {
->> @@ -867,6 +860,15 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>   	if (rval)
->>   		goto err_remove_cells;
->>
->> +	rval = device_register(&nvmem->dev);
->> +	if (rval) {
->> +		nvmem_device_remove_all_cells(nvmem);
->> +		if (config->compat)
->> +			nvmem_sysfs_remove_compat(nvmem, config);
->> +		put_device(&nvmem->dev);
->> +		return ERR_PTR(rval);
->> +	}
->> +
->>   	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem);
->>
->>   	return nvmem;
->> @@ -876,10 +878,10 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>   err_teardown_compat:
->>   	if (config->compat)
->>   		nvmem_sysfs_remove_compat(nvmem, config);
->> -err_device_del:
->> -	device_del(&nvmem->dev);
->> -err_put_device:
->> -	put_device(&nvmem->dev);
->> +err_gpiod_put:
->> +	gpiod_put(nvmem->wp_gpio);
->> +	ida_free(&nvmem_ida, nvmem->id);
->> +	kfree(nvmem);
->>
->>   	return ERR_PTR(rval);
->>   }
->> --
->> 2.35.1
->>
+> diff --git a/drivers/gpu/drm/arm/hdlcd_drv.c b/drivers/gpu/drm/arm/hdlcd_drv.c
+> index 7043d1c9ed8f..e3507dd6f82a 100644
+> --- a/drivers/gpu/drm/arm/hdlcd_drv.c
+> +++ b/drivers/gpu/drm/arm/hdlcd_drv.c
+> @@ -195,8 +195,8 @@ static int hdlcd_setup_mode_config(struct drm_device *drm)
+>  #ifdef CONFIG_DEBUG_FS
+>  static int hdlcd_show_underrun_count(struct seq_file *m, void *arg)
+>  {
+> -	struct drm_info_node *node = (struct drm_info_node *)m->private;
+> -	struct drm_device *drm = node->minor->dev;
+> +	struct drm_debugfs_entry *entry = m->private;
+> +	struct drm_device *drm = entry->dev;
+>  	struct hdlcd_drm_private *hdlcd = drm_to_hdlcd_priv(drm);
+>  
+>  	seq_printf(m, "underrun : %d\n", atomic_read(&hdlcd->buffer_underrun_count));
+> @@ -208,8 +208,8 @@ static int hdlcd_show_underrun_count(struct seq_file *m, void *arg)
+>  
+>  static int hdlcd_show_pxlclock(struct seq_file *m, void *arg)
+>  {
+> -	struct drm_info_node *node = (struct drm_info_node *)m->private;
+> -	struct drm_device *drm = node->minor->dev;
+> +	struct drm_debugfs_entry *entry = m->private;
+> +	struct drm_device *drm = entry->dev;
+>  	struct hdlcd_drm_private *hdlcd = drm_to_hdlcd_priv(drm);
+>  	unsigned long clkrate = clk_get_rate(hdlcd->clk);
+>  	unsigned long mode_clock = hdlcd->crtc.mode.crtc_clock * 1000;
+> @@ -219,17 +219,10 @@ static int hdlcd_show_pxlclock(struct seq_file *m, void *arg)
+>  	return 0;
+>  }
+>  
+> -static struct drm_info_list hdlcd_debugfs_list[] = {
+> +static struct drm_debugfs_info hdlcd_debugfs_list[] = {
+>  	{ "interrupt_count", hdlcd_show_underrun_count, 0 },
+>  	{ "clocks", hdlcd_show_pxlclock, 0 },
+>  };
+> -
+> -static void hdlcd_debugfs_init(struct drm_minor *minor)
+> -{
+> -	drm_debugfs_create_files(hdlcd_debugfs_list,
+> -				 ARRAY_SIZE(hdlcd_debugfs_list),
+> -				 minor->debugfs_root, minor);
+> -}
+>  #endif
+>  
+>  DEFINE_DRM_GEM_DMA_FOPS(fops);
+> @@ -237,9 +230,6 @@ DEFINE_DRM_GEM_DMA_FOPS(fops);
+>  static const struct drm_driver hdlcd_driver = {
+>  	.driver_features = DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
+>  	DRM_GEM_DMA_DRIVER_OPS,
+> -#ifdef CONFIG_DEBUG_FS
+> -	.debugfs_init = hdlcd_debugfs_init,
+> -#endif
+>  	.fops = &fops,
+>  	.name = "hdlcd",
+>  	.desc = "ARM HDLCD Controller DRM",
+> @@ -303,6 +293,10 @@ static int hdlcd_drm_bind(struct device *dev)
+>  	drm_mode_config_reset(drm);
+>  	drm_kms_helper_poll_init(drm);
+>  
+> +#ifdef CONFIG_DEBUG_FS
+> +	drm_debugfs_add_files(drm, hdlcd_debugfs_list, ARRAY_SIZE(hdlcd_debugfs_list));
+> +#endif
+> +
+>  	ret = drm_dev_register(drm, 0);
+>  	if (ret)
+>  		goto err_register;
+> -- 
+> 2.38.1
 > 
 
-
-- Hector
+-- 
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
