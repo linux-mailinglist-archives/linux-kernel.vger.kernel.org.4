@@ -2,99 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8A065CA6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1065465CA70
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbjACXis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 18:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
+        id S234277AbjACXjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 18:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjACXiq (ORCPT
+        with ESMTP id S234209AbjACXjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 18:38:46 -0500
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F3A1DE;
-        Tue,  3 Jan 2023 15:38:44 -0800 (PST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1672789123; bh=ynOWW3LgPvjCduGH9UcbEQT2h4nu+eDS7sALdUj0jpY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=D8OcQedRKM45liJhzV0Gsvc5J21BGX3cCKwbp0W1Z3Pcf4G0/WaKzIJC1P/gbXrvI
-         FUBeWWB2a+PiWWV9SRxRNNm5AAY3G6ZKKTcYtrDDy6deDufpCTZ+17HGyBdHthZ/gt
-         l1P1B0zw5K/9wRjYjGWCrJ9yJr3tXRQXFCVvUxEkhmHVXJ7+gEx/wzsxz1uYpZTqPU
-         IXbVmvacTjuMt8TOvKKlSVIbzhuEqmUN2u4PWhqVjgumjKZpugEb95qlpu/JxBU9mc
-         qAfz4vD6463ACL1hUzo5bDa8kQy+Rr4/VuCIOdTb+POWYnG+atjhVkK+G63lxCWJ0u
-         SSa3pjuKoTskA==
-To:     Fedor Pchelkin <pchelkin@ispras.ru>, Kalle Valo <kvalo@kernel.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Zekun Shen <bruceshenzk@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] wifi: ath9k: hif_usb: clean up skbs if
- ath9k_hif_usb_rx_stream() fails
-In-Reply-To: <20230103223052.303666-1-pchelkin@ispras.ru>
-References: <20230103223052.303666-1-pchelkin@ispras.ru>
-Date:   Wed, 04 Jan 2023 00:38:42 +0100
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87tu172np9.fsf@toke.dk>
+        Tue, 3 Jan 2023 18:39:05 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E94F9
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:39:04 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id s9so25870716qtx.6
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:39:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4IcK9nCCJcWx4DXnUq9jN3aJ923JmnvuRI8XJBFIY/0=;
+        b=AinaOJu6/IFu11c89krxqHstp+Qx6bg/GaS+/T4HG1pBBDurgbVIkkpQhX5l5tMvqb
+         Dt1aixulGN49hn0TCZDfJL7P2ujEI3Sb32Da2Ad7RzLbA8dzxkEYLQq3GZQcrenecSyI
+         FUTCfOup8/4qyfgTpAhOtrWipWNbIm0VnCSVdwFYngsL8nHD9rkzKFRezi0Kl7Q3hvbA
+         wfliVsDb7QqWxrnaKcP0ps9OCvq8tpOVmKmO7wCblz0d6e8uNpGAskXpNHAZ3s+sAcAQ
+         h+10YPQxw7ir5wvpzI0aHOfOWM7euZeizl49b4id9HdeFXirSJK4GNlbhtO17TXeoseg
+         BCdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4IcK9nCCJcWx4DXnUq9jN3aJ923JmnvuRI8XJBFIY/0=;
+        b=n4LHSZT2GCiskrH5/tABl1mQs48j4fRMB5dKaOhxntLY8PQpLOWO/C16OjBCx8q3ni
+         I/mt91WBdlAqUhlHsatSK2DdbBhv4mPHOCo7gE09jsTbWS0ocDgtPjFlV1j8lTlaAmGD
+         vSCOdX07Bi4V1BhJ7+rFK97IWGbD67T2U5TIIoJi53e0hu0oHSMZyaxMSkfC0kemUOHz
+         R9I9uTIC1WVr1e3PqORCqv0ZPna3g1p+bGVyycX/N5DSxcnxteYhtIx1x3CrXmdUm75a
+         2QJoMwKkDm9uCLz64DgSTJWnoWr3ehIFRnjUb7iWHuB6OuezvvshajtYGlNNprFz+0rD
+         pFgg==
+X-Gm-Message-State: AFqh2kpMVNl+pwz5qZnqXnKHo7STLeoELVuE7Uzbw8ZNAWDmU0SViI1U
+        Ka8oSqhxc8lmiV2Fo3e8FcgYEw==
+X-Google-Smtp-Source: AMrXdXvvM0guVyAor9xuEVWRu39rmqbdPOUOe8zG+/P2s+Pkb0RWQqNWBIKUyv6DWLfpgnETi66GRw==
+X-Received: by 2002:ac8:73c7:0:b0:3a7:f3e7:5149 with SMTP id v7-20020ac873c7000000b003a7f3e75149mr59471515qtp.61.1672789143621;
+        Tue, 03 Jan 2023 15:39:03 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-68-50-193.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.50.193])
+        by smtp.gmail.com with ESMTPSA id m10-20020a05620a220a00b006eeca296c00sm22545055qkh.104.2023.01.03.15.39.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 15:39:03 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1pCqs2-001cNC-IA;
+        Tue, 03 Jan 2023 19:39:02 -0400
+Date:   Tue, 3 Jan 2023 19:39:02 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Christian =?utf-8?Q?Borntr=C3=A4ger?= <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH 1/1] vfio/type1: Respect IOMMU reserved regions in
+ vfio_test_domain_fgsp()
+Message-ID: <Y7S8loyvHyjAmNdh@ziepe.ca>
+References: <20230102093452.761185-1-schnelle@linux.ibm.com>
+ <20230102093452.761185-2-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230102093452.761185-2-schnelle@linux.ibm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fedor Pchelkin <pchelkin@ispras.ru> writes:
+On Mon, Jan 02, 2023 at 10:34:52AM +0100, Niklas Schnelle wrote:
+> Since commit cbf7827bc5dc ("iommu/s390: Fix potential s390_domain
+> aperture shrinking") the s390 IOMMU driver uses a reserved region
+> instead of an artificially shrunk aperture to restrict IOMMU use based
+> on the system provided DMA ranges of devices. In particular on current
+> machines this prevents use of DMA addresses below 2^32 for all devices.
+> While usually just IOMMU mapping below these addresses is
+> harmless. However our virtual ISM PCI device looks at new mappings on
+> IOTLB flush and immediately goes into the error state if such a mapping
+> violates its allowed DMA ranges. This then breaks pass-through of the
+> ISM device to a KVM guest.
+> 
+> Analysing this we found that vfio_test_domain_fgsp() maps 2 pages at DMA
+> address 0 irrespective of the IOMMUs reserved regions. Even if usually
+> harmless this seems wrong in the general case so instead go through the
+> freshly updated IOVA list and try to find a range that isn't reserved
+> and fits 2 pages and use that for testing for fine grained super pages.
 
->> Hmm, so in the other error cases (if SKB allocation fails), we just
->> 'goto err' and call the receive handler for the packets already in
->> skb_pool. Why can't we do the same here?
->
-> If SKB allocation fails, then the packets already in skb_pool should be
-> processed by htc rx handler, yes. About the other two cases: if pkt_tag or
-> pkt_len is invalid, then the whole SKB is considered invalid and dropped.
-> That is what the statistics macros tell. So I think we should not process
-> packets from skb_pool which are associated with a dropped SKB. And so just
-> free them instead.
+Why does it matter? The s390 driver will not set fgsp=true, so if it
+fails because map fails or does a proper detection it shouldn't make a
+difference.
 
-Hmm, okay, but if we're counting packets, your patch is not incrementing
-any drop counters for the extra SKBs it's dropping either? They would
-previously have been counted as 'RX_STAT_INC(hif_dev, skb_allocated)',
-so shouldn't they now be counted as 'skb_dropped' as well? The single
-counter increase inside the err if statements refers to the skb that's
-the function parameter (which AFAICT is a different kind of skb than the
-ones being allocated and processed in that loop? it's being split into
-chunks or?).
+IOW how does this actualy manifest into a failure?
 
->> Also, I think there's another bug in that function, which this change
->> will make worse? Specifically, in the start of that function,
->> hif_dev->remain_skb is moved to skb_pool[0], but not cleared from
->> hif_dev itself. So if we then hit the invalid check and free it, the
->> next time the function is called, we'll get the same remain_skb pointer,
->> which has now been freed.
->
-> Sorry, I missed that somehow.
-> Moving 'hif_dev->rx_remain_len = index - MAX_RX_BUF_SIZE;' after
-> "ath9k_htc: RX memory allocation error\n" error path should be done, too.
-> hif_dev->rx_remain_len is zeroed after remain_skb processing, so we cannot
-> reference hif_dev->remain_skb unless we explicitly allocate successfully a
-> new one (making rx_remain_len non zero).
->
->> So I think we'll need to clear out hif_dev->remain_skb after moving it
->> to skb_pool. Care to add that as well?
->
-> Yes, this must be done. I'll add it to patch v3.
+> -	if (!ret) {
+> -		size_t unmapped = iommu_unmap(domain->domain, 0, PAGE_SIZE);
+> +	list_for_each_entry(region, regions, list) {
+> +		if (region->end - region->start < PAGE_SIZE * 2)
+> +			continue;
+>  
+> -		if (unmapped == PAGE_SIZE)
+> -			iommu_unmap(domain->domain, PAGE_SIZE, PAGE_SIZE);
+> -		else
+> -			domain->fgsp = true;
+> +		ret = iommu_map(domain->domain, region->start, page_to_phys(pages), PAGE_SIZE * 2,
+> +				IOMMU_READ | IOMMU_WRITE | IOMMU_CACHE);
 
-OK, cool!
+The region also needs to have 'region->start % (PAGE_SIZE*2) == 0' for the
+test to work
+
+Jason
