@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F101F65C1CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5906065C1E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237998AbjACOXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
+        id S233116AbjACOZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:25:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237964AbjACOWz (ORCPT
+        with ESMTP id S238005AbjACOZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:22:55 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBCE658E
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:22:52 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id bs20so27497040wrb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 06:22:52 -0800 (PST)
+        Tue, 3 Jan 2023 09:25:04 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7222120BF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:24:23 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-466c5fb1c39so425637977b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 06:24:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6ulJSyOqXIWJ2HiTvUjWjMNh2Sb0xfd3VnU0PyMIB40=;
-        b=QbNv4aDS8IiMoW9MC1CUJki1IzxiOa5aDT+RPVY3ZVXQkMHonRTWDcl+2gT2SY1d5G
-         gfMdlMG79DEkgwxPZWytNLVFwqFNMz9SQ5DPLEJdAR9b/cCOD5//Qeb4KXTBV50kDHgG
-         w1kIYTAxedqeGFPC1vcFQr6dABTvEulf1G3P64QL62pLWa7J2MUKMSdHzolSJgtGi0UG
-         mDzlg6SGTSh1X0NCdmfLLYhNTDOkG+kXzHLKwaJ4Lh8VaAaSrDwl4t3RiHO998c4GDV3
-         Kd4lJs5lnYblIdsyew8U2eQ3w+eRCTznDPTd5a2CeNQh8NScNXVf+WHzOcKVC9jBT/MI
-         PRaA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NE5M4o+uQQasvN424i3ug4ExVm+nFuQNfHX3PyiYrhY=;
+        b=i3jwR45oeE2d35x6ntkFfkol7/wtQxjvWn0I0lU5AyI9apocva0aLf5om/lKbpSFc9
+         nqVX/42fAyDN+D8kQahGzdNS/dFfR7vgJVty93UCDArtK8vUvUDu/Bov8t8WXdUacmaX
+         06VUEBM8F53prRApJYuAOdrBdtkQkNpYWMUdLaU+Ht+g57ofJZjv3TtIJlCU/MhgKWof
+         IRlfHBJgjw80yoyl8oK4pzui0Ouqx1XtA/Jem5nKyBvDgczgJvNQo5Am1SnYHmN7PX23
+         vbBpW1u4S0GysFGuZ9iqHMeu6tjvdVV9aGPFHSmZLoiHp+pMjIoJHvmnH0N9ud+Pg7SA
+         qUgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ulJSyOqXIWJ2HiTvUjWjMNh2Sb0xfd3VnU0PyMIB40=;
-        b=xCBhSILCoUpH8DXbuYnxTIpGllrZJtJ3lwC1Hu6DrM45RNxvmkD68QKRiBCMLbJHo1
-         cBArEuiAJkIiR+ncV6Vw/1gHpgNearctpVigICmpVumzMqUHz2SFGg2n5Ch8GyZOYrkk
-         fgJsRZsGzFfQWpCzesl8P0TCT3lK2+Zy12OyCB5kLjQcivjVwKbbf+y+IGXNT5I8H2hU
-         DnITLmum+IENnq2TaxZflSd6bVNXs9ZOSrdEwVMnSjS7dkBKjpRdBVsifT6b3lBkrbM6
-         1zsGBcH6v2tLZT3TVO1UJJlA1V28YqVU0uJvhdgCr5V3YVHWFX01F/atGGjtUHzskrE2
-         LDFg==
-X-Gm-Message-State: AFqh2koXd8OR93x07aVFyE6yg5+wNXdTuf6OKTNigDNvHAIJzqkt3/0k
-        pRfNfmCq7HPOdMAZ1xRfZpPOHQ==
-X-Google-Smtp-Source: AMrXdXuxerG02DjJJFQvbpU+7fmKx4OJ39Q6NMAGaoEvjaa/Q2YxQpVsFtx58UK4L9DQ9xs17smENg==
-X-Received: by 2002:adf:fe8f:0:b0:242:68fb:da2b with SMTP id l15-20020adffe8f000000b0024268fbda2bmr29070495wrr.18.1672755770698;
-        Tue, 03 Jan 2023 06:22:50 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id h29-20020adfaa9d000000b002368f6b56desm38768641wrc.18.2023.01.03.06.22.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 06:22:49 -0800 (PST)
-Message-ID: <b118af4c-e4cc-c50b-59aa-d768f1ec69ff@linaro.org>
-Date:   Tue, 3 Jan 2023 14:22:48 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NE5M4o+uQQasvN424i3ug4ExVm+nFuQNfHX3PyiYrhY=;
+        b=F/cPEqD4flJ3hK2wb+KIbOPfwOTWaKlWxIsxCT235PjuzFNQyv/SfQIgI1xWYt1bBO
+         Dlv5QcjCbqhouR5yW/efh+77a5bbQTHHgS1yAoipBbgrp3zKgjofzjaojoOj3rlpvzSY
+         0SQZAHWD+VyztBa6R/WLePDC/cWXJN/5dBCTJM/Gkce9YQH/602BzWxEN/+2Ud5A8vkH
+         f2QJFO8gPApTrYqf+VigHf3avGPL6N70DHK54YjXApg2C+qBxZBJ5jEiQdPLz4d4srGl
+         cYIXc5FltKHJXDaoPBEvGRh1FdUHgroxbjF29HFlTh+hMcY+n4RnLd4nX/4LPrQIZl0U
+         X+YQ==
+X-Gm-Message-State: AFqh2krx28xazWZKfLwnoj88xHwg5awuUOHmFBW/us5xl7OWoQUCUj/q
+        EQ9A2tm4Bagy8F6vxmi3shRbfKkaxIlcCbHv/bTkOA==
+X-Google-Smtp-Source: AMrXdXvfTDeGRopOZf2rluGeZaq7+pVIG0eHIP/6bV4NHM+1knLBXuE/oXdbslh3vqljSqaxplnY3e2rVZMChqZXziM=
+X-Received: by 2002:a0d:dc86:0:b0:3d5:ecbb:2923 with SMTP id
+ f128-20020a0ddc86000000b003d5ecbb2923mr5716457ywe.485.1672755863093; Tue, 03
+ Jan 2023 06:24:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] nvmem: core: Fix race in nvmem_register()
-Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Eric Curtin <ecurtin@redhat.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-References: <20230103114427.1825-1-marcan@marcan.st>
- <ff77ba1c-8b67-4697-d713-0392d3b1d77a@linaro.org>
- <95a4cfde-490f-d26d-163e-7ab1400e7380@marcan.st>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <95a4cfde-490f-d26d-163e-7ab1400e7380@marcan.st>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230103-topic-sm8550-upstream-dispcc-v1-0-81bfcc26b2dc@linaro.org>
+ <20230103-topic-sm8550-upstream-dispcc-v1-3-81bfcc26b2dc@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-dispcc-v1-3-81bfcc26b2dc@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 3 Jan 2023 16:24:11 +0200
+Message-ID: <CAA8EJprLTLCskyTOLzfchNt1mrCUu47qMH43REOKbY0c3CxYTw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] clk: qcom: add SM8550 DISPCC driver
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,172 +75,272 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 3 Jan 2023 at 15:54, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> Add support for the display clock controller found in SM8550
+> based devices.
+>
+> This clock controller feeds the Multimedia Display SubSystem (MDSS).
+> This driver is based on the SM8450 support.
+
+Looks good, few minor nits below:
+
+>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  drivers/clk/qcom/Kconfig         |    9 +
+>  drivers/clk/qcom/Makefile        |    1 +
+>  drivers/clk/qcom/dispcc-sm8550.c | 1814 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 1824 insertions(+)
+>
+
+[skipped]
+
+> +static struct clk_regmap_div disp_cc_mdss_byte0_div_clk_src = {
+> +       .reg = 0x8120,
+> +       .shift = 0,
+> +       .width = 4,
+> +       .clkr.hw.init = &(struct clk_init_data) {
+> +               .name = "disp_cc_mdss_byte0_div_clk_src",
+> +               .parent_data = &(const struct clk_parent_data) {
+> +                       .hw = &disp_cc_mdss_byte0_clk_src.clkr.hw,
+> +               },
+
+We can use parent_hws in such cases (here and below).
+
+> +               .num_parents = 1,
+> +               .ops = &clk_regmap_div_ops,
+> +       },
+> +};
+> +
+> +static struct clk_regmap_div disp_cc_mdss_byte1_div_clk_src = {
+> +       .reg = 0x813c,
+> +       .shift = 0,
+> +       .width = 4,
+> +       .clkr.hw.init = &(struct clk_init_data) {
+> +               .name = "disp_cc_mdss_byte1_div_clk_src",
+> +               .parent_data = &(const struct clk_parent_data) {
+> +                       .hw = &disp_cc_mdss_byte1_clk_src.clkr.hw,
+> +               },
+> +               .num_parents = 1,
+> +               .ops = &clk_regmap_div_ops,
+> +       },
+> +};
+
+[skipped most of the clocks]
+
+> +static struct gdsc mdss_gdsc = {
+> +       .gdscr = 0x9000,
+> +       .pd = {
+> +               .name = "mdss_gdsc",
+> +       },
+> +       .pwrsts = PWRSTS_OFF_ON,
+> +       .flags = HW_CTRL | RETAIN_FF_ENABLE,
+> +};
+> +
+> +static struct gdsc mdss_int2_gdsc = {
+> +       .gdscr = 0xb000,
+> +       .pd = {
+> +               .name = "mdss_int2_gdsc",
+> +       },
+> +       .pwrsts = PWRSTS_OFF_ON,
+> +       .flags = HW_CTRL | RETAIN_FF_ENABLE,
+> +};
+> +
+> +static struct clk_regmap *disp_cc_sm8550_clocks[] = {
+> +       [DISP_CC_MDSS_ACCU_CLK] = &disp_cc_mdss_accu_clk.clkr,
+> +       [DISP_CC_MDSS_AHB1_CLK] = &disp_cc_mdss_ahb1_clk.clkr,
+> +       [DISP_CC_MDSS_AHB_CLK] = &disp_cc_mdss_ahb_clk.clkr,
+> +       [DISP_CC_MDSS_AHB_CLK_SRC] = &disp_cc_mdss_ahb_clk_src.clkr,
+> +       [DISP_CC_MDSS_BYTE0_CLK] = &disp_cc_mdss_byte0_clk.clkr,
+> +       [DISP_CC_MDSS_BYTE0_CLK_SRC] = &disp_cc_mdss_byte0_clk_src.clkr,
+> +       [DISP_CC_MDSS_BYTE0_DIV_CLK_SRC] = &disp_cc_mdss_byte0_div_clk_src.clkr,
+> +       [DISP_CC_MDSS_BYTE0_INTF_CLK] = &disp_cc_mdss_byte0_intf_clk.clkr,
+> +       [DISP_CC_MDSS_BYTE1_CLK] = &disp_cc_mdss_byte1_clk.clkr,
+> +       [DISP_CC_MDSS_BYTE1_CLK_SRC] = &disp_cc_mdss_byte1_clk_src.clkr,
+> +       [DISP_CC_MDSS_BYTE1_DIV_CLK_SRC] = &disp_cc_mdss_byte1_div_clk_src.clkr,
+> +       [DISP_CC_MDSS_BYTE1_INTF_CLK] = &disp_cc_mdss_byte1_intf_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX0_AUX_CLK] = &disp_cc_mdss_dptx0_aux_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX0_AUX_CLK_SRC] = &disp_cc_mdss_dptx0_aux_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX0_CRYPTO_CLK] = &disp_cc_mdss_dptx0_crypto_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX0_LINK_CLK] = &disp_cc_mdss_dptx0_link_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX0_LINK_CLK_SRC] = &disp_cc_mdss_dptx0_link_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX0_LINK_DIV_CLK_SRC] = &disp_cc_mdss_dptx0_link_div_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX0_LINK_INTF_CLK] = &disp_cc_mdss_dptx0_link_intf_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX0_PIXEL0_CLK] = &disp_cc_mdss_dptx0_pixel0_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX0_PIXEL0_CLK_SRC] = &disp_cc_mdss_dptx0_pixel0_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX0_PIXEL1_CLK] = &disp_cc_mdss_dptx0_pixel1_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX0_PIXEL1_CLK_SRC] = &disp_cc_mdss_dptx0_pixel1_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX0_USB_ROUTER_LINK_INTF_CLK] =
+> +               &disp_cc_mdss_dptx0_usb_router_link_intf_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX1_AUX_CLK] = &disp_cc_mdss_dptx1_aux_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX1_AUX_CLK_SRC] = &disp_cc_mdss_dptx1_aux_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX1_CRYPTO_CLK] = &disp_cc_mdss_dptx1_crypto_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX1_LINK_CLK] = &disp_cc_mdss_dptx1_link_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX1_LINK_CLK_SRC] = &disp_cc_mdss_dptx1_link_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX1_LINK_DIV_CLK_SRC] = &disp_cc_mdss_dptx1_link_div_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX1_LINK_INTF_CLK] = &disp_cc_mdss_dptx1_link_intf_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX1_PIXEL0_CLK] = &disp_cc_mdss_dptx1_pixel0_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX1_PIXEL0_CLK_SRC] = &disp_cc_mdss_dptx1_pixel0_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX1_PIXEL1_CLK] = &disp_cc_mdss_dptx1_pixel1_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX1_PIXEL1_CLK_SRC] = &disp_cc_mdss_dptx1_pixel1_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX1_USB_ROUTER_LINK_INTF_CLK] =
+> +               &disp_cc_mdss_dptx1_usb_router_link_intf_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX2_AUX_CLK] = &disp_cc_mdss_dptx2_aux_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX2_AUX_CLK_SRC] = &disp_cc_mdss_dptx2_aux_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX2_CRYPTO_CLK] = &disp_cc_mdss_dptx2_crypto_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX2_LINK_CLK] = &disp_cc_mdss_dptx2_link_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX2_LINK_CLK_SRC] = &disp_cc_mdss_dptx2_link_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX2_LINK_DIV_CLK_SRC] = &disp_cc_mdss_dptx2_link_div_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX2_LINK_INTF_CLK] = &disp_cc_mdss_dptx2_link_intf_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX2_PIXEL0_CLK] = &disp_cc_mdss_dptx2_pixel0_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX2_PIXEL0_CLK_SRC] = &disp_cc_mdss_dptx2_pixel0_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX2_PIXEL1_CLK] = &disp_cc_mdss_dptx2_pixel1_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX2_PIXEL1_CLK_SRC] = &disp_cc_mdss_dptx2_pixel1_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX3_AUX_CLK] = &disp_cc_mdss_dptx3_aux_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX3_AUX_CLK_SRC] = &disp_cc_mdss_dptx3_aux_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX3_CRYPTO_CLK] = &disp_cc_mdss_dptx3_crypto_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX3_LINK_CLK] = &disp_cc_mdss_dptx3_link_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX3_LINK_CLK_SRC] = &disp_cc_mdss_dptx3_link_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX3_LINK_DIV_CLK_SRC] = &disp_cc_mdss_dptx3_link_div_clk_src.clkr,
+> +       [DISP_CC_MDSS_DPTX3_LINK_INTF_CLK] = &disp_cc_mdss_dptx3_link_intf_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX3_PIXEL0_CLK] = &disp_cc_mdss_dptx3_pixel0_clk.clkr,
+> +       [DISP_CC_MDSS_DPTX3_PIXEL0_CLK_SRC] = &disp_cc_mdss_dptx3_pixel0_clk_src.clkr,
+> +       [DISP_CC_MDSS_ESC0_CLK] = &disp_cc_mdss_esc0_clk.clkr,
+> +       [DISP_CC_MDSS_ESC0_CLK_SRC] = &disp_cc_mdss_esc0_clk_src.clkr,
+> +       [DISP_CC_MDSS_ESC1_CLK] = &disp_cc_mdss_esc1_clk.clkr,
+> +       [DISP_CC_MDSS_ESC1_CLK_SRC] = &disp_cc_mdss_esc1_clk_src.clkr,
+> +       [DISP_CC_MDSS_MDP1_CLK] = &disp_cc_mdss_mdp1_clk.clkr,
+> +       [DISP_CC_MDSS_MDP_CLK] = &disp_cc_mdss_mdp_clk.clkr,
+> +       [DISP_CC_MDSS_MDP_CLK_SRC] = &disp_cc_mdss_mdp_clk_src.clkr,
+> +       [DISP_CC_MDSS_MDP_LUT1_CLK] = &disp_cc_mdss_mdp_lut1_clk.clkr,
+> +       [DISP_CC_MDSS_MDP_LUT_CLK] = &disp_cc_mdss_mdp_lut_clk.clkr,
+> +       [DISP_CC_MDSS_NON_GDSC_AHB_CLK] = &disp_cc_mdss_non_gdsc_ahb_clk.clkr,
+> +       [DISP_CC_MDSS_PCLK0_CLK] = &disp_cc_mdss_pclk0_clk.clkr,
+> +       [DISP_CC_MDSS_PCLK0_CLK_SRC] = &disp_cc_mdss_pclk0_clk_src.clkr,
+> +       [DISP_CC_MDSS_PCLK1_CLK] = &disp_cc_mdss_pclk1_clk.clkr,
+> +       [DISP_CC_MDSS_PCLK1_CLK_SRC] = &disp_cc_mdss_pclk1_clk_src.clkr,
+> +       [DISP_CC_MDSS_RSCC_AHB_CLK] = &disp_cc_mdss_rscc_ahb_clk.clkr,
+> +       [DISP_CC_MDSS_RSCC_VSYNC_CLK] = &disp_cc_mdss_rscc_vsync_clk.clkr,
+> +       [DISP_CC_MDSS_VSYNC1_CLK] = &disp_cc_mdss_vsync1_clk.clkr,
+> +       [DISP_CC_MDSS_VSYNC_CLK] = &disp_cc_mdss_vsync_clk.clkr,
+> +       [DISP_CC_MDSS_VSYNC_CLK_SRC] = &disp_cc_mdss_vsync_clk_src.clkr,
+> +       [DISP_CC_PLL0] = &disp_cc_pll0.clkr,
+> +       [DISP_CC_PLL1] = &disp_cc_pll1.clkr,
+> +       [DISP_CC_SLEEP_CLK] = &disp_cc_sleep_clk.clkr,
+> +       [DISP_CC_SLEEP_CLK_SRC] = &disp_cc_sleep_clk_src.clkr,
+> +       [DISP_CC_XO_CLK_SRC] = &disp_cc_xo_clk_src.clkr,
+> +};
+> +
+> +static const struct qcom_reset_map disp_cc_sm8550_resets[] = {
+> +       [DISP_CC_MDSS_CORE_BCR] = { 0x8000 },
+> +       [DISP_CC_MDSS_CORE_INT2_BCR] = { 0xa000 },
+> +       [DISP_CC_MDSS_RSCC_BCR] = { 0xc000 },
+> +};
+> +
+> +static struct gdsc *disp_cc_sm8550_gdscs[] = {
+> +       [MDSS_GDSC] = &mdss_gdsc,
+> +       [MDSS_INT2_GDSC] = &mdss_int2_gdsc,
+> +};
+> +
+> +static const struct regmap_config disp_cc_sm8550_regmap_config = {
+> +       .reg_bits = 32,
+> +       .reg_stride = 4,
+> +       .val_bits = 32,
+> +       .max_register = 0x11008,
+> +       .fast_io = true,
+> +};
+> +
+> +static struct qcom_cc_desc disp_cc_sm8550_desc = {
+> +       .config = &disp_cc_sm8550_regmap_config,
+> +       .clks = disp_cc_sm8550_clocks,
+> +       .num_clks = ARRAY_SIZE(disp_cc_sm8550_clocks),
+> +       .resets = disp_cc_sm8550_resets,
+> +       .num_resets = ARRAY_SIZE(disp_cc_sm8550_resets),
+> +       .gdscs = disp_cc_sm8550_gdscs,
+> +       .num_gdscs = ARRAY_SIZE(disp_cc_sm8550_gdscs),
+> +};
+> +
+> +static const struct of_device_id disp_cc_sm8550_match_table[] = {
+> +       { .compatible = "qcom,sm8550-dispcc" },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, disp_cc_sm8550_match_table);
+> +
+> +static void disp_cc_sm8550_pm_runtime_disable(void *data)
+> +{
+> +       pm_runtime_disable(data);
+> +}
+> +
+> +static int disp_cc_sm8550_probe(struct platform_device *pdev)
+> +{
+> +       struct regmap *regmap;
+> +       int ret;
+> +
+> +       pm_runtime_enable(&pdev->dev);
+
+We can use devm_pm_runtime_enable() here.
+
+> +
+> +       ret = devm_add_action_or_reset(&pdev->dev, disp_cc_sm8550_pm_runtime_disable, &pdev->dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = pm_runtime_resume_and_get(&pdev->dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       regmap = qcom_cc_map(pdev, &disp_cc_sm8550_desc);
+> +       if (IS_ERR(regmap))
+> +               return PTR_ERR(regmap);
+> +
+> +       clk_lucid_evo_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
+> +       clk_lucid_evo_pll_configure(&disp_cc_pll1, regmap, &disp_cc_pll1_config);
+> +
+> +       /* Enable clock gating for MDP clocks */
+> +       regmap_update_bits(regmap, DISP_CC_MISC_CMD, 0x10, 0x10);
+> +
+> +       /*
+> +        * Keep clocks always enabled:
+> +        *      disp_cc_xo_clk
+> +        */
+> +       regmap_update_bits(regmap, 0xe054, BIT(0), BIT(0));
+> +
+> +       ret = qcom_cc_really_probe(pdev, &disp_cc_sm8550_desc, regmap);
+> +
+> +       pm_runtime_put(&pdev->dev);
+> +
+> +       return ret;
+> +}
+> +
+> +static struct platform_driver disp_cc_sm8550_driver = {
+> +       .probe = disp_cc_sm8550_probe,
+> +       .driver = {
+> +               .name = "disp_cc-sm8550",
+> +               .of_match_table = disp_cc_sm8550_match_table,
+> +       },
+> +};
+> +
+> +static int __init disp_cc_sm8550_init(void)
+> +{
+> +       return platform_driver_register(&disp_cc_sm8550_driver);
+> +}
+> +subsys_initcall(disp_cc_sm8550_init);
+> +
+> +static void __exit disp_cc_sm8550_exit(void)
+> +{
+> +       platform_driver_unregister(&disp_cc_sm8550_driver);
+> +}
+> +module_exit(disp_cc_sm8550_exit);
+> +
+> +MODULE_DESCRIPTION("QTI DISPCC SM8550 Driver");
+> +MODULE_LICENSE("GPL");
+>
+> --
+> 2.34.1
 
 
-On 03/01/2023 13:48, Hector Martin wrote:
-> On 03/01/2023 21.41, Srinivas Kandagatla wrote:
->>
->>
->> On 03/01/2023 11:44, Hector Martin wrote:
->>> nvmem_register() currently registers the device before adding the nvmem
->>> cells, which creates a race window where consumers may find the nvmem
->>> device (and not get PROBE_DEFERred), but then fail to find the cells and
->>> error out.
->>>
->>> Move device registration to the end of nvmem_register(), to close the
->>> race.
->>>
->>> Observed when the stars line up on Apple Silicon machines with the (not
->>> yet upstream, but trivial) spmi nvmem driver and the macsmc-rtc client:
->>>
->>> [    0.487375] macsmc-rtc macsmc-rtc: error -ENOENT: Failed to get rtc_offset NVMEM cell
->>>
->>> Fixes: eace75cfdcf7 ("nvmem: Add a simple NVMEM framework for nvmem providers")
->>> Cc: stable@vger.kernel.org
->>> Reviewed-by: Eric Curtin <ecurtin@redhat.com>
->>> Signed-off-by: Hector Martin <marcan@marcan.st>
->>> ---
->>
->> What has changed since v1?
-> 
-> What you told me to. I'm trying to get a silly bug fixed after you
-> ignored my original patch until Russell independently discovered and
-> submitted a fix for the same thing. I think we've wasted enough
-> developer time here already.
 
-You should remember that maintainers have other regular job and holidays 
-apart from maintaining. When you last sent the patch we are already in 
-near/middle of merge window. If I had applied your original patch 
-without proper review, It would have introduced more regressions. Be 
-patient and we/I understand your concern.
-
-Its always possible that multiple developers hit same bug and endup in 
-multiple patches, there is no way to avoid this unless every developer 
-checks for similar patches on the list.
-
-> 
->>
->>>    drivers/nvmem/core.c | 32 +++++++++++++++++---------------
->>>    1 file changed, 17 insertions(+), 15 deletions(-)
->>>
->>> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
->>> index 321d7d63e068..606f428d6292 100644
->>> --- a/drivers/nvmem/core.c
->>> +++ b/drivers/nvmem/core.c
->>> @@ -822,11 +822,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>>    		break;
->>>    	}
->>>
->>> -	if (rval) {
->>> -		ida_free(&nvmem_ida, nvmem->id);
->>> -		kfree(nvmem);
->>> -		return ERR_PTR(rval);
->>> -	}
->>> +	if (rval)
->>> +		goto err_gpiod_put;
->>
->> Why was gpiod changes added to this patch, that should be a separate
->> patch/discussion, as this is not relevant to the issue that you are
->> reporting.
-> 
-> Because freeing the device also does a gpiod_put in the destructor, so
-This are clearly untested, And I dont want this to be in the middle to 
-fix to the issue you are hitting.
-We should always be careful about untested changes, in this case gpiod 
-has some conditions to check before doing a put. So the patch is 
-incorrect as it is.
-
-> doing this is correct in every other instance below and maintains
-> existing behavior, and it just so happens that this instance converges
-> into the same codepath so it is correct to merge it, and it just so
-> happens that the gpiod put was missing in this path to begin with so
-> this becomes a drive-by bugfix.
-> 
-> If you don't like it I can remove it (i.e. reintroduce the bug for no
-> good reason) and you can submit this fix yourself, because I have no
-> incentive to waste time submitting a separate patch to fix a GPIO leak
-> in an error path corner case in a subsystem I don't own and I have much
-> bigger things to spend my (increasingly lower and lower) willingness to
-> fight for upstream submissions than this.
-> 
-> Seriously, what is wrong with y'all kernel people. No other open source
-> project wastes contributors' time with stupid nitpicks like this. I
-
-These are not stupid nit picks your v1/v2 patches introduced memory 
-leaks and regressions so i will not be picking up any patches that fall 
-in that area.
-
-> found a bug, I fixed it, I then fixed the issues you pointed out, and I
-> don't have the time nor energy to fight over this kind of nonsense next.
-
-I think its worth reading ./Documentation/process/submitting-patches.rst
-
-
-thanks,
-Srini
-> Do you want bugs fixed or not?
-> 
->>>
->>>    	nvmem->read_only = device_property_present(config->dev, "read-only") ||
->>>    			   config->read_only || !nvmem->reg_write;
->>> @@ -837,20 +834,16 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>>
->>>    	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
->>>
->>> -	rval = device_register(&nvmem->dev);
->>> -	if (rval)
->>> -		goto err_put_device;
->>> -
->>>    	if (nvmem->nkeepout) {
->>>    		rval = nvmem_validate_keepouts(nvmem);
->>>    		if (rval)
->>> -			goto err_device_del;
->>> +			goto err_gpiod_put;
->>>    	}
->>>
->>>    	if (config->compat) {
->>>    		rval = nvmem_sysfs_setup_compat(nvmem, config);
->>>    		if (rval)
->>> -			goto err_device_del;
->>> +			goto err_gpiod_put;
->>>    	}
->>>
->>>    	if (config->cells) {
->>> @@ -867,6 +860,15 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>>    	if (rval)
->>>    		goto err_remove_cells;
->>>
->>> +	rval = device_register(&nvmem->dev);
->>> +	if (rval) {
->>> +		nvmem_device_remove_all_cells(nvmem);
->>> +		if (config->compat)
->>> +			nvmem_sysfs_remove_compat(nvmem, config);
->>> +		put_device(&nvmem->dev);
->>> +		return ERR_PTR(rval);
->>> +	}
->>> +
->>>    	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem);
->>>
->>>    	return nvmem;
->>> @@ -876,10 +878,10 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>>    err_teardown_compat:
->>>    	if (config->compat)
->>>    		nvmem_sysfs_remove_compat(nvmem, config);
->>> -err_device_del:
->>> -	device_del(&nvmem->dev);
->>> -err_put_device:
->>> -	put_device(&nvmem->dev);
->>> +err_gpiod_put:
->>> +	gpiod_put(nvmem->wp_gpio);
->>> +	ida_free(&nvmem_ida, nvmem->id);
->>> +	kfree(nvmem);
->>>
->>>    	return ERR_PTR(rval);
->>>    }
->>> --
->>> 2.35.1
->>>
->>
-> 
-> 
-> - Hector
+-- 
+With best wishes
+Dmitry
