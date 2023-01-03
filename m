@@ -2,115 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAD065C4C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE1C65C490
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjACRGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S238305AbjACRGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:06:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238458AbjACRG0 (ORCPT
+        with ESMTP id S238532AbjACRGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:06:26 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ED113D27;
-        Tue,  3 Jan 2023 09:02:29 -0800 (PST)
-Date:   Tue, 03 Jan 2023 17:02:05 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672765325;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NbNZL1/2Oiy5t6PrYaYGRIsq5R0jMZs5rC//ELbFRzM=;
-        b=TNYIJvGpuQwWmnzUvVYVnhSEdmUuw/SyTdiFvQwEMEp1uCD3i/2+aXvvGSEqANqTgw7DxW
-        +53YKF8x94VexfUCcI8pThiwZwK6VqsuSP/JIkVlTWZW6nls9iI7F3vIe3qnVoeoc4xoMV
-        pcnqvhv8kdKrMLwvz3rwJwDEIt6inLEZyg4np02ZISmqWD8101cfONdMyf5GiuMljWm9b9
-        +tWml/ti89GvGFrFz3WtkKHmIIGAyYl3gCJ2c6yoc6D+9f0bPZi1lyTXbt00CozrBTriRb
-        vwHsKIYLeZ0FmujN7EJzSqwHB8BKblFMVRehghJxUqZ9rQyTCEW0HbtXs1375w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672765325;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NbNZL1/2Oiy5t6PrYaYGRIsq5R0jMZs5rC//ELbFRzM=;
-        b=1t6X4m25ig6UDQKuPKFIvKKEolexytJu2Y8OUkC5URrfHJjcs67mQp/Z6j3aVXxH0Rwj9T
-        lZ7NsdP78axbSfBQ==
-From:   "tip-bot2 for Anuradha Weeraman" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/asm] x86/lib: Fix compiler and kernel-doc warnings
-Cc:     Anuradha Weeraman <anuradha@debian.org>,
-        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230103114725.108431-1-anuradha@debian.org>
-References: <20230103114725.108431-1-anuradha@debian.org>
+        Tue, 3 Jan 2023 12:06:18 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7681403E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:02:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5bTeRA7Wa+rMuUkDwEr19koGJ9Y1JZKX6IAbWnhONOs=; b=buzyU+DwrFY83OetkEiJnc7Crf
+        mtPoJtIdVVFzS2cfv8+wM9EJlpeUzfzzHblOsLlKZEpfXdqa5y4oJCWH7XOEipAZ41u2Am0NJyTck
+        wE2q63qzPDE2AWatqJUD72A8Bw+t0qATOjfQLIOUYKqVLua1hOthLYUB4PERuZ3TYQ/HniKWkHZAO
+        2+jeydnaCQ20LTpHLinIKyP18Hqee/AWWDK4gk7iIZ9XuGpfASHWEh0UtPrCoeZ85wK2ikMBDFNYa
+        XmJVsnHVCiB83ajJ/oRXOpyxSiS/7OalPMeRikQYDHCi8mo7jge1yPQmcqPguNSA+gOypv6hLR0VQ
+        GZnahUBQ==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:51294 helo=rmk-PC.armlinux.org.uk)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <rmk@armlinux.org.uk>)
+        id 1pCkft-0005dK-US; Tue, 03 Jan 2023 17:02:05 +0000
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+        id 1pCkft-004hzL-0Q; Tue, 03 Jan 2023 17:02:05 +0000
+From:   "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: stop nvme matching for nvmem files
 MIME-Version: 1.0
-Message-ID: <167276532531.4906.13323918838111480270.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <E1pCkft-004hzL-0Q@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date:   Tue, 03 Jan 2023 17:02:05 +0000
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/asm branch of tip:
+The nvme patterns detect all include files starting with nvme, which
+also picks up the nvmem subsystem header files. Fix this by excluding
+the nvmem subsystem header files from the nvme subsystem entry.
 
-Commit-ID:     f843bfeee3d95782677569856ea7f33b87bfd3d0
-Gitweb:        https://git.kernel.org/tip/f843bfeee3d95782677569856ea7f33b87bfd3d0
-Author:        Anuradha Weeraman <anuradha@debian.org>
-AuthorDate:    Tue, 03 Jan 2023 17:17:24 +05:30
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 03 Jan 2023 17:56:08 +01:00
-
-x86/lib: Fix compiler and kernel-doc warnings
-
-Fix the following W=1 warnings:
-
-arch/x86/lib/cmdline.c:
-
-  - Include <asm/cmdline.h> to fix missing-prototypes warnings.
-
-  - Update comment for __cmdline_find_option_bool to fix a kernel-doc warning.
-
-Signed-off-by: Anuradha Weeraman <anuradha@debian.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230103114725.108431-1-anuradha@debian.org
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
- arch/x86/lib/cmdline.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/lib/cmdline.c b/arch/x86/lib/cmdline.c
-index b6da093..80570eb 100644
---- a/arch/x86/lib/cmdline.c
-+++ b/arch/x86/lib/cmdline.c
-@@ -7,16 +7,18 @@
- #include <linux/string.h>
- #include <linux/ctype.h>
- #include <asm/setup.h>
-+#include <asm/cmdline.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0cccd40d7801..64cc6947099e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14711,6 +14711,7 @@ T:	git://git.infradead.org/nvme.git
+ F:	drivers/nvme/host/
+ F:	drivers/nvme/common/
+ F:	include/linux/nvme*
++X:	include/linux/nvmem*
+ F:	include/uapi/linux/nvme_ioctl.h
  
- static inline int myisspace(u8 c)
- {
- 	return c <= ' ';	/* Close enough approximation */
- }
- 
--/**
-+/*
-  * Find a boolean option (like quiet,noapic,nosmp....)
-  *
-  * @cmdline: the cmdline string
-+ * @max_cmdline_size: the maximum size of cmdline
-  * @option: option string to look for
-  *
-  * Returns the position of that @option (starts counting with 1)
+ NVM EXPRESS FABRICS AUTHENTICATION
+-- 
+2.30.2
+
