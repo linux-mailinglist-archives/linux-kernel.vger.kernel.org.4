@@ -2,155 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D836965BFCE
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3042C65BFCF
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237538AbjACMW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 07:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S233068AbjACMYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 07:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbjACMWV (ORCPT
+        with ESMTP id S231250AbjACMYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 07:22:21 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F5FF017
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 04:22:20 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id n8so20173360oih.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 04:22:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jLTca1gX9g6fgPyk87rTl4KumqmJHjz23Fu2HgF4fpU=;
-        b=K7uD8cPJEJdLlIOweJyH+gkLNEn8O96uE77Gcq4itN88ByyVPVGSJJfgm1nzlu0twe
-         jSRWv6wMRxv4IW8YvDtr4l9+yth9HpeorflFJlKlHJWCl+cT22u52M1VIZdWnRO5WwDI
-         XH9VAyTiSBt0K8/tuYGvBZyRomsEBm/TukHhl+06TKVqOB8A7ZM+A9T/IxdIcojwlW1s
-         6ZA/l7VxyITeSUh20A0rKy2mhoei+UH3LqOpO4ArYSK5CNWGkrK7n+lJYipsvkFP+TGI
-         TWOs97j5KIGtNn/yROsxIzhC2w0Byyo2EskisOvhkxS+LqZefEw/Bh9qtExy/1JkFVrf
-         aM1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jLTca1gX9g6fgPyk87rTl4KumqmJHjz23Fu2HgF4fpU=;
-        b=qvmA48N8dtjmwjTRJ7WrGgFSI06+sP1QZF7h9oUNq5kcLjAtqAqDynAAkV5KH+zUyq
-         T6bGPuuNgMETwid0MZKzlpeIna1rzQUxJir8W+LLhAwDOVXHJwT1NFpGoZKdGRmBU9Mi
-         TahGRk+exY0k0OmB61uKvyjg+J0kTclrg4zAq7bmc6BQUlZoaPoQQHnY1oLWO4WE9CaP
-         0FDZwUSdQR+XbaDcvIU716dTUrlH5JIwqCpXoH4KSmeHRg5p0Ojz1W5DJEZk2w8etY8S
-         USZGJab+DGN/NXNjwgH2ywkFWfSgQsN4s9yYf6sKPPAAxrzyIMCpNAOyKn1J2/o4hS16
-         m4yw==
-X-Gm-Message-State: AFqh2kq6Q+mevmthJCT8TL3qpGGcgddPIGryAGjf+z4d3wQkNNTbzPeo
-        jwVgDT5u7VjdIXasqsTnwQQ=
-X-Google-Smtp-Source: AMrXdXu1wPBh5LROXTTg8vx1zqhJ9ykghcJIV6qN7Rwpa2uRUhk6ZYwtNvMMbKCt2WyDRezgXDAsDw==
-X-Received: by 2002:a05:6808:2082:b0:35e:93bf:a9bb with SMTP id s2-20020a056808208200b0035e93bfa9bbmr33973789oiw.13.1672748540046;
-        Tue, 03 Jan 2023 04:22:20 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j12-20020a9d7f0c000000b00660fe564e12sm14724792otq.58.2023.01.03.04.22.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 04:22:19 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 04:22:17 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: Linux 6.2-rc2
-Message-ID: <20230103122217.GA190111@roeck-us.net>
-References: <CAHk-=wim8DMRzjyYTJ3UbdqZ26keQyZSU02NZb-JY1=9OpcO1w@mail.gmail.com>
- <20230102225656.GA3532398@roeck-us.net>
- <CAHk-=wjZPPscjDhsHQw_ttHOaQS69rADLm0KuRhbNavBiO62OQ@mail.gmail.com>
- <20230103014535.GA313835@roeck-us.net>
- <CAHk-=whmeBkyu3iS_s-yk0=t3GEoW3sQb-wJFHKykOjG=iQVFw@mail.gmail.com>
- <CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com>
+        Tue, 3 Jan 2023 07:24:17 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C5EF581
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 04:24:15 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 92F0438B17;
+        Tue,  3 Jan 2023 12:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1672748654; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+7Jsn1eqHNc7UcnzZ6QQ9qgpbyDEmgmQmcW4o6pE8FE=;
+        b=f7crYuVZh+fY7/U7c8ENdcFQmDY4hjAnT6KBRzbwPvkwwakLKgtr01ia0SSIU2C4TV1LHd
+        s49hcG0z8cuwJxP9ViU9zIMcuasR9PbL1SD4Szcw9frJXYYvpU4GDojvUWCtHxeCq76v9O
+        nvI/IjIfxJH8kY7hkJOCjkYqSg6XK88=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 764D52C141;
+        Tue,  3 Jan 2023 12:24:14 +0000 (UTC)
+Date:   Tue, 3 Jan 2023 13:24:11 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     akpm@linux-foundation.org, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kthread_worker: Flush all delayed works when destroy
+ kthread worker
+Message-ID: <Y7Qea58f5R58pMhn@alley>
+References: <20221223131601.237244-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221223131601.237244-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 11:58:48AM +0100, Ard Biesheuvel wrote:
-> On Tue, 3 Jan 2023 at 03:13, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Mon, Jan 2, 2023 at 5:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > >
-> > > ... and reverting commit 99cb0d917ff indeed fixes the problem.
-> >
-> > Hmm. My gut feel is that this just exposes some bug in binutils.
-> >
-> > That said, maybe that commit should not have added its own /DISCARDS/
-> > thing, and instead just added that "*(.note.GNU-stack)" to the general
-> > /DISCARDS/ thing that is defined by the
-> >
-> >   #define DISCARDS  ..
-> >
-> > a little bit later, so that we only end up with one single DISCARD
-> > list. Something like this (broken patch on purpose):
-> >
-> >   --- a/include/asm-generic/vmlinux.lds.h
-> >   +++ b/include/asm-generic/vmlinux.lds.h
-> >   @@ -897,5 +897,4 @@
-> >     */
-> >    #define NOTES                                        \
-> >   -     /DISCARD/ : { *(.note.GNU-stack) }              \
-> >         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {       \
-> >                 BOUNDED_SECTION_BY(.note.*, _notes)     \
-> >   @@ -1016,4 +1015,5 @@
-> >    #define DISCARDS                                     \
-> >         /DISCARD/ : {                                   \
-> >   +     *(.note.GNU-stack)                              \
-> >         EXIT_DISCARDS                                   \
-> >         EXIT_CALL                                       \
-> >
-> > But maybe that DISCARDS macrop ends up being used too late?
-> >
-> 
-> Masahiro's v1 did something like this, and it caused an issue on
-> RISC-V, which is why we ended up with this approach instead.
-> 
-> > It really shouldn't matter, but here we are, with a build problem with
-> > some random old binutils on an odd platform..
-> >
-> 
-> AIUI, the way ld.bfd used to combine output sections may also affect
-> the /DISCARD/ pseudo-section, and so introducing it much earlier
-> results in these discards to be interpreted in a different order.
-> 
-> The purpose of this change is to prevent .note.GNU-stack from deciding
-> the section type of the .notes output section, and so keeping it in
-> its own section should be sufficient. E.g.,
-> 
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -896,7 +896,7 @@
->   * Otherwise, the type of .notes section would become PROGBITS
-> instead of NOTES.
->   */
->  #define NOTES                                                          \
-> -       /DISCARD/ : { *(.note.GNU-stack) }                              \
-> +       .note.GNU-stack : { *(.note.GNU-stack) }                        \
->         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {                       \
->                 BOUNDED_SECTION_BY(.note.*, _notes)                     \
->         } NOTES_HEADERS                                                 \
-> 
-> The .note.GNU-stack has zero size, so the result should be the same.
+On Fri 2022-12-23 21:16:01, Zqiang wrote:
+> When destroy a kthread worker, only flush all current works on
+> kthread worker, this is not very sufficient, there may be some
+> delayed works in the pending state,
 
-The above fixes the problem for sh.
+Great catch!
 
-Guenter
+> this commit therefore add
+> flush delayed works function in kthread_destroy_worker().
+> 
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -1375,6 +1375,35 @@ void kthread_flush_worker(struct kthread_worker *worker)
+>  }
+>  EXPORT_SYMBOL_GPL(kthread_flush_worker);
+>  
+> +/**
+> + * kthread_flush_delayed_works - flush all current delayed works on a
+> + * kthread_worker.
+> + * @worker: worker to flush
+> + *
+> + * Wait until all currently executing or pending delayed works are
+> + * queued completed.
+
+It is not clear to me what "queued completed" means. I am not a native
+speaker but this does not look like a meaningful English.
+
+My understanding is that the function queues all pending delayed
+work items immediately. It does not wait until they are proceed.
+
+I am not sure if this is a correct behavior. The delayed work
+items are often used for periodic events. The work usually
+queues itself to be proceed later again. In this case,
+it rather should get canceled.
+
+Another problem is that the kthread_worker API tries to behave
+the same way as the classic workqueue API. And destroy_workqueue()
+ignores delayed works. Well, it might be an implementation limitation
+because the classic workqueues do not have list of delayed work
+items.
+
+A compromise might be to just add the warning in
+kthread_destroy_worker() when worker->delayed_work_list is not empty.
+The caller will be responsible for queuing or canceling all delayed
+work items before calling kthread_destroy_worker().
+
+We should also document this expectation in the description
+of kthread_destroy_worker().
+
+> + */
+> +void kthread_flush_delayed_works(struct kthread_worker *worker)
+> +{
+> +	unsigned long flags;
+> +	struct kthread_delayed_work *dwork;
+> +	struct kthread_work *work;
+> +
+> +	raw_spin_lock_irqsave(&worker->lock, flags);
+> +	while (!list_empty(&worker->delayed_work_list)) {
+> +		work = list_first_entry(&worker->delayed_work_list,
+> +					struct kthread_work, node);
+> +		list_del_init(&work->node);
+
+This is racy. It removes the work from the list before deleting
+the timer. kthread_delayed_work_timer_fn() would warn when
+it gets triggered in the meantime.
+
+A safe solution would be to delete the timer using
+kthread_cancel_delayed_work_timer(). It would make sure
+that the work will not be queued when timer is proceed
+in the meantime.
+
+> +		dwork = container_of(work, struct kthread_delayed_work, work);
+> +		raw_spin_unlock_irqrestore(&worker->lock, flags);
+> +		if (del_timer_sync(&dwork->timer))
+> +			kthread_queue_work(worker, &dwork->work);
+> +		raw_spin_lock_irqsave(&worker->lock, flags);
+> +	}
+> +	raw_spin_unlock_irqrestore(&worker->lock, flags);
+> +}
+> +EXPORT_SYMBOL_GPL(kthread_flush_delayed_works);
+> +
+>  /**
+>   * kthread_destroy_worker - destroy a kthread worker
+>   * @worker: worker to be destroyed
+> @@ -1391,8 +1420,10 @@ void kthread_destroy_worker(struct kthread_worker *worker)
+>  	if (WARN_ON(!task))
+>  		return;
+>  
+> +	kthread_flush_delayed_works(worker);
+>  	kthread_flush_worker(worker);
+>  	kthread_stop(task);
+> +	WARN_ON(!list_empty(&worker->delayed_work_list));
+
+I would personally just add this warning.
+
+Also we should update the function description. The caller is
+responsible for handling delayed work items. They should either
+be queued immediately or canceled when this function
+is called.
+
+>  	WARN_ON(!list_empty(&worker->work_list));
+>  	kfree(worker);
+
+Best Regards,
+Petr
