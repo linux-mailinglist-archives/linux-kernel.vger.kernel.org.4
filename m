@@ -2,120 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADA565C6E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF59265C6E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238711AbjACTDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 14:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
+        id S238186AbjACTEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 14:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238481AbjACTDG (ORCPT
+        with ESMTP id S238784AbjACTEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 14:03:06 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F95A13D2B;
-        Tue,  3 Jan 2023 11:03:05 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso14057298wmq.1;
-        Tue, 03 Jan 2023 11:03:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dAiqidS71pJ1PpHC3qaeiwc7XXSwdkyY1rJdxC3sdNo=;
-        b=OcUJGFAXnpz0EkpWWzeEIqPQuYA7Qc6fwxZdmwvCO4Fcle/tdimP2DJpb0xboB1RnZ
-         PDCzLu1k27WuaXiLG2xsc0Q7SfrYippStl4wae/mLaKgZ7Cyri88QXLMF26l7D/SG3Om
-         cWcVa8aoGxOpZHzzcGF2kCJ1LEvdrLeghuGAgpIN27A7LwDEi6NG4wweKFc8pM3YLO1l
-         0CopLYMIGuzeHYC5/7UJ1hDuUVk4dCnN0IXOK1QQZJDif4mzY+xP1dKRAphKL4Y2unqP
-         FUi30PH3K0HPNXVqIqitXkmYcnG08fNM3nrq07Xq+odLoe9iLqbCM3GMpPPPQ0Hv6i6r
-         hVwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dAiqidS71pJ1PpHC3qaeiwc7XXSwdkyY1rJdxC3sdNo=;
-        b=n7wZbof0H3gqfAYSkUjISPuT8rpoQOcPqL5maZBNPcb4MkeeWJ0v1IdfogsqaVHYDn
-         1u47eG2GOQFGn3niammOvK4lP6hkx2lKNxR9rmy7N3yp44KunIp5eEd42msE/Z8t6nCB
-         POcxzz98HsNvU3ynEdh/bursaUA7o5i9b3DNJigaUlNUZHCMK7MyLgc8WJs0/GXjhGtp
-         4bPDP3kQ0bkmWUw9AA0EC5/3kKX2Jl4OmoDhHuzIzV50BGfFYnC2zeqR09yCZwbHC53q
-         tk6T9t8BA2h949jXOs+VNyXX1t1S22I0ywv6AIIO5QuW0oxsbHekS17mty1uN+QDozKe
-         j0sQ==
-X-Gm-Message-State: AFqh2koUEAwXd0TFa/LjcXWXdSJh3kLq6j4YZaGj6s7cXsMWlUHee6IK
-        LXiGYnrNiTOjK44au76LmrAX0ORhd3g=
-X-Google-Smtp-Source: AMrXdXtexH9TelQNA3D+1EMb1lKqrd/TkGIoXpjVBz/n72HJNG+Ol1q3Esrab9okaLJkXeVsl//o8A==
-X-Received: by 2002:a05:600c:21cc:b0:3d5:79bb:d7da with SMTP id x12-20020a05600c21cc00b003d579bbd7damr31957033wmj.18.1672772584014;
-        Tue, 03 Jan 2023 11:03:04 -0800 (PST)
-Received: from localhost.localdomain (host-79-56-217-20.retail.telecomitalia.it. [79.56.217.20])
-        by smtp.gmail.com with ESMTPSA id iv7-20020a05600c548700b003d35c09d4b9sm54517168wmb.40.2023.01.03.11.03.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 11:03:03 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Tyler Hicks <code@tyhicks.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Muchun Song <muchun.song@linux.dev>, ecryptfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] fs/ecryptfs: Replace kmap_atomic() with kmap_local_page()
-Date:   Tue,  3 Jan 2023 20:02:59 +0100
-Message-Id: <20230103190259.30944-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        Tue, 3 Jan 2023 14:04:00 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E4D12AFA;
+        Tue,  3 Jan 2023 11:03:59 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303IFEO6025375;
+        Tue, 3 Jan 2023 19:03:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=74AI/ynE6YGffYmhdsZlb/SD/hZgGQK0DkgHQIeRABg=;
+ b=N5l2QpQ/9eoFRqHaA+tkkCy93Rr1o01/gVuBQf0JpEiNthVmeFeprGWfzXu8ZlpeQYnT
+ KMa7Fc+TnpI4I7fA8LZiZrA+/txAJZYEBJrH6OUd7maJcmg1fQuGhLD/D8zdmSUIhoUF
+ wKFeagOSGI/VhH6SePmwfg2s9cR3BW73VflAjTNpRSGmRwuxdDnnxRVDsEvILpso43ZX
+ WVaotSbERrf02aXCOCIwPHp1Pimu7Pfi3WW30y/vGRdM5rHERoNQUusZKu0meQwOufUS
+ mbmtiqykSxod8oLWI/Wv6m4MOpazHcOcwRWHmxPukXk3PE067L4mrT+61Ne7uABUjWvH /w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvjvf3am4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 19:03:29 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 303IYupC003388;
+        Tue, 3 Jan 2023 19:03:29 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvjvf3ak4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 19:03:29 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303AGuqM017352;
+        Tue, 3 Jan 2023 19:03:27 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6u3bm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 19:03:27 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 303J3O6b42467742
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Jan 2023 19:03:24 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C60B420043;
+        Tue,  3 Jan 2023 19:03:24 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 32C0220040;
+        Tue,  3 Jan 2023 19:03:24 +0000 (GMT)
+Received: from osiris (unknown [9.171.65.115])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue,  3 Jan 2023 19:03:24 +0000 (GMT)
+Date:   Tue, 3 Jan 2023 20:03:20 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Willy Tarreau <w@1wt.eu>, "Paul E . McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 3/5] selftests/nolibc: add s390 support
+Message-ID: <Y7R7+BIEvFdxMJIu@osiris>
+References: <20230103071957.222360-1-svens@linux.ibm.com>
+ <20230103071957.222360-4-svens@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230103071957.222360-4-svens@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Rh_xE76xdcJyWjlZIFvAR_MVLEmgDkYo
+X-Proofpoint-GUID: LBFaDc2BbovnaaxdhXWgjphnmmBK7p7p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-03_07,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=788
+ adultscore=0 impostorscore=0 mlxscore=0 phishscore=0 malwarescore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301030163
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap_atomic() is deprecated in favor of kmap_local_page(). Therefore,
-replace kmap_atomic() with kmap_local_page() in ecryptfs_write().
+On Tue, Jan 03, 2023 at 08:19:55AM +0100, Sven Schnelle wrote:
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+> Acked-by: Heiko Carstens <hca@linux.ibm.com>
+> ---
+>  tools/testing/selftests/nolibc/Makefile | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+...
+> -CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables
+> +CFLAGS_s390 = -m64
+> +CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables $(CFLAGS_$(ARCH))
 
-kmap_atomic() is implemented like a kmap_local_page() which also disables
-page-faults and preemption (the latter only for !PREEMPT_RT kernels).
+Since this adds support for architecture specific compile flags, you
+might as well want to add -march=z10, since that's the minimum
+architecture level for the kernel we support anyway.
 
-The code within the mapping/un-mapping in ecryptfs_write() does not
-depend on the above-mentioned side effects.
-
-Therefore, a mere replacement of the old API with the new one is all that
-is required (i.e., there is no need to explicitly add any calls to
-pagefault_disable() and/or preempt_disable()).
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- fs/ecryptfs/read_write.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/ecryptfs/read_write.c b/fs/ecryptfs/read_write.c
-index 5edf027c8359..3458f153a588 100644
---- a/fs/ecryptfs/read_write.c
-+++ b/fs/ecryptfs/read_write.c
-@@ -140,7 +140,7 @@ int ecryptfs_write(struct inode *ecryptfs_inode, char *data, loff_t offset,
- 			       ecryptfs_page_idx, rc);
- 			goto out;
- 		}
--		ecryptfs_page_virt = kmap_atomic(ecryptfs_page);
-+		ecryptfs_page_virt = kmap_local_page(ecryptfs_page);
- 
- 		/*
- 		 * pos: where we're now writing, offset: where the request was
-@@ -163,7 +163,7 @@ int ecryptfs_write(struct inode *ecryptfs_inode, char *data, loff_t offset,
- 			       (data + data_offset), num_bytes);
- 			data_offset += num_bytes;
- 		}
--		kunmap_atomic(ecryptfs_page_virt);
-+		kunmap_local(ecryptfs_page_virt);
- 		flush_dcache_page(ecryptfs_page);
- 		SetPageUptodate(ecryptfs_page);
- 		unlock_page(ecryptfs_page);
--- 
-2.39.0
-
+That way you won't end up with problems like the lay instruction, and
+could also use cghsi for zero comparison. Not that I'm proposing that
+you should change the asm code again, it is fine as it is now.
