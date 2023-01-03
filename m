@@ -2,575 +2,1144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7018D65C47D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:04:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501AA65C486
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238345AbjACRAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:00:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S238151AbjACRCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:02:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238193AbjACRAL (ORCPT
+        with ESMTP id S238270AbjACRAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:00:11 -0500
-X-Greylist: delayed 931 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 Jan 2023 09:00:05 PST
+        Tue, 3 Jan 2023 12:00:23 -0500
 Received: from fx409.security-mail.net (smtpout253.security-mail.net [46.30.205.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D673E13CE9
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:00:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA6A13D17
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:00:17 -0800 (PST)
 Received: from localhost (fx409.security-mail.net [127.0.0.1])
-        by fx409.security-mail.net (Postfix) with ESMTP id DEB5F349884
+        by fx409.security-mail.net (Postfix) with ESMTP id 74A253496FF
         for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
         s=sec-sig-email; t=1672764272;
-        bh=N+DYnnHr44oo4yKA+FeZjrONfftZtLgtaVIUVljrXaQ=;
-        h=From:To:Cc:Subject:Date;
-        b=OqUKEZR2IYk/ddT+NyiSJukLO95i5ILynXZ7YzwgbIuSHaloG0DBD/meP5GW5FbML
-         xckaIfT89g7tCglo8vuBmX3gfeOL4JPLOJ+1FEpshx2FyiQZiUfHfxaIUHyPr0b5Qc
-         AOCV2VJaNsQ9Btr8BhhBNIeDnRwG90IBAFRwAYpc=
+        bh=oYDHnU5ZKUzTL1QpW0EIuqTwZIHaQIzA1PnB5i8pcQ8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=z++p2gugvnjYFPs1gbd80s1pGejmbjBg6kMAlZQ63NTsOXlC0yNajYSA1yWZ4rAtm
+         a6t5fa0W5vGGtPoBLqnt2P/9NwuVyrIC1EERVO7W1tY3y9dkMRQdZjQnR4+egXCgPf
+         w/RWLnhZ7wXxAbJcdpzxjxdUW2uw4q1rDo28nFP0=
 Received: from fx409 (fx409.security-mail.net [127.0.0.1]) by
- fx409.security-mail.net (Postfix) with ESMTP id 38F5A3496CF; Tue,  3 Jan
+ fx409.security-mail.net (Postfix) with ESMTP id 313C6349641; Tue,  3 Jan
  2023 17:44:32 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx409.security-mail.net (Postfix) with ESMTPS id 251F534946B; Tue,  3 Jan
+ fx409.security-mail.net (Postfix) with ESMTPS id 305BA3494C0; Tue,  3 Jan
  2023 17:44:31 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id D835E27E03FB; Tue,  3 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPS id F06DD27E03F5; Tue,  3 Jan 2023
  17:44:30 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id AEB8627E03F6; Tue,  3 Jan 2023 17:44:30 +0100 (CET)
+ (Postfix) with ESMTP id D076627E03FC; Tue,  3 Jan 2023 17:44:30 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- z0U0Q9npD5IP; Tue,  3 Jan 2023 17:44:30 +0100 (CET)
+ oCybUT6LI-hS; Tue,  3 Jan 2023 17:44:30 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 573EC27E03F4; Tue,  3 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id A08B727E03F5; Tue,  3 Jan 2023
  17:44:30 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <436b.63b45b6f.21544.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu AEB8627E03F6
+Secumail-id: <174a4.63b45b6f.2e05f.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu D076627E03FC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
  s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672764270;
- bh=2O/awilCjoYxjBxibrGUj8YEGsFd/+lKInplhMwhn6I=;
+ bh=lGV8+LYV/syNTS2qikQ1y3mIfJPOF1M2LPSPeT12PHQ=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=kYLE5ATPZNXxCA8Vuux6JUiW8dz36so+jFkYcH8SaHEK9H+U2g7yhh9Ik6viLepjp
- N4n9TTBGLXKXn01gTSi1meL3glhU5E+E4xCRqGcrORCkPSeq9Fixw4iHIEHbcyY8d7
- WzYtuuFQOx6Yy06EvwJX/ybXJuG963c2BvuaPn5Q=
+ b=jn4Ku+nRXQJfRAYobvbgq/8vkRsW6zr8iiMqU4S5OM1ylXUwi59uT9AWFozeAOP1s
+ 4yWH3FRCRX+3rvbZl5L8XCuTVqKiZdUMCcQm8zAr/nXI4vjUqzmIheea3tBEUwUOrp
+ rN/oRsG9Hclw3DAksm9jmR1IMJwNkgBGMpdqlmIc=
 From:   Yann Sionneau <ysionneau@kalray.eu>
-To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Yann Sionneau <ysionneau@kalray.eu>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
-        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-audit@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-Subject: [RFC PATCH 00/25] Upstream kvx Linux port
-Date:   Tue,  3 Jan 2023 17:43:34 +0100
-Message-ID: <20230103164359.24347-1-ysionneau@kalray.eu>
+        Guillaume Thouvenin <gthouvenin@kalray.eu>
+Subject: [RFC PATCH 01/25] Documentation: kvx: Add basic documentation
+Date:   Tue,  3 Jan 2023 17:43:35 +0100
+Message-ID: <20230103164359.24347-2-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
 X-ALTERMIMEV2_out: done
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds support for the kv3-1 CPU architecture of the kvx family
-found in the Coolidge (aka MPPA3-80) SoC of Kalray.
+Add some documentation for kvx arch and its Linux port.
 
-This is an RFC, since kvx support is not yet upstreamed into gcc/binutils,
-therefore this patch series cannot be merged into Linux for now.
-
-The goal is to have preliminary reviews and to fix problems early.
-
-The Kalray VLIW processor family (kvx) has the following features:
-* 32/64 bits execution mode
-* 6-issue VLIW architecture
-* 64 x 64bits general purpose registers
-* SIMD instructions
-* little-endian
-* deep learning co-processor
-
-Kalray kv3-1 core which is the third of the kvx family is embedded in Kalray
-Coolidge SoC currently used on K200 and K200-LP boards.
-
-The Coolidge SoC contains 5 clusters each of which is made of:
-* 4MiB of on-chip memory (SMEM)
-* 1 dedicated safety/security core (kv3-1 core).
-* 16 PEs (Processing Elements) (kv3-1 cores).
-* 16 Co-processors (one per PE)
-* 2 Crypto accelerators
-
-The Coolidge SoC contains the following features:
-* 5 Clusters
-* 2 100G Ethernet controllers
-* 8 PCIe GEN4 controllers (Root Complex and Endpoint capable)
-* 2 USB 2.0 controllers
-* 1 Octal SPI-NOR flash controller
-* 1 eMMC controller
-* 3 Quad SPI controllers
-* 6 UART
-* 5 I2C controllers (3 of which are SMBus capable)
-* 4 CAN controllers
-* 1 OTP memory
-
-A kvx toolchain can be built using:
-# install dependencies: texinfo bison flex libgmp-dev libmpc-dev libmpfr-dev
-$ git clone https://github.com/kalray/build-scripts
-$ cd build-scripts
-$ source last.refs
-$ ./build-kvx-xgcc.sh output
-
-The kvx toolchain will be installed in the "output" directory.
-
-A buildroot image (kernel+rootfs) and toolchain can be built using:
-$ git clone -b coolidge-for-upstream https://github.com/kalray/buildroot
-$ cd buildroot
-$ make O=build_kvx kvx_defconfig
-$ make O=build_kvx
-
-The vmlinux image can be found in buildroot/build_kvx/images/vmlinux.
-
-If you are just interested in building the Linux kernel with no rootfs you can
-just do this with the kvx-elf- toolchain:
-$ make ARCH=kvx O=build_kvx CROSS_COMPILE=kvx-elf- default_defconfig
-$ make ARCH=kvx O=build_kvx CROSS_COMPILE=kvx-elf- -j$(($(nproc) + 1))
-
-The vmlinux ELF can be run with qemu by doing:
-# install dependencies: ninja pkg-config libglib-2.0-dev cmake libfdt-dev libpixman-1-dev zlib1g-dev
-$ git clone https://github.com/kalray/qemu-builder
-$ cd qemu-builder
-$ git submodule update --init
-$ make -j$(($(nproc) + 1))
-$ ./qemu-system-kvx -m 1024 -nographic -kernel <path/to/vmlinux>
-
-Yann Sionneau (25):
-  Documentation: kvx: Add basic documentation
-  kvx: Add ELF-related definitions
-  kvx: Add build infrastructure
-  kvx: Add CPU definition headers
-  kvx: Add atomic/locking headers
-  kvx: Add other common headers
-  kvx: Add boot and setup routines
-  kvx: Add exception/interrupt handling
-  kvx: irqchip: Add support for irq controllers
-  kvx: Add process management
-  kvx: Add memory management
-  kvx: Add system call support
-  kvx: Add signal handling support
-  kvx: Add ELF relocations and module support
-  kvx: Add misc common routines
-  kvx: Add some library functions
-  kvx: Add multi-processor (SMP) support
-  kvx: Add kvx default config file
-  kvx: power: scall poweroff driver
-  kvx: gdb: add kvx related gdb helpers
-  kvx: Add support for ftrace
-  kvx: Add support for jump labels
-  kvx: Add debugging related support
-  kvx: Add support for CPU Perf Monitors
-  kvx: Add support for cpuinfo
-
- .../kalray,kvx-core-intc.txt                  |   22 +
- .../devicetree/bindings/perf/kalray-pm.txt    |   21 +
- Documentation/kvx/kvx-exceptions.txt          |  246 +
- Documentation/kvx/kvx-iommu.txt               |  183 +
- Documentation/kvx/kvx-mmu.txt                 |  272 +
- Documentation/kvx/kvx-smp.txt                 |   36 +
- Documentation/kvx/kvx.txt                     |  268 +
- arch/kvx/Kconfig                              |  249 +
- arch/kvx/Kconfig.debug                        |   70 +
- arch/kvx/Makefile                             |   52 +
- arch/kvx/configs/default_defconfig            |  130 +
- arch/kvx/include/asm/Kbuild                   |   20 +
- arch/kvx/include/asm/asm-prototypes.h         |   14 +
- arch/kvx/include/asm/atomic.h                 |  104 +
- arch/kvx/include/asm/barrier.h                |   15 +
- arch/kvx/include/asm/bitops.h                 |  207 +
- arch/kvx/include/asm/bitrev.h                 |   32 +
- arch/kvx/include/asm/break_hook.h             |   69 +
- arch/kvx/include/asm/bug.h                    |   67 +
- arch/kvx/include/asm/cache.h                  |   46 +
- arch/kvx/include/asm/cacheflush.h             |  181 +
- arch/kvx/include/asm/clocksource.h            |   17 +
- arch/kvx/include/asm/cmpxchg.h                |  185 +
- arch/kvx/include/asm/current.h                |   22 +
- arch/kvx/include/asm/dame.h                   |   31 +
- arch/kvx/include/asm/debug.h                  |   35 +
- arch/kvx/include/asm/elf.h                    |  155 +
- arch/kvx/include/asm/fixmap.h                 |   47 +
- arch/kvx/include/asm/ftrace.h                 |   41 +
- arch/kvx/include/asm/futex.h                  |  141 +
- arch/kvx/include/asm/hardirq.h                |   14 +
- arch/kvx/include/asm/hugetlb.h                |   36 +
- arch/kvx/include/asm/hw_breakpoint.h          |   72 +
- arch/kvx/include/asm/hw_irq.h                 |   14 +
- arch/kvx/include/asm/insns.h                  |   16 +
- arch/kvx/include/asm/insns_defs.h             |  197 +
- arch/kvx/include/asm/io.h                     |   34 +
- arch/kvx/include/asm/ipi.h                    |   16 +
- arch/kvx/include/asm/irqflags.h               |   58 +
- arch/kvx/include/asm/jump_label.h             |   59 +
- arch/kvx/include/asm/l2_cache.h               |   75 +
- arch/kvx/include/asm/l2_cache_defs.h          |   64 +
- arch/kvx/include/asm/linkage.h                |   13 +
- arch/kvx/include/asm/mem_map.h                |   44 +
- arch/kvx/include/asm/mmu.h                    |  296 +
- arch/kvx/include/asm/mmu_context.h            |  156 +
- arch/kvx/include/asm/mmu_stats.h              |   38 +
- arch/kvx/include/asm/page.h                   |  187 +
- arch/kvx/include/asm/page_size.h              |   29 +
- arch/kvx/include/asm/pci.h                    |   36 +
- arch/kvx/include/asm/perf_event.h             |   90 +
- arch/kvx/include/asm/pgalloc.h                |  101 +
- arch/kvx/include/asm/pgtable-bits.h           |  102 +
- arch/kvx/include/asm/pgtable.h                |  451 ++
- arch/kvx/include/asm/privilege.h              |  211 +
- arch/kvx/include/asm/processor.h              |  176 +
- arch/kvx/include/asm/ptrace.h                 |  217 +
- arch/kvx/include/asm/pwr_ctrl.h               |   45 +
- arch/kvx/include/asm/rm_fw.h                  |   16 +
- arch/kvx/include/asm/sections.h               |   18 +
- arch/kvx/include/asm/setup.h                  |   29 +
- arch/kvx/include/asm/sfr.h                    |  107 +
- arch/kvx/include/asm/sfr_defs.h               | 5028 +++++++++++++++++
- arch/kvx/include/asm/smp.h                    |   42 +
- arch/kvx/include/asm/sparsemem.h              |   15 +
- arch/kvx/include/asm/spinlock.h               |   16 +
- arch/kvx/include/asm/spinlock_types.h         |   17 +
- arch/kvx/include/asm/stackprotector.h         |   47 +
- arch/kvx/include/asm/stacktrace.h             |   44 +
- arch/kvx/include/asm/string.h                 |   20 +
- arch/kvx/include/asm/swab.h                   |   48 +
- arch/kvx/include/asm/switch_to.h              |   21 +
- arch/kvx/include/asm/symbols.h                |   16 +
- arch/kvx/include/asm/sys_arch.h               |   51 +
- arch/kvx/include/asm/syscall.h                |   73 +
- arch/kvx/include/asm/syscalls.h               |   21 +
- arch/kvx/include/asm/thread_info.h            |   78 +
- arch/kvx/include/asm/timex.h                  |   20 +
- arch/kvx/include/asm/tlb.h                    |   24 +
- arch/kvx/include/asm/tlb_defs.h               |  131 +
- arch/kvx/include/asm/tlbflush.h               |   58 +
- arch/kvx/include/asm/traps.h                  |   76 +
- arch/kvx/include/asm/types.h                  |   12 +
- arch/kvx/include/asm/uaccess.h                |  324 ++
- arch/kvx/include/asm/unistd.h                 |   11 +
- arch/kvx/include/asm/vermagic.h               |   12 +
- arch/kvx/include/asm/vmalloc.h                |   10 +
- arch/kvx/include/uapi/asm/Kbuild              |    1 +
- arch/kvx/include/uapi/asm/bitsperlong.h       |   14 +
- arch/kvx/include/uapi/asm/byteorder.h         |   12 +
- arch/kvx/include/uapi/asm/cachectl.h          |   25 +
- arch/kvx/include/uapi/asm/ptrace.h            |  114 +
- arch/kvx/include/uapi/asm/sigcontext.h        |   16 +
- arch/kvx/include/uapi/asm/unistd.h            |   16 +
- arch/kvx/kernel/Makefile                      |   27 +
- arch/kvx/kernel/asm-offsets.c                 |  157 +
- arch/kvx/kernel/break_hook.c                  |   77 +
- arch/kvx/kernel/common.c                      |   11 +
- arch/kvx/kernel/cpuinfo.c                     |   96 +
- arch/kvx/kernel/dame_handler.c                |  113 +
- arch/kvx/kernel/debug.c                       |   64 +
- arch/kvx/kernel/entry.S                       | 1759 ++++++
- arch/kvx/kernel/ftrace.c                      |  339 ++
- arch/kvx/kernel/head.S                        |  612 ++
- arch/kvx/kernel/hw_breakpoint.c               |  556 ++
- arch/kvx/kernel/insns.c                       |  146 +
- arch/kvx/kernel/io.c                          |   96 +
- arch/kvx/kernel/irq.c                         |   78 +
- arch/kvx/kernel/jump_label.c                  |   34 +
- arch/kvx/kernel/kvx_ksyms.c                   |   29 +
- arch/kvx/kernel/l2_cache.c                    |  448 ++
- arch/kvx/kernel/mcount.S                      |  340 ++
- arch/kvx/kernel/module.c                      |  148 +
- arch/kvx/kernel/perf_event.c                  |  609 ++
- arch/kvx/kernel/process.c                     |  212 +
- arch/kvx/kernel/prom.c                        |   24 +
- arch/kvx/kernel/ptrace.c                      |  461 ++
- arch/kvx/kernel/reset.c                       |   37 +
- arch/kvx/kernel/return_address.c              |   55 +
- arch/kvx/kernel/setup.c                       |  178 +
- arch/kvx/kernel/signal.c                      |  266 +
- arch/kvx/kernel/smp.c                         |  110 +
- arch/kvx/kernel/smpboot.c                     |  127 +
- arch/kvx/kernel/stacktrace.c                  |  173 +
- arch/kvx/kernel/sys_kvx.c                     |   58 +
- arch/kvx/kernel/syscall_table.c               |   19 +
- arch/kvx/kernel/time.c                        |  242 +
- arch/kvx/kernel/traps.c                       |  243 +
- arch/kvx/kernel/vdso.c                        |   87 +
- arch/kvx/kernel/vmlinux.lds.S                 |  173 +
- arch/kvx/lib/Makefile                         |    6 +
- arch/kvx/lib/clear_page.S                     |   40 +
- arch/kvx/lib/copy_page.S                      |   90 +
- arch/kvx/lib/delay.c                          |   39 +
- arch/kvx/lib/memcpy.c                         |   70 +
- arch/kvx/lib/memset.S                         |  351 ++
- arch/kvx/lib/strlen.S                         |  122 +
- arch/kvx/lib/usercopy.S                       |   90 +
- arch/kvx/mm/Makefile                          |   10 +
- arch/kvx/mm/cacheflush.c                      |  154 +
- arch/kvx/mm/dma-mapping.c                     |   95 +
- arch/kvx/mm/extable.c                         |   24 +
- arch/kvx/mm/fault.c                           |  264 +
- arch/kvx/mm/hugetlbpage.c                     |  317 ++
- arch/kvx/mm/init.c                            |  527 ++
- arch/kvx/mm/kernel_rwx.c                      |  228 +
- arch/kvx/mm/mmap.c                            |   31 +
- arch/kvx/mm/mmu.c                             |  204 +
- arch/kvx/mm/mmu_stats.c                       |   94 +
- arch/kvx/mm/tlb.c                             |  433 ++
- arch/kvx/platform/Makefile                    |    7 +
- arch/kvx/platform/ipi.c                       |  110 +
- arch/kvx/platform/pwr_ctrl.c                  |   93 +
- drivers/irqchip/Kconfig                       |   27 +
- drivers/irqchip/Makefile                      |    4 +
- drivers/irqchip/irq-kvx-apic-gic.c            |  349 ++
- drivers/irqchip/irq-kvx-apic-mailbox.c        |  465 ++
- drivers/irqchip/irq-kvx-core-intc.c           |   82 +
- drivers/irqchip/irq-kvx-itgen.c               |  224 +
- drivers/power/reset/kvx-scall-poweroff.c      |   53 +
- include/linux/cpuhotplug.h                    |    2 +
- include/linux/irqchip/irq-kvx-apic-gic.h      |   21 +
- include/linux/irqchip/irq-kvx-apic-mailbox.h  |   29 +
- include/linux/irqchip/irq-kvx-itgen.h         |   24 +
- include/uapi/linux/audit.h                    |    1 +
- include/uapi/linux/elf-em.h                   |    1 +
- include/uapi/linux/elf.h                      |    1 +
- scripts/gdb/arch/Makefile                     |   11 +
- scripts/gdb/arch/__init__.py                  |    1 +
- scripts/gdb/arch/kvx/Makefile                 |   25 +
- scripts/gdb/arch/kvx/__init__.py              |    1 +
- scripts/gdb/arch/kvx/constants.py.in          |   74 +
- scripts/gdb/arch/kvx/mmu.py                   |  199 +
- scripts/gdb/arch/kvx/page_table_walk.py       |  207 +
- tools/include/uapi/asm/bitsperlong.h          |    2 +
- 175 files changed, 25814 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kalray,kvx-core-intc.txt
- create mode 100644 Documentation/devicetree/bindings/perf/kalray-pm.txt
+CC: Jonathan Corbet <corbet@lwn.net>
+CC: linux-doc@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+Co-developed-by: Clement Leger <clement.leger@bootlin.com>
+Signed-off-by: Clement Leger <clement.leger@bootlin.com>
+Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
+Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
+Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+---
+ Documentation/kvx/kvx-exceptions.txt | 246 ++++++++++++++++++++++++
+ Documentation/kvx/kvx-iommu.txt      | 183 ++++++++++++++++++
+ Documentation/kvx/kvx-mmu.txt        | 272 +++++++++++++++++++++++++++
+ Documentation/kvx/kvx-smp.txt        |  36 ++++
+ Documentation/kvx/kvx.txt            | 268 ++++++++++++++++++++++++++
+ 5 files changed, 1005 insertions(+)
  create mode 100644 Documentation/kvx/kvx-exceptions.txt
  create mode 100644 Documentation/kvx/kvx-iommu.txt
  create mode 100644 Documentation/kvx/kvx-mmu.txt
  create mode 100644 Documentation/kvx/kvx-smp.txt
  create mode 100644 Documentation/kvx/kvx.txt
- create mode 100644 arch/kvx/Kconfig
- create mode 100644 arch/kvx/Kconfig.debug
- create mode 100644 arch/kvx/Makefile
- create mode 100644 arch/kvx/configs/default_defconfig
- create mode 100644 arch/kvx/include/asm/Kbuild
- create mode 100644 arch/kvx/include/asm/asm-prototypes.h
- create mode 100644 arch/kvx/include/asm/atomic.h
- create mode 100644 arch/kvx/include/asm/barrier.h
- create mode 100644 arch/kvx/include/asm/bitops.h
- create mode 100644 arch/kvx/include/asm/bitrev.h
- create mode 100644 arch/kvx/include/asm/break_hook.h
- create mode 100644 arch/kvx/include/asm/bug.h
- create mode 100644 arch/kvx/include/asm/cache.h
- create mode 100644 arch/kvx/include/asm/cacheflush.h
- create mode 100644 arch/kvx/include/asm/clocksource.h
- create mode 100644 arch/kvx/include/asm/cmpxchg.h
- create mode 100644 arch/kvx/include/asm/current.h
- create mode 100644 arch/kvx/include/asm/dame.h
- create mode 100644 arch/kvx/include/asm/debug.h
- create mode 100644 arch/kvx/include/asm/elf.h
- create mode 100644 arch/kvx/include/asm/fixmap.h
- create mode 100644 arch/kvx/include/asm/ftrace.h
- create mode 100644 arch/kvx/include/asm/futex.h
- create mode 100644 arch/kvx/include/asm/hardirq.h
- create mode 100644 arch/kvx/include/asm/hugetlb.h
- create mode 100644 arch/kvx/include/asm/hw_breakpoint.h
- create mode 100644 arch/kvx/include/asm/hw_irq.h
- create mode 100644 arch/kvx/include/asm/insns.h
- create mode 100644 arch/kvx/include/asm/insns_defs.h
- create mode 100644 arch/kvx/include/asm/io.h
- create mode 100644 arch/kvx/include/asm/ipi.h
- create mode 100644 arch/kvx/include/asm/irqflags.h
- create mode 100644 arch/kvx/include/asm/jump_label.h
- create mode 100644 arch/kvx/include/asm/l2_cache.h
- create mode 100644 arch/kvx/include/asm/l2_cache_defs.h
- create mode 100644 arch/kvx/include/asm/linkage.h
- create mode 100644 arch/kvx/include/asm/mem_map.h
- create mode 100644 arch/kvx/include/asm/mmu.h
- create mode 100644 arch/kvx/include/asm/mmu_context.h
- create mode 100644 arch/kvx/include/asm/mmu_stats.h
- create mode 100644 arch/kvx/include/asm/page.h
- create mode 100644 arch/kvx/include/asm/page_size.h
- create mode 100644 arch/kvx/include/asm/pci.h
- create mode 100644 arch/kvx/include/asm/perf_event.h
- create mode 100644 arch/kvx/include/asm/pgalloc.h
- create mode 100644 arch/kvx/include/asm/pgtable-bits.h
- create mode 100644 arch/kvx/include/asm/pgtable.h
- create mode 100644 arch/kvx/include/asm/privilege.h
- create mode 100644 arch/kvx/include/asm/processor.h
- create mode 100644 arch/kvx/include/asm/ptrace.h
- create mode 100644 arch/kvx/include/asm/pwr_ctrl.h
- create mode 100644 arch/kvx/include/asm/rm_fw.h
- create mode 100644 arch/kvx/include/asm/sections.h
- create mode 100644 arch/kvx/include/asm/setup.h
- create mode 100644 arch/kvx/include/asm/sfr.h
- create mode 100644 arch/kvx/include/asm/sfr_defs.h
- create mode 100644 arch/kvx/include/asm/smp.h
- create mode 100644 arch/kvx/include/asm/sparsemem.h
- create mode 100644 arch/kvx/include/asm/spinlock.h
- create mode 100644 arch/kvx/include/asm/spinlock_types.h
- create mode 100644 arch/kvx/include/asm/stackprotector.h
- create mode 100644 arch/kvx/include/asm/stacktrace.h
- create mode 100644 arch/kvx/include/asm/string.h
- create mode 100644 arch/kvx/include/asm/swab.h
- create mode 100644 arch/kvx/include/asm/switch_to.h
- create mode 100644 arch/kvx/include/asm/symbols.h
- create mode 100644 arch/kvx/include/asm/sys_arch.h
- create mode 100644 arch/kvx/include/asm/syscall.h
- create mode 100644 arch/kvx/include/asm/syscalls.h
- create mode 100644 arch/kvx/include/asm/thread_info.h
- create mode 100644 arch/kvx/include/asm/timex.h
- create mode 100644 arch/kvx/include/asm/tlb.h
- create mode 100644 arch/kvx/include/asm/tlb_defs.h
- create mode 100644 arch/kvx/include/asm/tlbflush.h
- create mode 100644 arch/kvx/include/asm/traps.h
- create mode 100644 arch/kvx/include/asm/types.h
- create mode 100644 arch/kvx/include/asm/uaccess.h
- create mode 100644 arch/kvx/include/asm/unistd.h
- create mode 100644 arch/kvx/include/asm/vermagic.h
- create mode 100644 arch/kvx/include/asm/vmalloc.h
- create mode 100644 arch/kvx/include/uapi/asm/Kbuild
- create mode 100644 arch/kvx/include/uapi/asm/bitsperlong.h
- create mode 100644 arch/kvx/include/uapi/asm/byteorder.h
- create mode 100644 arch/kvx/include/uapi/asm/cachectl.h
- create mode 100644 arch/kvx/include/uapi/asm/ptrace.h
- create mode 100644 arch/kvx/include/uapi/asm/sigcontext.h
- create mode 100644 arch/kvx/include/uapi/asm/unistd.h
- create mode 100644 arch/kvx/kernel/Makefile
- create mode 100644 arch/kvx/kernel/asm-offsets.c
- create mode 100644 arch/kvx/kernel/break_hook.c
- create mode 100644 arch/kvx/kernel/common.c
- create mode 100644 arch/kvx/kernel/cpuinfo.c
- create mode 100644 arch/kvx/kernel/dame_handler.c
- create mode 100644 arch/kvx/kernel/debug.c
- create mode 100644 arch/kvx/kernel/entry.S
- create mode 100644 arch/kvx/kernel/ftrace.c
- create mode 100644 arch/kvx/kernel/head.S
- create mode 100644 arch/kvx/kernel/hw_breakpoint.c
- create mode 100644 arch/kvx/kernel/insns.c
- create mode 100644 arch/kvx/kernel/io.c
- create mode 100644 arch/kvx/kernel/irq.c
- create mode 100644 arch/kvx/kernel/jump_label.c
- create mode 100644 arch/kvx/kernel/kvx_ksyms.c
- create mode 100644 arch/kvx/kernel/l2_cache.c
- create mode 100644 arch/kvx/kernel/mcount.S
- create mode 100644 arch/kvx/kernel/module.c
- create mode 100644 arch/kvx/kernel/perf_event.c
- create mode 100644 arch/kvx/kernel/process.c
- create mode 100644 arch/kvx/kernel/prom.c
- create mode 100644 arch/kvx/kernel/ptrace.c
- create mode 100644 arch/kvx/kernel/reset.c
- create mode 100644 arch/kvx/kernel/return_address.c
- create mode 100644 arch/kvx/kernel/setup.c
- create mode 100644 arch/kvx/kernel/signal.c
- create mode 100644 arch/kvx/kernel/smp.c
- create mode 100644 arch/kvx/kernel/smpboot.c
- create mode 100644 arch/kvx/kernel/stacktrace.c
- create mode 100644 arch/kvx/kernel/sys_kvx.c
- create mode 100644 arch/kvx/kernel/syscall_table.c
- create mode 100644 arch/kvx/kernel/time.c
- create mode 100644 arch/kvx/kernel/traps.c
- create mode 100644 arch/kvx/kernel/vdso.c
- create mode 100644 arch/kvx/kernel/vmlinux.lds.S
- create mode 100644 arch/kvx/lib/Makefile
- create mode 100644 arch/kvx/lib/clear_page.S
- create mode 100644 arch/kvx/lib/copy_page.S
- create mode 100644 arch/kvx/lib/delay.c
- create mode 100644 arch/kvx/lib/memcpy.c
- create mode 100644 arch/kvx/lib/memset.S
- create mode 100644 arch/kvx/lib/strlen.S
- create mode 100644 arch/kvx/lib/usercopy.S
- create mode 100644 arch/kvx/mm/Makefile
- create mode 100644 arch/kvx/mm/cacheflush.c
- create mode 100644 arch/kvx/mm/dma-mapping.c
- create mode 100644 arch/kvx/mm/extable.c
- create mode 100644 arch/kvx/mm/fault.c
- create mode 100644 arch/kvx/mm/hugetlbpage.c
- create mode 100644 arch/kvx/mm/init.c
- create mode 100644 arch/kvx/mm/kernel_rwx.c
- create mode 100644 arch/kvx/mm/mmap.c
- create mode 100644 arch/kvx/mm/mmu.c
- create mode 100644 arch/kvx/mm/mmu_stats.c
- create mode 100644 arch/kvx/mm/tlb.c
- create mode 100644 arch/kvx/platform/Makefile
- create mode 100644 arch/kvx/platform/ipi.c
- create mode 100644 arch/kvx/platform/pwr_ctrl.c
- create mode 100644 drivers/irqchip/irq-kvx-apic-gic.c
- create mode 100644 drivers/irqchip/irq-kvx-apic-mailbox.c
- create mode 100644 drivers/irqchip/irq-kvx-core-intc.c
- create mode 100644 drivers/irqchip/irq-kvx-itgen.c
- create mode 100644 drivers/power/reset/kvx-scall-poweroff.c
- create mode 100644 include/linux/irqchip/irq-kvx-apic-gic.h
- create mode 100644 include/linux/irqchip/irq-kvx-apic-mailbox.h
- create mode 100644 include/linux/irqchip/irq-kvx-itgen.h
- create mode 100644 scripts/gdb/arch/Makefile
- create mode 100644 scripts/gdb/arch/__init__.py
- create mode 100644 scripts/gdb/arch/kvx/Makefile
- create mode 100644 scripts/gdb/arch/kvx/__init__.py
- create mode 100644 scripts/gdb/arch/kvx/constants.py.in
- create mode 100644 scripts/gdb/arch/kvx/mmu.py
- create mode 100644 scripts/gdb/arch/kvx/page_table_walk.py
 
+diff --git a/Documentation/kvx/kvx-exceptions.txt b/Documentation/kvx/kvx-exceptions.txt
+new file mode 100644
+index 000000000000..11368287bd48
+--- /dev/null
++++ b/Documentation/kvx/kvx-exceptions.txt
+@@ -0,0 +1,246 @@
++Exceptions
++==========
++On kvx, handlers are set using $ev (exception vector) register which
++specifies a base address.
++An offset is added to $ev upon exception and the result is used as
++"Next $pc".
++The offset depends on which exception vector the cpu wants to jump to:
++* $ev + 0x00 for debug
++* $ev + 0x40 for trap
++* $ev + 0x80 for interrupt
++* $ev + 0xc0 for syscall
++
++Then, handlers are laid in the following order:
++
++         _____________
++        |             |
++        |   Syscall   |
++        |_____________|
++        |             |
++        |  Interrupts |
++        |_____________|
++        |             |
++        |    Traps    |
++        |_____________|
++        |             | ^
++        |    Debug    | | Stride
++BASE -> |_____________| v
++
++
++Interrupts, and traps are serviced similarly, ie:
++- Jump to handler
++- Save all registers
++- Prepare the call (do_IRQ or trap_handler)
++- restore all registers
++- return from exception
++
++entry.S file is (as for other architectures) the entry point into the kernel.
++It contains all assembly routines related to interrupts/traps/syscall.
++
++Syscall handling
++================
++
++When executing a syscall, it must be done using "scall $r6"
++where $r6 contains the syscall number. Using this convention allow to
++modify and restart a syscall from the kernel.
++
++Syscalls are handled differently than interrupts/exceptions. From an ABI
++point of view, scalls are like function calls: any caller saved register
++can be clobbered by the syscall. However, syscall parameters are passed
++using registers r0 through r7. These registers must be preserved to avoid
++cloberring them before the actual syscall function.
++
++On syscall from userspace (scall instruction), the processor will put
++the syscall number in $es.sn and switch from user to kernel privilege
++mode. kvx_syscall_handler will be called in kernel mode.
++
++The following steps are then taken:
++
++- Switch to kernel stack
++- Extract syscall number
++- Check that the syscall number is not bogus
++ - If so, set syscall func to a not implemented one
++- Check if tracing is enabled
++ - If so, jump to trace_syscall_enter
++ - Save syscall arguments (r0 -> r7) on stack in pt_regs
++ - Call do_trace_syscall_enter function
++- Restore syscall arguments since they have been modified by C call
++- Call the syscall function
++- Save $r0 in pt_regs since it can be cloberred afterward
++- If tracing was enabled, call trace_syscall_exit
++- Call work_pending
++- Return to user !
++
++The trace call is handled out of the fast path. All slow path handling
++is done in another part of code to avoid messing with the cache.
++
++Signals
++=======
++
++Signals are handled when exiting kernel before returning to user.
++When handling a signal, the path is the following:
++
++1 - User application is executing normally
++    Then any exception happens (syscall, interrupt, trap)
++2 - The exception handling path is taken
++    and before returning to user, pending signals are checked
++3 - Signal are handled by do_signal
++    Registers are saved and a special part of the stack is modified
++    to create a trampoline to call rt_sigreturn
++    $spc is modified to jump to user signal handler
++    $ra is modified to jump to sigreturn trampoline directly after
++    returning from user signal handler.
++4 - User signal handler is called after rfe from exception
++    when returning, $ra is retored to $pc, resulting in a call
++    to the syscall trampoline.
++5 - syscall trampoline is executed, leading to rt_sigreturn syscall
++6 - rt_sigreturn syscall is executed
++    Previous registers are restored to allow returning to user correctly
++7 - User application is restored at the exact point it was interrupted
++    before.
++
++
++        +----------+
++        |    1     |
++        | User app | @func
++        |  (user)  |
++        +---+------+
++            |
++            | it/trap/scall
++            |
++        +---v-------+
++        |    2      |
++        | exception |
++        | handling  |
++        | (kernel)  |
++        +---+-------+
++            |
++            | Check if signal are pending, if so, handle signals
++            |
++        +---v--------+
++        |    3       |
++        | do_signal  |
++        |  handling  |
++        |  (kernel)  |
++        +----+-------+
++             |
++             | Return to user signal handler
++             |
++        +----v------+
++        |    4      |
++        |  signal   |
++        |  handler  |
++        |  (user)   |
++        +----+------+
++             |
++             | Return to sigreturn trampoline
++             |
++        +----v-------+
++        |    5       |
++        |  syscall   |
++        |rt_sigreturn|
++        |  (user)    |
++        +----+-------+
++             |
++             | Syscall to rt_sigreturn
++             |
++        +----v-------+
++        |    6       |
++        |  sigreturn |
++        |  handler   |
++        |  (kernel)  |
++        +----+-------+
++             |
++             | Modify context to return to original func
++             |
++        +----v-----+
++        |    7     |
++        | User app | @func
++        |  (user)  |
++        +----------+
++
++Registers handling
++==================
++
++MMU is disabled in all exceptions paths, during register save and restoration.
++This will prevent from triggering MMU fault (such as TLB miss) which could
++clobber the current register state. Such event can occurs when RWX mode is
++enabled and the memory accessed to save register can trigger a TLB miss.
++Aside from that which is common for all exceptions path, registers are saved
++differently regarding the type of exception.
++
++Interrupts and traps
++--------------------
++
++When interrupt and traps are triggered, we only save the caller-saved registers.
++Indeed, we rely on the fact that C code will save and restore callee-saved and
++hence, there is no need to save them. This path is the following:
++
++     +------------+          +-----------+        +---------------+
++IT   | Save caller| C Call   | Execute C |  Ret   | Restore caller| Ret from IT
+++--->+   saved    +--------->+  handler  +------->+     saved     +----->
++     | registers  |          +-----------+        |   registers   |
++     +------------+                               +---------------+
++
++However, when returning to user, we check if there is work_pending. If a signal
++is pending and there is a signal handler to be called, then we need all
++registers to be saved on the stack in the pt_regs before executing the signal
++handler and restored after that. Since we only saved caller-saved registers, we
++need to also save callee-saved registers to restore them correctly when
++returning to user. This path is the following (a bit more complicated !):
++
++      +------------+
++      | Save caller|          +-----------+  Ret   +------------+
++ IT   |   saved    | C Call   | Execute C | to asm | Check work |
++ +--->+ registers  +--------->+  handler  +------->+   pending  |
++      | to pt_regs |          +-----------+        +--+---+-----+
++      +------------+                                  |   |
++                        Work pending                  |   | No work pending
++         +--------------------------------------------+   |
++         |                                                |
++         |                                   +------------+
++         v                                   |
++  +------+------+                            v
++  | Save callee |                    +-------+-------+
++  |   saved     |                    | Restore caller|  RFE from IT
++  | registers   |                    |     saved     +------->
++  | to pt_regs  |                    |   registers   |
++  +--+-------+--+                    | from pt_regs  |
++     |       |                       +-------+-------+
++     |       |         +---------+           ^
++     |       |         | Execute |           |
++     |       +-------->+ needed  +-----------+
++     |                 |  work   |
++     |                 +---------+
++     |Signal handler ?
++     v
+++----+----------+ RFE to user +-------------+       +--------------+
++|   Copy all    | handler     |  Execute    |  ret  | rt_sigreturn |
++|   registers   +------------>+ user signal +------>+ trampoline   |
++| from pt_regs  |             |  handler    |       |  to kernel   |
++| to user stack |             +-------------+       +------+-------+
+++---------------+                                          |
++                         syscall rt_sigreturn              |
++         +-------------------------------------------------+
++         |
++         v
+++--------+-------+                      +-------------+
++|   Recopy all   |                      | Restore all |  RFE
++| registers from +--------------------->+    saved    +------->
++|   user stack   |       Return         |  registers  |
++|   to pt_regs   |    from sigreturn    |from pt_regs |
+++----------------+  (via ret_from_fork) +-------------+
++
++
++Syscalls
++--------
++As explained before, for syscalls, we can use whatever callee-saved registers
++we want since syscall are seen as a "classic" call from ABI pov.
++Only different path is the one for clone. For this path, since the child expects
++to find same callee-registers content than his parent, we must save them before
++executing the clone syscall and restore them after that for the child. This is
++done via a redefinition of __sys_clone in assembly which will be called in place
++of the standard sys_clone. This new call will save callee saved registers
++in pt_regs. Parent will return using the syscall standard path. Freshly spawned
++child however will be woken up via ret_from_fork which will restore all
++registers (even if caller saved are not needed).
+diff --git a/Documentation/kvx/kvx-iommu.txt b/Documentation/kvx/kvx-iommu.txt
+new file mode 100644
+index 000000000000..96b74ce71acb
+--- /dev/null
++++ b/Documentation/kvx/kvx-iommu.txt
+@@ -0,0 +1,183 @@
++IOMMU
++=====
++
++General Overview
++----------------
++
++To exchange data between device and users through memory, the driver has to
++set up a buffer by doing some kernel allocation. The address of the buffer is
++virtual and the physical one is obtained through the MMU. When the device wants
++to access the same physical memory space it uses a bus address. This address is
++obtained by using the DMA mapping API. The Coolidge SoC includes several IOMMUs for clusters,
++PCIe peripherals, SoC peripherals, and more; that will translate this "bus address"
++into a physical one during DMA operations.
++
++The bus addresses are IOVA (I/O Virtual Address) or DMA addresses. This
++addresses can be obtained by calling the allocation functions of the DMA APIs.
++It can also be obtained through classical kernel allocation of physical
++contiguous memory and then calling mapping functions of the DMA API.
++
++In order to be able to use the kvx IOMMU we have implemented the IOMMU DMA
++interface in arch/kvx/mm/dma-mapping.c. DMA functions are registered by
++implementing arch_setup_dma_ops() and generic IOMMU functions. Generic IOMMU
++are calling our specific IOMMU functions that adding or removing mappings
++between DMA addresses and physical addresses in the IOMMU TLB.
++
++Specifics IOMMU functions are defined in the kvx IOMMU driver. A kvx IOMMU
++driver is managing two physical hardware IOMMU used for TX and RX. In the next
++section we described the HW IOMMUs.
++
++
++Cluster IOMMUs
++--------------
++
++IOMMUs on cluster are used for DMA and cryptographic accelerators.
++There are six IOMMUs connected to the:
++	- cluster DMA tx
++	- cluster DMA rx
++	- first non secure cryptographic accelerator
++	- second non secure cryptographic accelerator
++	- first secure cryptographic accelerator
++	- second secure cryptographic accelerator
++
++SoC peripherals IOMMUs
++----------------------
++
++Since SoC peripherals are connected to an AXI bus, two IOMMUs are used: one for
++each AXI channel (read and write). These two IOMMUs are shared between all master
++devices and DMA. These two IOMMUs will have the same entries but need to be configured
++independently.
++
++PCIe IOMMUs
++-----------
++
++There is a slave IOMMU (read and write from the MPPA to the PCIe endpoint)
++and a master IOMMU (read and write from a PCIe endpoint to system DDR).
++The PCIe root complex and the MSI/MSI-X controller have been designed to use
++the IOMMU feature when enabled. (For example for supporting endpoint that
++support only 32 bits addresses and allow them to access any memory in a
++64 bits address space). For security reason it is highly recommended to
++activate the IOMMU for PCIe.
++
++IOMMU implementation
++--------------------
++
++The kvx is providing several IOMMUs. Here is a simplified view of all IOMMUs
++and translations that occurs between memory and devices:
++
++ +---------------------------------------------------------------------+
++ | +------------+     +---------+                          | CLUSTER X |
++ | | Cores 0-15 +---->+ Crypto  |                          +-----------|
++ | +-----+------+     +----+----+                                      |
++ |       |                 |                                           |
++ |       v                 v                                           |
++ |   +-------+        +------------------------------+                 |
++ |   |  MMU  |   +----+ IOMMU x4 (secure + insecure) |                 |
++ |   +---+---+   |    +------------------------------+                 |
++ |       |       |                                                     |
++ +--------------------+                                                |
++        |        |    |                                                |
++        v        v    |                                                |
++    +---+--------+-+  |                                                |
++    |    MEMORY    |  |     +----------+     +--------+     +-------+  |
++    |              +<-|-----+ IOMMU Rx |<----+ DMA Rx |<----+       |  |
++    |              |  |     +----------+     +--------+     |       |  |
++    |              |  |                                     |  NoC  |  |
++    |              |  |     +----------+     +--------+     |       |  |
++    |              +--|---->| IOMMU Tx +---->| DMA Tx +---->+       |  |
++    |              |  |     +----------+     +--------+     +-------+  |
++    |              |  +------------------------------------------------+
++    |              |
++    |              |     +--------------+     +------+
++    |              |<--->+ IOMMU Rx/Tx  +<--->+ PCIe +
++    |              |     +--------------+     +------+
++    |              |
++    |              |     +--------------+     +------------------------+
++    |              |<--->+ IOMMU Rx/Tx  +<--->+ master Soc Peripherals |
++    |              |     +--------------+     +------------------------+
++    +--------------+
++
++
++There is also an IOMMU dedicated to the crypto module but this module will not
++be accessed by the operating system.
++
++We will provide one driver to manage IOMMUs RX/TX. All of them will be
++described in the device tree to be able to get their particularities. See
++the example below that describes the relation between IOMMU, DMA and NoC in
++the cluster.
++
++IOMMU is related to a specific bus like PCIe we will be able to specify that
++all peripherals will go through this IOMMU.
++
++### IOMMU Page table
++
++We need to be able to know which IO virtual addresses (IOVA) are mapped in the
++TLB in order to be able to remove entries when a device finishes a transfer and
++release memory. This information could be extracted when needed by computing all
++sets used by the memory and then reads all sixteen ways and compare them to the
++IOVA but it won't be efficient. We also need to be able to translate an IOVA
++to a physical address as required by the iova_to_phys IOMMU ops that is used
++by DMA. Like previously it can be done by extracting the set from the address
++and comparing the IOVA to each sixteen entries of the given set.
++
++A solution is to keep a page table for the IOMMU. But this method is not
++efficient for reloading an entry of the TLB without the help of an hardware
++page table. So to prevent the need of a refill we will update the TLB when a
++device request access to memory and if there is no more slot available in the
++TLB we will just fail and the device will have to try again later. It is not
++efficient but at least we won't need to manage the refill of the TLB.
++
++This leads to an issue with the memory that can be used for transfer between
++device and memory (see Limitations below). As we only support 4Ko page size we
++can only map 8Mo. To be able to manage bigger transfer we can implement the
++huge page table in the Linux kernel and use a page table that match the size of
++huge page table for a given IOMMU (typically the PCIe IOMMU).
++
++As we won't refill the TLB we know that we won't have more than 128*16 entries.
++In this case we can simply keep a table with all possible entries.
++
++### Maintenance interface
++
++It is possible to have several "maintainers" for the same IOMMU. The driver is
++using two of them. One that writes the TLB and another interface reads TLB. For
++debug purpose it is possible to display the content of the tlb by using the
++following command in gdb:
++
++    gdb> p kvx_iommu_dump_tlb( <iommu addr>, 0)
++
++Since different management interface are used for read and write it is safe to
++execute the above command at any moment.
++
++### Interrupts
++
++IOMMU can have 3 kind of interrupts that corresponds to 3 different types of
++errors (no mapping. protection, parity). When the IOMMU is shared between
++clusters (SoC periph and PCIe) then fifteen IRQs are generated according to the
++configuration of an association table. The association table is indexed by the
++ASN number (9 bits) and the entry of the table is a subscription mask with one
++bit per destination. Currently this is not managed by the driver.
++
++The driver is only managing interrupts for the cluster. The mode used is the
++stall one. So when an interrupt occurs it is managed by the driver. All others
++interrupts that occurs are stored and the IOMMU is stalled. When driver cleans
++the first interrupt others will be managed one by one.
++
++### ASN (Address Space Number)
++
++This is also know as ASID in some other architecture. Each device will have a
++given ASN that will be given through the device tree. As address space is
++managed at the IOMMU domain level we will use one group and one domain per ID.
++ASN are coded on 9 bits.
++
++Device tree
++-----------
++
++Relationships between devices, DMAs and IOMMUs are described in the
++device tree (see Documentation/devicetree/bindings/iommu/kalray,kvx-iommu.txt
++for more details).
++
++Limitations
++-----------
++
++Only supporting 4 KB page size will limit the size of mapped memory to 8 MB
++because the IOMMU TLB can have at most 128*16 entries.
+diff --git a/Documentation/kvx/kvx-mmu.txt b/Documentation/kvx/kvx-mmu.txt
+new file mode 100644
+index 000000000000..a3ebbef36981
+--- /dev/null
++++ b/Documentation/kvx/kvx-mmu.txt
+@@ -0,0 +1,272 @@
++MMU
++===
++
++Virtual addresses are on 41 bits for kvx when using 64-bit mode.
++To differentiate kernel from user space, we use the high order bit
++(bit 40). When bit 40 is set, then the higher remaining bits must also be set to
++1. The virtual address must be extended with 1 when the bit 40 is set,
++if not the address must be zero extended. Bit 40 is set for kernel space
++mappings and not set for user space mappings.
++
++Memory Map
++==========
++
++In Linux physical memories are arranged into banks according to the cost of an
++access in term of distance to a memory. As we are UMA architecture we only have
++one bank and thus one node.
++
++A node is divided into several kind of zone. For example if DMA can only access
++a specific area in the physical memory we will define a ZONE_DMA for this purpose.
++In our case we are considering that DMA can access all DDR so we don't have a specific
++zone for this. On 64 bit architecture all DDR can be mapped in virtual kernel space
++so there is no need for a ZONE_HIGHMEM. That means that in our case there is
++only one ZONE_NORMAL. This will be updated if DMA cannot access all memory.
++
++Currently, the memory mapping is the following for 4KB page:
++
+++-----------------------+-----------------------+------+-------+--------------+
++| Start                 | End                   | Attr | Size  | Name         |
+++-----------------------+-----------------------+------+-------+--------------+
++| 0000 0000 0000 0000   | 0000 003F FFFF FFFF   | ---  | 256GB | User         |
++| 0000 0040 0000 0000   | 0000 007F FFFF FFFF   | ---  | 256GB |   MMAP       |
++| 0000 0080 0000 0000   | FFFF FF7F FFFF FFFF   | ---  | ---   | Gap          |
++| FFFF FF80 0000 0000   | FFFF FFFF FFFF FFFF   | ---  | 512GB | Kernel       |
++|   FFFF FF80 0000 0000 |   FFFF FF8F FFFF FFFF | RWX  | 64GB  |   Direct Map |
++|   FFFF FF90 0000 0000 |   FFFF FF90 3FFF FFFF | RWX  | 1GB   |   Vmalloc    |
++|   FFFF FF90 4000 0000 |   FFFF FFFF FFFF FFFF | RW   | 447GB |   Free area  |
+++-----------------------+-----------------------+------+-------+--------------+
++
++Enable the MMU
++==============
++
++All kernel functions and symbols are in virtual memory except for kvx_start()
++function which is loaded at 0x0 in physical memory.
++To be able to switch from physical addresses to virtual addresses we choose to
++setup the TLB at the very beginning of the boot process to be able to map both
++pieces of code. For this we added two entries in the LTLB. The first one,
++LTLB[0], contains the mapping between virtual memory and DDR. Its size is 512MB.
++The second entry, LTLB[1], contains a flat mapping of the first 2MB of the SMEM.
++Once those two entries are present we can enable the MMU. LTLB[1] will be
++removed during paging_init() because once we are really running in virtual space
++it will not be used anymore.
++In order to access more than 512MB DDR memory, the remaining memory (> 512MB) is
++refill using a comparison in kernel_perf_refill that does not walk the kernel
++page table, thus having a faster refill time for kernel. These entries are
++inserted into the LTLB for easier computation (4 LTLB entries). The drawback of
++this approach is that mapped entries are using RWX protection attributes,
++leading to no protection at all.
++
++Kernel strict RWX
++=================
++
++CONFIG_STRICT_KERNEL_RWX is enabled by default in default_defconfig.
++Once booted, if CONFIG_STRICT_KERNEL_RWX is enable, the kernel text and memory
++will be mapped in the init_mm page table. Once mapped, the refill routine for
++the kernel is patched to always do a page table walk, bypassing the faster
++comparison but enforcing page protection attributes when refilling.
++Finally, the LTLB[0] entry is replaced by a 4K one, mapping only exceptions with
++RX protection. It allows us to never trigger nomapping on nomapping refill
++routine which would (obviously) not work... Once this is done, we can flush the
++4 LTLB entries for kernel refill in order to be sure there is no stalled
++entries and that new entries inserted in JTLB will apply.
++
++By default, the following policy is applied on vmlinux sections:
++- init_data: RW
++- init_text: RX (or RWX if parameter rodata=off)
++- text: RX (or RWX if parameter rodata=off)
++- rodata: RW before init, RO after init
++- sdata: RW
++
++Kernel RWX mode can then be switched on/off using /sys/kvx/kernel_rwx file.
++
++Privilege Level
++================
++Since we are using privilege levels on kvx, we make use of the virtual
++spaces to be in the same space as the user. The kernel will have the
++$ps.mmup set in kernel (PL1) and unset for user (PL2).
++As said in kvx documentation, we have two cases when the kernel is
++booted:
++- Either we have been booted by someone (bootloader, hypervisor, etc)
++- Or we are alone (boot from flash)
++
++In both cases, we will use the virtual space 0. Indeed, if we are alone
++on the core, then it means nobody is using the MMU and we can take the
++first virtual space. If not alone, then when writing an entry to the tlb
++using writetlb instruction, the hypervisor will catch it and change the
++virtual space accordingly.
++
++Memblock
++========
++
++When the kernel starts there is no memory allocator available. One of the first
++step in the kernel is to detect the amount of DDR available by getting this
++information in the device tree and initialize the low-level "memblock" allocator.
++
++We start by reserving memory for the whole kernel. For instance with a device
++tree containing 512Mo of DDR you could see the following boot messages:
++
++setup_bootmem: Memory  : 0x100000000 - 0x120000000
++setup_bootmem: Reserved: 0x10001f000 - 0x1002d1bc0
++
++During the paging init we need to set:
++  - min_low_pfn that is the lowest PFN available in the system
++  - max_low_pfn that indicates the end if NORMAL zone
++  - max_pfn that is the number of pages in the system
++
++This setting is used for dividing memory into pages and for configuring the
++zone. See the memory map section for more information about ZONE.
++
++Zones are configured in free_area_init_core(). During start_kernel() other
++allocations are done for command line, cpu areas, PID hash table, different
++caches for VFS. This allocator is used until mem_init() is called.
++
++mem_init() is provided by the architecture. For MPPA we just call
++free_all_bootmem() that will go through all pages that are not used by the
++low level allocator and mark them as not used. So physical pages that are
++reserved for the kernel are still used and remain in physical memory. All pages
++released will now be used by the buddy allocator.
++
++Peripherals
++===========
++
++Peripherals are mapped using standard ioremap infrastructure, therefore
++mapped addresses are located in the vmalloc space.
++
++LTLB Usage
++==========
++
++LTLB is used to add resident mapping which allows for faster MMU lookup.
++Currently, the LTLB is used to map some mandatory kernel pages and to allow fast
++accesses to l2 cache (mailbox and registers).
++When CONFIG_STRICT_KERNEL_RWX is disabled, 4 entries are reserved for kernel
++TLB refill using 512MB pages. When CONFIG_STRICT_KERNEL_RWX is enabled, these
++entries are unused since kernel is paginated using the same mecanism than for
++user (page walking and entries in JTLB)
++
++Page Table
++==========
++
++We only support three levels for the page table and 4KB for page size.
++
++3 levels page table
++-------------------
++
++...-----+--------+--------+--------+--------+--------+
++      40|39    32|31    24|23    16|15     8|7      0|
++...-----++-------+--+-----+---+----+----+---+--------+
++         |          |         |         |
++         |          |         |         +--->  [11:0] Offset (12 bits)
++         |          |         +------------->  [20:12] PTE offset (9 bits)
++         |          +----------------------->  [29:21] PMD offset (9 bits)
++         +---------------------------------->  [39:30] PGD offset (10 bits)
++Bits 40 to 64 are signed extended according to bit 39. If bit 39 is equal to 1
++we are in kernel space.
++
++As 10 bits are used for PGD we need to allocate 2 pages.
++
++PTE format
++==========
++
++About the format of the PTE entry, as we are not forced by hardware for choices,
++we choose to follow the format described in the RiscV implementation as a
++starting point.
++
++ +---------+--------+----+--------+---+---+---+---+---+---+------+---+---+
++ | 63..23  | 22..13 | 12 | 11..10 | 9 | 8 | 7 | 6 | 5 | 4 | 3..2 | 1 | 0 |
++ +---------+--------+----+--------+---+---+---+---+---+---+------+---+---+
++     PFN     Unused   S    PageSZ   H   G   X   W   R   D    CP    A   P
++       where:
++        P: Present
++        A: Accessed
++        CP: Cache policy
++        D: Dirty
++        R: Read
++        W: Write
++        X: Executable
++        G: Global
++        H: Huge page
++        PageSZ: Page size as set in TLB format (0:4Ko, 1:64Ko, 2:2Mo, 3:512Mo)
++        S: Soft/Special
++        PFN: Page frame number (depends on page size)
++
++Huge bit must be somewhere in the first 12 bits to be able to detect it
++when reading the PMD entry.
++
++PageSZ must be on bit 10 and 11 because it matches the TEL.PS bits. And
++by doing that it is easier in assembly to set the TEL.PS to PageSZ.
++
++Fast TLB refill
++===============
++
++kvx core does not feature a hardware page walker. This work must be done
++by the core in software. In order to optimize TLB refill, a special fast
++path is taken when entering in kernel space.
++In order to speed up the process, the following actions are taken:
++# Save some registers in a per process scratchpad
++# If the trap is a nomapping then try the fastpath
++# Save some more registers for this fastpath
++# Check if faulting address is a memory direct mapping one.
++ # If entry is a direct mapping one and RWX is not enabled, add an entry into LTLB
++ # If not, continue
++# Try to walk the page table
++ # If entry is not present, take the slowpath (do_page_fault)
++# Refill the tlb properly
++# Exit by restoring only a few registers
++
++ASN Handling
++============
++
++Disclaimer: Some part of this are taken from ARC architecture.
++
++kvx MMU provides 9-bit ASN (Address Space Number) in order to tag TLB entries.
++It allows for multiple process with the same virtual space to cohabit without
++the need to flush TLB everytime we context switch.
++kvx implementation to use them is based on other architectures (such as arc
++or xtensa) and uses a wrapping ASN counter containing both cycle/generation and
++asn.
++
+++---------+--------+
++|63     10|9      0|
+++---------+--------+
++  Cycle      ASN
++
++This ASN counter is incremented monotonously to allocate new ASNs. When the
++counter reaches 511 (9 bit), TLB is completely flushed and a new cycle is
++started. A new allocation cycle, post rollover, could potentially reassign an
++ASN to a different task. Thus the rule is to reassign an ASN when the current
++context cycles does not match the allocation cycle.
++The 64 bit @cpu_asn_cache (and mm->asn) have 9 bits MMU ASN and rest 55 bits
++serve as cycle/generation indicator and natural 64 bit unsigned math
++automagically increments the generation when lower 9 bits rollover.
++When the counter completely wraps, we reset the counter to first cycle value
++(ie cycle = 1). This allows to distinguish context without any ASN and old cycle
++generated value with the same operation (XOR on cycle).
++
++Huge page
++=========
++
++Currently only 3 level page table has been implemented for 4Ko base page size.
++So the page shift is 12 bits, the pmd shift is 21 and the pgdir shift is 30
++bits. This choice implies that for 4Ko base page size if we use a PMD as a huge
++page the size will be 2Mo and if we use a PUD as a huge page it will be 1Go.
++
++To support other huge page sizes (64Ko and 512Mo) we need to use several
++contiguous entries in the page table. For huge page of 64Ko we will need to
++use 16 entries in the PTE and for a huge page of 512Mo it means that 256
++entries in PMD will be used.
++
++Debug
++=====
++
++In order to debug the page table and tlb entries, gdb scripts contains commands
++which allows to dump the page table:
++- lx-kvx-page-table-walk
++ - Display the current process page table by default
++- lx-kvx-tlb-decode
++ - Display the content of $tel and $teh into something readable
++
++Other commands available in kvx-gdb are the following:
++- mppa-dump-tlb
++ - Display the content of TLBs (JTLB and LTLB)
++- mppa-lookup-addr
++ - Find physical address matching a virtual one
+diff --git a/Documentation/kvx/kvx-smp.txt b/Documentation/kvx/kvx-smp.txt
+new file mode 100644
+index 000000000000..1b69d77db8cd
+--- /dev/null
++++ b/Documentation/kvx/kvx-smp.txt
+@@ -0,0 +1,36 @@
++SMP
++===
++
++On kvx, 5 clusters are organized as groups of 16 processors + 1
++secure core (RM) for each cluster. These 17 processors are L1$ coherent
++for TCM (tightly Coupled Memory). A mixed hw/sw L2$ is present to have
++cache coherency on DDR as well as TCM.
++The RM manager is not meant to run Linux so, 16 processors are available
++for SMP.
++
++Booting
++=======
++
++When booting the kvx processor, only the RM is woken up. This RM will
++execute a portion of code located in a section named .rm_firmware.
++By default, a simple power off code is embedded in this section.
++To avoid embedding the firmware in kernel sources, the section is patched
++using external tools to add the L2$ firmware (and replace the default firmware).
++Before executing this firmware, the RM boots the PE0. PE0 will then enable L2
++coherency and request will be stalled until RM boots the L2$ firmware.
++
++Locking primitives
++==================
++
++spinlock/rwlock are using the kernel standard queued spinlock/rwlocks.
++These primitives are based on cmpxch and xchg. More particularly, it uses xchg16
++which is implemented as a read modify write with acswap on 32 bit word since
++kvx does not have cmpxchg for size < 32bits.
++
++IPI
++===
++
++An IPI controller allows to communicate between CPUs using a simple
++memory mapped register. This register can simply be written using a mask to
++trigger interrupts directly to the cores matching the mask.
++
+diff --git a/Documentation/kvx/kvx.txt b/Documentation/kvx/kvx.txt
+new file mode 100644
+index 000000000000..8ce0703de681
+--- /dev/null
++++ b/Documentation/kvx/kvx.txt
+@@ -0,0 +1,268 @@
++kvx Core Implementation
++=======================
++
++This documents will try to explain any architecture choice for the kvx
++linux port.
++
++Regarding the peripheral, we MUST use device tree to describe ALL
++peripherals. The bindings should always start with "kalray,kvx" for all
++core related peripherals (watchdog, timer, etc)
++
++System Architecture
++===================
++
++On kvx, we have 4 levels of privilege level starting from 0 (most
++privileged one) to 3 (less privilege one). A system of owners allows
++to delegate ownership of resources by using specials system registers.
++
++The 2 main software stacks for Linux Kernel are the following:
++
+++-------------+       +-------------+
++| PL0: Debug  |       | PL0: Debug  |
+++-------------+       +-------------+
++| PL1: Linux  |       | PL1: HyperV |
+++-------------+       +-------------+
++| PL2: User   |       | PL2: Linux  |
+++-------------+       +-------------+
++|             |       | PL3: User   |
+++-------------+       +-------------+
++
++In both cases, the kvx support for privileges has been designed using
++only relative PL and thus should work on both configurations without
++any modifications.
++
++When booting, the CPU is executing in PL0 and owns all the privileges.
++This level is almost dedicated to the debug routines for the debugguer.
++It only needs to own few privileges (breakpoint 0 and watchpoint 0) to
++be able to debug a system executing in PL1 to PL3.
++Debug routines are not always there for instance when the kernel is
++executing alone (booted from flash).
++In order to ease the load of debug routines, software convention is to
++jump directly to PL1 and let PL0 for the debug.
++When the kernel boots, it checks if the current privilege level is 0
++($ps.pl is the only absolute value). If so, then it will delegate
++almost all resources to PL1 and use a RFE to lower its execution
++privilege level (see asm_delegate_pl in head.S).
++If the current PL is already different from 0, then it means somebody
++is above us and we need to request resource to inform it we need them. It will
++then either delegate them to us directly or virtualize the delegation.
++All privileges levels have their set of banked registers (ps, ea, sps,
++sr, etc) which contain privilege level specific values.
++$sr (system reserved) is banked and will hold the current task_struct.
++This register is reserved and should not be touched by any other code.
++For more information, refer to the kvx system level architecture manual.
++
++Boot
++====
++
++On kvx, the RM (Secure Core) of Cluster 0 will boot first. It will then be able
++to boot a firmware. This firmware is stored in the rm_firmware section.
++The first argument ($r0) of this firmware will be a pointer to a function with
++the following prototype: void firmware_init_done(uint64_t features). This
++function is responsible of describing the features supported by the firmware and
++will start the first PE after that.
++By default, the rm_firmware function act as the "default" firmware. This
++function does nothing except calling firmware_init_done and then goes to sleep.
++In order to add another firmware, the rm_firmware section is patched using
++objcopy. The content of this section is then replaced by the provided firmware.
++This firmware will do an init and then call firmware_init_done before running
++the main loop.
++When the PE boots, it will check for the firmware features to enable or disable
++specific core features (L2$ for instance).
++
++When entering the C (kvx_lowlevel_start) the kernel will look for a special
++magic in $r0 (0x494C314B). This magic tells the kernel if there is arguments
++passed by a bootloader.
++Currently, the following values are passed through registers:
++ - r1: pointer to command line setup by bootloader
++ - r2: device tree
++
++If this magic is not set, then, the command line will be the one
++provided in the device tree (see bootargs). The default device tree is
++not builtin but will be patched by the runner used (simulator or jtag) in the
++dtb section.
++
++A default stdout-path is desirable to allow early printk.
++
++Boot Memory Allocator
++=====================
++
++The boot memory allocator is used to allocate memory before paging is enabled.
++It is initialized with DDR and also with the shared memory. This first one is
++initialized during the setup_bootmem() and the second one when calling
++early_init_fdt_scan_reserved_mem().
++
++
++Virtual and physical memory
++===========================
++
++The mapping used and the memory management is described in
++Documentation/kvx/kvx-mmu.txt.
++Our Kernel is compiled using virtual addresses that starts at
++0xffffff0000000000. But when it is started the kernel uses physical addresses.
++Before calling the first function arch_low_level_start() we configure 2 entries
++of the LTLB.
++
++The first entry will map the first 1G of virtual address space to the first
++1G of DDR:
++  - TLB[0]: 0xffffff0000000000 -> 0x100000000 (size 512Mo)
++
++The second entry will be a flat mapping of the first 512 Ko of the SMEM. It
++is required to have this flat mapping because there is still code located at
++this address that needs to be executed:
++  - TLB[1]: 0x0 -> 0x0 (size 512Ko)
++
++Once virtual space reached the second entry is removed.
++
++To be able to set breakpoints when MMU is enabled we added a label called
++gdb_mmu_enabled. If you try to set a breakpoint on a function that is in
++virtual memory before the activation of the MMU this address as no signification
++for GDB. So, for example, if you want to break on the function start_kernel()
++you will need to run:
++
++	kvx-gdb -silent path_to/vmlinux \
++		-ex 'tbreak gdb_mmu_enabled' -ex 'run' \
++		-ex 'break start_kernel' \
++		-ex 'continue'
++
++We will also add an option to kvx-gdb to simplify this step.
++
++Timers
++======
++
++The free-runinng clock (clocksource) is based on the DSU. This clock is
++not interruptible and never stops even if core go into idle.
++
++Regarding the tick (clockevent), we use the timer 0 available on the core.
++This timer allows to set a periodic tick which will be used as the main
++tick for each core. Note that this clock is percpu.
++
++get_cycles implementation is based on performance counter. One of them
++is used to count cycles. Note that since this is used only when the core
++is running, there is no need to worry about core sleeping (which will
++stop the cycle counter)
++
++Context switching
++=================
++
++context switching is done in entry.S. When spawning a fresh thread,
++copy_thread is called. During this call, we setup callee saved register
++r20 and r21 to special values containing the function to call.
++
++The normal path for a kernel thread will be the following:
++
++ 1 - Enter copy_thread_tls and setup callee saved registers which will
++     be restored in __switch_to.
++ 2 - set r20 and r21 (in thread_struct) to function and argument and
++     ra to ret_from_kernel_thread.
++     These callee saved will be restored in switch_to.
++ 3 - Call _switch_to at some point.
++ 4 - Save all callee saved register since switch_to is seen as a
++     standard function call by the caller.
++ 5 - Change stack pointer to the new stack
++ 6 - At the end of switch to, set sr0 to the new task and use ret to
++     jump to ret_from_kernel_thread (address restored from ra).
++ 7 - In ret_from_kernel_thread, execute the function with arguments by
++     using r20, r21 and we are done
++
++For more explanation, you can refer to https://lwn.net/Articles/520227/
++
++User thread creation
++====================
++
++We are using almost the same path as copy_thread to create it.
++The detailed path is the following:
++
++ 1 - Call start_thread which will setup user pc and stack pointer in
++     task regs. We also set sps and clear privilege mode bit.
++     When returning from exception, it will "flip" to user mode.
++ 2 - Enter copy_thread_tls and setup callee saved registers which will
++     be restored in __switch_to. Also, set the "return" function to be
++     ret_from_fork which will be called at end of switch_to
++ 3 - set r20 (in thread_struct) with tracing information.
++     (simply by lazyness to avoid computing it in assembly...)
++ 4 - Call _switch_to at some point.
++ 5 - The current pc will then be restored to be ret_from fork.
++ 6 - Ret from fork calls schedule_tail and then check if tracing is
++     enabled. If so call syscall_trace_exit
++ 7 - finally, instead of returning to kernel, we restore all registers
++     that have been setup by start_thread by restoring regs stored on
++     stack
++
++L2$ handling
++============
++
++On kvx, the L2$ is handled by a firmware running on the RM. This firmware needs
++various information to be aware of its configuration and communicate with the
++kernel. In order to do that, when firmware is starting, the device tree is given
++as parameter along with the "registers" zone. This zone is simply a memory area
++where data are exchanged between kernel <-> L2$. When some commands are written
++to it, the kernel sends an interrupt using a mailbox.
++If the L2$ node is not present in the device tree, then, the RM will directly go
++into sleeping.
++
++Boot diagram:
++
++           RM                       PE 0
++                          +
++       +---------+        |
++       |  Boot   |        |
++       +----+----+        |
++            |             |
++            v             |
++      +-----+-----+       |
++      |  Prepare  |       |
++      | L2 shared |       |
++      |  memory   |       |
++      |(registers)|       |
++      +-----+-----+       |
++            |             |      +-----------+
++            +------------------->+   Boot    |
++            |             |      +-----+-----+
++            v             |            |
++   +--------+---------+   |            |
++   | L2 firmware      |   |            |
++   | parameters:      |   |            |
++   | r0 = registers   |   |            |
++   | r1 = DTB         |   |            |
++   +--------+---------+   |            |
++            |             |            |
++            v             |            |
++    +-------+--------+    |     +------+------+
++    |  L2 firmware   |    |     | Wait for L2 |
++    |   execution    |    |     | to be ready |
++    +-------+--------+    |     +------+------+
++            |             |            |
++     +------v-------+     |            v
++     | L2 requests  |     |     +------+------+
+++--->+   handling   |     |     |   Enable    |
++|    +-------+------+     |     | L2 caching  |
++|            |            |     +------+------+
++|            |            |            |
+++------------+            +            v
++
++
++Since this driver is started early (before SMP boot), A lot of drivers are not
++yet probed (mailboxes, iommu, etc) and thus can not be used.
++
++Building
++========
++
++In order to build the kernel, you will need a complete kvx toolchain.
++First, setup the config using the following command line
++
++$ make ARCH=kvx O=your_directory default_defconfig
++
++Adjust any configuration option you may need and then, build the kernel:
++
++$ make ARCH=kvx O=your_directory -j12
++
++You will finally have a vmlinux image ready to be run.
++
++$ kvx-mppa -- vmlinux
++
++Additionally, you may want to debug it. To do so, use kvx-gdb:
++
++$ kvx-gdb vmlinux
++
++
 -- 
 2.37.2
+
+
 
 
 
