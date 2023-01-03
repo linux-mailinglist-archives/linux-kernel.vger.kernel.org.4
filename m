@@ -2,120 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77B865BC14
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0A865BC20
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236789AbjACIWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S233165AbjACIXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbjACIWF (ORCPT
+        with ESMTP id S233066AbjACIXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:22:05 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240E81036
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:22:04 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id f34so44615979lfv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:22:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hnNplO8zsSj05CAnhZjssEtarwgdK7a3BUAmXeHqfTE=;
-        b=IRDYFhgv7CWgApeZ9OhEzu4ziX6vYEoYanJOwxAVtNXXyq/6zS+qWU0v9JYWo+nTfr
-         75SUTilDQ6Wappp/0y36aU6HUHsoldMMAZOoCVs0bccvE8mHrAOQHuKhfI2OI8VjT+09
-         UU8jLYsLpZFuNwRey5xq1BPaD4oO9teX0QXKL95viaZ5J/EdMvJtY3X+lQMZB4tbEvGN
-         /tRbizkhie2NJuQiN0F8URex/wWIwEaW+ujREEPAJu8xRf2wnNfu8nz62Yr7iXHXrzLL
-         WwePuWhjeCaZvvfrBZH3flKA+v9TKZBDYwjyDQyhGYOqRV99y8Jyq0EJw3wNGjPhG68b
-         WQaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hnNplO8zsSj05CAnhZjssEtarwgdK7a3BUAmXeHqfTE=;
-        b=xFPVFOry32A036aJfNm/G/NIMwomjSdpwREu2xzfVvhh9vA45yACN/VhyCoX5pU6am
-         w4/7LKil8FUF0fH8Zf9TjJZRHfsbf9kdvgav0/3lTxa8k2/zwuYZ5G5M3C7dfYJCh+lc
-         QRvWxzr/deUBF72+r0JiwSC5/tJ6o5FRTDM47N1Q1DMfLM3LmccpUaJuJCR+hdKHFBlW
-         GlyvrTPvy0cOTt7S0Bp8YLkS58Clfy4P9v1iRmusyUZ6O09sRiC/+bBMuTB0YzP/+7zp
-         C3atP/rBM+Wflz9F57Gdz3wmrVbPDSMkFY9UOnOnM0AXMs769vrF0So26/h1u5XNdIZG
-         iw/A==
-X-Gm-Message-State: AFqh2kophABUj/niTzlS610DVNG00hvoG1LMBJ/LRS2mOgIh70gwUPRl
-        +Vr6uEnRCs+wLPd4C5/WJ3J+9Q==
-X-Google-Smtp-Source: AMrXdXvbZP6isWmvcJTEe2l329jkWLKnwxKfmHzK41+F7rk8tb5+8boVcvSBIznNrbeyntQ/Q+zNzQ==
-X-Received: by 2002:ac2:490f:0:b0:4b6:eca8:f6ca with SMTP id n15-20020ac2490f000000b004b6eca8f6camr10992900lfi.67.1672734122520;
-        Tue, 03 Jan 2023 00:22:02 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p23-20020a056512139700b004b577085688sm4757340lfa.82.2023.01.03.00.22.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:22:02 -0800 (PST)
-Message-ID: <dccc7a0f-9eaf-24ca-e800-8ee1417e74f9@linaro.org>
-Date:   Tue, 3 Jan 2023 09:22:00 +0100
+        Tue, 3 Jan 2023 03:23:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB2D65D4
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:23:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AE66611CF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D76C433F0;
+        Tue,  3 Jan 2023 08:23:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672734209;
+        bh=Vx19a5fM3UWWsmRzyAEudxpAQbx7QwFdTxShf8tHuL4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WuHPGWenPl+PO/3YSIXFQPh23Q7YnJvsoxF4TmpPeXXx29JSx+iunwr9wEVKhwGkw
+         eV5pE39zgeFoB71EpQxjdVbg9nLi8Z9liKpma0+t4ghVx8AYCRPtNKpa1MukSoHeFM
+         RuURsn9VEBJ49si8McV0I1sZtS8EkEyyCoCPTYq1tPcWfmJAwm8WVv8FZ+y76ysr2z
+         XWzN92BKHdtlDHXd8FCO9GE9URXbdIEsBZtmgbZ4zBUUeJmCBU3bvmVwcBz5495fTd
+         fN3++6LrhegkFGLP9dEt4LUwSrsADhRLE9O9ey03PWJHlCRSfWGfSMuLTd2eRqtWyT
+         8CCBh1lKJxr8g==
+Date:   Tue, 3 Jan 2023 08:23:22 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        heikki.krogerus@linux.intel.com,
+        Benson Leung <bleung@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Evan Green <evgreen@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Xiang wangx <wangxiang@cdjrlc.com>
+Subject: Re: [PATCH 01/10] Revert "mfd: cros_ec: Add SCP Core-1 as a new CrOS
+ EC MCU"
+Message-ID: <Y7Pl+gzs6ZEWDVH/@google.com>
+References: <20221228004648.793339-1-pmalani@chromium.org>
+ <20221228004648.793339-2-pmalani@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 2/4] dt-bindings: vendor-prefixes: Add lincolntech
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Guo Ren <guoren@kernel.org>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Linux RISC-V List <linux-riscv@lists.infradead.org>,
-        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
-        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230103064615.5311-1-a-bhatia1@ti.com>
- <20230103064615.5311-3-a-bhatia1@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230103064615.5311-3-a-bhatia1@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221228004648.793339-2-pmalani@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 07:46, Aradhya Bhatia wrote:
-> Add document vendor prefix for Lincoln Technology Solutions
-> (lincolntech).
+On Wed, 28 Dec 2022, Prashant Malani wrote:
+
+> This reverts commit 66ee379d743c69c726b61d078119a34d5be96a35.
 > 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+> The feature flag introduced by Commit 66ee379d743c ("mfd: cros_ec: Add
+> SCP Core-1 as a new CrOS EC MCU") was not first added in the source EC
+> code base[1]. This can lead to the possible misinterpration of an EC's
+> supported feature set, as well as causes issues with all future feature
+> flag updates.
+> 
+> [1] https://source.chromium.org/chromium/chromiumos/platform/ec/+/main:include/ec_commands.h
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 > ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+> 
+> While this patch modifies drivers/mfd, it would be preferable to submit
+> it through the chrome-platform tree, since that eliminates cross-tree
+> dependencies for the series of which this patch is a part.
 
+Shouldn't be an issue:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Lee Jones <lee@kernel.org>
 
-Best regards,
-Krzysztof
+>  drivers/mfd/cros_ec_dev.c                      | 5 -----
+>  include/linux/platform_data/cros_ec_commands.h | 2 --
+>  include/linux/platform_data/cros_ec_proto.h    | 1 -
+>  3 files changed, 8 deletions(-)
+> 
+> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+> index 344ad03bdc42..02d4271dfe06 100644
+> --- a/drivers/mfd/cros_ec_dev.c
+> +++ b/drivers/mfd/cros_ec_dev.c
+> @@ -64,11 +64,6 @@ static const struct cros_feature_to_name cros_mcu_devices[] = {
+>  		.name	= CROS_EC_DEV_SCP_NAME,
+>  		.desc	= "System Control Processor",
+>  	},
+> -	{
+> -		.id	= EC_FEATURE_SCP_C1,
+> -		.name	= CROS_EC_DEV_SCP_C1_NAME,
+> -		.desc	= "System Control Processor 2nd Core",
+> -	},
+>  	{
+>  		.id	= EC_FEATURE_TOUCHPAD,
+>  		.name	= CROS_EC_DEV_TP_NAME,
+> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+> index 5744a2d746aa..7c94bf5c8f05 100644
+> --- a/include/linux/platform_data/cros_ec_commands.h
+> +++ b/include/linux/platform_data/cros_ec_commands.h
+> @@ -1300,8 +1300,6 @@ enum ec_feature_code {
+>  	 * mux.
+>  	 */
+>  	EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK = 43,
+> -	/* The MCU is a System Companion Processor (SCP) 2nd Core. */
+> -	EC_FEATURE_SCP_C1 = 45,
+>  };
+>  
+>  #define EC_FEATURE_MASK_0(event_code) BIT(event_code % 32)
+> diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+> index e43107e0bee1..a1f5b6d6db3a 100644
+> --- a/include/linux/platform_data/cros_ec_proto.h
+> +++ b/include/linux/platform_data/cros_ec_proto.h
+> @@ -19,7 +19,6 @@
+>  #define CROS_EC_DEV_ISH_NAME	"cros_ish"
+>  #define CROS_EC_DEV_PD_NAME	"cros_pd"
+>  #define CROS_EC_DEV_SCP_NAME	"cros_scp"
+> -#define CROS_EC_DEV_SCP_C1_NAME	"cros_scp_c1"
+>  #define CROS_EC_DEV_TP_NAME	"cros_tp"
+>  
+>  #define CROS_EC_DEV_EC_INDEX 0
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+> 
 
+-- 
+Lee Jones [李琼斯]
