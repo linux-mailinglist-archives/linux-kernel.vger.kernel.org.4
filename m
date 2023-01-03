@@ -2,119 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA53F65BE47
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B024665BE4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237145AbjACKg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S237349AbjACKha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjACKg0 (ORCPT
+        with ESMTP id S237509AbjACKhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:36:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE03E65;
-        Tue,  3 Jan 2023 02:36:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AC786120E;
-        Tue,  3 Jan 2023 10:36:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0DDCC433EF;
-        Tue,  3 Jan 2023 10:36:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672742183;
-        bh=0l/jEazf659tayPyid3sUc0mwvJhC0Rmy66HOeL2yxE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=URV1bAvIz0cQgJWx769mY3qmM/vyf06WDUw9ZvBtTdjh/3yTzWc/AzK01qMyyv6xJ
-         SKQhCqgPdJy9K7/PKjqWe7T4WsRAqC0xVjVUu9bHoUMSJesTqoKpAF8R+aq74LGg5m
-         9L/qc0nKGs7LkBk2xt6y+pq23dFIqO1NHVZSJ+c1XgPqPSLdeMmpk03p55q9YVccyD
-         d7uk0hJPXdFM0kecNRgan0kSukwN9M57+pTTWWsYSDjZmjFz8sQt+NghNGHLZNSVwE
-         i2xCyL2oZF/BKgLnZc3/wNDwJ05tvF/3EEta9gj859U+45NIRkEf3118EqAEEp1lHP
-         2reSboTVlugNw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pCeex-0004Bk-8E; Tue, 03 Jan 2023 11:36:43 +0100
-Date:   Tue, 3 Jan 2023 11:36:43 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] arm64: dts: qcom: sm8450-hdk: move wcd938x codec
- node
-Message-ID: <Y7QFO8lHSexucASN@hovoldconsulting.com>
-References: <20230103103141.15807-1-johan+linaro@kernel.org>
- <20230103103141.15807-6-johan+linaro@kernel.org>
+        Tue, 3 Jan 2023 05:37:20 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A6B232;
+        Tue,  3 Jan 2023 02:37:18 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id b24-20020a05600c4a9800b003d21efdd61dso22751527wmp.3;
+        Tue, 03 Jan 2023 02:37:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mUIViT8791qts+nexw/1+egrl+ZnCa7TzReiRjS06ww=;
+        b=GnDQ5l2G2OTnTgTh4hH030GOYlThjBkEOy8nGBFa0TEVdsjCykbjSP4IE91yJr0/mK
+         dedCmMUvSvIqFqszD1ypz7QgwScD+hgKTQmJdVDgQnU2Thv1Y/4kqrcSI9+BDdML4+YI
+         kfme0UPVWRH1CSkeOaxZcOCYuI6RWEB1nlJt/k3znarKHDHMq7wzrJYrYVb/EABkMBF9
+         5nOFMSnZzG+x5onPULD/mzTS3dXZdkvvfqAhTS19eRMZBDuQ/exHNlLZMvuSx7+D89Cl
+         07YaaqbK0tDk89vZ9aSnMg+vLn8xuBPHJWWPAUZ2PASLOsKktpznElDSVESUiEh10MBE
+         /yKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mUIViT8791qts+nexw/1+egrl+ZnCa7TzReiRjS06ww=;
+        b=7OdJeXIYI50n1ccbHy1PSqJoUuDVSAE1CXhNVyfOW+4+bd+8eNkMpFMSGVO3tkbQ3G
+         +VR48AcTQbhgXk/vJMPyAugMBCRghfZvwiBQd6OkbKOHMgVv2nJ9UKM1Vlso61KONVCn
+         xJPQgjJZR04huCDDx/wOk4nuVUO9LKlKGSysV8pMMMN9uJsh2gXY26O/iNp6e4GNOKIF
+         zb2tKLhQ4GCet68w3eipC5L06pYriSGoQreqki3o5UFJZmS6MUaln+2+/VjJrapMqLAB
+         UhdcHINoGpkqQT0sTnUfqZLuwk8VfXO/WmUVxpggGYh5aE5C0NlmEgypWF98Hc6X6Ksq
+         A5JQ==
+X-Gm-Message-State: AFqh2kqaWudX8jn7EcEEjTQOcu72ivaL6bkuMy/HKSeRCSlIehMfvSvP
+        qUqrTufp4974awQQtdFDE3Q=
+X-Google-Smtp-Source: AMrXdXv0IheT4f3sV3DIZkz22C9Fyt1o3xyEVBlqHUqDDLM+HPntFeYFdO94wriA8UsbktxlOdYGWg==
+X-Received: by 2002:a05:600c:1ca3:b0:3d3:591a:bfda with SMTP id k35-20020a05600c1ca300b003d3591abfdamr33959996wms.27.1672742237317;
+        Tue, 03 Jan 2023 02:37:17 -0800 (PST)
+Received: from debian ([2a10:d582:3bb:0:63f8:f640:f53e:dd47])
+        by smtp.gmail.com with ESMTPSA id k31-20020a05600c1c9f00b003d22528decesm50587836wms.43.2023.01.03.02.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 02:37:17 -0800 (PST)
+Date:   Tue, 3 Jan 2023 10:37:15 +0000
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 00/74] 6.0.17-rc1 review
+Message-ID: <Y7QFW7O0xqSYTzyl@debian>
+References: <20230102110552.061937047@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103103141.15807-6-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230102110552.061937047@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 11:31:40AM +0100, Johan Hovold wrote:
-> The wcd938x codec is not a memory-mapped device and does not belong
-> under the soc node.
-> 
-> Move the node to the root node to avoid DT validation failures.
-> 
-> While at it, clean up the node somewhat by reordering properties and
-> renaming it 'audio-codec'.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 53 ++++++++++++-------------
->  1 file changed, 26 insertions(+), 27 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> index 4de3e1f1c39c..8ac7265d8c10 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> @@ -17,6 +17,32 @@ aliases {
->  		serial0 = &uart7;
->  	};
->  
-> +	wcd938x: audio-codec {
-> +		compatible = "qcom,wcd9380-codec";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&wcd_default>;
-> +
-> +		qcom,micbias1-microvolt = <1800000>;
-> +		qcom,micbias2-microvolt = <1800000>;
-> +		qcom,micbias3-microvolt = <1800000>;
-> +		qcom,micbias4-microvolt = <1800000>;
-> +		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
-> +		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
-> +		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
-> +		qcom,rx-device = <&wcd_rx>;
-> +		qcom,tx-device = <&wcd_tx>;
+Hi Greg,
 
-Bah, apparently I forgot to move the vendor properties after the
-supplies as I had intended. Probably not worth resending the series
-over.
+On Mon, Jan 02, 2023 at 12:21:33PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.17 release.
+> There are 74 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 04 Jan 2023 11:05:34 +0000.
+> Anything received after that time might be too late.
 
-> +
-> +		reset-gpios = <&tlmm 43 GPIO_ACTIVE_LOW>;
-> +
-> +		vdd-buck-supply = <&vreg_s10b_1p8>;
-> +		vdd-rxtx-supply = <&vreg_s10b_1p8>;
-> +		vdd-io-supply = <&vreg_s10b_1p8>;
-> +		vdd-mic-bias-supply = <&vreg_bob>;
-> +
-> +		#sound-dai-cells = <1>;
-> +	};
+Build test (gcc version 12.2.1 20221127):
+mips: 52 configs -> no failure
+arm: 100 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Johan
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+mips: Booted on ci20 board. VNC server did not start, will try a bisect
+later tonight.
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2541
+[2]. https://openqa.qa.codethink.co.uk/tests/2545
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
