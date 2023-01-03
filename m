@@ -2,123 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB82665C0A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A211565C0AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237689AbjACNRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:17:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
+        id S233191AbjACNRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237796AbjACNQl (ORCPT
+        with ESMTP id S237801AbjACNQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:16:41 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898D510FD8;
-        Tue,  3 Jan 2023 05:15:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672751726; x=1704287726;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=v5CCLLO+upNdoJWrssvE30mPz+dADC8azsX5O8Z4OGw=;
-  b=SZYAZ+XQx5nYR5eMitoqbhIIf2t5DTJLx07916zFBg+OdLwWby4/Y1tr
-   JO0Ltzk7v+ExOuqzUHk94A/k5cnpx78yvF9RQPSOGzZNpQgj++CqWH5ri
-   6nOTCIOyYaOOIBTwR+s4fNHRivm1lU1nOFNQiuVVQ6npCdTY49gU/zDPL
-   6xhgI5bIBR9d39PdYJR/gXCanHdtrfMDdoy8tJQGfPCLHL3GeVGUVivfN
-   ia3GPaW9gHT19bVRYbpd9cIwpHBerwYA+bkVDQ3GpAalHoogSja66cm9L
-   p8R0ARaN0D7HisJmFR70FwOO+K56W+Fq3Et4fx67MGXyBu82Ta5UCzq68
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="305160782"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="305160782"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 05:15:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="743492376"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="743492376"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Jan 2023 05:15:22 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1DDD7162; Tue,  3 Jan 2023 15:15:54 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc:     Lee Jones <lee@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [resent, PATCH v2 1/1] leds: is31fl319x: Wrap mutex_destroy() for devm_add_action_or_rest()
-Date:   Tue,  3 Jan 2023 15:15:53 +0200
-Message-Id: <20230103131553.34124-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 3 Jan 2023 08:16:46 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA130EA0;
+        Tue,  3 Jan 2023 05:16:00 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id t17so73408993eju.1;
+        Tue, 03 Jan 2023 05:16:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NnoWPE1jQ3kYm5s0XhMv2bhJOZqz4qyCDxQboi65+Mo=;
+        b=UVPg7nDcLHGMAlKprdPNpgabezsSufjZR4E62AZgq39xyQprvB5VqdG9vBkhqtebgE
+         S8lOGYELvqj+RU6B5KVEs9bquQYKobh3in0rnI8lEI/rJ+czEiK4hbrtMmA4q5E/ir4o
+         sEgbZSppvAYuxEvJzQttVIhPCxA/0a+nxpqMiLByU6lOwvDjJ2VhirGWBoO5zJOTLQpY
+         knwwZh8kclvnuU7BpRIhnC1RupIEKmMhqXvUoyei7DTtCSSCa4dgukDfvevQM6PItaKu
+         +iw4V9WS7eIgMu1Ncr0En28bpSdFK19XV9EZiCoelZDSnfPQwDXp8G8kBAo9nsGHWKKg
+         U1Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NnoWPE1jQ3kYm5s0XhMv2bhJOZqz4qyCDxQboi65+Mo=;
+        b=Ky4qKwb0VmuuuD7/eI8V4fDy60hRGH6vcIh+1BBUHiL18LSF86QLSUcN9a+FaXFvVI
+         jit4H9Of/uLx2yEWMHJBM27sGV8EGg459h/mi1N5qzYYt+3N+zqAs5tn0X7s6BCCIcad
+         pNLCrxT8Vn/SzM4vblsNHYGqifDVLIZyh8mKZyNNhsqNXgHyqSK4i8zdL/KUusxQD2Wp
+         aJsOv4t2ZWh4mw6ItZVusPtDyqjn+Z1zVfzA6fGLPCqteLmVuslTICBJJquiiY5OryEa
+         ig1HAE4laYXPBvm2tQqEoJ79tICznRR4mRlXXpT6Mhh1YqQYRQpUacR6Un1Ln3FnlK9M
+         +h+w==
+X-Gm-Message-State: AFqh2kqUSsIcV55O46HKfc4cCu8LXgvm1Md9ewTWwyMaGiGoeh7v3vDH
+        w6l1T7/5RtjlrAIqVQWAtNs=
+X-Google-Smtp-Source: AMrXdXvgiqj2LSEPUaEw6z2sRd7nVp5kdlIihi8FpByYeNs/V+YRRvBDcz75iq0OtJOTq78Ige/l/g==
+X-Received: by 2002:a17:906:19db:b0:7c0:8578:f4c0 with SMTP id h27-20020a17090619db00b007c08578f4c0mr34871936ejd.67.1672751759096;
+        Tue, 03 Jan 2023 05:15:59 -0800 (PST)
+Received: from skbuf ([188.26.185.118])
+        by smtp.gmail.com with ESMTPSA id hk25-20020a170906c9d900b007c094d31f35sm13973542ejb.76.2023.01.03.05.15.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 05:15:58 -0800 (PST)
+Date:   Tue, 3 Jan 2023 15:15:55 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wei Fang <wei.fang@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH RFC net-next v2 06/12] net: mdio: mdio-bitbang: Separate
+ C22 and C45 transactions
+Message-ID: <20230103131555.5i4tj7sk72gmed5d@skbuf>
+References: <20221227-v6-2-rc1-c45-seperation-v2-0-ddb37710e5a7@walle.cc>
+ <20221227-v6-2-rc1-c45-seperation-v2-6-ddb37710e5a7@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221227-v6-2-rc1-c45-seperation-v2-6-ddb37710e5a7@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang complains that devm_add_action() takes a parameter with a wrong type:
+On Wed, Dec 28, 2022 at 12:07:22AM +0100, Michael Walle wrote:
+> From: Andrew Lunn <andrew@lunn.ch>
+> 
+> The bitbbanging bus driver can perform both C22 and C45 transfers.
+> Create separate functions for each and register the C45 versions using
+> the new driver API calls.
+> 
+> The SH Ethernet driver places wrappers around these functions. In
+> order to not break boards which might be using C45, add similar
+> wrappers for C45 operations.
+> 
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
 
-warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
-    err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1 warning generated.
+Incomplete conversion, this breaks the build. Need to update all users
+of the bitbang driver (also davinci_mdio). Something like the diff below
+fixes that, but it leaves the davinci_mdio driver in a partially
+converted state (if data->manual_mode is true, new API is used,
+otherwise old API is used). So another patch to convert the other case
+will likely be needed.
 
-It appears that the commit e1af5c815586 ("leds: is31fl319x: Fix devm vs.
-non-devm ordering") missed two things:
-- while mention devm_add_action_or_reset() the actual change got
-  devm_add_action() call by unknown reason
-- strictly speaking the parameter is not compatible by type
-
-Fix both issues by switching to devm_add_action_or_reset() and adding a
-wrapper for mutex_destroy() call.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: e1af5c815586 ("leds: is31fl319x: Fix devm vs. non-devm ordering")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
-
-v2 resent: resent as v2
-v2: added tag (Vincent), Cc'ed to Lee                                                                            
-
- drivers/leds/leds-is31fl319x.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
-index b2f4c4ec7c56..7c908414ac7e 100644
---- a/drivers/leds/leds-is31fl319x.c
-+++ b/drivers/leds/leds-is31fl319x.c
-@@ -495,6 +495,11 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
- 	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
+diff --git a/drivers/net/ethernet/ti/davinci_mdio.c b/drivers/net/ethernet/ti/davinci_mdio.c
+index 946b9753ccfb..23169e36a3d4 100644
+--- a/drivers/net/ethernet/ti/davinci_mdio.c
++++ b/drivers/net/ethernet/ti/davinci_mdio.c
+@@ -225,7 +225,7 @@ static int davinci_get_mdio_data(struct mdiobb_ctrl *ctrl)
+ 	return test_bit(MDIO_PIN, &reg);
  }
  
-+static void is31f1319x_mutex_destroy(void *lock)
-+{
-+	mutex_destroy(lock);
+-static int davinci_mdiobb_read(struct mii_bus *bus, int phy, int reg)
++static int davinci_mdiobb_read_c22(struct mii_bus *bus, int phy, int reg)
+ {
+ 	int ret;
+ 
+@@ -233,7 +233,7 @@ static int davinci_mdiobb_read(struct mii_bus *bus, int phy, int reg)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = mdiobb_read(bus, phy, reg);
++	ret = mdiobb_read_c22(bus, phy, reg);
+ 
+ 	pm_runtime_mark_last_busy(bus->parent);
+ 	pm_runtime_put_autosuspend(bus->parent);
+@@ -241,8 +241,8 @@ static int davinci_mdiobb_read(struct mii_bus *bus, int phy, int reg)
+ 	return ret;
+ }
+ 
+-static int davinci_mdiobb_write(struct mii_bus *bus, int phy, int reg,
+-				u16 val)
++static int davinci_mdiobb_write_c22(struct mii_bus *bus, int phy, int reg,
++				    u16 val)
+ {
+ 	int ret;
+ 
+@@ -250,7 +250,41 @@ static int davinci_mdiobb_write(struct mii_bus *bus, int phy, int reg,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = mdiobb_write(bus, phy, reg, val);
++	ret = mdiobb_write_c22(bus, phy, reg, val);
++
++	pm_runtime_mark_last_busy(bus->parent);
++	pm_runtime_put_autosuspend(bus->parent);
++
++	return ret;
 +}
 +
- static int is31fl319x_probe(struct i2c_client *client)
- {
- 	struct is31fl319x_chip *is31;
-@@ -511,7 +516,7 @@ static int is31fl319x_probe(struct i2c_client *client)
- 		return -ENOMEM;
++static int davinci_mdiobb_read_c45(struct mii_bus *bus, int phy, int devad,
++				   int reg)
++{
++	int ret;
++
++	ret = pm_runtime_resume_and_get(bus->parent);
++	if (ret < 0)
++		return ret;
++
++	ret = mdiobb_read_c45(bus, phy, devad, reg);
++
++	pm_runtime_mark_last_busy(bus->parent);
++	pm_runtime_put_autosuspend(bus->parent);
++
++	return ret;
++}
++
++static int davinci_mdiobb_write_c45(struct mii_bus *bus, int phy, int devad,
++				    int reg, u16 val)
++{
++	int ret;
++
++	ret = pm_runtime_resume_and_get(bus->parent);
++	if (ret < 0)
++		return ret;
++
++	ret = mdiobb_write_c45(bus, phy, devad, reg, val);
  
- 	mutex_init(&is31->lock);
--	err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
-+	err = devm_add_action_or_reset(dev, is31f1319x_mutex_destroy, &is31->lock);
- 	if (err)
- 		return err;
+ 	pm_runtime_mark_last_busy(bus->parent);
+ 	pm_runtime_put_autosuspend(bus->parent);
+@@ -573,8 +607,10 @@ static int davinci_mdio_probe(struct platform_device *pdev)
+ 	data->bus->name		= dev_name(dev);
  
--- 
-2.35.1
-
+ 	if (data->manual_mode) {
+-		data->bus->read		= davinci_mdiobb_read;
+-		data->bus->write	= davinci_mdiobb_write;
++		data->bus->read		= davinci_mdiobb_read_c22;
++		data->bus->write	= davinci_mdiobb_write_c22;
++		data->bus->read_c45	= davinci_mdiobb_read_c45;
++		data->bus->write_c45	= davinci_mdiobb_write_c45;
+ 		data->bus->reset	= davinci_mdiobb_reset;
+ 
+ 		dev_info(dev, "Configuring MDIO in manual mode\n");
