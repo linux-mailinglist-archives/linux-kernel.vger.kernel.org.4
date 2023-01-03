@@ -2,349 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACED165BDDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AEE065BDE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbjACKUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:20:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
+        id S233024AbjACKUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237130AbjACKUY (ORCPT
+        with ESMTP id S232898AbjACKUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:20:24 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C8BF588;
-        Tue,  3 Jan 2023 02:20:22 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 303AK74Q046057;
-        Tue, 3 Jan 2023 04:20:07 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1672741207;
-        bh=lXDr1AG82dad2/KSpayMv8CLf6P2WQJfAqD3kcQ9adU=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=i03TyqyktVyPqwKufyOeCf5PYNMgxIB1ala1pV1ELy57jKbUwKqtQCRAAhbjy8sfg
-         VgXUXPzVm6wPHA/EEZo0imf9Xtlwidip6N/US+6pFF+7o6XDyurit51ejex5Rr7ikw
-         Si7tU1PmpWADZ2MK7FkfchbsFhdPbbY4+5riVwN4=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 303AK76J131017
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 3 Jan 2023 04:20:07 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 3
- Jan 2023 04:20:07 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 3 Jan 2023 04:20:07 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 303AK5FK032597;
-        Tue, 3 Jan 2023 04:20:06 -0600
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     <dri-devel@lists.freedesktop.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
-        <robert.foss@linaro.org>, <jonas@kwiboo.se>,
-        <jernej.skrabec@gmail.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <p.zabel@pengutronix.de>, <tomi.valkeinen@ideasonboard.com>,
-        <laurent.pinchart@ideasonboard.com>,
-        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
-        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>,
-        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
-        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH v11 5/5] drm/bridge: cdns-dsi: Add support for J721E wrapper
-Date:   Tue, 3 Jan 2023 15:49:51 +0530
-Message-ID: <20230103101951.10963-6-r-ravikumar@ti.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230103101951.10963-1-r-ravikumar@ti.com>
-References: <20230103101951.10963-1-r-ravikumar@ti.com>
+        Tue, 3 Jan 2023 05:20:07 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF060B1D1
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:20:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6C1AF611A4;
+        Tue,  3 Jan 2023 10:20:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1672741204; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WxwzilripMrMET7cDXrClsfcZECAT4drpWNCobXQpAM=;
+        b=an+tYDRSWJI67+lk8LBlngSSuYmwlz1zLTlFZ+NtuMAWAQVrizDo+RMIK8n+eBkeBovvji
+        5WJrajd2OQk8VXCFgdUQaKQFC3OCbtHr63ckwqYFI1+eFmvQo6nOVfkrzjGpDQ+RG9Hz39
+        zugmIkR4dVaxvCffsrqMij1BLrycVgE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 506C11392B;
+        Tue,  3 Jan 2023 10:20:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id t1SmElQBtGM7PwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 03 Jan 2023 10:20:04 +0000
+Date:   Tue, 3 Jan 2023 11:20:03 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?6rmA7J6s7JuQ?= <jaewon31.kim@samsung.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Subject: Re: (2) [PATCH] page_alloc: avoid the negative free for meminfo
+ available
+Message-ID: <Y7QBUx0Ds9SrzK9g@dhcp22.suse.cz>
+References: <Y7PoBkLyCaH1KHbB@dhcp22.suse.cz>
+ <Y7PhVaqhIzs8e8mU@dhcp22.suse.cz>
+ <20230103072807.19578-1-jaewon31.kim@samsung.com>
+ <20230103082008epcms1p6f75b54cbfeba0a1ab9a8044dc650134b@epcms1p6>
+ <CGME20230103072834epcas1p3441ef50a6cc26ac48d184f1244b76a0e@epcms1p7>
+ <20230103092232epcms1p7f2df94d75fc1b6f11ee986a3a1aa1900@epcms1p7>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230103092232epcms1p7f2df94d75fc1b6f11ee986a3a1aa1900@epcms1p7>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for wrapper settings for DSI bridge on j721e. Also enable
-DPI0
+On Tue 03-01-23 18:22:32, 김재원 wrote:
+> >> >On Tue 03-01-23 16:28:07, Jaewon Kim wrote:
+> >> >> The totalreserve_pages could be higher than the free because of
+> >> >> watermark high or watermark boost. Handle this situation and fix it to 0
+> >> >> free size.
+> >> >
+> >> >What is the actual problem you are trying to address by this change?
+> >> 
+> >> Hello
+> >> 
+> >> As described on the original commit,
+> >>   34e431b0ae39 /proc/meminfo: provide estimated available memory
+> >> mm is tring to provide the avaiable memory to user space.
+> >> 
+> >> But if free is negative, the available memory shown to userspace
+> >> would be shown smaller thatn the actual available size. The userspace
+> >> may do unwanted memory shrinking actions like process kills.
+> >
+> >Do you have any specific example? Have you seen this happening in
+> >practice or is this based on the code inspection?
+> 
+> I found this from a device using v5.10 based kernel.
+> Actually the log was printed by user space in its format after reading /proc/meminfo.
+> 
+> MemFree          38220 KB
+> MemAvailable     90008 KB
+> Active(file)    137116 KB
+> Inactive(file)  124128 KB
+> SReclaimable    100960 KB
+> 
+> Here's /proc/zoneinfo for wmark info.
+> 
+> ------ ZONEINFO (/proc/zoneinfo) ------
+> Node 0, zone    DMA32
+>   pages free     17059
+>         min      862
+>         low      9790
+>         high     18718
+>         spanned  524288
+>         present  497920
+>         managed  413348
+> Node 0, zone   Normal
+>   pages free     12795
+>         min      1044
+>         low      11855
+>         high     22666
+>         spanned  8388608
+>         present  524288
+>         managed  500548
+> 
+> The pagecache at this time, seems to be 174,664 KB.
+>   pagecache -= min(pagecache / 2, wmark_low)
+> We also need to add the reclaimable and the actual free on it to be MemAvaiable.
+> 
+> The MemAvailable should be bigger at leat this 174,664 KB, but it was 90,008 KB only
+> because the big wmark high 165,536 seems to be used.
 
----------------      -----------------------
-|      -------|      |-------              |
-| DSS  | DPI2 |----->| DPI0 |  DSI Wrapper |
-|      -------|      |-------              |
----------------      -----------------------
+How have you concluded that? Are you saying that a userspace would be
+behaving more sanely when considering more memory to be available?
+Please see more on the semantics below.
 
-As shown above DPI2 output of DSS is connected to DPI0 input of DSI
-Wrapper, DSI wrapper gives control wheather to enable/disable DPI0
-input. In j721e above is the only configuration supported
+> >Also does this patch actually fix anything? Say the system is really
+> >struggling and we are under min watermark. Shouldn't that lead to
+> >Available to be reported as 0 without even looking at other counters?
+> >
+> 
+> Sorry but I did not understand,
 
-Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
----
- drivers/gpu/drm/bridge/cadence/Kconfig        | 10 ++++
- drivers/gpu/drm/bridge/cadence/Makefile       |  1 +
- .../gpu/drm/bridge/cadence/cdns-dsi-core.c    | 35 ++++++++++++-
- .../gpu/drm/bridge/cadence/cdns-dsi-core.h    | 20 ++++++++
- .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   | 51 +++++++++++++++++++
- .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   | 16 ++++++
- 6 files changed, 132 insertions(+), 1 deletion(-)
- create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
- create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
+What I meant here is that the core of the high level definition says:
+"An estimate of how much memory is available for starting new
+applications, without swapping." If the system is close enough to watermarks 
+that NR_FREE_PAGES < reserves then it is likely that further memory
+allocations will not do without reclaim and potentially swapout.
 
-diff --git a/drivers/gpu/drm/bridge/cadence/Kconfig b/drivers/gpu/drm/bridge/cadence/Kconfig
-index 5f39859dcfdd..ec35215a2003 100644
---- a/drivers/gpu/drm/bridge/cadence/Kconfig
-+++ b/drivers/gpu/drm/bridge/cadence/Kconfig
-@@ -10,6 +10,16 @@ config DRM_CDNS_DSI
- 	  Support Cadence DPI to DSI bridge. This is an internal
- 	  bridge and is meant to be directly embedded in a SoC.
- 
-+if DRM_CDNS_DSI
-+
-+config DRM_CDNS_DSI_J721E
-+	bool "J721E Cadence DSI wrapper support"
-+	default y
-+	help
-+	  Support J721E Cadence DSI wrapper. The wrapper manages
-+	  the routing of the DSS DPI signal to the Cadence DSI.
-+endif
-+
- config DRM_CDNS_MHDP8546
- 	tristate "Cadence DPI/DP bridge"
- 	select DRM_DISPLAY_DP_HELPER
-diff --git a/drivers/gpu/drm/bridge/cadence/Makefile b/drivers/gpu/drm/bridge/cadence/Makefile
-index 9e2f34c84480..c95fd5b81d13 100644
---- a/drivers/gpu/drm/bridge/cadence/Makefile
-+++ b/drivers/gpu/drm/bridge/cadence/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_DRM_CDNS_DSI) += cdns-dsi.o
- cdns-dsi-y := cdns-dsi-core.o
-+cdns-dsi-$(CONFIG_DRM_CDNS_DSI_J721E) += cdns-dsi-j721e.o
- obj-$(CONFIG_DRM_CDNS_MHDP8546) += cdns-mhdp8546.o
- cdns-mhdp8546-y := cdns-mhdp8546-core.o cdns-mhdp8546-hdcp.o
- cdns-mhdp8546-$(CONFIG_DRM_CDNS_MHDP8546_J721E) += cdns-mhdp8546-j721e.o
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-index 058349bfeb67..5dbfc7226b31 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-@@ -15,6 +15,7 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_address.h>
-+#include <linux/of_device.h>
- #include <linux/of_graph.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-@@ -23,6 +24,9 @@
- #include <linux/phy/phy-mipi-dphy.h>
- 
- #include "cdns-dsi-core.h"
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+#include "cdns-dsi-j721e.h"
-+#endif
- 
- #define IP_CONF				0x0
- #define SP_HS_FIFO_DEPTH(x)		(((x) & GENMASK(30, 26)) >> 26)
-@@ -665,6 +669,10 @@ static void cdns_dsi_bridge_disable(struct drm_bridge *bridge)
- 
- 	val = readl(dsi->regs + MCTL_MAIN_EN) & ~IF_EN(input->id);
- 	writel(val, dsi->regs + MCTL_MAIN_EN);
-+
-+	if (dsi->platform_ops && dsi->platform_ops->disable)
-+		dsi->platform_ops->disable(dsi);
-+
- 	pm_runtime_put(dsi->base.dev);
- }
- 
-@@ -760,6 +768,9 @@ static void cdns_dsi_bridge_enable(struct drm_bridge *bridge)
- 	if (WARN_ON(pm_runtime_get_sync(dsi->base.dev) < 0))
- 		return;
- 
-+	if (dsi->platform_ops && dsi->platform_ops->enable)
-+		dsi->platform_ops->enable(dsi);
-+
- 	mode = &bridge->encoder->crtc->state->adjusted_mode;
- 	nlanes = output->dev->lanes;
- 
-@@ -1200,6 +1211,8 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
- 		goto err_disable_pclk;
- 	}
- 
-+	dsi->platform_ops = of_device_get_match_data(&pdev->dev);
-+
- 	val = readl(dsi->regs + IP_CONF);
- 	dsi->direct_cmd_fifo_depth = 1 << (DIRCMD_FIFO_DEPTH(val) + 2);
- 	dsi->rx_fifo_depth = RX_FIFO_DEPTH(val);
-@@ -1235,14 +1248,27 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
- 	dsi->base.dev = &pdev->dev;
- 	dsi->base.ops = &cdns_dsi_ops;
- 
-+	if (dsi->platform_ops && dsi->platform_ops->init) {
-+		ret = dsi->platform_ops->init(dsi);
-+		if (ret != 0) {
-+			dev_err(&pdev->dev, "platform initialization failed: %d\n",
-+				ret);
-+			goto err_disable_runtime_pm;
-+		}
-+	}
-+
- 	ret = mipi_dsi_host_register(&dsi->base);
- 	if (ret)
--		goto err_disable_runtime_pm;
-+		goto err_deinit_platform;
- 
- 	clk_disable_unprepare(dsi->dsi_p_clk);
- 
- 	return 0;
- 
-+err_deinit_platform:
-+	if (dsi->platform_ops && dsi->platform_ops->deinit)
-+		dsi->platform_ops->deinit(dsi);
-+
- err_disable_runtime_pm:
- 	pm_runtime_disable(&pdev->dev);
- 
-@@ -1257,6 +1283,10 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
- 	struct cdns_dsi *dsi = platform_get_drvdata(pdev);
- 
- 	mipi_dsi_host_unregister(&dsi->base);
-+
-+	if (dsi->platform_ops && dsi->platform_ops->deinit)
-+		dsi->platform_ops->deinit(dsi);
-+
- 	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
-@@ -1264,6 +1294,9 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
- 
- static const struct of_device_id cdns_dsi_of_match[] = {
- 	{ .compatible = "cdns,dsi" },
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+	{ .compatible = "ti,j721e-dsi", .data = &dsi_ti_j721e_ops, },
-+#endif
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, cdns_dsi_of_match);
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-index d5bb5caf77b1..dc05f3ad6951 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-@@ -45,9 +45,29 @@ struct cdns_dsi_input {
- 	struct drm_bridge bridge;
- };
- 
-+struct cdns_dsi;
-+
-+/**
-+ * struct cdns_dsi_platform_ops - CDNS DSI Platform operations
-+ * @init: Called in the CDNS DSI probe
-+ * @deinit: Called in the CDNS DSI remove
-+ * @enable: Called at the begining of CDNS DSI bridge enable
-+ * @disable: Called at the end of CDNS DSI bridge disable
-+ */
-+struct cdns_dsi_platform_ops {
-+	int (*init)(struct cdns_dsi *dsi);
-+	void (*deinit)(struct cdns_dsi *dsi);
-+	void (*enable)(struct cdns_dsi *dsi);
-+	void (*disable)(struct cdns_dsi *dsi);
-+};
-+
- struct cdns_dsi {
- 	struct mipi_dsi_host base;
- 	void __iomem *regs;
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+	void __iomem *j721e_regs;
-+#endif
-+	const struct cdns_dsi_platform_ops *platform_ops;
- 	struct cdns_dsi_input input;
- 	struct cdns_dsi_output output;
- 	unsigned int direct_cmd_fifo_depth;
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-new file mode 100644
-index 000000000000..b654d4b3cb5c
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * TI j721e Cadence DSI wrapper
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-+ * Author: Rahul T R <r-ravikumar@ti.com>
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/platform_device.h>
-+
-+#include "cdns-dsi-j721e.h"
-+
-+#define DSI_WRAP_REVISION		0x0
-+#define DSI_WRAP_DPI_CONTROL		0x4
-+#define DSI_WRAP_DSC_CONTROL		0x8
-+#define DSI_WRAP_DPI_SECURE		0xc
-+#define DSI_WRAP_DSI_0_ASF_STATUS	0x10
-+
-+#define DSI_WRAP_DPI_0_EN		BIT(0)
-+#define DSI_WRAP_DSI2_MUX_SEL		BIT(4)
-+
-+static int cdns_dsi_j721e_init(struct cdns_dsi *dsi)
-+{
-+	struct platform_device *pdev = to_platform_device(dsi->base.dev);
-+
-+	dsi->j721e_regs = devm_platform_ioremap_resource(pdev, 1);
-+	return PTR_ERR_OR_ZERO(dsi->j721e_regs);
-+}
-+
-+static void cdns_dsi_j721e_enable(struct cdns_dsi *dsi)
-+{
-+	/*
-+	 * Enable DPI0 as its input. DSS0 DPI2 is connected
-+	 * to DSI DPI0. This is the only supported configuration on
-+	 * J721E.
-+	 */
-+	writel(DSI_WRAP_DPI_0_EN, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-+}
-+
-+static void cdns_dsi_j721e_disable(struct cdns_dsi *dsi)
-+{
-+	/* Put everything to defaults  */
-+	writel(0, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-+}
-+
-+const struct cdns_dsi_platform_ops dsi_ti_j721e_ops = {
-+	.init = cdns_dsi_j721e_init,
-+	.enable = cdns_dsi_j721e_enable,
-+	.disable = cdns_dsi_j721e_disable,
-+};
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-new file mode 100644
-index 000000000000..275e5e8e7583
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * TI j721e Cadence DSI wrapper
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-+ * Author: Rahul T R <r-ravikumar@ti.com>
-+ */
-+
-+#ifndef __CDNS_DSI_J721E_H__
-+#define __CDNS_DSI_J721E_H__
-+
-+#include "cdns-dsi-core.h"
-+
-+extern const struct cdns_dsi_platform_ops dsi_ti_j721e_ops;
-+
-+#endif /* !__CDNS_DSI_J721E_H__ */
+So the question really is whether just clamping the value to 0 is
+actually making MemAvailable more "correct"? See my point?
+
+The actual value is never going to be lazer cut precise. Close to
+watermark behavior will vary wildly depending on the memory
+reclaimability. Kswapd might easily keep up with memory demand but it
+also could get stuck. MemAvailable should be considered a hint rather
+than an exact value IMHO.
 -- 
-2.39.0
-
+Michal Hocko
+SUSE Labs
