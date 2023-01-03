@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9430665BD16
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3F065BD1B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237021AbjACJYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S236896AbjACJYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237217AbjACJXh (ORCPT
+        with ESMTP id S237075AbjACJYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:23:37 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495E117A
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:23:36 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id o31-20020a17090a0a2200b00223fedffb30so30514668pjo.3
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:23:36 -0800 (PST)
+        Tue, 3 Jan 2023 04:24:32 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4032E0A8
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:24:30 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-14fb3809eaeso30179736fac.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:24:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AaEgQoi2wV88iETdzvSp20U7Cda3EBi9Iq1BYplBC3U=;
-        b=fRKiuLLPQXtm+PoLAnEO0C/uRszb5OZg3YHcvW2RCgSXdgYSqmUNIVOR6Yw5IkkkHr
-         +QjxZ3RVzCBOcOirYxxHt0r1WoqCp6tPnX+mb/UoZ6kAIx7Lm+E/ou+rSr9EZ2qoQeD6
-         bIpAN5WyNbnUdEwIzQE/O3pT9ZYGzuzsfHPQo=
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mzcK4BlDrehna2Cf5WyLld2E+p/c7PCOy1ZvlyaJP1k=;
+        b=bR1gztSKPi5u6/qmjSq8JJxxv3wfyJmMLpirn/KjmYibxhjZo7U5fODxttptFG4MZ4
+         0IXObSQFL1xNHqEy9yAzbxhEb+FU5HZHEK34C6Ofn5xjvKJTxUVdiTMnzTXI5lLY6jmn
+         uqPKflfmFLiTiOLvpmlbSeXcHUMzp4BHwLzZ+gx+mL/n09kl/h3U90Lxgu9xZyERDy+X
+         pN+aGzLOCuL5GZJI2FeIyy8y1r7QTz61jIjmrPeSChzLCOCVEiunaEiVXRndm9YbAak0
+         tpw42Yi+0S4wXmyg/of7mbrSehHDNbYtLyhTXH05Yrk8uYo3xyuziGAMU9T+Hc9Ke44Z
+         F8MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AaEgQoi2wV88iETdzvSp20U7Cda3EBi9Iq1BYplBC3U=;
-        b=19qMB9joEmmZ2AW96rWeew+nbSMU55Kmf2zjt+GNO72oyZSO4YVNmupy2MasoLLBzq
-         Gdq9mMNKkSeigm6iZaMYi3BK+tvgGWib3+JVK7UGPLCTJB6xHG1nIf0yw+21z7z5UHhp
-         l5tdZ7h3kFR282+oLYPyM3nk0956lpT2bWzF94Ri74Hzl4dsfs3bHgxcsM6ieqAkv9zC
-         eKgoPh82sncbD1ceJT6gkUeMMwwm/gsPm5/5t+esKMXWEQkJD+tBFQLlKNT+Z8Mdvel3
-         R6kKCrLwErh28kZyi/kLSB/64JJSaqo0QcUXY9RZcIRBYM3Mp71CvTnEH5r13tkgwuEM
-         itsw==
-X-Gm-Message-State: AFqh2kqYGFanhC8FN8NakE+aqp6u5mHuZGOPF4Hmi+XHeT506FFiAlXV
-        CdP8+V1prrqh5h+PtBXjG+Pxxw==
-X-Google-Smtp-Source: AMrXdXscvLpHbGWlFWU5ZkobIrKEQnk7OF5Eruk64rC/Zl69xEwyZqBgAT2SpMsWhcqVpsg57yVxIg==
-X-Received: by 2002:a17:902:f112:b0:189:9ee0:cc8e with SMTP id e18-20020a170902f11200b001899ee0cc8emr40941085plb.57.1672737815982;
-        Tue, 03 Jan 2023 01:23:35 -0800 (PST)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:96d9:31a:590:4d72])
-        by smtp.gmail.com with ESMTPSA id y126-20020a636484000000b0049f5da82b12sm6868632pgb.93.2023.01.03.01.23.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 01:23:35 -0800 (PST)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] clk: core: Honor CLK_OPS_PARENT_ENABLE in clk_core_is_enabled
-Date:   Tue,  3 Jan 2023 17:23:30 +0800
-Message-Id: <20230103092330.494102-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        bh=mzcK4BlDrehna2Cf5WyLld2E+p/c7PCOy1ZvlyaJP1k=;
+        b=QuZT/La9iQOiXOh49/F09ZIZyML6et9w3eYOt6GjRu7qfHkx31v1KqcuRV9e5FEwFm
+         xPgU6Ee6mSPz7mlAm2rE8oc6OuubzrCQJctHqVVukdPVJXo7wQeQ9CYiM2/wwKeuRpYs
+         DOz6lBOxqyl1n8F2JjJibQs6AKzmEI/Q+f3RhZCUgcy/dqbdz9+cbWCtE6Lw99XKp48s
+         rp/hB9AXgKY0Iu1bgcKi4Brj1rV8LHJ3L+sSoRZdkh6ljXUjb9gSC+1VN/Cqd8SHdMyN
+         pUjh4GQrlnWYcwOBHq2ZvcrOzFaWdbJ3LHud6Tp4+4bI/1NCSM4gUZfeWBwMqP6WAJud
+         pZrA==
+X-Gm-Message-State: AFqh2koWKnw8lho0+Cb9U1DAq0t+SsyyLfNGV7lr2JppAyI/JRpYqXgJ
+        F/lUWcKqK5696/S6QHgztMPV3zsl+4j7qJMuwAdbWg==
+X-Google-Smtp-Source: AMrXdXu7+GEt205lhs8PRbBO9C5QHjATHLZxARTl42LbFtqkt0s4GGajjKBhO17x3s7QodHXVkcp8SHp01rNiJX+xZo=
+X-Received: by 2002:a05:6870:fb90:b0:150:22dd:1f54 with SMTP id
+ kv16-20020a056870fb9000b0015022dd1f54mr1713164oab.155.1672737870170; Tue, 03
+ Jan 2023 01:24:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20221230153554.105856-1-robert.foss@linaro.org>
+ <20221230153554.105856-9-robert.foss@linaro.org> <deb17787-1a5a-89a3-3ecf-7690b4149f5c@linaro.org>
+ <CAG3jFysU84LRcqQOspub+9vtsP3syiksrGX6D7i3ff+X6+mbTA@mail.gmail.com> <b8a0d9c5-eb26-c41c-1190-2628977bc582@linaro.org>
+In-Reply-To: <b8a0d9c5-eb26-c41c-1190-2628977bc582@linaro.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 3 Jan 2023 10:24:19 +0100
+Message-ID: <CAG3jFyuUV79nyjnqNysDKQSyYb4HUSWu-BvxG6LAz1Uavmvkbg@mail.gmail.com>
+Subject: Re: [PATCH v4 08/11] arm64: dts: qcom: sm8350: Use 2 interconnect cells
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        quic_jesszhan@quicinc.com,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        vkoul@kernel.org, a39.skl@gmail.com, quic_khsieh@quicinc.com,
+        quic_vpolimer@quicinc.com, swboyd@chromium.org,
+        dianders@chromium.org, liushixin2@huawei.com,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        vinod.koul@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,71 +81,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the previous commits that added CLK_OPS_PARENT_ENABLE, support for
-this flag was only added to rate change operations (rate setting and
-reparent) and disabling unused subtree. It was not added to the
-clock gate related operations. Any hardware driver that needs it for
-these operations will either see bogus results, or worse, hang.
+On Tue, 3 Jan 2023 at 08:59, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 02/01/2023 18:10, Robert Foss wrote:
+> > On Fri, 30 Dec 2022 at 17:12, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 30/12/2022 16:35, Robert Foss wrote:
+> >>> Use two interconnect cells in order to optionally
+> >>> support a path tag.
+> >>>
+> >>> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> >>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >>> ---
+> >>>  arch/arm64/boot/dts/qcom/sm8350.dtsi | 28 ++++++++++++++--------------
+> >>>  1 file changed, 14 insertions(+), 14 deletions(-)
+> >>>
+> >>
+> >> I think you need to rebase to include:
+> >> https://lore.kernel.org/all/167233461761.1099840.5517525898039031248.b4-ty@kernel.org/
+> >
+> > Ah, I see. Functionally I seemed to do fine without those commits.
+> >
+> >>
+> >> On which tree/revision did you base this?
+> >
+> > msm/drm-msm-display-for-6.2
+>
+> Then it is not a proper base for DTS changes - you will miss quite some
+> commits. The DTS patches should be based on Bjorn's SoC tree or
+> linux-next (although the latter sometimes can lead to conflicts).
 
-This has been seen on MT8192 and MT8195, where the imp_ii2_* clk
-drivers set this, but dumping debugfs clk_summary would cause it
-to hang.
+Alright, then in that case this series needs to be split into 3 parts.
 
-Prepare parent on prepare and enable parent on enable dependencies are
-already handled automatically by the core as part of its sequencing.
-Whether the case for "enable parent on prepare" should be supported by
-this flag or not is not clear, and thus ignored for now.
+The dts fixes, remaining dts changes & the remainder of code.
 
-This change solely fixes the handling of clk_core_is_enabled, i.e.
-enabling the parent clock when reading the hardware state. Unfortunately
-clk_core_is_enabled is called in a variety of places, sometimes with
-the enable clock already held. To avoid deadlocking, the core will
-ignore readouts and just return false if CLK_OPS_PARENT_ENABLE is set
-but the parent isn't currently enabled.
+Is this what you'd like to see?
 
-Fixes: fc8726a2c021 ("clk: core: support clocks which requires parents enable (part 2)")
-Fixes: a4b3518d146f ("clk: core: support clocks which requires parents enable (part 1)")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
-This is a less invasive version of "clk: core: Honor CLK_OPS_PARENT_ENABLE
-for clk gate ops" [1] which caused regressions on i.MX platforms.
-
-My guess is that the i.MX clock driver uses clk_hw_is_enabled() in it's
-set_rate callback, in which the new code causes a deadlock.
-
-v3 drops the enable parent on prepare/unprepare bits, as it's unclear
-who benefits from it, and the locking is hard to get right. The part in
-clk_core_is_enabled() is changed into a bypass path, as described in the
-commit message. This fixes the issue I'm seeing, and hopefully doesn't
-change the behavior on other platforms.
-
-[1] https://lore.kernel.org/linux-clk/20220822081424.1310926-2-wenst@chromium.org/
-
- drivers/clk/clk.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index e62552a75f08..496b86e2753c 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -244,6 +244,17 @@ static bool clk_core_is_enabled(struct clk_core *core)
- 		}
- 	}
- 
-+	/*
-+	 * This could be called with the enable lock held, or from atomic
-+	 * context. If the parent isn't enabled already, we can't do
-+	 * anything here. We can also assume this clock isn't enabled.
-+	 */
-+	if ((core->flags & CLK_OPS_PARENT_ENABLE) && core->parent)
-+		if (!clk_core_is_enabled(core->parent)) {
-+			ret = false;
-+			goto done;
-+		}
-+
- 	ret = core->ops->is_enabled(core->hw);
- done:
- 	if (core->rpm_enabled)
--- 
-2.39.0.314.g84b9a713c41-goog
-
+>
+>
+> Best regards,
+> Krzysztof
+>
