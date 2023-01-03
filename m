@@ -2,294 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C6465BC6A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5817D65BC6D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237099AbjACIof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
+        id S237064AbjACIpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbjACIod (ORCPT
+        with ESMTP id S233206AbjACIpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:44:33 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2054.outbound.protection.outlook.com [40.107.223.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40888DFA4
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:44:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lnhPn8mNygji9r61PrHpHtTY9I2+a8ZYD/sakB6y+85XJD16WlLnowFi9xHdMSS3kldPd39AT4RNyw4XUVAVevyTYyhvy73fmE/8j3KZ9bPZzphys6IJQlFlERKaA6Dv7AwiMcbsSb0mvN926dgrtE8hnI03Gz4RjrCB5QEJEWjkRonBFA4NFAYz2hB7Y+9BJYl8DQY2+0570OkFpB8GiXN/xNz4CYT1MRZEHFbWJdcgY0kgTGvoBuzWnV0IpQYPbtS6Ryidz/DTvp8ZP9IGbLymtKtVcAv16PI7kU6FSEfcg/PbXACYTmVvnnIDPn2u1Dyy3z2qDU/pgerCr5AxBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=84AScyRPbNWnTracFXRpN3lr2M1UWkh2AKxKreheMMg=;
- b=eQE4LeByLJmTZqAtxt2adM5YnlCIkcoNne7pKaz9xszklV/Y+TgQuRc2y0mdUmDp2UuuIlEx9NxrYaL63Mtcn96MpMFM5OhvFmcp/lroXCpxgQpUeHyOJXOIDlfFuozGrvrLjlkcTIxvmSSkCnNy6yGNo0Pp4lHB0Xi5FAo72LcWw0idY+b/Gba5HVVY4uGT2/UzPnjs6RAF/wKJo4VNTK6L1qqrDMTvOgfTo9POO/NRWrYwuyuSYnLtkcsd2mhLu6S5jaH+C4EZrsun2x9+qzB5aJNqZjgrukBzQbu45P9hCGH5cb6pKbxpms8YtuyP0NIf33wX4UQI5e8VK7VzKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=84AScyRPbNWnTracFXRpN3lr2M1UWkh2AKxKreheMMg=;
- b=39M8CEVgBXA42rcraSEKP2pitaFHUCwh1oRFH3nBsM9cQmJBtgz00vilo1DykrGEJ3c81Im8GsSt/PsZl9rEuJECIPW4IwRndxvI0CAwu+NWIWptjyYOQp0ZnqnVGxkldRyb6jX3xwbmcJyCzFEMnRtpDJ+j1ZilD2fGTIF75cM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CY8PR12MB7145.namprd12.prod.outlook.com (2603:10b6:930:5f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
- 2023 08:44:28 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::80d8:934f:caa7:67b0]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::80d8:934f:caa7:67b0%3]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
- 08:44:22 +0000
-Message-ID: <5e192700-c54a-04cf-a223-281af7af0457@amd.com>
-Date:   Tue, 3 Jan 2023 09:44:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] [RFC] drm/drm_buddy fails to initialize on 32-bit
- architectures
-Content-Language: en-US
-To:     =?UTF-8?Q?Lu=c3=ads_Mendes?= <luis.p.mendes@gmail.com>,
-        akpm@linux-foundation.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Paneer Selvam, Arunpravin" <Arunpravin.PaneerSelvam@amd.com>
-References: <CAEzXK1oghXAB_KpKpm=-CviDQbNaH0qfgYTSSjZgvvyj4U78AA@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CAEzXK1oghXAB_KpKpm=-CviDQbNaH0qfgYTSSjZgvvyj4U78AA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0110.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9c::20) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Tue, 3 Jan 2023 03:45:43 -0500
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83023AA
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:45:41 -0800 (PST)
+Received: by mail-vk1-xa2c.google.com with SMTP id f184so10989354vkh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:45:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mDzXqRAmYkRyb/5KttlFdoZnuAGsRj6bLRaHwGPQJmQ=;
+        b=clLXLkkTnID97OANU4K4viXkAKV4b9TZIYV1rC18HxwmNY/vwuzdskSH9MCV28slyh
+         tiZSU2PYJ1XEShlVasUIgu16SZePRziZ8r1ggwWUhbFit4J0AoS066A51mDt0OM6svEj
+         TnWhUotvI2HZMXbF/v2Wn1B+xPYctcSPz2C5QDbJNgm2DVzgvwHpEv839ZHekO3Qe106
+         rir88ik4Mv9qTYvvCwyZj2ELfpXlVE9DTg4wa6gI+UKKfc+kviHZxwMLfEqHWIQmrFII
+         xK+oCH/nVRpko7ceDmOmHgKGiJ55Nzr0IyN5Ka5E3RD1OLvIFhWvO4/84JaAQRI/nYPH
+         4XuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mDzXqRAmYkRyb/5KttlFdoZnuAGsRj6bLRaHwGPQJmQ=;
+        b=5kIxZ24ynM7/EtdkFHRNQj8wT6hn0BmgONvRVRsf4lSC4xRfhcR3nk7ELFHRhitQRM
+         poYz3eMguTlbbxatJmOatcP2X3CD03f5eAUhHenZRTwPLr5kBlHIezptCp0sjlpaOW2Z
+         kd50p10vdrW3M0Becq8dVncWGysVfAx9gCz2wmw1NXGIc35Lti5cuNOWIGGu6T5bvVZQ
+         IhOq3TK2kfdtvLCciMGkQqqhcVFCfOiFH31NomvE8J3Xphls8DRNOTC10YDjB2adUj1H
+         /IIzBnvkQVkGwAPYIuBb5r/IYM1Ffkp22e9SXZUfZ4oNYWMcG53S3N2OrKqWkk+/fZQi
+         uITQ==
+X-Gm-Message-State: AFqh2kqvB0CmGOfymHLU65lAH9dm5w89Ad48IN+W8F/EGsSsu+s2Irbz
+        Oy2KBo4RjcUIcRFAr7EvxY9dtd2/0Sk+yqqwuR7UZw==
+X-Google-Smtp-Source: AMrXdXvLiKPbyPKkxxxDrgC1q9REor9cbnsRv3r24ttoIVf8s1ThfY5aJC3UEGMFVK7UvNycxRJ9BjWqCRXG5Q7C8P4=
+X-Received: by 2002:a1f:d904:0:b0:3d5:413f:ecd0 with SMTP id
+ q4-20020a1fd904000000b003d5413fecd0mr3726770vkg.20.1672735540762; Tue, 03 Jan
+ 2023 00:45:40 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CY8PR12MB7145:EE_
-X-MS-Office365-Filtering-Correlation-Id: cbcb5e82-31a7-4e8f-d14e-08daed66b62a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8A2rgi7JR+c/qyLdrpPscJyGB4w7MqTOEIEUgx9EUdF8F0er8WwcT4mmVhy17MOlJIl5c7uQqdcbnEKEk3n2BuocnCLGiEBFPxshkYI9cCyRydMidn9Rwfk2EmnjH0SmLh+YBpTZmabagYMNzDjKqIjVc0icBQqe1EUrHpHGV0BkjW4f7S8jZBnWhHr9UuKtZK0poE/4zpJLpsUwrjZusPm9AklaQW9OasNgtWXXLspfhT25hZ8AcXsYlastdDHxrGYp43Fd4sfCRGmdvmd3mVJe/cjzR7fmKmtBRIjd0Lsr/rRLdEosJroiHP98FkOkmOCnHn3e+euTAvlAr3BH7kz1v/tcKH7dCw2zX49tMzwW+cGakSZvJJJj1SreJObmCKbQStVIIOKTY95aGoqm7iWMXqFU5Nqlxm2/sMLu8defuAmZxmzxoFvjrkuEbb39k1BDUvQJ5JNSNcI8rR4fcF2SrsTZFfkyqhzGnOrdxP2ryDCdhPyL7tDnuoMvG7/QEihU+HJwd475r/Nvy/bnZdgsE5yzb7qqx2T1lwrlb3TCnty7PXW5hk2qZQHyAIFUemX2gsRNy5eo69597UD7G0BYsNzziD0PJrVTDKJkAOotjvPKgN/yue4n0ibofTqVTbhSbldR13hjqJWOMBbHOi20rgiAfVkqYckvEDCp0XHgoa162DNg6akkAiECd1/VO0aiGiFld8IcGjtFyCiCbignXsMyXeZ1jFXZdUo6TavMCW/dARqYU34C8RW4EbVH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(346002)(366004)(39860400002)(451199015)(83380400001)(38100700002)(86362001)(4001150100001)(31696002)(5660300002)(66946007)(8676002)(66476007)(2906002)(66556008)(478600001)(41300700001)(6506007)(6666004)(6512007)(186003)(66574015)(110136005)(6636002)(316002)(6486002)(8936002)(2616005)(31686004)(36756003)(22166006)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z01DVDFsNDkwUmhXQzNXR2llU0RlalR4bzNKTEgrcndtNC9OZTRPV2xQU3pH?=
- =?utf-8?B?N2FDMG43ejRGQzVLcVFTbDg2M2I4QkZINTZVVnZ5OTJ6UTVzSjdadlF1Rmov?=
- =?utf-8?B?bTgxT3hKM0J2T2x4MUdwQjJTVmRjOWF0REovRTNYcFAvZFZVRUJHeFdHUzV1?=
- =?utf-8?B?aFlEdmVCZk94YS9aRlh1MEZGRmZEQW1aZnZ4RGk5bHp3bDhnck9JdnJiaEd1?=
- =?utf-8?B?RlNJT3JOK2taOW5kUUNva0VOcFp0MWE3Z3hsb29jQWJxdS9yTkVLcUhSa3du?=
- =?utf-8?B?VkJySU1YMjVXQXE0UHNCckozNnNMaEVhMC9Yb05tY29PK0xPWHhqcSt0amxN?=
- =?utf-8?B?TzA2S1grTmdGajhHSVFJdllxZzg0U2YxSHk4ZVN4MmRERDVITC9ZSVZiVFNS?=
- =?utf-8?B?cTluQnlWQjQ0a3RoZDVjeERBRVdtY0Z1b2hIRFI3OGp6VCsyYmVDREIvbjI2?=
- =?utf-8?B?eE9aNm8zVHZXTk5sMXlZRFZ4N0ZVOGFPQXRaOG95d2VmbFVkRVhDWFNzUjBu?=
- =?utf-8?B?V1FRRjNIamh5UXM0bVZFQnJUdXZROWxENG5PVUFJY3J6aHJ3VTcya3pvZEx4?=
- =?utf-8?B?a0lrblZzbHY0cTZNZlo4dnZnU1JUK0lQTVhCVHpGUGRTWEQzWFhXNHBocGFJ?=
- =?utf-8?B?RlhtRUtuR0FiRFZKU1F6dmxMSmlWV2lVTVdQRmdydzhkbFcwYzVWeU5HTG5G?=
- =?utf-8?B?NHBIY2JQU0c2Z3l5SEh1ZmZ6QjJOUTJlZllpUGhRaVFEL3kyN3pvU0hLZ2M1?=
- =?utf-8?B?ZXZ6NEo1cWQ5TUQ5S1Uxei9nTGlHY08xSC9aaklFcDNaWG0yZjB0NHVLS0d5?=
- =?utf-8?B?ZDhxOFU3bmFVOE9uZm4zZGFXb1FSSTVEN29pS1JPaFpWV09KYmpGVkJIZTFt?=
- =?utf-8?B?REJoVElRdThaMzl6enJjVWs4anYvSVJ0VWp3REs1N3NXYTBGQTRFN3ErNHN0?=
- =?utf-8?B?MnZ0d1dRdXN5STVZbHVPUmw0RCtkM1ZsUDdUNmV2eFlTUHpnd1VBR0JIaGNT?=
- =?utf-8?B?V0lWV2x1eUoxRm9UeTBlbGFmSFlpQ2pvWlZEcUJiZnp6cVFTMXVhVWU4UC8v?=
- =?utf-8?B?TjRmMWV0UG1GWjhwTHJCQk9BWW16NVgxRXhYWTN2UmRtSDBocCtXaTR0VXEv?=
- =?utf-8?B?YXY0cjl5UXFETVhnZVJkSDRRb3BjZTAzMWZIZVpkK09PZ0NsT3VpRjg1UzBC?=
- =?utf-8?B?MG1TVFJHcjlqUUNDT2NXajdkNld2T3JGb1kxS3ZjZ1Zqc2lYMjVtMFNyOTN4?=
- =?utf-8?B?K0JlYWFWYlFCT1U3WGFuSTBkZnpVR0xLeEp1dDBza0lDQ3RDY1FCMCtnQTNU?=
- =?utf-8?B?MEhhL0d6L1dMelVabG9NZHdQN0t2dWFwNlJ4blgvOWcvVC9Qay81VWtOQ3JF?=
- =?utf-8?B?L0lHNERWb09PbWR2UHErWk9yRkQ5MFpxSEpoWmNmeDFnamNVdUFOQXMxWUhK?=
- =?utf-8?B?YTJtZWtGS05MRzBmQ01CS3ZmZ244YUFmZjZOUEZlbS91ZU1RRWpsRlRKQkFK?=
- =?utf-8?B?NkdxamQ5TUFoNnJPejVrM0l3WFc4M2NLYkFrYzZlTGpEOTVhNUpvQkNhSGpG?=
- =?utf-8?B?N2R4dXpCeTB5clVpUHFGME1QWXVlY0tYOTZ5a3FET2xpNHc2cURJMmpDNmd5?=
- =?utf-8?B?cC9QaktlMSswcXd3cFU3YWVDaHV1L24vakpSVFpKbjNScTFURG50UmJ0QTU4?=
- =?utf-8?B?VWViVGhOdWhlT2lKNnUxZm1zWlhZK05qQVdEcjE3OWFyQlkxN0kzdzZWOEda?=
- =?utf-8?B?Skx4RW5sSHFONDJldTFhUXAyWjBaQ3RiUjY1VitIOXdFdm90OXJERFZDMnl6?=
- =?utf-8?B?M1gxL24wSmtvMnFmZEI4Y21GQ09PcXR1R2daT0o2ZmtIYytaUWk3K1RJazlp?=
- =?utf-8?B?a2w0UWhiSURybWkwMVc2T0thcnVoVjV4RkJHUGFOOG9UOTBWcll1MUZJSWFC?=
- =?utf-8?B?VXBwMDZaY3VtRDVrT0lNRVZySVdONzMwQXlqY25hTm9WVHNQL0FNVnZob3dF?=
- =?utf-8?B?cmpYenRMVlBYL0VkbkJIQmcxTUpUeFB0WkNPWi82bzZwQTBTUStKaHNHN2V4?=
- =?utf-8?B?VThIYjlDa0F4M0x1OHFRUCswbERFMmNTL2ZhSXR0NnpzUk5yY0MvamhuVU1u?=
- =?utf-8?B?eFhLOGdLWUVueEQ4NzE4UE10bDAxMFFBaXlFSlNYMVYrUkxBYUYzY0pBMFI4?=
- =?utf-8?Q?NRFb8aZA6xITo99HbK/eLddEWV7HgzqW+N9tm2900+p9?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbcb5e82-31a7-4e8f-d14e-08daed66b62a
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 08:44:22.7709
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XaXOGgG9hInCRSDVrbSC52pISAEl2Bck1yDbk+P3wrXXPrNGBcBiDpJJhMF7Ipqd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7145
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230102110551.509937186@linuxfoundation.org>
+In-Reply-To: <20230102110551.509937186@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 3 Jan 2023 14:15:29 +0530
+Message-ID: <CA+G9fYtCRCjbbx7QxPdB21QhpjnSpbXEtEX6zfyNRqYXVpDBpw@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/71] 6.1.3-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 25.12.22 um 20:39 schrieb Luís Mendes:
-> Re-sending with the correct  linux-kernel mailing list email address.
-> Sorry for the inconvenience.
+On Mon, 2 Jan 2023 at 16:53, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> The proposed patch fixes the issue and allows amdgpu to work again on
-> armhf with a AMD RX 550 card, however it may not be the best solution
-> for the issue, as detailed below.
+> This is the start of the stable review cycle for the 6.1.3 release.
+> There are 71 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> include/log2.h defined macros rounddown_pow_of_two(...) and
-> roundup_pow_of_two(...) do not handle 64-bit values on 32-bit
-> architectures (tested on armv9 armhf machine) causing
-> drm_buddy_init(...) to fail on BUG_ON with an underflow on the order
-> value, thus impeding amdgpu to load properly (no GUI).
+> Responses should be made by Wed, 04 Jan 2023 11:05:34 +0000.
+> Anything received after that time might be too late.
 >
-> One option is to modify rounddown_pow_of_two(...) to detect if the
-> variable takes 32 bits or less and call __rounddown_pow_of_two_u32(u32
-> n) or if the variable takes more space than 32 bits, then call
-> __rounddown_pow_of_two_u64(u64 n). This would imply renaming
-> __rounddown_pow_of_two(unsigne
-> d long n) to
-> __rounddown_pow_of_two_u32(u32 n) and add a new function
-> __rounddown_pow_of_two_u64(u64 n). This would be the most transparent
-> solution, however there a few complications, and they are:
-> - that the mm subsystem will fail to link on armhf with an undefined
-> reference on __aeabi_uldivmod
-> - there a few drivers that directly call __rounddown_pow_of_two(...)
-> - that other drivers and subsystems generate warnings
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.3-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
 >
-> So this alternate solution was devised which avoids touching existing
-> code paths, and just updates drm_buddy which seems to be the only
-> driver that is failing, however I am not sure if this is the proper
-> way to go. So I would like to get a second opinion on this, by those
-> who know.
+> thanks,
 >
-> /include/linux/log2.h
-> /drivers/gpu/drm/drm_buddy.c
->
-> Signed-off-by: Luís Mendes <luis.p.mendes@gmail.com>
->> 8------------------------------------------------------8<
-> diff -uprN linux-next/drivers/gpu/drm/drm_buddy.c
-> linux-nextLM/drivers/gpu/drm/drm_buddy.c
-> --- linux-next/drivers/gpu/drm/drm_buddy.c    2022-12-25
-> 16:29:26.000000000 +0000
-> +++ linux-nextLM/drivers/gpu/drm/drm_buddy.c    2022-12-25
-> 17:04:32.136007116 +0000
-> @@ -128,7 +128,7 @@ int drm_buddy_init(struct drm_buddy *mm,
->           unsigned int order;
->           u64 root_size;
->
-> -        root_size = rounddown_pow_of_two(size);
-> +        root_size = rounddown_pow_of_two_u64(size);
->           order = ilog2(root_size) - ilog2(chunk_size);
+> greg k-h
 
-I think this can be handled much easier if keep around the root_order 
-instead of the root_size in the first place.
 
-Cause ilog2() does the right thing even for non power of two values and 
-so we just need the order for the offset subtraction below.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Arun can you take a closer look at this?
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Regards,
-Christian.
+## Build
+* kernel: 6.1.3-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-6.1.y
+* git commit: 6b5c4463f777f449d7e177fd1aa608e0b69f33db
+* git describe: v6.1.2-72-g6b5c4463f777
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
+-72-g6b5c4463f777
 
->
->           root = drm_block_alloc(mm, NULL, order, offset);
-> diff -uprN linux-next/include/linux/log2.h linux-nextLM/include/linux/log2.h
-> --- linux-next/include/linux/log2.h    2022-12-25 16:29:29.000000000 +0000
-> +++ linux-nextLM/include/linux/log2.h    2022-12-25 17:00:34.319901492 +0000
-> @@ -58,6 +58,18 @@ unsigned long __roundup_pow_of_two(unsig
->   }
->
->   /**
-> + * __roundup_pow_of_two_u64() - round up to nearest power of two
-> + * (unsgined 64-bits precision version)
-> + * @n: value to round up
-> + */
-> +static inline __attribute__((const))
-> +u64 __roundup_pow_of_two_u64(u64 n)
-> +{
-> +    return 1ULL << fls64(n - 1);
-> +}
-> +
-> +
-> +/**
->    * __rounddown_pow_of_two() - round down to nearest power of two
->    * @n: value to round down
->    */
-> @@ -68,6 +80,17 @@ unsigned long __rounddown_pow_of_two(uns
->   }
->
->   /**
-> + * __rounddown_pow_of_two_u64() - round down to nearest power of two
-> + * (unsgined 64-bits precision version)
-> + * @n: value to round down
-> + */
-> +static inline __attribute__((const))
-> +u64 __rounddown_pow_of_two_u64(u64 n)
-> +{
-> +    return 1ULL << (fls64(n) - 1);
-> +}
-> +
-> +/**
->    * const_ilog2 - log base 2 of 32-bit or a 64-bit constant unsigned value
->    * @n: parameter
->    *
-> @@ -163,6 +186,7 @@ unsigned long __rounddown_pow_of_two(uns
->       __ilog2_u64(n)            \
->    )
->
-> +
->   /**
->    * roundup_pow_of_two - round the given value up to nearest power of two
->    * @n: parameter
-> @@ -181,6 +205,25 @@ unsigned long __rounddown_pow_of_two(uns
->    )
->
->   /**
-> + * roundup_pow_of_two_u64 - round the given value up to nearest power of two
-> + * (unsgined 64-bits precision version)
-> + * @n: parameter
-> + *
-> + * round the given value up to the nearest power of two
-> + * - the result is undefined when n == 0
-> + * - this can be used to initialise global variables from constant data
-> + */
-> +#define roundup_pow_of_two_u64(n)            \
-> +(                        \
-> +    __builtin_constant_p(n) ? (        \
-> +        ((n) == 1) ? 1 :        \
-> +        (1ULL << (ilog2((n) - 1) + 1))    \
-> +                   ) :        \
-> +    __roundup_pow_of_two_u64(n)            \
-> + )
-> +
-> +
-> +/**
->    * rounddown_pow_of_two - round the given value down to nearest power of two
->    * @n: parameter
->    *
-> @@ -195,6 +238,22 @@ unsigned long __rounddown_pow_of_two(uns
->       __rounddown_pow_of_two(n)        \
->    )
->
-> +/**
-> + * rounddown_pow_of_two_u64 - round the given value down to nearest
-> power of two
-> + * (unsgined 64-bits precision version)
-> + * @n: parameter
-> + *
-> + * round the given value down to the nearest power of two
-> + * - the result is undefined when n == 0
-> + * - this can be used to initialise global variables from constant data
-> + */
-> +#define rounddown_pow_of_two_u64(n)            \
-> +(                        \
-> +    __builtin_constant_p(n) ? (        \
-> +        (1ULL << ilog2(n))) :        \
-> +    __rounddown_pow_of_two_u64(n)        \
-> + )
-> +
->   static inline __attribute_const__
->   int __order_base_2(unsigned long n)
->   {
+## Test Regressions (compared to v6.1.1-1141-g9c94d2e408ab)
 
+## Metric Regressions (compared to v6.1.1-1141-g9c94d2e408ab)
+
+## Test Fixes (compared to v6.1.1-1141-g9c94d2e408ab)
+
+## Metric Fixes (compared to v6.1.1-1141-g9c94d2e408ab)
+
+## Test result summary
+total: 166702, pass: 148814, fail: 3210, skip: 14678, xfail: 0
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 146 passed, 5 failed
+* arm64: 51 total, 50 passed, 1 failed
+* i386: 39 total, 36 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 32 passed, 6 failed
+* riscv: 16 total, 15 passed, 1 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 44 total, 44 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cv
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
