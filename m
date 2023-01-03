@@ -2,149 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D735B65C98C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 23:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4670465C99E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 23:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238127AbjACWUy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 3 Jan 2023 17:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S238838AbjACWXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 17:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237008AbjACWT4 (ORCPT
+        with ESMTP id S238729AbjACWVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 17:19:56 -0500
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C06A215FCA;
-        Tue,  3 Jan 2023 14:19:46 -0800 (PST)
-Received: from smtpclient.apple (p4ff9ff43.dip0.t-ipconnect.de [79.249.255.67])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 7A930CECF2;
-        Tue,  3 Jan 2023 23:19:45 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v5] Bluetooth: Add hci_nxp to hci_uart module to support
- NXP BT chipsets
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <AM9PR04MB86031859F17AE8D5B563D103E7F79@AM9PR04MB8603.eurprd04.prod.outlook.com>
-Date:   Tue, 3 Jan 2023 23:19:44 +0100
-Cc:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
-        Rohit Fule <rohit.fule@nxp.com>,
-        Sherry Sun <sherry.sun@nxp.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <61D5389C-013E-452C-ACE7-30708F0C1A35@holtmann.org>
-References: <20221216094350.1121354-1-neeraj.sanjaykale@nxp.com>
- <85D2AE3F-97A5-4C88-8FC4-1684F3FD4438@holtmann.org>
- <CABBYNZLWFNWp=StPQ0=8hQe8bUoJzwSvCBk7Ybd=2oe=NROCgQ@mail.gmail.com>
- <5742801D-881A-45BC-A8A7-28D694179D8E@holtmann.org>
- <AM9PR04MB86031859F17AE8D5B563D103E7F79@AM9PR04MB8603.eurprd04.prod.outlook.com>
-To:     Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 Jan 2023 17:21:43 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3350417409;
+        Tue,  3 Jan 2023 14:20:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ezBxF58/iYt4ytGREKmk4EHJi+NewNz9aFNzcPhEcYw=; b=Un/ZBjj4THLRJFaI3jBbBXkucy
+        xUI45WocO2gEO94eHnU3fsLtEM94vFQJoIlVZX/9HlebD8cYZ7AqzkZbTzQyfpm0busc46Zl6wGIt
+        orx2qJbtdDR/A1TDXLQ7OuLpdyKD1cZGfboGkfGZTaIqpEBt9qpW3+rKCOOc0Vaow2HK5bdhWWEC8
+        r5gDwaYGw4UWlrG6yIp6FVO6QyJLujP2p0BqvDTT/bJOW+4aVLyerujnJl7TQK2UWv/0/aekLlGsV
+        YmDgPgPWpRE2fqy4vb9DmQJznADN+64HklkJ1Lop1Ji3UZM0WuswEq/SYcVpdud1/JF7ssBuVDZhL
+        lBF6XAkQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35956)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pCpdY-0005wc-Hc; Tue, 03 Jan 2023 22:20:00 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pCpdR-0002SM-O6; Tue, 03 Jan 2023 22:19:53 +0000
+Date:   Tue, 3 Jan 2023 22:19:53 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wei Fang <wei.fang@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH RFC net-next v2 03/12] net: mdio: mdiobus_register:
+ update validation test
+Message-ID: <Y7SqCRkYkhQCLs8z@shell.armlinux.org.uk>
+References: <20221227-v6-2-rc1-c45-seperation-v2-0-ddb37710e5a7@walle.cc>
+ <20221227-v6-2-rc1-c45-seperation-v2-3-ddb37710e5a7@walle.cc>
+ <Y7P/45Owf2IezIpO@shell.armlinux.org.uk>
+ <37247c17e5e555dddbc37c3c63a2cadb@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <37247c17e5e555dddbc37c3c63a2cadb@walle.cc>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neeraj,
+Hi Michael,
 
->>>>> Add hci_nxp to the hci_uart module which adds support for the NXP BT
->>>>> chips. This driver has Power Save feature that will put the NXP
->>>>> bluetooth chip into sleep state, whenever there is no activity for
->>>>> certain duration of time (2000ms), and will be woken up when any
->>>>> activity is to be initiated.
->>>>> 
->>>>> The Power Save feature can be configured with the following set of
->>>>> commands (optional):
->>>>> hcitool -i hci0 cmd 3F 23 02 00 00    (enable Power Save)
->>>>> hcitool -i hci0 cmd 3F 23 03 00 00    (disable Power Save)
->>>>> where,
->>>>> OGF = 0x3F (vendor specific command) OCF = 0x23 (command to set
->>>>> Power Save state) arg[0] = 0x02 (disable Power Save) arg[0] = 0x03
->>>>> (enable Power Save) arg[1,2,...] = XX (don't care)
->>>>> 
->>>>> The sleep/wake-up source can be configured with the following set of
->>>>> commands (optional):
->>>>> hcitool -i hci0 cmd 3F 53 03 14 01 FF    (set UART break method)
->>>>> hcitool -i hci0 cmd 3F 53 03 14 00 FF    (set UART DSR method)
->>>>> where,
->>>>> OGF = 0x3F (vendor specific command) OCF = 0x53 (command to set
->>>>> sleep and wake-up source) arg[0] = 0x00 (Chip to host method NONE)
->>>>> arg[0] = 0x01 (Chip to host method UART DTR) arg[0] = 0x02 (Chip to
->>>>> host method UART BREAK) arg[0] = 0x03 (Chip to host method GPIO)
->>>>> arg[1] = 0x14 (Chip to host GPIO[20] if arg[0] is 0x03, else 0xFF)
->>>>> arg[2] = 0x00 (Host to chip method UART DSR) arg[2] = 0x01 (Host to
->>>>> chip method UART BREAK) arg[3] = 0xXX (Reserved for future use)
->>>>> 
->>>>> By default, the hci_nxp sets power save enable, chip to host wake-up
->>>>> source as GPIO and host to chip sleep and wake-up source as UART
->>>>> break during driver initialization, by sending the respective
->>>>> commands to the chip.
->>>>> 
->>>>> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
->>>>> ---
->>>>> v2: Changed the subject/summary lines and added more details in the
->>>>> description. (Paul Menzel)
->>>>> v3: Made internal functions static, optimized the code, added few
->>>>> comments. (Sherry Sun)
->>>>> v4: Reworked entire code to send vendor commands cmd23 and cmd53
->> by
->>>>> using __hci_cmd_sync. (Luiz Augusto von Dentz)
->>>>> v5: Used hci_command_hdr and combined OGF+OCF into a single
->> opcode.
->>>>> (Luiz Augusto von Dentz)
->>>>> ---
->>>>> MAINTAINERS                   |   6 +
->>>>> drivers/bluetooth/Kconfig     |  10 +
->>>>> drivers/bluetooth/Makefile    |   1 +
->>>>> drivers/bluetooth/hci_ldisc.c |   6 +
->>>>> drivers/bluetooth/hci_nxp.c   | 592
->> ++++++++++++++++++++++++++++++++++
->>>>> drivers/bluetooth/hci_nxp.h   |  94 ++++++
->>>>> drivers/bluetooth/hci_uart.h  |   8 +-
->>>>> 7 files changed, 716 insertions(+), 1 deletion(-) create mode 100644
->>>>> drivers/bluetooth/hci_nxp.c create mode 100644
->>>>> drivers/bluetooth/hci_nxp.h
->>>> 
->>>> so this is a clear NAK. Add this as serdev driver and not hook
->>>> further into the mess that is the HCI line discipline.
->>> 
->>> I wonder if we should make it more clear somehow, perhaps include a
->>> text on the likes of BT_HCIUART that is deprecated and new drivers
->>> shall use BT_HCIUART_SERDEV instead.
->> 
->> not even that. They need to be separate drivers. A long time ago I posted the
->> skeleton for btuart.ko and bt3wire.ko and that is where this has to go.
->> 
->> Regards
->> 
->> Marcel
+On Tue, Jan 03, 2023 at 11:21:08AM +0100, Michael Walle wrote:
+> Hi Russell,
 > 
-> Thanks for your comment. 
-> Based on your comment, I re-worked the entire driver with reference to following patches:
-> https://www.spinics.net/lists/linux-bluetooth/msg74918.html
-> https://elixir.bootlin.com/linux/v6.1-rc4/source/drivers/bluetooth/btmtkuart.c
+> Am 2023-01-03 11:13, schrieb Russell King (Oracle):
+> > On Wed, Dec 28, 2022 at 12:07:19AM +0100, Michael Walle wrote:
+> > > +	if (!bus || !bus->name)
+> > > +		return -EINVAL;
+> > > +
+> > > +	/* An access method always needs both read and write operations */
+> > > +	if ((bus->read && !bus->write) ||
+> > > +	    (!bus->read && bus->write) ||
+> > > +	    (bus->read_c45 && !bus->write_c45) ||
+> > > +	    (!bus->read_c45 && bus->write_c45))
+> > 
+> > I wonder whether the following would be even more readable:
+> > 
+> > 	if (!bus->read != !bus->write || !bus->read_c45 != !bus->write_c45)
 > 
-> I am able to create a standalone btnxp.ko which is able to run basic BT operations along with FW download with NXP chipsets.
-> 
-> However I have now hit a blocker. The NXP chipsets require support for break signal, by which the host can put the chip into sleep, and wake it up.
-> 
-> However, it seems that the serdev API's in https://elixir.bootlin.com/linux/v6.1-rc8/source/include/linux/serdev.h do not support break assertion over serial TX line.
-> 
-> Is there any plan for serdev to support break signaling?
-> 
-> Any help on this blocker would be highly appreciated.
+> That's what Andrew had originally. But there was a comment from Sergey [1]
+> which I agree with. I had a hard time wrapping my head around that, so I
+> just listed all the possible bad cases.
 
-I recall some posts about that. Either on LKML or some other mailing list. Don’t
-remember what the outcome was though.
+The only reason I suggested it was because when looked at your code,
+it also took several reads to work out what it was trying to do!
 
-Regards
+Would using !!bus->read != !!bus->write would help or make it worse,
+!!ptr being the more normal way to convert something to a boolean?
 
-Marcel
-
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
