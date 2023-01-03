@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9712E65C1B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6323265C1B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbjACORk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:17:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
+        id S233226AbjACOT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233122AbjACORh (ORCPT
+        with ESMTP id S230131AbjACOT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:17:37 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D9D255
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:17:36 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id c133so27208624oif.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 06:17:36 -0800 (PST)
+        Tue, 3 Jan 2023 09:19:56 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8392259;
+        Tue,  3 Jan 2023 06:19:55 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-476e643d1d5so321631187b3.1;
+        Tue, 03 Jan 2023 06:19:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P+ArUfu7KFijl6muxgVmT9H4zzXFEpCZ/1mv/6B2SoA=;
-        b=nTO14SOwfd1VwYx1HO58wK9SCmIM9R+ZS2yywbo/1XDaeaOTFvhhA4cjrZ7Q1qNn9P
-         B/AX2INxmbwuPLrhxQcd8+07HqY3YM2AWhbJ9SrZ2kASUsfSBWU1WYP3ZGhvpOx3H+2T
-         QkVsZ4zRNP5gEg6oSrk73QHiSGnas6mpYeq7qo1fp/i0ap7ZqE8o4waHjw7L85TGF/wd
-         biPKbZ6i66g4JVZ6ZaMtLkD4gP0EfXvY5XQW/I9OrlOMXr7yKZFm80nMAshnGj6RHD5p
-         vuZ2W2RDrwsi1BuNB550YiNR0OF4sRqSF4Ro56Iglx5kyfJpIBj4xC4SgkoIUZEwj3Ig
-         Rvew==
+        bh=j8rtKZ+QTL7/5Qarqo9MftuoiK8ia4Q77nefU4MQ9Yc=;
+        b=hL9WauySBN/sRqfbNsfyrbzhd90BB6grt3xtnVeuw9DJ/r70Gme9mRyLvv5T2RmAFk
+         PZwIafpHFUf4cs6672O3Gj0q1zHDbiAE5ESGSfX/mZbIYuX5U2LywtIWBCdjIoDgA3QX
+         DxCj6Z4POfGVN4Tgghz6N1RwPzO/aoXKBOUU2e2s08CF72tzJ1iFv2+NoQUqIVtn1y/y
+         SR6CHMDBSlzGDUzCrVm3zhstnxYs8+A344wE4//bvCSQm7TOoM5YVO6nwiGWQWfZkqYi
+         x6JgRoX+Ri7pmiUvLhV4lqSfUJqePmelttnRIU26nrgxZazBsJFMXUYbRnV6dGSooZ58
+         jDag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=P+ArUfu7KFijl6muxgVmT9H4zzXFEpCZ/1mv/6B2SoA=;
-        b=yNhTQbotVMHz3Nhcb1lmbdmqAdKLDa53frEEoCPvu2DLDmKpv54fJ10N9Bk2iTY8+g
-         SV0GbwmDzdUt7oa4sJmIEgJW+lo0oNFPMn9CD4/gmAGGWyJOE52tSjk/otbKlGY06Bi3
-         rOHi4vR1V/U9o0WZhfY7yBk7Duqs1EYv3GSNPhr5D80HU1xg9s0F1vi/YWDmHmknEbBb
-         Iq/kp5Lv8P/Xyi5Nykm8bOeho42Q8KDAflyMeVrZyOTaWprnzra9sVt296Pw+ljat6AP
-         px8Tlyb7J82VHMSY96fdY+M6THRP/oUAk8mxMQSy+jVTJpfrjewmlw+nP/5+Ll9Siree
-         jyNg==
-X-Gm-Message-State: AFqh2kpQWOcg4bEpdrm6z66CMSl3T6Pt8FHS4IvCqz4fzyyDgSwnSX9p
-        /AdFo7fjr9DxGXp12zdWxGZyzDpblJmQ/TfyBqXdRzDB
-X-Google-Smtp-Source: AMrXdXvi5V7fdZNZodswHeCB0A+LdbC8b5hjC9IVVfVd6Zzga4TSLFQFagFqANJvY8fipzDV0X8h3Q40bsGq2ezrhgM=
-X-Received: by 2002:a05:6808:2001:b0:35b:d93f:cbc4 with SMTP id
- q1-20020a056808200100b0035bd93fcbc4mr2777486oiw.96.1672755455331; Tue, 03 Jan
- 2023 06:17:35 -0800 (PST)
+        bh=j8rtKZ+QTL7/5Qarqo9MftuoiK8ia4Q77nefU4MQ9Yc=;
+        b=7ICm3eweH9HtIzVtK6UQuNi0RsE5kzmIGjbEEL6A6V7whS0evDi4g+FH5XLkX9VriT
+         MAK2Zzqxu3vWeFp17iR2NX+SxeFI9/FkbjYJmYtSjqzexf8qcoEOiCmVXIJTC1NINWNP
+         HCqZ8swxDzGpGFcvK83nVKVeed4ErOwlmg3Nuqbj0/Bpd3obtPVg0z1BI/Wqx4Ll0OIK
+         ImUMlqZp/RhHjRWgF54bFDQli4gd4auEdpo4vqWtglMnSFpdqsNEgIPbOlS64QGshIT+
+         Q5Wl3EeORvoxc3R7tnNf4wW2FlRf+MkydlBteiIsUKXSc9XGGEkiWT8Zq12SYcWE4sru
+         p/MQ==
+X-Gm-Message-State: AFqh2krhDh+AaW50bX5D7Ko7HsTwXiWEkC2kzRWfKZMv6qKtOi8gQU19
+        oW8cOZZAlCTl9nH9YZJv5SDmXQhLm2WffJlb05Q=
+X-Google-Smtp-Source: AMrXdXsB/B7CRNRIAy1wo10Zbloi+XkYaCnF9Tc4hrhG4A3JJ+5E6EVThxaM6wenO0q2R6hu65m3APjLlB/q9UH2RL8=
+X-Received: by 2002:a81:7343:0:b0:484:a94f:210 with SMTP id
+ o64-20020a817343000000b00484a94f0210mr3055550ywc.129.1672755595132; Tue, 03
+ Jan 2023 06:19:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20221228163102.468-1-mario.limonciello@amd.com> <de34e018-679d-893e-683e-5c10cbc9c5b2@amd.com>
-In-Reply-To: <de34e018-679d-893e-683e-5c10cbc9c5b2@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 3 Jan 2023 09:17:24 -0500
-Message-ID: <CADnq5_Mccimh_UMLh8P4355yOpi6j+w3TCDi7Ax54tnvSVpjBQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/11] Recover from failure to probe GPU
-To:     "Lazar, Lijo" <lijo.lazar@amd.com>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Carlos Soriano Sanchez <csoriano@redhat.com>,
-        David Airlie <airlied@gmail.com>, christian.koenig@amd.com
+References: <20221207173053.1463800-1-carlos.bilbao@amd.com>
+ <20221228174623.144199-1-carlos.bilbao@amd.com> <87wn64fq7d.fsf@meer.lwn.net>
+In-Reply-To: <87wn64fq7d.fsf@meer.lwn.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 3 Jan 2023 15:19:44 +0100
+Message-ID: <CANiq72mC+WzOxhZVtEvnsFYzuBPkd51=TYXK01ztcTZ-CAcUiw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/2] docs: Integrate rustdoc into Rust documentation
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org,
+        akiyks@gmail.com, jani.nikula@linux.intel.com,
+        rdunlap@infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, konstantin@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -72,129 +70,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 5:10 AM Lazar, Lijo <lijo.lazar@amd.com> wrote:
+On Tue, Jan 3, 2023 at 12:54 AM Jonathan Corbet <corbet@lwn.net> wrote:
 >
->
->
-> On 12/28/2022 10:00 PM, Mario Limonciello wrote:
-> > One of the first thing that KMS drivers do during initialization is
-> > destroy the system firmware framebuffer by means of
-> > `drm_aperture_remove_conflicting_pci_framebuffers`
-> >
-> > This means that if for any reason the GPU failed to probe the user
-> > will be stuck with at best a screen frozen at the last thing that
-> > was shown before the KMS driver continued it's probe.
-> >
-> > The problem is most pronounced when new GPU support is introduced
-> > because users will need to have a recent linux-firmware snapshot
-> > on their system when they boot a kernel with matching support.
-> >
-> > However the problem is further exaggerated in the case of amdgpu because
-> > it has migrated to "IP discovery" where amdgpu will attempt to load
-> > on "ALL" AMD GPUs even if the driver is missing support for IP blocks
-> > contained in that GPU.
-> >
-> > IP discovery requires some probing and isn't run until after the
-> > framebuffer has been destroyed.
-> >
-> > This means a situation can occur where a user purchases a new GPU not
-> > yet supported by a distribution and when booting the installer it will
-> > "freeze" even if the distribution doesn't have the matching kernel support
-> > for those IP blocks.
-> >
-> > The perfect example of this is Ubuntu 22.10 and the new dGPUs just
-> > launched by AMD.  The installation media ships with kernel 5.19 (which
-> > has IP discovery) but the amdgpu support for those IP blocks landed in
-> > kernel 6.0. The matching linux-firmware was released after 22.10's launch.
-> > The screen will freeze without nomodeset. Even if a user manages to install
-> > and then upgrades to kernel 6.0 after install they'll still have the
-> > problem of missing firmware, and the same experience.
-> >
-> > This is quite jarring for users, particularly if they don't know
-> > that they have to use "nomodeset" to install.
-> >
-> > To help the situation make changes to GPU discovery:
-> > 1) Delay releasing the firmware framebuffer until after IP discovery has
-> > completed.  This will help the situation of an older kernel that doesn't
-> > yet support the IP blocks probing a new GPU.
-> > 2) Request loading all PSP, VCN, SDMA, MES and GC microcode into memory
-> > during IP discovery. This will help the situation of new enough kernel for
-> > the IP discovery phase to otherwise pass but missing microcode from
-> > linux-firmware.git.
-> >
-> > Not all requested firmware will be loaded during IP discovery as some of it
-> > will require larger driver architecture changes. For example SMU firmware
-> > isn't loaded on certain products, but that's not known until later on when
-> > the early_init phase of the SMU load occurs.
-> >
-> > v1->v2:
-> >   * Take the suggestion from v1 thread to delay the framebuffer release until
-> >     ip discovery is done. This patch is CC to stable to that older stable
-> >     kernels with IP discovery won't try to probe unknown IP.
-> >   * Drop changes to drm aperature.
-> >   * Fetch SDMA, VCN, MES, GC and PSP microcode during IP discovery.
-> >
->
-> What is the gain here in just checking if firmware files are available?
-> It can fail anywhere during sw_init and it's the same situation.
+> - It forces the generation of a kernel configuration, something that the
+>   docs build has never done until now.  What are our changes of
+>   eliminating that?
 
-Other failures are presumably a bug or hardware issue.  The missing
-firmware would be a common issue when chips are first launched.
-Thinking about it a bit more, another option might be to move the
-calls to request_firmware() into the IP specific early_init()
-functions and then move the drm_aperture release after early_init().
-That would keep the firmware handling in the IPs and should still
-happen early enough that we haven't messed with the hardware yet.
+We could workaround it by providing a fixed, preset config that does
+not interfere with the usual `.config`.
 
-Alex
+We would still need to compile some things like we normally would do,
+though (see next point).
 
+> - It did a bunch of other building, starting with objtool - again, never
+>   needed for the docs build before.
+
+Yeah, rustdoc, like the compiler, requires dependencies to be
+available to understand the code. Thus some things need to be
+compiled, like for the normal build.
+
+This is definitely different than the current docs, of course, which
+is why I raised these questions back then.
+
+> In the end, it died with:
 >
-> Restricting IP FWs to IP specific files looks better to me than
-> centralizing and creating interdependencies.
+> > BINDGEN rust/bindings/bindings_generated.rs
+> > Failed to run rustfmt: No such file or directory (os error 2) (non-fatal, continuing)
+
+This one is unrelated -- it happens when rustfmt is not installed, so
+that those interested in only building (but not developing) the kernel
+can avoid it. We could hide the message, though for developers it is
+useful to know.
+
+This is one instance where knowing in the build system whether the
+user intends to developer the kernel or not could be useful (e.g. we
+could hide it for some of the distribution/packaging targets); but I
+would prefer to simply make rustfmt mandatory, since in principle
+there could be a rustfmt bug that makes a behavioral change, and it
+would simplify things (it comes with the compiler anyway).
+
+> >   BINDGEN rust/bindings/bindings_helpers_generated.rs
+> > error: Found argument '--blacklist-type' which wasn't expected, or isn't valid in this context
+> >
+> >       Did you mean '--blocklist-type'?
 >
-> Thanks,
-> Lijo
->
-> > Mario Limonciello (11):
-> >    drm/amd: Delay removal of the firmware framebuffer
-> >    drm/amd: Add a legacy mapping to "amdgpu_ucode_ip_version_decode"
-> >    drm/amd: Convert SMUv11 microcode init to use
-> >      `amdgpu_ucode_ip_version_decode`
-> >    drm/amd: Convert SMU v13 to use `amdgpu_ucode_ip_version_decode`
-> >    drm/amd: Request SDMA microcode during IP discovery
-> >    drm/amd: Request VCN microcode during IP discovery
-> >    drm/amd: Request MES microcode during IP discovery
-> >    drm/amd: Request GFX9 microcode during IP discovery
-> >    drm/amd: Request GFX10 microcode during IP discovery
-> >    drm/amd: Request GFX11 microcode during IP discovery
-> >    drm/amd: Request PSP microcode during IP discovery
-> >
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |   8 +
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 590 +++++++++++++++++-
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |   6 -
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c       |   2 -
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c      |   9 +-
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h      |   2 +-
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c     | 208 ++++++
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c       |  85 +--
-> >   drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c        | 180 +-----
-> >   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c        |  64 +-
-> >   drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c         | 143 +----
-> >   drivers/gpu/drm/amd/amdgpu/mes_v10_1.c        |  28 -
-> >   drivers/gpu/drm/amd/amdgpu/mes_v11_0.c        |  25 +-
-> >   drivers/gpu/drm/amd/amdgpu/psp_v10_0.c        | 106 +---
-> >   drivers/gpu/drm/amd/amdgpu/psp_v11_0.c        | 165 +----
-> >   drivers/gpu/drm/amd/amdgpu/psp_v12_0.c        | 102 +--
-> >   drivers/gpu/drm/amd/amdgpu/psp_v13_0.c        |  82 ---
-> >   drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c      |  36 --
-> >   drivers/gpu/drm/amd/amdgpu/psp_v3_1.c         |  36 --
-> >   drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c        |  61 +-
-> >   drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c        |  42 +-
-> >   drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c        |  65 +-
-> >   drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c        |  30 +-
-> >   .../gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c    |  35 +-
-> >   .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c    |  12 +-
-> >   25 files changed, 919 insertions(+), 1203 deletions(-)
-> >
-> >
-> > base-commit: de9a71e391a92841582ca3008e7b127a0b8ccf41
+> Perhaps this is because I ignored the warnings about my Rust toolchain
+> being too new? (Rust 1.65.0, bindgen 0.63.0).  I get that only one
+
+Yeah, that is due to bindgen 0.63.0 removing [1] some flags deprecated
+[2] in 0.58.0.
+
+[1] https://github.com/rust-lang/rust-bindgen/blob/v0.63.0/CHANGELOG.md#removed-1
+[2] https://github.com/rust-lang/rust-bindgen/blob/v0.58.0/CHANGELOG.md#deprecated-1
+
+> version is really supported, but it would be nice to fail a bit more
+> gracefully if at all possible.
+
+Do you mean failing in the `scripts/rust_is_available.sh` step instead
+of warning? We could also add versioning information to that script,
+so that it knows more about which versions work etc., but I guess at
+that point it would be best to simply start supporting several
+versions, which may be a bit too early to split CI runs on that since
+it would require some degree of testing.
+
+Cheers,
+Miguel
