@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06DA65BE10
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCD265BE18
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbjACKal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
+        id S233385AbjACKao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbjACKai (ORCPT
+        with ESMTP id S230309AbjACKai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 3 Jan 2023 05:30:38 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E4FF5BD;
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE89FACA;
         Tue,  3 Jan 2023 02:30:37 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C4F6361233;
-        Tue,  3 Jan 2023 10:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672741835; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1D357384B9;
+        Tue,  3 Jan 2023 10:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1672741836; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=S0fpHD/aVGPATEkhmOtr6aAZx/NtaItvDcnKgARuLII=;
-        b=H4mcgN5iwaCxNhoNI3/q08ZUacejngcauGzDH+dk+dpcF9FQBIIsXzQV1LrxwH0/ku6gAM
-        pddlOUcy2LO9usoiT+Aw339rgv7i5minKnyUKngRPN7YVjuSwB59vodu9U9GcxjlitZdxA
-        OJM8wz/kcVDn+sgiPbxZfzoVc3PjGYw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672741835;
+        bh=4ySrPxV3zhESWmq67sZZJzg1CJ6Yayz+hsQTCiO9cYA=;
+        b=bP8XS/I0HM8LJOSSoJIq2nyAuBCBNgbZjegXymSCM9nMzQaDBBTZRkBuE4K4qpbxKHU+R6
+        Hko4Kr/yzxeJVx/a4wWj7hArNq+2FsBl46Vu6xCC8y8kM1PdPl1J0/5IryLIrF2s4DWKxJ
+        HkWRmzQPbP6jVJp6NhJTnVlapB4aVmg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1672741836;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=S0fpHD/aVGPATEkhmOtr6aAZx/NtaItvDcnKgARuLII=;
-        b=JkKdihtsGYCvv+QGCsisIZsWGCg6twEmkStVBFoz31bLwCuwwwCMa76eH88Tlt4BZ06zYd
-        SuInez8hHXd36TAg==
+        bh=4ySrPxV3zhESWmq67sZZJzg1CJ6Yayz+hsQTCiO9cYA=;
+        b=yb+gU+KVGvvRYdz4C0uGJFD0BzaESqtpR2TVdwImv8MinanrkJYLaO6hlI21jbgpcT1JWZ
+        y8c9HdGJDSYSvuCQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD5971392B;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDD621392B;
         Tue,  3 Jan 2023 10:30:35 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id GUhPKssDtGOHRAAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 03 Jan 2023 10:30:35 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 8AFEBA0742; Tue,  3 Jan 2023 11:30:34 +0100 (CET)
+        id +YXBMMsDtGOKRAAAMHmgww
+        (envelope-from <jroedel@suse.de>); Tue, 03 Jan 2023 10:30:35 +0000
 Date:   Tue, 3 Jan 2023 11:30:34 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
-        tj@kernel.org, josef@toxicpanda.com, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: Re: [PATCH] block, bfq: switch 'bfqg->ref' to use atomic refcount
- apis
-Message-ID: <20230103103034.6wtj7fzyoqdsqdqy@quack3>
-References: <20230103084755.1256479-1-yukuai1@huaweicloud.com>
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [regression, =?iso-8859-1?Q?bisected?=
+ =?iso-8859-1?Q?=2C_pci=2Fiommu=5D_Bug=A0216865_-_Black_screen_when_amdgp?=
+ =?iso-8859-1?Q?u?= started during 6.2-rc1 boot with AMD IOMMU enabled
+Message-ID: <Y7QDyr2b3zviKdLc@suse.de>
+References: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230103084755.1256479-1-yukuai1@huaweicloud.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -73,82 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 03-01-23 16:47:55, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> The updating of 'bfqg->ref' should be protected by 'bfqd->lock', however,
-> during code review, we found that bfq_pd_free() update 'bfqg->ref'
-> without holding the lock, which is problematic:
-> 
-> 1) bfq_pd_free() triggered by removing cgroup is called asynchronously;
-> 2) bfqq will grab bfqg reference, and exit bfqq will drop the reference,
-> which can concurrent with 1).
-> 
-> Unfortunately, 'bfqd->lock' can't be held here because 'bfqd' might already
-> be freed in bfq_pd_free(). Fix the problem by using atomic refcount apis.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Baolu,
 
-The patch looks good to me. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
-> Changes from RFC:
->  - refcount_dec_and_test(bfqg->ref) -> refcount_dec_and_test(&bfqg->ref)
+On Fri, Dec 30, 2022 at 09:18:56AM +0100, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker speaking.
 > 
->  block/bfq-cgroup.c  | 8 +++-----
->  block/bfq-iosched.h | 2 +-
->  2 files changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-> index 1b2829e99dad..7d9b15f0dbd5 100644
-> --- a/block/bfq-cgroup.c
-> +++ b/block/bfq-cgroup.c
-> @@ -316,14 +316,12 @@ struct bfq_group *bfqq_group(struct bfq_queue *bfqq)
->  
->  static void bfqg_get(struct bfq_group *bfqg)
->  {
-> -	bfqg->ref++;
-> +	refcount_inc(&bfqg->ref);
->  }
->  
->  static void bfqg_put(struct bfq_group *bfqg)
->  {
-> -	bfqg->ref--;
-> -
-> -	if (bfqg->ref == 0)
-> +	if (refcount_dec_and_test(&bfqg->ref))
->  		kfree(bfqg);
->  }
->  
-> @@ -530,7 +528,7 @@ static struct blkg_policy_data *bfq_pd_alloc(gfp_t gfp, struct request_queue *q,
->  	}
->  
->  	/* see comments in bfq_bic_update_cgroup for why refcounting */
-> -	bfqg_get(bfqg);
-> +	refcount_set(&bfqg->ref, 1);
->  	return &bfqg->pd;
->  }
->  
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index 41aa151ccc22..466e4865ace6 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -928,7 +928,7 @@ struct bfq_group {
->  	char blkg_path[128];
->  
->  	/* reference counter (see comments in bfq_bic_update_cgroup) */
-> -	int ref;
-> +	refcount_t ref;
->  	/* Is bfq_group still online? */
->  	bool online;
->  
-> -- 
-> 2.31.1
-> 
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216865 :
+
+can you have a look at this please?
+
+Thanks,
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Jörg Rödel
+jroedel@suse.de
+
+SUSE Software Solutions Germany GmbH
+Frankenstraße 146
+90461 Nürnberg
+Germany
+
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+
