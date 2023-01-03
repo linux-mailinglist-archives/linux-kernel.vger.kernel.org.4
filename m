@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8D465BE71
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CDB65BE72
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237430AbjACKwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:52:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S237441AbjACKwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237193AbjACKvi (ORCPT
+        with ESMTP id S237304AbjACKvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:51:38 -0500
+        Tue, 3 Jan 2023 05:51:42 -0500
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765602FA
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:51:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784FB2AE1
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:51:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672743097; x=1704279097;
+  t=1672743101; x=1704279101;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=wwAlVm/7I8ndsWi60dF17HSTriSq8epoPrbPLSohnLw=;
-  b=PpLoTiiAXvPV6Y0VKIgd581nm9AxugWU/N8sDhTYFo0TI/aIuE2wbShk
-   ORfQmkUbA7DKmB/cFQYW9tvBGQi4AoPo11ezZAyzzEZrpxSHrJStaWjJx
-   qKtD9zHglvyKLCFrlElVLMvLiWuHDQlPOMY/cmADgpT/43Wjh6VUrrIS1
-   dDzYe1CbDVmttZApxjr1njzECMyoeM/gxCSbe2YIyyf5cZEEG/YnFlnMe
-   ecSDYTUNqHvkWOCxEieiuUwDLXCv97W/0IAPeSE9qAuF/cYDngEYzZw1Y
-   OwMRNepXuZF0OlYhHhQNGTuUiDVb4up5vf/i0y7jLVznumuwWhv6Sg4MQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="301318451"
+  bh=Wpp2BiRmPtCrq2dRBOAMounsOwKlI+2jikZIpNAzISg=;
+  b=P9+4tBXnraxk6gOQE34Ei6+MCf4EUe6dmRVgVf0LcBe8DiWMvMeD0qlx
+   zUxxTF0e5sZsLB3Jd139wpn0Gic6Zf+ObMqIeSHPpB8tOOrm7lYOvXPfD
+   KfvqYliwPrD+awOebQwWYFkL3kXfNEDej+ybREW3a8H0mBVVKurq+UA5r
+   qxvUh5WFJPdqXdTnJyOmJ20OKv8wkigFMiKBFE7bBWP8ZqUZ7e1JvxuNn
+   lA0gYI2xhUvSFNUgHkdgbjwcE8FNxPOr/adHAhBjpM7Bdrx0yAZJ1zdvX
+   772Um0xuvbJqDbEXfgD7ZHj7tT4b105v2cfkOKJwpWFo7Bxbd2giy6+WB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="301318463"
 X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="301318451"
+   d="scan'208";a="301318463"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 02:51:37 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="604772689"
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 02:51:41 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="604772706"
 X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="604772689"
+   d="scan'208";a="604772706"
 Received: from isobansk-mobl1.ger.corp.intel.com (HELO sboeuf-mobl.home) ([10.252.24.246])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 02:51:35 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 02:51:39 -0800
 From:   sebastien.boeuf@intel.com
 To:     linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org
 Cc:     mst@redhat.com, jasowang@redhat.com, eperezma@redhat.com,
         sebastien.boeuf@intel.com
-Subject: [PATCH v6 2/4] vhost-vdpa: Introduce RESUME backend feature bit
-Date:   Tue,  3 Jan 2023 11:51:06 +0100
-Message-Id: <b18db236ba3d990cdb41278eb4703be9201d9514.1672742878.git.sebastien.boeuf@intel.com>
+Subject: [PATCH v6 3/4] vhost-vdpa: uAPI to resume the device
+Date:   Tue,  3 Jan 2023 11:51:07 +0100
+Message-Id: <73b75fb87d25cff59768b4955a81fe7ffe5b4770.1672742878.git.sebastien.boeuf@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <cover.1672742878.git.sebastien.boeuf@intel.com>
 References: <cover.1672742878.git.sebastien.boeuf@intel.com>
@@ -64,76 +64,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sebastien Boeuf <sebastien.boeuf@intel.com>
 
-Userspace knows if the device can be resumed or not by checking this
-feature bit.
+This new ioctl adds support for resuming the device from userspace.
 
-It's only exposed if the vdpa driver backend implements the resume()
-operation callback. Userspace trying to negotiate this feature when it
-hasn't been exposed will result in an error.
+This is required when trying to restore the device in a functioning
+state after it's been suspended. It is already possible to reset a
+suspended device, but that means the device must be reconfigured and
+all the IOMMU/IOTLB mappings must be recreated. This new operation
+allows the device to be resumed without going through a full reset.
+
+This is particularly useful when trying to perform offline migration of
+a virtual machine (also known as snapshot/restore) as it allows the VMM
+to resume the virtual machine back to a running state after the snapshot
+is performed.
 
 Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Sebastien Boeuf <sebastien.boeuf@intel.com>
 ---
- drivers/vhost/vdpa.c             | 16 +++++++++++++++-
- include/uapi/linux/vhost_types.h |  2 ++
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ drivers/vhost/vdpa.c       | 18 ++++++++++++++++++
+ include/uapi/linux/vhost.h |  8 ++++++++
+ 2 files changed, 26 insertions(+)
 
 diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-index 166044642fd5..833617d00ef6 100644
+index 833617d00ef6..1db7bd39fb63 100644
 --- a/drivers/vhost/vdpa.c
 +++ b/drivers/vhost/vdpa.c
-@@ -355,6 +355,14 @@ static bool vhost_vdpa_can_suspend(const struct vhost_vdpa *v)
- 	return ops->suspend;
+@@ -502,6 +502,21 @@ static long vhost_vdpa_suspend(struct vhost_vdpa *v)
+ 	return ops->suspend(vdpa);
  }
  
-+static bool vhost_vdpa_can_resume(const struct vhost_vdpa *v)
++/* After a successful return of this ioctl the device resumes processing
++ * virtqueue descriptors. The device becomes fully operational the same way it
++ * was before it was suspended.
++ */
++static long vhost_vdpa_resume(struct vhost_vdpa *v)
 +{
 +	struct vdpa_device *vdpa = v->vdpa;
 +	const struct vdpa_config_ops *ops = vdpa->config;
 +
-+	return ops->resume;
++	if (!ops->resume)
++		return -EOPNOTSUPP;
++
++	return ops->resume(vdpa);
 +}
 +
- static long vhost_vdpa_get_features(struct vhost_vdpa *v, u64 __user *featurep)
+ static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cmd,
+ 				   void __user *argp)
  {
- 	struct vdpa_device *vdpa = v->vdpa;
-@@ -602,11 +610,15 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
- 		if (copy_from_user(&features, featurep, sizeof(features)))
- 			return -EFAULT;
- 		if (features & ~(VHOST_VDPA_BACKEND_FEATURES |
--				 BIT_ULL(VHOST_BACKEND_F_SUSPEND)))
-+				 BIT_ULL(VHOST_BACKEND_F_SUSPEND) |
-+				 BIT_ULL(VHOST_BACKEND_F_RESUME)))
- 			return -EOPNOTSUPP;
- 		if ((features & BIT_ULL(VHOST_BACKEND_F_SUSPEND)) &&
- 		     !vhost_vdpa_can_suspend(v))
- 			return -EOPNOTSUPP;
-+		if ((features & BIT_ULL(VHOST_BACKEND_F_RESUME)) &&
-+		     !vhost_vdpa_can_resume(v))
-+			return -EOPNOTSUPP;
- 		vhost_set_backend_features(&v->vdev, features);
- 		return 0;
- 	}
-@@ -658,6 +670,8 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
- 		features = VHOST_VDPA_BACKEND_FEATURES;
- 		if (vhost_vdpa_can_suspend(v))
- 			features |= BIT_ULL(VHOST_BACKEND_F_SUSPEND);
-+		if (vhost_vdpa_can_resume(v))
-+			features |= BIT_ULL(VHOST_BACKEND_F_RESUME);
- 		if (copy_to_user(featurep, &features, sizeof(features)))
- 			r = -EFAULT;
+@@ -687,6 +702,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
+ 	case VHOST_VDPA_SUSPEND:
+ 		r = vhost_vdpa_suspend(v);
  		break;
-diff --git a/include/uapi/linux/vhost_types.h b/include/uapi/linux/vhost_types.h
-index 53601ce2c20a..c5690a8992d8 100644
---- a/include/uapi/linux/vhost_types.h
-+++ b/include/uapi/linux/vhost_types.h
-@@ -163,5 +163,7 @@ struct vhost_vdpa_iova_range {
- #define VHOST_BACKEND_F_IOTLB_ASID  0x3
- /* Device can be suspended */
- #define VHOST_BACKEND_F_SUSPEND  0x4
-+/* Device can be resumed */
-+#define VHOST_BACKEND_F_RESUME  0x5
++	case VHOST_VDPA_RESUME:
++		r = vhost_vdpa_resume(v);
++		break;
+ 	default:
+ 		r = vhost_dev_ioctl(&v->vdev, cmd, argp);
+ 		if (r == -ENOIOCTLCMD)
+diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
+index f9f115a7c75b..92e1b700b51c 100644
+--- a/include/uapi/linux/vhost.h
++++ b/include/uapi/linux/vhost.h
+@@ -180,4 +180,12 @@
+  */
+ #define VHOST_VDPA_SUSPEND		_IO(VHOST_VIRTIO, 0x7D)
  
++/* Resume a device so it can resume processing virtqueue requests
++ *
++ * After the return of this ioctl the device will have restored all the
++ * necessary states and it is fully operational to continue processing the
++ * virtqueue descriptors.
++ */
++#define VHOST_VDPA_RESUME		_IO(VHOST_VIRTIO, 0x7E)
++
  #endif
 -- 
 2.37.2
