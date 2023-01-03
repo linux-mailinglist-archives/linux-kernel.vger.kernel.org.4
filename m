@@ -2,195 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAF865C8A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553B065C8A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjACVJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 16:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
+        id S230173AbjACVKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 16:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjACVJv (ORCPT
+        with ESMTP id S230166AbjACVKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:09:51 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB9014D3B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 13:09:49 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id n190-20020a25dac7000000b007447d7a25e4so31145164ybf.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 13:09:49 -0800 (PST)
+        Tue, 3 Jan 2023 16:10:40 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A504D1401C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 13:10:39 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id vm8so70311243ejc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 13:10:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ANpneqDCJ+3KDxQkFjUAT/0LVWtajW2dqlpEiVRJX78=;
-        b=Pvg1wppJZjphjhVqhO4J2TPpxFkdSWTgKMmeH0BKOHsuygBXm2vWF7hueOOYSYCSjk
-         uC2F88QoX9eqkruEZnO+f55CKVsGBkkiYIaeM80M0fk18cSJxBskzD0UI9lb4b9hs9SZ
-         ki5tIy4tJRzzJsHYjcTndIdIXU5cN+BZSSeABj5ET+bucob2VW88IEhHc+2xW/ASK5a5
-         30ceE47WYlSktl++FWoyUJatifclk3bmBuNGDDzWLT8EJlvum53QNbPeiSsJEhUZTPu6
-         qHDastODrUkdwLlLt+m7Ac12FbK+/dD5aimCTFh2mRxBq7y5YLt9govY4THwFuFqgBMZ
-         euwA==
+        d=aurora.tech; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZ2FmSNv2fjhmbZL2xtwyZRIFuE2CkO7NJQ4V0Oc4Lo=;
+        b=KxvXpyJbx48R7zqxK+HjZsnzh/LA/YfC2EyctNqWwm1f0aIalJDCzJcIoWHlnOxC2x
+         3MEaRg83mt5GlbcyNI/Rjr9dDLJ33/34wCEw4O5vOXP/tQF9qXHJDoY66t/ojuMf4TVB
+         VxoDsxyX5MzJ9cswu4NxJ6hesJloCMsm6EnEG3QUQpbcOtPV3tC+B2cH7zt8ELsgjVGa
+         M/t+9SEGAcniOsDcoV6tK2ZCHPnP0DSrOt8MPyO1I/gYjbZurDs5JKYEzt+7S8r+lwvP
+         f6KmE+qCIB6gSa2SUrBigHIQR3n4lLurRb5GCJKYfOQF+vIq49I0bXNqGBWNHv7Z+msd
+         U3Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ANpneqDCJ+3KDxQkFjUAT/0LVWtajW2dqlpEiVRJX78=;
-        b=DEzfnOY4irWWoiMuxTl8kAWkli95smMyB4qypQP5NnE+jrfkeVhYPYsYGH56MAoHNR
-         bW0Z+29EV6L9sl+ynxm+D1MHT3esx34xXYxmDfuK5bl1ovvnOPci4xjzu9kiIkgpAGdK
-         iP5hn43oIkTPjzA+kYjcSdb7YZs7v03890jln1lYXc2FJBtSQB7D2s57lO+pyqM1lpal
-         SqEHWdhGeJJzcvMs0IkJgDpAs0MUjkPhzYsKLtAsKHr1LJHiiRoHQOJJfuxExvz9sxCf
-         nZlz+q6a4cYgYooFjWBb3Heo6qd+jTbpDZm/zDM7w51eRAW9XRdKEay/qHjLz099Ahhx
-         iSQA==
-X-Gm-Message-State: AFqh2ko/lXZH+6VMmosVfGaM3Uk1ZdolNQ192guLpkCS229B87b1HxPI
-        NYi1G6pigJVYr3xzf0xzfUd/y4QIi3Ak/G2Vdk1FZ24rzLJBG/27WUUpFnkwdoGWgQQS7/e/cWV
-        lLC8WhnNFKlZs5SBT2s8eOFDLfPepH/ShXYdCWaL96BSKEN6IlnpUHFbD93Fq1aVh+83Hd5Y=
-X-Google-Smtp-Source: AMrXdXszQLI356iJi0FQ13NMGufYQBDGhT7dkHTMZzShwnc54wCpbF9hn1nlqPkTj+uK6jGD+ZdKYhHRuIqB
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a25:452:0:b0:713:a3c8:7baf with SMTP id
- 79-20020a250452000000b00713a3c87bafmr5283850ybe.641.1672780189166; Tue, 03
- Jan 2023 13:09:49 -0800 (PST)
-Date:   Tue,  3 Jan 2023 21:09:33 +0000
-In-Reply-To: <20230103151554.5c0a6c6f@gandalf.local.home>
-Mime-Version: 1.0
-References: <20230103151554.5c0a6c6f@gandalf.local.home>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230103210933.2979081-1-jstultz@google.com>
-Subject: [PATCH v2] trace: Add trace points for tasklet entry/exit
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Connor O'Brien" <connoro@google.com>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HZ2FmSNv2fjhmbZL2xtwyZRIFuE2CkO7NJQ4V0Oc4Lo=;
+        b=YDFgRAq+bX0SROW8cQw7OD6xZns+ea4QRRr7U1S/VWe67RR8cMFYHIixTik8bKYZ3x
+         UoOoOBud54dCO4oIgf1XM03AjGwYOpXvxfUJOzR2jqU7o/mlTQVC2dd/yWRhLQDnm761
+         +LeHVicC+wQHMtkjoNKqZX9F8MFVCUsekJbGnDG6WxZwU8for7rXQRfDiN0N5m6zX0Br
+         +hSIRskcW+O6uUr4I+LRtliziS5zIwOrw0i4kGKVwe7Hy6Nz1eC4+eI2pjTzbgDQrNh4
+         8svoOUeQc/4RzGmmXLj8GHttgVi+dRoTFLw9YnRiFJzWi+2ENSLCd2muGWjTM5LmW5j9
+         Jf/Q==
+X-Gm-Message-State: AFqh2koHn3qOwXVLb5msX1iWRPM4Z0GAqB3XD30d1Yunwag2itDSRuxh
+        HuWa76hfiapH2/DCv+BEHtwiYB3dH5UUwkdEAqQesQ==
+X-Google-Smtp-Source: AMrXdXvf/3WBemrGFk0maUt724TGaq9i0EGs6E+5zxJRGtltiDXr4elLp+LeL/qQqZnGr2pW54U4MVPjM6vT2/vg4BY=
+X-Received: by 2002:a17:906:500f:b0:7c0:d125:1fe6 with SMTP id
+ s15-20020a170906500f00b007c0d1251fe6mr4023752ejj.514.1672780238196; Tue, 03
+ Jan 2023 13:10:38 -0800 (PST)
+MIME-Version: 1.0
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+ <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com> <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+In-Reply-To: <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+From:   Matthew Garrett <mgarrett@aurora.tech>
+Date:   Tue, 3 Jan 2023 13:10:27 -0800
+Message-ID: <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     William Roberts <bill.c.roberts@gmail.com>
+Cc:     jejb@linux.ibm.com, Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
+On Tue, Jan 3, 2023 at 1:05 PM William Roberts <bill.c.roberts@gmail.com> wrote:
 
-Tasklets are supposed to finish their work quickly and
-should not block the current running process, but it is not
-guaranteed that. Currently softirq_entry/exit can be used to
-know total tasklets execution time, but not helpful to track
-individual tasklet's execution time. With that we can't find
-any culprit tasklet function, which is taking more time.
+> What's the use case of using the creation data and ticket in this
+> context? Who gets the
+> creationData and the ticket?
+> Could a user supplied outsideInfo work? IIRC I saw some patches flying around
+> where the sessions will get encrypted and presumably correctly as well. This
+> would allow the transfer of that outsideInfo, like the NV Index PCR value to
+> be included and integrity protected by the session HMAC.
 
-Add tasklet_entry/exit trace point support to track
-individual tasklet execution.
-
-This patch has been carried in the Android tree for awhile
-so I wanted to submit it for review upstream. Feedback would
-be appreciated!
-
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Connor O'Brien <connoro@google.com>
-Cc: kernel-team@android.com
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
-[elavila: Port to android-mainline]
-Signed-off-by: J. Avila <elavila@google.com>
-[jstultz: Rebased to upstream, cut unused trace points, added
- comments for the tracepoints, reworded commit]
-Signed-off-by: John Stultz <jstultz@google.com>
----
-v2:
-* Added tasklet pointer to the trace event as suggested by Steven
----
- include/trace/events/irq.h | 47 ++++++++++++++++++++++++++++++++++++++
- kernel/softirq.c           |  9 ++++++--
- 2 files changed, 54 insertions(+), 2 deletions(-)
-
-diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
-index eeceafaaea4c..a07b4607b663 100644
---- a/include/trace/events/irq.h
-+++ b/include/trace/events/irq.h
-@@ -160,6 +160,53 @@ DEFINE_EVENT(softirq, softirq_raise,
- 	TP_ARGS(vec_nr)
- );
- 
-+DECLARE_EVENT_CLASS(tasklet,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func),
-+
-+	TP_STRUCT__entry(
-+		__field(	void *,	tasklet)
-+		__field(	void *,	func)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->tasklet = t;
-+		__entry->func = func;
-+	),
-+
-+	TP_printk("tasklet=%ps function=%ps", __entry->tasklet, __entry->func)
-+);
-+
-+/**
-+ * tasklet_entry - called immediately before the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_entry,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
-+/**
-+ * tasklet_exit - called immediately after the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_exit,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
- #endif /*  _TRACE_IRQ_H */
- 
- /* This part must be outside protection */
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index c8a6913c067d..1b725510dd0f 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
- 		if (tasklet_trylock(t)) {
- 			if (!atomic_read(&t->count)) {
- 				if (tasklet_clear_sched(t)) {
--					if (t->use_callback)
-+					if (t->use_callback) {
-+						trace_tasklet_entry(t, t->callback);
- 						t->callback(t);
--					else
-+						trace_tasklet_exit(t, t->callback);
-+					} else {
-+						trace_tasklet_entry(t, t->func);
- 						t->func(t->data);
-+						trace_tasklet_exit(t, t->func);
-+					}
- 				}
- 				tasklet_unlock(t);
- 				continue;
--- 
-2.39.0.314.g84b9a713c41-goog
-
+The goal is to ensure that the key was generated by the kernel. In the
+absence of the creation data, an attacker could generate a hibernation
+image using their own key and trick the kernel into resuming arbitrary
+code. We don't have any way to pass secret data from the hibernate
+kernel to the resume kernel, so I don't think there's any easy way to
+do it with outsideinfo.
