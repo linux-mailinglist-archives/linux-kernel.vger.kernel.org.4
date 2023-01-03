@@ -2,147 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DD265C6C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DD665C6C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238561AbjACSwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S233597AbjACSyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238773AbjACSwF (ORCPT
+        with ESMTP id S230515AbjACSyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:52:05 -0500
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7030727A;
-        Tue,  3 Jan 2023 10:52:04 -0800 (PST)
-Received: by mail-io1-f45.google.com with SMTP id h6so17035006iof.9;
-        Tue, 03 Jan 2023 10:52:04 -0800 (PST)
+        Tue, 3 Jan 2023 13:54:14 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57251F7B
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:54:13 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id p12-20020a170902e74c00b0019254f41f6aso21749672plf.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:54:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=88y0UfhMzpIzcF+i0aeHj+160apjA13IPkO6jcFxsno=;
+        b=pb4wfNxDUm8ufcVaIopM/P/7BA4nwETAThO5+GdYRFGByDsGP2OY1BG1OREWfUvfJP
+         ioSBhW2guArKhAJWhPcMJp1n6UbR+F5/XlFdkvJMa0peVKimtw6aXNhEBCu0hvfCOLsf
+         dJRI+jyoxciIuI85qNw3pZ0IGC6lbMwoCbT7LWuRVK83EEjofpiYL8p3qthyVMdllOpz
+         5wsvVXuK4J1Veze/4qYvKbIhTa1rBrAzpvuGbigsSElTN4KApnqobUTt5XVBwD6xnvHK
+         F/8ueXFQuJA2KpAh4/rl6IEo7os7yCh85IY9WzWYsOOqQF+PG3xyp/BjkgZJbuUv3DiL
+         sQjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gm7xlk40RJ4XhPbmP5r8PjIXUo/5C8wCjuCRwKYtEwo=;
-        b=rWCnlmg2YqR3WE7GJ930yF5cP5uT88z1sWvqWioxaiHbOogjKWbzZ6YgCHI7nrgdnn
-         At3kmnljoB+CCtTYwyPI1e/9vlh97VT9Yq5gmkunFd+KO8B+vxNDnuvvMDEbTVgUvbkR
-         6nCZI6VcneAz12QYJ1TYm+YsXkTqqogSqnUScq5/wvqJbbAfWDkDsAtn1d9r6Wrikcpk
-         BmqkOHTRXuZo/lNwl9kxfijhSbb3SBHu3d+PK0SATqOx7Bk7iQxMHgnFFFWowcUAWgTo
-         Laqofa1n7sd+XUKiutyZ1mMYwDwYpdreE3ElX06oIoKDyTdeGg1Cs+0gIYfRIMjqZPzS
-         EbRg==
-X-Gm-Message-State: AFqh2kr298FAdONBLaafVP6Ywx228gZ2Sg3QtNIgWym+NqnitSXHTwyT
-        zUHJBA6pwrOHXUMIE9tZhg==
-X-Google-Smtp-Source: AMrXdXv7OOsrhVOoIf3EDP6AS5H8BDQI89ZyvKLhO8wd7ZGuXw04tq8zhovhjgSvEMimP8VZs0jiBQ==
-X-Received: by 2002:a5e:c80a:0:b0:6e3:f1da:fe9a with SMTP id y10-20020a5ec80a000000b006e3f1dafe9amr30300669iol.18.1672771923240;
-        Tue, 03 Jan 2023 10:52:03 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id x6-20020a056602160600b006e00556dc9esm11470725iow.16.2023.01.03.10.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 10:52:02 -0800 (PST)
-Received: (nullmailer pid 3660699 invoked by uid 1000);
-        Tue, 03 Jan 2023 18:52:01 -0000
-Date:   Tue, 3 Jan 2023 12:52:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jung Daehwan <dh10.jung@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
-        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
-        eomji.oh@samsung.com
-Subject: Re: [RFC PATCH v2 3/3] dt-bindings: usb: snps,dwc3: add generic-xhci
- as child
-Message-ID: <20230103185201.GA3650723-robh@kernel.org>
-References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>
- <CGME20221229100416epcas2p18f7600737b8f4149a1d75d2d8db3317a@epcas2p1.samsung.com>
- <1672307866-25839-4-git-send-email-dh10.jung@samsung.com>
- <f9b59733-61b1-67d8-01fa-fb3d3d7fbe0e@linaro.org>
- <20230102054517.GB74470@ubuntu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230102054517.GB74470@ubuntu>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=88y0UfhMzpIzcF+i0aeHj+160apjA13IPkO6jcFxsno=;
+        b=fWjL/PbA5aLqF5Zn/yjNnzDC4x4GEtt8bUqx3sD4/xCaNqy1A0qovsmxQ+T6HX3ueW
+         tgA2zPTz4Ck81Gywg/tQwBCFaApdl/TeFCAPaAgCr3WGthxKSqKAYOR4Bxu+pbAEs36M
+         NekBUXX+YPQrWVFCPOORJuchYCUXzLSqB8bxZM9KEFYaQ4ksYmc2oz6CdPPimeWWsUWD
+         eEB/P1zxS2V0G8CJXuHZv3jtKH+ei4IQo5kgQV/81LKD/cfFoWwxTFLmKnja7F+ZEQDx
+         yueL6DYJnOZcgbKYmCqebdLIyhpoPoZR36OzRwBZm/aMcyqnr7hH/bqN8dwYIDb2o20C
+         pqmQ==
+X-Gm-Message-State: AFqh2krwq7Qpa8fw3DRoHSIOKjp63KC8H8K9nUgQa5vQsa4XbBcCq6se
+        HY1JBxRIazyKcTGa+HVbsSsAn/yda58WBRl67Qhah+HYG4/3teL5FDTx3k3itSzT3jTKTPvd+Wt
+        /yYfhWiVh7tPyM2365LXakjp0b1pG2kB/KN54IMQW0UZuuelzHv6bZ9oEgu0pZZKDxBSXnhg=
+X-Google-Smtp-Source: AMrXdXupyFMOn124Go6QjcG8VYKG9jlja4Raft5SzbiZayFhIVJ7PZy4jplEJnnlLS5d5cMsdujIvGhPE1A2
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a17:902:e993:b0:192:b9ae:6def with SMTP id
+ f19-20020a170902e99300b00192b9ae6defmr704540plb.83.1672772052716; Tue, 03 Jan
+ 2023 10:54:12 -0800 (PST)
+Date:   Tue,  3 Jan 2023 18:54:08 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230103185408.2874345-1-jstultz@google.com>
+Subject: [PATCH] trace: Add trace points for tasklet entry/exit
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Connor O'Brien" <connoro@google.com>, kernel-team@android.com,
+        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 02:45:17PM +0900, Jung Daehwan wrote:
-> On Thu, Dec 29, 2022 at 11:23:02AM +0100, Krzysztof Kozlowski wrote:
-> > On 29/12/2022 10:57, Daehwan Jung wrote:
-> > > Currently, dwc3 invokes just xhci platform driver(generic-xhci) without
-> > > DT schema even though xhci works as child of dwc3. It makes sense to add
-> > > xhci as child of dwc3 with DT schema. It also supports to use another
-> > > compatible in xhci platform driver.
-> > 
-> > You use some driver as an argument for hardware description, which is
-> > not what we need. Describe the hardware.
-> > 
-> 
-> OK. I will it on next submission.
-> 
-> > > 
-> > > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> > > ---
-> > >  .../devicetree/bindings/usb/snps,dwc3.yaml    | 29 +++++++++++++++++++
-> > >  1 file changed, 29 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > index 6d78048c4613..83ed7c526dba 100644
-> > > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > @@ -360,8 +360,22 @@ properties:
-> > >      description:
-> > >        Enable USB remote wakeup.
-> > >  
-> > > +  "#address-cells":
-> > > +    enum: [ 1, 2 ]
-> > > +
-> > > +  "#size-cells":
-> > > +    enum: [ 1, 2 ]
-> > > +
-> > > +  ranges: true
-> > > +
-> > >  unevaluatedProperties: false
-> > >  
-> > > +# Required child node:
-> > > +patternProperties:
-> > > +  "^usb@[0-9a-f]+$":
-> > > +    $ref: generic-xhci.yaml#
-> > > +    description: Required child node
-> > 
-> > DWC does not have another piece of controller as child... DWC is the
-> > controller. Not mentioning that you now affect several other devices
-> > without describing the total hardware picture (just some drivers which
-> > is not that relevant).
-> > 
-> 
-> DWC controller supports USB Host mode and it uses same resource and
-> really works as a child. I guess it's same on many SOCs, especially
-> mobile..
+From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
 
-Yes, and we already support all those platforms just fine without this 
-child node. Adding it means we have to then support *both* ways in the 
-driver.
+Tasklets are supposed to finish their work quickly and
+should not block the current running process, but it is not
+guaranteed that. Currently softirq_entry/exit can be used to
+know total tasklets execution time, but not helpful to track
+individual tasklet's execution time. With that we can't find
+any culprit tasklet function, which is taking more time.
 
+Add tasklet_entry/exit trace point support to track
+individual tasklet execution.
 
-> I just want to modify it to work with DT schema (dwc3 -> xhci-plat).
-> I think it needs to dicuss more..
+This patch has been carried in the Android tree for awhile
+so I wanted to submit it for review upstream. Feedback would
+be appreciated!
 
-Why doesn't it work with the schema?
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Connor O'Brien <connoro@google.com>
+Cc: kernel-team@android.com
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
+[elavila: Port to android-mainline]
+Signed-off-by: J. Avila <elavila@google.com>
+[jstultz: Rebased to upstream, cut unused trace points, added
+ comments for the tracepoints, reworded commit]
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+ include/trace/events/irq.h | 43 ++++++++++++++++++++++++++++++++++++++
+ kernel/softirq.c           |  9 ++++++--
+ 2 files changed, 50 insertions(+), 2 deletions(-)
 
-It's convenient when DT nodes == device drivers, but hardware is messy 
-sometimes. Linux (and other OSs) have to deal with that. We can't write 
-the DT to reflect the current (and evolving) needs of a particular OS. 
+diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
+index eeceafaaea4c..da85851d4ec1 100644
+--- a/include/trace/events/irq.h
++++ b/include/trace/events/irq.h
+@@ -160,6 +160,49 @@ DEFINE_EVENT(softirq, softirq_raise,
+ 	TP_ARGS(vec_nr)
+ );
+ 
++DECLARE_EVENT_CLASS(tasklet,
++
++	TP_PROTO(void *func),
++
++	TP_ARGS(func),
++
++	TP_STRUCT__entry(
++		__field(	void *,	func)
++	),
++
++	TP_fast_assign(
++		__entry->func = func;
++	),
++
++	TP_printk("function=%ps", __entry->func)
++);
++
++/**
++ * tasklet_entry - called immediately before the tasklet is run
++ * @func:  tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_entry,
++
++	TP_PROTO(void *func),
++
++	TP_ARGS(func)
++);
++
++/**
++ * tasklet_exit - called immediately after the tasklet is run
++ * @func:  tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_exit,
++
++	TP_PROTO(void *func),
++
++	TP_ARGS(func)
++);
++
+ #endif /*  _TRACE_IRQ_H */
+ 
+ /* This part must be outside protection */
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index c8a6913c067d..dbd322524171 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
+ 		if (tasklet_trylock(t)) {
+ 			if (!atomic_read(&t->count)) {
+ 				if (tasklet_clear_sched(t)) {
+-					if (t->use_callback)
++					if (t->use_callback) {
++						trace_tasklet_entry(t->callback);
+ 						t->callback(t);
+-					else
++						trace_tasklet_exit(t->callback);
++					} else {
++						trace_tasklet_entry(t->func);
+ 						t->func(t->data);
++						trace_tasklet_exit(t->func);
++					}
+ 				}
+ 				tasklet_unlock(t);
+ 				continue;
+-- 
+2.39.0.314.g84b9a713c41-goog
 
-Rob
