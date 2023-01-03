@@ -2,99 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991E265C44A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0707C65C44E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbjACQyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S233744AbjACQzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbjACQyS (ORCPT
+        with ESMTP id S233476AbjACQzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:54:18 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8405208
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:54:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=F++bieaa8WBsyQQMnaGWrNLjsJ7SpG6QXkvjDF94ua0=; b=jNSHirJ09wG1JCmNde1dya7n69
-        i1Nxuz+kDIDPc+m4LFzAVPyPtNrgvqjcms0oLrPxbBjrHRf8w4ShYj9jACwIDImael7NdiaZb62k6
-        1KDLxRW8n8PZ6HbhBidyRM0Oy7BtmtMVtjAMFUtDfnyfehtb6zvBblUZ1mgT0Wsv9zHHDdo9deI7Z
-        wtz8mwQfxzKwUP1ccMrkGPpVauBgH1EYySGuv26h1KH/ChvD7EDSjWOAsCS9dNxMA7S+t2jSZpkTi
-        8y0OlRlEhWq8S0i3hPTTrOmxufFj65asKC6+b7onfg4QL3tR+eiwyDgljczyhnzVr27aQoiMaKa37
-        5GvrXlQg==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pCkYJ-0038Ei-UA; Tue, 03 Jan 2023 16:54:16 +0000
-Message-ID: <0ccd76c3-d516-16e8-8343-6c4881d377f3@infradead.org>
-Date:   Tue, 3 Jan 2023 08:54:14 -0800
+        Tue, 3 Jan 2023 11:55:50 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A8EB30;
+        Tue,  3 Jan 2023 08:55:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672764949; x=1704300949;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lCf3CkygM0RRymks3SyRZKTWmUhd9Lv3qTfO+5Y+XeQ=;
+  b=jGzcuX5FopK9dGp4YeznBafHxbzwqgqlguEZ2IDRTrRb6zUinI0GZZRs
+   aDbBXAIYs3ChsK/GE2BkqYZ5XDeCGHTUuocdx7+qTdqD6GAHDml5zLcdO
+   NYyaRlw4vpeqDBdoxwBnhLWODSjjEK7HuO8bSDSn9jtRkoDLTvBr74uDO
+   6U2U/uRj1+Lia+tqRtNNWhkHmRrifsqrstiShdyYJmfxo67cRbg5uOrpV
+   qVLoFJZIry2ek8ucx0hhkKHpf7G8E2apshL5xGS4iNGA4LFVH0/lblknu
+   kQ/nhDcM5MmsWJ00+co9SadLaHOxaJqDxmV/fKeR2QzqcVMnZcec6+tA0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="301385066"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="301385066"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 08:55:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="656820695"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="656820695"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 08:55:46 -0800
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     ruscur@russell.cc, oohall@gmail.com, bhelgaas@google.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajat.khandelwal@intel.com,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH] PCI/AER: Rate limit the reporting of the correctable errors
+Date:   Tue,  3 Jan 2023 22:25:48 +0530
+Message-Id: <20230103165548.570377-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] time: fix various kernel-doc problems
-Content-Language: en-US
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>
-References: <20230103032849.12723-1-rdunlap@infradead.org>
- <Y7P+KuMs52BTfKgv@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y7P+KuMs52BTfKgv@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ingo,
+There are many instances where correctable errors tend to inundate
+the message buffer. We observe such instances during thunderbolt PCIe
+tunneling.
 
-On 1/3/23 02:06, Ingo Molnar wrote:
-> 
-> * Randy Dunlap <rdunlap@infradead.org> wrote:
-> 
->> kernel/time/tick-oneshot.c:107: warning: expecting prototype for tick_check_oneshot_mode(). Prototype was for tick_oneshot_mode_active() instead
-> 
->> --- a/kernel/time/tick-oneshot.c
->> +++ b/kernel/time/tick-oneshot.c
-> 
->> @@ -103,7 +103,7 @@ int tick_switch_to_oneshot(void (*handle
->>   *
->>   * returns 1 when either nohz or highres are enabled. otherwise 0.
->>   */
->> -int tick_oneshot_mode_active(void)
->> +int tick_check_oneshot_mode(void)
->>  {
->>  	unsigned long flags;
->>  	int ret;
-> 
-> This one looks wrong - did you change the name on the wrong line?
+It's true that they are mitigated by the hardware and are non-fatal
+but we shouldn't be spamming the logs with such correctable errors as it
+confuses other kernel developers less familiar with PCI errors, support
+staff, and users who happen to look at the logs, hence rate limit them.
 
-Yes, sorry about that.
+A typical example log inside an HP TBT4 dock:
+[54912.661142] pcieport 0000:00:07.0: AER: Multiple Corrected error received: 0000:2b:00.0
+[54912.661194] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
+[54912.661203] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001100/00002000
+[54912.661211] igc 0000:2b:00.0:    [ 8] Rollover
+[54912.661219] igc 0000:2b:00.0:    [12] Timeout
+[54982.838760] pcieport 0000:00:07.0: AER: Corrected error received: 0000:2b:00.0
+[54982.838798] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
+[54982.838808] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001000/00002000
+[54982.838817] igc 0000:2b:00.0:    [12] Timeout
+This gets repeated continuously, thus inundating the buffer.
 
-> I've applied your patch, but fixed the above hunk to be:
-> 
-> @@ -99,7 +99,7 @@ int tick_switch_to_oneshot(void (*handle
->  }
->  
->  /**
-> - * tick_check_oneshot_mode - check whether the system is in oneshot mode
-> + * tick_oneshot_mode_active - check whether the system is in oneshot mode
->   *
->   * returns 1 when either nohz or highres are enabled. otherwise 0.
->   */
-> 
-> Thanks,
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+---
+ drivers/pci/pcie/aer.c | 54 +++++++++++++++++++++++++++---------------
+ include/linux/pci.h    |  3 +++
+ 2 files changed, 38 insertions(+), 19 deletions(-)
 
-Thank you also.
-
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index e2d8a74f83c3..7ae6761a8e59 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -684,23 +684,24 @@ static void __aer_print_error(struct pci_dev *dev,
+ {
+ 	const char **strings;
+ 	unsigned long status = info->status & ~info->mask;
+-	const char *level, *errmsg;
++	const char *errmsg;
+ 	int i;
+ 
+-	if (info->severity == AER_CORRECTABLE) {
++	if (info->severity == AER_CORRECTABLE)
+ 		strings = aer_correctable_error_string;
+-		level = KERN_WARNING;
+-	} else {
++	else
+ 		strings = aer_uncorrectable_error_string;
+-		level = KERN_ERR;
+-	}
+ 
+ 	for_each_set_bit(i, &status, 32) {
+ 		errmsg = strings[i];
+ 		if (!errmsg)
+ 			errmsg = "Unknown Error Bit";
+ 
+-		pci_printk(level, dev, "   [%2d] %-22s%s\n", i, errmsg,
++		if (info->severity == AER_CORRECTABLE)
++			pci_warn_ratelimited(dev, "   [%2d] %-22s%s\n", i, errmsg,
++					     info->first_error == i ? " (First)" : "");
++		else
++			pci_err(dev, "   [%2d] %-22s%s\n", i, errmsg,
+ 				info->first_error == i ? " (First)" : "");
+ 	}
+ 	pci_dev_aer_stats_incr(dev, info);
+@@ -710,7 +711,6 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
+ {
+ 	int layer, agent;
+ 	int id = ((dev->bus->number << 8) | dev->devfn);
+-	const char *level;
+ 
+ 	if (!info->status) {
+ 		pci_err(dev, "PCIe Bus Error: severity=%s, type=Inaccessible, (Unregistered Agent ID)\n",
+@@ -721,14 +718,21 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
+ 	layer = AER_GET_LAYER_ERROR(info->severity, info->status);
+ 	agent = AER_GET_AGENT(info->severity, info->status);
+ 
+-	level = (info->severity == AER_CORRECTABLE) ? KERN_WARNING : KERN_ERR;
++	if (info->severity == AER_CORRECTABLE) {
++		pci_warn_ratelimited(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
++				     aer_error_severity_string[info->severity],
++				     aer_error_layer[layer], aer_agent_string[agent]);
+ 
+-	pci_printk(level, dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
+-		   aer_error_severity_string[info->severity],
+-		   aer_error_layer[layer], aer_agent_string[agent]);
++		pci_warn_ratelimited(dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
++				     dev->vendor, dev->device, info->status, info->mask);
++	} else {
++		pci_err(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
++			aer_error_severity_string[info->severity],
++			aer_error_layer[layer], aer_agent_string[agent]);
+ 
+-	pci_printk(level, dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
+-		   dev->vendor, dev->device, info->status, info->mask);
++		pci_err(dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
++			dev->vendor, dev->device, info->status, info->mask);
++	}
+ 
+ 	__aer_print_error(dev, info);
+ 
+@@ -748,11 +755,19 @@ static void aer_print_port_info(struct pci_dev *dev, struct aer_err_info *info)
+ 	u8 bus = info->id >> 8;
+ 	u8 devfn = info->id & 0xff;
+ 
+-	pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
+-		 info->multi_error_valid ? "Multiple " : "",
+-		 aer_error_severity_string[info->severity],
+-		 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
+-		 PCI_FUNC(devfn));
++	if (info->severity == AER_CORRECTABLE)
++		pci_info_ratelimited(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
++				     info->multi_error_valid ? "Multiple " : "",
++				     aer_error_severity_string[info->severity],
++				     pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
++				     PCI_FUNC(devfn));
++	else
++		pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
++			 info->multi_error_valid ? "Multiple " : "",
++			 aer_error_severity_string[info->severity],
++			 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
++			 PCI_FUNC(devfn));
++
+ }
+ 
+ #ifdef CONFIG_ACPI_APEI_PCIEAER
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 060af91bafcd..d9434bae10c8 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -2491,6 +2491,9 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
+ #define pci_info_ratelimited(pdev, fmt, arg...) \
+ 	dev_info_ratelimited(&(pdev)->dev, fmt, ##arg)
+ 
++#define pci_warn_ratelimited(pdev, fmt, arg...) \
++	dev_warn_ratelimited(&(pdev)->dev, fmt, ##arg)
++
+ #define pci_WARN(pdev, condition, fmt, arg...) \
+ 	WARN(condition, "%s %s: " fmt, \
+ 	     dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
 -- 
-~Randy
+2.34.1
+
