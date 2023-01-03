@@ -2,167 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AC065C86D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A97E065C874
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbjACUw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 15:52:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S234012AbjACUxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 15:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233928AbjACUwW (ORCPT
+        with ESMTP id S232129AbjACUw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 15:52:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED62912ACA
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 12:52:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 741E461517
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 20:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03E9C43392
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 20:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672779140;
-        bh=xs5A+nMiaJ/Zy5xE1gzTZdyLZdx/SjaaBqXGHdvbWO4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IViIz6XhLna+IMieFjX0kFayYqlTjoK4+UskVhEDdMhHOndGCCTRyqPaAieL8owHT
-         pQXfK+agxm0x3tTTeVx7yC+pwtxkji9bgIkV37m1k0+Ga6fXMCDxXcJtWbKSVOncSO
-         dYo1bfTvjn6nVQAxcu5xgNJ+b/aiBEzVsrnfffA4R19DIxLqWzoAE3SuKKm2gld83q
-         FqiFd9fplaWqc5DpIYzb0Y6uvms1SQ5FN9SKFpHLPdE3ZA9nNiZMXBdDGD2De9aLuu
-         2JwzNU83DTalxqv9ivLGHCDGxKNWIdW7DOp/VAZvcdtZmzadzDcvm9IP/0fE1zywnC
-         TkheMl1WauzXg==
-Received: by mail-ej1-f52.google.com with SMTP id tz12so77114450ejc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 12:52:20 -0800 (PST)
-X-Gm-Message-State: AFqh2kqOayuIq5XdO6N2VvR4c6mAApoaty/Rh99YTkacxDkk4XI3QjcX
-        P3FrCe3/F+rJTDeq4OZMbjkgolHRkVJyD84b559yjg==
-X-Google-Smtp-Source: AMrXdXtJn4wvVsf0Gv6tOxeEuC/2g3dPY5tqpzGUE+LHAvoe7SJkKjKb2Tii9tUOZsU2wwA8B5p3fjKCk0JZwPbcZjk=
-X-Received: by 2002:a17:906:9155:b0:81a:c468:4421 with SMTP id
- y21-20020a170906915500b0081ac4684421mr5049277ejw.149.1672779138998; Tue, 03
- Jan 2023 12:52:18 -0800 (PST)
+        Tue, 3 Jan 2023 15:52:58 -0500
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB78EDFFC;
+        Tue,  3 Jan 2023 12:52:57 -0800 (PST)
+Received: by mail-il1-f171.google.com with SMTP id a9so6321030ilk.6;
+        Tue, 03 Jan 2023 12:52:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TcjxuWhsew0S4JMMZ0LVIr9mYr0ZItiOrBsIyKBjzxA=;
+        b=2NToks0C7J1Ro1UvG/6kt01FVvqSE9HR9qVAMAfaZb06yTAwrVLN65XEVXoYdk2sb/
+         FMDH86QOTkf1wdMlMR0dleIvp+iKloeh8GdzK1VfMzIR5mKBmjC5nnJFQD8eXF3nkv2c
+         dY7pzjpWv1OB2HULmgz9jZIO8vW435au8tXaxTXsClyEWgoz1g9qzlEG3Rvr13+3bRd2
+         sVlR2JmEJsANGr6A5u4z8LXD9rOrFNBNl2fwYhTpwN6SRkp5lS/7jyhfQVKayBh/JXLn
+         MlcxThMHg4KRVQgojY41+30qpXSL/0YXGHsHVLY34H6PJw+HYfF8wXBSBQUNQjTOidrU
+         gmMw==
+X-Gm-Message-State: AFqh2kqZ2tsPOgwVUCwTSoEgDRfiW27l+kCz1xXxrsewl87pch2FncLQ
+        Id3nHQnTweBl/NWr7CvSoQ==
+X-Google-Smtp-Source: AMrXdXs7CLCkBhA2bAs8+otIJJ87HLmOu2iBxk7dmL/ZdUhdNLgBmJbpCAkIQKJL5QLEGLa5kGxn6A==
+X-Received: by 2002:a05:6e02:549:b0:306:d1b4:f3c7 with SMTP id i9-20020a056e02054900b00306d1b4f3c7mr25689876ils.20.1672779176867;
+        Tue, 03 Jan 2023 12:52:56 -0800 (PST)
+Received: from robh_at_kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id c24-20020a023b18000000b00388b6508ec8sm9836486jaa.115.2023.01.03.12.52.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 12:52:56 -0800 (PST)
+Received: (nullmailer pid 3961459 invoked by uid 1000);
+        Tue, 03 Jan 2023 20:52:50 -0000
+Date:   Tue, 3 Jan 2023 14:52:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Yann Sionneau <ysionneau@kalray.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
+        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-audit@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+Message-ID: <20230103205250.GB3942221-robh@kernel.org>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
 MIME-Version: 1.0
-References: <20230101162910.710293-1-Jason@zx2c4.com> <20230101162910.710293-3-Jason@zx2c4.com>
- <Y7QIg/hAIk7eZE42@gmail.com> <CALCETrWdw5kxrtr4M7AkKYDOJEE1cU1wENWgmgOxn0rEJz4y3w@mail.gmail.com>
- <Y7R8Zq6sIKAIprtr@zx2c4.com>
-In-Reply-To: <Y7R8Zq6sIKAIprtr@zx2c4.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Tue, 3 Jan 2023 12:52:07 -0800
-X-Gmail-Original-Message-ID: <CALCETrXaHPZMNx7g2NS9-5ShG3i74615W7gKQ2tmr4xpvgTBkA@mail.gmail.com>
-Message-ID: <CALCETrXaHPZMNx7g2NS9-5ShG3i74615W7gKQ2tmr4xpvgTBkA@mail.gmail.com>
-Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
- lazily freeable mappings
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        "Carlos O'Donell" <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 11:06 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Hi Andy,
->
-> Thanks for your constructive suggestions.
->
-> On Tue, Jan 03, 2023 at 10:36:01AM -0800, Andy Lutomirski wrote:
-> > > > c) If there's not enough memory to service a page fault, it's not fatal,
-> > > >    and no signal is sent. Instead, writes are simply lost.
-> >
-> > This just seems massively overcomplicated to me.  If there isn't
-> > enough memory to fault in a page of code, we don't have some magic
-> > instruction emulator in the kernel.  We either OOM or we wait for
-> > memory to show up.
->
-> Before addressing the other parts of your email, I thought I'd touch on
-> this. Quoting from the email I just wrote Ingo:
->
-> | *However* - if your big objection to this patch is that the instruction
-> | skipping is problematic, we could actually punt that part. The result
-> | will be that userspace just retries the memory write and the fault
-> | happens again, and eventually it succeeds. From a perspective of
-> | vgetrandom(), that's perhaps worse -- with this v14 patchset, it'll
-> | immediately fallback to the syscall under memory pressure -- but you
-> | could argue that nobody really cares about performance at that point
-> | anyway, and so just retrying the fault until it succeeds is a less
-> | complex behavior that would be just fine.
-> |
-> | Let me know if you think that'd be an acceptable compromise, and I'll
-> | roll it into v15. As a preview, it pretty much amounts to dropping 3/7
-> | and editing the commit message in this 2/7 patch.
->
-> IOW, I think the main ideas of the patch work just fine without "point
-> c" with the instruction skipping. Instead, waiting/retrying could
-> potentially work. So, okay, it seems like the two of you both hate the
-> instruction decoder stuff, so I'll plan on working that part in, in one
-> way or another, for v15.
->
-> > On Tue, Jan 3, 2023 at 2:50 AM Ingo Molnar <mingo@kernel.org> wrote:
-> > > > The vDSO getrandom() implementation works with a buffer allocated with a
-> > > > new system call that has certain requirements:
-> > > >
-> > > > - It shouldn't be written to core dumps.
-> > > >   * Easy: VM_DONTDUMP.
-> > > > - It should be zeroed on fork.
-> > > >   * Easy: VM_WIPEONFORK.
-> >
-> > I have a rather different suggestion: make a special mapping.  Jason,
-> > you're trying to shoehorn all kinds of bizarre behavior into the core
-> > mm, and none of that seems to me to belong to the core mm.  Instead,
-> > have an actual special mapping with callbacks that does the right
-> > thing.  No fancy VM flags.
->
-> Oooo! I like this. Avoiding adding VM_* flags would indeed be nice.
-> I had seen things that I thought looked in this direction with the shmem
-> API, but when I got into the details, it looked like this was meant for
-> something else and couldn't address most of what I wanted here.
->
-> If you say this is possible, I'll look again to see if I can figure it
-> out. Though, if you have some API name at the top of your head, you
-> might save me some code squinting time.
+On Tue, Jan 03, 2023 at 05:43:34PM +0100, Yann Sionneau wrote:
+> This patch series adds support for the kv3-1 CPU architecture of the kvx family
+> found in the Coolidge (aka MPPA3-80) SoC of Kalray.
+> 
+> This is an RFC, since kvx support is not yet upstreamed into gcc/binutils,
+> therefore this patch series cannot be merged into Linux for now.
+> 
+> The goal is to have preliminary reviews and to fix problems early.
+> 
+> The Kalray VLIW processor family (kvx) has the following features:
+> * 32/64 bits execution mode
+> * 6-issue VLIW architecture
+> * 64 x 64bits general purpose registers
+> * SIMD instructions
+> * little-endian
+> * deep learning co-processor
+> 
+> Kalray kv3-1 core which is the third of the kvx family is embedded in Kalray
+> Coolidge SoC currently used on K200 and K200-LP boards.
+> 
+> The Coolidge SoC contains 5 clusters each of which is made of:
+> * 4MiB of on-chip memory (SMEM)
+> * 1 dedicated safety/security core (kv3-1 core).
+> * 16 PEs (Processing Elements) (kv3-1 cores).
+> * 16 Co-processors (one per PE)
+> * 2 Crypto accelerators
+> 
+> The Coolidge SoC contains the following features:
+> * 5 Clusters
+> * 2 100G Ethernet controllers
+> * 8 PCIe GEN4 controllers (Root Complex and Endpoint capable)
+> * 2 USB 2.0 controllers
+> * 1 Octal SPI-NOR flash controller
+> * 1 eMMC controller
+> * 3 Quad SPI controllers
+> * 6 UART
+> * 5 I2C controllers (3 of which are SMBus capable)
+> * 4 CAN controllers
+> * 1 OTP memory
+> 
+> A kvx toolchain can be built using:
+> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev libmpfr-dev
+> $ git clone https://github.com/kalray/build-scripts
+> $ cd build-scripts
+> $ source last.refs
+> $ ./build-kvx-xgcc.sh output
+> 
+> The kvx toolchain will be installed in the "output" directory.
+> 
+> A buildroot image (kernel+rootfs) and toolchain can be built using:
+> $ git clone -b coolidge-for-upstream https://github.com/kalray/buildroot
+> $ cd buildroot
+> $ make O=build_kvx kvx_defconfig
+> $ make O=build_kvx
+> 
+> The vmlinux image can be found in buildroot/build_kvx/images/vmlinux.
+> 
+> If you are just interested in building the Linux kernel with no rootfs you can
+> just do this with the kvx-elf- toolchain:
+> $ make ARCH=kvx O=build_kvx CROSS_COMPILE=kvx-elf- default_defconfig
+> $ make ARCH=kvx O=build_kvx CROSS_COMPILE=kvx-elf- -j$(($(nproc) + 1))
+> 
+> The vmlinux ELF can be run with qemu by doing:
+> # install dependencies: ninja pkg-config libglib-2.0-dev cmake libfdt-dev libpixman-1-dev zlib1g-dev
+> $ git clone https://github.com/kalray/qemu-builder
+> $ cd qemu-builder
+> $ git submodule update --init
+> $ make -j$(($(nproc) + 1))
+> $ ./qemu-system-kvx -m 1024 -nographic -kernel <path/to/vmlinux>
+> 
+> Yann Sionneau (25):
+>   Documentation: kvx: Add basic documentation
+>   kvx: Add ELF-related definitions
+>   kvx: Add build infrastructure
+>   kvx: Add CPU definition headers
+>   kvx: Add atomic/locking headers
+>   kvx: Add other common headers
+>   kvx: Add boot and setup routines
+>   kvx: Add exception/interrupt handling
+>   kvx: irqchip: Add support for irq controllers
+>   kvx: Add process management
+>   kvx: Add memory management
+>   kvx: Add system call support
+>   kvx: Add signal handling support
+>   kvx: Add ELF relocations and module support
+>   kvx: Add misc common routines
+>   kvx: Add some library functions
+>   kvx: Add multi-processor (SMP) support
+>   kvx: Add kvx default config file
+>   kvx: power: scall poweroff driver
+>   kvx: gdb: add kvx related gdb helpers
+>   kvx: Add support for ftrace
+>   kvx: Add support for jump labels
+>   kvx: Add debugging related support
+>   kvx: Add support for CPU Perf Monitors
+>   kvx: Add support for cpuinfo
 
-Look for _install_special_mapping().
+You should strip this series down to just what's needed to boot. You 
+don't need the last 7 patches at least.
 
---Andy
-
-> > Want to mlock it?  No, don't do that -- that's absurd.  Just arrange
-> > so that, if it gets evicted, it's not written out anywhere.  And when
-> > it gets faulted back in it does the right thing -- see above.
->
-> Presumably mlock calls are redirected to some function pointer so I can
-> just return EINTR?
-
-Or just don't worry about it.  If someone mlocks() it, that's their
-problem.  The point is that no one needs to.
-
->
-> > Zero on fork?  I'm sure that's manageable with a special mapping.  If
-> > not, you can add a new vm operation or similar to make it work.  (Kind
-> > of like how we extended special mappings to get mremap right a couple
-> > years go.)  But maybe you don't want to *zero* it on fork and you want
-> > to do something more intelligent.  Fine -- you control ->fault!
->
-> Doing something more intelligent would be an interesting development, I
-> guess... But, before I think about that, all mapping have flags;
-> couldn't I *still* set VM_WIPEONFORK on the special mapping? Or does the
-> API you have in mind not work that way? (Side note: I also want
-> VM_DONTDUMP to work.)
-
-You really want unmap (the pages, not the vma) on fork, not wipe on
-fork.  It'll be VM_SHARED, and I'm not sure what VM_WIPEONFORK |
-VM_SHARED does.
+Rob
