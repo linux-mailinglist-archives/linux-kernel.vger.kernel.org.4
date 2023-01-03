@@ -2,193 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D7A65C4D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE16665C4CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238313AbjACRNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        id S238461AbjACRNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238299AbjACRMm (ORCPT
+        with ESMTP id S238440AbjACRMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:12:42 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7B513E16;
-        Tue,  3 Jan 2023 09:11:47 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303GkE13032564;
-        Tue, 3 Jan 2023 17:11:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=r7DQyXh5gAucigmedJ3yha+lh4GmJ5T3l2qn9I7r4KE=;
- b=Ire6fu8w+NwlSEnZKlA1hBoe2/3JZgYUjlJMqatOErGi8/X8P8dBDxeiAGrhoamBoE+x
- qQyWzThSIRWrS6KbsNfVqkjHWVT+ix6qEObgHIHUBL2bSGb/hKlLZvmiYqNaLXMEjGsF
- 1KPb/Q0YC8eEdD/tViF8Q8n6nlLMaRslf21uWJIOKNcusNXSDqTiBFwk4vzymQlKe+TA
- fvpw3eyeBhSazBzl484DyIgFkOjoQkpJnEGtHyycJcJSWjP4HVCwHq5Xl4bvYbsk67K2
- L1gyXLaOOq7oudt5HDaordr7mr+ZpGZxmg70RD0puNZbc9673k2MB7U3LhnOsDHdzaed dA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvqrp83ga-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 17:11:37 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 303HBa6W009687
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 3 Jan 2023 17:11:36 GMT
-Received: from [10.110.6.145] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 3 Jan 2023
- 09:11:35 -0800
-Message-ID: <e5e8a6ae-29cf-beb2-e2b2-1875cb3a84e1@quicinc.com>
-Date:   Tue, 3 Jan 2023 09:11:34 -0800
+        Tue, 3 Jan 2023 12:12:46 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A46F0E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:12:26 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id h6so16885306iof.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 09:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=em3Ufd1K4FFk6wUY+M7YROP86iN6cIDpfsX/6JZ8LMs=;
+        b=IxtRL1xI/M7DHv6CuM2XNgJ63pduHqi4eG8on4E2MOZfzDFgtSQ7zMJJJBh990hFZh
+         WAkVgsQn71Z2e1DpUiHQwLMpfiHRniYn3qeCgE4Dw+j7gyxO7wsTBc19pQcUTmhVrx2d
+         /tz4xiyHI9iTo95NWoWI3W3QryAVA5l3HhbbA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=em3Ufd1K4FFk6wUY+M7YROP86iN6cIDpfsX/6JZ8LMs=;
+        b=2eCEia8g9mbje2HUrKgAaC59wsOUjPIxyPKZD0efbsd7Arl0Mj3EEkpx5GAaCU/LOD
+         5kvCfwlzW/ifJrUrsUgYiWl2vc6EF2BstpfuUoyiqohwT1aQ6e2/NrneblfYrtg6meyk
+         Keea957cyj0CAyubZyTYyEQi8XmSidDAmw+wU5anyPOTbETOpntWrF4Nluh4QUNCOsRN
+         sQmzi8KJMkWpApp/qthCStD9ZP/0Z0GUVNQSlI8ueTHnhmnEQMQIPUw3a0q5i/qhK6yK
+         pCaN1ZAuMfZ2RwfWOJ3ymX0784vZODMYhJH90ZybIO3ECBP6wRdWtieYPaVlkqUr/NvS
+         0Yrg==
+X-Gm-Message-State: AFqh2krobm1e8eJNQCaU86zcDTKXocKyOBow9c4b8iDC5oI5pZPmc+Uc
+        IGf3iyiinu77Iv+zWlkHduK+sA==
+X-Google-Smtp-Source: AMrXdXtO9WUhdiUZPUG/gevDvi+yxjJQcLLm7WRVJWiMFvJt5PBubVlHOmNols6A6ArtSfWGZcVXRQ==
+X-Received: by 2002:a5e:8d1a:0:b0:6e3:21fd:6783 with SMTP id m26-20020a5e8d1a000000b006e321fd6783mr27731823ioj.2.1672765945209;
+        Tue, 03 Jan 2023 09:12:25 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id x6-20020a056602160600b006e00556dc9esm11407972iow.16.2023.01.03.09.12.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 09:12:24 -0800 (PST)
+Date:   Tue, 3 Jan 2023 17:12:24 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>, stable@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Icenowy Zheng <uwu@icenowy.me>
+Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create platform
+ devices for DT nodes without 'vdd-supply'
+Message-ID: <Y7Rh+EkKKN5Gu8sz@google.com>
+References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+ <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v16 1/5] arm64: dts: qcom: add data-lanes and
- link-freuencies into dp_out endpoint
-Content-Language: en-US
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
-        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <airlied@gmail.com>
-CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1672163103-31254-1-git-send-email-quic_khsieh@quicinc.com>
- <1672163103-31254-2-git-send-email-quic_khsieh@quicinc.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <1672163103-31254-2-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ZjAL-29wo2191xPuriAZaZuRWO6NsmsO
-X-Proofpoint-GUID: ZjAL-29wo2191xPuriAZaZuRWO6NsmsO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-03_05,2023-01-03_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 adultscore=0 impostorscore=0 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0 phishscore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301030147
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof/Dmitry,
+On Thu, Dec 22, 2022 at 11:26:26AM -0800, Doug Anderson wrote:
+> Hi,
+> 
+> On Wed, Dec 21, 2022 at 6:26 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > The primary task of the onboard_usb_hub driver is to control the
+> > power of an onboard USB hub. The driver gets the regulator from the
+> > device tree property "vdd-supply" of the hub's DT node. Some boards
+> > have device tree nodes for USB hubs supported by this driver, but
+> > don't specify a "vdd-supply". This is not an error per se, it just
+> > means that the onboard hub driver can't be used for these hubs, so
+> > don't create platform devices for such nodes.
+> >
+> > This change doesn't completely fix the reported regression. It
+> > should fix it for the RPi 3 B Plus and boards with similar hub
+> > configurations (compatible DT nodes without "vdd-supply"), boards
+> > that actually use the onboard hub driver could still be impacted
+> > by the race conditions discussed in that thread. Not creating the
+> > platform devices for nodes without "vdd-supply" is the right
+> > thing to do, independently from the race condition, which will
+> > be fixed in future patch.
+> >
+> > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> > Link: https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
+> > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> >
+> > Changes in v2:
+> > - don't create platform devices when "vdd-supply" is missing,
+> >   rather than returning an error from _find_onboard_hub()
+> > - check for "vdd-supply" not "vdd" (Johan)
+> > - updated subject and commit message
+> > - added 'Link' tag (regzbot)
+> >
+> >  drivers/usb/misc/onboard_usb_hub_pdevs.c | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> 
+> I'm a tad bit skeptical.
+> 
+> It somehow feels a bit too much like "inside knowledge" to add this
+> here. I guess the "onboard_usb_hub_pdevs.c" is already pretty
+> entangled with "onboard_usb_hub.c", but I'd rather the "pdevs" file
+> keep the absolute minimum amount of stuff in it and all of the details
+> be in the other file.
+> 
+> If this was the only issue though, I'd be tempted to let it slide. As
+> it is, I'm kinda worried that your patch will break Alexander Stein,
+> who should have been CCed (I've CCed him now) or Icenowy Zheng (also
+> CCed now). I believe those folks are using the USB hub driver
+> primarily to drive a reset GPIO. Looking at the example in the
+> bindings for one of them (genesys,gl850g.yaml), I even see that the
+> reset-gpio is specified but not a vdd-supply. I think you'll break
+> that?
 
-Would you please review this patch.
+Thanks for pointing that out. My assumption was that the regulator is
+needed for the driver to do anything useful, but you are right, the
+reset GPIO alone could be used in combination with an always-on regulator
+to 'switch the hub on and off'.
 
-Thanks,
+> In general, it feels like it should actually be fine to create the USB
+> hub driver even if vdd isn't supplied. Sure, it won't do a lot, but it
+> shouldn't actively hurt anything. You'll just be turning off and on
+> bogus regulators and burning a few CPU cycles. I guess the problem is
+> some race condition that you talk about in the commit message. I'd
+> rather see that fixed...
 
+Yes, the race conditions needs to be fixed as well, I didn't have enough
+time to write and test a patch before taking a longer break for the
+holidays, so I only sent out this (supposed) partial mitigation.
 
-On 12/27/2022 9:44 AM, Kuogee Hsieh wrote:
-> Move data-lanes property from mdss_dp node to dp_out endpoint. Also
-> add link-frequencies property into dp_out endpoint as well. The last
-> frequency specified at link-frequencies will be the max link rate
-> supported by DP.
->
-> Changes in v5:
-> -- revert changes at sc7180.dtsi and sc7280.dtsi
-> -- add &dp_out to sc7180-trogdor.dtsi and sc7280-herobrine.dtsi
->
-> Changes in v6:
-> -- add data-lanes and link-frequencies to yaml
->
-> Changes in v7:
-> -- change 160000000 to 1620000000
-> -- separate yaml to different patch
->
-> Changes in v8:
-> -- correct Bjorn mail address to kernel.org
->
-> Changes in v9:
-> -- use symbol rate (hz) for link-frequencies at dp_out at sc7180_trogdor.dtsi
->
-> Changes in v13:
-> -- delete an extra space at data-lanes
->
-> Changes in v15:
-> -- replace space with tab at sc7180-trogdor.dtsi
->
-> Changes in v16:
-> -- rename dp_out with mdss_dp_Out and keep the order
->
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->   arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi   | 4 ++++
->   arch/arm64/boot/dts/qcom/sc7180.dtsi           | 2 +-
->   arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 4 ++++
->   arch/arm64/boot/dts/qcom/sc7280.dtsi           | 2 +-
->   4 files changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> index eae22e6..21fbaff 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> @@ -814,7 +814,11 @@ hp_i2c: &i2c9 {
->   	status = "okay";
->   	pinctrl-names = "default";
->   	pinctrl-0 = <&dp_hot_plug_det>;
-> +};
-> +
-> +&mdss_dp_out {
->   	data-lanes = <0 1>;
-> +	link-frequencies = /bits/ 64 <1620000000 2700000000 5400000000>;
->   };
->   
->   &pm6150_adc {
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index 58976a1b..0a90cce 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -3119,7 +3119,7 @@
->   
->   					port@1 {
->   						reg = <1>;
-> -						dp_out: endpoint { };
-> +						mdss_dp_out: endpoint { };
->   					};
->   				};
->   
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> index c11e371..3f6f1c9 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> @@ -442,7 +442,11 @@ ap_i2c_tpm: &i2c14 {
->   	status = "okay";
->   	pinctrl-names = "default";
->   	pinctrl-0 = <&dp_hot_plug_det>;
-> +};
-> +
-> +&mdss_dp_out {
->   	data-lanes = <0 1>;
-> +	link-frequencies = /bits/ 64 <1620000000 2700000000 5400000000 8100000000>;
->   };
->   
->   &mdss_mdp {
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 2125803..43ef6dc 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -4135,7 +4135,7 @@
->   
->   					port@1 {
->   						reg = <1>;
-> -						dp_out: endpoint { };
-> +						mdss_dp_out: endpoint { };
->   					};
->   				};
->   
+> That being said, if we want to be more efficient and not burn CPU cycles
+> and memory in Stefan Wahren's case, maybe the USB hub driver itself could
+> return a canonical error value from its probe when it detects that it has
+> no useful job and then "onboard_usb_hub_pdevs" could just silently bail
+> out?
+
+_probe() could return an error, however onboard_hub_create_pdevs() can't
+rely on that, since the actual onboard_hub driver might not have been
+loaded yet when the function is called.
+
+It would be nice not to instantiate the pdev and onboard_hub USB instances
+if the DT node has neither a 'vdd-supply' nor 'reset-gpios'. If we aren't
+ok with doing that in onboard_hub_create_pdevs() then at least the 'raw'
+platform device would be created. onboard_hub_probe() could still
+bail if both properties are absent, _find_onboard_hub() would have to
+check it again to avoid the deferred probing 'loop' for the USB instances.
+
+Alternatively we could 'just' fix the race condition involving the 'attach
+work' and the onboard_hub driver is fully instantiated even on (certain)
+boards where it does nothing. It's relatively rare that USB hub nodes are
+specified in the DT (unless the intention is to use this driver) and
+CONFIG_USB_ONBOARD_HUB needs to be set for the instances to be created,
+so maybe creating the useless instances is not such a big deal.
