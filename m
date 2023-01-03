@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E518D65C80B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140D265C80A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238489AbjACUZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 15:25:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S237959AbjACUZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 15:25:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238278AbjACUZl (ORCPT
+        with ESMTP id S238270AbjACUZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 3 Jan 2023 15:25:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320E9140F3
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321AD140F4
         for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 12:25:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C359BB810FD
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 20:25:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A5CC433B0;
-        Tue,  3 Jan 2023 20:25:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B77E46150C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 20:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FA21C433EF;
+        Tue,  3 Jan 2023 20:25:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672777536;
-        bh=zFC31q+ex+1Dl3BDwtcnroCVfROJ0aqVLE555+t4k/s=;
+        s=k20201202; t=1672777538;
+        bh=x+GcchtGQYQlLai5+CmXMMkSiw5EhNLH81SImALJnoU=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=R/L1HV0Dq6n53aNNnFFlg83TGKpPpHSMTjNvh4z6pems6ig10W/eGh7lAatJddfHl
-         TFnhMs2ecWcMKwUq9Z6Tv+w4TiPy9AvABwZzIeVe+RcBdB6m7ncgm27hN/HjFym86E
-         rPWUXZiFeeIAwW7RbOL6naMf9wBqXrVAFrh08DxFAoapBzoTWr5vX2lcUifx+/ojS5
-         iluVczswqBEXcreZLxHxJTqbrUWzKozXsmUy/7sxqhw2jBlYiNwnJ/F7TdM46DIH6z
-         K58g2basDaMccxTc84UkTKmvWCfKZc57PVlQI6CbqYwovWR75k6RxDznRTdpLOc9hn
-         kcM+3wzAC/TvA==
+        b=atZioraLtfipKzb/gvK5yhLPjflghimV3TvgC2ZebNAsQJy8DfVaq+O7rnYfidsMU
+         jpAQ8PP+THbR0IeKguJoQR45bdRhiztILjS4GmXO9iVNQNYKnvR/tf8dNxtB0Iu+Q2
+         WCb1f2YRz0tYxhaDRuN0oxv9Ty93NL8Rttb8aGzeN3TXWIP0soiZMUcgwFnwQVBD0f
+         7853MFNggpNdn/6MVCG+Ebnnqyps5iCLcGpaIO1SQ4KcDg/I8KqCWTGQ4tvlwreQY8
+         fS7vDh5f3FApODEM9Bsf3Dmq4lVWxUO2ec+psA1OWMlgm/nsLGvc41FTiIOAjfEvm0
+         YQrAiEBYj8e9w==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 03 Jan 2023 20:25:15 +0000
-Subject: [PATCH v2 1/6] arm64/signal: Don't redundantly verify FPSIMD magic
+Date:   Tue, 03 Jan 2023 20:25:16 +0000
+Subject: [PATCH v2 2/6] arm64/signal: Remove redundant size validation from
+ parse_user_sigframe()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221212-arm64-signal-cleanup-v2-1-14a8f3e088b7@kernel.org>
+Message-Id: <20221212-arm64-signal-cleanup-v2-2-14a8f3e088b7@kernel.org>
 References: <20221212-arm64-signal-cleanup-v2-0-14a8f3e088b7@kernel.org>
 In-Reply-To: <20221212-arm64-signal-cleanup-v2-0-14a8f3e088b7@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -46,15 +47,15 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-214b3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1247; i=broonie@kernel.org;
- h=from:subject:message-id; bh=zFC31q+ex+1Dl3BDwtcnroCVfROJ0aqVLE555+t4k/s=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjtI85VdbUmWZx8pESGvVVzybsGVa/FrGZIdhgibbe
- LHcz2syJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY7SPOQAKCRAk1otyXVSH0Fk1B/
- 9OGuQiovaH9EVYAhVRVZPIrfWq046KVBbZSCyKVgx3wFdkm3xfcwW10T2edp6UKYr0qCHOKC/85dlQ
- dYzOrCdNmYTbqaLKDeYvcqFCCBnAB2fNjCoqFv9VkvFQ/e6BwntCCM+ASUFN51g6dpZ5cnBQywl4Zh
- hSCas1IPotkR2yiefDL78cn/xdnJZhCsT6HHqJxxxWGRrgm1F3vPhmAmiG5jkgDZQQHUZIa/c/XAZu
- ud6Vy0+N27bA89FJBsU5cPjdW6ICvjDmiz1yIieVveJ+dsoIEOa+pvXGKE8+LKJ2Xjmk3MPZ7Isht2
- YvHD7vKZcnmuUvL/XPTNZh3CrYLG09
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2702; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=x+GcchtGQYQlLai5+CmXMMkSiw5EhNLH81SImALJnoU=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjtI85bDh+bOarIH4knGB/z8JxY1l40IEwpTz1YryH
+ ifnKvo+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY7SPOQAKCRAk1otyXVSH0Eq0B/
+ 9JVDlOxCNJR3j7nZcG2xkBNML//sZkZxAKPdNhA8Nco5iJy60qjGNl55augVclshngRMKjyy6IvM2e
+ PLurtzrwQKV4CH0qc7dqRYPXo9zMN4wuwW4sJ1FK4Qm/lqXME6uOIWoGgBje4ZfwdfbvoG0up9pIwn
+ 2mbZ/p+9HfXqll9G5RbRQT9phdCckO8qh+UqxGV8+Ewgq625I95pShkfb5q3/0SYTF5Xpg8dT0UK4t
+ FTjjTEVnJDesKhYLxvLND/rhSlOulgiu6T0hCAmZAajtwYO40Y345Qy48mRjaWzJ5UieSK1AJaRZOy
+ 7Vc1gJnhpBczsW/F/Pemi9/B4YuCBW
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -66,39 +67,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We validate that the magic in the struct fpsimd_context is correct in
-restore_fpsimd_context() but this is redundant since parse_user_sigframe()
-uses this magic to decide to call the function in the first place. Remove
-the extra validation.
+There is some minimal size validation in parse_user_sigframe() however
+all of the individual parsing functions perform frame specific validation
+of the sizing information, remove the frame specific size checks in the
+core so that there isn't any confusion about what we validate for size.
+
+Since the checks in the SVE and ZA parsing are after we have read the
+relevant context and since they won't report an error if the frame is
+undersized they are adjusted to check for this before doing anything else.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kernel/signal.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ arch/arm64/kernel/signal.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
 diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index e0d09bf5b01b..9d3d10269da7 100644
+index 9d3d10269da7..a7b4bb584d17 100644
 --- a/arch/arm64/kernel/signal.c
 +++ b/arch/arm64/kernel/signal.c
-@@ -189,15 +189,14 @@ static int preserve_fpsimd_context(struct fpsimd_context __user *ctx)
- static int restore_fpsimd_context(struct fpsimd_context __user *ctx)
- {
- 	struct user_fpsimd_state fpsimd;
--	__u32 magic, size;
-+	__u32 size;
- 	int err = 0;
- 
--	/* check the magic/size information */
--	__get_user_error(magic, &ctx->head.magic, err);
-+	/* check the size information */
- 	__get_user_error(size, &ctx->head.size, err);
- 	if (err)
+@@ -274,6 +274,9 @@ static int restore_sve_fpsimd_context(struct user_ctxs *user)
+ 	if (__copy_from_user(&sve, user->sve, sizeof(sve)))
  		return -EFAULT;
--	if (magic != FPSIMD_MAGIC || size != sizeof(struct fpsimd_context))
-+	if (size != sizeof(struct fpsimd_context))
+ 
++	if (sve.head.size < sizeof(*user->sve))
++		return -EINVAL;
++
+ 	if (sve.flags & SVE_SIG_FLAG_SM) {
+ 		if (!system_supports_sme())
+ 			return -EINVAL;
+@@ -289,7 +292,7 @@ static int restore_sve_fpsimd_context(struct user_ctxs *user)
+ 	if (sve.vl != vl)
  		return -EINVAL;
  
- 	/* copy the FP and status/control registers */
+-	if (sve.head.size <= sizeof(*user->sve)) {
++	if (sve.head.size == sizeof(*user->sve)) {
+ 		clear_thread_flag(TIF_SVE);
+ 		current->thread.svcr &= ~SVCR_SM_MASK;
+ 		current->thread.fp_type = FP_STATE_FPSIMD;
+@@ -404,10 +407,13 @@ static int restore_za_context(struct user_ctxs *user)
+ 	if (__copy_from_user(&za, user->za, sizeof(za)))
+ 		return -EFAULT;
+ 
++	if (za.head.size < sizeof(*user->za))
++		return -EINVAL;
++
+ 	if (za.vl != task_get_sme_vl(current))
+ 		return -EINVAL;
+ 
+-	if (za.head.size <= sizeof(*user->za)) {
++	if (za.head.size == sizeof(*user->za)) {
+ 		current->thread.svcr &= ~SVCR_ZA_MASK;
+ 		return 0;
+ 	}
+@@ -510,9 +516,6 @@ static int parse_user_sigframe(struct user_ctxs *user,
+ 			if (user->fpsimd)
+ 				goto invalid;
+ 
+-			if (size < sizeof(*user->fpsimd))
+-				goto invalid;
+-
+ 			user->fpsimd = (struct fpsimd_context __user *)head;
+ 			break;
+ 
+@@ -527,9 +530,6 @@ static int parse_user_sigframe(struct user_ctxs *user,
+ 			if (user->sve)
+ 				goto invalid;
+ 
+-			if (size < sizeof(*user->sve))
+-				goto invalid;
+-
+ 			user->sve = (struct sve_context __user *)head;
+ 			break;
+ 
+@@ -540,9 +540,6 @@ static int parse_user_sigframe(struct user_ctxs *user,
+ 			if (user->za)
+ 				goto invalid;
+ 
+-			if (size < sizeof(*user->za))
+-				goto invalid;
+-
+ 			user->za = (struct za_context __user *)head;
+ 			break;
+ 
 
 -- 
 2.30.2
