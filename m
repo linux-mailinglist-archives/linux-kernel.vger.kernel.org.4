@@ -2,113 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D9365BB30
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AE865BB32
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbjACHZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 02:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S236904AbjACH1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 02:27:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbjACHZm (ORCPT
+        with ESMTP id S236902AbjACH0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 02:25:42 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CFCB1F5
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 23:25:39 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1433ef3b61fso35907598fac.10
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 23:25:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0nNMMGww+HESuJGrtt7OTDK73JOC6okX5AlTUFO5dvk=;
-        b=FtG8AZqUStGiK435qQBb7ytOLII+YMPdVaAkYc/9/Uzr0TZwLIKY/0OYEBqvyIdmDY
-         9DUfb0Zn6ECxYb9hWEXBCN1Vgu5wQq+k+nFgTIKAAUSK5hwfmd+sMiZKJpCkloyQIyDU
-         u78pfQTTwOt587HS7sJmbPpSvVliocvOUBCFJx2PfrblOaUqB4JicJM7SiVXjuj6Lrvs
-         s3+obgVWNK1et7exmCKO3ltbaiFo7G8BbFKULDFsHICDUT0MmcqDGrJsJtsNyrSR2CsK
-         Wpx9Gb6rN9dBlsuDSmdUV1/UsYYl0nBy3lqOY1pW6qXiacxHcapg66QMNhvUA3b8iwUo
-         rIFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0nNMMGww+HESuJGrtt7OTDK73JOC6okX5AlTUFO5dvk=;
-        b=GVSkg/eb8CNtXdzH7lFqewzxSDTauposhkaoItMF3W5oM0cbA9B0303nky5u6JFFcz
-         nwnA0BIMv0BKsM4X3eVdU5K5zvRUPneHmyyY3/Isv1GMoY0yxsLOTsVIoUd0rb4aR18+
-         1AiIcQvh1z0VX+D2tFfiJi/hM4S5iEus3z4Zrso5vbvpxAsMdVj/zCLjQ/U6L+8lLYbz
-         dAe5B7j8jXF6bAwv0wSSM5GV1LYgdughh1fKPx8fLjKrhKZvpvTFTGq0Evd14IEDcaJJ
-         waQ4crAEuUgEwn5E2TklDfvMGX0M0DEbZheaOb1rhKB7kn0DIH2Mn+1SuOzQd2vlhSZ4
-         g5qA==
-X-Gm-Message-State: AFqh2koSzvTDDC5e5sHXTc6KMoF1UOhvA2d+53eGsAkrZ4+3gq8XV24N
-        MOlHckf2fU+opTFxyqICrxOURSARB+MBqfD8vMc=
-X-Google-Smtp-Source: AMrXdXsy8TEbxowp/DYsB8PHvIyW1la1xn7HJzwbXABsFcGyFBRPjgpk3fBQcG/ygYhh/V8oUbre15YdjVFFtPbg15w=
-X-Received: by 2002:a05:6870:7f0e:b0:150:39c6:15ba with SMTP id
- xa14-20020a0568707f0e00b0015039c615bamr1383164oab.209.1672730739237; Mon, 02
- Jan 2023 23:25:39 -0800 (PST)
+        Tue, 3 Jan 2023 02:26:55 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053091124;
+        Mon,  2 Jan 2023 23:26:52 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pCbgj-00DN68-DB; Tue, 03 Jan 2023 15:26:22 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 03 Jan 2023 15:26:21 +0800
+Date:   Tue, 3 Jan 2023 15:26:21 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LinuxKernelMailingList@gondor.apana.org.au,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: Re: [PATCH] crypto: sun8i-ss - Remove GFP_DMA and add DMA alignment
+ padding
+Message-ID: <Y7PYnb+oQpo7CI+N@gondor.apana.org.au>
+References: <Y4nDL50nToBbi4DS@gondor.apana.org.au>
+ <Y4xpGNNsfbucyUlt@infradead.org>
+ <Y47BgCuZsYLX61A9@gondor.apana.org.au>
+ <Y47g7qO8dsRdxCgf@infradead.org>
+ <Y47+gxbdKR03EYCj@gondor.apana.org.au>
+ <Y61WrVAjjtAMAvSh@gondor.apana.org.au>
+ <Y7PQbNrgs2EvkXMB@Red>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:5e17:b0:e7:8a4b:fe30 with HTTP; Mon, 2 Jan 2023
- 23:25:38 -0800 (PST)
-Reply-To: kreditlinel25@gmail.com
-From:   INFO <shivdvlbind62986@gmail.com>
-Date:   Mon, 2 Jan 2023 23:25:38 -0800
-Message-ID: <CABQZbM9vdkTo_oubh_nmTMDmtecqi450vNhZ=m5Rd=XfvngmZA@mail.gmail.com>
-Subject: lening
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:35 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 HK_RANDOM_ENVFROM Envelope sender username looks random
-        *  1.0 HK_RANDOM_FROM From username looks random
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [kreditlinel25[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [shivdvlbind62986[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [shivdvlbind62986[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7PQbNrgs2EvkXMB@Red>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 03, 2023 at 07:51:24AM +0100, Corentin Labbe wrote:
+.
+> Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+> Tested-on: sun8i-a83t-bananapi-m3
+> Acked-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+
+Thanks,
+
+> This means that lot of other crypto driver (sun8i-ce, amlogic, etc...) I maintain need the same fix, right ?
+
+I checked the other drivers and none of them seem to be broken.
+Only DMA from the device (DMA_FROM_DEVICE or DMA_BIDIRECTIONAL)
+need to be aligned appropriately.
+
+However, please do remove any unnecessary uses of GFP_DMA in those
+drivers.
+
+Cheers,
 -- 
-Goede dag,
-
-   Wij zijn gespecialiseerd in het verstrekken van leningen voor
-bedrijven, projecten, zakelijke en persoonlijke leningen tegen een
-rentepercentage van 2% per jaar.
-
-Wij bieden: -
-* Investeringen in projectleningen
-* Investeringen in zakelijke leningen
-* Persoonlijke Lening Investeringen
-
-Neem contact met ons op voor meer details.
-
-Ondergetekende,
-Online reclamebureau.
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
