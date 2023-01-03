@@ -2,144 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F49C65C43E
+	by mail.lfdr.de (Postfix) with ESMTP id D1FB165C440
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbjACQvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S238194AbjACQu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:50:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233711AbjACQu6 (ORCPT
+        with ESMTP id S238131AbjACQuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:50:58 -0500
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AAC12D28;
-        Tue,  3 Jan 2023 08:50:28 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id 36F072B06721;
-        Tue,  3 Jan 2023 11:50:23 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 03 Jan 2023 11:50:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1672764622; x=1672771822; bh=OAEx+kWOpU
-        s1ovkCOUPYt4BrguZtb4ZebjcqYHg4/yk=; b=SAmVbdnFaBzWfpnFGzV4NSDsrp
-        w/oJNVKvqGJxgxv+5cuJf5nW1Un9vV0Dp+Wz/8PRNAPQi9a6E9iB6P7fPKvjIxDc
-        sL4HDcHtwrl7pXHk7V3MgPQWqu05FxSbB9sUvpWN9KKGs4x8vL+qIY/u0O2fp32A
-        WAqTXa3KI/HWcNdqPcB+rYggrEcH15MpJ6Rkc4JPKXgau/UtLCWzNDxTa3kwfqeV
-        zzXlg1coYrCQvujOFEC7eWm3ZTrIXSENwnHXqfIt0HR4tRDATgdIYXJK/5Nklyc9
-        aK1RL7dvFw5nAF9DzxYqmKbi/kWMx9keHmBbHeA7s/EWyr+VxGNjwhtKapYA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672764622; x=1672771822; bh=OAEx+kWOpUs1ovkCOUPYt4BrguZt
-        b4ZebjcqYHg4/yk=; b=Os1ym1lstngE1yum7vioqidaf0tpUcIIddLV9oaWSOfr
-        Bp/LOs8s1eDc1lv7yge46iL+oTo/wMkxx27m9Yc6N3aV2TFIrYSkjiZdPQ8Dixm+
-        MdtzUXOxkrF8n3jv67bTVLyIeEpdtwhZZbr6DRy6eSsxHEeLTvrwGMCkx5wOQru3
-        LcNlUNWCaMJK5m1qqNpuLPnUa66cfWOJJRIOlVox9K7/RRqPZ9SJl0dYQTo66EU5
-        cPPwriRMEe+ZdKHvf4o8MaE+JiGSbpGlrJv8+wqaIVkBvWZfTB6lLcEQvdFquzkx
-        fChHnH7XWHxMTXIIMydoHXwDKugKo6A7KVet7ij5Nw==
-X-ME-Sender: <xms:zVy0Y_OMAKlPmEOZgHU3a6aRFfK4FxfhdvwVIklHrp_YRo8o61lqRQ>
-    <xme:zVy0Y59x2GX8W2BoN-3zVKBdj25Ajq9AP-OrqTzquZvM2wI-7Ix0NtTzj27YrKddM
-    tZvWCMnOIl-fW65cx4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeggdelfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpefhfeehgfejkedugeeutdffveehheeugfehgeelleefudeluedtgfejffeihffh
-    heenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdguvggsihgrnhdrohhrghenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
-    nhgusgdruggv
-X-ME-Proxy: <xmx:zVy0Y-SSMWtvnv9ZxmJhry6mi4BiUHZLH8otfjVaL1ZvtYqw_HgNxg>
-    <xmx:zVy0YzvPJ5VhbjYKcO9WXl04J_Mdvuydp68lACKnB0sC0DcdlpA9uw>
-    <xmx:zVy0Y3cCyrZtBDo3MJ4Hdt1EHAWboT_3ZNKcff2QNMqRJXhlhsucqg>
-    <xmx:zly0Y2fTU14izRdahtJutvIauGNC4i8YnSE3hUn7fbjaIA917RmO5fEWBSI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 465BAB60086; Tue,  3 Jan 2023 11:50:21 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <8fea3494-1d1f-4f64-b525-279152cf430b@app.fastmail.com>
-In-Reply-To: <Y7RVkjDC3EjQUCzM@FVFF77S0Q05N>
-References: <20221219153525.632521981@infradead.org>
- <20221219154119.154045458@infradead.org> <Y6DEfQXymYVgL3oJ@boqun-archlinux>
- <Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net>
- <Y7QszyTEG2+WiI/C@FVFF77S0Q05N> <Y7Q1uexv6DrxCASB@FVFF77S0Q05N>
- <Y7RVkjDC3EjQUCzM@FVFF77S0Q05N>
-Date:   Tue, 03 Jan 2023 17:50:00 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Mark Rutland" <mark.rutland@arm.com>,
-        "Peter Zijlstra" <peterz@infradead.org>
-Cc:     "Boqun Feng" <boqun.feng@gmail.com>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Will Deacon" <will@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
-        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, joro@8bytes.org,
-        suravee.suthikulpanit@amd.com,
-        "Robin Murphy" <robin.murphy@arm.com>, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, "Pekka Enberg" <penberg@kernel.org>,
-        "David Rientjes" <rientjes@google.com>,
-        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Roman Gushchin" <roman.gushchin@linux.dev>,
-        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, linux-crypto@vger.kernel.org,
-        iommu@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC][PATCH 05/12] arch: Introduce arch_{,try_}_cmpxchg128{,_local}()
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 Jan 2023 11:50:15 -0500
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508B111A21;
+        Tue,  3 Jan 2023 08:50:14 -0800 (PST)
+Received: by mail-io1-f42.google.com with SMTP id g20so16859459iob.2;
+        Tue, 03 Jan 2023 08:50:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mWejrGeSRIlJiaReS6MCqU3ykcYuOMfyT/yrgJKRHfE=;
+        b=Dcl9Zb+3xWbB9mtmT7KOgQ/DS/jp72LbqqEqGQs48sk0eSOYAzAmUdfxkx0b/t+0Kq
+         9wU2MGWMFMyKEsQXSIDU30Dk4ENBMN22/xVbajOVvnl8tI4a+BaKsVpFsj/Abr2khCg7
+         E0aI3ERCi2aWBOuxEi1FaPLwVWDFDbKw84laeEFGbGAdgDwfWbKFV0ETTueC62ksyuNP
+         u7/n7N8luLhFQ9AzMZ04IZUVQ0eLudOKtvWz5Z4vm9zFLShrwekMOUfTfgAwBB7USCeB
+         ui0u4YW62EB+7f5mnvEo1C+TN53iXVVyLpNcpFgK75gOs3uxL8MtynGOo0XtR/3g9Gq6
+         k9kA==
+X-Gm-Message-State: AFqh2kpUXJLvBhqMuQqnewMOEqPs05b6G4SZhz+4w2vh9I9ibc0RTBR9
+        HIS4NPX+GOcvlVSx+Zr/a9DMpaykeCsQ2F+FS0U=
+X-Google-Smtp-Source: AMrXdXsGRcban7+9+RlDswqCmNvApAK7PNpjc5gdFAfrPGp9WyWu6BrHHiaZnzzObalaZDB23HINJV45kkPijVha4Gg=
+X-Received: by 2002:a02:c994:0:b0:372:1520:a22a with SMTP id
+ b20-20020a02c994000000b003721520a22amr2728983jap.230.1672764613530; Tue, 03
+ Jan 2023 08:50:13 -0800 (PST)
+MIME-Version: 1.0
+References: <20221229124728.66515-1-yangjihong1@huawei.com> <Y7MEWK/z19QCaNoi@kernel.org>
+In-Reply-To: <Y7MEWK/z19QCaNoi@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 3 Jan 2023 08:50:02 -0800
+Message-ID: <CAM9d7cjcWKBephb5p9ZPU2+wDAz04DYQJoKczORioD=es10hPw@mail.gmail.com>
+Subject: Re: [PATCH v2] perf record: Fix coredump with --overwrite and --max-size
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Yang Jihong <yangjihong1@huawei.com>, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        jiwei.sun@windriver.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023, at 17:19, Mark Rutland wrote:
-> On Tue, Jan 03, 2023 at 02:03:37PM +0000, Mark Rutland wrote:
->> On Tue, Jan 03, 2023 at 01:25:35PM +0000, Mark Rutland wrote:
->> > On Tue, Dec 20, 2022 at 12:08:16PM +0100, Peter Zijlstra wrote:
-
->> ... makes GCC much happier:
+On Mon, Jan 2, 2023 at 8:20 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
 >
->> ... I'll go check whether clang is happy with that, and how far back that can
->> go, otherwise we'll need to blat the high half with a separate constaint that
->> (ideally) doesn't end up allocating a pointless address register.
+> Em Thu, Dec 29, 2022 at 12:47:28PM +0000, Yang Jihong escreveu:
+> > When --overwrite and --max-size options of perf record are used together,
+> > a segmentation fault occurs. The following is an example:
+> >
+> >  # perf record -e sched:sched* --overwrite --max-size 1M -a -- sleep 1
+> >   [ perf record: Woken up 1 times to write data ]
+> >   perf: Segmentation fault
+> >   Obtained 1 stack frames.
+> >   [0xc4c67f]
+> >   Segmentation fault (core dumped)
+> >
+> > backtrace of the core file is as follows:
+> >
+> >   #0  0x0000000000417990 in process_locked_synthesized_event (tool=0x0, event=0x15, sample=0x1de0, machine=0xf8) at builtin-record.c:630
+> >   #1  0x000000000057ee53 in perf_event__synthesize_threads (nr_threads_synthesize=21, mmap_data=<optimized out>, needs_mmap=<optimized out>, machine=0x17ad9b0, process=<optimized out>, tool=0x0) at util/synthetic-events.c:1950
+> >   #2  __machine__synthesize_threads (nr_threads_synthesize=0, data_mmap=<optimized out>, needs_mmap=<optimized out>, process=<optimized out>, threads=0x8, target=0x8, tool=0x0, machine=0x17ad9b0) at util/synthetic-events.c:1936
+> >   #3  machine__synthesize_threads (machine=0x17ad9b0, target=0x8, threads=0x8, needs_mmap=<optimized out>, data_mmap=<optimized out>, nr_threads_synthesize=0) at util/synthetic-events.c:1947
+> >   #4  0x000000000040165d in record__synthesize (tail=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2010
+> >   #5  0x0000000000403989 in __cmd_record (argc=<optimized out>, argv=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2810
+> >   #6  0x00000000004196ba in record__init_thread_user_masks (rec=0xbe2520 <record>, cpus=0x17a65f0) at builtin-record.c:3837
+> >   #7  record__init_thread_masks (rec=0xbe2520 <record>) at builtin-record.c:3938
+> >   #8  cmd_record (argc=1, argv=0x7ffdd692dc60) at builtin-record.c:4241
+> >   #9  0x00000000004b701d in pager_command_config (var=0x0, value=0x15 <error: Cannot access memory at address 0x15>, data=0x1de0) at perf.c:117
+> >   #10 0x00000000004b732b in get_leaf_frame_caller_aarch64 (sample=0xfffffffb, thread=0x0, usr_idx=<optimized out>) at util/arm64-frame-pointer-unwind-support.c:56
+> >   #11 0x0000000000406331 in execv_dashed_external (argv=0x7ffdd692d9e8) at perf.c:410
+> >   #12 run_argv (argcp=<synthetic pointer>, argv=<synthetic pointer>) at perf.c:431
+> >   #13 main (argc=<optimized out>, argv=0x7ffdd692d9e8) at perf.c:562
+> >
+> > The reason is that record__bytes_written accesses the freed memory rec->thread_data,
+> > The process is as follows:
+> >   __cmd_record
+> >     -> record__free_thread_data
+> >       -> zfree(&rec->thread_data)         // free rec->thread_data
+> >     -> record__synthesize
+> >       -> perf_event__synthesize_id_index
+> >         -> process_synthesized_event
+> >           -> record__write
+> >             -> record__bytes_written     // access rec->thread_data
+> >
+> > we only need to check the value of done first.
+> > Also add variable check in record__bytes_written for code hardening,
+> > and save bytes_written separately to reduce one calculation.
+> >
+> > Fixes: 6d57581659f7 ("perf record: Add support for limit perf output file size")
+> > Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> > ---
+> >
+> > Changes since v1:
+> >  - Add variable check in record__bytes_written for code hardening.
+> >  - Save bytes_written separately to reduce one calculation.
+> >  - Remove rec->opts.tail_synthesize check.
 >
-> Hmm... from the commit history it looks like GCC prior to 5.1 might not be
-> happy with that, but that *might* just be if we actually do arithmetic on the
-> value, and we might be ok just using it for memroy effects. I can't currently
-> get such an old GCC to run on my machines so I haven't been able to check.
+> Namhyung, are you ok with this now?
+>
+> - Arnaldo
+>
+> >  tools/perf/builtin-record.c | 26 +++++++++++++++++---------
+> >  1 file changed, 17 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> > index 29dcd454b8e2..acba9e43e519 100644
+> > --- a/tools/perf/builtin-record.c
+> > +++ b/tools/perf/builtin-record.c
+> > @@ -230,16 +230,29 @@ static u64 record__bytes_written(struct record *rec)
+> >       u64 bytes_written = rec->bytes_written;
+> >       struct record_thread *thread_data = rec->thread_data;
+> >
+> > +     if (thread_data == NULL)
+> > +             return bytes_written;
+> > +
 
-gcc-5.1 is the oldest (barely) supported compiler, the minimum was
-last raised from gcc-4.9 in linux-5.15. If only gcc-4.9 and older are
-affected, we're good on mainline but may still want a fix for stable
-kernels.
+Then it won't count bytes written by threads, right?
+I think it needs to be saved somewhere.
 
-I checked that the cross-compiler binaries from [1] still work, but I noticed
-that this version is missing the native aarch64-to-aarch64 compiler (x86 to
-aarch64 and vice versa are there), and you need to install libmpfr4 [2]
-as a dependency. The newer compilers (6.5.0 and up) don't have these problems.
+Thanks,
+Namhyung
 
-     Arnd
 
-[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/arm64/5.5.0/
-[2] http://ftp.uk.debian.org/debian/pool/main/m/mpfr4/libmpfr4_3.1.5-1_arm64.deb
+> >       for (t = 0; t < rec->nr_threads; t++)
+> >               bytes_written += thread_data[t].bytes_written;
+> >
+> >       return bytes_written;
+> >  }
+> >
+> > -static bool record__output_max_size_exceeded(struct record *rec)
+> > +static void record__check_output_max_size_exceeded(struct record *rec)
+> >  {
+> > -     return rec->output_max_size &&
+> > -            (record__bytes_written(rec) >= rec->output_max_size);
+> > +     u64 bytes_written;
+> > +
+> > +     if (rec->output_max_size == 0 || done)
+> > +             return;
+> > +
+> > +     bytes_written = record__bytes_written(rec);
+> > +     if (bytes_written >= rec->output_max_size) {
+> > +             fprintf(stderr, "[ perf record: perf size limit reached (%" PRIu64 " KB),"
+> > +                     " stopping session ]\n", bytes_written >> 10);
+> > +
+> > +             done = 1;
+> > +     }
+> >  }
+> >
+> >  static int record__write(struct record *rec, struct mmap *map __maybe_unused,
+> > @@ -260,12 +273,7 @@ static int record__write(struct record *rec, struct mmap *map __maybe_unused,
+> >       else
+> >               rec->bytes_written += size;
+> >
+> > -     if (record__output_max_size_exceeded(rec) && !done) {
+> > -             fprintf(stderr, "[ perf record: perf size limit reached (%" PRIu64 " KB),"
+> > -                             " stopping session ]\n",
+> > -                             record__bytes_written(rec) >> 10);
+> > -             done = 1;
+> > -     }
+> > +     record__check_output_max_size_exceeded(rec);
+> >
+> >       if (switch_output_size(rec))
+> >               trigger_hit(&switch_output_trigger);
+> > --
+> > 2.30.GIT
+>
+> --
+>
+> - Arnaldo
