@@ -2,88 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50B665C9B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 23:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635EA65C9B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 23:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233956AbjACWbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 17:31:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S233840AbjACWec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 17:34:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238068AbjACWbL (ORCPT
+        with ESMTP id S230480AbjACWe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 17:31:11 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266C3E24;
-        Tue,  3 Jan 2023 14:31:05 -0800 (PST)
-Received: from fedcomp.. (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 86DEC419E9CB;
-        Tue,  3 Jan 2023 22:31:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 86DEC419E9CB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1672785062;
-        bh=nQsquKCgBcLgQieVOG04ot3VHyn1Sman9uwZ5WiSKhw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R6QGFxZjzbCS2e4JKCul3q4pTmnJIcqTxPs1u827cjvYkrwv89hXj7nHQY2VC6UWA
-         QdHZYTU5XZ4ZgsBmaiJGwJRO7ZWv6hfvdF38PgAGeBGwj4sAGiza7zAKlOnBn4WKjO
-         FiTxSWjlGL8wXovie2FeOc2VOcIvRheqT0p9cKJw=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Zekun Shen <bruceshenzk@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] wifi: ath9k: hif_usb: clean up skbs if ath9k_hif_usb_rx_stream() fails
-Date:   Wed,  4 Jan 2023 01:30:52 +0300
-Message-Id: <20230103223052.303666-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <875ydn49h2.fsf@toke.dk>
-References: 
+        Tue, 3 Jan 2023 17:34:28 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77A2387
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 14:34:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672785267; x=1704321267;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gz1Bsl2VXdVsmjjQsG0xEXDmVpr2BN/Ua1eTj70vVD0=;
+  b=Ugz7/Tf3kEW8V5m+5PkljJbCRbcwXbKelsmKZZiNWxMr5gRuxeFOZuYC
+   ixKD3F4rj72wejZ+aINGK6/8uENHonCgTBsoB172ipxrXOkrdAboT2I5d
+   JwA9HHchvtTPeEK1vMuACaO33nzXgxLsP2grcrQHozcNnk5+GNE/I3A6/
+   OKGpSmw3i8+X1apmuwPAeBWrGA/n1XT/PplIDgUNOQjD6n0AYFApb8lK7
+   KFo6ISs27ti4hCcdyvcxDgqHo7Yt2ARY3/z2YPe5phVMFxyHvlsinEcYs
+   dt/gQuHOPa4k3NUnArZlJG1/T+PxNVua+sy/gRRkJoOqbcBUtz5sp3B0F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="302148148"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="302148148"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 14:34:27 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="779002611"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="779002611"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 14:34:27 -0800
+From:   Tony Luck <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fan Du <fan.du@intel.com>
+Subject: [PATCH] x86/mce: Mask out non-address bits from machine check bank
+Date:   Tue,  3 Jan 2023 14:34:16 -0800
+Message-Id: <20230103223416.310026-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hmm, so in the other error cases (if SKB allocation fails), we just
-> 'goto err' and call the receive handler for the packets already in
-> skb_pool. Why can't we do the same here?
+Systems that support various memory encryption schemes (MKTME, TDX, SEV)
+use high order physical address bits to indicate which key should be
+used for a specific memory location.
 
-If SKB allocation fails, then the packets already in skb_pool should be
-processed by htc rx handler, yes. About the other two cases: if pkt_tag or
-pkt_len is invalid, then the whole SKB is considered invalid and dropped.
-That is what the statistics macros tell. So I think we should not process
-packets from skb_pool which are associated with a dropped SKB. And so just
-free them instead.
+When a memory error is reported, some systems may report those key
+bits in the IA32_MCi_ADDR machine check MSR. This is legitimate because
+the Intel SDM has a footnote for the contents of the address register
+that says: "Useful bits in this field depend on the address methodology
+in use when the register state is saved."
 
-> Also, I think there's another bug in that function, which this change
-> will make worse? Specifically, in the start of that function,
-> hif_dev->remain_skb is moved to skb_pool[0], but not cleared from
-> hif_dev itself. So if we then hit the invalid check and free it, the
-> next time the function is called, we'll get the same remain_skb pointer,
-> which has now been freed.
+Note: I don't know if any AMD systems include key bits in the reported
+address, if they do, they also need this fix. If not, it is harmless.
 
-Sorry, I missed that somehow.
-Moving 'hif_dev->rx_remain_len = index - MAX_RX_BUF_SIZE;' after
-"ath9k_htc: RX memory allocation error\n" error path should be done, too.
-hif_dev->rx_remain_len is zeroed after remain_skb processing, so we cannot
-reference hif_dev->remain_skb unless we explicitly allocate successfully a
-new one (making rx_remain_len non zero).
+Add a new #define MCI_ADDR_PHYSADDR for the mask of valid physical
+address bits within the machine check bank address register. Use this
+mask for recoverable machine check handling and in the EDAC driver to
+ignore any key bits that may be present.
 
-> So I think we'll need to clear out hif_dev->remain_skb after moving it
-> to skb_pool. Care to add that as well?
+[Credit: fix is based on those proposed by Fan Du and Isaku Yamahata]
 
-Yes, this must be done. I'll add it to patch v3.
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Reported-by: Isaku Yamahata <isaku.yamahata@intel.com>
+Reported-by: Fan Du <fan.du@intel.com>
+---
+ arch/x86/include/asm/mce.h     |  3 +++
+ arch/x86/kernel/cpu/mce/core.c | 14 +++++++++-----
+ drivers/edac/skx_common.c      |  2 +-
+ 3 files changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 6e986088817d..a8eef87fb12a 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -88,6 +88,9 @@
+ #define  MCI_MISC_ADDR_MEM	3	/* memory address */
+ #define  MCI_MISC_ADDR_GENERIC	7	/* generic */
+ 
++/* MCi_ADDR register defines */
++#define MCI_ADDR_PHYSADDR	GENMASK(boot_cpu_data.x86_phys_bits - 1, 0)
++
+ /* CTL2 register defines */
+ #define MCI_CTL2_CMCI_EN		BIT_ULL(30)
+ #define MCI_CTL2_CMCI_THRESHOLD_MASK	0x7fffULL
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 2c8ec5c71712..949705bdb2f3 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -579,7 +579,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
+ 	    mce->severity != MCE_DEFERRED_SEVERITY)
+ 		return NOTIFY_DONE;
+ 
+-	pfn = mce->addr >> PAGE_SHIFT;
++	pfn = (mce->addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
+ 	if (!memory_failure(pfn, 0)) {
+ 		set_mce_nospec(pfn);
+ 		mce->kflags |= MCE_HANDLED_UC;
+@@ -1308,6 +1308,7 @@ static void kill_me_maybe(struct callback_head *cb)
+ {
+ 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
+ 	int flags = MF_ACTION_REQUIRED;
++	unsigned long pfn;
+ 	int ret;
+ 
+ 	p->mce_count = 0;
+@@ -1316,9 +1317,10 @@ static void kill_me_maybe(struct callback_head *cb)
+ 	if (!p->mce_ripv)
+ 		flags |= MF_MUST_KILL;
+ 
+-	ret = memory_failure(p->mce_addr >> PAGE_SHIFT, flags);
++	pfn = (p->mce_addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
++	ret = memory_failure(pfn, flags);
+ 	if (!ret) {
+-		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
++		set_mce_nospec(pfn);
+ 		sync_core();
+ 		return;
+ 	}
+@@ -1340,11 +1342,13 @@ static void kill_me_maybe(struct callback_head *cb)
+ static void kill_me_never(struct callback_head *cb)
+ {
+ 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
++	unsigned long pfn;
+ 
+ 	p->mce_count = 0;
+ 	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
+-	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
+-		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
++	pfn = (p->mce_addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
++	if (!memory_failure(pfn, 0))
++		set_mce_nospec(pfn);
+ }
+ 
+ static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callback_head *))
+diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
+index f0f8e98f6efb..806986f03177 100644
+--- a/drivers/edac/skx_common.c
++++ b/drivers/edac/skx_common.c
+@@ -657,7 +657,7 @@ int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
+ 
+ 	memset(&res, 0, sizeof(res));
+ 	res.mce  = mce;
+-	res.addr = mce->addr;
++	res.addr = mce->addr & MCI_ADDR_PHYSADDR;
+ 
+ 	/* Try driver decoder first */
+ 	if (!(driver_decode && driver_decode(&res))) {
+-- 
+2.38.1
+
