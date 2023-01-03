@@ -2,181 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254C865C8DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA36465C8E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238089AbjACVYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 16:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
+        id S233870AbjACVZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 16:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbjACVYE (ORCPT
+        with ESMTP id S238230AbjACVZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:24:04 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFDFFCDD;
-        Tue,  3 Jan 2023 13:24:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672781043; x=1704317043;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=PuiZtYtS9/n9911i2Pdw9QoQ7L2tzXXTpLObQ1cQRpc=;
-  b=U8ZNGvLvk78V7dFev/MBii1H78oyAtdSsopR+qu/u/nt0cHk1nwqWTio
-   JQpcTFLwOjzv0ZE1JLiFdPiDk05SY+PyzHzXG3e/06Q7nxJR3PfRwEctf
-   D+YgSrFWvF2/762ZUzVTGwFRoADmGI74qKj6puQdjof8Jv5BaLRGY4rrc
-   jcAauWi4z0+HSJ+2wvy9Jmzr1Buchi6G92Wqyf2KRDYZAgVq50frOvH/N
-   b9H8rlQoN4w16VUGwjK88O42zIV7S+n/vW6PG23TXID3lbcPBJKPvzw+r
-   xW8js7yc5Xe2pnI1VVTIL5xdjjOviu+BnZ2LuG2Q9yjPcnIfAc3GKCC4o
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="408016812"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="408016812"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 13:24:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="656898884"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="656898884"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Jan 2023 13:24:03 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 3 Jan 2023 13:24:02 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 3 Jan 2023 13:24:02 -0800
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.47) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 3 Jan 2023 13:24:02 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H3ZhCNd7dlmx/Y5bPRB62wSGojRjZILXWuEIUFThrAMblsZ61fYt2/tAbqNPytt2ZdtA89jAv4opZAwJel14qOd8jrXYBMLRsGI7bnMHnsZr5lWnq6b6OvqmIIHZrWVAV4OjceSmJrraGW0YtbDEgcfGD15Fam3CK6XYmpWGWTnyAlJiW2nzrfblSRxA5kgRnQ8VH/H+UBhd0x8RUP60oMahmw9bkF3YJqEgcMHFLHJMaFNzECmkmdPiwOcaf9MgM1wnGomyQgNZBQxJR8q7JjpTUKZoHryyPk461RLFT3hNkKtrGHB5MFME/uuv/tCK2xLn/IQSkm5Ql9KIPxHpaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PuiZtYtS9/n9911i2Pdw9QoQ7L2tzXXTpLObQ1cQRpc=;
- b=GiVjUQflBo20s1U/7OG1L3Es7Gse8d00MWLYHGfxUy6e5Iewkr/z7CqMKXcDTjiQ25MQcgaLF0qWYgpvBB+vYVAdXr1Md9eJFScxLEW6MLtdhepVZxJIEzN7CmZel0y8npqR6DbTfyiRfVMuSWaPlxVABK0ELoJuq0+v+T81FsKEy0hdlnxKJ8r7W+SnzNAZxJGFBXSjMoA/RshcgOh/tWH1/snfmfzbM36s0I5CFety2/WzLijNnPodUg4oy3irjr1vdOYTxdNmPFSMsvDHr61pzgcm9ghZ3QYUQQn7eY+lQOqavZgQxd/INfJ6I2T3R45fgtEqCeIJXy+9/DosOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by PH7PR11MB7145.namprd11.prod.outlook.com (2603:10b6:510:1ec::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
- 2023 21:24:00 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::3c14:aeca:37e2:c679]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::3c14:aeca:37e2:c679%7]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
- 21:24:00 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-CC:     "Brown, Len" <len.brown@intel.com>,
-        "kvijayab@amd.com" <kvijayab@amd.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Mario.Limonciello@amd.com" <Mario.Limonciello@amd.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "bpetkov@amd.com" <bpetkov@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "santosh.shukla@amd.com" <santosh.shukla@amd.com>
-Subject: RE: [PATCH] x86/acpi/boot: Do not register processors that cannot be
- onlined for x2apic
-Thread-Topic: [PATCH] x86/acpi/boot: Do not register processors that cannot be
- onlined for x2apic
-Thread-Index: AQHZHFU/90Ciuxi6gUqzVTlaWT7ada6NOfAA
-Date:   Tue, 3 Jan 2023 21:24:00 +0000
-Message-ID: <SJ1PR11MB6083AD01A91B546343259939FCF49@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20221228114558.3504-1-kvijayab@amd.com>
- <0e299876606352ca868d7b71991c66a1c1d361cb.camel@intel.com>
- <CAJZ5v0hzo7zSWjbC2h4S+B1ZShmrz8q_TtuUTGRGarhdh2HA+w@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hzo7zSWjbC2h4S+B1ZShmrz8q_TtuUTGRGarhdh2HA+w@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|PH7PR11MB7145:EE_
-x-ms-office365-filtering-correlation-id: 14c23ef0-8bdd-4f41-7a59-08daedd0d4e7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JtzUH3gRKABLL0iT/3mpdWCxonlzKPhkZYGkbh8EcRO/I1frcx05HNgyxaMH9dfwGwhJkaGeOUjLBG1VCD/h0LASF+KJVi08R3iJhGlxnl7k9TZOGglmWJAoBXOr/ELDdAw1ex3i8kK0abUrFddZJLfcdyLloJzPm53zHlSjpZGKuiDolQDGo6l097gNRRHpa7Xyz9nAG1ilEA5kw0rP3vvSQBVHmhGvNf/q39bwP78NGnA9JMvof+G6HIpKU6UF3ddICNBjtH8b+L4/ZzYjrkl3WoLNRgqPI9J4JWKg1agU5rFaRSpZa7JC9N+5OzI+s14mRQJzt7y/HmVvX8T9yABqBr0d3vaq4d9AbHKJQ16zoY+wilVEKYyoR2Xd6PDzQRElKJrYRldmyRK+h8CpxdW8X8dOtizSvAjS7wviTefZU3c9Vw6SHS7GPNcc/LQnMcdm7VQ69Q1JfeaqWfYAd8VKr4DTvYpdheHNj95E21Bhbgv4kbYgIjHJ65Lirb4rbqIagUOQuEV7pmzGFZ/0TF3TnZevzLxLvUK+PHqvhAsNcpHAIou8Kt+H40Xf9xzsM8BBlDpcAud1jRMsmkz9GxbeJZAl2d5Giq3/INHejQ4hhSVtImH5khNA+oyeI242ROQasuWq4xb7eNDUBSc3KwA/lEatpnVZOTegG3Ol87oHf8spptw5C6Zb8pcYroGl9lKTiqwXB0QppUbi6WZii8tm6PpI/3oltYFaI2+ceBE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(39860400002)(376002)(366004)(396003)(136003)(451199015)(4744005)(2906002)(8936002)(52536014)(7416002)(5660300002)(41300700001)(86362001)(33656002)(55016003)(38100700002)(38070700005)(122000001)(82960400001)(66556008)(7696005)(71200400001)(186003)(26005)(110136005)(54906003)(6636002)(9686003)(316002)(8676002)(478600001)(6506007)(64756008)(66446008)(66476007)(4326008)(76116006)(66946007)(22166008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?a0pSNEZnN0FhTVd4SFhCbytJL1pWc0dwRVVJaEllWm53MDRPS2RBdHAzcWt4?=
- =?utf-8?B?TENDMmZKRmt1ZFB5RGhzZXo5OEpaZ203aHNZeFNFS0IrZndGRnBSQ1hoMXZX?=
- =?utf-8?B?aXVlYVl6V1NLZVlLaC9oUUZWa2VkM3ZzWENNRVJPVE9XcGkwN0dEck5rSjNY?=
- =?utf-8?B?S1JheXlreWJmTU5wVlduN0RLaW9oOWtqYVU2MGdZdW1uaGlUdlVoV1UvNDgv?=
- =?utf-8?B?MTA2NEFMdGFoZlB3ZW1YRnlpeEJKS2k2Sk9ObEhUaENWYTBzTFNtdkFYd2Vy?=
- =?utf-8?B?Z0FRd3dsSXdmbm9sNmFITDdSUHlPUVMzR05zSkNONDBtMHRiT3FZM1ZwS2VJ?=
- =?utf-8?B?d0l5T0pVVlozM2p6UnpaNC9wckNTdXkweVUzaGVxdjRPM3NBcWRpaHpqdWNt?=
- =?utf-8?B?ZFB6OEMvOHpHS2pjZ2hhU2xjbFIxeTdoNUJxVFcyZzlKMnpSTmhGUVJqdVN6?=
- =?utf-8?B?b2RKSUtKaHVLeC9tc1g4QUtwZTdwanlMSDFZVGwrODRCWk5wSHAwVE5XazJ0?=
- =?utf-8?B?WVpEZENlcUI3M2J5ZWdrQ3VzTHZVRDhHaXNQU1UvaExKbkhMS0prY29HM20v?=
- =?utf-8?B?a0I3ekxLaVE3YzhrdlluMXdGb05LWUM4WWhSMUpjZHRSSWM5d045c1hXVEN3?=
- =?utf-8?B?a2FlaTZtVU94L0RuR3NORlB1bzdHdkRSeXF4R1pKUUZ3UWM0cytWWFQzbmta?=
- =?utf-8?B?VThLZkNaN20xUk5TazRBaE9LMGwvZkNGL0haMTBNMUpaYWhyMTRTZWtEcmph?=
- =?utf-8?B?a01lT1RIVjNMQnE4US9maW1teHNzNXY0a2xiUTVRWlVaTUVwQ1JJMEg1MFJk?=
- =?utf-8?B?ZlhQVlJoK1dvTDNUUlVnbTZYMW90Qk94bkpWaDlLWVFzTUllaGErTGVLcU5L?=
- =?utf-8?B?a29rWmdTUVFzSmhuSDNadnZuTkQveGV3eVdEVHN6RjZoRmdDRk0rWTdBeTRR?=
- =?utf-8?B?bEhHbGFubURZZEFIUjNsc0FWRk1lREQ3d2pPRG9IUmlmeDhoSDdtZ1RwdWlH?=
- =?utf-8?B?MXNqTEYyLzVZTHNHTWttUEx5dTJ3TFh3YUdXRDNmdm92eEdTWm1wM2dMeDc5?=
- =?utf-8?B?aUIvdkdzZmlJTWdsWWdwSnFtOGtZK1RjTnBKdERpcDRVckwwaG40ajlzSUYr?=
- =?utf-8?B?dVZkY0RsQTZ4UHZGVmNBSHlDK1RRT3Vvck16UlpsWFI3NWFKYlltZjhlRTlq?=
- =?utf-8?B?T3JzUWVreXpGY21EVkdQdjBiUC85SFFoaVI5cmp1VjNLYjh0NGIrWGdOYnpa?=
- =?utf-8?B?cVVoSmRicjFHMHM3TWMvbGtQWGhTelRoVjhJZytIY2lEek0wREZJb2FpVHJT?=
- =?utf-8?B?MHkyNEFMT3RjTlcxRGx0dTg3d3BJZlVoU1JQOWxHQTdTczc2UnRBUWIxZ082?=
- =?utf-8?B?c3lPZDZBWlpaSm9uRjdWZnVTSWVjeXR1anpnOXViWjNna1FSdVh6U1gyMHFS?=
- =?utf-8?B?ZnJ1ZE9Nc1cxUkxtSEs3VmR0T3JjQWZ2QVNzOUlYdTV2QmRKcDFrWEVwakp2?=
- =?utf-8?B?cThuRDBmZ2dNSHVuMUd2R3lEWmtuL0hyc3FsTTVLZzBlUWFETTlRSEY3WEhi?=
- =?utf-8?B?YTQ0VVRYUjFhdGpBVU5BeWNvL29ydFFVS3U1Z3VoUGxwZW5sNFlzN0hWSStD?=
- =?utf-8?B?M3RsczJJS3dyeHFTRVI5bUpOak41ek1PQm16MjYza0M1WDg1R1NRTXAwZGtV?=
- =?utf-8?B?K29TWjV3d1N1NGRaNmdWazdYejNPWHJBMzdXN2lmMUF2anliL3duSmk3TXFi?=
- =?utf-8?B?NWxhRktNVGhScWJhbTB0UHd4OFlETXY2Q3dZZFpZWStqNFhsM3d3TUdtSVpQ?=
- =?utf-8?B?OVE4NTF4Y0hSaERDVG82MzB4RkY5VDlOeVBrNTJaaUtwOWdzdmg1ZDBCR2Rs?=
- =?utf-8?B?MGhZa3ZDUFBWWVJqN1ZMMDFHQW1UZFFPSWVQRUIyV0xBVjJDUjhOamlFVXlO?=
- =?utf-8?B?MWtKTDdJZ0MzcDJDWEkrcUhsTmh2Rk9pV01kTjI2am5GYklaZGk0V1hXNE9Y?=
- =?utf-8?B?VUhRKzlPSjRLYWRlU2htN0NTcVRXYUpwNE0wZHpvZEtFY0FmMFMwSzlXZEZs?=
- =?utf-8?B?OWVwNk1vb0k5a1ZnUDJBM2g2MGVJUlBvTVVXTkNEVnY0akgzaFpWdm5LUEh1?=
- =?utf-8?Q?MfNAAFV96258nU7AVgZQPr3RY?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14c23ef0-8bdd-4f41-7a59-08daedd0d4e7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2023 21:24:00.6642
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m6Z5sum5q8eiWBRVO42jW9yGhQfyrJzt9Yb0l0IDXEyaskuMpRXM7lUh35V/ruT8PCYbt5AWkJhOiVZ8y/ypdg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7145
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 Jan 2023 16:25:40 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7996913F49
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 13:25:38 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id b2so33981296pld.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 13:25:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZUKV8XtdR9Wi29R6eAEUNYjmfBZwpc26xLflVPTdF70=;
+        b=hmzLco5GkMI78m65rJOjtshDE9OHs4WUD+ZoV6soHzsge2ezP/QV71N7ohi4JjzpDS
+         y3UOikUsRzLX6ubOwcdbnZjV0HuLQQChjawrybAiNFhEojD3bbj/e2SIdBh4GEQDydVa
+         K5jcW2K0wGVIlRbXlhfY4PpLhs3xMCrfXx+a8W9bi2em7OVAgdWaC2xe1WCSzi0p+N4M
+         XhCVIMVP9KkjmyHvmKYV/euzUPRLIBTxSnMkWUFsqArFVwkGR3VhrUtUB+XLKYwEFKnZ
+         cmtUL0biyXB4rkAvbBTyTph9RAIMs6qWzc+d7PI6SzEOnJ11+LBK0ZHnQNW6TzMf3WN0
+         Q/jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZUKV8XtdR9Wi29R6eAEUNYjmfBZwpc26xLflVPTdF70=;
+        b=ZQrKYNtcs7z20S//NCQUOnzBOHysXukLksbahAf3KClAIo2S9kSk66zcscRpwSmvQM
+         unPKgJF4sgNmRp7MGmjNar7kt+wB/+Pnl8HOOrvc8WtNHBheRNzb70E+SaVGe++wptX/
+         62qzTvP+gcuxqvUwmRNCjMD/BZXqWIg7QLdfsNCSO8OMYXLegi8l1W8wDmeyvpGq1pXj
+         sO8pcNl6GEYU3qWd763j05U4sMDGEpZpafSaNfKTxPcXHKExFPJGCSX4K9k1ADsp+WT7
+         l+NOof7/x+TDrKbCcGW27eaXCUooQ30X2fR0htef9pKbzJ8S3tEM1NyhOhg7yYfmxaOu
+         f5tQ==
+X-Gm-Message-State: AFqh2kqXxJegeydFPgp+ozo9neIfRIEfIaffruwvpQdOw1zVws/k52I/
+        AsblY1ZKob3ZLh+HuM/SCkJeCQ==
+X-Google-Smtp-Source: AMrXdXtSvMcBjakJm9BjhwFaZ8Ms1gtQxe0RsBhSPiFjUg//ODcQyEurfazTSl5cYA2O7TD2fHDrqA==
+X-Received: by 2002:a17:90a:558c:b0:226:1189:ad3e with SMTP id c12-20020a17090a558c00b002261189ad3emr25556131pji.27.1672781137514;
+        Tue, 03 Jan 2023 13:25:37 -0800 (PST)
+Received: from localhost ([135.180.226.51])
+        by smtp.gmail.com with ESMTPSA id y11-20020a634b0b000000b00477a442d450sm1734161pga.16.2023.01.03.13.25.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 13:25:36 -0800 (PST)
+Date:   Tue, 03 Jan 2023 13:25:36 -0800 (PST)
+X-Google-Original-Date: Tue, 03 Jan 2023 13:25:31 PST (-0800)
+Subject:     Re: [RFC v5.1 9/9] [DON'T APPLY] cache: sifive-ccache: add cache flushing capability
+In-Reply-To: <20230103210400.3500626-10-conor@kernel.org>
+CC:     Conor Dooley <conor@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        prabhakar.csengg@gmail.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        ajones@ventanamicro.com, aou@eecs.berkeley.edu,
+        apatel@ventanamicro.com, Atish Patra <atishp@rivosinc.com>,
+        biju.das.jz@bp.renesas.com, devicetree@vger.kernel.org,
+        geert@linux-m68k.org, guoren@kernel.org,
+        Christoph Hellwig <hch@infradead.org>, heiko@sntech.de,
+        jszhang@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, magnus.damm@gmail.com,
+        nathan@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        philipp.tomsich@vrull.eu, prabhakar.mahadev-lad.rj@bp.renesas.com,
+        robh+dt@kernel.org, samuel@sholland.org, soc@kernel.org,
+        daire.mcnamara@microchip.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-6e6653fa-4efc-49c4-bd70-320c63327c2b@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pj4gQSBkdW1iIHF1ZXN0aW9uLCB0aGUgTG9jYWwgU0FQSUMgc3RydWN0dXJlIGFsc28gdXNlcyB0
-aGUgTG9jYWwgQVBJQw0KPj4gZmxhZ3MsIGFuZCBzaG91bGQgd2UgYWRkIHRoZSBzYW1lIGNoZWNr
-IGluIGFjcGlfcGFyc2Vfc2FwaWMoKT8NCj4NCj4gSSdtIG5vdCBzdXJlIGlmIHRoaXMgbWF0dGVy
-cyBpbiBwcmFjdGljZSwgYmVjYXVzZSBTQVBJQyBpcyBvbmx5IHVzZWQNCj4gb24gSUE2NCBhbnl3
-YXkuDQo+DQo+IFRvbnksIHdoYXQgZG8geW91IHRoaW5rPw0KDQpJJ20gbm90IG1haW50YWluaW5n
-IElBNjQgYW55bW9yZS4gSWYgdGhpcyBjaGFuZ2UgaXMgb25seSBhYm91dCBzYXZpbmcNCmEgc21h
-bGwgYW1vdW50IG9mIG1lbW9yeSBmb3IgImltcG9zc2libGUiIENQVXMsIHRoZW4gaXQgcHJvYmFi
-bHkgaXNuJ3QNCndvcnRoIHRoZSBjaHVybi4NCg0KLVRvbnkNCg==
+On Tue, 03 Jan 2023 13:04:01 PST (-0800), Conor Dooley wrote:
+> From: Daire McNamara <daire.mcnamara@microchip.com>
+>
+> SiFive L2 cache controller can flush L2 cache. Expose this capability via
+
+Do you have a pointer to the datasheet for whatever L2 controller is in 
+the PFSOC?  IIRC whether it's possible to correctly flush the cache is 
+kind of subtle, as it depends on what else is floating around the SOC.
+
+> driver.
+>
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> [Conor: rebase on top of move to cache subsystem]
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> This commit needs more work, and a way to enable it from errata. I've
+> not gone and done this as PolarFire SoC has archid etc all set to zero.
+> So we need to go figure out a workaround for this, before adding in
+> errata enabling code for this. I've included it here as a second user of
+> the cache management stuff, since what's currently upstream for the
+> ccache driver does not do any cache management.
+> ---
+>  drivers/cache/sifive_ccache.c | 45 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>
+> diff --git a/drivers/cache/sifive_ccache.c b/drivers/cache/sifive_ccache.c
+> index 47e7d6557f85..3c00f205bace 100644
+> --- a/drivers/cache/sifive_ccache.c
+> +++ b/drivers/cache/sifive_ccache.c
+> @@ -9,12 +9,14 @@
+>  #define pr_fmt(fmt) "CCACHE: " fmt
+>
+>  #include <linux/debugfs.h>
+> +#include <linux/dma-direction.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/of_irq.h>
+>  #include <linux/of_address.h>
+>  #include <linux/device.h>
+>  #include <linux/bitfield.h>
+>  #include <asm/cacheinfo.h>
+> +#include <asm/cacheflush.h>
+>  #include <cache/sifive_ccache.h>
+>
+>  #define SIFIVE_CCACHE_DIRECCFIX_LOW 0x100
+> @@ -42,11 +44,15 @@
+>  #define SIFIVE_CCACHE_WAYENABLE 0x08
+>  #define SIFIVE_CCACHE_ECCINJECTERR 0x40
+>
+> +#define SIFIVE_CCACHE_FLUSH64 0x200
+> +#define SIFIVE_CCACHE_FLUSH32 0x240
+> +
+>  #define SIFIVE_CCACHE_MAX_ECCINTR 4
+>
+>  static void __iomem *ccache_base;
+>  static int g_irq[SIFIVE_CCACHE_MAX_ECCINTR];
+>  static struct riscv_cacheinfo_ops ccache_cache_ops;
+> +static struct riscv_cache_maint_ops ccache_cmos;
+>  static int level;
+>
+>  enum {
+> @@ -205,6 +211,42 @@ static irqreturn_t ccache_int_handler(int irq, void *device)
+>  	return IRQ_HANDLED;
+>  }
+>
+> +static void sifive_ccache_dma_wback_inv(void* vaddr, unsigned long size)
+> +{
+> +	void * __iomem flush = ccache_base + SIFIVE_CCACHE_FLUSH64;
+> +	phys_addr_t start = virt_to_phys(vaddr);
+> +	phys_addr_t aligned_start = start & ~0x3f;
+> +	u64 addr;
+> +	u64 end;
+> +	u64 aligned_end;
+> +
+> +	size += start - aligned_start;
+> +	end = start + size;
+> +	aligned_end = end += 0x3f;
+> +	aligned_end &= ~0x3f;
+> +
+> +	for (addr = aligned_start; addr < aligned_end; addr += 64)
+> +		writeq(addr, flush);
+> +}
+> +
+> +static void sifive_ccache_cmo(unsigned int cache_size, void *vaddr, size_t size,
+> +			      int dir, int ops)
+> +{
+> +	switch (dir) {
+> +	case DMA_TO_DEVICE:
+> +		sifive_ccache_dma_wback_inv(vaddr, size);
+> +		break;
+> +	case DMA_FROM_DEVICE:
+> +		sifive_ccache_dma_wback_inv(vaddr, size);
+> +		break;
+> +	case DMA_BIDIRECTIONAL:
+> +		sifive_ccache_dma_wback_inv(vaddr, size);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +}
+> +
+>  static int __init sifive_ccache_init(void)
+>  {
+>  	struct device_node *np;
+> @@ -254,6 +296,9 @@ static int __init sifive_ccache_init(void)
+>  	ccache_cache_ops.get_priv_group = ccache_get_priv_group;
+>  	riscv_set_cacheinfo_ops(&ccache_cache_ops);
+>
+> +	ccache_cmos.cmo_patchfunc = sifive_ccache_cmo;
+> +	riscv_set_cache_maint_ops(&ccache_cmos);
+> +
+>  #ifdef CONFIG_DEBUG_FS
+>  	setup_sifive_debug();
+>  #endif
