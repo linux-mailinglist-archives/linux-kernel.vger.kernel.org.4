@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B2265CA41
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE8765CA45
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233918AbjACXPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 18:15:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
+        id S234190AbjACXSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 18:18:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjACXPj (ORCPT
+        with ESMTP id S233455AbjACXSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 18:15:39 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2638C14D1B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:15:37 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id ud5so78298800ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:15:37 -0800 (PST)
+        Tue, 3 Jan 2023 18:18:34 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0E115FCF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:18:33 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id f3so21151300pgc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:18:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FlP6AKXyfsY8osv9smpKXc+sJXoOdEbrkb5H5RIj5Rg=;
-        b=aclJ+8dgNuNUKezC/tevLetwUo63WIkYV3mxD2arQONKtJ0q0rx+gqq/LqzYsls9zx
-         UCYerDsVxfzIs1LL650gG8DS4iXU8i64sTsYLMPw+p4Kb8ARb8noeg6APShk0AwJ0fyh
-         L7pBon9Pwpe6RMY8pzvj+L/w7bmz8LZlnY82/CkZ8gd2rVApubgmdie5rzraUiJrIAta
-         ZeYOK6OsPAXbD5DJvl6I3kJY21U91QeVO3qC1xBeK/Zar0N0wgtvCbS6zLKR3kPig2fz
-         wkdAi87L8KdHDTM2U73ZWO4MwMS2qyxq5yO87GNcdDHh8u7IkEgYAB05+ipBLxrT7Nxm
-         aaSA==
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+SKNwK2NyJVXaeShNit/vbIhlTVvPRm29ctCwVFguc8=;
+        b=dKwcY+gyo70o9MnjanigW/qbwMZCHd1jZ/HZNSbTYA7uNNvtO5+1d3klhV3LBMg+Wz
+         C2f5ATp6q34nZdwFYSHxnjLN6cdjcQaZYK8In156L+mHFNKh+ncF5id1Xdogt5wKfYUP
+         Jfq+tUgmYLuZ+tsFX7/u5Ev8KhBwft2jYUV4FcrCcN7XOYrKU8lEy9cr4xdbEFAeeqOM
+         +mNiWE5zo51VEhO5XWTZPXdcAW+wBtXNeIn+UGKmYkP6QHi06nkmYHqNyDHWviMrOrpU
+         DOsV/Fm4EsBo2CqwNVgdmKbLjtd3H+h0QfLHQ/3g4IxCEdekFIWpWIAFgfLrqB5VWLuZ
+         UoIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FlP6AKXyfsY8osv9smpKXc+sJXoOdEbrkb5H5RIj5Rg=;
-        b=FFPOzcWK8HDKgVFpms2icxabBFNObkeYRBCiKu2Uw269TpbIIuVo38h1x2oI46ZDAB
-         UaFS7lPeDeMAkEkKZ2wiMny5m7ydEeBKTNz1N+K767ye+i8Jc+x0QxXJghVgQ/dHPWbC
-         R/yvS6AtvhifY8dwojp5Nx0ABD01JS/zw99VBgiqN5F5iMYuCKMfIVhGjxMJR5RnwBhA
-         V85/QpwfvzicrpT45+kB2jYE2riwNPj46C0ZWEaQmxZYpgNE/TeSm+REMH/Kb1tfJVxW
-         D4Os4aWVZFCYQokwpRkh5Zok2rONAuKlciRHk9tY0xokr8vmy9h0WiU8CSHLOtxVGEjf
-         qtCQ==
-X-Gm-Message-State: AFqh2kqmdVb3HRFFHAoJzNj8nRsE4uja405EA6Q14qm4oFWVJuT6DmY4
-        bnKkgkXExkFPq49/Ry3GMR64xM2SZmVgOEAi+0+nXA==
-X-Google-Smtp-Source: AMrXdXttzhykV6L+/83GnDjq+1G30wNkN9JkVAov20JyXOd9aqYlb5HDTt4RBbNtT5FpzAs4WKpBdEdGW5woPYpcNk8=
-X-Received: by 2002:a17:906:5156:b0:801:e0d9:b29a with SMTP id
- jr22-20020a170906515600b00801e0d9b29amr3481999ejc.571.1672787735440; Tue, 03
- Jan 2023 15:15:35 -0800 (PST)
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+SKNwK2NyJVXaeShNit/vbIhlTVvPRm29ctCwVFguc8=;
+        b=BHiTAyJY/6fc/Yey8vnmJ2hWBzA8jBumrVXtQnDdkU2Rtnc1+APWZPFPpBjdya3yhA
+         AzLaOIyWOOqnn3buAdeXCIOPa0m7HaO/BuMsabVniHEuGu7wuA7zZ9LCQhZW0CjE7wT2
+         PpIGhjBOMEPn5Oz1E/5YAs7RUfSSexpE6eS0xnTJT9GSH91dCpwV4OY9RZ2gR22Lohpc
+         CR0Ftp9GCL6YhXDcMO/cKtgiuP4BRYhgZTtX1hQbeJ6WU9NYGGBH7fR0urkTlUZLcGq9
+         phnmyudvYUCNPd2vLARxRcg18izZNFj9ftfep+AAYP5jvFnPbdcT4la4cnSTHeWgffRB
+         WbEQ==
+X-Gm-Message-State: AFqh2kq0Au9wphxwFwBJxEA1VrB59/q8Lc1TwlD/ifWkFlCH51xhzjR4
+        TIvs1gSXViRCducbKfZjD+hJ3hzu+j6wn/iW
+X-Google-Smtp-Source: AMrXdXsj9J+1dDyzj3rH6i+WIAk9RX4wTCh/a0OvdiDq7jKdG5ipnl0KUACxUzdUC3b8vzSnoPI8sQ==
+X-Received: by 2002:aa7:8084:0:b0:574:8995:c0d0 with SMTP id v4-20020aa78084000000b005748995c0d0mr3598502pff.1.1672787912621;
+        Tue, 03 Jan 2023 15:18:32 -0800 (PST)
+Received: from [2620:15c:29:203:3ac1:84a4:2f59:c43f] ([2620:15c:29:203:3ac1:84a4:2f59:c43f])
+        by smtp.gmail.com with ESMTPSA id w18-20020aa79a12000000b00581816425f3sm12920964pfj.112.2023.01.03.15.18.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 15:18:31 -0800 (PST)
+Date:   Tue, 3 Jan 2023 15:18:31 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Gonda <pgonda@google.com>,
+        Andy Nguyen <theflow@google.com>, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, John Allen <john.allen@amd.com>
+Subject: Re: [patch] crypto: ccp - Avoid page allocation failure warning for
+ SEV_GET_ID2
+In-Reply-To: <1000d0c8-bd8c-8958-d54f-7e1924fd433d@amd.com>
+Message-ID: <06de8454-2b29-f3b6-7cf2-c037c2735b6d@google.com>
+References: <20221214202046.719598-1-pgonda@google.com> <Y5rxd6ZVBqFCBOUT@gondor.apana.org.au> <762d33dc-b5fd-d1ef-848c-7de3a6695557@google.com> <Y6wDJd3hfztLoCp1@gondor.apana.org.au> <826b3dda-5b48-2d42-96b8-c49ccebfdfed@google.com>
+ <833b4dd0-7f85-b336-0786-965f3f573f74@google.com> <1000d0c8-bd8c-8958-d54f-7e1924fd433d@amd.com>
 MIME-Version: 1.0
-References: <20221221185540.2265771-1-robbarnes@google.com>
- <CACeCKafZu=46NE--r9W-wtJWAhj8=s46yCBO4N4u5nt4COqYAQ@mail.gmail.com>
- <CA+Dqm30XF=wDVcdUabbHySp-fwf+zFNqXpdYDW3bDTOwRbkiZw@mail.gmail.com> <CACeCKafGg5=1MQQdCtXDm-3LE2VsixHPsUDngRwQXUvAwQ=u=Q@mail.gmail.com>
-In-Reply-To: <CACeCKafGg5=1MQQdCtXDm-3LE2VsixHPsUDngRwQXUvAwQ=u=Q@mail.gmail.com>
-From:   Rob Barnes <robbarnes@google.com>
-Date:   Tue, 3 Jan 2023 16:14:59 -0700
-Message-ID: <CA+Dqm33CAjWv=DFhp0+iee2-EugJzjWOYcyfieaULq2H9egheA@mail.gmail.com>
-Subject: Re: [PATCH] drivers/cros_ec: Handle CrOS EC panics
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dtor@chromium.org, Benson Leung <bleung@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,56 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 5:38 PM Prashant Malani <pmalani@chromium.org> wrote:
->
-> On Wed, Dec 21, 2022 at 3:55 PM Rob Barnes <robbarnes@google.com> wrote:
-> >
-> > On Wed, Dec 21, 2022 at 12:23 PM Prashant Malani <pmalani@chromium.org> wrote:
-> > >
-> > >
-> > > Can you provide a link (either in the commit, or here in the comment)
-> > > to the coreboot/BIOS code which uses this value? I feel this should
-> > > be documented in some form that correlates the caller and the callee.
-> >
-> > Link: https://chromium-review.googlesource.com/c/chromiumos/third_party/coreboot/+/4023535
->
-> Thanks. Please add a code link (for example, I could find [2], but you
-> could use another code mirror
-> if there is a canonical one for coreboot) to the commit description,
-> or in the comment when you send
-> out v2.
->
-> > > Any reason we cannot use the existing event_notifier (with value argument)?
-> > > It's a system panic, so I doubt that computational overhead for other
-> > > notifier block
-> > > listeners is a concern.
-> >
-> > The value field is already being used for "queued_during_suspend" in
-> > event_notifier.
->
-> OK, I suppose you could use the data pointer...
+On Tue, 3 Jan 2023, Tom Lendacky wrote:
 
-The data pointer contains ec_dev, so that's not really an option either.
+> On 12/30/22 16:18, David Rientjes wrote:
+> > For SEV_GET_ID2, the user provided length does not have a specified
+> > limitation because the length of the ID may change in the future.  The
+> > kernel memory allocation, however, is implicitly limited to 4MB on x86 by
+> > the page allocator, otherwise the kzalloc() will fail.
+> > 
+> > When this happens, it is best not to spam the kernel log with the warning.
+> > Simply fail the allocation and return ENOMEM to the user.
+> > 
+> > Fixes: d6112ea0cb34 ("crypto: ccp - introduce SEV_GET_ID2 command")
+> > Reported-by: Andy Nguyen <theflow@google.com>
+> > Reported-by: Peter Gonda <pgonda@google.com>
+> > Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
+> > Signed-off-by: David Rientjes <rientjes@google.com>
+> > ---
+> >   drivers/crypto/ccp/sev-dev.c | 9 ++++++++-
+> >   1 file changed, 8 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> > --- a/drivers/crypto/ccp/sev-dev.c
+> > +++ b/drivers/crypto/ccp/sev-dev.c
+> > @@ -881,7 +881,14 @@ static int sev_ioctl_do_get_id2(struct sev_issue_cmd
+> > *argp)
+> >   	input_address = (void __user *)input.address;
+> >     	if (input.address && input.length) {
+> > -		id_blob = kzalloc(input.length, GFP_KERNEL);
+> > +		/*
+> > +		 * The length of the ID shouldn't be assumed by software since
+> > +		 * it may change in the future.  The allocation size is
+> > limited
+> > +		 * to 1 << (PAGE_SHIFT + MAX_ORDER - 1) by the page allocator.
+> > +		 * If the allocation fails, simply return ENOMEM rather than
+> > +		 * warning in the kernel log.
+> > +		 */
+> > +		id_blob = kzalloc(input.length, GFP_KERNEL | __GFP_NOWARN);
+> 
+> We could do this or we could have the driver invoke the API with a zero length
+> to get the minimum buffer size needed for the call. The driver could then
+> perform some validation checks comparing the supplied input.length to the
+> returned length. If the driver can proceed, then if input.length is exactly 2x
+> the minimum length, then kzalloc the 2 * minimum length, otherwise kzalloc the
+> minimum length. This is a bit more complicated, though, compared to this fix.
+> 
 
->
-> It's just I find having a notifier for a single use case overkill(even
-> 2 would be fine); one could get away with exposing a method
-> in cros_typec_debugfs via a local .h file (it can compile to a stub if
-> cros_typec_debugfs is not compiled to the kernel);
-> the LPC code can then just call that method instead of invoking a notifier.
+Thanks Tom.  IIUC, this could be useful to identify situations where 
+input.length != min_length and input.length != min_length*2 and, in those 
+cases, return EINVAL?  Or are there situations where this is actually a 
+valid input.length?
 
-My first implementation did make a direct call to cros_ec_debugfs.c,
-but an internal reviewer recommended using an event notifier instead.
-So I'm histent to go back to a direct call.
-
-There may be other sub drivers that want to handle EC panics. So I
-think keeping this as a separate notifier makes sense given the
-constraints.
-
->
-> Best regards,
->
-> -Prashant
->
-> > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f867ea4d75fa59ee87a7f48be144
-> [2] https://github.com/coreboot/coreboot/blob/ff6b3af113f84a1957dcdf8a8179a751ce08becf/src/ec/google/chromeec/acpi/ec.asl#L15
+I was assuming that the user was always doing its own SEV_GET_ID2 first to 
+determine the length and then use it for input.length, but perhaps that's 
+not the case and they are passing a bogus value.
