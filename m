@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2D865C6BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A445365C6BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238666AbjACSut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S238494AbjACSuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238692AbjACSuT (ORCPT
+        with ESMTP id S238705AbjACSu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:50:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAF86464
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:50:19 -0800 (PST)
+        Tue, 3 Jan 2023 13:50:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB47124;
+        Tue,  3 Jan 2023 10:50:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEC48B810AA
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 18:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9B0A7C433F1;
-        Tue,  3 Jan 2023 18:50:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87B89614E2;
+        Tue,  3 Jan 2023 18:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E3DC433EF;
+        Tue,  3 Jan 2023 18:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672771816;
-        bh=sWG9rZzpm0Uy4RsyJFum58ghvV4r6+MVa47kFQe/yhY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DyVkDAEfyYJAVG4YCa99Q0P5eGgeWPsv2HMIJtQIiIQlMrCqlI8oIo9YFPjj1w3Us
-         78qyOpGXRs4uIncH4KO2jN1iSIKXhku3G7EhaAwkqHZm2TinS3Dnd+K0xXYulqBGjL
-         1eptToGegMpyf85KxkoMWX4Ik6hsP80lYLRTz3Au3L9SiNcTTr9TlqKNMGIZtnG6ut
-         75oP1+cUYHdJ5IkphJgzzArFm4kZ8Od8CZOW3nVPqJSxgEwGWgeqs/9myyDcTlXDPA
-         wCoSeF9xtqValf9JE0TBwXU082b3Q5Ecjo9KJoOWuxZgGn3KHpubtTvqpzkodszLo9
-         WIvmTzHSZ+l/Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 74EA3E5724B;
-        Tue,  3 Jan 2023 18:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1672771821;
+        bh=lc9EWhpLl3cJRu/WOwyewFLiY3xxPhpyl6R5J9nJ08Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uX52/RRbU4FqO9YV6D1O+Ayn9r/CPtlNof6E4GlI4TlEA33SOhVG3bT3pKNWOVdo7
+         tvjJ9zs92jzmVHzVZb+uqg22k8u+TnRZoABG2CZnMO9IsA0aeh3pLWql8gE0HAec5B
+         kTiDEebz3Dl5uE/Yo4oi6wGuj0nuiBwvULJ9gxxbHWrX8BS6KcTX/Kg1AH8SbiT0Ky
+         kzi3g0rxpq9uZjQyhq7km1SyaUspiVVOh7POd90TU6ZJVRIgMExCdhkBWY/LGLcS42
+         A7YJB/piZZJjsLqR8K+SBF99lBW1WhXGQxxAby0dKSbMykBhrVLn31lsJHOvxxEAos
+         4+KMKNG0DzEiw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id AB81E40468; Tue,  3 Jan 2023 15:50:17 -0300 (-03)
+Date:   Tue, 3 Jan 2023 15:50:17 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com
+Subject: Re: [PATCH] perf lock: Fix core dump in command perf lock contention
+Message-ID: <Y7R46VF87ab6o4N5@kernel.org>
+References: <20221230102627.2410847-1-tmricht@linux.ibm.com>
+ <Y7L5T2IHdovfLgWp@kernel.org>
+ <CAM9d7ch98dRk85DYF-okD4_VsU_A+EkkVOkW1-1X7GMLao0mwg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [f2fs-dev] [PATCH] f2fs: let's avoid panic if extent_tree is not
- created
-From:   patchwork-bot+f2fs@kernel.org
-Message-Id: <167277181647.18849.14412830382084760443.git-patchwork-notify@kernel.org>
-Date:   Tue, 03 Jan 2023 18:50:16 +0000
-References: <20221222235458.957816-1-jaegeuk@kernel.org>
-In-Reply-To: <20221222235458.957816-1-jaegeuk@kernel.org>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7ch98dRk85DYF-okD4_VsU_A+EkkVOkW1-1X7GMLao0mwg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,59 +60,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to jaegeuk/f2fs.git (dev)
-by Jaegeuk Kim <jaegeuk@kernel.org>:
-
-On Thu, 22 Dec 2022 15:54:58 -0800 you wrote:
-> This patch avoids the below panic.
+Em Tue, Jan 03, 2023 at 08:45:34AM -0800, Namhyung Kim escreveu:
+> Hi Arnaldo,
 > 
-> pc : __lookup_extent_tree+0xd8/0x760
-> lr : f2fs_do_write_data_page+0x104/0x87c
-> sp : ffffffc010cbb3c0
-> x29: ffffffc010cbb3e0 x28: 0000000000000000
-> x27: ffffff8803e7f020 x26: ffffff8803e7ed40
-> x25: ffffff8803e7f020 x24: ffffffc010cbb460
-> x23: ffffffc010cbb480 x22: 0000000000000000
-> x21: 0000000000000000 x20: ffffffff22e90900
-> x19: 0000000000000000 x18: ffffffc010c5d080
-> x17: 0000000000000000 x16: 0000000000000020
-> x15: ffffffdb1acdbb88 x14: ffffff888759e2b0
-> x13: 0000000000000000 x12: ffffff802da49000
-> x11: 000000000a001200 x10: ffffff8803e7ed40
-> x9 : ffffff8023195800 x8 : ffffff802da49078
-> x7 : 0000000000000001 x6 : 0000000000000000
-> x5 : 0000000000000006 x4 : ffffffc010cbba28
-> x3 : 0000000000000000 x2 : ffffffc010cbb480
-> x1 : 0000000000000000 x0 : ffffff8803e7ed40
-> Call trace:
->  __lookup_extent_tree+0xd8/0x760
->  f2fs_do_write_data_page+0x104/0x87c
->  f2fs_write_single_data_page+0x420/0xb60
->  f2fs_write_cache_pages+0x418/0xb1c
->  __f2fs_write_data_pages+0x428/0x58c
->  f2fs_write_data_pages+0x30/0x40
->  do_writepages+0x88/0x190
->  __writeback_single_inode+0x48/0x448
->  writeback_sb_inodes+0x468/0x9e8
->  __writeback_inodes_wb+0xb8/0x2a4
->  wb_writeback+0x33c/0x740
->  wb_do_writeback+0x2b4/0x400
->  wb_workfn+0xe4/0x34c
->  process_one_work+0x24c/0x5bc
->  worker_thread+0x3e8/0xa50
->  kthread+0x150/0x1b4
+> On Mon, Jan 2, 2023 at 7:33 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> >
+> > Em Fri, Dec 30, 2022 at 11:26:27AM +0100, Thomas Richter escreveu:
+> > > The test case perf lock contention dumps core on s390. Run the following
+> > > commands:
+> > >  # ./perf lock record -- ./perf bench sched messaging
+> > >  # Running 'sched/messaging' benchmark:
+> > >  # 20 sender and receiver processes per group
+> > >  # 10 groups == 400 processes run
+> > >
+> > >      Total time: 2.799 [sec]
+> > >  [ perf record: Woken up 1 times to write data ]
+> > >  [ perf record: Captured and wrote 0.073 MB perf.data (100 samples) ]
+> > >  #
+> > >  # ./perf lock contention
+> > >  Segmentation fault (core dumped)
+> > >  #
+> > >
+> > > The function call stack is lengthy, here are the top 5 functions:
+> > >  # gdb ./perf core.24048
+> > >  GNU gdb (GDB) Fedora Linux 12.1-6.fc37
+> > >  Copyright (C) 2022 Free Software Foundation, Inc.
+> > >  Core was generated by `./perf lock contention'.
+> > >  Program terminated with signal SIGSEGV, Segmentation fault.
+> > >  #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,
+> > >          addr=1789230) at util/machine.c:3356
+> > >          3356 machine->sched.text_end = kmap->unmap_ip(kmap, sym->start);
+> > >
+> > >  (gdb) where
+> > >   #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,\
+> > >          addr=1789230) at util/machine.c:3356
+> > >   #1  0x000000000109f244 in callchain_id (evsel=0x30313e0,\
+> > >          sample=0x3ffea4f77d0) at builtin-lock.c:957
+> > >   #2  0x000000000109e094 in get_key_by_aggr_mode (key=0x3ffea4f7290,\
+> > >          addr=27758136, evsel=0x30313e0, sample=0x3ffea4f77d0) \
+> > >          at builtin-lock.c:586
+> > >   #3  0x000000000109f4d0 in report_lock_contention_begin_event \
+> > >          (evsel=0x30313e0, sample=0x3ffea4f77d0)
+> > >          at builtin-lock.c:1004
+> > >   #4  0x00000000010a00ae in evsel__process_contention_begin \
+> > >          (evsel=0x30313e0, sample=0x3ffea4f77d0)
+> > >          at builtin-lock.c:1254
+> > >   #5  0x00000000010a0e14 in process_sample_event (tool=0x3ffea4f8480, \
+> > >          event=0x3ff85601ef8, sample=0x3ffea4f77d0,
+> > >          evsel=0x30313e0, machine=0x3029e28) at builtin-lock.c:1464
+> > >           sample=0x3ffea4f77d0, evsel=0x30313e0, machine=0x3029e28) \
+> > >        at util/session.c:1523
+> > >   .....
+> > >
+> > > The issue is in function machine__is_lock_function() in file
+> > > ./util/machine.c lines 3355:
+> > >    /* should not fail from here */
+> > >    sym = machine__find_kernel_symbol_by_name(machine, "__sched_text_end",
+> > >                                            &kmap);
+> > >    machine->sched.text_end = kmap->unmap_ip(kmap, sym->start)
+> > >
+> > > On s390 the symbol __sched_text_end is *NOT* in the symbol list and the
+> > > resulting pointer sym is set to NULL. The sym->start is then a NULL pointer
+> > > access and generates the core dump.
+> > >
+> > > The reason why __sched_text_end is not in the symbol list on s390 is
+> > > simple:
+> > > When the symbol list is created at perf start up with function calls
+> > >   dso__load
+> > >   +--> dso__load_vmlinux_path
+> > >        +--> dso__load_vmlinux
+> > >             +--> dso__load_sym
+> > >                +--> dso__load_sym_internal (reads kernel symbols)
+> > >                +--> symbols__fixup_end
+> > >                +--> symbols__fixup_duplicate
+> > >
+> > > The issue is in function symbols__fixup_duplicate(). It deletes all
+> > > symbols with have the same address. On s390
+> > >  # nm -g  ~/linux/vmlinux| fgrep c68390
+> > >  0000000000c68390 T __cpuidle_text_start
+> > >  0000000000c68390 T __sched_text_end
+> > >  #
+> > > two symbols have identical addresses and __sched_text_end is considered
+> > > duplicate (in ascending sort order) and removed from the symbol list.
+> > > Therefore it is missing and an invalid pointer reference occurs.
+> > > The code checks for symbol __sched_text_start and when it exists assumes
+> > > symbol __sched_text_end is also in the symbol table. However this is
+> > > not the case on s390.
+> > >
+> > > Same situation exists for symbol __lock_text_start:
+> > > 0000000000c68770 T __cpuidle_text_end
+> > > 0000000000c68770 T __lock_text_start
+> > > This symbol is also removed from the symbol table but used in function
+> > > machine__is_lock_function().
+> > >
+> > > To fix this and keep duplicate symbols in the symbol table, set
+> > > symbol_conf.allow_aliases to true. This prevents the removal of duplicate
+> > > symbols in function symbols__fixup_duplicate().
+> > >
+> > > Output After:
+> > >  # ./perf lock contention
+> > >  contended total wait  max wait  avg wait    type   caller
+> > >
+> > >         48   124.39 ms 123.99 ms   2.59 ms rwsem:W unlink_anon_vmas+0x24a
+> > >         47    83.68 ms  83.26 ms   1.78 ms rwsem:W free_pgtables+0x132
+> > >          5    41.22 us  10.55 us   8.24 us rwsem:W free_pgtables+0x140
+> > >          4    40.12 us  20.55 us  10.03 us rwsem:W copy_process+0x1ac8
+> > >  #
+> > >
+> > > Fixes: cc2367eebb0c ("machine: Adopt is_lock_function() from builtin-lock.c")
+> >
+> > Humm, is that really the cset that introduces the problem? It just moves
+> > things around, the cset that introduced the is_lock_function() function,
+> > that assumed that __sched_text_end was always available was:
+> >
+> > commit 0d2997f750d1de394231bc22768dab94a5b5db2f
+> > Author: Namhyung Kim <namhyung@kernel.org>
+> > Date:   Wed Jun 15 09:32:22 2022 -0700
+> >
+> >     perf lock: Look up callchain for the contended locks
+> >
+> > ---
+> >
+> > Right? Namhyung? Can you spot any problem in enabling duplicates as a
+> > fix?
 > 
-> [...]
+> Yep, I think that's the cset introduced the problem.
+> I'm fine with the fix.
+> 
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-Here is the summary with links:
-  - [f2fs-dev] f2fs: let's avoid panic if extent_tree is not created
-    https://git.kernel.org/jaegeux/f2fs/c/df9d44b645b8
+Thanks, applied.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+- Arnaldo
