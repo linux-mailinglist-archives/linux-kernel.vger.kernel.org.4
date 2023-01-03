@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EAA65C24C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C7665C251
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237929AbjACOwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
+        id S238079AbjACOwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238026AbjACOwB (ORCPT
+        with ESMTP id S237665AbjACOvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:52:01 -0500
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7186CEE06;
-        Tue,  3 Jan 2023 06:52:00 -0800 (PST)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-150debe2b7cso1215943fac.0;
-        Tue, 03 Jan 2023 06:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jnflFZNe0pA/ZYIPDzYWn3fRyrXDaT7T1O70Kantkxo=;
-        b=TEDrMUd9RqBtm4eSy6MmGo/oCcTE4Z+FJhmg2mTXBmzQN0OPOJVtyX5G2LS46k3lcP
-         unaUK2ln0mnXgAld+D4g2gRCGHYZhIC9w40gXvI0wqFIdgZnh7mu4jSN1rjxcJwv2qdp
-         o4YPvcrTlO9ti3tHs5fkLO1R1J6l21pxZRdhPbgTJ74JrIaXbN5yGeDOAkjHemow26Xp
-         /365dOB36MY3+jNdtIOlbmgB9gOa3SBjZPvuiaBuzrbqkNzTHjiWTqYowvQSGu3ek+vo
-         FCJBUOQslBfMUQXQQJztqZ88w7U6nH06NlTG1yzaSFjATY4xKOdkC+3wuXKwaooJi0Uu
-         mPPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jnflFZNe0pA/ZYIPDzYWn3fRyrXDaT7T1O70Kantkxo=;
-        b=0oDsO0mhjRvnnVZZDZE19K1WA/YfGu7nAGN9OFNRXNqxaes9DKpSNOlhU5dj4D2A9m
-         Y2/F3chjF0e7XQDZPcuGC6dHiu567WdeY8zJZCfw5yUbq7GXybc4ncw33L0524PtabvY
-         T65UWxBGK1IicDMLFySRLwjzJqQ9dR4HGWUCshUlE+WfDQSenQktd0Km1sIZnnIOr9K2
-         LF/eQXglTvsFEFcsq5oESNHAODi5mwKdxdxH9Ag0GdpY8g8+EAFtv2NI+DSkPJgJVVi7
-         BYDYRZ/fnH3b1kP3q9t8Pb2xr+1RnGW/CT7kH6ywxPFeRo8DwXmdT1y0ii/Ljhg8Szdi
-         AOWA==
-X-Gm-Message-State: AFqh2krzd0xZMVXhHGCdfiz+0cNOYjWgSJh5v1vCpWvGInR+hzSpNDgW
-        XjEqwcNOS75Vzw/Xh7ITjlkUsVxnUko=
-X-Google-Smtp-Source: AMrXdXs6MYI9m3GkQ9ZQCPw1EwIxc+QZ3vKMSFuwc2q4U1HHyfemHaKsF1oIptKevWas5Xc5JHHcCg==
-X-Received: by 2002:a05:6871:468b:b0:144:d64e:d6e1 with SMTP id ni11-20020a056871468b00b00144d64ed6e1mr19836087oab.44.1672757519804;
-        Tue, 03 Jan 2023 06:51:59 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f13-20020a4ab64d000000b004ce5d00de73sm10555926ooo.46.2023.01.03.06.51.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 06:51:59 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 06:51:57 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/63] 5.10.162-rc1 review
-Message-ID: <20230103145157.GA197592@roeck-us.net>
-References: <20230103081308.548338576@linuxfoundation.org>
+        Tue, 3 Jan 2023 09:51:53 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41444F580;
+        Tue,  3 Jan 2023 06:51:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672757513; x=1704293513;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CJNxDWf0SDtHR1aktd5x50aZoSIoYakJYJ7HaKKk2NI=;
+  b=nsHL1qcmTzhRqCU9XOPH7zaThnO6PR6gS6pH9WhhQfnT9x21FYFA7mx1
+   ISoQJ8loKIhp5lWR582FbbhN9DZKJYfJYM1htwuncK1IlK3TKB9V73UAV
+   5TU25E/KOM2O+m+7PX2BAEoIMtsBOyf//vH2RyAGlDpFaKJV51HNEOCuc
+   O5iqZpfd4/cip2mRzgSdihGenNcZvEo4/Q1h5tVb7svcWHeuhH9vxKQdY
+   hEt9sQvZHclKdvqHn9uYAtIR3sRvqlVBJv3sTZvPsGnjZ6BlCm/El0HT0
+   RxCWUTnfelPLBQ/geucanwlLG8G6h6hau6yvs8LtPhltDw1ypDsVwjJo2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="302047054"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="302047054"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 06:51:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="685422749"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="685422749"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 03 Jan 2023 06:51:50 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C328CF4; Tue,  3 Jan 2023 16:52:22 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sylvain Petinot <sylvain.petinot@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] media: i2c: st-vgxy61: Use asm intead of asm-generic
+Date:   Tue,  3 Jan 2023 16:52:19 +0200
+Message-Id: <20230103145219.40226-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103081308.548338576@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 09:13:30AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.162 release.
-> There are 63 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 05 Jan 2023 08:12:47 +0000.
-> Anything received after that time might be too late.
-> 
+There is no point to specify asm-generic for the unaligned.h.
+Drop the 'generic' suffix and move the inclusion to be after
+the non-media linux/* ones.
 
-Build results:
-	total: 162 pass: 162 fail: 0
-Qemu test results:
-	total: 475 pass: 475 fail: 0
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/media/i2c/st-vgxy61.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+diff --git a/drivers/media/i2c/st-vgxy61.c b/drivers/media/i2c/st-vgxy61.c
+index 826baf4e064d..5dcabee6677d 100644
+--- a/drivers/media/i2c/st-vgxy61.c
++++ b/drivers/media/i2c/st-vgxy61.c
+@@ -5,7 +5,6 @@
+  * Copyright (C) 2022 STMicroelectronics SA
+  */
+ 
+-#include <asm-generic/unaligned.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/gpio/consumer.h>
+@@ -15,6 +14,9 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/units.h>
++
++#include <asm/unaligned.h>
++
+ #include <media/mipi-csi2.h>
+ #include <media/v4l2-async.h>
+ #include <media/v4l2-ctrls.h>
+-- 
+2.35.1
 
-Guenter
