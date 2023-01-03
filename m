@@ -2,81 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFD965C034
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FE765C049
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237710AbjACMuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 07:50:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S237701AbjACMvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 07:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237693AbjACMuB (ORCPT
+        with ESMTP id S237760AbjACMvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 07:50:01 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0B51174;
-        Tue,  3 Jan 2023 04:50:00 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Tue, 3 Jan 2023 07:51:20 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DCD101DF;
+        Tue,  3 Jan 2023 04:51:04 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 300c1f581423dafe; Tue, 3 Jan 2023 13:51:02 +0100
+Received: from kreacher.localnet (unknown [213.134.163.200])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C44F938C77;
-        Tue,  3 Jan 2023 12:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1672750198; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZEzIhKt2C2SI/WYm+OZI65abirl7ySTd6WBWg9jxJDk=;
-        b=xc9iI98/J3TaTDSNEDN0tpUTzZ7pBlb4s9VbKSDV3irSxGxu9MC3m9O2xA+IJtK4WjsMcT
-        5tNjAm6/QzaqS3AaXRVB2w8VU1GOg2ZvZUjSlUxgoZUDz5H76mxNRKCOwwizuxnWNebxdi
-        +5l53mluriuk68EV6wYPYV1wBAeqD98=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1672750198;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZEzIhKt2C2SI/WYm+OZI65abirl7ySTd6WBWg9jxJDk=;
-        b=4Dt3mtDNy7NwTEv/sGp959JFzQTcPMqu6tgsJqvfJQvfdi2az26te36H/fdn0CADh6tjZ2
-        9v2JJ+sVbixVE/DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 56B111392B;
-        Tue,  3 Jan 2023 12:49:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5eHnE3YktGOeEgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 03 Jan 2023 12:49:58 +0000
-Date:   Tue, 03 Jan 2023 13:49:57 +0100
-Message-ID: <87v8lnrde2.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_jackp@quicinc.com, quic_plai@quicinc.com
-Subject: Re: [RFC PATCH 04/14] sound: usb: card: Introduce USB SND vendor op callbacks
-In-Reply-To: <465bb512-2ea3-ebfc-4b21-7b493f019fc3@suse.com>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
-        <20221223233200.26089-5-quic_wcheng@quicinc.com>
-        <80f92635-6d14-8ff3-17ac-de2e5b977947@suse.com>
-        <87lemqxpet.wl-tiwai@suse.de>
-        <ec632e64-2d9c-3f71-4fe7-e1c6acb81393@quicinc.com>
-        <465bb512-2ea3-ebfc-4b21-7b493f019fc3@suse.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        by v370.home.net.pl (Postfix) with ESMTPSA id 774AA781235;
+        Tue,  3 Jan 2023 13:51:01 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Hang Zhang <zh.nvgt@gmail.com>
+Subject: [PATCH v2] ACPI: Drop the custom_method debugfs interface
+Date:   Tue, 03 Jan 2023 13:51:00 +0100
+Message-ID: <2667007.mvXUDI8C0e@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.200
+X-CLIENT-HOSTNAME: 213.134.163.200
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeggdegfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduieefrddvtddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeifedrvddttddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepiihhrdhnvhhgthesghhmrghilhdr
+ tghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,28 +50,291 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 03 Jan 2023 13:20:48 +0100,
-Oliver Neukum wrote:
-> 
-> 
-> 
-> On 30.12.22 08:10, Wesley Cheng wrote:
-> 
-> > It may depend on how the offloading is implemented, but we do have a mechanism to force the audio stream off from the qc_usb_audio_offload. Regardless of if the UDEV is suspended first, or the USB backend, as long as we ensure that the offloading is disabled before entering suspend, I think that should be sufficient.
-> 
-> You would presumably output garbage, if the UDEV is asleep but the backend is not.
-> 
->  
-> > The reset_resume() path is fine.  Bus reset is going to cause a disconnect() callback in the offload driver, in which we already have the proper handling for ensuring the offload path is halted, and we reject any incoming stream start requests.
-> 
-> How? If we go the reset_resume() code path, we find that usb-audio does not make
-> a difference between regular resume() and reset_resume()
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Note that, for USB audio, there is no much difference between resume()
-and reset_resume(), especially about the PCM stream handling that is
-the main target for the offload (the mixer isn't handled there).
-And for the PCM, we just set the power state for UAC3, and that's
-all.  All the rest is handled by the PCM core handler as usual.
+The ACPI custom_method debugfs interface is security-sensitive and
+concurrent access to it is broken [1].
+
+Moreover, the recipe for preparing a customized version of a given
+control method has changed at one point due to ACPICA changes, which
+has not been reflected in its documentation, so whoever used it before
+has had to adapt an no problems with it have been reported.
+
+The latter likely means that the number of its users is limited at best
+and attempting to fix the issues mentioned above is likely not worth the
+effort.  Moreover, if it gets broken in the process, the breakage may not
+be readily discovered, so deleting it altogheher appeares to be a better
+option.
+
+Accordingly, drop custom_method along with its (outdated anyway)
+documentation.
+
+Link: https://lore.kernel.org/linux-acpi/20221227063335.61474-1-zh.nvgt@gmail.com/ # [1]
+Reported-by: Hang Zhang <zh.nvgt@gmail.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+-> v2: Update index.rst too.
+
+---
+ Documentation/firmware-guide/acpi/index.rst              |    1 
+ Documentation/firmware-guide/acpi/method-customizing.rst |   89 ------------
+ drivers/acpi/Kconfig                                     |   14 --
+ drivers/acpi/Makefile                                    |    1 
+ drivers/acpi/custom_method.c                             |  103 ---------------
+ 5 files changed, 208 deletions(-)
+
+Index: linux-pm/drivers/acpi/Kconfig
+===================================================================
+--- linux-pm.orig/drivers/acpi/Kconfig
++++ linux-pm/drivers/acpi/Kconfig
+@@ -444,20 +444,6 @@ config ACPI_HED
+ 	  which is used to report some hardware errors notified via
+ 	  SCI, mainly the corrected errors.
+ 
+-config ACPI_CUSTOM_METHOD
+-	tristate "Allow ACPI methods to be inserted/replaced at run time"
+-	depends on DEBUG_FS
+-	help
+-	  This debug facility allows ACPI AML methods to be inserted and/or
+-	  replaced without rebooting the system. For details refer to:
+-	  Documentation/firmware-guide/acpi/method-customizing.rst.
+-
+-	  NOTE: This option is security sensitive, because it allows arbitrary
+-	  kernel memory to be written to by root (uid=0) users, allowing them
+-	  to bypass certain security measures (e.g. if root is not allowed to
+-	  load additional kernel modules after boot, this feature may be used
+-	  to override that restriction).
+-
+ config ACPI_BGRT
+ 	bool "Boottime Graphics Resource Table support"
+ 	depends on EFI && (X86 || ARM64)
+Index: linux-pm/drivers/acpi/Makefile
+===================================================================
+--- linux-pm.orig/drivers/acpi/Makefile
++++ linux-pm/drivers/acpi/Makefile
+@@ -101,7 +101,6 @@ obj-$(CONFIG_ACPI_SBS)		+= sbshc.o
+ obj-$(CONFIG_ACPI_SBS)		+= sbs.o
+ obj-$(CONFIG_ACPI_HED)		+= hed.o
+ obj-$(CONFIG_ACPI_EC_DEBUGFS)	+= ec_sys.o
+-obj-$(CONFIG_ACPI_CUSTOM_METHOD)+= custom_method.o
+ obj-$(CONFIG_ACPI_BGRT)		+= bgrt.o
+ obj-$(CONFIG_ACPI_CPPC_LIB)	+= cppc_acpi.o
+ obj-$(CONFIG_ACPI_SPCR_TABLE)	+= spcr.o
+Index: linux-pm/drivers/acpi/custom_method.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/custom_method.c
++++ /dev/null
+@@ -1,103 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * custom_method.c - debugfs interface for customizing ACPI control method
+- */
+-
+-#include <linux/init.h>
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-#include <linux/uaccess.h>
+-#include <linux/debugfs.h>
+-#include <linux/acpi.h>
+-#include <linux/security.h>
+-
+-#include "internal.h"
+-
+-MODULE_LICENSE("GPL");
+-
+-static struct dentry *cm_dentry;
+-
+-/* /sys/kernel/debug/acpi/custom_method */
+-
+-static ssize_t cm_write(struct file *file, const char __user *user_buf,
+-			size_t count, loff_t *ppos)
+-{
+-	static char *buf;
+-	static u32 max_size;
+-	static u32 uncopied_bytes;
+-
+-	struct acpi_table_header table;
+-	acpi_status status;
+-	int ret;
+-
+-	ret = security_locked_down(LOCKDOWN_ACPI_TABLES);
+-	if (ret)
+-		return ret;
+-
+-	if (!(*ppos)) {
+-		/* parse the table header to get the table length */
+-		if (count <= sizeof(struct acpi_table_header))
+-			return -EINVAL;
+-		if (copy_from_user(&table, user_buf,
+-				   sizeof(struct acpi_table_header)))
+-			return -EFAULT;
+-		uncopied_bytes = max_size = table.length;
+-		/* make sure the buf is not allocated */
+-		kfree(buf);
+-		buf = kzalloc(max_size, GFP_KERNEL);
+-		if (!buf)
+-			return -ENOMEM;
+-	}
+-
+-	if (buf == NULL)
+-		return -EINVAL;
+-
+-	if ((*ppos > max_size) ||
+-	    (*ppos + count > max_size) ||
+-	    (*ppos + count < count) ||
+-	    (count > uncopied_bytes)) {
+-		kfree(buf);
+-		buf = NULL;
+-		return -EINVAL;
+-	}
+-
+-	if (copy_from_user(buf + (*ppos), user_buf, count)) {
+-		kfree(buf);
+-		buf = NULL;
+-		return -EFAULT;
+-	}
+-
+-	uncopied_bytes -= count;
+-	*ppos += count;
+-
+-	if (!uncopied_bytes) {
+-		status = acpi_install_method(buf);
+-		kfree(buf);
+-		buf = NULL;
+-		if (ACPI_FAILURE(status))
+-			return -EINVAL;
+-		add_taint(TAINT_OVERRIDDEN_ACPI_TABLE, LOCKDEP_NOW_UNRELIABLE);
+-	}
+-
+-	return count;
+-}
+-
+-static const struct file_operations cm_fops = {
+-	.write = cm_write,
+-	.llseek = default_llseek,
+-};
+-
+-static int __init acpi_custom_method_init(void)
+-{
+-	cm_dentry = debugfs_create_file("custom_method", S_IWUSR,
+-					acpi_debugfs_dir, NULL, &cm_fops);
+-	return 0;
+-}
+-
+-static void __exit acpi_custom_method_exit(void)
+-{
+-	debugfs_remove(cm_dentry);
+-}
+-
+-module_init(acpi_custom_method_init);
+-module_exit(acpi_custom_method_exit);
+Index: linux-pm/Documentation/firmware-guide/acpi/method-customizing.rst
+===================================================================
+--- linux-pm.orig/Documentation/firmware-guide/acpi/method-customizing.rst
++++ /dev/null
+@@ -1,89 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-=======================================
+-Linux ACPI Custom Control Method How To
+-=======================================
+-
+-:Author: Zhang Rui <rui.zhang@intel.com>
+-
+-
+-Linux supports customizing ACPI control methods at runtime.
+-
+-Users can use this to:
+-
+-1. override an existing method which may not work correctly,
+-   or just for debugging purposes.
+-2. insert a completely new method in order to create a missing
+-   method such as _OFF, _ON, _STA, _INI, etc.
+-
+-For these cases, it is far simpler to dynamically install a single
+-control method rather than override the entire DSDT, because kernel
+-rebuild/reboot is not needed and test result can be got in minutes.
+-
+-.. note::
+-
+-  - Only ACPI METHOD can be overridden, any other object types like
+-    "Device", "OperationRegion", are not recognized. Methods
+-    declared inside scope operators are also not supported.
+-
+-  - The same ACPI control method can be overridden for many times,
+-    and it's always the latest one that used by Linux/kernel.
+-
+-  - To get the ACPI debug object output (Store (AAAA, Debug)),
+-    please run::
+-
+-      echo 1 > /sys/module/acpi/parameters/aml_debug_output
+-
+-
+-1. override an existing method
+-==============================
+-a) get the ACPI table via ACPI sysfs I/F. e.g. to get the DSDT,
+-   just run "cat /sys/firmware/acpi/tables/DSDT > /tmp/dsdt.dat"
+-b) disassemble the table by running "iasl -d dsdt.dat".
+-c) rewrite the ASL code of the method and save it in a new file,
+-d) package the new file (psr.asl) to an ACPI table format.
+-   Here is an example of a customized \_SB._AC._PSR method::
+-
+-      DefinitionBlock ("", "SSDT", 1, "", "", 0x20080715)
+-      {
+-         Method (\_SB_.AC._PSR, 0, NotSerialized)
+-         {
+-            Store ("In AC _PSR", Debug)
+-            Return (ACON)
+-         }
+-      }
+-
+-   Note that the full pathname of the method in ACPI namespace
+-   should be used.
+-e) assemble the file to generate the AML code of the method.
+-   e.g. "iasl -vw 6084 psr.asl" (psr.aml is generated as a result)
+-   If parameter "-vw 6084" is not supported by your iASL compiler,
+-   please try a newer version.
+-f) mount debugfs by "mount -t debugfs none /sys/kernel/debug"
+-g) override the old method via the debugfs by running
+-   "cat /tmp/psr.aml > /sys/kernel/debug/acpi/custom_method"
+-
+-2. insert a new method
+-======================
+-This is easier than overriding an existing method.
+-We just need to create the ASL code of the method we want to
+-insert and then follow the step c) ~ g) in section 1.
+-
+-3. undo your changes
+-====================
+-The "undo" operation is not supported for a new inserted method
+-right now, i.e. we can not remove a method currently.
+-For an overridden method, in order to undo your changes, please
+-save a copy of the method original ASL code in step c) section 1,
+-and redo step c) ~ g) to override the method with the original one.
+-
+-
+-.. note:: We can use a kernel with multiple custom ACPI method running,
+-   But each individual write to debugfs can implement a SINGLE
+-   method override. i.e. if we want to insert/override multiple
+-   ACPI methods, we need to redo step c) ~ g) for multiple times.
+-
+-.. note:: Be aware that root can mis-use this driver to modify arbitrary
+-   memory and gain additional rights, if root's privileges got
+-   restricted (for example if root is not allowed to load additional
+-   modules after boot).
+Index: linux-pm/Documentation/firmware-guide/acpi/index.rst
+===================================================================
+--- linux-pm.orig/Documentation/firmware-guide/acpi/index.rst
++++ linux-pm/Documentation/firmware-guide/acpi/index.rst
+@@ -14,7 +14,6 @@ ACPI Support
+    dsd/phy
+    enumeration
+    osi
+-   method-customizing
+    method-tracing
+    DSD-properties-rules
+    debug
 
 
-Takashi
+
