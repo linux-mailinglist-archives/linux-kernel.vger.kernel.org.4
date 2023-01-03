@@ -2,238 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073C965BFAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1E165BFB1
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbjACMMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 07:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S237343AbjACMNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 07:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237343AbjACMMY (ORCPT
+        with ESMTP id S230193AbjACMNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 07:12:24 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFCDFAEE;
-        Tue,  3 Jan 2023 04:12:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672747943; x=1704283943;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=ypK3kprOdq+1u4Sc+7K9g6EUg4k4efMhRgGnMRZfCRI=;
-  b=f24OAfQJ9tg82p96YSFLHvq+H+xGGr3LcpLdonuGNArG0Hz7ucrtEFEH
-   acMp50HPWXyitZ/lc5EtuR0K7SzGF9ViGsWUvFcQS93NOG5T4yGNr1l79
-   /VGhQd589+oyWK9AZd+oTjsBzg8IzA6xVuLY5ldqNehwpbQ8G1yorG5dZ
-   fi5MBOYnGsXXKnTWR/qrwczfDifM1MIItAj04ZYZquEySZB31VnGeWZmD
-   8BMHaMgjoW9fq5ORUXitNsYYGQZtb2poMExGY0CM7lJSnSgcQ74+/S6TP
-   wsuvwmU9+cx/MvGYJR+cN9kZaJnzpgFwcacTyMGr2U44RLfoo5WI8eN0p
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="309416148"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="309416148"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 04:12:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="654768987"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="654768987"
-Received: from pdaniel-mobl1.ger.corp.intel.com ([10.252.48.214])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 04:12:14 -0800
-Date:   Tue, 3 Jan 2023 14:12:12 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 08/10] fpga: m10bmc-sec: Differentiate rsu status from
- doorbell in csr map
-In-Reply-To: <Y7P2nu3Lg65kvGxH@yilunxu-OptiPlex-7050>
-Message-ID: <ae468081-32fb-97dc-a640-e9343468c751@linux.intel.com>
-References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com> <20221226175849.13056-9-ilpo.jarvinen@linux.intel.com> <Y65p0kEZjyVt2pgr@yilunxu-OptiPlex-7050> <6d9ccd20-2c13-e352-c9e9-804ea3dadf@linux.intel.com> <Y7P2nu3Lg65kvGxH@yilunxu-OptiPlex-7050>
+        Tue, 3 Jan 2023 07:13:45 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF931005
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 04:13:44 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id e9-20020a056e020b2900b003036757d5caso19309595ilu.10
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 04:13:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eyFfBghNmCNohuQgi0p9x+tyF3wB+UXjN3PPo7fNH6Y=;
+        b=t+rpFlt668DGi9qpzYteUufIwWEjScN3bLSW0eZ/IVgvmy6ky1b3evAx7IqUGOQqhr
+         pboIHCBI/skT/tR+DB/Ex6KxumtLdUKAm93fIO/H67JEVPHOS5jJnHfpiKi2rMOJkyvt
+         vRZIoYCXdWlOKxYqg3gTXQNCu5YBPIiqptXQWZXzg6B6LKvRu8Cc4IabmFy7zANp1Fnh
+         lQgTGM425KS1vvaQ2yJvUm6AbH2a42SCq1yBNvP8pQMGslWZ16GW+8hxUzhAW/g0zYgC
+         RuSVnm7r40KtF8pKUCyqlxnk/QYn8grhanHa4WH6D5IxKAb/geWMnhPqXqjfqrcIO0i6
+         st5g==
+X-Gm-Message-State: AFqh2kr8hC3+RF1Dn46KNhMIpwZVQF+XK6mICIP8GF6x4uiQ+Ie2EnEE
+        CIGN4RI9JCDIpAKPzYKgQI93n+981pyyHcjCeUx8hjXHtiQH
+X-Google-Smtp-Source: AMrXdXuDsBAA0yBj17SvetkfjdsUCkvKGhqHIz/2Hh45gO952qewy8LRA8J8UpAGL67J7ZHXX7/v0hIR4pAFS9l3lOTSTIfU9Zvq
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-200732233-1672739707=:1634"
-Content-ID: <4dcd9d7a-a35a-c3b0-c5c2-be74bd176cce@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c052:0:b0:30c:1693:594b with SMTP id
+ o18-20020a92c052000000b0030c1693594bmr1687564ilf.210.1672748023758; Tue, 03
+ Jan 2023 04:13:43 -0800 (PST)
+Date:   Tue, 03 Jan 2023 04:13:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c146a005f15aff1b@google.com>
+Subject: [syzbot] [ntfs?] possible deadlock in __ntfs_cluster_free
+From:   syzbot <syzbot+6a2409526a801cf8c0ef@syzkaller.appspotmail.com>
+To:     anton@tuxera.com, linux-kernel@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hello,
 
---8323329-200732233-1672739707=:1634
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <be1c8dac-4cce-cb78-a5c7-4abdac509f9@linux.intel.com>
+syzbot found the following issue on:
 
-On Tue, 3 Jan 2023, Xu Yilun wrote:
+HEAD commit:    2258c2dc850b Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1543182a480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=68e0be42c8ee4bb4
+dashboard link: https://syzkaller.appspot.com/bug?extid=6a2409526a801cf8c0ef
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> On 2022-12-30 at 12:23:18 +0200, Ilpo Järvinen wrote:
-> > On Fri, 30 Dec 2022, Xu Yilun wrote:
-> > 
-> > > On 2022-12-26 at 19:58:47 +0200, Ilpo Järvinen wrote:
-> > > > The rsu_status field moves from the doorbell register to the auth
-> > > > result register in the PMCI implementation of the MAX10 BMC. Refactor
-> > > > the sec update driver code to handle two distinct registers (rsu_status
-> > > > field was added into csr map already when it was introduced but it was
-> > > > unused until now).
-> > > > 
-> > > > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > > > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > > ---
-> > > >  drivers/fpga/intel-m10-bmc-sec-update.c | 68 ++++++++++++++++---------
-> > > >  include/linux/mfd/intel-m10-bmc.h       |  2 +-
-> > > >  2 files changed, 46 insertions(+), 24 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > > > index 6e58a463619c..1fe8b7ff594c 100644
-> > > > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> > > > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > > > @@ -251,7 +251,7 @@ static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
-> > > >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> > > >  	u32 auth_result;
-> > > >  
-> > > > -	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
-> > > > +	dev_err(sec->dev, "Doorbell: 0x%08x\n", doorbell);
-> > > >  
-> > > >  	if (!m10bmc_sys_read(sec->m10bmc, csr_map->auth_result, &auth_result))
-> > > >  		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
-> > > > @@ -279,6 +279,30 @@ static bool rsu_progress_busy(u32 progress)
-> > > >  		progress == RSU_PROG_PROGRAM_KEY_HASH);
-> > > >  }
-> > > >  
-> > > > +static int m10bmc_sec_progress_status(struct m10bmc_sec *sec, u32 *doorbell,
-> > > 
-> > > Please try to rename the parameters, to indicate u32 *doorbell is the
-> > > raw value from doorbell register, and u32 *progress & status are
-> > > software managed info.
-> > 
-> > I'll try to do that.
-> >  
-> > > > +				      u32 *progress, u32 *status)
-> > > > +{
-> > > > +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> > > > +	u32 status_reg;
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, doorbell);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	if (csr_map->doorbell != csr_map->rsu_status) {
-> > > 
-> > > I prefer not to complicate the csr map filling in intel-m10-bmc, just invalid
-> > > the addr value if there is no such register for the board.
-> > 
-> > I'm sorry but I didn't get the meaning of your comment. Could you please 
-> > rephrase?
-> > 
-> > My guess is that you might have tried to say that if there's no register 
-> > for rsu_status, mark it not existing in csr map? But the field exists in 
-> 
-> Yes, this is what I mean, but I see I was wrong.
-> 
-> > both cases, it's just part of a different register (doorbell or 
-> 
-> I was thinking there was no AUTH_RESULT for N3000, sorry for the
-> mistake.
-> 
-> > auth_result) so if I use that kind of "register doesn't exist" condition, 
-> > it would apply to both cases.
-> > 
-> > > > @@ -330,21 +350,20 @@ static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
-> > > >  	if (ret)
-> > > >  		return FW_UPLOAD_ERR_RW_ERROR;
-> > > >  
-> > > > -	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> > > > -				       csr_map->base + csr_map->doorbell,
-> > > > -				       doorbell,
-> > > > -				       rsu_start_done(doorbell),
-> > > > -				       NIOS_HANDSHAKE_INTERVAL_US,
-> > > > -				       NIOS_HANDSHAKE_TIMEOUT_US);
-> > > > +	ret = read_poll_timeout(m10bmc_sec_progress_status, err,
-> > > > +				err < 0 || rsu_start_done(doorbell, progress, status),
-> > > > +				NIOS_HANDSHAKE_INTERVAL_US,
-> > > > +				NIOS_HANDSHAKE_TIMEOUT_US,
-> > > > +				false,
-> > > > +				sec, &doorbell, &progress, &status);
-> > > >  
-> > > >  	if (ret == -ETIMEDOUT) {
-> > > >  		log_error_regs(sec, doorbell);
-> > > >  		return FW_UPLOAD_ERR_TIMEOUT;
-> > > > -	} else if (ret) {
-> > > > +	} else if (err) {
-> > > >  		return FW_UPLOAD_ERR_RW_ERROR;
-> > > >  	}
-> > > >  
-> > > > -	status = rsu_stat(doorbell);
-> > > >  	if (status == RSU_STAT_WEAROUT) {
-> > > >  		dev_warn(sec->dev, "Excessive flash update count detected\n");
-> > > >  		return FW_UPLOAD_ERR_WEAROUT;
-> > > > @@ -393,7 +412,7 @@ static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
-> > > >  static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-> > > >  {
-> > > >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> > > > -	u32 doorbell;
-> > > > +	u32 doorbell, status;
-> > > >  	int ret;
-> > > >  
-> > > >  	ret = regmap_update_bits(sec->m10bmc->regmap,
-> > > > @@ -418,7 +437,10 @@ static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-> > > >  		return FW_UPLOAD_ERR_RW_ERROR;
-> > > >  	}
-> > > >  
-> > > > -	if (!rsu_status_ok(rsu_stat(doorbell))) {
-> > > > +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->rsu_status, &status);
-> > > 
-> > > Same as above, please just handle the detailed register definition 
-> > > differences in this driver, not in csr map.
-> > 
-> > Earlier you were having the exactly opposite opinion:
-> > 
-> > https://lore.kernel.org/linux-fpga/20221108144305.45424-1-ilpo.jarvinen@linux.intel.com/T/#me2d20e60d7feeafcdeeab4d58bd82787acf3ada9
-> 
-> Ah, I'm sorry. I was thinking just move one register to another addr at
-> that time. I was not aware that actually the detailed register field
-> definitions are changed in same registers.
-> 
-> > 
-> > So which way you want it? Should I have the board types here in the sec 
-> > update drivers as a second layer of differentiation or not?
-> 
-> I think the different register field definitions for the same registers
-> are specific to secure driver. So please differentiate them in secure
-> driver.
-> 
-> But with the change, enum m10bmc_type could still be removed, is it?
->
-> And having the register addr differentiations in m10bmc mfd driver is good to
-> me, cause with a different board type, the register offsets for all subdevs
-> are often globally re-arranged. But I don't want the HW change within a
-> single IP block been specified in m10bmc mfd driver.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Okay. I'll add ops for it then:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/aee4b2292a64/disk-2258c2dc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ecfc816182c/vmlinux-2258c2dc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f24ffaf1255a/bzImage-2258c2dc.xz
 
-struct m10bmc_sec_ops {
-       int (*rsu_status)(struct m10bmc_sec *sec);
-};
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6a2409526a801cf8c0ef@syzkaller.appspotmail.com
 
-Type enum won't be necessary. Those ops will be useful for other things 
-too which are not included to this patch set.
+ntfs: volume version 3.1.
+======================================================
+WARNING: possible circular locking dependency detected
+6.2.0-rc1-syzkaller-00043-g2258c2dc850b #0 Not tainted
+------------------------------------------------------
+syz-executor.3/28063 is trying to acquire lock:
+ffff88801e35d9f8 (&vol->lcnbmp_lock){+.+.}-{3:3}, at: __ntfs_cluster_free+0xd4/0x890 fs/ntfs/lcnalloc.c:862
 
--- 
- i.
---8323329-200732233-1672739707=:1634--
+but task is already holding lock:
+ffff888039ccc390 (&lcnbmp_mrec_lock_key){+.+.}-{3:3}, at: map_mft_record+0x46/0x610 fs/ntfs/mft.c:154
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&lcnbmp_mrec_lock_key){+.+.}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       map_mft_record+0x46/0x610 fs/ntfs/mft.c:154
+       __ntfs_write_inode+0x80/0xc90 fs/ntfs/inode.c:2978
+       ntfs_commit_inode fs/ntfs/inode.h:300 [inline]
+       ntfs_put_super+0x3ba/0xf80 fs/ntfs/super.c:2283
+       generic_shutdown_super+0x130/0x310 fs/super.c:492
+       kill_block_super+0x79/0xd0 fs/super.c:1386
+       deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+       cleanup_mnt+0x494/0x520 fs/namespace.c:1291
+       task_work_run+0x243/0x300 kernel/task_work.c:179
+       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+       exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
+       exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+       syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
+       do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&vol->lcnbmp_lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       down_write+0x9c/0x270 kernel/locking/rwsem.c:1562
+       __ntfs_cluster_free+0xd4/0x890 fs/ntfs/lcnalloc.c:862
+       ntfs_cluster_free fs/ntfs/lcnalloc.h:96 [inline]
+       ntfs_truncate+0x119c/0x2720 fs/ntfs/inode.c:2695
+       ntfs_truncate_vfs fs/ntfs/inode.c:2862 [inline]
+       ntfs_setattr+0x2b9/0x3a0 fs/ntfs/inode.c:2914
+       notify_change+0xe50/0x1100 fs/attr.c:482
+       do_truncate+0x200/0x2f0 fs/open.c:65
+       handle_truncate fs/namei.c:3216 [inline]
+       do_open fs/namei.c:3561 [inline]
+       path_openat+0x272b/0x2dd0 fs/namei.c:3714
+       do_file_open_root+0x339/0x790 fs/namei.c:3766
+       file_open_root+0x234/0x290 fs/open.c:1290
+       do_handle_open+0x565/0x950 fs/fhandle.c:232
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&lcnbmp_mrec_lock_key);
+                               lock(&vol->lcnbmp_lock);
+                               lock(&lcnbmp_mrec_lock_key);
+  lock(&vol->lcnbmp_lock);
+
+ *** DEADLOCK ***
+
+4 locks held by syz-executor.3/28063:
+ #0: ffff888038f60460 (sb_writers#21){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:508
+ #1: ffff888039ccc670 (&sb->s_type->i_mutex_key#33){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff888039ccc670 (&sb->s_type->i_mutex_key#33){+.+.}-{3:3}, at: do_truncate+0x1ec/0x2f0 fs/open.c:63
+ #2: ffff888039ccc300 (&lcnbmp_runlist_lock_key){++++}-{3:3}, at: ntfs_truncate+0x1d8/0x2720 fs/ntfs/inode.c:2378
+ #3: ffff888039ccc390 (&lcnbmp_mrec_lock_key){+.+.}-{3:3}, at: map_mft_record+0x46/0x610 fs/ntfs/mft.c:154
+
+stack backtrace:
+CPU: 0 PID: 28063 Comm: syz-executor.3 Not tainted 6.2.0-rc1-syzkaller-00043-g2258c2dc850b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ down_write+0x9c/0x270 kernel/locking/rwsem.c:1562
+ __ntfs_cluster_free+0xd4/0x890 fs/ntfs/lcnalloc.c:862
+ ntfs_cluster_free fs/ntfs/lcnalloc.h:96 [inline]
+ ntfs_truncate+0x119c/0x2720 fs/ntfs/inode.c:2695
+ ntfs_truncate_vfs fs/ntfs/inode.c:2862 [inline]
+ ntfs_setattr+0x2b9/0x3a0 fs/ntfs/inode.c:2914
+ notify_change+0xe50/0x1100 fs/attr.c:482
+ do_truncate+0x200/0x2f0 fs/open.c:65
+ handle_truncate fs/namei.c:3216 [inline]
+ do_open fs/namei.c:3561 [inline]
+ path_openat+0x272b/0x2dd0 fs/namei.c:3714
+ do_file_open_root+0x339/0x790 fs/namei.c:3766
+ file_open_root+0x234/0x290 fs/open.c:1290
+ do_handle_open+0x565/0x950 fs/fhandle.c:232
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f169e08c0a9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f169ee1f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
+RAX: ffffffffffffffda RBX: 00007f169e1abf80 RCX: 00007f169e08c0a9
+RDX: 0000000000000202 RSI: 0000000020000000 RDI: 0000000000000004
+RBP: 00007f169e0e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffecb030f6f R14: 00007f169ee1f300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
