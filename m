@@ -2,94 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8AD65C84A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3BA65C84E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238742AbjACUml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 15:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S238200AbjACUn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 15:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233670AbjACUmd (ORCPT
+        with ESMTP id S238722AbjACUnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 15:42:33 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A152E13D61
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 12:42:31 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id r26so40418477edc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 12:42:31 -0800 (PST)
+        Tue, 3 Jan 2023 15:43:23 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0452F04
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 12:43:21 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d9so17130103pll.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 12:43:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=aurora.tech; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ECm8WA+k+WcnWoeg/q1MJBXySQiL93FB03e86BM2/mI=;
-        b=jqx8FVn4X/0/v8pr/ntGsHhYBbI9ZfIaVDTWvlZU2RqguJHRQ8nJF2HNmVuKLInpc5
-         tG8AQrf5yS4d3Z0WqTnKKXyUIbP/Am3C9fR+d98WFqXM6StuZqw4DtH0jJme67GoA91W
-         fQut24FU+yvi6h/F0FRXsrFLdUXTArdJ0v78kCYFLfq199Q0YDhBe/n9ZGPqZac5vvGE
-         6EmHgnfhqxgUwrp54KPRAtcZse2vrtxPu/SN2n1CVLBVUJvyGARPHXeeu4XfoMUZW5kk
-         8tqUyCJk6tYxFoyxqYEODmDOzhoUZiqfPFVqD8EHiwBX9/oMAipsCQGdwoM2o75h5k2h
-         UI8A==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xa61Ou7j/846wt97LkeShrQLxxw8hvcUHjRwhnCxBCc=;
+        b=TRm8LLcbBZjdkaye1ciJYctw6wm9URMlqbJ1906WJVxLDuKmUx722YaaZouoCB+fM/
+         fx7xcyib0PtiWeUlApsonrBo5Qi5OZO5MatQeKw68gjkWsuYOsTkMR69iP4M8rDi1RrG
+         +yB0Xg0oyShcZT+u0OaOXMecYFnIFyLe9cBVIsCTCJHFUH9mufMqZgrQGPv845H9x8Im
+         oLQY3EzoIHULs3TQlMcP36a18sgdW9CtLFirUBznKSMM4V+FS7zmwX0YYO4BST1+yvCi
+         LulcuShq9RZKVGqael5KMpKjulXoP2pEXztql/1ZIOMcGNV9rw6f0MKqvRd2rox3NBFs
+         cWFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ECm8WA+k+WcnWoeg/q1MJBXySQiL93FB03e86BM2/mI=;
-        b=gTdrHT0Cd4M2THckZOSkfwKgngkgJh3q/qtHNES65Pmpu4X7U/KWvAIesJoIW5wLBw
-         EDfUTD8LBuSD+VyUBNPJbYT4U9kle/KT21o8tU1n+BH4aq6CfuKb23pslhUfIpTWUkSQ
-         epjb1EiiuTNU+IoJ3/SiG85sgAEoKO7YaVD8zW95OyggpPtpH8Ex3+lbaxiarKM3hjFS
-         LEVG1TWIvzf3BUuLOnEJTcR1X0i6vlt6mFDuxi0Ay7Od3uTlbiMNi/le46ppQ6q1YUXm
-         at/j+tcS3neuZli+TO0WRVF04YzM2KdqozBF9PNCmm/L27+rppKTIr8/QGmwzW9BlhU4
-         0gQg==
-X-Gm-Message-State: AFqh2krux6fWwv7d0uUUdVRTSC7eCcTScdqD2T/6eFUdIfFaEOr0gpYN
-        HeLxSgT6/TqpBUQ0msGj2nuA5ASfWKkSqzOZJ5uKXQ==
-X-Google-Smtp-Source: AMrXdXtt5MTR0jTlS5Y3StDuzIUa8QH2PHFhbIcGqUcEd4njNeeWnP3Nrq3FJH6eEITomow0Z1fIVN0HxsNLaLXgK8k=
-X-Received: by 2002:aa7:cb52:0:b0:484:93ac:33a6 with SMTP id
- w18-20020aa7cb52000000b0048493ac33a6mr2511161edt.81.1672778550139; Tue, 03
- Jan 2023 12:42:30 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xa61Ou7j/846wt97LkeShrQLxxw8hvcUHjRwhnCxBCc=;
+        b=zMdhHTmLpSjZWoGNLVxm3al2JtPgbvQ6giWV11hieQBd+l+7LI3Sb24dqQg2x/h3PJ
+         qVgG4sVerjaEZVkg+BbzRjmVYXP5cqMwyGBv6CSEc66pM2XOKkjEOVjpdlZj8sb2FVZB
+         FiibX15FvoWJBl8k11hl6RIXL52489xCLD8KX1RPeKeFG6UewQnHHOvEqcH+GrtIvYrI
+         So0RIkkJiT5c3w7qlJ5sNJLR1Q0FvKKLqhAO1y2dhLeGu+5Ms81V7wO1LIuXC4pFKr+l
+         Fnn8L5w8l1EeDP8TryqZhKyNN1jA9Xg8X7a0VS5lhZU927LUoqw/pwRcan6xRFIk1j/w
+         K/OQ==
+X-Gm-Message-State: AFqh2kpP95L69qrdxBH9ojuWHBlC+zXreMfC6SXQoD+LLS30SGzIwVVf
+        5mBrce6LrjWKYwUVgf7WMqSNaw==
+X-Google-Smtp-Source: AMrXdXunwdEn9XsOkAK37phwnHpqU8JPscGX/vIB459rXA0SHYQW7eVPVrszViDVGf0nnCl3jmsVxQ==
+X-Received: by 2002:a17:903:41ca:b0:189:6624:58c0 with SMTP id u10-20020a17090341ca00b00189662458c0mr4304764ple.3.1672778601095;
+        Tue, 03 Jan 2023 12:43:21 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t14-20020a1709027fce00b0019141c79b1dsm22670248plb.254.2023.01.03.12.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 12:43:20 -0800 (PST)
+Date:   Tue, 3 Jan 2023 20:43:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 09/27] drm/i915/gvt: Protect gfn hash table with
+ dedicated mutex
+Message-ID: <Y7STZZkd3EaRXLTC@google.com>
+References: <20221223005739.1295925-1-seanjc@google.com>
+ <20221223005739.1295925-10-seanjc@google.com>
+ <Y6vOEjHZhOWulyo1@yzhao56-desk.sh.intel.com>
 MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid> <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
-In-Reply-To: <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
-From:   Matthew Garrett <mgarrett@aurora.tech>
-Date:   Tue, 3 Jan 2023 12:42:19 -0800
-Message-ID: <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-To:     jejb@linux.ibm.com
-Cc:     Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, jarkko@kernel.org,
-        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6vOEjHZhOWulyo1@yzhao56-desk.sh.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 9:11 AM James Bottomley <jejb@linux.ibm.com> wrote:
->
-> On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
-> > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
-> > restricts usermode's ability to extend or reset PCR 23.
->
-> Could I re ask the question here that I asked of Matthew's patch set:
->
-> https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
->
-> Which was could we use an NVRAM index in the TPM instead of a PCR?  The
-> reason for asking was that PCRs are rather precious and might get more
-> so now that Lennart has some grand scheme for using more of them in his
-> unified boot project.  Matthew promised to play with the idea but never
-> got back to the patch set to say whether he investigated this or not.
+On Wed, Dec 28, 2022, Yan Zhao wrote:
+> On Fri, Dec 23, 2022 at 12:57:21AM +0000, Sean Christopherson wrote:
+> > Add and use a new mutex, gfn_lock, to protect accesses to the hash table
+> > used to track which gfns are write-protected when shadowing the guest's
+> > GTT.  This fixes a bug where kvmgt_page_track_write(), which doesn't hold
+> > kvm->mmu_lock, could race with intel_gvt_page_track_remove() and trigger
+> > a use-after-free.
+> > 
+> > Fixing kvmgt_page_track_write() by taking kvm->mmu_lock is not an option
+> > as mmu_lock is a r/w spinlock, and intel_vgpu_page_track_handler() might
+> > sleep when acquiring vgpu->cache_lock deep down the callstack:
+> > 
+> >   intel_vgpu_page_track_handler()
+> >   |
+> >   |->  page_track->handler / ppgtt_write_protection_handler()
+> >        |
+> >        |-> ppgtt_handle_guest_write_page_table_bytes()
+> >            |
+> >            |->  ppgtt_handle_guest_write_page_table()
+> >                 |
+> >                 |-> ppgtt_handle_guest_entry_removal()
+> >                     |
+> >                     |-> ppgtt_invalidate_pte()
+> >                         |
+> >                         |-> intel_gvt_dma_unmap_guest_page()
+> >                             |
+> >                             |-> mutex_lock(&vgpu->cache_lock);
+> > 
+> This gfn_lock could lead to deadlock in below sequence.
+> 
+> (1) kvm_write_track_add_gfn() to GFN 1
+> (2) kvmgt_page_track_write() for GFN 1
+> kvmgt_page_track_write()
+> |
+> |->mutex_lock(&info->vgpu_lock)
+> |->intel_vgpu_page_track_handler (as is kvmgt_gfn_is_write_protected)
+>    |
+>    |->page_track->handler() (ppgtt_write_protection_handler())
+>       |	
+>       |->ppgtt_handle_guest_write_page_table_bytes()
+>          |
+>          |->ppgtt_handle_guest_write_page_table()
+> 	    |
+> 	    |->ppgtt_handle_guest_entry_add() --> new_present
+> 	       |
+> 	       |->ppgtt_populate_spt_by_guest_entry()
+> 	          |
+> 		  |->intel_vgpu_enable_page_track() --> for GFN 2
+> 		     |
+> 		     |->intel_gvt_page_track_add()
+> 		        |
+> 			|->mutex_lock(&info->gfn_lock) ===>deadlock
 
-Is there any way to get key creation data to include NV indexes? If
-not, no, we can't use NVRAM.
+Or even more simply, 
+
+  kvmgt_page_track_write()
+  |
+  -> intel_vgpu_page_track_handler()
+     |
+     -> intel_gvt_page_track_remove()
+
+> 
+> Below fix based on this patch is to reuse vgpu_lock to protect the hash table
+> info->ptable.
+> Please check if it's good.
+> 
+> 
+> diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
+> index b924ed079ad4..526bd973e784 100644
+> --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
+> +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
+> @@ -364,7 +364,7 @@ __kvmgt_protect_table_find(struct intel_vgpu *info, gfn_t gfn)
+>  {
+>         struct kvmgt_pgfn *p, *res = NULL;
+> 
+> -       lockdep_assert_held(&info->gfn_lock);
+> +       lockdep_assert_held(&info->vgpu_lock);
+> 
+>         hash_for_each_possible(info->ptable, p, hnode, gfn) {
+>                 if (gfn == p->gfn) {
+> @@ -388,7 +388,7 @@ static void kvmgt_protect_table_add(struct intel_vgpu *info, gfn_t gfn)
+>  {
+>         struct kvmgt_pgfn *p;
+> 
+> -       lockdep_assert_held(&info->gfn_lock);
+> +       lockdep_assert_held(&info->vgpu_lock);
+
+I'll just delete these assertions, the one in __kvmgt_protect_table_find() should
+cover everything and is ultimately the assert that matters.
+
+> @@ -1629,12 +1629,11 @@ static void kvmgt_page_track_remove_region(gfn_t gfn, unsigned long nr_pages,
+>         struct intel_vgpu *info =
+>                 container_of(node, struct intel_vgpu, track_node);
+>  
+> -       mutex_lock(&info->gfn_lock);
+> +       lockdep_assert_held(&info->vgpu_lock);
+
+This path needs to manually take vgpu_lock as it's called from KVM.  IIRC, this
+is the main reason I tried adding a new lock.  That and I had a hell of a time
+figuring out whether or not vgpu_lock would actually be held.
+
+Looking at this with fresh eyes, AFAICT intel_vgpu_reset_gtt() is the only other
+path that can reach __kvmgt_protect_table_find() without holding vgpu_lock, by
+way of intel_gvt_page_track_remove().  But unless there's magic I'm missing, that's
+dead code and can simply be deleted.
