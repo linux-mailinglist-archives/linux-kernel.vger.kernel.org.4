@@ -2,187 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0455165BA2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 06:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200B765BA2C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 06:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjACFK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 00:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S232923AbjACFMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 00:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjACFKu (ORCPT
+        with ESMTP id S230159AbjACFME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 00:10:50 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B35243
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 21:10:49 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id t2so4964548vkk.9
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 21:10:49 -0800 (PST)
+        Tue, 3 Jan 2023 00:12:04 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104A26153;
+        Mon,  2 Jan 2023 21:12:03 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id c9so14915937pfj.5;
+        Mon, 02 Jan 2023 21:12:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G1lF+uQj+FQsqhODd3DjLZyHBCSILu/V4r6YB+47iCA=;
-        b=R4naHoGAnjr4w90CecJAm62X3fhC3J8oS6g5fRqtT1ap4xcepx+v9BGDMaDsVmDhnd
-         f8W68HvcCLB/Vp8eyQgnfImvPKFqYlk2bBC8fUb09rqHRbt1U4nMEYhLBhrx+2gGQxWg
-         CcDFDyLGVSLsMxP4Ad9Q9/e7MWD5LMYYtDRe81pBL0eC8ywRV5Y7m/G2x9+UKNNYrhuP
-         3zAbZtisGYN4olRPjtBtEifauiPo1D1PD7EyI1zbJrI3elFDblsyP45oXXD6c5Z/CY2Y
-         f0C+6adIEZfc8qfFOIEhm9OoyiWKdM1/HNQSOm3387gm9czDviOvHcT7EVCV39Vm70nh
-         DPcw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MrLsJYJCl0GUbw8xUXHKhur/cDclpdHM4gEbb6ape38=;
+        b=YUblAfcbYUoZigy84PUKdmiHPpqHvCoXUyrg0oPdFr3yQLVHRXnROC8VgTpBX8ad9v
+         3BEfyiugMfrj2gQiEUWISwiivScsLFANErQvNRBofAsmEQbpAe+/BY1XiZ6kw9YvbXFn
+         K+QWti4Yh5DvR15vH2+zdfPYpQPujqAXyQcFXgbLE8Fo1jwreU/2EFCsbbZRQ9E5sUkS
+         /Odu5p3Wl7EuXXmqxWxkW+AlxQbSZ58LlXejYgezACteoAOnoBUyViBseqIoiKRL9R6g
+         k9yXRk4lzfTj2UESAUZl6mjmYylSAlKmHQ6uqu0dVSF/Ajq6AvAOYD73Fu9wYkmoTqS+
+         nDag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G1lF+uQj+FQsqhODd3DjLZyHBCSILu/V4r6YB+47iCA=;
-        b=WdV86evHuXWmzCffoR9buaj215NEDi3u7ssOynfInw9tyVOfG/DMIf/7mI13SmCZcP
-         xGYv4HyipjIaNpUyLjWmDRZm/V8DaBYpRAwiIgfvD0ZMcX7nOumYYfLBN6BkNTXJIvCG
-         Fm0r4sgJdu2m78BTL7WKcuVO14CYm5iJFWB3dU85lLONzNlhiwW1P/Mfie3Kg/HuBl15
-         X6Yk+dY25zwjJn/edlR8J0bMBhjy9XcGYlpXt8MjDvmAGQm5nTQq5jLHXPWh0AHkUNGv
-         jOOwgKVHdzyrKEzyJCMVA3qM4RB7uwwzo5JAxwkORKDgyh4X2G6aeW5lAqWUnlt2PzWv
-         I1jQ==
-X-Gm-Message-State: AFqh2kouXdj/cpKZ26gU5AlyRdYW6534/pgmGFzdv8vZznJ5Q3pBhwhv
-        VdXkgc8A3s6UVFcKAz1AdBF6esIXM2bJmA+z7cMDdQ==
-X-Google-Smtp-Source: AMrXdXslkxL7UBNfkOhYC3B8zZdJn9HFotr+MwajcwvZmQTG61DbbRtZtGg7pjiZG0uYr4oy2I+EySvFDHjgctf1gGI=
-X-Received: by 2002:a1f:c345:0:b0:3b8:2d76:434d with SMTP id
- t66-20020a1fc345000000b003b82d76434dmr4520082vkf.31.1672722648007; Mon, 02
- Jan 2023 21:10:48 -0800 (PST)
+        bh=MrLsJYJCl0GUbw8xUXHKhur/cDclpdHM4gEbb6ape38=;
+        b=hjv3VweJ2qZN7Uu7Xo46I7UglaRRGDzgBdljKVf3ONO/FURwl+SknmGsje7AmwpJu3
+         kwgEmyCkDcsHZELrkr43m9qMoUGUgE2W5ufQHq2d5jlaIhETs0/nYDDJ8eYRanfOxS/x
+         9ow2iy4bMCeuBOT9C7YBnUCt2lIzhVZvNGtxTX1//jU9owg7lQt+KvhfYfWV8orVkxc2
+         XWR3HQhRXfbPqQsbWmbxhgv45PzsW1/NVtCyXbYxFA2MvrxSQSJT+qRtQUS1TfakjK1G
+         1CkcP+rFbTiR5sluXXuaLSXRsNgcLNXtWbS6CEDIIkoaTjYAa1VaIa/SDYWufqMSkSch
+         zvDA==
+X-Gm-Message-State: AFqh2krzNIlBMroNrMzV3c5MINXDdpk+c+mqCneDBO0Ijkpl3TpZ1qkE
+        JN3FkTxcgLuuLMsq6VQSMCI=
+X-Google-Smtp-Source: AMrXdXtv8kuS6DHOgo+p/LCWdI+rS7JAQJJcyMBeAh/i2Pxs1lTwoAEPG7RehHhZIW9rekFROjBXVQ==
+X-Received: by 2002:a05:6a00:1346:b0:581:c216:1390 with SMTP id k6-20020a056a00134600b00581c2161390mr23389911pfu.34.1672722722555;
+        Mon, 02 Jan 2023 21:12:02 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.3])
+        by smtp.gmail.com with ESMTPSA id e185-20020a621ec2000000b00571cdbd0771sm3270695pfe.102.2023.01.02.21.12.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 21:12:02 -0800 (PST)
+From:   zys.zljxml@gmail.com
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yushan Zhou <katrinzhou@tencent.com>
+Subject: [PATCH v3] btrfs: use PAGE_{ALIGN, ALIGNED, ALIGN_DOWN} macro
+Date:   Tue,  3 Jan 2023 13:11:37 +0800
+Message-Id: <20230103051137.4085572-1-zys.zljxml@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20221111044207.1478350-1-apatel@ventanamicro.com>
- <20221111044207.1478350-7-apatel@ventanamicro.com> <Y3EQ4JU7uGbIMGiW@spud>
- <CAAhSdy2UAMmX+W5Cm3DuTJzZ0jJ3=CW4PhjctQNdfeS+4hqWqg@mail.gmail.com> <Y7MfyZBAErYGMZBK@spud>
-In-Reply-To: <Y7MfyZBAErYGMZBK@spud>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Tue, 3 Jan 2023 10:40:35 +0530
-Message-ID: <CAK9=C2WoFZBmnqpNGUZWATMqd22TiHpQehAYbW+DNX8ejHU=RA@mail.gmail.com>
-Subject: Re: [PATCH 6/9] dt-bindings: Add RISC-V advanced PLIC bindings
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 2, 2023 at 11:48 PM Conor Dooley <conor@kernel.org> wrote:
->
-> On Mon, Jan 02, 2023 at 10:20:48PM +0530, Anup Patel wrote:
-> > On Sun, Nov 13, 2022 at 9:14 PM Conor Dooley <conor@kernel.org> wrote:
->
-> > > > +  domain.
-> > > > +
-> > > > +allOf:
-> > > > +  - $ref: /schemas/interrupt-controller.yaml#
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    items:
-> > > > +      - enum:
-> > > > +          - vendor,chip-aplic
-> > >
-> > > Same comment here about the validity of this placeholder.
-> >
-> > Okay, I will add "riscv,qemu-aplic" as QEMU specific compatible string.
->
-> Ah neat. I think that's a fair compromise.
->
-> > > > +      - const: riscv,aplic
->
-> > > > +  msi-parent:
-> > > > +    description:
-> > > > +      The presence of this property implies that given APLIC domain forwards
-> > > > +      wired interrupts as MSIs to a AIA incoming message signaled interrupt
-> > > > +      controller (IMSIC). This property should be considered only when the
-> > > > +      interrupts-extended property is absent.
-> > >
-> > > This mutual exclusion can be represented, can't it?
-> > > IIRC it is some sort of oneOf thing, somewhat like below:
-> > > oneOf:
-> > >   - required:
-> > >       - msi-parent
-> > >   - required:
-> > >       - interrupts-extended
-> > >
-> > > AFAIR from doing the i2c ocores binding, this will force the addition of
-> > > one, but not both, to a node.
-> > >
-> > > Or is this not actually mutually exclusive & the msi-parent property is
-> > > permitted but just left unused if interrupts-extended is present?
-> >
-> > If both are present then interrupts-extended is preferred.
->
-> Perhaps I am making a fool of myself here, but why would someone include
-> both of them at once, if only one is going to be used?
-> It would appear that making them explicitly mutually exclusive would
-> make the binding easier to understand.
-> What am I missing?
+From: Yushan Zhou <katrinzhou@tencent.com>
 
-If both "interrupts-extended" and "msi-parent" are present then it means
-the APLIC domain supports both MSI mode and Direct mode in HW. In this
-case, the APLIC driver has to choose between MSI mode or Direct mode.
+The header file linux/mm.h provides PAGE_ALIGN, PAGE_ALIGNED,
+PAGE_ALIGN_DOWN macros. Use these macros to make code more
+concise.
 
->
-> > > > +  riscv,children:
-> > > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> > > > +    minItems: 1
-> > > > +    maxItems: 1024
-> > > > +    description:
-> > > > +      This property represents a list of child APLIC domains for the given
-> > > > +      APLIC domain. Each child APLIC domain is assigned child index in
-> > > > +      increasing order with the first child APLIC domain assigned child
-> > > > +      index 0. The APLIC domain child index is used by firmware to delegate
-> > > > +      interrupts from the given APLIC domain to a particular child APLIC
-> > > > +      domain.
-> > > > +
-> > > > +  riscv,delegate:
-> > > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> > > > +    minItems: 1
-> > > > +    maxItems: 1024
-> > > > +    description:
-> > > > +      This property represents a interrupt delegation list where each entry
-> > > > +      is a triple consisting of child APLIC domain phandle, first interrupt
-> > > > +      number, and last interrupt number. The firmware will configure interrupt
-> > > > +      delegation registers based on interrupt delegation list.
-> > >
-> > > What is the inter dependence of the children and delegate?
-> > > Is it valid to have a delegate property without children?
-> > > Can the firmware delegate interrupts without the delegation list, based
-> > > on the children property alone? Or is it effectively useless without a
-> > > children property?
-> >
-> > Both properties convey different information. The "riscv,childen" describes
-> > the association of child indexes with child APLIC domains whereas the
-> > "riscv,delegate" describes the interrupt delegation to few of the child
-> > APLIC domains.
-> >
-> >
-> > >
-> > > In your examples, the second has msi-parent but neither of these custom
-> > > properties. Do the children/delegate properties have a meaning in the
-> > > msi-parent case?
-> >
-> > The "riscv,childern" and "riscv,delegate" are only useful when we have
-> > hierarchy of multiple APLIC domains. The second example only has
-> > one APLIC domain hence these custom properties are absent.
->
-> It'd be great if you could include an example that explains the
-> difference as, IIRC, both Rob and I both were kinda confused as to how
-> the properties differ.
+Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
+---
+ fs/btrfs/compression.c | 2 +-
+ fs/btrfs/defrag.c      | 2 +-
+ fs/btrfs/inode.c       | 5 ++---
+ fs/btrfs/lzo.c         | 2 +-
+ fs/btrfs/relocation.c  | 2 +-
+ fs/btrfs/send.c        | 4 ++--
+ 6 files changed, 8 insertions(+), 9 deletions(-)
 
-Okay, I will try to improve the examples.
+diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
+index 5122ca79f7ea..4a5aeb8dd479 100644
+--- a/fs/btrfs/compression.c
++++ b/fs/btrfs/compression.c
+@@ -1609,7 +1609,7 @@ static void heuristic_collect_sample(struct inode *inode, u64 start, u64 end,
+ 	index_end = end >> PAGE_SHIFT;
+ 
+ 	/* Don't miss unaligned end */
+-	if (!IS_ALIGNED(end, PAGE_SIZE))
++	if (!PAGE_ALIGNED(end))
+ 		index_end++;
+ 
+ 	curr_sample_pos = 0;
+diff --git a/fs/btrfs/defrag.c b/fs/btrfs/defrag.c
+index 0a3c261b69c9..130de66839c1 100644
+--- a/fs/btrfs/defrag.c
++++ b/fs/btrfs/defrag.c
+@@ -997,7 +997,7 @@ static int defrag_collect_targets(struct btrfs_inode *inode,
+ }
+ 
+ #define CLUSTER_SIZE	(SZ_256K)
+-static_assert(IS_ALIGNED(CLUSTER_SIZE, PAGE_SIZE));
++static_assert(PAGE_ALIGNED(CLUSTER_SIZE));
+ 
+ /*
+  * Defrag one contiguous target range.
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index 8bcad9940154..ff3b1ab6a696 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -10993,9 +10993,8 @@ static int btrfs_add_swap_extent(struct swap_info_struct *sis,
+ 		return 0;
+ 
+ 	max_pages = sis->max - bsi->nr_pages;
+-	first_ppage = ALIGN(bsi->block_start, PAGE_SIZE) >> PAGE_SHIFT;
+-	next_ppage = ALIGN_DOWN(bsi->block_start + bsi->block_len,
+-				PAGE_SIZE) >> PAGE_SHIFT;
++	first_ppage = PAGE_ALIGN(bsi->block_start) >> PAGE_SHIFT;
++	next_ppage = PAGE_ALIGN_DOWN(bsi->block_start + bsi->block_len) >> PAGE_SHIFT;
+ 
+ 	if (first_ppage >= next_ppage)
+ 		return 0;
+diff --git a/fs/btrfs/lzo.c b/fs/btrfs/lzo.c
+index d5e78cbc8fbc..71f6d8302d50 100644
+--- a/fs/btrfs/lzo.c
++++ b/fs/btrfs/lzo.c
+@@ -280,7 +280,7 @@ int lzo_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 		}
+ 
+ 		/* Check if we have reached page boundary */
+-		if (IS_ALIGNED(cur_in, PAGE_SIZE)) {
++		if (PAGE_ALIGNED(cur_in)) {
+ 			put_page(page_in);
+ 			page_in = NULL;
+ 		}
+diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
+index 31ec4a7658ce..ef13a9d4e370 100644
+--- a/fs/btrfs/relocation.c
++++ b/fs/btrfs/relocation.c
+@@ -2825,7 +2825,7 @@ static noinline_for_stack int prealloc_file_extent_cluster(
+ 	 *
+ 	 * Here we have to manually invalidate the range (i_size, PAGE_END + 1).
+ 	 */
+-	if (!IS_ALIGNED(i_size, PAGE_SIZE)) {
++	if (!PAGE_ALIGNED(i_size)) {
+ 		struct address_space *mapping = inode->vfs_inode.i_mapping;
+ 		struct btrfs_fs_info *fs_info = inode->root->fs_info;
+ 		const u32 sectorsize = fs_info->sectorsize;
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index e65e6b6600a7..b4cbd74fefce 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -5635,7 +5635,7 @@ static int send_encoded_extent(struct send_ctx *sctx, struct btrfs_path *path,
+ 	 * boundary in the send buffer. This means that there may be a gap
+ 	 * between the beginning of the command and the file data.
+ 	 */
+-	data_offset = ALIGN(sctx->send_size, PAGE_SIZE);
++	data_offset = PAGE_ALIGN(sctx->send_size);
+ 	if (data_offset > sctx->send_max_size ||
+ 	    sctx->send_max_size - data_offset < disk_num_bytes) {
+ 		ret = -EOVERFLOW;
+@@ -5759,7 +5759,7 @@ static int send_extent_data(struct send_ctx *sctx, struct btrfs_path *path,
+ 		sent += size;
+ 	}
+ 
+-	if (sctx->clean_page_cache && IS_ALIGNED(end, PAGE_SIZE)) {
++	if (sctx->clean_page_cache && PAGE_ALIGNED(end)) {
+ 		/*
+ 		 * Always operate only on ranges that are a multiple of the page
+ 		 * size. This is not only to prevent zeroing parts of a page in
+-- 
+2.27.0
 
-Regards,
-Anup
