@@ -2,239 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E556D65C5E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD4165C5EA
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238813AbjACSRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
+        id S238825AbjACSRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238811AbjACSRM (ORCPT
+        with ESMTP id S238818AbjACSRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:17:12 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8155C11159
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:17:09 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id a64so29108381vsc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:17:09 -0800 (PST)
+        Tue, 3 Jan 2023 13:17:20 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5493A13EB6
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:17:19 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id a12-20020a170902eccc00b001927f1d6316so15550388plh.10
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:17:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tOBzKrHIZiNhQCC3SGZiV+P8BTy8Nspc63LhdG+gCbc=;
-        b=TeKjETEb372iD79Ac+Wof6L+xeTA6p5FCrxhJMgxLzPAbJvdkDZuetOMB3DuqKh7hk
-         hh0AtEkahdi1UCFFMwMeoGLzWjjYzsC1wKbC7SJUGPGdmjh2AdLeEujdeZlMXeU3IO00
-         ozIKB4tPTrM45wn+tTq6IhfxOGzE6AnIAcWIM/Ap9h3MUECP7lAu1XmEJCqtuDhB8SHa
-         cHYV0I9fuRRkiKGCZajESwrd41zB9T7sqoYm09kEr9nL4H5LHuJRyfenzIMZ542M4iyd
-         NjQFbpI4V1Vra5PB6ncdTyxFfN8jsk058OtVEglgFSG7B+/6qADgpYizfhwom05M6BD4
-         o9nQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hl1m6owob6L03NijBO7al3lk620qRVaiSafJ4M2A8m4=;
+        b=Juf6c0M3QBOfV9ZSCI8ohzVj7mRdQu1neOhQ2eJdcs1PMri5dkm2rR1zvroFHOa/lD
+         nlfPteBpn1n5M+04MWVSDTbFORGKdpwuZLEha+YfY6zCOcCZtaysFrtHMLuP+sfo0vqs
+         XG4RBposZOmmw6D9b443tBrHbbfiidVpWqxz+SBkTlrBKDEFVq/l29DTjvBPuEHo/Pyv
+         GeioeQHUGHMdYskaAZJGuzuofVUCkmulLJ2Kkjl1tnHdoQu7F2mD/7fCZHSYyHCLL3S8
+         ptqCujUF0GUXnP0pKox44KqvRYtymYNvGzpIE4dylZnVL+XkgcS4QWikYiUfQDBB8Rkz
+         +iIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tOBzKrHIZiNhQCC3SGZiV+P8BTy8Nspc63LhdG+gCbc=;
-        b=3TgnPsPMO3ml3cI0ZhZHrjjbU+er2yJs6SKMDXR4rLPrwSx+REQSoAqF/zoJnHSOQW
-         FGDgffHLhjBKTNICYLJY4huXa9K+zyFkrA3LZAqUZoD8QtdSAAMUEiV9VErWCeE5vm/m
-         euSvHWGu0X3xHXfHiOvYba5YlEnaIRPoP08nnmzu4tm73uu0Oin6w+ghAMU/uM7vjji+
-         /bZ/z08LKIJm6asPNCrTB6FOZOXmo44QiHs5dliefZEteHdUt4yfC+kvFMMeiskwr8Bl
-         FqE+1aZ21q05ZumkdDpSIBO9hCGZn1uQl821twt1xC8D3c46vFiA5uKuAToivg1fZ+X0
-         FlgQ==
-X-Gm-Message-State: AFqh2kq4yUnDNeE++7HocX6NZH37inJZL1582s4m0KPbAeCqgmcDcP1x
-        TUhKFrzwyALmDpV2ZQKhqBs8J5H55w/q7HXIJl0gzQ==
-X-Google-Smtp-Source: AMrXdXt0sTPrcVgkVIhWyI5jbkVfigkIYOKIynaMGTeeVh0TksKHIXC6nC1bY4tPkjJPqQjg9Veh8w2ZQ7guuIaNhz8=
-X-Received: by 2002:a67:ec94:0:b0:3b5:32d0:edcc with SMTP id
- h20-20020a67ec94000000b003b532d0edccmr4938819vsp.24.1672769828471; Tue, 03
- Jan 2023 10:17:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20230103081308.548338576@linuxfoundation.org>
-In-Reply-To: <20230103081308.548338576@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 3 Jan 2023 23:46:57 +0530
-Message-ID: <CA+G9fYte94MoVjMBQ=37r9Wrg1C1VmTVZ7eWik3xKmu02_554w@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/63] 5.10.162-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hl1m6owob6L03NijBO7al3lk620qRVaiSafJ4M2A8m4=;
+        b=Hk1cZrOOcKaUM0gUGyWGT6FnTJXAfUtJctZrbR79DNZDpruqYR3Kka/FQyytgAeV1n
+         oAtLb2k2Y5LCFOUfsRdLrINIEDxNcFKLOO8soYl5ara3AIdzmPMVLiWSv8STEnjnM9e7
+         rAcb312tSlRX/vL3DQ1TxByZ975tBrcOljocKKyhyE/SxyE/nkdMXmCzAnBBRRtRYWNp
+         SyipEiNP6gXruBLfxNpZFL8nugQa3XAeOAVuRnjuhFtRJlD8wgaPEKdl+IEYehslc7A2
+         NPgUQyVQAvI8CqrCMhJugovtCv0KYzse1qILylBAVdaNnEZQ4tryUcBWWJQtzWhKTQED
+         Dimg==
+X-Gm-Message-State: AFqh2kqzUezT93f98O10sh/r2ADNJyI5I1wyfg1zI/F1HwKbaewV5G10
+        T11jyIsWt4v5pLCV6BFblBTeRejZOiSMeKr+Cw==
+X-Google-Smtp-Source: AMrXdXtl8YK5hENhsYq1u/WnQ3ynWhmnxnc48c8ukA28XJRLuwX2hjPOB7UhMO9ZIY5MFS/x5JA+x7V22y1x5c/Vtg==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a17:90b:1112:b0:223:dd6f:13b2 with
+ SMTP id gi18-20020a17090b111200b00223dd6f13b2mr3246528pjb.56.1672769838642;
+ Tue, 03 Jan 2023 10:17:18 -0800 (PST)
+Date:   Tue, 03 Jan 2023 10:17:16 -0800
+In-Reply-To: <20221215205937.GF3632095@ls.amr.corp.intel.com> (message from
+ Isaku Yamahata on Thu, 15 Dec 2022 12:59:37 -0800)
+Mime-Version: 1.0
+Message-ID: <diqzh6x7lbyr.fsf@google.com>
+Subject: Re: [PATCH v10 016/108] KVM: TDX: create/destroy VM structure
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        pbonzini@redhat.com, erdemaktas@google.com, seanjc@google.com,
+        sagis@google.com, dmatlack@google.com,
+        sean.j.christopherson@intel.com, kai.huang@intel.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 3 Jan 2023 at 13:45, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.162 release.
-> There are 63 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 05 Jan 2023 08:12:47 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.162-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
+Happy to help!
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Nope it wasn't any special technique, I was working on the selftests and
+made a mistake configuring the TD while initializing it.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+While setting up struct kvm_tdx_init_vm, I did not copy the entire
+struct kvm_cpuid2.
 
-## Build
-* kernel: 5.10.162-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: c5bc645ae6f96d3949dcf1f0fb0a7c243fb525d1
-* git describe: v5.10.161-64-gc5bc645ae6f9
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.161-64-gc5bc645ae6f9
+This reliably reproduces the crash:
 
-## Test Regressions (compared to v5.10.160-19-gbc32b2c55e20)
+--------
 
-## Metric Regressions (compared to v5.10.160-19-gbc32b2c55e20)
+// SPDX-License-Identifier: GPL-2.0-only
 
-## Test Fixes (compared to v5.10.160-19-gbc32b2c55e20)
+#include "kvm_util_base.h"
+#include <processor.h>
 
-## Metric Fixes (compared to v5.10.160-19-gbc32b2c55e20)
+static int tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
+{
+	struct kvm_tdx_cmd tdx_cmd;
 
-## Test result summary
-total: 138327, pass: 116359, fail: 3491, skip: 18160, xfail: 317
+	memset(&tdx_cmd, 0x0, sizeof(tdx_cmd));
+	tdx_cmd.id = ioctl_no;
+	tdx_cmd.flags = flags;
+	tdx_cmd.data = (uint64_t)data;
+	return ioctl(fd, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd);
+}
 
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 148 passed, 3 failed
-* arm64: 49 total, 46 passed, 3 failed
-* i386: 39 total, 37 passed, 2 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 32 total, 25 passed, 7 failed
-* riscv: 16 total, 14 passed, 2 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
+#define XFEATURE_LBR		15
+#define XFEATURE_XTILECFG	17
+#define XFEATURE_XTILEDATA	18
+#define XFEATURE_CET_U          11
+#define XFEATURE_CET_S          12
 
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
+#define XFEATURE_MASK_LBR	(1 << XFEATURE_LBR)
+#define XFEATURE_MASK_CET_U	(1 << XFEATURE_CET_U)
+#define XFEATURE_MASK_CET_S	(1 << XFEATURE_CET_S)
+#define XFEATURE_MASK_CET       (XFEATURE_MASK_CET_U | XFEATURE_MASK_CET_S)
+#define XFEATURE_MASK_XTILECFG	(1 << XFEATURE_XTILECFG)
+#define XFEATURE_MASK_XTILEDATA	(1 << XFEATURE_XTILEDATA)
+#define XFEATURE_MASK_XTILE	(XFEATURE_MASK_XTILECFG |  
+XFEATURE_MASK_XTILEDATA)
 
---
-Linaro LKFT
-https://lkft.linaro.org
+static void apply_tdx_restrictions(struct kvm_cpuid2 *cpuid_data)
+{
+	for (int i = 0; i < 100; i++) {
+		struct kvm_cpuid_entry2 *e = &cpuid_data->entries[i];
+
+		if (e->function == 0xd && e->index == 0) {
+			/*
+			 * TDX module requires both XTILE_{CFG, DATA} to be set.
+			 * Both bits are required for AMX to be functional.
+			 */
+			if ((e->eax & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE) {
+				e->eax &= ~XFEATURE_MASK_XTILE;
+			}
+		}
+
+		if (e->function == 0xd && e->index == 1) {
+			/*
+			 * TDX doesn't support LBR yet.
+			 * Disable bits from the XCR0 register.
+			 */
+			e->ecx &= ~XFEATURE_MASK_LBR;
+
+			/*
+			 * TDX modules requires both CET_{U, S} to be set even
+			 * if only one is supported.
+			 */
+			if (e->ecx & XFEATURE_MASK_CET)
+				e->ecx |= XFEATURE_MASK_CET;
+		}
+	}
+}
+
+void initialize_td_bad(struct kvm_vm *vm)
+{
+	const struct kvm_cpuid2 *cpuid;
+	int rc;
+
+	/* No guest VMM controlled cpuid information yet. */
+	struct kvm_tdx_init_vm init_vm;
+
+	rc = kvm_check_cap(KVM_CAP_X2APIC_API);
+	TEST_ASSERT(rc, "TDX: KVM_CAP_X2APIC_API is not supported!");
+	rc = kvm_check_cap(KVM_CAP_SPLIT_IRQCHIP);
+	TEST_ASSERT(rc, "TDX: KVM_CAP_SPLIT_IRQCHIP is not supported!");
+
+	vm_enable_cap(vm, KVM_CAP_X2APIC_API,
+		      KVM_X2APIC_API_USE_32BIT_IDS |
+			      KVM_X2APIC_API_DISABLE_BROADCAST_QUIRK);
+	vm_enable_cap(vm, KVM_CAP_SPLIT_IRQCHIP, 24);
+
+	/* Allocate and setup memory for the td guest. */
+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, 1, 0);
+
+	cpuid = kvm_get_supported_cpuid();
+	apply_tdx_restrictions((struct kvm_cpuid2 *) cpuid);
+
+	memset(&init_vm, 0, sizeof(init_vm));
+	init_vm.attributes = 0;
+
+	/*
+	 * Should have been kvm_cpuid2_size(cpuid->nent) instead of
+	 * sizeof(*cpuid)
+	 */
+	memcpy(&init_vm.cpuid, cpuid, sizeof(*cpuid));
+
+	rc = tdx_ioctl(vm->fd, KVM_TDX_INIT_VM, 0, &init_vm);
+	TEST_ASSERT(rc == 0, "KVM_TDX_INIT_VM failed: %d %d", rc, errno);
+}
+
+static int crash(void)
+{
+	struct kvm_vm *vm;
+
+	/* Create a TD VM with no memory.*/
+	vm = ____vm_create(VM_MODE_DEFAULT, 0, KVM_X86_TDX_VM);
+
+	/* Allocate TD guest memory and initialize the TD.*/
+	initialize_td_bad(vm);
+
+	return 0;
+}
+
+int main(int argc, char **argv)
+{
+	/* Disable stdout buffering */
+	setbuf(stdout, NULL);
+
+	return crash();
+}
