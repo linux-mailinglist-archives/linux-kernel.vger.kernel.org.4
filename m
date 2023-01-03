@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F2665C595
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F3B65C59B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238504AbjACSBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S238523AbjACSBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:01:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238496AbjACSAy (ORCPT
+        with ESMTP id S238513AbjACSA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:00:54 -0500
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D262260F3;
-        Tue,  3 Jan 2023 10:00:53 -0800 (PST)
-Received: by mail-il1-f177.google.com with SMTP id h26so4135104ila.11;
-        Tue, 03 Jan 2023 10:00:53 -0800 (PST)
+        Tue, 3 Jan 2023 13:00:57 -0500
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F41270;
+        Tue,  3 Jan 2023 10:00:56 -0800 (PST)
+Received: by mail-il1-f169.google.com with SMTP id bp26so3757088ilb.3;
+        Tue, 03 Jan 2023 10:00:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3U4kPXRDj8X/D/vbdLzUnOyXOpG/g/yFLv9I84Ua9eI=;
-        b=msi4v/2nXdDNRcSRGQCicecr1JhkOOQF6WqW2qEUSr/7yBI+IrnyvZfU4OOYX/B3KV
-         q9ySObEwNuUsFqWJhwcI1lDz6rYgTbuhqbGJ+8xUOmS0P1azFHsGvp87FDRdhDFJb3Bu
-         2Aw+p5Mc0Kz8Ml7LXuVe5v6fZM7yFlCaEsGHRMj0VusIrKVjBGJbsvSysIgp8IRQ1Me9
-         KHTdEvlcx0eMu8FxGeuMEZAgSFTRASMrgKt2LLepCyQB8+QOntDTgjgBs0NTXvvKxTtK
-         6U4lX0YVd/vP5OMEbagRg9RySFggjvClq3Lmjg5jJln0fDbHkXcTukBp4vROAgzbSxlH
-         bCKA==
-X-Gm-Message-State: AFqh2kp9tCFKP+ps1qtaOPSl5dQF+NqbEcpNhP0tyxQIQqB2r5LOMPD/
-        pXXC9ORScM0DxFvM4i2Wcw==
-X-Google-Smtp-Source: AMrXdXtEtZENPLw4lfH/V5j5pYzOrPCUXQlZ5CnDGDRq+MDhNRSNS6L4uutheusjaF3nHuQWU136zg==
-X-Received: by 2002:a92:c60e:0:b0:304:b79a:5008 with SMTP id p14-20020a92c60e000000b00304b79a5008mr32921267ilm.29.1672768853018;
-        Tue, 03 Jan 2023 10:00:53 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+wm/VAsCJtckCmZFwW1Ji09pFtmWQae4vzQe50HoWg4=;
+        b=GD2e6mffm45OB2oyL7ZGQGm/93Ivcs5E/RWdFedMvXO6u5dBXcvd2N1LtE0J2/90Mv
+         GlSDLDDcmkzYUxqa8T3ZTdc+MCgs+ryVRx1DaSH+DJada8/DvbGxoXjoWY9u4VI6rnp8
+         5VyW2Jg3e4MVS+PnbbvLWDGHXSkwrhe283IU7w36baUk6moXB/EKVd52c+LipKXtWehC
+         MqfnPQcMMc7J87bAGZwFYL5FOT20blUDAdYPZoe76K5L8OKL9HrGtTy4fXUDkfajtTMp
+         Qx/26YrfbrUaFyUFGwi0LUhiob0AZLsuhgFdKHizcI7ZiT3CiMw3NdAqNWcOiy9uT5B1
+         C6WA==
+X-Gm-Message-State: AFqh2kp54tTVTkEAFec4CPR3+Y/H9KB/hsKGe3u0pHn0j7H4bWt5RO2S
+        CjplyTS2ZvuyOb59sABggTVnIExCEw==
+X-Google-Smtp-Source: AMrXdXsBQWnE4m6NFOYZRRt+RQrVTDUs7E3tgSd494Hy/6KB47YogIhvaqdpkp8Sjgc46cbAw5DTRQ==
+X-Received: by 2002:a92:db47:0:b0:303:30a9:326a with SMTP id w7-20020a92db47000000b0030330a9326amr28638434ilq.7.1672768856073;
+        Tue, 03 Jan 2023 10:00:56 -0800 (PST)
 Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id v18-20020a92d252000000b0030c0217dde6sm7739103ilg.0.2023.01.03.10.00.52
+        by smtp.gmail.com with ESMTPSA id g14-20020a056e021a2e00b00304ae88ebebsm9803549ile.88.2023.01.03.10.00.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 10:00:52 -0800 (PST)
-Received: (nullmailer pid 3492165 invoked by uid 1000);
+        Tue, 03 Jan 2023 10:00:55 -0800 (PST)
+Received: (nullmailer pid 3492168 invoked by uid 1000);
         Tue, 03 Jan 2023 18:00:51 -0000
 From:   Rob Herring <robh@kernel.org>
-Subject: [PATCH 0/2] of: Fix handling CONFIG_CMDLINE* even without /chosen node
 Date:   Tue, 03 Jan 2023 12:00:31 -0600
-Message-Id: <20230103-dt-cmdline-fix-v1-0-7038e88b18b6@kernel.org>
+Subject: [PATCH 1/2] Revert "of: fdt: Honor CONFIG_CMDLINE* even without /chosen node"
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAD9ttGMC/x2NSwrCQBAFrxJ6bcMkgwl6leBiPs+kYWzDjIoQc
- ncbl1W84u3UUAWNrt1OFR9p8lSD/tRRWoMuYMnGNLjBu955zi9Oj1xEwXf5MvyIOMFf4nQmi2Jo
- 4FiDptUyfZdicquw7f9lvh3HD2TCtFx1AAAA
+Message-Id: <20230103-dt-cmdline-fix-v1-1-7038e88b18b6@kernel.org>
+References: <20230103-dt-cmdline-fix-v1-0-7038e88b18b6@kernel.org>
+In-Reply-To: <20230103-dt-cmdline-fix-v1-0-7038e88b18b6@kernel.org>
 To:     Geoff Levand <geoff@infradead.org>,
         Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         Frank Rowand <frowand.list@gmail.com>
@@ -67,31 +66,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit a7d550f82b445cf218b47a2c1a9c56e97ecb8c7a (of: fdt: Honor CONFIG_CMDLINE*
-even without /chosen node) moved the processing of the kernel built-in command
-line (CONFIG_CMDLINE) from the early_init_dt_scan_chosen routine to the
-early_init_dt_scan_nodes routine.
+This reverts commit a7d550f82b445cf218b47a2c1a9c56e97ecb8c7a.
 
-The current powerpc startup code does not call into early_init_dt_scan_nodes, so
-processing of CONFIG_CMDLINE never happens, even if CONFIG_CMDLINE_FORCE=y.
-The result is an empty kernel command line, and mounting of the root file system
-then fails with a kernel panic (not syncing: VFS: Unable to mount root fs).
+Some arches (PPC at least) don't call early_init_dt_scan_nodes(), so
+moving the cmdline processing there breaks them.
 
-Let's revert the above commit and redo the missing /chosen node handling 
-within early_init_dt_scan_chosen().
-
+Reported-by: Geoff Levand <geoff@infradead.org>
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
-Rob Herring (2):
-      Revert "of: fdt: Honor CONFIG_CMDLINE* even without /chosen node"
-      of: fdt: Honor CONFIG_CMDLINE* even without /chosen node, take 2
+ drivers/of/fdt.c | 40 ++++++++++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
- drivers/of/fdt.c | 54 ++++++++++++++++++++++++++++--------------------------
- 1 file changed, 28 insertions(+), 26 deletions(-)
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230103-dt-cmdline-fix-e36eb7e39b75
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index b2272bccf85c..7b571a631639 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1173,6 +1173,26 @@ int __init early_init_dt_scan_chosen(char *cmdline)
+ 	if (p != NULL && l > 0)
+ 		strscpy(cmdline, p, min(l, COMMAND_LINE_SIZE));
+ 
++	/*
++	 * CONFIG_CMDLINE is meant to be a default in case nothing else
++	 * managed to set the command line, unless CONFIG_CMDLINE_FORCE
++	 * is set in which case we override whatever was found earlier.
++	 */
++#ifdef CONFIG_CMDLINE
++#if defined(CONFIG_CMDLINE_EXTEND)
++	strlcat(cmdline, " ", COMMAND_LINE_SIZE);
++	strlcat(cmdline, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
++#elif defined(CONFIG_CMDLINE_FORCE)
++	strscpy(cmdline, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
++#else
++	/* No arguments from boot loader, use kernel's  cmdl*/
++	if (!((char *)cmdline)[0])
++		strscpy(cmdline, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
++#endif
++#endif /* CONFIG_CMDLINE */
++
++	pr_debug("Command line is: %s\n", (char *)cmdline);
++
+ 	rng_seed = of_get_flat_dt_prop(node, "rng-seed", &l);
+ 	if (rng_seed && l > 0) {
+ 		add_bootloader_randomness(rng_seed, l);
+@@ -1277,26 +1297,6 @@ void __init early_init_dt_scan_nodes(void)
+ 	if (rc)
+ 		pr_warn("No chosen node found, continuing without\n");
+ 
+-	/*
+-	 * CONFIG_CMDLINE is meant to be a default in case nothing else
+-	 * managed to set the command line, unless CONFIG_CMDLINE_FORCE
+-	 * is set in which case we override whatever was found earlier.
+-	 */
+-#ifdef CONFIG_CMDLINE
+-#if defined(CONFIG_CMDLINE_EXTEND)
+-	strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
+-	strlcat(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+-#elif defined(CONFIG_CMDLINE_FORCE)
+-	strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+-#else
+-	/* No arguments from boot loader, use kernel's cmdl */
+-	if (!boot_command_line[0])
+-		strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+-#endif
+-#endif /* CONFIG_CMDLINE */
+-
+-	pr_debug("Command line is: %s\n", boot_command_line);
+-
+ 	/* Setup memory, calling early_init_dt_add_memory_arch */
+ 	early_init_dt_scan_memory();
+ 
 
-Best regards,
 -- 
-Rob Herring <robh@kernel.org>
+2.39.0
