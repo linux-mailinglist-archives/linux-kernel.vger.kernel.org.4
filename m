@@ -2,142 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD3465C226
+	by mail.lfdr.de (Postfix) with ESMTP id D278C65C228
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237989AbjACOmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S233490AbjACOmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237944AbjACOmF (ORCPT
+        with ESMTP id S237890AbjACOmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:42:05 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F88EE29
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:42:03 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E824924000D;
-        Tue,  3 Jan 2023 14:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1672756921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rTMO3TySG46QgZw+qOV1x67KwVNxb2EvI1mr7+JDBlY=;
-        b=baEdm2IA5eAa4DvzbMbllbXt8eMiBNwUoF0l5/gM7tLt9Ot8Ap7FMA5x30dtyecLguiDWC
-        +mfcg3zF3zln8j648DeTEEjCqgOBA73cd9PkGMe84kQQB2ARMKb/aNWvC53Drltu8V2EXo
-        ZRwqCeGg47jMempFyYrDgL1kATygNal+T7387r9/UXb+To6i8aLGo1v6ZlK9F9Rlr8NnRp
-        k5T4B9o0cSxFL2P9hP86M6PWtHifg9VO0fVrRGsEDketJgYWTlRnst7p5+ODfCorAag7q9
-        h1mgsd54VW2USPLbBFa9R8YsrVBNwK21fcKwgviV8IQ6woar9EHL6x17Cz5P5Q==
-Date:   Tue, 3 Jan 2023 15:41:54 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 4/7] mtd: rawnand: sunxi: Fix ECC strength maximization
-Message-ID: <20230103154155.7064e59e@xps-13>
-In-Reply-To: <6940e60e-834d-9cc6-c3b8-657b100ea5db@sholland.org>
-References: <20221229181526.53766-1-samuel@sholland.org>
-        <20221229181526.53766-5-samuel@sholland.org>
-        <20230102101132.66aa1a1d@xps-13>
-        <4207d4eb-31d5-31c0-1a7f-67ec00b63f58@sholland.org>
-        <20230102174517.1ccb3654@xps-13>
-        <6940e60e-834d-9cc6-c3b8-657b100ea5db@sholland.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 3 Jan 2023 09:42:25 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DEBE0AA
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:42:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Dw5ZgJSaRLkDv4nIzFjapZY+fSw9bSxUXN0tVxPPIDY=; b=aouNauwujUkFDlJmZZD20JzSoD
+        siVGt+ePb/Oimb5sXnNpgyecNqCDeYdOx8MwoKE0wLcFXoBtKU8/Dc5VDDTZj7HrqM2EuBeOqw56V
+        gbnvFaYFpWzK2TceB3oad//AEoX1EBy3P4OxI+e0lwPohsX3y4u5bT7gDfoEheCRD4PCKDi0RmWPW
+        XZrVCHfWLxQRSv5kT3IKy3r1mlmKXtMfCrEeb4YULOHEGCYYffQogDriiCVaEssIEEc3da/R9HWZu
+        0lTCy5SR0qpVAFCa0RnnCegiA/MO0z/8yCu9/TC6AOGR6wNeFoY7MYGeIVGj7TBANhXaS5vKbC+xe
+        sKlu2HzA==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:34488 helo=rmk-PC.armlinux.org.uk)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <rmk@armlinux.org.uk>)
+        id 1pCiUf-0005R4-RZ; Tue, 03 Jan 2023 14:42:21 +0000
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+        id 1pCiUe-00457v-SQ; Tue, 03 Jan 2023 14:42:20 +0000
+From:   "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hector Martin <marcan@marcan.st>
+Subject: [PATCH v2] nvmem: fix registration vs use race
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1pCiUe-00457v-SQ@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date:   Tue, 03 Jan 2023 14:42:20 +0000
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
+The i.MX6 CPU frequency driver sometimes fails to register at boot time
+due to nvmem_cell_read_u32() sporadically returning -ENOENT.
 
-samuel@sholland.org wrote on Mon, 2 Jan 2023 11:06:20 -0600:
+This happens because there is a window where __nvmem_device_get() in
+of_nvmem_cell_get() is able to return the nvmem device, but as cells
+have been setup, nvmem_find_cell_entry_by_node() returns NULL.
 
-> Hi Miqu=C3=A8l,
->=20
-> On 1/2/23 10:45, Miquel Raynal wrote:
-> >>>> This is already accounted for in the subtraction for OOB, since the =
-BBM
-> >>>> overlaps the first OOB dword. With this change, the driver picks the
-> >>>> same ECC strength as the vendor driver.
-> >>>>
-> >>>> Fixes: 4796d8655915 ("mtd: nand: sunxi: Support ECC maximization")
-> >>>> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> >>>> ---
-> >>>>
-> >>>>  drivers/mtd/nand/raw/sunxi_nand.c | 3 +--
-> >>>>  1 file changed, 1 insertion(+), 2 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/ra=
-w/sunxi_nand.c
-> >>>> index 1bddeb1be66f..1ecf2cee343b 100644
-> >>>> --- a/drivers/mtd/nand/raw/sunxi_nand.c
-> >>>> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
-> >>>> @@ -1643,8 +1643,7 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct =
-nand_chip *nand,
-> >>>>  		ecc->size =3D 1024;
-> >>>>  		nsectors =3D mtd->writesize / ecc->size;
-> >>>> =20
-> >>>> -		/* Reserve 2 bytes for the BBM */
-> >>>> -		bytes =3D (mtd->oobsize - 2) / nsectors;
-> >>>> +		bytes =3D mtd->oobsize / nsectors;   =20
-> >>>
-> >>> I'm sorry but I don't think we can make this work. This change would
-> >>> break all existing users...   =20
-> >>
-> >> OK, it is not too much of an issue because I can manually specify the
-> >> ECC parameters in the devicetree. Do you think it makes sense to fix
-> >> this when adding new hardware variants/compatible strings? =20
-> >=20
-> > Actually, looking at the code again, I don't get how the above diff
-> > could be valid. The "maximize strength" logic (in which this diff is)
-> > looks for the biggest region to store ECC bytes. These bytes cannot
-> > be stored on the BBM, which "mtd->oobsize - 2" tries to avoid, so we
-> > cannot get rid of this. =20
->=20
-> Right, we cannot overlap the BBM, but the BBM is accounted for in the
-> line below:
->=20
->   /* 4 non-ECC bytes are added before each ECC bytes section */
->   bytes -=3D 4;
->=20
-> Normally those 4 bytes are all free OOB, but for the first ECC step,
-> those are split into 2 free bytes and 2 BBM bytes:
->=20
->   /*
->    * The first 2 bytes are used for BB markers, hence we
->    * only have 2 bytes available in the first user data
->    * section.
->    */
->   if (!section && ecc->engine_type =3D=3D NAND_ECC_ENGINE_TYPE_ON_HOST) {
->           oobregion->offset =3D 2;
->           oobregion->length =3D 2;
->=20
->           return 0;
->   }
->=20
-> So if we subtract 4 bytes for the each free OOB area, including the
-> first one, and also subtract 2 bytes for the BBM, we are double-counting
-> the BBM. I should have made my commit message clearer. But I am going to
-> drop this patch anyway.
+The occurs because the nvmem core registration code violates one of the
+fundamental principles of kernel programming: do not publish data
+structures before their setup is complete.
 
-Ah, yes, you are absolutely right, then.
+Fix this by making nvmem core code conform with this principle.
 
-Thanks,
-Miqu=C3=A8l
+Fixes: eace75cfdcf7 ("nvmem: Add a simple NVMEM framework for nvmem providers")
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+v2: add fixes tag
+
+ drivers/nvmem/core.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 321d7d63e068..6b89fb6fa582 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -835,22 +835,16 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	nvmem->dev.groups = nvmem_dev_groups;
+ #endif
+ 
+-	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
+-
+-	rval = device_register(&nvmem->dev);
+-	if (rval)
+-		goto err_put_device;
+-
+ 	if (nvmem->nkeepout) {
+ 		rval = nvmem_validate_keepouts(nvmem);
+ 		if (rval)
+-			goto err_device_del;
++			goto err_put_device;
+ 	}
+ 
+ 	if (config->compat) {
+ 		rval = nvmem_sysfs_setup_compat(nvmem, config);
+ 		if (rval)
+-			goto err_device_del;
++			goto err_put_device;
+ 	}
+ 
+ 	if (config->cells) {
+@@ -867,6 +861,12 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	if (rval)
+ 		goto err_remove_cells;
+ 
++	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
++
++	rval = device_register(&nvmem->dev);
++	if (rval)
++		goto err_remove_cells;
++
+ 	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem);
+ 
+ 	return nvmem;
+@@ -876,8 +876,6 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ err_teardown_compat:
+ 	if (config->compat)
+ 		nvmem_sysfs_remove_compat(nvmem, config);
+-err_device_del:
+-	device_del(&nvmem->dev);
+ err_put_device:
+ 	put_device(&nvmem->dev);
+ 
+-- 
+2.30.2
+
