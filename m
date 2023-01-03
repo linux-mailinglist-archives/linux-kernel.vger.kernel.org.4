@@ -2,171 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635EA65C9B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 23:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A034C65C9BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 23:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233840AbjACWec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 17:34:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
+        id S234157AbjACWkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 17:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbjACWe2 (ORCPT
+        with ESMTP id S233437AbjACWkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 17:34:28 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77A2387
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 14:34:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672785267; x=1704321267;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gz1Bsl2VXdVsmjjQsG0xEXDmVpr2BN/Ua1eTj70vVD0=;
-  b=Ugz7/Tf3kEW8V5m+5PkljJbCRbcwXbKelsmKZZiNWxMr5gRuxeFOZuYC
-   ixKD3F4rj72wejZ+aINGK6/8uENHonCgTBsoB172ipxrXOkrdAboT2I5d
-   JwA9HHchvtTPeEK1vMuACaO33nzXgxLsP2grcrQHozcNnk5+GNE/I3A6/
-   OKGpSmw3i8+X1apmuwPAeBWrGA/n1XT/PplIDgUNOQjD6n0AYFApb8lK7
-   KFo6ISs27ti4hCcdyvcxDgqHo7Yt2ARY3/z2YPe5phVMFxyHvlsinEcYs
-   dt/gQuHOPa4k3NUnArZlJG1/T+PxNVua+sy/gRRkJoOqbcBUtz5sp3B0F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="302148148"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="302148148"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 14:34:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="779002611"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="779002611"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 14:34:27 -0800
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fan Du <fan.du@intel.com>
-Subject: [PATCH] x86/mce: Mask out non-address bits from machine check bank
-Date:   Tue,  3 Jan 2023 14:34:16 -0800
-Message-Id: <20230103223416.310026-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 3 Jan 2023 17:40:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73D4101C2;
+        Tue,  3 Jan 2023 14:40:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C842B81020;
+        Tue,  3 Jan 2023 22:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 45E97C43392;
+        Tue,  3 Jan 2023 22:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672785617;
+        bh=Hy2eaSHJ7J2zC7XsHloSbhX5fiCeUzgDRNH8GWrVzBo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=kdv6zoK8FKOpimfXXG54bXrGQzHkT0L6A9zWIXGLktQOSRGfznbDfkfxMNOm5HZPT
+         qD0lTNsq0C1bXVLKY+UD7i/5OcxHp6ajIsHGlsx/gFe/WZJhrh6z3jHrHV3nlOxf8k
+         dhFUkKnBlFFpPWz9pr1UfeSOgovKCTAKfL+gJoC3jSxJJlplYermJoIrjxXA6npVVR
+         vL7Ed0aYiwdLzfExjNx26xQLE8VKmgcvE3peBJwVfL+n+2ucM1lu4ukKQnR2TEVtJ4
+         vN4RFQTj1wmPGzgNbiy/+pfkLxlQFLM83zljIlhzvxwJiUAt7QSHCZeNGnskGUqxcm
+         glFmgtebiVSEQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30F1CE5724F;
+        Tue,  3 Jan 2023 22:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Bluetooth: btusb: Add new PID/VID 0489:e0f2 for MT7921
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <167278561719.24920.2698221237471540145.git-patchwork-notify@kernel.org>
+Date:   Tue, 03 Jan 2023 22:40:17 +0000
+References: <20221215021854.1429-1-mario.limonciello@amd.com>
+In-Reply-To: <20221215021854.1429-1-mario.limonciello@amd.com>
+To:     Mario Limonciello <Mario.Limonciello@amd.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        matthias.bgg@gmail.com, mario.limonciello@amd.com,
+        sean.wang@mediatek.com, anson.tsao@amd.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Systems that support various memory encryption schemes (MKTME, TDX, SEV)
-use high order physical address bits to indicate which key should be
-used for a specific memory location.
+Hello:
 
-When a memory error is reported, some systems may report those key
-bits in the IA32_MCi_ADDR machine check MSR. This is legitimate because
-the Intel SDM has a footnote for the contents of the address register
-that says: "Useful bits in this field depend on the address methodology
-in use when the register state is saved."
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-Note: I don't know if any AMD systems include key bits in the reported
-address, if they do, they also need this fix. If not, it is harmless.
+On Wed, 14 Dec 2022 20:18:54 -0600 you wrote:
+> This bluetooth device is found in a combo WLAN/BT card
+> for a MediaTek 7921e.
+> 
+> The device information:
+> 
+> T:  Bus=01 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+> D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=0489 ProdID=e0f2 Rev= 1.00
+> S:  Manufacturer=MediaTek Inc.
+> S:  Product=Wireless_Device
+> S:  SerialNumber=000000000
+> C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
+> A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
+> I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+> I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
+> E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
+> E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
+> I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
+> E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
+> E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
+> 
+> [...]
 
-Add a new #define MCI_ADDR_PHYSADDR for the mask of valid physical
-address bits within the machine check bank address register. Use this
-mask for recoverable machine check handling and in the EDAC driver to
-ignore any key bits that may be present.
+Here is the summary with links:
+  - Bluetooth: btusb: Add new PID/VID 0489:e0f2 for MT7921
+    https://git.kernel.org/bluetooth/bluetooth-next/c/ad230933bec9
 
-[Credit: fix is based on those proposed by Fan Du and Isaku Yamahata]
-
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Reported-by: Isaku Yamahata <isaku.yamahata@intel.com>
-Reported-by: Fan Du <fan.du@intel.com>
----
- arch/x86/include/asm/mce.h     |  3 +++
- arch/x86/kernel/cpu/mce/core.c | 14 +++++++++-----
- drivers/edac/skx_common.c      |  2 +-
- 3 files changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 6e986088817d..a8eef87fb12a 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -88,6 +88,9 @@
- #define  MCI_MISC_ADDR_MEM	3	/* memory address */
- #define  MCI_MISC_ADDR_GENERIC	7	/* generic */
- 
-+/* MCi_ADDR register defines */
-+#define MCI_ADDR_PHYSADDR	GENMASK(boot_cpu_data.x86_phys_bits - 1, 0)
-+
- /* CTL2 register defines */
- #define MCI_CTL2_CMCI_EN		BIT_ULL(30)
- #define MCI_CTL2_CMCI_THRESHOLD_MASK	0x7fffULL
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 2c8ec5c71712..949705bdb2f3 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -579,7 +579,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
- 	    mce->severity != MCE_DEFERRED_SEVERITY)
- 		return NOTIFY_DONE;
- 
--	pfn = mce->addr >> PAGE_SHIFT;
-+	pfn = (mce->addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
- 	if (!memory_failure(pfn, 0)) {
- 		set_mce_nospec(pfn);
- 		mce->kflags |= MCE_HANDLED_UC;
-@@ -1308,6 +1308,7 @@ static void kill_me_maybe(struct callback_head *cb)
- {
- 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
- 	int flags = MF_ACTION_REQUIRED;
-+	unsigned long pfn;
- 	int ret;
- 
- 	p->mce_count = 0;
-@@ -1316,9 +1317,10 @@ static void kill_me_maybe(struct callback_head *cb)
- 	if (!p->mce_ripv)
- 		flags |= MF_MUST_KILL;
- 
--	ret = memory_failure(p->mce_addr >> PAGE_SHIFT, flags);
-+	pfn = (p->mce_addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
-+	ret = memory_failure(pfn, flags);
- 	if (!ret) {
--		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
-+		set_mce_nospec(pfn);
- 		sync_core();
- 		return;
- 	}
-@@ -1340,11 +1342,13 @@ static void kill_me_maybe(struct callback_head *cb)
- static void kill_me_never(struct callback_head *cb)
- {
- 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
-+	unsigned long pfn;
- 
- 	p->mce_count = 0;
- 	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
--	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
--		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
-+	pfn = (p->mce_addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
-+	if (!memory_failure(pfn, 0))
-+		set_mce_nospec(pfn);
- }
- 
- static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callback_head *))
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index f0f8e98f6efb..806986f03177 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -657,7 +657,7 @@ int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
- 
- 	memset(&res, 0, sizeof(res));
- 	res.mce  = mce;
--	res.addr = mce->addr;
-+	res.addr = mce->addr & MCI_ADDR_PHYSADDR;
- 
- 	/* Try driver decoder first */
- 	if (!(driver_decode && driver_decode(&res))) {
+You are awesome, thank you!
 -- 
-2.38.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
