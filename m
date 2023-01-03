@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F55D65C434
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F2C65C46A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237978AbjACQuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
+        id S238302AbjACRAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233296AbjACQuJ (ORCPT
+        with ESMTP id S238212AbjACRAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:50:09 -0500
-Received: from fx601.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8859A60EE
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:50:04 -0800 (PST)
-Received: from localhost (fx601.security-mail.net [127.0.0.1])
-        by fx601.security-mail.net (Postfix) with ESMTP id CC46F3494F8
+        Tue, 3 Jan 2023 12:00:08 -0500
+Received: from fx302.security-mail.net (mxout.security-mail.net [85.31.212.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C666B13CC8
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:00:03 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx302.security-mail.net (Postfix) with ESMTP id C43F51C3E570
         for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:44:33 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
         s=sec-sig-email; t=1672764273;
-        bh=rXiFKtQXvWxwKybb/JbQ+owVYszylINA4sVqq64J0Yo=;
+        bh=g8o7yBU0fW0Btbtr/FUOsx50o2zgPomgxUW06KoyPeE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=uB106S/eLUF8k34XC/kFl1j6NjI5RvAnmNsLp8PcbZJ2no/r4ooLUU2w2iX9cmDY6
-         vXuKpTLfc+kBBSAH7bE+utdCjWITh5TXZRDE7thJpifRUzRRkPRVj3SGafbQE7Z4GH
-         enf49gqqs6Jzt1Nw+a89pI22XbqvX/prmqcR/cAU=
-Received: from fx601 (fx601.security-mail.net [127.0.0.1]) by
- fx601.security-mail.net (Postfix) with ESMTP id 97F7C3494EE; Tue,  3 Jan
- 2023 17:44:33 +0100 (CET)
+        b=rgGlqIpBrTzg4DfXf9iiz7JjxKB0eyMA66u7tsSzjIRkueOkRQnRPDAB3+F210bY5
+         4GQ329VzvibdTCRiYVZa0Kuc1E/Zwhas1vZE+gx5jBWVLD7Gl7mb4/gGpDR0wZc5P5
+         mYewbF26wtNAd/mdhfYBourkMvW6w2F9VH8fTE0w=
+Received: from fx302 (localhost [127.0.0.1]) by fx302.security-mail.net
+ (Postfix) with ESMTP id AA3801C3E56F; Tue,  3 Jan 2023 17:44:33 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx601.security-mail.net (Postfix) with ESMTPS id E89EC3494B8; Tue,  3 Jan
- 2023 17:44:32 +0100 (CET)
+ fx302.security-mail.net (Postfix) with ESMTPS id 303D31C3E33E; Tue,  3 Jan
+ 2023 17:44:33 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 8AF3727E03FA; Tue,  3 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPS id D793027E03F8; Tue,  3 Jan 2023
  17:44:32 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 63CA227E03F8; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
+ (Postfix) with ESMTP id BAA8627E03F4; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- VQ7OynhiUhoS; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
+ KLaOBY1LLSaI; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 3D90F27E0404; Tue,  3 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 4F60227E03FC; Tue,  3 Jan 2023
  17:44:32 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <1389f.63b45b70.dba2b.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 63CA227E03F8
+Secumail-id: <b5cc.63b45b71.b64f.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu BAA8627E03F4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
  s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672764272;
- bh=SXydnobiim8GBbuISdX/uI3u8ViefqarsybGAD3CvbA=;
+ bh=FZoV3SI6m01mRRMGo+iEVAnlcBEvHRx80bZUqOcYkt0=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=ieXhPvCw2+KIbxnMP/zaS6dX3BqMr7EGrpcaUTGbaOPkztFLWogrr4D2gHorwp38P
- tC4HkArDXycbBFZG13bmGiwBlGUiQaHdwh0dk1reY+WIIur5ZxbK6uMMaLWyISkL4r
- TQyQuiBqGk/QpLqCA/y3xs9FsTB7Jds775IC6cok=
+ b=LJAJzgxmhRcY6lxER+29WNQX5ZTIXqZOBhbVu9PH+V8Kz62Wx1qNgzGnNliIjgt9d
+ jDz6O9QOyZGPBesXUbSevpGU1jfj2ABCarSWBArtlwJdycUmQnFMpWxgkDWM2LQyth
+ jqb5egZfMHZEmQjssKBqbugqTLJc29Ve4qL8RoPk=
 From:   Yann Sionneau <ysionneau@kalray.eu>
 Cc:     Yann Sionneau <ysionneau@kalray.eu>, linux-kernel@vger.kernel.org,
         Clement Leger <clement.leger@bootlin.com>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
         Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
         Marius Gligor <mgligor@kalray.eu>
-Subject: [RFC PATCH 16/25] kvx: Add some library functions
-Date:   Tue,  3 Jan 2023 17:43:50 +0100
-Message-ID: <20230103164359.24347-17-ysionneau@kalray.eu>
+Subject: [RFC PATCH 17/25] kvx: Add multi-processor (SMP) support
+Date:   Tue,  3 Jan 2023 17:43:51 +0100
+Message-ID: <20230103164359.24347-18-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
 References: <20230103164359.24347-1-ysionneau@kalray.eu>
@@ -78,349 +79,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add some library functions for kvx, including: delay, memset,
-memcpy, strlen, clear_page, copy_page, raw_copy_from/to_user,
-asm_clear_user.
+Coolidge v1 SoC has 5 clusters of 16 kvx cores
+(+1 special Resource Manager (RM) core).
+
+Linux can run in SMP config on the 16 cores of
+a Cluster.
+
+Cache coherency is done by the L2 cache.
 
 CC: linux-kernel@vger.kernel.org
 Co-developed-by: Clement Leger <clement.leger@bootlin.com>
 Signed-off-by: Clement Leger <clement.leger@bootlin.com>
-Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 Co-developed-by: Julian Vetter <jvetter@kalray.eu>
 Signed-off-by: Julian Vetter <jvetter@kalray.eu>
+Co-developed-by: Julien Hascoet <jhascoet@kalray.eu>
+Signed-off-by: Julien Hascoet <jhascoet@kalray.eu>
+Co-developed-by: Louis Morhet <lmorhet@kalray.eu>
+Signed-off-by: Louis Morhet <lmorhet@kalray.eu>
+Co-developed-by: Luc Michel <lmichel@kalray.eu>
+Signed-off-by: Luc Michel <lmichel@kalray.eu>
 Co-developed-by: Marius Gligor <mgligor@kalray.eu>
 Signed-off-by: Marius Gligor <mgligor@kalray.eu>
 Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
 Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 ---
- arch/kvx/include/asm/string.h |  20 ++
- arch/kvx/kernel/kvx_ksyms.c   |   5 +
- arch/kvx/lib/clear_page.S     |  40 ++++
- arch/kvx/lib/copy_page.S      |  90 +++++++++
- arch/kvx/lib/delay.c          |  39 ++++
- arch/kvx/lib/memcpy.c         |  70 +++++++
- arch/kvx/lib/memset.S         | 351 ++++++++++++++++++++++++++++++++++
- arch/kvx/lib/strlen.S         | 122 ++++++++++++
- arch/kvx/lib/usercopy.S       |  90 +++++++++
- 9 files changed, 827 insertions(+)
- create mode 100644 arch/kvx/include/asm/string.h
- create mode 100644 arch/kvx/lib/clear_page.S
- create mode 100644 arch/kvx/lib/copy_page.S
- create mode 100644 arch/kvx/lib/delay.c
- create mode 100644 arch/kvx/lib/memcpy.c
- create mode 100644 arch/kvx/lib/memset.S
- create mode 100644 arch/kvx/lib/strlen.S
- create mode 100644 arch/kvx/lib/usercopy.S
+ arch/kvx/include/asm/pwr_ctrl.h |  45 ++++
+ arch/kvx/include/asm/smp.h      |  42 +++
+ arch/kvx/kernel/l2_cache.c      | 448 ++++++++++++++++++++++++++++++++
+ arch/kvx/kernel/smp.c           | 110 ++++++++
+ arch/kvx/kernel/smpboot.c       | 127 +++++++++
+ arch/kvx/platform/pwr_ctrl.c    |  93 +++++++
+ include/linux/cpuhotplug.h      |   2 +
+ 7 files changed, 867 insertions(+)
+ create mode 100644 arch/kvx/include/asm/pwr_ctrl.h
+ create mode 100644 arch/kvx/include/asm/smp.h
+ create mode 100644 arch/kvx/kernel/l2_cache.c
+ create mode 100644 arch/kvx/kernel/smp.c
+ create mode 100644 arch/kvx/kernel/smpboot.c
+ create mode 100644 arch/kvx/platform/pwr_ctrl.c
 
-diff --git a/arch/kvx/include/asm/string.h b/arch/kvx/include/asm/string.h
+diff --git a/arch/kvx/include/asm/pwr_ctrl.h b/arch/kvx/include/asm/pwr_ctrl.h
 new file mode 100644
-index 000000000000..677c1393a5cd
+index 000000000000..25f403ba935a
 --- /dev/null
-+++ b/arch/kvx/include/asm/string.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Jules Maselbas
-+ */
-+
-+#ifndef _ASM_KVX_STRING_H
-+#define _ASM_KVX_STRING_H
-+
-+#define __HAVE_ARCH_MEMSET
-+extern void *memset(void *s, int c, size_t n);
-+
-+#define __HAVE_ARCH_MEMCPY
-+extern void *memcpy(void *dest, const void *src, size_t n);
-+
-+#define __HAVE_ARCH_STRLEN
-+extern size_t strlen(const char *s);
-+
-+#endif	/* _ASM_KVX_STRING_H */
-diff --git a/arch/kvx/kernel/kvx_ksyms.c b/arch/kvx/kernel/kvx_ksyms.c
-index 18990aaf259f..678f81716dea 100644
---- a/arch/kvx/kernel/kvx_ksyms.c
-+++ b/arch/kvx/kernel/kvx_ksyms.c
-@@ -22,3 +22,8 @@ DECLARE_EXPORT(__umoddi3);
- DECLARE_EXPORT(__divdi3);
- DECLARE_EXPORT(__udivdi3);
- DECLARE_EXPORT(__multi3);
-+
-+DECLARE_EXPORT(clear_page);
-+DECLARE_EXPORT(copy_page);
-+DECLARE_EXPORT(memset);
-+DECLARE_EXPORT(asm_clear_user);
-diff --git a/arch/kvx/lib/clear_page.S b/arch/kvx/lib/clear_page.S
-new file mode 100644
-index 000000000000..364fe0663ca2
---- /dev/null
-+++ b/arch/kvx/lib/clear_page.S
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Marius Gligor
-+ *            Clement Leger
-+ */
-+
-+#include <linux/linkage.h>
-+#include <linux/export.h>
-+#include <linux/const.h>
-+
-+#include <asm/cache.h>
-+#include <asm/page.h>
-+
-+#define CLEAR_PAGE_LOOP_COUNT	(PAGE_SIZE / 32)
-+
-+/*
-+ * Clear page @dest.
-+ *
-+ * Parameters:
-+ *	r0 - dest page
-+ */
-+ENTRY(clear_page)
-+	make $r1 = CLEAR_PAGE_LOOP_COUNT
-+	;;
-+	make $r4 = 0
-+	make $r5 = 0
-+	make $r6 = 0
-+	make $r7 = 0
-+	;;
-+
-+	loopdo $r1, clear_page_done
-+		;;
-+		so 0[$r0] = $r4r5r6r7
-+		addd $r0 = $r0, 32
-+		;;
-+	clear_page_done:
-+	ret
-+	;;
-+ENDPROC(clear_page)
-diff --git a/arch/kvx/lib/copy_page.S b/arch/kvx/lib/copy_page.S
-new file mode 100644
-index 000000000000..4bb82d1c964c
---- /dev/null
-+++ b/arch/kvx/lib/copy_page.S
-@@ -0,0 +1,90 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#include <linux/linkage.h>
-+#include <linux/const.h>
-+
-+#include <asm/page.h>
-+
-+/* We have 8 load/store octuple (32 bytes) per hardware loop */
-+#define COPY_SIZE_PER_LOOP	(32 * 8)
-+#define COPY_PAGE_LOOP_COUNT	(PAGE_SIZE / COPY_SIZE_PER_LOOP)
-+
-+/*
-+ * Copy a page from src to dest (both are page aligned)
-+ * In order to recover from smem latency, unroll the loop to trigger multiple
-+ * onfly loads and avoid waiting too much for them to return.
-+ * We use 8 * 32 load even though we could use more (up to 10 loads) to simplify
-+ * the handling using a single hardware loop
-+ *
-+ * Parameters:
-+ *	r0 - dest
-+ *	r1 - src
-+ */
-+ENTRY(copy_page)
-+	make $r2 = COPY_PAGE_LOOP_COUNT
-+	make $r3 = 0
-+	;;
-+	loopdo $r2, copy_page_done
-+		;;
-+		/*
-+		 * Load 8 * 32 bytes using uncached access to avoid hitting
-+		 * the cache
-+		 */
-+		lo.xs $r32r33r34r35 = $r3[$r1]
-+		/* Copy current copy index for store */
-+		copyd $r2 = $r3
-+		addd $r3 = $r3, 1
-+		;;
-+		lo.xs $r36r37r38r39 = $r3[$r1]
-+		addd $r3 = $r3, 1
-+		;;
-+		lo.xs $r40r41r42r43 = $r3[$r1]
-+		addd $r3 = $r3, 1
-+		;;
-+		lo.xs $r44r45r46r47 = $r3[$r1]
-+		addd $r3 = $r3, 1
-+		;;
-+		lo.xs $r48r49r50r51 = $r3[$r1]
-+		addd $r3 = $r3, 1
-+		;;
-+		lo.xs $r52r53r54r55 = $r3[$r1]
-+		addd $r3 = $r3, 1
-+		;;
-+		lo.xs $r56r57r58r59 = $r3[$r1]
-+		addd $r3 = $r3, 1
-+		;;
-+		lo.xs $r60r61r62r63 = $r3[$r1]
-+		addd $r3 = $r3, 1
-+		;;
-+		/* And then store all of them */
-+		so.xs $r2[$r0] = $r32r33r34r35
-+		addd $r2 = $r2, 1
-+		;;
-+		so.xs $r2[$r0] = $r36r37r38r39
-+		addd $r2 = $r2, 1
-+		;;
-+		so.xs $r2[$r0] = $r40r41r42r43
-+		addd $r2 = $r2, 1
-+		;;
-+		so.xs $r2[$r0] = $r44r45r46r47
-+		addd $r2 = $r2, 1
-+		;;
-+		so.xs $r2[$r0] = $r48r49r50r51
-+		addd $r2 = $r2, 1
-+		;;
-+		so.xs $r2[$r0] = $r52r53r54r55
-+		addd $r2 = $r2, 1
-+		;;
-+		so.xs $r2[$r0] = $r56r57r58r59
-+		addd $r2 = $r2, 1
-+		;;
-+		so.xs $r2[$r0] = $r60r61r62r63
-+		;;
-+	copy_page_done:
-+	ret
-+	;;
-+ENDPROC(copy_page)
-diff --git a/arch/kvx/lib/delay.c b/arch/kvx/lib/delay.c
-new file mode 100644
-index 000000000000..11295eedc3f5
---- /dev/null
-+++ b/arch/kvx/lib/delay.c
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#include <linux/export.h>
-+#include <linux/delay.h>
-+
-+#include <asm/param.h>
-+#include <asm/timex.h>
-+
-+void __delay(unsigned long loops)
-+{
-+	cycles_t target_cycle = get_cycles() + loops;
-+
-+	while (get_cycles() < target_cycle);
-+}
-+EXPORT_SYMBOL(__delay);
-+
-+inline void __const_udelay(unsigned long xloops)
-+{
-+	u64 loops = (u64)xloops * (u64)loops_per_jiffy * HZ;
-+
-+	__delay(loops >> 32);
-+}
-+EXPORT_SYMBOL(__const_udelay);
-+
-+void __udelay(unsigned long usecs)
-+{
-+	__const_udelay(usecs * 0x10C7UL); /* 2**32 / 1000000 (rounded up) */
-+}
-+EXPORT_SYMBOL(__udelay);
-+
-+void __ndelay(unsigned long nsecs)
-+{
-+	__const_udelay(nsecs * 0x5UL); /* 2**32 / 1000000000 (rounded up) */
-+}
-+EXPORT_SYMBOL(__ndelay);
-diff --git a/arch/kvx/lib/memcpy.c b/arch/kvx/lib/memcpy.c
-new file mode 100644
-index 000000000000..b81f746a80ee
---- /dev/null
-+++ b/arch/kvx/lib/memcpy.c
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Yann Sionneau
-+ */
-+
-+#include <linux/export.h>
-+#include <linux/types.h>
-+
-+void *memcpy(void *dest, const void *src, size_t n)
-+{
-+	__uint128_t *tmp128_d = dest;
-+	const __uint128_t *tmp128_s = src;
-+	uint64_t *tmp64_d;
-+	const uint64_t *tmp64_s;
-+	uint32_t *tmp32_d;
-+	const uint32_t *tmp32_s;
-+	uint16_t *tmp16_d;
-+	const uint16_t *tmp16_s;
-+	uint8_t *tmp8_d;
-+	const uint8_t *tmp8_s;
-+
-+	while (n >= 16) {
-+		*tmp128_d = *tmp128_s;
-+		tmp128_d++;
-+		tmp128_s++;
-+		n -= 16;
-+	}
-+
-+	tmp64_d = (uint64_t *) tmp128_d;
-+	tmp64_s = (uint64_t *) tmp128_s;
-+	while (n >= 8) {
-+		*tmp64_d = *tmp64_s;
-+		tmp64_d++;
-+		tmp64_s++;
-+		n -= 8;
-+	}
-+
-+	tmp32_d = (uint32_t *) tmp64_d;
-+	tmp32_s = (uint32_t *) tmp64_s;
-+	while (n >= 4) {
-+		*tmp32_d = *tmp32_s;
-+		tmp32_d++;
-+		tmp32_s++;
-+		n -= 4;
-+	}
-+
-+	tmp16_d = (uint16_t *) tmp32_d;
-+	tmp16_s = (uint16_t *) tmp32_s;
-+	while (n >= 2) {
-+		*tmp16_d = *tmp16_s;
-+		tmp16_d++;
-+		tmp16_s++;
-+		n -= 2;
-+	}
-+
-+	tmp8_d = (uint8_t *) tmp16_d;
-+	tmp8_s = (uint8_t *) tmp16_s;
-+	while (n >= 1) {
-+		*tmp8_d = *tmp8_s;
-+		tmp8_d++;
-+		tmp8_s++;
-+		n--;
-+	}
-+
-+	return dest;
-+}
-+EXPORT_SYMBOL(memcpy);
-+
-diff --git a/arch/kvx/lib/memset.S b/arch/kvx/lib/memset.S
-new file mode 100644
-index 000000000000..9eebc28da2be
---- /dev/null
-+++ b/arch/kvx/lib/memset.S
-@@ -0,0 +1,351 @@
++++ b/arch/kvx/include/asm/pwr_ctrl.h
+@@ -0,0 +1,45 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
@@ -428,574 +131,914 @@ index 000000000000..9eebc28da2be
 + *            Marius Gligor
 + */
 +
-+#include <linux/linkage.h>
++#ifndef _ASM_KVX_PWR_CTRL_H
++#define _ASM_KVX_PWR_CTRL_H
 +
-+#include <asm/cache.h>
++#ifndef __ASSEMBLY__
 +
-+#define REPLICATE_BYTE_MASK	0x0101010101010101
-+#define MIN_SIZE_FOR_ALIGN	128
++int kvx_pwr_ctrl_probe(void);
 +
-+/*
-+ * Optimized memset for kvx architecture
-+ *
-+ * In order to optimize memset on kvx, we can use various things:
-+ * - conditionnal store which avoid branch penalty
-+ * - store half/word/double/quad/octuple to store up to 16 bytes at a time
-+ * - dzerol to zero a cacheline when the pattern is '0' (often the case)
-+ * - hardware loop for steady cases.
-+ *
-+ * First, we assume that memset is mainly used for zeroing areas. In order
-+ * to optimize this case, we consider it to be the fast path of the algorithm.
-+ * In both cases (0 and non 0 pattern), we start by checking if the size is
-+ * below a minimum size. If so, we skip the alignment part. Indeed, the kvx
-+ * supports misalignment and the penalty for letting it do unaligned accesses is
-+ * lower than trying to realigning us. So for small sizes, we don't even bother
-+ * to realign. Minor difference is that in the memset with 0, we skip after the
-+ * dzerol loop since dzerol must be cache-line aligned (no misalignment of
-+ * course).
-+ * Regarding the non 0 pattern memset, we use sbmm to replicate the pattern on
-+ * all bits on a register in one call.
-+ * Once alignment has been reached, we can do the hardware loop for both cases(
-+ * store octuple/dzerol) in order to optimize throughput. Care must be taken to
-+ * align hardware loops on at least 8 bytes for performances.
-+ * Once the main loop has been done, we finish the copy by checking length to do
-+ * the necessary calls to store remaining bytes.
-+ *
-+ * Pseudo code (applies for non 0 pattern):
-+ *
-+ * int memset(void *dest, char pattern, long length)
-+ * {
-+ * 	long dest_align = -((long) dest);
-+ * 	long copy;
-+ * 	long orig_dest = dest;
-+ *
-+ * 	uint64_t pattern = sbmm8(pattern, 0x0101010101010101);
-+ * 	uint128_t pattern128 = pattern << 64 | pattern;
-+ * 	uint256_t pattern128 = pattern128 << 128 | pattern128;
-+ *
-+ * 	// Keep only low bits
-+ * 	dest_align &= 0x1F;
-+ * 	length -= dest_align;
-+ *
-+ * 	// Byte align
-+ * 	copy = align & (1 << 0);
-+ * 	if (copy)
-+ * 		*((u8 *) dest) = pattern;
-+ * 	dest += copy;
-+ * 	// Half align
-+ * 	copy = align & (1 << 1);
-+ * 	if (copy)
-+ * 		*((u16 *) dest) = pattern;
-+ * 	dest += copy;
-+ * 	// Word align
-+ * 	copy = align & (1 << 2);
-+ * 	if (copy)
-+ * 		*((u32 *) dest) = pattern;
-+ * 	dest += copy;
-+ * 	// Double align
-+ * 	copy = align & (1 << 3);
-+ * 	if (copy)
-+ * 		*((u64 *) dest) = pattern;
-+ * 	dest += copy;
-+ * 	// Quad align
-+ * 	copy = align & (1 << 4);
-+ * 	if (copy)
-+ * 		*((u128 *) dest) = pattern128;
-+ * 	dest += copy;
-+ *
-+ * 	// We are now aligned on 256 bits
-+ * 	loop_octuple_count = size >> 5;
-+ * 	for (i = 0; i < loop_octuple_count; i++) {
-+ * 		*((u256 *) dest) = pattern256;
-+ * 		dest += 32;
-+ * 	}
-+ *
-+ * 	if (length == 0)
-+ * 		return orig_dest;
-+ *
-+ * 	// Copy remaining part
-+ * 	remain = length & (1 << 4);
-+ * 	if (copy)
-+ * 		*((u128 *) dest) = pattern128;
-+ * 	dest += remain;
-+ * 	remain = length & (1 << 3);
-+ * 	if (copy)
-+ * 		*((u64 *) dest) = pattern;
-+ * 	dest += remain;
-+ * 	remain = length & (1 << 2);
-+ * 	if (copy)
-+ * 		*((u32 *) dest) = pattern;
-+ * 	dest += remain;
-+ * 	remain = length & (1 << 1);
-+ * 	if (copy)
-+ * 		*((u16 *) dest) = pattern;
-+ * 	dest += remain;
-+ * 	remain = length & (1 << 0);
-+ * 	if (copy)
-+ * 		*((u8 *) dest) = pattern;
-+ * 	dest += remain;
-+ *
-+ * 	return orig_dest;
-+ * }
-+ */
++void kvx_pwr_ctrl_cpu_poweron(unsigned int cpu);
 +
-+.text
-+.align 16
-+ENTRY(memset):
-+	make $r32 = 0
-+	make $r33 = 0
-+	/* Check if length < KVX_DCACHE_LINE_SIZE */
-+	compd.ltu $r7 = $r2, KVX_DCACHE_LINE_SIZE
-+	/* Jump to generic memset if pattern is != 0 */
-+	cb.dnez $r1? memset_non_0_pattern
-+	;;
-+	/* Preserve return value */
-+	copyd $r3 = $r0
-+	/* Invert address to compute size to copy to be aligned on 32 bytes */
-+	negd $r5 = $r0
-+	/* Remaining bytes for 16 bytes store (for alignment on 64 bytes) */
-+	andd $r8 = $r2, (1 << 5)
-+	copyq $r34r35 = $r32, $r33
-+	/* Skip loopdo with dzerol if length < KVX_DCACHE_LINE_SIZE */
-+	cb.dnez $r7? .Ldzerol_done
-+	;;
-+	/* Compute the size that will be copied to align on 64 bytes boundary */
-+	andw $r6 = $r5, 0x3F
-+	/* Check if address is aligned on 64 bytes */
-+	andw $r9 = $r0, 0x3F
-+	/* Alignment */
-+	nop
-+	;;
-+	/* If address already aligned on 64 bytes, jump to dzerol loop */
-+	cb.deqz $r9? .Laligned_64
-+	/* Remove unaligned part from length */
-+	sbfd $r2 = $r6, $r2
-+	/* Check if we need to copy 1 byte */
-+	andw $r4 = $r5, (1 << 0)
-+	;;
-+	/* If we are not aligned, store byte */
-+	sb.dnez $r4? [$r0] = $r32
-+	/* Check if we need to copy 2 bytes */
-+	andw $r4 = $r5, (1 << 1)
-+	/* Add potentially copied part for next store offset */
-+	addd $r0 = $r0, $r4
-+	;;
-+	sh.dnez $r4? [$r0] = $r32
-+	/* Check if we need to copy 4 bytes */
-+	andw $r4 = $r5, (1 << 2)
-+	addd $r0 = $r0, $r4
-+	;;
-+	sw.dnez $r4? [$r0] = $r32
-+	/* Check if we need to copy 8 bytes */
-+	andw $r4 = $r5, (1 << 3)
-+	addd $r0 = $r0, $r4
-+	;;
-+	sd.dnez $r4? [$r0] = $r32
-+	/* Check if we need to copy 16 bytes */
-+	andw $r4 = $r5, (1 << 4)
-+	addd $r0 = $r0, $r4
-+	;;
-+	sq.dnez $r4? [$r0] = $r32r33
-+	/* Check if we need to copy 32 bytes */
-+	andw $r4 = $r5, (1 << 5)
-+	addd $r0 = $r0, $r4
-+	;;
-+	so.dnez $r4? [$r0] = $r32r33r34r35
-+	addd $r0 = $r0, $r4
-+	;;
-+.Laligned_64:
-+	/* Prepare amount of data for dzerol */
-+	srld $r10 = $r2, 6
-+	/* Size to be handled in loopdo */
-+	andd $r4 = $r2, ~0x3F
-+	make $r11 = 64
-+	cb.deqz $r2? .Lmemset_done
-+	;;
-+	/* Remaining bytes for 16 bytes store */
-+	andw $r8 = $r2, (1 << 5)
-+	/* Skip dzerol if there are not enough data for 64 bytes store */
-+	cb.deqz $r10? .Ldzerol_done
-+	/* Update length to copy */
-+	sbfd $r2 = $r4, $r2
-+	;;
-+	loopdo $r10, .Ldzerol_done
-+		;;
-+		so 0[$r0], $r32r33r34r35
-+		;;
-+		so 32[$r0], $r32r33r34r35
-+		addd $r0 = $r0, $r11
-+		;;
-+	.Ldzerol_done:
-+	/*
-+	 * Now that we have handled every aligned bytes using 'dzerol', we can
-+	 * handled the remainder of length using store by decrementing size
-+	 * We also exploit the fact we are aligned to simply check remaining
-+	 * size */
-+	so.dnez $r8? [$r0] = $r32r33r34r35
-+	addd $r0 = $r0, $r8
-+	/* Remaining bytes for 16 bytes store */
-+	andw $r8 = $r2, (1 << 4)
-+	cb.deqz $r2? .Lmemset_done
-+	;;
-+	sq.dnez $r8? [$r0] = $r32r33
-+	addd $r0 = $r0, $r8
-+	/* Remaining bytes for 8 bytes store */
-+	andw $r8 = $r2, (1 << 3)
-+	;;
-+	sd.dnez $r8? [$r0] = $r32
-+	addd $r0 = $r0, $r8
-+	/* Remaining bytes for 4 bytes store */
-+	andw $r8 = $r2, (1 << 2)
-+	;;
-+	sw.dnez $r8? [$r0] = $r32
-+	addd $r0 = $r0, $r8
-+	/* Remaining bytes for 2 bytes store */
-+	andw $r8 = $r2, (1 << 1)
-+	;;
-+	sh.dnez $r8? [$r0] = $r32
-+	addd $r0 = $r0, $r8
-+	;;
-+	sb.odd $r2? [$r0] = $r32
-+	/* Restore original value */
-+	copyd $r0 = $r3
-+	ret
-+	;;
++#endif
 +
-+.align 16
-+memset_non_0_pattern:
-+	/* Preserve return value */
-+	copyd $r3 = $r0
-+	/* Replicate the first pattern byte on all bytes */
-+	sbmm8 $r32 = $r1, REPLICATE_BYTE_MASK
-+	/* Check if length < MIN_SIZE_FOR_ALIGN */
-+	compd.geu $r7 = $r2, MIN_SIZE_FOR_ALIGN
-+	/* Invert address to compute size to copy to be aligned on 32 bytes */
-+	negd $r5 = $r0
-+	;;
-+	/* Check if we are aligned on 32 bytes */
-+	andw $r9 = $r0, 0x1F
-+	/* Compute the size that will be copied to align on 32 bytes boundary */
-+	andw $r6 = $r5, 0x1F
-+	/*
-+	 * If size < MIN_SIZE_FOR_ALIGN bits, directly go to so, it will be done
-+	 * unaligned but that is still better that what we can do with sb
-+	 */
-+	cb.deqz $r7? .Laligned_32
-+	;;
-+	/* Remove unaligned part from length */
-+	sbfd $r2 = $r6, $r2
-+	/* If we are already aligned on 32 bytes, jump to main "so" loop */
-+	cb.deqz $r9? .Laligned_32
-+	/* Check if we need to copy 1 byte */
-+	andw $r4 = $r5, (1 << 0)
-+	;;
-+	/* If we are not aligned, store byte */
-+	sb.dnez $r4? [$r0] = $r32
-+	/* Check if we need to copy 2 bytes */
-+	andw $r4 = $r5, (1 << 1)
-+	/* Add potentially copied part for next store offset */
-+	addd $r0 = $r0, $r4
-+	;;
-+	sh.dnez $r4? [$r0] = $r32
-+	/* Check if we need to copy 4 bytes */
-+	andw $r4 = $r5, (1 << 2)
-+	addd $r0 = $r0, $r4
-+	;;
-+	sw.dnez $r4? [$r0] = $r32
-+	/* Check if we need to copy 8 bytes */
-+	andw $r4 = $r5, (1 << 3)
-+	addd $r0 = $r0, $r4
-+	/* Copy second part of pattern for sq */
-+	copyd $r33 = $r32
-+	;;
-+	sd.dnez $r4? [$r0] = $r32
-+	/* Check if we need to copy 16 bytes */
-+	andw $r4 = $r5, (1 << 4)
-+	addd $r0 = $r0, $r4
-+	;;
-+	sq.dnez $r4? [$r0] = $r32r33
-+	addd $r0 = $r0, $r4
-+	;;
-+.Laligned_32:
-+	/* Copy second part of pattern for sq */
-+	copyd $r33 = $r32
-+	/* Prepare amount of data for 32 bytes store */
-+	srld $r10 = $r2, 5
-+	nop
-+	nop
-+	;;
-+	copyq $r34r35 = $r32, $r33
-+	/* Remaining bytes for 16 bytes store */
-+	andw $r8 = $r2, (1 << 4)
-+	make $r11 = 32
-+	/* Check if there are enough data for 32 bytes store */
-+	cb.deqz $r10? .Laligned_32_done
-+	;;
-+	loopdo $r10, .Laligned_32_done
-+		;;
-+		so 0[$r0] = $r32r33r34r35
-+		addd $r0 = $r0, $r11
-+		;;
-+	.Laligned_32_done:
-+	/*
-+	 * Now that we have handled every aligned bytes using 'so', we can
-+	 * handled the remainder of length using store by decrementing size
-+	 * We also exploit the fact we are aligned to simply check remaining
-+	 * size */
-+	sq.dnez $r8? [$r0] = $r32r33
-+	addd $r0 = $r0, $r8
-+	/* Remaining bytes for 8 bytes store */
-+	andw $r8 = $r2, (1 << 3)
-+	cb.deqz $r2? .Lmemset_done
-+	;;
-+	sd.dnez $r8? [$r0] = $r32
-+	addd $r0 = $r0, $r8
-+	/* Remaining bytes for 4 bytes store */
-+	andw $r8 = $r2, (1 << 2)
-+	;;
-+	sw.dnez $r8? [$r0] = $r32
-+	addd $r0 = $r0, $r8
-+	/* Remaining bytes for 2 bytes store */
-+	andw $r8 = $r2, (1 << 1)
-+	;;
-+	sh.dnez $r8? [$r0] = $r32
-+	addd $r0 = $r0, $r8
-+	;;
-+	sb.odd $r2? [$r0] = $r32
-+	/* Restore original value */
-+	copyd $r0 = $r3
-+	ret
-+	;;
-+.Lmemset_done:
-+	/* Restore original value */
-+	copyd $r0 = $r3
-+	ret
-+	;;
-+ENDPROC(memset)
-diff --git a/arch/kvx/lib/strlen.S b/arch/kvx/lib/strlen.S
++/* Power controller vector register definitions */
++#define KVX_PWR_CTRL_VEC_OFFSET 0x1000
++#define KVX_PWR_CTRL_VEC_WUP_SET_OFFSET     0x10
++#define KVX_PWR_CTRL_VEC_WUP_CLEAR_OFFSET     0x20
++
++/* Power controller PE reset PC register definitions */
++#define KVX_PWR_CTRL_RESET_PC_OFFSET               0x2000
++
++/* Power controller global register definitions */
++#define KVX_PWR_CTRL_GLOBAL_OFFSET 0x4040
++
++#define KVX_PWR_CTRL_GLOBAL_SET_OFFSET     0x10
++#define KVX_PWR_CTRL_GLOBAL_SET_PE_EN_SHIFT           0x1
++
++#define PWR_CTRL_WUP_SET_OFFSET  \
++		(KVX_PWR_CTRL_VEC_OFFSET + \
++		 KVX_PWR_CTRL_VEC_WUP_SET_OFFSET)
++
++#define PWR_CTRL_WUP_CLEAR_OFFSET  \
++		(KVX_PWR_CTRL_VEC_OFFSET + \
++		 KVX_PWR_CTRL_VEC_WUP_CLEAR_OFFSET)
++
++#define PWR_CTRL_GLOBAL_CONFIG_OFFSET \
++		(KVX_PWR_CTRL_GLOBAL_OFFSET + \
++		 KVX_PWR_CTRL_GLOBAL_SET_OFFSET)
++
++#endif /* _ASM_KVX_PWR_CTRL_H */
+diff --git a/arch/kvx/include/asm/smp.h b/arch/kvx/include/asm/smp.h
 new file mode 100644
-index 000000000000..8298402a7898
+index 000000000000..e4fd4d001b2c
 --- /dev/null
-+++ b/arch/kvx/lib/strlen.S
-@@ -0,0 +1,122 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Jules Maselbas
-+ */
-+#include <linux/linkage.h>
-+#include <asm/export.h>
-+
-+/*
-+ *	kvx optimized strlen
-+ *
-+ *	This implementation of strlen only does aligned memory accesses.
-+ *	Since we don't know the total length the idea is to do double word
-+ *	load and stop on the first null byte found. As it's always safe to
-+ *	read more up to a lower 8-bytes boundary.
-+ *
-+ *	This implementation of strlen uses a trick to detect if a double
-+ *	word contains a null byte [1]:
-+ *
-+ *	> #define haszero(v) (((v) - 0x01010101UL) & ~(v) & 0x80808080UL)
-+ *	> The sub-expression (v - 0x01010101UL), evaluates to a high bit set
-+ *	> in any byte whenever the corresponding byte in v is zero or greater
-+ *	> than 0x80. The sub-expression ~v & 0x80808080UL evaluates to high
-+ *	> bits set in bytes where the byte of v doesn't have its high bit set
-+ *	> (so the byte was less than 0x80). Finally, by ANDing these two sub-
-+ *	> expressions the result is the high bits set where the bytes in v
-+ *	> were zero, since the high bits set due to a value greater than 0x80
-+ *	> in the first sub-expression are masked off by the second.
-+ *
-+ *	[1] http://graphics.stanford.edu/~seander/bithacks.html#ZeroInWord
-+ *
-+ *	A second trick is used to get the exact number of characters before
-+ *	the first null byte in a double word:
-+ *
-+ *		clz(sbmmt(zero, 0x0102040810204080))
-+ *
-+ *	This trick uses the haszero result which maps null byte to 0x80 and
-+ *	others value to 0x00. The idea is to count the number of consecutive
-+ *	null byte in the double word (counting from less significant byte
-+ *	to most significant byte). To do so, using the bit matrix transpose
-+ *	will "pack" all high bit (0x80) to the most significant byte (MSB).
-+ *	It is not possible to count the trailing zeros in this MSB, however
-+ *	if a byte swap is done before the bit matrix transpose we still have
-+ *	all the information in the MSB but now we can count the leading zeros.
-+ *	The instruction sbmmt with the matrix 0x0102040810204080 does exactly
-+ *	what we need a byte swap followed by a bit transpose.
-+ *
-+ *	A last trick is used to handle the first double word misalignment.
-+ *	This is done by masking off the N lower bytes (excess read) with N
-+ *	between 0 and 7. The mask is applied on haszero results and will
-+ *	force the N lower bytes to be considered not null.
-+ *
-+ *	This is a C implementation of the algorithm described above:
-+ *
-+ *	size_t strlen(char *s) {
-+ *		uint64_t *p    = (uint64_t *)((uintptr_t)s) & ~0x7;
-+ *		uint64_t rem   = ((uintptr_t)s) % 8;
-+ *		uint64_t low   = -0x0101010101010101;
-+ *		uint64_t high  =  0x8080808080808080;
-+ *		uint64_t dword, zero;
-+ *		uint64_t msk, len;
-+ *
-+ *		dword = *p++;
-+ *		zero  = (dword + low) & ~dword & high;
-+ *		msk   = 0xffffffffffffffff << (rem * 8);
-+ *		zero &= msk;
-+ *
-+ *		while (!zero) {
-+ *			dword = *p++;
-+ *			zero  = (dword + low) & ~dword & high;
-+ *		}
-+ *
-+ *		zero = __builtin_kvx_sbmmt8(zero, 0x0102040810204080);
-+ *		len = ((void *)p - (void *)s) - 8;
-+ *		len += __builtin_kvx_clzd(zero);
-+ *
-+ *		return len;
-+ *	}
-+ */
-+
-+.text
-+.align 16
-+ENTRY(strlen)
-+	andd  $r1 = $r0, ~0x7
-+	andd  $r2 = $r0,  0x7
-+	make $r10 = -0x0101010101010101
-+	make $r11 =  0x8080808080808080
-+	;;
-+	ld $r4 = 0[$r1]
-+	sllw $r2 = $r2, 3
-+	make $r3 = 0xffffffffffffffff
-+	;;
-+	slld $r2 = $r3, $r2
-+	addd $r5 = $r4, $r10
-+	andnd $r6 = $r4, $r11
-+	;;
-+	andd $r6 = $r6, $r2
-+	make $r3 = 0
-+	;;
-+.loop:
-+	andd $r4 = $r5, $r6
-+	addd $r1 = $r1, 0x8
-+	;;
-+	cb.dnez $r4? .end
-+	ld.deqz $r4? $r4 = [$r1]
-+	;;
-+	addd $r5 = $r4, $r10
-+	andnd $r6 = $r4, $r11
-+	goto .loop
-+	;;
-+.end:
-+	addd $r1 = $r1, -0x8
-+	sbmmt8 $r4 = $r4, 0x0102040810204080
-+	;;
-+	clzd $r4 = $r4
-+	sbfd $r1 = $r0, $r1
-+	;;
-+	addd $r0 = $r4, $r1
-+	ret
-+	;;
-+ENDPROC(strlen)
-+EXPORT_SYMBOL(strlen)
-diff --git a/arch/kvx/lib/usercopy.S b/arch/kvx/lib/usercopy.S
-new file mode 100644
-index 000000000000..bc7e1a45e1c7
---- /dev/null
-+++ b/arch/kvx/lib/usercopy.S
-@@ -0,0 +1,90 @@
++++ b/arch/kvx/include/asm/smp.h
+@@ -0,0 +1,42 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
 + */
-+#include <linux/linkage.h>
++
++#ifndef _ASM_KVX_SMP_H
++#define _ASM_KVX_SMP_H
++
++#include <linux/cpumask.h>
++#include <linux/irqreturn.h>
++
++#include <asm/sfr.h>
++
++#ifdef CONFIG_SMP
++
++/* Hook for the generic smp_call_function_many() routine. */
++void arch_send_call_function_ipi_mask(struct cpumask *mask);
++
++/* Hook for the generic smp_call_function_single() routine. */
++void arch_send_call_function_single_ipi(int cpu);
++
++void __init setup_processor(void);
++
++void smp_init_cpus(void);
++
++irqreturn_t ipi_call_interrupt(int irq, void *dev_id);
++
++#define raw_smp_processor_id() ((int) \
++	((kvx_sfr_get(PCR) & KVX_SFR_PCR_PID_MASK) \
++					>> KVX_SFR_PCR_PID_SHIFT))
++
++#define flush_cache_vmap(start, end)		do { } while (0)
++#define flush_cache_vunmap(start, end)		do { } while (0)
++
++#else
++
++void smp_init_cpus(void) {}
++
++#endif /* CONFIG_SMP */
++
++#endif
+diff --git a/arch/kvx/kernel/l2_cache.c b/arch/kvx/kernel/l2_cache.c
+new file mode 100644
+index 000000000000..94a4d9159471
+--- /dev/null
++++ b/arch/kvx/kernel/l2_cache.c
+@@ -0,0 +1,448 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Luc Michel
++ *            Julien Hascoet
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/io.h>
++#include <linux/of.h>
++#include <linux/jiffies.h>
++#include <linux/of_address.h>
++#include <linux/irqchip/irq-kvx-apic-mailbox.h>
++
++#include <asm/rm_fw.h>
++#include <asm/l2_cache.h>
++#include <asm/sections.h>
++#include <asm/cacheflush.h>
++
++#define L2_START_TIMEOUT_MS	10
++#define L2_CMD_TIMEOUT_MS	200
++
++#define L2_MK_OP(__cmd, __sync) (BIT(L2_CMD_OP_VALID_SHIFT) | \
++			 ((u64) __sync << L2_CMD_OP_SYNC_SHIFT) | \
++			 ((u64) __cmd << L2_CMD_OP_CMD_SHIFT))
++
++#define L2_ERROR(_err) \
++	((error & L2_ERROR_ERROR_CODE_MASK) >> L2_ERROR_ERROR_CODE_SHIFT)
++
++struct l2_cache_hw_cmd {
++	u64 op;
++	u64 args[L2_CMD_OP_ARG_COUNT];
++} __packed;
++
++struct l2_cache_cmd {
++	int sync;
++	int cmd_type;
++	unsigned int arg_count;
++	u64 args[L2_CMD_OP_ARG_COUNT];
++};
 +
 +/**
-+ * Copy from/to a user buffer
-+ * r0 = to buffer
-+ * r1 = from buffer
-+ * r2 = size to copy
-+ * This function can trapped when hitting a non-mapped page.
-+ * It will trigger a trap NOMAPPING and the trap handler will interpret
-+ * it and check if instruction pointer is inside __ex_table.
-+ * The next step are described later !
++ * struct l2_cached_data - Data associated to the l2-cache
++ * @regs: base of L2 registers
++ * @mbox_regs: Mailbox registers for L2 signaling
 + */
-+.text
-+ENTRY(raw_copy_from_user)
-+ENTRY(raw_copy_to_user)
-+	/**
-+	 * naive implementation byte per byte
++struct l2_cache_data {
++	void __iomem *regs;
++	void __iomem *mbox_regs;
++	u64 fifo_cmd_count;
++};
++
++DEFINE_STATIC_KEY_FALSE(l2_enabled);
++static struct l2_cache_data l2c_ctrl;
++
++static void *l2_cmd_regs_addr(void)
++{
++	return l2c_ctrl.regs + L2_CMD_OFFSET;
++}
++
++static struct l2_cache_hw_cmd *l2_cache_hw_cmd_addr(u64 idx)
++{
++	void *cmd_regs = l2_cmd_regs_addr();
++
++	/* Wrap index */
++	idx &= (l2c_ctrl.fifo_cmd_count - 1);
++	return cmd_regs + L2_CMD_FIFO_OFFSET + idx * L2_CMD_FIFO_ELEM_SIZE;
++}
++
++static u64 l2_cache_get_cmd_idx(unsigned int cmd_count)
++{
++	u64 cmd_idx;
++	void *cmd_regs = l2_cmd_regs_addr();
++	u64 *write_idx_ptr = cmd_regs + L2_CMD_WRITE_IDX_OFFSET;
++	u64 *read_idx_ptr = cmd_regs + L2_CMD_READ_IDX_OFFSET;
++
++	/* Grab a commands tickets */
++	cmd_idx = __builtin_kvx_aladdd(write_idx_ptr, cmd_count);
++
++	/* Wait until there is room in command fifo to enqueue commands */
++	while ((cmd_idx + cmd_count) >=
++	       (readq(read_idx_ptr) + l2c_ctrl.fifo_cmd_count))
++		cpu_relax();
++
++	return cmd_idx;
++}
++
++static void l2_wait_completion(u64 cmd_idx)
++{
++	u64 *read_idx_ptr = l2_cmd_regs_addr() + L2_CMD_READ_IDX_OFFSET;
++	unsigned long timeout = jiffies + msecs_to_jiffies(L2_CMD_TIMEOUT_MS);
++
++	/* Wait for completion */
++	while (cmd_idx >= readq(read_idx_ptr)) {
++		cpu_relax();
++		if (time_after(jiffies, timeout))
++			panic("L2 cache completion timeout\n");
++	}
++}
++
++static u64 l2_cache_push_cmds(struct l2_cache_cmd *cmds, int cmd_count)
++{
++	int i, arg;
++	u64 cmd_op;
++	struct l2_cache_hw_cmd *cmd;
++	struct l2_cache_cmd *soft_cmd;
++	u64 cmd_idx = l2_cache_get_cmd_idx(cmd_count);
++
++	for (i = 0; i < cmd_count; i++) {
++		soft_cmd = &cmds[i];
++		cmd = l2_cache_hw_cmd_addr(cmd_idx);
++		cmd_idx++;
++
++		for (arg = 0; arg < soft_cmd->arg_count; arg++)
++			writeq_relaxed(soft_cmd->args[arg], &cmd->args[arg]);
++
++		cmd_op = L2_MK_OP(soft_cmd->cmd_type, soft_cmd->sync);
++		writeq(cmd_op, &cmd->op);
++	}
++
++	return cmd_idx - 1;
++}
++
++static void l2_cache_create_line_cmd(struct l2_cache_cmd *cmd, int cmd_type,
++				     int sync, u64 addr)
++{
++	cmd->cmd_type = cmd_type;
++	cmd->sync = sync;
++	cmd->arg_count = 1;
++	cmd->args[0] = addr;
++}
++
++static void l2_cache_create_area_cmd(struct l2_cache_cmd *cmd, int cmd_type,
++				     int sync, u64 addr, u64 size)
++{
++	l2_cache_create_line_cmd(cmd, cmd_type, sync, addr);
++	cmd->arg_count = 2;
++	cmd->args[1] = size;
++}
++
++static void l2_cache_push_inval_cmd(phys_addr_t start,
++			    unsigned long size)
++{
++	phys_addr_t end = start + size;
++	struct l2_cache_cmd cmds[3];
++	unsigned long irq_flags;
++	int cmd_count = 0;
++	u64 cmd_idx;
++
++	/*
++	 * In case of invalidation, we must make sure we do not invalidate
++	 * unwanted area and thus discard legit data. In case we are not aligned
++	 * send a purge line command (writeback + inval) to unaligned lines
++	 * (which can be the end line or the start line)
 +	 */
-+	make $r33 = 0x0;
-+	/* If size == 0, exit directly */
-+	cb.deqz $r2? copy_exit
-+	;;
-+	loopdo $r2, copy_exit
-+		;;
-+0:		lbz $r34 = $r33[$r1]
-+		;;
-+1:		sb $r33[$r0] = $r34
-+		addd $r33 = $r33, 1 /* Ptr increment */
-+		addd $r2 = $r2, -1 /* Remaining bytes to copy */
-+		;;
-+	copy_exit:
-+	copyd $r0 = $r2
-+	ret
-+	;;
-+ENDPROC(raw_copy_to_user)
-+ENDPROC(raw_copy_from_user)
++	if (!IS_ALIGNED(end, L2_CACHE_LINE_SIZE)) {
++		end &= ~L2_CACHE_LINE_MASK;
++		l2_cache_create_line_cmd(&cmds[cmd_count],
++					 L2_CMD_OP_CMD_PURGE_LINE, 1, end);
++		cmd_count++;
++	}
 +
-+/**
-+ * Exception table
-+ * each entry correspond to the following:
-+ * .dword trapping_addr, restore_addr
-+ *
-+ * On trap, the handler will try to locate if $spc is matching a
-+ * trapping address in the exception table. If so, the restore addr
-+ * will  be put in the return address of the trap handler, allowing
-+ * to properly finish the copy and return only the bytes copied/cleared
-+ */
-+.pushsection __ex_table,"a"
-+.balign 8
-+.dword 0b, copy_exit
-+.dword 1b, copy_exit
-+.popsection
++	if (!IS_ALIGNED(start, L2_CACHE_LINE_SIZE)) {
++		start &= ~L2_CACHE_LINE_MASK;
++		/* If there is at least another line to clear */
++		if (end != start) {
++			l2_cache_create_line_cmd(&cmds[cmd_count],
++						 L2_CMD_OP_CMD_PURGE_LINE, 1,
++						 start);
++			cmd_count++;
++			start += L2_CACHE_LINE_SIZE;
++		}
++	}
 +
-+/**
-+ * Clear a user buffer
-+ * r0 = buffer to clear
-+ * r1 = size to clear
-+ */
-+.text
-+ENTRY(asm_clear_user)
-+	/**
-+	 * naive implementation byte per byte
++	BUG_ON(end < start);
++
++	size = (end - start);
++	if (size > 0) {
++		l2_cache_create_area_cmd(&cmds[cmd_count],
++					 L2_CMD_OP_CMD_INVAL_AREA, 1, start,
++					 size);
++		cmd_count++;
++	}
++
++	BUG_ON(cmd_count == 0);
++
++	local_irq_save(irq_flags);
++
++	cmd_idx = l2_cache_push_cmds(cmds, cmd_count);
++
++	/* Finally, ping the L2 cache controller */
++	writeq(1, l2c_ctrl.mbox_regs);
++
++	local_irq_restore(irq_flags);
++
++	l2_wait_completion(cmd_idx);
++}
++
++static void l2_cache_push_generic_cmd(u64 cmd_type, phys_addr_t start,
++			    unsigned long size)
++{
++	unsigned long irq_flags;
++	struct l2_cache_cmd cmd;
++	u64 cmd_idx;
++
++	/* Align the start address and size on cache line */
++	size += start & (L2_CACHE_LINE_SIZE - 1);
++	size = ALIGN(size, L2_CACHE_LINE_SIZE);
++	start = ALIGN_DOWN(start, L2_CACHE_LINE_SIZE);
++
++	local_irq_save(irq_flags);
++
++	l2_cache_create_area_cmd(&cmd, cmd_type, 1, start, size);
++	cmd_idx = l2_cache_push_cmds(&cmd, 1);
++
++	/* Finally, ping the L2 cache controller */
++	writeq(1, l2c_ctrl.mbox_regs);
++
++	local_irq_restore(irq_flags);
++
++	l2_wait_completion(cmd_idx);
++}
++
++void l2_cache_push_area_cmd(u64 cmd_type, phys_addr_t start,
++			    unsigned long size)
++{
++	if (WARN_ON(size == 0))
++		return;
++
++	if (cmd_type == L2_CMD_OP_CMD_INVAL_AREA)
++		l2_cache_push_inval_cmd(start, size);
++	else
++		l2_cache_push_generic_cmd(cmd_type, start, size);
++}
++
++static void __init l2_disp_error(u64 error)
++{
++	const char *err_type;
++
++	if (error & L2_ERROR_API_ERR_MASK)
++		err_type = "API";
++	else if (error & L2_ERROR_SETUP_ERR_MASK)
++		err_type = "SETUP";
++	else
++		err_type = "UNKNOWN";
++
++	pr_err("%s error: 0x%llx\n", err_type, L2_ERROR(error));
++}
++
++static int __init l2_cache_configure_mailboxes(void)
++{
++	phys_addr_t l2_mbox_addr = 0;
++	void *cmd_regs = l2_cmd_regs_addr();
++
++	/* We do not use mailbox to wait for completion, set it to 0 */
++	writeq(0, cmd_regs + L2_CMD_DOORBELL_READ_ADDR_OFFSET);
++
++	/* Read mailbox address from L2 registers */
++	l2_mbox_addr = readq(cmd_regs + L2_CMD_DOORBELL_WRITE_ADDR_OFFSET);
++
++	/* Then map the mailbox */
++	l2c_ctrl.mbox_regs = ioremap(l2_mbox_addr, PAGE_SIZE);
++	if (!l2c_ctrl.mbox_regs) {
++		pr_err("Failed to map mailbox\n");
++		return 1;
++	}
++
++	/* Lock this entry into the LTLB */
++	kvx_mmu_ltlb_add_entry((unsigned long) l2c_ctrl.mbox_regs & PAGE_MASK,
++			       l2_mbox_addr & PAGE_MASK,
++			       PAGE_KERNEL_DEVICE, TLB_PS_4K);
++
++	return 0;
++}
++
++static int __init l2_cache_read_queue_size(void)
++{
++	u64 inst;
++
++	/* Read command queue size */
++	inst = readq(l2c_ctrl.regs + L2_INSTANCE_OFFSET);
++	l2c_ctrl.fifo_cmd_count = (inst & L2_INSTANCE_CMD_QUEUE_SIZE_MASK)
++				   >> L2_INSTANCE_CMD_QUEUE_SIZE_SHIFT;
++
++	/* Check if value is a power of two */
++	if (hweight64(l2c_ctrl.fifo_cmd_count) != 1) {
++		pr_err("Command queue size is not a power of two\n");
++		return 1;
++	}
++
++	return 0;
++}
++
++static int __init l2_cache_init_hw(void)
++{
++	unsigned long timeout = jiffies + msecs_to_jiffies(L2_START_TIMEOUT_MS);
++	unsigned long flags;
++	u64 status, error;
++	int ret;
++
++	/* Wait for L2 to be up */
++	do {
++		status = readq(l2c_ctrl.regs + L2_STATUS_OFFSET);
++		if (status & (L2_STATUS_READY_MASK | L2_STATUS_ERROR_MASK))
++			break;
++	} while (time_before(jiffies, timeout));
++
++	if (!status) {
++		pr_err("Timeout while waiting for firmware status\n");
++		return -ENODEV;
++	}
++
++	if (status & L2_STATUS_ERROR_MASK) {
++		error = readq(l2c_ctrl.regs + L2_ERROR_OFFSET);
++		l2_disp_error(error);
++		return -EINVAL;
++	}
++
++	/* Now write ack to L2 firmware */
++	writeq(status | L2_STATUS_ACK_MASK, l2c_ctrl.regs + L2_STATUS_OFFSET);
++
++	ret = l2_cache_read_queue_size();
++	if (ret)
++		return ret;
++
++	ret = l2_cache_configure_mailboxes();
++	if (ret)
++		return ret;
++
++	/* Enable the L2 atomically */
++	local_irq_save(flags);
++
++	/* Fence data accesses */
++	kvx_fence();
++	/* Purge L1 */
++	l1_inval_dcache_all();
++	l1_inval_icache_all();
++	__builtin_kvx_barrier();
++
++	local_irq_restore(flags);
++
++	/* Enable L2$ */
++	kvx_sfr_set_field(PS, L2E, 1);
++
++	return 0;
++}
++
++static phys_addr_t __init l2_get_regs_addr(struct device_node *np)
++{
++	const void *reg;
++	struct resource res;
++	phys_addr_t l2_regs_addr;
++	int ret;
++
++	/*
++	 * If regs is specified in device tree, then the L2$ has been loaded by
++	 * someone else and not by ourself.
 +	 */
-+	make $r33 = 0x0;
-+	make $r34 = 0x0;
-+	/* If size == 0, exit directly */
-+	cb.deqz $r1? clear_exit
-+	;;
-+	loopdo $r1, clear_exit
-+		;;
-+40:		sb $r33[$r0] = $r34
-+		addd $r33 = $r33, 1 /* Ptr increment */
-+		addd $r1 = $r1, -1 /* Remaining bytes to copy */
-+		;;
-+	clear_exit:
-+	copyd $r0 = $r1
-+	ret
-+	;;
-+ENDPROC(asm_clear_user)
++	reg = of_get_property(np, "reg", NULL);
++	if (reg) {
++		ret = of_address_to_resource(np, 0, &res);
++		if (ret) {
++			pr_err("Address translation error\n");
++			return 0;
++		}
++		if ((res.end - res.start) > PAGE_SIZE) {
++			pr_err("L2 reg size > PAGE_SIZE\n");
++			return 0;
++		}
 +
-+.pushsection __ex_table,"a"
-+.balign 8
-+.dword 40b, clear_exit
-+.popsection
++		l2_regs_addr = res.start;
++	} else {
++		l2_regs_addr = (phys_addr_t) __rm_firmware_regs_start;
++	}
 +
++	if (!IS_ALIGNED(l2_regs_addr, PAGE_SIZE)) {
++		pr_err("Registers not aligned on PAGE_SIZE\n");
++		return 0;
++	}
++
++	return l2_regs_addr;
++}
++
++static int __init l2_cache_init(void)
++{
++	int ret = -ENODEV;
++	struct device_node *np;
++	phys_addr_t l2_regs_addr;
++
++	np = of_find_compatible_node(NULL, NULL, "kalray,kvx-l2-cache");
++	if (!np || !of_device_is_available(np)) {
++		if (!IS_ENABLED(CONFIG_SMP)) {
++			pr_info("controller disabled\n");
++			return 0;
++		}
++
++		if (np && of_get_property(np, "kalray,is-qemu", NULL)) {
++			/*
++			 * QEMU is always full cache coherent. The L2 cache controller is
++			 * not strictly necessary to ensure coherency in SMP.
++			 */
++			pr_info("controller disabled (QEMU detected)\n");
++			return 0;
++		}
++
++		/* Else, SMP is enabled and L2 is mandatory for it */
++		goto err;
++	}
++
++	l2_regs_addr = l2_get_regs_addr(np);
++	if (!l2_regs_addr)
++		goto err;
++
++	/* Map the L2 registers */
++	l2c_ctrl.regs = ioremap(l2_regs_addr, PAGE_SIZE);
++	if (!l2c_ctrl.regs)
++		goto err;
++
++	/* Lock this entry into the LTLB */
++	kvx_mmu_ltlb_add_entry((unsigned long) l2c_ctrl.regs, l2_regs_addr,
++			       PAGE_KERNEL_NOCACHE, TLB_PS_4K);
++
++	ret = l2_cache_init_hw();
++	if (ret) {
++		pr_err("Failed to init L2 cache controller");
++		goto err_unmap_l2;
++	}
++
++	static_branch_enable(&l2_enabled);
++
++	pr_info("controller enabled\n");
++
++	return 0;
++
++err_unmap_l2:
++	kvx_mmu_ltlb_remove_entry((unsigned long) l2c_ctrl.regs);
++	iounmap(l2c_ctrl.regs);
++err:
++	if (IS_ENABLED(CONFIG_SMP))
++		panic("L2$ controller is mandatory for SMP");
++
++	return ret;
++}
++
++
++early_initcall(l2_cache_init);
+diff --git a/arch/kvx/kernel/smp.c b/arch/kvx/kernel/smp.c
+new file mode 100644
+index 000000000000..ed4c35a8c4bc
+--- /dev/null
++++ b/arch/kvx/kernel/smp.c
+@@ -0,0 +1,110 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#include <linux/smp.h>
++#include <linux/cpu.h>
++#include <linux/of_irq.h>
++#include <linux/cpumask.h>
++#include <linux/irq_work.h>
++#include <linux/mm_types.h>
++#include <linux/interrupt.h>
++
++#include <asm/ipi.h>
++#include <asm/tlbflush.h>
++
++enum ipi_message_type {
++	IPI_RESCHEDULE,
++	IPI_CALL_FUNC,
++	IPI_IRQ_WORK,
++	IPI_MAX
++};
++
++/* A collection of single bit ipi messages.  */
++static struct {
++	unsigned long bits ____cacheline_aligned;
++} ipi_data[NR_CPUS] __cacheline_aligned;
++
++static void send_ipi_message(const struct cpumask *mask,
++			     enum ipi_message_type operation)
++{
++	unsigned long flags;
++	int cpu;
++
++	/* Set operation that must be done by receiver */
++	for_each_cpu(cpu, mask)
++		set_bit(operation, &ipi_data[cpu].bits);
++
++	/* Commit the write before sending IPI */
++	smp_wmb();
++
++	local_irq_save(flags);
++
++	kvx_ipi_send(mask);
++
++	local_irq_restore(flags);
++}
++
++void arch_send_call_function_ipi_mask(struct cpumask *mask)
++{
++	send_ipi_message(mask, IPI_CALL_FUNC);
++}
++
++void arch_send_call_function_single_ipi(int cpu)
++{
++	send_ipi_message(cpumask_of(cpu), IPI_CALL_FUNC);
++}
++
++#ifdef CONFIG_IRQ_WORK
++void arch_irq_work_raise(void)
++{
++	send_ipi_message(cpumask_of(smp_processor_id()), IPI_IRQ_WORK);
++}
++#endif
++
++static void ipi_stop(void *unused)
++{
++	local_cpu_stop();
++}
++
++void smp_send_stop(void)
++{
++	struct cpumask targets;
++
++	cpumask_copy(&targets, cpu_online_mask);
++	cpumask_clear_cpu(smp_processor_id(), &targets);
++
++	smp_call_function_many(&targets, ipi_stop, NULL, 0);
++}
++
++void smp_send_reschedule(int cpu)
++{
++	send_ipi_message(cpumask_of(cpu), IPI_RESCHEDULE);
++}
++
++irqreturn_t ipi_call_interrupt(int irq, void *dev_id)
++{
++	unsigned long *pending_ipis = &ipi_data[smp_processor_id()].bits;
++
++	while (true) {
++		unsigned long ops = xchg(pending_ipis, 0);
++
++		if (ops == 0)
++			return IRQ_HANDLED;
++
++		if (ops & (1 << IPI_RESCHEDULE))
++			scheduler_ipi();
++
++		if (ops & (1 << IPI_CALL_FUNC))
++			generic_smp_call_function_interrupt();
++
++		if (ops & (1 << IPI_IRQ_WORK))
++			irq_work_run();
++
++		BUG_ON((ops >> IPI_MAX) != 0);
++	}
++
++	return IRQ_HANDLED;
++}
+diff --git a/arch/kvx/kernel/smpboot.c b/arch/kvx/kernel/smpboot.c
+new file mode 100644
+index 000000000000..987a6f014163
+--- /dev/null
++++ b/arch/kvx/kernel/smpboot.c
+@@ -0,0 +1,127 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Julian Vetter
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/io.h>
++#include <linux/of.h>
++#include <linux/smp.h>
++#include <linux/cpu.h>
++#include <linux/sched.h>
++#include <linux/cpumask.h>
++#include <linux/sched/mm.h>
++#include <linux/mm_types.h>
++#include <linux/of_platform.h>
++#include <linux/sched/task_stack.h>
++
++#include <asm/pwr_ctrl.h>
++#include <asm/tlbflush.h>
++#include <asm/ipi.h>
++
++void *__cpu_up_stack_pointer[NR_CPUS];
++void *__cpu_up_task_pointer[NR_CPUS];
++
++void __init smp_prepare_boot_cpu(void)
++{
++}
++
++int __cpu_up(unsigned int cpu, struct task_struct *tidle)
++{
++	__cpu_up_stack_pointer[cpu] = task_stack_page(tidle) + THREAD_SIZE;
++	__cpu_up_task_pointer[cpu] = tidle;
++	/* We need to be sure writes are committed */
++	smp_mb();
++
++	kvx_pwr_ctrl_cpu_poweron(cpu);
++	while (!cpu_online(cpu))
++		cpu_relax();
++
++	return 0;
++}
++
++void __init smp_cpus_done(unsigned int max_cpus)
++{
++}
++
++void __init smp_init_cpus(void)
++{
++	struct cpumask cpumask;
++	struct device_node *cpu;
++	const __be32 *reg;
++	u32 cpu_num;
++	unsigned int nr_cpus = 0;
++
++	cpumask_clear(&cpumask);
++
++	for_each_of_cpu_node(cpu) {
++		if (!of_device_is_available(cpu))
++			continue;
++
++		reg = of_get_property(cpu, "reg", NULL);
++		if (!reg)
++			continue;
++
++		cpu_num = be32_to_cpup(reg);
++		if (cpu_num >= nr_cpu_ids)
++			continue;
++
++		nr_cpus++;
++		cpumask_set_cpu(cpu_num, &cpumask);
++	}
++
++	pr_info("%d possible cpus\n", nr_cpus);
++	init_cpu_possible(&cpumask);
++}
++
++void __init smp_prepare_cpus(unsigned int max_cpus)
++{
++	if (num_present_cpus() <= 1)
++		init_cpu_present(cpu_possible_mask);
++}
++
++int __init setup_smp(void)
++{
++	int ret;
++
++	ret = kvx_pwr_ctrl_probe();
++	if (ret)
++		panic("Failed to probe power controller !");
++
++	ret = kvx_ipi_ctrl_probe(ipi_call_interrupt);
++	if (ret)
++		panic("Failed to probe IPI controller !");
++
++	return 0;
++}
++
++early_initcall(setup_smp);
++
++/*
++ * C entry point for a secondary processor.
++ */
++void __init start_kernel_secondary(void)
++{
++	struct mm_struct *mm = &init_mm;
++	unsigned int cpu = smp_processor_id();
++
++	setup_processor();
++	kvx_mmu_early_setup();
++
++	/* All kernel threads share the same mm context.  */
++	mmgrab(mm);
++	current->active_mm = mm;
++	cpumask_set_cpu(cpu, mm_cpumask(mm));
++
++	notify_cpu_starting(cpu);
++	set_cpu_online(cpu, true);
++	trace_hardirqs_off();
++
++	local_flush_tlb_all();
++
++	local_irq_enable();
++	cpu_startup_entry(CPUHP_AP_ONLINE_IDLE);
++}
+diff --git a/arch/kvx/platform/pwr_ctrl.c b/arch/kvx/platform/pwr_ctrl.c
+new file mode 100644
+index 000000000000..64c86cd18695
+--- /dev/null
++++ b/arch/kvx/platform/pwr_ctrl.c
+@@ -0,0 +1,93 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/io.h>
++#include <linux/slab.h>
++#include <linux/types.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/of_platform.h>
++
++#include <asm/pwr_ctrl.h>
++#include <asm/symbols.h>
++
++struct kvx_pwr_ctrl {
++	void __iomem *regs;
++};
++
++static struct kvx_pwr_ctrl kvx_pwr_controller;
++
++/**
++ * kvx_pwr_ctrl_cpu_poweron() - Wakeup a cpu
++ * @cpu: cpu to wakeup
++ */
++void kvx_pwr_ctrl_cpu_poweron(unsigned int cpu)
++{
++	/* Set PE boot address */
++	writeq((unsigned long long)kvx_start,
++			kvx_pwr_controller.regs + KVX_PWR_CTRL_RESET_PC_OFFSET);
++	/* Wake up processor ! */
++	writeq(1ULL << cpu,
++	       kvx_pwr_controller.regs + PWR_CTRL_WUP_SET_OFFSET);
++	/* Then clear wakeup to allow processor to sleep */
++	writeq(1ULL << cpu,
++	       kvx_pwr_controller.regs + PWR_CTRL_WUP_CLEAR_OFFSET);
++}
++
++static struct device_node * __init get_pwr_ctrl_node(void)
++{
++	const phandle *ph;
++	struct device_node *cpu;
++	struct device_node *node;
++
++	cpu = of_get_cpu_node(raw_smp_processor_id(), NULL);
++	if (!cpu) {
++		pr_err("Failed to get CPU node\n");
++		return NULL;
++	}
++
++	ph = of_get_property(cpu, "power-controller", NULL);
++	if (!ph) {
++		pr_err("Failed to get power-controller phandle\n");
++		return NULL;
++	}
++
++	node = of_find_node_by_phandle(be32_to_cpup(ph));
++	if (!node) {
++		pr_err("Failed to get power-controller node\n");
++		return NULL;
++	}
++
++	return node;
++}
++
++int __init kvx_pwr_ctrl_probe(void)
++{
++	struct device_node *ctrl;
++
++	ctrl = get_pwr_ctrl_node();
++	if (!ctrl) {
++		pr_err("Failed to get power controller node\n");
++		return -EINVAL;
++	}
++
++	if (!of_device_is_compatible(ctrl, "kalray,kvx-pwr-ctrl")) {
++		pr_err("Failed to get power controller node\n");
++		return -EINVAL;
++	}
++
++	kvx_pwr_controller.regs = of_iomap(ctrl, 0);
++	if (!kvx_pwr_controller.regs) {
++		pr_err("Failed ioremap\n");
++		return -EINVAL;
++	}
++
++	pr_info("kvx power controller probed\n");
++
++	return 0;
++}
+diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+index f61447913db9..f5a484547b15 100644
+--- a/include/linux/cpuhotplug.h
++++ b/include/linux/cpuhotplug.h
+@@ -152,6 +152,7 @@ enum cpuhp_state {
+ 	CPUHP_AP_IRQ_RISCV_STARTING,
+ 	CPUHP_AP_IRQ_LOONGARCH_STARTING,
+ 	CPUHP_AP_IRQ_SIFIVE_PLIC_STARTING,
++	CPUHP_AP_IRQ_KVX_STARTING,
+ 	CPUHP_AP_ARM_MVEBU_COHERENCY,
+ 	CPUHP_AP_MICROCODE_LOADER,
+ 	CPUHP_AP_PERF_X86_AMD_UNCORE_STARTING,
+@@ -189,6 +190,7 @@ enum cpuhp_state {
+ 	CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
+ 	CPUHP_AP_KVM_ARM_VGIC_STARTING,
+ 	CPUHP_AP_KVM_ARM_TIMER_STARTING,
++	CPUHP_AP_KVX_TIMER_STARTING,
+ 	/* Must be the last timer callback */
+ 	CPUHP_AP_DUMMY_TIMER_STARTING,
+ 	CPUHP_AP_ARM_XEN_STARTING,
 -- 
 2.37.2
 
