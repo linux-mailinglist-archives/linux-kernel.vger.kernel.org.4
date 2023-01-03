@@ -2,155 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE27965B968
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 03:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5CA65B973
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 03:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbjACCfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 21:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
+        id S232137AbjACCnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 21:43:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjACCfn (ORCPT
+        with ESMTP id S231410AbjACCm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 21:35:43 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051B7FCA
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 18:35:41 -0800 (PST)
-Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302MlRWT019792;
-        Tue, 3 Jan 2023 02:35:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=rRT4sXA0xI9UGLf8O03IE3hR7lWr3pnX+x8tZL3iJio=;
- b=hmiygfto2No5MySnQbhnA02U56jRezrn6I7j4UcseP8sfkqSC2n/o8xotBPb3defkQNs
- oq9L0G3eOJJvua7bWCgx2Zh9ZtyGYr4sWkvfmLTHaz6uKCT7CO6MMgst1NupN30TY04u
- C5JGpRzL8hpFANqEp4HG82qunLTymmpSUMh5ry7DpIo9Nzazm8fr+FucdQAuCEDRUlox
- kmsXz02yZLXqIG+Osrjk/k6FFGKXpIu72+lVxDdnhTfwAp/TeBrj2N6yWLC6N0ao9Z2j
- tNiDZ54YiIuKu+N0MmX3xW4oImBqbEqH58qPVGKTBrMBMRS+EjBcZenk/87BDOI0dsWR sA== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3mv8c7gw75-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 02:35:36 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 38C612F1F8;
-        Tue,  3 Jan 2023 02:35:35 +0000 (UTC)
-Received: from blofly.tw.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id EA05780A0ED;
-        Tue,  3 Jan 2023 02:35:33 +0000 (UTC)
-Date:   Tue, 3 Jan 2023 10:35:31 +0800
-From:   Matt Hsiao <matt.hsiao@hpe.com>
-To:     Yoochan Lee <yoochan1026@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, arnd@arndb.de,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] misc: hpilo: Fix use-after-free in ilo_open
-Message-ID: <20230103023531.GA26527@blofly.tw.rdlabs.hpecorp.net>
-References: <20221231055310.2040648-1-yoochan1026@gmail.com>
- <Y7AHvYfZreO/G/kT@kroah.com>
- <CALQpDLfMjAE9_VtMO6e_iiPrciFNbksLQT3AB3QTGwZCNf5=sA@mail.gmail.com>
- <Y7AhLWSPE+2hnZ2I@kroah.com>
- <CALQpDLc4+-0st-U_s+09QCb2nmv=nQizheGXjhyKJLGS45zmZw@mail.gmail.com>
- <Y7A9ssF/WPVDMUKl@kroah.com>
- <CALQpDLdqW9UYfk_3AKXk-yiCtUize=HXDTM6h-nurH31j9FN8A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALQpDLdqW9UYfk_3AKXk-yiCtUize=HXDTM6h-nurH31j9FN8A@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: uBZYtFhdB6ET2vOHF_MMmfsICqAPyIks
-X-Proofpoint-ORIG-GUID: uBZYtFhdB6ET2vOHF_MMmfsICqAPyIks
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 2 URL's were un-rewritten
+        Mon, 2 Jan 2023 21:42:57 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBFB10F2;
+        Mon,  2 Jan 2023 18:42:57 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so29792110pjd.0;
+        Mon, 02 Jan 2023 18:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8fkzQhp1crKGSgSx8k6HIdZaU8pHi19M3YgxX2aKMxI=;
+        b=DHIvJaCQ6maLM8lILPL4VWUiTAZi93wbNMKHYiEwkekbNhqv9N9TKGNuzqOVEobp5p
+         Cn5e2RMnJBhgB0TJZfsNVjopF5E2XzjvbKbQ12nhcEatgOzQecR2Q9AdM4q6g3GlelZ0
+         m17m/unDTqoWrq7+x637ovTcnzzqzawh/egzIyytfCt3Vr9nNmLfZa4PyGBREVU/rwJ8
+         J/UhUacOZp1rdUOvWv8/41wJ5b/hCOhq+XolhnkXwrUXCVgSpYCau7Hy2KUGYd/3K4+g
+         O1PcqPmSXas50/b8Bbf/xtNBX1cSj+dYv0iMeqK1ucnd6Z16S6+FtBsQyYnAQb2klRDY
+         xcjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8fkzQhp1crKGSgSx8k6HIdZaU8pHi19M3YgxX2aKMxI=;
+        b=jd9ekfHJlVcC6xhRBeNZi5B9EzU9ytxs3rW4EHI5drYLuC4p7gn6/6lyKjRR0U6fey
+         OM94K23Oy+YbLZlIiJx7uhO9gyW2pMxMjpcE9P4GiEYoQy73WLaujqmyoxLSsAAOm5BF
+         9q9CiFvVMxI/+2+4gRe6WaGuvhijxNFnjCnQYRSKiOt0Lumd39azu6SDvyhBr6ZpR/Gl
+         X8Ad4caMqmqbfa3+JG6qHvMXJWxqsZZtb4uvX6EondG3yKReS3wYA7Htpt9rzmuDbbTb
+         +tgi4Hwk51oSo4IF8dD8he3gXDL1x87npE0rhh9TGZ9a7Pxq5yvW+ATGEUIhQCALE3vh
+         h2gA==
+X-Gm-Message-State: AFqh2ko2T4jL7c9V+NwkXtNtj+1+P+YgBR5ntcM7plPrbaqDR1QaaPoK
+        tBmFPSaR2pTkAknKzO7UyJU=
+X-Google-Smtp-Source: AMrXdXsfFOGY10WSLhxjnxlmb7z/kOCWm37mZqCGCRQnyzppVr3ya1ZIuUw/y/fJh4ZT271hSWTm5g==
+X-Received: by 2002:a17:902:a402:b0:191:7d3:7fe4 with SMTP id p2-20020a170902a40200b0019107d37fe4mr39660058plq.59.1672713776713;
+        Mon, 02 Jan 2023 18:42:56 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id b8-20020a1709027e0800b001895d871c95sm20923561plm.70.2023.01.02.18.42.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 18:42:56 -0800 (PST)
+From:   zys.zljxml@gmail.com
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yushan Zhou <katrinzhou@tencent.com>
+Subject: [PATCH v2] brtfs: use PAGE_ALIGNED macro
+Date:   Tue,  3 Jan 2023 10:36:26 +0800
+Message-Id: <20230103023626.3072656-1-zys.zljxml@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20230102150357.GF11562@twin.jikos.cz>
+References: <20230102150357.GF11562@twin.jikos.cz>
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_14,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- clxscore=1011 priorityscore=1501 spamscore=0 mlxlogscore=597 adultscore=0
- bulkscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301030021
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 01, 2023 at 10:19:14AM +0900, Yoochan Lee wrote:
-> > And how can this device actually be removed from the system?  Is that
-> > possible with this hardware?
-> HP ILO device is connected by using LAN cable.
-> Therefore, the detach function is triggered when the attacker
-> physically detaches the LAN cable connected to the HP ILO device.
+From: Yushan Zhou <katrinzhou@tencent.com>
 
-This is incorrect.
+The header file linux/mm.h provides the PAGE_ALIGNED macro to
+test whether an address is aligned to PAGE_SIZE. Use it instead
+of IS_ALIGNED.
 
-The iLO device is an SoC attached directly on the PCB board.
-It cannot be removed like a PCMCIA card that you referred so the
-patch cannot apply the same to iLO. This iLO SoC does have a NIC, but
-detach the LAN cable connected to it does not remove the SoC itself from
-the host CPU.
+Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
+---
+ fs/btrfs/compression.c | 2 +-
+ fs/btrfs/defrag.c      | 2 +-
+ fs/btrfs/lzo.c         | 2 +-
+ fs/btrfs/relocation.c  | 2 +-
+ fs/btrfs/send.c        | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-> 
-> > And again, this is not the correct solution as you have way too many
-> > reference counts happening here.  Please become more familiar with how
-> > these all work before adding another one and causing more problems like
-> > this patch did :(
-> Okay, I'll find a better way to patch this bug.
-> 
-> Sincerely,
-> Yoochan
-> 
-> 2022년 12월 31일 (토) 오후 10:48, Greg KH <gregkh@linuxfoundation.org>님이 작성:
-> >
-> > A: http://en.wikipedia.org/wiki/Top_post 
-> > Q: Were do I find info about this thing called top-posting?
-> > A: Because it messes up the order in which people normally read text.
-> > Q: Why is top-posting such a bad thing?
-> > A: Top-posting.
-> > Q: What is the most annoying thing in e-mail?
-> >
-> > A: No.
-> > Q: Should I include quotations after my reply?
-> >
-> > http://daringfireball.net/2007/07/on_top 
-> >
-> > On Sat, Dec 31, 2022 at 10:06:19PM +0900, Yoochan Lee wrote:
-> > > Thanks.
-> > >
-> > > Since I don't have a real device, it is difficult to verify the bug dynamically.
-> > > However, this type of race condition (i.e., b/w remove device and
-> > > fops) is prevalently founded recently[1-3].
-> > > Therefore, I think this bug can be triggered if a real device exists.
-> >
-> > And how can this device actually be removed from the system?  Is that
-> > possible with this hardware?
-> >
-> > > The main reason for this race condition (i.e., b/w detach and fops) is
-> > > there is no proper lock mechanism.
-> > > I think the detach device function is delayed until the other
-> > > operations (e.g., fops) is finished.
-> > > To this end, I use kref to wait for the other operations.
-> >
-> > And again, this is not the correct solution as you have way too many
-> > reference counts happening here.  Please become more familiar with how
-> > these all work before adding another one and causing more problems like
-> > this patch did :(
-> >
-> > > The tool I am making is currently under development, and it can find
-> > > the race condition between detach function and fops.
-> >
-> > Then you MUST document this as it looks like your tool needs work.
-> > Please read Documentation/process/researcher-guidelines.rst for what you
-> > MUST do if you use a tool to find "issues" and send out random patches.
-> >
-> > good luck!
-> >
-> > greg k-h
+diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
+index 5122ca79f7ea..4a5aeb8dd479 100644
+--- a/fs/btrfs/compression.c
++++ b/fs/btrfs/compression.c
+@@ -1609,7 +1609,7 @@ static void heuristic_collect_sample(struct inode *inode, u64 start, u64 end,
+ 	index_end = end >> PAGE_SHIFT;
+ 
+ 	/* Don't miss unaligned end */
+-	if (!IS_ALIGNED(end, PAGE_SIZE))
++	if (!PAGE_ALIGNED(end))
+ 		index_end++;
+ 
+ 	curr_sample_pos = 0;
+diff --git a/fs/btrfs/defrag.c b/fs/btrfs/defrag.c
+index 0a3c261b69c9..130de66839c1 100644
+--- a/fs/btrfs/defrag.c
++++ b/fs/btrfs/defrag.c
+@@ -997,7 +997,7 @@ static int defrag_collect_targets(struct btrfs_inode *inode,
+ }
+ 
+ #define CLUSTER_SIZE	(SZ_256K)
+-static_assert(IS_ALIGNED(CLUSTER_SIZE, PAGE_SIZE));
++static_assert(PAGE_ALIGNED(CLUSTER_SIZE));
+ 
+ /*
+  * Defrag one contiguous target range.
+diff --git a/fs/btrfs/lzo.c b/fs/btrfs/lzo.c
+index d5e78cbc8fbc..71f6d8302d50 100644
+--- a/fs/btrfs/lzo.c
++++ b/fs/btrfs/lzo.c
+@@ -280,7 +280,7 @@ int lzo_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 		}
+ 
+ 		/* Check if we have reached page boundary */
+-		if (IS_ALIGNED(cur_in, PAGE_SIZE)) {
++		if (PAGE_ALIGNED(cur_in)) {
+ 			put_page(page_in);
+ 			page_in = NULL;
+ 		}
+diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
+index 31ec4a7658ce..ef13a9d4e370 100644
+--- a/fs/btrfs/relocation.c
++++ b/fs/btrfs/relocation.c
+@@ -2825,7 +2825,7 @@ static noinline_for_stack int prealloc_file_extent_cluster(
+ 	 *
+ 	 * Here we have to manually invalidate the range (i_size, PAGE_END + 1).
+ 	 */
+-	if (!IS_ALIGNED(i_size, PAGE_SIZE)) {
++	if (!PAGE_ALIGNED(i_size)) {
+ 		struct address_space *mapping = inode->vfs_inode.i_mapping;
+ 		struct btrfs_fs_info *fs_info = inode->root->fs_info;
+ 		const u32 sectorsize = fs_info->sectorsize;
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index e65e6b6600a7..bab0ba3e6542 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -5759,7 +5759,7 @@ static int send_extent_data(struct send_ctx *sctx, struct btrfs_path *path,
+ 		sent += size;
+ 	}
+ 
+-	if (sctx->clean_page_cache && IS_ALIGNED(end, PAGE_SIZE)) {
++	if (sctx->clean_page_cache && PAGE_ALIGNED(end)) {
+ 		/*
+ 		 * Always operate only on ranges that are a multiple of the page
+ 		 * size. This is not only to prevent zeroing parts of a page in
+-- 
+2.27.0
+
