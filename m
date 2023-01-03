@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781AE65BEDA
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CBE65BEDC
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbjACLXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 06:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
+        id S236980AbjACLXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 06:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbjACLXF (ORCPT
+        with ESMTP id S232989AbjACLXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 06:23:05 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32835FE2
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 03:23:05 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id m129so25594491vsc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 03:23:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qymjN3ujIci8QkJahnuWyEwypRWjm8vIMiyD3hCE2XE=;
-        b=pCkQOR73NHA5kMDVdKeBPobVfVBQu0yDy9iSHpK0fEZ8eLqg3chkvWhYRneaHGmTYf
-         0CdNeRQEp6yUg992g6SPR1oEh9VGflRKlEncZu6JuN7dkzJ16ppVxaOwRGp5r5g8wA7C
-         +FSYHFgqzHO0LYtWR+vxPoYRgVfFf8hnv0rROQqqg3KPMdjyKqZx5rq1UUcLsAlDRavB
-         GO8/SYJa641nS4nM8cDlFmWl+tUY7JIhLaauvt3oCm1700B9qzocHeLReCcw+hGIMDNQ
-         DYkMt8Lf6HHMkFtpd13o5MZKFIC3tjIFZZe6k3Y6cLhv4nZcEcEndufA/evxk97IFayp
-         LNYQ==
+        Tue, 3 Jan 2023 06:23:15 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A2210BB;
+        Tue,  3 Jan 2023 03:23:13 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id vm8so65920327ejc.2;
+        Tue, 03 Jan 2023 03:23:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qymjN3ujIci8QkJahnuWyEwypRWjm8vIMiyD3hCE2XE=;
-        b=WWqJjx3+e3k0WE+omR9+T0Ucgidbhew/328sthg2EVVSC+s0ZAo9F7B6GQWDqCu4mM
-         C+19fgxOVgimo2JwuYL+dqLDaXc60MRnE+kSt0TnVNn7JBv7hGwNpXSyf7EwKG18DZgF
-         9bWyc3XaYPwt/L6xV1YwzQC3Ka+cDfPpK0933p0OyB5OQqxTkDML3yiCPAMitQtMyN4t
-         CO4DAhDDU1OsxLYSAYAispETMjUyqRsiKYSrLLMacLY9uilw5ORtHfnrwvSIRWiXRiRB
-         fztjTO3ggIjGDbJNGGwSul8zTtzI51QaaQYJRaJvoufMEknmrN8iUHiJO8pn3Y70zLV9
-         eQug==
-X-Gm-Message-State: AFqh2krFgjNX2vqL2R0hg0Qkc+yRxcLiKGeAFOAfasCxR2HfoqcvYb1s
-        InSc9KIDCubJO1Mv09KxX/CLhFGgQNAAtIJWFcGc7A==
-X-Google-Smtp-Source: AMrXdXsTmHtB0EK6xoRW7OhHg11NHnMNoEKbDRPiJpULGh0kuIcHf3NOlZjTvLpP7nB99SHwnJDvQDhanyajiENlXMo=
-X-Received: by 2002:a67:f642:0:b0:3c4:ec4b:b943 with SMTP id
- u2-20020a67f642000000b003c4ec4bb943mr4847879vso.17.1672744984229; Tue, 03 Jan
- 2023 03:23:04 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R9rwcH+0z/WoMjVmt8n3b6QTLjPJpDlMLUWW/8CK+Hc=;
+        b=sbkYZvQlx1xQrmDwJxYrggkGLEy9pMhkrV4xbFAK4KNTOxnn3DLRk7001Oe9sAzKRb
+         1QQqdPxy6kxvmK5OYu86yDPjmhyC4HqlqsxiG01c5VLrRJMckuGqUZJy7W5Ojevlk7A7
+         dNpKW/pt8Mvn3K9RmjzLf1e/JXnWWTQDR0ssCygVrBdtOqYQAV5Oo4XqEFy5S0S72XQ3
+         PNSSVll4Lwhq8kZyryG7TbUDSAC0PzojSqgCKAEgcvAlliAT6DRgDAa2SXA4aWU8RrJY
+         VjQouD6wUyo8PI7k2bzz2HmvyZgLvdERA5Ub3cKODXgatzi4GKaZ5zBa43gQllPWnMqu
+         lFcA==
+X-Gm-Message-State: AFqh2kp6awYvvtZFjhImLhbd/trlZJISaR20W7s6uwXOcRZKPDNv+Zh/
+        cyBocSH/CmzpkIlPp2hVTCitvEcIlMM=
+X-Google-Smtp-Source: AMrXdXvpVjg+/U4MZ59aolvSmlPbHjQ3tM40iF8+L7Uzh7pl9y9gysYH1szz6nr/9D2v4GFLJ70diw==
+X-Received: by 2002:a17:907:6f09:b0:7c0:a877:1cf1 with SMTP id sy9-20020a1709076f0900b007c0a8771cf1mr41824868ejc.12.1672744991799;
+        Tue, 03 Jan 2023 03:23:11 -0800 (PST)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id m9-20020a1709062ac900b007c0d41736c0sm13927489eje.39.2023.01.03.03.23.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 03:23:11 -0800 (PST)
+Message-ID: <1c33a2af-cd0d-cdde-5bc7-49b418665784@kernel.org>
+Date:   Tue, 3 Jan 2023 12:23:10 +0100
 MIME-Version: 1.0
-References: <000000000000e6c7b005f0e90bf1@google.com> <Y6zN/Q3glUcbty+c@mit.edu>
-In-Reply-To: <Y6zN/Q3glUcbty+c@mit.edu>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Tue, 3 Jan 2023 12:22:53 +0100
-Message-ID: <CANp29Y7yH6LeeHMX-joXgr7duZzs2p3j08qZzS6WGwBJDDq+PA@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic
- forced after error (2)
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     syzbot <syzbot+3c45794f522ad93b0eb6@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1] drivers/fsl_linflexuart.c : remove redundant uart type
+Content-Language: en-US
+To:     lizhe <sensor1010@163.com>, gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230103110255.2699-1-sensor1010@163.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20230103110255.2699-1-sensor1010@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ted,
+On 03. 01. 23, 12:02, lizhe wrote:
+> 	in linflex_config_port() the member variable will be
+> 	assigned again . see linflex_config_port()
 
-Syzkaller already tries to avoid such situations, but in this
-particular case, it has corrupted the mount options[1] and did not
-recognize the problem. Though, as I understand, this string was
-nevertheless valid to the kernel. Otherwise it would have aborted the
-mount early (?).
+Fine, but can you make the subject and the commit message a little bit 
+saner?
 
-I've sent a PR that should make the syzkaller logic more robust to
-such broken options strings:
-https://github.com/google/syzkaller/pull/3604
+I.e. no tabs, no spaces before semicolons and colons. The subject should 
+be something like "serial: linflexuart: remove redundant uart type 
+_assignment_" and so on.
 
-[1] grpjquota=Jnoinit_itable(errors=remount-ro,minixdf,jqfmt=vfsv0,usrjquota=."
+> Signed-off-by: lizhe <sensor1010@163.com>
 
---
-Aleksandr
+Is this your legal name?
 
-On Thu, Dec 29, 2022 at 12:14 AM Theodore Ts'o <tytso@mit.edu> wrote:
->
-> So this is a totally bogus Syzbot report.  If you use the mount option
-> "errors=panic", and you feed ext4 a corrupted file system, then it
-> *will* issue an "Ext4-fs error" message, and if you tell it to panic,
-> it will panic.
->
-> So *please* let's not have some crazy Red Hat principal engineer try
-> to file this as a high severity CVE....
->
-> This is Working As Intended.  And it is Not A Bug.
->
->                                         - Ted
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/Y6zN/Q3glUcbty%2Bc%40mit.edu.
+> ---
+>   drivers/tty/serial/fsl_linflexuart.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/fsl_linflexuart.c b/drivers/tty/serial/fsl_linflexuart.c
+> index 6fc21b6684e6..34400cc6ac7f 100644
+> --- a/drivers/tty/serial/fsl_linflexuart.c
+> +++ b/drivers/tty/serial/fsl_linflexuart.c
+> @@ -837,7 +837,6 @@ static int linflex_probe(struct platform_device *pdev)
+>   		return PTR_ERR(sport->membase);
+>   
+>   	sport->dev = &pdev->dev;
+> -	sport->type = PORT_LINFLEXUART;
+>   	sport->iotype = UPIO_MEM;
+>   	sport->irq = platform_get_irq(pdev, 0);
+>   	sport->ops = &linflex_pops;
+
+-- 
+js
+suse labs
+
