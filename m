@@ -2,130 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9860E65C426
+	by mail.lfdr.de (Postfix) with ESMTP id EDC7365C427
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237787AbjACQpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S237968AbjACQph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbjACQpT (ORCPT
+        with ESMTP id S237907AbjACQpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:45:19 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD00511A23
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:45:18 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303GHmoH031533;
-        Tue, 3 Jan 2023 16:45:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=UbFgjDhY1raX2ZeNtZC/NjM2vYEciID/vxc09kYi1h8=;
- b=ELV2nQMMWX5MLvKith4XqMDur1qBLJCA3rNT7GBYTVhfoO/Jlq+Ii049QEORqQN1m6aQ
- JY3eNWlJnctIeufIvqb0FaeImjvTrV+bM3VtqlcxJTpn9HQhG5X49bZ4SmNFI+FtvhT2
- zrX5Px8rqvvNi7p3z8t0jHKFNVEKXZgzdbojD3CrzfvfCT2GcA/qVIm7YzmjaKswrfTi
- tPBFAPPALLPqu8mPcNsquSGm6UeYAmam6C24pkynfiLoVsMsKh+m3m0kfr9G6vyYIdqX
- iZSUkY2HY2bmYptYy138LkwIOABkE//s1KT+Xmwn/fP7p/7zU30+scFPsAF2FAE4j8qt uA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvqrp8207-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 16:45:10 +0000
-Received: from nasanex01c.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 303Gj9uw016911
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 3 Jan 2023 16:45:09 GMT
-Received: from [10.216.2.249] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 3 Jan 2023
- 08:45:07 -0800
-Message-ID: <a20a9592-05e7-c529-5ab1-d7d52fffa59a@quicinc.com>
-Date:   Tue, 3 Jan 2023 22:15:04 +0530
+        Tue, 3 Jan 2023 11:45:35 -0500
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09B8DA0
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:45:34 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:f1ca:ff0d:9dea:806e])
+        by michel.telenet-ops.be with bizsmtp
+        id 4GlY2900w2YHDVW06GlYRb; Tue, 03 Jan 2023 17:45:33 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pCkPs-00203S-LF; Tue, 03 Jan 2023 17:45:32 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pCkPs-001TJk-68; Tue, 03 Jan 2023 17:45:32 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] clk: microchip: mpfs-ccc: Use devm_kasprintf() for allocating formatted strings
+Date:   Tue,  3 Jan 2023 17:45:30 +0100
+Message-Id: <f904fd28b2087d1463ea65f059924e3b1acc193c.1672764239.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: Query about IPI as NMI (pseudo-NMI) support patches
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-CC:     lkml <linux-kernel@vger.kernel.org>
-References: <5bed08c5-8663-4e68-27b4-8b6d3957a880@quicinc.com>
- <86zgb07tfs.wl-maz@kernel.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <86zgb07tfs.wl-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ymsRVg-mp3cYhD5WMckbu89yoO4s_IFs
-X-Proofpoint-GUID: ymsRVg-mp3cYhD5WMckbu89yoO4s_IFs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-03_05,2023-01-03_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 adultscore=0 impostorscore=0 mlxlogscore=777
- lowpriorityscore=0 spamscore=0 clxscore=1031 mlxscore=0 phishscore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301030142
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+In various places, string buffers of a fixed size are allocated, and
+filled using snprintf() with the same fixed size, which is error-prone.
 
-Thanks for your reply.
+Replace this by calling devm_kasprintf() instead, which always uses the
+appropriate size.
 
-On 1/2/2023 10:41 PM, Marc Zyngier wrote:
-> Hi Mukesh,
-> 
-> On Mon, 02 Jan 2023 16:44:59 +0000,
-> Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->>
->> Hi Marc,
->>
->> I was looking similar support mentioned in below patch series.
->>
->> https://lore.kernel.org/lkml/CAFA6WYO0+LQ=mB1spCstt0cNZ0G+sZu_+Wrv6BKSeXqF5SRq4A@mail.gmail.com/#t
->>
->> Wanted to check if there is chance of these patches to land in
->> mainline ?
-> 
-> I certainly have no intention to merge it as is, specially as there is
-> no good usage model for it other than "but think of debug!".
-> 
-> We have exactly *one* SGI left. If we are going to lose it over such a
-> feature, I'd want a description of how we are going to share it
-> between potential users, and how we claw some currently used SGIs
-> back.
+While at it, remove an unneeded intermediate variable, which allows us
+to drop a cast as a bonus.
 
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/clk/microchip/clk-mpfs-ccc.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-But, looks like patch will fail if SGI is not available.
+diff --git a/drivers/clk/microchip/clk-mpfs-ccc.c b/drivers/clk/microchip/clk-mpfs-ccc.c
+index 32aae880a14f3b1c..0ddc73e07be42973 100644
+--- a/drivers/clk/microchip/clk-mpfs-ccc.c
++++ b/drivers/clk/microchip/clk-mpfs-ccc.c
+@@ -164,12 +164,11 @@ static int mpfs_ccc_register_outputs(struct device *dev, struct mpfs_ccc_out_hw_
+ 
+ 	for (unsigned int i = 0; i < num_clks; i++) {
+ 		struct mpfs_ccc_out_hw_clock *out_hw = &out_hws[i];
+-		char *name = devm_kzalloc(dev, 23, GFP_KERNEL);
++		char *name = devm_kasprintf(dev, GFP_KERNEL, "%s_out%u", parent->name, i);
+ 
+ 		if (!name)
+ 			return -ENOMEM;
+ 
+-		snprintf(name, 23, "%s_out%u", parent->name, i);
+ 		out_hw->divider.hw.init = CLK_HW_INIT_HW(name, &parent->hw, &clk_divider_ops, 0);
+ 		out_hw->divider.reg = data->pll_base[i / MPFS_CCC_OUTPUTS_PER_PLL] +
+ 			out_hw->reg_offset;
+@@ -201,14 +200,13 @@ static int mpfs_ccc_register_plls(struct device *dev, struct mpfs_ccc_pll_hw_clo
+ 
+ 	for (unsigned int i = 0; i < num_clks; i++) {
+ 		struct mpfs_ccc_pll_hw_clock *pll_hw = &pll_hws[i];
+-		char *name = devm_kzalloc(dev, 18, GFP_KERNEL);
+ 
+-		if (!name)
++		pll_hw->name = devm_kasprintf(dev, GFP_KERNEL, "ccc%s_pll%u",
++					      strchrnul(dev->of_node->full_name, '@'), i);
++		if (!pll_hw->name)
+ 			return -ENOMEM;
+ 
+ 		pll_hw->base = data->pll_base[i];
+-		snprintf(name, 18, "ccc%s_pll%u", strchrnul(dev->of_node->full_name, '@'), i);
+-		pll_hw->name = (const char *)name;
+ 		pll_hw->hw.init = CLK_HW_INIT_PARENTS_DATA_FIXED_SIZE(pll_hw->name,
+ 								      pll_hw->parents,
+ 								      &mpfs_ccc_pll_ops, 0);
+-- 
+2.25.1
 
-https://lore.kernel.org/lkml/1604317487-14543-4-git-send-email-sumit.garg@linaro.org/
-
-
-
-set_smp_ipi_range(base_sgi, 8);
-
-+	if (n > nr_ipi)
-+		set_smp_dynamic_ipi(ipi_base + nr_ipi);
-+
-
-So, static SGI allocation still has higher priority than dynamic one.
-Would you be accepting if we keep it under some CONFIG_ARM64_IPI_NMI_DEBUG ?
-
--Mukesh
-> 
-> Until then, this is a proof of concept, and not much else.
-> 
-> Thanks,
-> 
-> 	M.
-> 
