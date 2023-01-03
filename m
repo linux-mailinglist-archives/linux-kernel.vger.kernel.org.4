@@ -2,109 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350FD65C1B2
+	by mail.lfdr.de (Postfix) with ESMTP id 9712E65C1B3
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbjACORH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
+        id S233354AbjACORk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237979AbjACOQm (ORCPT
+        with ESMTP id S233122AbjACORh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:16:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF23120BF
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:16:29 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id AC0153EA98;
-        Tue,  3 Jan 2023 14:16:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672755387; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J8oq+XhQ+3+x7Vpym61jDcEqm3Tvv2/Ah6NareozzB0=;
-        b=l8FjXtN8zdh0U4meV9iZO62MyXEqmKTWP7Q/m4r6dcTsBw67WgZxLxxwqJdnq8R7O1ac9J
-        svGmsNYXfEcWXVb5VHooaapMnlHXsp+a+dehl143P+plwid0/zPp0FE+OU24iIF1J8TwiC
-        tLKC3ELw211EDTJKmcmRNqsg4h2VDTU=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9185F2C141;
-        Tue,  3 Jan 2023 14:16:27 +0000 (UTC)
-Date:   Tue, 3 Jan 2023 15:16:27 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v3 6/6] printk: introduce
- console_prepend_dropped() for dropped messages
-Message-ID: <Y7Q4u9ICptw0RnXb@alley>
-References: <20221221202704.857925-1-john.ogness@linutronix.de>
- <20221221202704.857925-7-john.ogness@linutronix.de>
- <Y7MEDmP1zqWblj0N@alley>
- <87y1qjdimw.fsf@jogness.linutronix.de>
- <Y7QtusGlIX3AU+TN@alley>
- <87o7rfd96w.fsf@jogness.linutronix.de>
+        Tue, 3 Jan 2023 09:17:37 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D9D255
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:17:36 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id c133so27208624oif.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 06:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=P+ArUfu7KFijl6muxgVmT9H4zzXFEpCZ/1mv/6B2SoA=;
+        b=nTO14SOwfd1VwYx1HO58wK9SCmIM9R+ZS2yywbo/1XDaeaOTFvhhA4cjrZ7Q1qNn9P
+         B/AX2INxmbwuPLrhxQcd8+07HqY3YM2AWhbJ9SrZ2kASUsfSBWU1WYP3ZGhvpOx3H+2T
+         QkVsZ4zRNP5gEg6oSrk73QHiSGnas6mpYeq7qo1fp/i0ap7ZqE8o4waHjw7L85TGF/wd
+         biPKbZ6i66g4JVZ6ZaMtLkD4gP0EfXvY5XQW/I9OrlOMXr7yKZFm80nMAshnGj6RHD5p
+         vuZ2W2RDrwsi1BuNB550YiNR0OF4sRqSF4Ro56Iglx5kyfJpIBj4xC4SgkoIUZEwj3Ig
+         Rvew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P+ArUfu7KFijl6muxgVmT9H4zzXFEpCZ/1mv/6B2SoA=;
+        b=yNhTQbotVMHz3Nhcb1lmbdmqAdKLDa53frEEoCPvu2DLDmKpv54fJ10N9Bk2iTY8+g
+         SV0GbwmDzdUt7oa4sJmIEgJW+lo0oNFPMn9CD4/gmAGGWyJOE52tSjk/otbKlGY06Bi3
+         rOHi4vR1V/U9o0WZhfY7yBk7Duqs1EYv3GSNPhr5D80HU1xg9s0F1vi/YWDmHmknEbBb
+         Iq/kp5Lv8P/Xyi5Nykm8bOeho42Q8KDAflyMeVrZyOTaWprnzra9sVt296Pw+ljat6AP
+         px8Tlyb7J82VHMSY96fdY+M6THRP/oUAk8mxMQSy+jVTJpfrjewmlw+nP/5+Ll9Siree
+         jyNg==
+X-Gm-Message-State: AFqh2kpQWOcg4bEpdrm6z66CMSl3T6Pt8FHS4IvCqz4fzyyDgSwnSX9p
+        /AdFo7fjr9DxGXp12zdWxGZyzDpblJmQ/TfyBqXdRzDB
+X-Google-Smtp-Source: AMrXdXvi5V7fdZNZodswHeCB0A+LdbC8b5hjC9IVVfVd6Zzga4TSLFQFagFqANJvY8fipzDV0X8h3Q40bsGq2ezrhgM=
+X-Received: by 2002:a05:6808:2001:b0:35b:d93f:cbc4 with SMTP id
+ q1-20020a056808200100b0035bd93fcbc4mr2777486oiw.96.1672755455331; Tue, 03 Jan
+ 2023 06:17:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o7rfd96w.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228163102.468-1-mario.limonciello@amd.com> <de34e018-679d-893e-683e-5c10cbc9c5b2@amd.com>
+In-Reply-To: <de34e018-679d-893e-683e-5c10cbc9c5b2@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 3 Jan 2023 09:17:24 -0500
+Message-ID: <CADnq5_Mccimh_UMLh8P4355yOpi6j+w3TCDi7Ax54tnvSVpjBQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/11] Recover from failure to probe GPU
+To:     "Lazar, Lijo" <lijo.lazar@amd.com>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Carlos Soriano Sanchez <csoriano@redhat.com>,
+        David Airlie <airlied@gmail.com>, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2023-01-03 14:50:23, John Ogness wrote:
-> On 2023-01-03, Petr Mladek <pmladek@suse.com> wrote:
-> > Well, what about making sure that something more useful is always
-> > printed. For example:
+On Tue, Jan 3, 2023 at 5:10 AM Lazar, Lijo <lijo.lazar@amd.com> wrote:
+>
+>
+>
+> On 12/28/2022 10:00 PM, Mario Limonciello wrote:
+> > One of the first thing that KMS drivers do during initialization is
+> > destroy the system firmware framebuffer by means of
+> > `drm_aperture_remove_conflicting_pci_framebuffers`
 > >
-> > 	/*
-> > 	 * Make sure outbuf is sufficiently large before prepending.
-> > 	 * Keep at least the prefix when the message has to be truncated.
-> > 	 * It is a rather theoretical problem when someone tries to
-> > 	 * use a minimalist buffer.
-> > 	 */
-> > 	if (WARN_ON_ONCE(len + PREFIX_MAX + 1 >= outbuf_sz))
-> > 		return;
-> 
-> I am fine with this. We won't see this warning anyway. Few lines would
-> ever be printed correctly if anyone ever tries to use a buffer so small.
+> > This means that if for any reason the GPU failed to probe the user
+> > will be stuck with at best a screen frozen at the last thing that
+> > was shown before the KMS driver continued it's probe.
+> >
+> > The problem is most pronounced when new GPU support is introduced
+> > because users will need to have a recent linux-firmware snapshot
+> > on their system when they boot a kernel with matching support.
+> >
+> > However the problem is further exaggerated in the case of amdgpu because
+> > it has migrated to "IP discovery" where amdgpu will attempt to load
+> > on "ALL" AMD GPUs even if the driver is missing support for IP blocks
+> > contained in that GPU.
+> >
+> > IP discovery requires some probing and isn't run until after the
+> > framebuffer has been destroyed.
+> >
+> > This means a situation can occur where a user purchases a new GPU not
+> > yet supported by a distribution and when booting the installer it will
+> > "freeze" even if the distribution doesn't have the matching kernel support
+> > for those IP blocks.
+> >
+> > The perfect example of this is Ubuntu 22.10 and the new dGPUs just
+> > launched by AMD.  The installation media ships with kernel 5.19 (which
+> > has IP discovery) but the amdgpu support for those IP blocks landed in
+> > kernel 6.0. The matching linux-firmware was released after 22.10's launch.
+> > The screen will freeze without nomodeset. Even if a user manages to install
+> > and then upgrades to kernel 6.0 after install they'll still have the
+> > problem of missing firmware, and the same experience.
+> >
+> > This is quite jarring for users, particularly if they don't know
+> > that they have to use "nomodeset" to install.
+> >
+> > To help the situation make changes to GPU discovery:
+> > 1) Delay releasing the firmware framebuffer until after IP discovery has
+> > completed.  This will help the situation of an older kernel that doesn't
+> > yet support the IP blocks probing a new GPU.
+> > 2) Request loading all PSP, VCN, SDMA, MES and GC microcode into memory
+> > during IP discovery. This will help the situation of new enough kernel for
+> > the IP discovery phase to otherwise pass but missing microcode from
+> > linux-firmware.git.
+> >
+> > Not all requested firmware will be loaded during IP discovery as some of it
+> > will require larger driver architecture changes. For example SMU firmware
+> > isn't loaded on certain products, but that's not known until later on when
+> > the early_init phase of the SMU load occurs.
+> >
+> > v1->v2:
+> >   * Take the suggestion from v1 thread to delay the framebuffer release until
+> >     ip discovery is done. This patch is CC to stable to that older stable
+> >     kernels with IP discovery won't try to probe unknown IP.
+> >   * Drop changes to drm aperature.
+> >   * Fetch SDMA, VCN, MES, GC and PSP microcode during IP discovery.
+> >
+>
+> What is the gain here in just checking if firmware files are available?
+> It can fail anywhere during sw_init and it's the same situation.
 
-Yup.
+Other failures are presumably a bug or hardware issue.  The missing
+firmware would be a common issue when chips are first launched.
+Thinking about it a bit more, another option might be to move the
+calls to request_firmware() into the IP specific early_init()
+functions and then move the drm_aperture release after early_init().
+That would keep the firmware handling in the IPs and should still
+happen early enough that we haven't messed with the hardware yet.
 
-> > If we want to use this way. It would probably make sense to
-> > rename PREFIX_MAX to CONSOLE_PREFIX_MAX.
-> 
-> Actually, I would like to rename all of those limit macros to something
-> that makes more sense for the new code base:
-> 
-> CONSOLE_EXT_LOG_MAX -> CONSOLE_MESSAGE_MAX
-> 
-> CONSOLE_LOG_MAX     -> SYSLOG_MESSAGE_MAX
+Alex
 
-Heh, we actually do not need this. The size of @scratchbuf
-might be LOG_LINE_MAX/PRINTK_RECORD_MAX. The scratch buffer
-is newly used only to read the plain message. The prefixes
-are added to @outbuf.
-
-> LOG_LINE_MAX        -> PRINTK_RECORD_MAX
-> 
-> PREFIX_MAX          -> CONSOLE_PREFIX_MAX
-
-I like this.
-
-> I have a patch to do this ready, but I did not want to post it until we
-> are finished with the thread/atomic work.
-
-It would make sense to do this as part of this patchset. But I do not
-want to delay it too much. Feel free to do it later.
-
-Best Regards,
-Petr
+>
+> Restricting IP FWs to IP specific files looks better to me than
+> centralizing and creating interdependencies.
+>
+> Thanks,
+> Lijo
+>
+> > Mario Limonciello (11):
+> >    drm/amd: Delay removal of the firmware framebuffer
+> >    drm/amd: Add a legacy mapping to "amdgpu_ucode_ip_version_decode"
+> >    drm/amd: Convert SMUv11 microcode init to use
+> >      `amdgpu_ucode_ip_version_decode`
+> >    drm/amd: Convert SMU v13 to use `amdgpu_ucode_ip_version_decode`
+> >    drm/amd: Request SDMA microcode during IP discovery
+> >    drm/amd: Request VCN microcode during IP discovery
+> >    drm/amd: Request MES microcode during IP discovery
+> >    drm/amd: Request GFX9 microcode during IP discovery
+> >    drm/amd: Request GFX10 microcode during IP discovery
+> >    drm/amd: Request GFX11 microcode during IP discovery
+> >    drm/amd: Request PSP microcode during IP discovery
+> >
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |   8 +
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 590 +++++++++++++++++-
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |   6 -
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c       |   2 -
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c      |   9 +-
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h      |   2 +-
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c     | 208 ++++++
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c       |  85 +--
+> >   drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c        | 180 +-----
+> >   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c        |  64 +-
+> >   drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c         | 143 +----
+> >   drivers/gpu/drm/amd/amdgpu/mes_v10_1.c        |  28 -
+> >   drivers/gpu/drm/amd/amdgpu/mes_v11_0.c        |  25 +-
+> >   drivers/gpu/drm/amd/amdgpu/psp_v10_0.c        | 106 +---
+> >   drivers/gpu/drm/amd/amdgpu/psp_v11_0.c        | 165 +----
+> >   drivers/gpu/drm/amd/amdgpu/psp_v12_0.c        | 102 +--
+> >   drivers/gpu/drm/amd/amdgpu/psp_v13_0.c        |  82 ---
+> >   drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c      |  36 --
+> >   drivers/gpu/drm/amd/amdgpu/psp_v3_1.c         |  36 --
+> >   drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c        |  61 +-
+> >   drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c        |  42 +-
+> >   drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c        |  65 +-
+> >   drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c        |  30 +-
+> >   .../gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c    |  35 +-
+> >   .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c    |  12 +-
+> >   25 files changed, 919 insertions(+), 1203 deletions(-)
+> >
+> >
+> > base-commit: de9a71e391a92841582ca3008e7b127a0b8ccf41
