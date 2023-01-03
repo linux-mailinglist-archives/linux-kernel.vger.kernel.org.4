@@ -2,97 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006FE65BCB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB5365BD13
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237085AbjACJDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        id S237210AbjACJXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:23:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjACJDN (ORCPT
+        with ESMTP id S236967AbjACJWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:03:13 -0500
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAA3DFE2
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:03:12 -0800 (PST)
-Received: by mail-ot1-f48.google.com with SMTP id i26-20020a9d68da000000b00672301a1664so18749278oto.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:03:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=poZkD94G6LXE4+Lm/TBono3GS6hWH1AHLJnWJtULzYM=;
-        b=m9S5Lbx0LlMgu/t2wt8MY6H98PxDcM7jv5rWuWK83sABbX4goFg1Pgqt4cxvB8ZL2R
-         mQF3tNTLnCm4xWczGx7Ky0n9JFzBteVBTVYhqVQtqYltJUIKUdoGrcftyZD6eI35OjV3
-         18b7f+fWeJLOuL6Ky/PTRk+qRzEyyPnnt/AAUYY2+erKrLa8XRXTvJARLY6cKGNEZVzE
-         O7T4VreloHR9N3YuRLgLzgBFeJVkGipSbVj6182UT0xx5zOpIJWgYq+eOvRyLTIN//JK
-         2/x8lwEJnKHYKux47VCqRlogU5gPnbhUiBuUinKEcarTNsHVMDQ88aUOTYSASMjH1pvo
-         y01A==
-X-Gm-Message-State: AFqh2ko55Jh3ZukUrXXqKEJ1rX0dtj/d39mFCDkM2UZ9giOCAqv1Gwc/
-        zpafDvZMQ5jRlyi1D/dc+GIWNWiAtnN4EQ==
-X-Google-Smtp-Source: AMrXdXuYlC6CFo797LvMOUz+sNQab6p89VGVIUc3f0k2stSPVBQWCTIid8OD/MdhX0VNQwIZBewz5w==
-X-Received: by 2002:a9d:4d0e:0:b0:66c:2b60:9077 with SMTP id n14-20020a9d4d0e000000b0066c2b609077mr31224869otf.24.1672736591135;
-        Tue, 03 Jan 2023 01:03:11 -0800 (PST)
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com. [209.85.210.49])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056830334a00b0066eb4e9242esm14550591ott.67.2023.01.03.01.03.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 01:03:11 -0800 (PST)
-Received: by mail-ot1-f49.google.com with SMTP id k44-20020a9d19af000000b00683e176ab01so13823901otk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:03:10 -0800 (PST)
-X-Received: by 2002:a25:aae1:0:b0:6fc:1c96:c9fe with SMTP id
- t88-20020a25aae1000000b006fc1c96c9femr5618399ybi.36.1672736107872; Tue, 03
- Jan 2023 00:55:07 -0800 (PST)
+        Tue, 3 Jan 2023 04:22:44 -0500
+X-Greylist: delayed 1375 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 Jan 2023 01:22:43 PST
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE06AB3
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:22:43 -0800 (PST)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 6744B1004838E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:59:34 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id Cd8wpEaCIWC90Cd8wp4mWB; Tue, 03 Jan 2023 08:59:34 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=Huizp2fS c=1 sm=1 tr=0 ts=63b3ee76
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RvmDmJFTN0MA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=vE4MKPzicF6eR68Lvz9p63INS0oax3kRnD7n2dKi1UU=; b=UonnN+B7//Lc5jQeRQ15pvX/rg
+        RcLeCgQ3oJBNL6/ErS1hdG143RK/XZCX0IEn3qEjXLHHzEv36QDDJLv4Pk0CBwh2/D+g46mavWQlh
+        k2uzaUdbpoKWIxS6/fJbYCeCMCrSaNJtH2z16JBEp+jAkXM0frxFb/LMqQ+0ReIxn//+YQ0qivp6+
+        Ip66geAl5nVpUcSKxqpLoR73ytLAJJFckfM7GJe+4qBxG/2YwN12kfbV5jzzPItc8PLmvK4ZfMXy0
+        p4bpibumnBUwnmUlVsRiUrrxhkyTzyoHPkHiWnIcRdXk84fVGIr2hDBt7sr6vJx9GawUWLzHDURn+
+        30/tSgHw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:39128 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pCd8u-003vRH-Sy;
+        Tue, 03 Jan 2023 01:59:32 -0700
+Subject: Re: [PATCH 6.1 00/71] 6.1.3-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230102110551.509937186@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20230102110551.509937186@linuxfoundation.org>
+Message-ID: <c6ebdb01-8b76-adf6-76cc-94cfd87c1cae@w6rz.net>
+Date:   Tue, 3 Jan 2023 00:59:28 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20221228161915.13194-1-samuel@sholland.org> <20221228161915.13194-3-samuel@sholland.org>
-In-Reply-To: <20221228161915.13194-3-samuel@sholland.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Jan 2023 09:54:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXx3MZBHdeD3HrTx0740CF48+7j70NvFmVsJBOePJbbXQ@mail.gmail.com>
-Message-ID: <CAMuHMdXx3MZBHdeD3HrTx0740CF48+7j70NvFmVsJBOePJbbXQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] riscv: sbi: Share the code for unsupported extension warnings
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Petr Mladek <pmladek@suse.com>,
-        YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, tangmeng <tangmeng@uniontech.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pCd8u-003vRH-Sy
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:39128
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 5:19 PM Samuel Holland <samuel@sholland.org> wrote:
-> This reduces the code size by sharing most of the code and the format
-> string across all affected extensions.
+On 1/2/23 3:21 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.3 release.
+> There are 71 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Responses should be made by Wed, 04 Jan 2023 11:05:34 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Gr{oetje,eeting}s,
+Tested-by: Ron Economos <re@w6rz.net>
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
