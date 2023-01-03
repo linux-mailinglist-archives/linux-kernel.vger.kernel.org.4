@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216ED65CA57
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE14C65CA61
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238185AbjACXf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 18:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S238384AbjACXfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 18:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237008AbjACXfZ (ORCPT
+        with ESMTP id S237771AbjACXf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 18:35:25 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53091659C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:35:23 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id bp15so47948631lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:35:23 -0800 (PST)
+        Tue, 3 Jan 2023 18:35:26 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EBD165A6
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:35:25 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id m6so37598347lfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:35:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=P8v/Sj/X5KiOx/wkpfi7/cXq7ufsg9Eb2/gL5FeExVU=;
-        b=lZo5X85dn9IoD9hH6dzyKS5qQsUttihsDJCwSHm+iUxjf6OAN8lkuRZ78nwrs51zep
-         vy8MX3KNwgRz7mWHl5SVjeBIV6YOEwPX6zabIUJyEk7ImkRkgxqIxTZPI5TqpSdNmXRW
-         RegrmN2f8aOcs8RDF55NG5FANhvR8dThgOTUiAX5rOtjdMhGBTgCXtYj8UGRZASB1mgA
-         Wq7tpdiYyiUeDt4omgWuPBcrUvDQ9hxExY4fxCrY+Y0ICsrr1aLDCEiOf2tz6kEE2KD7
-         0bS/oznERD+4/6dhGP3GbAxUW2Idolx3cPN4l35FQXqmSap0lk3o5BS2PJorJQowRshP
-         JWjg==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=INGl8EC4lutAaxK7oytOrepZPv62csf4zgf/Dha7g08=;
+        b=tUh9Qclbxwes1y19TozU8R6/M6yFHt0Tf/7Uk9vnG8eT3MKTfnZ5FPazeKrWpGZ/Zs
+         FDHCXMqufboxBhsvccZNg7j44bIL/+rNLP0e+70HxzbS67f4vUXHkOdA5Xu5FdYxlegb
+         o9SYgd7W1epIDogWkpbLTzQihLn16sHKSZAXrU9AjO4LQV47d63ABNKdaa+4pNhBMVhG
+         Rd9wRbiao8kN0AZQX6BTdOQxwrfmAhr00DTDe3ra1H410N6socCrzWGi30Sz09qMVa42
+         pJp1lr6X8SfBhq+IueeYNKSdxR/3/E5Z60dCUmMUcUZet97rlLEZYSY+kiS1oHAkmJky
+         zDLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P8v/Sj/X5KiOx/wkpfi7/cXq7ufsg9Eb2/gL5FeExVU=;
-        b=TR/D8M/eFJg2ESdj1u6ggWeYw8vMBbtknBBhhPt26Op/q/90D2gxsTLIs30URkJDUw
-         3lfUd34gTCOSjIuIck0Q7LgNeVZNTAvqBYRo6d2YzVpATC9lYvzotn5+C/DhF3fCnWBF
-         HZMakFsO5r0Uag90I3wMX1xO98vjait5Oie3lOleTnR290zMGO5hSflM3Petn9HuGTxc
-         A2RF6z+fB3CU6v+hq5q7UuCQOiv5hq/o0Pqug41ibyHOtrKjQDzXGR//Y5FODbLYu8UD
-         0x7rE1dq5klDH4WFmHVE5v8d88HMmgn9NbM/NDiTZjw70XQebaVJFzGRA1GqcBjRgWRW
-         vC9g==
-X-Gm-Message-State: AFqh2kpZbyt2rckvBjpt+u2IeVJX3suR0Im5/6Bx1Ar3DhyZyA9BDRco
-        OdKkCbzerRR/MgejYQEcqnCKlw==
-X-Google-Smtp-Source: AMrXdXvqf6dS9jJfAmR7RmNVGzv4JmseSjNjYQSyoMbvN/YObznPsnpR68X2Xvd1JLlQtp7SGedzQw==
-X-Received: by 2002:a05:6512:2344:b0:4cb:90d:41b1 with SMTP id p4-20020a056512234400b004cb090d41b1mr9099547lfu.56.1672788922157;
-        Tue, 03 Jan 2023 15:35:22 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=INGl8EC4lutAaxK7oytOrepZPv62csf4zgf/Dha7g08=;
+        b=2yV5Fa29Y2grpoP6pxZd5HwJx/2x8TuK6U21yPbp5zLjeZdjQg+59hD/RdMwEBWECh
+         CCbs88JqWBP6Fu1sPguCmkJOLrpsncNhwO/YasJhRtnQzLlvoB7uMikR/OxRQEhhw8ya
+         Thw+OxkCb3E3GfVw2KOXzCkYdZ6/tK2ZI4tfP6EM24/PUWmfnrmW5V4JJSC2arRGL7sv
+         16pqyASfqmyPpQN+TDHOmXitpMjxP599q6NhCOwPjWikE1cAkajtjcwgoVjjD02EEGcb
+         6PbUOIkx5YM2xEBOnVpxkSm0zlBXX/2ObjdcMTIxuowtasMONUHoSJ/76Iw4yE9mIXGq
+         vebg==
+X-Gm-Message-State: AFqh2kro0pkIiBkTsbROFWydxrF5Q3wvmdOw7jjvxImvqHETWuTJowBU
+        FEPt9IuRztGAy7lYCNsWv4Cvjw==
+X-Google-Smtp-Source: AMrXdXvAhYJCpYRkWDTIDmckimmTS2x6TV9+jF5DsOMDB10ivmTBIrIyYglIf0/N5/eHOWrkh4XH1g==
+X-Received: by 2002:a05:6512:3ca9:b0:4b5:61c5:8927 with SMTP id h41-20020a0565123ca900b004b561c58927mr14359517lfv.42.1672788923444;
+        Tue, 03 Jan 2023 15:35:23 -0800 (PST)
 Received: from Fecusia.local (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056512070b00b004a45edc1de2sm4939801lfs.239.2023.01.03.15.35.20
+        by smtp.gmail.com with ESMTPSA id b11-20020a056512070b00b004a45edc1de2sm4939801lfs.239.2023.01.03.15.35.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 15:35:20 -0800 (PST)
+        Tue, 03 Jan 2023 15:35:22 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 0/7] usb: fotg210: Various improvements
 Date:   Wed, 04 Jan 2023 00:35:17 +0100
-Message-Id: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org>
+Subject: [PATCH 1/7] dt-bindings: usb: Correct and extend FOTG210 schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALW7tGMC/x2NQQqDMBAAvyJ77kISqan9SulhY9e4B2PZ1VIQ/
- 97Y4zAMs4OxChvcmx2UP2KylAr+0sAwUcmM8qoMwYXWeddi5lmK4LisOXiHmyXsrxS72N+i6whq
- mMgYk1IZpjOdyVbWU7yVR/n+b4/ncfwAMEvlbX0AAAA=
+Message-Id: <20230103-gemini-fotg210-usb-v1-1-f2670cb4a492@linaro.org>
+References: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org>
+In-Reply-To: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -76,60 +76,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is some gradual improvements to the FOTG210 dual-mode
-USB host/gadget driver.
+It turns out that this IP block exists in at least two
+incarnations: FOTG200 and FOTG210. The one in the Gemini
+is FOTG200, so add the variants and rectify the binding
+for Gemini.
 
-- Create stricter device tree bindings fixing some mistakes.
-  We have at least FOTG200 and FOTG210 out there. A third
-  variant named FUSB220 is probably related but has a separate
-  driver in the vendor code trees.
+This affects things such as the placement of certain
+registers.
 
-- Start to break out common code for remapping of memory and
-  clock handling to begin with, move this to the core file.
+It remains to be seen how similar this block is to the
+third USB block from Faraday, FUSB220.
 
-- Check that the block is in the right role before
-  proceeding, don't abort registration but print a warning
-  if it's not.
-
-- Assing some default speed and the OF node when the UDC
-  starts. This is based on the similar pattern in the DW
-  controllers.
-
-- Implement a proper VBUS session handler calling down to
-  the hardware VBUS control handler in the Gemini variant.
-  This makes everything work on my hardware.
-
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Rob Herring <robh+dt@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: linux-usb@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Fabian Vogt <fabian@ritter-vogt.de>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-
 ---
-Linus Walleij (7):
-      dt-bindings: usb: Correct and extend FOTG210 schema
-      usb: fotg210: List different variants
-      usb: fotg210: Acquire memory resource in core
-      usb: fotg210: Move clock handling to core
-      usb: fotg210: Check role register in core
-      usb: fotg210-udc: Assign of_node and speed on start
-      usb: fotg210-udc: Implement VBUS session
+ Documentation/devicetree/bindings/usb/faraday,fotg210.yaml | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- .../devicetree/bindings/usb/faraday,fotg210.yaml   |  7 +-
- drivers/usb/fotg210/fotg210-core.c                 | 81 +++++++++++++++++++---
- drivers/usb/fotg210/fotg210-hcd.c                  | 48 ++-----------
- drivers/usb/fotg210/fotg210-hcd.h                  |  1 +
- drivers/usb/fotg210/fotg210-udc.c                  | 68 ++++++++----------
- drivers/usb/fotg210/fotg210-udc.h                  |  2 +-
- drivers/usb/fotg210/fotg210.h                      | 27 ++++++--
- 7 files changed, 136 insertions(+), 98 deletions(-)
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230103-gemini-fotg210-usb-95a76798706a
+diff --git a/Documentation/devicetree/bindings/usb/faraday,fotg210.yaml b/Documentation/devicetree/bindings/usb/faraday,fotg210.yaml
+index 84b3b69256b1..12d4fc742f20 100644
+--- a/Documentation/devicetree/bindings/usb/faraday,fotg210.yaml
++++ b/Documentation/devicetree/bindings/usb/faraday,fotg210.yaml
+@@ -5,7 +5,7 @@
+ $id: http://devicetree.org/schemas/usb/faraday,fotg210.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Faraday Technology FOTG210 HS OTG USB 2.0 controller
++title: Faraday Technology FOTG200 series HS OTG USB 2.0 controller Bindings
+ 
+ maintainers:
+   - Linus Walleij <linus.walleij@linaro.org>
+@@ -17,10 +17,11 @@ allOf:
+ properties:
+   compatible:
+     oneOf:
++      - const: faraday,fotg200
+       - const: faraday,fotg210
+       - items:
+           - const: cortina,gemini-usb
+-          - const: faraday,fotg210
++          - const: faraday,fotg200
+ 
+   reg:
+     maxItems: 1
+@@ -66,7 +67,7 @@ examples:
+     #include <dt-bindings/clock/cortina,gemini-clock.h>
+     #include <dt-bindings/reset/cortina,gemini-reset.h>
+     usb0: usb@68000000 {
+-        compatible = "cortina,gemini-usb", "faraday,fotg210";
++        compatible = "cortina,gemini-usb", "faraday,fotg200";
+         reg = <0x68000000 0x1000>;
+         interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
+         resets = <&syscon GEMINI_RESET_USB0>;
 
-Best regards,
 -- 
-Linus Walleij <linus.walleij@linaro.org>
+2.38.1
