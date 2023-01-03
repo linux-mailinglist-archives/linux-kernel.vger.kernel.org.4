@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE4365C5C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5A665C5C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbjACSJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:09:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S238679AbjACSJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbjACSJa (ORCPT
+        with ESMTP id S233586AbjACSJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:09:30 -0500
+        Tue, 3 Jan 2023 13:09:53 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCDBFCDA;
-        Tue,  3 Jan 2023 10:09:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BFAFCDD
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:09:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 597B76148D;
-        Tue,  3 Jan 2023 18:09:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB81C433D2;
-        Tue,  3 Jan 2023 18:09:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C52A26148D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 18:09:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A666C433EF;
+        Tue,  3 Jan 2023 18:09:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672769368;
-        bh=M+guTx9/MFdaM/g9JD7GIaQjt1whUIAEus/BUJ/qVW0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aK/PvWiJ0IC/szabV2T3ucI2bbelhC5VEhUGImiCMvL4xSd7gEP89zAHFKL56PGvK
-         kgOiX+0uePgsZ8B3qX+GL2Fwpd2qvd2POGDAgoein1yukl4H5Lr4/2uIjTiJVfWKoK
-         Dmyr3gLhNUxH6/xObRVsiw3/xIt7ddUn0NDaep9ozLf+PUu1fPd3n4+M8SPBSDkeX1
-         KJa7JONexbyP+Q3JjghGzMcP3nTw1OLOWFgqFfU1C7/bvX/CFAf1j4uk+v8y93u5tB
-         RmbmkFbnJRNPJGYuSAnnrKSwajaRUJcZTmZ5wLGW877H987VgYXREW9XQC3vujh4OP
-         MaJC32NLQAc1w==
-Date:   Tue, 3 Jan 2023 18:09:22 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
-        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
-        alim.akhtar@samsung.com, rcsekar@samsung.com,
-        aswani.reddy@samsung.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] ASoC: samsung: i2s: add support for FSD I2S
-Message-ID: <Y7RvUlIuXQLUHEna@sirena.org.uk>
-References: <20230103045613.100309-1-p.rajanbabu@samsung.com>
- <CGME20230103045655epcas5p1af06a83208190c471e8cd891ef4760f3@epcas5p1.samsung.com>
- <20230103045613.100309-3-p.rajanbabu@samsung.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gcxAJ25eGCCq6ZtM"
-Content-Disposition: inline
-In-Reply-To: <20230103045613.100309-3-p.rajanbabu@samsung.com>
-X-Cookie: So many men
+        s=k20201202; t=1672769391;
+        bh=wQbkIKESYWax/laoInd6DKOdDsdq7q+29rZEh5GwHOs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RVwSE4PnNi48ujVwGRD9zBR80eRryE5pMiSgcTocnildT/U1XvKOPEMBkMvyC9EQN
+         EvLqZZpi7s4/rEzx/Ov2A/uGONArsC0Sz80GJpgIu5iNbWeZPM+m3vYIZdqzR0LRit
+         DiUxLGpNtIj/eVtakrNYdxAsjeLShLMZr7fycJBhRlHCa3LTsU95shyo4OuYMozCLp
+         7XhecoT3Iwf5RT9V3cVf924KtvnbxjbpWuMOQ1CK5Mgn0rde5tMj0f0w06ESGmKDxk
+         qPO3kkxREPsIs5hHnqphlF30HdVU5Aijj55LImaOTosagWAHRCAfiPyjhd+741naOF
+         VRyVxy8yQU0sg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pCljQ-00GaOg-73;
+        Tue, 03 Jan 2023 18:09:48 +0000
+Date:   Tue, 03 Jan 2023 18:09:47 +0000
+Message-ID: <86tu177ams.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     kvmarm@lists.cs.columbia.edu, kvmarm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Sven Peter <sven@svenpeter.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Hector Martin <marcan@marcan.st>, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Subject: Re: [PATCH 1/3] KVM: arm64: vgic: Add Apple M2 cpus to the list of broken SEIS implementations
+In-Reply-To: <Y7Rs8Lc5u6L2Bz6o@dev-arch.thelio-3990X>
+References: <20230103095022.3230946-1-maz@kernel.org>
+        <20230103095022.3230946-2-maz@kernel.org>
+        <Y7Rs8Lc5u6L2Bz6o@dev-arch.thelio-3990X>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nathan@kernel.org, kvmarm@lists.cs.columbia.edu, kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, sven@svenpeter.dev, catalin.marinas@arm.com, marcan@marcan.st, linux-kernel@vger.kernel.org, asahi@lists.linux.dev, tglx@linutronix.de, will@kernel.org, alyssa@rosenzweig.io
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,41 +73,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nathan,
 
---gcxAJ25eGCCq6ZtM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, 03 Jan 2023 17:59:12 +0000,
+Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> Hi Marc,
+> 
+> I have only been lurking on the kvmarm mailing list for a little bit and
+> it has mainly just been reading patches/review to get more familiar with
+> various virtualization concepts so I apologize if the following review
+> is rather shallow but...
 
-On Tue, Jan 03, 2023 at 10:26:10AM +0530, Padmanabhan Rajanbabu wrote:
+No need to apologise. Any extra pair of eye is welcome, specially when
+the idiot behind the keyboard writes stuff like the patch below...
 
-> +void fsd_i2s_fixup_early(struct snd_pcm_substream *substream,
-> +		struct snd_soc_dai *dai)
-> +{
-> +	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-> +	struct i2s_dai *i2s = to_info(asoc_rtd_to_cpu(rtd, 0));
-> +	struct i2s_dai *other = get_other_dai(i2s);
-> +
-> +	if (!is_opened(other)) {
-> +		i2s_set_sysclk(dai, SAMSUNG_I2S_CDCLK, 192, SND_SOC_CLOCK_OUT);
-> +		i2s_set_sysclk(dai, SAMSUNG_I2S_OPCLK, 0, MOD_OPCLK_PCLK);
-> +	}
-> +}
+> 
+> On Tue, Jan 03, 2023 at 09:50:20AM +0000, Marc Zyngier wrote:
+> > I really hoped that Apple had fixed their not-quite-a-vgic implementation
+> > when moving from M1 to M2. Alas, it seems they didn't, and running
+> > a buggy EFI version results in the vgic generating SErrors outside
+> > of the guest and taking the host down.
+> > 
+> > Apply the same workaround as for M1. Yes, this is all a bit crap.
+> > 
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > ---
+> >  arch/arm64/include/asm/cputype.h | 4 ++++
+> >  arch/arm64/kvm/vgic/vgic-v3.c    | 3 ++-
+> >  2 files changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
+> > index 4e8b66c74ea2..683ca3af4084 100644
+> > --- a/arch/arm64/include/asm/cputype.h
+> > +++ b/arch/arm64/include/asm/cputype.h
+> > @@ -124,6 +124,8 @@
+> >  #define APPLE_CPU_PART_M1_FIRESTORM_PRO	0x025
+> >  #define APPLE_CPU_PART_M1_ICESTORM_MAX	0x028
+> >  #define APPLE_CPU_PART_M1_FIRESTORM_MAX	0x029
+> > +#define APPLE_CPU_PART_M2_BLIZZARD	0x032
+> > +#define APPLE_CPU_PART_M2_AVALANCHE	0x033
+> >  
+> >  #define AMPERE_CPU_PART_AMPERE1		0xAC3
+> >  
+> > @@ -177,6 +179,8 @@
+> >  #define MIDR_APPLE_M1_FIRESTORM_PRO MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM_PRO)
+> >  #define MIDR_APPLE_M1_ICESTORM_MAX MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM_MAX)
+> >  #define MIDR_APPLE_M1_FIRESTORM_MAX MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM_MAX)
+> > +#define MIDR_APPLE_M2_BLIZZARD MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M2_BLIZZARD)
+> > +#define MIDR_APPLE_M2_AVALANCHE MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M2_AVALANCHE)
+> >  #define MIDR_AMPERE1 MIDR_CPU_MODEL(ARM_CPU_IMP_AMPERE, AMPERE_CPU_PART_AMPERE1)
+> >  
+> >  /* Fujitsu Erratum 010001 affects A64FX 1.0 and 1.1, (v0r0 and v1r0) */
+> > diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
+> > index 826ff6f2a4e7..c6442b08fe80 100644
+> > --- a/arch/arm64/kvm/vgic/vgic-v3.c
+> > +++ b/arch/arm64/kvm/vgic/vgic-v3.c
+> > @@ -615,7 +615,8 @@ static const struct midr_range broken_seis[] = {
+> >  	MIDR_ALL_VERSIONS(MIDR_APPLE_M1_ICESTORM_PRO),
+> >  	MIDR_ALL_VERSIONS(MIDR_APPLE_M1_FIRESTORM_PRO),
+> >  	MIDR_ALL_VERSIONS(MIDR_APPLE_M1_ICESTORM_MAX),
+> > -	MIDR_ALL_VERSIONS(MIDR_APPLE_M1_FIRESTORM_MAX),
+> 
+> The commit message makes no note of this removal, was it intentional?
+> MIDR_APPLE_M1_FIRESTORM_MAX is only used here so I assume it is not.
 
-This looks like we're just hard coding to 192kHz?
+Absolutely not intentional :-/ Thanks a lot for spotting this!
 
---gcxAJ25eGCCq6ZtM
-Content-Type: application/pgp-signature; name="signature.asc"
+I'll fix this immediately (good thing I didn't send the fixes PR!).
 
------BEGIN PGP SIGNATURE-----
+Thanks again,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO0b1EACgkQJNaLcl1U
-h9Dtpwf/QBcLyOstOlusyhiszKaJsdbQq5jWmUNMELBJe4e8mvmusHElUqb3+OoE
-jY2c7i7PWNP3Oi/MeieAOfGJeAB8W4MMyIqVor6A/rpdG4Rpi8oqrjDuO6T94nBJ
-staf9152tPNf3feG+I1WMH7K4wHkuSuByqwfES2Gd/AC5CLW5mAsJ7LdCA9isCwB
-60ZM6zs3NIOBTTOfTx6Hpr5WCKYLUOCVCBfQ5BfvncrS2Hygd+fgfFaEPCN5Q5vQ
-2NuVyFfIToDz6VYW4dJ2C/NKS4UG8633qDg2KZHA/u94L7FzPZLDlHExBIbQARX0
-nFuJFOwzX7ip//+J74ftTHpOUeFPqA==
-=GVZ8
------END PGP SIGNATURE-----
+       M.
 
---gcxAJ25eGCCq6ZtM--
+-- 
+Without deviation from the norm, progress is not possible.
