@@ -2,242 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5817D65BC6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 112FB65BC6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237064AbjACIpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S237129AbjACIrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbjACIpn (ORCPT
+        with ESMTP id S237066AbjACIqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:45:43 -0500
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83023AA
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:45:41 -0800 (PST)
-Received: by mail-vk1-xa2c.google.com with SMTP id f184so10989354vkh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:45:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mDzXqRAmYkRyb/5KttlFdoZnuAGsRj6bLRaHwGPQJmQ=;
-        b=clLXLkkTnID97OANU4K4viXkAKV4b9TZIYV1rC18HxwmNY/vwuzdskSH9MCV28slyh
-         tiZSU2PYJ1XEShlVasUIgu16SZePRziZ8r1ggwWUhbFit4J0AoS066A51mDt0OM6svEj
-         TnWhUotvI2HZMXbF/v2Wn1B+xPYctcSPz2C5QDbJNgm2DVzgvwHpEv839ZHekO3Qe106
-         rir88ik4Mv9qTYvvCwyZj2ELfpXlVE9DTg4wa6gI+UKKfc+kviHZxwMLfEqHWIQmrFII
-         xK+oCH/nVRpko7ceDmOmHgKGiJ55Nzr0IyN5Ka5E3RD1OLvIFhWvO4/84JaAQRI/nYPH
-         4XuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mDzXqRAmYkRyb/5KttlFdoZnuAGsRj6bLRaHwGPQJmQ=;
-        b=5kIxZ24ynM7/EtdkFHRNQj8wT6hn0BmgONvRVRsf4lSC4xRfhcR3nk7ELFHRhitQRM
-         poYz3eMguTlbbxatJmOatcP2X3CD03f5eAUhHenZRTwPLr5kBlHIezptCp0sjlpaOW2Z
-         kd50p10vdrW3M0Becq8dVncWGysVfAx9gCz2wmw1NXGIc35Lti5cuNOWIGGu6T5bvVZQ
-         IhOq3TK2kfdtvLCciMGkQqqhcVFCfOiFH31NomvE8J3Xphls8DRNOTC10YDjB2adUj1H
-         /IIzBnvkQVkGwAPYIuBb5r/IYM1Ffkp22e9SXZUfZ4oNYWMcG53S3N2OrKqWkk+/fZQi
-         uITQ==
-X-Gm-Message-State: AFqh2kqvB0CmGOfymHLU65lAH9dm5w89Ad48IN+W8F/EGsSsu+s2Irbz
-        Oy2KBo4RjcUIcRFAr7EvxY9dtd2/0Sk+yqqwuR7UZw==
-X-Google-Smtp-Source: AMrXdXvLiKPbyPKkxxxDrgC1q9REor9cbnsRv3r24ttoIVf8s1ThfY5aJC3UEGMFVK7UvNycxRJ9BjWqCRXG5Q7C8P4=
-X-Received: by 2002:a1f:d904:0:b0:3d5:413f:ecd0 with SMTP id
- q4-20020a1fd904000000b003d5413fecd0mr3726770vkg.20.1672735540762; Tue, 03 Jan
- 2023 00:45:40 -0800 (PST)
+        Tue, 3 Jan 2023 03:46:46 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF13FE5;
+        Tue,  3 Jan 2023 00:46:44 -0800 (PST)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 0F6BB81120;
+        Tue,  3 Jan 2023 09:46:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1672735601;
+        bh=FZRNOfo8qDLbEayCnZRVV6yMdXNFXN7AYV0C2JCc0Wc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rpYxe7vR1jl7FCp+KxCNipZzIJGDfQQUS7KvJxwrwDizpxDazeYCpt5BQEDN81wLu
+         6Nl2BQSyut+olElmuuE0xw7j3KlW6wZcfiyZtjtTTPkrqSVGXiStvIqt23P1daR8MT
+         ws5Yn1VFJmOo8GBpptPq3MiPc5NEIUucKowBQ/7njXm0eaM3KPXDaihSNxDoFyVA5W
+         0IdMzlhDJksbo3Ql3hLVuLNOEyACq7rY5pJNxPQjicpC5CAjZ6q2kccazFQWL3kqeM
+         7c1A7AOpYRSNQwC2DkbaTKGKHb1mZ/EkWqcPV9pBppES0QSVkkDmmTGtfbkirpdIrP
+         xwE3BhWid8SUg==
+Date:   Tue, 3 Jan 2023 09:46:33 +0100
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: Re: [PATCH v3 2/3] net: dsa: mv88e6xxx: add support for MV88E6020
+ switch
+Message-ID: <20230103094633.40328198@wsk>
+In-Reply-To: <Y7M3xg0mJhhr8Xg8@lunn.ch>
+References: <20230102150209.985419-1-lukma@denx.de>
+        <20230102150209.985419-2-lukma@denx.de>
+        <Y7M3xg0mJhhr8Xg8@lunn.ch>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230102110551.509937186@linuxfoundation.org>
-In-Reply-To: <20230102110551.509937186@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 3 Jan 2023 14:15:29 +0530
-Message-ID: <CA+G9fYtCRCjbbx7QxPdB21QhpjnSpbXEtEX6zfyNRqYXVpDBpw@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/71] 6.1.3-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/v=MSexCL7TfeyWV_xIgfSGY";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2 Jan 2023 at 16:53, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.3 release.
-> There are 71 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 04 Jan 2023 11:05:34 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.3-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+--Sig_/v=MSexCL7TfeyWV_xIgfSGY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Andrew,
+
+> On Mon, Jan 02, 2023 at 04:02:08PM +0100, Lukasz Majewski wrote:
+> > From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> >=20
+> > A mv88e6250 family (i.e. LinkStreet) switch with 2 PHY and RMII
+> > ports and no PTP support. =20
+>=20
+> >  static const struct mv88e6xxx_info mv88e6xxx_table[] =3D {
+> > +	[MV88E6020] =3D {
+> > +		.prod_num =3D MV88E6XXX_PORT_SWITCH_ID_PROD_6020,
+> > +		.family =3D MV88E6XXX_FAMILY_6250,
+> > +		.name =3D "Marvell 88E6020",
+> > +		.num_databases =3D 64,
+> > +		.num_ports =3D 7,
+> > +		.num_internal_phys =3D 5, =20
+>=20
+> You say in the commit message there are two PHYs, yet you have 5 here?
+>=20
+
+It looks like mine copy-paste error.
+
+In the documentation there is stated that the 88E6020 device contains
+two 10BASE-T/100BASE-TX transceivers (PHYs) and four independent Fast
+Ethernet MACs (so it is a 2+2 device).
+
+The 88E6071 is 5+2 device, so I'm going to correct this value to 2.
+Also num_ports needs to be updated to 4.
+
+>     Andrew
 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Best regards,
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.1.3-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-6.1.y
-* git commit: 6b5c4463f777f449d7e177fd1aa608e0b69f33db
-* git describe: v6.1.2-72-g6b5c4463f777
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
--72-g6b5c4463f777
-
-## Test Regressions (compared to v6.1.1-1141-g9c94d2e408ab)
-
-## Metric Regressions (compared to v6.1.1-1141-g9c94d2e408ab)
-
-## Test Fixes (compared to v6.1.1-1141-g9c94d2e408ab)
-
-## Metric Fixes (compared to v6.1.1-1141-g9c94d2e408ab)
-
-## Test result summary
-total: 166702, pass: 148814, fail: 3210, skip: 14678, xfail: 0
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 146 passed, 5 failed
-* arm64: 51 total, 50 passed, 1 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 32 passed, 6 failed
-* riscv: 16 total, 15 passed, 1 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 44 total, 44 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cv
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
+Lukasz Majewski
 
 --
-Linaro LKFT
-https://lkft.linaro.org
+
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/v=MSexCL7TfeyWV_xIgfSGY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmOz62kACgkQAR8vZIA0
+zr1RPgf9HpBDrIYVK7/JLCxI0tGq8u9eyZLT12kn2zBzhdNqoobcjLrlphDsR+Ur
+3bC/Xf+6aGh0Cx9TQtEcm6wWcSCHdxMOMG4wt6vEUMNbBtF76MdOPKzbx8cYz5tv
+Za2PBY2Znzt/uGbO3Xafx8zyVIEC3hhQSWFOVzIKtL2eGv5CB6FBVIimtBnzEY1c
+dYRbvd72w1uE34PcxaI9ARTngKaUiKG1Dr0YjqmOXUTJUyTRaqZOwsjJQitRlaHf
+YJJl+f35tjoVwflShoKF5Aw0/nPNdugddKqUbF5YIBSG7ct7AaEZFJb43qAivZQL
+j4BUTTlJARFxEj4e2tLmGTcL9yyqjg==
+=9+DG
+-----END PGP SIGNATURE-----
+
+--Sig_/v=MSexCL7TfeyWV_xIgfSGY--
