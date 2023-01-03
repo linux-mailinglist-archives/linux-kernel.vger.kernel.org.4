@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E50465BC9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B80F65BCA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbjACJAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
+        id S236941AbjACJAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:00:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237108AbjACI75 (ORCPT
+        with ESMTP id S233088AbjACJAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:59:57 -0500
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1921DFED;
-        Tue,  3 Jan 2023 00:59:56 -0800 (PST)
-Received: by mail-ej1-f41.google.com with SMTP id tz12so72046747ejc.9;
-        Tue, 03 Jan 2023 00:59:56 -0800 (PST)
+        Tue, 3 Jan 2023 04:00:53 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7DD2668;
+        Tue,  3 Jan 2023 01:00:51 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id u19so72017143ejm.8;
+        Tue, 03 Jan 2023 01:00:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MCnHYwwZj7hf09BfA6BHyTHlj6ziwHCFkuL5r8JlPOA=;
-        b=3UB2TlncEmGraNcuKFdFWVv6G0QXuXahuYpW8XfbVAf/auOcxG/Dpg0zVAGtvTBjEd
-         QXMYECYpMtR91Zuad+Yc7u2avDwANa6CDRfzGoj3G1APjwUBlPdWDLRcLpAh4MSO51Iv
-         1k3oMN0JCY0+wLW94bATR6c0ohdvW8bl+5sD8YiCQs4dtKbZ+NSq0E1JBfVkg4NOt9tk
-         B9LkOQo/WGp3tv9aSh5SAZaEdMxSVcdH0xNsFM+YCOI50urzHaPqkOc/QSpjvVI76FV+
-         lLxb5JnJmtT5PoEcQL0LQcKtPRYdGHyN3yj8Y1lUPoYkE06CKBTJ/Gx+JZWA2hSwmgEE
-         HRXQ==
-X-Gm-Message-State: AFqh2kqbLfSohb3trKddlzM3OMTG5PnMq/EkhAd4uYxdsDywSWQxNIQb
-        joJmeEdmggDqfK/gX8tq2lXsyW9aWFo=
-X-Google-Smtp-Source: AMrXdXvcP1oGDt/E0YoVGqFqd8qZMTeJ6LyuXS9DMAb0Wb1kAju/36tyX6fdevafL0MBe6S1FJb+FA==
-X-Received: by 2002:a17:906:4e4b:b0:7c1:4040:ef17 with SMTP id g11-20020a1709064e4b00b007c14040ef17mr37017092ejw.54.1672736395375;
-        Tue, 03 Jan 2023 00:59:55 -0800 (PST)
+        bh=OWuBtAVQiXhHtOCFE/dLo/ozknPRfRlKEoY8cqTUGrg=;
+        b=O3WdqP7TlsVM27d6kRkSqaaay/Pg/Jb/WCcIR101fMKKiGYZoZvuH2nRHJoxFjUt9D
+         cvnvsvIZRRSHOkEmrRzZ8G53Het6mv47meNh6DSzN6YfbGEFovEqNCLgZm6sURn1EO/Z
+         ZiH8Mwjhwog67mPeRc9guKBHjAxwAaGDp6C1orIgQSmwcv3tuAACUCX0mcAYYtt80zrp
+         7ffIsH0GyOpmNeXikSAB4kcVLd6ZNFy1BKLCkSEItX/+uZcQ80S8zG8ynIez0Z0CO76D
+         TMHJE7Et1+Sb6owcKrO0SQaXWlATOVvt6S3mRZ5wsLalwawrjyRkGb6ZRqW6U6ObPx/I
+         9rQQ==
+X-Gm-Message-State: AFqh2kqUGA5HcEzA9Iwo9RzQEhVUm97IoJ1Z71s+kbQZ3jryN6wQFyUl
+        dHl8L2AVMDDRuzEC20zRad2n9yjpn4k=
+X-Google-Smtp-Source: AMrXdXvjjVtmb+IPI41f0KEHX6NQ/BQWLfXBVEzM+4TZL33Mu52QyaHDY+TvdpL+zFdhqW/MqztWIA==
+X-Received: by 2002:a17:906:9688:b0:7c1:1c7:3bad with SMTP id w8-20020a170906968800b007c101c73badmr35605095ejx.36.1672736450357;
+        Tue, 03 Jan 2023 01:00:50 -0800 (PST)
 Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id e23-20020a170906375700b007bfacaea851sm13838036ejc.88.2023.01.03.00.59.53
+        by smtp.gmail.com with ESMTPSA id nd12-20020a170907628c00b0084cc87c03ebsm2388616ejc.110.2023.01.03.01.00.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:59:54 -0800 (PST)
-Message-ID: <e42d5d19-7ed5-468b-98cc-13d0187dc555@kernel.org>
-Date:   Tue, 3 Jan 2023 09:59:52 +0100
+        Tue, 03 Jan 2023 01:00:49 -0800 (PST)
+Message-ID: <3c4e744f-c313-e195-af93-a22382c81bb6@kernel.org>
+Date:   Tue, 3 Jan 2023 10:00:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v4 1/2] tty: serial: dz: convert atomic_* to refcount_*
- APIs for map_guard
+Subject: Re: [PATCH v4 2/2] tty: serial: dz: convert atomic_* to refcount_*
+ APIs for irq_guard
 Content-Language: en-US
 To:     Deepak R Varma <drv@mailo.com>,
         "Maciej W. Rozycki" <macro@orcam.me.uk>,
@@ -53,9 +53,9 @@ To:     Deepak R Varma <drv@mailo.com>,
 Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>
 References: <cover.1671898144.git.drv@mailo.com>
- <d85c7441b96ce387d9010142efc3469d53b6aedc.1671898144.git.drv@mailo.com>
+ <51ef854f77779c82010379420139993e12c38776.1671898144.git.drv@mailo.com>
 From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <d85c7441b96ce387d9010142efc3469d53b6aedc.1671898144.git.drv@mailo.com>
+In-Reply-To: <51ef854f77779c82010379420139993e12c38776.1671898144.git.drv@mailo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,
@@ -71,37 +71,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 26. 12. 22, 7:21, Deepak R Varma wrote:
 > The refcount_* APIs are designed to address known issues with the
 > atomic_t APIs for reference counting. They provide following distinct
-> advantages
+> advantages:
 >     - protect the reference counters from overflow/underflow
 >     - avoid use-after-free errors
 >     - provide improved memory ordering guarantee schemes
 >     - neater and safer.
-
-Really? (see below)
-
+> Hence, replace the atomic_* APIs by their equivalent refcount_t
+> API functions.
+> 
+> This patch proposal address the following warnings generated by
+> the atomic_as_refcounter.cocci coccinelle script
+> atomic_add_return(-1, ...)
+...
 > --- a/drivers/tty/serial/dz.c
 > +++ b/drivers/tty/serial/dz.c
 ...
-> @@ -687,23 +686,19 @@ static int dz_map_port(struct uart_port *uport)
->   static int dz_request_port(struct uart_port *uport)
->   {
->   	struct dz_mux *mux = to_dport(uport)->mux;
-> -	int map_guard;
+> @@ -400,18 +399,16 @@ static int dz_startup(struct uart_port *uport)
+>   	struct dz_port *dport = to_dport(uport);
+>   	struct dz_mux *mux = dport->mux;
+>   	unsigned long flags;
+> -	int irq_guard;
 >   	int ret;
+>   	u16 tmp;
 > 
-> -	map_guard = atomic_add_return(1, &mux->map_guard);
-> -	if (map_guard == 1) {
-> -		if (!request_mem_region(uport->mapbase, dec_kn_slot_size,
-> -					"dz")) {
-> -			atomic_add(-1, &mux->map_guard);
-> -			printk(KERN_ERR
-> -			       "dz: Unable to reserve MMIO resource\n");
-> +	refcount_inc(&mux->map_guard);
-> +	if (refcount_read(&mux->map_guard) == 1) {
+> -	irq_guard = atomic_add_return(1, &mux->irq_guard);
+> -	if (irq_guard != 1)
+> +	refcount_inc(&mux->irq_guard);
+> +	if (refcount_read(&mux->irq_guard) != 1)
+>   		return 0;
+> 
+> -	ret = request_irq(dport->port.irq, dz_interrupt,
+> -			  IRQF_SHARED, "dz", mux);
+> +	ret = request_irq(dport->port.irq, dz_interrupt, IRQF_SHARED, "dz", mux);
 
-This is now racy, right?
+How is this related to the above described change?
 
-thanks,
 -- 
 js
 suse labs
