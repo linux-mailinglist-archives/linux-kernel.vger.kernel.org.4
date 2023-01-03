@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C3765BE80
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38BD65BE83
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237399AbjACK55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
+        id S237140AbjACK7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233145AbjACK5z (ORCPT
+        with ESMTP id S237456AbjACK6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:57:55 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778B2FAE2;
-        Tue,  3 Jan 2023 02:57:53 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 303AvZSb090263;
-        Tue, 3 Jan 2023 04:57:35 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1672743455;
-        bh=vMEBQ4PD6kGg0suLTL9EmbRebRqL5OH/ooXSm7+/JOE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=QguY1QiqVYuQ0klszRFz5Nqz9XHjpza7VN8ihtP49CSZ5J8tIOTTpUGd7F/qUmL7g
-         3cv8t22ohQNpfYDiwwBq0b1X8wd28ePdVRyajzA+NABZfaFVEasFyi2V5SIDAjYrPb
-         i9H+Duec0CmKTdu8OQ+vegVF4+xB5RKzGf2K4H2c=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 303AvZkV017961
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 3 Jan 2023 04:57:35 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 3
- Jan 2023 04:57:33 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 3 Jan 2023 04:57:34 -0600
-Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 303AvUfO118033;
-        Tue, 3 Jan 2023 04:57:31 -0600
-Message-ID: <68f09cf2-e40f-cc06-b3ef-f7373ee64367@ti.com>
-Date:   Tue, 3 Jan 2023 16:27:30 +0530
+        Tue, 3 Jan 2023 05:58:40 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D2CA47C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:58:38 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id h24-20020a056e021d9800b0030be8a5dd68so17806768ila.13
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 02:58:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6j1u/uhaamjB44e0V7q46pvvkGWmXy7wnn05i7TPfE4=;
+        b=PaMPVvbV1ffvPOk80HgS7yEw+YxIpqB3GbgFoUlzVWb2NZuWfIek/U/e3CaBX6rlP7
+         0PdK4t7smdRdXOVjBbWFLd3xecAWHZzx46D3AZ7Qaev+HlJzJY1Ow1ya9zQZawBZ2CLu
+         MBvk10U0XPd4bsP1EFRKfEwkUKgQl5qpNFV4CtN/vkDRQi2yllY70z7USSoBGF8CtwL1
+         TgnMHmtNcqSgZPHyxdINZxunWU6dlq/q46L9CWg6Ppu8Wcyes0MIDzxGwzDA+W9+gEXM
+         jQoEe8IsmaDcam7E5ZBO+Sp+0ZAsBaeIdtdoDfQg9p16V45l0M/dkeIY9Q9CKfMNzljs
+         AxMw==
+X-Gm-Message-State: AFqh2kpVhHG0/Y50vzhGOSrcdXFFDNLr5L7IPufWsWO+MaxgjYqD6F8U
+        BM3XELGUOrxFH8Eu1prS0lc4EUAsZ70/mynUmFruA+RKFKdQ
+X-Google-Smtp-Source: AMrXdXtIrhIfXTl+QqlQgrVZzzeVZ2YJb3S6uX7a1D7gPukqHjpmc1VtYWJpd0Ad4+YFbjwVNBWRG1h84LL3itlTiuil6YhlyQWH
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4/4] arm64: dts: ti: k3-am62a7-sk: Enable USB1 node
-Content-Language: en-US
-To:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bb@ti.com>
-References: <20230103042110.1092122-1-vigneshr@ti.com>
- <20230103042110.1092122-5-vigneshr@ti.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20230103042110.1092122-5-vigneshr@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:8144:0:b0:6e4:b7b8:c5db with SMTP id
+ f4-20020a5d8144000000b006e4b7b8c5dbmr3398826ioo.189.1672743518220; Tue, 03
+ Jan 2023 02:58:38 -0800 (PST)
+Date:   Tue, 03 Jan 2023 02:58:38 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000034388605f159f31e@google.com>
+Subject: [syzbot] [ext4?] KMSAN: uninit-value in htree_dirblock_to_tree
+From:   syzbot <syzbot+394aa8a792cb99dbc837@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, glider@google.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    5c6259d6d19f kmsan: fix memcpy tests
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1343a1e4480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2f77da22508204e
+dashboard link: https://syzkaller.appspot.com/bug?extid=394aa8a792cb99dbc837
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/76b6594632b8/disk-5c6259d6.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/81a2113c440e/vmlinux-5c6259d6.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/fd12d098edab/bzImage-5c6259d6.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+394aa8a792cb99dbc837@syzkaller.appspotmail.com
+
+[EXT4 FS bs=2048, gc=1, bpg=16384, ipg=32, mo=e000e01c, mo2=0002]
+System zones: 0-11
+EXT4-fs (loop4): mounted filesystem without journal. Quota mode: none.
+=====================================================
+BUG: KMSAN: uninit-value in htree_dirblock_to_tree+0x101b/0x1710 fs/ext4/namei.c:1116
+ htree_dirblock_to_tree+0x101b/0x1710 fs/ext4/namei.c:1116
+ ext4_htree_fill_tree+0x1ac9/0x1cc0 fs/ext4/namei.c:1204
+ ext4_dx_readdir fs/ext4/dir.c:597 [inline]
+ ext4_readdir+0x53cd/0x6450 fs/ext4/dir.c:142
+ iterate_dir+0x3e5/0x9b0
+ __do_compat_sys_getdents fs/readdir.c:537 [inline]
+ __se_compat_sys_getdents+0x182/0x560 fs/readdir.c:522
+ __ia32_compat_sys_getdents+0x8f/0xd0 fs/readdir.c:522
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+Local variable hinfo created at:
+ ext4_htree_fill_tree+0x5f/0x1cc0 fs/ext4/namei.c:1170
+ ext4_dx_readdir fs/ext4/dir.c:597 [inline]
+ ext4_readdir+0x53cd/0x6450 fs/ext4/dir.c:142
+
+CPU: 0 PID: 6235 Comm: syz-executor.4 Not tainted 6.1.0-syzkaller-64311-g5c6259d6d19f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+=====================================================
 
 
-On 03/01/23 09:51, Vignesh Raghavendra wrote:
-> Enable USB1 host port on AM62A7 SK.
-> 
-> Co-developed-by: Bryan Brattlof <bb@ti.com>
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> ---
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-For the series,
-
-Acked-by: Dhruva Gole <d-gole@ti.com>
-
->   arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> index bdc363fcbb4b..5c9012141ee2 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> @@ -160,6 +160,12 @@ AM62AX_IOPAD(0x244, PIN_OUTPUT, 7) /* (D18) MMC1_SDWP.GPIO1_49 */
->   		>;
->   	};
->   
-> +	main_usb1_pins_default: main-usb1-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62AX_IOPAD(0x0258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
-> +		>;
-> +	};
-> +
->   	main_mdio1_pins_default: main-mdio1-pins-default {
->   		pinctrl-single,pins = <
->   			AM62AX_IOPAD(0x160, PIN_OUTPUT, 0) /* (V12) MDIO0_MDC */
-> @@ -247,6 +253,16 @@ &main_uart0 {
->   	pinctrl-0 = <&main_uart0_pins_default>;
->   };
->   
-> +&usbss1 {
-> +	status = "okay";
-> +};
-> +
-> +&usb1 {
-> +	dr_mode = "host";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_usb1_pins_default>;
-> +};
-> +
->   &cpsw3g {
->   	status = "okay";
->   	pinctrl-names = "default";
-
--- 
-Thanks and Regards,
-Dhruva Gole
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
