@@ -2,94 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B523B65BB90
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8037E65BB98
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236944AbjACIDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S233110AbjACIHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:07:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236729AbjACIDj (ORCPT
+        with ESMTP id S229716AbjACIHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:03:39 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D105D1D8
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:03:36 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B99C234367;
-        Tue,  3 Jan 2023 08:03:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672733014; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Ulj1KdXgOhz3mFb7YsOBfrLohsk+mOcfQTC8VIBIyY=;
-        b=A6ezqKSaMS5FkyAjD92Oqzp58vLYYNOst800s7iKTLxeX/W4EsZZj7Nh/qSNHuIdbQw+8v
-        UVQ+ITlICX/hTuNaWhltgnIb9FvIy7AYAYqlXIAYs3WxNcImmf0lJnQEjkd2urmE5lfUG/
-        PyH7UWhKQGzTcA2wqg0h0mFWznyD8LE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 99742139F1;
-        Tue,  3 Jan 2023 08:03:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id a1ktI1bhs2O0eQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 03 Jan 2023 08:03:34 +0000
-Date:   Tue, 3 Jan 2023 09:03:33 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Jaewon Kim <jaewon31.kim@samsung.com>
-Cc:     riel@redhat.com, redkoi@virtuozzo.com, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, jaewon31.kim@gmail.com
-Subject: Re: [PATCH] page_alloc: avoid the negative free for meminfo available
-Message-ID: <Y7PhVaqhIzs8e8mU@dhcp22.suse.cz>
-References: <CGME20230103072834epcas1p3441ef50a6cc26ac48d184f1244b76a0e@epcas1p3.samsung.com>
- <20230103072807.19578-1-jaewon31.kim@samsung.com>
+        Tue, 3 Jan 2023 03:07:53 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DAE2A5;
+        Tue,  3 Jan 2023 00:07:52 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id bs20so26536854wrb.3;
+        Tue, 03 Jan 2023 00:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YQO0ONCN4ZgZtx9HE+Nsk3Zq7sSG4eK1JNOppC+Lx/M=;
+        b=QDLW1jX26AnzUwefK2H+ja7576rr/JSkW+0K2ljLG+6oZyopCuqAABCXZ3ttcx+kDm
+         rphxzjnPsFyNFkPffo8odV6vt4PbFDc9cqI+u8JDxzKceNO4WgoGsUxREIsnDUc0We7R
+         v0rNKXv8unP0hz2MkdTwrgMe/35vng2kL8cLfRcU0Dfm9/reaRkj9d1dqBGii7+wxkg4
+         lySdvACqMcEwQMj7koxsJKBHZbQ13IVluzaJUKU439TJovDsSQCUQJBhr0XRbaS3LGiz
+         K7kxbtef9AQxASGqRMOZlYH4TmEedLmz0NryAw+5hkJzUmd+KUJDzhEgZC1FwD4lRT45
+         56lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YQO0ONCN4ZgZtx9HE+Nsk3Zq7sSG4eK1JNOppC+Lx/M=;
+        b=wIajuHMl1HYG9LvupJXbTjr7G8nSuUYxl7hInu2Q0Xj/pxkMFQcvdD9C4gTJsiQmfY
+         mmooOMlIoundwqwHRu7DQQzCrDcAgzUl+MLEnqHmecheoi//mOklFO6mftCW4zZ9SzR6
+         MxnLO9F11GfHDcfIv4liclKUFey6t8IBPahjAneDC0R/csvbPJeq2bla0dqoBdoSd4iz
+         ksvRKZhx23TCr7J38yTvXKndO//HCCqlzR2z3wkAOv2dVXUQcMRcryr4sWXzJsvHcu5s
+         P3QotEVaL7eDO7Pt3o7j+sUeJlBzeH9ytiQhHoevx1+u6q2QalCWzmmWAH5I/CPtGMPz
+         TSUg==
+X-Gm-Message-State: AFqh2ko3KsuGKkxBBkUmlTKgNJ7dh8UTuZNDN4HBnE8AnegXo0LsI8mO
+        xByPGfFz1ZrbrPRnRfjRtdiwK171W/OLkQ==
+X-Google-Smtp-Source: AMrXdXtmMg3fso+1Q3zVGl2iFiX51Pj04IeNueZWY1axHYHgHL3dcIYuPR3TZbL9T/xOaJH0CCZjkA==
+X-Received: by 2002:adf:f606:0:b0:28c:1ae0:e67f with SMTP id t6-20020adff606000000b0028c1ae0e67fmr10080656wrp.55.1672733270983;
+        Tue, 03 Jan 2023 00:07:50 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i1-20020adfb641000000b002425787c5easm30768195wre.96.2023.01.03.00.07.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 00:07:50 -0800 (PST)
+Date:   Tue, 3 Jan 2023 11:07:45 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sascha Hauer <sha@pengutronix.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH 3/5] drm/rockchip: vop2: use symmetric function pair
+ vop2_{create,destroy}_crtcs
+Message-ID: <202301010414.gzia8KzY-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103072807.19578-1-jaewon31.kim@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221130140217.3196414-4-michael.riesch@wolfvision.net>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 03-01-23 16:28:07, Jaewon Kim wrote:
-> The totalreserve_pages could be higher than the free because of
-> watermark high or watermark boost. Handle this situation and fix it to 0
-> free size.
+Hi Michael,
 
-What is the actual problem you are trying to address by this change?
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Riesch/drm-rockchip-vop2-add-support-for-the-rgb-output-block/20221130-220346
+base:   b7b275e60bcd5f89771e865a8239325f86d9927d
+patch link:    https://lore.kernel.org/r/20221130140217.3196414-4-michael.riesch%40wolfvision.net
+patch subject: [PATCH 3/5] drm/rockchip: vop2: use symmetric function pair vop2_{create,destroy}_crtcs
+config: parisc-randconfig-m031-20221225
+compiler: hppa-linux-gcc (GCC) 12.1.0
 
-> Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
-> ---
->  mm/page_alloc.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 218b28ee49ed..e510ae83d5f3 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -5948,6 +5948,8 @@ long si_mem_available(void)
->  	 * without causing swapping or OOM.
->  	 */
->  	available = global_zone_page_state(NR_FREE_PAGES) - totalreserve_pages;
-> +	if (available < 0)
-> +		available = 0;
->  
->  	/*
->  	 * Not all the page cache can be freed, otherwise the system will
-> -- 
-> 2.17.1
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+
+New smatch warnings:
+drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2330 vop2_create_crtcs() error: uninitialized symbol 'possible_crtcs'.
+
+vim +/possible_crtcs +2330 drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+
+fb83276e59f2d6 Michael Riesch 2022-11-30  2249  static int vop2_create_crtcs(struct vop2 *vop2)
+604be85547ce4d Andy Yan       2022-04-22  2250  {
+604be85547ce4d Andy Yan       2022-04-22  2251  	const struct vop2_data *vop2_data = vop2->data;
+604be85547ce4d Andy Yan       2022-04-22  2252  	struct drm_device *drm = vop2->drm;
+604be85547ce4d Andy Yan       2022-04-22  2253  	struct device *dev = vop2->dev;
+604be85547ce4d Andy Yan       2022-04-22  2254  	struct drm_plane *plane;
+604be85547ce4d Andy Yan       2022-04-22  2255  	struct device_node *port;
+604be85547ce4d Andy Yan       2022-04-22  2256  	struct vop2_video_port *vp;
+604be85547ce4d Andy Yan       2022-04-22  2257  	int i, nvp, nvps = 0;
+604be85547ce4d Andy Yan       2022-04-22  2258  	int ret;
+604be85547ce4d Andy Yan       2022-04-22  2259  
+604be85547ce4d Andy Yan       2022-04-22  2260  	for (i = 0; i < vop2_data->nr_vps; i++) {
+604be85547ce4d Andy Yan       2022-04-22  2261  		const struct vop2_video_port_data *vp_data;
+604be85547ce4d Andy Yan       2022-04-22  2262  		struct device_node *np;
+604be85547ce4d Andy Yan       2022-04-22  2263  		char dclk_name[9];
+604be85547ce4d Andy Yan       2022-04-22  2264  
+604be85547ce4d Andy Yan       2022-04-22  2265  		vp_data = &vop2_data->vp[i];
+604be85547ce4d Andy Yan       2022-04-22  2266  		vp = &vop2->vps[i];
+604be85547ce4d Andy Yan       2022-04-22  2267  		vp->vop2 = vop2;
+604be85547ce4d Andy Yan       2022-04-22  2268  		vp->id = vp_data->id;
+604be85547ce4d Andy Yan       2022-04-22  2269  		vp->regs = vp_data->regs;
+604be85547ce4d Andy Yan       2022-04-22  2270  		vp->data = vp_data;
+604be85547ce4d Andy Yan       2022-04-22  2271  
+604be85547ce4d Andy Yan       2022-04-22  2272  		snprintf(dclk_name, sizeof(dclk_name), "dclk_vp%d", vp->id);
+604be85547ce4d Andy Yan       2022-04-22  2273  		vp->dclk = devm_clk_get(vop2->dev, dclk_name);
+604be85547ce4d Andy Yan       2022-04-22  2274  		if (IS_ERR(vp->dclk)) {
+604be85547ce4d Andy Yan       2022-04-22  2275  			drm_err(vop2->drm, "failed to get %s\n", dclk_name);
+604be85547ce4d Andy Yan       2022-04-22  2276  			return PTR_ERR(vp->dclk);
+604be85547ce4d Andy Yan       2022-04-22  2277  		}
+604be85547ce4d Andy Yan       2022-04-22  2278  
+604be85547ce4d Andy Yan       2022-04-22  2279  		np = of_graph_get_remote_node(dev->of_node, i, -1);
+604be85547ce4d Andy Yan       2022-04-22  2280  		if (!np) {
+604be85547ce4d Andy Yan       2022-04-22  2281  			drm_dbg(vop2->drm, "%s: No remote for vp%d\n", __func__, i);
+604be85547ce4d Andy Yan       2022-04-22  2282  			continue;
+604be85547ce4d Andy Yan       2022-04-22  2283  		}
+604be85547ce4d Andy Yan       2022-04-22  2284  		of_node_put(np);
+604be85547ce4d Andy Yan       2022-04-22  2285  
+604be85547ce4d Andy Yan       2022-04-22  2286  		port = of_graph_get_port_by_id(dev->of_node, i);
+604be85547ce4d Andy Yan       2022-04-22  2287  		if (!port) {
+604be85547ce4d Andy Yan       2022-04-22  2288  			drm_err(vop2->drm, "no port node found for video_port%d\n", i);
+604be85547ce4d Andy Yan       2022-04-22  2289  			return -ENOENT;
+604be85547ce4d Andy Yan       2022-04-22  2290  		}
+604be85547ce4d Andy Yan       2022-04-22  2291  
+604be85547ce4d Andy Yan       2022-04-22  2292  		vp->crtc.port = port;
+604be85547ce4d Andy Yan       2022-04-22  2293  		nvps++;
+604be85547ce4d Andy Yan       2022-04-22  2294  	}
+604be85547ce4d Andy Yan       2022-04-22  2295  
+604be85547ce4d Andy Yan       2022-04-22  2296  	nvp = 0;
+604be85547ce4d Andy Yan       2022-04-22  2297  	for (i = 0; i < vop2->registered_num_wins; i++) {
+604be85547ce4d Andy Yan       2022-04-22  2298  		struct vop2_win *win = &vop2->win[i];
+604be85547ce4d Andy Yan       2022-04-22  2299  		u32 possible_crtcs;
+604be85547ce4d Andy Yan       2022-04-22  2300  
+604be85547ce4d Andy Yan       2022-04-22  2301  		if (vop2->data->soc_id == 3566) {
+604be85547ce4d Andy Yan       2022-04-22  2302  			/*
+604be85547ce4d Andy Yan       2022-04-22  2303  			 * On RK3566 these windows don't have an independent
+604be85547ce4d Andy Yan       2022-04-22  2304  			 * framebuffer. They share the framebuffer with smart0,
+604be85547ce4d Andy Yan       2022-04-22  2305  			 * esmart0 and cluster0 respectively.
+604be85547ce4d Andy Yan       2022-04-22  2306  			 */
+604be85547ce4d Andy Yan       2022-04-22  2307  			switch (win->data->phys_id) {
+604be85547ce4d Andy Yan       2022-04-22  2308  			case ROCKCHIP_VOP2_SMART1:
+604be85547ce4d Andy Yan       2022-04-22  2309  			case ROCKCHIP_VOP2_ESMART1:
+604be85547ce4d Andy Yan       2022-04-22  2310  			case ROCKCHIP_VOP2_CLUSTER1:
+604be85547ce4d Andy Yan       2022-04-22  2311  				continue;
+604be85547ce4d Andy Yan       2022-04-22  2312  			}
+604be85547ce4d Andy Yan       2022-04-22  2313  		}
+604be85547ce4d Andy Yan       2022-04-22  2314  
+604be85547ce4d Andy Yan       2022-04-22  2315  		if (win->type == DRM_PLANE_TYPE_PRIMARY) {
+604be85547ce4d Andy Yan       2022-04-22  2316  			vp = find_vp_without_primary(vop2);
+604be85547ce4d Andy Yan       2022-04-22  2317  			if (vp) {
+604be85547ce4d Andy Yan       2022-04-22  2318  				possible_crtcs = BIT(nvp);
+604be85547ce4d Andy Yan       2022-04-22  2319  				vp->primary_plane = win;
+604be85547ce4d Andy Yan       2022-04-22  2320  				nvp++;
+604be85547ce4d Andy Yan       2022-04-22  2321  			} else {
+604be85547ce4d Andy Yan       2022-04-22  2322  				/* change the unused primary window to overlay window */
+604be85547ce4d Andy Yan       2022-04-22  2323  				win->type = DRM_PLANE_TYPE_OVERLAY;
+604be85547ce4d Andy Yan       2022-04-22  2324  			}
+604be85547ce4d Andy Yan       2022-04-22  2325  		}
+604be85547ce4d Andy Yan       2022-04-22  2326  
+604be85547ce4d Andy Yan       2022-04-22  2327  		if (win->type == DRM_PLANE_TYPE_OVERLAY)
+604be85547ce4d Andy Yan       2022-04-22  2328  			possible_crtcs = (1 << nvps) - 1;
+
+What about if win->type is not equal to either DRM_PLANE_TYPE_PRIMARY or
+DRM_PLANE_TYPE_OVERLAY?  That's what the checker is worried about.
+
+604be85547ce4d Andy Yan       2022-04-22  2329  
+604be85547ce4d Andy Yan       2022-04-22 @2330  		ret = vop2_plane_init(vop2, win, possible_crtcs);
+                                                                                                 ^^^^^^^^^^^^^^
+
+604be85547ce4d Andy Yan       2022-04-22  2331  		if (ret) {
+604be85547ce4d Andy Yan       2022-04-22  2332  			drm_err(vop2->drm, "failed to init plane %s: %d\n",
+604be85547ce4d Andy Yan       2022-04-22  2333  				win->data->name, ret);
+604be85547ce4d Andy Yan       2022-04-22  2334  			return ret;
+604be85547ce4d Andy Yan       2022-04-22  2335  		}
+604be85547ce4d Andy Yan       2022-04-22  2336  	}
+604be85547ce4d Andy Yan       2022-04-22  2337  
+604be85547ce4d Andy Yan       2022-04-22  2338  	for (i = 0; i < vop2_data->nr_vps; i++) {
 
 -- 
-Michal Hocko
-SUSE Labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
+
