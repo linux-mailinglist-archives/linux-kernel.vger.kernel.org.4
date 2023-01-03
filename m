@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3148D65C852
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8359165C853
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238790AbjACUpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 15:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S238807AbjACUpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 15:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231283AbjACUo5 (ORCPT
+        with ESMTP id S238091AbjACUpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 15:44:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95084F0D;
-        Tue,  3 Jan 2023 12:44:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41FF9B80EE4;
-        Tue,  3 Jan 2023 20:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25E46C433EF;
-        Tue,  3 Jan 2023 20:44:52 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JLxfT6a/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672778690;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7cx/K+TO4UmCYrGKr/OeCO+B3doDOyrOgiixkdP5BVI=;
-        b=JLxfT6a/rEkEUgFSY1L4yTIcSrF8hxovhO70zSbWxsGUSi+/sjYNdkoTdF4o4JMObk5klI
-        c0Fo6JZ6+uqxC5jMswCTnFzpoxZSCY/tlQ4gnj6yz+8hZ6w1y4IVzghxvngOLLTnAhQ6xc
-        l/qf0d0XJsIsdXWUPQO1ui6+hOiBHO0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fc45cc16 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 3 Jan 2023 20:44:50 +0000 (UTC)
-Date:   Tue, 3 Jan 2023 21:44:47 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org
-Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
- lazily freeable mappings
-Message-ID: <Y7STv9+p248zr+0a@zx2c4.com>
-References: <20230101162910.710293-1-Jason@zx2c4.com>
- <20230101162910.710293-3-Jason@zx2c4.com>
- <Y7QIg/hAIk7eZE42@gmail.com>
- <CALCETrWdw5kxrtr4M7AkKYDOJEE1cU1wENWgmgOxn0rEJz4y3w@mail.gmail.com>
- <CAHk-=wg_6Uhkjy12Vq_hN6rQqGRP2nE15rkgiAo6Qay5aOeigg@mail.gmail.com>
- <Y7SDgtXayQCy6xT6@zx2c4.com>
- <CAHk-=whQdWFw+0eGttxsWBHZg1+uh=0MhxXYtvJGX4t9P1MgNw@mail.gmail.com>
- <Y7SJ+/axonTK0Fir@zx2c4.com>
- <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
+        Tue, 3 Jan 2023 15:45:02 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC8EF0D;
+        Tue,  3 Jan 2023 12:45:01 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id c124so34397653ybb.13;
+        Tue, 03 Jan 2023 12:45:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SeLnyRcrosxbe7zf1NVtqwd15UENUyCvBtMhWBv4YcQ=;
+        b=RgsXiF/LZxqKxVwy3PS7+xLpQTNa5yod6qXTeC6WE/1PoBqYtaLZEw+O1KnICdjsuF
+         FVbislKOQciha5Os2si2N3f2G8cuUuMVJn+fk8OKGMSQYwcLMdpOn0/0Htijta8tVhGN
+         2vU2rE6dyi1QmX2Sto+c47Vxcj7VlwgRPQCJQS1UeUd6qObj8wW0n+IxU1oirVG6KO+r
+         fX5iytG4iLcfqzIa6kpPNDTQX3YYxYG4NY6Pa/xIRyZpX76K5KY5c4Yf9Pm0m9tY9rqc
+         ts7HHaLxV2QINzyCIFqvIjaEqYDlWd9nWDY+UjW+//cGgGGPYyn5UjxyzvDpAozK0lVN
+         yPdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SeLnyRcrosxbe7zf1NVtqwd15UENUyCvBtMhWBv4YcQ=;
+        b=hSfTiIY/xg/84cq+DrPnKz1PEJhidGnK1MgTG4PICKF0s5/u3/rYRW6rhMW5wY797P
+         r/+Eu21JhUvveIkMq8dU5yC77RLsohfrZzvQ56HsBJ1xNiY+RHLN7jl3Wm+KKbbxaXU/
+         Iijfb8CwPFpHE/0/ZfO/YtR/5v4HcD3gs+O7i9P8pl8uvukGlGn2z809bAoSeXmaHKD5
+         81/Qtqt6rJNCA0/24uZP/BWRrcCCIy9WK5KgJTjJ+1MCySlCg74yvyVGLU7oFwnzSx7T
+         0DyDkEOPKr5q6X99w5XS2J8NNCy2sV4azwRyO1oDTGMZzkRXZzDlTnuPb9uHX/sReMuj
+         cf/w==
+X-Gm-Message-State: AFqh2kqIk9kKtRO9aEvFS8ommTTmiQhf3YTl8Os8MWmwf9VMbashwtpD
+        hbRQvXacAFW4MzcPuXq6P6RjpBC1iS47fZ1Xocs=
+X-Google-Smtp-Source: AMrXdXu0aI6zgR44lJkZQk5J/ah2nhc8d7y8bZuvOHZmmoOGaXFvRF8UKRfA/3TxipvjPYEdZM+Vjy2tLh5Ul5tIvb4=
+X-Received: by 2002:a25:ca4d:0:b0:771:56e1:e4e9 with SMTP id
+ a74-20020a25ca4d000000b0077156e1e4e9mr4244307ybg.75.1672778701030; Tue, 03
+ Jan 2023 12:45:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221231064203.1623793-1-masahiroy@kernel.org> <20221231064203.1623793-2-masahiroy@kernel.org>
+In-Reply-To: <20221231064203.1623793-2-masahiroy@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 3 Jan 2023 21:44:49 +0100
+Message-ID: <CANiq72k8LSqsnWNd_aa-M1=rMNLWD7KJWrK6Pv0Waq15Exv59g@mail.gmail.com>
+Subject: Re: [PATCH 1/6] kbuild: specify output names separately for each
+ emission type from rustc
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        llvm@lists.linux.dev, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,24 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 12:15:57PM -0800, Linus Torvalds wrote:
-> On Tue, Jan 3, 2023 at 12:03 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > That buffering cannot be done safely currently
-> 
-> .. again, this is "your semantics" (the (b) in my humbug list), not
-> necessarily reality for anybody else.
+On Sat, Dec 31, 2022 at 7:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+>   $ make -j$(nproc) samples/rust/rust_minimal.o samples/rust/rust_minimal.rsi \
+>                     samples/rust/rust_minimal.s samples/rust/rust_minimal.ll
 
-Yea that's fair. Except, of course, I maintain that my semantics are
-important ones. :)
+Yeah, we were testing the single targets, but not multiple at once, thanks!
 
-> I'm NAK'ing making invasive changes to the VM for something this
-> specialized. I really believe that the people who have this issue are
-> *so* few and far between that they can deal with the VM forking and
-> reseeding issues quite well on their own.
+> +               --emit=dep-info=$(depfile) --emit=obj=$@ --emit=metadata=$(dir $@)$(patsubst %.o,lib%.rmeta,$(notdir $@)) \
 
-Okay, that's fine. I'll see if I can make this work without having to do
-surgery on mm and introduce a new VM_* flag and such. Hopefully I'll
-succeed there.
+Perhaps a newline here to avoid the lengthy line?
 
-Jason
+>  hostc_flags    = -Wp,-MMD,$(depfile) $(_hostc_flags)
+>  hostcxx_flags  = -Wp,-MMD,$(depfile) $(_hostcxx_flags)
+> -hostrust_flags = $(_hostrust_flags)
+
+This was originally meant to be consistent with C and C++ indeed, but
+if you prefer less variables, I guess it is fine, in which case,
+should we update the C/C++ side too (in another series)?
+
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
+
+Cheers,
+Miguel
