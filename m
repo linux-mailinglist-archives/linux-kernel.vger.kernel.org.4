@@ -2,135 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57CE65C14B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFDB65C152
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237683AbjACNz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S237751AbjACN5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237645AbjACNzZ (ORCPT
+        with ESMTP id S237761AbjACN5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:55:25 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A84FFF2;
-        Tue,  3 Jan 2023 05:55:24 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id x22so73725769ejs.11;
-        Tue, 03 Jan 2023 05:55:24 -0800 (PST)
+        Tue, 3 Jan 2023 08:57:03 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50170FD3D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 05:56:59 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id g13so45726601lfv.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 05:56:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZtSxpSjX58ynpD01H51Yz32AIwKbxvwZO/htBdjgQhU=;
-        b=NWvGHpwyDNWGPavMB83+2pIXyyjvNcMRZF7kNLcgZILW4LhyNZhueL9uCOFlYStAxX
-         a5yChIeoLzAIk75K/SD7/Q6RmenE2Ie3nRtEN1YwUjEWUgzoUm2e/lc/WYLuV5BWrpnp
-         cukx7TMS1vciDJqH1yho4Vd4gsunpPcGLS7+7LMwEGfoGhxODaGxVm0lEzbfSDbY+6dF
-         jnVgQSrvead51nVPKMBVSmc70iMkIiVExjJBBARX1qoID8wQuJ9q+LgJBdmfU3gbAR/s
-         hJ/j3B9j3VMqYr3OZ9z7yLXQAbMamIg0fWWnu4h56ZEfkZesTprxp3knCWqYs5GHsFAx
-         d18A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=alWcI+JAUgaHIMnURdiNevKupC1Ev2KwHVJZTPqk/Mw=;
+        b=PjbkIHsi1OFmR6RoG+hRynsJegteU3JKnkJIsBR6n0UZ5yFo10eqEqDiOtKOx51Qst
+         t2Qt7+9ttPG3iOcYgPFGLovfsQqOmLfUS1QtICojuF4ZuzqFkmTCFxWXNVsaP+UZpmVF
+         KEWDY9KNlCIGvHY6ZpGfHIXCJgGlZmpG3reh60td3cOrIrQZ9lLPqg005Ts8y65wh3UM
+         JUhfgpFCEpnNrQUdeclJjcbG29LBm3yZOVy9bPQVDi+Jjl9GKrjy7BeHQt0/bGi+sUiu
+         Ezn1C52eeHzzXINAKuCMzsb8OYAHR8repbEYlA83N76DB4CHY+iwHpZGL8q7AB0C0EE8
+         xcxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZtSxpSjX58ynpD01H51Yz32AIwKbxvwZO/htBdjgQhU=;
-        b=Y7l2Rd46SRcjCr299Ng9FW1d4fHcK8O6q/LuC2kNgWFOx/iY5Fshl0xoThy0xg+hWW
-         bzmuxwIKwLPNgXJnfL2gXv9EM+g64kog892/xCdkdjpFE7H7GPB0LRl5u5MTmYoiTkoW
-         YvYkrAUvgblY6jh4cczNWZJBjQUE9s/kpwrShsjgeoqwQjKCltKp+GB2hq/LnEa/esq+
-         N7w0d2q1lD18CnlyBuXULHUOv0m9ikJlKxOCLVjUH5Dz27T9X3RJE7i+/NVKMyRI1gl4
-         9eT+EVFr/EoV8mQXR7hHrlxAp/GeeiACYlg8LIK9ao0H0bDM1ZlY3FTTDxGC2hPZJrbC
-         kA1g==
-X-Gm-Message-State: AFqh2kpPQURzIQFDiwowId2hqIRhIT7orUFWSxNrVMCeV+ZU+jtUOuGw
-        W/qJqNrPQ6G92A8TUMTpm8k=
-X-Google-Smtp-Source: AMrXdXul+Qhor0TFBD82nysJpNI3VhxWK05SAKn9RHHdHtJl9+gmsiDFWAngpR8gHsFYoJeQk44dqA==
-X-Received: by 2002:a17:907:7d8f:b0:7b5:911c:9b12 with SMTP id oz15-20020a1709077d8f00b007b5911c9b12mr46938748ejc.1.1672754122626;
-        Tue, 03 Jan 2023 05:55:22 -0800 (PST)
-Received: from skbuf ([188.26.185.118])
-        by smtp.gmail.com with ESMTPSA id j18-20020a1709066dd200b0080345493023sm13998125ejt.167.2023.01.03.05.55.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 05:55:22 -0800 (PST)
-Date:   Tue, 3 Jan 2023 15:55:19 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wei Fang <wei.fang@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH RFC net-next v2 08/12] net: ethernet: freescale: xgmac:
- Separate C22 and C45 transactions for xgmac
-Message-ID: <20230103135519.oai43rj3waigqi54@skbuf>
-References: <20221227-v6-2-rc1-c45-seperation-v2-0-ddb37710e5a7@walle.cc>
- <20221227-v6-2-rc1-c45-seperation-v2-8-ddb37710e5a7@walle.cc>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=alWcI+JAUgaHIMnURdiNevKupC1Ev2KwHVJZTPqk/Mw=;
+        b=PwkjTurFw9bDU00ivKxrdTZVGXFzkszCARO1Kd07bBHJgT8i+J84jKIZBDb2HonemE
+         xEeWzU+j1diFSEGwMt6f818OL7zOzzbehnJmFOjQjz865NC4mfoUQ/PkoV8vOJYAwW5l
+         o/2heTl1uPoYbIAYKqloon/hcm7hNPH3s/2FlbGE6xrA8ijIcuQbWWRBQU9K6Qaq8R1x
+         Mx6euT201wEk1p6myHr2/u10H/dKFKFqDXX9O1utUbwrwSfCGCOiCIPRf038mX/iVj7i
+         6cn2iX97/3anE2wnkbMJKr81SkRCAPyk/Cf8d6dI+2O/+68ZtqkRVjV7073uX9150osZ
+         GNHw==
+X-Gm-Message-State: AFqh2kpONl1YlkupGXjEKXa0w+PKk72opWLiOSSilwJRL9+ReL0XWuH5
+        3AO1/iHkWNXNP3Na0NIoj5VZiQ==
+X-Google-Smtp-Source: AMrXdXtho3pa153o5IOKv1liqVNqeU2DTI3V94wlf5xBgr/gsPuCMm40nP2HNkJDYvrzZ6YQgFVleQ==
+X-Received: by 2002:a19:650a:0:b0:4aa:978:32fb with SMTP id z10-20020a19650a000000b004aa097832fbmr16104497lfb.31.1672754217669;
+        Tue, 03 Jan 2023 05:56:57 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id z2-20020a196502000000b004cb015794a8sm3917652lfb.109.2023.01.03.05.56.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 05:56:57 -0800 (PST)
+Message-ID: <ff328a1f-e193-ec16-8dae-a580759c43ee@linaro.org>
+Date:   Tue, 3 Jan 2023 14:56:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221227-v6-2-rc1-c45-seperation-v2-8-ddb37710e5a7@walle.cc>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 2/3] clk: qcom: clk-alpha-pll: define alias of LUCID OLE
+ reset ops to EVO reset ops
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230103-topic-sm8550-upstream-dispcc-v1-0-81bfcc26b2dc@linaro.org>
+ <20230103-topic-sm8550-upstream-dispcc-v1-2-81bfcc26b2dc@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-dispcc-v1-2-81bfcc26b2dc@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit message can be: "net/fsl: xgmac_mdio: Separate C22 and C45 transactions".
 
-On Wed, Dec 28, 2022 at 12:07:24AM +0100, Michael Walle wrote:
-> From: Andrew Lunn <andrew@lunn.ch>
+
+On 3.01.2023 14:53, Neil Armstrong wrote:
+> Add an alias of LUCID OLE reset ops to EVO reset ops similar
+> to other aliases.
 > 
-> The xgmac MDIO bus driver can perform both C22 and C45 transfers.
-> Create separate functions for each and register the C45 versions using
-> the new API calls where appropriate.
-> 
-> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
-> v2:
->  - [al] Move the masking of regnum into the variable declarations
->  - [al] Remove a couple of blank lines
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-
+Konrad
+>  drivers/clk/qcom/clk-alpha-pll.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
+> index 2bdae362c827..c67cfda27ecb 100644
+> --- a/drivers/clk/qcom/clk-alpha-pll.h
+> +++ b/drivers/clk/qcom/clk-alpha-pll.h
+> @@ -162,6 +162,7 @@ extern const struct clk_ops clk_alpha_pll_zonda_ops;
 >  
-> -/*
-> - * Reads from register regnum in the PHY for device dev, returning the value.
-> +/* Reads from register regnum in the PHY for device dev, returning the value.
->   * Clears miimcom first.  All PHY configuration has to be done through the
->   * TSEC1 MIIM regs.
->   */
-
-I have some reservations regarding the utility of the comments in this
-driver. It's surely not worth duplicating them between C22 and C45.
-It might also be more productive to just delete them, because:
-
- - miimcom is a register accessed by fsl_pq_mdio.c, not by xgmac_mdio.c
- - "device dev" doesn't really refer to anything (maybe "dev_addr").
- - I don't understand what is meant by the comment "All PHY configuration
-   has to be done through the TSEC1 MIIM regs". Or rather said, I think I
-   understand, but it is irrelevant to the driver for 2 reasons:
-    * TSEC devices use the fsl_pq_mdio.c driver, not this one
-    * It doesn't matter to this driver whose TSEC registers are used for
-      MDIO access. The driver just works with the registers it's given,
-      which is a concern for the device tree.
- - barring the above, the rest just describes the MDIO bus API, which is
-   superfluous
+>  extern const struct clk_ops clk_alpha_pll_lucid_evo_ops;
+>  extern const struct clk_ops clk_alpha_pll_reset_lucid_evo_ops;
+> +#define clk_alpha_pll_reset_lucid_ole_ops clk_alpha_pll_reset_lucid_evo_ops
+>  extern const struct clk_ops clk_alpha_pll_fixed_lucid_evo_ops;
+>  #define clk_alpha_pll_fixed_lucid_ole_ops clk_alpha_pll_fixed_lucid_evo_ops
+>  extern const struct clk_ops clk_alpha_pll_postdiv_lucid_evo_ops;
+> 
