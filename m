@@ -2,196 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB78265BA86
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 06:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F18A965BA8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 06:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236748AbjACFn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 00:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S233379AbjACFvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 00:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbjACFnz (ORCPT
+        with ESMTP id S230124AbjACFvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 00:43:55 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBED204;
-        Mon,  2 Jan 2023 21:43:53 -0800 (PST)
-X-UUID: 4f9df4d8eb664c64a80c59cd7b8fce77-20230103
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:To:From; bh=OrcmwfS6+2Iu+cZ8WVitC9NHhR40T0s0ZefFCdVA/Hw=;
-        b=AhaXCnwhvx38MF1hv8IRiz90EwwoZWk6pRajBLzJ/S9pUL7m0K51VswounAmsIZ8vb0zekQiNNdRcK58i3SgLpV0kj2LVi5wCJAE2s3wUH23cOvhAEJuVXZxvIKPADlIGU5+sIHPqUIyddTFHOm3ArSMglBvW5UKahvU4hHFX70=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.16,REQID:ae4ff1ad-31dd-411c-9a32-e36dbc9d5955,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:09771b1,CLOUDID:0dab7553-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0,NGT
-X-UUID: 4f9df4d8eb664c64a80c59cd7b8fce77-20230103
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1641665107; Tue, 03 Jan 2023 13:43:47 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 3 Jan 2023 13:43:45 +0800
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Tue, 3 Jan 2023 13:43:44 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KpKD/KWP5j0IpYEgK7Z23f9L3M2or7q3hEL2yW2HYeuQzmAdXMxXJGCwifgfVAnuMza6uSLxsDCb5gSRqcAKF7uxvQifh1jcbAIfacVWX6B7aQdaW9GUJFroFBIssZ2Lw12Yu9Ytb/7cuNA7LBQ0ym8u7jShm8aRrg0PXjcq9TUvyqEONoxjrwr0LEklrPO5Z1wR+jI8zLKU0DY7WxkUKV2gw3LMWGHsfYwE/cGg5+vuX+Zz6yvML1blX8T6lzZgqjI/UrOfR+T+qQVT+lIeAKAhMF5LLg3dQ99DO36tqXFDzD1OIWEU/uQ9gpJ0i1uuLOl5dbKpIZzOCDAOncjHFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OrcmwfS6+2Iu+cZ8WVitC9NHhR40T0s0ZefFCdVA/Hw=;
- b=IMupWsIOllWjvaS6EJF/tPW4RsCctzwv8MypbhPXsrXhoPOy8abPzsFngQ4UJicq8SVl/+CKWll9iqWipurZpeTmMVcdoyLK+L/5p4980pTgSLo9tJT0Fe/qKT85KDII0AT/J+4WM0bOHCBu14Cjyjti4GG2TMlt1TBKRTCzacWIo2OPjfwvbedAlmSV3TITmnZJ4kWNfglDKeXkJm2yRULCVCfxKeYhX3bYHSubuS4zDyPbVQKrVcgWHCpgths9BMjiptQwUTOh9NPBigQNfT+04btDYWJO2XWXEDxneku0Qiw9dETjE1fGuCeuqPXmqgV5/KnnX6RSXaEGU9Uvaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OrcmwfS6+2Iu+cZ8WVitC9NHhR40T0s0ZefFCdVA/Hw=;
- b=Ixakg/uFvHfj143gxUJj0v1LdqhB3AB5x+jauzkkyO0L9HIqrI/GRy2Envoz3yODdwrJxSNp3EhdwmZUQC8C4ggo1eZUC8a5JD49gWvwS3dpkNwJXq+RD7SIev2KPiYs2nuvCeUwp6u4IJFL4JpK3UNqXBz38LZ6fKaqdiCF/NE=
-Received: from KL1PR03MB5062.apcprd03.prod.outlook.com (2603:1096:820:1a::22)
- by KL1PR0302MB5441.apcprd03.prod.outlook.com (2603:1096:820:45::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
- 2023 05:43:42 +0000
-Received: from KL1PR03MB5062.apcprd03.prod.outlook.com
- ([fe80::5e9b:f4cf:8d7f:60d1]) by KL1PR03MB5062.apcprd03.prod.outlook.com
- ([fe80::5e9b:f4cf:8d7f:60d1%3]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
- 05:43:42 +0000
-From:   =?utf-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
-        <Chunfeng.Yun@mediatek.com>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "bero@baylibre.com" <bero@baylibre.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v6 6/7] dt-bindings: usb: mediatek,mtk-xhci: add MT8365
- SoC bindings
-Thread-Topic: [PATCH v6 6/7] dt-bindings: usb: mediatek,mtk-xhci: add MT8365
- SoC bindings
-Thread-Index: AQHZHI5elRZMSV3IAEaOyMsCkjGZra6MM46A
-Date:   Tue, 3 Jan 2023 05:43:42 +0000
-Message-ID: <bb6dad8a0f7efe0be352eea94da9009e9605dbfa.camel@mediatek.com>
-References: <20221230203541.146807-1-bero@baylibre.com>
-         <20221230203541.146807-7-bero@baylibre.com>
-In-Reply-To: <20221230203541.146807-7-bero@baylibre.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: KL1PR03MB5062:EE_|KL1PR0302MB5441:EE_
-x-ms-office365-filtering-correlation-id: 4ade9312-7f8f-4fec-02c8-08daed4d78ff
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JDBZR9xHhnW75UGSXKbJkdI6PDsH8+eIP9DiXGz3xun0ClwbOm3aHXHAwUL8lFTZPcYnHSvNApei2tnaas0Q/anqtZZ91C6DhQakrIUwna0JObprn2McfmF9kUbVLhZ6SESgRS2Jab7CrP7iJsX9wVO4jUnrSaymT8wicWTXZO/KRUhYfJn8kLX3tdMe3+qW1WwvN4AeZ/s8LiFmcEPghnTHFyyJyH+SDFA4iKjJNQWFMkfd4ybkd7bJ0hAYNstfxhR8NFuIJQ3sbAlVEk7axkJywCp+6MTWFzRzLekFhtbREVt4YxfEio9Fh/aOtaT75wyxRHqJFtoBk3s908Aob3UQDz1WaIpsSHefNf1LrS6yh3zUQgL0bpnvPrkQMvAXfMz+0C05glhog5StxYIbeuGn2zFjxweboQj79SymZj4Dt6gk9bsHyHJE7AJc8fjB6XpH9qj5YJ+HfW+Qq5ZR91sTQ2otJCjNScDbh83FAY7QK8Bdloq86tVnvZMirhM5gmRtF1dfE8YySwdV5IAjmQn0Cmvf17DTceBQHFSXvSRZbkiSxwg0izNUGK5QFJLaHn2YfHxxGWU1J7F4ysX5hMrz9W/gk9C1lR+xRSm8KGjr4jJFd8Dvz0obPpGQuHbBng1pTcUj3PjXG0YbO5iE0/f42S55MrN12hB5cP7TeQEpwS8p0rqeg25MBb8lxe7W9IO3NX6Tu69/fN+KXWfcNZvdvn/iB9VwkgvSP/aU8wXXD7j95eCo7o1EEHiaNx4XSe4uuHRBipHEkOM5DSVmyg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB5062.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(366004)(396003)(451199015)(6512007)(26005)(6506007)(86362001)(38070700005)(36756003)(85182001)(38100700002)(921005)(122000001)(2616005)(186003)(478600001)(41300700001)(8676002)(2906002)(4001150100001)(7416002)(5660300002)(8936002)(6486002)(71200400001)(66556008)(66946007)(76116006)(66476007)(316002)(66446008)(64756008)(110136005)(22166006)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NUFLbEhwWVBTV1NEMFE5b2kxWGFJOWFPRjZEVUltZHRjK1pCZU1zNWVVbkRJ?=
- =?utf-8?B?dUd3UFZXQW13SnpGSTh2dnNzazBuVFBEQkYvcEg3NHBFMXFxWWlZdW9OemxP?=
- =?utf-8?B?OWtQVG1XdjhzWlJVU3BRK3JvTHJsZ3ZxTW5UeUVrYloyUVFvajI1WTZteWNB?=
- =?utf-8?B?ZmN1MGVJZEhweG14WkwvSTdKaWpLd1JXTUt0YmNQRHhTRlV4dHd5ZWwzMnJK?=
- =?utf-8?B?ZHYzQ1NTcE1ucjdPQlgyaHRNZjZXOEtuYmhqR003RVU2UEdPdEdKaDFhTGhL?=
- =?utf-8?B?WXd1eG00L2dEWWxQUFpPbWxaWDJuUm51OEhBeUR2dHpQRTVUbTByaVZGOGVs?=
- =?utf-8?B?UG5jQjlncjlpb1AwQWpGbnpXd2wxM3hyMWtRU0RJaUVyb3hvOHA2blpucGNk?=
- =?utf-8?B?UlJLRWpkT1dVbmdpK1ZrK2V4SVJ6cnR5QzhGS1NnTWhXVWE0WEtCNGMrZWlu?=
- =?utf-8?B?NDkzL0JEeHJ4WEoxbHAwWHdIYUFVc3FMS21NQURaL21wMzVybnNxUTNNZmpr?=
- =?utf-8?B?dW1zeEJDUm4xTE93aUxLS1BuaTZSOVVZdDZNcFBwWHJTbEM3NGRZV3hhN09F?=
- =?utf-8?B?YWhvMy9yRjNEZ3E5Njk4NHdlUm4yZkNkS05vVG9ER09maW1aSllBTk9teU1y?=
- =?utf-8?B?VytUcHp3NXhqMHh0NGw4YmZ0OWsxeHI5SGlFdndFTTJVSUdUV2tnVDRsdXJC?=
- =?utf-8?B?WGQ2aVdCZ0lYcjRIemFHNXlNRzhUeHE3S3BFQWYxRG1YdWZpNGsyblN6M3Bl?=
- =?utf-8?B?Q1krVzR6NVNZL1pLSjdpSXA5VnNTOEhwaGJNaFZqbGI5eXZYQXdYM21VZmJ0?=
- =?utf-8?B?dEhhTnNQQjNrZE9OQy9vb3EvUGx1b3Joaml1eGdpcittUVp0RU5HdWg0S1FU?=
- =?utf-8?B?TXdPcHdIWjI1aXdoNWtzWlhobWZhRE4xVkpGWEw3UDB1U0RscHlLanNtQll3?=
- =?utf-8?B?NXpFc216WmpSRGxLRXdpL2VuTkhFK1BVZk13VFV3NFNkeitJalQxczk1aFBT?=
- =?utf-8?B?VS9VZkdBQ2V2N0dqcUg5alFSdnAxSkozNkloQjI1b3NqbExjR2gyc3pySzdD?=
- =?utf-8?B?bDBpZ3JyUitVZmhlYmhWN3ZnejRMc1FWaFNNb0VWdUdFc3UvTTZBU28vT2FW?=
- =?utf-8?B?RVJSZEczclZONW1nSGhTQ1FJaXpoejhsV0JwVSs3RVltSFhBM3k4S2hZU3A0?=
- =?utf-8?B?QUJOTDZIR3J0dnpJbHpnZVIxSTFEOWJwNzEvR09ROFZBNmRKTFZzZytaWWdE?=
- =?utf-8?B?VjZRcGZRb29TYVB5S3NjZVhLYlRtU0pkQTZvSXZWNWZRMUNqMWpXRW00bVZF?=
- =?utf-8?B?MXpCZFcxSkdBaVkrbDRjbGRyZ2wrU05TQzJHcmFDYnJTU0dSSTUyYmZ2RkNH?=
- =?utf-8?B?L0JtOUpLekt3UXBVNGtaakdHSjlHbVV5ZEtaVitUUCs0RUYrNUpqc05FUEY1?=
- =?utf-8?B?ZHdWbEw3UmRtaHlBcy9zaFJrOW9OL1YzVkg3V1RlclNBWkpNVHFVQzlVZUxQ?=
- =?utf-8?B?Yk1LQ0hEbE1xMEFjeFR1b2wzdW9RVDIwVmNMMm1hZDlrNkJQS1E2dzU3alc2?=
- =?utf-8?B?ZjBpWUpYNGd0RXRSb3hsSHRBRm9nUjJ1QSs1b0txeE5peSs1bmppWlZmdjBi?=
- =?utf-8?B?QU9MYlhTeUlLcUIrckM0UWJENDNyazdZZVNRN2ZQMjBhYlFCWm9CVEFyV3Ix?=
- =?utf-8?B?QXpLQ3BqUUs5SmRBMmQ0anlYenFWNVFzeklVQWVxVHNyemQwUjBJcTdqVUxX?=
- =?utf-8?B?TU4veFhqb1d0c0NaSEFLYnZpVTl3WHIwaTMwTXh6bmJGNndSSWVTbytYeGRm?=
- =?utf-8?B?YXhLTjYyUWt3bWdrUThlN0dRdnYwSHZiYWpwSCtXczJJbWhBRWdkQTlrMXpH?=
- =?utf-8?B?RFZFcE5BeURPWmF1NHViR2JkTEg5S2lHM1o2OVdnNklGZ1ZMOWlWeEN1ZnJw?=
- =?utf-8?B?eFl5VHIzMElKK09PcUNWR3RFRXlIZWppU1NIOFVhVmI1TCtKbnVsSVR2L2tV?=
- =?utf-8?B?UzdUTDRPME1ncERKYUtjYWtxbUpmMTBhQzl3MTNESzNZU21WeVUxUWh2N3ZU?=
- =?utf-8?B?a0JjM2hJOHowWWNnUkF6cG5YcE5rVko3NU40eGNWNU80RmRXeW1iU2tKQzJq?=
- =?utf-8?B?ZVB6alZwaGFzQXZlTTNEWUhweXN4UEpSbU1wY1gwTitIYUREQW9UcFRwQSsy?=
- =?utf-8?B?RWc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3DAA2E78CC9D974A8C4F4C00F9BF0290@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 3 Jan 2023 00:51:08 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B8CAE73;
+        Mon,  2 Jan 2023 21:51:03 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MWASY-1pIcrG395u-00Xg4M; Tue, 03
+ Jan 2023 06:47:49 +0100
+Message-ID: <87d14908-dc9d-7ce4-c594-b28a9991efbb@gmx.com>
+Date:   Tue, 3 Jan 2023 13:47:43 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB5062.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ade9312-7f8f-4fec-02c8-08daed4d78ff
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2023 05:43:42.4120
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Zb9CcW5JGXghkccokn9hgGa9LNVhQJO9/d8Vx8RTWFPmLGcnt8gUJk6Pd+NFZxYd0hwUKhh3Bphe4ZsTiNNHwbEr+iRvrbNVDt6c/jk6QjM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0302MB5441
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     zys.zljxml@gmail.com, clm@fb.com, josef@toxicpanda.com,
+        dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yushan Zhou <katrinzhou@tencent.com>
+References: <20230103051137.4085572-1-zys.zljxml@gmail.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: Re: [PATCH v3] btrfs: use PAGE_{ALIGN, ALIGNED, ALIGN_DOWN} macro
+In-Reply-To: <20230103051137.4085572-1-zys.zljxml@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:pekQdG8Lv++qlQ443YYcSeM2YOcvnWrMIraexNtIzqzscu8wbPr
+ J3t2JfmzD28KJ4nTvCanPsH90IlhRAJoEDzxIdcmBbZG+NVM6GmfnQyfupv+csTofZinomz
+ VAn8FFiRq+i8hNiFzlirr/D0rE3vT1eVD1jtmZb0rrZGgpyrorui4K5B0cQ69YhLp0D3xiH
+ WvEivFlThagrHQFwLY51g==
+UI-OutboundReport: notjunk:1;M01:P0:RptfQLUvik4=;AsmpQKXmvBTk9kMZJovUzZin+ej
+ X58xFtQ8ng3M3c7KhAgAnTk0IlWkzgo74Q1OTF9FG4wq9OMNc5HJlaOM0hDLRs7G96xnEGFlA
+ SPhUwdDpTuCL4L659uTr04FCbGMigtpeVtDiFg7YDoUJLksXgZNB3pJ5+E1fLkxrssJmfnpS5
+ TznCp6HOFV6tx5UuaVpoY0tWZBDPF5cnfV46V9548GylHhJoCtxW1mk20zxTp3IzPVDry8HNY
+ Gbq+CgtOhSxU17XlNtpwyy7vZg8ResNCO7Mzni+CHiXmEJwNxnASGIFMerIYiQMOi3HvxtsCu
+ NBm32ZZWt4R42OLqZ5rHHoxXmrcwtEStyTFFeQx5qy6XtlEVo8w2cS2jFLQdKzg0iWBIiVkU0
+ HQzP2SN6ehleFJdgVAN8tsrzd3UZMl0LcG950EeAlaUE4LUO0jOdPHAy5AcIElGj93Ku8yR86
+ DEcya82i5lCFHm+9O0Utr3RWDMzIV2BC+SlJGw5Juv9k59zR7pFtFgYyG/E4BVc6WrwQlj5HV
+ CzRFwhOF/X1oqVmDPH3M3XAQvXpfDqQCHjHU15hrCfnZ4YxF1z+G7qJZU1ySmmdhdNIcV5I95
+ s+xCc2ZEqoNW/+5bHFwWCVNRrrH3eFDmlkyaT1eLfXt3ch79ZA4lmDZRQN9xY/pr4UmLn6yDp
+ 2LTPgjWHIVGJ6d5Rlf0PD50VI9yDOqo5aQaclrs7Uo1FC0rDUJQFA/7VYGNniT50SVe40Dkcc
+ F8jJeyKLj9vdfRvGh6uvuoO4YiKROCaaYhBapwV1cOBcEBj9sKjsajQRmO5njPlT7NrDFm37p
+ hzX474XjexL4bmMhnptvqipTnQnPHSRw2Q6VCQNxD9IwBIle/j1hvAvyPHg7uYwjKoT9DcShk
+ ylLnJwk+NlG9uEbT4NTzByhMYo9/86g1CZ1ZEPzFGYiYKjTptJAJBj+9z6s2FacTMlQZy6/G9
+ eSTDEcl7K8xoCfXyXy4VL/sTIEU=
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTEyLTMwIGF0IDIxOjM1ICswMTAwLCBCZXJuaGFyZCBSb3Nlbmtyw6RuemVy
-IHdyb3RlOg0KPiBGcm9tOiBGYWJpZW4gUGFyZW50IDxmcGFyZW50QGJheWxpYnJlLmNvbT4NCj4g
-DQo+IEFkZCBiaW5kaW5nIGRvY3VtZW50YXRpb24gZm9yIHRoZSBNVDgzNjUgU29DLg0KPiANCj4g
-U2lnbmVkLW9mZi1ieTogRmFiaWVuIFBhcmVudCA8ZnBhcmVudEBiYXlsaWJyZS5jb20+DQo+IFti
-ZXJvQGJheWxpYnJlLmNvbTogQ2xlYW51cHMgc3VnZ2VzdGVkIGJ5IHJldmlld2Vyc10NCj4gU2ln
-bmVkLW9mZi1ieTogQmVybmhhcmQgUm9zZW5rcsOkbnplciA8YmVyb0BiYXlsaWJyZS5jb20+DQo+
-IEFja2VkLWJ5OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFy
-by5vcmc+DQo+IFJldmlld2VkLWJ5OiBBbmdlbG9HaW9hY2NoaW5vIERlbCBSZWdubyA8DQo+IGFu
-Z2Vsb2dpb2FjY2hpbm8uZGVscmVnbm9AY29sbGFib3JhLmNvbT4NCj4gUmV2aWV3ZWQtYnk6IE1h
-dHRoaWFzIEJydWdnZXIgPG1hdHRoaWFzLmJnZ0BnbWFpbC5jb20+DQo+IC0tLQ0KPiAgRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9tZWRpYXRlayxtdGsteGhjaS55YW1sIHwg
-MSArDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCj4gDQo+IGRpZmYgLS1naXQg
-YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL21lZGlhdGVrLG10ay0NCj4g
-eGhjaS55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9tZWRpYXRl
-ayxtdGstDQo+IHhoY2kueWFtbA0KPiBpbmRleCBhM2MzNzk0NGM2MzA1Li5jMTE5Y2FhOWFkMTY4
-IDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL21l
-ZGlhdGVrLG10ay14aGNpLnlhbWwNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL3VzYi9tZWRpYXRlayxtdGsteGhjaS55YW1sDQo+IEBAIC0zNSw2ICszNSw3IEBAIHBy
-b3BlcnRpZXM6DQo+ICAgICAgICAgICAgLSBtZWRpYXRlayxtdDgxODgteGhjaQ0KPiAgICAgICAg
-ICAgIC0gbWVkaWF0ZWssbXQ4MTkyLXhoY2kNCj4gICAgICAgICAgICAtIG1lZGlhdGVrLG10ODE5
-NS14aGNpDQo+ICsgICAgICAgICAgLSBtZWRpYXRlayxtdDgzNjUteGhjaQ0KPiAgICAgICAgLSBj
-b25zdDogbWVkaWF0ZWssbXRrLXhoY2kNCj4gIA0KUmV2aWV3ZWQtYnk6IENodW5mZW5nIFl1biA8
-Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCg0KVGhhbmtzDQoNCj4gICAgcmVnOg0K
+
+
+On 2023/1/3 13:11, zys.zljxml@gmail.com wrote:
+> From: Yushan Zhou <katrinzhou@tencent.com>
+> 
+> The header file linux/mm.h provides PAGE_ALIGN, PAGE_ALIGNED,
+> PAGE_ALIGN_DOWN macros. Use these macros to make code more
+> concise.
+
+Is there anything benefit from the change?
+
+In fact, PAGE_ALIGN()/PAGE_ALIGNED() is just using the same 
+ALIGN()/IS_ALIGNED() macro.
+
+Thus I don't think your change is of any usefulness, not to mention it's 
+going to introduce confusion and extra effort.
+
+I'm completely fine with regular ALIGN()/IS_ALIGNED() usage with PAGE_SIZE.
+
+Thanks,
+Qu
+
+> 
+> Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
+> ---
+>   fs/btrfs/compression.c | 2 +-
+>   fs/btrfs/defrag.c      | 2 +-
+>   fs/btrfs/inode.c       | 5 ++---
+>   fs/btrfs/lzo.c         | 2 +-
+>   fs/btrfs/relocation.c  | 2 +-
+>   fs/btrfs/send.c        | 4 ++--
+>   6 files changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
+> index 5122ca79f7ea..4a5aeb8dd479 100644
+> --- a/fs/btrfs/compression.c
+> +++ b/fs/btrfs/compression.c
+> @@ -1609,7 +1609,7 @@ static void heuristic_collect_sample(struct inode *inode, u64 start, u64 end,
+>   	index_end = end >> PAGE_SHIFT;
+>   
+>   	/* Don't miss unaligned end */
+> -	if (!IS_ALIGNED(end, PAGE_SIZE))
+> +	if (!PAGE_ALIGNED(end))
+>   		index_end++;
+>   
+>   	curr_sample_pos = 0;
+> diff --git a/fs/btrfs/defrag.c b/fs/btrfs/defrag.c
+> index 0a3c261b69c9..130de66839c1 100644
+> --- a/fs/btrfs/defrag.c
+> +++ b/fs/btrfs/defrag.c
+> @@ -997,7 +997,7 @@ static int defrag_collect_targets(struct btrfs_inode *inode,
+>   }
+>   
+>   #define CLUSTER_SIZE	(SZ_256K)
+> -static_assert(IS_ALIGNED(CLUSTER_SIZE, PAGE_SIZE));
+> +static_assert(PAGE_ALIGNED(CLUSTER_SIZE));
+>   
+>   /*
+>    * Defrag one contiguous target range.
+> diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+> index 8bcad9940154..ff3b1ab6a696 100644
+> --- a/fs/btrfs/inode.c
+> +++ b/fs/btrfs/inode.c
+> @@ -10993,9 +10993,8 @@ static int btrfs_add_swap_extent(struct swap_info_struct *sis,
+>   		return 0;
+>   
+>   	max_pages = sis->max - bsi->nr_pages;
+> -	first_ppage = ALIGN(bsi->block_start, PAGE_SIZE) >> PAGE_SHIFT;
+> -	next_ppage = ALIGN_DOWN(bsi->block_start + bsi->block_len,
+> -				PAGE_SIZE) >> PAGE_SHIFT;
+> +	first_ppage = PAGE_ALIGN(bsi->block_start) >> PAGE_SHIFT;
+> +	next_ppage = PAGE_ALIGN_DOWN(bsi->block_start + bsi->block_len) >> PAGE_SHIFT;
+>   
+>   	if (first_ppage >= next_ppage)
+>   		return 0;
+> diff --git a/fs/btrfs/lzo.c b/fs/btrfs/lzo.c
+> index d5e78cbc8fbc..71f6d8302d50 100644
+> --- a/fs/btrfs/lzo.c
+> +++ b/fs/btrfs/lzo.c
+> @@ -280,7 +280,7 @@ int lzo_compress_pages(struct list_head *ws, struct address_space *mapping,
+>   		}
+>   
+>   		/* Check if we have reached page boundary */
+> -		if (IS_ALIGNED(cur_in, PAGE_SIZE)) {
+> +		if (PAGE_ALIGNED(cur_in)) {
+>   			put_page(page_in);
+>   			page_in = NULL;
+>   		}
+> diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
+> index 31ec4a7658ce..ef13a9d4e370 100644
+> --- a/fs/btrfs/relocation.c
+> +++ b/fs/btrfs/relocation.c
+> @@ -2825,7 +2825,7 @@ static noinline_for_stack int prealloc_file_extent_cluster(
+>   	 *
+>   	 * Here we have to manually invalidate the range (i_size, PAGE_END + 1).
+>   	 */
+> -	if (!IS_ALIGNED(i_size, PAGE_SIZE)) {
+> +	if (!PAGE_ALIGNED(i_size)) {
+>   		struct address_space *mapping = inode->vfs_inode.i_mapping;
+>   		struct btrfs_fs_info *fs_info = inode->root->fs_info;
+>   		const u32 sectorsize = fs_info->sectorsize;
+> diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+> index e65e6b6600a7..b4cbd74fefce 100644
+> --- a/fs/btrfs/send.c
+> +++ b/fs/btrfs/send.c
+> @@ -5635,7 +5635,7 @@ static int send_encoded_extent(struct send_ctx *sctx, struct btrfs_path *path,
+>   	 * boundary in the send buffer. This means that there may be a gap
+>   	 * between the beginning of the command and the file data.
+>   	 */
+> -	data_offset = ALIGN(sctx->send_size, PAGE_SIZE);
+> +	data_offset = PAGE_ALIGN(sctx->send_size);
+>   	if (data_offset > sctx->send_max_size ||
+>   	    sctx->send_max_size - data_offset < disk_num_bytes) {
+>   		ret = -EOVERFLOW;
+> @@ -5759,7 +5759,7 @@ static int send_extent_data(struct send_ctx *sctx, struct btrfs_path *path,
+>   		sent += size;
+>   	}
+>   
+> -	if (sctx->clean_page_cache && IS_ALIGNED(end, PAGE_SIZE)) {
+> +	if (sctx->clean_page_cache && PAGE_ALIGNED(end)) {
+>   		/*
+>   		 * Always operate only on ranges that are a multiple of the page
+>   		 * size. This is not only to prevent zeroing parts of a page in
