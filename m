@@ -2,178 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DAF65BCD2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B76865BCD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjACJJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:09:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
+        id S236846AbjACJJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjACJJM (ORCPT
+        with ESMTP id S231250AbjACJJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:09:12 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7114E00C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:09:10 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so35294914pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:09:10 -0800 (PST)
+        Tue, 3 Jan 2023 04:09:13 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C63E010
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:09:11 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id b24-20020a05600c4a9800b003d21efdd61dso22588989wmp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:09:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jcCeUe8dp3S0aIMiyCkv1Dk6gs4kz2Rph2Ssgj/ekI0=;
-        b=TL/1ao89hsBreVnGN22u5zp0DHtCX9c2AzLxijusP3QSP4QTbywfw/7EuRB7yIKcEP
-         C1Biq5+4JdbSQkFIWKTTxni2MzrTs5iiw4GKfsZMSOJBXYR4V+A70HpG6WAspLdoUy8Y
-         XQaiRE7546GF9oWek9s0lvW/LoB6l84hC02Lg=
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4VpH6JpHYPTb5N2QEbasH2uVz/byLh3cdPoaV+heNg=;
+        b=7mDgAIHeRGltGKdfPnbQWDWxMdgrISNNEmr8ZEWWLq07C+IEHgsYbgcR6k0zBYc/aO
+         H+7ZJ3ns8QTYMtH6GPC73xLC46L5SM21YFcSSi/WxokMkmUvkozmDpn5iVGQcqZOVaSe
+         PUAI/uJBK/8kkTOICrCLiHDyZ28Oi3SFFXFAhmfM6rPAHT6BsUsrj9L7wq+mfRDJyQBc
+         64qOneJttg7RjbsCl7R2yBGuCDPTdEbWfkOah9jk9qv8flepwSdUDbmBd8MfTv6nc8WV
+         dlD2o5/Uo8Nwo/9pLLNpLrvbEMvZc1N964hBMzHP1gDQdMuc1Cjj4RBx3SQlq+ktbGAR
+         JGkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jcCeUe8dp3S0aIMiyCkv1Dk6gs4kz2Rph2Ssgj/ekI0=;
-        b=du7Gj83HKdgv4eE1Y+toHyMdKBALlhhtliW2jnQXGspnHkcoLJk5peM8LqEYqeTOSk
-         aT4AsY1q+xAJHXFjyGXoo25Ne19Txq/lXRoBAMLt6mm64qptWICbxjJ4519nxy47azEx
-         Mh+4xNlAXp3tfT5/LzYE75DIR/ppdi7fcBOjr/QQ4ZWqDRyGMudIDmJLqfqsFW/ZxFzc
-         Cpklp3bt9opwZl67HQWa07E5RNs4Q6eQCx5N5hbTclnTvtKMPxpEschVlAzYTtXo8cIv
-         Wgoacgso5JfLPCVgoBX/RnppoHd+jgdpuTahlKfgfyOI+yatrYpTJHDelC38cQS0jgJs
-         vlBg==
-X-Gm-Message-State: AFqh2krZ0MXEdLWO9afRsyXnYQg96Ql8kQYKlb+djtyBgzB+9nCKi4GU
-        i8Klh+AAlzoMG2Wq3wWDDGSCH0JNSClQExWRVAs=
-X-Google-Smtp-Source: AMrXdXuLnqr7oz+h0IA9u98C+T3xNp1TCISDWbdxQKwA17ASE54ZPiT7tWpQsdJVK4K/11H/i8FD6w==
-X-Received: by 2002:a17:902:9a0b:b0:189:d3dc:a9c4 with SMTP id v11-20020a1709029a0b00b00189d3dca9c4mr42400859plp.36.1672736949848;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q4VpH6JpHYPTb5N2QEbasH2uVz/byLh3cdPoaV+heNg=;
+        b=mF0wYrQJT6sdCsyU7HOCOCwiaiGV6k2Ua+sPrOgQiytQhRzqR4R+diuFsRnrRScQF1
+         WauS+heNlG4B8dOpA/9FFd5XzX00N0OWEonUE5Bit7HA3kU8uEr/p7AQeIFiGEygppF2
+         ru/B4C49ZAUmBW5FzWgm/y3ugKbPjT1KNgvhUvkEKZ1hJ9W2lJMszouNMInemICFCp99
+         41H/8TzSvGSHaFxSBn1abBWwcXtbOfYpMQqvF6CBxAky0K9I2Wsd0B2g5yUA8enolMD9
+         AGKgMV6OPmrylLyV6/kZyBnZln/8ph66W4Zjwh+riF8GilPLGxUwmiKzl8SjZqVx+IDK
+         ABEA==
+X-Gm-Message-State: AFqh2koTEgFd1gurjSriHl9W6c8bcnyc2bUSqrm5zeE3VQVSpqQo3Aa4
+        6p+7+u1Tpb/YvwobMy43DDf/Zw==
+X-Google-Smtp-Source: AMrXdXthod9gNBtDKzM2/ooc897BFsfcfFr9DFrnqllE4RM8cMaiskR8rtfsDxEbCRXDVt3ZdpqNjw==
+X-Received: by 2002:a05:600c:18a1:b0:3d2:3ec4:7eed with SMTP id x33-20020a05600c18a100b003d23ec47eedmr33796593wmp.10.1672736950329;
+        Tue, 03 Jan 2023 01:09:10 -0800 (PST)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id z13-20020adff74d000000b002366f9bd717sm35847028wrp.45.2023.01.03.01.09.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 03 Jan 2023 01:09:09 -0800 (PST)
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com. [209.85.215.176])
-        by smtp.gmail.com with ESMTPSA id w1-20020a170902a70100b001873aa85e1fsm21586156plq.305.2023.01.03.01.09.08
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 01:09:08 -0800 (PST)
-Received: by mail-pg1-f176.google.com with SMTP id f3so19719995pgc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:09:08 -0800 (PST)
-X-Received: by 2002:a65:5b88:0:b0:495:fb5f:4395 with SMTP id
- i8-20020a655b88000000b00495fb5f4395mr1743111pgr.63.1672736947897; Tue, 03 Jan
- 2023 01:09:07 -0800 (PST)
+Date:   Tue, 3 Jan 2023 10:09:07 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Christoph Heiss <christoph@c8h4.io>
+Cc:     Chris Snook <chris.snook@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: alx: Switch to DEFINE_SIMPLE_DEV_PM_OPS()
+ and pm_sleep_ptr()
+Message-ID: <Y7PwsyuZKiQqIp9Z@nanopsycho>
+References: <20230102195118.1164280-1-christoph@c8h4.io>
 MIME-Version: 1.0
-References: <20221212-uvc-race-v6-0-2a662f8de011@chromium.org> <20230103022540.3667-1-hdanton@sina.com>
-In-Reply-To: <20230103022540.3667-1-hdanton@sina.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 3 Jan 2023 10:08:56 +0100
-X-Gmail-Original-Message-ID: <CANiDSCuTZ17ohj=G3c_36NmnCTtwt0aBZ1Fkh-+rzwEgufK5kw@mail.gmail.com>
-Message-ID: <CANiDSCuTZ17ohj=G3c_36NmnCTtwt0aBZ1Fkh-+rzwEgufK5kw@mail.gmail.com>
-Subject: Re: [PATCH v6] media: uvcvideo: Fix race condition with usb_kill_urb
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Staudt <mstaudt@google.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Yunke Cao <yunkec@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230102195118.1164280-1-christoph@c8h4.io>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hillf
+Mon, Jan 02, 2023 at 08:51:18PM CET, christoph@c8h4.io wrote:
+>Using these macros allows to remove an #ifdef-guard on CONFIG_PM_SLEEP.
+>No functional changes.
 
-Thanks for the heads up
-
-On Tue, 3 Jan 2023 at 03:25, Hillf Danton <hdanton@sina.com> wrote:
->
-> On 02 Jan 2023 15:48:01 +0100 Ricardo Ribalda <ribalda@chromium.org>
-> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> > @@ -1442,6 +1442,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
-> >
-> >       uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-> >
-> > +     if (dev->flush_status)
-> > +             return;
-> > +
-> >       /* Resubmit the URB. */
-> >       w->urb->interval = dev->int_ep->desc.bInterval;
-> >       ret = usb_submit_urb(w->urb, GFP_KERNEL);
-> > diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-> > index 7518ffce22ed..e457889345a3 100644
-> > --- a/drivers/media/usb/uvc/uvc_status.c
-> > +++ b/drivers/media/usb/uvc/uvc_status.c
-> > @@ -6,6 +6,7 @@
-> >   *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-> >   */
-> >
-> > +#include <asm/barrier.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/input.h>
-> >  #include <linux/slab.h>
-> > @@ -309,5 +310,44 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
-> >
-> >  void uvc_status_stop(struct uvc_device *dev)
-> >  {
-> > +     struct uvc_ctrl_work *w = &dev->async_ctrl;
-> > +
-> > +     /* Prevent the asynchronous control handler from requeing the URB */
-> > +     dev->flush_status = true;
-> > +
-> > +     /*
-> > +      * The barrier is needed so the flush_status change is visible to other
-> > +      * CPUs running the asynchronous handler before usb_kill_urb() is
-> > +      * called below.
-> > +      */
-> > +     smp_mb();
->
-> Given unpaired mb, take a look at the release/acquire memory barrier pairing
-> in c5b2cbdbdac5 ("ipc/mqueue.c: update/document memory barriers")
-
-Would it work? to replace:
-
-dev->flush_status = true;
-smp_mb();
-
-with:
-smp_store_release(&dev->flush_status, 1);
-
-and then read it always with:
-
-smp_load_acquire(&dev->flush_status);
-
-Thanks!
-
->
-> > +
-> > +     /* If there is any status event on the queue, process it. */
-> > +     if (cancel_work_sync(&w->work))
-> > +             uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-> > +
-> > +     /* Kill the urb. */
-> >       usb_kill_urb(dev->int_urb);
-> > +
-> > +     /*
-> > +      * The URB completion handler may have queued asynchronous work. This
-> > +      * won't resubmit the URB as flush_status is set, but it needs to be
-> > +      * cancelled before returning or it could then race with a future
-> > +      * uvc_status_start() call.
-> > +      */
-> > +     if (cancel_work_sync(&w->work))
-> > +             uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-> > +
-> > +     /*
-> > +      * From this point, there are no events on the queue and the status URB
-> > +      * is dead, this is, no events will be queued until uvc_status_start()
-> > +      * is called.
-> > +      */
-> > +     dev->flush_status = false;
-> > +
-> > +     /*
-> > +      * Write to memory the value of flush_status before uvc_status_start()
-> > +      * is called again.
-> > +      */
-> > +     smp_mb();
-> >  }
-
-
-
--- 
-Ricardo Ribalda
+Net-next is still closed. Please re-submit when it opens.
