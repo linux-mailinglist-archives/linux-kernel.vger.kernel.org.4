@@ -2,189 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0830B65C6BA
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F56D65C6BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238667AbjACSuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S238647AbjACSur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238800AbjACStY (ORCPT
+        with ESMTP id S238802AbjACSt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:49:24 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08F213D0F
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:49:08 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id az7so6166452wrb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:49:08 -0800 (PST)
+        Tue, 3 Jan 2023 13:49:58 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D424C13F36
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:49:47 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4a263c4ddbaso110854327b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:49:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EClO0eHZ1ZJTRLCT268bG05mzbFFKh0lHqO8s/xO1kk=;
-        b=k7FQg5RzPgxmKbPgb5mNDLxvWLIeik0YusJeYvDd/AvjkCX7QT89J8ToSCvh1FzaEl
-         PN3NapKsfaLIJptreMlTSBtqH1JTfn6HuSLCTvkwBSPbta8Uh+7NwUZpUE0cWKftgdrE
-         s9x8R9JyLehSOxhrB6wlnGzlksrOEbcydJgiobN7G9TGKOIXa0ceAspZxwZanb9azXmU
-         voHYHUbBNDfBnuTWTzFS1rMK5qNtahmEL3ZApYJt+OhAsKUawqmKos9ilJ3Hnt/Inetp
-         4oK2LX6bfmTQ5Ck0hN/oW3Sk4LCp9Z21VeWgS42GHbw1zvDoKzhv6cOnzWMgPefUBgr0
-         f26A==
+        bh=kD5iCtmMtoY9zsUWZCFp6s8wajpgXbqSKtnkj2WC3Sw=;
+        b=L69g2USYZkrgZ0NBPPovmuZzIm0GkBKlaw7kOr6MsNMHL5yfYxZmdW8n/WZo7h27Ov
+         a8wEcdkm3ACX7AMviZn5cczTFZDZnd6E1mjtn0dAIBg0VO89RYGO5P50EX12+cKD0rMf
+         GOxXDEL1e2WxSEU1X3DRI2dllts9D+GJWtDtrTHdUshkFyJQMbWC985rnA4b/DbPanJX
+         wC+oZneFvhy8Er8/9waMD7X8gLM54afCq3eEQUEY6q/sOzMIhKMLGdquLvJkWl9BOrq6
+         6Kl69DbvaddqEQoaLmOPy+JBkF8Wjf7dXKaH5O6F6uQs5t4Ii4ATiIpsuE5oz/GL4m04
+         jl3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EClO0eHZ1ZJTRLCT268bG05mzbFFKh0lHqO8s/xO1kk=;
-        b=SSnhtzYHDfBtwojyGv70DAYTX2Pex0JNvxihjxIOg0hpISiyyQuiuTvUNxVhgGjvnq
-         Lz27nT09C4gVoTVUXzoIRe2NtZmdifEAUAdXCfcsKnieXbT70Lt4ctsp9cRMo/J8ZByv
-         zAlfvf7MrLyrpLtA3GMqH++PUlhShUAoWbawTRKq30oVn39rErakql1+MZF/dV4z1boG
-         eHWWaThSGkhHqn7LDgAnml2qYG7KjEBCYCMEAx9IyMXfjYnoZ0CvrO9h0uwq0kaiO61f
-         sixZAdX/W1j9Bnm2bfgd/dtJOYvFCaM7D8LSQgsFQu9GkzEay7YAdgd517jesyVqF4o3
-         /jjA==
-X-Gm-Message-State: AFqh2koMONorZvNbqzcpr8XhcZGWpq5rxBq0eQrQI4XOlsl1yxe7J/t7
-        yTqOwZ8i7QzCMpgVfhd03wNvIesYFaix+BXxQvB7BSNigUljcwQw
-X-Google-Smtp-Source: AMrXdXvCMhSN98FeNpcisc6mzx12pLOOnLKrYEUr+nxMFAz4ph9VTNujcEWbOf7kYXCzitxDDwl1bnNOcRDQy69jmPk=
-X-Received: by 2002:a5d:4305:0:b0:29d:780d:182c with SMTP id
- h5-20020a5d4305000000b0029d780d182cmr149100wrq.251.1672771747211; Tue, 03 Jan
- 2023 10:49:07 -0800 (PST)
+        bh=kD5iCtmMtoY9zsUWZCFp6s8wajpgXbqSKtnkj2WC3Sw=;
+        b=sSI8JGPtP106I6ZjyPinlif85mBTktG/KmMd3eDNBP3mBtQIj3Vn4dZDWaYdA4KyZv
+         NUfQeelqXUHF/U2xuG6gqGcbi8lyiLFVSkM/BhWpEhJJjvcEypowOoRo893ifNwZ6Hs8
+         VMHs/+yulPtPnBkKUH2v1kfo5h8k7HtscemQ9LF3SCevDefjxBwmDiHO/rDRmg165FmE
+         PkwMZGoLE181jmNmqfDjwsdzegP/7HpotKVhypdztd/eM579eMWK0VRRTHNAzMGhndiz
+         bRp8Tp34rUB8i9IPQJDI5mOC+js3zQIgYTUld0ugsLHU+StnJLBd69HZCkYiEWlot+6H
+         Pcgg==
+X-Gm-Message-State: AFqh2ko3BCOFBiGALHXiQ3sWQM5dVayEkb5OYW5fcSMyVDEeMZNvRTAq
+        MDtPfV43JlCfI63e9J0ZLnxVy1yjFep+iGi+YFl/ig==
+X-Google-Smtp-Source: AMrXdXupLlRU1794URzIsqQNP+rdNjB+ialAMHEflMgrpUGU4vGKeZ7VQKQDqIj7Yd7LKbscJcUzylDa4lYvAn279eU=
+X-Received: by 2002:a0d:e2c1:0:b0:474:1969:ed89 with SMTP id
+ l184-20020a0de2c1000000b004741969ed89mr3051604ywe.175.1672771786812; Tue, 03
+ Jan 2023 10:49:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20221214221643.1286585-1-mathieu.poirier@linaro.org> <20221227151131.hkezt4j2om5volnu@builder.lan>
-In-Reply-To: <20221227151131.hkezt4j2om5volnu@builder.lan>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Tue, 3 Jan 2023 11:48:56 -0700
-Message-ID: <CANLsYkwrCoX=Mw5YDJq-1hvmB3tH2admCC5GodwU0=jggmZg0w@mail.gmail.com>
-Subject: Re: [PATCH] remoteproc: Make rproc_get_by_phandle() work for clusters
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.levinsky@xilinx.com
+References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-9-vipinsh@google.com>
+ <Y64gLzMJ5Ap2VmDs@google.com>
+In-Reply-To: <Y64gLzMJ5Ap2VmDs@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 3 Jan 2023 10:49:11 -0800
+Message-ID: <CAHVum0cVzitQ79TJHE0vx2XQqtxvytGd5gmg7-wxFSDUqNEYsA@mail.gmail.com>
+Subject: Re: [Patch v3 8/9] KVM: x86/mmu: Make split_shadow_page_cache NUMA aware
+To:     David Matlack <dmatlack@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Dec 2022 at 08:11, Bjorn Andersson <andersson@kernel.org> wrote:
+On Thu, Dec 29, 2022 at 3:18 PM David Matlack <dmatlack@google.com> wrote:
 >
-> On Wed, Dec 14, 2022 at 03:16:43PM -0700, Mathieu Poirier wrote:
-> > Multi-cluster remoteproc designs typically have the following DT
-> > declaration:
+> On Wed, Dec 21, 2022 at 06:34:56PM -0800, Vipin Sharma wrote:
+> > Make split_shadow_page_cache NUMA aware and allocate page table's pages
+> > during the split based on the underlying physical page's NUMA node.
 > >
-> >       remoteproc_cluster {
-> >               compatible = "soc,remoteproc-cluster";
-> >
-> >                 core0: core0 {
-> >                       compatible = "soc,remoteproc-core"
-> >                         memory-region;
-> >                         sram;
-> >                 };
-> >
-> >                 core1: core1 {
-> >                       compatible = "soc,remoteproc-core"
-> >                         memory-region;
-> >                         sram;
-> >                 }
-> >         };
-> >
-> > A driver exists for the cluster rather than the individual cores
-> > themselves so that operation mode and HW specific configurations
-> > applicable to the cluster can be made.
-> >
-> > Because the driver exists at the cluster level and not the individual
-> > core level, function rproc_get_by_phandle() fails to return the
-> > remoteproc associated with the phandled it is called for.
-> >
-> > This patch enhances rproc_get_by_phandle() by looking for the cluster's
-> > driver when the driver for the immediate remoteproc's parent is not
-> > found.
-> >
->
-> Can you please help me understand why zynqmp_r5_remoteproc_probe()
-> invokes devm_of_platform_populate() to create platform_device instances
-> for the clusters?
->
-
-Platform device instances are created for the individual cores found
-in the cluster, following the work done on TI's K3-R5[1].
-
-> Why can't the platform_device for the cluster be used as parent for both
-> remoteprocs and then the driver deal with the subnodes within the
-> driver?
->
-
-That is exactly how things work for both K3-R5 and R5F architectures.
-That said, if we use the cluster's platform device as parent of the
-remote processors inside the cluster, function rproc_get_by_phandle()
-will return the first remote processor it finds with a matching parent
-rather than the remote processor referenced by the phandle parameter.
-
-[1]. https://elixir.bootlin.com/linux/v6.2-rc2/source/drivers/remoteproc/ti_k3_r5_remoteproc.c#L1728
-
-> Regards,
-> Bjorn
->
-> > Reported-by: Ben Levinsky <ben.levinsky@xilinx.com>
-> > Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
 > > ---
-> >  drivers/remoteproc/remoteproc_core.c | 28 +++++++++++++++++++++++++++-
-> >  1 file changed, 27 insertions(+), 1 deletion(-)
+> >  arch/x86/include/asm/kvm_host.h |  2 +-
+> >  arch/x86/kvm/mmu/mmu.c          | 50 ++++++++++++++++++---------------
+> >  2 files changed, 29 insertions(+), 23 deletions(-)
 > >
-> > diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> > index 1cd4815a6dd1..91f82886add9 100644
-> > --- a/drivers/remoteproc/remoteproc_core.c
-> > +++ b/drivers/remoteproc/remoteproc_core.c
-> > @@ -33,6 +33,7 @@
-> >  #include <linux/idr.h>
-> >  #include <linux/elf.h>
-> >  #include <linux/crc32.h>
-> > +#include <linux/of_platform.h>
-> >  #include <linux/of_reserved_mem.h>
-> >  #include <linux/virtio_ids.h>
-> >  #include <linux/virtio_ring.h>
-> > @@ -2110,7 +2111,9 @@ EXPORT_SYMBOL(rproc_detach);
-> >  #ifdef CONFIG_OF
-> >  struct rproc *rproc_get_by_phandle(phandle phandle)
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index b1f319ad6f89..7b3f36ae37a4 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1410,7 +1410,7 @@ struct kvm_arch {
+> >        *
+> >        * Protected by kvm->slots_lock.
+> >        */
+> > -     struct kvm_mmu_memory_cache split_shadow_page_cache;
+> > +     struct kvm_mmu_memory_cache split_shadow_page_cache[MAX_NUMNODES];
+> >       struct kvm_mmu_memory_cache split_page_header_cache;
+> >
+> >       /*
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 511c6ef265ee..7454bfc49a51 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -6126,7 +6126,7 @@ static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
+> >  int kvm_mmu_init_vm(struct kvm *kvm)
 > >  {
-> > +     struct platform_device *cluster_pdev;
-> >       struct rproc *rproc = NULL, *r;
-> > +     struct device_driver *driver;
-> >       struct device_node *np;
+> >       struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
+> > -     int r;
+> > +     int r, nid;
 > >
-> >       np = of_find_node_by_phandle(phandle);
-> > @@ -2121,7 +2124,30 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
-> >       list_for_each_entry_rcu(r, &rproc_list, node) {
-> >               if (r->dev.parent && device_match_of_node(r->dev.parent, np)) {
-> >                       /* prevent underlying implementation from being removed */
-> > -                     if (!try_module_get(r->dev.parent->driver->owner)) {
-> > +
-> > +                     /*
-> > +                      * If the remoteproc's parent has a driver, the
-> > +                      * remoteproc is not part of a cluster and we can use
-> > +                      * that driver.
-> > +                      */
-> > +                     driver = r->dev.parent->driver;
-> > +
-> > +                     /*
-> > +                      * If the remoteproc's parent does not have a driver,
-> > +                      * look for the driver associated with the cluster.
-> > +                      */
-> > +                     if (!driver) {
-> > +                             cluster_pdev = of_find_device_by_node(np->parent);
-> > +                             if (!cluster_pdev) {
-> > +                                     dev_err(&r->dev, "can't get parent\n");
-> > +                                     break;
-> > +                             }
-> > +
-> > +                             driver = cluster_pdev->dev.driver;
-> > +                             put_device(&cluster_pdev->dev);
-> > +                     }
-> > +
-> > +                     if (!try_module_get(driver->owner)) {
-> >                               dev_err(&r->dev, "can't get owner\n");
-> >                               break;
-> >                       }
-> > --
-> > 2.25.1
+> >       INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
+> >       INIT_LIST_HEAD(&kvm->arch.possible_nx_huge_pages);
+> > @@ -6145,8 +6145,9 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+> >       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache,
+> >                                 mmu_page_header_cache, NUMA_NO_NODE);
 > >
+> > -     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache,
+> > -                               NULL, NUMA_NO_NODE);
+> > +     for_each_node(nid)
+> > +             INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache[nid],
+> > +                                       NULL, NUMA_NO_NODE);
+>                                                 ^^^^^^^^^^^^
+>                                                 Should this be nid?
+Yes, I will fix it in the next version. Thanks
