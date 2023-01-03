@@ -2,84 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9F765BCEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1130665BCEE
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbjACJRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
+        id S237039AbjACJRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237060AbjACJQw (ORCPT
+        with ESMTP id S237066AbjACJRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:16:52 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F485E00B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:16:51 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id b12so19719071pgj.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:16:51 -0800 (PST)
+        Tue, 3 Jan 2023 04:17:46 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A50E028;
+        Tue,  3 Jan 2023 01:17:45 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id p36so44815987lfa.12;
+        Tue, 03 Jan 2023 01:17:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bsv6sMQmC8jnqT/6rqRjPIfpOBvg88+WOYXR6wIOiQA=;
-        b=L4QCsZXhT0TI4pII995xIoC8oBcApkNjMLwIlf8yMRg7zzO3FrzwFQvMLGolU5OrE/
-         86c9067Rl5c/xwReGcY3Beux+Bxn710Ps6H3eQbBD4wSoLKvAjcEWyOe7rd9JIP9KhbH
-         UDU7ailCRql3J4cwjVaNlpAB3iGFS03SeexT6hHm40q+ChO949CQhuS+6Lf/lcQjpMkR
-         p2p84FbAzvkv6f842OaQbZ3AIAnFPStoLQmj8NBubn0gCPSqKKd68IIl5hYByZY01ciC
-         YV6LJUVYuebaot6nsNgnybAbzO+cnPsw0f481H8ZWwMajHwB8kX5+K5gEVv2POyh+Xhb
-         JL8g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C7NjRiu7yNj/gaqX5nfaaqWiPjVYEcvStY3bSuitipo=;
+        b=NHCofaVjJOSEk5I+et6U5lbknDF4+Ung5vA4J/2MxboMwWIWU/eV3md5YS1DqMhMMp
+         7xalI1SaMxN0nT9SgAdVin71LUZRWucJO8DSYl9sSzNVjv7JL4ksKiBN3ZoKIOqsKz4J
+         YgvMUf2COYsYu8UDkL8jCZkj7Mx7HVwv9blky9583gwPVUeebpn4q+tnAZ5ZymuF/DDf
+         VanCkcgVW6AaP+smeXiTxjDiqHqmOcuVmrZcfPsg1owLeBXfKfnXfI5e4tYkOld/MSwI
+         lg3aNPf2MUBKoXJWIBTQMpx2thfnd5/MtDzPZP9FZimwv491Tvmml3rprke/phjXkoMy
+         /j4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bsv6sMQmC8jnqT/6rqRjPIfpOBvg88+WOYXR6wIOiQA=;
-        b=Xvk8L3MjGnSrCX1SPETn3bV6tqx1Gaj2tFtCmIPOc31RXelNnwgPRiTpkswiguybe4
-         rqaZXwyQzV6LxLPqk7LC05BxdzINRnCc1eYL+QYL2lTQ4LDkxAe+E4sSetcyLMpN5khO
-         BwdhmzJkneDYO3IqYMlHDQYUEoE2qcTZe8HddqYzq/T46yvmgkVoMKV3YxVLFld9oYzv
-         U4ZS6d1uZf3NQFJnpj30+aMZBLfZPljp9t2F2x+sXd0Td8vC7+Ymf/BIWcwvB0DPyIRt
-         h4Q/nt+oco7yymn9cA24z448oVpbe3iL5iK/R+Sj87atvonspaokSiMsCI7UUp5ffJ7A
-         RBQA==
-X-Gm-Message-State: AFqh2kpnQA1owifkZBlTTiCv3a6CY/O/NkF3CweojVW6lEU+7eWuZkAV
-        FJpy98bbBC11cbBdo0sjdSCVjC6K/9FF83ZpNLE=
-X-Google-Smtp-Source: AMrXdXs3E68GZbSTpVJkQcuR2Jiw3YB2ske2uQ6M2uucmDEpw0b2yOcpEVWmo4neMh8L+HEa4/sqK7BdvOzsdBx9h1s=
-X-Received: by 2002:a63:3cc:0:b0:496:508d:6e43 with SMTP id
- 195-20020a6303cc000000b00496508d6e43mr2590938pgd.245.1672737410584; Tue, 03
- Jan 2023 01:16:50 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C7NjRiu7yNj/gaqX5nfaaqWiPjVYEcvStY3bSuitipo=;
+        b=q5HI+yJZseXWAY9li8PfSUKdHEvvdUUMoxwUkqydUUT0bHVQj9eM8allIkkbZ0lZ5U
+         xsf3YcsGSo++cGlEmqCndViOF193+MSIxiOEX7qXea0ZDzEIYJRMaggHCN8XdwC+r/G7
+         0OcNbRssUrkx9++c54Vx2RrMNTve2tbqaxFwpIAPvxvCV9D7bfWhFYhgQYIgyu++ALiv
+         Ud9quN5lyT5xlP5u7d0SkPlpKzGKHgfD85snX0kwK00u84iAQ1Uiwz3mMKsvmsWYTFoT
+         +veUAzexZig2wuWjm7+b6quMw9UZ4RkGvyt4xvMGEC+mgDJriPsB1uLNN4iYTofgrHzn
+         TZjg==
+X-Gm-Message-State: AFqh2kp+SWcL0JKPxBikjSajduZCWfeINeuzy7+3N2BEz8xv8uPsi1xb
+        u9i36LRPZfF0eXJLqptV/ec=
+X-Google-Smtp-Source: AMrXdXvAqDoLZ/NuJZCywOQ1kmOggM+e2g757Ohtxv60DAp7xaeQVG40UJTkVzoWYsyD5DYJZK7neA==
+X-Received: by 2002:a05:6512:e9d:b0:4b5:5476:4c27 with SMTP id bi29-20020a0565120e9d00b004b554764c27mr15917613lfb.43.1672737463481;
+        Tue, 03 Jan 2023 01:17:43 -0800 (PST)
+Received: from localhost.localdomain (077222238029.warszawa.vectranet.pl. [77.222.238.29])
+        by smtp.googlemail.com with ESMTPSA id v11-20020ac258eb000000b004aa0870b5e5sm4790562lfo.147.2023.01.03.01.17.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 01:17:42 -0800 (PST)
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+To:     davem@davemloft.ne, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     szymon.heidrich@gmail.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: rndis_host: Secure rndis_query check against int overflow
+Date:   Tue,  3 Jan 2023 10:17:09 +0100
+Message-Id: <20230103091710.81530-1-szymon.heidrich@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Sender: lilaeric8@gmail.com
-Received: by 2002:a05:6a10:4a14:b0:3a5:cad5:78d8 with HTTP; Tue, 3 Jan 2023
- 01:16:49 -0800 (PST)
-From:   Aisha Al-Gaddafi <aishaalgaddafi112@gmail.com>
-Date:   Tue, 3 Jan 2023 10:16:49 +0100
-X-Google-Sender-Auth: JQo9s1OrlFTB89OmOF8Xj9T6B4w
-Message-ID: <CAPA+_mKV6+6bLCGxY390HRMmBwTD18-R8AynMdYm1fLiS3C9ZQ@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MILLION_USD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear,
+Variables off and len typed as uint32 in rndis_query function
+are controlled by incoming RNDIS response message thus their
+value may be manipulated. Setting off to a unexpectetly large
+value will cause the sum with len and 8 to overflow and pass
+the implemented validation step. Consequently the response
+pointer will be referring to a location past the expected
+buffer boundaries allowing information leakage e.g. via
+RNDIS_OID_802_3_PERMANENT_ADDRESS OID.
 
-I am sorry to encroach into your privacy in this manner, There is
-absolutely going to be a great doubt and distrust in your heart in
-respect of this email, coupled with the fact that so many individuals
-have taken possession of the Internet to facilitate their nefarious
-deeds, thereby making it extremely difficult for genuine and
-legitimate business class persons to get attention and recognition.
+Fixes: ddda08624013 ("USB: rndis_host, various cleanups")
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+---
+ drivers/net/usb/rndis_host.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I am seeking your assistance for the transfer of Twenty Seven Million
-Five Hundred Thousand United State Dollars ($27.500.000.00 ) to your
-account for private investment purpose.
+diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
+index f79333fe1..7b3739b29 100644
+--- a/drivers/net/usb/rndis_host.c
++++ b/drivers/net/usb/rndis_host.c
+@@ -255,7 +255,8 @@ static int rndis_query(struct usbnet *dev, struct usb_interface *intf,
+ 
+ 	off = le32_to_cpu(u.get_c->offset);
+ 	len = le32_to_cpu(u.get_c->len);
+-	if (unlikely((8 + off + len) > CONTROL_BUFFER_SIZE))
++	if (unlikely((off > CONTROL_BUFFER_SIZE - 8) ||
++		     (len > CONTROL_BUFFER_SIZE - 8 - off)))
+ 		goto response_error;
+ 
+ 	if (*reply_len != -1 && len != *reply_len)
+-- 
+2.39.0
 
-I look forward to your response.
-Mrs. Aisha Al-Gaddafi.
