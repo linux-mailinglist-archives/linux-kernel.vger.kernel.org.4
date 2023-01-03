@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B578065C071
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D264865C07D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237569AbjACNGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
+        id S237658AbjACNMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237649AbjACNGu (ORCPT
+        with ESMTP id S230459AbjACNMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:06:50 -0500
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AF0267E
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 05:06:49 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id c124so32939901ybb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 05:06:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cg9NBeuSYbmn+DA79/KjX0RMB03P0+uV8JtF3hf3uM8=;
-        b=3sz9FlCvhHPwLkdpXYnFPsXdtgUnAr2DElPd0GUC3tqwaQ1kQbOovSBWeNoDKcRTi3
-         fLSTrOZP28Rd0rTooBRFwk2DEgG1RxZPt1SIWJi9JofDutM0tvJrUhlqSgUUllKNbs6E
-         o8HvDuQtw8Qq9aXRcG/HQxmCEXW1J4y1AbUr8jqKFfj326YHvrldqfUrCW396gpAuxq+
-         ZXxoWPMpq2pTtkhFEphZuEVY/RO5aUlcEjxL0fj3b/RQA+unG3BKB5YH2Pdsm9hKB5I/
-         rcni2OQtmhWEazE4sO8wK/i3lNdw/BUIsFN1tHlUt/VfQv/IFX37Xxie0s7ZvZ3iRfo7
-         pYug==
-X-Gm-Message-State: AFqh2kqnUg6TLifGhC56iG8oyGyFr0mQpnmUwcfwWjL0PelY0J6SppAj
-        0EuDyuCZrF8hTgBQVETii19pKzQhmY3g0Q==
-X-Google-Smtp-Source: AMrXdXt3BIXLP6+e4et9TPLHQcFYXg4gop5FlVVZXDjYAOJq/77VIsqumXEZL+P1iTHaQjJpUP1VSw==
-X-Received: by 2002:a25:3c85:0:b0:70c:419a:faf0 with SMTP id j127-20020a253c85000000b0070c419afaf0mr36983204yba.49.1672751208437;
-        Tue, 03 Jan 2023 05:06:48 -0800 (PST)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id n78-20020a374051000000b006f9ddaaf01esm21887473qka.102.2023.01.03.05.06.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 05:06:48 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id b16so33050117yba.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 05:06:47 -0800 (PST)
-X-Received: by 2002:a25:3143:0:b0:77a:b5f3:d0ac with SMTP id
- x64-20020a253143000000b0077ab5f3d0acmr2508697ybx.202.1672751207466; Tue, 03
- Jan 2023 05:06:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20221229075323.1394010-1-linmq006@gmail.com> <CAMuHMdWFyKA7nUojivvTwWcmxaiUQifRRB=Kn1q-qzmn20Xkuw@mail.gmail.com>
- <eaedf019-349c-c686-0f23-093371b4b61f@cambridgegreys.com> <a098244c-fe15-2c88-5c02-59aaa6cc3c6d@gmail.com>
-In-Reply-To: <a098244c-fe15-2c88-5c02-59aaa6cc3c6d@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Jan 2023 14:06:35 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVYCsGDGeub8-mduNw45qX_tMr0sZ5oMNfJ_eqFnPgs4g@mail.gmail.com>
-Message-ID: <CAMuHMdVYCsGDGeub8-mduNw45qX_tMr0sZ5oMNfJ_eqFnPgs4g@mail.gmail.com>
-Subject: Re: [PATCH] um: vector: Fix memory leak in vector_config
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Tue, 3 Jan 2023 08:12:34 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F0FF5B4;
+        Tue,  3 Jan 2023 05:12:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672751553; x=1704287553;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=apcGmjYq/qVMK/WjGsO3bG5bvbvbn9MDx/JXtx/ypL0=;
+  b=U2fEygDPK5x4NNFMF3D9QNJIFtw+D6co/3p2bLe5WRitJR5kvR2sBAbj
+   3cm6uh3XNXyX7m9bv4gkeVErjIOrlg73CbzvxfGk1siOgIb8ab4PKWoSM
+   yG9AJoSmlre/PV0Ca/s2nfvm7QRfs4n7asNsnrpeT2KIwmlPtJYcb1nJO
+   1xXOEqj42PP1W4J8BtyaWh1asMSp7PBsFbIIB5bNDD+XW+KuhfuBYSedS
+   uEWlG1Iu8tXlaAxZStvaUL8j5tue0YGH8MEfemv5Qopw8bI9USDWAM//8
+   Myqr5z3ex4CQpDP6fpImzek8uQ4A+KtuHXPTWICrMIjw3p0dLypS8hu6M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320367231"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="320367231"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 05:12:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="654781130"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="654781130"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 03 Jan 2023 05:12:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 70377162; Tue,  3 Jan 2023 15:13:00 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Gene Chen <gene_chen@richtek.com>, linux-leds@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH v4 00/11] leds: deduplicate led_init_default_state_get()
+Date:   Tue,  3 Jan 2023 15:12:45 +0200
+Message-Id: <20230103131256.33894-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian,
+There are several users of LED framework that reimplement the
+functionality of led_init_default_state_get(). In order to
+deduplicate them move the declaration to the global header
+(patch 2) and convert users (patche 3-11).
 
-On Tue, Jan 3, 2023 at 1:17 PM Miaoqian Lin <linmq006@gmail.com> wrote:
-> On 2023/1/3 18:28, Anton Ivanov wrote:
-> > On 03/01/2023 08:00, Geert Uytterhoeven wrote:
-> >> On Thu, Dec 29, 2022 at 8:53 AM Miaoqian Lin <linmq006@gmail.com> wrote:
-> >>> kstrdup() return newly allocated copy of the string.
-> >>> Call kfree() to release the memory when after use.
-> >>>
-> >>> Fixes: 49da7e64f33e ("High Performance UML Vector Network Driver")
-> >>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> >> Thanks for your patch!
-> >>
-> >>> --- a/arch/um/drivers/vector_kern.c
-> >>> +++ b/arch/um/drivers/vector_kern.c
-> >>> @@ -765,6 +765,7 @@ static int vector_config(char *str, char **error_out)
-> >>>
-> >>>          parsed = uml_parse_vector_ifspec(params);
-> >>>
-> >>> +       kfree(params);
-> >> Are you sure the memory pointed to by "params" is no longer used?
-> >> "parsed" seems to contain pointers pointing to (parts of) the string
-> >> pointed to by "params", so it cannot be freed.
-> >
-> > +1.
-> >
-> > I was just about to send the same comment.
-> >
-> Oh yes, thanks for spotting this. We should only perform release when uml_parse_vector_ifspec() fails (returns NULL). In this situation, 'params' is no longer used. Do you agree?
+Changelog v4:
+- added tags to patches 4, 5, 6, and 7 (Florian, AngeloGioacchino)
+- resent with Lee included in the Cc list (Lee)
 
-Yes, that sounds fine to me.
+Changelog v3:
+- added tag to patch 11 (Kurt)
+- Cc'ed to Lee, who might help with LED subsystem maintenance
 
-Gr{oetje,eeting}s,
+Changelog v2:
+- added missed patch 2 and hence make it the series
+- appended tag to patch 7
+- new patch 1
 
-                        Geert
+Andy Shevchenko (11):
+  leds: add missing includes and forward declarations in leds.h
+  leds: Move led_init_default_state_get() to the global header
+  leds: an30259a: Get rid of custom led_init_default_state_get()
+  leds: bcm6328: Get rid of custom led_init_default_state_get()
+  leds: bcm6358: Get rid of custom led_init_default_state_get()
+  leds: mt6323: Get rid of custom led_init_default_state_get()
+  leds: mt6360: Get rid of custom led_init_default_state_get()
+  leds: pca955x: Get rid of custom led_init_default_state_get()
+  leds: pm8058: Get rid of custom led_init_default_state_get()
+  leds: syscon: Get rid of custom led_init_default_state_get()
+  net: dsa: hellcreek: Get rid of custom led_init_default_state_get()
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ drivers/leds/flash/leds-mt6360.c           | 38 +++--------------
+ drivers/leds/leds-an30259a.c               | 21 ++--------
+ drivers/leds/leds-bcm6328.c                | 49 +++++++++++-----------
+ drivers/leds/leds-bcm6358.c                | 32 +++++++-------
+ drivers/leds/leds-mt6323.c                 | 30 ++++++-------
+ drivers/leds/leds-pca955x.c                | 26 +++---------
+ drivers/leds/leds-pm8058.c                 | 29 ++++++-------
+ drivers/leds/leds-syscon.c                 | 49 ++++++++++------------
+ drivers/leds/leds.h                        |  1 -
+ drivers/net/dsa/hirschmann/hellcreek_ptp.c | 45 ++++++++++----------
+ include/linux/leds.h                       | 15 ++++---
+ 11 files changed, 143 insertions(+), 192 deletions(-)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+2.35.1
+
