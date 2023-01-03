@@ -2,134 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D278C65C228
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7752C65C22A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbjACOmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S237804AbjACOnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237890AbjACOmZ (ORCPT
+        with ESMTP id S233338AbjACOmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:42:25 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DEBE0AA
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:42:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Dw5ZgJSaRLkDv4nIzFjapZY+fSw9bSxUXN0tVxPPIDY=; b=aouNauwujUkFDlJmZZD20JzSoD
-        siVGt+ePb/Oimb5sXnNpgyecNqCDeYdOx8MwoKE0wLcFXoBtKU8/Dc5VDDTZj7HrqM2EuBeOqw56V
-        gbnvFaYFpWzK2TceB3oad//AEoX1EBy3P4OxI+e0lwPohsX3y4u5bT7gDfoEheCRD4PCKDi0RmWPW
-        XZrVCHfWLxQRSv5kT3IKy3r1mlmKXtMfCrEeb4YULOHEGCYYffQogDriiCVaEssIEEc3da/R9HWZu
-        0lTCy5SR0qpVAFCa0RnnCegiA/MO0z/8yCu9/TC6AOGR6wNeFoY7MYGeIVGj7TBANhXaS5vKbC+xe
-        sKlu2HzA==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:34488 helo=rmk-PC.armlinux.org.uk)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1pCiUf-0005R4-RZ; Tue, 03 Jan 2023 14:42:21 +0000
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-        id 1pCiUe-00457v-SQ; Tue, 03 Jan 2023 14:42:20 +0000
-From:   "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hector Martin <marcan@marcan.st>
-Subject: [PATCH v2] nvmem: fix registration vs use race
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1pCiUe-00457v-SQ@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date:   Tue, 03 Jan 2023 14:42:20 +0000
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 Jan 2023 09:42:46 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E936210FF8;
+        Tue,  3 Jan 2023 06:42:45 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303BsSHi012278;
+        Tue, 3 Jan 2023 14:42:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=V5SYefJTflvsDT1Raha3+RcL0YPGYJhZPbSXBN2Wync=;
+ b=bwoEpH83Qm83OrP3aU5PxDb4oN2NrakevNPaOZaUJo0xrAJx4Wxyvy8HcO7MCX0Y2t61
+ beMArTDaF65onusmp2Vi+8BlDSvXMaryJVE+8H9NkIbkjnOPqptlgWu10VAEbzoClJZJ
+ IUiVCiKyDOTqCoNqhjTdWINe1gvFWZj3kM9lw6hHfeYqseDq5lRruap2W3vmRN9Hbvez
+ NW29Gv6JMbNRd++rk9ZPtdAT6qUliHs8P8r9fRZ7C551eh6zamSrTVMgEdQt5HAXPKK2
+ GMhdukc3IncdSb2H3UIVmmvLwzDlJarQoDjWWHIPEb4SYnoRfgjkEhQXU3dP2CEt9gif wg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvkwcueyr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 14:42:29 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 303C8QgB002419;
+        Tue, 3 Jan 2023 14:42:29 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvkwcueye-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 14:42:29 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303Cq9Ut011450;
+        Tue, 3 Jan 2023 14:42:28 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3mtcq726jt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 14:42:28 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 303EgRdw53477822
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Jan 2023 14:42:27 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1FDAD5804E;
+        Tue,  3 Jan 2023 14:42:27 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 778C958063;
+        Tue,  3 Jan 2023 14:42:26 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.32.150])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  3 Jan 2023 14:42:26 +0000 (GMT)
+Message-ID: <bd1d2f66bffb25fd80b2dd2464f8cda24f68c249.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 1/2] lockdown: kexec_file: prevent unsigned kernel
+ image when KEXEC_SIG not enabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
+Cc:     Matthew Garrett <mjg59@srcf.ucam.org>, Jiri Bohac <jbohac@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Matthew Garrett <mjg59@google.com>,
+        James Morris <jmorris@namei.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Tue, 03 Jan 2023 09:42:26 -0500
+In-Reply-To: <20221230065850.897967-1-coxu@redhat.com>
+References: <20221230065850.897967-1-coxu@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: C95uZj5SPEk7WXoIttTBfPO4blQSSKOm
+X-Proofpoint-GUID: YY4UBTk5waiOyIqDmUnHQ4H3PS3O6OHf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-03_04,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=895
+ clxscore=1011 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
+ phishscore=0 priorityscore=1501 mlxscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301030126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i.MX6 CPU frequency driver sometimes fails to register at boot time
-due to nvmem_cell_read_u32() sporadically returning -ENOENT.
+Hi Coiby,
 
-This happens because there is a window where __nvmem_device_get() in
-of_nvmem_cell_get() is able to return the nvmem device, but as cells
-have been setup, nvmem_find_cell_entry_by_node() returns NULL.
+On Fri, 2022-12-30 at 14:58 +0800, Coiby Xu wrote:
+> A kernel builder may not enable KEXEC_SIG and some architectures like
+> ppc64 simply don't have KEXEC_SIG. In these cases, unless both
+> IMA_ARCH_POLICY and secure boot also enabled, lockdown doesn't prevent
+> unsigned kernel image from being kexec'ed via the kexec_file_load
+> syscall whereas it could prevent one via the kexec_load syscall. Mandate
+> signature verification for those cases.
 
-The occurs because the nvmem core registration code violates one of the
-fundamental principles of kernel programming: do not publish data
-structures before their setup is complete.
+The phrase "unless both IMA_ARCH_POLICY and secure boot also enabled"
+doesn't reflect the code.  IMA could contain a custom policy rule which
+requires the kexec kernel image signature verification as well.  Refer
+to the comment now in mandate_signature_verification().
 
-Fix this by making nvmem core code conform with this principle.
+thanks,
 
-Fixes: eace75cfdcf7 ("nvmem: Add a simple NVMEM framework for nvmem providers")
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
-v2: add fixes tag
-
- drivers/nvmem/core.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 321d7d63e068..6b89fb6fa582 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -835,22 +835,16 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- 	nvmem->dev.groups = nvmem_dev_groups;
- #endif
- 
--	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
--
--	rval = device_register(&nvmem->dev);
--	if (rval)
--		goto err_put_device;
--
- 	if (nvmem->nkeepout) {
- 		rval = nvmem_validate_keepouts(nvmem);
- 		if (rval)
--			goto err_device_del;
-+			goto err_put_device;
- 	}
- 
- 	if (config->compat) {
- 		rval = nvmem_sysfs_setup_compat(nvmem, config);
- 		if (rval)
--			goto err_device_del;
-+			goto err_put_device;
- 	}
- 
- 	if (config->cells) {
-@@ -867,6 +861,12 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- 	if (rval)
- 		goto err_remove_cells;
- 
-+	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
-+
-+	rval = device_register(&nvmem->dev);
-+	if (rval)
-+		goto err_remove_cells;
-+
- 	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem);
- 
- 	return nvmem;
-@@ -876,8 +876,6 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- err_teardown_compat:
- 	if (config->compat)
- 		nvmem_sysfs_remove_compat(nvmem, config);
--err_device_del:
--	device_del(&nvmem->dev);
- err_put_device:
- 	put_device(&nvmem->dev);
- 
--- 
-2.30.2
+Mimi
 
