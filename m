@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38BD65BE83
+	by mail.lfdr.de (Postfix) with ESMTP id 8E53565BE82
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237140AbjACK7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
+        id S237367AbjACK7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237456AbjACK6k (ORCPT
+        with ESMTP id S237151AbjACK7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:58:40 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D2CA47C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:58:38 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id h24-20020a056e021d9800b0030be8a5dd68so17806768ila.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 02:58:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6j1u/uhaamjB44e0V7q46pvvkGWmXy7wnn05i7TPfE4=;
-        b=PaMPVvbV1ffvPOk80HgS7yEw+YxIpqB3GbgFoUlzVWb2NZuWfIek/U/e3CaBX6rlP7
-         0PdK4t7smdRdXOVjBbWFLd3xecAWHZzx46D3AZ7Qaev+HlJzJY1Ow1ya9zQZawBZ2CLu
-         MBvk10U0XPd4bsP1EFRKfEwkUKgQl5qpNFV4CtN/vkDRQi2yllY70z7USSoBGF8CtwL1
-         TgnMHmtNcqSgZPHyxdINZxunWU6dlq/q46L9CWg6Ppu8Wcyes0MIDzxGwzDA+W9+gEXM
-         jQoEe8IsmaDcam7E5ZBO+Sp+0ZAsBaeIdtdoDfQg9p16V45l0M/dkeIY9Q9CKfMNzljs
-         AxMw==
-X-Gm-Message-State: AFqh2kpVhHG0/Y50vzhGOSrcdXFFDNLr5L7IPufWsWO+MaxgjYqD6F8U
-        BM3XELGUOrxFH8Eu1prS0lc4EUAsZ70/mynUmFruA+RKFKdQ
-X-Google-Smtp-Source: AMrXdXtIrhIfXTl+QqlQgrVZzzeVZ2YJb3S6uX7a1D7gPukqHjpmc1VtYWJpd0Ad4+YFbjwVNBWRG1h84LL3itlTiuil6YhlyQWH
+        Tue, 3 Jan 2023 05:59:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E06287
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:59:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D349B80E95
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:59:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCFEDC43398
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672743541;
+        bh=CXbMsJ8amTRDKFFvM6G54IqkXE31MPgUrU/r8iQhkdI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lqUx2YMh1XCUkQFXRJ1CW82dcrzC4UQyFRw0dDceRqP2ZO0naI4GfcmhofQngSEuJ
+         8RYfsVQr6L9r7U/AKlQChOac3aZqOT1oEAPXR3cu9bfff8zNwL2amiw6Zq0qNhdnik
+         VtkZCmaOiWHH7/GUqNu2vGAExdsLMY7oCIGDqUqCPYzE+v69xlb0Gg4lklT/glC9mP
+         wN5mNLlZdQ8Ie56NNbtCnwQFichqn8KZI3fKMJOopTp3CP7WCLpcbzG7EEhbSb+vaI
+         hm4K/VJpP/LioUTjgKCu627Dsi1UHbF8K1ij4qy5Tb5A9fpTB14coKgIbH1/jXksFz
+         2dhqOOQbWA44A==
+Received: by mail-lf1-f43.google.com with SMTP id m6so34771829lfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 02:59:01 -0800 (PST)
+X-Gm-Message-State: AFqh2krTTUnTQdqLjXuu+0KZyTTdBVC0gdnu6uB0oiwC9FMC6tYNfyIO
+        dFLwrMQwMQdYaQE8vCGtEkzgo9ZQ3RP1dNCOvVU=
+X-Google-Smtp-Source: AMrXdXtFkl7JbY7HdH9+sfbb0HkJS5ihKYaaliEp58Pa6YLG7djJRwmRoQ7h+smOWbU2iRvoVVzBQmwtE+KheFJBOzY=
+X-Received: by 2002:a19:ad4b:0:b0:4cb:315d:e9b8 with SMTP id
+ s11-20020a19ad4b000000b004cb315de9b8mr950189lfd.110.1672743539856; Tue, 03
+ Jan 2023 02:58:59 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8144:0:b0:6e4:b7b8:c5db with SMTP id
- f4-20020a5d8144000000b006e4b7b8c5dbmr3398826ioo.189.1672743518220; Tue, 03
- Jan 2023 02:58:38 -0800 (PST)
-Date:   Tue, 03 Jan 2023 02:58:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000034388605f159f31e@google.com>
-Subject: [syzbot] [ext4?] KMSAN: uninit-value in htree_dirblock_to_tree
-From:   syzbot <syzbot+394aa8a792cb99dbc837@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, glider@google.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+References: <CAHk-=wim8DMRzjyYTJ3UbdqZ26keQyZSU02NZb-JY1=9OpcO1w@mail.gmail.com>
+ <20230102225656.GA3532398@roeck-us.net> <CAHk-=wjZPPscjDhsHQw_ttHOaQS69rADLm0KuRhbNavBiO62OQ@mail.gmail.com>
+ <20230103014535.GA313835@roeck-us.net> <CAHk-=whmeBkyu3iS_s-yk0=t3GEoW3sQb-wJFHKykOjG=iQVFw@mail.gmail.com>
+In-Reply-To: <CAHk-=whmeBkyu3iS_s-yk0=t3GEoW3sQb-wJFHKykOjG=iQVFw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 3 Jan 2023 11:58:48 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com>
+Message-ID: <CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com>
+Subject: Re: Linux 6.2-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 3 Jan 2023 at 03:13, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Mon, Jan 2, 2023 at 5:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > ... and reverting commit 99cb0d917ff indeed fixes the problem.
+>
+> Hmm. My gut feel is that this just exposes some bug in binutils.
+>
+> That said, maybe that commit should not have added its own /DISCARDS/
+> thing, and instead just added that "*(.note.GNU-stack)" to the general
+> /DISCARDS/ thing that is defined by the
+>
+>   #define DISCARDS  ..
+>
+> a little bit later, so that we only end up with one single DISCARD
+> list. Something like this (broken patch on purpose):
+>
+>   --- a/include/asm-generic/vmlinux.lds.h
+>   +++ b/include/asm-generic/vmlinux.lds.h
+>   @@ -897,5 +897,4 @@
+>     */
+>    #define NOTES                                        \
+>   -     /DISCARD/ : { *(.note.GNU-stack) }              \
+>         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {       \
+>                 BOUNDED_SECTION_BY(.note.*, _notes)     \
+>   @@ -1016,4 +1015,5 @@
+>    #define DISCARDS                                     \
+>         /DISCARD/ : {                                   \
+>   +     *(.note.GNU-stack)                              \
+>         EXIT_DISCARDS                                   \
+>         EXIT_CALL                                       \
+>
+> But maybe that DISCARDS macrop ends up being used too late?
+>
 
-syzbot found the following issue on:
+Masahiro's v1 did something like this, and it caused an issue on
+RISC-V, which is why we ended up with this approach instead.
 
-HEAD commit:    5c6259d6d19f kmsan: fix memcpy tests
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=1343a1e4480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e2f77da22508204e
-dashboard link: https://syzkaller.appspot.com/bug?extid=394aa8a792cb99dbc837
-compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+> It really shouldn't matter, but here we are, with a build problem with
+> some random old binutils on an odd platform..
+>
 
-Unfortunately, I don't have any reproducer for this issue yet.
+AIUI, the way ld.bfd used to combine output sections may also affect
+the /DISCARD/ pseudo-section, and so introducing it much earlier
+results in these discards to be interpreted in a different order.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/76b6594632b8/disk-5c6259d6.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/81a2113c440e/vmlinux-5c6259d6.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fd12d098edab/bzImage-5c6259d6.xz
+The purpose of this change is to prevent .note.GNU-stack from deciding
+the section type of the .notes output section, and so keeping it in
+its own section should be sufficient. E.g.,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+394aa8a792cb99dbc837@syzkaller.appspotmail.com
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -896,7 +896,7 @@
+  * Otherwise, the type of .notes section would become PROGBITS
+instead of NOTES.
+  */
+ #define NOTES                                                          \
+-       /DISCARD/ : { *(.note.GNU-stack) }                              \
++       .note.GNU-stack : { *(.note.GNU-stack) }                        \
+        .notes : AT(ADDR(.notes) - LOAD_OFFSET) {                       \
+                BOUNDED_SECTION_BY(.note.*, _notes)                     \
+        } NOTES_HEADERS                                                 \
 
-[EXT4 FS bs=2048, gc=1, bpg=16384, ipg=32, mo=e000e01c, mo2=0002]
-System zones: 0-11
-EXT4-fs (loop4): mounted filesystem without journal. Quota mode: none.
-=====================================================
-BUG: KMSAN: uninit-value in htree_dirblock_to_tree+0x101b/0x1710 fs/ext4/namei.c:1116
- htree_dirblock_to_tree+0x101b/0x1710 fs/ext4/namei.c:1116
- ext4_htree_fill_tree+0x1ac9/0x1cc0 fs/ext4/namei.c:1204
- ext4_dx_readdir fs/ext4/dir.c:597 [inline]
- ext4_readdir+0x53cd/0x6450 fs/ext4/dir.c:142
- iterate_dir+0x3e5/0x9b0
- __do_compat_sys_getdents fs/readdir.c:537 [inline]
- __se_compat_sys_getdents+0x182/0x560 fs/readdir.c:522
- __ia32_compat_sys_getdents+0x8f/0xd0 fs/readdir.c:522
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-Local variable hinfo created at:
- ext4_htree_fill_tree+0x5f/0x1cc0 fs/ext4/namei.c:1170
- ext4_dx_readdir fs/ext4/dir.c:597 [inline]
- ext4_readdir+0x53cd/0x6450 fs/ext4/dir.c:142
-
-CPU: 0 PID: 6235 Comm: syz-executor.4 Not tainted 6.1.0-syzkaller-64311-g5c6259d6d19f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+The .note.GNU-stack has zero size, so the result should be the same.
