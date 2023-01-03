@@ -2,193 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A445365C6BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4E565C6C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238494AbjACSuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
+        id S234082AbjACSwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238705AbjACSu0 (ORCPT
+        with ESMTP id S238705AbjACSvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:50:26 -0500
+        Tue, 3 Jan 2023 13:51:49 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB47124;
-        Tue,  3 Jan 2023 10:50:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E5512AB4;
+        Tue,  3 Jan 2023 10:51:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87B89614E2;
-        Tue,  3 Jan 2023 18:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E3DC433EF;
-        Tue,  3 Jan 2023 18:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672771821;
-        bh=lc9EWhpLl3cJRu/WOwyewFLiY3xxPhpyl6R5J9nJ08Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uX52/RRbU4FqO9YV6D1O+Ayn9r/CPtlNof6E4GlI4TlEA33SOhVG3bT3pKNWOVdo7
-         tvjJ9zs92jzmVHzVZb+uqg22k8u+TnRZoABG2CZnMO9IsA0aeh3pLWql8gE0HAec5B
-         kTiDEebz3Dl5uE/Yo4oi6wGuj0nuiBwvULJ9gxxbHWrX8BS6KcTX/Kg1AH8SbiT0Ky
-         kzi3g0rxpq9uZjQyhq7km1SyaUspiVVOh7POd90TU6ZJVRIgMExCdhkBWY/LGLcS42
-         A7YJB/piZZJjsLqR8K+SBF99lBW1WhXGQxxAby0dKSbMykBhrVLn31lsJHOvxxEAos
-         4+KMKNG0DzEiw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id AB81E40468; Tue,  3 Jan 2023 15:50:17 -0300 (-03)
-Date:   Tue, 3 Jan 2023 15:50:17 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com
-Subject: Re: [PATCH] perf lock: Fix core dump in command perf lock contention
-Message-ID: <Y7R46VF87ab6o4N5@kernel.org>
-References: <20221230102627.2410847-1-tmricht@linux.ibm.com>
- <Y7L5T2IHdovfLgWp@kernel.org>
- <CAM9d7ch98dRk85DYF-okD4_VsU_A+EkkVOkW1-1X7GMLao0mwg@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 441BF614D8;
+        Tue,  3 Jan 2023 18:51:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E000DC433EF;
+        Tue,  3 Jan 2023 18:51:45 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bHHodc0f"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672771903;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yIp6kO5eIHdv4v3c2ecLfUgKivnf2+mEm8o0l2hkbzo=;
+        b=bHHodc0fH+H7OOTTkxPAWw94TxrIyjgw8ZAmtm3SM0EYAXHTAqUINBwNVpDp+Ep30VQN7N
+        ngeXJ0no/zVq7bgjckhK5fPEXBM3HxDC/3PeTN5YrBYhgdotA9NzKVzvi5PfzmDmYoEQJd
+        Ss6rEgGplCLChsIP0gx+7BeqKr6GAKg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ea8cdcd1 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 3 Jan 2023 18:51:42 +0000 (UTC)
+Date:   Tue, 3 Jan 2023 19:51:38 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
+ lazily freeable mappings
+Message-ID: <Y7R5OokY7P+H2vuD@zx2c4.com>
+References: <20230101162910.710293-1-Jason@zx2c4.com>
+ <20230101162910.710293-3-Jason@zx2c4.com>
+ <Y7QIg/hAIk7eZE42@gmail.com>
+ <Y7RDQLEvlLM0o4cp@zx2c4.com>
+ <Y7Rw1plb/pqPiWgg@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAM9d7ch98dRk85DYF-okD4_VsU_A+EkkVOkW1-1X7GMLao0mwg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7Rw1plb/pqPiWgg@gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jan 03, 2023 at 08:45:34AM -0800, Namhyung Kim escreveu:
-> Hi Arnaldo,
+On Tue, Jan 03, 2023 at 07:15:50PM +0100, Ingo Molnar wrote:
+> Frankly, I don't appreciate your condescending discussion style that 
+> borders on the toxic, and to save time I'm nacking this technical approach 
+> until both the patch-set and your reaction to constructive review feedback 
+> improves:
 > 
-> On Mon, Jan 2, 2023 at 7:33 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >
-> > Em Fri, Dec 30, 2022 at 11:26:27AM +0100, Thomas Richter escreveu:
-> > > The test case perf lock contention dumps core on s390. Run the following
-> > > commands:
-> > >  # ./perf lock record -- ./perf bench sched messaging
-> > >  # Running 'sched/messaging' benchmark:
-> > >  # 20 sender and receiver processes per group
-> > >  # 10 groups == 400 processes run
-> > >
-> > >      Total time: 2.799 [sec]
-> > >  [ perf record: Woken up 1 times to write data ]
-> > >  [ perf record: Captured and wrote 0.073 MB perf.data (100 samples) ]
-> > >  #
-> > >  # ./perf lock contention
-> > >  Segmentation fault (core dumped)
-> > >  #
-> > >
-> > > The function call stack is lengthy, here are the top 5 functions:
-> > >  # gdb ./perf core.24048
-> > >  GNU gdb (GDB) Fedora Linux 12.1-6.fc37
-> > >  Copyright (C) 2022 Free Software Foundation, Inc.
-> > >  Core was generated by `./perf lock contention'.
-> > >  Program terminated with signal SIGSEGV, Segmentation fault.
-> > >  #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,
-> > >          addr=1789230) at util/machine.c:3356
-> > >          3356 machine->sched.text_end = kmap->unmap_ip(kmap, sym->start);
-> > >
-> > >  (gdb) where
-> > >   #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,\
-> > >          addr=1789230) at util/machine.c:3356
-> > >   #1  0x000000000109f244 in callchain_id (evsel=0x30313e0,\
-> > >          sample=0x3ffea4f77d0) at builtin-lock.c:957
-> > >   #2  0x000000000109e094 in get_key_by_aggr_mode (key=0x3ffea4f7290,\
-> > >          addr=27758136, evsel=0x30313e0, sample=0x3ffea4f77d0) \
-> > >          at builtin-lock.c:586
-> > >   #3  0x000000000109f4d0 in report_lock_contention_begin_event \
-> > >          (evsel=0x30313e0, sample=0x3ffea4f77d0)
-> > >          at builtin-lock.c:1004
-> > >   #4  0x00000000010a00ae in evsel__process_contention_begin \
-> > >          (evsel=0x30313e0, sample=0x3ffea4f77d0)
-> > >          at builtin-lock.c:1254
-> > >   #5  0x00000000010a0e14 in process_sample_event (tool=0x3ffea4f8480, \
-> > >          event=0x3ff85601ef8, sample=0x3ffea4f77d0,
-> > >          evsel=0x30313e0, machine=0x3029e28) at builtin-lock.c:1464
-> > >           sample=0x3ffea4f77d0, evsel=0x30313e0, machine=0x3029e28) \
-> > >        at util/session.c:1523
-> > >   .....
-> > >
-> > > The issue is in function machine__is_lock_function() in file
-> > > ./util/machine.c lines 3355:
-> > >    /* should not fail from here */
-> > >    sym = machine__find_kernel_symbol_by_name(machine, "__sched_text_end",
-> > >                                            &kmap);
-> > >    machine->sched.text_end = kmap->unmap_ip(kmap, sym->start)
-> > >
-> > > On s390 the symbol __sched_text_end is *NOT* in the symbol list and the
-> > > resulting pointer sym is set to NULL. The sym->start is then a NULL pointer
-> > > access and generates the core dump.
-> > >
-> > > The reason why __sched_text_end is not in the symbol list on s390 is
-> > > simple:
-> > > When the symbol list is created at perf start up with function calls
-> > >   dso__load
-> > >   +--> dso__load_vmlinux_path
-> > >        +--> dso__load_vmlinux
-> > >             +--> dso__load_sym
-> > >                +--> dso__load_sym_internal (reads kernel symbols)
-> > >                +--> symbols__fixup_end
-> > >                +--> symbols__fixup_duplicate
-> > >
-> > > The issue is in function symbols__fixup_duplicate(). It deletes all
-> > > symbols with have the same address. On s390
-> > >  # nm -g  ~/linux/vmlinux| fgrep c68390
-> > >  0000000000c68390 T __cpuidle_text_start
-> > >  0000000000c68390 T __sched_text_end
-> > >  #
-> > > two symbols have identical addresses and __sched_text_end is considered
-> > > duplicate (in ascending sort order) and removed from the symbol list.
-> > > Therefore it is missing and an invalid pointer reference occurs.
-> > > The code checks for symbol __sched_text_start and when it exists assumes
-> > > symbol __sched_text_end is also in the symbol table. However this is
-> > > not the case on s390.
-> > >
-> > > Same situation exists for symbol __lock_text_start:
-> > > 0000000000c68770 T __cpuidle_text_end
-> > > 0000000000c68770 T __lock_text_start
-> > > This symbol is also removed from the symbol table but used in function
-> > > machine__is_lock_function().
-> > >
-> > > To fix this and keep duplicate symbols in the symbol table, set
-> > > symbol_conf.allow_aliases to true. This prevents the removal of duplicate
-> > > symbols in function symbols__fixup_duplicate().
-> > >
-> > > Output After:
-> > >  # ./perf lock contention
-> > >  contended total wait  max wait  avg wait    type   caller
-> > >
-> > >         48   124.39 ms 123.99 ms   2.59 ms rwsem:W unlink_anon_vmas+0x24a
-> > >         47    83.68 ms  83.26 ms   1.78 ms rwsem:W free_pgtables+0x132
-> > >          5    41.22 us  10.55 us   8.24 us rwsem:W free_pgtables+0x140
-> > >          4    40.12 us  20.55 us  10.03 us rwsem:W copy_process+0x1ac8
-> > >  #
-> > >
-> > > Fixes: cc2367eebb0c ("machine: Adopt is_lock_function() from builtin-lock.c")
-> >
-> > Humm, is that really the cset that introduces the problem? It just moves
-> > things around, the cset that introduced the is_lock_function() function,
-> > that assumed that __sched_text_end was always available was:
-> >
-> > commit 0d2997f750d1de394231bc22768dab94a5b5db2f
-> > Author: Namhyung Kim <namhyung@kernel.org>
-> > Date:   Wed Jun 15 09:32:22 2022 -0700
-> >
-> >     perf lock: Look up callchain for the contended locks
-> >
-> > ---
-> >
-> > Right? Namhyung? Can you spot any problem in enabling duplicates as a
-> > fix?
-> 
-> Yep, I think that's the cset introduced the problem.
-> I'm fine with the fix.
-> 
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
+>     NAcked-by: Ingo Molnar <mingo@kernel.org>
 
-Thanks, applied.
+Your initial email to me did not strike me as constructive at all. All I
+gotta say is that you really seem to live up to your reputation here...
 
-- Arnaldo
+But trying to steer things back to the technical realm:
+
+> For a single architecture: x86.
+> 
+> And it's only 19 lines because x86 already happens to have a bunch of 
+> complexity implemented, such as a safe instruction decoder that allows the 
+> skipping of an instruction - which relies on thousands of lines of 
+> complexity.
+> 
+> On an architecture where this isn't present, it would have to be 
+> implemented to support the instruction-skipping aspect of VM_DROPPABLE.
+
+My assumption is actually the opposite: that x86 (CISC) is basically the
+most complex, and that the RISC architectures will all be a good deal
+more trivial -- e.g. just adding 4 to IP on some. It looks like some
+architectures also already have mature decoders where required.
+
+> Even on x86, it's not common today for the software-decoder to be used in 
+> unprivileged code - primary use was debugging & instrumentation code. So 
+> your patches bring this piece of complexity to a much larger scope of 
+> untrusted user-space functionality.
+
+As far as I can tell, this decoder *is* used with userspace already.
+It's used by SEV and by UMIP, in a totally userspace accessible way. Am
+I misunderstanding its use there? It looks to me like that operates on
+untrusted code.
+
+*However* - if your big objection to this patch is that the instruction
+skipping is problematic, we could actually punt that part. The result
+will be that userspace just retries the memory write and the fault
+happens again, and eventually it succeeds. From a perspective of
+vgetrandom(), that's perhaps worse -- with this v14 patchset, it'll
+immediately fallback to the syscall under memory pressure -- but you
+could argue that nobody really cares about performance at that point
+anyway, and so just retrying the fault until it succeeds is a less
+complex behavior that would be just fine.
+
+Let me know if you think that'd be an acceptable compromise, and I'll
+roll it into v15. As a preview, it pretty much amounts to dropping 3/7
+and editing the commit message in this 2/7 patch.
+
+> I did not suggest to swap it: my suggestion is to just pin these vDSO data 
+> pages. The per thread memory overhead is infinitesimal on the vast majority 
+> of the target systems, and the complexity trade-off you are proposing is 
+> poorly reasoned IMO.
+> 
+> I think my core point that it would be much simpler to simply pin those 
+> pages and not introduce rarely-excercised 'discardable memory' semantics in 
+> Linux is a fair one - so it's straightforward to lift this NAK.
+
+Okay so this is where I think we're really not lined up and is a large
+part of why I wondered whether you'd read the commit messages before
+dismissing this. This VM_DROPPABLE mapping comes as a result of a
+vgetrandom_alloc() syscall, which (g)libc makes at some point, and then
+the result of that is passed to the vDSO getrandom() function. The
+memory in vgetrandom_alloc() is then carved up, one per thread, with
+(g)libc's various internal pthread creation/exit functions.
+
+So that means this isn't a thing that's trivially limited to just one
+per thread. Userspace can call vgetrandom_alloc() all it wants.
+
+Thus, I'm having a hard time seeing how relaxing rlimits here as you
+suggested doesn't amount to an rlimit backdoor. I'm also not seeing
+other fancy options for "pinning pages" as you mentioned in this email.
+Something about having the kernel allocate them on clone()? That seems
+terrible and complex. And if you do want this all to go through mlock(),
+somehow, there's still the fork() inheritabiity issue. (This was all
+discussed on the thread a few versions ago that surfaced these issues,
+by the way.)
+
+So I'm not really seeing any good alternatives, no matter how hard I
+squint at your suggestions. Maybe you can elaborate a bit?
+Alternatively, perhaps the compromise I suggested above where we ditch
+the instruction decoder stuff is actually fine with you?
+
+> rarely-excercised 'discardable memory' semantics in 
+> Linux is a fair one - so it's straightforward to lift this NAK.
+
+I still don't think calling this "rarely-exercised" is true. Desktop
+machines regularly OOM with lots of Chrome tabs, and this is
+functionality that'll be in glibc, so it'll be exercised quite often.
+Even on servers, many operators work with the philosophy that unused RAM
+is wasted RAM, and so servers are run pretty close to capacity. Not to
+mention Android, where lots of handsets have way too little RAM.
+Swapping and memory pressure and so forth is very real. So claiming that
+this is somehow obscure or rarely used or what have you isn't very
+accurate. These are code paths that will certainly get exercised.
+
+Jason
