@@ -2,101 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E79C65C7F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D0165C7F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238264AbjACUQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 15:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S237615AbjACURo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 15:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233613AbjACUQU (ORCPT
+        with ESMTP id S233120AbjACURm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 15:16:20 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D13FDE92
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 12:16:16 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id j16so25467913qtv.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 12:16:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HTnuIAJdCSnqOgUCfI1VegmgFYxeW1ngR0BDNyHkGf0=;
-        b=DokQ/BEIgEpL/ia17Z2x8+os3L6Iix7X3VYwgY2oWHbqXrXltMNtHkuxWFNC0TiQoL
-         cBgZVKREYRgoskXuojqZ3A1XLXXW46nqyABZQqesu1jY6qAYwaNx5oLjtODVhfjUliU3
-         eVndN+o81O0zIOd96+Ti2/uGI99RMfL7MdUR0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HTnuIAJdCSnqOgUCfI1VegmgFYxeW1ngR0BDNyHkGf0=;
-        b=qJsZTTDvL9TZZd947ckUNwCyBhPA190+gWk6cvPwQ4wXYCVE4PquJlPL5MufuZ123j
-         vO111J7sKC635Hxydwv8UfP94geIUMiJm4VlgcrJxpSLaLsPfSkyOOS5iPGlmhBGsr8H
-         bNd4l0RXLWC74XL2jBBIEZgOB1Rwc9RdIZf41tu3S6lJpTKRKKstgarVH+rvV4WsGjUy
-         JGbJi/DeSai8tOFSeS45rw9hET7NybFHTIhak2ugJQt/GICuihak7r65bOGhFLhFFAnA
-         cuKg2ZZK4KUxpibsezbLC7VoyRziuH+9JAt4vy+G7Mkcs+YKRydXBnLPIb5ZENSmLT5p
-         rOpg==
-X-Gm-Message-State: AFqh2koBMrRLU2ole2RN7x0WbZqPE7A5mC4rnACliQC9Hr6iBlhq/uhl
-        ZQVU4ODASWqhs4YGDOquQgqd4YxsAV5eYFx3
-X-Google-Smtp-Source: AMrXdXu6Lf7juIlvAHNmV4jcHYW5ttZbIzEsYr01YlITWvInhFs27EIrVhRcsySdRYfKQ6YcGGL6AA==
-X-Received: by 2002:ac8:65d6:0:b0:3a9:691e:8dc6 with SMTP id t22-20020ac865d6000000b003a9691e8dc6mr65218826qto.47.1672776975334;
-        Tue, 03 Jan 2023 12:16:15 -0800 (PST)
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com. [209.85.222.179])
-        by smtp.gmail.com with ESMTPSA id z24-20020ac87118000000b0039cc0fbdb61sm19351146qto.53.2023.01.03.12.16.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 12:16:13 -0800 (PST)
-Received: by mail-qk1-f179.google.com with SMTP id k3so15324113qki.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 12:16:13 -0800 (PST)
-X-Received: by 2002:ae9:ef49:0:b0:6fe:d4a6:dcef with SMTP id
- d70-20020ae9ef49000000b006fed4a6dcefmr2045085qkg.594.1672776973189; Tue, 03
- Jan 2023 12:16:13 -0800 (PST)
+        Tue, 3 Jan 2023 15:17:42 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B6121B2;
+        Tue,  3 Jan 2023 12:17:41 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9D5D4108;
+        Tue,  3 Jan 2023 21:17:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672777060;
+        bh=lh2YiudcULvWvjVfZZbBPQ/O+yMC2b+02qH09fc1qNc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=atg7Iwtjskq4rDaYqHp/YrTUYDbAWSdiWGN7tvNGb8DSfUOyIvTJ+5NFJyxQRUUQK
+         T1oVxGi6YmU0p61vMpsNcg6nMTcwaNirHNgq8x2UEHRqhh7JrkvYw0/+cj5xMBKZr5
+         4sDB4T4+GKZthFh+LCw74Ku2lSCTTl11dZum60qw=
+Date:   Tue, 3 Jan 2023 22:17:35 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH v3 5/8] media: uvcvideo: Fix handling on Bitmask controls
+Message-ID: <Y7SNX5vAOuTq0NbO@pendragon.ideasonboard.com>
+References: <20220920-resend-v4l2-compliance-v3-0-598d33a15815@chromium.org>
+ <20220920-resend-v4l2-compliance-v3-5-598d33a15815@chromium.org>
 MIME-Version: 1.0
-References: <20230101162910.710293-1-Jason@zx2c4.com> <20230101162910.710293-3-Jason@zx2c4.com>
- <Y7QIg/hAIk7eZE42@gmail.com> <CALCETrWdw5kxrtr4M7AkKYDOJEE1cU1wENWgmgOxn0rEJz4y3w@mail.gmail.com>
- <CAHk-=wg_6Uhkjy12Vq_hN6rQqGRP2nE15rkgiAo6Qay5aOeigg@mail.gmail.com>
- <Y7SDgtXayQCy6xT6@zx2c4.com> <CAHk-=whQdWFw+0eGttxsWBHZg1+uh=0MhxXYtvJGX4t9P1MgNw@mail.gmail.com>
- <Y7SJ+/axonTK0Fir@zx2c4.com>
-In-Reply-To: <Y7SJ+/axonTK0Fir@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 3 Jan 2023 12:15:57 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
-Message-ID: <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
-Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
- lazily freeable mappings
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        "Carlos O'Donell" <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-v4l2-compliance-v3-5-598d33a15815@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 12:03 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> That buffering cannot be done safely currently
+Hi Ricardo,
 
-.. again, this is "your semantics" (the (b) in my humbug list), not
-necessarily reality for anybody else.
+Thank you for the patch.
 
-I'm NAK'ing making invasive changes to the VM for something this
-specialized. I really believe that the people who have this issue are
-*so* few and far between that they can deal with the VM forking and
-reseeding issues quite well on their own.
+On Tue, Jan 03, 2023 at 03:36:23PM +0100, Ricardo Ribalda wrote:
+> Minimum and step values for V4L2_CTRL_TYPE_BITMASK controls should be 0.
+> There is no need to query the camera firmware about this and maybe get
+> invalid results.
+> 
+> Also value should be masked to the max value advertised by the
+> hardware.
+> 
+> Finally, handle UVC 1.5 mask controls that use MAX instead of RES to
+> describe the valid bits.
+> 
+> Fixes v4l2-compliane:
+> Control ioctls (Input 0):
+>                 fail: v4l2-test-controls.cpp(97): minimum must be 0 for a bitmask control
+> 	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: FAIL
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-            Linus
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c | 52 ++++++++++++++++++++++++++++++----------
+>  1 file changed, 40 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index 6165d6b8e855..7622c5b54b35 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -1161,6 +1161,25 @@ static const char *uvc_map_get_name(const struct uvc_control_mapping *map)
+>  	return "Unknown Control";
+>  }
+>  
+> +static u32 uvc_get_ctrl_bitmap(struct uvc_control *ctrl,
+> +			       struct uvc_control_mapping *mapping)
+> +{
+> +	/*
+> +	 * Some controls, like CT_AE_MODE_CONTROL, use GET_RES to represent
+> +	 * the number of bits supported. Those controls do not list GET_MAX
+> +	 * as supported.
+> +	 */
+> +	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)
+> +		return mapping->get(mapping, UVC_GET_RES,
+> +				    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
+> +
+> +	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MAX)
+> +		return mapping->get(mapping, UVC_GET_MAX,
+> +				    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
+> +
+> +	return ~0;
+> +}
+> +
+>  static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+>  	struct uvc_control *ctrl,
+>  	struct uvc_control_mapping *mapping,
+> @@ -1235,6 +1254,12 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+>  		v4l2_ctrl->step = 0;
+>  		return 0;
+>  
+> +	case V4L2_CTRL_TYPE_BITMASK:
+> +		v4l2_ctrl->minimum = 0;
+> +		v4l2_ctrl->maximum = uvc_get_ctrl_bitmap(ctrl, mapping);
+> +		v4l2_ctrl->step = 0;
+> +		return 0;
+> +
+>  	default:
+>  		break;
+>  	}
+> @@ -1336,19 +1361,14 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
+>  
+>  	menu_info = &mapping->menu_info[query_menu->index];
+>  
+> -	if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK &&
+> -	    (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)) {
+> -		s32 bitmap;
+> -
+> +	if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK) {
+>  		if (!ctrl->cached) {
+>  			ret = uvc_ctrl_populate_cache(chain, ctrl);
+>  			if (ret < 0)
+>  				goto done;
+>  		}
+>  
+> -		bitmap = mapping->get(mapping, UVC_GET_RES,
+> -				      uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
+> -		if (!(bitmap & menu_info->value)) {
+> +		if (!(uvc_get_ctrl_bitmap(ctrl, mapping) & menu_info->value)) {
+>  			ret = -EINVAL;
+>  			goto done;
+>  		}
+> @@ -1831,6 +1851,17 @@ int uvc_ctrl_set(struct uvc_fh *handle,
+>  		value = xctrl->value;
+>  		break;
+>  
+> +	case V4L2_CTRL_TYPE_BITMASK:
+> +		if (!ctrl->cached) {
+> +			ret = uvc_ctrl_populate_cache(chain, ctrl);
+> +			if (ret < 0)
+> +				return ret;
+> +		}
+> +
+> +		xctrl->value &= uvc_get_ctrl_bitmap(ctrl, mapping);
+> +		value = xctrl->value;
+> +		break;
+> +
+>  	case V4L2_CTRL_TYPE_BOOLEAN:
+>  		xctrl->value = clamp(xctrl->value, 0, 1);
+>  		value = xctrl->value;
+> @@ -1845,17 +1876,14 @@ int uvc_ctrl_set(struct uvc_fh *handle,
+>  		 * Valid menu indices are reported by the GET_RES request for
+>  		 * UVC controls that support it.
+>  		 */
+> -		if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK &&
+> -		    (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)) {
+> +		if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK) {
+>  			if (!ctrl->cached) {
+>  				ret = uvc_ctrl_populate_cache(chain, ctrl);
+>  				if (ret < 0)
+>  					return ret;
+>  			}
+>  
+> -			step = mapping->get(mapping, UVC_GET_RES,
+> -					uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
+> -			if (!(step & value))
+> +			if (!(uvc_get_ctrl_bitmap(ctrl, mapping) & value))
+>  				return -EINVAL;
+>  		}
+>  
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
