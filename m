@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBB765C789
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D449E65C78D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238720AbjACT3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 14:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S239023AbjACTba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 14:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbjACT3W (ORCPT
+        with ESMTP id S233920AbjACTbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 14:29:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F5A13EA4;
-        Tue,  3 Jan 2023 11:29:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4056E614FE;
-        Tue,  3 Jan 2023 19:29:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E50CC433D2;
-        Tue,  3 Jan 2023 19:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672774160;
-        bh=kS1/OyPfwcshfjZ/3SRHvug8fTiy5Wp9PW3ZNN6JzkY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pVFMp+O7STYIzNC26PdnlOB+c8TEatF6kKtV74xmbxzfcUAgnz3l52ERbwcVEEQVR
-         iPX8VOIHAJfP67k3yMDCVkLMU9UNjOgHHj7PC1MU+n6bRjOpuQhFXrf79U7Qp8gelK
-         +fqGyFRzXPNx2V2R9+pswBxersPoCp4IgsbYCoRbMe6BfQABV/13+ccEJe0Na4cUiB
-         ZfCWj3fii45asfmzvj3hIK8Gs3nyJ2brfsLIpw3b/NzziiAtVm4kRzDAyx16/F4irb
-         SFf8Rcz+8RHR+vb2JEQq+CTjeLWBXg4a6aWIq6ufp9F3TsEFT4N1jNOmJ7tJ6KVG3y
-         j897npKffKRaQ==
-Received: by mail-vs1-f54.google.com with SMTP id x65so19280454vsb.13;
-        Tue, 03 Jan 2023 11:29:20 -0800 (PST)
-X-Gm-Message-State: AFqh2koi+O/gtHaRIRSPHgPVoZ2wmmA7vR0EZt0AiI3hgcakfFPgE5V7
-        BU3csidkBPtWYlvb9rjx/xxw+ONPuDPmCUX6kQ==
-X-Google-Smtp-Source: AMrXdXsQ2RTXm/Q35pqeUXeb1yWkLtg8oApHK2GmDp4d+XS1Y9R+sLOqoroDn7dwWaNBSf2fnc/56BSdJ4WHQRyGYuk=
-X-Received: by 2002:a67:edd4:0:b0:3b5:1fe4:f1c2 with SMTP id
- e20-20020a67edd4000000b003b51fe4f1c2mr5170483vsp.0.1672774159592; Tue, 03 Jan
- 2023 11:29:19 -0800 (PST)
+        Tue, 3 Jan 2023 14:31:09 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7630813D06
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 11:31:05 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id cp9-20020a17090afb8900b00226a934e0e5so535670pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 11:31:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GfjrvxCRgV3vcT3TiLbdLY/UTFxhC+HimhMaHMPiFqY=;
+        b=lArsKCWjaQrB20DDdwcxHZshdTmlKenjx9q1kEE6MWgGogRQe1DWuhUAXVToG8qYiA
+         8U8uXUk4teUMCrqDh5YtbMTi0o6YZOYfyQyxJjOD4NylWdGhThCq8q5I2boGk/1RWJca
+         1bI+yV0oKGCQmpGLKKhqmgyiBJsK1/96ROlvc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GfjrvxCRgV3vcT3TiLbdLY/UTFxhC+HimhMaHMPiFqY=;
+        b=tr6fUHgN+wP8/yvLrL3+PQUjcceyIbFe9Y/bLvqWXuB0OdZfPpfBK0LKBCpl966KEU
+         DoNBJhu3S9Ld9EfpT4WtmYhge3CxldlZ55GkkVSUqiUoNyhfgg61pW92gTEU5OKzepWT
+         kSGKliymE0c+WIQA5O+wuFJuZR2qJsA26lTRIpxemKopM1yLpzhwDyyIh/n/pqPa0ax7
+         dWP05PNAY9pEOHEVtpYTn4sle2kXgNBWgqtst9a8k1dcJhjURQ3/JysAGFn+uc6bFd8m
+         aso9w90/3u9fVmSXvsgVolgP861U8G1ID+asoybmpfxa4N46UauH2DKEFqUq2Gl5RK5y
+         N8uQ==
+X-Gm-Message-State: AFqh2ko6z8KqvWk8HZxCf5iDqb1FzkAH6q/XHOUNZXmp9y9UnXEm+AWN
+        tY0E7awKLbN3ckYf+zxyLTtIZQ==
+X-Google-Smtp-Source: AMrXdXsKEEFQguyagMQJh3jY/kGtdS7/3uuyfSVz8A0CqGldjL2bRyaXEVYiTKdrfQ9NZagj701hNg==
+X-Received: by 2002:a17:902:ca95:b0:189:e711:173 with SMTP id v21-20020a170902ca9500b00189e7110173mr42031348pld.33.1672774264931;
+        Tue, 03 Jan 2023 11:31:04 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:d4fc:5992:1009:1647])
+        by smtp.gmail.com with ESMTPSA id l2-20020a170903244200b001888cadf8f6sm22727951pls.49.2023.01.03.11.31.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 11:31:04 -0800 (PST)
+Date:   Tue, 3 Jan 2023 11:31:02 -0800
+From:   Brian Norris <briannorris@chromium.org>
+To:     Guenter Roeck <groeck@google.com>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jack Rosenthal <jrosenth@chromium.org>, coreboot@coreboot.org,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: memcpy: detected field-spanning write (size 168) of single field
+ "&device->entry" at drivers/firmware/google/coreboot_table.c:103 (size 8)
+Message-ID: <Y7SCdrL+xZm5CSjy@google.com>
+References: <03ae2704-8c30-f9f0-215b-7cdf4ad35a9a@molgen.mpg.de>
+ <CAODwPW8=1R53Dir+CFHu-NADygCZVqDjsg0q+xT-KheZHghxtw@mail.gmail.com>
+ <CABXOdTcvBe5PzO6RrUDC-NcYpWYuabZkN1qXA=gSqbhPHLxqsw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221207211327.2848665-1-robh@kernel.org>
-In-Reply-To: <20221207211327.2848665-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 3 Jan 2023 13:29:08 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKmULjtP7UCMZDxJTL3p7C_WS9qMaL5tMg5Jv74Sb0QQw@mail.gmail.com>
-Message-ID: <CAL_JsqKmULjtP7UCMZDxJTL3p7C_WS9qMaL5tMg5Jv74Sb0QQw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Fix CPU nodes compatible string
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABXOdTcvBe5PzO6RrUDC-NcYpWYuabZkN1qXA=gSqbhPHLxqsw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,95 +76,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 3:13 PM Rob Herring <robh@kernel.org> wrote:
->
-> 'arm,kryo' is not documented and is not an Arm Ltd thing either as that
-> is Qualcomm branding. The correct compatible is 'qcom,kryo'.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+On Thu, Dec 29, 2022 at 12:28:14PM -0800, Guenter Roeck wrote:
+> On Thu, Dec 29, 2022 at 6:43 AM Julius Werner <jwerner@chromium.org> wrote:
+> >
+> > I can confirm that this warning is a false positive, at least. We're
+> > intentionally copying bytes from beyond the end of the header
+> > structure in this case.
+> >
+> > I don't know what kind of kernel system detects this stuff at runtime
+> > and how to silence it. Probably need to add a void pointer cast or
+> > something?
+> >
+> 
+> This is part of kernel hardening code. Kees Cook might know what to do about it.
 
-Ping!
+One could probably throw in casts, like this example did:
 
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 212580316d3e..f06cc7588acc 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -166,7 +166,7 @@ cpus {
->
->                 CPU0: cpu@0 {
->                         device_type = "cpu";
-> -                       compatible = "arm,kryo";
-> +                       compatible = "qcom,kryo";
->                         reg = <0x0 0x0>;
->                         enable-method = "psci";
->                         cpu-idle-states = <&LITTLE_CPU_SLEEP_0
-> @@ -189,7 +189,7 @@ L3_0: l3-cache {
->
->                 CPU1: cpu@100 {
->                         device_type = "cpu";
-> -                       compatible = "arm,kryo";
-> +                       compatible = "qcom,kryo";
->                         reg = <0x0 0x100>;
->                         enable-method = "psci";
->                         cpu-idle-states = <&LITTLE_CPU_SLEEP_0
-> @@ -209,7 +209,7 @@ L2_100: l2-cache {
->
->                 CPU2: cpu@200 {
->                         device_type = "cpu";
-> -                       compatible = "arm,kryo";
-> +                       compatible = "qcom,kryo";
->                         reg = <0x0 0x200>;
->                         enable-method = "psci";
->                         cpu-idle-states = <&LITTLE_CPU_SLEEP_0
-> @@ -229,7 +229,7 @@ L2_200: l2-cache {
->
->                 CPU3: cpu@300 {
->                         device_type = "cpu";
-> -                       compatible = "arm,kryo";
-> +                       compatible = "qcom,kryo";
->                         reg = <0x0 0x300>;
->                         enable-method = "psci";
->                         cpu-idle-states = <&LITTLE_CPU_SLEEP_0
-> @@ -249,7 +249,7 @@ L2_300: l2-cache {
->
->                 CPU4: cpu@400 {
->                         device_type = "cpu";
-> -                       compatible = "arm,kryo";
-> +                       compatible = "qcom,kryo";
->                         reg = <0x0 0x400>;
->                         enable-method = "psci";
->                         cpu-idle-states = <&BIG_CPU_SLEEP_0
-> @@ -269,7 +269,7 @@ L2_400: l2-cache {
->
->                 CPU5: cpu@500 {
->                         device_type = "cpu";
-> -                       compatible = "arm,kryo";
-> +                       compatible = "qcom,kryo";
->                         reg = <0x0 0x500>;
->                         enable-method = "psci";
->                         cpu-idle-states = <&BIG_CPU_SLEEP_0
-> @@ -289,7 +289,7 @@ L2_500: l2-cache {
->
->                 CPU6: cpu@600 {
->                         device_type = "cpu";
-> -                       compatible = "arm,kryo";
-> +                       compatible = "qcom,kryo";
->                         reg = <0x0 0x600>;
->                         enable-method = "psci";
->                         cpu-idle-states = <&BIG_CPU_SLEEP_0
-> @@ -309,7 +309,7 @@ L2_600: l2-cache {
->
->                 CPU7: cpu@700 {
->                         device_type = "cpu";
-> -                       compatible = "arm,kryo";
-> +                       compatible = "qcom,kryo";
->                         reg = <0x0 0x700>;
->                         enable-method = "psci";
->                         cpu-idle-states = <&BIG_CPU_SLEEP_0
-> --
-> 2.35.1
->
+  0d043351e5ba ext4: fix fortify warning in fs/ext4/fast_commit.c:1551
+
+Or one could probably imitate this example, and insert an appropriate
+flexible array (possibly with yet another union?):
+
+  b43088f30db1 s390/zcrypt: fix warning about field-spanning write
+
+Side mostly-unrelated note: coreboot_table_populate() doesn't do any
+bounds checking that the individual entry copies don't overflow the
+table buffer size. We're _probably_ not that interested in recovering
+from a malicious (or even buggy) Coreboot, but it does seem like an area
+of improvement.
+
+Brian
+
+> 
+> Guenter
+> 
+> > On Thu, Dec 29, 2022 at 11:46 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+> > >
+> > > Dear Linux folks,
+> > >
+> > >
+> > > Running Linux v6.2-rc1+ on a motherboard using coreboot as firmware, the
+> > > warning below is shown.
+> > >
+> > > ```
+> > > [    1.630244] ------------[ cut here ]------------
+> > > [    1.630249] memcpy: detected field-spanning write (size 168) of
+> > > single field "&device->entry" at
+> > > drivers/firmware/google/coreboot_table.c:103 (size 8)
+> > > [    1.630299] WARNING: CPU: 1 PID: 150 at
+> > > drivers/firmware/google/coreboot_table.c:103
+> > > coreboot_table_probe+0x1ea/0x210 [coreboot_table]
+[...]
