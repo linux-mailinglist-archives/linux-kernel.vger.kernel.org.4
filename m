@@ -2,189 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC1B65C429
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F49C65C43E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238092AbjACQpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S233348AbjACQvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237978AbjACQps (ORCPT
+        with ESMTP id S233711AbjACQu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:45:48 -0500
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F671146C;
-        Tue,  3 Jan 2023 08:45:46 -0800 (PST)
-Received: by mail-io1-f42.google.com with SMTP id h6so16844931iof.9;
-        Tue, 03 Jan 2023 08:45:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q1rae2sovsy4pVfWNcl3s6hzHd+0nxeCVKITXKTuZ3A=;
-        b=SwWWixmSvpl7f59doik++DBsw/B6PQpBlhuTApcJVcrb94mOS4CMZ6sVrrtg0hcM1c
-         iBCylW46uqohLWqLtjrnXuU1h/8p5PcxJltLP7D6AZ4QfmMWlPoOxNIMpPJAPtHcXpCn
-         6r4iwFzY15Liekobp8pAhAycdhcKFKUSXZ0hIpuEPHl3sLg5SsNdyBkCentkbuLKrWKL
-         MTwF5b6WROyyHAeHRclqrUDSbvrHHvGXOd9q2Oob4P7ah7V05p68je6oTmkOHm/qZF/2
-         iSdKCXTvKfSr4Z3KhH7bGJGG/1tkz7pnaPlFAcSSgYNRhaQMBsekOSVBi9AMuNdJLWOQ
-         vhEg==
-X-Gm-Message-State: AFqh2kpO3P+LyyjElmS+pfU7iUFysgp3RzXfnc+8GUSsV+0EGG2vcuis
-        Pr11KOiGLbzoMeqjj3wTM+/r4an0YXs2upghtt1keVfGCik=
-X-Google-Smtp-Source: AMrXdXtHKgaYWT2qEMFhluIo+RK1qYHhyBBIM/vJuc9zfTT/hZCAkFH1zyiZoKOtnb/4inv4dtr/1WEPR79q1mqyJgk=
-X-Received: by 2002:a02:6005:0:b0:38a:3421:f2cb with SMTP id
- i5-20020a026005000000b0038a3421f2cbmr2988404jac.308.1672764345961; Tue, 03
- Jan 2023 08:45:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20221230102627.2410847-1-tmricht@linux.ibm.com> <Y7L5T2IHdovfLgWp@kernel.org>
-In-Reply-To: <Y7L5T2IHdovfLgWp@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 3 Jan 2023 08:45:34 -0800
-Message-ID: <CAM9d7ch98dRk85DYF-okD4_VsU_A+EkkVOkW1-1X7GMLao0mwg@mail.gmail.com>
-Subject: Re: [PATCH] perf lock: Fix core dump in command perf lock contention
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 3 Jan 2023 11:50:58 -0500
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AAC12D28;
+        Tue,  3 Jan 2023 08:50:28 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id 36F072B06721;
+        Tue,  3 Jan 2023 11:50:23 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 03 Jan 2023 11:50:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1672764622; x=1672771822; bh=OAEx+kWOpU
+        s1ovkCOUPYt4BrguZtb4ZebjcqYHg4/yk=; b=SAmVbdnFaBzWfpnFGzV4NSDsrp
+        w/oJNVKvqGJxgxv+5cuJf5nW1Un9vV0Dp+Wz/8PRNAPQi9a6E9iB6P7fPKvjIxDc
+        sL4HDcHtwrl7pXHk7V3MgPQWqu05FxSbB9sUvpWN9KKGs4x8vL+qIY/u0O2fp32A
+        WAqTXa3KI/HWcNdqPcB+rYggrEcH15MpJ6Rkc4JPKXgau/UtLCWzNDxTa3kwfqeV
+        zzXlg1coYrCQvujOFEC7eWm3ZTrIXSENwnHXqfIt0HR4tRDATgdIYXJK/5Nklyc9
+        aK1RL7dvFw5nAF9DzxYqmKbi/kWMx9keHmBbHeA7s/EWyr+VxGNjwhtKapYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672764622; x=1672771822; bh=OAEx+kWOpUs1ovkCOUPYt4BrguZt
+        b4ZebjcqYHg4/yk=; b=Os1ym1lstngE1yum7vioqidaf0tpUcIIddLV9oaWSOfr
+        Bp/LOs8s1eDc1lv7yge46iL+oTo/wMkxx27m9Yc6N3aV2TFIrYSkjiZdPQ8Dixm+
+        MdtzUXOxkrF8n3jv67bTVLyIeEpdtwhZZbr6DRy6eSsxHEeLTvrwGMCkx5wOQru3
+        LcNlUNWCaMJK5m1qqNpuLPnUa66cfWOJJRIOlVox9K7/RRqPZ9SJl0dYQTo66EU5
+        cPPwriRMEe+ZdKHvf4o8MaE+JiGSbpGlrJv8+wqaIVkBvWZfTB6lLcEQvdFquzkx
+        fChHnH7XWHxMTXIIMydoHXwDKugKo6A7KVet7ij5Nw==
+X-ME-Sender: <xms:zVy0Y_OMAKlPmEOZgHU3a6aRFfK4FxfhdvwVIklHrp_YRo8o61lqRQ>
+    <xme:zVy0Y59x2GX8W2BoN-3zVKBdj25Ajq9AP-OrqTzquZvM2wI-7Ix0NtTzj27YrKddM
+    tZvWCMnOIl-fW65cx4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeggdelfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpefhfeehgfejkedugeeutdffveehheeugfehgeelleefudeluedtgfejffeihffh
+    heenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdguvggsihgrnhdrohhrghenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
+    nhgusgdruggv
+X-ME-Proxy: <xmx:zVy0Y-SSMWtvnv9ZxmJhry6mi4BiUHZLH8otfjVaL1ZvtYqw_HgNxg>
+    <xmx:zVy0YzvPJ5VhbjYKcO9WXl04J_Mdvuydp68lACKnB0sC0DcdlpA9uw>
+    <xmx:zVy0Y3cCyrZtBDo3MJ4Hdt1EHAWboT_3ZNKcff2QNMqRJXhlhsucqg>
+    <xmx:zly0Y2fTU14izRdahtJutvIauGNC4i8YnSE3hUn7fbjaIA917RmO5fEWBSI>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 465BAB60086; Tue,  3 Jan 2023 11:50:21 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <8fea3494-1d1f-4f64-b525-279152cf430b@app.fastmail.com>
+In-Reply-To: <Y7RVkjDC3EjQUCzM@FVFF77S0Q05N>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.154045458@infradead.org> <Y6DEfQXymYVgL3oJ@boqun-archlinux>
+ <Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net>
+ <Y7QszyTEG2+WiI/C@FVFF77S0Q05N> <Y7Q1uexv6DrxCASB@FVFF77S0Q05N>
+ <Y7RVkjDC3EjQUCzM@FVFF77S0Q05N>
+Date:   Tue, 03 Jan 2023 17:50:00 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Mark Rutland" <mark.rutland@arm.com>,
+        "Peter Zijlstra" <peterz@infradead.org>
+Cc:     "Boqun Feng" <boqun.feng@gmail.com>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Will Deacon" <will@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
+        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com,
+        "Robin Murphy" <robin.murphy@arm.com>, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, "Pekka Enberg" <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linux-crypto@vger.kernel.org,
+        iommu@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC][PATCH 05/12] arch: Introduce arch_{,try_}_cmpxchg128{,_local}()
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
+On Tue, Jan 3, 2023, at 17:19, Mark Rutland wrote:
+> On Tue, Jan 03, 2023 at 02:03:37PM +0000, Mark Rutland wrote:
+>> On Tue, Jan 03, 2023 at 01:25:35PM +0000, Mark Rutland wrote:
+>> > On Tue, Dec 20, 2022 at 12:08:16PM +0100, Peter Zijlstra wrote:
 
-On Mon, Jan 2, 2023 at 7:33 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+>> ... makes GCC much happier:
 >
-> Em Fri, Dec 30, 2022 at 11:26:27AM +0100, Thomas Richter escreveu:
-> > The test case perf lock contention dumps core on s390. Run the following
-> > commands:
-> >  # ./perf lock record -- ./perf bench sched messaging
-> >  # Running 'sched/messaging' benchmark:
-> >  # 20 sender and receiver processes per group
-> >  # 10 groups == 400 processes run
-> >
-> >      Total time: 2.799 [sec]
-> >  [ perf record: Woken up 1 times to write data ]
-> >  [ perf record: Captured and wrote 0.073 MB perf.data (100 samples) ]
-> >  #
-> >  # ./perf lock contention
-> >  Segmentation fault (core dumped)
-> >  #
-> >
-> > The function call stack is lengthy, here are the top 5 functions:
-> >  # gdb ./perf core.24048
-> >  GNU gdb (GDB) Fedora Linux 12.1-6.fc37
-> >  Copyright (C) 2022 Free Software Foundation, Inc.
-> >  Core was generated by `./perf lock contention'.
-> >  Program terminated with signal SIGSEGV, Segmentation fault.
-> >  #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,
-> >          addr=1789230) at util/machine.c:3356
-> >          3356 machine->sched.text_end = kmap->unmap_ip(kmap, sym->start);
-> >
-> >  (gdb) where
-> >   #0  0x00000000011dd25c in machine__is_lock_function (machine=0x3029e28,\
-> >          addr=1789230) at util/machine.c:3356
-> >   #1  0x000000000109f244 in callchain_id (evsel=0x30313e0,\
-> >          sample=0x3ffea4f77d0) at builtin-lock.c:957
-> >   #2  0x000000000109e094 in get_key_by_aggr_mode (key=0x3ffea4f7290,\
-> >          addr=27758136, evsel=0x30313e0, sample=0x3ffea4f77d0) \
-> >          at builtin-lock.c:586
-> >   #3  0x000000000109f4d0 in report_lock_contention_begin_event \
-> >          (evsel=0x30313e0, sample=0x3ffea4f77d0)
-> >          at builtin-lock.c:1004
-> >   #4  0x00000000010a00ae in evsel__process_contention_begin \
-> >          (evsel=0x30313e0, sample=0x3ffea4f77d0)
-> >          at builtin-lock.c:1254
-> >   #5  0x00000000010a0e14 in process_sample_event (tool=0x3ffea4f8480, \
-> >          event=0x3ff85601ef8, sample=0x3ffea4f77d0,
-> >          evsel=0x30313e0, machine=0x3029e28) at builtin-lock.c:1464
-> >           sample=0x3ffea4f77d0, evsel=0x30313e0, machine=0x3029e28) \
-> >        at util/session.c:1523
-> >   .....
-> >
-> > The issue is in function machine__is_lock_function() in file
-> > ./util/machine.c lines 3355:
-> >    /* should not fail from here */
-> >    sym = machine__find_kernel_symbol_by_name(machine, "__sched_text_end",
-> >                                            &kmap);
-> >    machine->sched.text_end = kmap->unmap_ip(kmap, sym->start)
-> >
-> > On s390 the symbol __sched_text_end is *NOT* in the symbol list and the
-> > resulting pointer sym is set to NULL. The sym->start is then a NULL pointer
-> > access and generates the core dump.
-> >
-> > The reason why __sched_text_end is not in the symbol list on s390 is
-> > simple:
-> > When the symbol list is created at perf start up with function calls
-> >   dso__load
-> >   +--> dso__load_vmlinux_path
-> >        +--> dso__load_vmlinux
-> >             +--> dso__load_sym
-> >                +--> dso__load_sym_internal (reads kernel symbols)
-> >                +--> symbols__fixup_end
-> >                +--> symbols__fixup_duplicate
-> >
-> > The issue is in function symbols__fixup_duplicate(). It deletes all
-> > symbols with have the same address. On s390
-> >  # nm -g  ~/linux/vmlinux| fgrep c68390
-> >  0000000000c68390 T __cpuidle_text_start
-> >  0000000000c68390 T __sched_text_end
-> >  #
-> > two symbols have identical addresses and __sched_text_end is considered
-> > duplicate (in ascending sort order) and removed from the symbol list.
-> > Therefore it is missing and an invalid pointer reference occurs.
-> > The code checks for symbol __sched_text_start and when it exists assumes
-> > symbol __sched_text_end is also in the symbol table. However this is
-> > not the case on s390.
-> >
-> > Same situation exists for symbol __lock_text_start:
-> > 0000000000c68770 T __cpuidle_text_end
-> > 0000000000c68770 T __lock_text_start
-> > This symbol is also removed from the symbol table but used in function
-> > machine__is_lock_function().
-> >
-> > To fix this and keep duplicate symbols in the symbol table, set
-> > symbol_conf.allow_aliases to true. This prevents the removal of duplicate
-> > symbols in function symbols__fixup_duplicate().
-> >
-> > Output After:
-> >  # ./perf lock contention
-> >  contended total wait  max wait  avg wait    type   caller
-> >
-> >         48   124.39 ms 123.99 ms   2.59 ms rwsem:W unlink_anon_vmas+0x24a
-> >         47    83.68 ms  83.26 ms   1.78 ms rwsem:W free_pgtables+0x132
-> >          5    41.22 us  10.55 us   8.24 us rwsem:W free_pgtables+0x140
-> >          4    40.12 us  20.55 us  10.03 us rwsem:W copy_process+0x1ac8
-> >  #
-> >
-> > Fixes: cc2367eebb0c ("machine: Adopt is_lock_function() from builtin-lock.c")
+>> ... I'll go check whether clang is happy with that, and how far back that can
+>> go, otherwise we'll need to blat the high half with a separate constaint that
+>> (ideally) doesn't end up allocating a pointless address register.
 >
-> Humm, is that really the cset that introduces the problem? It just moves
-> things around, the cset that introduced the is_lock_function() function,
-> that assumed that __sched_text_end was always available was:
->
-> commit 0d2997f750d1de394231bc22768dab94a5b5db2f
-> Author: Namhyung Kim <namhyung@kernel.org>
-> Date:   Wed Jun 15 09:32:22 2022 -0700
->
->     perf lock: Look up callchain for the contended locks
->
-> ---
->
-> Right? Namhyung? Can you spot any problem in enabling duplicates as a
-> fix?
+> Hmm... from the commit history it looks like GCC prior to 5.1 might not be
+> happy with that, but that *might* just be if we actually do arithmetic on the
+> value, and we might be ok just using it for memroy effects. I can't currently
+> get such an old GCC to run on my machines so I haven't been able to check.
 
-Yep, I think that's the cset introduced the problem.
-I'm fine with the fix.
+gcc-5.1 is the oldest (barely) supported compiler, the minimum was
+last raised from gcc-4.9 in linux-5.15. If only gcc-4.9 and older are
+affected, we're good on mainline but may still want a fix for stable
+kernels.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+I checked that the cross-compiler binaries from [1] still work, but I noticed
+that this version is missing the native aarch64-to-aarch64 compiler (x86 to
+aarch64 and vice versa are there), and you need to install libmpfr4 [2]
+as a dependency. The newer compilers (6.5.0 and up) don't have these problems.
 
-Thanks,
-Namhyung
+     Arnd
+
+[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/arm64/5.5.0/
+[2] http://ftp.uk.debian.org/debian/pool/main/m/mpfr4/libmpfr4_3.1.5-1_arm64.deb
