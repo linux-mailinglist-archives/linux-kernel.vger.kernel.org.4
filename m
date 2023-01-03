@@ -2,100 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F9B65C57D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CEB65C57E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjACR4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:56:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
+        id S238283AbjACR5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238266AbjACR42 (ORCPT
+        with ESMTP id S233441AbjACR4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:56:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7E211836
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:56:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D44A614B6
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79571C433D2;
-        Tue,  3 Jan 2023 17:56:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672768585;
-        bh=UC4RdBvcPnI5XJhhZ46pv1YotwVqygpNpSpelRcjc+k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dNq2WgLp6fiiAgRTQt9iNPOZmuaaRoeBfgUewesNE5DImDRlCrMbjbqSMDDiIsrFy
-         fQ83YDSZTq659bmYpz0aXisuvux6mnraKOdoQTbm8JpDuEzCHDkdZCh0Mmds2rOQr4
-         zwjr57RrWgKHYZBAU2oGsX+AOLkodvGX+nd5XUGzF+g2U5a6wQmmlHrkb/NpGNyF1g
-         jiab5756EaFtBNsVqKqCW7kzfCZqz0E0E9J4T6flkSFrvguURllYJpT8ZFXEwxrudf
-         t41+RiIxV47Yxh5zw0ecjSLfdvnlD3015xQwGTLefok2gZH6Usex2tz5xk+tFQ/HKP
-         hD7KRz4wXqP0A==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pClWR-00Ga6w-6F;
-        Tue, 03 Jan 2023 17:56:23 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     kvmarm@lists.cs.columbia.edu, Marc Zyngier <maz@kernel.org>,
-        kvmarm@lists.linux.dev
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Will Deacon <will@kernel.org>, asahi@lists.linux.dev,
-        James Morse <james.morse@arm.com>
-Subject: Re: (subset) [PATCH 0/3] KVM: arm64: M2 vgic maintenance interrupt rework pre-NV
-Date:   Tue,  3 Jan 2023 17:56:19 +0000
-Message-Id: <167276854454.3239244.7195924669135808939.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230103095022.3230946-1-maz@kernel.org>
-References: <20230103095022.3230946-1-maz@kernel.org>
+        Tue, 3 Jan 2023 12:56:48 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B296D1147B;
+        Tue,  3 Jan 2023 09:56:46 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id j16so12413924edw.11;
+        Tue, 03 Jan 2023 09:56:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p7a1U2/c7WJv3NEBfJYAOixnmGcKLo0CuycVU47++aQ=;
+        b=aKwytJh4KX20LXxOryZJE0HuJG5HcaCeIxX3tFX5yZz0gEhN3vG/Ugzp3jfNHHAfFZ
+         zpCCt+btieU/rdBGPWbe3sejqYvYS8FTg2R49yHZy6jaIbMe+hPE/DtWRavxYZwoIN0T
+         QVzbnO8+eVVo9l/ID7dtlfG3fmFswrJrboaiZ3nNEzQHN+QM9WO5pCpA1f5g1joQhIXW
+         l72WenGT/6K3hPFCxw3kIKLiLCVK3azdhhESTO51lnjK++sWuiMrmBZf4WNy7jNIp7fY
+         YzJXiRkbxN0lvgynjSnG5SWR5+Uu2VYbKX6KvdPUI1pO/IiTONJIZdImNLn22/Eq/9AP
+         aWWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p7a1U2/c7WJv3NEBfJYAOixnmGcKLo0CuycVU47++aQ=;
+        b=Zq76Uzozq1s77vV07YW7Y6sN1jgMdeNPclu8K9ZPyDaI6RN7Hu/W869l+xUXUZ5S1+
+         1e9wimXnwxgFkkhynGFpCQXTL9w2+AbYH1j0Yhon5+3mZXBxEJXWTpR9j2wLVGt2KWko
+         gfvRSJLidEROVAIT5tzbsso/vl7s9iFCoCEfkYmqqPsuScYu89MTE25rQEMTBu33jUpN
+         +uP3rfTPFDwzfPzVLAOW6Jn2PJikXfHXmqnt+Xjeu5NDohYaOt5LF0v/pdUGDdjrh656
+         58GUpM4lQvHfDh9BBI4ZoPf914I2UPUbg0vBJQBbqPWelgMWy2KBAbGSs0oCBTCwaCFs
+         m7FA==
+X-Gm-Message-State: AFqh2kqvB2H2atkTy4ZwZqpaji8apBvIngX31LcOdnAYdmYGuCnCi3Q9
+        24xneICgEnFaU8xOPHG+57Y=
+X-Google-Smtp-Source: AMrXdXtEtXWdICTqd1aomJDuH7ZCpdFY3T3zFdVGv7z0OI1uDhXO0zYB+HaMBkbXi0VNrPwD5wFXmA==
+X-Received: by 2002:a05:6402:390b:b0:465:f6a9:cb7b with SMTP id fe11-20020a056402390b00b00465f6a9cb7bmr39249116edb.12.1672768605161;
+        Tue, 03 Jan 2023 09:56:45 -0800 (PST)
+Received: from skbuf ([188.26.185.118])
+        by smtp.gmail.com with ESMTPSA id h14-20020aa7c94e000000b0046f77031d40sm13864230edt.10.2023.01.03.09.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 09:56:44 -0800 (PST)
+Date:   Tue, 3 Jan 2023 19:56:41 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 net-next 09/10] dt-bindings: net: add generic
+ ethernet-switch-port binding
+Message-ID: <20230103175641.nqvo2gk43s3nanwg@skbuf>
+References: <20230103051401.2265961-1-colin.foster@in-advantage.com>
+ <20230103051401.2265961-10-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: kvmarm@lists.cs.columbia.edu, maz@kernel.org, kvmarm@lists.linux.dev, suzuki.poulose@arm.com, linux-kernel@vger.kernel.org, oliver.upton@linux.dev, alyssa@rosenzweig.io, catalin.marinas@arm.com, marcan@marcan.st, sven@svenpeter.dev, alexandru.elisei@arm.com, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, will@kernel.org, asahi@lists.linux.dev, james.morse@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230103051401.2265961-10-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 3 Jan 2023 09:50:19 +0000, Marc Zyngier wrote:
-> I've spent the holiday break reviving the Nested Virt KVM/arm64
-> implementation[1] and allowing it to work on the Apple M2 SoC. The
-> amusing part is that it actually works!
-> 
-> However, the way the vgic is implemented on this HW is still at odds
-> with the rest of the architecture, and requires some hacks, some of
-> which are independent of the actual NV code. This is what this series
-> is about.
-> 
-> [...]
+On Mon, Jan 02, 2023 at 09:14:00PM -0800, Colin Foster wrote:
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
+> new file mode 100644
+> index 000000000000..126bc0c12cb8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
+> @@ -0,0 +1,25 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/ethernet-switch-port.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic Ethernet Switch Port
+> +
+> +maintainers:
+> +  - Andrew Lunn <andrew@lunn.ch>
+> +  - Florian Fainelli <f.fainelli@gmail.com>
+> +  - Vladimir Oltean <olteanv@gmail.com>
+> +
+> +description:
+> +  Ethernet switch port Description
 
-Applied to fixes, thanks!
+Still doesn't look too great that the ethernet-switch-port description
+is this thing devoid of meaning. What is said about the dsa-port is what
+the description should be here, and the description of the dsa-port is
+that it's a generic Ethernet switch port plus DSA specific properties.
 
-[1/3] KVM: arm64: vgic: Add Apple M2 cpus to the list of broken SEIS implementations
-      commit: 4f6202c9fb51cc6a2593ad37d8ddff136b7acef2
+> +
+> +$ref: ethernet-controller.yaml#
+> +
+> +properties:
+> +  reg:
+> +    description: Port number
+> +
+> +additionalProperties: true
 
-Cheers,
-
-	M.
--- 
-Without deviation from the norm, progress is not possible.
-
-
+Also, I see your patches are deferred in patchwork, and while this isn't
+really for me to say, presumably it's because there was no announcement
+so far that net-next reopened.
