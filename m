@@ -2,120 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2425C65BB24
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D9365BB30
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 08:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236799AbjACHUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 02:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S236845AbjACHZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 02:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbjACHUj (ORCPT
+        with ESMTP id S232809AbjACHZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 02:20:39 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6C4B1E8;
-        Mon,  2 Jan 2023 23:20:38 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3036CGGr032696;
-        Tue, 3 Jan 2023 07:20:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=BIIiIarhrMjfZ53epwzctaykif7mltHYkilT75A5OPY=;
- b=KizFdBnlOLpd9/LevRENWKUnt6tz9UI+RVlkfAKECJXG0+AJq8JVCUyMH3uBpfNSIv1N
- aHPgTEyQFLw48Hjwhdou0fBoykM09eCapOFk74wYAudadsh2Rd5CsTDCQ4iHvbqGixar
- OaaGDSc7EaFZvf8cJzJ81EpqtIXO74uM/Fxa1JC5/MgJncksz6wdSZfikkUsB+6IKO0L
- JmFRJ+krjc79KggR4xga/2HFqiQnTqL5Z9UiJo6Wx2LQpjuFi4rD7lApX861HEWqTK9F
- asg3grv4H4SZxcV4NEOWZL9T+D0qFhAN0hHmqtJPeLawp0auAtPwKSVUFoT88jXqCtR+ iQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvevns0su-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 07:20:08 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30378iA1040828;
-        Tue, 3 Jan 2023 07:20:07 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvevns0s7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 07:20:07 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 302BoFlL008404;
-        Tue, 3 Jan 2023 07:20:05 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3mtcbfjh0h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 07:20:05 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3037K2sw46137732
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Jan 2023 07:20:02 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B27BA20040;
-        Tue,  3 Jan 2023 07:20:02 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A1F5A2004E;
-        Tue,  3 Jan 2023 07:20:02 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue,  3 Jan 2023 07:20:02 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
-        id 3B9AEE095C; Tue,  3 Jan 2023 08:20:02 +0100 (CET)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Willy Tarreau <w@1wt.eu>, "Paul E . McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH v3 5/5] rcutorture: build initrd for rcutorture with nolibc
-Date:   Tue,  3 Jan 2023 08:19:57 +0100
-Message-Id: <20230103071957.222360-6-svens@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230103071957.222360-1-svens@linux.ibm.com>
-References: <20230103071957.222360-1-svens@linux.ibm.com>
+        Tue, 3 Jan 2023 02:25:42 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CFCB1F5
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 23:25:39 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1433ef3b61fso35907598fac.10
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 23:25:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0nNMMGww+HESuJGrtt7OTDK73JOC6okX5AlTUFO5dvk=;
+        b=FtG8AZqUStGiK435qQBb7ytOLII+YMPdVaAkYc/9/Uzr0TZwLIKY/0OYEBqvyIdmDY
+         9DUfb0Zn6ECxYb9hWEXBCN1Vgu5wQq+k+nFgTIKAAUSK5hwfmd+sMiZKJpCkloyQIyDU
+         u78pfQTTwOt587HS7sJmbPpSvVliocvOUBCFJx2PfrblOaUqB4JicJM7SiVXjuj6Lrvs
+         s3+obgVWNK1et7exmCKO3ltbaiFo7G8BbFKULDFsHICDUT0MmcqDGrJsJtsNyrSR2CsK
+         Wpx9Gb6rN9dBlsuDSmdUV1/UsYYl0nBy3lqOY1pW6qXiacxHcapg66QMNhvUA3b8iwUo
+         rIFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0nNMMGww+HESuJGrtt7OTDK73JOC6okX5AlTUFO5dvk=;
+        b=GVSkg/eb8CNtXdzH7lFqewzxSDTauposhkaoItMF3W5oM0cbA9B0303nky5u6JFFcz
+         nwnA0BIMv0BKsM4X3eVdU5K5zvRUPneHmyyY3/Isv1GMoY0yxsLOTsVIoUd0rb4aR18+
+         1AiIcQvh1z0VX+D2tFfiJi/hM4S5iEus3z4Zrso5vbvpxAsMdVj/zCLjQ/U6L+8lLYbz
+         dAe5B7j8jXF6bAwv0wSSM5GV1LYgdughh1fKPx8fLjKrhKZvpvTFTGq0Evd14IEDcaJJ
+         waQ4crAEuUgEwn5E2TklDfvMGX0M0DEbZheaOb1rhKB7kn0DIH2Mn+1SuOzQd2vlhSZ4
+         g5qA==
+X-Gm-Message-State: AFqh2koSzvTDDC5e5sHXTc6KMoF1UOhvA2d+53eGsAkrZ4+3gq8XV24N
+        MOlHckf2fU+opTFxyqICrxOURSARB+MBqfD8vMc=
+X-Google-Smtp-Source: AMrXdXsy8TEbxowp/DYsB8PHvIyW1la1xn7HJzwbXABsFcGyFBRPjgpk3fBQcG/ygYhh/V8oUbre15YdjVFFtPbg15w=
+X-Received: by 2002:a05:6870:7f0e:b0:150:39c6:15ba with SMTP id
+ xa14-20020a0568707f0e00b0015039c615bamr1383164oab.209.1672730739237; Mon, 02
+ Jan 2023 23:25:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dVNGR_Aw9M95AwyOFs1Lc5kuM-qS7uPg
-X-Proofpoint-GUID: ZB1-E_5NVP3HV5W2wiWC1YX4QVzIqMq_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_14,2022-12-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- suspectscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 spamscore=0 phishscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301030062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:5e17:b0:e7:8a4b:fe30 with HTTP; Mon, 2 Jan 2023
+ 23:25:38 -0800 (PST)
+Reply-To: kreditlinel25@gmail.com
+From:   INFO <shivdvlbind62986@gmail.com>
+Date:   Mon, 2 Jan 2023 23:25:38 -0800
+Message-ID: <CABQZbM9vdkTo_oubh_nmTMDmtecqi450vNhZ=m5Rd=XfvngmZA@mail.gmail.com>
+Subject: lening
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:35 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 HK_RANDOM_ENVFROM Envelope sender username looks random
+        *  1.0 HK_RANDOM_FROM From username looks random
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [kreditlinel25[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [shivdvlbind62986[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [shivdvlbind62986[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reduces the size of init from ~600KB to ~1KB.
-
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
----
- tools/testing/selftests/rcutorture/bin/mkinitrd.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/rcutorture/bin/mkinitrd.sh b/tools/testing/selftests/rcutorture/bin/mkinitrd.sh
-index 70d62fd0d31d..71f0dfbb2a6d 100755
---- a/tools/testing/selftests/rcutorture/bin/mkinitrd.sh
-+++ b/tools/testing/selftests/rcutorture/bin/mkinitrd.sh
-@@ -64,7 +64,7 @@ ___EOF___
- # build using nolibc on supported archs (smaller executable) and fall
- # back to regular glibc on other ones.
- if echo -e "#if __x86_64__||__i386__||__i486__||__i586__||__i686__" \
--           "||__ARM_EABI__||__aarch64__\nyes\n#endif" \
-+           "||__ARM_EABI__||__aarch64__||__s390x__\nyes\n#endif" \
-    | ${CROSS_COMPILE}gcc -E -nostdlib -xc - \
-    | grep -q '^yes'; then
- 	# architecture supported by nolibc
 -- 
-2.34.1
+Goede dag,
 
+   Wij zijn gespecialiseerd in het verstrekken van leningen voor
+bedrijven, projecten, zakelijke en persoonlijke leningen tegen een
+rentepercentage van 2% per jaar.
+
+Wij bieden: -
+* Investeringen in projectleningen
+* Investeringen in zakelijke leningen
+* Persoonlijke Lening Investeringen
+
+Neem contact met ons op voor meer details.
+
+Ondergetekende,
+Online reclamebureau.
