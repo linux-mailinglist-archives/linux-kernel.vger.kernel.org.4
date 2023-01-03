@@ -2,380 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5038065C695
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6433D65C6AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbjACSoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S238605AbjACSqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:46:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238427AbjACSoW (ORCPT
+        with ESMTP id S238574AbjACSpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:44:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25A61146C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:42:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672771326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gJxygzEE9fcu4p09cst8BELDJgzUdAGTuCRkOH1nzj8=;
-        b=KmThromrwxToPAt0m9GCT+GS30QdIyClQ+3a91oKftzTgjnYEy70pVXD/HcumjAVx8UsRp
-        6o+6GWLXqmQz6D3HdymJ/KdMVRRKH/plXrRfGLf2IgZZqgsI2BsCatzmtW1cOGEMaWwkvR
-        Yjt+JWgw0UbSvRhBSSQX0qlmJMNAEcM=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-558-VY3nXWLUOmWtqRBbK8gGkw-1; Tue, 03 Jan 2023 13:42:05 -0500
-X-MC-Unique: VY3nXWLUOmWtqRBbK8gGkw-1
-Received: by mail-qv1-f71.google.com with SMTP id l4-20020a056214028400b0052d4b24e9f2so15721146qvv.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:42:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gJxygzEE9fcu4p09cst8BELDJgzUdAGTuCRkOH1nzj8=;
-        b=kfIYvKocrjNWSyMNByRt29Q5XTE9Ois1XRnP/CDTu5UF4Jzhi9xsr30UQBx4htST2y
-         DXwOhIF92Kz0dA1kgiVGgfcHhGICKso2vIdUOyGqTcJbklmzydxLNSNR+BMulJ7HnCh8
-         /lHkyijgNK8+gtoq8L65but4b+XV6AaZtxndSlb+GcKIudt4O0VH1TCxIOgtmyUXKf6A
-         tIZSrr6MljAIql98jcGT4VRFgjVtw9GVAVmxytqs77dz2GMV6956sD8sn9lDM+b+g6YD
-         YfnmF8K1jbRwQ6cbPW2kmL9VNK6bEmqSQF64kJMHoM7Ri35U2kLpL9QZa5yHvgaLY0OW
-         kd8w==
-X-Gm-Message-State: AFqh2kptiHVNc4dJtjQ3jsUSEN0eJ0wZoAhiapu5nAQ63iGROA1AAScX
-        RMckSvbjOD2ri3DXvocp94jRBUL2cKcaVGW3DJI0AYTqOreaRHHWCKHoyczjbVXV8XcztrNXqfY
-        KBvJjsv1n/CZ6PkiKlfL31hY7
-X-Received: by 2002:ac8:66d1:0:b0:3a5:9267:ee07 with SMTP id m17-20020ac866d1000000b003a59267ee07mr65172487qtp.63.1672771325160;
-        Tue, 03 Jan 2023 10:42:05 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs8AZtY4EXT+rQZQlhm1uuDEvLpOroOriz6oGlGCFD4KJBYyXVXA+8h6JlNZKqdHVNqWE90mg==
-X-Received: by 2002:ac8:66d1:0:b0:3a5:9267:ee07 with SMTP id m17-20020ac866d1000000b003a59267ee07mr65172457qtp.63.1672771324746;
-        Tue, 03 Jan 2023 10:42:04 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id a11-20020a05620a16cb00b006bb29d932e1sm22377245qkn.105.2023.01.03.10.42.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 10:42:03 -0800 (PST)
-Date:   Tue, 3 Jan 2023 13:43:03 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, willy@infradead.org,
-        kernel-team@meta.com
-Subject: Re: [PATCH v4 3/4] cachestat: implement cachestat syscall
-Message-ID: <Y7R3NzEkaex1A3L4@bfoster>
-References: <20221216192149.3902877-1-nphamcs@gmail.com>
- <20221216192149.3902877-4-nphamcs@gmail.com>
- <Y6HIxvH/YTHNnYM9@bfoster>
- <CAKEwX=Pe8PPgndHOrYwrrX+47HBQjUKdZaEUoFuBDSob0tYfUg@mail.gmail.com>
+        Tue, 3 Jan 2023 13:45:19 -0500
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09381056E;
+        Tue,  3 Jan 2023 10:43:51 -0800 (PST)
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303IJnNx015607;
+        Tue, 3 Jan 2023 18:43:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS06212021;
+ bh=wje1NDMN8Sx/Z1AJQylCF5ecxLBPrRp3mjqNchoCiNg=;
+ b=AfGP99MI2Qp74dzXSAGsWKWykcmWu/w7IWy8lAh34DTzbb02uKWrN5tU1uKZL4IqMx+S
+ hndfgkMY4P9JmeyJoF8ng3UAC+UHC2mv3TYaTAs6Evjm/xNfyN1/PyKCuS1QF87vHKjt
+ JB1dI7P3FnPHYB7WyOUISHPU+m2R7v2cy6rMPQOaW0+7z9KxevYwf3U+uFOdo3/MqK/O
+ olDqBCKWCPwZfBoilf2k5wK2Yg1ulnqq6a91b+2p5RRjiCJ2nVj75XFqORUawGmmSn9s
+ HeM3lNhAfgHVtpZfIY/s2dEnU+/PWwL46z3YEbFGk0xQV1FURfILMH/wOD2c7j1+KLfm 4g== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2104.outbound.protection.outlook.com [104.47.55.104])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3mtaa2hvcr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 18:43:23 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DO7IMeVBGhsCuUp4h3uAuBNUIxtWLg2H9+YJ+EKXAPkJAGuJAcFepeVOVTxShG1rbPGoVjGUTVbDHRFBKxP2UWvlqvwmIUXTE4K80ptXD7Iqr9SXHFup/WRuWa7J2kZeQ0Qn4ue103Uxs5LWM0ZYjXGtkjV9QhoyljsCHDtsPESMlPmMrdiXFadOVK+r550rsfCDyZrZV2GfuHB2YSJjoPmPqSO4nN0kxGNXO+9ctHznvVIjupQbmoBip6AvWhA8MJoufslGOZDPYzh6V/vKtfbrZ1I++KUXlpwGBO6qMG7KK8vv5VhP+h+VUL13ZOORvC/OH/q1PwROs3xY+EL+4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wje1NDMN8Sx/Z1AJQylCF5ecxLBPrRp3mjqNchoCiNg=;
+ b=EE4JEAgcaQhVvKi2EDgLv89OvzrnmHCTIDWA15U6SeGXrPm2PNuIgb8qlZrIG5R+wL+Ee78QsAPeK7+6Ki8oYyF6KxMd58Y8CtUWgp30uuxOiMp5xi0/IOuS+rGxz34ADdvmLCIL2CSwdtWVA3Yt6dnbbaw8Sf2SLhKlQWyi5tz+MEoRHYrsI7shy9+1fp82PilC6g3h4kQT0jqvKi6FcG7xTviedPJoD7PKGFIZhWZMUq+tdR7NDRJ5oAW5VL3VgLZXN4meUds99XgPCeU4Zmz1qL/4WvRM4KZm4d3i0oVrW6Iqgi/nVsGBSkLxLhutoCopfi60ZeECpIEtGulPTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com (2603:10b6:510:40::15)
+ by DS0PR11MB6352.namprd11.prod.outlook.com (2603:10b6:8:cb::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.19; Tue, 3 Jan 2023 18:43:21 +0000
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::52f4:f398:b983:2380]) by PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::52f4:f398:b983:2380%7]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
+ 18:43:21 +0000
+From:   Dragos-Marian Panait <dragos.panait@windriver.com>
+To:     stable@vger.kernel.org
+Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        David Zhou <David1.Zhou@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 4.19 0/1] drm/amdkfd: Check for null pointer after calling kmemdup
+Date:   Tue,  3 Jan 2023 20:43:07 +0200
+Message-Id: <20230103184308.511448-1-dragos.panait@windriver.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR07CA0295.eurprd07.prod.outlook.com
+ (2603:10a6:800:130::23) To PH0PR11MB4952.namprd11.prod.outlook.com
+ (2603:10b6:510:40::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKEwX=Pe8PPgndHOrYwrrX+47HBQjUKdZaEUoFuBDSob0tYfUg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4952:EE_|DS0PR11MB6352:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4977ca77-26e9-4baa-5a66-08daedba6332
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MfHITHCNcv3szdo0C6yyd4OYlo7q/cgXZK8B+6IfeLMX5oXQ7R3c5r3HDDILL09QTW8354gJyACDb3mFwyjtR0ofrL+M3O9YqerRlcd4OUBrUPxXJnUCnSI7UbJIxMQtL61VjnJYeJTVsoBqdJXS6HKO2TlWDF/Z8faOtO+bcx/ojPZqJmPoWUZQ8rYfYQ2iXCKKIC7nRVu88JTE9qvE2dS8r1s93GvoBzvIismJar7h7ACRS52iVRd4OYWyqxwIAYgmGaBkPzXZJYrHCepmw/noI0eW3SF9ObYailZs7sJXHaxJ1pBloDmm3byfHNaCjBVaseTt4gD/gMFW3lH/G3xASM6jlrmrkm7GVXM633tN7ho9hiygjyqFiPGbEk/zQoD3iE0QPJbGQu7xuTYqrUlWkhPMO27Z6r2N+K/8C49invrZ12Spm0WYYysZv7/JsQUyxMU/NwDWUl3FpUR7q79wJMczEubVb9BCBDxesOiRfVwTZubm/Fhs7W2WsM4ljpKkP40oxxS+gOu7KDAQiUtzTzOluVaPna5bZmr4z4XzfO1eHNrh4+HpWYUNEMZ9hOz89E411K3NhhRSl1Xex6uNcfxz0iy15bhPWsk4XLNlQepjQWBAy6/vjloXuBQzkkPrfM4B+hxGsa+RLZX2ypsZEdmJRSpQ2G79UgH3Fk2uKogk2zXVA7IG+/0y0CnhaDWe1nMdZ9xjgGW+/Hxmnyg5souZCoTZFPSzzxzjeji5RXWLCkhG0ZWXuEp9CwdO
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4952.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(366004)(39850400004)(396003)(376002)(451199015)(66556008)(66476007)(4326008)(66946007)(8676002)(7416002)(41300700001)(6916009)(54906003)(5660300002)(4744005)(8936002)(2906002)(316002)(36756003)(52116002)(6506007)(966005)(6666004)(478600001)(186003)(1076003)(26005)(2616005)(6512007)(6486002)(86362001)(38350700002)(38100700002)(22166006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nKd1S0KiDlo8/kVn4yPnvoMZqulzrrf5pWlgI2qWfqYB4777wObynx3fttV1?=
+ =?us-ascii?Q?0PDhN8AnXem3NejUpaVZIlrOO6zCEQ5RkpzvGGgs47HtT1H+oZo7yICLw4hw?=
+ =?us-ascii?Q?ioLqu8QYSjNah33IcF+e73SQwcNnvAi9B49n7l369YJNYkbptdhiKWgkKRZ8?=
+ =?us-ascii?Q?tH5dy3plnbwEgMBHpF17SMP0cAMJVZAQkkMryy0FCMUSTI+MsKkdTnf4gdrN?=
+ =?us-ascii?Q?lRnpGDQ3Ofn/NMwySGgvDeX4CKL+nC3VoyuRKBMAhuMD9IzZtwUdB5WOh1HK?=
+ =?us-ascii?Q?BoLpWrhx3mnFxsds5H0Rtp9j/81OELsVXwvkGtGGVSNPakSd/5uZg/lfg+pB?=
+ =?us-ascii?Q?QWrMykpRftt8r4tCB9KKfivfKKXzTJjDt9w5JWOhPgLUCh2b41wN258zWMD9?=
+ =?us-ascii?Q?6iBSVyOhjiderAupG5uZ7XhjlbpzfMYsQJe6Hbxt7KjSKEDbJtYQLhWwL7WJ?=
+ =?us-ascii?Q?6jfwqaQTnr/eoQArItPzuVFWyABs1GUsbqmAhr2x4fnKnstNj8jh9p8vOiYu?=
+ =?us-ascii?Q?DGd5jy24YLmkjGTFVP33KcSdDUodFmu4fedfGy8elNQWJbzteOP7tIgyzt7y?=
+ =?us-ascii?Q?1JhsC4zCXpCDG2MIHyT+jBnNlV0s/WkSxLpjta96/7E8/mboOyT185QlLGZh?=
+ =?us-ascii?Q?syLzjlgAemO1ueOvXagW900beqRewzFBaXY78f4BGJTFrQvejp0TZO86F8Sa?=
+ =?us-ascii?Q?abaZc5r+NZPa8R7dnjzgGpeQOQQDky0TGchcTWdR/KuDHtn2P+5m6k2YsloN?=
+ =?us-ascii?Q?ZSxzb9f959dMRX900xUe1ri9Ojdp9bKf5kEe5crE2M2w0bjm4xpNTXjiEDL+?=
+ =?us-ascii?Q?ocx3k/f+jzPeueC2ChAc5kAdbt1u7nq+EFjSXy9Biq4oWU6sLYtgWrgFOXul?=
+ =?us-ascii?Q?I/pmFHSs+v1knZNienz8L394XR05DLPC3PuH8ev2zFcodx8fYzgBIlKx7nJW?=
+ =?us-ascii?Q?erfYR3KzRinkNMigNumrB1x3dpwWEFkb6v7Bheqyaz9DvV7fXtg5RTf0hfIH?=
+ =?us-ascii?Q?EZxeNxdBRK+fL7m6AcdtacFr4A0Yef+U7OkgzDo08Eq1RCQSUhQpuLQ3zYxB?=
+ =?us-ascii?Q?l2UOM+EMw7JurWGjydiNLSMqZPk8SUILF8KKuReUT2vmkHXhH06/5rm68Z4M?=
+ =?us-ascii?Q?YwrEDTOtUdkHmIRcXw9GfEi4LVk1kvFznLxX10iwdKxCGk5JitiHbOXoy49o?=
+ =?us-ascii?Q?n99irwZSkDowFnyOmtv01Mw55Uc+2Zr5aupz+Pdl1dcnbhuv219oBavBu/Nr?=
+ =?us-ascii?Q?CpRX1Q858Em+bJ/15H07CNW5vUI/UM/xtaD/luTDZC8m/RbqraqEoFkEXqHX?=
+ =?us-ascii?Q?WC4buadvA4TvqKeoYCMXv3rc71/L3sPgj61F1WYXt9lOI5DLmH+tq0L9r5ac?=
+ =?us-ascii?Q?NY+lfnheKCXgDXSVjjBcr/ginPpZz7ecg3w1bIY0LFGrFUUy3sK922ToODNN?=
+ =?us-ascii?Q?Om0H1ozACML1WBQNYkfCcTdcrkhdCmCVCclnwZ7k/7nU6rXHz5ZEp5e36AUD?=
+ =?us-ascii?Q?Z1TUhzQwfk5+2kTwY/RL5QRyNDL55taVVNoOdy+gS9WhE4GBhEZJiNe94nnW?=
+ =?us-ascii?Q?9p2aGPQQ8CDnK4ZJ8396g04xU+NPLEq2rCU6tz1HPGrLX1an72xtXFb+0Q7f?=
+ =?us-ascii?Q?fA=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4977ca77-26e9-4baa-5a66-08daedba6332
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4952.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 18:43:21.3258
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hdp3/BgSCU46wHsYzkoCqU7KvTNS36tDctrJv/hZ8wfpPTPwUcdngfeGExt+bHZr71eP+qy9hRAkQXefz01hA/WWFaBl+QDmOzPUEYT46EM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6352
+X-Proofpoint-ORIG-GUID: 8XDpUqJ2ql_dbFkTcJSd-373clOiJ--n
+X-Proofpoint-GUID: 8XDpUqJ2ql_dbFkTcJSd-373clOiJ--n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-03_07,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ phishscore=0 mlxlogscore=643 impostorscore=0 spamscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301030160
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 01:50:19PM -0800, Nhat Pham wrote:
-> On Tue, Dec 20, 2022 at 6:37 AM Brian Foster <bfoster@redhat.com> wrote:
-> >
-> > On Fri, Dec 16, 2022 at 11:21:48AM -0800, Nhat Pham wrote:
-> > > Implement a new syscall that queries cache state of a file and
-> > > summarizes the number of cached pages, number of dirty pages, number of
-> > > pages marked for writeback, number of (recently) evicted pages, etc. in
-> > > a given range.
-> > >
-> > > NAME
-> > >     cachestat - query the page cache status of a file.
-> > >
-> > > SYNOPSIS
-> > >     #include <sys/mman.h>
-> > >
-> > >     struct cachestat {
-> > >         __u64 nr_cache;
-> > >         __u64 nr_dirty;
-> > >         __u64 nr_writeback;
-> > >         __u64 nr_evicted;
-> > >         __u64 nr_recently_evicted;
-> > >     };
-> > >
-> > >     int cachestat(unsigned int fd, off_t off, size_t len,
-> > >           size_t cstat_size, struct cachestat *cstat,
-> > >           unsigned int flags);
-> > >
-> > > DESCRIPTION
-> > >     cachestat() queries the number of cached pages, number of dirty
-> > >     pages, number of pages marked for writeback, number of (recently)
-> > >     evicted pages, in the bytes range given by `off` and `len`.
-> > >
-> > >     These values are returned in a cachestat struct, whose address is
-> > >     given by the `cstat` argument.
-> > >
-> > >     The `off` and `len` arguments must be non-negative integers. If
-> > >     `len` > 0, the queried range is [`off`, `off` + `len`]. If `len` ==
-> > >     0, we will query in the range from `off` to the end of the file.
-> > >
-> > >     `cstat_size` allows users to obtain partial results. The syscall
-> > >     will copy the first `csstat_size` bytes to the specified userspace
-> > >     memory. `cstat_size` must be a non-negative value that is no larger
-> > >     than the current size of the cachestat struct.
-> > >
-> > >     The `flags` argument is unused for now, but is included for future
-> > >     extensibility. User should pass 0 (i.e no flag specified).
-> > >
-> > > RETURN VALUE
-> > >     On success, cachestat returns 0. On error, -1 is returned, and errno
-> > >     is set to indicate the error.
-> > >
-> > > ERRORS
-> > >     EFAULT cstat points to an invalid address.
-> > >
-> > >     EINVAL invalid `cstat_size` or `flags`
-> > >
-> > >     EBADF  invalid file descriptor.
-> > >
-> > > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> > > ---
-> >
-> > Hi Nhat,
-> >
-> > Thanks for the tweaks. FWIW, this by and large looks reasonable to me.
-> 
-> Thanks for suggesting the tweaks! I tried refactoring it out and it
-> did look cleaner to me (and one fewer file that I have to keep
-> track of...)
-> 
-> > Just a couple more random nitty things, if you happen to care about
-> > them..
-> >
-> > >  arch/alpha/kernel/syscalls/syscall.tbl      |   1 +
-> > >  arch/arm/tools/syscall.tbl                  |   1 +
-> > >  arch/ia64/kernel/syscalls/syscall.tbl       |   1 +
-> > >  arch/m68k/kernel/syscalls/syscall.tbl       |   1 +
-> > >  arch/microblaze/kernel/syscalls/syscall.tbl |   1 +
-> > >  arch/parisc/kernel/syscalls/syscall.tbl     |   1 +
-> > >  arch/powerpc/kernel/syscalls/syscall.tbl    |   1 +
-> > >  arch/s390/kernel/syscalls/syscall.tbl       |   1 +
-> > >  arch/sh/kernel/syscalls/syscall.tbl         |   1 +
-> > >  arch/sparc/kernel/syscalls/syscall.tbl      |   1 +
-> > >  arch/x86/entry/syscalls/syscall_32.tbl      |   1 +
-> > >  arch/x86/entry/syscalls/syscall_64.tbl      |   1 +
-> > >  arch/xtensa/kernel/syscalls/syscall.tbl     |   1 +
-> > >  include/linux/fs.h                          |   3 +
-> > >  include/linux/syscalls.h                    |   3 +
-> > >  include/uapi/asm-generic/unistd.h           |   5 +-
-> > >  include/uapi/linux/mman.h                   |   9 ++
-> > >  init/Kconfig                                |  10 ++
-> > >  kernel/sys_ni.c                             |   1 +
-> > >  mm/filemap.c                                | 137 ++++++++++++++++++++
-> > >  20 files changed, 180 insertions(+), 1 deletion(-)
-> > >
-> > ...
-> > > diff --git a/mm/filemap.c b/mm/filemap.c
-> > > index 08341616ae7a..29ffb906caa4 100644
-> > > --- a/mm/filemap.c
-> > > +++ b/mm/filemap.c
-> > ...
-> > > @@ -3949,3 +3953,136 @@ bool filemap_release_folio(struct folio *folio, gfp_t gfp)
-> > >       return try_to_free_buffers(folio);
-> > >  }
-> > >  EXPORT_SYMBOL(filemap_release_folio);
-> > > +
-> > > +#ifdef CONFIG_CACHESTAT
-> > > +/**
-> > > + * filemap_cachestat() - compute the page cache statistics of a mapping
-> > > + * @mapping: The mapping to compute the statistics for.
-> > > + * @first_index:     The starting page cache index.
-> > > + * @last_index:      The final page index (inclusive).
-> > > + * @cs:      the cachestat struct to write the result to.
-> > > + *
-> > > + * This will query the page cache statistics of a mapping in the
-> > > + * page range of [first_index, last_index] (inclusive). THe statistics
-> > > + * queried include: number of dirty pages, number of pages marked for
-> > > + * writeback, and the number of (recently) evicted pages.
-> > > + */
-> > > +void filemap_cachestat(struct address_space *mapping, pgoff_t first_index,
-> > > +             pgoff_t last_index, struct cachestat *cs)
-> > > +{
-> >
-> > Not sure why the internal helper needs to be wrapped in a config option?
-> > Perhaps it makes more sense to define CONFIG_CACHESTAT_SYSCALL and just
-> > wrap the syscall bits with that..?
-> 
-> No particularly strong reasons - I was just bundling the two together
-> because I was not entirely sure if it's interesting or has any use
-> case outside of the syscall itself.
-> 
-> Do you have something in mind?
-> 
+The following commit is needed to fix CVE-2022-3108:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=abfaf0eee97925905e742aa3b0b72e04a918fa9e
 
-Not immediately, though it looks like a straightforward and potentially
-useful helper. It wouldn't surprise me if it grew more in-kernel users
-eventually. :)
+Jiasheng Jiang (1):
+  drm/amdkfd: Check for null pointer after calling kmemdup
 
-That said, I only suggested this for cleanup/consistency reasons. I.e.,
-it seems there is plenty of precedent for CONFIG_*_SYSCALL config
-options, and the one or two I happened to peek at looked like they only
-wrapped the syscall bits as opposed to the entire implementation (which
-also seems like a clean and elegant approach to me). Somebody could
-easily come along and make that change later if/when they might want to
-use the helper (though it might be annoying to change the name of the
-config option), so I have no strong opinion on either suggestion.
+ drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Brian
 
-> >
-> > I would also think it might make things simpler to split out all the
-> > syscall bits into a separate patch from filemap_cachestat().
-> 
-> Same as above.
-> 
-> >
-> > > +     XA_STATE(xas, &mapping->i_pages, first_index);
-> > > +     struct folio *folio;
-> > > +
-> > > +     rcu_read_lock();
-> > > +     xas_for_each(&xas, folio, last_index) {
-> > > +             unsigned long nr_pages;
-> > > +             pgoff_t folio_first_index, folio_last_index;
-> > > +
-> > > +             if (xas_retry(&xas, folio))
-> > > +                     continue;
-> > > +
-> > > +             nr_pages = folio_nr_pages(folio);
-> > > +             folio_first_index = folio_pgoff(folio);
-> > > +             folio_last_index = folio_first_index + nr_pages - 1;
-> > > +
-> > > +             /* Folios might straddle the range boundaries, only count covered subpages */
-> > > +             if (folio_first_index < first_index)
-> > > +                     nr_pages -= first_index - folio_first_index;
-> > > +
-> > > +             if (folio_last_index > last_index)
-> > > +                     nr_pages -= folio_last_index - last_index;
-> > > +
-> > > +             if (xa_is_value(folio)) {
-> > > +                     /* page is evicted */
-> > > +                     void *shadow = (void *)folio;
-> > > +                     bool workingset; /* not used */
-> > > +
-> > > +                     cs->nr_evicted += nr_pages;
-> > > +
-> > > +#ifdef CONFIG_SWAP /* implies CONFIG_MMU */
-> > > +                     if (shmem_mapping(mapping)) {
-> > > +                             /* shmem file - in swap cache */
-> > > +                             swp_entry_t swp = radix_to_swp_entry(folio);
-> > > +
-> > > +                             shadow = get_shadow_from_swap_cache(swp);
-> > > +                     }
-> > > +#endif
-> > > +                     if (workingset_test_recent(shadow, true, &workingset))
-> > > +                             cs->nr_recently_evicted += nr_pages;
-> > > +
-> > > +                     continue;
-> > > +             }
-> > > +
-> > > +             /* page is in cache */
-> > > +             cs->nr_cache += nr_pages;
-> > > +
-> > > +             if (folio_test_dirty(folio))
-> > > +                     cs->nr_dirty += nr_pages;
-> > > +
-> > > +             if (folio_test_writeback(folio))
-> > > +                     cs->nr_writeback += nr_pages;
-> >
-> > I'm not sure this is an issue right now (or if it will ever be for your
-> > use cases), but from a filesystem perspective it is possible to have
-> > large or variable sized folios in cache. At the moment I think the fs
-> > (or XFS+iomap at least) manages dirty/writeback state at folio
-> > granularity, but that may change in the near future if/when iomap
-> > sub-page dirty tracking comes along. I suspect that means it may become
-> > possible to have a large folio of some N number of pages where only a
-> > subset of those pages are actually in dirty/writeback state, and thus
-> > introduces some inaccuracy here because this assumes that folio state
-> > applies to folio_nr_pages() worth of pages. Just something to be aware
-> > of..
-> >
-> > Brian
-> 
-> Oof, I coded this with the mental framework of folio-as-a-unit, and
-> assumed that the dirty/writeback state is managed at the granularity of folio.
-> Thanks for bringing this up Brian! I'll have to watch out for this as iomap
-> evolves (and the subpage tracking becomes a thing).
-> 
-> >
-> > > +     }
-> > > +     rcu_read_unlock();
-> > > +}
-> > > +EXPORT_SYMBOL(filemap_cachestat);
-> > > +
-> > > +/*
-> > > + * The cachestat(5) system call.
-> > > + *
-> > > + * cachestat() returns the page cache statistics of a file in the
-> > > + * bytes specified by `off` and `len`: number of cached pages,
-> > > + * number of dirty pages, number of pages marked for writeback,
-> > > + * number of (recently) evicted pages.
-> > > + *
-> > > + * `off` and `len` must be non-negative integers. If `len` > 0,
-> > > + * the queried range is [`off`, `off` + `len`]. If `len` == 0,
-> > > + * we will query in the range from `off` to the end of the file.
-> > > + *
-> > > + * `cstat_size` allows users to obtain partial results. The syscall
-> > > + * will copy the first `csstat_size` bytes to the specified userspace
-> > > + * memory. It also makes the cachestat struct extensible - new fields
-> > > + * can be added in the future without breaking existing usage.
-> > > + * `cstat_size` must be a non-negative value that is no larger than
-> > > + * the current size of the cachestat struct.
-> > > + *
-> > > + * The `flags` argument is unused for now, but is included for future
-> > > + * extensibility. User should pass 0 (i.e no flag specified).
-> > > + *
-> > > + * Because the status of a page can change after cachestat() checks it
-> > > + * but before it returns to the application, the returned values may
-> > > + * contain stale information.
-> > > + *
-> > > + * return values:
-> > > + *  zero    - success
-> > > + *  -EFAULT - cstat points to an illegal address
-> > > + *  -EINVAL - invalid arguments
-> > > + *  -EBADF   - invalid file descriptor
-> > > + */
-> > > +SYSCALL_DEFINE6(cachestat, unsigned int, fd, off_t, off, size_t, len,
-> > > +             size_t, cstat_size, struct cachestat __user *, cstat,
-> > > +             unsigned int, flags)
-> > > +{
-> > > +     struct fd f = fdget(fd);
-> > > +     struct address_space *mapping;
-> > > +     struct cachestat cs;
-> > > +     pgoff_t first_index = off >> PAGE_SHIFT;
-> > > +     pgoff_t last_index =
-> > > +             len == 0 ? ULONG_MAX : (off + len - 1) >> PAGE_SHIFT;
-> > > +
-> > > +     if (off < 0 || cstat_size > sizeof(struct cachestat) || flags != 0)
-> > > +             return -EINVAL;
-> > > +
-> > > +     if (!f.file)
-> > > +             return -EBADF;
-> > > +
-> > > +     memset(&cs, 0, sizeof(struct cachestat));
-> > > +     mapping = f.file->f_mapping;
-> > > +     filemap_cachestat(mapping, first_index, last_index, &cs);
-> > > +     fdput(f);
-> > > +
-> > > +     if (copy_to_user(cstat, &cs, cstat_size))
-> > > +             return -EFAULT;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +#endif /* CONFIG_CACHESTAT */
-> > > --
-> > > 2.30.2
-> > >
-> >
-> 
+base-commit: c652c812211c7a427d16be1d3f904eb02eb4265f
+-- 
+2.38.1
 
