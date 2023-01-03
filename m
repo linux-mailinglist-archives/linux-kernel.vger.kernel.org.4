@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E162B65BD76
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E008B65BD74
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237309AbjACJvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
+        id S237299AbjACJvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237280AbjACJup (ORCPT
+        with ESMTP id S237279AbjACJup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 3 Jan 2023 04:50:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047D4E0EE
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02248E0DD
         for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:50:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD95FB80E73
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5246B80E71
         for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:50:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B188C433F0;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431CFC433EF;
         Tue,  3 Jan 2023 09:50:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672739441;
-        bh=ksABWOILjZpEH8g2g2MW4ZIXOmX06sjGYHgn9lXfTFo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=g5Jw+NnWDK6lM4inBLft9cmxDjeWejVbQgxI9tg+L9zjH/A2ju3GT3zmewDQMwA5C
-         2OHIMEGvSdwMUDNI2gC+CY5H/AzwwgysbSbDOA/WCj7qlomkDH/xEwztbYMWf4qZB4
-         +5chikFtIqXyNNgv8fHVb6t+iNdY6ufSM6sT7XB019cZjKFJvn3AhLZxLrQOFqC3fh
-         AFnHFoUsQz+8Af5JhNts8kcktDUBEiC7tb/O1YKEWD0JHWk9bb1oJb7ry5iQzNo2Yp
-         6aRt8kRsrVlcGrnnHG2o7Uba3VyafAHdM2u+KdtC6qXC8vhxIc+uaEv3Ji/TOyoxIg
-         H62E2CzfWVPHg==
+        bh=QagyCicwiw0PUhea9wxFGenMt5PRvlzgWVpE9fRmJ5M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=P8t5ZX9HZcFmk5luOzpQRjJGb8pu7v1GjJa2RKUPzf6jz1PzAvVn5Ao4HbJGhdtjM
+         oM/RJ5zGFmZ+gzNE5shxvH50pd4qhqDPoHi7w2n87mESwTpBiN6+EcwsAz2AU6Fj2P
+         Zcbv9GVs0l/iSOCRYMn4WIKbEKYU8DV+Y0Rie0jltvIMLm1IgILqVFh/j8iRGFJws8
+         gaPYdGyeX8Iwc0KwgRclDfD1/jBOfRIhJ7vMYvCDG4laTk9H1OFsgoVgBf7pdDH3cW
+         /wFpI10IYxf3zxS1/UIHmjUa5+x7SiL+PvWUNto1uyx2yePaotHUNAVCPhJyzptjK2
+         AV9pO/guE+4hQ==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1pCdwN-00GTcP-3O;
+        id 1pCdwN-00GTcP-DI;
         Tue, 03 Jan 2023 09:50:39 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     <kvmarm@lists.cs.columbia.edu>, <kvmarm@lists.linux.dev>
@@ -50,10 +50,12 @@ Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Oliver Upton <oliver.upton@linux.dev>, asahi@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] KVM: arm64: M2 vgic maintenance interrupt rework pre-NV
-Date:   Tue,  3 Jan 2023 09:50:19 +0000
-Message-Id: <20230103095022.3230946-1-maz@kernel.org>
+Subject: [PATCH 1/3] KVM: arm64: vgic: Add Apple M2 cpus to the list of broken SEIS implementations
+Date:   Tue,  3 Jan 2023 09:50:20 +0000
+Message-Id: <20230103095022.3230946-2-maz@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230103095022.3230946-1-maz@kernel.org>
+References: <20230103095022.3230946-1-maz@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 185.219.108.64
@@ -69,41 +71,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+I really hoped that Apple had fixed their not-quite-a-vgic implementation
+when moving from M1 to M2. Alas, it seems they didn't, and running
+a buggy EFI version results in the vgic generating SErrors outside
+of the guest and taking the host down.
 
-I've spent the holiday break reviving the Nested Virt KVM/arm64
-implementation[1] and allowing it to work on the Apple M2 SoC. The
-amusing part is that it actually works!
+Apply the same workaround as for M1. Yes, this is all a bit crap.
 
-However, the way the vgic is implemented on this HW is still at odds
-with the rest of the architecture, and requires some hacks, some of
-which are independent of the actual NV code. This is what this series
-is about.
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ arch/arm64/include/asm/cputype.h | 4 ++++
+ arch/arm64/kvm/vgic/vgic-v3.c    | 3 ++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-The first patch places M2 on the naughty list of broken SEIS
-implementations, just like the M1 before it. The second patch allows
-a vgic MI to be registered, even if this MI cannot be masked (we
-disable it at the source anyway). The last patch hacks the AIC driver
-to actually register the vgic MI with KVM.
-
-I plan to take the first patch as a fix for 6.2, while the rest can be
-deferred to 6.3.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=kvm-arm64/nv-6.2-WIP
-
-Marc Zyngier (3):
-  KVM: arm64: vgic: Add Apple M2 cpus to the list of broken SEIS
-    implementations
-  KVM: arm64: vgic: Allow registration of a non-maskable maintenance
-    interrupt
-  irqchip/apple-aic: Register vgic maintenance interrupt with KVM
-
- arch/arm64/include/asm/cputype.h |  4 +++
- arch/arm64/kvm/vgic/vgic-init.c  |  2 +-
- arch/arm64/kvm/vgic/vgic-v3.c    |  3 +-
- drivers/irqchip/irq-apple-aic.c  | 55 ++++++++++++++++++++++++--------
- 4 files changed, 49 insertions(+), 15 deletions(-)
-
+diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
+index 4e8b66c74ea2..683ca3af4084 100644
+--- a/arch/arm64/include/asm/cputype.h
++++ b/arch/arm64/include/asm/cputype.h
+@@ -124,6 +124,8 @@
+ #define APPLE_CPU_PART_M1_FIRESTORM_PRO	0x025
+ #define APPLE_CPU_PART_M1_ICESTORM_MAX	0x028
+ #define APPLE_CPU_PART_M1_FIRESTORM_MAX	0x029
++#define APPLE_CPU_PART_M2_BLIZZARD	0x032
++#define APPLE_CPU_PART_M2_AVALANCHE	0x033
+ 
+ #define AMPERE_CPU_PART_AMPERE1		0xAC3
+ 
+@@ -177,6 +179,8 @@
+ #define MIDR_APPLE_M1_FIRESTORM_PRO MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM_PRO)
+ #define MIDR_APPLE_M1_ICESTORM_MAX MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM_MAX)
+ #define MIDR_APPLE_M1_FIRESTORM_MAX MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM_MAX)
++#define MIDR_APPLE_M2_BLIZZARD MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M2_BLIZZARD)
++#define MIDR_APPLE_M2_AVALANCHE MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M2_AVALANCHE)
+ #define MIDR_AMPERE1 MIDR_CPU_MODEL(ARM_CPU_IMP_AMPERE, AMPERE_CPU_PART_AMPERE1)
+ 
+ /* Fujitsu Erratum 010001 affects A64FX 1.0 and 1.1, (v0r0 and v1r0) */
+diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
+index 826ff6f2a4e7..c6442b08fe80 100644
+--- a/arch/arm64/kvm/vgic/vgic-v3.c
++++ b/arch/arm64/kvm/vgic/vgic-v3.c
+@@ -615,7 +615,8 @@ static const struct midr_range broken_seis[] = {
+ 	MIDR_ALL_VERSIONS(MIDR_APPLE_M1_ICESTORM_PRO),
+ 	MIDR_ALL_VERSIONS(MIDR_APPLE_M1_FIRESTORM_PRO),
+ 	MIDR_ALL_VERSIONS(MIDR_APPLE_M1_ICESTORM_MAX),
+-	MIDR_ALL_VERSIONS(MIDR_APPLE_M1_FIRESTORM_MAX),
++	MIDR_ALL_VERSIONS(MIDR_APPLE_M2_BLIZZARD),
++	MIDR_ALL_VERSIONS(MIDR_APPLE_M2_AVALANCHE),
+ 	{},
+ };
+ 
 -- 
 2.34.1
 
