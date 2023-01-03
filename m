@@ -2,159 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB51E65B9D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 04:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109AC65B9D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 04:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236762AbjACDiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 22:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
+        id S232024AbjACDma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 22:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236810AbjACDh7 (ORCPT
+        with ESMTP id S230071AbjACDm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 22:37:59 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2138.outbound.protection.outlook.com [40.107.255.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA24D2C4;
-        Mon,  2 Jan 2023 19:37:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cr3EtS5+aMLDASFU2soxLC78JoT7PRjZKW0tOdWl7z7ByzFChi0Q0iCsrtr50Oh6u1P3BKPxkbqJ9rx/jfpbNyXyp9Z17h4CScoJFf6F6ID7SSOLwxenSf/kFC78ij/mJQL0zH5x2sR7FE6qDfLAKwqFjTZXAJmXdtcNTXIZ21o4PJHihpOLsWOVclwnK4L16iyfZt9mQSR7mgEUVZ0zwRP1U/vG8iqxByU7NCerDoQPeJdYkixyVhsa/Lo6QYbcl35mVWg/2f11rJkkuxdRI4XjLox/CF71pQTv+B/j02+W5Fy3T96PBT6NFJl/omsSqn4F2+JZl/Kp7sRqWHeuRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s+91SXb8PrY8K/2IWgJo9vDKxQSTSQz9Flc2s+Ap9R4=;
- b=JKFvCYNVUsShL4chdYlybIzlBeUQykpqXi9fZnDnNFSb9CuFW10x17jgwSNJIKeEjO2W07z6wFe3VFoEs0b/dIDn5+aoV8yZOw1EnUdfDzGALTYy6EN3Hn43bz8h1ugIW18o/5ZZxcvKiIu0+9NdGMMKL8g29mp8tsqjE9a7bKZYBn4S/dt7AROrMs8E4x3lJbmU86sgwppp7SFOHwDOtnUPBdGCE/TdYr3KesI5IFa9OGqnVEj0EmZ+v+1z/sRMroU0x3Zvj8kAruyqQ+8Jo1lj1l8CmLA/48BAbkfoE1AN2ShaJKOBIDZUab+3mhM1REhaR5wkBV5R75hMEPk7wA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s+91SXb8PrY8K/2IWgJo9vDKxQSTSQz9Flc2s+Ap9R4=;
- b=U1AC8OB+4TURjLbKb1hjqoOYDKQXTT1Sv/c7EY+LVMot7nHEZ0wTevDdMyX1QjbLyWd8GPEiI65SG+CaLCIM1vqttFto2JQCEepBB61hgstG2jX5Amji82xxE/TDmRyZPbkZw9ewFsYqoym5HNURJdw+J/tJV59FGcJP6xCnxCnG/8EPkHD5k+J/JKcOBiixXJHvc73+NXMl/aIGbqy4nIAG2gAde5/WpwxBRuRvmsCIaZ8ZPtXl/+tFddsgGderCXxTz0Yq3so1YPgbpoXpdV+l5ytYXTPeyP2XKq+c7FC83kPD+1vmHjC03zGWmWphG3AbtO6P3aL4abEby19gaw==
-Received: from TY2PR06MB3213.apcprd06.prod.outlook.com (2603:1096:404:97::16)
- by TYZPR06MB5782.apcprd06.prod.outlook.com (2603:1096:400:26a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
- 2023 03:37:48 +0000
-Received: from TY2PR06MB3213.apcprd06.prod.outlook.com
- ([fe80::abee:6367:ef03:e60b]) by TY2PR06MB3213.apcprd06.prod.outlook.com
- ([fe80::abee:6367:ef03:e60b%7]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
- 03:37:48 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        ChiaWei Wang <chiawei_wang@aspeedtech.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+        Mon, 2 Jan 2023 22:42:27 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71593BC32;
+        Mon,  2 Jan 2023 19:42:22 -0800 (PST)
+X-UUID: 34ab3a6ef2344f1c8e9fb48e46cdf970-20230103
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ApD93pQI5RZG3vKi/IhKSTfJIVsHqHw4mKr2DXKEgaQ=;
+        b=coeS4vU3hWLIWib/zI0WbTowpshcS1BJn3+taPV66l5EDpCZ3zEknw+AuyzM7KMegvfCrVjhR7lATH2nyHRfVNdMaZ9JmKitKmoXnT/2g8rCQLHi9oWEGIcs/vz60kbGgxgtKiT59jAS76TCGhjCJBwSOXhbGxAsT5a8tdBDuVM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.16,REQID:3f82b79e-7e22-44df-b0ef-93ef76ca5c56,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:09771b1,CLOUDID:ad339cf4-ff42-4fb0-b929-626456a83c14,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0
+X-UUID: 34ab3a6ef2344f1c8e9fb48e46cdf970-20230103
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2038646243; Tue, 03 Jan 2023 11:42:17 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 3 Jan 2023 11:42:15 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 3 Jan 2023 11:42:15 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>, kyrie wu <kyrie.wu@mediatek.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: RE: [PATCH v4 1/4] crypto: aspeed: Add ACRY RSA driver
-Thread-Topic: [PATCH v4 1/4] crypto: aspeed: Add ACRY RSA driver
-Thread-Index: AQHZD4nhuBerx3rD8U+/oUEvaZ6riq6GMoiAgAX3k6A=
-Date:   Tue, 3 Jan 2023 03:37:48 +0000
-Message-ID: <TY2PR06MB321306D17A97FBEBFE969A8B80F49@TY2PR06MB3213.apcprd06.prod.outlook.com>
-References: <20221214070114.3966155-1-neal_liu@aspeedtech.com>
- <20221214070114.3966155-2-neal_liu@aspeedtech.com>
- <Y66hXZHl+kqIivOl@gondor.apana.org.au>
-In-Reply-To: <Y66hXZHl+kqIivOl@gondor.apana.org.au>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR06MB3213:EE_|TYZPR06MB5782:EE_
-x-ms-office365-filtering-correlation-id: cf9276da-77c0-4956-6b9b-08daed3be2a4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Zi2Oa2GCIH2gjTrk53ZuHmFelc94b4tKrHB1g9C5ClWt+VAgx3FV4Btp6n/f1MqSq8F1Qvw7y/Pi6J3AIb5QBMdVsLzfM9CuRRcJ0i92jSrEQwSOQsizkxQI3JGBXBOlsezFZe95Fzmg2aTh32O+QhO7fMF7+AqttNCGxZoP78/q3w/ntlJpzs9kgUCFjapppLRiMcBCSzD9VrFi0KEf1VZiRUx/cM+FKgJAHIMtWx3h9PPGj9ZU9jCPEJyRQ7oodqZ94FZf5DqH6aBPjS4ZjIqPeV9Jh1BzO301tiQXQzxHKFYy7prLafzRYPNzd+UaqzJw+u9XIzp7voxLg+QT39OjU7EmuJ8HE4cusd3iwDWYwiEX6y2K3HbIA1ARpugBlP8wu8zag/sRPtWOxnuOYUHMeu7RQJ6QibE76TYsZNCJQTfX5sHHPqH51XhKQNwiR8Tef/lVFRceQp65k4VxQNUtJHvFuIIa3gHmuuYSEpOWhyXcUAAylGlgAN4QK9alXFBZNa2gY/R8+y1rHezdh7vFqNMQQ0dJEmMSdVQeDnsYq4WuANOUNLcoD4khBuL+WLTOlpOxhsp9f8Zw1iAkxa2nIlhd8ulM+z3qCTgWjXT3mWIisKLrjIViVe91S+r7oFcnCv5AJYcg6FIQD9gQgZrbfl6jtkE9q0OsfqSlhokfda5bcKD4XWiXuBjygAg9qfGQcSipfXsf+5g4UqYDNaK0n9X20hgVHPQ7nVEYo9HwLJ5spcH9mmWCjBXGFwgq
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR06MB3213.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(376002)(39830400003)(136003)(396003)(451199015)(52536014)(5660300002)(4744005)(76116006)(7416002)(316002)(41300700001)(54906003)(6916009)(2906002)(66556008)(66446008)(4326008)(66476007)(8676002)(64756008)(66946007)(8936002)(71200400001)(478600001)(53546011)(6506007)(26005)(33656002)(186003)(9686003)(83380400001)(7696005)(966005)(55016003)(86362001)(122000001)(38100700002)(38070700005)(22166006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?V2LJcRbkxuESCOlwGE6P8fm6ijioCT31TTQ6qjtR7wSXgo/ZBjYFi6qwbAl/?=
- =?us-ascii?Q?LQElNRJVtiRB4eRRtdRTY/dQuMIdmhChjnTlNchELUaZwhEYLXUOgCYBGcZh?=
- =?us-ascii?Q?luZj29aAX9l9y0KlMlOs2UZxYLRSjBzeP81zlu5y44iaVcZHYQhmN2JdgBB2?=
- =?us-ascii?Q?sHzdynE7CLK2rDCIApJH9m9d2BDPeke3EY0+JcuyBdx5gcED1A7zcl9HI1zP?=
- =?us-ascii?Q?ZckbyrBSH8jc51QaL/ggDi4SLphX2WVXiHheLzPxdLNCE/uN8l4WS/ooTDEZ?=
- =?us-ascii?Q?/uo5m5j1ZGX7EL1VsiG557YgFcnjKK9CAUbtj1lzdWYhsXHkVuCFZIxzloNQ?=
- =?us-ascii?Q?EeogY1pQkpRBkw+M778YLvpG3W6yjfdtooGVJj1rDSOfMwaO1htxR/wQRAit?=
- =?us-ascii?Q?/+yS4htiVCTTFpz5koL1hzQf9OHh+1/ktkzEykBFGvv02jndemAVVKoYcRoS?=
- =?us-ascii?Q?Tb/O+OzuFVkNrfvRtnjkpDmJNX4ceES5M09oKTPmEGwDYlRLA8au+gGlUjZe?=
- =?us-ascii?Q?bkWBROVlcFLqjsyKYFhDXs5vamhW74jnsh0z49Fz2A+JSnuLy8ZTfAZ7YAju?=
- =?us-ascii?Q?I1bxX0RKdX5IbGSON6+0CMqH2c9zk1HzQm8KDqeCHa1AmhiCRd0t+u2OM9+W?=
- =?us-ascii?Q?XVFwe0NoBdSfRK5LC9D9I2/QhAg52SdM/81sA6Fd3iBFOGfRW3Dpg9sS0fsy?=
- =?us-ascii?Q?pqgDCe2O71SGsHvxl5+w3omVpn8uT8sIXQXqF5ISAIynnClEOF/6tfcFKvD7?=
- =?us-ascii?Q?A08KKt8XGfzI+ojC1rwdCyrsj6+qgMUrwqwohrst3/Dm8O2OQiZFxOCqw58r?=
- =?us-ascii?Q?b0XQpEEidb+G2JXV1rcwC9lBMMh1Npqsyqf7m4fz6gh1EelID1op0eOiP6qf?=
- =?us-ascii?Q?YsT9CuYsHLZwGT+MOFzkjubKlL0L8VN1nYt45v0A1kU/toOeGuyYRZxU0Xqq?=
- =?us-ascii?Q?Sckyt4hEUGf61pir5+Ae9xJ1fN1kGIohRVGmn/xdfdMoMnJQYmttCkGJUAlb?=
- =?us-ascii?Q?lUSikjkJGycZXSUPD9FA794CGFH4nyUIhFkb5/wL2cGnHZfSOlql8dhFpDvP?=
- =?us-ascii?Q?ykdz2hbfOjCFHHYwt4r3qz36rjd+p/Q7mUuYKlmy/gFrCeS0boBt7k0rYjdo?=
- =?us-ascii?Q?g6ihSWj2WC9/2CcsO0jVdMpWW2OYFez51O7IYowk8Ljw6783tEXp3yFVqJUg?=
- =?us-ascii?Q?g/vm9Z1Tam0LoU+OkMprBzmzfjlD4q069evBVnzUkbQZlgxPc2gyNe54PSgc?=
- =?us-ascii?Q?Zq1Euyd9SbtqM8AreX4DTYdv7UqbrVe50aEJdvsl9wskInWNSIJX6XV84b3b?=
- =?us-ascii?Q?5wHcNyaRa29rObuYoeX6brpQfCN8kwEUOiHqujNdVAGVnDCzUcFSAsbaQRCL?=
- =?us-ascii?Q?nyy5P4CNFufNowcEfbymOw9D+ujT1ZZKCpFgWyg3iGCCM7iumWzN0amW60hd?=
- =?us-ascii?Q?z7WV6qU471CdLof+9hjIEFdCQf3DzlgnOrQQjxZX8YFrWJuOxleqYmvvZ7Q5?=
- =?us-ascii?Q?6sNPnusMORe2glYDx31eTqk4i5c9moCaVTV6mRqd/IdvJaNOtw9XbSQu2sEg?=
- =?us-ascii?Q?N/wLvozqCIGFCAgh0iiwrIBdohGBYMhoPk5u78qw?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
+        <maoguang.meng@mediatek.com>, Irui Wang <irui.wang@mediatek.com>
+Subject: [V4] media: mtk-jpeg: Fixes jpeghw multi-core judgement
+Date:   Tue, 3 Jan 2023 11:42:13 +0800
+Message-ID: <20230103034213.18573-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR06MB3213.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf9276da-77c0-4956-6b9b-08daed3be2a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2023 03:37:48.7313
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5/1snHlQmiE/eDcnWAyb72/2kmd9FjWvjShmYNCKv/51SsbM/18Aa3rogIAlPmFapM6Ml6STU5LyeCpbVKV+ZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5782
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Herbert Xu <herbert@gondor.apana.org.au>
-> Sent: Friday, December 30, 2022 4:29 PM
-> To: Neal Liu <neal_liu@aspeedtech.com>
-> Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley <joel@jms.id.au>; Andre=
-w
-> Jeffery <andrew@aj.id.au>; David S . Miller <davem@davemloft.net>;
-> ChiaWei Wang <chiawei_wang@aspeedtech.com>;
-> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org;
-> linux-crypto@vger.kernel.org; Christoph Hellwig <hch@infradead.org>
-> Subject: Re: [PATCH v4 1/4] crypto: aspeed: Add ACRY RSA driver
->=20
-> On Wed, Dec 14, 2022 at 03:01:11PM +0800, Neal Liu wrote:
-> >
-> > +static u8 *aspeed_rsa_key_copy(u8 *src, size_t len) {
-> > +	return kmemdup(src, len, GFP_DMA | GFP_KERNEL);
->=20
-> Please explain why you are using GFP_DMA.
+From: kyrie wu <kyrie.wu@mediatek.com>
 
-Looks like it's unnecessary. I'll remove it.
-Thanks.
+some chips have multi-hw, but others have only one,
+modify the condition of multi-hw judgement
 
-> Thanks,
-> --
-> Email: Herbert Xu <herbert@gondor.apana.org.au> Home Page:
-> http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Fixes: 934e8bccac95 ("mtk-jpegenc: support jpegenc multi-hardware")
+
+Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+Signed-off-by: irui wang <irui.wang@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c |  4 +++-
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h | 12 ++++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 969516a940ba..56b27ecd61ec 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1692,7 +1692,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (list_empty(&pdev->dev.devres_head)) {
++	if (jpeg->variant->hw_arch) {
+ 		INIT_DELAYED_WORK(&jpeg->job_timeout_work,
+ 				  mtk_jpeg_job_timeout_work);
+ 
+@@ -1885,6 +1885,7 @@ static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
+ 	.ioctl_ops = &mtk_jpeg_enc_ioctl_ops,
+ 	.out_q_default_fourcc = V4L2_PIX_FMT_YUYV,
+ 	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
++	.hw_arch = MTK_JPEG_HW_MULTI_CORE,
+ };
+ 
+ static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
+@@ -1896,6 +1897,7 @@ static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
+ 	.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
+ 	.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
+ 	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
++	.hw_arch = MTK_JPEG_HW_MULTI_CORE,
+ };
+ 
+ #if defined(CONFIG_OF)
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+index b9126476be8f..ead47e11dd48 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+@@ -46,6 +46,16 @@ enum mtk_jpeg_ctx_state {
+ 	MTK_JPEG_SOURCE_CHANGE,
+ };
+ 
++/**
++ * enum mtk_jpeg_hw_arch - arch of the jpeg hw
++ * @MTK_JPEG_HW_MULTI_CORE:	jpeg hw is mluti-core
++ * @MTK_JPEG_HW_SINGLE_CORE:	jpeg hw is single core
++ */
++enum mtk_jpeg_hw_arch {
++	MTK_JPEG_HW_MULTI_CORE = 0,
++	MTK_JPEG_HW_SINGLE_CORE = 1,
++};
++
+ /**
+  * struct mtk_jpeg_variant - mtk jpeg driver variant
+  * @clks:			clock names
+@@ -60,6 +70,7 @@ enum mtk_jpeg_ctx_state {
+  * @ioctl_ops:			the callback of jpeg v4l2_ioctl_ops
+  * @out_q_default_fourcc:	output queue default fourcc
+  * @cap_q_default_fourcc:	capture queue default fourcc
++ * @hw_arch:            mark jpeg hw arch
+  */
+ struct mtk_jpeg_variant {
+ 	struct clk_bulk_data *clks;
+@@ -74,6 +85,7 @@ struct mtk_jpeg_variant {
+ 	const struct v4l2_ioctl_ops *ioctl_ops;
+ 	u32 out_q_default_fourcc;
+ 	u32 cap_q_default_fourcc;
++	enum mtk_jpeg_hw_arch hw_arch;
+ };
+ 
+ struct mtk_jpeg_src_buf {
+-- 
+2.18.0
+
