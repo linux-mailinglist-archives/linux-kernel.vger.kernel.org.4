@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B8365C6CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5043365C6CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238531AbjACSz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S238595AbjACS4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238153AbjACSz4 (ORCPT
+        with ESMTP id S238568AbjACS4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:55:56 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A0E5F65
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:55:54 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id 188so17744589ybi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:55:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zQYTWmjt5FQcX2UxA0AXl1+Ue8Sq0BTNkGJBr9dSCRA=;
-        b=IBwfdfhO8NgUvWtGuivlCIKr8bO4BElPG2Or6rFcgA5/f9UJFdeKYseVnBaOdZae5A
-         HGwBUhevbmX41oi2HqlXlGbAm0g3UGoEOHZFMB15c3bROiH04aemVruBiW2dY4xNuBt4
-         i91T/XMwNDgi0rXr88TDGYnxc9CT2wwDXEAtESMxxBoa5RaJrPa02IVNMdIbJVGbyMQI
-         JiDSKQ4t2UtX3KxcBQNbXRqEzTx9DWxyfM5C93SK1IGNt0QCzZT2PBx3YiWH/TUlsReh
-         TbkMSZPEnfv3r3XDOUeONLvJbh0pBQQTHw0kwJtXQAQuNMAnId0rWpG4B95th2EJIC39
-         uT2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zQYTWmjt5FQcX2UxA0AXl1+Ue8Sq0BTNkGJBr9dSCRA=;
-        b=JcsFHXWX7htaobo3+e7Gip9CcVTYyLtj4R4+a0cMNR14p/2Zio7zG9X8gzxpbA87pc
-         qh2VQnThGIXUYaDXfm1Hx8QfaNQU3pjU7CB2+SIZKAMBBFuw7Ws/EzG82fs+ZxluOlFe
-         lh3BMpubFDRH5xwumA8zGgz6tGzMSObsJc06wfgFf1ArW7oFSKQUnuyB5FyWsf25B/bA
-         iCgL2XUB3SuF3k8h8nAabIGufieY1Tgy72TdSKsB1yb31z1xowd+cA42r839dmxiPtnI
-         viH0w308tKDDFVoIK4PFDQOdJOy0piQNuBqdqOEswUHlUB7jQdwDpB9otPCGmpedCQgd
-         vdSA==
-X-Gm-Message-State: AFqh2krjaKMskjWuXW6mRuJT1YjhdPhUz3wibY7KBOv9uy6ZmMLgok08
-        OcQ5KlyO/EFrRoJzXK6Ka9c3sYyfuNaVOXD4D5tcnA==
-X-Google-Smtp-Source: AMrXdXsJjmUyumx412omlS+7bb4uzVL3WLj9a97MK45jvTR5eAaPFzzNXlfaGe86KG8h57CWbILscCkAS4AxfqaL2go=
-X-Received: by 2002:a25:6fc6:0:b0:782:ad2:8433 with SMTP id
- k189-20020a256fc6000000b007820ad28433mr2175033ybc.305.1672772153718; Tue, 03
- Jan 2023 10:55:53 -0800 (PST)
+        Tue, 3 Jan 2023 13:56:10 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 65AD9DF41
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:56:09 -0800 (PST)
+Received: (qmail 443440 invoked by uid 1000); 3 Jan 2023 13:56:08 -0500
+Date:   Tue, 3 Jan 2023 13:56:08 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y7R6SPHGS9U/T6IC@rowland.harvard.edu>
+References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
+ <YytfFiMT2Xsdwowf@rowland.harvard.edu>
+ <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
+ <114ECED5-FED1-4361-94F7-8D9BC02449B7>
+ <YzSAnclenTz7KQyt@rowland.harvard.edu>
+ <f763bd5ff835458d8750b61da47fe316@huawei.com>
 MIME-Version: 1.0
-References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-7-vipinsh@google.com>
- <Y64eAvm4JglT1au4@google.com> <CALzav=fGmy=YmpA6u=b0-p8zxnKbF2rt5mQUo-DWm2wYBU7dzA@mail.gmail.com>
- <CAHVum0fdz8HmgQd5z2n9eAzWuTjtBPA5_aVrY123K=kAMdJvhw@mail.gmail.com>
-In-Reply-To: <CAHVum0fdz8HmgQd5z2n9eAzWuTjtBPA5_aVrY123K=kAMdJvhw@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 3 Jan 2023 10:55:27 -0800
-Message-ID: <CALzav=fpyskcX_vsJ=t_K-rM2QdbimNTt1C5w3UQW2TstjS7eQ@mail.gmail.com>
-Subject: Re: [Patch v3 6/9] KVM: Provide NUMA node support to kvm_mmu_memory_cache{}
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f763bd5ff835458d8750b61da47fe316@huawei.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,90 +53,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 10:46 AM Vipin Sharma <vipinsh@google.com> wrote:
->
-> On Thu, Dec 29, 2022 at 3:12 PM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Thu, Dec 29, 2022 at 3:08 PM David Matlack <dmatlack@google.com> wrote:
-> > >
-> > > On Wed, Dec 21, 2022 at 06:34:54PM -0800, Vipin Sharma wrote:
-> > > > Add 'node' variable in kvm_mmu_memory_cache{} to denote which NUMA node
-> > > > this cache should allocate memory from. Default initialize to
-> > > > NUMA_NO_NODE in all architectures.
-> > > >
-> > > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > > > ---
-> > > >  arch/arm64/kvm/arm.c      |  2 +-
-> > > >  arch/arm64/kvm/mmu.c      |  4 +++-
-> > > >  arch/mips/kvm/mips.c      |  2 ++
-> > > >  arch/riscv/kvm/mmu.c      |  2 +-
-> > > >  arch/riscv/kvm/vcpu.c     |  2 +-
-> > > >  arch/x86/kvm/mmu/mmu.c    | 22 ++++++++++++----------
-> > > >  include/linux/kvm_host.h  |  6 ++++++
-> > > >  include/linux/kvm_types.h |  2 ++
-> > > >  8 files changed, 28 insertions(+), 14 deletions(-)
-> > > >
-> > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > > index 9c5573bc4614..52a41f4532e2 100644
-> > > > --- a/arch/arm64/kvm/arm.c
-> > > > +++ b/arch/arm64/kvm/arm.c
-> > > > @@ -340,7 +340,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> > > >       vcpu->arch.target = -1;
-> > > >       bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
-> > > >
-> > > > -     vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
-> > > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache, NULL, NUMA_NO_NODE);
-> > > >
-> > > >       /*
-> > > >        * Default value for the FP state, will be overloaded at load
-> > > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > > > index 31d7fa4c7c14..bd07155e17fa 100644
-> > > > --- a/arch/arm64/kvm/mmu.c
-> > > > +++ b/arch/arm64/kvm/mmu.c
-> > > > @@ -894,12 +894,14 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
-> > > >  {
-> > > >       phys_addr_t addr;
-> > > >       int ret = 0;
-> > > > -     struct kvm_mmu_memory_cache cache = { .gfp_zero = __GFP_ZERO };
-> > > > +     struct kvm_mmu_memory_cache cache;
-> > > >       struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
-> > > >       enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
-> > > >                                    KVM_PGTABLE_PROT_R |
-> > > >                                    (writable ? KVM_PGTABLE_PROT_W : 0);
-> > > >
-> > > > +     INIT_KVM_MMU_MEMORY_CACHE(&cache, NULL, NUMA_NO_NODE);
-> > >
-> > > This is not any better than setting cache.node = NUMA_NO_NODE directly.
-> > > Yes it's less lines of code, but it's harder to read (what does NULL
-> > > mean here?), and every user of kvm_mmu_memory_cache still has to know to
-> > > pass NUMA_NO_NODE.
-> > >
-> > > When I originally gave this suggestion, I intended to suggest that
-> > > INIT_KVM_MMU_MEMORY_CACHE() provide just default initialization.
-> > > Non-default initialization for gfp_zero, gfp_custom, kmem_cache, and
-> > > node would remain as they are.
-> > >
-> > > Yes this adds some more lines, but keeps things readable, and doesn't
-> > > every initialization site of kvm_mmu_memory_cache to know what to pass
-> > > for gfp_zero, node, and kmem_cache. It only needs to set the fields
-> > > *it* cares about.
-> >
-> > And to offset the extra lines to call INIT_KVM_MMU_MEMORY_CACHE(), we
-> > could finally invert the meaning of gfp_zero so that caches use
-> > __GFP_ZERO by default. The majority of caches want __GFP_ZERO, so that
-> > should cut down a bunch of lines.
-> >
->
-> Can you clarify what you mean by invert?
->
-> Caches which don't want __GFP_ZERO will explicitly set gfp_zero to 0.
-> Is this what you intend?
+[Added LKML to the CC: list so there will be a permanent record of this 
+part of the discussion, and changed the Subject: to something more 
+descriptive of the topic at hand.]
 
-When I wrote that comment I was thinking you can change `gfp_t
-gfp_zero` to e.g. `bool skip_gfp_zero` so that the default initialized
-value (false/0) means "use __GFP_ZERO".
+On Tue, Jan 03, 2023 at 04:57:56PM +0000, Jonas Oberhauser wrote:
+> Happy new year everyone!
+> 
+> I'd like to circle back to the brief discussion we had about ppo \subseteq po.
+> 
+> Here's some context:
+> 
+> > > > > the preserved program order not always being a 
+> > > > > program order, lack of
+> > > 
+> > > > Where does the LKMM allow a ppo relation not to be in program order?
+> > >
+> > > When one thread releases a lock and another one takes the lock, you 
+> > > can get an mb relation between the two threads
+> > >
+> > > https://github.com/torvalds/linux/blob/master/tools/memory-model/linux
+> > > -kernel.cat#L40
+> > > 
+> > > this then turns into a ppo edge.
+> 
+> > Ah.  I suppose we should have been a little more careful about internal vs. external full barriers.  RCU barriers are also external, but the model didn't try to include them in the definition of mb; we should have done the same with unlock-lock.
+> 
+> To be more explicit, in the current LKMM, mb includes some cases of po;[UL];co;[LKW];po which also relates events between threads, and this trickles up to the ppo:
+> 
+>   let mb = ([M] ; fencerel(Mb) ; [M]) |
+> 	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
+> 	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
+> 	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> 	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> 		fencerel(After-unlock-lock) ; [M])
+>   let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+>   let strong-fence = mb | gp
+>   ...
+>   let ppo = to-r | to-w | (... | strong-fence | ...) | (po-unlock-lock-po & int) // expanded for readability
+> 
+> Because of this, not every preserved program order edge is actually a program order edge that is being preserved.
 
-However, that's silly once we have INIT_KVM_MMU_MEMORY_CACHE(). We can
-do what you suggest: set gfp_zero to __GFP_ZERO in
-INIT_KVM_MMU_MEMORY_CACHE() and then explicitly set it to 0 in caches
-that don't need __GFP_ZERO.
+Indeed, one can argue that neither the fence nor the (po-unlock-lock-po 
+& int) sub-relations should be included in ppo, since they don't reflect 
+dataflow constraints.  They could instead be added separately to the 
+definition of hb, which is the only place that uses ppo.
+
+> My suggestion for a fix would be to move this part out of mb and strong-fence, and instead introduce a new relation strong-sync that covers synchronization also between threads.
+> 
+>   let mb = ([M] ; fencerel(Mb) ; [M]) |
+> 	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
+> 	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
+> 	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> - 	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> -		fencerel(After-unlock-lock) ; [M])
+>   let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+>   let strong-fence = mb | gp
+> +  let strong-sync = strong-fence | ([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> +		fencerel(After-unlock-lock) ; [M])
+> ...
+>   let ppo = to-r | to-w | (... | strong-fence | ...) | (po-unlock-lock-po & int)
+> 
+> and then use strong-sync instead of strong-fence everywhere else, e.g.
+> - let pb = prop ; strong-fence ; hb* ; [Marked]
+> + let pb = prop ; strong-sync ; hb* ; [Marked]
+> and similarly where strong-fence is being redefined and used in various later lines.
+> (In general I would prefer renaming also other *-fence relations into *-sync when they include edges between threads).
+> 
+> 
+> Note that no ordering is changed by this move.
+> Firstly, the case [M];po;[UL];po;[LKW]; fencerel(After-unlock-lock) ; [M] which is also eliminated from mb by this change  is still present in ppo through the definition ppo = ... | (po-unlock-lock-po & int).
+> Secondly, for the ordering of [M];po;[UL];co;[LKW]; fencerel(After-unlock-lock) ; [M] we can focus on the case [M];po;[UL];coe;[LKW]; fencerel(After-unlock-lock) ; [M] because the other case (coi) is covered by the previous case.
+> Ordering imposed by this case is also not lost, since every [M];po;[UL];coe;[LKW]; fencerel(After-unlock-lock) ; [M] edge also imposes a
+>     [M];po;[UL];rfe;[LKR]; fencerel(After-unlock-lock) ; [M]
+> edge which is a po-rel ; [Marked] ; rfe ; [Marked] ; acq-po edge and hence hb;hb;hb.
+> Thirdly, no new ordering is imposed by this change since every place we now order by strong-sync was previously ordered by the old strong-fence which is identical to the new strong-sync, and in all other places we changed we just (potentially) removed ordering.
+> 
+> The definition of strong-sync could also be slightly simplified to 
+>   let strong-sync = strong-fence | ([M]; po-unlock-lock-po ; [After-unlock-lock] ; po ; [M])
+> which is kind of pretty because the after-unlock-lock is now after po-unlock-lock-po.
+> 
+> What do you think?
+
+That all sounds good to me.  However, I wonder if it might be better to 
+use "strong-order" (and similar) for the new relation name instead of 
+"strong-sync".  The idea being that fences are about ordering, not (or 
+not directly) about synchronization.
+
+Alan
