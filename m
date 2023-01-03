@@ -2,186 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DD665C6C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:54:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EB565C6C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbjACSyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
+        id S237912AbjACSye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjACSyO (ORCPT
+        with ESMTP id S233769AbjACSya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:54:14 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57251F7B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:54:13 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id p12-20020a170902e74c00b0019254f41f6aso21749672plf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:54:13 -0800 (PST)
+        Tue, 3 Jan 2023 13:54:30 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD8E12777
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:54:29 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id 186so34111004ybe.8
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:54:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=88y0UfhMzpIzcF+i0aeHj+160apjA13IPkO6jcFxsno=;
-        b=pb4wfNxDUm8ufcVaIopM/P/7BA4nwETAThO5+GdYRFGByDsGP2OY1BG1OREWfUvfJP
-         ioSBhW2guArKhAJWhPcMJp1n6UbR+F5/XlFdkvJMa0peVKimtw6aXNhEBCu0hvfCOLsf
-         dJRI+jyoxciIuI85qNw3pZ0IGC6lbMwoCbT7LWuRVK83EEjofpiYL8p3qthyVMdllOpz
-         5wsvVXuK4J1Veze/4qYvKbIhTa1rBrAzpvuGbigsSElTN4KApnqobUTt5XVBwD6xnvHK
-         F/8ueXFQuJA2KpAh4/rl6IEo7os7yCh85IY9WzWYsOOqQF+PG3xyp/BjkgZJbuUv3DiL
-         sQjQ==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V+xzLeZ8S7t67SE3NkibuPNQqDQccJbyj3xdCRJVnBQ=;
+        b=SRHdk+FFXl0fK9h0YkVj8GpayRN9BoW23pnChlHAjeNM0RXFkCQjP8iJq0Fbh5BQzr
+         Ksynjt7rpyQ4KeGO/2iHQMnmLBVOptLCH9Yb10G1xu+8iJNCKMG3hNrybyC+tPDLNm0P
+         aMtx5o8hvxK6IDOg1Zge97OLoEEh71Gu35nXhoh+rG2ZN/ecuD8MAnmgrlFHioO/Coum
+         epNyG6CVIGpZCk8UczOIUfmXG7JA9JlGY0FHuubt4VMw+odmGGkLnS5cH50Xj2mSqjsS
+         sGk1QC4lv/Zgv853Hu1i8FriJwGRLsHW14S0hCKGPsPngUffkxvISRG62AEj2w5EoEWd
+         CdTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=88y0UfhMzpIzcF+i0aeHj+160apjA13IPkO6jcFxsno=;
-        b=fWjL/PbA5aLqF5Zn/yjNnzDC4x4GEtt8bUqx3sD4/xCaNqy1A0qovsmxQ+T6HX3ueW
-         tgA2zPTz4Ck81Gywg/tQwBCFaApdl/TeFCAPaAgCr3WGthxKSqKAYOR4Bxu+pbAEs36M
-         NekBUXX+YPQrWVFCPOORJuchYCUXzLSqB8bxZM9KEFYaQ4ksYmc2oz6CdPPimeWWsUWD
-         eEB/P1zxS2V0G8CJXuHZv3jtKH+ei4IQo5kgQV/81LKD/cfFoWwxTFLmKnja7F+ZEQDx
-         yueL6DYJnOZcgbKYmCqebdLIyhpoPoZR36OzRwBZm/aMcyqnr7hH/bqN8dwYIDb2o20C
-         pqmQ==
-X-Gm-Message-State: AFqh2krwq7Qpa8fw3DRoHSIOKjp63KC8H8K9nUgQa5vQsa4XbBcCq6se
-        HY1JBxRIazyKcTGa+HVbsSsAn/yda58WBRl67Qhah+HYG4/3teL5FDTx3k3itSzT3jTKTPvd+Wt
-        /yYfhWiVh7tPyM2365LXakjp0b1pG2kB/KN54IMQW0UZuuelzHv6bZ9oEgu0pZZKDxBSXnhg=
-X-Google-Smtp-Source: AMrXdXupyFMOn124Go6QjcG8VYKG9jlja4Raft5SzbiZayFhIVJ7PZy4jplEJnnlLS5d5cMsdujIvGhPE1A2
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a17:902:e993:b0:192:b9ae:6def with SMTP id
- f19-20020a170902e99300b00192b9ae6defmr704540plb.83.1672772052716; Tue, 03 Jan
- 2023 10:54:12 -0800 (PST)
-Date:   Tue,  3 Jan 2023 18:54:08 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230103185408.2874345-1-jstultz@google.com>
-Subject: [PATCH] trace: Add trace points for tasklet entry/exit
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Connor O'Brien" <connoro@google.com>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V+xzLeZ8S7t67SE3NkibuPNQqDQccJbyj3xdCRJVnBQ=;
+        b=FO2Tn8yJxF+3VvcNJgu16tdigSCuaEHRb65lXsFgzmvN6M9shg0TwhJZIB/h7mMp0n
+         635+s4w6UvSHlzh7qJhLGDORec8yX9Nt0JFzJokOoMSA8KD6cU2hy8VA1IDMSNcLlGIW
+         SgRfMsCZi/3wjJlsT6M+Kyli6yR+m//aTOUx+RGq7GLCz/rNORgWn9lDhklu9z5X8eEV
+         Ilh/JB9jcTvitVVMlCzQ2qEeWmEjXRBTkEvFANwzXROtYhAtRMW+SngoLYY00nTT31WY
+         ST1OvEaJ7yBmr0Ye6ViB3OqTPoGOkzwe1OpVGnkvskPjj2Zk1x+oROEiWEn2hjuZ97wi
+         J64Q==
+X-Gm-Message-State: AFqh2krLk/dnvgz5Z3clGDguVbiaXVuZup4be59UqLVTiQOMqxkMF+PU
+        HIoLNO07t7fzdSD030xpJfiXDgud9FTiUsx3wKY=
+X-Google-Smtp-Source: AMrXdXtrWPb1rRvaJbJxuD4Y4B0rj/EjZLuf2IkF6g8Pq0CDMGaZweOGSAXDnH1iN0MNfw6LY3aAbBXF5jegsivQrGI=
+X-Received: by 2002:a25:c842:0:b0:72d:1f36:4114 with SMTP id
+ y63-20020a25c842000000b0072d1f364114mr4962673ybf.451.1672772068926; Tue, 03
+ Jan 2023 10:54:28 -0800 (PST)
+MIME-Version: 1.0
+Sender: pourpouritv@gmail.com
+Received: by 2002:a05:7110:4b14:b0:1a2:994a:cb5d with HTTP; Tue, 3 Jan 2023
+ 10:54:28 -0800 (PST)
+From:   Ahmed Hanifi <yunnanmrsyuging@gmail.com>
+Date:   Tue, 3 Jan 2023 10:54:28 -0800
+X-Google-Sender-Auth: tMWPfyc86-JJNq6VKlWihQc9sYw
+Message-ID: <CAPVv7-1t1JtzW+m3jwCQgP6YXwGAF42TdPQxqVxM13ti8m7XFA@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_99,DEAR_FRIEND,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b2d listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9954]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [yunnanmrsyuging[at]gmail.com]
+        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
-
-Tasklets are supposed to finish their work quickly and
-should not block the current running process, but it is not
-guaranteed that. Currently softirq_entry/exit can be used to
-know total tasklets execution time, but not helpful to track
-individual tasklet's execution time. With that we can't find
-any culprit tasklet function, which is taking more time.
-
-Add tasklet_entry/exit trace point support to track
-individual tasklet execution.
-
-This patch has been carried in the Android tree for awhile
-so I wanted to submit it for review upstream. Feedback would
-be appreciated!
-
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Connor O'Brien <connoro@google.com>
-Cc: kernel-team@android.com
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
-[elavila: Port to android-mainline]
-Signed-off-by: J. Avila <elavila@google.com>
-[jstultz: Rebased to upstream, cut unused trace points, added
- comments for the tracepoints, reworded commit]
-Signed-off-by: John Stultz <jstultz@google.com>
----
- include/trace/events/irq.h | 43 ++++++++++++++++++++++++++++++++++++++
- kernel/softirq.c           |  9 ++++++--
- 2 files changed, 50 insertions(+), 2 deletions(-)
-
-diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
-index eeceafaaea4c..da85851d4ec1 100644
---- a/include/trace/events/irq.h
-+++ b/include/trace/events/irq.h
-@@ -160,6 +160,49 @@ DEFINE_EVENT(softirq, softirq_raise,
- 	TP_ARGS(vec_nr)
- );
- 
-+DECLARE_EVENT_CLASS(tasklet,
-+
-+	TP_PROTO(void *func),
-+
-+	TP_ARGS(func),
-+
-+	TP_STRUCT__entry(
-+		__field(	void *,	func)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->func = func;
-+	),
-+
-+	TP_printk("function=%ps", __entry->func)
-+);
-+
-+/**
-+ * tasklet_entry - called immediately before the tasklet is run
-+ * @func:  tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_entry,
-+
-+	TP_PROTO(void *func),
-+
-+	TP_ARGS(func)
-+);
-+
-+/**
-+ * tasklet_exit - called immediately after the tasklet is run
-+ * @func:  tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_exit,
-+
-+	TP_PROTO(void *func),
-+
-+	TP_ARGS(func)
-+);
-+
- #endif /*  _TRACE_IRQ_H */
- 
- /* This part must be outside protection */
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index c8a6913c067d..dbd322524171 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
- 		if (tasklet_trylock(t)) {
- 			if (!atomic_read(&t->count)) {
- 				if (tasklet_clear_sched(t)) {
--					if (t->use_callback)
-+					if (t->use_callback) {
-+						trace_tasklet_entry(t->callback);
- 						t->callback(t);
--					else
-+						trace_tasklet_exit(t->callback);
-+					} else {
-+						trace_tasklet_entry(t->func);
- 						t->func(t->data);
-+						trace_tasklet_exit(t->func);
-+					}
- 				}
- 				tasklet_unlock(t);
- 				continue;
 -- 
-2.39.0.314.g84b9a713c41-goog
 
+Dear Friend,
+
+    I'm pleased to have a business relation with you' I got your
+contact address while am searching for foreign partner to assist me in
+business transaction that is present in our favor, My name is Mr.
+Ahmed Hanifi, I am the Bill and Exchange (assistant) Manager (BOA)
+BANK OF AFRICA. I'm proposing to transfer out in your name (US$18.3
+Million Dollars) that belong to our later customer, MR. GORPUN
+VLADIMIR From Russia who died in Siber airline that crashed into sea
+at Israel on 4th October 2001.
+
+I want to present you to my bank here as the beneficiary to this fund,
+I'm waiting for your response for more details, as you are willing to
+execute this business opportunity with me.
+
+Yours Sincerely,
+
+Mr. Ahmed Hanifi,
