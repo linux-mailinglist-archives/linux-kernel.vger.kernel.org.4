@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F8365C613
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF45965C630
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238852AbjACSYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S238846AbjACS0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238826AbjACSY3 (ORCPT
+        with ESMTP id S238839AbjACS0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:24:29 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B0413D4C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:24:25 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id i20so25168167qtw.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:24:25 -0800 (PST)
+        Tue, 3 Jan 2023 13:26:21 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E200B6A;
+        Tue,  3 Jan 2023 10:26:02 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id m3so14619274wmq.0;
+        Tue, 03 Jan 2023 10:26:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gyzUkUkRXrWbqnLogkn/YRgVffpdv0ujzVAsh7a/y2U=;
-        b=PeHOAO+KzAkwqiZ5CIjYlPexV4+nLZ+6gAwssCwloHRSHxpFDT34fBE7TkPvC2+Zjm
-         T5XFy06pckwsXDQ12aOxAR2xOZAAFXCxFa9lEeFtPvnzrnVJe2yVd/gRHmbnCvJ8Gs2q
-         n5ePob1ghM++0Gd6+hwa73lRqWY+rsP3+Ptb4=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aRzoYepSkl//ziJ1ySsV1tuFv4CAwJQc87Spdth6SZs=;
+        b=LHPtwEsDLxDopS5vPBG5/7yCKyJME02A52f9mbnYvB8qXsIJphtU/CxV+bwqsbv8Je
+         Sq3Rhtiuc4X04lI3z+oTM2s7p+/qQum2zqveO2PDy2nRm4OUJb69g3F48Vg12ozrAB4V
+         BBsXYg4gVe9Ftv9ElQMid3simNahAm5JQy7yGkWEoa6Kp+z4JQzu6yyv15hWAvHQMi8q
+         X11sW1qYuIlek8rkcfcNxcbfQvtaae4oB8u/s8c7wmSsPJ3QeFx9CvgTsx0/ohx6z+Jn
+         2yOKzAUnS8PdeGeGe2bMIGvYyMb8Kr7HMGTXD/43WMosZGVXu0hvoj1jfEN7P45de8AQ
+         InZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gyzUkUkRXrWbqnLogkn/YRgVffpdv0ujzVAsh7a/y2U=;
-        b=tuEr8ZUHTp6H6nD1A5eN8zbSUedW3fxTJxrJ8kpuvJSV3ulW4rKMiJehEt+ZqL4oWB
-         N9Nuh1aygCmOtfIk8ZiyHXvIVyDTmEtRAbLhlrH544WW0xPPUKJYHeVtVDQKAJ8T5CNP
-         iRU8kInADkHjwTWRiqMDse9Kt1N/xqeJHTfEoHxHo3ldQypwMJTvBus/gRJS0P2qgOrz
-         Q+dB3rHZ4im9gyBXQIpcCHMdxpPlWS9AOpDvPJ0jMENJQppIMwyWDqeqF0EMQZLjqD3g
-         OQPQaK/ppK1C4+jkltxObUaXl9wVGgrenpitJa197zqYZZTlM4ZJuENqUc+SU3H53Bth
-         gwtw==
-X-Gm-Message-State: AFqh2krWY13u2UWevGk6Bvxnms0ZkLRMXiBFyZeTYnarBTcYkHO2G0Yd
-        5dz9MUMoSkHhZRcQI+5PNH5NbA==
-X-Google-Smtp-Source: AMrXdXul9oA+pYoIrGwSof8bvXuSYPQIF8PvW/t01f3pc3Rc3QgzAMbTE3o+cWaad98PHcO+FNiRFA==
-X-Received: by 2002:ac8:534c:0:b0:3a9:8183:6a04 with SMTP id d12-20020ac8534c000000b003a981836a04mr72845793qto.54.1672770264535;
-        Tue, 03 Jan 2023 10:24:24 -0800 (PST)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id u2-20020ac80502000000b003a81eef14efsm19111867qtg.45.2023.01.03.10.24.23
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aRzoYepSkl//ziJ1ySsV1tuFv4CAwJQc87Spdth6SZs=;
+        b=6Qr/RCmrEsH8lJkLQ4k7/kSssguF4WRRgf+o07ealDut7vLNu8V/uBiXtY66xqn/7s
+         yHdl5jM7PqVnstnGXPCADfFzFZqB3C3rbUr6z8m1d1PUxoSEUFGCiwDcWFTT805Gltpw
+         SxZMQIQgTE3+9CnyMxlOzelCoZLFovh53hzuZgYOrS2kEyCuR/q3tAOCMT4H7/o4OgKA
+         gA6W5GwNbw6fMQy93aI+aUubAQAnVPubRIzoWhXIzDROwlUaEy7mSHnyZCNvqYPPmJSi
+         Phypm/D6o1RWTfZW1rEsrsGBl3rzYq/lcPuVXt/kSSoRxnnW1vgCU6PdcJAmXZcoV0Mf
+         BqpA==
+X-Gm-Message-State: AFqh2kqtUTwWAToWsezEU1Jy0rY8kXRW3YKVDDFD59lP1qWMdor7eCkB
+        R/s597ipgadDTmBepHDZlvTpN7xNRmY=
+X-Google-Smtp-Source: AMrXdXvTgaLqJaIX0z7u6gR4WtDhUDjJxeU6g8nd6mOzh+aOlhG38dQ+rO49Ieue3d9OtXykXgBP/g==
+X-Received: by 2002:a05:600c:601e:b0:3d0:7fee:8a70 with SMTP id az30-20020a05600c601e00b003d07fee8a70mr34287826wmb.19.1672770360793;
+        Tue, 03 Jan 2023 10:26:00 -0800 (PST)
+Received: from localhost.localdomain (host-79-56-217-20.retail.telecomitalia.it. [79.56.217.20])
+        by smtp.gmail.com with ESMTPSA id m22-20020a05600c161600b003cfa622a18asm45156598wmn.3.2023.01.03.10.25.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 10:24:23 -0800 (PST)
-Date:   Tue, 3 Jan 2023 18:24:23 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>, linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, stable@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org
-Subject: Re: [PATCH] torture: Fix hang during kthread shutdown phase
-Message-ID: <Y7Ry1yTT/mltqSUI@google.com>
-References: <20230101061555.278129-1-joel@joelfernandes.org>
- <20230102164310.2olg7xhwwhzmzg24@offworld>
- <20230103180404.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 03 Jan 2023 10:26:00 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Brian King <brking@us.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] scsi: ipr: Replace kmap() with kmap_local_page()
+Date:   Tue,  3 Jan 2023 19:25:56 +0100
+Message-Id: <20230103182556.29080-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230103180404.GA4028633@paulmck-ThinkPad-P17-Gen-1>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,WEIRD_PORT autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,65 +73,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 10:04:04AM -0800, Paul E. McKenney wrote:
-> On Mon, Jan 02, 2023 at 08:43:10AM -0800, Davidlohr Bueso wrote:
-> > On Sun, 01 Jan 2023, Joel Fernandes (Google) wrote:
-> > 
-> > > During shutdown of rcutorture, the shutdown thread in
-> > > rcu_torture_cleanup() calls torture_cleanup_begin() which sets fullstop
-> > > to FULLSTOP_RMMOD. This is enough to cause the rcutorture threads for
-> > > readers and fakewriters to breakout of their main while loop and start
-> > > shutting down.
-> > > 
-> > > Once out of their main loop, they then call torture_kthread_stopping()
-> > > which in turn waits for kthread_stop() to be called, however
-> > > rcu_torture_cleanup() has not even called kthread_stop() on those
-> > > threads yet, it does that a bit later.  However, before it gets a chance
-> > > to do so, torture_kthread_stopping() calls
-> > > schedule_timeout_interruptible(1) in a tight loop. Tracing confirmed
-> > > this makes the timer softirq constantly execute timer callbacks, while
-> > > never returning back to the softirq exit path and is essentially "locked
-> > > up" because of that. If the softirq preempts the shutdown thread,
-> > > kthread_stop() may never be called.
-> > > 
-> > > This commit improves the situation dramatically, by increasing timeout
-> > > passed to schedule_timeout_interruptible() 1/20th of a second. This
-> > > causes the timer softirq to not lock up a CPU and everything works fine.
-> > > Testing has shown 100 runs of TREE07 passing reliably, which was not the
-> > > case before because of RCU stalls.
-> > > 
-> > > Cc: Paul McKenney <paulmck@kernel.org>
-> > > Cc: Frederic Weisbecker <fweisbec@gmail.com>
-> > > Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > Cc: <stable@vger.kernel.org> # 6.0.x
-> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > 
-> > Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> Queued for further review and testing, thank you all!
-> 
-> One thing still puzzles me.  Assuming HZ=1000 and given 16 CPUs, each
-> timer hander must have consumed many tens of microseconds in order
-> to keep the system busy, which seems a bit longer than it should be.
-> Or am I underestimating the number of tasks involved?
+The use of kmap() is deprecated in favor of kmap_local_page().
 
-Here are the traces between successive calls to process_timeout() which is the timer callback handler:
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmapâ€™s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-[ 1320.444210]   <idle>-0         0dNs.. 314229620us : __run_timers: Calling timerfn 5: process_timeout
-[ 1320.444215]   <idle>-0         0dNs.. 314229620us : sched_waking: comm=rcu_torture_fak pid=145 prio=139 target_cpu=008
-[ 1320.463393]   <idle>-0         7d.... 314229655us : sched_switch: prev_comm=swapper/7 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_wri next_pid=144 next_prio=120
-[ 1320.478870] rcu_tort-144       7d.... 314229658us : sched_switch: prev_comm=rcu_torture_wri prev_pid=144 prev_prio=120 prev_state=D ==> next_comm=swapper/7 next_pid=0 next_prio=120
-[ 1320.494324]   <idle>-0         0dNs.. 314229738us : __run_timers: Calling timerfn 6: process_timeout
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
-It appears the time delta in the above occurrence is 118 micro seconds
-between 2 timer callbacks. It does appear to be doing a cross-CPU wake up.
-Maybe that adds to the long time?
+Therefore, replace kmap() with kmap_local_page() in
+ipr_copy_ucode_buffer() and, instead of open-coding local mappings +
+memcpy() + local un-mappings, use the better suited memcpy_to_page()
+helper.
 
-Here are the full logs with traces (in case it helps, search for "=D" for the
-D-state sched_switch event before the "panic now" trace happens):
-http://box.joelfernandes.org:9080/job/rcutorture_stable/job/linux-6.0.y/26/artifact/tools/testing/selftests/rcutorture/res/2022.12.31-23.04.42/TREE07.2/console.log
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ drivers/scsi/ipr.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-thanks,
-
- - Joel
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index 2022ffb45041..7dff517a0858 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -3912,7 +3912,6 @@ static int ipr_copy_ucode_buffer(struct ipr_sglist *sglist,
+ {
+ 	int bsize_elem, i, result = 0;
+ 	struct scatterlist *sg;
+-	void *kaddr;
+ 
+ 	/* Determine the actual number of bytes per element */
+ 	bsize_elem = PAGE_SIZE * (1 << sglist->order);
+@@ -3923,9 +3922,7 @@ static int ipr_copy_ucode_buffer(struct ipr_sglist *sglist,
+ 			buffer += bsize_elem) {
+ 		struct page *page = sg_page(sg);
+ 
+-		kaddr = kmap(page);
+-		memcpy(kaddr, buffer, bsize_elem);
+-		kunmap(page);
++		memcpy_to_page(page, 0, buffer, bsize_elem);
+ 
+ 		sg->length = bsize_elem;
+ 
+@@ -3938,9 +3935,7 @@ static int ipr_copy_ucode_buffer(struct ipr_sglist *sglist,
+ 	if (len % bsize_elem) {
+ 		struct page *page = sg_page(sg);
+ 
+-		kaddr = kmap(page);
+-		memcpy(kaddr, buffer, len % bsize_elem);
+-		kunmap(page);
++		memcpy_to_page(page, 0, buffer, len % bsize_elem);
+ 
+ 		sg->length = len % bsize_elem;
+ 	}
+-- 
+2.39.0
 
