@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D6565BD00
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9B265BD02
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237204AbjACJU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
+        id S237017AbjACJUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237112AbjACJUV (ORCPT
+        with ESMTP id S237198AbjACJUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:20:21 -0500
+        Tue, 3 Jan 2023 04:20:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D524CE0A1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55CEE0AA;
         Tue,  3 Jan 2023 01:20:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF58561229;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E848F61194;
         Tue,  3 Jan 2023 09:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4072EC433F2;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4321BC433F1;
         Tue,  3 Jan 2023 09:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672737617;
-        bh=SerKHQrowj7eNz7nlu2mjO2Ycwmdq3DdXH04+EeFqn8=;
+        bh=SBX5BjaglMd9geNlMVmiFqVg49+qe0wrPdYdqPyyKec=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=F+S+/7r9Lui00FUzNiprQbxDAze4fuJizOy25fw7IzgBBFKTo3bdhxBBUg8AilWlv
-         055Y3NQxA/Z/+bhUTV56fs+Qiw1oCGDZD+T3UXMSBRoxAAvoRSzh3tfHX5zGbuYg20
-         mS+4V0afCO2w9W+NCdFFjcZgEx6R/R9HleI/xIytYJKX2vxrTPwrHB9y8JN+TNX5HO
-         HJif+gt75smrdWtH2k7EG0NBKrsvjOm+LA9AYw0gQrHISoFrR9W3wygT15uSx7X1Vw
-         XbvyxS1DVqla9Z7JPjRmoBfryysQFX1k6u2KsU9f5GDx/ftItml9jrBnQ5W0DZQUik
-         nJRRoRYPfBZbQ==
+        b=lE0fHHXJORU9R54HRkjflM+XoRXSMyZ8ZNBWI2cA1rZ5P6MV/P5C+9EVuFKBHL4Zx
+         t1bunovkV0znUgCkDddbNukBThr9HiS2Vs+V5azojF7el2xgNgjRfxbsDlkZRy3lkx
+         WB4mrbiZCyFSsq5PI0YvAVYpCxMV/+SMvLSR9UEVrlLHfrRHYpbyK2LA1hlGnw2e83
+         XLe6kTcEU17/SbkLxCodN+7HtmiI7jxWe5Qf6qBJiI4n+1N2DYyLY/H5D0TGcT67Va
+         qUhN/HMAjjRICPHOETNbwohrOzDXcCzHaBOOMk55YtCSxObbeRtNJiEmSIvSqrLSOG
+         o5JLi0c98szlQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C9E8C395DF;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 238D2E5724D;
         Tue,  3 Jan 2023 09:20:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [v2 PATCH net] octeontx2-pf: Fix lmtst ID used in aura free
+Subject: Re: [PATCH net v2] drivers/net/bonding/bond_3ad: return when there's no
+ aggregator
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167273761711.18098.13255060434872425902.git-patchwork-notify@kernel.org>
+Message-Id: <167273761714.18098.11508217081391735701.git-patchwork-notify@kernel.org>
 Date:   Tue, 03 Jan 2023 09:20:17 +0000
-References: <20230103035012.15924-1-gakula@marvell.com>
-In-Reply-To: <20230103035012.15924-1-gakula@marvell.com>
-To:     Geetha sowjanya <gakula@marvell.com>
+References: <20230102095335.94249-1-d-tatianin@yandex-team.ru>
+In-Reply-To: <20230102095335.94249-1-d-tatianin@yandex-team.ru>
+To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net,
-        edumazet@google.com, sbhatta@marvell.com, hkelam@marvell.com,
-        sgoutham@marvell.com
+        j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,22 +64,21 @@ Hello:
 This patch was applied to netdev/net.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Tue, 3 Jan 2023 09:20:12 +0530 you wrote:
-> Current code uses per_cpu pointer to get the lmtst_id mapped to
-> the core on which aura_free() is executed. Using per_cpu pointer
-> without preemption disable causing mismatch between lmtst_id and
-> core on which pointer gets freed. This patch fixes the issue by
-> disabling preemption around aura_free.
+On Mon,  2 Jan 2023 12:53:35 +0300 you wrote:
+> Otherwise we would dereference a NULL aggregator pointer when calling
+> __set_agg_ports_ready on the line below.
 > 
-> Fixes: ef6c8da71eaf ("octeontx2-pf: cn10K: Reserve LMTST lines per core")
-> Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
-> Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+> Found by Linux Verification Center (linuxtesting.org) with the SVACE
+> static analysis tool.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,net] octeontx2-pf: Fix lmtst ID used in aura free
-    https://git.kernel.org/netdev/net/c/4af1b64f80fb
+  - [net,v2] drivers/net/bonding/bond_3ad: return when there's no aggregator
+    https://git.kernel.org/netdev/net/c/9c807965483f
 
 You are awesome, thank you!
 -- 
