@@ -2,56 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707F965BD81
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C73C065BD89
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237272AbjACJyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:54:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S237282AbjACJ7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:59:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237108AbjACJyc (ORCPT
+        with ESMTP id S233070AbjACJ7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:54:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74203B5A;
-        Tue,  3 Jan 2023 01:54:30 -0800 (PST)
+        Tue, 3 Jan 2023 04:59:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5923E0D9;
+        Tue,  3 Jan 2023 01:59:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11A2660E97;
-        Tue,  3 Jan 2023 09:54:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DD7C433EF;
-        Tue,  3 Jan 2023 09:54:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A4CDB80E80;
+        Tue,  3 Jan 2023 09:59:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DFDCC43392;
+        Tue,  3 Jan 2023 09:59:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672739669;
-        bh=BpfDQ8HqIK6YKlZtjbbpD8Zo3Pb/8YhLfqVQpatUtt0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KxJii57/6HLZ5doJil0NXj28Kw4JpRkyPmP7KGXKsLj4q3nx9/+eBuPvve4qqAvvn
-         GMp0W+1yVkKF9vK4hhcKvKGJN3KNZaSkG+JskFvdXGm2KNMN25TM2TtDySGpOReh9w
-         etMBWuT8aISx+egjmKosD8zICLvqak10muDDkbeiLNHV6yml4gNhmf1C/hs27dC4J2
-         R0aBXrrf88B5574M0quLMUDDPuTzV6Kjz+7ONopNNM2l5C+Y8Bbgq73NXEh1SLENuo
-         exYF8Yv7UYU/BAQ76jVmo6A1LxSQ0XSdEf7PDK8idSO9P28r+jW+JdSLsVxSc7tDsa
-         rOe4mrEXoO92g==
-Date:   Tue, 3 Jan 2023 11:54:24 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        intel-wired-lan@lists.osuosl.org, rajat.khandelwal@intel.com,
-        jesse.brandeburg@intel.com, linux-kernel@vger.kernel.org,
-        edumazet@google.com, anthony.l.nguyen@intel.com,
-        netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
-        davem@davemloft.net, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: [Intel-wired-lan] [PATCH] igc: Mask replay rollover/timeout
- errors in I225_LMVP
-Message-ID: <Y7P7UKpmE8/LsmOn@unreal>
-References: <20221229122640.239859-1-rajat.khandelwal@linux.intel.com>
- <Y7FFESJONJqGJUkb@unreal>
- <a4216a94-72b3-4711-bc90-ad564a57b310@molgen.mpg.de>
+        s=k20201202; t=1672739987;
+        bh=K3GNdh0iSKVs4cxHbbMFC6QCnRMk4vyTA2omm3ALejE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=s1knHPqbkH7hlnM/m2D9Hj1wBaYLROgZ0vWB17OegTZcHFUhfFTMGjijqVogryHkf
+         PwIYftn7jclRTnQmNvitI578qvf3d8l2U1GW9YCcQ1g0cc1ZxzpIi4uormiWctxVd8
+         4ijcD1hwqub9bvsMEiA65wZb9ZFrV/xupotZCIIzelvY5/dreDDYVrB3jMHTS1fBjP
+         QZo7YCgdHhEly2Qov/UlMKbuL/glPxUYdFUvgclP1agwJDf/3/yQhreMoigbXgkQTN
+         723b29wsh137zszJDNpjRK9aCUcVBx8ErN13PHlVkUx864RMcN5k88znh2jHNTQW7N
+         xCGR9zDycUJLA==
+Received: by mail-ej1-f44.google.com with SMTP id gh17so72429258ejb.6;
+        Tue, 03 Jan 2023 01:59:47 -0800 (PST)
+X-Gm-Message-State: AFqh2ko3Jam+ddPzpfMqz7PX984POdy57AljLDuddsNLOGlE4BE/ak/E
+        U91jRBS0UL2U18UCRsXfaNbtwcZn+QYSKmLzqLM=
+X-Google-Smtp-Source: AMrXdXs6X1KS2ScftLdukmy7fbm+oYnh2kNUOaxOawhAHpBi8S0P7w9c/T56eT42XKAb8tDbpox74vUvReqk46aTokU=
+X-Received: by 2002:a17:906:33d4:b0:7c0:f7af:7c5e with SMTP id
+ w20-20020a17090633d400b007c0f7af7c5emr2862143eja.406.1672739985408; Tue, 03
+ Jan 2023 01:59:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a4216a94-72b3-4711-bc90-ad564a57b310@molgen.mpg.de>
+References: <20230102160748.1307289-1-bjorn@kernel.org>
+In-Reply-To: <20230102160748.1307289-1-bjorn@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 3 Jan 2023 17:59:33 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTF9_J__Qk+ppg5c1V+1PeFbZ-xf7DEbo=DXBRpQu1L=A@mail.gmail.com>
+Message-ID: <CAJF2gTTF9_J__Qk+ppg5c1V+1PeFbZ-xf7DEbo=DXBRpQu1L=A@mail.gmail.com>
+Subject: Re: [PATCH] riscv, kprobes: Stricter c.jr/c.jalr decoding
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,66 +66,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 01, 2023 at 11:34:21AM +0100, Paul Menzel wrote:
-> [Cc: +Bjorn, +linux-pci]
-> 
-> Dear Leon, dear Rajat,
-> 
-> 
-> Am 01.01.23 um 09:32 schrieb Leon Romanovsky:
-> > On Thu, Dec 29, 2022 at 05:56:40PM +0530, Rajat Khandelwal wrote:
-> > > The CPU logs get flooded with replay rollover/timeout AER errors in
-> > > the system with i225_lmvp connected, usually inside thunderbolt devices.
-> > > 
-> > > One of the prominent TBT4 docks we use is HP G4 Hook2, which incorporates
-> > > an Intel Foxville chipset, which uses the igc driver.
-> > > On connecting ethernet, CPU logs get inundated with these errors. The point
-> > > is we shouldn't be spamming the logs with such correctible errors as it
-> > > confuses other kernel developers less familiar with PCI errors, support
-> > > staff, and users who happen to look at the logs.
-> > > 
-> > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> > > ---
-> > >   drivers/net/ethernet/intel/igc/igc_main.c | 28 +++++++++++++++++++++--
-> > >   1 file changed, 26 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-> > > index ebff0e04045d..a3a6e8086c8d 100644
-> > > --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> > > +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> > > @@ -6201,6 +6201,26 @@ u32 igc_rd32(struct igc_hw *hw, u32 reg)
-> > >   	return value;
-> > >   }
-> > > +#ifdef CONFIG_PCIEAER
-> > > +static void igc_mask_aer_replay_correctible(struct igc_adapter *adapter)
-> > > +{
-> > > +	struct pci_dev *pdev = adapter->pdev;
-> > > +	u32 aer_pos, corr_mask;
-> > > +
-> > > +	if (pdev->device != IGC_DEV_ID_I225_LMVP)
-> > > +		return;
-> > > +
-> > > +	aer_pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_ERR);
-> > > +	if (!aer_pos)
-> > > +		return;
-> > > +
-> > > +	pci_read_config_dword(pdev, aer_pos + PCI_ERR_COR_MASK, &corr_mask);
-> > > +
-> > > +	corr_mask |= PCI_ERR_COR_REP_ROLL | PCI_ERR_COR_REP_TIMER;
-> > > +	pci_write_config_dword(pdev, aer_pos + PCI_ERR_COR_MASK, corr_mask);
-> > 
-> > Shouldn't this igc_mask_aer_replay_correctible function be implemented
-> > in drivers/pci/quirks.c and not in igc_probe()?
-> 
-> Probably. Though I think, the PCI quirk file, is getting too big.
+Thx for catching it.
 
-As long as that file is right location, we should use it.
-One can refactor quirk file later.
+On Tue, Jan 3, 2023 at 12:07 AM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wr=
+ote:
+>
+> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>
+> In the compressed instruction extension, c.jr, c.jalr, c.mv, and c.add
+> is encoded the following way (each instruction is 16b):
+>
+> ---+-+-----------+-----------+--
+> 100 0 rs1[4:0]!=3D0       00000 10 : c.jr
+> 100 1 rs1[4:0]!=3D0       00000 10 : c.jalr
+> 100 0  rd[4:0]!=3D0 rs2[4:0]!=3D0 10 : c.mv
+> 100 1  rd[4:0]!=3D0 rs2[4:0]!=3D0 10 : c.add
+Yes, I forgot the c.mv & c.add effect.
 
-Thanks
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-> 
-> 
-> Kind regards,
-> 
-> Paul
+>
+> The following logic is used to decode c.jr and c.jalr:
+>
+>   insn & 0xf007 =3D=3D 0x8002 =3D> instruction is an c.jr
+>   insn & 0xf007 =3D=3D 0x9002 =3D> instruction is an c.jalr
+>
+> When 0xf007 is used to mask the instruction, c.mv can be incorrectly
+> decoded as c.jr, and c.add as c.jalr.
+>
+> Correct the decoding by changing the mask from 0xf007 to 0xf07f.
+>
+> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> ---
+>  arch/riscv/kernel/probes/simulate-insn.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/probes/simulate-insn.h b/arch/riscv/kernel=
+/probes/simulate-insn.h
+> index cb6ff7dccb92..de8474146a9b 100644
+> --- a/arch/riscv/kernel/probes/simulate-insn.h
+> +++ b/arch/riscv/kernel/probes/simulate-insn.h
+> @@ -31,9 +31,9 @@ __RISCV_INSN_FUNCS(fence,     0x7f, 0x0f);
+>         } while (0)
+>
+>  __RISCV_INSN_FUNCS(c_j,                0xe003, 0xa001);
+> -__RISCV_INSN_FUNCS(c_jr,       0xf007, 0x8002);
+> +__RISCV_INSN_FUNCS(c_jr,       0xf07f, 0x8002);
+>  __RISCV_INSN_FUNCS(c_jal,      0xe003, 0x2001);
+> -__RISCV_INSN_FUNCS(c_jalr,     0xf007, 0x9002);
+> +__RISCV_INSN_FUNCS(c_jalr,     0xf07f, 0x9002);
+>  __RISCV_INSN_FUNCS(c_beqz,     0xe003, 0xc001);
+>  __RISCV_INSN_FUNCS(c_bnez,     0xe003, 0xe001);
+>  __RISCV_INSN_FUNCS(c_ebreak,   0xffff, 0x9002);
+>
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> --
+> 2.37.2
+>
+
+
+--=20
+Best Regards
+ Guo Ren
