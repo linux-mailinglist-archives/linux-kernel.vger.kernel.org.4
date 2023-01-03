@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9450265BE90
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A6965BE8A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237452AbjACLCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 06:02:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S237326AbjACLCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 06:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236914AbjACLBz (ORCPT
+        with ESMTP id S237168AbjACLB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 06:01:55 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85A8B84
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 03:01:54 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id qk9so72647319ejc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 03:01:54 -0800 (PST)
+        Tue, 3 Jan 2023 06:01:56 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED6110D9
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 03:01:55 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id m18so72609164eji.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 03:01:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=pVSDtU7olXhlILdRW39EpiEJBIjwXVR1HyfxicCBJXA=;
-        b=jQI6cuA9L7qCnerstCMQGG118OwE+62frT9w34GiJ90I7hHoKM5pC6R9blce01Mg+P
-         pIy5YEssGXySRxqu9m/IBcKfqGzycAd+QyIn6oNASBnDTtGeLOKAc/IR2Qcc7vIrRn79
-         Jzh4g4EDPdvsExf/Q+H0zAFxH8tMsQz2HEoRQ=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Co9IVvG+/S6WvoqX0pBLNaNrTdqsJyhBz/38h+pUNcQ=;
+        b=PNXXFXIq+faqpY2Liq7EY/E7M78Zi+NAF2s5xp+2bI1depV/ZFGgtfGg3DaeAmlK2w
+         77aqj/inIHQokfyHkn1PvhTYD4WQuxdkQKud4EUbOQlrBPpp70eenxPZnumWgnNbeyHK
+         NfeGLIwhNoGllFYDPc/UDKAG/gCrb0NsNCir4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pVSDtU7olXhlILdRW39EpiEJBIjwXVR1HyfxicCBJXA=;
-        b=yqlPApt5WHvDE4IfUlawIu/BzGzwJzCrC1YCdbNVhWWTb60NPMVdKQHdmyhAvgKBdV
-         g2eukJKaOb5SHXpKh0XvXQgpgnFIiQZZq8GNV3MabVoIKO/TDOxazm6hgA2e7oKuAYI9
-         oID7FbUZaKIYwkQS2wRHUM8iP5Rds3eDNvxVNxVmcGzJceafdwf6iAhZGrFdHxVt5KYP
-         a9yIoriog+55tj5pgsq+bNUbHICz2RwfP9ZgKLsU9ZV9Hy/ylebkJoQIyTXl3X2iXC1b
-         Z5u3Ml7VZeMRNzoHutDpZdMh7HhvYUDckHP8ZLP6g1H7whhQ6W+TzxZDv549VMFGrCwq
-         +fcQ==
-X-Gm-Message-State: AFqh2kpT0bi7YWIi5KcSbhVLbfSamu11jhjAAnqJKk8HJmDIf49J2zMY
-        BRjXEq0DpiTnvv2v3sisx/DehTNo+SjuU2akavU=
-X-Google-Smtp-Source: AMrXdXvxsuHAkIifWrLekTL0gcNmQ5SuhULbkHRs7c/Rv4XlA8AAKGNGKqh0EnMwzbJ9Gn3Y78MS4A==
-X-Received: by 2002:a17:907:b686:b0:7c1:7c3a:ffba with SMTP id vm6-20020a170907b68600b007c17c3affbamr42763636ejc.35.1672743713414;
-        Tue, 03 Jan 2023 03:01:53 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Co9IVvG+/S6WvoqX0pBLNaNrTdqsJyhBz/38h+pUNcQ=;
+        b=MQQnlHWZoOe0uD+HwEXG0evbMagzMcbv+Rz/qQE/KS3/NHouDZLX5hbIwbreVIK3Q8
+         M/Gno3hNuyimNCkpbBj2+HchQfUnDnyyAdGhPQR0Oo4fRZZaurouM0jTIcjYEXVDViZa
+         UZUL5DguIjwY9KHRmCRCDJUxoeKYEGJoBPqjYJmN4/sMTC3wgk1HvpZsSfyP2MqTXrUI
+         h8XJXXKMAzQ+/23MxxcvV4iE2vAlCJchEa2r/A+8qwcyNlDIML/shwi7xQgWBff11Peo
+         mftl/w5J7WS1CRw+g/U5qqqNSxoonbRK09emmEcUDpYiFRef1JnurtgyjZzSeEI8ZGsf
+         BIXw==
+X-Gm-Message-State: AFqh2koeE/WMNwCaWAFVBSi3xJZpwDMnT6Z4ONw8AikLgeClxYVXxwUU
+        hmyHgFi/5+F1PVlNmACmx4qzdbJOxXt9OCQ13+c=
+X-Google-Smtp-Source: AMrXdXuFHS3L/k5nrZ5ec5hc//xVb2JMLvmw84nYYasWMhxgx8Fkj5YlZAzRCWmEl4kL3LBVdlT16w==
+X-Received: by 2002:a17:907:6e16:b0:7e0:eed0:8beb with SMTP id sd22-20020a1709076e1600b007e0eed08bebmr50674638ejc.41.1672743714098;
+        Tue, 03 Jan 2023 03:01:54 -0800 (PST)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:ef23:1430:9acc:b68])
-        by smtp.gmail.com with ESMTPSA id l12-20020a17090615cc00b007c0cd272a06sm13944331ejd.225.2023.01.03.03.01.52
+        by smtp.gmail.com with ESMTPSA id l12-20020a17090615cc00b007c0cd272a06sm13944331ejd.225.2023.01.03.03.01.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 03 Jan 2023 03:01:53 -0800 (PST)
-Subject: [PATCH v3 0/3] media: uvcvideo: Limit Power Line Control
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 03 Jan 2023 12:01:21 +0100
+Subject: [PATCH v3 1/3] media: uvcvideo: Limit power line control for Acer EasyCamera
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAALtGMC/3WNywqDMBBFf0Wybkpmoql21f8oXeRpAmogqYKI/9
- 60u75Ww73cc2Yj2aZgMzlXG0l2CTnEqQR+qIj2cuotDaZkggwRgAG1Mq9ajrR1IFXTtQrQkbJWMl
- uqkpy0L/tpHoZS+pDvMa0v+wLlXL9FC1BGucMa0XLkxl20T3EM83iMqX+qfyMnMKJmXSe4ke/IrT
- AL/vmGBW26RtRQS8Fa/YHu+/4AtSFskBQBAAA=
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 03 Jan 2023 12:01:20 +0100
-Message-Id: <20221101-easycam-v3-0-2c9881a7a4f7@chromium.org>
+Message-Id: <20221101-easycam-v3-1-2c9881a7a4f7@chromium.org>
+References: <20221101-easycam-v3-0-2c9881a7a4f7@chromium.org>
+In-Reply-To: <20221101-easycam-v3-0-2c9881a7a4f7@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-media@vger.kernel.org,
@@ -64,19 +63,19 @@ Cc:     linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1405; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=sML02cle1nMarXtXIOsKRVwDVFx3dvEdPkPGJTKYfsQ=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtAsBue97dn5WQjp/JY9waSbr1wldWFgr+6XGy493
- bWNJ7bqJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7QLAQAKCRDRN9E+zzrEiPPGD/
- 9+iYTGBndOHU/pcS2VNysgEf5lZYxuukvUVL8AWAWncFphPqiFrj+wckmUQqCjJjyszOUgtyTnvjec
- xPlH8LbClNA7MArXVbap6J6NYw4/A0LWzLF1fM2/gRxs6nsAUKTt8qjwTm6TO9Qhs16XKip2hLQtgr
- rkCYAQtjNkXeXEKzcGwXrW/R6r0R7ghSMnxZ8eWQPCdRdWfG0uUqM6m2nasJMT7T7MnNsSwSWkOIQX
- EeUPc9ICBSwLIX4wKAQIs+hiIsC4mxovhtMYoI4MA0Vp6xX6GiC66/20d1gXD+u5xOTU4zoxb4Y9i8
- 8EGuBRC38VLJS/8j3kXSI19RK+CIjIPwP1gW+Y0n98uXmZCJ5EwdjVcHhBQaeZLpnNo1ZOu0PZfNu0
- xnb5mTaTN/BPUr7dDt5J7+t+GMWMiwH/viTAeGPbpjxp+1jUWmpwlk/5oNfdv4vcEjArlUeenZ5K7v
- QU1YKSdgNaIAkaeOnQendLUSFN8aUfprLD2dy/JgDtnxxRR2/SuzwQN6Zn6nkSR3tZSComv9PQ68Cw
- ljYRzEceRimwlVDTosCX3eFXIVks457YF7KSyYTfTRqC2ZFz9LLQw2x74iO9g9RkZl9mF29AH/knRr
- eHipW6Yfx6N64wrYJ2kaf/O38Jqx/hKaxzpKVwnJ1pSBmYY+h4JY77X3Deow==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1859; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=rO1fkJL8+8p1iNyVTD4jSQz4HIqEXb4KMbzC4AEwi/0=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtAsZuAFlyAU0OVj1MY8bdt/khTMDCzwe3OKTs8DM
+ bi51/RSJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7QLGQAKCRDRN9E+zzrEiM8gD/
+ 9/PDhrsZcm4p8YEssdUzKS1CTASCQ6oDA6Je7r2pDnjab0mpapPCh1Gur5rqkAMGtSkiMHQhYMblWZ
+ Ic/HIIWaQgEoQaY/K++MqsT+D8pvG0G/BEa0JZaSQ2btZBw1va2+znLxCuet8juawAAGCiho1ZaW1l
+ x5QvEmNlXtrfC/0RJkThtbZ2tqq1Me+ZGEhy9Qv5KhqXUezod2pcYX4QrthCW/Lo0XnBuOCNgH/Al6
+ pUbqA658hjtsmeEFEzZEQw8d3CGDDlwbzfLDJh1w3cwDcu7dZIvxrXQ6aqCyCRLGdRcFd2E2z8WOmm
+ bSselOPrt4FsONFb8r5W7BfWLIY5WsQTkfDnLIG+DBV3NvFA3+QOLvyXCND8eODA7gdWUEc4Ir6zP3
+ hA0TA9ZzAwLSBy8PQP0r1Yxe/zFFNawesdyFDOAnT5rJF8nGbs0/NuAkBflf8lkLS8pGnSAEGN8U+Y
+ HI/rnLFDLXhmezNbdK6mXbNbrzcYT6x+PM48P2FaixjZOhgJGf5Aef22geEBomVmOy3vnLtCUvqXv4
+ J3hxP1y0t9QJL70J077umXvdQTOO1N3EZlQ96rnQnq+e9j0H/6cKh1+DX1eafOYvKJlngsmv4t43iH
+ 7Yv6DQD0bS53NCtDuffsDRX5FcPefJsUOpIvckQq1UpQpSvmWpjh8rV+vRkg==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -89,39 +88,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Another set of webcams with invalid PLC controls.
+The device does not implement the power line control correctly. Add a
+corresponding control mapping override.
 
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Bus 003 Device 002: ID 5986:1180 Acer, Inc EasyCamera
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x5986 Acer, Inc
+  idProduct          0x1180
+  bcdDevice           56.04
+  iManufacturer           3 Bison
+  iProduct                1 EasyCamera
+  iSerial                 2
+  bNumConfigurations      1
+
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
 ---
-Changes in v3:
-- Add patch to refactor uvc_ctrl_power_line_mapping_limited. (Can be ignored)
-- Improve commit message. (Thanks Laurent!)
-- Reference uvc_ctrl_power_line_mapping_uvc11 from uvc_ctrl.c (Thanks Laurent!)
-- Link to v2: https://lore.kernel.org/r/20221101-easycam-v2-0-5956414a608c@chromium.org
+ drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Changes in v2:
-- Add Lenovo Integrated Camera
-- Link to v1: https://lore.kernel.org/r/20221101-easycam-v1-0-71d6409963da@chromium.org
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index e4bcb5011360..f2abd9d0c717 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2991,6 +2991,15 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceSubClass	= 1,
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
++	/* Acer EasyCamera */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x5986,
++	  .idProduct		= 0x1180,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0,
++	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
+ 	/* Intel RealSense D4M */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
 
----
-Ricardo Ribalda (3):
-      media: uvcvideo: Limit power line control for Acer EasyCamera
-      media: uvcvideo: Fix power line control for Lenovo Integrated Camera
-      media: uvcvideo: Refactor power_line_frequency_controls_limited
-
- drivers/media/usb/uvc/uvc_ctrl.c   | 41 ++++++++++++++++++++++++++++----------
- drivers/media/usb/uvc/uvc_driver.c | 38 +++++++++++++++++++++--------------
- drivers/media/usb/uvc/uvcvideo.h   |  2 ++
- 3 files changed, 55 insertions(+), 26 deletions(-)
----
-base-commit: 69b41ac87e4a664de78a395ff97166f0b2943210
-change-id: 20221101-easycam-8f1ab598b12f
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
