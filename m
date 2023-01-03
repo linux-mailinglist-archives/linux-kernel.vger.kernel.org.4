@@ -2,92 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685BA65C37F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 324CA65C37C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237971AbjACQEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:04:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
+        id S230214AbjACQDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbjACQEE (ORCPT
+        with ESMTP id S230397AbjACQDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:04:04 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CB112628;
-        Tue,  3 Jan 2023 08:04:03 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303F6dY7007140;
-        Tue, 3 Jan 2023 16:03:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=KPIltgXLcHbMrQ52Lpe9AnY3EOsSgDqPWtgU38MSmuA=;
- b=Wvje720BtmDRxaBaFTG4WI2s7O8GUwyEAllmpNHFRat0EtXvcTMs/HmDclcIxfSD4low
- qR4Zpu9wEa4/za4wgVv+gLsmGaBGvVptWxjOzJ9GnQ8xq8WAzW7bF5R3hO5STbETkmL4
- YTgqEJ/Shh7K4Ko/tm+kEbxFQdhN9dfL6Yvv5Oh4fBWT8bMEMp+p6gEKDWnZ0I9jWlll
- fLMGSK016qyVW68O7fMzzAEvxj0t9Bp3h7qbgjIgJ7jHbRHdh5omVEtLdKIarCVKBAR7
- mmP01DupO5JONdbk+9aGGNNywS0VNGAzEytFTO9G5Ub9DeITM/E8FAMhQIm591HfWpbn TQ== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvmb7n9v8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 16:03:31 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 302N0mkG006506;
-        Tue, 3 Jan 2023 16:03:29 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6ay3n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 16:03:29 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 303G3PPh41157076
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Jan 2023 16:03:25 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B473720040;
-        Tue,  3 Jan 2023 16:03:25 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B25A420049;
-        Tue,  3 Jan 2023 16:03:24 +0000 (GMT)
-Received: from [9.179.26.205] (unknown [9.179.26.205])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  3 Jan 2023 16:03:24 +0000 (GMT)
-Message-ID: <310913b0a92bd06b93ede9e01e3f99cb5bce4e7a.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/7] iommu: Allow .iotlb_sync_map to fail and handle
- s390's -ENOMEM return
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Date:   Tue, 03 Jan 2023 17:03:23 +0100
-In-Reply-To: <20230102115619.2088685-3-schnelle@linux.ibm.com>
-References: <20230102115619.2088685-1-schnelle@linux.ibm.com>
-         <20230102115619.2088685-3-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Tue, 3 Jan 2023 11:03:34 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA62C112C;
+        Tue,  3 Jan 2023 08:03:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=fxpXgnZwZOvzoJ655io/8wieYC6m5OZtZxEHi2BztSk=; b=Ybnfgp3O3ucnrfrTgPRsAdD4HD
+        /l+4pneoWtKNsJDRAC9QmIReHEsETLEphSDUgWrmwqPlnbKFrZ4cUEx6yrk8C46BjEuynvHl6wm7g
+        Jkc7bQCZcbnqq+I+RnJILnNDl/65hry+Tni0Gkbwi/ZPBZb7Mkrj3xFM68oVLkg99N6h9Yq4QWEEw
+        H9QPVYCPvC0P/LySG5qWe23tcywTjYRlE6D5YcUwEGKLE44qxry+tnFCzczetS7v1Orw+r7lmVvMd
+        BR7ALrZg3nHIZsA+mdjvn4QL7Ova9N5uvjB1lZ2uQpRxc2E7m7ZLh1KPJP6lgI4zdBofFRpZvgYtG
+        U7zvvsxw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35946)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pCjlC-0005YC-5j; Tue, 03 Jan 2023 16:03:29 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pCjl9-0002Co-Hd; Tue, 03 Jan 2023 16:03:27 +0000
+Date:   Tue, 3 Jan 2023 16:03:27 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Eric Curtin <ecurtin@redhat.com>
+Subject: Re: [PATCH v2] nvmem: core: Fix race in nvmem_register()
+Message-ID: <Y7RRz6nPwYlgwFk4@shell.armlinux.org.uk>
+References: <20230103114427.1825-1-marcan@marcan.st>
+ <ff77ba1c-8b67-4697-d713-0392d3b1d77a@linaro.org>
+ <95a4cfde-490f-d26d-163e-7ab1400e7380@marcan.st>
+ <b118af4c-e4cc-c50b-59aa-d768f1ec69ff@linaro.org>
+ <b98e313d-8875-056b-4b64-bb7528f2670a@marcan.st>
+ <Y7RHTXZ60zuExeMA@shell.armlinux.org.uk>
+ <03514845-dfd6-a117-83c8-ab3abc402229@marcan.st>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: c3genIMIgTmUDXTYXgiTkNQddLTb2SxI
-X-Proofpoint-GUID: c3genIMIgTmUDXTYXgiTkNQddLTb2SxI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-03_05,2023-01-03_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxlogscore=754 malwarescore=0 bulkscore=0 lowpriorityscore=0
- priorityscore=1501 clxscore=1015 mlxscore=0 spamscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301030136
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <03514845-dfd6-a117-83c8-ab3abc402229@marcan.st>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,53 +66,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-02 at 12:56 +0100, Niklas Schnelle wrote:
-> On s390 .iotlb_sync_map is used to sync mappings to an underlying
-> hypervisor by letting the hypervisor inspect the synced IOVA range and
-> updating its shadow table. This however means that it can fail as the
-> hypervisor may run out of resources. This can be due to the hypervisor
-> being unable to pin guest pages, due to a limit on concurrently mapped
-> addresses such as vfio_iommu_type1.dma_entry_limit or other resources.
-> Either way such a failure to sync a mapping should result in
-> a DMA_MAPPING_EROR.
->=20
-> Now especially when running with batched IOTLB flushes for unmap it may
-> be that some IOVAs have already been invalidated but not yet synced via
-> .iotlb_sync_map. Thus if the hypervisor indicates running out of
-> resources, first do a global flush allowing the hypervisor to free
-> resources associated with these mappings and only if that also fails
-> report this error to callers.
->=20
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->  drivers/iommu/amd/iommu.c   |  5 +++--
->  drivers/iommu/apple-dart.c  |  5 +++--
->  drivers/iommu/intel/iommu.c |  5 +++--
->  drivers/iommu/iommu.c       | 20 ++++++++++++++++----
->  drivers/iommu/msm_iommu.c   |  5 +++--
->  drivers/iommu/mtk_iommu.c   |  5 +++--
->  drivers/iommu/s390-iommu.c  | 29 ++++++++++++++++++++++++-----
->  drivers/iommu/sprd-iommu.c  |  5 +++--
->  drivers/iommu/tegra-gart.c  |  5 +++--
->  include/linux/iommu.h       |  4 ++--
->  10 files changed, 63 insertions(+), 25 deletions(-)
+On Wed, Jan 04, 2023 at 12:33:33AM +0900, Hector Martin wrote:
+> On 04/01/2023 00.18, Russell King (Oracle) wrote:
+> > On Tue, Jan 03, 2023 at 11:56:21PM +0900, Hector Martin wrote:
+> >> On 03/01/2023 23.22, Srinivas Kandagatla wrote:
+> >>>>>>    drivers/nvmem/core.c | 32 +++++++++++++++++---------------
+> >>>>>>    1 file changed, 17 insertions(+), 15 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> >>>>>> index 321d7d63e068..606f428d6292 100644
+> >>>>>> --- a/drivers/nvmem/core.c
+> >>>>>> +++ b/drivers/nvmem/core.c
+> >>>>>> @@ -822,11 +822,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+> >>>>>>    		break;
+> >>>>>>    	}
+> >>>>>>
+> >>>>>> -	if (rval) {
+> >>>>>> -		ida_free(&nvmem_ida, nvmem->id);
+> >>>>>> -		kfree(nvmem);
+> >>>>>> -		return ERR_PTR(rval);
+> >>>>>> -	}
+> >>>>>> +	if (rval)
+> >>>>>> +		goto err_gpiod_put;
+> >>>>>
+> >>>>> Why was gpiod changes added to this patch, that should be a separate
+> >>>>> patch/discussion, as this is not relevant to the issue that you are
+> >>>>> reporting.
+> >>>>
+> >>>> Because freeing the device also does a gpiod_put in the destructor, so
+> >>> This are clearly untested, And I dont want this to be in the middle to 
+> >>> fix to the issue you are hitting.
+> >>
+> >> I somehow doubt you tested any of these error paths either. Nobody tests
+> >> initialization error paths. That's why there was a gpio leak here to
+> >> begin with.
+> > 
+> > Sadly, this is one of the biggest problems with error paths, they get
+> > very little proper testing - and in most cases we're reliant on
+> > reviewers spotting errors. That's why we much prefer the devm_* stuff,
+> > but even that can be error-prone.
+> > 
+> >>> We should always be careful about untested changes, in this case gpiod 
+> >>> has some conditions to check before doing a put. So the patch is 
+> >>> incorrect as it is.
+> >>
+> >> Then the existing code is also incorrect as it is, because the device
+> >> release callback is doing the same gpiod_put() already. I just moved it
+> >> out since we are now registering the device later.
+> > 
+> > At the point where this change is being made (checking rval after
+> > dev_set_name()) the struct device has not been initialised, so the
+> > release callback will not be called. nvmem->wp_gpio will be leaked.
+> 
+> But later in the code where device_put() was being called would will be,
+> and that callback is calling gpiod_put() unconditionally, which is why I
+> am doing the same after moving the device registration later.
+> 
+> Is this wrong? Well,
 
-Ok kernel test robot reported that I missed an implementation of
-.iotlb_sync_map in drivers/iommu/sun50i-iommu.c during rebase as that
-was only added in v6.2-rc1 by commit e563cc0c787c85 ("iommu/sun50i:
-Implement .iotlb_sync_map"). Will add and send a v4 including the
-proposed commit message rewording too.
+I'm not going to read the rest of your rant, honestly it's really not
+worth it. Let's just concentrate on trying to work out how best to fix
+this crud.
 
->=20
-> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-> index cbeaab55c0db..3df7d20e0e52 100644
-> --- a/drivers/iommu/amd/iommu.c
-> +++ b/drivers/iommu/amd/iommu.c
-> @@ -2180,14 +2180,15 @@ static int amd_iommu_attach_device(struct iommu_d=
-omain *dom,
->  	return ret;
->  }
-> =20
-> -static void amd_iommu_iotlb_sync_map(struct iommu_domain *dom,
-> -				     unsigned long iova, size_t size)
----8<---
+Not only is there the issue with wp_gpio, but the whole IDA handling
+is fscked as well, so there's many problems to be sorted out here,
+and if we lump them all into one patch, we'll probably be getting to
+the point of completely rewriting nvmem_register() making backports
+extremely difficult.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
