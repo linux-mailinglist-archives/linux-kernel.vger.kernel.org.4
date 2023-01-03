@@ -2,128 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2DB65C205
+	by mail.lfdr.de (Postfix) with ESMTP id 87F9D65C204
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237707AbjACOeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S237777AbjACOei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbjACOe3 (ORCPT
+        with ESMTP id S230214AbjACOed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:34:29 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBC1EE36;
-        Tue,  3 Jan 2023 06:34:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1672756468; x=1704292468;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=i1lPUCFojlYIYbMOHocJhr6H9ebKcpdRjDcv/yl/BGU=;
-  b=Gb/6ETlCvU7ixVImNhsxz9oWDTZORe3dvn6Ijya7e/V+7tdnzWcC9FWx
-   7dArxyhwfl/xTlh/gW4SaC8NnTTPJ9IF6c/k8+ZLwFMDKKAxVjewOaWDW
-   +YOCEGYqZlkRQYubhTg5knzujJL3vS380Yp1eqLW2KCyef59XyBWjfZP9
-   s=;
-X-IronPort-AV: E=Sophos;i="5.96,297,1665446400"; 
-   d="scan'208";a="167314138"
-Subject: Re: RFC on drivers/memory vs drivers/edac memory mapping for DDR Controller
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-af372327.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 14:34:13 +0000
-Received: from EX13D40EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-m6i4x-af372327.us-west-2.amazon.com (Postfix) with ESMTPS id C1E1E610F4;
-        Tue,  3 Jan 2023 14:34:11 +0000 (UTC)
-Received: from EX19D001EUA003.ant.amazon.com (10.252.50.232) by
- EX13D40EUA002.ant.amazon.com (10.43.165.195) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Tue, 3 Jan 2023 14:34:10 +0000
-Received: from [192.168.14.109] (10.43.161.114) by
- EX19D001EUA003.ant.amazon.com (10.252.50.232) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
- Tue, 3 Jan 2023 14:34:07 +0000
-Message-ID: <7cc4d012-1382-204c-5ba5-73bdf6dae2d5@amazon.com>
-Date:   Tue, 3 Jan 2023 16:34:02 +0200
+        Tue, 3 Jan 2023 09:34:33 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6725EE27
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:34:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QMZBZ22IGBh45Cf/NuWC5djX29Cio7BfdtoICqFLw8c=; b=vzoZM0xwgbok6IYxVXqs12zdCr
+        TuabIQ9nU3oiOJcpn9227fxmFE4ePZADHDcPzbXP9D4grvwld0YCZER64IK63BKVAL5Nri8yfouF5
+        UozlfO+LfJiiOOCzwcuhQ0Ps85nz22Bii8JwmXzQW8TZ8xzxRI145iD+s2S50qh/ed/fZsjfhukqA
+        84NvaCAM9zCsi2EUdYd+esPEM1WXtvVCvi15lC30pD97myua40DT4pM/82lz/YSb781nVP3v28Qts
+        C5hg2a5MKZeQNYrm7Z+LdV3NhgU71wYvzsi2WgPF14ceGCYvTa6HYqdghaNekCBRPW2nt7hPI1NMv
+        60ptpCyA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35932)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pCiN2-0005QQ-2I; Tue, 03 Jan 2023 14:34:27 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pCiMz-00028E-7l; Tue, 03 Jan 2023 14:34:25 +0000
+Date:   Tue, 3 Jan 2023 14:34:25 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Hui Tang <tanghui20@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [bug-report] possible performance problem in ret_to_user_from_irq
+Message-ID: <Y7Q88aBpxfWRqzTe@shell.armlinux.org.uk>
+References: <7ecb8f3c-2aeb-a905-0d4a-aa768b9649b5@huawei.com>
+ <Y7P+MjPNA6Tg8JBr@shell.armlinux.org.uk>
+ <50a5ebdb-4107-26cc-a2f6-da551d99ff38@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <bp@alien8.de>
-CC:     <talelshenhar@gmail.com>, <shellykz@amazon.com>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <2511c7aa-8ce6-a803-a1ea-6121df79c677@amazon.com>
- <8b844f3a-e9b0-28d5-200a-611fe3068bc0@linaro.org>
- <4bd90224-d09a-1f21-92e6-51c967d68a39@amazon.com>
- <21c6dd41-3e6f-26c6-d6ca-25102e992c18@linaro.org>
- <567f14ef-7940-25c5-9323-c673b98e585a@amazon.com>
- <60d2899e-aed3-a98d-4f3e-8203918a23f9@linaro.org>
- <4c91989c-8b63-410b-e06f-99d99ddbb390@amazon.com>
- <a15335d1-fc08-a507-2365-6a14ff6154f6@linaro.org>
- <07109746-6fba-8c66-069b-b5982f460d76@amazon.com>
- <add4e548-c7cd-741d-90e5-5c7c9ec7284f@linaro.org>
-From:   "Shenhar, Talel" <talel@amazon.com>
-In-Reply-To: <add4e548-c7cd-741d-90e5-5c7c9ec7284f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.43.161.114]
-X-ClientProxiedBy: EX13D41UWB002.ant.amazon.com (10.43.161.109) To
- EX19D001EUA003.ant.amazon.com (10.252.50.232)
-X-Spam-Status: No, score=-15.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <50a5ebdb-4107-26cc-a2f6-da551d99ff38@kernel.dk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 03, 2023 at 07:25:26AM -0700, Jens Axboe wrote:
+> On 1/3/23 3:06?AM, Russell King (Oracle) wrote:
+> > On Mon, Dec 26, 2022 at 04:45:20PM +0800, Hui Tang wrote:
+> >> hi folks.
+> >>
+> >> I found a performance problem which is introduced by commit
+> >> 32d59773da38 ("arm: add support for TIF_NOTIFY_SIGNAL").
+> >> After the commit,  any bit in the range of 0..15 will cause
+> >> do_work_pending() to be invoked. More frequent do_work_pending()
+> >> invoked possible result in worse performance.
+> >>
+> >> Some of the tests I've done? as follows:
+> >> lmbench test			base		with patch
+> >> ./lat_ctx -P 1 -s 0  2		7.3167		11.04
+> >> ./lat_ctx -P 1 -s 16 2          8.0467		14.5367
+> >> ./lat_ctx -P 1 -s 64 2		7.8667		11.43
+> >> ./lat_ctx -P 1 -s 16 16		16.47		18.3667
+> >> ./lat_pipe -P 1			28.1671		44.7904
+> >>
+> >> libMicro-0.4.1 test		base		with patch
+> >> ./cascade_cond -E -C 200\
+> >>  -L -S -W -N "c_cond_1" -I 100	286.3333	358
+> >>
+> >> When I adjust test bit, the performance problem gone.
+> >> -	movs	r1, r1, lsl #16
+> >> +	ldr	r2, =#_TIF_WORK_MASK
+> >> +	tst	r1, r2
+> >>
+> >> Does anyone have a good suggestion for this problem?
+> >> should just test _TIF_WORK_MASK, as before?
+> > 
+> > I think it should be fine - but I would suggest re-organising the
+> > TIF definitions so that those TIF bits that shouldn't trigger
+> > do_work_pending are not in the first 16 bits.
+> > 
+> > Note that all four bits in _TIF_SYSCALL_WORK need to stay within
+> > an 8-bit even-bit-aligned range, so the value is suitable for an
+> > immediate assembly constant.
+> > 
+> > I'd suggest moving the TIF definitions for 20 to 19, and 4..7 to
+> > 20..23, and then 8 to 4.
+> 
+> Like this?
+> 
+> diff --git a/arch/arm/include/asm/thread_info.h b/arch/arm/include/asm/thread_info.h
+> index aecc403b2880..7f092cb55a41 100644
+> --- a/arch/arm/include/asm/thread_info.h
+> +++ b/arch/arm/include/asm/thread_info.h
+> @@ -128,15 +128,16 @@ extern int vfp_restore_user_hwstate(struct user_vfp *,
+>  #define TIF_NEED_RESCHED	1	/* rescheduling necessary */
+>  #define TIF_NOTIFY_RESUME	2	/* callback before returning to user */
+>  #define TIF_UPROBE		3	/* breakpointed or singlestepping */
+> -#define TIF_SYSCALL_TRACE	4	/* syscall trace active */
+> -#define TIF_SYSCALL_AUDIT	5	/* syscall auditing active */
+> -#define TIF_SYSCALL_TRACEPOINT	6	/* syscall tracepoint instrumentation */
+> -#define TIF_SECCOMP		7	/* seccomp syscall filtering active */
+> -#define TIF_NOTIFY_SIGNAL	8	/* signal notifications exist */
+> +#define TIF_NOTIFY_SIGNAL	4	/* signal notifications exist */
+>  
+>  #define TIF_USING_IWMMXT	17
+>  #define TIF_MEMDIE		18	/* is terminating due to OOM killer */
+> -#define TIF_RESTORE_SIGMASK	20
+> +#define TIF_RESTORE_SIGMASK	19
+> +#define TIF_SYSCALL_TRACE	20	/* syscall trace active */
+> +#define TIF_SYSCALL_AUDIT	21	/* syscall auditing active */
+> +#define TIF_SYSCALL_TRACEPOINT	22	/* syscall tracepoint instrumentation */
+> +#define TIF_SECCOMP		23	/* seccomp syscall filtering active */
+> +
+>  
+>  #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
+>  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
 
-On 1/3/2023 4:24 PM, Krzysztof Kozlowski wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->
->
->
-> On 03/01/2023 14:47, Shenhar, Talel wrote:
->> So how would you have the DT described and how would driver/s look like
->> for cases that the unit registers are split interchangeably?
->>
->>> You did not Cc relevant here mailing addresses (DT and Rob), so this
->>> discussion might miss their feedback.
->>>
->>> How the drivers map IO address space is independent question and should
->>> not determine the hardware description. You want to say that hardware
->>> changes depending on OS? One OS means hardware is like that and on other
->>> OS it's different?
-> BTW, you nicely skipped points of my email which are a bit
-> inconvenient,e.g. how you want to tie DTS and bindings to one specific
-> driver implementation and ignore the rest...
+Yep, LGTM, thanks.
 
-Sorry missed that.
-
-Rob would probably be relevant for this topic as well, however, I didn't 
-want to focus on DT for this topic.
-
-Seems your question is what I am actually asking...
-
-However your answer keep getting back to do "full hardware description 
-in dt and that it doesn't relate to driver" but does not give concrete 
-response hence I fail to get the answer or direction I am looking for.
-
-The solution I previously gave show different possibility for describing 
-the HW and the impact on the drivers and wonder what is the best path.
-
-
-For now I think this is the path I shall take which is option 1:
-
-"1) map more specific region to avoid conflict (we don't need the same 
-registers on both entity so if we do very specific multiple mapping this 
-shall be resolved)"
-
-Which seems to be what you are trying to say by give more complete HW 
-description.
-
-
->
-> Best regards,
-> Krzysztof
->
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
