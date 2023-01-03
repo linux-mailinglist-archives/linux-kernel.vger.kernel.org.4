@@ -2,101 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5327165C02C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8427765C024
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237618AbjACMre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 07:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
+        id S237611AbjACMrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 07:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237592AbjACMra (ORCPT
+        with ESMTP id S237592AbjACMqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 07:47:30 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64753C0D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 04:47:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672750050; x=1704286050;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Wv6PqdnYRxTtLwJPfLqSelTVLmVXx8C1Wpf/8vKA3do=;
-  b=ibt9ii4ZCo2vj/NJSEO7a1COUDXLhKcezibmat0oDtqKhQx0X8Lwt3m6
-   YyfFVYfd8mTmOBPio2jXTDQYeqqwUQ1UKk4dNaqDiqa01XyV8zXOPpBXw
-   pyVPCQkr3gP9gWIXMeTkSdq+jIr1jupxiJlVBc6rXrF8jSa46+NvtJAMo
-   6BuyX/LoqI3QaZUkAOGdS2GH5GiEK5osSOLwhdYQoti6Sxaumt6Mptx6W
-   8To2rVhgN4sU8gDOSFQ4tQBTPn5dxgeywCVw3p5Cugo9W6tHrxtSGGopr
-   wjlf+lNbLp5I6p+XIBGVkROGm7Lt31x2Cokxw09tnxqVkJ0rxZROOHcBy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="322883437"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="322883437"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 04:46:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="900170800"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="900170800"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2023 04:46:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pCggZ-003t6w-1l;
-        Tue, 03 Jan 2023 14:46:31 +0200
-Date:   Tue, 3 Jan 2023 14:46:31 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH] cpumask: fix function description kernel-doc notation
-Message-ID: <Y7Qjp/Bm6ckmaXbB@smile.fi.intel.com>
-References: <20230102211830.2674-1-rdunlap@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230102211830.2674-1-rdunlap@infradead.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 Jan 2023 07:46:53 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3547B6B;
+        Tue,  3 Jan 2023 04:46:51 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id g20so12222299pfb.3;
+        Tue, 03 Jan 2023 04:46:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fUjNNWOKD+ottU/UILwC+uJbUalxL5iu3rVNkyz1zWA=;
+        b=iND6xuYDopujt+jwzoUI9RSkd+qnVzRwCZlYSKfax0GyxdTzoaqHYu4JRThLd5dyB4
+         mCm/nVqtloVxWI7nqaRRiIqbzZ4pxv7giaoPv5QEVyCJXCQxacg+/Kdgu+1bMJ0ToMNB
+         kpLb6zZUvgF0Kdlpz25G8/FbjnQAmoFyzYA3CYKPI142DJxi+Zb639CiQ20xF03LEKUM
+         ntephGDKRfavXhTMSkIWOdD8Z4xjNdx9ddvSszNn8bpqI3FrrP284MdR5HUtBghYXHvX
+         ahDYFS4rph9cNf9gTs3oeFhvnYCf7EoBggFxnVChigGBrA8GJ1it84rwTWeRywiivsF3
+         n2Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fUjNNWOKD+ottU/UILwC+uJbUalxL5iu3rVNkyz1zWA=;
+        b=wG6wGfMK674+9qBBKSrAkvR5aDJb5MsSLSNyNDLaPNagsZuEhZMfd7B9W/c/n0q93v
+         daYFhGBQm0Tw3VhJGrUBU8BAPcRXdjlC691kZD0LaL3wQ1jE8w+0qBW3jFXALp31KLBx
+         eEftAEk6IGsVeepgndkcuLP9nfSRjIdsVog3cvJMdgkvnM0m5IHYdTbog/hKrOeqTTUl
+         tVMHKaJA7VYe2ZlKM4EzVbliSPqazEfTuYBwKUpQm1wcRTafYYLozhfBFunkQLzbDLi0
+         eJ0oYn9leyd7T9AGhiaGgHLWM59D8ODhtNP/NIi395nhAnR/rxUmff+wBPKI871KHInm
+         gyOA==
+X-Gm-Message-State: AFqh2kpRDw4he8tpnQs3n1abivoZMRnR3YoGibHC/TD6uIT8s6SFk73C
+        60lvZrrdxL2gnSW+wZsagbj9vh1fySoj
+X-Google-Smtp-Source: AMrXdXs4f7lqWrjp/+rRMhN8l1qe3lMtKnScmHvX3mK5FTyClpw/WzKlrZimaxMcM/DwvMFKdPnJug==
+X-Received: by 2002:aa7:943b:0:b0:582:49d9:688d with SMTP id y27-20020aa7943b000000b0058249d9688dmr9920477pfo.3.1672750011003;
+        Tue, 03 Jan 2023 04:46:51 -0800 (PST)
+Received: from smtpclient.apple (n119236129232.netvigator.com. [119.236.129.232])
+        by smtp.gmail.com with ESMTPSA id 68-20020a620647000000b005756a67e227sm20989364pfg.90.2023.01.03.04.46.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 Jan 2023 04:46:50 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: kernel panic: Attempted to kill init!
+From:   Hao Sun <sunhao.th@gmail.com>
+In-Reply-To: <CAADnVQ+EMzAmeKvivFKvqCNj6H9X-1rBtBBnjRzDiNvkocsc6A@mail.gmail.com>
+Date:   Tue, 3 Jan 2023 20:46:36 +0800
+Cc:     Yonghong Song <yhs@meta.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <2EC740FA-A10B-4208-8080-9A268BD8E675@gmail.com>
+References: <20221222043507.33037-1-sunhao.th@gmail.com>
+ <ef46c1f6-0939-c2ed-3efb-c3c5f28d1931@meta.com>
+ <73E3CA9E-F67E-429F-A2DB-C77649E32D7A@gmail.com>
+ <CAADnVQ+EMzAmeKvivFKvqCNj6H9X-1rBtBBnjRzDiNvkocsc6A@mail.gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 01:18:30PM -0800, Randy Dunlap wrote:
-> Use kernel-doc notation for the function description to prevent
-> a warning:
-> 
-> lib/cpumask.c:160: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Returns an arbitrary cpu within srcp1 & srcp2.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks!
+> On 31 Dec 2022, at 12:55 AM, Alexei Starovoitov =
+<alexei.starovoitov@gmail.com> wrote:
+>=20
+> On Fri, Dec 30, 2022 at 1:54 AM Hao Sun <sunhao.th@gmail.com> wrote:
+>>=20
+>>=20
+>>=20
+>>> On 28 Dec 2022, at 2:35 PM, Yonghong Song <yhs@meta.com> wrote:
+>>>=20
+>>>=20
+>>>=20
+>>> On 12/21/22 8:35 PM, Hao Sun wrote:
+>>>> Hi,
+>>>> This crash can be triggered by executing the C reproducer for
+>>>> multiple times, which just keep loading the following prog as
+>>>> raw tracepoint into kmem_cache_free().
+>>>> The prog send SIGSEGV to current via bpf_send_signal_thread(),
+>>>> after load this, whoever tries to free mem would trigger this,
+>>>> kernel crashed when this happens to init.
+>>>> Seems we should filter init out in bpf_send_signal_common() by
+>>>> is_global_init(current), or maybe we should check this in the
+>>>> verifier?
+>>>=20
+>>> The helper is just to send a particular signal to *current*
+>>> thread. In typical use case, it is never a good idea to send
+>>> the signal to a *random* thread. In certain cases, maybe user
+>>> indeed wants to send the signal to init thread to observe
+>>> something. Note that such destructive side effect already
+>>> exists in the bpf land. For example, for a xdp program,
+>>> it could drop all packets to make machine not responsive
+>>> to ssh etc. Therefore, I recommend to keep the existing
+>>> bpf_send_signal_common() helper behavior.
+>>=20
+>> Sound the two are different cases. Not responsive in XDP seems like
+>> an intended behaviour, panic caused by killing init is buggy. If the
+>> last thread of global init was killed, kernel panic immediately.
+>=20
+> I don't get it. How was it possible that this prog was
+> executed with current =3D=3D pid 1 ?
 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> ---
->  lib/cpumask.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff -- a/lib/cpumask.c b/lib/cpumask.c
-> --- a/lib/cpumask.c
-> +++ b/lib/cpumask.c
-> @@ -157,7 +157,7 @@ EXPORT_SYMBOL(cpumask_local_spread);
->  static DEFINE_PER_CPU(int, distribute_cpu_mask_prev);
->  
->  /**
-> - * Returns an arbitrary cpu within srcp1 & srcp2.
-> + * cpumask_any_and_distribute - Return an arbitrary cpu within srcp1 & srcp2.
->   *
->   * Iterated calls using the same srcp1 and srcp2 will be distributed within
->   * their intersection.
+The prog is raw trace point and is attached to =E2=80=98kmem_cache_free=E2=
+=80=99 event.
+When init triggered the event, the prog would be executed with pid 1.
+But, the reason of this crash is not very clear to me, because it=E2=80=99=
+s
+really hard to debug with original C reproducer.
 
--- 
-With Best Regards,
-Andy Shevchenko
+The following is the corresponding Syz prog:
 
+# {Threaded:true Repeat:true RepeatTimes:0 Procs:1 Slowdown:1 =
+Sandbox:none SandboxArg:0 Leak:false NetInjection:true NetDevices:true =
+NetReset:true Cgroups:true BinfmtMisc:true CloseFDs:true KCSAN:false =
+DevlinkPCI:false NicVF:false USB:false VhciInjection:false Wifi:false =
+IEEE802154:true Sysctl:true UseTmpDir:true HandleSegv:true Repro:false =
+Trace:false LegacyOptions:{Collide:false Fault:false FaultCall:0 =
+FaultNth:0}}
+r0 =3D bpf$BPF_PROG_RAW_TRACEPOINT_LOAD(0x5, &(0x7f0000000000)=3D{0x11, =
+0xe, =
+&(0x7f0000000400)=3DANY=3D[@ANYBLOB=3D"18000000000000000000000000000000180=
+60000000000000000000000000000180700000000000000000000000000001808000000000=
+0000000000000000000180900000000000000000000000000002d00020000000000b701000=
+00b000000850000007500000095"], &(0x7f00000000c0)}, 0x80)
+bpf$BPF_RAW_TRACEPOINT_OPEN(0x11, =
+&(0x7f0000000100)=3D{&(0x7f0000000080)=3D'kmem_cache_free\x00', r0}, =
+0x10)
 
