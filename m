@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CBE65BEDC
+	by mail.lfdr.de (Postfix) with ESMTP id 9F85065BEDD
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236980AbjACLXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 06:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S230124AbjACLYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 06:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbjACLXP (ORCPT
+        with ESMTP id S233146AbjACLYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 06:23:15 -0500
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A2210BB;
-        Tue,  3 Jan 2023 03:23:13 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id vm8so65920327ejc.2;
-        Tue, 03 Jan 2023 03:23:13 -0800 (PST)
+        Tue, 3 Jan 2023 06:24:15 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCDB10EE
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 03:24:14 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id b24-20020a05600c4a9800b003d21efdd61dso22844647wmp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 03:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aM19bk+2PSoO6lDFC0lZ/JmQltFQ351Ko7Fkp/8cpJg=;
+        b=FvQ2z2GpdrHYPMRbQ7exRNu0TReI7Pd2G2HPrkGzBDACmtFIVcCMpb8ZAVWPAUwTc5
+         tFq99Tq4nSj8/0edkuZsgJYewmQ94M7JljTMPSeXZIgh6XMpSyFvDq/GU+wmIJm1RtHl
+         AynPkEolxmN0ZqqlYYVZMENvtrRq770f1Mwais801+EZecQvVHgO57gHiOoK1OOBlJbI
+         nlYgG8qF1xGloAdsZRIV0lzuYkqsWrTTJlYGyeKqfo9hy5W/XQHCXduhS970HhwTXZNV
+         +4oAAdYepQGhIT94dkcLSIcc/ThwVGrjfy9zPLwckVffBO/rvdcW9BiHYVyjWDaOY88W
+         ycpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R9rwcH+0z/WoMjVmt8n3b6QTLjPJpDlMLUWW/8CK+Hc=;
-        b=sbkYZvQlx1xQrmDwJxYrggkGLEy9pMhkrV4xbFAK4KNTOxnn3DLRk7001Oe9sAzKRb
-         1QQqdPxy6kxvmK5OYu86yDPjmhyC4HqlqsxiG01c5VLrRJMckuGqUZJy7W5Ojevlk7A7
-         dNpKW/pt8Mvn3K9RmjzLf1e/JXnWWTQDR0ssCygVrBdtOqYQAV5Oo4XqEFy5S0S72XQ3
-         PNSSVll4Lwhq8kZyryG7TbUDSAC0PzojSqgCKAEgcvAlliAT6DRgDAa2SXA4aWU8RrJY
-         VjQouD6wUyo8PI7k2bzz2HmvyZgLvdERA5Ub3cKODXgatzi4GKaZ5zBa43gQllPWnMqu
-         lFcA==
-X-Gm-Message-State: AFqh2kp6awYvvtZFjhImLhbd/trlZJISaR20W7s6uwXOcRZKPDNv+Zh/
-        cyBocSH/CmzpkIlPp2hVTCitvEcIlMM=
-X-Google-Smtp-Source: AMrXdXvpVjg+/U4MZ59aolvSmlPbHjQ3tM40iF8+L7Uzh7pl9y9gysYH1szz6nr/9D2v4GFLJ70diw==
-X-Received: by 2002:a17:907:6f09:b0:7c0:a877:1cf1 with SMTP id sy9-20020a1709076f0900b007c0a8771cf1mr41824868ejc.12.1672744991799;
-        Tue, 03 Jan 2023 03:23:11 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id m9-20020a1709062ac900b007c0d41736c0sm13927489eje.39.2023.01.03.03.23.10
+        bh=aM19bk+2PSoO6lDFC0lZ/JmQltFQ351Ko7Fkp/8cpJg=;
+        b=L9gKtXjY2AAuh0TsUsy5kystxh2/yysgThFgpZaZow6KhGThQ7GpAlv9zwKN+dzAuK
+         02SFOF5QXfmy+MLbWut2xguBMC4iX53ddd3lcQaEVQ3iUdPMoRj8s0pSHs0wqMwY7Dkd
+         bC2Hr85Kn8XhdSlgAQ25mHHCRkptrwE01QPkzaFaGDWXgF6DQdF9OjMQSGRRr+d+qTP4
+         Cqrq3tECG64EwTX6iChx+xNEz22xauhTT1bjajqkIUhE9904D/CYOnHUTJRafIY/+EL2
+         pi68RQaUP3x9Va49ZGjic4l6uXjHmwBNYU5GxLflLS0BDnmavE26I5t1o8bP+qDbFPQg
+         68uA==
+X-Gm-Message-State: AFqh2kqLVO65WZc0sG2UlQKPNpicwWHrV3JnZS+eq5PgFQO9sHzqwTDG
+        zJ2YnIn1R9fX51uVdfZ/qh2VkmbjTEAw+886WPA=
+X-Google-Smtp-Source: AMrXdXsu4u0wS962KDrqVuRXWqgErsy12KGEqrrdIuV/v8sTQ2HhnIDVP5FKAwi4HI638j+JyW33Lw==
+X-Received: by 2002:a05:600c:a10:b0:3d5:64bf:ccb8 with SMTP id z16-20020a05600c0a1000b003d564bfccb8mr30880129wmp.12.1672745053251;
+        Tue, 03 Jan 2023 03:24:13 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id r17-20020a05600c425100b003cffd3c3d6csm39874902wmm.12.2023.01.03.03.24.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 03:23:11 -0800 (PST)
-Message-ID: <1c33a2af-cd0d-cdde-5bc7-49b418665784@kernel.org>
-Date:   Tue, 3 Jan 2023 12:23:10 +0100
+        Tue, 03 Jan 2023 03:24:12 -0800 (PST)
+Message-ID: <6b7d1e08-e27e-3f8a-5b08-ba622f206295@linaro.org>
+Date:   Tue, 3 Jan 2023 11:24:11 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1] drivers/fsl_linflexuart.c : remove redundant uart type
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] nvmem: core: Fix race in nvmem_register()
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Russell King <rmk+kernel@armlinux.org.uk>
+References: <20221214142952.9372-1-marcan@marcan.st>
 Content-Language: en-US
-To:     lizhe <sensor1010@163.com>, gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230103110255.2699-1-sensor1010@163.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230103110255.2699-1-sensor1010@163.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20221214142952.9372-1-marcan@marcan.st>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,39 +76,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03. 01. 23, 12:02, lizhe wrote:
-> 	in linflex_config_port() the member variable will be
-> 	assigned again . see linflex_config_port()
+Thanks Hector for the patch,
 
-Fine, but can you make the subject and the commit message a little bit 
-saner?
 
-I.e. no tabs, no spaces before semicolons and colons. The subject should 
-be something like "serial: linflexuart: remove redundant uart type 
-_assignment_" and so on.
+On 14/12/2022 14:29, Hector Martin wrote:
+> nvmem_register() currently registers the device before adding the nvmem
+> cells, which creates a race window where consumers may find the nvmem
+> device (and not get PROBE_DEFERred), but then fail to find the cells and
+> error out.
+> 
+> Move device registration to the end of nvmem_register(), to close the
+> race.
+> 
+> Observed when the stars line up on Apple Silicon machines with the (not
+> yet upstream, but trivial) spmi nvmem driver and the macsmc-rtc client:
+> 
+> [    0.487375] macsmc-rtc macsmc-rtc: error -ENOENT: Failed to get rtc_offset NVMEM cell
+> 
+> Fixes: eace75cfdcf7 ("nvmem: Add a simple NVMEM framework for nvmem providers")
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-> Signed-off-by: lizhe <sensor1010@163.com>
-
-Is this your legal name?
+Missing Cc Stable
 
 > ---
->   drivers/tty/serial/fsl_linflexuart.c | 1 -
->   1 file changed, 1 deletion(-)
+>   drivers/nvmem/core.c | 18 ++++++++----------
+>   1 file changed, 8 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/tty/serial/fsl_linflexuart.c b/drivers/tty/serial/fsl_linflexuart.c
-> index 6fc21b6684e6..34400cc6ac7f 100644
-> --- a/drivers/tty/serial/fsl_linflexuart.c
-> +++ b/drivers/tty/serial/fsl_linflexuart.c
-> @@ -837,7 +837,6 @@ static int linflex_probe(struct platform_device *pdev)
->   		return PTR_ERR(sport->membase);
->   
->   	sport->dev = &pdev->dev;
-> -	sport->type = PORT_LINFLEXUART;
->   	sport->iotype = UPIO_MEM;
->   	sport->irq = platform_get_irq(pdev, 0);
->   	sport->ops = &linflex_pops;
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 321d7d63e068..d255feca5e17 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -837,20 +837,16 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+> 
+>   	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
+> 
+> -	rval = device_register(&nvmem->dev);
+> -	if (rval)
+> -		goto err_put_device;
+> -
+>   	if (nvmem->nkeepout) {
+>   		rval = nvmem_validate_keepouts(nvmem);
+>   		if (rval)
+> -			goto err_device_del;
+> +			return ERR_PTR(rval);
 
--- 
-js
-suse labs
+you can not do this as this will leak ida and nvmem itself.
 
+
+>   	}
+> 
+>   	if (config->compat) {
+>   		rval = nvmem_sysfs_setup_compat(nvmem, config);
+>   		if (rval)
+> -			goto err_device_del;
+> +			return ERR_PTR(rval);
+
+same here.
+
+>   	}
+> 
+>   	if (config->cells) {
+> @@ -867,19 +863,21 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+>   	if (rval)
+>   		goto err_remove_cells;
+> 
+> +	rval = device_register(&nvmem->dev);
+> +	if (rval)
+> +		goto err_put_device;
+> +
+>   	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem);
+> 
+>   	return nvmem;
+> 
+> +err_put_device:
+> +	put_device(&nvmem->dev);
+
+this will free nvmem and further down you are going to de-reference the 
+freed pointer.
+
+--srini
+
+>   err_remove_cells:
+>   	nvmem_device_remove_all_cells(nvmem);
+>   err_teardown_compat:
+>   	if (config->compat)
+>   		nvmem_sysfs_remove_compat(nvmem, config);
+> -err_device_del:
+> -	device_del(&nvmem->dev);
+> -err_put_device:
+> -	put_device(&nvmem->dev);
+> 
+>   	return ERR_PTR(rval);
+>   }
+> --
+> 2.35.1
+> 
