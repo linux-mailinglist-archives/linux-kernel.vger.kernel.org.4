@@ -2,256 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AA865C7B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B515065C7BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237876AbjACTth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 14:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S233716AbjACTv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 14:51:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233130AbjACTte (ORCPT
+        with ESMTP id S230369AbjACTvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 14:49:34 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4544EDEF9;
-        Tue,  3 Jan 2023 11:49:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672775373; x=1704311373;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=bIDOws5tUz92tzu0nSJr/AIN8r/xnDLdvwP+8eGsVh8=;
-  b=INudEYLMYdw7PLUunJ3fMahdmgDPuocWixrOxlEF7F+PBulf89XPn37K
-   +U/2XBkAUCJmOdJXskVknvIS5i594cSUIIFWsI1sHCTzCfvFMJbwKQaE6
-   7Iq0I1ZTQQtvWqjxO1/kYnYwDkH7bZfLZJ2n6ydyLsECBNlWeEJKuvBWa
-   dgO6JIaCTdSHVgBEH1klE6KYObUGrZLL81XcQOfWQJxuZYmuMH572xvCV
-   bAkyWsU7T3kknVgHsM8Ym7kLNLfuNjMGVVWD0Tsvk2kxKVfdW4gTNlNkG
-   54ieXZ/8Ov57OStNj5tyw3p2DbUtCDiii3ggbQmJpDL6xJEOZZTSOq2Vh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="348963674"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="348963674"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 11:49:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="654908255"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="654908255"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 11:49:32 -0800
-Date:   Tue, 3 Jan 2023 11:50:04 -0800 (PST)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Xu Yilun <yilun.xu@intel.com>
-cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v7 3/4] fpga: dfl: add basic support for DFHv1
-In-Reply-To: <Y7OteZ2FuLtHfg5D@yilunxu-OptiPlex-7050>
-Message-ID: <alpine.DEB.2.22.394.2301031143420.4963@rhweight-WRK1>
-References: <20221220163652.499831-1-matthew.gerlach@linux.intel.com> <20221220163652.499831-4-matthew.gerlach@linux.intel.com> <Y6HqyjFkiUDeNmH1@smile.fi.intel.com> <alpine.DEB.2.22.394.2212211105490.570436@rhweight-WRK1> <Y6kR632DYwilj505@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2212311237320.2138420@rhweight-WRK1> <Y7OteZ2FuLtHfg5D@yilunxu-OptiPlex-7050>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 3 Jan 2023 14:51:54 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A2F12D2B
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 11:51:52 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id v23so22960116ljj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 11:51:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jLl/VBpTeAUex90BhERl8MGE6mygiDh6d8Zf8SUBHPU=;
+        b=KDMaHJXANJpPoCFDrxBW4CxJPTb1ijSzp0nrjDks6+905S5frx0CrBENdGluzq6QWT
+         naIFLbRDdpWQHpj8UWPMCrAj+2/Sal5qICq+EocHyd0TxHAUBS/qi54Un19mCp7Vym1k
+         eq7tbs8YOzQwDXvAt4xL1PEEAGJXZr0tVTReU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jLl/VBpTeAUex90BhERl8MGE6mygiDh6d8Zf8SUBHPU=;
+        b=TWnoexWy9mvaVuWdEIj1oWT8nFu8cm6/erExnL+n4ci6mb8rciLN0yDCv7CqEsarG1
+         Y+tJTSr4COw3eZ5dK2mfqSWjX6PzR+k9pqbUqB2V3OSeK63SzFUe1seQMwQDcKVVbENi
+         5JfZ72bojB+HCHarnGiZvs9iJ+U0N5YB9AH816tO3b9kEY5lMx6/kmk9/eJPqJC271O5
+         nmC5CtN0nRb18czxWgiAqK4PY8ktbmEj5exPfoBtl/T5G6OwJR5ZytEIo+ZNK0WYRgfT
+         bfaFdg1e4RE2Z9hKgse1UERWrZ8bl/HngtKqJvSwhro/VTBKHeCYkStT+pS8FAK/Pwo8
+         cBDw==
+X-Gm-Message-State: AFqh2kqVFJw5oOfOO3ulWg8kl08ODJAueYdaN4wjYhP03HDGv4U57ey3
+        xzsOHdeKejBZdWMzNPzoJ4+NzHXKulfC4L2cQ60W/w==
+X-Google-Smtp-Source: AMrXdXtR2aN9oMyc5niWecpovOi01R6wJz6os+F4PQBl/sFdc0exT9zbFH9GrrJksjcJa68duB7B3Vydeu54pIHClIE=
+X-Received: by 2002:a2e:3215:0:b0:27f:b98c:7a0e with SMTP id
+ y21-20020a2e3215000000b0027fb98c7a0emr2682588ljy.356.1672775510916; Tue, 03
+ Jan 2023 11:51:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230101061555.278129-1-joel@joelfernandes.org>
+ <20230102164310.2olg7xhwwhzmzg24@offworld> <20230103180404.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+ <Y7Ry1yTT/mltqSUI@google.com> <20230103185958.GB4028633@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230103185958.GB4028633@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 3 Jan 2023 19:51:39 +0000
+Message-ID: <CAEXW_YTSh-QLzbBf_JK4-X8MoAvbNzOdfeOPsXk6MhT+Dk8uTg@mail.gmail.com>
+Subject: Re: [PATCH] torture: Fix hang during kthread shutdown phase
+To:     paulmck@kernel.org
+Cc:     Davidlohr Bueso <dave@stgolabs.net>, linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>, stable@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,WEIRD_PORT autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 3, 2023 at 7:00 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Tue, Jan 03, 2023 at 06:24:23PM +0000, Joel Fernandes wrote:
+> > On Tue, Jan 03, 2023 at 10:04:04AM -0800, Paul E. McKenney wrote:
+> > > On Mon, Jan 02, 2023 at 08:43:10AM -0800, Davidlohr Bueso wrote:
+> > > > On Sun, 01 Jan 2023, Joel Fernandes (Google) wrote:
+> > > >
+> > > > > During shutdown of rcutorture, the shutdown thread in
+> > > > > rcu_torture_cleanup() calls torture_cleanup_begin() which sets fullstop
+> > > > > to FULLSTOP_RMMOD. This is enough to cause the rcutorture threads for
+> > > > > readers and fakewriters to breakout of their main while loop and start
+> > > > > shutting down.
+> > > > >
+> > > > > Once out of their main loop, they then call torture_kthread_stopping()
+> > > > > which in turn waits for kthread_stop() to be called, however
+> > > > > rcu_torture_cleanup() has not even called kthread_stop() on those
+> > > > > threads yet, it does that a bit later.  However, before it gets a chance
+> > > > > to do so, torture_kthread_stopping() calls
+> > > > > schedule_timeout_interruptible(1) in a tight loop. Tracing confirmed
+> > > > > this makes the timer softirq constantly execute timer callbacks, while
+> > > > > never returning back to the softirq exit path and is essentially "locked
+> > > > > up" because of that. If the softirq preempts the shutdown thread,
+> > > > > kthread_stop() may never be called.
+> > > > >
+> > > > > This commit improves the situation dramatically, by increasing timeout
+> > > > > passed to schedule_timeout_interruptible() 1/20th of a second. This
+> > > > > causes the timer softirq to not lock up a CPU and everything works fine.
+> > > > > Testing has shown 100 runs of TREE07 passing reliably, which was not the
+> > > > > case before because of RCU stalls.
+> > > > >
+> > > > > Cc: Paul McKenney <paulmck@kernel.org>
+> > > > > Cc: Frederic Weisbecker <fweisbec@gmail.com>
+> > > > > Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > > Cc: <stable@vger.kernel.org> # 6.0.x
+> > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > >
+> > > > Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> > >
+> > > Queued for further review and testing, thank you all!
+> > >
+> > > One thing still puzzles me.  Assuming HZ=1000 and given 16 CPUs, each
+> > > timer hander must have consumed many tens of microseconds in order
+> > > to keep the system busy, which seems a bit longer than it should be.
+> > > Or am I underestimating the number of tasks involved?
+> >
+> > Here are the traces between successive calls to process_timeout() which is the timer callback handler:
+> >
+> > [ 1320.444210]   <idle>-0         0dNs.. 314229620us : __run_timers: Calling timerfn 5: process_timeout
+> > [ 1320.444215]   <idle>-0         0dNs.. 314229620us : sched_waking: comm=rcu_torture_fak pid=145 prio=139 target_cpu=008
+> > [ 1320.463393]   <idle>-0         7d.... 314229655us : sched_switch: prev_comm=swapper/7 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_wri next_pid=144 next_prio=120
+> > [ 1320.478870] rcu_tort-144       7d.... 314229658us : sched_switch: prev_comm=rcu_torture_wri prev_pid=144 prev_prio=120 prev_state=D ==> next_comm=swapper/7 next_pid=0 next_prio=120
+> > [ 1320.494324]   <idle>-0         0dNs.. 314229738us : __run_timers: Calling timerfn 6: process_timeout
+> >
+> > It appears the time delta in the above occurrence is 118 micro seconds
+> > between 2 timer callbacks. It does appear to be doing a cross-CPU wake up.
+> > Maybe that adds to the long time?
+> >
+> > Here are the full logs with traces (in case it helps, search for "=D" for the
+> > D-state sched_switch event before the "panic now" trace happens):
+> > http://box.joelfernandes.org:9080/job/rcutorture_stable/job/linux-6.0.y/26/artifact/tools/testing/selftests/rcutorture/res/2022.12.31-23.04.42/TREE07.2/console.log
+>
+> 118 microseconds would do it!
+>
+> Still seems excessive to me
 
+True, also my machine is a bit slow so maybe it took more CPU cycles
+than usual. Still if it happened to me and Zhouyi, it could happen to
+anyone ;-)
 
-On Tue, 3 Jan 2023, Xu Yilun wrote:
+thanks,
 
-> On 2022-12-31 at 12:46:28 -0800, matthew.gerlach@linux.intel.com wrote:
->>
->>
->> On Mon, 26 Dec 2022, Xu Yilun wrote:
->>
->>> On 2022-12-21 at 11:14:59 -0800, matthew.gerlach@linux.intel.com wrote:
->>>>
->>>>
->>>> On Tue, 20 Dec 2022, Andy Shevchenko wrote:
->>>>
->>>>> On Tue, Dec 20, 2022 at 08:36:51AM -0800, matthew.gerlach@linux.intel.com wrote:
->>>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>>>
->>>>>> Version 1 of the Device Feature Header (DFH) definition adds
->>>>>> functionality to the DFL bus.
->>>>>>
->>>>>> A DFHv1 header may have one or more parameter blocks that
->>>>>> further describes the HW to SW.  Add support to the DFL bus
->>>>>> to parse the MSI-X parameter.
->>>>>>
->>>>>> The location of a feature's register set is explicitly
->>>>>> described in DFHv1 and can be relative to the base of the DFHv1
->>>>>> or an absolute address.  Parse the location and pass the information
->>>>>> to DFL driver.
->>>>>
->>>>> ...
->>>>>
->>>>>> +/**
->>>>>> + * dfh_find_param() - find data for the given parameter id
->>>>>> + * @dfl_dev: dfl device
->>>>>> + * @param: id of dfl parameter
->>>>>> + *
->>>>>> + * Return: pointer to parameter header on success, NULL otherwise.
->>>>>
->>>>> header is a bit confusing here, does it mean we give and ID and we got
->>>>> something more than just a data as summary above suggests?
->>>>
->>>> Yes, the summary is not correct.  It should say "find the parameter block
->>>> for the given parameter id".
->>>>
->>>>>
->>>>> In such case summary and this text should clarify what exactly we get
->>>>> and layout of the data. Since this is a pointer, who is responsible of
->>>>> checking out-of-boundary accesses? For instance, if the parameters are
->>>>> variadic by length the length should be returned as well. Otherwise it
->>>>> should be specified as a constant somewhere, right?
->>>>
->>>> The parameter header has the next/size field; so the caller of
->>>> dfh_find_param should perform boundary checking as part of interpreting the
->>>> parameter data.  I think a function to perform this checking and data
->>>> interpretation would help here.
->>>
->>> It is better the DFL core provides the size of the parameter block, just
->>> in this API. It provides the pointer and should be ensured the memory
->>> for the pointer be correctly understood.
->>
->> Ok, how about the following API for dfh_find_param?
->>
->> /**
->>  * dfh_find_param() - find parameter block for the given parameter id
->>  * @dfl_dev: dfl device
->>  * @param_id: id of dfl parameter
->>  * @pver: destination to store parameter version
->>  * @pcount: destination to store size of parameter data in u64 bit words
->
-> The size of the parameter data could just be number of bytes (size_t is
-> ok?), this is the most common way for a data block.
->
->>  *
->>  * Return: pointer to start of parameter data, PTR_ERR otherwise.
->>  */
->> void *dfh_find_param(struct dfl_device *dfl_dev, int param_id, unsigned
->> *pver, unsigned *pcount)
->
-> For now no driver is caring about parameter version, so we could just have
-> a simplified API without version, like:
->
->  void *dfh_find_param(struct dfl_device *dfl_dev, int param_id, size_t *psize)
-
-Using size_t and the simplified API you suggest is fine with me.
-
->
-> I assume this simplified API should be most commonly used by drivers,
-> changing the layout of the parameter block is not such a good idea to
-> me, try best not to do so.
->
-> If more property is to be added without changing the existing fields,
-> drivers could be aware of this just by the parameter size?
->
->
-> Anyway, if version is really needed in future, create another API like:
->
->  void *dfh_find_param_version(struct dfl_device *dfl_dev, int param_id,
->  			       size_t *psize, unsigned int *pver)
-
-Sure, we can add API when it is actually used, as you point out, the 
-structure of a particular paramater should not change very often.
-
->
-> Thanks,
-> Yilun
->
->>
->>
->>>
->>>>
->>>>>
->>>>>> + */
->>>>>> +u64 *dfh_find_param(struct dfl_device *dfl_dev, int param_id)
->>>>>> +{
->>>>>> +	return find_param(dfl_dev->params, dfl_dev->param_size, param_id);
->>>>>> +}
->>>>>> +EXPORT_SYMBOL_GPL(dfh_find_param);
->>>>>
->>>>> ...
->>>>>
->>>>>> +	finfo = kzalloc(sizeof(*finfo) + dfh_psize, GFP_KERNEL);
->>>>>
->>>>> It sounds like a candidate for struct_size() from overflow.h.
->>>>> I.o.w. check that header and come up with the best what can
->>>>> suit your case.
->>>>
->>>> 	finfo = kzalloc(struct_size(finfo, params, dfh_psize/sizeof(u64)),
->>>> GFP_KERNEL);
->>>>
->>>> Does seem better.
->>>
->>> How about we change the dfh_get_psize() to like dfh_get_pcount(), so we
->>> don't have to multiply & divide back and forth.
->>
->> We need the size in bytes for calls to kmemdup, devm_kmemdup, and
->
-> When the count of u64 is caculated, you could still convert it to size of
-> bytes when needed.
-
-We need to use number of bytes more often than than count of u64.  How 
-would calculating bytes from counts of u64 three times be better than 
-calculating counts of u64 once, like it is now?
-
-Thanks,
-Matthew Gerlach
-
->
->> memcpy_fromio, but we only need to divide once here.
->>
->>
->>>
->>> Or we just use size_add()?
->>
->> I think using struct_size is better because the params member of struct
->> dfl_feature_info is a trailing flexible array.
->
-> That's OK.
->
->>
->> Thanks for the feedback,
->> Matthew
->>
->>
->>>
->>> Thanks,
->>> Yilun
->>>
->>>>
->>>> Thanks for the suggestion,
->>>> Matthew Gerlach
->>>>
->>>>
->>>>>
->>>>>>  	if (!finfo)
->>>>>>  		return -ENOMEM;
->>>>>
->>>>> --
->>>>> With Best Regards,
->>>>> Andy Shevchenko
->>>>>
->>>>>
->>>>>
->>>
->
+ - Joel
