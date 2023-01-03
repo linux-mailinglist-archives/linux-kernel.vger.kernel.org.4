@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006B365C468
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F7365C433
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238272AbjACRAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        id S238070AbjACQuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:50:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238185AbjACRAI (ORCPT
+        with ESMTP id S237897AbjACQuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:00:08 -0500
-Received: from fx302.security-mail.net (mxout.security-mail.net [85.31.212.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED9212D2F
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:00:03 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by fx302.security-mail.net (Postfix) with ESMTP id 355691C3E602
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:44:34 +0100 (CET)
+        Tue, 3 Jan 2023 11:50:09 -0500
+X-Greylist: delayed 331 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 Jan 2023 08:50:04 PST
+Received: from fx601.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883F326F6
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:50:04 -0800 (PST)
+Received: from localhost (fx601.security-mail.net [127.0.0.1])
+        by fx601.security-mail.net (Postfix) with ESMTP id 08763349565
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:44:35 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1672764274;
-        bh=iqUNNzDLisafreTxbEHRNtewypp1lhCyKCi+cWHBHhk=;
+        s=sec-sig-email; t=1672764275;
+        bh=JS+HtC1lA+Kr4cSv3Wk7v/czT2LlzONqGLrjIUqd0ZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=DdMu7idMgb/2y7InhUf3eQ9VKIpCzxXU2wAWOlGVevlynpqhcmD960iZsF7XqKkGc
-         QdDILvdOGJC1vg0YW1ITyZvrsFLf3BlVReqe44CnLPOkMNq3A6EodR4fsDYFr23M4k
-         lHMD5kdwq3tL7vlzDf7oN6Hz6xd5gN03/5FRLEo0=
-Received: from fx302 (localhost [127.0.0.1]) by fx302.security-mail.net
- (Postfix) with ESMTP id 1A26F1C3E5FD; Tue,  3 Jan 2023 17:44:34 +0100 (CET)
+        b=P7OnHLGdDuAwVIoykTDmozTpgqMpbvdwcOPDff/Px9emn117CBrlsWH8Hb0ctF3rl
+         ttgEgwCccTAwU9NInZ07OO3qfTs5TuR59/NbBgrfN8HF7+7/cu49VdoiahjWkB/kXp
+         uZ6CqM4F+V/9cjmdoHmR7AZ6FfGUiZJprp4i6ePg=
+Received: from fx601 (fx601.security-mail.net [127.0.0.1]) by
+ fx601.security-mail.net (Postfix) with ESMTP id B57DA3494AC; Tue,  3 Jan
+ 2023 17:44:34 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx302.security-mail.net (Postfix) with ESMTPS id A9D381C3E568; Tue,  3 Jan
+ fx601.security-mail.net (Postfix) with ESMTPS id DF14A349509; Tue,  3 Jan
  2023 17:44:33 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 84B1827E03F9; Tue,  3 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPS id A20EA27E03F6; Tue,  3 Jan 2023
  17:44:33 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 69A3127E03F5; Tue,  3 Jan 2023 17:44:33 +0100 (CET)
+ (Postfix) with ESMTP id 830FE27E03F4; Tue,  3 Jan 2023 17:44:33 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- i1wsBIIbpDs4; Tue,  3 Jan 2023 17:44:33 +0100 (CET)
+ 2jRb9Y1q8kDj; Tue,  3 Jan 2023 17:44:33 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 330E927E03F6; Tue,  3 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 4B4D827E0404; Tue,  3 Jan 2023
  17:44:33 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <b5cd.63b45b71.a872c.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 69A3127E03F5
+Secumail-id: <13d48.63b45b71.dbc59.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 830FE27E03F4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
  s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672764273;
- bh=hhpDT2TDNtjd7uFw01tx3aoQasVcNdqeCrX/hr/2ndo=;
+ bh=PCKi+35fzL0XO4WXU3FNRWj16reIt3EESho87ZWjCP0=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=ZMDBTVYennsNAV+vNi1sJir/8senGhbF++meVyt/d3y3yGSUvd+sXbrYPox+ibcY8
- h5UbesEi3Eq61477W9mS4bk4DLVFpImztfwPwncxNNtKxDduOmfw01g2+TpIaSK7UB
- JVVEP1RVoZYnFJ+qgog1YsoFa/emEFWY078Jm+24=
+ b=qFQPJVpR7FPztqL7TwrXUcLSem00UxLPcDBeG1+n+KOk0qObBPZstS0P8/YgTLJXQ
+ PsSWcKMNvcw5fdmsFWrc1HVqcIryjM/oUCVWpKDghEBfd9GyWV95wShcAgD+tUpuqO
+ mscbEsHokW2FzywOzg57VluGOPzA4A2wGO0tx/lI=
 From:   Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>, linux-kernel@vger.kernel.org,
+Cc:     Yann Sionneau <ysionneau@kalray.eu>, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Marius Gligor <mgligor@kalray.eu>
-Subject: [RFC PATCH 23/25] kvx: Add debugging related support
-Date:   Tue,  3 Jan 2023 17:43:57 +0100
-Message-ID: <20230103164359.24347-24-ysionneau@kalray.eu>
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>
+Subject: [RFC PATCH 24/25] kvx: Add support for CPU Perf Monitors
+Date:   Tue,  3 Jan 2023 17:43:58 +0100
+Message-ID: <20230103164359.24347-25-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
 References: <20230103164359.24347-1-ysionneau@kalray.eu>
@@ -77,1169 +89,778 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add kvx support for ptrace and hw breakpoints.
+Each kvx core includes several Perf Monitors.
+This commit adds the driver that handles those core PM.
 
+CC: Will Deacon <will@kernel.org>
+CC: Mark Rutland <mark.rutland@arm.com>
+CC: Rob Herring <robh+dt@kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC: Peter Zijlstra <peterz@infradead.org>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Arnaldo Carvalho de Melo <acme@kernel.org>
+CC: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+CC: Jiri Olsa <jolsa@kernel.org>
+CC: Namhyung Kim <namhyung@kernel.org>
+CC: linux-arm-kernel@lists.infradead.org
+CC: devicetree@vger.kernel.org
 CC: linux-kernel@vger.kernel.org
+CC: linux-perf-users@vger.kernel.org
 Co-developed-by: Clement Leger <clement.leger@bootlin.com>
 Signed-off-by: Clement Leger <clement.leger@bootlin.com>
-Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
-Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
+Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
+Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 Co-developed-by: Julian Vetter <jvetter@kalray.eu>
 Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-Co-developed-by: Marius Gligor <mgligor@kalray.eu>
-Signed-off-by: Marius Gligor <mgligor@kalray.eu>
 Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
 Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 ---
- arch/kvx/include/asm/debug.h      |  35 ++
- arch/kvx/include/asm/insns.h      |  16 +
- arch/kvx/include/asm/insns_defs.h | 197 +++++++++++
- arch/kvx/kernel/break_hook.c      |  77 +++++
- arch/kvx/kernel/debug.c           |  64 ++++
- arch/kvx/kernel/hw_breakpoint.c   | 556 ++++++++++++++++++++++++++++++
- arch/kvx/kernel/insns.c           | 146 ++++++++
- 7 files changed, 1091 insertions(+)
- create mode 100644 arch/kvx/include/asm/debug.h
- create mode 100644 arch/kvx/include/asm/insns.h
- create mode 100644 arch/kvx/include/asm/insns_defs.h
- create mode 100644 arch/kvx/kernel/break_hook.c
- create mode 100644 arch/kvx/kernel/debug.c
- create mode 100644 arch/kvx/kernel/hw_breakpoint.c
- create mode 100644 arch/kvx/kernel/insns.c
+ .../devicetree/bindings/perf/kalray-pm.txt    |  21 +
+ arch/kvx/include/asm/perf_event.h             |  90 +++
+ arch/kvx/kernel/perf_event.c                  | 609 ++++++++++++++++++
+ 3 files changed, 720 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/perf/kalray-pm.txt
+ create mode 100644 arch/kvx/include/asm/perf_event.h
+ create mode 100644 arch/kvx/kernel/perf_event.c
 
-diff --git a/arch/kvx/include/asm/debug.h b/arch/kvx/include/asm/debug.h
+diff --git a/Documentation/devicetree/bindings/perf/kalray-pm.txt b/Documentation/devicetree/bindings/perf/kalray-pm.txt
 new file mode 100644
-index 000000000000..f60c632e6697
+index 000000000000..9ce00d703941
 --- /dev/null
-+++ b/arch/kvx/include/asm/debug.h
-@@ -0,0 +1,35 @@
++++ b/Documentation/devicetree/bindings/perf/kalray-pm.txt
+@@ -0,0 +1,21 @@
++* Kalray kvx Performance Monitors
++
++KVX core has several Performance Monitors for counting cpu and cache events.
++The KVX PM representation in the device tree should be done as under:
++
++Required properties:
++
++- compatible :
++	"kalray,kvx-core-pm"
++
++- interrupts : The interrupt number for kvx PM is 3.
++- interrupt-parent : The kvx core interrupt controller.
++- kalray,pm-num : Number of Performance Monitors the kvx core has.
++
++Example:
++core_pm {
++	compatible = "kalray,kvx-core-pm";
++	interrupts = <3>;
++	interrupt-parent = <&core_intc>;
++	kalray,pm-num = <4>;
++}
+diff --git a/arch/kvx/include/asm/perf_event.h b/arch/kvx/include/asm/perf_event.h
+new file mode 100644
+index 000000000000..bb0147dfdf47
+--- /dev/null
++++ b/arch/kvx/include/asm/perf_event.h
+@@ -0,0 +1,90 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#ifndef __ASM_KVX_DEBUG_HOOK_H_
-+#define __ASM_KVX_DEBUG_HOOK_H_
-+
-+/**
-+ * enum debug_ret - Break return value
-+ * @DEBUG_HOOK_HANDLED: Hook handled successfully
-+ * @DEBUG_HOOK_IGNORED: Hook call has been ignored
-+ */
-+enum debug_ret {
-+	DEBUG_HOOK_HANDLED = 0,
-+	DEBUG_HOOK_IGNORED = 1,
-+};
-+
-+/**
-+ * struct debug_hook - Debug hook description
-+ * @node: List node
-+ * @handler: handler called on debug entry
-+ * @mode: Hook mode (user/kernel)
-+ */
-+struct debug_hook {
-+	struct list_head node;
-+	int (*handler)(u64 ea, struct pt_regs *regs);
-+	u8 mode;
-+};
-+
-+void debug_hook_register(struct debug_hook *dbg_hook);
-+void debug_hook_unregister(struct debug_hook *dbg_hook);
-+
-+#endif /* __ASM_KVX_DEBUG_HOOK_H_ */
-diff --git a/arch/kvx/include/asm/insns.h b/arch/kvx/include/asm/insns.h
-new file mode 100644
-index 000000000000..36a9e8335ce8
---- /dev/null
-+++ b/arch/kvx/include/asm/insns.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_INSNS_H
-+#define _ASM_KVX_INSNS_H
-+
-+int kvx_insns_write_nostop(u32 *insns, u8 insns_len, u32 *insn_addr);
-+
-+int kvx_insns_write(u32 *insns, unsigned long insns_len, u32 *addr);
-+
-+int kvx_insns_read(u32 *insns, unsigned long insns_len, u32 *addr);
-+
-+#endif
-diff --git a/arch/kvx/include/asm/insns_defs.h b/arch/kvx/include/asm/insns_defs.h
-new file mode 100644
-index 000000000000..ed8d9d6f0817
---- /dev/null
-+++ b/arch/kvx/include/asm/insns_defs.h
-@@ -0,0 +1,197 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Guillaume Thouvenin
-+ */
-+
-+#ifndef __ASM_KVX_INSNS_DEFS_H_
-+#define __ASM_KVX_INSNS_DEFS_H_
-+
-+#include <linux/bits.h>
-+
-+#ifndef __ASSEMBLY__
-+static inline int check_signed_imm(long long imm, int bits)
-+{
-+	long long min, max;
-+
-+	min = -BIT_ULL(bits - 1);
-+	max = BIT_ULL(bits - 1) - 1;
-+	if (imm < min || imm > max)
-+		return 1;
-+
-+	return 0;
-+}
-+#endif /* __ASSEMBLY__ */
-+
-+#define BITMASK(bits)		(BIT_ULL(bits) - 1)
-+
-+#define KVX_INSN_SYLLABLE_WIDTH 4
-+
-+#define IS_INSN(__insn, __mnemo) \
-+	((__insn & KVX_INSN_ ## __mnemo ## _MASK_0) == \
-+	 KVX_INSN_ ## __mnemo ## _OPCODE_0)
-+
-+#define INSN_SIZE(__insn) \
-+	(KVX_INSN_ ## __insn ## _SIZE * KVX_INSN_SYLLABLE_WIDTH)
-+
-+/* Values for general registers */
-+#define KVX_REG_R0	0
-+#define KVX_REG_R1	1
-+#define KVX_REG_R2	2
-+#define KVX_REG_R3	3
-+#define KVX_REG_R4	4
-+#define KVX_REG_R5	5
-+#define KVX_REG_R6	6
-+#define KVX_REG_R7	7
-+#define KVX_REG_R8	8
-+#define KVX_REG_R9	9
-+#define KVX_REG_R10	10
-+#define KVX_REG_R11	11
-+#define KVX_REG_R12	12
-+#define KVX_REG_SP	12
-+#define KVX_REG_R13	13
-+#define KVX_REG_TP	13
-+#define KVX_REG_R14	14
-+#define KVX_REG_FP	14
-+#define KVX_REG_R15	15
-+#define KVX_REG_R16	16
-+#define KVX_REG_R17	17
-+#define KVX_REG_R18	18
-+#define KVX_REG_R19	19
-+#define KVX_REG_R20	20
-+#define KVX_REG_R21	21
-+#define KVX_REG_R22	22
-+#define KVX_REG_R23	23
-+#define KVX_REG_R24	24
-+#define KVX_REG_R25	25
-+#define KVX_REG_R26	26
-+#define KVX_REG_R27	27
-+#define KVX_REG_R28	28
-+#define KVX_REG_R29	29
-+#define KVX_REG_R30	30
-+#define KVX_REG_R31	31
-+#define KVX_REG_R32	32
-+#define KVX_REG_R33	33
-+#define KVX_REG_R34	34
-+#define KVX_REG_R35	35
-+#define KVX_REG_R36	36
-+#define KVX_REG_R37	37
-+#define KVX_REG_R38	38
-+#define KVX_REG_R39	39
-+#define KVX_REG_R40	40
-+#define KVX_REG_R41	41
-+#define KVX_REG_R42	42
-+#define KVX_REG_R43	43
-+#define KVX_REG_R44	44
-+#define KVX_REG_R45	45
-+#define KVX_REG_R46	46
-+#define KVX_REG_R47	47
-+#define KVX_REG_R48	48
-+#define KVX_REG_R49	49
-+#define KVX_REG_R50	50
-+#define KVX_REG_R51	51
-+#define KVX_REG_R52	52
-+#define KVX_REG_R53	53
-+#define KVX_REG_R54	54
-+#define KVX_REG_R55	55
-+#define KVX_REG_R56	56
-+#define KVX_REG_R57	57
-+#define KVX_REG_R58	58
-+#define KVX_REG_R59	59
-+#define KVX_REG_R60	60
-+#define KVX_REG_R61	61
-+#define KVX_REG_R62	62
-+#define KVX_REG_R63	63
-+
-+/* Value for bitfield parallel */
-+#define KVX_INSN_PARALLEL_EOB	0x0
-+#define KVX_INSN_PARALLEL_NONE	0x1
-+
-+#define KVX_INSN_PARALLEL(__insn)       (((__insn) >> 31) & 0x1)
-+
-+#define KVX_INSN_MAKE_IMM64_SIZE 3
-+#define KVX_INSN_MAKE_IMM64_W64_CHECK(__val) \
-+	(check_signed_imm(__val, 64))
-+#define KVX_INSN_MAKE_IMM64_MASK_0 0xff030000
-+#define KVX_INSN_MAKE_IMM64_OPCODE_0 0xe0000000
-+#define KVX_INSN_MAKE_IMM64_SYLLABLE_0(__rw, __w64) \
-+	(KVX_INSN_MAKE_IMM64_OPCODE_0 | (((__rw) & 0x3f) << 18) | (((__w64) & 0x3ff) << 6))
-+#define KVX_INSN_MAKE_IMM64_MASK_1 0xe0000000
-+#define KVX_INSN_MAKE_IMM64_OPCODE_1 0x80000000
-+#define KVX_INSN_MAKE_IMM64_SYLLABLE_1(__w64) \
-+	(KVX_INSN_MAKE_IMM64_OPCODE_1 | (((__w64) >> 10) & 0x7ffffff))
-+#define KVX_INSN_MAKE_IMM64_SYLLABLE_2(__p, __w64) \
-+	(((__p) << 31) | (((__w64) >> 37) & 0x7ffffff))
-+#define KVX_INSN_MAKE_IMM64(__buf, __p, __rw, __w64) \
-+do { \
-+	(__buf)[0] = KVX_INSN_MAKE_IMM64_SYLLABLE_0(__rw, __w64); \
-+	(__buf)[1] = KVX_INSN_MAKE_IMM64_SYLLABLE_1(__w64); \
-+	(__buf)[2] = KVX_INSN_MAKE_IMM64_SYLLABLE_2(__p, __w64); \
-+} while (0)
-+
-+#define KVX_INSN_ICALL_SIZE 1
-+#define KVX_INSN_ICALL_MASK_0 0x7ffc0000
-+#define KVX_INSN_ICALL_OPCODE_0 0xfdc0000
-+#define KVX_INSN_ICALL_SYLLABLE_0(__p, __rz) \
-+	(KVX_INSN_ICALL_OPCODE_0 | ((__p) << 31) | ((__rz) & 0x3f))
-+#define KVX_INSN_ICALL(__buf, __p, __rz) \
-+do { \
-+	(__buf)[0] = KVX_INSN_ICALL_SYLLABLE_0(__p, __rz); \
-+} while (0)
-+
-+#define KVX_INSN_IGOTO_SIZE 1
-+#define KVX_INSN_IGOTO_MASK_0 0x7ffc0000
-+#define KVX_INSN_IGOTO_OPCODE_0 0xfd80000
-+#define KVX_INSN_IGOTO_SYLLABLE_0(__p, __rz) \
-+	(KVX_INSN_IGOTO_OPCODE_0 | ((__p) << 31) | ((__rz) & 0x3f))
-+#define KVX_INSN_IGOTO(__buf, __p, __rz) \
-+do { \
-+	(__buf)[0] = KVX_INSN_IGOTO_SYLLABLE_0(__p, __rz); \
-+} while (0)
-+
-+#define KVX_INSN_CALL_SIZE 1
-+#define KVX_INSN_CALL_PCREL27_CHECK(__val) \
-+	(((__val) & BITMASK(2)) || check_signed_imm((__val) >> 2, 27))
-+#define KVX_INSN_CALL_MASK_0 0x78000000
-+#define KVX_INSN_CALL_OPCODE_0 0x18000000
-+#define KVX_INSN_CALL_SYLLABLE_0(__p, __pcrel27) \
-+	(KVX_INSN_CALL_OPCODE_0 | ((__p) << 31) | (((__pcrel27) >> 2) & 0x7ffffff))
-+#define KVX_INSN_CALL(__buf, __p, __pcrel27) \
-+do { \
-+	(__buf)[0] = KVX_INSN_CALL_SYLLABLE_0(__p, __pcrel27); \
-+} while (0)
-+
-+#define KVX_INSN_GOTO_SIZE 1
-+#define KVX_INSN_GOTO_PCREL27_CHECK(__val) \
-+	(((__val) & BITMASK(2)) || check_signed_imm((__val) >> 2, 27))
-+#define KVX_INSN_GOTO_MASK_0 0x78000000
-+#define KVX_INSN_GOTO_OPCODE_0 0x10000000
-+#define KVX_INSN_GOTO_SYLLABLE_0(__p, __pcrel27) \
-+	(KVX_INSN_GOTO_OPCODE_0 | ((__p) << 31) | (((__pcrel27) >> 2) & 0x7ffffff))
-+#define KVX_INSN_GOTO(__buf, __p, __pcrel27) \
-+do { \
-+	(__buf)[0] = KVX_INSN_GOTO_SYLLABLE_0(__p, __pcrel27); \
-+} while (0)
-+
-+#define KVX_INSN_NOP_SIZE 1
-+#define KVX_INSN_NOP_MASK_0 0x7f03f000
-+#define KVX_INSN_NOP_OPCODE_0 0x7f03f000
-+#define KVX_INSN_NOP_SYLLABLE_0(__p) \
-+	(KVX_INSN_NOP_OPCODE_0 | ((__p) << 31))
-+#define KVX_INSN_NOP(__buf, __p) \
-+do { \
-+	(__buf)[0] = KVX_INSN_NOP_SYLLABLE_0(__p); \
-+} while (0)
-+
-+#define KVX_INSN_SET_SIZE 1
-+#define KVX_INSN_SET_MASK_0 0x7ffc0000
-+#define KVX_INSN_SET_OPCODE_0 0xfc00000
-+#define KVX_INSN_SET_SYLLABLE_0(__p, __systemT3, __rz) \
-+	(KVX_INSN_SET_OPCODE_0 | ((__p) << 31) | (((__systemT3) & 0x1ff) << 6) | ((__rz) & 0x3f))
-+#define KVX_INSN_SET(__buf, __p, __systemT3, __rz) \
-+do { \
-+	(__buf)[0] = KVX_INSN_SET_SYLLABLE_0(__p, __systemT3, __rz); \
-+} while (0)
-+
-+#endif /* __ASM_KVX_INSNS_DEFS_H_ */
-diff --git a/arch/kvx/kernel/break_hook.c b/arch/kvx/kernel/break_hook.c
-new file mode 100644
-index 000000000000..2c02287c04a6
---- /dev/null
-+++ b/arch/kvx/kernel/break_hook.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#include <linux/list.h>
-+#include <linux/rculist.h>
-+#include <linux/spinlock.h>
-+#include <linux/rcupdate.h>
-+
-+#include <asm/insns.h>
-+#include <asm/traps.h>
-+#include <asm/processor.h>
-+#include <asm/break_hook.h>
-+
-+static DEFINE_SPINLOCK(debug_hook_lock);
-+static LIST_HEAD(user_break_hook);
-+static LIST_HEAD(kernel_break_hook);
-+
-+void kvx_skip_break_insn(struct pt_regs *regs)
-+{
-+	regs->spc += KVX_BREAK_INSN_SIZE;
-+}
-+
-+int break_hook_handler(uint64_t es, struct pt_regs *regs)
-+{
-+	int (*fn)(struct break_hook *brk_hook, struct pt_regs *regs) = NULL;
-+	struct break_hook *tmp_hook, *hook = NULL;
-+	struct list_head *list;
-+	unsigned long flags;
-+	u32 idx;
-+
-+	if (trap_sfri(es) != KVX_TRAP_SFRI_SET ||
-+	    trap_sfrp(es) != KVX_SFR_VSFR0)
-+		return BREAK_HOOK_ERROR;
-+
-+	idx = trap_gprp(es);
-+	list = user_mode(regs) ? &user_break_hook : &kernel_break_hook;
-+
-+	local_irq_save(flags);
-+	list_for_each_entry_rcu(tmp_hook, list, node) {
-+		if (idx == tmp_hook->id) {
-+			hook = tmp_hook;
-+			break;
-+		}
-+	}
-+	local_irq_restore(flags);
-+
-+	if (!hook)
-+		return BREAK_HOOK_ERROR;
-+
-+	fn = hook->handler;
-+	return fn(hook, regs);
-+}
-+
-+void break_hook_register(struct break_hook *brk_hook)
-+{
-+	struct list_head *list;
-+
-+	if (brk_hook->mode == MODE_USER)
-+		list = &user_break_hook;
-+	else
-+		list = &kernel_break_hook;
-+
-+	spin_lock(&debug_hook_lock);
-+	list_add_rcu(&brk_hook->node, list);
-+	spin_unlock(&debug_hook_lock);
-+}
-+
-+void break_hook_unregister(struct break_hook *brk_hook)
-+{
-+	spin_lock(&debug_hook_lock);
-+	list_del_rcu(&brk_hook->node);
-+	spin_unlock(&debug_hook_lock);
-+	synchronize_rcu();
-+}
-diff --git a/arch/kvx/kernel/debug.c b/arch/kvx/kernel/debug.c
-new file mode 100644
-index 000000000000..d4cde403bca9
---- /dev/null
-+++ b/arch/kvx/kernel/debug.c
-@@ -0,0 +1,64 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+#include <linux/list.h>
-+#include <linux/rculist.h>
-+#include <linux/spinlock.h>
-+#include <linux/rcupdate.h>
-+
-+#include <asm/dame.h>
-+#include <asm/debug.h>
-+
-+static DEFINE_SPINLOCK(debug_hook_lock);
-+static LIST_HEAD(user_debug_hook);
-+static LIST_HEAD(kernel_debug_hook);
-+
-+static struct list_head *debug_hook_list(bool user_mode)
-+{
-+	return user_mode ? &user_debug_hook : &kernel_debug_hook;
-+}
-+
-+static void call_debug_hook(u64 ea, struct pt_regs *regs)
-+{
-+	int ret;
-+	struct debug_hook *hook;
-+	struct list_head *list = debug_hook_list(user_mode(regs));
-+
-+	list_for_each_entry_rcu(hook, list, node) {
-+		ret = hook->handler(ea, regs);
-+		if (ret == DEBUG_HOOK_HANDLED)
-+			return;
-+	}
-+
-+	panic("Entered debug but no requester !");
-+}
-+
-+void debug_hook_register(struct debug_hook *dbg_hook)
-+{
-+	struct list_head *list = debug_hook_list(dbg_hook->mode == MODE_USER);
-+
-+	spin_lock(&debug_hook_lock);
-+	list_add_rcu(&dbg_hook->node, list);
-+	spin_unlock(&debug_hook_lock);
-+}
-+
-+void debug_hook_unregister(struct debug_hook *dbg_hook)
-+{
-+	spin_lock(&debug_hook_lock);
-+	list_del_rcu(&dbg_hook->node);
-+	spin_unlock(&debug_hook_lock);
-+	synchronize_rcu();
-+}
-+
-+/**
-+ * Main debug handler called by the _debug_handler routine in entry.S
-+ * This handler will perform the required action
-+ */
-+void debug_handler(u64 ea, struct pt_regs *regs)
-+{
-+	trace_hardirqs_off();
-+	call_debug_hook(ea, regs);
-+	dame_irq_check(regs);
-+}
-diff --git a/arch/kvx/kernel/hw_breakpoint.c b/arch/kvx/kernel/hw_breakpoint.c
-new file mode 100644
-index 000000000000..f28ed1a99bf2
---- /dev/null
-+++ b/arch/kvx/kernel/hw_breakpoint.c
-@@ -0,0 +1,556 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Marius Gligor
++ * Author(s): Yann Sionneau
 + *            Clement Leger
 + */
 +
-+#include <linux/hw_breakpoint.h>
-+#include <linux/percpu.h>
++#ifndef _ASM_KVX_PERF_EVENT_H
++#define _ASM_KVX_PERF_EVENT_H
++
 +#include <linux/perf_event.h>
-+#include <linux/bitops.h>
-+#include <linux/cache.h>
-+
-+#include <asm/hw_breakpoint.h>
-+#include <asm/sfr.h>
-+
-+#define HW_BREAKPOINT_SIZE	4
-+#define HW_BREAKPOINT_RANGE	2
-+#define MAX_STORE_LENGTH	32
-+#define L1_LINE_MASK		((u64) KVX_DCACHE_LINE_SIZE - 1)
-+
-+#define ES_AS_DZEROL_CODE	0x3F
-+#define ES_AS_MAINT_CODE	0x21
-+
-+#define WATCHPOINT_STEPPED	1
-+#define WATCHPOINT_GDB_HIT	2
-+
-+#define hw_breakpoint_remap(idx) (KVX_HW_BREAKPOINT_COUNT - 1 - (idx))
-+#define hw_watchpoint_remap(idx) (idx)
-+
-+/* Breakpoint currently in use */
-+static DEFINE_PER_CPU(struct perf_event *, hbp_on_reg[KVX_HW_BREAKPOINT_COUNT]);
-+
-+/* Watchpoint currently in use */
-+static DEFINE_PER_CPU(struct perf_event *, hwp_on_reg[KVX_HW_WATCHPOINT_COUNT]);
-+
-+/* Get and set function of the debug hardware registers */
-+#define gen_set_hw_sfr(__name, __sfr) \
-+static inline void set_hw_ ## __name(int idx, u64 addr) \
-+{ \
-+	if (idx == 0) \
-+		kvx_sfr_set(__sfr ## 0, addr); \
-+	else \
-+		kvx_sfr_set(__sfr ## 1, addr); \
-+}
-+
-+#define gen_set_hw_sfr_field(__name, __sfr, __field) \
-+static inline void set_hw_ ## __name(int idx, u32 value) \
-+{ \
-+	if (idx == 0) \
-+		kvx_sfr_set_field(__sfr, __field ## 0, value); \
-+	else \
-+		kvx_sfr_set_field(__sfr, __field ## 1, value); \
-+}
-+
-+#define gen_get_hw_sfr_field(__name, __sfr, __field) \
-+static inline u32 get_hw_ ## __name(int idx) \
-+{ \
-+	if (idx == 0) \
-+		return kvx_sfr_field_val(kvx_sfr_get(__sfr), \
-+					 __sfr, __field ## 0); \
-+	return kvx_sfr_field_val(kvx_sfr_get(__sfr), __sfr, \
-+				 __field ## 1); \
-+}
-+
-+gen_set_hw_sfr_field(bp_owner, DOW, B);
-+gen_set_hw_sfr_field(wp_owner, DOW, W);
-+gen_get_hw_sfr_field(bp_owner, DO, B);
-+gen_get_hw_sfr_field(wp_owner, DO, W);
-+gen_set_hw_sfr(bp_addr, DBA);
-+gen_set_hw_sfr(wp_addr, DWA);
-+gen_set_hw_sfr_field(bp_range, DC, BR);
-+gen_set_hw_sfr_field(wp_range, DC, WR);
-+gen_set_hw_sfr_field(bp_enable, DC, BE);
-+gen_set_hw_sfr_field(wp_enable, DC, WE);
 +
 +/**
-+ * hw_breakpoint_slots() - obtain the maximum available number of hardware
-+ * resources for the specified type
-+ * @type: Requested hardware watchpoint/breakpoint type
-+ * Return: The maximum number of hardware resources for the given type
-+ * or 0 if type is invalide
++ * struct cpu_hw_events - per-cpu structure to describe PM resource usage
++ * @n_events:	number of events currently existing
++ * @events:	events[i] is the event using PMi. NULL if PMi is not used.
 + */
-+int hw_breakpoint_slots(int type)
-+{
-+	switch (type) {
-+	case TYPE_INST:
-+		return KVX_HW_BREAKPOINT_COUNT;
-+	case TYPE_DATA:
-+		return KVX_HW_WATCHPOINT_COUNT;
-+	default:
-+		pr_warn("unknown slot type: %d\n", type);
-+		return 0;
-+	}
-+}
-+
-+/**
-+ * arch_check_bp_in_kernelspace() - verify if the specified
-+ * watchpoint/breakpoint address is inside the kernel
-+ * @hw: The arch hardware watchpoint/breakpoint whose address should be checked
-+ * Return: The result of the verification
-+ */
-+int arch_check_bp_in_kernelspace(struct arch_hw_breakpoint *hw)
-+{
-+	return hw->addr >= PAGE_OFFSET;
-+}
-+
-+/*
-+ * compute_hw_watchpoint_range() - compute the watchpoint hardware registers to
-+ * cover attr->bp_len bytes beginning from attr->bp_addr
-+ * @attr: Provides the address and length for which the hardware registers
-+ * should be computed
-+ * @hw: Address of the arch_hw_breakpoint where the computed values should be
-+ * stored
-+ * Observation: Because of the kvx watchpoint range problem, both hardware
-+ * watchpoints may be used for index 0
-+ */
-+static void compute_hw_watchpoint_range(const struct perf_event_attr *attr,
-+					struct arch_hw_breakpoint *hw)
-+{
-+	u64 addr = attr->bp_addr;
-+	u32 size = attr->bp_len;
-+	u64 begin = (addr >= MAX_STORE_LENGTH - 1) ?
-+		(addr - (MAX_STORE_LENGTH - 1)) : 0;
-+	u64 end = addr + size - 1;
-+	u64 addr_l1_aligned = addr & ~L1_LINE_MASK;
-+	u64 end_l1_aligned = end & ~L1_LINE_MASK;
-+
-+	/* The maximum range of a store instruction is 32 bytes (store octuple).
-+	 * The stores may be unaligned. The dzerol instruction fills the
-+	 * specified line cache with 0, so its range is the L1 cache line size
-+	 * (64 bytes for Coolidge). So, the range that should be covered is:
-+	 * MIN(MAX(addr - 31, 0), (addr & ~L1_LINE_MASK)) to (addr + len -1)
-+	 * We can have MAX(addr - 31, 0) less (addr & ~L1_LINE_MASK) only for an
-+	 * unaligned access. In this case, we have a store that modifies data in
-+	 * 2 L1 cache lines. If the addresses of the 2 consecutive L1 cache
-+	 * lines have many bits different (e.g. 0x10000000 and 0xfffffc0), the
-+	 * watchpoint range will be very big (29 bits (512 MB) in the example)
-+	 * and each time a byte in this range will change, the watchpoint will
-+	 * be triggered, so, in fact, almost all stores will trigger the
-+	 * watchpoint and the execution will be very very slow. To avoid this,
-+	 * in this case, we use 2 hardware watchpoints, one for each L1 cache
-+	 * line, each covering only a few bytes in their cache line.
-+	 * A similar case, requiring 2 hardware watchpoints, happens when
-+	 * (addr + len -1) is in next cache line
-+	 */
-+	if (begin < addr_l1_aligned) {
-+		hw->wp.hw_addr[0] = begin;
-+		hw->wp.hw_range[0] = fls64(begin ^ (addr_l1_aligned - 1));
-+
-+		hw->wp.use_wp1 = 1;
-+		hw->wp.hw_addr[1] = addr_l1_aligned;
-+		hw->wp.hw_range[1] = fls64(addr_l1_aligned ^ end);
-+	} else if (addr_l1_aligned != end_l1_aligned) {
-+		hw->wp.hw_addr[0] = addr_l1_aligned;
-+		hw->wp.hw_range[0] =
-+			fls64(addr_l1_aligned ^ (end_l1_aligned - 1));
-+
-+		hw->wp.use_wp1 = 1;
-+		hw->wp.hw_addr[1] = end_l1_aligned;
-+		hw->wp.hw_range[1] = fls64(end_l1_aligned ^ end);
-+	} else {
-+		hw->wp.use_wp1 = 0;
-+		hw->wp.hw_addr[0] = addr_l1_aligned;
-+		hw->wp.hw_range[0] = fls64(addr_l1_aligned ^ end);
-+	}
-+
-+	if (!hw->wp.use_wp1) {
-+		hw->wp.hw_addr[1] = 0;
-+		hw->wp.hw_range[1] = 0;
-+	}
-+	hw->wp.hit_info = 0;
-+}
-+
-+/*
-+ * hw_breakpoint_arch_parse() - Construct an arch_hw_breakpoint from
-+ * a perf_event
-+ * @bp: The source perf event
-+ * @attr: Attributes of the perf_event
-+ * @hw: Address of the arch_hw_breakpoint to be constructed
-+ * Return: 0 for success, or negative error code
-+ */
-+int hw_breakpoint_arch_parse(struct perf_event *bp,
-+			     const struct perf_event_attr *attr,
-+			     struct arch_hw_breakpoint *hw)
-+{
-+	/* Type */
-+	if (attr->bp_type == HW_BREAKPOINT_X) {
-+		if (!attr->disabled) {
-+			if (!IS_ALIGNED(attr->bp_addr, HW_BREAKPOINT_SIZE) ||
-+			    attr->bp_len != HW_BREAKPOINT_SIZE)
-+				return -EINVAL;
-+		}
-+
-+		hw->type = KVX_HW_BREAKPOINT_TYPE;
-+		hw->bp.hw_addr = attr->bp_addr;
-+		hw->bp.hw_range = HW_BREAKPOINT_RANGE;
-+	} else {
-+		if (attr->bp_type == HW_BREAKPOINT_W) {
-+			hw->type = KVX_HW_WATCHPOINT_TYPE;
-+			if (!attr->disabled)
-+				compute_hw_watchpoint_range(attr, hw);
-+		} else
-+			return -EINVAL;
-+	}
-+
-+	hw->addr = attr->bp_addr;
-+	hw->len = attr->bp_len;
-+
-+	return 0;
-+}
-+
-+int hw_breakpoint_exceptions_notify(struct notifier_block *unused,
-+				    unsigned long val, void *data)
-+{
-+	return NOTIFY_DONE;
-+}
-+
-+static int alloc_slot(struct perf_event **slot, size_t n,
-+		      struct perf_event *bp)
-+{
-+	int idx;
-+
-+	for (idx = 0; idx < n; idx++) {
-+		if (!slot[idx]) {
-+			slot[idx] = bp;
-+			return idx;
-+		}
-+	}
-+	return -EBUSY;
-+}
-+
-+static void enable_hw_breakpoint(int idx, int enable, struct perf_event *bp)
-+{
-+	struct arch_hw_breakpoint *info = counter_arch_bp(bp);
-+
-+	idx = hw_breakpoint_remap(idx);
-+	if (enable) {
-+		set_hw_bp_addr(idx, info->bp.hw_addr);
-+		set_hw_bp_range(idx, info->bp.hw_range);
-+	}
-+
-+	set_hw_bp_enable(idx, enable);
-+}
-+
-+/*
-+ * ptrace_request_hw_breakpoint() - tries to obtain the ownership for the
-+ * requested hardware breakpoint
-+ * @idx: The index of the requested hardware breakpoint
-+ * Return: 0 for success, or negative error code
-+ */
-+int ptrace_request_hw_breakpoint(int idx)
-+{
-+	int linux_pl, pl;
-+
-+	if (idx < 0 || idx >= KVX_HW_BREAKPOINT_COUNT)
-+		return -EINVAL;
-+
-+	linux_pl = kvx_sfr_field_val(kvx_sfr_get(PS), PS, PL);
-+
-+	/* Remap the indexes: request first the last hw breakpoint */
-+	idx = hw_breakpoint_remap(idx);
-+	pl = get_hw_bp_owner(idx);
-+	if (pl < linux_pl) {
-+		set_hw_bp_owner(idx, 0);
-+		pl = get_hw_bp_owner(idx);
-+	}
-+
-+	return (pl == linux_pl) ? 0 : -EPERM;
-+}
-+
-+static int reserve_one_hw_watchpoint(int idx)
-+{
-+	int linux_pl = kvx_sfr_field_val(kvx_sfr_get(PS), PS, PL);
-+	int pl = get_hw_wp_owner(idx);
-+
-+	if (pl < linux_pl) {
-+		set_hw_wp_owner(idx, 0);
-+		pl = get_hw_wp_owner(idx);
-+	}
-+
-+	return (pl == linux_pl) ? 0 : -EPERM;
-+}
-+
-+/*
-+ * ptrace_request_hw_watchpoint() - tries to obtain the ownership for the
-+ * requested hardware watchpoint
-+ * @idx: The index of the requested hardware watchpoint
-+ * Return: 0 for success, or negative error code
-+ *
-+ * Observation: Because of the kvx watchpoint range limitation, both hardware
-+ * watchpoints are used for index 0 for Coolidge V1
-+ */
-+int ptrace_request_hw_watchpoint(int idx)
-+{
-+	int res;
-+
-+	if (idx < 0 || idx >= KVX_HW_WATCHPOINT_COUNT)
-+		return -EINVAL;
-+
-+	idx = hw_watchpoint_remap(idx);
-+	res = reserve_one_hw_watchpoint(idx);
-+	if (res)
-+		return res;
-+
-+	/* Request the both watchpoints for Coolidge V1. W0 is ours, now W1 */
-+	return reserve_one_hw_watchpoint(idx + 1);
-+}
-+
-+static void enable_one_watchpoint(int idx, int sub_idx, int enable,
-+				  struct arch_hw_breakpoint *info)
-+{
-+	if (enable) {
-+		set_hw_wp_addr(idx, info->wp.hw_addr[sub_idx]);
-+		set_hw_wp_range(idx, info->wp.hw_range[sub_idx]);
-+	}
-+
-+	set_hw_wp_enable(idx, enable);
-+}
-+
-+static void enable_hw_watchpoint(int idx, int enable, struct perf_event *bp)
-+{
-+	struct arch_hw_breakpoint *info = counter_arch_bp(bp);
-+
-+	if (idx < 0 || idx >= KVX_HW_WATCHPOINT_COUNT)
-+		return;
-+
-+	idx = hw_watchpoint_remap(idx);
-+	enable_one_watchpoint(idx, 0, enable, info);
-+	if (info->wp.use_wp1)
-+		enable_one_watchpoint(idx + 1, 1, enable, info);
-+}
-+
-+static void get_hw_pt_list(int type, struct perf_event ***p, int *count)
-+{
-+	if (type == KVX_HW_BREAKPOINT_TYPE) {
-+		/* Breakpoint */
-+		*p = this_cpu_ptr(hbp_on_reg);
-+		*count = KVX_HW_BREAKPOINT_COUNT;
-+	} else {
-+		/* Watchpoint */
-+		*p = this_cpu_ptr(hwp_on_reg);
-+		*count = KVX_HW_WATCHPOINT_COUNT;
-+	}
-+}
-+
-+static void enable_hw_pt(int idx, int enable, struct perf_event *bp)
-+{
-+	int type = counter_arch_bp(bp)->type;
-+
-+	if (type == KVX_HW_BREAKPOINT_TYPE)
-+		enable_hw_breakpoint(idx, enable, bp);
-+	else
-+		enable_hw_watchpoint(idx, enable, bp);
-+}
-+
-+int arch_install_hw_breakpoint(struct perf_event *bp)
-+{
-+	struct perf_event **p;
-+	int idx, count;
-+
-+	get_hw_pt_list(counter_arch_bp(bp)->type, &p, &count);
-+	idx = alloc_slot(p, count, bp);
-+	if (idx < 0)
-+		return idx;
-+
-+	enable_hw_pt(idx, 1, bp);
-+
-+	return 0;
-+}
-+
-+static int free_slot(struct perf_event **slot, size_t n,
-+		     struct perf_event *bp)
-+{
-+	int idx;
-+
-+	for (idx = 0; idx < n; idx++) {
-+		if (slot[idx] == bp) {
-+			slot[idx] = NULL;
-+			return idx;
-+		}
-+	}
-+	return -EBUSY;
-+}
-+
-+void arch_uninstall_hw_breakpoint(struct perf_event *bp)
-+{
-+	struct perf_event **p;
-+	int idx, count;
-+
-+	get_hw_pt_list(counter_arch_bp(bp)->type, &p, &count);
-+	idx = free_slot(p, count, bp);
-+	if (idx < 0)
-+		return;
-+
-+	enable_hw_pt(idx, 0, bp);
-+}
-+
-+void hw_breakpoint_pmu_read(struct perf_event *bp)
-+{
-+}
-+
-+void flush_ptrace_hw_breakpoint(struct task_struct *tsk)
-+{
-+	int i;
-+	struct thread_struct *t = &tsk->thread;
-+
-+	for (i = 0; i < KVX_HW_BREAKPOINT_COUNT; i++) {
-+		if (t->debug.ptrace_hbp[i]) {
-+			unregister_hw_breakpoint(t->debug.ptrace_hbp[i]);
-+			t->debug.ptrace_hbp[i] = NULL;
-+		}
-+	}
-+	for (i = 0; i < KVX_HW_WATCHPOINT_COUNT; i++) {
-+		if (t->debug.ptrace_hwp[i]) {
-+			unregister_hw_breakpoint(t->debug.ptrace_hwp[i]);
-+			t->debug.ptrace_hwp[i] = NULL;
-+		}
-+	}
-+}
-+
-+/*
-+ * Set ptrace breakpoint pointers to zero for this task.
-+ * This is required in order to prevent child processes from unregistering
-+ * breakpoints held by their parent.
-+ */
-+void clear_ptrace_hw_breakpoint(struct task_struct *tsk)
-+{
-+	struct debug_info *d = &tsk->thread.debug;
-+
-+	memset(d->ptrace_hbp, 0, sizeof(d->ptrace_hbp));
-+	memset(d->ptrace_hwp, 0, sizeof(d->ptrace_hwp));
-+}
-+
-+/**
-+ * check_hw_breakpoint() - called from debug_handler for each hardware
-+ * breakpoint exception
-+ * @regs: Pointer to registers saved when trapping
-+ *
-+ * This function informs the debugger if a hardware breakpoint hit
-+ */
-+void check_hw_breakpoint(struct pt_regs *regs)
-+{
-+	int i;
-+	struct perf_event **bp = this_cpu_ptr(hbp_on_reg);
-+
-+	for (i = 0; i < KVX_HW_BREAKPOINT_COUNT; i++) {
-+		if (bp[i] && !bp[i]->attr.disabled &&
-+		    regs->spc == bp[i]->attr.bp_addr)
-+			perf_bp_event(bp[i], regs);
-+	}
-+}
-+
-+static void watchpoint_triggered(struct perf_event *wp, struct pt_regs *regs,
-+				 int idx, u64 ea)
-+{
-+	struct arch_hw_breakpoint *info = counter_arch_bp(wp);
-+	int as = kvx_sfr_field_val(regs->es, ES, AS);
-+
-+	/* Disable the watchpoint in order to be able to stepi */
-+	info->wp.hit_info = WATCHPOINT_STEPPED;
-+	enable_hw_watchpoint(idx, 0, wp);
-+
-+	if (as == ES_AS_MAINT_CODE)
-+		return;
-+
-+	if (as == ES_AS_DZEROL_CODE) {
-+		as = KVX_DCACHE_LINE_SIZE;
-+		ea &= ~L1_LINE_MASK;
-+	}
-+
-+	/* Check if the user watchpoint range was written */
-+	if (ea < info->addr + info->len && ea + as >= info->addr)
-+		info->wp.hit_info |= WATCHPOINT_GDB_HIT;
-+}
-+
-+/**
-+ * check_hw_watchpoint() - called from debug_handler for each hardware
-+ * watchpoint exception
-+ * @regs: Pointer to registers saved when trapping
-+ * @ea: Exception Address register
-+ * Return: 1 if this exception was caused by a registered user watchpoint,
-+ * otherwise returns 0
-+ */
-+int check_hw_watchpoint(struct pt_regs *regs, u64 ea)
-+{
-+	struct perf_event **wp;
-+	struct arch_hw_breakpoint *info;
-+	u64 mask;
-+	int i, ret = 0;
-+
-+	wp = this_cpu_ptr(hwp_on_reg);
-+	for (i = 0; i < KVX_HW_WATCHPOINT_COUNT; i++) {
-+		if (!wp[i] || wp[i]->attr.disabled)
-+			continue;
-+
-+		info = counter_arch_bp(wp[i]);
-+		mask = ~(BIT_ULL(info->wp.hw_range[0]) - 1);
-+		if ((info->wp.hw_addr[0] & mask) == (ea & mask)) {
-+			ret = 1;
-+			watchpoint_triggered(wp[i], regs, i, ea);
-+		}
-+
-+		if (info->wp.use_wp1) {
-+			mask = ~(BIT_ULL(info->wp.hw_range[1]) - 1);
-+			if ((info->wp.hw_addr[1] & mask) == (ea & mask)) {
-+				ret = 1;
-+				watchpoint_triggered(wp[i], regs, i, ea);
-+			}
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+/**
-+ * check_hw_watchpoint_stepped() - called from debug_handler for each
-+ * stepi exception
-+ * @regs: Pointer to registers saved when trapping
-+ * Return: 1 if this stepi event was caused by stepping a watchpoint,
-+ * otherwise returns 0
-+ *
-+ * This function verifies if this stepi event was caused by stepping a
-+ * watchpoint, restores the watchpoints disabled before stepping and informs
-+ * the debugger about the wathcpoint hit
-+ */
-+int check_hw_watchpoint_stepped(struct pt_regs *regs)
-+{
-+	struct perf_event **wp;
-+	struct arch_hw_breakpoint *info;
-+	int i, ret = 0;
-+
-+	wp = this_cpu_ptr(hwp_on_reg);
-+	for (i = 0; i < KVX_HW_WATCHPOINT_COUNT; i++) {
-+		if (!wp[i] || wp[i]->attr.disabled)
-+			continue;
-+
-+		info = counter_arch_bp(wp[i]);
-+		if (info->wp.hit_info & WATCHPOINT_STEPPED) {
-+			ret = 1;
-+			enable_hw_watchpoint(i, 1, wp[i]);
-+		}
-+
-+		/* Inform the debugger about the watchpoint only if the
-+		 * requested watched range was written to
-+		 */
-+		if (info->wp.hit_info & WATCHPOINT_GDB_HIT) {
-+			if (user_mode(regs))
-+				perf_bp_event(wp[i], regs);
-+		}
-+
-+		info->wp.hit_info = 0;
-+	}
-+
-+	return ret;
-+}
-diff --git a/arch/kvx/kernel/insns.c b/arch/kvx/kernel/insns.c
++struct cpu_hw_events {
++	unsigned int n_events;
++	struct perf_event **events;
++};
++
++enum kvx_pmc_ie {
++	PMC_IE_DISABLED,
++	PMC_IE_ENABLED
++};
++
++enum kvx_pm_idx {
++	KVX_PM_1,
++	KVX_PM_2,
++	KVX_PM_3
++};
++
++enum kvx_pm_event_code {
++	KVX_PM_PCC,
++	KVX_PM_ICC,
++	KVX_PM_EBE,
++	KVX_PM_ENIE,
++	KVX_PM_ENSE,
++	KVX_PM_ICHE,
++	KVX_PM_ICME,
++	KVX_PM_ICMABE,
++	KVX_PM_MNGIC,
++	KVX_PM_MIMHE,
++	KVX_PM_MIMME,
++	KVX_PM_IATSC,
++	KVX_PM_FE,
++	KVX_PM_PBSC,
++	KVX_PM_PNVC,
++	KVX_PM_PSC,
++	KVX_PM_TADBE,
++	KVX_PM_TABE,
++	KVX_PM_TBE,
++	KVX_PM_MDMHE,
++	KVX_PM_MDMME,
++	KVX_PM_DATSC,
++	KVX_PM_DCLHE,
++	KVX_PM_DCHE,
++	KVX_PM_DCLME,
++	KVX_PM_DCME,
++	KVX_PM_DARSC,
++	KVX_PM_LDSC,
++	KVX_PM_DCNGC,
++	KVX_PM_DMAE,
++	KVX_PM_LCFSC,
++	KVX_PM_MNGDC,
++	KVX_PM_MACC,
++	KVX_PM_TACC,
++	KVX_PM_IWC,
++	KVX_PM_WISC,
++	KVX_PM_SISC,
++	KVX_PM_DDSC,
++	KVX_PM_SC,
++	KVX_PM_ELE,
++	KVX_PM_ELNBE,
++	KVX_PM_ELUE,
++	KVX_PM_ELUNBE,
++	KVX_PM_ESE,
++	KVX_PM_ESNBE,
++	KVX_PM_EAE,
++	KVX_PM_CIRE,
++	KVX_PM_CIE,
++	KVX_PM_SE,
++	KVX_PM_RE,
++	KVX_PM_FSC,
++	KVX_PM_MAX,
++	KVX_PM_UNSUPPORTED = KVX_PM_MAX,
++};
++
++#endif /* _ASM_KVX_PERF_EVENT_H */
+diff --git a/arch/kvx/kernel/perf_event.c b/arch/kvx/kernel/perf_event.c
 new file mode 100644
-index 000000000000..d25d8ad2a48c
+index 000000000000..bfc547e78aba
 --- /dev/null
-+++ b/arch/kvx/kernel/insns.c
-@@ -0,0 +1,146 @@
++++ b/arch/kvx/kernel/perf_event.c
+@@ -0,0 +1,609 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Yann Sionneau
-+ *            Marius Gligor
-+ *            Guillaume Thouvenin
++ * Author(s): Yann Sionneau
++ *            Clement Leger
 + */
 +
-+#include <linux/types.h>
-+#include <linux/string.h>
-+#include <linux/atomic.h>
-+#include <linux/cpumask.h>
-+#include <linux/uaccess.h>
-+#include <linux/stop_machine.h>
++#include <linux/of.h>
++#include <linux/of_irq.h>
++#include <linux/kernel.h>
++#include <linux/perf_event.h>
++#include <linux/errno.h>
++#include <linux/platform_device.h>
++#include <asm/perf_event.h>
 +
-+#include <asm/cacheflush.h>
-+#include <asm/insns_defs.h>
-+#include <asm/fixmap.h>
++static unsigned int pm_num;
++static unsigned int kvx_pm_irq;
++static DEFINE_PER_CPU(struct cpu_hw_events, cpu_hw_events);
 +
-+struct insns_patch {
-+	atomic_t cpu_count;
-+	u32 *addr;
-+	u32 *insns;
-+	unsigned long insns_len;
++static const enum kvx_pm_event_code kvx_hw_event_map[] = {
++	[PERF_COUNT_HW_CPU_CYCLES] = KVX_PM_PCC,
++	[PERF_COUNT_HW_INSTRUCTIONS] = KVX_PM_ENIE,
++	[PERF_COUNT_HW_CACHE_REFERENCES] = KVX_PM_UNSUPPORTED,
++	[PERF_COUNT_HW_CACHE_MISSES] = KVX_PM_UNSUPPORTED,
++	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS] = KVX_PM_TABE,
++	[PERF_COUNT_HW_BRANCH_MISSES] = KVX_PM_UNSUPPORTED,
++	[PERF_COUNT_HW_BUS_CYCLES] = KVX_PM_PCC,
++	[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND] = KVX_PM_PSC,
++	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND] = KVX_PM_UNSUPPORTED,
++	[PERF_COUNT_HW_REF_CPU_CYCLES] = KVX_PM_UNSUPPORTED,
 +};
 +
-+static void *insn_patch_map(void *addr)
++#define C(_x)			PERF_COUNT_HW_CACHE_##_x
++
++static const enum kvx_pm_event_code
++			kvx_cache_map[C(MAX)][C(OP_MAX)][C(RESULT_MAX)] = {
++[C(L1D)] = {
++	[C(OP_READ)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_DCLME,
++	},
++	[C(OP_WRITE)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_PREFETCH)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++},
++[C(L1I)] = {
++	[C(OP_READ)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_ICME,
++	},
++	[C(OP_WRITE)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_PREFETCH)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++},
++[C(LL)] = {
++	[C(OP_READ)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_WRITE)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_PREFETCH)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++},
++[C(DTLB)] = {
++	[C(OP_READ)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_WRITE)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_PREFETCH)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++},
++[C(ITLB)] = {
++	[C(OP_READ)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_MIMME,
++	},
++	[C(OP_WRITE)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_PREFETCH)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++},
++[C(BPU)] = {
++	[C(OP_READ)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_WRITE)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_PREFETCH)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++},
++[C(NODE)] = {
++	[C(OP_READ)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_WRITE)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++	[C(OP_PREFETCH)] = {
++		[C(RESULT_ACCESS)] = KVX_PM_UNSUPPORTED,
++		[C(RESULT_MISS)] = KVX_PM_UNSUPPORTED,
++	},
++},
++};
++
++static u64 read_counter(struct perf_event *event)
 +{
-+	unsigned long uintaddr = (uintptr_t) addr;
-+	bool module = !core_kernel_text(uintaddr);
-+	struct page *page;
++	struct hw_perf_event *hwc = &event->hw;
++	unsigned int pm = hwc->idx;
 +
-+	if (module && IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-+		page = vmalloc_to_page(addr);
-+	else if (!module && IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
-+		page = phys_to_page(__pa_symbol(addr));
-+	else
-+		return addr;
-+
-+	BUG_ON(!page);
-+	return (void *)set_fixmap_offset(FIX_TEXT_PATCH, page_to_phys(page) +
-+			(uintaddr & ~PAGE_MASK));
++	if (pm > pm_num) {
++		WARN_ONCE(1, "This PM (%u) does not exist!\n", pm);
++		return 0;
++	}
++	return kvx_sfr_iget(KVX_SFR_PM1 + pm);
 +}
 +
-+static void insn_patch_unmap(void)
++static void kvx_pmu_read(struct perf_event *event)
 +{
-+	clear_fixmap(FIX_TEXT_PATCH);
-+}
-+
-+int kvx_insns_write_nostop(u32 *insns, u8 insns_len, u32 *insn_addr)
-+{
-+	unsigned long current_insn_addr = (unsigned long) insn_addr;
-+	unsigned long len_remain = insns_len;
-+	unsigned long next_insn_page, patch_len;
-+	void *map_patch_addr;
-+	int ret = 0;
++	struct hw_perf_event *hwc = &event->hw;
++	u64 delta, prev_raw_count, new_raw_count;
 +
 +	do {
-+		/* Compute next upper page boundary */
-+		next_insn_page = (current_insn_addr + PAGE_SIZE) & PAGE_MASK;
-+
-+		patch_len = min(next_insn_page - current_insn_addr, len_remain);
-+		len_remain -= patch_len;
-+
-+		/* Map & patch insns */
-+		map_patch_addr = insn_patch_map((void *) current_insn_addr);
-+		ret = copy_to_kernel_nofault(map_patch_addr, insns, patch_len);
-+		if (ret)
-+			break;
-+
-+		insns = (void *) insns + patch_len;
-+		current_insn_addr = next_insn_page;
-+
-+	} while (len_remain);
-+
-+	insn_patch_unmap();
-+
++		prev_raw_count = local64_read(&hwc->prev_count);
++		new_raw_count = read_counter(event);
++	} while (local64_cmpxchg(&hwc->prev_count, prev_raw_count,
++				new_raw_count) != prev_raw_count);
 +	/*
-+	 * Flush & invalidate L2 + L1 icache to reload instructions from memory
-+	 * L2 wbinval is necessary because we write through DEVICE cache policy
-+	 * mapping which is uncached therefore L2 is bypassed
++	 * delta is the value to update the counter we maintain in the kernel.
 +	 */
-+	wbinval_icache_range(virt_to_phys(insn_addr), insns_len);
-+
-+	return ret;
++	delta = (new_raw_count - prev_raw_count);
++	local64_add(delta, &event->count);
 +}
 +
-+static int patch_insns_percpu(void *data)
++static void kvx_set_pmc_ie(unsigned int pm_num, enum kvx_pmc_ie ievalue)
 +{
-+	struct insns_patch *ip = data;
-+	unsigned long insn_addr = (unsigned long) ip->addr;
-+	int ret;
++	u64 shifted_value = ((u64)ievalue << KVX_SFR_PMC_PM1IE_SHIFT)
++			     & KVX_SFR_PMC_PM1IE_MASK;
++	u64 clr_mask = KVX_SFR_PMC_PM1IE_MASK << pm_num;
++	u64 set_mask = shifted_value << pm_num;
 +
-+	if (atomic_inc_return(&ip->cpu_count) == 1) {
-+		ret = kvx_insns_write_nostop(ip->insns, ip->insns_len,
-+					     ip->addr);
-+		/* Additionnal up to release other processors */
-+		atomic_inc(&ip->cpu_count);
++	kvx_sfr_set_mask(PMC, clr_mask, set_mask);
++}
 +
-+		return ret;
++static void kvx_set_pmc(unsigned int pm_num, enum kvx_pm_event_code pmc_value)
++{
++	u64 pm_shift = (pm_num + 1) * KVX_SFR_PMC_PM1C_SHIFT;
++	u64 clr_mask = KVX_SFR_PMC_PM0C_MASK << pm_shift;
++	u64 set_mask = pmc_value << pm_shift;
++
++	kvx_sfr_set_mask(PMC, clr_mask, set_mask);
++}
++
++static void give_pm_to_user(unsigned int pm)
++{
++	int pl_value = 1 << (KVX_SFR_MOW_PM0_SHIFT
++				+ KVX_SFR_MOW_PM0_WIDTH * (pm + 1));
++	int pl_clr_mask = 3 << (KVX_SFR_MOW_PM0_SHIFT
++				+ KVX_SFR_MOW_PM0_WIDTH * (pm + 1));
++	kvx_sfr_set_mask(MOW, pl_clr_mask, pl_value);
++}
++
++static void get_pm_back_to_kernel(unsigned int pm)
++{
++	int pl_value = 0;
++	int pl_clr_mask = 3 << (KVX_SFR_MOW_PM0_SHIFT
++				+ KVX_SFR_MOW_PM0_WIDTH * (pm + 1));
++	kvx_sfr_set_mask(MOW, pl_clr_mask, pl_value);
++}
++
++static void kvx_set_pm(enum kvx_pm_idx pm, u64 value)
++{
++	switch (pm) {
++	case KVX_PM_1:
++		kvx_sfr_set(PM1, value);
++		break;
++	case KVX_PM_2:
++		kvx_sfr_set(PM2, value);
++		break;
++	case KVX_PM_3:
++		kvx_sfr_set(PM3, value);
++		break;
++	default:
++		WARN_ONCE(1, "This PM (%u) does not exist!\n", pm);
++	}
++}
++
++static void kvx_stop_sampling_event(unsigned int pm)
++{
++	kvx_set_pmc_ie(pm, PMC_IE_DISABLED);
++}
++
++static u64 kvx_start_sampling_event(struct perf_event *event, unsigned int pm)
++{
++	u64 start_value;
++
++	if (event->attr.freq) {
++		pr_err_once("kvx_pm: Frequency sampling is not supported\n");
++		return 0;
 +	}
 +
-+	/* Wait for first processor to update instructions */
-+	while (atomic_read(&ip->cpu_count) <= num_online_cpus())
-+		cpu_relax();
++	/* PM counter will overflow after "sample_period" ticks */
++	start_value = (u64)(-event->attr.sample_period);
 +
-+	/* Simply invalidate L1 I-cache to reload from L2 or memory */
-+	l1_inval_icache_range(insn_addr, insn_addr + ip->insns_len);
++	kvx_set_pmc(pm, KVX_PM_SE);
++	kvx_set_pm(pm, start_value);
++	kvx_set_pmc_ie(pm, PMC_IE_ENABLED);
++	return start_value;
++}
++
++static void kvx_pmu_start(struct perf_event *event, int flags)
++{
++	struct hw_perf_event *hwc = &event->hw;
++	struct perf_event_attr *attr = &event->attr;
++	u64 pm_config = hwc->config;
++	unsigned int pm = hwc->idx;
++	u64 start_value = 0;
++
++	if (WARN_ON_ONCE(!(event->hw.state & PERF_HES_STOPPED)))
++		return;
++
++	if (flags & PERF_EF_RELOAD)
++		WARN_ON_ONCE(!(event->hw.state & PERF_HES_UPTODATE));
++
++	hwc->state = 0;
++	perf_event_update_userpage(event);
++
++	if (is_sampling_event(event))
++		start_value = kvx_start_sampling_event(event, pm);
++
++	local64_set(&hwc->prev_count, start_value);
++	if (attr->exclude_kernel)
++		give_pm_to_user(pm);
++	if (!is_sampling_event(event))
++		kvx_set_pmc(pm, KVX_PM_RE);
++	kvx_set_pmc(pm, pm_config);
++}
++
++static void kvx_pmu_stop(struct perf_event *event, int flags)
++{
++	struct hw_perf_event *hwc = &event->hw;
++	struct perf_event_attr *attr = &event->attr;
++	unsigned int pm = hwc->idx;
++
++	if (is_sampling_event(event))
++		kvx_stop_sampling_event(pm);
++
++	kvx_set_pmc(pm, KVX_PM_SE);
++	if (attr->exclude_kernel)
++		get_pm_back_to_kernel(pm);
++
++	WARN_ON_ONCE(hwc->state & PERF_HES_STOPPED);
++	hwc->state |= PERF_HES_STOPPED;
++
++	if ((flags & PERF_EF_UPDATE) && !(hwc->state & PERF_HES_UPTODATE)) {
++		kvx_pmu_read(event);
++		hwc->state |= PERF_HES_UPTODATE;
++	}
++}
++
++static void kvx_pmu_del(struct perf_event *event, int flags)
++{
++	struct hw_perf_event *hwc = &event->hw;
++	struct cpu_hw_events *cpuc = &get_cpu_var(cpu_hw_events);
++
++	cpuc->events[hwc->idx] = NULL;
++	cpuc->n_events--;
++	put_cpu_var(cpu_hw_events);
++	kvx_pmu_stop(event, PERF_EF_UPDATE);
++	perf_event_update_userpage(event);
++}
++
++static int kvx_pmu_add(struct perf_event *event, int flags)
++{
++	struct hw_perf_event *hwc = &event->hw;
++	struct cpu_hw_events *cpuc = &get_cpu_var(cpu_hw_events);
++	unsigned int i, idx = -1;
++
++	if (cpuc->n_events >= pm_num) {
++		put_cpu_var(cpu_hw_events);
++		return -ENOSPC;
++	}
++
++	for (i = 0; i < pm_num; i++)
++		if (cpuc->events[i] == NULL)
++			idx = i;
++
++	BUG_ON(idx == -1);
++
++	hwc->idx = idx;
++	cpuc->events[idx] = event;
++	cpuc->n_events++;
++	put_cpu_var(cpu_hw_events);
++	hwc->state = PERF_HES_UPTODATE | PERF_HES_STOPPED;
++
++	if (flags & PERF_EF_START)
++		kvx_pmu_start(event, PERF_EF_RELOAD);
++
 +	return 0;
 +}
 +
-+/**
-+ * kvx_insns_write() Patch instructions at a specified address
-+ * @insns: Instructions to be written at @addr
-+ * @insns_len: Size of instructions to patch
-+ * @addr: Address of the first instruction to patch
-+ */
-+int kvx_insns_write(u32 *insns, unsigned long insns_len, u32 *addr)
++static enum kvx_pm_event_code kvx_pmu_cache_event(u64 config)
 +{
-+	struct insns_patch ip = {
-+		.cpu_count = ATOMIC_INIT(0),
-+		.addr = addr,
-+		.insns = insns,
-+		.insns_len = insns_len
-+	};
++	unsigned int type, op, result;
++	enum kvx_pm_event_code code;
 +
-+	if (!insns_len)
-+		return -EINVAL;
++	type = (config >> 0) & 0xff;
++	op = (config >> 8) & 0xff;
++	result = (config >> 16) & 0xff;
++	if (type >= PERF_COUNT_HW_CACHE_MAX ||
++	    op >= PERF_COUNT_HW_CACHE_OP_MAX ||
++	    result >= PERF_COUNT_HW_CACHE_RESULT_MAX)
++		return KVX_PM_UNSUPPORTED;
 +
-+	if (!IS_ALIGNED((unsigned long) addr, KVX_INSN_SYLLABLE_WIDTH))
-+		return -EINVAL;
++	code = kvx_cache_map[type][op][result];
++
++	return code;
++}
++
++static int kvx_pm_starting_cpu(unsigned int cpu)
++{
++	struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
++
++	cpuc->events = kmalloc_array(pm_num, sizeof(struct perf_event *),
++								 GFP_ATOMIC);
++	if (!cpuc->events)
++		return -ENOMEM;
++
++	memset(cpuc->events, 0, pm_num * sizeof(struct perf_event *));
++
++	enable_percpu_irq(kvx_pm_irq, IRQ_TYPE_NONE);
++	return 0;
++}
++
++static int kvx_pm_dying_cpu(unsigned int cpu)
++{
++	struct cpu_hw_events *cpuc = &get_cpu_var(cpu_hw_events);
++
++	disable_percpu_irq(kvx_pm_irq);
++	kfree(cpuc->events);
++	put_cpu_var(cpu_hw_events);
++	return 0;
++}
++
++static enum kvx_pm_event_code kvx_pmu_raw_events(u64 config)
++{
++	if (config >= KVX_PM_MAX)
++		return KVX_PM_UNSUPPORTED;
++
++	if (config == KVX_PM_SE || config == KVX_PM_RE)
++		return KVX_PM_UNSUPPORTED;
++
++	return config;
++}
++
++static int kvx_pmu_event_init(struct perf_event *event)
++{
++	struct perf_event_attr *attr = &event->attr;
++	struct hw_perf_event *hwc = &event->hw;
++	enum kvx_pm_event_code code;
++
++	if (attr->exclude_user && !attr->exclude_kernel) {
++		attr->exclude_user = 0;
++		pr_err_once("kvx_pm: Cannot exclude userspace from perf events and not kernelspace\n");
++	}
++
++	switch (attr->type) {
++	case PERF_TYPE_HARDWARE:
++		code = kvx_hw_event_map[attr->config];
++		break;
++	case PERF_TYPE_HW_CACHE:
++		code = kvx_pmu_cache_event(attr->config);
++		break;
++	case PERF_TYPE_RAW:
++		code = kvx_pmu_raw_events(attr->config);
++		break;
++	default:
++		return -ENOENT;
++	}
++
++	if (code == KVX_PM_UNSUPPORTED)
++		return -EOPNOTSUPP;
++
++	hwc->config = code;
++	hwc->idx = -1;
++
++	if (event->cpu >= 0 && !cpu_online(event->cpu))
++		return -ENODEV;
++
++	return 0;
++}
++
++static struct pmu pmu = {
++	.event_init	= kvx_pmu_event_init,
++	.add		= kvx_pmu_add,
++	.del		= kvx_pmu_del,
++	.start		= kvx_pmu_start,
++	.stop		= kvx_pmu_stop,
++	.read		= kvx_pmu_read,
++};
++
++static void kvx_pm_clear_sav(void)
++{
++	u64 clr_mask = KVX_SFR_PMC_SAV_MASK;
++	u64 set_mask = 0;
++
++	kvx_sfr_set_mask(PMC, clr_mask, set_mask);
++}
++
++static void kvx_pm_reload(struct perf_event *event)
++{
++	struct hw_perf_event *hwc = &event->hw;
++	u64 pm = hwc->idx;
++	u64 start_value = (u64)(-event->attr.sample_period);
++
++	kvx_set_pmc(pm, KVX_PM_SE);
++	kvx_set_pm(pm, start_value);
++}
++
++static bool kvx_pm_is_sav_set(void)
++{
++	return kvx_sfr_get(PMC) & KVX_SFR_PMC_SAV_MASK;
++}
++
++static int handle_pm_overflow(u8 pm_id, struct perf_event *event, u64 pmc,
++			      struct pt_regs *regs)
++{
++	u64 pm_ie_mask = KVX_SFR_PMC_PM0IE_MASK << (pm_id + 1);
++	u64 pmc_event_code_mask = KVX_SFR_PMC_PM0C_MASK <<
++					((pm_id + 1)
++					* KVX_SFR_PMC_PM1C_SHIFT);
++	struct hw_perf_event *hwc = &event->hw;
++	struct perf_sample_data data;
++	u64 sample_period;
++	u64 pm;
++
++	sample_period = event->attr.sample_period;
++	pm = kvx_sfr_iget(pm_id + KVX_SFR_PM1);
 +
 +	/*
-+	 * Function name is a "bit" misleading. while being named
-+	 * stop_machine, this function does not stop the machine per se
-+	 * but execute the provided function on all CPU in a safe state.
++	 * check if this pm has just overflowed
++	 * ie: pm value is 0, pm interrupt is enabled
++	 * and pm is not stopped.
 +	 */
-+	return stop_machine(patch_insns_percpu, &ip, cpu_online_mask);
++	if ((pm < local64_read(&hwc->prev_count)) && (pmc & pm_ie_mask)
++		&& ((pmc & pmc_event_code_mask) != KVX_PM_SE)) {
++		perf_sample_data_init(&data, 0, sample_period);
++		if (perf_event_overflow(event, &data, regs))
++			pmu.stop(event, 0);
++		else {
++			kvx_pmu_read(event);
++			if (is_sampling_event(event))
++				kvx_pm_reload(event);
++		}
++		return 1;
++	}
++
++	return 0;
 +}
 +
-+int kvx_insns_read(u32 *insns, unsigned long insns_len, u32 *addr)
++irqreturn_t pm_irq_handler(int irq, void *dev_id)
 +{
-+	l1_inval_dcache_range((unsigned long)addr, insns_len);
-+	return copy_from_kernel_nofault(insns, addr, insns_len);
++	struct cpu_hw_events *cpuc = &get_cpu_var(cpu_hw_events);
++	struct pt_regs *regs;
++	enum kvx_pm_idx pm_id;
++	u64 pmc;
++	bool a_pm_overflowed = false;
++	irqreturn_t ret = IRQ_NONE;
++
++	regs = get_irq_regs();
++	pmc = kvx_sfr_get(PMC);
++
++	for (pm_id = KVX_PM_1; pm_id <= KVX_PM_3; pm_id++) {
++		struct perf_event *event = cpuc->events[pm_id];
++
++		if (!event)
++			continue;
++
++		if (handle_pm_overflow(pm_id, event, pmc, regs)) {
++			ret = IRQ_HANDLED;
++			a_pm_overflowed = true;
++		}
++	}
++
++	put_cpu_var(cpu_hw_events);
++
++	if (likely(kvx_pm_is_sav_set()))
++		kvx_pm_clear_sav();
++	else
++		pr_err_once("kvx_pm: PM triggered an IRQ but did not set pmc.sav\n");
++
++	if (unlikely(!a_pm_overflowed))
++		pr_err_once("kvx_pm: PM triggered an IRQ but no PM seemed to have overflowed\n");
++
++	if (ret == IRQ_HANDLED)
++		irq_work_run();
++	return ret;
 +}
++
++static int kvx_pmu_device_probe(struct platform_device *pdev)
++{
++	int ret;
++	int statenum;
++	struct device *dev = &pdev->dev;
++
++	ret = of_property_read_u32(dev->of_node, "kalray,pm-num", &pm_num);
++	if (ret < 0) {
++		dev_err(dev, "Cannot read kalray,pm-num from device tree\n");
++		return -ENODEV;
++	}
++
++	/*
++	 * PM0 is reserved for cycle counting, that's why pm_num is
++	 * decremented.
++	 */
++	if (pm_num-- < 2) {
++		dev_err(dev, "Not enough PM to handle perf events, at least 2 are needed\n");
++		return -ENODEV;
++	}
++
++	kvx_pm_irq = platform_get_irq(pdev, 0);
++	if (!kvx_pm_irq) {
++		dev_err(dev, "Failed to parse pm irq\n");
++		return -ENODEV;
++	}
++
++	ret = request_percpu_irq(kvx_pm_irq, pm_irq_handler, "pm",
++				 this_cpu_ptr(&cpu_hw_events));
++	if (ret) {
++		dev_err(dev, "Failed to request pm irq\n");
++		return -ENODEV;
++	}
++
++	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
++				"kvx/pm_handler:online",
++				kvx_pm_starting_cpu,
++				kvx_pm_dying_cpu);
++
++	if (ret <= 0) {
++		dev_err(dev, "Failed to setup cpuhp\n");
++		goto free_irq;
++	}
++	statenum = ret;
++
++	ret = perf_pmu_register(&pmu, "cpu", PERF_TYPE_RAW);
++	if (ret) {
++		dev_err(dev, "Failed to register CPU PM as PMU\n");
++		goto free_cpuhp_state;
++	}
++
++	return ret;
++
++free_cpuhp_state:
++	cpuhp_remove_state(statenum);
++free_irq:
++	free_percpu_irq(kvx_pm_irq, this_cpu_ptr(&cpu_hw_events));
++	return ret;
++}
++
++static const struct of_device_id kvx_pmu_of_device_ids[] = {
++	{.compatible = "kalray,kvx-core-pm"},
++	{},
++};
++
++static struct platform_driver kvx_pmu_driver = {
++	.driver		= {
++		.name	= "pmu",
++		.of_match_table = kvx_pmu_of_device_ids,
++	},
++	.probe		= kvx_pmu_device_probe,
++};
++
++static int __init kvx_pmu_driver_init(void)
++{
++	return platform_driver_register(&kvx_pmu_driver);
++}
++
++device_initcall(kvx_pmu_driver_init);
 -- 
 2.37.2
 
