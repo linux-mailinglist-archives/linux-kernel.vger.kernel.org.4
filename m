@@ -2,122 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1065465CA70
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6812965CA75
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbjACXjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 18:39:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
+        id S238308AbjACXjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 18:39:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234209AbjACXjF (ORCPT
+        with ESMTP id S238278AbjACXjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 18:39:05 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E94F9
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:39:04 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id s9so25870716qtx.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:39:04 -0800 (PST)
+        Tue, 3 Jan 2023 18:39:42 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BAA165AC
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:39:34 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-476e643d1d5so341041877b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:39:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4IcK9nCCJcWx4DXnUq9jN3aJ923JmnvuRI8XJBFIY/0=;
-        b=AinaOJu6/IFu11c89krxqHstp+Qx6bg/GaS+/T4HG1pBBDurgbVIkkpQhX5l5tMvqb
-         Dt1aixulGN49hn0TCZDfJL7P2ujEI3Sb32Da2Ad7RzLbA8dzxkEYLQq3GZQcrenecSyI
-         FUTCfOup8/4qyfgTpAhOtrWipWNbIm0VnCSVdwFYngsL8nHD9rkzKFRezi0Kl7Q3hvbA
-         wfliVsDb7QqWxrnaKcP0ps9OCvq8tpOVmKmO7wCblz0d6e8uNpGAskXpNHAZ3s+sAcAQ
-         h+10YPQxw7ir5wvpzI0aHOfOWM7euZeizl49b4id9HdeFXirSJK4GNlbhtO17TXeoseg
-         BCdQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KJI36WUyX3/lg5q+41u1VLOHfo9VaH4c9Ww4np9pMVE=;
+        b=C0Mv/9IL2kuCPPdWA8msop6QpZ3EpuOLH1kfR1zVpw/f4AUbyJBD+6G/iANVtk22ds
+         hu5duuhrQjxm+1Kp4nKH6+kqp9XMhdkuQv3ErYIW7UH7XgBdnhBAn/M9ORQcscUmKxsQ
+         YKQl+Y2WcFCcO/NKx0eYOqQf3MKFdo1QloKx5psY6iMcrO+/NTuvhAHB2hpKlW55yHXD
+         ABIkQWJYkDINemtlyOBeLXVmwbXTOByw6YXnv1VfjGrBnOKwaFyEDMunh+tiQj/hgoat
+         k9t1e0q1Cg4EIWuUG6Vuqs9jd9SCiXm/BoDYSI12xTkYfSTIxWWueNsZ1JVWJX5WEnWJ
+         p9JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4IcK9nCCJcWx4DXnUq9jN3aJ923JmnvuRI8XJBFIY/0=;
-        b=n4LHSZT2GCiskrH5/tABl1mQs48j4fRMB5dKaOhxntLY8PQpLOWO/C16OjBCx8q3ni
-         I/mt91WBdlAqUhlHsatSK2DdbBhv4mPHOCo7gE09jsTbWS0ocDgtPjFlV1j8lTlaAmGD
-         vSCOdX07Bi4V1BhJ7+rFK97IWGbD67T2U5TIIoJi53e0hu0oHSMZyaxMSkfC0kemUOHz
-         R9I9uTIC1WVr1e3PqORCqv0ZPna3g1p+bGVyycX/N5DSxcnxteYhtIx1x3CrXmdUm75a
-         2QJoMwKkDm9uCLz64DgSTJWnoWr3ehIFRnjUb7iWHuB6OuezvvshajtYGlNNprFz+0rD
-         pFgg==
-X-Gm-Message-State: AFqh2kpMVNl+pwz5qZnqXnKHo7STLeoELVuE7Uzbw8ZNAWDmU0SViI1U
-        Ka8oSqhxc8lmiV2Fo3e8FcgYEw==
-X-Google-Smtp-Source: AMrXdXvvM0guVyAor9xuEVWRu39rmqbdPOUOe8zG+/P2s+Pkb0RWQqNWBIKUyv6DWLfpgnETi66GRw==
-X-Received: by 2002:ac8:73c7:0:b0:3a7:f3e7:5149 with SMTP id v7-20020ac873c7000000b003a7f3e75149mr59471515qtp.61.1672789143621;
-        Tue, 03 Jan 2023 15:39:03 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-50-193.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.50.193])
-        by smtp.gmail.com with ESMTPSA id m10-20020a05620a220a00b006eeca296c00sm22545055qkh.104.2023.01.03.15.39.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 15:39:03 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pCqs2-001cNC-IA;
-        Tue, 03 Jan 2023 19:39:02 -0400
-Date:   Tue, 3 Jan 2023 19:39:02 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Christian =?utf-8?Q?Borntr=C3=A4ger?= <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH 1/1] vfio/type1: Respect IOMMU reserved regions in
- vfio_test_domain_fgsp()
-Message-ID: <Y7S8loyvHyjAmNdh@ziepe.ca>
-References: <20230102093452.761185-1-schnelle@linux.ibm.com>
- <20230102093452.761185-2-schnelle@linux.ibm.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KJI36WUyX3/lg5q+41u1VLOHfo9VaH4c9Ww4np9pMVE=;
+        b=c/grQ4u10Ynp5r1UmogmBjAnaE6TIwKOdnIBUEB6P3WWc39vgiukGl5AwFlDIbvOBm
+         Do0n/yn8C52PSl6lVDNovkIIyB7gVvhHktLTB+YC5N/YN9gTUNG1GNGgyxVLs4vRhN4E
+         RJSZhsMaKJfvdZiyz1rTef9TyqurVHl6b5b9T5kcbnl4e9yQxMPuFUwjeQ06FEMJIoC2
+         Rq8Cfrj4QRFgqkWbZGytZxixnCHNlCanOGFBSXMISC7+yka7rliJd447kGPYCVGWlPJQ
+         A8+HJ/wKetFM82hmog1yy9BR1fp4ovhYVe4PTY9T1C3OgOpKvlTPgGPTJJlp7HaWaOpu
+         6DAw==
+X-Gm-Message-State: AFqh2koy6x3ykSALLrjlQEFF6MReAEtkr73wimKgkrzUB/qnmaUZzmSM
+        IFN7jN+zuhg5OJ3/gl98DFDVPxs9KqYMsUpPqjSYXA==
+X-Google-Smtp-Source: AMrXdXvx+mmANx48xLrOqbQThKhH6zIY5rRl2OxAt8bBN55Sv7hiEKHnG69rb1VP2Uv9FiN2mXvWkniEDvOJav50QZw=
+X-Received: by 2002:a81:5c85:0:b0:461:49a3:db6a with SMTP id
+ q127-20020a815c85000000b0046149a3db6amr3875030ywb.185.1672789174162; Tue, 03
+ Jan 2023 15:39:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230102093452.761185-2-schnelle@linux.ibm.com>
+References: <20230102210850.25320-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230102210850.25320-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 4 Jan 2023 00:39:22 +0100
+Message-ID: <CACRpkdYw+J2cPfMrRtUC1KNLyWn__8Q3uk5j=WP_JN-Hm2AALg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: Remove unused and obsoleted gpio_export_link()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arch@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 10:34:52AM +0100, Niklas Schnelle wrote:
-> Since commit cbf7827bc5dc ("iommu/s390: Fix potential s390_domain
-> aperture shrinking") the s390 IOMMU driver uses a reserved region
-> instead of an artificially shrunk aperture to restrict IOMMU use based
-> on the system provided DMA ranges of devices. In particular on current
-> machines this prevents use of DMA addresses below 2^32 for all devices.
-> While usually just IOMMU mapping below these addresses is
-> harmless. However our virtual ISM PCI device looks at new mappings on
-> IOTLB flush and immediately goes into the error state if such a mapping
-> violates its allowed DMA ranges. This then breaks pass-through of the
-> ISM device to a KVM guest.
-> 
-> Analysing this we found that vfio_test_domain_fgsp() maps 2 pages at DMA
-> address 0 irrespective of the IOMMUs reserved regions. Even if usually
-> harmless this seems wrong in the general case so instead go through the
-> freshly updated IOVA list and try to find a range that isn't reserved
-> and fits 2 pages and use that for testing for fine grained super pages.
+On Mon, Jan 2, 2023 at 10:08 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-Why does it matter? The s390 driver will not set fgsp=true, so if it
-fails because map fails or does a proper detection it shouldn't make a
-difference.
+> gpio_export_link() is legacy and unused API, remove it for good.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-IOW how does this actualy manifest into a failure?
+Good riddance.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> -	if (!ret) {
-> -		size_t unmapped = iommu_unmap(domain->domain, 0, PAGE_SIZE);
-> +	list_for_each_entry(region, regions, list) {
-> +		if (region->end - region->start < PAGE_SIZE * 2)
-> +			continue;
->  
-> -		if (unmapped == PAGE_SIZE)
-> -			iommu_unmap(domain->domain, PAGE_SIZE, PAGE_SIZE);
-> -		else
-> -			domain->fgsp = true;
-> +		ret = iommu_map(domain->domain, region->start, page_to_phys(pages), PAGE_SIZE * 2,
-> +				IOMMU_READ | IOMMU_WRITE | IOMMU_CACHE);
-
-The region also needs to have 'region->start % (PAGE_SIZE*2) == 0' for the
-test to work
-
-Jason
+Yours,
+Linus Walleij
