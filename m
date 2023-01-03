@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C8465B8AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 02:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 685E765B8AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 02:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236596AbjACBJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 20:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S236669AbjACBKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 20:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236475AbjACBJU (ORCPT
+        with ESMTP id S236509AbjACBJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 20:09:20 -0500
+        Mon, 2 Jan 2023 20:09:24 -0500
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7FAE72;
-        Mon,  2 Jan 2023 17:09:16 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 07CFF3200919;
-        Mon,  2 Jan 2023 20:09:14 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43D6B1CC;
+        Mon,  2 Jan 2023 17:09:19 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 1CA5C320091D;
+        Mon,  2 Jan 2023 20:09:18 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 02 Jan 2023 20:09:16 -0500
+  by compute5.internal (MEProxy); Mon, 02 Jan 2023 20:09:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672708154; x=1672794554; bh=l3
-        3byjN96tAFT91WzVSv7uBqAlUyhhwrwVPAOp/DxlI=; b=cUBLPZjztaJPEF/tEF
-        eXnYxSk3QYC4X9Z7BNWWtKNjLeMXIICX3Z0F8srYK52u98ILXKIAd8ey6+qiX+2/
-        CCjS38MZ8Oe+mD2bKi4MAGhwnVkT3B9toQo1K9iJowu5tTZG2k97iHSKAnbB5/Jr
-        ke2GtIwXCgCdTv3mcZAC5/B0XRLjz3OJvSCueGp7HtFYI5nJzW1M+rEgNePKjwt+
-        1JpAKKyNSlpHCfgUifkjt+vrUsCE8D9ExCMld5D4SiccVrOLbsjmmIlCmYP/1n/a
-        oJkSowd45RKHw7EOYQcZgaLe7UgxoBTS6CEczexSaGjrIbnpgcpS3XgRVgeskRTc
-        ZPFQ==
+        :subject:subject:to:to; s=fm3; t=1672708157; x=1672794557; bh=ez
+        FU4xIsWU9r0j3R9gbsjOutPYOzIkuUPEsZkjIMNUQ=; b=ysFzFO7qoXLTgCeEil
+        UPJ4g+pwrpPLNpTU2ODGVgjy7OznuxvvlHC2pDgGk6nWdoeTAS+6hgH3lQB5QGap
+        W4pcK/KgSq1KVf/8koUZ10R5AtusMvSk0ErGUaFWaS6oCsa1fvnZ68JnLPp0hDJl
+        Yb2USiCorZ7DXkZK+oYu87NZIq1GUGQs0XMhE8cGs7NI1NxRwT/iFqRQe6sz3eni
+        3gy8EGYQhke+DZvVhng/vqtIvRwG5zaIjJ0c2T6iKts2eux9ZI5sHbGKKF3b1AjX
+        wwYSF5297IK2fe2FhMz+ZCoEkycIjwRBuvUKJ6oundSXoNMBnBqGE4ik3a60mK2U
+        yM2w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672708154; x=1672794554; bh=l33byjN96tAFT
-        91WzVSv7uBqAlUyhhwrwVPAOp/DxlI=; b=o4pb0s46K9RCUY30Fk6zVEKZDK0lT
-        JnqzFQvbGCV95Q4cwbpolMY8oC7geSKBCkCT/zx1IY5on+go50zWThlMBK6iUhha
-        mo850IGtZegHv5RvI74j/eHf38uCTQRfnU3wJy6Bcl/BTiLoZBmzmGnLFFdm1zTn
-        Ogx4W7OaNakzafipaZcj0y2ttLazg6HwIFGJioYA75B3ywDWBepeEQWH6PqAXjyJ
-        2SDLMjvaa6rw7jliJ3nJsUraewPELG4b6UnNIKLYaeKIC4pXj4jNpSsiEOqdi8mM
-        73ZnvyMUw7evkNB+jW1rsWE3mlVf7C8suf7LVlBRcHw6jvdfF2zuJG7bw==
-X-ME-Sender: <xms:OoCzY40XwAL7Mw2qfW8R7yZtSXnkTobP58eAxsWnVsjHT3L97Dnjmw>
-    <xme:OoCzYzHR5ATTmvCuW0oDQmDii67QGh5rV8bTrLI0UJas1y9sDl3JJJhfLDJt7VXCi
-    mp3YSZ_8g3GI93twQ>
-X-ME-Received: <xmr:OoCzYw5w6_foboC11EytP4uHHf7K75hsh7KEwTOe8OXLi512oZjF_6B6UzaYNzJI1ePgQ4k675xNVGUAuk00XBKaC7BS9-j-pkEWhaOV2piQJUkyLYx-pdWbVJlRKsC-Uggjmw>
+        :x-sasl-enc; s=fm2; t=1672708157; x=1672794557; bh=ezFU4xIsWU9r0
+        j3R9gbsjOutPYOzIkuUPEsZkjIMNUQ=; b=qPmEr0jQTznHxX4YH91JJ/Tt1OXoA
+        +SBQ8+YRAeNQHjCf/iICYQ9yJIqN7Fh3W4qHXb43C6whCUjmqapXK2mEFghZpdi6
+        nvi2nXQCn9eNaLM4aN+qg9uil81boFSCHo1ZjrDA4IJL4vhhS8odo7aR6w+DkgPC
+        U1Cyk18Uy8P46JmFLyIjSbOjbx20dXNvoSdFJ2WqxgdgWyG00m9sxVGR3cTQ3NY3
+        V8118KLv9X02O2fO15vK8v+2Ex9Bw15pT41JtsPNxd+MF4QoSfMnN7rRD+CWgXeq
+        gwmvVHc1KV+CeX9YPW3uROZO2YRshdNQFEkS30/4SauqWnj1NyjE5xsRw==
+X-ME-Sender: <xms:PYCzYw2wMyjbT5wy7tPj1fWKgo7CfUsq_o_t0fjGcBPbBITdYi9j0Q>
+    <xme:PYCzY7G_H2jzTS7osBn6sw0StJj0fp6yfXKZrzgU8c8zHM9Kw_8RBfOJKEGHamCjB
+    u6OB8elF0IZ7lp-Ww>
+X-ME-Received: <xmr:PYCzY478SQhvHDgJkIlb5lm1DnZneYmjXjenone8U-RSY0gFV8usjHBGBYyTNF661OODL98qgBN8AMLH8aq2QrnUAZD6lndyy9vlJE85neY9huN79XSvpu42pfg9fXOtxqxn8w>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeefgdeffecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeefgdeffecutefuodetggdote
     frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
     feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:OoCzYx22tssr2N_jjw1IDDP1HktzUEyAq6_ZmAcbxjp_oiFcDm8Zkg>
-    <xmx:OoCzY7FcaSnWQYLRNYsiyc26yuAbA8jY8eh_vJDOaBwUsnwH_qiqcw>
-    <xmx:OoCzY68ZNr3X_rlHBINkSxzu6lyII9TiB36pUYrEIPhOZCsDMsg6Mg>
-    <xmx:OoCzY6ePsjL84G5bb2BTz9wkGzE2_6JrqKiBPnyTkQBEA18PuV-cqQ>
+X-ME-Proxy: <xmx:PYCzY52IMzwFaM43lq2rDa28cN65sbvnWO5XC_LUPJeXB1KUlY8oFA>
+    <xmx:PYCzYzH9rUEA9ASs7fAqmcOs4FJaadTM6HdBGExC9hg2fWMMWtPViQ>
+    <xmx:PYCzYy9wobBSYehwcCCa4zZ0N82Xw7vBZXplCg6OGKS1nQ8EFrTx_g>
+    <xmx:PYCzYzHKp5Dmi7EcJJl0f9A3E8amyE8dD3SrgVDW0NB8cSo8PJV_gg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 Jan 2023 20:09:13 -0500 (EST)
+ 2 Jan 2023 20:09:16 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         Robin Murphy <robin.murphy@arm.com>,
@@ -72,10 +72,11 @@ To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
 Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v2 3/6] iommu/sun50i: Keep the bypass register up to date
-Date:   Mon,  2 Jan 2023 19:09:00 -0600
-Message-Id: <20230103010903.11181-4-samuel@sholland.org>
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH v2 4/6] iommu/sun50i: Support variants without an external reset
+Date:   Mon,  2 Jan 2023 19:09:01 -0600
+Message-Id: <20230103010903.11181-5-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20230103010903.11181-1-samuel@sholland.org>
 References: <20230103010903.11181-1-samuel@sholland.org>
@@ -91,74 +92,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the IOMMU driver leaves the bypass register at its default
-value. The H6 variant of the hardware disables bypass by default. So
-once the first device is attached to the IOMMU, translation is enabled
-for all masters, even those not attached to an IOMMU group/domain.
+The IOMMU in the Allwinner D1 SoC does not have an external reset line.
 
-On the other hand, the D1 hardware variant enables bypass by default, so
-keeping the default value prevents the IOMMU from functioning entirely.
+Only attempt to get the reset on hardware variants which should have one
+according to the binding. And switch from the deprecated function to the
+explicit "exclusive" variant.
 
-Fixes: 4100b8c229b3 ("iommu: Add Allwinner H6 IOMMU driver")
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
-Changes in v2:
- - Set bypass based on attached devices instead of using a fixed value
+(no changes since v1)
 
- drivers/iommu/sun50i-iommu.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/iommu/sun50i-iommu.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
-index 3757d5a18318..a3a462933c62 100644
+index a3a462933c62..d19f6ce25f76 100644
 --- a/drivers/iommu/sun50i-iommu.c
 +++ b/drivers/iommu/sun50i-iommu.c
-@@ -441,6 +441,9 @@ static int sun50i_iommu_enable(struct sun50i_iommu *iommu)
+@@ -95,6 +95,10 @@
  
- 	spin_lock_irqsave(&iommu->iommu_lock, flags);
+ #define SPAGE_SIZE			4096
  
-+	iommu_write(iommu, IOMMU_BYPASS_REG,
-+		    ~atomic_read(&sun50i_domain->masters));
++struct sun50i_iommu_variant {
++	bool has_reset;
++};
 +
- 	iommu_write(iommu, IOMMU_TTB_REG, sun50i_domain->dt_dma);
- 	iommu_write(iommu, IOMMU_TLB_PREFETCH_REG,
- 		    IOMMU_TLB_PREFETCH_MASTER_ENABLE(0) |
-@@ -755,6 +758,17 @@ static void sun50i_iommu_detach_domain(struct sun50i_iommu *iommu,
- 	iommu->domain = NULL;
- }
+ struct sun50i_iommu {
+ 	struct iommu_device iommu;
  
-+static void sun50i_iommu_update_masters(struct sun50i_iommu *iommu,
-+					struct sun50i_iommu_domain *sun50i_domain)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&iommu->iommu_lock, flags);
-+	iommu_write(iommu, IOMMU_BYPASS_REG,
-+		    ~atomic_read(&sun50i_domain->masters));
-+	spin_unlock_irqrestore(&iommu->iommu_lock, flags);
-+}
-+
- static void sun50i_iommu_detach_device(struct iommu_domain *domain,
- 				       struct device *dev)
+@@ -995,9 +999,14 @@ static irqreturn_t sun50i_iommu_irq(int irq, void *dev_id)
+ 
+ static int sun50i_iommu_probe(struct platform_device *pdev)
  {
-@@ -770,6 +784,8 @@ static void sun50i_iommu_detach_device(struct iommu_domain *domain,
++	const struct sun50i_iommu_variant *variant;
+ 	struct sun50i_iommu *iommu;
+ 	int ret, irq;
  
- 	if (atomic_fetch_andnot(masters, &sun50i_domain->masters) == masters)
- 		sun50i_iommu_detach_domain(iommu, sun50i_domain);
-+	else
-+		sun50i_iommu_update_masters(iommu, sun50i_domain);
++	variant = of_device_get_match_data(&pdev->dev);
++	if (!variant)
++		return -EINVAL;
++
+ 	iommu = devm_kzalloc(&pdev->dev, sizeof(*iommu), GFP_KERNEL);
+ 	if (!iommu)
+ 		return -ENOMEM;
+@@ -1037,7 +1046,8 @@ static int sun50i_iommu_probe(struct platform_device *pdev)
+ 		goto err_free_group;
+ 	}
+ 
+-	iommu->reset = devm_reset_control_get(&pdev->dev, NULL);
++	if (variant->has_reset)
++		iommu->reset = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+ 	if (IS_ERR(iommu->reset)) {
+ 		dev_err(&pdev->dev, "Couldn't get our reset line.\n");
+ 		ret = PTR_ERR(iommu->reset);
+@@ -1075,8 +1085,12 @@ static int sun50i_iommu_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
- static int sun50i_iommu_attach_device(struct iommu_domain *domain,
-@@ -791,6 +807,8 @@ static int sun50i_iommu_attach_device(struct iommu_domain *domain,
- 
- 	if (atomic_fetch_or(masters, &sun50i_domain->masters) == 0)
- 		sun50i_iommu_attach_domain(iommu, sun50i_domain);
-+	else
-+		sun50i_iommu_update_masters(iommu, sun50i_domain);
- 
- 	return 0;
- }
++static const struct sun50i_iommu_variant sun50i_h6_iommu = {
++	.has_reset = true,
++};
++
+ static const struct of_device_id sun50i_iommu_dt[] = {
+-	{ .compatible = "allwinner,sun50i-h6-iommu", },
++	{ .compatible = "allwinner,sun50i-h6-iommu", .data = &sun50i_h6_iommu },
+ 	{ /* sentinel */ },
+ };
+ MODULE_DEVICE_TABLE(of, sun50i_iommu_dt);
 -- 
 2.37.4
 
