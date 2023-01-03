@@ -2,180 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8A365C7EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E79C65C7F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233845AbjACUQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 15:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
+        id S238264AbjACUQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 15:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237743AbjACUQA (ORCPT
+        with ESMTP id S233613AbjACUQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 15:16:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1684E26E1
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 12:15:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 331DB614B4
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 20:15:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8634CC433EF;
-        Tue,  3 Jan 2023 20:15:56 +0000 (UTC)
-Date:   Tue, 3 Jan 2023 15:15:54 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     John Stultz <jstultz@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Connor O'Brien" <connoro@google.com>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>
-Subject: Re: [PATCH] trace: Add trace points for tasklet entry/exit
-Message-ID: <20230103151554.5c0a6c6f@gandalf.local.home>
-In-Reply-To: <20230103185408.2874345-1-jstultz@google.com>
-References: <20230103185408.2874345-1-jstultz@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 3 Jan 2023 15:16:20 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D13FDE92
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 12:16:16 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id j16so25467913qtv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 12:16:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HTnuIAJdCSnqOgUCfI1VegmgFYxeW1ngR0BDNyHkGf0=;
+        b=DokQ/BEIgEpL/ia17Z2x8+os3L6Iix7X3VYwgY2oWHbqXrXltMNtHkuxWFNC0TiQoL
+         cBgZVKREYRgoskXuojqZ3A1XLXXW46nqyABZQqesu1jY6qAYwaNx5oLjtODVhfjUliU3
+         eVndN+o81O0zIOd96+Ti2/uGI99RMfL7MdUR0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HTnuIAJdCSnqOgUCfI1VegmgFYxeW1ngR0BDNyHkGf0=;
+        b=qJsZTTDvL9TZZd947ckUNwCyBhPA190+gWk6cvPwQ4wXYCVE4PquJlPL5MufuZ123j
+         vO111J7sKC635Hxydwv8UfP94geIUMiJm4VlgcrJxpSLaLsPfSkyOOS5iPGlmhBGsr8H
+         bNd4l0RXLWC74XL2jBBIEZgOB1Rwc9RdIZf41tu3S6lJpTKRKKstgarVH+rvV4WsGjUy
+         JGbJi/DeSai8tOFSeS45rw9hET7NybFHTIhak2ugJQt/GICuihak7r65bOGhFLhFFAnA
+         cuKg2ZZK4KUxpibsezbLC7VoyRziuH+9JAt4vy+G7Mkcs+YKRydXBnLPIb5ZENSmLT5p
+         rOpg==
+X-Gm-Message-State: AFqh2koBMrRLU2ole2RN7x0WbZqPE7A5mC4rnACliQC9Hr6iBlhq/uhl
+        ZQVU4ODASWqhs4YGDOquQgqd4YxsAV5eYFx3
+X-Google-Smtp-Source: AMrXdXu6Lf7juIlvAHNmV4jcHYW5ttZbIzEsYr01YlITWvInhFs27EIrVhRcsySdRYfKQ6YcGGL6AA==
+X-Received: by 2002:ac8:65d6:0:b0:3a9:691e:8dc6 with SMTP id t22-20020ac865d6000000b003a9691e8dc6mr65218826qto.47.1672776975334;
+        Tue, 03 Jan 2023 12:16:15 -0800 (PST)
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com. [209.85.222.179])
+        by smtp.gmail.com with ESMTPSA id z24-20020ac87118000000b0039cc0fbdb61sm19351146qto.53.2023.01.03.12.16.13
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 12:16:13 -0800 (PST)
+Received: by mail-qk1-f179.google.com with SMTP id k3so15324113qki.13
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 12:16:13 -0800 (PST)
+X-Received: by 2002:ae9:ef49:0:b0:6fe:d4a6:dcef with SMTP id
+ d70-20020ae9ef49000000b006fed4a6dcefmr2045085qkg.594.1672776973189; Tue, 03
+ Jan 2023 12:16:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230101162910.710293-1-Jason@zx2c4.com> <20230101162910.710293-3-Jason@zx2c4.com>
+ <Y7QIg/hAIk7eZE42@gmail.com> <CALCETrWdw5kxrtr4M7AkKYDOJEE1cU1wENWgmgOxn0rEJz4y3w@mail.gmail.com>
+ <CAHk-=wg_6Uhkjy12Vq_hN6rQqGRP2nE15rkgiAo6Qay5aOeigg@mail.gmail.com>
+ <Y7SDgtXayQCy6xT6@zx2c4.com> <CAHk-=whQdWFw+0eGttxsWBHZg1+uh=0MhxXYtvJGX4t9P1MgNw@mail.gmail.com>
+ <Y7SJ+/axonTK0Fir@zx2c4.com>
+In-Reply-To: <Y7SJ+/axonTK0Fir@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 3 Jan 2023 12:15:57 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
+Message-ID: <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
+Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
+ lazily freeable mappings
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        "Carlos O'Donell" <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  3 Jan 2023 18:54:08 +0000
-John Stultz <jstultz@google.com> wrote:
+On Tue, Jan 3, 2023 at 12:03 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> That buffering cannot be done safely currently
 
-> From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
-> 
-> Tasklets are supposed to finish their work quickly and
-> should not block the current running process, but it is not
-> guaranteed that. Currently softirq_entry/exit can be used to
-> know total tasklets execution time, but not helpful to track
-> individual tasklet's execution time. With that we can't find
-> any culprit tasklet function, which is taking more time.
-> 
-> Add tasklet_entry/exit trace point support to track
-> individual tasklet execution.
-> 
-> This patch has been carried in the Android tree for awhile
-> so I wanted to submit it for review upstream. Feedback would
-> be appreciated!
-> 
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Connor O'Brien <connoro@google.com>
-> Cc: kernel-team@android.com
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
-> [elavila: Port to android-mainline]
-> Signed-off-by: J. Avila <elavila@google.com>
-> [jstultz: Rebased to upstream, cut unused trace points, added
->  comments for the tracepoints, reworded commit]
-> Signed-off-by: John Stultz <jstultz@google.com>
-> ---
->  include/trace/events/irq.h | 43 ++++++++++++++++++++++++++++++++++++++
->  kernel/softirq.c           |  9 ++++++--
->  2 files changed, 50 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
-> index eeceafaaea4c..da85851d4ec1 100644
-> --- a/include/trace/events/irq.h
-> +++ b/include/trace/events/irq.h
-> @@ -160,6 +160,49 @@ DEFINE_EVENT(softirq, softirq_raise,
->  	TP_ARGS(vec_nr)
->  );
->  
-> +DECLARE_EVENT_CLASS(tasklet,
-> +
-> +	TP_PROTO(void *func),
-> +
-> +	TP_ARGS(func),
-> +
-> +	TP_STRUCT__entry(
+.. again, this is "your semantics" (the (b) in my humbug list), not
+necessarily reality for anybody else.
 
-Could you also add a pointer to the tasklet too?
+I'm NAK'ing making invasive changes to the VM for something this
+specialized. I really believe that the people who have this issue are
+*so* few and far between that they can deal with the VM forking and
+reseeding issues quite well on their own.
 
-		__field(	void *, tasklet)
-
-> +		__field(	void *,	func)
-> +	),
-> +
-> +	TP_fast_assign(
-
-		__entry->tasklet = t;
-
-> +		__entry->func = func;
-> +	),
-> +
-> +	TP_printk("function=%ps", __entry->func)
-
-This way if we wanted more information, we could use event probes:
-
- # echo 'e:tasklet_info tasklet/tasklet_entry state=+8($tasklet):u64' > dynamic_events
-
--- Steve
-
-
-> +);
-> +
-> +/**
-> + * tasklet_entry - called immediately before the tasklet is run
-> + * @func:  tasklet callback or function being run
-> + *
-> + * Used to find individual tasklet execution time
-> + */
-> +DEFINE_EVENT(tasklet, tasklet_entry,
-> +
-> +	TP_PROTO(void *func),
-> +
-> +	TP_ARGS(func)
-> +);
-> +
-> +/**
-> + * tasklet_exit - called immediately after the tasklet is run
-> + * @func:  tasklet callback or function being run
-> + *
-> + * Used to find individual tasklet execution time
-> + */
-> +DEFINE_EVENT(tasklet, tasklet_exit,
-> +
-> +	TP_PROTO(void *func),
-> +
-> +	TP_ARGS(func)
-> +);
-> +
->  #endif /*  _TRACE_IRQ_H */
->  
->  /* This part must be outside protection */
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index c8a6913c067d..dbd322524171 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
->  		if (tasklet_trylock(t)) {
->  			if (!atomic_read(&t->count)) {
->  				if (tasklet_clear_sched(t)) {
-> -					if (t->use_callback)
-> +					if (t->use_callback) {
-> +						trace_tasklet_entry(t->callback);
->  						t->callback(t);
-> -					else
-> +						trace_tasklet_exit(t->callback);
-> +					} else {
-> +						trace_tasklet_entry(t->func);
->  						t->func(t->data);
-> +						trace_tasklet_exit(t->func);
-> +					}
->  				}
->  				tasklet_unlock(t);
->  				continue;
-
+            Linus
