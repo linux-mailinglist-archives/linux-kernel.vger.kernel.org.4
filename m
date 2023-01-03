@@ -2,113 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF59265C6E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:04:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5554A65C6E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 20:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238186AbjACTEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 14:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S238692AbjACTFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 14:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238784AbjACTEA (ORCPT
+        with ESMTP id S238727AbjACTFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 14:04:00 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E4D12AFA;
-        Tue,  3 Jan 2023 11:03:59 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303IFEO6025375;
-        Tue, 3 Jan 2023 19:03:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=74AI/ynE6YGffYmhdsZlb/SD/hZgGQK0DkgHQIeRABg=;
- b=N5l2QpQ/9eoFRqHaA+tkkCy93Rr1o01/gVuBQf0JpEiNthVmeFeprGWfzXu8ZlpeQYnT
- KMa7Fc+TnpI4I7fA8LZiZrA+/txAJZYEBJrH6OUd7maJcmg1fQuGhLD/D8zdmSUIhoUF
- wKFeagOSGI/VhH6SePmwfg2s9cR3BW73VflAjTNpRSGmRwuxdDnnxRVDsEvILpso43ZX
- WVaotSbERrf02aXCOCIwPHp1Pimu7Pfi3WW30y/vGRdM5rHERoNQUusZKu0meQwOufUS
- mbmtiqykSxod8oLWI/Wv6m4MOpazHcOcwRWHmxPukXk3PE067L4mrT+61Ne7uABUjWvH /w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvjvf3am4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 19:03:29 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 303IYupC003388;
-        Tue, 3 Jan 2023 19:03:29 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvjvf3ak4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 19:03:29 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303AGuqM017352;
-        Tue, 3 Jan 2023 19:03:27 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6u3bm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 19:03:27 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 303J3O6b42467742
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Jan 2023 19:03:24 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C60B420043;
-        Tue,  3 Jan 2023 19:03:24 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32C0220040;
-        Tue,  3 Jan 2023 19:03:24 +0000 (GMT)
-Received: from osiris (unknown [9.171.65.115])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue,  3 Jan 2023 19:03:24 +0000 (GMT)
-Date:   Tue, 3 Jan 2023 20:03:20 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Willy Tarreau <w@1wt.eu>, "Paul E . McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 3/5] selftests/nolibc: add s390 support
-Message-ID: <Y7R7+BIEvFdxMJIu@osiris>
-References: <20230103071957.222360-1-svens@linux.ibm.com>
- <20230103071957.222360-4-svens@linux.ibm.com>
+        Tue, 3 Jan 2023 14:05:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9252313CF1;
+        Tue,  3 Jan 2023 11:05:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39F85B80EC2;
+        Tue,  3 Jan 2023 19:05:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E56C433D2;
+        Tue,  3 Jan 2023 19:05:16 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UdnPlTE1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672772714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5NpNAATWWkRP+91skuEFC6IGLeSW0ntw/LmFnvD5DJo=;
+        b=UdnPlTE1GPtqZiqmhGqOPzd6vGqyg6RTb0tEiIQb3JQvC+0sAK7ZpyfNLtyLmIrUtUf9K6
+        w7Kfep3+so7dS+IlkrWLwGAzluYN53gA4o+QhAuIxj4VDfXQ7+yIY1g4OGUVazEqAj/nV8
+        46Fjym8BynZrySEy5c5LuroAzBOGafw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id cfe7dd4e (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 3 Jan 2023 19:05:14 +0000 (UTC)
+Date:   Tue, 3 Jan 2023 20:05:10 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, tglx@linutronix.de,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
+ lazily freeable mappings
+Message-ID: <Y7R8Zq6sIKAIprtr@zx2c4.com>
+References: <20230101162910.710293-1-Jason@zx2c4.com>
+ <20230101162910.710293-3-Jason@zx2c4.com>
+ <Y7QIg/hAIk7eZE42@gmail.com>
+ <CALCETrWdw5kxrtr4M7AkKYDOJEE1cU1wENWgmgOxn0rEJz4y3w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230103071957.222360-4-svens@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Rh_xE76xdcJyWjlZIFvAR_MVLEmgDkYo
-X-Proofpoint-GUID: LBFaDc2BbovnaaxdhXWgjphnmmBK7p7p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-03_07,2023-01-03_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=788
- adultscore=0 impostorscore=0 mlxscore=0 phishscore=0 malwarescore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301030163
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALCETrWdw5kxrtr4M7AkKYDOJEE1cU1wENWgmgOxn0rEJz4y3w@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 08:19:55AM +0100, Sven Schnelle wrote:
-> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-> Acked-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  tools/testing/selftests/nolibc/Makefile | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-...
-> -CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables
-> +CFLAGS_s390 = -m64
-> +CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables $(CFLAGS_$(ARCH))
+Hi Andy,
 
-Since this adds support for architecture specific compile flags, you
-might as well want to add -march=z10, since that's the minimum
-architecture level for the kernel we support anyway.
+Thanks for your constructive suggestions.
 
-That way you won't end up with problems like the lay instruction, and
-could also use cghsi for zero comparison. Not that I'm proposing that
-you should change the asm code again, it is fine as it is now.
+On Tue, Jan 03, 2023 at 10:36:01AM -0800, Andy Lutomirski wrote:
+> > > c) If there's not enough memory to service a page fault, it's not fatal,
+> > >    and no signal is sent. Instead, writes are simply lost.
+> 
+> This just seems massively overcomplicated to me.  If there isn't
+> enough memory to fault in a page of code, we don't have some magic
+> instruction emulator in the kernel.  We either OOM or we wait for
+> memory to show up.
+
+Before addressing the other parts of your email, I thought I'd touch on
+this. Quoting from the email I just wrote Ingo:
+
+| *However* - if your big objection to this patch is that the instruction
+| skipping is problematic, we could actually punt that part. The result
+| will be that userspace just retries the memory write and the fault
+| happens again, and eventually it succeeds. From a perspective of
+| vgetrandom(), that's perhaps worse -- with this v14 patchset, it'll
+| immediately fallback to the syscall under memory pressure -- but you
+| could argue that nobody really cares about performance at that point
+| anyway, and so just retrying the fault until it succeeds is a less
+| complex behavior that would be just fine.
+| 
+| Let me know if you think that'd be an acceptable compromise, and I'll
+| roll it into v15. As a preview, it pretty much amounts to dropping 3/7
+| and editing the commit message in this 2/7 patch.
+
+IOW, I think the main ideas of the patch work just fine without "point
+c" with the instruction skipping. Instead, waiting/retrying could
+potentially work. So, okay, it seems like the two of you both hate the
+instruction decoder stuff, so I'll plan on working that part in, in one
+way or another, for v15.
+
+> On Tue, Jan 3, 2023 at 2:50 AM Ingo Molnar <mingo@kernel.org> wrote:
+> > > The vDSO getrandom() implementation works with a buffer allocated with a
+> > > new system call that has certain requirements:
+> > >
+> > > - It shouldn't be written to core dumps.
+> > >   * Easy: VM_DONTDUMP.
+> > > - It should be zeroed on fork.
+> > >   * Easy: VM_WIPEONFORK.
+> 
+> I have a rather different suggestion: make a special mapping.  Jason,
+> you're trying to shoehorn all kinds of bizarre behavior into the core
+> mm, and none of that seems to me to belong to the core mm.  Instead,
+> have an actual special mapping with callbacks that does the right
+> thing.  No fancy VM flags.
+
+Oooo! I like this. Avoiding adding VM_* flags would indeed be nice.
+I had seen things that I thought looked in this direction with the shmem
+API, but when I got into the details, it looked like this was meant for
+something else and couldn't address most of what I wanted here.
+
+If you say this is possible, I'll look again to see if I can figure it
+out. Though, if you have some API name at the top of your head, you
+might save me some code squinting time.
+
+> Memory pressure: have it free and unmap it self.  Gets accessed again?
+>  ->fault can handle it.
+
+Right.
+
+> Want to mlock it?  No, don't do that -- that's absurd.  Just arrange
+> so that, if it gets evicted, it's not written out anywhere.  And when
+> it gets faulted back in it does the right thing -- see above.
+
+Presumably mlock calls are redirected to some function pointer so I can
+just return EINTR?
+
+> Zero on fork?  I'm sure that's manageable with a special mapping.  If
+> not, you can add a new vm operation or similar to make it work.  (Kind
+> of like how we extended special mappings to get mremap right a couple
+> years go.)  But maybe you don't want to *zero* it on fork and you want
+> to do something more intelligent.  Fine -- you control ->fault!
+
+Doing something more intelligent would be an interesting development, I
+guess... But, before I think about that, all mapping have flags;
+couldn't I *still* set VM_WIPEONFORK on the special mapping? Or does the
+API you have in mind not work that way? (Side note: I also want
+VM_DONTDUMP to work.)
+
+> > > - It shouldn't reserve actual memory, but it also shouldn't crash when
+> > >   page faulting in memory if none is available
+> > >   * Uh-oh: MAP_NORESERVE respects vm.overcommit_memory=2.
+> > >   * Uh-oh: VM_NORESERVE means segfaults.
+> 
+> ->fault can do whatever you want.
+> 
+> And there is no shortage of user memory that *must* be made available
+> on fault in order to resume the faulting process.  ->fault can handle
+> this.
+
+I'll look to see how other things handle this...
+
+Anyway, thanks for the suggestion. That seems like a good future
+direction for this.
+
+Jason
