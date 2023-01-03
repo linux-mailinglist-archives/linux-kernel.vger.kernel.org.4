@@ -2,186 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7FE65C005
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960CF65C00D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 13:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237469AbjACMlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 07:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S237552AbjACMmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 07:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbjACMlI (ORCPT
+        with ESMTP id S230437AbjACMmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 07:41:08 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2AC10551
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 04:41:03 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id z8-20020a05600c220800b003d33b0bda11so16465263wml.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 04:41:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1gkN1S5ZlvpEeBogO6vpEZy9U0i82QGUm+UbrTpiEso=;
-        b=E3K3wLQAZdncIqzqu2Q6Bd7JKdI4Rq6ZX1HiGGEj2M+BQDEGbUHwucomhqO4uZgAOD
-         Enqs8wqSbmv0BnVfWnfZUa0Z0TpWoKe4gZTSOv666zhzqtwzFzWVj88cUO/aANoaGHiL
-         JS+PW9W4Ql6HYCij65Wvofyolx0dHO5n+XYCd8yP8i8XEaJsO2N0lsaq1+hSB4GXLkqm
-         7f7uzOLgC/0y55PxKdaIh6ikINaZYWDO7WnPEgqKH903WesXJtV2E9n+2pWfEcBqNQ7K
-         SmREjXv2EbolfNtTebVuh1CArMiBIbCLedw3I4Vu0oqrnEaB3MEQOwDpoVnYTiEaMvlA
-         iHyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1gkN1S5ZlvpEeBogO6vpEZy9U0i82QGUm+UbrTpiEso=;
-        b=dr9GOnOm4jNv/fqK7VaY4fmc2iMgKbhoxyvlwA4/S/2gn6fnmnKM3SRRnERR9yd4xd
-         3RNXrubiZMQ2uNVJggxbDw0T1JlyQJyPCr8f6JuMbt6YV72fki51QKGQ7KYBpAEssAxb
-         +98oih/3YhA9G6yQ0YwwPJ16UPqlgU+j0w5hYiYoh1fGa592MPOWIqHbH5U1N5h5y+JC
-         yBVDIVlUHSWJEv8ZgO3SwDM/utqpcB/0qZdkrfDMPCYv6Os9iLOUfjvyzHHedMnu8nzh
-         JPjjP3femgDCwZVfi9ny2T+0LHpt9Nf3xF+XxgLmZ/cNHQyuqobYDa9D+yWBQKR48+au
-         pbcA==
-X-Gm-Message-State: AFqh2kp1vakVhmDtpWpduU9hb84dZOVkJQ/mXg8lUZFA6mKdFclinAjX
-        VeIoEmy235QCZw3YxB31twD+/g==
-X-Google-Smtp-Source: AMrXdXtd/n4T7oT7EJwzPIPADbEUarUVmVBN9kaC29mimSQ3fmwKsrjWYJugvfguwY0xNRU+WSG49w==
-X-Received: by 2002:a05:600c:798:b0:3d3:5737:3b0f with SMTP id z24-20020a05600c079800b003d357373b0fmr38639588wmo.36.1672749662438;
-        Tue, 03 Jan 2023 04:41:02 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id bi14-20020a05600c3d8e00b003d9ad6783b1sm11844502wmb.6.2023.01.03.04.41.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 04:41:01 -0800 (PST)
-Message-ID: <ff77ba1c-8b67-4697-d713-0392d3b1d77a@linaro.org>
-Date:   Tue, 3 Jan 2023 12:41:00 +0000
+        Tue, 3 Jan 2023 07:42:04 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AC89FD3;
+        Tue,  3 Jan 2023 04:42:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2390D671AC;
+        Tue,  3 Jan 2023 12:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672749722; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pTRmPLN+nKDxpkvAuy7xPSj+P5EUaykcz/bu6SdbF0o=;
+        b=gGorrRDau2nrUcCwnX8wbC7EN9jCz8eEPUV/e/66YNbDy15+B96B7v6eDHuv8KlU5byjMy
+        IkeQvcaTZ4GBJIWnRymFXp5NTMwvcGMdUg6gP8wJfiR1vEafV4JUIluIKO2f4hCn33VJKW
+        OZTxz++wX6FNhylZKDz0G2m2ndshblM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672749722;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pTRmPLN+nKDxpkvAuy7xPSj+P5EUaykcz/bu6SdbF0o=;
+        b=osD1MW9Rp24AQxdfGkeuER8PF8qI1TxQbQPYHisjuff44K9ufUJwbC0hxa4YHJ3XGtDwhG
+        wc7NwZkZ/vtuXxDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0F5211392B;
+        Tue,  3 Jan 2023 12:42:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id f1ewA5oitGN9DgAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 03 Jan 2023 12:42:02 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 7D9B8A0742; Tue,  3 Jan 2023 13:42:01 +0100 (CET)
+Date:   Tue, 3 Jan 2023 13:42:01 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Jan Kara <jack@suse.cz>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v5 2/3] fanotify: define struct members to hold response
+ decision context
+Message-ID: <20230103124201.iopasddbtb6vi362@quack3>
+References: <cover.1670606054.git.rgb@redhat.com>
+ <45da8423b9b1e8fc7abd68cd2269acff8cf9022a.1670606054.git.rgb@redhat.com>
+ <20221216164342.ojcbdifdmafq5njw@quack3>
+ <Y6TCWe4/nR957pFh@madcap2.tricolour.ca>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] nvmem: core: Fix race in nvmem_register()
-Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Eric Curtin <ecurtin@redhat.com>
-References: <20230103114427.1825-1-marcan@marcan.st>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230103114427.1825-1-marcan@marcan.st>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6TCWe4/nR957pFh@madcap2.tricolour.ca>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu 22-12-22 15:47:21, Richard Guy Briggs wrote:
+> On 2022-12-16 17:43, Jan Kara wrote:
+> > On Mon 12-12-22 09:06:10, Richard Guy Briggs wrote:
+> > > This patch adds a flag, FAN_INFO and an extensible buffer to provide
+> > > additional information about response decisions.  The buffer contains
+> > > one or more headers defining the information type and the length of the
+> > > following information.  The patch defines one additional information
+> > > type, FAN_RESPONSE_INFO_AUDIT_RULE, to audit a rule number.  This will
+> > > allow for the creation of other information types in the future if other
+> > > users of the API identify different needs.
+> > > 
+> > > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > > Link: https://lore.kernel.org/r/2745105.e9J7NaK4W3@x2
+> > > Suggested-by: Jan Kara <jack@suse.cz>
+> > > Link: https://lore.kernel.org/r/20201001101219.GE17860@quack2.suse.cz
+> > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > 
+> > Thanks for the patches. They look very good to me. Just two nits below. I
+> > can do the small updates on commit if there would be no other changes. But
+> > I'd like to get some review from audit guys for patch 3/3 before I commit
+> > this.
+> 
+> I'd prefer to send a followup patch based on your recommendations rather
+> than have you modify it.  It does save some back and forth though...
 
+OK, since there are updates to patch 3 as well, I agree this is a better
+way forward.
 
-On 03/01/2023 11:44, Hector Martin wrote:
-> nvmem_register() currently registers the device before adding the nvmem
-> cells, which creates a race window where consumers may find the nvmem
-> device (and not get PROBE_DEFERred), but then fail to find the cells and
-> error out.
+> > > diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+> > > index caa1211bac8c..cf3584351e00 100644
+> > > --- a/fs/notify/fanotify/fanotify_user.c
+> > > +++ b/fs/notify/fanotify/fanotify_user.c
+> > > @@ -283,19 +283,44 @@ static int create_fd(struct fsnotify_group *group, const struct path *path,
+> > >  	return client_fd;
+> > >  }
+> > >  
+> > > +static int process_access_response_info(int fd, const char __user *info, size_t info_len,
+> > > +					struct fanotify_response_info_audit_rule *friar)
+> > 
+> > I prefer to keep lines within 80 columns, unless there is really good
+> > reason (like with strings) to have them longer.
 > 
-> Move device registration to the end of nvmem_register(), to close the
-> race.
-> 
-> Observed when the stars line up on Apple Silicon machines with the (not
-> yet upstream, but trivial) spmi nvmem driver and the macsmc-rtc client:
-> 
-> [    0.487375] macsmc-rtc macsmc-rtc: error -ENOENT: Failed to get rtc_offset NVMEM cell
-> 
-> Fixes: eace75cfdcf7 ("nvmem: Add a simple NVMEM framework for nvmem providers")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Eric Curtin <ecurtin@redhat.com>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
+> Sure.  In this case, it buys us little since the last line is lined up
+> with the arguments openning bracket and it one long struct name unless I
+> unalign that argument and back up the indent by one.
 
-What has changed since v1?
+Yeah, that's what I'd generally do.
 
+> > BTW, why do you call the info structure 'friar'? I feel some language twist
+> > escapes me ;)
+> 
+> Fanotify_Response_Info_Audit_Rule, it is a pronounceable word, and
+> besides they have a long reputation for making good beer.  :-D
 
->   drivers/nvmem/core.c | 32 +++++++++++++++++---------------
->   1 file changed, 17 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index 321d7d63e068..606f428d6292 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -822,11 +822,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->   		break;
->   	}
-> 
-> -	if (rval) {
-> -		ida_free(&nvmem_ida, nvmem->id);
-> -		kfree(nvmem);
-> -		return ERR_PTR(rval);
-> -	}
-> +	if (rval)
-> +		goto err_gpiod_put;
+Aha, ok :) Thanks for explanation.
 
-Why was gpiod changes added to this patch, that should be a separate 
-patch/discussion, as this is not relevant to the issue that you are 
-reporting.
+> > > +{
+> > > +	if (fd == FAN_NOFD)
+> > > +		return -ENOENT;
+> > 
+> > I would not test 'fd' in this function at all. After all it is not part of
+> > the response info structure and you do check it in
+> > process_access_response() anyway.
+> 
+> I wrestled with that.  I was even tempted to swallow the following fd
+> check too, but the flow would not have made as much sense for the
+> non-INFO case.
+> 
+> My understanding from Amir was that FAN_NOFD was only to be sent in in
+> conjuction with FAN_INFO to test if a newer kernel was present.
 
+Yes, that is correct. But we not only want to check that FAN_INFO flag is
+understood (as you do in your patch) but also whether a particular response
+type is understood (which you don't verify for FAN_NOFD). Currently, there
+is only one response type (FAN_RESPONSE_INFO_AUDIT_RULE) but if there are
+more in the future we need old kernels to refuse new response types even
+for FAN_NOFD case.
+
+> I presumed that if FAN_NOFD was present without FAN_INFO that was an
+> invalid input to an old kernel.
+
+Yes, that is correct and I agree the conditions I've suggested below are
+wrong in that regard and need a bit of tweaking. Thanks for catching it.
+
+> > > +
+> > > +	if (info_len != sizeof(*friar))
+> > > +		return -EINVAL;
+> > > +
+> > > +	if (copy_from_user(friar, info, sizeof(*friar)))
+> > > +		return -EFAULT;
+> > > +
+> > > +	if (friar->hdr.type != FAN_RESPONSE_INFO_AUDIT_RULE)
+> > > +		return -EINVAL;
+> > > +	if (friar->hdr.pad != 0)
+> > > +		return -EINVAL;
+> > > +	if (friar->hdr.len != sizeof(*friar))
+> > > +		return -EINVAL;
+> > > +
+> > > +	return info_len;
+> > > +}
+> > > +
+> > 
+> > ...
+> > 
+> > > @@ -327,10 +359,18 @@ static int process_access_response(struct fsnotify_group *group,
+> > >  		return -EINVAL;
+> > >  	}
+> > >  
+> > > -	if (fd < 0)
+> > > +	if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
+> > >  		return -EINVAL;
+> > >  
+> > > -	if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
+> > > +	if (response & FAN_INFO) {
+> > > +		ret = process_access_response_info(fd, info, info_len, &friar);
+> > > +		if (ret < 0)
+> > > +			return ret;
+> > > +	} else {
+> > > +		ret = 0;
+> > > +	}
+> > > +
+> > > +	if (fd < 0)
+> > >  		return -EINVAL;
+> > 
+> > And here I'd do:
+> > 
+> > 	if (fd == FAN_NOFD)
+> > 		return 0;
+> > 	if (fd < 0)
+> > 		return -EINVAL;
+> > 
+> > As we talked in previous revisions we'd specialcase FAN_NOFD to just verify
+> > extra info is understood by the kernel so that application writing fanotify
+> > responses has a way to check which information it can provide to the
+> > kernel.
 > 
->   	nvmem->read_only = device_property_present(config->dev, "read-only") ||
->   			   config->read_only || !nvmem->reg_write;
-> @@ -837,20 +834,16 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
-> 
->   	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
-> 
-> -	rval = device_register(&nvmem->dev);
-> -	if (rval)
-> -		goto err_put_device;
-> -
->   	if (nvmem->nkeepout) {
->   		rval = nvmem_validate_keepouts(nvmem);
->   		if (rval)
-> -			goto err_device_del;
-> +			goto err_gpiod_put;
->   	}
-> 
->   	if (config->compat) {
->   		rval = nvmem_sysfs_setup_compat(nvmem, config);
->   		if (rval)
-> -			goto err_device_del;
-> +			goto err_gpiod_put;
->   	}
-> 
->   	if (config->cells) {
-> @@ -867,6 +860,15 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->   	if (rval)
->   		goto err_remove_cells;
-> 
-> +	rval = device_register(&nvmem->dev);
-> +	if (rval) {
-> +		nvmem_device_remove_all_cells(nvmem);
-> +		if (config->compat)
-> +			nvmem_sysfs_remove_compat(nvmem, config);
-> +		put_device(&nvmem->dev);
-> +		return ERR_PTR(rval);
-> +	}
-> +
->   	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem);
-> 
->   	return nvmem;
-> @@ -876,10 +878,10 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->   err_teardown_compat:
->   	if (config->compat)
->   		nvmem_sysfs_remove_compat(nvmem, config);
-> -err_device_del:
-> -	device_del(&nvmem->dev);
-> -err_put_device:
-> -	put_device(&nvmem->dev);
-> +err_gpiod_put:
-> +	gpiod_put(nvmem->wp_gpio);
-> +	ida_free(&nvmem_ida, nvmem->id);
-> +	kfree(nvmem);
-> 
->   	return ERR_PTR(rval);
->   }
-> --
-> 2.35.1
-> 
+> The reason for including it in process_access_response_info() is to make
+> sure that it is included in the FAN_INFO case to detect this extension.
+> If it were included here
+
+I see what you're getting at now. So the condition
+
+ 	if (fd == FAN_NOFD)
+ 		return 0;
+
+needs to be moved into 
+
+	if (response & FAN_INFO)
+
+branch after process_access_response_info(). I still prefer to keep it
+outside of the process_access_response_info() function itself as it looks
+more logical to me. Does it address your concerns?
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
