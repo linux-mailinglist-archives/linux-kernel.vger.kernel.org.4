@@ -2,139 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA87365C552
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 226CB65C555
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238373AbjACRrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:47:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S237742AbjACRrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237982AbjACRrO (ORCPT
+        with ESMTP id S233627AbjACRrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:47:14 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5CE6572;
-        Tue,  3 Jan 2023 09:47:13 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id u9so75918422ejo.0;
-        Tue, 03 Jan 2023 09:47:13 -0800 (PST)
+        Tue, 3 Jan 2023 12:47:49 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2956455;
+        Tue,  3 Jan 2023 09:47:48 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id fc4so75718925ejc.12;
+        Tue, 03 Jan 2023 09:47:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xv23uFExM2LvOZ6MXvWBaZStvyI5+FhGv1pfjK5XMR8=;
-        b=DL3DOSjRmrsFyBH6+4+QHQWYjlisMC2MTj9lQ2jgRKjGUWeeOjz0x1ipTxjEtajl1r
-         61hn4Jk86qtC1r2ZJQ6ewPFJmeBX0boeSVUNXboqgJkNewWRnjHvFeeBGUSJmfcwUzTB
-         Qxg5eY7lZqN8HvYyN8S+kKsuu+IhaDF9VCMaT/KZvrcBdcXj/UmDVH/MOasM4c587exU
-         dx53pttW5YCP/O6AbD+Q9IhqhRpsTPo9yLvN4N67R4NqflSoNdl36YuEYWeXV750srR7
-         VCCXJpFF2HNHhT+RV4eee7Hszxz04mAcayZhJ9JoVELl622ClUBw+b94arRcrQwrl2ia
-         NP2g==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W7cyotX0l7ebhA4GIXOl1W2CMlFAspZ6Tf1buLbR5Nw=;
+        b=iu960tRompiJyFTJnEjBi11ZS+9d8i6l02Zfuya9QRR8fqgx5gmgJyEeRmp/naqHrV
+         RBN9Sav3ZMUUYu3T9rHQrg2bpeRXsi3Uc/wWc0MYB7BZCLptyqc1rOYs7F757gICKEBE
+         Pox0q6WWxbNtjQ4tQwP5ymahr6+GNAZ7P4e1zKCE1ojoGoLHoKC9CZS37Bai0Dwyd6C2
+         7fr8j6/IOU6VyTTHDPJrPGBBtb7ikxjmgd3IWoPofp6rIJ7/j66xA1moZx0G6B8UlbDV
+         fjfFCK5JLX/FQg7F2G35yZQatml97b9Or2BOgOaSfmXMW4G94bkY3rgf4cfxRyL8FAYG
+         HHsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xv23uFExM2LvOZ6MXvWBaZStvyI5+FhGv1pfjK5XMR8=;
-        b=Z3J1aF4qnT///Z6SsiW2MLLR1WP3jJuxfubhFZePPPRbspqSarT/ByaLZSFPlJVeRa
-         oKw9zLMh+qehOlYrwaBbCVVzK0v3mTzrNWkbdxRZ11vmGcMYp6DON0VtkdS+LhP+vIuS
-         w2DlI4KXOTTgu6QG5NmV46sdPJs8LiWRZzt88fYS6Py4nm6Y2ImSQt+//Fd8xeib9it1
-         WfkA4fdF6kGEAtfyMmsexRYSWOtsEGF64Z/KyoJO0hwIwiiICF4tj5d/1ocviA+N2qBy
-         D79gWXaP9Mw+b8YPIFJMPv6A+l3OJPCUsd0Fgkzt3Rr2RquEDFy6HJqurfiSNMsJeuST
-         efbw==
-X-Gm-Message-State: AFqh2kqmLCN0hWpY39d+UuR6G6JJdUQ0viGvpe3Su0k8KH0mXUTPDM3u
-        7dIbHL8SRQv+HuXLh0f60LY=
-X-Google-Smtp-Source: AMrXdXvbG3Ha9vS24+zdJs+kic01YcSnyh8tCgm7Cs8VxQ6DQMW9pplWKIZpFHiHNmCD6gnNu/pJkw==
-X-Received: by 2002:a17:906:71c3:b0:7c0:dd80:e95e with SMTP id i3-20020a17090671c300b007c0dd80e95emr44695436ejk.51.1672768032320;
-        Tue, 03 Jan 2023 09:47:12 -0800 (PST)
-Received: from skbuf ([188.26.185.118])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906300a00b007c53090d511sm14293642ejz.192.2023.01.03.09.47.11
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W7cyotX0l7ebhA4GIXOl1W2CMlFAspZ6Tf1buLbR5Nw=;
+        b=brsnKIAziDgh5Z9yai8qXy6VrsrdpRNgMjnvi+A/ORMhbIk3FWDyxqSvH2O6aP68Di
+         MbPh8JM3cs8m2ydIFAITf4RnvDuDupc7dIRFcW/4JHCSjBIgZKLbtmZ3zWMSjb+F9PPs
+         eh9hdF817s2N8PmleDrQwCwiIZeGETvukeUcIVzmNMGcty3JBVbiwq7Oo8mkF0TWKkFO
+         TrFic2Ou2/qzBGGAQaBr0Jhr5+qEHpnzVvWpu4y4umYN8k9HYrKtsANMG2d/gp7dIYqc
+         KSNOEJTaPgU4ui8xNUMQ8/RreU/8Njz5IzvT55G5pdS5FFvNyYNawKq3Gz875ID0pz7f
+         QJxw==
+X-Gm-Message-State: AFqh2kpS4EaiOOuCku2on/ZVRlsYOfH+2fwxELEOmmGzDmNBnkkBXtYj
+        RitxZGDyYhLd3HEWbHk5w9Y=
+X-Google-Smtp-Source: AMrXdXtEgaqK+gulQ7OcVitdluoQBbDA+fdlh+FFGqJNxGkLF4DjAh8aeRkqM3BM6+nwYfYaYrBRsw==
+X-Received: by 2002:a17:906:82c3:b0:7c1:9041:8c5 with SMTP id a3-20020a17090682c300b007c1904108c5mr52710406ejy.41.1672768067457;
+        Tue, 03 Jan 2023 09:47:47 -0800 (PST)
+Received: from gmail.com (1F2EF380.nat.pool.telekom.hu. [31.46.243.128])
+        by smtp.gmail.com with ESMTPSA id kx20-20020a170907775400b0078d3f96d293sm14352978ejc.30.2023.01.03.09.47.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 09:47:11 -0800 (PST)
-Date:   Tue, 3 Jan 2023 19:47:09 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com,
-        ceggers@arri.de, jacob.e.keller@intel.com
-Subject: Re: [Patch net-next v6 12/13] net: dsa: microchip: ptp: lan937x: add
- 2 step timestamping
-Message-ID: <20230103174709.uzzxrvloei4diz2n@skbuf>
-References: <20230102050459.31023-1-arun.ramadoss@microchip.com>
- <20230102050459.31023-1-arun.ramadoss@microchip.com>
- <20230102050459.31023-13-arun.ramadoss@microchip.com>
- <20230102050459.31023-13-arun.ramadoss@microchip.com>
+        Tue, 03 Jan 2023 09:47:46 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 3 Jan 2023 18:47:44 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, tglx@linutronix.de,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v14 1/7] x86: lib: Separate instruction decoder MMIO type
+ from MMIO trace
+Message-ID: <Y7RqQNH0OuiYCDeE@gmail.com>
+References: <20230101162910.710293-1-Jason@zx2c4.com>
+ <20230101162910.710293-2-Jason@zx2c4.com>
+ <Y7QELo9etPM8Tpx5@gmail.com>
+ <Y7RA3bmko0AjO8hQ@zx2c4.com>
+ <Y7RfPnyK/25pxpKs@gmail.com>
+ <Y7RmDVI/ScoeBO2a@zn.tnic>
+ <CAHmME9ohJ3JZNjkxuA0KjFW0LLQksgQP5f8bfrogd3+GmLrpKw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230102050459.31023-13-arun.ramadoss@microchip.com>
- <20230102050459.31023-13-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHmME9ohJ3JZNjkxuA0KjFW0LLQksgQP5f8bfrogd3+GmLrpKw@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 10:34:58AM +0530, Arun Ramadoss wrote:
-> ---
->  drivers/net/dsa/microchip/ksz_ptp.c | 37 ++++++++++++++++++++++++++++-
->  1 file changed, 36 insertions(+), 1 deletion(-)
+
+* Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+
+> On Tue, Jan 3, 2023 at 6:29 PM Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > On Tue, Jan 03, 2023 at 06:00:46PM +0100, Ingo Molnar wrote:
+> > > > I guess you missed the conversation with Borislav yesterday about that.
+> > > > He mentioned that I'd just take it through random.git when this whole
+> > > > series goes in.
+> > >
+> > > Please base your tree off on tip:x86/asm then (or pull it in) - it only
+> >
+> > My idea was a lot simpler: avoid the tree inter-dependency by us acking this
+> > patch so that it can go through the random.git tree.
 > 
-> diff --git a/drivers/net/dsa/microchip/ksz_ptp.c b/drivers/net/dsa/microchip/ksz_ptp.c
-> index 2d52a3d4771e..c2d156002ee5 100644
-> --- a/drivers/net/dsa/microchip/ksz_ptp.c
-> +++ b/drivers/net/dsa/microchip/ksz_ptp.c
-> @@ -283,6 +283,9 @@ int ksz_get_ts_info(struct dsa_switch *ds, int port, struct ethtool_ts_info *ts)
->  
->  	ts->tx_types = BIT(HWTSTAMP_TX_OFF) | BIT(HWTSTAMP_TX_ONESTEP_P2P);
->  
-> +	if (is_lan937x(dev))
-> +		ts->tx_types |= BIT(HWTSTAMP_TX_ON);
-> +
->  	ts->rx_filters = BIT(HWTSTAMP_FILTER_NONE) |
->  			 BIT(HWTSTAMP_FILTER_PTP_V2_L4_EVENT) |
->  			 BIT(HWTSTAMP_FILTER_PTP_V2_L2_EVENT) |
-> @@ -310,6 +313,8 @@ static int ksz_set_hwtstamp_config(struct ksz_device *dev,
->  				   struct ksz_port *prt,
->  				   struct hwtstamp_config *config)
->  {
-> +	int ret;
-> +
->  	if (config->flags)
->  		return -EINVAL;
->  
-> @@ -325,6 +330,25 @@ static int ksz_set_hwtstamp_config(struct ksz_device *dev,
->  		prt->ptpmsg_irq[KSZ_XDREQ_MSG].ts_en = 1;
->  		prt->ptpmsg_irq[KSZ_PDRES_MSG].ts_en = 0;
->  		prt->hwts_tx_en = true;
-> +
-> +		ret = ksz_rmw16(dev, REG_PTP_MSG_CONF1, PTP_1STEP, PTP_1STEP);
-> +		if (ret)
-> +			return ret;
-> +
-> +		break;
-> +	case HWTSTAMP_TX_ON:
-> +		if (!is_lan937x(dev))
-> +			return -ERANGE;
-> +
-> +		prt->ptpmsg_irq[KSZ_SYNC_MSG].ts_en  = 1;
-> +		prt->ptpmsg_irq[KSZ_XDREQ_MSG].ts_en = 1;
-> +		prt->ptpmsg_irq[KSZ_PDRES_MSG].ts_en = 1;
+> Indeed I would prefer this.
+> 
+> Or... just put this in 6.2 because it's trivial anyway? Heck, even mark 
+> it as stable@ so make future backporting easier. Then it'll meet tip's 
+> urgent criteria.
 
-s/1/true/ please
+Yeah - that's sensible too, it does fix a header namespace bug - I've put 
+it into tip:x86/urgent.
 
-> +		prt->hwts_tx_en = true;
-> +
-> +		ret = ksz_rmw16(dev, REG_PTP_MSG_CONF1, PTP_1STEP, 0);
-> +		if (ret)
-> +			return ret;
-> +
->  		break;
->  	default:
->  		return -ERANGE;
+Thanks,
+
+	Ingo
