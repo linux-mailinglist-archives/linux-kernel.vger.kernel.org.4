@@ -2,116 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857AA65C38D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F3065C2CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238140AbjACQHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
+        id S233452AbjACPOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 10:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238147AbjACQH3 (ORCPT
+        with ESMTP id S230337AbjACPOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:07:29 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3781412A8C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:07:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672762043; x=1704298043;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=10rPs+q/6GprahqHx1aTzXOGUTqi4tY+HjtFhoTQcd8=;
-  b=O8ju2l8AadI4iy74/FQ8PnDxRbGBlP3pVEEBoZp8LDkevDcvGFHGHdss
-   7uBFsgusWZwrgKKIKD0rmWxOE+H1V7dRa53w+qboxIcg3Q6+GGSbzMSfA
-   1dVaJGCIco6FEvbhBCJyQPVelXalBzc+4aaXlJ4tMiAJr3rP4wfY8ocnv
-   6cESGVtrhNorcar/6eTrT1ES5CjNl1s3h0PaCpzZpNluhfse1+Vlu+CeX
-   rEZVuTWa30nDWvU0Fan/4OHRkGYEKwO8+PvwmEev++rNQixBT8ExNf1gq
-   i8kuOY2CrnDKtWtBjW051E5NEKnxotIS/Fgj0YnJuLvNMYtQyd+wTjuq1
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="305196335"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="305196335"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 08:07:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="743546034"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="743546034"
-Received: from nkpuppal-mobl2.amr.corp.intel.com (HELO [10.209.178.199]) ([10.209.178.199])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 08:07:21 -0800
-Message-ID: <393a6418-0963-4859-3212-2f959be4f14f@linux.intel.com>
-Date:   Tue, 3 Jan 2023 09:13:33 -0600
+        Tue, 3 Jan 2023 10:14:17 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19640FAC2;
+        Tue,  3 Jan 2023 07:14:16 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 65CA641F72;
+        Tue,  3 Jan 2023 15:14:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1672758854; bh=1PSEtOTX/u4zPRzwJty5aY47xeibawU7cSRmZalIq0s=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=PCr0/NgFTVxGU9raXFFVI2266XRVCHaknQA7vpdbmUXaotZuJwwnC8nkcZXMK2nEl
+         mxmFHfr5PFqfMLQ8LurLxeni2a+4gGZ7w4GmWARXg1pvzk1MLKVnW1TKHM4SG4P2rs
+         VGk9SvJ/Z4nOroH0eYutwJn1mTE6U9X3GUqq/hb5MWQOH4SZ6fuN58S3FS1G9uDSe5
+         wNhnSQVZ8eUx6J9IFxFjdb3awmh+6qsNreu40Ikfd19MoAqxI/hFgGtINV1ObQ158/
+         z0YRWCVva3++ezXNZqcOjAiGtt2ZhQUNTZq12zb+Y2ofFXeZ59gguwX/azbx4xP29P
+         HULXsWro1YBAw==
+Message-ID: <ec2c2712-04fa-751d-9817-23ff4e0b7fb4@marcan.st>
+Date:   Wed, 4 Jan 2023 00:14:10 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH] ASoC: Intel: sof_ssp_amp: remove unused variable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     Brent Lu <brent.lu@intel.com>, alsa-devel@alsa-project.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        linux-kernel@vger.kernel.org
-References: <20230103073704.722027-1-brent.lu@intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230103073704.722027-1-brent.lu@intel.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Eric Curtin <ecurtin@redhat.com>
+References: <20230103114427.1825-1-marcan@marcan.st>
+ <ff77ba1c-8b67-4697-d713-0392d3b1d77a@linaro.org>
+ <95a4cfde-490f-d26d-163e-7ab1400e7380@marcan.st>
+ <Y7REcpXjxTlxv1Fp@shell.armlinux.org.uk>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2] nvmem: core: Fix race in nvmem_register()
+In-Reply-To: <Y7REcpXjxTlxv1Fp@shell.armlinux.org.uk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/3/23 01:37, Brent Lu wrote:
-> The variable becomes useless since we moved the snd_soc_jack
-> structure from a static array to sof_hdmi_pcm structure.
+On 04/01/2023 00.06, Russell King (Oracle) wrote:
+> Hi Hector,
 > 
-> Signed-off-by: Brent Lu <brent.lu@intel.com>
-
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
-> ---
->  sound/soc/intel/boards/sof_ssp_amp.c | 4 ----
->  1 file changed, 4 deletions(-)
+> On Tue, Jan 03, 2023 at 10:48:52PM +0900, Hector Martin wrote:
+>>>> @@ -822,11 +822,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+>>>>   		break;
+>>>>   	}
+>>>>
+>>>> -	if (rval) {
+>>>> -		ida_free(&nvmem_ida, nvmem->id);
+>>>> -		kfree(nvmem);
+>>>> -		return ERR_PTR(rval);
+>>>> -	}
+>>>> +	if (rval)
+>>>> +		goto err_gpiod_put;
+>>>
+>>> Why was gpiod changes added to this patch, that should be a separate 
+>>> patch/discussion, as this is not relevant to the issue that you are 
+>>> reporting.
+>>
+>> Because freeing the device also does a gpiod_put in the destructor, so
+>> doing this is correct in every other instance below and maintains
+>> existing behavior, and it just so happens that this instance converges
+>> into the same codepath so it is correct to merge it, and it just so
+>> happens that the gpiod put was missing in this path to begin with so
+>> this becomes a drive-by bugfix.
+>>
+>> If you don't like it I can remove it (i.e. reintroduce the bug for no
+>> good reason) and you can submit this fix yourself, because I have no
+>> incentive to waste time submitting a separate patch to fix a GPIO leak
+>> in an error path corner case in a subsystem I don't own and I have much
+>> bigger things to spend my (increasingly lower and lower) willingness to
+>> fight for upstream submissions than this.
+>>
+>> Seriously, what is wrong with y'all kernel people. No other open source
+>> project wastes contributors' time with stupid nitpicks like this. I
+>> found a bug, I fixed it, I then fixed the issues you pointed out, and I
+>> don't have the time nor energy to fight over this kind of nonsense next.
+>> Do you want bugs fixed or not?
 > 
-> diff --git a/sound/soc/intel/boards/sof_ssp_amp.c b/sound/soc/intel/boards/sof_ssp_amp.c
-> index 94d25aeb6e7c..f75800d9d6de 100644
-> --- a/sound/soc/intel/boards/sof_ssp_amp.c
-> +++ b/sound/soc/intel/boards/sof_ssp_amp.c
-> @@ -105,7 +105,6 @@ static int sof_card_late_probe(struct snd_soc_card *card)
->  	char jack_name[NAME_SIZE];
->  	struct sof_hdmi_pcm *pcm;
->  	int err;
-> -	int i;
->  
->  	if (!(sof_ssp_amp_quirk & SOF_HDMI_PLAYBACK_PRESENT))
->  		return 0;
-> @@ -124,7 +123,6 @@ static int sof_card_late_probe(struct snd_soc_card *card)
->  		return hda_dsp_hdmi_build_controls(card, component);
->  	}
->  
-> -	i = 0;
->  	list_for_each_entry(pcm, &ctx->hdmi_pcm_list, head) {
->  		component = pcm->codec_dai->component;
->  		snprintf(jack_name, sizeof(jack_name),
-> @@ -139,8 +137,6 @@ static int sof_card_late_probe(struct snd_soc_card *card)
->  					  &pcm->sof_hdmi);
->  		if (err < 0)
->  			return err;
-> -
-> -		i++;
->  	}
->  
->  	return hdac_hdmi_jack_port_init(component, &card->dapm);
+> This is not nonsense. We have always had a policy of one fix/change
+> per patch, and in this case it makes complete and utter sense. Of
+> course, the interpretation of "one change" is a matter of opinion.
+
+The change here is the race condition fix. That change involves adding
+an error cleanup path that involves a gpio_put(). Therefore it seems
+logical to actually use it in that one extra case that should've used it
+anyway, a few lines above.
+
+Now,
+
+> 
+> Your patch contains two bug fixes for problems:
+> 1) publication of nvmem_device before it's fully setup (leading to the
+>    race) which has been around since the inception of nvmem stuff.
+> 2) fixing a memory leak for gpiod stuff, caused by a recent patch
+>    5544e90c8126 ("nvmem: core: add error handling for dev_set_name")
+>    from September 2022.
+
+That's a fair argument for having two patches (I didn't know the gpiod
+leak was introduced later). However, the backport is nontrivial anyway
+if you want clean code, because if we merge the codepaths the fix would
+end up being different in backports and mainline. Which means we now
+need 3 patches for them to apply properly. Which is more effort than I'm
+willing to put in for an issue I don't care about.
+
+But the bigger problem is that this isn't what Srini replied with, he's
+now saying my patch is outright broken, and I'm tired of this nonsense.
+
+- Hector
