@@ -2,77 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3887065CA26
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED62A65CA2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbjACXFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 18:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S233582AbjACXGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 18:06:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjACXFn (ORCPT
+        with ESMTP id S233577AbjACXGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 18:05:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32C513F3C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:04:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672787097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fsV4iw9XRai6TVSACmsV0RGWy9G55hSnzu9m14iwstk=;
-        b=HKyurcJilufKQDSYGOZtpzFLaIJLWEJpebgbfdwWVJoHhfGYiSKBbIv8feuaUT4YzNSmDT
-        CB5L/Nt4mH1nGr8iSw4MxM6SSZ1vtpsIWzNIZ3qHGJ3scBsGGbg41sCreNyyXB+J3o1z3o
-        d4e3+bQzj71QeEvCP1/j9qlcNcSE9Z8=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-187-3amrKK11PPuHN8ZMWVxHbQ-1; Tue, 03 Jan 2023 18:04:54 -0500
-X-MC-Unique: 3amrKK11PPuHN8ZMWVxHbQ-1
-Received: by mail-qt1-f199.google.com with SMTP id cf23-20020a05622a401700b003ab6e87db28so9980031qtb.18
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:04:54 -0800 (PST)
+        Tue, 3 Jan 2023 18:06:42 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D9E13F3C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:06:41 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so32684982pjd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:06:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wms9vJRG39Hnpaj8L9AdTUEiKoOujl8Zc1PlfJpuAvc=;
+        b=h9725tfa5hdVaq1HRKMg38pT3bnSdsZu1gYJxnR5d5+gbg52PuYQIv5wBFlDJhO9bS
+         mI84Q+hhI20dHQcSkgxSkQf4wP4qmQP1LNIFkAq/VomPx4jdE8OPYacqy/eeBE+fylf/
+         swL/aH5bYQ07AmejSAYJHcZh07QDgP5xrRt6bm8Q1etUwfrKAFos+bdLOE5+JE6PBi3U
+         sFDQ9Dps9Lxs/yyXs3jQijpfnjXJqK66rKL3UJSPZwrJDKJketPNn4qX/18FtXZzHbno
+         RPLBoKWopziiN34rcQN0qmYINuJwWj5jMTrSB3yTnXpqqbcBJ6htLtlQbhw4piMR+QeH
+         MFPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fsV4iw9XRai6TVSACmsV0RGWy9G55hSnzu9m14iwstk=;
-        b=04RuUC76v2WyRIj+Hq2MDSD1SVdrcxnKelFhcdwvHAC1sfwonaY38TJnAkJZEijkAY
-         ujmIbUKOQMJdlQXT3lBVAb6/mIzQ+g3O4sVE4QVbaEDoiBt0zsouRGfrTlXnCSFmDszj
-         1FRpERn+/9KjnUNunqq+1/O5HiUO4guViCcMJlTH12p7Fr6ernsA4YI6sn/N3ti1yaDq
-         dOd+wBbv8ba8N+qbogANLe9J1xI1OgV5Xd7i3edY0JRoSpR91LzlyeWbboNJgWJSQmPu
-         NuYLCd2E31VPwLKyvPdSQb4JQsfjHDdVkp5oQXwyOrLwFI47JgeDm4lxp2gmgzIcgQdZ
-         BPCg==
-X-Gm-Message-State: AFqh2kouuZLQN6YabEwodohlUSMg4S1noba/x+6wbCPvwyiRU6eyNvCT
-        UiNU7lA3EspxnYzmMixRiFJSpuSU4XSDMEuhiKY9tX+UqwgHyx2/ypURz2P5N6tTbtbCm+qvr7y
-        SmCcmIG6bHFXNNq5oDdtgYRlZ
-X-Received: by 2002:ac8:5c12:0:b0:3a6:18ff:c6e2 with SMTP id i18-20020ac85c12000000b003a618ffc6e2mr90195692qti.28.1672787094133;
-        Tue, 03 Jan 2023 15:04:54 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtJiAAjxhaa62K5E5gNgeQKrZG8BuWoDHlLV08V4CS0/xU1yn0QB/vH5nE+HdfgaY4+fQco0g==
-X-Received: by 2002:ac8:5c12:0:b0:3a6:18ff:c6e2 with SMTP id i18-20020ac85c12000000b003a618ffc6e2mr90195666qti.28.1672787093875;
-        Tue, 03 Jan 2023 15:04:53 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
-        by smtp.gmail.com with ESMTPSA id h24-20020ac87458000000b003a7ef7a758dsm19434981qtr.59.2023.01.03.15.04.52
+        bh=wms9vJRG39Hnpaj8L9AdTUEiKoOujl8Zc1PlfJpuAvc=;
+        b=l/mmY/sBgDIjkdSNrnOrDEAJF1AmJUAHKqKOYUZHb2YfOjbI+aa+bhhs6Yu4qlJpCW
+         u/AuohcpPamZ7t2zs12qCyiWRYn9G14DBID7jZJxX9vG2tVBOkJjaiWwG98Ra8i1mVRW
+         3P0L5iKo0SsFjFcIIBQZFBiJCX9T4oKzTmuWHzN7ONUuF7f6MaueBEXx2wxRNssX+e+p
+         61zjAZ6w8U6w/f6Gwrw1uNWOvRIqEZObyqsSsFvYSTvEHJbol31M9VGhFsBDAaD87R5q
+         wPKGkwsEY2zJmGxXgKpcMXtbI6RdsEyVu+a7pFkC5VyqPR93vSpfmTsxVlz/f1GiC1f+
+         RPXg==
+X-Gm-Message-State: AFqh2krlxO3wIttebh7iQmGkJgIzjshSQQgm2B8O23seJjQS9NPUX7M+
+        rrh9bi1ugF4Uw5rMlA7ItpOI2EPRamO5sWfO
+X-Google-Smtp-Source: AMrXdXv0hPqADj10or2SDVYag+quux5jra8KVSiEDlbg50PLMvdP+6Y7KrZdfBMvhypOkMi3Sz3H1g==
+X-Received: by 2002:a05:6a20:2a9f:b0:a4:efde:2ed8 with SMTP id v31-20020a056a202a9f00b000a4efde2ed8mr5044243pzh.0.1672787201272;
+        Tue, 03 Jan 2023 15:06:41 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b27-20020aa7951b000000b00580c8a15d13sm19479380pfp.11.2023.01.03.15.06.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 15:04:53 -0800 (PST)
-Date:   Tue, 3 Jan 2023 18:04:52 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hugetlb: unshare some PMDs when splitting VMAs
-Message-ID: <Y7S0lDCeBYLMHBvR@x1n>
-References: <20230101230042.244286-1-jthoughton@google.com>
+        Tue, 03 Jan 2023 15:06:40 -0800 (PST)
+Date:   Tue, 3 Jan 2023 23:06:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        "Qiang, Chenyi" <chenyi.qiang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "ddutile@redhat.com" <ddutile@redhat.com>,
+        "dhildenb@redhat.com" <dhildenb@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        "tabba@google.com" <tabba@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Hocko, Michal" <mhocko@suse.com>
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+Message-ID: <Y7S0/VYsy4aWjfQ+@google.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+ <1c9bbaa5-eea3-351e-d6a0-cfbc32115c82@intel.com>
+ <20230103013948.GA2178318@chaop.bj.intel.com>
+ <DS0PR11MB63738AE206ADE5EB00D8838BDCF49@DS0PR11MB6373.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230101230042.244286-1-jthoughton@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <DS0PR11MB63738AE206ADE5EB00D8838BDCF49@DS0PR11MB6373.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,136 +119,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 01, 2023 at 11:00:42PM +0000, James Houghton wrote:
-> PMD sharing can only be done in PUD_SIZE-aligned pieces of VMAs;
-> however, it is possible that HugeTLB VMAs are split without unsharing
-> the PMDs first.
+On Tue, Jan 03, 2023, Wang, Wei W wrote:
+> On Tuesday, January 3, 2023 9:40 AM, Chao Peng wrote:
+> > > Because guest memory defaults to private, and now this patch stores
+> > > the attributes with KVM_MEMORY_ATTRIBUTE_PRIVATE instead of
+> > _SHARED,
+> > > it would bring more KVM_EXIT_MEMORY_FAULT exits at the beginning of
+> > > boot time. Maybe it can be optimized somehow in other places? e.g. set
+> > > mem attr in advance.
+> > 
+> > KVM defaults to 'shared' because this ioctl can also be potentially used by
+> > normal VMs and 'shared' sounds a value meaningful for both normal VMs and
+> > confidential VMs. 
 > 
-> In some (most?) cases, this is a non-issue, like userfaultfd_register
-> and mprotect, where PMDs are unshared before anything is done. However,
-> mbind() and madvise() (like MADV_DONTDUMP) can cause a split without
-> unsharing first.
+> Do you mean a normal VM could have pages marked private? What's the usage?
+> (If all the pages are just marked shared for normal VMs, then why do we need it)
+
+No, there are potential use cases for per-page attribute/permissions, e.g. to
+make select pages read-only, exec-only, no-exec, etc...
+
+> > As for more KVM_EXIT_MEMORY_FAULT exits during the
+> > booting time, yes, setting all memory to 'private' for confidential VMs through
+> > this ioctl in userspace before guest launch is an approach for KVM userspace to
+> > 'override' the KVM default and reduce the number of implicit conversions.
 > 
-> It might seem ideal to unshare in hugetlb_vm_op_open, but that would
-> only unshare PMDs in the new VMA.
-> 
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> ---
->  mm/hugetlb.c | 42 +++++++++++++++++++++++++++++++++---------
->  1 file changed, 33 insertions(+), 9 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index b39b74e0591a..bf7a1f628357 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -94,6 +94,8 @@ static int hugetlb_acct_memory(struct hstate *h, long delta);
->  static void hugetlb_vma_lock_free(struct vm_area_struct *vma);
->  static void hugetlb_vma_lock_alloc(struct vm_area_struct *vma);
->  static void __hugetlb_vma_unlock_write_free(struct vm_area_struct *vma);
-> +static void hugetlb_unshare_pmds(struct vm_area_struct *vma,
-> +		unsigned long start, unsigned long end);
->  
->  static inline bool subpool_is_free(struct hugepage_subpool *spool)
->  {
-> @@ -4828,6 +4830,23 @@ static int hugetlb_vm_op_split(struct vm_area_struct *vma, unsigned long addr)
->  {
->  	if (addr & ~(huge_page_mask(hstate_vma(vma))))
->  		return -EINVAL;
-> +
-> +	/* We require PUD_SIZE VMA alignment for PMD sharing. */
+> Most pages of a confidential VM are likely to be private pages. It seems more efficient
+> (and not difficult to check vm_type) to have KVM defaults to "private" for confidential VMs
+> and defaults to "shared" for normal VMs.
 
-I can get the point, but it reads slightly awkward.  How about:
+If done right, the default shouldn't matter all that much for efficiency.  KVM
+needs to be able to effeciently track large ranges regardless of the default,
+otherwise the memory overhead and the presumably cost of lookups will be painful.
+E.g. converting a 1GiB chunk to shared should ideally require one entry, not 256k
+entries.
 
-        /*
-         * If the address to split can be in the middle of a shared pmd
-         * range, unshare before split the vma.
-         */
+Looks like that behavior was changed in v8 in response to feedback[*] that doing
+xa_store_range() on a subset of an existing range (entry) would overwrite the
+entire existing range (entry), not just the smaller subset.  xa_store_range() does
+appear to be too simplistic for this use case, but looking at __filemap_add_folio(),
+splitting an existing entry isn't super complex.
 
-I remember you had a helper to check pmd sharing possibility.  Can use here
-depending on whether that existed in the code base or in your hgm series
-(or just pick that up with this one?).
+Using xa_store() for the very initial implementation is ok, and probably a good
+idea since it's more obviously correct and will give us a bisection point.  But
+we definitely want a more performant implementation sooner than later.  The hardest
+part will likely be merging existing entries, but that can be done separately too,
+and is probably lower priority.
 
-> +	if (addr & ~PUD_MASK) {
-> +		/*
-> +		 * hugetlb_vm_op_split is called right before we attempt to
-> +		 * split the VMA. We will need to unshare PMDs in the old and
-> +		 * new VMAs, so let's unshare before we split.
-> +		 */
-> +		unsigned long floor = addr & PUD_MASK;
-> +		unsigned long ceil = floor + PUD_SIZE;
-> +
-> +		if (floor < vma->vm_start || ceil >= vma->vm_end)
+E.g. (1) use xa_store() and always track at 4KiB granularity, (2) support storing
+metadata in multi-index entries, and finally (3) support merging adjacent entries
+with identical values.
 
-s/>=/>/?
-
-> +			/* PMD sharing is already impossible. */
-> +			return 0;
-
-IMHO slightly cleaner to write in the reversed way and let it fall through:
-
-  if (floor >= vma->vm_start && ceil <= vma->vm_end)
-      hugetlb_unshare_pmds(vma, floor, ceil);
-
-Thanks,
-
-> +		hugetlb_unshare_pmds(vma, floor, ceil);
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -7313,26 +7332,21 @@ void move_hugetlb_state(struct folio *old_folio, struct folio *new_folio, int re
->  	}
->  }
->  
-> -/*
-> - * This function will unconditionally remove all the shared pmd pgtable entries
-> - * within the specific vma for a hugetlbfs memory range.
-> - */
-> -void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
-> +static void hugetlb_unshare_pmds(struct vm_area_struct *vma,
-> +				   unsigned long start,
-> +				   unsigned long end)
->  {
->  	struct hstate *h = hstate_vma(vma);
->  	unsigned long sz = huge_page_size(h);
->  	struct mm_struct *mm = vma->vm_mm;
->  	struct mmu_notifier_range range;
-> -	unsigned long address, start, end;
-> +	unsigned long address;
->  	spinlock_t *ptl;
->  	pte_t *ptep;
->  
->  	if (!(vma->vm_flags & VM_MAYSHARE))
->  		return;
->  
-> -	start = ALIGN(vma->vm_start, PUD_SIZE);
-> -	end = ALIGN_DOWN(vma->vm_end, PUD_SIZE);
-> -
->  	if (start >= end)
->  		return;
->  
-> @@ -7364,6 +7378,16 @@ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
->  	mmu_notifier_invalidate_range_end(&range);
->  }
->  
-> +/*
-> + * This function will unconditionally remove all the shared pmd pgtable entries
-> + * within the specific vma for a hugetlbfs memory range.
-> + */
-> +void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
-> +{
-> +	hugetlb_unshare_pmds(vma, ALIGN(vma->vm_start, PUD_SIZE),
-> +			ALIGN_DOWN(vma->vm_end, PUD_SIZE));
-> +}
-> +
->  #ifdef CONFIG_CMA
->  static bool cma_reserve_called __initdata;
->  
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
-
--- 
-Peter Xu
-
+[*] https://lore.kernel.org/all/CAGtprH9xyw6bt4=RBWF6-v2CSpabOCpKq5rPz+e-9co7EisoVQ@mail.gmail.com
