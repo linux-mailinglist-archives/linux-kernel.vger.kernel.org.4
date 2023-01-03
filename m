@@ -2,119 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB5365BD13
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE8265BCAE
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237210AbjACJXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S236786AbjACJC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236967AbjACJWo (ORCPT
+        with ESMTP id S236812AbjACJCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:22:44 -0500
-X-Greylist: delayed 1375 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 Jan 2023 01:22:43 PST
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE06AB3
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:22:43 -0800 (PST)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 6744B1004838E
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:59:34 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id Cd8wpEaCIWC90Cd8wp4mWB; Tue, 03 Jan 2023 08:59:34 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Huizp2fS c=1 sm=1 tr=0 ts=63b3ee76
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RvmDmJFTN0MA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vE4MKPzicF6eR68Lvz9p63INS0oax3kRnD7n2dKi1UU=; b=UonnN+B7//Lc5jQeRQ15pvX/rg
-        RcLeCgQ3oJBNL6/ErS1hdG143RK/XZCX0IEn3qEjXLHHzEv36QDDJLv4Pk0CBwh2/D+g46mavWQlh
-        k2uzaUdbpoKWIxS6/fJbYCeCMCrSaNJtH2z16JBEp+jAkXM0frxFb/LMqQ+0ReIxn//+YQ0qivp6+
-        Ip66geAl5nVpUcSKxqpLoR73ytLAJJFckfM7GJe+4qBxG/2YwN12kfbV5jzzPItc8PLmvK4ZfMXy0
-        p4bpibumnBUwnmUlVsRiUrrxhkyTzyoHPkHiWnIcRdXk84fVGIr2hDBt7sr6vJx9GawUWLzHDURn+
-        30/tSgHw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:39128 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pCd8u-003vRH-Sy;
-        Tue, 03 Jan 2023 01:59:32 -0700
-Subject: Re: [PATCH 6.1 00/71] 6.1.3-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230102110551.509937186@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20230102110551.509937186@linuxfoundation.org>
-Message-ID: <c6ebdb01-8b76-adf6-76cc-94cfd87c1cae@w6rz.net>
-Date:   Tue, 3 Jan 2023 00:59:28 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 3 Jan 2023 04:02:54 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30127DFAF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:02:53 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id cf42so44778859lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:02:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rma1OXXtPwZorAATSPbIGVsCt0s7nGTGyXy8BRV6/bU=;
+        b=OlLux7s2JLGz6488fEjnlO/wdyBRA8JLHewattA+W86HDetZuNSdSSyeYNWvNCL9At
+         UrqMqQA9O1BIyBnAYes7Ng0KTegwNeqM/pSfkXxM/QTltEQLBBne7P5OCeh7z4nLZsFJ
+         prkibeotV5EdIscZre8uQstBPFL6CsLCvOv4Z3KiTY8fKrNZ0M9nZxwahPfaNkf+tUwj
+         vnJtuPY0DxGvDY3FCMkj37lG1Dw+G6ksRnLNHr9KvAb+V0GPX4CH2QD64V2hBAlIMWOz
+         VGAp2X4dU3hGD0VlN2Lb2l+qpE1NThSOGUTs37dxlWrGBfCt++zXFQ3/T5JeKO7UAk63
+         /GYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rma1OXXtPwZorAATSPbIGVsCt0s7nGTGyXy8BRV6/bU=;
+        b=5L801Q3F7Guhw9Ndp2r4nGcr5ABCDOYxuWsTHvH7HWzNYCYIbObOzUuCbDginbKzJ3
+         j+f4KZ5duMHW0je0vNsqApN6NT3RSMNkcCTZ4ILxhax9h/7gC9WrRWDZ6NfbVT3gBlqd
+         3RgrMIQTXysC6ONbRCOQiYCaySUtSbMRa5C4dNDTWNCGHbCh8X5FXGlQ6f+M+eg9/Vlt
+         jww/2ImMIX9L4+Pi2UVn7CdKV0PVgz8ARPp8F4ZQ+dfHTTJyW9gvYMWdcfQutFdJ4nn4
+         u4MNopJOFYcG7d2RUB4iBmMiM6xLFEGmndZOlcNPkAWeI01AWqXIgRGnRoyvZGN75Iv1
+         qUDQ==
+X-Gm-Message-State: AFqh2kp7NQrEhOCg9YB7CDcy18S+F1IygC+ABI2WXfMZKvT17jq5KP+u
+        Qwb3gzrpH4ueQpumWtTw+5YMog==
+X-Google-Smtp-Source: AMrXdXuKSKb4fXDliXY3IUZECvd6jGgLhEO6HXKkRbrr0zxUThMGA6Ko67tu68FtPxF7Lu0U9qP6fg==
+X-Received: by 2002:ac2:43a4:0:b0:4cb:3a60:65cc with SMTP id t4-20020ac243a4000000b004cb3a6065ccmr1399538lfl.5.1672736571492;
+        Tue, 03 Jan 2023 01:02:51 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w4-20020a05651234c400b0049d0a98f73csm4739133lfr.154.2023.01.03.01.02.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 01:02:50 -0800 (PST)
+Message-ID: <ba4ec52a-d6ee-b471-bfa5-521f876aef2d@linaro.org>
+Date:   Tue, 3 Jan 2023 10:02:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/7] dt-bindings: interconnect: Move interconnect child
+ node definition
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pCd8u-003vRH-Sy
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:39128
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org
+References: <20230103010904.3201835-1-bryan.odonoghue@linaro.org>
+ <20230103010904.3201835-2-bryan.odonoghue@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230103010904.3201835-2-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/2/23 3:21 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.3 release.
-> There are 71 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 04 Jan 2023 11:05:34 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.3-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 03/01/2023 02:08, Bryan O'Donoghue wrote:
+> New properties should be defined before the allOf. Move the
+> patternProperties definition to before the additionalProperties: false in
+> this file.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Your commit description suggests it is just a move but it is not.
+Instead you make these properties available for all compatibles, which
+is not justified here.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Either provide full explanation why making such change or make the move
+equivalent by disallowing the properties for other variants.
+
+> 
+> Fixes: dfeef93fe3ee ("dt-bindings: interconnect: Convert snoc-mm to a sub-node of snoc")
+
+There is no bug to fix, at least no bug described in commit msg. Style
+and convention issues are not bugs and not worth backporting. Drop the
+Fixes.
+
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+Best regards,
+Krzysztof
 
