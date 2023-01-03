@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B1D65BD27
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D7465BD24
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237212AbjACJ1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S237264AbjACJ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:27:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237272AbjACJ1N (ORCPT
+        with ESMTP id S237235AbjACJ0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:27:13 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9715DE0B4;
-        Tue,  3 Jan 2023 01:27:08 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3038rnia031537;
-        Tue, 3 Jan 2023 09:26:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=mR+fL4sHpM2IjvOZKJOk8JnSeuFPchXAScxPuKjD2d8=;
- b=BkSlJCEgmHB4iwqbXBsYtvdh3iCmjs6wl8pg/CwLl/NE2zKW1QE/gwAC5FLfxx1LtNcA
- W1CPhpxEem8pjlVWBMOVEy4/rT70QnNgIMxrdidG5qseBLegUB4QGHTMIfwd1zGUoM3m
- E8QDz8UkQsElzMjUs2ec+brZMJSa/nCTnbuTwEdNqaxBMfkw2jqaNcMkYdIdKAfyKHGa
- X/wgVu4AjnxHtJcUmyq4ytmoMk5+XtQ3dou7C2i5Yoa7dfoFq+6gj1KOXl4QPUR6vomK
- 4eovBade6OBtFpmbKNfdLAju9A9dm0egKV9pSM1NFmZCk5cdqYZPC3e1ZM/W1hMymgaL yQ== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvh8p8k73-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 09:26:57 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 302EEjvS011509;
-        Tue, 3 Jan 2023 09:26:55 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6akt3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 09:26:55 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3039Qpe649611220
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Jan 2023 09:26:52 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E302F20043;
-        Tue,  3 Jan 2023 09:26:51 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0425020040;
-        Tue,  3 Jan 2023 09:26:51 +0000 (GMT)
-Received: from osiris (unknown [9.171.83.23])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue,  3 Jan 2023 09:26:50 +0000 (GMT)
-Date:   Tue, 3 Jan 2023 10:26:49 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Alexandra Winter <wintera@linux.ibm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com,
-        linux-kernel@vger.kernel.org, Julian Ruess <julianr@linux.ibm.com>
-Subject: Re: [PATCH v3 2/7] iommu: Allow .iotlb_sync_map to fail and handle
- s390's -ENOMEM return
-Message-ID: <Y7P02dYnvGgbqA2C@osiris>
-References: <20230102115619.2088685-1-schnelle@linux.ibm.com>
- <20230102115619.2088685-3-schnelle@linux.ibm.com>
- <2f1beb15-e9e4-d8ab-1b68-c83f1a53c5c5@linux.ibm.com>
- <3e363da787126a4e8f779988ced92ae4624e3ec3.camel@linux.ibm.com>
+        Tue, 3 Jan 2023 04:26:55 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD375FB0
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 01:26:54 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id m6so34484439lfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 01:26:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/w/HVtfVylFb92xZ3cLJHBmfw9Fvd9M+61nNyBqRlQw=;
+        b=RTLhoxkH+nPWqbV4+/wsP1hbkiXd+l89odwyVICOIKfv0tv3vI2z2vgSLpeWzbdf/4
+         7jmOlUMawjAT4OY3fnJMT1/gokohqPxF7zEav5Jw3V6G8/EP990p8jd8ZvQ+YHSZ5SNu
+         P8jEtL4VPSoLQsiAcAe1GWE9XzBjGqJuFCsyeUd7axrIgN0MQ+JGCea0Z/9wjFJOXdFq
+         tuw+RRIckHLwm6UCUUoP/YLPr+ZSdEFmbqPcx2X4vjjk5c24bUQmsGxqIOfoPsY/jE51
+         e0cDJjFz9L+WEY61i+G38N6ICgYtH+c6tQZ1RpyPDYgDRZu4GzhBL7AOC/6Hr5jRbh9o
+         RMQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/w/HVtfVylFb92xZ3cLJHBmfw9Fvd9M+61nNyBqRlQw=;
+        b=V6edb8UMtgh850Z2xE/mSQw9EJxspCbf4fzGToqtVakJaBYwVUtWaI8ecXGA1uGMAy
+         nD+hDSti6pQjm/uFGo7sX1ifq1ms9Idrdc6H1iAtdNbgP94LqgHwUgMKvLZfJaNhZSZv
+         s1fOb36i6EN/CLBu7VgjHOnJrNK6XXdMR2lpe0A0WKE8JOBckuIWSK9ab7hei6mPb5bw
+         1vWt6Xo9n9WC0YuaFmKCWZ7z33ipx725RIfinmkkD8DWAVQSy7Tv7Nr2MkkSSj8hJAmL
+         lt2ETrdZvLJXmPilLKhrD1yVs8QzSBruNBOGh9xW0FBDGff/l+iJ1R7dyq1kX5n+/+HW
+         bDuw==
+X-Gm-Message-State: AFqh2koYiEVWT3RUaY8akUJ/Z5Z4Uhx61n+czJbl7b0uTloFG6EDpXlQ
+        084Hz+fzmmCG0lfs7KILijX2jg==
+X-Google-Smtp-Source: AMrXdXtxBjEkK70iD51Dp0X3k5oQpocNZh8ibg9YbJMfLNtcc4svtr8iSFKyEPRp4WwGOQw+jjzdVA==
+X-Received: by 2002:a05:6512:1116:b0:4a4:68b7:dee8 with SMTP id l22-20020a056512111600b004a468b7dee8mr15192136lfg.68.1672738012533;
+        Tue, 03 Jan 2023 01:26:52 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o17-20020ac24351000000b0048a934168c0sm4768418lfl.35.2023.01.03.01.26.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 01:26:52 -0800 (PST)
+Message-ID: <207b6699-fe4f-8ab7-5ddb-4eb2e4183c88@linaro.org>
+Date:   Tue, 3 Jan 2023 10:26:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e363da787126a4e8f779988ced92ae4624e3ec3.camel@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OaaAjdiGbONlT31k2AbBpa-LO5f64S6H
-X-Proofpoint-ORIG-GUID: OaaAjdiGbONlT31k2AbBpa-LO5f64S6H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-02_14,2023-01-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=601
- suspectscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- bulkscore=0 impostorscore=0 clxscore=1011 spamscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301030080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 08/11] arm64: dts: qcom: sm8350: Use 2 interconnect
+ cells
+Content-Language: en-US
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        quic_jesszhan@quicinc.com,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        vkoul@kernel.org, a39.skl@gmail.com, quic_khsieh@quicinc.com,
+        quic_vpolimer@quicinc.com, swboyd@chromium.org,
+        dianders@chromium.org, liushixin2@huawei.com,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        vinod.koul@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>
+References: <20221230153554.105856-1-robert.foss@linaro.org>
+ <20221230153554.105856-9-robert.foss@linaro.org>
+ <deb17787-1a5a-89a3-3ecf-7690b4149f5c@linaro.org>
+ <CAG3jFysU84LRcqQOspub+9vtsP3syiksrGX6D7i3ff+X6+mbTA@mail.gmail.com>
+ <b8a0d9c5-eb26-c41c-1190-2628977bc582@linaro.org>
+ <CAG3jFyuUV79nyjnqNysDKQSyYb4HUSWu-BvxG6LAz1Uavmvkbg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAG3jFyuUV79nyjnqNysDKQSyYb4HUSWu-BvxG6LAz1Uavmvkbg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 09:16:22AM +0100, Niklas Schnelle wrote:
-> On Mon, 2023-01-02 at 19:25 +0100, Alexandra Winter wrote:
-> > 
-> > On 02.01.23 12:56, Niklas Schnelle wrote:
-> > > On s390 .iotlb_sync_map is used to sync mappings to an underlying
-> > > hypervisor by letting the hypervisor inspect the synced IOVA range and
-> > > updating its shadow table. This however means that it can fail as the
-> > > hypervisor may run out of resources. This can be due to the hypervisor
-> > > being unable to pin guest pages, due to a limit on concurrently mapped
-> > > addresses such as vfio_iommu_type1.dma_entry_limit or other resources.
-> > > Either way such a failure to sync a mapping should result in
-> > > a DMA_MAPPING_EROR.
-> > > 
-> > > Now especially when running with batched IOTLB flushes for unmap it may
-> > > be that some IOVAs have already been invalidated but not yet synced via
-> > > .iotlb_sync_map. Thus if the hypervisor indicates running out of
-> > > resources, first do a global flush allowing the hypervisor to free
-> > > resources associated with these mappings and only if that also fails
-> > > report this error to callers.
-> > > 
-> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > > ---
-> > Just a small typo, I noticed
-> > [...]
+On 03/01/2023 10:24, Robert Foss wrote:
+>>>> On which tree/revision did you base this?
+>>>
+>>> msm/drm-msm-display-for-6.2
+>>
+>> Then it is not a proper base for DTS changes - you will miss quite some
+>> commits. The DTS patches should be based on Bjorn's SoC tree or
+>> linux-next (although the latter sometimes can lead to conflicts).
 > 
-> You mean the misspelled DMA_MAPPING_ERROR, right? Either way I did edit
+> Alright, then in that case this series needs to be split into 3 parts.
+> 
+> The dts fixes, remaining dts changes & the remainder of code.
 
-I think Alexandra meant the below:
+The split of any fixes (or unrelated cleanups) is good idea anyway.
+However code can go with DTS - just base on linux-next. If you do not
+want to base on linux-next then splitting code from DTS is indeed one
+more good way to send it.
 
-> > > +		/*
-> > > +		 * let the hypervisor disover invalidated entries
-> > 			typo: s/disover/discover/g
+> 
+> Is this what you'd like to see?
 
-Now you know why I always complain when people do full quotes and not
-trim replies to relevant parts.
-It is sometimes very hard to spot comments :)
+Best regards,
+Krzysztof
+
