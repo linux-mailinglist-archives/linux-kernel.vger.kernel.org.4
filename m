@@ -2,126 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEF065C8C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9D465C8C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237887AbjACVPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 16:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
+        id S238012AbjACVPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 16:15:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233535AbjACVPR (ORCPT
+        with ESMTP id S238178AbjACVPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:15:17 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF7B1401C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 13:15:16 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id g10so10131039wmo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 13:15:16 -0800 (PST)
+        Tue, 3 Jan 2023 16:15:35 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC0F13F01;
+        Tue,  3 Jan 2023 13:15:34 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id o66so28109422oia.6;
+        Tue, 03 Jan 2023 13:15:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=geSj+DXEUmOxdOeeDJZ/nQ54Og0nckMFbHdAOqXcfBs=;
-        b=NK7NswDIpYAb+3I91f6REGYNrzXRXjaYUVihLgnWCLhd7xlBBlWi1yO8GNoW3Q1f30
-         gH3yjAF0SgkFV8sCrehpcLG7ejJqObFL96M0Mai919/MeJEFSIgFGjxcv2EKbiCeM0EH
-         Cz2f1Mlw6PDuBxiZhYiW7QnwH6C9498tVd6PCgVZ5UL9SbfVbUyYFJ79D0e6vRYCjw1x
-         kau5TPxSu9TIAHtOwK0l2KlMAxt28dyOU71p2IZfbwvkyYNPjccydaKtR+ZxXuUEqSfe
-         e6WRgWJEmltqaoDMq52Mb9O4hsS+mnCYilrqHzCeXqiS7nYsQ2mwv0UG3/u0n1gpHmAX
-         4HEw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+ZxT7AkK4JaaocuB9JiHUjdT5b+M9kmcVxNv9bDE1Xk=;
+        b=hyKqduVN0JDnk5wxAUL9GQHSV4jns03UucHDkmteolm5TZgNpxL2EaMOkLxxDSlvJ1
+         ShLKzOu4l6/aWbkoqesrffKkSWE54qhMn30rRP09ZwafQqZVIDBvAvoV9LDOWTYjtxEA
+         CbhORl05MF2SkUhABbzJHSW4kz0fUkncJZuMiQqPr4vkcuwiQ27szOmvoMB3dDCAZa1L
+         WDQUamcG9Bs7/vJjOcnHC+DDrAekkN7sigpDpifc1DCFBiv8DFtPXHNIr7JvPdM05iWG
+         0e5ctgmsqY5QDGLte61bXCOjhga6QA8C3oARjz0CJxEgn1TcVunuceWuFmIGiqFxy5k9
+         9PAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=geSj+DXEUmOxdOeeDJZ/nQ54Og0nckMFbHdAOqXcfBs=;
-        b=L/EqlSZxUwWCBPN1EmtpeLGeFenZZM2JFi1+EQ1ii3Zqft+fWl21nx3nsXumaDwHl+
-         R0T5jaeckrKgSW3s+fmh9SDuhfjW6ZIbE4OwesXmVOIwR6IWUlk3x6Ibm036/P1lqngb
-         5RZFnOIMFBLvTxERX0nrCFLDca4vJ8/GmKlhFcLQbQvf3eIAV3ZYiJJIWY82y4M/T0H/
-         HoI84u171rOsuNE76c4C93u9vcpdNx20vRLMuZMRC3wTEjXhPgHekhlSICa6WsXetm8D
-         oByfwG3Gm4Wns1HrD+JzHwCm27GQSpWvQ9199NjGrcMFV/pB0blPwiEFAon6DZc9L67f
-         uEHA==
-X-Gm-Message-State: AFqh2krbPCvUMuylp/pymCwfBTmlAf+Bk4+CLFHy2YIk0kYd4gHrZf+4
-        HBh9cJQOkU2qI1M2J5LvdVFA/g==
-X-Google-Smtp-Source: AMrXdXs4LAvgJkPYzg/o25RIqBUx4HRsevGt8UERo+VmDuRbJP8VQRFUFM72sq6SWnTqbG3XwOUDug==
-X-Received: by 2002:a05:600c:250:b0:3d2:2830:b8bb with SMTP id 16-20020a05600c025000b003d22830b8bbmr35663176wmj.34.1672780515007;
-        Tue, 03 Jan 2023 13:15:15 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id l42-20020a05600c1d2a00b003cfbbd54178sm71148273wms.2.2023.01.03.13.15.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 13:15:14 -0800 (PST)
-Message-ID: <7f6b2a9a-1ffc-424f-2287-5934cf653bde@linaro.org>
-Date:   Tue, 3 Jan 2023 21:15:13 +0000
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+ZxT7AkK4JaaocuB9JiHUjdT5b+M9kmcVxNv9bDE1Xk=;
+        b=PgGOYhX4iz1Ji0KlDBd12oaZok/l/hwJtfYYRpulnolXOrb7mMm3LX67f91iBQXNp/
+         He0yC5YmYb5pBo+vrf93tRab2vz0QmjbNwFq5AbK1zVNhOkcNsm29qfu+R72OGeQ1j34
+         NtIeAa3PmJlaKaZRWoCH1sWN+ED82ORsh88yjF1QTMEXhay8t0B2cfXRrfK4lo5ZJbfs
+         KfbqbulVRW+AvsZ6CM2oaQXJ6sS/0OLPFIsMcjDpIfXDnO8y3ztJylOCd7+W7+E8vILo
+         wRW8qveLssmPq+RuSfdSRu8iG/pX/hbLhuZ1dnVMxzj+MbWomQvwd5gU+8mDVe34PYyj
+         p4MQ==
+X-Gm-Message-State: AFqh2ko7fOuI1LA65QIDM9X8hG+lQAKLd6ByxXpcdXY6S4AFeeEnE7f5
+        GKa1zTJ/+Z2CSnjW74dyGZ0=
+X-Google-Smtp-Source: AMrXdXu4WIyav5RtdaBHBeekV7IxuWtMs8Epo1jBJL+gverOfxMVuMA4aZVXLdGGCh9sPH23aq6hdQ==
+X-Received: by 2002:a05:6808:191e:b0:35e:9838:162b with SMTP id bf30-20020a056808191e00b0035e9838162bmr32514408oib.14.1672780533962;
+        Tue, 03 Jan 2023 13:15:33 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b24-20020a056808011800b0035b99bbe30bsm13464438oie.54.2023.01.03.13.15.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 13:15:33 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 3 Jan 2023 13:15:32 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] watchdog: pic32-wdt: Use devm_clk_get_enabled() helper
+Message-ID: <20230103211532.GE212337@roeck-us.net>
+References: <4335b4201b535ebc749a98bad0b99e3cb5317c39.1672496563.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 0/5] Fix a whole host of nvmem registration/cleanup
- issues
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Hector Martin <marcan@marcan.st>
-References: <Y7RezbPSGrO37NZZ@shell.armlinux.org.uk>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <Y7RezbPSGrO37NZZ@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4335b4201b535ebc749a98bad0b99e3cb5317c39.1672496563.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Russell,
+On Sat, Dec 31, 2022 at 03:22:57PM +0100, Christophe JAILLET wrote:
+> The devm_clk_get_enabled() helper:
+>    - calls devm_clk_get()
+>    - calls clk_prepare_enable() and registers what is needed in order to
+>      call clk_disable_unprepare() when needed, as a managed resource.
+> 
+> This simplifies the code and avoids the need of a dedicated function used
+> with devm_add_action_or_reset().
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-On 03/01/2023 16:58, Russell King (Oracle) wrote:
-> Hi,
+> ---
+>  drivers/watchdog/pic32-wdt.c | 17 +----------------
+>  1 file changed, 1 insertion(+), 16 deletions(-)
 > 
-> This series fixes a whole host of nvmem registration/error cleanup
-> issues that have been identified by both Hector and myself. It is a
-> substantial rework of my original patch fixing the first problem.
-> 
-> The first most obvious problem is the race between nvmem registration
-> and use, which leads to sporadic failures of drivers to probe at boot
-> time.
-> 
-> While fixing this, it has been noticed that a recent fix to check the
-> return value of dev_set_name() introduced a new bug where wp_gpio was
-> not being put in that newly introduced error path.
-> 
-> Then there's a fix for a previous fix which itself purports to fix
-> another bug, but results in the allocated ID being leaked. Fix for a
-> fix for a fix is not good!
-> 
-> Then there's an error in the docbook documentation for wp_gpio (it's
-> listed as wp-gpio instead) but as nothing seems to set wp_gpio, we
-> might as well get rid of it - which also solves the issue that we
-> call gpiod_put() on this whether we own it or not.
-> 
-> Lastly, there's a fix for yet another spurious white-space in this
-> code, one of what seems to be a long history of past white-space
-> fixes.
-> 
-> These patches have been individually build-tested in the order of
-> posting, but not run-time tested except for the entire series.
-
-
-thanks for fixing these issues, I have applied these after fixing the 
-subject on all the patches, as it ended up with email ids in subject.
-
-
-thanks,
-Srini
-> 
->   drivers/nvmem/core.c           | 51 ++++++++++++++++++------------------------
->   include/linux/nvmem-provider.h |  2 --
->   2 files changed, 22 insertions(+), 31 deletions(-)
+> diff --git a/drivers/watchdog/pic32-wdt.c b/drivers/watchdog/pic32-wdt.c
+> index 41715d68d9e9..6d1a00222991 100644
+> --- a/drivers/watchdog/pic32-wdt.c
+> +++ b/drivers/watchdog/pic32-wdt.c
+> @@ -162,11 +162,6 @@ static const struct of_device_id pic32_wdt_dt_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, pic32_wdt_dt_ids);
+>  
+> -static void pic32_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int pic32_wdt_drv_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -186,22 +181,12 @@ static int pic32_wdt_drv_probe(struct platform_device *pdev)
+>  	if (!wdt->rst_base)
+>  		return -ENOMEM;
+>  
+> -	wdt->clk = devm_clk_get(dev, NULL);
+> +	wdt->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(wdt->clk)) {
+>  		dev_err(dev, "clk not found\n");
+>  		return PTR_ERR(wdt->clk);
+>  	}
+>  
+> -	ret = clk_prepare_enable(wdt->clk);
+> -	if (ret) {
+> -		dev_err(dev, "clk enable failed\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, pic32_clk_disable_unprepare,
+> -				       wdt->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	if (pic32_wdt_is_win_enabled(wdt)) {
+>  		dev_err(dev, "windowed-clear mode is not supported.\n");
+>  		return -ENODEV;
+> -- 
+> 2.34.1
 > 
