@@ -2,78 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C0665C652
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7277265C655
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbjACSeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:34:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
+        id S233789AbjACSed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjACSeE (ORCPT
+        with ESMTP id S233429AbjACSe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:34:04 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4460DF5D;
-        Tue,  3 Jan 2023 10:34:03 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id qk9so76008913ejc.3;
-        Tue, 03 Jan 2023 10:34:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b9v/ufy34ZVB6nwfDjrI5oZeLWMB3WaNB3swR5de9fg=;
-        b=K6phPrOFRBMXjKkfBIW7liiPV4QoUHA8309m6Zj+WeZdXwPeBYa2sq5WbTBY7z03Wr
-         moKFP4cWbxELbj5K28+l1yyaegcyplEFz2O1JN3mq2DtCKz4js5E92nBYGYXigUn/V6V
-         Lwry5Hb0R9kpwOXYnR9h4WjSlrzZWWTi7S8oqkQIL0gRKPR/lmcsfM9gCAfWltjugR0f
-         5sMZLgQSvI0cFmKCbp8O0NX9lzl4FKQC57mrux60e5epceFe6w1AKtX0roJIbkuAUzmL
-         C3ViLSL5/7gu+F9g37iW2fbYkRoxehroYM4v2ECECeb0ghGTxvX53XAA75g92kyCums2
-         /a8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b9v/ufy34ZVB6nwfDjrI5oZeLWMB3WaNB3swR5de9fg=;
-        b=xLtwDYxWuFIf0B6St+Cor1fwKX/A/pgxNRGVUY3bDzSjDjX/ItXs1cfTWRf1rB9ylh
-         lPFWZrCDq8VZ+olvUS54MS6/XbauwfWWNw2MOdaTLIn/GcasVVekT192T7OHC63Tj0/T
-         n+MZci/1i1Jn01lQ/pwOo6QnAWQhliYxWN/PVgZmM6Lo3Ey8OX9u7QQASVtO5h7e4EMP
-         6M0jRHT1BG9K4M6aE8zLe9AY7dn3tEWC/cIvZIvD3ISXJinhb2IXXCxakL/OYkQ1n+xs
-         roYorRG4DcHcCDgIJG80Sv2codJvq2DWLy1Om3h/+w9OwskD5l48PpYERlrbojtepd12
-         dXQw==
-X-Gm-Message-State: AFqh2kqvYTzQ9oxaKx4JLCAEKXg9an5IJA55M4YjrgVFZaRQf/JSN9Xd
-        H5lQouOlsaBFuHoWYv8Q2TH6Pc+djqx6D9yq50w=
-X-Google-Smtp-Source: AMrXdXszpqTcKv3zjqBHWx0HIDMsGRcGB2lej/CKF7clkJP/fZweqMTpCRpxTsbZE0FhbnLaIy5eZDFCTREuND8JrCA=
-X-Received: by 2002:a17:906:a18c:b0:7c0:f2cf:3515 with SMTP id
- s12-20020a170906a18c00b007c0f2cf3515mr2956112ejy.327.1672770841681; Tue, 03
- Jan 2023 10:34:01 -0800 (PST)
+        Tue, 3 Jan 2023 13:34:27 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2056.outbound.protection.outlook.com [40.107.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0011AD2E6;
+        Tue,  3 Jan 2023 10:34:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g4cTdNoLLAYA87lcnEtYDtm/BY63xfqgFhzL37Ev6w1dpgFbkhmlwKibxPIAU/PJcCZqqRCouobO0/avdpR63Bh8Y9pg0YAcRySjg6BxeSap4G/vNWJ2dB9TH0AX5uf815bfsXxBD2f0xq3aR1UjgCj9BRgAIemiJKlsfWKGNaw+SpY46UE6/00ycsnvecKrqPMdG2AksCLKqnW9JkI4TVBSZ9kLsq6tFChUjcZieM5U3GxRJ93aweDcoLaxcBYS7R3XW59zQELytJE4kP98Bg6QnOC9vaV/nPuHpZUC27K775aIE1e7kRp8PbT/4EjFtu5a9zIvxQDe8jIYXRmYDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6XD6y/5bUrCcLgA90cFAWrX47gNQS8pTuNJxxOsffCg=;
+ b=PNw0IBoW5HlT3Q7vrkWQ9G/8Dk83co27UypxCdGSzlHbL339/5AiY91/nqd6sVc+Ui6QPqSU9VJy/Le7hchK6Jp2IpM1DuDA2+YRYz34alRmMaRepowjbV/rYnDLk+l0Dh4MMtQRI7V4C0ufN+ZmFsgGFmIYEpc5hjjamN0/T3Mx8wBm1F6L9em0Lf4pJxGq5RN3gKQdoT6heHJ11alorZMXAiA5YWYvhJpzSoUhNKUjMUPQ+B0fPdriXhCf5nEKT6SZNStwTQgW9jSxVWvzUxXnNXRUZ971WK1HkYMCFhI7V458HUNYEQZPR42HaFLXlpWg5y68bRUS6F1F3nHnIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=bootlin.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6XD6y/5bUrCcLgA90cFAWrX47gNQS8pTuNJxxOsffCg=;
+ b=aS0mV1zPmcSgccx6TT433WZwUYD4IVtLPzy99K/jaCfkWqXakGQ4YE2YFxCi2MLyzTct5TCavuRCIBnYTNZQtiZdbFE6r2ephFbzH03ORrd5EPth2L8FLz/ihI86kCsYQgHF/NfFvTY7VToF19sZRg+vasug9c/vVjF4YfkGuUA=
+Received: from DM6PR21CA0007.namprd21.prod.outlook.com (2603:10b6:5:174::17)
+ by LV2PR12MB5920.namprd12.prod.outlook.com (2603:10b6:408:172::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
+ 2023 18:34:23 +0000
+Received: from CY4PEPF0000C967.namprd02.prod.outlook.com
+ (2603:10b6:5:174:cafe::4a) by DM6PR21CA0007.outlook.office365.com
+ (2603:10b6:5:174::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.3 via Frontend
+ Transport; Tue, 3 Jan 2023 18:34:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CY4PEPF0000C967.mail.protection.outlook.com (10.167.241.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5944.8 via Frontend Transport; Tue, 3 Jan 2023 18:34:22 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 3 Jan
+ 2023 12:34:20 -0600
+Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Tue, 3 Jan 2023 12:34:19 -0600
+Message-ID: <f8d5d5a9-6d3c-8b1d-797b-a96c3580dc61@amd.com>
+Date:   Tue, 3 Jan 2023 10:34:18 -0800
 MIME-Version: 1.0
-References: <20221222043507.33037-1-sunhao.th@gmail.com> <ef46c1f6-0939-c2ed-3efb-c3c5f28d1931@meta.com>
- <73E3CA9E-F67E-429F-A2DB-C77649E32D7A@gmail.com> <CAADnVQ+EMzAmeKvivFKvqCNj6H9X-1rBtBBnjRzDiNvkocsc6A@mail.gmail.com>
- <2EC740FA-A10B-4208-8080-9A268BD8E675@gmail.com>
-In-Reply-To: <2EC740FA-A10B-4208-8080-9A268BD8E675@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 3 Jan 2023 10:33:50 -0800
-Message-ID: <CAADnVQKzRS6HcbOPuJRJ=8SOXDDDdy2EBN-LP6vSgB9tLb27Ug@mail.gmail.com>
-Subject: Re: kernel panic: Attempted to kill init!
-To:     Hao Sun <sunhao.th@gmail.com>
-Cc:     Yonghong Song <yhs@meta.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V5 1/3] of: dynamic: Add interfaces for creating device
+ node dynamically
+Content-Language: en-US
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+CC:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
+        <frowand.list@gmail.com>, <helgaas@kernel.org>, <max.zhen@amd.com>,
+        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>,
+        <stefano.stabellini@xilinx.com>, <trix@redhat.com>,
+        "Allan.Nielsen@microchip.com" <Allan.Nielsen@microchip.com>,
+        "Horatiu.Vultur@microchip.com" <Horatiu.Vultur@microchip.com>,
+        "Steen.Hegelund@microchip.com" <Steen.Hegelund@microchip.com>
+References: <1671125446-57584-1-git-send-email-lizhi.hou@amd.com>
+ <1671125446-57584-2-git-send-email-lizhi.hou@amd.com>
+ <20230102145046.3e1d009e@fixe.home>
+From:   Lizhi Hou <lizhi.hou@amd.com>
+In-Reply-To: <20230102145046.3e1d009e@fixe.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C967:EE_|LV2PR12MB5920:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2e0fbcbe-7f98-420a-dbab-08daedb9226f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +T7/yfJJsAG/KdhTJTT5c5Hac7EGCO2OXrisQe8gdKDQ9h1Cc5NX1xfx5fmKhlUr7nb4EmTrL5BWpEoietuSAA0/eEnsS0h7+o9ixsBTNuTa2vaTvj6eoNmuEEJ/WvXIG14FdjFQufSmUGD048GP7VbNJFgGqF7g/W20Z6/I4LLsCu4T+u103/WUoJUljuBfkKYs/T3EncjcYDGoqE8TWAs8WUmj7/92QfAEdNarcJrdygFesnhWGnEC3gtFSEsSrIhsDyiZIV1hs6d8gfKLraFlDOI73XZkjk9AZge2ZA2E2xjSFWGHsZfnAw4G1mz/FxIs62NMrUYKN2UvaeqDXA1uQaFMNTHmX/zMrpGMeu02hTCgNychc2+EkbkPJVBffkdaIuF8BljHdkz0zaGRXwTfRd8Y21S9w4erDHFIfTT58VWFv0kHjhfapPs1vQGktdv9OWD0Gk6DtokRw4HasSjMz7BYXR9p7rG50mkIkzc8rYIUY8OqaBJF8moy58IaF8MdFirlWToLrhZwdWTFKnqLnoBwKyg3NA9+Ey8ANBBm5TdyoV7xJ3bSNYR/JDRHMHoBgvYOAD4avZ0JpTxSIYzG67qoSiYlQoNXEAxoKG8rNpUo5j0GY++fw5a+OEoLvnyHnotwwIqZ/aJu5/JHGFW8A0L8UgrlscEDyDY9yUXcSDws93KDhbqwUQ8fqtYtX3OIQLi4Vq7qCsEw1xKbq296yYM9vZ/Hzso+/GzxoQ1VZ0L46VxfIF2R2FYQSBwjIU5W3pHyj39LWNLZHqfNiyBlWQFj64rMV6ZHBCTSQbY=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199015)(40470700004)(36840700001)(46966006)(66574015)(36860700001)(47076005)(426003)(86362001)(31696002)(82740400003)(356005)(81166007)(44832011)(2906002)(8936002)(41300700001)(5660300002)(7416002)(40460700003)(53546011)(82310400005)(4326008)(40480700001)(2616005)(186003)(316002)(26005)(336012)(478600001)(8676002)(16576012)(6916009)(70586007)(54906003)(70206006)(31686004)(36756003)(22166006)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 18:34:22.7741
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e0fbcbe-7f98-420a-dbab-08daedb9226f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C967.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5920
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,75 +110,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 4:46 AM Hao Sun <sunhao.th@gmail.com> wrote:
->
->
->
-> > On 31 Dec 2022, at 12:55 AM, Alexei Starovoitov <alexei.starovoitov@gma=
-il.com> wrote:
-> >
-> > On Fri, Dec 30, 2022 at 1:54 AM Hao Sun <sunhao.th@gmail.com> wrote:
-> >>
-> >>
-> >>
-> >>> On 28 Dec 2022, at 2:35 PM, Yonghong Song <yhs@meta.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 12/21/22 8:35 PM, Hao Sun wrote:
-> >>>> Hi,
-> >>>> This crash can be triggered by executing the C reproducer for
-> >>>> multiple times, which just keep loading the following prog as
-> >>>> raw tracepoint into kmem_cache_free().
-> >>>> The prog send SIGSEGV to current via bpf_send_signal_thread(),
-> >>>> after load this, whoever tries to free mem would trigger this,
-> >>>> kernel crashed when this happens to init.
-> >>>> Seems we should filter init out in bpf_send_signal_common() by
-> >>>> is_global_init(current), or maybe we should check this in the
-> >>>> verifier?
-> >>>
-> >>> The helper is just to send a particular signal to *current*
-> >>> thread. In typical use case, it is never a good idea to send
-> >>> the signal to a *random* thread. In certain cases, maybe user
-> >>> indeed wants to send the signal to init thread to observe
-> >>> something. Note that such destructive side effect already
-> >>> exists in the bpf land. For example, for a xdp program,
-> >>> it could drop all packets to make machine not responsive
-> >>> to ssh etc. Therefore, I recommend to keep the existing
-> >>> bpf_send_signal_common() helper behavior.
-> >>
-> >> Sound the two are different cases. Not responsive in XDP seems like
-> >> an intended behaviour, panic caused by killing init is buggy. If the
-> >> last thread of global init was killed, kernel panic immediately.
-> >
-> > I don't get it. How was it possible that this prog was
-> > executed with current =3D=3D pid 1 ?
->
-> The prog is raw trace point and is attached to =E2=80=98kmem_cache_free=
-=E2=80=99 event.
-> When init triggered the event, the prog would be executed with pid 1.
-> But, the reason of this crash is not very clear to me, because it=E2=80=
-=99s
-> really hard to debug with original C reproducer.
->
-> The following is the corresponding Syz prog:
->
-> # {Threaded:true Repeat:true RepeatTimes:0 Procs:1 Slowdown:1 Sandbox:non=
-e SandboxArg:0 Leak:false NetInjection:true NetDevices:true NetReset:true C=
-groups:true BinfmtMisc:true CloseFDs:true KCSAN:false DevlinkPCI:false NicV=
-F:false USB:false VhciInjection:false Wifi:false IEEE802154:true Sysctl:tru=
-e UseTmpDir:true HandleSegv:true Repro:false Trace:false LegacyOptions:{Col=
-lide:false Fault:false FaultCall:0 FaultNth:0}}
-> r0 =3D bpf$BPF_PROG_RAW_TRACEPOINT_LOAD(0x5, &(0x7f0000000000)=3D{0x11, 0=
-xe, &(0x7f0000000400)=3DANY=3D[@ANYBLOB=3D"18000000000000000000000000000000=
-180600000000000000000000000000001807000000000000000000000000000018080000000=
-000000000000000000000180900000000000000000000000000002d00020000000000b70100=
-000b000000850000007500000095"], &(0x7f00000000c0)}, 0x80)
-> bpf$BPF_RAW_TRACEPOINT_OPEN(0x11, &(0x7f0000000100)=3D{&(0x7f0000000080)=
-=3D'kmem_cache_free\x00', r0}, 0x10)
 
-Does syzbot running without any user space?
-Is syzbot itself a pid=3D1 ? and the only process ?
-If so, the error would makes sense.
-I guess we can add a safety check to bpf_send_signal_common
-to prevent syzbot from killing itself.
+On 1/2/23 05:50, Clément Léger wrote:
+> Le Thu, 15 Dec 2022 09:30:44 -0800,
+> Lizhi Hou <lizhi.hou@amd.com> a écrit :
+>
+>> of_create_node() creates device node dynamically. The parent device node
+>> and full name are required for creating the node. It optionally creates
+>> an OF changeset and attaches the newly created node to the changeset. The
+>> device node pointer and the changeset pointer can be used to add
+>> properties to the device node and apply the node to the base tree.
+>>
+>> of_destroy_node() frees the device node created by of_create_node(). If
+>> an OF changeset was also created for this node, it will destroy the
+>> changeset before freeing the device node.
+>>
+>> Expand of_changeset APIs to handle specific types of properties.
+>>      of_changeset_add_prop_string()
+>>      of_changeset_add_prop_string_array()
+>>      of_changeset_add_prop_u32_array()
+>>
+>> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+>> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+>> Signed-off-by: Max Zhen <max.zhen@amd.com>
+>> Reviewed-by: Brian Xu <brian.xu@amd.com>
+>> ---
+>>   drivers/of/dynamic.c | 197 +++++++++++++++++++++++++++++++++++++++++++
+>>   include/linux/of.h   |  24 ++++++
+>>   2 files changed, 221 insertions(+)
+>>
+>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+>> index cd3821a6444f..067d996a9f79 100644
+>> --- a/drivers/of/dynamic.c
+>> +++ b/drivers/of/dynamic.c
+>> @@ -461,6 +461,71 @@ struct device_node *__of_node_dup(const struct device_node *np,
+>>   	return NULL;
+>>   }
+>>   
+>> +/**
+>> + * of_create_node - Dynamically create a device node
+>> + *
+>> + * @parent: Pointer to parent device node
+>> + * @full_name: Node full name
+>> + * @cset: Pointer to returning changeset
+>> + *
+>> + * Return: Pointer to the created device node or NULL in case of an error.
+>> + */
+>> +struct device_node *of_create_node(struct device_node *parent,
+>> +				   const char *full_name,
+>> +				   struct of_changeset **cset)
+>> +{
+>> +	struct of_changeset *ocs;
+>> +	struct device_node *np;
+>> +	int ret;
+>> +
+>> +	np = __of_node_dup(NULL, full_name);
+>> +	if (!np)
+>> +		return NULL;
+>> +	np->parent = parent;
+>> +
+>> +	if (!cset)
+>> +		return np;
+>> +
+>> +	ocs = kmalloc(sizeof(*cset), GFP_KERNEL);
+> I started to test this series and this sizeof(*cset) is probably wrong,
+> it should be sizeof(*ocs) or it will yield the size of a struct
+> of_changeset pointer and not the struct of_changeset itself.
+
+I will fix this. Thanks.
+
+Lizhi
+
+>
