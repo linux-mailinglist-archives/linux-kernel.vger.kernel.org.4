@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE4E65CA52
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216ED65CA57
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbjACXew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 18:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
+        id S238185AbjACXf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 18:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbjACXet (ORCPT
+        with ESMTP id S237008AbjACXfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 18:34:49 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A138164B5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:34:49 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id b2so34260930pld.7
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:34:49 -0800 (PST)
+        Tue, 3 Jan 2023 18:35:25 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53091659C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:35:23 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bp15so47948631lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:35:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5/148/emZk2X7NXA2ZwL6cgorWQ0FeFrEoaSTceyS2Y=;
-        b=Iwr1w90jote5Q4FWnxggWOj4Td6LX2xnYKBAtTc/ki2FfC2p93XeHqyHZVMuB1Vyfc
-         Kz0ETUC4QebjYjglXywNjWLweuAgE0eIZRM8BKob7FgQF8b8z6Ef4IxOfnRlLNsT6TDX
-         CvhBTtSz+WPRTBjY6fE/iDWhHXNCFe5kSQZ4A=
+        d=linaro.org; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P8v/Sj/X5KiOx/wkpfi7/cXq7ufsg9Eb2/gL5FeExVU=;
+        b=lZo5X85dn9IoD9hH6dzyKS5qQsUttihsDJCwSHm+iUxjf6OAN8lkuRZ78nwrs51zep
+         vy8MX3KNwgRz7mWHl5SVjeBIV6YOEwPX6zabIUJyEk7ImkRkgxqIxTZPI5TqpSdNmXRW
+         RegrmN2f8aOcs8RDF55NG5FANhvR8dThgOTUiAX5rOtjdMhGBTgCXtYj8UGRZASB1mgA
+         Wq7tpdiYyiUeDt4omgWuPBcrUvDQ9hxExY4fxCrY+Y0ICsrr1aLDCEiOf2tz6kEE2KD7
+         0bS/oznERD+4/6dhGP3GbAxUW2Idolx3cPN4l35FQXqmSap0lk3o5BS2PJorJQowRshP
+         JWjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5/148/emZk2X7NXA2ZwL6cgorWQ0FeFrEoaSTceyS2Y=;
-        b=FCDUWahSGaAKVE2qzfa94znQnHpwlh/kyaFGHNFqzzhJwIa9f14fw2ns1sC5KkXeJr
-         dXre0w7BxR02U27rwubWyhg4vVqEhQDS9IlMC4oONM8MIJk1zNb0DgCyDmB2vKg/8eyt
-         z6bUdMmroXm35NhcVQklHCGwE6Y5subrXgViAdYjfKPqy1tv30yj/il96tuZvqcIBgse
-         T4gpccar6vqODF1WuFmhVVpI9kN9egYE7FK2FxHCMbJuvfkNHqEYdxXjtJNt/eztmDFV
-         yLaGlrxbNZB+RvqvBj+bCTjTQORAaAhYR1IpZWtSGZw/G5RYo91qcQDg9Q2h29lDHjAU
-         WmcA==
-X-Gm-Message-State: AFqh2kp5Z6HKdA/20PIuRhymwsO0Qsyhq7dMQwz8n/MIwCkJ5bOh6Kuk
-        zV0y4N9pOTDbpKuVbJRW/EyqWa+HzSgWFFm+Qb8=
-X-Google-Smtp-Source: AMrXdXtdZtG0AM+UBB9N+gk5hnNv8E9sBczwEWpJrVTZCPXZyjJtZASvTBv3eJBCIAsrlopsMlL9Nw==
-X-Received: by 2002:a05:6a20:4e1e:b0:9f:2dd1:c2bc with SMTP id gk30-20020a056a204e1e00b0009f2dd1c2bcmr50673200pzb.49.1672788888652;
-        Tue, 03 Jan 2023 15:34:48 -0800 (PST)
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com. [209.85.214.180])
-        by smtp.gmail.com with ESMTPSA id x194-20020a6286cb000000b005811f5b9fb3sm16284225pfd.210.2023.01.03.15.34.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 15:34:47 -0800 (PST)
-Received: by mail-pl1-f180.google.com with SMTP id c2so6719501plc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:34:47 -0800 (PST)
-X-Received: by 2002:a17:90a:cf02:b0:219:33a1:d05f with SMTP id
- h2-20020a17090acf0200b0021933a1d05fmr3544224pju.116.1672788886090; Tue, 03
- Jan 2023 15:34:46 -0800 (PST)
+        bh=P8v/Sj/X5KiOx/wkpfi7/cXq7ufsg9Eb2/gL5FeExVU=;
+        b=TR/D8M/eFJg2ESdj1u6ggWeYw8vMBbtknBBhhPt26Op/q/90D2gxsTLIs30URkJDUw
+         3lfUd34gTCOSjIuIck0Q7LgNeVZNTAvqBYRo6d2YzVpATC9lYvzotn5+C/DhF3fCnWBF
+         HZMakFsO5r0Uag90I3wMX1xO98vjait5Oie3lOleTnR290zMGO5hSflM3Petn9HuGTxc
+         A2RF6z+fB3CU6v+hq5q7UuCQOiv5hq/o0Pqug41ibyHOtrKjQDzXGR//Y5FODbLYu8UD
+         0x7rE1dq5klDH4WFmHVE5v8d88HMmgn9NbM/NDiTZjw70XQebaVJFzGRA1GqcBjRgWRW
+         vC9g==
+X-Gm-Message-State: AFqh2kpZbyt2rckvBjpt+u2IeVJX3suR0Im5/6Bx1Ar3DhyZyA9BDRco
+        OdKkCbzerRR/MgejYQEcqnCKlw==
+X-Google-Smtp-Source: AMrXdXvqf6dS9jJfAmR7RmNVGzv4JmseSjNjYQSyoMbvN/YObznPsnpR68X2Xvd1JLlQtp7SGedzQw==
+X-Received: by 2002:a05:6512:2344:b0:4cb:90d:41b1 with SMTP id p4-20020a056512234400b004cb090d41b1mr9099547lfu.56.1672788922157;
+        Tue, 03 Jan 2023 15:35:22 -0800 (PST)
+Received: from Fecusia.local (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
+        by smtp.gmail.com with ESMTPSA id b11-20020a056512070b00b004a45edc1de2sm4939801lfs.239.2023.01.03.15.35.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 15:35:20 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 0/7] usb: fotg210: Various improvements
+Date:   Wed, 04 Jan 2023 00:35:17 +0100
+Message-Id: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org>
 MIME-Version: 1.0
-References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
- <20220920-resend-hwtimestamp-v2-8-0d7978a817cc@chromium.org> <Y6761ScB9FgMC6zb@pendragon.ideasonboard.com>
-In-Reply-To: <Y6761ScB9FgMC6zb@pendragon.ideasonboard.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 4 Jan 2023 00:34:34 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtsk+oejXSDGo_DStocHOEsk4=oYOu6KccQdckfBXbj-g@mail.gmail.com>
-Message-ID: <CANiDSCtsk+oejXSDGo_DStocHOEsk4=oYOu6KccQdckfBXbj-g@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 8/8] media: uvcvideo: Fix hw timestampt handling
- for slow FPS
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALW7tGMC/x2NQQqDMBAAvyJ77kISqan9SulhY9e4B2PZ1VIQ/
+ 97Y4zAMs4OxChvcmx2UP2KylAr+0sAwUcmM8qoMwYXWeddi5lmK4LisOXiHmyXsrxS72N+i6whq
+ mMgYk1IZpjOdyVbWU7yVR/n+b4/ncfwAMEvlbX0AAAA=
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>,
+        Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,103 +76,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent
+This is some gradual improvements to the FOTG210 dual-mode
+USB host/gadget driver.
 
-On Fri, 30 Dec 2022 at 15:51, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ricardo,
->
-> Thank you for the patch.
->
-> On Fri, Dec 02, 2022 at 06:02:48PM +0100, Ricardo Ribalda wrote:
-> > In UVC 1.5, when working with FPS under 32, there is a chance that the
-> > circular buffer contains two dev_sof overflows,
->
-> An explanation of why this is the case would be good in the commit
-> message. Also, by overflow, are you talking about the SOF counter
-> rolling over ?
->
-> > but the clock interpolator
-> > is only capable of handle a single overflow.
-> >
-> > Remove all the samples from the circular buffer that are two overflows
-> > old.
->
-> I would rather support multiple roll-over in the clock interpolator.
-> Dropping older sampls will lead to less predictable behaviour and harder
-> to debug issues.
->
+- Create stricter device tree bindings fixing some mistakes.
+  We have at least FOTG200 and FOTG210 out there. A third
+  variant named FUSB220 is probably related but has a separate
+  driver in the vendor code trees.
 
-Multiple roll-over would not necessarily mean better data here. We are
-deleting data that is more than 1 second away, and our resolution is
-1kHz, which means that we have enough data to provide good results, we
-have measured that 250msec already provides good data.
+- Start to break out common code for remapping of memory and
+  clock handling to begin with, move this to the core file.
 
-From a logical point of view, this patch is fixing a bug, not adding a
-new feature, and it has been validated. I would rather add multi
-roll-over as a follow-up patch, or maybe suggest implementing it in
-userspace ;).
+- Check that the block is in the right role before
+  proceeding, don't abort registration but print a warning
+  if it's not.
 
-> > Tested-by: HungNien Chen <hn.chen@sunplusit.com>
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  drivers/media/usb/uvc/uvc_video.c | 15 +++++++++++++++
-> >  drivers/media/usb/uvc/uvcvideo.h  |  1 +
-> >  2 files changed, 16 insertions(+)
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> > index c81a8362d582..6b6bd521d6c2 100644
-> > --- a/drivers/media/usb/uvc/uvc_video.c
-> > +++ b/drivers/media/usb/uvc/uvc_video.c
-> > @@ -471,6 +471,20 @@ static void uvc_video_clock_add_sample(struct uvc_clock *clock,
-> >
-> >       spin_lock_irqsave(&clock->lock, flags);
-> >
-> > +     /* Delete last overflows */
-> > +     if (clock->head == clock->last_sof_overflow)
-> > +             clock->last_sof_overflow = -1;
-> > +
-> > +     /* Handle overflows */
-> > +     if (clock->count > 0 && clock->last_sof > sample->dev_sof) {
-> > +             /* Remove data from the last^2 overflows */
-> > +             if (clock->last_sof_overflow != -1)
-> > +                     clock->count = (clock->head - clock->last_sof_overflow)
-> > +                                                             % clock->count;
-> > +             clock->last_sof_overflow = clock->head;
-> > +     }
-> > +
-> > +     /* Add sample */
-> >       memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
-> >       clock->last_sof = sample->dev_sof;
-> >       clock->head = (clock->head + 1) % clock->size;
-> > @@ -594,6 +608,7 @@ static void uvc_video_clock_reset(struct uvc_clock *clock)
-> >       clock->head = 0;
-> >       clock->count = 0;
-> >       clock->last_sof = -1;
-> > +     clock->last_sof_overflow = -1;
-> >       clock->sof_offset = -1;
-> >  }
-> >
-> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > index 14daa7111953..d8c520ce5a86 100644
-> > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > @@ -647,6 +647,7 @@ struct uvc_streaming {
-> >               unsigned int head;
-> >               unsigned int count;
-> >               unsigned int size;
-> > +             unsigned int last_sof_overflow;
-> >
-> >               u16 last_sof;
-> >               u16 sof_offset;
->
-> --
-> Regards,
->
-> Laurent Pinchart
+- Assing some default speed and the OF node when the UDC
+  starts. This is based on the similar pattern in the DW
+  controllers.
 
+- Implement a proper VBUS session handler calling down to
+  the hardware VBUS control handler in the Gemini variant.
+  This makes everything work on my hardware.
 
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-usb@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Fabian Vogt <fabian@ritter-vogt.de>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
+---
+Linus Walleij (7):
+      dt-bindings: usb: Correct and extend FOTG210 schema
+      usb: fotg210: List different variants
+      usb: fotg210: Acquire memory resource in core
+      usb: fotg210: Move clock handling to core
+      usb: fotg210: Check role register in core
+      usb: fotg210-udc: Assign of_node and speed on start
+      usb: fotg210-udc: Implement VBUS session
+
+ .../devicetree/bindings/usb/faraday,fotg210.yaml   |  7 +-
+ drivers/usb/fotg210/fotg210-core.c                 | 81 +++++++++++++++++++---
+ drivers/usb/fotg210/fotg210-hcd.c                  | 48 ++-----------
+ drivers/usb/fotg210/fotg210-hcd.h                  |  1 +
+ drivers/usb/fotg210/fotg210-udc.c                  | 68 ++++++++----------
+ drivers/usb/fotg210/fotg210-udc.h                  |  2 +-
+ drivers/usb/fotg210/fotg210.h                      | 27 ++++++--
+ 7 files changed, 136 insertions(+), 98 deletions(-)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230103-gemini-fotg210-usb-95a76798706a
+
+Best regards,
 -- 
-Ricardo Ribalda
+Linus Walleij <linus.walleij@linaro.org>
