@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879A865BF38
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEEBF65BF35
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 12:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237175AbjACLpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 06:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S230139AbjACLpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 06:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237411AbjACLo5 (ORCPT
+        with ESMTP id S236914AbjACLpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 06:44:57 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20062625D;
-        Tue,  3 Jan 2023 03:44:54 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sendonly@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 5731241F72;
-        Tue,  3 Jan 2023 11:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1672746292; bh=wOgcEgG9+pZDSbBKY1gb2vXCECwZ3HDBdpb7Vw0TlGs=;
-        h=From:To:Cc:Subject:Date;
-        b=obvVnoOOwOgqZwleUIuXZh9Vut/Qr8xCsjjEGEDUK7cgkhzG/0tkJewmuk8VkWCYe
-         EwODwQrvmpRpqnz6xHlxkTym6m+P+2IFzxV28IKhexwbIYipjnQNaQa0kpExRCR08+
-         /w0XNFrsj/NzBwHRpnUGVHufxSJM1xtkcmyXK4En8C/kLtfPhk+QIrNSvnWlTw5ei1
-         4EXD2bnSDVniVAowOk4X7e2j+6sb/uV0aZmOujrssMN8LyYcuyDk+bJbKwJ3IYpWPY
-         Hki9fHU0f+0M9ZpdX5UEFLDvMr1Juh3ezFBYDjNi4wQMpdt3Rqh41RhbzRmeQuBSxh
-         9NUNLXKZf7uuQ==
-From:   Hector Martin <marcan@marcan.st>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>, stable@vger.kernel.org,
-        Eric Curtin <ecurtin@redhat.com>
-Subject: [PATCH v2] nvmem: core: Fix race in nvmem_register()
-Date:   Tue,  3 Jan 2023 20:44:28 +0900
-Message-Id: <20230103114427.1825-1-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
+        Tue, 3 Jan 2023 06:45:16 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59C35F83;
+        Tue,  3 Jan 2023 03:45:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1672746301; bh=hq1Mr8Cwby3ZbX2qb3uIoXDEXzZmuXFc29XcF8N/+r4=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=JOv+xNVKD5112S93a8c7aYmoCdX5KoU6wBhdnCWFfbKPJpGhoWZRjuks+zSBEsw75
+         SQPqDig8L+0Joav7loNL8qDYPMUh7sgIJsfpHPEyZZveFpTHIJKn7i+T7pkINA6PBZ
+         A56vNK7INh6hKl8O63cSAqsmToub/440/EUs+c68=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Tue,  3 Jan 2023 12:45:01 +0100 (CET)
+X-EA-Auth: FA+GNfPw6PUD7+tjmQeBh7FR6EBoNuE5zSwpXBGXi4UNiowYmso+Xd15a3rfkgucAXYCHE1qTxBD6g3O2bSauSf9YlqOl8BE
+Date:   Tue, 3 Jan 2023 17:14:55 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] staging: media: imx: remove unnecessary return variable
+Message-ID: <Y7QVN0XY+ld2mBk4@qemulion>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -53,99 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-nvmem_register() currently registers the device before adding the nvmem
-cells, which creates a race window where consumers may find the nvmem
-device (and not get PROBE_DEFERred), but then fail to find the cells and
-error out.
+The function imx_media_fim_set_stream() can directly return 0 instead of
+using a ret variable which never changes its value. Issue identified
+using the returnvar.cocci Coccinelle semantic patch.
 
-Move device registration to the end of nvmem_register(), to close the
-race.
-
-Observed when the stars line up on Apple Silicon machines with the (not
-yet upstream, but trivial) spmi nvmem driver and the macsmc-rtc client:
-
-[    0.487375] macsmc-rtc macsmc-rtc: error -ENOENT: Failed to get rtc_offset NVMEM cell
-
-Fixes: eace75cfdcf7 ("nvmem: Add a simple NVMEM framework for nvmem providers")
-Cc: stable@vger.kernel.org
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
-Signed-off-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
- drivers/nvmem/core.c | 32 +++++++++++++++++---------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
+ drivers/staging/media/imx/imx-media-fim.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 321d7d63e068..606f428d6292 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -822,11 +822,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- 		break;
- 	}
+diff --git a/drivers/staging/media/imx/imx-media-fim.c b/drivers/staging/media/imx/imx-media-fim.c
+index fb6590dcfc36..e719227d4323 100644
+--- a/drivers/staging/media/imx/imx-media-fim.c
++++ b/drivers/staging/media/imx/imx-media-fim.c
+@@ -373,7 +373,6 @@ int imx_media_fim_set_stream(struct imx_media_fim *fim,
+ 			     bool on)
+ {
+ 	unsigned long flags;
+-	int ret = 0;
 
--	if (rval) {
--		ida_free(&nvmem_ida, nvmem->id);
--		kfree(nvmem);
--		return ERR_PTR(rval);
--	}
-+	if (rval)
-+		goto err_gpiod_put;
+ 	v4l2_ctrl_lock(fim->ctrl[FIM_CL_ENABLE]);
 
- 	nvmem->read_only = device_property_present(config->dev, "read-only") ||
- 			   config->read_only || !nvmem->reg_write;
-@@ -837,20 +834,16 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
-
- 	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
-
--	rval = device_register(&nvmem->dev);
--	if (rval)
--		goto err_put_device;
--
- 	if (nvmem->nkeepout) {
- 		rval = nvmem_validate_keepouts(nvmem);
- 		if (rval)
--			goto err_device_del;
-+			goto err_gpiod_put;
- 	}
-
- 	if (config->compat) {
- 		rval = nvmem_sysfs_setup_compat(nvmem, config);
- 		if (rval)
--			goto err_device_del;
-+			goto err_gpiod_put;
- 	}
-
- 	if (config->cells) {
-@@ -867,6 +860,15 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- 	if (rval)
- 		goto err_remove_cells;
-
-+	rval = device_register(&nvmem->dev);
-+	if (rval) {
-+		nvmem_device_remove_all_cells(nvmem);
-+		if (config->compat)
-+			nvmem_sysfs_remove_compat(nvmem, config);
-+		put_device(&nvmem->dev);
-+		return ERR_PTR(rval);
-+	}
-+
- 	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem);
-
- 	return nvmem;
-@@ -876,10 +878,10 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- err_teardown_compat:
- 	if (config->compat)
- 		nvmem_sysfs_remove_compat(nvmem, config);
--err_device_del:
--	device_del(&nvmem->dev);
--err_put_device:
--	put_device(&nvmem->dev);
-+err_gpiod_put:
-+	gpiod_put(nvmem->wp_gpio);
-+	ida_free(&nvmem_ida, nvmem->id);
-+	kfree(nvmem);
-
- 	return ERR_PTR(rval);
+@@ -393,7 +392,7 @@ int imx_media_fim_set_stream(struct imx_media_fim *fim,
+ 	fim->stream_on = on;
+ out:
+ 	v4l2_ctrl_unlock(fim->ctrl[FIM_CL_ENABLE]);
+-	return ret;
++	return 0;
  }
+
+ int imx_media_fim_add_controls(struct imx_media_fim *fim)
 --
-2.35.1
+2.34.1
+
+
 
