@@ -2,400 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD83065C6B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6613165C6B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238284AbjACSsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        id S238399AbjACSse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238273AbjACSq3 (ORCPT
+        with ESMTP id S239065AbjACSrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:46:29 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C8111156
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:46:27 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 188so17718861ybi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:46:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zMM79R7cqTsBsvAEfVjTqYtKnnoyNuCArOemgcn3l64=;
-        b=fT6Nl/AR1KZXfZDfxlPsejL5yaYMUgK5QMfzbxN/9n1ShiShit9ZG9l7euKNgcC901
-         Vb+tUSGYk13dZx07tRUD5SjDjebTi84CWdLcL2AtBYsWhE0l1o3GnSwoP5s6239miwLu
-         92RPggzYMZDPgqq0PRiQSnANMXsODi81ZkykopwKCJbGDeitrTxvhiJu5FaA06ZJSa3X
-         Zca544K6Ee+bEhRgPCwXMfz5s2wLPh+W5qH2utpTrJ/AXI8wAKoOhHoyeVvJS1vZAweq
-         LAKC21Ogq5CWL/BMo3x16PrjvkET3a2z8Rol7gDG0KWnfRcYpbJ4kyUE7gRbOogtNmqw
-         C0WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zMM79R7cqTsBsvAEfVjTqYtKnnoyNuCArOemgcn3l64=;
-        b=webNeyCrLaR7TRALxkmfsD7zQbp5BTIAaYePVDdc8sO8tyPuX3IwkFEEAOKlzn2zTb
-         XoYtzU/a9sQ7kl85TCZecQFerFmoDeHEjxMgrBRxsNvDrKrP8+3BRqR9iS1HygGBmcQl
-         Y9g5/l03P9D4iVed40Gk50B4VIbkHwclEURGEIH8nYdf3lMg2pF8ELy1gEK9V89eL7Fd
-         lkLyk/ZSUhXoWHJ147WqDKAHQEZ9ZNwf4wS2bFUj+wFISnu7SkQox3B/4DcU+VXcYn5w
-         /QAIqJJLexbmlNUajbFQtX534DtM1n2LvFP62hPjPCbYGfhB1tCAZ3yxcCphtxlZmgh3
-         p/jA==
-X-Gm-Message-State: AFqh2krRp0zLCoQaypOXnrP/OpO9/aaAH52qnWYDBRUzkOuE/exmicAz
-        HHoPIMmlUDxry+OD0ZO5yGEEV+GQoGgajFKJfiG/TQ==
-X-Google-Smtp-Source: AMrXdXulrrPrKjE2OAgTgupDIPDf70WZCm+YU+d2D4nGF8mNmfmoq71cczZjfPYu2eQboFVofDZv+qAyrhDySuKPp3Q=
-X-Received: by 2002:a25:420d:0:b0:76a:701e:3972 with SMTP id
- p13-20020a25420d000000b0076a701e3972mr4329174yba.519.1672771586618; Tue, 03
- Jan 2023 10:46:26 -0800 (PST)
+        Tue, 3 Jan 2023 13:47:52 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B363814D0A
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:47:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672771622; x=1704307622;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1uaWgsWi4o1Ho2eADPCN9pAUfuK7ViANHJnqxAf/HWM=;
+  b=kMS2Rwn0BN+fMt+ZEzcVctFYWSfD5WpJk2qeZrxbvPhnT6f8JvCDRGZp
+   +Y5z1NyOeYqDHt42cUsURfMa3riaVD4ArMThe43qrL+pedqne1XRq17Am
+   yUbDhYb40gZpOx4XWfHJSMqI+51y5x/eRIeYHwQyKWl5xPR0bCGMDSJtl
+   yLSo9UL+R1bUjq8TFU7HLtbRQcS+E/na3smYa68NnnEoQ1ArmWnvcy7h1
+   OUdj8EB1nZKix5wE2hnsr8X9IQxB7NNSlqVD8L2/K8xLbtFwDzTD+KBQn
+   Vx73w6v1b2sLGBgY09x0d6F1wnPZsG9/phuUxQX9CJ+7fpeT98TdBX3s9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="348949097"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="348949097"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 10:46:57 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="685498837"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="685498837"
+Received: from aalnoman-mobl.amr.corp.intel.com (HELO [10.212.192.60]) ([10.212.192.60])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 10:46:56 -0800
+Message-ID: <efafb54e-5447-fd5e-8f8b-1fc150087d35@intel.com>
+Date:   Tue, 3 Jan 2023 10:46:56 -0800
 MIME-Version: 1.0
-References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-7-vipinsh@google.com>
- <Y64eAvm4JglT1au4@google.com> <CALzav=fGmy=YmpA6u=b0-p8zxnKbF2rt5mQUo-DWm2wYBU7dzA@mail.gmail.com>
-In-Reply-To: <CALzav=fGmy=YmpA6u=b0-p8zxnKbF2rt5mQUo-DWm2wYBU7dzA@mail.gmail.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 3 Jan 2023 10:45:50 -0800
-Message-ID: <CAHVum0fdz8HmgQd5z2n9eAzWuTjtBPA5_aVrY123K=kAMdJvhw@mail.gmail.com>
-Subject: Re: [Patch v3 6/9] KVM: Provide NUMA node support to kvm_mmu_memory_cache{}
-To:     David Matlack <dmatlack@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 2/6] x86/microcode/core: Take a snapshot before and
+ after applying microcode
+Content-Language: en-US
+To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     X86-kernel <x86@kernel.org>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+References: <20230103180212.333496-1-ashok.raj@intel.com>
+ <20230103180212.333496-3-ashok.raj@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230103180212.333496-3-ashok.raj@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 3:12 PM David Matlack <dmatlack@google.com> wrote:
->
-> On Thu, Dec 29, 2022 at 3:08 PM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Wed, Dec 21, 2022 at 06:34:54PM -0800, Vipin Sharma wrote:
-> > > Add 'node' variable in kvm_mmu_memory_cache{} to denote which NUMA node
-> > > this cache should allocate memory from. Default initialize to
-> > > NUMA_NO_NODE in all architectures.
-> > >
-> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > > ---
-> > >  arch/arm64/kvm/arm.c      |  2 +-
-> > >  arch/arm64/kvm/mmu.c      |  4 +++-
-> > >  arch/mips/kvm/mips.c      |  2 ++
-> > >  arch/riscv/kvm/mmu.c      |  2 +-
-> > >  arch/riscv/kvm/vcpu.c     |  2 +-
-> > >  arch/x86/kvm/mmu/mmu.c    | 22 ++++++++++++----------
-> > >  include/linux/kvm_host.h  |  6 ++++++
-> > >  include/linux/kvm_types.h |  2 ++
-> > >  8 files changed, 28 insertions(+), 14 deletions(-)
-> > >
-> > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > index 9c5573bc4614..52a41f4532e2 100644
-> > > --- a/arch/arm64/kvm/arm.c
-> > > +++ b/arch/arm64/kvm/arm.c
-> > > @@ -340,7 +340,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> > >       vcpu->arch.target = -1;
-> > >       bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
-> > >
-> > > -     vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache, NULL, NUMA_NO_NODE);
-> > >
-> > >       /*
-> > >        * Default value for the FP state, will be overloaded at load
-> > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > > index 31d7fa4c7c14..bd07155e17fa 100644
-> > > --- a/arch/arm64/kvm/mmu.c
-> > > +++ b/arch/arm64/kvm/mmu.c
-> > > @@ -894,12 +894,14 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
-> > >  {
-> > >       phys_addr_t addr;
-> > >       int ret = 0;
-> > > -     struct kvm_mmu_memory_cache cache = { .gfp_zero = __GFP_ZERO };
-> > > +     struct kvm_mmu_memory_cache cache;
-> > >       struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
-> > >       enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
-> > >                                    KVM_PGTABLE_PROT_R |
-> > >                                    (writable ? KVM_PGTABLE_PROT_W : 0);
-> > >
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&cache, NULL, NUMA_NO_NODE);
-> >
-> > This is not any better than setting cache.node = NUMA_NO_NODE directly.
-> > Yes it's less lines of code, but it's harder to read (what does NULL
-> > mean here?), and every user of kvm_mmu_memory_cache still has to know to
-> > pass NUMA_NO_NODE.
-> >
-> > When I originally gave this suggestion, I intended to suggest that
-> > INIT_KVM_MMU_MEMORY_CACHE() provide just default initialization.
-> > Non-default initialization for gfp_zero, gfp_custom, kmem_cache, and
-> > node would remain as they are.
-> >
-> > Yes this adds some more lines, but keeps things readable, and doesn't
-> > every initialization site of kvm_mmu_memory_cache to know what to pass
-> > for gfp_zero, node, and kmem_cache. It only needs to set the fields
-> > *it* cares about.
->
-> And to offset the extra lines to call INIT_KVM_MMU_MEMORY_CACHE(), we
-> could finally invert the meaning of gfp_zero so that caches use
-> __GFP_ZERO by default. The majority of caches want __GFP_ZERO, so that
-> should cut down a bunch of lines.
->
+On 1/3/23 10:02, Ashok Raj wrote:
+> The kernel caches features about each CPU's features at boot in an
+> x86_capability[] structure. The microcode update takes one snapshot and
+> compares it with the saved copy at boot.
+> 
+> However, the capabilities in the boot copy can be turned off as a result of
+> certain command line parameters or configuration restrictions. This can
+> cause a mismatch when comparing the values before and after the microcode
+> update.
+> 
+> microcode_check() is called after an update to report any previously
+> cached CPUID bits might have changed due to the update.
+> 
+> microcode_store_cpu_caps() basically stores the original CPU reported
+> values and not the OS modified values. This will avoid giving a false
+> warning even if no capabilities have changed.
+> 
+> Ignore the capabilities recorded at boot. Take a new snapshot before the
+> update and compare with a snapshot after the update to eliminate the false
+> warning.
+...
 
-Can you clarify what you mean by invert?
+It took me a moment to square this "Ignore the capabilities recorded at
+boot." statement with the continued existence of:
 
-Caches which don't want __GFP_ZERO will explicitly set gfp_zero to 0.
-Is this what you intend?
+	memcpy(info->x86_capability, &boot_cpu_data.x86_capability, ...
 
+I think just adding "hardware" might help:
 
-> >
-> > Here's what I mean specifically, based on INIT_LIST_HEAD. I don't think
-> > I got all the kvm_mmu_memory_cache users, but you get the point.
-> >
-> >
-> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > index 9c5573bc4614..0e138dcaf4d4 100644
-> > --- a/arch/arm64/kvm/arm.c
-> > +++ b/arch/arm64/kvm/arm.c
-> > @@ -340,6 +340,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> >         vcpu->arch.target = -1;
-> >         bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
-> >
-> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache);
-> >         vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
-> >
-> >         /*
-> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > index 31d7fa4c7c14..f5fd78a4f084 100644
-> > --- a/arch/arm64/kvm/mmu.c
-> > +++ b/arch/arm64/kvm/mmu.c
-> > @@ -894,12 +894,14 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
-> >  {
-> >         phys_addr_t addr;
-> >         int ret = 0;
-> > -       struct kvm_mmu_memory_cache cache = { .gfp_zero = __GFP_ZERO };
-> > +       KVM_MMU_MEMORY_CACHE(cache);
-> >         struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
-> >         enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
-> >                                      KVM_PGTABLE_PROT_R |
-> >                                      (writable ? KVM_PGTABLE_PROT_W : 0);
-> >
-> > +       cache.gfp_zero = __GFP_ZERO;
-> > +
-> >         if (is_protected_kvm_enabled())
-> >                 return -EPERM;
-> >
-> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> > index 34b57e0be2ef..7915a5a2d104 100644
-> > --- a/arch/riscv/kvm/mmu.c
-> > +++ b/arch/riscv/kvm/mmu.c
-> > @@ -351,10 +351,11 @@ int kvm_riscv_gstage_ioremap(struct kvm *kvm, gpa_t gpa,
-> >         int ret = 0;
-> >         unsigned long pfn;
-> >         phys_addr_t addr, end;
-> > -       struct kvm_mmu_memory_cache pcache = {
-> > -               .gfp_custom = (in_atomic) ? GFP_ATOMIC | __GFP_ACCOUNT : 0,
-> > -               .gfp_zero = __GFP_ZERO,
-> > -       };
-> > +       KVM_MMU_MEMORY_CACHE(pcache);
-> > +
-> > +       pcache.gfp_zero = __GFP_ZERO;
-> > +       if (in_atomic)
-> > +               pcache.gfp_custom = GFP_ATOMIC | __GFP_ACCOUNT;
-> >
-> >         end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
-> >         pfn = __phys_to_pfn(hpa);
-> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> > index 7c08567097f0..3d73ab3ec9a4 100644
-> > --- a/arch/riscv/kvm/vcpu.c
-> > +++ b/arch/riscv/kvm/vcpu.c
-> > @@ -161,6 +161,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> >
-> >         /* Mark this VCPU never ran */
-> >         vcpu->arch.ran_atleast_once = false;
-> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache);
-> >         vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
-> >         bitmap_zero(vcpu->arch.isa, RISCV_ISA_EXT_MAX);
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 254bc46234e0..d4cd8e64cc03 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -5909,14 +5909,19 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
-> >  {
-> >         int ret;
-> >
-> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_pte_list_desc_cache);
-> >         vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
-> >         vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
-> >
-> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache);
-> >         vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
-> >         vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
-> >
-> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache);
-> >         vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> >
-> > +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadowed_info_cache);
-> > +
-> >         vcpu->arch.mmu = &vcpu->arch.root_mmu;
-> >         vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
-> >
-> > @@ -6083,11 +6088,14 @@ int kvm_mmu_init_vm(struct kvm *kvm)
-> >         node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
-> >         kvm_page_track_register_notifier(kvm, node);
-> >
-> > +       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache);
-> >         kvm->arch.split_page_header_cache.kmem_cache = mmu_page_header_cache;
-> >         kvm->arch.split_page_header_cache.gfp_zero = __GFP_ZERO;
-> >
-> > +       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache);
-> >         kvm->arch.split_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> >
-> > +       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_desc_cache);
-> >         kvm->arch.split_desc_cache.kmem_cache = pte_list_desc_cache;
-> >         kvm->arch.split_desc_cache.gfp_zero = __GFP_ZERO;
-> >
-> > diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-> > index 76de36e56cdf..eb7ff9afa5c7 100644
-> > --- a/include/linux/kvm_types.h
-> > +++ b/include/linux/kvm_types.h
-> > @@ -98,6 +98,17 @@ struct kvm_mmu_memory_cache {
-> >         int capacity;
-> >         void **objects;
-> >  };
-> > +
-> > +#define KVM_MMU_MEMORY_CACHE_INIT() (struct kvm_mmu_memory_cache) { \
-> > +}
-> > +
-> > +#define KVM_MMU_MEMORY_CACHE(_name) \
-> > +       struct kvm_mmu_memory_cache _name = KVM_MMU_MEMORY_CACHE_INIT()
-> > +
-> > +static inline void INIT_KVM_MMU_MEMORY_CACHE(struct kvm_mmu_memory_cache *cache)
-> > +{
-> > +       *cache = KVM_MMU_MEMORY_CACHE_INIT();
-> > +}
-> >  #endif
-> >
-> >  #define HALT_POLL_HIST_COUNT                   32
-> >
-> > > +
-> > >       if (is_protected_kvm_enabled())
-> > >               return -EPERM;
-> > >
-> > > diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> > > index a25e0b73ee70..b017c29a9340 100644
-> > > --- a/arch/mips/kvm/mips.c
-> > > +++ b/arch/mips/kvm/mips.c
-> > > @@ -304,6 +304,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> > >                    HRTIMER_MODE_REL);
-> > >       vcpu->arch.comparecount_timer.function = kvm_mips_comparecount_wakeup;
-> > >
-> > > +     vcpu->arch.mmu_page_cache.node = NUMA_NO_NODE;
-> > > +
-> > >       /*
-> > >        * Allocate space for host mode exception handlers that handle
-> > >        * guest mode exits
-> > > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> > > index 34b57e0be2ef..119de4520cc6 100644
-> > > --- a/arch/riscv/kvm/mmu.c
-> > > +++ b/arch/riscv/kvm/mmu.c
-> > > @@ -353,9 +353,9 @@ int kvm_riscv_gstage_ioremap(struct kvm *kvm, gpa_t gpa,
-> > >       phys_addr_t addr, end;
-> > >       struct kvm_mmu_memory_cache pcache = {
-> > >               .gfp_custom = (in_atomic) ? GFP_ATOMIC | __GFP_ACCOUNT : 0,
-> > > -             .gfp_zero = __GFP_ZERO,
-> > >       };
-> > >
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&pcache, NULL, NUMA_NO_NODE);
-> > >       end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
-> > >       pfn = __phys_to_pfn(hpa);
-> > >
-> > > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> > > index 7c08567097f0..189b14feb365 100644
-> > > --- a/arch/riscv/kvm/vcpu.c
-> > > +++ b/arch/riscv/kvm/vcpu.c
-> > > @@ -161,7 +161,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> > >
-> > >       /* Mark this VCPU never ran */
-> > >       vcpu->arch.ran_atleast_once = false;
-> > > -     vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache, NULL, NUMA_NO_NODE);
-> > >       bitmap_zero(vcpu->arch.isa, RISCV_ISA_EXT_MAX);
-> > >
-> > >       /* Setup ISA features available to VCPU */
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 6f6a10d7a871..23a3b82b2384 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -5954,13 +5954,14 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
-> > >  {
-> > >       int ret;
-> > >
-> > > -     vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
-> > > -     vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_pte_list_desc_cache,
-> > > +                               pte_list_desc_cache, NUMA_NO_NODE);
-> > >
-> > > -     vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
-> > > -     vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache,
-> > > +                               mmu_page_header_cache, NUMA_NO_NODE);
-> > >
-> > > -     vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache,
-> > > +                               NULL, NUMA_NO_NODE);
-> > >       spin_lock_init(&vcpu->arch.mmu_shadow_page_cache_lock);
-> > >
-> > >       vcpu->arch.mmu = &vcpu->arch.root_mmu;
-> > > @@ -6124,14 +6125,15 @@ int kvm_mmu_init_vm(struct kvm *kvm)
-> > >       node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
-> > >       kvm_page_track_register_notifier(kvm, node);
-> > >
-> > > -     kvm->arch.split_page_header_cache.kmem_cache = mmu_page_header_cache;
-> > > -     kvm->arch.split_page_header_cache.gfp_zero = __GFP_ZERO;
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache,
-> > > +                               mmu_page_header_cache, NUMA_NO_NODE);
-> > >
-> > > -     kvm->arch.split_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache,
-> > > +                               NULL, NUMA_NO_NODE);
-> > >       spin_lock_init(&kvm->arch.split_shadow_page_cache_lock);
-> > >
-> > > -     kvm->arch.split_desc_cache.kmem_cache = pte_list_desc_cache;
-> > > -     kvm->arch.split_desc_cache.gfp_zero = __GFP_ZERO;
-> > > +     INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_desc_cache,
-> > > +                               pte_list_desc_cache, NUMA_NO_NODE);
-> > >
-> > >       return 0;
-> > >  }
-> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > > index a262e15ebd19..719687a37ef7 100644
-> > > --- a/include/linux/kvm_host.h
-> > > +++ b/include/linux/kvm_host.h
-> > > @@ -2302,4 +2302,10 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
-> > >  /* Max number of entries allowed for each kvm dirty ring */
-> > >  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
-> > >
-> > > +#define INIT_KVM_MMU_MEMORY_CACHE(_cache, _kmem_cache, _node) ({     \
-> > > +     (_cache)->kmem_cache = _kmem_cache;                             \
-> > > +     (_cache)->gfp_zero = __GFP_ZERO;                                \
-> > > +     (_cache)->node = _node;                                         \
-> > > +})
-> > > +
-> > >  #endif
-> > > diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-> > > index 76de36e56cdf..9c70ce95e51f 100644
-> > > --- a/include/linux/kvm_types.h
-> > > +++ b/include/linux/kvm_types.h
-> > > @@ -97,6 +97,8 @@ struct kvm_mmu_memory_cache {
-> > >       struct kmem_cache *kmem_cache;
-> > >       int capacity;
-> > >       void **objects;
-> > > +     /* Node on which memory should be allocated by default */
-> > > +     int node;
-> > >  };
-> > >  #endif
-> > >
-> > > --
-> > > 2.39.0.314.g84b9a713c41-goog
-> > >
+	Ignore all hardware capabilities recorded at boot.
+
+Or even adding one more sentence:
+
+	Only consult the synthetic capabilities recorded at boot so that
+	a simple memcmp() can be used for comparisons.
+
+> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+> index 387578049de0..ac2e67156b9b 100644
+> --- a/arch/x86/include/asm/processor.h
+> +++ b/arch/x86/include/asm/processor.h
+> @@ -697,6 +697,7 @@ bool xen_set_default_idle(void);
+>  #endif
+>  
+>  void __noreturn stop_this_cpu(void *dummy);
+> +void microcode_store_cpu_caps(struct cpuinfo_x86 *info);
+>  void microcode_check(struct cpuinfo_x86 *info);
+>  
+>  enum l1tf_mitigations {
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index b9c7529c920e..7c86c6fd07ae 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -2297,28 +2297,43 @@ void cpu_init_secondary(void)
+>  #endif
+>  
+>  #ifdef CONFIG_MICROCODE_LATE_LOADING
+> +
+> +void microcode_store_cpu_caps(struct cpuinfo_x86 *info)
+> +{
+> +	/* Reload CPUID max function as it might've changed. */
+> +	info->cpuid_level = cpuid_eax(0);
+> +
+> +	/*
+> +	 * Copy all capability leafs to pick up the synthetic ones so that
+> +	 * memcmp() below doesn't fail on that. The ones coming from CPUID will
+> +	 * get overwritten in get_cpu_cap().
+> +	 */
+> +	memcpy(info->x86_capability, &boot_cpu_data.x86_capability,
+> +	       sizeof(info->x86_capability));
+> +
+> +	get_cpu_cap(info);
+> +}
+> +
+>  /*
+>   * The microcode loader calls this upon late microcode load to recheck features,
+>   * only when microcode has been updated. Caller holds microcode_mutex and CPU
+>   * hotplug lock.
+>   */
+> -void microcode_check(struct cpuinfo_x86 *info)
+> +void microcode_check(struct cpuinfo_x86 *orig)
+>  {
+> -	perf_check_microcode();
+> +	struct cpuinfo_x86 info;
+
+'info' is kinda a throwaway name.  would this be better as:
+
+	prev_info / new_info
+
+instead of:
+
+	orig / info
+
+?
+
+> -	/* Reload CPUID max function as it might've changed. */
+> -	info->cpuid_level = cpuid_eax(0);
+> +	perf_check_microcode();
+>  
+>  	/*
+>  	 * Copy all capability leafs to pick up the synthetic ones so that
+>  	 * memcmp() below doesn't fail on that. The ones coming from CPUID will
+>  	 * get overwritten in get_cpu_cap().
+>  	 */
+
+This comment got copied to microcode_store_cpu_caps().  Does this
+instance still need to be here?
+
+> -	memcpy(&info->x86_capability, &boot_cpu_data.x86_capability, sizeof(info->x86_capability));
+> -
+> -	get_cpu_cap(info);
+> +	microcode_store_cpu_caps(&info);
+>  
+> -	if (!memcmp(&info->x86_capability, &boot_cpu_data.x86_capability, sizeof(info->x86_capability)))
+> +	if (!memcmp(&info.x86_capability, &orig->x86_capability,
+> +		    sizeof(info.x86_capability)))
+>  		return;
+>  
+>  	pr_warn("x86/CPU: CPU features have changed after loading microcode, but might not take effect.\n");
+> diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+> index d86a4f910a6b..14d9031ed68a 100644
+> --- a/arch/x86/kernel/cpu/microcode/core.c
+> +++ b/arch/x86/kernel/cpu/microcode/core.c
+> @@ -447,6 +447,13 @@ static int microcode_reload_late(void)
+>  	atomic_set(&late_cpus_in,  0);
+>  	atomic_set(&late_cpus_out, 0);
+>  
+> +	/*
+> +	 * Take a snapshot before the microcode update, so we can compare
+> +	 * them after the update is successful to check for any bits
+> +	 * changed.
+> +	 */
+> +	microcode_store_cpu_caps(&info);
+
+A "we" snuck in there.  How about this?
+
+	/*
+	 * Take a snapshot before the microcode update.  This enables
+	 * a later comparison to see any bits changed after an update.
+	 */
+
+I do think some better naming of 'info' here would be nice too.
+'old_info' or 'prev_info' seem like good alternatives.
+
+>  	ret = stop_machine_cpuslocked(__reload_late, NULL, cpu_online_mask);
+>  	if (ret == 0)
+>  		microcode_check(&info);
+
