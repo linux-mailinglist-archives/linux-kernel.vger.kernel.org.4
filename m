@@ -2,119 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A00865BC5B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE51465BC56
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236968AbjACIiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:38:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
+        id S237051AbjACIic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbjACIh5 (ORCPT
+        with ESMTP id S232898AbjACIib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:37:57 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E007BDB1;
-        Tue,  3 Jan 2023 00:37:56 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 656C260C46;
-        Tue,  3 Jan 2023 08:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672735075; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cxucqJyzfnCNVadtYHxDXtyUdE5BQ5o27Kjd3R83JAg=;
-        b=pB+jvQ4LqFEtRQBnhrTspiYshQvgyQetx3pEFEuajdpgDTi17C9MFciV3ESup3uhcsSOzj
-        /TQS3rxhGPtDbogm4hadF52JYRROPgu0QbRk5MeKfowBOv1rpXcYMrimuSK9YBgnfQRH5I
-        3l4+qWHER2nf3zdpdyBBsQePl9eBXWA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D0921390C;
-        Tue,  3 Jan 2023 08:37:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TiStDGPps2OnCwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 03 Jan 2023 08:37:55 +0000
-Date:   Tue, 3 Jan 2023 09:37:54 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mina Almasry <almasrymina@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] Revert "mm: add nodes= arg to memory.reclaim"
-Message-ID: <Y7PpYsbv1xC6m/Hu@dhcp22.suse.cz>
-References: <20221202223533.1785418-1-almasrymina@google.com>
- <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
- <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
- <20221216101820.3f4a370af2c93d3c2e78ed8a@linux-foundation.org>
- <Y52Scge3ynvn/mB4@dhcp22.suse.cz>
- <20221219144252.f3da256e75e176905346b4d1@linux-foundation.org>
+        Tue, 3 Jan 2023 03:38:31 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B279DDE82
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:38:29 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id p36so44693438lfa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:38:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4CHw5FRtPDUOv1NrpkJyQctZ8ejkK9MC1Qo92iGbQHA=;
+        b=yWUERWb3HN5RS07LpLAzOJBjd4P9b6jvyMrjMHFK3nKwcgTP3rK53AfQOTMwIvhUlH
+         HRnTv0odk9zaw8ACrc+glhjQDOj0uoSDLhL5Qu021HGlkPyM8554WPC8nnqhKI1yDjps
+         gBPl3ja3J6Be7JPn1RgYe3VGFqd9FZpDmkCa49pJIyLuHqCFIZvaBfnrC7O8Hg5R0jhG
+         mQPlOyYoDPzHUEfYqK3jdJFWttdEXqzUvHX1ywpBmSkGqplYR7iPQSOvtOPRWE0JGemO
+         rsgRFq1TiUGhlkt8TQGQm1aUT1eXHPQsyu7HShhQ3qK6rkEKPkw8yR8v+c2Mutx01Szm
+         doJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4CHw5FRtPDUOv1NrpkJyQctZ8ejkK9MC1Qo92iGbQHA=;
+        b=eFlU4vzoIPTGxSsnRBfqDu6gNy4kZZtPJrTxGjB8h5B7TxJzMFgBHvTFKWcoW2MHWM
+         hKlexHjxRlMRl20iJvEpeFljBblMVz24cynceKTvQdw/k8nFTAH1RFZgHwocvwWzfU66
+         Q7Mljbd2/trcfLXIfb0motLRNc4oC+ckEab9oWyH+UeVNErikCQRBvoVy6ne/cWLTj/t
+         vWYvbYNxSAdMavxX7/S/zaJY7OEW58+C0xvNoS/d+dyLoWQfHyjZ2zOhOyCiaHC+siAT
+         bweMmhZIorLWSjLPt/5ukfz+/25akZlh9fcw9wYib4+ii/lbPsj8fX24VxQcVbCskE/s
+         cKqg==
+X-Gm-Message-State: AFqh2krsFQo+62T3D3B0iIM+kvY9Jo/o4jLayqg/5f4chsBHJoRtFqgR
+        w5kjvUAoYGH+hamzjvpOrMhBjw==
+X-Google-Smtp-Source: AMrXdXt8qdijhfpphBEQyqtUvrn7jPvTr9kTEBH4cPMC3TMxiu2AnOqGKjlaZxNaozv/f12gc+22cg==
+X-Received: by 2002:a05:6512:2591:b0:4b5:7dd6:4df0 with SMTP id bf17-20020a056512259100b004b57dd64df0mr12477210lfb.32.1672735108149;
+        Tue, 03 Jan 2023 00:38:28 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z9-20020a056512370900b004b55c1b5c66sm4727589lfr.157.2023.01.03.00.38.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 00:38:27 -0800 (PST)
+Message-ID: <7dc37079-c577-8eca-2c6b-8715f0a715a9@linaro.org>
+Date:   Tue, 3 Jan 2023 09:38:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219144252.f3da256e75e176905346b4d1@linux-foundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: reserved-memory: rmtfs: Document
+ qcom,assign-to-nav
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230102165034.830620-1-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230102165034.830620-1-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Sorry I was offline]
-
-On Mon 19-12-22 14:42:52, Andrew Morton wrote:
-> On Sat, 17 Dec 2022 10:57:06 +0100 Michal Hocko <mhocko@suse.com> wrote:
+On 02/01/2023 17:50, Konrad Dybcio wrote:
+> Some SoCs mandate that the RMTFS is also assigned to the NAV VM, while
+> others really don't want that. Since it has to be conditional, add a
+> bool property to toggle this behavior.
 > 
-> > > I think it's a bit premature to revert at this stage.  Possibly we can
-> > > get to the desired end state by modifying the existing code.  Possibly
-> > > we can get to the desired end state by reverting this and by adding
-> > > something new.
-> > 
-> > Sure if we can converge to a proper implementation during the rc phase
-> > then it would be ok. I cannot speak for others but at least for me
-> > upcoming 2 weeks would be mostly offline so I cannot really contribute
-> > much. A revert would be much more easier from the coordination POV IMHO.
-> > 
-> > Also I do not think there is any strong reason to rush this in. I do not
-> > really see any major problems to have this extension in 6.2
-> 
-> I'll queue the revert in mm-unstable with a plan to merge it upstream
-> around the -rc5 timeframe if there hasn't been resolution.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> v1 -> v2:
+> - Rewrite the newly added description
 
-Thanks! I do not really think we need to rush node based reclaim and
-better have a reasonable and more futureproof interface.
 
-> Please check Mina's issues with this revert's current changelog and
-> perhaps send along a revised one.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yes, I believe, I have addressed all the feedback but I am open to alter
-the wording of course. The biggest concern by Mina IIRC was that the
-nr_reclaimed reporting has been a pre-existing problem. And I agree with
-that. The thing is that this doesn't matter without node specification
-because the memory gets reclaimed even if the reported value is over
-accounted. With nodemask specification the value becomes bogus if no
-demotion nodes are specified because no memory gets reclaimed
-potentially while the success is still reported. Mina has tried to
-address that but I am not convinced the fix is actually future proof.
+Best regards,
+Krzysztof
 
-This really requires more discussion.
-
--- 
-Michal Hocko
-SUSE Labs
