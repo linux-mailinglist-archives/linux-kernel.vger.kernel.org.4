@@ -2,242 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7E565BC4B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA9065BC4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236992AbjACIeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S237044AbjACIe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236793AbjACIeL (ORCPT
+        with ESMTP id S233033AbjACIey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:34:11 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F05C775
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:34:10 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id l184so2397951vsc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D0LRzaF4/eAHl8TOiwxl4NBIKM++7t47+klDG5YxwLE=;
-        b=fnT59MiryMAYp0O8jmgcwbPbaobGE32AFR+KpPHkGFbsJ8FkMuDJsg/AFohviUbq9+
-         8TsUmScZMvFqdccMQI+A7HIiPyl4o+wyvBbAgxq2s37iJZRVNLPHjc4LMoAixKDnlEYA
-         2Qo8Z9uXG0lJiGQ1GEw10CcYpzcSRtSEBnbx8qJIjLYz46wTYIneUUHBCSCbSKdO9Cyx
-         /yzqXlLP+kdE0lF4/zfiYQxyHsPQ87APfo2vKxQJ3jSCGWzVjwkcIN6xlcVeokmCyPOc
-         JE3SvNH2+jiCaY1XiKiEDolPadoIkrz/LX7bW6rlL2SjptuAf5GJdvfkheFFLVibR/Xl
-         MPCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D0LRzaF4/eAHl8TOiwxl4NBIKM++7t47+klDG5YxwLE=;
-        b=fY4ccViiAR3QBvjTpNKBcOkEZWR5aqSJxCVtQr2Bfs8UGGP3xtszaieJLHBX3Plhp9
-         v59xj+LnrPoGiWglOIzNmQKwxxLom48QvC0PWLmw/kQozPsNi4BjeVI3dH5tph8Fv9uD
-         myXlSsFIhRySw93K9yoxbgPDwjj5M3IumYot2qMxvm03IiSIE9qtW2qp2UXTBUeyi/YW
-         qNuAbyB8JNCd27V0+oRVFeCqhiCmD9uLSBQ83VLPyQVKKcWgwaIKTEx5j5mronfGfZzp
-         oGuGzI6PslHjX96m4tOVphyAUohnE3TqjmHSxR47AZoL+teMFGPcjqpelMLjZokCPJvZ
-         4uTg==
-X-Gm-Message-State: AFqh2kp6oXGXJCCoCyVnHR+w+IstxIz7ESuUvwmvfiUhsMPjIPhSyMBs
-        eDgQW258Sfqw9kcqghqM7dRKG/1gJ4wK7Meapva6wA==
-X-Google-Smtp-Source: AMrXdXuciQboi6XVi++eNEEmorcFjhwmSXVig2GCgBHpcRFA34Dd6NWZp0egXm/aJE33u2Po7Mh+CoF5UHCKLKTcXzA=
-X-Received: by 2002:a67:ec94:0:b0:3b5:32d0:edcc with SMTP id
- h20-20020a67ec94000000b003b532d0edccmr4702598vsp.24.1672734848954; Tue, 03
- Jan 2023 00:34:08 -0800 (PST)
+        Tue, 3 Jan 2023 03:34:54 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7DA9596
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:34:51 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pCckn-0004ze-Ue; Tue, 03 Jan 2023 09:34:37 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Icenowy Zheng <uwu@icenowy.me>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>
+Subject: Re: [PATCH RESEND 1/2] riscv: errata: fix T-Head dcache.cva encoding
+Date:   Tue, 03 Jan 2023 09:34:37 +0100
+Message-ID: <2668919.mvXUDI8C0e@diego>
+In-Reply-To: <20230103062610.69704-1-uwu@icenowy.me>
+References: <20230103062610.69704-1-uwu@icenowy.me>
 MIME-Version: 1.0
-References: <20230102110552.061937047@linuxfoundation.org>
-In-Reply-To: <20230102110552.061937047@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 3 Jan 2023 14:03:57 +0530
-Message-ID: <CA+G9fYvEOcOrPROaDWXpuuyNFh1apk_-hiRZpZbFQJYXR4Hu4Q@mail.gmail.com>
-Subject: Re: [PATCH 6.0 00/74] 6.0.17-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2 Jan 2023 at 16:58, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.17 release.
-> There are 74 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 04 Jan 2023 11:05:34 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.0.17-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Am Dienstag, 3. Januar 2023, 07:26:09 CET schrieb Icenowy Zheng:
+> The dcache.cva encoding shown in the comments are wrong, it's for
+> dcache.cval1 (which is restricted to L1) instead.
+> 
+> Fix this in the comment and in the hardcoded instruction.
+> 
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> Tested-by: Sergey Matyukevich <sergey.matyukevich@syntacore.com>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Original was on
+https://lore.kernel.org/all/5894419.tdWV9SEqCh@phil/
 
-## Build
-* kernel: 6.0.17-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-6.0.y
-* git commit: 9c0ac88985a8f62726941213c92ff8eddf500f72
-* git describe: v6.0.16-75-g9c0ac88985a8
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.1=
-6-75-g9c0ac88985a8
+> ---
+> Included when resending:
+> - Sergey's Tested-by tag.
+> 
+>  arch/riscv/include/asm/errata_list.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+> index 4180312d2a70..605800bd390e 100644
+> --- a/arch/riscv/include/asm/errata_list.h
+> +++ b/arch/riscv/include/asm/errata_list.h
+> @@ -102,7 +102,7 @@ asm volatile(ALTERNATIVE(						\
+>   * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
+>   *   0000001    01001      rs1       000      00000  0001011
+>   * dcache.cva rs1 (clean, virtual address)
+> - *   0000001    00100      rs1       000      00000  0001011
+> + *   0000001    00101      rs1       000      00000  0001011
+>   *
+>   * dcache.cipa rs1 (clean then invalidate, physical address)
+>   * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
+> @@ -115,7 +115,7 @@ asm volatile(ALTERNATIVE(						\
+>   *   0000000    11001     00000      000      00000  0001011
+>   */
+>  #define THEAD_inval_A0	".long 0x0265000b"
+> -#define THEAD_clean_A0	".long 0x0245000b"
+> +#define THEAD_clean_A0	".long 0x0255000b"
+>  #define THEAD_flush_A0	".long 0x0275000b"
+>  #define THEAD_SYNC_S	".long 0x0190000b"
+>  
+> 
 
-## Test Regressions (compared to v6.0.15-1067-gf54b936f8ec7)
 
-## Metric Regressions (compared to v6.0.15-1067-gf54b936f8ec7)
 
-## Test Fixes (compared to v6.0.15-1067-gf54b936f8ec7)
 
-## Metric Fixes (compared to v6.0.15-1067-gf54b936f8ec7)
-
-## Test result summary
-total: 143234, pass: 127347, fail: 2737, skip: 12854, xfail: 296
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 146 passed, 5 failed
-* arm64: 49 total, 49 passed, 0 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 32 passed, 6 failed
-* riscv: 16 total, 16 passed, 0 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 41 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
