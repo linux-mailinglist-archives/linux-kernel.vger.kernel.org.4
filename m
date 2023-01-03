@@ -2,139 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0397A65B9E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 04:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AD865B9E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 04:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236674AbjACD4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 22:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S230050AbjACD5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 22:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjACD4L (ORCPT
+        with ESMTP id S236687AbjACD5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 22:56:11 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBFD105;
-        Mon,  2 Jan 2023 19:56:08 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 6956041DF4;
-        Tue,  3 Jan 2023 03:56:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1672718166; bh=0co2iDbnvPtc0hBv0PZI8JkI2F1BtjH5BwsUTUdoWwo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=F/gg5uQz2GRvyTw8JUQ9eD8pT3T7lNap/jZ4jF+9I3v6rKQc8R5NaIqQQRZQHwhwC
-         q2D21Wp9zpgw3YcmU2QA08cc1Qe9auVnTvF97uOoKszA/jeZzPhFz1jU6ijnfy7Hec
-         W5PIKQNBb48WwH1mCKTNLG/MB4PZOZZC2AsPgqDbqKWGpJUPcCgzTx2DB9kzj/lhK9
-         teAKQRabAaukXjSs+bNMcqYiJIB4o31ZfflLmRJqxORwdtrk0mChMtSYFo4nwUEbUw
-         SIgEbbp5nc3UouzEKNk2LtZK/PSP81XlY0rLBtkUUFYVln4ZTer4p1siGsRuCkzCQ+
-         8Hkpn2mrtpOaw==
-Message-ID: <3785835b-164b-28d1-6905-85454cabb69d@marcan.st>
-Date:   Tue, 3 Jan 2023 12:55:59 +0900
+        Mon, 2 Jan 2023 22:57:09 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07FAF28
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 19:57:06 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-14fb3809eaeso29620413fac.1
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 19:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bWVeQQpdd/jLPKPydMjlUMpExApWVFcNiP/MSHvrGpg=;
+        b=BaCgF7PC9rILICMUIct+fv8mdyG/o76D6FnY05KGtn8aV9H9avuC2xyBgPv+h55dfz
+         hUSbbGhuzPJTX51C0M/srLlm5P44nbXFIVLctYm0AK76kqq1S9bHAnrYOkpHov+wUyN3
+         +0Rk5+Sb2EcMfYMjpUO2Dj+50snq0VG50r8JjR3jkJQie22g5s8L6vzcVfbT5kktFZQ8
+         UtlwHAV9hwBrN1un/6HssmeLceA23e6UnxqR4awR/SGyAY9sg5CELREHeQDcx2lOYrmN
+         LC6mTeOF5lXbAH4qm7QzPCipBt/AZfYaT4xP0SRI883IP8rZR4pfLUNAUYDa/pHeE9e8
+         TjnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bWVeQQpdd/jLPKPydMjlUMpExApWVFcNiP/MSHvrGpg=;
+        b=Yp0kqi/fp8hTrFH1GZ9hMvYDf+MYFg/IIffsbVcbuKiTs5mxG4cnW3+iL0OJL5yYV3
+         yTrFpyZk6Ig3hgEV72KRxnc85dlcTWcdZ0kmwkg4qshLGSoDQJHRn/a73bQw9y0/YBxk
+         Es1Gv1EHv1TmIcVB1MRzmypOGgrU78jvQJB+srn/dmgjTzOxE0R3f8kCsoV51D9JJrZo
+         ih1eYqPRrc8LtPc+fxhXRznA8yQO4IyU525mFYMI2+t/+gJgVpNfFs2wubhLEKA9hogC
+         NjqEpG+TO7aW7g37eDq9JXXjD7Pmfs/6XdYQi2z2+ZlupBwesKfDgCxsd/OWKQV+H3/O
+         ZRTA==
+X-Gm-Message-State: AFqh2krUoTkQGk1LZaG0XMw3LTf9MsVLfaUA/hIYKbM0EcguPRMyC40r
+        IbkNrK5EPefNnQbKSWa4FdJiQiQQfw4=
+X-Google-Smtp-Source: AMrXdXvHZbBKlts29WlnYcd2ogt4i6LCsjDZzB4C105wWcUln7Ut5YV44aPQtggHlCfclXuFDjs4Lg==
+X-Received: by 2002:a05:6870:d0c7:b0:150:9356:1d12 with SMTP id k7-20020a056870d0c700b0015093561d12mr5336085oaa.1.1672718226208;
+        Mon, 02 Jan 2023 19:57:06 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t8-20020a4aadc8000000b004d7363cdddfsm8012771oon.19.2023.01.02.19.57.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 19:57:05 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 2 Jan 2023 19:57:04 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: Linux 6.2-rc2
+Message-ID: <20230103035704.GA1207672@roeck-us.net>
+References: <CAHk-=wim8DMRzjyYTJ3UbdqZ26keQyZSU02NZb-JY1=9OpcO1w@mail.gmail.com>
+ <20230102225656.GA3532398@roeck-us.net>
+ <CAHk-=wjZPPscjDhsHQw_ttHOaQS69rADLm0KuRhbNavBiO62OQ@mail.gmail.com>
+ <20230103014535.GA313835@roeck-us.net>
+ <CAHk-=whmeBkyu3iS_s-yk0=t3GEoW3sQb-wJFHKykOjG=iQVFw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] brcmfmac: Use separate struct to declare firmware
- names for Apple OTP chips
-Content-Language: en-US
-To:     Arend Van Spriel <arend.vanspriel@broadcom.com>,
-        Aditya Garg <gargaditya08@live.com>, aspriel@gmail.com,
-        hante.meuleman@broadcom.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        lina@asahilina.net, franky.lin@broadcom.com
-Cc:     Orlando Chamberlain <redecorating@protonmail.com>,
-        brcm80211-dev-list@broadcom.com,
-        brcm80211-dev-list.pdl@broadcom.com,
-        linux-wireless@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Asahi Linux <asahi@lists.linux.dev>
-References: <F8829A7C-909E-4A1F-A22C-668220C5C06D@live.com>
- <f36dd8e3-9905-f04a-ed34-4be91ed1fec6@marcan.st>
- <F9EFCCD1-4407-42CC-8316-2F58AAC1AE7F@live.com>
- <ACC0D1F6-7857-4FF0-A474-4EC699572E1B@live.com>
- <9c5bdb0a-0877-ed16-f09f-164a9dab16d4@marcan.st>
- <18573bd1a38.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <18573bd1a38.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whmeBkyu3iS_s-yk0=t3GEoW3sQb-wJFHKykOjG=iQVFw@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/01/03 3:27, Arend Van Spriel wrote:
-> On January 2, 2023 4:15:41 PM Hector Martin <marcan@marcan.st> wrote:
+On Mon, Jan 02, 2023 at 06:13:09PM -0800, Linus Torvalds wrote:
+> On Mon, Jan 2, 2023 at 5:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > ... and reverting commit 99cb0d917ff indeed fixes the problem.
 > 
->> On 02/01/2023 23.40, Aditya Garg wrote:
->>> From: Aditya Garg <gargaditya08@live.com>
->>>
->>> Commit 'dce45ded7619' added support for 89459 chip pcie device. It uses the
->>> BRCM4355 chip which is also found in Apple hardware. However this commit
->>> causes conflicts in the firmware naming between Apple hardware, which
->>> supports OTP and other non-Apple hardwares. So, this patch makes these
->>> Apple chips use their own firmware table so as to avoid possible conflicts
->>> like these in the future.
->>
->> I think my reply to Arend flew over your head.
->>
->> My point was that I'd rather have the Broadcom/Cypress people actually
->> answer my question so we can figure out how to do this *properly*,
->> instead of doing "safer-but-dumb" things (like this patch) because we
->> just don't have the information to do it properly.
+> Hmm. My gut feel is that this just exposes some bug in binutils.
 > 
-> Fair enough. Can you accurately (re)state your question and I will try to 
-> answer it.
+May well be, but it would be an architecture specific bug. The problem
+is not seen when building an x86 image with binutils 2.32. Of course it
+might affect other architectures.
 
-As per my original email: Is the CYW89459 just a rebrand of the BCM4355,
-or just a subset? Can we consider them equivalent, and equivalent to the
-Apple part (BCM4355C1 / revision 12)?
+> That said, maybe that commit should not have added its own /DISCARDS/
+> thing, and instead just added that "*(.note.GNU-stack)" to the general
+> /DISCARDS/ thing that is defined by the
+> 
+>   #define DISCARDS  ..
+> 
+> a little bit later, so that we only end up with one single DISCARD
+> list. Something like this (broken patch on purpose):
+> 
+>   --- a/include/asm-generic/vmlinux.lds.h
+>   +++ b/include/asm-generic/vmlinux.lds.h
+>   @@ -897,5 +897,4 @@
+>     */
+>    #define NOTES                                        \
+>   -     /DISCARD/ : { *(.note.GNU-stack) }              \
+>         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {       \
+>                 BOUNDED_SECTION_BY(.note.*, _notes)     \
+>   @@ -1016,4 +1015,5 @@
+>    #define DISCARDS                                     \
+>         /DISCARD/ : {                                   \
+>   +     *(.note.GNU-stack)                              \
+>         EXIT_DISCARDS                                   \
+>         EXIT_CALL                                       \
+> 
 
-More specifically:
-- What BCM4355 variants exist in the wild, and what are their PCI device
-IDs and revision IDs?
-- Is a single firmware nominally intended to be compatible with all of
-those variants? Does that include the CYW89459 branded parts?
-- If CYW89459 is a rebrand of BCM4355, is it complete, or are there
-still chips being sold as BCM4355?
+I don't know if and how it affects arm64 and riscv, but the above fixes
+the problem for sh.
 
-Even more specifically, bcmdhd has these device IDs:
+> But maybe that DISCARDS macrop ends up being used too late?
+> 
 
-#define BCM4355_D11AC_ID    0x43dc  /* 4355 802.11ac dualband device */
-#define BCM4355_D11AC2G_ID  0x43fc  /* 4355 802.11ac 2.4G device */
-#define BCM4355_D11AC5G_ID  0x43fd  /* 4355 802.11ac 5G device */
+DISCARDS is the very first entry in SECTIONS. NOTES is part of RO_DATA
+and comes much later.
 
-But the patch I'm replying to uses PCI ID 0x4355, which instead should be:
+> It really shouldn't matter, but here we are, with a build problem with
+> some random old binutils on an odd platform..
 
-#define BCM43237_D11N_ID    0x4355  /* 43237 802.11n dualband device */
-#define BCM43237_D11N5G_ID  0x4356  /* 43237 802.11n 5GHz device */
+The one we know of. I could try to compile all architectures with
+binutils 2.32, but I don't really want to do that if I can avoid it.
 
-So what's up with the BCM43237? Is that a 4355 variant? Is this what got
-rebranded as CYW89459? Is it firmware-compatible with the others?
-
-<rant>
-
-I'm going to be honest here: I'm quite saddened by the state of brcmfmac
-and Broadcom's neglect of this driver. Other than the Apple OTP /
-firmware selection shenanigans, everything else I'm having to implement
-to support Apple machines are features that Broadcom's downstream bcmdhd
-driver *already* supports on non-Apple machines, not Apple-specific. Not
-only that, people are asking for modern WiFi features like newer crypto
-modes that bcmdhd supports but brcmfmac doesn't. It seems clear that
-Broadcom isn't interested in maintaining this driver and updating it to
-support newer chips and features. So I'm basically doing your job for
-you all. Which is fine, but if I'm going to be in charge of implementing
-all this stuff for you, *please* help me by at least clarifying the
-device variant / firmware feature related issues, because getting that
-wrong will cause regressions or firmware naming scheme breaks down the
-line, and that sucks for users.
-
-</rant>
-
-- Hector
+Guenter
