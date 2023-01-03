@@ -2,280 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1036965B8D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 02:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A44A065B8F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 02:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbjACBal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 20:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        id S233074AbjACBoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 20:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjACBai (ORCPT
+        with ESMTP id S230486AbjACBoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 20:30:38 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86DCCF4;
-        Mon,  2 Jan 2023 17:30:36 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NmFY31stQz4f3v4p;
-        Tue,  3 Jan 2023 09:30:31 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP3 (Coremail) with SMTP id _Ch0CgA3MR84hbNjzHakAw--.49033S2;
-        Tue, 03 Jan 2023 09:30:33 +0800 (CST)
-From:   Pu Lehui <pulehui@huaweicloud.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next] bpf, x86: Simplify the parsing logic of structure parameters
-Date:   Tue,  3 Jan 2023 09:31:58 +0800
-Message-Id: <20230103013158.1945869-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 2 Jan 2023 20:44:16 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B489C627F;
+        Mon,  2 Jan 2023 17:44:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672710255; x=1704246255;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=kIuNdU/0BTpRBUyYlNa5j3GUvL63FAbv1n39zRBT40o=;
+  b=bQJP3fqSOKbx7aiPvOdVujVKhkkpfgO0rX6OMY/pB+Rg8+oOSoc+zoE3
+   3UW1DCJMBdFxQ0XPfZXhdpna+YPpDN8uylotIK5eIZ4oTOidOFpGvE9Uc
+   NlzaKSWt1/HxzRCxgaRaLIa5IyuGckiJHbJPsV/BInoGW+IT29cA6xcWr
+   /YvnY14++Qh/vir1z6JwzBj72yvlcLcwvHwmEOYx0Ub2L4hGzJbL/D5CA
+   KkQDAr5ulmG87HqiuxCRPNIwFFCPoWBeYJXI/+LOD6IxMIIM1WIif4tw6
+   yPFl/iTC+td9ChegbGzp65eYOttN+O9imJzkjryRxM1TT6CzKOPGlNdh0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="407822398"
+X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
+   d="scan'208";a="407822398"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 17:44:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="828701041"
+X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
+   d="scan'208";a="828701041"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga005.jf.intel.com with ESMTP; 02 Jan 2023 17:44:01 -0800
+Date:   Tue, 3 Jan 2023 09:39:48 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Chenyi Qiang <chenyi.qiang@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+Message-ID: <20230103013948.GA2178318@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+ <1c9bbaa5-eea3-351e-d6a0-cfbc32115c82@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgA3MR84hbNjzHakAw--.49033S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3JF1xCFWxZw4xWF1xWrW8Xrb_yoWxAw45pa
-        nxu3WSyF4kXrsrWrZ7Xw4kXF1ayaykX347CFWrCa4fCrs8Jr95J3WrKFyFyrWYkryvyF4a
-        9rn0vr95Ar1fJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UdHUDUUUUU=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1c9bbaa5-eea3-351e-d6a0-cfbc32115c82@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+On Wed, Dec 28, 2022 at 04:28:01PM +0800, Chenyi Qiang wrote:
+...
+> > +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> > +					   struct kvm_memory_attributes *attrs)
+> > +{
+> > +	gfn_t start, end;
+> > +	unsigned long i;
+> > +	void *entry;
+> > +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
+> > +
+> > +	/* flags is currently not used. */
+> > +	if (attrs->flags)
+> > +		return -EINVAL;
+> > +	if (attrs->attributes & ~supported_attrs)
+> > +		return -EINVAL;
+> > +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> > +		return -EINVAL;
+> > +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> > +		return -EINVAL;
+> > +
+> > +	start = attrs->address >> PAGE_SHIFT;
+> > +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
+> > +
+> > +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
+> > +
+> 
+> Because guest memory defaults to private, and now this patch stores the
+> attributes with KVM_MEMORY_ATTRIBUTE_PRIVATE instead of _SHARED, it
+> would bring more KVM_EXIT_MEMORY_FAULT exits at the beginning of boot
+> time. Maybe it can be optimized somehow in other places? e.g. set mem
+> attr in advance.
 
-Extra_nregs of structure parameters and nr_args can be
-added directly at the beginning, and using a flip flag
-to identifiy structure parameters. Meantime, renaming
-some variables to make them more sense.
+KVM defaults to 'shared' because this ioctl can also be potentially used
+by normal VMs and 'shared' sounds a value meaningful for both normal VMs
+and confidential VMs. As for more KVM_EXIT_MEMORY_FAULT exits during the
+booting time, yes, setting all memory to 'private' for confidential VMs
+through this ioctl in userspace before guest launch is an approach for
+KVM userspace to 'override' the KVM default and reduce the number of
+implicit conversions.
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- arch/x86/net/bpf_jit_comp.c | 99 +++++++++++++++++--------------------
- 1 file changed, 46 insertions(+), 53 deletions(-)
-
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index e3e2b57e4e13..e7b72299f5a4 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1839,62 +1839,57 @@ st:			if (is_imm8(insn->off))
- 	return proglen;
- }
- 
--static void save_regs(const struct btf_func_model *m, u8 **prog, int nr_args,
-+static void save_regs(const struct btf_func_model *m, u8 **prog, int nr_regs,
- 		      int stack_size)
- {
--	int i, j, arg_size, nr_regs;
-+	int i, j, arg_size;
-+	bool is_struct = false;
-+
- 	/* Store function arguments to stack.
- 	 * For a function that accepts two pointers the sequence will be:
- 	 * mov QWORD PTR [rbp-0x10],rdi
- 	 * mov QWORD PTR [rbp-0x8],rsi
- 	 */
--	for (i = 0, j = 0; i < min(nr_args, 6); i++) {
--		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG) {
--			nr_regs = (m->arg_size[i] + 7) / 8;
-+	for (i = 0, j = 0; i < min(nr_regs, 6); i++) {
-+		arg_size = m->arg_size[j];
-+		if (arg_size > 8) {
- 			arg_size = 8;
--		} else {
--			nr_regs = 1;
--			arg_size = m->arg_size[i];
-+			is_struct ^= 1;
- 		}
- 
--		while (nr_regs) {
--			emit_stx(prog, bytes_to_bpf_size(arg_size),
--				 BPF_REG_FP,
--				 j == 5 ? X86_REG_R9 : BPF_REG_1 + j,
--				 -(stack_size - j * 8));
--			nr_regs--;
--			j++;
--		}
-+		emit_stx(prog, bytes_to_bpf_size(arg_size),
-+			 BPF_REG_FP,
-+			 i == 5 ? X86_REG_R9 : BPF_REG_1 + i,
-+			 -(stack_size - i * 8));
-+
-+		j = is_struct ? j : j + 1;
- 	}
- }
- 
--static void restore_regs(const struct btf_func_model *m, u8 **prog, int nr_args,
-+static void restore_regs(const struct btf_func_model *m, u8 **prog, int nr_regs,
- 			 int stack_size)
- {
--	int i, j, arg_size, nr_regs;
-+	int i, j, arg_size;
-+	bool is_struct = false;
- 
- 	/* Restore function arguments from stack.
- 	 * For a function that accepts two pointers the sequence will be:
- 	 * EMIT4(0x48, 0x8B, 0x7D, 0xF0); mov rdi,QWORD PTR [rbp-0x10]
- 	 * EMIT4(0x48, 0x8B, 0x75, 0xF8); mov rsi,QWORD PTR [rbp-0x8]
- 	 */
--	for (i = 0, j = 0; i < min(nr_args, 6); i++) {
--		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG) {
--			nr_regs = (m->arg_size[i] + 7) / 8;
-+	for (i = 0, j = 0; i < min(nr_regs, 6); i++) {
-+		arg_size = m->arg_size[j];
-+		if (arg_size > 8) {
- 			arg_size = 8;
--		} else {
--			nr_regs = 1;
--			arg_size = m->arg_size[i];
-+			is_struct ^= 1;
- 		}
- 
--		while (nr_regs) {
--			emit_ldx(prog, bytes_to_bpf_size(arg_size),
--				 j == 5 ? X86_REG_R9 : BPF_REG_1 + j,
--				 BPF_REG_FP,
--				 -(stack_size - j * 8));
--			nr_regs--;
--			j++;
--		}
-+		emit_ldx(prog, bytes_to_bpf_size(arg_size),
-+			 i == 5 ? X86_REG_R9 : BPF_REG_1 + i,
-+			 BPF_REG_FP,
-+			 -(stack_size - i * 8));
-+
-+		j = is_struct ? j : j + 1;
- 	}
- }
- 
-@@ -2120,8 +2115,8 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 				struct bpf_tramp_links *tlinks,
- 				void *func_addr)
- {
--	int ret, i, nr_args = m->nr_args, extra_nregs = 0;
--	int regs_off, ip_off, args_off, stack_size = nr_args * 8, run_ctx_off;
-+	int i, ret, nr_regs = m->nr_args, stack_size = 0;
-+	int regs_off, nregs_off, ip_off, run_ctx_off;
- 	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
- 	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
- 	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-@@ -2130,17 +2125,14 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	u8 *prog;
- 	bool save_ret;
- 
--	/* x86-64 supports up to 6 arguments. 7+ can be added in the future */
--	if (nr_args > 6)
--		return -ENOTSUPP;
--
--	for (i = 0; i < MAX_BPF_FUNC_ARGS; i++) {
-+	/* extra registers for struct arguments */
-+	for (i = 0; i < m->nr_args; i++)
- 		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
--			extra_nregs += (m->arg_size[i] + 7) / 8 - 1;
--	}
--	if (nr_args + extra_nregs > 6)
-+			nr_regs += (m->arg_size[i] + 7) / 8 - 1;
-+
-+	/* x86-64 supports up to 6 arguments. 7+ can be added in the future */
-+	if (nr_regs > 6)
- 		return -ENOTSUPP;
--	stack_size += extra_nregs * 8;
- 
- 	/* Generated trampoline stack layout:
- 	 *
-@@ -2154,7 +2146,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	 *                 [ ...             ]
- 	 * RBP - regs_off  [ reg_arg1        ]  program's ctx pointer
- 	 *
--	 * RBP - args_off  [ arg regs count  ]  always
-+	 * RBP - nregs_off [ regs count	     ]  always
- 	 *
- 	 * RBP - ip_off    [ traced function ]  BPF_TRAMP_F_IP_ARG flag
- 	 *
-@@ -2166,11 +2158,12 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	if (save_ret)
- 		stack_size += 8;
- 
-+	stack_size += nr_regs * 8;
- 	regs_off = stack_size;
- 
--	/* args count  */
-+	/* regs count  */
- 	stack_size += 8;
--	args_off = stack_size;
-+	nregs_off = stack_size;
- 
- 	if (flags & BPF_TRAMP_F_IP_ARG)
- 		stack_size += 8; /* room for IP address argument */
-@@ -2198,11 +2191,11 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	EMIT1(0x53);		 /* push rbx */
- 
- 	/* Store number of argument registers of the traced function:
--	 *   mov rax, nr_args + extra_nregs
--	 *   mov QWORD PTR [rbp - args_off], rax
-+	 *   mov rax, nr_regs
-+	 *   mov QWORD PTR [rbp - nregs_off], rax
- 	 */
--	emit_mov_imm64(&prog, BPF_REG_0, 0, (u32) nr_args + extra_nregs);
--	emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -args_off);
-+	emit_mov_imm64(&prog, BPF_REG_0, 0, (u32) nr_regs);
-+	emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -nregs_off);
- 
- 	if (flags & BPF_TRAMP_F_IP_ARG) {
- 		/* Store IP address of the traced function:
-@@ -2213,7 +2206,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -ip_off);
- 	}
- 
--	save_regs(m, &prog, nr_args, regs_off);
-+	save_regs(m, &prog, nr_regs, regs_off);
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
- 		/* arg1: mov rdi, im */
-@@ -2243,7 +2236,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	}
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		restore_regs(m, &prog, nr_args, regs_off);
-+		restore_regs(m, &prog, nr_regs, regs_off);
- 
- 		if (flags & BPF_TRAMP_F_ORIG_STACK) {
- 			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
-@@ -2284,7 +2277,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 		}
- 
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
--		restore_regs(m, &prog, nr_args, regs_off);
-+		restore_regs(m, &prog, nr_regs, regs_off);
- 
- 	/* This needs to be done regardless. If there were fmod_ret programs,
- 	 * the return value is only updated on the stack and still needs to be
--- 
-2.25.1
-
+Thanks,
+Chao
+> 
+> > +	mutex_lock(&kvm->lock);
+> > +	for (i = start; i < end; i++)
+> > +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
+> > +				    GFP_KERNEL_ACCOUNT)))
+> > +			break;
+> > +	mutex_unlock(&kvm->lock);
+> > +
+> > +	attrs->address = i << PAGE_SHIFT;
+> > +	attrs->size = (end - i) << PAGE_SHIFT;
+> > +
+> > +	return 0;
+> > +}
+> > +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+> > +
+> >  struct kvm_memory_slot *gfn_to_memslot(struct kvm *kvm, gfn_t gfn)
+> >  {
+> >  	return __gfn_to_memslot(kvm_memslots(kvm), gfn);
