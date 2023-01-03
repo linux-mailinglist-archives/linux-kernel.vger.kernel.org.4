@@ -2,121 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E79465CA7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 293EC65CA86
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 00:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjACXqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 18:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
+        id S238143AbjACXrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 18:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjACXq0 (ORCPT
+        with ESMTP id S237815AbjACXq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 18:46:26 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CE1393
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 15:46:25 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d9so17536336pll.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 15:46:25 -0800 (PST)
+        Tue, 3 Jan 2023 18:46:59 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBDD1004E;
+        Tue,  3 Jan 2023 15:46:58 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id u19so78606786ejm.8;
+        Tue, 03 Jan 2023 15:46:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=euRwx6QF/OV6RpXiKr7BIdAc00ukRSAUiOkpbL7iCKU=;
-        b=XjKNtQpNLJ8aqo7xjHoll4+DdwZrxKRZXlYp6JqqXGXYzu6avm3dJLbOsMQuy89EdG
-         OIWBFWbEMo8JNz8qp4S5dPsIzqCFDBkzKAK65Fd3iUKktYjLfZgxonKbHUMSqauJ6Kyx
-         kSt3wX07D1moGHhO+wh5Wh7DHypEKw3VjuYS0=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3oSb7JXJVS/6HsFecUnGwQqOOB9BR+/FVmXe6sUvBjE=;
+        b=gTbDgWlCH4NUcCEHgth2YTnVqtz4s4PKz+5t3gYtxN5MZc/LvN+nJoGJJTISFRSwrs
+         w7pwymo+rn2BVMZudW2Xk6ZRv9sxlcO321RroJPRpATfUSEdl99e2+eBB6dFfFWEqyRr
+         KHR4OANaK7QgwTNcrf6CpPboBwZ+H3m74npjgBNekhmRjZBp5BDdZTG28bEyZEKLe1aj
+         LN0OAKAxx+3FOh4o6EhTjiNSXUmxihBDxy+xbXN2esrqPr8F88hN8W/l+k1QT4wDHM0C
+         ZU3GvFfRsG3VaXyuhXEpYQVBw0ikmucnv4PLXcvg0Gabb1PjMBYaokh3LO1pb323WZ+9
+         Z/AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=euRwx6QF/OV6RpXiKr7BIdAc00ukRSAUiOkpbL7iCKU=;
-        b=WgWoUAH03MaeeyFG1fWWl6puGNk7O4qlNIOx/zfT0TWFgi+tluXzY+Wl3jJ8K3VPj8
-         A0sjcNift34lbkeFa7jof9HHU6l7Q6KW0dJl5v79+ADInOq8V70uoDNO45YHXQemBF1f
-         cAHLTGzYcYiVbRWOJmb2pcBFlCuntaP7Q0h009RtpWSqfnQ7j0YNP/Txg4QbMG+/4d2k
-         5z4yOYcy+QRYZh+dndez6/V5cE64sENypHMfza3OcVrpKPVNiwyEqpkYRbTQOi620vAV
-         h93plsqCgNz0igB4XkD+8BP2BFbkMBClO68xCU9AN4GgXYIEg26NV9OUnSge9qPjMIMT
-         Jj1w==
-X-Gm-Message-State: AFqh2kqKLYuWkfI2AxF+Fb+AEr7rkzVmaM/fPlq6mJnvfkiL21Sicz+a
-        5yP2DQlBLUjFb8whmlybpmKqEw==
-X-Google-Smtp-Source: AMrXdXv/JNePduRY0txUDdRCt5JhRSIR6DrhMpv75pkJ3d4K/8KqbSdJC4O5iyMFwg38vN8/tHD1Kg==
-X-Received: by 2002:a05:6a20:bf19:b0:af:dc62:8abd with SMTP id gc25-20020a056a20bf1900b000afdc628abdmr50713685pzb.0.1672789584914;
-        Tue, 03 Jan 2023 15:46:24 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a23-20020aa794b7000000b00582729b7032sm4793752pfl.97.2023.01.03.15.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 15:46:24 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     tytso@mit.edu
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] ext4: Fix function prototype mismatch for ext4_feat_ktype
-Date:   Tue,  3 Jan 2023 15:46:20 -0800
-Message-Id: <20230103234616.never.915-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        bh=3oSb7JXJVS/6HsFecUnGwQqOOB9BR+/FVmXe6sUvBjE=;
+        b=57Q2UmTxvpuubDmxLNSh0wrvy9lWbT4yeOo87y3wZeDu/ld/x12HF5MFq5b4bJVCkf
+         MJtxCR3EWQZ5IV9rrdNmYDNqVTQn/LKcE0X296WayEKMAcCDqYdPjpdnxyKIKlcAMAGU
+         ecbhnMCAv0OfJQE0eDvC+aftYCDeuQUNnX5hUwGMgEQJfZ0VgXgFOBVdNq5JU4LgQvVS
+         rhFKioxrHMj6tIzyR/5XuzhpFeek23i270FXQhvh2Zo8MNKje9mUSMUBPr0AQZJq53BK
+         hlUzLc9GzS6XDNQtWUHOsiMDmd2+svcbVz6TjJjpa9OaUMug5d0hMRMJBykEgcOXZGTa
+         sSJg==
+X-Gm-Message-State: AFqh2kow8FDFah/O7bEibL4MExqnBpXI8ZZO/Z0+Hijqzve8o0cjnCXI
+        A6YP5tEibEKT2dUQ+6vWLV0T4ygYOLsXsxDojrM=
+X-Google-Smtp-Source: AMrXdXuhifcsN+8XoM8iEoIb5YJM9m8QkCS0hSkZA7F88v0P+GOkciVAILvtt3gP0l/69vPr+tvVBoIzvy8akGQX88U=
+X-Received: by 2002:a17:906:f43:b0:84c:95c7:304d with SMTP id
+ h3-20020a1709060f4300b0084c95c7304dmr2153565ejj.545.1672789616772; Tue, 03
+ Jan 2023 15:46:56 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1630; h=from:subject:message-id; bh=EPPA4fAFZuWB5pdzvby7FTtYsOyM2XQPaphR85N5tMQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjtL5MF54NCvmDQY0Dd7rNnLX1L0GvWxEKudKalV75 pS6Nr92JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7S+TAAKCRCJcvTf3G3AJjndD/ 47MN61Dsc0UtJKECZp7gwKoY73Pw3qTWJzGhEO8zpglulKrzEkZeTmPqhCIiQ7U8fC9E6hyPMOvGkR JL3zryAjWLo9eGZSahA3Hd7tbnnwYZ/ZF2iKqEhnkRF/dnXpC5Pa1QozMpdidQ6rZO5/v9dnLQDW0w Xi98Dw0EjbPMvKQnM7L+uJoYyyiI7kBjsYAePwWSerOGNflmjK7jj+RLCAZgdRUMgPdvSSm/BCLYqg kDeTUx8FPOHowELmcRgHBexBBzvFKb65KXlUBj4hndW/bMUjLR2s9VTm09L3DeILJrL9iH6sNLRyjL ADKZtflw7g7rUxaQX3RIK5ML2pcj/272P3g/5uNtCyBkOkNgKWsAqedOsIP4goqWAI0QCMsKY3RIm2 7du4nSWz7sQdkpIIVqNJfHoKbtKKrkjwN552ikIhXKWsDOsjDzFzi0VbHikZiWupfdcX3Yl8JIeKvW BpVAP83s1pbJS54o4CwGMT+1M/K0iX1xNpYhaieiJfX6qePvsAdYLNmi2KmdDrPVNmDv7Lp8tCudP8 NKdrr8dUolvQoy3K9oBsuxGUcStGfPSaiMfyIhuAuGaPJbXjLMpTjkygqQBdEmRgYh3HSnPqeLNyQi EeXk5XyMYgH2WqJLhtBB1KTJuOLGoSuBDmmUvEPBF5znyJD3023rRY+4SY8w==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221217223509.88254-1-changbin.du@gmail.com> <20221217223509.88254-2-changbin.du@gmail.com>
+ <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan> <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
+ <Y6GdofET0gHQzRX6@leoy-yangtze.lan> <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
+ <ea02357d-c5c7-aeff-e045-d639315d87e9@isovalent.com>
+In-Reply-To: <ea02357d-c5c7-aeff-e045-d639315d87e9@isovalent.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 3 Jan 2023 15:46:44 -0800
+Message-ID: <CAEf4BzZMJGrRhNeQeWB0fRsuRYUv01aZGhvDeFV2o5zdpRbR-w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF" section
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Leo Yan <leo.yan@linaro.org>, Changbin Du <changbin.du@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed.
+On Tue, Jan 3, 2023 at 7:03 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>
+> 2022-12-20 16:13 UTC-0800 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> > On Tue, Dec 20, 2022 at 3:34 AM Leo Yan <leo.yan@linaro.org> wrote:
+> >>
+> >> On Tue, Dec 20, 2022 at 09:31:14AM +0800, Changbin Du wrote:
+> >>
+> >> [...]
+> >>
+> >>>>> Now will print below info:
+> >>>>> libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux
+> >>>>
+> >>>> Recently I encountered the same issue, it could be caused by:
+> >>>> either missing to install tool pahole or missing to enable kernel
+> >>>> configuration CONFIG_DEBUG_INFO_BTF.
+> >>>>
+> >>>> Could we give explict info for reasoning failure?  Like:
+> >>>>
+> >>>> "libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux,
+> >>>> please install pahole and enable CONFIG_DEBUG_INFO_BTF=y for kernel building".
+> >>>>
+> >>> This is vmlinux special information and similar tips are removed from
+> >>> patch V2. libbpf is common for all ELFs.
+> >>
+> >> Okay, I see.  Sorry for noise.
+> >>
+> >>>>> Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
+> >>>>
+> >>>> This log is confusing when we can find vmlinux file but without BTF
+> >>>> section.  Consider to use a separate patch to detect vmlinux not
+> >>>> found case and print out "No such file or directory"?
+> >>>>
+> >>> I think it's already there. If the file doesn't exist, open will fail.
+> >>
+> >> [...]
+> >>
+> >>>>> @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+> >>>>>   err = 0;
+> >>>>>
+> >>>>>   if (!btf_data) {
+> >>>>> +         pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
+> >>>>>           err = -ENOENT;
+> >>
+> >> btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
+> >> section, therefore, bpftool dumps error string "No such file or
+> >> directory".  It's confused that actually vmlinux is existed.
+> >>
+> >> I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
+> >> better choice?) to replace -ENOENT at here, this can avoid bpftool to
+> >> outputs "No such file or directory" in this case.
+> >
+> > The only really meaningful error code would be -ESRCH, which
+> > strerror() will translate to "No such process", which is also
+> > completely confusing.
+> >
+> > In general, I always found these strerror() messages extremely
+> > unhelpful and confusing. I wonder if we should make an effort to
+> > actually emit symbolic names of errors instead (literally, "-ENOENT"
+> > in this case). This is all tooling for engineers, I find -ENOENT or
+> > -ESRCH much more meaningful as an error message, compared to "No such
+> > file" seemingly human-readable interpretation.
+> >
+> > Quenting, what do you think about the above proposal for bpftool? We
+> > can have some libbpf helper internally and do it in libbpf error
+> > messages as well and just reuse the logic in bpftool, perhaps?
+>
+> Apologies for the delay.
+> What you're proposing is to replace all messages currently looking like
+> this:
+>
+>         $ bpftool prog
+>         Error: can't get next program: Operation not permitted
+>
+> by:
+>
+>         $ bpftool prog
+>         Error: can't get next program: -EPERM
+>
+> Do I understand correctly?
 
-ext4_feat_ktype was setting the "release" handler to "kfree", which
-doesn't have a matching function prototype. Add a simple wrapper
-with the correct prototype.
+yep, that's what I had in mind
 
-This was found as a result of Clang's new -Wcast-function-type-strict
-flag, which is more sensitive than the simpler -Wcast-function-type,
-which only checks for type width mismatches.
+>
+> I think the strerror() messages are helpful in some occasions (they
+> _are_ more human-friendly to many users), but it's also true that
+> they're not always precise. With bpftool, "Invalid argument" is a
+> classic when the program doesn't load, and may lead to confusion with
+> the args passed to bpftool on the command line. Then there are the other
+> corner cases like the one discussed in this thread. So, why not.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/ext4/sysfs.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+maybe the right approach would be to have both symbolic error name and
+its human-readable representation, so for example above
 
-diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
-index d233c24ea342..83cf8b5afb54 100644
---- a/fs/ext4/sysfs.c
-+++ b/fs/ext4/sysfs.c
-@@ -491,6 +491,11 @@ static void ext4_sb_release(struct kobject *kobj)
- 	complete(&sbi->s_kobj_unregister);
- }
- 
-+static void ext4_kobject_release(struct kobject *kobj)
-+{
-+	kfree(kobj);
-+}
-+
- static const struct sysfs_ops ext4_attr_ops = {
- 	.show	= ext4_attr_show,
- 	.store	= ext4_attr_store,
-@@ -505,7 +510,7 @@ static struct kobj_type ext4_sb_ktype = {
- static struct kobj_type ext4_feat_ktype = {
- 	.default_groups = ext4_feat_groups,
- 	.sysfs_ops	= &ext4_attr_ops,
--	.release	= (void (*)(struct kobject *))kfree,
-+	.release	= ext4_kobject_release,
- };
- 
- void ext4_notify_error_sysfs(struct ext4_sb_info *sbi)
--- 
-2.34.1
+Error: can't get next program: [-EPERM] Operation not permitted
 
+or something like that? And if error value is unknown, just keep it as
+integer: "[-5555]" ?
+
+>
+> If we do change, yeah I'd rather have as much of this handling in libbpf
+> itself, and then adjust bpftool to handle the remaining cases, for
+> consistency.
+
+we can teach libbpf_strerror_r() to do this and if bpftool is going to
+use it consistently then it would get the benefit automatically
+
+>
+> Quentin
