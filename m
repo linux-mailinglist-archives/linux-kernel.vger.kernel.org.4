@@ -2,96 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7038B65C237
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8037965C23A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbjACOsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S237826AbjACOsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjACOs3 (ORCPT
+        with ESMTP id S233316AbjACOso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:48:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDAD2BDB;
-        Tue,  3 Jan 2023 06:48:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 3 Jan 2023 09:48:44 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F6911C2A
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:48:42 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4380B80E4A;
-        Tue,  3 Jan 2023 14:48:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E58DC433EF;
-        Tue,  3 Jan 2023 14:48:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672757306;
-        bh=HQ/f5bb2T+vCcsil5attd5ZhSruOb+wwCOJdncMEw34=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=KHlVYqB2TXbti8UdT3LdyF0rLG60zuy+c68G3irf9GnbDNjjIEpC0IbXOoNBY7sZ1
-         RAjDRlZA8HVaJSF8/j/plrD3U6ZoQ9ejkRmR6m3RhTJqtyerUnASmmgHeoHFZknJxh
-         K4ukOvooVWDQQKxMxzETP8KrqsMAb+JRralS7lmnEs6sGIcMZkA12Nye7xtxhdSyFS
-         wNpnwwSathahyAf1CXKHc2hsKKKamJoNS5CDPeqWSDYmP3MeNcXmKiNkPAyLHLGUj7
-         2AbR/alUi+dF9Mzt7FkT4CrMdysWAV37dUs0OrwJgITtNSJzAjHt+PsDHylY+o6wOm
-         OIT2XYkPVO31A==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     kernel@axis.com, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230102160852.3090202-1-vincent.whitchurch@axis.com>
-References: <20230102160852.3090202-1-vincent.whitchurch@axis.com>
-Subject: Re: [PATCH] spi: pl022: Only use DT-specified DMA channels
-Message-Id: <167275730502.106091.7148795609007337973.b4-ty@kernel.org>
-Date:   Tue, 03 Jan 2023 14:48:25 +0000
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-7ab1d
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A92AC38016;
+        Tue,  3 Jan 2023 14:48:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1672757321; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sovwqjCX/Lg3b4xYU7Si4jSQmDxNGHWrdnUaNJ8QV1s=;
+        b=eO2lEeh8+wGU7EzyxQ1Z6iW/B9QuT+OBYsDZ6juGOZlPyatfEEzbjLPJrXcS6kURpe1GMn
+        MWYNMJSE9SX0C6g3sWnwv35OIq6iAbmCUvoU3MlgHr4bI8LByuNHEXVN8MIT1tjTouXTV+
+        YwvWa1dvDm3mF2MLIk9PKvwpDpPU9as=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1672757321;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sovwqjCX/Lg3b4xYU7Si4jSQmDxNGHWrdnUaNJ8QV1s=;
+        b=APm+f0c6x/vOsb4ZWCkTCRH5RVl46PyTYdFtH8iw0zC80stWXQVjId4RS4kGi9J+7gcKfw
+        UaSC48JRsOfQBvAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 746FF1392B;
+        Tue,  3 Jan 2023 14:48:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0u6zG0lAtGO3UwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 03 Jan 2023 14:48:41 +0000
+Date:   Tue, 03 Jan 2023 15:48:41 +0100
+Message-ID: <87h6x7r7w6.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     =?ISO-8859-1?Q?P=C1LFFY_D=E1niel?= <dpalffy@gmail.com>
+Cc:     Alsa-devel <alsa-devel@alsa-project.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Mark Brown <broonie@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Sergey <zagagyka@basealt.ru>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: Re: [regression, 5.10.y] Bug 216861 - sound disappearance on Acer Swift 3 SF314-59-78UR after update to 5.10.157
+In-Reply-To: <CALp6mk+rdqGXySUowxZv3kEEVWrh96m_x-h8xcFNQ9YZPkbc5w@mail.gmail.com>
+References: <bebd692d-7d21-6648-6b7a-c91063bb51c2@leemhuis.info>
+        <Y7K1WDmPYi3EMOn1@eldamar.lan>
+        <87wn65umye.wl-tiwai@suse.de>
+        <CALp6mkJhM1zDcNr9X_7WL09+uqcaAhNFFMhrjme0r7584O+Lgw@mail.gmail.com>
+        <CALp6mk+rdqGXySUowxZv3kEEVWrh96m_x-h8xcFNQ9YZPkbc5w@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 02 Jan 2023 17:08:51 +0100, Vincent Whitchurch wrote:
-> When a platform is booted with devicetree and does not provide a
-> platform data structure, the driver creates one internally.  enable_dma
-> should not be set in this structure when creating it; the probe function
-> will set it later if DMA channels are specified via the devicetree.
+On Tue, 03 Jan 2023 14:04:50 +0100,
+PÁLFFY Dániel wrote:
 > 
-> Setting enable_dma = 1 when creating this internal platform data can
-> lead to pl022_dma_probe() finding bogus DMA channels (since there is no
-> channel filter specified) when no DMA channels are specified in the
-> devicetree.
+> And confirming, 5.10.161 with e8444560b4d9302a511f0996f4cfdf85b628f4ca
+> and 636110411ca726f19ef8e87b0be51bb9a4cdef06 cherry-picked works for
+> me.
+
+That's a good news.  Then we can ask stable people to pick up those
+commits for 5.10.y and 5.15.y.
+
+
+Takashi
+
 > 
-> [...]
-
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: pl022: Only use DT-specified DMA channels
-      commit: dfce16722b9cb842a6f23500ee80b3d07b47bdd4
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> On Tue, Jan 3, 2023 at 1:05 PM PÁLFFY Dániel <dpalffy@gmail.com> wrote:
+> >
+> > Another report: https://bugs.archlinux.org/task/76795
+> > Apparently, folks at alsa-devel traced down the dependencies of that patch, see the mail thread at https://lore.kernel.org/all/dc65501c-c2fd-5608-c3d9-7cea184c3989%40opensource.cirrus.com/
+> >
+> > On Mon, Jan 2, 2023 at 1:42 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >>
+> >> On Mon, 02 Jan 2023 11:43:36 +0100,
+> >> Salvatore Bonaccorso wrote:
+> >> >
+> >> > Hi,
+> >> >
+> >> > [Adding as well Richard Fitzgerald and PÁLFFY Dániel to recipients]
+> >> >
+> >> > On Fri, Dec 30, 2022 at 09:08:57AM +0100, Thorsten Leemhuis wrote:
+> >> > > Hi, this is your Linux kernel regression tracker speaking.
+> >> > >
+> >> > > I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> >> > > kernel developer don't keep an eye on it, I decided to forward it by
+> >> > > mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216861 :
+> >> > >
+> >> > > >  Sergey 2022-12-29 10:07:51 UTC
+> >> > > >
+> >> > > > Created attachment 303497 [details]
+> >> > > > pulseaudio.log
+> >> > > >
+> >> > > > Sudden sound disappearance was reported for some laptops, e.g.
+> >> > > >
+> >> > > > Acer Swift 3 SF314-59-78UR 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+> >> > > >
+> >> > > > # lspci
+> >> > > > 0000:00:1f.3 Multimedia audio controller: Intel Corporation Tiger Lake-LP Smart Sound Technology Audio Controller (rev 20)
+> >> > > >         Subsystem: Acer Incorporated [ALI] Device 148c
+> >> > > >         Flags: bus master, fast devsel, latency 32, IRQ 197, IOMMU group 12
+> >> > > >         Memory at 601f270000 (64-bit, non-prefetchable) [size=16K]
+> >> > > >         Memory at 601f000000 (64-bit, non-prefetchable) [size=1M]
+> >> > > >         Capabilities: [50] Power Management version 3
+> >> > > >         Capabilities: [80] Vendor Specific Information: Len=14 <?>
+> >> > > >         Capabilities: [60] MSI: Enable+ Count=1/1 Maskable- 64bit+
+> >> > > >         Kernel driver in use: sof-audio-pci
+> >> > > >
+> >> > > > I am attaching the pulseaudio and dmesg logs
+> >> > > >
+> >> > > > This bug started reproducing after updating the kernel from 5.10.156 to 5.10.157
+> >> > > >
+> >> > > > Bisection revealed the commit being reverted:
+> >> > > >
+> >> > > > c34db0d6b88b1da95e7ab3353e674f4f574cccee is the first bad commit
+> >> > > > commit c34db0d6b88b1da95e7ab3353e674f4f574cccee
+> >> > > > Author: Richard Fitzgerald <rf@opensource.cirrus.com>
+> >> > > > Date:   Fri Nov 4 13:22:13 2022 +0000
+> >> > > >
+> >> > > >     ASoC: soc-pcm: Don't zero TDM masks in __soc_pcm_open()
+> >> > > >
+> >> > > >     [ Upstream commit 39bd801d6908900e9ab0cdc2655150f95ddd4f1a ]
+> >> > > >
+> >> > > >     The DAI tx_mask and rx_mask are set by snd_soc_dai_set_tdm_slot()
+> >> > > >     and used by later code that depends on the TDM settings. So
+> >> > > >     __soc_pcm_open() should not be obliterating those mask values.
+> >> > > >
+> >> > > > [...]
+> >> > > > Original bug report: https://bugzilla.altlinux.org/44690
+> >> > >
+> >> > > See the ticket for more details.
+> >> > >
+> >> > > BTW, let me use this mail to also add the report to the list of tracked
+> >> > > regressions to ensure it's doesn't fall through the cracks:
+> >> > >
+> >> > > #regzbot introduced: c34db0d6b88b1d
+> >> > > https://bugzilla.kernel.org/show_bug.cgi?id=216861
+> >> > > #regzbot title: sound: asoc: sudden sound disappearance
+> >> > > #regzbot ignore-activity
+> >> >
+> >> > FWIW, we had as well reports in Debian after having updated the kernel
+> >> > from 5.10.149 based one to 5.10.158 based one in the last point
+> >> > releases, they are at least:
+> >> >
+> >> > https://bugs.debian.org/1027483
+> >> > https://bugs.debian.org/1027430
+> >>
+> >> I got another report while the commit was backported to 5.14-based
+> >> openSUSE Leap kernel, and I ended up with dropping it.
+> >>
+> >> So, IMO, it's safer to drop this patch from the older stable trees.
+> >> As far as I see, 5.15.y and 5.10.y got this.
+> >>
+> >> Unless anyone gives a better fix, I'm going to submit a revert patch
+> >> for those trees.
+> >>
+> >>
+> >> thanks,
+> >>
+> >> Takashi
+> 
