@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F20F65BD5C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F4565BD60
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237245AbjACJox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:44:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S237249AbjACJqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbjACJow (ORCPT
+        with ESMTP id S230467AbjACJp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:44:52 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C79DE0D5;
-        Tue,  3 Jan 2023 01:44:51 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 120D83825B;
-        Tue,  3 Jan 2023 09:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672739090; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h9d33HEzxSlB3aWdhyISRr5Fj3AshfOOVeWRm3q0aSQ=;
-        b=dKiKaiVuzqWQLU16r4Itx7y8XqtIAzQ6BeSjKjYn2lVdjgyp003gWZFV++vJ99AxyELn8E
-        KoTn+Gdur7lM/i/CedKASpXAIwyJTi/ioEE9Sf0yug2xHzFeZ5BKXzEtVOX4DeXByfQwlU
-        g/fNrf8iYSgouEtHzKHNdeGZ9crfRSA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672739090;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h9d33HEzxSlB3aWdhyISRr5Fj3AshfOOVeWRm3q0aSQ=;
-        b=ZnZqVLV55JADBFuAx1wD64/UKUmFDMQdkEfKp3jFPu3mDA7FX/yF63/jnLW5Oh1m0StGDo
-        jLG3z1zpLJwo7/Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 033CE1392B;
-        Tue,  3 Jan 2023 09:44:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bFfHABL5s2N1LQAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 03 Jan 2023 09:44:50 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 83845A0742; Tue,  3 Jan 2023 10:44:49 +0100 (CET)
-Date:   Tue, 3 Jan 2023 10:44:49 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     jack@suse.com, paolo.valente@linaro.org, axboe@kernel.dk,
-        hch@lst.de, damien.lemoal@opensource.wdc.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 7/8] block, bfq: remove unnecessary goto tag in
- bfq_dispatch_rq_from_bfqq
-Message-ID: <20230103094449.caq2hoftxdhmnv6e@quack3>
-References: <20230103095303.2223546-1-shikemeng@huaweicloud.com>
- <20230103095303.2223546-8-shikemeng@huaweicloud.com>
+        Tue, 3 Jan 2023 04:45:59 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931FBB0C;
+        Tue,  3 Jan 2023 01:45:58 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3039Rttf020920;
+        Tue, 3 Jan 2023 10:45:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=mwrG17PW7SqKB89a6ELsvyEm8ye3mmzw4STYyVEeDSU=;
+ b=wBAUZhnv0+6UZSKWtf7q+8ZrcsoP9h1Su+GAt2CCsi2qMxxrvHwI96hpveBacWFvLt8z
+ M5VGoQN9qR4mR4QpE/r+hZqhPymoFewPAMbgZc0RF/huPUPPH9JARsNTyyIph+sEFYY6
+ A7zwU0toRQwlrrGOGCF5hD78vhwrCoZrA/yjOxx8dfmqSLY23Balt56NcAN5EWulNUMa
+ LuTH+AYSSPzfmDwJkh+3g9wFOFsyuiLCzXFecKKenpuHUsDkbDEucb/gvZ/wtjLbBaPC
+ ZIlq4cY8HTNEADoYrThHWwe13qRF0hL6jfmmuPBFSiU+DNqNH2UwTwXBkwLgRkMslSIo Qg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mtbcpv7ta-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 10:45:24 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4613B10002A;
+        Tue,  3 Jan 2023 10:45:23 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 36D0721514F;
+        Tue,  3 Jan 2023 10:45:23 +0100 (CET)
+Received: from [10.201.21.177] (10.201.21.177) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Tue, 3 Jan
+ 2023 10:45:22 +0100
+Message-ID: <98aa92e9-9ac0-0fe4-a140-ac478e261f94@foss.st.com>
+Date:   Tue, 3 Jan 2023 10:45:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103095303.2223546-8-shikemeng@huaweicloud.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH v2 0/7] Introduce STM32 system bus
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
+        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>
+References: <20221222100504.68247-1-gatien.chevallier@foss.st.com>
+ <Y6SIOpsxNdezKCTc@kroah.com>
+Content-Language: en-US
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <Y6SIOpsxNdezKCTc@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.177]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-02_14,2023-01-03_01,2022-06-22_01
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 03-01-23 17:53:02, Kemeng Shi wrote:
-> We jump to tag only for returning current rq. Return directly to
-> remove this tag.
+Hello Greg,
+
+I've put the "RFC" tag on the the patch set as it is based on bindings 
+that are currently under review. It has been submitted with the idea to 
+support the bindings proposed by Oleksii. Apart from this and the 
+comments made by Krzysztof, there is indeed no more "work" planned on 
+this change.
+
+Should the "RFC" tag be omitted for the next version?
+
+Best regards,
+Gatien
+
+On 12/22/22 17:39, Greg KH wrote:
+> On Thu, Dec 22, 2022 at 11:04:57AM +0100, Gatien Chevallier wrote:
+>> Document STM32 System Bus. This bus is intended to control firewall
+>> access for the peripherals connected to it.
 > 
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-
-Looks good to me. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  block/bfq-iosched.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+> Why is this an "RFC"?  That usually means "I have more work to do on it,
+> but I'll send it out now anyway".  What work is left?
 > 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 9ff424c78e9b..a11be312ac77 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -4966,7 +4966,7 @@ static struct request *bfq_dispatch_rq_from_bfqq(struct bfq_data *bfqd,
->  	bfq_dispatch_remove(bfqd->queue, rq);
->  
->  	if (bfqq != bfqd->in_service_queue)
-> -		goto return_rq;
-> +		return rq;
->  
->  	/*
->  	 * If weight raising has to terminate for bfqq, then next
-> @@ -4986,12 +4986,9 @@ static struct request *bfq_dispatch_rq_from_bfqq(struct bfq_data *bfqd,
->  	 * belongs to CLASS_IDLE and other queues are waiting for
->  	 * service.
->  	 */
-> -	if (!(bfq_tot_busy_queues(bfqd) > 1 && bfq_class_idle(bfqq)))
-> -		goto return_rq;
-> +	if (bfq_tot_busy_queues(bfqd) > 1 && bfq_class_idle(bfqq))
-> +		bfq_bfqq_expire(bfqd, bfqq, false, BFQQE_BUDGET_EXHAUSTED);
->  
-> -	bfq_bfqq_expire(bfqd, bfqq, false, BFQQE_BUDGET_EXHAUSTED);
-> -
-> -return_rq:
->  	return rq;
->  }
->  
-> -- 
-> 2.30.0
+> And for most code, I know I don't review "RFC" changes as there are too
+> many "real" patches being submitted where people think their code is
+> ready to be merged.  Other reviewers might think otherwise, but be aware
+> of this...
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> thanks,
+> 
+> greg k-h
