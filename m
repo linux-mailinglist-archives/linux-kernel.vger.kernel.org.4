@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F101265B859
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 01:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A861B65B85C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 01:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbjACAWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 19:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S232265AbjACAZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 19:25:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbjACAWB (ORCPT
+        with ESMTP id S230486AbjACAZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 19:22:01 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8E66153
-        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 16:21:59 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id c11so23457966qtn.11
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 16:21:59 -0800 (PST)
+        Mon, 2 Jan 2023 19:25:53 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095A7D92
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 16:25:52 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id o13so17341084ilc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 16:25:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lberQ9s8H9q3h4BbAU80BUmPvpUWvW4Ql62uwafcong=;
-        b=CC9yyWoYu8YlriJaskROfGNDC7Aa+Owk/jFAzWoCVbua1t+8ZcEFwKjpcvsF5vXY/P
-         rt3DkGuj5Fvlli1p23VRJZl+PUqiHkLmL2jjxqqHQQTj445adFMPShGXrPUCnj+YRIiN
-         yWBSV7+c/27nNh8LYT7iPNSlgNfqxJIHcUCGU=
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X2bRqedDHz7W8LP/t/e8z/mJRrJLBwwXwuoJjeyrKPQ=;
+        b=WRpqGYVNcjYj/JZxI+lIU5Mp/6pPnnamqt9IOpppL4UtcG4hEizNDdmi2yRzsOZFNU
+         FLQy+u1qfwR6XxLwkVoe1vo01wLLgqwqDRtCQhxE/3sISiHkk4yK4IbYS8oDZInW9KOs
+         I4T6fgbonmBLJSjL2p6ks+DX63wLfOEM9Avr8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lberQ9s8H9q3h4BbAU80BUmPvpUWvW4Ql62uwafcong=;
-        b=RRa31gsz2E1AqKOugqe+xV5WasuehExzZ/PYHBBdnwRlSP92zB8jCKII0CirFS0yIO
-         AlPia2f64cnNajzNim7C3WwaNJz5XifTe8CgmckrXaiwfZJDV/lj5ItAND1Buk6c/MyG
-         YAnwm2Fmp9EvPeIDwkAyn3hbYs6qemWElBZCZ1n2Ki4aMmtVBlNRFaQfsoIJ9jpYNZoL
-         JFGvfryIQq08kpqy6obclAA8W6Rb6y9VsAop4S0O9P8CxkUqZ9P8WIIfitVNC2zpx/ew
-         ORF0fYD/kFweXzCODPeBVED1lHOk7z08c+zJD/vRAN5im108x+V6RbUFEChl7Fu6kD6p
-         mBKw==
-X-Gm-Message-State: AFqh2koCbgTkUnHN8TuSIX4I/+CPkdMeCTZgkDZBfvwpyLP9kjw79SI2
-        nj4bdh1KqNjmKUM2YrefUXftYpaqKAbM44Ow
-X-Google-Smtp-Source: AMrXdXtUsaFMaQteQxPzmLW5BQG2ESQLr2C9u90Zw81lwrJLNXAKYYr1wJ9cYMYLZAb1tmFUEF3Jaw==
-X-Received: by 2002:ac8:44b8:0:b0:3a8:2fba:b02d with SMTP id a24-20020ac844b8000000b003a82fbab02dmr60329945qto.51.1672705318044;
-        Mon, 02 Jan 2023 16:21:58 -0800 (PST)
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com. [209.85.219.50])
-        by smtp.gmail.com with ESMTPSA id bp20-20020a05622a1b9400b003a591194221sm17987516qtb.7.2023.01.02.16.21.57
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X2bRqedDHz7W8LP/t/e8z/mJRrJLBwwXwuoJjeyrKPQ=;
+        b=wu56APA7Qv2qT4xsom8KciBmAssjve3cYR94zi5GDh7csuCJwkBG7oknHCSHJligXh
+         Tlb3cu78bINSmOSw46kUz7+AMVEdsEuTwOXnBAoCHW3UdehrkfWQLRE8HDTynyDIwhG9
+         3TOBioIMF2aZj85uxzER1dZkA5ozhokg00M5nvWE6P+/SHjZXFgqgzAaUUk/iqdPqcET
+         QsphxbianeJ4k/JxT67RYwphAX7UROChtuDFX5HrqcYZ70E0t//UIDXTlLXbjuniVpb1
+         fgbKuIZuJ+Kg2SWDmc41I0iN2hqdYOHkIqRKJa78ltTifvrvs+qYZCHGzghAftZlA1vO
+         sh0Q==
+X-Gm-Message-State: AFqh2krahnqXFLvE5xc8QOnErB2FusdC6TKr3O8iINR90u9u06jPqEHM
+        ZIII0dfHRC8nCiJtk+uBgTcHwg==
+X-Google-Smtp-Source: AMrXdXvs5/vh8wOrYitaU6nwXH2xlsyKqI0lkqQSJoUKYXh1+FlKb3hOPwOzO8PIhXnNaOkhsJmSXA==
+X-Received: by 2002:a05:6e02:12af:b0:30b:fe91:35ed with SMTP id f15-20020a056e0212af00b0030bfe9135edmr3789190ilr.1.1672705551299;
+        Mon, 02 Jan 2023 16:25:51 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id l1-20020a056e02066100b0030bfd384821sm7609317ilt.81.2023.01.02.16.25.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 16:21:57 -0800 (PST)
-Received: by mail-qv1-f50.google.com with SMTP id h10so20542363qvq.7
-        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 16:21:57 -0800 (PST)
-X-Received: by 2002:a05:6214:1185:b0:4c6:608c:6b2c with SMTP id
- t5-20020a056214118500b004c6608c6b2cmr1978995qvv.130.1672705317084; Mon, 02
- Jan 2023 16:21:57 -0800 (PST)
+        Mon, 02 Jan 2023 16:25:50 -0800 (PST)
+Message-ID: <1978c896-f08e-a397-0949-d66aedb5ae38@linuxfoundation.org>
+Date:   Mon, 2 Jan 2023 17:25:49 -0700
 MIME-Version: 1.0
-References: <CAHk-=wim8DMRzjyYTJ3UbdqZ26keQyZSU02NZb-JY1=9OpcO1w@mail.gmail.com>
- <20230102225656.GA3532398@roeck-us.net>
-In-Reply-To: <20230102225656.GA3532398@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 2 Jan 2023 16:21:41 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjZPPscjDhsHQw_ttHOaQS69rADLm0KuRhbNavBiO62OQ@mail.gmail.com>
-Message-ID: <CAHk-=wjZPPscjDhsHQw_ttHOaQS69rADLm0KuRhbNavBiO62OQ@mail.gmail.com>
-Subject: Re: Linux 6.2-rc2
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6.1 00/71] 6.1.3-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230102110551.509937186@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230102110551.509937186@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,47 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Adding Jason in case he has any ideas, and seeing if sh maintainer
-emails are still valid, and Arnd in case they aren't ]
+On 1/2/23 04:21, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.3 release.
+> There are 71 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 04 Jan 2023 11:05:34 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-On Mon, Jan 2, 2023 at 2:57 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> One detail to mention, though, is that sh:rts7751r2dplus_defconfig
-> no longer builds with older versions of binutils (2.32). Trying to
-> do so results in the following build error.
->
-> `.exit.text' referenced in section `__bug_table' of drivers/char/hw_random/core.o:
->         defined in discarded section `.exit.text' of drivers/char/hw_random/core.o
->
-> To make this more interesting, kernels older than v5.10 do not boot
-> (at least not in qemu) when images are built with binutils 2.27 or newer.
-> That is why I had used binutils 2.32 in the first place.
->
-> I didn't bother tracking this down but switched to binutils 2.39 when
-> building v5.10+ images.
+Compiled and booted on my test system. No dmesg regressions.
 
-I have to admit that I can't really see myself carding deeply about
-SH, but somebody else may. I don't think I've gotten an arch/sh pull
-in a couple of years.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-That said, I also don't see anything wrong with the arch/sh version of
-BUG() and friends, so I don't see why this would hit arch/sh and not
-somebody else.
-
-I _assume_ it is the BUG_ON() in hwrng_modexit() that triggers this:
-
-  static void __exit hwrng_modexit(void)
-  {
-        mutex_lock(&rng_mutex);
-        BUG_ON(current_rng);
-        kfree(rng_buffer);
-        ...
-
-but again, I don't see what's special about sh here apart from maybe
-"not well maintained binutils support".
-
-Does removing the BUG_ON() fix the build?
-
-None of this is at all new, though. Funky.
-
-              Linus
+thanks,
+-- Shuah
