@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07BB65BD3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD32865BD3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 10:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbjACJet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 04:34:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S237240AbjACJfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 04:35:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233155AbjACJeo (ORCPT
+        with ESMTP id S233155AbjACJfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 04:34:44 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8D9E3C;
-        Tue,  3 Jan 2023 01:34:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672738483; x=1704274483;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8AGwAjvHJ0btsKD9yaGewvpaJNJi1fzYP5R08FbNXhE=;
-  b=Hy7yKxPG/QcoBCZA/qBJXtN0Sc5SS2De5rgyTW9VOEa1IK2tvjMjz4JV
-   NdDL0OjdtvwqQswn9wyYuZj4tUnsIBYTBSzfXgnWova/Ib29Uh5xJnOON
-   eSUrnCtufUFiqxtoP5d8CbYxIhqAtnnXJgnqr8VimudqGfj3jCSVPCDHJ
-   PH95rayWxnMd0ONT+TZpAEeygBzGGb8i4raSifbkSGYtz73qb3/p1BQXt
-   Z3vQ/Aq1fGrdJ4OjECwCqV7viSrZjrK7XtXrnoXgmFhhoX3VVPXJHfqJB
-   /Dt8FZwb19A7KKfIAZBE1qMpBJcGVLrXHkoWfz8k05lYMA6is6bv3Y1q7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="305128061"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="305128061"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 01:34:43 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="654721808"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="654721808"
-Received: from pdaniel-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.48.214])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 01:34:40 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 1/1] serial: pch_uart: Pass correct sg to dma_unmap_sg()
-Date:   Tue,  3 Jan 2023 11:34:35 +0200
-Message-Id: <20230103093435.4396-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 3 Jan 2023 04:35:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D30FE094;
+        Tue,  3 Jan 2023 01:35:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFE0661228;
+        Tue,  3 Jan 2023 09:35:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A44C433D2;
+        Tue,  3 Jan 2023 09:35:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672738509;
+        bh=JUA2lT1qfrNXleMDtLF82i4F/TDM47rJDAehK4IRzWE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iXpIJf3tpbeiVTecgwdjxbmVlDfR8sXNFxkplivk1BDVRtIGCWc8cFgb1WqzCPrmh
+         pSv97G0VpNR8j3hHwc/jaVkUc/Y5Ewv8yamA/s61oXZC2s3cV6OXAeMi52NIzQ/O9l
+         fyfzwUhhmn6dF1vX5A6/KiiJC9Pf6QEno960d6JEOfCsG9YS7fleQpCMeAeeNG6XIV
+         JXUXBALPMV4N3kkIqtEG7XlNQzPjWkj7D5Tc7l/h3eWH7JKBCI+Y6AOL9f6m9pR37s
+         PJseOduPM1nwO7SPbb1SYAjTF8/MmXpjqBVNM3LbBO1e5bqBEWxbF3umaLN7Ogovv4
+         DzYePuKtc2bbw==
+Date:   Tue, 3 Jan 2023 11:35:04 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     tariqt@nvidia.com, yishaih@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Part of devices not initialized with mlx4
+Message-ID: <Y7P2yECHeKvyqQqo@unreal>
+References: <0a361ac2-c6bd-2b18-4841-b1b991f0635e@suse.com>
+ <Y57jE03Rmr7wphlj@unreal>
+ <e939dbde-8905-fc98-5717-c555e05b708d@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e939dbde-8905-fc98-5717-c555e05b708d@suse.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A local variable sg is used to store scatterlist pointer in
-pch_dma_tx_complete(). The for loop doing Tx byte accounting before
-dma_unmap_sg() alters sg in its increment statement. Therefore, the
-pointer passed into dma_unmap_sg() won't match to the one given to
-dma_map_sg().
+On Mon, Jan 02, 2023 at 11:33:15AM +0100, Petr Pavlu wrote:
+> On 12/18/22 10:53, Leon Romanovsky wrote:
+> > On Thu, Dec 15, 2022 at 10:51:15AM +0100, Petr Pavlu wrote:
+> >> Hello,
+> >>
+> >> We have seen an issue when some of ConnectX-3 devices are not initialized
+> >> when mlx4 drivers are a part of initrd.
+> > 
+> > <...>
+> > 
+> >> * Systemd stops running services and then sends SIGTERM to "unmanaged" tasks
+> >>   on the system to terminate them too. This includes the modprobe task.
+> >> * Initialization of mlx4_en is interrupted in the middle of its init function.
+> > 
+> > And why do you think that this systemd behaviour is correct one?
+> 
+> My view is that this is an issue between the kernel and initrd/systemd.
+> Switching the root is a delicate operation and both parts need to carefully
+> cooperate for it to work correctly.
+> 
+> I think it is generally sensible that systemd tries to terminate any remaining
+> processes started from the initrd. They would have troubles when the root is
+> switched under their hands anyway, unless they are specifically prepared for
+> it. Systemd only skips terminating kthreads and allows to exclude root storage
+> daemons. A modprobe helper could be excluded from being terminated too but the
+> problem with the root switch remains.
+> 
+> It looks to me that a good approach is to complete all running module loads
+> before switching the root and continue with any further loads after the
+> operation is done. Leaving module loads to udevd assures this, hence the idea
+> to use an auxiliary bus.
 
-To fix the problem, use priv->sg_tx_p directly in dma_unmap_sg()
-instead of the local variable.
+I'm not sure about it. Everything above are user-space troubles which
+are invited once systemd does root switch. Anyway, if you want to do
+aux bus for mlx4, go for it.
 
-Fixes: da3564ee027e ("pch_uart: add multi-scatter processing")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/pch_uart.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Feel free to send me patches off-list and I will add them to our
+regression, but be aware that you are stepping on landmine field
+here.
 
-diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-index 3d54a43768cd..9576ba8bbc40 100644
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -749,7 +749,7 @@ static void pch_dma_tx_complete(void *arg)
- 		uart_xmit_advance(port, sg_dma_len(sg));
- 
- 	async_tx_ack(priv->desc_tx);
--	dma_unmap_sg(port->dev, sg, priv->orig_nent, DMA_TO_DEVICE);
-+	dma_unmap_sg(port->dev, priv->sg_tx_p, priv->orig_nent, DMA_TO_DEVICE);
- 	priv->tx_dma_use = 0;
- 	priv->nent = 0;
- 	priv->orig_nent = 0;
--- 
-2.30.2
-
+Thanks
