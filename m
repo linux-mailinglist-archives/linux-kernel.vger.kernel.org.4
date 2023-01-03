@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8F265C099
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB82665C0A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237638AbjACNNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
+        id S237689AbjACNRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:17:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237739AbjACNNN (ORCPT
+        with ESMTP id S237796AbjACNQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:13:13 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645191114B;
-        Tue,  3 Jan 2023 05:12:44 -0800 (PST)
+        Tue, 3 Jan 2023 08:16:41 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898D510FD8;
+        Tue,  3 Jan 2023 05:15:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672751564; x=1704287564;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WhGrjx6LzV2jk/LAfomo4zdb3Tdn1LBofxlORU1JDv0=;
-  b=VEnh19VivwIMpe6hZMkoOBw+iPBVlOXfiQ8M2op6En9nltN6BPgVw4DI
-   euIIJ/CmmnoVs1VUTkGT23dCqyadrpucX4OVJo91Bq0U1ze1AuxWYtt/u
-   YykK1JW4P56mF2200zI2XHNZjnZq/axm7A1ehZUOVEMfEymHqeu8w5b1G
-   orEgufqr5hm6ZKBsruoPzz4QS1CNrA3KiE52/zyI0sHoo2qIzR4n2G7cG
-   Jh0LYNkVZfcyZzPZmdmMzYzc+gPX1kC8QTGHv/D3eT6GA8cgWn0Ns4lHk
-   ucw/nJyo6mFCXcxjLVC6wzj2Lp00hMMpZ8kZH4dWwQyCMn50H5DvA0ta/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="322888002"
+  t=1672751726; x=1704287726;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=v5CCLLO+upNdoJWrssvE30mPz+dADC8azsX5O8Z4OGw=;
+  b=SZYAZ+XQx5nYR5eMitoqbhIIf2t5DTJLx07916zFBg+OdLwWby4/Y1tr
+   JO0Ltzk7v+ExOuqzUHk94A/k5cnpx78yvF9RQPSOGzZNpQgj++CqWH5ri
+   6nOTCIOyYaOOIBTwR+s4fNHRivm1lU1nOFNQiuVVQ6npCdTY49gU/zDPL
+   6xhgI5bIBR9d39PdYJR/gXCanHdtrfMDdoy8tJQGfPCLHL3GeVGUVivfN
+   ia3GPaW9gHT19bVRYbpd9cIwpHBerwYA+bkVDQ3GpAalHoogSja66cm9L
+   p8R0ARaN0D7HisJmFR70FwOO+K56W+Fq3Et4fx67MGXyBu82Ta5UCzq68
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="305160782"
 X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="322888002"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 05:12:39 -0800
+   d="scan'208";a="305160782"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 05:15:26 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="685397947"
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="743492376"
 X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="685397947"
+   d="scan'208";a="743492376"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 03 Jan 2023 05:12:34 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Jan 2023 05:15:22 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EDD04458; Tue,  3 Jan 2023 15:13:00 +0200 (EET)
+        id 1DDD7162; Tue,  3 Jan 2023 15:15:54 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gene Chen <gene_chen@richtek.com>, linux-leds@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH v4 11/11] net: dsa: hellcreek: Get rid of custom led_init_default_state_get()
-Date:   Tue,  3 Jan 2023 15:12:56 +0200
-Message-Id: <20230103131256.33894-12-andriy.shevchenko@linux.intel.com>
+To:     Pavel Machek <pavel@ucw.cz>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     Lee Jones <lee@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [resent, PATCH v2 1/1] leds: is31fl319x: Wrap mutex_destroy() for devm_add_action_or_rest()
+Date:   Tue,  3 Jan 2023 15:15:53 +0200
+Message-Id: <20230103131553.34124-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230103131256.33894-1-andriy.shevchenko@linux.intel.com>
-References: <20230103131256.33894-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,85 +66,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LED core provides a helper to parse default state from firmware node.
-Use it instead of custom implementation.
+Clang complains that devm_add_action() takes a parameter with a wrong type:
 
+warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+    err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1 warning generated.
+
+It appears that the commit e1af5c815586 ("leds: is31fl319x: Fix devm vs.
+non-devm ordering") missed two things:
+- while mention devm_add_action_or_reset() the actual change got
+  devm_add_action() call by unknown reason
+- strictly speaking the parameter is not compatible by type
+
+Fix both issues by switching to devm_add_action_or_reset() and adding a
+wrapper for mutex_destroy() call.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: e1af5c815586 ("leds: is31fl319x: Fix devm vs. non-devm ordering")
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
+Tested-by: Vincent Knecht <vincent.knecht@mailoo.org>
 ---
- drivers/net/dsa/hirschmann/hellcreek_ptp.c | 45 ++++++++++++----------
- 1 file changed, 24 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/dsa/hirschmann/hellcreek_ptp.c b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-index b28baab6d56a..793b2c296314 100644
---- a/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-+++ b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-@@ -297,7 +297,8 @@ static enum led_brightness hellcreek_led_is_gm_get(struct led_classdev *ldev)
- static int hellcreek_led_setup(struct hellcreek *hellcreek)
+v2 resent: resent as v2
+v2: added tag (Vincent), Cc'ed to Lee                                                                            
+
+ drivers/leds/leds-is31fl319x.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
+index b2f4c4ec7c56..7c908414ac7e 100644
+--- a/drivers/leds/leds-is31fl319x.c
++++ b/drivers/leds/leds-is31fl319x.c
+@@ -495,6 +495,11 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
+ 	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
+ }
+ 
++static void is31f1319x_mutex_destroy(void *lock)
++{
++	mutex_destroy(lock);
++}
++
+ static int is31fl319x_probe(struct i2c_client *client)
  {
- 	struct device_node *leds, *led = NULL;
--	const char *label, *state;
-+	enum led_default_state state;
-+	const char *label;
- 	int ret = -EINVAL;
+ 	struct is31fl319x_chip *is31;
+@@ -511,7 +516,7 @@ static int is31fl319x_probe(struct i2c_client *client)
+ 		return -ENOMEM;
  
- 	of_node_get(hellcreek->dev->of_node);
-@@ -318,16 +319,17 @@ static int hellcreek_led_setup(struct hellcreek *hellcreek)
- 	ret = of_property_read_string(led, "label", &label);
- 	hellcreek->led_sync_good.name = ret ? "sync_good" : label;
+ 	mutex_init(&is31->lock);
+-	err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
++	err = devm_add_action_or_reset(dev, is31f1319x_mutex_destroy, &is31->lock);
+ 	if (err)
+ 		return err;
  
--	ret = of_property_read_string(led, "default-state", &state);
--	if (!ret) {
--		if (!strcmp(state, "on"))
--			hellcreek->led_sync_good.brightness = 1;
--		else if (!strcmp(state, "off"))
--			hellcreek->led_sync_good.brightness = 0;
--		else if (!strcmp(state, "keep"))
--			hellcreek->led_sync_good.brightness =
--				hellcreek_get_brightness(hellcreek,
--							 STATUS_OUT_SYNC_GOOD);
-+	state = led_init_default_state_get(of_fwnode_handle(led));
-+	switch (state) {
-+	case LEDS_DEFSTATE_ON:
-+		hellcreek->led_sync_good.brightness = 1;
-+		break;
-+	case LEDS_DEFSTATE_KEEP:
-+		hellcreek->led_sync_good.brightness =
-+				hellcreek_get_brightness(hellcreek, STATUS_OUT_SYNC_GOOD);
-+		break;
-+	default:
-+		hellcreek->led_sync_good.brightness = 0;
- 	}
- 
- 	hellcreek->led_sync_good.max_brightness = 1;
-@@ -344,16 +346,17 @@ static int hellcreek_led_setup(struct hellcreek *hellcreek)
- 	ret = of_property_read_string(led, "label", &label);
- 	hellcreek->led_is_gm.name = ret ? "is_gm" : label;
- 
--	ret = of_property_read_string(led, "default-state", &state);
--	if (!ret) {
--		if (!strcmp(state, "on"))
--			hellcreek->led_is_gm.brightness = 1;
--		else if (!strcmp(state, "off"))
--			hellcreek->led_is_gm.brightness = 0;
--		else if (!strcmp(state, "keep"))
--			hellcreek->led_is_gm.brightness =
--				hellcreek_get_brightness(hellcreek,
--							 STATUS_OUT_IS_GM);
-+	state = led_init_default_state_get(of_fwnode_handle(led));
-+	switch (state) {
-+	case LEDS_DEFSTATE_ON:
-+		hellcreek->led_is_gm.brightness = 1;
-+		break;
-+	case LEDS_DEFSTATE_KEEP:
-+		hellcreek->led_is_gm.brightness =
-+				hellcreek_get_brightness(hellcreek, STATUS_OUT_IS_GM);
-+		break;
-+	default:
-+		hellcreek->led_is_gm.brightness = 0;
- 	}
- 
- 	hellcreek->led_is_gm.max_brightness = 1;
 -- 
 2.35.1
 
