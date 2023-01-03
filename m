@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212AF65B84E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 01:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F101265B859
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 01:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbjACAAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 Jan 2023 19:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S231879AbjACAWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 Jan 2023 19:22:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjACAAb (ORCPT
+        with ESMTP id S230486AbjACAWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 Jan 2023 19:00:31 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCC7DEB;
-        Mon,  2 Jan 2023 16:00:29 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id g13so43494490lfv.7;
-        Mon, 02 Jan 2023 16:00:29 -0800 (PST)
+        Mon, 2 Jan 2023 19:22:01 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8E66153
+        for <linux-kernel@vger.kernel.org>; Mon,  2 Jan 2023 16:21:59 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id c11so23457966qtn.11
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 16:21:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UYSfbZHaZiRzvcUGlZ72kiuTZe0hkGLK83eVEG4p7xE=;
-        b=UlM5tCzB/7uHbHxmVB7H2mUOJjYyAv/24TEOPYMIclLY5G7N6zZcCU0iFfmmlRXhXi
-         YvzEvzos9KtdlF9X83lz/EoqvXJiEJyzrGLEytE3p66zQ1aULOy1NF0CdaFeu4sGtqax
-         acs/Y0Ryj0po/zKxDOx5z+0JThT2Xs1m+pCYDaKSkgNOs8d/Ck1I2J8ra888zelHSI+p
-         4hmLpawu8Ngdvq4bOUaGqMdrSoHXJJoaR/o/Rdp9xKUqyndsn6tqu9Ys/g4zkkYEuJ7m
-         3C93OOoDKOfwOlEVnszIR+hGPRwlUvxaLwNObgUH6mLgEtyeab8hZlkJg7jr6MyOgLKj
-         HN8Q==
+        bh=lberQ9s8H9q3h4BbAU80BUmPvpUWvW4Ql62uwafcong=;
+        b=CC9yyWoYu8YlriJaskROfGNDC7Aa+Owk/jFAzWoCVbua1t+8ZcEFwKjpcvsF5vXY/P
+         rt3DkGuj5Fvlli1p23VRJZl+PUqiHkLmL2jjxqqHQQTj445adFMPShGXrPUCnj+YRIiN
+         yWBSV7+c/27nNh8LYT7iPNSlgNfqxJIHcUCGU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UYSfbZHaZiRzvcUGlZ72kiuTZe0hkGLK83eVEG4p7xE=;
-        b=XHyGzhFRaApt4jSXKCUogFOO+cROyTwqYL3uT9Vek9FtayOjowJJfW7ImCpHr6ZkRT
-         5OvyoGG/OYJLLjZyyw9Kp2GEZLhiYUtcqO/zWT+wagEAYNsyx60asrfUBdsd3yvwjNqZ
-         zJJtQR8zLgJdzBI65OijXj//fJgRE+EFpVV8Mlt1ge3WmngkQQba36MIrgSmOw7G3rC+
-         lcPQa8U84jawzYWL+0BEO6cwqtAhr+eEhe/BhZjXMzXTkdac/AhShI677J4+sfDTAW2m
-         CnSvLKiLy90KOAmaUIe58UkcXfVB5Dq0UimnTbHpGp71HNfgXzagPTSmWl3XcmmyhTSe
-         qGJg==
-X-Gm-Message-State: AFqh2krNDhAk7xJkhfIplUEVmjk+arc9ygjLuOztOOk7QMF0Vd609Azt
-        auko5PoT5WZ0FAMzkAy6qbWBsZpl8qsG2HY0mGM=
-X-Google-Smtp-Source: AMrXdXsOfz367ZxRl7B9NEJTynNT5sdfT7GmKAnF2I+fmexEO/Fx/8Ivv3EboNus3qkkNumB75qVHGXmCHXSpsCMDZo=
-X-Received: by 2002:ac2:41da:0:b0:4b4:af05:4a8d with SMTP id
- d26-20020ac241da000000b004b4af054a8dmr1884470lfi.415.1672704027048; Mon, 02
- Jan 2023 16:00:27 -0800 (PST)
+        bh=lberQ9s8H9q3h4BbAU80BUmPvpUWvW4Ql62uwafcong=;
+        b=RRa31gsz2E1AqKOugqe+xV5WasuehExzZ/PYHBBdnwRlSP92zB8jCKII0CirFS0yIO
+         AlPia2f64cnNajzNim7C3WwaNJz5XifTe8CgmckrXaiwfZJDV/lj5ItAND1Buk6c/MyG
+         YAnwm2Fmp9EvPeIDwkAyn3hbYs6qemWElBZCZ1n2Ki4aMmtVBlNRFaQfsoIJ9jpYNZoL
+         JFGvfryIQq08kpqy6obclAA8W6Rb6y9VsAop4S0O9P8CxkUqZ9P8WIIfitVNC2zpx/ew
+         ORF0fYD/kFweXzCODPeBVED1lHOk7z08c+zJD/vRAN5im108x+V6RbUFEChl7Fu6kD6p
+         mBKw==
+X-Gm-Message-State: AFqh2koCbgTkUnHN8TuSIX4I/+CPkdMeCTZgkDZBfvwpyLP9kjw79SI2
+        nj4bdh1KqNjmKUM2YrefUXftYpaqKAbM44Ow
+X-Google-Smtp-Source: AMrXdXtUsaFMaQteQxPzmLW5BQG2ESQLr2C9u90Zw81lwrJLNXAKYYr1wJ9cYMYLZAb1tmFUEF3Jaw==
+X-Received: by 2002:ac8:44b8:0:b0:3a8:2fba:b02d with SMTP id a24-20020ac844b8000000b003a82fbab02dmr60329945qto.51.1672705318044;
+        Mon, 02 Jan 2023 16:21:58 -0800 (PST)
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com. [209.85.219.50])
+        by smtp.gmail.com with ESMTPSA id bp20-20020a05622a1b9400b003a591194221sm17987516qtb.7.2023.01.02.16.21.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 16:21:57 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id h10so20542363qvq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 02 Jan 2023 16:21:57 -0800 (PST)
+X-Received: by 2002:a05:6214:1185:b0:4c6:608c:6b2c with SMTP id
+ t5-20020a056214118500b004c6608c6b2cmr1978995qvv.130.1672705317084; Mon, 02
+ Jan 2023 16:21:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20221218234801.579114-1-jmaxwell37@gmail.com> <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
- <CAGHK07ALtLTjRP-XOepqoc8xzWcT8=0v5ccL-98f4+SU9vwfsg@mail.gmail.com>
- <20221223212835.eb9d03f3f7db22360e34341d@uniroma2.it> <CAGHK07APOwLvhs73WKkQfZuEy2FoKEWJusSyejKVcth4D47g=w@mail.gmail.com>
-In-Reply-To: <CAGHK07APOwLvhs73WKkQfZuEy2FoKEWJusSyejKVcth4D47g=w@mail.gmail.com>
-From:   Jonathan Maxwell <jmaxwell37@gmail.com>
-Date:   Tue, 3 Jan 2023 10:59:50 +1100
-Message-ID: <CAGHK07Crj8s0wOivw62Q_N4Km6r1qsH-y-8YgfYhX-JJF6kZSA@mail.gmail.com>
-Subject: Re: [net-next] ipv6: fix routing cache overflow for raw sockets
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+References: <CAHk-=wim8DMRzjyYTJ3UbdqZ26keQyZSU02NZb-JY1=9OpcO1w@mail.gmail.com>
+ <20230102225656.GA3532398@roeck-us.net>
+In-Reply-To: <20230102225656.GA3532398@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 2 Jan 2023 16:21:41 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjZPPscjDhsHQw_ttHOaQS69rADLm0KuRhbNavBiO62OQ@mail.gmail.com>
+Message-ID: <CAHk-=wjZPPscjDhsHQw_ttHOaQS69rADLm0KuRhbNavBiO62OQ@mail.gmail.com>
+Subject: Re: Linux 6.2-rc2
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,194 +77,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrea,
+[ Adding Jason in case he has any ideas, and seeing if sh maintainer
+emails are still valid, and Arnd in case they aren't ]
 
-Happy New Year.
-
-Any chance you could test this patch based on the latest net-next
-kernel and let me know the result?
-
-diff --git a/include/net/dst_ops.h b/include/net/dst_ops.h
-index 88ff7bb2bb9b..632086b2f644 100644
---- a/include/net/dst_ops.h
-+++ b/include/net/dst_ops.h
-@@ -16,7 +16,7 @@ struct dst_ops {
-        unsigned short          family;
-        unsigned int            gc_thresh;
-
--       int                     (*gc)(struct dst_ops *ops);
-+       void                    (*gc)(struct dst_ops *ops);
-        struct dst_entry *      (*check)(struct dst_entry *, __u32 cookie);
-        unsigned int            (*default_advmss)(const struct dst_entry *);
-        unsigned int            (*mtu)(const struct dst_entry *);
-diff --git a/net/core/dst.c b/net/core/dst.c
-index 6d2dd03dafa8..31c08a3386d3 100644
---- a/net/core/dst.c
-+++ b/net/core/dst.c
-@@ -82,12 +82,8 @@ void *dst_alloc(struct dst_ops *ops, struct net_device *dev,
-
-        if (ops->gc &&
-            !(flags & DST_NOCOUNT) &&
--           dst_entries_get_fast(ops) > ops->gc_thresh) {
--               if (ops->gc(ops)) {
--                       pr_notice_ratelimited("Route cache is full:
-consider increasing sysctl net.ipv6.route.max_size.\n");
--                       return NULL;
--               }
--       }
-+           dst_entries_get_fast(ops) > ops->gc_thresh)
-+               ops->gc(ops);
-
-        dst = kmem_cache_alloc(ops->kmem_cachep, GFP_ATOMIC);
-        if (!dst)
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index e74e0361fd92..b643dda68d31 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -91,7 +91,7 @@ static struct dst_entry *ip6_negative_advice(struct
-dst_entry *);
- static void            ip6_dst_destroy(struct dst_entry *);
- static void            ip6_dst_ifdown(struct dst_entry *,
-                                       struct net_device *dev, int how);
--static int              ip6_dst_gc(struct dst_ops *ops);
-+static void             ip6_dst_gc(struct dst_ops *ops);
-
- static int             ip6_pkt_discard(struct sk_buff *skb);
- static int             ip6_pkt_discard_out(struct net *net, struct
-sock *sk, struct sk_buff *skb);
-@@ -3284,11 +3284,10 @@ struct dst_entry *icmp6_dst_alloc(struct
-net_device *dev,
-        return dst;
- }
-
--static int ip6_dst_gc(struct dst_ops *ops)
-+static void ip6_dst_gc(struct dst_ops *ops)
- {
-        struct net *net = container_of(ops, struct net, ipv6.ip6_dst_ops);
-        int rt_min_interval = net->ipv6.sysctl.ip6_rt_gc_min_interval;
--       int rt_max_size = net->ipv6.sysctl.ip6_rt_max_size;
-        int rt_elasticity = net->ipv6.sysctl.ip6_rt_gc_elasticity;
-        int rt_gc_timeout = net->ipv6.sysctl.ip6_rt_gc_timeout;
-        unsigned long rt_last_gc = net->ipv6.ip6_rt_last_gc;
-@@ -3296,11 +3295,10 @@ static int ip6_dst_gc(struct dst_ops *ops)
-        int entries;
-
-        entries = dst_entries_get_fast(ops);
--       if (entries > rt_max_size)
-+       if (entries > ops->gc_thresh)
-                entries = dst_entries_get_slow(ops);
-
--       if (time_after(rt_last_gc + rt_min_interval, jiffies) &&
--           entries <= rt_max_size)
-+       if (time_after(rt_last_gc + rt_min_interval, jiffies))
-                goto out;
-
-        fib6_run_gc(atomic_inc_return(&net->ipv6.ip6_rt_gc_expire), net, true);
-@@ -3310,7 +3308,6 @@ static int ip6_dst_gc(struct dst_ops *ops)
- out:
-        val = atomic_read(&net->ipv6.ip6_rt_gc_expire);
-        atomic_set(&net->ipv6.ip6_rt_gc_expire, val - (val >> rt_elasticity));
--       return entries > rt_max_size;
- }
-
- static int ip6_nh_lookup_table(struct net *net, struct fib6_config *cfg,
-@@ -6512,7 +6509,7 @@ static int __net_init ip6_route_net_init(struct net *net)
- #endif
-
-        net->ipv6.sysctl.flush_delay = 0;
--       net->ipv6.sysctl.ip6_rt_max_size = 4096;
-+       net->ipv6.sysctl.ip6_rt_max_size = INT_MAX;
-        net->ipv6.sysctl.ip6_rt_gc_min_interval = HZ / 2;
-        net->ipv6.sysctl.ip6_rt_gc_timeout = 60*HZ;
-        net->ipv6.sysctl.ip6_rt_gc_interval = 30*HZ;
-
-On Sat, Dec 24, 2022 at 6:38 PM Jonathan Maxwell <jmaxwell37@gmail.com> wrote:
+On Mon, Jan 2, 2023 at 2:57 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> On Sat, Dec 24, 2022 at 7:28 AM Andrea Mayer <andrea.mayer@uniroma2.it> wrote:
-> >
-> > Hi Jon,
-> > please see below, thanks.
-> >
-> > On Wed, 21 Dec 2022 08:48:11 +1100
-> > Jonathan Maxwell <jmaxwell37@gmail.com> wrote:
-> >
-> > > On Tue, Dec 20, 2022 at 11:35 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> > > >
-> > > > On Mon, 2022-12-19 at 10:48 +1100, Jon Maxwell wrote:
-> > > > > Sending Ipv6 packets in a loop via a raw socket triggers an issue where a
-> > > > > route is cloned by ip6_rt_cache_alloc() for each packet sent. This quickly
-> > > > > consumes the Ipv6 max_size threshold which defaults to 4096 resulting in
-> > > > > these warnings:
-> > > > >
-> > > > > [1]   99.187805] dst_alloc: 7728 callbacks suppressed
-> > > > > [2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> > > > > .
-> > > > > .
-> > > > > [300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> > > >
-> > > > If I read correctly, the maximum number of dst that the raw socket can
-> > > > use this way is limited by the number of packets it allows via the
-> > > > sndbuf limit, right?
-> > > >
-> > >
-> > > Yes, but in my test sndbuf limit is never hit so it clones a route for
-> > > every packet.
-> > >
-> > > e.g:
-> > >
-> > > output from C program sending 5000000 packets via a raw socket.
-> > >
-> > > ip raw: total num pkts 5000000
-> > >
-> > > # bpftrace -e 'kprobe:dst_alloc {@count[comm] = count()}'
-> > > Attaching 1 probe...
-> > >
-> > > @count[a.out]: 5000009
-> > >
-> > > > Are other FLOWI_FLAG_KNOWN_NH users affected, too? e.g. nf_dup_ipv6,
-> > > > ipvs, seg6?
-> > > >
-> > >
-> > > Any call to ip6_pol_route(s) where no res.nh->fib_nh_gw_family is 0 can do it.
-> > > But we have only seen this for raw sockets so far.
-> > >
-> >
-> > In the SRv6 subsystem, the seg6_lookup_nexthop() is used by some
-> > cross-connecting behaviors such as End.X and End.DX6 to forward traffic to a
-> > specified nexthop. SRv6 End.X/DX6 can specify an IPv6 DA (i.e., a nexthop)
-> > different from the one carried by the IPv6 header. For this purpose,
-> > seg6_lookup_nexthop() sets the FLOWI_FLAG_KNOWN_NH.
-> >
-> Hi Andrea,
+> One detail to mention, though, is that sh:rts7751r2dplus_defconfig
+> no longer builds with older versions of binutils (2.32). Trying to
+> do so results in the following build error.
 >
-> Thanks for pointing that datapath out. The more generic approach we are
-> taking bringing Ipv6 closer to Ipv4 in this regard should fix all instances
-> of this.
+> `.exit.text' referenced in section `__bug_table' of drivers/char/hw_random/core.o:
+>         defined in discarded section `.exit.text' of drivers/char/hw_random/core.o
 >
-> > > > > [1]   99.187805] dst_alloc: 7728 callbacks suppressed
-> > > > > [2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> > > > > .
-> > > > > .
-> > > > > [300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> >
-> > I can reproduce the same warning messages reported by you, by instantiating an
-> > End.X behavior whose nexthop is handled by a route for which there is no "via".
-> > In this configuration, the ip6_pol_route() (called by seg6_lookup_nexthop())
-> > triggers ip6_rt_cache_alloc() because i) the FLOWI_FLAG_KNOWN_NH is present ii)
-> > and the res.nh->fib_nh_gw_family is 0 (as already pointed out).
-> >
+> To make this more interesting, kernels older than v5.10 do not boot
+> (at least not in qemu) when images are built with binutils 2.27 or newer.
+> That is why I had used binutils 2.32 in the first place.
 >
-> Nice, when I get back after the holiday break I'll submit the next patch. It
-> would be great if you could test the new patch and let me know how it works in
-> your tests at that juncture. I'll keep you posted.
->
-> Regards
->
-> Jon
->
-> > > Regards
-> > >
-> > > Jon
-> >
-> > Ciao,
-> > Andrea
+> I didn't bother tracking this down but switched to binutils 2.39 when
+> building v5.10+ images.
+
+I have to admit that I can't really see myself carding deeply about
+SH, but somebody else may. I don't think I've gotten an arch/sh pull
+in a couple of years.
+
+That said, I also don't see anything wrong with the arch/sh version of
+BUG() and friends, so I don't see why this would hit arch/sh and not
+somebody else.
+
+I _assume_ it is the BUG_ON() in hwrng_modexit() that triggers this:
+
+  static void __exit hwrng_modexit(void)
+  {
+        mutex_lock(&rng_mutex);
+        BUG_ON(current_rng);
+        kfree(rng_buffer);
+        ...
+
+but again, I don't see what's special about sh here apart from maybe
+"not well maintained binutils support".
+
+Does removing the BUG_ON() fix the build?
+
+None of this is at all new, though. Funky.
+
+              Linus
