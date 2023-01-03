@@ -2,96 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD4365C112
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB3A65C110
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 14:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237406AbjACNpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 08:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
+        id S237373AbjACNow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 08:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237375AbjACNpE (ORCPT
+        with ESMTP id S237549AbjACNos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 08:45:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7A51114A
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 05:45:03 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672753501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rAcxMAKJNRiN8Bk3atXFvfIisLL3QxgCrRf05TmHA2I=;
-        b=N1ea1Fnra/MBqhoT8H2zCLgdgV1iSYTwdMAyPAJkFgWWYNkh2hci5t7ttXUBMcUAVPF0Xi
-        ck98MRv15+4dFlNP7pZCIAA8cIc2X6JimARsE+U/wniBC8qN+0Cs8Nt7eVNV5oZT+Q9mL6
-        1fMmQSdjpPLaMgR7HkHAraVNqrq0cVjFJSoPOBbwP/0YohURfKPWqptkG47Ca8KKEQfNfA
-        k+Pxbq+AKTFpboyprV8NsOBANWmnw79UJZ8W3DQIF6BKhZD/K6Hpge+pmahP6Kzc8rqbIO
-        qjbgVkQQqp2o8os00S+XY/56xp0DYPCsdgLZMkB2z4lOOJUg6KrIJW88HT4SwA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672753501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rAcxMAKJNRiN8Bk3atXFvfIisLL3QxgCrRf05TmHA2I=;
-        b=vtaqMSM9L1ZY4vLO30KhOGEb2eOw2Aoh3hjYS0+BSVQDUScKMPw6w9At4dWl8YeDEpIO4B
-        db+JHH/TgSB+bkCQ==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v3 6/6] printk: introduce
- console_prepend_dropped() for dropped messages
-In-Reply-To: <Y7QtusGlIX3AU+TN@alley>
-References: <20221221202704.857925-1-john.ogness@linutronix.de>
- <20221221202704.857925-7-john.ogness@linutronix.de>
- <Y7MEDmP1zqWblj0N@alley> <87y1qjdimw.fsf@jogness.linutronix.de>
- <Y7QtusGlIX3AU+TN@alley>
-Date:   Tue, 03 Jan 2023 14:50:23 +0106
-Message-ID: <87o7rfd96w.fsf@jogness.linutronix.de>
+        Tue, 3 Jan 2023 08:44:48 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8322B1116E;
+        Tue,  3 Jan 2023 05:44:47 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id C4B671C0AAC; Tue,  3 Jan 2023 14:44:44 +0100 (CET)
+Date:   Tue, 3 Jan 2023 14:44:43 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/63] 5.10.162-rc1 review
+Message-ID: <Y7QxS98UKluqdY2c@duo.ucw.cz>
+References: <20230103081308.548338576@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="wwSmC9Gm6tCMakED"
+Content-Disposition: inline
+In-Reply-To: <20230103081308.548338576@linuxfoundation.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-03, Petr Mladek <pmladek@suse.com> wrote:
-> Well, what about making sure that something more useful is always
-> printed. For example:
->
-> 	/*
-> 	 * Make sure outbuf is sufficiently large before prepending.
-> 	 * Keep at least the prefix when the message has to be truncated.
-> 	 * It is a rather theoretical problem when someone tries to
-> 	 * use a minimalist buffer.
-> 	 */
-> 	if (WARN_ON_ONCE(len + PREFIX_MAX + 1 >= outbuf_sz))
-> 		return;
 
-I am fine with this. We won't see this warning anyway. Few lines would
-ever be printed correctly if anyone ever tries to use a buffer so small.
+--wwSmC9Gm6tCMakED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> If we want to use this way. It would probably make sense to
-> rename PREFIX_MAX to CONSOLE_PREFIX_MAX.
+Hi!
 
-Actually, I would like to rename all of those limit macros to something
-that makes more sense for the new code base:
+> This is the start of the stable review cycle for the 5.10.162 release.
+> There are 63 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-CONSOLE_EXT_LOG_MAX -> CONSOLE_MESSAGE_MAX
+CIP testing did not find any problems here:
 
-CONSOLE_LOG_MAX     -> SYSLOG_MESSAGE_MAX
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+5.10.y
 
-LOG_LINE_MAX        -> PRINTK_RECORD_MAX
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
 
-PREFIX_MAX          -> CONSOLE_PREFIX_MAX
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-I have a patch to do this ready, but I did not want to post it until we
-are finished with the thread/atomic work.
+--wwSmC9Gm6tCMakED
+Content-Type: application/pgp-signature; name="signature.asc"
 
-John
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY7QxSwAKCRAw5/Bqldv6
+8tE+AJ4z9fmkmKFJJ6pB3kzfybgGwWfa9ACgkTag9R/MhDn1GC/HBZ96z9MtV4o=
+=PpXM
+-----END PGP SIGNATURE-----
+
+--wwSmC9Gm6tCMakED--
