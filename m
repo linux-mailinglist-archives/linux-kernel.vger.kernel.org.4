@@ -2,435 +2,1645 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18AC65C3B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 043DF65C3B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237844AbjACQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:16:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
+        id S233606AbjACQRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237921AbjACQQR (ORCPT
+        with ESMTP id S233574AbjACQRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:16:17 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3F5DFC4
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 08:16:11 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-46d4840b51fso383285917b3.12
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 08:16:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T9E3yODCOfZo0/pWTG+czeAvvP2raTvlQmHAk+DYnOs=;
-        b=nA4r95X7N/keC8+zAS1FsJPbm3mXsCxmCg2IFQs4Y5rAbc31twg6Fmc4vCWD1gHVwE
-         wGJPISwNETwyjEC7X+seEI5tSi3S9kXGk7GNYM1LEN7MEDqskbaAXFgBTjn2lRtB6ATY
-         whJ0m2xlTV7HaL7Kf4CncZoIEcPhlqPNS2zew=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T9E3yODCOfZo0/pWTG+czeAvvP2raTvlQmHAk+DYnOs=;
-        b=C+gur2f/cieHVtOctsg+pYWKWCdEQHrr5IBAMUHo6vQ/CLFUqiY4JGxX/inAF8EEEm
-         082zjFtYvWAuUutAAHl1B0Ky9aNjG4CLxfOrWcwv8g5ji2K51fda5+oUSstLLm8/6Nty
-         QgL3OTFSW/3jYMjJUnbtCXY6DKk+5pHxd7yAzgP454mQgyeSGHXfuG0CfuBd0IcP40po
-         68Y86ZlZsV78ryG1IDiU9I6ew2aFV27uuiZoq5T4t4gxHQ1rVz+o155qnuEIAYhlSW/+
-         gik3CsGM1AMcDtdGFfWhVI988aH+3AlB55ElSILtyFfP1LuEK3kkIUcRc6J2TwDO1fax
-         iimg==
-X-Gm-Message-State: AFqh2kqMyXYjssDQVlCD1G/ZFfw5xvPkw+DETud9R6IXnIepM88gicrt
-        jr3uNhBLV9gQI7myBHFTyqwnlA==
-X-Google-Smtp-Source: AMrXdXugJHssjtvoGtsjOMTkx4zuVT9yDfuVETqyj1vbXVmTJuW0si04aQVlUr4wLafXWmPbDZMiTA==
-X-Received: by 2002:a81:6d4d:0:b0:3b8:1d18:90a8 with SMTP id i74-20020a816d4d000000b003b81d1890a8mr38194581ywc.39.1672762570550;
-        Tue, 03 Jan 2023 08:16:10 -0800 (PST)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id x17-20020ac84d51000000b003a7f3c4dcdfsm19032594qtv.47.2023.01.03.08.16.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 08:16:07 -0800 (PST)
-Date:   Tue, 3 Jan 2023 16:16:07 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/63] 5.10.162-rc1 review
-Message-ID: <Y7RUxwrokcIKZNZ4@google.com>
-References: <20230103081308.548338576@linuxfoundation.org>
+        Tue, 3 Jan 2023 11:17:42 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0500E1F;
+        Tue,  3 Jan 2023 08:17:39 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303FDNOC000552;
+        Tue, 3 Jan 2023 16:17:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Eop4zUojcw9G/ptTcfDgdTZgBO8J/C1LSHwIIm78kTI=;
+ b=URVf4F5W7qP76b0SiOeG3RjqRvW4ZcuDF9BeU0gmYp8Y6qFS5jbrN49Soyb7X1HXIu+F
+ Pi+2sH28W5eqxATAru6ALCFDkKe2tL2xzU7zBHuWLQwLnwOOy7/PsrhPB3RjJ6IiSCXP
+ 49mmbr9xKFLXA8SjqFBWzwmcXlk+hxu/B2nmQ0MpmVLOe9oXnF1UPL4aupLC/AtRGiDD
+ EC6NueBCQwqcdSwxtxrg9Y8mhhjsf+UiZF/oLRtxa4qK1Sf4LBcKYa+Lr9QSwfS3Y8ev
+ 8kfuoPvWmXRQ6aW3AuQSICep2WJF4jIZE5INiCmZl2KSx7msKNXHrB/90zczi0/HMWUc 4Q== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvmkmnc5d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 16:17:33 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303Fe7Fn019425;
+        Tue, 3 Jan 2023 16:17:32 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3mtcq7jqte-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 16:17:32 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 303GHV508848042
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Jan 2023 16:17:31 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4FEC558056;
+        Tue,  3 Jan 2023 16:17:31 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02D6D58063;
+        Tue,  3 Jan 2023 16:17:31 +0000 (GMT)
+Received: from [9.163.50.163] (unknown [9.163.50.163])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  3 Jan 2023 16:17:30 +0000 (GMT)
+Message-ID: <0077179b-ba75-8c21-5ac7-a62c54c3532f@linux.ibm.com>
+Date:   Tue, 3 Jan 2023 10:17:30 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103081308.548338576@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v2 3/6] An accelerated AES/GCM stitched implementation.
+Content-Language: en-US
+To:     linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com
+References: <20221205003458.4182-1-dtsen@linux.ibm.com>
+ <20221205003458.4182-4-dtsen@linux.ibm.com>
+From:   Danny Tsen <dtsen@linux.ibm.com>
+In-Reply-To: <20221205003458.4182-4-dtsen@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: liEZQan0sGmbyvRMrDNNqND-o5IM3cAK
+X-Proofpoint-ORIG-GUID: liEZQan0sGmbyvRMrDNNqND-o5IM3cAK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-03_05,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=889
+ suspectscore=0 impostorscore=0 phishscore=0 mlxscore=0 clxscore=1015
+ malwarescore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301030136
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 09:13:30AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.162 release.
-> There are 63 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 05 Jan 2023 08:12:47 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.162-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
+Hi all,
 
-Testing fails. Could you please pick these 2 up?
-https://lore.kernel.org/r/20221230153215.1333921-1-joel@joelfernandes.org
-https://lore.kernel.org/all/20221230153215.1333921-2-joel@joelfernandes.org/
+Please remove 'abiversion" from this patch file since it may not 
+compile.  Here is the git diff.
 
-Thank you,
+Thanks. -Danny
 
- - Joel
+diff --git a/arch/powerpc/crypto/p10_aes_gcm.S 
+b/arch/powerpc/crypto/p10_aes_gcm.S
+index ab353e94c1bb..2bb095c6166b 100644
+--- a/arch/powerpc/crypto/p10_aes_gcm.S
++++ b/arch/powerpc/crypto/p10_aes_gcm.S
+@@ -39,7 +39,6 @@
+   #
 
+  .machine        "any"
+-.abiversion     2
+  .text
 
-> 
-> greg k-h
-> 
-> -------------
-> Pseudo-Shortlog of commits:
-> 
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->     Linux 5.10.162-rc1
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: pass in EPOLL_URING_WAKE for eventfd signaling and wakeups
-> 
-> Jens Axboe <axboe@kernel.dk>
->     eventfd: provide a eventfd_signal_mask() helper
-> 
-> Jens Axboe <axboe@kernel.dk>
->     eventpoll: add EPOLL_URING_WAKE poll wakeup flag
-> 
-> Jens Axboe <axboe@kernel.dk>
->     Revert "proc: don't allow async path resolution of /proc/self components"
-> 
-> Jens Axboe <axboe@kernel.dk>
->     Revert "proc: don't allow async path resolution of /proc/thread-self components"
-> 
-> Jens Axboe <axboe@kernel.dk>
->     net: remove cmsg restriction from io_uring based send/recvmsg calls
-> 
-> Jens Axboe <axboe@kernel.dk>
->     task_work: unconditionally run task_work from get_signal()
-> 
-> Jens Axboe <axboe@kernel.dk>
->     signal: kill JOBCTL_TASK_WORK
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: import 5.15-stable io_uring
-> 
-> Jens Axboe <axboe@kernel.dk>
->     task_work: add helper for more targeted task_work canceling
-> 
-> Jens Axboe <axboe@kernel.dk>
->     kernel: don't call do_exit() for PF_IO_WORKER threads
-> 
-> Jens Axboe <axboe@kernel.dk>
->     kernel: stop masking signals in create_io_thread()
-> 
-> Stefan Metzmacher <metze@samba.org>
->     x86/process: setup io_threads more like normal user space threads
-> 
-> Jens Axboe <axboe@kernel.dk>
->     arch: ensure parisc/powerpc handle PF_IO_WORKER in copy_thread()
-> 
-> Jens Axboe <axboe@kernel.dk>
->     arch: setup PF_IO_WORKER threads like PF_KTHREAD
-> 
-> Seth Forshee <sforshee@digitalocean.com>
->     entry/kvm: Exit to user mode when TIF_NOTIFY_SIGNAL is set
-> 
-> Jens Axboe <axboe@kernel.dk>
->     kernel: allow fork with TIF_NOTIFY_SIGNAL pending
-> 
-> Eric W. Biederman <ebiederm@xmission.com>
->     coredump: Limit what can interrupt coredumps
-> 
-> Jens Axboe <axboe@kernel.dk>
->     kernel: remove checking for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     task_work: remove legacy TWA_SIGNAL path
-> 
-> Al Viro <viro@zeniv.linux.org.uk>
->     alpha: fix TIF_NOTIFY_SIGNAL handling
-> 
-> Vineet Gupta <vgupta@synopsys.com>
->     ARC: unbork 5.11 bootup: fix snafu in _TIF_NOTIFY_SIGNAL handling
-> 
-> Jens Axboe <axboe@kernel.dk>
->     ia64: don't call handle_signal() unless there's actually a signal queued
-> 
-> Jens Axboe <axboe@kernel.dk>
->     sparc: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     riscv: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     nds32: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     ia64: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     h8300: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     c6x: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     alpha: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     xtensa: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     arm: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     microblaze: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     hexagon: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     csky: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     openrisc: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     sh: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     um: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     s390: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     mips: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     powerpc: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     parisc: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     nios32: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     m68k: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     arm64: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     arc: add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     x86: Wire up TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     task_work: Use TIF_NOTIFY_SIGNAL if available
-> 
-> Jens Axboe <axboe@kernel.dk>
->     entry: Add support for TIF_NOTIFY_SIGNAL
-> 
-> Jens Axboe <axboe@kernel.dk>
->     fs: provide locked helper variant of close_fd_get_file()
-> 
-> Eric W. Biederman <ebiederm@xmission.com>
->     file: Rename __close_fd_get_file close_fd_get_file
-> 
-> Jens Axboe <axboe@kernel.dk>
->     fs: make do_renameat2() take struct filename
-> 
-> Jens Axboe <axboe@kernel.dk>
->     signal: Add task_sigpending() helper
-> 
-> Pavel Begunkov <asml.silence@gmail.com>
->     net: add accept helper not installing fd
-> 
-> Jens Axboe <axboe@kernel.dk>
->     net: provide __sys_shutdown_sock() that takes a socket
-> 
-> Arnaldo Carvalho de Melo <acme@redhat.com>
->     tools headers UAPI: Sync openat2.h with the kernel sources
-> 
-> Jens Axboe <axboe@kernel.dk>
->     fs: expose LOOKUP_CACHED through openat2() RESOLVE_CACHED
-> 
-> Al Viro <viro@zeniv.linux.org.uk>
->     Make sure nd->path.mnt and nd->path.dentry are always valid pointers
-> 
-> Al Viro <viro@zeniv.linux.org.uk>
->     fix handling of nd->depth on LOOKUP_CACHED failures in try_to_unlazy*
-> 
-> Jens Axboe <axboe@kernel.dk>
->     fs: add support for LOOKUP_CACHED
-> 
-> Al Viro <viro@zeniv.linux.org.uk>
->     saner calling conventions for unlazy_child()
-> 
-> Jens Axboe <axboe@kernel.dk>
->     iov_iter: add helper to save iov_iter state
-> 
-> Jens Axboe <axboe@kernel.dk>
->     kernel: provide create_io_thread() helper
-> 
-> 
-> -------------
-> 
-> Diffstat:
-> 
->  Makefile                                  |    6 +-
->  arch/alpha/include/asm/thread_info.h      |    4 +-
->  arch/alpha/kernel/entry.S                 |    2 +-
->  arch/alpha/kernel/process.c               |    2 +-
->  arch/alpha/kernel/signal.c                |    2 +-
->  arch/arc/include/asm/thread_info.h        |    4 +-
->  arch/arc/kernel/entry.S                   |    3 +-
->  arch/arc/kernel/process.c                 |    2 +-
->  arch/arc/kernel/signal.c                  |    2 +-
->  arch/arm/include/asm/thread_info.h        |    7 +-
->  arch/arm/kernel/entry-common.S            |    6 +-
->  arch/arm/kernel/entry-v7m.S               |    2 +-
->  arch/arm/kernel/process.c                 |    2 +-
->  arch/arm/kernel/signal.c                  |    2 +-
->  arch/arm64/include/asm/thread_info.h      |    5 +-
->  arch/arm64/kernel/process.c               |    2 +-
->  arch/arm64/kernel/signal.c                |    2 +-
->  arch/c6x/include/asm/thread_info.h        |    1 +
->  arch/c6x/kernel/asm-offsets.c             |    1 +
->  arch/c6x/kernel/signal.c                  |    3 +-
->  arch/csky/include/asm/thread_info.h       |    5 +-
->  arch/csky/kernel/process.c                |    2 +-
->  arch/csky/kernel/signal.c                 |    2 +-
->  arch/h8300/include/asm/thread_info.h      |    4 +-
->  arch/h8300/kernel/process.c               |    2 +-
->  arch/h8300/kernel/signal.c                |    2 +-
->  arch/hexagon/include/asm/thread_info.h    |    2 +
->  arch/hexagon/kernel/process.c             |    4 +-
->  arch/ia64/include/asm/thread_info.h       |    4 +-
->  arch/ia64/kernel/process.c                |    5 +-
->  arch/ia64/kernel/signal.c                 |    3 +-
->  arch/m68k/include/asm/thread_info.h       |    1 +
->  arch/m68k/kernel/process.c                |    2 +-
->  arch/m68k/kernel/signal.c                 |    3 +-
->  arch/microblaze/include/asm/thread_info.h |    2 +
->  arch/microblaze/kernel/process.c          |    2 +-
->  arch/microblaze/kernel/signal.c           |    3 +-
->  arch/mips/include/asm/thread_info.h       |    4 +-
->  arch/mips/kernel/process.c                |    2 +-
->  arch/mips/kernel/signal.c                 |    2 +-
->  arch/nds32/include/asm/thread_info.h      |    2 +
->  arch/nds32/kernel/ex-exit.S               |    2 +-
->  arch/nds32/kernel/process.c               |    2 +-
->  arch/nds32/kernel/signal.c                |    2 +-
->  arch/nios2/include/asm/thread_info.h      |    2 +
->  arch/nios2/kernel/process.c               |    2 +-
->  arch/nios2/kernel/signal.c                |    3 +-
->  arch/openrisc/include/asm/thread_info.h   |    2 +
->  arch/openrisc/kernel/process.c            |    2 +-
->  arch/openrisc/kernel/signal.c             |    2 +-
->  arch/parisc/include/asm/thread_info.h     |    4 +-
->  arch/parisc/kernel/process.c              |    2 +-
->  arch/parisc/kernel/signal.c               |    3 +-
->  arch/powerpc/include/asm/thread_info.h    |    5 +-
->  arch/powerpc/kernel/process.c             |    2 +-
->  arch/powerpc/kernel/signal.c              |    2 +-
->  arch/riscv/include/asm/thread_info.h      |    5 +-
->  arch/riscv/kernel/process.c               |    2 +-
->  arch/riscv/kernel/signal.c                |    2 +-
->  arch/s390/include/asm/thread_info.h       |    2 +
->  arch/s390/kernel/entry.S                  |   11 +-
->  arch/s390/kernel/process.c                |    2 +-
->  arch/s390/kernel/signal.c                 |    2 +-
->  arch/sh/include/asm/thread_info.h         |    4 +-
->  arch/sh/kernel/process_32.c               |    2 +-
->  arch/sh/kernel/signal_32.c                |    2 +-
->  arch/sparc/include/asm/thread_info_32.h   |    4 +-
->  arch/sparc/include/asm/thread_info_64.h   |    6 +-
->  arch/sparc/kernel/process_32.c            |    2 +-
->  arch/sparc/kernel/process_64.c            |    2 +-
->  arch/sparc/kernel/signal_32.c             |    2 +-
->  arch/sparc/kernel/signal_64.c             |    2 +-
->  arch/um/include/asm/thread_info.h         |    2 +
->  arch/um/kernel/process.c                  |    5 +-
->  arch/x86/include/asm/thread_info.h        |    2 +
->  arch/x86/kernel/process.c                 |   17 +
->  arch/x86/kernel/signal.c                  |    4 +-
->  arch/xtensa/include/asm/thread_info.h     |    5 +-
->  arch/xtensa/kernel/entry.S                |    4 +-
->  arch/xtensa/kernel/process.c              |    2 +-
->  arch/xtensa/kernel/signal.c               |    3 +-
->  drivers/android/binder.c                  |    2 +-
->  fs/Makefile                               |    2 -
->  fs/coredump.c                             |    2 +-
->  fs/eventfd.c                              |   37 +-
->  fs/eventpoll.c                            |   18 +-
->  fs/file.c                                 |   34 +-
->  fs/internal.h                             |    3 +
->  fs/io-wq.c                                | 1242 ----
->  fs/namei.c                                |   84 +-
->  fs/open.c                                 |    6 +
->  fs/proc/self.c                            |    7 -
->  fs/proc/thread_self.c                     |    7 -
->  include/linux/entry-common.h              |    7 +-
->  include/linux/entry-kvm.h                 |    4 +-
->  include/linux/eventfd.h                   |    7 +
->  include/linux/fcntl.h                     |    2 +-
->  include/linux/fdtable.h                   |    2 +-
->  include/linux/io_uring.h                  |   46 +-
->  include/linux/namei.h                     |    1 +
->  include/linux/net.h                       |    3 -
->  include/linux/sched.h                     |    3 +
->  include/linux/sched/jobctl.h              |    4 +-
->  include/linux/sched/signal.h              |   18 +-
->  include/linux/sched/task.h                |    2 +
->  include/linux/socket.h                    |    4 +
->  include/linux/syscalls.h                  |    2 +-
->  include/linux/task_work.h                 |    2 +
->  include/linux/tracehook.h                 |   23 +
->  include/linux/uio.h                       |   15 +
->  include/trace/events/io_uring.h           |  121 +-
->  include/uapi/linux/eventpoll.h            |    6 +
->  include/uapi/linux/io_uring.h             |  115 +-
->  include/uapi/linux/openat2.h              |    4 +
->  io_uring/Makefile                         |    6 +
->  io_uring/io-wq.c                          | 1398 +++++
->  {fs => io_uring}/io-wq.h                  |   47 +-
->  {fs => io_uring}/io_uring.c               | 9209 ++++++++++++++++-------------
->  kernel/entry/common.c                     |   14 +-
->  kernel/entry/kvm.c                        |    2 +-
->  kernel/events/uprobes.c                   |    2 +-
->  kernel/exit.c                             |    2 +-
->  kernel/fork.c                             |   33 +-
->  kernel/sched/core.c                       |    2 +-
->  kernel/signal.c                           |   53 +-
->  kernel/task_work.c                        |   48 +-
->  lib/iov_iter.c                            |   52 +-
->  net/ipv4/af_inet.c                        |    1 -
->  net/ipv6/af_inet6.c                       |    1 -
->  net/socket.c                              |   92 +-
->  tools/include/uapi/linux/openat2.h        |    4 +
->  131 files changed, 7279 insertions(+), 5773 deletions(-)
-> 
-> 
+   # 4x loops
+
+On 12/4/22 6:34 PM, Danny Tsen wrote:
+> Improve overall performance of AES/GCM encrypt and decrypt operations
+> for Power10+ CPU.
+>
+> Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
+> ---
+>   arch/powerpc/crypto/p10_aes_gcm.S | 1519 +++++++++++++++++++++++++++++
+>   1 file changed, 1519 insertions(+)
+>   create mode 100644 arch/powerpc/crypto/p10_aes_gcm.S
+>
+> diff --git a/arch/powerpc/crypto/p10_aes_gcm.S b/arch/powerpc/crypto/p10_aes_gcm.S
+> new file mode 100644
+> index 000000000000..ab353e94c1bb
+> --- /dev/null
+> +++ b/arch/powerpc/crypto/p10_aes_gcm.S
+> @@ -0,0 +1,1519 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> + #
+> + # Accelerated AES-GCM stitched implementation for ppc64le.
+> + #
+> + # Copyright 2022- IBM Inc. All rights reserved
+> + #
+> + #===================================================================================
+> + # Written by Danny Tsen <dtsen@linux.ibm.com>
+> + #
+> + # GHASH is based on the Karatsuba multiplication method.
+> + #
+> + #    Xi xor X1
+> + #
+> + #    X1 * H^4 + X2 * H^3 + x3 * H^2 + X4 * H =
+> + #      (X1.h * H4.h + xX.l * H4.l + X1 * H4) +
+> + #      (X2.h * H3.h + X2.l * H3.l + X2 * H3) +
+> + #      (X3.h * H2.h + X3.l * H2.l + X3 * H2) +
+> + #      (X4.h * H.h + X4.l * H.l + X4 * H)
+> + #
+> + # Xi = v0
+> + # H Poly = v2
+> + # Hash keys = v3 - v14
+> + #     ( H.l, H, H.h)
+> + #     ( H^2.l, H^2, H^2.h)
+> + #     ( H^3.l, H^3, H^3.h)
+> + #     ( H^4.l, H^4, H^4.h)
+> + #
+> + # v30 is IV
+> + # v31 - counter 1
+> + #
+> + # AES used,
+> + #     vs0 - vs14 for round keys
+> + #     v15, v16, v17, v18, v19, v20, v21, v22 for 8 blocks (encrypted)
+> + #
+> + # This implementation uses stitched AES-GCM approach to improve overall performance.
+> + # AES is implemented with 8x blocks and GHASH is using 2 4x blocks.
+> + #
+> + # ===================================================================================
+> + #
+> +
+> +.machine        "any"
+> +.abiversion     2
+> +.text
+> +
+> + # 4x loops
+> + # v15 - v18 - input states
+> + # vs1 - vs9 - round keys
+> + #
+> +.macro Loop_aes_middle4x
+> +	xxlor	19+32, 1, 1
+> +	xxlor	20+32, 2, 2
+> +	xxlor	21+32, 3, 3
+> +	xxlor	22+32, 4, 4
+> +
+> +	vcipher	15, 15, 19
+> +	vcipher	16, 16, 19
+> +	vcipher	17, 17, 19
+> +	vcipher	18, 18, 19
+> +
+> +	vcipher	15, 15, 20
+> +	vcipher	16, 16, 20
+> +	vcipher	17, 17, 20
+> +	vcipher	18, 18, 20
+> +
+> +	vcipher	15, 15, 21
+> +	vcipher	16, 16, 21
+> +	vcipher	17, 17, 21
+> +	vcipher	18, 18, 21
+> +
+> +	vcipher	15, 15, 22
+> +	vcipher	16, 16, 22
+> +	vcipher	17, 17, 22
+> +	vcipher	18, 18, 22
+> +
+> +	xxlor	19+32, 5, 5
+> +	xxlor	20+32, 6, 6
+> +	xxlor	21+32, 7, 7
+> +	xxlor	22+32, 8, 8
+> +
+> +	vcipher	15, 15, 19
+> +	vcipher	16, 16, 19
+> +	vcipher	17, 17, 19
+> +	vcipher	18, 18, 19
+> +
+> +	vcipher	15, 15, 20
+> +	vcipher	16, 16, 20
+> +	vcipher	17, 17, 20
+> +	vcipher	18, 18, 20
+> +
+> +	vcipher	15, 15, 21
+> +	vcipher	16, 16, 21
+> +	vcipher	17, 17, 21
+> +	vcipher	18, 18, 21
+> +
+> +	vcipher	15, 15, 22
+> +	vcipher	16, 16, 22
+> +	vcipher	17, 17, 22
+> +	vcipher	18, 18, 22
+> +
+> +	xxlor	23+32, 9, 9
+> +	vcipher	15, 15, 23
+> +	vcipher	16, 16, 23
+> +	vcipher	17, 17, 23
+> +	vcipher	18, 18, 23
+> +.endm
+> +
+> + # 8x loops
+> + # v15 - v22 - input states
+> + # vs1 - vs9 - round keys
+> + #
+> +.macro Loop_aes_middle8x
+> +	xxlor	23+32, 1, 1
+> +	xxlor	24+32, 2, 2
+> +	xxlor	25+32, 3, 3
+> +	xxlor	26+32, 4, 4
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	16, 16, 23
+> +	vcipher	17, 17, 23
+> +	vcipher	18, 18, 23
+> +	vcipher	19, 19, 23
+> +	vcipher	20, 20, 23
+> +	vcipher	21, 21, 23
+> +	vcipher	22, 22, 23
+> +
+> +	vcipher	15, 15, 24
+> +	vcipher	16, 16, 24
+> +	vcipher	17, 17, 24
+> +	vcipher	18, 18, 24
+> +	vcipher	19, 19, 24
+> +	vcipher	20, 20, 24
+> +	vcipher	21, 21, 24
+> +	vcipher	22, 22, 24
+> +
+> +	vcipher	15, 15, 25
+> +	vcipher	16, 16, 25
+> +	vcipher	17, 17, 25
+> +	vcipher	18, 18, 25
+> +	vcipher	19, 19, 25
+> +	vcipher	20, 20, 25
+> +	vcipher	21, 21, 25
+> +	vcipher	22, 22, 25
+> +
+> +	vcipher	15, 15, 26
+> +	vcipher	16, 16, 26
+> +	vcipher	17, 17, 26
+> +	vcipher	18, 18, 26
+> +	vcipher	19, 19, 26
+> +	vcipher	20, 20, 26
+> +	vcipher	21, 21, 26
+> +	vcipher	22, 22, 26
+> +
+> +	xxlor	23+32, 5, 5
+> +	xxlor	24+32, 6, 6
+> +	xxlor	25+32, 7, 7
+> +	xxlor	26+32, 8, 8
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	16, 16, 23
+> +	vcipher	17, 17, 23
+> +	vcipher	18, 18, 23
+> +	vcipher	19, 19, 23
+> +	vcipher	20, 20, 23
+> +	vcipher	21, 21, 23
+> +	vcipher	22, 22, 23
+> +
+> +	vcipher	15, 15, 24
+> +	vcipher	16, 16, 24
+> +	vcipher	17, 17, 24
+> +	vcipher	18, 18, 24
+> +	vcipher	19, 19, 24
+> +	vcipher	20, 20, 24
+> +	vcipher	21, 21, 24
+> +	vcipher	22, 22, 24
+> +
+> +	vcipher	15, 15, 25
+> +	vcipher	16, 16, 25
+> +	vcipher	17, 17, 25
+> +	vcipher	18, 18, 25
+> +	vcipher	19, 19, 25
+> +	vcipher	20, 20, 25
+> +	vcipher	21, 21, 25
+> +	vcipher	22, 22, 25
+> +
+> +	vcipher	15, 15, 26
+> +	vcipher	16, 16, 26
+> +	vcipher	17, 17, 26
+> +	vcipher	18, 18, 26
+> +	vcipher	19, 19, 26
+> +	vcipher	20, 20, 26
+> +	vcipher	21, 21, 26
+> +	vcipher	22, 22, 26
+> +
+> +	xxlor	23+32, 9, 9
+> +	vcipher	15, 15, 23
+> +	vcipher	16, 16, 23
+> +	vcipher	17, 17, 23
+> +	vcipher	18, 18, 23
+> +	vcipher	19, 19, 23
+> +	vcipher	20, 20, 23
+> +	vcipher	21, 21, 23
+> +	vcipher	22, 22, 23
+> +.endm
+> +
+> +.macro Loop_aes_middle_1x
+> +	xxlor	19+32, 1, 1
+> +	xxlor	20+32, 2, 2
+> +	xxlor	21+32, 3, 3
+> +	xxlor	22+32, 4, 4
+> +
+> +	vcipher 15, 15, 19
+> +	vcipher 15, 15, 20
+> +	vcipher 15, 15, 21
+> +	vcipher 15, 15, 22
+> +
+> +	xxlor	19+32, 5, 5
+> +	xxlor	20+32, 6, 6
+> +	xxlor	21+32, 7, 7
+> +	xxlor	22+32, 8, 8
+> +
+> +	vcipher 15, 15, 19
+> +	vcipher 15, 15, 20
+> +	vcipher 15, 15, 21
+> +	vcipher 15, 15, 22
+> +
+> +	xxlor	19+32, 9, 9
+> +	vcipher 15, 15, 19
+> +.endm
+> +
+> + #
+> + # Compute 4x hash values based on Karatsuba method.
+> + #
+> +ppc_aes_gcm_ghash:
+> +	vxor		15, 15, 0
+> +
+> +	vpmsumd		23, 12, 15		# H4.L * X.L
+> +	vpmsumd		24, 9, 16
+> +	vpmsumd		25, 6, 17
+> +	vpmsumd		26, 3, 18
+> +
+> +	vxor		23, 23, 24
+> +	vxor		23, 23, 25
+> +	vxor		23, 23, 26		# L
+> +
+> +	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
+> +	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
+> +	vpmsumd		26, 7, 17
+> +	vpmsumd		27, 4, 18
+> +
+> +	vxor		24, 24, 25
+> +	vxor		24, 24, 26
+> +	vxor		24, 24, 27		# M
+> +
+> +	# sum hash and reduction with H Poly
+> +	vpmsumd		28, 23, 2		# reduction
+> +
+> +	vxor		29, 29, 29
+> +	vsldoi		26, 24, 29, 8		# mL
+> +	vsldoi		29, 29, 24, 8		# mH
+> +	vxor		23, 23, 26		# mL + L
+> +
+> +	vsldoi		23, 23, 23, 8		# swap
+> +	vxor		23, 23, 28
+> +
+> +	vpmsumd		24, 14, 15		# H4.H * X.H
+> +	vpmsumd		25, 11, 16
+> +	vpmsumd		26, 8, 17
+> +	vpmsumd		27, 5, 18
+> +
+> +	vxor		24, 24, 25
+> +	vxor		24, 24, 26
+> +	vxor		24, 24, 27
+> +
+> +	vxor		24, 24, 29
+> +
+> +	# sum hash and reduction with H Poly
+> +	vsldoi		27, 23, 23, 8		# swap
+> +	vpmsumd		23, 23, 2
+> +	vxor		27, 27, 24
+> +	vxor		23, 23, 27
+> +
+> +	xxlor		32, 23+32, 23+32		# update hash
+> +
+> +	blr
+> +
+> + #
+> + # Combine two 4x ghash
+> + # v15 - v22 - input blocks
+> + #
+> +.macro ppc_aes_gcm_ghash2_4x
+> +	# first 4x hash
+> +	vxor		15, 15, 0		# Xi + X
+> +
+> +	vpmsumd		23, 12, 15		# H4.L * X.L
+> +	vpmsumd		24, 9, 16
+> +	vpmsumd		25, 6, 17
+> +	vpmsumd		26, 3, 18
+> +
+> +	vxor		23, 23, 24
+> +	vxor		23, 23, 25
+> +	vxor		23, 23, 26		# L
+> +
+> +	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
+> +	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
+> +	vpmsumd		26, 7, 17
+> +	vpmsumd		27, 4, 18
+> +
+> +	vxor		24, 24, 25
+> +	vxor		24, 24, 26
+> +
+> +	# sum hash and reduction with H Poly
+> +	vpmsumd		28, 23, 2		# reduction
+> +
+> +	vxor		29, 29, 29
+> +
+> +	vxor		24, 24, 27		# M
+> +	vsldoi		26, 24, 29, 8		# mL
+> +	vsldoi		29, 29, 24, 8		# mH
+> +	vxor		23, 23, 26		# mL + L
+> +
+> +	vsldoi		23, 23, 23, 8		# swap
+> +	vxor		23, 23, 28
+> +
+> +	vpmsumd		24, 14, 15		# H4.H * X.H
+> +	vpmsumd		25, 11, 16
+> +	vpmsumd		26, 8, 17
+> +	vpmsumd		27, 5, 18
+> +
+> +	vxor		24, 24, 25
+> +	vxor		24, 24, 26
+> +	vxor		24, 24, 27		# H
+> +
+> +	vxor		24, 24, 29		# H + mH
+> +
+> +	# sum hash and reduction with H Poly
+> +	vsldoi		27, 23, 23, 8		# swap
+> +	vpmsumd		23, 23, 2
+> +	vxor		27, 27, 24
+> +	vxor		27, 23, 27		# 1st Xi
+> +
+> +	# 2nd 4x hash
+> +	vpmsumd		24, 9, 20
+> +	vpmsumd		25, 6, 21
+> +	vpmsumd		26, 3, 22
+> +	vxor		19, 19, 27		# Xi + X
+> +	vpmsumd		23, 12, 19		# H4.L * X.L
+> +
+> +	vxor		23, 23, 24
+> +	vxor		23, 23, 25
+> +	vxor		23, 23, 26		# L
+> +
+> +	vpmsumd		24, 13, 19		# H4.L * X.H + H4.H * X.L
+> +	vpmsumd		25, 10, 20		# H3.L * X1.H + H3.H * X1.L
+> +	vpmsumd		26, 7, 21
+> +	vpmsumd		27, 4, 22
+> +
+> +	vxor		24, 24, 25
+> +	vxor		24, 24, 26
+> +
+> +	# sum hash and reduction with H Poly
+> +	vpmsumd		28, 23, 2		# reduction
+> +
+> +	vxor		29, 29, 29
+> +
+> +	vxor		24, 24, 27		# M
+> +	vsldoi		26, 24, 29, 8		# mL
+> +	vsldoi		29, 29, 24, 8		# mH
+> +	vxor		23, 23, 26		# mL + L
+> +
+> +	vsldoi		23, 23, 23, 8		# swap
+> +	vxor		23, 23, 28
+> +
+> +	vpmsumd		24, 14, 19		# H4.H * X.H
+> +	vpmsumd		25, 11, 20
+> +	vpmsumd		26, 8, 21
+> +	vpmsumd		27, 5, 22
+> +
+> +	vxor		24, 24, 25
+> +	vxor		24, 24, 26
+> +	vxor		24, 24, 27		# H
+> +
+> +	vxor		24, 24, 29		# H + mH
+> +
+> +	# sum hash and reduction with H Poly
+> +	vsldoi		27, 23, 23, 8		# swap
+> +	vpmsumd		23, 23, 2
+> +	vxor		27, 27, 24
+> +	vxor		23, 23, 27
+> +
+> +	xxlor		32, 23+32, 23+32		# update hash
+> +
+> +.endm
+> +
+> + #
+> + # Compute update single hash
+> + #
+> +.macro ppc_update_hash_1x
+> +	vxor		28, 28, 0
+> +
+> +	vxor		19, 19, 19
+> +
+> +	vpmsumd		22, 3, 28		# L
+> +	vpmsumd		23, 4, 28		# M
+> +	vpmsumd		24, 5, 28		# H
+> +
+> +	vpmsumd		27, 22, 2		# reduction
+> +
+> +	vsldoi		25, 23, 19, 8		# mL
+> +	vsldoi		26, 19, 23, 8		# mH
+> +	vxor		22, 22, 25		# LL + LL
+> +	vxor		24, 24, 26		# HH + HH
+> +
+> +	vsldoi		22, 22, 22, 8		# swap
+> +	vxor		22, 22, 27
+> +
+> +	vsldoi		20, 22, 22, 8		# swap
+> +	vpmsumd		22, 22, 2		# reduction
+> +	vxor		20, 20, 24
+> +	vxor		22, 22, 20
+> +
+> +	vmr		0, 22			# update hash
+> +
+> +.endm
+> +
+> +.macro SAVE_REGS
+> +	stdu 1,-640(1)
+> +	mflr 0
+> +
+> +	std	14,112(1)
+> +	std	15,120(1)
+> +	std	16,128(1)
+> +	std	17,136(1)
+> +	std	18,144(1)
+> +	std	19,152(1)
+> +	std	20,160(1)
+> +	std	21,168(1)
+> +	li	9, 256
+> +	stvx	20, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	21, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	22, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	23, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	24, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	25, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	26, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	27, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	28, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	29, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	30, 9, 1
+> +	addi	9, 9, 16
+> +	stvx	31, 9, 1
+> +	stxv	14, 464(1)
+> +	stxv	15, 480(1)
+> +	stxv	16, 496(1)
+> +	stxv	17, 512(1)
+> +	stxv	18, 528(1)
+> +	stxv	19, 544(1)
+> +	stxv	20, 560(1)
+> +	stxv	21, 576(1)
+> +	stxv	22, 592(1)
+> +	std	0, 656(1)
+> +.endm
+> +
+> +.macro RESTORE_REGS
+> +	lxv	14, 464(1)
+> +	lxv	15, 480(1)
+> +	lxv	16, 496(1)
+> +	lxv	17, 512(1)
+> +	lxv	18, 528(1)
+> +	lxv	19, 544(1)
+> +	lxv	20, 560(1)
+> +	lxv	21, 576(1)
+> +	lxv	22, 592(1)
+> +	li	9, 256
+> +	lvx	20, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	21, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	22, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	23, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	24, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	25, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	26, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	27, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	28, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	29, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	30, 9, 1
+> +	addi	9, 9, 16
+> +	lvx	31, 9, 1
+> +
+> +	ld	0, 656(1)
+> +	ld      14,112(1)
+> +	ld      15,120(1)
+> +	ld      16,128(1)
+> +	ld      17,136(1)
+> +	ld      18,144(1)
+> +	ld      19,152(1)
+> +	ld      20,160(1)
+> +	ld	21,168(1)
+> +
+> +	mtlr	0
+> +	addi	1, 1, 640
+> +.endm
+> +
+> +.macro LOAD_HASH_TABLE
+> +	# Load Xi
+> +	lxvb16x	32, 0, 8	# load Xi
+> +
+> +	# load Hash - h^4, h^3, h^2, h
+> +	li	10, 32
+> +	lxvd2x	2+32, 10, 8	# H Poli
+> +	li	10, 48
+> +	lxvd2x	3+32, 10, 8	# Hl
+> +	li	10, 64
+> +	lxvd2x	4+32, 10, 8	# H
+> +	li	10, 80
+> +	lxvd2x	5+32, 10, 8	# Hh
+> +
+> +	li	10, 96
+> +	lxvd2x	6+32, 10, 8	# H^2l
+> +	li	10, 112
+> +	lxvd2x	7+32, 10, 8	# H^2
+> +	li	10, 128
+> +	lxvd2x	8+32, 10, 8	# H^2h
+> +
+> +	li	10, 144
+> +	lxvd2x	9+32, 10, 8	# H^3l
+> +	li	10, 160
+> +	lxvd2x	10+32, 10, 8	# H^3
+> +	li	10, 176
+> +	lxvd2x	11+32, 10, 8	# H^3h
+> +
+> +	li	10, 192
+> +	lxvd2x	12+32, 10, 8	# H^4l
+> +	li	10, 208
+> +	lxvd2x	13+32, 10, 8	# H^4
+> +	li	10, 224
+> +	lxvd2x	14+32, 10, 8	# H^4h
+> +.endm
+> +
+> + #
+> + # aes_p10_gcm_encrypt (const void *inp, void *out, size_t len,
+> + #               const char *rk, unsigned char iv[16], void *Xip);
+> + #
+> + #    r3 - inp
+> + #    r4 - out
+> + #    r5 - len
+> + #    r6 - AES round keys
+> + #    r7 - iv and other data
+> + #    r8 - Xi, HPoli, hash keys
+> + #
+> + #    rounds is at offset 240 in rk
+> + #    Xi is at 0 in gcm_table (Xip).
+> + #
+> +.global aes_p10_gcm_encrypt
+> +.align 5
+> +aes_p10_gcm_encrypt:
+> +
+> +	SAVE_REGS
+> +
+> +	LOAD_HASH_TABLE
+> +
+> +	# initialize ICB: GHASH( IV ), IV - r7
+> +	lxvb16x	30+32, 0, 7	# load IV  - v30
+> +
+> +	mr	12, 5		# length
+> +	li	11, 0		# block index
+> +
+> +	# counter 1
+> +	vxor	31, 31, 31
+> +	vspltisb 22, 1
+> +	vsldoi	31, 31, 22,1	# counter 1
+> +
+> +	# load round key to VSR
+> +	lxv	0, 0(6)
+> +	lxv	1, 0x10(6)
+> +	lxv	2, 0x20(6)
+> +	lxv	3, 0x30(6)
+> +	lxv	4, 0x40(6)
+> +	lxv	5, 0x50(6)
+> +	lxv	6, 0x60(6)
+> +	lxv	7, 0x70(6)
+> +	lxv	8, 0x80(6)
+> +	lxv	9, 0x90(6)
+> +	lxv	10, 0xa0(6)
+> +
+> +	# load rounds - 10 (128), 12 (192), 14 (256)
+> +	lwz	9,240(6)
+> +
+> +	#
+> +	# vxor	state, state, w # addroundkey
+> +	xxlor	32+29, 0, 0
+> +	vxor	15, 30, 29	# IV + round key - add round key 0
+> +
+> +	cmpdi	9, 10
+> +	beq	Loop_aes_gcm_8x
+> +
+> +	# load 2 more round keys (v11, v12)
+> +	lxv	11, 0xb0(6)
+> +	lxv	12, 0xc0(6)
+> +
+> +	cmpdi	9, 12
+> +	beq	Loop_aes_gcm_8x
+> +
+> +	# load 2 more round keys (v11, v12, v13, v14)
+> +	lxv	13, 0xd0(6)
+> +	lxv	14, 0xe0(6)
+> +	cmpdi	9, 14
+> +	beq	Loop_aes_gcm_8x
+> +
+> +	b	aes_gcm_out
+> +
+> +.align 5
+> +Loop_aes_gcm_8x:
+> +	mr	14, 3
+> +	mr	9, 4
+> +
+> +	#
+> +	# check partial block
+> +	#
+> +Continue_partial_check:
+> +	ld	15, 56(7)
+> +	cmpdi	15, 0
+> +	beq	Continue
+> +	bgt	Final_block
+> +	cmpdi	15, 16
+> +	blt	Final_block
+> +
+> +Continue:
+> +	# n blcoks
+> +	li	10, 128
+> +	divdu	10, 12, 10	# n 128 bytes-blocks
+> +	cmpdi	10, 0
+> +	beq	Loop_last_block
+> +
+> +	vaddudm	30, 30, 31	# IV + counter
+> +	vxor	16, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	17, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	18, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	19, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	20, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	21, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	22, 30, 29
+> +
+> +	mtctr	10
+> +
+> +	li	15, 16
+> +	li	16, 32
+> +	li	17, 48
+> +	li	18, 64
+> +	li	19, 80
+> +	li	20, 96
+> +	li	21, 112
+> +
+> +	lwz	10, 240(6)
+> +
+> +Loop_8x_block:
+> +
+> +	lxvb16x		15, 0, 14	# load block
+> +	lxvb16x		16, 15, 14	# load block
+> +	lxvb16x		17, 16, 14	# load block
+> +	lxvb16x		18, 17, 14	# load block
+> +	lxvb16x		19, 18, 14	# load block
+> +	lxvb16x		20, 19, 14	# load block
+> +	lxvb16x		21, 20, 14	# load block
+> +	lxvb16x		22, 21, 14	# load block
+> +	addi		14, 14, 128
+> +
+> +	Loop_aes_middle8x
+> +
+> +	xxlor	23+32, 10, 10
+> +
+> +	cmpdi	10, 10
+> +	beq	Do_next_ghash
+> +
+> +	# 192 bits
+> +	xxlor	24+32, 11, 11
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	16, 16, 23
+> +	vcipher	17, 17, 23
+> +	vcipher	18, 18, 23
+> +	vcipher	19, 19, 23
+> +	vcipher	20, 20, 23
+> +	vcipher	21, 21, 23
+> +	vcipher	22, 22, 23
+> +
+> +	vcipher	15, 15, 24
+> +	vcipher	16, 16, 24
+> +	vcipher	17, 17, 24
+> +	vcipher	18, 18, 24
+> +	vcipher	19, 19, 24
+> +	vcipher	20, 20, 24
+> +	vcipher	21, 21, 24
+> +	vcipher	22, 22, 24
+> +
+> +	xxlor	23+32, 12, 12
+> +
+> +	cmpdi	10, 12
+> +	beq	Do_next_ghash
+> +
+> +	# 256 bits
+> +	xxlor	24+32, 13, 13
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	16, 16, 23
+> +	vcipher	17, 17, 23
+> +	vcipher	18, 18, 23
+> +	vcipher	19, 19, 23
+> +	vcipher	20, 20, 23
+> +	vcipher	21, 21, 23
+> +	vcipher	22, 22, 23
+> +
+> +	vcipher	15, 15, 24
+> +	vcipher	16, 16, 24
+> +	vcipher	17, 17, 24
+> +	vcipher	18, 18, 24
+> +	vcipher	19, 19, 24
+> +	vcipher	20, 20, 24
+> +	vcipher	21, 21, 24
+> +	vcipher	22, 22, 24
+> +
+> +	xxlor	23+32, 14, 14
+> +
+> +	cmpdi	10, 14
+> +	beq	Do_next_ghash
+> +	b	aes_gcm_out
+> +
+> +Do_next_ghash:
+> +
+> +	#
+> +	# last round
+> +	vcipherlast     15, 15, 23
+> +	vcipherlast     16, 16, 23
+> +
+> +	xxlxor		47, 47, 15
+> +	stxvb16x        47, 0, 9	# store output
+> +	xxlxor		48, 48, 16
+> +	stxvb16x        48, 15, 9	# store output
+> +
+> +	vcipherlast     17, 17, 23
+> +	vcipherlast     18, 18, 23
+> +
+> +	xxlxor		49, 49, 17
+> +	stxvb16x        49, 16, 9	# store output
+> +	xxlxor		50, 50, 18
+> +	stxvb16x        50, 17, 9	# store output
+> +
+> +	vcipherlast     19, 19, 23
+> +	vcipherlast     20, 20, 23
+> +
+> +	xxlxor		51, 51, 19
+> +	stxvb16x        51, 18, 9	# store output
+> +	xxlxor		52, 52, 20
+> +	stxvb16x        52, 19, 9	# store output
+> +
+> +	vcipherlast     21, 21, 23
+> +	vcipherlast     22, 22, 23
+> +
+> +	xxlxor		53, 53, 21
+> +	stxvb16x        53, 20, 9	# store output
+> +	xxlxor		54, 54, 22
+> +	stxvb16x        54, 21, 9	# store output
+> +
+> +	addi		9, 9, 128
+> +
+> +	# ghash here
+> +	ppc_aes_gcm_ghash2_4x
+> +
+> +	xxlor	27+32, 0, 0
+> +	vaddudm 30, 30, 31		# IV + counter
+> +	vmr	29, 30
+> +	vxor    15, 30, 27		# add round key
+> +	vaddudm 30, 30, 31
+> +	vxor    16, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    17, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    18, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    19, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    20, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    21, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    22, 30, 27
+> +
+> +	addi    12, 12, -128
+> +	addi    11, 11, 128
+> +
+> +	bdnz	Loop_8x_block
+> +
+> +	vmr	30, 29
+> +	stxvb16x 30+32, 0, 7		# update IV
+> +
+> +Loop_last_block:
+> +	cmpdi   12, 0
+> +	beq     aes_gcm_out
+> +
+> +	# loop last few blocks
+> +	li      10, 16
+> +	divdu   10, 12, 10
+> +
+> +	mtctr   10
+> +
+> +	lwz	10, 240(6)
+> +
+> +	cmpdi   12, 16
+> +	blt     Final_block
+> +
+> +Next_rem_block:
+> +	lxvb16x 15, 0, 14		# load block
+> +
+> +	Loop_aes_middle_1x
+> +
+> +	xxlor	23+32, 10, 10
+> +
+> +	cmpdi	10, 10
+> +	beq	Do_next_1x
+> +
+> +	# 192 bits
+> +	xxlor	24+32, 11, 11
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	15, 15, 24
+> +
+> +	xxlor	23+32, 12, 12
+> +
+> +	cmpdi	10, 12
+> +	beq	Do_next_1x
+> +
+> +	# 256 bits
+> +	xxlor	24+32, 13, 13
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	15, 15, 24
+> +
+> +	xxlor	23+32, 14, 14
+> +
+> +	cmpdi	10, 14
+> +	beq	Do_next_1x
+> +
+> +Do_next_1x:
+> +	vcipherlast     15, 15, 23
+> +
+> +	xxlxor		47, 47, 15
+> +	stxvb16x	47, 0, 9	# store output
+> +	addi		14, 14, 16
+> +	addi		9, 9, 16
+> +
+> +	vmr		28, 15
+> +	ppc_update_hash_1x
+> +
+> +	addi		12, 12, -16
+> +	addi		11, 11, 16
+> +	xxlor		19+32, 0, 0
+> +	vaddudm		30, 30, 31		# IV + counter
+> +	vxor		15, 30, 19		# add round key
+> +
+> +	bdnz	Next_rem_block
+> +
+> +	li	15, 0
+> +	std	15, 56(7)		# clear partial?
+> +	stxvb16x 30+32, 0, 7		# update IV
+> +	cmpdi	12, 0
+> +	beq	aes_gcm_out
+> +
+> +Final_block:
+> +	lwz	10, 240(6)
+> +	Loop_aes_middle_1x
+> +
+> +	xxlor	23+32, 10, 10
+> +
+> +	cmpdi	10, 10
+> +	beq	Do_final_1x
+> +
+> +	# 192 bits
+> +	xxlor	24+32, 11, 11
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	15, 15, 24
+> +
+> +	xxlor	23+32, 12, 12
+> +
+> +	cmpdi	10, 12
+> +	beq	Do_final_1x
+> +
+> +	# 256 bits
+> +	xxlor	24+32, 13, 13
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	15, 15, 24
+> +
+> +	xxlor	23+32, 14, 14
+> +
+> +	cmpdi	10, 14
+> +	beq	Do_final_1x
+> +
+> +Do_final_1x:
+> +	vcipherlast     15, 15, 23
+> +
+> +	# check partial block
+> +	li	21, 0			# encrypt
+> +	ld	15, 56(7)		# partial?
+> +	cmpdi	15, 0
+> +	beq	Normal_block
+> +	bl	Do_partial_block
+> +
+> +	cmpdi	12, 0
+> +	ble aes_gcm_out
+> +
+> +	b Continue_partial_check
+> +
+> +Normal_block:
+> +	lxvb16x	15, 0, 14		# load last block
+> +	xxlxor	47, 47, 15
+> +
+> +	# create partial block mask
+> +	li	15, 16
+> +	sub	15, 15, 12		# index to the mask
+> +
+> +	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
+> +	vspltisb	17, 0		# second 16 bytes - 0x0000...00
+> +	li	10, 192
+> +	stvx	16, 10, 1
+> +	addi	10, 10, 16
+> +	stvx	17, 10, 1
+> +
+> +	addi	10, 1, 192
+> +	lxvb16x	16, 15, 10		# load partial block mask
+> +	xxland	47, 47, 16
+> +
+> +	vmr	28, 15
+> +	ppc_update_hash_1x
+> +
+> +	# * should store only the remaining bytes.
+> +	bl	Write_partial_block
+> +
+> +	stxvb16x 30+32, 0, 7		# update IV
+> +	std	12, 56(7)		# update partial?
+> +	li	16, 16
+> +
+> +	stxvb16x	32, 0, 8		# write out Xi
+> +	stxvb16x	32, 16, 8		# write out Xi
+> +	b aes_gcm_out
+> +
+> + #
+> + # Compute data mask
+> + #
+> +.macro GEN_MASK _mask _start _end
+> +	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
+> +	vspltisb	17, 0		# second 16 bytes - 0x0000...00
+> +	li	10, 192
+> +	stxvb16x	17+32, 10, 1
+> +	add	10, 10, \_start
+> +	stxvb16x	16+32, 10, 1
+> +	add	10, 10, \_end
+> +	stxvb16x	17+32, 10, 1
+> +
+> +	addi	10, 1, 192
+> +	lxvb16x	\_mask, 0, 10		# load partial block mask
+> +.endm
+> +
+> + #
+> + # Handle multiple partial blocks for encrypt and decrypt
+> + #   operations.
+> + #
+> +Do_partial_block:
+> +	add	17, 15, 5
+> +	cmpdi	17, 16
+> +	bgt	Big_block
+> +	GEN_MASK 18, 15, 5
+> +	b	_Partial
+> +Big_block:
+> +	li	16, 16
+> +	GEN_MASK 18, 15, 16
+> +
+> +_Partial:
+> +	lxvb16x	17+32, 0, 14		# load last block
+> +	sldi	16, 15, 3
+> +	mtvsrdd	32+16, 0, 16
+> +	vsro	17, 17, 16
+> +	xxlxor	47, 47, 17+32
+> +	xxland	47, 47, 18
+> +
+> +	vxor	0, 0, 0			# clear Xi
+> +	vmr	28, 15
+> +
+> +	cmpdi	21, 0			# encrypt/decrypt ops?
+> +	beq	Skip_decrypt
+> +	xxland	32+28, 32+17, 18
+> +
+> +Skip_decrypt:
+> +
+> +	ppc_update_hash_1x
+> +
+> +	li	16, 16
+> +	lxvb16x 32+29, 16, 8
+> +	vxor	0, 0, 29
+> +	stxvb16x 32, 0, 8		# save Xi
+> +	stxvb16x 32, 16, 8		# save Xi
+> +
+> +	# store partial block
+> +	# loop the rest of the stream if any
+> +	sldi	16, 15, 3
+> +	mtvsrdd	32+16, 0, 16
+> +	vslo	15, 15, 16
+> +	#stxvb16x 15+32, 0, 9		# last block
+> +
+> +	li	16, 16
+> +	sub	17, 16, 15		# 16 - partial
+> +
+> +	add	16, 15, 5
+> +	cmpdi	16, 16
+> +	bgt	Larger_16
+> +	mr	17, 5
+> +Larger_16:
+> +
+> +	# write partial
+> +	li		10, 192
+> +	stxvb16x	15+32, 10, 1	# save current block
+> +
+> +	addi		10, 9, -1
+> +	addi		16, 1, 191
+> +	mtctr		17		# move partial byte count
+> +
+> +Write_last_partial:
+> +        lbzu		18, 1(16)
+> +	stbu		18, 1(10)
+> +        bdnz		Write_last_partial
+> +	# Complete loop partial
+> +
+> +	add	14, 14, 17
+> +	add	9, 9, 17
+> +	sub	12, 12, 17
+> +	add	11, 11, 17
+> +
+> +	add	15, 15, 5
+> +	cmpdi	15, 16
+> +	blt	Save_partial
+> +
+> +	vaddudm	30, 30, 31
+> +	stxvb16x 30+32, 0, 7		# update IV
+> +	xxlor	32+29, 0, 0
+> +	vxor	15, 30, 29		# IV + round key - add round key 0
+> +	li	15, 0
+> +	std	15, 56(7)		# partial done - clear
+> +	b	Partial_done
+> +Save_partial:
+> +	std	15, 56(7)		# partial
+> +
+> +Partial_done:
+> +	blr
+> +
+> + #
+> + # Write partial block
+> + # r9 - output
+> + # r12 - remaining bytes
+> + # v15 - partial input data
+> + #
+> +Write_partial_block:
+> +	li		10, 192
+> +	stxvb16x	15+32, 10, 1		# last block
+> +
+> +	addi		10, 9, -1
+> +	addi		16, 1, 191
+> +
+> +        mtctr		12			# remaining bytes
+> +	li		15, 0
+> +
+> +Write_last_byte:
+> +        lbzu		14, 1(16)
+> +	stbu		14, 1(10)
+> +        bdnz		Write_last_byte
+> +	blr
+> +
+> +aes_gcm_out:
+> +	# out = state
+> +	stxvb16x	32, 0, 8		# write out Xi
+> +	add	3, 11, 12		# return count
+> +
+> +	RESTORE_REGS
+> +	blr
+> +
+> + #
+> + # 8x Decrypt
+> + #
+> +.global aes_p10_gcm_decrypt
+> +.align 5
+> +aes_p10_gcm_decrypt:
+> +
+> +	SAVE_REGS
+> +
+> +	LOAD_HASH_TABLE
+> +
+> +	# initialize ICB: GHASH( IV ), IV - r7
+> +	lxvb16x	30+32, 0, 7	# load IV  - v30
+> +
+> +	mr	12, 5		# length
+> +	li	11, 0		# block index
+> +
+> +	# counter 1
+> +	vxor	31, 31, 31
+> +	vspltisb 22, 1
+> +	vsldoi	31, 31, 22,1	# counter 1
+> +
+> +	# load round key to VSR
+> +	lxv	0, 0(6)
+> +	lxv	1, 0x10(6)
+> +	lxv	2, 0x20(6)
+> +	lxv	3, 0x30(6)
+> +	lxv	4, 0x40(6)
+> +	lxv	5, 0x50(6)
+> +	lxv	6, 0x60(6)
+> +	lxv	7, 0x70(6)
+> +	lxv	8, 0x80(6)
+> +	lxv	9, 0x90(6)
+> +	lxv	10, 0xa0(6)
+> +
+> +	# load rounds - 10 (128), 12 (192), 14 (256)
+> +	lwz	9,240(6)
+> +
+> +	#
+> +	# vxor	state, state, w # addroundkey
+> +	xxlor	32+29, 0, 0
+> +	vxor	15, 30, 29	# IV + round key - add round key 0
+> +
+> +	cmpdi	9, 10
+> +	beq	Loop_aes_gcm_8x_dec
+> +
+> +	# load 2 more round keys (v11, v12)
+> +	lxv	11, 0xb0(6)
+> +	lxv	12, 0xc0(6)
+> +
+> +	cmpdi	9, 12
+> +	beq	Loop_aes_gcm_8x_dec
+> +
+> +	# load 2 more round keys (v11, v12, v13, v14)
+> +	lxv	13, 0xd0(6)
+> +	lxv	14, 0xe0(6)
+> +	cmpdi	9, 14
+> +	beq	Loop_aes_gcm_8x_dec
+> +
+> +	b	aes_gcm_out
+> +
+> +.align 5
+> +Loop_aes_gcm_8x_dec:
+> +	mr	14, 3
+> +	mr	9, 4
+> +
+> +	#
+> +	# check partial block
+> +	#
+> +Continue_partial_check_dec:
+> +	ld	15, 56(7)
+> +	cmpdi	15, 0
+> +	beq	Continue_dec
+> +	bgt	Final_block_dec
+> +	cmpdi	15, 16
+> +	blt	Final_block_dec
+> +
+> +Continue_dec:
+> +	# n blcoks
+> +	li	10, 128
+> +	divdu	10, 12, 10	# n 128 bytes-blocks
+> +	cmpdi	10, 0
+> +	beq	Loop_last_block_dec
+> +
+> +	vaddudm	30, 30, 31	# IV + counter
+> +	vxor	16, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	17, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	18, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	19, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	20, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	21, 30, 29
+> +	vaddudm	30, 30, 31
+> +	vxor	22, 30, 29
+> +
+> +	mtctr	10
+> +
+> +	li	15, 16
+> +	li	16, 32
+> +	li	17, 48
+> +	li	18, 64
+> +	li	19, 80
+> +	li	20, 96
+> +	li	21, 112
+> +
+> +	lwz	10, 240(6)
+> +
+> +Loop_8x_block_dec:
+> +
+> +	lxvb16x		15, 0, 14	# load block
+> +	lxvb16x		16, 15, 14	# load block
+> +	lxvb16x		17, 16, 14	# load block
+> +	lxvb16x		18, 17, 14	# load block
+> +	lxvb16x		19, 18, 14	# load block
+> +	lxvb16x		20, 19, 14	# load block
+> +	lxvb16x		21, 20, 14	# load block
+> +	lxvb16x		22, 21, 14	# load block
+> +	addi		14, 14, 128
+> +
+> +	Loop_aes_middle8x
+> +
+> +	xxlor	23+32, 10, 10
+> +
+> +	cmpdi	10, 10
+> +	beq	Do_next_ghash_dec
+> +
+> +	# 192 bits
+> +	xxlor	24+32, 11, 11
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	16, 16, 23
+> +	vcipher	17, 17, 23
+> +	vcipher	18, 18, 23
+> +	vcipher	19, 19, 23
+> +	vcipher	20, 20, 23
+> +	vcipher	21, 21, 23
+> +	vcipher	22, 22, 23
+> +
+> +	vcipher	15, 15, 24
+> +	vcipher	16, 16, 24
+> +	vcipher	17, 17, 24
+> +	vcipher	18, 18, 24
+> +	vcipher	19, 19, 24
+> +	vcipher	20, 20, 24
+> +	vcipher	21, 21, 24
+> +	vcipher	22, 22, 24
+> +
+> +	xxlor	23+32, 12, 12
+> +
+> +	cmpdi	10, 12
+> +	beq	Do_next_ghash_dec
+> +
+> +	# 256 bits
+> +	xxlor	24+32, 13, 13
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	16, 16, 23
+> +	vcipher	17, 17, 23
+> +	vcipher	18, 18, 23
+> +	vcipher	19, 19, 23
+> +	vcipher	20, 20, 23
+> +	vcipher	21, 21, 23
+> +	vcipher	22, 22, 23
+> +
+> +	vcipher	15, 15, 24
+> +	vcipher	16, 16, 24
+> +	vcipher	17, 17, 24
+> +	vcipher	18, 18, 24
+> +	vcipher	19, 19, 24
+> +	vcipher	20, 20, 24
+> +	vcipher	21, 21, 24
+> +	vcipher	22, 22, 24
+> +
+> +	xxlor	23+32, 14, 14
+> +
+> +	cmpdi	10, 14
+> +	beq	Do_next_ghash_dec
+> +	b	aes_gcm_out
+> +
+> +Do_next_ghash_dec:
+> +
+> +	#
+> +	# last round
+> +	vcipherlast     15, 15, 23
+> +	vcipherlast     16, 16, 23
+> +
+> +	xxlxor		47, 47, 15
+> +	stxvb16x        47, 0, 9	# store output
+> +	xxlxor		48, 48, 16
+> +	stxvb16x        48, 15, 9	# store output
+> +
+> +	vcipherlast     17, 17, 23
+> +	vcipherlast     18, 18, 23
+> +
+> +	xxlxor		49, 49, 17
+> +	stxvb16x        49, 16, 9	# store output
+> +	xxlxor		50, 50, 18
+> +	stxvb16x        50, 17, 9	# store output
+> +
+> +	vcipherlast     19, 19, 23
+> +	vcipherlast     20, 20, 23
+> +
+> +	xxlxor		51, 51, 19
+> +	stxvb16x        51, 18, 9	# store output
+> +	xxlxor		52, 52, 20
+> +	stxvb16x        52, 19, 9	# store output
+> +
+> +	vcipherlast     21, 21, 23
+> +	vcipherlast     22, 22, 23
+> +
+> +	xxlxor		53, 53, 21
+> +	stxvb16x        53, 20, 9	# store output
+> +	xxlxor		54, 54, 22
+> +	stxvb16x        54, 21, 9	# store output
+> +
+> +	addi		9, 9, 128
+> +
+> +	xxlor           15+32, 15, 15
+> +	xxlor           16+32, 16, 16
+> +	xxlor           17+32, 17, 17
+> +	xxlor           18+32, 18, 18
+> +	xxlor           19+32, 19, 19
+> +	xxlor           20+32, 20, 20
+> +	xxlor           21+32, 21, 21
+> +	xxlor           22+32, 22, 22
+> +
+> +	# ghash here
+> +	ppc_aes_gcm_ghash2_4x
+> +
+> +	xxlor	27+32, 0, 0
+> +	vaddudm 30, 30, 31		# IV + counter
+> +	vmr	29, 30
+> +	vxor    15, 30, 27		# add round key
+> +	vaddudm 30, 30, 31
+> +	vxor    16, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    17, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    18, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    19, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    20, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    21, 30, 27
+> +	vaddudm 30, 30, 31
+> +	vxor    22, 30, 27
+> +
+> +	addi    12, 12, -128
+> +	addi    11, 11, 128
+> +
+> +	bdnz	Loop_8x_block_dec
+> +
+> +	vmr	30, 29
+> +	stxvb16x 30+32, 0, 7		# update IV
+> +
+> +Loop_last_block_dec:
+> +	cmpdi   12, 0
+> +	beq     aes_gcm_out
+> +
+> +	# loop last few blocks
+> +	li      10, 16
+> +	divdu   10, 12, 10
+> +
+> +	mtctr   10
+> +
+> +	lwz	10, 240(6)
+> +
+> +	cmpdi   12, 16
+> +	blt     Final_block_dec
+> +
+> +Next_rem_block_dec:
+> +	lxvb16x 15, 0, 14		# load block
+> +
+> +	Loop_aes_middle_1x
+> +
+> +	xxlor	23+32, 10, 10
+> +
+> +	cmpdi	10, 10
+> +	beq	Do_next_1x_dec
+> +
+> +	# 192 bits
+> +	xxlor	24+32, 11, 11
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	15, 15, 24
+> +
+> +	xxlor	23+32, 12, 12
+> +
+> +	cmpdi	10, 12
+> +	beq	Do_next_1x_dec
+> +
+> +	# 256 bits
+> +	xxlor	24+32, 13, 13
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	15, 15, 24
+> +
+> +	xxlor	23+32, 14, 14
+> +
+> +	cmpdi	10, 14
+> +	beq	Do_next_1x_dec
+> +
+> +Do_next_1x_dec:
+> +	vcipherlast     15, 15, 23
+> +
+> +	xxlxor		47, 47, 15
+> +	stxvb16x	47, 0, 9	# store output
+> +	addi		14, 14, 16
+> +	addi		9, 9, 16
+> +
+> +	xxlor           28+32, 15, 15
+> +	#vmr		28, 15
+> +	ppc_update_hash_1x
+> +
+> +	addi		12, 12, -16
+> +	addi		11, 11, 16
+> +	xxlor		19+32, 0, 0
+> +	vaddudm		30, 30, 31		# IV + counter
+> +	vxor		15, 30, 19		# add round key
+> +
+> +	bdnz	Next_rem_block_dec
+> +
+> +	li	15, 0
+> +	std	15, 56(7)		# clear partial?
+> +	stxvb16x 30+32, 0, 7		# update IV
+> +	cmpdi	12, 0
+> +	beq	aes_gcm_out
+> +
+> +Final_block_dec:
+> +	lwz	10, 240(6)
+> +	Loop_aes_middle_1x
+> +
+> +	xxlor	23+32, 10, 10
+> +
+> +	cmpdi	10, 10
+> +	beq	Do_final_1x_dec
+> +
+> +	# 192 bits
+> +	xxlor	24+32, 11, 11
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	15, 15, 24
+> +
+> +	xxlor	23+32, 12, 12
+> +
+> +	cmpdi	10, 12
+> +	beq	Do_final_1x_dec
+> +
+> +	# 256 bits
+> +	xxlor	24+32, 13, 13
+> +
+> +	vcipher	15, 15, 23
+> +	vcipher	15, 15, 24
+> +
+> +	xxlor	23+32, 14, 14
+> +
+> +	cmpdi	10, 14
+> +	beq	Do_final_1x_dec
+> +
+> +Do_final_1x_dec:
+> +	vcipherlast     15, 15, 23
+> +
+> +	# check partial block
+> +	li	21, 1			# decrypt
+> +	ld	15, 56(7)		# partial?
+> +	cmpdi	15, 0
+> +	beq	Normal_block_dec
+> +	bl	Do_partial_block
+> +	cmpdi	12, 0
+> +	ble aes_gcm_out
+> +
+> +	b Continue_partial_check_dec
+> +
+> +Normal_block_dec:
+> +	lxvb16x	15, 0, 14		# load last block
+> +	xxlxor	47, 47, 15
+> +
+> +	# create partial block mask
+> +	li	15, 16
+> +	sub	15, 15, 12		# index to the mask
+> +
+> +	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
+> +	vspltisb	17, 0		# second 16 bytes - 0x0000...00
+> +	li	10, 192
+> +	stvx	16, 10, 1
+> +	addi	10, 10, 16
+> +	stvx	17, 10, 1
+> +
+> +	addi	10, 1, 192
+> +	lxvb16x	16, 15, 10		# load partial block mask
+> +	xxland	47, 47, 16
+> +
+> +	xxland	32+28, 15, 16
+> +	#vmr	28, 15
+> +	ppc_update_hash_1x
+> +
+> +	# * should store only the remaining bytes.
+> +	bl	Write_partial_block
+> +
+> +	stxvb16x 30+32, 0, 7		# update IV
+> +	std	12, 56(7)		# update partial?
+> +	li	16, 16
+> +
+> +	stxvb16x	32, 0, 8		# write out Xi
+> +	stxvb16x	32, 16, 8		# write out Xi
+> +	b aes_gcm_out
