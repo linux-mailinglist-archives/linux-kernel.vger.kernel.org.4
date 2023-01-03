@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB70B65C571
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B2E65C576
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238169AbjACRxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S238154AbjACRzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbjACRxa (ORCPT
+        with ESMTP id S230441AbjACRzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:53:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FCFD2F8;
-        Tue,  3 Jan 2023 09:53:29 -0800 (PST)
-Date:   Tue, 03 Jan 2023 17:53:27 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672768408;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=beUhn54vQ9yAxhGskxJoE0cbMUZA4bJ7XIpbzZYty0Y=;
-        b=y+VTmE99cueCiL1I78JE3ewvTzfCxvKdKfcyxdyHG3LpzZTOZzi7EaDimbIvJw0vGzOjQI
-        K4JPqxJAA6rFXfaSy4mKsJiRh9NbQFoTjMzaBZ68C+bDgSEmCdOo/JAP7zXNcx8HVjblEt
-        fNO5luCHsYZIiSOCxaTDOg3Zb9HeerzYXXPUJfFIOl/WdVwANyrW5yYA9QKi4kfx6s3BpC
-        ypn+EgnFG8iWoP67aw511Euc6sgA25WIuzMlaP3T5uWJGzActnst9hl2kR/sO6Ir4T01j8
-        97kqGhA1Xbzx6TAgtSIk58v2sxCNUfnJ44/nuNpHkiDb+qJmfEeKhkZ8gWYVnA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672768408;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=beUhn54vQ9yAxhGskxJoE0cbMUZA4bJ7XIpbzZYty0Y=;
-        b=Y1CL4aI9BlTZ+NG807+10MdMOPM2UFpj98KSw67Ebu+sXDnzX/aE2HN7bK3iWBBfc45e90
-        vGg+1VQl7hHbZsDA==
-From:   "tip-bot2 for Anuradha Weeraman" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/asm] x86/lib: Fix compiler and kernel-doc warnings
-Cc:     Anuradha Weeraman <anuradha@debian.org>,
-        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230103114725.108431-1-anuradha@debian.org>
-References: <20230103114725.108431-1-anuradha@debian.org>
+        Tue, 3 Jan 2023 12:55:19 -0500
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B247BD2F8;
+        Tue,  3 Jan 2023 09:55:18 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id l29so37888930edj.7;
+        Tue, 03 Jan 2023 09:55:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RUpuSMDfOPVMA7Lhol2TGCGqnvjImReIZMnb3tupDO0=;
+        b=132kTcoPagbLBvF+ycyV++P3VRH2s7TRCrQUwgA1TOtTusGpR8gaCg1BVvaOWVYtoW
+         kvE6C5XTKgNQD3jV+Nh6dj5mGJs9uOPXbOv5bSqy0+a4lWY6N28IbSmmqPNcYS01Mrk4
+         sRiAc87ftBgdhqQeME9Pm3i7xsA3ObAsvtCvgHF8V9OLjiyxYcLlJpBxlGkDB8GefFig
+         fFBrK/N+/Bm2K+TiinHkucdFnKw+R4man1EmLH1NzVW+/g9qlTSfGfzosc4EUEbCKPo7
+         DIjTIssW6rvrSz7A7Uh+yKXLpC7vNmDSxPxVzWPp3ad8EFHBzuF+T/NdXFC9M9IKcz0H
+         lWFw==
+X-Gm-Message-State: AFqh2kr9Z2X9v6SGfmQ3fYsZKROPB7YK6Pfk6ROdh9ZbUJN3opB8vtNp
+        P2YaLpBxaab5dnDFJVPR4xerD3iL9VZGxV7dOtaTWdab
+X-Google-Smtp-Source: AMrXdXuFEL2ZEbkBLv778V3DmoFPb+DI+v37vVO4pDA8Oi4xBWOX2M+nFyckvvm4rOhlyhU2rwyVLbRy8TFL/tNEwVY=
+X-Received: by 2002:a50:eb49:0:b0:46d:731c:2baf with SMTP id
+ z9-20020a50eb49000000b0046d731c2bafmr4325586edp.280.1672768517389; Tue, 03
+ Jan 2023 09:55:17 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <167276840783.4906.14619707136056889151.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205002804.21225-1-rick.p.edgecombe@intel.com>
+ <CAJZ5v0iZ8QdCMca1F+z2NJ8+a-jUkGMSNp2KRovCB-aMjHF7qg@mail.gmail.com> <c4c95945df72fda7b7d6f333a4aea7e19d7e684c.camel@intel.com>
+In-Reply-To: <c4c95945df72fda7b7d6f333a4aea7e19d7e684c.camel@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 3 Jan 2023 18:55:06 +0100
+Message-ID: <CAJZ5v0j6qd930BKWWf-e+_Vod0Wv16LZChCOa0yf0_uLC=UMyw@mail.gmail.com>
+Subject: Re: [PATCH] x86/hibernate: Use fixmap for saving unmapped pages
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "x86@kernel.org" <x86@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "Brown, Len" <len.brown@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/asm branch of tip:
+On Tue, Jan 3, 2023 at 6:23 PM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> On Mon, 2022-12-05 at 13:46 +0100, Rafael J. Wysocki wrote:
+> > >
+> > > Hi,
+> > >
+> > > Since none of the module space allocation overhauls ever seem to go
+> > > smoothly
+> > > and it may be awhile before VM_FLUSH_RESET_PERMS in not needed, I
+> > > thought I
+> > > would try and fix up some of its deficiencies in the meantime. This
+> > > is
+> > > pre-work for that, but I thought it was useful enough on it's own.
+> > >
+> > > The testing was hacking up hibernate to load some data to a huge NP
+> > > mapping
+> > > and making sure the data was there when it came back.
+> >
+> > OK, so I don't feel like it is 6.2 material at this point.
+> >
+> > Please resend it when 6.2-rc1 is out so it gets some more significant
+> > linux-next coverage before going into the mainline.
+> >
+> > Thanks!
+>
+> Hi,
+>
+> This still applies fine on both tip and Linus' tree. Is it a good time?
 
-Commit-ID:     65c24d7b0f9142c6acc9bd6dabeba22767077681
-Gitweb:        https://git.kernel.org/tip/65c24d7b0f9142c6acc9bd6dabeba22767077681
-Author:        Anuradha Weeraman <anuradha@debian.org>
-AuthorDate:    Tue, 03 Jan 2023 17:17:24 +05:30
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 03 Jan 2023 18:46:21 +01:00
+Sure.
 
-x86/lib: Fix compiler and kernel-doc warnings
-
-Fix the following W=1 warnings:
-
-arch/x86/lib/cmdline.c:
-
-  - Include <asm/cmdline.h> to fix missing-prototypes warnings.
-
-  - Update comment for __cmdline_find_option_bool to fix a kernel-doc warning.
-
-Signed-off-by: Anuradha Weeraman <anuradha@debian.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230103114725.108431-1-anuradha@debian.org
----
- arch/x86/lib/cmdline.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/lib/cmdline.c b/arch/x86/lib/cmdline.c
-index b6da093..80570eb 100644
---- a/arch/x86/lib/cmdline.c
-+++ b/arch/x86/lib/cmdline.c
-@@ -7,16 +7,18 @@
- #include <linux/string.h>
- #include <linux/ctype.h>
- #include <asm/setup.h>
-+#include <asm/cmdline.h>
- 
- static inline int myisspace(u8 c)
- {
- 	return c <= ' ';	/* Close enough approximation */
- }
- 
--/**
-+/*
-  * Find a boolean option (like quiet,noapic,nosmp....)
-  *
-  * @cmdline: the cmdline string
-+ * @max_cmdline_size: the maximum size of cmdline
-  * @option: option string to look for
-  *
-  * Returns the position of that @option (starts counting with 1)
+Thanks!
