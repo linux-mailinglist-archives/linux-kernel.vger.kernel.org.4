@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A770565C8AE
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B56B65C8B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbjACVNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 16:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S234128AbjACVOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 16:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbjACVNv (ORCPT
+        with ESMTP id S234088AbjACVOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:13:51 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F00614026;
-        Tue,  3 Jan 2023 13:13:50 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id s187so28090061oie.10;
-        Tue, 03 Jan 2023 13:13:50 -0800 (PST)
+        Tue, 3 Jan 2023 16:14:01 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537F713F14
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 13:13:59 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id c2so6410271plc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 13:13:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XE75YtvOdvDomo8uXrOVQKva/Jfq1iADNtB4zYNap7c=;
-        b=Lpowg12mxYqoiJ4BdljvIs/bARRrYXIOFjq+fs8Y/8lZbX4Vrm/ihZGZyXrwtTDRGt
-         4qarAynnfhSVeEb0jVrmjqG4XpQ+h/HGOyy9J9mlsjT01v+Kg3a6lWnk6Iu2cPUxh9mU
-         N+aFsvWoqJ3eezpDT9RQTS391H9EupZbcTGDqamdY2frrRyeDbl+KnGCTFpc25tBDD6+
-         dHnvlZYrv2+PTwYEVThC5180SsdwTPnuvgm/LYnlsIgpscPdfIUNimPQsM3RFZ0CHZzl
-         Nk2bo61/wgKPFM/6Bzlbhkb7AZUZACncwGR4hObH5YmghEVk5a+vMWgKOwG9L9TyP6ox
-         OOwQ==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9p6xOAllsdwmLNRF1CYEiIp55ypvlzYzax0rYzleWNo=;
+        b=ciy1v2owEhU15SQWAmYsdnJ1U5xMAuX9wzmG43dAuqW7vCvtsEpJkV55tG9JuZSJTS
+         fkvXO7rqR96Q01Np531KBtWzzBAiqUHSw/2uwB4qMojVHHvYWrsBgarkdFofh14rFl46
+         5ARxqE5hr1JAnrDVEFTfxpMNxqTaY+rrkJQcMQOr4UVOQZHdDLS/hwXhHwcwbA/IY8po
+         qXiNsF0hj8M1B7TphtxcQfzfMw/zLvuuRxxIH1zB1J8kDFkEljiJjUoh2A49ocsY8i22
+         wer+iZUB0riKCypu60lSg3hRyA4GpRQsKFwwsgPYHJr/3UMjMrruzD2CC22ebXuacWn7
+         9bNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XE75YtvOdvDomo8uXrOVQKva/Jfq1iADNtB4zYNap7c=;
-        b=kLKt/KdtYD6UyINq8TFh6gdzPpEZbjZ46avY6ptTf2SC3yWPRG2HD+dOFYAtbvmt12
-         qCBHxkANQ3gZ/s5uvkWdegRsxaZjFtrzctl/2nD1docE39KKyPfcV1WK/N03pE8fJB2m
-         QoAmws6Rn3T4cUE0ljuNo23zI46lng1GLbJFK9kqIhFefqVA2BGrFSC8E5HCUBhw2gi0
-         n7NFdiq910ncKA3JQmWixBfEjtmj9Lo+tWBILhuOlCESy++qvjeE+DrR9piYU5EUW9o6
-         RMc7dR+386qFUwfihnAWzbsCDXkIKBLRGGyYanBS1QRSMM1GojnFzWqUnZwDfC9AkZnz
-         55Xg==
-X-Gm-Message-State: AFqh2kokPrG1MgHslJIbuqCMLwilgMufQdBpmv2TLODlVFUSjgINCjZw
-        xCjY7qvW0gYyXinS5Xx7Mak=
-X-Google-Smtp-Source: AMrXdXvnKs27s2VbrRKfzPeMKbw05RGDjEKZXjegoX/C5hhIayzISy2/C4p1r+mZBK8lmDMr+nJaYQ==
-X-Received: by 2002:a05:6808:7c9:b0:35e:7748:5899 with SMTP id f9-20020a05680807c900b0035e77485899mr19383004oij.50.1672780429799;
-        Tue, 03 Jan 2023 13:13:49 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s22-20020a0568080b1600b0035b439a4b81sm13513958oij.31.2023.01.03.13.13.49
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9p6xOAllsdwmLNRF1CYEiIp55ypvlzYzax0rYzleWNo=;
+        b=kwT7LhLu5kJF+hmRZk9Z3I9iXRv3dRQfIoRjbDz6w68WsxK4+93iOdKg2NGxPjTUGo
+         7xIX7CBVZ9ByE3w5euHfvahFbEPTWXw0dPhbkuZtlM10HN+CE0Z+DyAqzCCZWflvCtGj
+         x9h9HFGyy9qXeRfbsCUVqycZuO94FMm0QnZmoO3e83GSCUzqN43NRa6rMa42ZjpjM6+p
+         24y7TzrW7j/A90dUrRT/mwD3SB4LpzFpAcP+w/UYUWnBarEYwapu6mKt1/7hUmEYZ4T+
+         6spktuIW9KhaTTtFQMYZ+Y5MsR5yqHTz2Du1Td/lpkP+CJ2DYaaIwp0kDZDSOxM0ARGY
+         tvUg==
+X-Gm-Message-State: AFqh2kqJKK6Eand9sUfe2lHUOMpf69KAEzJPucjhrgkQONH23cS0YMat
+        ZpZPrm0mSGb4DUOzB26bthdqQw==
+X-Google-Smtp-Source: AMrXdXsUJWWyS0pzIR8xoON1mt4qFc3XLmvSjOul9xU40XtPwpStroqnw3FiN9s3u4jye6EKg+pYPw==
+X-Received: by 2002:a17:902:ce90:b0:192:8a1e:9bc7 with SMTP id f16-20020a170902ce9000b001928a1e9bc7mr2157751plg.0.1672780438696;
+        Tue, 03 Jan 2023 13:13:58 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id h11-20020a170902680b00b00192849d1209sm3321073plk.96.2023.01.03.13.13.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 13:13:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 13:13:48 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH] watchdog: meson_gxbb: Use devm_clk_get_enabled() helper
-Message-ID: <20230103211348.GB212337@roeck-us.net>
-References: <6c5948373d309408095c1a098b7b4c491c5265f7.1672490071.git.christophe.jaillet@wanadoo.fr>
+        Tue, 03 Jan 2023 13:13:58 -0800 (PST)
+Date:   Tue, 3 Jan 2023 21:13:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 03/27] drm/i915/gvt: Incorporate KVM memslot info into
+ check for 2MiB GTT entry
+Message-ID: <Y7SaklDQD0EoIs8l@google.com>
+References: <20221223005739.1295925-1-seanjc@google.com>
+ <20221223005739.1295925-4-seanjc@google.com>
+ <Y6vXTcxDNovrmeVB@yzhao56-desk.sh.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6c5948373d309408095c1a098b7b4c491c5265f7.1672490071.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <Y6vXTcxDNovrmeVB@yzhao56-desk.sh.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,64 +79,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 01:34:44PM +0100, Christophe JAILLET wrote:
-> The devm_clk_get_enabled() helper:
->    - calls devm_clk_get()
->    - calls clk_prepare_enable() and registers what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
-> 
-> This simplifies the code and avoids the need of a dedicated function used
-> with devm_add_action_or_reset().
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Wed, Dec 28, 2022, Yan Zhao wrote:
+> On Fri, Dec 23, 2022 at 12:57:15AM +0000, Sean Christopherson wrote:
+> > Honor KVM's max allowed page size when determining whether or not a 2MiB
+> > GTT shadow page can be created for the guest.  Querying KVM's max allowed
+> > size is somewhat odd as there's no strict requirement that KVM's memslots
+> > and VFIO's mappings are configured with the same gfn=>hva mapping, but
+> Without vIOMMU, VFIO's mapping is configured with the same as KVM's
+> memslots, i.e. with the same gfn==>HVA mapping
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+But that's controlled by userspace, correct?
 
-> ---
->  drivers/watchdog/meson_gxbb_wdt.c | 16 +---------------
->  1 file changed, 1 insertion(+), 15 deletions(-)
+> > the check will be accurate if userspace wants to have a functional guest,
+> > and at the very least checking KVM's memslots guarantees that the entire
+> > 2MiB range has been exposed to the guest.
 > 
-> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-> index 981a2f7c3bec..35d80cb39856 100644
-> --- a/drivers/watchdog/meson_gxbb_wdt.c
-> +++ b/drivers/watchdog/meson_gxbb_wdt.c
-> @@ -146,16 +146,10 @@ static const struct of_device_id meson_gxbb_wdt_dt_ids[] = {
->  };
->  MODULE_DEVICE_TABLE(of, meson_gxbb_wdt_dt_ids);
->  
-> -static void meson_clk_disable_unprepare(void *data)
-> -{
-> -	clk_disable_unprepare(data);
-> -}
-> -
->  static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct meson_gxbb_wdt *data;
-> -	int ret;
->  	u32 ctrl_reg;
->  
->  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> @@ -166,18 +160,10 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(data->reg_base))
->  		return PTR_ERR(data->reg_base);
->  
-> -	data->clk = devm_clk_get(dev, NULL);
-> +	data->clk = devm_clk_get_enabled(dev, NULL);
->  	if (IS_ERR(data->clk))
->  		return PTR_ERR(data->clk);
->  
-> -	ret = clk_prepare_enable(data->clk);
-> -	if (ret)
-> -		return ret;
-> -	ret = devm_add_action_or_reset(dev, meson_clk_disable_unprepare,
-> -				       data->clk);
-> -	if (ret)
-> -		return ret;
-> -
->  	platform_set_drvdata(pdev, data);
->  
->  	data->wdt_dev.parent = dev;
-> -- 
-> 2.34.1
-> 
+> I think just check the entrie 2MiB GFN range are all within KVM memslot is
+> enough.
+
+Strictly speaking, no.  E.g. if a 2MiB region is covered with multiple memslots
+and the memslots have different properties.
+
+> If for some reason, KVM maps a 2MiB range in 4K sizes, KVMGT can still map
+> it in IOMMU size in 2MiB size as long as the PFNs are continous and the
+> whole range is all exposed to guest.
+
+I agree that practically speaking this will hold true, but if KVMGT wants to honor
+KVM's memslots then checking that KVM allows a hugepage is correct.  Hrm, but on
+the flip side, KVMGT ignores read-only memslot flags, so KVMGT is already ignoring
+pieces of KVM's memslots.
+
+I have no objection to KVMGT defining its ABI such that KVMGT is allowed to create
+2MiB so long as (a) the GFN is contiguous according to VFIO, and (b) that the entire
+2MiB range is exposed to the guest.
+
+That said, being fully permissive also seems wasteful, e.g. KVM would need to
+explicitly support straddling multiple memslots.
+
+As a middle ground, what about tweaking kvm_page_track_is_valid_gfn() to take a
+range, and then checking that the range is contained in a single memslot?
+
+E.g. something like:
+
+bool kvm_page_track_is_contiguous_gfn_range(struct kvm *kvm, gfn_t gfn,
+					    unsigned long nr_pages)
+{
+	struct kvm_memory_slot *memslot;
+	bool ret;
+	int idx;
+
+	idx = srcu_read_lock(&kvm->srcu);
+	memslot = gfn_to_memslot(kvm, gfn);
+	ret = kvm_is_visible_memslot(memslot) &&
+	      gfn + nr_pages <= memslot->base_gfn + memslot->npages;
+	srcu_read_unlock(&kvm->srcu, idx);
+
+	return ret;
+}
+
+> Actually normal device passthrough with VFIO-PCI also maps GFNs in a
+> similar way, i.e. maps a guest visible range in as large size as
+> possible as long as the PFN is continous. 
+> > 
+> > Note, KVM may also restrict the mapping size for reasons that aren't
+> > relevant to KVMGT, e.g. for KVM's iTLB multi-hit workaround or if the gfn
+> Will iTLB multi-hit affect DMA?
+
+I highly doubt it, I can't imagine an IOMMU would have a dedicated instruction
+TLB :-)
+
+> AFAIK, IOMMU mappings currently never sets exec bit (and I'm told this bit is
+> under discussion to be removed).
