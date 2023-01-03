@@ -2,591 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3966B65C935
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 23:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A88BE65C936
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 23:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbjACWKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 17:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S233928AbjACWLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 17:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjACWKW (ORCPT
+        with ESMTP id S234057AbjACWLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 17:10:22 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4844AA9;
-        Tue,  3 Jan 2023 14:10:20 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id e205so28199196oif.11;
-        Tue, 03 Jan 2023 14:10:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cgm6PevOu4SaEp689m62kLO8X6SAzD/KfVsAqPH4asY=;
-        b=Ny8KE8QA6XEcEI5DmfDoiEfJextN+n4yfBW+MKWfvRcoO2//PqH4cvLutY9hr6aqGg
-         oz9LJc7+iLd/rNdpUYf9O2R3aO3ZC9tzMyLvpNhi3UWYeba9HrNoVEZW+FE1np8Qi2Si
-         Zej0xHlb5SUXZlwvXP8th0Buzai9RO3Bl3XmX4B840SED5oxNyNtyne99aojLh5bXmEd
-         y50n/9Z107BrhBnF/r/z7VekPKPXYCvEJ/WBp9Ync2OFe+OQmGaeADpT2iicz1qVrgiP
-         OLWsi0ejJrNCxXaWto2DfHtqrIAxjtMGitdexP8VmouT1HNgj3RH53b+u/bnA7MkBboq
-         Vbcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cgm6PevOu4SaEp689m62kLO8X6SAzD/KfVsAqPH4asY=;
-        b=oig7JCU1rDoQ1ZCWWwZgGIROYa4SGfRu73icAyHSwtCG1GBKeThx+JS5LU1jqMqduU
-         fVBFQ6hlyuLNkzBhLMWp41sx6atUkNxi91FI7IxvC3LX2pmuAVjBKr9o+T7+XkZwqxnB
-         mPiGB3hjB+AAc6aqidfRtcm3DEQfDaSj3SjXxfUkVDQL/ok6GaeLUs4yl/qdrTDEfFYg
-         liMtp+/2x38aQU9ShgvPpirmc+/suxQGFmdUtAkcmZOorByEol8VVms0Du7px0GrMqlj
-         qQzBpYw04JsN60BHcZpTX2JB/sRAJGFpGsz2IrrWc+J8VgbICBCZcIIufvHM8fq+gihU
-         kqIQ==
-X-Gm-Message-State: AFqh2koQ0B3WNbzb3+gr04qf95Jx3IZ/DcqfwamjM1pWNkv16IE6yhRg
-        rVkSlOVrqg1fYEUV+pft59U=
-X-Google-Smtp-Source: AMrXdXutk4Rft4cMNtxqoyFbps7PK3GMeY6ng1G1lzDbXARFKd6vTNyF/1dmlX4+dfz7l/qjmgRQ+w==
-X-Received: by 2002:aca:db42:0:b0:360:f4ef:f3fe with SMTP id s63-20020acadb42000000b00360f4eff3femr17642722oig.58.1672783819410;
-        Tue, 03 Jan 2023 14:10:19 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q12-20020a9d630c000000b006718a823321sm15745070otk.41.2023.01.03.14.10.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 14:10:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 14:10:17 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/4] hwmon: (sfctemp) Add StarFive JH71x0 temperature
- sensor
-Message-ID: <20230103221017.GA217155@roeck-us.net>
-References: <20230103013145.9570-1-hal.feng@starfivetech.com>
- <20230103013145.9570-3-hal.feng@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Tue, 3 Jan 2023 17:11:41 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C64F71;
+        Tue,  3 Jan 2023 14:11:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672783900; x=1704319900;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=l0hXQzVKljrv4MTtgDpTbqtBAy5mBpl95EbCsh/Eb7M=;
+  b=GJZ1bLKHvT6Qikk04NWZZT2tmuRYCe62Rs1x1jkK4+1FyPwUmBaA9mkp
+   vld1DIBE+pEx70qMZHAWfD9uZ0gc6CoNiugiw75kxQbGGu93RszYzc+G8
+   Jof815pJaUaEJonRI4+hWXgoo+fq1CZfJwxmQKc9LJ6Lau6HRM6tPJFQD
+   ua9Z/4dPXmXvVJ6MjhS8V4QYaLj181qwM9SdvgeCVjim7dZ9ZJUD6HLOv
+   7tqCOwwLlYl8H0jmQYQgQiNqr4KQZUAx757yUZLCpD2vdeJGs1+LzGwNb
+   6gGFWsGnTJ9ORlmp9uE2VzKR2zjBinGZTF1ktNnJyPt1CcH0LPFGizhht
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="321837467"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="321837467"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 14:11:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="687321323"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="687321323"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga001.jf.intel.com with ESMTP; 03 Jan 2023 14:11:40 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 3 Jan 2023 14:11:39 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 3 Jan 2023 14:11:38 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 3 Jan 2023 14:11:38 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 3 Jan 2023 14:11:38 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=COp4YzgE3ncAoCGoDJ+3BRGhpUqU4GcUHDO+KQIJJgcWd798kfZt7Y13zG8D3MMiMHpxRz4/z6aanCNUVl1yyL9v6R1Fntj9c+Fn96pyLJNwGH/LyHNUNLWU+Hy8AJuKEG9zI7Ie0i+7j1cBiEW9CVurCNkCKsTETo011qKCGtm7JhSoEkcHeR5DoWoVzCNVnYx1Fuh8iJ7OqccVrS8N6WklzL+hUXEoWs3NZKRR8Q3KuAAhFnyBYNHgNB14/tSrzGc8+vaNchhOxW4e2URoLOTc960dk3b6GG3UZ8X02EBXMlTGd3/Toz6fZEiQnz09BSmXYHtav3mFWktml3kE/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T0c5IOWRUOBv3wEuv1Zn78O4taepMSxiR1F4uiydcOw=;
+ b=CdoOT3ZjDB2bZNIe0mXD6Xk0D1v9nH/u9AuMb4lmCn7RdWOo1UMB9bBZMH9l8boUeJnv5sudfh/aXyZ3NVOLXG6ZQ/pD95cQTrF3Fd3x6AZ/A8i1TfUF7TNkYuHx+WYG7MC4c/fb45qj97d9GI2b1/EHz9uBXN1y8jYxJaRWWDjigPl4+e5CdjcsyYzwu0n11Ykn3YJAs8YflfZ0CJOoo9gxsLZaRoCyd6kE/fsYpiPAdd9NF8q7BATzYum+k8gCslloEu6GNQzVjSZUvaq4vYfI6R0TvJT0g69FPzs+Z05T1uOM4OauHEomdcvCU3voLqwotjHD6JS//qkylUJ+IQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by PH7PR11MB7608.namprd11.prod.outlook.com
+ (2603:10b6:510:269::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
+ 2023 22:11:36 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::8dee:cc20:8c44:42dd]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::8dee:cc20:8c44:42dd%5]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
+ 22:11:35 +0000
+Date:   Tue, 3 Jan 2023 14:11:33 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Robert Richter <rrichter@amd.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ira Weiny" <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        "Dan Williams" <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>
+CC:     Robert Richter <rrichter@amd.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] cxl/mbox: Fix Payload Length check for Get Log command
+Message-ID: <63b4a8153d6b6_517412948a@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230103205937.1126626-1-rrichter@amd.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230103013145.9570-3-hal.feng@starfivetech.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230103205937.1126626-1-rrichter@amd.com>
+X-ClientProxiedBy: BY3PR10CA0019.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::24) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|PH7PR11MB7608:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4fbb5bff-3061-4f73-74c9-08daedd77a63
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tc1+NIupNaXfogKef5shP8cqxOIu84MNRKPLifBM5RQMFSXlkrf+yhDQ3LIZoQ4maXlN5mDESIki51gpZKEYNDBoYLpWO2Az9436MdZM5aLbzGFxE3Tcgl8jyJ4vH7Ot6R6lGIFi+RByxpjnWndpd0avNIPflB5/N77rG7tGCGQWR+vrWdLcYnbv4JDW4tDYFIkakkBMMzPSOKoiK19iklAbnsU/6zkqUuQZg/gCvoVBXhMYeFH3BkbuQWr2egddUJ8qkFZ51+b/MVoYfyMgrUoD0MK4H7yfQfsxq3WJLZTA6qFSYgsrCrvOmKWtMDEtp/R5DRMfmK2WcymkhFYzMB6qjsYE/a2STQ0q/wgi1xa081pKtBlKvY7zUa46YUZWlew9EWiLlpe9lgsKO5qXrZpY1fDEqMdsTECmqKhL2leMCXRoT6zx1sfdpQ7HVRJDy+Am05NfZ4ZXhpRmqjHmwm8Ik5WXEU8X+Kc3/WjeIpzUL2X/oCZCZ6ydFsH7WdSDCtt9v49N6ECFOpQAocU1NNCyRboQb4TfKAdALAWRVIPGnNhAe+crBxmZ/8OVYq79XjJ9hFoLejmk6jbQYbv42SvVPEEhfBTr0dCPDViLjso6VAiBKGVlrUvM/bSKq4n/uFW1xjehqj0aCpQayJdq1Z6si5lcMJY2T7eUluYmV5l/qK5s83NZJGQP7bO93U0q
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(396003)(39860400002)(376002)(366004)(451199015)(83380400001)(26005)(9686003)(6512007)(186003)(6506007)(86362001)(38100700002)(82960400001)(41300700001)(8676002)(4326008)(2906002)(5660300002)(8936002)(6486002)(478600001)(66476007)(66946007)(316002)(66556008)(6636002)(110136005)(22166009);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?U2ueeX7E2yVIQXxR7mvDLPGbWaC91VrO4dba9QjS2iE1ZuePx7hl+Q4JDu/F?=
+ =?us-ascii?Q?8oG2rWS8gM32evidwXtaoKgWz3q/SqgUxEdZR4bFb84GMLXebt45vd+N2Ui5?=
+ =?us-ascii?Q?goqg933AsRci2U7yDaXIHB1oNSk397jOC8ML4Uw1620FdknaDNF9J7DOpM4M?=
+ =?us-ascii?Q?s2D/K14TR+FjmKBNEKKWbre910CA+lroSPMd974PTQb3btRgP0DtWM1swEle?=
+ =?us-ascii?Q?s40ZOyzYgbXRQxPXne/3rGWEPSowc/NEOzkyh2gldVfV9e6Pkw7VOk8fyULW?=
+ =?us-ascii?Q?HFCEGGenPL8VYg67aB2Wl+dQMmHb+9GxhaReXc7f5QMBrxav1uFOIm4BiR7G?=
+ =?us-ascii?Q?NR/1vcC2fCieVQV5y5zlnSJie+eOuTtsSe7DuCFpJHbK8GtTuxCyuk02q1L5?=
+ =?us-ascii?Q?PW2POpXen103dE6b97+8Kam9DFErZwBzdZVJOGAuzAJ1N2XtCfgOTQCvgqQg?=
+ =?us-ascii?Q?DU88nOruBdoK+ktLD98KX1hMutaz+MEYeYoIeuxwP7O3ZvJhfT3100tetwYq?=
+ =?us-ascii?Q?njWLha66tzpDWBhWxK2Tm2Hgh91UQ71aA1QEr2f7bnuuhtuH8pUNzki0/e/y?=
+ =?us-ascii?Q?3yEF5lWtq7a4pMr9T/U5HJzbhiM0tbKQiZug2GBywT5mLn/fsd2NYE6w/yQQ?=
+ =?us-ascii?Q?h35a2pyB+gChBeX+sDyZQkdDYjV3oR4iXHf+YsmPhDeGBnmyVMJ788aQC3ac?=
+ =?us-ascii?Q?RhHUUhclj1U10VMP47m6R/FWid8D3F7NaCQN6noWacgb6agMN/hiOvz2BhGk?=
+ =?us-ascii?Q?opoQlfWzuBOaMeLWXWrA2BGdy3kevJLtAo/feGZv2YxJ1zA0h8YRp7rs+xcb?=
+ =?us-ascii?Q?aShINJ30wNDdoKw38XHz6aXtywr3ysG45feVdNaITTddW9XuU1b+hN0F1Uca?=
+ =?us-ascii?Q?rg8CkTaP1U7AvmP+GmL2fMC4K7OhL0c5FmWPjJaPOye1DNZnfum0y5J9qC/a?=
+ =?us-ascii?Q?ZlIet6XkFathI7WUHw2sya1n5Yc74gVnSq3Jnb0LhcCGipy26LrkLrxRtXmu?=
+ =?us-ascii?Q?kJT9PTAtJAcF8elfp5beo9la5b+YikW9w/dRhmHmOlacjz0VDWXwU/g6MSsg?=
+ =?us-ascii?Q?AGYdq75xIT9aMtQvdzUq/rDTNxm/nGpOvEicdslSt4FyErvris8tbX/JT3ix?=
+ =?us-ascii?Q?RWl0tMifuS1FSN0Wxm22fUb4WKvPCt/f8s5DSz+dzkJJlIuEr5tLREemgCNX?=
+ =?us-ascii?Q?MOsOIss2SsaHWeJDUJjqx9pgq6o+UqINiPCTcAqt5KNtwJnGGSHz+KfveYlq?=
+ =?us-ascii?Q?d9vASXpaDfXmgS74091FH4ZevKUVu6XwuoyUZEvnJS19WfJnLsQfgsBmFpgI?=
+ =?us-ascii?Q?OXXgc82PA1+Fog4Fu+DNhwP8l8m6GABxR9xCIY7NOpqhO8DJrIbT2S+cEPQW?=
+ =?us-ascii?Q?jc2KTDqIzCAzblTyKgbzjx+lZn5ZqOiGBRP+p7TJWCt9LflC7XVH4C4LQ6S0?=
+ =?us-ascii?Q?zSmF6//tYZd3soCvflmio9o1C9xAJ24VA3tF+R+15x1JKnC4+cnKjcWvygLY?=
+ =?us-ascii?Q?2e2cT9jl2iCV8BnmpVrLllbilwLbvR0U+1qqJ+hWZ9NjJ4WocErauwj1uHw2?=
+ =?us-ascii?Q?zEfQ4eH/VaPjJRAFBtYLCVhGA9ZPtorjtjqSRY16e3AeK2CZio8Hv1mY6UP9?=
+ =?us-ascii?Q?TA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4fbb5bff-3061-4f73-74c9-08daedd77a63
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 22:11:35.6248
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iVabQFp6D1qXdimmJSgAaTU2A9HyG5PNr/FJkfnj+Z3EIr/VRN/O7gtfRz7WZDCU9mGQHprdmuSA2gFDcG30UMGVEmXAgeZx5U6+WRYqZkU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7608
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 09:31:43AM +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
+Robert Richter wrote:
+> Commit 2aeaf663b85e introduced strict checking for variable length
+> payload size validation. The payload length of received data must
+> match the size of the requested data by the caller except for the case
+> where the min_out value is set.
 > 
-> Register definitions and conversion constants based on sfctemp driver by
-> Samin in the StarFive 5.10 kernel.
+> The Get Log command does not have a header with a length field set.
+> The Log size is determined by the Get Supported Logs command (CXL 3.0,
+> 8.2.9.5.1). However, the actual size can be smaller and the number of
+> valid bytes in the payload output must be determined reading the
+> Payload Length field (CXL 3.0, Table 8-36, Note 2).
 > 
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Co-developed-by: Samin Guo <samin.guo@starfivetech.com>
-> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> Two issues arise: The command can successfully complete with a payload
+> length of zero. And, the valid payload length must then also be
+> consumed by the caller.
 
-This is obviously version 4 of the previous patch series,
-with various enhancements. Please do not "sell" that as
-v1 of a new patch series. Submit it as next version,
-and provide a change log.
+Perhaps this is confusion about what the "Log Size" field of Get
+Supported Logs means? My reading is that the "Log Size" field indicates
+the data "currently available" in the log. Correct me if I am wrong, but
+it seems your reading is that it is the "possibly available" data and
+software can not assume anything is available until it actually goes to
+read the log.
 
+The spec does feel ambiguous here as it could have left off the word
+"maximum" to make it clearer it is the data currently pending value, or
+leave off the word "available" to make it clear that this value is the
+max that will ever be valid for one retrieval, but not necessarily
+currently. I do not think "CXL 3.0, Table 8-36, Note 2" helps to clear
+this up either as that does not answer what expectations software can
+assume about Get Log::Log Size.
+
+Are you sure that this is not a device-side implementation issue where
+it needs to make sure that Get Supported Logs indicates what Get Log can
+expect?
+
+Table 8-94 "Identify Memory Device Output Payload" specifies the
+*possible* data that can be made available in a log.
+
+> 
+> Change cxl_xfer_log() to pass the number of payload bytes back to the
+> caller to determine the number of log entries.
+> 
+> Logs can be bigger than the maximum payload length and multiple Get
+> Log commands can be issued. If the received payload size is smaller
+> than the maximum payload size we can assume all valid bytes have been
+> fetched. Stop sending further Get Log commands then.
+> 
+> Also, implement CXL_NO_PAYLOAD_SIZE_VALIDATION as special value to
+> @min_out to skip the payload size validation check. A value of zero
+> for @min_out is already widespread in use as default if the size must
+> match @size_out. Thus, zero can not be passed to allow zero length
+> variable payloads, CXL_NO_PAYLOAD_SIZE_VALIDATION should be used
+> instead for this case.
+> 
+> On that occasion, change debug messages to also report supported
+> opcodes.
+> 
+> There could be other variable payloads commands affected by this
+> strict check, the implementation of GET_LSA and SET_LSA in this kernel
+> could possibly be broken too. A fix of this is not scope of this
+> patch.
+
+SET_LSA cannot be broken because SET_LSA does not return an output
+payload, and GET_LSA never expects short reads.
+
+Now, if short reads need to be supported on production devices for any
+variable length output payload command, I would rather see that handled
+as a cxl_internal_send_cmd() special case where mbox_cmd->size_out is
+consulted when cxl_internal_send_cmd() returns -EIO.
+
+> 
+> Fixes: 2aeaf663b85e ("cxl/mbox: Add variable output size validation for internal commands")
+> Signed-off-by: Robert Richter <rrichter@amd.com>
 > ---
->  Documentation/hwmon/index.rst   |   1 +
->  Documentation/hwmon/sfctemp.rst |  33 +++
->  MAINTAINERS                     |   8 +
->  drivers/hwmon/Kconfig           |  10 +
->  drivers/hwmon/Makefile          |   1 +
->  drivers/hwmon/sfctemp.c         | 350 ++++++++++++++++++++++++++++++++
->  6 files changed, 403 insertions(+)
->  create mode 100644 Documentation/hwmon/sfctemp.rst
->  create mode 100644 drivers/hwmon/sfctemp.c
+>  drivers/cxl/core/mbox.c | 41 ++++++++++++++++++++++++++++++-----------
+>  drivers/cxl/cxlmem.h    |  5 +++++
+>  2 files changed, 35 insertions(+), 11 deletions(-)
 > 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index c1d11cf13eef..f7ede608b6e3 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -179,6 +179,7 @@ Hardware Monitoring Kernel Drivers
->     sch5627
->     sch5636
->     scpi-hwmon
-> +   sfctemp
->     sht15
->     sht21
->     sht3x
-> diff --git a/Documentation/hwmon/sfctemp.rst b/Documentation/hwmon/sfctemp.rst
-> new file mode 100644
-> index 000000000000..9fbd5bb1f356
-> --- /dev/null
-> +++ b/Documentation/hwmon/sfctemp.rst
-> @@ -0,0 +1,33 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index b03fba212799..0c2056ae8aff 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -183,11 +183,16 @@ int cxl_internal_send_cmd(struct cxl_dev_state *cxlds,
+>  	 * Variable sized output needs to at least satisfy the caller's
+>  	 * minimum if not the fully requested size.
+>  	 */
 > +
-> +Kernel driver sfctemp
-> +=====================
-> +
-> +Supported chips:
-> + - StarFive JH7100
-> + - StarFive JH7110
-> +
-> +Authors:
-> + - Emil Renner Berthing <kernel@esmil.dk>
-> +
-> +Description
-> +-----------
-> +
-> +This driver adds support for reading the built-in temperature sensor on the
-> +JH7100 and JH7110 RISC-V SoCs by StarFive Technology Co. Ltd.
-> +
-> +``sysfs`` interface
-> +-------------------
-> +
-> +The temperature sensor can be enabled, disabled and queried via the standard
-> +hwmon interface in sysfs under ``/sys/class/hwmon/hwmonX`` for some value of
-> +``X``:
-> +
-> +================ ==== =============================================
-> +Name             Perm Description
-> +================ ==== =============================================
-> +temp1_enable     RW   Enable or disable temperature sensor.
-> +                      Automatically enabled by the driver,
-> +                      but may be disabled to save power.
-> +temp1_input      RO   Temperature reading in milli-degrees Celsius.
-> +================ ==== =============================================
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 85e8f83161d7..ab3cd5827b26 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18661,6 +18661,14 @@ L:	netdev@vger.kernel.org
->  S:	Supported
->  F:	drivers/net/ethernet/sfc/
->  
-> +SFCTEMP HWMON DRIVER
-> +M:	Emil Renner Berthing <kernel@esmil.dk>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
-> +F:	Documentation/hwmon/sfctemp.rst
-> +F:	drivers/hwmon/sfctemp.c
-> +
->  SFF/SFP/SFP+ MODULE SUPPORT
->  M:	Russell King <linux@armlinux.org.uk>
->  L:	netdev@vger.kernel.org
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 7ac3daaf59ce..c6bbfcca3a14 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1910,6 +1910,16 @@ config SENSORS_STTS751
->  	  This driver can also be built as a module. If so, the module
->  	  will be called stts751.
->  
-> +config SENSORS_SFCTEMP
-> +	tristate "Starfive JH71x0 temperature sensor"
-> +	depends on SOC_STARFIVE || COMPILE_TEST
-> +	help
-> +	  If you say yes here you get support for temperature sensor
-> +	  on the Starfive JH71x0 SoCs.
-> +
-> +	  This driver can also be built as a module.  If so, the module
-> +	  will be called sfctemp.
-> +
->  config SENSORS_SMM665
->  	tristate "Summit Microelectronics SMM665"
->  	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 11d076cad8a2..5a4a02c5535c 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -179,6 +179,7 @@ obj-$(CONFIG_SENSORS_SBRMI)	+= sbrmi.o
->  obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
->  obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
->  obj-$(CONFIG_SENSORS_SCH5636)	+= sch5636.o
-> +obj-$(CONFIG_SENSORS_SFCTEMP)	+= sfctemp.o
->  obj-$(CONFIG_SENSORS_SL28CPLD)	+= sl28cpld-hwmon.o
->  obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
->  obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
-> diff --git a/drivers/hwmon/sfctemp.c b/drivers/hwmon/sfctemp.c
-> new file mode 100644
-> index 000000000000..e56716ad9587
-> --- /dev/null
-> +++ b/drivers/hwmon/sfctemp.c
-> @@ -0,0 +1,350 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
-> + * Copyright (C) 2021 Samin Guo <samin.guo@starfivetech.com>
-> + */
-> +#include <linux/clk.h>
-> +#include <linux/completion.h>
-> +#include <linux/delay.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +
-> +/*
-> + * TempSensor reset. The RSTN can be de-asserted once the analog core has
-> + * powered up. Trst(min 100ns)
-> + * 0:reset  1:de-assert
-> + */
-> +#define SFCTEMP_RSTN	BIT(0)
-
-Missing include of linux/bits.h
-
-> +
-> +/*
-> + * TempSensor analog core power down. The analog core will be powered up
-> + * Tpu(min 50us) after PD is de-asserted. RSTN should be held low until the
-> + * analog core is powered up.
-> + * 0:power up  1:power down
-> + */
-> +#define SFCTEMP_PD	BIT(1)
-> +
-> +/*
-> + * TempSensor start conversion enable.
-> + * 0:disable  1:enable
-> + */
-> +#define SFCTEMP_RUN	BIT(2)
-> +
-> +/*
-> + * TempSensor conversion value output.
-> + * Temp(C)=DOUT*Y/4094 - K
-> + */
-> +#define SFCTEMP_DOUT_POS	16
-> +#define SFCTEMP_DOUT_MSK	GENMASK(27, 16)
-> +
-> +/* DOUT to Celcius conversion constants */
-> +#define SFCTEMP_Y1000	237500L
-> +#define SFCTEMP_Z	4094L
-> +#define SFCTEMP_K1000	81100L
-> +
-> +struct sfctemp {
-> +	/* serialize access to hardware register and enabled below */
-> +	struct mutex lock;
-> +	struct completion conversion_done;
-> +	void __iomem *regs;
-> +	struct clk *clk_sense;
-> +	struct clk *clk_bus;
-> +	struct reset_control *rst_sense;
-> +	struct reset_control *rst_bus;
-> +	bool enabled;
-> +};
-> +
-> +static irqreturn_t sfctemp_isr(int irq, void *data)
-> +{
-> +	struct sfctemp *sfctemp = data;
-> +
-> +	complete(&sfctemp->conversion_done);
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static void sfctemp_power_up(struct sfctemp *sfctemp)
-> +{
-> +	/* make sure we're powered down first */
-> +	writel(SFCTEMP_PD, sfctemp->regs);
-> +	udelay(1);
-> +
-> +	writel(0, sfctemp->regs);
-> +	/* wait t_pu(50us) + t_rst(100ns) */
-> +	usleep_range(60, 200);
-> +
-> +	/* de-assert reset */
-> +	writel(SFCTEMP_RSTN, sfctemp->regs);
-> +	udelay(1); /* wait t_su(500ps) */
-> +}
-> +
-> +static void sfctemp_power_down(struct sfctemp *sfctemp)
-> +{
-> +	writel(SFCTEMP_PD, sfctemp->regs);
-> +}
-> +
-> +static void sfctemp_run_single(struct sfctemp *sfctemp)
-> +{
-> +	writel(SFCTEMP_RSTN | SFCTEMP_RUN, sfctemp->regs);
-> +	udelay(1);
-> +	writel(SFCTEMP_RSTN, sfctemp->regs);
-
-The datasheet (or, rather, programming manual) does not appear
-to be public, so I have to guess here.
-
-The code suggests that running a single conversion may be a choice,
-not a requirement. If it is indeed a choice, the reasoning needs to be
-explained since it adds a lot of complexity and dependencies to the
-driver (for example, interrupt support is only mandatory or even needed
-due to this choice). It also adds a significant delay to temperature
-read operations, which may have practical impact on thermal control
-software.
-
-If the chip only supports single temperature readings, that needs to be
-explained as well (and why SFCTEMP_RUN has to be reset in that case).
-
-> +}
-> +
-> +static int sfctemp_enable(struct sfctemp *sfctemp)
-> +{
-> +	int ret = 0;
-> +
-> +	mutex_lock(&sfctemp->lock);
-> +	if (sfctemp->enabled)
-> +		goto done;
-> +
-> +	ret = clk_prepare_enable(sfctemp->clk_bus);
-> +	if (ret)
-> +		goto err;
-> +	ret = reset_control_deassert(sfctemp->rst_bus);
-> +	if (ret)
-> +		goto err_disable_bus;
-> +
-> +	ret = clk_prepare_enable(sfctemp->clk_sense);
-> +	if (ret)
-> +		goto err_assert_bus;
-> +	ret = reset_control_deassert(sfctemp->rst_sense);
-> +	if (ret)
-> +		goto err_disable_sense;
-> +
-> +	sfctemp_power_up(sfctemp);
-> +	sfctemp->enabled = true;
-> +done:
-> +	mutex_unlock(&sfctemp->lock);
-> +	return ret;
-> +
-> +err_disable_sense:
-> +	clk_disable_unprepare(sfctemp->clk_sense);
-> +err_assert_bus:
-> +	reset_control_assert(sfctemp->rst_bus);
-> +err_disable_bus:
-> +	clk_disable_unprepare(sfctemp->clk_bus);
-> +err:
-> +	mutex_unlock(&sfctemp->lock);
-> +	return ret;
-> +}
-> +
-> +static int sfctemp_disable(struct sfctemp *sfctemp)
-> +{
-> +	mutex_lock(&sfctemp->lock);
-> +	if (!sfctemp->enabled)
-> +		goto done;
-> +
-> +	sfctemp_power_down(sfctemp);
-> +	reset_control_assert(sfctemp->rst_sense);
-> +	clk_disable_unprepare(sfctemp->clk_sense);
-> +	reset_control_assert(sfctemp->rst_bus);
-> +	clk_disable_unprepare(sfctemp->clk_bus);
-> +	sfctemp->enabled = false;
-> +done:
-> +	mutex_unlock(&sfctemp->lock);
-> +	return 0;
-> +}
-> +
-> +static void sfctemp_disable_action(void *data)
-> +{
-> +	sfctemp_disable(data);
-> +}
-> +
-> +static int sfctemp_convert(struct sfctemp *sfctemp, long *val)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&sfctemp->lock);
-> +	if (!sfctemp->enabled) {
-> +		ret = -ENODATA;
-> +		goto out;
-> +	}
-> +
-> +	sfctemp_run_single(sfctemp);
-> +
-> +	ret = wait_for_completion_interruptible_timeout(&sfctemp->conversion_done,
-> +							msecs_to_jiffies(10));
-> +	if (ret <= 0) {
-> +		if (ret == 0)
-> +			ret = -ETIMEDOUT;
-> +		goto out;
-> +	}
-> +
-> +	/* calculate temperature in milli Celcius */
-> +	*val = (long)((readl(sfctemp->regs) & SFCTEMP_DOUT_MSK) >> SFCTEMP_DOUT_POS)
-> +		* SFCTEMP_Y1000 / SFCTEMP_Z - SFCTEMP_K1000;
-> +
-> +	ret = 0;
-> +out:
-> +	mutex_unlock(&sfctemp->lock);
-> +	return ret;
-> +}
-> +
-> +static umode_t sfctemp_is_visible(const void *data, enum hwmon_sensor_types type,
-> +				  u32 attr, int channel)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_enable:
-> +			return 0644;
-> +		case hwmon_temp_input:
-> +			return 0444;
-> +		}
+> +	if (min_out == CXL_NO_PAYLOAD_SIZE_VALIDATION)
 > +		return 0;
-> +	default:
-> +		return 0;
-> +	}
-> +}
 > +
-> +static int sfctemp_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	struct sfctemp *sfctemp = dev_get_drvdata(dev);
+>  	if (min_out == 0)
+>  		min_out = out_size;
+>  
+>  	if (mbox_cmd->size_out < min_out)
+>  		return -EIO;
 > +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_enable:
-> +			*val = sfctemp->enabled;
-> +			return 0;
-> +		case hwmon_temp_input:
-> +			return sfctemp_convert(sfctemp, val);
-> +		}
-> +		return -EINVAL;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_internal_send_cmd, CXL);
+> @@ -554,6 +559,7 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
+>  {
+>  	u32 remaining = size;
+>  	u32 offset = 0;
+> +	u32 size_out;
+>  
+>  	while (remaining) {
+>  		u32 xfer_size = min_t(u32, remaining, cxlds->payload_size);
+> @@ -572,6 +578,8 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
+>  			.size_in = sizeof(log),
+>  			.payload_in = &log,
+>  			.size_out = xfer_size,
+> +			/* Any size is allowed (CXL 3.0, Table 8-36). */
+> +			.min_out = CXL_NO_PAYLOAD_SIZE_VALIDATION,
+>  			.payload_out = out,
+>  		};
+>  
+> @@ -579,12 +587,24 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
+>  		if (rc < 0)
+>  			return rc;
+>  
+> -		out += xfer_size;
+> -		remaining -= xfer_size;
+> -		offset += xfer_size;
+> +		size_out = mbox_cmd.size_out;
+> +		if (size_out > xfer_size)
+> +			return -ENXIO;
 > +
-> +static int sfctemp_write(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, long val)
-> +{
-> +	struct sfctemp *sfctemp = dev_get_drvdata(dev);
+> +		out += size_out;
+> +		remaining -= size_out;
+> +		offset += size_out;
 > +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_enable:
-> +			if (val == 0)
-> +				return sfctemp_disable(sfctemp);
-> +			if (val == 1)
-> +				return sfctemp_enable(sfctemp);
+> +		/*
+> +		 * A smaller output payload length indicates all valid
+> +		 * bytes have been fetched.
+> +		 */
+> +		if (size_out < xfer_size)
 > +			break;
-> +		}
-> +		return -EINVAL;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static const struct hwmon_channel_info *sfctemp_info[] = {
-> +	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_ENABLE | HWMON_T_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops sfctemp_hwmon_ops = {
-> +	.is_visible = sfctemp_is_visible,
-> +	.read = sfctemp_read,
-> +	.write = sfctemp_write,
-> +};
-> +
-> +static const struct hwmon_chip_info sfctemp_chip_info = {
-> +	.ops = &sfctemp_hwmon_ops,
-> +	.info = sfctemp_info,
-> +};
-> +
-> +static int sfctemp_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device *hwmon_dev;
-> +	struct sfctemp *sfctemp;
-> +	int ret;
-> +
-> +	sfctemp = devm_kzalloc(dev, sizeof(*sfctemp), GFP_KERNEL);
-> +	if (!sfctemp)
-> +		return -ENOMEM;
-> +
-> +	dev_set_drvdata(dev, sfctemp);
-> +	mutex_init(&sfctemp->lock);
-> +	init_completion(&sfctemp->conversion_done);
-> +
-> +	sfctemp->regs = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(sfctemp->regs))
-> +		return PTR_ERR(sfctemp->regs);
-> +
-> +	sfctemp->clk_sense = devm_clk_get(dev, "sense");
-> +	if (IS_ERR(sfctemp->clk_sense))
-> +		return dev_err_probe(dev, PTR_ERR(sfctemp->clk_sense),
-> +				     "error getting sense clock\n");
-> +
-> +	sfctemp->clk_bus = devm_clk_get(dev, "bus");
-> +	if (IS_ERR(sfctemp->clk_bus))
-> +		return dev_err_probe(dev, PTR_ERR(sfctemp->clk_bus),
-> +				     "error getting bus clock\n");
-> +
-> +	sfctemp->rst_sense = devm_reset_control_get_exclusive(dev, "sense");
-> +	if (IS_ERR(sfctemp->rst_sense))
-> +		return dev_err_probe(dev, PTR_ERR(sfctemp->rst_sense),
-> +				     "error getting sense reset\n");
-> +
-> +	sfctemp->rst_bus = devm_reset_control_get_exclusive(dev, "bus");
-> +	if (IS_ERR(sfctemp->rst_bus))
-> +		return dev_err_probe(dev, PTR_ERR(sfctemp->rst_bus),
-> +				     "error getting busreset\n");
-> +
-> +	ret = reset_control_assert(sfctemp->rst_sense);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "error asserting sense reset\n");
-> +
-> +	ret = reset_control_assert(sfctemp->rst_bus);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "error asserting bus reset\n");
-> +
-> +	ret = platform_get_irq(pdev, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = devm_request_irq(dev, ret, sfctemp_isr, 0, pdev->name, sfctemp);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "error requesting irq\n");
-> +
-> +	ret = devm_add_action(dev, sfctemp_disable_action, sfctemp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = sfctemp_enable(sfctemp);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "error enabling temperature sensor: %d\n", ret);
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, pdev->name, sfctemp,
-> +							 &sfctemp_chip_info, NULL);
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct of_device_id sfctemp_of_match[] = {
-> +	{ .compatible = "starfive,jh7100-temp" },
-> +	{ .compatible = "starfive,jh7110-temp" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, sfctemp_of_match);
-> +
-> +static struct platform_driver sfctemp_driver = {
-> +	.probe  = sfctemp_probe,
-> +	.driver = {
-> +		.name = "sfctemp",
-> +		.of_match_table = sfctemp_of_match,
-> +	},
-> +};
-> +module_platform_driver(sfctemp_driver);
-> +
-> +MODULE_AUTHOR("Emil Renner Berthing");
-> +MODULE_DESCRIPTION("StarFive JH71x0 temperature sensor driver");
-> +MODULE_LICENSE("GPL");
+>  	}
+>  
+> -	return 0;
+> +	/* Total number of bytes fetched. */
+> +	return offset;
+>  }
+>  
+>  /**
+> @@ -608,13 +628,11 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
+>  		u16 opcode = le16_to_cpu(cel_entry[i].opcode);
+>  		struct cxl_mem_command *cmd = cxl_mem_find_command(opcode);
+>  
+> -		if (!cmd) {
+> -			dev_dbg(cxlds->dev,
+> -				"Opcode 0x%04x unsupported by driver", opcode);
+> -			continue;
+> -		}
+> +		if (cmd)
+> +			set_bit(cmd->info.id, cxlds->enabled_cmds);
+>  
+> -		set_bit(cmd->info.id, cxlds->enabled_cmds);
+> +		dev_dbg(cxlds->dev, "Opcode 0x%04x %ssupported by driver",
+> +			opcode, cmd ? "" : "un");
+>  	}
+>  }
+>  
+> @@ -695,11 +713,12 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
+>  		}
+>  
+>  		rc = cxl_xfer_log(cxlds, &uuid, size, log);
+> -		if (rc) {
+> +		if (rc < 0) {
+>  			kvfree(log);
+>  			goto out;
+>  		}
+>  
+> +		size = (u32)rc;
+>  		cxl_walk_cel(cxlds, size, log);
+>  		kvfree(log);
+>  
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index ab138004f644..2db24b062913 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -102,6 +102,10 @@ static inline struct cxl_ep *cxl_ep_load(struct cxl_port *port,
+>   *            variable sized output commands, it tells the exact number of bytes
+>   *            written.
+>   * @min_out: (input) internal command output payload size validation
+> + *  * %0:   Payload size must match @size_out.
+> + *  * %>0:  Minimum payload size.
+> + *  * %CXL_NO_PAYLOAD_SIZE_VALIDATION: Skip payload size validation check.
+> + *
+>   * @return_code: (output) Error code returned from hardware.
+>   *
+>   * This is the primary mechanism used to send commands to the hardware.
+> @@ -117,6 +121,7 @@ struct cxl_mbox_cmd {
+>  	size_t size_in;
+>  	size_t size_out;
+>  	size_t min_out;
+> +#define CXL_NO_PAYLOAD_SIZE_VALIDATION	SIZE_MAX
+>  	u16 return_code;
+>  };
+>  
+> -- 
+> 2.30.2
+> 
+
+
