@@ -2,135 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB2165C296
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 15:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD39065C299
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238125AbjACO5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 09:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S237881AbjACO6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 09:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238149AbjACO4f (ORCPT
+        with ESMTP id S238208AbjACO57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 09:56:35 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E478012752;
-        Tue,  3 Jan 2023 06:56:27 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id EE5F741DF4;
-        Tue,  3 Jan 2023 14:56:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1672757786; bh=JxObLc/qm6ouCvba+ko/0VFoVj+NMIFZ8pHIBxM2D20=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=Y9Lw3GuNhDYbSLECBkDfYelRfYNUeIPCzNUZlNTewWRean55tCrPsG0VK8rVtUaon
-         GNt+PB+NFYVPSxe1+/t9TqPMjB71waj3JK0CegQtx4ialHrep6CJt5YKhLhN41iePC
-         f7AaJQ3QoejXCDvLVw7hqlxAtt2QgLAtiBgp4m4aDAPIYofip8A0FqsqMQHejc+MEU
-         3ZKxYI74o79FA8JrP0giWA/DDtBCeZ3UW+25Ecd/VAwUqiarT4XWIQes4Vf2fL1INL
-         MEAqz4lyBcrBtEwsqj+x7flQvaNu5Ya8nHPN+S9YBob6Zs1zPeB9Ens7CcPbTeshwT
-         wwdGCUHHK51zw==
-Message-ID: <b98e313d-8875-056b-4b64-bb7528f2670a@marcan.st>
-Date:   Tue, 3 Jan 2023 23:56:21 +0900
+        Tue, 3 Jan 2023 09:57:59 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C1422E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 06:57:57 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672757875;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e7z7CUNlsanp+SPsDxU+kUkk2ziXu09FTtaRiMc8sLk=;
+        b=DlyQin0OsEKElx4hYsx/267klTWIelW3dGApenDzv6Xruj44R2wal0V8aZbzw7gFYRyeJf
+        OUHqKpo0jSd1lzVjH8dD4qLR1oXTMlRuMzi13zxSmqdTqXVPaG4rEoHJBIf11cAxJXbfiY
+        7h/oBFQ4K98b/CAos6YT1hDDDZUn8MLbP+PEqdaHpgXAh2bzAakODazlGb6+y3IwqWVJnt
+        ELLso9dEcqd4xEKv+piTu2HStLcfmk3sf9exQC+JUIgnGU+brgDaHIQUdtvWkMna9vWpWv
+        pinlMzhdzH0bgEllcpVb9wYtVT/sJGvmQX+isQyl4h8RkkPjyCVW1+b4Pe5uaw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672757875;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e7z7CUNlsanp+SPsDxU+kUkk2ziXu09FTtaRiMc8sLk=;
+        b=0Cxs5uJ8Vio3XZoYVwkn68Y9s9X4SQK3Mgf8Z2S3g4oX9HY+wqGKFrHlph1+9z1jIlVYis
+        d8diMOARWb4BRpBA==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v3 5/6] printk: introduce
+ console_get_next_message() and console_message
+In-Reply-To: <Y7Q2B+p1gxJ1WCdj@alley>
+References: <20221221202704.857925-1-john.ogness@linutronix.de>
+ <20221221202704.857925-6-john.ogness@linutronix.de>
+ <87bknva1jg.fsf@jogness.linutronix.de> <Y7Q2B+p1gxJ1WCdj@alley>
+Date:   Tue, 03 Jan 2023 16:03:17 +0106
+Message-ID: <87ilhnd5te.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Eric Curtin <ecurtin@redhat.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-References: <20230103114427.1825-1-marcan@marcan.st>
- <ff77ba1c-8b67-4697-d713-0392d3b1d77a@linaro.org>
- <95a4cfde-490f-d26d-163e-7ab1400e7380@marcan.st>
- <b118af4c-e4cc-c50b-59aa-d768f1ec69ff@linaro.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2] nvmem: core: Fix race in nvmem_register()
-In-Reply-To: <b118af4c-e4cc-c50b-59aa-d768f1ec69ff@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 23.22, Srinivas Kandagatla wrote:
->>>>    drivers/nvmem/core.c | 32 +++++++++++++++++---------------
->>>>    1 file changed, 17 insertions(+), 15 deletions(-)
->>>>
->>>> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
->>>> index 321d7d63e068..606f428d6292 100644
->>>> --- a/drivers/nvmem/core.c
->>>> +++ b/drivers/nvmem/core.c
->>>> @@ -822,11 +822,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>>>    		break;
->>>>    	}
->>>>
->>>> -	if (rval) {
->>>> -		ida_free(&nvmem_ida, nvmem->id);
->>>> -		kfree(nvmem);
->>>> -		return ERR_PTR(rval);
->>>> -	}
->>>> +	if (rval)
->>>> +		goto err_gpiod_put;
->>>
->>> Why was gpiod changes added to this patch, that should be a separate
->>> patch/discussion, as this is not relevant to the issue that you are
->>> reporting.
->>
->> Because freeing the device also does a gpiod_put in the destructor, so
-> This are clearly untested, And I dont want this to be in the middle to 
-> fix to the issue you are hitting.
+On 2023-01-03, Petr Mladek <pmladek@suse.com> wrote:
+> On Thu 2022-12-22 16:47:39, John Ogness wrote:
+>> On 2022-12-21, John Ogness <john.ogness@linutronix.de> wrote:
+>> > +static bool console_emit_next_record(struct console *con, bool *handover, int cookie)
+>> > +{
+>> > +	bool is_extended = console_srcu_read_flags(con) & CON_EXTENDED;
+>> > +	static char dropped_text[DROPPED_TEXT_MAX];
+>> > +	static struct console_buffers cbufs;
+>> > +	static struct console_message cmsg = {
+>> > +		.cbufs = &cbufs,
+>> > +	};
+>> 
+>> @cmsg should not be static. The whole point of the console_message
+>> wrapper struct is so that it can sit on the stack.
+>
+> Well, it might actually be better to keep it static for now.
+> It always points to static struct console_buffers cbufs anyway.
+>
+> It would make sense to have it on stack only when it uses
+> different buffers.
 
-I somehow doubt you tested any of these error paths either. Nobody tests
-initialization error paths. That's why there was a gpio leak here to
-begin with.
+I think we should avoid making things static when it serves no purpose.
 
-> We should always be careful about untested changes, in this case gpiod 
-> has some conditions to check before doing a put. So the patch is 
-> incorrect as it is.
+> Which brings the question. Does it makes sense to use
+> the same buffers by different struct console_message?
+> Will it be safe in any situation?
+>
+> I did not want to complicate it yesterday. I think that
+> I have already proposed this. But this brings back
+> the question whether it makes sense to have two structures
+> at all.
+>
+> I still think that it would be easier and even more safe
+> to put everything into struct console_message.
+>
+> I mean to have:
+>
+> struct console_message {
+> 	char			buf[CONSOLE_EXT_LOG_MAX];
+> 	char			scratch_buf[LOG_LINE_MAX];
+> 	unsigned int		len;
+> 	u64			seq;
+> 	unsigned long		dropped;
+> };
 
-Then the existing code is also incorrect as it is, because the device
-release callback is doing the same gpiod_put() already. I just moved it
-out since we are now registering the device later.
+The current atomic console proposal allocates 1x cbuf per-cpu and 4x
+meta-data per-cpu. Different contexts of a cpu will have different
+meta-data, but all the contexts of a cpu will share the same cbuf.
 
-> These are not stupid nit picks your v1/v2 patches introduced memory 
-> leaks and regressions so i will not be picking up any patches that fall 
-> in that area.
+If cbufs become embedded in cmsg, then we would allocate 1x cmsg
+per-cpu. But the atomic consoles would still need their own 4x per-cpu
+meta-data.
 
-v1 certainly had issues which you rightly pointed out. Now with v2 you
-are nitpicking that I merged two codepaths that belong together, and
-fixed a corner case bug in the process. If there is an actual problem,
-please point it out. "Lol why did you fix this other bug that naturally
-falls into the influence of the changes being made" is not constructive.
+When looking at the proposal code, it looks wrong to have meta-data
+fields in the cmsg struct that are not being used. But maybe that is
+acceptable during the "transition phase" until all legacy consoles are
+gone.
 
->> found a bug, I fixed it, I then fixed the issues you pointed out, and I
->> don't have the time nor energy to fight over this kind of nonsense next.
-> 
-> I think its worth reading ./Documentation/process/submitting-patches.rst
+For v4 I will drop the console_buffers struct. I will use your
+suggestion.
 
-Oh I've read it alright. You're not the first maintainer to have me lose
-more faith in the kernel development process, this isn't my first rodeo
-(hint: check MAINTAINERS, I'm also a maintainer). And I know it doesn't
-have to be like this because other maintainers that are actually
-reasonable and nice to work with do exist.
-
-I'm going to note that right now this core subsystem code is broken in
-the *success path*, while all the arguments here are about the *error
-path*. In other words, there is a negligible change that any
-mistakes/regressions I'm making here would actually impact people, while
-the status quo is that the code is actively breaking people's systems.
-
-So, are you going to actually point out the supposed regressions with v2
-so we can actually fix this bug, or should I just drop this submission
-and keep it in my downstream tree and you can continue to get bug
-reports about this race condition?
-
-- Hector
+John
