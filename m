@@ -2,95 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE51465BC56
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F05365BC5E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237051AbjACIic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S236973AbjACIkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbjACIib (ORCPT
+        with ESMTP id S236949AbjACIjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:38:31 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B279DDE82
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:38:29 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id p36so44693438lfa.12
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:38:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4CHw5FRtPDUOv1NrpkJyQctZ8ejkK9MC1Qo92iGbQHA=;
-        b=yWUERWb3HN5RS07LpLAzOJBjd4P9b6jvyMrjMHFK3nKwcgTP3rK53AfQOTMwIvhUlH
-         HRnTv0odk9zaw8ACrc+glhjQDOj0uoSDLhL5Qu021HGlkPyM8554WPC8nnqhKI1yDjps
-         gBPl3ja3J6Be7JPn1RgYe3VGFqd9FZpDmkCa49pJIyLuHqCFIZvaBfnrC7O8Hg5R0jhG
-         mQPlOyYoDPzHUEfYqK3jdJFWttdEXqzUvHX1ywpBmSkGqplYR7iPQSOvtOPRWE0JGemO
-         rsgRFq1TiUGhlkt8TQGQm1aUT1eXHPQsyu7HShhQ3qK6rkEKPkw8yR8v+c2Mutx01Szm
-         doJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4CHw5FRtPDUOv1NrpkJyQctZ8ejkK9MC1Qo92iGbQHA=;
-        b=eFlU4vzoIPTGxSsnRBfqDu6gNy4kZZtPJrTxGjB8h5B7TxJzMFgBHvTFKWcoW2MHWM
-         hKlexHjxRlMRl20iJvEpeFljBblMVz24cynceKTvQdw/k8nFTAH1RFZgHwocvwWzfU66
-         Q7Mljbd2/trcfLXIfb0motLRNc4oC+ckEab9oWyH+UeVNErikCQRBvoVy6ne/cWLTj/t
-         vWYvbYNxSAdMavxX7/S/zaJY7OEW58+C0xvNoS/d+dyLoWQfHyjZ2zOhOyCiaHC+siAT
-         bweMmhZIorLWSjLPt/5ukfz+/25akZlh9fcw9wYib4+ii/lbPsj8fX24VxQcVbCskE/s
-         cKqg==
-X-Gm-Message-State: AFqh2krsFQo+62T3D3B0iIM+kvY9Jo/o4jLayqg/5f4chsBHJoRtFqgR
-        w5kjvUAoYGH+hamzjvpOrMhBjw==
-X-Google-Smtp-Source: AMrXdXt8qdijhfpphBEQyqtUvrn7jPvTr9kTEBH4cPMC3TMxiu2AnOqGKjlaZxNaozv/f12gc+22cg==
-X-Received: by 2002:a05:6512:2591:b0:4b5:7dd6:4df0 with SMTP id bf17-20020a056512259100b004b57dd64df0mr12477210lfb.32.1672735108149;
-        Tue, 03 Jan 2023 00:38:28 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z9-20020a056512370900b004b55c1b5c66sm4727589lfr.157.2023.01.03.00.38.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:38:27 -0800 (PST)
-Message-ID: <7dc37079-c577-8eca-2c6b-8715f0a715a9@linaro.org>
-Date:   Tue, 3 Jan 2023 09:38:26 +0100
+        Tue, 3 Jan 2023 03:39:47 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32143BE1F;
+        Tue,  3 Jan 2023 00:39:46 -0800 (PST)
+Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NmQzh4gJHzJpXn;
+        Tue,  3 Jan 2023 16:35:44 +0800 (CST)
+Received: from [10.67.109.184] (10.67.109.184) by
+ kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 3 Jan 2023 16:39:42 +0800
+Message-ID: <09763a5e-22c9-513d-ca51-9234478b9c67@huawei.com>
+Date:   Tue, 3 Jan 2023 16:39:42 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: reserved-memory: rmtfs: Document
- qcom,assign-to-nav
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH bpf-next 3/4] riscv, bpf: Add bpf_arch_text_poke
+ support for RV64
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230102165034.830620-1-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230102165034.830620-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Pu Lehui <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20221219133736.1387008-1-pulehui@huaweicloud.com>
+ <20221219133736.1387008-4-pulehui@huaweicloud.com>
+ <87v8looypd.fsf@all.your.base.are.belong.to.us>
+ <713f9f26-da42-eda8-c804-338d61b1557c@huawei.com>
+ <877cy4xc2l.fsf@all.your.base.are.belong.to.us>
+From:   Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <877cy4xc2l.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.184]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500020.china.huawei.com (7.221.188.8)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/01/2023 17:50, Konrad Dybcio wrote:
-> Some SoCs mandate that the RMTFS is also assigned to the NAV VM, while
-> others really don't want that. Since it has to be conditional, add a
-> bool property to toggle this behavior.
+
+
+On 2023/1/3 16:21, Björn Töpel wrote:
+> Pu Lehui <pulehui@huawei.com> writes:
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> v1 -> v2:
-> - Rewrite the newly added description
+>> On 2023/1/3 15:37, Björn Töpel wrote:
+>>> Pu Lehui <pulehui@huaweicloud.com> writes:
+>>>
+>>>> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+>>>> index bf4721a99a09..fa8b03c52463 100644
+>>>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>>>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>>>
+>>>> @@ -1266,7 +1389,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>>>>    
+>>>>    void bpf_jit_build_prologue(struct rv_jit_context *ctx)
+>>>>    {
+>>>> -	int stack_adjust = 0, store_offset, bpf_stack_adjust;
+>>>> +	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
+>>>>    	bool is_main_prog = ctx->prog->aux->func_idx == 0;
+>>>
+>>> This line magically appeared, and makes it hard to apply the series
+>>> without hacking the patches manually. Going forward, please supply a
+>>> base tree commit to the series (or a link to a complete git tree).
+>>>
+>>
+>> A rebase version has been resend as follow:
+>>
+>> https://lore.kernel.org/bpf/20221220021319.1655871-1-pulehui@huaweicloud.com/
+> 
+> Yes, but with the same issue:
+> https://lore.kernel.org/bpf/20221220021319.1655871-4-pulehui@huaweicloud.com/
+> 
+> The "is_main_prog" line is still around in the resend.
+> 
 
+Oops, something was left when debugging mixing bpf2bpf and tailcalls. 
+Sorry, will send v2.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+> 
+> Björn
