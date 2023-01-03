@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A95865BDD6
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA82F65BDE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 11:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbjACKS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 05:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S233166AbjACKT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 05:19:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjACKS5 (ORCPT
+        with ESMTP id S232898AbjACKTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 05:18:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0599F49
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:18:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CBF1B80E63
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:18:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA7CC433EF;
-        Tue,  3 Jan 2023 10:18:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672741134;
-        bh=HSkVcDE93TTwdgQxX+NA/uwZL5WLjZtqGQP1f8SU5p4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=agDOiY9giFZqyqoG3aX1QNO2DsCG6ek4ASaFfVcZKSsPpBPaioUkl+2uUMGUC15L/
-         4IHlfN8H0PS2uvrpzIBZfK6QApOSQPNvGVPxXUE7TbvTW2PzcRmBmK6+NsUGBzePXI
-         htwc/2oRapfGIZv0ZSnT//3WVwCLjEj+FwbgARQsYhWYVexmank2TaBYKThcBQ0m2a
-         goB5v27HnyHmT6/rleh344S3IwvZnJ4FtwAu05i+iZk/zWRUN3ucJKj++LeG66qhtY
-         jsegLAStQZI4KzVYDdp8HjiXxy6JOC7hgEJ5nDfy0HqTEJK3ILq6N0nLognr1QC5WS
-         bBNETEftCZ+3A==
-Date:   Tue, 3 Jan 2023 10:18:49 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>, uwu@icenowy.me
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 2/2] riscv: errata: prefix T-Head mnemonics with
- th.
-Message-ID: <Y7QBCeqh96rKmZvf@spud>
-References: <20230103062610.69704-1-uwu@icenowy.me>
- <20230103062610.69704-2-uwu@icenowy.me>
- <5641668.DvuYhMxLoT@diego>
+        Tue, 3 Jan 2023 05:19:25 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F50DE9D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 02:19:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mQ+kH7Y1jP8FPnV3r6fvzT20qbbg9pYdOaXBVU8Mh1s=; b=VfiIGMI2Jwicl5gjt8FuQRhlgB
+        FtZPIMyWuAC4dgXlPh3TkJuEvvN+V0RWGejKvr4P5AGwseO7pDjNmN5yiVfQJmZO09UEPWc6ZtPJ+
+        ErgjrC0kT2jtz/DG0Vks/zZnVUH861EWUJBfJdRstwFZr+k0ygSCHgv/YuH6/DUIKfQlz7nI2OIUn
+        W8XAdWtdq+xUtMMDjYd+hCDMaEkA0vGy1OaFYiqzZAqXV9RTTmf9itr6fU8YLfgaRs9AMrAObCGEp
+        AiJUNANy6036vD/1GpQsBMaNjCblNsUReY/aU4OOHe0BBRA+lptViivo2TdYUITBzxOQ3iP8F6OLZ
+        2b6s46eA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35912)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pCeOA-0005Cm-J8; Tue, 03 Jan 2023 10:19:22 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pCeO8-0001yu-W1; Tue, 03 Jan 2023 10:19:21 +0000
+Date:   Tue, 3 Jan 2023 10:19:20 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Julia Lawall <julia.lawall@inria.fr>
+Subject: Re: [PATCH v2] ARM/dma-mapping: use kvcalloc for fallback memory
+ allocation need
+Message-ID: <Y7QBKMzuzNQAdKyY@shell.armlinux.org.uk>
+References: <Y6HDwOyR23QPssRa@qemulion>
+ <Y6wYQNvloBeW1oq4@qemulion>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="hAPl3w13QUb7Di8T"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5641668.DvuYhMxLoT@diego>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y6wYQNvloBeW1oq4@qemulion>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 28, 2022 at 03:49:44PM +0530, Deepak R Varma wrote:
+> On Tue, Dec 20, 2022 at 07:46:32PM +0530, Deepak R Varma wrote:
+> > Current conditional determination of whether to use kzalloc or vzalloc
+> > has known issues such as "indefinite retry" when less than PAGE_SIZE
+> > memory is needed, but is unavailable. This LWN article [1] describes
+> > these issues in greater detail. Use helper function kvcalloc() instead
+> > which is more efficient in terms of performance and security.
+> >
+> >  	[1] https://lwn.net/Articles/711653/
+> >
+> > This patch proposal is based on following Coccinelle warning using the
+> > kvmalloc.cocci semantic patch.
+> > 	arch/arm/mm/dma-mapping.c:858:28-29: WARNING opportunity for kvmalloc
+> >
+> > The semantic patch suggests using kvzalloc() helper function, however,
+> > this patch proposes to use kvcalloc instead. kvcalloc() helper function
+> > uses 2-factor argument form which is better from a security perspective
+> > as described in the following KSPP project commit.
+> >
+> > 	Commit 4e3fd7217105 ("wireguard: ratelimiter: use kvcalloc() instead of kvzalloc()")
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> 
+> Hello,
+> May I please request a review and feedback on this patch proposal?
 
---hAPl3w13QUb7Di8T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The DMA API on ARM has been maintained by others recently, so it's no
+longer up to me. Please include Christoph Hellwig <hch@lst.de> when
+sending changes for this. Thanks.
 
-> T-Head now maintains some specification for their extended instructions
-> at [1], in which all instructions are prefixed "th.".
->=20
-> Follow this practice in the kernel comments.
->=20
-> [1] https://github.com/T-head-Semi/thead-extension-spec
->=20
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-
-Hey Icenowy,
-This (yet again) appears to not have made it to the list.
-It's not on patchwork, nor lore:
-https://lore.kernel.org/linux-riscv/2668919.mvXUDI8C0e@diego/T/#t
-https://lore.kernel.org/all/2668919.mvXUDI8C0e@diego/T/#t
-
-Since you CCed lkml & not just linux-riscv, but it is not showing idk
-what's wrong..
-Your reply to me the other day came through:
-https://lore.kernel.org/all/dda144a8397a175f3ce092485f08896c9a66d232.camel@=
-icenowy.me/
-
-Thanks,
-Conor.
-
-
---hAPl3w13QUb7Di8T
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7QBCQAKCRB4tDGHoIJi
-0tAGAPsFQ8k9MUuX4iWMfvfLGnFocl2dh5/008Fu0QoDJl3+aAD9G/mDs4wbC+hu
-PcisOihXXbQQPYBicsUO15UAgnF7Tgo=
-=Q0QQ
------END PGP SIGNATURE-----
-
---hAPl3w13QUb7Di8T--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
