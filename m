@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF45965C630
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F2065C638
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 19:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238846AbjACS0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 13:26:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S233732AbjACS1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 13:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238839AbjACS0V (ORCPT
+        with ESMTP id S238955AbjACS1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:26:21 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E200B6A;
-        Tue,  3 Jan 2023 10:26:02 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id m3so14619274wmq.0;
-        Tue, 03 Jan 2023 10:26:02 -0800 (PST)
+        Tue, 3 Jan 2023 13:27:07 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA8DF023
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 10:26:52 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id e141so34070099ybh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 10:26:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aRzoYepSkl//ziJ1ySsV1tuFv4CAwJQc87Spdth6SZs=;
-        b=LHPtwEsDLxDopS5vPBG5/7yCKyJME02A52f9mbnYvB8qXsIJphtU/CxV+bwqsbv8Je
-         Sq3Rhtiuc4X04lI3z+oTM2s7p+/qQum2zqveO2PDy2nRm4OUJb69g3F48Vg12ozrAB4V
-         BBsXYg4gVe9Ftv9ElQMid3simNahAm5JQy7yGkWEoa6Kp+z4JQzu6yyv15hWAvHQMi8q
-         X11sW1qYuIlek8rkcfcNxcbfQvtaae4oB8u/s8c7wmSsPJ3QeFx9CvgTsx0/ohx6z+Jn
-         2yOKzAUnS8PdeGeGe2bMIGvYyMb8Kr7HMGTXD/43WMosZGVXu0hvoj1jfEN7P45de8AQ
-         InZg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pq3R+dMUCBtQBXaTENIPK+pFT96E7II7s9kyI9TK3FA=;
+        b=qtM6NgWaiVqZCrj8mlfOBfl9chZFnGk7FZeAhK0wy71zu0Jbt2DGUrwpnG+p6HliNC
+         wO2NaOlbCKIgyAgsIjNe/ikj5/5528+86PkkSkuC0kNwPWkn7sa5m7z0RYJ3nJKeFbCh
+         qKMd4AqqUqZL4N4KitDhTrxCoBKchw+0ODvu4s+qk5ApqgNxN5YNl00Xc/+j+jTj5Zf3
+         pPUGZsWkOgqVLfWCcj3yYEHcaOdmMTAoL6Jc05sJ/Hh4r2FXvyZEmzUYIWm9n0Tt0b7y
+         GzMQ8UT2wOaVw/bOcZ1dvM88egQWS4WawD4MiF/7QBnjCih+TPZ3Cy6Y3OPb5R3FTuf3
+         76FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aRzoYepSkl//ziJ1ySsV1tuFv4CAwJQc87Spdth6SZs=;
-        b=6Qr/RCmrEsH8lJkLQ4k7/kSssguF4WRRgf+o07ealDut7vLNu8V/uBiXtY66xqn/7s
-         yHdl5jM7PqVnstnGXPCADfFzFZqB3C3rbUr6z8m1d1PUxoSEUFGCiwDcWFTT805Gltpw
-         SxZMQIQgTE3+9CnyMxlOzelCoZLFovh53hzuZgYOrS2kEyCuR/q3tAOCMT4H7/o4OgKA
-         gA6W5GwNbw6fMQy93aI+aUubAQAnVPubRIzoWhXIzDROwlUaEy7mSHnyZCNvqYPPmJSi
-         Phypm/D6o1RWTfZW1rEsrsGBl3rzYq/lcPuVXt/kSSoRxnnW1vgCU6PdcJAmXZcoV0Mf
-         BqpA==
-X-Gm-Message-State: AFqh2kqtUTwWAToWsezEU1Jy0rY8kXRW3YKVDDFD59lP1qWMdor7eCkB
-        R/s597ipgadDTmBepHDZlvTpN7xNRmY=
-X-Google-Smtp-Source: AMrXdXvTgaLqJaIX0z7u6gR4WtDhUDjJxeU6g8nd6mOzh+aOlhG38dQ+rO49Ieue3d9OtXykXgBP/g==
-X-Received: by 2002:a05:600c:601e:b0:3d0:7fee:8a70 with SMTP id az30-20020a05600c601e00b003d07fee8a70mr34287826wmb.19.1672770360793;
-        Tue, 03 Jan 2023 10:26:00 -0800 (PST)
-Received: from localhost.localdomain (host-79-56-217-20.retail.telecomitalia.it. [79.56.217.20])
-        by smtp.gmail.com with ESMTPSA id m22-20020a05600c161600b003cfa622a18asm45156598wmn.3.2023.01.03.10.25.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 10:26:00 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Brian King <brking@us.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] scsi: ipr: Replace kmap() with kmap_local_page()
-Date:   Tue,  3 Jan 2023 19:25:56 +0100
-Message-Id: <20230103182556.29080-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        bh=pq3R+dMUCBtQBXaTENIPK+pFT96E7II7s9kyI9TK3FA=;
+        b=BTzc3AkHxHzgJvfRBAg12XFwTfXoWUQJL9Uu19hzf38o8G5oMyQOj5WghrvqHG/i0b
+         4DXaQqLmJplu+nio039YaCzDKve6Rd3CGeEZ9/jWcUKmpABaieHTLPifNFywi6NA7sqj
+         RCznVpG2dcpsJIZ9DXXHyT/WlcZi+UZ6n2WPiSTzWKeW23UiWvVvh26JqtRhVAFo9YgQ
+         DTNrBNdW/l2l0iuDtMABPCLn1t9SkL2rhqyO//0krlnq78F5SWH0SGprFM+ITOJBs4Id
+         1OJi/0jFDhsxDGK6IecWytfoDlqLIfLK/JOAAYjUTN4EyvojLcqfL4lZ4zwYzqgWgilP
+         n+lQ==
+X-Gm-Message-State: AFqh2ko95KTVqhmEsrFOB7x6Y2ZusQzTQWEqNAtPbxjy+mbAPH84TNGA
+        UFwptt2QUM/7oPYIcbm4gszx4yy56b3UW1neCRvG6g==
+X-Google-Smtp-Source: AMrXdXtz9fE389kox3Zm+Hqn9n1jIVfUW3PvUCQvVSXTI5E+gIl9S5H+OLruEjvmoAaAls5jjJ+8Df66Dwj9ERutr3Y=
+X-Received: by 2002:a25:da14:0:b0:707:34cf:b4b1 with SMTP id
+ n20-20020a25da14000000b0070734cfb4b1mr4286913ybf.123.1672770411475; Tue, 03
+ Jan 2023 10:26:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-6-vipinsh@google.com>
+ <Y64VG4Bl0fujE2qG@google.com>
+In-Reply-To: <Y64VG4Bl0fujE2qG@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 3 Jan 2023 10:26:15 -0800
+Message-ID: <CAHVum0eE+bJw7vaYczipR5v8h94QzAkddz6etQKYkEBz6+zZoQ@mail.gmail.com>
+Subject: Re: [Patch v3 5/9] KVM: x86/mmu: Allocate TDP page table's page on
+ correct NUMA node on split
+To:     David Matlack <dmatlack@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,65 +70,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is deprecated in favor of kmap_local_page().
+On Thu, Dec 29, 2022 at 2:30 PM David Matlack <dmatlack@google.com> wrote:
+>
+> On Wed, Dec 21, 2022 at 06:34:53PM -0800, Vipin Sharma wrote:
+> > When dirty log is enabled, huge pages are split. Page table's pages
+> > during the split are allocated based on the current thread NUMA node or
+> > mempolicy. This causes inefficient page table accesses if underlying
+> > page is on a different NUMA node
+> >
+> > Allocate page table's pages on the same NUMA node as the underlying huge
+> > page when dirty log is enabled and huge pages are split.
+> >
+> > The performance gain during the pre-copy phase of live migrations of a
+> > 416 vCPUs and 11 TiB memory VM  on a 8 node host was seen in the range
+> > of 130% to 150%.
+>
+> Can you be more specific about this. "The performance" is vague. I know
+> it's an internal workload and fully explaining it would be difficult,
+> but you can give readers a slightly more specific idea of what improved.
+> e.g.
+>
+>  When testing with a synthetic write-heavy workload in a 416 vCPU VM on
+>  an 8 NUMA node host, the throughput increased by 150% from X to Y
+>  operations per second.
+>
+> It's also necessary to characterize the improvement relative to the
+> performance when dirty logging is not enabled. Whithout that information
+> it would be hard for an unfamiliar reader to understand how useful this
+> change really is.
+>
+> For example, let's say the throughput of your workload is 100,000
+> operations per second before dirty logging is enabled, and that drops
+> down to 1,000 operations per second after dirty logging is enabled. This
+> commit could increase that by 150% to 2,500 operations per second, but
+> that's actually not a very meaningful improvement since, either way,
+> guest performance is degraded by 95+% during dirty logging.
+>
+> On the other hand, if performance goes from 100,000 to 30,000 normally,
+> and this commit increases that 30,000 to 75,000 (150%), that's a much
+> more meaningful improvement.
+>
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-the mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+Yeah, I will provide more insight in the next version.
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and still valid.
+> >
+> > Suggested-by: David Matlack <dmatlack@google.com>
+> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++----
+> >  include/linux/kvm_host.h   | 18 ++++++++++++++++++
+> >  2 files changed, 26 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > index 4974fa96deff..376b8dceb3f9 100644
+> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > @@ -1403,7 +1403,7 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
+> >       return spte_set;
+> >  }
+> >
+> > -static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+> > +static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
+> >  {
+> >       struct kvm_mmu_page *sp;
+> >
+> > @@ -1413,7 +1413,8 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+> >       if (!sp)
+> >               return NULL;
+> >
+> > -     sp->spt = (void *)__get_free_page(gfp);
+> > +     sp->spt = kvm_mmu_get_free_page(nid, gfp);
+> > +
+> >       if (!sp->spt) {
+> >               kmem_cache_free(mmu_page_header_cache, sp);
+> >               return NULL;
+> > @@ -1427,6 +1428,9 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+> >                                                      bool shared)
+> >  {
+> >       struct kvm_mmu_page *sp;
+> > +     int nid;
+> > +
+> > +     nid = kvm_pfn_to_page_table_nid(spte_to_pfn(iter->old_spte));
+> >
+> >       /*
+> >        * Since we are allocating while under the MMU lock we have to be
+> > @@ -1437,7 +1441,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+> >        * If this allocation fails we drop the lock and retry with reclaim
+> >        * allowed.
+> >        */
+> > -     sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
+> > +     sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_NOWAIT | __GFP_ACCOUNT);
+> >       if (sp)
+> >               return sp;
+> >
+> > @@ -1449,7 +1453,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+> >               write_unlock(&kvm->mmu_lock);
+> >
+> >       iter->yielded = true;
+> > -     sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
+> > +     sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_KERNEL_ACCOUNT);
+> >
+> >       if (shared)
+> >               read_lock(&kvm->mmu_lock);
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index d48064503b88..a262e15ebd19 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -1583,6 +1583,24 @@ void kvm_arch_sync_events(struct kvm *kvm);
+> >  int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
+> >
+> >  struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn);
+> > +
+> > +/*
+> > + * Tells the appropriate NUMA node location of the page table's page based on
+> > + * pfn it will point to.
+>
+> I know what you are trying to say but the wording is a bit awkward. e.g.
+> "Tells" instead of "Returns", "location" is redundant, "page table's
+> page", etc. Suggest this:
+>
+> /*
+>  * Returns an appropriate NUMA node on which to allocate a page table that
+>  * maps @pfn.
+>  */
+>
+> > + *
+> > + * Return the nid of the page if pfn is valid and backed by a refcounted page,
+> > + * otherwise, return the nearest memory node for the current CPU.
+>
+> I would just drop this as it's just restating the code, which is already
+> very readable.
+>
 
-Therefore, replace kmap() with kmap_local_page() in
-ipr_copy_ucode_buffer() and, instead of open-coding local mappings +
-memcpy() + local un-mappings, use the better suited memcpy_to_page()
-helper.
+Okay.
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/scsi/ipr.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index 2022ffb45041..7dff517a0858 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -3912,7 +3912,6 @@ static int ipr_copy_ucode_buffer(struct ipr_sglist *sglist,
- {
- 	int bsize_elem, i, result = 0;
- 	struct scatterlist *sg;
--	void *kaddr;
- 
- 	/* Determine the actual number of bytes per element */
- 	bsize_elem = PAGE_SIZE * (1 << sglist->order);
-@@ -3923,9 +3922,7 @@ static int ipr_copy_ucode_buffer(struct ipr_sglist *sglist,
- 			buffer += bsize_elem) {
- 		struct page *page = sg_page(sg);
- 
--		kaddr = kmap(page);
--		memcpy(kaddr, buffer, bsize_elem);
--		kunmap(page);
-+		memcpy_to_page(page, 0, buffer, bsize_elem);
- 
- 		sg->length = bsize_elem;
- 
-@@ -3938,9 +3935,7 @@ static int ipr_copy_ucode_buffer(struct ipr_sglist *sglist,
- 	if (len % bsize_elem) {
- 		struct page *page = sg_page(sg);
- 
--		kaddr = kmap(page);
--		memcpy(kaddr, buffer, len % bsize_elem);
--		kunmap(page);
-+		memcpy_to_page(page, 0, buffer, len % bsize_elem);
- 
- 		sg->length = len % bsize_elem;
- 	}
--- 
-2.39.0
-
+> > + */
+> > +static inline int kvm_pfn_to_page_table_nid(kvm_pfn_t pfn)
+> > +{
+> > +     struct page *page = kvm_pfn_to_refcounted_page(pfn);
+> > +
+> > +     if (page)
+> > +             return page_to_nid(page);
+> > +     else
+> > +             return numa_mem_id();
+> > +}
+> > +
+> >  bool kvm_is_zone_device_page(struct page *page);
+> >
+> >  struct kvm_irq_ack_notifier {
+> > --
+> > 2.39.0.314.g84b9a713c41-goog
+> >
