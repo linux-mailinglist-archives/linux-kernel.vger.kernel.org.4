@@ -2,172 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AA465C36A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA8D65C367
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 16:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238082AbjACP5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 10:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S238050AbjACP4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 10:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjACP4n (ORCPT
+        with ESMTP id S233454AbjACP4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 10:56:43 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDE4386;
-        Tue,  3 Jan 2023 07:56:43 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303FS4Bt022669;
-        Tue, 3 Jan 2023 07:56:39 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=50ZZaOLwnf4n3mzLa2/GkS0zShwrKJ9SXeUjrdRCPbM=;
- b=fPpPFvgqpSCF0ir1rCPdiMb+Fq6CzHQdAYTMT7eTB3gBsxvWlLhkWC8TKj3Tvg51LZct
- b43+KkaqFsW0X5EQB4IkolKOIGo7opwoJZOf6x5c6hhMjEV4gTojbSgtr+S5868CT3fz
- a79bXcoG1ru+w+qNaW4glXnUGJZC0TFHr3p1V1JtTWnKq4LFUKIw78reqcgsCpsu+SRB
- 3xUxoT85PXxCKTeKvoW92AUbTaGSGft/4DIh351mlDWe2rbg1XOE+zH5mdmlNw97HhOK
- gJOXHYOrUYbN5xDDAtP43xCHS1FbMaJv2T8IHeVSDrvf/FZQJ1puhUIgjwDrfXgKUoL+ IA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3mtkauwayx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 03 Jan 2023 07:56:39 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 3 Jan
- 2023 07:56:38 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Tue, 3 Jan 2023 07:56:38 -0800
-Received: from localhost.localdomain (unknown [10.110.150.170])
-        by maili.marvell.com (Postfix) with ESMTP id D2E1D3F7068;
-        Tue,  3 Jan 2023 07:56:37 -0800 (PST)
-From:   Wojciech Zmuda <wzmuda@marvell.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <jassisinghbrar@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>, <sgoutham@marvell.com>,
-        <devicetree@vger.kernel.org>,
-        Wojciech Bartczak <wbartczak@marvell.com>,
-        Wojciech Zmuda <wzmuda@marvell.com>
-Subject: [PATCH v2 2/2] Documentation: add Marvell MHU driver bindings
-Date:   Tue, 3 Jan 2023 07:56:12 -0800
-Message-ID: <20230103155612.6217-3-wzmuda@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230103155612.6217-1-wzmuda@marvell.com>
-References: <20230103155612.6217-1-wzmuda@marvell.com>
+        Tue, 3 Jan 2023 10:56:39 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A233DA1AD;
+        Tue,  3 Jan 2023 07:56:38 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id b88so37104941edf.6;
+        Tue, 03 Jan 2023 07:56:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cUgk7t5CLogpADp6v+03F2a0C4ndvH9yI7BzPUoVTz8=;
+        b=Nlop0vV2rhk/Y14mg/LYKMI/LgbnDu0LklT8ZlGkVGT6ndSrTIzsmfL+UKV+rctl7C
+         LTgsO6ABsOsdupP0jMFKDPkeJOR/AjFdfRo1Kg92jTO3bYdUXQy0W2AOAvF67poVg1Ax
+         M1E36j+goZnA9IKiW00QGwlwffPb/29IZCIUJRj5YM3kGL/tOGPHmNWLJ32If2ZsqA6V
+         P1G2DWN8BnASIEwuGtlrA933d7Yn9FSU/Z3x+ITFmaWt+G4dhW7kYHic9RylMsTtx5f2
+         h0dZVKaxxZc4PhVmuSZ6Qtq4+903piGIKgA58TaiWTJ4GgrOy0O/gWNWrVTaOitxuPgL
+         bavA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cUgk7t5CLogpADp6v+03F2a0C4ndvH9yI7BzPUoVTz8=;
+        b=7qF6lGZgptzaH3MVXs0Ccj3PeoiAZt3SQiSb1CnRmL2AJg8x3gw2vJ38HWJntW4Lb0
+         WwPEaiyQnpUkYJ2HQMaIQNSNOwhSaVhL9v57eIjpPrKxwe3a/en0oI1qGcQdkHfh9jr1
+         /Mdz/JvCPeeJZIUjbvMRtR76UxFT9O0B3FY7FcZuDpGBVfSUnu7iAATmE23UcLRqfDwf
+         s8cPnJq0pLFZYxJJCZg4G1myhlSk5cQBPq1Yy00RMkLPlVPDgwagalgJV+Ia6B02UyhB
+         O2W0YBEDnuGEwxHu5tRa2/1aO+7FPIaOnrlufOTb/ulroh6dnO6m69AuooEdQx0sI39N
+         RGzw==
+X-Gm-Message-State: AFqh2ko2hUbURT1JZqAoLc1ylPp5cKaF3dCF9PVZkfNb0vKLOAlmfRZl
+        MLcFlsEPv28/BMY/7QxlRD0=
+X-Google-Smtp-Source: AMrXdXtoAYN/JnDVDN1YkdRe3Sjl9+sUDPRbeIocCAM+QeCzmE90ykdzaDAgpT+gUrrkq+LbtncKDA==
+X-Received: by 2002:aa7:d04d:0:b0:46c:d905:b9e8 with SMTP id n13-20020aa7d04d000000b0046cd905b9e8mr37622928edo.23.1672761396798;
+        Tue, 03 Jan 2023 07:56:36 -0800 (PST)
+Received: from skbuf ([188.26.185.118])
+        by smtp.gmail.com with ESMTPSA id g3-20020a170906538300b0082535e2da13sm14252877ejo.6.2023.01.03.07.56.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 07:56:36 -0800 (PST)
+Date:   Tue, 3 Jan 2023 17:56:33 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Michael Walle <michael@walle.cc>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wei Fang <wei.fang@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Subject: Re: [PATCH RFC net-next v2 11/12] net: dsa: Separate C22 and C45
+ MDIO bus transaction methods
+Message-ID: <20230103155633.tfdxncl75s4tb2ln@skbuf>
+References: <20221227-v6-2-rc1-c45-seperation-v2-0-ddb37710e5a7@walle.cc>
+ <20221227-v6-2-rc1-c45-seperation-v2-0-ddb37710e5a7@walle.cc>
+ <20221227-v6-2-rc1-c45-seperation-v2-11-ddb37710e5a7@walle.cc>
+ <20221227-v6-2-rc1-c45-seperation-v2-11-ddb37710e5a7@walle.cc>
+ <20230103153134.utalc6kw3l34dp4s@skbuf>
+ <Y7ROa8ql9R5SHPsK@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: Q_h8Wywq1zqiT1iROStxzYQfhjHpmBsQ
-X-Proofpoint-ORIG-GUID: Q_h8Wywq1zqiT1iROStxzYQfhjHpmBsQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-03_05,2023-01-03_02,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7ROa8ql9R5SHPsK@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wojciech Bartczak <wbartczak@marvell.com>
+On Tue, Jan 03, 2023 at 04:48:59PM +0100, Andrew Lunn wrote:
+> > Since clause 45 PHYs are identified by the "ethernet-phy-ieee802.3-c45"
+> > compatible string (otherwise they are C22), then a PHY which is not
+> > described in the device tree can only be C22. So this is why
+> > ds->slave_mii_bus only deals with clause 22 methods, and the true reason
+> > behind the comment above.
+> > 
+> > But actually this premise is no longer true since Luiz' commit
+> > fe7324b93222 ("net: dsa: OF-ware slave_mii_bus"), which introduced the
+> > strange concept of an "OF-aware helper for internal PHYs which are not
+> > described in the device tree". After his patch, it is possible to have
+> > something like this:
+> > 
+> > 	ethernet-switch {
+> > 		ethernet-ports {
+> > 			port@1 {
+> > 				reg = <1>;
+> > 			};
+> > 		};
+> > 
+> > 		mdio {
+> > 			ethernet-phy@1 {
+> > 				compatible = "ethernet-phy-ieee802.3-c45"
+> > 				reg = <1>;
+> > 			};
+> > 		};
+> > 	};
+> > 
+> > As you can see, this is a clause 45 internal PHY which lacks a
+> > phy-handle, so its bus must be put in ds->slave_mii_bus in order for
+> > dsa_slave_phy_connect() to see it without that phy-handle (based on the
+> > port number matching with the PHY number). After Luiz' patch, this kind
+> > of device tree is possible, and it invalidates the assumption about
+> > ds->slave_mii_bus only driving C22 PHYs.
+> 
+> My memory is hazy, but i think at the time i wrote these patches,
+> there was no DSA driver which made use of ds->slave_mii_bus with
+> C45. So i took the short cut of only supporting C22.
 
-Marvell Message Handling Unit is a mailbox controller present in
-Marvell OcteonTx and OcteonTX2 SoC family.
+Actually I believe that in v1 you did extend ds->ops with C45 methods,
+but it's me who told you to remove them:
+https://patchwork.kernel.org/project/netdevbpf/patch/20220508153049.427227-10-andrew@lunn.ch/#24852813
 
-Signed-off-by: Wojciech Bartczak <wbartczak@marvell.com>
-Signed-off-by: Wojciech Zmuda <wzmuda@marvell.com>
----
- .../bindings/mailbox/marvell,mvl-mhu.yml      | 67 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 68 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mailbox/marvell,mvl-mhu.yml
+> 
+> Those DSA drivers which do support C45 all register their bus directly
+> with the MDIO core.
 
-diff --git a/Documentation/devicetree/bindings/mailbox/marvell,mvl-mhu.yml b/Documentation/devicetree/bindings/mailbox/marvell,mvl-mhu.yml
-new file mode 100644
-index 000000000000..e06a17eab0f9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mailbox/marvell,mvl-mhu.yml
-@@ -0,0 +1,67 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mailbox/marvell,mvl-mhu.yml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Marvell Message Handling Unit driver
-+
-+maintainers:
-+  - Sujeet Baranwal <sbaranwal@marvell.com>
-+  - Sunil Goutham <sgoutham@marvell.com>
-+  - Wojciech Bartczak <wbartczak@marvell.com>
-+
-+description:
-+  The Control-Processors Cluster (CPC) provides Arm-platform specification
-+  entities for managing the system. On of the CPC processors is the System
-+  Control Processor (SCP). The SCP is responsible, among others, for booting
-+  the chip, clock and power initialization, controlling power consumption
-+  through DVFS, monitoring temperature sensors and controlling AVS. The SCP,
-+  as each XCP, contains mailboxes for software-to-software communications.
-+  Mailbox writes cause an interrupt to the local XCP core or to the AP.
-+  This driver exposes AP-SCP Message Handling Unit to the system, providing
-+  the mailbox communication mechanism to the system, with the intention
-+  of plugging into the SCMI framework. It is designed to work with Marvell
-+  OcteonTX and OcteonTX2-based platforms.
-+  Mailbox has no other usage than SCMI communication. In case of
-+  configurations running without SCMI support it should be disabled.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: marvell,mbox
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#mbox-cells":
-+    description: Index of the channel
-+    const: 1
-+
-+required:
-+  - "#mbox-cells"
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+		/ {
-+			mailbox: mailbox@28,0 {
-+				compatible = "marvell,mbox";
-+				#mbox-cells = <1>;
-+				reg = <0xE000 0 0 0 0>;/*  DEVFN = 0xE0 (1C:0) */
-+			};
-+
-+			/* ... */
-+
-+			firmware {
-+				scmi {
-+					compatible = "arm,scmi";
-+					mboxes = <&mailbox 0>;
-+					mbox-names = "scp_ap";
-+					/* ... */
-+				};
-+			};
-+		};
-+
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 650a198cce24..e53f001a15c3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11328,6 +11328,7 @@ M:	Sunil Goutham <sgoutham@marvell.com>
- M:	Wojciech Bartczak <wbartczak@marvell.com>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/mailbox/marvell,mvl-mhu.yml
- F:	drivers/mailbox/mvl_mhu.c
- 
- MATROX FRAMEBUFFER DRIVER
--- 
-2.17.1
+And rightfully so. IMHO, letting DSA allocate ds->slave_mii_bus out of
+driver writer sheer convenience (a secondary purpose) should be deprecated,
+unless the reason for using ds->slave_mii_bus is the lack of a phy-handle
+(the primary purpose). It becomes that more confusing to have to extend
+dsa_switch_ops with 2 more methods which serve the secondary purpose but
+not the primary one.
 
+> So Luiz patches may allow a C45 bus, but are there any drivers today
+> actually using it?
+
+I sent a private email to Luiz a few minutes ago asking him to confirm.
