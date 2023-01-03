@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F57A65C538
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA3E65C533
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbjACRk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
+        id S238304AbjACRkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238300AbjACRkO (ORCPT
+        with ESMTP id S238253AbjACRkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 12:40:14 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC531263B;
-        Tue,  3 Jan 2023 09:40:07 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id c17so44823622edj.13;
-        Tue, 03 Jan 2023 09:40:07 -0800 (PST)
+        Tue, 3 Jan 2023 12:40:12 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC91C10FFF;
+        Tue,  3 Jan 2023 09:40:08 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-14ffd3c5b15so26041927fac.3;
+        Tue, 03 Jan 2023 09:40:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M7/u/+NO1/u6xtGW0HGp1uN31lHD185Kfc1YVT6fktU=;
-        b=ltpHUQ+4guxNvt6/0CnhPaDbWdW1ukGhY+rOeWF60K03bzWNS5uY2PdgF3lhKalEQK
-         NaI1Vgfsr8ntVqlLQ9iSMOwdratCYBxWOX5uJMTdQ/ACy+gJNZmXtcyaJz42050PXXko
-         3/jjaBkND7vX5cZXq+klkfqt0yPPS9e0A/6gAx+w8WH60zJReTsEfLEQqx1WGIBSWnKP
-         kPx/UgBWi3fKMfANbEZjKyKjVWmqeRFuxZV5ZgIBMAtmmnBWtiub7Z68rk4i+lunIEAF
-         JAEAqjeG7P7LaLAdcvVMncoiKa5FvUxDAwHqrNQyECmLTpg0HL5nOrF2OhYg4VAl0MRq
-         D6RA==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cMNfeSjCh0BfCORHZrZEG9uctt5EKtuv6ubYw+95YrQ=;
+        b=fm71vNWnwQQHOfPakKRsYfmPoBLDYAw3ctA/PF+HT9ICdhbnGIQNYGMmkUw9GyAuHg
+         IbZTvYgBweMemgOW43AYk1BY/ymFH7gCsd8OEcatJ8MMhGny8fORmKvanUBGMwXQzmHy
+         LN5dc7a9M8rWUEdVNM8DKA3Vw6H4GWxTv28Uh6wRXE1KcNplob7d7q0G33Tm3PjaYNXR
+         ARIdwd1tF3UX6QmqdRPxhqG9CQpP1Q9Q9ItfCiOSFdHSreFl9V1NSSMo6zKIT9VRkPpi
+         7Css/CDwbSFotuEUqQwCx0eSikbL/KFSw9N/ZnudxBZRodEXH/iyv2goEofDbqquEyM1
+         REEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M7/u/+NO1/u6xtGW0HGp1uN31lHD185Kfc1YVT6fktU=;
-        b=qnTU/n3n6C5Zmn480Dx3BErETIYdk0sGQA09hbKgg/Mj7oz5AOpJupt63yEeWCLkIE
-         K3mDoNnFMByog5H2uq4cs0SqoiJ3iTZfi47MgQyRnaDxNK71SIpIiEE/Chm6tFjU59Gv
-         Sr5r/MgMKnJMcx249wyYwe+uVagDi4YbCGEb3ZaHZMraO7NHT5Y1zfhWrbN5Jn8bCeRn
-         CCc7jjOX5hawStZwekuBPGoGxmvENPYHFnRyLgn6XplPzlK+TX9T1N2d7n+SJ8dcZhsQ
-         293QBHfxR7Na3Hz9Y0gsEWKQbwHbej75C44BEsI6pH7ZHVWjOg+jt+SA6TL463YO6ryX
-         FxUg==
-X-Gm-Message-State: AFqh2kpABhwpS8cHau/ZXKEQsc13PXu2guIQX42M2TE6AKiSjE3qOvkl
-        FRhXsM8K+H/fssGQEMAhgGU=
-X-Google-Smtp-Source: AMrXdXts9S3Rn+7Va7dRsPXFdpIGlugAHTLT5uwwdJqPT1e2FDsmYRsg2uYWiw1XvfZL89s95KQd9g==
-X-Received: by 2002:aa7:c704:0:b0:47e:22ac:625c with SMTP id i4-20020aa7c704000000b0047e22ac625cmr34898903edq.41.1672767606027;
-        Tue, 03 Jan 2023 09:40:06 -0800 (PST)
-Received: from skbuf ([188.26.185.118])
-        by smtp.gmail.com with ESMTPSA id r17-20020aa7d591000000b004847513929csm11074269edq.72.2023.01.03.09.40.04
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cMNfeSjCh0BfCORHZrZEG9uctt5EKtuv6ubYw+95YrQ=;
+        b=IvdDxr+Q/AXLZzMil6Zmk8I3I8c57pgi5J6kepGovcCIh/FFgfuZbncDlP+ugPdoPr
+         qpnHCGxcsFYrAn1SihpLyP94DEEZz/OuvKnmpRaxxTb8CatKlgYBiKhaezHNVxUyoZXV
+         VJDIFMQg5EJdOp0KDnfGpynm7RNf78EPh1672ATuXzPkZXirzI2+m2oIWglrqUZKLJtD
+         PRRIhIXyU4pyb9vEylpHuDK0JCAqsTdgkmoq4HNev2UOyF7DUZXJqIXiDEUW1Ri5tBzy
+         MRXsnlQQz2SkSiIOpEc7nSV18dGnUpQFGX2X0Nw/gCOtRRKo+DeNljiuYEo4sgrgnwil
+         ZH1A==
+X-Gm-Message-State: AFqh2kqldeF7dy2MNzoCDxIvZ5EgkqAule3DSe9CMo3Ppj7MUcmRkOO2
+        KaDGQs3EEwx2Itzxw/foR9mrUSQzB8A=
+X-Google-Smtp-Source: AMrXdXtC7utx+3MwR6P3tvbWfL40qQV0qB9AIJ2x6aWpB+sMLmruy2V+jnlYzmuedmnBhvyrf2IDVQ==
+X-Received: by 2002:a05:6870:cd04:b0:13b:8098:d195 with SMTP id qk4-20020a056870cd0400b0013b8098d195mr19013960oab.27.1672767607277;
+        Tue, 03 Jan 2023 09:40:07 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n38-20020a05687055a600b0013b9ee734dcsm14450344oao.35.2023.01.03.09.40.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 09:40:05 -0800 (PST)
-Date:   Tue, 3 Jan 2023 19:40:03 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com,
-        ceggers@arri.de, jacob.e.keller@intel.com
-Subject: Re: [Patch net-next v6 09/13] net: dsa: microchip: ptp: move
- pdelay_rsp correction field to tail tag
-Message-ID: <20230103174003.ip7suairhetlru6z@skbuf>
-References: <20230102050459.31023-1-arun.ramadoss@microchip.com>
- <20230102050459.31023-1-arun.ramadoss@microchip.com>
- <20230102050459.31023-10-arun.ramadoss@microchip.com>
- <20230102050459.31023-10-arun.ramadoss@microchip.com>
+        Tue, 03 Jan 2023 09:40:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 3 Jan 2023 09:40:04 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH RESEND v6 1/5] hwmon: (pmbus/core): Add interrupt support
+Message-ID: <20230103174004.GA202902@roeck-us.net>
+References: <20221214080715.2700442-1-Naresh.Solanki@9elements.com>
+ <20221229144012.GA21213@roeck-us.net>
+ <ecdf887d-d2c8-d9d4-ab19-3b30ee1d4607@9elements.com>
+ <20230103122656.GB190111@roeck-us.net>
+ <dc604c81-b447-3bc0-18c3-13e03ba56c40@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230102050459.31023-10-arun.ramadoss@microchip.com>
- <20230102050459.31023-10-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <dc604c81-b447-3bc0-18c3-13e03ba56c40@9elements.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,159 +81,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 10:34:55AM +0530, Arun Ramadoss wrote:
-> From: Christian Eggers <ceggers@arri.de>
+On Tue, Jan 03, 2023 at 08:56:59PM +0530, Naresh Solanki wrote:
+> Hi Guenter
 > 
-> For PDelay_Resp messages we will likely have a negative value in the
-> correction field. The switch hardware cannot correctly update such
-> values (produces an off by one error in the UDP checksum), so it must be
-> moved to the time stamp field in the tail tag. Format of the correction
-> field is 48 bit ns + 16 bit fractional ns.  After updating the
-> correction field, clone is no longer required hence it is freed.
-> 
-> Signed-off-by: Christian Eggers <ceggers@arri.de>
-> Co-developed-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
-> v2 -> v3
-> - used update_correction variable in skb->cb instead of ptp_msg_type
-> 
-> v1 -> v2
-> - added fallthrough keyword in switch case to suppress checkpatch
-> warning
+> On 03-01-2023 05:56 pm, Guenter Roeck wrote:
+> > On Tue, Jan 03, 2023 at 12:18:49PM +0530, Naresh Solanki wrote:
+> > > Hi Guenter,
+> > > 
+> > > On 29-12-2022 08:10 pm, Guenter Roeck wrote:
+> > > > On Wed, Dec 14, 2022 at 09:07:11AM +0100, Naresh Solanki wrote:
+> > > > > From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > > > > 
+> > > > > Implement PMBUS irq handler.
+> > > > > 
+> > > > > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > > > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > > 
+> > > > $ scripts/checkpatch.pl --strict index.html
+> > > > CHECK: Blank lines aren't necessary after an open brace '{'
+> > > > #131: FILE: drivers/hwmon/pmbus/pmbus_core.c:3088:
+> > > > +	for (i = 0; i < data->info->pages; i++) {
+> > > > +
+> > > > 
+> > > > CHECK: Alignment should match open parenthesis
+> > > > #183: FILE: drivers/hwmon/pmbus/pmbus_core.c:3140:
+> > > > +	ret = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler,
+> > > > +			      0, "pmbus-irq", data);
+> > > > 
+> > > > CHECK: Please use a blank line after function/struct/union/enum declarations
+> > > > #197: FILE: drivers/hwmon/pmbus/pmbus_core.c:3154:
+> > > >    }
+> > > > +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+> > > > 
+> > > > total: 0 errors, 0 warnings, 3 checks, 109 lines checked
+> > > > 
+> > > > NOTE: For some of the reported defects, checkpatch may be able to
+> > > >         mechanically convert to the typical style using --fix or --fix-inplace.
+> > > > 
+> > > > index.html has style problems, please review.
+> > > > 
+> > > > Please run checkpatch --strict on your patches.
+> > > > Also see Documentation/hwmon/submitting-patches.rst.
+> > > I will take care of these errors in the updated version.
+> > > > 
+> > > > > ---
+> > > > >    drivers/hwmon/pmbus/pmbus.h      |  2 +-
+> > > > >    drivers/hwmon/pmbus/pmbus_core.c | 84 ++++++++++++++++++++++++++++++++
+> > > > >    2 files changed, 85 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > 
+> > > > > base-commit: 364ffd2537c44cb6914ff5669153f4a86fffad29
+> > > > > 
+> > > > > diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> > > > > index 10fb17879f8e..6b2e6cf93b19 100644
+> > > > > --- a/drivers/hwmon/pmbus/pmbus.h
+> > > > > +++ b/drivers/hwmon/pmbus/pmbus.h
+> > > > > @@ -26,7 +26,7 @@ enum pmbus_regs {
+> > > > >    	PMBUS_CAPABILITY		= 0x19,
+> > > > >    	PMBUS_QUERY			= 0x1A,
+> > > > > -
+> > > > > +	PMBUS_SMBALERT_MASK		= 0x1B,
+> > > > >    	PMBUS_VOUT_MODE			= 0x20,
+> > > > >    	PMBUS_VOUT_COMMAND		= 0x21,
+> > > > >    	PMBUS_VOUT_TRIM			= 0x22,
+> > > > > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> > > > > index 95e95783972a..244fd2597252 100644
+> > > > > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > > > > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > > > > @@ -3072,11 +3072,89 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+> > > > >    	return 0;
+> > > > >    }
+> > > > > +
+> > > > > +static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
+> > > > > +{
+> > > > > +	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+> > > > > +}
+> > > > > +
+> > > > > +static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+> > > > > +{
+> > > > > +	struct pmbus_data *data = pdata;
+> > > > > +	struct i2c_client *client = to_i2c_client(data->dev);
+> > > > > +	int i, status;
+> > > > > +
+> > > > > +	for (i = 0; i < data->info->pages; i++) {
+> > > > > +
+> > > > > +		mutex_lock(&data->update_lock);
+> > > > > +		status = pmbus_read_status_word(client, i);
+> > > > > +		if (status < 0) {
+> > > > > +			mutex_unlock(&data->update_lock);
+> > > > > +			return status;
+> > > > > +		}
+> > > > > +
+> > > > > +		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
+> > > > > +			pmbus_clear_fault_page(client, i);
+> > > > > +
+> > > > > +		mutex_unlock(&data->update_lock);
+> > > > > +	}
+> > > > > +
+> > > > > +	return IRQ_HANDLED;
+> > > > > +}
+> > > > > +
+> > > > > +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+> > > > > +{
+> > > > > +	struct device *dev = &client->dev;
+> > > > > +	const struct pmbus_regulator_status_category *cat;
+> > > > > +	const struct pmbus_regulator_status_assoc *bit;
+> > > > > +	int i, j, err, ret, func;
+> > > > > +	u8 mask;
+> > > > > +
+> > > > > +	for (i = 0; i < data->info->pages; i++) {
+> > > > > +		func = data->info->func[i];
+> > > > > +
+> > > > > +		for (j = 0; j < ARRAY_SIZE(pmbus_regulator_flag_map); j++) {
+> > > > > +			cat = &pmbus_regulator_flag_map[j];
+> > > > > +			if (!(func & cat->func))
+> > > > > +				continue;
+> > > > > +			mask = 0;
+> > > > > +			for (bit = cat->bits; bit->pflag; bit++)
+> > > > > +				mask |= bit->pflag;
+> > > > > +
+> > > > > +			err = pmbus_write_smbalert_mask(client, i, cat->reg, ~mask);
+> > > > > +			if (err)
+> > > > > +				dev_err(dev, "Failed to set smbalert for reg 0x%02x\n",	cat->reg);
+> > > > 
+> > > > This concerns me. It might mean that the chip does not support
+> > > > PMBUS_SMBALERT_MASK. If so, there would be lots of error messages.
+> > > After going through the PMBus specification, it appears that this should not
+> > > be an issue unless there is a violation of the specification.
+> > 
+> > PMBus chips have lots of issues which violate the specification.
+> > Have a look at the various drivers and the workarounds implemented there.
+> > You'll need to check if the command/register is supported before using it.
+> > Also, if you want to keep the error message, make it dev_err_once().
+> > 
+> > Either case, an error is an error, not to be ignored. An error here
+> > should result in an error abort.
+> Yes, I agree that PMBus chips can have issues that violate the
+> specification, and that it is important to check whether a command or
+> register is supported before using it.
+> I have noticed that many drivers use the PMBUS_HAVE_* flags to expose the
+> presence of specific registers, and I think it would be a good idea to add a
+> PMBUS_HAVE_SMBALERT flag as well, so that drivers for supported chips can
+> use it to determine whether they should set up an IRQ handler or not. If
+> PMBUS_HAVE_SMBALERT is set, then the IRQ handler should be set up, otherwise
+> it should be ignored.
+> Will this approach be right?
 
-I don't think checkpatch asks for fallthrough keyword if there is no
-code in between the cases. That would be silly, because it's obvious
-that the code falls through. It's most likely that the fallthrough is
-needed, but not _here_.
+Not really. PMBUS_HAVE_ flags are intended to indicate sensor register
+support, not to indicate compliance problems. What you'd be looking for
+would be the flags in struct pmbus_platform_data. However, those are only
+intended to be used if registers/commands can not be auto-detected or if
+doing so causes problems. See include/linux/pmbus.h for details.
+Unless there is reason to believe that chips are misbehaving when trying
+to read from or to set PMBUS_SMBALERT_MASK, we should stick with auto-
+detection. After all, that is what pmbus_check_{status,byte,word}_register()
+functions are for.
 
-> 
-> RFC v3 -> Patch v1
-> - Patch is separated from transmission logic patch
-> ---
->  drivers/net/dsa/microchip/ksz_ptp.c |  5 ++++
->  include/linux/dsa/ksz_common.h      |  2 ++
->  net/dsa/tag_ksz.c                   | 41 ++++++++++++++++++++++++++++-
->  3 files changed, 47 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz_ptp.c b/drivers/net/dsa/microchip/ksz_ptp.c
-> index 8f5e099b1b99..5d5b8d4ed17b 100644
-> --- a/drivers/net/dsa/microchip/ksz_ptp.c
-> +++ b/drivers/net/dsa/microchip/ksz_ptp.c
-> @@ -267,6 +267,8 @@ void ksz_port_txtstamp(struct dsa_switch *ds, int port,
->  
->  	switch (ptp_msg_type) {
->  	case PTP_MSGTYPE_PDELAY_REQ:
-> +		 fallthrough;
-
-On the other hand, I would expect checkpatch to warn about the
-superfluous space. There should be just 2 leading tabs here, not 2 tabs
-and 1 space.
-
-> +	case PTP_MSGTYPE_PDELAY_RESP:
->  		break;
->  
->  	default:
-> @@ -279,6 +281,9 @@ void ksz_port_txtstamp(struct dsa_switch *ds, int port,
->  
->  	/* caching the value to be used in tag_ksz.c */
->  	KSZ_SKB_CB(skb)->clone = clone;
-> +	KSZ_SKB_CB(clone)->ptp_type = type;
-> +	if (ptp_msg_type == PTP_MSGTYPE_PDELAY_RESP)
-> +		KSZ_SKB_CB(clone)->update_correction = true;
->  }
->  
->  static void ksz_ptp_txtstamp_skb(struct ksz_device *dev,
-> diff --git a/include/linux/dsa/ksz_common.h b/include/linux/dsa/ksz_common.h
-> index b91beab5e138..576a99ca698d 100644
-> --- a/include/linux/dsa/ksz_common.h
-> +++ b/include/linux/dsa/ksz_common.h
-> @@ -36,6 +36,8 @@ struct ksz_tagger_data {
->  
->  struct ksz_skb_cb {
->  	struct sk_buff *clone;
-> +	unsigned int ptp_type;
-> +	bool update_correction;
->  	u32 tstamp;
->  };
->  
-> diff --git a/net/dsa/tag_ksz.c b/net/dsa/tag_ksz.c
-> index e14ee26bf6a0..7dd2133b0820 100644
-> --- a/net/dsa/tag_ksz.c
-> +++ b/net/dsa/tag_ksz.c
-> @@ -7,6 +7,7 @@
->  #include <linux/dsa/ksz_common.h>
->  #include <linux/etherdevice.h>
->  #include <linux/list.h>
-> +#include <linux/ptp_classify.h>
->  #include <net/dsa.h>
->  
->  #include "tag.h"
-> @@ -194,14 +195,52 @@ static void ksz_rcv_timestamp(struct sk_buff *skb, u8 *tag)
->   */
->  static void ksz_xmit_timestamp(struct dsa_port *dp, struct sk_buff *skb)
->  {
-> +	struct sk_buff *clone = KSZ_SKB_CB(skb)->clone;
->  	struct ksz_tagger_private *priv;
-> +	struct ptp_header *ptp_hdr;
-> +	bool update_correction;
-> +	unsigned int ptp_type;
-> +	u32 tstamp_raw = 0;
-> +	s64 correction;
->  
->  	priv = ksz_tagger_private(dp->ds);
->  
->  	if (!test_bit(KSZ_HWTS_EN, &priv->state))
->  		return;
->  
-> -	put_unaligned_be32(0, skb_put(skb, KSZ_PTP_TAG_LEN));
-> +	if (!clone)
-> +		goto output_tag;
-> +
-> +	update_correction = KSZ_SKB_CB(clone)->update_correction;
-> +	if (!update_correction)
-
-I don't think the on-stack variable "update_correction" really serves a
-purpose here, since it's used only once; it would be simpler if you just
-used "if (KSZ_SKB_CB()->update...)".
-
-> +		goto output_tag;
-> +
-> +	ptp_type = KSZ_SKB_CB(clone)->ptp_type;
-> +
-> +	ptp_hdr = ptp_parse_header(skb, ptp_type);
-> +	if (!ptp_hdr)
-> +		goto output_tag;
-> +
-> +	correction = (s64)get_unaligned_be64(&ptp_hdr->correction);
-> +
-> +	if (correction < 0) {
-> +		struct timespec64 ts;
-> +
-> +		ts = ns_to_timespec64(-correction >> 16);
-> +		tstamp_raw = ((ts.tv_sec & 3) << 30) | ts.tv_nsec;
-> +
-> +		/* Set correction field to 0 and update UDP checksum.  */
-> +		ptp_header_update_correction(skb, ptp_type, ptp_hdr, 0);
-> +	}
-> +
-> +	/* For PDelay_Resp messages, the clone is not required in
-> +	 * skb_complete_tx_timestamp() and should be freed here.
-> +	 */
-> +	kfree_skb(clone);
-> +	KSZ_SKB_CB(skb)->clone = NULL;
-
-Why do you clone the skb in the first place, then?
-Just extend KSZ_SKB_CB() with some other flag to denote that this skb
-needs processing here, and replace the "if (!clone)" test with that.
-
-> +
-> +output_tag:
-> +	put_unaligned_be32(tstamp_raw, skb_put(skb, KSZ_PTP_TAG_LEN));
->  }
->  
->  /* Defer transmit if waiting for egress time stamp is required.  */
-> -- 
-> 2.36.1
-> 
-
+Thanks,
+Guenter
