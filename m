@@ -2,54 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A243565BADA
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 07:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F198765BAEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 07:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236749AbjACGo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 01:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        id S236840AbjACGro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 01:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjACGo4 (ORCPT
+        with ESMTP id S236634AbjACGrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 01:44:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0DDCFF;
-        Mon,  2 Jan 2023 22:44:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5DB3AB80E15;
-        Tue,  3 Jan 2023 06:44:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85993C433D2;
-        Tue,  3 Jan 2023 06:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672728292;
-        bh=/5lMFYxeFk4tjVM5Sh1D4dpCcs4gKL4U7mbXKFl9Uh8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XZ/vpsOESYRh8ZWz0uxpiUANHiIBRN71wk6PU5xY4tprr93vWqFQlUKy3GQS9ryA3
-         aN4b16a9Lo9jjGmWnl9abxUjVJzve6Rhy0a45zfdoNuJCbxvYlKH6y/8vHnTbxAHsG
-         286P8RV389ST+mFodfka7ZfNAgIko5hR6IOYE8SJRaEX/AYDFK16fXbihXO3oj/sWN
-         XvrU0EZqstjhw9egLIFzD8Wk43BXu2c3K44OvFkA7M/nQmekRyw9Y1nwnkTxGl3xKv
-         TBoMcEFYbWc62ULPdu4TWxAJ7fZl81ZX4jkP2yEKOCbbQg28N2v6p7OHSCw6j6Ckse
-         YlB7iYDZnikvg==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Tue, 3 Jan 2023 01:47:07 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45963BD;
+        Mon,  2 Jan 2023 22:47:03 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3036kHrS036766;
+        Tue, 3 Jan 2023 00:46:17 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672728377;
+        bh=GjviG7byUxJQO3JTq97W9RSWN/t+Ue/18g//GetxcNs=;
+        h=From:To:CC:Subject:Date;
+        b=MlEsJlQW28ncTKGiacYeRQHBUGi5M7vNIJIo/32shZD8qHL2gnNgsUA+sZpw9HbJu
+         Wm45kD9SgsBzcxpMF+zL/cmYcIVArF+n+LbSAYQWNW0whH0tTehWT30G85MJMB/h4t
+         Q81CtfSC3AQFmcg0jtl86ihlyeh2W7h+Xlk5LuXU=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3036kG9g042359
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 3 Jan 2023 00:46:16 -0600
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 3
+ Jan 2023 00:46:16 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 3 Jan 2023 00:46:16 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3036kFhp075217;
+        Tue, 3 Jan 2023 00:46:16 -0600
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv, kprobes: Stricter c.jr/c.jalr decoding
-In-Reply-To: <Y7M/HlcF3u0qWIDJ@spud>
-References: <20230102160748.1307289-1-bjorn@kernel.org> <Y7M/HlcF3u0qWIDJ@spud>
-Date:   Tue, 03 Jan 2023 07:44:49 +0100
-Message-ID: <87sfgsp15q.fsf@all.your.base.are.belong.to.us>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Guo Ren <guoren@kernel.org>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux RISC-V List <linux-riscv@lists.infradead.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
+        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        Aradhya Bhatia <a-bhatia1@ti.com>
+Subject: [RFC PATCH 0/4] dt-bindings: Introduce dual-link panels & panel-vendors
+Date:   Tue, 3 Jan 2023 12:16:11 +0530
+Message-ID: <20230103064615.5311-1-a-bhatia1@ti.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,94 +90,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conor Dooley <conor@kernel.org> writes:
+Hi all,
 
-> Hey Bjorn,
->
-> On Mon, Jan 02, 2023 at 05:07:48PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
->> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->>=20
->> In the compressed instruction extension, c.jr, c.jalr, c.mv, and c.add
->> is encoded the following way (each instruction is 16b):
->>=20
->> ---+-+-----------+-----------+--
->> 100 0 rs1[4:0]!=3D0       00000 10 : c.jr
->> 100 1 rs1[4:0]!=3D0       00000 10 : c.jalr
->> 100 0  rd[4:0]!=3D0 rs2[4:0]!=3D0 10 : c.mv
->> 100 1  rd[4:0]!=3D0 rs2[4:0]!=3D0 10 : c.add
->>=20
->> The following logic is used to decode c.jr and c.jalr:
->>=20
->>   insn & 0xf007 =3D=3D 0x8002 =3D> instruction is an c.jr
->>   insn & 0xf007 =3D=3D 0x9002 =3D> instruction is an c.jalr
->>=20
->> When 0xf007 is used to mask the instruction, c.mv can be incorrectly
->> decoded as c.jr, and c.add as c.jalr.
->>=20
->> Correct the decoding by changing the mask from 0xf007 to 0xf07f.
->>=20
->> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
->> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->> ---
->>  arch/riscv/kernel/probes/simulate-insn.h | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/arch/riscv/kernel/probes/simulate-insn.h b/arch/riscv/kerne=
-l/probes/simulate-insn.h
->> index cb6ff7dccb92..de8474146a9b 100644
->> --- a/arch/riscv/kernel/probes/simulate-insn.h
->> +++ b/arch/riscv/kernel/probes/simulate-insn.h
->> @@ -31,9 +31,9 @@ __RISCV_INSN_FUNCS(fence,	0x7f, 0x0f);
->>  	} while (0)
->>=20=20
->>  __RISCV_INSN_FUNCS(c_j,		0xe003, 0xa001);
->> -__RISCV_INSN_FUNCS(c_jr,	0xf007, 0x8002);
->
-> Hmm, I wonder where the mask originally came from!
+Microtips Technology Solutions USA, and Lincoln Technology Solutions are
+2 display panel vendors, and the first 2 patches add their vendor
+prefixes.
 
-I think it's just a simple bug -- missing that "rs2" must be zero.
+The fourth patch, simply introduces the new compatible for the generic
+dual-link panels in the panel-lvds driver. This new compatible is based
+from a new DT binding added in the third patch explained below.
 
-> I had a look at the compressed spec, of which the version google gave to
-> me was v1.9 [1], and Table 1.6 in that (Instruction listing for RVC,
-> Quadrant 2) seems to list them all together.
-> Tedious it may be, but future instruction decoding bits probably need
-> more scrutiny as Drew found another clearly wrong bit a few weeks ago
-> [2].
->
-> Anyways, I checked against the doc and the new versions look good to
-> me. How'd you spot this, and did you check the other masks?
+The third patch introduces a dt-binding for generic dual-link LVDS
+panels. These panels do not have any documented constraints, except for
+their timing characteristics. Further, these panels have 2 pixel-sinks.
+In a dual-link connection between an LVDS encoder and the panel, one
+sink accepts the odd set of LVDS pixels and the other, the even set.
 
-I got hit by it when testing the optprobe series (c.mv was rejected as
-c.jr).
+A lot of this has been based from the Advantech,idk-2121wr dual-link
+panel[1] and Maxime's patches for generic LVDS panels[2] (which are
+single-link by default.) and the discussions that happened before they
+were finally merged.
 
-Skimmed the other masks quickly, but will take another look.
+Below are some notes and points that I want to bring forward.
 
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->
-> [1] -
-> https://riscv.org/wp-content/uploads/2015/11/riscv-compressed-spec-v1.9.p=
-df
+  - The advantech,idk-2121wr panel binding uses 2 boolean properties
+    dual-link-odd/even-pixels, to signify which port sink is being used
+    for which set of LVDS pixels. I too have added similar support and
+    introduced constraints around those properties, so as to not break
+    the ABI... but I believe there is a better way to achieve this.
 
-C-ext is part of the unpriv spec:
-https://github.com/riscv/riscv-isa-manual/releases
+    A "pixel-type" enum property could be introduced in their stead,
+    which can accept one of the 2 options <dual-lvds-odd-pixels> or
+    <dual-lvds-even-pixels>.
 
-> [2] - https://lore.kernel.org/linux-riscv/20221223221332.4127602-2-heiko@=
-sntech.de/
->
->> +__RISCV_INSN_FUNCS(c_jr,	0xf07f, 0x8002);
->>  __RISCV_INSN_FUNCS(c_jal,	0xe003, 0x2001);
->> -__RISCV_INSN_FUNCS(c_jalr,	0xf007, 0x9002);
->> +__RISCV_INSN_FUNCS(c_jalr,	0xf07f, 0x9002);
->>  __RISCV_INSN_FUNCS(c_beqz,	0xe003, 0xc001);
->>  __RISCV_INSN_FUNCS(c_bnez,	0xe003, 0xe001);
->>  __RISCV_INSN_FUNCS(c_ebreak,	0xffff, 0x9002);
->
-> Worth noting that this code is gone in riscv/for-next thanks to Heiko's
-> de-duplication:
-> https://lore.kernel.org/linux-riscv/20221223221332.4127602-7-heiko@sntech=
-.de/
+    This method, in my opinion, is more accurate and cleaner to
+    implement in the bindings as well.
 
-Yay!
+    If this does sound a better I can push out a new revision where the
+    driver supports both these methods (to not break the ABI) and the
+    advantech,2121wr panel can remain as an exception.
 
 
-Bj=C3=B6rn
+  - As an alternative to the previous point, if that method is not
+    preferred for some reason, the advantech,2121wtr panel binding
+    could then be merged in the panel-dual-lvds binding as part of
+    future work.
+
+
+  - Another tweak, I am looking forward to do as part of future work and
+    would like all your comments is to introduce driver-based
+    implementation of the panel timing parameters, like it is with
+    "panel-simple". The driver can then support both the panel-timing
+    sources (DT node or hard-coded driver structure) and the binding
+    can remove this from the "required" section.
+
+Thank you!
+
+[1]: https://patchwork.freedesktop.org/patch/357122/
+[2]: https://patchwork.freedesktop.org/patch/471228/
+
+Aradhya Bhatia (4):
+  dt-bindings: vendor-prefixes: Add microtips
+  dt-bindings: vendor-prefixes: Add lincolntech
+  dt-bindings: panel: Introduce dual-link LVDS panel
+  drm: panel-lvds: Introduce dual-link panels
+
+ .../display/panel/panel-dual-lvds.yaml        | 157 ++++++++++++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+ MAINTAINERS                                   |   1 +
+ drivers/gpu/drm/panel/panel-lvds.c            |   1 +
+ 4 files changed, 163 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+
+-- 
+2.39.0
+
