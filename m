@@ -2,290 +2,433 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D026D65C38E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7DE65C397
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 17:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238038AbjACQIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 11:08:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S233556AbjACQJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 11:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237750AbjACQH6 (ORCPT
+        with ESMTP id S229721AbjACQJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 11:07:58 -0500
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4498A1274B;
-        Tue,  3 Jan 2023 08:07:55 -0800 (PST)
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 303G7FEw010683;
-        Tue, 3 Jan 2023 17:07:20 +0100
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 2171E120CE0;
-        Tue,  3 Jan 2023 17:07:11 +0100 (CET)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1672762031; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ponzqwujCMdHaLQwY9lHikWod3tMARwfE8YEJshdl/A=;
-        b=qe46ieEpr3ROhDlOWcethB2L4QKgD5B+j/cdgOtd1HkxKKqN7OnRFkAc3BJM/G2BKDf+5/
-        nq0mpAnLe+WlInDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1672762031; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ponzqwujCMdHaLQwY9lHikWod3tMARwfE8YEJshdl/A=;
-        b=Q8qKGxOdwppg7R3buoVuurgB4AQtrrEJYjFDdsE5YW5hE46nOFNEEQqmyd/+7PlHC8I1Wk
-        q9lS70ffpliwc0xdOjpEfkcYujEdQ/N6WRQmoJ2kikdBLO5s/NtonVoDvF5vMT17peMKGs
-        9bxpXzB9N/W2CqnpzB/O5iWdVJChQkbDh2yJ5QZBAgDHL8pLpZrDSYsvKFV3kYbe6Prpki
-        VkU4V/HhdPVfqUl7WTgTq8pw2pa5a0zEgVnw63zzcEvzTCBaM5XLI0iuXqbm0Tw1FlYhD9
-        oklZxf0U67GEFQ5WKPDGKBg/QIBEygOEK4tfCBTlAir5ijl+RZLuQqPoclg45A==
-Date:   Tue, 3 Jan 2023 17:07:11 +0100
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     Jonathan Maxwell <jmaxwell37@gmail.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [net-next] ipv6: fix routing cache overflow for raw sockets
-Message-Id: <20230103170711.819921d40132494b4bfd6a0d@uniroma2.it>
-In-Reply-To: <CAGHK07Crj8s0wOivw62Q_N4Km6r1qsH-y-8YgfYhX-JJF6kZSA@mail.gmail.com>
-References: <20221218234801.579114-1-jmaxwell37@gmail.com>
-        <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
-        <CAGHK07ALtLTjRP-XOepqoc8xzWcT8=0v5ccL-98f4+SU9vwfsg@mail.gmail.com>
-        <20221223212835.eb9d03f3f7db22360e34341d@uniroma2.it>
-        <CAGHK07APOwLvhs73WKkQfZuEy2FoKEWJusSyejKVcth4D47g=w@mail.gmail.com>
-        <CAGHK07Crj8s0wOivw62Q_N4Km6r1qsH-y-8YgfYhX-JJF6kZSA@mail.gmail.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 Jan 2023 11:09:35 -0500
+Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B941F1275F;
+        Tue,  3 Jan 2023 08:09:32 -0800 (PST)
+Received: from myt6-d7f912e2c4c1.qloud-c.yandex.net (myt6-d7f912e2c4c1.qloud-c.yandex.net [IPv6:2a02:6b8:c12:12a2:0:640:d7f9:12e2])
+        by forward500c.mail.yandex.net (Yandex) with ESMTP id 6980C5EBCF;
+        Tue,  3 Jan 2023 19:09:23 +0300 (MSK)
+Received: by myt6-d7f912e2c4c1.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id L9ZNDK3VSKo1-qKQR7HNW;
+        Tue, 03 Jan 2023 19:09:22 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skif-web.ru; s=mail; t=1672762162;
+        bh=RvyiumiKAWeTFchPo0wErjQawybfDW3eU+2ZZg2I1hM=;
+        h=Message-ID:Subject:References:To:From:In-Reply-To:Cc:Date;
+        b=pjwzg2z0A6V/Tq5F+0GNab0lV8UNeJpLzs6XwlZ+THNOrniU0YwqyNfLeBIgPI+6W
+         Ncm5E2AESiCpsbkChcKNXyLZg8xXOYZDBxMts/tF+DAuJoCYs1ocPOVGXkoYkVLC0t
+         FWfyVwKMzzoSUzWTE67hzWHHjoIjbEO7e/LuIxg4=
+Authentication-Results: myt6-d7f912e2c4c1.qloud-c.yandex.net; dkim=pass header.i=@skif-web.ru
+Date:   Tue, 3 Jan 2023 19:09:20 +0300
+From:   Alexey Lukyachuk <skif@skif-web.ru>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     <tvrtko.ursulin@linux.intel.com>,
+        <dri-devel@lists.freedesktop.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>
+Subject: Re: [Intel-gfx] [PATCH v2] drm/i915: dell wyse 3040 shutdown fix
+Message-ID: <20230103190920.754a7b2c@alexey-Swift-SF314-42>
+In-Reply-To: <Y7QjsNBYKumzEvBS@intel.com>
+References: <20221225184413.146916-1-skif@skif-web.ru>
+        <20221225185507.149677-1-skif@skif-web.ru>
+        <Y6sfvUJmrb73AeJh@intel.com>
+        <20221227204003.6b0abe65@alexey-Swift-SF314-42>
+        <20230102165649.2b8e69e3@alexey-Swift-SF314-42>
+        <Y7QjsNBYKumzEvBS@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NO_DNS_FOR_FROM,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jon,
-please see below, thanks.
+On Tue, 3 Jan 2023 07:46:40 -0500
+Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
 
-On Tue, 3 Jan 2023 10:59:50 +1100
-Jonathan Maxwell <jmaxwell37@gmail.com> wrote:
+> On Mon, Jan 02, 2023 at 04:56:49PM +0300, Alexey Lukyachuk wrote:
+> > On Tue, 27 Dec 2022 20:40:03 +0300
+> > Alexey Lukyachuk <skif@skif-web.ru> wrote:
+> >=20
+> > > On Tue, 27 Dec 2022 11:39:25 -0500
+> > > Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
+> > >=20
+> > > > On Sun, Dec 25, 2022 at 09:55:08PM +0300, Alexey Lukyanchuk wrote:
+> > > > > dell wyse 3040 doesn't peform poweroff properly, but instead rema=
+ins in=20
+> > > > > turned power on state.
+> > > >=20
+> > > > okay, the motivation is explained in the commit msg..
+> > > >=20
+> > > > > Additional mutex_lock and=20
+> > > > > intel_crtc_wait_for_next_vblank=20
+> > > > > feature 6.2 kernel resolve this trouble.
+> > > >=20
+> > > > but this why is not very clear... seems that by magic it was found,
+> > > > without explaining what race we are really protecting here.
+> > > >=20
+> > > > but even worse is:
+> > > > what about those many random vblank waits in the code? what's the
+> > > > reasoning?
+> > > >=20
+> > > > >=20
+> > > > > cc: stable@vger.kernel.org
+> > > > > original commit Link: https://patchwork.freedesktop.org/patch/508=
+926/
+> > > > > fixes: fe0f1e3bfdfeb53e18f1206aea4f40b9bd1f291c
+> > > > > Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+> > > > > ---
+> > > > > I got some troubles with this device (dell wyse 3040) since kerne=
+l 5.11
+> > > > > started to use i915_driver_shutdown function. I found solution he=
+re:
+> > > > >=20
+> > > > > https://lore.kernel.org/dri-devel/Y1wd6ZJ8LdJpCfZL@intel.com/#r
+> > > > >=20
+> > > > > ---
+> > > > >  drivers/gpu/drm/i915/display/intel_audio.c | 37 +++++++++++++++-=
+------
+> > > > >  1 file changed, 25 insertions(+), 12 deletions(-)
+> > > > >=20
+> > > > > diff --git a/drivers/gpu/drm/i915/display/intel_audio.c b/drivers=
+/gpu/drm/i915/display/intel_audio.c
+> > > > > index aacbc6da8..44344ecdf 100644
+> > > > > --- a/drivers/gpu/drm/i915/display/intel_audio.c
+> > > > > +++ b/drivers/gpu/drm/i915/display/intel_audio.c
+> > > > > @@ -336,6 +336,7 @@ static void g4x_audio_codec_disable(struct in=
+tel_encoder *encoder,
+> > > > >  				    const struct drm_connector_state *old_conn_state)
+> > > > >  {
+> > > > >  	struct drm_i915_private *dev_priv =3D to_i915(encoder->base.dev=
+);
+> > > > > +	struct intel_crtc *crtc =3D to_intel_crtc(old_crtc_state->uapi.=
+crtc);
+> > > > >  	u32 eldv, tmp;
+> > > > > =20
+> > > > >  	tmp =3D intel_de_read(dev_priv, G4X_AUD_VID_DID);
+> > > > > @@ -348,6 +349,9 @@ static void g4x_audio_codec_disable(struct in=
+tel_encoder *encoder,
+> > > > >  	tmp =3D intel_de_read(dev_priv, G4X_AUD_CNTL_ST);
+> > > > >  	tmp &=3D ~eldv;
+> > > > >  	intel_de_write(dev_priv, G4X_AUD_CNTL_ST, tmp);
+> > > > > +
+> > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > >  }
+> > > > > =20
+> > > > >  static void g4x_audio_codec_enable(struct intel_encoder *encoder,
+> > > > > @@ -355,12 +359,15 @@ static void g4x_audio_codec_enable(struct i=
+ntel_encoder *encoder,
+> > > > >  				   const struct drm_connector_state *conn_state)
+> > > > >  {
+> > > > >  	struct drm_i915_private *dev_priv =3D to_i915(encoder->base.dev=
+);
+> > > > > +	struct intel_crtc *crtc =3D to_intel_crtc(crtc_state->uapi.crtc=
+);
+> > > > >  	struct drm_connector *connector =3D conn_state->connector;
+> > > > >  	const u8 *eld =3D connector->eld;
+> > > > >  	u32 eldv;
+> > > > >  	u32 tmp;
+> > > > >  	int len, i;
+> > > > > =20
+> > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > +
+> > > > >  	tmp =3D intel_de_read(dev_priv, G4X_AUD_VID_DID);
+> > > > >  	if (tmp =3D=3D INTEL_AUDIO_DEVBLC || tmp =3D=3D INTEL_AUDIO_DEV=
+CL)
+> > > > >  		eldv =3D G4X_ELDV_DEVCL_DEVBLC;
+> > > > > @@ -493,6 +500,7 @@ static void hsw_audio_codec_disable(struct in=
+tel_encoder *encoder,
+> > > > >  				    const struct drm_connector_state *old_conn_state)
+> > > > >  {
+> > > > >  	struct drm_i915_private *dev_priv =3D to_i915(encoder->base.dev=
+);
+> > > > > +	struct intel_crtc *crtc =3D to_intel_crtc(old_crtc_state->uapi.=
+crtc);
+> > > > >  	enum transcoder cpu_transcoder =3D old_crtc_state->cpu_transcod=
+er;
+> > > > >  	u32 tmp;
+> > > > > =20
+> > > > > @@ -508,6 +516,10 @@ static void hsw_audio_codec_disable(struct i=
+ntel_encoder *encoder,
+> > > > >  		tmp |=3D AUD_CONFIG_N_VALUE_INDEX;
+> > > > >  	intel_de_write(dev_priv, HSW_AUD_CFG(cpu_transcoder), tmp);
+> > > > > =20
+> > > > > +
+> > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > +
+> > > > >  	/* Invalidate ELD */
+> > > > >  	tmp =3D intel_de_read(dev_priv, HSW_AUD_PIN_ELD_CP_VLD);
+> > > > >  	tmp &=3D ~AUDIO_ELD_VALID(cpu_transcoder);
+> > > > > @@ -633,6 +645,7 @@ static void hsw_audio_codec_enable(struct int=
+el_encoder *encoder,
+> > > > >  				   const struct drm_connector_state *conn_state)
+> > > > >  {
+> > > > >  	struct drm_i915_private *dev_priv =3D to_i915(encoder->base.dev=
+);
+> > > > > +	struct intel_crtc *crtc =3D to_intel_crtc(crtc_state->uapi.crtc=
+);
+> > > > >  	struct drm_connector *connector =3D conn_state->connector;
+> > > > >  	enum transcoder cpu_transcoder =3D crtc_state->cpu_transcoder;
+> > > > >  	const u8 *eld =3D connector->eld;
+> > > > > @@ -651,12 +664,7 @@ static void hsw_audio_codec_enable(struct in=
+tel_encoder *encoder,
+> > > > >  	tmp &=3D ~AUDIO_ELD_VALID(cpu_transcoder);
+> > > > >  	intel_de_write(dev_priv, HSW_AUD_PIN_ELD_CP_VLD, tmp);
+> > > > > =20
+> > > > > -	/*
+> > > > > -	 * FIXME: We're supposed to wait for vblank here, but we have v=
+blanks
+> > > > > -	 * disabled during the mode set. The proper fix would be to pus=
+h the
+> > > > > -	 * rest of the setup into a vblank work item, queued here, but =
+the
+> > > > > -	 * infrastructure is not there yet.
+> > > > > -	 */
+> > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > =20
+> > > > >  	/* Reset ELD write address */
+> > > > >  	tmp =3D intel_de_read(dev_priv, HSW_AUD_DIP_ELD_CTRL(cpu_transc=
+oder));
+> > > > > @@ -705,6 +713,8 @@ static void ilk_audio_codec_disable(struct in=
+tel_encoder *encoder,
+> > > > >  		aud_cntrl_st2 =3D CPT_AUD_CNTRL_ST2;
+> > > > >  	}
+> > > > > =20
+> > > > > +	mutex_lock(&dev_priv->display.audio.mutex);
+> > > > > +
+> > > > >  	/* Disable timestamps */
+> > > > >  	tmp =3D intel_de_read(dev_priv, aud_config);
+> > > > >  	tmp &=3D ~AUD_CONFIG_N_VALUE_INDEX;
+> > > > > @@ -721,6 +731,10 @@ static void ilk_audio_codec_disable(struct i=
+ntel_encoder *encoder,
+> > > > >  	tmp =3D intel_de_read(dev_priv, aud_cntrl_st2);
+> > > > >  	tmp &=3D ~eldv;
+> > > > >  	intel_de_write(dev_priv, aud_cntrl_st2, tmp);
+> > > > > +	mutex_unlock(&dev_priv->display.audio.mutex);
+> > > > > +
+> > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > >  }
+> > > > > =20
+> > > > >  static void ilk_audio_codec_enable(struct intel_encoder *encoder,
+> > > > > @@ -740,12 +754,7 @@ static void ilk_audio_codec_enable(struct in=
+tel_encoder *encoder,
+> > > > >  	if (drm_WARN_ON(&dev_priv->drm, port =3D=3D PORT_A))
+> > > > >  		return;
+> > > > > =20
+> > > > > -	/*
+> > > > > -	 * FIXME: We're supposed to wait for vblank here, but we have v=
+blanks
+> > > > > -	 * disabled during the mode set. The proper fix would be to pus=
+h the
+> > > > > -	 * rest of the setup into a vblank work item, queued here, but =
+the
+> > > > > -	 * infrastructure is not there yet.
+> > > > > -	 */
+> > > > > +	intel_crtc_wait_for_next_vblank(crtc);
+> > > > > =20
+> > > > >  	if (HAS_PCH_IBX(dev_priv)) {
+> > > > >  		hdmiw_hdmiedid =3D IBX_HDMIW_HDMIEDID(pipe);
+> > > > > @@ -767,6 +776,8 @@ static void ilk_audio_codec_enable(struct int=
+el_encoder *encoder,
+> > > > > =20
+> > > > >  	eldv =3D IBX_ELD_VALID(port);
+> > > > > =20
+> > > > > +	mutex_lock(&dev_priv->display.audio.mutex);
+> > > > > +
+> > > > >  	/* Invalidate ELD */
+> > > > >  	tmp =3D intel_de_read(dev_priv, aud_cntrl_st2);
+> > > > >  	tmp &=3D ~eldv;
+> > > > > @@ -798,6 +809,8 @@ static void ilk_audio_codec_enable(struct int=
+el_encoder *encoder,
+> > > > >  	else
+> > > > >  		tmp |=3D audio_config_hdmi_pixel_clock(crtc_state);
+> > > > >  	intel_de_write(dev_priv, aud_config, tmp);
+> > > > > +
+> > > > > +	mutex_unlock(&dev_priv->display.audio.mutex);
+> > > > >  }
+> > > > > =20
+> > > > >  /**
+> > > > > --=20
+> > > > > 2.25.1
+> > > > >=20
+> > >=20
+> > >=20
+> > > I would like to say, that this solution was found in drm-tip reposito=
+ry:
+> > > link: git://anongit.freedesktop.org/drm-tip
+> > > I will quotate original commit message from Ville Syrj=C3=A4l=C3=A4=20
+> > > <ville.syrjala@linux.intel.com>: "The spec tells us to do a bunch of=
+=20
+> > > vblank waits in the audio enable/disable sequences. Make it so."
+> > > So it's just a backport of accepted patch.
+> > > Which i wanna to propagate to stable versions
+> >=20
+> >=20
+> > Yes, I have checked 6.2-rc2 and everything work fine. I want to backport
+> > this commit to 6.0 and 6.1 because my company going to use these versio=
+ns.
+> > Maybe it will be useful for 5.15, companies and vendors are passionate =
+about
+> > LTS kernel ( I am edge to make special version of this patch for 5.15
+> > because hank 3 will be failed with it.).
+> > I am fully supportive with you that trouble is in timings/ locking chan=
+ges.
+> > Early in detecting process I made some sleeps and it's help but not rel=
+iable.
+> > Regarding to your question about fdo gitlab, I went to do it. And in pr=
+ocess
+> >  ("Before filing the bug, please try to reproduce your issue with the l=
+atest
+> >  kernel. Use the latest drm-tip branch") I found that trouble is resolv=
+es.
+> > Using bisect and tests, I got needed commit.
+>=20
+> okay, so the only commit we need is this:
+> https://patchwork.freedesktop.org/patch/508926/
+> ?
+>=20
+> and nothing else?
 
-> Hi Andrea,
-> 
-> Happy New Year.
-> 
+Yes, this patch is enough.
 
-Thank you, Happy New Year to you too and everybody on the mailing list as well.
+>=20
+> If we want this to be included in older released active kernel versions we
+> need to follow this process:
+>=20
+> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+>=20
+> We cannot create a new patch like the origin of this thread.
+>=20
 
-> Any chance you could test this patch based on the latest net-next
-> kernel and let me know the result?
-> 
-> diff --git a/include/net/dst_ops.h b/include/net/dst_ops.h
-> index 88ff7bb2bb9b..632086b2f644 100644
-> --- a/include/net/dst_ops.h
-> +++ b/include/net/dst_ops.h
-> @@ -16,7 +16,7 @@ struct dst_ops {
->         unsigned short          family;
->         unsigned int            gc_thresh;
-> 
-> -       int                     (*gc)(struct dst_ops *ops);
-> +       void                    (*gc)(struct dst_ops *ops);
->         struct dst_entry *      (*check)(struct dst_entry *, __u32 cookie);
->         unsigned int            (*default_advmss)(const struct dst_entry *);
->         unsigned int            (*mtu)(const struct dst_entry *);
-> diff --git a/net/core/dst.c b/net/core/dst.c
-> index 6d2dd03dafa8..31c08a3386d3 100644
-> --- a/net/core/dst.c
-> +++ b/net/core/dst.c
-> @@ -82,12 +82,8 @@ void *dst_alloc(struct dst_ops *ops, struct net_device *dev,
-> 
->         if (ops->gc &&
->             !(flags & DST_NOCOUNT) &&
-> -           dst_entries_get_fast(ops) > ops->gc_thresh) {
-> -               if (ops->gc(ops)) {
-> -                       pr_notice_ratelimited("Route cache is full:
-> consider increasing sysctl net.ipv6.route.max_size.\n");
-> -                       return NULL;
-> -               }
-> -       }
-> +           dst_entries_get_fast(ops) > ops->gc_thresh)
-> +               ops->gc(ops);
-> 
->         dst = kmem_cache_alloc(ops->kmem_cachep, GFP_ATOMIC);
->         if (!dst)
-> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-> index e74e0361fd92..b643dda68d31 100644
-> --- a/net/ipv6/route.c
-> +++ b/net/ipv6/route.c
-> @@ -91,7 +91,7 @@ static struct dst_entry *ip6_negative_advice(struct
-> dst_entry *);
->  static void            ip6_dst_destroy(struct dst_entry *);
->  static void            ip6_dst_ifdown(struct dst_entry *,
->                                        struct net_device *dev, int how);
-> -static int              ip6_dst_gc(struct dst_ops *ops);
-> +static void             ip6_dst_gc(struct dst_ops *ops);
-> 
->  static int             ip6_pkt_discard(struct sk_buff *skb);
->  static int             ip6_pkt_discard_out(struct net *net, struct
-> sock *sk, struct sk_buff *skb);
-> @@ -3284,11 +3284,10 @@ struct dst_entry *icmp6_dst_alloc(struct
-> net_device *dev,
->         return dst;
->  }
-> 
-> -static int ip6_dst_gc(struct dst_ops *ops)
-> +static void ip6_dst_gc(struct dst_ops *ops)
->  {
->         struct net *net = container_of(ops, struct net, ipv6.ip6_dst_ops);
->         int rt_min_interval = net->ipv6.sysctl.ip6_rt_gc_min_interval;
-> -       int rt_max_size = net->ipv6.sysctl.ip6_rt_max_size;
->         int rt_elasticity = net->ipv6.sysctl.ip6_rt_gc_elasticity;
->         int rt_gc_timeout = net->ipv6.sysctl.ip6_rt_gc_timeout;
->         unsigned long rt_last_gc = net->ipv6.ip6_rt_last_gc;
-> @@ -3296,11 +3295,10 @@ static int ip6_dst_gc(struct dst_ops *ops)
->         int entries;
-> 
->         entries = dst_entries_get_fast(ops);
-> -       if (entries > rt_max_size)
-> +       if (entries > ops->gc_thresh)
->                 entries = dst_entries_get_slow(ops);
-> 
-> -       if (time_after(rt_last_gc + rt_min_interval, jiffies) &&
-> -           entries <= rt_max_size)
-> +       if (time_after(rt_last_gc + rt_min_interval, jiffies))
->                 goto out;
-> 
->         fib6_run_gc(atomic_inc_return(&net->ipv6.ip6_rt_gc_expire), net, true);
-> @@ -3310,7 +3308,6 @@ static int ip6_dst_gc(struct dst_ops *ops)
->  out:
->         val = atomic_read(&net->ipv6.ip6_rt_gc_expire);
->         atomic_set(&net->ipv6.ip6_rt_gc_expire, val - (val >> rt_elasticity));
-> -       return entries > rt_max_size;
->  }
-> 
->  static int ip6_nh_lookup_table(struct net *net, struct fib6_config *cfg,
-> @@ -6512,7 +6509,7 @@ static int __net_init ip6_route_net_init(struct net *net)
->  #endif
-> 
->         net->ipv6.sysctl.flush_delay = 0;
-> -       net->ipv6.sysctl.ip6_rt_max_size = 4096;
-> +       net->ipv6.sysctl.ip6_rt_max_size = INT_MAX;
->         net->ipv6.sysctl.ip6_rt_gc_min_interval = HZ / 2;
->         net->ipv6.sysctl.ip6_rt_gc_timeout = 60*HZ;
->         net->ipv6.sysctl.ip6_rt_gc_interval = 30*HZ;
-> 
+May I ask you for a little additional explanation?
+I submitted my patch with adding <stable@vger.kernel.org> to CC.
+What else should I do?
+Maybe I should send new thread and send it only to <stable@vger.kernel.org>=
+ ?
+Should I make separate version for 5.15 lts?
 
-Yes, I will apply this patch in the next days and check how it deals with the
-seg6 subsystem. I will keep you posted.
+> >=20
+> > Also I add log (by netconsole) from 5.15 kernel
+> >=20
+> > [   60.031680] ------------[ cut here ]------------
+> > [   60.031709] i915 0000:00:02.0: drm_WARN_ON(!intel_irqs_enabled(dev_p=
+riv))
+> > [   60.031766] WARNING: CPU: 1 PID: 1964 at drivers/gpu/drm/i915/i915_i=
+rq.c:527 i915_enable_pipestat+0x1b9/0x230 [i915]
+> > [   60.032016] Modules linked in: snd_soc_sst_cht_bsw_rt5672 snd_hdmi_l=
+pe_audio mei_hdcp intel_rapl_msr intel_powerclamp coretemp kvm_intel kvm pu=
+nit_atom_debug crct10dif_pclmul ghash_clmulni_intel joydev input_leds aesni=
+_intel crypto_simd cryptd snd_sof_acpi_intel_byt intel_cstate snd_sof_intel=
+_ipc snd_sof_acpi snd_sof_intel_atom dell_wmi snd_sof_xtensa_dsp snd_sof de=
+ll_smbios ledtrig_audio dcdbas snd_intel_sst_acpi nls_iso8859_1 snd_soc_acp=
+i_intel_match sparse_keymap snd_soc_acpi i915 efi_pstore snd_intel_sst_core=
+ wmi_bmof dell_wmi_descriptor snd_soc_sst_atom_hifi2_platform snd_soc_rt567=
+0 snd_intel_dspcfg intel_chtdc_ti_pwrbtn snd_soc_rl6231 snd_intel_sdw_acpi =
+ttm drm_kms_helper snd_soc_core cec snd_compress ac97_bus rc_core processor=
+_thermal_device_pci_legacy snd_pcm_dmaengine i2c_algo_bit processor_thermal=
+_device fb_sys_fops processor_thermal_rfim snd_pcm snd_seq_midi syscopyarea=
+ processor_thermal_mbox sysfillrect processor_thermal_rapl intel_rapl_commo=
+n mei_txe intel_soc_dts_iosf
+> > [   60.032231]  snd_seq_midi_event mei intel_xhci_usb_role_switch sysim=
+gblt snd_rawmidi snd_seq snd_seq_device snd_timer snd soundcore 8250_dw int=
+3406_thermal mac_hid int3403_thermal int340x_thermal_zone int3400_thermal a=
+cpi_pad intel_int0002_vgpio acpi_thermal_rel sch_fq_codel ipmi_devintf ipmi=
+_msghandler msr parport_pc ppdev lp parport drm ip_tables x_tables autofs4 =
+overlay hid_logitech_hidpp hid_logitech_dj hid_generic usbhid hid netconsol=
+e mmc_block crc32_pclmul r8169 realtek lpc_ich sdhci_pci xhci_pci cqhci xhc=
+i_pci_renesas dw_dmac wmi sdhci_acpi video dw_dmac_core intel_soc_pmic_chtd=
+c_ti sdhci
+> > [   60.032427] CPU: 1 PID: 1964 Comm: plymouthd Not tainted 5.15.0-57-g=
+eneric #63~20.04.1-Ubuntu
+> > [   60.032440] Hardware name: Dell Inc. Wyse 3040 Thin Client/0G56C0, B=
+IOS 1.2.4 01/18/2018
+> > [   60.032450] RIP: 0010:i915_enable_pipestat+0x1b9/0x230 [i915]
+> > [   60.032669] Code: 89 55 cc 44 89 5d d0 44 89 4d d4 e8 c1 15 ae d8 48=
+ 8b 55 c0 48 c7 c1 a8 72 b5 c0 48 c7 c7 54 b5 b8 c0 48 89 c6 e8 0e 21 f5 d8=
+ <0f> 0b 44 8b 55 cc 44 8b 5d d0 44 8b 4d d4 e9 9d fe ff ff 4c 89 f6
+> > [   60.032682] RSP: 0018:ffffaaa50070b878 EFLAGS: 00010086
+> > [   60.032694] RAX: 0000000000000000 RBX: ffff980ec8080000 RCX: fffffff=
+f9ab7a748
+> > [   60.032703] RDX: 00000000ffffdfff RSI: ffffaaa50070b6b8 RDI: 0000000=
+000000001
+> > [   60.032713] RBP: ffffaaa50070b8c0 R08: 0000000000000003 R09: 0000000=
+000000001
+> > [   60.032721] R10: ffffffff9b21f3b6 R11: 000000009b21f38a R12: 0000000=
+000000004
+> > [   60.032730] R13: 0000000000000000 R14: 0000000000000000 R15: ffff980=
+ec8080000
+> > [   60.032740] FS:  00007f0967eec740(0000) GS:ffff980f34280000(0000) kn=
+lGS:0000000000000000
+> > [   60.032752] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [   60.032762] CR2: 00007f7f5f21eaa4 CR3: 000000000a34a000 CR4: 0000000=
+0001006e0
+> > [   60.032772] Call Trace:
+> > [   60.032781]  <TASK>
+> > [   60.032793]  ? drm_crtc_vblank_helper_get_vblank_timestamp_internal+=
+0xe0/0x370 [drm]
+> > [   60.032899]  i965_enable_vblank+0x3d/0x60 [i915]
+> > [   60.033139]  drm_vblank_enable+0xfd/0x1a0 [drm]
+> > [   60.033240]  drm_vblank_get+0xaf/0x100 [drm]
+> > [   60.033335]  drm_crtc_vblank_get+0x17/0x20 [drm]
+> > [   60.033426]  intel_pipe_update_start+0x128/0x2f0 [i915]
+> > [   60.033689]  ? wait_woken+0x60/0x60
+> > [   60.033710]  intel_update_crtc+0xd2/0x420 [i915]
+> > [   60.033969]  intel_commit_modeset_enables+0x74/0xa0 [i915]
+> > [   60.034228]  intel_atomic_commit_tail+0x587/0x14e0 [i915]
+> > [   60.034488]  intel_atomic_commit+0x3a6/0x410 [i915]
+> > [   60.034746]  drm_atomic_commit+0x4a/0x60 [drm]
+> > [   60.034849]  drm_atomic_helper_set_config+0x80/0xc0 [drm_kms_helper]
+> > [   60.034921]  drm_mode_setcrtc+0x1ff/0x7d0 [drm]
+> > [   60.035011]  ? drm_mode_getcrtc+0x1e0/0x1e0 [drm]
+> > [   60.035098]  drm_ioctl_kernel+0xb2/0x100 [drm]
+> > [   60.035182]  drm_ioctl+0x275/0x4a0 [drm]
+> > [   60.035265]  ? drm_mode_getcrtc+0x1e0/0x1e0 [drm]
+> > [   60.035354]  __x64_sys_ioctl+0x95/0xd0
+> > [   60.035372]  do_syscall_64+0x5c/0xc0
+> > [   60.035388]  ? exit_to_user_mode_prepare+0x3d/0x1c0
+> > [   60.035404]  ? syscall_exit_to_user_mode+0x27/0x50
+> > [   60.035418]  ? do_syscall_64+0x69/0xc0
+> > [   60.035431]  ? syscall_exit_to_user_mode+0x27/0x50
+> > [   60.035445]  ? do_syscall_64+0x69/0xc0
+> > [   60.035459]  ? syscall_exit_to_user_mode+0x27/0x50
+> > [   60.035474]  ? do_syscall_64+0x69/0xc0
+> > [   60.035487]  ? do_syscall_64+0x69/0xc0
+> > [   60.035501]  ? do_syscall_64+0x69/0xc0
+> > [   60.035514]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
+> > [   60.035528] RIP: 0033:0x7f09681aa3ab
+> > [   60.035542] Code: 0f 1e fa 48 8b 05 e5 7a 0d 00 64 c7 00 26 00 00 00=
+ 48 c7 c0 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa b8 10 00 00 00 0f 05=
+ <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b5 7a 0d 00 f7 d8 64 89 01 48
+> > [   60.035554] RSP: 002b:00007fff40931638 EFLAGS: 00000246 ORIG_RAX: 00=
+00000000000010
+> > [   60.035567] RAX: ffffffffffffffda RBX: 00007fff40931670 RCX: 00007f0=
+9681aa3ab
+> > [   60.035576] RDX: 00007fff40931670 RSI: 00000000c06864a2 RDI: 0000000=
+000000009
+> > [   60.035584] RBP: 00000000c06864a2 R08: 0000000000000000 R09: 0000556=
+0dd410090
+> > [   60.035592] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000=
+00000007f
+> > [   60.035601] R13: 0000000000000009 R14: 00005560dd40ffe0 R15: 0000556=
+0dd410020
+> > [   60.035613]  </TASK>
+> > [   60.035622] ---[ end trace a700e85625cc752d ]---
 
-Ciao,
-Andrea
-
-> On Sat, Dec 24, 2022 at 6:38 PM Jonathan Maxwell <jmaxwell37@gmail.com> wrote:
-> >
-> > On Sat, Dec 24, 2022 at 7:28 AM Andrea Mayer <andrea.mayer@uniroma2.it> wrote:
-> > >
-> > > Hi Jon,
-> > > please see below, thanks.
-> > >
-> > > On Wed, 21 Dec 2022 08:48:11 +1100
-> > > Jonathan Maxwell <jmaxwell37@gmail.com> wrote:
-> > >
-> > > > On Tue, Dec 20, 2022 at 11:35 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> > > > >
-> > > > > On Mon, 2022-12-19 at 10:48 +1100, Jon Maxwell wrote:
-> > > > > > Sending Ipv6 packets in a loop via a raw socket triggers an issue where a
-> > > > > > route is cloned by ip6_rt_cache_alloc() for each packet sent. This quickly
-> > > > > > consumes the Ipv6 max_size threshold which defaults to 4096 resulting in
-> > > > > > these warnings:
-> > > > > >
-> > > > > > [1]   99.187805] dst_alloc: 7728 callbacks suppressed
-> > > > > > [2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> > > > > > .
-> > > > > > .
-> > > > > > [300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> > > > >
-> > > > > If I read correctly, the maximum number of dst that the raw socket can
-> > > > > use this way is limited by the number of packets it allows via the
-> > > > > sndbuf limit, right?
-> > > > >
-> > > >
-> > > > Yes, but in my test sndbuf limit is never hit so it clones a route for
-> > > > every packet.
-> > > >
-> > > > e.g:
-> > > >
-> > > > output from C program sending 5000000 packets via a raw socket.
-> > > >
-> > > > ip raw: total num pkts 5000000
-> > > >
-> > > > # bpftrace -e 'kprobe:dst_alloc {@count[comm] = count()}'
-> > > > Attaching 1 probe...
-> > > >
-> > > > @count[a.out]: 5000009
-> > > >
-> > > > > Are other FLOWI_FLAG_KNOWN_NH users affected, too? e.g. nf_dup_ipv6,
-> > > > > ipvs, seg6?
-> > > > >
-> > > >
-> > > > Any call to ip6_pol_route(s) where no res.nh->fib_nh_gw_family is 0 can do it.
-> > > > But we have only seen this for raw sockets so far.
-> > > >
-> > >
-> > > In the SRv6 subsystem, the seg6_lookup_nexthop() is used by some
-> > > cross-connecting behaviors such as End.X and End.DX6 to forward traffic to a
-> > > specified nexthop. SRv6 End.X/DX6 can specify an IPv6 DA (i.e., a nexthop)
-> > > different from the one carried by the IPv6 header. For this purpose,
-> > > seg6_lookup_nexthop() sets the FLOWI_FLAG_KNOWN_NH.
-> > >
-> > Hi Andrea,
-> >
-> > Thanks for pointing that datapath out. The more generic approach we are
-> > taking bringing Ipv6 closer to Ipv4 in this regard should fix all instances
-> > of this.
-> >
-> > > > > > [1]   99.187805] dst_alloc: 7728 callbacks suppressed
-> > > > > > [2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> > > > > > .
-> > > > > > .
-> > > > > > [300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> > >
-> > > I can reproduce the same warning messages reported by you, by instantiating an
-> > > End.X behavior whose nexthop is handled by a route for which there is no "via".
-> > > In this configuration, the ip6_pol_route() (called by seg6_lookup_nexthop())
-> > > triggers ip6_rt_cache_alloc() because i) the FLOWI_FLAG_KNOWN_NH is present ii)
-> > > and the res.nh->fib_nh_gw_family is 0 (as already pointed out).
-> > >
-> >
-> > Nice, when I get back after the holiday break I'll submit the next patch. It
-> > would be great if you could test the new patch and let me know how it works in
-> > your tests at that juncture. I'll keep you posted.
-> >
-> > Regards
-> >
-> > Jon
-> >
-> > > > Regards
-> > > >
-> > > > Jon
-> > >
-> > > Ciao,
-> > > Andrea
-
-
--- 
-Andrea Mayer <andrea.mayer@uniroma2.it>
