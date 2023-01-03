@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAAD65C485
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 466A165C489
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 18:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238346AbjACRAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 12:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
+        id S238351AbjACRBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 12:01:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238241AbjACRAL (ORCPT
+        with ESMTP id S238245AbjACRAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 3 Jan 2023 12:00:11 -0500
-Received: from fx303.security-mail.net (mxout.security-mail.net [85.31.212.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEF713CF1
+Received: from fx409.security-mail.net (smtpout253.security-mail.net [46.30.205.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DF913CF5
         for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 09:00:05 -0800 (PST)
-Received: from localhost (fx303.security-mail.net [127.0.0.1])
-        by fx303.security-mail.net (Postfix) with ESMTP id 6A78530F72F
+Received: from localhost (fx409.security-mail.net [127.0.0.1])
+        by fx409.security-mail.net (Postfix) with ESMTP id F1F60349891
         for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1672764272;
-        bh=YH3j4lWcqVGB+XxPClom/0YJ4GyVdH+efLxL7eCca3k=;
+        s=sec-sig-email; t=1672764273;
+        bh=jUHjYOhyrYCUbEm+VR8OYdUWk6B/jIcLyB2A1JdBO34=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=3PJmcNqwIRl8f2wIVNLtfnxKI7t6tGcEUSJAUZCpjdilhakpARWt9BCavW55boZcm
-         C2MxSGa0VqK4gzyWBxnk+b7X8WhRFVACRwlhbg3GusBfVmVF7pmtOacJcMGQ3BRjr8
-         xgo6d2hWcKDjxkdBYryuSLtO9+1h9MV8LQ/7/LGs=
-Received: from fx303 (fx303.security-mail.net [127.0.0.1]) by
- fx303.security-mail.net (Postfix) with ESMTP id 1B7D430F74B; Tue,  3 Jan
+        b=BP+MWc+qKjg/rBKUi7zSh5t0e6g8+7QKGEAOe/BuyNw+/T7hf4RVhsKaXG4grKr3+
+         4seCHrkwRJLkO9O81lb99dYDuLCEIQ662YQVz/E+nQxS1UfHdFufXB6BTejjO7ee5D
+         SSdkNj5eUg0ZgGkV+xn6m29QEthij9yoCF9VVga4=
+Received: from fx409 (fx409.security-mail.net [127.0.0.1]) by
+ fx409.security-mail.net (Postfix) with ESMTP id 858033497A5; Tue,  3 Jan
  2023 17:44:32 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx303.security-mail.net (Postfix) with ESMTPS id 5CD2030F6FC; Tue,  3 Jan
+ fx409.security-mail.net (Postfix) with ESMTPS id B092334962A; Tue,  3 Jan
  2023 17:44:31 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 2AB0727E03FA; Tue,  3 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 76CC127E03F4; Tue,  3 Jan 2023
  17:44:31 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 0588E27E03FF; Tue,  3 Jan 2023 17:44:31 +0100 (CET)
+ (Postfix) with ESMTP id 39D3727E0401; Tue,  3 Jan 2023 17:44:31 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- PDNQOglGLXJP; Tue,  3 Jan 2023 17:44:30 +0100 (CET)
+ cR9EOqemCNkN; Tue,  3 Jan 2023 17:44:31 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id C381227E03FA; Tue,  3 Jan 2023
- 17:44:30 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 1154D27E03F4; Tue,  3 Jan 2023
+ 17:44:31 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <78c5.63b45b6f.58f2a.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 0588E27E03FF
+Secumail-id: <117be.63b45b6f.ae1c9.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 39D3727E0401
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
  s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672764271;
- bh=e2NwdngYjT0DrUiqwADFLZTxSeB26H5545unsz7UyUE=;
+ bh=/t2gS4eaeImmTDnVmtv07mt1x1AaQ3f6rnoIVIG42fk=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=hXPe9V3YBdSTymCZXUQ5IMi134fTMq+DEFTCuERnSR9MtNbt0dcwg7PsNfOznBnsS
- Zp8ZjmBD+2S8U7zSMBy53SXT4z6fNccBGQCTPzdbNArnQSYviodKp9/As2btCKe3ST
- KrQVPlh7sQ9XqpuQg9jSxtKLSecglgkYkXD7sl/Q=
+ b=As3QRekIenaBULRuHV1xV16oQNq9ZNoC2IrD6FX3BtVekXo/7Yr0men2j82ghXLII
+ 3/fu4kEeNXtvWjgae1xJK2kpEdFit473WjUs//kZK+VEc7CZTeOruDZLSGD5su4RQe
+ H8f6/YoYftK7cF3Y4lDczfLBzj75Lr6Ahl1HxVyg=
 From:   Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jonathan Borne <jborne@kalray.eu>,
+Cc:     Yann Sionneau <ysionneau@kalray.eu>, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Clement Leger <clement.leger@bootlin.com>,
         Jules Maselbas <jmaselbas@kalray.eu>,
         Julian Vetter <jvetter@kalray.eu>,
-        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-Subject: [RFC PATCH 03/25] kvx: Add build infrastructure
-Date:   Tue,  3 Jan 2023 17:43:37 +0100
-Message-ID: <20230103164359.24347-4-ysionneau@kalray.eu>
+        Julien Villette <jvillette@kalray.eu>
+Subject: [RFC PATCH 05/25] kvx: Add atomic/locking headers
+Date:   Tue,  3 Jan 2023 17:43:39 +0100
+Message-ID: <20230103164359.24347-6-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
 References: <20230103164359.24347-1-ysionneau@kalray.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
 X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 To:     unlisted-recipients:; (no To-header on input)
@@ -83,760 +82,610 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Kbuild, Makefile, Kconfig and link script for kvx build infrastructure.
+Add common headers (atomic, bitops, barrier and locking) for basic
+kvx support.
 
+CC: Will Deacon <will@kernel.org>
+CC: Peter Zijlstra <peterz@infradead.org>
+CC: Boqun Feng <boqun.feng@gmail.com>
+CC: Mark Rutland <mark.rutland@arm.com>
 CC: linux-kernel@vger.kernel.org
-CC: bpf@vger.kernel.org
 Co-developed-by: Clement Leger <clement.leger@bootlin.com>
 Signed-off-by: Clement Leger <clement.leger@bootlin.com>
-Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
-Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
-Co-developed-by: Jonathan Borne <jborne@kalray.eu>
-Signed-off-by: Jonathan Borne <jborne@kalray.eu>
 Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 Co-developed-by: Julian Vetter <jvetter@kalray.eu>
 Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-Co-developed-by: Marc Poulhiès <dkm@kataplop.net>
-Signed-off-by: Marc Poulhiès <dkm@kataplop.net>
-Co-developed-by: Marius Gligor <mgligor@kalray.eu>
-Signed-off-by: Marius Gligor <mgligor@kalray.eu>
-Co-developed-by: Samuel Jones <sjones@kalray.eu>
-Signed-off-by: Samuel Jones <sjones@kalray.eu>
-Co-developed-by: Vincent Chardon <vincent.chardon@elsys-design.com>
-Signed-off-by: Vincent Chardon <vincent.chardon@elsys-design.com>
+Co-developed-by: Julien Villette <jvillette@kalray.eu>
+Signed-off-by: Julien Villette <jvillette@kalray.eu>
 Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
 Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 ---
- arch/kvx/Kconfig                 | 249 +++++++++++++++++++++++++++++++
- arch/kvx/Kconfig.debug           |  70 +++++++++
- arch/kvx/Makefile                |  52 +++++++
- arch/kvx/include/asm/Kbuild      |  20 +++
- arch/kvx/include/uapi/asm/Kbuild |   1 +
- arch/kvx/kernel/Makefile         |  27 ++++
- arch/kvx/kernel/kvx_ksyms.c      |  24 +++
- arch/kvx/kernel/vmlinux.lds.S    | 173 +++++++++++++++++++++
- arch/kvx/lib/Makefile            |   6 +
- arch/kvx/mm/Makefile             |  10 ++
- arch/kvx/platform/Makefile       |   7 +
- 11 files changed, 639 insertions(+)
- create mode 100644 arch/kvx/Kconfig
- create mode 100644 arch/kvx/Kconfig.debug
- create mode 100644 arch/kvx/Makefile
- create mode 100644 arch/kvx/include/asm/Kbuild
- create mode 100644 arch/kvx/include/uapi/asm/Kbuild
- create mode 100644 arch/kvx/kernel/Makefile
- create mode 100644 arch/kvx/kernel/kvx_ksyms.c
- create mode 100644 arch/kvx/kernel/vmlinux.lds.S
- create mode 100644 arch/kvx/lib/Makefile
- create mode 100644 arch/kvx/mm/Makefile
- create mode 100644 arch/kvx/platform/Makefile
+ arch/kvx/include/asm/atomic.h  | 104 +++++++++++++++++
+ arch/kvx/include/asm/barrier.h |  15 +++
+ arch/kvx/include/asm/bitops.h  | 207 +++++++++++++++++++++++++++++++++
+ arch/kvx/include/asm/bitrev.h  |  32 +++++
+ arch/kvx/include/asm/cmpxchg.h | 185 +++++++++++++++++++++++++++++
+ 5 files changed, 543 insertions(+)
+ create mode 100644 arch/kvx/include/asm/atomic.h
+ create mode 100644 arch/kvx/include/asm/barrier.h
+ create mode 100644 arch/kvx/include/asm/bitops.h
+ create mode 100644 arch/kvx/include/asm/bitrev.h
+ create mode 100644 arch/kvx/include/asm/cmpxchg.h
 
-diff --git a/arch/kvx/Kconfig b/arch/kvx/Kconfig
+diff --git a/arch/kvx/include/asm/atomic.h b/arch/kvx/include/asm/atomic.h
 new file mode 100644
-index 000000000000..8e8820c5c860
+index 000000000000..eb8acbcbc70d
 --- /dev/null
-+++ b/arch/kvx/Kconfig
-@@ -0,0 +1,249 @@
-+#
-+# For a description of the syntax of this configuration file,
-+# see Documentation/kbuild/kconfig-language.txt.
-+#
-+
-+config 64BIT
-+	def_bool y
-+
-+config GENERIC_CALIBRATE_DELAY
-+	def_bool y
-+
-+config FIX_EARLYCON_MEM
-+	def_bool y
-+
-+config MMU
-+	def_bool y
-+
-+config KALLSYMS_BASE_RELATIVE
-+	def_bool n
-+
-+config GENERIC_CSUM
-+	def_bool y
-+
-+config RWSEM_GENERIC_SPINLOCK
-+	def_bool y
-+
-+config GENERIC_HWEIGHT
-+	def_bool y
-+
-+config ARCH_MMAP_RND_BITS_MAX
-+	default 24
-+
-+config ARCH_MMAP_RND_BITS_MIN
-+	default 18
-+
-+config STACKTRACE_SUPPORT
-+	def_bool y
-+
-+config LOCKDEP_SUPPORT
-+	def_bool y
-+
-+config GENERIC_BUG
-+	def_bool y
-+	depends on BUG
-+
-+config KVX_4K_PAGES
-+	def_bool y
-+
-+config KVX
-+	def_bool y
-+	select ARCH_CLOCKSOURCE_DATA
-+	select ARCH_DMA_ADDR_T_64BIT
-+	select ARCH_HAS_DEVMEM_IS_ALLOWED
-+	select ARCH_HAS_DMA_PREP_COHERENT
-+	select ARCH_HAS_ELF_RANDOMIZE
-+	select ARCH_HAS_PTE_SPECIAL
-+	select ARCH_HAS_SETUP_DMA_OPS if IOMMU_SUPPORT
-+	select ARCH_HAS_STRICT_KERNEL_RWX
-+	select ARCH_HAS_STRICT_MODULE_RWX
-+	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-+	select ARCH_HAS_SYNC_DMA_FOR_CPU
-+	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
-+	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
-+	select ARCH_SUPPORTS_HUGETLBFS
-+	select ARCH_USE_QUEUED_SPINLOCKS
-+	select ARCH_USE_QUEUED_RWLOCKS
-+	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-+	select ARCH_WANT_FRAME_POINTERS
-+	select CLKSRC_OF
-+	select COMMON_CLK
-+	select DMA_DIRECT_REMAP
-+	select GENERIC_ALLOCATOR
-+	select GENERIC_CLOCKEVENTS
-+	select GENERIC_CLOCKEVENTS
-+	select GENERIC_CPU_DEVICES
-+	select GENERIC_IOMAP
-+	select GENERIC_IOREMAP
-+	select GENERIC_IRQ_CHIP
-+	select GENERIC_IRQ_PROBE
-+	select GENERIC_IRQ_SHOW
-+	select GENERIC_SCHED_CLOCK
-+	select HAVE_ARCH_AUDITSYSCALL
-+	select HAVE_ARCH_BITREVERSE
-+	select HAVE_ARCH_JUMP_LABEL
-+	select HAVE_ARCH_MMAP_RND_BITS
-+	select HAVE_ARCH_TRACEHOOK
-+	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
-+	select HAVE_ASM_MODVERSIONS
-+	select HAVE_DEBUG_KMEMLEAK
-+	select HAVE_DYNAMIC_FTRACE
-+	select HAVE_EFFICIENT_UNALIGNED_ACCESS
-+	select HAVE_FTRACE_MCOUNT_RECORD
-+	select HAVE_FUTEX_CMPXCHG if FUTEX
-+	select HAVE_FUNCTION_TRACER
-+	select HAVE_FUNCTION_GRAPH_TRACER
-+	select HAVE_HW_BREAKPOINT
-+	select HAVE_IOREMAP_PROT
-+	select HAVE_MEMBLOCK_NODE_MAP
-+	select HAVE_PCI
-+	select HAVE_PERF_EVENTS
-+	select HAVE_STACKPROTECTOR
-+	select HAVE_SYSCALL_TRACEPOINTS
-+	select IOMMU_DMA if IOMMU_SUPPORT
-+	select KVX_APIC_GIC
-+	select KVX_APIC_MAILBOX
-+	select KVX_CORE_INTC
-+	select KVX_ITGEN
-+	select KVX_WATCHDOG
-+	select MODULES_USE_ELF_RELA
-+	select OF
-+	select OF_EARLY_FLATTREE
-+	select OF_RESERVED_MEM
-+	select PERF_EVENTS
-+	select PCI_DOMAINS_GENERIC if PCI
-+	select SPARSE_IRQ
-+	select SYSCTL_EXCEPTION_TRACE
-+	select THREAD_INFO_IN_TASK
-+	select TIMER_OF
-+	select TRACE_IRQFLAGS_SUPPORT
-+	select WATCHDOG
-+	select ZONE_DMA32
-+
-+config PGTABLE_LEVELS
-+	int
-+	default 3
-+
-+config HAVE_KPROBES
-+	def_bool n
-+
-+menu "System setup"
-+
-+config POISON_INITMEM
-+	bool "Enable to poison freed initmem"
-+	default y
-+	help
-+	  In order to debug initmem, using poison allows to verify if
-+	  some data/code is stille using them. Enable this for debug
-+	  purposes
-+
-+config KVX_PHYS_OFFSET
-+	hex "RAM address of memory base"
-+	default 0x100000000
-+
-+config KVX_PAGE_OFFSET
-+	hex "kernel virtual address of memory base"
-+	default 0xFFFFFF8000000000
-+
-+config ARCH_FLATMEM_ENABLE
-+	def_bool y
-+
-+config ARCH_SPARSEMEM_ENABLE
-+	def_bool y
-+
-+config ARCH_SPARSEMEM_DEFAULT
-+	def_bool ARCH_SPARSEMEM_ENABLE
-+
-+config ARCH_SELECT_MEMORY_MODEL
-+	def_bool ARCH_SPARSEMEM_ENABLE
-+
-+config STACK_MAX_DEPTH_TO_PRINT
-+	int "Maximum depth of stack to print"
-+	range 1 128
-+	default "24"
-+
-+config L2_CACHE
-+	bool "Enable l2 cache driver"
-+	default y
-+	help
-+	  Enable L2 cache driver in order to handle it. This driver can be
-+	  disabled to eliminate any overhead related to L2 cache
-+	  inval/writeback. Note that L2 cache is mandatory for SMP in order
-+	  to maintain coherency on DDR between all PEs.
-+
-+config SECURE_DAME_HANDLING
-+	bool "Secure DAME handling"
-+	default y
-+	help
-+	  In order to securely handle Data Asynchronous Memory Errors, we need
-+	  to do a barrier upon kernel entry when coming from userspace. This
-+	  barrier guarantee us that any pending DAME will be serviced right
-+	  away. We also need to do a barrier when returning from kernel to user.
-+	  This way, if the kernel or the user triggered a DAME, it will be
-+	  serviced by knowing we are coming from kernel or user and avoid
-+	  pulling the wrong lever (panic for kernel or sigfault for user).
-+	  This can be costly but ensure that user cannot interfere with kernel.
-+	  /!\ Do not disable unless you want to open a giant breach between
-+	  user and kernel /!\
-+
-+config CACHECTL_UNSAFE_PHYS_OPERATIONS
-+	bool "Enable cachectl syscall unsafe physical operations"
-+	default n
-+	help
-+	  Enable cachectl syscall to allow writebacking/invalidating ranges
-+	  based on physical addresses. These operations requires the
-+	  CAP_SYS_ADMIN capability
-+
-+config ENABLE_TCA
-+	bool "Enable TCA coprocessor support"
-+	default y
-+	help
-+	  This option enables TCA coprocessor support. It will allow the user to
-+	  use the coprocessor and save registers on context switch if used.
-+	  Registers content will also be cleared when switching.
-+
-+config SMP
-+	bool "Symmetric multi-processing support"
-+	default n
-+	select GENERIC_SMP_IDLE_THREAD
-+	select GENERIC_IRQ_IPI
-+	select IRQ_DOMAIN_HIERARCHY
-+	select IRQ_DOMAIN
-+	select L2_CACHE
-+	help
-+	  This enables support for systems with more than one CPU. If you have
-+	  a system with only one CPU, say N. If you have a system with more
-+	  than one CPU, say Y.
-+
-+	  If you say N here, the kernel will run on uni- and multiprocessor
-+	  machines, but will use only one CPU of a multiprocessor machine. If
-+	  you say Y here, the kernel will run on many, but not all,
-+	  uniprocessor machines. On a uniprocessor machine, the kernel
-+	  will run faster if you say N here.
-+
-+config NR_CPUS
-+	int "Maximum number of CPUs"
-+	range 1 16
-+	default "16"
-+	depends on SMP
-+	help
-+	  Kalray support can handle a maximum of 16 CPUs.
-+
-+config KVX_PAGE_SHIFT
-+	int
-+	default 12
-+
-+config CMDLINE
-+	string "Default kernel command string"
-+	default ""
-+	help
-+	  On some architectures there is currently no way for the boot loader
-+	  to pass arguments to the kernel. For these architectures, you should
-+	  supply some command-line options at build time by entering them
-+	  here.
-+
-+endmenu
-+
-+menu "Kernel Features"
-+source "kernel/Kconfig.hz"
-+endmenu
-diff --git a/arch/kvx/Kconfig.debug b/arch/kvx/Kconfig.debug
-new file mode 100644
-index 000000000000..027e919a1e14
---- /dev/null
-+++ b/arch/kvx/Kconfig.debug
-@@ -0,0 +1,70 @@
-+menu "KVX debugging"
-+
-+config KVX_DEBUG_ASN
-+	bool "Check ASN before writing TLB entry"
-+	default n
-+	help
-+	  This option allows to check if the ASN of the current
-+	  process is matching the ASN found in MMC. If it is not the
-+	  case an error will be printed.
-+
-+config KVX_DEBUG_TLB_WRITE
-+	bool "Enable TLBs write checks"
-+	default n
-+	help
-+	  Enabling this option will enable TLB access checks. This is
-+	  particularly helpful when modifying the assembly code responsible
-+	  of TLB refill. If set, mmc.e will be checked each time the tlb are
-+	  written and a panic will be thrown on error.
-+
-+config KVX_DEBUG_TLB_ACCESS
-+	bool "Enable TLBs accesses logging"
-+	default n
-+	help
-+	  Enabling this option will enable TLB entry manipulation logging.
-+	  Each time an entry will be added to the TLBs, it will be logged in
-+	  an array readable via gdb scripts. This can be useful to understand
-+	  strange crashes related to suspicious virtual/physical addresses.
-+
-+config KVX_DEBUG_TLB_ACCESS_BITS
-+	int "Number of bits used as index of entries in log table"
-+	default 12
-+	depends on KVX_DEBUG_TLB_ACCESS
-+	help
-+	  Set the number of bits used as index of entries that will be logged
-+	  in a ring buffer called kvx_tlb_access. One entry in the table
-+	  contains registers TEL, TEH and MMC. It also logs the type of the
-+	  operations (0:read, 1:write, 2:probe). Buffer is per CPU. For one
-+	  entry 24 bytes are used. So by default it uses 96Ko of memory per
-+	  CPU to store 2^12 (4096) entries.
-+
-+config KVX_MMU_STATS
-+	bool "Register mmu stats debugfs entries"
-+	default n
-+	select DEBUG_FS
-+	help
-+	  Enable debugfs attribute which will allow inspecting various metric
-+	  regarding MMU:
-+	  - Number of nomapping traps handled
-+	  - avg/min/max time for nomapping refill (user/kernel)
-+
-+config DEBUG_EXCEPTION_STACK
-+	bool "Enable exception stack debugging"
-+	default n
-+	help
-+	  Enable stack check debugging when entering/exiting
-+	  exception handlers.
-+	  This can be particularly helpful after modifying stack
-+	  handling to see if stack when exiting is the same as the one
-+	  when entering exception handler.
-+
-+config DEBUG_SFR_SET_MASK
-+	bool "Enable sfr set_mask debugging"
-+	default n
-+	help
-+	  Verify that values written using kvx_sfr_set_mask are matching the
-+	  mask. This ensure that no extra bits of sfr will be overridden by some
-+	  incorrectly truncated values. This can lead to huge problems by
-+	  modifying important bits in system registers.
-+
-+endmenu
-diff --git a/arch/kvx/Makefile b/arch/kvx/Makefile
-new file mode 100644
-index 000000000000..b9da5017cf2a
---- /dev/null
-+++ b/arch/kvx/Makefile
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (C) 2018-2023 Kalray Inc.
-+
-+ifeq ($(CROSS_COMPILE),)
-+CROSS_COMPILE := kvx-elf-
-+endif
-+
-+KBUILD_DEFCONFIG := default_defconfig
-+
-+LDFLAGS_vmlinux := -X
-+OBJCOPYFLAGS := -O binary -R .comment -R .note -R .bootloader -S
-+
-+# Link with libgcc to get __div* builtins.
-+LIBGCC	:= $(shell $(CC) $(KBUILD_CFLAGS) --print-libgcc-file-name)
-+
-+DEFAULT_OPTS := -nostdlib -fno-builtin -march=kv3-1
-+KBUILD_CFLAGS += $(DEFAULT_OPTS)
-+KBUILD_AFLAGS += $(DEFAULT_OPTS)
-+KBUILD_CFLAGS_MODULE += -mfarcall
-+
-+KBUILD_LDFLAGS += -m elf64kvx
-+
-+head-y	:= arch/kvx/kernel/head.o
-+libs-y 	+= $(LIBGCC)
-+libs-y  += arch/kvx/lib/
-+core-y += arch/kvx/kernel/ \
-+          arch/kvx/mm/ \
-+          arch/kvx/platform/
-+# Final targets
-+all: vmlinux
-+
-+BOOT_TARGETS = bImage bImage.bin bImage.bz2 bImage.gz bImage.lzma bImage.lzo
-+
-+$(BOOT_TARGETS): vmlinux
-+	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
-+
-+install:
-+	$(Q)$(MAKE) $(build)=$(boot) BOOTIMAGE=$(KBUILD_IMAGE) install
-+
-+define archhelp
-+  echo  '* bImage         - Alias to selected kernel format (bImage.gz by default)'
-+  echo  '  bImage.bin     - Uncompressed Kernel-only image for barebox (arch/$(ARCH)/boot/bImage.bin)'
-+  echo  '  bImage.bz2     - Kernel-only image for barebox (arch/$(ARCH)/boot/bImage.bz2)'
-+  echo  '* bImage.gz      - Kernel-only image for barebox (arch/$(ARCH)/boot/bImage.gz)'
-+  echo  '  bImage.lzma    - Kernel-only image for barebox (arch/$(ARCH)/boot/bImage.lzma)'
-+  echo  '  bImage.lzo     - Kernel-only image for barebox (arch/$(ARCH)/boot/bImage.lzo)'
-+  echo  '  install        - Install kernel using'
-+  echo  '                     (your) ~/bin/$(INSTALLKERNEL) or'
-+  echo  '                     (distribution) PATH: $(INSTALLKERNEL) or'
-+  echo  '                     install to $$(INSTALL_PATH)'
-+endef
-diff --git a/arch/kvx/include/asm/Kbuild b/arch/kvx/include/asm/Kbuild
-new file mode 100644
-index 000000000000..ea73552faa10
---- /dev/null
-+++ b/arch/kvx/include/asm/Kbuild
-@@ -0,0 +1,20 @@
-+generic-y += asm-offsets.h
-+generic-y += clkdev.h
-+generic-y += auxvec.h
-+generic-y += bpf_perf_event.h
-+generic-y += cmpxchg-local.h
-+generic-y += errno.h
-+generic-y += extable.h
-+generic-y += export.h
-+generic-y += kvm_para.h
-+generic-y += mcs_spinlock.h
-+generic-y += mman.h
-+generic-y += param.h
-+generic-y += qrwlock.h
-+generic-y += qspinlock.h
-+generic-y += rwsem.h
-+generic-y += sockios.h
-+generic-y += stat.h
-+generic-y += statfs.h
-+generic-y += ucontext.h
-+generic-y += user.h
-diff --git a/arch/kvx/include/uapi/asm/Kbuild b/arch/kvx/include/uapi/asm/Kbuild
-new file mode 100644
-index 000000000000..8b137891791f
---- /dev/null
-+++ b/arch/kvx/include/uapi/asm/Kbuild
-@@ -0,0 +1 @@
-+
-diff --git a/arch/kvx/kernel/Makefile b/arch/kvx/kernel/Makefile
-new file mode 100644
-index 000000000000..d155fef62614
---- /dev/null
-+++ b/arch/kvx/kernel/Makefile
-@@ -0,0 +1,27 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (C) 2019-2023 Kalray Inc.
-+#
-+
-+ifdef CONFIG_FUNCTION_TRACER
-+CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_insns.o = $(CC_FLAGS_FTRACE)
-+endif
-+
-+CFLAGS_REMOVE_return_address.o = $(CC_FLAGS_FTRACE)
-+
-+obj-y	:= head.o setup.o process.o traps.o common.o time.o prom.o kvx_ksyms.o \
-+	   irq.o cpuinfo.o ptrace.o entry.o syscall_table.o signal.o sys_kvx.o \
-+	   stacktrace.o dame_handler.o vdso.o perf_event.o return_address.o \
-+	   insns.o break_hook.o reset.o io.o debug.o
-+
-+obj-$(CONFIG_JUMP_LABEL) 		+= jump_label.o
-+obj-$(CONFIG_SMP) 			+= smp.o smpboot.o
-+obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
-+obj-$(CONFIG_MODULES)			+= module.o
-+obj-$(CONFIG_KGDB)			+= kgdb.o
-+CFLAGS_module.o				+= -Wstrict-overflow -fstrict-overflow
-+obj-$(CONFIG_L2_CACHE)			+= l2_cache.o
-+obj-$(CONFIG_FUNCTION_TRACER)		+= mcount.o ftrace.o
-+
-+extra-y					+= vmlinux.lds
-diff --git a/arch/kvx/kernel/kvx_ksyms.c b/arch/kvx/kernel/kvx_ksyms.c
-new file mode 100644
-index 000000000000..18990aaf259f
---- /dev/null
-+++ b/arch/kvx/kernel/kvx_ksyms.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * derived from arch/nios2/kernel/nios2_ksyms.c
-+ *
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Yann Sionneau
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/export.h>
-+
-+/*
-+ * libgcc functions - functions that are used internally by the
-+ * compiler...  (prototypes are not correct though, but that
-+ * doesn't really matter since they're not versioned).
-+ */
-+#define DECLARE_EXPORT(name)	extern void name(void); EXPORT_SYMBOL(name)
-+
-+DECLARE_EXPORT(__moddi3);
-+DECLARE_EXPORT(__umoddi3);
-+DECLARE_EXPORT(__divdi3);
-+DECLARE_EXPORT(__udivdi3);
-+DECLARE_EXPORT(__multi3);
-diff --git a/arch/kvx/kernel/vmlinux.lds.S b/arch/kvx/kernel/vmlinux.lds.S
-new file mode 100644
-index 000000000000..74013771ff40
---- /dev/null
-+++ b/arch/kvx/kernel/vmlinux.lds.S
-@@ -0,0 +1,173 @@
++++ b/arch/kvx/include/asm/atomic.h
+@@ -0,0 +1,104 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
-+ *            Guillaume Thouvenin
-+ *            Marius Gligor
-+ *            Marc Poulhiès
++ */
++
++#ifndef _ASM_KVX_ATOMIC_H
++#define _ASM_KVX_ATOMIC_H
++
++#include <linux/types.h>
++
++#include <asm/cmpxchg.h>
++
++#define ATOMIC64_INIT(i)     { (i) }
++
++#define arch_atomic64_cmpxchg(v, old, new) (arch_cmpxchg(&((v)->counter), old, new))
++#define arch_atomic64_xchg(v, new) (arch_xchg(&((v)->counter), new))
++
++static inline long arch_atomic64_read(const atomic64_t *v)
++{
++	return v->counter;
++}
++
++static inline void arch_atomic64_set(atomic64_t *v, long i)
++{
++	v->counter = i;
++}
++
++#define ATOMIC64_RETURN_OP(op, c_op)					\
++static inline long arch_atomic64_##op##_return(long i, atomic64_t *v)	\
++{									\
++	long new, old, ret;						\
++									\
++	do {								\
++		old = v->counter;					\
++		new = old c_op i;					\
++		ret = arch_cmpxchg(&v->counter, old, new);		\
++	} while (ret != old);						\
++									\
++	return new;							\
++}
++
++#define ATOMIC64_OP(op, c_op)						\
++static inline void arch_atomic64_##op(long i, atomic64_t *v)		\
++{									\
++	long new, old, ret;						\
++									\
++	do {								\
++		old = v->counter;					\
++		new = old c_op i;					\
++		ret = arch_cmpxchg(&v->counter, old, new);		\
++	} while (ret != old);						\
++}
++
++#define ATOMIC64_FETCH_OP(op, c_op)					\
++static inline long arch_atomic64_fetch_##op(long i, atomic64_t *v)	\
++{									\
++	long new, old, ret;						\
++									\
++	do {								\
++		old = v->counter;					\
++		new = old c_op i;					\
++		ret = arch_cmpxchg(&v->counter, old, new);		\
++	} while (ret != old);						\
++									\
++	return old;							\
++}
++
++#define ATOMIC64_OPS(op, c_op)						\
++	ATOMIC64_OP(op, c_op)						\
++	ATOMIC64_RETURN_OP(op, c_op)					\
++	ATOMIC64_FETCH_OP(op, c_op)
++
++ATOMIC64_OPS(and, &)
++ATOMIC64_OPS(or, |)
++ATOMIC64_OPS(xor, ^)
++ATOMIC64_OPS(add, +)
++ATOMIC64_OPS(sub, -)
++
++#undef ATOMIC64_OPS
++#undef ATOMIC64_FETCH_OP
++#undef ATOMIC64_OP
++
++static inline int arch_atomic_add_return(int i, atomic_t *v)
++{
++	int new, old, ret;
++
++	do {
++		old = v->counter;
++		new = old + i;
++		ret = arch_cmpxchg(&v->counter, old, new);
++	} while (ret != old);
++
++	return new;
++}
++
++static inline int arch_atomic_sub_return(int i, atomic_t *v)
++{
++	return arch_atomic_add_return(-i, v);
++}
++
++#include <asm-generic/atomic.h>
++
++#endif	/* _ASM_KVX_ATOMIC_H */
+diff --git a/arch/kvx/include/asm/barrier.h b/arch/kvx/include/asm/barrier.h
+new file mode 100644
+index 000000000000..371f1c70746d
+--- /dev/null
++++ b/arch/kvx/include/asm/barrier.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#ifndef _ASM_KVX_BARRIER_H
++#define _ASM_KVX_BARRIER_H
++
++/* fence is sufficient to guarantee write ordering */
++#define mb()	__builtin_kvx_fence()
++
++#include <asm-generic/barrier.h>
++
++#endif /* _ASM_KVX_BARRIER_H */
+diff --git a/arch/kvx/include/asm/bitops.h b/arch/kvx/include/asm/bitops.h
+new file mode 100644
+index 000000000000..03b861169ce8
+--- /dev/null
++++ b/arch/kvx/include/asm/bitops.h
+@@ -0,0 +1,207 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
 + *            Yann Sionneau
 + */
 +
-+#include <asm/thread_info.h>
-+#include <asm/asm-offsets.h>
-+#include <asm/sys_arch.h>
-+#include <asm/cache.h>
-+#include <asm/rm_fw.h>
-+#include <asm/page.h>
-+#include <asm/fixmap.h>
++#ifndef _ASM_KVX_BITOPS_H
++#define _ASM_KVX_BITOPS_H
 +
-+#define BOOT_ENTRY		0x0
-+#define DTB_DEFAULT_SIZE	(64 * 1024)
-+#define RM_FIRMWARE_SIZE	(64 * 1024)
-+#define RM_FIRMWARE_ADDRESS	(64 * 1024)
++#ifdef __KERNEL__
 +
-+#define LOAD_OFFSET  (PAGE_OFFSET - PHYS_OFFSET)
-+#include <asm-generic/vmlinux.lds.h>
++#ifndef _LINUX_BITOPS_H
++#error only <linux/bitops.h> can be included directly
++#endif
 +
-+OUTPUT_FORMAT("elf64-kvx")
-+ENTRY(kvx_start)
++#include <asm/cmpxchg.h>
 +
-+#define HANDLER_SECTION(__sec, __name) \
-+	__sec ## _ ## __name ## _start = .; \
-+	KEEP(*(.##__sec ##.## __name)); \
-+	. = __sec ## _ ##__name ## _start + EXCEPTION_STRIDE;
++static inline unsigned long __ffs(unsigned long word);
++
++#include <asm-generic/bitops/const_hweight.h>
++#include <asm-generic/bitops/ffz.h>
++#include <asm-generic/bitops/non-atomic.h>
++#include <asm-generic/bitops/lock.h>
++#include <asm-generic/bitops/sched.h>
++
++static inline int fls(int x)
++{
++	return 32 - __builtin_kvx_clzw(x);
++}
++
++static inline int fls64(__u64 x)
++{
++	return 64 - __builtin_kvx_clzd(x);
++}
 +
 +/**
-+ * Generate correct section positioning for exception handling
-+ * Since we need it twice for early exception handler and normal
-+ * exception handler, factorize it here.
++ * __ffs - find first set bit in word
++ * @word: The word to search
++ *
++ * Undefined if no set bit exists, so code should check against 0 first.
 + */
-+#define EXCEPTION_SECTIONS(__sec) \
-+	__ ## __sec ## _start = ABSOLUTE(.); \
-+	HANDLER_SECTION(__sec,debug) \
-+	HANDLER_SECTION(__sec,trap) \
-+	HANDLER_SECTION(__sec,interrupt) \
-+	HANDLER_SECTION(__sec,syscall)
-+
-+jiffies = jiffies_64;
-+SECTIONS
++static inline unsigned long __ffs(unsigned long word)
 +{
-+	. = BOOT_ENTRY;
-+	.boot :
-+	{
-+		__kernel_smem_code_start = .;
-+		KEEP(*(.boot.startup));
-+		KEEP(*(.boot.*));
-+		__kernel_smem_code_end = .;
-+	}
-+
-+	/**
-+	 * Special section to patch rm_firmware binary after compiling
-+	 * the kernel.
-+	 */
-+	. = RM_FIRMWARE_ADDRESS;
-+	.rm_firmware :
-+	{
-+		__rm_firmware_start = .;
-+		KEEP(*(.rm_firmware.default));
-+		/* Force minimum size */
-+		. = __rm_firmware_start + RM_FIRMWARE_SIZE;
-+		__rm_firmware_end = .;
-+
-+		/* Registers for RM firmware */
-+		. = ALIGN(PAGE_SIZE);
-+		__rm_firmware_regs_start = .;
-+		/* Force minimum size */
-+		. = __rm_firmware_regs_start + RM_FIRMWARE_REGS_SIZE;
-+		__rm_firmware_regs_end = .;
-+	}
-+
-+	. = PAGE_OFFSET;
-+	_start = .;
-+
-+	_stext = .;
-+	__init_begin = .;
-+	__inittext_start = .;
-+	.exit.text : AT(ADDR(.exit.text) - LOAD_OFFSET)
-+	{
-+		EXIT_TEXT
-+	}
-+
-+	.early_exception ALIGN(EXCEPTION_ALIGNMENT) :
-+				AT(ADDR(.early_exception) - LOAD_OFFSET)
-+	{
-+		EXCEPTION_SECTIONS(early_exception)
-+	}
-+
-+	HEAD_TEXT_SECTION
-+	INIT_TEXT_SECTION(PAGE_SIZE)
-+	. = ALIGN(PAGE_SIZE);
-+	__inittext_end = .;
-+	__initdata_start = .;
-+	INIT_DATA_SECTION(16)
-+
-+	/* we have to discard exit text and such at runtime, not link time */
-+	.exit.data : AT(ADDR(.exit.data) - LOAD_OFFSET)
-+	{
-+		EXIT_DATA
-+	}
-+
-+	PERCPU_SECTION(L1_CACHE_BYTES)
-+	. = ALIGN(PAGE_SIZE);
-+	__initdata_end = .;
-+	__init_end = .;
-+
-+	/* Everything below this point will be mapped RO EXEC up to _etext */
-+	.text ALIGN(PAGE_SIZE) : AT(ADDR(.text) - LOAD_OFFSET)
-+	{
-+		_text = .;
-+		EXCEPTION_SECTIONS(exception)
-+		*(.exception.text)
-+		. = ALIGN(PAGE_SIZE);
-+		__exception_end = .;
-+		TEXT_TEXT
-+		SCHED_TEXT
-+		CPUIDLE_TEXT
-+		LOCK_TEXT
-+		KPROBES_TEXT
-+		ENTRY_TEXT
-+		IRQENTRY_TEXT
-+		SOFTIRQENTRY_TEXT
-+		*(.fixup)
-+	}
-+	. = ALIGN(PAGE_SIZE);
-+	_etext = .;
-+
-+	/* Everything below this point will be mapped RO NOEXEC up to _sdata */
-+	__rodata_start = .;
-+	RO_DATA(PAGE_SIZE)
-+	EXCEPTION_TABLE(8)
-+	. = ALIGN(32);
-+	.dtb : AT(ADDR(.dtb) - LOAD_OFFSET)
-+	{
-+		__dtb_start = .;
-+		. += DTB_DEFAULT_SIZE;
-+		__dtb_end = .;
-+	}
-+	. = ALIGN(PAGE_SIZE);
-+	__rodata_end = .;
-+
-+	/* Everything below this point will be mapped RW NOEXEC up to _end */
-+	_sdata = .;
-+	RW_DATA(L1_CACHE_BYTES, PAGE_SIZE, THREAD_SIZE)
-+	_edata = .;
-+
-+	BSS_SECTION(32, 32, 32)
-+	. = ALIGN(PAGE_SIZE);
-+	_end = .;
-+
-+	/* This page will be mapped using a FIXMAP */
-+	.gdb_page ALIGN(PAGE_SIZE) : AT(ADDR(.gdb_page) - LOAD_OFFSET)
-+	{
-+		_debug_start = ADDR(.gdb_page) - LOAD_OFFSET;
-+		. += PAGE_SIZE;
-+	}
-+	_debug_start_lma = ASM_FIX_TO_VIRT(FIX_GDB_MEM_BASE_IDX);
-+
-+	/* Debugging sections */
-+	STABS_DEBUG
-+	DWARF_DEBUG
-+
-+	/* Sections to be discarded -- must be last */
-+	DISCARDS
++	return __builtin_kvx_ctzd(word);
 +}
-diff --git a/arch/kvx/lib/Makefile b/arch/kvx/lib/Makefile
-new file mode 100644
-index 000000000000..ddb666c244e1
---- /dev/null
-+++ b/arch/kvx/lib/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (C) 2017-2023 Kalray Inc.
-+#
 +
-+lib-y := usercopy.o clear_page.o copy_page.o memcpy.o memset.o strlen.o delay.o
-diff --git a/arch/kvx/mm/Makefile b/arch/kvx/mm/Makefile
-new file mode 100644
-index 000000000000..d97ab0e94a6f
---- /dev/null
-+++ b/arch/kvx/mm/Makefile
-@@ -0,0 +1,10 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (C) 2017-2023 Kalray Inc.
-+#
++/**
++ * __fls - find last set bit in word
++ * @word: The word to search
++ *
++ * Undefined if no set bit exists, so code should check against 0 first.
++ */
++static inline unsigned long __fls(unsigned long word)
++{
++	return 63 - __builtin_kvx_clzd(word);
++}
 +
-+obj-y := init.o mmu.o fault.o tlb.o extable.o dma-mapping.o cacheflush.o
-+obj-$(CONFIG_HUGETLB_PAGE) += hugetlbpage.o
-+obj-$(CONFIG_KVX_MMU_STATS) += mmu_stats.o
-+obj-$(CONFIG_STRICT_KERNEL_RWX) += kernel_rwx.o
-+obj-$(CONFIG_STRICT_DEVMEM) += mmap.o
-diff --git a/arch/kvx/platform/Makefile b/arch/kvx/platform/Makefile
-new file mode 100644
-index 000000000000..27f0914e0de5
---- /dev/null
-+++ b/arch/kvx/platform/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (C) 2018-2023 Kalray Inc.
-+#
 +
-+obj-$(CONFIG_SMP) += pwr_ctrl.o
-+obj-$(CONFIG_SMP) += ipi.o
++/**
++ * ffs - find first set bit in word
++ * @x: the word to search
++ *
++ * This is defined the same way as the libc and compiler builtin ffs
++ * routines, therefore differs in spirit from the other bitops.
++ *
++ * ffs(value) returns 0 if value is 0 or the position of the first
++ * set bit if value is nonzero. The first (least significant) bit
++ * is at position 1.
++ */
++static inline int ffs(int x)
++{
++	if (!x)
++		return 0;
++	return __builtin_kvx_ctzw(x) + 1;
++}
++
++
++static inline unsigned int __arch_hweight32(unsigned int w)
++{
++	unsigned int count;
++
++	asm volatile ("cbsw %0 = %1\n\t;;"
++	: "=r" (count)
++	: "r" (w));
++
++	return count;
++}
++
++static inline unsigned int __arch_hweight64(__u64 w)
++{
++	unsigned int count;
++
++	asm volatile ("cbsd %0 = %1\n\t;;"
++	: "=r" (count)
++	: "r" (w));
++
++	return count;
++}
++
++static inline unsigned int __arch_hweight16(unsigned int w)
++{
++	return __arch_hweight32(w & 0xffff);
++}
++
++static inline unsigned int __arch_hweight8(unsigned int w)
++{
++	return __arch_hweight32(w & 0xff);
++}
++
++
++/* Bitmask modifiers */
++#define __NOP(x)	(x)
++#define __NOT(x)	(~(x))
++
++
++#define __test_and_op_bit(nr, addr, op, mod)				\
++({									\
++	unsigned long __mask = BIT_MASK(nr);				\
++	unsigned long __new, __old, __ret;				\
++	do {								\
++		__old = *(&addr[BIT_WORD(nr)]);				\
++		__new = __old op mod(__mask);				\
++		__ret = cmpxchg(addr, __old, __new);			\
++	} while (__ret != __old);					\
++	(__old & __mask);						\
++})
++
++/**
++ * test_and_set_bit - Set a bit and return its old value
++ * @nr: Bit to set
++ * @addr: Address to count from
++ *
++ * This operation may be reordered on other architectures than x86.
++ */
++static inline int test_and_set_bit(int nr, volatile unsigned long *addr)
++{
++	return __test_and_op_bit(nr, addr, |, __NOP) != 0;
++}
++
++/**
++ * test_and_clear_bit - Clear a bit and return its old value
++ * @nr: Bit to clear
++ * @addr: Address to count from
++ *
++ * This operation can be reordered on other architectures other than x86.
++ */
++static inline int test_and_clear_bit(int nr, volatile unsigned long *addr)
++{
++	return __test_and_op_bit(nr, addr, &, __NOT);
++}
++
++#define __atomic_op(nr, addr, op, mod)					\
++({									\
++	unsigned long __new, __old, __ret;				\
++	__ret = addr[BIT_WORD(nr)];					\
++	do {								\
++		__old = __ret;						\
++		__new = __old op mod(BIT_MASK(nr));			\
++		__ret = cmpxchg(&addr[BIT_WORD(nr)], __old, __new);	\
++	} while (__ret != __old);					\
++})
++
++/**
++ * set_bit - Atomically set a bit in memory
++ * @nr: the bit to set
++ * @addr: the address to start counting from
++ *
++ * Note that @nr may be almost arbitrarily large; this function is not
++ * restricted to acting on a single-word quantity.
++ */
++static inline void set_bit(int nr, volatile unsigned long *addr)
++{
++	__atomic_op(nr, addr, |, __NOP);
++}
++
++/**
++ * clear_bit - Clears a bit in memory
++ * @nr: Bit to clear
++ * @addr: Address to start counting from
++ */
++static inline void clear_bit(int nr, volatile unsigned long *addr)
++{
++	__atomic_op(nr, addr, &, __NOT);
++}
++
++/**
++ * change_bit - Toggle a bit in memory
++ * @nr: Bit to change
++ * @addr: Address to start counting from
++ *
++ * Note that @nr may be almost arbitrarily large; this function is not
++ * restricted to acting on a single-word quantity.
++ */
++static inline void change_bit(int nr, volatile unsigned long *addr)
++{
++	__atomic_op(nr, addr, ^, __NOP);
++}
++
++#include <asm-generic/bitops/lock.h>
++#include <asm-generic/bitops/non-atomic.h>
++#include <asm-generic/bitops/le.h>
++#include <asm-generic/bitops/ext2-atomic.h>
++
++#endif
++
++#endif
+diff --git a/arch/kvx/include/asm/bitrev.h b/arch/kvx/include/asm/bitrev.h
+new file mode 100644
+index 000000000000..79865081905a
+--- /dev/null
++++ b/arch/kvx/include/asm/bitrev.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#ifndef _ASM_KVX_BITREV_H
++#define _ASM_KVX_BITREV_H
++
++#include <linux/swab.h>
++
++/* Bit reversal constant for matrix multiply */
++#define BIT_REVERSE 0x0102040810204080ULL
++
++static __always_inline __attribute_const__ u32 __arch_bitrev32(u32 x)
++{
++	/* Reverse all bits for each bytes and then byte-reverse the 32 LSB */
++	return swab32(__builtin_kvx_sbmm8(BIT_REVERSE, x));
++}
++
++static __always_inline __attribute_const__ u16 __arch_bitrev16(u16 x)
++{
++	/* Reverse all bits for each bytes and then byte-reverse the 16 LSB */
++	return swab16(__builtin_kvx_sbmm8(BIT_REVERSE, x));
++}
++
++static __always_inline __attribute_const__ u8 __arch_bitrev8(u8 x)
++{
++	return __builtin_kvx_sbmm8(BIT_REVERSE, x);
++}
++
++#endif
+diff --git a/arch/kvx/include/asm/cmpxchg.h b/arch/kvx/include/asm/cmpxchg.h
+new file mode 100644
+index 000000000000..b1d128b060a2
+--- /dev/null
++++ b/arch/kvx/include/asm/cmpxchg.h
+@@ -0,0 +1,185 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Yann Sionneau
++ */
++
++#ifndef _ASM_KVX_CMPXCHG_H
++#define _ASM_KVX_CMPXCHG_H
++
++#include <linux/bits.h>
++#include <linux/types.h>
++#include <linux/build_bug.h>
++
++/*
++ * On kvx, we have a boolean compare and swap which means that the operation
++ * returns only the success of operation.
++ * If operation succeed, this is simple, we just need to return the provided
++ * old value. However, if it fails, we need to load the value to return it for
++ * the caller. If the loaded value is different from the "old" provided by the
++ * caller, we can return it since it will means it failed.
++ * However, if for some reason the value we read is equal to the old value
++ * provided by the caller, we can't simply return it or the caller will think it
++ * succeeded. So if the value we read is the same as the "old" provided by
++ * the caller, we try again until either we succeed or we fail with a different
++ * value than the provided one.
++ */
++#define __cmpxchg(ptr, old, new, op_suffix, load_suffix)		\
++({									\
++	register unsigned long __rn asm("r62");				\
++	register unsigned long __ro asm("r63");				\
++	__asm__ __volatile__ (						\
++		/* Fence to guarantee previous store to be committed */	\
++		"fence\n"						\
++		/* Init "expect" with previous value */			\
++		"copyd $r63 = %[rOld]\n"				\
++		";;\n"							\
++		"1:\n"							\
++		/* Init "update" value with new */			\
++		"copyd $r62 = %[rNew]\n"				\
++		";;\n"							\
++		"acswap" #op_suffix " 0[%[rPtr]], $r62r63\n"		\
++		";;\n"							\
++		/* if acswap succeed, simply return */			\
++		"cb.dnez $r62? 2f\n"					\
++		";;\n"							\
++		/* We failed, load old value */				\
++		"l"  #op_suffix  #load_suffix" $r63 = 0[%[rPtr]]\n"	\
++		";;\n"							\
++		/* Check if equal to "old" one */			\
++		"comp" #op_suffix ".ne $r62 = $r63, %[rOld]\n"		\
++		";;\n"							\
++		/* If different from "old", return it to caller */	\
++		"cb.deqz $r62? 1b\n"					\
++		";;\n"							\
++		"2:\n"							\
++		: "+r" (__rn), "+r" (__ro)				\
++		: [rPtr] "r" (ptr), [rOld] "r" (old), [rNew] "r" (new)	\
++		: "memory");						\
++	(__ro);								\
++})
++
++#define arch_cmpxchg(ptr, o, n)						\
++({									\
++	unsigned long __ret;						\
++	BUILD_BUG_ON(sizeof(*(ptr)) != 4 && sizeof(*(ptr)) != 8);	\
++	switch (sizeof(*(ptr))) {					\
++	case 4:								\
++		__ret = __cmpxchg((ptr), (o), (n), w, s);		\
++		break;							\
++	case 8:								\
++		__ret = __cmpxchg((ptr), (o), (n), d, );		\
++		break;							\
++	}								\
++	(__typeof__(*(ptr))) (__ret);					\
++})
++
++/*
++ * In order to optimize xchg for 16 byte, we can use insf/extfs if we know the
++ * bounds. This way, we only take one more bundle than standard xchg.
++ * We simply do a read modify acswap on a 32 bit word.
++ */
++#define __xchg_small_asm(ptr, new, start, stop)				\
++({									\
++	register unsigned long __rn asm("r62");				\
++	register unsigned long __ro asm("r63");				\
++	__asm__ __volatile__ (						\
++		"fence\n"						\
++		";;\n"							\
++		"1:\n"							\
++		/* Load original old value */				\
++		"lws $r62 = 0[%[rPtr]]\n"				\
++		";;\n"							\
++		/* Copy read value into "expect" */			\
++		"copyd $r63 = $r62\n"					\
++		/* Prepare new value with insf */			\
++		"insf $r62 = %[rNew], " #stop "," #start "\n"		\
++		";;\n"							\
++		/* Try compare & swap with loaded value */		\
++		"acswapw 0[%[rPtr]], $r62r63\n"				\
++		";;\n"							\
++		/* Did we succeed ?, if no, try again */		\
++		"cb.deqz $r62? 1b\n"					\
++		/* Extract old value for ret value */			\
++		"extfs $r63 = $r63, " #stop "," #start "\n"		\
++		";;\n"							\
++		: "+r" (__rn), "+r" (__ro)				\
++		: [rPtr] "r" (ptr), [rNew] "r" (new)			\
++		: "memory");						\
++	(__ro);								\
++})
++
++/* Needed for generic qspinlock implementation */
++static inline unsigned long xchg_u16(volatile void *ptr, unsigned long new,
++				     int size)
++{
++	int off = (unsigned long)ptr % sizeof(u32);
++	volatile u32 *p = ptr - off;
++
++	/*
++	 * GCC is smart enough to eliminate the dead branches by detecting
++	 * the offset statically
++	 */
++	if (off == 0)
++		return __xchg_small_asm(p, new, 0, 15);
++	else
++		return __xchg_small_asm(p, new, 16, 31);
++}
++
++#define __xchg_asm(ptr, new, op_suffix, load_suffix)			\
++({									\
++	register unsigned long __rn asm("r62") = (unsigned long) (new);	\
++	register unsigned long __ro asm("r63");				\
++	__asm__ __volatile__ (						\
++		"fence\n"						\
++		";;\n"							\
++		"1:\n"							\
++		/* Load original old value */				\
++		"l" #op_suffix #load_suffix " $r63 = 0[%[rPtr]]\n"	\
++		";;\n"							\
++		/* Try compare & swap with loaded value */		\
++		"acswap" #op_suffix " 0[%[rPtr]], $r62r63\n"		\
++		";;\n"							\
++		/* Did we succeed ?, if no, try again */		\
++		"cb.deqz $r62? 1b\n"					\
++		/* $r62 has been cloberred by acswap, restore it */	\
++		"copyd $r62 = %[rNew]\n"				\
++		";;\n"							\
++		: "+r" (__rn), "+r" (__ro)				\
++		: [rPtr] "r" (ptr), [rNew] "r" (new)			\
++		: "memory");						\
++	(__ro);								\
++})
++
++/*
++ * This function doesn't exist, so you'll get a linker error if
++ * something tries to do an invalidly-sized xchg().
++ */
++extern unsigned long __xchg_called_with_bad_pointer(void)
++	__compiletime_error("Bad argument size for xchg");
++
++static inline unsigned long __xchg(volatile void *ptr, unsigned long val,
++				   int size)
++{
++	switch (size) {
++	case 2:
++		return xchg_u16(ptr, val, size);
++	case 4:
++		return __xchg_asm(ptr, val, w, s);
++	case 8:
++		return __xchg_asm(ptr, val, d, );
++	}
++	__xchg_called_with_bad_pointer();
++
++	return val;
++}
++
++#define arch_xchg(ptr, with)						\
++	({								\
++		(__typeof__(*(ptr))) __xchg((ptr),			\
++					    (unsigned long)(with),	\
++					    sizeof(*(ptr)));		\
++	})
++
++#endif
 -- 
 2.37.2
 
