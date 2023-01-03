@@ -2,129 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79AF65C905
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DEC65C90A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 22:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238404AbjACViu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 16:38:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S234104AbjACVp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 16:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbjACVir (ORCPT
+        with ESMTP id S231949AbjACVpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:38:47 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91756478;
-        Tue,  3 Jan 2023 13:38:46 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so19823588otk.8;
-        Tue, 03 Jan 2023 13:38:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xGuFbt9MnQvsizsuFNkW6vGAc/rCyLL+1IoksQSaqUw=;
-        b=SdNy7thRNBmLh90LwMtLMK2SGTiiQhZQx02rjhweC0zuS6FgW6C6EQ1xSlLseSne9t
-         fI0E2+yoLypQ+jUMnfet69n5LeLqeGnWK0g1xPNzqdNO3F9KWQAL7vTwBQIXu2thcjOZ
-         6dUt7ow31sk4m9rOcKAbFQlP+5lZm/GDbdNYluWnPTnPYHqOVsX7bf/7TCAh1ImPEgt1
-         TgksGr0utl6VAC3ShxTDTVW5IcP8VnEV0RhplCSIhKVRFHQxi4x29/Ji22R8Vx7lUhTC
-         BsgIB1T2kQBrRyY/Aao36BFBlfbbQxLhZqy6qJI5INaAvYBNEoEJyz4vzcjF7cafLAsa
-         drpg==
+        Tue, 3 Jan 2023 16:45:25 -0500
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058AAB48E;
+        Tue,  3 Jan 2023 13:45:25 -0800 (PST)
+Received: by mail-pf1-f169.google.com with SMTP id k137so16746138pfd.8;
+        Tue, 03 Jan 2023 13:45:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xGuFbt9MnQvsizsuFNkW6vGAc/rCyLL+1IoksQSaqUw=;
-        b=T+VMyf9L6PlYXeYVDeBxRAie/hTPc5wUWfd0+T8xy1vCaNRbl4UFZMyCs0vT5+FdN9
-         LaqV2YMAemuLJPCNQ7QMYgZaoZZNDj++Ly5Mdgye4adt6yI6wRtN12szNpB/KZsgGAN5
-         +X8KR9LnT52aKY1qWSNSs7rqOU4FeLx8ryzMstjHkx6BSwIfcDJI27xHicifrk4zE8Wl
-         CXD4XTXjvet2WkdPsVdfZOw9xsQhvXq9268bnjmQd9DW5jCxaEvyG2OSNVeSpZm82ZFn
-         ugn/D7cXteYr86z0mSFUhoEh0B+iblHsKfQv0/WEjlHU04iO8cFgUylBvW6iYF91GUgJ
-         GzOQ==
-X-Gm-Message-State: AFqh2kpKfM0khaWHv8zDtWNp825FUXZsPhLVcAzDXhtffDDYjNHfeN/Z
-        OrHLGG+HpbbV8dhum8xNP14=
-X-Google-Smtp-Source: AMrXdXt7c/6AQ2q7aRwMgm8FWnnVybLnqUG6ZVNVtpi8w1ICAH8+DKxHTVbdzaSlv/gIr8ZNLWR4cg==
-X-Received: by 2002:a9d:7a8d:0:b0:66e:6673:2c48 with SMTP id l13-20020a9d7a8d000000b0066e66732c48mr30099369otn.20.1672781926075;
-        Tue, 03 Jan 2023 13:38:46 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h9-20020a9d6f89000000b006619295af60sm15205317otq.70.2023.01.03.13.38.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 13:38:45 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 13:38:44 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
-        linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 4/5] ARM: multi_v7_defconfig: Add GXP Fan and SPI
- support
-Message-ID: <20230103213844.GA216540@roeck-us.net>
-References: <20230103203654.59322-1-nick.hawkins@hpe.com>
- <20230103203654.59322-5-nick.hawkins@hpe.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o7Jv5muMEwbo/g8i6mc6MDy/iv+Z0WW/HWuFgl0aO8w=;
+        b=G1XzyG44yM3TE0/eMOvLDsbbP6SZZ4p04Ey1pg7cw2R57XUSUK5rEnu52o6UPSJZZW
+         AkVHcliPL2UvIqUJb2Zmfu4kJoFpFuT3E1RlAQBwQ22qktz6/dbdv7Q1pXyac/dNoFGd
+         dNap7R9+or7e77CvaK83kiuz/jqDpy4ec1NU9Va5I2A1wiE4g/rN4EFQW8iTvXsY0fgW
+         2nFh70Ggot1h19k6YgItOlWOLz6L4zJtfgKljCJPGC9Ay+a/ma0vpTyzKc27+JH+ZxLc
+         Qvwe2JR+KjS7ueG4c15x7QbeWkYaybD4iVTQpIPhYCQU8r6Sb6h/2fBJeQQWTsg6njRP
+         xwIw==
+X-Gm-Message-State: AFqh2koxEG0OWFuPchz4PqmYKvl6LXnjhvXl/KHsKkpefUv2/RjTYLHX
+        teTiaJXbT0cc7XWKkP2ZjHM=
+X-Google-Smtp-Source: AMrXdXv+VDgcsAMMYubJX3gPMMPS447LrTmW5ZaJO+72jSR8Bc3UkXLp/ep5sS2sefEQKBegZIyOzQ==
+X-Received: by 2002:aa7:804a:0:b0:576:ebfe:e9c1 with SMTP id y10-20020aa7804a000000b00576ebfee9c1mr44658779pfm.20.1672782324469;
+        Tue, 03 Jan 2023 13:45:24 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:7da8:fef9:8c31:bf89? ([2620:15c:211:201:7da8:fef9:8c31:bf89])
+        by smtp.gmail.com with ESMTPSA id x15-20020aa7940f000000b00574c54423d3sm12373019pfo.145.2023.01.03.13.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 13:45:23 -0800 (PST)
+Message-ID: <85e91255-1e6f-f428-5376-08416d2107a2@acm.org>
+Date:   Tue, 3 Jan 2023 13:45:21 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103203654.59322-5-nick.hawkins@hpe.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] scsi: ufs: core: fix devfreq deadlocks
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Can Guo <quic_cang@quicinc.com>
+References: <20221222102121.18682-1-johan+linaro@kernel.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20221222102121.18682-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 02:36:53PM -0600, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> In order for HPE platforms to be supported by linux on GXP it is
-> necessary for there to be fan and spi driver support. There fan driver
-> can support up to 16 fans that are driven by pwm through the CPLD. The
-> SPI driver supports access to the core flash and bios part. The SPI
-> driver spi-gxp was added previously to linux.
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+On 12/22/22 02:21, Johan Hovold wrote:
+> +	/* Enable Write Booster if we have scaled up else disable it */
+> +	if (ufshcd_enable_wb_if_scaling_up(hba))
+> +		ufshcd_wb_toggle(hba, scale_up);
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Hi Asutosh,
 
-This patch will have to be applied through the arm tree.
+This patch is the second complaint about the mechanism that toggles the 
+WriteBooster during clock scaling. Can this mechanism be removed entirely?
+
+I think this commit introduced that mechanism: 3d17b9b5ab11 ("scsi: ufs: 
+Add write booster feature support"; v5.8).
 
 Thanks,
-Guenter
 
-> ---
-> v4:
->  *No change
-> v3:
->  *No change
-> v2:
->  *No change
-> ---
->  arch/arm/configs/multi_v7_defconfig | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-> index b61b2e3d116b..192c89bfd02a 100644
-> --- a/arch/arm/configs/multi_v7_defconfig
-> +++ b/arch/arm/configs/multi_v7_defconfig
-> @@ -441,6 +441,7 @@ CONFIG_SPI_CADENCE=y
->  CONFIG_SPI_DAVINCI=y
->  CONFIG_SPI_FSL_QUADSPI=m
->  CONFIG_SPI_GPIO=m
-> +CONFIG_SPI_GXP=m
->  CONFIG_SPI_FSL_DSPI=m
->  CONFIG_SPI_OMAP24XX=y
->  CONFIG_SPI_ORION=y
-> @@ -530,6 +531,7 @@ CONFIG_SENSORS_NTC_THERMISTOR=m
->  CONFIG_SENSORS_PWM_FAN=m
->  CONFIG_SENSORS_RASPBERRYPI_HWMON=m
->  CONFIG_SENSORS_INA2XX=m
-> +CONFIG_SENSORS_GXP_FAN_CTRL=m
->  CONFIG_CPU_THERMAL=y
->  CONFIG_DEVFREQ_THERMAL=y
->  CONFIG_IMX_THERMAL=y
+Bart.
+
