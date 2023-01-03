@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3BA65C84E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3148D65C852
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 21:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238200AbjACUn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 15:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S238790AbjACUpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 15:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238722AbjACUnX (ORCPT
+        with ESMTP id S231283AbjACUo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 15:43:23 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0452F04
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 12:43:21 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id d9so17130103pll.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 12:43:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xa61Ou7j/846wt97LkeShrQLxxw8hvcUHjRwhnCxBCc=;
-        b=TRm8LLcbBZjdkaye1ciJYctw6wm9URMlqbJ1906WJVxLDuKmUx722YaaZouoCB+fM/
-         fx7xcyib0PtiWeUlApsonrBo5Qi5OZO5MatQeKw68gjkWsuYOsTkMR69iP4M8rDi1RrG
-         +yB0Xg0oyShcZT+u0OaOXMecYFnIFyLe9cBVIsCTCJHFUH9mufMqZgrQGPv845H9x8Im
-         oLQY3EzoIHULs3TQlMcP36a18sgdW9CtLFirUBznKSMM4V+FS7zmwX0YYO4BST1+yvCi
-         LulcuShq9RZKVGqael5KMpKjulXoP2pEXztql/1ZIOMcGNV9rw6f0MKqvRd2rox3NBFs
-         cWFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xa61Ou7j/846wt97LkeShrQLxxw8hvcUHjRwhnCxBCc=;
-        b=zMdhHTmLpSjZWoGNLVxm3al2JtPgbvQ6giWV11hieQBd+l+7LI3Sb24dqQg2x/h3PJ
-         qVgG4sVerjaEZVkg+BbzRjmVYXP5cqMwyGBv6CSEc66pM2XOKkjEOVjpdlZj8sb2FVZB
-         FiibX15FvoWJBl8k11hl6RIXL52489xCLD8KX1RPeKeFG6UewQnHHOvEqcH+GrtIvYrI
-         So0RIkkJiT5c3w7qlJ5sNJLR1Q0FvKKLqhAO1y2dhLeGu+5Ms81V7wO1LIuXC4pFKr+l
-         Fnn8L5w8l1EeDP8TryqZhKyNN1jA9Xg8X7a0VS5lhZU927LUoqw/pwRcan6xRFIk1j/w
-         K/OQ==
-X-Gm-Message-State: AFqh2kpP95L69qrdxBH9ojuWHBlC+zXreMfC6SXQoD+LLS30SGzIwVVf
-        5mBrce6LrjWKYwUVgf7WMqSNaw==
-X-Google-Smtp-Source: AMrXdXunwdEn9XsOkAK37phwnHpqU8JPscGX/vIB459rXA0SHYQW7eVPVrszViDVGf0nnCl3jmsVxQ==
-X-Received: by 2002:a17:903:41ca:b0:189:6624:58c0 with SMTP id u10-20020a17090341ca00b00189662458c0mr4304764ple.3.1672778601095;
-        Tue, 03 Jan 2023 12:43:21 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t14-20020a1709027fce00b0019141c79b1dsm22670248plb.254.2023.01.03.12.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 12:43:20 -0800 (PST)
-Date:   Tue, 3 Jan 2023 20:43:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 09/27] drm/i915/gvt: Protect gfn hash table with
- dedicated mutex
-Message-ID: <Y7STZZkd3EaRXLTC@google.com>
-References: <20221223005739.1295925-1-seanjc@google.com>
- <20221223005739.1295925-10-seanjc@google.com>
- <Y6vOEjHZhOWulyo1@yzhao56-desk.sh.intel.com>
+        Tue, 3 Jan 2023 15:44:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95084F0D;
+        Tue,  3 Jan 2023 12:44:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41FF9B80EE4;
+        Tue,  3 Jan 2023 20:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25E46C433EF;
+        Tue,  3 Jan 2023 20:44:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JLxfT6a/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672778690;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7cx/K+TO4UmCYrGKr/OeCO+B3doDOyrOgiixkdP5BVI=;
+        b=JLxfT6a/rEkEUgFSY1L4yTIcSrF8hxovhO70zSbWxsGUSi+/sjYNdkoTdF4o4JMObk5klI
+        c0Fo6JZ6+uqxC5jMswCTnFzpoxZSCY/tlQ4gnj6yz+8hZ6w1y4IVzghxvngOLLTnAhQ6xc
+        l/qf0d0XJsIsdXWUPQO1ui6+hOiBHO0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fc45cc16 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 3 Jan 2023 20:44:50 +0000 (UTC)
+Date:   Tue, 3 Jan 2023 21:44:47 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org
+Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
+ lazily freeable mappings
+Message-ID: <Y7STv9+p248zr+0a@zx2c4.com>
+References: <20230101162910.710293-1-Jason@zx2c4.com>
+ <20230101162910.710293-3-Jason@zx2c4.com>
+ <Y7QIg/hAIk7eZE42@gmail.com>
+ <CALCETrWdw5kxrtr4M7AkKYDOJEE1cU1wENWgmgOxn0rEJz4y3w@mail.gmail.com>
+ <CAHk-=wg_6Uhkjy12Vq_hN6rQqGRP2nE15rkgiAo6Qay5aOeigg@mail.gmail.com>
+ <Y7SDgtXayQCy6xT6@zx2c4.com>
+ <CAHk-=whQdWFw+0eGttxsWBHZg1+uh=0MhxXYtvJGX4t9P1MgNw@mail.gmail.com>
+ <Y7SJ+/axonTK0Fir@zx2c4.com>
+ <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y6vOEjHZhOWulyo1@yzhao56-desk.sh.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,108 +74,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022, Yan Zhao wrote:
-> On Fri, Dec 23, 2022 at 12:57:21AM +0000, Sean Christopherson wrote:
-> > Add and use a new mutex, gfn_lock, to protect accesses to the hash table
-> > used to track which gfns are write-protected when shadowing the guest's
-> > GTT.  This fixes a bug where kvmgt_page_track_write(), which doesn't hold
-> > kvm->mmu_lock, could race with intel_gvt_page_track_remove() and trigger
-> > a use-after-free.
-> > 
-> > Fixing kvmgt_page_track_write() by taking kvm->mmu_lock is not an option
-> > as mmu_lock is a r/w spinlock, and intel_vgpu_page_track_handler() might
-> > sleep when acquiring vgpu->cache_lock deep down the callstack:
-> > 
-> >   intel_vgpu_page_track_handler()
-> >   |
-> >   |->  page_track->handler / ppgtt_write_protection_handler()
-> >        |
-> >        |-> ppgtt_handle_guest_write_page_table_bytes()
-> >            |
-> >            |->  ppgtt_handle_guest_write_page_table()
-> >                 |
-> >                 |-> ppgtt_handle_guest_entry_removal()
-> >                     |
-> >                     |-> ppgtt_invalidate_pte()
-> >                         |
-> >                         |-> intel_gvt_dma_unmap_guest_page()
-> >                             |
-> >                             |-> mutex_lock(&vgpu->cache_lock);
-> > 
-> This gfn_lock could lead to deadlock in below sequence.
+On Tue, Jan 03, 2023 at 12:15:57PM -0800, Linus Torvalds wrote:
+> On Tue, Jan 3, 2023 at 12:03 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > That buffering cannot be done safely currently
 > 
-> (1) kvm_write_track_add_gfn() to GFN 1
-> (2) kvmgt_page_track_write() for GFN 1
-> kvmgt_page_track_write()
-> |
-> |->mutex_lock(&info->vgpu_lock)
-> |->intel_vgpu_page_track_handler (as is kvmgt_gfn_is_write_protected)
->    |
->    |->page_track->handler() (ppgtt_write_protection_handler())
->       |	
->       |->ppgtt_handle_guest_write_page_table_bytes()
->          |
->          |->ppgtt_handle_guest_write_page_table()
-> 	    |
-> 	    |->ppgtt_handle_guest_entry_add() --> new_present
-> 	       |
-> 	       |->ppgtt_populate_spt_by_guest_entry()
-> 	          |
-> 		  |->intel_vgpu_enable_page_track() --> for GFN 2
-> 		     |
-> 		     |->intel_gvt_page_track_add()
-> 		        |
-> 			|->mutex_lock(&info->gfn_lock) ===>deadlock
+> .. again, this is "your semantics" (the (b) in my humbug list), not
+> necessarily reality for anybody else.
 
-Or even more simply, 
+Yea that's fair. Except, of course, I maintain that my semantics are
+important ones. :)
 
-  kvmgt_page_track_write()
-  |
-  -> intel_vgpu_page_track_handler()
-     |
-     -> intel_gvt_page_track_remove()
+> I'm NAK'ing making invasive changes to the VM for something this
+> specialized. I really believe that the people who have this issue are
+> *so* few and far between that they can deal with the VM forking and
+> reseeding issues quite well on their own.
 
-> 
-> Below fix based on this patch is to reuse vgpu_lock to protect the hash table
-> info->ptable.
-> Please check if it's good.
-> 
-> 
-> diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> index b924ed079ad4..526bd973e784 100644
-> --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-> +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> @@ -364,7 +364,7 @@ __kvmgt_protect_table_find(struct intel_vgpu *info, gfn_t gfn)
->  {
->         struct kvmgt_pgfn *p, *res = NULL;
-> 
-> -       lockdep_assert_held(&info->gfn_lock);
-> +       lockdep_assert_held(&info->vgpu_lock);
-> 
->         hash_for_each_possible(info->ptable, p, hnode, gfn) {
->                 if (gfn == p->gfn) {
-> @@ -388,7 +388,7 @@ static void kvmgt_protect_table_add(struct intel_vgpu *info, gfn_t gfn)
->  {
->         struct kvmgt_pgfn *p;
-> 
-> -       lockdep_assert_held(&info->gfn_lock);
-> +       lockdep_assert_held(&info->vgpu_lock);
+Okay, that's fine. I'll see if I can make this work without having to do
+surgery on mm and introduce a new VM_* flag and such. Hopefully I'll
+succeed there.
 
-I'll just delete these assertions, the one in __kvmgt_protect_table_find() should
-cover everything and is ultimately the assert that matters.
-
-> @@ -1629,12 +1629,11 @@ static void kvmgt_page_track_remove_region(gfn_t gfn, unsigned long nr_pages,
->         struct intel_vgpu *info =
->                 container_of(node, struct intel_vgpu, track_node);
->  
-> -       mutex_lock(&info->gfn_lock);
-> +       lockdep_assert_held(&info->vgpu_lock);
-
-This path needs to manually take vgpu_lock as it's called from KVM.  IIRC, this
-is the main reason I tried adding a new lock.  That and I had a hell of a time
-figuring out whether or not vgpu_lock would actually be held.
-
-Looking at this with fresh eyes, AFAICT intel_vgpu_reset_gtt() is the only other
-path that can reach __kvmgt_protect_table_find() without holding vgpu_lock, by
-way of intel_gvt_page_track_remove().  But unless there's magic I'm missing, that's
-dead code and can simply be deleted.
+Jason
