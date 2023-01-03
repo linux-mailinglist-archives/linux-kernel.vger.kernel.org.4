@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E139665BC8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A11B65BC95
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 Jan 2023 09:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237056AbjACI5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 03:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S236805AbjACI6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 03:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236957AbjACI5I (ORCPT
+        with ESMTP id S233100AbjACI6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 03:57:08 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18EFE71
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 00:57:06 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id s22so31157463ljp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 00:57:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FVam3FPvVcVUPkFARUn9WWGX9bvQ9k6HzVFVKcvWyZE=;
-        b=tbfh3qioo77N98XjSFjd7PWy0XS7UHqQ0rnPICB/GFgnLr36lA59Nnhk2zRCgNwf3E
-         yZfUrCAVxeP05N4N6KGfR+8H84WM+ckoAFIxPQlFOhVaJEc/2zev65dxW4n2if7eR/RB
-         Q76GsIylyfR9RUSXCXRyZyyj94MSAp2Us7ZP+TTLNv+NFUfQXAzu48phTLoc2x1YxADn
-         GzPuByvzjlv2WY2cs+5nocxxigfu99C5WmdAmD3ns4tKA1CA2O5w/6BhM2lgeSCWFxiq
-         5Dv6IJ3fvjIzabxCErbEWBLQ5C5cFq6iyXb21tkmYiFFkkgIAgh4JdN/yPOb782/X7yw
-         kqtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FVam3FPvVcVUPkFARUn9WWGX9bvQ9k6HzVFVKcvWyZE=;
-        b=fWHidMiKkgzUN4EdPmA264ElA0HGSZuNbSaK881H188bbZHO3aT55e0uFUHVxuYApp
-         9oGFTygdQv6NM8r8D595fEZZSJ4fUmoIBZ7NgPYDmCvywU8xMMxRLOxPYcBmV9dpd9x5
-         3G0uDfxvC6poWv9b047OBr8qV4jgHsculK5djFxeF4NA9xpDjjyBmq9cFrEZ5iDK6jyA
-         vb4nDTO21QD/useZzoUp5P38fRIDbBKfq+i0f5Flps9rL9CVqWFJO1fS1rJH5GjJ4lDl
-         Vjb2fynHNqVPaV/ueNC42DG3J/VRQ1drp4hg91eQgbNI5Jmhdm9jzWhDDR24jYaIq2H7
-         wU+Q==
-X-Gm-Message-State: AFqh2krK4QZ2PKITk97q28q464DfQFOwCJrSG3IWKeGhdP5uvx8YCadr
-        DhboEAInnMwMGMMvr3vYUqiTBg==
-X-Google-Smtp-Source: AMrXdXsAmGHVUPFl2qLHgz7MtYi89rEbq9xWFBU46j9e11S6S1IWHRAtPUrkkcXlHtb2NXJtGJ+4xw==
-X-Received: by 2002:a2e:aa9f:0:b0:27f:cb0c:fd1b with SMTP id bj31-20020a2eaa9f000000b0027fcb0cfd1bmr7425321ljb.8.1672736225351;
-        Tue, 03 Jan 2023 00:57:05 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f13-20020a05651c03cd00b0027fea3a3318sm608902ljp.23.2023.01.03.00.57.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:57:04 -0800 (PST)
-Message-ID: <3267da40-5c53-0b79-fd65-3009ee17c7ee@linaro.org>
-Date:   Tue, 3 Jan 2023 09:57:03 +0100
+        Tue, 3 Jan 2023 03:58:07 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C3EE42;
+        Tue,  3 Jan 2023 00:58:05 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3038vp7o028382;
+        Tue, 3 Jan 2023 02:57:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672736271;
+        bh=fvLcQsFoerdZp1NUVoU+fVtrbVImgnCozdSyZvf657M=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Ws9Cub/+7w0PKUQPemZMSjxO6nIE3aQwNakI9rlkq2TE7mFt0n1yJH4pbWvFWPOQN
+         xpVq8l5E6wpl6tJ2hsLYYI6/ujth4H1eQf9iG1ZMYnIeM6yO+DcMD9WNYNhS+kOa8H
+         ujThcf+BQDhms0GDaLV/DZFanIFiFzjoRI7r6SwA=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3038vppn017272
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 3 Jan 2023 02:57:51 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 3
+ Jan 2023 02:57:50 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 3 Jan 2023 02:57:50 -0600
+Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3038vmhl060761;
+        Tue, 3 Jan 2023 02:57:49 -0600
+Message-ID: <e9be3f95-c33d-2e76-0ceb-17627973ec29@ti.com>
+Date:   Tue, 3 Jan 2023 14:27:47 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/4] dt-bindings: clock: qcom,sc7280-lpasscc: Remove
- qdsp6ss reg property
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] spi: pl022: Only use DT-specified DMA channels
 Content-Language: en-US
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        swboyd@chromium.org, agross@kernel.org, andersson@kernel.org,
-        robh+dt@kernel.org, broonie@kernel.org, quic_plai@quicinc.com,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com
-References: <1672407799-13768-1-git-send-email-quic_srivasam@quicinc.com>
- <1672407799-13768-2-git-send-email-quic_srivasam@quicinc.com>
- <0d225fb0-7bc7-4de0-0f07-039502926e6b@linaro.org>
- <ca053156-7da1-f0f4-e23c-7c515a1e6afe@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ca053156-7da1-f0f4-e23c-7c515a1e6afe@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+CC:     <kernel@axis.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230102160852.3090202-1-vincent.whitchurch@axis.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20230102160852.3090202-1-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 06:51, Srinivasa Rao Mandadapu wrote:
-> 
-> On 1/2/2023 9:33 PM, Krzysztof Kozlowski wrote:
-> Thanks for Your time Krzyszto!!!
->> On 30/12/2022 14:43, Srinivasa Rao Mandadapu wrote:
->>> The qdsp6ss memory region is being shared by ADSP remoteproc device and
->>> lpasscc clock device, hence causing memory conflict.
->>> As the qdsp6ss clocks are being enabled in remoteproc driver, remove
->>> clock controlling in the clock driver.
->>>
->> That's an ABI break change. You cannot just drop it because the driver
->> will fail now to probe with old DTS.
->>
->> This ABI break (and Fixes tag below) requires extensive justification
->> where is the bug and how it affects users. Otherwise, I see no reason
->> for ABI changes.
-> 
-> As ADSP path is not used so far due to various vendor requirements, we 
-> haven't seen this conflict till now.
+Hey Vincent,
 
-The device is used in sc7280.dtsi (and it is not disabled), thus it is
-available in every board.
+On 02/01/23 21:38, Vincent Whitchurch wrote:
+> When a platform is booted with devicetree and does not provide a
+> platform data structure, the driver creates one internally.  enable_dma
+> should not be set in this structure when creating it; the probe function
+> will set it later if DMA channels are specified via the devicetree.
+
+Yeah, I agree.
 
 > 
-> Actually, in the below commit,  clock handling in remoteproc driver has 
-> already up-streamed by Bjorn.
+> Setting enable_dma = 1 when creating this internal platform data can
+> lead to pl022_dma_probe() finding bogus DMA channels (since there is no
+> channel filter specified) when no DMA channels are specified in the
+> devicetree.
 > 
-> If we add PIL device node and use remoteproc driver, qcom_q6v5_adsp.c, 
-> it's mandatory to remove it from clock
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+
+Acked-by: Dhruva Gole <d-gole@ti.com>
+
+>   drivers/spi/spi-pl022.c | 1 -
+>   1 file changed, 1 deletion(-)
 > 
-> driver.
-> 
-> Also the memory region is used by clock driver is part of 
-> LPASS_QDSP6V67SS register region.
-> 
-> Here is the commit 0c6de4c299cc8f3283c38f3778777e00ed7e4b69 
-> ("remoteproc: qcom: qdsp6-adsp: Add support for QCS404 CDSP")
+> diff --git a/drivers/spi/spi-pl022.c b/drivers/spi/spi-pl022.c
+> index e4484ace584e..a17ff839117f 100644
+> --- a/drivers/spi/spi-pl022.c
+> +++ b/drivers/spi/spi-pl022.c
+> @@ -2091,7 +2091,6 @@ pl022_platform_data_dt_get(struct device *dev)
+>   		return NULL;
+>   
+>   	pd->bus_id = -1;
+> -	pd->enable_dma = 1;
+>   	of_property_read_u32(np, "pl022,autosuspend-delay",
+>   			     &pd->autosuspend_delay);
+>   	pd->rt = of_property_read_bool(np, "pl022,rt");
 
-The commit introduces qcom,qcs404-cdsp-pil which is not used in upstream
-DTS...
-
-Anyway none of the reasons above explain to me why ABI has to be broken.
-To remind - valid reasons are usually only: "it never worked" or "I was
-introduced recently so there are no users".
-
-> For ABI Break resolution shall I include, device tree changes also in 
-> this series? Or Could you please suggest better approach?
-
-Lack of DTS changes causes upstream to be broken. This is independent of
-ABI break. ABI means supporting users of the binding, so firmware, other
-OS, out-of-tree DTS users etc. All of them are broken.
-
-You need to keep backwards compatibility.
-Best regards,
-Krzysztof
-
+-- 
+Thanks and Regards,
+Dhruva Gole
