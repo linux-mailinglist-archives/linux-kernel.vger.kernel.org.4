@@ -2,98 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E8665CB96
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA13665CB98
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238943AbjADBjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 20:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S238944AbjADBlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 20:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234260AbjADBji (ORCPT
+        with ESMTP id S233577AbjADBky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 20:39:38 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9B417E22
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:39:37 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id i26-20020a9d68da000000b00672301a1664so20091629oto.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 17:39:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WGPbBPdsp8zIf+EmFg/nOXV2cdecCkjYIO3nEraDq9Y=;
-        b=MD+yU2XpDZkyNyPpLshmS3Cxq+jRFNJr4pec7YPTCQoUkwXce2fO92A5btzsgZ3myd
-         GYqLETtSlQeZWmoUcHAAb25jk3f/utSVu5Vwmj6nlkPCyHhtiRXN1qREywdcaDQE5MQF
-         aydvtCIuO/cu/kFsZEtIw6L3LC1/WbkIwQ+ak=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WGPbBPdsp8zIf+EmFg/nOXV2cdecCkjYIO3nEraDq9Y=;
-        b=rHRbliuaayIV0tDIXKnodZRHWtws31rexuK2ud8SKH+5vuYDKu/ScxakhsMRXJZglJ
-         BO9V/96dM6D0N63CrAnkGqCOw8tlxgQhC3asJqYP/pwhkEt4MpTtaz8G5jjgksgt1hrN
-         iX+pLQ59JmPtM98WFpMwR1NzDBz4kvYGbFpQAlXvqeZkau7BKL1qxetr42Fp+IKYdsb9
-         E805ZYj/IsafBVA64yTUWpJel5XRqD8v81BB+7L6Iqv8PLYYgcpClOGHVI/nTYKObh4h
-         kneEQ3rp642D2BD90xxmEfQ99MVWW7xUeRnqLAkrhIgdhpDri7Jm2hrtrV3TgSiVhUdn
-         ugHg==
-X-Gm-Message-State: AFqh2kqIRxBhS6ZiIjfleetqVI3/EgU9HpMS+VXc+j3xsSXaceeiK6B4
-        bvshaG53ebZ9Rl9kPDr9779P0w==
-X-Google-Smtp-Source: AMrXdXvEQhWHLpe3ZOJFYnCQi1ouodXNJ8NYkBOZ+42TANe2SzsIG7iZ15RliSoUC7TvfiGn4247Mw==
-X-Received: by 2002:a9d:2c28:0:b0:66d:da2c:c7bb with SMTP id f37-20020a9d2c28000000b0066dda2cc7bbmr22014145otb.18.1672796377124;
-        Tue, 03 Jan 2023 17:39:37 -0800 (PST)
-Received: from fedora64.linuxtx.org ([99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id w7-20020a9d5387000000b00666a5b5d20fsm15322435otg.32.2023.01.03.17.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 17:39:36 -0800 (PST)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Tue, 3 Jan 2023 19:39:35 -0600
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/71] 6.1.3-rc1 review
-Message-ID: <Y7TY13wNr/7MQhgM@fedora64.linuxtx.org>
-References: <20230102110551.509937186@linuxfoundation.org>
+        Tue, 3 Jan 2023 20:40:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5114DB4;
+        Tue,  3 Jan 2023 17:40:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25B6B614F9;
+        Wed,  4 Jan 2023 01:40:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FBFBC433A1;
+        Wed,  4 Jan 2023 01:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672796452;
+        bh=4+YCVSlmS1xGxI66GjUsM1FciiRv5pR0ZH+g1/QKoos=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hF5inMd2JJa2s9C62pR/YMr3UcBLXs7OeFvbq1rlqV4Hz2x+8e5Q4ylkoJuFXSBua
+         l0EegukYO5PjZe3Bj0DNsVywqQp169cpPLPxQsG01l/SYZOkInqb5SjUa2XZfNgGz4
+         xPgK0x52pl6YC2zKaWszZb0R2dGiLNXiekoU7tEB9WfJ0S1g0KM81yBediPfvM4vpW
+         nD77GSaDTq0XngKa7M+oyu4b1mFkkDgOQ6tFmpBbM4UIVICZNhd34fmZtUz5xcCxOO
+         0oMYAcrFNTXRv+UDs+64ibDK99VwHZXYL00c9dHg+DCPrUNDZemUYULK4k7Cb26H3B
+         S1DXIMNIizfrA==
+Received: by mail-ej1-f50.google.com with SMTP id tz12so79279912ejc.9;
+        Tue, 03 Jan 2023 17:40:52 -0800 (PST)
+X-Gm-Message-State: AFqh2kpaIFSWguqRCL13VIb6ImBZmBtOkzzYTgxWsLdr+ZJLa51WOIWr
+        XJ1RvFaOfmw+iWbOBVLwGSB+PtgD8jqK4XOM7a4=
+X-Google-Smtp-Source: AMrXdXuguKZK0xV2EbDa692rlZxWl3jbDoL9vGT6mVExfffLZNxoo/dIejOpWwEoJqQtPyJfzfwjMbyJ83re0sVpEew=
+X-Received: by 2002:a17:906:308a:b0:7c0:f7b0:fbbb with SMTP id
+ 10-20020a170906308a00b007c0f7b0fbbbmr4720616ejv.266.1672796450559; Tue, 03
+ Jan 2023 17:40:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230102110551.509937186@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230103033531.2011112-1-guoren@kernel.org> <20230103033531.2011112-4-guoren@kernel.org>
+ <36314eb6-e41d-30b9-9ac4-12b88a108b7b@ghiti.fr>
+In-Reply-To: <36314eb6-e41d-30b9-9ac4-12b88a108b7b@ghiti.fr>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 4 Jan 2023 09:40:38 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTSretKkJGNV7Y6iJboPuAWUQ=to=RPA8_-Nz8dnufGAg@mail.gmail.com>
+Message-ID: <CAJF2gTTSretKkJGNV7Y6iJboPuAWUQ=to=RPA8_-Nz8dnufGAg@mail.gmail.com>
+Subject: Re: [PATCH -next V12 3/7] riscv: entry: Add noinstr to prevent
+ instrumentation inserted
+To:     Alexandre Ghiti <alex@ghiti.fr>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
+        bjorn@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 12:21:25PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.3 release.
-> There are 71 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 04 Jan 2023 11:05:34 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.3-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, Jan 3, 2023 at 5:12 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
+>
+> Hi Guo,
+>
+> On 1/3/23 04:35, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Without noinstr the compiler is free to insert instrumentation (think
+> > all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
+> > yet ready to run this early in the entry path, for instance it could
+> > rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
+> >
+> > Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.progra=
+mming.kicks-ass.net/
+> > Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >   arch/riscv/kernel/traps.c | 4 ++--
+> >   arch/riscv/mm/fault.c     | 2 +-
+> >   2 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > index 549bde5c970a..96ec76c54ff2 100644
+> > --- a/arch/riscv/kernel/traps.c
+> > +++ b/arch/riscv/kernel/traps.c
+> > @@ -95,9 +95,9 @@ static void do_trap_error(struct pt_regs *regs, int s=
+igno, int code,
+> >   }
+> >
+> >   #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
+> > -#define __trap_section               __section(".xip.traps")
+> > +#define __trap_section __noinstr_section(".xip.traps")
+> >   #else
+> > -#define __trap_section
+> > +#define __trap_section noinstr
+> >   #endif
+> >   #define DO_ERROR_INFO(name, signo, code, str)                        =
+       \
+> >   asmlinkage __visible __trap_section void name(struct pt_regs *regs) \
+> > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+> > index d86f7cebd4a7..b26f68eac61c 100644
+> > --- a/arch/riscv/mm/fault.c
+> > +++ b/arch/riscv/mm/fault.c
+> > @@ -204,7 +204,7 @@ static inline bool access_error(unsigned long cause=
+, struct vm_area_struct *vma)
+> >    * This routine handles page faults.  It determines the address and t=
+he
+> >    * problem, and then passes it off to one of the appropriate routines=
+.
+> >    */
+> > -asmlinkage void do_page_fault(struct pt_regs *regs)
+> > +asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+>
+>
+> (I dug the archive but can't find the series before v4, so sorry if it
+> was already answered)
+>
+> I think we should not disable the instrumentation of those trap handlers
+> as at least profiling them with ftrace would provide valuable
+> information (and gcov would be nice too): why do we need to do that? A
+> trap very early in the boot process is not recoverable anyway.
+Everything that calls irqentry_enter() should be noinstr, and this
+patch prepares for the next generic_entry convert.
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+eg:
+asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+{
+        irqentry_state_t state =3D irqentry_enter(regs);
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+        __do_page_fault(regs);
+
+        local_irq_disable();
+
+        irqentry_exit(regs, state);
+}
+NOKPROBE_SYMBOL(do_page_fault);
+
+You still could profile __do_page_fault.
+
+>
+> And I took a look at other architectures, none of them disables the
+> instrumentation on do_page_fault.
+That's not true, have a look at power & arm64. All of them have some
+limitations at the entry of page_fault.
+
+>
+>
+> >   {
+> >       struct task_struct *tsk;
+> >       struct vm_area_struct *vma;
+
+
+
+--=20
+Best Regards
+ Guo Ren
