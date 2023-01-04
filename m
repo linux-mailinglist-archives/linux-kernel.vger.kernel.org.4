@@ -2,135 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E09B065CA9E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E2765CAA2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbjADAIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:08:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S233598AbjADAMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 19:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbjADAIx (ORCPT
+        with ESMTP id S230247AbjADAMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:08:53 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44D713DEC
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:08:51 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id i7-20020a056e021b0700b003033a763270so20371297ilv.19
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 16:08:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BdI30cbwiGsAahh561Kwaa0VX4PARo/97jT/k9Clyvs=;
-        b=g3UdvfQeNlWyVdU0GXaID1ioTjNXRPtL77aX6kVuo2ToEdXuk3T5LD0r+Rqlm1dnx8
-         AdiM2AhxsFTunD7K7PxdfLGs2IPvlrD4tr2U9c8sI6s9YN9lzCLIzxovaZp0tAPjiwAM
-         5eygKc3LQr2a+AOwYZ8K3rnN9GsErl6vhGmEh/RTTdcVuu8eJpjKVkz6hqBvKgzRalsE
-         InZgXb6/HHfaKKsj8yimaP7efXIYlXh5h4NMfMIf+FO59DnXhvzt/X7yvK4gHwypP3ZE
-         uEgg7OVhUFyXl6j1AFKzb7AlCAFsQ8cgKROo/1iYmSJjhoEIo7o9CIBR+K9jCYj/9C7p
-         84Hw==
-X-Gm-Message-State: AFqh2ko7GMgeYnLumqw7NGp7De/uj74opYYueIZgXz9fBZDs+4tchHW3
-        /Dknr8GRJGvztTwoTqB6D+DnvuDTeRu1Na0AlD8u4dpwkJzK
-X-Google-Smtp-Source: AMrXdXtktJUAQB0oiFltFeGqoxF0/+s/3kugRtELBcdbscMpvSKOmvlomBwz9opS/4d2r8Jg9d+HVmsDMz/M7SbAGadO2QdbHU8C
+        Tue, 3 Jan 2023 19:12:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3947E13EB0;
+        Tue,  3 Jan 2023 16:12:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB7F8B81148;
+        Wed,  4 Jan 2023 00:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E715AC433EF;
+        Wed,  4 Jan 2023 00:12:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672791139;
+        bh=ND1Wr1MoOKLl3XcwPrGcFU/G4D7jt7w3I5bZzOY2l3k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eTm6RHP1Uu+Q81kktV21pykehzogHIdDoKtICAIXNfyCIdrZtV/yRfysMu8x+ugu7
+         cTaigngnxDJlEMwOacy+NFmzLkXDeRpIVa8uhWQfz3jLA7rQuBVmj2BMjsMXzs+v7J
+         H9LNNPdXmcUNSQagbJNpP12J7MCDwkgC7oxW+zjg5KqDr+GicvbOVJtmZz6jtUHdzd
+         H8iqz30PTkUZVIZ8vrF7RdczYqLg/Uzl+gHJs0zAMIlF+c2SOU81leIWEKJOko/mSi
+         yiD8K65kbbEwHWYKQsAE8+efB3eQzHpVvj9qCPcx5eXPhh6LdauZDCBuvNosLLq6v+
+         w/W+kiZIiODwA==
+Date:   Tue, 3 Jan 2023 17:12:17 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] ext4: Fix function prototype mismatch for ext4_feat_ktype
+Message-ID: <Y7TEYceulOsSTQIZ@dev-arch.thelio-3990X>
+References: <20230103234616.never.915-kees@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:490b:b0:375:2ff:b633 with SMTP id
- cx11-20020a056638490b00b0037502ffb633mr519089jab.100.1672790931037; Tue, 03
- Jan 2023 16:08:51 -0800 (PST)
-Date:   Tue, 03 Jan 2023 16:08:51 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003a68dc05f164fd69@google.com>
-Subject: [syzbot] kernel BUG in vhost_vsock_handle_tx_kick
-From:   syzbot <syzbot+30b72abaa17c07fe39dd@syzkaller.appspotmail.com>
-To:     jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        netdev@vger.kernel.org, sgarzare@redhat.com, stefanha@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230103234616.never.915-kees@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jan 03, 2023 at 03:46:20PM -0800, Kees Cook wrote:
+> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> indirect call targets are validated against the expected function
+> pointer prototype to make sure the call target is valid to help mitigate
+> ROP attacks. If they are not identical, there is a failure at run time,
+> which manifests as either a kernel panic or thread getting killed.
+> 
+> ext4_feat_ktype was setting the "release" handler to "kfree", which
+> doesn't have a matching function prototype. Add a simple wrapper
+> with the correct prototype.
+> 
+> This was found as a result of Clang's new -Wcast-function-type-strict
+> flag, which is more sensitive than the simpler -Wcast-function-type,
+> which only checks for type width mismatches.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-syzbot found the following issue on:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-HEAD commit:    c76083fac3ba Add linux-next specific files for 20221226
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1723da42480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c217c755f1884ab6
-dashboard link: https://syzkaller.appspot.com/bug?extid=30b72abaa17c07fe39dd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fc414c480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1604b20a480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e388f26357fd/disk-c76083fa.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e24f0bae36d5/vmlinux-c76083fa.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a5a69a059716/bzImage-c76083fa.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+30b72abaa17c07fe39dd@syzkaller.appspotmail.com
-
-skbuff: skb_over_panic: text:ffffffff8768d6f1 len:25109 put:25109 head:ffff88802b5ac000 data:ffff88802b5ac02c tail:0x6241 end:0xc0 dev:<NULL>
-------------[ cut here ]------------
-kernel BUG at net/core/skbuff.c:121!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5072 Comm: vhost-5071 Not tainted 6.2.0-rc1-next-20221226-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:121
-Code: f7 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 40 04 5b 8b ff 74 24 10 ff 74 24 20 e8 09 8e bf ff <0f> 0b e8 1a 67 82 f7 4c 8b 64 24 18 e8 80 3d d0 f7 48 c7 c1 40 12
-RSP: 0018:ffffc90003cefca0 EFLAGS: 00010282
-RAX: 000000000000008d RBX: ffff88802b674500 RCX: 0000000000000000
-RDX: ffff8880236bba80 RSI: ffffffff81663b9c RDI: fffff5200079df86
-RBP: ffffffff8b5b1280 R08: 000000000000008d R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8768d6f1
-R13: 0000000000006215 R14: ffffffff8b5b0400 R15: 00000000000000c0
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000380 CR3: 000000002985f000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- skb_over_panic net/core/skbuff.c:126 [inline]
- skb_put.cold+0x24/0x24 net/core/skbuff.c:2218
- virtio_vsock_skb_rx_put include/linux/virtio_vsock.h:56 [inline]
- vhost_vsock_alloc_skb drivers/vhost/vsock.c:374 [inline]
- vhost_vsock_handle_tx_kick+0xad1/0xd00 drivers/vhost/vsock.c:509
- vhost_worker+0x241/0x3e0 drivers/vhost/vhost.c:364
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:121
-Code: f7 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 40 04 5b 8b ff 74 24 10 ff 74 24 20 e8 09 8e bf ff <0f> 0b e8 1a 67 82 f7 4c 8b 64 24 18 e8 80 3d d0 f7 48 c7 c1 40 12
-RSP: 0018:ffffc90003cefca0 EFLAGS: 00010282
-RAX: 000000000000008d RBX: ffff88802b674500 RCX: 0000000000000000
-RDX: ffff8880236bba80 RSI: ffffffff81663b9c RDI: fffff5200079df86
-RBP: ffffffff8b5b1280 R08: 000000000000008d R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8768d6f1
-R13: 0000000000006215 R14: ffffffff8b5b0400 R15: 00000000000000c0
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fdc6f4a4298 CR3: 000000002985f000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> ---
+>  fs/ext4/sysfs.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
+> index d233c24ea342..83cf8b5afb54 100644
+> --- a/fs/ext4/sysfs.c
+> +++ b/fs/ext4/sysfs.c
+> @@ -491,6 +491,11 @@ static void ext4_sb_release(struct kobject *kobj)
+>  	complete(&sbi->s_kobj_unregister);
+>  }
+>  
+> +static void ext4_kobject_release(struct kobject *kobj)
+> +{
+> +	kfree(kobj);
+> +}
+> +
+>  static const struct sysfs_ops ext4_attr_ops = {
+>  	.show	= ext4_attr_show,
+>  	.store	= ext4_attr_store,
+> @@ -505,7 +510,7 @@ static struct kobj_type ext4_sb_ktype = {
+>  static struct kobj_type ext4_feat_ktype = {
+>  	.default_groups = ext4_feat_groups,
+>  	.sysfs_ops	= &ext4_attr_ops,
+> -	.release	= (void (*)(struct kobject *))kfree,
+> +	.release	= ext4_kobject_release,
+>  };
+>  
+>  void ext4_notify_error_sysfs(struct ext4_sb_info *sbi)
+> -- 
+> 2.34.1
+> 
