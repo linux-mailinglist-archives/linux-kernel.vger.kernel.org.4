@@ -2,123 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A557765DAD3
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1708B65DAD6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239660AbjADQ5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:57:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
+        id S240093AbjADQ5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240291AbjADQ5N (ORCPT
+        with ESMTP id S240356AbjADQ5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:57:13 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F8EDA0;
-        Wed,  4 Jan 2023 08:54:02 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id j8-20020a17090a3e0800b00225fdd5007fso25287490pjc.2;
-        Wed, 04 Jan 2023 08:54:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bbOBQVb3RdLyfUHgOO8SrdRe73a4J3V0VjVeqsiIMyg=;
-        b=EA3IfsuvB4+ngQcFgXazs9up+BHg+GXLXmIVafCOFWXPSUT8axBmcCc1JLrx5b6W1g
-         siIkRYQTpey+yElpHtfv87wOzTxE1v0zyYy3Ex6tm3thIOOa4gDPySQs03+yg6balCQx
-         qNCujaog5PzmZaRXHveJ3HYnAXxfGp/cPKgwa3pVXzBDvE03j9DPoc3cObdHkE9krfiE
-         vD/7euCAVa13V48VfRFiUeNVkDMFrV0BEofVemxwLx5Iry3H/bmcrseymZRPP1F+yyPW
-         PNFU4dOkcT52xQ3eLLHRLdsJZRRT/fAIt8ug5+5mwBK9th/QDNdlPXPJ61BMzrsAauOP
-         vTZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bbOBQVb3RdLyfUHgOO8SrdRe73a4J3V0VjVeqsiIMyg=;
-        b=IbdK9Cyt+vxOt/EZjYFyOD9ViWvmt4qQXZDXCDZPj2cqOJ2Wuf5EdeZaArmfW9peGM
-         Wvhm6htwVjijxx4tjoRQSTeu4/KYtgKedo0hGWLZq1R2teThN/6s/El+TrbEgMQtJTF9
-         G2YsB96FtIO6m/ZiqV6Xkn5CxfzGu84qlW+hGV+qiE1ZHBw4UDJEWOCEalCRekh2lnUk
-         Hi5Y85/U7LpMMSpDJpaljpB6VpkTZlBrTX3WsBSZ3vcSyZtrn0ysaUzVK9DCl2Otu4TE
-         PYSnycEPeDbgxbgjmQyMvTWFEkONBbdGt7iuWjvpJb1iXa0BM3wPL0rfIgL9My0wSfi8
-         GPXg==
-X-Gm-Message-State: AFqh2kqSM3L33BnKwqzrYH9hnp0xSe47SZ5WuCDPYje5reTo6lMhMpMy
-        Xd+uePcbGxZDztJKhQSOTQc=
-X-Google-Smtp-Source: AMrXdXv8KwaLBN02f6SybYhP2+cZNEImFb/2Rg7xdstihKD1Yz8YPGGVeOATVrwGMcrihgYIRjA05A==
-X-Received: by 2002:a05:6a20:5482:b0:a4:491d:d589 with SMTP id i2-20020a056a20548200b000a4491dd589mr79127340pzk.4.1672851241481;
-        Wed, 04 Jan 2023 08:54:01 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id f2-20020a655502000000b004790eb3fee1sm20284950pgr.90.2023.01.04.08.54.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 08:54:01 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 4 Jan 2023 06:53:59 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Shakeel Butt <shakeelb@google.com>
-Subject: Re: [PATCH 00/10] docs: cgroup-v1: formatting improv for "Memory
- Resource Controller" doc
-Message-ID: <Y7WvJzquc8r81X9u@slm.duckdns.org>
-References: <20221219042209.22898-1-bagasdotme@gmail.com>
- <87a630h5mv.fsf@meer.lwn.net>
+        Wed, 4 Jan 2023 11:57:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A81C00;
+        Wed,  4 Jan 2023 08:55:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3434B617B3;
+        Wed,  4 Jan 2023 16:55:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401AFC433EF;
+        Wed,  4 Jan 2023 16:54:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672851300;
+        bh=PRT9pyRYXkxTWpB3lRIbo0OKaSnhV5A3KNAJsop1Qhw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yflc5IqAZB+mr3pTNLZaIWWHnHQzKqJIK8gXyn7fIxTuSZ4pUmH878QlnmTz4dfcX
+         56gjGE+gKKaNFA2Kj3+Zb3FQGICuY9nJnXJTR/DweCBmGXxJxGRecoDldf9SU0xSJN
+         9u7O/9gNnMelBN0OGIQHou0lTsXgBDa0wIFG+UgR3RPxyK0PJMNIc8hq28zAqHzlXQ
+         Rw+qvFzlrE294xQFEAoWefHhFGC4Q9mMo9NVfcdS06OG38R/5w8N0IHUdo9CIUaadz
+         bVOKG187B8Y/3ZYdUC/WqqYfiN/MrXtEXMJ/r+7TJz9P/ER+bK3tsbWfIBzKPXStEv
+         vgW8OsZGYnIJA==
+Date:   Wed, 4 Jan 2023 16:54:53 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [RFC PATCH v3 2/2] mfd: syscon: allow reset control for syscon
+ devices
+Message-ID: <Y7WvXTPxyIGw5y9R@google.com>
+References: <20221211025700.1180843-1-jk@codeconstruct.com.au>
+ <20221211025700.1180843-3-jk@codeconstruct.com.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87a630h5mv.fsf@meer.lwn.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221211025700.1180843-3-jk@codeconstruct.com.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 04:35:20PM -0700, Jonathan Corbet wrote:
-> Bagas Sanjaya <bagasdotme@gmail.com> writes:
-> 
-> > "Memory Resource Controller" CGroup v1 documentation has been in reST
-> > since 99c8b231ae6c6c ("docs: cgroup-v1: convert docs to ReST and rename to *.rst"). The current doc look is kinda ugly, so improve the formatting (only
-> > htmldocs is tested).
-> >
-> > The first patch is a fix for recently reported htmldocs warning, which can
-> > be pickup separately from rest of the series.
-> >
-> > Bagas Sanjaya (10):
-> >   docs: cgroup-v1: extend underline of section 8
-> >   docs: cgroup-v1: replace custom note constructs with appropriate
-> >     admonition blocks
-> >   docs: cgroup-v1: wrap remaining admonitions in admonition blocks
-> >   docs: cgroup-v1: use code block for locking order schema
-> >   docs: cgroup-v1: fix footnotes
-> >   docs: cgroup-v1: move hierarchy of accounting caption
-> >   docs: cgroup-v1: use bullet lists for list of stat file tables
-> >   docs: cgroup-v1: use make swap extension subsections subsections
-> >   docs: cgroup-v1: add internal cross-references
-> >   docs: cgroup-v1: use numbered lists for user interface setup
-> >
-> >  .../admin-guide/cgroup-v1/cgroups.rst         |   2 +
-> >  .../admin-guide/cgroup-v1/memory.rst          | 290 ++++++++++--------
-> >  2 files changed, 158 insertions(+), 134 deletions(-)
-> 
-> Tejun, do you have an opinion on these?  I'm not really sure we need to
-> be tweaking the v1 docs at this point, but I don't see anything in here
-> that seems harmful either...
+On Sun, 11 Dec 2022, Jeremy Kerr wrote:
 
-One of the patches doesn't apply because it's against -next (it's
-referencing -next sha1 too) and the series feels a bit overly elaborate but,
-I mean, why not? I was planning to pick up the series after the holidays
-unless you wanna route it through the doc tree.
+> Simple syscon devices may require deassertion of a reset signal in order
+> to access their register set. Rather than requiring a custom driver to
+> implement this, we can use the generic "resets" specifiers to link a
+> reset line to the syscon.
+> 
+> This change adds an optional reset line to the syscon device
+> description, and deasserts the reset if detected.
+> 
+> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
+> 
+> ---
+> v2:
+>  * do reset control in the early of_syscon_register() path, rather than
+>    the platform device init, which isn't used.
+> v3:
+>  * use a direct reset_control_deassert rather than handling in the
+>    regmap
+> ---
+>  drivers/mfd/syscon.c | 27 +++++++++++++++++++++------
+>  1 file changed, 21 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
+> index bdb2ce7ff03b..05e286a69dbe 100644
+> --- a/drivers/mfd/syscon.c
+> +++ b/drivers/mfd/syscon.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/platform_data/syscon.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> +#include <linux/reset.h>
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/slab.h>
+>  
+> @@ -31,6 +32,7 @@ static LIST_HEAD(syscon_list);
+>  struct syscon {
+>  	struct device_node *np;
+>  	struct regmap *regmap;
+> +	struct reset_control *reset;
+>  	struct list_head list;
+>  };
+>  
+> @@ -40,7 +42,7 @@ static const struct regmap_config syscon_regmap_config = {
+>  	.reg_stride = 4,
+>  };
+>  
+> -static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
+> +static struct syscon *of_syscon_register(struct device_node *np, bool check_res)
+>  {
+>  	struct clk *clk;
+>  	struct syscon *syscon;
+> @@ -50,6 +52,7 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
+>  	int ret;
+>  	struct regmap_config syscon_config = syscon_regmap_config;
+>  	struct resource res;
+> +	struct reset_control *reset;
+>  
+>  	syscon = kzalloc(sizeof(*syscon), GFP_KERNEL);
+>  	if (!syscon)
+> @@ -114,7 +117,7 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
+>  		goto err_regmap;
+>  	}
+>  
+> -	if (check_clk) {
+> +	if (check_res) {
+>  		clk = of_clk_get(np, 0);
+>  		if (IS_ERR(clk)) {
+>  			ret = PTR_ERR(clk);
+> @@ -124,7 +127,17 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
+>  		} else {
+>  			ret = regmap_mmio_attach_clk(regmap, clk);
+>  			if (ret)
+> -				goto err_attach;
+> +				goto err_attach_clk;
+> +		}
+> +
+> +		reset = of_reset_control_get_optional_exclusive(np, NULL);
+> +		if (IS_ERR(reset)) {
+> +			ret = PTR_ERR(reset);
+> +			goto err_attach_clk;
+> +		} else {
+> +			ret = reset_control_deassert(reset);
+> +			if (ret)
+> +				goto err_reset;
+>  		}
 
-Thanks.
+The else is superfluous, right?
+
+Arnd, besides this are you happy with the patch?
 
 -- 
-tejun
+Lee Jones [李琼斯]
