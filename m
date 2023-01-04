@@ -2,70 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC0F65E134
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB4E65E0FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235210AbjADX7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 18:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        id S234469AbjADXf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 18:35:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjADX7Q (ORCPT
+        with ESMTP id S230312AbjADXfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 18:59:16 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCFF4318D;
-        Wed,  4 Jan 2023 15:59:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672876755; x=1704412755;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DZgBOwyaksYR8rOqarCeAE7wIzcUZnoEzEaWzuWNeE8=;
-  b=KUR1u8aW+AWVPqeBmRv3LPrUj5qtTnpm8kNBiZ5hUMR2Zj6lqRWIlr1O
-   gB5pzSATErNuaPEQsVDK4KFASwZjrmV+h8CpwxmSHRvVj3ownLMVliymC
-   vkIV7TuL+RaOylkurCY9QifYtO4ezw2SLtS5Cxqzm7vAR9dy+50o6iC+I
-   KOuVUaVXMCZYvMRTuNTTJCRyGiQjzQ6F9bgxil/uANKoBr028gFN2yQ/t
-   0GBq4+oK0ZuVnCMpp70v6HYXuE6Xm7hl9XAqM60odp6S7xTszvDJl7VEe
-   +46rqiG77B9SBHmKT47mFrpD+ezhlXBNoogJp3frqf6YaZ7hyQN7pq0ld
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="323306066"
-X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
-   d="scan'208";a="323306066"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:58:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="900745331"
-X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
-   d="scan'208";a="900745331"
-Received: from kvthalli-mobl1.amr.corp.intel.com (HELO [10.212.102.90]) ([10.212.102.90])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:58:47 -0800
-Message-ID: <5babccd6-9796-7613-cf82-cc859f338448@linux.intel.com>
-Date:   Wed, 4 Jan 2023 17:33:53 -0600
+        Wed, 4 Jan 2023 18:35:25 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099CC42604;
+        Wed,  4 Jan 2023 15:35:23 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NnQvD5qPTz4y0Q;
+        Thu,  5 Jan 2023 10:35:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1672875321;
+        bh=yPWtUWuhKT5LMYjyGA+k1TObWc9g/oFcO/5wrE8UDlw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B95rxWOf0rhsimoqMfO0IFGZ/Q7TS0tXcE62nYxDjJxFrLCRZ4sCNSOZe7eV1XZSm
+         f8HfzvoEAvHlb5YnlZuzdAOEQ9/sI9C/dn7DIJO2TZofUohuCACIEP/tAHExhoL8U6
+         amNeVQsiR+OtiAYYBzbHpzRlrVPrqIJh2nYIrUtKtHGoa405dpQ9WwhNgye9qBbMo1
+         NvJoaH2xP/Pwq5+/3ys+XYcZDVrcQY7u+hU6l/f7OxZJ8gRQvmVCb49fEi869YOrgJ
+         QCwZeEOvuKbosdEWmcIdgNSMZfzXGpWkgNf1dINufztFGUkuRHRHzhdq2Ig9uV2TiA
+         x3D3fa9Qf9pZQ==
+Date:   Thu, 5 Jan 2023 10:35:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: linux-next: manual merge of the thermal tree with the pm tree
+Message-ID: <20230105103519.4e849420@canb.auug.org.au>
+In-Reply-To: <20230105101054.108ad186@canb.auug.org.au>
+References: <20230105101054.108ad186@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 02/14] ASoC: qcom: qdsp6: Introduce USB AFE port to
- q6dsp
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-3-quic_wcheng@quicinc.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20221223233200.26089-3-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: multipart/signed; boundary="Sig_/cxUdS2=HvIhlCp64bT_L5XX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,167 +56,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/cxUdS2=HvIhlCp64bT_L5XX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 12/23/22 17:31, Wesley Cheng wrote:
-> The QC ADSP is able to support USB playback and capture, so that the
-> main application processor can be placed into lower CPU power modes.  This
-> adds the required AFE port configurations and port start command to start
-> an audio session.
+On Thu, 5 Jan 2023 10:10:54 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the thermal tree got a conflict in:
+>=20
+>   drivers/thermal/intel/x86_pkg_temp_thermal.c
+>=20
+> between commit:
+>=20
+>   58374a3970a0 ("thermal/x86_pkg_temp_thermal: Add support for handling d=
+ynamic tjmax")
+>=20
+> from the pm tree and commit:
+>=20
+>   03b2e86a24aa ("thermal/drivers/intel: Use generic thermal_zone_get_trip=
+() function")
+>=20
+> from the thermal tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-It would be good to clarify what sort of endpoints can be supported. I
-presume the SOF-synchronous case is handled, but how would you deal with
-async endpoints with feedback (be it explicit or implicit)?
+Actually, the resolution I needed was this:
 
-Note that it's very hard to make the decision not to support async
-endpoints, there are quite a few devices that are exposed as async to
-work around an obscure legacy issue on Windows but are really
-sof-synchronous endpoints that never ask for any change of pace.
+diff --cc drivers/thermal/intel/x86_pkg_temp_thermal.c
+index 9e08d8c8f5fb,494f25250c2d..24c7774cc4a9
+--- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
++++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+@@@ -107,56 -108,37 +108,17 @@@ static struct zone_device *pkg_temp_the
+  static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
+  {
+  	struct zone_device *zonedev =3D tzd->devdata;
+ -	u32 eax, edx;
+ +	int val;
+ =20
+ -	rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_STATUS,
+ -			&eax, &edx);
+ -	if (eax & 0x80000000) {
+ -		*temp =3D zonedev->tj_max - ((eax >> 16) & 0x7f) * 1000;
+ -		pr_debug("sys_get_curr_temp %d\n", *temp);
+ -		return 0;
+ -	}
+ -	return -EINVAL;
+ +	val =3D intel_tcc_get_temp(zonedev->cpu, true);
+ +	if (val < 0)
+ +		return val;
+ +
+ +	*temp =3D val * 1000;
+ +	pr_debug("sys_get_curr_temp %d\n", *temp);
+ +	return 0;
+  }
+ =20
+- static int sys_get_trip_temp(struct thermal_zone_device *tzd,
+- 			     int trip, int *temp)
+- {
+- 	struct zone_device *zonedev =3D tzd->devdata;
+- 	unsigned long thres_reg_value;
+- 	u32 mask, shift, eax, edx;
+- 	int tj_max, ret;
+-=20
+- 	if (trip >=3D MAX_NUMBER_OF_TRIPS)
+- 		return -EINVAL;
+-=20
+- 	if (trip) {
+- 		mask =3D THERM_MASK_THRESHOLD1;
+- 		shift =3D THERM_SHIFT_THRESHOLD1;
+- 	} else {
+- 		mask =3D THERM_MASK_THRESHOLD0;
+- 		shift =3D THERM_SHIFT_THRESHOLD0;
+- 	}
+-=20
+- 	tj_max =3D intel_tcc_get_tjmax(zonedev->cpu);
+- 	if (tj_max < 0)
+- 		return tj_max;
+- 	tj_max *=3D 1000;
+-=20
+- 	ret =3D rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
+- 			   &eax, &edx);
+- 	if (ret < 0)
+- 		return ret;
+-=20
+- 	thres_reg_value =3D (eax & mask) >> shift;
+- 	if (thres_reg_value)
+- 		*temp =3D tj_max - thres_reg_value * 1000;
+- 	else
+- 		*temp =3D THERMAL_TEMP_INVALID;
+- 	pr_debug("sys_get_trip_temp %d\n", *temp);
+-=20
+- 	return 0;
+- }
+-=20
+  static int
+  sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
+  {
+@@@ -330,18 -340,25 +325,25 @@@ static int pkg_temp_thermal_device_add(
+ =20
+  	thres_count =3D clamp_val(thres_count, 0, MAX_NUMBER_OF_TRIPS);
+ =20
+- 	err =3D intel_tcc_get_tjmax(cpu);
+- 	if (err < 0)
+ -	err =3D get_tj_max(cpu, &tj_max);
+ -	if (err)
+--		return err;
+++	tj_max =3D intel_tcc_get_tjmax(cpu);
+++	if (tj_max < 0)
+++		return tj_max;
+++	tj_max *=3D 1000;
+ =20
+  	zonedev =3D kzalloc(sizeof(*zonedev), GFP_KERNEL);
+  	if (!zonedev)
+  		return -ENOMEM;
+ =20
++ 	zonedev->trips =3D pkg_temp_thermal_trips_init(cpu, tj_max, thres_count);
++ 	if (IS_ERR(zonedev->trips)) {
++ 		err =3D PTR_ERR(zonedev->trips);
++ 		goto out_kfree_zonedev;
++ 	}
++=20
+  	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
+  	zonedev->cpu =3D cpu;
+- 	zonedev->tzone =3D thermal_zone_device_register("x86_pkg_temp",
+- 			thres_count,
+ -	zonedev->tj_max =3D tj_max;
++ 	zonedev->tzone =3D thermal_zone_device_register_with_trips("x86_pkg_temp=
+",
++ 			zonedev->trips, thres_count,
+  			(thres_count =3D=3D MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
+  			zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
+  	if (IS_ERR(zonedev->tzone)) {
 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  .../sound/qcom,q6dsp-lpass-ports.h            |   1 +
->  sound/soc/qcom/qdsp6/q6afe-dai.c              |  47 +++++
->  sound/soc/qcom/qdsp6/q6afe.c                  | 183 ++++++++++++++++++
->  sound/soc/qcom/qdsp6/q6afe.h                  |  46 ++++-
->  sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c      |  23 +++
->  sound/soc/qcom/qdsp6/q6dsp-lpass-ports.h      |   1 +
->  sound/soc/qcom/qdsp6/q6routing.c              |   8 +
->  7 files changed, 308 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
-> index 9f7c5103bc82..746bc462bb2e 100644
-> --- a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
-> +++ b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
-> @@ -131,6 +131,7 @@
->  #define RX_CODEC_DMA_RX_7	126
->  #define QUINARY_MI2S_RX		127
->  #define QUINARY_MI2S_TX		128
-> +#define USB_RX				129
+--=20
+Cheers,
+Stephen Rothwell
 
-the commit message says the DSP can support Playback and capture, but
-here there's capture only ...
+--Sig_/cxUdS2=HvIhlCp64bT_L5XX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
->  
->  static const struct snd_soc_dapm_route q6afe_dapm_routes[] = {
-> +	{"USB Playback", NULL, "USB_RX"},
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO2DTcACgkQAVBC80lX
+0Gwk5ggAlDLN0jQ8yc4u3iD1B8OXVew2BvXEKREM0tu5DHXUuvaR/JDq6IYj9MJT
+k2yszqpnPXfjtowNJMR1b4icL4K1Mu36JQIX9eLSsXUAvM5fbMt/Gkzoh4ltPyEe
+O/rI6rcyilXkpGt6jHFuNwBVDsSmCs1c4AdEXxPmgQ8rKEofwlXRWbLWrpJKJzk7
+iqdyomxVRh/8W7uviD0UA9+HzdFMmn9akWKEejkiaf4K0+RQN/tWEaYVlT8ifIe8
+N3YDng9dLS2rDRM3ml+fBmhP20TbD/17AV5PmqXzP12aAwolZuos6gfXpOYe43kw
+4jHqGtWxlzqEnV7jFV7jwr8DnUG2Jw==
+=eVLW
+-----END PGP SIGNATURE-----
 
-... but here RX means playback?
-
-I am not sure I get the convention on directions and what is actually
-supported?
-
-> +struct afe_param_id_usb_cfg {
-> +/* Minor version used for tracking USB audio device configuration.
-> + * Supported values: AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG
-> + */
-> +	u32                  cfg_minor_version;
-> +/* Sampling rate of the port.
-> + * Supported values:
-> + * - AFE_PORT_SAMPLE_RATE_8K
-> + * - AFE_PORT_SAMPLE_RATE_11025
-> + * - AFE_PORT_SAMPLE_RATE_12K
-> + * - AFE_PORT_SAMPLE_RATE_16K
-> + * - AFE_PORT_SAMPLE_RATE_22050
-> + * - AFE_PORT_SAMPLE_RATE_24K
-> + * - AFE_PORT_SAMPLE_RATE_32K
-> + * - AFE_PORT_SAMPLE_RATE_44P1K
-> + * - AFE_PORT_SAMPLE_RATE_48K
-> + * - AFE_PORT_SAMPLE_RATE_96K
-> + * - AFE_PORT_SAMPLE_RATE_192K
-> + */
-> +	u32                  sample_rate;
-> +/* Bit width of the sample.
-> + * Supported values: 16, 24
-> + */
-> +	u16                  bit_width;
-> +/* Number of channels.
-> + * Supported values: 1 and 2
-
-that aligns with my feedback on the cover letter, if you connect a
-device that can support from than 2 channels should the DSP even expose
-this DSP-optimized path?
-
-Oh and I forgot, what happens if there are multiple audio devices
-connected, can the DSP deal with all of them? If not, how is this handled?
-
-> + */
-> +	u16                  num_channels;
-> +/* Data format supported by the USB. The supported value is
-> + * 0 (#AFE_USB_AUDIO_DATA_FORMAT_LINEAR_PCM).
-> + */
-> +	u16                  data_format;
-> +/* this field must be 0 */
-> +	u16                  reserved;
-> +/* device token of actual end USB aduio device */
-
-typo: audio
-
-> +	u32                  dev_token;
-> +/* endianness of this interface */
-> +	u32                   endian;
-
-Is this a USB concept? I can't recall having seen any parts of the USB
-audio class spec that the data can be big or little endian?
-
-> +/* service interval */
-> +	u32                  service_interval;
-> +} __packed;
-
-> +int afe_port_send_usb_dev_param(struct q6afe_port *port, struct q6afe_usb_cfg *cfg)
-> +{
-> +	union afe_port_config *pcfg = &port->port_cfg;
-> +	struct afe_param_id_usb_audio_dev_params usb_dev;
-> +	struct afe_param_id_usb_audio_dev_lpcm_fmt lpcm_fmt;
-> +	struct afe_param_id_usb_audio_svc_interval svc_int;
-> +	int ret = 0;
-> +
-> +	if (!pcfg) {
-> +		pr_err("%s: Error, no configuration data\n", __func__);
-
-can you use a dev_err() here and the rest of the code?
-
-> +		ret = -EINVAL;
-> +		goto exit;
-> +	}
-> +
-> +	memset(&usb_dev, 0, sizeof(usb_dev));
-> +	memset(&lpcm_fmt, 0, sizeof(lpcm_fmt));
-> +
-> +	usb_dev.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
-> +	q6afe_port_set_param_v2(port, &usb_dev,
-> +					AFE_PARAM_ID_USB_AUDIO_DEV_PARAMS,
-> +					AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(usb_dev));
-> +	if (ret) {
-> +		pr_err("%s: AFE device param cmd failed %d\n",
-> +			__func__, ret);
-> +		goto exit;
-> +	}
-> +
-> +	lpcm_fmt.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
-> +	lpcm_fmt.endian = pcfg->usb_cfg.endian;
-> +	ret = q6afe_port_set_param_v2(port, &lpcm_fmt,
-> +					AFE_PARAM_ID_USB_AUDIO_DEV_LPCM_FMT,
-> +					AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(lpcm_fmt));
-> +	if (ret) {
-> +		pr_err("%s: AFE device param cmd LPCM_FMT failed %d\n",
-> +			__func__, ret);
-> +		goto exit;
-> +	}
-> +
-> +	svc_int.cfg_minor_version =
-> +		AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
-> +	svc_int.svc_interval = pcfg->usb_cfg.service_interval;
-> +	ret = q6afe_port_set_param_v2(port, &svc_int,
-> +					AFE_PARAM_ID_USB_AUDIO_SVC_INTERVAL,
-> +					AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(svc_int));
-> +	if (ret) {
-> +		pr_err("%s: AFE device param cmd svc_interval failed %d\n",
-> +			__func__, ret);
-> +		ret = -EINVAL;
-> +		goto exit;
-> +	}
-> +exit:
-> +	return ret;
-> +}
+--Sig_/cxUdS2=HvIhlCp64bT_L5XX--
