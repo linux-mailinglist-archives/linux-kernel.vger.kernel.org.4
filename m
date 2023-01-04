@@ -2,193 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2574065CD59
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38B065CD58
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbjADGsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:48:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        id S233306AbjADGs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbjADGrc (ORCPT
+        with ESMTP id S233738AbjADGrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:47:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4369186F1
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 22:46:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672814776;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dZlFWtxiRkDtk+thRF9nVuLB+b4oL2TYgzK5e9wk6bs=;
-        b=SOOS8aI83cGhGdG2ckdETkO+AvAKw6/I1mzXh0cWm2ObnR3Oc0hTOR6dvkiwyxLtu+/KY0
-        McwH5kTcpX/O1e8umacApWemFGXdRoSTCzhogLjB9kgQ6N07DCtDesJ4tqaFQNCcxYXS91
-        RQCE/C7oLa5zLszqrNRdjFIItVgsKoo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-552-fhAv2q2nPLOAt5fC20D_EA-1; Wed, 04 Jan 2023 01:46:14 -0500
-X-MC-Unique: fhAv2q2nPLOAt5fC20D_EA-1
-Received: by mail-wm1-f72.google.com with SMTP id l17-20020a05600c1d1100b003d9a145366cso7539908wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 22:46:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dZlFWtxiRkDtk+thRF9nVuLB+b4oL2TYgzK5e9wk6bs=;
-        b=o0OdJPjHJHLFp5AKg6+3mzZV2wc1zJl4wPRcyroiKHxIgrl5El5IfbIfkhNfZPCLBb
-         XRoeXDfvGvAGHbADFORwwQd5JNNXhsHpxOnURDA7V1o+muX6Twju26h28YlbfjODP5K6
-         U/hYwJS0lKQKfHSL5ne9CrJEfmwoBVIQKf9MkdRiAZXRFtRor6fKGwo9x4ZaVU3wbyQu
-         P/E3NrizFe91+OSsNVXojAHXiINWyOf1Z6uUANoFeb1+AIa81JOfmVi/ZQuwpSmJBonA
-         JP55w+ujG1Cn9y0EEg7F8WMCXEt+leh6ydedryODpUFXXT5lGv/aJKckMdancUy/RCXL
-         jtOA==
-X-Gm-Message-State: AFqh2krG+7viEl+I94tnW2eIyhdW44DDEBiZn37Iwu4Ikly1LzfTNHg+
-        vCxl8MtPnFA6nWWbWDZzk0/DsZD79i2GFTWwmRQ2xo84Kr2R6uf8554RwjIfGGUfYmMlKNfExUW
-        WE848/BHmXiZ618YULUWZa/1I
-X-Received: by 2002:a05:600c:3ba7:b0:3d3:4dac:aa69 with SMTP id n39-20020a05600c3ba700b003d34dacaa69mr32523077wms.36.1672814773591;
-        Tue, 03 Jan 2023 22:46:13 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtsmKlEtrhGwFJV/isqLZ83QMfqezcC6GQt8r/1BBQD+my1HQhflP0L+uExmpASFxDlO1tKIg==
-X-Received: by 2002:a05:600c:3ba7:b0:3d3:4dac:aa69 with SMTP id n39-20020a05600c3ba700b003d34dacaa69mr32523066wms.36.1672814773307;
-        Tue, 03 Jan 2023 22:46:13 -0800 (PST)
-Received: from redhat.com ([2.52.151.85])
-        by smtp.gmail.com with ESMTPSA id x7-20020a05600c188700b003d9aa76dc6asm17424241wmp.0.2023.01.03.22.46.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 22:46:12 -0800 (PST)
-Date:   Wed, 4 Jan 2023 01:46:09 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com
-Subject: Re: [PATCH net V2] virtio-net: correctly enable callback during
- start_xmit
-Message-ID: <20230104014256-mutt-send-email-mst@kernel.org>
-References: <20221215032719.72294-1-jasowang@redhat.com>
- <20221215034740-mutt-send-email-mst@kernel.org>
- <CACGkMEsLeCRDqyuyGzWw+kjYrTVDjUjOw6+xHESPT2D1p03=sQ@mail.gmail.com>
- <20221215042918-mutt-send-email-mst@kernel.org>
- <CACGkMEsbvTQrEp5dmQRHp58Mu=E7f433Xrvsbs4nZMA5R3B6mQ@mail.gmail.com>
- <CACGkMEsu_OFFs15d2dzNbfSjzAZfYXLn9CNcO3ELPbDqZsndzg@mail.gmail.com>
- <50eb0df0-89fe-a5df-f89f-07bf69bd00ae@redhat.com>
+        Wed, 4 Jan 2023 01:47:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BC913E37;
+        Tue,  3 Jan 2023 22:46:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80C21615B1;
+        Wed,  4 Jan 2023 06:46:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DEB0C433D2;
+        Wed,  4 Jan 2023 06:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672814816;
+        bh=Ce2cVNmnHW33oC2dbbxBr7ty/7AVWh3XFhy+5mBUDp4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hIpEuo0+/ygOTG8Dz2hbZZkPNeitPdV7IPTHKzKtcImcXcXEeEXcrc4uInwuSp4aS
+         CX5f7suvudBp8+mEqLj04JdokYLnhTEOFF4kzcUS/G1MDNHC55858EeEx4ormv0rZ4
+         ZkvFHCjfUpfRfY4XbLycUyBfuZTjkkoFCPTc72lRwHXjOcvhv4Wknd0bCCDQwHdHtV
+         VquhUvSY10TqwxPvbJQ6rBpeLyuDmWDTJzanwgaXP7BCx/otUp0yrElxnYNPeqpqJu
+         61iuuNF4jWICeh3NQg6p7y/F410/YNGx7CHnEHb4qxWIn+voOuEE1LGbSO3P6zL3Gt
+         ZVV3bwXa963lA==
+Date:   Wed, 4 Jan 2023 08:46:52 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, ruscur@russell.cc,
+        oohall@gmail.com, bhelgaas@google.com,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajat.khandelwal@intel.com,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Neftin, Sasha" <sasha.neftin@intel.com>,
+        Frederick Zhang <frederick888@tsundere.moe>
+Subject: Re: [PATCH] PCI/AER: Rate limit the reporting of the correctable
+ errors
+Message-ID: <Y7Ug3F6AIhaAiqCD@unreal>
+References: <20230103191418.GA1011392@bhelgaas>
+ <e6e53119-a249-a03f-c9eb-3caafbe5d983@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <50eb0df0-89fe-a5df-f89f-07bf69bd00ae@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e6e53119-a249-a03f-c9eb-3caafbe5d983@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 12:23:07PM +0800, Jason Wang wrote:
+On Wed, Jan 04, 2023 at 10:27:33AM +0530, Rajat Khandelwal wrote:
+> Hi Bjorn,
 > 
-> 在 2022/12/23 14:29, Jason Wang 写道:
-> > On Fri, Dec 16, 2022 at 11:43 AM Jason Wang <jasowang@redhat.com> wrote:
-> > > On Thu, Dec 15, 2022 at 5:35 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > On Thu, Dec 15, 2022 at 05:15:43PM +0800, Jason Wang wrote:
-> > > > > On Thu, Dec 15, 2022 at 5:02 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > On Thu, Dec 15, 2022 at 11:27:19AM +0800, Jason Wang wrote:
-> > > > > > > Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
-> > > > > > > virtqueue callback via the following statement:
-> > > > > > > 
-> > > > > > >          do {
-> > > > > > >             ......
-> > > > > > >        } while (use_napi && kick &&
-> > > > > > >                 unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> > > > > > > 
-> > > > > > > When NAPI is used and kick is false, the callback won't be enabled
-> > > > > > > here. And when the virtqueue is about to be full, the tx will be
-> > > > > > > disabled, but we still don't enable tx interrupt which will cause a TX
-> > > > > > > hang. This could be observed when using pktgen with burst enabled.
-> > > > > > > 
-> > > > > > > Fixing this by trying to enable tx interrupt after we disable TX when
-> > > > > > > we're not using napi or kick is false.
-> > > > > > > 
-> > > > > > > Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
-> > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > ---
-> > > > > > > The patch is needed for -stable.
-> > > > > > > Changes since V1:
-> > > > > > > - enable tx interrupt after we disable tx
-> > > > > > > ---
-> > > > > > >   drivers/net/virtio_net.c | 2 +-
-> > > > > > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > > > 
-> > > > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > > > index 86e52454b5b5..dcf3a536d78a 100644
-> > > > > > > --- a/drivers/net/virtio_net.c
-> > > > > > > +++ b/drivers/net/virtio_net.c
-> > > > > > > @@ -1873,7 +1873,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
-> > > > > > >         */
-> > > > > > >        if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
-> > > > > > >                netif_stop_subqueue(dev, qnum);
-> > > > > > > -             if (!use_napi &&
-> > > > > > > +             if ((!use_napi || !kick) &&
-> > > > > > >                    unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
-> > > > > > >                        /* More just got used, free them then recheck. */
-> > > > > > >                        free_old_xmit_skbs(sq, false);
-> > > > > > This will work but the following lines are:
-> > > > > > 
-> > > > > >                         if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
-> > > > > >                                  netif_start_subqueue(dev, qnum);
-> > > > > >                                  virtqueue_disable_cb(sq->vq);
-> > > > > >                          }
-> > > > > > 
-> > > > > > 
-> > > > > > and I thought we are supposed to keep callbacks enabled with napi?
-> > > > > This seems to be the opposite logic of commit a7766ef18b33 that
-> > > > > disables callbacks for NAPI.
-> > > > > 
-> > > > > It said:
-> > > > > 
-> > > > >      There are currently two cases where we poll TX vq not in response to a
-> > > > >      callback: start xmit and rx napi.  We currently do this with callbacks
-> > > > >      enabled which can cause extra interrupts from the card.  Used not to be
-> > > > >      a big issue as we run with interrupts disabled but that is no longer the
-> > > > >      case, and in some cases the rate of spurious interrupts is so high
-> > > > >      linux detects this and actually kills the interrupt.
-> > > > > 
-> > > > > My undersatnding is that it tries to disable callbacks on TX.
-> > > > I think we want to disable callbacks while polling, yes. here we are not
-> > > > polling, and I think we want a callback because otherwise nothing will
-> > > > orphan skbs and a socket can be blocked, not transmitting anything - a
-> > > > deadlock.
-> > > I'm not sure how I got here, did you mean a partial revert of
-> > > a7766ef18b33 (the part that disables TX callbacks on start_xmit)?
-> > Michael, any idea on this?
+> Thanks for the acknowledgement.
+> 
+> On 1/4/2023 12:44 AM, Bjorn Helgaas wrote:
+> > [+cc Paul, Sasha, Leon, Frederick]
 > > 
-> > Thanks
+> > (Please cc folks who have commented on previous versions of your
+> > patch.)
+> > 
+> > On Tue, Jan 03, 2023 at 10:25:48PM +0530, Rajat Khandelwal wrote:
+> > > There are many instances where correctable errors tend to inundate
+> > > the message buffer. We observe such instances during thunderbolt PCIe
+> > > tunneling.
+
+<...>
+
+> > > [54982.838808] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001000/00002000
+> > > [54982.838817] igc 0000:2b:00.0:    [12] Timeout
+> > Please remove the timestamps; they don't contribute to understanding
+> > the problem.
 > 
+> --> Sure.
+
+Please don't add "-->" or any marker to replies. It breaks mail color
+scheme.
+
 > 
-> Michael, any comment?
+> > 
+> > > This gets repeated continuously, thus inundating the buffer.
+> > Did you verify that we actually clear the Correctable Error Status
+> > register?
 > 
-> Thanks
+> --> This patch targets only rate limiting the correctable errors since they are
+> non-fatal, and they kind of inundate the CPU logs, particularly during thunderbolt
+> connections. It doesn't have an impact anywhere else.
+> As per your suggestion in the igc patch, I found rate limiting as a doable option
+> currently. Have eradicated any kind of masking the bits.
 
-Sorry I don't understand the question. What does "how I got here" mean?
-To repeat my suggestion:
+You didn't answer on the asked question. "Did you verify that we actually clear
+the Correctable Error Status register?".
 
-	I think it is easier to just do a separate branch here. Along the
-	lines of:
-
-			if (use_napi) {
-				if (unlikely(!virtqueue_enable_cb_delayed(sq->vq)))
-					virtqueue_napi_schedule(napi, vq);
-			} else {
-				... old code ...
-			}
-
-we can also backport this minimal safe fix, any refactorings can be done on
-top.
-
-
--- 
-MST
-
+Thanks
