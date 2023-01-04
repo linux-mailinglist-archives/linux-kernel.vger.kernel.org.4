@@ -2,227 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AA065DFBE
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D5C65DFC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240164AbjADWRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S240528AbjADWRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240503AbjADWRG (ORCPT
+        with ESMTP id S240520AbjADWRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:17:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D741A069;
-        Wed,  4 Jan 2023 14:17:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FAD86185F;
-        Wed,  4 Jan 2023 22:17:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE9CCC43392;
-        Wed,  4 Jan 2023 22:17:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672870623;
-        bh=nTOZE+n1x/HPxCpxyWWYLQviHIqmDTpR/4NccwtHT+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IoJlp+b1uXIaXFHUxj+Ce2apRzAZDrapooHr9EBzBVf9qXgfCSTbbmlb8q/1UPgi1
-         DJLeY67pw21s2QLNCimRumKSVcikEtJBKJrIFgOCMF1IxWY4fUDa5R7nrkzr/DRTuL
-         yKUtHutzxz0QbWy19JidFkwfHfESoNqco1tRCcKdfHQ0GuvlkS8uslWj/OPvhsJEzn
-         1FwkjijYTga8XPpRorWH5Z69r+aQnoVdt6bb6CK0yCS5jXchwcKbcEIjLjOHx4Ub3b
-         9/ks/XYDKey4/5wBoO+8YeSIbcNZIz8xCYG9rI4RQ7eEaSnIUXbcrOUZ4MdBcNjc79
-         UecqYixuIVYaA==
-Date:   Wed, 4 Jan 2023 22:16:58 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 6/9] dt-bindings: interrupt-controller: Add RISC-V
- advanced PLIC
-Message-ID: <Y7X62v5Zp6+thx5A@spud>
-References: <20230103141409.772298-1-apatel@ventanamicro.com>
- <20230103141409.772298-7-apatel@ventanamicro.com>
+        Wed, 4 Jan 2023 17:17:16 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5381F65F8;
+        Wed,  4 Jan 2023 14:17:15 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 36so23234446pgp.10;
+        Wed, 04 Jan 2023 14:17:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mBdR1OYvv5zIjW+hrNHEjqsBYdzTVZarSCYttdRP9P0=;
+        b=QMHC+W+cPdzEvzu7OmXQnPcvd3ozAn24UBAx+NJZqCwKaCIFamFDpMO5+0fusnSF32
+         7rMEcXxCkh4xwbepxkxjCAqOfToVfBsCo5T4Zhh1dfX2BqcKbKxuLLFRvRk+KozCh6mx
+         PiCfloJVXYuGwuqkgKdvzg966p0QrHBmHM/DBZD5gJ4Ko0FRf6GQKmkum04ZTwYAA9cE
+         driK/F8H6DubpL+VDkSG5dj/M2uRgMqzRORN7tTGUotYlF33zztJk2LStCylCgiyWQTH
+         E2UEA+UtPJK0jAs+7pXInfPnzlYTC2Q7qiiRVolqUUgI1DbrVvUN8MvIboES+bgyLdJg
+         tq2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mBdR1OYvv5zIjW+hrNHEjqsBYdzTVZarSCYttdRP9P0=;
+        b=EFryHCV7JWZRztQ1l6im6JTuZjHo6Qyu1Hm56+O+Tt6uLRsG6awVGDOHz3h23RFLJu
+         Uq6ReGIgZLOx850KXd4GdEXoy/V03Xb78NQ4Uo5BB8M/+M9oKRqNYa1vAdLnVlOBFYRb
+         lhkiyaNHQGQYdB5f1IHNE+eG5kqRV18g6U5EGKDK9qUMfKUxqd2cjFMa6mYlghdQzK/I
+         uRhPWB/WQkMDS/69FtciLXWd7h58MGnaT9S+w87pxwmXUmMHUKoljhB+7qhzC7FZ2ctw
+         JPaCFw6pDb5Sm71iq4YPX2rDk5n7W6GMjO9dIric10MvdjK/n5qPhU3sxLQPYbYzB8Kq
+         WvyQ==
+X-Gm-Message-State: AFqh2krBaUgmiHoc5OE+n8Fmh8JdSQau4vpQMsg7NK2X/Fqq9dvonMG/
+        RBp65VVpXZEYJxlGYLiM/fs=
+X-Google-Smtp-Source: AMrXdXtp1FOgKJapFay7R/Uc+L09gGitWWTApSjT57fgZ9XZutFON8Lz6yWq6yuVU18c/qzHQWw+pw==
+X-Received: by 2002:a62:cf42:0:b0:581:a004:3f36 with SMTP id b63-20020a62cf42000000b00581a0043f36mr26189605pfg.25.1672870634700;
+        Wed, 04 Jan 2023 14:17:14 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id b27-20020aa78edb000000b0056b9ec7e2desm23036966pfr.125.2023.01.04.14.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 14:17:14 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 4 Jan 2023 12:17:13 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Yann Droneaud <ydroneaud@opteya.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] blk-iocost: don't make all constants unsigned long long
+Message-ID: <Y7X66RDNGhB45rzZ@slm.duckdns.org>
+References: <20221220201819.1497577-1-ydroneaud@opteya.com>
+ <20221222135855.GC20830@blackbody.suse.cz>
+ <Y7X6ajqnPrtFAL0C@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="CM+OG7HiznyhPXQ1"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230103141409.772298-7-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y7X6ajqnPrtFAL0C@slm.duckdns.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 04, 2023 at 12:15:06PM -1000, Tejun Heo wrote:
+> On Thu, Dec 22, 2022 at 02:58:55PM +0100, Michal Koutný wrote:
+> > On Tue, Dec 20, 2022 at 09:18:19PM +0100, Yann Droneaud <ydroneaud@opteya.com> wrote:
+> > > +enum {
+> > >  	/* switch iff the conditions are met for longer than this */
+> > >  	AUTOP_CYCLE_NSEC	= 10LLU * NSEC_PER_SEC,
+> > > +};
+> > 
+> > This looks gratuitous.
+> > 
+> > What about indivudial #defines with typed literals instead of the "lazy
+> > splitting"?
+> 
+> enums are so much better for debugging and tracing. This is a gcc caused
+> problem where there's no other way to generate the same code between two gcc
+> versions without splitting the enum definitions. I'm kinda baffled that this
+> is what they chose to do but can't think of a better way to work around it.
 
---CM+OG7HiznyhPXQ1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I thought this was the other patch addressing this issue. The proposed patch
+is rather painful to look at. The other one splits it into two groups.
 
-Hey Anup,
+Thanks.
 
-On Tue, Jan 03, 2023 at 07:44:06PM +0530, Anup Patel wrote:
-> We add DT bindings document for RISC-V advanced platform level
-> interrupt controller (APLIC) defined by the RISC-V advanced
-> interrupt architecture (AIA) specification.
->=20
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  .../interrupt-controller/riscv,aplic.yaml     | 159 ++++++++++++++++++
->  1 file changed, 159 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controlle=
-r/riscv,aplic.yaml
-
-> +  interrupts-extended:
-> +    minItems: 1
-> +    maxItems: 16384
-> +    description:
-> +      Given APLIC domain directly injects external interrupts to a set of
-> +      RISC-V HARTS (or CPUs). Each node pointed to should be a riscv,cpu=
--intc
-> +      node, which has a riscv node (i.e. RISC-V HART) as parent.
-> +
-> +  msi-parent:
-> +    description:
-> +      Given APLIC domain forwards wired interrupts as MSIs to a AIA inco=
-ming
-> +      message signaled interrupt controller (IMSIC). This property shoul=
-d be
-> +      considered only when the interrupts-extended property is absent.
-
-Considered by what?
-On v1 you said:
-<quote>
-If both "interrupts-extended" and "msi-parent" are present then it means
-the APLIC domain supports both MSI mode and Direct mode in HW. In this
-case, the APLIC driver has to choose between MSI mode or Direct mode.
-<\quote>
-
-The description is still pretty ambiguous IMO. Perhaps incorporate
-some of that expanded comment into the property description?
-Say, "If both foo and bar are present, the APLIC domain has hardware
-support for both MSI and direct mode. Software may then chose either
-mode".
-Have I misunderstood your comment on v1? It read as if having both
-present indicated that both were possible & that "should be considered
-only..." was more of a suggestion and a comment about the Linux driver's
-behaviour.
-Apologies if I have misunderstood, but I suppose if I have then the
-binding's description could be improved!!
-
-> +  riscv,children:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    minItems: 1
-> +    maxItems: 1024
-> +    items:
-> +      maxItems: 1
-> +    description:
-> +      A list of child APLIC domains for the given APLIC domain. Each chi=
-ld
-> +      APLIC domain is assigned child index in increasing order with the
-
-btw, missing article before child (& a comma after order I think).
-
-> +      first child APLIC domain assigned child index 0. The APLIC domain
-> +      child index is used by firmware to delegate interrupts from the
-> +      given APLIC domain to a particular child APLIC domain.
-> +
-> +  riscv,delegate:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    minItems: 1
-> +    maxItems: 1024
-
-Is it valid to have a delegate property without children? If not, the
-binding should reflect that dependency IMO.
-
-> +    items:
-> +      items:
-> +        - description: child APLIC domain phandle
-> +        - description: first interrupt number (inclusive)
-> +        - description: last interrupt number (inclusive)
-> +    description:
-> +      A interrupt delegation list where each entry is a triple consisting
-> +      of child APLIC domain phandle, first interrupt number, and last
-> +      interrupt number. The firmware will configure interrupt delegation
-
-btw, drop the article before firmware here.
-Also, "firmware will" or "firmware must"? Semantics perhaps, but they
-are different!
-
-Kinda for my own curiosity here, but do you expect these properties to
-generally be dynamically filled in by the bootloader or read by the
-bootloader to set up the configuration?
-
-> +      registers based on interrupt delegation list.
-
-I'm sorry Anup, but this child versus delegate thing is still not clear
-to me binding wise. See below.
-
-> +    aplic0: interrupt-controller@c000000 {
-> +      compatible =3D "riscv,qemu-aplic", "riscv,aplic";
-> +      interrupts-extended =3D <&cpu1_intc 11>,
-> +                            <&cpu2_intc 11>,
-> +                            <&cpu3_intc 11>,
-> +                            <&cpu4_intc 11>;
-> +      reg =3D <0xc000000 0x4080>;
-> +      interrupt-controller;
-> +      #interrupt-cells =3D <2>;
-> +      riscv,num-sources =3D <63>;
-> +      riscv,children =3D <&aplic1>, <&aplic2>;
-> +      riscv,delegate =3D <&aplic1 1 63>;
-
-Is aplic2 here for demonstrative purposes only, since it has not been
-delegated any interrupts?
-I suppose it is hardware present on the SoC that is not being used by
-the current configuration?
-
-Thanks,
-Conor.
-
-> +    };
-> +
-> +    aplic1: interrupt-controller@d000000 {
-> +      compatible =3D "riscv,qemu-aplic", "riscv,aplic";
-> +      interrupts-extended =3D <&cpu1_intc 9>,
-> +                            <&cpu2_intc 9>;
-> +      reg =3D <0xd000000 0x4080>;
-> +      interrupt-controller;
-> +      #interrupt-cells =3D <2>;
-> +      riscv,num-sources =3D <63>;
-> +    };
-> +
-> +    aplic2: interrupt-controller@e000000 {
-> +      compatible =3D "riscv,qemu-aplic", "riscv,aplic";
-> +      interrupts-extended =3D <&cpu3_intc 9>,
-> +                            <&cpu4_intc 9>;
-> +      reg =3D <0xe000000 0x4080>;
-> +      interrupt-controller;
-> +      #interrupt-cells =3D <2>;
-> +      riscv,num-sources =3D <63>;
-> +    };
-
-
---CM+OG7HiznyhPXQ1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7X62gAKCRB4tDGHoIJi
-0jdPAQDE7jaXqDBSHkYz30DfCDF68e8vHV/nGNfwySX74TqkmAEA8kiQVjEAphNj
-VrxoMV535/dnuFew0/H+emA4BYc1swU=
-=Whsj
------END PGP SIGNATURE-----
-
---CM+OG7HiznyhPXQ1--
+-- 
+tejun
