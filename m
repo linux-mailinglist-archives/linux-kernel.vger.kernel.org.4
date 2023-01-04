@@ -2,174 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E3065DB4D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 670A165DB51
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239688AbjADRdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 12:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S239745AbjADRfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 12:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235439AbjADRc6 (ORCPT
+        with ESMTP id S235030AbjADRff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 12:32:58 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE201AA07;
-        Wed,  4 Jan 2023 09:32:57 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id tz12so84373457ejc.9;
-        Wed, 04 Jan 2023 09:32:57 -0800 (PST)
+        Wed, 4 Jan 2023 12:35:35 -0500
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CF21AA05;
+        Wed,  4 Jan 2023 09:35:33 -0800 (PST)
+Received: from pecola.lan (unknown [159.196.93.152])
+        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 1739420032;
+        Thu,  5 Jan 2023 01:35:27 +0800 (AWST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MEegHzGTQTeTa1NUIepj4R3JBIHY1olyOe+oTPFcWR8=;
-        b=UEeSJjGPFJrjKKpusUDJdN1P9nuCL4nm4TB99LM7ucYWow3oP/OyZCO4R+AvSm2vDv
-         VZYTsrLTXkauuWXnLie470POs0Ql0p1omob5Ou6iv3Mnl3BRXlaAMczETEhw+pE9ljo1
-         SHWUk9kfJ0rFEZWgwMOA+tcvmBavL7RjqiPA6Cp6aH6B1MGakbPj7Z9JqQFb/Ngifz3C
-         AdxhGp+xgMXHEqqNDIU6Td/k292e5ztnHTqYfwusI6S7C1Ssu6U91se0d68YJfYFwb0S
-         JiLIi348x149+te5Vu5dJHN8iG1gN0swrf8s5Fx+aO8ldV6ldDWP6coDe4YMDTllDbDW
-         wghw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MEegHzGTQTeTa1NUIepj4R3JBIHY1olyOe+oTPFcWR8=;
-        b=NiVD1Plc3ZwMMG8Ag9Tz6+lDo2+43LzMd00J/t2bKqgIVCIeYyxzl+FhZZBuwsREC4
-         AEwo4FyRe27C5Gw8rZFDYphLksfWW2+2m01CR2FEUZuNM3K4q/sdIn87hHiDzUbSV8oF
-         YGnjXe9f26yOMZA8n5fSaXlHo6UH1s+z2VqrELJxjl29htUcMaUBR/z4Zh0d+4Lbk/da
-         lSMpy9wNjgVoiyb2luHSp5EbqOF+MjwEQ3OVn2b4FLEvznBRr+YcgLpWj7ABKviFqPZT
-         BQbnVdOEBL/hwGjeYBGu98FV4IACHeQLszUAo972C7BOUWG7i05WZWB44osL6cXXbHkZ
-         DvDg==
-X-Gm-Message-State: AFqh2koXZcKR1kTmMk2uq9gEJhRycJ2dF6/j9+S3o53wo2prexX6FRae
-        2Nv0bHAapYgvC7fxptOnrtQ=
-X-Google-Smtp-Source: AMrXdXsh2etwUVakYyUdLmkNHEbZayYU/QZf8Fb6zvQ1thqBc5rmTe7M6zeOGVU3GS+4x020mrptAQ==
-X-Received: by 2002:a17:906:3ec8:b0:846:cdd9:d23 with SMTP id d8-20020a1709063ec800b00846cdd90d23mr38536318ejj.19.1672853575691;
-        Wed, 04 Jan 2023 09:32:55 -0800 (PST)
-Received: from skbuf ([188.26.184.223])
-        by smtp.gmail.com with ESMTPSA id l12-20020a17090615cc00b007c0cd272a06sm15490891ejd.225.2023.01.04.09.32.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 09:32:55 -0800 (PST)
-Date:   Wed, 4 Jan 2023 19:32:53 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Hans J. Schultz" <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 2/3] net: dsa: mv88e6xxx: disable hold of
- chip lock for handling
-Message-ID: <20230104173253.77wa6kmi4fzglc6v@skbuf>
-References: <20230104130603.1624945-1-netdev@kapio-technology.com>
- <20230104130603.1624945-1-netdev@kapio-technology.com>
- <20230104130603.1624945-3-netdev@kapio-technology.com>
- <20230104130603.1624945-3-netdev@kapio-technology.com>
+        d=codeconstruct.com.au; s=2022a; t=1672853728;
+        bh=/N0R+ySjnTMdM2rsZ7vk1QeAJ/dma8FcYdzFNNeDzG4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=CB8m11jXSPWlNaT0kTy91CILph1AGDbbBSOO/HrKs4uexZ6c7E6y766M8z0N621sk
+         nDw/SX9ZECUmpo6vbbYZeCcGT/+xMax81sdStb9VmHXf/4FkiVXZmYEzR6QFw8elNU
+         Cd5bG3x10eQUusor9ih4RIIwtNOQ7mPTf20je3RFAtTaWVmJqh9Ys3yaN7k4VsEzNb
+         xmKfH2jD1KXbVfXJbt4YPBySMMyfi3H0UVQiq077697PxYKLYvS18F7ykt+Ai92Q1E
+         w2fNWiVMJc/60K+lskjfWtKyUHEjcq3FXc9pPKp0HoeK9Y0gvKHkHshkLkf/gOEUY6
+         gD/TofMqXIwcQ==
+Message-ID: <33f6f9e66c8143515d36d17bf33d95362830f83f.camel@codeconstruct.com.au>
+Subject: Re: [RFC PATCH v3 2/2] mfd: syscon: allow reset control for syscon
+ devices
+From:   Jeremy Kerr <jk@codeconstruct.com.au>
+To:     Lee Jones <lee@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Date:   Thu, 05 Jan 2023 01:35:26 +0800
+In-Reply-To: <Y7WvXTPxyIGw5y9R@google.com>
+References: <20221211025700.1180843-1-jk@codeconstruct.com.au>
+         <20221211025700.1180843-3-jk@codeconstruct.com.au>
+         <Y7WvXTPxyIGw5y9R@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104130603.1624945-3-netdev@kapio-technology.com>
- <20230104130603.1624945-3-netdev@kapio-technology.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 02:06:02PM +0100, Hans J. Schultz wrote:
-> As functions called under the interrupt handler will need to take the
-> netlink lock, we need to release the chip lock before calling those
-> functions as otherwise double lock deadlocks will occur as userspace
-> calls towards the driver often take the netlink lock and then the
-> chip lock.
-> 
-> The deadlock would look like:
-> 
-> Interrupt handler: chip lock taken, but cannot take netlink lock as
->                    userspace config call has netlink lock.
-> Userspace config: netlink lock taken, but cannot take chip lock as
->                    the interrupt handler has the chip lock.
-
-Ultimately, none of this explanation is really relevant, and it requires
-too much prior reviewer knowledge. I would phrase the commit title as
-"shorten the locked section in mv88e6xxx_g1_atu_prob_irq_thread_fn()"
-and say, as an explanation, that only the hardware access functions (up
-until the call to mv88e6xxx_g1_atu_mac_read()) require the register lock.
-The follow-up code, which processes the ATU violation data, can run
-unlocked, and in a future patch will even run from a context which is
-incompatible with the register lock being held. If you wish, you can
-mention here as a small note that the incompatible context comes from an
-AB/BA ordering inversion with rtnl_lock().
-
-> 
-> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
-> ---
->  drivers/net/dsa/mv88e6xxx/global1_atu.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-> index 61ae2d61e25c..34203e112eef 100644
-> --- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
-> +++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-> @@ -409,11 +409,11 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->  
->  	err = mv88e6xxx_g1_read_atu_violation(chip);
->  	if (err)
-> -		goto out;
-> +		goto out_unlock;
->  
->  	err = mv88e6xxx_g1_read(chip, MV88E6XXX_G1_ATU_OP, &val);
->  	if (err)
-> -		goto out;
-> +		goto out_unlock;
->  
->  	err = mv88e6xxx_g1_atu_fid_read(chip, &fid);
-
-If mv88e6xxx_g1_atu_fid_read() fails, it will goto out, which will exit
-the IRQ handler with the mv88e6xxx_reg_lock() still held.
-
-Probably not a good idea, since the driver will access the registers
-again in the future (errors in IRQ handlers aren't propagated anywhere),
-and the user might need a computer which is not deadlocked.
-
->  	if (err)
-> @@ -421,11 +421,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->  
->  	err = mv88e6xxx_g1_atu_data_read(chip, &entry);
->  	if (err)
-> -		goto out;
-> +		goto out_unlock;
->  
->  	err = mv88e6xxx_g1_atu_mac_read(chip, &entry);
->  	if (err)
-> -		goto out;
-> +		goto out_unlock;
-> +
-> +	mv88e6xxx_reg_unlock(chip);
->  
->  	spid = entry.state;
->  
-> @@ -449,13 +451,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->  						   fid);
->  		chip->ports[spid].atu_full_violation++;
->  	}
-> -	mv88e6xxx_reg_unlock(chip);
->  
->  	return IRQ_HANDLED;
->  
-> -out:
-> +out_unlock:
->  	mv88e6xxx_reg_unlock(chip);
->  
-> +out:
->  	dev_err(chip->dev, "ATU problem: error %d while handling interrupt\n",
->  		err);
->  	return IRQ_HANDLED;
-> -- 
-> 2.34.1
-> 
+SGkgTGVlLAoKPiA+IEBAIC0xMjQsNyArMTI3LDE3IEBAIHN0YXRpYyBzdHJ1Y3Qgc3lzY29uICpv
+Zl9zeXNjb25fcmVnaXN0ZXIoc3RydWN0IGRldmljZV9ub2RlICpucCwgYm9vbCBjaGVja19jbGsp
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0gZWxzZSB7Cj4gPiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSByZWdtYXBfbW1p
+b19hdHRhY2hfY2xrKHJlZ21hcCwgY2xrKTsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChyZXQpCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIGVycl9hdHRhY2g7
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBnb3RvIGVycl9hdHRhY2hfY2xrOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoH0KPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXNl
+dCA9IG9mX3Jlc2V0X2NvbnRyb2xfZ2V0X29wdGlvbmFsX2V4Y2x1c2l2ZShucCwgTlVMTCk7Cj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKElTX0VSUihyZXNldCkpIHsKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gUFRS
+X0VSUihyZXNldCk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGdvdG8gZXJyX2F0dGFjaF9jbGs7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgfSBlbHNlIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgcmV0ID0gcmVzZXRfY29udHJvbF9kZWFzc2VydChyZXNldCk7Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChyZXQpCj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBnb3RvIGVycl9yZXNldDsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+
+IAo+IFRoZSBlbHNlIGlzIHN1cGVyZmx1b3VzLCByaWdodD8KClllcCwgd2UgY291bGQgbW92ZSB0
+aGF0IHJlc2V0X2NvbnRyb2xfZGVhc3NlcnQoKSBvdXQgb2YgdGhlIGVsc2UgYmxvY2suCklmIHRo
+ZXJlIGFyZSBubyBvdGhlciBjaGFuZ2VzLCBJJ2xsIHNlbmQgYSB2NCB3aXRoIHRoYXQuCgpDaGVl
+cnMsCgoKSmVyZW15Cg==
 
