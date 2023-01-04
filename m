@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C7665D29A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 690CF65D2A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234350AbjADM1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+        id S234923AbjADM3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 07:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234206AbjADM1M (ORCPT
+        with ESMTP id S234206AbjADM3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:27:12 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103771A21D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 04:27:11 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id z16so16286769wrw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 04:27:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C30T6tNGFSuxvz3Mz5j5spVtycMF/lADJz0DPiFP6T8=;
-        b=luMd9K3IkxjocbML0QXFirxmtfakpeCmxnFW7ekh8TEqv2B+6u88Ll/XSxONlFR1CC
-         H0sj7UWnqBTF8cMsxY8A5Q1I1H0xQMupfQQhzVXA4jfEvjHi23ZwrVfKpZwgyh+wbL9I
-         VaeKEkIYHn5OGvzlIM/I4/YyP/mKrbPLVc/PykKH9bNVJvkZvG2Xd3EuAJ9wz8L3R81f
-         A2dch1C9pGi42sMsdLXqNwn6T5uDLVHcjmvoH/UKV/9wronAPuHWFNKIJn8YfcoSV4xX
-         piWmF/EfvFWCMAnvekQ+ju7XW0oUtqhWhCjI25HbKsuh25oJ1+blb6HR6qfNTFkk7M6F
-         GMvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C30T6tNGFSuxvz3Mz5j5spVtycMF/lADJz0DPiFP6T8=;
-        b=mOYaPTc3gESyuO68cVmxY2FFzB4GJ3tEo6EXZQmP8ADiQbrVyGRhxi2uJhV6YZTTZ/
-         jk25MPaS4AcMfSzjocogbujeascYuIRwHbEPE2TNPw87OWDZg6SshFzIcbF90yECSZ1Q
-         RVBqG1a3MIhRiRWzIXROYn6MiX43IXI/AchAZDtA7r3tYt8umFvWbubsN+zaJCjt5CGb
-         AsXNossd+giHSx88Ejxa38mozzvuHKti1fAmjGW/CJPBeKMcfMxvVmL22FmTOjnJOemF
-         3MRNDir8/O1LL+OkTqG0qUjCAW5M73QFIuCbAU5tQNFqy9XKW6zZ1yGTbCEF55Va9Esy
-         RJug==
-X-Gm-Message-State: AFqh2kofwByZWKn1J+kIHGL2cz0S+4ZKR1KtVWvek3PCtQcFfx5ozGfy
-        zzVvvZVN1wGWNE/26WeKlxajF3FwjCWl4+brZFY=
-X-Google-Smtp-Source: AMrXdXv53xtPSbIhxmlMfoYs3hxEElTh4PBEm7t6OokhRJO2RAsiyRKmAqzRYpsXcr3bFj74XxxNimMgRJEQ0VS8u+M=
-X-Received: by 2002:a5d:5d8a:0:b0:242:257f:3006 with SMTP id
- ci10-20020a5d5d8a000000b00242257f3006mr1004952wrb.147.1672835229563; Wed, 04
- Jan 2023 04:27:09 -0800 (PST)
+        Wed, 4 Jan 2023 07:29:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7AB1A224;
+        Wed,  4 Jan 2023 04:29:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90D78B81628;
+        Wed,  4 Jan 2023 12:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AB6C433EF;
+        Wed,  4 Jan 2023 12:29:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672835345;
+        bh=VpZBnDQgpO+oMahbk71quy/7eaPxvqN/v3XHlU5yAs8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nvP6ASrZMvHhcAuGAOT+jzapK5d4RDlHuP7MNzgblqPmZshleLtD6q8jIngbDODgC
+         mS0B6DhdIeJcf+JIBlOej9FcVxj9GaXcQXO/O4XGk6/jskWiCAXqWHGpA95RZRSaMn
+         MedCrXfgpzFU2Gbj7mUD3MoP9XeW/jmuCNuGopv1K4JtY+347xB69jAcXQabIjzt59
+         5p24LKC132KD3ukQLYlqpnYjfR4WeJRrZTi1LIG1PMBenCr59P7LI1K22FG29+qAgh
+         GpFKfoL3w1AM37xqSxzvMQKhWP0QtmuqrLFOkhB7MkEE6PktRyg5dqLG3SedrMrgAT
+         Unx2kERSX0QAw==
+Date:   Wed, 4 Jan 2023 12:29:02 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        pvorel@suse.cz, noodles@fb.com, tiwai@suse.de,
+        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
+        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 03/10] KEYS: X.509: Parse Basic Constraints for CA
+Message-ID: <Y7VxDloaHyF8cX5j@kernel.org>
+References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
+ <20221214003401.4086781-4-eric.snowberg@oracle.com>
+ <b0f29738b919e2705d770017f2f1eb0542c2fad4.camel@linux.ibm.com>
 MIME-Version: 1.0
-Sender: michealkeini@gmail.com
-Received: by 2002:a05:6000:250:0:0:0:0 with HTTP; Wed, 4 Jan 2023 04:27:09
- -0800 (PST)
-From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
-Date:   Wed, 4 Jan 2023 00:27:09 -1200
-X-Google-Sender-Auth: 1-TA2zXowpn1vCm3GsNY1SwZ6Uw
-Message-ID: <CAJ9PX1Yj4Wkpn_r4_xBdUxB00bSxbmuricQX+HLW+hrWKMu_9g@mail.gmail.com>
-Subject: Good Day My beloved,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_95,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0f29738b919e2705d770017f2f1eb0542c2fad4.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I came across your e-mail contact prior to a private search while in
-need of a trusted person. My name is Mrs. Aisha Gaddafi, a single
-Mother and a Widow with three Children. I am the only biological
-Daughter of the late Libyan President (Late Colonel Muammar Gaddafi)I
-have a business Proposal for you worth $27.5 Million dollars and I
-need mutual respect, trust, honesty and transparency, adequate support
-and assistance, Hope to hear from you for further details.
-Warmest regards
-Mrs Aisha Gaddafi
+On Thu, Dec 15, 2022 at 06:10:04AM -0500, Mimi Zohar wrote:
+> > diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
+> > index a299c9c56f40..7c5c0ad1c22e 100644
+> > --- a/crypto/asymmetric_keys/x509_parser.h
+> > +++ b/crypto/asymmetric_keys/x509_parser.h
+> > @@ -38,6 +38,7 @@ struct x509_certificate {
+> >  	bool		self_signed;		/* T if self-signed (check unsupported_sig too) */
+> >  	bool		unsupported_sig;	/* T if signature uses unsupported crypto */
+> >  	bool		blacklisted;
+> > +	bool		root_ca;		/* T if basic constraints CA is set */
+> >  }; 
+> 
+> The variable "root_ca" should probably be renamed to just "ca", right?
+
+Perhaps is_ca?
+
+BR, Jarkko
