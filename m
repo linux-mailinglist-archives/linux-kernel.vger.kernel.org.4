@@ -2,111 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9383265CD8C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 959F265CD8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbjADHVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 02:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
+        id S233707AbjADHVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 02:21:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjADHVI (ORCPT
+        with ESMTP id S233067AbjADHVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 02:21:08 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19957E99;
-        Tue,  3 Jan 2023 23:20:58 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30453MQO023989;
-        Wed, 4 Jan 2023 07:20:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=rDjGqkVgd6zk9OUmcD2sbF0qmef7zF+caei8zGo4y8w=;
- b=ZlVGfdJGNoiaMCf9rp/bm+kaOZnd3gP4LEZY82Q9V82suM2qNim87OEK0mDeF8QQl8ep
- HdgbwVbZx1Z2wUPVJQIn7mtRD/UOht7Ymwl9pbtk4jY1r3+Q45TavBDetDwVFA7SjlbT
- HfW37B2d8c+7oZTvje8hpJg0kKb0NGeXYivHQ6EnfYnop9BQp3VfF8Zhcr550lsfcXjy
- Yv+cU4aykEoUCePIaHiAoys8uVBT2idEs0rnaRgjj9fdcuJfNG0r6uILXzH6AJKeUIEw
- vnG3YYLYH4v3MnWknTcKllxJzvc45Awy5tFCQ0iiGZ4pc6qTUFKlVpY30LyKS8x4qYAA ew== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvhh51hu4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 07:20:54 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303Mh0ID003741;
-        Wed, 4 Jan 2023 07:20:52 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mtcbfcwak-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 07:20:52 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3047KnEA33751328
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 Jan 2023 07:20:49 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C86F92004B;
-        Wed,  4 Jan 2023 07:20:49 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ABAA120040;
-        Wed,  4 Jan 2023 07:20:49 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed,  4 Jan 2023 07:20:49 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] fix out-of-bounds access when specifying invalid
- console
-References: <20221209112737.3222509-1-svens@linux.ibm.com>
-Date:   Wed, 04 Jan 2023 08:20:49 +0100
-In-Reply-To: <20221209112737.3222509-1-svens@linux.ibm.com> (Sven Schnelle's
-        message of "Fri, 9 Dec 2022 12:27:35 +0100")
-Message-ID: <yt9dh6x6n4tq.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Wed, 4 Jan 2023 02:21:09 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A95FF04;
+        Tue,  3 Jan 2023 23:21:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672816865; x=1704352865;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7liNCCRrFXPCHaux0+GTNz9npfiWKG1pQ2+rp8wmVNs=;
+  b=R33U12flHIz+tCCfIIq60q/CoZEjObvGqxf3tobC85T/Iq4MogR8l0Zt
+   43bCb1KA033W3mhlEJVXVyYKfb+xctFhVBwydCJqtkZCB0fKBo4cC711p
+   rW3DdufaVP7Gvnsz6umNwHsOs/trfn5VFVjX0pVXMEwq/fna5r+oYPoJS
+   4X+BWbMDXYoNhVxSCHr6USUSk9r/hOiX94obHhLyvE2Pg8rew+urKvR0x
+   b/EXXU9ICFlzLJpr9oI26w6HAGdEmKrYVILI2YD0U7SQEE0gNF1hqecKr
+   9+aI5ZdrXPtGOVNU/gV0xaqUqHhH2xSnnwyH1Fr+XoDRAF2RFRp+jFilN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="302234725"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="302234725"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 23:21:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="687447285"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="687447285"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 23:21:02 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 18480202DD;
+        Wed,  4 Jan 2023 09:21:00 +0200 (EET)
+Date:   Wed, 4 Jan 2023 07:21:00 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     Robert Mader <robert.mader@collabora.com>,
+        linux-kernel@vger.kernel.org, nicholas@rothemail.net,
+        javierm@redhat.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: i2c: imx258: Parse and register properties
+Message-ID: <Y7Uo3JlOoGJAoorz@paasikivi.fi.intel.com>
+References: <20221225154234.378555-1-robert.mader@collabora.com>
+ <20230102140631.hadlh3stozecnzpj@uno.localdomain>
+ <20f405f3-0a82-5d2f-2b0d-ce0d510b5098@collabora.com>
+ <20230103171624.qx6hm2exs3d5lg53@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UwaY8cH2TmC-LY2GUG3Jfnf0jygc6mif
-X-Proofpoint-GUID: UwaY8cH2TmC-LY2GUG3Jfnf0jygc6mif
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-04_04,2023-01-03_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- adultscore=0 mlxscore=0 phishscore=0 spamscore=0 bulkscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
- mlxlogscore=458 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301040054
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230103171624.qx6hm2exs3d5lg53@uno.localdomain>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sven Schnelle <svens@linux.ibm.com> writes:
+Hi Jacopo, Robert,
 
-> Hi,
->
-> these two patches fix a crash in the tty driver when a user specifies an
-> invalid console like 'console=tty3000'. The first patch adds a check to
-> tty_driver_lookup_tty(), the second one prevents that such a console gets
-> registered in the vt driver.
->
-> Changes in v2:
-> - trim commit message in first patch
-> - add second patch as suggested by Jiri Slaby
->
-> Sven Schnelle (2):
->   tty: fix out-of-bounds access in tty_driver_lookup_tty()
->   tty/vt: prevent registration of console with invalid number
->
->  drivers/tty/tty_io.c | 8 +++++---
->  drivers/tty/vt/vt.c  | 6 ++++++
->  2 files changed, 11 insertions(+), 3 deletions(-)
+On Tue, Jan 03, 2023 at 06:16:24PM +0100, Jacopo Mondi wrote:
+> Hi Robert
+> 
+> On Tue, Jan 03, 2023 at 03:11:44PM +0100, Robert Mader wrote:
+> > On 02.01.23 15:06, Jacopo Mondi wrote:
+> > > Hi Robert
+> > >
+> > > On Sun, Dec 25, 2022 at 04:42:34PM +0100, Robert Mader wrote:
+> > > > Analogous to e.g. the imx219. This enables propagating
+> > > > V4L2_CID_CAMERA_SENSOR_ROTATION values so that libcamera
+> > > > can detect the correct rotation from the device tree
+> > > > and propagate it further to e.g. Pipewire.
+> > > >
+> > > > Signed-off-by: Robert Mader <robert.mader@collabora.com>
+> > > > ---
+> > > >   drivers/media/i2c/imx258.c | 13 ++++++++++++-
+> > > >   1 file changed, 12 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+> > > > index eab5fc1ee2f7..85819043d1e3 100644
+> > > > --- a/drivers/media/i2c/imx258.c
+> > > > +++ b/drivers/media/i2c/imx258.c
+> > > > @@ -9,6 +9,7 @@
+> > > >   #include <linux/pm_runtime.h>
+> > > >   #include <media/v4l2-ctrls.h>
+> > > >   #include <media/v4l2-device.h>
+> > > > +#include <media/v4l2-fwnode.h>
+> > > >   #include <asm/unaligned.h>
+> > > >
+> > > >   #define IMX258_REG_VALUE_08BIT		1
+> > > > @@ -1149,6 +1150,7 @@ static int imx258_init_controls(struct imx258 *imx258)
+> > > >   {
+> > > >   	struct i2c_client *client = v4l2_get_subdevdata(&imx258->sd);
+> > > >   	struct v4l2_ctrl_handler *ctrl_hdlr;
+> > > > +	struct v4l2_fwnode_device_properties props;
+> > > Might be nicer to move this one line up
+> >
+> >  Can you say what's your reasoning? I personally slightly prefer
+> > alphabetical order, but no strong opinion :)
+> >
+> 
+> I've often been instructed to try to respect the inverse-xmas-tree
 
-Gentle ping... I couldn't find that this was applied anywhere?
+I'd advise the same, unless there are other reasons to arrange the lines
+differently.
 
-Thanks
-Sven
+-- 
+Kind regards,
+
+Sakari Ailus
