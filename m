@@ -2,171 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA13665CB98
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2D965CB9A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238944AbjADBlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 20:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S238958AbjADBmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 20:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233577AbjADBky (ORCPT
+        with ESMTP id S238875AbjADBmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 20:40:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5114DB4;
-        Tue,  3 Jan 2023 17:40:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25B6B614F9;
-        Wed,  4 Jan 2023 01:40:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FBFBC433A1;
-        Wed,  4 Jan 2023 01:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672796452;
-        bh=4+YCVSlmS1xGxI66GjUsM1FciiRv5pR0ZH+g1/QKoos=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hF5inMd2JJa2s9C62pR/YMr3UcBLXs7OeFvbq1rlqV4Hz2x+8e5Q4ylkoJuFXSBua
-         l0EegukYO5PjZe3Bj0DNsVywqQp169cpPLPxQsG01l/SYZOkInqb5SjUa2XZfNgGz4
-         xPgK0x52pl6YC2zKaWszZb0R2dGiLNXiekoU7tEB9WfJ0S1g0KM81yBediPfvM4vpW
-         nD77GSaDTq0XngKa7M+oyu4b1mFkkDgOQ6tFmpBbM4UIVICZNhd34fmZtUz5xcCxOO
-         0oMYAcrFNTXRv+UDs+64ibDK99VwHZXYL00c9dHg+DCPrUNDZemUYULK4k7Cb26H3B
-         S1DXIMNIizfrA==
-Received: by mail-ej1-f50.google.com with SMTP id tz12so79279912ejc.9;
-        Tue, 03 Jan 2023 17:40:52 -0800 (PST)
-X-Gm-Message-State: AFqh2kpaIFSWguqRCL13VIb6ImBZmBtOkzzYTgxWsLdr+ZJLa51WOIWr
-        XJ1RvFaOfmw+iWbOBVLwGSB+PtgD8jqK4XOM7a4=
-X-Google-Smtp-Source: AMrXdXuguKZK0xV2EbDa692rlZxWl3jbDoL9vGT6mVExfffLZNxoo/dIejOpWwEoJqQtPyJfzfwjMbyJ83re0sVpEew=
-X-Received: by 2002:a17:906:308a:b0:7c0:f7b0:fbbb with SMTP id
- 10-20020a170906308a00b007c0f7b0fbbbmr4720616ejv.266.1672796450559; Tue, 03
- Jan 2023 17:40:50 -0800 (PST)
+        Tue, 3 Jan 2023 20:42:11 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09928BF42
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:42:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672796531; x=1704332531;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=3FWdbGNJ00seTicTD9h7GyRV6nTIv2Ka0HqJ4nF8V0I=;
+  b=Ano/4Zc9aom6Eg4G6+cSwKfGCgs15yiFddyrESEGtULvFnEVoA1sAz2h
+   yXMwiXh53bahTuxQ+5XZE8ygfmYqaFnG8T+i2LUDhEKqIwpGWVuO+pnqh
+   itc6Mgz1XuQW5SDumBLt4+UqUkStx5+OwcDSWb++R9PbHfdEbPvYb6Y3u
+   kTWu4elXBdjrlUEtaHS+0cVUIQxPHnO6EOR+IdOSw7QvyivwUHjcK5cVx
+   A3VN22MocF6TC9zhWbtmaZ+ePFshqbX8x8DcWWc8b8WaPhQsR49pYCAIX
+   BnkaAEbuFxPleBKOl0SeRMnsYWyHj9C4r/x1RnaWGqUHZjjcG0KmFZ1JF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="302179909"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="302179909"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 17:42:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="656956601"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="656956601"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 17:42:07 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Matthew Wilcox" <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        "Alistair Popple" <apopple@nvidia.com>,
+        haoxin <xhao@linux.alibaba.com>
+Subject: Re: [PATCH 8/8] migrate_pages: batch flushing TLB
+References: <20221227002859.27740-1-ying.huang@intel.com>
+        <20221227002859.27740-9-ying.huang@intel.com>
+        <D8F02562-AA7E-4868-BE58-F1144728A352@nvidia.com>
+Date:   Wed, 04 Jan 2023 09:41:14 +0800
+In-Reply-To: <D8F02562-AA7E-4868-BE58-F1144728A352@nvidia.com> (Zi Yan's
+        message of "Tue, 03 Jan 2023 14:19:23 -0500")
+Message-ID: <87o7rfm5z9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230103033531.2011112-1-guoren@kernel.org> <20230103033531.2011112-4-guoren@kernel.org>
- <36314eb6-e41d-30b9-9ac4-12b88a108b7b@ghiti.fr>
-In-Reply-To: <36314eb6-e41d-30b9-9ac4-12b88a108b7b@ghiti.fr>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 4 Jan 2023 09:40:38 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTSretKkJGNV7Y6iJboPuAWUQ=to=RPA8_-Nz8dnufGAg@mail.gmail.com>
-Message-ID: <CAJF2gTTSretKkJGNV7Y6iJboPuAWUQ=to=RPA8_-Nz8dnufGAg@mail.gmail.com>
-Subject: Re: [PATCH -next V12 3/7] riscv: entry: Add noinstr to prevent
- instrumentation inserted
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        bjorn@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 5:12 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
+Zi Yan <ziy@nvidia.com> writes:
+
+> On 26 Dec 2022, at 19:28, Huang Ying wrote:
 >
-> Hi Guo,
+>> The TLB flushing will cost quite some CPU cycles during the folio
+>> migration in some situations.  For example, when migrate a folio of a
+>> process with multiple active threads that run on multiple CPUs.  After
+>> batching the _unmap and _move in migrate_pages(), the TLB flushing can
+>> be batched easily with the existing TLB flush batching mechanism.
+>> This patch implements that.
+>>
+>> We use the following test case to test the patch.
+>>
+>> On a 2-socket Intel server,
+>>
+>> - Run pmbench memory accessing benchmark
+>>
+>> - Run `migratepages` to migrate pages of pmbench between node 0 and
+>>   node 1 back and forth.
+>>
+>> With the patch, the TLB flushing IPI reduces 99.1% during the test and
+>> the number of pages migrated successfully per second increases 291.7%.
+>>
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: Oscar Salvador <osalvador@suse.de>
+>> Cc: Matthew Wilcox <willy@infradead.org>
+>> Cc: Bharata B Rao <bharata@amd.com>
+>> Cc: Alistair Popple <apopple@nvidia.com>
+>> Cc: haoxin <xhao@linux.alibaba.com>
+>> ---
+>>  mm/migrate.c |  4 +++-
+>>  mm/rmap.c    | 20 +++++++++++++++++---
+>>  2 files changed, 20 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 70a40b8fee1f..d7413164e748 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1215,7 +1215,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
+>>  		/* Establish migration ptes */
+>>  		VM_BUG_ON_FOLIO(folio_test_anon(src) &&
+>>  			       !folio_test_ksm(src) && !anon_vma, src);
+>> -		try_to_migrate(src, 0);
+>> +		try_to_migrate(src, TTU_BATCH_FLUSH);
+>>  		page_was_mapped = 1;
+>>  	}
+>>
+>> @@ -1732,6 +1732,8 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  	stats->nr_thp_failed += thp_retry;
+>>  	stats->nr_failed_pages += nr_retry_pages;
+>>  move:
+>> +	try_to_unmap_flush();
+>> +
+>>  	retry = 1;
+>>  	for (pass = 0; pass < 10 && (retry || large_retry); pass++) {
+>>  		retry = 0;
+>> diff --git a/mm/rmap.c b/mm/rmap.c
+>> index b616870a09be..2e125f3e462e 100644
+>> --- a/mm/rmap.c
+>> +++ b/mm/rmap.c
+>> @@ -1976,7 +1976,21 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+>>  		} else {
+>>  			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+>>  			/* Nuke the page table entry. */
+>> -			pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>> +			if (should_defer_flush(mm, flags)) {
+>> +				/*
+>> +				 * We clear the PTE but do not flush so potentially
+>> +				 * a remote CPU could still be writing to the folio.
+>> +				 * If the entry was previously clean then the
+>> +				 * architecture must guarantee that a clear->dirty
+>> +				 * transition on a cached TLB entry is written through
+>> +				 * and traps if the PTE is unmapped.
+>> +				 */
+>> +				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
+>> +
+>> +				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
+>> +			} else {
+>> +				pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>> +			}
+>>  		}
+>>
 >
-> On 1/3/23 04:35, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Without noinstr the compiler is free to insert instrumentation (think
-> > all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> > yet ready to run this early in the entry path, for instance it could
-> > rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
-> >
-> > Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.progra=
-mming.kicks-ass.net/
-> > Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > ---
-> >   arch/riscv/kernel/traps.c | 4 ++--
-> >   arch/riscv/mm/fault.c     | 2 +-
-> >   2 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > index 549bde5c970a..96ec76c54ff2 100644
-> > --- a/arch/riscv/kernel/traps.c
-> > +++ b/arch/riscv/kernel/traps.c
-> > @@ -95,9 +95,9 @@ static void do_trap_error(struct pt_regs *regs, int s=
-igno, int code,
-> >   }
-> >
-> >   #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
-> > -#define __trap_section               __section(".xip.traps")
-> > +#define __trap_section __noinstr_section(".xip.traps")
-> >   #else
-> > -#define __trap_section
-> > +#define __trap_section noinstr
-> >   #endif
-> >   #define DO_ERROR_INFO(name, signo, code, str)                        =
-       \
-> >   asmlinkage __visible __trap_section void name(struct pt_regs *regs) \
-> > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> > index d86f7cebd4a7..b26f68eac61c 100644
-> > --- a/arch/riscv/mm/fault.c
-> > +++ b/arch/riscv/mm/fault.c
-> > @@ -204,7 +204,7 @@ static inline bool access_error(unsigned long cause=
-, struct vm_area_struct *vma)
-> >    * This routine handles page faults.  It determines the address and t=
-he
-> >    * problem, and then passes it off to one of the appropriate routines=
-.
-> >    */
-> > -asmlinkage void do_page_fault(struct pt_regs *regs)
-> > +asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+> This is only for PTE mapped pages, right? We also need something similar
+> in set_pmd_migration_entry() in mm/huge_memory.c for PMD-mapped THPs.
+> Oh, since you limit NR_MAX_BATCHED_MIGRATION to HPAGE_PMD_NR and count
+> nr_pages with folio_nr_pages(), THPs will only be migrated one by one.
+> This is not obvious from the cover letter.
 >
->
-> (I dug the archive but can't find the series before v4, so sorry if it
-> was already answered)
->
-> I think we should not disable the instrumentation of those trap handlers
-> as at least profiling them with ftrace would provide valuable
-> information (and gcov would be nice too): why do we need to do that? A
-> trap very early in the boot process is not recoverable anyway.
-Everything that calls irqentry_enter() should be noinstr, and this
-patch prepares for the next generic_entry convert.
+> Are you planning to support batched THP migration? If not, it might be
+> better to update cover letter to be explicit about it and add comments
+> in migrate_pages(). It would be nice to also note that we need to
+> increase NR_MAX_BATCHED_MIGRATION beyond HPAGE_PMD_NR and make similar
+> changes in set_pmd_migration_entry() to get batched THP migration support.
 
-eg:
-asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
-{
-        irqentry_state_t state =3D irqentry_enter(regs);
+For now, I have no plan to support batching THP migration.  Because the
+overhead of THP TLB shootdown is only 1/512 of that of the 4KB normal
+page.  I will add some words in patch description for that.
 
-        __do_page_fault(regs);
+Best Regards,
+Huang, Ying
 
-        local_irq_disable();
-
-        irqentry_exit(regs, state);
-}
-NOKPROBE_SYMBOL(do_page_fault);
-
-You still could profile __do_page_fault.
-
->
-> And I took a look at other architectures, none of them disables the
-> instrumentation on do_page_fault.
-That's not true, have a look at power & arm64. All of them have some
-limitations at the entry of page_fault.
-
->
->
-> >   {
-> >       struct task_struct *tsk;
-> >       struct vm_area_struct *vma;
-
-
-
---=20
-Best Regards
- Guo Ren
+>>  		/* Set the dirty flag on the folio now the pte is gone. */
+>> @@ -2148,10 +2162,10 @@ void try_to_migrate(struct folio *folio, enum ttu_flags flags)
+>>
+>>  	/*
+>>  	 * Migration always ignores mlock and only supports TTU_RMAP_LOCKED and
+>> -	 * TTU_SPLIT_HUGE_PMD and TTU_SYNC flags.
+>> +	 * TTU_SPLIT_HUGE_PMD, TTU_SYNC, and TTU_BATCH_FLUSH flags.
+>>  	 */
+>>  	if (WARN_ON_ONCE(flags & ~(TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
+>> -					TTU_SYNC)))
+>> +					TTU_SYNC | TTU_BATCH_FLUSH)))
+>>  		return;
+>>
+>>  	if (folio_is_zone_device(folio) &&
+>> -- 
+>> 2.35.1
