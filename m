@@ -2,74 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9568A65CD0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935F365CD11
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbjADG1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:27:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
+        id S233564AbjADG15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbjADG1O (ORCPT
+        with ESMTP id S233126AbjADG1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:27:14 -0500
-Received: from mail-il1-x145.google.com (mail-il1-x145.google.com [IPv6:2607:f8b0:4864:20::145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B71519C3D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 22:26:24 -0800 (PST)
-Received: by mail-il1-x145.google.com with SMTP id n15-20020a056e021baf00b0030387c2e1d3so20581722ili.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 22:26:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fPXQ+JT8y7Oy9kiSQ2Hk6loKbj3gnxbxJCYs2Zsnc/Q=;
-        b=7vyFHEL1weG7RRScbyGVd9tjjTYysVKDF+tN3fWxsfRuU7vxhEDdNrx9uLhHdYXyDy
-         5AWP/Ce78i+U3wXxyLZ/sbPWMC/XJcnNbHMr2zXYjkbL5McSvR6pvxBWtaW0/SW/IOnd
-         0c+AOgvY6LI9ssEUqxqBqRRmqmnZF7Ky70Z1NnGBdhgQrAzG2KddAtGL+A+E17A//j/+
-         qYtTqQSHtZXIivtEFYcSqwfrw78PbWvCYGXZdUX4xo7LS9TmZPHA3ss5zY1YktFwb4Ck
-         vvc6CxuwGlSThBCAMZOBKenj1awPsCHiCG108rqERlq+KJgEGgpF5OPyOWXEJhINnVP9
-         W4tg==
-X-Gm-Message-State: AFqh2kqCbA8XBpQNuDI4DK5666XGlYKvj59Jk0MybQZB1CZgXLTzWJ5b
-        nhpy5LRsTpZnEcMIcE5RpqOv+pq/3IxpX0hkPSek9W0gZGBN
-X-Google-Smtp-Source: AMrXdXt3nPyc+EJ2585XP9CQHqISVPTiI/GmusdOlsK95rKhemXncIf1Gk6Bp9qJ3nqHvYyXP1DRKkFCEhl8PskhLU8CFd4FLE4p
+        Wed, 4 Jan 2023 01:27:35 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62D91A224;
+        Tue,  3 Jan 2023 22:26:45 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3046QM1J054819;
+        Wed, 4 Jan 2023 00:26:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672813582;
+        bh=50kwzeglqLbLMm3hsB8pVB3cbz/k2cqY2lSOghSdHi0=;
+        h=From:To:CC:Subject:Date;
+        b=XshEnZoIwSAV2ogPAWiDkr4AE/Cew8HetGElgh2WroqgFcrcGtN+ZohAFswf7HVIJ
+         c31wNmb2oswu4tOTtzZLPCxJPD8RHwiPAukAYmA8GaoNpIic+Qu2ZtsFkrrOthuxOx
+         /Ky/NsW0uL+pqngVdd3whvTtLofp6yTHZUYYTegA=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3046QMkI104557
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 4 Jan 2023 00:26:22 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 4
+ Jan 2023 00:26:22 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 4 Jan 2023 00:26:22 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3046QLJt047826;
+        Wed, 4 Jan 2023 00:26:21 -0600
+From:   Dhruva Gole <d-gole@ti.com>
+To:     <broonie@kernel.org>
+CC:     Dhruva Gole <d-gole@ti.com>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Vignesh <vigneshr@ti.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Vaishnav Achath <vaishnav.a@ti.com>
+Subject: [PATCH 0/2] spi: cqspi: Fix register reads in STIG Mode
+Date:   Wed, 4 Jan 2023 11:56:02 +0530
+Message-ID: <20230104062604.1556763-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:8788:0:b0:38a:49b8:bc49 with SMTP id
- t8-20020a028788000000b0038a49b8bc49mr3734672jai.66.1672813521702; Tue, 03 Jan
- 2023 22:25:21 -0800 (PST)
-Date:   Tue, 03 Jan 2023 22:25:21 -0800
-In-Reply-To: <20230104003141.3986-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bc96d105f16a3fdc@google.com>
-Subject: Re: [syzbot] [reiserfs?] INFO: task hung in reiserfs_sync_fs
-From:   syzbot <syzbot+4dadbee41d087d9c6234@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Intent of these patches is to fix register reads in STIG mode and also
+use STIG mode while reading flash registers.
+Currently if you try to read a register while in STIG mode there is no
+support for ADDR and thus naturally a register never gets read from the
+flash.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+Logs demonstrating the usage and working of QSPI-NOR Flash (Cypress
+s25hs512t) on a modified AM625 SK EVM can be found on the link below:
+https://gist.github.com/DhruvaG2000/a9b90d3d9c60edd3b2d8a360d869a00b
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5544 } 2644 jiffies s: 2781 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
+A series very similar to this was also sent to u-boot and the latest
+revision can be viewed here:
+[PATCH V4 0/2] spi: cqspi: Fix register reads in STIG Mode
+https://lore.kernel.org/u-boot/20230103063112.1165898-1-d-gole@ti.com/
 
 
-Tested on:
+Dhruva Gole (2):
+  spi: cadence-quadspi: setup ADDR Bits in cmd reads
+  spi: cadence-quadspi: use STIG mode for small reads
 
-commit:         69b41ac8 Merge tag 'for-6.2-rc2-tag' of git://git.kern..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=178087b2480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=46221e8203c7aca6
-dashboard link: https://syzkaller.appspot.com/bug?extid=4dadbee41d087d9c6234
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10fd1f84480000
+ drivers/spi/spi-cadence-quadspi.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
 
