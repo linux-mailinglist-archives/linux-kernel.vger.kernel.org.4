@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D1065D3C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82EB65D3D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237727AbjADNHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:07:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S239296AbjADNHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:07:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239347AbjADNGa (ORCPT
+        with ESMTP id S239173AbjADNGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:06:30 -0500
+        Wed, 4 Jan 2023 08:06:37 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C72537517
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:06:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7418B3753E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:06:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672837575; x=1704373575;
+  t=1672837581; x=1704373581;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LJMM7gEaI2hxsNih1EgB3wunRnyqdXlkoKPFLMX6xOs=;
-  b=UO1yZ01+5nbitr12vWZYauAH/6Ljxa3nXkVhQhZSFT6OTx6RB9jsSg17
-   QSafmfDtxDaWzu+Vxso+fgVjVYMm422iwcn87TVl5mRiLGKPrqS3qkl5M
-   QlHNHEHbyk+tH5nryNJp40dzmiIxjZWX1TNLCsQHhvLxMYOmqZ67mTKG4
-   fOi/39F85+u+WvEWyey1/zqAvapBFYmDt6qCaW0Ru1XAaqoGV36Ow7Zcd
-   C7YqjqHijPzUAyUXyprhe6WQdSvn67Xrr3asUNXiqRlua5eIxUeWfgTM0
-   XsK8hU8bG6IecRKTe9pRmaATCpur+8jD7eXw3STATGcrmw7o38OqrVZTJ
+  bh=+FAqxiLeKTjC5EQBIkZoPJaAUfpQlzWcuzFJW+dcWDQ=;
+  b=cKbaUosIVxQJlhUfHm+bLYaylBqQpBfnuiraFRM7tox6eUL9HaXWu4nN
+   i7bvH30DzYWHo9VcOKWUUeU8gg5pT8HesyRGra7enjT9JciSSCGwnsqSB
+   H7AuKg7iuaMR/ekauiNYlo5S0LZkRtSvpp8VyDJN6Cx2VCg9EuyZevNzs
+   CwggdyNSBVwo8+CiXz7fbFIZjLz+LN9X3/reTog1CTBBKIvzcjfEf0Wvs
+   AQHpVDSzkjKgu1reXHSkT+Z/CSTAJfQS1Ug7WIWfOd98p9giye4OtoXLY
+   fXAaV5FjT8ji0UqeLFTF1EMIlqOTV1TF0g9eDm8XccY1GLSZDaAssftgw
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320639875"
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320639913"
 X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="320639875"
+   d="scan'208";a="320639913"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:06:14 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:06:20 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529076"
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529095"
 X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="797529076"
+   d="scan'208";a="797529095"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:06:08 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:06:14 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -65,9 +65,9 @@ Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v4 08/19] iommu/sprd: Remove detach_dev callback
-Date:   Wed,  4 Jan 2023 20:57:14 +0800
-Message-Id: <20230104125725.271850-9-baolu.lu@linux.intel.com>
+Subject: [PATCH v4 09/19] iommu/sun50i: Remove detach_dev callback
+Date:   Wed,  4 Jan 2023 20:57:15 +0800
+Message-Id: <20230104125725.271850-10-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230104125725.271850-1-baolu.lu@linux.intel.com>
 References: <20230104125725.271850-1-baolu.lu@linux.intel.com>
@@ -86,46 +86,23 @@ The IOMMU driver supports default domain, so the detach_dev op will never
 be called. Remove it to avoid dead code.
 
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/sprd-iommu.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+ drivers/iommu/sun50i-iommu.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
-index 219bfa11f7f4..ae94d74b73f4 100644
---- a/drivers/iommu/sprd-iommu.c
-+++ b/drivers/iommu/sprd-iommu.c
-@@ -255,21 +255,6 @@ static int sprd_iommu_attach_device(struct iommu_domain *domain,
- 	return 0;
- }
- 
--static void sprd_iommu_detach_device(struct iommu_domain *domain,
--					     struct device *dev)
--{
--	struct sprd_iommu_domain *dom = to_sprd_domain(domain);
--	struct sprd_iommu_device *sdev = dom->sdev;
--	size_t pgt_size = sprd_iommu_pgt_size(domain);
--
--	if (!sdev)
--		return;
--
--	dma_free_coherent(sdev->dev, pgt_size, dom->pgt_va, dom->pgt_pa);
--	sprd_iommu_hw_en(sdev, false);
--	dom->sdev = NULL;
--}
--
- static int sprd_iommu_map(struct iommu_domain *domain, unsigned long iova,
- 			  phys_addr_t paddr, size_t pgsize, size_t pgcount,
- 			  int prot, gfp_t gfp, size_t *mapped)
-@@ -414,7 +399,6 @@ static const struct iommu_ops sprd_iommu_ops = {
- 	.owner		= THIS_MODULE,
+diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
+index 5b585eace3d4..2d993d0cea7d 100644
+--- a/drivers/iommu/sun50i-iommu.c
++++ b/drivers/iommu/sun50i-iommu.c
+@@ -834,7 +834,6 @@ static const struct iommu_ops sun50i_iommu_ops = {
+ 	.probe_device	= sun50i_iommu_probe_device,
  	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev	= sprd_iommu_attach_device,
--		.detach_dev	= sprd_iommu_detach_device,
- 		.map_pages	= sprd_iommu_map,
- 		.unmap_pages	= sprd_iommu_unmap,
- 		.iotlb_sync_map	= sprd_iommu_sync_map,
+ 		.attach_dev	= sun50i_iommu_attach_device,
+-		.detach_dev	= sun50i_iommu_detach_device,
+ 		.flush_iotlb_all = sun50i_iommu_flush_iotlb_all,
+ 		.iotlb_sync_map = sun50i_iommu_iotlb_sync_map,
+ 		.iotlb_sync	= sun50i_iommu_iotlb_sync,
 -- 
 2.34.1
 
