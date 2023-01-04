@@ -2,126 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DA565D6CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6917365D6DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234874AbjADPDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S234719AbjADPHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbjADPDG (ORCPT
+        with ESMTP id S234555AbjADPHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:03:06 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB868A466
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 07:03:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1672844561; bh=Gxx8p8mpsg9J44j8zqgcHN1uUXlyWdyKyrs6bhfzWxk=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=nCKXozbQ901kZvOchjH1D10FPAwM2IqGb1fn/ViN2k6hDV7thbPOMh5+U6HXTJeYt
-         utDnNsTZQ1VxPgBpobrmh1MM4nU76m2Juy1w532D2O+D2UqfJuf2lGn7u7AJWNKrc3
-         LII0El9YhNLXA3D4jg80tp7lrgOs1MusTJa+oTqY=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Wed,  4 Jan 2023 16:02:41 +0100 (CET)
-X-EA-Auth: ns1gYKoffHkdcXKgpzCMeK7t42qdBucUa46mVRkBNVeaeO+9qZ2eFPZ/rjcUQzgTjV+E5JIKm/U0moGyItmS6KukCk/RJckR
-Date:   Wed, 4 Jan 2023 20:32:35 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Alex Elder <elder@ieee.org>
-Cc:     Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH] staging: greybus: Replace zero-length array by
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <Y7WVC1mpIWdoi+IS@qemulion>
-References: <Y7T5MYfANf2xVsEx@qemulion>
- <f943d3ca-7cf7-cb4d-5dc7-1e45015ba213@ieee.org>
+        Wed, 4 Jan 2023 10:07:23 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660D5F5B6
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 07:07:21 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso1739794pjf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 07:07:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PKEgnyMFwcgXk2aMsB6+O7Pav/CXcn/a1bbl0p4KdeE=;
+        b=ZThp9cDYo0RcqzGNHuox72sutY4mSPfjzqeP0zFU0gendX9FC+UYl2mBH1WLfwh4+H
+         +WftiO1in1+fMZrImQ3GlQ2KLNQXt1GSzCifjXORCQmWudmc2US1fEyP46wTEublqNB5
+         ZgsMNhf6VcvwEQyWG+YZA0jbxjvIRgrziCewk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PKEgnyMFwcgXk2aMsB6+O7Pav/CXcn/a1bbl0p4KdeE=;
+        b=vBuK9Tcn1V0kYywJzTFTJvaDswt6SE9DoIL9F6ZecpLZJt0xU3hzH224BE0H8iTwZH
+         C54tq4maBRqllD0JDch77B0l+XlWS+OXJtBkOmAR8CdJkwB8hsuvQToAzLk37a/pmeLK
+         vOzoKiPLOUuk8ovHKgobr4LgTFwYBc6ILuP8lHDe47KlSiQg0JQk/30v6gXEDz2qPQZg
+         JwFCOvCQCVklRcR7MX/CwKXZ+MqR105ptOUAjkwIM3KFQIl8J0L3Nf10D3h+YBsoCe7X
+         jlKF+tLbgyIZIgZKJKq7/3ejKtVdLwxA0wkYyQts3Gy5q3aSzFDr/SRBcLQP8ykDeu6Q
+         AsgQ==
+X-Gm-Message-State: AFqh2kq4jilSR0ZNbGzsrFBTHUtY5kULm7ua25pJv+3R5c3T9r1nqmN0
+        kIL1jnYlUx294mOROJn3q7wH1g==
+X-Google-Smtp-Source: AMrXdXsc2/xGMSPne4LohlL4RiBczdcrR/6eEz5BBnK2pG8Tqd64LQTPAPlrneexzuG2cct5/RfJOw==
+X-Received: by 2002:a05:6a21:869f:b0:af:98cd:846a with SMTP id ox31-20020a056a21869f00b000af98cd846amr52100745pzb.30.1672844840952;
+        Wed, 04 Jan 2023 07:07:20 -0800 (PST)
+Received: from localhost (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
+        by smtp.gmail.com with UTF8SMTPSA id h6-20020a63c006000000b00478b930f970sm20262786pgg.66.2023.01.04.07.07.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 07:07:20 -0800 (PST)
+From:   Ying Hsu <yinghsu@chromium.org>
+To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        leon@kernel.org
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        Ying Hsu <yinghsu@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v2] Bluetooth: Fix possible deadlock in rfcomm_sk_state_change
+Date:   Wed,  4 Jan 2023 15:07:11 +0000
+Message-Id: <20230104150642.v2.1.I1f29bb547a03e9adfe2e6754212f9d14a2e39c4b@changeid>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f943d3ca-7cf7-cb4d-5dc7-1e45015ba213@ieee.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 07:33:57AM -0600, Alex Elder wrote:
-> On 1/3/23 9:57 PM, Deepak R Varma wrote:
-> > The code currently uses C90 standard extension based zero length array
-> > struct which is now deprecated and the new C99 standard extension of
-> > flexible array declarations are to be used instead. Also, the macro
-> > DECLARE_FLEX_ARRAY() allows to use single flexible array member in a
-> > structure. Refer to these links [1], [2] for details.
->
-> Thank you for citing some references in your commit, it's
-> a good and helpful practice.  This might have been another
-> helpful one:
->
-> https://lore.kernel.org/lkml/20210827163015.3141722-2-keescook@chromium.org/
+There's a possible deadlock when two processes are connecting
+and closing a RFCOMM socket concurrently. Here's the call trace:
 
-Hello Alex,
-Thank you so much for the feedback. I will include the additional reference and
-send in a v2.
+-> #2 (&d->lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock0x12f/0x1360 kernel/locking/mutex.c:747
+       __rfcomm_dlc_close+0x15d/0x890 net/bluetooth/rfcomm/core.c:487
+       rfcomm_dlc_close+1e9/0x240 net/bluetooth/rfcomm/core.c:520
+       __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
+       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
+       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
+       __sock_release+0xcd/0x280 net/socket.c:650
+       sock_close+0x1c/0x20 net/socket.c:1365
+       __fput+0x27c/0xa90 fs/file_table.c:320
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       exit_task_work include/linux/task_work.h:38 [inline]
+       do_exit+0xaa8/0x2950 kernel/exit.c:867
+       do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+       get_signal+0x21c3/0x2450 kernel/signal.c:2859
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
->
-> > [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> > [2] https://lkml.kernel.org/r/YxKY6O2hmdwNh8r8@work
->
-> FYI, Linux mailing lists hosted by kernel.org are normally
-> cited using "lore.kernel.org" now, e.g.:
->   https://lore.kernel.org/lkml/YxKY6O2hmdwNh8r8@work
-> Your patch is fine, this is just so you can consider this
-> in the future.
+-> #1 (rfcomm_mutex){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1360 kernel/locking/mutex.c:747
+       rfcomm_dlc_open+0x93/0xa80 net/bluetooth/rfcomm/core.c:425
+       rfcomm_sock_connect+0x329/0x450 net/bluetooth/rfcomm/sock.c:413
+       __sys_connect_file+0x153/0x1a0 net/socket.c:1976
+       __sys_connect+0x165/0x1a0 net/socket.c:1993
+       __do_sys_connect net/socket.c:2003 [inline]
+       __se_sys_connect net/socket.c:2000 [inline]
+       __x64_sys_connect+0x73/0xb0 net/socket.c:2000
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Sure, I will. This is very helpful to know.
+-> #0 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+       lock_acquire kernel/locking/lockdep.c:5668 [inline]
+       lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+       lock_sock_nested+0x3a/0xf0 net/core/sock.c:3470
+       lock_sock include/net/sock.h:1725 [inline]
+       rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
+       __rfcomm_dlc_close+0x1b1/0x890 net/bluetooth/rfcomm/core.c:489
+       rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:520
+       __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
+       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
+       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
+       __sock_release+0xcd/0x280 net/socket.c:650
+       sock_close+0x1c/0x20 net/socket.c:1365
+       __fput+0x27c/0xa90 fs/file_table.c:320
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       exit_task_work include/linux/task_work.h:38 [inline]
+       do_exit+0xaa8/0x2950 kernel/exit.c:867
+       do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+       get_signal+0x21c3/0x2450 kernel/signal.c:2859
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
->
-> > Issue identified using Coccinelle flexible_array.cocci semantic patch.
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
->
-> Looks good to me.
+Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+---
+This commit has been tested with a C reproducer on qemu-x86_64
+and a ChromeOS device.
 
-Appreciate your time for the review and comments. I will include the reviewed by
-tag in my v2.
+Changes in v2:
+- Fix potential use-after-free in rfc_comm_sock_connect.
 
-Regards,
-./drv
+ net/bluetooth/rfcomm/sock.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
->
-> Reviewed-by: Alex Elder <elder@linaro.org>
->
-> > ---
-> >   drivers/staging/greybus/usb.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/staging/greybus/usb.c b/drivers/staging/greybus/usb.c
-> > index 8e9d9d59a357..b7badf87a3f0 100644
-> > --- a/drivers/staging/greybus/usb.c
-> > +++ b/drivers/staging/greybus/usb.c
-> > @@ -27,7 +27,7 @@ struct gb_usb_hub_control_request {
-> >   };
-> >
-> >   struct gb_usb_hub_control_response {
-> > -	u8 buf[0];
-> > +	DECLARE_FLEX_ARRAY(u8, buf);
-> >   };
-> >
-> >   struct gb_usb_device {
-> > --
-> > 2.34.1
-> >
-> >
-> >
->
-
+diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
+index 21e24da4847f..4397e14ff560 100644
+--- a/net/bluetooth/rfcomm/sock.c
++++ b/net/bluetooth/rfcomm/sock.c
+@@ -391,6 +391,7 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
+ 	    addr->sa_family != AF_BLUETOOTH)
+ 		return -EINVAL;
+ 
++	sock_hold(sk);
+ 	lock_sock(sk);
+ 
+ 	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
+@@ -410,14 +411,18 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
+ 	d->sec_level = rfcomm_pi(sk)->sec_level;
+ 	d->role_switch = rfcomm_pi(sk)->role_switch;
+ 
++	/* Drop sock lock to avoid potential deadlock with the RFCOMM lock */
++	release_sock(sk);
+ 	err = rfcomm_dlc_open(d, &rfcomm_pi(sk)->src, &sa->rc_bdaddr,
+ 			      sa->rc_channel);
+-	if (!err)
++	lock_sock(sk);
++	if (!err && !sock_flag(sk, SOCK_ZAPPED))
+ 		err = bt_sock_wait_state(sk, BT_CONNECTED,
+ 				sock_sndtimeo(sk, flags & O_NONBLOCK));
+ 
+ done:
+ 	release_sock(sk);
++	sock_put(sk);
+ 	return err;
+ }
+ 
+-- 
+2.39.0.314.g84b9a713c41-goog
 
