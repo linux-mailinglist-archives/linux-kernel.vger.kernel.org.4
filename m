@@ -2,94 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CE465D1FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D258B65D1FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239177AbjADMDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
+        id S239201AbjADMDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 07:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239170AbjADMDG (ORCPT
+        with ESMTP id S239190AbjADMDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:03:06 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0DF1EEFB
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 04:03:06 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 79so22043245pgf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 04:03:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gbKqkFsN4hQeaKGBwT0swWYlTLMQd/HhdjuV7OkFZck=;
-        b=mHVGqX8H91pzBJ3DqpDdUa8q5l+Xnziz+IY+I893b//GyPfrcaV4LyEnL5N7W5orqd
-         KhjDg2DKRkhNeg7kPMi5/Dhy3WkN7600cWS/0Yu9rxCpyqo6ycTsVO0NN2JpLSH8kMyK
-         vXORpTS7mvElXy7DsHenbpJaJVvGFX/hjwlGlF0eg94KlhEZgBDawY7WE2dRw3ar+b2i
-         KCiH4TGS/ukHVvhsiEvXeIHB87DmZkltPYIzUeRllH6xEgLaT6NJ0QPl9TZhB2tEE4Ex
-         wsFb6n+q+5/6hA8Q+vPZ5CnnwLwj2nu7jw2G2lKejRqy5shn0+KKHYefSNm2sZ/Hxh65
-         xfPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gbKqkFsN4hQeaKGBwT0swWYlTLMQd/HhdjuV7OkFZck=;
-        b=IMEO26jPJRtWlKv64MaDw973pDZ3HSsmEv1MPPXkvZ/F+R0ErkucrZfHqK78msL7BF
-         SvHP1jLJcL3F8rlhTR19uQ1fHbLC7LLn518r0MH/KEbU1cmn9LPuSq7kfG7VMAL3OM42
-         xjLYXzknQSlByXSi89IrRRPb6K0IhSInidMc5o0Xbv0J9BhcxNy7JCj6uGfeh1REXOoX
-         wgT69mNuaPDlMN4ig9EjpeDUZGYLlrc4anvwYLGqNodf3PRppV9srmhYta1w6M+j0eZI
-         Z3gyKPMU+kpcDqqPVKogrPuUa6DtCiBBUFPgOSiCJ9CnaMbaBmZupgkknSHgjhb0pBce
-         T1Nw==
-X-Gm-Message-State: AFqh2koHP2SKNZCzIYrD86EItFtiyOI4ngJjljU19vJlPhbEg5j3egEI
-        lyiRizCmnueBLuL2R2Ug3l2qa7sHwXU5dACIyxk=
-X-Google-Smtp-Source: AMrXdXvLlycQwR2yfcSSdIDuT8mAhKbn5aH7b2zhWOcV7RFoNEz+oc6njRkxGsmdCSs+xOoNDXJDDQ==
-X-Received: by 2002:a62:e317:0:b0:581:4297:362f with SMTP id g23-20020a62e317000000b005814297362fmr33459797pfh.13.1672833785678;
-        Wed, 04 Jan 2023 04:03:05 -0800 (PST)
-Received: from redecorated-mbp ([202.53.32.211])
-        by smtp.gmail.com with ESMTPSA id d18-20020aa797b2000000b0058251b6e0e8sm6856527pfq.188.2023.01.04.04.03.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 04:03:05 -0800 (PST)
-Date:   Wed, 4 Jan 2023 23:03:00 +1100
-From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
-To:     marcan@marcan.st
-Cc:     asahi@lists.linux.dev, axboe@fb.com, hch@lst.de, kbusch@kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        sagi@grimberg.me, sven@svenpeter.dev, ushankar@purestorage.com
-Subject: Re: [PATCH] nvme-pci: Add NVME_QUIRK_IDENTIFY_CNS quirk to Apple T2
- controllers
-Message-ID: <20230104230300.66b4a581@redecorated-mbp>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
-In-Reply-To: <20230104101641.12215-1-marcan@marcan.st>
+        Wed, 4 Jan 2023 07:03:35 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77AA032180;
+        Wed,  4 Jan 2023 04:03:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9D031042;
+        Wed,  4 Jan 2023 04:04:15 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.37.146])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C581C3F587;
+        Wed,  4 Jan 2023 04:03:30 -0800 (PST)
+Date:   Wed, 4 Jan 2023 12:03:28 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Alexandre Ghiti <alex@ghiti.fr>, arnd@arndb.de,
+        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, ben@decadent.org.uk, bjorn@kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
+Subject: Re: [PATCH -next V12 3/7] riscv: entry: Add noinstr to prevent
+ instrumentation inserted
+Message-ID: <Y7VrEMJtwC7v7oNy@FVFF77S0Q05N>
+References: <20230103033531.2011112-1-guoren@kernel.org>
+ <20230103033531.2011112-4-guoren@kernel.org>
+ <36314eb6-e41d-30b9-9ac4-12b88a108b7b@ghiti.fr>
+ <CAJF2gTTSretKkJGNV7Y6iJboPuAWUQ=to=RPA8_-Nz8dnufGAg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJF2gTTSretKkJGNV7Y6iJboPuAWUQ=to=RPA8_-Nz8dnufGAg@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This mirrors the quirk added to Apple Silicon controllers in apple.c.
-> These controllers do not support the Active NS ID List command and
-> behave identically to the SoC version judging by existing user
-> reports/syslogs, so will need the same fix. This quirk reverts
-> back to NVMe 1.0 behavior and disables the broken commands.
->
-> Fixes: 811f4de0344d ("nvme: avoid fallback to sequential scan due to transient issues")
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+On Wed, Jan 04, 2023 at 09:40:38AM +0800, Guo Ren wrote:
+> On Tue, Jan 3, 2023 at 5:12 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
+> >
+> > Hi Guo,
+> >
+> > On 1/3/23 04:35, guoren@kernel.org wrote:
+> > > From: Guo Ren <guoren@linux.alibaba.com>
+> > >
+> > > Without noinstr the compiler is free to insert instrumentation (think
+> > > all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
+> > > yet ready to run this early in the entry path, for instance it could
+> > > rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
+> > >
+> > > Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/
+> > > Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+> > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > > Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > ---
+> > >   arch/riscv/kernel/traps.c | 4 ++--
+> > >   arch/riscv/mm/fault.c     | 2 +-
+> > >   2 files changed, 3 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > > index 549bde5c970a..96ec76c54ff2 100644
+> > > --- a/arch/riscv/kernel/traps.c
+> > > +++ b/arch/riscv/kernel/traps.c
+> > > @@ -95,9 +95,9 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
+> > >   }
+> > >
+> > >   #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
+> > > -#define __trap_section               __section(".xip.traps")
+> > > +#define __trap_section __noinstr_section(".xip.traps")
+> > >   #else
+> > > -#define __trap_section
+> > > +#define __trap_section noinstr
+> > >   #endif
+> > >   #define DO_ERROR_INFO(name, signo, code, str)                               \
+> > >   asmlinkage __visible __trap_section void name(struct pt_regs *regs) \
+> > > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+> > > index d86f7cebd4a7..b26f68eac61c 100644
+> > > --- a/arch/riscv/mm/fault.c
+> > > +++ b/arch/riscv/mm/fault.c
+> > > @@ -204,7 +204,7 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
+> > >    * This routine handles page faults.  It determines the address and the
+> > >    * problem, and then passes it off to one of the appropriate routines.
+> > >    */
+> > > -asmlinkage void do_page_fault(struct pt_regs *regs)
+> > > +asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+> >
+> >
+> > (I dug the archive but can't find the series before v4, so sorry if it
+> > was already answered)
+> >
+> > I think we should not disable the instrumentation of those trap handlers
+> > as at least profiling them with ftrace would provide valuable
+> > information (and gcov would be nice too): why do we need to do that? A
+> > trap very early in the boot process is not recoverable anyway.
+> Everything that calls irqentry_enter() should be noinstr, and this
+> patch prepares for the next generic_entry convert.
+> 
+> eg:
+> asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+> {
+>         irqentry_state_t state = irqentry_enter(regs);
+> 
+>         __do_page_fault(regs);
+> 
+>         local_irq_disable();
+> 
+>         irqentry_exit(regs, state);
+> }
+> NOKPROBE_SYMBOL(do_page_fault);
+> 
+> You still could profile __do_page_fault.
+> 
+> >
+> > And I took a look at other architectures, none of them disables the
+> > instrumentation on do_page_fault.
+> That's not true, have a look at power & arm64. All of them have some
+> limitations at the entry of page_fault.
 
-On T2 macbookpro16,1 with 6.2.0-rc3-00010-g69b41ac87e4a I had this in
-dmesg:
+Well, arm64's can't be kprobed, but is *can* be traced with ftrace, and *can*
+be instrumented with KASAN and friends. I'm not sure that we actually need to
+inhibit kprobes for do_page_fault, and we might be able to relax that.
 
-nvme nvme0: 1/0/0 default/read/poll queues
-nvme nvme0: Identify NS List failed (status=0xb)
+As a general thing, we've tried to centralize all the necesarily-noinstr bits
+in arch/arm64/kernel/entry-common.c, and keep everything else as instrumentable
+as possible.
 
-And in /dev only nvme0 existed (no nvme0n1*).
+I'd recommend doing similar, and have a central file for any entry bits which
+can't live in the generic entry code, and keep the rest instrumentable. That
+will make it easier to maintain and verify.
 
-This patch fixed that and /dev/nvme0n1p* existed.
-
-Tested-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+Thanks,
+Mark.
