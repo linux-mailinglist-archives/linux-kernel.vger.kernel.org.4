@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9705F65D3BF
+	by mail.lfdr.de (Postfix) with ESMTP id E315165D3C0
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239170AbjADNFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S239320AbjADNFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239283AbjADNFZ (ORCPT
+        with ESMTP id S231130AbjADNF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:05:25 -0500
+        Wed, 4 Jan 2023 08:05:29 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398D0FADF
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:05:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABBF1DF3A
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:05:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672837524; x=1704373524;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rdI/oJ9HW+kmCjRVi5jemUFp00YfbT8GRbCeKCMZrnI=;
-  b=bWvIbuLgpKfTYzZneyjzFSzVrYngInKbVq97403KFnehqeNBfCKEZE4u
-   pNbCvJ8G4CfK5Qi4BiV0oxdf2vMd7Jo9KYApNCtP4+XJy+Oxd07H5dJSV
-   KjvfFtvUl0wzsyNkx53bft/8UJ5KVumedyLOpcEQJ/loOLOU4LWWIzFNm
-   dPE+f97OnbeqA0I2aIvtDfpvGTk9szI4Dpz/fnWt7c++vbvoxanmWO0a4
-   htmUut570ZQIWkyp4VizMXmUSB9TcJYmpecd/dA6mfqAOzOCR+KV74OdV
-   oapgGHf5/RC34KY35ZmS29jcwmgrxRjLzxX656E4+Qi6btmLkt/UACBtq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320639544"
+  t=1672837528; x=1704373528;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=1xeeuRQM/dsTN33VxOfF8H61kIE4esUx5TqB4kEEMhw=;
+  b=XqGsS7dsKWlMyoia0AexbFZUCD63G7c/xjHFwI/q/m40dXAh37l0rJTw
+   tkWgpEcQZzdXZXlUWzFOq7TF4iRigPSwKk96AuD6DbImLgurITnQrAueI
+   lS1cIbgAhkBI8tfOLG/+kH2lAQra9sxt5x0l+X2nRxHLoY/sfrXwI9Ndi
+   t43vt3q3jKYrG7OWEogIz55ljbQ46eKrGb+kaKTGkKu4146ng6ux8C9+h
+   7eOtP0gHYcIGpMJDIWucWjHVcWKjSOa+FEyT1wC1AY+Q5Q0SpTU6rWB2D
+   SIfZ3Cklu+5+BNYEb59GXfn/bK+4bV5s1YWE/EygzRrh740Dhj3f27yXV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320639595"
 X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="320639544"
+   d="scan'208";a="320639595"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:05:23 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:05:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797528992"
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529016"
 X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="797528992"
+   d="scan'208";a="797529016"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:05:15 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:05:21 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -65,10 +65,12 @@ Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v4 00/19] iommu: Retire detach_dev callback
-Date:   Wed,  4 Jan 2023 20:57:06 +0800
-Message-Id: <20230104125725.271850-1-baolu.lu@linux.intel.com>
+Subject: [PATCH v4 01/19] iommu/amd: Remove detach_dev callback
+Date:   Wed,  4 Jan 2023 20:57:07 +0800
+Message-Id: <20230104125725.271850-2-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230104125725.271850-1-baolu.lu@linux.intel.com>
+References: <20230104125725.271850-1-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -80,130 +82,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+The AMD IOMMU supports default domain, so the detach_dev op will never
+be called. Remove it to avoid dead code.
 
-The iommu core calls the driver's detach_dev domain op callback only when
-a device is finished assigning to user space and
-iommu_group_release_dma_owner() is called to return the device to the
-kernel, where iommu core wants to set the default domain to the device but
-the driver didn't provide one. The code looks like:
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+---
+ drivers/iommu/amd/iommu.c | 26 --------------------------
+ 1 file changed, 26 deletions(-)
 
-        /*
-         * New drivers should support default domains and so the detach_dev() op
-         * will never be called. Otherwise the NULL domain represents some
-         * platform specific behavior.
-         */
-        if (!new_domain) {
-                if (WARN_ON(!group->domain->ops->detach_dev))
-                        return -EINVAL;
-                __iommu_group_for_each_dev(group, group->domain,
-                                           iommu_group_do_detach_device);
-                group->domain = NULL;
-                return 0;
-        }
-
-In other words, if the iommu driver provides default domains, the
-.detach_dev callback will never be called; Otherwise, the .detach_dev
-callback is actually called to return control back to the platform DMA
-ops, other than detaching the domain from device.
-
-This series cleanups this by:
-
-- If the IOMMU driver provides default domains, remove .detach_dev
-  callback.
-- Adds a new set_platform_dma iommu op. Any IOMMU driver that doesn't
-  provide default domain should implement set_platform_dma callback
-  instead.
-- Retire .detach_dev callback.
-
-This series originates from various discussion in the community. Thank
-Jason, Robin and all others for their ideas. This series looks very
-long. It is necessary because I hope that change in each driver has a
-confirmation from its stakeholder. I will then be able to merge some of
-them to make the series cute.
-
-The whole series is available on github:
-https://github.com/LuBaolu/intel-iommu/commits/iommu-retire-detach_dev-v4
-
-Please review and suggest.
-
-Change log:
-v4:
- - Drop the patch which renamed .attach_dev to .set_dev. As Robin said,
-   "... I also wouldn't say that "attach" loses its meaning in a context
-   where an equivalent "detach" operation is only ever implicit in 
-   reattaching to something else...". If we have a better name in the
-   future, we can do it in other series.
- - Adjust the patch of "iommu: Add set_platform_dma_ops iommu ops"
-   according to Jason's following suggestion " ... This is a bit ugly,
-   it would be better to make the previous patch call set_platform_dma
-   if it is set instead of detach_dev and then these patches should just
-   rename the driver's fsl_pamu_detach_device to
-   fsl_pamu_set_platform_dma ..."
- - Add a new patch to remove deferred attach check from
-   __iommu_detach_domain() path. Make it a separate patch as the
-   prerequisite to remove __iommu_detach_device() helper.
- - Rename set_platform_dma to set_platform_dma_ops to make it more
-   meaningful.
-
-v3:
- - https://lore.kernel.org/linux-iommu/20221128064648.1934720-1-baolu.lu@linux.intel.com/
- - Setting blocking domain is not conceptually equal to detach_dev.
-   Dropped all blocking domain related staffs in the previous version.
-
-v2:
- - https://lore.kernel.org/linux-iommu/20220826123014.52709-1-baolu.lu@linux.intel.com/
- - Replace .detach_dev callback with static block domain ops;
- - Rename .attach_dev to .set_dev.
-
-v1:
- - https://lore.kernel.org/linux-iommu/20220516015759.2952771-1-baolu.lu@linux.intel.com/
-
-Jason Gunthorpe (1):
-  iommu: Remove deferred attach check from __iommu_detach_device()
-
-Lu Baolu (18):
-  iommu/amd: Remove detach_dev callback
-  iommu/apple-dart: Remove detach_dev callback
-  iommu/qcom: Remove detach_dev callback
-  iommu/exynos: Remove detach_dev callback
-  iommu/ipmmu: Remove detach_dev callback
-  iommu/mtk: Remove detach_dev callback
-  iommu/rockchip: Remove detach_dev callback
-  iommu/sprd: Remove detach_dev callback
-  iommu/sun50i: Remove detach_dev callback
-  iommu: Add set_platform_dma_ops iommu ops
-  iommu/fsl_pamu: Add set_platform_dma_ops callback
-  iommu/msm: Add set_platform_dma_ops callback
-  iommu/mtk_v1: Add set_platform_dma_ops callback
-  iommu/omap: Add set_platform_dma_ops callback
-  iommu/s390: Add set_platform_dma_ops callback
-  iommu/gart: Add set_platform_dma_ops callback
-  iommu/tegra: Add set_platform_dma_ops callback
-  iommu: Remove detach_dev callback
-
- include/linux/iommu.h                   |  8 +-
- include/trace/events/iommu.h            |  7 --
- drivers/iommu/amd/iommu.c               | 26 -------
- drivers/iommu/apple-dart.c              | 24 ------
- drivers/iommu/arm/arm-smmu/qcom_iommu.c | 23 ------
- drivers/iommu/exynos-iommu.c            |  1 -
- drivers/iommu/fsl_pamu_domain.c         |  6 +-
- drivers/iommu/iommu-traces.c            |  1 -
- drivers/iommu/iommu.c                   | 98 ++++++++++++-------------
- drivers/iommu/ipmmu-vmsa.c              | 16 ----
- drivers/iommu/msm_iommu.c               |  6 +-
- drivers/iommu/mtk_iommu.c               |  9 ---
- drivers/iommu/mtk_iommu_v1.c            |  4 +-
- drivers/iommu/omap-iommu.c              |  6 +-
- drivers/iommu/rockchip-iommu.c          |  1 -
- drivers/iommu/s390-iommu.c              |  7 +-
- drivers/iommu/sprd-iommu.c              | 16 ----
- drivers/iommu/sun50i-iommu.c            |  1 -
- drivers/iommu/tegra-gart.c              |  6 +-
- drivers/iommu/tegra-smmu.c              |  5 +-
- 20 files changed, 73 insertions(+), 198 deletions(-)
-
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index cbeaab55c0db..92319c9b877c 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -2126,31 +2126,6 @@ static void amd_iommu_domain_free(struct iommu_domain *dom)
+ 	protection_domain_free(domain);
+ }
+ 
+-static void amd_iommu_detach_device(struct iommu_domain *dom,
+-				    struct device *dev)
+-{
+-	struct iommu_dev_data *dev_data = dev_iommu_priv_get(dev);
+-	struct amd_iommu *iommu;
+-
+-	if (!check_device(dev))
+-		return;
+-
+-	if (dev_data->domain != NULL)
+-		detach_device(dev);
+-
+-	iommu = rlookup_amd_iommu(dev);
+-	if (!iommu)
+-		return;
+-
+-#ifdef CONFIG_IRQ_REMAP
+-	if (AMD_IOMMU_GUEST_IR_VAPIC(amd_iommu_guest_ir) &&
+-	    (dom->type == IOMMU_DOMAIN_UNMANAGED))
+-		dev_data->use_vapic = 0;
+-#endif
+-
+-	iommu_completion_wait(iommu);
+-}
+-
+ static int amd_iommu_attach_device(struct iommu_domain *dom,
+ 				   struct device *dev)
+ {
+@@ -2416,7 +2391,6 @@ const struct iommu_ops amd_iommu_ops = {
+ 	.def_domain_type = amd_iommu_def_domain_type,
+ 	.default_domain_ops = &(const struct iommu_domain_ops) {
+ 		.attach_dev	= amd_iommu_attach_device,
+-		.detach_dev	= amd_iommu_detach_device,
+ 		.map_pages	= amd_iommu_map_pages,
+ 		.unmap_pages	= amd_iommu_unmap_pages,
+ 		.iotlb_sync_map	= amd_iommu_iotlb_sync_map,
 -- 
 2.34.1
 
