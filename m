@@ -2,175 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AC265E0A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5359065E0B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234616AbjADXDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 18:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S234013AbjADXHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 18:07:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjADXDH (ORCPT
+        with ESMTP id S229571AbjADXH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 18:03:07 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C139E;
-        Wed,  4 Jan 2023 15:03:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 4 Jan 2023 18:07:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7151D0CF;
+        Wed,  4 Jan 2023 15:07:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NnQB01lDCz4y0W;
-        Thu,  5 Jan 2023 10:03:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1672873385;
-        bh=YB0hJcpraawuKA1dE5txTbZJubHg4syLjM+ce6VinJI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=U1l29gCWEE3CA0htK9qJVDQNQdqmJqpXjGX1STDqp07j8lwBzx8b/5hcBA+Vxn8eK
-         QChZdv+lG67w9CDW8E3lpXD6LJTjwxlXKlGUfQkDfPZJ1V97wB03uooU3kS5dU0t0B
-         7m7dcsqyVPz+pKPC4VL+OiToNPk1RbBnJHZprbF74HKUdrxPuVOyfNTtGFAKfj0VJx
-         lqa2n3CmlGE8yMhBxQAezI7LYbmLHMSgyUdSXv8KcltS6O3poHqIDwRqSAXx+/g3TY
-         QYiieDMPu7nfkuSAcJ+5n9/O4vOWroSqiFmpIlSwzczzO+XjYNdEvtSyefxEYtrnVs
-         q71Uu9/NuZ9oQ==
-Date:   Thu, 5 Jan 2023 10:03:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: linux-next: manual merge of the thermal tree with the pm tree
-Message-ID: <20230105100302.00b1c5cd@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AA7CB81916;
+        Wed,  4 Jan 2023 23:07:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E56EC433F0;
+        Wed,  4 Jan 2023 23:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672873645;
+        bh=SuNnedOBTBfRkngA+uwJbPA6/dPQf71AItesDuB3NQY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r2H5ihuSQ2Tix3j3i0Qx3h5A1G2BmO25RNvZCbR49C1JYPoGXkElPPjPqlhfo1ZcN
+         M9sTV4KprAeRmQXEY+ALI5Fz1wz3TJZmAm6HMxE8N1BTLYxxAZvtuHDp6mMOngkpad
+         8s3Ta5qEpOX0nF1+1XWTPNa+8XtOtQqFSZDNJp+0Y9gObhfTzsOcsFux4EJqz3D69o
+         VCHS2Padnjk0Bcka/gtsrwMclHgPmdte95W0JNb0cGK1P1F88kv+fvlYuuJMdczvL0
+         RQq1hEveF0mwiEDYTPFQWqH/TatDo8I6mc0nD/z9J0E4wiQpVrvLunKV02yWZhJ77q
+         V6KvQJZqSUo+Q==
+Date:   Wed, 4 Jan 2023 23:07:19 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] RISC-V: Add AIA related CSR defines
+Message-ID: <Y7YGp/7ufyRPhkwg@spud>
+References: <20230103141409.772298-1-apatel@ventanamicro.com>
+ <20230103141409.772298-2-apatel@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Th_1jjRpUTa/0Qt/QlTJHeC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jxzId6Yfk8IaDWIM"
+Content-Disposition: inline
+In-Reply-To: <20230103141409.772298-2-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Th_1jjRpUTa/0Qt/QlTJHeC
-Content-Type: text/plain; charset=US-ASCII
+
+--jxzId6Yfk8IaDWIM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hey Anup!
 
-Today's linux-next merge of the thermal tree got a conflict in:
+On Tue, Jan 03, 2023 at 07:44:01PM +0530, Anup Patel wrote:
+> The RISC-V AIA specification improves handling per-HART local interrupts
+> in a backward compatible manner. This patch adds defines for new RISC-V
+> AIA CSRs.
+>=20
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/include/asm/csr.h | 92 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 92 insertions(+)
+>=20
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 0e571f6483d9..4e1356bad7b2 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -73,7 +73,10 @@
+>  #define IRQ_S_EXT		9
+>  #define IRQ_VS_EXT		10
+>  #define IRQ_M_EXT		11
+> +#define IRQ_S_GEXT		12
+>  #define IRQ_PMU_OVF		13
+> +#define IRQ_LOCAL_MAX		(IRQ_PMU_OVF + 1)
+> +#define IRQ_LOCAL_MASK		((_AC(1, UL) << IRQ_LOCAL_MAX) - 1)
+> =20
+>  /* Exception causes */
+>  #define EXC_INST_MISALIGNED	0
+> @@ -156,6 +159,26 @@
+>  				 (_AC(1, UL) << IRQ_S_TIMER) | \
+>  				 (_AC(1, UL) << IRQ_S_EXT))
+> =20
+> +/* AIA CSR bits */
+> +#define TOPI_IID_SHIFT		16
+> +#define TOPI_IID_MASK		0xfff
+> +#define TOPI_IPRIO_MASK		0xff
+> +#define TOPI_IPRIO_BITS		8
+> +
+> +#define TOPEI_ID_SHIFT		16
+> +#define TOPEI_ID_MASK		0x7ff
+> +#define TOPEI_PRIO_MASK		0x7ff
+> +
+> +#define ISELECT_IPRIO0		0x30
+> +#define ISELECT_IPRIO15		0x3f
+> +#define ISELECT_MASK		0x1ff
+> +
+> +#define HVICTL_VTI		0x40000000
+> +#define HVICTL_IID		0x0fff0000
+> +#define HVICTL_IID_SHIFT	16
+> +#define HVICTL_IPRIOM		0x00000100
+> +#define HVICTL_IPRIO		0x000000ff
 
-  drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+Why not name these as masks, like you did for the other masks?
+Also, the mask/shift defines appear inconsistent. TOPI_IID_MASK is
+intended to be used post-shift AFAICT, but HVICTL_IID_SHIFT is intended
+to be used *pre*-shift.
+Some consistency in naming and function would be great.
 
-between commit:
 
-  d91a4714e54e ("thermal/int340x/processor_thermal: Use Intel TCC library")
+> +/* Machine-Level High-Half CSRs (AIA) */
+> +#define CSR_MIDELEGH		0x313
 
-from the pm tree and commit:
+I feel like I could find Midelegh in an Irish dictionary lol
+Anyways, I went through the CSRs and they do all seem correct.
 
-  e503a68ebfe3 ("thermal/intel/int340x: Replace parameter to simplify")
+Thanks,
+Conor.
 
-from the thermal tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-index a2ea22f2bffd,317703027ce9..000000000000
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-@@@ -118,22 -174,39 +118,18 @@@ static int proc_thermal_get_zone_temp(s
-  	*temp =3D 0;
- =20
-  	for_each_online_cpu(cpu) {
- -		err =3D rdmsr_safe_on_cpu(cpu, MSR_IA32_THERM_STATUS, &eax,
- -					&edx);
- -		if (err)
- -			goto err_ret;
- -		else {
- -			if (eax & 0x80000000) {
- -				curr_temp_off =3D (eax >> 16) & 0x7f;
- -				if (!*temp || curr_temp_off < *temp)
- -					*temp =3D curr_temp_off;
- -			} else {
- -				err =3D -EINVAL;
- -				goto err_ret;
- -			}
- -		}
- +		curr_temp =3D intel_tcc_get_temp(cpu, false);
- +		if (curr_temp < 0)
- +			return curr_temp;
- +		if (!*temp || curr_temp > *temp)
- +			*temp =3D curr_temp;
-  	}
- =20
- -	return 0;
- -err_ret:
- -	return err;
- -}
- -
- -static int proc_thermal_get_zone_temp(struct thermal_zone_device *zone,
- -					 int *temp)
- -{
- -	int ret;
- -
- -	ret =3D read_temp_msr(temp);
- -	if (!ret)
- -		*temp =3D (stored_tjmax - *temp) * 1000;
- +	*temp *=3D 1000;
- =20
- -	return ret;
- +	return 0;
-  }
- =20
-- static struct thermal_zone_device_ops proc_thermal_local_ops =3D {
-- 	.get_temp       =3D proc_thermal_get_zone_temp,
-- };
--=20
-  static int proc_thermal_read_ppcc(struct proc_thermal_device *proc_priv)
-  {
-  	int i;
-@@@ -225,11 -298,12 +221,11 @@@ int proc_thermal_add(struct device *dev
-  	status =3D acpi_evaluate_integer(adev->handle, "_TMP", NULL, &tmp);
-  	if (ACPI_FAILURE(status)) {
-  		/* there is no _TMP method, add local method */
- -		stored_tjmax =3D get_tjmax();
- -		if (stored_tjmax > 0)
- +		if (intel_tcc_get_tjmax(-1) > 0)
-- 			ops =3D &proc_thermal_local_ops;
-+ 			get_temp =3D proc_thermal_get_zone_temp;
-  	}
- =20
-- 	proc_priv->int340x_zone =3D int340x_thermal_zone_add(adev, ops);
-+ 	proc_priv->int340x_zone =3D int340x_thermal_zone_add(adev, get_temp);
-  	if (IS_ERR(proc_priv->int340x_zone)) {
-  		return PTR_ERR(proc_priv->int340x_zone);
-  	} else
-
---Sig_/Th_1jjRpUTa/0Qt/QlTJHeC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--jxzId6Yfk8IaDWIM
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO2BaYACgkQAVBC80lX
-0Gzw+wf9Gh6CpmkHgDqujTh8ujmvQavwIDZ6aTZ1av6xXKI+lwCdNpfhrJ7aSssB
-z7vB70gFhmIHdhOKqR9gVq3zE0mzNCPrX47Hwo8ZIKCfMByK6cAs2TJSanunNDIi
-1NolP8fJJ3T7b+qQq83QdNIP3wj1rhYKs13u3cWI2iXymQRimMIZOXSBGlRWSLIc
-Y/JmisDSRkHYdVHs7sHAM/HAFzzl0b3UPi9DYbBUn6YxKy6hSujjoGuUpKiqkKfN
-8x99VBm/VFolbEYbM6hufFF5sg2WFDYNFKn+5/SKoAp4Xvu3IAnLZzfLmjEECS9p
-vNK3AC95PQ6IkZKSeruMg/GkqSdc5g==
-=qDGI
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7YGpwAKCRB4tDGHoIJi
+0lRTAP4wNZdKZZX9vvp6BuQN+P/gjGLcQs5KY25lQJK75lJ+yQEAgXVYUM3O80Dq
+NEcF2/9not7ySdC5sv0F4cG1oEoruAg=
+=NNSd
 -----END PGP SIGNATURE-----
 
---Sig_/Th_1jjRpUTa/0Qt/QlTJHeC--
+--jxzId6Yfk8IaDWIM--
