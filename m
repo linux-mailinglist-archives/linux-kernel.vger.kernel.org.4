@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8F365D75B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6A765D75F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235231AbjADPjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S239565AbjADPlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235127AbjADPj3 (ORCPT
+        with ESMTP id S239500AbjADPlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:39:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188241DDE5;
-        Wed,  4 Jan 2023 07:39:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9B1FB816CE;
-        Wed,  4 Jan 2023 15:39:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1249C433EF;
-        Wed,  4 Jan 2023 15:39:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1672846765;
-        bh=3hMvQGxizKyuCmzdeT21b9sxTcAaxoUByPhxhR0E2xs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BarF4nd+8w/PUzHArLsrzqW1EziK33xBM+Ez0w+IjrWUeOEh6HkfD9CtaWHIBz1vo
-         xFevvJg1G3ph4tw5l4vtuMjO3DSOAiY0OpXZQOhheQEtEt+kUiS2YF/ylswyQj2nIy
-         okgNuB+Qgc6fvh9DBvKslEgBs4tUa7GZTHwrhNw8=
-Date:   Wed, 4 Jan 2023 16:39:17 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     lizhe <sensor1010@163.com>
-Cc:     jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] serial: linflexuart: remove redundant uart type
- assignment
-Message-ID: <Y7WdpQkqJA03z8w0@kroah.com>
-References: <20230104152444.3407-1-sensor1010@163.com>
+        Wed, 4 Jan 2023 10:41:06 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95447FFF;
+        Wed,  4 Jan 2023 07:41:04 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id m21so49000622edc.3;
+        Wed, 04 Jan 2023 07:41:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eEskvgBf/rIaiXvPWmodi9mgQl9xhX7PHLLGIqbDhHY=;
+        b=XWrhBK29nNMXRHIPEFUtEE1LdNiUpExU+GmJ7HzkrnJem0TWV+0K6Zn3iKIqwHo5bn
+         jps0ri0ynZIp14qHPoSbhbsBm3/yTlZ1H8xmitnjqMOKdYquJdViyp/R/C9RAGwvIuuu
+         YM+nMqq1ZOV+CQpFP4jQN5mtIr62eT4LrY+B2w+mUC7GJXbYrn4iz1/sy3SGORLNkizD
+         kyJf2oo5lhEjWMekNOtrh8gxs2DCYegZLE/7XbQt4CpajvuWrWn0tVNod627hZRfW0/p
+         Q0JDpT9piCbeDiIBsedzuxTrb5k3pfo5RL597j5nsw7nnh+wWaJkCJAHxOlkphEYYEnm
+         OClw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eEskvgBf/rIaiXvPWmodi9mgQl9xhX7PHLLGIqbDhHY=;
+        b=fy1xnoiCV5JtgWoQ4R1JD3diHMqOq/fp0wrMZi0pl4eroWxnSffmfqjXjuMWUd5AqZ
+         2Mn09N+XMD7F7PZQOHJiRt/78nYY14EwoS2UUiK7K0nx0JqDB9G1LDpL9nmuoX51J6zd
+         065+VF5WxUftmbZg5rMqApv2wkvt/yHgFYjtXzIrL0z/lOxo6Xrn/vUgjVKlhS8xLRav
+         JcspI7HNIDyDuVCXvbQ8JC9vs2bkF3ikKsLohPGkoBFFjADb1n4wuYlhBRaQVDAg8CoA
+         zyAgvTus996pqZQNAAE73X2jUG7iONiIna5DhxmiLQHi2O0OYsbiusbHsIoWqWHTSVep
+         T4Qg==
+X-Gm-Message-State: AFqh2krO/uGSGlZcqKjjh5eQ0YIftZHjSo5LeAgU+wIGfz7ijx99bb7u
+        oLA904zZZz8sVH3kkTfxKna0UKR0Lm44heudx9o=
+X-Google-Smtp-Source: AMrXdXvkYCzFVRif6nEi7mpIIaz+nt5cEg2zMnTtan+deHoFEsjrW1VcMfCJHWwSeP5ArsTmQu4LkxYI3ijB6/sysSA=
+X-Received: by 2002:aa7:c0cd:0:b0:461:b033:90ac with SMTP id
+ j13-20020aa7c0cd000000b00461b03390acmr5588804edp.257.1672846862917; Wed, 04
+ Jan 2023 07:41:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104152444.3407-1-sensor1010@163.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
+ <20221227233020.284266-20-martin.blumenstingl@googlemail.com> <63b4b3e1.050a0220.791fb.767c@mx.google.com>
+In-Reply-To: <63b4b3e1.050a0220.791fb.767c@mx.google.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 4 Jan 2023 16:40:51 +0100
+Message-ID: <CAFBinCDpMjHPZ4CA-YdyAu=k1F_7DxxYEMSjnBEX2aMWfSCCeA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 19/19] rtw88: Add support for the SDIO based
+ RTL8821CS chipset
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     linux-wireless@vger.kernel.org,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 07:24:44AM -0800, lizhe wrote:
-> in linflex_config_port() the member variable type will be
-> assigned again. see linflex_connfig_port()
-> 
-> Signed-off-by: lizhe <sensor1010@163.com>
-> Link: https://lore.kernel.org/all/20230103170948.3777-1-sensor1010@163.com/
-> ---
->  drivers/tty/serial/fsl_linflexuart.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/fsl_linflexuart.c b/drivers/tty/serial/fsl_linflexuart.c
-> index 6fc21b6684e6..34400cc6ac7f 100644
-> --- a/drivers/tty/serial/fsl_linflexuart.c
-> +++ b/drivers/tty/serial/fsl_linflexuart.c
-> @@ -837,7 +837,6 @@ static int linflex_probe(struct platform_device *pdev)
->  		return PTR_ERR(sport->membase);
->  
->  	sport->dev = &pdev->dev;
-> -	sport->type = PORT_LINFLEXUART;
->  	sport->iotype = UPIO_MEM;
->  	sport->irq = platform_get_irq(pdev, 0);
->  	sport->ops = &linflex_pops;
-> -- 
-> 2.17.1
-> 
+Hi Chris,
 
-Hi,
+On Wed, Jan 4, 2023 at 12:01 AM Chris Morgan <macroalpha82@gmail.com> wrote:
+>
+> On Wed, Dec 28, 2022 at 12:30:20AM +0100, Martin Blumenstingl wrote:
+> > Wire up RTL8821CS chipset support using the new rtw88 SDIO HCI code as
+> > well as the existing RTL8821C chipset code.
+> >
+>
+> Unfortunately, this doesn't work for me. I applied it on top of 6.2-rc2
+> master and I get errors during probe (it appears the firmware never
+> loads).
+That's unfortunate.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+> Relevant dmesg logs are as follows:
+>
+> [    0.989545] mmc2: new high speed SDIO card at address 0001
+> [    0.989993] rtw_8821cs mmc2:0001:1: Firmware version 24.8.0, H2C version 12
+> [    1.005684] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x14): -110
+> [    1.005737] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1080): -110
+> [    1.005789] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x11080): -110
+> [    1.005840] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x3): -110
+> [    1.005920] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x1103): -110
+> [    1.005998] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x80): -110
+> [    1.006078] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1700): -110
+The error starts with a write to register 0x14 (REG_SDIO_HIMR), which
+happens right after configuring RX aggregation.
+Can you please try two modifications inside
+drivers/net/wireless/realtek/rtw88/sdio.c:
+1. inside the rtw_sdio_start() function: change
+"rtw_sdio_rx_aggregation(rtwdev, false);" to
+"rtw_sdio_rx_aggregation(rtwdev, true);"
+2. if 1) does not work: remove the call to rtw_sdio_rx_aggregation()
+from rtw_sdio_start()
 
-You are receiving this message because of the following common error(s)
-as indicated below:
 
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file,
-  Documentation/process/submitting-patches.rst for how to do this
-  correctly.
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Best regards,
+Martin
