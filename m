@@ -2,204 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A036965CF48
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4528E65CF4B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238350AbjADJNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
+        id S234030AbjADJOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234182AbjADJND (ORCPT
+        with ESMTP id S233945AbjADJOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:13:03 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FFCFD2B;
-        Wed,  4 Jan 2023 01:13:01 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id i188so34231388vsi.8;
-        Wed, 04 Jan 2023 01:13:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QPMX5kWJZPRRY4wnvXmSYf/iEepycQO9qoz1tO03Y7E=;
-        b=V5CHBHmD0S3FbkXFR+gItsN90huqqoo5uYdU3eF8jc9PWKVQPmONGIcPnPtLRvlj8W
-         aV2Qr7a0+07PeaMz5mL93zB69HtQifJXnmqseFsOAI4tm/UJBnyf8kT8WPFhsq16Zy0C
-         FiR4ay1mvoDxnXMMBZRHJlRM/LA+I2cjFE1hYMFfOMeg/xvt4WheNQZ9a50r5yzkD2Ou
-         f/+jpLcxTSotclANBYL9H5j+Ffjp8wuyKs63qKx25pifjjdOVXtGZ5vTQ6yYlW1RAgdN
-         3Nz6Wyqb4WyL280TZ17G/vBkRBkqHW/wcb61rIi5eO5VE1BGuKrSsezv16qndtj1OMiJ
-         IiXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QPMX5kWJZPRRY4wnvXmSYf/iEepycQO9qoz1tO03Y7E=;
-        b=RNC2A/xtBhSXPoI2EANEcHJS79ofhIzyoLVg4ySYJvaJjFhHRU8kBiQflPfTp3Fv4E
-         sIS5qJdIvPgZkRtZ+V2bAzgLdpRejbEqtvaau1Td/HAvaT5IGSPB4ipaxyQGx/KCZm1U
-         mqTSSi/a4WsQL8F+ssDZUXmRyYUyJikvgVn7k1xr5I/CwXlmXJrORNyAhQZLfsByalhE
-         yj21VAucoSuvvjFhzHcto6mmhNvAv+4RxtYNKeHbgxkLHjmmbR0boK6YknaP91+DbuNH
-         cVhIDMUOW9r8D+ypg1cD/pwBpv20DmU9ulzAz5eK+3JaOBbjfD2fD49mEwfGY1fryyqE
-         Ur3g==
-X-Gm-Message-State: AFqh2kpYNbBz1qeEv3NEZYSUaRt0FLlGfC+/rS1GMaQ2r6sOwXRBWO8R
-        e0gGnava3JplYP3HZHTQt//DU23+cfT03JiVTbY=
-X-Google-Smtp-Source: AMrXdXvTAdvAkZT6n8ezEcrJXpeklPvOVSosiAD0Vx17p4+/0cH66MykDFyoZ+aMSBUgDhRY9po3H9T6OpYe5jZNSAs=
-X-Received: by 2002:a05:6102:e94:b0:3b1:3231:ac9e with SMTP id
- l20-20020a0561020e9400b003b13231ac9emr5119931vst.50.1672823580988; Wed, 04
- Jan 2023 01:13:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20221227095123.2447948-1-milkfafa@gmail.com> <20221227095123.2447948-8-milkfafa@gmail.com>
- <b8f173c0-6d40-d6aa-543e-fa8b06557f4f@molgen.mpg.de> <CADnNmFr1naRfam=z0p-4hEugSDJy_HCK8XZyQJ0eFirnmwuH4A@mail.gmail.com>
- <4d64e3f9-57a3-c6be-2709-36e9a1617bf9@molgen.mpg.de>
-In-Reply-To: <4d64e3f9-57a3-c6be-2709-36e9a1617bf9@molgen.mpg.de>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Wed, 4 Jan 2023 17:12:49 +0800
-Message-ID: <CADnNmFqFMBUj07oAZze3eeXAR0hbep4p9za=XNu5YrLVqUex=w@mail.gmail.com>
-Subject: Re: [PATCH v10 7/7] media: nuvoton: Add driver for NPCM video capture
- and encode engine
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andrzej.p@collabora.com, kwliu@nuvoton.com,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, kflin@nuvoton.com,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 04:14:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D53BFD2B
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:14:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9FAA61601
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 09:14:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E34EC433D2;
+        Wed,  4 Jan 2023 09:14:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672823683;
+        bh=mJh49gOowpFn7+Mf2+NzoeE+1uPAP7nf0ykY5SI6xRA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RByDVmopxsAX67RDoyuA2IWr4HOq9FpatqPtVszFPzZaebwXr8veU4HeQEgrtxf1I
+         Q8uE8wYYZgIAWKjnm8AdHQkkG6bHfGP7z+YnIrOYwjHdiHAroKTiUwRLYkqZJBOF8w
+         AKkmncuAsR8KBxgRCazMKMYiIO8v62KucjLHnMrYSvpSKZWtbdlxDSM+08P4LeymNH
+         a6NoLvBYDb/dfLIAmIwpTkwjMWjtRL9BUKHn0L/JieiRjIhfi7oX3HvB5mqceAvm/B
+         6omlv6sF2XQc9fPfP4Rd1M7QXguLWpQWZwWvGSPNkne4ZsenZHRgb8SUi0gTdcI5+8
+         6XonmoREJZLlA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pCzr6-00GiDV-PE;
+        Wed, 04 Jan 2023 09:14:40 +0000
+Date:   Wed, 04 Jan 2023 09:14:40 +0000
+Message-ID: <86sfgq7jb3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shanker Donthineni <sdonthineni@nvidia.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] arm64: gic: increase the number of IRQ descriptors
+In-Reply-To: <20230104023738.1258925-1-sdonthineni@nvidia.com>
+References: <20230104023738.1258925-1-sdonthineni@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sdonthineni@nvidia.com, catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > How about "The VCD can capture a frame from digital video input and
-> > compare two frames in memory, then the ECE will compress the frame
-> > data into HEXTITLE format", is it better?
->
-> Yes, I prefer your suggestion.
->
-> >> Wich VNC viewer and version?
-> >
-> > I used RealVNC version 6.21.1109 to test.
-> > Do I have to add this information in the commit message?
->
-> I do not think there are rules, but I prefer to have the test
-> environment and procedure information in the commit message in case
-> there are problems, and you want to reproduce things.
+On Wed, 04 Jan 2023 02:37:38 +0000,
+Shanker Donthineni <sdonthineni@nvidia.com> wrote:
+> 
+> The default value of NR_IRQS is not sufficient to support GICv4.1
+> features and ~56K LPIs. This parameter would be too small for certain
+> server platforms where it has many IO devices and is capable of
+> direct injection of vSGI and vLPI features.
+> 
+> Currently, maximum of 64 + 8192 (IRQ_BITMAP_BITS) IRQ descriptors
+> are allowed. The vCPU creation fails after reaching count ~400 with
+> kvm-arm.vgic_v4_enable=1.
+> 
+> This patch increases NR_IRQS to 1^19 to cover 56K LPIs and 262144
+> vSGIs (16K vPEs x 16).
+> 
+> Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
+> ---
+> Changes since v1:
+>  -create from v6.2-rc1 and edit commit text
+> 
+>  arch/arm64/include/asm/irq.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/irq.h b/arch/arm64/include/asm/irq.h
+> index fac08e18bcd5..3fffc0b8b704 100644
+> --- a/arch/arm64/include/asm/irq.h
+> +++ b/arch/arm64/include/asm/irq.h
+> @@ -4,6 +4,10 @@
+>  
+>  #ifndef __ASSEMBLER__
+>  
+> +#if defined(CONFIG_ARM_GIC_V3_ITS)
+> +#define  NR_IRQS  (1 << 19)
+> +#endif
+> +
+>  #include <asm-generic/irq.h>
+>  
+>  struct pt_regs;
 
-OK, I'll do that.
+Sorry, but I don't think this is an acceptable change. This is a large
+overhead that affects *everyone*, and that will eventually be too
+small anyway with larger systems and larger interrupt spaces.
 
+A better way to address this would be to move to a more dynamic
+allocation, converting the irqdesc rb-tree into an xarray, getting rid
+of the bitmaps (the allocation bitmap and the resend one), and track
+everything in the xarray.
 
-> Yes, that is what I meant. Maybe even the debug messages.
+This would scale, avoid allocations, and benefit all architectures.
 
-I get these debug messages after VNC viewer connected:
+Thanks,
 
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD mode = 0x1000b, Hi Res mode
-npcm-video f0810000.video: Digital mode: 1600 x 1200 x 2, pixelclock
-161666000, bytesperline 4096
-npcm-video f0810000.video: ECE open: client 1
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: offset = 0, ed_size = 1540907, gap = 12
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: offset = 0, ed_size = 1539638, gap = 12
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: offset = 0, ed_size = 1539638, gap = 12
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: offset = 0, ed_size = 1539638, gap = 12
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: offset = 0, ed_size = 1539638, gap = 12
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: offset = 0, ed_size = 1539638, gap = 12
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-npcm-video f0810000.video: VCD irq status 0x84b00ff1
-npcm-video f0810000.video: Got resolution[1600x1200] -> [1600x1200], status 0
-[...]
+	M.
 
-
-> > I can note the datasheet name and revision in the commit message but
-> > can't provide the file link because it is not public.
-> > Is it ok with you?
->
-> Yes, that would be ok with me.
-
-> > So what I have to do is replace "u8/u16/u32" with "unsigned int" for
-> > generic local variables as much as possible.
-> > Is my understanding correct?
->
-> Yes, I would say so.
-
-> >>> +MODULE_AUTHOR("Joseph Liu<kwliu@nuvoton.com>");
-> >>> +MODULE_AUTHOR("Marvin Lin<kflin@nuvoton.com>");
-> >>
-> >> Please add a space before the <.
-> >>
-> >>> +MODULE_DESCRIPTION("Driver for Nuvoton NPCM Video Capture/Encode Engine");
-> >>> +MODULE_LICENSE("GPL");
-> >>
-> >> Not GPL v2?
-> >
-> > I'll correct them in the next patch.
->
-> Awesome.
-
- Thank you for your feedback.
-
-Regards,
-Marvin
+-- 
+Without deviation from the norm, progress is not possible.
