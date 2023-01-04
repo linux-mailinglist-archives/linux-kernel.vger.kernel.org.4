@@ -2,71 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA5C65D0A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6D665D0AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234067AbjADK3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 05:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S234339AbjADKaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 05:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbjADK3g (ORCPT
+        with ESMTP id S233383AbjADKaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 05:29:36 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA70C63A6
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 02:29:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672828175; x=1704364175;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=arwmrU6pTPoOLqCBDphrff/+pF//A9r4I80+Attw2tM=;
-  b=c1Db9WQjDL1iVswlhAXvIEDSWL9/ROld0ckclsEPPqwxHwHW/lC+IbAs
-   /x+qrf9VpZqSar3vj+hARs6Hkm2IqGXCTphmHPWbZXVudfQSp6g26+Yx5
-   1k0X8AITwavEJIjFfGjrqB0gnyYRFd++cxz7124F2K31TPBEWynQKRYPc
-   akAKxOr0i/5aDBjDAID9LkFCmTOxYBHry78dc9q7GaCuBQCZUsFyK/HvP
-   iNsWLbf/O8VEySu3INWBj/DVBFAoMXUx/qLUvvFfDw0gHUila3oyEJCvT
-   omf04w3SLF/Mi2nXCo+QNIYXiBVIBXioB867xghouZN3t0FxQxm2dfj+x
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="305406978"
-X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="305406978"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 02:29:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="718407267"
-X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="718407267"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Jan 2023 02:29:32 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pD11W-004GDy-0d;
-        Wed, 04 Jan 2023 12:29:30 +0200
-Date:   Wed, 4 Jan 2023 12:29:29 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 1/5] ASoC: Intel: bytcht_cx2072x: Replace open coded
- acpi_dev_put()
-Message-ID: <Y7VVCc7TjY3YsJoV@smile.fi.intel.com>
-References: <20230102203037.16120-1-andriy.shevchenko@linux.intel.com>
- <731b2d59-22f1-a456-bcfc-040a1adccce0@linux.intel.com>
+        Wed, 4 Jan 2023 05:30:13 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174433894
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 02:30:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=qqH/Me3GhLyp/wEo5gWkk1CCi9uaf7ZM+4ekDHBfv/o=; b=MzSwVCMy6Sq7bl8rj3fXSOX+wo
+        CwdlM35qa0ksQvSjj6nd+QzXei7uCaw/SNr/gvTxC+3EaH0dHXoA8DqTsGNAEdPTh0r+voNedE5rt
+        4R16DXgUj2sLwSqPjfJef3JTByMVybwdUvViL5Ppxp0C3rUrgW9SMkoeQFxVfeYLh0b673Q+aodWe
+        cOPhnEG7byynZn9fSJELCi1OyhB4wq8PXYxfHiQCKCOs9kv+sgFXPslo3hEM/3LtJXaDSLzf4Jtvw
+        AFYlolxEqjqAj4KNJ3uh+RwlIKHyVnXxrIWxVileSzrmTH4mlUvhnNBaITd17Qntda6otI79i8O1z
+        j4VPAg1g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35964)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pD123-0006Jo-NA; Wed, 04 Jan 2023 10:30:03 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pD11z-0002yH-Ev; Wed, 04 Jan 2023 10:29:59 +0000
+Date:   Wed, 4 Jan 2023 10:29:59 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>
+Subject: Re: [PATCH v3 0/5] Fix a whole host of nvmem registration/cleanup
+ issues
+Message-ID: <Y7VVJxpLtouhEO6u@shell.armlinux.org.uk>
+References: <Y7RezbPSGrO37NZZ@shell.armlinux.org.uk>
+ <7f6b2a9a-1ffc-424f-2287-5934cf653bde@linaro.org>
+ <c5b1949f-f39e-8783-19be-cb27c96aea33@marcan.st>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <731b2d59-22f1-a456-bcfc-040a1adccce0@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <c5b1949f-f39e-8783-19be-cb27c96aea33@marcan.st>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,30 +64,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 09:08:20AM -0600, Pierre-Louis Bossart wrote:
-> On 1/2/23 14:30, Andy Shevchenko wrote:
-> > Instead of calling put_device(&adev->dev) where adev is a pointer
-> > to an ACPI device, use specific call, i.e. acpi_dev_put().
+On Wed, Jan 04, 2023 at 10:15:14AM +0900, Hector Martin wrote:
+> On 04/01/2023 06.15, Srinivas Kandagatla wrote:
+> > Hi Russell,
 > > 
-> > Also move it out of the conditional to make it more visible in case
-> > some other code will be added which may use that pointer. We need
-> > to keep a reference as long as we use the pointer.
 > > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > On 03/01/2023 16:58, Russell King (Oracle) wrote:
+> >> Hi,
+> >>
+> >> This series fixes a whole host of nvmem registration/error cleanup
+> >> issues that have been identified by both Hector and myself. It is a
+> >> substantial rework of my original patch fixing the first problem.
+> >>
+> >> The first most obvious problem is the race between nvmem registration
+> >> and use, which leads to sporadic failures of drivers to probe at boot
+> >> time.
+> >>
+> >> While fixing this, it has been noticed that a recent fix to check the
+> >> return value of dev_set_name() introduced a new bug where wp_gpio was
+> >> not being put in that newly introduced error path.
+> >>
+> >> Then there's a fix for a previous fix which itself purports to fix
+> >> another bug, but results in the allocated ID being leaked. Fix for a
+> >> fix for a fix is not good!
+> >>
+> >> Then there's an error in the docbook documentation for wp_gpio (it's
+> >> listed as wp-gpio instead) but as nothing seems to set wp_gpio, we
+> >> might as well get rid of it - which also solves the issue that we
+> >> call gpiod_put() on this whether we own it or not.
+> >>
+> >> Lastly, there's a fix for yet another spurious white-space in this
+> >> code, one of what seems to be a long history of past white-space
+> >> fixes.
+> >>
+> >> These patches have been individually build-tested in the order of
+> >> posting, but not run-time tested except for the entire series.
+> > 
+> > 
+> > thanks for fixing these issues, I have applied these after fixing the 
+> > subject on all the patches, as it ended up with email ids in subject.
 > 
-> Answering for the series: we should make the change across all Intel
-> machine drivers. I see at least four cases that were missed
+> Right. I see none of the issues you two lectured me about actually
+> mattered, it was all for show, and this isn't getting backported anyway.
 > 
-> bytcr_rt5640.c:         put_device(&adev->dev);
-> bytcr_rt5651.c:         put_device(&adev->dev);
-> bytcr_wm5102.c: put_device(&adev->dev);
-> sof_es8336.c:           put_device(&adev->dev);
+> Good job you two. The day I finally rage quit the kernel after enough of
+> this nonsense and make a big dossier of just how fucked up the kernel
+> maintainer community's attitude is, I will be sure to use this as an
+> example.
+> 
+> That day is not today though. But I certainly won't be upstreaming any
+> more patches to nvmem.
 
-Aren't they (they all problematic, btw) covered by the fixes series
-https://lore.kernel.org/r/20230102203014.16041-1-andriy.shevchenko@linux.intel.com?
+You've really little clue, have you.
+
+I really don't see that you'll *ever* get apple hardware properly
+functional in mainline. Good luck maintaining a fork of the kernel
+for ever into the future.
+
+I've had enough of you.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
