@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE71465CC1F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 04:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD59465CC2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 04:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234357AbjADDV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 22:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S237990AbjADDfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 22:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234316AbjADDV5 (ORCPT
+        with ESMTP id S230060AbjADDf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 22:21:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A465580
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 19:21:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672802474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a0EYPdegMv2Qzzqky790rw/FkqITGzxXVxGnFBGqkRE=;
-        b=ioJSbTVIs4iQjXuBh21F+ZzM8pXLr/9WSR9j3ugZP/mCzgGoEJ3VIR7vLTbkLh3TQe6cpx
-        zh1Ze9V2xqnIIvLVWCOgPQEIxixmaK893wLvWuG7DOTr5qzhPXufBz+4dcHfINHo5vTLRD
-        j2EqKs94YDc8HViXGWRCNyD1ZkVeVzU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-132-8xHK1lY2PtyCeW7JVIIdsA-1; Tue, 03 Jan 2023 22:21:08 -0500
-X-MC-Unique: 8xHK1lY2PtyCeW7JVIIdsA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 017E129ABA17;
-        Wed,  4 Jan 2023 03:21:08 +0000 (UTC)
-Received: from localhost (ovpn-12-189.pek2.redhat.com [10.72.12.189])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BC5B02026D68;
-        Wed,  4 Jan 2023 03:21:06 +0000 (UTC)
-Date:   Wed, 4 Jan 2023 11:21:03 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH 0/2] kexec: Remove unnecessary arch hook
-Message-ID: <Y7TwnyixithmnizI@MiWiFi-R3L-srv>
-References: <20221215182339.129803-1-helgaas@kernel.org>
- <Y6KiH2Nf/hMiaPmD@MiWiFi-R3L-srv>
+        Tue, 3 Jan 2023 22:35:29 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D6C165BC
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 19:35:05 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so25540063wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 19:35:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gsvk33R4DYQucuzlILv604rElypjCvBYNtIeYzz0ItU=;
+        b=3oPy7+/jBszDhLigAlcyWJ6kZj7wuKNL8KKHikey1QL2RrHkm82yqN0HrLoHfyD/Np
+         hvADAUjv04m5PtaKw+YETVRcGYgSUcZQdM3QEBMIYe6u/N58dvcESEvokUVObcQosnTb
+         PZZC27Ng0YvD/2QcKhqwXrwm+i4vqLP7ofMRRlX2xMgGY+PdM8j/v2oFtuD13+Tnq/8g
+         6lFuZCOcWtfaNQztCOmwqHRTmhvjaKPd+M+/tProuJU1f9ByAZKYmMYwPeLTzqWqfHr/
+         W66+LngGprgSggAPkGil5/MvRA7CP6EtYiA+eEAfNaWTSqqQcKNEtmMAEyIA64wmpCT5
+         Z+9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gsvk33R4DYQucuzlILv604rElypjCvBYNtIeYzz0ItU=;
+        b=C2u1YOqRUSnYuIPjn+sZ7Is3EFqHMLcQHbYufMGU+JbMi1S7pZI6wb4kjZbBVYkp/F
+         G0kIkwe1CF6kEztSDzHilK0itmlpSBGIGQ4ffHNLBp1EgqPcGI4rHVqybYMX3fqbgYfH
+         6KRaHVTmVRp3OSiZ3kCYgR9j/X1UbfOY79PlzRpt/pz74qJwielb8x1iBETNJbcI6IR1
+         vUQSk0A1Ni+RG0n0qPUkcF7IlmZc4ZUbETp3gFoRFQR+djoIH2shjNkpzh7KotH3cd0S
+         L51aJnXrrmLoe5wpdRJg1tRBSKtNQrTb7gFaLaoyD6bj4WXw5MCCcjY6ZapBC+W1Xqmy
+         ewIA==
+X-Gm-Message-State: AFqh2kpuO5GGZfsGSeFnGdXpouNGBSrs3p17rhIEmAjPu0yJPfe+tqLZ
+        FTmYXtsrXkFGztqZVUttZSu8NfR6ok0fKcT39O87/A==
+X-Google-Smtp-Source: AMrXdXv/rEpUOV6MhzNpIfs3SJsrAZanT6qfePBKVHNyTtojiOwaTIsZIFySFaHBQhw+w4GqtmEzKe/FnRXjQ605btg=
+X-Received: by 2002:a05:600c:3503:b0:3cf:8952:2fd2 with SMTP id
+ h3-20020a05600c350300b003cf89522fd2mr2897959wmq.9.1672803304583; Tue, 03 Jan
+ 2023 19:35:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6KiH2Nf/hMiaPmD@MiWiFi-R3L-srv>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221229080207.1029-1-cuiyunhui@bytedance.com> <Y7HaeTkNtfb3oIP4@pop-os.localdomain>
+In-Reply-To: <Y7HaeTkNtfb3oIP4@pop-os.localdomain>
+From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+Date:   Wed, 4 Jan 2023 11:34:53 +0800
+Message-ID: <CAEEQ3wmc_hPwUc9zeFJ7c0xvmyip7CGHvCHQN2U4c8wyfM1KLA@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH] tcp/udp: add tracepoint for send recv length
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     edumazet@google.com, rostedt@goodmis.org, mhiramat@kernel.org,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, duanxiongchun@bytedance.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,26 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ingo, Boris,
+Cong Wang <xiyou.wangcong@gmail.com> =E4=BA=8E2023=E5=B9=B41=E6=9C=882=E6=
+=97=A5=E5=91=A8=E4=B8=80 03:10=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Thu, Dec 29, 2022 at 04:02:07PM +0800, Yunhui Cui wrote:
+> > From: Xiongchun Duan <duanxiongchun@bytedance.com>
+> >
+> > Add a tracepoint for capturing TCP segments with
+> > a send or receive length. This makes it easy to obtain
+> > the packet sending and receiving information of each process
+> > in the user mode, such as the netatop tool.
+>
+> You can obtain the same information with kretprobe:
+> https://www.gcardone.net/2020-07-31-per-process-bandwidth-monitoring-on-L=
+inux-with-bpftrace/
 
-On 12/21/22 at 02:05pm, Baoquan He wrote:
-> On 12/15/22 at 12:23pm, Bjorn Helgaas wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > There are no arch-specific things in arch_kexec_kernel_image_load(), so
-> > remove it and just use the generic version.
-> 
-> This patchset looks good to me, thx.
-> 
-> Acked-by: Baoquan He <bhe@redhat.com>
-> 
-> Since it cleans up the last arch specific version of
-> arch_kexec_kernel_image_load in x86, maybe this patchset can go into x86
-> branch?
+As we know, kprobe gets the result by trapping in an exception, which
+loses performance compared to tracepoint.
 
-Could you consider picking this patchset into x86 branch? This is a
-clean up on kexec, while the last ARCH using it is x86.
+We did a test for performance comparison. The results are as follows.
 
-Thanks
-Baoquan
+Time per request
+sock_sendmsg(k,kr):  12.382ms=EF=BC=8C tcp_send_length(tracepoint): 11.887m=
+s=EF=BC=8C
+without hook=EF=BC=9A11.222ms
 
+It can be seen that the performance loss of tracepoint is only half of
+that of kprobe.
