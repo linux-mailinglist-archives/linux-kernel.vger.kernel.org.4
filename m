@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F063165DB48
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5476465DB4A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235388AbjADRah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 12:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S239633AbjADRaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 12:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjADRaf (ORCPT
+        with ESMTP id S235108AbjADRaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 Jan 2023 12:30:35 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F35C15725
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 09:30:34 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id v15-20020a9d69cf000000b006709b5a534aso21139806oto.11
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 09:30:34 -0800 (PST)
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1592317E06
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 09:30:35 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id jn22so36508725plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 09:30:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qcvt8eh5u3jiwS1uurMGyfwX+9LkSAcqQgzciAku68s=;
-        b=d8/9SpVPU7WL3d9+TCOTqSUjTgV0TdrbEaPSgajJJe80tyjT9JW0e2ovpH1D5hQf1i
-         5y+NXU1Isls0KfGTP45/Bc1gYfX51BRNOG8drqyq7w5WV5fJ9ACZ6A4CqWZ6De16gTtZ
-         1wX3nWw4VyjWp8yTViHWaQqCLamPkidvDtHj12/uYbZfqkLGaPzhuN0EK2ZeCkrEbn4O
-         yUmTbpQd+Mb02PZLFPuxCvjfxGnsvGPshMhkt2sq5J+yVlAx4sBU5ONIL8EcrFPcWFQz
-         uZoChbKguX9jiIybrGeu2LdLadfMcXpwsmEtHw0Kx+t7Sjr5VihhAp0X4D/cIyBtqqC+
-         pbbw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RraqTIc19Yf5WtljYry6wuVG1FISGDkwp9OBAd+D23A=;
+        b=nYD+1MWGEyXXY7smw4USQOZ+pFDB8wUhA6OqZNwfBqAuXcxed7yNXs0Uh+Y5wKpErG
+         jtF1Vx87FoUTEOUrJTCBixGhRZTHta5JTHroUkxEZwR5bMmK8UFhPhvL5EJoTmcdTdiV
+         th3K4t/tI/kdnYSSfCSoZ4B9oxxIn0NCt/KhydPVoyLDcflZrSo22T84RVu1nSkc5zAp
+         rlZJv/FPDdSV6svuxHyxxCOg9z6GPFXRxhdigGz8XvZTahIrx6SeEIUn0b1hKzSZUuAN
+         ZRQYGWsNG/cIdRhBz3rO/VARYVcVowy/nJLBb9EZo49qBJl91Op8S0SFxsrvWi3CKcz9
+         1H3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qcvt8eh5u3jiwS1uurMGyfwX+9LkSAcqQgzciAku68s=;
-        b=eQGMXzcIevtWMQSvsdjr4LRcvF/aH1rdanVxR8gZlVFjfEmxnq4SktVGLdrjUliluY
-         uEmInJdxyXrwXra4ozL0NCzCVNBqBbdokFWy7Tzoc7844E460+cgMZacJsEh1+UJKIam
-         VNE17uLhes+1SdprddkH0LJxJJuUUF4UPO1vkvb6CVYb7iOKu3SX39chFv2Z3gioq5Oh
-         gg12coXQ3RoGxeGKdJZt1jAWvKq4hpoBUw8WQzzS8HsD+GocOwaGolBB3Arh5Qhyn5fD
-         wyDfHhnrr3u/N4cYN3hklAe/32RBbDTDbLNdIgr24TdsY5ri4zhJQ7RjYTK4erni07GP
-         wBCA==
-X-Gm-Message-State: AFqh2krfCKJDO8udm+4bMw/+x7E5jcZi5J68ib/CdOd2YbfwPvIDoXg4
-        IycMFAO5uDF/+qteiIIQzRcXfkz8jqcx12V8Tek=
-X-Google-Smtp-Source: AMrXdXtMAMNL/KMNkRIFRDaQNb7XroAB+qD+qaH8wu1bibXrlG8xHLN3IbD2SQrSd9LHx19dUTDLMJ2ScX135Ata/0Q=
-X-Received: by 2002:a9d:6ac6:0:b0:671:cacb:681f with SMTP id
- m6-20020a9d6ac6000000b00671cacb681fmr3039203otq.233.1672853433856; Wed, 04
- Jan 2023 09:30:33 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RraqTIc19Yf5WtljYry6wuVG1FISGDkwp9OBAd+D23A=;
+        b=T2pZ1fZoU8wdaJQxt34LOkWBotD32mZXCRhgHnZc/nrL59FsIlnDsAyQIcOOo5bxwV
+         nU2iewqV0T7OliPekQvGw4X2T7X0THUThuvADr1R9MQrCFs3QCHTrusK5IBazf7tFukn
+         hNrDtmfLvJBIioZqJv65XkFrarGp8OcVawz78WD3t5XnA6Yku/2/ugNQycW0sGNqxMhI
+         Qk8w1G9BgPnSwhzv136l3krms+Z+gPRUiMy1pcGDK9RIYGwDbxnoD8xXkVpDaHJ9vt6u
+         F2md3YyUvm0t+oEIFiqA3fuhUSAmRERo2QvhxYETJUsDnRIWlXiqyn6ettTQO48ShTZR
+         sRJg==
+X-Gm-Message-State: AFqh2kr4/WtnA2OczGwnlDOUwoBRKBzArKzGUOZa7xPdyBw/E/ulbRWq
+        U+o1f8318aklVoxeNFVwfFRobujkk3LEsGRhi5i12w==
+X-Google-Smtp-Source: AMrXdXuGAjwbDO6MlESAelpRxq+pO6qqLPGFFa6VegJVnadYDSgxviiV3lNZONQzL2U8Rb3QZX7hTECA6cgKpvNbp6Y=
+X-Received: by 2002:a17:902:6b08:b0:190:f5f5:fd17 with SMTP id
+ o8-20020a1709026b0800b00190f5f5fd17mr3078478plk.59.1672853434356; Wed, 04 Jan
+ 2023 09:30:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20230104164042.30271-1-mario.limonciello@amd.com> <20230104164042.30271-46-mario.limonciello@amd.com>
-In-Reply-To: <20230104164042.30271-46-mario.limonciello@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 4 Jan 2023 12:30:22 -0500
-Message-ID: <CADnq5_OkOvjaJFFj2HzQE+PTRqMby0uHEkgziGnaxwn1=JoRiA@mail.gmail.com>
-Subject: Re: [PATCH v5 45/45] drm/amd: make amdgpu_ucode_validate static
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        linux-kernel@vger.kernel.org, "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Lazar Lijo <Lijo.Lazar@amd.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        Carlos Soriano Sanchez <csoriano@redhat.com>,
-        christian.koenig@amd.com
+References: <Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N> <Y1QEzk/A41PKLEPe@hirez.programming.kicks-ass.net>
+ <Y1Z12xuY9fDaHuCm@FVFF77S0Q05N>
+In-Reply-To: <Y1Z12xuY9fDaHuCm@FVFF77S0Q05N>
+From:   Fangrui Song <maskray@google.com>
+Date:   Wed, 4 Jan 2023 09:30:22 -0800
+Message-ID: <CAFP8O3+X0ZoA3MjzgDDwqV2OyCwkperKiQK5cx36j0FypVdJeA@mail.gmail.com>
+Subject: Re: kCFI && patchable-function-entry=M,N
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,46 +78,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Other than the patches I commented directly on, this series is:
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+ On Mon, Oct 24, 2022 at 4:24 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Sat, Oct 22, 2022 at 04:57:18PM +0200, Peter Zijlstra wrote:
+> > On Fri, Oct 21, 2022 at 04:56:20PM +0100, Mark Rutland wrote:
+> > > Hi,
+> > >
+> > > For arm64, I'd like to use -fatchable-function-entry=3DM,N (where N >=
+ 0), for our
+> > > ftrace implementation, which instruments *some* but not all functions=
+.
+> > > Unfortuntately, this doesn't play nicely with -fsanitize=3Dkcfi, as i=
+nstrumented
+> > > and non-instrumented functions don't agree on where the type hash sho=
+uld live
+> > > relative to the function entry point, making them incompatible with o=
+ne another.
+> > > AFAICT, there's no mechanism today to get them to agree.
+> > >
+> > > Today we use -fatchable-function-entry=3D2, which happens to avoid th=
+is.
+> >
+> > > ... but I understand that for x86, folk want the pre-function NOPs to
+> > > fall-through into the body of the function.
+> >
+> > Yep.
+> >
+> > > Is there any mechanism today that we could use to solve this, or coul=
+d we
+> > > extend clang to have some options to control this behaviour?
+> >
+> > So the main pain-point for you is differentiating between function with
+> > notrace and those without it, right?
+> >
+> > That is; suppose you (like x86) globally do:
+> > -fpatchable-function-entry=3D4,2 to get a consistent function signature=
+,
+> > you're up a creek because you use the __patchable_function_entries
+> > section to drive ftrace and now every function will have it.
+> >
+> > So perhaps something like:
+> >
+> >  -fpatchable-function-entry=3DN,M,sectionname
+> >
+> > would help, then you can have notrace be the same layout, except a
+> > different section. Eg. something like:
+> >
+> >  #define notrace __attribute__((patchable_function_entry(4,2,__notrace_=
+function_entries)))
+>
+> FWIW, I think that'd work for me, and that was roughly my original propos=
+al on
+> IRC. My only concern with this approach is code size, since all uninstrum=
+ented
+> functions gain some point less prefix NOPs.
+>
+> We can make that slghtly better as:
+>
+> #define notrace __attribute__((patchable_function_entry(2,2,__notrace_fun=
+ction_entries)))
+>
+> ... since we don't care about placing NOPs *within* the function
+>
+> > It does make the whole: CFLAGS_REMOVE_file.o =3D $(CC_FLAGS_FTRACE)
+> > a bit of a pain, but I've long favoured removing all that and having
+> > explitic notrace attributes on all relevant functions.
+> >
+> > Then again; perhaps it could be made to work by ensuring CFLAGS starts
+> > with:
+> >
+> >  -fpatchable-function-entry=3D4,2,__notrace_function_entries
+> >
+> > and have CC_FLAGS_FTRACE include (and hence override with)
+> >
+> >  -fpatchable-function-entry=3D4,2,__ftrace_function_entries
+> >
+> > assuming that with duplicate argument the last is effective.
+>
+> TBH, it'd be nice to move ftrace to the `CFLAGS_WHATEVER_obj.o :=3D n` ap=
+proach
+> the other instrumentation uses, which IIUC would allow us to define diffe=
+rent
+> flags for the two cases (though I'll need to go check that).
+>
+> Thanks,
+> Mark.
 
-On Wed, Jan 4, 2023 at 11:45 AM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> No consumers outside of amdgpu_ucode.c use amdgpu_ucode_validate
-> anymore, so make the function static.
->
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c | 2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-> index dc6af1fffdd9..b759a4300d7a 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-> @@ -504,7 +504,7 @@ void amdgpu_ucode_print_gpu_info_hdr(const struct common_firmware_header *hdr)
->         }
->  }
->
-> -int amdgpu_ucode_validate(const struct firmware *fw)
-> +static int amdgpu_ucode_validate(const struct firmware *fw)
->  {
->         const struct common_firmware_header *hdr =
->                 (const struct common_firmware_header *)fw->data;
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
-> index 7fd2f04f7f98..28fc2960edfe 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
-> @@ -543,7 +543,6 @@ void amdgpu_ucode_print_rlc_hdr(const struct common_firmware_header *hdr);
->  void amdgpu_ucode_print_sdma_hdr(const struct common_firmware_header *hdr);
->  void amdgpu_ucode_print_psp_hdr(const struct common_firmware_header *hdr);
->  void amdgpu_ucode_print_gpu_info_hdr(const struct common_firmware_header *hdr);
-> -int amdgpu_ucode_validate(const struct firmware *fw);
->  int amdgpu_ucode_request(struct amdgpu_device *adev, const struct firmware **fw,
->                          const char *fw_name);
->  void amdgpu_ucode_release(const struct firmware *fw);
-> --
-> 2.34.1
->
+Hi Mark and Peter,
+
+Sami asked my opinion (as the main -fpatchable-function-entry=3D
+implementer on the llvm-project side) on this extension
+(-fpatchable-function-entry=3D4,2,__ftrace_function_entries).
+I think this is fine.
+
+You may consider bringing this up as a GCC feature request
+(https://gcc.gnu.org/bugzilla/show_bug.cgi) and CCing the author/the
+committer of https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D417ca0117a=
+1a9a8aaf5bc5ca530adfd68cb00399
+(original -fpatchable-function-entry=3D support) and the author of
+https://gcc.gnu.org/git/gitweb.cgi?p=3Dgcc.git;h=3Dc23b5006d3ffeda1a9edf5fd=
+817765a6da3696ca
+(powerpc64 ELFv2 support).
+On the feature request, a summary (so that toolchain people don't have
+to read every message in this thread) will help:)
+
+
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
