@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7DD65D3D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D2D65D3D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239355AbjADNIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S234652AbjADNIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:08:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239362AbjADNHt (ORCPT
+        with ESMTP id S239466AbjADNIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:07:49 -0500
+        Wed, 4 Jan 2023 08:08:15 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E5D395C2
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:07:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75A737387
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:07:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672837626; x=1704373626;
+  t=1672837646; x=1704373646;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gxJLHmezjsBYFySYnAyva9RMyCE4Jcahplt9m+F0/+g=;
-  b=WFHi+D5iBPo74VzbRcv88jdv//tVFUmRHGoG4cx83rKu2hFBzvaDoIsF
-   TpWZl+phJgeHLXu8YgstW9GwhfXqx/4DeOh1tyA6NW/Bi2+FFatuJGX5Q
-   2GeVEHJRXaUZx5kgDWesB1PlMbkN0GovNQPddS43QedXbdQdudMJolpMk
-   TKYDJXh1FYBc83a4IQbJqsskVNbXuMxANzRryYg7ZFuUemRr4TuMe9eWn
-   hKuVWiKhmeSqW6P8wTL2sHlzeBjyFyXPJ6tuD76fgpunWCu8n0RAsC4Jg
-   oQeSxRkjjo762nM6GDWkBnJZpjwbmOJBH8oXfzTcuXL+Lx6gI+tou9jB+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320640135"
-X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="320640135"
+  bh=NqpK1UK4zC2YasbUe6iVPvT9t2cN4N0bRVM1VXzIvT0=;
+  b=NF02FhD1eQM8nLxU8MfxJIF+u/my/1K27BVf1gMkLbLLjiuSeKr5a0Fm
+   niM6Jr5o2h414Bgcp2/6C/+MOm99E1OEMXCnn+CygQNjvSUTL23aj3HNK
+   nM7J+uIXVMcqa8brT0zft6ZU76wyHe1rjEcSvoaV/3FNRXTyE6UQ2pKs/
+   b6pngtha8x9/k+N8N/56WARCcMI3hryh5lx7KbeZePsJMdd4cO9oYcgk2
+   aevOlXJF6wIeRB9pnW4it6d6p5Yitysnz8d8y21q6skBIBLvhia1YtX29
+   fooK1hrOea/r6iGb5OGKybUO5fhs5xB2kNIn9Axdur+xiYJCMhzRRWwE6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320640190"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="320640190"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:06:54 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:07:00 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529142"
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529147"
 X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="797529142"
+   d="scan'208";a="797529147"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:06:47 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:06:54 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -65,9 +65,9 @@ Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v4 14/19] iommu/omap: Add set_platform_dma_ops callback
-Date:   Wed,  4 Jan 2023 20:57:20 +0800
-Message-Id: <20230104125725.271850-15-baolu.lu@linux.intel.com>
+Subject: [PATCH v4 15/19] iommu/s390: Add set_platform_dma_ops callback
+Date:   Wed,  4 Jan 2023 20:57:21 +0800
+Message-Id: <20230104125725.271850-16-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230104125725.271850-1-baolu.lu@linux.intel.com>
 References: <20230104125725.271850-1-baolu.lu@linux.intel.com>
@@ -89,37 +89,41 @@ detach_dev. Remove it to avoid dead code.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/omap-iommu.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/iommu/s390-iommu.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
-index 2fd7702c6709..3ab078112a7c 100644
---- a/drivers/iommu/omap-iommu.c
-+++ b/drivers/iommu/omap-iommu.c
-@@ -1556,9 +1556,9 @@ static void _omap_iommu_detach_dev(struct omap_iommu_domain *omap_domain,
- 	omap_domain->dev = NULL;
+diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+index ed33c6cce083..5591dab99446 100644
+--- a/drivers/iommu/s390-iommu.c
++++ b/drivers/iommu/s390-iommu.c
+@@ -144,13 +144,10 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 	return 0;
  }
  
--static void omap_iommu_detach_dev(struct iommu_domain *domain,
--				  struct device *dev)
-+static void omap_iommu_set_platform_dma(struct device *dev)
+-static void s390_iommu_detach_device(struct iommu_domain *domain,
+-				     struct device *dev)
++static void s390_iommu_set_platform_dma(struct device *dev)
  {
-+	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
- 	struct omap_iommu_domain *omap_domain = to_omap_domain(domain);
+ 	struct zpci_dev *zdev = to_zpci_dev(dev);
  
- 	spin_lock(&omap_domain->lock);
-@@ -1737,10 +1737,10 @@ static const struct iommu_ops omap_iommu_ops = {
- 	.probe_device	= omap_iommu_probe_device,
- 	.release_device	= omap_iommu_release_device,
- 	.device_group	= omap_iommu_device_group,
-+	.set_platform_dma_ops = omap_iommu_set_platform_dma,
- 	.pgsize_bitmap	= OMAP_IOMMU_PGSIZES,
+-	WARN_ON(zdev->s390_domain != to_s390_domain(domain));
+-
+ 	__s390_iommu_detach_device(zdev);
+ 	zpci_dma_init_device(zdev);
+ }
+@@ -435,11 +432,11 @@ static const struct iommu_ops s390_iommu_ops = {
+ 	.probe_device = s390_iommu_probe_device,
+ 	.release_device = s390_iommu_release_device,
+ 	.device_group = generic_device_group,
++	.set_platform_dma_ops = s390_iommu_set_platform_dma,
+ 	.pgsize_bitmap = SZ_4K,
+ 	.get_resv_regions = s390_iommu_get_resv_regions,
  	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev	= omap_iommu_attach_dev,
--		.detach_dev	= omap_iommu_detach_dev,
- 		.map		= omap_iommu_map,
- 		.unmap		= omap_iommu_unmap,
- 		.iova_to_phys	= omap_iommu_iova_to_phys,
+ 		.attach_dev	= s390_iommu_attach_device,
+-		.detach_dev	= s390_iommu_detach_device,
+ 		.map_pages	= s390_iommu_map_pages,
+ 		.unmap_pages	= s390_iommu_unmap_pages,
+ 		.flush_iotlb_all = s390_iommu_flush_iotlb_all,
 -- 
 2.34.1
 
