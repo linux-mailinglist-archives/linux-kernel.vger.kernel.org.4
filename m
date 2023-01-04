@@ -2,34 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A32865D0F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21DF65D06E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238972AbjADKxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 05:53:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
+        id S234814AbjADKL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 05:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbjADKwk (ORCPT
+        with ESMTP id S234672AbjADKLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 05:52:40 -0500
-X-Greylist: delayed 2457 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Jan 2023 02:50:52 PST
-Received: from stargate.chelsio.com (stargate.chelsio.com [12.32.117.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880CBE7D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 02:50:52 -0800 (PST)
-Received: from localhost (raina-lt.asicdesigners.com [10.193.177.176] (may be forged))
-        by stargate.chelsio.com (8.14.7/8.14.7) with ESMTP id 304A9GXG016296;
-        Wed, 4 Jan 2023 02:09:28 -0800
-Date:   Wed, 4 Jan 2023 15:39:16 +0530
-From:   Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>
-To:     linux-firmware@kernel.org
-Cc:     linux-kernel@vger.kernel.org, jwboyer@kernel.org,
-        rahul.lakkireddy@chelsio.com
-Subject: pull request: linux-firmware: update cxgb4 firmware to 1.27.1.0
-Message-ID: <Y7VQTMD97rHTqsBo@chelsio.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_05,SPF_HELO_NONE,
+        Wed, 4 Jan 2023 05:11:36 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAF16160;
+        Wed,  4 Jan 2023 02:11:35 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CF59C3EC52;
+        Wed,  4 Jan 2023 10:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1672827093; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Wf8/FIMUYrQBgeOJTLbyqmuHcLemKRfaSwIgj/ziLY=;
+        b=jIUUFUU4O3+mr00mQ7oQ+W+IN6muOpQoiGa1T4DXF48Lx9Y3A5n1l3SM5VZCFtXmV9rKtO
+        PWozl0rpB0LiTs1pgl+y+qx9yOF2gc7x35uoNxzClAeKaIqmHP7juHQFr+amDAbnvPtsGn
+        Awxy+tP6CsmdlT8zN3wPbrKXwlKuyvU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1672827093;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Wf8/FIMUYrQBgeOJTLbyqmuHcLemKRfaSwIgj/ziLY=;
+        b=D0MHobL4tuE7ZPWKE8E97wXFBOr64KvTOm6Rw/I7BhK9Q5o1j91ixSHvtER+J+tV0YG4/M
+        fEf/9Vm6HgpdY/DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 93007133D1;
+        Wed,  4 Jan 2023 10:11:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id swQFI9VQtWPZTQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 04 Jan 2023 10:11:33 +0000
+Date:   Wed, 04 Jan 2023 11:11:33 +0100
+Message-ID: <87wn62obhm.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org,
+        =?ISO-8859-1?Q?P=C1LFFY_D=E1niel?= <dpalffy@gmail.com>,
+        Alsa-devel <alsa-devel@alsa-project.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Mark Brown <broonie@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Sergey <zagagyka@basealt.ru>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: Request for cherry-picks for sound (Re: [regression, 5.10.y] Bug 216861)
+In-Reply-To: <87sfgrpos6.wl-tiwai@suse.de>
+References: <bebd692d-7d21-6648-6b7a-c91063bb51c2@leemhuis.info>
+        <Y7K1WDmPYi3EMOn1@eldamar.lan>
+        <87wn65umye.wl-tiwai@suse.de>
+        <CALp6mkJhM1zDcNr9X_7WL09+uqcaAhNFFMhrjme0r7584O+Lgw@mail.gmail.com>
+        <CALp6mk+rdqGXySUowxZv3kEEVWrh96m_x-h8xcFNQ9YZPkbc5w@mail.gmail.com>
+        <87h6x7r7w6.wl-tiwai@suse.de>
+        <87sfgrpos6.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -37,37 +86,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the new Chelsio firmware from the following URL.
+Greg, just in case you missed my previous post.
 
-  http://git.chelsio.net/pub/git/linux-firmware.git for-upstream
+Could you cherry-pick the following two commits to 5.10.y and 5.15.y
+stable trees?
 
-Thanks,
-Rahul
+e8444560b4d9302a511f0996f4cfdf85b628f4ca
+    ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire
+ 
+636110411ca726f19ef8e87b0be51bb9a4cdef06
+    ASoC: Intel/SOF: use set_stream() instead of set_tdm_slots() for HDAudio
 
 
-The following changes since commit 52261d0329b1a2e414ee394aae3c5ca36283730f:
+Thanks!
 
-  Merge https://github.com/pkshih/linux-firmware (2022-12-16 07:10:10 -0500)
+Takashi
 
-are available in the Git repository at:
-
-  http://git.chelsio.net/pub/git/linux-firmware.git for-upstream
-
-for you to fetch changes up to 52e62d6af5c56b82ef49db415b12c8cfe4faf756:
-
-  cxgb4: Update firmware to revision 1.27.1.0 (2023-01-04 09:14:46 +0000)
-
-----------------------------------------------------------------
-Rahul Lakkireddy (1):
-      cxgb4: Update firmware to revision 1.27.1.0
-
- WHENCE                                         |  12 ++++++------
- cxgb4/{t4fw-1.27.0.0.bin => t4fw-1.27.1.0.bin} | Bin 570880 -> 570880 bytes
- cxgb4/t5fw-1.27.0.0.bin                        | Bin 677376 -> 0 bytes
- cxgb4/t5fw-1.27.1.0.bin                        | Bin 0 -> 678400 bytes
- cxgb4/{t6fw-1.27.0.0.bin => t6fw-1.27.1.0.bin} | Bin 729600 -> 730112 bytes
- 5 files changed, 6 insertions(+), 6 deletions(-)
- rename cxgb4/{t4fw-1.27.0.0.bin => t4fw-1.27.1.0.bin} (73%)
- delete mode 100644 cxgb4/t5fw-1.27.0.0.bin
- create mode 100644 cxgb4/t5fw-1.27.1.0.bin
- rename cxgb4/{t6fw-1.27.0.0.bin => t6fw-1.27.1.0.bin} (54%)
+On Tue, 03 Jan 2023 17:26:49 +0100,
+Takashi Iwai wrote:
+> 
+> On Tue, 03 Jan 2023 15:48:41 +0100,
+> Takashi Iwai wrote:
+> > 
+> > On Tue, 03 Jan 2023 14:04:50 +0100,
+> > PÁLFFY Dániel wrote:
+> > > 
+> > > And confirming, 5.10.161 with e8444560b4d9302a511f0996f4cfdf85b628f4ca
+> > > and 636110411ca726f19ef8e87b0be51bb9a4cdef06 cherry-picked works for
+> > > me.
+> > 
+> > That's a good news.  Then we can ask stable people to pick up those
+> > commits for 5.10.y and 5.15.y.
+> 
+> I confirmed that the latest 5.15.y requires those fixes, too.
+> 
+> Greg, could you cherry-pick the following two commits to both 5.10.y
+> and 5.15.y stable trees?  This fixes the recent regression caused by
+> the backport of 39bd801d6908.
+> 
+> e8444560b4d9302a511f0996f4cfdf85b628f4ca
+>     ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire
+> 
+> 636110411ca726f19ef8e87b0be51bb9a4cdef06
+>     ASoC: Intel/SOF: use set_stream() instead of set_tdm_slots() for HDAudio
+> 
+> 
+> Thanks!
+> 
+> Takashi
+> 
+> > 
+> > 
+> > Takashi
+> > 
+> > > 
+> > > On Tue, Jan 3, 2023 at 1:05 PM PÁLFFY Dániel <dpalffy@gmail.com> wrote:
+> > > >
+> > > > Another report: https://bugs.archlinux.org/task/76795
+> > > > Apparently, folks at alsa-devel traced down the dependencies of that patch, see the mail thread at https://lore.kernel.org/all/dc65501c-c2fd-5608-c3d9-7cea184c3989%40opensource.cirrus.com/
+> > > >
+> > > > On Mon, Jan 2, 2023 at 1:42 PM Takashi Iwai <tiwai@suse.de> wrote:
+> > > >>
+> > > >> On Mon, 02 Jan 2023 11:43:36 +0100,
+> > > >> Salvatore Bonaccorso wrote:
+> > > >> >
+> > > >> > Hi,
+> > > >> >
+> > > >> > [Adding as well Richard Fitzgerald and PÁLFFY Dániel to recipients]
+> > > >> >
+> > > >> > On Fri, Dec 30, 2022 at 09:08:57AM +0100, Thorsten Leemhuis wrote:
+> > > >> > > Hi, this is your Linux kernel regression tracker speaking.
+> > > >> > >
+> > > >> > > I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> > > >> > > kernel developer don't keep an eye on it, I decided to forward it by
+> > > >> > > mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216861 :
+> > > >> > >
+> > > >> > > >  Sergey 2022-12-29 10:07:51 UTC
+> > > >> > > >
+> > > >> > > > Created attachment 303497 [details]
+> > > >> > > > pulseaudio.log
+> > > >> > > >
+> > > >> > > > Sudden sound disappearance was reported for some laptops, e.g.
+> > > >> > > >
+> > > >> > > > Acer Swift 3 SF314-59-78UR 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+> > > >> > > >
+> > > >> > > > # lspci
+> > > >> > > > 0000:00:1f.3 Multimedia audio controller: Intel Corporation Tiger Lake-LP Smart Sound Technology Audio Controller (rev 20)
+> > > >> > > >         Subsystem: Acer Incorporated [ALI] Device 148c
+> > > >> > > >         Flags: bus master, fast devsel, latency 32, IRQ 197, IOMMU group 12
+> > > >> > > >         Memory at 601f270000 (64-bit, non-prefetchable) [size=16K]
+> > > >> > > >         Memory at 601f000000 (64-bit, non-prefetchable) [size=1M]
+> > > >> > > >         Capabilities: [50] Power Management version 3
+> > > >> > > >         Capabilities: [80] Vendor Specific Information: Len=14 <?>
+> > > >> > > >         Capabilities: [60] MSI: Enable+ Count=1/1 Maskable- 64bit+
+> > > >> > > >         Kernel driver in use: sof-audio-pci
+> > > >> > > >
+> > > >> > > > I am attaching the pulseaudio and dmesg logs
+> > > >> > > >
+> > > >> > > > This bug started reproducing after updating the kernel from 5.10.156 to 5.10.157
+> > > >> > > >
+> > > >> > > > Bisection revealed the commit being reverted:
+> > > >> > > >
+> > > >> > > > c34db0d6b88b1da95e7ab3353e674f4f574cccee is the first bad commit
+> > > >> > > > commit c34db0d6b88b1da95e7ab3353e674f4f574cccee
+> > > >> > > > Author: Richard Fitzgerald <rf@opensource.cirrus.com>
+> > > >> > > > Date:   Fri Nov 4 13:22:13 2022 +0000
+> > > >> > > >
+> > > >> > > >     ASoC: soc-pcm: Don't zero TDM masks in __soc_pcm_open()
+> > > >> > > >
+> > > >> > > >     [ Upstream commit 39bd801d6908900e9ab0cdc2655150f95ddd4f1a ]
+> > > >> > > >
+> > > >> > > >     The DAI tx_mask and rx_mask are set by snd_soc_dai_set_tdm_slot()
+> > > >> > > >     and used by later code that depends on the TDM settings. So
+> > > >> > > >     __soc_pcm_open() should not be obliterating those mask values.
+> > > >> > > >
+> > > >> > > > [...]
+> > > >> > > > Original bug report: https://bugzilla.altlinux.org/44690
+> > > >> > >
+> > > >> > > See the ticket for more details.
+> > > >> > >
+> > > >> > > BTW, let me use this mail to also add the report to the list of tracked
+> > > >> > > regressions to ensure it's doesn't fall through the cracks:
+> > > >> > >
+> > > >> > > #regzbot introduced: c34db0d6b88b1d
+> > > >> > > https://bugzilla.kernel.org/show_bug.cgi?id=216861
+> > > >> > > #regzbot title: sound: asoc: sudden sound disappearance
+> > > >> > > #regzbot ignore-activity
+> > > >> >
+> > > >> > FWIW, we had as well reports in Debian after having updated the kernel
+> > > >> > from 5.10.149 based one to 5.10.158 based one in the last point
+> > > >> > releases, they are at least:
+> > > >> >
+> > > >> > https://bugs.debian.org/1027483
+> > > >> > https://bugs.debian.org/1027430
+> > > >>
+> > > >> I got another report while the commit was backported to 5.14-based
+> > > >> openSUSE Leap kernel, and I ended up with dropping it.
+> > > >>
+> > > >> So, IMO, it's safer to drop this patch from the older stable trees.
+> > > >> As far as I see, 5.15.y and 5.10.y got this.
+> > > >>
+> > > >> Unless anyone gives a better fix, I'm going to submit a revert patch
+> > > >> for those trees.
+> > > >>
+> > > >>
+> > > >> thanks,
+> > > >>
+> > > >> Takashi
+> > > 
+> > 
