@@ -2,671 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E053865D9D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4291865D9D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239910AbjADQaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:30:20 -0500
+        id S239936AbjADQaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:30:23 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239942AbjADQ36 (ORCPT
+        with ESMTP id S235307AbjADQaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:29:58 -0500
-Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ED03E0C9
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:29:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
-        q=dns/txt; i=@phytec.de; t=1672849790; x=1675441790;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9sW5kml93bWgYpDfe56LODelbeza2R2wLKSMJ3Zok44=;
-        b=QKTTYZvLQukXBNu0iOpaLRWx7R8N4PA6iuBTXf4RTU4XJYbq5VKPUdaoJU0yHaxu
-        wb0jjMZ2x2tLuQI//tdwySJN2anqFYUnfTlmWCOqDCIjuRNEAm1gcFB6I3wNOCbL
-        IowIKpsj+5GhhnHs85OzYiH8sabgku0vLIIIfnJstAQ=;
-X-AuditID: ac14000a-917fe70000007ecb-1f-63b5a97e8d60
-Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
-        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 3B.EC.32459.E79A5B36; Wed,  4 Jan 2023 17:29:50 +0100 (CET)
-Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
- (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 4 Jan
- 2023 17:29:50 +0100
-From:   Wadim Egorov <w.egorov@phytec.de>
-To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <upstream@lists.phytec.de>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <kristo@kernel.org>, <vigneshr@ti.com>, <nm@ti.com>
-Subject: [PATCH v4 2/2] arm64: dts: ti: Add support for phyBOARD-Electra-AM642
-Date:   Wed, 4 Jan 2023 17:29:27 +0100
-Message-ID: <20230104162927.1215033-2-w.egorov@phytec.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230104162927.1215033-1-w.egorov@phytec.de>
-References: <20230104162927.1215033-1-w.egorov@phytec.de>
+        Wed, 4 Jan 2023 11:30:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE52233D74;
+        Wed,  4 Jan 2023 08:30:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 768CA617A2;
+        Wed,  4 Jan 2023 16:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196D8C433D2;
+        Wed,  4 Jan 2023 16:30:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672849802;
+        bh=xnOCzG4x3mzE/Q5tiZn6gSjOTpXMSm3tByuio0JtZsQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WNw4LQFd8WODdQn37Z8ntM7xcTSztBu7D4rr9xbvK4N/4XXK87+jb7PER2jOHzBGd
+         VCAPhkGMeRAqQ35G7yMm8xZX+Sgv1ebang2vEWPICgNJ/jepYfYlq8qAJ3SElKU0Eq
+         l4HXDp/mutw/NHVkf64r9FMP/n6P7rMANFIz1ffQ3Yjb/xqHzMADz4mlLYpnxp6sdN
+         o1fOiJEBkRKX/PxUVphN0joraHnl6mta9fBzo8WyPS/Tj9kMC+2POlKncBeAXYvcVq
+         w39nDfdlW8YVRiRHfoH1sQOhYRuJ04RhsV+nUc3MVPtN2smwMc0SJB93mOaLj1P89n
+         3sXKWUh33Z5rA==
+Date:   Wed, 4 Jan 2023 10:30:00 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Sarannya S <quic_sarannya@quicinc.com>, quic_bjorande@quicinc.com,
+        swboyd@chromium.org, quic_clew@quicinc.com,
+        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>
+Subject: Re: [PATCH V4 1/3] rpmsg: core: Add signal API support
+Message-ID: <20230104163000.hi6zehbbxpubeqfe@builder.lan>
+References: <1670418258-11502-1-git-send-email-quic_sarannya@quicinc.com>
+ <1670418258-11502-2-git-send-email-quic_sarannya@quicinc.com>
+ <6ba10328-bc48-c953-49e7-29e079fb6406@foss.st.com>
+ <20221227153252.ufenietw5wgsk7kj@builder.lan>
+ <1cbcd57c-ba6d-390f-a28c-fa651d1d7262@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.25.0.11]
-X-ClientProxiedBy: Florix.phytec.de (172.25.0.13) To Berlix.phytec.de
- (172.25.0.12)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrALMWRmVeSWpSXmKPExsWyRpKBR7du5dZkg7Pb9C3mHznHarH882x2
-        i74XD5ktNj2+xmpxedccNos3P84yWbTuPcJu0f1O3eL/2Q/sDpwem1Z1snncubaHzWPzknqP
-        /u4WVo/jN7YzeXzeJBfAFsVlk5Kak1mWWqRvl8CV8WXFIsaCny2MFdu3ZjQwtuR0MXJySAiY
-        SBy49JO5i5GLQ0hgMZPE/wfz2CCcx4wSz15+ZwSpYhNQl7iz4RsrSEJEoI1RYtaaaywgCWaB
-        Eok1x++xg9jCAn4Si/4fAopzcLAIqEisOegAEuYVsJQ4t3grG8Q2eYmZl76DlXMKWEnMP/0F
-        zBYCqmncPY0Rol5Q4uTMJ1Dj5SWat85mhrAlJA6+eMEMUS8v8eLSchaYmdPOvWaGsEMljmxa
-        zTSBUWgWklGzkIyahWTUAkbmVYxCuZnJ2alFmdl6BRmVJanJeimpmxhBsSLCwLWDsW+OxyFG
-        Jg7GQ4wSHMxKIryTXmxKFuJNSaysSi3Kjy8qzUktPsQozcGiJM57v4cpUUggPbEkNTs1tSC1
-        CCbLxMEp1cC4RCmRN8yoN+1S/PR8+eZFmgl7hOZJHJ9Z/sNW8la2gsyi5OgJDAdbItbc1Dt6
-        wMwr5PrsjkM7AgsnOc160j2hnKF6plSPOb+31ZpJd7zUe1bbXbojGfv3+Xbmg9o6Yac7TzIK
-        7Wc+XNPR1/B6I3Ol6LPefJtUd99Nqm/iDgYcmLJpSsODmTOUWIozEg21mIuKEwFwSLYPgwIA
-        AA==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1cbcd57c-ba6d-390f-a28c-fa651d1d7262@foss.st.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic support for phyCORE-AM64x SoM & phyBOARD-Electra-AM642 CB.
+On Tue, Jan 03, 2023 at 02:50:13PM +0100, Arnaud POULIQUEN wrote:
+> Hello,
+> 
+> On 12/27/22 16:32, Bjorn Andersson wrote:
+> > On Wed, Dec 21, 2022 at 05:12:22PM +0100, Arnaud POULIQUEN wrote:
+> >> Hello,
+> >>
+> >> On 12/7/22 14:04, Sarannya S wrote:
+> >>> Some transports like Glink support the state notifications between
+> >>> clients using flow control signals similar to serial protocol signals.
+> >>> Local glink client drivers can send and receive flow control status
+> >>> to glink clients running on remote processors.
+> >>>
+> >>> Add APIs to support sending and receiving of flow control status by
+> >>> rpmsg clients.
+> >>>
+> >>> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> >>> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
+> >>> ---
+> >>>  drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
+> >>>  drivers/rpmsg/rpmsg_internal.h |  2 ++
+> >>>  include/linux/rpmsg.h          | 15 +++++++++++++++
+> >>>  3 files changed, 38 insertions(+)
+> >>>
+> >>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> >>> index d6dde00e..77aeba0 100644
+> >>> --- a/drivers/rpmsg/rpmsg_core.c
+> >>> +++ b/drivers/rpmsg/rpmsg_core.c
+> >>> @@ -331,6 +331,25 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+> >>>  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
+> >>>  
+> >>>  /**
+> >>> + * rpmsg_set_flow_control() - sets/clears serial flow control signals
+> >>> + * @ept:	the rpmsg endpoint
+> >>> + * @enable:	enable or disable serial flow control
+> >>
+> >> What does it mean "enable and disable serial flow control"?
+> >> Do you speak about the flow control feature or the data flow itself?
+> >>
+> > 
+> > Good point, the purpose of the boolean is to "request throttling of the
+> > incoming data flow".
+> > 
+> >> I guess it is the activation/deactivation of the data stream
+> >> regarding Bjorn's comment in V1:
+> >>
+> >> "I therefore asked Deepak to change it so the rpmsg api would contain a
+> >> single "pause incoming data"/"resume incoming data" - given that this is
+> >> a wish that we've seen in a number of discussions."
+> >>
+> >> For me this is the software flow control:
+> >> https://en.wikipedia.org/wiki/Software_flow_control
+> >>
+> >> I would suggest not limiting the control only to activation/deactivation but to
+> >> offer more flexibility in terms of services. replace the boolean by a bitmap
+> >> would allow to extend it later.
+> >>
+> >> For instance by introducing 2 definitions:
+> >>
+> >> /* RPMSG pause transmission request:
+> >>  * sent to the remote endpoint to request to suspend its transmission */
+> >>  */
+> >> #define RPMSG_FC_PT_REQ  (1 << 0)
+> > 
+> > enable = true
+> > 
+> >>
+> >> /* RPMSG resume transmission request
+> >>  * sent to the remote endpoint to allow to resume its transmission
+> >>  */
+> >> #define RPMSG_FC_RT_REQ  (1 << 1)
+> >>
+> > 
+> > enable = false
+> 
+> Do you mean that it should be only one definition? If yes you are right
+> only one definition is sufficient for the pause/resume
+> 
 
-The phyCORE-AM64x [1] is a SoM (System on Module) featuring TI's AM64x SoC.
-It can be used in combination with different carrier boards.
-This module can come with different sizes and models for
-DDR, eMMC, SPI NOR Flash and various SoCs from the AM64x family.
+Yes, I envision this being used for cases such as rpmsg_char being able
+to send a "I already have 1MB of data in my sk_buf_head queue, please
+don't send me any more data for now".
 
-A development Kit, called phyBOARD-Electra [2] is used as a carrier board
-reference design around the AM64x SoM.
+> > 
+> >> Then we could add (in a next step) some other flow controls such as
+> >> /* RPMSG pause transmission information
+> >>  * Sent to the remote endpoint to inform that no more data will be sent
+> >>  * until the reception of RPMSG_FC_RT_INFO
+> >>  */
+> >> #define RPMSG_FC_PT_INFO  (1 << 16)
+> >> #define RPMSG_FC_RT_INFO  (1 << 16)
+> >>
+> > 
+> > I presume you're looking for a usage pattern where the client would send
+> > this to the remote and then the flow control mechanism would be used for
+> > the remote end to request more data.
+> > 
+> > I find Deepak's (adjusted) proposal to be generic and to the point, and
+> > your proposal builds unnecessary "flexibility" into this same mechanism.
+> > 
+> > If you have a rpmsg protocol where the client is expected to sit
+> > waiting, and upon a request from the remote side send another piece of
+> > data, why don't you just build this into the application protocol?  That
+> > way your application would work over both transports with and without
+> > flow control...
+> > 
+> > 
+> > Perhaps I'm misunderstanding what you're asking for?
+> 
+> With the RPMSG_FC_PT_INFO example I had in mind the possibility to implement PM
+> runtime.
+> 
 
-Supported features:
-  * Debug UART
-  * Heartbeat LED
-  * GPIO buttons & LEDs
-  * SPI NOR flash
-  * eMMC
-  * CAN
-  * Ethernet
-  * Micro SD card
-  * I2C EEPROM
-  * I2C RTC
-  * I2C LED Dimmer
-  * USB
+Which device/part are you going to runtime PM suspend using this?
 
-For more details, see:
+> But my main point here is to allow to extend the flow control in future.
+> or instance an comment in OpenAMP PR part [1] was:
+> 
+> "ON/OFF info isn't enough in the advanced flow control since the additional info
+> is required(e.g. the slide window, round trip delay, congestion etc..)."
+> 
+> [1]https://github.com/OpenAMP/open-amp/pull/394#discussion_r878363627
 
-[1] Product page SoM: https://www.phytec.com/product/phycore-am64x
-[2] Product page CB: https://www.phytec.com/product/phyboard-am64x
+We don't have a way to apply back pressure today, so I have a hard time
+imagining the use cases and the implementation of such advanced flow
+control.
 
-Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
----
-v4:
-  - Do not override led pinmux in carrier board dts file, extend it
-  - Do not mark tscadc0 and mcu_gpio0 nodes as reserved
-  - Drop note about SPI TPM chip support from commit message
+Reading your proposal again, I don't think that's flow control, that's a
+mechanism for requesting notifications. Either way, the mechanism seems
+orthogonal to rpmsg_set_flow_control() - even if they were implemented
+using the same mechanism in the underlying transport.
 
-v3:
-  - Fix regulator name s/vcc-5v0-som/regulator-vcc-5v0-som
-  - Drop nodes currently without YAML schemes and cause dtbs_check errors:
-    - pmic@61 / ti,lp8733
-    - rtc@52 / trickle-resistor-ohms
-    - leds@62 / nxp,pca9533
-    - main_spi0 + tpm@1 / infineon,slb9670
-v2:
-  - Update commit message
-  - Add links to product pages for SoM & CB
-  - Drop "fixed" from regulator node names
-  - Use generic node names for pmic, tpm, leds & keys
-  - Update compatible of som.dtsi
-  - Remove not needed node labels for pmic, tpm
-  - Remove not needed R5 core mailbox & reserved memory definitions
-    This is use case specific and should not be defined in the som.dtsi
-  - Provide aliases for used devices by SoM & CB
-  - Fixed led definition: Provide proper default-trigger, function & color
-  - Renamed rtc label to i2c_som_rtc
----
- arch/arm64/boot/dts/ti/Makefile               |   1 +
- .../boot/dts/ti/k3-am64-phycore-som.dtsi      | 231 +++++++++++++++
- .../dts/ti/k3-am642-phyboard-electra-rdk.dts  | 277 ++++++++++++++++++
- 3 files changed, 509 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am64-phycore-som.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts
+> 
+> Using a @enable boolean would imply to create new ops if someone want to extend
+> the flow control (to keep legacy compatibility). Using a bit map for the
+> parameter could ease a future extension.
+> 
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index cf7c509538a4..0f8aa8725673 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -21,6 +21,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
- 
- dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am642-phyboard-electra-rdk.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
- 
- dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
-diff --git a/arch/arm64/boot/dts/ti/k3-am64-phycore-som.dtsi b/arch/arm64/boot/dts/ti/k3-am64-phycore-som.dtsi
-new file mode 100644
-index 000000000000..8dfb6301b17d
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am64-phycore-som.dtsi
-@@ -0,0 +1,231 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2021 PHYTEC America, LLC - https://www.phytec.com
-+ * Author: Matt McKee <mmckee@phytec.com>
-+ *
-+ * Copyright (C) 2022 PHYTEC Messtechnik GmbH
-+ * Author: Wadim Egorov <w.egorov@phytec.de>
-+ *
-+ * Product homepage:
-+ * https://www.phytec.com/product/phycore-am64x
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/net/ti-dp83867.h>
-+
-+/ {
-+	model = "PHYTEC phyCORE-AM64x";
-+	compatible = "phytec,am64-phycore-som", "ti,am642";
-+
-+	aliases {
-+		ethernet0 = &cpsw_port1;
-+		mmc0 = &sdhci0;
-+		rtc0 = &i2c_som_rtc;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		secure_ddr: optee@9e800000 {
-+			reg = <0x00 0x9e800000 0x00 0x01800000>; /* for OP-TEE */
-+			alignment = <0x1000>;
-+			no-map;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&leds_pins_default>;
-+
-+		led-0 {
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&main_gpio0 12 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+			function = LED_FUNCTION_HEARTBEAT;
-+		};
-+	};
-+
-+	vcc_5v0_som: regulator-vcc-5v0-som {
-+		/* VIN / VCC_5V0_SOM */
-+		compatible = "regulator-fixed";
-+		regulator-name = "VCC_5V0_SOM";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&main_pmx0 {
-+	cpsw_mdio_pins_default: cpsw-mdio-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x01f8, PIN_INPUT, 4)	/* (P5) PRG0_PRU1_GPO18.MDIO0_MDIO */
-+			AM64X_IOPAD(0x01fc, PIN_OUTPUT, 4)	/* (R2) PRG0_PRU1_GPO19.MDIO0_MDC */
-+			AM64X_IOPAD(0x0100, PIN_OUTPUT, 7)	/* (V7) PRG1_PRU0_GPO18.GPIO0_63 */
-+		>;
-+	};
-+
-+	cpsw_rgmii1_pins_default: cpsw-rgmii1-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0184, PIN_INPUT, 4)	/* (W6) PRG0_PRU0_GPO9.RGMII1_RX_CTL */
-+			AM64X_IOPAD(0x0188, PIN_INPUT, 4)	/* (AA5) PRG0_PRU0_GPO10.RGMII1_RXC */
-+			AM64X_IOPAD(0x00dc, PIN_OUTPUT, 4)	/* (U15) PRG1_PRU0_GPO9.RGMII1_TX_CTL */
-+			AM64X_IOPAD(0x00e0, PIN_OUTPUT, 4)	/* (U14) PRG1_PRU0_GPO10.RGMII1_TXC */
-+			AM64X_IOPAD(0x01cc, PIN_INPUT, 4)	/* (W5) PRG0_PRU1_GPO7.RGMII1_RD0 */
-+			AM64X_IOPAD(0x0124, PIN_OUTPUT, 4)	/* (V15) PRG1_PRU1_GPO7.RGMII1_TD0 */
-+			AM64X_IOPAD(0x01d4, PIN_INPUT, 4)	/* (Y5) PRG0_PRU1_GPO9.RGMII1_RD1 */
-+			AM64X_IOPAD(0x012c, PIN_OUTPUT, 4)	/* (V14) PRG1_PRU1_GPO9.RGMII1_TD1 */
-+			AM64X_IOPAD(0x01d8, PIN_INPUT, 4)	/* (V6) PRG0_PRU1_GPO10.RGMII1_RD2 */
-+			AM64X_IOPAD(0x0130, PIN_OUTPUT, 4)	/* (W14) PRG1_PRU1_GPO10.RGMII1_TD2 */
-+			AM64X_IOPAD(0x01f4, PIN_INPUT, 4)	/* (V5) PRG0_PRU1_GPO17.RGMII1_RD3 */
-+			AM64X_IOPAD(0x014c, PIN_OUTPUT, 4)	/* (AA14) PRG1_PRU1_GPO17.RGMII1_TD3 */
-+			AM64X_IOPAD(0x0154, PIN_INPUT, 7)	/* (V12) PRG1_PRU1_GPO19.GPIO0_84 */
-+		>;
-+	};
-+
-+	eeprom_wp_pins_default: eeprom-wp-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0208, PIN_OUTPUT, 7)	/* (D12) SPI0_CS0.GPIO1_42 */
-+		>;
-+	};
-+
-+	leds_pins_default: leds-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0030, PIN_OUTPUT, 7)	/* (L18) OSPI0_CSn1.GPIO0_12 */
-+		>;
-+	};
-+
-+	main_i2c0_pins_default: main-i2c0-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0260, PIN_INPUT, 0)	/* (A18) I2C0_SCL */
-+			AM64X_IOPAD(0x0264, PIN_INPUT, 0)	/* (B18) I2C0_SDA */
-+		>;
-+	};
-+
-+	ospi0_pins_default: ospi0-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0000, PIN_OUTPUT, 0)	/* (N20) OSPI0_CLK */
-+			AM64X_IOPAD(0x0008, PIN_INPUT, 0)	/* (N19) OSPI0_DQS */
-+			AM64X_IOPAD(0x000c, PIN_INPUT, 0)	/* (M19) OSPI0_D0 */
-+			AM64X_IOPAD(0x0010, PIN_INPUT, 0)	/* (M18) OSPI0_D1 */
-+			AM64X_IOPAD(0x0014, PIN_INPUT, 0)	/* (M20) OSPI0_D2 */
-+			AM64X_IOPAD(0x0018, PIN_INPUT, 0)	/* (M21) OSPI0_D3 */
-+			AM64X_IOPAD(0x001c, PIN_INPUT, 0)	/* (P21) OSPI0_D4 */
-+			AM64X_IOPAD(0x0020, PIN_INPUT, 0)	/* (P20) OSPI0_D5 */
-+			AM64X_IOPAD(0x0024, PIN_INPUT, 0)	/* (N18) OSPI0_D6 */
-+			AM64X_IOPAD(0x0028, PIN_INPUT, 0)	/* (M17) OSPI0_D7 */
-+			AM64X_IOPAD(0x002c, PIN_OUTPUT, 0)	/* (L19) OSPI0_CSn0 */
-+		>;
-+	};
-+};
-+
-+&cpsw3g {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&cpsw_rgmii1_pins_default>;
-+};
-+
-+&cpsw3g_mdio {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&cpsw_mdio_pins_default>;
-+
-+	cpsw3g_phy1: ethernet-phy@1 {
-+		compatible = "ethernet-phy-id2000.a231", "ethernet-phy-ieee802.3-c22";
-+		reg = <1>;
-+		interrupt-parent = <&main_gpio0>;
-+		interrupts = <84 IRQ_TYPE_EDGE_FALLING>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		reset-gpios = <&main_gpio0 63 GPIO_ACTIVE_LOW>;
-+		reset-assert-us = <1000>;
-+		reset-deassert-us = <1000>;
-+	};
-+};
-+
-+&cpsw_port1 {
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&cpsw3g_phy1>;
-+};
-+
-+&cpsw_port2 {
-+	status = "disabled";
-+};
-+
-+&mailbox0_cluster2 {
-+	status = "disabled";
-+};
-+
-+&mailbox0_cluster3 {
-+	status = "disabled";
-+};
-+
-+&mailbox0_cluster4 {
-+	status = "disabled";
-+};
-+
-+&mailbox0_cluster5 {
-+	status = "disabled";
-+};
-+
-+&mailbox0_cluster6 {
-+	status = "disabled";
-+};
-+
-+&mailbox0_cluster7 {
-+	status = "disabled";
-+};
-+
-+&main_i2c0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c0_pins_default>;
-+	clock-frequency = <400000>;
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c32";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&eeprom_wp_pins_default>;
-+		pagesize = <32>;
-+		reg = <0x50>;
-+	};
-+
-+	i2c_som_rtc: rtc@52 {
-+		compatible = "microcrystal,rv3028";
-+		reg = <0x52>;
-+	};
-+};
-+
-+&ospi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ospi0_pins_default>;
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+		spi-max-frequency = <25000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <0>;
-+	};
-+};
-+
-+&sdhci0 {
-+	bus-width = <8>;
-+	non-removable;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+	keep-power-in-suspend;
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts b/arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts
-new file mode 100644
-index 000000000000..8d3114d14a8b
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts
-@@ -0,0 +1,277 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2021 PHYTEC America, LLC - https://www.phytec.com
-+ * Author: Matt McKee <mmckee@phytec.com>
-+ *
-+ * Copyright (C) 2022 PHYTEC Messtechnik GmbH
-+ * Author: Wadim Egorov <w.egorov@phytec.de>
-+ *
-+ * Product homepage:
-+ * https://www.phytec.com/product/phyboard-am64x
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/mux/ti-serdes.h>
-+#include <dt-bindings/phy/phy.h>
-+#include "k3-am642.dtsi"
-+#include "k3-am64-phycore-som.dtsi"
-+
-+/ {
-+	compatible = "phytec,am642-phyboard-electra-rdk",
-+		     "phytec,am64-phycore-som", "ti,am642";
-+	model = "PHYTEC phyBOARD-Electra-AM64x RDK";
-+
-+	aliases {
-+		mmc1 = &sdhci1;
-+		serial2 = &main_uart0;
-+		serial3 = &main_uart1;
-+	};
-+
-+	chosen {
-+		stdout-path = &main_uart0;
-+	};
-+
-+	can_tc1: can-phy0 {
-+		compatible = "ti,tcan1042";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&can_tc1_pins_default>;
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		standby-gpios = <&main_gpio0 32 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	can_tc2: can-phy1 {
-+		compatible = "ti,tcan1042";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&can_tc2_pins_default>;
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		standby-gpios = <&main_gpio0 35 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	keys {
-+		compatible = "gpio-keys";
-+		autorepeat;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&gpio_keys_pins_default>;
-+
-+		key-home {
-+			label = "home";
-+			linux,code = <KEY_HOME>;
-+			gpios = <&main_gpio0 17 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		key-menu {
-+			label = "menu";
-+			linux,code = <KEY_MENU>;
-+			gpios = <&main_gpio0 21 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&leds_pins_default &user_leds_pins_default>;
-+
-+		led-1 {
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&main_gpio0 15 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "mmc0";
-+			function = LED_FUNCTION_DISK;
-+		};
-+
-+		led-2 {
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&main_gpio0 16 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "mmc1";
-+			function = LED_FUNCTION_DISK;
-+		};
-+	};
-+
-+	vcc_3v3_mmc: regulator-sd {
-+		/* TPS22963C */
-+		compatible = "regulator-fixed";
-+		regulator-name = "VCC_3V3_MMC";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+};
-+
-+&main_pmx0 {
-+	can_tc1_pins_default: can-tc1-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0084, PIN_OUTPUT, 7)	/* (P16) GPMC0_ADVn_ALE.GPIO0_32 */
-+		>;
-+	};
-+
-+	can_tc2_pins_default: can-tc2-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0090, PIN_OUTPUT, 7)	/* (P17) GPMC0_BE0n_CLE.GPIO0_35 */
-+		>;
-+	};
-+
-+	gpio_keys_pins_default: gpio-keys-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0044, PIN_INPUT, 7)	/* (T18) GPMC0_AD2.GPIO0_17 */
-+			AM64X_IOPAD(0x0054, PIN_INPUT, 7)	/* (V20) GPMC0_AD6.GPIO0_21 */
-+		>;
-+	};
-+
-+	main_i2c1_pins_default: main-i2c1-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0268, PIN_INPUT, 0)	/* (C18) I2C1_SCL */
-+			AM64X_IOPAD(0x026c, PIN_INPUT, 0)	/* (B19) I2C1_SDA */
-+		>;
-+	};
-+
-+	main_mcan0_pins_default: main-mcan0-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0250, PIN_OUTPUT, 0)	/* (A17) MCAN0_TX */
-+			AM64X_IOPAD(0x0254, PIN_INPUT, 0)	/* (B17) MCAN0_RX */
-+		>;
-+	};
-+
-+	main_mcan1_pins_default: main-mcan1-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0258, PIN_OUTPUT, 0)	/* (C17) MCAN1_TX */
-+			AM64X_IOPAD(0x025c, PIN_INPUT, 0)	/* (D17) MCAN1_RX */
-+		>;
-+	};
-+
-+	main_mmc1_pins_default: main-mmc1-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x027c, PIN_INPUT_PULLUP, 0)	/* (K18) MMC1_DAT3 */
-+			AM64X_IOPAD(0x0280, PIN_INPUT_PULLUP, 0)	/* (K19) MMC1_DAT2 */
-+			AM64X_IOPAD(0x0284, PIN_INPUT_PULLUP, 0)	/* (L21) MMC1_DAT1 */
-+			AM64X_IOPAD(0x0288, PIN_INPUT_PULLUP, 0)	/* (K21) MMC1_DAT0 */
-+			AM64X_IOPAD(0x028c, PIN_INPUT_PULLDOWN, 0)	/* (L20) MMC1_CLK */
-+			AM64X_IOPAD(0x0290, PIN_INPUT, 0)		/* MMC1_CLKLB */
-+			AM64X_IOPAD(0x0294, PIN_INPUT_PULLUP, 0)	/* (J19) MMC1_CMD */
-+			AM64X_IOPAD(0x0298, PIN_INPUT_PULLUP, 0)	/* (D19) MMC1_SDCD */
-+		>;
-+	};
-+
-+	main_uart0_pins_default: main-uart0-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0230, PIN_INPUT, 0)	/* (D15) UART0_RXD */
-+			AM64X_IOPAD(0x0234, PIN_OUTPUT, 0)	/* (C16) UART0_TXD */
-+		>;
-+	};
-+
-+	main_uart1_pins_default: main-uart1-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0248, PIN_INPUT, 0)	/* (D16) UART1_CTSn */
-+			AM64X_IOPAD(0x024C, PIN_OUTPUT, 0)	/* (E16) UART1_RTSn */
-+			AM64X_IOPAD(0x0240, PIN_INPUT, 0)	/* (E15) UART1_RXD */
-+			AM64X_IOPAD(0x0244, PIN_OUTPUT, 0)	/* (E14) UART1_TXD */
-+		>;
-+	};
-+
-+	main_usb0_pins_default: main-usb0-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x02a8, PIN_OUTPUT, 0)	/* (E19) USB0_DRVVBUS */
-+		>;
-+	};
-+
-+	pcie_usb_sel_pins_default: pcie-usb-sel-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x017c, PIN_OUTPUT, 7)	/* (T1) PRG0_PRU0_GPO7.GPIO1_7 */
-+		>;
-+	};
-+
-+	pcie0_pins_default: pcie0-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0098, PIN_OUTPUT, 7)	/* (W19) GPMC0_WAIT0.GPIO0_37 */
-+		>;
-+	};
-+
-+	user_leds_pins_default: user-leds-pins-default {
-+		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x003c, PIN_OUTPUT, 7)	/* (T20) GPMC0_AD0.GPIO0_15 */
-+			AM64X_IOPAD(0x0040, PIN_OUTPUT, 7)	/* (U21) GPMC0_AD1.GPIO0_16 */
-+		>;
-+	};
-+};
-+
-+&main_i2c1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c1_pins_default>;
-+	clock-frequency = <400000>;
-+
-+	eeprom@51 {
-+		compatible = "atmel,24c02";
-+		pagesize = <16>;
-+		reg = <0x51>;
-+	};
-+};
-+
-+&main_mcan0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mcan0_pins_default>;
-+	phys = <&can_tc1>;
-+};
-+
-+&main_mcan1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mcan1_pins_default>;
-+	phys = <&can_tc2>;
-+};
-+
-+&main_uart0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_uart0_pins_default>;
-+};
-+
-+&main_uart1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_uart1_pins_default>;
-+	uart-has-rtscts;
-+};
-+
-+&sdhci1 {
-+	vmmc-supply = <&vcc_3v3_mmc>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mmc1_pins_default>;
-+	bus-width = <4>;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+	no-1-8-v;
-+};
-+
-+&serdes0 {
-+	serdes0_pcie_usb_link: phy@0 {
-+		reg = <0>;
-+		cdns,num-lanes = <1>;
-+		#phy-cells = <0>;
-+		cdns,phy-type = <PHY_TYPE_USB3>;
-+		resets = <&serdes_wiz0 1>;
-+	};
-+};
-+
-+&serdes_ln_ctrl {
-+	idle-states = <AM64_SERDES0_LANE0_USB>;
-+};
-+
-+&usbss0 {
-+	ti,vbus-divider;
-+};
-+
-+&usb0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_usb0_pins_default>;
-+	dr_mode = "host";
-+	maximum-speed = "super-speed";
-+	phys = <&serdes0_pcie_usb_link>;
-+	phy-names = "cdns3,usb3-phy";
-+};
--- 
-2.34.1
+This is a kernel-internal API, a boolean "flow or now flow" is
+sufficient for what Qualcomm is asking and the ioctl is the only new
+external mechanism introduced.
 
+I have no concerns extending or altering this as the use cases appear.
+
+Regards,
+Bjorn
