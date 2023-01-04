@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C7F65CF9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F1365CFA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbjADJew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
+        id S238995AbjADJfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239051AbjADJeZ (ORCPT
+        with ESMTP id S239125AbjADJf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:34:25 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF5065F7
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:34:24 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 562095C0160;
-        Wed,  4 Jan 2023 04:34:22 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute5.internal (MEProxy); Wed, 04 Jan 2023 04:34:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1672824862; x=1672911262; bh=f+
-        jnYbjKkcGa4orSRr51wlvhbjDUTHP0WzFeB65hkKI=; b=XG5NsyuO5oIi9m1QsA
-        aY1Tifw8aYg4xPf4tW/3vDfkF8crVHQWlU3GMese8JGmxh4btldiJkF8zCpO4+45
-        wKv3Kim21Jf626pw253t1bE8b97E8g2wkaAWl69LaciDDgifoiGRgD/XNVQrFVLb
-        hpUXVt2Gn9dU2lWBqK24a7+Z3fiy3LcPAWDAvfMQ148SZHBJHUkkXZ7RMmWp9f4U
-        kQFy/+9VIoe7UUFEiwuxSg2RkNE25A5JbE8a8w417pZzQ0wR7cKUUjnrO6z/ZO2i
-        4o4Qo9dALfqOMfYOIsTjbCRZimHjkiZe4Kjzm5ev1B2CAsT8PmPlQ0/xEGQPxZEG
-        Sfug==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672824862; x=1672911262; bh=f+jnYbjKkcGa4orSRr51wlvhbjDU
-        THP0WzFeB65hkKI=; b=X9HDDIpQ6rdXzpKDkUqkDg4BwR//zGRYNT97c6euphFs
-        eg1IA6ZNfrKHAph5rEnoQ83b8G5bjQqe2q87R2SYAK09D5BXMgb6v7eBU+pbzF4K
-        w01CuktLPTkTjOFtbz2hkpYR2iRPcpKRSsekQDo74iu3Ap+/DqPpXK/TcFFPekyk
-        g5bGbKQAuayq+lequ8QAaWyUV3xgoVUz7JEiruLWZixeAqJY07J3B6czpkLzTa3I
-        O/XUi1PMnQxZLBzxfDDzYXey5ENO7pqO15tyh5XhgJtAwf6w8wxbK2eF94tQ0/lr
-        A/l4SiBS2xmFKTM2E4gXBlaK3epfMAjzRlh10tbKAA==
-X-ME-Sender: <xms:HUi1Y4XhYXXBcbBDl9iCGnVqmEdVGBv9EYfCGodu_OcnKdYHMtbP6Q>
-    <xme:HUi1Y8mf3G_teSr0zZvmsefl-rrPmm6tpop0DiSspSiyOVtjP2A6IWxBH0HdMxYbq
-    Wv7u0CzOHhwvyeCSX8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigddthecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
-    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:HUi1Y8b2KmsTy8rJZLYL2jOoxLSnBIyqE2Zhg0Lbu5f8Srk_093IAQ>
-    <xmx:HUi1Y3VibLJXKJadKqOx8iRkDaQRpyrRecjazKFuJZOH7JH9rzZo9g>
-    <xmx:HUi1YynOus5-FknWgCrKDQ1N5m6-5UsXDtNePGAIqLlmtGMeJyAmEg>
-    <xmx:Hki1Y84cPdVHRbVURSxp-KFAjuwaEUWj7q8sM8q4m6IYcqQrTjerWQ>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C501AA6007C; Wed,  4 Jan 2023 04:34:21 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <548661c9-165c-495b-b12a-ab25e92ece63@app.fastmail.com>
-In-Reply-To: <20230104092148.15578-1-marcan@marcan.st>
-References: <20230104092148.15578-1-marcan@marcan.st>
-Date:   Wed, 04 Jan 2023 10:33:56 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Hector Martin" <marcan@marcan.st>,
-        "Keith Busch" <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
-        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>
-Cc:     "Uday Shankar" <ushankar@purestorage.com>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] nvme-apple: Add NVME_QUIRK_IDENTIFY_CNS quirk to fix regression
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 04:35:29 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2E01ADA9
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:35:04 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id ja17so25111341wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 01:35:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bn35MCymS4jefAOtB8LpHRl6V3chqeTKM4An0AeJQ8Q=;
+        b=rug8cHT3SMg1Zi5j+BhP5N7pPAd1Fv0zoxcy5+Wfd/4hoI7jy7PmTwcj7pw20vVwoI
+         F48LcmbtOqhmVa2sjulZ0qTEBd/YpTf8HW83k8vLCN1R3fqTGUpZayZreN38HoL7BaTO
+         ducmaxN7/sTgk3S06c6yYxCm5tidP7VEhh+Nr3FkEKyalZpw2v6Vr5q1v1oq4f4iUZ2I
+         RRWeJIyBs1j1DOT61dbtNngDUIGXUXLV+MRDErM8imtZlxZJANQkhM/B4MNMOiXEPmE7
+         1ss8IPG0EGGENxMgN8ejSIr0TYpZRTkafYTXKliRlraAIscw4zpD85U1bcsCVBKwe8Vu
+         BVOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bn35MCymS4jefAOtB8LpHRl6V3chqeTKM4An0AeJQ8Q=;
+        b=X4WCzmVwT0dLOITxZheUmldHVbwvkkArcoD3rTa/664+uIIZaN4mJIJrky2k1WsvXf
+         6LjjBHwwu4Dpx1EkPC+Hy3lpu8ooDPLieIKzOZylKjP0NehF6z1I3mHDL4bO5OkM+4z/
+         AHmMMRefKWyXLlbQoNbB0SfprSAEi9hGkw/rMQXtFxIbf8+bUmzy+9NqyRBYHcla3NdY
+         8Un43aKqYAHpDX/HTGiCIPXLDGc14yFMdGq0X7omSpmyT78rYUEZC5smsJAY6ygm4jOq
+         4DQ4JEFYcoGqmThMKzGDAjYEl45I7VW9gcW6b8QzUszgnnpdRdyMcBgmKc3X/m0cQfI7
+         Sq8A==
+X-Gm-Message-State: AFqh2kpT/bD4MeYJNseE45f2KPNScluIlJGHM9jslbGaRaKqI4CBitPK
+        vEe+bx5ZjgO94hZDKd8mNL1Oqw==
+X-Google-Smtp-Source: AMrXdXuqzkSn3rR1xjuy80hePampeT5Cf59w1yG+YqfnwcxBFFloj6msrL55FaBTqOxpmsZizCsspg==
+X-Received: by 2002:a05:600c:2e54:b0:3cf:ceac:94d3 with SMTP id q20-20020a05600c2e5400b003cfceac94d3mr32396174wmf.13.1672824902914;
+        Wed, 04 Jan 2023 01:35:02 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id b22-20020a05600c4e1600b003c6d21a19a0sm45561452wmq.29.2023.01.04.01.35.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 01:35:02 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v8 0/4] clk: qcom: Add support for SM8550
+Date:   Wed,  4 Jan 2023 11:34:46 +0200
+Message-Id: <20230104093450.3150578-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This patchset adds more clocks support for the Qualcomm SM8550 SoC,
+It adds the TCSR clock controller driver and the rpmh clocks.
 
+Changes since v7:
+ * Replaced RPMH_CXO_PAD_CLK with RPMH_CXO_CLK in the TCSR CC binding
+   schema example
 
-On Wed, Jan 4, 2023, at 10:21, Hector Martin wrote:
-> From the get-go, this driver and the ANS syslog have been complaining
-> about namespace identification. In 6.2-rc1, commit 811f4de0344d ("nvme:
-> avoid fallback to sequential scan due to transient issues") regressed
-> the driver by no longer allowing fallback to sequential namespace scans,
-> leaving us with no namespaces.
->
-> It turns out that the real problem is that this controller claiming
-> NVMe 1.1 compat is treating the CNS field as a binary field, as in NVMe
-> 1.0. This already has a quirk, NVME_QUIRK_IDENTIFY_CNS, so set it for
-> the controller to fix all this nonsense (including other errors
-> triggered by other CNS commands).
->
-> Fixes: 811f4de0344d ("nvme: avoid fallback to sequential scan due to 
-> transient issues")
-> Fixes: 5bd2927aceba ("nvme-apple: Add initial Apple SoC NVMe driver")
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-Nice, I've been meaning to look into those weird namespace scanning errors
-for a while now but never got around to it because they didn't break anything.
+Abel Vesa (4):
+  dt-bindings: clock: Add SM8550 TCSR CC clocks
+  dt-bindings: clock: Add RPMHCC for SM8550
+  clk: qcom: rpmh: Add support for SM8550 rpmh clocks
+  clk: qcom: Add TCSR clock driver for SM8550
 
-There's a chance this is also required for the later T2/x86 Macs in pci.c
-(PCI_DEVICE(PCI_VENDOR_ID_APPLE, 0x2005)) since they share a similar firmware but
-I don't have access to those to test if this is actually required.
+ .../bindings/clock/qcom,rpmhcc.yaml           |   1 +
+ .../bindings/clock/qcom,sm8550-tcsr.yaml      |  55 +++++
+ drivers/clk/qcom/Kconfig                      |   7 +
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/clk-rpmh.c                   |  36 ++++
+ drivers/clk/qcom/tcsrcc-sm8550.c              | 192 ++++++++++++++++++
+ include/dt-bindings/clock/qcom,sm8550-tcsr.h  |  18 ++
+ 7 files changed, 310 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8550-tcsr.yaml
+ create mode 100644 drivers/clk/qcom/tcsrcc-sm8550.c
+ create mode 100644 include/dt-bindings/clock/qcom,sm8550-tcsr.h
 
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
+-- 
+2.34.1
 
-
-
-Best,
-
-Sven
