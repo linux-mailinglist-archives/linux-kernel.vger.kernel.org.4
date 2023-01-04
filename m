@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C954065D52F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 491CE65D533
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239463AbjADOMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:12:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S239619AbjADOMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239678AbjADOLv (ORCPT
+        with ESMTP id S239742AbjADOMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:11:51 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5F811A1A;
-        Wed,  4 Jan 2023 06:10:58 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304DcWhg021439;
-        Wed, 4 Jan 2023 14:10:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=x9OOQVyq/BLgjeDzLgMuVgKdwd13+INdbkP4hoyCx8M=;
- b=bJGXPFvwLGBs9NEGo/ZbNduNVWLWAJfUYlYhcyAvUD3ECmRrdNURr84t85beyjtUUSBu
- bQXBeUEVlKmtf889NvVg6pNJSsU08LtEi9ztzZKkfEGXq+OokDDuKAvayuVRdb/rntab
- +jOS9Ec1/Igkm/r1xRq4JP89xGAtDFNcw2+OPgssAVfI/zdnqvWyUjVW/xRLFI5HTB2c
- OOMCKo0TrdsQLy9ySpU9+0eQvogfXq1/sn1bjyuzL76luoPTJ5BGqIULN1tga3a8tXZy
- 2Ua4NB+IJClbUslNhdgrosiCjvyQ/e8DQcdIR7sdECCcmExbUf0IelyhFoVEWM2i9f6V tQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvf9xtn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 14:10:48 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 304EAjoK014467
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 4 Jan 2023 14:10:45 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 4 Jan 2023 06:10:45 -0800
-Date:   Wed, 4 Jan 2023 06:10:45 -0800
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-CC:     Johan Hovold <johan+linaro@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Alim Akhtar" <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>, Can Guo <quic_cang@quicinc.com>
-Subject: Re: [PATCH] scsi: ufs: core: fix devfreq deadlocks
-Message-ID: <20230104141045.GB8114@asutoshd-linux1.qualcomm.com>
-References: <20221222102121.18682-1-johan+linaro@kernel.org>
- <85e91255-1e6f-f428-5376-08416d2107a2@acm.org>
+        Wed, 4 Jan 2023 09:12:09 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E0D1EEEF;
+        Wed,  4 Jan 2023 06:12:05 -0800 (PST)
+Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 855D76F0;
+        Wed,  4 Jan 2023 15:12:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672841522;
+        bh=msUYvAx7nht3qkWr7r2R/VeKP9ruGiKSIVIO/mml9Fw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RaOsVC2Yn3RRXAMOBkNE7Zh3BYIS+mpWQJtUUN+Hypq2K164Zzw0pMuXN+v6qQFlB
+         AsvlWWd/UZCT0ExN/PKbTKyQWSRadFxAH/CJhg8spJz64MoHYr2KH1F2ySEa0QLMeJ
+         lUkrFVLRyMphz2bDgKmWCe4k5f3AMqTJ4ACWj+Xk=
+Date:   Wed, 4 Jan 2023 15:11:59 +0100
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Robert Mader <robert.mader@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, nicholas@rothemail.net,
+        javierm@redhat.com, Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v2] media: i2c: imx258: Parse and register properties
+Message-ID: <20230104141159.e2klapbpenslxqbx@uno.localdomain>
+References: <20230104122337.123055-1-robert.mader@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <85e91255-1e6f-f428-5376-08416d2107a2@acm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zEqWUFqKC9RYj1dTlGriAwsalX9RpyWw
-X-Proofpoint-GUID: zEqWUFqKC9RYj1dTlGriAwsalX9RpyWw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- clxscore=1011 mlxlogscore=767 priorityscore=1501 malwarescore=0
- adultscore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301040120
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230104122337.123055-1-robert.mader@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03 2023 at 13:45 -0800, Bart Van Assche wrote:
->On 12/22/22 02:21, Johan Hovold wrote:
->>+	/* Enable Write Booster if we have scaled up else disable it */
->>+	if (ufshcd_enable_wb_if_scaling_up(hba))
->>+		ufshcd_wb_toggle(hba, scale_up);
->
->Hi Asutosh,
->
->This patch is the second complaint about the mechanism that toggles 
->the WriteBooster during clock scaling. Can this mechanism be removed 
->entirely?
->
->I think this commit introduced that mechanism: 3d17b9b5ab11 ("scsi: 
->ufs: Add write booster feature support"; v5.8).
->
->Thanks,
->
->Bart.
+Hi Robert
 
-Hello Bart,
-Load based toggling of WB seemed fine to me then.
-I haven't thought about another method to toggle WriteBooster yet.
-Let me see if I can come up with something.
-IMT if you have a mechanism in mind, please let me know.
+On Wed, Jan 04, 2023 at 01:23:37PM +0100, Robert Mader wrote:
+> Analogous to e.g. the imx219. This enables propagating
+> V4L2_CID_CAMERA_ORIENTATION and V4L2_CID_CAMERA_SENSOR_ROTATION
+> values.
+> The motivation is to allow libcamera detect these values from the
+> device tree and propagate them further to e.g. Pipewire.
+>
+> While at it, reserve space for 3 additional controls even if
+> v4l2_ctrl_new_fwnode_properties() can only register 2 of
+> them, to fix the existing implementation which reserve space for 8
+> controls but actually registers 9.
+>
+> Changes in v2:
+>  - Reserve 11 instead of 10 controls
+>  - Change order of variable declaration
+>  - Slightly extend description
 
--asd
+This part should go below, after ---, as it shouldn't be part of the commit
+message
 
+The patch looks good
+
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+
+>
+> Signed-off-by: Robert Mader <robert.mader@collabora.com>
+> ---
+>  drivers/media/i2c/imx258.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+> index eab5fc1ee2f7..3b560865b657 100644
+> --- a/drivers/media/i2c/imx258.c
+> +++ b/drivers/media/i2c/imx258.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <media/v4l2-ctrls.h>
+>  #include <media/v4l2-device.h>
+> +#include <media/v4l2-fwnode.h>
+>  #include <asm/unaligned.h>
+>
+>  #define IMX258_REG_VALUE_08BIT		1
+> @@ -1148,6 +1149,7 @@ static const struct v4l2_subdev_internal_ops imx258_internal_ops = {
+>  static int imx258_init_controls(struct imx258 *imx258)
+>  {
+>  	struct i2c_client *client = v4l2_get_subdevdata(&imx258->sd);
+> +	struct v4l2_fwnode_device_properties props;
+>  	struct v4l2_ctrl_handler *ctrl_hdlr;
+>  	s64 vblank_def;
+>  	s64 vblank_min;
+> @@ -1156,7 +1158,7 @@ static int imx258_init_controls(struct imx258 *imx258)
+>  	int ret;
+>
+>  	ctrl_hdlr = &imx258->ctrl_handler;
+> -	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
+> +	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 11);
+>  	if (ret)
+>  		return ret;
+>
+> @@ -1232,6 +1234,15 @@ static int imx258_init_controls(struct imx258 *imx258)
+>  		goto error;
+>  	}
+>
+> +	ret = v4l2_fwnode_device_parse(&client->dev, &props);
+> +	if (ret)
+> +		goto error;
+> +
+> +	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx258_ctrl_ops,
+> +					      &props);
+> +	if (ret)
+> +		goto error;
+> +
+>  	imx258->sd.ctrl_handler = ctrl_hdlr;
+>
+>  	return 0;
+> --
+> 2.39.0
 >
