@@ -2,198 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A68665D066
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6725165D068
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233351AbjADKIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 05:08:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
+        id S234437AbjADKJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 05:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbjADKIa (ORCPT
+        with ESMTP id S234672AbjADKJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 05:08:30 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543081648E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 02:08:29 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id k26-20020a05600c1c9a00b003d972646a7dso22815066wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 02:08:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qWVpoQHblmDwFl1sBCobe3EL1RtatjgZTaxQDVY+onE=;
-        b=ZeVEphlwDCu2OKKQwSIylb81iKaUYqLHC2OaOx5XWZ5KsDkI/M55LIqWkRhMCzngJu
-         RAiJuAXSl1C3Ke7OzI+PEU8fJgAW8GycgTgSY/xYJVGgnh/mX9sV+xPV6nbRAutQfLcJ
-         UXjMqYHbV62rM+L4wM6JD0BuUqwOV4HjcLcK5bNbt099XTklfejMJSLMA4lbHuY9/GqS
-         60zr9ost44CL3S79xYyA/hUExW1rKdjEKXEC2S3QMMd9J7QbGcy+e2V2fz3XLi7inCqD
-         mlIM23cnFO6H/8bJ0GCCgSHM2bHSBV3WVwNHRnV37YVSvnJhBRgN5xEg6dDFqVU4m0fZ
-         fK3Q==
+        Wed, 4 Jan 2023 05:09:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D415167D6
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 02:08:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672826923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T7HpEnvLFRP9Wc3pt+AlvGW4vqhHztK91tjZWI6KGnk=;
+        b=PtBrc/RZbxxUmJw5lut2UduhR2BQr3vLadYikWAdmoiK1WYznPYG4HKyhcZnbeX92Tn29q
+        PrWzupVd8RhKwuHgwc3NdwKklCtMWR1+2pNvfIOpL8Rfggo47Br4b11btaZGXjQio73qDo
+        iFYP+NP3F/kp2DdYL3QIuLvycLMyf0A=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-119-vfKIEyfhOgG000b_8b4jTQ-1; Wed, 04 Jan 2023 05:08:42 -0500
+X-MC-Unique: vfKIEyfhOgG000b_8b4jTQ-1
+Received: by mail-wm1-f69.google.com with SMTP id n18-20020a05600c4f9200b003d993e08485so10582806wmq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 02:08:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qWVpoQHblmDwFl1sBCobe3EL1RtatjgZTaxQDVY+onE=;
-        b=OrqOFleYtZT8TkaftrQ2Rm+9qmGerYuerPNcQYID8QshK4vK3v3pFey1zOxcYwBT52
-         +SW/N9pnLLvHltnEP5pfMBsd6WdK3lQkaAe/0APuu3g418KXoFfRW6gpWjN/CLycZ2W5
-         dJHKeKel4XGkEYOALYHvCaSO6DznVIJtWN8NnDS0PU8n2aOyRp4+GBvpWZN0Xdqx92sM
-         tKcYgxlFmKYHH2YVp9saiS94bBuY/BC7Av1nK6ipvoeFd9qzFEAuNhg/9twktQhbI2VQ
-         AVI1Qr+LFuzga8MGpFbE5ZlNF6R0jBSo6iQhcFPaaRnHK7TkJ4QTe9vRl0au5MLncp4i
-         4RzQ==
-X-Gm-Message-State: AFqh2kpjqR4gbX8Wrgbt/IdY6UcMkfY7yqTPaiyAKW8HIa07hmYNmUXx
-        8puemO3y9GvBK1eMhxgoGIq0ow==
-X-Google-Smtp-Source: AMrXdXtPRTRJrapRYcjS0g4PAGHwCub3tO5l2N4viWO3LyullBOoY5kSV31s6n8XAbIUP5KmHcMObw==
-X-Received: by 2002:a7b:cb59:0:b0:3d3:5709:68e8 with SMTP id v25-20020a7bcb59000000b003d3570968e8mr33358155wmj.36.1672826907903;
-        Wed, 04 Jan 2023 02:08:27 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:102f:89e:4a9f:68c? ([2a01:e0a:982:cbb0:102f:89e:4a9f:68c])
-        by smtp.gmail.com with ESMTPSA id i25-20020a1c5419000000b003c6c182bef9sm58991052wmb.36.2023.01.04.02.08.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 02:08:27 -0800 (PST)
-Message-ID: <de3860ba-40f9-cdd5-097c-e015f6b19255@linaro.org>
-Date:   Wed, 4 Jan 2023 11:08:26 +0100
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T7HpEnvLFRP9Wc3pt+AlvGW4vqhHztK91tjZWI6KGnk=;
+        b=PXozE0HqQ9wbCb7ZZey7c5XRsIQvodzunnTbRZwIeHL6i8B0LxcLbKpObrSFTfJ+YZ
+         t7IsEgz8gj8JfaYHfAycoP6gp0Hdf31etMJuxVbrunHRk7eelf3Dsyqb+dwFk3ZpelqM
+         c7CluwwXQGxX+PvnkD7o8NvEWyFDWa/xTPRmjbTny49RHNZcW+8wOCJVdm+0bQElX9mV
+         6BYdtXe/9Lu+bZ20vkzh9mM4egooLOiC6IjRuJS4IEB9KYWNaffeW+5rNlNkB1J2hzBD
+         CUMJ9iBWgZiUxB4Mv5l/1sSCVAA3Sah1B3+o6pnt8wbkCgA7zXZcxIr9B7aNwcvsaFdV
+         4pLw==
+X-Gm-Message-State: AFqh2kpB50UyPyXQ9KLugZUKWHZWrsYu1cBXIM/2PPmKPutInIuR0MHj
+        a/5NdCqFF6Kmada5bzMPjvaI2QtuklBgP6TeOUGXAu0xIIBK+e3AgL4k9otBge4g0BHQAiD5MCv
+        qjk928Dc7dThfIuOQ5tXH6r4K
+X-Received: by 2002:adf:ee83:0:b0:270:213a:b53d with SMTP id b3-20020adfee83000000b00270213ab53dmr28007205wro.33.1672826921388;
+        Wed, 04 Jan 2023 02:08:41 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsGj8pewT8+sUCUsJf50Rb17SXAd6Z6tmNwzcf4m/yIhH3mB51TOWtZJwSua81YkACkPxNNdQ==
+X-Received: by 2002:adf:ee83:0:b0:270:213a:b53d with SMTP id b3-20020adfee83000000b00270213ab53dmr28007190wro.33.1672826921142;
+        Wed, 04 Jan 2023 02:08:41 -0800 (PST)
+Received: from starship ([89.237.103.62])
+        by smtp.gmail.com with ESMTPSA id u17-20020adfeb51000000b0026e94493858sm33190358wrn.106.2023.01.04.02.08.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 02:08:40 -0800 (PST)
+Message-ID: <aba3787196caa812cee04f840dce26ac8a79eb7f.camel@redhat.com>
+Subject: Re: [PATCH v4 28/32] KVM: SVM: Require logical ID to be power-of-2
+ for AVIC entry
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 04 Jan 2023 12:08:38 +0200
+In-Reply-To: <b002fd18c2abdfe5f4395be38858f461b3c76ac3.camel@redhat.com>
+References: <20221001005915.2041642-1-seanjc@google.com>
+         <20221001005915.2041642-29-seanjc@google.com>
+         <f1f1a33134c739f09f5820b5a4973535f121c0da.camel@redhat.com>
+         <b002fd18c2abdfe5f4395be38858f461b3c76ac3.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 3/6] drm/msm/dpu: add support for SM8550
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230103-topic-sm8550-upstream-mdss-dsi-v1-0-9ccd7e652fcd@linaro.org>
- <20230103-topic-sm8550-upstream-mdss-dsi-v1-3-9ccd7e652fcd@linaro.org>
- <96ccae6f-3788-e030-480f-7aa2478ca560@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <96ccae6f-3788-e030-480f-7aa2478ca560@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 10:45, Dmitry Baryshkov wrote:
-> On 04/01/2023 11:08, Neil Armstrong wrote:
->> Add definitions for the display hardware used on Qualcomm SM8550
->> platform.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 197 +++++++++++++++++++++++++
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |   1 +
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h    |   2 +
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c        |   1 +
->>   4 files changed, 201 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index b4ca123d8e69..adf5e25269dc 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-
-<snip>
-
->> @@ -776,6 +821,45 @@ static const struct dpu_ctl_cfg sm8450_ctl[] = {
->>       },
->>   };
->> +static const struct dpu_ctl_cfg sm8550_ctl[] = {
->> +    {
->> +    .name = "ctl_0", .id = CTL_0,
->> +    .base = 0x15000, .len = 0x290,?
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_SPLIT_DISPLAY) | BIT(DPU_CTL_FETCH_ACTIVE),
+On Thu, 2022-12-29 at 10:27 +0200, mlevitsk@redhat.com wrote:
+> On Fri, 2022-12-09 at 00:00 +0200, Maxim Levitsky wrote:
+> > On Sat, 2022-10-01 at 00:59 +0000, Sean Christopherson wrote:
+> > > Do not modify AVIC's logical ID table if the logical ID portion of the
+> > > LDR is not a power-of-2, i.e. if the LDR has multiple bits set.  Taking
+> > > only the first bit means that KVM will fail to match MDAs that intersect
+> > > with "higher" bits in the "ID"
+> > > 
+> > > The "ID" acts as a bitmap, but is referred to as an ID because theres an
+> > > implicit, unenforced "requirement" that software only set one bit.  This
+> > > edge case is arguably out-of-spec behavior, but KVM cleanly handles it
+> > > in all other cases, e.g. the optimized logical map (and AVIC!) is also
+> > > disabled in this scenario.
+> > > 
+> > > Refactor the code to consolidate the checks, and so that the code looks
+> > > more like avic_kick_target_vcpus_fast().
+> > > 
+> > > Fixes: 18f40c53e10f ("svm: Add VMEXIT handlers for AVIC")
+> > > Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> > > Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> > > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > > ---
+> > >  arch/x86/kvm/svm/avic.c | 30 +++++++++++++++---------------
+> > >  1 file changed, 15 insertions(+), 15 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> > > index 4b6fc9d64f4d..a9e4e09f83fc 100644
+> > > --- a/arch/x86/kvm/svm/avic.c
+> > > +++ b/arch/x86/kvm/svm/avic.c
+> > > @@ -513,26 +513,26 @@ unsigned long avic_vcpu_get_apicv_inhibit_reasons(struct kvm_vcpu *vcpu)
+> > >  static u32 *avic_get_logical_id_entry(struct kvm_vcpu *vcpu, u32 ldr, bool flat)
+> > >  {
+> > >  	struct kvm_svm *kvm_svm = to_kvm_svm(vcpu->kvm);
+> > > -	int index;
+> > >  	u32 *logical_apic_id_table;
+> > > -	int dlid = GET_APIC_LOGICAL_ID(ldr);
+> > > +	u32 cluster, index;
+> > >  
+> > > -	if (!dlid)
+> > > -		return NULL;
+> > > +	ldr = GET_APIC_LOGICAL_ID(ldr);
+> > >  
+> > > -	if (flat) { /* flat */
+> > > -		index = ffs(dlid) - 1;
+> > > -		if (index > 7)
+> > > +	if (flat) {
+> > > +		cluster = 0;
+> > > +	} else {
+> > > +		cluster = (ldr >> 4) << 2;
+> > > +		if (cluster >= 0xf)
+> > >  			return NULL;
+> > > -	} else { /* cluster */
+> > > -		int cluster = (dlid & 0xf0) >> 4;
+> > > -		int apic = ffs(dlid & 0x0f) - 1;
+> > > -
+> > > -		if ((apic < 0) || (apic > 7) ||
+> > > -		    (cluster >= 0xf))
+> > > -			return NULL;
+> > > -		index = (cluster << 2) + apic;
+> > > +		ldr &= 0xf;
+> > >  	}
+> > > +	if (!ldr || !is_power_of_2(ldr))
+> > > +		return NULL;
+> > > +
+> > > +	index = __ffs(ldr);
+> > > +	if (WARN_ON_ONCE(index > 7))
+> > > +		return NULL;
+> > > +	index += (cluster << 2);
+> > >  
+> > >  	logical_apic_id_table = (u32 *) page_address(kvm_svm->avic_logical_id_table_page);
+> > >  
+> > 
+> > Looks good.
 > 
-> CTL_SC7280_MASK | BIT(DPU_CTL_SPLIT_DISPLAY) ?
-
-Indeed DPU_CTL_VM_CFG is missing, will switch to that.
-
+> I hate to say it but this patch has a bug:
 > 
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
->> +    },
->> +    {
->> +    .name = "ctl_1", .id = CTL_1,
->> +    .base = 0x16000, .len = 0x290,
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_SPLIT_DISPLAY) | BIT(DPU_CTL_FETCH_ACTIVE),
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
->> +    },
->> +    {
->> +    .name = "ctl_2", .id = CTL_2,
->> +    .base = 0x17000, .len = 0x290,
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
+> We have both 'cluster = (ldr >> 4) << 2' and then 'index += (cluster << 2)'
 > 
-> CTL_SC7280_MASK?
+> One of the shifts has to go.
 
-Ack
 
+Sean, please don't forget to fix this isssue in the next patch series.
+Best regards,
+	Maxim Levitsky
 > 
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
->> +    },
->> +    {
->> +    .name = "ctl_3", .id = CTL_3,
->> +    .base = 0x18000, .len = 0x290,
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
->> +    },
->> +    {
->> +    .name = "ctl_4", .id = CTL_4,
->> +    .base = 0x19000, .len = 0x290,
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 13),
->> +    },
->> +    {
->> +    .name = "ctl_5", .id = CTL_5,
->> +    .base = 0x1a000, .len = 0x290,
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 23),
->> +    },
->> +};
->> +
->>   static const struct dpu_ctl_cfg sc7280_ctl[] = {
->>       {
->>       .name = "ctl_0", .id = CTL_0,
-
-<snip>
-
->> @@ -1268,6 +1386,16 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
->>       .len = 0x20, .version = 0x20000},
->>   };
->> +#define PP_BLK_DIPHER(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
->> +    {\
->> +    .name = _name, .id = _id, \
->> +    .base = _base, .len = 0, \
+> Best regards,
+> 	Maxim Levitsky
 > 
-> len = 0 looks incorrect. Any particular reason why can't we use plain PP_BLK here?
-
-The TE block has been moved to the DSI INTF blocks since SM8350 I think, or earlier.
-
-This removes the DPU_PINGPONG_DITHER feature used downstream to enable the PP TE callbacks.
-
-Since there's only the DIPHER sub-block remaining, this is why I set len to 0.
-
 > 
->> +    .features = BIT(DPU_PINGPONG_DITHER), \
->> +    .merge_3d = _merge_3d, \
->> +    .sblk = &_sblk, \
->> +    .intr_done = _done, \
->> +    .intr_rdptr = _rdptr, \
->> +    }
->>   #define PP_BLK_TE(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
->>       {\
->>       .name = _name, .id = _id, \
+> > For future refactoring, I also suggest to rename this function to 'avic_get_logical_id_table_entry'
+> > to stress the fact that it gets a pointer to the AVIC's data structure.
+> > 
+> > Same for 'avic_get_physical_id_entry'
+> > 
+> > And also while at it : the 'svm->avic_physical_id_cache', is a very misleading name,
+> > 
+> > It should be svm->avic_physical_id_table_entry_ptr with a comment explaining that
+> > is is the pointer to physid table entry.
+> > 
+> > 
+> > Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > 
+> > 
+> > 
+> > Best regards,
+> > 	Maxim Levitsky
+> 
+> 
 
-<snip>
 
