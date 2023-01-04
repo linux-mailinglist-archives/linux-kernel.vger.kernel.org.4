@@ -2,134 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6BD65D9B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A665265D9CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240045AbjADQ1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:27:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
+        id S239920AbjADQ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239980AbjADQ1U (ORCPT
+        with ESMTP id S240125AbjADQ2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:27:20 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341593F10A;
-        Wed,  4 Jan 2023 08:27:14 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 9FA1A41DF4;
-        Wed,  4 Jan 2023 16:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1672849632; bh=CyB6nBdwWKmnMF5EnKIpG3XVjcUbBPWolPGePYu6aHs=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=ZFcYfazb5ofGvHpZhd4vo4wCI/Euispc2vhvGew9YeFe0W6od6eOyJfBvn8XX4J14
-         M+OqOZ9tmBNHZEo2BYLybSCDVkcBr4i88ejbzqQd5N/NuRKr4d2tdvkOtVLm8VFtKT
-         nNbbbCXBXPPCL/D0vf0XTB5CVCBbRdEVoiEo+UxpATWG2RhRFHj49Z6wS5VGXt2nbu
-         wJCnQIk/OS3MS+sIiuP33sSoHkgizDyXFZ7Ah5T2MlJX4NtvumXL1+CoKvKbi8eJdr
-         NWydl6B6H41U+laQ1EVo2MSSC1CJ9Usc1R9ZXSDOMI10m50GXKhFFkVassPW9vHcaU
-         Wd8kZ+GXW9uFg==
-Message-ID: <fdc60ff9-78b1-73e8-84d2-f6156a157057@marcan.st>
-Date:   Thu, 5 Jan 2023 01:27:03 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        Wed, 4 Jan 2023 11:28:33 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1480C3FC87
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:27:54 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso39400175pjp.4
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 08:27:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p5ldDYIOXfvjTc4b7EJAJFOKCZXF3rJ2nLQt59UJk44=;
+        b=Si1p1uZKMKgyRnjdIvLXnojExDV9ZK1rRqYqjWMbzUTveSQerXE071iqeblGg4GHSZ
+         1KjX4A0dVJO2IBwh9ZUH3ZmEe7O9cnYKyHbRHDFgXcj9EZaPWI+wSv0rm2k17/uCNF2N
+         qcubAjIZUnSg+nGqu1LVq5PAkIJYQKSKuI1jLITCtM4P02/LIf6x5gh2AguPDMHZRm8S
+         wy62QEomimNBNSjda9cJAkIzLFk8Zw9pBT7wetgGgB1xMGPhHiWtuUj7PskUZGk+Pi0R
+         gjEFWxg2Yl2Tl683w/Ttr5Ezj3EVccJ5YkC3Mq451ByA928icLllPtn0uh/hKhp9VvBV
+         guDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p5ldDYIOXfvjTc4b7EJAJFOKCZXF3rJ2nLQt59UJk44=;
+        b=hGd/BrWzgDgd+Ui3rWxFR/fU820wYM44mzB3nyGazekyOsVNG8maruX7WGXhlD6GQF
+         /T4euj/vT9uYkWYYj0i36e30ZFRlgqA1szX2Xzks2MA31JCz/SRJufyY6WNJjgb5cMNa
+         ZThjqKDO7ZMBMwsPpwvnQoBHy2K/2bG331C4jHWxsVNfc1iZiXqpJjXNQQye+ZDcHM72
+         eVuhB6jlYwOPF2nTy8m5BggbBrdAKzbfh3DADwmDBl1bSg/W5xtS91+bnrXzRGzi0ID+
+         mzc9xABIVp2ne+xCHBR6gn6QuhiJNSEfFntZesC4stB+u8Cr/0D8bUNcsiD1qQX+7ciI
+         sXGQ==
+X-Gm-Message-State: AFqh2krA6mumWYPq5VbZxjIC1M4CUz8TSPNl6cMefNVBTZnSUWt8TrdR
+        GW5U9YIkrAxHL92hL3VYT0dQyA==
+X-Google-Smtp-Source: AMrXdXu8mMtXWTK1RWwNPLvw0Ofzeg7CfYQc6Zmv3knrG55MAkZn5NM5UYCz148yt+fXTIgvsW50kw==
+X-Received: by 2002:a17:902:d4d1:b0:189:3a04:4466 with SMTP id o17-20020a170902d4d100b001893a044466mr4712627plg.2.1672849673390;
+        Wed, 04 Jan 2023 08:27:53 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x17-20020a170902ec9100b00192b93a6ce4sm9106786plg.86.2023.01.04.08.27.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 08:27:52 -0800 (PST)
+Date:   Wed, 4 Jan 2023 16:27:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230104100116.729-1-marcan@marcan.st>
- <20230104100116.729-3-marcan@marcan.st>
- <ca904d05-7f11-80dd-cb1c-1cd54c4d7222@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v1 2/4] brcmfmac: pcie: Add IDs/properties for BCM4355
-In-Reply-To: <ca904d05-7f11-80dd-cb1c-1cd54c4d7222@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 2/3] KVM: x86: Ignore host accesses to higher version PMU
+ features MSRs
+Message-ID: <Y7WpBSx5fBJFhFR4@google.com>
+References: <20221226111710.51831-1-likexu@tencent.com>
+ <20221226111710.51831-3-likexu@tencent.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221226111710.51831-3-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 22.35, Arend van Spriel wrote:
-> On 1/4/2023 11:01 AM, 'Hector Martin' via BRCM80211-DEV-LIST,PDL wrote:
->> This chip is present on at least these Apple T2 Macs:
->>
->> * hawaii: MacBook Air 13" (Late 2018)
->> * hawaii: MacBook Air 13" (True Tone, 2019)
->>
->> Users report seeing PCI revision ID 12 for this chip, which Arend
->> reports should be revision C2, but Apple has the firmware tagged as
->> revision C1. Assume the right cutoff point for firmware versions is
->> revision ID 11 then, and leave older revisions using the non-versioned
->> firmware filename (Apple only uses C1 firmware builds).
+On Mon, Dec 26, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> ---
->>   .../net/wireless/broadcom/brcm80211/brcmfmac/pcie.c    | 10 +++++++++-
->>   .../wireless/broadcom/brcm80211/include/brcm_hw_ids.h  |  1 +
->>   2 files changed, 10 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> index 3264be485e20..bb4faea0f0b6 100644
->> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> Higher version PMU features are obviously not supported on hosts with
+> lower version Arch pmu, such as trying to access FIXED_CTR registers
+> and PERF_GLOBAL registers from pmu.version >1 on a host with version 1.
 > 
-> [...]
+> Ignore host userspace reads and writes of '0' to those PMU MSRs that
+> KVM reports in the MSR-to-save list, but the MSRs are ultimately
+> unsupported. All MSRs in said list must be writable by userspace, e.g.
+> if userspace sends the list back at KVM without filtering out the MSRs
+> it doesn't need.
 > 
->> @@ -1994,6 +1996,11 @@ static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
->>   	int ret;
->>   
->>   	switch (devinfo->ci->chip) {
->> +	case BRCM_CC_4355_CHIP_ID:
->> +		coreid = BCMA_CORE_CHIPCOMMON;
->> +		base = 0x8c0;
->> +		words = 0xb2;
->> +		break;
->>   	case BRCM_CC_4378_CHIP_ID:
->>   		coreid = BCMA_CORE_GCI;
->>   		base = 0x1120;
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/x86.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> This bit is not described in the commit message. Can you remind me why 
-> the driver needs to read OTP?
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index f570367463c8..fcb9c317df59 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3881,6 +3881,11 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  	case MSR_IA32_DS_AREA:
+>  	case MSR_PEBS_DATA_CFG:
+>  	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
+> +	case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
+> +	case MSR_CORE_PERF_FIXED_CTR_CTRL:
+> +	case MSR_CORE_PERF_GLOBAL_STATUS:
+> +	case MSR_CORE_PERF_GLOBAL_CTRL:
+> +	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
+>  		if (kvm_pmu_is_valid_msr(vcpu, msr))
+>  			return kvm_pmu_set_msr(vcpu, msr_info);
+>  		/*
+> @@ -3984,6 +3989,11 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  	case MSR_IA32_DS_AREA:
+>  	case MSR_PEBS_DATA_CFG:
+>  	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
+> +	case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
+> +	case MSR_CORE_PERF_FIXED_CTR_CTRL:
+> +	case MSR_CORE_PERF_GLOBAL_STATUS:
+> +	case MSR_CORE_PERF_GLOBAL_CTRL:
+> +	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
 
-Apple platforms use a vendor-specific OTP area to store identification
-information used to select the right firmware/txcap/clm/nvram blobs. See
-6bad3eeab6d3d (already upstream) and the immediately preceding commits
-for how this all works.
+Having to manually handle each MSR is again a maintenance burden.  Rather than
+manually add the affect PMU MSRs, I think we should just allow benign accesses
+to all "MSRs to save".  The lookup will be a linear search, but the array isn't
+_that_ big and this should be a rare occurrence.
 
-In principle this should just return gracefully if that part of the OTP
-is empty, though when I originally wrote this code we only knew of Apple
-platforms using these chips anyway. If you think this might possibly
-introduce issues to other platforms using the same chips (e.g. if
-reading the OTP fails outright for some reason), we could gate it on the
-presence of a valid devinfo->settings->antenna_sku, which would indicate
-an Apple platform (since that property is specific to the Apple
-firmware-selection process and only populated on those platforms).
+That might also make it easier to handle non-PMU MSRs that want similar treatment.
 
-- Hector
+I'll send a series with the patches I've proposed, along with the patch to clean
+up the unimplemented MSR printks[*], which was never formally posted.
+
+[*] https://lore.kernel.org/all/Y1wCqAzJwvz4s8OR@google.com
+
+---
+ arch/x86/kvm/x86.c | 51 ++++++++++++++++++++++++++--------------------
+ 1 file changed, 29 insertions(+), 22 deletions(-)
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 87bb7024e18f..4ad7e3065c69 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3561,6 +3561,18 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
+ 	mark_page_dirty_in_slot(vcpu->kvm, ghc->memslot, gpa_to_gfn(ghc->gpa));
+ }
+ 
++static bool kvm_is_msr_to_save(u32 msr_index)
++{
++	unsigned int i;
++
++	for (i = 0; i < num_msrs_to_save; i++) {
++		if (msrs_to_save[i] == msr_index)
++			return true;
++	}
++
++	return false;
++}
++
+ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ {
+ 	bool pr = false;
+@@ -3884,20 +3896,18 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		vcpu->arch.guest_fpu.xfd_err = data;
+ 		break;
+ #endif
+-	case MSR_IA32_PEBS_ENABLE:
+-	case MSR_IA32_DS_AREA:
+-	case MSR_PEBS_DATA_CFG:
+-	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
++	default:
+ 		if (kvm_pmu_is_valid_msr(vcpu, msr))
+ 			return kvm_pmu_set_msr(vcpu, msr_info);
++
+ 		/*
+ 		 * Userspace is allowed to write '0' to MSRs that KVM reports
+ 		 * as to-be-saved, even if an MSRs isn't fully supported.
+ 		 */
+-		return !msr_info->host_initiated || data;
+-	default:
+-		if (kvm_pmu_is_valid_msr(vcpu, msr))
+-			return kvm_pmu_set_msr(vcpu, msr_info);
++		if (msr_info->host_initiated && !data &&
++		    kvm_is_msr_to_save(msr))
++			break;
++
+ 		return KVM_MSR_RET_INVALID;
+ 	}
+ 	return 0;
+@@ -3987,20 +3997,6 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	case MSR_DRAM_ENERGY_STATUS:	/* DRAM controller */
+ 		msr_info->data = 0;
+ 		break;
+-	case MSR_IA32_PEBS_ENABLE:
+-	case MSR_IA32_DS_AREA:
+-	case MSR_PEBS_DATA_CFG:
+-	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
+-		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
+-			return kvm_pmu_get_msr(vcpu, msr_info);
+-		/*
+-		 * Userspace is allowed to read MSRs that KVM reports as
+-		 * to-be-saved, even if an MSR isn't fully supported.
+-		 */
+-		if (!msr_info->host_initiated)
+-			return 1;
+-		msr_info->data = 0;
+-		break;
+ 	case MSR_K7_EVNTSEL0 ... MSR_K7_EVNTSEL3:
+ 	case MSR_K7_PERFCTR0 ... MSR_K7_PERFCTR3:
+ 	case MSR_P6_PERFCTR0 ... MSR_P6_PERFCTR1:
+@@ -4256,6 +4252,17 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	default:
+ 		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
+ 			return kvm_pmu_get_msr(vcpu, msr_info);
++
++		/*
++		 * Userspace is allowed to read MSRs that KVM reports as
++		 * to-be-saved, even if an MSR isn't fully supported.
++		 */
++		if (msr_info->host_initiated &&
++		    kvm_is_msr_to_save(msr_info->index)) {
++			msr_info->data = 0;
++			break;
++		}
++
+ 		return KVM_MSR_RET_INVALID;
+ 	}
+ 	return 0;
+
+base-commit: eee17ec1d2c43ab3fcba604c4b88c6eb2d728fcd
+-- 
+
