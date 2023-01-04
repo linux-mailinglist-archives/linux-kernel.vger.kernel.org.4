@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B8165D641
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE2E65D651
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239612AbjADOnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
+        id S239658AbjADOoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239681AbjADOms (ORCPT
+        with ESMTP id S239678AbjADOnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:42:48 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2191EACF
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 06:42:45 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id d9so19310100pll.9
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 06:42:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XqrtrKRhDtPaDDzxdLxDCGFf7RuTdmXM7ZNOkYasJp0=;
-        b=annFklxy87JJ3NRbnht+zPMvo+BAwdt75U4NiJoQVnyUOKlpPtp/cRuA2vofqUcQCi
-         P0vuJl1DIw3GMfw5OTu1tZiv2Vj3qPg+WnN/Jx7K9J6RdGVZSi9zs+Zlp1gP2aqAhVjL
-         AqzsIO9GT4hQEORUz+CRmEUeKbk0I42JGplO2YoztwiDlYiMb+TO9BJa/n3E5GXZhbuL
-         GhjKblEIvWoseorJLshQnlvMK+QxSrk5smdrSblQmZ7FyzYfHXRZfElfeDV+lX1tb3YX
-         bS2etoCnGfiK5NAvxGZ+DWDbLoy2IBD1CMYXN4G6CS+r9yhOO0i7f3uaOMNTgYA4dxv9
-         aDCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XqrtrKRhDtPaDDzxdLxDCGFf7RuTdmXM7ZNOkYasJp0=;
-        b=h712TNhLjLpnmEj2GO1xBbrXtXWkFNLcSJUx+e6wRMOWfPOfBO75lx4kBV3RHb5hsE
-         VXBH6ydB48YzNkg4qdFtlvZj0oXcPwB4kHXUldW2DXdob6rCtsUeU5O6MtvzuKGihnAY
-         hiTJMYP5VJSJMvf75Oltge3RkipL+lVhq1pFwnWFP4/EtsMbywuTPGPwhb//kMujycT3
-         4tD9sYqtynrCZ0nWIspvbFjtv/i36ghzZ0NO7/m1QKmcYgPapR+P3v2N8nL6jnw1Hn1m
-         LZnbuBEfHm13fgPz7CLOLuPJgKT0b8g768vQQdLqV/FTQy6OubW6RHb/kFfUcfRojxxO
-         OH7g==
-X-Gm-Message-State: AFqh2kq4M3nl4uriy7cE514WWBlnHADwkilE7O3Z/3kSMUdNeCeM1yOF
-        xxWz6B2WllAd4qG60n07shFNlw==
-X-Google-Smtp-Source: AMrXdXtZlSUzwJzX/CvX/YPyt/O1AXFajoGSeAYuzp0beESFSo5sq4QF1exhZz+z45WMIHfXVDWBFg==
-X-Received: by 2002:a05:6a20:7f59:b0:ac:af5c:2970 with SMTP id e25-20020a056a207f5900b000acaf5c2970mr3145986pzk.3.1672843364859;
-        Wed, 04 Jan 2023 06:42:44 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z15-20020a63190f000000b0046ffe3fea77sm20377445pgl.76.2023.01.04.06.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 06:42:44 -0800 (PST)
-Date:   Wed, 4 Jan 2023 14:42:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aaron Lewis <aaronlewis@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>
-Subject: Re: [PATCH v2 3/4] KVM: nVMX: Don't muck with allowed sec exec
- controls on CPUID changes
-Message-ID: <Y7WQYLO4Ou8M8ElV@google.com>
-References: <20221213062306.667649-1-seanjc@google.com>
- <20221213062306.667649-4-seanjc@google.com>
- <70872206-7a75-0a19-3df5-a97207e710fa@redhat.com>
- <Y7WNrZ9NaDHOxwuG@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7WNrZ9NaDHOxwuG@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 09:43:55 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CE0A45E;
+        Wed,  4 Jan 2023 06:43:55 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 75BE55C00D8;
+        Wed,  4 Jan 2023 09:43:54 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 04 Jan 2023 09:43:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1672843434; x=1672929834; bh=IP0SBqSeI5
+        mc59ZzakVz5++34RGUjvJuQ+gcI75nQXs=; b=VoINooEr5WOspjZwRdnXKqc+bp
+        MO59Ddyd/q3wOgjXLAqJFudwj2UxAIQgG3pIooVTwQvAd2icp+a1rD19MdEI/l8F
+        T8ippB0TDMBL0BhjvmfDqlYOEc2OtBfSuhPy6vusDnaGiF43M64bpOaNz37qYZ5g
+        Ju58xyCyDnuodGPwTbAfSZslG+sOpfo9BdZcLh2MUYclr+BsAwRynHbwEhBU5kMT
+        lp6OqfNsHpQRLyKLkyOI4tfRu9LqWE2nW4M//RyV8f/n5jq8QBoCdCKBBueNW+eX
+        kMGFrEbIQblm8NSlG0jIoVBxEa1laPZeCqVBl5VlQi/b93IyCB+vGQ2WzN8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672843434; x=1672929834; bh=IP0SBqSeI5mc59ZzakVz5++34RGU
+        jvJuQ+gcI75nQXs=; b=Pw5nAxrGGfXBUxTzjcHL9sfteVJyBr8aneachg4KStgZ
+        CCOkAN0rcKdiyaelMN36AhxNizJaGu/c09rdLqrdQjUDIVyAg6wE7q8qAzvHop8j
+        XCNc9sJdZ6dtne3VgU5O64TmI2y9GQbHhnWXzN6PBErSy46PTCkYhk37K+SsbmLM
+        consMgl0Y9frTXRJRqoOewmTeGvsIDLPzX71TGm1yY30QLCY7Xa9ZlZ+OJmPT5RQ
+        dxazuvXIugign9bD30jGneRVi69RRPhGoBcr1MTaPNrcIUPsH80gy1VJ5e0LwpTc
+        8RpjhG/ibKLRpskSSEVsKxoYw60idjGieU46sDaATw==
+X-ME-Sender: <xms:qpC1Y9JR4n9apK9TmXcCX_pUP2VI4bearpNsngO0nqvFQXy2FweOog>
+    <xme:qpC1Y5KebZrY83ScsJj9Vw_VQ_6EGkH41y_aXg-BILWsdNM2EEyCGFDR1bgFX8-Q3
+    Gh3u75Hs1JvkbtSmMU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigdeijecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepffegffdutddvhefffeeltefhjeejgedvleffjeeigeeuteelvdettddulefgudfg
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:qpC1Y1sIHP_cdgjpWxNokEAMzClG6wracp465TYqrZBvcGQUiZ_BAA>
+    <xmx:qpC1Y-a8OLFOjgpbw_j7lr7yPJ2lWs7Azpo2hagp1Cl-8-L1mkyvBw>
+    <xmx:qpC1Y0bWKkMo8jH5FNcGO5nbSx-AbzCPRahp1MC3CXot3GEBkL-CWg>
+    <xmx:qpC1Y07xo504-x_7Lw8SQrhtOu3MPfs24B2_b1tCFQDCDzdYRKuIGA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 02214B60086; Wed,  4 Jan 2023 09:43:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <5f45bb9a-5e00-48dd-82b0-46b19b1b98a3@app.fastmail.com>
+In-Reply-To: <000000000000dbce4e05f170f289@google.com>
+References: <000000000000dbce4e05f170f289@google.com>
+Date:   Wed, 04 Jan 2023 15:43:33 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     syzbot <syzbot+7bb7cd3595533513a9e7@syzkaller.appspotmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        christian.brauner@ubuntu.com,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        jlayton@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Matthew Wilcox" <willy@infradead.org>
+Subject: Re: [syzbot] [hfs?] WARNING in hfs_write_inode
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023, Sean Christopherson wrote:
-> On Fri, Dec 23, 2022, Paolo Bonzini wrote:
-> > On 12/13/22 07:23, Sean Christopherson wrote:
-> > > Don't modify the set of allowed secondary execution controls, i.e. the
-> > > virtual MSR_IA32_VMX_PROCBASED_CTLS2, in response to guest CPUID changes.
-> > > To avoid breaking old userspace that never sets the VMX MSRs, i.e. relies
-> > > on KVM to provide a consistent vCPU model, keep the existing behavior if
-> > > userspace has never written MSR_IA32_VMX_PROCBASED_CTLS2.
-> > > 
-> > > KVM should not modify the VMX capabilities presented to L1 based on CPUID
-> > > as doing so may discard explicit settings provided by userspace.  E.g. if
-> > > userspace does KVM_SET_MSRS => KVM_SET_CPUID and disables a feature in
-> > > the VMX MSRs but not CPUID (to prevent exposing the feature to L2), then
-> > > stuffing the VMX MSRs during KVM_SET_CPUID will expose the feature to L2
-> > > against userspace's wishes.
-> > 
-> > The commit message doesn't explain *why* KVM_SET_CPUID would be done before
-> > KVM_SET_MSRS.
-> 
-> I assume you mean why KVM_SET_MSRS would be done before KVM_SET_CPUID2?
-> 
-> This patch is mostly paranoia, AFAIK there is no userspace that is negatively
-> affected by KVM's manipulations.  The only case I can think of is if userspace
-> wanted to emulate dynamic CPUID updates, e.g. set an MSR filter to intercept writes
-> to MISC_ENABLES to update MONITOR/MWAIT support, but that behavior isn't allowed
-> since commit feb627e8d6f6 ("KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN").
-> 
-> There are scenarios where userspace might do KVM_SET_MSRS before KVM_SET_CPUID,
-> e.g. QEMU's reuse of a vCPU for CPU hotplug, but in those cases I would expect
-> userspace to follow up with another KVM_SET_MSRS.
+On Wed, Jan 4, 2023, at 15:24, syzbot wrote:
 
-An argument for taking this patch is that it might be necessary to disallow
-KVM_SET_MSRS after KVM_RUN[*].  If KVM manipulates VMX MSRs during KVM_SET_CPUID2,
-reusing a vCPU with sequence:
+> The issue was bisected to:
+>
+> commit 55d1cbbbb29e6656c662ee8f73ba1fc4777532eb
+> Author: Arnd Bergmann <arnd@arndb.de>
+> Date:   Tue Nov 9 02:35:04 2021 +0000
+>
+>     hfs/hfsplus: use WARN_ON for sanity check
+>
 
-  SET_CPUID2 => SET_MSRS => RUN => unplug => hotplug => SET_CPUID2 => SET_MSRS
+My patch was a mechanical conversion from '/* panic? */'
+to 'WARN_ON()' to work around a compiler warning,
+and the previous code had been in there since the
+2004 HFS rewrite by Roman Zippel.
 
-sequence will cause the second SET_MSRS to fail due to userspace "changing" the
-MSR value.
+I know nothing about what this function actually does,
+so my best answer is that we could revert my patch
+and use pr_debug() instead of WARN_ON() for all of these.
 
-[*] https://lore.kernel.org/all/20220805172945.35412-4-seanjc@google.com
+    Arnd
