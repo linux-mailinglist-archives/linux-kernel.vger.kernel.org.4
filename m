@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D653965CECA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5622365CED4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238547AbjADIwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
+        id S234709AbjADIx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:53:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238936AbjADIwA (ORCPT
+        with ESMTP id S234808AbjADIxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:52:00 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2FBB9
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:51:59 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id d14so5942301uak.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 00:51:59 -0800 (PST)
+        Wed, 4 Jan 2023 03:53:21 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9E2B9
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:53:20 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-476e643d1d5so352327427b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 00:53:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pUKsoV4Lm/CWZW8qi8AxjB5QcnN+u3WoDRCFgIJvRGg=;
-        b=JrJ2p1o+y2QfQPv83Y9jQ8FhwJ10JLWuRCN/A7ttuek/HpHP2BSQD+0V5GOF3LVtrj
-         djP3n+tApFeAMDb3VYf+kkVJzaDcjuepyt/RTMIwuR2ZIvjc4U6VpcQFgyELWJOou80M
-         5H/6c1uCx+PAupXq2aAdYs0l5jPhtiATPTdU1iPdeMVtevVajievN9dTqzyQaiEymuXT
-         6wHdrURo8P7+QJTGkujGpG7QLvM65M1CEh1FP/FxqlqEljr0hlHI1R2l6mEg/jFBfrlO
-         yVDHiQts5WRyp2mW9qFB/3Nf3iqGQSm/Yz4wKMNzjHOnUlGO2ZIPnH+N5OkA5AOt0icC
-         7oKg==
+        bh=TC8yBB36dJOtwIcLP7PUotL5XoF8yexyBz9lxLUGOuw=;
+        b=U71+aMIK1JfGXVeOOUCgzZlgVwce9KVUK8MsvITFQ12CseoqB11UBQ/yD87mnzls7+
+         Udg+lkeJlOaYcHv8nF32vYB1YtXRgmZVOXJYwzodJ0SXj43Vo2tmpYx0T97YU3QtQ48N
+         VNs5ze1Wk6x/eU5O9/s7yPpzDCju+/+bnQV620xCvg6WpZ+Q1Q+EJPvJ5X1DMbNM9CfV
+         AZdqImG24QcmcXa2S0O3poRunUp6MA5aWd0Il5QwlRhWKs7ulUM0F+6ER2NJzI1zXcgk
+         fx5NyH9E5JoAAQTbsbp8xm40ydHd88uUJBmsU+Lbjz0/gfUelgSmAYkGLbfDjA55Lxks
+         Y0RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pUKsoV4Lm/CWZW8qi8AxjB5QcnN+u3WoDRCFgIJvRGg=;
-        b=pxNJ6ES2ff6X0EY+A3+5BGqS4v5Z0YE6bKiUT59HnxsgKwel9xhomcjo7GzukCnjiT
-         LZmS5LHn5qJDftWTrlgzblSCEHHp+Tav5CwkEw+uxKfU8bVHK3Cch47u7gx861UVP8Tq
-         9HwjWEjPAjDIdQBiyhrlHWcKJqtXiA7V3tQFN7ZgFpBMp4vRgtxzKlzWOI9ODoGh4wGY
-         cwQyd6g+pP46/dFy/ZL2q5Q6dCc17nyVrkLktGqkDzPgo0+e5FVnU0ju9D1xZNujGDvp
-         viqFoJDgoC3fU1wiotcmJgjWKCDsymLQ5/wyv9XULYu5jwHHd2aylhhryxphbP5KiGip
-         BXOA==
-X-Gm-Message-State: AFqh2kp2fKezBdGKis0+C46sMz7NXAknZAPrz8yBjHk/JLsqsWTZFWUs
-        6g/zog6S5wVjktOwM7fXi/fDzK2sauTNakqUNycyQg==
-X-Google-Smtp-Source: AMrXdXvywqTwg5gwiAgwD6OwzN41CwmUiVACqEFuvW80D3qdhKKKjymm4mzEWpsTC5AxtOAlbJ8TPh/TQwzCCdZL+tg=
-X-Received: by 2002:ab0:5a49:0:b0:424:e8b8:7bcb with SMTP id
- m9-20020ab05a49000000b00424e8b87bcbmr4312189uad.123.1672822318273; Wed, 04
- Jan 2023 00:51:58 -0800 (PST)
+        bh=TC8yBB36dJOtwIcLP7PUotL5XoF8yexyBz9lxLUGOuw=;
+        b=dLFXQ6iTMymUBjqxdBiTIH4pXWr2iva/t7aOloK6WK4R11bjyBez20jZRaIWSA3KqB
+         s6JuWPToI2kNIoDT2AQTFKz2UVuUPdYfX/QdlPcQVQzW8txpoqmdEF9zPbmscqKYFW8n
+         N85aDh1/A3BZJ9Iv7EkRcI5+H532a2uIJqKo/NyxD62aitzsxL859qbgCCrZVa9h88GE
+         8A+7tqcUbd3Kht8z8hMjN+izhtaoy3Lh35mACtxiolzihNL2iU2v6s1HRjdMUPUOUPVk
+         /SE6RULniXF7/2oNcdCZJcgCnoa9kRVUsDGiGnFgPrjt7KWxl8Vu74J8VifJVSyn3kRY
+         YAgw==
+X-Gm-Message-State: AFqh2koS1ugJ2Mo3Mjb96nlva4X77B4mc83Zw5TPwiH380Vs3ZicWk9U
+        PIpFBsD4mSeGGxzf4IY8XsNH9DBdmWNrsjWwktm22A==
+X-Google-Smtp-Source: AMrXdXt9RzCN1QGkqr19+W9ziQdaJtNGffrhlj50YdgCTywgjwdfZJaTXWkXPcZr71jOqeDgf/vlqXVyUkhwH0eJvRQ=
+X-Received: by 2002:a0d:f083:0:b0:3b2:ce3b:eae1 with SMTP id
+ z125-20020a0df083000000b003b2ce3beae1mr5973532ywe.4.1672822399245; Wed, 04
+ Jan 2023 00:53:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20221228092045.80425-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221228092045.80425-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 4 Jan 2023 09:51:47 +0100
-Message-ID: <CAMRc=Mdvc=VC=9pVaB8spj6ErS1rRM37qyDZ_03P1R-sQ0soCw@mail.gmail.com>
-Subject: Re: [rft, PATCH v4 0/3] gpiolib: eventual of_node retirement
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+References: <f64778a4683b16a73bba72576f73bf4a2b45a82f.1672794398.git.andreyknvl@google.com>
+In-Reply-To: <f64778a4683b16a73bba72576f73bf4a2b45a82f.1672794398.git.andreyknvl@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 4 Jan 2023 09:52:42 +0100
+Message-ID: <CANpmjNMBHQxYd4R+s3gsyKrp+OpZLiyVCsKK2TBLzMHGv4urBw@mail.gmail.com>
+Subject: Re: [PATCH] kasan: mark kasan_kunit_executing as static
+To:     andrey.konovalov@linux.dev
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Thierry Reding <treding@nvidia.com>
+        Andrey Konovalov <andreyknvl@google.com>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,55 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 10:20 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Wed, 4 Jan 2023 at 02:09, <andrey.konovalov@linux.dev> wrote:
 >
-> Now that all GPIO library users are converted to use fwnode,
-> Drop redundant field from struct gpio_chip and accompanying
-> code.
+> From: Andrey Konovalov <andreyknvl@google.com>
 >
-> Bart, I prefer this series to go as soon as possible if you
-> have no objection. Or even as v6.2 material.
+> Mark kasan_kunit_executing as static, as it is only used within
+> mm/kasan/report.c.
 >
-> Thierry, can you please test it once again, so we will be sure
-> there is no breakage for OF platforms?
+> Fixes: c8c7016f50c8 ("kasan: fail non-kasan KUnit tests on KASAN reports")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+
+Reviewed-by: Marco Elver <elver@google.com>
+
+> ---
+>  mm/kasan/report.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Cc: Thierry Reding <treding@nvidia.com>
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index 1d02757e90a3..22598b20c7b7 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -119,7 +119,7 @@ EXPORT_SYMBOL_GPL(kasan_restore_multi_shot);
+>   * Whether the KASAN KUnit test suite is currently being executed.
+>   * Updated in kasan_test.c.
+>   */
+> -bool kasan_kunit_executing;
+> +static bool kasan_kunit_executing;
 >
-> v4: added couple of additional patches to the bundle that missed
->     the merge window by one or another reason
->
-> v3: rebased against latest Linux Next: expected not to fail now
->     (Also keeping in mind Thierry's report, so reworked a bit)
->
-> v2: resent against latest Linux Next: expected not to fail now
->     (Linux Next has no more users of of_node member of gpio_chip)
->
-> v1: to test for now (using CIs and build bots) what is left unconverted
->     (Expected to fail in some configurations!)
->
-> Andy Shevchenko (3):
->   gpiolib: Introduce gpio_device_get() and gpio_device_put()
->   gpiolib: Get rid of not used of_node member
->   gpiolib: sort header inclusion alphabetically
->
->  drivers/gpio/gpiolib-acpi.c | 10 -------
->  drivers/gpio/gpiolib-acpi.h |  4 ---
->  drivers/gpio/gpiolib-cdev.c | 21 ++++++-------
->  drivers/gpio/gpiolib-of.c   | 25 ++++------------
->  drivers/gpio/gpiolib-of.h   |  5 ----
->  drivers/gpio/gpiolib.c      | 60 +++++++++++++++++--------------------
->  drivers/gpio/gpiolib.h      | 10 +++++++
->  include/linux/gpio/driver.h |  7 -----
->  8 files changed, 51 insertions(+), 91 deletions(-)
->
->
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+>  void kasan_kunit_test_suite_start(void)
+>  {
 > --
-> 2.35.1
+> 2.25.1
 >
-
-I applied the series, let's give it some time in next and see that
-nothing breaks.
-
-Bart
