@@ -2,63 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467CF65CEB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2877265CEA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234390AbjADIs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S234439AbjADIqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238403AbjADIsc (ORCPT
+        with ESMTP id S234516AbjADIqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:48:32 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7473E1DF20;
-        Wed,  4 Jan 2023 00:46:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1672822005; x=1704358005;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=W2X6hd2YoYJaGLzxWhc78FUyCit417xk/t76AdZRdTM=;
-  b=I0DcaLzsFcJuumP0GjvCwzqpyU8p8qEDXm/KGC7torrg7j+XB9jEYZa+
-   DdHrb7RXTbliLcYsOUJMRSPiAPhaShP31Ugw8h3I+RprnlgtEx6fWYTNe
-   n1uQVYvgIDiE3XbyHnaS52Le/G43afd4vShdcK5Izie4SqdhdyGpzFWqp
-   d+qay9LOU7RRx5RGN3EU/5uzxEqdTDjl8Gm89QaSfutkFGRs3drjlxG0v
-   ge9ZPeOOw+awSSaCkySwTCgkf5O/C7pgxG7gPQahRoe8Ii8A7UVagXG7C
-   ccmDEHBSb6gWDasUryqhRWZwCj3Cl+k7mPTjZeQvmneYwPR4lx41Ukz+T
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="194178463"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jan 2023 01:46:40 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 4 Jan 2023 01:46:38 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Wed, 4 Jan 2023 01:46:32 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <richardcochran@gmail.com>, <ceggers@arri.de>
-Subject: [Patch net-next v7 13/13] net: dsa: microchip: ptp: lan937x: Enable periodic output in LED pins
-Date:   Wed, 4 Jan 2023 14:13:16 +0530
-Message-ID: <20230104084316.4281-14-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230104084316.4281-1-arun.ramadoss@microchip.com>
-References: <20230104084316.4281-1-arun.ramadoss@microchip.com>
+        Wed, 4 Jan 2023 03:46:05 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E3118B3C;
+        Wed,  4 Jan 2023 00:45:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BkbXcd8MPuh2svqppW4DAOUoYyqk+WrAXiknsp/3GJA5xTBxopTOHYcYjEtnR0FDfXEwTCVBZMu4RSuW31XaSKQwm/Wi6yBhdo1g0jgM0Wmkrt4qg1O+cdPz4n9SxJ4Zka4GXafc1h9FSzsHJzErqUWI80DvUhPbHDv3jhsUCXGmme04Uem8eu8fvoxB+9vW/YTk+JQJs4hMN3O6mndEOJBmDQUNhv5b0W/8usCSyJIEoWNLjH52lz3qO1HcV9exka7t7hwglFUMClas3kCcp7WpoGU3OZRnBwFDMAROtIYkKNKsnLMa4WyoJ0Y5WPWLGST1tz0sHazT5nO2vHCgng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P9DRz61tYaKyVo5e8+t3w/hhVLA6iVetsBIlDVf6XLg=;
+ b=QHrV0B/qc2VvyUJTcbyv3xKoCD+27ffKwc/IdzjlZjvcB30nCejtxmQm6DJf2BLDdzubJkXL2zWTh6TaIK9x9AUs1DARJKI2lliR3UAmGlLxcaBOwx/2WWYCSkwPmnR0boaZQplrSJ1j28DPAGT3aK6zIMUGkxWkrc8GdCBg3f+64YRzEc2PcVHOKk4wMYNNoHCidJo3QCDuNr8hQJZ7xyc8zvu8qnoLo25VJJg+JwheNsVQe5wRrdKHUdYqoC6ztlpGOsr7XmUHgqSgKIl9xRR97nN+xhC9Ep5msi3K8xkOxxEc7Ov6+2BxUxyVZ8ANJfBp+3JlxpMeXIx4cBqW+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P9DRz61tYaKyVo5e8+t3w/hhVLA6iVetsBIlDVf6XLg=;
+ b=xmgbvMf3xf0Qs+2rsmWitUvt92+ws24lWP4RDc9OW6Ng1opX700smbrcglCzNfsYGQhmeXXqy0YM9HTrUSrkhh2rq6u2lpat6PsjRxDSwVcCEsftRIh/Fcp58t9wqyuvtiWQe4TbuTP5pn8je8rDYjFVqrQeF/pDwD4Rwtv+90E=
+Received: from MW4PR04CA0305.namprd04.prod.outlook.com (2603:10b6:303:82::10)
+ by PH7PR12MB5952.namprd12.prod.outlook.com (2603:10b6:510:1db::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Wed, 4 Jan
+ 2023 08:45:52 +0000
+Received: from CO1NAM11FT089.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::71) by MW4PR04CA0305.outlook.office365.com
+ (2603:10b6:303:82::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.19 via Frontend
+ Transport; Wed, 4 Jan 2023 08:45:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT089.mail.protection.outlook.com (10.13.175.179) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5986.14 via Frontend Transport; Wed, 4 Jan 2023 08:45:51 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
+ 2023 02:45:50 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
+ 2023 02:45:50 -0600
+Received: from xhdlakshmis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Wed, 4 Jan 2023 02:45:46 -0600
+From:   Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        "Robert Richter" <rric@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <saikrishna12468@gmail.com>, <git@amd.com>,
+        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: [PATCH v7 0/2] EDAC: Add support for Xilinx ZynqMP OCM EDAC
+Date:   Wed, 4 Jan 2023 14:15:10 +0530
+Message-ID: <20230104084512.1855243-1-sai.krishna.potthuri@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT089:EE_|PH7PR12MB5952:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0843cff8-57ee-4273-7ccb-08daee3015e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k8dYcTMZmlPMLM8TeUSd9S0vKZpLEvp0EeHDCImJT4pH9OtsKznZQZ83nO5lxAMkpmzUUbwUg5CWk+toZRDR0pplijk6q17i9ZjtA5TviQvT4i7EAOHIFef+J1eFP4pHsw16Kgi2Dmsgp4Gl7RkcquwHLboX658TCsneToXm60zMOD3GFD7VIszQtKRfG7jw6Fvv5jld2E8za8FH1XphG79L7LNyFzTxZFbSv/ijLfHG441UjteOGRqbv2o5yoA54Hfvv5r8qP9cFKvqwwFBGL0v1fV2k2UaBAQoHYG/4BT+jUWKvaMQJ87hr/iecKvPN3Uml2xDAHlJ5ZSNt+wIiKs7aykNUv54uIx/BQ1RBLyw6KiYxKZi1K3jxmALOyf+j4yN5DEN36Z9+cb1N34ZjOMWEXknrGZrjeRWDx+AOsNjLfEKHR5bWe1wmS/91ck3HP3IgjpH5qG76wZIFuFKS0KHdjyYvibXqXWZPoapgwQrq7C5gC5QLf4hxDIvkH384+EFj+biFreTZEiKbrTW0R8tGQbHhgQDXA9AqLfZFI/moJKWuU9MSf5XSW5CUfuyTdbKrmiay28WuuIYB2oA6L8Zs0qvQ0hp1wItIRsjuWPnRKrT4Rx1+L2+/AQRcYYB3HIDqMCbp5ABMTbsvy+iFKs2b3RifVuBcPfhTZPea37S8Ga9MDSh4dymi+TTgY9lWm56pEpmeRCi5Vfqqpeo+PoXb9auANDP+25/ViuXRmo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(83380400001)(36860700001)(82740400003)(103116003)(4326008)(356005)(86362001)(5660300002)(7416002)(70586007)(70206006)(8676002)(2906002)(47076005)(26005)(41300700001)(40480700001)(82310400005)(6666004)(186003)(1076003)(426003)(54906003)(110136005)(316002)(40460700003)(81166007)(8936002)(478600001)(336012)(2616005)(66899015)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 08:45:51.7986
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0843cff8-57ee-4273-7ccb-08daee3015e5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT089.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5952
+X-Spam-Status: No, score=-1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,86 +111,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is difference in implementation of per_out pins between KSZ9563
-and LAN937x. In KSZ9563, Timestamping control register (0x052C) bit 6,
-if 1 - timestamp input and 0 - trigger output. But it is opposite for
-LAN937x 1 - trigger output and 0 - timestamp input.
-As per per_out gpio pins, KSZ9563 has four Led pins and two dedicated
-gpio pins. But in LAN937x dedicated gpio pins are removed instead there
-are up to 10 LED pins out of which LED_0 and LED_1 can be mapped to PTP
-tou 0, 1 or 2. This patch sets the bit 6 in 0x052C register and
-configure the LED override and source register for LAN937x series of
-switches alone.
+Add dt-binding and driver for Xilinx ZynqMP OCM controller.
 
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
- drivers/net/dsa/microchip/ksz_ptp.c     | 26 +++++++++++++++++++++++++
- drivers/net/dsa/microchip/ksz_ptp_reg.h |  8 ++++++++
- 2 files changed, 34 insertions(+)
+changes in v7:
+-> 2/2 - Renamed the driver file name to zynqmp_edac.c.
+-> 2/2 - Update the UE error injection logic to use string separator,
+also removed the inject_cebitpos() or inject_uebitpos() and handled in the
+top level inject functions.
+-> 2/2 - Changed the name of the debugfs directory to "ocm" to make it
+simple.
+-> 2/2 - Fixed few more comments like update commit description, used
+IS_ENABLED(CONFIG_EDAC_DEBUG) instead of #ifdef, removing "controller"
+string, local variable ordering.
 
-diff --git a/drivers/net/dsa/microchip/ksz_ptp.c b/drivers/net/dsa/microchip/ksz_ptp.c
-index 3ba36d33e830..a66a256f8814 100644
---- a/drivers/net/dsa/microchip/ksz_ptp.c
-+++ b/drivers/net/dsa/microchip/ksz_ptp.c
-@@ -32,6 +32,28 @@
- 
- #define KSZ_PTP_INT_START 13
- 
-+static int ksz_ptp_tou_gpio(struct ksz_device *dev)
-+{
-+	int ret;
-+
-+	if (!is_lan937x(dev))
-+		return 0;
-+
-+	ret = ksz_rmw32(dev, REG_PTP_CTRL_STAT__4, GPIO_OUT,
-+			GPIO_OUT);
-+	if (ret)
-+		return ret;
-+
-+	ret = ksz_rmw32(dev, REG_SW_GLOBAL_LED_OVR__4, LED_OVR_1 | LED_OVR_2,
-+			LED_OVR_1 | LED_OVR_2);
-+	if (ret)
-+		return ret;
-+
-+	return ksz_rmw32(dev, REG_SW_GLOBAL_LED_SRC__4,
-+			 LED_SRC_PTP_GPIO_1 | LED_SRC_PTP_GPIO_2,
-+			 LED_SRC_PTP_GPIO_1 | LED_SRC_PTP_GPIO_2);
-+}
-+
- static int ksz_ptp_tou_reset(struct ksz_device *dev, u8 unit)
- {
- 	u32 data;
-@@ -224,6 +246,10 @@ static int ksz_ptp_enable_perout(struct ksz_device *dev,
- 	if (ret)
- 		return ret;
- 
-+	ret = ksz_ptp_tou_gpio(dev);
-+	if (ret)
-+		return ret;
-+
- 	ret = ksz_ptp_tou_start(dev, request->index);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/net/dsa/microchip/ksz_ptp_reg.h b/drivers/net/dsa/microchip/ksz_ptp_reg.h
-index c5c76b9a4329..d71e85510cda 100644
---- a/drivers/net/dsa/microchip/ksz_ptp_reg.h
-+++ b/drivers/net/dsa/microchip/ksz_ptp_reg.h
-@@ -6,6 +6,14 @@
- #ifndef __KSZ_PTP_REGS_H
- #define __KSZ_PTP_REGS_H
- 
-+#define REG_SW_GLOBAL_LED_OVR__4	0x0120
-+#define LED_OVR_2			BIT(1)
-+#define LED_OVR_1			BIT(0)
-+
-+#define REG_SW_GLOBAL_LED_SRC__4	0x0128
-+#define LED_SRC_PTP_GPIO_1		BIT(3)
-+#define LED_SRC_PTP_GPIO_2		BIT(2)
-+
- /* 5 - PTP Clock */
- #define REG_PTP_CLK_CTRL		0x0500
- 
+changes in v6:
+-> 2/2 - Updated subject prefix and commit description.
+-> 2/2 - Used Debugfs instead of sysfs for error injection and
+placed the injection logic under CONFIG_EDAC_DEBUG.
+-> 2/2 - Dropped zynqmp_ocm prefix for all static APIs and structures.
+-> 2/2 - Fixed few more comments related to using caps for acronyms,
+dealing error info, UE logic simplification, using BIT() definitions.
+
+changes in v5:
+-> 1/2, 2/2 - Added 'Co-developed-by' tag.
+-> 2/2 - Updated the driver hep text to be more clear about the hardware
+this driver is targeted.
+-> 2/2 - Fixed the warning reported by kernel test robot.
+
+changes in v4:
+-> 2/2 - Replaced \n\r with \n.
+
+changes in v3:
+-> 1/2 - Moved the binding from edac to memory-controllers directory.
+-> 1/2 - Changed the file name to match with the compatible.
+-> 1/2 - Used additionalProperties instead of unevaluatedProperties.
+-> 1/2 - Used macro instead of constant value.
+
+changes in v2:
+-> 1/2 - Used define for interrupt flag.
+-> 1/2 - Updated the description and title.
+-> 2/2 - Removed Kernel doc for probe and remove.
+-> 2/2 - Used COMPILE_TEST, used wrapper for get and ioremap resource.
+-> 2/2 - Fixed few comments related to static variable declaration
+and print statements.
+
+Sai Krishna Potthuri (1):
+  EDAC/zynqmp: Add EDAC support for Xilinx ZynqMP OCM
+
+Shubhrajyoti Datta (1):
+  dt-bindings: edac: Add bindings for Xilinx ZynqMP OCM
+
+ .../xlnx,zynqmp-ocmc-1.0.yaml                 |  45 ++
+ MAINTAINERS                                   |   7 +
+ drivers/edac/Kconfig                          |   9 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/zynqmp_edac.c                    | 465 ++++++++++++++++++
+ 5 files changed, 527 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,zynqmp-ocmc-1.0.yaml
+ create mode 100644 drivers/edac/zynqmp_edac.c
+
 -- 
-2.36.1
+2.25.1
 
