@@ -2,116 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FE965CD2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C092F65CD3E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbjADGgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
+        id S233456AbjADGki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbjADGgt (ORCPT
+        with ESMTP id S233475AbjADGkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:36:49 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BCA15FCB
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 22:36:48 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id 17so35038822pll.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 22:36:48 -0800 (PST)
+        Wed, 4 Jan 2023 01:40:12 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD5118689
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 22:40:09 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id e10so7701893pgc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 22:40:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7uVXHnSALPWjAGdd6BcYwGu3zAP8ItkH0wqpAn2cEBw=;
-        b=FzVtcwTap3yhH4FGOTP61iBjnPryQFKiCNWMEYeFSrpC5OKj6GZOPBF3q2TGzkLwNr
-         9l8PopjmluF70r6/9Ul5FEKvuSUShQCR9bhhfSMdwTKU53i468h/sTedzoMsLv13WdZB
-         kvAXT9YHE8g3K3XYHmlNV+ouKcdLpr9D6Yvml1mUsZx/LFKFOkHxbPlE3vnookk3aIcF
-         /rUjYu76wI/zOCZzBQMGo5j2N3fYbH5Ms4DPMxRlcWvuk3X/VDCXwAl7ZN4+Gn+0nUzp
-         DZN/Ump2wS+DEaLMV4ow7w0do4MCMlN5iuGZmQ4hh1uVrOlSS95cNPAfyTmvyLmR5YeT
-         FMyA==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
+        b=lxucC7WdJqs/f6vnO0xyjDIiYvkO1zIUbY5dvzc1gS3dAy3OfQQYNJY3qgkIp4IvGC
+         Oi3Qiq2J4RL2YPCvlge/HIY6+nyJiUXFhgSIFyzAmwWVXagd97/PUtXlb5jfygBt6BRf
+         fwWN260uJVbK/yc9R8WuWezkJeUQdhpjES8XGIHyH3AdF/AFkNlz+YfQuZN2gO1EmOPc
+         8KKIj6/qhE8i3Fe0WWEG9u5kvwBFlkiVo2YRHtZuVzM09AJ0QQD44w0muYyCcKVpzTF1
+         KpA5Z3tjS1NOBVAYcaIMzzN2x6CIMAwuhChhhugpiMtk+ck5Mr24ICxbQ/8nSTPVum7J
+         QJOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7uVXHnSALPWjAGdd6BcYwGu3zAP8ItkH0wqpAn2cEBw=;
-        b=WjU72bhItdRkJpijSDeAakydbf6dNt3YEqHSzFotzhpgmbw1UG9tWyWc7TcDLZeHjP
-         c9QjCBMIH3ijgyu4HFRocsSYCEoy2TQpfa2kivIEJ4skq4xGuN6qwgr22bwximzieXG1
-         240TWwwr/wss6Rtq/YTEzXzU1fB9y1iqTZwRrrPpOSMphVsVtzEROIO2bD/enluB6/3C
-         VfYZV4Ke4O5ztrN9ap0i4rpNqLW95ZNjMlevdjl/4Xdu985yylW2dhQLOGRyRYfXvC8b
-         p2GwrAqVGsBIl9wFcetx8EV8tRadtS/bqmA75NbFPvrZ9GpAp2PedJon28Bf20ZgtQ+L
-         xUcw==
-X-Gm-Message-State: AFqh2kpj5EXRZ3ns5heqnXostKiPIMLwiavihT4u+1AcmA3etwJD3XC1
-        BHXKqEf4R7/ui0UoSPVigGUT1g==
-X-Google-Smtp-Source: AMrXdXuJfkaM9HP5sTgea85WdNl19GXUBL6z9pH/VmiWT24RIpac5R3fCLYYytpvXlzXKXNcuDQFHg==
-X-Received: by 2002:a17:90a:558c:b0:226:1189:ad3e with SMTP id c12-20020a17090a558c00b002261189ad3emr26787226pji.27.1672814207632;
-        Tue, 03 Jan 2023 22:36:47 -0800 (PST)
-Received: from localhost ([122.172.82.107])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090a5d8600b00219752c8ea5sm19527374pji.37.2023.01.03.22.36.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 22:36:46 -0800 (PST)
-Date:   Wed, 4 Jan 2023 12:06:44 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: document
- interrupts
-Message-ID: <20230104063644.o5gijn6wv266u4va@vireshk-i7>
-References: <20221227144202.79800-1-krzysztof.kozlowski@linaro.org>
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
+        b=EgPzGAAdZptKeI/vrAe4UFOYeRPAsgX8zKy8VO7Gm2WDgZ7ugRXYNHRn7njt+CDF3a
+         FOaBfVSj/DLlRovTqByMqZbl48fD6+ruA3F0y5QqvANg1J29syS2TpPOprsm+jlypIcl
+         uQrW57P5Ao2zCVJs1cX6I8bbAYZ3AS77p5SmWSAqUaMtvfvOx/TEl98ePs6IcfR1gYkb
+         /KOAMcOCui+3WQra2PCbP5gh2A4Zq2MRG7Q+a1OVg8UK+rDric3Acunh8Ey6qAWx36zP
+         FE/l2MdRS8mnqlURyRtFM7xy5/vZ/O/jTXOXNDEdXy4D7z4xceYNJx6B3wu04KRqUFfR
+         VFaQ==
+X-Gm-Message-State: AFqh2kosRfO2UydGfoJauZ/lAuBWIG+utvvrsDjiWQyk/P+mazguOlNi
+        7D1M5x+cDWuM1rGlPTw/7NblwAdP4liz6NNSwGA=
+X-Google-Smtp-Source: AMrXdXtzEgdGNYXviASYnSqNJC0ZiQxlpsBhKtwlV/fC9EHlEQAD4b0ufCVYBzwI8FMubEJLf3ti+D5YEYUYV8QjtJ4=
+X-Received: by 2002:a62:1d07:0:b0:582:e7c:f6f3 with SMTP id
+ d7-20020a621d07000000b005820e7cf6f3mr1157112pfd.8.1672814408803; Tue, 03 Jan
+ 2023 22:40:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221227144202.79800-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Reply-To: mrs.maryander1947@gmail.com
+Sender: mrs.janeval197@gmail.com
+Received: by 2002:a05:7300:7652:b0:94:fcda:856a with HTTP; Tue, 3 Jan 2023
+ 22:40:08 -0800 (PST)
+From:   "Mrs. Mary Anderson" <amrsmary16@gmail.com>
+Date:   Wed, 4 Jan 2023 06:40:08 +0000
+X-Google-Sender-Auth: jTqv_0vHyo2y0EStaK-jLA4ClSk
+Message-ID: <CAL+V8fx8n5YVCBnyPw3TzcFWBtXqZO5w+9A_JwP7BB54jJSoEA@mail.gmail.com>
+Subject: Dear Beloved,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:52c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5309]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrs.janeval197[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrs.maryander1947[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [amrsmary16[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-12-22, 15:42, Krzysztof Kozlowski wrote:
-> The Qualcomm Soc cpufreq hardware engine has LMh/thermal throttling
-> interrupts (already present in SM8250 and SM8450 DTS) and Linux driver
-> uses them:
-> 
->   sm8250-hdk.dtb: cpufreq@18591000: 'interrupt-names', 'interrupts' do not match any of the regexes: 'pinctrl-[0-9]+'
->   sm8450-qrd.dtb: cpufreq@17d91000: 'interrupt-names', 'interrupts' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml  | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> index b69b71d497cc..2494e90a2fda 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> @@ -58,6 +58,17 @@ properties:
->        - const: xo
->        - const: alternate
->  
-> +  interrupts:
-> +    minItems: 1
-> +    maxItems: 3
-> +
-> +  interrupt-names:
-> +    minItems: 1
-> +    items:
-> +      - const: dcvsh-irq-0
-> +      - const: dcvsh-irq-1
-> +      - const: dcvsh-irq-2
-> +
->    '#freq-domain-cells':
->      const: 1
+Hello,
 
-Applied. Thanks.
+Dear Beloved,
 
--- 
-viresh
+I am Mrs. Mary Anderson, It is understandable that you may be a bit
+apprehensive because you do not know me, I found your email address
+from a Human resources database and decided to contact you. I would
+love to employ you into my charity work, I am ready to donate some
+money to you to carry on the Charity work in your country. Please
+reply so that i will give you further details and tell you about
+myself.
+
+Yours Sincerely
+Mrs. Mary Anderson
