@@ -2,331 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C5B65E0DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC0F65E134
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbjADXWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 18:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        id S235210AbjADX7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 18:59:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbjADXW1 (ORCPT
+        with ESMTP id S231136AbjADX7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 18:22:27 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D99D3FA23;
-        Wed,  4 Jan 2023 15:22:26 -0800 (PST)
+        Wed, 4 Jan 2023 18:59:16 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCFF4318D;
+        Wed,  4 Jan 2023 15:59:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672874546; x=1704410546;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YbK0ZFebc3C1aEHFkh2yWBK0gLY996ZLxM87h2OZEsg=;
-  b=nQQP/vQcTGXWtdNygpJpuYPRWG8OVwTLgo8096aoBgQTlu7te0nMf17h
-   ztmzZn1NUrYhAwL/7K+aMs/jSc6GehCo+rFiIAztXtHoliaB7rLjPz5p8
-   i/5rGPtNTbAFbJfyCrFt6lOqSAcaul1G5lzttkHq2SwkU0kRYrtPk/1y2
-   0V9iA1ecUVqhsDnrZ53vHTrDcvMhGfvXybakrLf1jcezEoTRkyYUOuQ3v
-   4RVDXgcSz9zUAi/pPQnQuWkaIhnAkA3aqqqZYdPP2ZDZ2W9pHuWXWzvN3
-   3LQl5Tt0oE6R1c0EzpiAeU0xwOJYiGON4UAm0TPguIOVjLUE1CJEQje2z
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="301762156"
+  t=1672876755; x=1704412755;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DZgBOwyaksYR8rOqarCeAE7wIzcUZnoEzEaWzuWNeE8=;
+  b=KUR1u8aW+AWVPqeBmRv3LPrUj5qtTnpm8kNBiZ5hUMR2Zj6lqRWIlr1O
+   gB5pzSATErNuaPEQsVDK4KFASwZjrmV+h8CpwxmSHRvVj3ownLMVliymC
+   vkIV7TuL+RaOylkurCY9QifYtO4ezw2SLtS5Cxqzm7vAR9dy+50o6iC+I
+   KOuVUaVXMCZYvMRTuNTTJCRyGiQjzQ6F9bgxil/uANKoBr028gFN2yQ/t
+   0GBq4+oK0ZuVnCMpp70v6HYXuE6Xm7hl9XAqM60odp6S7xTszvDJl7VEe
+   +46rqiG77B9SBHmKT47mFrpD+ezhlXBNoogJp3frqf6YaZ7hyQN7pq0ld
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="323306066"
 X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
-   d="scan'208";a="301762156"
+   d="scan'208";a="323306066"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:22:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="900739382"
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:58:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="900745331"
 X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
-   d="scan'208";a="900739382"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:22:24 -0800
-From:   matthew.gerlach@linux.intel.com
-To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v9 4/4] tty: serial: 8250: add DFL bus driver for Altera 16550.
-Date:   Wed,  4 Jan 2023 15:22:53 -0800
-Message-Id: <20230104232253.24743-5-matthew.gerlach@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230104232253.24743-1-matthew.gerlach@linux.intel.com>
-References: <20230104232253.24743-1-matthew.gerlach@linux.intel.com>
+   d="scan'208";a="900745331"
+Received: from kvthalli-mobl1.amr.corp.intel.com (HELO [10.212.102.90]) ([10.212.102.90])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:58:47 -0800
+Message-ID: <5babccd6-9796-7613-cf82-cc859f338448@linux.intel.com>
+Date:   Wed, 4 Jan 2023 17:33:53 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 02/14] ASoC: qcom: qdsp6: Introduce USB AFE port to
+ q6dsp
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-3-quic_wcheng@quicinc.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20221223233200.26089-3-quic_wcheng@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-Add a Device Feature List (DFL) bus driver for the Altera
-16550 implementation of UART.
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v9: add Rb Andy Shevchenko
-    move dfh_get_u64_param_vals to static version of dfh_get_u64_param_val
+On 12/23/22 17:31, Wesley Cheng wrote:
+> The QC ADSP is able to support USB playback and capture, so that the
+> main application processor can be placed into lower CPU power modes.  This
+> adds the required AFE port configurations and port start command to start
+> an audio session.
 
-v8: use dfh_get_u64_param_vals()
+It would be good to clarify what sort of endpoints can be supported. I
+presume the SOF-synchronous case is handled, but how would you deal with
+async endpoints with feedback (be it explicit or implicit)?
 
-v7: no change
+Note that it's very hard to make the decision not to support async
+endpoints, there are quite a few devices that are exposed as async to
+work around an obscure legacy issue on Windows but are really
+sof-synchronous endpoints that never ask for any change of pace.
 
-v6: move driver specific parameter definitions to limit scope
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  .../sound/qcom,q6dsp-lpass-ports.h            |   1 +
+>  sound/soc/qcom/qdsp6/q6afe-dai.c              |  47 +++++
+>  sound/soc/qcom/qdsp6/q6afe.c                  | 183 ++++++++++++++++++
+>  sound/soc/qcom/qdsp6/q6afe.h                  |  46 ++++-
+>  sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c      |  23 +++
+>  sound/soc/qcom/qdsp6/q6dsp-lpass-ports.h      |   1 +
+>  sound/soc/qcom/qdsp6/q6routing.c              |   8 +
+>  7 files changed, 308 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+> index 9f7c5103bc82..746bc462bb2e 100644
+> --- a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+> +++ b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+> @@ -131,6 +131,7 @@
+>  #define RX_CODEC_DMA_RX_7	126
+>  #define QUINARY_MI2S_RX		127
+>  #define QUINARY_MI2S_TX		128
+> +#define USB_RX				129
 
-v5: removed unneeded blank line
-    removed unneeded includes
-    included device.h and types.h
-    removed unneeded local variable
-    remove calls to dev_dbg
-    memset -> { }
-    remove space after period
-    explicitly include used headers
-    remove redundant Inc from Copyright
-    fix format specifier
+the commit message says the DSP can support Playback and capture, but
+here there's capture only ...
 
-v4: use dev_err_probe() everywhere that is appropriate
-    clean up noise
-    change error messages to use the word, unsupported
-    tried again to sort Makefile and KConfig better
-    reorder probe function for easier error handling
-    use new dfh_find_param API
 
-v3: use passed in location of registers
-    use cleaned up functions for parsing parameters
+>  
+>  static const struct snd_soc_dapm_route q6afe_dapm_routes[] = {
+> +	{"USB Playback", NULL, "USB_RX"},
 
-v2: clean up error messages
-    alphabetize header files
-    fix 'missing prototype' error by making function static
-    tried to sort Makefile and Kconfig better
----
- drivers/tty/serial/8250/8250_dfl.c | 167 +++++++++++++++++++++++++++++
- drivers/tty/serial/8250/Kconfig    |  12 +++
- drivers/tty/serial/8250/Makefile   |   1 +
- 3 files changed, 180 insertions(+)
- create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+... but here RX means playback?
 
-diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-new file mode 100644
-index 000000000000..fe3a4f7fc0e6
---- /dev/null
-+++ b/drivers/tty/serial/8250/8250_dfl.c
-@@ -0,0 +1,167 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for FPGA UART
-+ *
-+ * Copyright (C) 2022 Intel Corporation.
-+ *
-+ * Authors:
-+ *   Ananda Ravuri <ananda.ravuri@intel.com>
-+ *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/device.h>
-+#include <linux/dfl.h>
-+#include <linux/errno.h>
-+#include <linux/ioport.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/types.h>
-+
-+#include <linux/serial.h>
-+#include <linux/serial_8250.h>
-+
-+#define DFHv1_PARAM_ID_CLK_FRQ    0x2
-+#define DFHv1_PARAM_ID_FIFO_LEN   0x3
-+
-+#define DFHv1_PARAM_ID_REG_LAYOUT	0x4
-+#define DFHv1_PARAM_REG_LAYOUT_WIDTH	GENMASK_ULL(63, 32)
-+#define DFHv1_PARAM_REG_LAYOUT_SHIFT	GENMASK_ULL(31, 0)
-+
-+struct dfl_uart {
-+	int line;
-+};
-+
-+static int dfh_get_u64_param_val(struct dfl_device *dfl_dev, int param_id, u64 *pval)
-+{
-+	size_t psize;
-+	u64 *p;
-+
-+	p = dfh_find_param(dfl_dev, param_id, &psize);
-+	if (IS_ERR(p))
-+		return PTR_ERR(p);
-+
-+	if (psize != 1)
-+		return -EINVAL;
-+
-+	*pval = *p;
-+
-+	return 0;
-+}
-+
-+static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	u64 fifo_len, clk_freq, reg_layout;
-+	u32 reg_width;
-+	int ret;
-+
-+	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ, &clk_freq);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "missing CLK_FRQ param\n");
-+
-+	uart->port.uartclk = clk_freq;
-+
-+	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN, &fifo_len);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "missing FIFO_LEN param\n");
-+
-+	switch (fifo_len) {
-+	case 32:
-+		uart->port.type = PORT_ALTR_16550_F32;
-+		break;
-+
-+	case 64:
-+		uart->port.type = PORT_ALTR_16550_F64;
-+		break;
-+
-+	case 128:
-+		uart->port.type = PORT_ALTR_16550_F128;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported FIFO_LEN %llu\n", fifo_len);
-+	}
-+
-+	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT, &reg_layout);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "missing REG_LAYOUT param\n");
-+
-+	uart->port.regshift = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_SHIFT, reg_layout);
-+	reg_width = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_WIDTH, reg_layout);
-+	switch (reg_width) {
-+	case 4:
-+		uart->port.iotype = UPIO_MEM32;
-+		break;
-+
-+	case 2:
-+		uart->port.iotype = UPIO_MEM16;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported reg-width %u\n", reg_width);
-+
-+	}
-+
-+	return 0;
-+}
-+
-+static int dfl_uart_probe(struct dfl_device *dfl_dev)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	struct uart_8250_port uart = { };
-+	struct dfl_uart *dfluart;
-+	int ret;
-+
-+	uart.port.flags = UPF_IOREMAP;
-+	uart.port.mapbase = dfl_dev->mmio_res.start;
-+	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
-+
-+	ret = dfl_uart_get_params(dfl_dev, &uart);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-+
-+	if (dfl_dev->num_irqs == 1)
-+		uart.port.irq = dfl_dev->irqs[0];
-+
-+	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
-+	if (!dfluart)
-+		return -ENOMEM;
-+
-+	dfluart->line = serial8250_register_8250_port(&uart);
-+	if (dfluart->line < 0)
-+		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
-+
-+	dev_set_drvdata(dev, dfluart);
-+
-+	return 0;
-+}
-+
-+static void dfl_uart_remove(struct dfl_device *dfl_dev)
-+{
-+	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
-+
-+	serial8250_unregister_port(dfluart->line);
-+}
-+
-+#define FME_FEATURE_ID_UART 0x24
-+
-+static const struct dfl_device_id dfl_uart_ids[] = {
-+	{ FME_ID, FME_FEATURE_ID_UART },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
-+
-+static struct dfl_driver dfl_uart_driver = {
-+	.drv = {
-+		.name = "dfl-uart",
-+	},
-+	.id_table = dfl_uart_ids,
-+	.probe = dfl_uart_probe,
-+	.remove = dfl_uart_remove,
-+};
-+module_dfl_driver(dfl_uart_driver);
-+
-+MODULE_DESCRIPTION("DFL Intel UART driver");
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-index b0f62345bc84..08af2acd4645 100644
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -370,6 +370,18 @@ config SERIAL_8250_FSL
- 	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
- 	  enables support for ACPI enumeration.
- 
-+config SERIAL_8250_DFL
-+	tristate "DFL bus driver for Altera 16550 UART"
-+	depends on SERIAL_8250 && FPGA_DFL
-+	help
-+	  This option enables support for a Device Feature List (DFL) bus
-+	  driver for the Altera 16650 UART. One or more Altera 16650 UARTs
-+	  can be instantiated in a FPGA and then be discovered during
-+	  enumeration of the DFL bus.
-+
-+	  To compile this driver as a module, chose M here: the
-+	  module will be called 8250_dfl.
-+
- config SERIAL_8250_DW
- 	tristate "Support for Synopsys DesignWare 8250 quirks"
- 	depends on SERIAL_8250
-diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-index 1615bfdde2a0..4e1a32812683 100644
---- a/drivers/tty/serial/8250/Makefile
-+++ b/drivers/tty/serial/8250/Makefile
-@@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
- obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
- obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
- obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
-+obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
- obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
- obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
- obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
--- 
-2.25.1
+I am not sure I get the convention on directions and what is actually
+supported?
 
+> +struct afe_param_id_usb_cfg {
+> +/* Minor version used for tracking USB audio device configuration.
+> + * Supported values: AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG
+> + */
+> +	u32                  cfg_minor_version;
+> +/* Sampling rate of the port.
+> + * Supported values:
+> + * - AFE_PORT_SAMPLE_RATE_8K
+> + * - AFE_PORT_SAMPLE_RATE_11025
+> + * - AFE_PORT_SAMPLE_RATE_12K
+> + * - AFE_PORT_SAMPLE_RATE_16K
+> + * - AFE_PORT_SAMPLE_RATE_22050
+> + * - AFE_PORT_SAMPLE_RATE_24K
+> + * - AFE_PORT_SAMPLE_RATE_32K
+> + * - AFE_PORT_SAMPLE_RATE_44P1K
+> + * - AFE_PORT_SAMPLE_RATE_48K
+> + * - AFE_PORT_SAMPLE_RATE_96K
+> + * - AFE_PORT_SAMPLE_RATE_192K
+> + */
+> +	u32                  sample_rate;
+> +/* Bit width of the sample.
+> + * Supported values: 16, 24
+> + */
+> +	u16                  bit_width;
+> +/* Number of channels.
+> + * Supported values: 1 and 2
+
+that aligns with my feedback on the cover letter, if you connect a
+device that can support from than 2 channels should the DSP even expose
+this DSP-optimized path?
+
+Oh and I forgot, what happens if there are multiple audio devices
+connected, can the DSP deal with all of them? If not, how is this handled?
+
+> + */
+> +	u16                  num_channels;
+> +/* Data format supported by the USB. The supported value is
+> + * 0 (#AFE_USB_AUDIO_DATA_FORMAT_LINEAR_PCM).
+> + */
+> +	u16                  data_format;
+> +/* this field must be 0 */
+> +	u16                  reserved;
+> +/* device token of actual end USB aduio device */
+
+typo: audio
+
+> +	u32                  dev_token;
+> +/* endianness of this interface */
+> +	u32                   endian;
+
+Is this a USB concept? I can't recall having seen any parts of the USB
+audio class spec that the data can be big or little endian?
+
+> +/* service interval */
+> +	u32                  service_interval;
+> +} __packed;
+
+> +int afe_port_send_usb_dev_param(struct q6afe_port *port, struct q6afe_usb_cfg *cfg)
+> +{
+> +	union afe_port_config *pcfg = &port->port_cfg;
+> +	struct afe_param_id_usb_audio_dev_params usb_dev;
+> +	struct afe_param_id_usb_audio_dev_lpcm_fmt lpcm_fmt;
+> +	struct afe_param_id_usb_audio_svc_interval svc_int;
+> +	int ret = 0;
+> +
+> +	if (!pcfg) {
+> +		pr_err("%s: Error, no configuration data\n", __func__);
+
+can you use a dev_err() here and the rest of the code?
+
+> +		ret = -EINVAL;
+> +		goto exit;
+> +	}
+> +
+> +	memset(&usb_dev, 0, sizeof(usb_dev));
+> +	memset(&lpcm_fmt, 0, sizeof(lpcm_fmt));
+> +
+> +	usb_dev.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
+> +	q6afe_port_set_param_v2(port, &usb_dev,
+> +					AFE_PARAM_ID_USB_AUDIO_DEV_PARAMS,
+> +					AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(usb_dev));
+> +	if (ret) {
+> +		pr_err("%s: AFE device param cmd failed %d\n",
+> +			__func__, ret);
+> +		goto exit;
+> +	}
+> +
+> +	lpcm_fmt.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
+> +	lpcm_fmt.endian = pcfg->usb_cfg.endian;
+> +	ret = q6afe_port_set_param_v2(port, &lpcm_fmt,
+> +					AFE_PARAM_ID_USB_AUDIO_DEV_LPCM_FMT,
+> +					AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(lpcm_fmt));
+> +	if (ret) {
+> +		pr_err("%s: AFE device param cmd LPCM_FMT failed %d\n",
+> +			__func__, ret);
+> +		goto exit;
+> +	}
+> +
+> +	svc_int.cfg_minor_version =
+> +		AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
+> +	svc_int.svc_interval = pcfg->usb_cfg.service_interval;
+> +	ret = q6afe_port_set_param_v2(port, &svc_int,
+> +					AFE_PARAM_ID_USB_AUDIO_SVC_INTERVAL,
+> +					AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(svc_int));
+> +	if (ret) {
+> +		pr_err("%s: AFE device param cmd svc_interval failed %d\n",
+> +			__func__, ret);
+> +		ret = -EINVAL;
+> +		goto exit;
+> +	}
+> +exit:
+> +	return ret;
+> +}
