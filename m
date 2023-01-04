@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429D965CBB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726E865CBB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238614AbjADB4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 20:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S234255AbjADB5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 20:57:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjADB4L (ORCPT
+        with ESMTP id S230247AbjADB5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 20:56:11 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D0F178A2;
-        Tue,  3 Jan 2023 17:56:10 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id t15so35080496ybq.4;
-        Tue, 03 Jan 2023 17:56:10 -0800 (PST)
+        Tue, 3 Jan 2023 20:57:43 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B3D17410
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:57:42 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id s22so34075527ljp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 17:57:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K4wOmTH7AdBL4iuOzbwjUMBRytNfhWEyWPFeK4sWBy4=;
-        b=cKbWf6w24QFBgI1EnWW1sqJLqUmNNKOe5fdQS52IiG+HlxVu21dtgYAQz25SYKQt67
-         5y7xctc3LUwSQWoWvO4NTRT1p1yH2pJyQTNZugd6YPnFfN89F+FKAJrV52qhoEsGLSbc
-         9avlrOQgjWz3tI8Vxr9Xk4V1QbyHIHr5SC8KiEU0Sp0lJ3co64y/eTcrKICX+nNh3AHD
-         NtY5HWdQeF/R+fbOtEBRt+7SbdCiSg0oXEKdqHQA7GY5LCS5Or8dRu1ZlU1obZsoHRBi
-         AhcesjMJLsprvMduauH4uMAW3jjLeVdcd507heZFLGDlbbE/zNV7GyVVoL8NV7KzBMe7
-         x9nQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TLKBUphXfs/UWZdenQBIRYJf0m4RI75UDSLQL1B/F20=;
+        b=KTelfnNN/7MymnnCGQBQslfVwxbDJd4c80V4g70R0Px9RHiEZnKnMlGopzmHb/sHkD
+         7qOFXZwsVZ2unvCGIGSwxXbcgTFaFm59MaHjMYVuo3YrgjIKmU0ezIhQwoBpGBr25yW6
+         /pbMHzg7Ic+WOGK+R0q1ePBsSwbVKsiGce2iQNcKbd8PMMBMNPGpQRN7PIoUzaaB7ccj
+         OWh/LTsiw/6vO+HRLH39dAQh/sZQHq2DEwFoG7zHR1vE+b8fUP89xZKQvyQZ1mGciMXJ
+         eEahFtDJVCRsgmQaPWgQ4HVzjf9t6zW75QKrz0/8MigMknrKJakTub06FBCfVo1r33HY
+         M8ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K4wOmTH7AdBL4iuOzbwjUMBRytNfhWEyWPFeK4sWBy4=;
-        b=wHui8zbYgxJBWUHTcnQ/FBlBCIKTbOK2B28c+7egwqERTOrxezYOwNuF2aL3jLEcfV
-         zLmIz1mhQQq/koo2Q1Ph2my4+PwkNE9P0tPrf6hb4kmgATBsI+k3XAKGfDE9KVRlXLmy
-         OG27hOA20Wj37vL59TNEbusUuy1zdMixR6tzZuKskUsHHhNvGcRPLp4AMNZg771KHlVd
-         YYQt5msm935yyVqD9tR7HTD2QbLkmTa6BxUa4h5FpniNH2HPYHLcP7Zk++oEzAPlBIjl
-         e3Y7KLo7zlmr9OL2SLkXgOonRSwya9hAnn9pIpHXCBdUDrJVNptKBKX8SEKAR66+nxuj
-         WOGA==
-X-Gm-Message-State: AFqh2kpLUe1yn3OYkJnP7JubmKjDiJrZAfCGO8lH8VsnKcB8QyscrYWs
-        ruajVn3kPXLh6b2V7FMUO013DCbn5L/2Zyn52Ew=
-X-Google-Smtp-Source: AMrXdXt4GnqdkyJnjP8zMXH7iI+c+15e0+LPvhTq1mbGSgQzKC0W+H2/9Zu8ROxMsaOHO++Oeb/fRvRxQc9KuE8d6O8=
-X-Received: by 2002:a25:e6c1:0:b0:761:d9ec:328f with SMTP id
- d184-20020a25e6c1000000b00761d9ec328fmr4371243ybh.507.1672797370167; Tue, 03
- Jan 2023 17:56:10 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TLKBUphXfs/UWZdenQBIRYJf0m4RI75UDSLQL1B/F20=;
+        b=yXIrmnm+GcFnQ7nNzu/+a+WUOWl3LN+kmwKCiqxb6wuyNcS5YB+EQQd/geKdBDqZks
+         pgqPJynMkcjHw4hvosfWY8SZkbTvDrHdFnWHkxfZowcpmauqmKv3RAWShoKPCYZgJIDR
+         EJYFiP+04c7M++r7zNqDAt/XUp+mkp2Di1J33s2U2obur9XGjxKhIgRtb8m/VeRvaKkc
+         cOSC4AR7Q3BEBCVMwNcq393+dtc3eoC+pjoXDVstX3PwWDFfGqbOpSBWyy51/Rr2StH+
+         U7gHi562mwZJmYMGyblQDKkzLyxeoVLZ43no2RFuYfW/JBA7IQD0vlDCai7F4l5NsREW
+         XSzA==
+X-Gm-Message-State: AFqh2ko/1SJ+XRS5adS1wPeXIDM1f1oUtgCa/H6xmx8CFi1aiETl/QHp
+        7W3TOLwdgU3kMOm8pIjJqg7cJkFOqxhORz3G8xo3q4u+Wvp9gg==
+X-Google-Smtp-Source: AMrXdXtOV1gbwyd4IezCo8uK3Ns0+zwKr+ZVt4Q8/AS6jf5i7PWXBlod+9hH0r3BrhnLx8mBTr/BN0NR0lSB6ueGhiA=
+X-Received: by 2002:a2e:a593:0:b0:280:54b:9254 with SMTP id
+ m19-20020a2ea593000000b00280054b9254mr74610ljp.165.1672797460849; Tue, 03 Jan
+ 2023 17:57:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20221207173053.1463800-1-carlos.bilbao@amd.com>
- <20221228174623.144199-1-carlos.bilbao@amd.com> <87wn64fq7d.fsf@meer.lwn.net>
- <CANiq72mC+WzOxhZVtEvnsFYzuBPkd51=TYXK01ztcTZ-CAcUiw@mail.gmail.com> <87h6x7cfiy.fsf@meer.lwn.net>
-In-Reply-To: <87h6x7cfiy.fsf@meer.lwn.net>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 4 Jan 2023 02:55:59 +0100
-Message-ID: <CANiq72n3qnWwDjp0E1xY1m15qhMHz8_AXcL9hstVM8Xwfi=pbw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] docs: Integrate rustdoc into Rust documentation
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org,
-        akiyks@gmail.com, jani.nikula@linux.intel.com,
-        rdunlap@infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, konstantin@linuxfoundation.org
+References: <20221229014502.2322727-1-jun.nie@linaro.org> <Y7R/QKIbYQ2TCP+W@magnolia>
+In-Reply-To: <Y7R/QKIbYQ2TCP+W@magnolia>
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Wed, 4 Jan 2023 09:58:03 +0800
+Message-ID: <CABymUCPCT9KbMQDUTxwf6A+Cg9fWJNkefbMHD7SZD3Fc7FMFHg@mail.gmail.com>
+Subject: Re: [PATCH] ext4: reject 1k block fs on the first block of disk
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tudor.ambarus@linaro.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 1:25 AM Jonathan Corbet <corbet@lwn.net> wrote:
+Darrick J. Wong <djwong@kernel.org> =E4=BA=8E2023=E5=B9=B41=E6=9C=884=E6=97=
+=A5=E5=91=A8=E4=B8=89 03:17=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Does it really need objtool?
+> On Thu, Dec 29, 2022 at 09:45:02AM +0800, Jun Nie wrote:
+> > For 1k-block filesystems, the filesystem starts at block 1, not block 0=
+.
+> > If start_fsb is 0, it will be bump up to s_first_data_block. Then
+> > ext4_get_group_no_and_offset don't know what to do and return garbage
+> > results (blockgroup 2^32-1). The underflow make index
+> > exceed es->s_groups_count in ext4_get_group_info() and trigger the BUG_=
+ON.
+> >
+> > Fixes: 4a4956249dac0 ("ext4: fix off-by-one fsmap error on 1k block fil=
+esystems")
+> > Link: https://syzkaller.appspot.com/bug?id=3D79d5768e9bfe362911ac1a5057=
+a36fc6b5c30002
+> > Reported-by: syzbot+6be2b977c89f79b6b153@syzkaller.appspotmail.com
+> > Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> > ---
+> >  fs/ext4/fsmap.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
+> > index 4493ef0c715e..1aef127b0634 100644
+> > --- a/fs/ext4/fsmap.c
+> > +++ b/fs/ext4/fsmap.c
+> > @@ -702,6 +702,12 @@ int ext4_getfsmap(struct super_block *sb, struct e=
+xt4_fsmap_head *head,
+> >               if (handlers[i].gfd_dev > head->fmh_keys[0].fmr_device)
+> >                       memset(&dkeys[0], 0, sizeof(struct ext4_fsmap));
+> >
+> > +             /*
+> > +              * Re-check the range after above limit operation and rej=
+ect
+> > +              * 1K fs on block 0 as fs should start block 1. */
+> > +             if (dkeys[0].fmr_physical =3D=3D0 && dkeys[1].fmr_physica=
+l =3D=3D 0)
+> > +                     continue;
+>
+> ...and if this filesystem has 4k blocks, and therefore *does* define a
+> block 0?
 
-No, it does not. That is a byproduct of using the `prepare` target to
-setup Rust for the descend, but we could rearrange some things for
-`rustdoc`.
+Yes, this is a real corner case test :-)
 
-> A certain amount of extra building is OK as long as it doesn't radically
-> slow down the (already glacial) docs build.  I'd like it to not *break*
-> the docs build if the right dependencies aren't there, though.
-
-I agree if we go with a fixed/preset/configless approach, because in
-that case we will always have `CONFIG_RUST=y` and therefore the
-generation of Rust docs is really just an attempt that may or may not
-fail (or we could only attempt to do so if the dependencies are met
-exactly as expected).
-
-On the other hand, if we went with the current setup, where a config
-is used, then if the user has specified `CONFIG_RUST=y`, I think it is
-fair to fail, since the operation cannot be completed, just like the
-normal build. Of course, we could also do the "just attempt it"
-approach and print a loud message if it failed, but I think, as a
-user, would still prefer as a user if it just failed.
-
-> It seems like that step should fail regardless, not just for the docs
-> build, no?
-
-The bindgen step should fail the same way for both normal builds and
-docs, indeed.
-
-I think I understand now what you meant by "fail more gracefully". I
-thought you meant fail with a better/proper message given versioning
-information or similar, but you primarily meant avoid breaking the
-entire docs build if the Rust part fails, right?
-
-Cheers,
-Miguel
+>
+> --D
+>
+> > +
+> >               info.gfi_dev =3D handlers[i].gfd_dev;
+> >               info.gfi_last =3D false;
+> >               info.gfi_agno =3D -1;
+> > --
+> > 2.34.1
+> >
