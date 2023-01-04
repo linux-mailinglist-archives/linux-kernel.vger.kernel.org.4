@@ -2,97 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2668D65E008
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3184065E00D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240481AbjADWdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:33:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S240575AbjADWeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240419AbjADWdr (ORCPT
+        with ESMTP id S240347AbjADWeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:33:47 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AE041D66;
-        Wed,  4 Jan 2023 14:33:47 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id d127so29332117oif.12;
-        Wed, 04 Jan 2023 14:33:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MBk/GUOFJpV0frmR9hUeExB+NmtSOtdf9eRxJ5AOjIQ=;
-        b=Mf84CwUoCPXs/lUsleHJP2QDFRgLTo3+Lt//Avckve7viIJJY/esQ98sEvFhnv1yw2
-         mcMFffwSv3g7eI0K1CIyJgCrWSNaFFZXSDRBY+jdlxTuWjDoazyg8lrdA7sEWECJZ8wR
-         iXT9cG2uvoUcs3mLLSOw57fa1/o/559A4wVOfzOXChWvr0p61TUO9d+Nh675YEBIFIHf
-         SH/lopXtFauTWG+fRvFwbsg9LWaihflqnBqTkMIJF+mFi6wRnCocJFtQ2KgWanIbNTdi
-         E0nzJTfkeOBHDOpQTbc/yCph9nN9SofGrgDEi456gZaaxSv6F4ZmLVECASbXT3WhxVgd
-         VHxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MBk/GUOFJpV0frmR9hUeExB+NmtSOtdf9eRxJ5AOjIQ=;
-        b=zDaeh9a4s0CryZnpF7ICDVRspQEYg1k8e1jSd+d+NLpO1fPtCUQEvaRlNiD3mJJKQM
-         ExJ40L0oTbicXgfxhv46XLWKTl07d7JfVpV2vCBy66Hq6h0Ivy1B3PuaOfIXSgf63acE
-         xUEHW2fKHS6e8QQId6+xlvt7DwwCsrkSjJ68PyoOFjS+JJqSTT4BmGQYI1eBEiHxNFKV
-         nYdPJbsaD1pRF4OIf+K7v/ag+wNdHvtxtTTW7Vu3A5uyKyerPWfOz5IJaxh1pEV4Dhx7
-         bwCuwVFuYsjIVVB7hOqeT3LK4nWYjUZnFbP5fCZKaV6FZjTStHAgV89rC8BrVI8lfUrX
-         ywnQ==
-X-Gm-Message-State: AFqh2kqkKSpIzi09HkkTxg/rGPkoSM/P5t5OF5wDmg/UXwXgfy/rmzZw
-        kZCFXOhXxT7sYlmZK20VblU=
-X-Google-Smtp-Source: AMrXdXsxFBFKu40SWVBDh7xLZrJOajopjl+QOpkoKTwFCGDmynRGRrgVRUGPRX8uBqQP0gScBg9Gbw==
-X-Received: by 2002:a05:6808:1493:b0:35b:e443:e5d0 with SMTP id e19-20020a056808149300b0035be443e5d0mr28281025oiw.17.1672871626219;
-        Wed, 04 Jan 2023 14:33:46 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id cp26-20020a056830661a00b0066da36d2c45sm16753405otb.22.2023.01.04.14.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 14:33:45 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 4 Jan 2023 14:33:43 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/177] 6.0.18-rc1 review
-Message-ID: <20230104223343.GA2451464@roeck-us.net>
-References: <20230104160507.635888536@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104160507.635888536@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 17:34:15 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363864260E;
+        Wed,  4 Jan 2023 14:34:13 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id C324A5C00EA;
+        Wed,  4 Jan 2023 17:34:10 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 04 Jan 2023 17:34:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1672871650; x=
+        1672958050; bh=GhHK13puG9rbbmVLp8YxJh1oi2E1z8eW7EP8WFvlzbE=; b=P
+        2rxRqqhwAYm82oHQZlx0eRquBq9ZbKOP3GKdJ563/G6LTzhGjkMpyJFzH5eUa/PX
+        DaoAw+MhLf5t9tMzc9+3GHXPUF9LYA77CjlOcFP46f3PYJa2fy7U7HMVVgphFDwG
+        /2QNvnirm2bH+0W8S3DJT1quRzS/nlbBZggpwkDPpCnOf76gYEEBn0HKaK/3s31u
+        I1gLXMRob7wXikMCPXv5ZDFRimmLxTp8ZnnNq47QSeU3gr3Tcp0oxIwy9V383U2u
+        aohzsLAqeKXo0Q9O1iKb4/s/upBfdrQxyQBLf19sBR7bdctl5vjxSwhcLjwlWivJ
+        yTQ9nSFLzQyXM4p2VRBmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672871650; x=
+        1672958050; bh=GhHK13puG9rbbmVLp8YxJh1oi2E1z8eW7EP8WFvlzbE=; b=s
+        XjvCay9qgfp5zZA/FK9sFizwgm3P949Px1iTHcIgW8gTVg86SVON5Wfbk9cu7P4h
+        IufKBgZaD/y0adTibbCtd70bGu1wcKNqiggPDE8SZ3BfIz/ezIJLA7rXBpyO9lfm
+        eM0GadwVZqDfSaDY/hwqpMYHohA8QlCgljo1xvKYbTRugVk4vk+dXit1lNVSqEDn
+        +j+uLX8se25VVGGvly4Zz/t9lWJ3DUU+oxshdq8DGxmVjeMmORnRpkER5W+ftKTR
+        I5ivgROXearuZrs3UY5aOwws/2XFAnKoJmvR2z8dH7IuwZJl7/3jMM4ZABFD5gxh
+        e9zPd/1+v4UP3k/fKunug==
+X-ME-Sender: <xms:4f61Y0kq7rlqRwa5qrGsGybkL6fvzLhofq5cbBitIKGmcyWSwvl3SQ>
+    <xme:4f61Yz2zp7ViQ0uVBBNH1kf7n-onscPjH9L7mgZfYkU69rCQ8gCFcp5HaVsIa_-XL
+    vJCcakZ8eCNjSDtG5A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeejucetufdoteggodetrfdotffvucfrrh
+    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueeffeeigeen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:4f61Yyp3DB1iBTFWX1mslGa6YZRkjsTkLa0ihJVdErUrhV-OYzSxtg>
+    <xmx:4f61Ywnl-RxDAY2VGVQX6wdyc8nVnhG1BE6fwNKJ9i59vMLOAkwexQ>
+    <xmx:4f61Yy1fvAgq5OEIcQ4B2FVdKhaiVIrhU8pzKUnQQPaH6n7XRoI93Q>
+    <xmx:4v61Y7sWXUG5KKCDli-ondi4lSho29TgaWtYpUSJFStWM5SUaTI30w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9628CB60086; Wed,  4 Jan 2023 17:34:09 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <ab7a9477-ddc7-430f-b4ee-c67251e879b0@app.fastmail.com>
+In-Reply-To: <CAHk-=wi8XyAUF9_z6-oa4Ava6PVZeE-=TVNcFK1puQHpOtqLLw@mail.gmail.com>
+References: <000000000000dbce4e05f170f289@google.com>
+ <5f45bb9a-5e00-48dd-82b0-46b19b1b98a3@app.fastmail.com>
+ <CAHk-=wi8XyAUF9_z6-oa4Ava6PVZeE-=TVNcFK1puQHpOtqLLw@mail.gmail.com>
+Date:   Wed, 04 Jan 2023 23:33:50 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     syzbot <syzbot+7bb7cd3595533513a9e7@syzkaller.appspotmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        christian.brauner@ubuntu.com,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        jlayton@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        "Matthew Wilcox" <willy@infradead.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        "Viacheslav Dubeyko" <slava@dubeyko.com>,
+        linux-m68k@lists.linux-m68k.org
+Subject: Re: [syzbot] [hfs?] WARNING in hfs_write_inode
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 05:04:51PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.18 release.
-> There are 177 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
-> Anything received after that time might be too late.
-> 
+On Wed, Jan 4, 2023, at 20:06, Linus Torvalds wrote:
+>
+> I suspect this code is basically all dead. From what I can tell, hfs
+> only gets updates for
+>
+>  (a) syzbot reports
+>
+>  (b) vfs interface changes
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 500 pass: 500 fail: 0
+There is clearly no new work going into it, and most data exchange
+with MacOS would use HFS+, but I think there are still some users.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+> and the last real changes seem to have been by Ernesto A. Fern=C3=A1nd=
+ez
+> back in 2018.
+>
+> Hmm. Looking at that code, we have another bug in there, introduced by
+> an earlier fix for a similar issue: commit 8d824e69d9f3 ("hfs: fix OOB
+> Read in __hfs_brec_find") added
+>
+> +       if (HFS_I(main_inode)->cat_key.CName.len > HFS_NAMELEN)
+> +               return -EIO;
+>
+> but it's after hfs_find_init(), so it should actually have done a
+> hfs_find_exit() to not leak memory.
+>
+> So we should probably fix that too.
+>
+> Something like this ENTIRELY UNTESTED patch?
+>
+> Do we have anybody who looks at hfs?
 
-Guenter
+Adding Viacheslav Dubeyko to Cc, he's at least been reviewing
+patches for HFS and HFS+ somewhat recently. The linux-m68k
+list may have some users dual-booting old MacOS.
+
+Viacheslav, see the start of the thread at
+https://lore.kernel.org/lkml/000000000000dbce4e05f170f289@google.com/
+
+     Arnd
