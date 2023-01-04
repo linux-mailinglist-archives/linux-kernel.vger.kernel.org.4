@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD2565CB04
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECE165CB08
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238715AbjADAmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S238803AbjADAmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 19:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234247AbjADAmA (ORCPT
+        with ESMTP id S238544AbjADAmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:42:00 -0500
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9E4140D3;
-        Tue,  3 Jan 2023 16:41:54 -0800 (PST)
-Received: by mail-il1-f169.google.com with SMTP id d10so18881149ilc.12;
-        Tue, 03 Jan 2023 16:41:54 -0800 (PST)
+        Tue, 3 Jan 2023 19:42:22 -0500
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B621649C;
+        Tue,  3 Jan 2023 16:42:22 -0800 (PST)
+Received: by mail-il1-f180.google.com with SMTP id a9so6560815ilk.6;
+        Tue, 03 Jan 2023 16:42:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7i5QCkn5f7/8bQHHWhpZfw+Hrwcm09g6oLcGGwmqm4Y=;
-        b=tnwWDMwWgDjqvkLQKMpl5kelgrYH1KMlpaOLG+bKTfwgopRJXe1v4HPAdxACJVuIlV
-         2qfLbcbZCh1GlUhQm43NfFWwMiDl7uU2xBPH5hCvJb1aPMs5+noi1DR1XkI7Q7UYeR7o
-         TFNc9nueLHK0iLufsKFLzn3jfnbPepjWwIkYpxovX/+6TqZhOtjyzmcS741hW+oNliTF
-         hKTOVzGpSZ1wFo+/ELissROAI0UjlKhkzPZHlxrYF6xGYHm0YTtWdS9hFF5ftKGL/Xok
-         7lb1DtfJAPd3TseamelXfohpFJlrdsMUivlGTSQUUmTx4xHNF/OE5iv0LQVxWtr4CaFS
-         C9bg==
-X-Gm-Message-State: AFqh2krFZW3wciDBt+e3vjhsOKygIwHLLN8f/p/DccmO+cv/ALiXZ3/K
-        ejKSkZkJBiC9TzWUE4404WICGeVk1A==
-X-Google-Smtp-Source: AMrXdXt8R8M3J07HjvnrwFZepzmoP7CIx516i0FzByPM6GyFR9cjiBdwLlH3aoq3iU0UQkzD0+SzOg==
-X-Received: by 2002:a05:6e02:218d:b0:30c:2266:cfca with SMTP id j13-20020a056e02218d00b0030c2266cfcamr20059297ila.9.1672792913990;
-        Tue, 03 Jan 2023 16:41:53 -0800 (PST)
+        bh=w1g83OSSu3QiXhYjCljnUwd0VoQP0/wjekUDGXp9bdc=;
+        b=kcPY1GjnMCgJHcjAVUc8XCLC/POEGDi8UxdT7U/phTfy/W1pOezdDCrTd+DaG0VYKk
+         ejTOqZFeUPpJc+S2WmcKKoLDG/bRkHp2jlUDieP1s+3BDFJPQMeHfXKwlYT/3iIy44fb
+         PTZa3GXpODETujsn49Oyn8oFexZbBUUaqLGLzFd+KK9jlUFeqNXksdZhlEr0rzg5yloq
+         lt7zx4ozEhQkp6NteJvq2rXdW7UfAZUR4i5bFqLBw79a95MPcD+WV6KwUGLx2SyAN4gl
+         uiOGPNSH0txtxZ6Ku2+kvYMvyNm1iREGGgyZvL69bYVStnAIA1ZopEcTG/MrxRjLIy/7
+         eMRg==
+X-Gm-Message-State: AFqh2krC1YDoZHjnPOqviA+qhf0XEtJ8DXjeWdgHDlTxb2tJMYEDoLig
+        UZpaz4y4aTLyxm1xDu/XZQ==
+X-Google-Smtp-Source: AMrXdXtZ8Iv27+U5gKIsitbqCFmpUAbFTYPdwn7uiMEnoIOVq08xkv0z+iOw4CeBcmytx3bNaZlN2g==
+X-Received: by 2002:a05:6e02:1524:b0:305:e1f9:89b with SMTP id i4-20020a056e02152400b00305e1f9089bmr38587379ilu.24.1672792941242;
+        Tue, 03 Jan 2023 16:42:21 -0800 (PST)
 Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id y17-20020a926411000000b00305e6279bf2sm10160256ilb.74.2023.01.03.16.41.52
+        by smtp.gmail.com with ESMTPSA id i4-20020a056638050400b0038a5b8d79basm10584873jar.106.2023.01.03.16.42.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 16:41:53 -0800 (PST)
-Received: (nullmailer pid 160851 invoked by uid 1000);
-        Wed, 04 Jan 2023 00:41:52 -0000
-Date:   Tue, 3 Jan 2023 18:41:52 -0600
+        Tue, 03 Jan 2023 16:42:20 -0800 (PST)
+Received: (nullmailer pid 161533 invoked by uid 1000);
+        Wed, 04 Jan 2023 00:42:19 -0000
+Date:   Tue, 3 Jan 2023 18:42:19 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rao Mandadapu <quic_srivasam@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
         Vinod Koul <vkoul@kernel.org>,
-        Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH] dt-bindings: soundwire: qcom,soundwire: correct sizes
- related to number of ports
-Message-ID: <167279291060.160766.17238671980369497938.robh@kernel.org>
-References: <20221223132159.81211-1-krzysztof.kozlowski@linaro.org>
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,sm8450-tlmm: correct
+ gpio-line-names size
+Message-ID: <167279293841.161448.17344555773044379937.robh@kernel.org>
+References: <20221223132226.81340-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221223132159.81211-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221223132226.81340-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -73,20 +70,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 23 Dec 2022 14:21:59 +0100, Krzysztof Kozlowski wrote:
-> There are several properties depending on number of ports.  Some of them
-> had maximum limit of 5 and some of 8.  SM8450 AudioReach comes with 8
-> ports, so fix the limits:
+On Fri, 23 Dec 2022 14:22:26 +0100, Krzysztof Kozlowski wrote:
+> The SM8450 has GPIOs from 0 to 209, so 210 in total:
 > 
->   sm8450-sony-xperia-nagara-pdx224.dtb: soundwire-controller@3250000: qcom,ports-word-length: 'oneOf' conditional failed, one must be fixed:
->     [[255, 255, 255, 255, 255, 255, 255, 255]] is too short
->     [255, 255, 255, 255, 255, 255, 255, 255] is too long
+>   sm8450-sony-xperia-nagara-pdx223.dtb: pinctrl@f100000: gpio-line-names:
+>     ['NC', 'NC', 'NC', 'NC', 'WLC_I2C_SDA', 'WLC_I2C_SCL', ...
+>      'APPS_I2C_0_SDA', 'APPS_I2C_0_SCL', 'CCI_I2C3_SDA', 'CCI_I2C3_SCL'] is too long
 > 
-> Fixes: febc50b82bc9 ("dt-bindings: soundwire: Convert text bindings to DT Schema")
+> Fixes: 9779ed30f92c ("dt-bindings: pinctrl: qcom,sm8450-pinctrl: add gpio-line-names")
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../devicetree/bindings/soundwire/qcom,soundwire.yaml  | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  Documentation/devicetree/bindings/pinctrl/qcom,sm8450-tlmm.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
-Applied, thanks!
+Acked-by: Rob Herring <robh@kernel.org>
