@@ -2,130 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BB065D747
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 445A165D753
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239229AbjADPcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
+        id S239489AbjADPgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjADPcV (ORCPT
+        with ESMTP id S230420AbjADPgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:32:21 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363C61B9D6;
-        Wed,  4 Jan 2023 07:32:20 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2A0D4A16;
-        Wed,  4 Jan 2023 16:32:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672846337;
-        bh=yKSmdm+JkNCC/zelXC0/m5mbL7/v+Rt6f44V0yse8gk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kzDkr2em0T+eszSyTIq5zC4hfox4eOSQy9RfJzMq6Wa50fS3TGgEy8JYUxo55aoC4
-         F4WD/vrN01zPxGI9FuZyJotneId+z61mECD7QSAhQTJ7GjNYPtdcRPyTfPixBeUywW
-         rVjyaMPCkqWllZ53B1wDNQ0vRr4i64Ox9Ya8KAbo=
-Date:   Wed, 4 Jan 2023 17:32:13 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v5 7/8] media: i2c: add DS90UB913 driver
-Message-ID: <Y7Wb/Z3627D3HQJb@pendragon.ideasonboard.com>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-8-tomi.valkeinen@ideasonboard.com>
- <Y5YiazDtaxtLJyL0@pendragon.ideasonboard.com>
- <4d349785-ca37-d930-db3c-2581bba9fde0@ideasonboard.com>
- <7ddd576f-6e8a-7581-178c-2e8575227811@ideasonboard.com>
- <Y6nSVlmlweUuUwJf@pendragon.ideasonboard.com>
- <61729020-0977-521a-6137-3bd89f300652@ideasonboard.com>
- <Y7WFaR5+NNSXLLow@pendragon.ideasonboard.com>
- <dddcfe51-5dec-2826-61c3-12edaf04da4e@ideasonboard.com>
+        Wed, 4 Jan 2023 10:36:32 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C54167EF;
+        Wed,  4 Jan 2023 07:36:31 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4D1873FBE0;
+        Wed,  4 Jan 2023 15:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1672846590; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y3eRToaXVdN3AVocHxVVeVyr8FyHyxT3hbSrQcFTokM=;
+        b=Z8o1DceIPDjGkidYTGzhocEhLkBXzXqqcguZQC+zUMSqmtR1isNtL7jsRs2WGOlbP41GoT
+        Vw2CcOg1XWYvqtEXK0Ge9hfVYay6Fxwdzh8y3d9hs4SusTG8QNm5RshQFPkhA0IfXb2+ZJ
+        7e+oRqulsuvmHTT1QxbrpVaTIsLC3MU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D36CD2C141;
+        Wed,  4 Jan 2023 15:36:29 +0000 (UTC)
+Date:   Wed, 4 Jan 2023 16:36:28 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH 1/3] livepatch: Improve the search performance of
+ module_kallsyms_on_each_symbol()
+Message-ID: <Y7Wc/G8a+pv6iV7G@alley>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dddcfe51-5dec-2826-61c3-12edaf04da4e@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221230112729.351-2-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 04:13:17PM +0200, Tomi Valkeinen wrote:
-> On 04/01/2023 15:55, Laurent Pinchart wrote:
-> > Hi Tomi,
-> > 
-> > On Mon, Dec 26, 2022 at 09:25:34PM +0200, Tomi Valkeinen wrote:
-> >> On 26/12/2022 18:56, Laurent Pinchart wrote:
-> >>> On Wed, Dec 14, 2022 at 08:36:47AM +0200, Tomi Valkeinen wrote:
-> >>>> On 14/12/2022 08:29, Tomi Valkeinen wrote:
-> >>>>
-> >>>>>> wondering if the struct device of the DS90UB913 could be passed instead
-> >>>>>> of the port, to avoid passing the port throught
-> >>>>>> ds90ub9xx_platform_data.
-> >>>>>
-> >>>>> Interesting thought. That would limit the number of remote i2c busses to
-> >>>>> one, though. Not a problem for FPD-Link, but I wonder if that's assuming
-> >>>>> too much for the future users. Then again, this is an in-kernel API so
-> >>>>> we could extend it later if needed. So I'll try this out and see if I
-> >>>>> hit any issues.
-> >>>>
-> >>>> Right, so the issue with this one would be that it would prevent a
-> >>>> single device uses. E.g. a single chip which acts as an ATR (similar to
-> >>>> i2c-mux chips), i.e. it contains both the main and the remote i2c busses.
-> >>>
-> >>> I don't think I understand this, sorry.
-> >>
-> >> What you are suggesting above means that we'd have a separate device for
-> >> each port of the ATR. Which is fine in our current case, as the i2c
-> >> master busses are behind separate remote devices.
-> >>
-> >> But if you consider a case similar to i2c-mux, where we have a single
-> >> chip with the slave bus and, say, 4 master busses. We would probably
-> >> have only a single device for that.
-> > 
-> > Hmmm... Yes you're right, it won't work in that case. Maybe we could
-> > have two functions, the existing i2c_atr_add_adapter(), and another one
-> > that wraps it ? It would be nice if we could get rid of the platform
-> > data for the UB913 and UB953 drivers.
+On Fri 2022-12-30 19:27:27, Zhen Lei wrote:
+> Currently we traverse all symbols of all modules to find the specified
+> function for the specified module. But in reality, we just need to find
+> the given module and then traverse all the symbols in it.
 > 
-> I wouldn't mind that at all, but we already have the bc_rate there. And 
-> I have a feeling that we might need more if we implement more features.
+> Let's add a new parameter 'const char *modname' to function
+> module_kallsyms_on_each_symbol(), then we can compare the module names
+> directly in this function and call hook 'fn' after matching. If 'modname'
+> is NULL, the symbols of all modules are still traversed for compatibility
+> with other usage cases.
+> 
+> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
+>                 |
+> Phase2:          -->f1-->f2-->f3
+> 
+> Assuming that there are m modules, each module has n symbols on average,
+> then the time complexity is reduced from O(m * n) to O(m) + O(n).
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-Indeed. I feel that platform data is a bit of a hack here, but maybe
-it's not that bad.
+Looks good to me:
 
-> And we also have the atr pointer there. Or do you think that could be 
-> dropped also? In your mail above you only mention the port, but maybe 
-> the deser could register the serializer device and port to the ATR, and 
-> then the ser could just use its device pointer instead of atr & port.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-I was wondering if we could drop the atr pointer too, yes. I'm not sure
-how, and there's no urgency to fix this. My main concern is that new
-drivers should ideally not be forced to use platform data just for ATR
-support, if they don't use it already for something else.
-
--- 
-Regards,
-
-Laurent Pinchart
+Best Regards,
+Petr
