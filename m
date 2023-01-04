@@ -2,174 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD23F65CF95
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C7F65CF9A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbjADJeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
+        id S234488AbjADJew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:34:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234220AbjADJeB (ORCPT
+        with ESMTP id S239051AbjADJeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:34:01 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A33D7B
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:34:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672824840; x=1704360840;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KPN8YqY9LSOEXrt90pYffb+Xv9BOeYf4y3o6s7PYJ+s=;
-  b=A/ATrrB8Z7v9Io8KT1L2bZ9fUZ5KeJOKtaLew2T8q90CXlGQRd3GvOxW
-   6JxOmuEXq8iycJg2uzkHc4+blAS3Y58k09KriGPlrBRmNSfomiBjiRUqK
-   ybryz5nOZXVynbZZUDpdBoB2l00TctSdwYWbQ9t+pNAMuKAFQcBHyvAMC
-   Qf4+c1r6+dq0MjVOtQXOUGx7dk9KbmkIVG9d9FYLAlg9GWLh+CEBvCCUP
-   IjZrq88NUfcZT+3OMJJ/kz74ogx5/CCQmXQzTA6NLTFqpBTTVPF7oJJzm
-   tBCZQAL7BAMhS3bRTkGxYflWCG9W3zjbNVyeQAi92gV0YDQGGDZTELrok
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="301582481"
-X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="301582481"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 01:34:00 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="743790546"
-X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="743790546"
-Received: from wfurtakx-mobl.ger.corp.intel.com (HELO [10.213.223.45]) ([10.213.223.45])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 01:33:56 -0800
-Message-ID: <04ec647c-184e-942e-a7ed-4ba393e591b7@linux.intel.com>
-Date:   Wed, 4 Jan 2023 09:33:54 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] drm/i915: Fix potential context UAFs
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        katrinzhou <katrinzhou@tencent.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        "open list:INTEL DRM DRIVERS" <intel-gfx@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230103234948.1218393-1-robdclark@gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20230103234948.1218393-1-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 04:34:25 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF5065F7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:34:24 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 562095C0160;
+        Wed,  4 Jan 2023 04:34:22 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute5.internal (MEProxy); Wed, 04 Jan 2023 04:34:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1672824862; x=1672911262; bh=f+
+        jnYbjKkcGa4orSRr51wlvhbjDUTHP0WzFeB65hkKI=; b=XG5NsyuO5oIi9m1QsA
+        aY1Tifw8aYg4xPf4tW/3vDfkF8crVHQWlU3GMese8JGmxh4btldiJkF8zCpO4+45
+        wKv3Kim21Jf626pw253t1bE8b97E8g2wkaAWl69LaciDDgifoiGRgD/XNVQrFVLb
+        hpUXVt2Gn9dU2lWBqK24a7+Z3fiy3LcPAWDAvfMQ148SZHBJHUkkXZ7RMmWp9f4U
+        kQFy/+9VIoe7UUFEiwuxSg2RkNE25A5JbE8a8w417pZzQ0wR7cKUUjnrO6z/ZO2i
+        4o4Qo9dALfqOMfYOIsTjbCRZimHjkiZe4Kjzm5ev1B2CAsT8PmPlQ0/xEGQPxZEG
+        Sfug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672824862; x=1672911262; bh=f+jnYbjKkcGa4orSRr51wlvhbjDU
+        THP0WzFeB65hkKI=; b=X9HDDIpQ6rdXzpKDkUqkDg4BwR//zGRYNT97c6euphFs
+        eg1IA6ZNfrKHAph5rEnoQ83b8G5bjQqe2q87R2SYAK09D5BXMgb6v7eBU+pbzF4K
+        w01CuktLPTkTjOFtbz2hkpYR2iRPcpKRSsekQDo74iu3Ap+/DqPpXK/TcFFPekyk
+        g5bGbKQAuayq+lequ8QAaWyUV3xgoVUz7JEiruLWZixeAqJY07J3B6czpkLzTa3I
+        O/XUi1PMnQxZLBzxfDDzYXey5ENO7pqO15tyh5XhgJtAwf6w8wxbK2eF94tQ0/lr
+        A/l4SiBS2xmFKTM2E4gXBlaK3epfMAjzRlh10tbKAA==
+X-ME-Sender: <xms:HUi1Y4XhYXXBcbBDl9iCGnVqmEdVGBv9EYfCGodu_OcnKdYHMtbP6Q>
+    <xme:HUi1Y8mf3G_teSr0zZvmsefl-rrPmm6tpop0DiSspSiyOVtjP2A6IWxBH0HdMxYbq
+    Wv7u0CzOHhwvyeCSX8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigddthecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
+    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:HUi1Y8b2KmsTy8rJZLYL2jOoxLSnBIyqE2Zhg0Lbu5f8Srk_093IAQ>
+    <xmx:HUi1Y3VibLJXKJadKqOx8iRkDaQRpyrRecjazKFuJZOH7JH9rzZo9g>
+    <xmx:HUi1YynOus5-FknWgCrKDQ1N5m6-5UsXDtNePGAIqLlmtGMeJyAmEg>
+    <xmx:Hki1Y84cPdVHRbVURSxp-KFAjuwaEUWj7q8sM8q4m6IYcqQrTjerWQ>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C501AA6007C; Wed,  4 Jan 2023 04:34:21 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <548661c9-165c-495b-b12a-ab25e92ece63@app.fastmail.com>
+In-Reply-To: <20230104092148.15578-1-marcan@marcan.st>
+References: <20230104092148.15578-1-marcan@marcan.st>
+Date:   Wed, 04 Jan 2023 10:33:56 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Hector Martin" <marcan@marcan.st>,
+        "Keith Busch" <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
+        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>
+Cc:     "Uday Shankar" <ushankar@purestorage.com>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nvme-apple: Add NVME_QUIRK_IDENTIFY_CNS quirk to fix regression
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 03/01/2023 23:49, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> gem_context_register() makes the context visible to userspace, and which
-> point a separate thread can trigger the I915_GEM_CONTEXT_DESTROY ioctl.
-> So we need to ensure that nothing uses the ctx ptr after this.  And we
-> need to ensure that adding the ctx to the xarray is the *last* thing
-> that gem_context_register() does with the ctx pointer.
 
-Any backtraces from oopses or notes on how it was found to record in the commit message?
+On Wed, Jan 4, 2023, at 10:21, Hector Martin wrote:
+> From the get-go, this driver and the ANS syslog have been complaining
+> about namespace identification. In 6.2-rc1, commit 811f4de0344d ("nvme:
+> avoid fallback to sequential scan due to transient issues") regressed
+> the driver by no longer allowing fallback to sequential namespace scans,
+> leaving us with no namespaces.
+>
+> It turns out that the real problem is that this controller claiming
+> NVMe 1.1 compat is treating the CNS field as a binary field, as in NVMe
+> 1.0. This already has a quirk, NVME_QUIRK_IDENTIFY_CNS, so set it for
+> the controller to fix all this nonsense (including other errors
+> triggered by other CNS commands).
+>
+> Fixes: 811f4de0344d ("nvme: avoid fallback to sequential scan due to 
+> transient issues")
+> Fixes: 5bd2927aceba ("nvme-apple: Add initial Apple SoC NVMe driver")
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+Nice, I've been meaning to look into those weird namespace scanning errors
+for a while now but never got around to it because they didn't break anything.
 
-Fixes: a4c1cdd34e2c ("drm/i915/gem: Delay context creation (v3)")
-References: 3aa9945a528e ("drm/i915: Separate GEM context construction and registration to userspace")
-Cc: <stable@vger.kernel.org> # v5.15+
+There's a chance this is also required for the later T2/x86 Macs in pci.c
+(PCI_DEVICE(PCI_VENDOR_ID_APPLE, 0x2005)) since they share a similar firmware but
+I don't have access to those to test if this is actually required.
 
-> ---
->   drivers/gpu/drm/i915/gem/i915_gem_context.c | 24 +++++++++++++++------
->   1 file changed, 18 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> index 7f2831efc798..6250de9b9196 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> @@ -1688,6 +1688,10 @@ void i915_gem_init__contexts(struct drm_i915_private *i915)
->   	init_contexts(&i915->gem.contexts);
->   }
->   
-> +/*
-> + * Note that this implicitly consumes the ctx reference, by placing
-> + * the ctx in the context_xa.
-> + */
->   static void gem_context_register(struct i915_gem_context *ctx,
->   				 struct drm_i915_file_private *fpriv,
->   				 u32 id)
-> @@ -1703,10 +1707,6 @@ static void gem_context_register(struct i915_gem_context *ctx,
->   	snprintf(ctx->name, sizeof(ctx->name), "%s[%d]",
->   		 current->comm, pid_nr(ctx->pid));
->   
-> -	/* And finally expose ourselves to userspace via the idr */
-> -	old = xa_store(&fpriv->context_xa, id, ctx, GFP_KERNEL);
-> -	WARN_ON(old);
-> -
->   	spin_lock(&ctx->client->ctx_lock);
->   	list_add_tail_rcu(&ctx->client_link, &ctx->client->ctx_list);
->   	spin_unlock(&ctx->client->ctx_lock);
-> @@ -1714,6 +1714,10 @@ static void gem_context_register(struct i915_gem_context *ctx,
->   	spin_lock(&i915->gem.contexts.lock);
->   	list_add_tail(&ctx->link, &i915->gem.contexts.list);
->   	spin_unlock(&i915->gem.contexts.lock);
-> +
-> +	/* And finally expose ourselves to userspace via the idr */
-> +	old = xa_store(&fpriv->context_xa, id, ctx, GFP_KERNEL);
-> +	WARN_ON(old);
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
 
-Have you seen that this hunk is needed or just moving it for a good measure? To be clear, it is probably best to move it even if the current placement cannot cause any problems, I am just double-checking if you had any concrete observations here while mulling over easier stable backports if we would omit it.
 
->   }
->   
->   int i915_gem_context_open(struct drm_i915_private *i915,
-> @@ -2199,14 +2203,22 @@ finalize_create_context_locked(struct drm_i915_file_private *file_priv,
->   	if (IS_ERR(ctx))
->   		return ctx;
->   
-> +	/*
-> +	 * One for the xarray and one for the caller.  We need to grab
-> +	 * the reference *prior* to making the ctx visble to userspace
-> +	 * in gem_context_register(), as at any point after that
-> +	 * userspace can try to race us with another thread destroying
-> +	 * the context under our feet.
-> +	 */
-> +	i915_gem_context_get(ctx);
-> +
->   	gem_context_register(ctx, file_priv, id);
->   
->   	old = xa_erase(&file_priv->proto_context_xa, id);
->   	GEM_BUG_ON(old != pc);
->   	proto_context_close(file_priv->dev_priv, pc);
->   
-> -	/* One for the xarray and one for the caller */
-> -	return i915_gem_context_get(ctx);
-> +	return ctx;
 
-Otherwise userspace can look up a context which hasn't had it's reference count increased yep. I can add the Fixes: and Stable: tags while merging if no complaints.
+Best,
 
-Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-
-Regards,
-
-Tvrtko
-
->   }
->   
->   struct i915_gem_context *
+Sven
