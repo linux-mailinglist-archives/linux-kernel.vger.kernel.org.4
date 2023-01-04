@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BDD65D444
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E791665D44C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbjADNcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:32:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
+        id S239553AbjADNcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:32:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbjADNbW (ORCPT
+        with ESMTP id S239402AbjADNbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:31:22 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936E6F0E;
-        Wed,  4 Jan 2023 05:28:26 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1FC031EC0645;
-        Wed,  4 Jan 2023 14:28:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672838905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=M4exezlY2OdmtDJcZ7SGATML35Drmrf4DmtljZBELBU=;
-        b=sTRYQxNRv189O2ywiRO60YX0kSyCUJ9Vj278c1F7yfP2By4xyrdXZF9fFyj1sOwyHDhoqm
-        Hc/aJjQgx6MqcB21Hyx1uESdoSd74I6zkZl8ekoR85ukW395B3KCbpx+QpHyxcWcc1qp02
-        H70uFzneKqgfy0fJnJi+Y6mpuUMLRLw=
-Date:   Wed, 4 Jan 2023 14:28:24 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v4 12/39] x86/mm: Update ptep_set_wrprotect() and
- pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
-Message-ID: <Y7V++OwWGGM4kFdl@zn.tnic>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-13-rick.p.edgecombe@intel.com>
- <Y6ryhvE3ev485oYC@zn.tnic>
- <6b4b96ec7a1cc53541f25c5a5ee8fa310b693ccc.camel@intel.com>
+        Wed, 4 Jan 2023 08:31:34 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862866586;
+        Wed,  4 Jan 2023 05:29:40 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304C2SSX031851;
+        Wed, 4 Jan 2023 13:29:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=fUw5rIZT+w0OaKCTkpkfHTn9ZdkIHNTL3qKKX182P/U=;
+ b=IBDvQlm0JNzBPu+Zz1ZW8nAbLzmRcZOaGWXCKR1AKGgPgTzG/1TCtp/cs0TqrXnDB/2A
+ B5IpTEZER/KNGY7Y+usbZcam29cKDVGiIsxERuK8qHqcQsqcDAH2ifWzJCTLWDV6bwDN
+ sguJCngVMyzJtQbPZ5jbkEuYCWKsysGpdomv1JvDusjXoVZf0PE6F9yABN1cq27g4OOb
+ ay01klX6ZLGk5Jh1Daou+7ah6Dtwl++bIpQeDnl0hTI4C+574Md6yLTjJQWMoM66GT9s
+ g+dLiL9ItHaXYiLikO3ThuV1dT+PjwP/JCAIFM2k+ACmZyA02eI/5N52vvM6+a/FkCkk Xw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvva0hk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 13:29:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 304DTVaj006473
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 4 Jan 2023 13:29:31 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 4 Jan 2023 05:29:26 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v3 0/4] Add resets for ADSP based audio clock controller driver.
+Date:   Wed, 4 Jan 2023 18:59:11 +0530
+Message-ID: <1672838955-7759-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6b4b96ec7a1cc53541f25c5a5ee8fa310b693ccc.camel@intel.com>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8CKuKcmpTFeTP3ljGXgEbwlEVXgIRLut
+X-Proofpoint-GUID: 8CKuKcmpTFeTP3ljGXgEbwlEVXgIRLut
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 suspectscore=0
+ impostorscore=0 adultscore=0 bulkscore=0 mlxlogscore=706
+ priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301040113
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -89,28 +77,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 10:26:33PM +0000, Edgecombe, Rick P wrote:
-> Sure on "Shadow Stack". For Write=0,Dirty=1 there was a previous
-> suggestion to standardize on how these bits are referred to across the
-> series in both the comments and commit logs. I think the capitalization
-> helps differentiate between the concepts of write and dirty and the
-> actual PTE bits with those names. Especially since shadow stack muddies
-> the concepts of writable and dirty memory, I thought it was a helpful
-> distinction. Is it ok?
+Add resets and remove qdsp6ss clcok controller for audioreach based platforms. 
 
-Oh sorry, I meant only
+Changes since v2:
+    -- Avoid Removing qdsp6ss clock control by conditional check.
+Changes since v1:
+    -- Update commit message.
+    -- Remove qdsp6ss clock control.
 
-s/Shadow Stack/shadow stack/
+Srinivasa Rao Mandadapu (4):
+  dt-bindings: clock: qcom,sc7280-lpasscc: Add qcom,adsp-pil-mode
+    property
+  dt-bindings: clock: qcom,sc7280-lpasscc: Add resets for audioreach
+  clk: qcom: lpasscc-sc7280: Skip qdsp6ss clock registration
+  clk: qcom: lpasscc-sc7280: Add resets for audioreach
 
-The page flags are fine.
-
-Bottom line is: hw documents love to capitalize features and concepts and that's
-just unnecessary marketing bla.
-
-Thx.
+ .../bindings/clock/qcom,sc7280-lpasscc.yaml        | 19 +++++++++++--
+ drivers/clk/qcom/lpasscc-sc7280.c                  | 33 ++++++++++++++++++----
+ 2 files changed, 45 insertions(+), 7 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.7.4
 
-https://people.kernel.org/tglx/notes-about-netiquette
