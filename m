@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1C065E0EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8D965E0EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjADXZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 18:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S235122AbjADX0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 18:26:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234381AbjADXZr (ORCPT
+        with ESMTP id S234977AbjADXZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 18:25:47 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5AE4435D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 15:18:36 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so180090pjj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 15:18:36 -0800 (PST)
+        Wed, 4 Jan 2023 18:25:49 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAD344365
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 15:19:24 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-45e2e1d6d2fso358665617b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 15:19:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gRcfEeBUiKP91OsdArHb6simzQ/tXUisez8hBc+MWKo=;
-        b=YeU28UUL4inyRR7K5g/5Trnb8sZ76lyOBb8OTfdfkx6AUmJMIiQlH+49+Bx4uNuoZ1
-         vEH1jJt49B+55yNcwU8pcBuxnU5H+niZCLDOT74HhOcrGXi/b3iUFJf6oQ3H2hAwk8Cv
-         qV/caibJO6eCkxt9m/vnTZSwMMvugUGv/DCsV76q1HKtg8CtSlwa1qMBoB5K87kFD7Rc
-         jUNXzcbJOFxtniFBeSIjzUvUH0UQwWSdGVWYkRR2sqxFVUc+ovakE6SFIFI8aDfyqg/M
-         MHSMOx4t9dqPYWD2v/2peV6yfGXbq+aq2msDKuTegR7aE7AHA9YTjyHt5woOqX8OMir1
-         adEg==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hsTeCtDlD4kOcnEo+TQdmsNYr+o2yfE7y3Ola08DhEw=;
+        b=Ua1Z5pOjsPwoBKo57uGgeQCHC1YUvPLHUZcDo9RH+vMEkr5v0R1UhMNZ4BvJBT/0NK
+         ix8Hf2D0krQcl7Ux30RbnMLFcwvniN6q5lcsbaSJQBvCGBaU1lOWQ6HBflcMmudrZRaC
+         uIBh6bt0DuuJ2Jihyku+CPw1gVStE+8gqVQcqACmfczzhoxdXH9uQbDg2V6cQFVD8f3R
+         6rlO+E5zXn0LQm4yPfAyTpJwQGGARUOKDfUd/qFDIXiyPV1hgxcqrfUgQAOxYs4CoX8B
+         z8hdgnEznug7GJtO22B5TiETOSHrsge9pczW7fda3vXPRIRhCfFqSiyr3wY+gc532q9j
+         jo/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gRcfEeBUiKP91OsdArHb6simzQ/tXUisez8hBc+MWKo=;
-        b=IJ+moLwRqZkgKE7RJ/xlvTRw+Gkg1oplXrzOCGHg1eNPhAT8Xxi69CE7vN/hKH0x0a
-         JKVWPt/asocvj8jG2wXutGExmPeWqCGtNfsD1a3V+fU7I0VqId2xvz/VMtxPdrzNkahq
-         QV0Viguorx7fTOGXM4ZzuECao+CVjn0pbn0MaZVluvGBEdAQuKE9a4tE5i0Atu96tR7M
-         lUFPAfWiLnZQ5D6Tg+o1fq8h4spFbJXWVN2fQ1u/VNln+jGTPSSeiikYsn1YUCMQBY2q
-         nIEgsS6UKK/Bxvyj88XpxgslJxoP6SA9ZfGPf1bdc4+tJMEiPmhzvZMGpEGzW/pbS3GD
-         28UQ==
-X-Gm-Message-State: AFqh2kpnWX5fabRMlBYXL7ltYnfl9+3d7gYCmaAiWUQ2kA3+PMmk2FkQ
-        fxB+I+cz5KHsh/dJY6h2DMW9Mg==
-X-Google-Smtp-Source: AMrXdXsDjg+cB5XnlPEkPebRkiYzNI867eG9HsWV7lTjWcL2caaY5Z5/HSEP85Wc/JySwN/fQSfHrA==
-X-Received: by 2002:a17:903:2481:b0:191:1543:6b2f with SMTP id p1-20020a170903248100b0019115436b2fmr3952plw.3.1672874315439;
-        Wed, 04 Jan 2023 15:18:35 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x2-20020a170902ec8200b0017f72a430adsm24909082plg.71.2023.01.04.15.18.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 15:18:34 -0800 (PST)
-Date:   Wed, 4 Jan 2023 23:18:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 1/3] x86/cpu: Process all CPUID dependencies after
- identifying CPU info
-Message-ID: <Y7YJRwlWVqt3uY9/@google.com>
-References: <20221203003745.1475584-1-seanjc@google.com>
- <20221203003745.1475584-2-seanjc@google.com>
- <Y5INU3o+SFReGkLz@zn.tnic>
- <Y5IQNY/fZw2JFA0B@google.com>
- <Y5IUsB83PzHCJ+EY@zn.tnic>
- <Y7XpTAFV6BLT8KgB@google.com>
- <Y7YDz/8lsVigmeXF@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7YDz/8lsVigmeXF@zn.tnic>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hsTeCtDlD4kOcnEo+TQdmsNYr+o2yfE7y3Ola08DhEw=;
+        b=QAwedwbFOe7+1htNfk3ZMsT1cJQIzYCfjuCzd6uj0BqjZkOh/rDCnGmot7YTHPkt/O
+         FgP7WBNiNfuPUtcubIUSoa/7JU7fz8sgnXdxwZdR/NBgZu0O4pWjRAjPhpqwwxRINKMJ
+         MIT7cIdb7yfXnA34twGd9lOtTsZafJFZ2zpE279opdG6lEG0meHPOtq4QPXBT8CR9lPK
+         rrgG84EuyFwewUm/tPkkuNtoNUBwvVrNNS2mPY8PRnRIT0fNmAqmvuei8GjbdGjoaJKf
+         P4ROg9K2AvC7zcRqztgxpiFlisJUmNnegUVcVCXKvDx5W9HsVt95ZdjMwK6kg3SyMYh3
+         KZsg==
+X-Gm-Message-State: AFqh2kpY0vKx8GR6CyNpDRBMc2CuDPrNmG/7JVLOGblz/tXzhUyP5/UJ
+        6FntYPsfvsc1eaKCc6bfgOqM6A0hBDX03kKa
+X-Google-Smtp-Source: AMrXdXsv1fwnxSmx96jF1r3m7J1UJjdBH9+gQsfU8IsTxGlJloYYZautPOjaDrGIKAu/GMjNbJVjicFYIQSwthmm
+X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
+ (user=jthoughton job=sendgmr) by 2002:a81:17d5:0:b0:480:fa10:459e with SMTP
+ id 204-20020a8117d5000000b00480fa10459emr2376956ywx.283.1672874363730; Wed,
+ 04 Jan 2023 15:19:23 -0800 (PST)
+Date:   Wed,  4 Jan 2023 23:19:10 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230104231910.1464197-1-jthoughton@google.com>
+Subject: [PATCH v2] hugetlb: unshare some PMDs when splitting VMAs
+From:   James Houghton <jthoughton@google.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        James Houghton <jthoughton@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,32 +70,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023, Borislav Petkov wrote:
-> On Wed, Jan 04, 2023 at 09:02:04PM +0000, Sean Christopherson wrote:
-> > And there's a non-zero chance we'd end up with a kernel param to allow booting
-> > unknown CPUs, e.g. for people doing weird things with VMs or running old, esoteric
-> > hardware.  At that point we'd end up with a more complex implementation than
-> > processing dependencies on synthetic flags, especially if there's ever a more
-> > legitimate need to process such dependencies.
-> 
-> I'm sorry but I'm still unclear on what actual use care are we even fixing here?
+PMD sharing can only be done in PUD_SIZE-aligned pieces of VMAs;
+however, it is possible that HugeTLB VMAs are split without unsharing
+the PMDs first.
 
-There's no fix.  What I was trying to say is that modifying the kernel to refuse
-to boot on unknown CPUs is opening a can of worms for very little benefit.
+Without this fix, it is possible to hit the uffd-wp-related WARN_ON_ONCE
+in hugetlb_change_protection [1]. The key there is that
+hugetlb_unshare_all_pmds will not attempt to unshare PMDs in
+non-PUD_SIZE-aligned sections of the VMA.
 
-> If it is about people who'd like to tinker with old hw or doing weird VM things,
-> they can just as well adjust their kernel .configs and rebuild.
-> 
-> Peeking around your patchset, if all this is about dropping the
-> X86_FEATURE_MSR_IA32_FEAT_CTL check and checking only X86_FEATURE_VMX and in
-> order to do that, you want to cover those obscure cases where
-> init_ia32_feat_ctl() won't get run, then sure, I guess - changes look simple
-> enough. :)
+It might seem ideal to unshare in hugetlb_vm_op_open, but we need to
+unshare in both the new and old VMAs, so unsharing in
+hugetlb_vm_op_split seems natural.
 
-Yes, this is purely to drop the explicit X86_FEATURE_MSR_IA32_FEAT_CTL checks.
+[1]: https://lore.kernel.org/linux-mm/CADrL8HVeOkj0QH5VZZbRzybNE8CG-tEGFshnA+bG9nMgcWtBSg@mail.gmail.com/
 
-Alternatively, we could just drop the checks without processing the dependency,
-i.e. take the stance that running KVM with a funky .config is a user error, but
-that feels unnecessarily hostile since it's quite easy to play nice.
+Fixes: 6dfeaff93be1 ("hugetlb/userfaultfd: unshare all pmds for hugetlbfs when register wp")
+Signed-off-by: James Houghton <jthoughton@google.com>
+---
+ mm/hugetlb.c | 44 +++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 35 insertions(+), 9 deletions(-)
 
-Or I guess do nothing and carry the explicit checks.
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index b39b74e0591a..b6976da0fa4d 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -94,6 +94,8 @@ static int hugetlb_acct_memory(struct hstate *h, long delta);
+ static void hugetlb_vma_lock_free(struct vm_area_struct *vma);
+ static void hugetlb_vma_lock_alloc(struct vm_area_struct *vma);
+ static void __hugetlb_vma_unlock_write_free(struct vm_area_struct *vma);
++static void hugetlb_unshare_pmds(struct vm_area_struct *vma,
++		unsigned long start, unsigned long end);
+ 
+ static inline bool subpool_is_free(struct hugepage_subpool *spool)
+ {
+@@ -4828,6 +4830,25 @@ static int hugetlb_vm_op_split(struct vm_area_struct *vma, unsigned long addr)
+ {
+ 	if (addr & ~(huge_page_mask(hstate_vma(vma))))
+ 		return -EINVAL;
++
++	/*
++	 * PMD sharing is only possible for PUD_SIZE-aligned address ranges
++	 * in HugeTLB VMAs. If we will lose PUD_SIZE alignment due to this
++	 * split, unshare PMDs in the PUD_SIZE interval surrounding addr now.
++	 */
++	if (addr & ~PUD_MASK) {
++		/*
++		 * hugetlb_vm_op_split is called right before we attempt to
++		 * split the VMA. We will need to unshare PMDs in the old and
++		 * new VMAs, so let's unshare before we split.
++		 */
++		unsigned long floor = addr & PUD_MASK;
++		unsigned long ceil = floor + PUD_SIZE;
++
++		if (floor >= vma->vm_start && ceil <= vma->vm_end)
++			hugetlb_unshare_pmds(vma, floor, ceil);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -7313,26 +7334,21 @@ void move_hugetlb_state(struct folio *old_folio, struct folio *new_folio, int re
+ 	}
+ }
+ 
+-/*
+- * This function will unconditionally remove all the shared pmd pgtable entries
+- * within the specific vma for a hugetlbfs memory range.
+- */
+-void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
++static void hugetlb_unshare_pmds(struct vm_area_struct *vma,
++				   unsigned long start,
++				   unsigned long end)
+ {
+ 	struct hstate *h = hstate_vma(vma);
+ 	unsigned long sz = huge_page_size(h);
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	struct mmu_notifier_range range;
+-	unsigned long address, start, end;
++	unsigned long address;
+ 	spinlock_t *ptl;
+ 	pte_t *ptep;
+ 
+ 	if (!(vma->vm_flags & VM_MAYSHARE))
+ 		return;
+ 
+-	start = ALIGN(vma->vm_start, PUD_SIZE);
+-	end = ALIGN_DOWN(vma->vm_end, PUD_SIZE);
+-
+ 	if (start >= end)
+ 		return;
+ 
+@@ -7364,6 +7380,16 @@ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
+ 	mmu_notifier_invalidate_range_end(&range);
+ }
+ 
++/*
++ * This function will unconditionally remove all the shared pmd pgtable entries
++ * within the specific vma for a hugetlbfs memory range.
++ */
++void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
++{
++	hugetlb_unshare_pmds(vma, ALIGN(vma->vm_start, PUD_SIZE),
++			ALIGN_DOWN(vma->vm_end, PUD_SIZE));
++}
++
+ #ifdef CONFIG_CMA
+ static bool cma_reserve_called __initdata;
+ 
+-- 
+2.39.0.314.g84b9a713c41-goog
+
