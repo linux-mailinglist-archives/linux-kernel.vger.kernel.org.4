@@ -2,168 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0BD65D7A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB9D65D7A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239718AbjADP42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S239719AbjADP52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:57:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239277AbjADP4Y (ORCPT
+        with ESMTP id S239277AbjADP50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:56:24 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2061.outbound.protection.outlook.com [40.92.103.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA722AE9;
-        Wed,  4 Jan 2023 07:56:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JmSKv0BsP+ekqBs3bcCKHd0is60UbcpErYNkAZQE7L/3sU3t433er+bU9okjmRX49tTH7PRZ+AxKQ+hipW27g86Naen9f8a66xPX9KcNeCjBOfackhI2jAVvsDpLLcLJPfoOOe/q40sczx0fWNFVVRMnOs0ttgww4oKf0wlY7ue1yeVwHiJWZy6/dLsagU6JckrwZtCv69Bqc308irFRf1jr2s1Yyic+bQyc9bsKqKG8hm7GEzprMLosskiodiFVLxmefkL0udcPALTkTLJ0nPGTSPsd5RI+VbAg/7ycAXUEXJjv1VVF1oPylX7sEpFzxmlKgkrhzsXC1FJKrsC7Zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TBVQyhFdC0YHBfbxjaL/VnhW3r6c0ZcCJ1EGGYYzsrc=;
- b=d0tli+bxNdy1zUm10oQcG9qZUnrDeYB0XOpppHTIUMJnSZXqJ1KsuqFJCK04Htd1Ls6jKhtZlDaYEyzeI2zTeKVAy1/jgoHuNqi37A04VYKOz3uoAkjtzh3StsZUJnLwmto8OSzqLfOEAP9Ec15tLUml7GhLmDzvkQm3leZ69Md0uKXCqN8ziVI/lD0eEfW/BrfparI7djpFchB2XoTJmdbfN0xhMbEgyEuaOtGbNk/T+WLJ4jfmvyORPoEEtcGZhVzYjUKkpQg5rYJUYLrOjRzUgmXiNljhLdf5ZL0PuFq8i4BaRFtVFU0MRyJ6h18wNPzknp+iqPA5EaR82zJ8TA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TBVQyhFdC0YHBfbxjaL/VnhW3r6c0ZcCJ1EGGYYzsrc=;
- b=gjpzU3TJrDakPM0UfUxZ9Dq2jPvhrlw0FtTfrBe1OPydzeY/JOCWtWpmk16sCmnzPlB8jRxGY/JYqCIN8he2X0+pG2pWZtQIXsynQSxIR0Su6wh8ZdgMaDxcmpYfGNtPp/NW+79PUx03Ttf4sXg15khWjvoEbNHqUAamz9xN1zIapiORO4flmhkztuRaowM3DIquJruIksbtiEmnBRGAYHMiOpK2C4RKIINdvBh/TdYFo9BJcP/ytG7PP29rCB2HlAvPomnuSYYDr9mh3tuh2KW8kBVFubQt2CH/3oNXqhCS9XQ9RgoUUaIr70dlXgyLP69L1G/sxWxO3Lg5ZyjGTw==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- MAZPR01MB5695.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:63::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Wed, 4 Jan 2023 15:56:14 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f90e:46bc:7a0f:23bc]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f90e:46bc:7a0f:23bc%7]) with mapi id 15.20.5944.019; Wed, 4 Jan 2023
- 15:56:14 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Hector Martin <marcan@marcan.st>
-CC:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 4/4] brcmfmac: pcie: Perform correct BCM4364 firmware
- selection
-Thread-Topic: [PATCH v1 4/4] brcmfmac: pcie: Perform correct BCM4364 firmware
- selection
-Thread-Index: AQHZIFUSEFBryofprUeqp4fURzKUtg==
-Date:   Wed, 4 Jan 2023 15:56:14 +0000
-Message-ID: <4AC571A3-D90C-4BE6-A413-74C9142FF604@live.com>
-References: <20230104100116.729-1-marcan@marcan.st>
- <20230104100116.729-5-marcan@marcan.st>
-In-Reply-To: <20230104100116.729-5-marcan@marcan.st>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [vgmokLZvB0LodnavtZtyJai6lGdk3tQ7jGk27G0mW7YXfLHV2fyBEsjvNO8LTKez]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MAZPR01MB5695:EE_
-x-ms-office365-filtering-correlation-id: 64c7e031-7011-49a7-f67f-08daee6c3511
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: L+S/I8uhzqvfxI587aQDAx8l5gEbTMUFIWeG2J4Z7N/mKKN5wPeOuRmJRmUjX7SS180+D4W2O2If4m8+zv9WzCqYNvDSu6waINZ/MobpfolKKPrsJ8LLoqtuSY4Rlwpi3iWZ9yKCeDXXp+PlNuNgHMbvJ4acgTJBZIv6em1Krf2CV6PRUcPvDbzCGR8nsg2UmNjyXD2Y+OSrP8twJqvPcfzCxqX+Nh4EBpxDXoy1sYuea+H9A3YTueaSFZvs+gQ5xXQys4qpn5y81yfp7Vk23tAb90ik9ZT3x69thTtFYP52XF6jBviUgmQ2KYDCkcMHjf1hVY9mOz5QU7RoOWt0trnjrjW0l87shj21PTun+ZNjMOzsarYI4st8U8H6RCEBraEIIXVsHBrS/SbpNFgl8v6dHSU661Y4lxIU3LeCbqwkOHtR6Nkevlk2LzuGkB5RsjJ//1MRmN3RdoYT9IZeKUdsyTyx+G2tNRGWmUsROhbus/eRkZQ/90JcS7kSSNUIuKtlsS/C82pUtF1zS2G4ftWGADRx43DXAlECon3SEMmVQAmCMDsyo5WhnyW8Ia/i3zN4DC59Fw0/wRSeMM6kTH2WMI3MxVd0l+77/f2OY//ZD2FTgVNKbwCDfXYU3Ay9wnm/IO1ew3n+6jv1DBle6w==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SHE0Uk9yenMzYndObU12UEhQY00wcUNYb0tJdGhlVlZiWjNZcVZJUUZXVExo?=
- =?utf-8?B?WHpZRzBRQ1h6SHNXMVM0TXo5UzBBbVR2SWVmdCt6dkJ4cWlyMEJhanBLWHJh?=
- =?utf-8?B?bEN0ZUNIczl3QWN2VHBxeDRRUUN2akMxSWxaRTEzL1U1Y25tem1veU5RSWZM?=
- =?utf-8?B?WU1WcVFXVDJLdGNoSWsrd3l4M3JBQ3VEbi8rTWxYWjU2ZHMwZkNmdWQzbkF4?=
- =?utf-8?B?R2Rwcm1rYzErMTFSQ0N6SEFKUmVBOG1PTXNJUmlJWURnVjgydGxSbmI5M2Nm?=
- =?utf-8?B?V2FacnVidGd3NHRnWXhxR3J0UndhcVhvTm5IU3U3TXBWT05iNU91Sy9DWHhm?=
- =?utf-8?B?NjZtTGVQYTV2eHJ3S1BJRHBxQWJTZlRSbjFzVGhPTzZiZDZ4UmRqdXZ0eEEw?=
- =?utf-8?B?STVyN0hrdDhuS1FlMCtLWXVBTExjTHFRNlRqVi9mYUZWSktwWVA0dk9Ob3Uv?=
- =?utf-8?B?bm1vYUo3QytVNENTbUpxQzdhSUxSbldlbEpZMCtkMm1IdVN2NU9VTENTdXFC?=
- =?utf-8?B?dXJwK0ZybktCSmEyV3A2ZE1kV3p2ODZWaFdUQjc0OElQQVdSU0xpaTVMV2tM?=
- =?utf-8?B?L3hNT0VQY2VHWUJib2JScjRNSnNQdWdiK01pcW5XTy94bkgzU2t5d083WDhO?=
- =?utf-8?B?aEpnY2RSTy92cUlQL2dTRnp1RXBvcFdmR3BCbEt3Zm1PSTYydWRiZk9JRTJT?=
- =?utf-8?B?Uk1ZRnFqRjc4R3NhZE5CNVhzN3J4RkVremQ4emhBbXR5T3lmMXFFbWM4S0N3?=
- =?utf-8?B?NU5FdTJVZnU2NDFkb3FFc1RTQUJIbWlVOWxxMG0rSndDa1dHZW9saWw5Mmpr?=
- =?utf-8?B?NEQ3OGpjWVF0a0NYUkJ2bDdicjk3U0piblNtaGp6SU90eEJ0Zk9WLzkyVmVk?=
- =?utf-8?B?T3NIWjlxWDZIVC9Ic1Y2ak9oYjUxbllMbjJWY3Fvb1JTTEdiRU91bHJiVHJZ?=
- =?utf-8?B?RnZ6aE5GWDlVMXAySE1qSWh5ZlUzY1JsYklTVy9ubVJlc0VSTUVZNDVkSGdv?=
- =?utf-8?B?V2E4SVdibmRrQVdoRHhkdnJJdFdwd3E1TDdUL2hhWDI2ZTFDY283RmRDeDZn?=
- =?utf-8?B?T0ZLSWh0dzNpZzBtWG92SDRVV2dBKzF4QU5LbDdWQlB4ZElwL3RCS21yVkhC?=
- =?utf-8?B?RnptS29yM0pqbnhiYmh5MExMeW13eE95V0VaUVVYTk14WkJYeHRvVU5VQXZy?=
- =?utf-8?B?U25YYlZIdWkyNlhEYVV2Qnlnb3JBUENyczI2SC9jZ3AybTkvM091SVZPeEE1?=
- =?utf-8?B?Z3IzSFJnZWdadERJdmFzNk0reDdBcXhVd1lGaHpsQzlMNnEvV29VaEpxWjcw?=
- =?utf-8?B?V0dQT2N6MnBUaGxjRkpaZndmVlZsOVhyK0FwWEJOblF0eEd5REc1RHVlVlB4?=
- =?utf-8?B?b3hORUpkZDM0ei9WTDU1WUhucGRQRFhiMHNTK1IzMUM5L3FHbDllbVFzdFJM?=
- =?utf-8?B?TUZ5TDJyT3FiU0VQc095TFJvai9kMXlQWU9hazZlY0ZaQTF0MTlEaG9LMVc5?=
- =?utf-8?B?TTErb0RPdkczRVZJRXlGaDRCSmxsMmI2TjZUUGxVNUtkN0xnQWdKVG52SDdL?=
- =?utf-8?B?c3hhcHcrWldVQ3ExYmtUK3RYSDFXWVhvT3gvTXFWYkQzSWJEdFh1cHdjMXRo?=
- =?utf-8?B?K0QzL2JhWVRHUWlKaUl6Wk1pVHNyaUFuR0J3WGphbmlndy9zK21QNVU3YS93?=
- =?utf-8?B?NitIV1g1Z0pvQTB0M1VZSlNZNTR6L3BQSHdqMzNaOXNwMHpYUjJRUHNzQ2hJ?=
- =?utf-8?B?S2VJbmVXMXBhZFNlWTZvVVVzSUU2eUZXamtTMENSZGlhRHdTT0VqdW0zZnlo?=
- =?utf-8?B?NVdZZ1BxbmJtQkxMSUFtdz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AFE96DB990481144A500A93CCE00873A@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 4 Jan 2023 10:57:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91712AE9
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 07:56:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672847803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JHICDqOYgukumk9LLwV3EBYxIew7z8FbH0jMEwELhJU=;
+        b=K6gSSx8NYBjYZIDsxGHtl8cwV8teKLO5FPMC1Srcm3tECOCC92DiLytevTs4B12G1QAqSr
+        xYgFTn+6Whz6X7ImG7n1YIhME1y0Jiybbl/Y5ZDqGyYbwOJidt9/yG1/mOl7DYZ6dDx3h8
+        DSgtCt1DZt+PVEGky6sJ++io9U45q9s=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-675-PatMQ56pPSWba6xKx7_W3Q-1; Wed, 04 Jan 2023 10:56:41 -0500
+X-MC-Unique: PatMQ56pPSWba6xKx7_W3Q-1
+Received: by mail-wr1-f71.google.com with SMTP id v4-20020adfa1c4000000b002753317406aso3604454wrv.21
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 07:56:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JHICDqOYgukumk9LLwV3EBYxIew7z8FbH0jMEwELhJU=;
+        b=S74YpJArpBPchHDooHD1hCE6nEdAXII1biWvV2Ndq+h0eDjS+5pcJZTHS5+vpdrcqU
+         ZHtkNzhZvnRE9OhjglOb9NHr7OjTAaBYjWSE+tQYMvuHiLHrBXEdn8/HF4xfTcSatbzs
+         DVkXjd6+qCnfXi5Ic0Dfi8IcJheGbRruv2xn9CQevQ3R860QLhJScvtxXKwAibyHCK3Z
+         F6tCE6L3gJxgrMzK8hifrwKAo4jHQTOcZLrEMHtAXdJTida6qDSbXN7P8B6K9rDoSWgb
+         ljRa7Hs4sgh2Yx2OgC4ol9QaptGz0vHROApuWZ6Q2vpYxsZ7FzMgRRlphIJk/4odNuRa
+         abuQ==
+X-Gm-Message-State: AFqh2kowUGRzha7qNHNNtUeyY2V4ucA8quKU0DbBFRl5rT79y3rJTw8s
+        FlxI835lTi7sSVdVfCjNGGja4g23Gjg6r5YKGLoDZV9Ln7/t7yVeDZzeXpYBpuE1nUQeRTYiNFl
+        ePLRqznFe7nhMTaOyNrV0a/Yz
+X-Received: by 2002:a05:600c:1c8e:b0:3d2:4234:e8fe with SMTP id k14-20020a05600c1c8e00b003d24234e8femr34647339wms.19.1672847799934;
+        Wed, 04 Jan 2023 07:56:39 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXt40B+dtViPfORnTqodkSNT3rePREF+wDWgBhvy/3xO+yStgoKvUDgnDiJUjA2nL/MozidRew==
+X-Received: by 2002:a05:600c:1c8e:b0:3d2:4234:e8fe with SMTP id k14-20020a05600c1c8e00b003d24234e8femr34647305wms.19.1672847799605;
+        Wed, 04 Jan 2023 07:56:39 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:f100:8100:5a6c:eb:fd3b? (p200300cbc703f10081005a6c00ebfd3b.dip0.t-ipconnect.de. [2003:cb:c703:f100:8100:5a6c:eb:fd3b])
+        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003d96efd09b7sm49070632wmp.19.2023.01.04.07.56.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 07:56:39 -0800 (PST)
+Message-ID: <0c4e35de-f790-5399-c812-ff90a4ab7531@redhat.com>
+Date:   Wed, 4 Jan 2023 16:56:37 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64c7e031-7011-49a7-f67f-08daee6c3511
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jan 2023 15:56:14.0282
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAZPR01MB5695
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20221020215318.4193269-1-opendmb@gmail.com>
+ <bff78f19-fd40-d9be-6592-93a7a4a91587@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v3 0/9] mm: introduce Designated Movable Blocks
+In-Reply-To: <bff78f19-fd40-d9be-6592-93a7a4a91587@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IE9uIDA0LUphbi0yMDIzLCBhdCAzOjMxIFBNLCBIZWN0b3IgTWFydGluIDxtYXJjYW5AbWFy
-Y2FuLnN0PiB3cm90ZToNCj4gDQo+IFRoaXMgY2hpcCBleGlzdHMgaW4gdHdvIHJldmlzaW9ucyAo
-QjI9cjMgYW5kIEIzPXI0KSBvbiBkaWZmZXJlbnQNCj4gcGxhdGZvcm1zLCBhbmQgd2FzIGFkZGVk
-IHdpdGhvdXQgcmVnYXJkIHRvIGRvaW5nIHByb3BlciBmaXJtd2FyZQ0KPiBzZWxlY3Rpb24gb3Ig
-ZGlmZmVyZW50aWF0aW5nIGJldHdlZW4gdGhlbS4gRml4IHRoaXMgdG8gaGF2ZSBwcm9wZXINCj4g
-cGVyLXJldmlzaW9uIGZpcm13YXJlcyBhbmQgc3VwcG9ydCBBcHBsZSBOVlJBTSBzZWxlY3Rpb24u
-DQo+IA0KPiBSZXZpc2lvbiBCMiBpcyBwcmVzZW50IG9uIGF0IGxlYXN0IHRoZXNlIEFwcGxlIFQy
-IE1hY3M6DQo+IA0KPiBrYXVhaTogICAgTWFjQm9vayBQcm8gMTUiIChUb3VjaC8yMDE4LTIwMTkp
-DQo+IG1hdWk6ICAgICBNYWNCb29rIFBybyAxMyIgKFRvdWNoLzIwMTgtMjAxOSkNCj4gbGFuYWk6
-ICAgIE1hYyBtaW5pIChMYXRlIDIwMTgpDQo+IGVrYW5zOiAgICBpTWFjIFBybyAyNyIgKDVLLCBM
-YXRlIDIwMTcpDQo+IA0KPiBBbmQgdGhlc2Ugbm9uLVQyIE1hY3M6DQo+IA0KPiBuaWhhdTogICAg
-aU1hYyAyNyIgKDVLLCAyMDE5KQ0KPiANCj4gUmV2aXNpb24gQjMgaXMgcHJlc2VudCBvbiBhdCBs
-ZWFzdCB0aGVzZSBBcHBsZSBUMiBNYWNzOg0KPiANCj4gYmFsaTogICAgIE1hY0Jvb2sgUHJvIDE2
-IiAoMjAxOSkNCj4gdHJpbmlkYWQ6IE1hY0Jvb2sgUHJvIDEzIiAoMjAyMCwgNCBUQjMpDQo+IGJv
-cm5lbzogICBNYWNCb29rIFBybyAxNiIgKDIwMTksIDU2MDBNKQ0KPiBrYWhhbmE6ICAgTWFjIFBy
-byAoMjAxOSkNCj4ga2FoYW5hOiAgIE1hYyBQcm8gKDIwMTksIFJhY2spDQo+IGhhbmF1bWE6ICBp
-TWFjIDI3IiAoNUssIDIwMjApDQo+IGt1cmU6ICAgICBpTWFjIDI3IiAoNUssIDIwMjAsIDU3MDAv
-WFQpDQo+IA0KPiBGaXhlczogMjRmMGJkMTM2MjY0ICgiYnJjbWZtYWM6IGFkZCB0aGUgQlJDTSA0
-MzY0IGZvdW5kIGluIE1hY0Jvb2sgUHJvIDE1LDIiKQ0KPiBSZXZpZXdlZC1ieTogTGludXMgV2Fs
-bGVpaiA8bGludXMud2FsbGVpakBsaW5hcm8ub3JnPg0KPiBTaWduZWQtb2ZmLWJ5OiBIZWN0b3Ig
-TWFydGluIDxtYXJjYW5AbWFyY2FuLnN0Pg0KPiAtLS0NCj4gLi4uL25ldC93aXJlbGVzcy9icm9h
-ZGNvbS9icmNtODAyMTEvYnJjbWZtYWMvcGNpZS5jICAgfCAxMSArKysrKysrKystLQ0KPiAxIGZp
-bGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiANCg0KSGkgSGVj
-dG9yDQoNClNob3VsZG7igJl0IHRoZXJlIGJlIGEgV0NDIGluc3RlYWQgb2YgQkNBIGhlcmUgOg0K
-DQpodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxk
-cy9saW51eC5naXQvdHJlZS9kcml2ZXJzL25ldC93aXJlbGVzcy9icm9hZGNvbS9icmNtODAyMTEv
-YnJjbWZtYWMvcGNpZS5jP2g9djYuMi1yYzIjbjI2MDM=
+On 04.01.23 00:43, Florian Fainelli wrote:
+> On 10/20/22 14:53, Doug Berger wrote:
+>> MOTIVATION:
+>> Some Broadcom devices (e.g. 7445, 7278) contain multiple memory
+>> controllers with each mapped in a different address range within
+>> a Uniform Memory Architecture. Some users of these systems have
+>> expressed the desire to locate ZONE_MOVABLE memory on each
+>> memory controller to allow user space intensive processing to
+>> make better use of the additional memory bandwidth.
+>> Unfortunately, the historical monotonic layout of zones would
+>> mean that if the lowest addressed memory controller contains
+>> ZONE_MOVABLE memory then all of the memory available from
+>> memory controllers at higher addresses must also be in the
+>> ZONE_MOVABLE zone. This would force all kernel memory accesses
+>> onto the lowest addressed memory controller and significantly
+>> reduce the amount of memory available for non-movable
+>> allocations.
+>>
+>> The main objective of this patch set is therefore to allow a
+>> block of memory to be designated as part of the ZONE_MOVABLE
+>> zone where it will always only be used by the kernel page
+>> allocator to satisfy requests for movable pages. The term
+>> Designated Movable Block is introduced here to represent such a
+>> block. The favored implementation allows extension of the
+>> 'movablecore' kernel parameter to allow specification of a base
+>> address and support for multiple blocks. The existing
+>> 'movablecore' mechanisms are retained.
+>>
+>> BACKGROUND:
+>> NUMA architectures support distributing movablecore memory
+>> across each node, but it is undesirable to introduce the
+>> overhead and complexities of NUMA on systems that don't have a
+>> Non-Uniform Memory Architecture.
+>>
+>> Commit 342332e6a925 ("mm/page_alloc.c: introduce kernelcore=mirror option")
+>> also depends on zone overlap to support sytems with multiple
+>> mirrored ranges.
+>>
+>> Commit c6f03e2903c9 ("mm, memory_hotplug: remove zone restrictions")
+>> embraced overlapped zones for memory hotplug.
+>>
+>> This commit set follows their lead to allow the ZONE_MOVABLE
+>> zone to overlap other zones. Designated Movable Blocks are made
+>> absent from overlapping zones and present within the
+>> ZONE_MOVABLE zone.
+>>
+>> I initially investigated an implementation using a Designated
+>> Movable migrate type in line with comments[1] made by Mel Gorman
+>> regarding a "sticky" MIGRATE_MOVABLE type to avoid using
+>> ZONE_MOVABLE. However, this approach was riskier since it was
+>> much more instrusive on the allocation paths. Ultimately, the
+>> progress made by the memory hotplug folks to expand the
+>> ZONE_MOVABLE functionality convinced me to follow this approach.
+>>
+> 
+> Mel, David, does the sub-thread discussion with Doug help ensuring that
+> all of the context is gathered before getting into a more detailed patch
+> review on a patch-by-patch basis?
+> 
+> Eventually we may need a fairly firm answer as to whether the proposed
+> approach has any chance of landing upstream in order to either commit to
+> in subsequent iterations of this patch set, or find an alternative.
+
+
+As raised, I'd appreciate if less intrusive alternatives could be 
+evaluated (e.g., fake NUMA nodes and being ablee to just use mbind(), 
+moving such memory to ZONE_MOVABLE after boot via something like daxctl).
+
+I'm not convinced that these intrusive changes are worth it at this 
+point. Further, some of the assumptions (ZONE_MOVABLE == user space) are 
+not really future proof as I raised.
+
+-- 
+Thanks,
+
+David / dhildenb
+
