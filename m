@@ -2,327 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F05D65D4F4
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACD665D4F3
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239459AbjADOFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
+        id S234327AbjADOFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239328AbjADOFQ (ORCPT
+        with ESMTP id S239430AbjADOFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:05:16 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D741005A;
-        Wed,  4 Jan 2023 06:05:14 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0562E6F0;
-        Wed,  4 Jan 2023 15:05:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672841112;
-        bh=8l/K5yv0Rv8XIaQ6t0Ibk5O6oXfkCVkhituRfl0UILo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=G+SVu0CPCHDlF8Sc29jxhhNMAjAEwL1FLc3ZtdxmnVg+Zzm29o2+Kd+6SN19GG5nQ
-         XLBnbSrVvn3xQ/hOhtFDcaHGd6pxliZn24E2jmI3b0EOAvk6deHUE9kJAiChoqiSfg
-         1sJKNr02PTuOI64EZl61j8g8bf4UYfYZlrsdXAo8=
-Message-ID: <0cb140df-b83f-1fd8-852a-61dee1e28086@ideasonboard.com>
-Date:   Wed, 4 Jan 2023 16:05:08 +0200
+        Wed, 4 Jan 2023 09:05:19 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F81B1ADBB;
+        Wed,  4 Jan 2023 06:05:18 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id tz12so82836302ejc.9;
+        Wed, 04 Jan 2023 06:05:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=omjjaDP/LgtiwtMeTshwHRcoEfKVz88lQXr6vhpQX7U=;
+        b=NRxTkCEHs+jUaIEdhc1YbJId89SvZp9B6wbB1x4tXPdqhkccLYlcFKe2MLxWTOfQ+R
+         pLm+ZuOi4eqS3EuNZERb7uHMYVO/Pxkpv1kvPxNPelypMD0GQX3GjIYJ3wgkChDbrzP8
+         cGVoHfIOg3VOVHuOQCgEvWkPA+8n2xy2WhSes+g8EETQ/x21MKst82sdk/h8E5qSIM5V
+         PSMegNYP0V62Z/7k4R0lN+tFb0QCW5PmsFpHG8hHpkfmURToZ1zKL3TCk5sLnwluKA67
+         ZOPaMYMSGAkCu+HsNY5tQVhhKQuDkK+MYIxEAKqW3TlPkrt1JxdO+MMaXqDNwUxqDoPa
+         VcrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=omjjaDP/LgtiwtMeTshwHRcoEfKVz88lQXr6vhpQX7U=;
+        b=esulOfsiHq/w8coXmSYmpRiMX9mbMwHfutRaV2kD/1qe6zDC30wSVihYvExZqkZSgS
+         rlmFLnM5+3CitNCHhG9Nge0l73By96QkIZBNTyVNp8udQ4VjXfnXJPXH/pSrLtxWgvMI
+         XGD49Vhb2vse4gUeokZrnbPmNZQPl0/qVMouotGvxPfQf6OijIoOhi5nc3Ff3C4sDEiC
+         QspcCvsd0FcEq+8ry/JeJ48Ljcd5WHiLGJIFW5H1wn05veyr691Vjt9qzKAM3OesSpDl
+         Xks+aE9nxv+wzo+KAxK26xRUg6dvdLprpkq6jwFiJ0mrrL7HtvAJAp9BsovZnC+phnTo
+         3zaw==
+X-Gm-Message-State: AFqh2kpSeb71s9KT0MsI9aLMiRTWSD3B40v+H4TlVQr3mttoqbA7eXSP
+        82cDL+jTn32t/Eeoepl36KQ=
+X-Google-Smtp-Source: AMrXdXtzaZH0hKIHcFwkAOS0sIhsKaCOQ9xnQkuxnjepURuUQIMIU2bCyeHJl8Y7yqiLRFXWLC7wzw==
+X-Received: by 2002:a17:906:30c2:b0:7ae:c0b:a25c with SMTP id b2-20020a17090630c200b007ae0c0ba25cmr37612280ejb.13.1672841116699;
+        Wed, 04 Jan 2023 06:05:16 -0800 (PST)
+Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
+        by smtp.gmail.com with ESMTPSA id l18-20020a1709060cd200b0084c70c187e8sm9838522ejh.165.2023.01.04.06.05.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 06:05:16 -0800 (PST)
+Date:   Wed, 4 Jan 2023 15:05:24 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH net-next 0/5] add PLCA RS support and onsemi NCN26000
+Message-ID: <cover.1672840325.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 5/8] dt-bindings: media: add bindings for TI DS90UB960
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-6-tomi.valkeinen@ideasonboard.com>
- <Y5YaMpbj1WTTIp3B@pendragon.ideasonboard.com>
- <99372b9d-2050-2040-6b29-a1939c2e0c95@ideasonboard.com>
- <Y6nRWpWvWZ++V1KP@pendragon.ideasonboard.com>
- <67f2998e-131f-a4f9-1434-8e0f5bd90bd7@ideasonboard.com>
- <Y7V3z9Pf4OB3UR7l@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y7V3z9Pf4OB3UR7l@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 14:57, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> On Wed, Jan 04, 2023 at 10:59:00AM +0200, Tomi Valkeinen wrote:
->> On 26/12/2022 18:52, Laurent Pinchart wrote:
->>> On Tue, Dec 13, 2022 at 04:25:46PM +0200, Tomi Valkeinen wrote:
->>>> On 11/12/2022 19:58, Laurent Pinchart wrote:
->>>>> On Thu, Dec 08, 2022 at 12:40:03PM +0200, Tomi Valkeinen wrote:
->>>>>> Add DT bindings for TI DS90UB960 FPDLink-3 Deserializer.
->>>>>>
->>>>>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->>>>>> ---
->>>>>>     .../bindings/media/i2c/ti,ds90ub960.yaml      | 358 ++++++++++++++++++
->>>>>>     1 file changed, 358 insertions(+)
->>>>>>     create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..d8b5e219d420
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
->>>>>> @@ -0,0 +1,358 @@
->>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
->>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>> +
->>>>>> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->>>>>> +
->>>>>> +description:
->>>>>> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
->>>>>> +  forwarding.
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    enum:
->>>>>> +      - ti,ds90ub960-q1
->>>>>> +      - ti,ds90ub9702-q1
->>>>>> +
->>>>>> +  reg:
->>>>>> +    maxItems: 1
->>>>>> +    description:
->>>>>> +      i2c addresses for the deserializer and the serializers
->>>>>
->>>>> s/i2c/I2C/
->>>>>
->>>>> Same below.
->>>>>
->>>>> A bit more details would be nice, for instance the order in which
->>>>> addresses should be specified should be documented. The example below
->>>>> has one address only, so it's quite unclear. Or is this a left-over,
->>>>> from before the i2c-alias-pool ?
->>>>
->>>> That's a left over, but not related to i2c-alias-pool but the i2c-alias
->>>> for the serializers. It already says above 'maxItems: 1', so now it only
->>>> contains the deserializer address. I'll drop the desc.
->>>
->>> Looks good to me.
->>>
->>>>>> +
->>>>>> +  clocks:
->>>>>> +    maxItems: 1
->>>>>> +    description:
->>>>>> +      Reference clock connected to the REFCLK pin.
->>>>>> +
->>>>>> +  clock-names:
->>>>>> +    items:
->>>>>> +      - const: refclk
->>>>>> +
->>>>>> +  powerdown-gpios:
->>>>>> +    maxItems: 1
->>>>>> +    description:
->>>>>> +      Specifier for the GPIO connected to the PDB pin.
->>>>>> +
->>>>>> +  i2c-alias-pool:
->>>>>> +    $ref: /schemas/types.yaml#/definitions/uint16-array
->>>>>> +    description:
->>>>>> +      i2c alias pool is a pool of i2c addresses on the main i2c bus that can be
->>>>>> +      used to access the remote peripherals. The addresses must be available,
->>>>>> +      not used by any other peripheral. Each remote peripheral is assigned an
->>>>>> +      alias from the pool, and transactions to that address will be forwarded
->>>>>> +      to the remote peripheral, with the address translated to the remote
->>>>>> +      peripheral's real address.
->>>>>
->>>>> As this property is optional, should you describe what happens when it's
->>>>> not specified ?
->>>>>
->>>>> I would also indicate that the pool doesn't cover the serializers, only
->>>>> the devices behind them.
->>>>
->>>> Yep, I'll clarify these.
->>>>
->>>>>> +
->>>>>> +  links:
->>>>>> +    type: object
->>>>>> +    additionalProperties: false
->>>>>> +
->>>>>> +    properties:
->>>>>> +      '#address-cells':
->>>>>> +        const: 1
->>>>>> +
->>>>>> +      '#size-cells':
->>>>>> +        const: 0
->>>>>> +
->>>>>> +      ti,manual-strobe:
->>>>>> +        type: boolean
->>>>>> +        description:
->>>>>> +          Enable manual strobe position and EQ level
->>>>>> +
->>>>>> +    patternProperties:
->>>>>> +      '^link@[0-9a-f]+$':
->>>>>
->>>>> There can be up to 4 links only, right ? I would then use
->>>>>
->>>>>          '^link@[0-3]$':
->>>>
->>>> Yes, I'll change that.
->>>>
->>>>>> +        type: object
->>>>>> +        additionalProperties: false
->>>>>> +        properties:
->>>>>> +          reg:
->>>>>> +            description: The link number
->>>>>> +            maxItems: 1
->>>>>> +
->>>>>> +          i2c-alias:
->>>>>> +            description:
->>>>>> +              The i2c address used for the serializer. Transactions to this
->>>>>> +              address on the i2c bus where the deserializer resides are
->>>>>> +              forwarded to the serializer.
->>>>>> +
->>>>>> +          ti,rx-mode:
->>>>>> +            $ref: /schemas/types.yaml#/definitions/uint32
->>>>>> +            enum:
->>>>>> +              - 0 # RAW10
->>>>>> +              - 1 # RAW12 HF
->>>>>> +              - 2 # RAW12 LF
->>>>>> +              - 3 # CSI2 SYNC
->>>>>> +              - 4 # CSI2 NON-SYNC
->>>>>> +            description: FPD-Link Input Mode
->>>>>
->>>>> Are there use cases for controlling this dynamically (in particular the
->>>>> sync/non-sync modes) ? Is there anything that could be queried at
->>>>> runtime from the serializers instead of being specified in DT ?
->>>>
->>>> We need a link to the serializer before we can query anything from the
->>>> serializer.
->>>
->>> I meant querying it from the serializer driver, not the serializer
->>> hardware. This being said, it would likely be difficult to do so, as the
->>> serializer driver would need to probe first. I think I'm thus fine
->>> selecting the mode in DT on the deserializer side.
->>>
->>>> To have a link, we need the mode... So, as I mentioned in
->>>> the other reply, we could define these in some way in the serializer's
->>>> properties instead of here, but I'm not sure if that's a good change.
->>>>
->>>> The driver can change the mode at runtime (say, from sync to non-sync
->>>> mode, if the HW supports that). But I think this property should reflect
->>>> the HW strapped configuration of the serializer.
->>>
->>> That would possibly work for the DS90UB953, but the DS90UB913 has no
->>> strapped mode selected at boot time but is instead configured
->>> automatically through the back-channel (see my last reply to patch 3/8).
->>
->> Indeed.
->>
->>> When connecting a DS90UB913 to a DS90UB914 deserializer, we can probably
->>> start without mode selection in software, as the MODE pin is meant to
->>> bootstrap that to a correct value which is then automatically
->>> transmitted to the serializer (hardware designs where the mode would
->>> need to be overridden should be rate). However, when connecting multiple
->>
->> I don't know if that's true. I guess it depends on how you see the deser
->> and the camera module. Are they part of the same HW design or not? In my
->> setups they are quite separate, and I connect different kinds of camera
->> modules to my deserializers. But I can see that if you create a, say,
->> car, you'd have both sides known at design time and would never change.
->>
->>> DS90UB913 to a DS90UB960, I can imagine connecting different types of
->>> cameras on the four input ports, so the need to specify the mode
->>> per-port in DT would be more common.
->>
->> Right, and even with UB914, you might well design the deserializer side
->> with, say, RAW10 sensors, but later in the cycle you'd need to change to
->> a RAW12 sensor. Depending on the deser mode strap would require you to
->> do a HW change on the deser side too.
->>
->> As I said in the other mail, I don't like the deser's strap, and I think
->> we should just basically ignore it as we can provide the necessary data
->> in the DT.
-> 
-> What I meant is that, given that the UB914 is meant to be used with a
-> single camera, using a RAW mode, there's a much higher chance that
-> hardware strapping will work as intended there. We could thus start
-> without support for overrides in a UB914 driver (but as far as I
-> understand we're not planning to work on such a driver in the near
-> future, so it's hypothetical only), while in the UB960 driver we
-> probably need override support from the beginning.
+This patchset adds support for getting/setting the Physical Layer 
+Collision Avoidace (PLCA) Reconciliation Sublayer (RS) configuration and
+status on Ethernet PHYs that supports it.
 
-Yes, but depending on the UB914 strap mode would still be only a partial 
-solution, and it would still need to also support overriding the strap 
-mode (from DT). As you said in the other mail, we anyway have to define 
-the serializer and the sensor in the DT, so even with UB914 we couldn't 
-just switch the camera module and change the mode via a DIP switch.
+PLCA is a feature that provides improved media-access performance in terms
+of throughput, latency and fairness for multi-drop (P2MP) half-duplex PHYs.
+PLCA is defined in Clause 148 of the IEEE802.3 specifications as amended
+by 802.3cg-2019. Currently, PLCA is supported by the 10BASE-T1S single-pair
+Ethernet PHY defined in the same standard and related amendments. The OPEN
+Alliance SIG TC14 defines additional specifications for the 10BASE-T1S PHY,
+including a standard register map for PHYs that embeds the PLCA RS (see
+PLCA management registers at https://www.opensig.org/about/specifications/).
 
-So I still don't see why we would even bother supporting the deser strap 
-mode, even on UB914.
+The changes proposed herein add the appropriate ethtool netlink interface
+for configuring the PLCA RS on PHYs that supports it. A separate patchset
+further modifies the ethtool userspace program to show and modify the
+configuration/status of the PLCA RS.
 
->>> For these reasons, I don't think the ti,rx-mode property can be defined
->>> as reflecting the hardware MODE strap with the DS90UB913. I also think
->>> it would be quite confusing to define it as the desired runtime
->>> configuration for the DS90UB913 and as the hardware MODE strap for the
->>> DS90UB953. Could it be (explicitly) defined as the desired runtime
->>> configuration in all cases ?
->>
->> That sounds bad in a DT context =). You're right that the rx-mode can't
->> be defined as reflecting the serializer mode strap, but I think we can
->> define it as reflecting the default operation mode of the serializer
->> hardware (or maybe rather the camera module).
-> 
-> What do you mean by "default operation mode" in this case ?
+Additionally, this patchset adds support for the onsemi NCN26000
+Industrial Ethernet 10BASE-T1S PHY that uses the newly added PLCA
+infrastructure.
 
-How the camera module is HW strapped and supposed to be used, how it 
-works (more or less) out of the box:
+Piergiorgio Beruto (5):
+  net/ethtool: add netlink interface for the PLCA RS
+  drivers/net/phy: add the link modes for the 10BASE-T1S Ethernet PHY
+  drivers/net/phy: add connection between ethtool and phylib for PLCA
+  drivers/net/phy: add helpers to get/set PLCA configuration
+  drivers/net/phy: add driver for the onsemi NCN26000 10BASE-T1S PHY
 
-- The UB953 is HW strapped to sync or non-sync CSI mode, or RAW mode.
-- Both UB913 and UB953 (in RAW mode) have a sensor connected either with 
-10 or 12 lines.
-- The sensor has a default (either HW or use-case default) pixel clock.
+ Documentation/networking/ethtool-netlink.rst | 138 ++++++++++
+ MAINTAINERS                                  |  14 +
+ drivers/net/phy/Kconfig                      |   7 +
+ drivers/net/phy/Makefile                     |   1 +
+ drivers/net/phy/mdio-open-alliance.h         |  46 ++++
+ drivers/net/phy/ncn26000.c                   | 171 ++++++++++++
+ drivers/net/phy/phy-c45.c                    | 183 ++++++++++++
+ drivers/net/phy/phy-core.c                   |   5 +-
+ drivers/net/phy/phy.c                        | 172 ++++++++++++
+ drivers/net/phy/phy_device.c                 |  17 ++
+ drivers/net/phy/phylink.c                    |   6 +-
+ include/linux/ethtool.h                      |  12 +
+ include/linux/phy.h                          |  84 ++++++
+ include/uapi/linux/ethtool.h                 |   3 +
+ include/uapi/linux/ethtool_netlink.h         |  25 ++
+ net/ethtool/Makefile                         |   2 +-
+ net/ethtool/common.c                         |   8 +
+ net/ethtool/netlink.c                        |  29 ++
+ net/ethtool/netlink.h                        |   6 +
+ net/ethtool/plca.c                           | 276 +++++++++++++++++++
+ 20 files changed, 1202 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/net/phy/mdio-open-alliance.h
+ create mode 100644 drivers/net/phy/ncn26000.c
+ create mode 100644 net/ethtool/plca.c
 
-Based on those, I think we get all the possible modes. So, I think, 
-every camera module will have a known "normal" / "default" mode, which 
-is what the mode in the DT tells.
-
-Well, for FPD4, there's also the CDR mode. UB971 can work in both FDP3 
-and FPD4 modes. But there again it should be clear what's the "normal" 
-operation mode, as it comes from a serializer HW strap.
-
-We can do changes to those at runtime (not supported by the drivers), 
-e.g. changing from sync to non-sync CSI mode, changing the RAW mode, and 
-even changing from FDP4 to FDP3. But those, I believe, are rare cases, 
-and the changes have to be done carefully, on both the deser and ser 
-sides in certain order.
-
-So, back to the original point, "desired runtime configuration" and 
-"default operation mode" are maybe the same thing =).
-
-  Tomi
+-- 
+2.37.4
 
