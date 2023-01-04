@@ -2,98 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7C165D523
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DD865D51D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239595AbjADOJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
+        id S239575AbjADOJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:09:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239540AbjADOJY (ORCPT
+        with ESMTP id S239490AbjADOIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:09:24 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FFF321BE;
-        Wed,  4 Jan 2023 06:09:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672841341; x=1704377341;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=HCOvoASy+qbpDqBB8eBzzhSQ2v8lak3B7DRvotc2hZ4=;
-  b=k5X1gNvN6uxi1ycaodF5u4MrDv9l9KHjpfx6BUf+8ajRxxncHa7YiOa9
-   wPAGKu1H038FWiw7NPvlfqN262AuglqC4znSjvJmMCA7f9b+ZXA3uISin
-   PEIqF46/TbHoQDayAR8Z9G3JlG+GwW9tqhvuA+kus+jeL2Prh3Rv4iTeK
-   otC9Q2+AFWbX+LoDwLYP70rov2apYokKL4eGz/DWdH9Tuo/kv4wPc5jCZ
-   Q9FYWYr/v1jK0joI9PGODPeWFu2++5NpGz4cez16udWp3wOUlxD4AveHw
-   QEeYNjRXzuDV8xrcsV5Xj3/rJMzuMAh1EiayCS2TX/lSfbfJVM4JUHKEN
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="302310103"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="302310103"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 06:09:00 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="983940643"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="983940643"
-Received: from mkabdel-mobl.ger.corp.intel.com (HELO localhost) ([10.252.25.63])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 06:08:57 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Alexey Lukyachuk <skif@skif-web.ru>
-Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>
-Subject: Re: [Intel-gfx] [PATCH v2] drm/i915: dell wyse 3040 shutdown fix
-In-Reply-To: <20230103132426.0c6d144f@alexey-Swift-SF314-42>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221225184413.146916-1-skif@skif-web.ru>
- <20221225185507.149677-1-skif@skif-web.ru> <Y6sfvUJmrb73AeJh@intel.com>
- <20221227204003.6b0abe65@alexey-Swift-SF314-42>
- <20230102165649.2b8e69e3@alexey-Swift-SF314-42> <87a630ylg5.fsf@intel.com>
- <20230103132426.0c6d144f@alexey-Swift-SF314-42>
-Date:   Wed, 04 Jan 2023 16:08:55 +0200
-Message-ID: <87sfgqwfwo.fsf@intel.com>
+        Wed, 4 Jan 2023 09:08:52 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7E71B9E5;
+        Wed,  4 Jan 2023 06:08:51 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id b88so41409715edf.6;
+        Wed, 04 Jan 2023 06:08:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mK9Z/AU8nGQ9sZMvDQuANxIsK6zhP0TpVbEgNn1uSXE=;
+        b=GK2h5xTuX5pqmEi2bDO4KshsH9h5dUr0UW6UZbDKtCo5BK1NBc9iqFEgSYWVDLdsQ3
+         h2dgUnSxyHqTZb1axRx0POJa68a47w+b8fA4ipAGsiRsMLRMGmpAGQMB+GBGKKwkhZCD
+         Ikv+8rXGg7oCfXwP/15Z23XcKGMSBBIe7NggMnF0u97p3YhYSD9Qe0MLFx7pl6Gbz43Y
+         EDGHawDuiwlx/UoyovgHUTMiYZymklaDX4YZjCjfs0CbsLA7+Tl5eKpL57zjSWiRu+hh
+         ZKQy1G0NiXeyghh03NtMtspfrQEU4446O718jST6bDNh8PbeCEu1WbWbAFGM8TAZyvgI
+         MFAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mK9Z/AU8nGQ9sZMvDQuANxIsK6zhP0TpVbEgNn1uSXE=;
+        b=y/9/ZF6WE5yMSM0Xh1pr5kOwc4lHr5XHsk6DXwem5iNI7mt6TIK9tYTOpHBrcmjkZU
+         VyA5ETgV3lVHiIL89uiiRRU/P6LDvAO9bMN8mRn7VQeD+BrVbJuwikFqEOzVIdzaYG+R
+         Z6FC/sVBS9Yx2FifP0mCg2lfKET3lnNffYwVaRB7ejb+8+01X7mZV4rd0PSWBQHSsU4d
+         KbTNLWDg1kKcnONdJSqw4ZgBQ3crCWWTZcQRafvtd/ilvZUTMo6Qfhq7MLR5sWlgKay+
+         Nq1Pey5MGBcOXSr/rC8ZcR+YKzQKQ7hm1DR68mhscDKFtjyhXNAt9q5CvO402ZVzZJGE
+         xffQ==
+X-Gm-Message-State: AFqh2kqGkFPQujyGW/iz/lgZjd4i+JBd8uvlEWO89MEOknZRPx7UUcV3
+        60cjteL+iBIEpK94+mlTsdQ=
+X-Google-Smtp-Source: AMrXdXuNXEUHC6QW+5j3OLmzpwvqOnR/tQ30OKVigQHI2KJHp0nNhrTSd8VYIm9aODqbiXLyEUANGw==
+X-Received: by 2002:a05:6402:1c95:b0:48b:a29f:4bef with SMTP id cy21-20020a0564021c9500b0048ba29f4befmr14029755edb.6.1672841330329;
+        Wed, 04 Jan 2023 06:08:50 -0800 (PST)
+Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
+        by smtp.gmail.com with ESMTPSA id b12-20020aa7dc0c000000b0046892e493dcsm14744531edu.26.2023.01.04.06.08.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 06:08:49 -0800 (PST)
+Date:   Wed, 4 Jan 2023 15:08:58 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH ethtool-next 1/2] update UAPI header copies
+Message-ID: <aa2698743539e903075ced36366afbf61aae6b10.1672840949.git.piergiorgio.beruto@gmail.com>
+References: <cover.1672840949.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1672840949.git.piergiorgio.beruto@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 03 Jan 2023, Alexey Lukyachuk <skif@skif-web.ru> wrote:
-> On Tue, 03 Jan 2023 12:14:02 +0200
-> Jani Nikula <jani.nikula@linux.intel.com> wrote:
->
->> On Mon, 02 Jan 2023, Alexey Lukyachuk <skif@skif-web.ru> wrote:
->> > Regarding to your question about fdo gitlab, I went to do it.
->> 
->> What's the URL for the issue?
->> 
->> BR,
->> Jani.
->> 
->
-> I have not submited issue in bug tracker because I found solution in git.
-> ("Before filing the bug, please try to reproduce your issue with the 
-> latest kernel. Use the latest drm-tip branch from 
-> http://cgit.freedesktop.org/drm-tip and build as instructed on 
-> our Build Guide.")
->
-> Should I do it?
+Update to kernel commit d6ffe9c0296b.
 
-Shot in the dark first, does snd_intel_dspcfg.dsp_driver=1 module
-parameter help on the affected kernels? Should be easy enough to test.
+Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+---
+ uapi/linux/ethtool.h         |  3 +++
+ uapi/linux/ethtool_netlink.h | 39 ++++++++++++++++++++++++++++++++++++
+ uapi/linux/net_tstamp.h      |  3 ++-
+ 3 files changed, 44 insertions(+), 1 deletion(-)
 
-BR,
-Jani.
-
-
+diff --git a/uapi/linux/ethtool.h b/uapi/linux/ethtool.h
+index d1748702bddc..78bf6fad9e02 100644
+--- a/uapi/linux/ethtool.h
++++ b/uapi/linux/ethtool.h
+@@ -1739,6 +1739,9 @@ enum ethtool_link_mode_bit_indices {
+ 	ETHTOOL_LINK_MODE_800000baseDR8_2_Full_BIT	 = 96,
+ 	ETHTOOL_LINK_MODE_800000baseSR8_Full_BIT	 = 97,
+ 	ETHTOOL_LINK_MODE_800000baseVR8_Full_BIT	 = 98,
++	ETHTOOL_LINK_MODE_10baseT1S_Full_BIT		 = 99,
++	ETHTOOL_LINK_MODE_10baseT1S_Half_BIT		 = 100,
++	ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT	 = 101,
+ 
+ 	/* must be last entry */
+ 	__ETHTOOL_LINK_MODE_MASK_NBITS
+diff --git a/uapi/linux/ethtool_netlink.h b/uapi/linux/ethtool_netlink.h
+index d581c43d592d..a6d899cd7f3a 100644
+--- a/uapi/linux/ethtool_netlink.h
++++ b/uapi/linux/ethtool_netlink.h
+@@ -51,6 +51,10 @@ enum {
+ 	ETHTOOL_MSG_MODULE_SET,
+ 	ETHTOOL_MSG_PSE_GET,
+ 	ETHTOOL_MSG_PSE_SET,
++	ETHTOOL_MSG_RSS_GET,
++	ETHTOOL_MSG_PLCA_GET_CFG,
++	ETHTOOL_MSG_PLCA_SET_CFG,
++	ETHTOOL_MSG_PLCA_GET_STATUS,
+ 
+ 	/* add new constants above here */
+ 	__ETHTOOL_MSG_USER_CNT,
+@@ -97,6 +101,10 @@ enum {
+ 	ETHTOOL_MSG_MODULE_GET_REPLY,
+ 	ETHTOOL_MSG_MODULE_NTF,
+ 	ETHTOOL_MSG_PSE_GET_REPLY,
++	ETHTOOL_MSG_RSS_GET_REPLY,
++	ETHTOOL_MSG_PLCA_GET_CFG_REPLY,
++	ETHTOOL_MSG_PLCA_GET_STATUS_REPLY,
++	ETHTOOL_MSG_PLCA_NTF,
+ 
+ 	/* add new constants above here */
+ 	__ETHTOOL_MSG_KERNEL_CNT,
+@@ -880,6 +888,37 @@ enum {
+ 	ETHTOOL_A_PSE_MAX = (__ETHTOOL_A_PSE_CNT - 1)
+ };
+ 
++enum {
++	ETHTOOL_A_RSS_UNSPEC,
++	ETHTOOL_A_RSS_HEADER,
++	ETHTOOL_A_RSS_CONTEXT,		/* u32 */
++	ETHTOOL_A_RSS_HFUNC,		/* u32 */
++	ETHTOOL_A_RSS_INDIR,		/* binary */
++	ETHTOOL_A_RSS_HKEY,		/* binary */
++
++	__ETHTOOL_A_RSS_CNT,
++	ETHTOOL_A_RSS_MAX = (__ETHTOOL_A_RSS_CNT - 1),
++};
++
++/* PLCA */
++
++enum {
++	ETHTOOL_A_PLCA_UNSPEC,
++	ETHTOOL_A_PLCA_HEADER,			/* nest - _A_HEADER_* */
++	ETHTOOL_A_PLCA_VERSION,			/* u16 */
++	ETHTOOL_A_PLCA_ENABLED,			/* u8  */
++	ETHTOOL_A_PLCA_STATUS,			/* u8  */
++	ETHTOOL_A_PLCA_NODE_CNT,		/* u32 */
++	ETHTOOL_A_PLCA_NODE_ID,			/* u32 */
++	ETHTOOL_A_PLCA_TO_TMR,			/* u32 */
++	ETHTOOL_A_PLCA_BURST_CNT,		/* u32 */
++	ETHTOOL_A_PLCA_BURST_TMR,		/* u32 */
++
++	/* add new constants above here */
++	__ETHTOOL_A_PLCA_CNT,
++	ETHTOOL_A_PLCA_MAX = (__ETHTOOL_A_PLCA_CNT - 1)
++};
++
+ /* generic netlink info */
+ #define ETHTOOL_GENL_NAME "ethtool"
+ #define ETHTOOL_GENL_VERSION 1
+diff --git a/uapi/linux/net_tstamp.h b/uapi/linux/net_tstamp.h
+index 55501e5e7ac8..a2c66b3d7f0f 100644
+--- a/uapi/linux/net_tstamp.h
++++ b/uapi/linux/net_tstamp.h
+@@ -31,8 +31,9 @@ enum {
+ 	SOF_TIMESTAMPING_OPT_PKTINFO = (1<<13),
+ 	SOF_TIMESTAMPING_OPT_TX_SWHW = (1<<14),
+ 	SOF_TIMESTAMPING_BIND_PHC = (1 << 15),
++	SOF_TIMESTAMPING_OPT_ID_TCP = (1 << 16),
+ 
+-	SOF_TIMESTAMPING_LAST = SOF_TIMESTAMPING_BIND_PHC,
++	SOF_TIMESTAMPING_LAST = SOF_TIMESTAMPING_OPT_ID_TCP,
+ 	SOF_TIMESTAMPING_MASK = (SOF_TIMESTAMPING_LAST - 1) |
+ 				 SOF_TIMESTAMPING_LAST
+ };
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.37.4
+
