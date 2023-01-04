@@ -2,114 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C46565D3A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9705F65D3BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbjADNCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S239170AbjADNFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239173AbjADNCt (ORCPT
+        with ESMTP id S239283AbjADNFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:02:49 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4398FADF
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:02:48 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id b12so22152396pgj.6
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 05:02:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ho94QZUxZzWgd7jHuwQ3/9xze7CYSmr9inNhvmT/D4A=;
-        b=CyfGV2C8n29w0gNHADbTxhprc/0+JdU0rRGfzAUqFFH8epwH3E2idIqf9fuqUGqDMZ
-         dORbGewDDtcIr5HD5Sa5gG6Yj3ZsL9UP0BlgC5hADcb6+EQj8YM25cGmO+923Cs5JtiH
-         5/jmoi7wgmWoI5RIDwUGVQv0W9dpvQN2Cgyta0Jy7gjmJds39aIRKDXD61GuMZ9ywQEq
-         ICZ8iqO8C3ozYmvPlrFPLCQkDjWdLUYcRZSMUSMRk+PIORt1L5GaI4POQeAzpCRrEkov
-         SfLOaB2ZpUw4RlGPWjmYAB/RFHf6pAhLDzfosX2431lfJnTtUuYgMjOJT4zpK9RVjD0m
-         Eahg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ho94QZUxZzWgd7jHuwQ3/9xze7CYSmr9inNhvmT/D4A=;
-        b=1hXJTePxgvriV7qp9W6xCce36i8YtvI6t4n+ghtpJrYv+gftXwMCrb17AQRGVRPOwY
-         ngsMhNOmEishFhsSVYXUn1zHLQYTH7gIsWnOMYIpPrEVuLxH4kvR37KQ13GIsNAoGASI
-         6Yg2tTOp/yeBzmXkGpF8Mw6mLxtOlb7BudStwAgjsgT9614AWCvKQmSIwlUKItWNv5KD
-         W2lvInUZbV3o5z7k/RFelgnQ0dIy1BDbbPFsKUW3snRMI55QFmCVUXXTOBMAbn2E+fIf
-         TnImnWL1d4SNinuKAgcO/eOuWPZ4dv9ta5TmPLTE07rCT9sHOIEbQF245itK4TjX7mxI
-         T9/g==
-X-Gm-Message-State: AFqh2kq0pjWYGv/y8N8AYRYHaOdpRUtFrUgY95cHm7CLf7viu+mJyND5
-        m5zl4xrWI/Ctjx2g0XtgLbY=
-X-Google-Smtp-Source: AMrXdXvGURFkyMm74VyfIz4yWLwjRopTmFGouzeQUAsQiOhZzOr3QIJ7QSsv0rs7ygeaO/mNXRpgKw==
-X-Received: by 2002:aa7:804a:0:b0:576:ebfe:e9c1 with SMTP id y10-20020aa7804a000000b00576ebfee9c1mr46637714pfm.20.1672837368296;
-        Wed, 04 Jan 2023 05:02:48 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-82.three.co.id. [180.214.232.82])
-        by smtp.gmail.com with ESMTPSA id z6-20020aa79586000000b005815837164fsm14913094pfj.59.2023.01.04.05.02.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 05:02:47 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id C911B104491; Wed,  4 Jan 2023 20:02:43 +0700 (WIB)
-Date:   Wed, 4 Jan 2023 20:02:43 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     linux-kernel@vger.kernel.org,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-Subject: Re: [RFC PATCH 18/25] kvx: Add kvx default config file
-Message-ID: <Y7V48w+k+asLbrpY@debian.me>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
- <20230103164359.24347-19-ysionneau@kalray.eu>
+        Wed, 4 Jan 2023 08:05:25 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398D0FADF
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:05:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672837524; x=1704373524;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rdI/oJ9HW+kmCjRVi5jemUFp00YfbT8GRbCeKCMZrnI=;
+  b=bWvIbuLgpKfTYzZneyjzFSzVrYngInKbVq97403KFnehqeNBfCKEZE4u
+   pNbCvJ8G4CfK5Qi4BiV0oxdf2vMd7Jo9KYApNCtP4+XJy+Oxd07H5dJSV
+   KjvfFtvUl0wzsyNkx53bft/8UJ5KVumedyLOpcEQJ/loOLOU4LWWIzFNm
+   dPE+f97OnbeqA0I2aIvtDfpvGTk9szI4Dpz/fnWt7c++vbvoxanmWO0a4
+   htmUut570ZQIWkyp4VizMXmUSB9TcJYmpecd/dA6mfqAOzOCR+KV74OdV
+   oapgGHf5/RC34KY35ZmS29jcwmgrxRjLzxX656E4+Qi6btmLkt/UACBtq
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320639544"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="320639544"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:05:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797528992"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="797528992"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:05:15 -0800
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Rob Clark <robdclark@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH v4 00/19] iommu: Retire detach_dev callback
+Date:   Wed,  4 Jan 2023 20:57:06 +0800
+Message-Id: <20230104125725.271850-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0oKCTb0BCo8Raula"
-Content-Disposition: inline
-In-Reply-To: <20230103164359.24347-19-ysionneau@kalray.eu>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi folks,
 
---0oKCTb0BCo8Raula
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The iommu core calls the driver's detach_dev domain op callback only when
+a device is finished assigning to user space and
+iommu_group_release_dma_owner() is called to return the device to the
+kernel, where iommu core wants to set the default domain to the device but
+the driver didn't provide one. The code looks like:
 
-On Tue, Jan 03, 2023 at 05:43:52PM +0100, Yann Sionneau wrote:
->  arch/kvx/configs/default_defconfig | 130 +++++++++++++++++++++++++++++
->  1 file changed, 130 insertions(+)
->  create mode 100644 arch/kvx/configs/default_defconfig
->=20
+        /*
+         * New drivers should support default domains and so the detach_dev() op
+         * will never be called. Otherwise the NULL domain represents some
+         * platform specific behavior.
+         */
+        if (!new_domain) {
+                if (WARN_ON(!group->domain->ops->detach_dev))
+                        return -EINVAL;
+                __iommu_group_for_each_dev(group, group->domain,
+                                           iommu_group_do_detach_device);
+                group->domain = NULL;
+                return 0;
+        }
 
-Shouldn't it be arch/kvx/configs/defconfig to be consistent with other
-archs?
+In other words, if the iommu driver provides default domains, the
+.detach_dev callback will never be called; Otherwise, the .detach_dev
+callback is actually called to return control back to the platform DMA
+ops, other than detaching the domain from device.
 
---=20
-An old man doll... just what I always wanted! - Clara
+This series cleanups this by:
 
---0oKCTb0BCo8Raula
-Content-Type: application/pgp-signature; name="signature.asc"
+- If the IOMMU driver provides default domains, remove .detach_dev
+  callback.
+- Adds a new set_platform_dma iommu op. Any IOMMU driver that doesn't
+  provide default domain should implement set_platform_dma callback
+  instead.
+- Retire .detach_dev callback.
 
------BEGIN PGP SIGNATURE-----
+This series originates from various discussion in the community. Thank
+Jason, Robin and all others for their ideas. This series looks very
+long. It is necessary because I hope that change in each driver has a
+confirmation from its stakeholder. I will then be able to merge some of
+them to make the series cute.
 
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY7V47QAKCRD2uYlJVVFO
-o7X8AQCWPvpV7kFzPxQRxWQ6H0iYZMKsI2w/dhTO4FqUW8jmfAD/erOYtLz2sgps
-Bn9Fdf+msSnSf681/C2WeDPv/Qq6UAM=
-=nrEh
------END PGP SIGNATURE-----
+The whole series is available on github:
+https://github.com/LuBaolu/intel-iommu/commits/iommu-retire-detach_dev-v4
 
---0oKCTb0BCo8Raula--
+Please review and suggest.
+
+Change log:
+v4:
+ - Drop the patch which renamed .attach_dev to .set_dev. As Robin said,
+   "... I also wouldn't say that "attach" loses its meaning in a context
+   where an equivalent "detach" operation is only ever implicit in 
+   reattaching to something else...". If we have a better name in the
+   future, we can do it in other series.
+ - Adjust the patch of "iommu: Add set_platform_dma_ops iommu ops"
+   according to Jason's following suggestion " ... This is a bit ugly,
+   it would be better to make the previous patch call set_platform_dma
+   if it is set instead of detach_dev and then these patches should just
+   rename the driver's fsl_pamu_detach_device to
+   fsl_pamu_set_platform_dma ..."
+ - Add a new patch to remove deferred attach check from
+   __iommu_detach_domain() path. Make it a separate patch as the
+   prerequisite to remove __iommu_detach_device() helper.
+ - Rename set_platform_dma to set_platform_dma_ops to make it more
+   meaningful.
+
+v3:
+ - https://lore.kernel.org/linux-iommu/20221128064648.1934720-1-baolu.lu@linux.intel.com/
+ - Setting blocking domain is not conceptually equal to detach_dev.
+   Dropped all blocking domain related staffs in the previous version.
+
+v2:
+ - https://lore.kernel.org/linux-iommu/20220826123014.52709-1-baolu.lu@linux.intel.com/
+ - Replace .detach_dev callback with static block domain ops;
+ - Rename .attach_dev to .set_dev.
+
+v1:
+ - https://lore.kernel.org/linux-iommu/20220516015759.2952771-1-baolu.lu@linux.intel.com/
+
+Jason Gunthorpe (1):
+  iommu: Remove deferred attach check from __iommu_detach_device()
+
+Lu Baolu (18):
+  iommu/amd: Remove detach_dev callback
+  iommu/apple-dart: Remove detach_dev callback
+  iommu/qcom: Remove detach_dev callback
+  iommu/exynos: Remove detach_dev callback
+  iommu/ipmmu: Remove detach_dev callback
+  iommu/mtk: Remove detach_dev callback
+  iommu/rockchip: Remove detach_dev callback
+  iommu/sprd: Remove detach_dev callback
+  iommu/sun50i: Remove detach_dev callback
+  iommu: Add set_platform_dma_ops iommu ops
+  iommu/fsl_pamu: Add set_platform_dma_ops callback
+  iommu/msm: Add set_platform_dma_ops callback
+  iommu/mtk_v1: Add set_platform_dma_ops callback
+  iommu/omap: Add set_platform_dma_ops callback
+  iommu/s390: Add set_platform_dma_ops callback
+  iommu/gart: Add set_platform_dma_ops callback
+  iommu/tegra: Add set_platform_dma_ops callback
+  iommu: Remove detach_dev callback
+
+ include/linux/iommu.h                   |  8 +-
+ include/trace/events/iommu.h            |  7 --
+ drivers/iommu/amd/iommu.c               | 26 -------
+ drivers/iommu/apple-dart.c              | 24 ------
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c | 23 ------
+ drivers/iommu/exynos-iommu.c            |  1 -
+ drivers/iommu/fsl_pamu_domain.c         |  6 +-
+ drivers/iommu/iommu-traces.c            |  1 -
+ drivers/iommu/iommu.c                   | 98 ++++++++++++-------------
+ drivers/iommu/ipmmu-vmsa.c              | 16 ----
+ drivers/iommu/msm_iommu.c               |  6 +-
+ drivers/iommu/mtk_iommu.c               |  9 ---
+ drivers/iommu/mtk_iommu_v1.c            |  4 +-
+ drivers/iommu/omap-iommu.c              |  6 +-
+ drivers/iommu/rockchip-iommu.c          |  1 -
+ drivers/iommu/s390-iommu.c              |  7 +-
+ drivers/iommu/sprd-iommu.c              | 16 ----
+ drivers/iommu/sun50i-iommu.c            |  1 -
+ drivers/iommu/tegra-gart.c              |  6 +-
+ drivers/iommu/tegra-smmu.c              |  5 +-
+ 20 files changed, 73 insertions(+), 198 deletions(-)
+
+-- 
+2.34.1
+
