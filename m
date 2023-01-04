@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4397065CAB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F39D65CAC9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbjADAXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:23:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
+        id S238513AbjADA0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 19:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjADAXr (ORCPT
+        with ESMTP id S238722AbjADAZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:23:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630F7164B8;
-        Tue,  3 Jan 2023 16:23:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF72961560;
-        Wed,  4 Jan 2023 00:23:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 310C8C433D2;
-        Wed,  4 Jan 2023 00:23:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672791826;
-        bh=Ub1O4ARA4Fg1QerVBHMPex3kBs1tuOPd9OUWy+AyaE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OZwcaB7pDsRLazyUJiUCwgCbXeXHfPdPlBxzS9RGiCSHj9KgfXl7IbIbWALJzQfsQ
-         XacyMUuuQrCcLhrYdplLErkyezbqno6aB4dGt9WzbC/zMfQbEjIH/jEhx0wCYhILHw
-         842OZZRWeHYTnWl5/K7R7xf56w9baqfnSzZQsAQwcdfvoJ0i9b6lO7ET0WCYayim8f
-         EWbh/u1kI/ghzkRHK+x970ganXbmY08478lfgqX5/6OZpuVLzqvGOdrXpsGoktvjN5
-         yg0qacQjxBYYYzgnG4OXJ1qwQHYLHvlhB3osx9zyRGNN+JoawlYRvzHHIQHTH5MQnE
-         ySiN15/1QoAoQ==
-Date:   Wed, 4 Jan 2023 00:23:44 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] ext4: Fix function prototype mismatch for ext4_feat_ktype
-Message-ID: <Y7THENi5v2+fgUAc@gmail.com>
-References: <20230103234616.never.915-kees@kernel.org>
+        Tue, 3 Jan 2023 19:25:54 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9756817592
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:25:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672791940; x=1704327940;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=edKy2ReilvbH/TaDlMaXGjVC5v8DHE8hu3zYyHeDKrM=;
+  b=dGOuXdYP4I+59Zb0otzZV52T4wy3MY4jCHkW2QMHwD3VmiGundwrEtgI
+   6/ac+6vwfJY7mvRyUJTG+7qzPOR085LNCEt1LZ+iPw9bVIBwf0skkCAFj
+   eYkpgqEHLyE7ToArE1ZKrmQd8vQSj5ag4vBIkqGW4Dj2j3Yb1KDlUJYfm
+   8e4+uMMob9qbqzPDoN0MLCLx+uG1MClTRXBbR2OMbGygDCQ1I6uxwFI6S
+   /yL3ORnnUae36tL52TdmgsFIPGzM2HXw3tn4Y03H5diIqmWxpTWe0lUOO
+   sSAsp5rj+dY8wXvqCD1llHfY+2ThM56FSb/Ou6Mr2sRfeQgdwS8QoVjcC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="319501208"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="319501208"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 16:25:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="605011640"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="605011640"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 16:25:21 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Matthew Wilcox" <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        "Alistair Popple" <apopple@nvidia.com>,
+        haoxin <xhao@linux.alibaba.com>
+Subject: Re: [PATCH 3/8] migrate_pages: restrict number of pages to migrate
+ in batch
+References: <20221227002859.27740-1-ying.huang@intel.com>
+        <20221227002859.27740-4-ying.huang@intel.com>
+        <761F148B-555B-4C51-8A1E-F17ABA85D014@nvidia.com>
+Date:   Wed, 04 Jan 2023 08:24:12 +0800
+In-Reply-To: <761F148B-555B-4C51-8A1E-F17ABA85D014@nvidia.com> (Zi Yan's
+        message of "Tue, 03 Jan 2023 13:40:00 -0500")
+Message-ID: <87pmbvno43.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103234616.never.915-kees@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 03:46:20PM -0800, Kees Cook wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed.
-> 
-> ext4_feat_ktype was setting the "release" handler to "kfree", which
-> doesn't have a matching function prototype. Add a simple wrapper
-> with the correct prototype.
-> 
-> This was found as a result of Clang's new -Wcast-function-type-strict
-> flag, which is more sensitive than the simpler -Wcast-function-type,
-> which only checks for type width mismatches.
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  fs/ext4/sysfs.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
-> index d233c24ea342..83cf8b5afb54 100644
-> --- a/fs/ext4/sysfs.c
-> +++ b/fs/ext4/sysfs.c
-> @@ -491,6 +491,11 @@ static void ext4_sb_release(struct kobject *kobj)
->  	complete(&sbi->s_kobj_unregister);
->  }
->  
-> +static void ext4_kobject_release(struct kobject *kobj)
-> +{
-> +	kfree(kobj);
-> +}
-> +
->  static const struct sysfs_ops ext4_attr_ops = {
->  	.show	= ext4_attr_show,
->  	.store	= ext4_attr_store,
-> @@ -505,7 +510,7 @@ static struct kobj_type ext4_sb_ktype = {
->  static struct kobj_type ext4_feat_ktype = {
->  	.default_groups = ext4_feat_groups,
->  	.sysfs_ops	= &ext4_attr_ops,
-> -	.release	= (void (*)(struct kobject *))kfree,
-> +	.release	= ext4_kobject_release,
+Zi Yan <ziy@nvidia.com> writes:
 
-For consistency, maybe call this ext4_feat_release?  So ext4_sb_ktype would have
-ext4_sb_release, and ext4_feat_ktype would have ext4_feat_release.
+> On 26 Dec 2022, at 19:28, Huang Ying wrote:
 
-I'm also surprised that this wasn't found earlier.  Is it possible that CFI does
-not actually distinguish between the two function prototypes here?
+[snip]
 
-- Eric
+>> +/*
+>> + * migrate_pages - migrate the folios specified in a list, to the free folios
+>> + *		   supplied as the target for the page migration
+>> + *
+>> + * @from:		The list of folios to be migrated.
+>> + * @get_new_page:	The function used to allocate free folios to be used
+>> + *			as the target of the folio migration.
+>> + * @put_new_page:	The function used to free target folios if migration
+>> + *			fails, or NULL if no special handling is necessary.
+>> + * @private:		Private data to be passed on to get_new_page()
+>> + * @mode:		The migration mode that specifies the constraints for
+>> + *			folio migration, if any.
+>> + * @reason:		The reason for folio migration.
+>> + * @ret_succeeded:	Set to the number of folios migrated successfully if
+>> + *			the caller passes a non-NULL pointer.
+>> + *
+>> + * The function returns after 10 attempts or if no folios are movable any more
+>> + * because the list has become empty or no retryable folios exist any more.
+>> + * It is caller's responsibility to call putback_movable_pages() to return folios
+>> + * to the LRU or free list only if ret != 0.
+>> + *
+>> + * Returns the number of {normal folio, large folio, hugetlb} that were not
+>> + * migrated, or an error code. The number of large folio splits will be
+>> + * considered as the number of non-migrated large folio, no matter how many
+>> + * split folios of the large folio are migrated successfully.
+>> + */
+>> +int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>> +		free_page_t put_new_page, unsigned long private,
+>> +		enum migrate_mode mode, int reason, unsigned int *ret_succeeded)
+>> +{
+>> +	int rc, rc_gether;
+>
+> rc_gether -> rc_gather?
+
+Good catch!  Thanks!  Will change this in the next version.
+
+Best Regards,
+Huang, Ying
+
+>> +	int nr_pages;
+>> +	struct folio *folio, *folio2;
+>> +	LIST_HEAD(folios);
+>> +	LIST_HEAD(ret_folios);
+>> +	struct migrate_pages_stats stats;
+>> +
+
+[snip]
