@@ -2,94 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FCA65D1F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C34365D1F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239199AbjADL7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 06:59:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S239158AbjADL7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 06:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239116AbjADL7B (ORCPT
+        with ESMTP id S239234AbjADL7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 06:59:01 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493391EC5E;
-        Wed,  4 Jan 2023 03:59:00 -0800 (PST)
-Date:   Wed, 04 Jan 2023 11:58:57 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672833538;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=+n2ZcuHyYQSIvPOuKhwvmkaHaWyKOGj/JfAklwx+MxU=;
-        b=Xbz8Grh+urUwKujbRtQx5LM4M/FBOoc4fw9A5cav8F0RZU5/NOLvMbS+XZhAG8XxqsCTmv
-        yEj6lx1A1U9YmrOlDRr152+RG9UpEAm+BeZEuA2Csrp+NnthIHHA5hPQBUz8fi62jn2yMi
-        zqjBM6Si57Rs98yuFNdoXA4Tg7uWeB2r3biYG8jU3CF9BxKX3ggl3UpAGRIOo8oJGxYOcb
-        RERO6kLlQhVqdUGxunhGGIrx356+N5W23QbNWA6dvBHXZ7XsvR30H2ZbSXKMEatpkSXftD
-        nUbVyTNGAqA9n6aVILjyXX5JKZkPZkCvwe3YA8rW0A+KPTcCdNLc7/PhKNA5Lw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672833538;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=+n2ZcuHyYQSIvPOuKhwvmkaHaWyKOGj/JfAklwx+MxU=;
-        b=JAHylUUA7jd66QVeVdn/gYui89nlgS18uubG3jOSVL4goX9RqpNispLQiMeFHrbvDI8RfP
-        fVtVzuBEiOxZ/jBQ==
-From:   "tip-bot2 for Rodrigo Branco" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/bugs: Flush IBP in ib_prctl_set()
-Cc:     Rodrigo Branco <bsdaemon@google.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Ingo Molnar <mingo@kernel.org>, <stable@vger.kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
+        Wed, 4 Jan 2023 06:59:31 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3B31B1D0;
+        Wed,  4 Jan 2023 03:59:29 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id o15so25363828wmr.4;
+        Wed, 04 Jan 2023 03:59:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wQ7g43yeFEdHpj10PompOYHIr0cHFQF71QMr+oMaves=;
+        b=G1LgyYFT/Lkivs2XYaRTUJ80unLJrliTTqQuLIwNA5tQS3byAdibus/57RD4JPCw1J
+         5VBifp0LSHdJGcDSTYZICOles4jG41ih1M5d9+eqgbVy16YvmhOaQ/Lsht4r1Byyq2s7
+         sXyINieCS7SqDa694VtWHIwHKHwf3SQcEaJwIZ6gtHiFbO/ZUxMkXRx2OSlcteGSj6x/
+         Tz8JvhP/r0hmXRb/e5IvLClmlogoqFKBYNJQ1xVt1bc8d7L42YUKhRqlRx/23YfT2tZw
+         NAKQrldmBij1S6eAE4bMEZldmeEqzmFwTGt4g+Cr0jxCJLz83LxEhPPOu/XQChNVVEAr
+         iCXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wQ7g43yeFEdHpj10PompOYHIr0cHFQF71QMr+oMaves=;
+        b=17xYBJXN01HNAKqsuoGpu9gl7DfSWaw2u7JRdKfJpJB03VpXSt151iDNfe1jDXBuHZ
+         ksLdogHOLsDPLM2y1U7QyB7h+2B8j4TvSSXnvBotTpITwTmjbutuyqEAeQTWrDbTAyrG
+         dqTMehn/OMRaPAJK65mHOI/J5M8wEFyq0ykZgxSTzUB+MsMPACfjIoRcUaEmiExz5dcM
+         clQNIIBnhCjbMXI6BCAfc04jes5mqjPQH+AzHhZd9wqBaLkTFb3PY1TIznaxNkLg0ewY
+         nwrrE10/2DzJ0RohURRRDCS+CA9NeAi2EtEu0JrITa9cPo0KJfA7iAKhCAkPMjxkIA3r
+         Yg9w==
+X-Gm-Message-State: AFqh2krSePvkKtuVvUQ/OxeqAmWY9Djkd9g5BYX7iV98vQiEZz4I7kY8
+        Y5FhzBRBliG4R/hfEy3JFG8=
+X-Google-Smtp-Source: AMrXdXv4Q84TnQCE5ksibHnf+NQDrI+GZXTnLALoLGQVU2OEMSIddRzRtvcZyHZQyAxktj4bAOBALw==
+X-Received: by 2002:a05:600c:3b1c:b0:3c6:e60f:3f66 with SMTP id m28-20020a05600c3b1c00b003c6e60f3f66mr32999816wms.29.1672833567559;
+        Wed, 04 Jan 2023 03:59:27 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b003d1e34bcbb2sm1878973wmb.13.2023.01.04.03.59.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 03:59:27 -0800 (PST)
+Date:   Wed, 4 Jan 2023 14:59:24 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 2/4] fs/sysv: Change the signature of dir_get_page()
+Message-ID: <202301041814.3Lbh2QfK-lkp@intel.com>
 MIME-Version: 1.0
-Message-ID: <167283353750.4906.14334038214138785293.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221231075717.10258-3-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Hi Fabio,
 
-Commit-ID:     a664ec9158eeddd75121d39c9a0758016097fa96
-Gitweb:        https://git.kernel.org/tip/a664ec9158eeddd75121d39c9a0758016097fa96
-Author:        Rodrigo Branco <bsdaemon@google.com>
-AuthorDate:    Tue, 03 Jan 2023 14:17:51 -06:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Wed, 04 Jan 2023 11:25:32 +01:00
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-x86/bugs: Flush IBP in ib_prctl_set()
+url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/fs-sysv-Use-the-offset_in_page-helper/20221231-155850
+base:   git://git.infradead.org/users/hch/configfs.git for-next
+patch link:    https://lore.kernel.org/r/20221231075717.10258-3-fmdefrancesco%40gmail.com
+patch subject: [PATCH 2/4] fs/sysv: Change the signature of dir_get_page()
+config: xtensa-randconfig-m031-20230101
+compiler: xtensa-linux-gcc (GCC) 12.1.0
 
-We missed the window between the TIF flag update and the next reschedule.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
-Signed-off-by: Rodrigo Branco <bsdaemon@google.com>
-Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Cc: <stable@vger.kernel.org>
----
- arch/x86/kernel/cpu/bugs.c | 2 ++
- 1 file changed, 2 insertions(+)
+smatch warnings:
+fs/sysv/dir.c:190 sysv_add_link() warn: passing zero to 'PTR_ERR'
 
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index d970ddb..bca0bd8 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -1981,6 +1981,8 @@ static int ib_prctl_set(struct task_struct *task, unsigned long ctrl)
- 		if (ctrl == PR_SPEC_FORCE_DISABLE)
- 			task_set_spec_ib_force_disable(task);
- 		task_update_spec_tif(task);
-+		if (task == current)
-+			indirect_branch_prediction_barrier();
- 		break;
- 	default:
- 		return -ERANGE;
+vim +/PTR_ERR +190 fs/sysv/dir.c
+
+^1da177e4c3f41 Linus Torvalds        2005-04-16  174  int sysv_add_link(struct dentry *dentry, struct inode *inode)
+^1da177e4c3f41 Linus Torvalds        2005-04-16  175  {
+2b0143b5c986be David Howells         2015-03-17  176  	struct inode *dir = d_inode(dentry->d_parent);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  177  	const char * name = dentry->d_name.name;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  178  	int namelen = dentry->d_name.len;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  179  	struct page *page = NULL;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  180  	struct sysv_dir_entry * de;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  181  	unsigned long npages = dir_pages(dir);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  182  	unsigned long n;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  183  	char *kaddr;
+26a6441aadde86 Nicholas Piggin       2007-10-16  184  	loff_t pos;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  185  	int err;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  186  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  187  	/* We take care of directory expansion in the same loop */
+^1da177e4c3f41 Linus Torvalds        2005-04-16  188  	for (n = 0; n <= npages; n++) {
+4b8a9c0afda16b Fabio M. De Francesco 2022-12-31  189  		kaddr = dir_get_page(dir, n, &page);
+^1da177e4c3f41 Linus Torvalds        2005-04-16 @190  		err = PTR_ERR(page);
+
+This "err" assignment is a dead store (pointless/never used).
+
+4b8a9c0afda16b Fabio M. De Francesco 2022-12-31  191  		if (IS_ERR(kaddr))
+4b8a9c0afda16b Fabio M. De Francesco 2022-12-31  192  			return PTR_ERR(kaddr);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  193  		de = (struct sysv_dir_entry *)kaddr;
+09cbfeaf1a5a67 Kirill A. Shutemov    2016-04-01  194  		kaddr += PAGE_SIZE - SYSV_DIRSIZE;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  195  		while ((char *)de <= kaddr) {
+^1da177e4c3f41 Linus Torvalds        2005-04-16  196  			if (!de->inode)
+^1da177e4c3f41 Linus Torvalds        2005-04-16  197  				goto got_it;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  198  			err = -EEXIST;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  199  			if (namecompare(namelen, SYSV_NAMELEN, name, de->name)) 
+^1da177e4c3f41 Linus Torvalds        2005-04-16  200  				goto out_page;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  201  			de++;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  202  		}
+^1da177e4c3f41 Linus Torvalds        2005-04-16  203  		dir_put_page(page);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  204  	}
+^1da177e4c3f41 Linus Torvalds        2005-04-16  205  	BUG();
+^1da177e4c3f41 Linus Torvalds        2005-04-16  206  	return -EINVAL;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  207  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  208  got_it:
+1023904333f9cb Fabio M. De Francesco 2022-12-31  209  	pos = page_offset(page) + offset_in_page(de);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  210  	lock_page(page);
+f4e420dc423148 Christoph Hellwig     2010-06-04  211  	err = sysv_prepare_chunk(page, pos, SYSV_DIRSIZE);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  212  	if (err)
+^1da177e4c3f41 Linus Torvalds        2005-04-16  213  		goto out_unlock;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  214  	memcpy (de->name, name, namelen);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  215  	memset (de->name + namelen, 0, SYSV_DIRSIZE - namelen - 2);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  216  	de->inode = cpu_to_fs16(SYSV_SB(inode->i_sb), inode->i_ino);
+26a6441aadde86 Nicholas Piggin       2007-10-16  217  	err = dir_commit_chunk(page, pos, SYSV_DIRSIZE);
+02027d42c3f747 Deepa Dinamani        2016-09-14  218  	dir->i_mtime = dir->i_ctime = current_time(dir);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  219  	mark_inode_dirty(dir);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  220  out_page:
+^1da177e4c3f41 Linus Torvalds        2005-04-16  221  	dir_put_page(page);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  222  	return err;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  223  out_unlock:
+^1da177e4c3f41 Linus Torvalds        2005-04-16  224  	unlock_page(page);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  225  	goto out_page;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  226  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
+
