@@ -2,90 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4194E65CB91
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9A465CB94
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238887AbjADBhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 20:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S238913AbjADBiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 20:38:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239015AbjADBh2 (ORCPT
+        with ESMTP id S234260AbjADBiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 20:37:28 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B4E178BB
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:37:26 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id t15so35052697ybq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 17:37:26 -0800 (PST)
+        Tue, 3 Jan 2023 20:38:52 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B0A17590
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:38:49 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id u204so28047279oib.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 17:38:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o+6CzOy0CAP0ecsYxKWZ90I9ape91rJYpbkSwqevcg8=;
-        b=N6YHgWrsP9L3QB2IT95p8DJprk2mLCA7HuiNeqDr97A9qDEymEKWo73KguQM93wTCX
-         2aOuVlAO4ZIUXQWHyGZ5p5WvA3im/McxYtWRPbSSZKO5oYbc0YwP8ct3wTHzpHsnO7lc
-         TXskQkYzp++vcFX+bGEwOz4jpBN6Yjn7r5IgvqxGBzCPFdP9k41pzncXQaAFgUyGKOW+
-         uuDlMkI64pFkP7PjcoLnLgooVTUg/NI3X+JZH67mwu88hbgYntocLMgH2RKyN9B9F4KM
-         9MuMjJE/xCDGEx8rmNL2iOazXVc3c9rR+Jo+jkODdVsExDRUUSTU6zRlJCFv4kI0o8w6
-         X/gw==
+        d=linuxtx.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7xiJceqXb+ErDMJE6RdkUBkKlMsVUevK6KQODTOQeNE=;
+        b=cgocR8kJne+v2LfJ1M+39Y+WFnzR2RfHzix5JcICL0w/SQ/MTmRVI3zy6as3846VKB
+         UJ4rET4SgdihgeQ6qQQUYg2UDjq+ulOE5hBTCCGB3rkZN2Tv+QLCNr5FgjwLvVE7wung
+         hSrD9nepNh0YS/faWkd5pRNUkBLvJmu01BWGM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o+6CzOy0CAP0ecsYxKWZ90I9ape91rJYpbkSwqevcg8=;
-        b=g61ujby4zYIRO1ZUTMuAOjjx6JfnBcjb/osKM3aw7ZbSzcaWWADfnO+mT52cSXljLy
-         yP/YaWHwHl3zKACkMFSeaUInBstu+WHaNv+ZvppYSnuGU3wzsXPi9jM3EYmlzOzkk5VX
-         ml/+A0MVANYwK7q7dGL7HRQXg4Hvy0QYv4Q3iS8mGl4GcszMf6ZwvwgLsta/qV/tQLDq
-         yicBymy1w3ZkXdaLXqjUUPSi1Me8ZgXylDPh2VTHwgT02YvE+abiJziOFTSgb+/x/41K
-         oUxPhO0eRBCyEVG7g8bKQfNyQLNZ+9by4OfywH7LMxFnxdUkYWupYpV3n/nYzNUETZHl
-         rmUw==
-X-Gm-Message-State: AFqh2kryc1d3Vyx6Ey++ojqGJeqd/UuInps4q2imKrHgakym7VGzdPeZ
-        k0n287NdZi/cUmpGubkwfq2Q94RHUnOhokTvQFwvpdyhPT4ZnQ==
-X-Google-Smtp-Source: AMrXdXv3VLQSwRtgRUrr1lfCnGaSVr+RhK0rBcgaiEy8h0FqNpr8BCTTGDyCU8D3j/XK5+BHD2k5/vUuaJCsESsZyUU=
-X-Received: by 2002:a25:6d02:0:b0:6f9:d605:92d1 with SMTP id
- i2-20020a256d02000000b006f9d60592d1mr4726402ybc.341.1672796245815; Tue, 03
- Jan 2023 17:37:25 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7xiJceqXb+ErDMJE6RdkUBkKlMsVUevK6KQODTOQeNE=;
+        b=KA8A+LSgqOl8Gd6SdBCwEWkcNPSb7Lx7Bud1xsN7TtUxjU47ESqLJ87A0QgUyPL0II
+         tHZ/CwMhWmgbMMP7ywJZu1vvra7XyMdYq3YGf2fosXHP5ieBNRm3Kzp3qkLzjIWuqcG6
+         /3jIXzCq9eMrHYNkzFyIfZd1fRpN7mTnu3c0jYWGuQGyqbAaYoAC4CoADGHBCft73LUe
+         pzFLFnfALWMj7DU/pxpMIBC02KAYEUu0iJy9Db8yUERE8BrI7ZWlwUOdd6vEJ8GGKeQM
+         6yybIDnUSlnZk32Zktv1gfUsaK3aawcMs7ryzdpblX8eKRstLmfo1pQHa7aRibhZmolV
+         yImg==
+X-Gm-Message-State: AFqh2koRbfnobJKJe8YHXIeW6+av1guwIl/6R6Q6zrwIRLlcPM6OBMxC
+        /QK3LjxGjXVuwmlmoXEGMJsg9cZoryXqt0jizGMMqcz0
+X-Google-Smtp-Source: AMrXdXuEEiqD7YMLDJRG/moqiOTIvlKBHn0RDaHAY+4JnbJkovH7LLd3AlM4DQiO8DdZIIDGhE5JhQ==
+X-Received: by 2002:a05:6808:2020:b0:35e:46d9:21bf with SMTP id q32-20020a056808202000b0035e46d921bfmr28869075oiw.17.1672796328975;
+        Tue, 03 Jan 2023 17:38:48 -0800 (PST)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id b66-20020acab245000000b0035b4b6d1bbfsm13559979oif.28.2023.01.03.17.38.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 17:38:48 -0800 (PST)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Tue, 3 Jan 2023 19:38:46 -0600
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 00/74] 6.0.17-rc1 review
+Message-ID: <Y7TYpnlZWQHBa1Lm@fedora64.linuxtx.org>
+References: <20230102110552.061937047@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20221229100746.35047-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221229100746.35047-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 4 Jan 2023 02:37:14 +0100
-Message-ID: <CACRpkdZGx+Sdsx_=cuQMsLJZMWixVf7QFPzEfkTrJLEUOfg1zQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] pinctrl: nomadik: Add missing header(s)
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230102110552.061937047@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 11:07 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Mon, Jan 02, 2023 at 12:21:33PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.17 release.
+> There are 74 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 04 Jan 2023 11:05:34 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.17-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-> Do not imply that some of the generic headers may be always included.
-> Instead, include explicitly what we are direct user of.
->
-> While at it, sort headers alphabetically.
->
-> Fixes: e5530adc17a7 ("pinctrl: Clean up headers")
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Arnd Bergmann <arnd@arndb.de>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->
-> v2: removed double inclusion (Randy)
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-Patch applied for fixes!
-
-Yours,
-Linus Walleij
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
