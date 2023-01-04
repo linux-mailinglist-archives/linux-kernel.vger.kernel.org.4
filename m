@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04ACD65D3E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A481A65D3E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239364AbjADNKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S239235AbjADNMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239358AbjADNKZ (ORCPT
+        with ESMTP id S229582AbjADNLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:10:25 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889F93B921;
-        Wed,  4 Jan 2023 05:08:51 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304BevXa002179;
-        Wed, 4 Jan 2023 13:08:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=9rW9D4bKG1AYqSLVRir+QNP3LNiG0x+xb+IzrxVzjqc=;
- b=saSqHReT18X5kzdwEgE80spO9akrd1tJRrXgWQI4xphg5AimHdAf5x1zmG1KMldl1X8f
- vO6+rgqQutKMOnzQYWZRQatdi/Xt8GgOaR/4rR1mJw1iS5DuHKzx+MFJoBJpw++D4WW9
- mbYBRDsq+2dMo4ZN7/zFdqfbXGuY2vPTZif+CT2iFMeST4ggkUW2lkTRKN1fSsk6TFGj
- LYf8DcH/bfsoylgsOpNFDqrP1kmFMeU/lCOfeNxnN1miYNbVqAXxE/1DYtgENgRGDDYI
- OSnZg5oJQPieZisSnksKOYL2tHnlYuEMof7HRErPq+8BRGLM0vA0rVs68L9X6el+nyZ4 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mw83xat49-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 13:08:50 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 304Co51D033666;
-        Wed, 4 Jan 2023 13:08:50 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mw83xat3r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 13:08:50 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303J3anK006506;
-        Wed, 4 Jan 2023 13:08:47 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6bw32-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 13:08:47 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 304D8hpj46006752
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 Jan 2023 13:08:44 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6D3F20043;
-        Wed,  4 Jan 2023 13:08:43 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41CA520040;
-        Wed,  4 Jan 2023 13:08:43 +0000 (GMT)
-Received: from [9.171.35.166] (unknown [9.171.35.166])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  4 Jan 2023 13:08:43 +0000 (GMT)
-Message-ID: <d2e13511df130c3d4824a78ed0aa24c49e7137e5.camel@linux.ibm.com>
-Subject: Re: [PATCH 1/1] vfio/type1: Respect IOMMU reserved regions in
- vfio_test_domain_fgsp()
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Christian =?ISO-8859-1?Q?Borntr=E4ger?= 
-        <borntraeger@linux.ibm.com>
-Date:   Wed, 04 Jan 2023 14:08:42 +0100
-In-Reply-To: <Y7VuFJFUHtkqA9ZM@ziepe.ca>
-References: <20230102093452.761185-1-schnelle@linux.ibm.com>
-         <20230102093452.761185-2-schnelle@linux.ibm.com>
-         <Y7S8loyvHyjAmNdh@ziepe.ca>
-         <4e8d3f53af2f73a464e4ffc4a9a28c8d31692369.camel@linux.ibm.com>
-         <Y7VuFJFUHtkqA9ZM@ziepe.ca>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _OXaFNEQjnbWGa5dpbnehKOorelZPU2V
-X-Proofpoint-GUID: r_yVo2XLt-HKe7O2EE04fC2dJ0P9p6Lt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 mlxlogscore=724
- malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301040110
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 4 Jan 2023 08:11:17 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF00238AF3;
+        Wed,  4 Jan 2023 05:09:23 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 63C62320091E;
+        Wed,  4 Jan 2023 08:09:11 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute5.internal (MEProxy); Wed, 04 Jan 2023 08:09:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1672837751; x=1672924151; bh=sW
+        97sEIph+hgvFghJa+u0wBCf7AiPUYeQdDtJ0BUk6c=; b=hE19vYa45oYCigsNdz
+        PXnGM8k46ZlLPD1vWz7V9kusPHwzNr0i3KR3PBAdkA8wCzeTR6KoYqLS1YoU33Hh
+        rGwsh7G8fTJPRHwH6oq+gGl81WB8XhbW50t9pJO5aRyPe1/FIuNyz02b4rr3oNSr
+        UQ75Uffrr7Mc/7dZkdTIW12dx9tb1OjmmkQOg2302FSqTRQ9ygDP1KWI3cGx6Sba
+        +5xs5zNpLd/sSoS6CYljQhAWdT3gJspPS9wxvOEZSqBIA+3lE/gDBjq4wrx3Nq0M
+        sm+qQ3i643Ux1c3aisS00saZZ88QSpI53i/wQUl7j5yiuPsckZ/2YqpG7Dt77Itl
+        5axA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672837751; x=1672924151; bh=sW97sEIph+hgvFghJa+u0wBCf7Ai
+        PUYeQdDtJ0BUk6c=; b=YxnUHEhiKcb8lZ5UjzCdfW4EqEjQubucJO3YTDJwxGK+
+        dCDPx1Yia2YciL2zdof/aWicGBZqsENFN5aIz1OMVtGKQwPYh3ALXt+s/f/I0SE9
+        1E/uDnq4PNpvdkQkGPeMTWQ/xoL2dxGKEb5zuZBch1Y12/NEMKoSnzE189zmjKZ5
+        bYqQ/ZgLOq7hihySC4j+DMKtgioPR0NOs43mHBVM16Dpao5nUChPV57CLkPk1HjK
+        eDuVMkhLo844Bj0Wbk1T4/rnAAyTKrayqW1kqjdotRxFQYpeRAsLBnJ08CGaMWxj
+        +eARmJ0NYSnjA0f78gGs4rdYjfQAl+ejlh5kVdTwRA==
+X-ME-Sender: <xms:dnq1Y4xbEsBi_ZZyK8aqYryYMZRzpiqyuK301GmvIvJgYnY5VTyRLA>
+    <xme:dnq1Y8TeFluo6wHZtCGgxausyZ8AtX00ps2Tx5XiP7MbPbFUf_icxQqTuaxuJfrkp
+    TgmKltpjuTc47CNEuk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigdegkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
+    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:dnq1Y6VJ8aA2FhvZ6dNUS1QbWMTUw6TRSDw1PGPDrZEX-9Fg4K3L5A>
+    <xmx:dnq1Y2gF5o1db_P2UT03VTg4ce88CjKm6_GueOZAGLIuldYJd8FG0g>
+    <xmx:dnq1Y6CB73uums9oT5l9Lt_WriwfTvtKuSD2a0hd4OAu_5uJMZw6fQ>
+    <xmx:d3q1Y-67uaMPAchUrJ4I6Jo-2yL7pIfbA_8Ql5zIfidKyp8qEE8DvQ>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0F62AA6007C; Wed,  4 Jan 2023 08:09:09 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <1205bb21-c252-4c6f-be2d-4a10bb3cd077@app.fastmail.com>
+In-Reply-To: <20230104110013.24738-2-marcan@marcan.st>
+References: <20230104110013.24738-1-marcan@marcan.st>
+ <20230104110013.24738-2-marcan@marcan.st>
+Date:   Wed, 04 Jan 2023 14:08:43 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Hector Martin" <marcan@marcan.st>,
+        "Joerg Roedel" <joro@8bytes.org>, "Will Deacon" <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>
+Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Janne Grunau" <j@jannau.net>, "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] dt-bindings: iommu: dart: add t8110 compatible
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,36 +91,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-04 at 08:16 -0400, Jason Gunthorpe wrote:
-> On Wed, Jan 04, 2023 at 10:52:55AM +0100, Niklas Schnelle wrote:
->=20
-> > The problem manifests only with ISM devices which are a special s390
-> > virtual PCI device that is implemented in the machine hypervisor. This
-> > device is used for high speed cross-LPAR (Logical Partition)
-> > communication, basically it allows two LPARs that previously exchanged
-> > an authentication token to memcpy between their partitioned memory
-> > using the virtual device. For copying a receiving LPAR will IOMMU map a
-> > region of memory for the ISM device that it will allow DMAing into
-> > (memcpy by the hypervisor). All other regions remain unmapped and thus
-> > inaccessible. In preparation the device  emulation in the machine
-> > hypervisor intercepts the IOTLB flush and looks at the IOMMU
-> > translation tables performing e.g. size and alignment checks I presume,
-> > one of these checks against the start/end DMA boundaries. This check
-> > fails which leads to the virtual ISM device being put into an error
-> > state. Being in an error state it then fails to be initialized by the
-> > guest driver later on.
->=20
-> You could rephrase this as saying that the S390 map operation doesn't
-> check for bounds so mapping in a reserved region doesn't fail, but
-> errors the HW.
->=20
-> Which seems reasonable to me
->=20
-> Jason
 
-Kind of yes, before the recent IOMMU changes the IOMMU code did check
-on map failing early but now handles the limits via reserved regions.
-The IOMMU hardware would only check the limits once an actual DMA uses
-them but of course no DMA will be triggered for this test mapping. For
-this specific virtual device though there is an extra check as part of
-an intercepted IOTLB flush (RPCIT instruction in S390).
+
+On Wed, Jan 4, 2023, at 12:00, Hector Martin wrote:
+> t600x SoCs use this DART style for the Thunderbolt ports, and t8112 SoCs
+> use them everywhere. Add a compatible for it. No other binding changes
+> necessary.
+>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
+
