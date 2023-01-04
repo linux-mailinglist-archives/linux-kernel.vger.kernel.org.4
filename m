@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B72765DD67
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A46165DD69
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239824AbjADUIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 15:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S240200AbjADUJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 15:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239830AbjADUIc (ORCPT
+        with ESMTP id S239949AbjADUJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 15:08:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F687FCF1;
-        Wed,  4 Jan 2023 12:08:31 -0800 (PST)
-Date:   Wed, 04 Jan 2023 20:08:28 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672862909;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E8t7dQIyWK5WQjI17E7L9fh3dy/gkCN7U/fHMiEQLO0=;
-        b=XIwZSc2VoNql0e7b1X4+VX0T2V0MW6Ixy72YlraZvE2piUUPT/xoyr7dYd5O3u0Pg+tQ7O
-        oLx6Lpg53zSiPI2ubKGNHIVMKcRYubetPTUUlib98x92G0iBnjSXZbFrw8FA5bpB2qzcLd
-        k7Jdp6bN/1oUi6Nudh0/LL7eXVRO+ZHdQewznFgI4AFOaBbuuVkkS+t3rAa5PatOytjF6f
-        hzvFAX9u1gFugTAjHN7crpg6b332bA5W7uw+gi+8x30hQlrdss4gZr+3/Iz3Qnp57Tga4+
-        M9IMT8A3pPFB2S4DMWT/d0NbjUrE4u8m4/PU4Fw7lVKkDeGf/gsfn3hbGDxUaw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672862909;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E8t7dQIyWK5WQjI17E7L9fh3dy/gkCN7U/fHMiEQLO0=;
-        b=pxeEgIEvUuLF7D0Hxj9uqAlmvWA/STFGsOvre6UpHckKwmHDSgzq3ql8B94Z0sZjD/WO91
-        RccyTC4u2duqakCg==
-From:   "tip-bot2 for Zhang Rui" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/x86/rapl: Add support for Intel Meteor Lake
-Cc:     Zhang Rui <rui.zhang@intel.com>, Ingo Molnar <mingo@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230104145831.25498-1-rui.zhang@intel.com>
-References: <20230104145831.25498-1-rui.zhang@intel.com>
+        Wed, 4 Jan 2023 15:09:09 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A2211C3A;
+        Wed,  4 Jan 2023 12:09:01 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id y1so1480471plb.2;
+        Wed, 04 Jan 2023 12:09:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UMWHrF0/XfOeG1CXIwzjSceGj1ferSMxrkHipfWDqB0=;
+        b=e4YVXucNPMPkk8BQv0XVWpSYCAh5IChMWylGp5stDe2ZlkO1YLf/sQG5KoSDfm7JgO
+         qMTQM82bTjQ7x4+6CsfKGUSh7TiXo6ee6p6wULesgzqGys0Q2/v+nwvb2Zh8L+7MUpfb
+         y8J/ri/OU7+0VdBrgnbcBv6eelz43iCqSJCHqEe/dlGZax6NYq2eM/r/FfVAqVFt5ibW
+         hwuBd4MDfP7SWq/cix/ZIPEYtpfG3LSjlko50EunmdX1+tIOzjUdlmGc96GOqqUhZRwS
+         B0yEJXiPtdpfFuSIPnkHjSqM1XNsNItSeC2SCtKNek/O4fdHPY0tx45GbbMecCYDZt7I
+         ymPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UMWHrF0/XfOeG1CXIwzjSceGj1ferSMxrkHipfWDqB0=;
+        b=cggSEfGk58RKYDlCC5VOr4C/FlK64k+/bff96TuwFSfQkKlsAhv1O69edXrfxnOP0j
+         xt2UrucDVqTfn5Yi+zlB1Rxnh6ZVy2tRALQMnYvLJg2kTQJiDPtJjglQsoUdGjiatTUH
+         A4uFvEpjYns1DkbUjFbTZZBh1zuEOAF19RPe8DQqaw7olUFULNniCmo2wig2s4RSDw8q
+         b7+iOLIWCaLJ9CN/bXsOyMerzGOpzWX4bAJeNNOBe62C/pa3UDb2ukLGJHHQ3HhpVVJ9
+         jPrsjSGkWCKlNPmF6PYFQzDv9rhSz6RGIPTxVQFz9lER9/KugYxKb8JPFZXr+T3OTeFr
+         3l5A==
+X-Gm-Message-State: AFqh2kr9sI1yjK9/z3PvAsmfQUfLQz7ATKld4AbSOnypaDJ065rBQs9s
+        b8Pm57k4yDx0rLR4SFGECjA=
+X-Google-Smtp-Source: AMrXdXvZ+bAPgOIV0REbDfAPvqzjHXbJBXtzNNRKMMwm5WRxmgk4RtO8ftfCcp7pGN6LjlLBJKsUNA==
+X-Received: by 2002:a05:6a20:2d1e:b0:af:6f24:b154 with SMTP id g30-20020a056a202d1e00b000af6f24b154mr64018840pzl.60.1672862940560;
+        Wed, 04 Jan 2023 12:09:00 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id f8-20020a655908000000b0047829d1b8eesm21073037pgu.31.2023.01.04.12.08.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 12:08:55 -0800 (PST)
+Message-ID: <d725c96e-4b74-d5c1-e25e-1876e8aa40d9@gmail.com>
+Date:   Wed, 4 Jan 2023 12:08:43 -0800
 MIME-Version: 1.0
-Message-ID: <167286290849.4906.3624732511270016278.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6.0 000/177] 6.0.18-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230104160507.635888536@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230104160507.635888536@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/urgent branch of tip:
+On 1/4/23 08:04, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.18 release.
+> There are 177 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.18-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Commit-ID:     f52853a668bfeddd79f319d536a506f68cc2b478
-Gitweb:        https://git.kernel.org/tip/f52853a668bfeddd79f319d536a506f68cc2b478
-Author:        Zhang Rui <rui.zhang@intel.com>
-AuthorDate:    Wed, 04 Jan 2023 22:58:30 +08:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Wed, 04 Jan 2023 21:00:28 +01:00
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-perf/x86/rapl: Add support for Intel Meteor Lake
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-Meteor Lake RAPL support is the same as previous Sky Lake.
-Add Meteor Lake model for RAPL.
-
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230104145831.25498-1-rui.zhang@intel.com
----
- arch/x86/events/rapl.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-index ae5779e..589c688 100644
---- a/arch/x86/events/rapl.c
-+++ b/arch/x86/events/rapl.c
-@@ -809,6 +809,8 @@ static const struct x86_cpu_id rapl_model_match[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&model_skl),
- 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	&model_skl),
- 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&model_skl),
-+	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE,		&model_skl),
-+	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,	&model_skl),
- 	{},
- };
- MODULE_DEVICE_TABLE(x86cpu, rapl_model_match);
