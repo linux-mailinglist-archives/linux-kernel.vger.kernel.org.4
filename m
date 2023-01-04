@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378E965D7E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389DA65D7EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239773AbjADQIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
+        id S239768AbjADQIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239560AbjADQIF (ORCPT
+        with ESMTP id S239745AbjADQII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:08:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FBB18E20;
-        Wed,  4 Jan 2023 08:08:01 -0800 (PST)
+        Wed, 4 Jan 2023 11:08:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4F539FAF;
+        Wed,  4 Jan 2023 08:08:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F0F8617A1;
-        Wed,  4 Jan 2023 16:08:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F215C433F0;
-        Wed,  4 Jan 2023 16:07:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB709B81714;
+        Wed,  4 Jan 2023 16:08:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1CC0C433F1;
+        Wed,  4 Jan 2023 16:08:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1672848479;
-        bh=cu2DbWw4G+y+134mB/1XKJznzXFMg8APeJqujJk6zyw=;
+        s=korg; t=1672848483;
+        bh=oIuzSFPX4FRbrNn4L9iJy9jRqguSJyk997b1dMfKunY=;
         h=From:To:Cc:Subject:Date:From;
-        b=YHzY1G3gw1g1CwYYTB9DXyhv3a22P+nR90NJUhoK/CFLYO5HZEJfNSbo34jz2uUIU
-         pNYJw0Fq6dEcwWoM/a7SeVm145zBgx7ifznpF4XJb4bVwCNlSsy1ZwQYmXkz62OjXH
-         H7LdYQGyy1AQjtK/yV17RyMRnfdEDDLXrzXWOfkU=
+        b=ahJOT8qmVhivpytgzNPo0t3kPYJXpK4RktAFYNcW2vt4dYTwQ2WLmBs7Ss8HmZQ+K
+         hQxTbTGqZHz5LLx+dY6MIHgnF/MN/+AbpQK82p3IVvXKFId5ei7e5/AtpdqUs/s1Ns
+         j7VNasNUSABMY4d8hV4dpdPQEji1znw353KOvMzQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,19 +38,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 6.1 000/207] 6.1.4-rc1 review
-Date:   Wed,  4 Jan 2023 17:04:18 +0100
-Message-Id: <20230104160511.905925875@linuxfoundation.org>
+Subject: [PATCH 6.0 000/177] 6.0.18-rc1 review
+Date:   Wed,  4 Jan 2023 17:04:51 +0100
+Message-Id: <20230104160507.635888536@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.4-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.18-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.1.y
+X-KernelTest-Branch: linux-6.0.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.1.4-rc1
+X-KernelTest-Version: 6.0.18-rc1
 X-KernelTest-Deadline: 2023-01-06T16:05+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -63,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.1.4 release.
-There are 207 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 6.0.18 release.
+There are 177 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -72,9 +72,9 @@ Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.4-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.18-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
 and the diffstat can be found below.
 
 thanks,
@@ -85,7 +85,7 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.1.4-rc1
+    Linux 6.0.18-rc1
 
 Evan Quan <evan.quan@amd.com>
     drm/amd/pm: correct the fan speed retrieving in PWM for some SMU13 asics
@@ -216,9 +216,6 @@ Baokun Li <libaokun1@huawei.com>
 Alexander Potapenko <glider@google.com>
     fs: ext4: initialize fsdata in pagecache_write()
 
-Baokun Li <libaokun1@huawei.com>
-    ext4: correct inconsistent error msg in nojournal mode
-
 Luís Henriques <lhenriques@suse.de>
     ext4: remove trailing newline from ext4_msg() message
 
@@ -243,9 +240,6 @@ Mikko Kovanen <mikko.kovanen@aavamobile.com>
 Lucas Stach <l.stach@pengutronix.de>
     drm/etnaviv: move idle mapping reaping into separate function
 
-Jocelyn Falempe <jfalempe@redhat.com>
-    drm/mgag200: Fix PLL setup for G200_SE_A rev >=4
-
 Zack Rusin <zackr@vmware.com>
     drm/vmwgfx: Validate the box size for the snooped cursor
 
@@ -259,16 +253,10 @@ Helge Deller <deller@gmx.de>
     parisc: Drop PMD_SHIFT from calculation in pgtable.h
 
 Helge Deller <deller@gmx.de>
-    parisc: Drop duplicate kgdb_pdc console
-
-Helge Deller <deller@gmx.de>
     parisc: Add missing FORCE prerequisites in Makefile
 
 Helge Deller <deller@gmx.de>
     parisc: Fix locking in pdc_iodc_print() firmware call
-
-Helge Deller <deller@gmx.de>
-    parisc: Drop locking in pdc console code
 
 Shang XiaoJing <shangxiaojing@huawei.com>
     parisc: led: Fix potential null-ptr-deref in start_task()
@@ -282,9 +270,6 @@ Maria Yu <quic_aiquny@quicinc.com>
 Shengjiu Wang <shengjiu.wang@nxp.com>
     remoteproc: imx_dsp_rproc: Add mutex protection for workqueue
 
-Mike Kravetz <mike.kravetz@oracle.com>
-    hugetlb: really allocate vma lock for all sharable vmas
-
 Li Hua <hucool.lihua@huawei.com>
     test_kprobes: Fix implicit declaration error of test_kprobes
 
@@ -296,9 +281,6 @@ Kim Phillips <kim.phillips@amd.com>
 
 Johan Hovold <johan+linaro@kernel.org>
     phy: qcom-qmp-combo: fix sc8180x reset
-
-Johan Hovold <johan+linaro@kernel.org>
-    phy: qcom-qmp-combo: fix sdm845 reset
 
 Qiang Yu <quic_qianyu@quicinc.com>
     bus: mhi: host: Fix race between channel preparation and M0 event
@@ -335,9 +317,6 @@ Michael S. Tsirkin <mst@redhat.com>
 
 Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
     crypto: ccree,hisilicon - Fix dependencies to correct algorithm
-
-Kees Cook <keescook@chromium.org>
-    um: virt-pci: Avoid GCC non-NULL warning
 
 Roberto Sassu <roberto.sassu@huawei.com>
     ima: Fix memory leak in __ima_inode_hash()
@@ -483,9 +462,6 @@ Zheng Yejian <zhengyejian1@huawei.com>
 Li Ming <ming4.li@intel.com>
     PCI/DOE: Fix maximum data object length miscalculation
 
-Arnd Bergmann <arnd@arndb.de>
-    ata: ahci: fix enum constants for gcc-13
-
 Mike Snitzer <snitzer@kernel.org>
     dm cache: set needs_check flag after aborting metadata
 
@@ -531,60 +507,6 @@ Alexander Aring <aahringo@redhat.com>
 Alexander Aring <aahringo@redhat.com>
     fs: dlm: fix sock release if listen fails
 
-Jaroslav Kysela <perex@perex.cz>
-    ALSA: usb-audio: Add new quirk FIXED_RATE for JBL Quantum810 Wireless
-
-José Expósito <jose.exposito89@gmail.com>
-    HID: Ignore HP Envy x360 eu0009nv stylus battery
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: x86-android-tablets: Add Advantech MICA-071 extra button
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: x86-android-tablets: Add Lenovo Yoga Tab 3 (YT3-X90F) charger + fuel-gauge data
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: x86-android-tablets: Add Medion Lifetab S10346 data
-
-Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-    ALSA: hda/cirrus: Add extra 10 ms delay to allow PLL settle and lock.
-
-Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-    platform/x86: intel-uncore-freq: add Emerald Rapids support
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: ideapad-laptop: Stop writing VPCCMD_W_TOUCHPAD at probe time
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: ideapad-laptop: Send KEY_TOUCHPAD_TOGGLE on some models
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: ideapad-laptop: Only toggle ps2 aux port on/off on select models
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: ideapad-laptop: Do not send KEY_TOUCHPAD* events on probe / resume
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: ideapad-laptop: Refactor ideapad_sync_touchpad_state()
-
-Hans de Goede <hdegoede@redhat.com>
-    ACPI: video: Prefer native over vendor
-
-Hans de Goede <hdegoede@redhat.com>
-    ACPI: video: Simplify __acpi_video_get_backlight_type()
-
-Philipp Jungkamp <p.jungkamp@gmx.net>
-    platform/x86: ideapad-laptop: support for more special keys in WMI
-
-Eray Orçunus <erayorcunus@gmail.com>
-    platform/x86: ideapad-laptop: Add new _CFG bit numbers for future use
-
-Eray Orçunus <erayorcunus@gmail.com>
-    platform/x86: ideapad-laptop: Revert "check for touchpad support in _CFG"
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: thinkpad_acpi: Fix max_brightness of thinklight
-
 Chris Chiu <chris.chiu@canonical.com>
     ALSA: hda/realtek: Apply dual codec fixup for Dell Latitude laptops
 
@@ -612,9 +534,6 @@ Yongqiang Liu <liuyongqiang13@huawei.com>
 Kant Fan <kant@allwinnertech.com>
     PM/devfreq: governor: Add a private governor_data for governor
 
-Jason A. Donenfeld <Jason@zx2c4.com>
-    random: add helpers for random numbers with given floor or range
-
 Yazen Ghannam <yazen.ghannam@amd.com>
     x86/MCE/AMD: Clear DFR errors found in THR handler
 
@@ -633,9 +552,6 @@ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Andrew Cooper <andrew.cooper3@citrix.com>
     x86/fpu/xstate: Fix XSTATE_WARN_ON() to emit relevant diagnostics
 
-Jason A. Donenfeld <Jason@zx2c4.com>
-    random: use rejection sampling for uniform bounded random integers
-
 Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
     arm64: dts: qcom: sdm850-samsung-w737: correct I2C12 pins drive strength
 
@@ -647,9 +563,6 @@ Boris Burkov <boris@bur.io>
 
 void0red <void0red@gmail.com>
     btrfs: fix extent map use-after-free when handling missing device in read_one_chunk
-
-Josef Bacik <josef@toxicpanda.com>
-    btrfs: fix uninitialized parent in insert_state
 
 Evan Quan <evan.quan@amd.com>
     drm/amd/pm: correct SMU13.0.0 pstate profiling clock settings
@@ -702,9 +615,6 @@ Fan Ni <fan.ni@samsung.com>
 Jason A. Donenfeld <Jason@zx2c4.com>
     media: stv0288: use explicitly signed char
 
-Tim Huang <tim.huang@amd.com>
-    drm/amdgpu: skip mes self test after s0i3 resume for MES IP v11.0
-
 Alex Deucher <alexander.deucher@amd.com>
     drm/amdgpu: skip MES for S0ix as well since it's part of GFX
 
@@ -713,7 +623,7 @@ Alex Deucher <alexander.deucher@amd.com>
 
 Diffstat:
 
- Documentation/admin-guide/kernel-parameters.txt    |  27 +-
+ Documentation/admin-guide/kernel-parameters.txt    |  27 ++-
  Documentation/filesystems/mount_api.rst            |   1 +
  Makefile                                           |   4 +-
  arch/arm/nwfpe/Makefile                            |   6 +
@@ -724,47 +634,41 @@ Diffstat:
  arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts   |   6 +-
  arch/arm64/include/asm/efi.h                       |   3 +
  arch/arm64/kernel/efi-rt-wrapper.S                 |  13 +-
- arch/arm64/kernel/efi.c                            |  27 ++
+ arch/arm64/kernel/efi.c                            |  27 +++
  arch/arm64/kernel/stacktrace.c                     |  10 +-
  arch/parisc/include/asm/pgtable.h                  |   4 +-
- arch/parisc/kernel/firmware.c                      |  24 +-
- arch/parisc/kernel/kgdb.c                          |  20 --
- arch/parisc/kernel/pdc_cons.c                      |  16 +-
+ arch/parisc/kernel/firmware.c                      |  24 ++-
  arch/parisc/kernel/vdso32/Makefile                 |   4 +-
  arch/parisc/kernel/vdso64/Makefile                 |   4 +-
- arch/powerpc/include/asm/ftrace.h                  |  12 -
+ arch/powerpc/include/asm/ftrace.h                  |  12 --
  arch/riscv/Kconfig                                 |   2 +-
  arch/riscv/include/asm/kexec.h                     |   5 +
  arch/riscv/include/asm/mmu.h                       |   2 +
  arch/riscv/include/asm/pgtable.h                   |   2 +-
- arch/riscv/include/asm/tlbflush.h                  |  18 +
- arch/riscv/kernel/elf_kexec.c                      |  14 +
+ arch/riscv/include/asm/tlbflush.h                  |  18 ++
+ arch/riscv/kernel/elf_kexec.c                      |  14 ++
  arch/riscv/kernel/stacktrace.c                     |   2 +-
  arch/riscv/mm/context.c                            |  10 +
- arch/riscv/mm/tlbflush.c                           |  28 +-
- arch/um/drivers/virt-pci.c                         |   9 +-
+ arch/riscv/mm/tlbflush.c                           |  28 +--
  arch/x86/events/intel/uncore.h                     |   1 +
  arch/x86/events/intel/uncore_snbep.c               |  22 +-
- arch/x86/kernel/cpu/mce/amd.c                      |  33 +-
+ arch/x86/kernel/cpu/mce/amd.c                      |  33 +--
  arch/x86/kernel/cpu/microcode/intel.c              |   8 +-
  arch/x86/kernel/fpu/xstate.c                       |  12 +-
  arch/x86/kernel/ftrace.c                           |   2 +
  arch/x86/kernel/kprobes/core.c                     |  10 +-
- arch/x86/kernel/kprobes/opt.c                      |  28 +-
+ arch/x86/kernel/kprobes/opt.c                      |  28 +--
  arch/x86/kvm/lapic.c                               |   5 +-
- arch/x86/kvm/vmx/nested.c                          |  47 ++-
+ arch/x86/kvm/vmx/nested.c                          |  47 +++--
  arch/x86/kvm/vmx/sgx.c                             |   4 +-
  arch/xtensa/kernel/xtensa_ksyms.c                  |   2 +
  arch/xtensa/lib/Makefile                           |   2 +-
- arch/xtensa/lib/umulsidi3.S                        | 230 +++++++++++++
- block/mq-deadline.c                                |  83 ++++-
- drivers/acpi/video_detect.c                        |  52 ++-
- drivers/ata/ahci.h                                 | 245 +++++++-------
+ arch/xtensa/lib/umulsidi3.S                        | 230 +++++++++++++++++++++
+ block/mq-deadline.c                                |  83 +++++++-
  drivers/base/dd.c                                  |   6 +-
  drivers/bus/mhi/host/pm.c                          |   3 +-
  drivers/char/ipmi/ipmi_msghandler.c                |   4 +-
- drivers/char/ipmi/ipmi_si_intf.c                   |  27 +-
- drivers/char/random.c                              |  38 +++
+ drivers/char/ipmi/ipmi_si_intf.c                   |  27 ++-
  drivers/cpufreq/cpufreq.c                          |   2 +-
  drivers/crypto/Kconfig                             |   4 +-
  drivers/crypto/ccp/sp-pci.c                        |  11 +-
@@ -773,11 +677,10 @@ Diffstat:
  drivers/cxl/core/region.c                          |   5 +-
  drivers/devfreq/devfreq.c                          |   6 +-
  drivers/devfreq/governor_userspace.c               |  12 +-
- drivers/edac/edac_mc_sysfs.c                       |  24 ++
+ drivers/edac/edac_mc_sysfs.c                       |  24 +++
  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |   5 +-
  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |  13 +-
  drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |   3 +-
- drivers/gpu/drm/amd/amdgpu/mes_v11_0.c             |   3 +-
  drivers/gpu/drm/amd/amdgpu/mmhub_v2_0.c            |   2 +-
  drivers/gpu/drm/amd/amdgpu/mmhub_v2_3.c            |   2 +-
  drivers/gpu/drm/amd/amdgpu/mmhub_v3_0.c            |   2 +-
@@ -787,34 +690,31 @@ Diffstat:
  .../pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_0.h |   2 +-
  drivers/gpu/drm/amd/pm/swsmu/inc/smu_v13_0.h       |   1 +
  drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c     |   2 +
- .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   | 111 +++++-
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   | 111 +++++++++-
  .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c   |  19 +-
  drivers/gpu/drm/drm_connector.c                    |   3 +
  drivers/gpu/drm/etnaviv/etnaviv_gem.c              |   7 +-
- drivers/gpu/drm/etnaviv/etnaviv_mmu.c              |  23 +-
+ drivers/gpu/drm/etnaviv/etnaviv_mmu.c              |  23 ++-
  drivers/gpu/drm/etnaviv/etnaviv_mmu.h              |   1 +
  drivers/gpu/drm/i915/display/intel_dsi_vbt.c       |   4 +-
- drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c     |  59 +++-
+ drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c     |  59 +++++-
  drivers/gpu/drm/i915/gem/i915_gem_mman.c           |   2 +-
  drivers/gpu/drm/i915/gem/i915_gem_object.c         |   3 +
  drivers/gpu/drm/i915/gem/i915_gem_object_types.h   |  10 +-
  drivers/gpu/drm/i915/gem/i915_gem_ttm_pm.c         |  18 +-
  drivers/gpu/drm/i915/gt/intel_migrate.c            |  16 +-
- drivers/gpu/drm/i915/i915_gem_evict.c              |  37 +-
+ drivers/gpu/drm/i915/i915_gem_evict.c              |  37 +++-
  drivers/gpu/drm/i915/i915_gem_evict.h              |   4 +-
  drivers/gpu/drm/i915/i915_vma.c                    |   2 +-
  drivers/gpu/drm/i915/selftests/i915_gem_evict.c    |   4 +-
  drivers/gpu/drm/ingenic/ingenic-drm-drv.c          |   6 +-
- drivers/gpu/drm/mgag200/mgag200_g200se.c           |   3 +-
  drivers/gpu/drm/vmwgfx/vmwgfx_kms.c                |   3 +-
- drivers/hid/hid-ids.h                              |   1 +
- drivers/hid/hid-input.c                            |   2 +
- drivers/iommu/amd/init.c                           |  86 +++--
- drivers/md/dm-cache-metadata.c                     |  54 ++-
+ drivers/iommu/amd/init.c                           |  86 +++++---
+ drivers/md/dm-cache-metadata.c                     |  54 ++++-
  drivers/md/dm-cache-target.c                       |  11 +-
  drivers/md/dm-clone-target.c                       |   1 +
  drivers/md/dm-integrity.c                          |   2 +
- drivers/md/dm-thin-metadata.c                      |  60 +++-
+ drivers/md/dm-thin-metadata.c                      |  60 +++++-
  drivers/md/dm-thin.c                               |  18 +-
  drivers/md/md-bitmap.c                             |  20 +-
  drivers/media/dvb-core/dmxdev.c                    |   8 +
@@ -825,7 +725,7 @@ Diffstat:
  .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c      |  14 +-
  drivers/mmc/host/sdhci-sprd.c                      |  16 +-
  drivers/mtd/spi-nor/core.c                         |   2 +
- drivers/mtd/spi-nor/gigadevice.c                   |  24 +-
+ drivers/mtd/spi-nor/gigadevice.c                   |  24 ++-
  drivers/net/ethernet/renesas/ravb_main.c           |   2 +-
  drivers/net/wireless/microchip/wilc1000/sdio.c     |   1 +
  drivers/of/kexec.c                                 |  10 +-
@@ -833,22 +733,17 @@ Diffstat:
  drivers/pci/doe.c                                  |  20 +-
  drivers/pci/pci-sysfs.c                            |  13 +-
  drivers/pci/pci.c                                  |   2 +
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c          |  47 ++-
- drivers/platform/x86/ideapad-laptop.c              | 371 ++++++++++++++++-----
- .../x86/intel/uncore-frequency/uncore-frequency.c  |   1 +
- drivers/platform/x86/thinkpad_acpi.c               |   1 +
- drivers/platform/x86/x86-android-tablets.c         | 285 +++++++++++++++-
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c          |   8 +-
  drivers/remoteproc/imx_dsp_rproc.c                 |  12 +-
  drivers/remoteproc/imx_rproc.c                     |   4 +-
  drivers/remoteproc/remoteproc_core.c               |   9 +-
  drivers/rtc/rtc-ds1347.c                           |   2 +-
  drivers/soc/qcom/Kconfig                           |   2 +
  drivers/soc/ux500/ux500-soc-id.c                   |  10 +-
- drivers/staging/media/ipu3/ipu3-v4l2.c             |  57 ++--
+ drivers/staging/media/ipu3/ipu3-v4l2.c             |  57 ++---
  drivers/staging/media/tegra-video/csi.c            |   4 +-
  drivers/staging/media/tegra-video/csi.h            |   2 +-
  fs/btrfs/backref.c                                 |   4 +
- fs/btrfs/extent-io-tree.c                          |   2 +-
  fs/btrfs/volumes.c                                 |   3 +-
  fs/cifs/cifsfs.c                                   |   8 +-
  fs/cifs/connect.c                                  |  16 +-
@@ -857,15 +752,15 @@ Diffstat:
  fs/ext4/ext4.h                                     |   9 +-
  fs/ext4/extents.c                                  |   8 +
  fs/ext4/extents_status.c                           |   3 +-
- fs/ext4/fast_commit.c                              | 171 +++++-----
+ fs/ext4/fast_commit.c                              | 171 ++++++++-------
  fs/ext4/fast_commit.h                              |   3 +-
  fs/ext4/indirect.c                                 |   9 +-
- fs/ext4/inode.c                                    |  48 ++-
- fs/ext4/ioctl.c                                    |  24 +-
- fs/ext4/namei.c                                    |  47 +--
+ fs/ext4/inode.c                                    |  48 ++++-
+ fs/ext4/ioctl.c                                    |  24 ++-
+ fs/ext4/namei.c                                    |  47 +++--
  fs/ext4/orphan.c                                   |   2 +-
- fs/ext4/resize.c                                   |  32 +-
- fs/ext4/super.c                                    |  42 ++-
+ fs/ext4/resize.c                                   |  32 +--
+ fs/ext4/super.c                                    |  33 ++-
  fs/ext4/verity.c                                   |   2 +-
  fs/ext4/xattr.c                                    |  19 +-
  fs/fs_parser.c                                     |   3 +-
@@ -875,44 +770,31 @@ Diffstat:
  include/linux/devfreq.h                            |   7 +-
  include/linux/fs_parser.h                          |   1 +
  include/linux/mbcache.h                            |   9 +-
- include/linux/prandom.h                            |  18 +-
- include/linux/random.h                             |  65 ++++
  include/net/mptcp.h                                |  12 +-
  include/trace/events/ext4.h                        |   7 +-
- include/trace/events/jbd2.h                        |  44 +--
+ include/trace/events/jbd2.h                        |  44 ++--
  kernel/bpf/core.c                                  |   5 +-
  kernel/events/core.c                               |   6 +-
  kernel/trace/Kconfig                               |   2 +
- kernel/trace/trace.c                               |  38 ++-
- kernel/trace/trace.h                               |  27 +-
+ kernel/trace/trace.c                               |  38 +++-
+ kernel/trace/trace.h                               |  27 ++-
  kernel/trace/trace_eprobe.c                        |   3 +
  kernel/trace/trace_events_hist.c                   |  11 +-
  kernel/trace/trace_events_synth.c                  |   2 +-
  kernel/trace/trace_probe.c                         |   2 +-
  lib/Kconfig.debug                                  |   1 +
- mm/hugetlb.c                                       | 333 ++++++++----------
  net/ipv4/syncookies.c                              |   7 +-
  net/mptcp/pm_userspace.c                           |   4 +
- net/mptcp/subflow.c                                |  61 +++-
- security/device_cgroup.c                           |  33 +-
+ net/mptcp/subflow.c                                |  61 +++++-
+ security/device_cgroup.c                           |  33 ++-
  security/integrity/ima/Kconfig                     |   2 +-
  security/integrity/ima/ima_main.c                  |   7 +-
  security/integrity/ima/ima_template.c              |   5 +-
  security/integrity/platform_certs/load_uefi.c      |   1 +
- sound/pci/hda/patch_cs8409.c                       |   2 +-
- sound/pci/hda/patch_realtek.c                      |  50 +++
- sound/soc/jz4740/jz4740-i2s.c                      |  39 ++-
- sound/usb/card.h                                   |   1 +
- sound/usb/endpoint.c                               |  16 +-
- sound/usb/endpoint.h                               |   3 +-
- sound/usb/implicit.c                               |   6 +-
- sound/usb/implicit.h                               |   2 +-
- sound/usb/pcm.c                                    |  36 +-
- sound/usb/pcm.h                                    |   2 +
- sound/usb/quirks.c                                 |   2 +
- sound/usb/usbaudio.h                               |   4 +
- tools/testing/ktest/ktest.pl                       |  23 +-
+ sound/pci/hda/patch_realtek.c                      |  50 +++++
+ sound/soc/jz4740/jz4740-i2s.c                      |  39 +++-
+ tools/testing/ktest/ktest.pl                       |  23 ++-
  tools/testing/selftests/lib.mk                     |   5 +
- 200 files changed, 3052 insertions(+), 1144 deletions(-)
+ 172 files changed, 1961 insertions(+), 648 deletions(-)
 
 
