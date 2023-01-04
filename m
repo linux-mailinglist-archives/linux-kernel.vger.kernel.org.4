@@ -2,145 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A7865DD55
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE66865DD59
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235127AbjADT7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 14:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S235053AbjADUEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 15:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjADT7v (ORCPT
+        with ESMTP id S229662AbjADUEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 14:59:51 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC791C5;
-        Wed,  4 Jan 2023 11:59:49 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso17226959wmq.1;
-        Wed, 04 Jan 2023 11:59:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=s+/hKz08BYW613SwzPDOji0Uda/OZFrDaRrXnjaH9QA=;
-        b=jBMrIWAvjZ5EACoeq+/3r6G3NvAOVTAjdRt0wx4sapMr3oZqyBC3+0YOjPGmWSx3QU
-         Yfz+PXnxDApmC8xhK9FyCSn0zoDVZzAP4j3ENZrkC3e8yKu2l+LbMSZaLBU6HR+nlBkS
-         6kxFJfkOue7RxVayfstH/UJ31NrvO2MtqNSSlNVYm2Zl1JRro5/dMzPheBjyP7R864Pq
-         /1sGAwPPiNh1Yl371HGsrJcpfK6E5LtPxV+u48t5Rgox4LMXIMTamCWOKgcMNT2aKVbt
-         Lz2DSxUXu0n8R215tQ8kZoVcBmhFoc+/HCXnJBR0Xl6RxLgW8KRA4pFqZFbXiWc2QWjB
-         fQDQ==
+        Wed, 4 Jan 2023 15:04:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF2218E2E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 12:03:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672862630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VCJoB+mKqkSz09nDtW8cNX32+uHYvkoQDhWihAl/a04=;
+        b=FDQI0syLd9/I+UxactmcbeIHysifDNVePIaum+Ab4EVd6j3v/R6RlQA5RHr6HGtu78ba+l
+        BqCEjym2FHpTZyXv4MKn3uv7ZCLzdGBvN7xVqSp1WbcVImFmWxXZOUWAshSvy3j4qyEizS
+        9VqM2lJ/w61aPHkdwCuGcMqWYFP1hpg=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-627-w41fms_MMwCRGvh2VbsaRA-1; Wed, 04 Jan 2023 15:03:49 -0500
+X-MC-Unique: w41fms_MMwCRGvh2VbsaRA-1
+Received: by mail-qt1-f197.google.com with SMTP id k4-20020ac84784000000b003a96744cee6so12314929qtq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 12:03:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s+/hKz08BYW613SwzPDOji0Uda/OZFrDaRrXnjaH9QA=;
-        b=LyRxlrLqK+xIrF698uCiXeWKstfLfOnmul5GuWLQu91ose3pWvm4P+JIVwprK3ZJPJ
-         VwmqZB+JUemeI6j4zNl1P0oy9+NNd6NoujDBFreVAXtvvICGJgujzjS3bW3o6TRL7aSj
-         E9Zgg9ivYoI3fHwtX+EmzKBJssObk5Pa8HjjBtY2zBzIgYNy/G2elmDgf0YoSN3Eb++r
-         IGPcFA/XMQuznzoJgG8MsTm/JaKlDgjL0yo3pHyVlMWj6zAwF6iVN/bobFpdSPxz60PF
-         x7bbGxHcQT2JaN0N9H9NzIC9BlD6B+tkliPPc+Er6N4X2IDaNqkiOuebUuNyIZiMXw/q
-         QPzg==
-X-Gm-Message-State: AFqh2krq12pF7CJFeVXMi1QsfUF2ifkM8DggES4Om+ZJUDfd6XX0g5Jd
-        WkelEGCJQZY/TJC1qyAYPEk=
-X-Google-Smtp-Source: AMrXdXt+1KnGVZk9G4+sTWDpqpUHC/UWvKj30a4r7Vg7IB1LT/jgkVarK5m6YHIRZeukXX4BAvftKA==
-X-Received: by 2002:a05:600c:5399:b0:3d9:c6f5:c643 with SMTP id hg25-20020a05600c539900b003d9c6f5c643mr3691505wmb.29.1672862388314;
-        Wed, 04 Jan 2023 11:59:48 -0800 (PST)
-Received: from [192.168.1.50] ([79.119.240.114])
-        by smtp.gmail.com with ESMTPSA id p12-20020a05600c468c00b003cf5ec79bf9sm46787543wmo.40.2023.01.04.11.59.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 11:59:47 -0800 (PST)
-Message-ID: <0acf173d-a425-dcca-ad2f-f0f0f13a9f5e@gmail.com>
-Date:   Wed, 4 Jan 2023 21:59:35 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VCJoB+mKqkSz09nDtW8cNX32+uHYvkoQDhWihAl/a04=;
+        b=kCpMTgAPAJaJNGuPhyaIUyO6EYEjSNd7EKJu8zaxfMAhjgYWiFN4o5PSQwrKVaTx/u
+         4MHfyhsZKhdlKtFdsQB2KI+nLhjb+UmDo4Vn9Zak8EwHAZWoRvHDAl8AyBC6n9M4KTcg
+         qjqldzPnGlRcuOAni1rWBRUlDVLxF28j5/r2Gnjql8LANMGMuPBPBkACJf+Q8p6fyxEd
+         lqDLzLpmscJjVR3yD7XAK7DVOFnOxZ8FWtgBNNAC+A3GSeBOv+cxTqRtXY8KPuCky6f0
+         hrAigG5yXDTCzggxMFiXLDQxSJnce8xkJROjvf8a9et3Hyx7AQhp0xmwfvGHggeZcq+6
+         Zhtw==
+X-Gm-Message-State: AFqh2kqBbif2Nf5lS1g8FUkoMAPu91juHdZRPYyZqzYKPVlXFd3F8yWa
+        KGjeglEte/MnQ+Fif2yHYs888MzrXrDXrjkjk/n75vsbhDO/wpi1RH0UwDG5e/hCrwn4fF+6db0
+        8SISqqgdSgruKLaTY4PNe4wvb
+X-Received: by 2002:ac8:4808:0:b0:3a8:16c0:d9c9 with SMTP id g8-20020ac84808000000b003a816c0d9c9mr68523839qtq.7.1672862628996;
+        Wed, 04 Jan 2023 12:03:48 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsOBvwpHMgJ01kJRNO6mhggyjm6TVgBXS7eNzC/N5GqdjhLWSKBpavEwqMsvePbQso0RnMI/g==
+X-Received: by 2002:ac8:4808:0:b0:3a8:16c0:d9c9 with SMTP id g8-20020ac84808000000b003a816c0d9c9mr68523815qtq.7.1672862628616;
+        Wed, 04 Jan 2023 12:03:48 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
+        by smtp.gmail.com with ESMTPSA id r14-20020ac87eee000000b003a6a92a202esm20665683qtc.83.2023.01.04.12.03.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 12:03:48 -0800 (PST)
+Date:   Wed, 4 Jan 2023 15:03:47 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hugetlb: unshare some PMDs when splitting VMAs
+Message-ID: <Y7Xbo0tUO26khHCA@x1n>
+References: <20230101230042.244286-1-jthoughton@google.com>
+ <Y7SA839SDcpf+Ll0@monkey>
+ <CADrL8HVeOkj0QH5VZZbRzybNE8CG-tEGFshnA+bG9nMgcWtBSg@mail.gmail.com>
+ <Y7Sq+Rs9cpSaHZSk@monkey>
+ <CADrL8HV73m0nVJOK3uv4sbyGKOVZhVxSv2+i4pUV7tozu6vW5Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-From:   Bitterblue Smith <rtl8821cerfe2@gmail.com>
-Subject: Re: [RFC PATCH v1 19/19] rtw88: Add support for the SDIO based
- RTL8821CS chipset
-To:     Chris Morgan <macroalpha82@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
- <20221227233020.284266-20-martin.blumenstingl@googlemail.com>
- <63b4b3e1.050a0220.791fb.767c@mx.google.com>
-Content-Language: en-US
-In-Reply-To: <63b4b3e1.050a0220.791fb.767c@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CADrL8HV73m0nVJOK3uv4sbyGKOVZhVxSv2+i4pUV7tozu6vW5Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 01:01, Chris Morgan wrote:
-> On Wed, Dec 28, 2022 at 12:30:20AM +0100, Martin Blumenstingl wrote:
->> Wire up RTL8821CS chipset support using the new rtw88 SDIO HCI code as
->> well as the existing RTL8821C chipset code.
->>
+On Wed, Jan 04, 2023 at 07:10:11PM +0000, James Houghton wrote:
+> > > I'll see if I can confirm that this is indeed possible and send a
+> > > repro if it is.
+> >
+> > I think your analysis above is correct.  The key being the failure to unshare
+> > in the non-PUD_SIZE vma after the split.
 > 
-> Unfortunately, this doesn't work for me. I applied it on top of 6.2-rc2
-> master and I get errors during probe (it appears the firmware never
-> loads).
+> I do indeed hit the WARN_ON_ONCE (repro attached), and the MADV wasn't
+> even needed (the UFFDIO_REGISTER does the VMA split before "unsharing
+> all PMDs"). With the fix, we avoid the WARN_ON_ONCE, but the behavior
+> is still incorrect: I expect the address range to be write-protected,
+> but it isn't.
 > 
-> Relevant dmesg logs are as follows:
+> The reason why is that hugetlb_change_protection uses huge_pte_offset,
+> even if it's being called for a UFFDIO_WRITEPROTECT with
+> UFFDIO_WRITEPROTECT_MODE_WP. In that particular case, I'm pretty sure
+> we should be using huge_pte_alloc, but even so, it's not trivial to
+> get an allocation failure back up to userspace. The non-hugetlb
+> implementation of UFFDIO_WRITEPROTECT seems to also have this problem.
 > 
-> [    0.989545] mmc2: new high speed SDIO card at address 0001
-> [    0.989993] rtw_8821cs mmc2:0001:1: Firmware version 24.8.0, H2C version 12
-> [    1.005684] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x14): -110
-> [    1.005737] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1080): -110
-> [    1.005789] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x11080): -110
-> [    1.005840] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x3): -110
-> [    1.005920] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x1103): -110
-> [    1.005998] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x80): -110
-> [    1.006078] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1700): -110
-> 
-> The error of "sdio read32 failed (0x1700): -110" then repeats several
-> hundred times, then I get this:
-> 
-> [    1.066294] rtw_8821cs mmc2:0001:1: failed to download firmware
-> [    1.066367] rtw_8821cs mmc2:0001:1: sdio read16 failed (0x80): -110
-> [    1.066417] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x100): -110
-> [    1.066697] rtw_8821cs mmc2:0001:1: failed to setup chip efuse info
-> [    1.066703] rtw_8821cs mmc2:0001:1: failed to setup chip information
-> [    1.066839] rtw_8821cs: probe of mmc2:0001:1 failed with error -16
-> 
-> The hardware I am using is an rtl8821cs that I can confirm was working
-> with a previous driver.
-> 
-> Thank you.
-> 
-The USB-based RTL8811CU also doesn't work, with suspiciously similar
-errors:
+> Peter, what do you think?
 
-Dec 25 21:43:37 home kernel: rtw_8821cu 1-2:1.0: Firmware version 24.11.0, H2C version 12
-Dec 25 21:43:37 home kernel: rtw_8821cu 1-2:1.0 wlp0s20f0u2: renamed from wlan0
-Dec 25 21:43:40 home kernel: rtw_8821cu 1-2:1.0: read register 0x5 failed with -110
-Dec 25 21:43:41 home kernel: rtw_8821cu 1-2:1.0: read register 0x20 failed with -110
-Dec 25 21:44:11 home kernel: rtw_8821cu 1-2:1.0: write register 0x20 failed with -110
-Dec 25 21:44:12 home kernel: rtw_8821cu 1-2:1.0: read register 0x7c failed with -110
-Dec 25 21:44:43 home kernel: rtw_8821cu 1-2:1.0: write register 0x7c failed with -110
-Dec 25 21:44:44 home kernel: rtw_8821cu 1-2:1.0: read register 0x1080 failed with -110
-Dec 25 21:45:16 home kernel: rtw_8821cu 1-2:1.0: write register 0x1080 failed with -110
+Indeed.  Thanks for spotting that, James.
 
+Non-hugetlb should be fine with having empty pgtable entries. Anon doesn't
+need to care about no-pgtable-populated ranges so far. Shmem does it with a
+few change_prepare() calls to populate the entries so the markers can be
+installed later on.
 
-Dec 25 21:46:47 home kernel: rtw_8821cu 1-3:1.0: Firmware version 24.11.0, H2C version 12
-Dec 25 21:46:47 home kernel: rtw_8821cu 1-3:1.0 wlp0s20f0u3: renamed from wlan0
-Dec 25 21:46:55 home kernel: rtw_8821cu 1-3:1.0: failed to poll offset=0x5 mask=0x1 value=0x0
-Dec 25 21:46:55 home kernel: rtw_8821cu 1-3:1.0: mac power on failed
-Dec 25 21:46:55 home kernel: rtw_8821cu 1-3:1.0: failed to power on mac
+However I think the fault handling is still not well handled as you pointed
+out even for shmem: that's the path I probably never triggered myself yet
+before and the code stayed there since a very early version:
 
-I tested with https://github.com/lwfinger/rtw88/ which should have the
-same code as wireless-next currently.
+#define  change_pmd_prepare(vma, pmd, cp_flags)				\
+	do {								\
+		if (unlikely(uffd_wp_protect_file(vma, cp_flags))) {	\
+			if (WARN_ON_ONCE(pte_alloc(vma->vm_mm, pmd)))	\
+				break;					\
+		}							\
+	} while (0)
+
+I think a better thing we can do here (instead of warning and stop the
+UFFDIO_WRITEPROTECT at the current stage) is returning with -ENOMEM
+properly so the user can know the error.  We'll need to touch the stacks up
+to uffd_wp_range() as it's the only one that can trigger the -ENOMEM so
+far, so as to not ignore retval from change_protection().
+
+Meanwhile, I'd also wonder whether we should call pagefault_out_of_memory()
+because it should be the same as when pgtable allocation failure happens in
+page faults, we may want to OOM already.  I can take care of hugetlb part
+too along the way.
+
+Man page of UFFDIO_WRITEPROTECT may need a fixup too to introduce -ENOMEM.
+
+I can quickly prepare some patches for this, and hopefully it doesn't need
+to block the current fix on split.
+
+Any thoughts?
+
+> 
+> >
+> > To me, the fact it was somewhat difficult to come up with this scenario is an
+> > argument what we should just unshare at split time as you propose.  Who
+> > knows what other issues may exist.
+> >
+> > > 60dfaad65a ("mm/hugetlb: allow uffd wr-protect none ptes") is the
+> > > commit that introduced the WARN_ON_ONCE; perhaps it's a good choice
+> > > for a Fixes: tag (if above is indeed true).
+> >
+> > If the key issue in your above scenario is indeed the failure of
+> > hugetlb_unshare_all_pmds in the non-PUD_SIZE vma, then perhaps we tag?
+> >
+> > 6dfeaff93be1 ("hugetlb/userfaultfd: unshare all pmds for hugetlbfs when
+> > register wp")
+> 
+> SGTM. Thanks Mike.
+
+Looks good here too.
+
+Thanks,
+
+-- 
+Peter Xu
+
