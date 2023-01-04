@@ -2,148 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8985165D4BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9596B65D4C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbjADNzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
+        id S239361AbjADN4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbjADNza (ORCPT
+        with ESMTP id S233373AbjADN4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:55:30 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 517007657;
-        Wed,  4 Jan 2023 05:55:29 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C3741FB;
-        Wed,  4 Jan 2023 05:56:10 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.37.146])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 297963F587;
-        Wed,  4 Jan 2023 05:55:23 -0800 (PST)
-Date:   Wed, 4 Jan 2023 13:55:20 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, joro@8bytes.org,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, linux-crypto@vger.kernel.org,
-        iommu@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC][PATCH 05/12] arch: Introduce
- arch_{,try_}_cmpxchg128{,_local}()
-Message-ID: <Y7WFSAcbSsMI/0eh@FVFF77S0Q05N>
-References: <20221219153525.632521981@infradead.org>
- <20221219154119.154045458@infradead.org>
- <Y6DEfQXymYVgL3oJ@boqun-archlinux>
- <Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net>
- <Y7QszyTEG2+WiI/C@FVFF77S0Q05N>
- <Y7Q1uexv6DrxCASB@FVFF77S0Q05N>
- <Y7RVkjDC3EjQUCzM@FVFF77S0Q05N>
- <8fea3494-1d1f-4f64-b525-279152cf430b@app.fastmail.com>
- <Y7Vksr9OLZeL3qmU@FVFF77S0Q05N>
+        Wed, 4 Jan 2023 08:56:00 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118C3260;
+        Wed,  4 Jan 2023 05:55:59 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F0B1B6F0;
+        Wed,  4 Jan 2023 14:55:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672840557;
+        bh=upbq8ae2FZJb0op+c7L/iVvpVZ0tuSM70IZxIgj4xxQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Adk7SiicoFw4s0rpd9scAI6FTP/uQw8Qt0zilZLE2i/Pl25jYLs0NzHb+8G1KC0q+
+         3b8aNyZ4EPJ88t8t2QIaPAr24jDv17upSMXrcAgBe7lSUwMQKAylJcV1OjcbSNbX8n
+         38JVUUuB32nRNRWCDEit1hY/rNFC03oLAkFO+6MY=
+Date:   Wed, 4 Jan 2023 15:55:53 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v5 7/8] media: i2c: add DS90UB913 driver
+Message-ID: <Y7WFaR5+NNSXLLow@pendragon.ideasonboard.com>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <20221208104006.316606-8-tomi.valkeinen@ideasonboard.com>
+ <Y5YiazDtaxtLJyL0@pendragon.ideasonboard.com>
+ <4d349785-ca37-d930-db3c-2581bba9fde0@ideasonboard.com>
+ <7ddd576f-6e8a-7581-178c-2e8575227811@ideasonboard.com>
+ <Y6nSVlmlweUuUwJf@pendragon.ideasonboard.com>
+ <61729020-0977-521a-6137-3bd89f300652@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y7Vksr9OLZeL3qmU@FVFF77S0Q05N>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <61729020-0977-521a-6137-3bd89f300652@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 11:36:18AM +0000, Mark Rutland wrote:
-> On Tue, Jan 03, 2023 at 05:50:00PM +0100, Arnd Bergmann wrote:
-> > On Tue, Jan 3, 2023, at 17:19, Mark Rutland wrote:
-> > > On Tue, Jan 03, 2023 at 02:03:37PM +0000, Mark Rutland wrote:
-> > >> On Tue, Jan 03, 2023 at 01:25:35PM +0000, Mark Rutland wrote:
-> > >> > On Tue, Dec 20, 2022 at 12:08:16PM +0100, Peter Zijlstra wrote:
+Hi Tomi,
+
+On Mon, Dec 26, 2022 at 09:25:34PM +0200, Tomi Valkeinen wrote:
+> On 26/12/2022 18:56, Laurent Pinchart wrote:
+> > On Wed, Dec 14, 2022 at 08:36:47AM +0200, Tomi Valkeinen wrote:
+> >> On 14/12/2022 08:29, Tomi Valkeinen wrote:
+> >>
+> >>>> wondering if the struct device of the DS90UB913 could be passed instead
+> >>>> of the port, to avoid passing the port throught
+> >>>> ds90ub9xx_platform_data.
+> >>>
+> >>> Interesting thought. That would limit the number of remote i2c busses to
+> >>> one, though. Not a problem for FPD-Link, but I wonder if that's assuming
+> >>> too much for the future users. Then again, this is an in-kernel API so
+> >>> we could extend it later if needed. So I'll try this out and see if I
+> >>> hit any issues.
+> >>
+> >> Right, so the issue with this one would be that it would prevent a
+> >> single device uses. E.g. a single chip which acts as an ATR (similar to
+> >> i2c-mux chips), i.e. it contains both the main and the remote i2c busses.
 > > 
-> > >> ... makes GCC much happier:
-> > >
-> > >> ... I'll go check whether clang is happy with that, and how far back that can
-> > >> go, otherwise we'll need to blat the high half with a separate constaint that
-> > >> (ideally) doesn't end up allocating a pointless address register.
-> > >
-> > > Hmm... from the commit history it looks like GCC prior to 5.1 might not be
-> > > happy with that, but that *might* just be if we actually do arithmetic on the
-> > > value, and we might be ok just using it for memroy effects. I can't currently
-> > > get such an old GCC to run on my machines so I haven't been able to check.
-> > 
-> > gcc-5.1 is the oldest (barely) supported compiler, the minimum was
-> > last raised from gcc-4.9 in linux-5.15. If only gcc-4.9 and older are
-> > affected, we're good on mainline but may still want a fix for stable
-> > kernels.
+> > I don't think I understand this, sorry.
 > 
-> Yup; I just wanted something that would easily backport to stable, at least as
-> far as linux-4.9.y (where I couldn't find the minimum GCC version when I looked
-> yesterday).
-
-I'd missed that we backported commit:
-
-  dca5244d2f5b94f1 ("compiler.h: Raise minimum version of GCC to 5.1 for arm64")
-
-... all the way back to v4.4.y, so we can assume v5.1 even in stable.
-
-The earliest toolchain I could get running was GCC 4.8.5, and that was happy
-with the __uint128_t cast for the asm,
-
-Looking back through the history, the reason for the GCC 5.1 check was that
-prior to GCC 5.1 GCC would output library calls for arithmetic on 128-bit
-types, as noted in commit:
-
-  fb8722735f50cd51 ("arm64: support __int128 on gcc 5+")
-
-... but since we're not doing any actual manipulation of the value, that should
-be fine.
-
-I'll go write a commit message and send that out as a fix.
-
-> > I checked that the cross-compiler binaries from [1] still work, but I noticed
-> > that this version is missing the native aarch64-to-aarch64 compiler (x86 to
-> > aarch64 and vice versa are there), and you need to install libmpfr4 [2]
-> > as a dependency. The newer compilers (6.5.0 and up) don't have these problems.
+> What you are suggesting above means that we'd have a separate device for 
+> each port of the ATR. Which is fine in our current case, as the i2c 
+> master busses are behind separate remote devices.
 > 
-> I was trying the old kernel.org crosstool binaries, but I was either missing a
-> library (or I have an incompatible version) on my x86_64 host. I'll have
-> another look today -- thanks for the pointers!
+> But if you consider a case similar to i2c-mux, where we have a single 
+> chip with the slave bus and, say, 4 master busses. We would probably 
+> have only a single device for that.
 
-It turns out I'd just missed that at some point the prefix used by the
-kernel.org cross compilers changed from:
+Hmmm... Yes you're right, it won't work in that case. Maybe we could
+have two functions, the existing i2c_atr_add_adapter(), and another one
+that wraps it ? It would be nice if we could get rid of the platform
+data for the UB913 and UB953 drivers.
 
-  aarch64-linux-gnu-
+-- 
+Regards,
 
-to:
-
-  aarch64-linux-
-
-... and I'd become so used to the latter that I was trying to invoke a binary
-that didn't exist. With the older prefix I could use the kernel.org GCC 4.8.5
-without issue.
-
-Thanks,
-Mark.
+Laurent Pinchart
