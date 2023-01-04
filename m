@@ -2,107 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE28565D846
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DA565D6CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239672AbjADQNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        id S234874AbjADPDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235171AbjADQMr (ORCPT
+        with ESMTP id S234797AbjADPDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:12:47 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85E163C1
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:12:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672848766; x=1704384766;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5u1MnWbPdDkdU0lePvDGFz3o3hj2dJI39QEDkTF/5Ww=;
-  b=HyG/M1gBifp0AfOmJwtMF6fx/NKuH0TjuLO9GcsKBV0kOJfbBbFf3YLZ
-   RBZkIJW2foc3uGOwp/01x9jetMdOwIp2aF29duwg0fAq5or11EwWosSvm
-   x6zSgz5+fRbHTTKdRJgeaTM5KZQeZ7qW+RHPI7L6gAosDS3PJBHfulxGV
-   wNisYaqLUpkkKI4i9jFpZj+IfbCwsuQToVfLbxZqoBJrr6JV8krVV+bgx
-   j2N+xzWzkz+gvn2Cn0kE8l61MC4v6NpESmkEfmpQS50N3dRWytKBGFMYB
-   e7lNNICzz+0dAx4TB1vJOu7obVdNxNWZejUm7s+4hL7397fPGrBX+ImfB
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="386402221"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="386402221"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 08:12:45 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="762722855"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="762722855"
-Received: from hlgentry-mobl2.amr.corp.intel.com (HELO [10.212.74.62]) ([10.212.74.62])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 08:12:44 -0800
-Message-ID: <151a05a5-fc56-e005-e572-d031e6de0bb1@linux.intel.com>
-Date:   Wed, 4 Jan 2023 08:15:27 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v1 1/5] ASoC: Intel: bytcht_cx2072x: Replace open coded
- acpi_dev_put()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        Wed, 4 Jan 2023 10:03:06 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB868A466
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 07:03:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1672844561; bh=Gxx8p8mpsg9J44j8zqgcHN1uUXlyWdyKyrs6bhfzWxk=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=nCKXozbQ901kZvOchjH1D10FPAwM2IqGb1fn/ViN2k6hDV7thbPOMh5+U6HXTJeYt
+         utDnNsTZQ1VxPgBpobrmh1MM4nU76m2Juy1w532D2O+D2UqfJuf2lGn7u7AJWNKrc3
+         LII0El9YhNLXA3D4jg80tp7lrgOs1MusTJa+oTqY=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Wed,  4 Jan 2023 16:02:41 +0100 (CET)
+X-EA-Auth: ns1gYKoffHkdcXKgpzCMeK7t42qdBucUa46mVRkBNVeaeO+9qZ2eFPZ/rjcUQzgTjV+E5JIKm/U0moGyItmS6KukCk/RJckR
+Date:   Wed, 4 Jan 2023 20:32:35 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Alex Elder <elder@ieee.org>
+Cc:     Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-References: <20230102203037.16120-1-andriy.shevchenko@linux.intel.com>
- <731b2d59-22f1-a456-bcfc-040a1adccce0@linux.intel.com>
- <Y7VVCc7TjY3YsJoV@smile.fi.intel.com>
-Content-Language: en-US
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <Y7VVCc7TjY3YsJoV@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] staging: greybus: Replace zero-length array by
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <Y7WVC1mpIWdoi+IS@qemulion>
+References: <Y7T5MYfANf2xVsEx@qemulion>
+ <f943d3ca-7cf7-cb4d-5dc7-1e45015ba213@ieee.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f943d3ca-7cf7-cb4d-5dc7-1e45015ba213@ieee.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 04, 2023 at 07:33:57AM -0600, Alex Elder wrote:
+> On 1/3/23 9:57 PM, Deepak R Varma wrote:
+> > The code currently uses C90 standard extension based zero length array
+> > struct which is now deprecated and the new C99 standard extension of
+> > flexible array declarations are to be used instead. Also, the macro
+> > DECLARE_FLEX_ARRAY() allows to use single flexible array member in a
+> > structure. Refer to these links [1], [2] for details.
+>
+> Thank you for citing some references in your commit, it's
+> a good and helpful practice.  This might have been another
+> helpful one:
+>
+> https://lore.kernel.org/lkml/20210827163015.3141722-2-keescook@chromium.org/
 
+Hello Alex,
+Thank you so much for the feedback. I will include the additional reference and
+send in a v2.
 
-On 1/4/23 04:29, Andy Shevchenko wrote:
-> On Tue, Jan 03, 2023 at 09:08:20AM -0600, Pierre-Louis Bossart wrote:
->> On 1/2/23 14:30, Andy Shevchenko wrote:
->>> Instead of calling put_device(&adev->dev) where adev is a pointer
->>> to an ACPI device, use specific call, i.e. acpi_dev_put().
->>>
->>> Also move it out of the conditional to make it more visible in case
->>> some other code will be added which may use that pointer. We need
->>> to keep a reference as long as we use the pointer.
->>>
->>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>
->> Answering for the series: we should make the change across all Intel
->> machine drivers. I see at least four cases that were missed
->>
->> bytcr_rt5640.c:         put_device(&adev->dev);
->> bytcr_rt5651.c:         put_device(&adev->dev);
->> bytcr_wm5102.c: put_device(&adev->dev);
->> sof_es8336.c:           put_device(&adev->dev);
-> 
-> Aren't they (they all problematic, btw) covered by the fixes series
-> https://lore.kernel.org/r/20230102203014.16041-1-andriy.shevchenko@linux.intel.com?
+>
+> > [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> > [2] https://lkml.kernel.org/r/YxKY6O2hmdwNh8r8@work
+>
+> FYI, Linux mailing lists hosted by kernel.org are normally
+> cited using "lore.kernel.org" now, e.g.:
+>   https://lore.kernel.org/lkml/YxKY6O2hmdwNh8r8@work
+> Your patch is fine, this is just so you can consider this
+> in the future.
 
-They are indeed, but if you group AMD-related patches with Intel ones,
-it's only human for reviewers to skip the thread entirely, even more so
-when catching up with email on January 3 :-)
+Sure, I will. This is very helpful to know.
 
-For this series
+>
+> > Issue identified using Coccinelle flexible_array.cocci semantic patch.
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+>
+> Looks good to me.
 
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Appreciate your time for the review and comments. I will include the reviewed by
+tag in my v2.
+
+Regards,
+./drv
+
+>
+> Reviewed-by: Alex Elder <elder@linaro.org>
+>
+> > ---
+> >   drivers/staging/greybus/usb.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/staging/greybus/usb.c b/drivers/staging/greybus/usb.c
+> > index 8e9d9d59a357..b7badf87a3f0 100644
+> > --- a/drivers/staging/greybus/usb.c
+> > +++ b/drivers/staging/greybus/usb.c
+> > @@ -27,7 +27,7 @@ struct gb_usb_hub_control_request {
+> >   };
+> >
+> >   struct gb_usb_hub_control_response {
+> > -	u8 buf[0];
+> > +	DECLARE_FLEX_ARRAY(u8, buf);
+> >   };
+> >
+> >   struct gb_usb_device {
+> > --
+> > 2.34.1
+> >
+> >
+> >
+>
 
 
