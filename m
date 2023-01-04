@@ -2,120 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2B165DABD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AE365DAB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239964AbjADQuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
+        id S240060AbjADQtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240173AbjADQsJ (ORCPT
+        with ESMTP id S239660AbjADQri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:48:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6FC4732A
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672850693;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6EzsGSC3holClBSPQw8EocT+rCm9w6LTUpG8IqXLKaM=;
-        b=KmfhUiP1Z4CC5XYWE1y6bb4X3paTR4BHLNiHsyvkK1hSy9BNhGkpmIauh4f2QAVKtFrtS6
-        Bsse17u+qgjcH6bQQEQ8giUdoCi6b/cvkKsoyb74VQWJ4rqr/zwJu6eHjoHaFMu3Xxp2gJ
-        CtAJd4AYtX+NswBVrw5S6W57LY8xFss=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-413-YOoYbGWUO_WgRxhhQyXtfw-1; Wed, 04 Jan 2023 11:44:52 -0500
-X-MC-Unique: YOoYbGWUO_WgRxhhQyXtfw-1
-Received: by mail-qk1-f197.google.com with SMTP id bp6-20020a05620a458600b006ffd3762e78so23472998qkb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 08:44:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6EzsGSC3holClBSPQw8EocT+rCm9w6LTUpG8IqXLKaM=;
-        b=XVyoIHNFJ6KmxHaTjEdrJHuZftI5qBCnubHreXEVOUYXYszAvWVmw+Nv7Q85SWLVZv
-         YNvtJKo9gWg/pCYMU1DsgOxHsyfCgN9g/vYV3XN5L7g1JTFUcoW6IYrxDi+4ZTjfu2dt
-         9QAYz8x+tmjy5bE4Z2Fq/KL1vCpIHMr2dK+Z0KFYcW7S59i+jU1WTW/Uzxwe2mKLiWmF
-         cO+Kbu0ldNO5xHZtQmkD/2i2ZMd78MboAWZkHEFOynHjkVGJnA+0bTBd3QnXz8V34Pn5
-         8AUILqYMc0HLTcoQGUv9njFO8f4JNIzEVJc7a5ytI+fpbjpl/n5evX26reyJ64nQtPqn
-         x9ww==
-X-Gm-Message-State: AFqh2kqegtM0xMcJy03nJvFVz67fyF8wQ+3pd9ZWnsPU+TIFXTNNKaCK
-        FHNWP5r5w99e5KtKriKxvqGiO6tVnv5/dfNPAmvrToNiqmFMJPAc9r8RXiMqQ/D0aBG2IPVYn4c
-        iAiX7d1wqmso9bAvEOIofuk6d
-X-Received: by 2002:a05:622a:124b:b0:3ab:7bb3:4707 with SMTP id z11-20020a05622a124b00b003ab7bb34707mr50094157qtx.64.1672850692361;
-        Wed, 04 Jan 2023 08:44:52 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtC6/5x1TZXjNxaTZni/mgmGgEGvHrxdB4Ldf1ggEJ59TT3GmI7MMZ8cyzI4+MP/hbyTOvkqA==
-X-Received: by 2002:a05:622a:124b:b0:3ab:7bb3:4707 with SMTP id z11-20020a05622a124b00b003ab7bb34707mr50094133qtx.64.1672850692030;
-        Wed, 04 Jan 2023 08:44:52 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
-        by smtp.gmail.com with ESMTPSA id u22-20020a05620a455600b006fb112f512csm24300165qkp.74.2023.01.04.08.44.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 08:44:51 -0800 (PST)
-Date:   Wed, 4 Jan 2023 11:44:49 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] mm: remove zap_page_range and create zap_vma_pages
-Message-ID: <Y7WtAXpZM3Mxi95N@x1n>
-References: <20230104002732.232573-1-mike.kravetz@oracle.com>
+        Wed, 4 Jan 2023 11:47:38 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE7344348
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:45:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672850724; x=1704386724;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n827LXFF0m/V8FFdJYZ6rHgfWaPvWoE7fWU+oAtQlfQ=;
+  b=XsmsQ6jqo9eY1FLtAFy3kBTGgT37cIVTOou/JSosWror+ujj2SqhAv+I
+   +e8kOIjfK/INjW8Yox6xP7CM7GFlADCStLnuC/pmXdrY6+ZDL5bkQGSCL
+   u2Ev7vZrdEZC3xKgSRWbrKadRmkkMgoSX/13mb/sbT2TKvd9iWQcvzCUP
+   kmf4tFRBhfCdGO0/aQQOBicj+CbaPe2fdisgvM1/9opi6biZoWd67B1tk
+   ht1KwqymDIDxjqPClYCwJ6oqWujkrvRltp0kz6OTdU05oDuXvJ7SKJvBX
+   dGN0/bOsHcGFF3wk91S03dWUszuD5FsQ/EAk7xxgA2Plfg+h0r0ekX2ZC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="408233894"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="408233894"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 08:45:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="648635619"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="648635619"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 04 Jan 2023 08:45:14 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pD6t6-004Noc-1d;
+        Wed, 04 Jan 2023 18:45:12 +0200
+Date:   Wed, 4 Jan 2023 18:45:12 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH v1 1/5] ASoC: Intel: bytcht_cx2072x: Replace open coded
+ acpi_dev_put()
+Message-ID: <Y7WtGBenfisLjwbu@smile.fi.intel.com>
+References: <20230102203037.16120-1-andriy.shevchenko@linux.intel.com>
+ <731b2d59-22f1-a456-bcfc-040a1adccce0@linux.intel.com>
+ <Y7VVCc7TjY3YsJoV@smile.fi.intel.com>
+ <151a05a5-fc56-e005-e572-d031e6de0bb1@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230104002732.232573-1-mike.kravetz@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <151a05a5-fc56-e005-e572-d031e6de0bb1@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 04:27:32PM -0800, Mike Kravetz wrote:
-> zap_page_range was originally designed to unmap pages within an address
-> range that could span multiple vmas.  While working on [1], it was
-> discovered that all callers of zap_page_range pass a range entirely within
-> a single vma.  In addition, the mmu notification call within zap_page
-> range does not correctly handle ranges that span multiple vmas.  When
-> crossing a vma boundary, a new mmu_notifier_range_init/end call pair
-> with the new vma should be made.
+On Wed, Jan 04, 2023 at 08:15:27AM -0600, Pierre-Louis Bossart wrote:
+> On 1/4/23 04:29, Andy Shevchenko wrote:
+> > On Tue, Jan 03, 2023 at 09:08:20AM -0600, Pierre-Louis Bossart wrote:
+> >> On 1/2/23 14:30, Andy Shevchenko wrote:
+> >>> Instead of calling put_device(&adev->dev) where adev is a pointer
+> >>> to an ACPI device, use specific call, i.e. acpi_dev_put().
+> >>>
+> >>> Also move it out of the conditional to make it more visible in case
+> >>> some other code will be added which may use that pointer. We need
+> >>> to keep a reference as long as we use the pointer.
+> >>>
+> >>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >>
+> >> Answering for the series: we should make the change across all Intel
+> >> machine drivers. I see at least four cases that were missed
+> >>
+> >> bytcr_rt5640.c:         put_device(&adev->dev);
+> >> bytcr_rt5651.c:         put_device(&adev->dev);
+> >> bytcr_wm5102.c: put_device(&adev->dev);
+> >> sof_es8336.c:           put_device(&adev->dev);
+> > 
+> > Aren't they (they all problematic, btw) covered by the fixes series
+> > https://lore.kernel.org/r/20230102203014.16041-1-andriy.shevchenko@linux.intel.com?
 > 
-> Instead of fixing zap_page_range, do the following:
-> - Create a new routine zap_vma_pages() that will remove all pages within
->   the passed vma.  Most users of zap_page_range pass the entire vma and
->   can use this new routine.
-> - For callers of zap_page_range not passing the entire vma, instead call
->   zap_page_range_single().
-> - Remove zap_page_range.
-> 
-> [1] https://lore.kernel.org/linux-mm/20221114235507.294320-2-mike.kravetz@oracle.com/
-> Suggested-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> They are indeed, but if you group AMD-related patches with Intel ones,
+> it's only human for reviewers to skip the thread entirely, even more so
+> when catching up with email on January 3 :-)
 
-Acked-by: Peter Xu <peterx@redhat.com>
+Ah, I will try to remember to split also by platform (there are not many that's
+why I decided to group them by the problem type only).
+
+> For this series
+> 
+> Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+Thank you and HNY!
 
 -- 
-Peter Xu
+With Best Regards,
+Andy Shevchenko
+
 
