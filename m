@@ -2,154 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9B665E017
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE91665E01D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240607AbjADWiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S240619AbjADWiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235536AbjADWh7 (ORCPT
+        with ESMTP id S235536AbjADWiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:37:59 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1971D0DE
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:37:58 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id d10so20236533ilc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:37:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YcNoql4sxZAAG0Z9x382x27f16j/NJH8gvjDj7DBfeY=;
-        b=ohe7m4zraaZuCG6StlOr3NDElGbtNTt/AgB57cgRJ7fR/62RRKlU/4Kkq1hw+ths9X
-         H+IwFo9T4WLorbzXH15hXAuWYP0qA7UDgvG6zA0vgTCHsVQaPXB9tzFAp3rNEU/pjGFP
-         Aj6X4ML3gX7K7csd049yNiopXlnTHatPghoj0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YcNoql4sxZAAG0Z9x382x27f16j/NJH8gvjDj7DBfeY=;
-        b=LoR3pS/R1SV5L/oCA2Dk+4HX4k1ZebEsixh6NS0QkI7K+/7BXHTQqisNRNcMmL6jCh
-         qC82dNxT5B1UR+8LITtLaho1izG7O4SAF168mxahuldPDSZ/AaY4WvuTVEzEu0EbmWnw
-         QoPpaGPlHm4oZEOg52eUm1+eG5uTq/7NW6ah87bA233QLZFchU9pBQSAzRiFNj2tiZyP
-         wqnPgkIc0QTU1Sb5fw6j2aSR/uX4SZ7PrvH+6n06VqexuVN6cwXzc1FZdN9ehsLwPGwN
-         szKjfeqJETr+IcF2N+MVEQtsLfLkEN6tiF54wz48okoxw8w/EiTO7NnhpZPfErcCsTO7
-         C7yA==
-X-Gm-Message-State: AFqh2kolvEE67UGqmiYSu6QrtgbO6LAFL3vLDHFhmtMFKZHWyqiRjddv
-        WnQclVf9mpPgYfFq4c32uNsZAbarGYEwMLSa
-X-Google-Smtp-Source: AMrXdXsnV5WKBO3y2D9jF6L7JkTbhKxnOGOhp02IPb09JTYoS/rGNOwzeyl6ujdBGNOViFzaAqfhkA==
-X-Received: by 2002:a05:6e02:b2c:b0:304:c95e:8c36 with SMTP id e12-20020a056e020b2c00b00304c95e8c36mr39114239ilu.14.1672871878123;
-        Wed, 04 Jan 2023 14:37:58 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id r22-20020a02b116000000b00363ec4dcaacsm11304062jah.22.2023.01.04.14.37.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 14:37:57 -0800 (PST)
-Date:   Wed, 4 Jan 2023 22:37:57 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab
- VL817Q7 hub controller
-Message-ID: <Y7X/xadXIA2f9lHz@google.com>
-References: <20221228100321.15949-1-linux.amoon@gmail.com>
- <20221228100321.15949-9-linux.amoon@gmail.com>
+        Wed, 4 Jan 2023 17:38:46 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3FC1EC79;
+        Wed,  4 Jan 2023 14:38:45 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304ME1CI018620;
+        Wed, 4 Jan 2023 22:38:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=dnzle0EcHMmwGRtnVfx0mWs2UVkVr780qRGnF49Zxbw=;
+ b=PqUzd7tArfL9HGT34lPsW6zlrVMMIK535/wJOQoVQZ0gW1WTH0F34zg8wHIkJ0T+78zI
+ 9SyDP/o+2ZSjXkXAwWoQm4LWk8v8NBwrycMasue3XpHOqx9HtkSfcE9Qv2iEj09hOeK5
+ ZIG+dkVdQSWcxT0MMKKcPZ/lD4VaGFMdEskERUchWy1oyuzogVTUrXMvvyKx+0sLfvK5
+ Lyozi++13HBffdqTXnsN4UG1Az1KEBfTh+bBtkC1a+5gwyTw/TK8Stih7oG/fuFEq5r/
+ LZZsu2j9NXhehyg7bXZRWmK7dT2D7I3TZuQwtkvszafXOvb6uyHsp8HXBpLCWIz4ENGV Zw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwj2hgkfd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 22:38:16 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 304MZFBa004552;
+        Wed, 4 Jan 2023 22:38:15 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwj2hgker-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 22:38:15 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 304MW0JQ019440;
+        Wed, 4 Jan 2023 22:38:15 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3mtcq7tgas-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 22:38:15 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 304McERA2622200
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 Jan 2023 22:38:14 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E5B3A58066;
+        Wed,  4 Jan 2023 22:38:13 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B763A58062;
+        Wed,  4 Jan 2023 22:38:11 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.185.16])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  4 Jan 2023 22:38:11 +0000 (GMT)
+Message-ID: <1738bcddc690825f634bfe41ca1df778a1a50b0a.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 03/10] KEYS: X.509: Parse Basic Constraints for CA
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "pvorel@suse.cz" <pvorel@suse.cz>,
+        "noodles@fb.com" <noodles@fb.com>, "tiwai@suse.de" <tiwai@suse.de>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        Elaine Palmer <erpalmer@linux.vnet.ibm.com>,
+        Coiby Xu <coxu@redhat.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Wed, 04 Jan 2023 17:38:07 -0500
+In-Reply-To: <5F14DD59-7139-427E-A263-D5DED6EB57F8@oracle.com>
+References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
+         <20221214003401.4086781-4-eric.snowberg@oracle.com>
+         <b0f29738b919e2705d770017f2f1eb0542c2fad4.camel@linux.ibm.com>
+         <Y7VxDloaHyF8cX5j@kernel.org>
+         <5F14DD59-7139-427E-A263-D5DED6EB57F8@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qxLcN76R_0JpWidhJf1J_gZEXtL92O2g
+X-Proofpoint-GUID: shNbEMAaO2O3rlpd5WibO3G1L5cR6plP
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221228100321.15949-9-linux.amoon@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ mlxlogscore=999 mlxscore=0 clxscore=1015 malwarescore=0 phishscore=0
+ suspectscore=0 adultscore=0 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301040183
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 10:03:17AM +0000, Anand Moon wrote:
-> The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
-> features 4 downstream ports, an internal 5V regulator and has
-> external reset pin.
+On Wed, 2023-01-04 at 20:14 +0000, Eric Snowberg wrote:
 > 
-> Add a device tree binding for its USB protocol part.
-> The internal LDO is not covered by this and can just be modelled
-> as a fixed regulator.
+> > On Jan 4, 2023, at 5:29 AM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > 
+> > On Thu, Dec 15, 2022 at 06:10:04AM -0500, Mimi Zohar wrote:
+> >>> diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
+> >>> index a299c9c56f40..7c5c0ad1c22e 100644
+> >>> --- a/crypto/asymmetric_keys/x509_parser.h
+> >>> +++ b/crypto/asymmetric_keys/x509_parser.h
+> >>> @@ -38,6 +38,7 @@ struct x509_certificate {
+> >>> 	bool		self_signed;		/* T if self-signed (check unsupported_sig too) */
+> >>> 	bool		unsupported_sig;	/* T if signature uses unsupported crypto */
+> >>> 	bool		blacklisted;
+> >>> +	bool		root_ca;		/* T if basic constraints CA is set */
+> >>> }; 
+> >> 
+> >> The variable "root_ca" should probably be renamed to just "ca", right?
+> > 
+> > Perhaps is_ca?
 > 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
->  .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> I am open to renaming this, but need an agreement on whether the “is_” should be used or not:
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
-> new file mode 100644
-> index 000000000000..4ae995160fd5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Via labs VL817Q7 USB 3.1 hub controller
+> https://lore.kernel.org/lkml/b28ea211d88e968a5487b20477236e9b507755f4.camel@linux.ibm.com/
 
-nit: VIA Labs VL817-Q7
+Examples of both functions and variables exist that are prefixed with
+"is_".   One is a question; the other a statement.   Naming the
+variable "is_ca" and using it like "if (cert->is_ca)" does make sense.
 
-> +
-> +maintainers:
-> +  - Anand Moon <linux.amoon@gmail.com>
-> +
-> +allOf:
-> +  - $ref: usb-device.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - vialab,usb2109
+-- 
+thanks,
 
-This is not a valid compatible string as Johan already noted.
+Mimi
 
-Besides that the VL817-Q7 provides both a 3.1 and a 2.0 USB hub, which
-are enumerated separately. Please also add a compatible string for the
-2.0 hub (assuming 0x2109 is the 3.1 hub).
-
-> +
-> +  reg: true
-> +
-> +  reset-gpios:
-> +    description: GPIO controlling the RESET# pin.
-> +
-> +  vdd-supply:
-> +    description:
-> +      the regulator that provides 5.0V core power to the hub.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    usb {
-> +        dr_mode = "host";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        hub: hub@1 {
-> +            compatible = "vialab,usb2109"
-> +            reg = <1>;
-> +            reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
-> +        };
-
-Please also add a node for the other hub and link the two nodes with
-each other through the 'peer-hub' property. See realtek,rts5411.yaml
-for reference.
