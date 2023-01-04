@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E011C65CFE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BF365CFEA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbjADJqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S233634AbjADJtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjADJqL (ORCPT
+        with ESMTP id S229490AbjADJtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:46:11 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F67F13CCF
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:46:10 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id g14so34822668ljh.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 01:46:09 -0800 (PST)
+        Wed, 4 Jan 2023 04:49:02 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D95B19C02;
+        Wed,  4 Jan 2023 01:49:01 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id jo4so81287055ejb.7;
+        Wed, 04 Jan 2023 01:49:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xLn2bt9y0tlIr7p0iSmEuj9u/yaMgCFX32OBdxNgivg=;
-        b=QesHGYAH3/oBzujE24SxNEFgv671Lygrg1IqLa48kTIW1bAZCao5PTjg3ZTQMGxVu9
-         qbtAXGqFRz59RlNBmTXCgJgScChAAmFYIWdbqk9l17dRWsZkKrbLaJBujo8dBXDLlk0B
-         NgpooMW07nLSoZ41/a/5We5sRcBSw6itCUeuNT7LmzQt7BckIuQM4rIDAh/5YYQIEXa1
-         RwWGYYzA7XjFD+nVZcPl5VGbHlBP5Gd+4qQcUTLmt8gDA8jLYOx8wJwQ9DPQaz/0XK25
-         4wFMQOU/iIpFvm4PB+3CclA12V39T20KcJ18g3PL8fNfDIaGuYr1lCLcXJLdrbpwRcOI
-         t46w==
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1oNRW1cGJQQReSYi/ZQ8ERmnLQ2tK8+sfHV1Fnu4AsQ=;
+        b=pQBzfXE2nfgS9cuj64iVl9iLzAQXlmMuXHI1TE1lksdqJDfcdAH7PGmIeE0l7mPK3J
+         mEITQ0ZdwENwEySxSv1WUvmfNIviWmXfuE5bQxftyTpDx1JZ1pVyjc6M7yAYGQ1bqJi1
+         G8jG/YFon4PMkJJq38BPj2P4MzSWzbGmGsMdu76jUmpaJ3aLHaSb4oMr6YKCzjYNzIfh
+         og1csQJZrtl/Fi7KSd79bEkHtCV+iWImrnXiEfXZNS6dnV2TJm2WOlkjg7JPzutQtgJs
+         NAwJGRkZRnRWAneJGH1eMkcLP/KwVm+sMvkqInFdyFOqL1z1n2AYowPb9oZLJIhZMLhJ
+         j32A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLn2bt9y0tlIr7p0iSmEuj9u/yaMgCFX32OBdxNgivg=;
-        b=WDqdEtVzAQVVabBGHKVe5OuN2yK0s2sKTTiAXBoMyGdbFKYOHsNodwSgEDD0rvwvH6
-         X8X8P5CEwuEAOt/NahICusXNHGeOQ6J5oaqsYxGnWPn74ifHJMmt4BVI+yDBFig1nSM8
-         pjjpte2zfrJOV8Mm1rjLS5GHVRoRzry3v5Pyi9cpINICUkUgjNSEbonVMUyc8jUEzeMV
-         2nMZkrL4lPaY8Om241dQEVAZ89PsMEnMHoXndx4c2bJHiWxZFbiMfToMvHZWSZxn39ym
-         0UInOPlC8iGC7TusCVzv6XBeZT13vP6Abdf7bxDQ+aCrQnWY09338Bquwe1UNTtqfwMm
-         f3iw==
-X-Gm-Message-State: AFqh2kowp7BdfX5LOwHurlvK65wDv9X/1D+jzzoPvSstySKoUfQvioEv
-        y86iFgK+lkKmi8yJEFGNVv3W0g==
-X-Google-Smtp-Source: AMrXdXtVOq8Byz0bWtV2/2hZ7V337JltXS2U1orF9hGxvAEjfykXA0Z3HJKdyd/cKK6hWH10tGShVg==
-X-Received: by 2002:a05:651c:1a29:b0:280:b13e:8e84 with SMTP id by41-20020a05651c1a2900b00280b13e8e84mr537926ljb.16.1672825568416;
-        Wed, 04 Jan 2023 01:46:08 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id z4-20020a2ebe04000000b0027fd65e4faesm1636051ljq.108.2023.01.04.01.46.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 01:46:08 -0800 (PST)
-Message-ID: <97ca4286-09c2-6883-f480-fbf6f94f74f2@linaro.org>
-Date:   Wed, 4 Jan 2023 11:46:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 4/6] drm/msm: mdss: add support for SM8550
-Content-Language: en-GB
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1oNRW1cGJQQReSYi/ZQ8ERmnLQ2tK8+sfHV1Fnu4AsQ=;
+        b=VIc+tQCNEEIOoD9BzaSoEKzWZGFxJn7nRwxyzjv39+C2dB9JHa8n9F1vUffFiUEQX/
+         Rgt+7WZNW8pDPvQS5u04tqgyDDCEzaQl4qrsKgGJQ313wR7tkYdzTljmQShdP6haQTPv
+         FUlpemcy3cJRwRgf1SNRf+RWUgdJqf6IK3Y0oYCRPvNZEGVSYT8wK1U9qYpX8tSSE6TA
+         JbY54B8hL0TAuUniCfWrOU543diD0hAmyW6KgtN5ETcZkeBG9uCJNTwTgtURFZcd5Tos
+         HVAkhaAtEh3msfERbbM58BsUAE08QLVZNB+X//Oy9NKsMqb99mu4sx5EIehCXV4Sj+3w
+         qJEA==
+X-Gm-Message-State: AFqh2koKDSc/l8CsMFVCG7JrcmAGvaljcTqH5i6EFr1kk4TByEls66Fg
+        giC0ta7IbYZ0nCysowkNKjBunvGympE=
+X-Google-Smtp-Source: AMrXdXttG+EoWUW+sa5tampPMDoAEVDU+I1njWdndjI7/wp6ng0FQIB9yIewFK0dVqfGWldknbJuiQ==
+X-Received: by 2002:a17:907:d311:b0:7c4:e7b0:8491 with SMTP id vg17-20020a170907d31100b007c4e7b08491mr41897603ejc.61.1672825739951;
+        Wed, 04 Jan 2023 01:48:59 -0800 (PST)
+Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id 1-20020a170906310100b00738795e7d9bsm15146582ejx.2.2023.01.04.01.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 01:48:59 -0800 (PST)
+Message-ID: <52ed3964aacb4ae8fc7ff8416cbddb4110902196.camel@gmail.com>
+Subject: Re: [PATCH 0/2] of: Fix handling CONFIG_CMDLINE* even without
+ /chosen node
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     Rob Herring <robh@kernel.org>, Geoff Levand <geoff@infradead.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230103-topic-sm8550-upstream-mdss-dsi-v1-0-9ccd7e652fcd@linaro.org>
- <20230103-topic-sm8550-upstream-mdss-dsi-v1-4-9ccd7e652fcd@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230103-topic-sm8550-upstream-mdss-dsi-v1-4-9ccd7e652fcd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 04 Jan 2023 10:48:58 +0100
+In-Reply-To: <20230103-dt-cmdline-fix-v1-0-7038e88b18b6@kernel.org>
+References: <20230103-dt-cmdline-fix-v1-0-7038e88b18b6@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 11:08, Neil Armstrong wrote:
-> Add support for the MDSS block on SM8550 platform.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Hi Rob,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+thanks for looking into it!
 
-> ---
->   drivers/gpu/drm/msm/msm_mdss.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
-> index 144c8dd82be1..54483fe30ffd 100644
-> --- a/drivers/gpu/drm/msm/msm_mdss.c
-> +++ b/drivers/gpu/drm/msm/msm_mdss.c
-> @@ -288,6 +288,7 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
->   		msm_mdss_setup_ubwc_dec_40(msm_mdss, UBWC_3_0, 6, 1, 1, 1);
->   		break;
->   	case DPU_HW_VER_810:
-> +	case DPU_HW_VER_900:
->   		/* TODO: highest_bank_bit = 2 for LP_DDR4 */
->   		msm_mdss_setup_ubwc_dec_40(msm_mdss, UBWC_4_0, 6, 1, 3, 1);
->   		break;
-> @@ -521,6 +522,7 @@ static const struct of_device_id mdss_dt_match[] = {
->   	{ .compatible = "qcom,sm8150-mdss" },
->   	{ .compatible = "qcom,sm8250-mdss" },
->   	{ .compatible = "qcom,sm8450-mdss" },
-> +	{ .compatible = "qcom,sm8550-mdss" },
->   	{}
->   };
->   MODULE_DEVICE_TABLE(of, mdss_dt_match);
-> 
+On Tue, 2023-01-03 at 12:00 -0600, Rob Herring wrote:
+> Commit a7d550f82b445cf218b47a2c1a9c56e97ecb8c7a (of: fdt: Honor CONFIG_CM=
+DLINE*
+> even without /chosen node) moved the processing of the kernel built-in co=
+mmand
+> line (CONFIG_CMDLINE) from the early_init_dt_scan_chosen routine to the
+> early_init_dt_scan_nodes routine.
+>=20
+> The current powerpc startup code does not call into early_init_dt_scan_no=
+des, so
+> processing of CONFIG_CMDLINE never happens, even if CONFIG_CMDLINE_FORCE=
+=3Dy.
+> The result is an empty kernel command line, and mounting of the root file=
+ system
+> then fails with a kernel panic (not syncing: VFS: Unable to mount root fs=
+).
+>=20
+> Let's revert the above commit and redo the missing /chosen node handling=
+=20
+> within early_init_dt_scan_chosen().
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
--- 
-With best wishes
-Dmitry
+The series looks good to me,
+Reviewed-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+
+--=20
+Alexander Sverdlin.
 
