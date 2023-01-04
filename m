@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DC265CBA2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323FB65CBA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238789AbjADBre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 20:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        id S234247AbjADByM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 20:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbjADBrb (ORCPT
+        with ESMTP id S230247AbjADByJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 20:47:31 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31281789B;
-        Tue,  3 Jan 2023 17:47:30 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id n4so34529326plp.1;
-        Tue, 03 Jan 2023 17:47:30 -0800 (PST)
+        Tue, 3 Jan 2023 20:54:09 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EC0164AC
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:54:09 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id g13so48396902lfv.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 17:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=N93YY89WDpMZjTihyV1kEiKGVsyhZqvxZRbXkfy1dBE=;
-        b=c/oGnk5YDdOxMv6HyaPaUUBNrHeXU9UmROddqkW2D1Vhtm77tujXWuJBLHbHotvJEt
-         ZzhBSldYFuZO9nBMP1/QEyqXle7MKVLoXFHaXLKxFxUlBODA/OFAfSFaisDC5ZeM0ebB
-         rN62CtXb498KrsK+R+uaO5aBix2y4SaRpg1UarZzwc72594V6OSsMpZEspG5/yuCUox8
-         vFBquEThPCxU0p5qYMXlTZxVSIdo7qGWyPLp+yeTVV99xvUrdY6lx7+sTybF51jcahfK
-         w1W4CbILjdNheev4ZowVXyXqughHR9Ew4FdFH1s3rIPo75rZj7JwlRAuRH7DNDUO4ks2
-         9eRg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3ENfREs/+kE8uL6hKvwskOdg+lSrgQr9bKPvZeVGJsQ=;
+        b=l2Oa3ChyCBqNbRs+zG8Q6BjSygUEBDXqjvOtb6ISycKB4uz13FzHAd2NeOuT80deCp
+         F16Ls0b3Hdpp2sDdKdqrXl8/UYlrxyjvUeXNgVAB5u0L9AWtjUCfXBz/NyCx3BzRq69w
+         SrJI+RN9AJ8gOkTUDJYsZuAC+SrK26Y0tfgdEhAIL9ZInzItPmdOXi6ISqi5hB3rWzyp
+         LzT1CpRrx+yJdky8GmUENBZLxQ6IPW2F8yWHMjQpPERIrhnpL4mlBn+ute/muhBRkncO
+         mJQsxGdcc5fHz8hnS+pF0KcU4A/meIIeMZQWHigy0Ppo6dciulyyraX0Yzj3WVydOPce
+         1Mdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N93YY89WDpMZjTihyV1kEiKGVsyhZqvxZRbXkfy1dBE=;
-        b=jXhjXN2n2ehnmevxVDfCimyEAYAygI0HaDA6PLAjm8Ru2srkIuDSafb/2XbYyn8B3U
-         ZJ94HZkgR+nvCp1g/ky25UzPlTj4n+NsKpeQMUtiWHrShqikhYRq472Bd9QUZMCTLC1F
-         eEiKMIWASkJ7BS8zC8Gm+t/3nvH3C75g8drqATxcRHdnMDRnxgjVm9C61z7ryqpJGSfS
-         HXae2x07zXSreHOZaK4zqNtHroO49pLfgMy6guXf/TAZT0TveczegMTA4wFdmhJMBAxs
-         cije5JFyNKHEtsOdWUXWt2Uc/e7RObdhIUgpQzScnxM5G7krhJ8hCDVyG6LRvUkzfrhP
-         FSgQ==
-X-Gm-Message-State: AFqh2kr8cPOgukuW+zm/Nkd3gKzlFvAS7LiT2Ns2ia4tkd7pzcehU3JA
-        4OGjHBLkrJZrJYP+G+qINX1/yBzHOUlJ
-X-Google-Smtp-Source: AMrXdXths8w3ORcAFDY3TxfvaKampKf1Foy9mlSdG0Nr6Eu+QTc70DKpDuuVyoR9PIuTjeXWIs77+g==
-X-Received: by 2002:a17:902:edd1:b0:192:50fe:504a with SMTP id q17-20020a170902edd100b0019250fe504amr44577350plk.16.1672796849860;
-        Tue, 03 Jan 2023 17:47:29 -0800 (PST)
-Received: from localhost.localdomain ([144.214.0.13])
-        by smtp.gmail.com with ESMTPSA id l3-20020a170902e2c300b00192bf7eaf28sm6758798plc.286.2023.01.03.17.47.26
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 03 Jan 2023 17:47:29 -0800 (PST)
-From:   Hao Sun <sunhao.th@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH] bpf: skip invalid kfunc call in backtrack_insn
-Date:   Wed,  4 Jan 2023 09:47:09 +0800
-Message-Id: <20230104014709.9375-1-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3ENfREs/+kE8uL6hKvwskOdg+lSrgQr9bKPvZeVGJsQ=;
+        b=Ll+Th0zOJcl16LzzXlhyhMPGlBree3l6AQgst+x3r4KzdURaWZUvoqdpe7DuhiiBtK
+         L3JKx9kWsH0DtVsTMo2oNVpGqUrxAiUsE/cnk2gAp1Fc5LulgNDedf7GWHjBACvIxXkY
+         bBUlQvwqQbnQCemZ8u1P1tR3Dy31tFNODNtOlzt8voa9L3Q3upXUfZXv2LIRIMsvbBCe
+         1zkw5NZaczzWwAisBUQwSTEBYz0VCCapfpbBiOjRY3CFTq/r+T4FDOiU/E6xoQq0S6Wm
+         w4mDh4Ff/UcOOCpQ7iSFl+jDY3YJyodGOppM4C33fw24Tu2xRQYQoSrVMTLVurOjAblk
+         ovsw==
+X-Gm-Message-State: AFqh2kq5tL12jPU2Fw7q67NQAznEMSA8AFgsl0fDOlxfdvcvr4CdN9Kt
+        9dF1Av+TfAVkhaHnA+UzK/A9rmQofNPRqEk2wio=
+X-Google-Smtp-Source: AMrXdXummYS5wWjhsB82C1I1nGXyx/WY06hs91ePQQc/dWXl7bXvUORru8MGAx3oYddjt38BMzgtQGyukuftT2d1NC4=
+X-Received: by 2002:ac2:53ae:0:b0:4b5:7968:630f with SMTP id
+ j14-20020ac253ae000000b004b57968630fmr3152653lfh.351.1672797246897; Tue, 03
+ Jan 2023 17:54:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221230154332.5082-1-chao@kernel.org> <167276540205.24190.7786330518792341546.git-patchwork-notify@kernel.org>
+In-Reply-To: <167276540205.24190.7786330518792341546.git-patchwork-notify@kernel.org>
+From:   Yuwei Guan <ssawgyw@gmail.com>
+Date:   Wed, 4 Jan 2023 09:53:32 +0800
+Message-ID: <CALJQGLmws5BBdDUYp3qiytEWrCLegT6RA+M+9H7O1kYfoy6TXg@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to avoid NULL pointer dereference in f2fs_issue_flush()
+To:     patchwork-bot+f2fs@kernel.org
+Cc:     Chao Yu <chao@kernel.org>, jaegeuk@kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,51 +70,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The verifier skips invalid kfunc call in check_kfunc_call(), which
-would be captured in fixup_kfunc_call() if such insn is not
-eliminated by dead code elimination. However, this can lead to the
-following warning in backtrack_insn(), alse see [1]:
+<patchwork-bot+f2fs@kernel.org> =E4=BA=8E2023=E5=B9=B41=E6=9C=884=E6=97=A5=
+=E5=91=A8=E4=B8=89 01:04=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hello:
+>
+> This patch was applied to jaegeuk/f2fs.git (dev)
+> by Jaegeuk Kim <jaegeuk@kernel.org>:
+>
+> On Fri, 30 Dec 2022 23:43:32 +0800 you wrote:
+> > With below two cases, it will cause NULL pointer dereference when
+> > accessing SM_I(sbi)->fcc_info in f2fs_issue_flush().
+> >
+> > a) If kthread_run() fails in f2fs_create_flush_cmd_control(), it will
+> > release SM_I(sbi)->fcc_info,
+> >
+> > - mount -o noflush_merge /dev/vda /mnt/f2fs
+> > - mount -o remount,flush_merge /dev/vda /mnt/f2fs  -- kthread_run() fai=
+ls
+> > - dd if=3D/dev/zero of=3D/mnt/f2fs/file bs=3D4k count=3D1 conv=3Dfsync
+> >
+> > [...]
+>
+> Here is the summary with links:
+>   - [f2fs-dev] f2fs: fix to avoid NULL pointer dereference in f2fs_issue_=
+flush()
+>     https://git.kernel.org/jaegeux/f2fs/c/b3d83066cbeb
+>
 
-------------[ cut here ]------------
-verifier backtracking bug
-WARNING: CPU: 6 PID: 8646 at kernel/bpf/verifier.c:2756 backtrack_insn
-kernel/bpf/verifier.c:2756
-	__mark_chain_precision kernel/bpf/verifier.c:3065
-	mark_chain_precision kernel/bpf/verifier.c:3165
-	adjust_reg_min_max_vals kernel/bpf/verifier.c:10715
-	check_alu_op kernel/bpf/verifier.c:10928
-	do_check kernel/bpf/verifier.c:13821 [inline]
-	do_check_common kernel/bpf/verifier.c:16289
-...
+Hi jeageuk,
+There is a character error in patchwork configuration, :).
+:s/jaegeux/jeageuk/g
 
-So make backtracking conservative with this by returning ENOTSUPP.
-
-[1] https://lore.kernel.org/bpf/CACkBjsaXNceR8ZjkLG=dT3P=4A8SBsg0Z5h5PWLryF5=ghKq=g@mail.gmail.com/
-
-Signed-off-by: Hao Sun <sunhao.th@gmail.com>
----
- kernel/bpf/verifier.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4a25375ebb0d..04887b1e4178 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2750,6 +2750,12 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx,
- 			 */
- 			if (insn->src_reg == 0 && is_callback_calling_function(insn->imm))
- 				return -ENOTSUPP;
-+			/* kfunc with imm==0 is invalid and fixup_kfunc_call will
-+			 * catch this error later. Make backtracking conservative
-+			 * with ENOTSUPP.
-+			 */
-+			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL && insn->imm == 0)
-+				return -ENOTSUPP;
- 			/* regular helper call sets R0 */
- 			*reg_mask &= ~1;
- 			if (*reg_mask & 0x3f) {
-
-base-commit: acd3b7768048fe338248cdf43ccfbf8c084a6bc1
--- 
-2.39.0
-
+> You are awesome, thank you!
+> --
+> Deet-doot-dot, I am a bot.
+> https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+>
+>
+>
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
