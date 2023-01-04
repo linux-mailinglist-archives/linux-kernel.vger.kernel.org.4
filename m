@@ -2,114 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E99A65CB51
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C38665CB57
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjADBUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 20:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S233889AbjADBWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 20:22:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjADBUE (ORCPT
+        with ESMTP id S233735AbjADBWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 20:20:04 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B203D254
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:20:03 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso37532702pjp.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 17:20:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T8llHjR/KQu58vDYm+H0ZW1/5cWe3F1SVFXfrX2ssKw=;
-        b=e5RJU+JW14exSHanVzjQr6x1Q+wSY3Wpe9awigVhR1BiYRBZEU9W0BVIrrX/aVyqG0
-         Y/5VaDKcsJZxckZn14g0rfSItOQ57y+4JIgyHsrSIub1MAG53kt04U50STocLDM0J7sn
-         QFyP6xW1wHF5U+zbhc8NRF0wlvmOcUt6AKBIOn5+vjZZZ0Gqv4gEs7xV6409M+6SBAkS
-         YH3xIGZJmi4QK9Nx65lrMlRqda04kU/WbxF+7CinjYZ/g0xNbdP9PIeHWKf0weW9lxHw
-         BCKjtNvdDy++5YY1Tow6B0lJCcED661MzsT241XV/k+5MBFqdEuck7s9HoxesDmlB24c
-         0ugQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T8llHjR/KQu58vDYm+H0ZW1/5cWe3F1SVFXfrX2ssKw=;
-        b=GZ21NvGvwqUOHvf5PEC9BB7GEQkkiHiXBkM5xrgJeTyTXsTygifSYR+BMnOQDYtEv+
-         Ub0AqvX3r0/6KRaX6Rr/f/FbixImrH3Dbne/iFEnzPimAlBrLEHOhreXVkip2KDbEbY2
-         5kNefU6KA0sV7TolgiwUTWeSPFCKWdtywD57U0AREe/Zlf+9bE3C/+TODNWRNr2LLMV8
-         OdaguX0/Pj83YX+XqTUnzyFDk0LI3Y3Awu3pxgtllRdnWIsNnWoQzw3gNpApnSLzcmf+
-         yfPz4hi7GmjUH0kCJtNPbWrNJMP03EUCtqIIxxM5qy4Hy6eQ2qxSphyzGjH0BDrzBOiJ
-         U7bw==
-X-Gm-Message-State: AFqh2koDLgYaOkcg2MStsXXXYdU+S9ANxfKpOzuL5+bUthYo1XnWUFgQ
-        h5fNiiHN5D5Pzf84IANKOBtrwA==
-X-Google-Smtp-Source: AMrXdXvUtv379swOd0R3oaMvDQyW13GYD5V9BwZP8VPERQc+bDajwVIrshsYMc6ZAUnSJPJDlWn+rA==
-X-Received: by 2002:a17:902:dad0:b0:191:1543:6b2f with SMTP id q16-20020a170902dad000b0019115436b2fmr4061929plx.3.1672795203106;
-        Tue, 03 Jan 2023 17:20:03 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902e74400b00178b9c997e5sm22960993plf.138.2023.01.03.17.20.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 17:20:02 -0800 (PST)
-Date:   Wed, 4 Jan 2023 01:19:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Hao Peng <flyingpenghao@gmail.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: use unified srcu interface function
-Message-ID: <Y7TUPw5i5BejllCB@google.com>
-References: <CAPm50aJTh7optC=gBXfj+1HKVu+9U0165mYH0sjj3Jqgf8Aivg@mail.gmail.com>
- <Y5KNvgzakT1Vvxy4@google.com>
- <CAPm50aJv2_6321BgLXB6SWH1CcoYM4733fsovtB_5zhoP_7x+Q@mail.gmail.com>
- <365fe273-ba11-eb12-4d80-a2e6a17bf0fa@redhat.com>
+        Tue, 3 Jan 2023 20:22:34 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2046.outbound.protection.outlook.com [40.107.100.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A463120B1
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:22:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NfJAIKCI2etei00zU0m/32+7cXcKSO/AqDvDKIpOUF52Dn+675cBVKvnkGEQE6RvtGzBMzG+QEPxlVuWudF2NZBVwKQdQ+j2QfafyUVaFL6kCJ1rh9QisRfvg5X/q7ls/mj5lxE99h2F/Rgrxpcqrcgo9s/hVS0K18pEJWuSZ1kwlNdfGSdBrrNQZR9DA5ARG7QSZRs9uiYTnX9gq80nHnraXjXN0RJkyNFFTfsJUNreUSCJLhSq3v6+g+mV4mf/y+znhWwkzow9QMxcO31rFj2c1UtqOdAge+RMKqC97sqUaHzjJVbF2Jf6y8ejyZApKqfo345wRxNEbfiKqeiPVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z8yu37O2QCpAzqxY2AphNZJUs4R3hPPxQsLcKe3KLrw=;
+ b=j7WA/9Y6Svb+hULgeLtfIehN/HrWzMjMvYsLufL+pSuvVjZsQyH8x2ainMJDZwlGCeIDcken1amZmbIfeWXih7QhStyIyYhFX0dY+r4zWo+7aBhH0n0Bru2nItlJYw8/fDuqn2C15v8tJpnp/Y0AtcucnivsxO/KnkSLUqP91+LT1WbVv3iqYhexUGAyL7xZdXu3fIX8p1kXKJGl3SMH9+C4k2IKLdBayCizFWUyG5kVQSDKvYWYJncddxH7PxGfDeGUGD2oXoOrpf7/h+UE60CIUAF31gaLN2vmOaXjXZcB9TPE7Z4QtMnCl5r0fRaJEyEUJ+VEohYs4GvlyOoh2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z8yu37O2QCpAzqxY2AphNZJUs4R3hPPxQsLcKe3KLrw=;
+ b=Mhv1GF4YA5eDg5yfgbdJi+3Yjtoz7oPE+2aBWpmOpw0EmfTNW2MOeZ1QXBJTYwXJtZpNyUfj6i/Py3DuRyyZ0nKuttgDdGH/jqTHXmt3AXOmF+oWSTX56QOUlSACuGTzEvij2wxQuhBAdbofRJi7JmsC17hUKHTFS1bO2EpbfDzqdTU82bkIWLqmbE9Z5gKfRMqNk7ZP7w+UYBRjdK8PEkvRqtFa9Sgogyvcwzy1c3rKPldJgSvWrkNRgKHQvC27XS3PQBNgDKh+Q3JYlW4aUSP6r74QdS6apJCLKIoSSCT9PovSJsVfRmyGDwsmdpIsyuiBBV6Rx4nJprTBs7gQ9w==
+Received: from MW4PR04CA0177.namprd04.prod.outlook.com (2603:10b6:303:85::32)
+ by LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Wed, 4 Jan
+ 2023 01:22:31 +0000
+Received: from CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:85:cafe::92) by MW4PR04CA0177.outlook.office365.com
+ (2603:10b6:303:85::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.14 via Frontend
+ Transport; Wed, 4 Jan 2023 01:22:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT064.mail.protection.outlook.com (10.13.175.77) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.16 via Frontend Transport; Wed, 4 Jan 2023 01:22:30 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 3 Jan 2023
+ 17:22:17 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 3 Jan 2023
+ 17:22:17 -0800
+Received: from SDONTHINENI-DESKTOP.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.36 via Frontend
+ Transport; Tue, 3 Jan 2023 17:22:16 -0800
+From:   Shanker Donthineni <sdonthineni@nvidia.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Shanker Donthineni <sdonthineni@nvidia.com>
+Subject: [PATCH] arm64: gic: increase the number of IRQ descriptors
+Date:   Tue, 3 Jan 2023 19:22:15 -0600
+Message-ID: <20230104012215.1222263-1-sdonthineni@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <365fe273-ba11-eb12-4d80-a2e6a17bf0fa@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT064:EE_|LV2PR12MB5869:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9b33e5cb-2091-46a0-d5ca-08daedf2268e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8K0umbqjJgjCcGEh7at+m746uZ7IK7XQq4JoUBjr/oWjcIDH/Q5IUm3utyQmKBplWltUeFBBkzUc7qOuyCGo6NldjH4W6sBrjYRW3cGGvjvcdlsDmsEI566ZMFwkcH1QU8XaTdG6SlNNiJ8HorUWSuy3QB0rXQlRSuQkfmleaNvJku0Db8lUpRChE4lD6JRSUszg9vquEBSw2EWsuiHIwM22sGXX319IlsH4it56/zamsm3Oi7J92h5nHgDUohCUtfwJJ9TGI4y5CHcaARCcidPFllQ+vVeHQ70CxKA7zIRTtdJ8qRwu6v9/GgF0h8AmFUt1BLW8v8pauU+2jMFyXQ3XCm6eyToyyv1+8TUJdv32NuIZ3z4aqGScQ8aSU2bq+591AUpZ34+i5PwH5GTe7W6QISwGmuf3qkojwrQIgl+lHUZTFuMWefIdgfdYPXoiJGq9g+oF6+8jstMaoWdtKITBXRc6bLejB9HcycA63nAR6ZERF8KysxnPbEpGgPXoUeF1DyzixS19dLDepxtVD4q/DIwKRH7wAC4mkjQxq68VuaWcsyBG1frqLzcQVyQa2Vf3ESkpHuhxmNr3LViYmItF/FgTbgQruw4Qw9PS0ov0A43J3qTOjCa4NPkidj9MI69f/Dbxf0XQBA843ozKN4fOdFjoqs7WIpz/LHWAihTrah7X67wH2UBJ8OPhMjCdwJD92cGnPWMTzYO/GT+TXQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(376002)(136003)(451199015)(36840700001)(46966006)(40470700004)(41300700001)(5660300002)(8676002)(8936002)(4326008)(70206006)(70586007)(4744005)(316002)(110136005)(54906003)(2906002)(7696005)(478600001)(107886003)(426003)(47076005)(2616005)(86362001)(336012)(40480700001)(186003)(26005)(1076003)(36756003)(356005)(36860700001)(7636003)(82740400003)(40460700003)(82310400005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 01:22:30.9703
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b33e5cb-2091-46a0-d5ca-08daedf2268e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5869
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022, Paolo Bonzini wrote:
-> On 12/20/22 08:47, Hao Peng wrote:
-> > > > +       old = srcu_dereference_check(kvm->irq_routing, &kvm->irq_srcu,
-> > > > +                                       lockdep_is_held(&kvm->irq_lock));
-> > > Readers of irq_routing are protected via kvm->irq_srcu, but this writer is never
-> > > called with kvm->irq_srcu held.  I do like the of replacing '1' with
-> > > lockdep_is_held(&kvm->irq_lock) to document the protection, so what about just
-> > > doing that?  I.e.
-> > > 
-> > Sorry for the long delay in replying. Although kvm->irq_srcu is not required
-> > to protect irq_routing here, this interface function srcu_dereference_check
-> > indicates that irq_routing is protected by kvm->irq_srcu in the kvm subsystem.
-> > Thanks.
-> > 
-> 
-> I agree, the last two arguments basically are alternative conditions to
-> satisfy the check:
-> 
-> #define srcu_dereference_check(p, ssp, c) \
->         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
->                                 (c) || srcu_read_lock_held(ssp), __rcu)
-> 
-> The idea is to share the code between readers and writers,
+The default value of NR_IRQS is not sufficient to support GICv4.1
+features and ~64K LPIs. This parameter would be too small for certain
+server platforms where it has many IO devices and is capable of
+direct injection of vSGI and vLPI features.
 
-But readers and writers naturally don't share code, and the subsequent
-synchronize_srcu_expedited() is what really documents the interaction between
-readers and writers.
+Currently, maximum of 64 + 8192 (IRQ_BITMAP_BITS) IRQ descriptors
+are allowed. The vCPU creation fails after reaching count ~400 with
+kvm-arm.vgic_v4_enable=1.
 
-It's definitely not a sticking point though, and this one does seems to be the
-outlier in KVM.
+This patch increases NR_IRQS to 1^19 to cover 64K LPIs and 262144
+vSGIs (16K vPEs x 16).
 
-> so what do you think of adding a
-> 
-> #define kvm_get_irq_routing(kvm) srcu_dereference_check(...)
-> 
-> macro at the top of virt/kvm/irqchip.c?
+Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
+---
+ arch/arm64/include/asm/irq.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I'm fine with any approach, though a macro seems like overkill.
+diff --git a/arch/arm64/include/asm/irq.h b/arch/arm64/include/asm/irq.h
+index 168d710a7b70..741e0e9148ed 100644
+--- a/arch/arm64/include/asm/irq.h
++++ b/arch/arm64/include/asm/irq.h
+@@ -4,6 +4,10 @@
+ 
+ #ifndef __ASSEMBLER__
+ 
++#if defined(CONFIG_ARM_GIC_V3_ITS)
++#define  NR_IRQS  (1 << 19)
++#endif
++
+ #include <asm-generic/irq.h>
+ #include <linux/irqchip/arm-gic-common.h>
+ 
+-- 
+2.25.1
+
