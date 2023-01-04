@@ -2,114 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80E065DDB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632E065DDB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240254AbjADUaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 15:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S240279AbjADUah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 15:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240105AbjADUaO (ORCPT
+        with ESMTP id S240157AbjADUaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 15:30:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076DE18384;
-        Wed,  4 Jan 2023 12:30:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BA1BB818D8;
-        Wed,  4 Jan 2023 20:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C80C433EF;
-        Wed,  4 Jan 2023 20:30:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="XBIXrtxj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672864206;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sa99aiRE7scIwfvML/yhzFWYXLOzBtNC5r3KfyUVDy4=;
-        b=XBIXrtxjyxM17F4LGCu3fLy0l12mdSSGD5Bm/7S/ewL3U7DkzEfoILDO3caI9a+cxq0mnH
-        d6JkaiqGvGg5nHS69g7paR51Fh3h3KeWP5BxdFYVFbfRaFw0Ypsb1jcXcGpevT38Jfy8OY
-        j6OL/0LFLGkmcNR5q8/5dVVjw9B6pp8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 44c9cd83 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 4 Jan 2023 20:30:05 +0000 (UTC)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-4a2f8ad29d5so151104427b3.8;
-        Wed, 04 Jan 2023 12:30:05 -0800 (PST)
-X-Gm-Message-State: AFqh2kouei6B1NTBCBlvK1V40m6O4p65YypaBaarwjrXpxKlZKmwEQgt
-        vihV9PF3CHDU3eHuk6/IFrAqCfjVrrodLubli8U=
-X-Google-Smtp-Source: AMrXdXtnlAdEjqXnGADVmxcmaw0N9w1q4mvc2FZ8ZEIAmo/GMankbc+DPDnEMO2SqEh4Lmm3cojhsNUj9E/km0ZrpC4=
-X-Received: by 2002:a0d:ea43:0:b0:47d:af22:b7ec with SMTP id
- t64-20020a0dea43000000b0047daf22b7ecmr2656959ywe.259.1672864202973; Wed, 04
- Jan 2023 12:30:02 -0800 (PST)
+        Wed, 4 Jan 2023 15:30:35 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on20612.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8b::612])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3120A38AD6;
+        Wed,  4 Jan 2023 12:30:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bGzwgSG2+ucIuO3fyqDuHysvHN32gmas7rrPeBzGABoXmjpi84LdRRss+IcWrXvP2PnNtuJyZnZdS52pPyMOYFxcID0aMcpkBVzsMhVOLoCZ+Uvfd+yjoUzxoN9kLzfvVSawb54Y7PKTThDAGYA6sFuSjvuZrBKRp2/lmS6B8/+go9UtfgI4xZ6T0SdhwjZXxscZHRyyd3wCkFTxJT6v0k3DRRjXXErKZvb97fvjx9X2LaoOPXQfyvBwsaSfffukid71VILZE8k+cjvQPorQ2vMczogVJE2q6i+AuhYV0rjrzM7ltPR01dZh6vZcyNMh2KwGit1U3mFM9bPiZwMKlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Gv1sQUMPKGdnY/IkkYNbf+FC60lh4lQEvG1dxEmiBa8=;
+ b=GSrctn+MXWHSyRvSYzIjC59VjOe45YFntzJ/0J18OQYKAl2aoZ8n3kafO7YUe5t4MXLIK/Vkz4k5yKRExasJa03iNBX12kFcBErB3qbXbw56dLPOWxwlr3F+mX2+9OpAzoiJNn1M+A82bBjEC5yhdkW0Gt2i+zo1ucbxdYbj3sxUOFOlzhu1LAdNAoX4yLv4/aNSfPzsbbm0yNM/hri3xno6u/XD1u0CpYoIPRyeTnY+v1DFDuqhfE36Bctw/41t/y7spmrzMLqkDHiLkpIOmXLZN46q2WjOTEtXA6L62+WxA0IjMzhovUFcud6nG8pcHF0Wk0kc6Cr4/dkqI5wvwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Gv1sQUMPKGdnY/IkkYNbf+FC60lh4lQEvG1dxEmiBa8=;
+ b=EDqPARpbGCDXvl1IgBca6oy2GVMn9xf5YIs4P+o4l3/mMyPRDiBowF4chhdbwetmxnzRC+W4c4n1KhN//Jk6vG93mhK7NhXqVtGxWI4coIBdj5XICEJZXQSOXKYrAOOmq0pGpaIz7T1g1SsqcPwK8EOvs8F0hDVwqB3m9ZOXAFQ=
+Received: from DM6PR03CA0039.namprd03.prod.outlook.com (2603:10b6:5:100::16)
+ by CH0PR12MB5300.namprd12.prod.outlook.com (2603:10b6:610:d7::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Wed, 4 Jan
+ 2023 20:30:29 +0000
+Received: from DS1PEPF0000E659.namprd02.prod.outlook.com
+ (2603:10b6:5:100:cafe::7e) by DM6PR03CA0039.outlook.office365.com
+ (2603:10b6:5:100::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.14 via Frontend
+ Transport; Wed, 4 Jan 2023 20:30:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E659.mail.protection.outlook.com (10.167.18.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5944.8 via Frontend Transport; Wed, 4 Jan 2023 20:30:29 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
+ 2023 14:30:26 -0600
+From:   Robert Richter <rrichter@amd.com>
+To:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>
+CC:     Robert Richter <rrichter@amd.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] cxl/mbox: Fix Payload Length check for Get Log command
+Date:   Wed, 4 Jan 2023 21:29:54 +0100
+Message-ID: <20230104202954.1163366-1-rrichter@amd.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230101162910.710293-1-Jason@zx2c4.com> <20230101162910.710293-2-Jason@zx2c4.com>
- <Y7QELo9etPM8Tpx5@gmail.com> <Y7RA3bmko0AjO8hQ@zx2c4.com> <Y7RfPnyK/25pxpKs@gmail.com>
- <Y7RmDVI/ScoeBO2a@zn.tnic> <CAHmME9ohJ3JZNjkxuA0KjFW0LLQksgQP5f8bfrogd3+GmLrpKw@mail.gmail.com>
- <Y7RqQNH0OuiYCDeE@gmail.com> <Y7Xg19H39FqTwyEL@gmail.com>
-In-Reply-To: <Y7Xg19H39FqTwyEL@gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 4 Jan 2023 21:29:52 +0100
-X-Gmail-Original-Message-ID: <CAHmME9p6zwGU33hq1D1Zt9ek8T5ExBp7jLxgn1DVhO4bvOODog@mail.gmail.com>
-Message-ID: <CAHmME9p6zwGU33hq1D1Zt9ek8T5ExBp7jLxgn1DVhO4bvOODog@mail.gmail.com>
-Subject: Re: [PATCH v14 1/7] x86: lib: Separate instruction decoder MMIO type
- from MMIO trace
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, tglx@linutronix.de,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        "Carlos O'Donell" <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E659:EE_|CH0PR12MB5300:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9543e9d-a4c1-4355-20b3-08daee928535
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tqLGFa2Rq2ctrOhNHzrGiukN6Yjx8G/XqiK/MHyB626h5A8Bej3zMm/VKeGmnlHOXVX9RGSJaAq1zcnvhs0aaigATbAYIuNKqxfwwjxcQhi09NqFo9J7YpGSliCPGyD/KEy9nQBMF3//E9UcJUGNEzTtOIJB/z6A/u2R/iNavq4OoCela31xqQ092vY1SGahYhd4HQ7Zl22zPRLC8GOPHplUKXA84/HRh0/R2QF2DhgfF5p5PpSa/MysvGpJTO42VvuWbu/7onMMj3ddyd+OFhQo2ex2lkuMg6H2cv3oos93Qnu6MkZKT+sOVij1u/02Vk7Cg1u7tVFwvVuV1pgJ56HvWk73gR40iszpVD2B/xvTE/pGEscHpklO4VYUfQxBVLmYLGQJNyC97SSph/jjwAJamm8oCGdZT3EDiVqkJldQTF/QgOHrQzs9Ubl/wUZPw02igrCVmPmOsLWQ1FXCstwZcNA5Rv/qnr730Um64TOviDeqomNA8sGjxF/EG/BzpISJO7g3yDGT5v+I8PQou2MQ/uAZe22uoiY5Y3ZK8VZGSf3mKvZ7yf8NycxAsB3l7lViEs5EeaSpf67SiCArDI+1PFCoQrQQUXi4IbvTBlCwbNoHjU+BAFHqDsxcuqvWbldhTSEu9KgdR3pSzsdLTkSr5ByhTBWpsfJDb7Bne/vzJ3eXPmGNIAAdR74UzuUtKRkG0K6sFehfL1aXiGMe86o56sW7Cma8ywsweEyKFao=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199015)(36840700001)(46966006)(40470700004)(47076005)(83380400001)(426003)(2616005)(186003)(82310400005)(16526019)(26005)(336012)(40480700001)(6666004)(40460700003)(36860700001)(36756003)(81166007)(356005)(1076003)(82740400003)(41300700001)(4326008)(8676002)(2906002)(5660300002)(8936002)(316002)(478600001)(110136005)(54906003)(70206006)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 20:30:29.3052
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9543e9d-a4c1-4355-20b3-08daee928535
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E659.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5300
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 9:26 PM Ingo Molnar <mingo@kernel.org> wrote:
->
->
-> * Ingo Molnar <mingo@kernel.org> wrote:
->
-> >
-> > * Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > > On Tue, Jan 3, 2023 at 6:29 PM Borislav Petkov <bp@alien8.de> wrote:
-> > > >
-> > > > On Tue, Jan 03, 2023 at 06:00:46PM +0100, Ingo Molnar wrote:
-> > > > > > I guess you missed the conversation with Borislav yesterday about that.
-> > > > > > He mentioned that I'd just take it through random.git when this whole
-> > > > > > series goes in.
-> > > > >
-> > > > > Please base your tree off on tip:x86/asm then (or pull it in) - it only
-> > > >
-> > > > My idea was a lot simpler: avoid the tree inter-dependency by us acking this
-> > > > patch so that it can go through the random.git tree.
-> > >
-> > > Indeed I would prefer this.
-> > >
-> > > Or... just put this in 6.2 because it's trivial anyway? Heck, even mark
-> > > it as stable@ so make future backporting easier. Then it'll meet tip's
-> > > urgent criteria.
-> >
-> > Yeah - that's sensible too, it does fix a header namespace bug - I've put
-> > it into tip:x86/urgent.
->
-> This namespace clash fix is now upstream as of 512dee0c00ad & later kernels.
+Commit 2aeaf663b85e introduced strict checking for variable length
+payload size validation. The payload length of received data must
+match the size of the requested data by the caller except for the case
+where the min_out value is set.
 
-Thanks. I've rebased my vdso branch on that now. I guess at this point
-it probably doesn't matter that much since everyone hates my use of
-the instruction decoder anyway, so I'll see what else I can do for
-v15, but still, it'll at least make it easier to experiment.
+The Get Log command does not have a header with a length field set.
+The Log size is determined by the Get Supported Logs command (CXL 3.0,
+8.2.9.5.1). However, the actual size can be smaller and the number of
+valid bytes in the payload output must be determined reading the
+Payload Length field (CXL 3.0, Table 8-36, Note 2).
 
-Jason
+Two issues arise: The command can successfully complete with a payload
+length of zero. And, the valid payload length must then also be
+consumed by the caller.
+
+Change cxl_xfer_log() to pass the number of payload bytes back to the
+caller to determine the number of log entries. Implement the payload
+handling as a special case where mbox_cmd->size_out is consulted when
+cxl_internal_send_cmd() returns -EIO. A WARN_ONCE() is added to check
+that -EIO is only returned in case of an unexpected output size.
+
+Logs can be bigger than the maximum payload length and multiple Get
+Log commands can be issued. If the received payload size is smaller
+than the maximum payload size we can assume all valid bytes have been
+fetched. Stop sending further Get Log commands then.
+
+On that occasion, change debug messages to also report the opcodes of
+supported commands.
+
+The variable payload commands GET_LSA and SET_LSA could be also
+affected by this strict check, but SET_LSA cannot be broken because
+SET_LSA does not return an output payload, and GET_LSA never expects
+short reads.
+
+Fixes: 2aeaf663b85e ("cxl/mbox: Add variable output size validation for internal commands")
+Signed-off-by: Robert Richter <rrichter@amd.com>
+---
+ drivers/cxl/core/mbox.c | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+index b03fba212799..e93df0d39022 100644
+--- a/drivers/cxl/core/mbox.c
++++ b/drivers/cxl/core/mbox.c
+@@ -170,6 +170,8 @@ int cxl_internal_send_cmd(struct cxl_dev_state *cxlds,
+ 	out_size = mbox_cmd->size_out;
+ 	min_out = mbox_cmd->min_out;
+ 	rc = cxlds->mbox_send(cxlds, mbox_cmd);
++	if (WARN_ONCE(rc == -EIO, "Bad return code: -EIO"))
++		return -ENXIO;
+ 	if (rc)
+ 		return rc;
+ 
+@@ -576,6 +578,17 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
+ 		};
+ 
+ 		rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
++
++		/*
++		 * The output payload length that indicates the number
++		 * of valid bytes can be smaller than the Log buffer
++		 * size.
++		 */
++		if (rc == -EIO && mbox_cmd.size_out < xfer_size) {
++			offset += mbox_cmd.size_out;
++			break;
++		}
++
+ 		if (rc < 0)
+ 			return rc;
+ 
+@@ -584,7 +597,7 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
+ 		offset += xfer_size;
+ 	}
+ 
+-	return 0;
++	return offset;
+ }
+ 
+ /**
+@@ -608,13 +621,11 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
+ 		u16 opcode = le16_to_cpu(cel_entry[i].opcode);
+ 		struct cxl_mem_command *cmd = cxl_mem_find_command(opcode);
+ 
+-		if (!cmd) {
+-			dev_dbg(cxlds->dev,
+-				"Opcode 0x%04x unsupported by driver", opcode);
+-			continue;
+-		}
++		if (cmd)
++			set_bit(cmd->info.id, cxlds->enabled_cmds);
+ 
+-		set_bit(cmd->info.id, cxlds->enabled_cmds);
++		dev_dbg(cxlds->dev, "Opcode 0x%04x %ssupported by driver",
++			opcode, cmd ? "" : "un");
+ 	}
+ }
+ 
+@@ -695,11 +706,12 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
+ 		}
+ 
+ 		rc = cxl_xfer_log(cxlds, &uuid, size, log);
+-		if (rc) {
++		if (rc < 0) {
+ 			kvfree(log);
+ 			goto out;
+ 		}
+ 
++		size = (u32)rc;
+ 		cxl_walk_cel(cxlds, size, log);
+ 		kvfree(log);
+ 
+-- 
+2.30.2
+
