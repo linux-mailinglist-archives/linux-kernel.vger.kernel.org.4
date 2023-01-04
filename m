@@ -2,74 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D156165DF0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF73165DF0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235291AbjADV2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 16:28:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S240433AbjADV3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 16:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240456AbjADV2Q (ORCPT
+        with ESMTP id S240548AbjADV3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 16:28:16 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741B03FA02
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 13:22:18 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id m21so50319890edc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 13:22:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5r/V3HPXwjpuD7IphcjrrB8OiZUQp0rchrkxxQGzaWI=;
-        b=KEIC0i6TYit5Z0cdFjku8f3xpdIif4U2Ymvz3XlFlq2j6BxcLI8+aRhr5ueD/4NPZt
-         5J/8Tmn+RoO27XqmSSN+2MvKrF23PsPGVyxQsTSipAdevtpNTCAHHgE1Q/dRVQTvoBqO
-         4T5iaYELTABGEiuIT0Ntyw6CUkWJlk7WiKrlY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5r/V3HPXwjpuD7IphcjrrB8OiZUQp0rchrkxxQGzaWI=;
-        b=OiQnokCVqRIbiCvQQ+7UpJFMDdCnqnj/rSH2vwBjSIS+o+FqqivvZCftZi2TkGYQTI
-         bt7GRWlQ+KvaxbMa33xrPu1dRxZUaswB4MF72Xctsn8rP4dRqSzzxVh41obT7FJ4fWqh
-         Iew6MwTDKX1+g5qKYp3DD+e+gksh9KM+BV9SnERyUTTgKQ9bzOqsG7GhXMqxegg8UBLg
-         fjSL4h0RR6vwFLH3TfWj8v1R/pwEa317cdsFJ4xCVuh1BFj2FmdSdlLhkNfcyP7KmlTC
-         iPWA7qieyTNxxRq9Tx8IQY6MkpSA66sS7rIJ9HisMtXPsI74N6b1OZE3LrxrZb+nSaZ9
-         s41Q==
-X-Gm-Message-State: AFqh2kpFiLQkweuUpX/KSBJK+LZ8UINhx76MHTlZfI88/V0NTKjeCfa8
-        W73YpTbb7JZ8uwxkqz7IIHiLAk1e473RjeejY/zKvA==
-X-Google-Smtp-Source: AMrXdXvyL02g5V8vC60eMixSySeuV+cmNwoRkD+KYiZL+r9p1DmuiHRjgR21Y+li8eMYghzwdId8ULZTKPgGOnDzC2M=
-X-Received: by 2002:a05:6402:f27:b0:485:8114:9779 with SMTP id
- i39-20020a0564020f2700b0048581149779mr3674496eda.41.1672867336970; Wed, 04
- Jan 2023 13:22:16 -0800 (PST)
+        Wed, 4 Jan 2023 16:29:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BC3CC0
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 13:27:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CBFC61844
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 21:27:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D70C433D2;
+        Wed,  4 Jan 2023 21:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672867653;
+        bh=57CtgsMHkeFVcBeyAUuKsmZhu3NAy0h5TZ/By4Ry+rE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=isRVW1dz7l8BAG1DnM02Nfai5LchfSn1JuLkRPx87dHlTKk6r/BJYQLAQdjEfKvK9
+         O5ZSVqVrOOybDFdKR6srQDXGVjlapVG0HpfWpZdXAxklGGzu+qmyIl9yd1VpCivfXV
+         Lmt2AMJWdu+6MZTpH8xG8i2e0v+oIANKQi9MdtewryxJ5PNbuQVwPnezQNNqQs/WPn
+         EGTcLjkN1GIlXXKMNbzfvarVUtb8tELXxkBtauyYu+ZGdRDPQwVddDfPMUoY7i0u+M
+         6e2bOrN23CVuCKqe8clVrDekxbVZ3mczJctKhsTaYYelpV0kAgJSiiUr4ok1wdEudE
+         bOkDXQcZDyLxw==
+Received: by pali.im (Postfix)
+        id C9C31A3A; Wed,  4 Jan 2023 22:27:29 +0100 (CET)
+Date:   Wed, 4 Jan 2023 22:27:29 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 6.2-rc1
+Message-ID: <20230104212729.s6mdthwqdoxzbjga@pali>
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20230104190115.ceglfefco475ev6c@pali>
+ <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
+ <20230104205640.o2uy2jk4v6yfm4w3@pali>
 MIME-Version: 1.0
-References: <20221229081252.452240-1-sarthakkukreti@chromium.org>
- <20221229081252.452240-4-sarthakkukreti@chromium.org> <Y7Wr2uadI+82BB6a@magnolia>
-In-Reply-To: <Y7Wr2uadI+82BB6a@magnolia>
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-Date:   Wed, 4 Jan 2023 13:22:06 -0800
-Message-ID: <CAG9=OMNbeU=Xg5bWvHUSfzRf8vsk6csvcw5BGZeMD5Lo7dfKFQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] fs: Introduce FALLOC_FL_PROVISION
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     sarthakkukreti@google.com, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Brian Foster <bfoster@redhat.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230104205640.o2uy2jk4v6yfm4w3@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,162 +59,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Resend; the text flow made the last reply unreadable)
+On Wednesday 04 January 2023 21:56:40 Pali Rohár wrote:
+> On Wednesday 04 January 2023 11:25:41 Linus Torvalds wrote:
+> > On Wed, Jan 4, 2023 at 11:01 AM Pali Rohár <pali@kernel.org> wrote:
+> > >
+> > > Driver is still used and userspace tools for it are part of the udftools
+> > > project, which is still under active maintenance. More people already
+> > > informed me about this "surprise".
+> > 
+> > Why is that driver used?
+> > 
+> > It's *literally* pointless. It's just a shell that forwards ioctl's to
+> > the real drivers.
+> > 
+> > > Any comments on this? Because until now nobody answered why this
+> > > actively used driver was removed from kernel without informing anybody:
+> > 
+> > Well, it's been marked as deprecated for five years, so any kernel
+> > config should have gotten this notice for the help entry
+> > 
+> >           Note: This driver is deprecated and will be removed from the
+> >           kernel in the near future!
+> > 
+> > but I guess people didn't notice.
+> > 
+> > It could be re-instated, but it really is a completely useless driver.
+> > Just use the *regular* device nodes, not the pointless pktcd ones.
+> > 
+> > Is there any real reason why udftools can't just use the normal device node?
+> > 
+> > The historical reason for this driver being pointless goes back *much*
+> > longer than five years - it used to be that the pktcd driver was
+> > special, and was the only thing that did raw commands.
+> > 
+> > But the regular block layer was taught to do that back around 2004, so
+> > the "pktcd" driver has literally just been a pointless shell for
+> > almost two decades.
+> > 
+> > And I know it was in 2004, because I actually did most of that "make
+> > SCSI commands generic" work myself (but had to go back to the old BK
+> > archives to find the exact date - it's been two decades, after all).
+> > 
+> > I did it because I was fed up with the crazy pktcd driver requiring
+> > extra work, when I just wanted to write CD's on my regular IDE CD-ROM
+> > the obvious way.
+> > 
+> > So if there is some reason to actually use the pktcd driver, please
+> > tell us what that is.
+> > 
+> >               Linus
+> 
+> Last time I did big retest of optical media was two years ago. At that
+> time kernel was not able to mount CD-RW disc in full read-write mode
+> from the normal node /dev/cdrom. Via pktcdvd driver mapping it was
+> possible without any issue. Was there any change in last 5 (or more)
+> years in this CD-RW area? Mounting CD-RW media in read-only mode via
+> normal /dev/cdrom node always worked fine. Also "burning" CD-R media
+> with userspace burning tools on normal /dev/cdrom node also worked.
+> But here it is CD-RW media in read-write mode with kernel udf filesystem
+> driver without any userspace involved (after proper formatting).
 
-On Wed, Jan 4, 2023 at 8:39 AM Darrick J. Wong <djwong@kernel.org> wrote:
->
-> On Thu, Dec 29, 2022 at 12:12:48AM -0800, Sarthak Kukreti wrote:
-> > FALLOC_FL_PROVISION is a new fallocate() allocation mode that
-> > sends a hint to (supported) thinly provisioned block devices to
-> > allocate space for the given range of sectors via REQ_OP_PROVISION.
-> >
-> > The man pages for both fallocate(2) and posix_fallocate(3) describe
-> > the default allocation mode as:
-> >
-> > ```
-> > The default operation (i.e., mode is zero) of fallocate()
-> > allocates the disk space within the range specified by offset and len.
-> > ...
-> > subsequent writes to bytes in the specified range are guaranteed
-> > not to fail because of lack of disk space.
-> > ```
-> >
-> > For thinly provisioned storage constructs (dm-thin, filesystems on sparse
-> > files), the term 'disk space' is overloaded and can either mean the apparent
-> > disk space in the filesystem/thin logical volume or the true disk
-> > space that will be utilized on the underlying non-sparse allocation layer.
-> >
-> > The use of a separate mode allows us to cleanly disambiguate whether fallocate()
-> > causes allocation only at the current layer (default mode) or whether it propagates
-> > allocations to underlying layers (provision mode)
->
-> Why is it important to make this distinction?  The outcome of fallocate
-> is supposed to be that subsequent writes do not fail with ENOSPC.  In my
-> (fs developer) mind, REQ_OP_PROVISION simply an extra step to be taken
-> after allocating file blocks.
->
-Some use cases still benefit from keeping the default mode - eg.
-virtual machines running on massive storage pools that don't expect to
-hit the storage limit anytime soon (like most cloud storage
-providers). Essentially, if the 'no ENOSPC' guarantee is maintained
-via other means, then REQ_OP_PROVISION adds latency that isn't needed
-(and cloud storage providers don't need to set aside that extra space
-that may or may not be used).
+In commit where was pktcdvd dropped is written:
+https://git.kernel.org/torvalds/c/f40eb99897af665f11858dd7b56edcb62c3f3c67
 
-> If you *don't* add this API flag and simply bake the REQ_OP_PROVISION
-> call into mode 0 fallocate, then the new functionality can be added (or
-> even backported) to existing kernels and customers can use it
-> immediately.  If you *do*, then you get to wait a few years for
-> developers to add it to their codebases only after enough enterprise
-> distros pick up a new kernel to make it worth their while.
->
-> > for thinly provisioned filesystems/
-> > block devices. For devices that do not support REQ_OP_PROVISION, both these
-> > allocation modes will be equivalent. Given the performance cost of sending provision
-> > requests to the underlying layers, keeping the default mode as-is allows users to
-> > preserve existing behavior.
->
-> How expensive is this expected to be?  Is this why you wanted a separate
-> mode flag?
->
-Yes, the exact latency will depend on the stacked block devices and
-the fragmentation at the allocation layers.
+  * At the lowest level, there is the standard driver for the CD/DVD device,
+  * such as drivers/scsi/sr.c. This driver can handle read and write requests,
+  * but it doesn't know anything about the special restrictions that apply to
+  * packet writing. One restriction is that write requests must be aligned to
+  * packet boundaries on the physical media, and the size of a write request
+  * must be equal to the packet size. Another restriction is that a
+  * GPCMD_FLUSH_CACHE command has to be issued to the drive before a read
+  * command, if the previous command was a write.
+  *
+  * The purpose of the packet writing driver is to hide these restrictions from
+  * higher layers, such as file systems, and present a block device that can be
+  * randomly read and written using 2kB-sized blocks.
 
-I did a quick test for benchmarking fallocate() with an:
-A) ext4 filesystem mounted with 'noprovision'
-B) ext4 filesystem mounted with 'provision' on a dm-thin device.
-C) ext4 filesystem mounted with 'provision' on a loop device with a
-sparse backing file on the filesystem in (B).
+Were all these write restrictions implemented in sr.c driver? Do you
+remember other details?
 
-I tested file sizes from 512M to 8G, time taken for fallocate() in (A)
-remains expectedly flat at ~0.01-0.02s, but for (B), it scales from
-0.03-0.4s and for (C) it scales from 0.04s-0.52s (I captured the exact
-time distribution in the cover letter
-https://marc.info/?l=linux-ext4&m=167230113520636&w=2)
-
-+0.5s for a 8G fallocate doesn't sound a lot but I think fragmentation
-and how the block device is layered can make this worse...
-
-> --D
->
-> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > ---
-> >  block/fops.c                | 15 +++++++++++----
-> >  include/linux/falloc.h      |  3 ++-
-> >  include/uapi/linux/falloc.h |  8 ++++++++
-> >  3 files changed, 21 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/block/fops.c b/block/fops.c
-> > index 50d245e8c913..01bde561e1e2 100644
-> > --- a/block/fops.c
-> > +++ b/block/fops.c
-> > @@ -598,7 +598,8 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
-> >
-> >  #define      BLKDEV_FALLOC_FL_SUPPORTED                                      \
-> >               (FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |           \
-> > -              FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE)
-> > +              FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE |       \
-> > +              FALLOC_FL_PROVISION)
-> >
-> >  static long blkdev_fallocate(struct file *file, int mode, loff_t start,
-> >                            loff_t len)
-> > @@ -634,9 +635,11 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
-> >       filemap_invalidate_lock(inode->i_mapping);
-> >
-> >       /* Invalidate the page cache, including dirty pages. */
-> > -     error = truncate_bdev_range(bdev, file->f_mode, start, end);
-> > -     if (error)
-> > -             goto fail;
-> > +     if (mode != FALLOC_FL_PROVISION) {
-> > +             error = truncate_bdev_range(bdev, file->f_mode, start, end);
-> > +             if (error)
-> > +                     goto fail;
-> > +     }
-> >
-> >       switch (mode) {
-> >       case FALLOC_FL_ZERO_RANGE:
-> > @@ -654,6 +657,10 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
-> >               error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
-> >                                            len >> SECTOR_SHIFT, GFP_KERNEL);
-> >               break;
-> > +     case FALLOC_FL_PROVISION:
-> > +             error = blkdev_issue_provision(bdev, start >> SECTOR_SHIFT,
-> > +                                            len >> SECTOR_SHIFT, GFP_KERNEL);
-> > +             break;
-> >       default:
-> >               error = -EOPNOTSUPP;
-> >       }
-> > diff --git a/include/linux/falloc.h b/include/linux/falloc.h
-> > index f3f0b97b1675..b9a40a61a59b 100644
-> > --- a/include/linux/falloc.h
-> > +++ b/include/linux/falloc.h
-> > @@ -30,7 +30,8 @@ struct space_resv {
-> >                                        FALLOC_FL_COLLAPSE_RANGE |     \
-> >                                        FALLOC_FL_ZERO_RANGE |         \
-> >                                        FALLOC_FL_INSERT_RANGE |       \
-> > -                                      FALLOC_FL_UNSHARE_RANGE)
-> > +                                      FALLOC_FL_UNSHARE_RANGE |      \
-> > +                                      FALLOC_FL_PROVISION)
-> >
-> >  /* on ia32 l_start is on a 32-bit boundary */
-> >  #if defined(CONFIG_X86_64)
-> > diff --git a/include/uapi/linux/falloc.h b/include/uapi/linux/falloc.h
-> > index 51398fa57f6c..2d323d113eed 100644
-> > --- a/include/uapi/linux/falloc.h
-> > +++ b/include/uapi/linux/falloc.h
-> > @@ -77,4 +77,12 @@
-> >   */
-> >  #define FALLOC_FL_UNSHARE_RANGE              0x40
-> >
-> > +/*
-> > + * FALLOC_FL_PROVISION acts as a hint for thinly provisioned devices to allocate
-> > + * blocks for the range/EOF.
-> > + *
-> > + * FALLOC_FL_PROVISION can only be used with allocate-mode fallocate.
-> > + */
-> > +#define FALLOC_FL_PROVISION          0x80
-> > +
-> >  #endif /* _UAPI_FALLOC_H_ */
-> > --
-> > 2.37.3
-> >
+Because CD-RW support into kernel was really introduced in 2004 in
+this historical commit, but it was not for SCSI sr.c driver:
+https://git.kernel.org/history/history/c/2f8e2dc86c9876edca632e8ef2ab1f68d1b753f0
