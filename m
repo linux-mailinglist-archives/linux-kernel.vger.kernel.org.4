@@ -2,195 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3604D65CAF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E3465CAF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238831AbjADAeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:34:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
+        id S234107AbjADAfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 19:35:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238780AbjADAdn (ORCPT
+        with ESMTP id S238359AbjADAfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:33:43 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BF51571E
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:33:42 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-47fc4e98550so316413447b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 16:33:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RAmO1UdSFn79XxfUi2PrOxrwFrgSjQETxdZ4jD1AARY=;
-        b=GVIvHJfTfucLsRZYTU209kE4hGkfEV6r79iz887meP5PTiCLshXyLbDhFhxVqmLfI1
-         F1OaYqiIsT0onF06rMMnAh/qQ2IunPr78VIwZRbMBxe5AxOvJR78IHrLVzI/ttWz/kfi
-         TQg9A7JUjNOcxNDtbeFTLGsIAe2MRtUlvOTDAn3v37JfbNtULdkQA/gtpeW19+XsDPJh
-         lbtJnPH5PBqxBbOZH8gWLVSIjun+Qts7mz3oY0hD3lRYgKWuUpXgSJuOX1kZ9bYMHVpc
-         pwgoEXlXODljGWsSgTtKEwxWrKrpw6cZXDBKKQS/LafbekTROAguvthrq2dZQi6aA7bm
-         adVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RAmO1UdSFn79XxfUi2PrOxrwFrgSjQETxdZ4jD1AARY=;
-        b=LK9GwVInXYpcSKmT1Ez37vbHq6sgpEwL2BWrzApWQV7Fh4vgbIGkinJNqpEXUJQV47
-         BNunn1WUjWHLQd/slSf6kW+Id9IZ/h8XXbWyjymhbyAhNEVRs5Jpd8pxigeYofb/CHVU
-         EHjgei5pSQaxyvftn7+OXO1OT4xksxTmWNhtZLEMDVYcohSUXwrBi7NbM/P98IKoIg4u
-         DPg6qHxmGNHtGk4Xe/KNNNnZvGb8+3TC8EQ9s8Qa7PXmz+i6DdGnxZ5JuCTqXQi5+dmH
-         wIaJXVQRlyPAf5CzJjS6OR4loC2GgdljsTLBxb5ofVDDm1hJXsDj3mhfpla1N1v2+Ofe
-         mPsw==
-X-Gm-Message-State: AFqh2kr2kidNYhKgsAeqwFyWWr0QzKiz4VDqBRHQ1RiUp2yzCZVCJrUf
-        3WuFdwL+QZUHjU3CSFZGf2MEgz934I2UnD4dDKRlfg==
-X-Google-Smtp-Source: AMrXdXuq3dRPbt6uZvU/J8x4yw8CkVF6jRaNqOJBh+qd1/z5FeUWno7h/EAjFkiB9/ImIaY0wnrrOYaIasgxIxM3HJE=
-X-Received: by 2002:a81:99cf:0:b0:391:c415:f872 with SMTP id
- q198-20020a8199cf000000b00391c415f872mr4948869ywg.318.1672792421534; Tue, 03
- Jan 2023 16:33:41 -0800 (PST)
+        Tue, 3 Jan 2023 19:35:44 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964D2167C5
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:35:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672792543; x=1704328543;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=AQQCUoBmBnV6RpnznP0zSFHaXETOQbD7b9hAWbdNjfc=;
+  b=Z1tb1w4SFRT6DM6ykjQrV66HayPH5rCmSRmSTPg392Qp1ADRbI1q8bBn
+   9d4DWHf7ygjN+KuL5glZ1BJcE9ezs5D2q7XRb2j4tR8S4FNtYxsXHgOI9
+   eGnhdHZg4wjVNzjgF/xOKRgvhd8Wgp2n2jBWU/DZy4FHj692WDrjeOB8L
+   iKn/oTroKKTvwe861guiYoZyOvGkL+FVgFQlhqOuvJ9WAM63p2epJykIe
+   8uap7AklG3A2SbAOa4YEeJeuo9QzRqrupFFGcGI4o+CX+MmF7mCd7B9Vy
+   OLibJQco3/c3fZxMOOUM7CbWp4dM89nDDNVm2dEFUZJWZ2dDqkdxP1xXv
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="302168916"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="302168916"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 16:35:43 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="743668051"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="743668051"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 16:35:40 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Matthew Wilcox" <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        "Alistair Popple" <apopple@nvidia.com>,
+        haoxin <xhao@linux.alibaba.com>
+Subject: Re: [PATCH 5/8] migrate_pages: batch _unmap and _move
+References: <20221227002859.27740-1-ying.huang@intel.com>
+        <20221227002859.27740-6-ying.huang@intel.com>
+        <05A09BF6-A30C-45A5-952D-0CCFC43FE2D7@nvidia.com>
+Date:   Wed, 04 Jan 2023 08:34:46 +0800
+In-Reply-To: <05A09BF6-A30C-45A5-952D-0CCFC43FE2D7@nvidia.com> (Zi Yan's
+        message of "Tue, 03 Jan 2023 14:01:37 -0500")
+Message-ID: <87lemjnnmh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20221212183720.4062037-1-vipinsh@google.com>
-In-Reply-To: <20221212183720.4062037-1-vipinsh@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 3 Jan 2023 16:33:05 -0800
-Message-ID: <CAHVum0cT5a+NyXTDv_rrfRUPW+8dvMz-bQXTHLAXXiwi+F+XSw@mail.gmail.com>
-Subject: Re: [Patch v4 00/13] Add Hyper-v extended hypercall support in KVM
-To:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
-        dmatlack@google.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 10:37 AM Vipin Sharma <vipinsh@google.com> wrote:
->
-> Hi,
->
-> There are two patch series combined in this one because I have rebased
-> my patch series (patches 8 to 13) on top of Vitaly's "Hyper-V invariant TSC control
-> feature" (patches 1 to 7).
-> https://lore.kernel.org/kvm/87o7szouyr.fsf@ovpn-194-185.brq.redhat.com/
->
-> Vitaly's series had some small merge conflicts on the KVM queue branch I
-> have fixed them in this series, no code changes.
->
-> My patches (8 to 13) add Hyper-V extended hypercall support and selftests.
->
-> v4:
-> - Changed vm_vaddr_t to vm_paddr_t in hyperv_extended_hypercalls.
-> - Changed ASSERT_EXIT_REASON to TEST_ASSERT_KVM_EXIT_REASON
->
-> v3: https://lore.kernel.org/lkml/20221205191430.2455108-1-vipinsh@google.com/
-> - Rebased on top of Vitaly's "Hyper-V invariant TSC control feature"
->   series.
-> - Removed enabling KVM_CAP_HYPERV_ENFORCE_CPUID in
->   hyperv_extended_hypercalls test.
->
->
-> v2: https://lore.kernel.org/lkml/20221121234026.3037083-1-vipinsh@google.com/
-> - Intorduced ASSERT_EXIT_REASON macro and replaced all occurences of
->   TEST_ASSERT for vcpu exit reason.
-> - Skip hyperv_extended_hypercalls test if extended hypercalls are not
->   supported by the kernel.
-> - Rebased with latest KVM queue.
-> - Addressed all of the comments in patch 6 of v1.
->
-> v1: https://lore.kernel.org/lkml/20221105045704.2315186-1-vipinsh@google.com/
->
-> RFC: https://lore.kernel.org/lkml/20221021185916.1494314-1-vipinsh@google.com/
->
-> Vipin Sharma (6):
->   KVM: x86: hyper-v: Use common code for hypercall userspace exit
->   KVM: x86: hyper-v: Add extended hypercall support in Hyper-v
->   KVM: selftests: Test Hyper-V extended hypercall enablement
->   KVM: selftests: Replace hardcoded Linux OS id with HYPERV_LINUX_OS_ID
->   KVM: selftests: Make vCPU exit reason test assertion common.
->   KVM: selftests: Test Hyper-V extended hypercall exit to userspace
->
-> Vitaly Kuznetsov (7):
->   x86/hyperv: Add HV_EXPOSE_INVARIANT_TSC define
->   KVM: x86: Add a KVM-only leaf for CPUID_8000_0007_EDX
->   KVM: x86: Hyper-V invariant TSC control
->   KVM: selftests: Rename 'msr->available' to 'msr->fault_exepected' in
->     hyperv_features test
->   KVM: selftests: Convert hyperv_features test to using
->     KVM_X86_CPU_FEATURE()
->   KVM: selftests: Test that values written to Hyper-V MSRs are preserved
->   KVM: selftests: Test Hyper-V invariant TSC control
->
->  arch/x86/include/asm/hyperv-tlfs.h            |   3 +
->  arch/x86/include/asm/kvm_host.h               |   1 +
->  arch/x86/kernel/cpu/mshyperv.c                |   2 +-
->  arch/x86/kvm/cpuid.c                          |  11 +-
->  arch/x86/kvm/hyperv.c                         |  74 +++-
->  arch/x86/kvm/hyperv.h                         |  27 ++
->  arch/x86/kvm/reverse_cpuid.h                  |   7 +
->  arch/x86/kvm/x86.c                            |   4 +-
->  tools/testing/selftests/kvm/.gitignore        |   1 +
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../testing/selftests/kvm/aarch64/psci_test.c |   4 +-
->  .../testing/selftests/kvm/include/test_util.h |  10 +
->  .../selftests/kvm/include/x86_64/hyperv.h     | 149 +++++---
->  .../selftests/kvm/include/x86_64/processor.h  |   1 +
->  .../kvm/lib/s390x/diag318_test_handler.c      |   3 +-
->  .../selftests/kvm/s390x/sync_regs_test.c      |  15 +-
->  .../selftests/kvm/set_memory_region_test.c    |   6 +-
->  tools/testing/selftests/kvm/x86_64/amx_test.c |   8 +-
->  .../kvm/x86_64/cr4_cpuid_sync_test.c          |   8 +-
->  .../testing/selftests/kvm/x86_64/debug_regs.c |   2 +-
->  .../selftests/kvm/x86_64/flds_emulation.h     |   5 +-
->  .../selftests/kvm/x86_64/hyperv_clock.c       |   9 +-
->  .../selftests/kvm/x86_64/hyperv_evmcs.c       |   8 +-
->  .../kvm/x86_64/hyperv_extended_hypercalls.c   |  93 +++++
->  .../selftests/kvm/x86_64/hyperv_features.c    | 353 +++++++++++-------
->  .../testing/selftests/kvm/x86_64/hyperv_ipi.c |   6 +-
->  .../selftests/kvm/x86_64/hyperv_svm_test.c    |   7 +-
->  .../selftests/kvm/x86_64/hyperv_tlb_flush.c   |  14 +-
->  .../selftests/kvm/x86_64/kvm_clock_test.c     |   5 +-
->  .../selftests/kvm/x86_64/kvm_pv_test.c        |   5 +-
->  .../selftests/kvm/x86_64/monitor_mwait_test.c |   9 +-
->  .../kvm/x86_64/nested_exceptions_test.c       |   5 +-
->  .../selftests/kvm/x86_64/platform_info_test.c |  14 +-
->  .../kvm/x86_64/pmu_event_filter_test.c        |   6 +-
->  tools/testing/selftests/kvm/x86_64/smm_test.c |   9 +-
->  .../testing/selftests/kvm/x86_64/state_test.c |   8 +-
->  .../selftests/kvm/x86_64/svm_int_ctl_test.c   |   8 +-
->  .../kvm/x86_64/svm_nested_shutdown_test.c     |   7 +-
->  .../kvm/x86_64/svm_nested_soft_inject_test.c  |   6 +-
->  .../selftests/kvm/x86_64/svm_vmcall_test.c    |   6 +-
->  .../selftests/kvm/x86_64/sync_regs_test.c     |  25 +-
->  .../kvm/x86_64/triple_fault_event_test.c      |   9 +-
->  .../selftests/kvm/x86_64/tsc_scaling_sync.c   |   6 +-
->  .../kvm/x86_64/ucna_injection_test.c          |  22 +-
->  .../selftests/kvm/x86_64/userspace_io_test.c  |   6 +-
->  .../kvm/x86_64/userspace_msr_exit_test.c      |  22 +-
->  .../kvm/x86_64/vmx_apic_access_test.c         |  11 +-
->  .../kvm/x86_64/vmx_close_while_nested_test.c  |   5 +-
->  .../selftests/kvm/x86_64/vmx_dirty_log_test.c |   7 +-
->  .../vmx_exception_with_invalid_guest_state.c  |   4 +-
->  .../x86_64/vmx_invalid_nested_guest_state.c   |   4 +-
->  .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |   6 +-
->  .../kvm/x86_64/vmx_preemption_timer_test.c    |   8 +-
->  .../kvm/x86_64/vmx_tsc_adjust_test.c          |   6 +-
->  .../selftests/kvm/x86_64/xapic_ipi_test.c     |   6 +-
->  .../selftests/kvm/x86_64/xen_shinfo_test.c    |   7 +-
->  .../selftests/kvm/x86_64/xen_vmcall_test.c    |   5 +-
->  57 files changed, 586 insertions(+), 493 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c
->
-> --
-> 2.39.0.rc1.256.g54fd8350bd-goog
->
+Zi Yan <ziy@nvidia.com> writes:
 
-Hi Paolo, Sean
+> On 26 Dec 2022, at 19:28, Huang Ying wrote:
+>
+>> In this patch the _unmap and _move stage of the folio migration is
+>> batched.  That for, previously, it is,
+>>
+>>   for each folio
+>>     _unmap()
+>>     _move()
+>>
+>> Now, it is,
+>>
+>>   for each folio
+>>     _unmap()
+>>   for each folio
+>>     _move()
+>
+> Also worth adding some notes here, we need extra code to undo the _unmap()
+> if _move() fails. Andrew has asked for comments on *_undo_src/dst(),
+> but I think it would be better to provide a high level new workflow,
+> in the form of pseudo code, in git log and the comment for migrate_pages().
+> The extra cleanup code for a failed _move() with a previously successful
+> _unmap() might not be obvious to everyone.
 
-Is this one on your todo for 6.3?
+Here, I removed the detailed error processing to make it easier to
+understand the basic flow changing.  So, I would rather to keep the
+pseudo code here as simple as possible and keep the detailed flow in the
+diff below.
 
-Thanks
-Vipin
+Best Regards,
+Huang, Ying
+
+>>
+>> Based on this, we can batch the TLB flushing and use some hardware
+>> accelerator to copy folios between batched _unmap and batched _move
+>> stages.
+>>
+
+[snip]
