@@ -2,97 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5928C65DC08
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 19:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F83D65DC09
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 19:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239760AbjADSVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 13:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
+        id S235371AbjADSXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 13:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239561AbjADSVT (ORCPT
+        with ESMTP id S231406AbjADSXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 13:21:19 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023C21BEA5
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 10:21:17 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 319C91EC068E;
-        Wed,  4 Jan 2023 19:21:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672856476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=pOFSXrweTQp5roB0wksByK8Ln4O+0v0oLGFxanlhYoc=;
-        b=aLkKz3qIE7BkCGzuPTk5XL88mbW2F/HcGh9agXXfgQ9Gvh5O9cTbN+f+hoejMD7miXFoCd
-        anODhqdCfUlxbzIQ+KBU0YBh+nrCao90ZDPIn5ndnrIkNjs05t2MyN/4VFDhixh5irK3Sn
-        Iwk8verMyfBcXYS/9G4BAyfH1OzeVdg=
-Date:   Wed, 4 Jan 2023 19:21:11 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, X86-kernel <x86@kernel.org>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v3 1/6] x86/microcode: Add a parameter to
- microcode_check() to store CPU capabilities
-Message-ID: <Y7XDlyHY2kFeMUMI@zn.tnic>
-References: <20230103180212.333496-1-ashok.raj@intel.com>
- <20230103180212.333496-2-ashok.raj@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230103180212.333496-2-ashok.raj@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 13:23:17 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDBC19009
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 10:23:16 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id x28-20020a056a000bdc00b005826732edb6so4488417pfu.22
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 10:23:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/6gSWZH/V4L9BXpFay4ZvL5sJpJpduz8JVO3laT9niY=;
+        b=HVNO+DZbPX858fjsSZfcBnQtKwvK+sazRDKA3G8FPcsF/NcHqJmGDgsjqzoAkbfXCT
+         BMsjZAWKxMAZiXB8r4f3xoWNCnMDaDo7mimAG+Mua3zBEk6NZecZ/S9ONhaGP1ltwUTG
+         hpi+VrHfMzfHjd8PKvbVZJJBwgLnmWHyXVbbqWj50LoF1aPDB3yuhjhtGZ2trdbmHn30
+         qvcGQFl98YyxU0gaDQ3YlZNSFg9UpJeGNgBZkFUq0Ki37LMJBLNmL2hG01zVa7mUzucX
+         jn6f9dOUZ8EpZRn9V6hOv1ylol0BR4uoI3IK2xGQiIuYS6BAmbAfqleGdsJibYUGzI0C
+         a0hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/6gSWZH/V4L9BXpFay4ZvL5sJpJpduz8JVO3laT9niY=;
+        b=yFvSUMKTsokkpgSjLwCM1sPuhLvHUwNaYY7cKfexsAhbSXx1P1x2fdvXi8df6mp/BK
+         +1/8wHp8JJiXUJuV88t2fe21834zPTL8zP5/9LbjalaluxNZBLuZpvDpdEQsNLhSS5UB
+         MJYi4JP5waeT90HezLfDgnAfvfWBc4Ylhbk5AQYQ4GS8QnOawWt7Ep9/e1f+ABfvJk0u
+         fqVToMDZIFRnIU3Hby0+kwtpNVfRoK6Ia80cHfRD6HkqCwRFnIi3Ow76Z8IKRICoTe61
+         0OO91k6Z3iuJ/IySGKPIISG6T4kidSMXrXdWcY3vEQ4mdwzmso64Yf/WCSg1QJBkZOjv
+         P9ag==
+X-Gm-Message-State: AFqh2kp4lA5kQZkq7rxZ6aCzkULUtzsezNL598O2Ca+PV0+8TDvEpqPe
+        pHtOejMq7owzfFFZuKdWGnqXnI72xoiT1Mw=
+X-Google-Smtp-Source: AMrXdXuvros/MWUdVxz/GhSEPlyh4EujXXdYhnVNNFaI8S/EulfAVHXaNA+UWO7MqB3yl07M5DDVMfcYy7Dg/Nk=
+X-Received: from jesussanp.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5f10])
+ (user=jesussanp job=sendgmr) by 2002:a05:6a00:d4e:b0:581:a3e3:13fc with SMTP
+ id n14-20020a056a000d4e00b00581a3e313fcmr1603877pfv.42.1672856595837; Wed, 04
+ Jan 2023 10:23:15 -0800 (PST)
+Date:   Wed,  4 Jan 2023 10:23:13 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230104182313.3164736-1-jesussanp@google.com>
+Subject: [PATCH] perf: Add missing sys/types.h include
+From:   Jesus Sanchez-Palencia <jesussanp@google.com>
+To:     linux-perf-users@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        Jesus Sanchez-Palencia <jesussanp@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 10:02:07AM -0800, Ashok Raj wrote:
-> This is a preparation before the next patch uses this to compare CPU
+Not all libc implementations define ssize_t as part of stdio.h like
+glibc does since the standard only requires this type to be defined by
+unistd.h and sys/types.h. For this reason the perf build is currently
+broken for toolchains based on uClibc, for instance.
 
-Once a patch is in git, the concept of "subsequent" or "next" patch becomes
-ambiguous depending on how you're sorting them.
+Include sys/types.h explicitly to fix that. This is a follow up to
+commit 378ef0f5d9d7 ("perf build: Use libtraceevent from the system").
 
-So you should strive for your commit messages to make sense on their own,
-without referencing other "subsequent" or "next" patches.
+Signed-off-by: Jesus Sanchez-Palencia <jesussanp@google.com>
+---
+ tools/perf/util/trace-event.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-> capabilities after performing an update.
-> 
-> Add a parameter to store CPU capabilities before performing a microcode
-> update.
-
-	" ... so that code later can do X."
-
-And that is enough for an explanation.
-
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 9cfca3d7d0e2..b9c7529c920e 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -2302,25 +2302,23 @@ void cpu_init_secondary(void)
->   * only when microcode has been updated. Caller holds microcode_mutex and CPU
->   * hotplug lock.
-
-<--- I guess you can document that new parameter here.
-
->   */
-> -void microcode_check(void)
-> +void microcode_check(struct cpuinfo_x86 *info)
-
-...
-
+diff --git a/tools/perf/util/trace-event.h b/tools/perf/util/trace-event.h
+index add6c5d9531c..9b3cd79cca12 100644
+--- a/tools/perf/util/trace-event.h
++++ b/tools/perf/util/trace-event.h
+@@ -4,6 +4,7 @@
+ 
+ #include <stdbool.h>
+ #include <stdio.h>
++#include <sys/types.h>
+ #include <linux/types.h>
+ 
+ struct evlist;
 -- 
-Regards/Gruss,
-    Boris.
+2.39.0.314.g84b9a713c41-goog
 
-https://people.kernel.org/tglx/notes-about-netiquette
