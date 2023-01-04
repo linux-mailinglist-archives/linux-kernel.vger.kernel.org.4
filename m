@@ -2,100 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4BB65E0A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B0765E09E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbjADW4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
+        id S231463AbjADW47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234655AbjADW4J (ORCPT
+        with ESMTP id S234898AbjADW4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:56:09 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629AF1C40D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:55:56 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id e22-20020a4a5516000000b004a3d3028bafso6743604oob.3
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:55:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rSa3y2kVtXyGfcBV6KdEhTjbXDEsZrA1QZe8gseBjok=;
-        b=pdyU5nNwLPBCT14Il41JLXWCOGGjzhZ4+/GNaRyCvoxhZxkZmU4IXOpTTppmn/l7+m
-         H6wQXscp6yQEha0x4Im1vXl/LkEmw3hm1SugtqM17JUzmrfKImfohf5zBk5FUs58OB3q
-         exz/fJi8zcAHdS4uiEK9t4dx3lQsHNPSchD5KnhuGwT/o7CCDMvrU/hMcYVzbTaS35nE
-         9+dQRxUAXzGlXEbQGM+omi47Y/9m9f5Y7us2U2xh00UMTdwQQVPAn41osB1UB2HeDRA1
-         6+aDcvEkCLucxEV9EDI93yOaPLK6QEHwPvxkajgsNNX+W3EhSHKPA72kjjhwDQZooPhY
-         j1+g==
+        Wed, 4 Jan 2023 17:56:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC401EAF2
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:55:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672872924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZyTLJHuaFPBCABjbLPe2M3+m2RCTfeHYSklpqyimWbc=;
+        b=g+jLU58ZKlaNmWTpIwI+LKjjHtKpgtbEULTXrfJMOW8N/3Qrn6Y7luLxe3uki7MVcaJAee
+        OMfGZAidoRVe3QJtHjUEKJH/plY1j8dqpJEJ0w3AZ7cWxNeH+EkqnghvuQ4jSXyfhzz0Vb
+        sBC4Suxf1GCKMt73epp7Fua2evhTxXs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-154-XGjd8dJKO_6VXIz947yA4A-1; Wed, 04 Jan 2023 17:52:11 -0500
+X-MC-Unique: XGjd8dJKO_6VXIz947yA4A-1
+Received: by mail-qk1-f199.google.com with SMTP id v7-20020a05620a0f0700b006faffce43b2so23816151qkl.9
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:52:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rSa3y2kVtXyGfcBV6KdEhTjbXDEsZrA1QZe8gseBjok=;
-        b=dsC044SPZKwnN1GaY/H2/pTcd6w6UgU/kU2wywZ3ee6KV+UlEDyczHQbnG0901kpQJ
-         K238hkoPOIhIU9jNNc4dYQSsW+h/K6YS9URgmWoSvm0Ou1+cq/YcgB9BOnH/3hUOOB9S
-         cyQkke7WVSSHqrsu4iD8ACESvQH2SH455kH+Xw2kgVDMUoE318FU5I6XHXNxoJxpbumZ
-         c8kXDa9cQn+v7o176mOtWjVrNLcK4Rs8GgcELL0p/bzd0lV3h1ZNQzwAigJO0aAe8x25
-         JN+dvO15qY1NycGqyLk8p074vmbYmo1UnFOs9flETLEQid5VCdHsovFM2zlUqq1JYKrE
-         tMeQ==
-X-Gm-Message-State: AFqh2krJbt6jt+ujDBOrc65MiNdHFV1g0qHQk90UQQYLVf9f9fpqyfkZ
-        hKsaLt/2vdvbguqNFU+DFLvU0RozCvzfNCPz
-X-Google-Smtp-Source: AMrXdXunaxUnZdko3CQ/sTo/WkLccuHLO8jxYV96IN/3Yhs/EMlXwL0hEXVd2h6ymN2kv2e8H7xYPw==
-X-Received: by 2002:a05:6a21:339b:b0:b0:29db:fb73 with SMTP id yy27-20020a056a21339b00b000b029dbfb73mr68503088pzb.12.1672872453217;
-        Wed, 04 Jan 2023 14:47:33 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:1328:ca09:d4c2:fcbc])
-        by smtp.gmail.com with ESMTPSA id e11-20020aa798cb000000b005825460056asm7433625pfm.70.2023.01.04.14.47.32
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZyTLJHuaFPBCABjbLPe2M3+m2RCTfeHYSklpqyimWbc=;
+        b=QYwnO1W71CfJrDwsE/FVHEu/lRVU2pfqbrXZLhCJ98h6OtfycC8c2YEa0bUq/JFSLf
+         f6z9rVDHjBh+E4+rCSw49PY8ABQQXMZEUBZVEHZl4AHvPGXpIAJv5DWzaZjwLZAXraSD
+         972rlxT0WDtX8ezKl2fsR8zq07EdR3agqo8Hp7nDPE+RcPg/TUkUY15NC4Ce1OEOnfMO
+         j+mefNNiXw2g7NtoWuZfpOHG+GPkv2rpd4yjLnMq26LT2RiEFNLdg2UnOTAWzIvsXeqH
+         yaqSAGjD+h3psbOLBxQ39Yj/B+Loyl5f7wDEFn218b5dKCgN4yzXr30qHIgrHhtOCH/7
+         o2ug==
+X-Gm-Message-State: AFqh2kqe7Q+OzKyEcfM+rwOwB6i2pOqykqwaTbyW+c+oiZqIUsacz8fV
+        6XKy8sjpYrJ5PyaGyK8OiGIWY6WZTAV4l0vI4v50gAgkLunHguH6rSV8GlsXiepWx1SWxEImRv7
+        PBmgsb73zCDDvhHsqEnHPFQ9C
+X-Received: by 2002:ad4:4507:0:b0:532:de3:9b7d with SMTP id k7-20020ad44507000000b005320de39b7dmr2272124qvu.9.1672872730487;
+        Wed, 04 Jan 2023 14:52:10 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXttMw1zpmySJ1jlN/fXgDbyJj/7czFDfLKTRd1p2aZYSUC76jFCepdyVyNTX6QT2vSi43W2DA==
+X-Received: by 2002:ad4:4507:0:b0:532:de3:9b7d with SMTP id k7-20020ad44507000000b005320de39b7dmr2272101qvu.9.1672872730163;
+        Wed, 04 Jan 2023 14:52:10 -0800 (PST)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
+        by smtp.gmail.com with ESMTPSA id r1-20020a05620a298100b006eeb3165565sm24654710qkp.80.2023.01.04.14.52.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 14:47:32 -0800 (PST)
-Date:   Wed, 4 Jan 2023 15:47:30 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     andersson@kernel.org, matthias.bgg@gmail.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wenst@chromium.org
-Subject: Re: [PATCH 0/2] MediaTek SCP IPI cleanups
-Message-ID: <20230104224730.GC2112402@p14s>
-References: <20230104115341.320951-1-angelogioacchino.delregno@collabora.com>
+        Wed, 04 Jan 2023 14:52:09 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>, peterx@redhat.com,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 0/3] mm/uffd: Fix missing markers on hugetlb
+Date:   Wed,  4 Jan 2023 17:52:04 -0500
+Message-Id: <20230104225207.1066932-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104115341.320951-1-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 12:53:39PM +0100, AngeloGioacchino Del Regno wrote:
-> Cleanups bringing no functional changes.
-> Tested on MT8173 Elm, MT8192 Asurada, MT8195 Tomato.
-> 
-> This series applies only on top of [1].
-> 
-> [1]: https://lore.kernel.org/lkml/20230104083110.736377-1-wenst@chromium.org/
-> 
-> AngeloGioacchino Del Regno (2):
->   remoteproc/mtk_scp: Use readl_poll_timeout_atomic() for polling
->   remoteproc/mtk_scp: Remove timeout variable from scp_ipi_send()
->
+When James was developing the vma split fix for hugetlb pmd sharing, he
+found that hugetlb uffd-wp is broken with the test case he developed [1]:
 
-I have applied both patches.
+https://lore.kernel.org/r/CADrL8HWSym93=yNpTUdWebOEzUOTR2ffbfUk04XdK6O+PNJNoA@mail.gmail.com
 
-Thanks,
-Mathieu
+Missing hugetlb pgtable pages caused uffd-wp to lose message when vma split
+happens to be across a shared huge pmd range in the test.
 
->  drivers/remoteproc/mtk_scp_ipi.c | 23 ++++++++++++-----------
->  1 file changed, 12 insertions(+), 11 deletions(-)
-> 
-> -- 
-> 2.39.0
-> 
+The issue is pgtable pre-allocation on hugetlb path was overlooked.  That
+was fixed in patch 1.
+
+Meanwhile there's another issue on proper reporting of pgtable allocation
+failures during UFFDIO_WRITEPROTECT.  When pgtable allocation failed during
+the ioctl(UFFDIO_WRITEPROTECT), we will silent the error so the user cannot
+detect it (even if extremely rare).  This issue can happen not only on
+hugetlb but also shmem.  Anon is not affected because anon doesn't require
+pgtable allocation during wr-protection.  Patch 2 prepares for such a
+change, then patch 3 allows the error to be reported to the users.
+
+This set only marks patch 1 to copy stable, because it's a real bug to be
+fixed for all kernels 5.19+.
+
+Patch 2-3 will be an enhancement to process pgtable allocation errors, it
+should hardly be hit even during heavy workloads in the past of my tests,
+but it should make the interface clearer.  Not copying stable for patch 2-3
+due to that.  I'll prepare a man page update after patch 2-3 lands.
+
+Tested with:
+
+  - James's reproducer above [1] so it'll start to pass with the vma split
+    fix:
+    https://lore.kernel.org/r/20230101230042.244286-1-jthoughton@google.com
+  - Faked memory pressures to make sure -ENOMEM returned with either shmem
+    and hugetlbfs
+  - Some uffd general routines
+
+Peter Xu (3):
+  mm/hugetlb: Pre-allocate pgtable pages for uffd wr-protects
+  mm/mprotect: Use long for page accountings and retval
+  mm/uffd: Detect pgtable allocation failures
+
+ include/linux/hugetlb.h       |  4 +-
+ include/linux/mm.h            |  2 +-
+ include/linux/userfaultfd_k.h |  2 +-
+ mm/hugetlb.c                  | 21 +++++++--
+ mm/mempolicy.c                |  4 +-
+ mm/mprotect.c                 | 89 ++++++++++++++++++++++-------------
+ mm/userfaultfd.c              | 16 +++++--
+ 7 files changed, 88 insertions(+), 50 deletions(-)
+
+-- 
+2.37.3
+
