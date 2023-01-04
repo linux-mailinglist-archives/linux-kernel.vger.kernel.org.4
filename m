@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F381065DF39
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C276C65DF3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240389AbjADVqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 16:46:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
+        id S240308AbjADVqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 16:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240330AbjADVp7 (ORCPT
+        with ESMTP id S240352AbjADVqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 16:45:59 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5374263C;
-        Wed,  4 Jan 2023 13:44:52 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id k19so16168832pfg.11;
-        Wed, 04 Jan 2023 13:44:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jN9NPhWClQWUyrodOitLH/xXA1FW1Ui0r+TGvgzsk+I=;
-        b=cXrEG+Rp4bpoH5QyJuX+T/ITDUTrmTAEJgtTakf8Fr9Z2UG0eudj3G1B3lDoHATS9X
-         Pm6qsmfthZzQfo5pwH5129XqjfONgWZpmjQsh6hCjB+U3UFtQApzIPA0V4UIicMRHLVf
-         ULndJXZPOxNjsIVje3f6lnnvitNlrJ8pNe+cARywmDSANC5W+7zE1wsgyInuVxBGp+Oi
-         GDTviBGjbYgvqpnJ283V4Bso2KLNrk9rYlt6fgtCBOOOhMfEHDYoT7LyBJxXrtwzdEtt
-         GgtXjLoCt0V+UpuVq8WB7HCl+4VoRTlnuxfUcdagBib6D5T5KVB0CQcjGu4of9j+dW7r
-         2Dow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jN9NPhWClQWUyrodOitLH/xXA1FW1Ui0r+TGvgzsk+I=;
-        b=Jd5j4p4YRFkrmRkLQvDccQiKLvpSBYRNf2BnQgMPl5k6AOfNfnBEC/TVQUhbZVV+tE
-         9AIbtDtsNBtgVraInxvYYNoXbKTsoFcvdqWbmCiQV+ftKicw7kXUSNuu2L1p+3WMTksZ
-         oCNK4vDWBcx5XCZEKXi+I1kZv1pxCjFgqDa60N12gwrAAM8X1lDHwsb2PRz8gTVueQFY
-         r/kibLmi8Bs6m9F1iJLSt6dW/zGZUEViEMo8KBnxeqPBkw3y3Oe1Fv2aW9mrV2nCyNOi
-         xoAfGO0iDsM6J6GXtC0Q/dj6HTBd/JhnxyXvS5qXmwN2Wwp6AbF1SUQ/kCDs53FabEru
-         6uWg==
-X-Gm-Message-State: AFqh2koKLJINQSOW9kSqvtPctMlzCeOeUS+l5SR9BH5+EVzMRgIVCg7k
-        3YZxXsKIa9TSUgllL1wyQcM=
-X-Google-Smtp-Source: AMrXdXuTHCH9flQwoBm7vKxBB2ohaXZZXszddwEh2M95rh9I33uHzbvHViHclGxyaiB1f0bxZfSIHQ==
-X-Received: by 2002:a62:1b42:0:b0:581:eca3:fd05 with SMTP id b63-20020a621b42000000b00581eca3fd05mr20626920pfb.16.1672868691483;
-        Wed, 04 Jan 2023 13:44:51 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id u16-20020a627910000000b00580e526cd33sm20004883pfc.198.2023.01.04.13.44.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 13:44:50 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 4 Jan 2023 11:44:49 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v2 1/2] blk-iocost: add refcounting for iocg
-Message-ID: <Y7XzUee5Bq+DoIC1@slm.duckdns.org>
-References: <20221227125502.541931-1-yukuai1@huaweicloud.com>
- <20221227125502.541931-2-yukuai1@huaweicloud.com>
+        Wed, 4 Jan 2023 16:46:14 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F98F42E1A;
+        Wed,  4 Jan 2023 13:45:13 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NnNS72W08z4xMy;
+        Thu,  5 Jan 2023 08:45:11 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1672868711;
+        bh=Q0NhW7anrrUDZgEP8B0LcI9rjxnS0BhzIw1DzboVlbs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TtpePlgezSSjT2SlgTXeoCvY1aKzL0LVxRgtCQR+XXypAAjmSaiG9GrYljglIdt3a
+         KFwSPkDJ2au8lVfXcJxsDouWiW5QYHeJTAgltldyGrROHiNyZRRA+NbjOGyFNC0w4r
+         U22mQo/wzPZOgz0IA/5fw+wIQ00JGUeZG8q/6bbBZ5X66JJ60KsxPP4mu0imn7kzjG
+         NDe5npqXHCe24LE+/0tXZzmd72KYT+IsnD40Yv0D5OyFP0RD5Io7SHC8uFwT5MTtdr
+         n/5LjOtBHup8mlYE3uPXuTxR8QReq4Cu5DkEECPEGbZ6c0E/vfIYJJUssBh0NRwsH+
+         PE31jFF6g1ABw==
+Date:   Thu, 5 Jan 2023 08:45:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the amdgpu tree
+Message-ID: <20230105084510.3193434a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221227125502.541931-2-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/dLkUZ0Djhrk_gWgmpJfjEO8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 08:55:01PM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> iocost requires that child iocg must exit before parent iocg, otherwise
-> kernel might crash in ioc_timer_fn(). However, currently iocg is exited
-> in pd_free_fn(), which can't guarantee such order:
-> 
-> 1) remove cgroup can concurrent with deactivate policy;
-> 2) blkg_free() triggered by remove cgroup is asynchronously, remove
-> child cgroup can concurrent with remove parent cgroup;
-> 
-> Fix the problem by add refcounting for iocg, and child iocg will grab
-> reference of parent iocg, so that parent iocg will wait for all child
-> iocg to be exited.
+--Sig_/dLkUZ0Djhrk_gWgmpJfjEO8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Wouldn't it be better to do this refcnting in the blk-cgroup core code
-rather than in blk-iocost?
+Hi all,
 
-Thanks.
+The following commits already exist in Linus Torvald's tree as different
+commits (but the same patches):
 
--- 
-tejun
+  cb8dc232cbd2 ("drm/amdkfd: Fix kfd_process_device_init_vm error handling")
+  41d82649ca56 ("drm/amdkfd: Fix double release compute pasid")
+  76a95b833ac7 ("drm/amd/pm: avoid large variable on kernel stack")
+  7f35c54cc2fa ("drm/amd/pm: bump SMU13.0.0 driver_if header to version 0x3=
+4")
+  0b93c5434181 ("drm/amd/pm: correct the fan speed retrieving in PWM for so=
+me SMU13 asics")
+  e3bf7e96d0f6 ("drm/amdgpu: skip mes self test after s0i3 resume for MES I=
+P v11.0")
+  9c705b96d25c ("drm/amdgpu: enable VCN DPG for GC IP v11.0.4")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/dLkUZ0Djhrk_gWgmpJfjEO8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO182YACgkQAVBC80lX
+0GwGBgf8C6KbLgFnbaD+LwrEcFZBcpW9o9vV4kUazcC898opzM3fZ+qxhIGnoBC5
+Q6MAt2UDsbvlMvQPZcgN7Rc4FLsasFvNDpWJsxnltvH6C2COpKB1PmcvCvDBC/Q5
+LAb4A5XUttRQqbigRdkZpNrHk/rNkTyBsL7gf/2Qo8f7FJ/aj3V64rUESQ3K9CQ6
+6bUCovGoEYKerUOGsf4K/2QdDB0yScmhbAdQZaEoyvMC58X/8jBiNns9F1TKKnhw
+90nxJ2dWSZB71Pvt0PnsjagqgjiOB9Oek8Ok/kAXCyNJF26n2gb+O+SVdLlx3iXO
+HJy/w9jZpBXhO/3kjqNuoAz7/4p6Qw==
+=kJFu
+-----END PGP SIGNATURE-----
+
+--Sig_/dLkUZ0Djhrk_gWgmpJfjEO8--
