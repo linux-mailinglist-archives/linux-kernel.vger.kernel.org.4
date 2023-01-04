@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B20F65D3E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932CF65D3E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239397AbjADNL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S233588AbjADNLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:11:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239405AbjADNLC (ORCPT
+        with ESMTP id S239444AbjADNLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:11:02 -0500
+        Wed, 4 Jan 2023 08:11:06 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CD63FA06
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:09:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9846B395C8
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:09:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672837751; x=1704373751;
+  t=1672837754; x=1704373754;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AeIus9biOgp1nN+2vk2ulQschotD0WiAc9w42SrZDaQ=;
-  b=BmCfGWe6roZ9VQjwfD2pWwk7z9xacGfjYtpWeJtch18XmEp0uDRP5EPa
-   J9MF6XBLqoNAF4fjBQMhdVX1xo0+1m4SavlE+KzJYPtUfzJQV8TuXM4Dm
-   4ZxViWrDTp9a2ndPqDq2Q+qU9vKz+h3A8gw5dRBp+tfjsSQt5YeJWoRLQ
-   JPkCR5YXRuu15i8rw156EtdWm5p/Anepu/NFx5UZ0Lne+gXKrkrmt9Syz
-   xgQ8kG+Z15EivIpv7d5Fd/1J5GW6q1KmjYtVswZJSYKaYWCtm3j2PJphG
-   /r5miP8h3rxsKlI+p21LatD+wrY/kD/tYMuw058HYQwBXZTU1RD/zIbtf
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320640291"
+  bh=etvQ4VuCYjgoc+S/bXFKsFRT2trDWdnEQJZuwIpkWNE=;
+  b=OKT1ire+nXckr3/1b5FzlbgR+jtyRi7WInoKH0G6q+fNyux906jxNBln
+   qBieaUiQ7UKWI2KRaja6Yu4vFPjAB7h4nMqHGNYLihixsFv2LkQus+Rvx
+   QOzqLVz//I0MoRx2V3Z73EAmSAyTNMoEDVsQNfiQbIu6OjyJApAeY6DwP
+   2NJLHyNyBIw/AmGwfQK80VsCLFcaR++1ipdUGCbHj2cMySNoNRW9tdZh8
+   tqSH5D0FOWEW/UfhlE7RCzE0d4yoyCS/XbfXWjh7rORaIThLjLzNhXukx
+   gqcIiQRw94JiaUio51YeEkxakIEBfU3iHB5iCvHGLzoijzTA+dOBGuean
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320640320"
 X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="320640291"
+   d="scan'208";a="320640320"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:07:14 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:07:20 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529267"
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529378"
 X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="797529267"
+   d="scan'208";a="797529378"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:07:07 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:07:14 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -65,9 +65,9 @@ Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v4 17/19] iommu/tegra: Add set_platform_dma_ops callback
-Date:   Wed,  4 Jan 2023 20:57:23 +0800
-Message-Id: <20230104125725.271850-18-baolu.lu@linux.intel.com>
+Subject: [PATCH v4 18/19] iommu: Remove deferred attach check from __iommu_detach_device()
+Date:   Wed,  4 Jan 2023 20:57:24 +0800
+Message-Id: <20230104125725.271850-19-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230104125725.271850-1-baolu.lu@linux.intel.com>
 References: <20230104125725.271850-1-baolu.lu@linux.intel.com>
@@ -82,44 +82,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This IOMMU driver doesn't support default domain. Add the implementation
-of set_platform_dma_ops callback so that the IOMMU core could return the
-DMA control. With the set_platform_dma_ops implemented, there's no need
-for detach_dev. Remove it to avoid dead code.
+From: Jason Gunthorpe <jgg@nvidia.com>
 
+At the current moment, __iommu_detach_device() is only called via call
+chains that are after the device driver is attached - eg via explicit
+attach APIs called by the device driver.
+
+Commit bd421264ed30 ("iommu: Fix deferred domain attachment") has removed
+deferred domain attachment check from __iommu_attach_device() path, so it
+should just unconditionally work in the __iommu_detach_device() path.
+
+It actually looks like a bug that we were blocking detach on these paths
+since the attach was unconditional and the caller is going to free the
+(probably) UNAMANGED domain once this returns.
+
+The only place we should be testing for deferred attach is during the
+initial point the dma device is linked to the group, and then again
+during the dma api calls.
+
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/tegra-smmu.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/linux/iommu.h |  2 ++
+ drivers/iommu/iommu.c | 70 ++++++++++++++++++++++---------------------
+ 2 files changed, 38 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-index 5b1af40221ec..4c4ac22d5fb1 100644
---- a/drivers/iommu/tegra-smmu.c
-+++ b/drivers/iommu/tegra-smmu.c
-@@ -511,8 +511,9 @@ static int tegra_smmu_attach_dev(struct iommu_domain *domain,
- 	return err;
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 7b3e3775b069..0d10566b3cb2 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -405,6 +405,7 @@ struct iommu_fault_param {
+  * @iommu_dev:	 IOMMU device this device is linked to
+  * @priv:	 IOMMU Driver private data
+  * @max_pasids:  number of PASIDs this device can consume
++ * @attach_deferred: the dma domain attachment is deferred
+  *
+  * TODO: migrate other per device data pointers under iommu_dev_data, e.g.
+  *	struct iommu_group	*iommu_group;
+@@ -417,6 +418,7 @@ struct dev_iommu {
+ 	struct iommu_device		*iommu_dev;
+ 	void				*priv;
+ 	u32				max_pasids;
++	u32				attach_deferred:1;
+ };
+ 
+ int iommu_device_register(struct iommu_device *iommu,
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 4e35a9f94873..c7bd8663f1f5 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -371,6 +371,30 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
+ 	return ret;
  }
  
--static void tegra_smmu_detach_dev(struct iommu_domain *domain, struct device *dev)
-+static void tegra_smmu_set_platform_dma(struct device *dev)
++static bool iommu_is_attach_deferred(struct device *dev)
++{
++	const struct iommu_ops *ops = dev_iommu_ops(dev);
++
++	if (ops->is_attach_deferred)
++		return ops->is_attach_deferred(dev);
++
++	return false;
++}
++
++static int iommu_group_do_dma_first_attach(struct device *dev, void *data)
++{
++	struct iommu_domain *domain = data;
++
++	lockdep_assert_held(&dev->iommu_group->mutex);
++
++	if (iommu_is_attach_deferred(dev)) {
++		dev->iommu->attach_deferred = 1;
++		return 0;
++	}
++
++	return __iommu_attach_device(domain, dev);
++}
++
+ int iommu_probe_device(struct device *dev)
  {
-+	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
- 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
- 	struct tegra_smmu_as *as = to_smmu_as(domain);
- 	struct tegra_smmu *smmu = as->smmu;
-@@ -965,11 +966,11 @@ static const struct iommu_ops tegra_smmu_ops = {
- 	.domain_alloc = tegra_smmu_domain_alloc,
- 	.probe_device = tegra_smmu_probe_device,
- 	.device_group = tegra_smmu_device_group,
-+	.set_platform_dma_ops = tegra_smmu_set_platform_dma,
- 	.of_xlate = tegra_smmu_of_xlate,
- 	.pgsize_bitmap = SZ_4K,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev	= tegra_smmu_attach_dev,
--		.detach_dev	= tegra_smmu_detach_dev,
- 		.map		= tegra_smmu_map,
- 		.unmap		= tegra_smmu_unmap,
- 		.iova_to_phys	= tegra_smmu_iova_to_phys,
+ 	const struct iommu_ops *ops;
+@@ -401,7 +425,7 @@ int iommu_probe_device(struct device *dev)
+ 	 * attach the default domain.
+ 	 */
+ 	if (group->default_domain && !group->owner) {
+-		ret = __iommu_attach_device(group->default_domain, dev);
++		ret = iommu_group_do_dma_first_attach(dev, group->default_domain);
+ 		if (ret) {
+ 			mutex_unlock(&group->mutex);
+ 			iommu_group_put(group);
+@@ -947,16 +971,6 @@ static int iommu_create_device_direct_mappings(struct iommu_group *group,
+ 	return ret;
+ }
+ 
+-static bool iommu_is_attach_deferred(struct device *dev)
+-{
+-	const struct iommu_ops *ops = dev_iommu_ops(dev);
+-
+-	if (ops->is_attach_deferred)
+-		return ops->is_attach_deferred(dev);
+-
+-	return false;
+-}
+-
+ /**
+  * iommu_group_add_device - add a device to an iommu group
+  * @group: the group into which to add the device (reference should be held)
+@@ -1009,8 +1023,8 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
+ 
+ 	mutex_lock(&group->mutex);
+ 	list_add_tail(&device->list, &group->devices);
+-	if (group->domain  && !iommu_is_attach_deferred(dev))
+-		ret = __iommu_attach_device(group->domain, dev);
++	if (group->domain)
++		ret = iommu_group_do_dma_first_attach(dev, group->domain);
+ 	mutex_unlock(&group->mutex);
+ 	if (ret)
+ 		goto err_put_group;
+@@ -1776,21 +1790,10 @@ static void probe_alloc_default_domain(struct bus_type *bus,
+ 
+ }
+ 
+-static int iommu_group_do_dma_attach(struct device *dev, void *data)
+-{
+-	struct iommu_domain *domain = data;
+-	int ret = 0;
+-
+-	if (!iommu_is_attach_deferred(dev))
+-		ret = __iommu_attach_device(domain, dev);
+-
+-	return ret;
+-}
+-
+-static int __iommu_group_dma_attach(struct iommu_group *group)
++static int __iommu_group_dma_first_attach(struct iommu_group *group)
+ {
+ 	return __iommu_group_for_each_dev(group, group->default_domain,
+-					  iommu_group_do_dma_attach);
++					  iommu_group_do_dma_first_attach);
+ }
+ 
+ static int iommu_group_do_probe_finalize(struct device *dev, void *data)
+@@ -1855,7 +1858,7 @@ int bus_iommu_probe(struct bus_type *bus)
+ 
+ 		iommu_group_create_direct_mappings(group);
+ 
+-		ret = __iommu_group_dma_attach(group);
++		ret = __iommu_group_dma_first_attach(group);
+ 
+ 		mutex_unlock(&group->mutex);
+ 
+@@ -1987,9 +1990,11 @@ static int __iommu_attach_device(struct iommu_domain *domain,
+ 		return -ENODEV;
+ 
+ 	ret = domain->ops->attach_dev(domain, dev);
+-	if (!ret)
+-		trace_attach_device_to_domain(dev);
+-	return ret;
++	if (ret)
++		return ret;
++	dev->iommu->attach_deferred = 0;
++	trace_attach_device_to_domain(dev);
++	return 0;
+ }
+ 
+ /**
+@@ -2034,7 +2039,7 @@ EXPORT_SYMBOL_GPL(iommu_attach_device);
+ 
+ int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+ {
+-	if (iommu_is_attach_deferred(dev))
++	if (dev->iommu && dev->iommu->attach_deferred)
+ 		return __iommu_attach_device(domain, dev);
+ 
+ 	return 0;
+@@ -2043,9 +2048,6 @@ int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+ static void __iommu_detach_device(struct iommu_domain *domain,
+ 				  struct device *dev)
+ {
+-	if (iommu_is_attach_deferred(dev))
+-		return;
+-
+ 	domain->ops->detach_dev(domain, dev);
+ 	trace_detach_device_from_domain(dev);
+ }
 -- 
 2.34.1
 
