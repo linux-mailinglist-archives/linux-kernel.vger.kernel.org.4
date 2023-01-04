@@ -2,176 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910C365CE79
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8557D65CE7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234191AbjADIkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S234204AbjADIm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234239AbjADIkX (ORCPT
+        with ESMTP id S233701AbjADImz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:40:23 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDF91A058;
-        Wed,  4 Jan 2023 00:40:19 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VYr1l.B_1672821614;
-Received: from 30.221.147.98(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VYr1l.B_1672821614)
-          by smtp.aliyun-inc.com;
-          Wed, 04 Jan 2023 16:40:15 +0800
-Message-ID: <d90c35db-c801-02ba-d9ea-148324a1de13@linux.alibaba.com>
-Date:   Wed, 4 Jan 2023 16:40:13 +0800
+        Wed, 4 Jan 2023 03:42:55 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9239192BA;
+        Wed,  4 Jan 2023 00:42:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672821774; x=1704357774;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=uaz6QB5HKom2SgAX7GeYtr38/rEA4ATvE3w66kjiUZo=;
+  b=fTuGDMKWGr/vdD+8Eu/CtWrvxt5gCcz0EnQzcL/KiPFIrWZ3wLYhTqO1
+   erQWwSUVRIPjqAsW1RyfInNpal8LUEsEW8uN9i4EvvXZ3aEjYzM1spCqT
+   gIHSWbmAfDwFFsl2OKf0dNZwRW1EkkwqbUls5BN6y231zViwBNDh837M+
+   We7qJiecwopCiE3FZ4ZqCJ/sCN2AmFJL2CmeBIn56PfR+plCH1berAMAW
+   SbN9dJPOZA36azHDoJcFFzjVJe329ye2fUjGZ6kDjh8DnZaLUFYh62cIr
+   zEY4SLu5a1U5T9yfWrgoVfPudv9T8bgIT/QoUlrmm4X5OMmnznvAiYHBn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="321947414"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="321947414"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 00:42:54 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="762604707"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="762604707"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 00:42:49 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Michal Hocko <mhocko@suse.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, fvdl@google.com,
+        bagasdotme@gmail.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Proactive reclaim/demote discussion (was Re: [PATCH] Revert "mm:
+ add nodes= arg to memory.reclaim")
+In-Reply-To: <Y7PpYsbv1xC6m/Hu@dhcp22.suse.cz> (Michal Hocko's message of
+        "Tue, 3 Jan 2023 09:37:54 +0100")
+References: <20221202223533.1785418-1-almasrymina@google.com>
+        <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz> <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
+        <20221216101820.3f4a370af2c93d3c2e78ed8a@linux-foundation.org>
+        <Y52Scge3ynvn/mB4@dhcp22.suse.cz>
+        <20221219144252.f3da256e75e176905346b4d1@linux-foundation.org>
+        <Y7PpYsbv1xC6m/Hu@dhcp22.suse.cz>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Wed, 04 Jan 2023 16:41:50 +0800
+Message-ID: <87lemiitdd.fsf_-_@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [PATCH v5 2/6] perf vendor events arm64: Add TLB metrics for
- neoverse-n2
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-To:     Ian Rogers <irogers@google.com>
-Cc:     John Garry <john.g.garry@oracle.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1672745976-2800146-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1672745976-2800146-3-git-send-email-renyu.zj@linux.alibaba.com>
- <CAP-5=fVP_=FcEQChQwVpis9iyZsdb6NrVJQUo4GJA4_j=knfcA@mail.gmail.com>
- <14a2ca08-e946-f319-e2a8-f5f91e1eb8e6@linux.alibaba.com>
-In-Reply-To: <14a2ca08-e946-f319-e2a8-f5f91e1eb8e6@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-13.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Michal Hocko <mhocko@suse.com> writes:
 
+[snip]
 
-在 2023/1/4 下午1:21, Jing Zhang 写道:
-> 
-> 
-> 在 2023/1/4 上午1:14, Ian Rogers 写道:
->> On Tue, Jan 3, 2023 at 3:39 AM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
->>>
->>> Add TLB related metrics.
->>>
->>> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
->>> Acked-by: Ian Rogers <irogers@google.com>
->>> ---
->>>  .../arch/arm64/arm/neoverse-n2/metrics.json        | 49 ++++++++++++++++++++++
->>>  1 file changed, 49 insertions(+)
->>>
->>> diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
->>> index c126f1bc..8a74e07 100644
->>> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
->>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
->>> @@ -26,5 +26,54 @@
->>>          "MetricGroup": "TopdownL1",
->>>          "MetricName": "backend_bound",
->>>          "ScaleUnit": "100%"
->>> +    },
->>> +    {
->>> +        "MetricExpr": "L1D_TLB_REFILL / L1D_TLB",
->>> +        "BriefDescription": "The rate of L1D TLB refill to the overall L1D TLB lookups",
->>> +        "MetricGroup": "TLB",
->>> +        "MetricName": "l1d_tlb_miss_rate",
->>> +        "ScaleUnit": "100%"
->>> +    },
->>> +    {
->>> +        "MetricExpr": "L1I_TLB_REFILL / L1I_TLB",
->>> +        "BriefDescription": "The rate of L1I TLB refill to the overall L1I TLB lookups",
->>> +        "MetricGroup": "TLB",
->>> +        "MetricName": "l1i_tlb_miss_rate",
->>> +        "ScaleUnit": "100%"
->>> +    },
->>> +    {
->>> +        "MetricExpr": "L2D_TLB_REFILL / L2D_TLB",
->>> +        "BriefDescription": "The rate of L2D TLB refill to the overall L2D TLB lookups",
->>> +        "MetricGroup": "TLB",
->>> +        "MetricName": "l2_tlb_miss_rate",
->>> +        "ScaleUnit": "100%"
->>> +    },
->>> +    {
->>> +        "MetricExpr": "DTLB_WALK / INST_RETIRED * 1000",
->>> +        "BriefDescription": "The rate of TLB Walks per kilo instructions for data accesses",
->>> +        "MetricGroup": "TLB",
->>> +        "MetricName": "dtlb_mpki",
->>> +        "ScaleUnit": "MPKI"
->>> +    },
->>> +    {
->>> +        "MetricExpr": "DTLB_WALK / L1D_TLB",
->>> +        "BriefDescription": "The rate of DTLB Walks to the overall L1D TLB lookups",
->>> +        "MetricGroup": "TLB",
->>> +        "MetricName": "dtlb_walk_rate",
->>> +        "ScaleUnit": "100%"
->>> +    },
->>> +    {
->>> +        "MetricExpr": "ITLB_WALK / INST_RETIRED * 1000",
->>> +        "BriefDescription": "The rate of TLB Walks per kilo instructions for instruction accesses",
->>> +        "MetricGroup": "TLB",
->>> +        "MetricName": "itlb_mpki",
->>> +        "ScaleUnit": "MPKI"
->>
->> Did you test this? IIRC if there is no number in the ScaleUnit then
->> the scale factor becomes 0 and the metric value is always multiplied
->> by zero. Perhaps:
->>
->> "MetricName": "itlb_miss_rate",
->> "MetricExpr": "ITLB / INST_RETIRED"
->> "ScaleUnit": "1000MPKI"
->>
->> Thanks,
->> Ian
->>
-> 
-> You are absolutely right, I only tested TLB metrics. Sorry for not double checking. I will repost the corrected patches.
-> 
+> This really requires more discussion.
 
-I rethought it. I want to change the ScaleUnit to "1MPKI" and keep the MetricExpr multiplied by 1000,
-so that the "MetricExpr" expresses the value of per kilo instruciton, which can be consistent with the
-description in "BriefDescription". Like:
-   {
-        "MetricExpr": "DTLB_WALK / INST_RETIRED * 1000",
-        "BriefDescription": "The rate of TLB Walks per kilo instructions for data accesses",
-        "MetricGroup": "TLB",
-        "MetricName": "dtlb_mpki",
-        "ScaleUnit": "1MPKI"
-    },
+Let's start the discussion with some summary.
 
+Requirements:
 
-In addition, I think it is more reasonable for ScaleUnit to have a default scale factor of 1 when there
-is no number. I want to try to fix this bug.
+- Proactive reclaim.  The counting of current per-memcg proactive
+  reclaim (memory.reclaim) isn't correct.  The demoted, but not
+  reclaimed pages will be counted as reclaimed.  So "echo XXM >
+  memory.reclaim" may exit prematurely before the specified number of
+  memory is reclaimed.
 
-Ian, what's your opnion?
+- Proactive demote.  We need an interface to do per-memcg proactive
+  demote.  We may reuse memory.reclaim via extending the concept of
+  reclaiming to include demoting.  Or, we can add a new interface for
+  that (for example, memory.demote).  In addition to demote from fast
+  tier to slow tier, in theory, we may need to demote from a set of
+  nodes to another set of nodes for something like general node
+  balancing.
 
+- Proactive promote.  In theory, this is possible, but there's no real
+  life requirements yet.  And it should use a separate interface, so I
+  don't think we need to discuss that here.
 
->>> +    },
->>> +    {
->>> +        "MetricExpr": "ITLB_WALK / L1I_TLB",
->>> +        "BriefDescription": "The rate of ITLB Walks to the overall L1I TLB lookups",
->>> +        "MetricGroup": "TLB",
->>> +        "MetricName": "itlb_walk_rate",
->>> +        "ScaleUnit": "100%"
->>>      }
->>>  ]
->>> --
->>> 1.8.3.1
->>>
+Open questions:
+
+- Use memory.reclaim or memory.demote for proactive demote.  In current
+  memcg context, reclaiming and demoting is quite different, because
+  reclaiming will uncharge, while demoting will not.  But if we will add
+  per-memory-tier charging finally, the difference disappears.  So the
+  question becomes whether will we add per-memory-tier charging.
+
+- Whether should we demote from faster tier nodes to lower tier nodes
+  during the proactive reclaiming.  Choice A is to keep as much fast
+  memory as possible.  That is, reclaim from the lowest tier nodes
+  firstly, then the secondary lowest tier nodes, and so on.  Choice B is
+  to demote at the same time of reclaiming.  In this way, if we
+  proactively reclaim XX MB memory, we may free XX MB memory on the
+  fastest memory nodes.
+
+- When we proactively demote some memory from a fast memory tier, should
+  we trigger memory competition in the slower memory tiers?  That is,
+  whether to wake up kswapd of the slower memory tiers nodes?  If we
+  want to make per-memcg proactive demoting to be per-memcg strictly, we
+  should avoid to trigger the global behavior such as triggering memory
+  competition in the slower memory tiers.  Instead, we can add a global
+  proactive demote interface for that (such as per-memory-tier or
+  per-node).
+
+Best Regards,
+Huang, Ying
