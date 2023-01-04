@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E00C65D3CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9F965D3C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239306AbjADNH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
+        id S234975AbjADNHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239294AbjADNGu (ORCPT
+        with ESMTP id S239303AbjADNGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 Jan 2023 08:06:50 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097F7E45
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:06:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7A61E3F7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:06:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672837588; x=1704373588;
+  t=1672837594; x=1704373594;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1DSM4fHz5l5HcYyLuKZ27aWJHPiNFSeHrlfd99N8Mho=;
-  b=lWpQjES+ZHcguUi0H5ibzy0IZwpUPiM6OBjo6PAjrR63okVYveqfZpR0
-   J8mNPR9HCid+Kko/ihZS33gw+YpdHZ9fV+zBdnHC1ce5DxUd2XIyCORza
-   MjxgGDopdPxmAGe25JijzpniQBbleqd3xYnMryUYIHkltm0nK3c8V5/qF
-   ssO1xojZa6Uoty7Vqn9jronKGjA4KJs2AVgtJWPre8FtX0gJVhlv4mpdL
-   QMdaC06BKF0anrF6KyA+nCP0uKrio5zRAYd0bMIzyzKnxIoKanoV0wzD8
-   Qq7BcAY9Y+/XInH+xQ+FoUrvrhsX1N3NEJFC1yiyO5Xp7LPBd59lCdrU5
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320639955"
+  bh=W4kgWJ13KkfOnFNvqJ626ui344bVCUNFAhn6AsaS62k=;
+  b=QGhIfr59Z4JHsKb9iSPsKMKvWoStPG80Ok0uApMWd29pRD2lTN93muVt
+   1QqJJEgC7ZU+eaGKkeLsP5JA/DGZssim5v52MTpHRV9ubS9Rb/BYS9sJ0
+   hoMdZYkPp8T8KenP4osrmXpKv6C6+kpUHux0bAQ4BtWsRSpxWbyMnpn6V
+   PX+JPzJBhtF79NXFkC/X5w9ngdIV1xkMJOcJtY6r1CwHUIA5hV+vJS6fz
+   To7D6Mlkex2bYXtZdu8AvfG6WhwSicRYlF3mlWMkxTM2yyQqWIBCkUNjI
+   qvUtzcP7UbtWE9cPv6tofJbILUftqn1LSWw31/cydGXEQeJNk4h2+8bJ3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320639997"
 X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="320639955"
+   d="scan'208";a="320639997"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:06:27 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:06:34 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529106"
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529117"
 X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="797529106"
+   d="scan'208";a="797529117"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:06:21 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:06:27 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -65,9 +65,9 @@ Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v4 10/19] iommu: Add set_platform_dma_ops iommu ops
-Date:   Wed,  4 Jan 2023 20:57:16 +0800
-Message-Id: <20230104125725.271850-11-baolu.lu@linux.intel.com>
+Subject: [PATCH v4 11/19] iommu/fsl_pamu: Add set_platform_dma_ops callback
+Date:   Wed,  4 Jan 2023 20:57:17 +0800
+Message-Id: <20230104125725.271850-12-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230104125725.271850-1-baolu.lu@linux.intel.com>
 References: <20230104125725.271850-1-baolu.lu@linux.intel.com>
@@ -82,85 +82,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When VFIO finishes assigning a device to user space and calls
-iommu_group_release_dma_owner() to return the device to kernel, the IOMMU
-core will attach the default domain to the device. Unfortunately, some
-IOMMU drivers don't support default domain, hence in the end, the core
-calls .detach_dev instead.
+This IOMMU driver doesn't support default domain. Add the implementation
+of set_platform_dma_ops callback so that the IOMMU core could return the
+DMA control. With the set_platform_dma_ops implemented, there's no need
+for detach_dev. Remove it to avoid dead code.
 
-This adds set_platform_dma_ops iommu ops to make it clear that what it
-does is returning control back to the platform DMA ops.
-
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- include/linux/iommu.h |  4 ++++
- drivers/iommu/iommu.c | 23 +++++++++++++++++++----
- 2 files changed, 23 insertions(+), 4 deletions(-)
+ drivers/iommu/fsl_pamu_domain.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 46e1347bfa22..7b3e3775b069 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -228,6 +228,9 @@ struct iommu_iotlb_gather {
-  * @release_device: Remove device from iommu driver handling
-  * @probe_finalize: Do final setup work after the device is added to an IOMMU
-  *                  group and attached to the groups domain
-+ * @set_platform_dma_ops: Returning control back to the platform DMA ops. This op
-+ *                        is to support old IOMMU drivers, new drivers should use
-+ *                        default domains, and the common IOMMU DMA ops.
-  * @device_group: find iommu group for a particular device
-  * @get_resv_regions: Request list of reserved regions for a device
-  * @of_xlate: add OF master IDs to iommu grouping
-@@ -256,6 +259,7 @@ struct iommu_ops {
- 	struct iommu_device *(*probe_device)(struct device *dev);
- 	void (*release_device)(struct device *dev);
- 	void (*probe_finalize)(struct device *dev);
-+	void (*set_platform_dma_ops)(struct device *dev);
- 	struct iommu_group *(*device_group)(struct device *dev);
- 
- 	/* Request/Free a list of reserved regions for a device */
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index de91dd88705b..4e35a9f94873 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -2163,6 +2163,17 @@ static int iommu_group_do_detach_device(struct device *dev, void *data)
- 	return 0;
+diff --git a/drivers/iommu/fsl_pamu_domain.c b/drivers/iommu/fsl_pamu_domain.c
+index 4408ac3c49b6..e123161c211a 100644
+--- a/drivers/iommu/fsl_pamu_domain.c
++++ b/drivers/iommu/fsl_pamu_domain.c
+@@ -283,9 +283,9 @@ static int fsl_pamu_attach_device(struct iommu_domain *domain,
+ 	return ret;
  }
  
-+static int iommu_group_do_set_platform_dma(struct device *dev, void *data)
-+{
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
-+
-+	if (!ops->set_platform_dma_ops)
-+		return -EINVAL;
-+
-+	ops->set_platform_dma_ops(dev);
-+	return 0;
-+}
-+
- static int __iommu_group_set_domain(struct iommu_group *group,
- 				    struct iommu_domain *new_domain)
+-static void fsl_pamu_detach_device(struct iommu_domain *domain,
+-				   struct device *dev)
++static void fsl_pamu_set_platform_dma(struct device *dev)
  {
-@@ -2177,10 +2188,14 @@ static int __iommu_group_set_domain(struct iommu_group *group,
- 	 * platform specific behavior.
- 	 */
- 	if (!new_domain) {
--		if (WARN_ON(!group->domain->ops->detach_dev))
--			return -EINVAL;
--		__iommu_group_for_each_dev(group, group->domain,
--					   iommu_group_do_detach_device);
-+		ret = __iommu_group_for_each_dev(group, NULL,
-+				iommu_group_do_set_platform_dma);
-+		if (ret) {
-+			if (WARN_ON(!group->domain->ops->detach_dev))
-+				return -EINVAL;
-+			__iommu_group_for_each_dev(group, group->domain,
-+				iommu_group_do_detach_device);
-+		}
- 		group->domain = NULL;
- 		return 0;
++	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+ 	struct fsl_dma_domain *dma_domain = to_fsl_dma_domain(domain);
+ 	const u32 *prop;
+ 	int len;
+@@ -452,9 +452,9 @@ static const struct iommu_ops fsl_pamu_ops = {
+ 	.domain_alloc	= fsl_pamu_domain_alloc,
+ 	.probe_device	= fsl_pamu_probe_device,
+ 	.device_group   = fsl_pamu_device_group,
++	.set_platform_dma_ops = fsl_pamu_set_platform_dma;
+ 	.default_domain_ops = &(const struct iommu_domain_ops) {
+ 		.attach_dev	= fsl_pamu_attach_device,
+-		.detach_dev	= fsl_pamu_detach_device,
+ 		.iova_to_phys	= fsl_pamu_iova_to_phys,
+ 		.free		= fsl_pamu_domain_free,
  	}
 -- 
 2.34.1
