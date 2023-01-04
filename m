@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F6065D1F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FCA65D1F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238864AbjADL64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 06:58:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S239199AbjADL7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 06:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjADL6y (ORCPT
+        with ESMTP id S239116AbjADL7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 06:58:54 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817DE1E7
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 03:58:53 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 18EC91EC008F;
-        Wed,  4 Jan 2023 12:58:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672833532;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=UKl/CVF+4GJS0LDdyX728sU1J1aGkocy2OklfcAdRtI=;
-        b=VcttLkPNy9K1xNdWfFV7Yz0KEUwXXic9v2XG1jbmKgXxKVSo4wcHOiMPPS/Y09Wr2p5SCF
-        2pmDtdw/423IjVUdnSQ/yOxlJdQFacJj5lXUfKDExPe/KfWSxHLfgoaUswfq1pSyDkPKwR
-        +8kZx8fwKmnCVLzKEVBMtns1UtQy+9g=
-Date:   Wed, 4 Jan 2023 12:58:48 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-        hpa@zytor.com, luto@amacapital.net, dave.hansen@linux.intel.com,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com,
-        jailhouse-dev@googlegroups.com, jan.kiszka@siemens.com,
-        xen-devel@lists.xenproject.org, jgross@suse.com,
-        boris.ostrovsky@oracle.com, andrew.cooper3@citrix.com
-Subject: Re: [PATCH v2 1/2] x86: Check return values from early_memremap calls
-Message-ID: <Y7Vp+EPq5wkGr5mi@zn.tnic>
-References: <20221110154521.613472-1-ross.philipson@oracle.com>
- <20221110154521.613472-2-ross.philipson@oracle.com>
- <8e62a029-f2fa-0627-1f71-4850a68ec6b6@intel.com>
+        Wed, 4 Jan 2023 06:59:01 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493391EC5E;
+        Wed,  4 Jan 2023 03:59:00 -0800 (PST)
+Date:   Wed, 04 Jan 2023 11:58:57 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672833538;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=+n2ZcuHyYQSIvPOuKhwvmkaHaWyKOGj/JfAklwx+MxU=;
+        b=Xbz8Grh+urUwKujbRtQx5LM4M/FBOoc4fw9A5cav8F0RZU5/NOLvMbS+XZhAG8XxqsCTmv
+        yEj6lx1A1U9YmrOlDRr152+RG9UpEAm+BeZEuA2Csrp+NnthIHHA5hPQBUz8fi62jn2yMi
+        zqjBM6Si57Rs98yuFNdoXA4Tg7uWeB2r3biYG8jU3CF9BxKX3ggl3UpAGRIOo8oJGxYOcb
+        RERO6kLlQhVqdUGxunhGGIrx356+N5W23QbNWA6dvBHXZ7XsvR30H2ZbSXKMEatpkSXftD
+        nUbVyTNGAqA9n6aVILjyXX5JKZkPZkCvwe3YA8rW0A+KPTcCdNLc7/PhKNA5Lw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672833538;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=+n2ZcuHyYQSIvPOuKhwvmkaHaWyKOGj/JfAklwx+MxU=;
+        b=JAHylUUA7jd66QVeVdn/gYui89nlgS18uubG3jOSVL4goX9RqpNispLQiMeFHrbvDI8RfP
+        fVtVzuBEiOxZ/jBQ==
+From:   "tip-bot2 for Rodrigo Branco" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/bugs: Flush IBP in ib_prctl_set()
+Cc:     Rodrigo Branco <bsdaemon@google.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Ingo Molnar <mingo@kernel.org>, <stable@vger.kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8e62a029-f2fa-0627-1f71-4850a68ec6b6@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167283353750.4906.14334038214138785293.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 08:07:53AM -0800, Dave Hansen wrote:
-> On 11/10/22 07:45, Ross Philipson wrote:
-> >  	dt = early_memremap(initial_dtb, map_len);
-> > +	if (!dt) {
-> > +		pr_warn("failed to memremap initial dtb\n");
-> > +		return;
-> > +	}
-> 
-> Are all of these new pr_warn/err()'s really adding much value?  They all
-> look pretty generic.  It makes me wonder if we should just spit out a
-> generic message in early_memremap() and save all the callers the trouble.
+The following commit has been merged into the x86/urgent branch of tip:
 
-Well, let's see.
+Commit-ID:     a664ec9158eeddd75121d39c9a0758016097fa96
+Gitweb:        https://git.kernel.org/tip/a664ec9158eeddd75121d39c9a0758016097fa96
+Author:        Rodrigo Branco <bsdaemon@google.com>
+AuthorDate:    Tue, 03 Jan 2023 14:17:51 -06:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 04 Jan 2023 11:25:32 +01:00
 
-early_memremap() calls __early_ioremap() and that one already warns befofe each
-NULL return. So I guess we don't need the error messages as we will know where
-it starts failing.
+x86/bugs: Flush IBP in ib_prctl_set()
 
-I guess we still need the error handling though.
+We missed the window between the TIF flag update and the next reschedule.
 
-I.e., this above should be:
+Signed-off-by: Rodrigo Branco <bsdaemon@google.com>
+Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Cc: <stable@vger.kernel.org>
+---
+ arch/x86/kernel/cpu/bugs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-    dt = early_memremap(initial_dtb, map_len);
-+   if (!dt)
-+           return;
-
-so that we don't go off into the weeds with a NULL ptr.
-
-Or?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index d970ddb..bca0bd8 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1981,6 +1981,8 @@ static int ib_prctl_set(struct task_struct *task, unsigned long ctrl)
+ 		if (ctrl == PR_SPEC_FORCE_DISABLE)
+ 			task_set_spec_ib_force_disable(task);
+ 		task_update_spec_tif(task);
++		if (task == current)
++			indirect_branch_prediction_barrier();
+ 		break;
+ 	default:
+ 		return -ERANGE;
