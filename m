@@ -2,329 +2,474 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1196265CFFC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB82965CFFF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234416AbjADJxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:53:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S234008AbjADJx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:53:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234067AbjADJxG (ORCPT
+        with ESMTP id S234656AbjADJxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:53:06 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135A7186EC
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:53:05 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id m6so39295482lfj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 01:53:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I98ULhLWyCqayXMMJkCuOnfLjcT5QtAufhh2nvE0sCk=;
-        b=tIbitPTS/C7EJbuyHCKvFcAGOUTPbRPraSa5O9mzZVYcHvphhSLtHpvhx8GrLNI8Zd
-         JSlsblsnr9ehTwsTB7eKxsd0UCZY/ztmBXckb7OSNeGmZFkC0lD4l4oETUGDqCFsobuA
-         8L2nlEFfvRFIN8O9HiwznL/+WUnfze3/jIL4YWJTFz9KSzAnFuccUgTp41ISOBztNh80
-         S4Viz8UzeJBlBDvXutPGGYUFUtQ7A8+/aVXLOesBsmfo6BXf8JzLnlTRpIvH/lJbmIZt
-         7UtcQC6MbfFFITOtRYFJgl+lF8iCupuCInNcRr/rDnQtSvcFd0i1pJv7OTHFk2NELdmq
-         xXiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I98ULhLWyCqayXMMJkCuOnfLjcT5QtAufhh2nvE0sCk=;
-        b=qYrcOB0iSkCyMGQ0Vor4O9yD5LPoosZpaHbDfvIlPrxxt+wzwX0X3xWJ7rq0bCQFB7
-         v81q2T97CuNaIsmdLdK3PV+iuuRR3qVw5V2ZdgomHs1CEAMTPntcktdSkplZcIcVelfY
-         iVjCo3GwneMd4NXMAfNwUrfvFuRT8MTKNyxKjCPEsNe2JnhD0D08wj/OWxUGVeiogTsa
-         V5SJXkC6IA/AWp2yq/YC9/Ddz/bLug+Kz+F0ng3/LB1m3gcverjOlSC6Z82DrsiYHq53
-         GZThyNW0ML25O2sz+VDjQc0IY0sRDiHfp+inSZ4+Ua3am1XYGCimXssxLmk2Hhtmg/sQ
-         2sQQ==
-X-Gm-Message-State: AFqh2krnqlntRtMrZRg19OT+o03NuR6DlPrz8rfnhTuAdnXNXA3Jps+0
-        iyZrUMz3fHng50fcX6fJ44gsOQ==
-X-Google-Smtp-Source: AMrXdXvzIRojM3yyG8r6lpD+gLvL5kXRBI38/ZmtLFCPQG2hsnnWniBCv/NUd7RLJvdAmL3TFAquJA==
-X-Received: by 2002:ac2:5dfa:0:b0:4b5:41fa:69d8 with SMTP id z26-20020ac25dfa000000b004b541fa69d8mr13542688lfq.16.1672825983374;
-        Wed, 04 Jan 2023 01:53:03 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id z20-20020ac24194000000b004b56a8d9e90sm5113133lfh.116.2023.01.04.01.53.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 01:53:02 -0800 (PST)
-Message-ID: <aa6724af-99bc-de1d-4c03-82609b59174c@linaro.org>
-Date:   Wed, 4 Jan 2023 11:53:01 +0200
+        Wed, 4 Jan 2023 04:53:37 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B31A21C13D
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:53:32 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DCCD51063;
+        Wed,  4 Jan 2023 01:54:13 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.37.146])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3AA73F71A;
+        Wed,  4 Jan 2023 01:53:30 -0800 (PST)
+Date:   Wed, 4 Jan 2023 09:53:24 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Yann Sionneau <ysionneau@kalray.eu>
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Clement Leger <clement.leger@bootlin.com>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>
+Subject: Re: [RFC PATCH 05/25] kvx: Add atomic/locking headers
+Message-ID: <Y7VMlPKGEQwvTK4W@FVFF77S0Q05N>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
+ <20230103164359.24347-6-ysionneau@kalray.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 5/6] drm/msm/dsi: add support for DSI-PHY on SM8550
-Content-Language: en-GB
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230103-topic-sm8550-upstream-mdss-dsi-v1-0-9ccd7e652fcd@linaro.org>
- <20230103-topic-sm8550-upstream-mdss-dsi-v1-5-9ccd7e652fcd@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230103-topic-sm8550-upstream-mdss-dsi-v1-5-9ccd7e652fcd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230103164359.24347-6-ysionneau@kalray.eu>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 11:08, Neil Armstrong wrote:
-> SM8550 use a 4nm DSI PHYs, which share register definitions
-> with 7nm DSI PHYs. Rather than duplicating the driver, handle
-> 4nm variant inside the common 5+7nm driver.
+On Tue, Jan 03, 2023 at 05:43:39PM +0100, Yann Sionneau wrote:
+> Add common headers (atomic, bitops, barrier and locking) for basic
+> kvx support.
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> CC: Will Deacon <will@kernel.org>
+> CC: Peter Zijlstra <peterz@infradead.org>
+> CC: Boqun Feng <boqun.feng@gmail.com>
+> CC: Mark Rutland <mark.rutland@arm.com>
+> CC: linux-kernel@vger.kernel.org
+> Co-developed-by: Clement Leger <clement.leger@bootlin.com>
+> Signed-off-by: Clement Leger <clement.leger@bootlin.com>
+> Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
+> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+> Co-developed-by: Julian Vetter <jvetter@kalray.eu>
+> Signed-off-by: Julian Vetter <jvetter@kalray.eu>
+> Co-developed-by: Julien Villette <jvillette@kalray.eu>
+> Signed-off-by: Julien Villette <jvillette@kalray.eu>
+> Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
+> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 > ---
->   drivers/gpu/drm/msm/Kconfig               |   4 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c     |   2 +
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy.h     |   1 +
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c | 102 ++++++++++++++++++++++++------
->   4 files changed, 89 insertions(+), 20 deletions(-)
+>  arch/kvx/include/asm/atomic.h  | 104 +++++++++++++++++
+>  arch/kvx/include/asm/barrier.h |  15 +++
+>  arch/kvx/include/asm/bitops.h  | 207 +++++++++++++++++++++++++++++++++
+>  arch/kvx/include/asm/bitrev.h  |  32 +++++
+>  arch/kvx/include/asm/cmpxchg.h | 185 +++++++++++++++++++++++++++++
+>  5 files changed, 543 insertions(+)
+>  create mode 100644 arch/kvx/include/asm/atomic.h
+>  create mode 100644 arch/kvx/include/asm/barrier.h
+>  create mode 100644 arch/kvx/include/asm/bitops.h
+>  create mode 100644 arch/kvx/include/asm/bitrev.h
+>  create mode 100644 arch/kvx/include/asm/cmpxchg.h
 > 
-> diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
-> index e7b100d97f88..949b18a29a55 100644
-> --- a/drivers/gpu/drm/msm/Kconfig
-> +++ b/drivers/gpu/drm/msm/Kconfig
-> @@ -140,11 +140,11 @@ config DRM_MSM_DSI_10NM_PHY
->   	  Choose this option if DSI PHY on SDM845 is used on the platform.
->   
->   config DRM_MSM_DSI_7NM_PHY
-> -	bool "Enable DSI 7nm/5nm PHY driver in MSM DRM"
-> +	bool "Enable DSI 7nm/5nm/4nm PHY driver in MSM DRM"
->   	depends on DRM_MSM_DSI
->   	default y
->   	help
-> -	  Choose this option if DSI PHY on SM8150/SM8250/SM8350/SM8450/SC7280
-> +	  Choose this option if DSI PHY on SM8150/SM8250/SM8350/SM8450/SM8550/SC7280
->   	  is used on the platform.
->   
->   config DRM_MSM_HDMI
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> index 0c956fdab23e..54e03cc9fbe7 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> @@ -573,6 +573,8 @@ static const struct of_device_id dsi_phy_dt_match[] = {
->   	  .data = &dsi_phy_5nm_8350_cfgs },
->   	{ .compatible = "qcom,dsi-phy-5nm-8450",
->   	  .data = &dsi_phy_5nm_8450_cfgs },
-> +	{ .compatible = "qcom,dsi-phy-4nm-8550",
-> +	  .data = &dsi_phy_4nm_8550_cfgs },
->   #endif
->   	{}
->   };
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-> index f7a907ed2b4b..58f9e09f5224 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-> @@ -59,6 +59,7 @@ extern const struct msm_dsi_phy_cfg dsi_phy_7nm_8150_cfgs;
->   extern const struct msm_dsi_phy_cfg dsi_phy_7nm_7280_cfgs;
->   extern const struct msm_dsi_phy_cfg dsi_phy_5nm_8350_cfgs;
->   extern const struct msm_dsi_phy_cfg dsi_phy_5nm_8450_cfgs;
-> +extern const struct msm_dsi_phy_cfg dsi_phy_4nm_8550_cfgs;
->   
->   struct msm_dsi_dphy_timing {
->   	u32 clk_zero;
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-> index 7b2c16b3a36c..11629c431c30 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-> @@ -47,6 +47,8 @@
->   #define DSI_PHY_7NM_QUIRK_V4_2		BIT(2)
->   /* Hardware is V4.3 */
->   #define DSI_PHY_7NM_QUIRK_V4_3		BIT(3)
-> +/* Hardware is V5.2 */
-> +#define DSI_PHY_7NM_QUIRK_V5_2		BIT(4)
->   
->   struct dsi_pll_config {
->   	bool enable_ssc;
-> @@ -124,14 +126,25 @@ static void dsi_pll_calc_dec_frac(struct dsi_pll_7nm *pll, struct dsi_pll_config
->   
->   	if (pll->phy->cfg->quirks & DSI_PHY_7NM_QUIRK_PRE_V4_1)
->   		config->pll_clock_inverters = 0x28;
-> -	else if (pll_freq <= 1000000000ULL)
-> -		config->pll_clock_inverters = 0xa0;
-> -	else if (pll_freq <= 2500000000ULL)
-> -		config->pll_clock_inverters = 0x20;
-> -	else if (pll_freq <= 3020000000ULL)
-> -		config->pll_clock_inverters = 0x00;
-> -	else
-> -		config->pll_clock_inverters = 0x40;
-> +	else if ((pll->phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V5_2)) {
-> +		if (pll_freq <= 1300000000ULL)
-> +			config->pll_clock_inverters = 0xa0;
-> +		else if (pll_freq <= 2500000000ULL)
-> +			config->pll_clock_inverters = 0x20;
-> +		else if (pll_freq <= 4000000000ULL)
-> +			config->pll_clock_inverters = 0x00;
-> +		else
-> +			config->pll_clock_inverters = 0x40;
-> +	} else {
-> +		if (pll_freq <= 1000000000ULL)
-> +			config->pll_clock_inverters = 0xa0;
-> +		else if (pll_freq <= 2500000000ULL)
-> +			config->pll_clock_inverters = 0x20;
-> +		else if (pll_freq <= 3020000000ULL)
-> +			config->pll_clock_inverters = 0x00;
-> +		else
-> +			config->pll_clock_inverters = 0x40;
+> diff --git a/arch/kvx/include/asm/atomic.h b/arch/kvx/include/asm/atomic.h
+> new file mode 100644
+> index 000000000000..eb8acbcbc70d
+> --- /dev/null
+> +++ b/arch/kvx/include/asm/atomic.h
+> @@ -0,0 +1,104 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2017-2023 Kalray Inc.
+> + * Author(s): Clement Leger
+> + */
+> +
+> +#ifndef _ASM_KVX_ATOMIC_H
+> +#define _ASM_KVX_ATOMIC_H
+> +
+> +#include <linux/types.h>
+> +
+> +#include <asm/cmpxchg.h>
+> +
+> +#define ATOMIC64_INIT(i)     { (i) }
+> +
+> +#define arch_atomic64_cmpxchg(v, old, new) (arch_cmpxchg(&((v)->counter), old, new))
+> +#define arch_atomic64_xchg(v, new) (arch_xchg(&((v)->counter), new))
+> +
+> +static inline long arch_atomic64_read(const atomic64_t *v)
+> +{
+> +	return v->counter;
+> +}
+
+This is a plain read, and is *not* atomic.
+
+The compiler can replay a plain read an arbitrary number of times, and is
+permitted to split it into smaller accesses.
+
+At minimum this needs to be
+
+  READ_ONCE(v->counter)
+
+... which will prevent replay. Whether or not that's actually atomic will
+depend on the instructions the compiler generates, and how those instructions
+are defines in your architecture.
+
+Do you have a single instruction that can read a 64-bit memory location, and is
+it guaranteed to result in a single access that cannot be split?
+
+> +static inline void arch_atomic64_set(atomic64_t *v, long i)
+> +{
+> +	v->counter = i;
+> +}
+
+Same comments as for arch_atomic64_read(); at minimum this needs to be:
+
+  WRITE_ONCE(v->counter, i)
+
+... but that may or may not actually be atomic on your architecture.
+
+> +#define ATOMIC64_RETURN_OP(op, c_op)					\
+> +static inline long arch_atomic64_##op##_return(long i, atomic64_t *v)	\
+> +{									\
+> +	long new, old, ret;						\
+> +									\
+> +	do {								\
+> +		old = v->counter;					\
+> +		new = old c_op i;					\
+> +		ret = arch_cmpxchg(&v->counter, old, new);		\
+> +	} while (ret != old);						\
+> +									\
+> +	return new;							\
+> +}
+> +
+> +#define ATOMIC64_OP(op, c_op)						\
+> +static inline void arch_atomic64_##op(long i, atomic64_t *v)		\
+> +{									\
+> +	long new, old, ret;						\
+> +									\
+> +	do {								\
+> +		old = v->counter;					\
+> +		new = old c_op i;					\
+> +		ret = arch_cmpxchg(&v->counter, old, new);		\
+> +	} while (ret != old);						\
+> +}
+> +
+> +#define ATOMIC64_FETCH_OP(op, c_op)					\
+> +static inline long arch_atomic64_fetch_##op(long i, atomic64_t *v)	\
+> +{									\
+> +	long new, old, ret;						\
+> +									\
+> +	do {								\
+> +		old = v->counter;					\
+> +		new = old c_op i;					\
+> +		ret = arch_cmpxchg(&v->counter, old, new);		\
+> +	} while (ret != old);						\
+> +									\
+> +	return old;							\
+> +}
+
+These look ok, but it'd be nicer if we could teach the generic atomic64 code to
+do this, like the generic atomic code does.
+
+We could rename the existing asm-generic/atomic64 code to atomic64-spinlock,
+and add a separate atomic64-cmpxchg (and likewise for the 32-bit code) to make
+that clearer and consistent.
+
+> +
+> +#define ATOMIC64_OPS(op, c_op)						\
+> +	ATOMIC64_OP(op, c_op)						\
+> +	ATOMIC64_RETURN_OP(op, c_op)					\
+> +	ATOMIC64_FETCH_OP(op, c_op)
+> +
+> +ATOMIC64_OPS(and, &)
+> +ATOMIC64_OPS(or, |)
+> +ATOMIC64_OPS(xor, ^)
+> +ATOMIC64_OPS(add, +)
+> +ATOMIC64_OPS(sub, -)
+> +
+> +#undef ATOMIC64_OPS
+> +#undef ATOMIC64_FETCH_OP
+> +#undef ATOMIC64_OP
+> +
+> +static inline int arch_atomic_add_return(int i, atomic_t *v)
+> +{
+> +	int new, old, ret;
+> +
+> +	do {
+> +		old = v->counter;
+> +		new = old + i;
+> +		ret = arch_cmpxchg(&v->counter, old, new);
+> +	} while (ret != old);
+> +
+> +	return new;
+> +}
+> +
+> +static inline int arch_atomic_sub_return(int i, atomic_t *v)
+> +{
+> +	return arch_atomic_add_return(-i, v);
+> +}
+
+Likewise for these two.
+
+> +
+> +#include <asm-generic/atomic.h>
+> +
+> +#endif	/* _ASM_KVX_ATOMIC_H */
+> diff --git a/arch/kvx/include/asm/barrier.h b/arch/kvx/include/asm/barrier.h
+> new file mode 100644
+> index 000000000000..371f1c70746d
+> --- /dev/null
+> +++ b/arch/kvx/include/asm/barrier.h
+> @@ -0,0 +1,15 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2017-2023 Kalray Inc.
+> + * Author(s): Clement Leger
+> + */
+> +
+> +#ifndef _ASM_KVX_BARRIER_H
+> +#define _ASM_KVX_BARRIER_H
+
+> +/* Bitmask modifiers */
+> +#define __NOP(x)	(x)
+> +#define __NOT(x)	(~(x))
+> +
+> +
+> +#define __test_and_op_bit(nr, addr, op, mod)				\
+> +({									\
+> +	unsigned long __mask = BIT_MASK(nr);				\
+> +	unsigned long __new, __old, __ret;				\
+> +	do {								\
+> +		__old = *(&addr[BIT_WORD(nr)]);				\
+> +		__new = __old op mod(__mask);				\
+> +		__ret = cmpxchg(addr, __old, __new);			\
+> +	} while (__ret != __old);					\
+> +	(__old & __mask);						\
+> +})
+
+Please use <asm-generic/bitops/atomic.h> which should give you the common
+bit operations "for free" atop your regular atomics.
+
+[...]
+
+> diff --git a/arch/kvx/include/asm/cmpxchg.h b/arch/kvx/include/asm/cmpxchg.h
+> new file mode 100644
+> index 000000000000..b1d128b060a2
+> --- /dev/null
+> +++ b/arch/kvx/include/asm/cmpxchg.h
+> @@ -0,0 +1,185 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2017-2023 Kalray Inc.
+> + * Author(s): Clement Leger
+> + *            Yann Sionneau
+> + */
+> +
+> +#ifndef _ASM_KVX_CMPXCHG_H
+> +#define _ASM_KVX_CMPXCHG_H
+> +
+> +#include <linux/bits.h>
+> +#include <linux/types.h>
+> +#include <linux/build_bug.h>
+> +
+> +/*
+> + * On kvx, we have a boolean compare and swap which means that the operation
+> + * returns only the success of operation.
+> + * If operation succeed, this is simple, we just need to return the provided
+> + * old value. However, if it fails, we need to load the value to return it for
+> + * the caller. If the loaded value is different from the "old" provided by the
+> + * caller, we can return it since it will means it failed.
+> + * However, if for some reason the value we read is equal to the old value
+> + * provided by the caller, we can't simply return it or the caller will think it
+> + * succeeded. So if the value we read is the same as the "old" provided by
+> + * the caller, we try again until either we succeed or we fail with a different
+> + * value than the provided one.
+> + */
+> +#define __cmpxchg(ptr, old, new, op_suffix, load_suffix)		\
+> +({									\
+> +	register unsigned long __rn asm("r62");				\
+> +	register unsigned long __ro asm("r63");				\
+
+Why do you need to specify the exact registers?
+
+e.g. does some instruction use these implicitly, or do you need two adjacent
+register for encoding reasons?
+
+> +	__asm__ __volatile__ (						\
+> +		/* Fence to guarantee previous store to be committed */	\
+> +		"fence\n"						\
+
+This implies you can implement the relaxed form of cmpxchg().
+
+What ordering do you get by default, and do you have any other barriers (e.g.
+for acquire/release semantics), or just "fence" ?
+
+Thanks,
+Mark.
+
+> +		/* Init "expect" with previous value */			\
+> +		"copyd $r63 = %[rOld]\n"				\
+> +		";;\n"							\
+> +		"1:\n"							\
+> +		/* Init "update" value with new */			\
+> +		"copyd $r62 = %[rNew]\n"				\
+> +		";;\n"							\
+> +		"acswap" #op_suffix " 0[%[rPtr]], $r62r63\n"		\
+> +		";;\n"							\
+> +		/* if acswap succeed, simply return */			\
+> +		"cb.dnez $r62? 2f\n"					\
+> +		";;\n"							\
+> +		/* We failed, load old value */				\
+> +		"l"  #op_suffix  #load_suffix" $r63 = 0[%[rPtr]]\n"	\
+> +		";;\n"							\
+> +		/* Check if equal to "old" one */			\
+> +		"comp" #op_suffix ".ne $r62 = $r63, %[rOld]\n"		\
+> +		";;\n"							\
+> +		/* If different from "old", return it to caller */	\
+> +		"cb.deqz $r62? 1b\n"					\
+> +		";;\n"							\
+> +		"2:\n"							\
+> +		: "+r" (__rn), "+r" (__ro)				\
+> +		: [rPtr] "r" (ptr), [rOld] "r" (old), [rNew] "r" (new)	\
+> +		: "memory");						\
+> +	(__ro);								\
+> +})
+> +
+> +#define arch_cmpxchg(ptr, o, n)						\
+> +({									\
+> +	unsigned long __ret;						\
+> +	BUILD_BUG_ON(sizeof(*(ptr)) != 4 && sizeof(*(ptr)) != 8);	\
+> +	switch (sizeof(*(ptr))) {					\
+> +	case 4:								\
+> +		__ret = __cmpxchg((ptr), (o), (n), w, s);		\
+> +		break;							\
+> +	case 8:								\
+> +		__ret = __cmpxchg((ptr), (o), (n), d, );		\
+> +		break;							\
+> +	}								\
+> +	(__typeof__(*(ptr))) (__ret);					\
+> +})
+> +
+> +/*
+> + * In order to optimize xchg for 16 byte, we can use insf/extfs if we know the
+> + * bounds. This way, we only take one more bundle than standard xchg.
+> + * We simply do a read modify acswap on a 32 bit word.
+> + */
+> +#define __xchg_small_asm(ptr, new, start, stop)				\
+> +({									\
+> +	register unsigned long __rn asm("r62");				\
+> +	register unsigned long __ro asm("r63");				\
+> +	__asm__ __volatile__ (						\
+> +		"fence\n"						\
+> +		";;\n"							\
+> +		"1:\n"							\
+> +		/* Load original old value */				\
+> +		"lws $r62 = 0[%[rPtr]]\n"				\
+> +		";;\n"							\
+> +		/* Copy read value into "expect" */			\
+> +		"copyd $r63 = $r62\n"					\
+> +		/* Prepare new value with insf */			\
+> +		"insf $r62 = %[rNew], " #stop "," #start "\n"		\
+> +		";;\n"							\
+> +		/* Try compare & swap with loaded value */		\
+> +		"acswapw 0[%[rPtr]], $r62r63\n"				\
+> +		";;\n"							\
+> +		/* Did we succeed ?, if no, try again */		\
+> +		"cb.deqz $r62? 1b\n"					\
+> +		/* Extract old value for ret value */			\
+> +		"extfs $r63 = $r63, " #stop "," #start "\n"		\
+> +		";;\n"							\
+> +		: "+r" (__rn), "+r" (__ro)				\
+> +		: [rPtr] "r" (ptr), [rNew] "r" (new)			\
+> +		: "memory");						\
+> +	(__ro);								\
+> +})
+> +
+> +/* Needed for generic qspinlock implementation */
+> +static inline unsigned long xchg_u16(volatile void *ptr, unsigned long new,
+> +				     int size)
+> +{
+> +	int off = (unsigned long)ptr % sizeof(u32);
+> +	volatile u32 *p = ptr - off;
+> +
+> +	/*
+> +	 * GCC is smart enough to eliminate the dead branches by detecting
+> +	 * the offset statically
+> +	 */
+> +	if (off == 0)
+> +		return __xchg_small_asm(p, new, 0, 15);
+> +	else
+> +		return __xchg_small_asm(p, new, 16, 31);
+> +}
+> +
+> +#define __xchg_asm(ptr, new, op_suffix, load_suffix)			\
+> +({									\
+> +	register unsigned long __rn asm("r62") = (unsigned long) (new);	\
+> +	register unsigned long __ro asm("r63");				\
+> +	__asm__ __volatile__ (						\
+> +		"fence\n"						\
+> +		";;\n"							\
+> +		"1:\n"							\
+> +		/* Load original old value */				\
+> +		"l" #op_suffix #load_suffix " $r63 = 0[%[rPtr]]\n"	\
+> +		";;\n"							\
+> +		/* Try compare & swap with loaded value */		\
+> +		"acswap" #op_suffix " 0[%[rPtr]], $r62r63\n"		\
+> +		";;\n"							\
+> +		/* Did we succeed ?, if no, try again */		\
+> +		"cb.deqz $r62? 1b\n"					\
+> +		/* $r62 has been cloberred by acswap, restore it */	\
+> +		"copyd $r62 = %[rNew]\n"				\
+> +		";;\n"							\
+> +		: "+r" (__rn), "+r" (__ro)				\
+> +		: [rPtr] "r" (ptr), [rNew] "r" (new)			\
+> +		: "memory");						\
+> +	(__ro);								\
+> +})
+> +
+> +/*
+> + * This function doesn't exist, so you'll get a linker error if
+> + * something tries to do an invalidly-sized xchg().
+> + */
+> +extern unsigned long __xchg_called_with_bad_pointer(void)
+> +	__compiletime_error("Bad argument size for xchg");
+> +
+> +static inline unsigned long __xchg(volatile void *ptr, unsigned long val,
+> +				   int size)
+> +{
+> +	switch (size) {
+> +	case 2:
+> +		return xchg_u16(ptr, val, size);
+> +	case 4:
+> +		return __xchg_asm(ptr, val, w, s);
+> +	case 8:
+> +		return __xchg_asm(ptr, val, d, );
 > +	}
->   
->   	config->decimal_div_start = dec;
->   	config->frac_div_start = frac;
-> @@ -222,6 +235,13 @@ static void dsi_pll_config_hzindep_reg(struct dsi_pll_7nm *pll)
->   			vco_config_1 = 0x01;
->   	}
->   
-> +	if ((pll->phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V5_2)) {
-> +		if (pll->vco_current_rate < 1557000000ULL)
-> +			vco_config_1 = 0x08;
-> +		else
-> +			vco_config_1 = 0x01;
-> +	}
+> +	__xchg_called_with_bad_pointer();
 > +
->   	dsi_phy_write(base + REG_DSI_7nm_PHY_PLL_ANALOG_CONTROLS_FIVE_1,
->   		      analog_controls_five_1);
->   	dsi_phy_write(base + REG_DSI_7nm_PHY_PLL_VCO_CONFIG_1, vco_config_1);
-> @@ -860,7 +880,8 @@ static int dsi_7nm_phy_enable(struct msm_dsi_phy *phy,
->   		pr_warn("PLL turned on before configuring PHY\n");
->   
->   	/* Request for REFGEN READY */
-> -	if (phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_3) {
-> +	if ((phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_3) ||
-> +	    (phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V5_2)) {
->   		dsi_phy_write(phy->base + REG_DSI_7nm_PHY_CMN_GLBL_DIGTOP_SPARE10, 0x1);
->   		udelay(500);
->   	}
-> @@ -881,20 +902,38 @@ static int dsi_7nm_phy_enable(struct msm_dsi_phy *phy,
->   
->   	glbl_str_swi_cal_sel_ctrl = 0x00;
->   	if (phy->cphy_mode) {
-> -		vreg_ctrl_0 = 0x51;
-> -		vreg_ctrl_1 = 0x55;
-> +		if ((phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V5_2)) {
-> +			vreg_ctrl_0 = 0x45;
-> +			vreg_ctrl_1 = 0x45;
-> +		} else {
-> +			vreg_ctrl_0 = 0x51;
-> +			vreg_ctrl_1 = 0x55;
-> +		}
-
-Please move these quirk-specific values down, to the rest of if 
-(QUIRK_5_2) statement.
-
->   		glbl_hstx_str_ctrl_0 = 0x00;
->   		glbl_pemph_ctrl_0 = 0x11;
->   		lane_ctrl0 = 0x17;
->   	} else {
-> -		vreg_ctrl_0 = less_than_1500_mhz ? 0x53 : 0x52;
-> -		vreg_ctrl_1 = 0x5c;
-> +		if ((phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V5_2)) {
-> +			vreg_ctrl_0 = 0x44;
-> +			vreg_ctrl_1 = 0x19;
-> +		} else {
-> +			vreg_ctrl_0 = less_than_1500_mhz ? 0x53 : 0x52;
-> +			vreg_ctrl_1 = 0x5c;
-> +		}
->   		glbl_hstx_str_ctrl_0 = 0x88;
->   		glbl_pemph_ctrl_0 = 0x00;
->   		lane_ctrl0 = 0x1f;
->   	}
->   
-> -	if (phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_3) {
-> +	if ((phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V5_2)) {
-> +		if (phy->cphy_mode) {
-> +			glbl_rescode_top_ctrl = 0x00;
-> +			glbl_rescode_bot_ctrl = 0x00;
-> +		} else {
-> +			glbl_rescode_top_ctrl = less_than_1500_mhz ? 0x3c :  0x03;
-> +			glbl_rescode_bot_ctrl = less_than_1500_mhz ? 0x38 :  0x3c;
-> +		}
-> +	} else if ((phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_3)) {
->   		if (phy->cphy_mode) {
->   			glbl_rescode_top_ctrl = less_than_1500_mhz ? 0x3d :  0x01;
->   			glbl_rescode_bot_ctrl = less_than_1500_mhz ? 0x38 :  0x3b;
-> @@ -943,9 +982,8 @@ static int dsi_7nm_phy_enable(struct msm_dsi_phy *phy,
->   	dsi_phy_write(base + REG_DSI_7nm_PHY_CMN_RBUF_CTRL, 0x00);
->   
->   	/* program CMN_CTRL_4 for minor_ver 2 chipsets*/
-> -	data = dsi_phy_read(base + REG_DSI_7nm_PHY_CMN_REVISION_ID0);
-> -	data = data & (0xf0);
-> -	if (data == 0x20)
-> +	if ((phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V5_2) ||
-> +	    (dsi_phy_read(base + REG_DSI_7nm_PHY_CMN_REVISION_ID0) & (0xf0)) == 0x20)
->   		dsi_phy_write(base + REG_DSI_7nm_PHY_CMN_CTRL_4, 0x04);
-
-Ugh. I should change this statement to use quirks too.
-
->   
->   	/* Configure PHY lane swap (TODO: we need to calculate this) */
-> @@ -1058,7 +1096,8 @@ static void dsi_7nm_phy_disable(struct msm_dsi_phy *phy)
->   	dsi_phy_hw_v4_0_config_lpcdrx(phy, false);
->   
->   	/* Turn off REFGEN Vote */
-> -	if (phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_3) {
-> +	if ((phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_3) ||
-> +	    (phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V5_2)) {
->   		dsi_phy_write(base + REG_DSI_7nm_PHY_CMN_GLBL_DIGTOP_SPARE10, 0x0);
->   		wmb();
->   		/* Delay to ensure HW removes vote before PHY shut down */
-> @@ -1092,6 +1131,10 @@ static const struct regulator_bulk_data dsi_phy_7nm_97800uA_regulators[] = {
->   	{ .supply = "vdds", .init_load_uA = 97800 },
->   };
->   
-> +static const struct regulator_bulk_data dsi_phy_7nm_98400uA_regulators[] = {
-> +	{ .supply = "vdds", .init_load_uA = 98400 },
-> +};
+> +	return val;
+> +}
 > +
->   const struct msm_dsi_phy_cfg dsi_phy_7nm_cfgs = {
->   	.has_phy_lane = true,
->   	.regulator_data = dsi_phy_7nm_36mA_regulators,
-> @@ -1201,3 +1244,26 @@ const struct msm_dsi_phy_cfg dsi_phy_5nm_8450_cfgs = {
->   	.num_dsi_phy = 2,
->   	.quirks = DSI_PHY_7NM_QUIRK_V4_3,
->   };
+> +#define arch_xchg(ptr, with)						\
+> +	({								\
+> +		(__typeof__(*(ptr))) __xchg((ptr),			\
+> +					    (unsigned long)(with),	\
+> +					    sizeof(*(ptr)));		\
+> +	})
 > +
-> +const struct msm_dsi_phy_cfg dsi_phy_4nm_8550_cfgs = {
-> +	.has_phy_lane = true,
-> +	.regulator_data = dsi_phy_7nm_98400uA_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_7nm_98400uA_regulators),
-> +	.ops = {
-> +		.enable = dsi_7nm_phy_enable,
-> +		.disable = dsi_7nm_phy_disable,
-> +		.pll_init = dsi_pll_7nm_init,
-> +		.save_pll_state = dsi_7nm_pll_save_state,
-> +		.restore_pll_state = dsi_7nm_pll_restore_state,
-> +		.set_continuous_clock = dsi_7nm_set_continuous_clock,
-> +	},
-> +	.min_pll_rate = 600000000UL,
-> +#ifdef CONFIG_64BIT
-> +	.max_pll_rate = 5000000000UL,
-> +#else
-> +	.max_pll_rate = ULONG_MAX,
 > +#endif
-> +	.io_start = { 0xae95000, 0xae97000 },
-> +	.num_dsi_phy = 2,
-> +	.quirks = DSI_PHY_7NM_QUIRK_V5_2,
-> +};
+> -- 
+> 2.37.2
 > 
-
--- 
-With best wishes
-Dmitry
-
+> 
+> 
+> 
+> 
