@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75A965DD11
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE0165DD17
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240227AbjADTqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 14:46:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S240152AbjADTtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 14:49:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240204AbjADTqb (ORCPT
+        with ESMTP id S231197AbjADTt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 14:46:31 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF4262C1;
-        Wed,  4 Jan 2023 11:46:30 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 141so4643920pgc.0;
-        Wed, 04 Jan 2023 11:46:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lfp41JQ/onUmjvZ07AVTcvQ52DwcrIfI2vmD2kQlaH4=;
-        b=kO1or/RXoA05nURTG3xyN7muAUlj2ebxkGpDEctbc4x6Nqwc9T5PxVV04perKzOzW9
-         SX6g6Y8JUF48swj3lmNF14tIlC/U5klThXu4dbx1aukENqSQUMfFWG/jJB6Q9xbl1ltK
-         qNpSfcQ6np3P6rpVcRUp9mC8cnnqijDUGEiEa3zFJIlnzS17Pzo8ryM7Pf7d5Xtkz6De
-         d6c/bZR2mtvKLev5k1qwzFkOo676v92PcZ4Pdu4mwwzepQ38u9h6q16OeI0OAU6XWltd
-         XlFkx5ntnXOFPR1ByE2rVojIUXNjYviqtVUQH7Boc2uHlHZljhmmamshUGtZcT5Rh9XN
-         QtbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lfp41JQ/onUmjvZ07AVTcvQ52DwcrIfI2vmD2kQlaH4=;
-        b=Rvg7QEDqNIV7fP3cG3F7kUweMPnuu1UW0j6+x3WT2GyRdMuVf8NrmMBAfUCepSB7Y4
-         ZNdfU1dT5VCVbhfXZTLZBMT0OvekHcM3Dm8PL2n1LbQyaUFzeYNbRiDGJWqK4FESTaKq
-         yMs6TaOIBHgiFrwZfoNcdsdXmre5I5ezrpkw1EnXJIeZf4jcSHHJnyh886Xyr8VXJ+cO
-         T9G5EPxrQXFgIHwgZulc3i6uYR4frcxkqFSajLXn3nQVCDdEhgSI/qLtGiHYI9YettRq
-         nWhCJ8+tOAuzDMaXhwmR4qTZ0XZdNOyV8X4VyykneSwB7kNPmOwS+mVOgrSAoZXEFnuf
-         tKug==
-X-Gm-Message-State: AFqh2kqxJmutStX/CrNWvZmmZXNXaFmFOQJfe7mA8IC2AHmEnXNvkcHc
-        dVTktxko/WVvrAj9uJ6oEVOBZMwQ6Kj3brTAtYE=
-X-Google-Smtp-Source: AMrXdXuUI87EkFUiq+H9wnUuDjm36Sg0u4sCXF0UhtLLaXBCzOjCNdY2tjgwN9QtDTcSCPtYCShEKY9S0cZg3XH6MT4=
-X-Received: by 2002:a05:6a00:27a0:b0:57e:7d2e:cbea with SMTP id
- bd32-20020a056a0027a000b0057e7d2ecbeamr3153172pfb.27.1672861589963; Wed, 04
- Jan 2023 11:46:29 -0800 (PST)
+        Wed, 4 Jan 2023 14:49:28 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF2A1C923;
+        Wed,  4 Jan 2023 11:49:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5h44GyxCWISniKktCT90cH4QhD6riOrQVWIwvRCxzbw=; b=ZQWgrJE4XgyLf6kvLMp/aZLcVg
+        sGN9Ds1J7FGcfssdBslD+0I7rd6hM5mADayyRpwSDX42lg1nBSGdc+b1D2hpcvM9Q/sIQvTEyj6LB
+        ctHITxUAIWkYntx80OxJkYQcc2jZRkmYX1FiCYVmUmim5nghGSqocsmZzTRtnAh4njj02i9LDClIQ
+        IU7Fy7nDrLR9nHtayba1dlYlVIteer6RXQi5GVbD/BtVEvwIM5EFnhFEa/6AjqCxdF0E344Jkgi2W
+        yM/mDbl0YJ6GLEZZxQCAg/Ln/Z/l6ktv3IWnumLjal8QfJtJ2qrGHv0TJW38eA9vNEEk1vgJN7YwA
+        ccWYdFEg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pD9lB-00BZm4-Qf; Wed, 04 Jan 2023 19:49:13 +0000
+Date:   Wed, 4 Jan 2023 11:49:13 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     alison.schofield@intel.com, vishal.l.verma@intel.com,
+        ira.weiny@intel.com, bwidawsk@kernel.org, dave@stgolabs.net,
+        a.manzanares@samsung.com, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] cxl_test: upgrade as a first class citizen selftests
+ capable driver
+Message-ID: <Y7XYOfYjDM0v2SAy@bombadil.infradead.org>
+References: <20221217034947.1174795-1-mcgrof@kernel.org>
+ <639d4bb71bada_b41e329452@dwillia2-xfh.jf.intel.com.notmuch>
+ <Y6DDPGnwszUAiNh2@bombadil.infradead.org>
+ <63a1015e6ec4a_1bf22944c@dwillia2-xfh.jf.intel.com.notmuch>
+ <Y6Ehi2ihIgQd/aoR@bombadil.infradead.org>
+ <63a2124db0877_1bf229440@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-References: <20230104160511.905925875@linuxfoundation.org>
-In-Reply-To: <20230104160511.905925875@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Wed, 4 Jan 2023 11:46:18 -0800
-Message-ID: <CAJq+SaAqX7ikxOEsNvqyAyrtDes5-r1aeOMSx2fapddk8s3U=A@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/207] 6.1.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63a2124db0877_1bf229440@dwillia2-xfh.jf.intel.com.notmuch>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +58,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 6.1.4 release.
-> There are 207 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.4-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Dec 20, 2022 at 11:51:41AM -0800, Dan Williams wrote:
+> Luis Chamberlain wrote:
+> > On Mon, Dec 19, 2022 at 04:27:10PM -0800, Dan Williams wrote:
+> > > Luis Chamberlain wrote:
+> > > > On Fri, Dec 16, 2022 at 08:55:19PM -0800, Dan Williams wrote:
+> > > > > In other words the suggestion that the current
+> > > > > organization ultimately leads to bit rot has not been substantiated in
+> > > > > practice.
+> > > > 
+> > > > On top of this patch I just added a custom debug patch to my tree which
+> > > > enables CXL_BUS and CXL_TEST by default when this is currently allowed
+> > > > and it got quite a bit of kernel build warnings. Although some of these
+> > > > are specific to my change, some of them do not seem to be related to
+> > > > that and likely could benefit from fixing:
+> > > > 
+> > > > https://gist.github.com/mcgrof/73dce72939590c6edc9413b0384ae4c2
+> > > > 
+> > > > And so although you may not see some build warnings so far, it does not
+> > > > negate my suggestion that having cxl_test as a proper upstream driver strategy
+> > > > gets you more build testing / coverage.
+> > > 
+> > > If autobuild coverage of test components is the main concern then
+> > > cxl_test can copy what nfit_test is doing with CONFIG_NVDIMM_TEST_BUILD.
+> > > No need for disruptive redesign of how this facility is integrated.
+> > 
+> > I've itemized a list of gains of having this properly integrated. What
+> > gains are there of this being an external module other than a few folks
+> > are used to it and it been done before for other subsystems?
+> 
+> Your crash report is a prime example of why this needs to stay an
+> external module. 
 
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
+The crash *can* be avoided completely *iff* the semantics over the
+requirements are expressed clearly through kconfig. My follow up patch
+to the top level Makefile INSTALL_MOD_DIR to use "updates" instead of
+"extra" essentially exposed anyone other than folks using a specific
+version of RHEL or Fedora *easily* can end up crashing with cxl_test.
+That's I think a far much worse predicament.
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+> Any redefinition of what a symbol does via --wrap= is a
+> fragile proposition.
 
-Thanks.
+It is what cxl_test does though. Supporting it as a module Vs built-in
+has no difference except as exposing semantics and requirements clearly.
+
+> The fact that crash signatures with cxl_test loaded
+> have the external module taint flag set is a feature.
+
+I helped review the patch that added the taint flag for all testing
+modules, that it does not mean we can't add it for built-in. This can
+easily be done for instance with a kconfig symbol which pegs the taint
+for any test module as built-in. In fact if we're not tainint built-in
+test modules that change should happen anyway.
+
+Having a test module be built-in or not shoud in no way shape or form
+affect your testing. If the driver *happens* to rely on module load
+and unload to any clean state machine -- that should be fixed given
+the slew of bugs I have found other test modules which follow similar
+logic.
+
+> The --wrap= option
+> has no business within the main tree 
+
+If --wrap is really unreliable, the unreliable aspects should be
+documented, however it seems in this case it is just seems for cxl
+its only used for testing. And whether or not you test with built-in
+or modules should have no effect over --wrap.
+
+> because it violates the valid
+> assumptions of other cxl_test-innocent developers.
+
+By having cxl_test be a proper upstream driver you define the
+requirements clearly, and the kconfig symbols enabled are sufficient
+to only let that module be built if folks are ready to shoot themseves
+on the foot. Today the semantics are not clear, and in fact relies on
+a old distro INSTALL_MOD_DIR assumption.
+
+> The benefit that resonated with me during this discussion was more
+> compile test coverage for cxl_test components.
+
+Those benefits still stand.
+
+> However, that is achieved
+> by tools/testing/cxl/ adopting the same compile coverage scheme that
+> tools/testing/nvdimm/ has with CONFIG_NVDIMM_TEST_BUILD.
+
+That does not by any means mean that CONFIG_NVDIMM_TEST_BUILD can also
+be converted to allow built-in. In fact I'd argue the same for that too.
+The same benefits applies there too.
+
+  Luis
