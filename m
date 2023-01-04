@@ -2,382 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F9C65D7C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF0F65D7C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239816AbjADP7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S239819AbjADQBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239753AbjADP7K (ORCPT
+        with ESMTP id S239444AbjADQA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:59:10 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3052AE9
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 07:59:09 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id q9so5544375pgq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 07:59:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cee0Ydp1kO8u9xvcfzgAFfEixnJwANHVFnUtawqlX6A=;
-        b=RYSfNU7f19kuYS+NK9ORiTJ2YFf+MpKbJu6OJ1dC7hGiGBzmsADpOpXN9ixPxSJXqi
-         eeVmOEMI6ITcl6AAk5C9EoFRE0J+mFglb/nsjL50aeuS7IRBUB4AutID7OoqujFAZzni
-         dzssnwes+Te0Kf1uQGeJT25TQMPVHfeLtePh5t2JWPwsbgQAIeYiHmVYA6wjWYlKS9B/
-         d+R0Y5lpM8d8dM/wIZ77Bi4OFNDSadKoJfvzzfLOcrAEfPSOD1LiC6G1K+CXPaHb2hOI
-         sVhwmeRdg55weYnDlKH1eBMIb+loLBfW45choQ5IT6ZwA2a1wVgZujDMteplLyj+xJPE
-         M8yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cee0Ydp1kO8u9xvcfzgAFfEixnJwANHVFnUtawqlX6A=;
-        b=fW7WY+i4nBKT+6LSHTxP5a5MKvXleawv3nHHLSJUUN6RDl7nzMr+QA0ydOCFKSqtjs
-         H4VJXF03xnsqF4xQsjwh0iKmFOfhovZ8Hu1a00ZE4gYKnZZFedOq+USva9LKonYWJn6B
-         N1qKcW1brPi4+M8iKGQ2iHCPRhO3XuHo7pnoqEKn9Lf5Hj6A2fhmEGHig7l0RbgHkhKB
-         IV236IscFUMk53ykjRzzdXGqU5PuQxxgxyyhtiazQLFOGMddrfq8o6kLEk/cY/UIPGjj
-         WMIvHYCSFRLol1SmMl2NU+WL/aagLCiuo1u6FOMGpYt6uitOiHhOm8IDR9uMV8lluSho
-         DyDg==
-X-Gm-Message-State: AFqh2kr1HfbOqo67PgL2mPpQDCiN8HXKNbkGK5886wOgOM/BakUUlFXn
-        gbLa+FDpQmHEZvLJKb7MVyweaw==
-X-Google-Smtp-Source: AMrXdXsLRLCer+GNS5A8O6r0Qdt+lzJgTREMPRI5uA3P7HKDR4KqMywbZZ4UuWll9d4bNzJrn+3F1A==
-X-Received: by 2002:a05:6a00:1c8e:b0:581:bfac:7a52 with SMTP id y14-20020a056a001c8e00b00581bfac7a52mr1727118pfw.1.1672847948421;
-        Wed, 04 Jan 2023 07:59:08 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y2-20020a62ce02000000b00582388bd80csm8249512pfg.83.2023.01.04.07.59.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 07:59:07 -0800 (PST)
-Date:   Wed, 4 Jan 2023 15:59:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Yang, Weijiang" <weijiang.yang@intel.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>
-Subject: Re: [PATCH 1/3] KVM: x86: Omit PMU MSRs from KVM_GET_MSR_INDEX_LIST
- if !enable_pmu
-Message-ID: <Y7WiSDPRwb5NDhn+@google.com>
-References: <20221226111710.51831-1-likexu@tencent.com>
- <20221226111710.51831-2-likexu@tencent.com>
- <752cacbf-5268-6ea0-8c5d-36fb297789ee@intel.com>
+        Wed, 4 Jan 2023 11:00:59 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3977B3752F;
+        Wed,  4 Jan 2023 08:00:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672848021; x=1704384021;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wUkahyYCePZjF9jvyYrlyn2wQDAaaljuEwG/x6ICOEU=;
+  b=jIVf1uX8VM8SqyKUJy08CyYKxjCTxyD3NCKXlJELBqAbcuniKyFF75hO
+   2nL7Zon3uqJhg+ahJ0ys/JOceFDs2omxJZtJDanwd2UInwrCcj//eyMmG
+   8uwU0bD/zwQNLsfcIanKPVu5uZTuAvpFvF7oB/TIws6+vYnuIe5yn+hZM
+   lgmk1dtEfms2V3i2sKB7vgBwGnVeUz4C+L8I5tiYt9hLtFmIMoGXHED+k
+   0agTu6/KCVugPgdne4RmmFsFz8mPWkvB9rh/jaiPa7AosdT7w83mtUhDc
+   bb7CkQx7goGnqjz6I0yWPBrRe2AeWQGn3LuMP25aZnJ4HjXr90sHF1YPu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="386396655"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="386396655"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 08:00:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="900590914"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="900590914"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 07:59:55 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 32FFA2017A;
+        Wed,  4 Jan 2023 17:59:53 +0200 (EET)
+Date:   Wed, 4 Jan 2023 15:59:53 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Robert Mader <robert.mader@collabora.com>
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, nicholas@rothemail.net,
+        javierm@redhat.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v2] media: i2c: imx258: Parse and register properties
+Message-ID: <Y7WieRzn4p9NCwsg@paasikivi.fi.intel.com>
+References: <20230104122337.123055-1-robert.mader@collabora.com>
+ <20230104141159.e2klapbpenslxqbx@uno.localdomain>
+ <e55766f0-5090-abb5-dbd7-58230153a8ce@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <752cacbf-5268-6ea0-8c5d-36fb297789ee@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e55766f0-5090-abb5-dbd7-58230153a8ce@collabora.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022, Yang, Weijiang wrote:
-> 
-> On 12/26/2022 7:17 PM, Like Xu wrote:
-> > From: Like Xu <likexu@tencent.com>
+Hi Robert,
+
+On Wed, Jan 04, 2023 at 03:14:50PM +0100, Robert Mader wrote:
+> On 04.01.23 15:11, Jacopo Mondi wrote:
+> > Hi Robert
 > > 
-> > When the PMU is disabled, don't bother sharing the PMU MSRs with
-> > userspace through KVM_GET_MSR_INDEX_LIST.  Instead, filter them out
-> > so userspace doesn't have to keep track of them.
+> > On Wed, Jan 04, 2023 at 01:23:37PM +0100, Robert Mader wrote:
+> > > Analogous to e.g. the imx219. This enables propagating
+> > > V4L2_CID_CAMERA_ORIENTATION and V4L2_CID_CAMERA_SENSOR_ROTATION
+> > > values.
+> > > The motivation is to allow libcamera detect these values from the
+> > > device tree and propagate them further to e.g. Pipewire.
+> > > 
+> > > While at it, reserve space for 3 additional controls even if
+> > > v4l2_ctrl_new_fwnode_properties() can only register 2 of
+> > > them, to fix the existing implementation which reserve space for 8
+> > > controls but actually registers 9.
+> > > 
+> > > Changes in v2:
+> > >   - Reserve 11 instead of 10 controls
+> > >   - Change order of variable declaration
+> > >   - Slightly extend description
+> > This part should go below, after ---, as it shouldn't be part of the commit
+> > message
 > > 
-> > Note that 'enable_pmu' is read-only, so userspace has no control over
-> > whether the PMU MSRs are included in the list or not.
+> > The patch looks good
 > > 
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Co-developed-by: Aaron Lewis <aaronlewis@google.com>
-> > Signed-off-by: Aaron Lewis <aaronlewis@google.com>
-> > Signed-off-by: Like Xu <likexu@tencent.com>
-> > ---
-> >   arch/x86/include/asm/kvm_host.h |  1 +
-> >   arch/x86/kvm/x86.c              | 22 ++++++++++++++++++++--
-> >   2 files changed, 21 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index f35f1ff4427b..2ed710b393eb 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -514,6 +514,7 @@ struct kvm_pmc {
-> >   #define MSR_ARCH_PERFMON_PERFCTR_MAX	(MSR_ARCH_PERFMON_PERFCTR0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
-> >   #define MSR_ARCH_PERFMON_EVENTSEL_MAX	(MSR_ARCH_PERFMON_EVENTSEL0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
-> >   #define KVM_PMC_MAX_FIXED	3
-> > +#define MSR_ARCH_PERFMON_FIXED_CTR_MAX	(MSR_ARCH_PERFMON_FIXED_CTR0 + KVM_PMC_MAX_FIXED - 1)
-> >   #define KVM_AMD_PMC_MAX_GENERIC	6
-> >   struct kvm_pmu {
-> >   	unsigned nr_arch_gp_counters;
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 5c3ce39cdccb..f570367463c8 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -7054,15 +7054,32 @@ static void kvm_init_msr_list(void)
-> >   				continue;
-> >   			break;
-> >   		case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR_MAX:
-> > -			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
-> > +			if (!enable_pmu || msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
-> >   			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
-> >   				continue;
-> >   			break;
-> >   		case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL_MAX:
-> > -			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
-> > +			if (!enable_pmu || msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
-> >   			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
-> >   				continue;
-> >   			break;
-> > +		case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
-> > +			if (!enable_pmu || msrs_to_save_all[i] - MSR_ARCH_PERFMON_FIXED_CTR0 >=
-> > +			    min(KVM_PMC_MAX_FIXED, kvm_pmu_cap.num_counters_fixed))
+> > Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> Thanks! And ops, right, make sense. Should I spin a v3 for that or is it
+> simple enough to fix when pulling?
 
-The num_counters_fixed check is a separate change, no?
+I can fix it while applying the patch.
 
-> > +				continue;
-> > +			break;
-> > +		case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
-> > +		case MSR_K7_EVNTSEL0 ... MSR_K7_PERFCTR3:
-> > +		case MSR_CORE_PERF_FIXED_CTR_CTRL:
-> > +		case MSR_CORE_PERF_GLOBAL_STATUS:
-> > +		case MSR_CORE_PERF_GLOBAL_CTRL:
-> > +		case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
-> > +		case MSR_IA32_DS_AREA:
-> > +		case MSR_IA32_PEBS_ENABLE:
-> > +		case MSR_PEBS_DATA_CFG:
-
-Rather than duplicating all list entries, which will be a maintenance problem,
-what about moving PMU MSRs to a separate array?  Sample patch (that applies on top
-of the num_counters_fixed change) at the bottom.
-
-> > +			if (!enable_pmu)
-> > +				continue;
-> > +			break;
-> 
-> 
-> I prefer use a helper to wrap the hunk of PMU msr checks and move the helper
-> to the "default" branch of switch, it makes the code looks nicer:
-> 
-> default:
-
-That won't work as "default" is used to catch MSRs that always exist from the
-guest's perspective.  And even if that weren't the case, I don't like the idea of
-utilizing "default" for PMU MSRs.  The default=>PMU logic in kvm_{g,s}et_msr_common()
-isn't ideal, but it's the lesser of all evils.  But in this case there's no need
-since common KVM code knows all possible MSRs that might be saved.
-
----
- arch/x86/kvm/x86.c | 161 ++++++++++++++++++++++++---------------------
- 1 file changed, 87 insertions(+), 74 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 1cc8036d9e91..87bb7024e18f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1419,7 +1419,7 @@ EXPORT_SYMBOL_GPL(kvm_emulate_rdpmc);
-  * may depend on host virtualization features rather than host cpu features.
-  */
- 
--static const u32 msrs_to_save_all[] = {
-+static const u32 msrs_to_save_base[] = {
- 	MSR_IA32_SYSENTER_CS, MSR_IA32_SYSENTER_ESP, MSR_IA32_SYSENTER_EIP,
- 	MSR_STAR,
- #ifdef CONFIG_X86_64
-@@ -1436,6 +1436,10 @@ static const u32 msrs_to_save_all[] = {
- 	MSR_IA32_RTIT_ADDR3_A, MSR_IA32_RTIT_ADDR3_B,
- 	MSR_IA32_UMWAIT_CONTROL,
- 
-+	MSR_IA32_XFD, MSR_IA32_XFD_ERR,
-+};
-+
-+static const u32 msrs_to_save_pmu[] = {
- 	MSR_ARCH_PERFMON_FIXED_CTR0, MSR_ARCH_PERFMON_FIXED_CTR1,
- 	MSR_ARCH_PERFMON_FIXED_CTR0 + 2,
- 	MSR_CORE_PERF_FIXED_CTR_CTRL, MSR_CORE_PERF_GLOBAL_STATUS,
-@@ -1460,11 +1464,10 @@ static const u32 msrs_to_save_all[] = {
- 	MSR_F15H_PERF_CTL3, MSR_F15H_PERF_CTL4, MSR_F15H_PERF_CTL5,
- 	MSR_F15H_PERF_CTR0, MSR_F15H_PERF_CTR1, MSR_F15H_PERF_CTR2,
- 	MSR_F15H_PERF_CTR3, MSR_F15H_PERF_CTR4, MSR_F15H_PERF_CTR5,
--
--	MSR_IA32_XFD, MSR_IA32_XFD_ERR,
- };
- 
--static u32 msrs_to_save[ARRAY_SIZE(msrs_to_save_all)];
-+static u32 msrs_to_save[ARRAY_SIZE(msrs_to_save_base) +
-+			ARRAY_SIZE(msrs_to_save_pmu)];
- static unsigned num_msrs_to_save;
- 
- static const u32 emulated_msrs_all[] = {
-@@ -7001,9 +7004,83 @@ long kvm_arch_vm_ioctl(struct file *filp,
- 	return r;
- }
- 
--static void kvm_init_msr_list(void)
-+static void kvm_probe_msr_to_save(u32 msr_index)
- {
- 	u32 dummy[2];
-+
-+	if (rdmsr_safe(msr_index, &dummy[0], &dummy[1]))
-+		return;
-+
-+	/*
-+	 * Even MSRs that are valid in the host may not be exposed to the
-+	 * guests in some cases.
-+	 */
-+	switch (msr_index) {
-+	case MSR_IA32_BNDCFGS:
-+		if (!kvm_mpx_supported())
-+			return;
-+		break;
-+	case MSR_TSC_AUX:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_RDTSCP) &&
-+		    !kvm_cpu_cap_has(X86_FEATURE_RDPID))
-+			return;
-+		break;
-+	case MSR_IA32_UMWAIT_CONTROL:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_WAITPKG))
-+			return;
-+		break;
-+	case MSR_IA32_RTIT_CTL:
-+	case MSR_IA32_RTIT_STATUS:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT))
-+			return;
-+		break;
-+	case MSR_IA32_RTIT_CR3_MATCH:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-+		    !intel_pt_validate_hw_cap(PT_CAP_cr3_filtering))
-+			return;
-+		break;
-+	case MSR_IA32_RTIT_OUTPUT_BASE:
-+	case MSR_IA32_RTIT_OUTPUT_MASK:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-+		    (!intel_pt_validate_hw_cap(PT_CAP_topa_output) &&
-+		     !intel_pt_validate_hw_cap(PT_CAP_single_range_output)))
-+			return;
-+		break;
-+	case MSR_IA32_RTIT_ADDR0_A ... MSR_IA32_RTIT_ADDR3_B:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-+		    (msr_index - MSR_IA32_RTIT_ADDR0_A >=
-+		     intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2))
-+			return;
-+		break;
-+	case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR_MAX:
-+		if (msr_index - MSR_ARCH_PERFMON_PERFCTR0 >=
-+		    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
-+			return;
-+		break;
-+	case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL_MAX:
-+		if (msr_index - MSR_ARCH_PERFMON_EVENTSEL0 >=
-+		    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
-+			return;
-+		break;
-+	case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
-+		if (msr_index - MSR_ARCH_PERFMON_FIXED_CTR0 >=
-+		    min(KVM_PMC_MAX_FIXED, kvm_pmu_cap.num_counters_fixed))
-+			return;
-+		break;
-+	case MSR_IA32_XFD:
-+	case MSR_IA32_XFD_ERR:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
-+			return;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	msrs_to_save[num_msrs_to_save++] = msr_index;
-+}
-+
-+static void kvm_init_msr_list(void)
-+{
- 	unsigned i;
- 
- 	BUILD_BUG_ON_MSG(KVM_PMC_MAX_FIXED != 3,
-@@ -7013,76 +7090,12 @@ static void kvm_init_msr_list(void)
- 	num_emulated_msrs = 0;
- 	num_msr_based_features = 0;
- 
--	for (i = 0; i < ARRAY_SIZE(msrs_to_save_all); i++) {
--		if (rdmsr_safe(msrs_to_save_all[i], &dummy[0], &dummy[1]) < 0)
--			continue;
-+	for (i = 0; i < ARRAY_SIZE(msrs_to_save_base); i++)
-+		kvm_probe_msr_to_save(msrs_to_save_base[i]);
- 
--		/*
--		 * Even MSRs that are valid in the host may not be exposed
--		 * to the guests in some cases.
--		 */
--		switch (msrs_to_save_all[i]) {
--		case MSR_IA32_BNDCFGS:
--			if (!kvm_mpx_supported())
--				continue;
--			break;
--		case MSR_TSC_AUX:
--			if (!kvm_cpu_cap_has(X86_FEATURE_RDTSCP) &&
--			    !kvm_cpu_cap_has(X86_FEATURE_RDPID))
--				continue;
--			break;
--		case MSR_IA32_UMWAIT_CONTROL:
--			if (!kvm_cpu_cap_has(X86_FEATURE_WAITPKG))
--				continue;
--			break;
--		case MSR_IA32_RTIT_CTL:
--		case MSR_IA32_RTIT_STATUS:
--			if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT))
--				continue;
--			break;
--		case MSR_IA32_RTIT_CR3_MATCH:
--			if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
--			    !intel_pt_validate_hw_cap(PT_CAP_cr3_filtering))
--				continue;
--			break;
--		case MSR_IA32_RTIT_OUTPUT_BASE:
--		case MSR_IA32_RTIT_OUTPUT_MASK:
--			if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
--				(!intel_pt_validate_hw_cap(PT_CAP_topa_output) &&
--				 !intel_pt_validate_hw_cap(PT_CAP_single_range_output)))
--				continue;
--			break;
--		case MSR_IA32_RTIT_ADDR0_A ... MSR_IA32_RTIT_ADDR3_B:
--			if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
--				msrs_to_save_all[i] - MSR_IA32_RTIT_ADDR0_A >=
--				intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
--				continue;
--			break;
--		case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR_MAX:
--			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
--			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
--				continue;
--			break;
--		case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL_MAX:
--			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
--			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
--				continue;
--			break;
--		case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
--			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_FIXED_CTR0 >=
--			    min(KVM_PMC_MAX_FIXED, kvm_pmu_cap.num_counters_fixed))
--				continue;
--			break;
--		case MSR_IA32_XFD:
--		case MSR_IA32_XFD_ERR:
--			if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
--				continue;
--			break;
--		default:
--			break;
--		}
--
--		msrs_to_save[num_msrs_to_save++] = msrs_to_save_all[i];
-+	if (enable_pmu) {
-+		for (i = 0; i < ARRAY_SIZE(msrs_to_save_pmu); i++)
-+			kvm_probe_msr_to_save(msrs_to_save_pmu[i]);
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(emulated_msrs_all); i++) {
-
-base-commit: 248deec419748c75f3a0fd6c075fc7687441b7ea
 -- 
+Regards,
 
+Sakari Ailus
