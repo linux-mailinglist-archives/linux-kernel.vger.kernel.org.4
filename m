@@ -2,197 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6725165D068
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A32865D0F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234437AbjADKJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 05:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
+        id S238972AbjADKxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 05:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234672AbjADKJW (ORCPT
+        with ESMTP id S234590AbjADKwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 05:09:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D415167D6
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 02:08:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672826923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T7HpEnvLFRP9Wc3pt+AlvGW4vqhHztK91tjZWI6KGnk=;
-        b=PtBrc/RZbxxUmJw5lut2UduhR2BQr3vLadYikWAdmoiK1WYznPYG4HKyhcZnbeX92Tn29q
-        PrWzupVd8RhKwuHgwc3NdwKklCtMWR1+2pNvfIOpL8Rfggo47Br4b11btaZGXjQio73qDo
-        iFYP+NP3F/kp2DdYL3QIuLvycLMyf0A=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-119-vfKIEyfhOgG000b_8b4jTQ-1; Wed, 04 Jan 2023 05:08:42 -0500
-X-MC-Unique: vfKIEyfhOgG000b_8b4jTQ-1
-Received: by mail-wm1-f69.google.com with SMTP id n18-20020a05600c4f9200b003d993e08485so10582806wmq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 02:08:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T7HpEnvLFRP9Wc3pt+AlvGW4vqhHztK91tjZWI6KGnk=;
-        b=PXozE0HqQ9wbCb7ZZey7c5XRsIQvodzunnTbRZwIeHL6i8B0LxcLbKpObrSFTfJ+YZ
-         t7IsEgz8gj8JfaYHfAycoP6gp0Hdf31etMJuxVbrunHRk7eelf3Dsyqb+dwFk3ZpelqM
-         c7CluwwXQGxX+PvnkD7o8NvEWyFDWa/xTPRmjbTny49RHNZcW+8wOCJVdm+0bQElX9mV
-         6BYdtXe/9Lu+bZ20vkzh9mM4egooLOiC6IjRuJS4IEB9KYWNaffeW+5rNlNkB1J2hzBD
-         CUMJ9iBWgZiUxB4Mv5l/1sSCVAA3Sah1B3+o6pnt8wbkCgA7zXZcxIr9B7aNwcvsaFdV
-         4pLw==
-X-Gm-Message-State: AFqh2kpB50UyPyXQ9KLugZUKWHZWrsYu1cBXIM/2PPmKPutInIuR0MHj
-        a/5NdCqFF6Kmada5bzMPjvaI2QtuklBgP6TeOUGXAu0xIIBK+e3AgL4k9otBge4g0BHQAiD5MCv
-        qjk928Dc7dThfIuOQ5tXH6r4K
-X-Received: by 2002:adf:ee83:0:b0:270:213a:b53d with SMTP id b3-20020adfee83000000b00270213ab53dmr28007205wro.33.1672826921388;
-        Wed, 04 Jan 2023 02:08:41 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsGj8pewT8+sUCUsJf50Rb17SXAd6Z6tmNwzcf4m/yIhH3mB51TOWtZJwSua81YkACkPxNNdQ==
-X-Received: by 2002:adf:ee83:0:b0:270:213a:b53d with SMTP id b3-20020adfee83000000b00270213ab53dmr28007190wro.33.1672826921142;
-        Wed, 04 Jan 2023 02:08:41 -0800 (PST)
-Received: from starship ([89.237.103.62])
-        by smtp.gmail.com with ESMTPSA id u17-20020adfeb51000000b0026e94493858sm33190358wrn.106.2023.01.04.02.08.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 02:08:40 -0800 (PST)
-Message-ID: <aba3787196caa812cee04f840dce26ac8a79eb7f.camel@redhat.com>
-Subject: Re: [PATCH v4 28/32] KVM: SVM: Require logical ID to be power-of-2
- for AVIC entry
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Wed, 04 Jan 2023 12:08:38 +0200
-In-Reply-To: <b002fd18c2abdfe5f4395be38858f461b3c76ac3.camel@redhat.com>
-References: <20221001005915.2041642-1-seanjc@google.com>
-         <20221001005915.2041642-29-seanjc@google.com>
-         <f1f1a33134c739f09f5820b5a4973535f121c0da.camel@redhat.com>
-         <b002fd18c2abdfe5f4395be38858f461b3c76ac3.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 4 Jan 2023 05:52:40 -0500
+X-Greylist: delayed 2457 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Jan 2023 02:50:52 PST
+Received: from stargate.chelsio.com (stargate.chelsio.com [12.32.117.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880CBE7D
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 02:50:52 -0800 (PST)
+Received: from localhost (raina-lt.asicdesigners.com [10.193.177.176] (may be forged))
+        by stargate.chelsio.com (8.14.7/8.14.7) with ESMTP id 304A9GXG016296;
+        Wed, 4 Jan 2023 02:09:28 -0800
+Date:   Wed, 4 Jan 2023 15:39:16 +0530
+From:   Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>
+To:     linux-firmware@kernel.org
+Cc:     linux-kernel@vger.kernel.org, jwboyer@kernel.org,
+        rahul.lakkireddy@chelsio.com
+Subject: pull request: linux-firmware: update cxgb4 firmware to 1.27.1.0
+Message-ID: <Y7VQTMD97rHTqsBo@chelsio.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_05,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-29 at 10:27 +0200, mlevitsk@redhat.com wrote:
-> On Fri, 2022-12-09 at 00:00 +0200, Maxim Levitsky wrote:
-> > On Sat, 2022-10-01 at 00:59 +0000, Sean Christopherson wrote:
-> > > Do not modify AVIC's logical ID table if the logical ID portion of the
-> > > LDR is not a power-of-2, i.e. if the LDR has multiple bits set.  Taking
-> > > only the first bit means that KVM will fail to match MDAs that intersect
-> > > with "higher" bits in the "ID"
-> > > 
-> > > The "ID" acts as a bitmap, but is referred to as an ID because theres an
-> > > implicit, unenforced "requirement" that software only set one bit.  This
-> > > edge case is arguably out-of-spec behavior, but KVM cleanly handles it
-> > > in all other cases, e.g. the optimized logical map (and AVIC!) is also
-> > > disabled in this scenario.
-> > > 
-> > > Refactor the code to consolidate the checks, and so that the code looks
-> > > more like avic_kick_target_vcpus_fast().
-> > > 
-> > > Fixes: 18f40c53e10f ("svm: Add VMEXIT handlers for AVIC")
-> > > Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> > > Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > > ---
-> > >  arch/x86/kvm/svm/avic.c | 30 +++++++++++++++---------------
-> > >  1 file changed, 15 insertions(+), 15 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> > > index 4b6fc9d64f4d..a9e4e09f83fc 100644
-> > > --- a/arch/x86/kvm/svm/avic.c
-> > > +++ b/arch/x86/kvm/svm/avic.c
-> > > @@ -513,26 +513,26 @@ unsigned long avic_vcpu_get_apicv_inhibit_reasons(struct kvm_vcpu *vcpu)
-> > >  static u32 *avic_get_logical_id_entry(struct kvm_vcpu *vcpu, u32 ldr, bool flat)
-> > >  {
-> > >  	struct kvm_svm *kvm_svm = to_kvm_svm(vcpu->kvm);
-> > > -	int index;
-> > >  	u32 *logical_apic_id_table;
-> > > -	int dlid = GET_APIC_LOGICAL_ID(ldr);
-> > > +	u32 cluster, index;
-> > >  
-> > > -	if (!dlid)
-> > > -		return NULL;
-> > > +	ldr = GET_APIC_LOGICAL_ID(ldr);
-> > >  
-> > > -	if (flat) { /* flat */
-> > > -		index = ffs(dlid) - 1;
-> > > -		if (index > 7)
-> > > +	if (flat) {
-> > > +		cluster = 0;
-> > > +	} else {
-> > > +		cluster = (ldr >> 4) << 2;
-> > > +		if (cluster >= 0xf)
-> > >  			return NULL;
-> > > -	} else { /* cluster */
-> > > -		int cluster = (dlid & 0xf0) >> 4;
-> > > -		int apic = ffs(dlid & 0x0f) - 1;
-> > > -
-> > > -		if ((apic < 0) || (apic > 7) ||
-> > > -		    (cluster >= 0xf))
-> > > -			return NULL;
-> > > -		index = (cluster << 2) + apic;
-> > > +		ldr &= 0xf;
-> > >  	}
-> > > +	if (!ldr || !is_power_of_2(ldr))
-> > > +		return NULL;
-> > > +
-> > > +	index = __ffs(ldr);
-> > > +	if (WARN_ON_ONCE(index > 7))
-> > > +		return NULL;
-> > > +	index += (cluster << 2);
-> > >  
-> > >  	logical_apic_id_table = (u32 *) page_address(kvm_svm->avic_logical_id_table_page);
-> > >  
-> > 
-> > Looks good.
-> 
-> I hate to say it but this patch has a bug:
-> 
-> We have both 'cluster = (ldr >> 4) << 2' and then 'index += (cluster << 2)'
-> 
-> One of the shifts has to go.
+Please pull the new Chelsio firmware from the following URL.
+
+  http://git.chelsio.net/pub/git/linux-firmware.git for-upstream
+
+Thanks,
+Rahul
 
 
-Sean, please don't forget to fix this isssue in the next patch series.
-Best regards,
-	Maxim Levitsky
-> 
-> Best regards,
-> 	Maxim Levitsky
-> 
-> 
-> > For future refactoring, I also suggest to rename this function to 'avic_get_logical_id_table_entry'
-> > to stress the fact that it gets a pointer to the AVIC's data structure.
-> > 
-> > Same for 'avic_get_physical_id_entry'
-> > 
-> > And also while at it : the 'svm->avic_physical_id_cache', is a very misleading name,
-> > 
-> > It should be svm->avic_physical_id_table_entry_ptr with a comment explaining that
-> > is is the pointer to physid table entry.
-> > 
-> > 
-> > Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > 
-> > 
-> > 
-> > Best regards,
-> > 	Maxim Levitsky
-> 
-> 
+The following changes since commit 52261d0329b1a2e414ee394aae3c5ca36283730f:
 
+  Merge https://github.com/pkshih/linux-firmware (2022-12-16 07:10:10 -0500)
 
+are available in the Git repository at:
+
+  http://git.chelsio.net/pub/git/linux-firmware.git for-upstream
+
+for you to fetch changes up to 52e62d6af5c56b82ef49db415b12c8cfe4faf756:
+
+  cxgb4: Update firmware to revision 1.27.1.0 (2023-01-04 09:14:46 +0000)
+
+----------------------------------------------------------------
+Rahul Lakkireddy (1):
+      cxgb4: Update firmware to revision 1.27.1.0
+
+ WHENCE                                         |  12 ++++++------
+ cxgb4/{t4fw-1.27.0.0.bin => t4fw-1.27.1.0.bin} | Bin 570880 -> 570880 bytes
+ cxgb4/t5fw-1.27.0.0.bin                        | Bin 677376 -> 0 bytes
+ cxgb4/t5fw-1.27.1.0.bin                        | Bin 0 -> 678400 bytes
+ cxgb4/{t6fw-1.27.0.0.bin => t6fw-1.27.1.0.bin} | Bin 729600 -> 730112 bytes
+ 5 files changed, 6 insertions(+), 6 deletions(-)
+ rename cxgb4/{t4fw-1.27.0.0.bin => t4fw-1.27.1.0.bin} (73%)
+ delete mode 100644 cxgb4/t5fw-1.27.0.0.bin
+ create mode 100644 cxgb4/t5fw-1.27.1.0.bin
+ rename cxgb4/{t6fw-1.27.0.0.bin => t6fw-1.27.1.0.bin} (54%)
