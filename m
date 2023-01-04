@@ -2,182 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1CE65DCD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A8065DCDF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240162AbjADTe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 14:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S240214AbjADTf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 14:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240138AbjADTey (ORCPT
+        with ESMTP id S240122AbjADTfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 14:34:54 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322EC3C3B5
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:34:54 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 36so22928443pgp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 11:34:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hec4l6+at5WSRcm7OYvARniaVMgLC26qEPf8vcDcszw=;
-        b=lAfdpdRAWCHlsIepuddv34x9a8FqsGMAnXmLXaUtAv2nYJENBdHCf6oGBuVHkOjQjH
-         EDqn7eTzgEfaRUJoy1w7rl0Pe4T+iZhj/dp2m8DMo/s9BBdQaRm3+Tur4By66hSmxtR6
-         44IbGgoazsxg5JG7IkyHCUL1TFVLCRXWR/ludEle/oXzWhSL47e1blotcrmF9o17mHDX
-         mjXtkCBFpPdMOH4t3ePqxZ4eIynrgSnEZf1VIbIR1D17Zz3Di3acZ2KZ1xpV3X9Bata8
-         hXGoPEaQEpG1moN6GDs64l8VPW/u5i9rKgL8w41Y5ja256ZpPF0oc5aRU4yz0RQltWgH
-         2KEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hec4l6+at5WSRcm7OYvARniaVMgLC26qEPf8vcDcszw=;
-        b=6XNGkdXebmqXsFj7hjbv8mrG8L22/V87xleZretD9hczG/QUzAmUOzab/v66A8EKfZ
-         CpyRTmnX+/TlVVygStWpFs4c02S4kdcOgjrA9vt3beKwbCqAN/3OCmRopviky6uC9aye
-         rGkEi3kgt5Rjv+zsIvhXCHhQ0aaLu8BX1V/s6KpNDDshWorvAbPCEQGXkd5capJRRkYz
-         SuXdSAfXTaaIITrlSIsx2s7JtQ4cgKYF/5UITwcV+BhwgiZ6pm66W3NUOyFwLl63A98T
-         QkufrVLz4sHyzl7HmnnYFDWtRseaK9/ULTHnolGQYMznd4DuX/ARU4vBe/fNYSrVxF6+
-         vSRg==
-X-Gm-Message-State: AFqh2kpjrUdPImN5eV5exXaiSDIv1+gWIugBKuQB+A0h3UncGc51sLt5
-        pdLSuRACb2Ucz3IJAeekLVhiXQ==
-X-Google-Smtp-Source: AMrXdXsy0gl5nkmrz2u2oeezJO6bgxcJOrlyv+1OHKLZ3HSm4tTUeMsCNRHvqfcfkmnVN/Li5pjVtw==
-X-Received: by 2002:aa7:8084:0:b0:574:8995:c0d0 with SMTP id v4-20020aa78084000000b005748995c0d0mr3883534pff.1.1672860893603;
-        Wed, 04 Jan 2023 11:34:53 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x24-20020aa78f18000000b0058134d2df41sm17961993pfr.146.2023.01.04.11.34.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 11:34:53 -0800 (PST)
-Date:   Wed, 4 Jan 2023 19:34:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paul Durrant <pdurrant@amazon.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Wed, 4 Jan 2023 14:35:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2A93C3AF;
+        Wed,  4 Jan 2023 11:35:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10A09B818B6;
+        Wed,  4 Jan 2023 19:35:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E819FC433EF;
+        Wed,  4 Jan 2023 19:35:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672860914;
+        bh=nBtzaERYqz1fl0bdAO7NgdUE0uQtmK9u3n6Av8noF4A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CZG94dIaCb9RFeCz/iBmZN53uq60BtSkPGf5lymH1RW37BYp5I/uIK7xaqHuPZzxk
+         jqwDrxZN4LxxDwMTFq0fQuAdNnS3A7jk9hqsyIYl+toChVSOKl9kNqgG2THRIBqHl+
+         7eOgSoGzizy8hjdYhfsuwxh0dUYV6jO0U7eOnl3rxWtoP4Dc4EsRW5UPs81KWBboul
+         cfpyt/XnCV8OVbITcL7jpUfTfiB+olHJhQSuGzux3M4zWY6EmQjnxnWpnK7pk7SPl7
+         K3ATjvbPmUv6A8vmO9hh6oGOeMGokKEvcPSbruIdgZPrODecyW31L8B+g4PsAnzqmC
+         BUP7gcwQQzufA==
+Date:   Wed, 4 Jan 2023 21:34:57 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Aaron Thompson <dev@aaront.org>
+Cc:     linux-mm@kvack.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Darren Hart <dvhart@infradead.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [PATCH v6 1/2] KVM: x86/cpuid: generalize
- kvm_update_kvm_cpuid_base() and also capture limit
-Message-ID: <Y7XU2R0f3pCYF9uz@google.com>
-References: <20221220134053.15591-1-pdurrant@amazon.com>
- <20221220134053.15591-2-pdurrant@amazon.com>
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Marco Elver <elver@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 1/1] mm: Always release pages to the buddy allocator in
+ memblock_free_late().
+Message-ID: <Y7XU4Wf2ohArLtvs@kernel.org>
+References: <20230104074215.2621-1-dev@aaront.org>
+ <010101857bbc4d26-d9683bb4-c4f0-465b-aea6-5314dbf0aa01-000000@us-west-2.amazonses.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221220134053.15591-2-pdurrant@amazon.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <010101857bbc4d26-d9683bb4-c4f0-465b-aea6-5314dbf0aa01-000000@us-west-2.amazonses.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022, Paul Durrant wrote:
-> A sunsequent patch will need to acquire the CPUID leaf range for emulated
-> Xen so explicitly pass the signature of the hypervisor we're interested in
-> to the new function. Also introduce a new kvm_hypervisor_cpuid structure
-> so we can neatly store both the base and limit leaf indices.
-> 
-> Signed-off-by: Paul Durrant <pdurrant@amazon.com>
-> ---
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: David Woodhouse <dwmw2@infradead.org>
-> 
-> v6:
->  - New in this version
-> ---
->  arch/x86/include/asm/kvm_host.h |  7 ++++++-
->  arch/x86/kvm/cpuid.c            | 15 ++++++++-------
->  2 files changed, 14 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index f35f1ff4427b..ff201ad35551 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -710,6 +710,11 @@ struct kvm_queued_exception {
->  	bool has_payload;
->  };
->  
-> +struct kvm_hypervisor_cpuid {
-> +	u32 base;
-> +	u32 limit;
-> +};
+Hi,
 
-Probably makes sense to place this above "struct kvm_vcpu_xen" right away to
-avoid the (very minor) churn.
+On Wed, Jan 04, 2023 at 07:43:36AM +0000, Aaron Thompson wrote:
+> If CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled, memblock_free_pages()
+> only releases pages to the buddy allocator if they are not in the
+> deferred range. This is correct for free pages (as defined by
+> for_each_free_mem_pfn_range_in_zone()) because free pages in the
+> deferred range will be initialized and released as part of the deferred
+> init process. memblock_free_pages() is called by memblock_free_late(),
+> which is used to free reserved ranges after memblock_free_all() has
+> run. memblock_free_all() initializes all pages in reserved ranges, and
 
->  struct kvm_vcpu_arch {
->  	/*
->  	 * rip and regs accesses must go through
-> @@ -826,7 +831,7 @@ struct kvm_vcpu_arch {
+To be precise, memblock_free_all() frees pages, or releases them to the
+pages allocator, rather than initializes.
+
+> accordingly, those pages are not touched by the deferred init
+> process. This means that currently, if the pages that
+> memblock_free_late() intends to release are in the deferred range, they
+> will never be released to the buddy allocator. They will forever be
+> reserved.
+> 
+> In addition, memblock_free_pages() calls kmsan_memblock_free_pages(),
+> which is also correct for free pages but is not correct for reserved
+> pages. KMSAN metadata for reserved pages is initialized by
+> kmsan_init_shadow(), which runs shortly before memblock_free_all().
+> 
+> For both of these reasons, memblock_free_pages() should only be called
+> for free pages, and memblock_free_late() should call __free_pages_core()
+> directly instead.
+
+Overall looks fine to me and I couldn't spot potential issues.
+
+I'd appreciate if you add a paragraph about the actual issue with EFI boot
+you described in the cover letter to the commit message.
+
+> Fixes: 3a80a7fa7989 ("mm: meminit: initialise a subset of struct pages if CONFIG_DEFERRED_STRUCT_PAGE_INIT is set")
+> Signed-off-by: Aaron Thompson <dev@aaront.org>
+> ---
+>  mm/memblock.c                     | 2 +-
+>  tools/testing/memblock/internal.h | 4 ++++
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 511d4783dcf1..56a5b6086c50 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -1640,7 +1640,7 @@ void __init memblock_free_late(phys_addr_t base, phys_addr_t size)
+>  	end = PFN_DOWN(base + size);
 >  
->  	int cpuid_nent;
->  	struct kvm_cpuid_entry2 *cpuid_entries;
-> -	u32 kvm_cpuid_base;
-> +	struct kvm_hypervisor_cpuid kvm_cpuid;
->  
->  	u64 reserved_gpa_bits;
->  	int maxphyaddr;
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 0b5bf013fcb8..2468720f8d84 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -180,12 +180,13 @@ static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2
->  	return 0;
+>  	for (; cursor < end; cursor++) {
+> -		memblock_free_pages(pfn_to_page(cursor), cursor, 0);
+> +		__free_pages_core(pfn_to_page(cursor), 0);
+
+Please add a comment that explains why it is safe to call __free_pages_core() here.
+Something like
+
+	/*
+	 * Reserved pages are always initialized by the end of
+	 * memblock_free_all() either during memmap_init() or, with deferred
+	 * initialization if struct page in reserve_bootmem_region()
+	 */
+
+>  		totalram_pages_inc();
+>  	}
 >  }
+> diff --git a/tools/testing/memblock/internal.h b/tools/testing/memblock/internal.h
+> index fdb7f5db7308..85973e55489e 100644
+> --- a/tools/testing/memblock/internal.h
+> +++ b/tools/testing/memblock/internal.h
+> @@ -15,6 +15,10 @@ bool mirrored_kernelcore = false;
 >  
-> -static void kvm_update_kvm_cpuid_base(struct kvm_vcpu *vcpu)
-> +static void kvm_update_hypervisor_cpuid(struct kvm_vcpu *vcpu, const char *hypervisor_signature,
+>  struct page {};
+>  
+> +void __free_pages_core(struct page *page, unsigned int order)
+> +{
+> +}
+> +
+>  void memblock_free_pages(struct page *page, unsigned long pfn,
+>  			 unsigned int order)
+>  {
+> -- 
+> 2.30.2
+> 
 
-Please wrap.  The 80 char limit is a soft limit, but should still be honored unless
-there's a good reason to run over.
-
-I also vote to name the param "sig" to keep line lengths short.
-
-> +					struct kvm_hypervisor_cpuid *hypervisor_cpuid)
-
-Since the struct is a 64-bit value, what about making this a pure getter that
-returns a copy?
-
-static struct kvm_hypervisor_cpuid kvm_get_hypervisor_cpuid(struct kvm_vcpu *vcpu,
-							    const char *sig)
-{
-	struct kvm_hypervisor_cpuid cpuid = {};
-	struct kvm_cpuid_entry2 *entry;
-	u32 function;
-
-	for_each_possible_hypervisor_cpuid_base(cpuid.base) {
-		entry = kvm_find_cpuid_entry(vcpu, function);
-
-		if (entry) {
-			u32 signature[3];
-
-			signature[0] = entry->ebx;
-			signature[1] = entry->ecx;
-			signature[2] = entry->edx;
-
-			if (!memcmp(signature, sig, sizeof(signature))) {
-				cpuid.base = function;
-				cpuid.limit = entry->eax;
-				break;
-			}
-		}
-	}
-
-	return cpuid;
-}
-
-
-	vcpu->arch.kvm_cpuid = kvm_get_hypervisor_cpuid(vcpu, KVM_SIGNATURE);
-	vcpu->arch.xen.cpuid = kvm_get_hypervisor_cpuid(vcpu, XEN_SIGNATURE);
+-- 
+Sincerely yours,
+Mike.
