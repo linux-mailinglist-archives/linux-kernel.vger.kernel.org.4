@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5144865CCF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE7265CCF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjADGY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:24:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S233056AbjADGYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjADGYW (ORCPT
+        with ESMTP id S229773AbjADGYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 Jan 2023 01:24:22 -0500
 Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4831317419;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2FE17E01;
         Tue,  3 Jan 2023 22:24:20 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Nn01V4ZRCz4f3mJL;
-        Wed,  4 Jan 2023 14:24:14 +0800 (CST)
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Nn01W0J3pz4f3mKr;
+        Wed,  4 Jan 2023 14:24:15 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgDnnbGOG7Vju3lKBA--.23788S4;
+        by APP4 (Coremail) with SMTP id gCh0CgDnnbGOG7Vju3lKBA--.23788S5;
         Wed, 04 Jan 2023 14:24:17 +0800 (CST)
 From:   Kemeng Shi <shikemeng@huaweicloud.com>
 To:     axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
         ming.lei@redhat.com, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     hch@lst.de, john.garry@huawei.com, jack@suse.cz
-Subject: [PATCH v2 02/13] blk-mq: remove stale comment for blk_mq_sched_mark_restart_hctx
-Date:   Wed,  4 Jan 2023 22:22:48 +0800
-Message-Id: <20230104142259.2673013-3-shikemeng@huaweicloud.com>
+Subject: [PATCH v2 03/13] blk-mq: wait on correct sbitmap_queue in blk_mq_mark_tag_wait
+Date:   Wed,  4 Jan 2023 22:22:49 +0800
+Message-Id: <20230104142259.2673013-4-shikemeng@huaweicloud.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20230104142259.2673013-1-shikemeng@huaweicloud.com>
 References: <20230104142259.2673013-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgDnnbGOG7Vju3lKBA--.23788S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw18Ary5CF1UZw45KFyDKFg_yoWDZrX_Ww
-        15Crn7GFWDGwn0vrWakF4UZF4Ik34kJa4UCay5tr9Fyw10qa9xGr4UKr15XrZ8W3ZxGFW3
-        Jwn5XrykA3Za9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbfxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_JFv_Gryl82
-        xGYIkIc2x26280x7IE14v26r15M28IrcIa0xkI8VCY1x0267AKxVW8JVW5JwA2ocxC64kI
-        II0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7
-        xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
-        z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4
-        xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
-        6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jguciUUUUU=
+X-CM-TRANSID: gCh0CgDnnbGOG7Vju3lKBA--.23788S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF15AF1rKFW7tr4rCFyUWrg_yoW8Xr4DpF
+        43Ga1jkasaqryjvFWkJa9rC3ZY939xKr93Grs3Cw4Ygr4rGrs3Xr10gF4UXry0vrZ5Ca98
+        ArWDtryfZr1UXa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+        8IrcIa0xkI8VA2jI8067AKxVWUWwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK
+        0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
+        x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+        84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I
+        8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
+        xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIq2MUUUUU
 X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
@@ -61,32 +61,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 97889f9ac24f8 ("blk-mq: remove synchronize_rcu() from
-blk_mq_del_queue_tag_set()") remove handle of TAG_SHARED in restart,
-then shared_hctx_restart counted for how many hardware queues are marked
-for restart is removed too.
-Remove the stale comment that we still count hardware queues need restart.
+For shared queues case, we will only wait on bitmap_tags if we fail to get
+driver tag. However, rq could be from breserved_tags, then two problems
+will occur:
+1. io hung if no tag is currently allocated from bitmap_tags.
+2. unnecessary wakeup when tag is freed to bitmap_tags while no tag is
+freed to breserved_tags.
+Wait on the bitmap from which rq from to fix this.
 
-Fixes: 97889f9ac24f ("blk-mq: remove synchronize_rcu() from blk_mq_del_queue_tag_set()")
+Fixes: f906a6a0f426 ("blk-mq: improve tag waiting setup for non-shared tags")
 Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 ---
- block/blk-mq-sched.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ block/blk-mq.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/block/blk-mq-sched.c b/block/blk-mq-sched.c
-index 23d1a90fec42..ae40cdb7a383 100644
---- a/block/blk-mq-sched.c
-+++ b/block/blk-mq-sched.c
-@@ -19,8 +19,7 @@
- #include "blk-wbt.h"
- 
- /*
-- * Mark a hardware queue as needing a restart. For shared queues, maintain
-- * a count of how many hardware queues are marked for restart.
-+ * Mark a hardware queue as needing a restart.
-  */
- void blk_mq_sched_mark_restart_hctx(struct blk_mq_hw_ctx *hctx)
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 42bb59fa275c..ec958aa044ba 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -1820,7 +1820,7 @@ static int blk_mq_dispatch_wake(wait_queue_entry_t *wait, unsigned mode,
+ static bool blk_mq_mark_tag_wait(struct blk_mq_hw_ctx *hctx,
+ 				 struct request *rq)
  {
+-	struct sbitmap_queue *sbq = &hctx->tags->bitmap_tags;
++	struct sbitmap_queue *sbq;
+ 	struct wait_queue_head *wq;
+ 	wait_queue_entry_t *wait;
+ 	bool ret;
+@@ -1843,6 +1843,10 @@ static bool blk_mq_mark_tag_wait(struct blk_mq_hw_ctx *hctx,
+ 	if (!list_empty_careful(&wait->entry))
+ 		return false;
+ 
++	if (blk_mq_tag_is_reserved(rq->mq_hctx->sched_tags, rq->internal_tag))
++		sbq = &hctx->tags->breserved_tags;
++	else
++		sbq = &hctx->tags->bitmap_tags;
+ 	wq = &bt_wait_ptr(sbq, hctx)->wait;
+ 
+ 	spin_lock_irq(&wq->lock);
 -- 
 2.30.0
 
