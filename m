@@ -2,403 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A373A65DFE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7830E65DFE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240602AbjADWV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:21:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S239991AbjADWWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240575AbjADWVw (ORCPT
+        with ESMTP id S240543AbjADWVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:21:52 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3263FA0C
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:21:39 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h16so34421614wrz.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:21:39 -0800 (PST)
+        Wed, 4 Jan 2023 17:21:53 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E84342600;
+        Wed,  4 Jan 2023 14:21:43 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j17so43039716lfr.3;
+        Wed, 04 Jan 2023 14:21:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sRpdkBF8vlGiGm4/xH4GyWurcWx8IXmtNRmJ/fowJgo=;
-        b=U1TlV6bPwS2xr8bte26ZQ/I/hC7qBxWB48u9HAuWnIMZ6kOb4GWr8zRhd0TM3ixAd0
-         9TCHr0a/AWUOKr0+LgpJoiqnJdvJhiF7v59qH8NcrTRGrUP62/0vNPiZgrb3c2PAewIV
-         S8dG01KDfyOsKY4B1bjJOqiJ15S137i4aD8UxRLZNMinK8HOPmXMUaO16ASzeqS/tBDo
-         SXiJASblRvnZZgj2C0HmqZPlCPIPb2uU0H37BmtgG+oqycWmkgMO2WpN7VlbwMxf2i2F
-         H9mX9Ex2CeHFcLIpQYYKU/akSRqRmUIKAdw8q6tCiyro/Elas6i7UelRdxBj2tl2E38L
-         zJ9w==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zS4jIgttPjdUhbCGJt5R7vixRsFgTExBXPa62NdH9To=;
+        b=kyAaa8T49nuCcj+Ed3b/1eNxBpOf69N7dbzOW96Y7f7rNYaV3+6cYSnx2n0b3r3RmX
+         oxuUKvFkmSES+c+fV9kOwsgGhefMWEYhqLHo5WQNQILzam3433kpSFDkWf2EKgfuLS3n
+         DNjD/Hvf4pvjsxfIkqVuTElxykILEqLIQM9EGV5TyIFFgG1mUcyxEZ5rxY2K/1rLSHtT
+         ZyYZel35i/+wcuT74HUvFC0tasHlfzn4R98Xsn+iEAdpgR/Eww//poNkI+FmTdhxKvlP
+         LPwkhPOYUzxZgyDRTIcsqQBZvYR+7vHIXLsBD9dRCia4iim9OldAf+w7yXgUnsXuUKxA
+         3DAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sRpdkBF8vlGiGm4/xH4GyWurcWx8IXmtNRmJ/fowJgo=;
-        b=rUSA7Ka4Q5CeXQ3EGnd93Kc4foNnSKKi6r3aLpbaj4vYVui1JOLDUON/kBTlHh/1LI
-         R6/yC6HyuD/iINoHKPFrnrNBIH1LU+iLlYrcz0yoNAKVef6wqfsRgn68ganSzlpT8Qwg
-         QQQUvfkVLU/sy4DGovdxeLMEXdrYd6o8jKVH4lv9CJEpHW7fID05fCNKpwlKvJYa/qRD
-         nNCNL1BoW508Ka2JXudi4iWiKtklrPn4IDcdi/yo+S2jn/q4HSirUudMgAGlb91bqZFH
-         I9cE8flykS/azFwrqtRniDsSH5mCDUPvEgfyC39C1urqaEoaHGTfoBQM1C9AYM2jONi8
-         V4CA==
-X-Gm-Message-State: AFqh2kqr2qKDUQrEI6icQRfRLJN1qlTZXROsZKTJW8fIXKa/lPx4ZJK1
-        0YExVRwqFNqbWhaGaC8IyqRk3g==
-X-Google-Smtp-Source: AMrXdXvudSgrHA0bF9cLFrhsDk49195ij1qrEoCSBBhRt+S9HpMnEjr4GcEMytg5IE+c9xBNbC8qBg==
-X-Received: by 2002:adf:d084:0:b0:278:29ac:f894 with SMTP id y4-20020adfd084000000b0027829acf894mr22530677wrh.64.1672870897920;
-        Wed, 04 Jan 2023 14:21:37 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id l7-20020adfc787000000b002238ea5750csm42430278wrg.72.2023.01.04.14.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 14:21:37 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-X-Google-Original-From: Daniel Lezcano <daniel.lezcano@kernel.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org,
-        srinivas.pandruvada@linux.intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, rui.zhang@intel.com,
-        christophe.jaillet@wanadoo.fr, Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v3 3/3] thermal/drivers/intel: Use generic trip points int340x
-Date:   Wed,  4 Jan 2023 23:21:27 +0100
-Message-Id: <20230104222127.2364396-4-daniel.lezcano@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230104222127.2364396-1-daniel.lezcano@kernel.org>
-References: <20230104222127.2364396-1-daniel.lezcano@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zS4jIgttPjdUhbCGJt5R7vixRsFgTExBXPa62NdH9To=;
+        b=aVDx0l6gvdlDNQ3lZcrQx4uTrdHsIaMprllWVvfoM7cnaKCqt/zKUchtlf7RhXkhj1
+         h1rPXMsxa9BLOYml1jUhKk2ZANU6+skVetVo4OI9FrA+//WzX24TN1Nkj+IUzDW3l1/Q
+         OKebqAMXwNU52HqZVsMl/a+izbQP86EbdMMPEr6OZvVw9jAwLBZiIkYB55S2RQogOBu1
+         0o/rfUXX07STKi8IjzZ3BYR6JigAxOmccSoZW4MbH8+eKqAKm/kI++raiUAKtiEy4l1L
+         fzvF8pYUO0+81XDKgTY645V+dXPfdeAzqJDXu7jsHYq4/f1eARVhHazJiRGor2M77cfT
+         M/Xg==
+X-Gm-Message-State: AFqh2krry43bYARR3E1IAF+rDPQfQOoTYMdlJiFfAK9NYKHuoFd9ulzk
+        +siOOAtaJBBNl8glzKVWjzydMi/JXCorMUFnL3I=
+X-Google-Smtp-Source: AMrXdXvticf4UQYxlPAwok2rNeBZBmlG+UMosc3ysNBfJc0tpDVZ70h2990Q33vmktGo/xmH6Q8tEd1QME6y4ilqeTQ=
+X-Received: by 2002:a05:6512:2821:b0:4b5:5da1:5224 with SMTP id
+ cf33-20020a056512282100b004b55da15224mr2100381lfb.106.1672870901453; Wed, 04
+ Jan 2023 14:21:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230104150642.v2.1.I1f29bb547a03e9adfe2e6754212f9d14a2e39c4b@changeid>
+In-Reply-To: <20230104150642.v2.1.I1f29bb547a03e9adfe2e6754212f9d14a2e39c4b@changeid>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Wed, 4 Jan 2023 14:21:29 -0800
+Message-ID: <CABBYNZL9FiZjRYJE_h4n2kf9LKv_5XF3Fd=bz=cU4bTcDR-QHQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: Fix possible deadlock in rfcomm_sk_state_change
+To:     Ying Hsu <yinghsu@chromium.org>
+Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        leon@kernel.org, chromeos-bluetooth-upstreaming@chromium.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
+Hi Ying,
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
+On Wed, Jan 4, 2023 at 7:07 AM Ying Hsu <yinghsu@chromium.org> wrote:
+>
+> There's a possible deadlock when two processes are connecting
+> and closing a RFCOMM socket concurrently. Here's the call trace:
 
-Convert the ops content logic into generic trip points and register
-them with the thermal zone.
+Are you sure it is 2 different processes? Usually that would mean 2
+different sockets (sk) then so they wouldn't share the same lock, so
+this sounds more like 2 different threads, perhaps it is worth
+creating a testing case in our rfcomm-tester so we are able to detect
+this sort of thing in the future.
 
-In order to consolidate the code, use the ACPI thermal framework API
-to fill the generic trip point from the ACPI tables.
+> -> #2 (&d->lock){+.+.}-{3:3}:
+>        __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+>        __mutex_lock0x12f/0x1360 kernel/locking/mutex.c:747
+>        __rfcomm_dlc_close+0x15d/0x890 net/bluetooth/rfcomm/core.c:487
+>        rfcomm_dlc_close+1e9/0x240 net/bluetooth/rfcomm/core.c:520
+>        __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
+>        rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
+>        rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
+>        __sock_release+0xcd/0x280 net/socket.c:650
+>        sock_close+0x1c/0x20 net/socket.c:1365
+>        __fput+0x27c/0xa90 fs/file_table.c:320
+>        task_work_run+0x16f/0x270 kernel/task_work.c:179
+>        exit_task_work include/linux/task_work.h:38 [inline]
+>        do_exit+0xaa8/0x2950 kernel/exit.c:867
+>        do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+>        get_signal+0x21c3/0x2450 kernel/signal.c:2859
+>        arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+>        exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+>        exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+>        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+>        syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+>        do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> -> #1 (rfcomm_mutex){+.+.}-{3:3}:
+>        __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+>        __mutex_lock+0x12f/0x1360 kernel/locking/mutex.c:747
+>        rfcomm_dlc_open+0x93/0xa80 net/bluetooth/rfcomm/core.c:425
+>        rfcomm_sock_connect+0x329/0x450 net/bluetooth/rfcomm/sock.c:413
+>        __sys_connect_file+0x153/0x1a0 net/socket.c:1976
+>        __sys_connect+0x165/0x1a0 net/socket.c:1993
+>        __do_sys_connect net/socket.c:2003 [inline]
+>        __se_sys_connect net/socket.c:2000 [inline]
+>        __x64_sys_connect+0x73/0xb0 net/socket.c:2000
+>        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> -> #0 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
+>        check_prev_add kernel/locking/lockdep.c:3097 [inline]
+>        check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+>        validate_chain kernel/locking/lockdep.c:3831 [inline]
+>        __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+>        lock_acquire kernel/locking/lockdep.c:5668 [inline]
+>        lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+>        lock_sock_nested+0x3a/0xf0 net/core/sock.c:3470
+>        lock_sock include/net/sock.h:1725 [inline]
+>        rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
+>        __rfcomm_dlc_close+0x1b1/0x890 net/bluetooth/rfcomm/core.c:489
+>        rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:520
+>        __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
+>        rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
+>        rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
+>        __sock_release+0xcd/0x280 net/socket.c:650
+>        sock_close+0x1c/0x20 net/socket.c:1365
+>        __fput+0x27c/0xa90 fs/file_table.c:320
+>        task_work_run+0x16f/0x270 kernel/task_work.c:179
+>        exit_task_work include/linux/task_work.h:38 [inline]
+>        do_exit+0xaa8/0x2950 kernel/exit.c:867
+>        do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+>        get_signal+0x21c3/0x2450 kernel/signal.c:2859
+>        arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+>        exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+>        exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+>        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+>        syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+>        do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+> ---
+> This commit has been tested with a C reproducer on qemu-x86_64
+> and a ChromeOS device.
+>
+> Changes in v2:
+> - Fix potential use-after-free in rfc_comm_sock_connect.
+>
+>  net/bluetooth/rfcomm/sock.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
+> index 21e24da4847f..4397e14ff560 100644
+> --- a/net/bluetooth/rfcomm/sock.c
+> +++ b/net/bluetooth/rfcomm/sock.c
+> @@ -391,6 +391,7 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
+>             addr->sa_family != AF_BLUETOOTH)
+>                 return -EINVAL;
+>
+> +       sock_hold(sk);
+>         lock_sock(sk);
+>
+>         if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
+> @@ -410,14 +411,18 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
+>         d->sec_level = rfcomm_pi(sk)->sec_level;
+>         d->role_switch = rfcomm_pi(sk)->role_switch;
+>
+> +       /* Drop sock lock to avoid potential deadlock with the RFCOMM lock */
+> +       release_sock(sk);
+>         err = rfcomm_dlc_open(d, &rfcomm_pi(sk)->src, &sa->rc_bdaddr,
+>                               sa->rc_channel);
+> -       if (!err)
+> +       lock_sock(sk);
+> +       if (!err && !sock_flag(sk, SOCK_ZAPPED))
+>                 err = bt_sock_wait_state(sk, BT_CONNECTED,
+>                                 sock_sndtimeo(sk, flags & O_NONBLOCK));
+>
+>  done:
+>         release_sock(sk);
+> +       sock_put(sk);
+>         return err;
+>  }
 
-It has been tested on a Intel i7-8650U - x280 with the INT3400, the
-PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
+This sounds like a great solution to hold the reference and then
+checking if the socket has been zapped when attempting to lock_sock,
+so Ive been thinking on generalize this into something like
+bt_sock_connect(sock, addr, alen, callback) so we make sure the
+callback is done while holding a reference but with the socket
+unlocked since typically the underline procedure only needs to access
+the pi(sk) information without changing it e.g. rfcomm_dlc_open,
+anyway Im fine if you don't want to pursue doing it right now but I'm
+afraid these type of locking problem is no restricted to RFCOMM only.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
----
-   V3:
-      - The driver Kconfig option selects CONFIG_THERMAL_ACPI
-      - Change the initialization to use GTSH for the hysteresis on
-        all the trip points
+> --
+> 2.39.0.314.g84b9a713c41-goog
+>
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
----
- drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
- .../int340x_thermal/int340x_thermal_zone.c    | 177 ++++--------------
- .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
- 3 files changed, 43 insertions(+), 145 deletions(-)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/Kconfig b/drivers/thermal/intel/int340x_thermal/Kconfig
-index 5d046de96a5d..b7072d37101d 100644
---- a/drivers/thermal/intel/int340x_thermal/Kconfig
-+++ b/drivers/thermal/intel/int340x_thermal/Kconfig
-@@ -9,6 +9,7 @@ config INT340X_THERMAL
- 	select THERMAL_GOV_USER_SPACE
- 	select ACPI_THERMAL_REL
- 	select ACPI_FAN
-+	select THERMAL_ACPI
- 	select INTEL_SOC_DTS_IOSF_CORE
- 	select PROC_THERMAL_MMIO_RAPL if POWERCAP
- 	help
-diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-index 228f44260b27..626b33253153 100644
---- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -37,65 +37,6 @@ static int int340x_thermal_get_zone_temp(struct thermal_zone_device *zone,
- 	return 0;
- }
- 
--static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
--					 int trip, int *temp)
--{
--	struct int34x_thermal_zone *d = zone->devdata;
--	int i;
--
--	if (trip < d->aux_trip_nr)
--		*temp = d->aux_trips[trip];
--	else if (trip == d->crt_trip_id)
--		*temp = d->crt_temp;
--	else if (trip == d->psv_trip_id)
--		*temp = d->psv_temp;
--	else if (trip == d->hot_trip_id)
--		*temp = d->hot_temp;
--	else {
--		for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--			if (d->act_trips[i].valid &&
--			    d->act_trips[i].id == trip) {
--				*temp = d->act_trips[i].temp;
--				break;
--			}
--		}
--		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
--			return -EINVAL;
--	}
--
--	return 0;
--}
--
--static int int340x_thermal_get_trip_type(struct thermal_zone_device *zone,
--					 int trip,
--					 enum thermal_trip_type *type)
--{
--	struct int34x_thermal_zone *d = zone->devdata;
--	int i;
--
--	if (trip < d->aux_trip_nr)
--		*type = THERMAL_TRIP_PASSIVE;
--	else if (trip == d->crt_trip_id)
--		*type = THERMAL_TRIP_CRITICAL;
--	else if (trip == d->hot_trip_id)
--		*type = THERMAL_TRIP_HOT;
--	else if (trip == d->psv_trip_id)
--		*type = THERMAL_TRIP_PASSIVE;
--	else {
--		for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--			if (d->act_trips[i].valid &&
--			    d->act_trips[i].id == trip) {
--				*type = THERMAL_TRIP_ACTIVE;
--				break;
--			}
--		}
--		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
--			return -EINVAL;
--	}
--
--	return 0;
--}
--
- static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
- 				      int trip, int temp)
- {
-@@ -109,25 +50,6 @@ static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
- 	if (ACPI_FAILURE(status))
- 		return -EIO;
- 
--	d->aux_trips[trip] = temp;
--
--	return 0;
--}
--
--
--static int int340x_thermal_get_trip_hyst(struct thermal_zone_device *zone,
--		int trip, int *temp)
--{
--	struct int34x_thermal_zone *d = zone->devdata;
--	acpi_status status;
--	unsigned long long hyst;
--
--	status = acpi_evaluate_integer(d->adev->handle, "GTSH", NULL, &hyst);
--	if (ACPI_FAILURE(status))
--		*temp = 0;
--	else
--		*temp = hyst * 100;
--
- 	return 0;
- }
- 
-@@ -138,58 +60,36 @@ static void int340x_thermal_critical(struct thermal_zone_device *zone)
- 
- static struct thermal_zone_device_ops int340x_thermal_zone_ops = {
- 	.get_temp       = int340x_thermal_get_zone_temp,
--	.get_trip_temp	= int340x_thermal_get_trip_temp,
--	.get_trip_type	= int340x_thermal_get_trip_type,
- 	.set_trip_temp	= int340x_thermal_set_trip_temp,
--	.get_trip_hyst =  int340x_thermal_get_trip_hyst,
- 	.critical	= int340x_thermal_critical,
- };
- 
--static int int340x_thermal_get_trip_config(acpi_handle handle, char *name,
--				      int *temp)
--{
--	unsigned long long r;
--	acpi_status status;
--
--	status = acpi_evaluate_integer(handle, name, NULL, &r);
--	if (ACPI_FAILURE(status))
--		return -EIO;
--
--	*temp = deci_kelvin_to_millicelsius(r);
--
--	return 0;
--}
--
- int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
- {
--	int trip_cnt = int34x_zone->aux_trip_nr;
--	int i;
-+	int trip_cnt;
-+	int i, ret;
-+
-+	trip_cnt = int34x_zone->aux_trip_nr;
- 
--	int34x_zone->crt_trip_id = -1;
--	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_CRT",
--					     &int34x_zone->crt_temp))
--		int34x_zone->crt_trip_id = trip_cnt++;
-+	ret = thermal_acpi_trip_crit(int34x_zone->adev, &int34x_zone->trips[trip_cnt]);
-+	if (!ret)
-+		trip_cnt++;
- 
--	int34x_zone->hot_trip_id = -1;
--	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_HOT",
--					     &int34x_zone->hot_temp))
--		int34x_zone->hot_trip_id = trip_cnt++;
-+	ret = thermal_acpi_trip_hot(int34x_zone->adev, &int34x_zone->trips[trip_cnt]);
-+	if (!ret)
-+		trip_cnt++;
- 
--	int34x_zone->psv_trip_id = -1;
--	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_PSV",
--					     &int34x_zone->psv_temp))
--		int34x_zone->psv_trip_id = trip_cnt++;
-+	ret = thermal_acpi_trip_psv(int34x_zone->adev, &int34x_zone->trips[trip_cnt]);
-+	if (!ret)
-+		trip_cnt++;
- 
- 	for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--		char name[5] = { '_', 'A', 'C', '0' + i, '\0' };
- 
--		if (int340x_thermal_get_trip_config(int34x_zone->adev->handle,
--					name,
--					&int34x_zone->act_trips[i].temp))
-+		ret = thermal_acpi_trip_act(int34x_zone->adev, &int34x_zone->trips[trip_cnt], i);
-+		if (ret)
- 			break;
- 
--		int34x_zone->act_trips[i].id = trip_cnt++;
--		int34x_zone->act_trips[i].valid = true;
-+		trip_cnt++;
- 	}
- 
- 	return trip_cnt;
-@@ -208,7 +108,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- 	acpi_status status;
- 	unsigned long long trip_cnt;
- 	int trip_mask = 0;
--	int ret;
-+	int i, ret;
- 
- 	int34x_thermal_zone = kzalloc(sizeof(*int34x_thermal_zone),
- 				      GFP_KERNEL);
-@@ -228,32 +128,35 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- 		int34x_thermal_zone->ops->get_temp = get_temp;
- 
- 	status = acpi_evaluate_integer(adev->handle, "PATC", NULL, &trip_cnt);
--	if (ACPI_FAILURE(status))
--		trip_cnt = 0;
--	else {
--		int i;
--
--		int34x_thermal_zone->aux_trips =
--			kcalloc(trip_cnt,
--				sizeof(*int34x_thermal_zone->aux_trips),
--				GFP_KERNEL);
--		if (!int34x_thermal_zone->aux_trips) {
--			ret = -ENOMEM;
--			goto err_trip_alloc;
--		}
--		trip_mask = BIT(trip_cnt) - 1;
-+	if (!ACPI_FAILURE(status)) {
- 		int34x_thermal_zone->aux_trip_nr = trip_cnt;
--		for (i = 0; i < trip_cnt; ++i)
--			int34x_thermal_zone->aux_trips[i] = THERMAL_TEMP_INVALID;
-+		trip_mask = BIT(trip_cnt) - 1;
-+	}
-+
-+	int34x_thermal_zone->trips = kzalloc(sizeof(*int34x_thermal_zone->trips) *
-+					     (INT340X_THERMAL_MAX_TRIP_COUNT + trip_cnt),
-+					      GFP_KERNEL);
-+	if (!int34x_thermal_zone->trips) {
-+		ret = -ENOMEM;
-+		goto err_trips_alloc;
- 	}
- 
- 	trip_cnt = int340x_thermal_read_trips(int34x_thermal_zone);
- 
-+	for (i = 0; i < trip_cnt; ++i)
-+		int34x_thermal_zone->trips[i].hysteresis = thermal_acpi_trip_gtsh(adev);
-+
-+	for (i = 0; i < int34x_thermal_zone->aux_trip_nr; i++) {
-+		int34x_thermal_zone->trips[i].type = THERMAL_TRIP_PASSIVE;
-+		int34x_thermal_zone->trips[i].temperature = THERMAL_TEMP_INVALID;
-+	}
-+	
- 	int34x_thermal_zone->lpat_table = acpi_lpat_get_conversion_table(
- 								adev->handle);
- 
--	int34x_thermal_zone->zone = thermal_zone_device_register(
-+	int34x_thermal_zone->zone = thermal_zone_device_register_with_trips(
- 						acpi_device_bid(adev),
-+						int34x_thermal_zone->trips,
- 						trip_cnt,
- 						trip_mask, int34x_thermal_zone,
- 						int34x_thermal_zone->ops,
-@@ -272,9 +175,9 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- err_enable:
- 	thermal_zone_device_unregister(int34x_thermal_zone->zone);
- err_thermal_zone:
-+	kfree(int34x_thermal_zone->trips);
- 	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
--	kfree(int34x_thermal_zone->aux_trips);
--err_trip_alloc:
-+err_trips_alloc:
- 	kfree(int34x_thermal_zone->ops);
- err_ops_alloc:
- 	kfree(int34x_thermal_zone);
-@@ -287,7 +190,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
- {
- 	thermal_zone_device_unregister(int34x_thermal_zone->zone);
- 	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
--	kfree(int34x_thermal_zone->aux_trips);
-+	kfree(int34x_thermal_zone->trips);
- 	kfree(int34x_thermal_zone->ops);
- 	kfree(int34x_thermal_zone);
- }
-diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-index e28ab1ba5e06..0c2c8de92014 100644
---- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-+++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-@@ -10,6 +10,7 @@
- #include <acpi/acpi_lpat.h>
- 
- #define INT340X_THERMAL_MAX_ACT_TRIP_COUNT	10
-+#define INT340X_THERMAL_MAX_TRIP_COUNT INT340X_THERMAL_MAX_ACT_TRIP_COUNT + 3
- 
- struct active_trip {
- 	int temp;
-@@ -19,15 +20,8 @@ struct active_trip {
- 
- struct int34x_thermal_zone {
- 	struct acpi_device *adev;
--	struct active_trip act_trips[INT340X_THERMAL_MAX_ACT_TRIP_COUNT];
--	unsigned long *aux_trips;
-+	struct thermal_trip *trips;
- 	int aux_trip_nr;
--	int psv_temp;
--	int psv_trip_id;
--	int crt_temp;
--	int crt_trip_id;
--	int hot_temp;
--	int hot_trip_id;
- 	struct thermal_zone_device *zone;
- 	struct thermal_zone_device_ops *ops;
- 	void *priv_data;
 -- 
-2.34.1
-
+Luiz Augusto von Dentz
