@@ -2,223 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CDE65D7E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDED565D7E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239723AbjADQHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S235168AbjADQH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239757AbjADQGz (ORCPT
+        with ESMTP id S235269AbjADQHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:06:55 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15B91573E;
-        Wed,  4 Jan 2023 08:06:53 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2DACE5C012E;
-        Wed,  4 Jan 2023 11:06:53 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 04 Jan 2023 11:06:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crisal.io; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1672848413; x=
-        1672934813; bh=HgshSoO5gw8yYEeQSi81/W1v7g4XA2r8QMVrsjONx5I=; b=z
-        I7x+LH720P0gZVa8KHWvcshG7XaXO9NS2yuLvwOuNA6i3jT7Pl5MrWLx+frLTlly
-        66m+WsYaVzm82TdZ++2AzIKbrtW01p6CjxemIIoyJPubrcfw+vL84DDJrtdJKjCy
-        xT+7qaY6suCw0SFETHT9XRdOxBbE6JK3iWpTs1eeq6/zaSgZTvFq9C5OC3W0zAxq
-        tW/Q45yveERsaqdbBvDZ6pzH+cNzMT+gDpLt9AZPGGaaHf+M0PkTRkajjZgYOXDR
-        4CKur/3YukbmH2iYmIrZp3xWhJwGE9YzqbptjSnInHp9w80TRRhn3ll7xzT6nYoD
-        Wdo/mIB0W96RrElX7Kxxg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672848413; x=
-        1672934813; bh=HgshSoO5gw8yYEeQSi81/W1v7g4XA2r8QMVrsjONx5I=; b=Q
-        vAdZRdUhTX5t2vVNYWgqUCPXg+3e9v1+FCgBYbZ1y3aHIL1HJsfZlgK5vMp1L232
-        yq2eRlwJ/jDWmtamXTfcU+nuDC9UH9fJ4oFaICz/uqwmzPEJksZLoVsaCwe2fnm1
-        lpOAFqrJBTQaMdWAbLyVHF1VT0ntKxdIgNGiavxH+Bu9OhQPP37nV0Abqc/hB8El
-        lN8OCS5wumqemM+BkjD4r5QZ5eDIskht3gtatBcNKlOMJuYpnV7nMVGlUFZmYPr+
-        QwI0sFl1lehDGtvM0Q3aRnovPaEP4gaOZedxi1ucwnZd65y92iK0tmv2G1JCM/Q4
-        uijqHrNk6Zr+n28IwXhrg==
-X-ME-Sender: <xms:HKS1Y5ILR1fimQUTVL8r2BhrQ-9YTXvo4aZW26Vu9rs8u1I8QJgWMQ>
-    <xme:HKS1Y1I1M4ybfGvg3wF0hU1VibLdQi7GJ1Ln7hHoeLqz7fVWMx2Hius6ItpUWH1cg
-    Bpeb-wYcsfmEJG0PEQ>
-X-ME-Received: <xmr:HKS1Yxu4re7fTD_htRg5CfatlJhCD1FDx5Il_qtSMbqh65xofy7WSjPZu0rRNM-JNtFN>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigdekgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepgfhmihhl
-    ihhoucevohgsohhsucmllhhvrghrvgiiuceovghmihhlihhosegtrhhishgrlhdrihhoqe
-    enucggtffrrghtthgvrhhnpeejfeehgfduudeuvddujedujeeliefgheethefhtedvfeel
-    keeiuedvudeugeefkeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepvghmihhlihhosegtrhhi
-    shgrlhdrihho
-X-ME-Proxy: <xmx:HKS1Y6YRJxu_BMnTO-F-W7dmol3WzGB0GNpHTRnjwyAIDsBrDyU5Mw>
-    <xmx:HKS1YwZsyR5BVqeBbAv1agCAY3Nk4pC_Wrx1LnteGE8q5_8fo2EHDA>
-    <xmx:HKS1Y-D-Pl1rJjyrZr6bz5uRgQ-dqIIEiOuamvwlhCAbJIwRLK_flQ>
-    <xmx:HaS1Y1N5tmAGt_7eT_tflbS4oEEQy4U9voy6-dO5sTnUhQe7RcpJWQ>
-Feedback-ID: i2e3c46c1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 4 Jan 2023 11:06:51 -0500 (EST)
-Message-ID: <df2f6c0b-fb4c-97e5-b607-7df626ea5933@crisal.io>
-Date:   Wed, 4 Jan 2023 17:06:50 +0100
+        Wed, 4 Jan 2023 11:07:54 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E072818E20;
+        Wed,  4 Jan 2023 08:07:52 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id kw15so83620183ejc.10;
+        Wed, 04 Jan 2023 08:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ejNWmUVKzv6qd8rLkoL3Pzd4W2kPQ/FppYN+juVc8Q=;
+        b=J/Rj73/PMMXzGDA1AflmrcliuQUFXdrSsVsCzOeGfL4B0v7eO8LTGTZCNnr6lfNrSZ
+         LtJi4U+zhiGXTC868O0SZO2EgLuHOCNXKKzuypUikmB1RuLq6hpRpo7LVWVjuOumvh0Z
+         AGFEXBq7mZYK8vxYJH0d/1T73DVbWeuCSh+dzMYmFjWRoKAvbGxFFBIHFp3Xlr8uXRgV
+         P23FJV7QxaSQkXE45EhTsAl5qvEkojIZBNSbV1dMoYflNuyKwo2BlIsf+4ZD9efJvjKJ
+         TMtk/gu/zXDWJe49/KQVx+nL3ByIGr3T+3QWNJqqO3A7noqxylSsCtn2NF9Bgt2nwoPj
+         +f8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ejNWmUVKzv6qd8rLkoL3Pzd4W2kPQ/FppYN+juVc8Q=;
+        b=o/EGvYG67VB+lZt0ILpOkCV7M8J4n4HNOjZXTR1UQA7pZrIU30TiMnyCrbBWdvkI8C
+         yH+j28beKTytEQEhzZya8Yz2UIqlqoqs3we5LQLTjKyG70kiwqcyNb0cfJH4jt1Up46r
+         odQG6DjwS8OQS8+kBdppkxiCWvnV0cDxSxdWm3F/DJ/U7hJwqWmUkcta5dzrRfgN2vnD
+         cu8Sp6Bp4ewaf3NE1qaznEVSVi5+EWnHvya13H+e9bLZzr5A7DFX0bxchBCpMgPmkyzv
+         38E7GW/UU885U8NAzZ04d5+DegWxMPK2s3qt0hHlxu0mB+8zvg96A5YBkqzujk7jA0ML
+         Fihw==
+X-Gm-Message-State: AFqh2kr5NAelW7w0kn/xEA7OmS4NP1WHjE5GeL4aAL2uzrxgi4PkQelr
+        vQpgzAcZjH8iYIRPDzTLWdS+tzF+/FJhV6Dc10o=
+X-Google-Smtp-Source: AMrXdXuQRmCSfRaOEdJCZIrCcUOnz+Xb8K4QYSu4moaSSdC2g9go8yZV9lt4/XJDzHYAz7yGF5eUJncC4Oz8wY6aS9w=
+X-Received: by 2002:a17:906:26d2:b0:7c1:36:8ffe with SMTP id
+ u18-20020a17090626d200b007c100368ffemr3304851ejc.725.1672848471417; Wed, 04
+ Jan 2023 08:07:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101
- Firefox/110.0 Thunderbird/110.0a1
-Subject: Re: [PATCH 4/7] rust: sync: introduce `ArcBorrow`
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20221228060346.352362-1-wedsonaf@gmail.com>
- <20221228060346.352362-4-wedsonaf@gmail.com>
- <20221231194352.55cf0a26.gary@garyguo.net>
- <CANeycqrVsbNJ+A+A26LXkBezBNUHvnZU2Q3_whexCwwG5ZcgPQ@mail.gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Emilio_Cobos_=C3=81lvarez?= <emilio@crisal.io>
-In-Reply-To: <CANeycqrVsbNJ+A+A26LXkBezBNUHvnZU2Q3_whexCwwG5ZcgPQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
+ <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
+ <92eb7dfa8b7d447e966a2751e174b642@realtek.com> <87da8c82dec749dc826b5a1b4c4238aa@AcuMS.aculab.com>
+ <eee17e2f4e44a2f38021a839dc39fedc1c1a4141.camel@realtek.com>
+ <a86893f11fe64930897473a38226a9a8@AcuMS.aculab.com> <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
+ <CAFBinCC+1jGJx1McnBY+kr3RTQ-UpxW6JYNpHzStUTredDuCug@mail.gmail.com> <ec6a0988f3f943128e0122d50959185a@AcuMS.aculab.com>
+In-Reply-To: <ec6a0988f3f943128e0122d50959185a@AcuMS.aculab.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 4 Jan 2023 17:07:40 +0100
+Message-ID: <CAFBinCC9sNvQJcu-SOSrFmo4sCx29K6KwXnc-O6MX9TJEHtXYg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Ping-Ke Shih <pkshih@realtek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tehuang@realtek.com" <tehuang@realtek.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the drive-by comment, but maybe it saves some work.
+On Wed, Jan 4, 2023 at 4:53 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Martin Blumenstingl
+> > Sent: 04 January 2023 15:30
+> >
+> > Hi Ping-Ke, Hi David,
+> >
+> > On Sun, Jan 1, 2023 at 2:09 PM Ping-Ke Shih <pkshih@realtek.com> wrote:
+> > [...]
+> > > Yes, it should not use bit filed. Instead, use a __le16 for all fields, such as
+> > I think this can be done in a separate patch.
+> > My v2 of this patch has reduced these changes to a minimum, see [0]
+> >
+> > [...]
+> > > struct rtw8821ce_efuse {
+> > >    ...
+> > >    u8 data1;       // offset 0x100
+> > >    __le16 data2;   // offset 0x101-0x102
+> > >    ...
+> > > } __packed;
+> > >
+> > > Without __packed, compiler could has pad between data1 and data2,
+> > > and then get wrong result.
+> > My understanding is that this is the reason why we need __packed.
+>
+> True, but does it really have to look like that?
+> I can't find that version (I don't have a net_next tree).
+My understanding is that there's one actual and one potential use-case.
+Let's start with the actual one in
+drivers/net/wireless/realtek/rtw88/rtw8821c.h:
+  struct rtw8821c_efuse {
+      __le16 rtl_id;
+      u8 res0[0x0e];
+      ...
 
-On 1/4/23 16:29, Wedson Almeida Filho wrote:
-> On Sat, 31 Dec 2022 at 19:43, Gary Guo <gary@garyguo.net> wrote:
->>
->> On Wed, 28 Dec 2022 06:03:43 +0000
->> Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
->>
->>> This allows us to create references to a ref-counted allocation without
->>> double-indirection and that still allow us to increment the refcount to
->>> a new `Arc<T>`.
->>>
->>> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
->>> ---
->>>   rust/kernel/sync.rs     |  2 +-
->>>   rust/kernel/sync/arc.rs | 97 +++++++++++++++++++++++++++++++++++++++++
->>>   2 files changed, 98 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
->>> index 39b379dd548f..5de03ea83ea1 100644
->>> --- a/rust/kernel/sync.rs
->>> +++ b/rust/kernel/sync.rs
->>> @@ -7,4 +7,4 @@
->>>
->>>   mod arc;
->>>
->>> -pub use arc::Arc;
->>> +pub use arc::{Arc, ArcBorrow};
->>> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
->>> index dbc7596cc3ce..f68bfc02c81a 100644
->>> --- a/rust/kernel/sync/arc.rs
->>> +++ b/rust/kernel/sync/arc.rs
->>> @@ -19,6 +19,7 @@ use crate::{bindings, error::Result, types::Opaque};
->>>   use alloc::boxed::Box;
->>>   use core::{
->>>       marker::{PhantomData, Unsize},
->>> +    mem::ManuallyDrop,
->>>       ops::Deref,
->>>       ptr::NonNull,
->>>   };
->>> @@ -164,6 +165,18 @@ impl<T: ?Sized> Arc<T> {
->>>               _p: PhantomData,
->>>           }
->>>       }
->>> +
->>> +    /// Returns an [`ArcBorrow`] from the given [`Arc`].
->>> +    ///
->>> +    /// This is useful when the argument of a function call is an [`ArcBorrow`] (e.g., in a method
->>> +    /// receiver), but we have an [`Arc`] instead. Getting an [`ArcBorrow`] is free when optimised.
->>> +    #[inline]
->>> +    pub fn as_arc_borrow(&self) -> ArcBorrow<'_, T> {
->>> +        // SAFETY: The constraint that the lifetime of the shared reference must outlive that of
->>> +        // the returned `ArcBorrow` ensures that the object remains alive and that no mutable
->>> +        // reference can be created.
->>> +        unsafe { ArcBorrow::new(self.ptr) }
->>> +    }
->>>   }
->>>
->>>   impl<T: ?Sized> Deref for Arc<T> {
->>> @@ -208,3 +221,87 @@ impl<T: ?Sized> Drop for Arc<T> {
->>>           }
->>>       }
->>>   }
->>> +
->>> +/// A borrowed reference to an [`Arc`] instance.
->>> +///
->>> +/// For cases when one doesn't ever need to increment the refcount on the allocation, it is simpler
->>> +/// to use just `&T`, which we can trivially get from an `Arc<T>` instance.
->>> +///
->>> +/// However, when one may need to increment the refcount, it is preferable to use an `ArcBorrow<T>`
->>> +/// over `&Arc<T>` because the latter results in a double-indirection: a pointer (shared reference)
->>> +/// to a pointer (`Arc<T>`) to the object (`T`). An [`ArcBorrow`] eliminates this double
->>> +/// indirection while still allowing one to increment the refcount and getting an `Arc<T>` when/if
->>> +/// needed.
->>> +///
->>> +/// # Invariants
->>> +///
->>> +/// There are no mutable references to the underlying [`Arc`], and it remains valid for the
->>> +/// lifetime of the [`ArcBorrow`] instance.
->>> +///
->>> +/// # Example
->>> +///
->>> +/// ```
->>> +/// use crate::sync::{Arc, ArcBorrow};
->>> +///
->>> +/// struct Example;
->>> +///
->>> +/// fn do_something(e: ArcBorrow<'_, Example>) -> Arc<Example> {
->>> +///     e.into()
->>> +/// }
->>> +///
->>> +/// let obj = Arc::try_new(Example)?;
->>> +/// let cloned = do_something(obj.as_arc_borrow());
->>> +///
->>> +/// // Assert that both `obj` and `cloned` point to the same underlying object.
->>> +/// assert!(core::ptr::eq(&*obj, &*cloned));
->>> +/// ```
->>> +pub struct ArcBorrow<'a, T: ?Sized + 'a> {
->>> +    inner: NonNull<ArcInner<T>>,
->>> +    _p: PhantomData<&'a ()>,
->>> +}
->>> +
->>> +impl<T: ?Sized> Clone for ArcBorrow<'_, T> {
->>> +    fn clone(&self) -> Self {
->>> +        *self
->>> +    }
->>> +}
->>> +
->>> +impl<T: ?Sized> Copy for ArcBorrow<'_, T> {}
->>
->> Couldn't this just be derived `Clone` and `Copy`?
-> 
-> Indeed. I'll send a v2 with this.
+The second one is a potential one, also in
+drivers/net/wireless/realtek/rtw88/rtw8821c.h if we replace the
+bitfields by an __le16 (which is my understanding how the data is
+modeled in the eFuse):
+  struct rtw8821ce_efuse {
+      ...
+      u8 serial_number[8];
+      __le16 cap_data; /* 0xf4 */
+      ...
+(I'm not sure about the "cap_data" name, but I think you get the point)
 
-I'm not sure this is true. Deriving will add the T: Copy and T: Clone 
-bound, which I think is not what you want here.
+> Possibly it should be 'u8 data2[2];'
+So you're saying we should replace the __le16 with u8 some_name[2];
+instead, then we don't need the __packed attribute.
 
-i.e., I assume you want an ArcBorrow to be Copy even if the underlying T 
-is not.
+> What you may want to do is add compile-time asserts for the
+> sizes of the structures.
+Do I get you right that something like:
+  BUILD_BUG_ON(sizeof(rtw8821c_efuse) != 256);
+is what you have in mind?
 
-See <https://github.com/rust-lang/rust/issues/26925> for the relevant 
-(really long-standing) Rust issue.
 
-Cheers,
 
-  -- Emilio
+Best regards,
+Martin
