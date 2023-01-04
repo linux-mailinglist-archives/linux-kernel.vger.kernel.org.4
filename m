@@ -2,185 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE24265CD4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEC965CD53
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233653AbjADGop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
+        id S234018AbjADGqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbjADGoN (ORCPT
+        with ESMTP id S233680AbjADGp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:44:13 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCFB2E5;
-        Tue,  3 Jan 2023 22:44:12 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id o21so5092701pjw.0;
-        Tue, 03 Jan 2023 22:44:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+bliKfRbQDwAdV97iBZEDSuzGn0Y1LH+Sf/kDY4qOSE=;
-        b=cxIOOkUt8IWLH0cIGaDmPPocHS4+b8nZeOZSKJTwIzIioIzzrJEWbsBdB20yQSLTiB
-         rv8aZVuBiQlm99kquR8FaBb5qXjzD79AkKjTdku4QyfvVOwmu8K78HoD/z1UNroLYNP5
-         uvhs7YDAwdb/IZ9WOWNum7qPngiGL0EOxJHL5VqnCJFRbY3AhYhmuDygjdIqjcS3vLHB
-         5Iq7jDnCGpfFyzMHVh47Q0pUyrTzYlbqy9HNk5ZUuHdSiePuspbY78ZhES0RlLlYoiaY
-         7C6x/p60oVKAZENXtwlbtXZ4qsjWf0yKWuQmEQX7N3WZ8qyYmTDPAx6YW9zPCi4QPykU
-         2eTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+bliKfRbQDwAdV97iBZEDSuzGn0Y1LH+Sf/kDY4qOSE=;
-        b=3Mp2WTqkhoHjIxIR+9ORj+TBZL16Xc60e1/Q/sKuFFM+uLUcO/h0jdcq8DprogvWIw
-         UfQE5nV1f8JS8vOJil6mE0DCYRa+JMNq+9TWPPlHv7O/xiYAoneSzeuNekm8P+n2kXDm
-         us6ALSvGpeSk8N9cAYZp/wXuOH7M3f9jEPToqUsGiDj/SEzqrkUgtzM1JFYpV8tEdPYD
-         f7jO5BiSqeEMk+04GsTpeDDrndI8CuvJP0zc5gcFWqPcKbSwqyMgtsrqz3d14SH6Gy8E
-         +b6E3Va5+bmnx988VWHivGnX5NUzSD5X7BYszdqFh5lcUnaPvQGWOhA56d/2m1O2C60A
-         hK6w==
-X-Gm-Message-State: AFqh2kosCJs5JRPHsQ/cl2XDeORLQIxQjQgmkYyNJo2Qwe32q1JaUDih
-        D5sgBbDWWho8M85BmT+jwzM=
-X-Google-Smtp-Source: AMrXdXtBbMbi88hRDwiINdwpS40V2CHVQ+KcNL2U0hUv4HmmvG5LPPknJ0oCV8HBTVfS8GQyPNf4Rw==
-X-Received: by 2002:a05:6a20:659d:b0:b0:275d:3036 with SMTP id p29-20020a056a20659d00b000b0275d3036mr56741439pzh.24.1672814651855;
-        Tue, 03 Jan 2023 22:44:11 -0800 (PST)
-Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:d1f4:a47f:3a41:e1a2])
-        by smtp.gmail.com with ESMTPSA id e28-20020a056a0000dc00b00576f7bd92cdsm11829257pfj.14.2023.01.03.22.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 22:44:11 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        bpf@vger.kernel.org
-Subject: [PATCH 4/4] perf stat: Do not use the same cgroup more than once
-Date:   Tue,  3 Jan 2023 22:44:02 -0800
-Message-Id: <20230104064402.1551516-5-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230104064402.1551516-1-namhyung@kernel.org>
-References: <20230104064402.1551516-1-namhyung@kernel.org>
+        Wed, 4 Jan 2023 01:45:59 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB42186D3
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 22:45:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672814746; x=1704350746;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0OZy2kgdGArGHEtGLZumYB/77Yk70EGO6La4WXF7ERU=;
+  b=MlytUHmocXdMYwQxSm3R0PshE2ntE589mCTv0l/+8jKjP/yliYalXMYV
+   ldT3VHiZ6byPEIT5OmGF+uU9SCRCok/QmO9mm9Jk5GGRjPqml61UmFOdT
+   B0+JucBcuXS6zuYjRotH5RnLG+uMS0Bmp9HeJWfCjPdCTyt4+bX8ux097
+   oja+Kf4GU/DmFHU0qk7xZKWw2TGtEYyQG412KTUWALVsCTc93cHh9r/K2
+   J07LH4wP0iPDxsd7uHds0+ftPtX0Y/Rb2wukFOiJAdyyGRNFmOYsXZ4JS
+   sOwutprbV7yiUeLrSBB/OgmzUj0kCuuFmSDC0U6xk0hqjjEr0JrVXEfIg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320566106"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="320566106"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 22:45:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="779101651"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="779101651"
+Received: from lkp-server02.sh.intel.com (HELO 5bfee921edb0) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 03 Jan 2023 22:45:42 -0800
+Received: from kbuild by 5bfee921edb0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pCxWv-00003c-0a;
+        Wed, 04 Jan 2023 06:45:41 +0000
+Date:   Wed, 04 Jan 2023 14:45:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 08d1485bcd896e9516da6585c6dbce18ff466694
+Message-ID: <63b52077.+vrf/p/GOVUj0LCx%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The --for-each-cgroup can have the same cgroup multiple times, but it makes
-bpf counters confused (since they have the same cgroup id), and the last
-cgroup events are counted only.  Let's check the cgroup name before adding
-a new entry.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 08d1485bcd896e9516da6585c6dbce18ff466694  Merge branch into tip/master: 'perf/urgent'
 
-Before:
-  $ sudo ./perf stat -a --bpf-counters --for-each-cgroup /,/ sleep 1
+elapsed time: 750m
 
-   Performance counter stats for 'system wide':
+configs tested: 68
+configs skipped: 2
 
-       <not counted> msec cpu-clock                        /
-       <not counted>      context-switches                 /
-       <not counted>      cpu-migrations                   /
-       <not counted>      page-faults                      /
-       <not counted>      cycles                           /
-       <not counted>      instructions                     /
-       <not counted>      branches                         /
-       <not counted>      branch-misses                    /
-            8,016.04 msec cpu-clock                        /                #    7.998 CPUs utilized
-               6,152      context-switches                 /                #  767.461 /sec
-                 250      cpu-migrations                   /                #   31.187 /sec
-                 442      page-faults                      /                #   55.139 /sec
-         613,111,487      cycles                           /                #    0.076 GHz
-         280,599,604      instructions                     /                #    0.46  insn per cycle
-          57,692,724      branches                         /                #    7.197 M/sec
-           3,385,168      branch-misses                    /                #    5.87% of all branches
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-         1.002220125 seconds time elapsed
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+x86_64                              defconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20230102
+s390                                defconfig
+i386                 randconfig-a003-20230102
+x86_64                               rhel-8.3
+i386                 randconfig-a001-20230102
+i386                 randconfig-a002-20230102
+ia64                             allmodconfig
+i386                 randconfig-a005-20230102
+x86_64                    rhel-8.3-kselftests
+i386                 randconfig-a006-20230102
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+s390                             allyesconfig
+i386                                defconfig
+m68k                             allyesconfig
+arm                                 defconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                           rhel-8.3-bpf
+riscv                randconfig-r042-20230101
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+arc                  randconfig-r043-20230102
+x86_64                           rhel-8.3-kvm
+i386                             allyesconfig
+arm                  randconfig-r046-20230102
+arc                  randconfig-r043-20230101
+x86_64               randconfig-a001-20230102
+s390                 randconfig-r044-20230101
+x86_64               randconfig-a004-20230102
+x86_64               randconfig-a002-20230102
+x86_64               randconfig-a003-20230102
+x86_64               randconfig-a005-20230102
+x86_64               randconfig-a006-20230102
+arm64                            allyesconfig
+arm                              allyesconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64                            allnoconfig
 
-After:
-  $ sudo ./perf stat -a --bpf-counters --for-each-cgroup /,/  sleep 1
+clang tested configs:
+x86_64                          rhel-8.3-rust
+hexagon              randconfig-r041-20230102
+hexagon              randconfig-r045-20230101
+hexagon              randconfig-r045-20230102
+x86_64               randconfig-a011-20230102
+arm                  randconfig-r046-20230101
+x86_64               randconfig-a014-20230102
+i386                 randconfig-a011-20230102
+x86_64               randconfig-a012-20230102
+x86_64               randconfig-a013-20230102
+riscv                randconfig-r042-20230102
+hexagon              randconfig-r041-20230101
+x86_64               randconfig-a015-20230102
+i386                 randconfig-a014-20230102
+x86_64               randconfig-a016-20230102
+i386                 randconfig-a013-20230102
+s390                 randconfig-r044-20230102
+i386                 randconfig-a012-20230102
+i386                 randconfig-a016-20230102
+i386                 randconfig-a015-20230102
 
-   Performance counter stats for 'system wide':
-
-            8,013.38 msec cpu-clock                        /                #    7.998 CPUs utilized
-               6,859      context-switches                 /                #  855.944 /sec
-                 334      cpu-migrations                   /                #   41.680 /sec
-                 345      page-faults                      /                #   43.053 /sec
-         782,326,119      cycles                           /                #    0.098 GHz
-         471,645,724      instructions                     /                #    0.60  insn per cycle
-          94,963,430      branches                         /                #   11.851 M/sec
-           3,685,511      branch-misses                    /                #    3.88% of all branches
-
-         1.001864539 seconds time elapsed
-
-Fixes: bb1c15b60b981 ("perf stat: Support regex pattern in --for-each-cgroup")
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/cgroup.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/tools/perf/util/cgroup.c b/tools/perf/util/cgroup.c
-index e99b41f9be45..cd978c240e0d 100644
---- a/tools/perf/util/cgroup.c
-+++ b/tools/perf/util/cgroup.c
-@@ -224,6 +224,19 @@ static int add_cgroup_name(const char *fpath, const struct stat *sb __maybe_unus
- 	return 0;
- }
- 
-+static int check_and_add_cgroup_name(const char *fpath)
-+{
-+	struct cgroup_name *cn;
-+
-+	list_for_each_entry(cn, &cgroup_list, list) {
-+		if (!strcmp(cn->name, fpath))
-+			return 0;
-+	}
-+
-+	/* pretend if it's added by ftw() */
-+	return add_cgroup_name(fpath, NULL, FTW_D, NULL);
-+}
-+
- static void release_cgroup_list(void)
- {
- 	struct cgroup_name *cn;
-@@ -242,7 +255,7 @@ static int list_cgroups(const char *str)
- 	struct cgroup_name *cn;
- 	char *s;
- 
--	/* use given name as is - for testing purpose */
-+	/* use given name as is when no regex is given */
- 	for (;;) {
- 		p = strchr(str, ',');
- 		e = p ? p : eos;
-@@ -253,13 +266,13 @@ static int list_cgroups(const char *str)
- 			s = strndup(str, e - str);
- 			if (!s)
- 				return -1;
--			/* pretend if it's added by ftw() */
--			ret = add_cgroup_name(s, NULL, FTW_D, NULL);
-+
-+			ret = check_and_add_cgroup_name(s);
- 			free(s);
--			if (ret)
-+			if (ret < 0)
- 				return -1;
- 		} else {
--			if (add_cgroup_name("", NULL, FTW_D, NULL) < 0)
-+			if (check_and_add_cgroup_name("/") < 0)
- 				return -1;
- 		}
- 
 -- 
-2.39.0.314.g84b9a713c41-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
