@@ -2,44 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0079D65D2F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DC065D396
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239255AbjADMoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
+        id S232614AbjADNAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbjADMo2 (ORCPT
+        with ESMTP id S229739AbjADNAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:44:28 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE48417E0F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 04:44:27 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nn8Ln5nVTzqTpb;
-        Wed,  4 Jan 2023 20:39:45 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 4 Jan 2023 20:44:24 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH] arm64: make ARCH_FORCE_MAX_ORDER selectable
-Date:   Wed, 4 Jan 2023 21:00:00 +0800
-Message-ID: <20230104130000.69806-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 4 Jan 2023 08:00:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA4F12624
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:00:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0790961425
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 13:00:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE597C433EF;
+        Wed,  4 Jan 2023 13:00:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672837235;
+        bh=aINReqP5sO7hUDTxAOXJWJ1lezkfPWFHYacE2WLSAIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d13CxfskSSa47ik9YFbYTqnfy5hGnxfMFm1eHx8Vy+gys0g8NN+ivnn+0YcvqqkjF
+         5aSk+zyLaBBA2wMGRh1vPFxiaNwhaO7PAwOshw5pajnl3ogH+F2CDg+RomRWToFeeY
+         eUhzKbCE8Eqlsrkqu36gBSZur6+7lQ3sILvWW93jFkLVCoyaqPUEOZCdORmyJfQuFM
+         2A1vFpAkpDDsIjKdOSsGeRD+/EmmtvFh/9sRzV0PlhbD0RoQQ4rPvrqVSyTqaXTde+
+         8sPl3pBCorhERsGhXJxVHY3NZjE8LjAKBdXyvyTlFHP+Trf2fcE50MHB3JsQ1elJjg
+         uVEKxWmyjNGmA==
+Date:   Wed, 4 Jan 2023 13:00:31 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Ley Foon Tan <leyfoon.tan@starfivetech.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ley Foon Tan <lftan.linux@gmail.com>
+Subject: Re: [PATCH] riscv: Move call to init_cpu_topology() to later
+ initialization stage
+Message-ID: <Y7V4byskevAWKM3G@spud>
+References: <20230103035316.3841303-1-leyfoon.tan@starfivetech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="upFcVDVkXP8V4qFX"
+Content-Disposition: inline
+In-Reply-To: <20230103035316.3841303-1-leyfoon.tan@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,47 +58,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The other architectures with ARCH_FORCE_MAX_ORDER are selectable,
-but not for ARM64, this is to make it selectable on ARM64, which
-is useful for user that need to allocate more than 4MB of physically
-contiguous memory with 4K pagesize, also more bigger on 16K pagesize
-too, the max value of MAX_ORDER is calculated bellow,
 
-see include/linux/mmzone.h,
+--upFcVDVkXP8V4qFX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  MAX_ORDER - 1 + PAGE_SHIFT <= SECTION_SIZE_BITS
+Hey Ley Foon Tan,
 
-  so max value of MAX_ORDER = SECTION_SIZE_BITS + 1 - PAGE_SHIFT
+Apologies for my various bits of confusion.
 
-    | SECTION_SIZE_BITS |  PAGE_SHIFT  |  max MAX_ORDER  |  default MAX_ORDER |
-----+-------------------+--------------+-----------------+--------------------+
-4K  |       27          |      12      |     16          |      11            |
-16K |       27          |      14      |     14          |      12            |
-64K |       29          |      16      |     14          |      14            |
-----+-------------------+--------------+-----------------+--------------------+
+On Tue, Jan 03, 2023 at 11:53:16AM +0800, Ley Foon Tan wrote:
+> topology_parse_cpu_capacity() is failed to allocate memory with kcalloc()
+> after read "capacity-dmips-mhz" DT parameter in CPU DT nodes. This
+> topology_parse_cpu_capacity() is called from init_cpu_topology(), move
+> call to init_cpu_topology() to later initialization  stage (after memory
+> allocation is available).
+>=20
+> Note, this refers to ARM64 implementation, call init_cpu_topology() in
+> smp_prepare_cpus().
+>=20
+> Tested on Qemu platform.
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- arch/arm64/Kconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+I'd like to suggest a change to the commit message:
+```
+If "capacity-dmips-mhz" is present in a CPU DT node,
+topology_parse_cpu_capacity() will fail to allocate memory.
+arm64, with which this code path is shared, does not call
+topology_parse_cpu_capacity() until later in boot where memory
+allocation is available.
+While "capacity-dmips-mhz" is not yet a valid property on RISC-V,
+invalid properties should be ignored rather than cause issues.
+Move init_cpu_topology(), which calls topology_parse_cpu_capacity(),
+to a later initialization stage, to match arm64.
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 03934808b2ed..22f0fb73a762 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1457,9 +1457,11 @@ config XEN
- 	  Say Y if you want to run Linux in a Virtual Machine on Xen on ARM64.
- 
- config ARCH_FORCE_MAX_ORDER
--	int
-+	int "Maximum zone order" if ARM64_4K_PAGES || ARM64_16K_PAGES
- 	default "14" if ARM64_64K_PAGES
-+	range 12 14 if ARM64_16K_PAGES
- 	default "12" if ARM64_16K_PAGES
-+	range 11 16 if ARM64_4K_PAGES
- 	default "11"
- 	help
- 	  The kernel memory allocator divides physically contiguous memory
--- 
-2.35.3
+As a side effect of this change, RISC-V is "protected" from changes to
+core topology code that would work on arm64 where memory allocation is
+safe but on RISC-V isn't.
+```
 
+You don't need to use exactly that, but with something along those
+lines:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+>=20
+> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+>=20
+> ---
+>=20
+> In drivers/base/arch_topology.c: topology_parse_cpu_capacity():
+>=20
+> 	ret =3D of_property_read_u32(cpu_node, "capacity-dmips-mhz",
+> 				   &cpu_capacity);
+> 	if (!ret) {
+> 		if (!raw_capacity) {
+> 			raw_capacity =3D kcalloc(num_possible_cpus(),
+> 					       sizeof(*raw_capacity),
+> 					       GFP_KERNEL);
+> 			if (!raw_capacity) {
+> 				cap_parsing_failed =3D true;
+> 				return false;
+> 			}
+> ---
+>  arch/riscv/kernel/smpboot.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+> index 3373df413c88..ddb2afba6d25 100644
+> --- a/arch/riscv/kernel/smpboot.c
+> +++ b/arch/riscv/kernel/smpboot.c
+> @@ -39,7 +39,6 @@ static DECLARE_COMPLETION(cpu_running);
+> =20
+>  void __init smp_prepare_boot_cpu(void)
+>  {
+> -	init_cpu_topology();
+>  }
+> =20
+>  void __init smp_prepare_cpus(unsigned int max_cpus)
+> @@ -48,6 +47,8 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+>  	int ret;
+>  	unsigned int curr_cpuid;
+> =20
+> +	init_cpu_topology();
+> +
+>  	curr_cpuid =3D smp_processor_id();
+>  	store_cpu_topology(curr_cpuid);
+>  	numa_store_cpu_info(curr_cpuid);
+> --=20
+> 2.25.1
+>=20
+
+--upFcVDVkXP8V4qFX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7V4bwAKCRB4tDGHoIJi
+0o0PAP9HD9PLqgsCZxfFPCseSIFNVy2GxrDM9AOY7oa7VqDuPgD/cAkklAAE+I71
+MIeO+K6gmi6G4ENFCyIG/KlgIrjdkAU=
+=kUSK
+-----END PGP SIGNATURE-----
+
+--upFcVDVkXP8V4qFX--
