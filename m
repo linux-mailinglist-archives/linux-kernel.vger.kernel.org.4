@@ -2,112 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6F765D1E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F6065D1F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239172AbjADL4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 06:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S238864AbjADL64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 06:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239144AbjADLzs (ORCPT
+        with ESMTP id S229739AbjADL6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 06:55:48 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EE041E7;
-        Wed,  4 Jan 2023 03:55:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7EBD51042;
-        Wed,  4 Jan 2023 03:56:28 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.37.146])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C49E53F587;
-        Wed,  4 Jan 2023 03:55:43 -0800 (PST)
-Date:   Wed, 4 Jan 2023 11:55:35 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, ben@decadent.org.uk, bjorn@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
-Subject: Re: [PATCH -next V12 3/7] riscv: entry: Add noinstr to prevent
- instrumentation inserted
-Message-ID: <Y7VpN/fFjqGJbxPu@FVFF77S0Q05N>
-References: <20230103033531.2011112-1-guoren@kernel.org>
- <20230103033531.2011112-4-guoren@kernel.org>
+        Wed, 4 Jan 2023 06:58:54 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817DE1E7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 03:58:53 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 18EC91EC008F;
+        Wed,  4 Jan 2023 12:58:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672833532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UKl/CVF+4GJS0LDdyX728sU1J1aGkocy2OklfcAdRtI=;
+        b=VcttLkPNy9K1xNdWfFV7Yz0KEUwXXic9v2XG1jbmKgXxKVSo4wcHOiMPPS/Y09Wr2p5SCF
+        2pmDtdw/423IjVUdnSQ/yOxlJdQFacJj5lXUfKDExPe/KfWSxHLfgoaUswfq1pSyDkPKwR
+        +8kZx8fwKmnCVLzKEVBMtns1UtQy+9g=
+Date:   Wed, 4 Jan 2023 12:58:48 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        hpa@zytor.com, luto@amacapital.net, dave.hansen@linux.intel.com,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com,
+        jailhouse-dev@googlegroups.com, jan.kiszka@siemens.com,
+        xen-devel@lists.xenproject.org, jgross@suse.com,
+        boris.ostrovsky@oracle.com, andrew.cooper3@citrix.com
+Subject: Re: [PATCH v2 1/2] x86: Check return values from early_memremap calls
+Message-ID: <Y7Vp+EPq5wkGr5mi@zn.tnic>
+References: <20221110154521.613472-1-ross.philipson@oracle.com>
+ <20221110154521.613472-2-ross.philipson@oracle.com>
+ <8e62a029-f2fa-0627-1f71-4850a68ec6b6@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230103033531.2011112-4-guoren@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8e62a029-f2fa-0627-1f71-4850a68ec6b6@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 10:35:27PM -0500, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On Thu, Nov 10, 2022 at 08:07:53AM -0800, Dave Hansen wrote:
+> On 11/10/22 07:45, Ross Philipson wrote:
+> >  	dt = early_memremap(initial_dtb, map_len);
+> > +	if (!dt) {
+> > +		pr_warn("failed to memremap initial dtb\n");
+> > +		return;
+> > +	}
 > 
-> Without noinstr the compiler is free to insert instrumentation (think
-> all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> yet ready to run this early in the entry path, for instance it could
-> rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
+> Are all of these new pr_warn/err()'s really adding much value?  They all
+> look pretty generic.  It makes me wonder if we should just spit out a
+> generic message in early_memremap() and save all the callers the trouble.
 
-That's generally true, and makes sense to me, but ....
+Well, let's see.
 
-> Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/
-> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> ---
->  arch/riscv/kernel/traps.c | 4 ++--
->  arch/riscv/mm/fault.c     | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index 549bde5c970a..96ec76c54ff2 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -95,9 +95,9 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
->  }
->  
->  #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
-> -#define __trap_section		__section(".xip.traps")
-> +#define __trap_section __noinstr_section(".xip.traps")
->  #else
-> -#define __trap_section
-> +#define __trap_section noinstr
->  #endif
->  #define DO_ERROR_INFO(name, signo, code, str)				\
->  asmlinkage __visible __trap_section void name(struct pt_regs *regs)	\
-> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> index d86f7cebd4a7..b26f68eac61c 100644
-> --- a/arch/riscv/mm/fault.c
-> +++ b/arch/riscv/mm/fault.c
-> @@ -204,7 +204,7 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
->   * This routine handles page faults.  It determines the address and the
->   * problem, and then passes it off to one of the appropriate routines.
->   */
-> -asmlinkage void do_page_fault(struct pt_regs *regs)
-> +asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+early_memremap() calls __early_ioremap() and that one already warns befofe each
+NULL return. So I guess we don't need the error messages as we will know where
+it starts failing.
 
-... why do you need that for do_page_fault? That doesn't (currently) do any
-entry/exit logic, so this seems unnecessary per the commit description.
+I guess we still need the error handling though.
 
-Thanks,
-Mark.
+I.e., this above should be:
 
->  {
->  	struct task_struct *tsk;
->  	struct vm_area_struct *vma;
-> -- 
-> 2.36.1
-> 
+    dt = early_memremap(initial_dtb, map_len);
++   if (!dt)
++           return;
+
+so that we don't go off into the weeds with a NULL ptr.
+
+Or?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
