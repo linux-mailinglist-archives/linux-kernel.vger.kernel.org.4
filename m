@@ -2,115 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2FD65D79C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7BF65D759
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239710AbjADPxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S235049AbjADPiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239744AbjADPxl (ORCPT
+        with ESMTP id S235231AbjADPiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:53:41 -0500
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Jan 2023 07:53:32 PST
-Received: from witt.link (witt.link [185.233.105.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7648F3C38E;
-        Wed,  4 Jan 2023 07:53:32 -0800 (PST)
-Received: from [IPV6:2003:f3:70b:a100:e782:3e2f:c635:6e83] (p200300f3070ba100e7823e2fc6356e83.dip0.t-ipconnect.de [IPv6:2003:f3:70b:a100:e782:3e2f:c635:6e83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by witt.link (Postfix) with ESMTPSA id 2D57C2AE1A9;
-        Wed,  4 Jan 2023 16:37:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=witt.link; s=dkim;
-        t=1672846667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=asRCi9LTyyDCpoVhm5bnewuJ1tD1lcwNq1Fx7lnNlME=;
-        b=C3qBS0Pjjc7QlKMCLaFtPP6Mj4lR0mEffrZVc5ofoWMLlbFWcAdIfvJg5wtfYqGZfkub3M
-        WXThlqR+pLYQdsOrhi8WuLpQonVkxmZ/OTmi4ZtzlyRS/kxFgzzazDscmk9mQlHyAq0Zj7
-        ng34N5kcparcKIBGW66CS7lfdeySUgyAHSBSK9Bf6P/gPAAhQlE/5hWY36QdaWAKQt2jOs
-        Y/LPW+9+xa1kz9VFs9oiThusv2OXtTZgSB9ajnuwYHDp6+hBgM3MfErAF705WYyFZEUfp5
-        56H02meB2rhPVu/W5+tzRJwuAsi3mGlsreNewbAI1e/PX/zcFeD5zjtacgWMJg==
-Message-ID: <fa187ea6-eaba-92cd-b2bc-a62d25501826@witt.link>
-Date:   Wed, 4 Jan 2023 16:37:46 +0100
+        Wed, 4 Jan 2023 10:38:19 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2321DDF4;
+        Wed,  4 Jan 2023 07:38:16 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pD5qA-0007gv-QA; Wed, 04 Jan 2023 16:38:06 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: Re: [PATCH 4/6] riscv: Fix EFI stub usage of KASAN instrumented string functions
+Date:   Wed, 04 Jan 2023 16:38:05 +0100
+Message-ID: <10490920.nUPlyArG6x@diego>
+In-Reply-To: <20221216162141.1701255-5-alexghiti@rivosinc.com>
+References: <20221216162141.1701255-1-alexghiti@rivosinc.com> <20221216162141.1701255-5-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [Bug 216877] New: Regression in PCI powermanagement breaks resume
- after suspend
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Vidya Sagar <vidyas@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230104150246.GA1068896@bhelgaas>
-Content-Language: en-US
-From:   Thomas Witt <kernel@witt.link>
-In-Reply-To: <20230104150246.GA1068896@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 16:02, Bjorn Helgaas wrote:
-> On Wed, Jan 04, 2023 at 09:44:25AM +0100, Thomas Witt wrote:
->> On 04/01/2023 01:30, Bjorn Helgaas wrote:
->>> On Mon, Jan 02, 2023 at 11:15:16AM -0600, Bjorn Helgaas wrote:
->>>> On Mon, Jan 02, 2023 at 02:02:51PM +0000, bugzilla-daemon@kernel.org wrote:
->>>>> https://bugzilla.kernel.org/show_bug.cgi?id=216877
->>>>>
->>>>>               Bug ID: 216877
->>>>>              Summary: Regression in PCI powermanagement breaks resume after
->>>>>                       suspend
->>>>>       Kernel Version: 6.0.0-rc1
+Am Freitag, 16. Dezember 2022, 17:21:39 CET schrieb Alexandre Ghiti:
+> The EFI stub must not use any KASAN instrumented code as the kernel
+> proper did not initialize the thread pointer and the mapping for the
+> KASAN shadow region.
 > 
-> BTW, if the bisect is correct, I think the regression actually is in
-> v6.1-rc1, where 5e85eba6f50d ("PCI/ASPM: Refactor L1 PM Substates
-> Control Register programming") appeared.
+> Avoid using generic string functions by copying stub dependencies from
+> lib/string.c to drivers/firmware/efi/libstub/string.c as RISC-V does
+> not implement architecture-specific versions of those functions.
 > 
->>>>> Created attachment 303512
->>>>>     --> https://bugzilla.kernel.org/attachment.cgi?id=303512&action=edit
->>>>> output of git bisect log
->>>>>
->>>>> After commit 5e85eba6f50dc288c22083a7e213152bcc4b8208 "PCI/ASPM:
->>>>> Refactor L1 PM Substates Control Register programming" my Laptop
->>>>> does not resume PCI devices back from suspend.
->>>
->>> Thomas, could you try the debug patch below on top of v6.2-rc1?
->>
->> Thank you for that patch Bjorn, but as far as I can see it does not change
->> anything.
-> 
-> Thanks for testing it.  Maybe Vidya will have more ideas.  The patch
-> below (based on v6.2-rc1) would revert 5e85eba6f50d and 4ff116d0d5fd.
-> If 5e85eba6f50d is the culprit, it should fix the regression.  It
-> would also potentially break L1 substates after resume, so we'd like
-> to avoid reverting it if possible.
-> 
-> But the "Unable to change power state from D3hot to D0, device
-> inaccessible" symptom suggests that the device is still in D3, which
-> would be more like a wakeup issue than an ASPM issue.
-> 
-> Your bisect log said 3e347969a577 ("PCI/PM: Reduce D3hot delay with
-> usleep_range()") was "good", but it would be worth double-checking,
-> e.g., see if reverting it from v6.2-rc1 makes any difference.
-> 
-> Bjorn
-> 
-> commit 61de2691d549 ("Revert "PCI/ASPM: Refactor L1 PM Substates Control Register programming"")
-> parent 1b929c02afd3
-> Author: Bjorn Helgaas <bhelgaas@google.com>
-> Date:   Wed Jan 4 08:38:53 2023 -0600
-> 
->      Revert "PCI/ASPM: Refactor L1 PM Substates Control Register programming"
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 
-With this patch on top of 6.2-rc1 suspend/resume works and my PCI 
-devices come back online.
+I think a similar change already went into 6.2-rc1 [0],
+though it seems to leave strcmp in place in image-vars.h
+
+
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=da8dd0c75b3f82eb366eb1745fb473ea92c8c087
+
 
