@@ -2,109 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB2065D551
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3106565D54B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239512AbjADOP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
+        id S234536AbjADOPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234578AbjADOPl (ORCPT
+        with ESMTP id S235105AbjADOPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:15:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF40639FAB
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 06:14:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672841687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9cfdRosRnqWGgYsCh7xZca32Ewr/g2k4G8qYMhpZ2gk=;
-        b=HX+Bh1b99eHO6KCR6G/lVfyp8gN5dXN/i1zgfvHC6fnCY17d+2ZPJeX8JeRzxTtjExUbda
-        Fn/D9u0jOfaP3y5Kt+7xhaRNHueWb++Dq/L4roHB1PKHT5n6n9MHKZMaFou8SB/yc4NVpq
-        H56uYsB4j+A/d5pBQnnd4ELnFR93E2Y=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-189-MZZWL-2WM4-hDb6w4kKg-Q-1; Wed, 04 Jan 2023 09:14:44 -0500
-X-MC-Unique: MZZWL-2WM4-hDb6w4kKg-Q-1
-Received: by mail-qv1-f70.google.com with SMTP id nt2-20020a0562143c0200b004c74f7ec3afso17679364qvb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 06:14:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9cfdRosRnqWGgYsCh7xZca32Ewr/g2k4G8qYMhpZ2gk=;
-        b=JVm/3VcX425eTgP94hAg6F//AuA1CBE/Dr5dWXPEss9WGCJyCRxRn5sH089VgrI3FN
-         ayYBGEHP56bTuaRcjfV2DEmQM8e1q1nZnNfoFyeAXXlqSHf3MqQJFeFsHlJKn8LJGq9d
-         dAPlHG/cs7smhAYSl1tD/drq8CA9KzJjJCymBGo0EoJPjoEHUQWPEqKhJI6cBcwgVwtB
-         KPLzPb1g8Uv0QbMQSXp+yakugMPS1nj8vqHL22Q0+9VY0GAlcBx8p7Q5/4gmO7+OyV77
-         SpKywm0FvPPeo+Iff+R6g6qhJqmVnkzFjvqtbC883Bv3xTecTALRzlwbQJz2Zkuhr/J/
-         g2UA==
-X-Gm-Message-State: AFqh2koJqtAGPlAI90pzxnZmZnzBT4snlmnFK1cMcpnGhKd+KzXcJoBT
-        PgGIcqeZzK11yxbWMS5dFEGk9AjRaRkEXxueAjGcxYHM7ZRMcC1VyAJqyJ0WuuB55AAOdShbJJW
-        I7NLRofgFNsMny2wRajMigb4A
-X-Received: by 2002:ac8:4247:0:b0:3a8:2e48:349f with SMTP id r7-20020ac84247000000b003a82e48349fmr68869476qtm.61.1672841683752;
-        Wed, 04 Jan 2023 06:14:43 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs+seHgT1LQmMai82icTAb5q4cuIvHG0Fp8IH23mh3AfCWFoUZldcrrRerBKNPKLa89DFwBqQ==
-X-Received: by 2002:ac8:4247:0:b0:3a8:2e48:349f with SMTP id r7-20020ac84247000000b003a82e48349fmr68869366qtm.61.1672841682031;
-        Wed, 04 Jan 2023 06:14:42 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id i7-20020a05622a08c700b00343057845f7sm20431560qte.20.2023.01.04.06.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 06:14:41 -0800 (PST)
-Date:   Wed, 4 Jan 2023 09:14:39 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        quic_shazhuss@quicinc.com, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, johan+linaro@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
-        echanude@redhat.com, Javier Martinez Canillas <fmartine@redhat.com>
-Subject: Re: [PATCH v3 0/7] dts: qcom: sc8280xp: add i2c, spi, and rng nodes
-Message-ID: <Y7WJzx78EMIS5d7z@x1>
-References: <20221220192854.521647-1-bmasney@redhat.com>
- <4d434dd7-cd3c-ed53-c337-4cf1ba018aef@kali.org>
+        Wed, 4 Jan 2023 09:15:07 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BA33AAB4;
+        Wed,  4 Jan 2023 06:14:55 -0800 (PST)
+Received: from [IPV6:2001:4091:a244:801c:ff2e:9846:2bd1:fe62] (unknown [IPv6:2001:4091:a244:801c:ff2e:9846:2bd1:fe62])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: rmader)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 33D5F6602D11;
+        Wed,  4 Jan 2023 14:14:53 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1672841693;
+        bh=lw2JPVpDxfHC/ODQKCtrvMC8RVqDv1kVX/tAotai0sA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=U2IkzowEhaZ6My70+KsMfUG2wTu7Wo8/9WWzs3e/C4T/o6/ekFvV2zLFfqXE7RwmY
+         K3yb847DCT284KExyldIYc28BR0P1yYhsH/w8PGONz9zVZYqshTaU+cW5QcNA/3wrP
+         X3MrNdJJB/WJEVRlsD+3xIKWrhwRuC307qczmI4kXkM/YXUUDfr5176aQKFUSgSx+G
+         hk4CXYAyMkdN8FBgH2eNwG52nXBeg9JbeIJbKPJ0fzbvG3ixJ2ajI5z9wyxlPDva6j
+         fQ2QXLZQIi+q0f40UeYOcBwyceoVZGHBVjGxWUWR5G7xUqn2HtaJ6Qn4KNJsDLB3oq
+         0H6P193wOSlxg==
+Message-ID: <e55766f0-5090-abb5-dbd7-58230153a8ce@collabora.com>
+Date:   Wed, 4 Jan 2023 15:14:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d434dd7-cd3c-ed53-c337-4cf1ba018aef@kali.org>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] media: i2c: imx258: Parse and register properties
+Content-Language: en-US
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     linux-kernel@vger.kernel.org, nicholas@rothemail.net,
+        javierm@redhat.com, Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+References: <20230104122337.123055-1-robert.mader@collabora.com>
+ <20230104141159.e2klapbpenslxqbx@uno.localdomain>
+From:   Robert Mader <robert.mader@collabora.com>
+In-Reply-To: <20230104141159.e2klapbpenslxqbx@uno.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 01:41:52PM -0600, Steev Klimaszewski wrote:
-> One note, and this isn't due to your patches at all, but the touchscreen on
-> the Thinkpad X13s needs to be manually bound in order to work via echo
-> 1-0010 | sudo tee /sys/bus/i2c/drivers/i2c_hid_of/bind - this patch does not
-> affect that, though I had hoped maybe it would.
-> 
-> Tested on the Lenovo Thinkpad X13s
-> 
-> Tested-by: Steev Klimaszewski <steev@kali.org>
-
-Hi Steev,
-
-I believe that I remember reading at some point that the touchscreen
-issue on the x13s was related to some probe deferral issues. If so,
-try adding this patch series from Javier to see if that helps the
-situation:
-
-https://lore.kernel.org/lkml/20221116115348.517599-1-javierm@redhat.com/
-
-Javier separately encountered a probe deferral issue when enabling a
-Snapdragon-based Chromebook on Fedora that caused him to work on that
-patch series.
-
-Brian
-
+On 04.01.23 15:11, Jacopo Mondi wrote:
+> Hi Robert
+>
+> On Wed, Jan 04, 2023 at 01:23:37PM +0100, Robert Mader wrote:
+>> Analogous to e.g. the imx219. This enables propagating
+>> V4L2_CID_CAMERA_ORIENTATION and V4L2_CID_CAMERA_SENSOR_ROTATION
+>> values.
+>> The motivation is to allow libcamera detect these values from the
+>> device tree and propagate them further to e.g. Pipewire.
+>>
+>> While at it, reserve space for 3 additional controls even if
+>> v4l2_ctrl_new_fwnode_properties() can only register 2 of
+>> them, to fix the existing implementation which reserve space for 8
+>> controls but actually registers 9.
+>>
+>> Changes in v2:
+>>   - Reserve 11 instead of 10 controls
+>>   - Change order of variable declaration
+>>   - Slightly extend description
+> This part should go below, after ---, as it shouldn't be part of the commit
+> message
+>
+> The patch looks good
+>
+> Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Thanks! And ops, right, make sense. Should I spin a v3 for that or is it 
+simple enough to fix when pulling?
+>> Signed-off-by: Robert Mader <robert.mader@collabora.com>
+>> ---
+>>   drivers/media/i2c/imx258.c | 13 ++++++++++++-
+>>   1 file changed, 12 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+>> index eab5fc1ee2f7..3b560865b657 100644
+>> --- a/drivers/media/i2c/imx258.c
+>> +++ b/drivers/media/i2c/imx258.c
+>> @@ -9,6 +9,7 @@
+>>   #include <linux/pm_runtime.h>
+>>   #include <media/v4l2-ctrls.h>
+>>   #include <media/v4l2-device.h>
+>> +#include <media/v4l2-fwnode.h>
+>>   #include <asm/unaligned.h>
+>>
+>>   #define IMX258_REG_VALUE_08BIT		1
+>> @@ -1148,6 +1149,7 @@ static const struct v4l2_subdev_internal_ops imx258_internal_ops = {
+>>   static int imx258_init_controls(struct imx258 *imx258)
+>>   {
+>>   	struct i2c_client *client = v4l2_get_subdevdata(&imx258->sd);
+>> +	struct v4l2_fwnode_device_properties props;
+>>   	struct v4l2_ctrl_handler *ctrl_hdlr;
+>>   	s64 vblank_def;
+>>   	s64 vblank_min;
+>> @@ -1156,7 +1158,7 @@ static int imx258_init_controls(struct imx258 *imx258)
+>>   	int ret;
+>>
+>>   	ctrl_hdlr = &imx258->ctrl_handler;
+>> -	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
+>> +	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 11);
+>>   	if (ret)
+>>   		return ret;
+>>
+>> @@ -1232,6 +1234,15 @@ static int imx258_init_controls(struct imx258 *imx258)
+>>   		goto error;
+>>   	}
+>>
+>> +	ret = v4l2_fwnode_device_parse(&client->dev, &props);
+>> +	if (ret)
+>> +		goto error;
+>> +
+>> +	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx258_ctrl_ops,
+>> +					      &props);
+>> +	if (ret)
+>> +		goto error;
+>> +
+>>   	imx258->sd.ctrl_handler = ctrl_hdlr;
+>>
+>>   	return 0;
+>> --
+>> 2.39.0
+>>
