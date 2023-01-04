@@ -2,107 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E900465CAA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4EA65CAAD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233936AbjADAOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S234315AbjADATv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 19:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbjADAOQ (ORCPT
+        with ESMTP id S234072AbjADATt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:14:16 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F5F13F2D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:14:15 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id 192so34923713ybt.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 16:14:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hQ/lWA2u673qQ3zZUAqUhxWgXqekzo4IW91NihIOMao=;
-        b=FMXhuV3K2ARtmgPHeUhmZFz7Ug53ziDjO+cCjXO9HNwnsX8S02ay2252oFhhss3762
-         z96s/0ZsfKsPyffy3FeMV2aZh0HgEnBAJa0VLdJRnYIaU5PRaFPYAMATDB1t6MYDA6Zl
-         94nTVRaQ7ACXOSVNgpmXUtakqKwKJuKCTVgf/ti26nwyFIxfHGzr3362F+FoWXPCk2kQ
-         RAjKwD4tkQ4U1pOHiKEG0aoXTFaCYQoVqv2DEjBwpMWsGPC925H7LUAI7iMT+TzwWQwl
-         Jmu0JLGmSKqQQThJAiU0SVYeKoBpMOjHDvNQ6OFGEdueQYAvDH11SgcJc7JoyC7YLl0X
-         EOlw==
+        Tue, 3 Jan 2023 19:19:49 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AAF14023
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:19:47 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id y5-20020a056e021be500b0030bc4f23f0aso20292439ilv.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 16:19:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hQ/lWA2u673qQ3zZUAqUhxWgXqekzo4IW91NihIOMao=;
-        b=JKBrTsLi3SBspp5cOWYexd8vml6t0uuSiHVgOPWtflFWKkY6oD+4AajvJaHE+oxWXA
-         MKUkb5Er84yi8GIwmtGz2sCWSHUZ5gVOmrJdLk4Jd0tslEr8Kdq2OlAkTKqgeaYpEUE4
-         C+ChNzapZf9+XMpsZeb5lU+FrHjAsqQ1nYRQ0bONEpOlbMm7NtLQNeiMZlZwaHoMC09m
-         9AAT5OghniuBBPWGiRbhmIzdfmA+qb+vkSAIGtSBW8AN+UI4Wt457/IBPWSs11fqBOq8
-         WtLoFbLOGx6Oa7zKQ8/5CaUY6wFQlEM5+YTF1fNZcDArgR5cWqJgr+EIt9Xv82UmSu35
-         /UOg==
-X-Gm-Message-State: AFqh2kodOgzZyCw9YTIQELJTe67Ld48/Dz5UqWXScx1HB7HNsyrSUF8T
-        frVt+/9p0CZVcUM2qP2Or84rSBEbunxg76u0UzJRi/s15cLi3rwa
-X-Google-Smtp-Source: AMrXdXtULjWSx/uLAyoLdOmvGxodGKaxAIYHXql4LycOyWtwq7wqvcnw0vWsSR5d21aGy9Mikwess4Umu7qN+6/8UxY=
-X-Received: by 2002:a25:8e8e:0:b0:6fa:a54e:9276 with SMTP id
- q14-20020a258e8e000000b006faa54e9276mr3560320ybl.460.1672791254909; Tue, 03
- Jan 2023 16:14:14 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZvMEon9aNprI7JYdc4rObwMVQwKm8shDYc4iBAlTaoI=;
+        b=1Mw+SDWnoiaBuM59anY85/U4m2ktCRNElY5MUSKfU7BRrP1CE81BN/Jqh/qpEIBJzD
+         1q6PIVBjdiz1pzrF96drDVVjC7fZ0mW5FJgPIvMN/Q2aaW//z+xiedSrbXA7MVqwTMe7
+         WZUTi9ixTx0EnfzVdRmFYI1ydTnM06nfrmnAbU+xZW337nt3GJ1HymWYkvDBnX7lk5Aq
+         81rUi756dajz+A5V+edjptAsHeY2Qxu3YY017FCx1bQk8Psimh+U4DVt9YCAmJRifLZI
+         hzKtms2Ua8nirA7ogBQrJ6ElZjZ6GnGrXQUYbGhlk4PCH6FRC6x7KxwyXLjjqXSURJM9
+         jeBw==
+X-Gm-Message-State: AFqh2kr/HkgDzEnNmmFCCWpCVvr3n9CxB+Kl2DGWWZh7kZyTLyuIewr2
+        U3Ykn/ByfZBHjGnAI7IJg4DtzO//Vpdu58EVEIuyMkCwD2r3
+X-Google-Smtp-Source: AMrXdXvxbt/Op/gW1dVwmMcNedERAmLDqEUbZfoQIXlGYB6BKQHvghh8rV00J4YF2ddlj9pPWaRf0Q0w2QYHhy64ze8+w/qgZxvk
 MIME-Version: 1.0
-References: <20221215165728.2062984-1-arnd@kernel.org> <CACRpkda3V2Fv9aOxxcuQ5NKv3sWic9-skQU_z7=0S692h_WhnQ@mail.gmail.com>
- <CAFr9PXmVXqAX73VUzAt_M2yPN93in9Y_LHyYcEA1Dfj_m_4ZHA@mail.gmail.com>
-In-Reply-To: <CAFr9PXmVXqAX73VUzAt_M2yPN93in9Y_LHyYcEA1Dfj_m_4ZHA@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 4 Jan 2023 01:14:03 +0100
-Message-ID: <CACRpkdZBs0RTwnEjTu81ih0Pyar-e0mb-9-zo9rS6fB9OAHWog@mail.gmail.com>
-Subject: Re: [PATCH] usb: fotg210: fix OTG-only build
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Received: by 2002:a02:ac14:0:b0:38a:9b13:b92d with SMTP id
+ a20-20020a02ac14000000b0038a9b13b92dmr2764806jao.265.1672791586966; Tue, 03
+ Jan 2023 16:19:46 -0800 (PST)
+Date:   Tue, 03 Jan 2023 16:19:46 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005315c105f1652480@google.com>
+Subject: [syzbot] possible deadlock in rds_message_put
+From:   syzbot <syzbot+f9db6ff27b9bfdcfeca0@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, jasowang@redhat.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, mst@redhat.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, rds-devel@oss.oracle.com,
+        santosh.shilimkar@oracle.com, syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 2, 2023 at 7:10 AM Daniel Palmer <daniel@0x0f.com> wrote:
+Hello,
 
-> Maybe a little unrelated to this patch but this IP is also used on the
-> MStar/SigmaStar chips
+syzbot found the following issue on:
 
-I actually think Arnd Bergmann at one point sent me a device with
-this line of chips in it. I suppose you will be upstreaming this
-support?
+HEAD commit:    c183e6c3ec34 Merge git://git.kernel.org/pub/scm/linux/kern..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1161aa7c480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8ca07260bb631fb4
+dashboard link: https://syzkaller.appspot.com/bug?extid=f9db6ff27b9bfdcfeca0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1370b478480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ab141a480000
 
-> (albeit only the host (FUSBH200) part that used
-> to have its own driver that got removed at some point...)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/9b693820fb05/disk-c183e6c3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e449d80e60dc/vmlinux-c183e6c3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/08e31763ce79/bzImage-c183e6c3.xz
 
-Sorry for reading this after sending out my latest changes, here:
-https://lore.kernel.org/linux-usb/20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org/T/#t
+The issue was bisected to:
 
-The first patch in this series differentiates between
-FOTG200 and FOTG210, do you mean to say there is
-rather FUSBH200 as well? There is also FUSB220...
-(Faraday used to have datasheets on their webpage
-but I can't access them anymore.)
+commit 1628c6877f371194b603330c324828d03e0eacda
+Author: Jason Wang <jasowang@redhat.com>
+Date:   Mon Jan 4 06:55:02 2021 +0000
 
-> For what it's worth I could not get this driver to function correctly
-> with UVC cameras etc and was fed up with hacking it apart to try to
-> get it to work when it's mostly a copy/paste of an old copy of the
-> common EHCI driver.
-> So I added some extra quirks to the common EHCI driver to allow it to
-> run this IP too and deleted the custom driver in my tree (hence the
-> conflicts..).
->
-> I'm not sure how using the common EHCI driver works with the OTG part
-> but if it's possible to make that work maybe my way is a better
-> solution than trying to maintain this driver?
+    virtio_vdpa: don't warn when fail to disable vq
 
-That's a good point, do you have a pointer to your EHCI
-quirk patch so I can take a look?
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1479f7da480000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1679f7da480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1279f7da480000
 
-Yours,
-Linus Walleij
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f9db6ff27b9bfdcfeca0@syzkaller.appspotmail.com
+Fixes: 1628c6877f37 ("virtio_vdpa: don't warn when fail to disable vq")
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-syzkaller-11778-gc183e6c3ec34 #0 Not tainted
+------------------------------------------------------
+syz-executor390/18169 is trying to acquire lock:
+ffff8880763af100 (&rm->m_rs_lock){..-.}-{2:2}, at: rds_message_purge net/rds/message.c:138 [inline]
+ffff8880763af100 (&rm->m_rs_lock){..-.}-{2:2}, at: rds_message_put+0x1dd/0xc20 net/rds/message.c:180
+
+but task is already holding lock:
+ffff88802afafa70 (&rs->rs_recv_lock){...-}-{2:2}, at: rds_clear_recv_queue+0x33/0x350 net/rds/recv.c:761
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&rs->rs_recv_lock){...-}-{2:2}:
+       __raw_read_lock_irqsave include/linux/rwlock_api_smp.h:160 [inline]
+       _raw_read_lock_irqsave+0x49/0x90 kernel/locking/spinlock.c:236
+       rds_wake_sk_sleep+0x23/0xe0 net/rds/af_rds.c:109
+       rds_send_remove_from_sock+0xb9/0x9e0 net/rds/send.c:634
+       rds_send_path_drop_acked+0x2f3/0x3d0 net/rds/send.c:710
+       rds_tcp_write_space+0x1b5/0x690 net/rds/tcp_send.c:198
+       tcp_new_space net/ipv4/tcp_input.c:5483 [inline]
+       tcp_check_space+0x11b/0x810 net/ipv4/tcp_input.c:5502
+       tcp_data_snd_check net/ipv4/tcp_input.c:5511 [inline]
+       tcp_rcv_established+0x93e/0x2230 net/ipv4/tcp_input.c:6019
+       tcp_v4_do_rcv+0x670/0x9b0 net/ipv4/tcp_ipv4.c:1721
+       sk_backlog_rcv include/net/sock.h:1113 [inline]
+       __release_sock+0x133/0x3b0 net/core/sock.c:2928
+       release_sock+0x58/0x1b0 net/core/sock.c:3485
+       rds_send_xmit+0xafc/0x2540 net/rds/send.c:422
+       rds_sendmsg+0x27d3/0x3080 net/rds/send.c:1381
+       sock_sendmsg_nosec net/socket.c:714 [inline]
+       sock_sendmsg+0xd3/0x120 net/socket.c:734
+       __sys_sendto+0x23a/0x340 net/socket.c:2117
+       __do_sys_sendto net/socket.c:2129 [inline]
+       __se_sys_sendto net/socket.c:2125 [inline]
+       __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2125
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&rm->m_rs_lock){..-.}-{2:2}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+       lock_acquire kernel/locking/lockdep.c:5668 [inline]
+       lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
+       rds_message_purge net/rds/message.c:138 [inline]
+       rds_message_put+0x1dd/0xc20 net/rds/message.c:180
+       rds_inc_put net/rds/recv.c:82 [inline]
+       rds_inc_put+0x13e/0x1a0 net/rds/recv.c:76
+       rds_clear_recv_queue+0x14b/0x350 net/rds/recv.c:767
+       rds_release+0xd8/0x3c0 net/rds/af_rds.c:73
+       __sock_release+0xcd/0x280 net/socket.c:650
+       sock_close+0x1c/0x20 net/socket.c:1365
+       __fput+0x27c/0xa90 fs/file_table.c:320
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+       exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+       exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&rs->rs_recv_lock);
+                               lock(&rm->m_rs_lock);
+                               lock(&rs->rs_recv_lock);
+  lock(&rm->m_rs_lock);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor390/18169:
+ #0: ffff8880719a3210 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #0: ffff8880719a3210 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
+ #1: ffff88802afafa70 (&rs->rs_recv_lock){...-}-{2:2}, at: rds_clear_recv_queue+0x33/0x350 net/rds/recv.c:761
+
+stack backtrace:
+CPU: 0 PID: 18169 Comm: syz-executor390 Not tainted 6.1.0-syzkaller-11778-gc183e6c3ec34 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+ lock_acquire kernel/locking/lockdep.c:5668 [inline]
+ lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
+ rds_message_purge net/rds/message.c:138 [inline]
+ rds_message_put+0x1dd/0xc20 net/rds/message.c:180
+ rds_inc_put net/rds/recv.c:82 [inline]
+ rds_inc_put+0x13e/0x1a0 net/rds/recv.c:76
+ rds_clear_recv_queue+0x14b/0x350 net/rds/recv.c:767
+ rds_release+0xd8/0x3c0 net/rds/af_rds.c:73
+ __sock_release+0xcd/0x280 net/socket.c:650
+ sock_close+0x1c/0x20 net/socket.c:1365
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4a3a75f5fb
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 03 fd ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 41 fd ff ff 8b 44
+RSP: 002b:00007ffff26fde60 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f4a3a75f5fb
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
+RBP: 0000000000000032 R08: 0000000000000000 R09: 00007f4a3a7f51ae
+R10: 0000000000000000 R11: 0000000000000293 R12: 00007f4a3a8284ec
+R13: 00007ffff26fdeb0 R14: 00007ffff26fded0 R15: 00007ffff26fdf40
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
