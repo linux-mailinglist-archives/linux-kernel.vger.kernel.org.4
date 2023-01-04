@@ -2,232 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303E165DBA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A989665DBBA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240023AbjADRxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 12:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S235070AbjADR5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 12:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240103AbjADRxA (ORCPT
+        with ESMTP id S240168AbjADR4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 12:53:00 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6A2E0A2;
-        Wed,  4 Jan 2023 09:52:58 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1442977d77dso40639463fac.6;
-        Wed, 04 Jan 2023 09:52:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pzRN+ThvK9tCIgke9+TLEirKqYpVwfmOcXrEgIxAajI=;
-        b=Bh+eN9QLMyipT6Z9HuZkAw5U7DOXS0Yx86HMEMI1AQBref5j0cYWdKlY5pro1eo5Ij
-         of6QbL7Spuzk6CPXZGDPJIXYypt377XLxZChKWDpQvyoxzlpyynetvJKRlI3mZ7wytrO
-         IOQGPvzOde80/6rR7tpK9Vn1LpJMMPN7A3Fq+b9WRkUFk+Kn/AMqoqbvFCnIX1ksj7kJ
-         XOOyoaxzgOUSoH0temzpJ7qYs7Apg6I+KLygDD0ffiO8WYc4fuI/UNcrtmEX44KRUPsh
-         eYN3bJqXDU46KyU6P+aYthrIj7UEYBAxG6zGu8LoLDyOg2uKp+mjQY3ZkKPwRj3J2SZF
-         VDsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pzRN+ThvK9tCIgke9+TLEirKqYpVwfmOcXrEgIxAajI=;
-        b=LYgJTr3QrNhbq2KDGUWVlhFvAP/Ef476BZIx0lw/LZuHnZLutUhkJeASRCqh1CYi0E
-         9uw1vH0kLZO/brFoGq+fFzYKDdJ2GWLnhDVtMkX+ryUnoCscE3BB+rfHJo+3YY+54vFs
-         DziqxbI1heAHefds2GonQjAbjFAfdA8bpffR5QeDJHjo4Ehjl/MssFmwI7DoUp2pX/3y
-         wEkhnSYaD+iX0fDHTNqy8Oty/tVDps1tHb/SnsYjewQ9csiISPKzK70SbQ9BVOZPGt0f
-         b1ZH2BhPxObW1c0MTZXGkyova4wwgwg0rDwJI685Nq+5G6X9EHOUfUX0crQBz/+Znnv3
-         xP2w==
-X-Gm-Message-State: AFqh2kqKM4RQsEIYRpKt3k9iGpBsERGmjVIFZFcOHZnbXjisvNFHCrgR
-        BRCfPqCypFaax8EutmN/3vipQF6JhMq4iN2ggI8=
-X-Google-Smtp-Source: AMrXdXtD98iNnP9l7LW63xiy0OQEGh+Cg1ggoDhD+5dqZSCaUmMt1C4pJrxjmNENyM2O1Wio9LnMyetUHjAgFag9Lv8=
-X-Received: by 2002:a05:6870:ac10:b0:144:bf10:eecd with SMTP id
- kw16-20020a056870ac1000b00144bf10eecdmr3806466oab.204.1672854777368; Wed, 04
- Jan 2023 09:52:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20221228060346.352362-1-wedsonaf@gmail.com> <20221228060346.352362-4-wedsonaf@gmail.com>
- <20221231194352.55cf0a26.gary@garyguo.net> <CANeycqrVsbNJ+A+A26LXkBezBNUHvnZU2Q3_whexCwwG5ZcgPQ@mail.gmail.com>
- <df2f6c0b-fb4c-97e5-b607-7df626ea5933@crisal.io>
-In-Reply-To: <df2f6c0b-fb4c-97e5-b607-7df626ea5933@crisal.io>
-From:   Wedson Almeida Filho <wedsonaf@gmail.com>
-Date:   Wed, 4 Jan 2023 17:52:46 +0000
-Message-ID: <CANeycqrBLoYSMcdNbD=SCbDc4dMFy3qi0rc2AznaBn5rQ0auEQ@mail.gmail.com>
-Subject: Re: [PATCH 4/7] rust: sync: introduce `ArcBorrow`
-To:     =?UTF-8?Q?Emilio_Cobos_=C3=81lvarez?= <emilio@crisal.io>
-Cc:     Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Wed, 4 Jan 2023 12:56:55 -0500
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93483E0EE;
+        Wed,  4 Jan 2023 09:56:53 -0800 (PST)
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304FPeLp020752;
+        Wed, 4 Jan 2023 09:56:48 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS06212021;
+ bh=qNtKodlYZ2qO13drn1n3crHjP+yMfgGR0q7i0tIE0bY=;
+ b=Ld2t34OvcJ+SFSelEbIzf6Op+bnUgmDBqacaDfzZwji0t+ra1Z9+TZh7Qx6liOuoPiLZ
+ mix7me76U/sFifKDKqqfjKuEHLjFpoAoeS0flOg+LRvG+Vna3mh+5wC9UsyfKwQEaPJQ
+ H0+J5lC8d9eyWYLIIugUc9+FCLpY1SqEsx2al7MIuqTkWNULdDnuHQ0V0NJmBHdvnD1e
+ w38TSOz16/ze4Vq82yagMctCZ2R8lND9eEWsLWq1pFp8gVaxTwyW68gm9OIZQJdjpNfN
+ 1iqQUIYpr4SOFHBIkpNEA4vsdFqe8gm2WiHQzPYH2juyqYpI4SMFqqYxHCwHWdpozUg3 TA== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3mtnfrtfff-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 09:56:48 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MsAx45y/tdePbLNwHx9TLrP/9uhXqYkqUIy4xeMrGMZTcFbbegiflRkiveUsQKwNM1mFPahN8BPjZTvDH1404ggw+o9AaeJ0NwWP95MBdJBWrg6C1UBdSOeUvuTswva2+5ZEqwRDPHMdeQcmL1f/ob2XLtCvmpxin8gBxIXassKuhqxfqwog9kTMlQtb6J8Oqq3mEP869I0LFSbEm1KkGPJLBprb+4KXzuctgyg3pDQraQd4rgiILuaW1RAxPpo7bADAIE4znOcEF52GH7OtscS5z0XlQ/khn/ELAa/LB8xV5tg9p84xO6XtFXiFH/erKWujKZ5SjK1we8diypfjjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qNtKodlYZ2qO13drn1n3crHjP+yMfgGR0q7i0tIE0bY=;
+ b=gHIno9yWjOYsgRz4YhMDwIivR4qbTaQ5u3BcdCM7ntr6PHunIF5wx5yAjaP8tIVEpmKppDo+jqNXj+PeY+0rAw6O91D401hjJEQ/htFhgQncKss8dA7bNJGECiZq6dULPitcDqnDFdJJIWKUhXD+VGV7Vz0b4XgJ2CdGbZbiVGZdO7L2Qc4slP/wUXvAHDz27dUWJGq0MMkOY8HFHKnzxWss+fsWKWQoM2oOKZt77Wsd2B4W3hAitAl/ODCE9OUUeQgVC4RPKGbCo7tMj8SkaaKPQKsJ6szGc8ZVaRmyu8Yb7vqntUfVzxoE2pIT5GJD+2hRbQ6dqk0FAEQLhfHNKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com (2603:10b6:510:40::15)
+ by BL1PR11MB5462.namprd11.prod.outlook.com (2603:10b6:208:31e::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Wed, 4 Jan
+ 2023 17:56:44 +0000
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::52f4:f398:b983:2380]) by PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::52f4:f398:b983:2380%7]) with mapi id 15.20.5944.019; Wed, 4 Jan 2023
+ 17:56:44 +0000
+From:   Dragos-Marian Panait <dragos.panait@windriver.com>
+To:     stable@vger.kernel.org
+Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kent Russell <kent.russell@amd.com>,
+        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: [PATCH 5.10 0/1] drm/amdkfd: Check for null pointer after calling kmemdup
+Date:   Wed,  4 Jan 2023 19:56:32 +0200
+Message-Id: <20230104175633.1420151-1-dragos.panait@windriver.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VE1PR03CA0059.eurprd03.prod.outlook.com
+ (2603:10a6:803:118::48) To PH0PR11MB4952.namprd11.prod.outlook.com
+ (2603:10b6:510:40::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4952:EE_|BL1PR11MB5462:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5361a79f-5074-4ae6-0c6e-08daee7d0a68
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SG6mwZugglmWlZlhQRI9IEHVJmdyporJFKcrXvLW76x66wCyBwOqza50IgkvudCIAPmMVBhFOYfOSuSInYuhWImbJDdtf3VcRizoeeeI+m6q/4e/+gqP0AVGgE7KqID2FleJ+vjlr+1YnCjxAYGL1Mwoe8UtCMfHVSeAa3O7ciXW+qDSAZPYFmKYgeLcwpYGUHB7joUlHspx8AKOY9tx+a6teX/ogqqK0c0mlHpzToUa4+O5jpk5j4iJCXkETJaEax1XL8/RRUCIApMpTDKivKFE1p9RSk0YCahGx0A2ar1BwBnfkqMkW6S8/HR30feANTf1pcRQP//YV2c1yxkXRk5mgAIAc9QLB1wqPL/YLAEcQhPouFrDBAgBI0fhPIY1MGdx1ofF/+C4zYNWFYJMH6xZpqdEu9LfrOGnrLE1/gquRvEM08BWE6tf6JZp/zQ9u6pGhO99ZSIFJnfu8PAvBJchd1Jgup9JQk/NuQEM5Smc1GOhXP4GUeWBGKICKGEgm6wDWEUU2d6P/24Ezpj8IWBLc15UAGQIrq4xW+0JQBDtTTarzDGan78rvP499cESvr5VUkEVj47z5Av6x8ylk5lceEEFjKuAytD5T9TShEDWTKC3VGJq5WVx11M/5r4a8sZCmnJtdU4zi6p4nIxPV+XXnoaexCOysezZRWKvuPy5e8IdLR/CnjTNgXH05Iu7ApfXfsx+deEU7G7a2Ie8D0eAYavl3eVRkfqjCREA5a4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4952.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(136003)(366004)(346002)(376002)(396003)(451199015)(8676002)(4326008)(66946007)(66556008)(6506007)(66476007)(478600001)(966005)(6486002)(36756003)(52116002)(86362001)(54906003)(38100700002)(6916009)(316002)(1076003)(2616005)(38350700002)(4744005)(7416002)(41300700001)(5660300002)(6666004)(186003)(8936002)(2906002)(6512007)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NaMdy1w8tuqqCZ5Ny/WJO5C3DenoBdt3skUCF8U4U6qn9JKAeKMD6ulsNx5+?=
+ =?us-ascii?Q?cPswf3UkOwmvbp6jYaIt/qnBhibaRTIZclF0xLdT+GevpQkIwfaq0HlDWy50?=
+ =?us-ascii?Q?9M2zCa0Wwp1uak0nxgYWEFAzYWrjxwRb4VC2dbt/mXVICxsa01YT9NPT2cT+?=
+ =?us-ascii?Q?La9/IhOR4g0EwixkhbtuXIIdz2cR5e0ghe6i2sXD8iUcF/JIuanBBeXM21fO?=
+ =?us-ascii?Q?DqXvQ4vmA9s4aamS0iU+9Q/Nt9BGp/mtfjDrraZUV2Uvu1+xrNhAxp4xtvh6?=
+ =?us-ascii?Q?uxso4G0h/y/OdfEt/2YJtQOVM95IY1smUiFvJWZ9x5gFLZE7qY7JOgWJregQ?=
+ =?us-ascii?Q?iPQTKq58t3JsMFVJDohAwnUJefQ8GxbT99KUoqOuQE0SjXYEqE6fV6eSkiYV?=
+ =?us-ascii?Q?NM02OcQennb3bBbEozcgi5fBAMxl+ZZNPSnmvwDOmy88tJCW+1r+yiyPJOWd?=
+ =?us-ascii?Q?7Wvpi2W8GuJxaX/LNfk4A0zhkVdFY9e/5uT4y5af6KZ/4JcLt3WFQvOyg/rM?=
+ =?us-ascii?Q?dWQutkc/4Dfu4F+XKsGOXa94WJ5hiDWjS6VWt8sYhDYG+39gXbnwnfIXuZBy?=
+ =?us-ascii?Q?G3HNYsaCIWdujnCo1KHh7ihm5N9loXfCB486y+Xu8vywp0SsYnzuDa2Hd52Z?=
+ =?us-ascii?Q?/C3HqPqkzvMoGmqf1rZuyEoH0Ye9EdTp4ZdeYjhJNrN38WYcdq+GQNAzLFXr?=
+ =?us-ascii?Q?nY8BEnvwRLZmd65P/8VO8xd8DtJbGwZ14K+ZhjNDtw97FqqWhzTphBr3OTgR?=
+ =?us-ascii?Q?0K3HIZt+ZRbZH69Pz7aTfPlDPg5dhHgvCPHNmM97eygpD6AI1tGiJFpnJnII?=
+ =?us-ascii?Q?4E58Vi8uVqUkO6s2mJTIQiMrlwz/R/T+Mi1pGVWcu4sqmHJvfgiezh0wbznN?=
+ =?us-ascii?Q?linhBRhUya01qbjaHxVkCgmD2SznkspgS74EFPFLlSrXzY5wmOdq+AC0S2T1?=
+ =?us-ascii?Q?JPbxLxxog32Zk+wfLbd2m9yBAAkOMjn6H7gzyX2nPbVzTRIJxNW22LI0ke+S?=
+ =?us-ascii?Q?NLxxAG8JtX75M+fxdbBH4Cl3MvFgwDJMimnZxE/eRd5yGV1qjjHqi2tkdw+f?=
+ =?us-ascii?Q?v+OIQJnGMEqrqlKLw80a3dJDza40apGYrNYIkWoNWCcWpwYTuZDcERLTZpRv?=
+ =?us-ascii?Q?2vEEJhZPKds4MQRT6+q9HAxhoKwr6HjbsaLF5JKi66eyun5l7zLQAqourHvp?=
+ =?us-ascii?Q?g00VpM+LsWDf3s+Wsl4g8pWlDzGGFdXgHQqLgPDEQyebPU6FHFbhuE/WxFGN?=
+ =?us-ascii?Q?75LJ0+6ZtuA2oXEFcBqx9V5nBbAF03zyJ+AnpVFe82VYL8MlnCe6MmiMmLLJ?=
+ =?us-ascii?Q?A0K9vNvM9pZ2lhNubwbsWm8T6ROlLLzYTM3Ebe2uoMN71RAKuKlqrJpYDYXT?=
+ =?us-ascii?Q?/8VNFkiTf5uuOgdIahlB8WT9LOwnL1FurFYmajKmkxL8qWwdQxBG9ocDohK4?=
+ =?us-ascii?Q?kyway4hmf7A6/LalKSAxcNYHqI6CWwFsn0jVhJis38DnBl+F5mPo95xmbPDS?=
+ =?us-ascii?Q?BNmMHng/2v5yUTE4WfkORkEySkh+wgWRBmuHKDvN0Ot8iwukKDg4vc7iK20N?=
+ =?us-ascii?Q?ULyrVo+fM8JNGh6/oZFhYrI5GluhnB4phUxrO5P9a36UPLfcXiR21MqGWIm0?=
+ =?us-ascii?Q?qQ=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5361a79f-5074-4ae6-0c6e-08daee7d0a68
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4952.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 17:56:44.2552
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rXom+AxwYjXZM35h9vd1+qfSFeEuSb/UvXSDf5kUQBN+9za687elHxrilzsU5c0YZ7mDqK0HukVxA0harDgUnuH7MbaEWii4pWpae7Lg1mQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5462
+X-Proofpoint-ORIG-GUID: qJ8upN-k10C69ms2tui1v13Wh51tMqlr
+X-Proofpoint-GUID: qJ8upN-k10C69ms2tui1v13Wh51tMqlr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=643
+ impostorscore=0 mlxscore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
+ bulkscore=0 priorityscore=1501 adultscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301040150
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 Jan 2023 at 16:06, Emilio Cobos =C3=81lvarez <emilio@crisal.io> w=
-rote:
->
-> Sorry for the drive-by comment, but maybe it saves some work.
->
-> On 1/4/23 16:29, Wedson Almeida Filho wrote:
-> > On Sat, 31 Dec 2022 at 19:43, Gary Guo <gary@garyguo.net> wrote:
-> >>
-> >> On Wed, 28 Dec 2022 06:03:43 +0000
-> >> Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
-> >>
-> >>> This allows us to create references to a ref-counted allocation witho=
-ut
-> >>> double-indirection and that still allow us to increment the refcount =
-to
-> >>> a new `Arc<T>`.
-> >>>
-> >>> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> >>> ---
-> >>>   rust/kernel/sync.rs     |  2 +-
-> >>>   rust/kernel/sync/arc.rs | 97 ++++++++++++++++++++++++++++++++++++++=
-+++
-> >>>   2 files changed, 98 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-> >>> index 39b379dd548f..5de03ea83ea1 100644
-> >>> --- a/rust/kernel/sync.rs
-> >>> +++ b/rust/kernel/sync.rs
-> >>> @@ -7,4 +7,4 @@
-> >>>
-> >>>   mod arc;
-> >>>
-> >>> -pub use arc::Arc;
-> >>> +pub use arc::{Arc, ArcBorrow};
-> >>> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> >>> index dbc7596cc3ce..f68bfc02c81a 100644
-> >>> --- a/rust/kernel/sync/arc.rs
-> >>> +++ b/rust/kernel/sync/arc.rs
-> >>> @@ -19,6 +19,7 @@ use crate::{bindings, error::Result, types::Opaque}=
-;
-> >>>   use alloc::boxed::Box;
-> >>>   use core::{
-> >>>       marker::{PhantomData, Unsize},
-> >>> +    mem::ManuallyDrop,
-> >>>       ops::Deref,
-> >>>       ptr::NonNull,
-> >>>   };
-> >>> @@ -164,6 +165,18 @@ impl<T: ?Sized> Arc<T> {
-> >>>               _p: PhantomData,
-> >>>           }
-> >>>       }
-> >>> +
-> >>> +    /// Returns an [`ArcBorrow`] from the given [`Arc`].
-> >>> +    ///
-> >>> +    /// This is useful when the argument of a function call is an [`=
-ArcBorrow`] (e.g., in a method
-> >>> +    /// receiver), but we have an [`Arc`] instead. Getting an [`ArcB=
-orrow`] is free when optimised.
-> >>> +    #[inline]
-> >>> +    pub fn as_arc_borrow(&self) -> ArcBorrow<'_, T> {
-> >>> +        // SAFETY: The constraint that the lifetime of the shared re=
-ference must outlive that of
-> >>> +        // the returned `ArcBorrow` ensures that the object remains =
-alive and that no mutable
-> >>> +        // reference can be created.
-> >>> +        unsafe { ArcBorrow::new(self.ptr) }
-> >>> +    }
-> >>>   }
-> >>>
-> >>>   impl<T: ?Sized> Deref for Arc<T> {
-> >>> @@ -208,3 +221,87 @@ impl<T: ?Sized> Drop for Arc<T> {
-> >>>           }
-> >>>       }
-> >>>   }
-> >>> +
-> >>> +/// A borrowed reference to an [`Arc`] instance.
-> >>> +///
-> >>> +/// For cases when one doesn't ever need to increment the refcount o=
-n the allocation, it is simpler
-> >>> +/// to use just `&T`, which we can trivially get from an `Arc<T>` in=
-stance.
-> >>> +///
-> >>> +/// However, when one may need to increment the refcount, it is pref=
-erable to use an `ArcBorrow<T>`
-> >>> +/// over `&Arc<T>` because the latter results in a double-indirectio=
-n: a pointer (shared reference)
-> >>> +/// to a pointer (`Arc<T>`) to the object (`T`). An [`ArcBorrow`] el=
-iminates this double
-> >>> +/// indirection while still allowing one to increment the refcount a=
-nd getting an `Arc<T>` when/if
-> >>> +/// needed.
-> >>> +///
-> >>> +/// # Invariants
-> >>> +///
-> >>> +/// There are no mutable references to the underlying [`Arc`], and i=
-t remains valid for the
-> >>> +/// lifetime of the [`ArcBorrow`] instance.
-> >>> +///
-> >>> +/// # Example
-> >>> +///
-> >>> +/// ```
-> >>> +/// use crate::sync::{Arc, ArcBorrow};
-> >>> +///
-> >>> +/// struct Example;
-> >>> +///
-> >>> +/// fn do_something(e: ArcBorrow<'_, Example>) -> Arc<Example> {
-> >>> +///     e.into()
-> >>> +/// }
-> >>> +///
-> >>> +/// let obj =3D Arc::try_new(Example)?;
-> >>> +/// let cloned =3D do_something(obj.as_arc_borrow());
-> >>> +///
-> >>> +/// // Assert that both `obj` and `cloned` point to the same underly=
-ing object.
-> >>> +/// assert!(core::ptr::eq(&*obj, &*cloned));
-> >>> +/// ```
-> >>> +pub struct ArcBorrow<'a, T: ?Sized + 'a> {
-> >>> +    inner: NonNull<ArcInner<T>>,
-> >>> +    _p: PhantomData<&'a ()>,
-> >>> +}
-> >>> +
-> >>> +impl<T: ?Sized> Clone for ArcBorrow<'_, T> {
-> >>> +    fn clone(&self) -> Self {
-> >>> +        *self
-> >>> +    }
-> >>> +}
-> >>> +
-> >>> +impl<T: ?Sized> Copy for ArcBorrow<'_, T> {}
-> >>
-> >> Couldn't this just be derived `Clone` and `Copy`?
-> >
-> > Indeed. I'll send a v2 with this.
->
-> I'm not sure this is true. Deriving will add the T: Copy and T: Clone
-> bound, which I think is not what you want here.
->
-> i.e., I assume you want an ArcBorrow to be Copy even if the underlying T
-> is not.
->
-> See <https://github.com/rust-lang/rust/issues/26925> for the relevant
-> (really long-standing) Rust issue.
+The following commit is needed to fix CVE-2022-3108:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=abfaf0eee97925905e742aa3b0b72e04a918fa9e
 
-Thanks for the heads up, Emilio!
+Jiasheng Jiang (1):
+  drm/amdkfd: Check for null pointer after calling kmemdup
 
-After trying this out, derive doesn't work. The errors brought me back
-memories of when I first implemented this over a year ago, though I
-didn't take the time to try to understand why it was failing.
+ drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-So no v2. The series will remain as is.
 
-Cheers
+base-commit: 0fe4548663f7dc2c3b549ef54ce9bb6d40a235be
+-- 
+2.38.1
 
->
-> Cheers,
->
->   -- Emilio
