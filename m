@@ -2,191 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CD265D7DE
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CDE65D7E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbjADQGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S239723AbjADQHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239168AbjADQG2 (ORCPT
+        with ESMTP id S239757AbjADQGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:06:28 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDFA1BEA1
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:06:27 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so34736472pjj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 08:06:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qoMsanQfdrnJNpK+VHphw12WDh7b/ImX3dHhODz+IvA=;
-        b=xTS8w7m0XrsQQYE15w0Gmn+j7j9adCpRTTi1yI86BOf1Ey2uLEUmfrH0yoZbFjVWm4
-         fBDOTqraLqcuSMaiYFb+uZTm6Mx/iXsvbHPX39ZfeQ6LH/TDkKKGYHhpa7h8zfXP/KQI
-         LW6AkV7EJFtzd4tcPol6Fi6Ccr/Wn8Y6lXp0hPjXaeNq06WyHnQqS+5Ffq+/cQ54+5BB
-         AABHT07Lj8MP0y84HSwyBxZbzwTPfDdbb2xBoftOlDMJUWlzz/El7TNjP01HnxhavgJK
-         hYavH+0i8lleDyhCGaSc6eZP8JaiUlPaFGr1ES6R7f55/zMgM37q94e2/rD7Po/ypTg4
-         LFJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qoMsanQfdrnJNpK+VHphw12WDh7b/ImX3dHhODz+IvA=;
-        b=aCjwZGor/d2yn8G2wjkM8Eb/0YXksPZYZkWDc9YW/DmXpK+SdfnW9SO89zws3qfxiq
-         oFkCcQyYnvkCoAmF5Y336Mvt3nN4x9rUhMSWkH62Gid5hE8Am6ZujJlSCh6Mjp2N7FQI
-         A5rdRMeyGKWZGQRFHeJEYzlYzL2MgYQT5y39lj/EUwhKIOKhheOFZVgfWH223sNNY6uB
-         Hg98RI9a1NhK925QzM7BtyiAsH/vZfpZSVGHqly11+0Yw7TwM4AwKpcHbB+yRey6wBkk
-         XOI2si9lncojA/X4/tvuzABC7FI/yRJnAQmqQ1/lEHarOoJH6opcf0xZZHCJYeX1g7Vt
-         eFdA==
-X-Gm-Message-State: AFqh2krjYJ3YdD5Rs9F0Uuf77UacIWKdb/CG1zkzLeE3L3nbWm7hUSSL
-        21T5TLl0sSQhTKUzyFTZcXI0tVjz81dsHt4sO8ioNA==
-X-Google-Smtp-Source: AMrXdXu0Zkm98NSEmToInkvbeoOiqHqFC2u77W6RRb8vCi1vUtqqdRNIozRRUc8NnGm/zSv0I6VrewLi0U1sjbVAX7E=
-X-Received: by 2002:a17:90a:c083:b0:226:6c53:fc27 with SMTP id
- o3-20020a17090ac08300b002266c53fc27mr877853pjs.202.1672848387129; Wed, 04 Jan
- 2023 08:06:27 -0800 (PST)
+        Wed, 4 Jan 2023 11:06:55 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15B91573E;
+        Wed,  4 Jan 2023 08:06:53 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2DACE5C012E;
+        Wed,  4 Jan 2023 11:06:53 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 04 Jan 2023 11:06:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crisal.io; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1672848413; x=
+        1672934813; bh=HgshSoO5gw8yYEeQSi81/W1v7g4XA2r8QMVrsjONx5I=; b=z
+        I7x+LH720P0gZVa8KHWvcshG7XaXO9NS2yuLvwOuNA6i3jT7Pl5MrWLx+frLTlly
+        66m+WsYaVzm82TdZ++2AzIKbrtW01p6CjxemIIoyJPubrcfw+vL84DDJrtdJKjCy
+        xT+7qaY6suCw0SFETHT9XRdOxBbE6JK3iWpTs1eeq6/zaSgZTvFq9C5OC3W0zAxq
+        tW/Q45yveERsaqdbBvDZ6pzH+cNzMT+gDpLt9AZPGGaaHf+M0PkTRkajjZgYOXDR
+        4CKur/3YukbmH2iYmIrZp3xWhJwGE9YzqbptjSnInHp9w80TRRhn3ll7xzT6nYoD
+        Wdo/mIB0W96RrElX7Kxxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672848413; x=
+        1672934813; bh=HgshSoO5gw8yYEeQSi81/W1v7g4XA2r8QMVrsjONx5I=; b=Q
+        vAdZRdUhTX5t2vVNYWgqUCPXg+3e9v1+FCgBYbZ1y3aHIL1HJsfZlgK5vMp1L232
+        yq2eRlwJ/jDWmtamXTfcU+nuDC9UH9fJ4oFaICz/uqwmzPEJksZLoVsaCwe2fnm1
+        lpOAFqrJBTQaMdWAbLyVHF1VT0ntKxdIgNGiavxH+Bu9OhQPP37nV0Abqc/hB8El
+        lN8OCS5wumqemM+BkjD4r5QZ5eDIskht3gtatBcNKlOMJuYpnV7nMVGlUFZmYPr+
+        QwI0sFl1lehDGtvM0Q3aRnovPaEP4gaOZedxi1ucwnZd65y92iK0tmv2G1JCM/Q4
+        uijqHrNk6Zr+n28IwXhrg==
+X-ME-Sender: <xms:HKS1Y5ILR1fimQUTVL8r2BhrQ-9YTXvo4aZW26Vu9rs8u1I8QJgWMQ>
+    <xme:HKS1Y1I1M4ybfGvg3wF0hU1VibLdQi7GJ1Ln7hHoeLqz7fVWMx2Hius6ItpUWH1cg
+    Bpeb-wYcsfmEJG0PEQ>
+X-ME-Received: <xmr:HKS1Yxu4re7fTD_htRg5CfatlJhCD1FDx5Il_qtSMbqh65xofy7WSjPZu0rRNM-JNtFN>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigdekgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepgfhmihhl
+    ihhoucevohgsohhsucmllhhvrghrvgiiuceovghmihhlihhosegtrhhishgrlhdrihhoqe
+    enucggtffrrghtthgvrhhnpeejfeehgfduudeuvddujedujeeliefgheethefhtedvfeel
+    keeiuedvudeugeefkeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepvghmihhlihhosegtrhhi
+    shgrlhdrihho
+X-ME-Proxy: <xmx:HKS1Y6YRJxu_BMnTO-F-W7dmol3WzGB0GNpHTRnjwyAIDsBrDyU5Mw>
+    <xmx:HKS1YwZsyR5BVqeBbAv1agCAY3Nk4pC_Wrx1LnteGE8q5_8fo2EHDA>
+    <xmx:HKS1Y-D-Pl1rJjyrZr6bz5uRgQ-dqIIEiOuamvwlhCAbJIwRLK_flQ>
+    <xmx:HaS1Y1N5tmAGt_7eT_tflbS4oEEQy4U9voy6-dO5sTnUhQe7RcpJWQ>
+Feedback-ID: i2e3c46c1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 4 Jan 2023 11:06:51 -0500 (EST)
+Message-ID: <df2f6c0b-fb4c-97e5-b607-7df626ea5933@crisal.io>
+Date:   Wed, 4 Jan 2023 17:06:50 +0100
 MIME-Version: 1.0
-References: <20221227122227.460921-1-william.qiu@starfivetech.com>
- <20221227122227.460921-4-william.qiu@starfivetech.com> <CAPDyKFqziA+PB__v8nJzgkTuM9ZszW8X2U-akvRFv0_qwZ22OA@mail.gmail.com>
- <14433b44-8359-b9e8-446c-bb49e86bf48f@starfivetech.com>
-In-Reply-To: <14433b44-8359-b9e8-446c-bb49e86bf48f@starfivetech.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 4 Jan 2023 17:05:50 +0100
-Message-ID: <CAPDyKFrH=U-Sz1Kx2AJ+X_FXi9GcEdHXjO+aC=MXpGP_+xgOsQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] riscv: dts: starfive: Add mmc node
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101
+ Firefox/110.0 Thunderbird/110.0a1
+Subject: Re: [PATCH 4/7] rust: sync: introduce `ArcBorrow`
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228060346.352362-1-wedsonaf@gmail.com>
+ <20221228060346.352362-4-wedsonaf@gmail.com>
+ <20221231194352.55cf0a26.gary@garyguo.net>
+ <CANeycqrVsbNJ+A+A26LXkBezBNUHvnZU2Q3_whexCwwG5ZcgPQ@mail.gmail.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?Emilio_Cobos_=C3=81lvarez?= <emilio@crisal.io>
+In-Reply-To: <CANeycqrVsbNJ+A+A26LXkBezBNUHvnZU2Q3_whexCwwG5ZcgPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 Jan 2023 at 07:08, William Qiu <william.qiu@starfivetech.com> wrote:
->
->
->
-> On 2023/1/2 22:03, Ulf Hansson wrote:
-> > On Tue, 27 Dec 2022 at 13:22, William Qiu <william.qiu@starfivetech.com> wrote:
-> >>
-> >> This adds the mmc node for the StarFive JH7110 SoC.
-> >> Set sdioo node to emmc and set sdio1 node to sd.
-> >>
-> >> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> >> ---
-> >>  .../jh7110-starfive-visionfive-v2.dts         | 25 ++++++++++++
-> >>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 38 +++++++++++++++++++
-> >>  2 files changed, 63 insertions(+)
-> >>
-> >> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> >> index c8946cf3a268..d8244fd1f5a0 100644
-> >> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> >> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> >> @@ -47,6 +47,31 @@ &clk_rtc {
-> >>         clock-frequency = <32768>;
-> >>  };
-> >>
-> >> +&mmc0 {
-> >> +       max-frequency = <100000000>;
-> >> +       card-detect-delay = <300>;
-> >
-> > Nitpick:  This seems redundant for a non-removable card!?
-> >
->
-> Will drop
->
-> >> +       bus-width = <8>;
-> >> +       cap-mmc-highspeed;
-> >> +       mmc-ddr-1_8v;
-> >> +       mmc-hs200-1_8v;
-> >> +       non-removable;
-> >> +       cap-mmc-hw-reset;
-> >> +       post-power-on-delay-ms = <200>;
-> >> +       status = "okay";
-> >> +};
-> >> +
-> >> +&mmc1 {
-> >> +       max-frequency = <100000000>;
-> >> +       card-detect-delay = <300>;
-> >
-> > Nitpick: This looks redundant for polling based card detection
-> > (broken-cd is set a few lines below).
-> >
->
-> Will drop
->
-> >> +       bus-width = <4>;
-> >> +       no-sdio;
-> >> +       no-mmc;
-> >> +       broken-cd;
-> >> +       cap-sd-highspeed;
-> >> +       post-power-on-delay-ms = <200>;
-> >> +       status = "okay";
-> >> +};
-> >> +
-> >>  &gmac0_rmii_refin {
-> >>         clock-frequency = <50000000>;
-> >>  };
-> >> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> >> index c22e8f1d2640..08a780d2c0f4 100644
-> >> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> >> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> >> @@ -331,6 +331,11 @@ aoncrg: clock-controller@17000000 {
-> >>                         #reset-cells = <1>;
-> >>                 };
-> >>
-> >> +               syscon: syscon@13030000 {
-> >> +                       compatible = "starfive,syscon", "syscon";
-> >> +                       reg = <0x0 0x13030000 0x0 0x1000>;
-> >> +               };
-> >> +
-> >>                 gpio: gpio@13040000 {
-> >>                         compatible = "starfive,jh7110-sys-pinctrl";
-> >>                         reg = <0x0 0x13040000 0x0 0x10000>;
-> >> @@ -433,5 +438,38 @@ uart5: serial@12020000 {
-> >>                         reg-shift = <2>;
-> >>                         status = "disabled";
-> >>                 };
-> >> +
-> >> +               /* unremovable emmc as mmcblk0 */
-> >
-> > Don't confuse the mmc0 node name with mmcblk0. There is no guarantee
-> > that this is true, unless you also specify an alias.
-> >
->
-> Hi Ulf,
->
-> Thank you for taking time to review and provide helpful comments for this patch.
-> Actually we define mmc0 as eMMC, which is mmcblk0 in the kernel, and define mmc1 as SDIO,
-> which is mmcblk1 in the kernel, so it's not confuse.
->
+Sorry for the drive-by comment, but maybe it saves some work.
 
-My point is, mmc0 from DT node perspective doesn't necessarily need to
-map to mmc0, as that depends on the "probe" order of the devices. At
-least for the Linux kernel, mmc0 from DT point of view, could end up
-being mmc1.
+On 1/4/23 16:29, Wedson Almeida Filho wrote:
+> On Sat, 31 Dec 2022 at 19:43, Gary Guo <gary@garyguo.net> wrote:
+>>
+>> On Wed, 28 Dec 2022 06:03:43 +0000
+>> Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+>>
+>>> This allows us to create references to a ref-counted allocation without
+>>> double-indirection and that still allow us to increment the refcount to
+>>> a new `Arc<T>`.
+>>>
+>>> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+>>> ---
+>>>   rust/kernel/sync.rs     |  2 +-
+>>>   rust/kernel/sync/arc.rs | 97 +++++++++++++++++++++++++++++++++++++++++
+>>>   2 files changed, 98 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+>>> index 39b379dd548f..5de03ea83ea1 100644
+>>> --- a/rust/kernel/sync.rs
+>>> +++ b/rust/kernel/sync.rs
+>>> @@ -7,4 +7,4 @@
+>>>
+>>>   mod arc;
+>>>
+>>> -pub use arc::Arc;
+>>> +pub use arc::{Arc, ArcBorrow};
+>>> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+>>> index dbc7596cc3ce..f68bfc02c81a 100644
+>>> --- a/rust/kernel/sync/arc.rs
+>>> +++ b/rust/kernel/sync/arc.rs
+>>> @@ -19,6 +19,7 @@ use crate::{bindings, error::Result, types::Opaque};
+>>>   use alloc::boxed::Box;
+>>>   use core::{
+>>>       marker::{PhantomData, Unsize},
+>>> +    mem::ManuallyDrop,
+>>>       ops::Deref,
+>>>       ptr::NonNull,
+>>>   };
+>>> @@ -164,6 +165,18 @@ impl<T: ?Sized> Arc<T> {
+>>>               _p: PhantomData,
+>>>           }
+>>>       }
+>>> +
+>>> +    /// Returns an [`ArcBorrow`] from the given [`Arc`].
+>>> +    ///
+>>> +    /// This is useful when the argument of a function call is an [`ArcBorrow`] (e.g., in a method
+>>> +    /// receiver), but we have an [`Arc`] instead. Getting an [`ArcBorrow`] is free when optimised.
+>>> +    #[inline]
+>>> +    pub fn as_arc_borrow(&self) -> ArcBorrow<'_, T> {
+>>> +        // SAFETY: The constraint that the lifetime of the shared reference must outlive that of
+>>> +        // the returned `ArcBorrow` ensures that the object remains alive and that no mutable
+>>> +        // reference can be created.
+>>> +        unsafe { ArcBorrow::new(self.ptr) }
+>>> +    }
+>>>   }
+>>>
+>>>   impl<T: ?Sized> Deref for Arc<T> {
+>>> @@ -208,3 +221,87 @@ impl<T: ?Sized> Drop for Arc<T> {
+>>>           }
+>>>       }
+>>>   }
+>>> +
+>>> +/// A borrowed reference to an [`Arc`] instance.
+>>> +///
+>>> +/// For cases when one doesn't ever need to increment the refcount on the allocation, it is simpler
+>>> +/// to use just `&T`, which we can trivially get from an `Arc<T>` instance.
+>>> +///
+>>> +/// However, when one may need to increment the refcount, it is preferable to use an `ArcBorrow<T>`
+>>> +/// over `&Arc<T>` because the latter results in a double-indirection: a pointer (shared reference)
+>>> +/// to a pointer (`Arc<T>`) to the object (`T`). An [`ArcBorrow`] eliminates this double
+>>> +/// indirection while still allowing one to increment the refcount and getting an `Arc<T>` when/if
+>>> +/// needed.
+>>> +///
+>>> +/// # Invariants
+>>> +///
+>>> +/// There are no mutable references to the underlying [`Arc`], and it remains valid for the
+>>> +/// lifetime of the [`ArcBorrow`] instance.
+>>> +///
+>>> +/// # Example
+>>> +///
+>>> +/// ```
+>>> +/// use crate::sync::{Arc, ArcBorrow};
+>>> +///
+>>> +/// struct Example;
+>>> +///
+>>> +/// fn do_something(e: ArcBorrow<'_, Example>) -> Arc<Example> {
+>>> +///     e.into()
+>>> +/// }
+>>> +///
+>>> +/// let obj = Arc::try_new(Example)?;
+>>> +/// let cloned = do_something(obj.as_arc_borrow());
+>>> +///
+>>> +/// // Assert that both `obj` and `cloned` point to the same underlying object.
+>>> +/// assert!(core::ptr::eq(&*obj, &*cloned));
+>>> +/// ```
+>>> +pub struct ArcBorrow<'a, T: ?Sized + 'a> {
+>>> +    inner: NonNull<ArcInner<T>>,
+>>> +    _p: PhantomData<&'a ()>,
+>>> +}
+>>> +
+>>> +impl<T: ?Sized> Clone for ArcBorrow<'_, T> {
+>>> +    fn clone(&self) -> Self {
+>>> +        *self
+>>> +    }
+>>> +}
+>>> +
+>>> +impl<T: ?Sized> Copy for ArcBorrow<'_, T> {}
+>>
+>> Couldn't this just be derived `Clone` and `Copy`?
+> 
+> Indeed. I'll send a v2 with this.
 
-To avoid confusion, please drop the "mmcblk*" here. It's anyway a
-Linux specific thing. Don't get me wrong, feel free to keep the
-information about eMMC and SDIO for the corresponding mmc controller
-node.
+I'm not sure this is true. Deriving will add the T: Copy and T: Clone 
+bound, which I think is not what you want here.
 
-Moreover, if you can't use PARTID/UUID to find the rootfs device -
-then you may use an aliases node, to let mmc0 to be enumerated as
-mmc0, for example. See below.
+i.e., I assume you want an ArcBorrow to be Copy even if the underlying T 
+is not.
 
-aliases {
-     mmc0 = &mmc0;
-}
+See <https://github.com/rust-lang/rust/issues/26925> for the relevant 
+(really long-standing) Rust issue.
 
-Kind regards
-Uffe
+Cheers,
+
+  -- Emilio
