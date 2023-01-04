@@ -2,152 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5359065E0B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF42E65E0BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234013AbjADXHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 18:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S234684AbjADXLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 18:11:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjADXH3 (ORCPT
+        with ESMTP id S229571AbjADXLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 18:07:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7151D0CF;
-        Wed,  4 Jan 2023 15:07:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AA7CB81916;
-        Wed,  4 Jan 2023 23:07:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E56EC433F0;
-        Wed,  4 Jan 2023 23:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672873645;
-        bh=SuNnedOBTBfRkngA+uwJbPA6/dPQf71AItesDuB3NQY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r2H5ihuSQ2Tix3j3i0Qx3h5A1G2BmO25RNvZCbR49C1JYPoGXkElPPjPqlhfo1ZcN
-         M9sTV4KprAeRmQXEY+ALI5Fz1wz3TJZmAm6HMxE8N1BTLYxxAZvtuHDp6mMOngkpad
-         8s3Ta5qEpOX0nF1+1XWTPNa+8XtOtQqFSZDNJp+0Y9gObhfTzsOcsFux4EJqz3D69o
-         VCHS2Padnjk0Bcka/gtsrwMclHgPmdte95W0JNb0cGK1P1F88kv+fvlYuuJMdczvL0
-         RQq1hEveF0mwiEDYTPFQWqH/TatDo8I6mc0nD/z9J0E4wiQpVrvLunKV02yWZhJ77q
-         V6KvQJZqSUo+Q==
-Date:   Wed, 4 Jan 2023 23:07:19 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/9] RISC-V: Add AIA related CSR defines
-Message-ID: <Y7YGp/7ufyRPhkwg@spud>
-References: <20230103141409.772298-1-apatel@ventanamicro.com>
- <20230103141409.772298-2-apatel@ventanamicro.com>
+        Wed, 4 Jan 2023 18:11:00 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D645A33D53
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 15:10:58 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id h192so18516274pgc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 15:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B01nNF6+kAsKxYPfPU/0+WQhCbAoy0WeTmIq8oeqfFU=;
+        b=GyjjMhT7es/DNqMgW9D/+0rv4LOnbs/7E8Bh/PSBkCsynthD771CdAuWM5BgvLkGIt
+         VTaZ7C7AjYBUJzEjN3GtKIL/gjN6g4j4e3JB6f08yVjtSEa0Cu9pZcKUwUlfrmkyv529
+         qpmuxa9n37Ylo+l9vEd2lneZlm9Uf/iKISUSRA+/iYnmb8B5ni7X0qZhX6V0pfqiTFkz
+         gZ4dA3drZzm3WLx8gx6DXlxXfXrts1YDTlYj5F1GvAXr3nqA4GQE3csabqp1P2Y6WScS
+         h3bk2P1pmHHzdKT16rN2CbUUJa7JwmhQkHT55giYH0RFqcViaQCNatA0UaCT0zXX/82b
+         w5bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B01nNF6+kAsKxYPfPU/0+WQhCbAoy0WeTmIq8oeqfFU=;
+        b=XlYATWGpd4OPLk3JMvnab6E8a5GFJ6IaBOus2TQzoO4wtRHhlQBSnczbfTmpk2W18I
+         DX/Imv6AxMbX5XGjXY73sNwnPgQg53s0/VD+eaqXYtb1yGemhLavZEeuyR4AfieJ1wSY
+         aKJd9A/5WbdT1pfA5JeLcArS1AdxbclbBJv8Hv0O5jFkKyq7Z+spa2dnJ7SuzQE4Qx7b
+         NOim41qhwu3JG1VcBVX7KvR7JV7kHgzqyKWKRhYDiHEehCRb/pKmldojvGqnhsO8yiap
+         X2WLPwIF+UdIqW0R0QjkfN/lE4qOsfXLStG+ElJq0/8cb2Nzfog68m185GHouBzuKNpO
+         iNug==
+X-Gm-Message-State: AFqh2ko/pkw/E0y04oHiRIFyXQFV3DklBwKZH5sEb9RWwUHEhzaFCP22
+        VHcr5jHlRmVNTd5NrwCwxAE=
+X-Google-Smtp-Source: AMrXdXuchPNJZqpGHnwUiiPSgDCfEXE+xEtS+5QXgsKyb3YtY8DtXUlDhakpGA1cQXW/pZClnw2fYQ==
+X-Received: by 2002:a62:8408:0:b0:575:d06d:1bfa with SMTP id k8-20020a628408000000b00575d06d1bfamr54592617pfd.2.1672873858369;
+        Wed, 04 Jan 2023 15:10:58 -0800 (PST)
+Received: from localhost (fwdproxy-prn-020.fbsv.net. [2a03:2880:ff:14::face:b00c])
+        by smtp.gmail.com with ESMTPSA id k3-20020aa79983000000b0057462848b94sm10924829pfh.184.2023.01.04.15.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 15:10:57 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, kernel-team@meta.com
+Subject: [PATCH v5 0/3] cachestat: a new syscall for page cache state of files
+Date:   Wed,  4 Jan 2023 15:10:54 -0800
+Message-Id: <20230104231057.2632639-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jxzId6Yfk8IaDWIM"
-Content-Disposition: inline
-In-Reply-To: <20230103141409.772298-2-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changelog:
+v5:
+  * Separate first patch into its own series.
+    (suggested by Andrew Morton)
+  * Expose filemap_cachestat() to non-syscall usage
+    (patch 2) (suggested by Brian Foster).
+  * Fix some build errors from last version.
+    (patch 2)
+  * Explain eviction and recent eviction in the draft man page and
+    documentation (suggested by Andrew Morton).
+    (patch 2)
+v4:
+  * Refactor cachestat and move it to mm/filemap.c (patch 3)
+    (suggested by Brian Foster)
+  * Remove redundant checks (!folio, access_ok)
+    (patch 3) (suggested by Matthew Wilcox and Al Viro)
+  * Fix a bug in handling multipages folio.
+    (patch 3) (suggested by Matthew Wilcox)
+  * Add a selftest for shmem files, which can be used to test huge
+    pages (patch 4) (suggested by Johannes Weiner)
+v3:
+  * Fix some minor formatting issues and build errors.
+  * Add the new syscall entry to missing architecture syscall tables.
+    (patch 3).
+  * Add flags argument for the syscall. (patch 3).
+  * Clean up the recency refactoring (patch 2) (suggested by Yu Zhao)
+  * Add the new Kconfig (CONFIG_CACHESTAT) to disable the syscall.
+    (patch 3) (suggested by Josh Triplett)
+v2:
+  * len == 0 means query to EOF. len < 0 is invalid.
+    (patch 3) (suggested by Brian Foster)
+  * Make cachestat extensible by adding the `cstat_size` argument in the
+    syscall (patch 3)
 
---jxzId6Yfk8IaDWIM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There is currently no good way to query the page cache state of large
+file sets and directory trees. There is mincore(), but it scales poorly:
+the kernel writes out a lot of bitmap data that userspace has to
+aggregate, when the user really doesn not care about per-page information
+in that case. The user also needs to mmap and unmap each file as it goes
+along, which can be quite slow as well.
 
-Hey Anup!
+This series of patches introduces a new system call, cachestat, that
+summarizes the page cache statistics (number of cached pages, dirty
+pages, pages marked for writeback, evicted pages etc.) of a file, in a
+specified range of bytes. It also include a selftest suite that tests some
+typical usage
 
-On Tue, Jan 03, 2023 at 07:44:01PM +0530, Anup Patel wrote:
-> The RISC-V AIA specification improves handling per-HART local interrupts
-> in a backward compatible manner. This patch adds defines for new RISC-V
-> AIA CSRs.
->=20
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/csr.h | 92 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 92 insertions(+)
->=20
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index 0e571f6483d9..4e1356bad7b2 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -73,7 +73,10 @@
->  #define IRQ_S_EXT		9
->  #define IRQ_VS_EXT		10
->  #define IRQ_M_EXT		11
-> +#define IRQ_S_GEXT		12
->  #define IRQ_PMU_OVF		13
-> +#define IRQ_LOCAL_MAX		(IRQ_PMU_OVF + 1)
-> +#define IRQ_LOCAL_MASK		((_AC(1, UL) << IRQ_LOCAL_MAX) - 1)
-> =20
->  /* Exception causes */
->  #define EXC_INST_MISALIGNED	0
-> @@ -156,6 +159,26 @@
->  				 (_AC(1, UL) << IRQ_S_TIMER) | \
->  				 (_AC(1, UL) << IRQ_S_EXT))
-> =20
-> +/* AIA CSR bits */
-> +#define TOPI_IID_SHIFT		16
-> +#define TOPI_IID_MASK		0xfff
-> +#define TOPI_IPRIO_MASK		0xff
-> +#define TOPI_IPRIO_BITS		8
-> +
-> +#define TOPEI_ID_SHIFT		16
-> +#define TOPEI_ID_MASK		0x7ff
-> +#define TOPEI_PRIO_MASK		0x7ff
-> +
-> +#define ISELECT_IPRIO0		0x30
-> +#define ISELECT_IPRIO15		0x3f
-> +#define ISELECT_MASK		0x1ff
-> +
-> +#define HVICTL_VTI		0x40000000
-> +#define HVICTL_IID		0x0fff0000
-> +#define HVICTL_IID_SHIFT	16
-> +#define HVICTL_IPRIOM		0x00000100
-> +#define HVICTL_IPRIO		0x000000ff
+This interface is inspired by past discussion and concerns with fincore,
+which has a similar design (and as a result, issues) as mincore.
+Relevant links:
 
-Why not name these as masks, like you did for the other masks?
-Also, the mask/shift defines appear inconsistent. TOPI_IID_MASK is
-intended to be used post-shift AFAICT, but HVICTL_IID_SHIFT is intended
-to be used *pre*-shift.
-Some consistency in naming and function would be great.
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04207.html
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04209.html
 
+For comparison with mincore, I ran both syscalls on a 2TB sparse file:
 
-> +/* Machine-Level High-Half CSRs (AIA) */
-> +#define CSR_MIDELEGH		0x313
+Using mincore:
+real    0m37.510s
+user    0m2.934s
+sys     0m34.558s
 
-I feel like I could find Midelegh in an Irish dictionary lol
-Anyways, I went through the CSRs and they do all seem correct.
+Using cachestat:
+real    0m0.009s
+user    0m0.000s
+sys     0m0.009s
 
-Thanks,
-Conor.
+This series should be applied on top of:
+
+workingset: fix confusion around eviction vs refault container
+https://lkml.org/lkml/2023/1/4/1066
+
+This series consist of 3 patches:
+
+Nhat Pham (3):
+  workingset: refactor LRU refault to expose refault recency check
+  cachestat: implement cachestat syscall
+  selftests: Add selftests for cachestat
+
+ MAINTAINERS                                   |   7 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ include/linux/fs.h                            |   3 +
+ include/linux/swap.h                          |   1 +
+ include/linux/syscalls.h                      |   3 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/mman.h                     |   9 +
+ init/Kconfig                                  |  10 +
+ kernel/sys_ni.c                               |   1 +
+ mm/filemap.c                                  | 143 ++++++++++
+ mm/workingset.c                               | 129 ++++++---
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/cachestat/.gitignore  |   2 +
+ tools/testing/selftests/cachestat/Makefile    |   8 +
+ .../selftests/cachestat/test_cachestat.c      | 259 ++++++++++++++++++
+ 27 files changed, 555 insertions(+), 39 deletions(-)
+ create mode 100644 tools/testing/selftests/cachestat/.gitignore
+ create mode 100644 tools/testing/selftests/cachestat/Makefile
+ create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
 
 
-
---jxzId6Yfk8IaDWIM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7YGpwAKCRB4tDGHoIJi
-0lRTAP4wNZdKZZX9vvp6BuQN+P/gjGLcQs5KY25lQJK75lJ+yQEAgXVYUM3O80Dq
-NEcF2/9not7ySdC5sv0F4cG1oEoruAg=
-=NNSd
------END PGP SIGNATURE-----
-
---jxzId6Yfk8IaDWIM--
+base-commit: 1440f576022887004f719883acb094e7e0dd4944
+prerequisite-patch-id: 171a43d333e1b267ce14188a5beaea2f313787fb
+-- 
+2.30.2
