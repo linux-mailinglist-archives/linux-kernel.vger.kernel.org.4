@@ -2,119 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D700565CD41
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C24365CD43
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233209AbjADGnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S233510AbjADGoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbjADGnl (ORCPT
+        with ESMTP id S233239AbjADGoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:43:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F88E1157;
-        Tue,  3 Jan 2023 22:43:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 338C2615B9;
-        Wed,  4 Jan 2023 06:43:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C343C433D2;
-        Wed,  4 Jan 2023 06:43:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672814619;
-        bh=6N2Ke/st2hAmX2V/VgSABXPm5IauQsGR3LMjD5iJN8Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CoPzNQXbuZbSVda/faaYideuP/YV0mH1Cm201igkahsCYWKp/9CZ7fq67eVdgST4g
-         s74JrHfPByRtGaFM+mIG3FtWZmxD1fGOwFO9AkRs1Ccu3y4HVOmKlclhv9+jqFBZaN
-         YYVZo/hWZ2LpSdE8Ugql18VpQ1ap3x4vWJS8v06L/ln5EN6ugWf/2G9ZxP8riDDo/C
-         sHcTLSTS/Wc9KvZgkGOeN97v4gwtOBBZI2ewMCDi2RQmzA5qMuZYtTXdRqOW8xfXui
-         k21k3HSS6hCmZP037e1e4qFUKrp4pIU1DxouZeoTqncsDGUvoRNGPj9qYqjUNUoJk+
-         l5xEXxAUE9TUQ==
-Date:   Tue, 3 Jan 2023 22:43:37 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] ext4: Fix function prototype mismatch for ext4_feat_ktype
-Message-ID: <Y7UgGSoeB+3yQD8V@sol.localdomain>
-References: <20230103234616.never.915-kees@kernel.org>
- <Y7THENi5v2+fgUAc@gmail.com>
+        Wed, 4 Jan 2023 01:44:08 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22A62E5;
+        Tue,  3 Jan 2023 22:44:06 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 7so21635684pga.1;
+        Tue, 03 Jan 2023 22:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=BvYzXAL/OlbKW9D/wg8hZHsAC+MKri2nzRM9M3nCnfw=;
+        b=VL/fZbA6t/GuJl1DROc4Q7erRbG8ljlGFm3MYSZroHsARxDV4ES1aGPnfkDUBlaWgm
+         VxtSzASxNXkYZkyeH6JJk7cr6egf0qSLP2FHXN7++JE9M6SMHMtg9MT9pO0cOIjnPCC9
+         YJ0mcYujWew9RDk1VH9zkE3VTmn+iUuYbkGaXPcb8r63I3IRpzJdZtOkmFYRM+cajuwH
+         SQ05zAb4bm6/6Yk0VoZdIgoCaaPV6KtemTe8NAwcIyuC0Pi6bvt96kur2oMIxonte4i/
+         o+pPSawng+oGruQqSiIukrGJF4q/S3qJMH0KSLvfoFIMXvmtUv9rmsFKzUJAebm0R8Ku
+         TfIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BvYzXAL/OlbKW9D/wg8hZHsAC+MKri2nzRM9M3nCnfw=;
+        b=dIxYKbKZaiqyoJq/+gFFdwn7fgWIi7D+KAm5zlkwQwEoql9JMZsSIdI4USSDTTbOJH
+         Wdj1HvmVmH7N0pRyzeJ5TL01Bn5+DH9fujNLYq5ViWtiK0w2QU2Vpg3kR4QdX8QTlOS0
+         mFV6TDZJXymo0ywQDtYfPBv03KVEu+KJSQaQnuCZxzgxTqWgwKjeU3GDmDlnemXJo4Vz
+         dUfvHyU3DQmBRfotU2ozbLLM0mHnwtvj1i83XdhvBzVHLhCrze4oBAary0JrKIdFC9J4
+         rujswNjp2hdc36LoHnlFgFCk5eynjeYwNQ+++sJ1VzJb7LtFfQGbHqyCs2f/ZNK2F6Wi
+         OK9w==
+X-Gm-Message-State: AFqh2kp82PQ/Cz6zvkURIZMlPll8yk/oFFTMGHR26ZOoPyYWhezyFky0
+        /uN2ZyMwbcAan+6Hl4NVOp9UZvgLkhJi1A==
+X-Google-Smtp-Source: AMrXdXtHjIsd7F/CDve4QRLOpi0yINQhobFMRqn5Qstw4aIThCiNLCA0qj9ikvS8jdJ50GyvwBJjQg==
+X-Received: by 2002:a62:1614:0:b0:580:dd4d:43bc with SMTP id 20-20020a621614000000b00580dd4d43bcmr37428806pfw.26.1672814646060;
+        Tue, 03 Jan 2023 22:44:06 -0800 (PST)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:d1f4:a47f:3a41:e1a2])
+        by smtp.gmail.com with ESMTPSA id e28-20020a056a0000dc00b00576f7bd92cdsm11829257pfj.14.2023.01.03.22.44.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 22:44:05 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org
+Subject: [PATCH 0/4] perf bpf_counter: A set of random fixes (v1)
+Date:   Tue,  3 Jan 2023 22:43:58 -0800
+Message-Id: <20230104064402.1551516-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7THENi5v2+fgUAc@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 12:23:44AM +0000, Eric Biggers wrote:
-> I'm also surprised that this wasn't found earlier.  Is it possible that CFI does
-> not actually distinguish between the two function prototypes here?
-> 
+Hello,
 
-It's because this code is only reached when ext4 is a loadable module and it is
-being unloaded.  I can reproduce the CFI failure by doing that.
+This is a collection of small fixes for perf stat bpf counters (bperf).
 
-In addition to the naming tweak I requested, can you also add Fixes and Cc
-stable tags?
+The bperf framework maintains perf_attr_map in the BPF fs to share the
+same event as much as possible.  But the size was limited to 16 and
+perf stat with -ddd option would create more than 16 events and fails.
 
-By the way, here's the log from the CFI failure I got:
+Also cgroup events with --for-each-cgroup had some other problems when
+dealing with unsupported events and duplicate cgroups.
 
-[   16.412498] CFI failure at kobject_put+0xbb/0x1b0 (target: kfree+0x0/0x180; expected type: 0x7c4aa698)
-[   16.413716] invalid opcode: 0000 [#1] PREEMPT SMP
-[   16.414299] CPU: 2 PID: 179 Comm: rmmod Tainted: G                T  6.2.0-rc2 #28
-[   16.415223] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.16.1-1-1 04/01/2014
-[   16.416383] RIP: 0010:kobject_put+0xbb/0x1b0
-[   16.416926] Code: df e8 f9 03 00 00 4d 85 e4 74 24 49 83 3c 24 00 74 1d 0f 1f 44 00 00 48 89 df 4d 8b 1c 24 41 ba 68 59 b5 9
-[   16.419199] RSP: 0018:ffffc90000283e20 EFLAGS: 00010a13
-[   16.419842] RAX: 0000000000000000 RBX: ffff88800436c9c0 RCX: 0000000000000000
-[   16.420719] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88800436c9c0
-[   16.421595] RBP: ffffc90000283e40 R08: 0000000000000000 R09: 0000000000000000
-[   16.422465] R10: 0000000017461662 R11: ffffffff81216a20 R12: ffffffffa00f9510
-[   16.423330] R13: 0000000000000000 R14: ffff88800436ca80 R15: ffff888007643950
-[   16.424207] FS:  00007f7bf573f740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
-[   16.425188] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   16.425814] CR2: 0000561eb661f818 CR3: 00000000074c9000 CR4: 00000000003506e0
-[   16.426574] Call Trace:
-[   16.426862]  <TASK>
-[   16.427098]  ext4_exit_sysfs+0x14/0x60 [ext4]
-[   16.427604]  cleanup_module+0x67/0xedb [ext4]
-[   16.428099]  __se_sys_delete_module+0x22d/0x3e0
-[   16.428593]  ? syscall_enter_from_user_mode+0x2a/0x1d0
-[   16.429142]  ? syscall_enter_from_user_mode+0x2a/0x1d0
-[   16.429694]  __x64_sys_delete_module+0x11/0x20
-[   16.430173]  do_syscall_64+0x53/0xb0
-[   16.430562]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   16.431151] RIP: 0033:0x7f7bf584ccfb
-[   16.431544] Code: 73 01 c3 48 8b 0d 8d f0 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 8
-[   16.433517] RSP: 002b:00007fff7d959068 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
-[   16.434327] RAX: ffffffffffffffda RBX: 0000561eb6615750 RCX: 00007f7bf584ccfb
-[   16.435090] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 0000561eb66157b8
-[   16.435852] RBP: 0000000000000000 R08: 1999999999999999 R09: 0000000000000000
-[   16.436617] R10: 00007f7bf58c2ac0 R11: 0000000000000206 R12: 0000000000000000
-[   16.437472] R13: 00007fff7d9592d0 R14: 00007fff7d959d80 R15: 0000561eb66152a0
-[   16.438307]  </TASK>
-[   16.438552] Modules linked in: ext4(-) crc32c_generic mbcache crc16 jbd2
-[   16.439321] ---[ end trace 0000000000000000 ]---
-[   16.439829] RIP: 0010:kobject_put+0xbb/0x1b0
-[   16.440294] Code: df e8 f9 03 00 00 4d 85 e4 74 24 49 83 3c 24 00 74 1d 0f 1f 44 00 00 48 89 df 4d 8b 1c 24 41 ba 68 59 b5 9
-[   16.442310] RSP: 0018:ffffc90000283e20 EFLAGS: 00010a13
-[   16.442960] RAX: 0000000000000000 RBX: ffff88800436c9c0 RCX: 0000000000000000
-[   16.443719] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88800436c9c0
-[   16.444472] RBP: ffffc90000283e40 R08: 0000000000000000 R09: 0000000000000000
-[   16.445231] R10: 0000000017461662 R11: ffffffff81216a20 R12: ffffffffa00f9510
-[   16.446012] R13: 0000000000000000 R14: ffff88800436ca80 R15: ffff888007643950
-[   16.446779] FS:  00007f7bf573f740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
-[   16.447658] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   16.448276] CR2: 0000561eb661f818 CR3: 00000000074c9000 CR4: 00000000003506e0
+The code is available at 'perf/stat-bpf-fix-v1' branch in
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+Namhyung Kim (4):
+  perf bpf_counter: Add more error messages for bperf
+  perf bpf_counter: Increase perf_attr_map entries to 32
+  perf bpf_counter: Handle unsupported cgroup events
+  perf stat: Do not use the same cgroup more than once
+
+ tools/perf/util/bpf_counter.c        | 11 ++++++++---
+ tools/perf/util/bpf_counter_cgroup.c | 14 +++-----------
+ tools/perf/util/cgroup.c             | 23 ++++++++++++++++++-----
+ 3 files changed, 29 insertions(+), 19 deletions(-)
+
+
+base-commit: d8d85ce86dc82de4f88b821a78f533b9d5b22a45
+-- 
+2.39.0.314.g84b9a713c41-goog
+
