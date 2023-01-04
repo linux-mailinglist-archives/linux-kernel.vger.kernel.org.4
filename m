@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32D265D421
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F05B365D422
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234711AbjADNan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
+        id S239431AbjADNap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239363AbjADNaY (ORCPT
+        with ESMTP id S239433AbjADNaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:30:24 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D67234754
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:24:15 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C14CE3F4F6;
-        Wed,  4 Jan 2023 13:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672838653; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RyfIJ6gjYshx31FNKwyOcXwR4Zep67IZ6ANu2M3YhZo=;
-        b=OIv0DI2TcJniSkMT5Tymcr5qs+mqxzWJHWsjBON08fDiutJDvSnRaLv6YfjvEYikBJUn4M
-        4KMgZ4U/kk0a0iy4N2whmVZEhl2BZNnjueBF95Nvb/ImzMaQ3sq6fLLa4Nj/TqrYmw5BGF
-        NNvGZ3sL03vvxd+EggF6fmDDxtHA3QM=
-Received: from suse.cz (unknown [10.100.208.146])
+        Wed, 4 Jan 2023 08:30:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E303A3753E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:24:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5F0A02C141;
-        Wed,  4 Jan 2023 13:24:13 +0000 (UTC)
-Date:   Wed, 4 Jan 2023 14:24:11 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-        zyhtheonly@gmail.com, zyhtheonly@yeah.net, zwp10758@gmail.com
-Subject: Re: [PATCH] sched: print parent comm in sched_show_task()
-Message-ID: <Y7V9+1AhGhgP52xO@alley>
-References: <20221227161400.GA7646@didi-ThinkCentre-M930t-N000>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74BEFB81643
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 13:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36082C433D2;
+        Wed,  4 Jan 2023 13:24:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672838689;
+        bh=YpYR2GonCLztWkI2c4G09bee7KvC/CLcpqPv7HvDuwg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Iu2X7jUmxgJ/of/VU0GSilr6CgXjd3TeOXz5nsB3sYgXa/qbpcHsBieFfErATV8CD
+         OPJy69/EecNUi9WCdtMFlx7IbgLXFO/QFyW7lzn1gvlVR/SySBy5DCM0iVn7/1Fp79
+         2mktgAxJ9bui4kygHL8pbui+O5QRdrr1RfThBU/d0XXwotGFQ/NsadZrrtrz/UAxBC
+         q+txTAvgvE+P2B9Bx/5ZK9JfT53hM+6ERmKj2ebmpDi4v5DmUXiFQ/8o9sVku3h1or
+         //eBbdpQa7m+KMJrxMeJ56NyNiqBBWY55ygS92Aywl9IIMD72ua48CagvoZv142fKU
+         MEnrw2d+0UY0A==
+Date:   Wed, 4 Jan 2023 13:24:44 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ley Foon Tan <lftan.linux@gmail.com>
+Subject: Re: [PATCH] riscv: Move call to init_cpu_topology() to later
+ initialization stage
+Message-ID: <Y7V+HJk8twZXcdcf@spud>
+References: <20230103035316.3841303-1-leyfoon.tan@starfivetech.com>
+ <20230103065411.2l7k6r57v4phrnos@orel>
+ <efed8f35ae8c4901ba01702bcc07b511@EXMBX161.cuchost.com>
+ <Y7Rg28suWh1RUbkU@spud>
+ <672440143ab04d3dbcc6de0a16bab3e1@EXMBX161.cuchost.com>
+ <F86CD957-8B7C-46B9-A14B-AAE67E43CD71@kernel.org>
+ <20230104104900.aohsn6zemfllub7r@bogus>
+ <Y7VulIcGwuXvBES6@spud>
+ <20230104125632.ktoyt7mxjjxq5udm@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="H1G8jhfASj+O0pW2"
 Content-Disposition: inline
-In-Reply-To: <20221227161400.GA7646@didi-ThinkCentre-M930t-N000>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230104125632.ktoyt7mxjjxq5udm@bogus>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-12-28 00:14:00, Tio Zhang wrote:
-> Knowing who the parent is might be useful for debugging.
-> For example, we can sometimes resolve kernel hung tasks by stopping
-> the person who begins those hung tasks.
-> With the parent's name printed in sched_show_task(),
-> it might be helpful to let people know which "service" should be operated.
 
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -8854,6 +8854,7 @@ void sched_show_task(struct task_struct *p)
->  {
->  	unsigned long free = 0;
->  	int ppid;
-> +	char pcomm[TASK_COMM_LEN];
->  
->  	if (!try_get_task_stack(p))
->  		return;
-> @@ -8867,11 +8868,13 @@ void sched_show_task(struct task_struct *p)
->  #endif
->  	ppid = 0;
+--H1G8jhfASj+O0pW2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We need to intialized pcomm here:
+On Wed, Jan 04, 2023 at 12:56:32PM +0000, Sudeep Holla wrote:
+> On Wed, Jan 04, 2023 at 12:18:28PM +0000, Conor Dooley wrote:
 
-	pcomm[0] = '\0';
+> > On Wed, Jan 04, 2023 at 10:49:00AM +0000, Sudeep Holla wrote:
+> > > On Wed, Jan 04, 2023 at 09:49:48AM +0000, Conor Dooley wrote:
 
-Otherwise, it would include a garbage when pid_alive(p) returns false below..
+> > > > Why should we "fix" something that may never be a valid dts?
+> > > >
+> > >=20
+> > > I would not say invalid. But surely absence of it must be handled and
+> > > we do that for sure. IIRC, here the presence of it is causing the iss=
+ue.
+> > > And if it is present means someone is trying to build it(I do underst=
+and
+> > > this is Qemu but is quite common these days for power and performance
+> > > balance in many SoC)
+> >=20
+> > I said "invalid" as the binding is defined for arm{,64} in arm/cpus.yaml
+> > & documented in the same directory in cpu-capacity.txt, but not yet on
+> > riscv. All bets are off if your cpu node is using invalid properties
+> > IMO, at least this one will fail to boot!
+> >=20
+> > However, I see no reason (at this point) that we should deviate from
+> > what arm{,64} is doing & that documenation should probably move to a
+> > shared location at some point.
+> >
+>=20
+> I prefer making this binding generic rather than patching to handle RISC-V
+> differently in the generic code. Since it is optional, the platform
+> need not use it if it is not needed.
 
->  	rcu_read_lock();
-> -	if (pid_alive(p))
-> +	if (pid_alive(p)) {
->  		ppid = task_pid_nr(rcu_dereference(p->real_parent));
-> +		get_task_comm(pcomm, rcu_dereference(p->real_parent));
-> +	}
->  	rcu_read_unlock();
-> -	pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d flags:0x%08lx\n",
-> -		free, task_pid_nr(p), ppid,
-> +	pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d parent:%-15.15s
-> flags:0x%08lx\n",
+Oh yeah, I was not suggesting making changes in the generic code. We
+just need to change our cpu binding to match the arm cpu binding so that
+having this property is accepted.
 
-It would print:  .... parent:xxx flags:0000
+I shall go do that at some point today probably.
 
-Some people might be confused whether the flags are from
-the task or from the parent.
+Thanks,
+Conor.
 
-A solution would be to move the parent value to another line.
-It would even better solve the situation when the task
-is not alive and we could not get information about the parent:
 
-	if (pid_alive(p)) {
-		struct parent = rcu_dereference(p->real_parent);
+--H1G8jhfASj+O0pW2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-		pr_info("parent:%-15.15s ppid:%-6d\n",
-			parent->comm, task_pid_nr(parent));
-	}
+-----BEGIN PGP SIGNATURE-----
 
-> +		free, task_pid_nr(p), ppid, pcomm,
->  		read_task_thread_flags(p));
->  
->  	print_worker_info(KERN_INFO, p);
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7V+HAAKCRB4tDGHoIJi
+0sqnAQD+Kw88kORg+w9/4qunCf0eOuyAhDu9FkXM7x6v7jV7UAEA0H965UPe35Zi
+7tkByuA1+8dQQgAkMyAinm0vPGPCJwI=
+=ebrI
+-----END PGP SIGNATURE-----
 
-Best Regards,
-Petr
+--H1G8jhfASj+O0pW2--
