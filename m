@@ -2,81 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C3D65CE0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:08:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A7065CE0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbjADIIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
+        id S233788AbjADILg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:11:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbjADIIS (ORCPT
+        with ESMTP id S230251AbjADILd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:08:18 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967B91182E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:08:17 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id jn22so35120333plb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 00:08:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BHSYb64FJ80mwIoAZyU1q1qJuQxSAJaJ02PPlkNgjuQ=;
-        b=ffhf4eXWBt2PERbYvUEK1x5SCDboX5qm4ZnFS1MUIznIfh0hi6HFS1cGhMPpcqn46q
-         gJTAOtVLEHIMycS1ovZo4M3lAwvmes3LqeR6X8sENg8I8jwXUbOcoPF9s/0fERfRcbgF
-         +YgCX4VXifOyXB3f5b7hJ7H9d9mpdAtCwl0N2D1IagUHtdBuH+VIaKLkRB4shfRVY0Or
-         +0K5CcCC9Kubeqdbo0nu0XhtSfy2t94TejRhzdLa6tpjL+7fP+xI9wudSfF2wOyntFjk
-         SX9eet8KnAvD0d2U4vyEW0jUdDFfW2j0J6QKz5S6NvqNpRtxXjtvoxbU0WB5nK+gd1L6
-         rAZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BHSYb64FJ80mwIoAZyU1q1qJuQxSAJaJ02PPlkNgjuQ=;
-        b=ED1QOJLy8Gv5tYyoMQ9v+Jo669eFlMvN/ZCrGguTRNw7xZDbsSHOHuAaKJzuKu/c9X
-         EVNDFedUady+e3UCYWbtwZ09E4qNexHWve0SL0wvs9Ww+o+DysH1D3Q1z3pcWRri69EE
-         4Wa5dlOHOcfRxoTd6b/JL5cKbHQRJnO+tbmZUt+lf32QdMeueVehwtTrkdqLoLdRHpLO
-         OHH8c6enQHjGjEenlJhzJpZCpuNa3OJv33TqbfEjIYGT3riEEPJ2epCbF3nzh3Tq376P
-         YpKrezcXYzXFk/QgHbQo/uvDD+KFiueSDXDwfmjPWXWZl4VG7k7ARmrBhos3BIdJm+PM
-         gxbA==
-X-Gm-Message-State: AFqh2kou97TA4xfbME+rHy3w3ARh1YEk3Bo8h++8cXTV85Zk2uTyuzj+
-        q/rTQCLheulKbMo5g6yCJmXciTVVz2W7fwMmqE7pXg==
-X-Google-Smtp-Source: AMrXdXtnyMkEG9oI5Jwky77UHJWthj46fueW+qNo4Iva5YapgZ32fX41SgNYVa8pNq/7qlJ4XMhQpCLhznczijLFISc=
-X-Received: by 2002:a17:902:db07:b0:192:ab97:633c with SMTP id
- m7-20020a170902db0700b00192ab97633cmr824235plx.69.1672819697110; Wed, 04 Jan
- 2023 00:08:17 -0800 (PST)
+        Wed, 4 Jan 2023 03:11:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5FDDEAC;
+        Wed,  4 Jan 2023 00:11:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D163615C1;
+        Wed,  4 Jan 2023 08:11:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E509C433EF;
+        Wed,  4 Jan 2023 08:11:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672819891;
+        bh=SIPCFfmc72iP44TKzaToJdxfKCMW0e9hhb3cSHdlX8g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jgwopIAIv0bRg9NMUyNLs86h3NhcGTgxs1/Husy6wNrnoeY74XxzztEJdIiOU08ZF
+         TyD9as1T4iMvqVL15mHRsOVLZ9DNt39f92lTvFtLCQOkU3iJ0Jgk8j97amZOZ6eLpB
+         0DuB2VHi6Z+wYka9GvozKlMT9dnsq4O/Yis+sTL12DNdhQA5VJofuqPo4Bwt84sI/S
+         PQjml2a48mKqouGZnLwyB3q/i/9LEOjkxSwiGuFgcrUwvJrRFxt2jUQ5iWBvtyshLe
+         lI/ebQAmbwoKWUXgK/o8jKG/fGgrV6r5DJh6ggzPpOWmuh9AAU51PAecmspB0n8AaI
+         iSEf5uTUKeEoA==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Leon Romanovsky <leonro@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org,
+        Michael Guralnik <michaelgur@nvidia.com>,
+        netdev@vger.kernel.org, Or Har-Toov <ohartoov@nvidia.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH rdma-next 0/4] Rely on firmware to get special mkeys
+Date:   Wed,  4 Jan 2023 10:11:21 +0200
+Message-Id: <cover.1672819469.git.leonro@nvidia.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20230103142120.15605-1-konrad.dybcio@linaro.org>
-In-Reply-To: <20230103142120.15605-1-konrad.dybcio@linaro.org>
-From:   Shawn Guo <shawn.guo@linaro.org>
-Date:   Wed, 4 Jan 2023 16:08:05 +0800
-Message-ID: <CAAQ0ZWRRW7S6iFz0vJWPC1jRQ8iSvcXeWbNHE=mpHbZBe0hEDA@mail.gmail.com>
-Subject: Re: [PATCH] interconnect: qcom: qcm2290: Fix MASTER_SNOC_BIMC_NRT
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 10:21 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> Due to what seems to be a copy-paste error, the _NRT master was
-> identical to the _RT master, which should not be the case.. Fix it
-> using the values available from the downstream kernel [1].
->
-> [1] https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/heads/android-msm-bramble-4.19-android11-qpr1/qcom/scuba-bus.dtsi#127
-> Fixes: 1a14b1ac3935 ("interconnect: qcom: Add QCM2290 driver support")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-Acked-by: Shawn Guo <shawn.guo@linaro.org>
+This series from Or extends mlx5 driver to rely on firmware to get
+special mkey values.
+
+Thanks
+
+Or Har-Toov (4):
+  net/mlx5: Expose bits for querying special mkeys
+  net/mlx5: Change define name for 0x100 lkey value
+  net/mlx5: Use query_special_contexts for mkeys
+  RDMA/mlx5: Use query_special_contexts for mkeys
+
+ drivers/infiniband/hw/mlx5/cmd.c              | 41 ++++++++++---------
+ drivers/infiniband/hw/mlx5/cmd.h              |  3 +-
+ drivers/infiniband/hw/mlx5/main.c             | 10 ++---
+ drivers/infiniband/hw/mlx5/mlx5_ib.h          |  9 +++-
+ drivers/infiniband/hw/mlx5/odp.c              | 27 ++++--------
+ drivers/infiniband/hw/mlx5/srq.c              |  2 +-
+ drivers/infiniband/hw/mlx5/wr.c               |  2 +-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  3 +-
+ .../net/ethernet/mellanox/mlx5/core/main.c    | 27 ++++++++++++
+ include/linux/mlx5/driver.h                   |  1 +
+ include/linux/mlx5/mlx5_ifc.h                 | 10 ++++-
+ include/linux/mlx5/qp.h                       |  2 +-
+ 12 files changed, 85 insertions(+), 52 deletions(-)
+
+-- 
+2.38.1
+
