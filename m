@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40ACA65DF14
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7212D65DF15
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235548AbjADVbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 16:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        id S235047AbjADVbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 16:31:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235561AbjADVad (ORCPT
+        with ESMTP id S240391AbjADVav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 16:30:33 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253D3EB;
-        Wed,  4 Jan 2023 13:29:54 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NnN6P1znzz4y0B;
-        Thu,  5 Jan 2023 08:29:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1672867789;
-        bh=+JmFpXePagpX88IPAsk6wyt07kw2DZLrQIoyAdf5SSc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Tr2JUDtE74aXZqpBRLfcFRgHlQqcU9b8KDacmddTQgNWrMDRx5bl+7TxZ87LYCMa1
-         LR7j1uMHCKopx1RZE18dnyft+UpgnIaDGHNjrAnX452RxL5f9hXTHhwvzC+pgk4roF
-         7C76rt5xt5TRM8WeRP4LxJ9JGpRMHbziv1KmH7HKKwIVGoe28jft8Nbfno+7pK0IFS
-         jpMTc1gxpHrm8E7/Db68OhqpYfbVZGefooz7kKCFyKpIGEb6LvRjBKFdNVLnJG/ogo
-         lD4hh8KlmCLH41lZFpvdsYwLOG22U/umKkYYuqGEcnyVKT064fGmvekEsJAi2Kx62j
-         nxlccHfYNoNrQ==
-Date:   Thu, 5 Jan 2023 08:29:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the backlight-fixes tree
-Message-ID: <20230105082925.3a0a1c43@canb.auug.org.au>
+        Wed, 4 Jan 2023 16:30:51 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E98213F64;
+        Wed,  4 Jan 2023 13:30:36 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id 17so37325703pll.0;
+        Wed, 04 Jan 2023 13:30:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QUxjPqi8cIjWiZ4wgk9iUZ3U2OAiaNP4OQpT53WV9V4=;
+        b=XHg29x/xZNjdTm//dbuc775EIoI9HMgi3iyEYs8SyHdybx5CB84wsv0dt8CY18Rb6+
+         n8NNZRGZm0EPHN/tL8w/1pzIx1GCaTryX0QV0R/UI7JrYWTUAr3hJ9Qp2iaYPtOg+Jh3
+         QQXIhBzb9qDYiD98zixXkhWfzrJE7RUj7UBTHemmMDjKssASMTxLBNyimWO/IxlX6Qt/
+         QEocTqc3A9MZWTqSmLuiUkNXiDDCNW0hU43r/6bkTwpt+uHX7/FZV+cRc5ctkX2YDPo+
+         gToPpHWLhdLXOpMYeN/OnEstNepYdbn2ikoN7J3fOEsl9CLGMAKYzCAEXEqPHzd1cFm2
+         hzCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QUxjPqi8cIjWiZ4wgk9iUZ3U2OAiaNP4OQpT53WV9V4=;
+        b=Q2hyHQqXaMh+wkv+57mC7Jb/0ui3A9Wbjcw8eF39NShtODNRVEZ3S2TJLcXsZNQZ6e
+         9TRXSLla/zV4RxO7hbnN+caehH1yHISUhmgCK4ESUgRZlCDerRfhlYB68yIxKCsnTrhd
+         FA9wHv1rOnv5rqIpO32QqQokUykAHLGPKzP6EA5NBXx3M2lVMbGZZJ9kefo0pOqfJYRR
+         6COVrXQIbMgCgPfZsC9txdZEYbZHaBvk9OgU1clGOldBdWPF5qV5DBKGxae7jlDEmGFS
+         YptKGM5i6+hK/WOzXtphdekAnnm9il2iCn0qstZwFCqq2eyVaIP3kSHi3+dTdjR81Snu
+         1+Rw==
+X-Gm-Message-State: AFqh2kqqp9fQUWIz+L5L2YmKphV5YYTyl8PtqjbReG1If9vDZ1kh9z2r
+        1DEdzslIdmkRlBls80VyhFM=
+X-Google-Smtp-Source: AMrXdXvfV+Dp6BhUSY78RXOZsV1BB6OX4Lwe5b3z206ag2kVX4WoXI3kxQe7VIec8wieciL5C18zTA==
+X-Received: by 2002:a17:90a:c24a:b0:225:f3e6:424e with SMTP id d10-20020a17090ac24a00b00225f3e6424emr35633894pjx.17.1672867835855;
+        Wed, 04 Jan 2023 13:30:35 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id om5-20020a17090b3a8500b002192a60e900sm2505pjb.47.2023.01.04.13.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 13:30:35 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 4 Jan 2023 11:30:34 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH -next 1/4] block/rq_qos: move implementions of init/exit
+ rq-qos apis to blk-rq-qos.c
+Message-ID: <Y7Xv+rtqXQM8gf+A@slm.duckdns.org>
+References: <20230104085354.2343590-1-yukuai1@huaweicloud.com>
+ <20230104085354.2343590-2-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2TLkVyTKAVcTNn84Nsh55K5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104085354.2343590-2-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2TLkVyTKAVcTNn84Nsh55K5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jan 04, 2023 at 04:53:51PM +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> These init/exit rq-qos apis are super cold path, there is no need to
+> inline them to improve performance. This patch also prepare to use a
+> global mutex to protect these apis, move these implementions to
+> blk-rq-qos.c so that the global mutex won't be exposed. There are no
+> functional changes.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Hi all,
+Acked-by: Tejun Heo <tj@kernel.org>
 
-The following commit already exists in Linus Torvald's tree as a
-different commit (but the same patch):
+Thanks.
 
-  ac3fbaec13ec ("mfd: palmas: Use device_get_match_data() to simplify the c=
-ode")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/2TLkVyTKAVcTNn84Nsh55K5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO177UACgkQAVBC80lX
-0GygXwf+M3AhDmGOgb9DADtFy3JXfhyJU4XNA0f51mpG7R6BHRf2HYOjDy8v+KW2
-tfdoaz/j00W4Ce8z7tIyWhVP6IafKYpZ0dZuRpqC06auopqrz2GXkihF9Ge5R1yZ
-mEjnfSXpBHsEQvUAef/SsfMinlALArlZCTdLvALOnU6vDkmJPNdk+deOotc/Yjse
-CtaiSri5dbs4yGZcAtTQSiKcZUas/Gw6Oy+PhTJgyiz3TgJ8RqSyRjuFWGdxWUm5
-ae0lZAIBMQX2NOkCvnU15yokm8+eRUXR5mmxf36Kq09kWPY+HiVTV2mYE2n2GfbM
-4dVFVRkXF+U0Y7TnYKQNz8JIzx+fsg==
-=ZDbe
------END PGP SIGNATURE-----
-
---Sig_/2TLkVyTKAVcTNn84Nsh55K5--
+-- 
+tejun
