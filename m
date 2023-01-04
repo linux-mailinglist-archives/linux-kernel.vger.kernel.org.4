@@ -2,83 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4563C65CD20
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A0E65CD23
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbjADGcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
+        id S233353AbjADGfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:35:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbjADGcf (ORCPT
+        with ESMTP id S230411AbjADGfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:32:35 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE6A14027;
-        Tue,  3 Jan 2023 22:32:34 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nn0C04FZWz4xyt;
-        Wed,  4 Jan 2023 17:32:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1672813949;
-        bh=yy1Ja7/gN5t53Ult7n0CLa7oWDzh1zFh5lkAWxcgdt4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=O4NB1Mbe8U1HnIqf4kh5MjyenZwCG/UFSMjCR1YYsUv1msRBsq/cOPLS6UtlKekr1
-         p6ptRIVwVzzlvJI93Ym02Oo05krdVqvgro5C0ZJsz43Szf6QgOVbpOsmHnW+gP0Gxx
-         It+IIdezLasjprYmU/SNgRBa10xEHn9+NA+tiicO7+ipsJRYHocYBPmny2FkZO/+wg
-         /epgOSK4vPhFgHXdUqK1IAxlZdB/yJHbn5w69kkhfDL3nd7GL2eD5P212casgM5OdH
-         c43Ps7M6A84QPKdoDYHXciU+J4Ulm/M0HKxYmBvID8fagf/DOXadZyPIXS+qRVGPMN
-         77iTDos8k8Exg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Landley <rob@landley.net>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        kasan-dev@googlegroups.com,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Subject: Re: Build regressions/improvements in v6.2-rc1
-In-Reply-To: <CAMuHMdVX4Yz-zHvnwB0oCuLfiNAiEsSupcyjfeH+1oKTfQKC9A@mail.gmail.com>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20221227082932.798359-1-geert@linux-m68k.org>
- <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
- <397291cd-4953-8b47-6021-228c9eb38361@landley.net>
- <CAMuHMdVX4Yz-zHvnwB0oCuLfiNAiEsSupcyjfeH+1oKTfQKC9A@mail.gmail.com>
-Date:   Wed, 04 Jan 2023 17:32:24 +1100
-Message-ID: <877cy24xon.fsf@mpe.ellerman.id.au>
+        Wed, 4 Jan 2023 01:35:15 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA8714017;
+        Tue,  3 Jan 2023 22:35:14 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id c9so17276002pfj.5;
+        Tue, 03 Jan 2023 22:35:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5i2PAsadZxre+fZA40ApSOO4k6rDBMhHG9OHUSd1jK0=;
+        b=gAU5b++TyEBAGOOaOjV+IHnXy9gGfUTiYm9Ah5+13Veoa4PyVgvxtlUrJbzk1V5sa8
+         AcmbmoM63BK7EcMazLZ+5+ksoUUBV4oKeYdzfMi/cjQJlqjA+Ozr1k/UUT0bugDyccfv
+         Ws5ridHBCE+02PZxSg8qgC+RdpMVR7YW8LaNn4UAUqkUlTRVO426XC2NlSmJ0QoDZWbG
+         UbtWr4etQF+jokXd1g4um6O/bTDPKAK2WoE1WcQ7lxR2KB1+gyC3PkD5y7vkWifaubjb
+         jtvlU7Uq0JfA4iU1+NqoukvI0jAXDKOszVV7xPRs4BDXNHp6N9caWLIzFyo86ylzz7dn
+         P9JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5i2PAsadZxre+fZA40ApSOO4k6rDBMhHG9OHUSd1jK0=;
+        b=w1lqCgewXT7EUqUNCW1bHjtvArWbrdRxQP696NhRtUHIhS7dAjjgm/93BvW58qKXls
+         WO5l2dsuYfi6Hz87Zvwi1uTumgDdtr8JV3QbeC1BVNy2ta1/4p4Y0Qhsa/H7oaGn4uiI
+         vS/cuG22SclnHQdx400jS2pAIfC67WijgPvmoRwsAe5WdLC/fu3JZmLFt3CbzKntoJSF
+         jgTj1HeUdVwU5RdV30SOqUwCfexcU2KfX2d7Z1ohg3GIh7+arAWU5vsaBowjFpcIDOX3
+         s5alXgg7ywNnh25jr5bSYUjVfsDRps7QsFxzHT0fZX/9Wqk8F+Zy24OvrUJvltXRR0Ll
+         /7/A==
+X-Gm-Message-State: AFqh2kqTp/GDGhKotQqrdAMioV0LD/lmZ4WJRfCB0y9mnE1DrCJQxsAM
+        kq+STjhhfyiOIRPGORJAaKnS2nVIdHAYirpU
+X-Google-Smtp-Source: AMrXdXvi6Dj8Q8jPRtltXyZIDqYzpi3IkyqsCHG995ldQ2iwyBQ2irb4AHPBwcV/AwV9CgE0Jc2w3A==
+X-Received: by 2002:a05:6a00:21ce:b0:581:26c2:aa0a with SMTP id t14-20020a056a0021ce00b0058126c2aa0amr43392435pfj.30.1672814112856;
+        Tue, 03 Jan 2023 22:35:12 -0800 (PST)
+Received: from guoguo-thinkbook.lan ([240e:379:964:5365:9621:efdc:4c9e:b465])
+        by smtp.gmail.com with ESMTPSA id 67-20020a621446000000b0056d98e359a5sm20378439pfu.165.2023.01.03.22.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 22:35:11 -0800 (PST)
+From:   Chuanhong Guo <gch981213@gmail.com>
+To:     linux-wireless@vger.kernel.org
+Cc:     Chuanhong Guo <gch981213@gmail.com>, Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Deren Wu <deren.wu@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>,
+        Ben Greear <greearb@candelatech.com>,
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support),
+        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] wifi: mt76: mt7921u: add support for Comfast CF-952AX
+Date:   Wed,  4 Jan 2023 14:33:38 +0800
+Message-Id: <20230104063341.18863-1-gch981213@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Geert Uytterhoeven <geert@linux-m68k.org> writes:
-> Hi Rob,
->
-> On Sun, Jan 1, 2023 at 2:22 AM Rob Landley <rob@landley.net> wrote:
->> On 12/27/22 02:35, Geert Uytterhoeven wrote:
->> > sh4-gcc11/sh-allmodconfig (ICE = internal compiler error)
->>
->> What's your actual test config here? Because when I try make ARCH=sh
->> allmodconfig; make ARCH=sh it dies in arch/sh/kernel/cpu/sh2/setup-sh7619.c with:
->
-> [re-adding the URL you deleted]
->
->> > [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
->
-> Following to
-> http://kisskb.ellerman.id.au/kisskb/target/212841/ and
-> http://kisskb.ellerman.id.au/kisskb/buildresult/14854440/
-> gives you a page with a link to the config.
+Comfast CF-952AX is a MT7921 based USB WiFi dongle with custom
+VID/PID. Add an entry for it.
 
-It's possible there's something wrong with the toolchain setup, I don't
-know much about sh.
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+---
+ drivers/net/wireless/mediatek/mt76/mt7921/usb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-But it's just the kernel.org crosstool sh4 compiler, nothing else fancy.
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
+index 5321d20dcdcb..a0778ecdb995 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
+@@ -15,6 +15,9 @@
+ static const struct usb_device_id mt7921u_device_table[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x0e8d, 0x7961, 0xff, 0xff, 0xff),
+ 		.driver_info = (kernel_ulong_t)MT7921_FIRMWARE_WM },
++	/* Comfast CF-952AX */
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x3574, 0x6211, 0xff, 0xff, 0xff),
++		.driver_info = (kernel_ulong_t)MT7921_FIRMWARE_WM },
+ 	{ },
+ };
+ 
+-- 
+2.39.0
 
-cheers
