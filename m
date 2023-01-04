@@ -2,132 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACD665D4F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6E065D515
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbjADOFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        id S239508AbjADOIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:08:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239430AbjADOFT (ORCPT
+        with ESMTP id S239639AbjADOHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:05:19 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F81B1ADBB;
-        Wed,  4 Jan 2023 06:05:18 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id tz12so82836302ejc.9;
-        Wed, 04 Jan 2023 06:05:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=omjjaDP/LgtiwtMeTshwHRcoEfKVz88lQXr6vhpQX7U=;
-        b=NRxTkCEHs+jUaIEdhc1YbJId89SvZp9B6wbB1x4tXPdqhkccLYlcFKe2MLxWTOfQ+R
-         pLm+ZuOi4eqS3EuNZERb7uHMYVO/Pxkpv1kvPxNPelypMD0GQX3GjIYJ3wgkChDbrzP8
-         cGVoHfIOg3VOVHuOQCgEvWkPA+8n2xy2WhSes+g8EETQ/x21MKst82sdk/h8E5qSIM5V
-         PSMegNYP0V62Z/7k4R0lN+tFb0QCW5PmsFpHG8hHpkfmURToZ1zKL3TCk5sLnwluKA67
-         ZOPaMYMSGAkCu+HsNY5tQVhhKQuDkK+MYIxEAKqW3TlPkrt1JxdO+MMaXqDNwUxqDoPa
-         VcrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=omjjaDP/LgtiwtMeTshwHRcoEfKVz88lQXr6vhpQX7U=;
-        b=esulOfsiHq/w8coXmSYmpRiMX9mbMwHfutRaV2kD/1qe6zDC30wSVihYvExZqkZSgS
-         rlmFLnM5+3CitNCHhG9Nge0l73By96QkIZBNTyVNp8udQ4VjXfnXJPXH/pSrLtxWgvMI
-         XGD49Vhb2vse4gUeokZrnbPmNZQPl0/qVMouotGvxPfQf6OijIoOhi5nc3Ff3C4sDEiC
-         QspcCvsd0FcEq+8ry/JeJ48Ljcd5WHiLGJIFW5H1wn05veyr691Vjt9qzKAM3OesSpDl
-         Xks+aE9nxv+wzo+KAxK26xRUg6dvdLprpkq6jwFiJ0mrrL7HtvAJAp9BsovZnC+phnTo
-         3zaw==
-X-Gm-Message-State: AFqh2kpSeb71s9KT0MsI9aLMiRTWSD3B40v+H4TlVQr3mttoqbA7eXSP
-        82cDL+jTn32t/Eeoepl36KQ=
-X-Google-Smtp-Source: AMrXdXtzaZH0hKIHcFwkAOS0sIhsKaCOQ9xnQkuxnjepURuUQIMIU2bCyeHJl8Y7yqiLRFXWLC7wzw==
-X-Received: by 2002:a17:906:30c2:b0:7ae:c0b:a25c with SMTP id b2-20020a17090630c200b007ae0c0ba25cmr37612280ejb.13.1672841116699;
-        Wed, 04 Jan 2023 06:05:16 -0800 (PST)
-Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
-        by smtp.gmail.com with ESMTPSA id l18-20020a1709060cd200b0084c70c187e8sm9838522ejh.165.2023.01.04.06.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 06:05:16 -0800 (PST)
-Date:   Wed, 4 Jan 2023 15:05:24 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH net-next 0/5] add PLCA RS support and onsemi NCN26000
-Message-ID: <cover.1672840325.git.piergiorgio.beruto@gmail.com>
+        Wed, 4 Jan 2023 09:07:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD00A3AA84;
+        Wed,  4 Jan 2023 06:06:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A12761426;
+        Wed,  4 Jan 2023 14:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42357C433EF;
+        Wed,  4 Jan 2023 14:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1672841198;
+        bh=JiU6G0FN3DjTsufjBDI7TmTwZLWAaHwTdoMjG8Y9dKw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U4/bFaPXye1faIR8T6yCiUvtkqXvNI4QuUd5IQDj9xyK2bA1Xz+Q3H6vnjKwdqnus
+         ZNHDCOmzFWhlmOEiGkZOcLpLmbmJuasbUwUUsupS0IqKROQ9pNjVRKLoGBAdA7yLpX
+         T4j4Qj6hbyZr7T1SlxzVYoOubFFABVAIUVNuejEM=
+Date:   Wed, 4 Jan 2023 15:05:38 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mani@kernel.org, hemantk@codeaurora.org, quic_jhugo@quicinc.com,
+        andersson@kernel.org, Michael.Srba@seznam.cz, arnd@arndb.de,
+        dipenp@nvidia.com, bvanassche@acm.org, iwona.winiarska@intel.com,
+        ogabbay@kernel.org, tzimmermann@suse.de, fmdefrancesco@gmail.com,
+        jason.m.bills@linux.intel.com, jae.hyun.yoo@linux.intel.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Subject: Re: [PATCH 3/3] wiegand: add Wiegand GPIO bit-banged controller
+ driver
+Message-ID: <Y7WHsgvfhgLhO1YX@kroah.com>
+References: <20230104133414.39305-1-m.zatovic1@gmail.com>
+ <20230104133414.39305-4-m.zatovic1@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230104133414.39305-4-m.zatovic1@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds support for getting/setting the Physical Layer 
-Collision Avoidace (PLCA) Reconciliation Sublayer (RS) configuration and
-status on Ethernet PHYs that supports it.
+On Wed, Jan 04, 2023 at 02:34:14PM +0100, Martin Zaťovič wrote:
+> +if WIEGAND
+> +
+> +config WIEGAND_GPIO
+> +        tristate "GPIO-based wiegand master (write only)"
+> +        help
+> +	  This driver uses GPIO pins to send wiegand data.
 
-PLCA is a feature that provides improved media-access performance in terms
-of throughput, latency and fairness for multi-drop (P2MP) half-duplex PHYs.
-PLCA is defined in Clause 148 of the IEEE802.3 specifications as amended
-by 802.3cg-2019. Currently, PLCA is supported by the 10BASE-T1S single-pair
-Ethernet PHY defined in the same standard and related amendments. The OPEN
-Alliance SIG TC14 defines additional specifications for the 10BASE-T1S PHY,
-including a standard register map for PHYs that embeds the PLCA RS (see
-PLCA management registers at https://www.opensig.org/about/specifications/).
+Odd mix of tabs and spaces :(
 
-The changes proposed herein add the appropriate ethtool netlink interface
-for configuring the PLCA RS on PHYs that supports it. A separate patchset
-further modifies the ethtool userspace program to show and modify the
-configuration/status of the PLCA RS.
+Also you need a lot more information here please.
 
-Additionally, this patchset adds support for the onsemi NCN26000
-Industrial Ethernet 10BASE-T1S PHY that uses the newly added PLCA
-infrastructure.
+thanks,
 
-Piergiorgio Beruto (5):
-  net/ethtool: add netlink interface for the PLCA RS
-  drivers/net/phy: add the link modes for the 10BASE-T1S Ethernet PHY
-  drivers/net/phy: add connection between ethtool and phylib for PLCA
-  drivers/net/phy: add helpers to get/set PLCA configuration
-  drivers/net/phy: add driver for the onsemi NCN26000 10BASE-T1S PHY
-
- Documentation/networking/ethtool-netlink.rst | 138 ++++++++++
- MAINTAINERS                                  |  14 +
- drivers/net/phy/Kconfig                      |   7 +
- drivers/net/phy/Makefile                     |   1 +
- drivers/net/phy/mdio-open-alliance.h         |  46 ++++
- drivers/net/phy/ncn26000.c                   | 171 ++++++++++++
- drivers/net/phy/phy-c45.c                    | 183 ++++++++++++
- drivers/net/phy/phy-core.c                   |   5 +-
- drivers/net/phy/phy.c                        | 172 ++++++++++++
- drivers/net/phy/phy_device.c                 |  17 ++
- drivers/net/phy/phylink.c                    |   6 +-
- include/linux/ethtool.h                      |  12 +
- include/linux/phy.h                          |  84 ++++++
- include/uapi/linux/ethtool.h                 |   3 +
- include/uapi/linux/ethtool_netlink.h         |  25 ++
- net/ethtool/Makefile                         |   2 +-
- net/ethtool/common.c                         |   8 +
- net/ethtool/netlink.c                        |  29 ++
- net/ethtool/netlink.h                        |   6 +
- net/ethtool/plca.c                           | 276 +++++++++++++++++++
- 20 files changed, 1202 insertions(+), 3 deletions(-)
- create mode 100644 drivers/net/phy/mdio-open-alliance.h
- create mode 100644 drivers/net/phy/ncn26000.c
- create mode 100644 net/ethtool/plca.c
-
--- 
-2.37.4
-
+greg k-h
