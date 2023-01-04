@@ -2,199 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB5965D0C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86FE65D0C5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238928AbjADKgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 05:36:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S238568AbjADKgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 05:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238920AbjADKfL (ORCPT
+        with ESMTP id S238869AbjADKfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 Jan 2023 05:35:11 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5C01EEC4;
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A0D1EEC2;
         Wed,  4 Jan 2023 02:35:10 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 304AYrFP089567;
-        Wed, 4 Jan 2023 04:34:53 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1672828493;
-        bh=JLolzC2M77GixtbG7tlUDAuwCMA/10WstQ7R0WzKE6s=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=YoFgnoXMHUAFFUocgtUH6MstSHkSx75OH1zdICGA8Q+0ke5jjaP62INzKDje8CkPi
-         YcAJNRLwTsCvGVkHzmd+j3s5hcLX8Fa7ghg8w5aT09j4AJvFX1AvJXZG8ivxfEPlWJ
-         J0V6FDXu38j7VhwlVgFRYub+zMxfmXDjeR6z9uQk=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 304AYrUX121139
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 4 Jan 2023 04:34:53 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 4
- Jan 2023 04:34:53 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 4 Jan 2023 04:34:53 -0600
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 304AYWFZ018054;
-        Wed, 4 Jan 2023 04:34:48 -0600
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
-        <vladimir.oltean@nxp.com>, <vigneshr@ti.com>, <nsekhar@ti.com>
-CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH net-next v6 3/3] net: ethernet: ti: am65-cpsw: Add support for SERDES configuration
-Date:   Wed, 4 Jan 2023 16:04:32 +0530
-Message-ID: <20230104103432.1126403-4-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230104103432.1126403-1-s-vadapalli@ti.com>
-References: <20230104103432.1126403-1-s-vadapalli@ti.com>
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pD16y-0006GG-7N; Wed, 04 Jan 2023 11:35:08 +0100
+Message-ID: <60aa306c-2047-59ab-24ba-a6fba6667a3d@leemhuis.info>
+Date:   Wed, 4 Jan 2023 11:35:04 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: Request for cherry-picks for sound (Re: [regression, 5.10.y] Bug
+ 216861)
+Content-Language: en-US, de-DE
+To:     Takashi Iwai <tiwai@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org,
+        =?UTF-8?B?UMOBTEZGWSBEw6FuaWVs?= <dpalffy@gmail.com>,
+        Alsa-devel <alsa-devel@alsa-project.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Mark Brown <broonie@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Sergey <zagagyka@basealt.ru>,
+        Salvatore Bonaccorso <carnil@debian.org>
+References: <bebd692d-7d21-6648-6b7a-c91063bb51c2@leemhuis.info>
+ <Y7K1WDmPYi3EMOn1@eldamar.lan> <87wn65umye.wl-tiwai@suse.de>
+ <CALp6mkJhM1zDcNr9X_7WL09+uqcaAhNFFMhrjme0r7584O+Lgw@mail.gmail.com>
+ <CALp6mk+rdqGXySUowxZv3kEEVWrh96m_x-h8xcFNQ9YZPkbc5w@mail.gmail.com>
+ <87h6x7r7w6.wl-tiwai@suse.de> <87sfgrpos6.wl-tiwai@suse.de>
+ <87wn62obhm.wl-tiwai@suse.de>
+From:   "Linux kernel regression tracking (#info)" 
+        <regressions@leemhuis.info>
+Reply-To: Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <87wn62obhm.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1672828510;96571186;
+X-HE-SMSGID: 1pD16y-0006GG-7N
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use PHY framework APIs to initialize the SERDES PHY connected to CPSW MAC.
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
 
-Define the functions am65_cpsw_disable_phy(), am65_cpsw_enable_phy(),
-am65_cpsw_disable_serdes_phy() and am65_cpsw_enable_serdes_phy().
+On 04.01.23 11:11, Takashi Iwai wrote:
+> Greg, just in case you missed my previous post.
 
-Add new member "serdes_phy" to struct "am65_cpsw_slave_data" to store the
-SERDES PHY for each port, if it exists. Use it later while disabling the
-SERDES PHY for each port.
+Side note: thx for handling this, Takashi!
 
-Power on and initialize the SerDes PHY in am65_cpsw_nuss_init_slave_ports()
-by invoking am65_cpsw_enable_serdes_phy().
+> Could you cherry-pick the following two commits to 5.10.y and 5.15.y
+> stable trees?
+> 
+> e8444560b4d9302a511f0996f4cfdf85b628f4ca
+>     ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire
+>  
+> 636110411ca726f19ef8e87b0be51bb9a4cdef06
+>     ASoC: Intel/SOF: use set_stream() instead of set_tdm_slots() for HDAudio
 
-Power off the SerDes PHY in am65_cpsw_nuss_remove() by invoking
-am65_cpsw_disable_serdes_phy().
+#regzbot fix: ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 68 ++++++++++++++++++++++++
- drivers/net/ethernet/ti/am65-cpsw-nuss.h |  1 +
- 2 files changed, 69 insertions(+)
+/me just picked one of them as the fix for the tracked regression, even
+if both are needed, as that's likely close enough, unless something
+really unexpected happens
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 06912363d5d5..1bd11166dc28 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -1416,6 +1416,68 @@ static const struct net_device_ops am65_cpsw_nuss_netdev_ops = {
- 	.ndo_setup_tc           = am65_cpsw_qos_ndo_setup_tc,
- };
- 
-+static void am65_cpsw_disable_phy(struct phy *phy)
-+{
-+	phy_power_off(phy);
-+	phy_exit(phy);
-+}
-+
-+static int am65_cpsw_enable_phy(struct phy *phy)
-+{
-+	int ret;
-+
-+	ret = phy_init(phy);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = phy_power_on(phy);
-+	if (ret < 0) {
-+		phy_exit(phy);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void am65_cpsw_disable_serdes_phy(struct am65_cpsw_common *common)
-+{
-+	struct am65_cpsw_port *port;
-+	struct phy *phy;
-+	int i;
-+
-+	for (i = 0; i < common->port_num; i++) {
-+		port = &common->ports[i];
-+		phy = port->slave.serdes_phy;
-+		if (phy)
-+			am65_cpsw_disable_phy(phy);
-+	}
-+}
-+
-+static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *port_np,
-+				     struct am65_cpsw_port *port)
-+{
-+	const char *name = "serdes-phy";
-+	struct phy *phy;
-+	int ret;
-+
-+	phy = devm_of_phy_get(dev, port_np, name);
-+	if (PTR_ERR(phy) == -ENODEV)
-+		return 0;
-+
-+	/* Serdes PHY exists. Store it. */
-+	port->slave.serdes_phy = phy;
-+
-+	ret =  am65_cpsw_enable_phy(phy);
-+	if (ret < 0)
-+		goto err_phy;
-+
-+	return 0;
-+
-+err_phy:
-+	devm_phy_put(dev, phy);
-+	return ret;
-+}
-+
- static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned int mode,
- 				      const struct phylink_link_state *state)
- {
-@@ -1959,6 +2021,11 @@ static int am65_cpsw_nuss_init_slave_ports(struct am65_cpsw_common *common)
- 			goto of_node_put;
- 		}
- 
-+		/* Initialize the Serdes PHY for the port */
-+		ret = am65_cpsw_init_serdes_phy(dev, port_np, port);
-+		if (ret)
-+			return ret;
-+
- 		port->slave.mac_only =
- 				of_property_read_bool(port_np, "ti,mac-only");
- 
-@@ -2878,6 +2945,7 @@ static int am65_cpsw_nuss_remove(struct platform_device *pdev)
- 	 */
- 	am65_cpsw_nuss_cleanup_ndev(common);
- 	am65_cpsw_nuss_phylink_cleanup(common);
-+	am65_cpsw_disable_serdes_phy(common);
- 
- 	of_platform_device_destroy(common->mdio_dev, NULL);
- 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.h b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-index 4b75620f8d28..ed26768a6e51 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-@@ -32,6 +32,7 @@ struct am65_cpsw_slave_data {
- 	struct device_node		*phy_node;
- 	phy_interface_t			phy_if;
- 	struct phy			*ifphy;
-+	struct phy			*serdes_phy;
- 	bool				rx_pause;
- 	bool				tx_pause;
- 	u8				mac_addr[ETH_ALEN];
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+> On Tue, 03 Jan 2023 17:26:49 +0100,
+> Takashi Iwai wrote:
+>>
+>> On Tue, 03 Jan 2023 15:48:41 +0100,
+>> Takashi Iwai wrote:
+>>>
+>>> On Tue, 03 Jan 2023 14:04:50 +0100,
+>>> PÁLFFY Dániel wrote:
+>>>>
+>>>> And confirming, 5.10.161 with e8444560b4d9302a511f0996f4cfdf85b628f4ca
+>>>> and 636110411ca726f19ef8e87b0be51bb9a4cdef06 cherry-picked works for
+>>>> me.
+>>>
+>>> That's a good news.  Then we can ask stable people to pick up those
+>>> commits for 5.10.y and 5.15.y.
+>>
+>> I confirmed that the latest 5.15.y requires those fixes, too.
+>>
+>> Greg, could you cherry-pick the following two commits to both 5.10.y
+>> and 5.15.y stable trees?  This fixes the recent regression caused by
+>> the backport of 39bd801d6908.
+>>
+>> e8444560b4d9302a511f0996f4cfdf85b628f4ca
+>>     ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire
+>>
+>> 636110411ca726f19ef8e87b0be51bb9a4cdef06
+>>     ASoC: Intel/SOF: use set_stream() instead of set_tdm_slots() for HDAudio
+>>
+>>
+>> Thanks!
+>>
+>> Takashi
+>>
+>>>
+>>>
+>>> Takashi
+>>>
+>>>>
+>>>> On Tue, Jan 3, 2023 at 1:05 PM PÁLFFY Dániel <dpalffy@gmail.com> wrote:
+>>>>>
+>>>>> Another report: https://bugs.archlinux.org/task/76795
+>>>>> Apparently, folks at alsa-devel traced down the dependencies of that patch, see the mail thread at https://lore.kernel.org/all/dc65501c-c2fd-5608-c3d9-7cea184c3989%40opensource.cirrus.com/
+>>>>>
+>>>>> On Mon, Jan 2, 2023 at 1:42 PM Takashi Iwai <tiwai@suse.de> wrote:
+>>>>>>
+>>>>>> On Mon, 02 Jan 2023 11:43:36 +0100,
+>>>>>> Salvatore Bonaccorso wrote:
+>>>>>>>
+>>>>>>> Hi,
+>>>>>>>
+>>>>>>> [Adding as well Richard Fitzgerald and PÁLFFY Dániel to recipients]
+>>>>>>>
+>>>>>>> On Fri, Dec 30, 2022 at 09:08:57AM +0100, Thorsten Leemhuis wrote:
+>>>>>>>> Hi, this is your Linux kernel regression tracker speaking.
+>>>>>>>>
+>>>>>>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+>>>>>>>> kernel developer don't keep an eye on it, I decided to forward it by
+>>>>>>>> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216861 :
+>>>>>>>>
+>>>>>>>>>  Sergey 2022-12-29 10:07:51 UTC
+>>>>>>>>>
+>>>>>>>>> Created attachment 303497 [details]
+>>>>>>>>> pulseaudio.log
+>>>>>>>>>
+>>>>>>>>> Sudden sound disappearance was reported for some laptops, e.g.
+>>>>>>>>>
+>>>>>>>>> Acer Swift 3 SF314-59-78UR 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+>>>>>>>>>
+>>>>>>>>> # lspci
+>>>>>>>>> 0000:00:1f.3 Multimedia audio controller: Intel Corporation Tiger Lake-LP Smart Sound Technology Audio Controller (rev 20)
+>>>>>>>>>         Subsystem: Acer Incorporated [ALI] Device 148c
+>>>>>>>>>         Flags: bus master, fast devsel, latency 32, IRQ 197, IOMMU group 12
+>>>>>>>>>         Memory at 601f270000 (64-bit, non-prefetchable) [size=16K]
+>>>>>>>>>         Memory at 601f000000 (64-bit, non-prefetchable) [size=1M]
+>>>>>>>>>         Capabilities: [50] Power Management version 3
+>>>>>>>>>         Capabilities: [80] Vendor Specific Information: Len=14 <?>
+>>>>>>>>>         Capabilities: [60] MSI: Enable+ Count=1/1 Maskable- 64bit+
+>>>>>>>>>         Kernel driver in use: sof-audio-pci
+>>>>>>>>>
+>>>>>>>>> I am attaching the pulseaudio and dmesg logs
+>>>>>>>>>
+>>>>>>>>> This bug started reproducing after updating the kernel from 5.10.156 to 5.10.157
+>>>>>>>>>
+>>>>>>>>> Bisection revealed the commit being reverted:
+>>>>>>>>>
+>>>>>>>>> c34db0d6b88b1da95e7ab3353e674f4f574cccee is the first bad commit
+>>>>>>>>> commit c34db0d6b88b1da95e7ab3353e674f4f574cccee
+>>>>>>>>> Author: Richard Fitzgerald <rf@opensource.cirrus.com>
+>>>>>>>>> Date:   Fri Nov 4 13:22:13 2022 +0000
+>>>>>>>>>
+>>>>>>>>>     ASoC: soc-pcm: Don't zero TDM masks in __soc_pcm_open()
+>>>>>>>>>
+>>>>>>>>>     [ Upstream commit 39bd801d6908900e9ab0cdc2655150f95ddd4f1a ]
+>>>>>>>>>
+>>>>>>>>>     The DAI tx_mask and rx_mask are set by snd_soc_dai_set_tdm_slot()
+>>>>>>>>>     and used by later code that depends on the TDM settings. So
+>>>>>>>>>     __soc_pcm_open() should not be obliterating those mask values.
+>>>>>>>>>
+>>>>>>>>> [...]
+>>>>>>>>> Original bug report: https://bugzilla.altlinux.org/44690
+>>>>>>>>
+>>>>>>>> See the ticket for more details.
+>>>>>>>>
+>>>>>>>> BTW, let me use this mail to also add the report to the list of tracked
+>>>>>>>> regressions to ensure it's doesn't fall through the cracks:
+>>>>>>>>
+>>>>>>>> #regzbot introduced: c34db0d6b88b1d
+>>>>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=216861
+>>>>>>>> #regzbot title: sound: asoc: sudden sound disappearance
+>>>>>>>> #regzbot ignore-activity
+>>>>>>>
+>>>>>>> FWIW, we had as well reports in Debian after having updated the kernel
+>>>>>>> from 5.10.149 based one to 5.10.158 based one in the last point
+>>>>>>> releases, they are at least:
+>>>>>>>
+>>>>>>> https://bugs.debian.org/1027483
+>>>>>>> https://bugs.debian.org/1027430
+>>>>>>
+>>>>>> I got another report while the commit was backported to 5.14-based
+>>>>>> openSUSE Leap kernel, and I ended up with dropping it.
+>>>>>>
+>>>>>> So, IMO, it's safer to drop this patch from the older stable trees.
+>>>>>> As far as I see, 5.15.y and 5.10.y got this.
+>>>>>>
+>>>>>> Unless anyone gives a better fix, I'm going to submit a revert patch
+>>>>>> for those trees.
+>>>>>>
+>>>>>>
+>>>>>> thanks,
+>>>>>>
+>>>>>> Takashi
+>>>>
+>>>
+> 
+> 
+
 -- 
-2.25.1
-
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
