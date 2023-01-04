@@ -2,85 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D78A65CFD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447F065CFC9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234787AbjADJhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S239216AbjADJiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239196AbjADJg5 (ORCPT
+        with ESMTP id S238440AbjADJhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:36:57 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACD813D7B;
-        Wed,  4 Jan 2023 01:36:45 -0800 (PST)
+        Wed, 4 Jan 2023 04:37:38 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DB1D7B
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:37:36 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id d17so12602689wrs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 01:37:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1672825006; x=1704361006;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nsO1CZD+vUD12bKyw7wW0FNLGseH7jcJ3bw7kLzGUSQ=;
-  b=VNK4dQ8/N0MZ/zWZWsvUNv51Boni+6NdrVF7XnRRg6Prv5z8megvVr5/
-   UmIBM9cSb4h4Q1DcJuDDLL2uiUYZutw1BTra1jBIWgJMFVcHUhOHRe17a
-   0SxMYBfcVFDx+nJ7cGMrtW3GFomZpztv28WofhFcl9eNSkChtze+9757X
-   KZMnis8KbtAN5rE5/UiRoBCldkUvCJEHs1qbQ39WnrF6Xt28Pv1WG3DGX
-   VaCmi8G1Epg9HsCQsgQC0FfTbKLgyuD0Uye3zedgxZPcxobn0cVJ1Y6ky
-   AFE/mpC28hJJWJSsoN78QWb0KiExcFwP6QRB7WGDQTvL2gOcN+lGLHQsp
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,299,1665439200"; 
-   d="scan'208";a="28236837"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 04 Jan 2023 10:36:44 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 04 Jan 2023 10:36:44 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 04 Jan 2023 10:36:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1672825004; x=1704361004;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nsO1CZD+vUD12bKyw7wW0FNLGseH7jcJ3bw7kLzGUSQ=;
-  b=gn0saoMwQtXJXxzx5B9uwfhdvQQjCgddU79p4wnAJ+N9I7HtNKxhDku8
-   /8Wv+TdQ8imM8hiNkf5HfD025TY90sNf9cMVTKj4dLgfvrlWqDYUBx2ho
-   TTbA7ZOIdP0K7ITPEoA2Or0pUSiIwfZDxpfwDOQeBDF+5wyptSVZHIziE
-   dlbTdH5AylVkG4bS0ugVTz54nJaG1nc3y15gEpuK5uQsCrk9BaaPz/dTk
-   8IKDkUuITIf8QkY9RlTKhkf2w/BwALF21UFBF7glUs5xNDnbyr8WpUEp6
-   JGC4TbbP/8D3drshxBpFMtrGtIIXrSS4bb3E1DgzGG30Y+o0W01CnV7fb
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,299,1665439200"; 
-   d="scan'208";a="28236836"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 04 Jan 2023 10:36:44 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1E958280056;
-        Wed,  4 Jan 2023 10:36:44 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anand Moon <linux.amoon@gmail.com>
-Subject: Re: [PATCH v1 03/11] arm64: dts: amlogic: Used onboard usb hub reset on odroid c2
-Date:   Wed, 04 Jan 2023 10:36:41 +0100
-Message-ID: <2188024.ZfL8zNpBrT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <CANAwSgTc=uGyZ0H_-ZckYoKztMB--DRfx7apBtP9zAbAU1XTvA@mail.gmail.com>
-References: <20221228100321.15949-1-linux.amoon@gmail.com> <CANAwSgTS+j_oRrckwmi60afX6-D=OP0oy05m3eQga_gEZJJ_mg@mail.gmail.com> <CANAwSgTc=uGyZ0H_-ZckYoKztMB--DRfx7apBtP9zAbAU1XTvA@mail.gmail.com>
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TnVvBp5CvE66t59orsQS+M89VsfZfBWG2ITuei4MwH4=;
+        b=p022zXGl7ys+VouK511OJhJu3no9rVMMieW8eJHrFxf2Z3tYJyBf7LKext5MgWIkjT
+         LUHcOGdYze9CNWtax3Q+27HGwn9DEWEdyOHCb8sggooOavU5CRsjJqnp/xyqLec0IUOw
+         0iw/k0X9iD5zSR1Sv+TMSCwwby/aLF15xrVM5o2hK1fdtMFEliSvtRIc+EuuufhAISuI
+         uAAXnwracH9HTxBWGb2ovPwfzUmEdCOHd9L+rSHD88TTQBd28+4lC3b/BfvKKxfQPRv3
+         XzaWNtP0IT9h9FImutfBoqAvcC9pFQ0mQyhEVmEzSRSejt1zBalgpkzdh9jkPgWOEKS6
+         scbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TnVvBp5CvE66t59orsQS+M89VsfZfBWG2ITuei4MwH4=;
+        b=fiAGeZLJetSwSqpSH729LFpiSnZ287LYvFvQMPQuNu5O1yCUI7tlM6H1skN5irBoMd
+         vRVXAf2A58zE8oqotUVzn10QOagviymMzd7N1QoIiktfzZzh1/sOsbzQRTtdPdG/TOaN
+         F34MevH+/eX9n2lAANT/EutxL/bon/R2xhfyeVNr3pFplYkR402UMz6LvJws0KfL9xEH
+         Vx/k5M0JKBClyv3FLqhP6kkXY1qQwJgYcvEPUqwPKNqDFFlF/M/z3AZMLCkl37PzR6gi
+         U3yQJKsvIiIkqcnb0spdwaFCUs1bdBB1DrY43fet+WLT7KvJ95xWUxiXTZjEl2z2Wm93
+         fgCw==
+X-Gm-Message-State: AFqh2kpbFZclN+s3BGQV+a5PX7MjCdVwAoU2ejJXthtY8mEGx195T8Un
+        9EEasMzmd766YIAab8eE7ek=
+X-Google-Smtp-Source: AMrXdXvU/enDDNHVuc8zxYqzqJ57ugDBT89W+Gset7WCKuRiRY6jIh5WsIW7wCb5Z9zmhCX6Ed1AAA==
+X-Received: by 2002:a5d:6808:0:b0:272:3a86:29c1 with SMTP id w8-20020a5d6808000000b002723a8629c1mr26678451wru.16.1672825054733;
+        Wed, 04 Jan 2023 01:37:34 -0800 (PST)
+Received: from [192.168.178.21] (p5b0ea2e7.dip0.t-ipconnect.de. [91.14.162.231])
+        by smtp.gmail.com with ESMTPSA id f14-20020adfe90e000000b002365730eae8sm33500867wrm.55.2023.01.04.01.37.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 01:37:34 -0800 (PST)
+Message-ID: <a8ed4887-e4f9-7e5e-3fe7-430d3814cc2b@gmail.com>
+Date:   Wed, 4 Jan 2023 10:37:31 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 05/27] drm/amd: Add a new helper for loading/validating
+ microcode
+Content-Language: en-US
+To:     "Lazar, Lijo" <lijo.lazar@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Carlos Soriano Sanchez <csoriano@redhat.com>,
+        David Airlie <airlied@gmail.com>, christian.koenig@amd.com
+References: <20230103221852.22813-1-mario.limonciello@amd.com>
+ <20230103221852.22813-6-mario.limonciello@amd.com>
+ <151bb1ab-8b2b-afaf-2976-5f60b756c4ca@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <151bb1ab-8b2b-afaf-2976-5f60b756c4ca@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,139 +85,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 4. Januar 2023, 09:13:21 CET schrieb Anand Moon:
-> Hi Martin,
-> 
-> On Wed, 28 Dec 2022 at 20:14, Anand Moon <linux.amoon@gmail.com> wrote:
-> > Hi Martin,
-> > 
-> > On Wed, 28 Dec 2022 at 18:21, Martin Blumenstingl
-> > 
-> > <martin.blumenstingl@googlemail.com> wrote:
-> > > Hi Anand,
-> > 
-> > Thanks for your review comments.
-> > 
-> > > thank you for working on this topic!
-> > > 
-> > > On Wed, Dec 28, 2022 at 11:05 AM Anand Moon <linux.amoon@gmail.com>
-> > > wrote:
-> > > [...]
-> > > 
-> > > > +       usb {
-> > > > +               dr_mode = "host";
-> > > > +               #address-cells = <1>;
-> > > > +               #size-cells = <0>;
-> > > > +
-> > > > +               hub@1 {
-> > > > +                       /* Genesys Logic GL852G-OHG usb hub */
-> > > > +                       compatible = "genesys,usb5e3,610";
-> > > > +                       reg = <1>;
-> > > > +                       vdd-supply = <&usb_otg_pwr>;
-> > > > +                       reset-gpio = <&gpio_ao GPIOAO_4
-> > > > GPIO_ACTIVE_LOW>;
-> > > > +               };
-> > > > +       };
-> > > 
-> > > My understanding is that the hub@1 node should be part of the
-> > > corresponding USB controller node, not a new node.
-> > > In this case hub@1 should go into the existing &usb1 node. That way we
-> > > describe the way the hardware is set up (meaning: hub@1 is connected
-> > > to &usb1).
-> > 
-> > Ok, I will move this code under &usb0 and &usb1 nodes.
-> > 
-> > onboard_usb_hub module just assists in usb hub reset.
-> > so these changes are meant to replace the gpio-hog.
-> > 
-> > $ dmesg | grep onboard
-> > [    5.405558] usbcore: registered new device driver onboard-usb-hub
-> > [    6.383428] onboard-usb-hub 1-1: reset high-speed USB device number
-> > 2 using dwc2
-> > 
-> > Here is the boot log of the odroid c2 [0] https://pastebin.com/PFy5waPb
-> 
-> Moving the usb hub into usb subnode usb0 or usb1 does not work
-> on Odroid n2 and c4, we have a combo phys of usb 2.0 and usb 3.0
-> so the onboard usb hub reset does not get initialized until both the PHY
-> and USB nodes are brought up by the drivers.
-> 
-> # On Odroid n2 has a combo hub
-> alarm@odroid-n2:~$ lsusb -tv
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
-> 
->     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
-> 
->         ID 05e3:0620 Genesys Logic, Inc. GL3523 Hub
-> 
->         |__ Port 1: Dev 5, If 0, Class=Mass Storage, Driver=usb-storage,
->         |5000M
-> 
->             ID 174c:5106 ASMedia Technology Inc. ASM1051 SATA 3Gb/s bridge
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
->     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
-> 
->         ID 05e3:0610 Genesys Logic, Inc. Hub
-> 
->         |__ Port 2: Dev 4, If 0, Class=Vendor Specific Class,
-> 
-> Driver=ax88179_178a, 480M
->             ID 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
-> 
-> # Odroid C4 also has a combo hub
-> 
-> alarm@odroid-c4:~$ lsusb -tv
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
-> 
->     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
-> 
->         ID 2109:0817 VIA Labs, Inc.
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
->     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
-> 
->         ID 2109:2817 VIA Labs, Inc.
-> 
-> So I will continue to work with this usb hub node to do a proper reset
-> of the USB hub.
+Am 04.01.23 um 05:53 schrieb Lazar, Lijo:
+>
+>
+> On 1/4/2023 3:48 AM, Mario Limonciello wrote:
+>> All microcode runs a basic validation after it's been loaded. Each
+>> IP block as part of init will run both.
+>>
+>> Introduce a wrapper for request_firmware and amdgpu_ucode_validate.
+>> This wrapper will also remap any error codes from request_firmware
+>> to -ENODEV.  This is so that early_init will fail if firmware couldn't
+>> be loaded instead of the IP block being disabled.
+>>
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>> v3-v4:
+>>   * New patch
+>> ---
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c | 24 +++++++++++++++++++++++
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h |  1 +
+>>   2 files changed, 25 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+>> index eafcddce58d3..8c4a7b09e344 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+>> @@ -1312,3 +1312,27 @@ void amdgpu_ucode_ip_version_decode(struct 
+>> amdgpu_device *adev, int block_type,
+>>         snprintf(ucode_prefix, len, "%s_%d_%d_%d", ip_name, maj, min, 
+>> rev);
+>>   }
+>> +
+>> +/*
+>> + * amdgpu_ucode_load - Load and validate amdgpu microcode
+>> + *
+>> + * @adev: amdgpu device
+>> + * @fw: pointer to load firmware to
+>> + * @fw_name: firmware to load
+>> + *
+>> + * This is a helper that will use request_firmware and 
+>> amdgpu_ucode_validate
+>> + * to load and run basic validation on firmware. If the load fails, 
+>> remap
+>> + * the error code to -ENODEV, so that early_init functions will fail 
+>> to load.
+>> + */
+>> +int amdgpu_ucode_load(struct amdgpu_device *adev, const struct 
+>> firmware **fw, char *fw_name)
+>
+> 'load' also takes a different meaning of loading firmware to ASIC. 
+> Maybe keep it as 'get' and keep another corresponding common 'put' for 
+> release_firmware?
 
-If your USB hub does both USB2.0 and USB3.0 you need to add both devices in DT 
-and reference them using 'peer-hub'property. See ca69b6c78d5d ("arm64: dts: 
-tqma8mpql: add support for 2nd USB (host) interface") for a reference.
+get/put are usually used for reference counting, how about sticking with 
+request/release instead? That's used by the underlying functionality as 
+well IIRC.
 
-Best regards,
-Alexander
+Christian.
 
-> > > In case hub@1 is not detected within &usb1 then you maym need something
-> > > like [0] (not tested for your use-case).
-> > > If that helps: feel free to include that patch in your series.
-> > 
-> > Thanks, will check if this is needed in this case. As of now it just
-> > reinitializes the hub.
-> > 
-> > > Best regards,
-> > > Martin
-> > > 
-> > > 
-> > > [0]
-> > > https://github.com/xdarklight/linux/commit/d8b96e5bc9c20ab2585194e0e595
-> > > 80c3b062c431> 
-> > Thanks
-> > -Anand
-> 
-> Thanks
-> -Anand
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
-
-
+>
+> Thanks,
+> Lijo
+>
+>> +{
+>> +    int err = request_firmware(fw, fw_name, adev->dev);
+>> +
+>> +    if (err)
+>> +        return -ENODEV;
+>> +    err = amdgpu_ucode_validate(*fw);
+>> +    if (err)
+>> +        dev_dbg(adev->dev, "\"%s\" failed to validate\n", fw_name);
+>> +
+>> +    return err;
+>> +}
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
+>> index 552e06929229..b9139fb44506 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
+>> @@ -544,6 +544,7 @@ void amdgpu_ucode_print_sdma_hdr(const struct 
+>> common_firmware_header *hdr);
+>>   void amdgpu_ucode_print_psp_hdr(const struct common_firmware_header 
+>> *hdr);
+>>   void amdgpu_ucode_print_gpu_info_hdr(const struct 
+>> common_firmware_header *hdr);
+>>   int amdgpu_ucode_validate(const struct firmware *fw);
+>> +int amdgpu_ucode_load(struct amdgpu_device *adev, const struct 
+>> firmware **fw, char *fw_name);
+>>   bool amdgpu_ucode_hdr_version(union amdgpu_firmware_header *hdr,
+>>                   uint16_t hdr_major, uint16_t hdr_minor);
 
