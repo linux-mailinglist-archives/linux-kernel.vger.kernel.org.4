@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933DD65D0B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3082965D0B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234722AbjADKdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 05:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
+        id S234758AbjADKeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 05:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234700AbjADKdw (ORCPT
+        with ESMTP id S233932AbjADKeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 05:33:52 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AFC95BE
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 02:33:51 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9938D49C6;
-        Wed,  4 Jan 2023 10:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672828430; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9MENpgKWJUeBtkqg/AW3kRkJNgM5Dwvt7M9Yj1nczok=;
-        b=Wx8W3ShVeasimMMdLVr9V5fl/IvH9lMKnqBIbkM2qXA75Q7WAa8ocbSn8Yb0w1O8j9u1lp
-        S+2fat15tgzH751Er0pLDgwwpgr/YXuH3cWghUq/aPvHJPZforeHcxy/2DQuzr2RQ45KdS
-        92ZtALyY+BSaYKsB9JkZOmZeLvol3mk=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 4 Jan 2023 05:34:18 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D572295BE
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 02:34:15 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 549532C141;
-        Wed,  4 Jan 2023 10:33:50 +0000 (UTC)
-Date:   Wed, 4 Jan 2023 11:33:49 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v3 6/6] printk: introduce
- console_prepend_dropped() for dropped messages
-Message-ID: <Y7VWDUUQ4f4EX/8v@alley>
-References: <20221221202704.857925-1-john.ogness@linutronix.de>
- <20221221202704.857925-7-john.ogness@linutronix.de>
- <Y7MEDmP1zqWblj0N@alley>
- <87y1qjdimw.fsf@jogness.linutronix.de>
- <Y7QtusGlIX3AU+TN@alley>
- <87o7rfd96w.fsf@jogness.linutronix.de>
- <Y7Q4u9ICptw0RnXb@alley>
- <87fscrd5os.fsf@jogness.linutronix.de>
- <Y7RUF1zhmJEJKWl3@alley>
- <874jt6fz46.fsf@jogness.linutronix.de>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nn5Yr2J42z4xwl;
+        Wed,  4 Jan 2023 21:34:08 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1672828450;
+        bh=5gtoEfhVejTP2PSgVm0jnlqHjpeRUn34WQgEHxOBFKo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ZgQc1aUhkiFUlsN1j3jU9HhNE9Mc/f5fex+rJfbq/ViJ/I45I7m1Nawieeq0kUPuy
+         OjSsaoBVGoAxMd+6G6OvQiTizzajnZ77O8cWzKrOkwI3VOy10QtrnSWF9UwqNutxnB
+         mFY+2SYBZVMLvDSw9cUnEP1yVBVEVxpZP0/A2VR5knYFZde6FYruZHJb4N7UqYhGM1
+         vioLbAL/Zxo8qgC0GL0iQUcy0rPPul6NBBtUQoIPDohhIRMzAquHn/9TOvQ9bRmWaC
+         eAEbZL+nB/MY9veAzSVOI+uppvtT1pJsa2jp3V2S1Q2iBMiTMj4Z6om5vLO9SxRhdg
+         ZI6UueG8lj68w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: Linux 6.2-rc2
+In-Reply-To: <CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com>
+References: <CAHk-=wim8DMRzjyYTJ3UbdqZ26keQyZSU02NZb-JY1=9OpcO1w@mail.gmail.com>
+ <20230102225656.GA3532398@roeck-us.net>
+ <CAHk-=wjZPPscjDhsHQw_ttHOaQS69rADLm0KuRhbNavBiO62OQ@mail.gmail.com>
+ <20230103014535.GA313835@roeck-us.net>
+ <CAHk-=whmeBkyu3iS_s-yk0=t3GEoW3sQb-wJFHKykOjG=iQVFw@mail.gmail.com>
+ <CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com>
+Date:   Wed, 04 Jan 2023 21:34:07 +1100
+Message-ID: <874jt64mhs.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874jt6fz46.fsf@jogness.linutronix.de>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,46 +63,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2023-01-04 10:12:01, John Ogness wrote:
-> On 2023-01-03, Petr Mladek <pmladek@suse.com> wrote:
-> >> Unless you think it is OK to kmalloc 8KB instead of 1KB for the
-> >> syslog calls. Then yes, we do not need SYSLOG_MESSAGE_MAX.
-> >
-> > IMHO, it is acceptable and even correct. syslog uses the same
-> > prefixes as console. It would make sense to use the same
-> > buffers for formatting.
-> >
-> > That said, 8kB looks non-necessary big to me.
-> >
-> > It seems that it comes from devkmsg interface, see the commit
-> > d43ff430f434d862db59582 ("printk: guard the amount written
-> > per line by devkmsg_read()"). It was supposed to include
-> > the message, the extended prefix and dictionary, where
-> >
-> >    + message is limited by LOG_LINE_MAX
-> >    + prefix includes few well defined fields (should be < 128B)
-> >    + dictionary comes from dev_printk() => ( < 128B as well)
-> >
-> > I believe that 2kB or 4kB would be perfectly fine.
-> 
-> The main issue is multi-line records. Normal messages become _much_
-> larger than extended messages in this case because they add a prefix per
-> '\n', whereas extended messages just use "\x0a". Extended messages
-> really could only end up being significantly longer than normal messages
-> if there are many non-printable characters in the message. But AFAIK
-> non-printables are not really used in printk messages.
+Ard Biesheuvel <ardb@kernel.org> writes:
+> On Tue, 3 Jan 2023 at 03:13, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>>
+>> On Mon, Jan 2, 2023 at 5:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>> >
+>> > ... and reverting commit 99cb0d917ff indeed fixes the problem.
+>>
+>> Hmm. My gut feel is that this just exposes some bug in binutils.
+...
+>> It really shouldn't matter, but here we are, with a build problem with
+>> some random old binutils on an odd platform..
+>>
+>
+> AIUI, the way ld.bfd used to combine output sections may also affect
+> the /DISCARD/ pseudo-section, and so introducing it much earlier
+> results in these discards to be interpreted in a different order.
+>
+> The purpose of this change is to prevent .note.GNU-stack from deciding
+> the section type of the .notes output section, and so keeping it in
+> its own section should be sufficient. E.g.,
+>
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -896,7 +896,7 @@
+>   * Otherwise, the type of .notes section would become PROGBITS
+> instead of NOTES.
+>   */
+>  #define NOTES                                                          \
+> -       /DISCARD/ : { *(.note.GNU-stack) }                              \
+> +       .note.GNU-stack : { *(.note.GNU-stack) }                        \
+>         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {                       \
+>                 BOUNDED_SECTION_BY(.note.*, _notes)                     \
+>         } NOTES_HEADERS                                                 \
 
-Right.
+This also fixes errors seen in the powerpc build with binutils <= 2.35.
 
-> So IMHO it does not make sense that normal messages are limited to 1KB
-> but extended messages can use 8KB. I agree that a universal limit of 2KB
-> for normal/extended/syslog would be a nice compromise. Normal messages
-> will have more space available and it will reduce the overall static
-> buffer usage. It would mean that syslog calls will kmalloc 2KB instead
-> of 1KB, but I expect that should be acceptable since, generally
-> speaking, overall we are reducing memory usage.
+Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-I agree that 2kB are a good compromise and the allocation should be acceptable.
-
-Best Regards,
-Petr
+cheers
