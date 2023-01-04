@@ -2,87 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C4165CDDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360A365CDE1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbjADHud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 02:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S233828AbjADHvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 02:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbjADHuZ (ORCPT
+        with ESMTP id S233809AbjADHuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 02:50:25 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752D119C07
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 23:50:24 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30470TJA004692;
-        Wed, 4 Jan 2023 07:50:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=nlR5v9LbmlouqW9g8B2hSA5SQ8aDtdzdBWD3vT1ml/4=;
- b=IvNAPIwSCM4p7CTfxdvMmqTSJvTDygbrSyZn8NX6PixRIZuq6B8iYA3kf8DDtmVhIpmz
- VUCiG6P/s5qpcvf7IKLajnrNOBrizO0y9/Ok1D3JDFK3Zk6Y+JHKDa2P8KI+gabeOxZy
- N2/gAV/Ih3Xn0h2rsqXyY0e60BtY8lJsV1ZhT78EHuCANRVneZjkF1bFzhRtIDAFSYtK
- ggf0sRTYP7Tl3b9FcWNZF8MA5eepVdr3P0tGYu74mxM0MRRiXjjCbdU/Ifnasb2gwZZo
- UqqBZmM9V65Qh9nEnXCVjP496k4xrYdNYAnjeWzZq0gDrPfFsrTPG/ll0ZuVvAZHmZS3 CQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvjk2rj6s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 07:50:16 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303Mh0KM003741;
-        Wed, 4 Jan 2023 07:50:13 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mtcbfcxa6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 07:50:12 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3047oAOg45679070
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 Jan 2023 07:50:10 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7230B2004F;
-        Wed,  4 Jan 2023 07:50:10 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 757FA2004D;
-        Wed,  4 Jan 2023 07:50:09 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  4 Jan 2023 07:50:09 +0000 (GMT)
-Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 4 Jan 2023 02:50:54 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7525AF60
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 23:50:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1672818652; x=1704354652;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DRe0onl7YTTCOkDpa9QQx6RzsX7z1YI7hLJ273ULKZU=;
+  b=BbFjR2r3tWQfES5VvJkShVZssXex+BNzO0FGgN/Nd109qCD8MQaZUCEL
+   JuHmqfC0KyiOfCsHj3m8MJfPdi8ZUlHSUB5V0+l+Wy3FuRfHYDy3frvl1
+   mGsqQDKhCQ+qG4lijAfjtV5LXA3EQMHnhfeAitECbmW7/kOQTYgSZSzUH
+   libTT30lp3t2WK5ObN5v1Rz9Kp2WAhyO2vw670y0IarXrv33mrYn09xNw
+   DDkYc/2yo/ryjH4s8IQA2LlBWZtfW3NClOMlj9kpSBPJwbgWSzLtuDBU4
+   JLTYT3+kIbNO7BScLYI24uuUEEi8bWQiTz6ieQsXEA/FrnV1m467O2Soo
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,299,1665439200"; 
+   d="scan'208";a="28232829"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 04 Jan 2023 08:50:49 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 04 Jan 2023 08:50:49 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 04 Jan 2023 08:50:49 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1672818649; x=1704354649;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DRe0onl7YTTCOkDpa9QQx6RzsX7z1YI7hLJ273ULKZU=;
+  b=V/2kTp8lEwBUpeUrYLIlm+bhjsdFMfB2W16Rhgtjntdu0Ttvv9IyTNHp
+   DFo0vRISzj+/FUu5W8b8fc/Ucu8ZsEI5ZemUekaDg1c7opFnJDTfHlRMO
+   3PIDCMk1MPJJkuYQGoVMqkMCssRxSLAPDQMF5hjMIA+mwWEyUczZIoP/G
+   cpE2lusKVL8+eQ9h925WDWr5U+ORXAAaDcNmQVCZKUcH+2DG9psYBAuh9
+   hTvHdWvuFQGSMzfyVndScAJTFjraTQR5RtCg/jmjY20lky5BSPr2hcZlS
+   HsHPTYbI9XBbN49qcXuB2JdOg12heLWZVznWPIT5hdnmm3PBIE1G/wNxF
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,299,1665439200"; 
+   d="scan'208";a="28232828"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 04 Jan 2023 08:50:49 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 25F1060060;
-        Wed,  4 Jan 2023 18:50:06 +1100 (AEDT)
-Message-ID: <01993c7ec9d4d97906dc54c165c32b6d8a30f1ec.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 5/7] powerpc/secvar: Handle max object size in the
- consumer
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     Russell Currey <ruscur@russell.cc>, linuxppc-dev@lists.ozlabs.org
-Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
-        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
-        zohar@linux.ibm.com, mpe@ellerman.id.au
-Date:   Wed, 04 Jan 2023 18:50:05 +1100
-In-Reply-To: <20221230042014.154483-6-ruscur@russell.cc>
-References: <20221230042014.154483-1-ruscur@russell.cc>
-         <20221230042014.154483-6-ruscur@russell.cc>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 7DB46280056;
+        Wed,  4 Jan 2023 08:50:49 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, xiaolei.wang@windriver.com,
+        l.stach@pengutronix.de, Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH] soc: imx8m: fix wrong return value check of of_clk_get_by_name()
+Date:   Wed, 04 Jan 2023 08:50:47 +0100
+Message-ID: <1882509.eGJsNajkDb@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230104064136.1695102-1-yangyingliang@huawei.com>
+References: <20230104064136.1695102-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ltg5V2iHgSJbFfI-qLhijx_YaW9q10bf
-X-Proofpoint-GUID: ltg5V2iHgSJbFfI-qLhijx_YaW9q10bf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-04_04,2023-01-03_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 priorityscore=1501 suspectscore=0 bulkscore=0
- impostorscore=0 mlxscore=0 adultscore=0 clxscore=1015 spamscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301040063
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -92,72 +82,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTEyLTMwIGF0IDE1OjIwICsxMTAwLCBSdXNzZWxsIEN1cnJleSB3cm90ZToK
-PiBDdXJyZW50bHkgdGhlIG1heCBvYmplY3Qgc2l6ZSBpcyBoYW5kbGVkIGluIHRoZSBjb3JlIHNl
-Y3ZhciBjb2RlIHdpdGgKPiBhbgo+IGVudGlyZWx5IE9QQUwtc3BlY2lmaWMgaW1wbGVtZW50YXRp
-b24sIHNvIGNyZWF0ZSBhIG5ldyBtYXhfc2l6ZSgpIG9wCj4gYW5kCj4gbW92ZSB0aGUgZXhpc3Rp
-bmcgaW1wbGVtZW50YXRpb24gaW50byB0aGUgcG93ZXJudiBwbGF0Zm9ybS7CoCBTaG91bGQKPiBi
-ZQo+IG5vIGZ1bmN0aW9uYWwgY2hhbmdlLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFJ1c3NlbGwgQ3Vy
-cmV5IDxydXNjdXJAcnVzc2VsbC5jYz4KCkxHVE0KClJldmlld2VkLWJ5OiBBbmRyZXcgRG9ubmVs
-bGFuIDxhamRAbGludXguaWJtLmNvbT4KCj4gLS0tCj4gwqBhcmNoL3Bvd2VycGMvaW5jbHVkZS9h
-c20vc2VjdmFyLmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAxICsKPiDCoGFyY2gvcG93ZXJw
-Yy9rZXJuZWwvc2VjdmFyLXN5c2ZzLmPCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDE3ICsrKy0tLS0t
-LS0tLS0tLS0tCj4gwqBhcmNoL3Bvd2VycGMvcGxhdGZvcm1zL3Bvd2VybnYvb3BhbC1zZWN2YXIu
-YyB8IDE5Cj4gKysrKysrKysrKysrKysrKysrKwo+IMKgMyBmaWxlcyBjaGFuZ2VkLCAyMyBpbnNl
-cnRpb25zKCspLCAxNCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBj
-L2luY2x1ZGUvYXNtL3NlY3Zhci5oCj4gYi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vc2VjdmFy
-LmgKPiBpbmRleCAzYjdlNWEzNjI1YmQuLjkyZDJjMDUxOTE4YiAxMDA2NDQKPiAtLS0gYS9hcmNo
-L3Bvd2VycGMvaW5jbHVkZS9hc20vc2VjdmFyLmgKPiArKysgYi9hcmNoL3Bvd2VycGMvaW5jbHVk
-ZS9hc20vc2VjdmFyLmgKPiBAQCAtMjEsNiArMjEsNyBAQCBzdHJ1Y3Qgc2VjdmFyX29wZXJhdGlv
-bnMgewo+IMKgwqDCoMKgwqDCoMKgwqBpbnQgKCpzZXQpKGNvbnN0IGNoYXIgKmtleSwgdWludDY0
-X3Qga2V5X2xlbiwgdTggKmRhdGEsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHVpbnQ2NF90IGRhdGFfc2l6ZSk7Cj4gwqDCoMKgwqDCoMKgwqDCoHNzaXplX3QgKCpmb3Jt
-YXQpKGNoYXIgKmJ1Zik7Cj4gK8KgwqDCoMKgwqDCoMKgaW50ICgqbWF4X3NpemUpKHVpbnQ2NF90
-ICptYXhfc2l6ZSk7Cj4gwqB9Owo+IMKgCj4gwqAjaWZkZWYgQ09ORklHX1BQQ19TRUNVUkVfQk9P
-VAo+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMva2VybmVsL3NlY3Zhci1zeXNmcy5jCj4gYi9h
-cmNoL3Bvd2VycGMva2VybmVsL3NlY3Zhci1zeXNmcy5jCj4gaW5kZXggMTkwMjM4ZjUxMzM1Li5h
-YTFkYWVjNDgwZTEgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9zZWN2YXItc3lz
-ZnMuYwo+ICsrKyBiL2FyY2gvcG93ZXJwYy9rZXJuZWwvc2VjdmFyLXN5c2ZzLmMKPiBAQCAtMTIy
-LDI3ICsxMjIsMTYgQEAgc3RhdGljIHN0cnVjdCBrb2JqX3R5cGUgc2VjdmFyX2t0eXBlID0gewo+
-IMKgc3RhdGljIGludCB1cGRhdGVfa29ial9zaXplKHZvaWQpCj4gwqB7Cj4gwqAKPiAtwqDCoMKg
-wqDCoMKgwqBzdHJ1Y3QgZGV2aWNlX25vZGUgKm5vZGU7Cj4gwqDCoMKgwqDCoMKgwqDCoHU2NCB2
-YXJzaXplOwo+IC3CoMKgwqDCoMKgwqDCoGludCByYyA9IDA7Cj4gK8KgwqDCoMKgwqDCoMKgaW50
-IHJjID0gc2VjdmFyX29wcy0+bWF4X3NpemUoJnZhcnNpemUpOwo+IMKgCj4gLcKgwqDCoMKgwqDC
-oMKgbm9kZSA9IG9mX2ZpbmRfY29tcGF0aWJsZV9ub2RlKE5VTEwsIE5VTEwsICJpYm0sc2VjdmFy
-LQo+IGJhY2tlbmQiKTsKPiAtwqDCoMKgwqDCoMKgwqBpZiAoIW9mX2RldmljZV9pc19hdmFpbGFi
-bGUobm9kZSkpIHsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmMgPSAtRU5PREVW
-Owo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIG91dDsKPiAtwqDCoMKgwqDC
-oMKgwqB9Cj4gLQo+IC3CoMKgwqDCoMKgwqDCoHJjID0gb2ZfcHJvcGVydHlfcmVhZF91NjQobm9k
-ZSwgIm1heC12YXItc2l6ZSIsICZ2YXJzaXplKTsKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJjKQo+
-IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIG91dDsKPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJjOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGRhdGFf
-YXR0ci5zaXplID0gdmFyc2l6ZTsKPiDCoMKgwqDCoMKgwqDCoMKgdXBkYXRlX2F0dHIuc2l6ZSA9
-IHZhcnNpemU7Cj4gwqAKPiAtb3V0Ogo+IC3CoMKgwqDCoMKgwqDCoG9mX25vZGVfcHV0KG5vZGUp
-Owo+IC0KPiAtwqDCoMKgwqDCoMKgwqByZXR1cm4gcmM7Cj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJu
-IDA7Cj4gwqB9Cj4gwqAKPiDCoHN0YXRpYyBpbnQgc2VjdmFyX3N5c2ZzX2xvYWQodm9pZCkKPiBk
-aWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy9wb3dlcm52L29wYWwtc2VjdmFyLmMK
-PiBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvcG93ZXJudi9vcGFsLXNlY3Zhci5jCj4gaW5kZXgg
-NWU5ZGUwNmIyNTMzLi4wNzI2MDQ2MGU5NjYgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9wb3dlcnBjL3Bs
-YXRmb3Jtcy9wb3dlcm52L29wYWwtc2VjdmFyLmMKPiArKysgYi9hcmNoL3Bvd2VycGMvcGxhdGZv
-cm1zL3Bvd2VybnYvb3BhbC1zZWN2YXIuYwo+IEBAIC0xMjUsMTEgKzEyNSwzMCBAQCBzdGF0aWMg
-c3NpemVfdCBvcGFsX3NlY3Zhcl9mb3JtYXQoY2hhciAqYnVmKQo+IMKgwqDCoMKgwqDCoMKgwqBy
-ZXR1cm4gcmM7Cj4gwqB9Cj4gwqAKPiArc3RhdGljIGludCBvcGFsX3NlY3Zhcl9tYXhfc2l6ZSh1
-aW50NjRfdCAqbWF4X3NpemUpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBpbnQgcmM7Cj4gK8KgwqDC
-oMKgwqDCoMKgc3RydWN0IGRldmljZV9ub2RlICpub2RlOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBu
-b2RlID0gb2ZfZmluZF9jb21wYXRpYmxlX25vZGUoTlVMTCwgTlVMTCwgImlibSxzZWN2YXItCj4g
-YmFja2VuZCIpOwo+ICvCoMKgwqDCoMKgwqDCoGlmICghb2ZfZGV2aWNlX2lzX2F2YWlsYWJsZShu
-b2RlKSkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByYyA9IC1FTk9ERVY7Cj4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gb3V0Owo+ICvCoMKgwqDCoMKgwqDC
-oH0KPiArCj4gK8KgwqDCoMKgwqDCoMKgcmMgPSBvZl9wcm9wZXJ0eV9yZWFkX3U2NChub2RlLCAi
-bWF4LXZhci1zaXplIiwgbWF4X3NpemUpOwo+ICsKPiArb3V0Ogo+ICvCoMKgwqDCoMKgwqDCoG9m
-X25vZGVfcHV0KG5vZGUpOwo+ICvCoMKgwqDCoMKgwqDCoHJldHVybiByYzsKPiArfQo+ICsKPiDC
-oHN0YXRpYyBjb25zdCBzdHJ1Y3Qgc2VjdmFyX29wZXJhdGlvbnMgb3BhbF9zZWN2YXJfb3BzID0g
-ewo+IMKgwqDCoMKgwqDCoMKgwqAuZ2V0ID0gb3BhbF9nZXRfdmFyaWFibGUsCj4gwqDCoMKgwqDC
-oMKgwqDCoC5nZXRfbmV4dCA9IG9wYWxfZ2V0X25leHRfdmFyaWFibGUsCj4gwqDCoMKgwqDCoMKg
-wqDCoC5zZXQgPSBvcGFsX3NldF92YXJpYWJsZSwKPiDCoMKgwqDCoMKgwqDCoMKgLmZvcm1hdCA9
-IG9wYWxfc2VjdmFyX2Zvcm1hdCwKPiArwqDCoMKgwqDCoMKgwqAubWF4X3NpemUgPSBvcGFsX3Nl
-Y3Zhcl9tYXhfc2l6ZSwKPiDCoH07Cj4gwqAKPiDCoHN0YXRpYyBpbnQgb3BhbF9zZWN2YXJfcHJv
-YmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKCi0tIApBbmRyZXcgRG9ubmVsbGFuICAg
-IE96TGFicywgQURMIENhbmJlcnJhCmFqZEBsaW51eC5pYm0uY29tICAgSUJNIEF1c3RyYWxpYSBM
-aW1pdGVkCg==
+Hi,
+
+Am Mittwoch, 4. Januar 2023, 07:41:36 CET schrieb Yang Yingliang:
+> of_clk_get_by_name() never returns NULL pointer, it will return
+> ERR_PTR() when it fails, so replace the check with IS_ERR().
+> 
+> Fixes: 836fb30949d9 ("soc: imx8m: Enable OCOTP clock before reading the
+> register") Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/soc/imx/soc-imx8m.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/imx/soc-imx8m.c b/drivers/soc/imx/soc-imx8m.c
+> index 28144c699b0c..32ed9dc88e45 100644
+> --- a/drivers/soc/imx/soc-imx8m.c
+> +++ b/drivers/soc/imx/soc-imx8m.c
+> @@ -66,8 +66,8 @@ static u32 __init imx8mq_soc_revision(void)
+>  	ocotp_base = of_iomap(np, 0);
+>  	WARN_ON(!ocotp_base);
+>  	clk = of_clk_get_by_name(np, NULL);
+> -	if (!clk) {
+> -		WARN_ON(!clk);
+> +	if (IS_ERR(clk)) {
+
+Nice catch. But wouldn't
+> if (WARN_ON(IS_ERR(clk)))
+be even better instead of doing the check twice?
+
+Best regards,
+Alexander
+
+> +		WARN_ON(IS_ERR(clk));
+>  		return 0;
+>  	}
+
+
+
 
