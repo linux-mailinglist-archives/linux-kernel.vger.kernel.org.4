@@ -2,195 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBE265CB18
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 337DE65CB1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjADAsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
+        id S229712AbjADAul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 19:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238269AbjADAsh (ORCPT
+        with ESMTP id S229685AbjADAuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:48:37 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDC8295
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:48:35 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id v25so824357lfe.12
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 16:48:35 -0800 (PST)
+        Tue, 3 Jan 2023 19:50:39 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4CC167EF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:50:38 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id o31-20020a17090a0a2200b00223fedffb30so32823568pjo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 16:50:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BKu/VauqBCYgezBQrQES+QSt580NOfOFvIsxFY1xklM=;
-        b=aNnURh34uv0pBnVClleJ/1Ml04l/3rLsPGa6vlFNRtHhR5qe3umW4RNR/f/wVl+cTn
-         8gPmT5Wlmr7vOXw+N8hCC3vNEheaogyh1+IhDRFH5md10IxTXygVG6NP42cL6970K/+N
-         wUwxzk+QMw+eJb3iWIO9xfRqmpnyLEDZDDv7hk84tMbHDwHhblTJFOKp2TXFi5Nm5nwP
-         fm42XeQpE71XI9srQlTc3iICpg0Ww1irI6Fz9z8I84G/ZQPXe4wGlVuR57sUYns/OyhX
-         mOp3oKhDV4RaBkXcUeEx9seQEvct81nID68hXTYNKEgozM//yr6JVnoKYvZ4BdWog00o
-         CQyA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qiXxV2Hfa6NF/4ylZM+g7WvF4+7PZbuEwjwOszBrON4=;
+        b=X1gfDcjSYLcBbE0MBBhwhK7htLKCvb7xiAhW84JJ8aR2Pj4C/Pqyu1xYLrpco24N6I
+         C9J4IiYkw3j/UaqXUUFDvfYuxTV/W1PEByDZO0nLhXVDhQBEEYbkWvAc/QrdgV/sWe9p
+         yd8EukT4278a/13eUsqTspQqTK+PO/lrb3dgkeuFP/Ggm6iHdv5OIvhBRaqiDmz+DT6m
+         G5aOcyJFapCbF7bqQlrlr6MLuKYN3wDADKSYL+m4fAeRxOZiGuwWYXVA3rpzpNcqEhgh
+         G851VezyQ+DuRZMMfEVjF8ForgLRPohL1fV6h73KcisSwFQS0nRBEESKvhxtVc2Sx9vL
+         9xpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BKu/VauqBCYgezBQrQES+QSt580NOfOFvIsxFY1xklM=;
-        b=v/hTJyixiddyb4xF+WBP7QMyGuJyILV8AkYr0yIAEKnbHhsFJXm4JEo8NDfv5rOCye
-         lSLQIURxmBgmga/IflBEnEAnSE+NtmG36HAnDNB/ElSRo7kpjHlv9y/oHDQ6HYm4O4tV
-         YDDQMNq4CMDuZ5z+KYr8z9IN0KU/M+q/IbmtoAY5VXRuLrRDQqiUM8E5Y0CnvG16xqQ1
-         uZMhE4J75JFy4IoIZhRqW92h4sAI3zt6Ra7rWFLmfy7cvrzFUsstHNMlergmSx8STHcZ
-         cdfLSpaGxVm6bbuq/19nD4LKIIytfqxjoDHlRNr9jiC343VnDXEQpW7hoXNH9XNqkYXK
-         FMkg==
-X-Gm-Message-State: AFqh2koAOcEs6H4//+zUqB1pNa86pjy+rBUVQZ4y1yrKma9cyDeGcu+a
-        1T4B9rKpqmX4wbHV1dAJshBD2g==
-X-Google-Smtp-Source: AMrXdXtFwlBTAINRE3QlKZUsoy3/Un3r6y8+Qs/P30nEzQxFBlXIG3z+/Y+dx7xRT1oEEDcxiLDtBw==
-X-Received: by 2002:a19:645b:0:b0:4a4:68b8:f4e7 with SMTP id b27-20020a19645b000000b004a468b8f4e7mr11338362lfj.45.1672793313687;
-        Tue, 03 Jan 2023 16:48:33 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id l18-20020ac24312000000b00485caa0f5dfsm5015288lfh.44.2023.01.03.16.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 16:48:33 -0800 (PST)
-Message-ID: <00e2ba61-c64d-0ef9-c802-f96c72109712@linaro.org>
-Date:   Wed, 4 Jan 2023 01:48:31 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qiXxV2Hfa6NF/4ylZM+g7WvF4+7PZbuEwjwOszBrON4=;
+        b=Ey6fot2G5fHw5xUSPmtVBK7bdP2GvaNY+A1HFwDmKziIe01Cpj46d9nwQ8UhBrCD/5
+         vPiW6al6/MWc83Q4dSs0jKTfhRIutdStzpTGt/VU6Weu5WDqvDEIr2iuP9BqYMfoiu7a
+         0VGWa27iIqgWp45/C85OLoPwGiwjVi29ziWa3JXJM1XpWwjijUuyCyslBCo+0l8+/Dph
+         9tTlRuHhM/WZH9FWfSphm3rPu0iXRCZC3DcL/xxKoyfreJYk+VdIMiFZIupQv4ciHmAE
+         cV6IB8GgQ2FhuQE55Ct8CgaQeosO34g3NANS6mhkOBSEqrhuS+6i38KXyIUeDeyA8oKL
+         Qnjg==
+X-Gm-Message-State: AFqh2kp99i3GoT5AUXuqbMz98l2oKdweuoH6vGXhdmdmf+01jTQuUPAQ
+        P5PubYfmXVkKlCeOwNkhlfrpMg==
+X-Google-Smtp-Source: AMrXdXvtFqhaSn3Tw9QYHWUPgyOXDjo3XDFOrsnNrIE80F2Yb82IIBW1/ye7zb7YefnrkcgKD3AD/w==
+X-Received: by 2002:a17:90a:8b8c:b0:219:c2f2:f83c with SMTP id z12-20020a17090a8b8c00b00219c2f2f83cmr3726315pjn.2.1672793437914;
+        Tue, 03 Jan 2023 16:50:37 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id mt2-20020a17090b230200b00225dfb6e8b3sm16083571pjb.11.2023.01.03.16.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 16:50:37 -0800 (PST)
+Date:   Wed, 4 Jan 2023 00:50:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 19/27] KVM: x86/mmu: Use page-track notifiers iff there
+ are external users
+Message-ID: <Y7TNWYaJ9PA6HZL0@google.com>
+References: <20221223005739.1295925-1-seanjc@google.com>
+ <20221223005739.1295925-20-seanjc@google.com>
+ <Y6vogAvkktOPLwK9@yzhao56-desk.sh.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/4] interconnect: qcom: rpm: Set QoS parameters
- regardless of RPM bw setting
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>
-References: <20230103173059.265856-1-konrad.dybcio@linaro.org>
- <20230103173059.265856-2-konrad.dybcio@linaro.org>
- <0e2bdaec-b7ba-0474-8b80-8901fcc87a0f@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <0e2bdaec-b7ba-0474-8b80-8901fcc87a0f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6vogAvkktOPLwK9@yzhao56-desk.sh.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 28, 2022, Yan Zhao wrote:
+> On Fri, Dec 23, 2022 at 12:57:31AM +0000, Sean Christopherson wrote:
+> > diff --git a/arch/x86/kvm/mmu/page_track.c b/arch/x86/kvm/mmu/page_track.c
+> > index 2b302fd2c5dd..f932909aa9b5 100644
+> > --- a/arch/x86/kvm/mmu/page_track.c
+> > +++ b/arch/x86/kvm/mmu/page_track.c
+> > @@ -193,6 +193,7 @@ bool kvm_slot_page_track_is_active(struct kvm *kvm,
+> >  	return !!READ_ONCE(slot->arch.gfn_track[mode][index]);
+> >  }
+> >  
+> > +#ifdef CONFIG_KVM_EXTERNAL_WRITE_TRACKING
+> >  void kvm_page_track_cleanup(struct kvm *kvm)
+> >  {
+> >  	struct kvm_page_track_notifier_head *head;
+> > @@ -208,6 +209,7 @@ int kvm_page_track_init(struct kvm *kvm)
+> >  	head = &kvm->arch.track_notifier_head;
+> >  	INIT_HLIST_HEAD(&head->track_notifier_list);
+> >  	return init_srcu_struct(&head->track_srcu);
+> > +	return 0;
+> Double "return"s.
 
+Huh, I'm surprised this didn't throw a warning.  I'm pretty sure I screwed up a
+refactoring, I originally had the "return 0" in an #else branch.
 
-On 4.01.2023 00:43, Bryan O'Donoghue wrote:
-> On 03/01/2023 17:30, Konrad Dybcio wrote:
->> QoS parameters and RPM bandwidth requests are wholly separate. Setting one
->> should only depend on the description of the interconnect node and not
->> whether the other is present. If we vote through RPM, QoS parameters
->> should be set so that the bus controller can make better decisions.
-> 
-> Is that true ?
-> 
->> If we don't vote through RPM, QoS parameters should be set regardless,
->> as we're requesting additional bandwidth by setting the interconnect
->> clock rates.
->>
->> The Fixes tag references the commit in which this logic was added, it
->> has since been shuffled around to a different file, but it's the one
->> where it originates from.
->>
->> Fixes: f80a1d414328 ("interconnect: qcom: Add SDM660 interconnect provider driver")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/interconnect/qcom/icc-rpm.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->> index 06e0fee547ab..a190a0a839c8 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.c
->> +++ b/drivers/interconnect/qcom/icc-rpm.c
->> @@ -252,8 +252,10 @@ static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
->>           ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
->>           if (ret)
->>               return ret;
->> -    } else if (qn->qos.qos_mode != -1) {
->> -        /* set bandwidth directly from the AP */
->> +    }
->> +
->> +    if (qn->qos.qos_mode != NOC_QOS_MODE_INVALID) {
->> +        /* Set QoS params from the AP */
->>           ret = qcom_icc_qos_set(n, sum_bw);
->>           if (ret)
->>               return ret;
-> 
-> Taking the example of
-> 
-> static struct qcom_icc_node bimc_snoc_slv = {
->         .name = "bimc_snoc_slv",
->         .id = MSM8939_BIMC_SNOC_SLV,
->         .buswidth = 16,
->         .mas_rpm_id = -1,
->         .slv_rpm_id = 2,
->         .num_links = ARRAY_SIZE(bimc_snoc_slv_links),
->         .links = bimc_snoc_slv_links,
-> };
-> 
-> #define NOC_QOS_MODE_INVALID -1
-> ap_owned == false
-> qos_mode == NOC_QOS_MODE_FIXED
-> 
-> 
-> if (!qn->qos.ap_owned) {
->     /* bod: this will run */
->     /* send bandwidth request message to the RPM processor */
->     ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
->     if (ret)
->         return ret;
-> } else if (qn->qos.qos_mode != -1) {
->     /* bod: this will not run */
->     /* set bandwidth directly from the AP */
->     ret = qcom_icc_qos_set(n, sum_bw);
->     if (ret)
->         return ret;
-> }
-> 
-> and your proposed change
-> 
-> if (!qn->qos.ap_owned) {
->     /* bod: this will run */
->     /* send bandwidth request message to the RPM processor */
->     ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
->     if (ret)
->         return ret;
-> }
-> 
-> if (qn->qos.qos_mode != NOC_QOS_MODE_INVALID) {
->     /* bod: this will run */
-Also, this will not run with the next patch, perhaps i should
-have ordered them differently (or perhaps the issue it solves
-should have never been introduced :P).
+> > +#endif /* CONFIG_KVM_EXTERNAL_WRITE_TRACKING */
+> > +
+> > +static inline void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa,
+> > +					const u8 *new, int bytes)
+> > +{
+> > +	__kvm_page_track_write(vcpu, gpa, new, bytes);
+> > +
+> Why not convert "vcpu" to "kvm" in __kvm_page_track_write() ?
 
-Konrad
->     /* set bandwidth directly from the AP */
->     ret = qcom_icc_qos_set(n, sum_bw);
->     if (ret)
->         return ret;
-> }
-> 
-> however if we look downstream we have the concept of ap_owned
-> 
-> https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.BR.1.2.9-00810-8x09.0/drivers/platform/msm/msm_bus/msm_bus_fabric_adhoc.c#L194
-> 
-> https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.BR.1.2.9-00810-8x09.0/drivers/platform/msm/msm_bus/msm_bus_fabric_adhoc.c#L208
-> 
-> In simple terms
-> if (node_info->ap_owned) {
->     ret = fabdev->noc_ops.set_bw(node_info,
->                                     } else {
->     ret = send_rpm_msg(node_device);
-> }
-> 
-> I agree your code does what it says on the tin but, whats the overall justification to depart from the downstream logic ?
-> 
-> ---
-> bod
+No reason, I just overlooked the opportunistic cleanup.  I'll do this in the next
+version.
+
+Thanks much for the reviews!
