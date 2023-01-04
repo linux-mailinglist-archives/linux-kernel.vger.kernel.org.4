@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A0E65CD23
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FBD65CD26
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbjADGfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S233364AbjADGgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjADGfP (ORCPT
+        with ESMTP id S231241AbjADGf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:35:15 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA8714017;
-        Tue,  3 Jan 2023 22:35:14 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id c9so17276002pfj.5;
-        Tue, 03 Jan 2023 22:35:14 -0800 (PST)
+        Wed, 4 Jan 2023 01:35:59 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFD232C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 22:35:57 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so38053772pjj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 22:35:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5i2PAsadZxre+fZA40ApSOO4k6rDBMhHG9OHUSd1jK0=;
-        b=gAU5b++TyEBAGOOaOjV+IHnXy9gGfUTiYm9Ah5+13Veoa4PyVgvxtlUrJbzk1V5sa8
-         AcmbmoM63BK7EcMazLZ+5+ksoUUBV4oKeYdzfMi/cjQJlqjA+Ozr1k/UUT0bugDyccfv
-         Ws5ridHBCE+02PZxSg8qgC+RdpMVR7YW8LaNn4UAUqkUlTRVO426XC2NlSmJ0QoDZWbG
-         UbtWr4etQF+jokXd1g4um6O/bTDPKAK2WoE1WcQ7lxR2KB1+gyC3PkD5y7vkWifaubjb
-         jtvlU7Uq0JfA4iU1+NqoukvI0jAXDKOszVV7xPRs4BDXNHp6N9caWLIzFyo86ylzz7dn
-         P9JQ==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jjU6a1BIpzw50Rh+s83xc47mktrNM3TuYh2UZCXGX4k=;
+        b=i8Z2zuVQLdlS/yxxfAVQFry4zW3eGi0PoTYqKD5oo5xmb48Owl73lLYAw95CNWIJtl
+         J1uu9HRnK0oYJ66KuH/zY4MkV+luT7RaJijwQ1AHhrAxLiGYDXEEt+DfW5zJOGs1XcgY
+         v9EoE6zL25MQ0czH/kWLmSQKtUfNr7brJ/k5op9Ky/4miITK/UoSXxJSfBUNcW9CQTBu
+         pwbbrrr9w9Y7pc65Oblf6hVA5LOU89aples/H2e6/RYPJgbqwdG59XBa4jwUtZ+0Yrmr
+         iCbrtD5giGMnbIBpDfFPponhYV3XsOUNi23BpBRYzIT43lo7Q1ih32GaZE0MKJcAGkQp
+         9gvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5i2PAsadZxre+fZA40ApSOO4k6rDBMhHG9OHUSd1jK0=;
-        b=w1lqCgewXT7EUqUNCW1bHjtvArWbrdRxQP696NhRtUHIhS7dAjjgm/93BvW58qKXls
-         WO5l2dsuYfi6Hz87Zvwi1uTumgDdtr8JV3QbeC1BVNy2ta1/4p4Y0Qhsa/H7oaGn4uiI
-         vS/cuG22SclnHQdx400jS2pAIfC67WijgPvmoRwsAe5WdLC/fu3JZmLFt3CbzKntoJSF
-         jgTj1HeUdVwU5RdV30SOqUwCfexcU2KfX2d7Z1ohg3GIh7+arAWU5vsaBowjFpcIDOX3
-         s5alXgg7ywNnh25jr5bSYUjVfsDRps7QsFxzHT0fZX/9Wqk8F+Zy24OvrUJvltXRR0Ll
-         /7/A==
-X-Gm-Message-State: AFqh2kqTp/GDGhKotQqrdAMioV0LD/lmZ4WJRfCB0y9mnE1DrCJQxsAM
-        kq+STjhhfyiOIRPGORJAaKnS2nVIdHAYirpU
-X-Google-Smtp-Source: AMrXdXvi6Dj8Q8jPRtltXyZIDqYzpi3IkyqsCHG995ldQ2iwyBQ2irb4AHPBwcV/AwV9CgE0Jc2w3A==
-X-Received: by 2002:a05:6a00:21ce:b0:581:26c2:aa0a with SMTP id t14-20020a056a0021ce00b0058126c2aa0amr43392435pfj.30.1672814112856;
-        Tue, 03 Jan 2023 22:35:12 -0800 (PST)
-Received: from guoguo-thinkbook.lan ([240e:379:964:5365:9621:efdc:4c9e:b465])
-        by smtp.gmail.com with ESMTPSA id 67-20020a621446000000b0056d98e359a5sm20378439pfu.165.2023.01.03.22.35.06
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jjU6a1BIpzw50Rh+s83xc47mktrNM3TuYh2UZCXGX4k=;
+        b=r4LM/AMsQiFObgOpM40buk4gpDbjgjAwf6tTvsLpqlbZX5Gwu63r6tAwo6KuuNQI2C
+         rn3amhFprlS6SGDiuiCxxpa2CGve1eZrstJ+WGFYmPDz7ZA1dX7wpK3/9dhmnk6xMBD7
+         ZmvX4zS4A8jNzGevA+rdK0/CDnDz9tD2sjl7avItzjbugGUNrLsBONY7FegqnUIDSV+9
+         SWppclEbwWlDYcD3JnXy6yCxXs6CsJ0v6FsLSRZZ7aqZpBeviJgjKl3aCSO/X8y/9IOE
+         0Xejw+AKbMxADKE6u1YrWau3X0QjTtjcLRHTyCWgUBQuXejd9Vamvg1UPe5ysoUfyska
+         Phdg==
+X-Gm-Message-State: AFqh2krD0F8Aes3IAZoUIbpSUe/ypLUVi8Qgdh2PA9Z9kXdJ8ETQw+AJ
+        cvhqI8h8sgtHkQqQ6gC4elSghA==
+X-Google-Smtp-Source: AMrXdXsQxSKmqH1ZRszJvE7YCY36ZUkR/DKopj7I1yyLVB0Jfz2BfuVJgFClf5x7+GMbi4cWShUc6g==
+X-Received: by 2002:a17:902:d48f:b0:192:a664:1b2d with SMTP id c15-20020a170902d48f00b00192a6641b2dmr24928193plg.30.1672814156735;
+        Tue, 03 Jan 2023 22:35:56 -0800 (PST)
+Received: from localhost ([122.172.82.107])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170902a3c700b001894dc5fdf2sm23115190plb.296.2023.01.03.22.35.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 22:35:11 -0800 (PST)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-wireless@vger.kernel.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>, Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Deren Wu <deren.wu@mediatek.com>,
-        YN Chen <YN.Chen@mediatek.com>,
-        Ben Greear <greearb@candelatech.com>,
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] wifi: mt76: mt7921u: add support for Comfast CF-952AX
-Date:   Wed,  4 Jan 2023 14:33:38 +0800
-Message-Id: <20230104063341.18863-1-gch981213@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        Tue, 03 Jan 2023 22:35:56 -0800 (PST)
+Date:   Wed, 4 Jan 2023 12:05:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        marijn.suijten@somainline.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Add SM6375 to cpufreq-dt-platdev blocklist
+Message-ID: <20230104063553.2rkoxxkkrsmbmqdg@vireshk-i7>
+References: <20230103171129.191193-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230103171129.191193-1-konrad.dybcio@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Comfast CF-952AX is a MT7921 based USB WiFi dongle with custom
-VID/PID. Add an entry for it.
+On 03-01-23, 18:11, Konrad Dybcio wrote:
+> The Qualcomm SM6375 platform uses the qcom-cpufreq-hw driver, so add
+> it to the cpufreq-dt-platdev driver's blocklist.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 8ab672883043..1a7b2420e735 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -150,6 +150,7 @@ static const struct of_device_id blocklist[] __initconst = {
+>  	{ .compatible = "qcom,sdm845", },
+>  	{ .compatible = "qcom,sm6115", },
+>  	{ .compatible = "qcom,sm6350", },
+> +	{ .compatible = "qcom,sm6375", },
+>  	{ .compatible = "qcom,sm8150", },
+>  	{ .compatible = "qcom,sm8250", },
+>  	{ .compatible = "qcom,sm8350", },
 
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
- drivers/net/wireless/mediatek/mt76/mt7921/usb.c | 3 +++
- 1 file changed, 3 insertions(+)
+Applied. Thanks.
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
-index 5321d20dcdcb..a0778ecdb995 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
-@@ -15,6 +15,9 @@
- static const struct usb_device_id mt7921u_device_table[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(0x0e8d, 0x7961, 0xff, 0xff, 0xff),
- 		.driver_info = (kernel_ulong_t)MT7921_FIRMWARE_WM },
-+	/* Comfast CF-952AX */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x3574, 0x6211, 0xff, 0xff, 0xff),
-+		.driver_info = (kernel_ulong_t)MT7921_FIRMWARE_WM },
- 	{ },
- };
- 
 -- 
-2.39.0
-
+viresh
