@@ -2,93 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F3265CAA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09B065CA9E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238297AbjADAJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        id S234294AbjADAIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 19:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbjADAJA (ORCPT
+        with ESMTP id S233598AbjADAIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:09:00 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2185315F00
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:08:59 -0800 (PST)
-Received: from letrec.thunk.org (host-67-21-23-146.mtnsat.com [67.21.23.146] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 30408IRA015473
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 3 Jan 2023 19:08:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1672790909; bh=ALtAqJM3Wx45sHnWFvBnJn73zqSfwhn12OmzEU3j3nE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=XvZ/szbp4LO2MJek2jxvKd9zSrTRq4/ah2n0S0d0hsxl/gubg6CZ71ddRUPxTQ79s
-         stC5q+/e7FYCiBf91Uq3FtlQrIlebABfKK+fNVpCl+7lCXavKmQz4UmAc4IrrqET0g
-         KOiGoo8JUk2H5CLaFHAe4Oaz+B8hqYQQCwslED34tYPI6R6Rsegogx268XoK23ii4b
-         gp0kG6HtJRqFnGySACT+wiZ3yEv1UTe+oGqSEgbF5n4I/O4P/b55c9bDhtAeurCgTf
-         Jih/kW3x3mdCpjmWHZm1KTNC8FqjAiMPG1qBXfBJfpfVC3nxrWvSHIZ5/nXq6kJ1wa
-         Js7LLSz3GkZcw==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id C4C478C0C2E; Tue,  3 Jan 2023 19:08:05 -0500 (EST)
-Date:   Tue, 3 Jan 2023 19:08:05 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     syzbot <syzbot+3c45794f522ad93b0eb6@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic
- forced after error (2)
-Message-ID: <Y7TDZRpDVysLdq+N@mit.edu>
-References: <000000000000e6c7b005f0e90bf1@google.com>
- <Y6zN/Q3glUcbty+c@mit.edu>
- <CANp29Y7yH6LeeHMX-joXgr7duZzs2p3j08qZzS6WGwBJDDq+PA@mail.gmail.com>
+        Tue, 3 Jan 2023 19:08:53 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44D713DEC
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:08:51 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id i7-20020a056e021b0700b003033a763270so20371297ilv.19
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 16:08:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BdI30cbwiGsAahh561Kwaa0VX4PARo/97jT/k9Clyvs=;
+        b=g3UdvfQeNlWyVdU0GXaID1ioTjNXRPtL77aX6kVuo2ToEdXuk3T5LD0r+Rqlm1dnx8
+         AdiM2AhxsFTunD7K7PxdfLGs2IPvlrD4tr2U9c8sI6s9YN9lzCLIzxovaZp0tAPjiwAM
+         5eygKc3LQr2a+AOwYZ8K3rnN9GsErl6vhGmEh/RTTdcVuu8eJpjKVkz6hqBvKgzRalsE
+         InZgXb6/HHfaKKsj8yimaP7efXIYlXh5h4NMfMIf+FO59DnXhvzt/X7yvK4gHwypP3ZE
+         uEgg7OVhUFyXl6j1AFKzb7AlCAFsQ8cgKROo/1iYmSJjhoEIo7o9CIBR+K9jCYj/9C7p
+         84Hw==
+X-Gm-Message-State: AFqh2ko7GMgeYnLumqw7NGp7De/uj74opYYueIZgXz9fBZDs+4tchHW3
+        /Dknr8GRJGvztTwoTqB6D+DnvuDTeRu1Na0AlD8u4dpwkJzK
+X-Google-Smtp-Source: AMrXdXtktJUAQB0oiFltFeGqoxF0/+s/3kugRtELBcdbscMpvSKOmvlomBwz9opS/4d2r8Jg9d+HVmsDMz/M7SbAGadO2QdbHU8C
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANp29Y7yH6LeeHMX-joXgr7duZzs2p3j08qZzS6WGwBJDDq+PA@mail.gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,MAY_BE_FORGED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:490b:b0:375:2ff:b633 with SMTP id
+ cx11-20020a056638490b00b0037502ffb633mr519089jab.100.1672790931037; Tue, 03
+ Jan 2023 16:08:51 -0800 (PST)
+Date:   Tue, 03 Jan 2023 16:08:51 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003a68dc05f164fd69@google.com>
+Subject: [syzbot] kernel BUG in vhost_vsock_handle_tx_kick
+From:   syzbot <syzbot+30b72abaa17c07fe39dd@syzkaller.appspotmail.com>
+To:     jasowang@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        netdev@vger.kernel.org, sgarzare@redhat.com, stefanha@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 12:22:53PM +0100, Aleksandr Nogikh wrote:
-> Hi Ted,
-> 
-> Syzkaller already tries to avoid such situations, but in this
-> particular case, it has corrupted the mount options[1] and did not
-> recognize the problem. Though, as I understand, this string was
-> nevertheless valid to the kernel. Otherwise it would have aborted the
-> mount early (?).
-> 
-> [1] grpjquota=Jnoinit_itable(errors=remount-ro,minixdf,jqfmt=vfsv0,usrjquota=."
+Hello,
 
-Yes, it's considered valid with the name of the journaled group quota
-file being "Jnoinit_itable(errors=remount-ro".  Which is very odd, but
-in theory, if that file existed, quotaon would have tried to find that
-file and used it as the group quota.
+syzbot found the following issue on:
 
-(Old-style quota files, which we still support because (a) there might
-be RHEL users using system setups that haven't been updated since the
-RHEL3/RHEL4 days and (b) there are still stackoverflow answers and
-other FAQ posts on the web telling people how to enable quota using
-these ancient schemes, are passed into kernel, but aren't actually
-used by the kernel; instead the userspace quota tools parse either
-/etc/mtab or /proc/mounts to find the relevant mount option and then
-try to use the named file as the user or group quota file.)
+HEAD commit:    c76083fac3ba Add linux-next specific files for 20221226
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1723da42480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c217c755f1884ab6
+dashboard link: https://syzkaller.appspot.com/bug?extid=30b72abaa17c07fe39dd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fc414c480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1604b20a480000
 
-> I've sent a PR that should make the syzkaller logic more robust to
-> such broken options strings:
-> https://github.com/google/syzkaller/pull/3604
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e388f26357fd/disk-c76083fa.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e24f0bae36d5/vmlinux-c76083fa.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a5a69a059716/bzImage-c76083fa.xz
 
-Thanks for fixing this so promptly!
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+30b72abaa17c07fe39dd@syzkaller.appspotmail.com
 
-						- Ted
-						
+skbuff: skb_over_panic: text:ffffffff8768d6f1 len:25109 put:25109 head:ffff88802b5ac000 data:ffff88802b5ac02c tail:0x6241 end:0xc0 dev:<NULL>
+------------[ cut here ]------------
+kernel BUG at net/core/skbuff.c:121!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 5072 Comm: vhost-5071 Not tainted 6.2.0-rc1-next-20221226-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:121
+Code: f7 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 40 04 5b 8b ff 74 24 10 ff 74 24 20 e8 09 8e bf ff <0f> 0b e8 1a 67 82 f7 4c 8b 64 24 18 e8 80 3d d0 f7 48 c7 c1 40 12
+RSP: 0018:ffffc90003cefca0 EFLAGS: 00010282
+RAX: 000000000000008d RBX: ffff88802b674500 RCX: 0000000000000000
+RDX: ffff8880236bba80 RSI: ffffffff81663b9c RDI: fffff5200079df86
+RBP: ffffffff8b5b1280 R08: 000000000000008d R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8768d6f1
+R13: 0000000000006215 R14: ffffffff8b5b0400 R15: 00000000000000c0
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000380 CR3: 000000002985f000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ skb_over_panic net/core/skbuff.c:126 [inline]
+ skb_put.cold+0x24/0x24 net/core/skbuff.c:2218
+ virtio_vsock_skb_rx_put include/linux/virtio_vsock.h:56 [inline]
+ vhost_vsock_alloc_skb drivers/vhost/vsock.c:374 [inline]
+ vhost_vsock_handle_tx_kick+0xad1/0xd00 drivers/vhost/vsock.c:509
+ vhost_worker+0x241/0x3e0 drivers/vhost/vhost.c:364
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:121
+Code: f7 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 40 04 5b 8b ff 74 24 10 ff 74 24 20 e8 09 8e bf ff <0f> 0b e8 1a 67 82 f7 4c 8b 64 24 18 e8 80 3d d0 f7 48 c7 c1 40 12
+RSP: 0018:ffffc90003cefca0 EFLAGS: 00010282
+RAX: 000000000000008d RBX: ffff88802b674500 RCX: 0000000000000000
+RDX: ffff8880236bba80 RSI: ffffffff81663b9c RDI: fffff5200079df86
+RBP: ffffffff8b5b1280 R08: 000000000000008d R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8768d6f1
+R13: 0000000000006215 R14: ffffffff8b5b0400 R15: 00000000000000c0
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fdc6f4a4298 CR3: 000000002985f000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
