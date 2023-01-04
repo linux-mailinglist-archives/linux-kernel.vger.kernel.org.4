@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B89665DD75
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCFE65DD76
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235260AbjADUOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 15:14:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
+        id S240018AbjADUOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 15:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239929AbjADUOL (ORCPT
+        with ESMTP id S239931AbjADUOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 15:14:11 -0500
+        Wed, 4 Jan 2023 15:14:12 -0500
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB991BE8E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 12:14:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDE91ADAE
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 12:14:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672863250; x=1704399250;
+  t=1672863251; x=1704399251;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=970u/0g+e4dGCNxze4E0X7C5IVyu6CmpruauqCZkzzc=;
-  b=XgDVi17bwbpIbHxh02ToEBxXibxTAb8omb/dPzTWOoGCVt9myje9Hviv
-   BNMk0Ch33eQ8iDvbCwQOi9Qq8Bfg3YQElOE/C45EkiWRNq46oi7a3SgXk
-   L9UKWXTlnk6LTZAZxJfk/wyN9W6zR2zkfrVuTKwe2im3Fkba22KD/orb/
-   WoFXa8NB5KDbPDlQRnJ9BLWfosBPl5m6oyJ1Pi7f6yrYHaDI9qyMDX98z
-   dt6LGwoCGmaK9XpcufVdxy7wNutmTeJlxoQW2k5ouaIGEOG/kaReJga1E
-   YYKQcdSTI0EYK8hM9NRKPOSSg1TNbT0QGdNiFrumUJvjZdvuGsFwjvXez
+  bh=ODnj0oJoGmWARgg6cHLRiOsAa7nFIWXK+OjGcPoiaW4=;
+  b=oFzCnG8MpVtqgnYd1nSvW29bPwRbrwfTFneRSUROKwB26U1buRJELakF
+   9uAaBpJDR0xgmsv7y9NS4GjnDXF8oQTlqfayByk80gQFnCydlmmH+Hyum
+   l5O6C61PvyKANug1eB+STo9f3OlMRNBHvEJQztsShL0uPmxe1hsSfMUvI
+   AWlu2imXau/fuoMUwQnSzjcbEvXxEKL9n13MHV8pDdm6huGhX2hD+EscY
+   RjqXUnnfw50UfwICYSMsYzFZBdnGfNQxn9cDzZ/FgGOEt/LRL8YaorOEj
+   Wfp+L84bT9iHfm1+sGQJKoxrHRSDF44RC2ZeLKkeIMAeXBr8fyr8/GlqG
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="322105472"
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="322105478"
 X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="322105472"
+   d="scan'208";a="322105478"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 12:14:10 -0800
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 12:14:11 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="779324005"
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="779324007"
 X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="779324005"
+   d="scan'208";a="779324007"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga004.jf.intel.com with ESMTP; 04 Jan 2023 12:14:10 -0800
+  by orsmga004.jf.intel.com with ESMTP; 04 Jan 2023 12:14:11 -0800
 From:   kan.liang@linux.intel.com
 To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     ak@linux.intel.com, eranian@google.com, irogers@google.com,
         Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH V2 5/9] perf/x86/intel: Support Architectural PerfMon Extension leaf
-Date:   Wed,  4 Jan 2023 12:13:45 -0800
-Message-Id: <20230104201349.1451191-5-kan.liang@linux.intel.com>
+Subject: [PATCH V2 6/9] perf/x86/cstate: Add Meteor Lake support
+Date:   Wed,  4 Jan 2023 12:13:46 -0800
+Message-Id: <20230104201349.1451191-6-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230104201349.1451191-1-kan.liang@linux.intel.com>
 References: <20230104201349.1451191-1-kan.liang@linux.intel.com>
@@ -63,80 +63,103 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-The new CPUID leaf 0x23 reports the "true view" of PMU resources.
+Meteor Lake is Intel's successor to Raptor lake. From the perspective of
+Intel cstate residency counters, there is nothing changed compared with
+Raptor lake.
 
-The sub-leaf 1 reports the available general-purpose counters and fixed
-counters. Update the number of counters and fixed counters when the
-sub-leaf is detected.
+Share adl_cstates with Raptor lake.
+Update the comments for Meteor Lake.
 
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
 
 No change since V1
 
- arch/x86/events/intel/core.c      | 22 ++++++++++++++++++++++
- arch/x86/include/asm/perf_event.h |  8 ++++++++
- 2 files changed, 30 insertions(+)
+ arch/x86/events/intel/cstate.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index a5678ab6d3e3..29d2d0411caf 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -4588,6 +4588,25 @@ static void flip_smm_bit(void *data)
- 	}
- }
- 
-+static void intel_pmu_check_num_counters(int *num_counters,
-+					 int *num_counters_fixed,
-+					 u64 *intel_ctrl, u64 fixed_mask);
-+
-+static void update_pmu_cap(struct x86_hybrid_pmu *pmu)
-+{
-+	unsigned int sub_bitmaps = cpuid_eax(ARCH_PERFMON_EXT_LEAF);
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	if (sub_bitmaps & ARCH_PERFMON_NUM_COUNTER_LEAF_BIT) {
-+		cpuid_count(ARCH_PERFMON_EXT_LEAF, ARCH_PERFMON_NUM_COUNTER_LEAF,
-+			    &eax, &ebx, &ecx, &edx);
-+		pmu->num_counters = fls(eax);
-+		pmu->num_counters_fixed = fls(ebx);
-+		intel_pmu_check_num_counters(&pmu->num_counters, &pmu->num_counters_fixed,
-+					     &pmu->intel_ctrl, ebx);
-+	}
-+}
-+
- static bool init_hybrid_pmu(int cpu)
- {
- 	struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
-@@ -4613,6 +4632,9 @@ static bool init_hybrid_pmu(int cpu)
- 	if (!cpumask_empty(&pmu->supported_cpus))
- 		goto end;
- 
-+	if (this_cpu_has(X86_FEATURE_ARCH_PERFMON_EXT))
-+		update_pmu_cap(pmu);
-+
- 	if (!check_hw_exists(&pmu->pmu, pmu->num_counters, pmu->num_counters_fixed))
- 		return false;
- 
-diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-index 5d0f6891ae61..6496bdbcac98 100644
---- a/arch/x86/include/asm/perf_event.h
-+++ b/arch/x86/include/asm/perf_event.h
-@@ -159,6 +159,14 @@ union cpuid10_edx {
- 	unsigned int full;
- };
- 
-+/*
-+ * Intel "Architectural Performance Monitoring extension" CPUID
-+ * detection/enumeration details:
-+ */
-+#define ARCH_PERFMON_EXT_LEAF			0x00000023
-+#define ARCH_PERFMON_NUM_COUNTER_LEAF_BIT	0x1
-+#define ARCH_PERFMON_NUM_COUNTER_LEAF		0x1
-+
- /*
-  * Intel Architectural LBR CPUID detection/enumeration details:
+diff --git a/arch/x86/events/intel/cstate.c b/arch/x86/events/intel/cstate.c
+index a2834bc93149..3019fb1926e3 100644
+--- a/arch/x86/events/intel/cstate.c
++++ b/arch/x86/events/intel/cstate.c
+@@ -41,6 +41,7 @@
+  *	MSR_CORE_C1_RES: CORE C1 Residency Counter
+  *			 perf code: 0x00
+  *			 Available model: SLM,AMT,GLM,CNL,ICX,TNT,ADL,RPL
++ *					  MTL
+  *			 Scope: Core (each processor core has a MSR)
+  *	MSR_CORE_C3_RESIDENCY: CORE C3 Residency Counter
+  *			       perf code: 0x01
+@@ -51,50 +52,50 @@
+  *			       perf code: 0x02
+  *			       Available model: SLM,AMT,NHM,WSM,SNB,IVB,HSW,BDW,
+  *						SKL,KNL,GLM,CNL,KBL,CML,ICL,ICX,
+- *						TGL,TNT,RKL,ADL,RPL,SPR
++ *						TGL,TNT,RKL,ADL,RPL,SPR,MTL
+  *			       Scope: Core
+  *	MSR_CORE_C7_RESIDENCY: CORE C7 Residency Counter
+  *			       perf code: 0x03
+  *			       Available model: SNB,IVB,HSW,BDW,SKL,CNL,KBL,CML,
+- *						ICL,TGL,RKL,ADL,RPL
++ *						ICL,TGL,RKL,ADL,RPL,MTL
+  *			       Scope: Core
+  *	MSR_PKG_C2_RESIDENCY:  Package C2 Residency Counter.
+  *			       perf code: 0x00
+  *			       Available model: SNB,IVB,HSW,BDW,SKL,KNL,GLM,CNL,
+  *						KBL,CML,ICL,ICX,TGL,TNT,RKL,ADL,
+- *						RPL,SPR
++ *						RPL,SPR,MTL
+  *			       Scope: Package (physical package)
+  *	MSR_PKG_C3_RESIDENCY:  Package C3 Residency Counter.
+  *			       perf code: 0x01
+  *			       Available model: NHM,WSM,SNB,IVB,HSW,BDW,SKL,KNL,
+  *						GLM,CNL,KBL,CML,ICL,TGL,TNT,RKL,
+- *						ADL,RPL
++ *						ADL,RPL,MTL
+  *			       Scope: Package (physical package)
+  *	MSR_PKG_C6_RESIDENCY:  Package C6 Residency Counter.
+  *			       perf code: 0x02
+  *			       Available model: SLM,AMT,NHM,WSM,SNB,IVB,HSW,BDW,
+  *						SKL,KNL,GLM,CNL,KBL,CML,ICL,ICX,
+- *						TGL,TNT,RKL,ADL,RPL,SPR
++ *						TGL,TNT,RKL,ADL,RPL,SPR,MTL
+  *			       Scope: Package (physical package)
+  *	MSR_PKG_C7_RESIDENCY:  Package C7 Residency Counter.
+  *			       perf code: 0x03
+  *			       Available model: NHM,WSM,SNB,IVB,HSW,BDW,SKL,CNL,
+- *						KBL,CML,ICL,TGL,RKL,ADL,RPL
++ *						KBL,CML,ICL,TGL,RKL,ADL,RPL,MTL
+  *			       Scope: Package (physical package)
+  *	MSR_PKG_C8_RESIDENCY:  Package C8 Residency Counter.
+  *			       perf code: 0x04
+  *			       Available model: HSW ULT,KBL,CNL,CML,ICL,TGL,RKL,
+- *						ADL,RPL
++ *						ADL,RPL,MTL
+  *			       Scope: Package (physical package)
+  *	MSR_PKG_C9_RESIDENCY:  Package C9 Residency Counter.
+  *			       perf code: 0x05
+  *			       Available model: HSW ULT,KBL,CNL,CML,ICL,TGL,RKL,
+- *						ADL,RPL
++ *						ADL,RPL,MTL
+  *			       Scope: Package (physical package)
+  *	MSR_PKG_C10_RESIDENCY: Package C10 Residency Counter.
+  *			       perf code: 0x06
+  *			       Available model: HSW ULT,KBL,GLM,CNL,CML,ICL,TGL,
+- *						TNT,RKL,ADL,RPL
++ *						TNT,RKL,ADL,RPL,MTL
+  *			       Scope: Package (physical package)
+  *
   */
+@@ -686,6 +687,8 @@ static const struct x86_cpu_id intel_cstates_match[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&adl_cstates),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	&adl_cstates),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&adl_cstates),
++	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE,		&adl_cstates),
++	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,	&adl_cstates),
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(x86cpu, intel_cstates_match);
 -- 
 2.35.1
 
