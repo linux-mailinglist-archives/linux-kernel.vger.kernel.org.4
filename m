@@ -2,279 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4969D65CEE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D6565CEEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbjADI7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:59:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S238579AbjADI7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjADI7J (ORCPT
+        with ESMTP id S233699AbjADI70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:59:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF491F2;
-        Wed,  4 Jan 2023 00:59:07 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 582D46C7;
-        Wed,  4 Jan 2023 09:59:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672822744;
-        bh=X4caveR8pcG+lsAtnOYm8ZzzqR5wLDb9yHb7Nz59WIs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VkBvjaRSuvrQF35+gGbVJo9ejV7VMTl8XW9Lu58F7TtMYjdWjufTL5npH4QOca+2R
-         gJJL8Jb4YVEfwqVYQIF6J3+xAxbLLuxqHqLfForz/MIcI+6niAUG7vBXk+vBi4jZFe
-         NCnWRPXSIQaSSoMC37ZollMukUXW3qQYGJ0SrDbc=
-Message-ID: <67f2998e-131f-a4f9-1434-8e0f5bd90bd7@ideasonboard.com>
-Date:   Wed, 4 Jan 2023 10:59:00 +0200
+        Wed, 4 Jan 2023 03:59:26 -0500
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21C81F2
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:59:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1672822747; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=d5eZy/gk6QR6EU8i/njR8r3ZZHpMWIMIVJFfLzXnm9HTVOKh8dNr4ki5iBl/sOoehHF0/KrFDKJgmKV5JPPlcv49uPpxrSJnTUiB8/eGp0Awy7FkSoI4Xz/dj2Olbosu3Dw0mkOtZaBvlPZOuRqz+4a9jgE9M2S6Sm0MBhtg53Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1672822747; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=mGVEEqg9y41OGC1daXDP6Rf+M/fdNyUu5fMaF3ljaNI=; 
+        b=bwcTxJ1E3mJQjGu/+VVD0QgaBlmG2zMZqIKQuyREfU7F0ufSfziXCIrCUezt0gk+z9tduvBZ2mnghYM0FNL8Jt377qrdnhOmxHRcDhZRz9RutqAuwYeN+TPRGkm1Qquht4D44i+tTnSwCsf6gOIcvs+nvwQyGSjSmPCH9wND8a4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672822747;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=mGVEEqg9y41OGC1daXDP6Rf+M/fdNyUu5fMaF3ljaNI=;
+        b=Vk0Fjlc3K4sq3GmQZCScu/Z96MNb3aTZ31Uaa8YkZD3/jSWd5Mn0V53D5N2pI1jZ
+        ZFXGTNMO6iqbV9c0Llx99tDnXG1X8ZW5OaurALPzzX28GFKPDG9xG6o5UGlvKDodDOf
+        yRLAsdWCSIygmH/ofZ8YLlpoJGGatmTT3ggpFhfQ=
+Received: from edelgard.fodlan.icenowy.me (120.85.96.143 [120.85.96.143]) by mx.zohomail.com
+        with SMTPS id 1672822745390708.8255740342773; Wed, 4 Jan 2023 00:59:05 -0800 (PST)
+Message-ID: <a2a8c7522b9b57f074d6962511b6d779cfd4b56b.camel@icenowy.me>
+Subject: Re: [RFC PATCH 2/3] riscv: use VA+PA variant of CMO macros for DMA
+ synchorization
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Wed, 04 Jan 2023 16:59:00 +0800
+In-Reply-To: <CAJF2gTSb4qEPHw8hy1ro+UMoyKQaoQESNGveSGLdPL=cXac8jQ@mail.gmail.com>
+References: <20230104074146.578485-1-uwu@icenowy.me>
+         <20230104074146.578485-3-uwu@icenowy.me>
+         <CAJF2gTSb4qEPHw8hy1ro+UMoyKQaoQESNGveSGLdPL=cXac8jQ@mail.gmail.com>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 5/8] dt-bindings: media: add bindings for TI DS90UB960
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-6-tomi.valkeinen@ideasonboard.com>
- <Y5YaMpbj1WTTIp3B@pendragon.ideasonboard.com>
- <99372b9d-2050-2040-6b29-a1939c2e0c95@ideasonboard.com>
- <Y6nRWpWvWZ++V1KP@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y6nRWpWvWZ++V1KP@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/12/2022 18:52, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> On Tue, Dec 13, 2022 at 04:25:46PM +0200, Tomi Valkeinen wrote:
->> On 11/12/2022 19:58, Laurent Pinchart wrote:
->>> On Thu, Dec 08, 2022 at 12:40:03PM +0200, Tomi Valkeinen wrote:
->>>> Add DT bindings for TI DS90UB960 FPDLink-3 Deserializer.
->>>>
->>>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->>>> ---
->>>>    .../bindings/media/i2c/ti,ds90ub960.yaml      | 358 ++++++++++++++++++
->>>>    1 file changed, 358 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
->>>> new file mode 100644
->>>> index 000000000000..d8b5e219d420
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
->>>> @@ -0,0 +1,358 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
->>>> +
->>>> +maintainers:
->>>> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->>>> +
->>>> +description:
->>>> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
->>>> +  forwarding.
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - ti,ds90ub960-q1
->>>> +      - ti,ds90ub9702-q1
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +    description:
->>>> +      i2c addresses for the deserializer and the serializers
->>>
->>> s/i2c/I2C/
->>>
->>> Same below.
->>>
->>> A bit more details would be nice, for instance the order in which
->>> addresses should be specified should be documented. The example below
->>> has one address only, so it's quite unclear. Or is this a left-over,
->>> from before the i2c-alias-pool ?
->>
->> That's a left over, but not related to i2c-alias-pool but the i2c-alias
->> for the serializers. It already says above 'maxItems: 1', so now it only
->> contains the deserializer address. I'll drop the desc.
-> 
-> Looks good to me.
-> 
->>>> +
->>>> +  clocks:
->>>> +    maxItems: 1
->>>> +    description:
->>>> +      Reference clock connected to the REFCLK pin.
->>>> +
->>>> +  clock-names:
->>>> +    items:
->>>> +      - const: refclk
->>>> +
->>>> +  powerdown-gpios:
->>>> +    maxItems: 1
->>>> +    description:
->>>> +      Specifier for the GPIO connected to the PDB pin.
->>>> +
->>>> +  i2c-alias-pool:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint16-array
->>>> +    description:
->>>> +      i2c alias pool is a pool of i2c addresses on the main i2c bus that can be
->>>> +      used to access the remote peripherals. The addresses must be available,
->>>> +      not used by any other peripheral. Each remote peripheral is assigned an
->>>> +      alias from the pool, and transactions to that address will be forwarded
->>>> +      to the remote peripheral, with the address translated to the remote
->>>> +      peripheral's real address.
->>>
->>> As this property is optional, should you describe what happens when it's
->>> not specified ?
->>>
->>> I would also indicate that the pool doesn't cover the serializers, only
->>> the devices behind them.
->>
->> Yep, I'll clarify these.
->>
->>>> +
->>>> +  links:
->>>> +    type: object
->>>> +    additionalProperties: false
->>>> +
->>>> +    properties:
->>>> +      '#address-cells':
->>>> +        const: 1
->>>> +
->>>> +      '#size-cells':
->>>> +        const: 0
->>>> +
->>>> +      ti,manual-strobe:
->>>> +        type: boolean
->>>> +        description:
->>>> +          Enable manual strobe position and EQ level
->>>> +
->>>> +    patternProperties:
->>>> +      '^link@[0-9a-f]+$':
->>>
->>> There can be up to 4 links only, right ? I would then use
->>>
->>>         '^link@[0-3]$':
->>
->> Yes, I'll change that.
->>
->>>> +        type: object
->>>> +        additionalProperties: false
->>>> +        properties:
->>>> +          reg:
->>>> +            description: The link number
->>>> +            maxItems: 1
->>>> +
->>>> +          i2c-alias:
->>>> +            description:
->>>> +              The i2c address used for the serializer. Transactions to this
->>>> +              address on the i2c bus where the deserializer resides are
->>>> +              forwarded to the serializer.
->>>> +
->>>> +          ti,rx-mode:
->>>> +            $ref: /schemas/types.yaml#/definitions/uint32
->>>> +            enum:
->>>> +              - 0 # RAW10
->>>> +              - 1 # RAW12 HF
->>>> +              - 2 # RAW12 LF
->>>> +              - 3 # CSI2 SYNC
->>>> +              - 4 # CSI2 NON-SYNC
->>>> +            description: FPD-Link Input Mode
->>>
->>> Are there use cases for controlling this dynamically (in particular the
->>> sync/non-sync modes) ? Is there anything that could be queried at
->>> runtime from the serializers instead of being specified in DT ?
->>
->> We need a link to the serializer before we can query anything from the
->> serializer.
-> 
-> I meant querying it from the serializer driver, not the serializer
-> hardware. This being said, it would likely be difficult to do so, as the
-> serializer driver would need to probe first. I think I'm thus fine
-> selecting the mode in DT on the deserializer side.
-> 
->> To have a link, we need the mode... So, as I mentioned in
->> the other reply, we could define these in some way in the serializer's
->> properties instead of here, but I'm not sure if that's a good change.
->>
->> The driver can change the mode at runtime (say, from sync to non-sync
->> mode, if the HW supports that). But I think this property should reflect
->> the HW strapped configuration of the serializer.
-> 
-> That would possibly work for the DS90UB953, but the DS90UB913 has no
-> strapped mode selected at boot time but is instead configured
-> automatically through the back-channel (see my last reply to patch 3/8).
-
-Indeed.
-
-> When connecting a DS90UB913 to a DS90UB914 deserializer, we can probably
-> start without mode selection in software, as the MODE pin is meant to
-> bootstrap that to a correct value which is then automatically
-> transmitted to the serializer (hardware designs where the mode would
-> need to be overridden should be rate). However, when connecting multiple
-
-I don't know if that's true. I guess it depends on how you see the deser 
-and the camera module. Are they part of the same HW design or not? In my 
-setups they are quite separate, and I connect different kinds of camera 
-modules to my deserializers. But I can see that if you create a, say, 
-car, you'd have both sides known at design time and would never change.
-
-> DS90UB913 to a DS90UB960, I can imagine connecting different types of
-> cameras on the four input ports, so the need to specify the mode
-> per-port in DT would be more common.
-
-Right, and even with UB914, you might well design the deserializer side 
-with, say, RAW10 sensors, but later in the cycle you'd need to change to 
-a RAW12 sensor. Depending on the deser mode strap would require you to 
-do a HW change on the deser side too.
-
-As I said in the other mail, I don't like the deser's strap, and I think 
-we should just basically ignore it as we can provide the necessary data 
-in the DT.
-
-> For these reasons, I don't think the ti,rx-mode property can be defined
-> as reflecting the hardware MODE strap with the DS90UB913. I also think
-> it would be quite confusing to define it as the desired runtime
-> configuration for the DS90UB913 and as the hardware MODE strap for the
-> DS90UB953. Could it be (explicitly) defined as the desired runtime
-> configuration in all cases ?
-
-That sounds bad in a DT context =). You're right that the rx-mode can't 
-be defined as reflecting the serializer mode strap, but I think we can 
-define it as reflecting the default operation mode of the serializer 
-hardware (or maybe rather the camera module).
-
-  Tomi
+5ZyoIDIwMjMtMDEtMDTmmJ/mnJ/kuInnmoQgMTY6NTAgKzA4MDDvvIxHdW8gUmVu5YaZ6YGT77ya
+Cj4gT24gV2VkLCBKYW4gNCwgMjAyMyBhdCAzOjQzIFBNIEljZW5vd3kgWmhlbmcgPHV3dUBpY2Vu
+b3d5Lm1lPiB3cm90ZToKPiA+IAo+ID4gRE1BIHN5bmNob3JpemF0aW9uIGlzIGRvbmUgb24gUEEg
+YW5kIHRoZSBWQSBpcyBjYWxjdWxhdGVkIGZyb20gdGhlCj4gPiBQQS4KPiA+IAo+ID4gVXNlIHRo
+ZSBhbHRlcm5hdGl2ZSBtYWNybyB2YXJpYW50IHRoYXQgdGFrZXMgYm90aCBWQSBhbmQgUEEgYXMK
+PiA+IHBhcmFtZXRlcnMsIHRodXMgaW4gY2FzZSB0aGUgSVNBIGV4dGVuc2lvbiB1c2VkIHN1cHBv
+cnQgUEEKPiA+IGRpcmVjdGx5LCB0aGUKPiA+IG92ZXJoZWFkIGZvciByZS1jb252ZXJ0aW5nIFZB
+IHRvIFBBIGNhbiBiZSBvbWl0dGVkLgo+ID4gCj4gPiBTdWdnZXN0ZWQtYnk6IEd1byBSZW4gPGd1
+b3JlbkBrZXJuZWwub3JnPgo+ID4gU2lnbmVkLW9mZi1ieTogSWNlbm93eSBaaGVuZyA8dXd1QGlj
+ZW5vd3kubWU+Cj4gPiAtLS0KPiA+IMKgYXJjaC9yaXNjdi9tbS9kbWEtbm9uY29oZXJlbnQuYyB8
+IDggKysrKy0tLS0KPiA+IMKgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxl
+dGlvbnMoLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvcmlzY3YvbW0vZG1hLW5vbmNvaGVy
+ZW50LmMgYi9hcmNoL3Jpc2N2L21tL2RtYS0KPiA+IG5vbmNvaGVyZW50LmMKPiA+IGluZGV4IGQ5
+MTllZmFiNmViYS4uYTc1MWY0YWVjZTYyIDEwMDY0NAo+ID4gLS0tIGEvYXJjaC9yaXNjdi9tbS9k
+bWEtbm9uY29oZXJlbnQuYwo+ID4gKysrIGIvYXJjaC9yaXNjdi9tbS9kbWEtbm9uY29oZXJlbnQu
+Ywo+ID4gQEAgLTE5LDEzICsxOSwxMyBAQCB2b2lkIGFyY2hfc3luY19kbWFfZm9yX2RldmljZShw
+aHlzX2FkZHJfdAo+ID4gcGFkZHIsIHNpemVfdCBzaXplLAo+ID4gCj4gPiDCoMKgwqDCoMKgwqDC
+oCBzd2l0Y2ggKGRpcikgewo+ID4gwqDCoMKgwqDCoMKgwqAgY2FzZSBETUFfVE9fREVWSUNFOgo+
+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19PUChjbGVhbiwgdmFkZHIs
+IHNpemUsCj4gPiByaXNjdl9jYm9tX2Jsb2NrX3NpemUpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgQUxUX0NNT19PUF9WUEEoY2xlYW4sIHZhZGRyLCBwYWRkciwgc2l6ZSwKPiA+
+IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7Cj4gQUxUX0NNT19PUCAtPiBBTFRfQ01PX09QX1ZQQSwg
+aXMgdGhlIHJlbmFtaW5nIG5lY2Vzc2FyeT8KCkkgZGlkbid0IHJlbmFtZSB0aGUgb3JpZ2luYWwg
+QUxUX0NNT19PUCwgQUxUX0NNT19PUF9WUEEgaXMgc29tZXRoaW5nCm5ldy4KCj4gCj4gT3RoZXJz
+Ogo+IFJldmlld2VkLWJ5OiBHdW8gUmVuIDxndW9yZW5Aa2VybmVsLm9yZz4KPiAKPiA+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+IMKgwqDCoMKgwqDCoMKgIGNhc2Ug
+RE1BX0ZST01fREVWSUNFOgo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NN
+T19PUChjbGVhbiwgdmFkZHIsIHNpemUsCj4gPiByaXNjdl9jYm9tX2Jsb2NrX3NpemUpOwo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19PUF9WUEEoY2xlYW4sIHZhZGRy
+LCBwYWRkciwgc2l6ZSwKPiA+IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7Cj4gPiDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7Cj4gPiDCoMKgwqDCoMKgwqDCoCBjYXNlIERNQV9C
+SURJUkVDVElPTkFMOgo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19P
+UChmbHVzaCwgdmFkZHIsIHNpemUsCj4gPiByaXNjdl9jYm9tX2Jsb2NrX3NpemUpOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19PUF9WUEEoZmx1c2gsIHZhZGRyLCBw
+YWRkciwgc2l6ZSwKPiA+IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7Cj4gPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7Cj4gPiDCoMKgwqDCoMKgwqDCoCBkZWZhdWx0Ogo+ID4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ID4gQEAgLTQyLDcgKzQyLDcg
+QEAgdm9pZCBhcmNoX3N5bmNfZG1hX2Zvcl9jcHUocGh5c19hZGRyX3QgcGFkZHIsCj4gPiBzaXpl
+X3Qgc2l6ZSwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+IMKg
+wqDCoMKgwqDCoMKgIGNhc2UgRE1BX0ZST01fREVWSUNFOgo+ID4gwqDCoMKgwqDCoMKgwqAgY2Fz
+ZSBETUFfQklESVJFQ1RJT05BTDoKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEFM
+VF9DTU9fT1AoZmx1c2gsIHZhZGRyLCBzaXplLAo+ID4gcmlzY3ZfY2JvbV9ibG9ja19zaXplKTsK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEFMVF9DTU9fT1BfVlBBKGZsdXNoLCB2
+YWRkciwgcGFkZHIsIHNpemUsCj4gPiByaXNjdl9jYm9tX2Jsb2NrX3NpemUpOwo+ID4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ID4gwqDCoMKgwqDCoMKgwqAgZGVmYXVs
+dDoKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+IC0tCj4gPiAy
+LjM4LjEKPiA+IAo+IAo+IAoK
 
