@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D995B65CB21
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004DB65CB27
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233993AbjADAzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
+        id S231240AbjADBAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 20:00:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjADAzB (ORCPT
+        with ESMTP id S233130AbjADBAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:55:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F114817070;
-        Tue,  3 Jan 2023 16:54:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2345B81151;
-        Wed,  4 Jan 2023 00:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2880FC433EF;
-        Wed,  4 Jan 2023 00:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672793697;
-        bh=D6kfiVE9mOojgtBjsTsllPEN/tZ8Ks/6aaCN32Ve4Fs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kCCVcy5Fg8yE5P4F1SSVrZau28sxHVJfMQmJm5uNuMn/euAdc62ttf8L99nhGl3Hr
-         iYfz3N/vZW+pLgKR2GEt+em3gmFkUTDCtFCAcgeo0iH5ZLYVF3OW1pbxUg75MuI1uS
-         PrZkTO6NXSz94VPxNC3E7Jc0rGW4MRPb4E6d4H5ReZrW+sGjZ3MwwbVLZDAFWSl7az
-         ux9pKObnTpv5WmqH/qNVHjm+nQ0QLPU58CQ1UoME7IIDSTKZlTvj5soX7TSuqUmZZK
-         yqtkR/Q+VXo0kwutDlKWcKn7qboODjjJWSmifteSat3rxTFdyKwosfOP3APthscdqS
-         wMtIttSbc2kvA==
-Date:   Tue, 3 Jan 2023 18:55:01 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] ext4: Fix function prototype mismatch for ext4_feat_ktype
-Message-ID: <Y7TOZRnz9sH6C2ey@work>
-References: <20230103234616.never.915-kees@kernel.org>
+        Tue, 3 Jan 2023 20:00:42 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC00317411
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:00:41 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-45ef306bd74so459294567b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 17:00:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CjDUy4DyLWqialDx+oLtHpMfqyOR8g2BaJhUO6gTmfk=;
+        b=eR5jD+Kzi4enxS2mo0zQ8w7UbSuNkQNe0DLqJqyFknrRav4Y85zJTCrtONPeXEl8Pf
+         9Fmv5Cgw3apZ887oi4QlOhfTSK6lSBziIiebarh9uQpX7Hy3qx4NOdYJ2tIydgJDKk15
+         bI81jiaOmY1C2CdF3vDXX/xaqE7HHUabKzHHlG2ndn14gVi+DadXFibMjziKCuiddHDD
+         rNvgBRHgpVtV45mlf0h9/CUp4BKoMV/cbjXAtR51SnxwNuNfdrxLtMOlCWJt0tLMFL+f
+         BVuzmhvpxKeQoIvDC9guGycKyRvQzdMuQwGc+XMt+ebcRscUaXfD3ZdLNWNKHWyqByAM
+         EzKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CjDUy4DyLWqialDx+oLtHpMfqyOR8g2BaJhUO6gTmfk=;
+        b=A72Tn3WP4NUPugLYnfu77Kxm+YTqcJSs95jd4WUCwhroVF41zq8Z5optw2ahSIe65v
+         iJ/Z1xjT+rEBhkY/aBwLAXdyN8qPfrusPbbX3HshqsF4MehD8D3n8a9x4aaSSqfHfSNf
+         xuh0m23rqlxE/gXQLNJXi+lIvBNgxsatDqELiX416MK6/ilAV0sBbMcJjE6y4qEgHuBk
+         KdfcYXfW7lPMOo/hifyaY++4wfB9Bho1gtpzq3cIkWclsU11vNXN4CtxHqIMhHxYoCFU
+         bPQDfQbUmb0PUOg1Jw0c/Mjvv4dwYJgGqTNm32p4t/gE45OdO45JGnj+HlO7paR6swik
+         z0bQ==
+X-Gm-Message-State: AFqh2kqFpHiN+vxA1OjwVTKTn4OhshL11vdvP467+dh2Cc5HklI+3WFh
+        DHOcBa0OR9iiVwvBIR3BBcZkG6wqyR0oD3iQKOfy0g==
+X-Google-Smtp-Source: AMrXdXtiQi+hq88sxDOXcORmCgkHqXukWNpnyG/jVyI0iyqKDex2KRtHsGUn0omuHWxUotVBU5iAOsu5wA9jDefUICw=
+X-Received: by 2002:a0d:d882:0:b0:36f:f251:213b with SMTP id
+ a124-20020a0dd882000000b0036ff251213bmr3410913ywe.228.1672794040800; Tue, 03
+ Jan 2023 17:00:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103234616.never.915-kees@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-2-vipinsh@google.com>
+ <CAL715WKT_WbaUHT++tvnKr9fhGObiJpyKdD-zMmmcZnt4Bc=Gg@mail.gmail.com>
+In-Reply-To: <CAL715WKT_WbaUHT++tvnKr9fhGObiJpyKdD-zMmmcZnt4Bc=Gg@mail.gmail.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 3 Jan 2023 17:00:04 -0800
+Message-ID: <CAHVum0f9kxHBBR8mBQrA3FrNHvPvqkGE8qXxKJhrnKoE6XkySg@mail.gmail.com>
+Subject: Re: [Patch v3 1/9] KVM: x86/mmu: Repurpose KVM MMU shrinker to purge
+ shadow page caches
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        dmatlack@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 03:46:20PM -0800, Kees Cook wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed.
-> 
-> ext4_feat_ktype was setting the "release" handler to "kfree", which
-> doesn't have a matching function prototype. Add a simple wrapper
-> with the correct prototype.
-> 
-> This was found as a result of Clang's new -Wcast-function-type-strict
-> flag, which is more sensitive than the simpler -Wcast-function-type,
-> which only checks for type width mismatches.
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On Tue, Jan 3, 2023 at 11:32 AM Mingwei Zhang <mizhang@google.com> wrote:
+>
+> On Wed, Dec 21, 2022 at 6:35 PM Vipin Sharma <vipinsh@google.com> wrote:
+> >
+> > +static void mmu_free_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
+> > +                                    spinlock_t *cache_lock)
+> > +{
+> > +       int orig_nobjs;
+> > +
+> > +       spin_lock(cache_lock);
+> > +       orig_nobjs = cache->nobjs;
+> > +       kvm_mmu_free_memory_cache(cache);
+> > +       if (orig_nobjs)
+> > +               percpu_counter_sub(&kvm_total_unused_mmu_pages, orig_nobjs);
+> > +
+> > +       spin_unlock(cache_lock);
+> > +}
+>
+> I think the mmu_cache allocation and deallocation may cause the usage
+> of GFP_ATOMIC (as observed by other reviewers as well). Adding a new
+> lock would definitely sound like a plan, but I think it might affect
+> the performance. Alternatively, I am wondering if we could use a
+> mmu_cache_sequence similar to mmu_notifier_seq to help avoid the
+> concurrency?
+>
 
-Build-tested-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Can you explain more about the performance impact? Each vcpu will have
+its own mutex. So, only contention will be with the mmu_shrinker. This
+shrinker will use mutex_try_lock() which will not block to wait for
+the lock, it will just pass on to the next vcpu. While shrinker is
+holding the lock, vcpu will be blocked in the page fault path but I
+think it should not have a huge impact considering it will execute
+rarely and for a small time.
 
-Just for the record, this is the warning Clang reports without this
-patch:
+> Similar to mmu_notifier_seq, mmu_cache_sequence should be protected by
+> mmu write lock. In the page fault path, each vcpu has to collect a
+> snapshot of  mmu_cache_sequence before calling into
+> mmu_topup_memory_caches() and check the value again when holding the
+> mmu lock. If the value is different, that means the mmu_shrinker has
+> removed the cache objects and because of that, the vcpu should retry.
+>
 
-fs/ext4/sysfs.c:508:13: warning: cast from 'void (*)(const void *)' to 'void (*)(struct kobject *)' converts to incompatible function type [-Wcast-function-type-strict]
-
-Thanks
---
-Gustavo
-
-> ---
->  fs/ext4/sysfs.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
-> index d233c24ea342..83cf8b5afb54 100644
-> --- a/fs/ext4/sysfs.c
-> +++ b/fs/ext4/sysfs.c
-> @@ -491,6 +491,11 @@ static void ext4_sb_release(struct kobject *kobj)
->  	complete(&sbi->s_kobj_unregister);
->  }
->  
-> +static void ext4_kobject_release(struct kobject *kobj)
-> +{
-> +	kfree(kobj);
-> +}
-> +
->  static const struct sysfs_ops ext4_attr_ops = {
->  	.show	= ext4_attr_show,
->  	.store	= ext4_attr_store,
-> @@ -505,7 +510,7 @@ static struct kobj_type ext4_sb_ktype = {
->  static struct kobj_type ext4_feat_ktype = {
->  	.default_groups = ext4_feat_groups,
->  	.sysfs_ops	= &ext4_attr_ops,
-> -	.release	= (void (*)(struct kobject *))kfree,
-> +	.release	= ext4_kobject_release,
->  };
->  
->  void ext4_notify_error_sysfs(struct ext4_sb_info *sbi)
-> -- 
-> 2.34.1
-> 
+Yeah, this can be one approach. I think it will come down to the
+performance impact of using mutex which I don't think should be a
+concern.
