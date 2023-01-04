@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C2565D225
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1980665D232
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234651AbjADMMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
+        id S234559AbjADMQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 07:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjADMMp (ORCPT
+        with ESMTP id S233916AbjADMP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:12:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159542E4;
-        Wed,  4 Jan 2023 04:12:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A496661426;
-        Wed,  4 Jan 2023 12:12:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81AF9C433D2;
-        Wed,  4 Jan 2023 12:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672834364;
-        bh=2LM4YgK9ZwjTNPSN2P5IZrHlicBcI8kTMt/REMjAc98=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hxEg5IlT8BNPimyBbh61k0QbFTkMWB6pALC5qBmzuPUzhAdJ1O/ps1/S01t9QoWnS
-         DKlg3hsfGR5luWLAzrWvAPMKOmvpI4FpujQm0KyLWz+wmdCOxGogmTuXaGRSh8i3ZE
-         8FxegDtxke3qT2hG7LXmpGdVUfxh52Oy8IXMcdUCUWwN5qjmGAII4YR79t9HIyaBqP
-         EZm22UrAk+EE96zWeivUQMtyd/mSynCnyKEsDOw2h3IG7YZnlpeXfAhVmyG7t7gbX5
-         lO7Jv04rxaWxZXFGQwf3Qoat9E2SiOG1V+If8r7fRsnZBhtsjSWs01J8sP8hqMDf4W
-         k384F7fvHfOCg==
-Date:   Wed, 4 Jan 2023 12:12:41 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, ashish.kalra@amd.com, harald@profian.com,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v7 25/64] crypto: ccp: Add support to initialize the
- AMD-SP for SEV-SNP
-Message-ID: <Y7VtOQa5Hd0oMdfh@kernel.org>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-26-michael.roth@amd.com>
+        Wed, 4 Jan 2023 07:15:59 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E5411151
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 04:15:55 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id m129so28826647vsc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 04:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RUY5y6zLuR5cWqeaKguClMSYR6J/UjlVX1mPxUIDiqs=;
+        b=VJmLCb73UryNuQbimr+CbNAQyBR7W4yGvyxJvyca8oDYvWVnVqj7g5bHUTN+kxCSqc
+         M6J5m4XgBf1sk+dTvoAU7kZ1UGKnRYcbHKwWWAiSylFKzDL9AvRUMuX41zUuYfiOBQt8
+         V+gbQmCWzQaN1FoOm8Rk+sSHWLB8Mw37LriXHhPp0pyv1AzBjWqqw2YXYqArPHATvAUt
+         7uw6BA9hAHu+IUt4BQM/Iv0SrdL95Qj2YjPaXiZ2QqMMcsU/9zaAliVp6E6dUfAsWEmf
+         v5MWVFAq7jOmXc9qPJjvooQFevpcsoWnMQvWx+ODemG+r4SHxzPc4nhaAaj8tTDgduQn
+         jETA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RUY5y6zLuR5cWqeaKguClMSYR6J/UjlVX1mPxUIDiqs=;
+        b=d7Jt9BHdqrui8Cu1QMSgVZk5/6xuk3qkbNr8Hv3xu/hjSU327tfUIgGcqA5iAp6Hrw
+         5jqWDZSiETBg2j6XTA66kFvSOTOUB/h8ynCYoz1JqaGz75uza4ysSRqfwvm8wcR0H2Ze
+         BW8W9vojNIAUImYoazzsau40RnCoiN+6PSicaFjQw4nNCuVn/CkHQot2yZJELa78zAid
+         +XgFiEvnGI33btKxk16xzKsEWAdib/LoQbCasgMau57QwT5MJ/wDuWJ6h7wF40XhwcUW
+         ZvmZpZXwdDIVhmugwzXtB3wz1H8qxJv/ZlHenWkgqyTxXgnGWm7KgsihVkI/nKpA8Ij5
+         oiow==
+X-Gm-Message-State: AFqh2ko4hSBOVk0dZ+uWV1tNHYysNE99PDZlUJTJu/3C+Kf50FiM06rg
+        1yZH0ECZWj0imx6VF7hzFiibENzDoWvfk4cJ0qg=
+X-Google-Smtp-Source: AMrXdXs9Z6fy+tJM59MPMF0s8+Akct7I6gaT4gfcJFl0WIQDXbDv2TweXy/eYx9EaCLAbg4Zvcs+/VGDDKhatSS8Bfs=
+X-Received: by 2002:a67:5c03:0:b0:3ce:a7c5:3757 with SMTP id
+ q3-20020a675c03000000b003cea7c53757mr587901vsb.63.1672834554496; Wed, 04 Jan
+ 2023 04:15:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214194056.161492-26-michael.roth@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a9f:2d84:0:0:0:0:0 with HTTP; Wed, 4 Jan 2023 04:15:54 -0800 (PST)
+Reply-To: garryfoundation2022@gmail.com
+From:   Garry Myles <oluyedeblessing4@gmail.com>
+Date:   Wed, 4 Jan 2023 15:15:54 +0300
+Message-ID: <CAGHbOor6dJX1ws5Ji0MQYHOHZdAji7MraVGYpVYHXbgqs4W8Kw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e30 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7088]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [oluyedeblessing4[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [garryfoundation2022[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [oluyedeblessing4[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 01:40:17PM -0600, Michael Roth wrote:
-> +	/*
-> +	 * If boot CPU supports SNP, then first attempt to initialize
-> +	 * the SNP firmware.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_SEV_SNP)) {
-> +		if (!sev_version_greater_or_equal(SNP_MIN_API_MAJOR, SNP_MIN_API_MINOR)) {
-> +			dev_err(sev->dev, "SEV-SNP support requires firmware version >= %d:%d\n",
-> +				SNP_MIN_API_MAJOR, SNP_MIN_API_MINOR);
-> +		} else {
-> +			rc = sev_snp_init(&error, true);
-> +			if (rc) {
-> +				/*
-> +				 * Don't abort the probe if SNP INIT failed,
-> +				 * continue to initialize the legacy SEV firmware.
-> +				 */
-> +				dev_err(sev->dev, "SEV-SNP: failed to INIT error %#x\n", error);
-> +			}
-> +		}
-> +	}
+--=20
+Guten Tag
+Sie haben eine Spende von 2.000.000,00 =E2=82=AC von der GARRY CHARITY FOUN=
+DATION.
+Bitte kontaktieren Sie uns =C3=BCber: garryfoundation2022@gmail.com f=C3=BC=
+r
+weitere Informationen dar=C3=BCber, wie Sie diese Spende in Anspruch nehmen
+k=C3=B6nnen.
 
-I think this is not right as there is a dep between sev init and this,
-and there is about a dozen of call sites already __sev_platform_init_locked().
-
-Instead there should be __sev_snp_init_locked() that would be called as
-part of __sev_platform_init_locked() flow.
-
-Also TMR allocation should be moved inside __sev_platform_init_locked,
-given that it needs to be marked into RMP after SNP init.
-
-BR, Jarkko
-
+mit freundlichen Gr=C3=BC=C3=9Fen
+Garry Myles
