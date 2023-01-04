@@ -2,89 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B0565DE1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9AB65DE1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjADVNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 16:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S240157AbjADVOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 16:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjADVNi (ORCPT
+        with ESMTP id S229616AbjADVOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 16:13:38 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80541B9CB
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 13:13:37 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-466c5fb1c39so481088877b3.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 13:13:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rm/j0z462mdM8G/UYzJ5Uazs2w9/g+VBxs3TnQCWPbc=;
-        b=FOhn/gMU6U3jv24+NuZ1TYiqoPJmc8rFD0nwOSD/TV6yICBfuwk7ApX28XT6c3UX6U
-         Boq6xVaC8XWn2+Eeej8pEGEv/jdBsoRD/jPMyg/BemURBBn6BiImgjv6+oXdjr9h8T9C
-         LaQg/omj0fFdX5wlX6negdcjIfgD8WteEcyJiJwmLdx24hTgA+13/S1NWBdNGxmbxDg2
-         dtO9ZRuQ8+s4zW4E5HW68dWIab8NLQpL+avDRUkGX5nhoO0wg+cciuU9a0H38n/ghPNM
-         r0AJd58dYmYn4zlGD8Rxt1OXQMU1G6PnOMW3InGJNhSZYUyzeIYA7i8iyxQ3Pwmb3QWM
-         3A2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rm/j0z462mdM8G/UYzJ5Uazs2w9/g+VBxs3TnQCWPbc=;
-        b=A+XKwvTfrnLKRyWg5002RZRUVN0u5aMnJMwkR6xpKZQK4S8XzL5UVWqxIScQe9FXbr
-         CMHTM/fA4C/hbdD3n+1OkCCkPBu7VYGnqwYKt7dWThN4TAfRbid/UBYMq7f090rUcd1D
-         7baz3Z1rlJxgr6jJfdyFwaXpzOsih2h9CFNrX0M2FZ6UyLA2m9CeMK1mwxkEqcxAIVw2
-         TE3qmC25Qf+hRhLWxwzMxUpY59G2d3cKKKk1YUVrJVdwv9R3VSWxLy3x4S7RG5kX2Wfs
-         RxV5tdbfPCxgjkJqu3UWtNRVhqH0NVAgUxZLnNohCzkjZoN2HfIpbw3keaRfiZbKGrc1
-         BLkQ==
-X-Gm-Message-State: AFqh2koDBs7vEgqzW+KZ2kVw+wXpi17rzXQDeSzZbUgQZRGvRvYEssTk
-        EnxBYA4fUEEo/vWMZt57Flkc+2+PMS9aPzB/9sl2VDkQzq4=
-X-Google-Smtp-Source: AMrXdXuzUscg3toIJ/GWjXTw3UiHmASA3k4gv23QHRgPogVR9QFJJtq9XL8I8RHf+Y1hzh3UDMk98Jw3P52HzkCkTCs=
-X-Received: by 2002:a81:4817:0:b0:42c:cb4d:187 with SMTP id
- v23-20020a814817000000b0042ccb4d0187mr5534691ywa.78.1672866816816; Wed, 04
- Jan 2023 13:13:36 -0800 (PST)
+        Wed, 4 Jan 2023 16:14:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723A71CB24;
+        Wed,  4 Jan 2023 13:14:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E43D61826;
+        Wed,  4 Jan 2023 21:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078F6C433EF;
+        Wed,  4 Jan 2023 21:14:15 +0000 (UTC)
+Date:   Wed, 4 Jan 2023 16:14:12 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: [PATCH] tracing: Make sure trace_printk() can output as soon as it
+ can be used
+Message-ID: <20230104161412.019f6c55@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230104095049.59043-1-ppbuk5246@gmail.com> <Y7VT4gvLCQK7B1Ak@kernel.org>
- <CAM7-yPQakk1bwON8abPm6CpYGNy=MxAjoYXfWYQExY08hFkC9g@mail.gmail.com> <Y7VY66+BNvCF26dG@kernel.org>
-In-Reply-To: <Y7VY66+BNvCF26dG@kernel.org>
-From:   Yun Levi <ppbuk5246@gmail.com>
-Date:   Thu, 5 Jan 2023 06:13:26 +0900
-Message-ID: <CAM7-yPSjzP3_w=wXiRB-zDbeqxAZD+0x1jKkwiKeXgdNbgZshA@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH] memblock: Fix return sizeless candidate on __memblock_find_range_top_down.
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've got possessed by something... Sorry to make noise again :) Thanks!
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-On Wed, Jan 4, 2023 at 7:46 PM Mike Rapoport <rppt@kernel.org> wrote:
->
-> On Wed, Jan 04, 2023 at 07:33:25PM +0900, Yun Levi wrote:
-> > > Did you see an actual issue or it's solely based on code inspection?
-> >
-> > Based on code inspection. I haven't seen the actual issue yet :)
->
-> I don't see a problem there. Do you have an example how this could happen?
->
-> > Thanks.
-> >
-> > --
-> > Sincerely,
-> > Levi.
->
-> --
-> Sincerely yours,
-> Mike.
+Currently trace_printk() can be used as soon as early_trace_init() is
+called from start_kernel(). But if a crash happens, and
+"ftrace_dump_on_oops" is set on the kernel command line, all you get will
+be:
+
+  [    0.456075]   <idle>-0         0dN.2. 347519us : Unknown type 6
+  [    0.456075]   <idle>-0         0dN.2. 353141us : Unknown type 6
+  [    0.456075]   <idle>-0         0dN.2. 358684us : Unknown type 6
+
+This is because the trace_printk() event (type 6) hasn't been registered
+yet. That gets done via an early_initcall(), which may be early, but not
+early enough.
+
+Instead of registering the trace_printk() event (and other ftrace events,
+which are not trace events) via an early_initcall(), have them registered at
+the same time that trace_printk() can be used. This way, if there is a
+crash before early_initcall(), then the trace_printk()s will actually be
+useful.
+
+Cc: stable@vger.kernel.org
+Reported-by: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Fixes: e725c731e3bb1 ("tracing: Split tracing initialization into two for early initialization")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/trace.c        | 2 ++
+ kernel/trace/trace.h        | 1 +
+ kernel/trace/trace_output.c | 3 +--
+ 3 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index d3005279165d..80de338f1277 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -10196,6 +10196,8 @@ void __init early_trace_init(void)
+ 			static_key_enable(&tracepoint_printk_key.key);
+ 	}
+ 	tracer_alloc_buffers();
++
++	init_events();
+ }
+ 
+ void __init trace_init(void)
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 900e75d96c84..11c4918ff202 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -1504,6 +1504,7 @@ extern void trace_event_enable_cmd_record(bool enable);
+ extern void trace_event_enable_tgid_record(bool enable);
+ 
+ extern int event_trace_init(void);
++extern int init_events(void);
+ extern int event_trace_add_tracer(struct dentry *parent, struct trace_array *tr);
+ extern int event_trace_del_tracer(struct trace_array *tr);
+ extern void __trace_early_add_events(struct trace_array *tr);
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 67f47ea27921..5cd4fb656306 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -1568,7 +1568,7 @@ static struct trace_event *events[] __initdata = {
+ 	NULL
+ };
+ 
+-__init static int init_events(void)
++__init int init_events(void)
+ {
+ 	struct trace_event *event;
+ 	int i, ret;
+@@ -1581,4 +1581,3 @@ __init static int init_events(void)
+ 
+ 	return 0;
+ }
+-early_initcall(init_events);
+-- 
+2.35.1
+
