@@ -2,113 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C092F65CD3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A708F65CCF0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233456AbjADGki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S229688AbjADGXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbjADGkM (ORCPT
+        with ESMTP id S229457AbjADGXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:40:12 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD5118689
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 22:40:09 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id e10so7701893pgc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 22:40:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
-        b=lxucC7WdJqs/f6vnO0xyjDIiYvkO1zIUbY5dvzc1gS3dAy3OfQQYNJY3qgkIp4IvGC
-         Oi3Qiq2J4RL2YPCvlge/HIY6+nyJiUXFhgSIFyzAmwWVXagd97/PUtXlb5jfygBt6BRf
-         fwWN260uJVbK/yc9R8WuWezkJeUQdhpjES8XGIHyH3AdF/AFkNlz+YfQuZN2gO1EmOPc
-         8KKIj6/qhE8i3Fe0WWEG9u5kvwBFlkiVo2YRHtZuVzM09AJ0QQD44w0muYyCcKVpzTF1
-         KpA5Z3tjS1NOBVAYcaIMzzN2x6CIMAwuhChhhugpiMtk+ck5Mr24ICxbQ/8nSTPVum7J
-         QJOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
-        b=EgPzGAAdZptKeI/vrAe4UFOYeRPAsgX8zKy8VO7Gm2WDgZ7ugRXYNHRn7njt+CDF3a
-         FOaBfVSj/DLlRovTqByMqZbl48fD6+ruA3F0y5QqvANg1J29syS2TpPOprsm+jlypIcl
-         uQrW57P5Ao2zCVJs1cX6I8bbAYZ3AS77p5SmWSAqUaMtvfvOx/TEl98ePs6IcfR1gYkb
-         /KOAMcOCui+3WQra2PCbP5gh2A4Zq2MRG7Q+a1OVg8UK+rDric3Acunh8Ey6qAWx36zP
-         FE/l2MdRS8mnqlURyRtFM7xy5/vZ/O/jTXOXNDEdXy4D7z4xceYNJx6B3wu04KRqUFfR
-         VFaQ==
-X-Gm-Message-State: AFqh2kosRfO2UydGfoJauZ/lAuBWIG+utvvrsDjiWQyk/P+mazguOlNi
-        7D1M5x+cDWuM1rGlPTw/7NblwAdP4liz6NNSwGA=
-X-Google-Smtp-Source: AMrXdXtzEgdGNYXviASYnSqNJC0ZiQxlpsBhKtwlV/fC9EHlEQAD4b0ufCVYBzwI8FMubEJLf3ti+D5YEYUYV8QjtJ4=
-X-Received: by 2002:a62:1d07:0:b0:582:e7c:f6f3 with SMTP id
- d7-20020a621d07000000b005820e7cf6f3mr1157112pfd.8.1672814408803; Tue, 03 Jan
- 2023 22:40:08 -0800 (PST)
+        Wed, 4 Jan 2023 01:23:09 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7060413D67
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 22:23:08 -0800 (PST)
+Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NmzvZ2BC8zJpvD;
+        Wed,  4 Jan 2023 14:19:06 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
+ 2023 14:23:05 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <xiaolei.wang@windriver.com>, <l.stach@pengutronix.de>
+Subject: [PATCH] soc: imx8m: fix wrong return value check of of_clk_get_by_name()
+Date:   Wed, 4 Jan 2023 14:41:36 +0800
+Message-ID: <20230104064136.1695102-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Reply-To: mrs.maryander1947@gmail.com
-Sender: mrs.janeval197@gmail.com
-Received: by 2002:a05:7300:7652:b0:94:fcda:856a with HTTP; Tue, 3 Jan 2023
- 22:40:08 -0800 (PST)
-From:   "Mrs. Mary Anderson" <amrsmary16@gmail.com>
-Date:   Wed, 4 Jan 2023 06:40:08 +0000
-X-Google-Sender-Auth: jTqv_0vHyo2y0EStaK-jLA4ClSk
-Message-ID: <CAL+V8fx8n5YVCBnyPw3TzcFWBtXqZO5w+9A_JwP7BB54jJSoEA@mail.gmail.com>
-Subject: Dear Beloved,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:52c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5309]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrs.janeval197[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrs.maryander1947[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [amrsmary16[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+of_clk_get_by_name() never returns NULL pointer, it will return
+ERR_PTR() when it fails, so replace the check with IS_ERR().
 
-Dear Beloved,
+Fixes: 836fb30949d9 ("soc: imx8m: Enable OCOTP clock before reading the register")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/soc/imx/soc-imx8m.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I am Mrs. Mary Anderson, It is understandable that you may be a bit
-apprehensive because you do not know me, I found your email address
-from a Human resources database and decided to contact you. I would
-love to employ you into my charity work, I am ready to donate some
-money to you to carry on the Charity work in your country. Please
-reply so that i will give you further details and tell you about
-myself.
+diff --git a/drivers/soc/imx/soc-imx8m.c b/drivers/soc/imx/soc-imx8m.c
+index 28144c699b0c..32ed9dc88e45 100644
+--- a/drivers/soc/imx/soc-imx8m.c
++++ b/drivers/soc/imx/soc-imx8m.c
+@@ -66,8 +66,8 @@ static u32 __init imx8mq_soc_revision(void)
+ 	ocotp_base = of_iomap(np, 0);
+ 	WARN_ON(!ocotp_base);
+ 	clk = of_clk_get_by_name(np, NULL);
+-	if (!clk) {
+-		WARN_ON(!clk);
++	if (IS_ERR(clk)) {
++		WARN_ON(IS_ERR(clk));
+ 		return 0;
+ 	}
+ 
+-- 
+2.25.1
 
-Yours Sincerely
-Mrs. Mary Anderson
