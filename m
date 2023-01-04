@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB1765D73D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD8B65D740
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239173AbjADPaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S239478AbjADPaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:30:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjADPaC (ORCPT
+        with ESMTP id S239213AbjADPaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:30:02 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A83A140DC;
-        Wed,  4 Jan 2023 07:30:00 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-14455716674so40201201fac.7;
-        Wed, 04 Jan 2023 07:30:00 -0800 (PST)
+        Wed, 4 Jan 2023 10:30:20 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6AB1B9C9;
+        Wed,  4 Jan 2023 07:30:19 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id fy8so19443836ejc.13;
+        Wed, 04 Jan 2023 07:30:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NfxHydJ7vcXPQ6fPlrgCpC4AEcwL+rcytzyr1+pnLIg=;
-        b=jT+L3srWh2ZYUIkORPbrT1bXHkvtAhHuHovU35juyFt8hH9nhwxjFiU6ZTmvorFBcR
-         +CzjVpknBEhnaKh9qktPb0sFyoyqw+NLZwPBIQbrG1qgfYoeeSQBisd5lbFT28EyzBBW
-         1ajUawTyh6TWJTdCR/eu2/XEnb51oUqr2n7/Y3tIPchP4h+cZvG6oIS2DFB92uzQ4AzY
-         M0GDp4FhkzPneogxygdw//PlaSpZ+2ZiIZF7IE5rfy5wE9ci2p/ij1kJ4s9vcUIHHOAz
-         6OqqvC9gy50/AbqMQRlMwHdzxj0DeL+ROze8Z1RYvhWgTMCeKgv6K1v2FIh2woGL5qiF
-         lL/g==
+        bh=RlY5zc887o4HmnQmxYxtgGa5YwnXO1c9ubHXsFfKj/w=;
+        b=pbOa1icFKE3DphJvUEUO+QlWK5zCVsP0PI5DQcHnCWNZFfhX1W51ohvn228RBtGQzu
+         CFWAf5bsoM4x61CUXF3bk1PK1zNi59wXfnNlxOoEbVSahX7bfi1XgI9EL3HN29snyqjQ
+         cuitpahioxFArY6+AXzoHjUhicXXHkBUz3Kn9TfDwWkEAKXCI954h17Ie1imYZmE7pFX
+         z0aP9Qh9rnHChXD2awC47/YH9tf/e1BkFxDRs9LEqzPcaiLb59ODEnJR9nhVVYXeeoNV
+         a3ChPIrSrG3LXZ5gRtflQjRu12W2Ia7koQZSA74vSsVqpd82ariTScUNvxj+DQJc7fep
+         Woog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NfxHydJ7vcXPQ6fPlrgCpC4AEcwL+rcytzyr1+pnLIg=;
-        b=Wyk6bDpcAg72qgm84zhxEaDomsgwEtEX/tMEwaN6DbPGT6E8nTnLeWLknnwARgSE6P
-         GcHu3c0Ep3l47seDMm8jEKjlbdz88vR3XyF7B1RUF/luuipedpGSnQAxX3y+ZZDwiEYn
-         aU275BBaX5DurutiB29QG8/U+/ihldG+C9ZpJmYNRpY9sPKzza25H9DcneI+0a5wZNo+
-         QJZU4l3EJ84jmF32Nn97Ukpr8xfFFzwPV7Td4FwmgAizOJualUfSN348PFsySv4q9ltb
-         8qpJPIvUSkXBMW4/MVvSNlMXrQgBVbTOCYFmk3k4s+I0zg4oFlcvCVE0xxHb2BKB4Ptm
-         Ozmg==
-X-Gm-Message-State: AFqh2krBmjojYJKJ1svZrpGhphmgRjrXGcciFHkvSikces57QpwzuHx+
-        UI3WGq0jA42F/OWx+vHTBnf+8S1pV7HQD0r5Z9I=
-X-Google-Smtp-Source: AMrXdXthknk47AJCyahPlWiZVEC7YmaqDThEZmJspP8DPwuElsiR+5+3izzwlJdC3q3+FZgOVzhT8imOUbmeltiLt2E=
-X-Received: by 2002:a05:6870:ac10:b0:144:bf10:eecd with SMTP id
- kw16-20020a056870ac1000b00144bf10eecdmr3762840oab.204.1672846199424; Wed, 04
- Jan 2023 07:29:59 -0800 (PST)
+        bh=RlY5zc887o4HmnQmxYxtgGa5YwnXO1c9ubHXsFfKj/w=;
+        b=2QHFw4asUWE2AcleTv19MWlQWOTi4Zqvh5T9HDyKAzSuQa90JlASvmPLrb+6jJ2gnK
+         Ruysfo5FqqgCBm8gt9hyqeqq6X3GoJp1BTFK3po2xiECZa/MkuSSb/4HgeJfujGurmoD
+         GWdDPVN4FSLQ0RKjaeb4wclYkk+e70jMTNmEf23bjmeIRBrR5VHW+wKmPuS6DB4hoGWT
+         4Mm3O692wT4ezKOkD38W3twZXLeFuN8GclTE3F+789Ucbkt/LWjUOwa+40WnfkHAfDva
+         YIjRK1kjH8p91B6lGwopeT5duw86ByKpJr0prlC9PNxVXVBzFIN4pIYJXi/mwihuU7+W
+         RkVQ==
+X-Gm-Message-State: AFqh2kpkpdQjLDwb6GFTXZSlJp1SSGq2mS8V1x75hhbZZl1lLM5mKd52
+        CEc8CWPfPwDCuCAxgWT7zLNt4wGLpmmQ32TBdKY=
+X-Google-Smtp-Source: AMrXdXvJmnd3SsJYqbXkYBdYE92lok/9FJfVlIXR0snMPyAbpSQeVOltv/RKbd6e3C34bh6SgwpTS1YG31jJ8fMzjQ4=
+X-Received: by 2002:a17:906:81cf:b0:7c1:6b9e:6f5d with SMTP id
+ e15-20020a17090681cf00b007c16b9e6f5dmr4136083ejx.339.1672846218347; Wed, 04
+ Jan 2023 07:30:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20221228060346.352362-1-wedsonaf@gmail.com> <20221228060346.352362-4-wedsonaf@gmail.com>
- <20221231194352.55cf0a26.gary@garyguo.net>
-In-Reply-To: <20221231194352.55cf0a26.gary@garyguo.net>
-From:   Wedson Almeida Filho <wedsonaf@gmail.com>
-Date:   Wed, 4 Jan 2023 15:29:48 +0000
-Message-ID: <CANeycqrVsbNJ+A+A26LXkBezBNUHvnZU2Q3_whexCwwG5ZcgPQ@mail.gmail.com>
-Subject: Re: [PATCH 4/7] rust: sync: introduce `ArcBorrow`
-To:     Gary Guo <gary@garyguo.net>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org
+References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
+ <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
+ <92eb7dfa8b7d447e966a2751e174b642@realtek.com> <87da8c82dec749dc826b5a1b4c4238aa@AcuMS.aculab.com>
+ <eee17e2f4e44a2f38021a839dc39fedc1c1a4141.camel@realtek.com>
+ <a86893f11fe64930897473a38226a9a8@AcuMS.aculab.com> <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
+In-Reply-To: <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 4 Jan 2023 16:30:07 +0100
+Message-ID: <CAFBinCC+1jGJx1McnBY+kr3RTQ-UpxW6JYNpHzStUTredDuCug@mail.gmail.com>
+Subject: Re: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+To:     Ping-Ke Shih <pkshih@realtek.com>,
+        "David.Laight@ACULAB.COM" <david.laight@aculab.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tehuang@realtek.com" <tehuang@realtek.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,160 +77,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 31 Dec 2022 at 19:43, Gary Guo <gary@garyguo.net> wrote:
->
-> On Wed, 28 Dec 2022 06:03:43 +0000
-> Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
->
-> > This allows us to create references to a ref-counted allocation without
-> > double-indirection and that still allow us to increment the refcount to
-> > a new `Arc<T>`.
-> >
-> > Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> > ---
-> >  rust/kernel/sync.rs     |  2 +-
-> >  rust/kernel/sync/arc.rs | 97 +++++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 98 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-> > index 39b379dd548f..5de03ea83ea1 100644
-> > --- a/rust/kernel/sync.rs
-> > +++ b/rust/kernel/sync.rs
-> > @@ -7,4 +7,4 @@
-> >
-> >  mod arc;
-> >
-> > -pub use arc::Arc;
-> > +pub use arc::{Arc, ArcBorrow};
-> > diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> > index dbc7596cc3ce..f68bfc02c81a 100644
-> > --- a/rust/kernel/sync/arc.rs
-> > +++ b/rust/kernel/sync/arc.rs
-> > @@ -19,6 +19,7 @@ use crate::{bindings, error::Result, types::Opaque};
-> >  use alloc::boxed::Box;
-> >  use core::{
-> >      marker::{PhantomData, Unsize},
-> > +    mem::ManuallyDrop,
-> >      ops::Deref,
-> >      ptr::NonNull,
-> >  };
-> > @@ -164,6 +165,18 @@ impl<T: ?Sized> Arc<T> {
-> >              _p: PhantomData,
-> >          }
-> >      }
-> > +
-> > +    /// Returns an [`ArcBorrow`] from the given [`Arc`].
-> > +    ///
-> > +    /// This is useful when the argument of a function call is an [`ArcBorrow`] (e.g., in a method
-> > +    /// receiver), but we have an [`Arc`] instead. Getting an [`ArcBorrow`] is free when optimised.
-> > +    #[inline]
-> > +    pub fn as_arc_borrow(&self) -> ArcBorrow<'_, T> {
-> > +        // SAFETY: The constraint that the lifetime of the shared reference must outlive that of
-> > +        // the returned `ArcBorrow` ensures that the object remains alive and that no mutable
-> > +        // reference can be created.
-> > +        unsafe { ArcBorrow::new(self.ptr) }
-> > +    }
-> >  }
-> >
-> >  impl<T: ?Sized> Deref for Arc<T> {
-> > @@ -208,3 +221,87 @@ impl<T: ?Sized> Drop for Arc<T> {
-> >          }
-> >      }
-> >  }
-> > +
-> > +/// A borrowed reference to an [`Arc`] instance.
-> > +///
-> > +/// For cases when one doesn't ever need to increment the refcount on the allocation, it is simpler
-> > +/// to use just `&T`, which we can trivially get from an `Arc<T>` instance.
-> > +///
-> > +/// However, when one may need to increment the refcount, it is preferable to use an `ArcBorrow<T>`
-> > +/// over `&Arc<T>` because the latter results in a double-indirection: a pointer (shared reference)
-> > +/// to a pointer (`Arc<T>`) to the object (`T`). An [`ArcBorrow`] eliminates this double
-> > +/// indirection while still allowing one to increment the refcount and getting an `Arc<T>` when/if
-> > +/// needed.
-> > +///
-> > +/// # Invariants
-> > +///
-> > +/// There are no mutable references to the underlying [`Arc`], and it remains valid for the
-> > +/// lifetime of the [`ArcBorrow`] instance.
-> > +///
-> > +/// # Example
-> > +///
-> > +/// ```
-> > +/// use crate::sync::{Arc, ArcBorrow};
-> > +///
-> > +/// struct Example;
-> > +///
-> > +/// fn do_something(e: ArcBorrow<'_, Example>) -> Arc<Example> {
-> > +///     e.into()
-> > +/// }
-> > +///
-> > +/// let obj = Arc::try_new(Example)?;
-> > +/// let cloned = do_something(obj.as_arc_borrow());
-> > +///
-> > +/// // Assert that both `obj` and `cloned` point to the same underlying object.
-> > +/// assert!(core::ptr::eq(&*obj, &*cloned));
-> > +/// ```
-> > +pub struct ArcBorrow<'a, T: ?Sized + 'a> {
-> > +    inner: NonNull<ArcInner<T>>,
-> > +    _p: PhantomData<&'a ()>,
-> > +}
-> > +
-> > +impl<T: ?Sized> Clone for ArcBorrow<'_, T> {
-> > +    fn clone(&self) -> Self {
-> > +        *self
-> > +    }
-> > +}
-> > +
-> > +impl<T: ?Sized> Copy for ArcBorrow<'_, T> {}
->
-> Couldn't this just be derived `Clone` and `Copy`?
+Hi Ping-Ke, Hi David,
 
-Indeed. I'll send a v2 with this.
+On Sun, Jan 1, 2023 at 2:09 PM Ping-Ke Shih <pkshih@realtek.com> wrote:
+[...]
+> Yes, it should not use bit filed. Instead, use a __le16 for all fields, such as
+I think this can be done in a separate patch.
+My v2 of this patch has reduced these changes to a minimum, see [0]
 
+[...]
+> struct rtw8821ce_efuse {
+>    ...
+>    u8 data1;       // offset 0x100
+>    __le16 data2;   // offset 0x101-0x102
+>    ...
+> } __packed;
 >
-> > +
-> > +impl<T: ?Sized> ArcBorrow<'_, T> {
-> > +    /// Creates a new [`ArcBorrow`] instance.
-> > +    ///
-> > +    /// # Safety
-> > +    ///
-> > +    /// Callers must ensure the following for the lifetime of the returned [`ArcBorrow`] instance:
-> > +    /// 1. That `inner` remains valid;
-> > +    /// 2. That no mutable references to `inner` are created.
-> > +    unsafe fn new(inner: NonNull<ArcInner<T>>) -> Self {
-> > +        // INVARIANT: The safety requirements guarantee the invariants.
-> > +        Self {
-> > +            inner,
-> > +            _p: PhantomData,
-> > +        }
-> > +    }
-> > +}
-> > +
-> > +impl<T: ?Sized> From<ArcBorrow<'_, T>> for Arc<T> {
-> > +    fn from(b: ArcBorrow<'_, T>) -> Self {
-> > +        // SAFETY: The existence of `b` guarantees that the refcount is non-zero. `ManuallyDrop`
-> > +        // guarantees that `drop` isn't called, so it's ok that the temporary `Arc` doesn't own the
-> > +        // increment.
-> > +        ManuallyDrop::new(unsafe { Arc::from_inner(b.inner) })
-> > +            .deref()
-> > +            .clone()
-> > +    }
-> > +}
->
-> It might be easier to follow if this is jsut `bindings::refcount_inc`
-> followed by `Arc::from_inner`?
+> Without __packed, compiler could has pad between data1 and data2,
+> and then get wrong result.
+My understanding is that this is the reason why we need __packed.
 
-I'd prefer to keep the interactions with `refcount_t` in `Arc` only so
-that we can more easily change it in the future if we so choose.
+So my idea for the next steps is:
+- I will send a v3 of my series but change the wording in the commit
+description so it only mentions padding (but dropping the re-ordering
+part)
+- maybe Ping-Ke or his team can send a patch to fix the endian/bit
+field problem in the PCIe eFuse structs
+- (I'll keep working on SDIO support)
 
-> > +
-> > +impl<T: ?Sized> Deref for ArcBorrow<'_, T> {
-> > +    type Target = T;
-> > +
-> > +    fn deref(&self) -> &Self::Target {
-> > +        // SAFETY: By the type invariant, the underlying object is still alive with no mutable
-> > +        // references to it, so it is safe to create a shared reference.
-> > +        unsafe { &self.inner.as_ref().data }
-> > +    }
-> > +}
+Does this make sense to both of you?
+
+
+Best regards,
+Martin
+
+
+[0] https://lore.kernel.org/linux-wireless/20221229124845.1155429-2-martin.blumenstingl@googlemail.com/
