@@ -2,440 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACB265D4B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2C265D4B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239292AbjADNuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:50:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S235144AbjADNwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234427AbjADNuh (ORCPT
+        with ESMTP id S239354AbjADNwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:50:37 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D3319C15;
-        Wed,  4 Jan 2023 05:50:35 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 31F60320090D;
-        Wed,  4 Jan 2023 08:50:34 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute5.internal (MEProxy); Wed, 04 Jan 2023 08:50:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1672840233; x=1672926633; bh=Qt
-        g0MOHgi6seiuHK1iiy3zhwcnkqZAht7543FYU1Zhg=; b=rRBeZNT6lHBhV/Mk04
-        o1ubEL1+r4dtrFspiC0fS4jgPl3pVolvEOGrCQS2AmOwjqpYEA3iNvKGyxeeLupr
-        429YYOYGTXS8oh9VUH6DoJQSuRABbJnsJHJ4aqdG3fWFuh4VW+eh2vS87XGVQ2bZ
-        Hpaaf5PxKRPuqAQ9pYDm3AjJIflc6nMGp3IJg4ngh1hk8TzlcDXiekD/SlDjbMjY
-        oPy+GA2TBqt4vKil9TAd1rxP+UyK+aTBorr8pIlnCZkDRAL5hAuL8hT1DcEeFolJ
-        iD1+UqThFnXrWaqbLPuxGFpX59wRDSZPwRo0SwtoHC9VisMISFFxvAKzqcAWagGE
-        e+vA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672840233; x=1672926633; bh=Qtg0MOHgi6seiuHK1iiy3zhwcnkq
-        ZAht7543FYU1Zhg=; b=U3Q7/qamlPcHNMEien4RW5OP2k8iASjzwdWenqRAyl1L
-        /BHTlQHQwId2jWivWMxbH9+O9d/qcpMjsGstr9wAdbDRk6Yacd7Eotf9rfQjvEe0
-        MXD+bVZISOZQW2ghtcm0f6HfMsHpNDmMnBzJnwwiw084IVMwS63tKHqd/a9Czuuq
-        OyDsg9mBjQ1IXXO0vuZO3Z8KgbngHqwlIPLXfqVo3MktZFThYcrKlbGov3C6VDsy
-        9FLYhwpBNn1eDLYjZuIteeNPkR7do9Qkqqy+tKcYHuW7bu6HEZOgofweuPjonxxK
-        Qbsr5TJVgFH6oRDNceJ8/p2VKYbWx3Xtr9D659Hh0A==
-X-ME-Sender: <xms:KYS1Yz1DGeXrKCfmfqpyQdH3bJdMhRmRNh-9UModOWEF0LhKEPcsdQ>
-    <xme:KYS1YyGLXGh2-1ctpmtvF5RU2wxz6Zrv92Rnx7FC4tcsohyKXq4Sv6lR3yidR4wIn
-    UBRxr87xPTPOsZc170>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigdehjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
-    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:KYS1Yz47M2ylRWv33VUIv-jM5LrUvWrSwig2k5Bgcd7IPBezlyNrRQ>
-    <xmx:KYS1Y41ZFb_RqDmxhwjlGrhYve6Op_1bskc9Ph5cG0Q6FDirSs3PWA>
-    <xmx:KYS1Y2GTy5qA9Bp5bpRt1YCDeoKf41Y_x2mLnIeyah1YvbooVFC4HQ>
-    <xmx:KYS1Y--_MZ0uPwfjmPUDY3L0BRrQbbFgn0as0c7Nw4FU8htB8fSTQA>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8D882A60082; Wed,  4 Jan 2023 08:50:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <bebc741d-bcbe-4449-9379-be70fd65b0f0@app.fastmail.com>
-In-Reply-To: <20230104110013.24738-8-marcan@marcan.st>
-References: <20230104110013.24738-1-marcan@marcan.st>
- <20230104110013.24738-8-marcan@marcan.st>
-Date:   Wed, 04 Jan 2023 14:50:07 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Hector Martin" <marcan@marcan.st>,
-        "Joerg Roedel" <joro@8bytes.org>, "Will Deacon" <will@kernel.org>,
-        "Robin Murphy" <robin.murphy@arm.com>
-Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Janne Grunau" <j@jannau.net>, "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, iommu@lists.linux.dev,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] iommu: dart: Add t8110 DART support
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 08:52:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3195C7657;
+        Wed,  4 Jan 2023 05:52:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A15AF6173D;
+        Wed,  4 Jan 2023 13:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2B5BC433EF;
+        Wed,  4 Jan 2023 13:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672840320;
+        bh=zESvBys6+ijsskoiD+WZAQfcK9HlkvwqKa5QFLGE1+k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RzK+HN/GgtdsCdbn2JfClMtYHrLB+Q54mgXbsqtwIx8SyQZ4JRS0hQviCOPvmn6zt
+         V8xGTINAh6SdwWQjlTaCRYWHUla2RCeaccZc3Zr1SFpOlZcWMnS22eh+AsYKaQVS8L
+         5T6pWaWNFAowfSNGGgGugaOaCxD49U+kjM4dIaNFCdH1V1boAFVvfXOataMRp87M0c
+         aRKAfm4QVy7eDdJQzSQvjdUHFBsADtopCPJ5x4Hq4GQg9pracJljqowtVUD2snqqBb
+         s1UJEU3pyaVLLLnd/P2zLZHBK4AKx1FDQ2BAMD/9E69Jepr5x5PzUQM5WopNpIDmMV
+         L7W5X66GPo1fw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0160740468; Wed,  4 Jan 2023 10:51:56 -0300 (-03)
+Date:   Wed, 4 Jan 2023 10:51:56 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH 3/4] perf bpf_counter: Handle unsupported cgroup events
+Message-ID: <Y7WEfDHc5xw6x3t8@kernel.org>
+References: <20230104064402.1551516-1-namhyung@kernel.org>
+ <20230104064402.1551516-4-namhyung@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104064402.1551516-4-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023, at 12:00, Hector Martin wrote:
-> Now that we have the driver properly parameterized, we can add support
-> for T8110 DARTs. These DARTs drop the multiple TTBRs (which only make
-> sense with legacy 4K page platforms) and instead add support for new
-> features and more stream IDs. The register layout is different, but the
-> pagetable format is the same as T6000.
->
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+Em Tue, Jan 03, 2023 at 10:44:01PM -0800, Namhyung Kim escreveu:
+> When --for-each-cgroup option is used, it failed when any of events is not
+> supported and it exited immediately.  This is not how perf stat handles the
+> unsupported events.  Let's ignore the failure and proceed with others.
+> 
+> Before:
+>   $ sudo ./perf stat -a --bpf-counters -e L1-icache-loads,L1-dcache-loads \
+>   > --for-each-cgroup system.slice,user.slice  sleep 1
+>   Failed to open first cgroup events
+
+Interesting, tried the above on a arm64 machine and it all works:
+
+root@roc-rk3399-pc:~# strace -e bpf,perf_event_open perf stat -a --bpf-counters -e L1-icache-loads,L1-dcache-loads --for-each-cgroup system.slice,user.slice sleep 1
+bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_SOCKET_FILTER, insn_cnt=2, insns=0xffffd36afc98, license="GPL", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(0, 0, 0), prog_flags=0, prog_name="", prog_ifindex=0, expected_attach_type=BPF_CGROUP_INET_INGRESS, prog_btf_fd=0, func_info_rec_size=0, func_info=NULL, func_info_cnt=0, line_info_rec_size=0, line_info=NULL, line_info_cnt=0, attach_btf_id=0, attach_prog_fd=0}, 116) = 5
+bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_SOCKET_FILTER, insn_cnt=2, insns=0xffffd36afee8, license="GPL", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(0, 0, 0), prog_flags=0, prog_name="", prog_ifindex=0, expected_attach_type=BPF_CGROUP_INET_INGRESS, prog_btf_fd=0, func_info_rec_size=0, func_info=NULL, func_info_cnt=0, line_info_rec_size=0, line_info=NULL, line_info_cnt=0, attach_btf_id=0, attach_prog_fd=0, fd_array=NULL}, 128) = 5
+bpf(BPF_BTF_LOAD, {btf="\237\353\1\0\30\0\0\0\0\0\0\0\20\0\0\0\20\0\0\0\5\0\0\0\1\0\0\0\0\0\0\1"..., btf_log_buf=NULL, btf_size=45, btf_log_size=0, btf_log_level=0}, 28) = 5
+bpf(BPF_BTF_LOAD, {btf="\237\353\1\0\30\0\0\0\0\0\0\0000\0\0\0000\0\0\0\t\0\0\0\1\0\0\0\0\0\0\1"..., btf_log_buf=NULL, btf_size=81, btf_log_size=0, btf_log_level=0}, 28) = 5
+bpf(BPF_BTF_LOAD, {btf="\237\353\1\0\30\0\0\0\0\0\0\08\0\0\08\0\0\0\t\0\0\0\0\0\0\0\0\0\0\1"..., btf_log_buf=NULL, btf_size=89, btf_log_size=0, btf_log_level=0}, 28) = 5
+bpf(BPF_BTF_LOAD, {btf="\237\353\1\0\30\0\0\0\0\0\0\0\f\0\0\0\f\0\0\0\7\0\0\0\1\0\0\0\0\0\0\20"..., btf_log_buf=NULL, btf_size=43, btf_log_size=0, btf_log_level=0}, 28) = 5
+bpf(BPF_BTF_LOAD, {btf="\237\353\1\0\30\0\0\0\0\0\0\0000\0\0\0000\0\0\0\t\0\0\0\1\0\0\0\0\0\0\1"..., btf_log_buf=NULL, btf_size=81, btf_log_size=0, btf_log_level=0}, 28) = 5
+bpf(BPF_BTF_LOAD, {btf="\237\353\1\0\30\0\0\0\0\0\0\0000\0\0\0000\0\0\0\5\0\0\0\0\0\0\0\0\0\0\1"..., btf_log_buf=NULL, btf_size=77, btf_log_size=0, btf_log_level=0}, 28) = 5
+bpf(BPF_BTF_LOAD, {btf="\237\353\1\0\30\0\0\0\0\0\0\0(\0\0\0(\0\0\0\5\0\0\0\0\0\0\0\0\0\0\1"..., btf_log_buf=NULL, btf_size=69, btf_log_size=0, btf_log_level=0}, 28) = 5
+bpf(BPF_BTF_LOAD, {btf="\237\353\1\0\30\0\0\0\0\0\0\0\f\0\0\0\f\0\0\0\10\0\0\0\1\0\0\0\0\0\0\23"..., btf_log_buf=NULL, btf_size=44, btf_log_size=0, btf_log_level=0}, 28) = 5
+bpf(BPF_BTF_LOAD, {btf="\237\353\1\0\30\0\0\0\0\0\0\0@G\0\0@G\0\0\2725\0\0\0\0\0\0\0\0\0\2"..., btf_log_buf=NULL, btf_size=32018, btf_log_size=0, btf_log_level=0}, 28) = 5
+bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_SOCKET_FILTER, insn_cnt=2, insns=0xffffd36afb18, license="GPL", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(0, 0, 0), prog_flags=0, prog_name="libbpf_nametest"}, 64) = 6
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_ARRAY, key_size=4, value_size=4, max_entries=1, map_flags=BPF_F_MMAPABLE, inner_map_fd=0, map_name="libbpf_mmap", map_ifindex=0, btf_fd=0, btf_key_type_id=0, btf_value_type_id=0, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 6
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_PERF_EVENT_ARRAY, key_size=4, value_size=4, max_entries=12, map_flags=0, inner_map_fd=0, map_name="events", map_ifindex=0, btf_fd=0, btf_key_type_id=0, btf_value_type_id=0, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 6
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_HASH, key_size=8, value_size=4, max_entries=2, map_flags=0, inner_map_fd=0, map_name="cgrp_idx", map_ifindex=0, btf_fd=5, btf_key_type_id=0, btf_value_type_id=0, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 7
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_PERCPU_ARRAY, key_size=4, value_size=24, max_entries=2, map_flags=0, inner_map_fd=0, map_name="prev_readings", map_ifindex=0, btf_fd=5, btf_key_type_id=0, btf_value_type_id=0, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 9
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_PERCPU_ARRAY, key_size=4, value_size=24, max_entries=4, map_flags=0, inner_map_fd=0, map_name="cgrp_readings", map_ifindex=0, btf_fd=5, btf_key_type_id=0, btf_value_type_id=0, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 10
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_ARRAY, key_size=4, value_size=32, max_entries=1, map_flags=0, inner_map_fd=0, map_name="libbpf_global", map_ifindex=0, btf_fd=0, btf_key_type_id=0, btf_value_type_id=0, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 11
+bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_SOCKET_FILTER, insn_cnt=5, insns=0xffffd36afb80, license="GPL", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(0, 0, 0), prog_flags=0, prog_name="", prog_ifindex=0, expected_attach_type=BPF_CGROUP_INET_INGRESS, prog_btf_fd=0, func_info_rec_size=0, func_info=NULL, func_info_cnt=0, line_info_rec_size=0, line_info=NULL, line_info_cnt=0, attach_btf_id=0, attach_prog_fd=0, fd_array=NULL}, 128) = 12
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_ARRAY, key_size=4, value_size=8, max_entries=1, map_flags=BPF_F_RDONLY_PROG|BPF_F_MMAPABLE, inner_map_fd=0, map_name="bperf_cg.rodata", map_ifindex=0, btf_fd=5, btf_key_type_id=0, btf_value_type_id=413, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 11
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=11, key=0xffffd36afcdc, value=0xffff8da49000, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_FREEZE, {map_fd=11}, 4)     = 0
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_ARRAY, key_size=4, value_size=8, max_entries=1, map_flags=BPF_F_MMAPABLE, inner_map_fd=0, map_name="bperf_cg.bss", map_ifindex=0, btf_fd=5, btf_key_type_id=0, btf_value_type_id=410, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 12
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=12, key=0xffffd36afcdc, value=0xffff8da48000, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_ARRAY, key_size=4, value_size=4, max_entries=1, map_flags=BPF_F_MMAPABLE, inner_map_fd=0, map_name="bperf_cg.data", map_ifindex=0, btf_fd=5, btf_key_type_id=0, btf_value_type_id=411, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 13
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=13, key=0xffffd36afcdc, value=0xffff8da47000, flags=BPF_ANY}, 32) = 0
+bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_TRACEPOINT, insn_cnt=6, insns=0xffffd36afd48, license="GPL", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(0, 0, 0), prog_flags=0, prog_name="", prog_ifindex=0, expected_attach_type=BPF_CGROUP_INET_INGRESS, prog_btf_fd=0, func_info_rec_size=0, func_info=NULL, func_info_cnt=0, line_info_rec_size=0, line_info=NULL, line_info_cnt=0, attach_btf_id=0, attach_prog_fd=0, fd_array=NULL}, 128) = 14
+bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_PERF_EVENT, insn_cnt=306, insns=0xaaaaf14b9de0, license="Dual BSD/GPL", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(6, 1, 0), prog_flags=0, prog_name="on_cgrp_switch", prog_ifindex=0, expected_attach_type=BPF_CGROUP_INET_INGRESS, prog_btf_fd=5, func_info_rec_size=8, func_info=0xaaaaf14baec0, func_info_cnt=2, line_info_rec_size=16, line_info=0xaaaaf1491390, line_info_cnt=109, attach_btf_id=0, attach_prog_fd=0, fd_array=NULL}, 128) = 14
+bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_ARRAY, key_size=4, value_size=32, max_entries=1, map_flags=0, inner_map_fd=0, map_name="libbpf_det_bind", map_ifindex=0, btf_fd=0, btf_key_type_id=0, btf_value_type_id=0, btf_vmlinux_value_type_id=0, map_extra=0}, 72) = 15
+bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_SOCKET_FILTER, insn_cnt=2, insns=0xffffd36af358, license="GPL", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(0, 0, 0), prog_flags=0, prog_name="", prog_ifindex=0, expected_attach_type=BPF_CGROUP_INET_INGRESS, prog_btf_fd=0, func_info_rec_size=0, func_info=NULL, func_info_cnt=0, line_info_rec_size=0, line_info=NULL, line_info_cnt=0, attach_btf_id=0, attach_prog_fd=0, fd_array=NULL}, 128) = 16
+bpf(BPF_PROG_BIND_MAP, 0xffffd36af288, 12) = 0
+bpf(BPF_PROG_BIND_MAP, 0xffffd36af398, 12) = 0
+bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_RAW_TRACEPOINT, insn_cnt=306, insns=0xaaaaf1491a70, license="Dual BSD/GPL", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(6, 1, 0), prog_flags=0, prog_name="trigger_read", prog_ifindex=0, expected_attach_type=BPF_CGROUP_INET_INGRESS, prog_btf_fd=5, func_info_rec_size=8, func_info=0xaaaaf14b9ad0, func_info_cnt=2, line_info_rec_size=16, line_info=0xaaaaf1492710, line_info_cnt=109, attach_btf_id=0, attach_prog_fd=0, fd_array=NULL}, 128) = 15
+bpf(BPF_PROG_BIND_MAP, 0xffffd36af398, 12) = 0
+perf_event_open({type=PERF_TYPE_SOFTWARE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_SW_CGROUP_SWITCHES, sample_period=1, sample_type=0, read_format=0, disabled=1, precise_ip=0 /* arbitrary skid */, ...}, -1, 0, -1, PERF_FLAG_FD_CLOEXEC) = 16
+perf_event_open({type=PERF_TYPE_SOFTWARE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_SW_CGROUP_SWITCHES, sample_period=1, sample_type=0, read_format=0, disabled=1, precise_ip=0 /* arbitrary skid */, ...}, -1, 1, -1, PERF_FLAG_FD_CLOEXEC) = 17
+perf_event_open({type=PERF_TYPE_SOFTWARE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_SW_CGROUP_SWITCHES, sample_period=1, sample_type=0, read_format=0, disabled=1, precise_ip=0 /* arbitrary skid */, ...}, -1, 2, -1, PERF_FLAG_FD_CLOEXEC) = 18
+perf_event_open({type=PERF_TYPE_SOFTWARE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_SW_CGROUP_SWITCHES, sample_period=1, sample_type=0, read_format=0, disabled=1, precise_ip=0 /* arbitrary skid */, ...}, -1, 3, -1, PERF_FLAG_FD_CLOEXEC) = 19
+perf_event_open({type=PERF_TYPE_SOFTWARE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_SW_CGROUP_SWITCHES, sample_period=1, sample_type=0, read_format=0, disabled=1, precise_ip=0 /* arbitrary skid */, ...}, -1, 4, -1, PERF_FLAG_FD_CLOEXEC) = 20
+perf_event_open({type=PERF_TYPE_SOFTWARE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_SW_CGROUP_SWITCHES, sample_period=1, sample_type=0, read_format=0, disabled=1, precise_ip=0 /* arbitrary skid */, ...}, -1, 5, -1, PERF_FLAG_FD_CLOEXEC) = 21
+bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_TRACEPOINT, insn_cnt=2, insns=0xffffd36afe28, license="GPL", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(0, 0, 0), prog_flags=0, prog_name="", prog_ifindex=0, expected_attach_type=BPF_CGROUP_INET_INGRESS, prog_btf_fd=0, func_info_rec_size=0, func_info=NULL, func_info_cnt=0, line_info_rec_size=0, line_info=NULL, line_info_cnt=0, attach_btf_id=0, attach_prog_fd=0, fd_array=NULL}, 128) = 22
+bpf(BPF_LINK_CREATE, {link_create={prog_fd=22, target_fd=-1, attach_type=BPF_PERF_EVENT, flags=0}}, 48) = -1 EBADF (Bad file descriptor)
+bpf(BPF_LINK_CREATE, {link_create={prog_fd=14, target_fd=16, attach_type=BPF_PERF_EVENT, flags=0}}, 48) = 22
+bpf(BPF_LINK_CREATE, {link_create={prog_fd=14, target_fd=17, attach_type=BPF_PERF_EVENT, flags=0}}, 48) = 23
+bpf(BPF_LINK_CREATE, {link_create={prog_fd=14, target_fd=18, attach_type=BPF_PERF_EVENT, flags=0}}, 48) = 24
+bpf(BPF_LINK_CREATE, {link_create={prog_fd=14, target_fd=19, attach_type=BPF_PERF_EVENT, flags=0}}, 48) = 25
+bpf(BPF_LINK_CREATE, {link_create={prog_fd=14, target_fd=20, attach_type=BPF_PERF_EVENT, flags=0}}, 48) = 26
+bpf(BPF_LINK_CREATE, {link_create={prog_fd=14, target_fd=21, attach_type=BPF_PERF_EVENT, flags=0}}, 48) = 27
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1I, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 0, -1, PERF_FLAG_FD_CLOEXEC) = 28
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1I, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 1, -1, PERF_FLAG_FD_CLOEXEC) = 29
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1I, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 2, -1, PERF_FLAG_FD_CLOEXEC) = 30
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1I, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 3, -1, PERF_FLAG_FD_CLOEXEC) = 31
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1I, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 4, -1, PERF_FLAG_FD_CLOEXEC) = 32
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1I, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 5, -1, PERF_FLAG_FD_CLOEXEC) = 33
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=7, key=0xaaaaf14c1c58, value=0xffffd36b005c, flags=BPF_ANY}, 32) = 0
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1D, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 0, -1, PERF_FLAG_FD_CLOEXEC) = 34
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1D, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 1, -1, PERF_FLAG_FD_CLOEXEC) = 35
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1D, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 2, -1, PERF_FLAG_FD_CLOEXEC) = 36
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1D, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 3, -1, PERF_FLAG_FD_CLOEXEC) = 37
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1D, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 4, -1, PERF_FLAG_FD_CLOEXEC) = 38
+perf_event_open({type=PERF_TYPE_HW_CACHE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CACHE_RESULT_ACCESS<<16|PERF_COUNT_HW_CACHE_OP_READ<<8|PERF_COUNT_HW_CACHE_L1D, sample_period=0, sample_type=0, read_format=0, precise_ip=0 /* arbitrary skid */, exclude_guest=1, ...}, -1, 5, -1, PERF_FLAG_FD_CLOEXEC) = 39
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=6, key=0xffffd36b00b0, value=0xffffd36b0060, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_UPDATE_ELEM, {map_fd=7, key=0xaaaaf14c2278, value=0xffffd36b005c, flags=BPF_ANY}, 32) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=0}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=0}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=1}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=2}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=3}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=4}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=5}}, 80) = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=8741, si_uid=0, si_status=0, si_utime=0, si_stime=1} ---
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=0}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=1}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=2}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=3}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=4}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=5}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=0}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=1}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=2}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=3}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=4}}, 80) = 0
+bpf(BPF_PROG_TEST_RUN, {test={prog_fd=15, retval=0, data_size_in=0, data_size_out=0, data_in=NULL, data_out=NULL, repeat=0, duration=0, ctx_size_in=0, ctx_size_out=0, ctx_in=NULL, ctx_out=NULL, flags=BPF_F_TEST_RUN_ON_CPU, cpu=5}}, 80) = 0
+bpf(BPF_MAP_LOOKUP_ELEM, {map_fd=10, key=0xffffd36b0004, value=0xaaaaf14be350, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_LOOKUP_ELEM, {map_fd=10, key=0xffffd36b0004, value=0xaaaaf14be350, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_LOOKUP_ELEM, {map_fd=10, key=0xffffd36b0004, value=0xaaaaf14be350, flags=BPF_ANY}, 32) = 0
+bpf(BPF_MAP_LOOKUP_ELEM, {map_fd=10, key=0xffffd36b0004, value=0xaaaaf14be350, flags=BPF_ANY}, 32) = 0
+
+ Performance counter stats for 'system wide':
+
+             46116      L1-icache-loads                  system.slice
+             15864      L1-dcache-loads                  system.slice
+           8685400      L1-icache-loads                  user.slice
+           3686787      L1-dcache-loads                  user.slice
+
+       1.021264798 seconds time elapsed
+
+--- SIGCHLD {si_signo=SIGCHLD, si_code=SI_USER, si_pid=8740, si_uid=0} ---
++++ exited with 0 +++
+root@roc-rk3399-pc:~#
+root@roc-rk3399-pc:~# perf -vv
+perf version 6.2.rc2.gfb710ddee75f
+                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+                 glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
+         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+                libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
+            debuginfod: [ OFF ]  # HAVE_DEBUGINFOD_SUPPORT
+                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+               libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
+             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+               libpfm4: [ OFF ]  # HAVE_LIBPFM
+         libtraceevent: [ on  ]  # HAVE_LIBTRACEEVENT
+root@roc-rk3399-pc:~#
+root@roc-rk3399-pc:~# head -8 /proc/cpuinfo
+processor	: 0
+BogoMIPS	: 48.00
+Features	: fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer	: 0x41
+CPU architecture: 8
+CPU variant	: 0x0
+CPU part	: 0xd03
+CPU revision	: 4
+root@roc-rk3399-pc:~# uname -a
+Linux roc-rk3399-pc 6.1.0-rc5-00123-g4dd7ff4a0311 #2 SMP PREEMPT Wed Nov 16 19:55:11 UTC 2022 aarch64 aarch64 aarch64 GNU/Linux
+root@roc-rk3399-pc:~#
+
+So these events are supported there, lets see with something else..
+
+Before:
+
+root@roc-rk3399-pc:~# perf stat -a --bpf-counters -e LLC-loads,LLC-stores --for-each-cgroup system.slice,user.slice sleep 1
+Failed to open first cgroup events
+root@roc-rk3399-pc:~#
+
+After:
+
+root@roc-rk3399-pc:~# perf stat -a --bpf-counters -e LLC-loads,LLC-stores --for-each-cgroup system.slice,user.slice sleep 1
+
+ Performance counter stats for 'system wide':
+
+   <not supported>      LLC-loads                        system.slice                                          
+   <not supported>      LLC-stores                       system.slice                                          
+   <not supported>      LLC-loads                        user.slice                                            
+   <not supported>      LLC-stores                       user.slice                                            
+
+       1.016196455 seconds time elapsed
+
+root@roc-rk3399-pc:~# 
+
+And with mixed supported/unsupported:
+
+root@roc-rk3399-pc:~# perf stat -a --bpf-counters -e LLC-loads,LLC-stores,L1-icache-loads,L1-dcache-loads --for-each-cgroup system.slice,user.slice sleep 1
+
+ Performance counter stats for 'system wide':
+
+   <not supported>      LLC-loads                        system.slice                                          
+   <not supported>      LLC-stores                       system.slice                                          
+            180903      L1-icache-loads                  system.slice                                          
+             66861      L1-dcache-loads                  system.slice                                          
+   <not supported>      LLC-loads                        user.slice                                            
+   <not supported>      LLC-stores                       user.slice                                            
+           2948290      L1-icache-loads                  user.slice                                            
+           1962675      L1-dcache-loads                  user.slice                                            
+
+       1.016265003 seconds time elapsed
+
+root@roc-rk3399-pc:~#
+
+Applied,
+
+- Arnaldo
+ 
+> After:
+>   $ sudo ./perf stat -a --bpf-counters -e L1-icache-loads,L1-dcache-loads \
+>   > --for-each-cgroup system.slice,user.slice  sleep 1
+> 
+>    Performance counter stats for 'system wide':
+> 
+>      <not supported>      L1-icache-loads                  system.slice
+>           29,892,418      L1-dcache-loads                  system.slice
+>      <not supported>      L1-icache-loads                  user.slice
+>           52,497,220      L1-dcache-loads                  user.slice
+> 
+> Fixes: 944138f048f7d ("perf stat: Enable BPF counter with --for-each-cgroup")
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 > ---
-
-One minor nit below, otherwise
-
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
-
-
->  drivers/iommu/apple-dart.c | 206 ++++++++++++++++++++++++++++++++++++-
->  1 file changed, 201 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-> index 396da83f2f9e..e9cbdb45448c 100644
-> --- a/drivers/iommu/apple-dart.c
-> +++ b/drivers/iommu/apple-dart.c
-> @@ -85,6 +85,62 @@
->  #define DART_T8020_TTBR_ADDR_OFF 0
->  #define DART_T8020_TTBR_SHIFT 12
+>  tools/perf/util/bpf_counter_cgroup.c | 14 +++-----------
+>  1 file changed, 3 insertions(+), 11 deletions(-)
 > 
-> +/* T8110 registers */
-> +
-> +#define DART_T8110_PARAMS3 0x08
-> +#define DART_T8110_PARAMS3_PA_WIDTH GENMASK(29, 24)
-> +#define DART_T8110_PARAMS3_VA_WIDTH GENMASK(21, 16)
-> +#define DART_T8110_PARAMS3_VER_MAJ GENMASK(15, 8)
-> +#define DART_T8110_PARAMS3_VER_MIN GENMASK(7, 0)
-> +
-> +#define DART_T8110_PARAMS4 0x0c
-> +#define DART_T8110_PARAMS4_NUM_CLIENTS GENMASK(24, 16)
-> +#define DART_T8110_PARAMS4_NUM_SIDS GENMASK(8, 0)
-> +
-> +#define DART_T8110_TLB_CMD              0x80
-> +#define DART_T8110_TLB_CMD_BUSY         BIT(31)
-> +#define DART_T8110_TLB_CMD_OP           GENMASK(10, 8)
-> +#define DART_T8110_TLB_CMD_OP_FLUSH_ALL 0
-> +#define DART_T8110_TLB_CMD_OP_FLUSH_SID 1
-> +#define DART_T8110_TLB_CMD_STREAM       GENMASK(7, 0)
-> +
-> +#define DART_T8110_ERROR 0x100
-> +#define DART_T8110_ERROR_STREAM GENMASK(27, 20)
-> +#define DART_T8110_ERROR_CODE GENMASK(14, 0)
-> +#define DART_T8110_ERROR_FLAG BIT(31)
-> +
-> +#define DART_T8110_ERROR_MASK 0x104
-> +
-> +#define DART_T8110_ERROR_READ_FAULT BIT(4)
-> +#define DART_T8110_ERROR_WRITE_FAULT BIT(3)
-> +#define DART_T8110_ERROR_NO_PTE BIT(3)
-> +#define DART_T8110_ERROR_NO_PMD BIT(2)
-> +#define DART_T8110_ERROR_NO_PGD BIT(1)
-> +#define DART_T8110_ERROR_NO_TTBR BIT(0)
-> +
-> +#define DART_T8110_ERROR_ADDR_LO 0x170
-> +#define DART_T8110_ERROR_ADDR_HI 0x174
-> +
-> +#define DART_T8110_PROTECT 0x200
-> +#define DART_T8110_UNPROTECT 0x204
-> +#define DART_T8110_PROTECT_LOCK 0x208
-> +#define DART_T8110_PROTECT_TTBR_TCR BIT(0)
-
-Do you have any more details on this registers? For the 8103 DART
-we called it _CONFIG but I assume for the t8110 DART it can
-actually lock different parts of the HW instead of just a global lock?
-
-> +
-> +#define DART_T8110_ENABLE_STREAMS  0xc00
-> +#define DART_T8110_DISABLE_STREAMS 0xc20
-> +
-> +#define DART_T8110_TCR                  0x1000
-> +#define DART_T8110_TCR_REMAP            GENMASK(11, 8)
-> +#define DART_T8110_TCR_REMAP_EN         BIT(7)
-> +#define DART_T8110_TCR_BYPASS_DAPF      BIT(2)
-> +#define DART_T8110_TCR_BYPASS_DART      BIT(1)
-> +#define DART_T8110_TCR_TRANSLATE_ENABLE BIT(0)
-> +
-> +#define DART_T8110_TTBR       0x1400
-> +#define DART_T8110_TTBR_VALID BIT(0)
-> +#define DART_T8110_TTBR_ADDR_OFF 2
-> +#define DART_T8110_TTBR_SHIFT 14
-> +
->  #define DART_TCR(dart, sid) ((dart)->hw->tcr + ((sid) << 2))
-> 
->  #define DART_TTBR(dart, sid, idx) ((dart)->hw->ttbr + \
-> @@ -93,7 +149,14 @@
-> 
->  struct apple_dart_stream_map;
-> 
-> +enum dart_type {
-
-Minor nit: enum apple_dart_type to be consistent with the rest of the driver.
-
-> +	DART_T8020,
-> +	DART_T6000,
-> +	DART_T8110,
-> +};
-> +
->  struct apple_dart_hw {
-> +	enum dart_type type;
->  	irqreturn_t (*irq_handler)(int irq, void *dev);
->  	int (*invalidate_tlb)(struct apple_dart_stream_map *stream_map);
-> 
-> @@ -150,6 +213,8 @@ struct apple_dart {
-> 
->  	spinlock_t lock;
-> 
-> +	u32 ias;
-> +	u32 oas;
->  	u32 pgsize;
->  	u32 num_streams;
->  	u32 supports_bypass : 1;
-> @@ -331,6 +396,44 @@ apple_dart_t8020_hw_stream_command(struct 
-> apple_dart_stream_map *stream_map,
->  	return 0;
->  }
-> 
-> +static int
-> +apple_dart_t8110_hw_tlb_command(struct apple_dart_stream_map 
-> *stream_map,
-> +				u32 command)
-> +{
-> +	struct apple_dart *dart = stream_map->dart;
-> +	unsigned long flags;
-> +	int ret = 0;
-> +	int sid;
-> +
-> +	spin_lock_irqsave(&dart->lock, flags);
-> +
-> +	for_each_set_bit(sid, stream_map->sidmap, dart->num_streams) {
-> +		u32 val = FIELD_PREP(DART_T8110_TLB_CMD_OP, command) |
-> +			FIELD_PREP(DART_T8110_TLB_CMD_STREAM, sid);
-> +		writel(val, dart->regs + DART_T8110_TLB_CMD);
-> +
-> +		ret = readl_poll_timeout_atomic(
-> +			dart->regs + DART_T8110_TLB_CMD, val,
-> +			!(val & DART_T8110_TLB_CMD_BUSY), 1,
-> +			DART_STREAM_COMMAND_BUSY_TIMEOUT);
-> +
-> +		if (ret)
-> +			break;
-> +
-> +	}
-> +
-> +	spin_unlock_irqrestore(&dart->lock, flags);
-> +
-> +	if (ret) {
-> +		dev_err(stream_map->dart->dev,
-> +			"busy bit did not clear after command %x for stream %d\n",
-> +			command, sid);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int
->  apple_dart_t8020_hw_invalidate_tlb(struct apple_dart_stream_map 
-> *stream_map)
->  {
-> @@ -338,6 +441,13 @@ apple_dart_t8020_hw_invalidate_tlb(struct 
-> apple_dart_stream_map *stream_map)
->  		stream_map, DART_T8020_STREAM_COMMAND_INVALIDATE);
->  }
-> 
-> +static int
-> +apple_dart_t8110_hw_invalidate_tlb(struct apple_dart_stream_map *stream_map)
-> +{
-> +	return apple_dart_t8110_hw_tlb_command(
-> +		stream_map, DART_T8110_TLB_CMD_OP_FLUSH_SID);
-> +}
-> +
->  static int apple_dart_hw_reset(struct apple_dart *dart)
->  {
->  	u32 config;
-> @@ -364,6 +474,9 @@ static int apple_dart_hw_reset(struct apple_dart *dart)
->  	/* clear any pending errors before the interrupt is unmasked */
->  	writel(readl(dart->regs + dart->hw->error), dart->regs + dart->hw->error);
-> 
-> +	if (dart->hw->type == DART_T8110)
-> +		writel(0,  dart->regs + DART_T8110_ERROR_MASK);
-> +
->  	return dart->hw->invalidate_tlb(&stream_map);
->  }
-> 
-> @@ -479,8 +592,8 @@ static int apple_dart_finalize_domain(struct 
-> iommu_domain *domain,
-> 
->  	pgtbl_cfg = (struct io_pgtable_cfg){
->  		.pgsize_bitmap = dart->pgsize,
-> -		.ias = 32,
-> -		.oas = dart->hw->oas,
-> +		.ias = dart->ias,
-> +		.oas = dart->oas,
->  		.coherent_walk = 1,
->  		.iommu_dev = dart->dev,
->  	};
-> @@ -494,7 +607,7 @@ static int apple_dart_finalize_domain(struct 
-> iommu_domain *domain,
-> 
->  	domain->pgsize_bitmap = pgtbl_cfg.pgsize_bitmap;
->  	domain->geometry.aperture_start = 0;
-> -	domain->geometry.aperture_end = DMA_BIT_MASK(32);
-> +	domain->geometry.aperture_end = DMA_BIT_MASK(dart->ias);
->  	domain->geometry.force_aperture = true;
-> 
->  	dart_domain->finalized = true;
-> @@ -881,10 +994,49 @@ static irqreturn_t apple_dart_t8020_irq(int irq, 
-> void *dev)
->  	return IRQ_HANDLED;
->  }
-> 
-> +static irqreturn_t apple_dart_t8110_irq(int irq, void *dev)
-> +{
-> +	struct apple_dart *dart = dev;
-> +	const char *fault_name = NULL;
-> +	u32 error = readl(dart->regs + DART_T8110_ERROR);
-> +	u32 error_code = FIELD_GET(DART_T8110_ERROR_CODE, error);
-> +	u32 addr_lo = readl(dart->regs + DART_T8110_ERROR_ADDR_LO);
-> +	u32 addr_hi = readl(dart->regs + DART_T8110_ERROR_ADDR_HI);
-> +	u64 addr = addr_lo | (((u64)addr_hi) << 32);
-> +	u8 stream_idx = FIELD_GET(DART_T8110_ERROR_STREAM, error);
-> +
-> +	if (!(error & DART_T8110_ERROR_FLAG))
-> +		return IRQ_NONE;
-> +
-> +	/* there should only be a single bit set but let's use == to be sure */
-> +	if (error_code == DART_T8110_ERROR_READ_FAULT)
-> +		fault_name = "READ FAULT";
-> +	else if (error_code == DART_T8110_ERROR_WRITE_FAULT)
-> +		fault_name = "WRITE FAULT";
-> +	else if (error_code == DART_T8110_ERROR_NO_PTE)
-> +		fault_name = "NO PTE FOR IOVA";
-> +	else if (error_code == DART_T8110_ERROR_NO_PMD)
-> +		fault_name = "NO PMD FOR IOVA";
-> +	else if (error_code == DART_T8110_ERROR_NO_PGD)
-> +		fault_name = "NO PGD FOR IOVA";
-> +	else if (error_code == DART_T8110_ERROR_NO_TTBR)
-> +		fault_name = "NO TTBR FOR IOVA";
-> +	else
-> +		fault_name = "unknown";
-> +
-> +	dev_err_ratelimited(
-> +		dart->dev,
-> +		"translation fault: status:0x%x stream:%d code:0x%x (%s) at 0x%llx",
-> +		error, stream_idx, error_code, fault_name, addr);
-> +
-> +	writel(error, dart->regs + DART_T8110_ERROR);
-> +	return IRQ_HANDLED;
-> +}
-> +
->  static int apple_dart_probe(struct platform_device *pdev)
->  {
->  	int ret;
-> -	u32 dart_params[2];
-> +	u32 dart_params[4];
->  	struct resource *res;
->  	struct apple_dart *dart;
->  	struct device *dev = &pdev->dev;
-> @@ -924,7 +1076,22 @@ static int apple_dart_probe(struct platform_device *pdev)
->  	dart->pgsize = 1 << FIELD_GET(DART_PARAMS1_PAGE_SHIFT, dart_params[0]);
->  	dart->supports_bypass = dart_params[1] & DART_PARAMS2_BYPASS_SUPPORT;
-> 
-> -	dart->num_streams = dart->hw->max_sid_count;
-> +	switch (dart->hw->type) {
-> +	case DART_T8020:
-> +	case DART_T6000:
-> +		dart->ias = 32;
-> +		dart->oas = dart->hw->oas;
-> +		dart->num_streams = dart->hw->max_sid_count;
-> +		break;
-> +
-> +	case DART_T8110:
-> +		dart_params[2] = readl(dart->regs + DART_T8110_PARAMS3);
-> +		dart_params[3] = readl(dart->regs + DART_T8110_PARAMS4);
-> +		dart->ias = FIELD_GET(DART_T8110_PARAMS3_VA_WIDTH, dart_params[2]);
-> +		dart->oas = FIELD_GET(DART_T8110_PARAMS3_PA_WIDTH, dart_params[2]);
-> +		dart->num_streams = FIELD_GET(DART_T8110_PARAMS4_NUM_SIDS, dart_params[3]);
-> +		break;
-> +	}
-> 
->  	if (dart->num_streams > DART_MAX_STREAMS) {
->  		dev_err(&pdev->dev, "Too many streams (%d > %d)\n",
-> @@ -987,6 +1154,7 @@ static int apple_dart_remove(struct platform_device *pdev)
->  }
-> 
->  static const struct apple_dart_hw apple_dart_hw_t8103 = {
-> +	.type = DART_T8020,
->  	.irq_handler = apple_dart_t8020_irq,
->  	.invalidate_tlb = apple_dart_t8020_hw_invalidate_tlb,
->  	.oas = 36,
-> @@ -1011,6 +1179,7 @@ static const struct apple_dart_hw apple_dart_hw_t8103 = {
->  	.ttbr_count = 4,
->  };
->  static const struct apple_dart_hw apple_dart_hw_t6000 = {
-> +	.type = DART_T6000,
->  	.irq_handler = apple_dart_t8020_irq,
->  	.invalidate_tlb = apple_dart_t8020_hw_invalidate_tlb,
->  	.oas = 42,
-> @@ -1035,6 +1204,32 @@ static const struct apple_dart_hw apple_dart_hw_t6000 = {
->  	.ttbr_count = 4,
->  };
-> 
-> +static const struct apple_dart_hw apple_dart_hw_t8110 = {
-> +	.type = DART_T8110,
-> +	.irq_handler = apple_dart_t8110_irq,
-> +	.invalidate_tlb = apple_dart_t8110_hw_invalidate_tlb,
-> +	.fmt = APPLE_DART2,
-> +	.max_sid_count = 256,
-> +
-> +	.enable_streams = DART_T8110_ENABLE_STREAMS,
-> +	.disable_streams = DART_T8110_DISABLE_STREAMS,
-> +	.lock = DART_T8110_PROTECT,
-> +	.lock_bit = DART_T8110_PROTECT_TTBR_TCR,
-> +
-> +	.error = DART_T8110_ERROR,
-> +
-> +	.tcr = DART_T8110_TCR,
-> +	.tcr_enabled = DART_T8110_TCR_TRANSLATE_ENABLE,
-> +	.tcr_disabled = 0,
-> +	.tcr_bypass = DART_T8110_TCR_BYPASS_DAPF | DART_T8110_TCR_BYPASS_DART,
-> +
-> +	.ttbr = DART_T8110_TTBR,
-> +	.ttbr_valid = DART_T8110_TTBR_VALID,
-> +	.ttbr_addr_off = DART_T8110_TTBR_ADDR_OFF,
-> +	.ttbr_shift = DART_T8110_TTBR_SHIFT,
-> +	.ttbr_count = 1,
-> +};
-> +
->  static __maybe_unused int apple_dart_suspend(struct device *dev)
->  {
->  	struct apple_dart *dart = dev_get_drvdata(dev);
-> @@ -1076,6 +1271,7 @@ DEFINE_SIMPLE_DEV_PM_OPS(apple_dart_pm_ops, 
-> apple_dart_suspend, apple_dart_resum
-> 
->  static const struct of_device_id apple_dart_of_match[] = {
->  	{ .compatible = "apple,t8103-dart", .data = &apple_dart_hw_t8103 },
-> +	{ .compatible = "apple,t8110-dart", .data = &apple_dart_hw_t8110 },
->  	{ .compatible = "apple,t6000-dart", .data = &apple_dart_hw_t6000 },
->  	{},
->  };
+> diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
+> index 3c2df7522f6f..1c82377ed78b 100644
+> --- a/tools/perf/util/bpf_counter_cgroup.c
+> +++ b/tools/perf/util/bpf_counter_cgroup.c
+> @@ -116,27 +116,19 @@ static int bperf_load_program(struct evlist *evlist)
+>  
+>  			/* open single copy of the events w/o cgroup */
+>  			err = evsel__open_per_cpu(evsel, evsel->core.cpus, -1);
+> -			if (err) {
+> -				pr_err("Failed to open first cgroup events\n");
+> -				goto out;
+> -			}
+> +			if (err == 0)
+> +				evsel->supported = true;
+>  
+>  			map_fd = bpf_map__fd(skel->maps.events);
+>  			perf_cpu_map__for_each_cpu(cpu, j, evsel->core.cpus) {
+>  				int fd = FD(evsel, j);
+>  				__u32 idx = evsel->core.idx * total_cpus + cpu.cpu;
+>  
+> -				err = bpf_map_update_elem(map_fd, &idx, &fd,
+> -							  BPF_ANY);
+> -				if (err < 0) {
+> -					pr_err("Failed to update perf_event fd\n");
+> -					goto out;
+> -				}
+> +				bpf_map_update_elem(map_fd, &idx, &fd, BPF_ANY);
+>  			}
+>  
+>  			evsel->cgrp = leader_cgrp;
+>  		}
+> -		evsel->supported = true;
+>  
+>  		if (evsel->cgrp == cgrp)
+>  			continue;
 > -- 
-> 2.35.1
+> 2.39.0.314.g84b9a713c41-goog
+
+-- 
+
+- Arnaldo
