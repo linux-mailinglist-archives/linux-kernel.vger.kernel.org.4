@@ -2,181 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738AB65DAF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38C665DAFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239858AbjADRIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 12:08:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
+        id S239917AbjADRKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 12:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239882AbjADRIL (ORCPT
+        with ESMTP id S239446AbjADRJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 12:08:11 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E0113F5D;
-        Wed,  4 Jan 2023 09:08:10 -0800 (PST)
-Received: from mercury (dyndsl-085-016-198-046.ewe-ip-backbone.de [85.16.198.46])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 859F26602C47;
-        Wed,  4 Jan 2023 17:08:08 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672852088;
-        bh=lmwv+XzzktDTWq1Kr388hqTnxr0aFQF0m/DEo/weZG8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l6p0FYd98aQNOvCOwOkBj0KQ2y+MuC3j586/RziM4EGREiImJxcNITnRkTEEb1VU8
-         U/BOMe5fsuOzTZtpdc+PmPRuutkiagwP9hqaL5XUaOH6mLDjPp/dl123aZQQJ8rqte
-         ZcFHTnZ7XgHZmS803G44RaaX+B+7yjzD3hmgtbTpPalCUWsKyROJOZMYXlwjnUZSKP
-         +KuAFigrBD37qrUPsuzxuOmX87R46ez8IkANJFZbqC7PdtEXDJIiQZxbOmypaqbt0d
-         NBuGrlvR6GIyKVYIDc9Zu/tztZ0PVDtraLf9o27UR2TrFKPew8dzt5p+G3GkigGwzP
-         nsx29Qrycxj8w==
-Received: by mercury (Postfix, from userid 1000)
-        id 461411060772; Wed,  4 Jan 2023 18:08:06 +0100 (CET)
-Date:   Wed, 4 Jan 2023 18:08:06 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Clement Leger <clement.leger@bootlin.com>,
-        Julian Vetter <jvetter@kalray.eu>
-Subject: Re: [RFC PATCH 19/25] kvx: power: scall poweroff driver
-Message-ID: <20230104170806.jrb6qnoyk6buzvg5@mercury.elektranox.org>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
- <20230103164359.24347-20-ysionneau@kalray.eu>
+        Wed, 4 Jan 2023 12:09:46 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E1E11807
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 09:09:44 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id j16-20020a056830271000b0067202045ee9so21103504otu.7
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 09:09:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v3SV/pRZ8kBLvbm32yVCANFhuKrE0mqli+M9WEjG9/g=;
+        b=NtTfzMp8Uv94LYMmBNgNaWa9k9Ic79F8HfGVm5DUTWxbedBe8PI3OYGixCm9Ha5j6s
+         Obuyi5r92oltw8vsC0VKaJqx5GNYRDAFjoBZMFRCpobo/w3PahmqlKl8nHq9E0OKc4Vr
+         1JAXBIVNmONvfMwfCcdE1enfS2hHVXKX4SqCDfRvNzPXEvE4iMyOK9q5Kf4hIjjWGRUN
+         pa8frZ89+Des6b/G9LuVpyQF2HBSmVijA+o7ZKb+rqdaKO5KZ5CBMFTE9VE7dYPzEPLB
+         ++07iMgR2x+P273wPRftk51Z1zs37AuQdsLhL0GWBnlTcH6xCMEMcMyXSt1nSpOK3W6a
+         Tvgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v3SV/pRZ8kBLvbm32yVCANFhuKrE0mqli+M9WEjG9/g=;
+        b=0Ye6Hdoga6GrRbhNF6FH5yGfukU4bf5U0F+9EvJi3LBFoPp7XOF7YOo7KE9pVIaFpo
+         O6ei08HBTEWaAyFeTT/W7/L0/EHGAh3/pZNCdsu7cdgVG37OjBTpVRm3Y23w7TrgXjWe
+         EM2nx79Som5x2PWVMtVrfgH8bWrPZi0fRVAPunOp7cen8vrmiRMu9/CpROy3TLy8/zIW
+         YqBioT1zidSe548WdwnCEAL4xryVrqwRJHFfv8Y9nfGVW03OJ+f6rDVCVFcR4EX7GMbb
+         V+z03lyjToJZ471hxIIWE9F/QoXKe/aEgHXNu7ggmXXz197DugPrF6dTHoUXMnB95Or5
+         qEyw==
+X-Gm-Message-State: AFqh2koyAn0xbLxrx11lWt03jZLBAjM1uuXIcS2D7+EscW2sF359WPYB
+        wpJezwcR9KK4HJ5Z543M4kbiOFX6LYN6KOf1ZPI=
+X-Google-Smtp-Source: AMrXdXsO5U+hyynlhinfooNiyQdtVxoQct8y+ZUzoE8fk296xHwLprRJoY/m4CkymQXu9HHO3iCbJULL7895QurkJZM=
+X-Received: by 2002:a9d:62d1:0:b0:675:cde9:90b9 with SMTP id
+ z17-20020a9d62d1000000b00675cde990b9mr3163048otk.123.1672852184006; Wed, 04
+ Jan 2023 09:09:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uq66y7ogcsufp33e"
-Content-Disposition: inline
-In-Reply-To: <20230103164359.24347-20-ysionneau@kalray.eu>
+References: <20230104164042.30271-1-mario.limonciello@amd.com> <20230104164042.30271-6-mario.limonciello@amd.com>
+In-Reply-To: <20230104164042.30271-6-mario.limonciello@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 4 Jan 2023 12:09:32 -0500
+Message-ID: <CADnq5_M-JFEYtEOJyBAP1Z9zBkA-=ck8ZZMUC5eJ42zp-_9KjQ@mail.gmail.com>
+Subject: Re: [PATCH v5 05/45] drm/amd: Add a new helper for loading/validating microcode
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        linux-kernel@vger.kernel.org, "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Lazar Lijo <Lijo.Lazar@amd.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Carlos Soriano Sanchez <csoriano@redhat.com>,
+        David Airlie <airlied@gmail.com>, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---uq66y7ogcsufp33e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Tue, Jan 03, 2023 at 05:43:53PM +0100, Yann Sionneau wrote:
-> Add a driver to poweroff the Coolidge SoC
-> when running under Qemu, ISS or when
-> the debugger (jtag-runner) runs on PL0
-> to catch the scall.
-
-line length of 41 characters is quite short.
-
-> CC: Sebastian Reichel <sre@kernel.org>
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-pm@vger.kernel.org
-> Co-developed-by: Clement Leger <clement.leger@bootlin.com>
-> Signed-off-by: Clement Leger <clement.leger@bootlin.com>
-> Co-developed-by: Julian Vetter <jvetter@kalray.eu>
-> Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+On Wed, Jan 4, 2023 at 11:42 AM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> All microcode runs a basic validation after it's been loaded. Each
+> IP block as part of init will run both.
+>
+> Introduce a wrapper for request_firmware and amdgpu_ucode_validate.
+> This wrapper will also remap any error codes from request_firmware
+> to -ENODEV.  This is so that early_init will fail if firmware couldn't
+> be loaded instead of the IP block being disabled.
+>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/power/reset/kvx-scall-poweroff.c | 53 ++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 drivers/power/reset/kvx-scall-poweroff.c
->=20
-> diff --git a/drivers/power/reset/kvx-scall-poweroff.c b/drivers/power/res=
-et/kvx-scall-poweroff.c
-> new file mode 100644
-> index 000000000000..586d93fbcaed
-> --- /dev/null
-> +++ b/drivers/power/reset/kvx-scall-poweroff.c
-> @@ -0,0 +1,53 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+> v4->v5:
+>  * Rename symbols for amdgpu_ucode_request/amdgpu_ucode_release
+>  * Make argument const
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c | 36 +++++++++++++++++++++++
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h |  3 ++
+>  2 files changed, 39 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+> index eafcddce58d3..dc6af1fffdd9 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+> @@ -1312,3 +1312,39 @@ void amdgpu_ucode_ip_version_decode(struct amdgpu_device *adev, int block_type,
+>
+>         snprintf(ucode_prefix, len, "%s_%d_%d_%d", ip_name, maj, min, rev);
+>  }
+> +
 > +/*
-> + * Copyright (c) 2017 - 2022 Kalray Inc.
-> + * Author(s): Clement Leger
+> + * amdgpu_ucode_request - Fetch and validate amdgpu microcode
+> + *
+> + * @adev: amdgpu device
+> + * @fw: pointer to load firmware to
+> + * @fw_name: firmware to load
+> + *
+> + * This is a helper that will use request_firmware and amdgpu_ucode_validate
+> + * to load and run basic validation on firmware. If the load fails, remap
+> + * the error code to -ENODEV, so that early_init functions will fail to load.
 > + */
-> +
-> +#include <linux/pm.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define SCALL_NUM_EXIT	"0xfff"
-> +
-> +static void kvx_scall_poweroff(void)
+> +int amdgpu_ucode_request(struct amdgpu_device *adev, const struct firmware **fw,
+> +                        const char *fw_name)
 > +{
-> +	register int status asm("r0") =3D 0;
+> +       int err = request_firmware(fw, fw_name, adev->dev);
 > +
-> +	asm volatile ("scall " SCALL_NUM_EXIT "\n\t;;"
-> +		      : /* out */
-> +		      : "r"(status));
+> +       if (err)
+> +               return -ENODEV;
+> +       err = amdgpu_ucode_validate(*fw);
+> +       if (err)
+> +               dev_dbg(adev->dev, "\"%s\" failed to validate\n", fw_name);
 > +
-> +	unreachable();
+> +       return err;
 > +}
 > +
-> +static int kvx_scall_poweroff_probe(struct platform_device *pdev)
+> +/*
+> + * amdgpu_ucode_release - Release firmware microcode
+> + *
+> + * @fw: pointer to firmware to release
+> + */
+> +void amdgpu_ucode_release(const struct firmware *fw)
+
+This should be **fw if we want to set it to NULL.
+
+Alex
+
 > +{
-> +	pm_power_off =3D kvx_scall_poweroff;
-> +
-> +	return 0;
+> +       release_firmware(fw);
+> +       fw = NULL;
 > +}
-
-Please use devm_register_power_off_handler().
-
--- Sebastian
-
-> +static int kvx_scall_poweroff_remove(struct platform_device *pdev)
-> +{
-> +	if (pm_power_off =3D=3D kvx_scall_poweroff)
-> +		pm_power_off =3D NULL;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id kvx_scall_poweroff_of_match[] =3D {
-> +	{ .compatible =3D "kalray,kvx-scall-poweroff" },
-> +	{}
-> +};
-> +
-> +static struct platform_driver kvx_scall_poweroff_driver =3D {
-> +	.probe =3D kvx_scall_poweroff_probe,
-> +	.remove =3D kvx_scall_poweroff_remove,
-> +	.driver =3D {
-> +		.name =3D "kvx-scall-poweroff",
-> +		.of_match_table =3D kvx_scall_poweroff_of_match,
-> +	},
-> +};
-> +module_platform_driver(kvx_scall_poweroff_driver);
-> --=20
-> 2.37.2
->=20
->=20
->=20
->=20
->=20
-
---uq66y7ogcsufp33e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmO1smUACgkQ2O7X88g7
-+pqgzg//d3Xremg6XYAx7LO05CGbscipl+LZlHCgESkUNjRgsh+B4wkHwa/YFK9v
-3CRp+z8Xdl+hpiFyNlWOjhbWW+gKz6LMDkIcnRyXXvp8kH2CXrNQBKiIzNNnnGot
-nOHtd8tmvuUhpvKYmQq5ZIfdAPFkRP4MX6/SbGIP89fUtz8d4remh1yeFeOh8jFB
-3oN2yi/HnY1xKue0WH0PUGCg+fSHbfXXF9jyb52CUkQ20LwE6FzTYTe6GGgFfPYc
-tk2DFMnt8JqoId2aVWzpjkoHab1fQKb0qPR2KLfbH/9DAbo6/P2ZFe20tQMe3YaC
-wbiPaM1W18kqb3QhRTwUddo3XPRO57UxelJt37h3h+l0O1BYTFIwnFYg31aODFCW
-j9lUKAh/+kepNmcha4FXgnLtFzUiQt7zH1kDdnrKBc0LT+cxfsklEE8fRV+IRgSl
-tOFHBtAPQUq20NlnSlavVMUD8zgOSlZXiR/fEt993BtRrk/DtgWeOCMIPR5FlN9I
-yjRAjXfEMsw5pZJOLBqgGiNwIi5eZGE24BRv2GTuRnQF0LU4YL3uGNAHJEDpb0zR
-EjuMgMzOwSb4k49DZ5uymqD5T2PZ7Xh+A+/olncZAGDkeq4B6k+gDCFaPQtHfvrv
-LwGQusmHZciEHpfg4Q9f87iCi/z13VUVelaKWTTXl6hgrOHlzn8=
-=GMph
------END PGP SIGNATURE-----
-
---uq66y7ogcsufp33e--
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
+> index 552e06929229..7fd2f04f7f98 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
+> @@ -544,6 +544,9 @@ void amdgpu_ucode_print_sdma_hdr(const struct common_firmware_header *hdr);
+>  void amdgpu_ucode_print_psp_hdr(const struct common_firmware_header *hdr);
+>  void amdgpu_ucode_print_gpu_info_hdr(const struct common_firmware_header *hdr);
+>  int amdgpu_ucode_validate(const struct firmware *fw);
+> +int amdgpu_ucode_request(struct amdgpu_device *adev, const struct firmware **fw,
+> +                        const char *fw_name);
+> +void amdgpu_ucode_release(const struct firmware *fw);
+>  bool amdgpu_ucode_hdr_version(union amdgpu_firmware_header *hdr,
+>                                 uint16_t hdr_major, uint16_t hdr_minor);
+>
+> --
+> 2.34.1
+>
