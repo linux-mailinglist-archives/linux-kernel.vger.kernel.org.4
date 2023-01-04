@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D5165DCCA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C90565DCCC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240080AbjADTdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 14:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
+        id S240114AbjADTdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 14:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240052AbjADTdS (ORCPT
+        with ESMTP id S240110AbjADTdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 14:33:18 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9942D1BE88
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:33:15 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id i19so23632781ljg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 11:33:15 -0800 (PST)
+        Wed, 4 Jan 2023 14:33:42 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1A03C386
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:33:41 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 141so4619179pgc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 11:33:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F6N+OP+6yy03flX+mI06gXGKWmxb8vTgx5JtQZDesWc=;
-        b=ywyJ1diL3UYldnanPgu/gbwLosUj6n9Xuv3577wYf9BSvcU2PDcsjh2ibb8sXd9Tie
-         E8aPBCBkVzYCMbxpOU/YKCI9CmG2nYIvmQQ3kh6jz5mxzAmxYrml35vV8rCxjRVeFb1U
-         fO4J6FyfrVi5S0U8084vsGWn4mFMng22spHnL0OCYGndX/sdTlO62l2U5oaud7K8q8bS
-         EPYLdxoRLKrlnbA6SBQjod7CIIMlmj4hl/vLD8KCEOkMk73GZMehbfs6yKOw8IlliRIi
-         3sFKYdwvw8iBK0q7aL4/8QhxNS5xd/ThFdxd2q0xaei41ggJMZ+qVKOtTb/3r27vexB4
-         8gPQ==
+        bh=PhNuTXjWu/P/rdy7WLoVk70gjnClYIr8c3qZ/AxyUh8=;
+        b=TT13YhOLFTeC/rkM3WpWltn6ub8CCNGWPD3HLItQpVtzPFS7zNlX5v7pZJOsmwJF35
+         rirXKL1c/2WHcJmQr3hcMaAkgxs8jTVudUmVR/e4oJhDjuVRnH8zHS/oGxRfiyoOhzfU
+         VIOU+J1YEAZcO1rlKuH3zkW8ySX2XLW9WOL0kzRbRRs5oifLAvIjVR+UFeQZauoQyB3F
+         xg1u0b9TimgphNbSzwtkzWM7yooJ9xJZkyqlLxcmJxD23rJw+aNsrBwKBWb6UsI6mEsl
+         pMVPMeMMtgwk/xT3NSAegHGRPYjKjPnpqL29a7HaNss9H9ltAR0qHlenHCuDBEAy5Uah
+         c29w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=F6N+OP+6yy03flX+mI06gXGKWmxb8vTgx5JtQZDesWc=;
-        b=KQY4d9QgR/OwZKX7nN/7dTu7krM3Xi/nbCJuKmjnK5gQFjGIarFoQfViyh0vuFljUU
-         SaHHwos68Wn85JYsisyRJV/uIRnbS88W6gQF13StdUkjEj7a11moPetqYUDH7B+nDljp
-         rSGp+rbRsjE7eGSJcOiPbh7R5NBkxuOeBnd4j3S2+MX2QfOUGggMPH5cnRs595kNgpft
-         6fqBKafVjpCKRCmKAAo7ae9ujOrviN1JrFWLONP3bVw60kcb7/8NhKnRyn/mNJ0bMdru
-         TvCBrm5L6y1NQh4by+WXZZeIgTp7lUnnQNCkb024Sdr0CTFv6ZU3aAnqo9pMbyVh1j+P
-         BBbg==
-X-Gm-Message-State: AFqh2kptN8kctVPc1r1yibIndktb4yI78LV2PEVcOQVal4ndJvvIr8J0
-        LsaodzmswpXueuCAocbPp8VZR23HsPtCLSWExretiA==
-X-Google-Smtp-Source: AMrXdXsw/78tBcgISSlM45Fz8wx/0zC7FLlIbONYasugHZBibZQRhly4sSsbLzK+gYIUEjhvu2ylEmwzLDylydzpIy8=
-X-Received: by 2002:a2e:b54c:0:b0:27f:e3e3:7f25 with SMTP id
- a12-20020a2eb54c000000b0027fe3e37f25mr655188ljn.103.1672860793967; Wed, 04
- Jan 2023 11:33:13 -0800 (PST)
+        bh=PhNuTXjWu/P/rdy7WLoVk70gjnClYIr8c3qZ/AxyUh8=;
+        b=Dk140eJsEaBcrVtFFV3emrmgyQfjGR2aRdWxCzXapkS0ae1UDk6hUJe+cgH7oImw6m
+         LQS5LyN91JrtYyQybzXyYuZF+I4s8oDJGgGGM6g81Ed3A+3rKV6uCfcLRXEKwTnwqkHy
+         xgAmT0WIVurJej0t/pCUloqHpyyRO6k9iopkfLHiMalTFAUtFSRUvwlyDzvpshny5ZU8
+         4NS+PgdzHkwFzPDeaYEtEib9NPwPQAN0SsG/lkgnqYQzYWdkQAC4k9ZhWvPnNMrJOqCj
+         v0VltLOehGOVjTpfvQwPL3Spl86c3KGC3cSuKl3EhsecxAbXn9oDwOscjUNlUCHgEstP
+         INXg==
+X-Gm-Message-State: AFqh2koynVTWeOzFTHi06kHvVkeQfYT9jOzx91ZekmAvQVrt1F24lzaa
+        9oPidS7kNNiGhrhxQhIV1R8GYnycLWJi6EyW9yKS/Q==
+X-Google-Smtp-Source: AMrXdXtB3UqDlg4fywThZ9oEcUJmkAbLk6z8tYBOfw7AenAVgHXmA24tL1e0zkLeqXOZuJxqdj9Lg8jgkS/Ktjb4wME=
+X-Received: by 2002:a63:de12:0:b0:478:9367:1f27 with SMTP id
+ f18-20020a63de12000000b0047893671f27mr3466595pgg.525.1672860820917; Wed, 04
+ Jan 2023 11:33:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20230103170058.810597-1-benjamin.gaignard@collabora.com> <20230103170058.810597-8-benjamin.gaignard@collabora.com>
-In-Reply-To: <20230103170058.810597-8-benjamin.gaignard@collabora.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Wed, 4 Jan 2023 16:33:02 -0300
-Message-ID: <CAAEAJfBpGwa-ZDFFCep8rk4+dgLrYOFdfyrqBZP68C+jkN0qMQ@mail.gmail.com>
-Subject: Re: [PATCH v2 07/13] media: verisilicon: Check AV1 bitstreams bit depth
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20230104182313.3164736-1-jesussanp@google.com> <Y7XP66TlOpkVlwyp@kernel.org>
+In-Reply-To: <Y7XP66TlOpkVlwyp@kernel.org>
+From:   Jesus Sanchez-Palencia <jesussanp@google.com>
+Date:   Wed, 4 Jan 2023 11:33:30 -0800
+Message-ID: <CAK4Nh0izFWa107JVvDs9bHt+SpWMMkCSK+5p4grQ3SZFvDX86w@mail.gmail.com>
+Subject: Re: [PATCH] perf: Add missing sys/types.h include
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,61 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
-
-Thanks for the patch.
-
-On Tue, Jan 3, 2023 at 2:01 PM Benjamin Gaignard
-<benjamin.gaignard@collabora.com> wrote:
+On Wed, Jan 4, 2023 at 11:13 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
 >
-> The driver supports 8 and 10 bits bitstreams, make sure to discard
-> other cases.
+> Em Wed, Jan 04, 2023 at 10:23:13AM -0800, Jesus Sanchez-Palencia escreveu:
+> > Not all libc implementations define ssize_t as part of stdio.h like
+> > glibc does since the standard only requires this type to be defined by
+> > unistd.h and sys/types.h. For this reason the perf build is currently
+> > broken for toolchains based on uClibc, for instance.
+> >
+> > Include sys/types.h explicitly to fix that. This is a follow up to
+> > commit 378ef0f5d9d7 ("perf build: Use libtraceevent from the system").
 >
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  drivers/media/platform/verisilicon/hantro_drv.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
+> Do you mean this problem started with the 378ef0f5d9d7 commit? If so
+> then this is the fase for adding:
 >
-> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-> index 8e93710dcfed..16539e89935c 100644
-> --- a/drivers/media/platform/verisilicon/hantro_drv.c
-> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-> @@ -282,7 +282,13 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
->                 /* We only support profile 0 */
->                 if (dec_params->profile != 0)
->                         return -EINVAL;
-> +       } else if (ctrl->id == V4L2_CID_STATELESS_AV1_SEQUENCE) {
-> +               const struct v4l2_ctrl_av1_sequence *sequence = ctrl->p_new.p_av1_sequence;
-> +
-> +               if (sequence->bit_depth != 8 && sequence->bit_depth != 10)
-> +                       return -EINVAL;
->         }
-> +
->         return 0;
->  }
+> Fixes: 378ef0f5d9d7 ("perf build: Use libtraceevent from the system")
 >
-> @@ -333,7 +339,13 @@ static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
->
->         switch (ctrl->id) {
->         case V4L2_CID_STATELESS_AV1_SEQUENCE:
-> -               ctx->bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
-> +               int bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
-> +
-> +               if (vb2_is_streaming(v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx)))
-> +                       if (ctx->bit_depth != bit_depth)
-> +                               return -EINVAL;
-> +
+> To this patch, ok?
 
-Please use the v4l2_ctrl_grab API. Can you send a separate series to address
-this for the other codecs?
+Fixed in v2.
 
-Thanks a lot!
-Ezequiel
+Thanks,
+Jesus
 
-> +               ctx->bit_depth = bit_depth;
->                 break;
->         default:
->                 return -EINVAL;
+
+>
+> - Arnaldo
+>
+> > Signed-off-by: Jesus Sanchez-Palencia <jesussanp@google.com>
+> > ---
+> >  tools/perf/util/trace-event.h | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/perf/util/trace-event.h b/tools/perf/util/trace-event.h
+> > index add6c5d9531c..9b3cd79cca12 100644
+> > --- a/tools/perf/util/trace-event.h
+> > +++ b/tools/perf/util/trace-event.h
+> > @@ -4,6 +4,7 @@
+> >
+> >  #include <stdbool.h>
+> >  #include <stdio.h>
+> > +#include <sys/types.h>
+> >  #include <linux/types.h>
+> >
+> >  struct evlist;
+> > --
+> > 2.39.0.314.g84b9a713c41-goog
+>
 > --
-> 2.34.1
 >
+> - Arnaldo
