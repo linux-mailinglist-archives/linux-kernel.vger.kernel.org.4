@@ -2,228 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A665265D9CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F7665D9D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239920AbjADQ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:29:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
+        id S239682AbjADQaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240125AbjADQ2d (ORCPT
+        with ESMTP id S239932AbjADQ3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:28:33 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1480C3FC87
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:27:54 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso39400175pjp.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 08:27:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p5ldDYIOXfvjTc4b7EJAJFOKCZXF3rJ2nLQt59UJk44=;
-        b=Si1p1uZKMKgyRnjdIvLXnojExDV9ZK1rRqYqjWMbzUTveSQerXE071iqeblGg4GHSZ
-         1KjX4A0dVJO2IBwh9ZUH3ZmEe7O9cnYKyHbRHDFgXcj9EZaPWI+wSv0rm2k17/uCNF2N
-         qcubAjIZUnSg+nGqu1LVq5PAkIJYQKSKuI1jLITCtM4P02/LIf6x5gh2AguPDMHZRm8S
-         wy62QEomimNBNSjda9cJAkIzLFk8Zw9pBT7wetgGgB1xMGPhHiWtuUj7PskUZGk+Pi0R
-         gjEFWxg2Yl2Tl683w/Ttr5Ezj3EVccJ5YkC3Mq451ByA928icLllPtn0uh/hKhp9VvBV
-         guDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p5ldDYIOXfvjTc4b7EJAJFOKCZXF3rJ2nLQt59UJk44=;
-        b=hGd/BrWzgDgd+Ui3rWxFR/fU820wYM44mzB3nyGazekyOsVNG8maruX7WGXhlD6GQF
-         /T4euj/vT9uYkWYYj0i36e30ZFRlgqA1szX2Xzks2MA31JCz/SRJufyY6WNJjgb5cMNa
-         ZThjqKDO7ZMBMwsPpwvnQoBHy2K/2bG331C4jHWxsVNfc1iZiXqpJjXNQQye+ZDcHM72
-         eVuhB6jlYwOPF2nTy8m5BggbBrdAKzbfh3DADwmDBl1bSg/W5xtS91+bnrXzRGzi0ID+
-         mzc9xABIVp2ne+xCHBR6gn6QuhiJNSEfFntZesC4stB+u8Cr/0D8bUNcsiD1qQX+7ciI
-         sXGQ==
-X-Gm-Message-State: AFqh2krA6mumWYPq5VbZxjIC1M4CUz8TSPNl6cMefNVBTZnSUWt8TrdR
-        GW5U9YIkrAxHL92hL3VYT0dQyA==
-X-Google-Smtp-Source: AMrXdXu8mMtXWTK1RWwNPLvw0Ofzeg7CfYQc6Zmv3knrG55MAkZn5NM5UYCz148yt+fXTIgvsW50kw==
-X-Received: by 2002:a17:902:d4d1:b0:189:3a04:4466 with SMTP id o17-20020a170902d4d100b001893a044466mr4712627plg.2.1672849673390;
-        Wed, 04 Jan 2023 08:27:53 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x17-20020a170902ec9100b00192b93a6ce4sm9106786plg.86.2023.01.04.08.27.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 08:27:52 -0800 (PST)
-Date:   Wed, 4 Jan 2023 16:27:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] KVM: x86: Ignore host accesses to higher version PMU
- features MSRs
-Message-ID: <Y7WpBSx5fBJFhFR4@google.com>
-References: <20221226111710.51831-1-likexu@tencent.com>
- <20221226111710.51831-3-likexu@tencent.com>
+        Wed, 4 Jan 2023 11:29:53 -0500
+Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8405833D48
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:29:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1672849790; x=1675441790;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=k2LNwpyqgnwIIWGpWIUItJTEja1sIrjCi/q5WAARKac=;
+        b=sWevkYLAVb50w/ySo+rmRfErC1C/0LcVUDsiOZ6l1OwJN7HEOB23iFUS2LAu0KOY
+        wX9hzlzdEqYhk3dNMJxoW212yVljMQdBvVIa9mSqPOdsk5nLKhVZvxYgf5qkzAu5
+        VuuboeKfoZdLtP9w+Larh4dkmwCofmm9jWynOZKYzc8=;
+X-AuditID: ac14000a-923ff70000007ecb-1e-63b5a97e2df4
+Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 9A.EC.32459.E79A5B36; Wed,  4 Jan 2023 17:29:50 +0100 (CET)
+Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
+ (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 4 Jan
+ 2023 17:29:50 +0100
+From:   Wadim Egorov <w.egorov@phytec.de>
+To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <upstream@lists.phytec.de>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <vigneshr@ti.com>, <nm@ti.com>
+Subject: [PATCH v4 1/2] dt-bindings: arm: ti: Add bindings for PHYTEC AM64x based hardware
+Date:   Wed, 4 Jan 2023 17:29:26 +0100
+Message-ID: <20230104162927.1215033-1-w.egorov@phytec.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221226111710.51831-3-likexu@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.25.0.11]
+X-ClientProxiedBy: Florix.phytec.de (172.25.0.13) To Berlix.phytec.de
+ (172.25.0.12)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrJLMWRmVeSWpSXmKPExsWyRpKBR7du5dZkgxUXlSzmHznHarH882x2
+        i74XD5ktNj2+xmpxedccNos3P84yWbTuPcJu0f1O3eL/2Q/sDpwem1Z1snncubaHzWPzknqP
+        /u4WVo/jN7YzeXzeJBfAFsVlk5Kak1mWWqRvl8CVcXz5euaCbRwVc+c9ZmtgPMvWxcjJISFg
+        InFl32uWLkYuDiGBxUwS1/sPsEI4jxklnr38zghSxSagLnFnwzewhIhAG6PErDXXWEASzAIl
+        EmuO32MHsYUFoiSeLtkGZrMIqEhM3badGcTmFbCU2HJzMtQ6eYmZl76zQ8QFJU7OfAI1R16i
+        eetsZghbQuLgixdgthBQ/MWl5SwwvdPOvWaGsEMljmxazTSBUWAWklGzkIyahWTUAkbmVYxC
+        uZnJ2alFmdl6BRmVJanJeimpmxhBwS/CwLWDsW+OxyFGJg7GQ4wSHMxKIryTXmxKFuJNSays
+        Si3Kjy8qzUktPsQozcGiJM57v4cpUUggPbEkNTs1tSC1CCbLxMEp1cDof2HWvEl5PQt//Nzz
+        Zfcu9d01GmbP7Fn770ZG2/teXLSG0WyhQOyxq6YTtq2T9mY6oPar87ylocjnsD0XOItct+aK
+        6c7qc3m1Mdqy4LuCE+OKQl6+kgM9e12m/rsVUCWadv/eHs/mY9Mu7750TGUZR2tuj/j2Y0pB
+        87e8fuQv9XfStdypd69uUGIpzkg01GIuKk4EABdbY/RsAgAA
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 26, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> Higher version PMU features are obviously not supported on hosts with
-> lower version Arch pmu, such as trying to access FIXED_CTR registers
-> and PERF_GLOBAL registers from pmu.version >1 on a host with version 1.
-> 
-> Ignore host userspace reads and writes of '0' to those PMU MSRs that
-> KVM reports in the MSR-to-save list, but the MSRs are ultimately
-> unsupported. All MSRs in said list must be writable by userspace, e.g.
-> if userspace sends the list back at KVM without filtering out the MSRs
-> it doesn't need.
-> 
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/kvm/x86.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index f570367463c8..fcb9c317df59 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3881,6 +3881,11 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  	case MSR_IA32_DS_AREA:
->  	case MSR_PEBS_DATA_CFG:
->  	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
-> +	case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
-> +	case MSR_CORE_PERF_FIXED_CTR_CTRL:
-> +	case MSR_CORE_PERF_GLOBAL_STATUS:
-> +	case MSR_CORE_PERF_GLOBAL_CTRL:
-> +	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
->  		if (kvm_pmu_is_valid_msr(vcpu, msr))
->  			return kvm_pmu_set_msr(vcpu, msr_info);
->  		/*
-> @@ -3984,6 +3989,11 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  	case MSR_IA32_DS_AREA:
->  	case MSR_PEBS_DATA_CFG:
->  	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
-> +	case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
-> +	case MSR_CORE_PERF_FIXED_CTR_CTRL:
-> +	case MSR_CORE_PERF_GLOBAL_STATUS:
-> +	case MSR_CORE_PERF_GLOBAL_CTRL:
-> +	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
+Add devicetree bindings for AM64x based phyCORE-AM64 SoM
+and phyBOARD-Electra RDK.
 
-Having to manually handle each MSR is again a maintenance burden.  Rather than
-manually add the affect PMU MSRs, I think we should just allow benign accesses
-to all "MSRs to save".  The lookup will be a linear search, but the array isn't
-_that_ big and this should be a rare occurrence.
-
-That might also make it easier to handle non-PMU MSRs that want similar treatment.
-
-I'll send a series with the patches I've proposed, along with the patch to clean
-up the unimplemented MSR printks[*], which was never formally posted.
-
-[*] https://lore.kernel.org/all/Y1wCqAzJwvz4s8OR@google.com
-
+Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/x86/kvm/x86.c | 51 ++++++++++++++++++++++++++--------------------
- 1 file changed, 29 insertions(+), 22 deletions(-)
+v4: No changes
+v3: No changes
+v2:
+  - Add Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/ti/k3.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 87bb7024e18f..4ad7e3065c69 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3561,6 +3561,18 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
- 	mark_page_dirty_in_slot(vcpu->kvm, ghc->memslot, gpa_to_gfn(ghc->gpa));
- }
+diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+index 203faab80142..c55e3fdb7b33 100644
+--- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+@@ -38,6 +38,12 @@ properties:
+               - ti,am642-sk
+           - const: ti,am642
  
-+static bool kvm_is_msr_to_save(u32 msr_index)
-+{
-+	unsigned int i;
++      - description: K3 AM642 SoC PHYTEC phyBOARD-Electra
++        items:
++          - const: phytec,am642-phyboard-electra-rdk
++          - const: phytec,am64-phycore-som
++          - const: ti,am642
 +
-+	for (i = 0; i < num_msrs_to_save; i++) {
-+		if (msrs_to_save[i] == msr_index)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- {
- 	bool pr = false;
-@@ -3884,20 +3896,18 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		vcpu->arch.guest_fpu.xfd_err = data;
- 		break;
- #endif
--	case MSR_IA32_PEBS_ENABLE:
--	case MSR_IA32_DS_AREA:
--	case MSR_PEBS_DATA_CFG:
--	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
-+	default:
- 		if (kvm_pmu_is_valid_msr(vcpu, msr))
- 			return kvm_pmu_set_msr(vcpu, msr_info);
-+
- 		/*
- 		 * Userspace is allowed to write '0' to MSRs that KVM reports
- 		 * as to-be-saved, even if an MSRs isn't fully supported.
- 		 */
--		return !msr_info->host_initiated || data;
--	default:
--		if (kvm_pmu_is_valid_msr(vcpu, msr))
--			return kvm_pmu_set_msr(vcpu, msr_info);
-+		if (msr_info->host_initiated && !data &&
-+		    kvm_is_msr_to_save(msr))
-+			break;
-+
- 		return KVM_MSR_RET_INVALID;
- 	}
- 	return 0;
-@@ -3987,20 +3997,6 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	case MSR_DRAM_ENERGY_STATUS:	/* DRAM controller */
- 		msr_info->data = 0;
- 		break;
--	case MSR_IA32_PEBS_ENABLE:
--	case MSR_IA32_DS_AREA:
--	case MSR_PEBS_DATA_CFG:
--	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
--		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
--			return kvm_pmu_get_msr(vcpu, msr_info);
--		/*
--		 * Userspace is allowed to read MSRs that KVM reports as
--		 * to-be-saved, even if an MSR isn't fully supported.
--		 */
--		if (!msr_info->host_initiated)
--			return 1;
--		msr_info->data = 0;
--		break;
- 	case MSR_K7_EVNTSEL0 ... MSR_K7_EVNTSEL3:
- 	case MSR_K7_PERFCTR0 ... MSR_K7_PERFCTR3:
- 	case MSR_P6_PERFCTR0 ... MSR_P6_PERFCTR1:
-@@ -4256,6 +4252,17 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	default:
- 		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
- 			return kvm_pmu_get_msr(vcpu, msr_info);
-+
-+		/*
-+		 * Userspace is allowed to read MSRs that KVM reports as
-+		 * to-be-saved, even if an MSR isn't fully supported.
-+		 */
-+		if (msr_info->host_initiated &&
-+		    kvm_is_msr_to_save(msr_info->index)) {
-+			msr_info->data = 0;
-+			break;
-+		}
-+
- 		return KVM_MSR_RET_INVALID;
- 	}
- 	return 0;
-
-base-commit: eee17ec1d2c43ab3fcba604c4b88c6eb2d728fcd
+       - description: K3 AM654 SoC
+         items:
+           - enum:
 -- 
+2.34.1
 
