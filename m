@@ -2,212 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B688865D7BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F9C65D7C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239787AbjADP7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S239816AbjADP7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239739AbjADP6t (ORCPT
+        with ESMTP id S239753AbjADP7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:58:49 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A551413F6B;
-        Wed,  4 Jan 2023 07:58:47 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 284635C00D1;
-        Wed,  4 Jan 2023 10:58:45 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 04 Jan 2023 10:58:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1672847925; x=1672934325; bh=H0UTR4kJze
-        AkAZivC7ap8DwhEwb/MXnY4XPO+uy9kKc=; b=U8pU6dYSVrl/CVJUPPEqx1R9Aq
-        lRxcqMgYm/TyRX26ZRhyXa5uD+cs/yqjcy+nxmXyUIG+GTv181nQJi14UJAOIAjf
-        9og92IBPb31uZ6dMCyYRlMnZEfzQ6xvntOWmT3FWGrbwUq5HC7doLJZu6KqzASKI
-        hx0t/iE+7VsGIErLSpVMU0gFj5/H+ZQaKAZypwzKqJpGCyYDp223hOv+Zz4SLqW0
-        aap4i0c2yXuHQ0fuFazE/+lmbeVPJ9sjpKCGtqT+ziNxFO9URfDlN8d6S8yyG2Kc
-        gfoSMJGJPpNha+B3JWXggdUNoTtSLSxTxQuqa+jy3h74M4/4siNT+25L+AnA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672847925; x=1672934325; bh=H0UTR4kJzeAkAZivC7ap8DwhEwb/
-        MXnY4XPO+uy9kKc=; b=HgaFI40sC8yMY8VOy7QQ2F4//wyS3hYp0LPxGg03HAWk
-        qEtLjRM+JzoyCdjTkYPOh/vyRMocCgEQJJqgRHD5+URJ6Ih4+/PWfKLiNnp0SZ5c
-        2eVHhYC4JvCfKwLmmEFnjnFQRQl/X6q87HzGKYozVQvf+hOjcXLbChRn7u4v6rVv
-        A7h6PsV/16E/QY06UxPPdbXrMJQ3AXHk2Coz61RWuHtjaXz5GAT/CtwzH0J/hC6Z
-        8GBNd2fU1eV3VheOX6SEI3N2hK9df+iJYKLxk619yg08GulRxfRBLXa5HcZVP0mX
-        atQsepbklOuSYA/wRkqz2dILaWkGdP1/uzO37OwLPg==
-X-ME-Sender: <xms:NKK1Y48HslmbYS4XfyvkV25JDSKz4gqEZbPhEXvALJOvcqVVorgYrQ>
-    <xme:NKK1YwvOYWU86IT641Xjgz28D53RJaLRPWwjvOCq1FuTvXSRIj9DM-9LxgP0a6zpv
-    RWXh9d7Rchms20DgzA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigdekvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:NKK1Y-D0Rn03uTnG6oMJtNULtppKVKQLRwrnCdfDvZq1rkRA1aAVAg>
-    <xmx:NKK1Y4fvmlqny8-TiW5EIb1Km8tOPFA7Fqn4qJNuwbm4wf6rLLbgkw>
-    <xmx:NKK1Y9MK4-XTCquhXJiLE_n3OfFxMW22ddTI_UZsemVu5efG4lpnyQ>
-    <xmx:NaK1YztseASQahJ66RWxLZYnhH-1ueAQdizsGnk9d2-oLHJ_jMdhJw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 43F24B6008D; Wed,  4 Jan 2023 10:58:44 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <7c531595-e987-422b-bcf7-48ad0ba49ce6@app.fastmail.com>
-In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
-Date:   Wed, 04 Jan 2023 16:58:25 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Yann Sionneau" <ysionneau@kalray.eu>
-Cc:     "Albert Ou" <aou@eecs.berkeley.edu>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Aneesh Kumar" <aneesh.kumar@linux.ibm.com>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        "Boqun Feng" <boqun.feng@gmail.com>, bpf@vger.kernel.org,
-        "Christian Brauner" <brauner@kernel.org>,
-        devicetree@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Eric Paris" <eparis@redhat.com>, "Ingo Molnar" <mingo@redhat.com>,
-        "Jan Kiszka" <jan.kiszka@siemens.com>,
-        "Jason Baron" <jbaron@akamai.com>, "Jiri Olsa" <jolsa@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Josh Poimboeuf" <jpoimboe@kernel.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Kieran Bingham" <kbingham@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-audit@redhat.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Oleg Nesterov" <oleg@redhat.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Paul Moore" <paul@paul-moore.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Waiman Long" <longman@redhat.com>,
-        "Will Deacon" <will@kernel.org>, "Alex Michon" <amichon@kalray.eu>,
-        "Ashley Lesdalons" <alesdalons@kalray.eu>,
-        "Benjamin Mugnier" <mugnier.benjamin@gmail.com>,
-        "Clement Leger" <clement.leger@bootlin.com>,
-        "Guillaume Missonnier" <gmissonnier@kalray.eu>,
-        "Guillaume Thouvenin" <gthouvenin@kalray.eu>,
-        "Jean-Christophe Pince" <jcpince@gmail.com>,
-        "Jonathan Borne" <jborne@kalray.eu>,
-        "Jules Maselbas" <jmaselbas@kalray.eu>,
-        "Julian Vetter" <jvetter@kalray.eu>,
-        "Julien Hascoet" <jhascoet@kalray.eu>,
-        "Julien Villette" <jvillette@kalray.eu>,
-        "Louis Morhet" <lmorhet@kalray.eu>,
-        "Luc Michel" <lmichel@kalray.eu>,
-        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
-        "Marius Gligor" <mgligor@kalray.eu>,
-        "Samuel Jones" <sjones@kalray.eu>,
-        "Thomas Costis" <tcostis@kalray.eu>,
-        "Vincent Chardon" <vincent.chardon@elsys-design.com>
-Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 10:59:10 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3052AE9
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 07:59:09 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id q9so5544375pgq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 07:59:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cee0Ydp1kO8u9xvcfzgAFfEixnJwANHVFnUtawqlX6A=;
+        b=RYSfNU7f19kuYS+NK9ORiTJ2YFf+MpKbJu6OJ1dC7hGiGBzmsADpOpXN9ixPxSJXqi
+         eeVmOEMI6ITcl6AAk5C9EoFRE0J+mFglb/nsjL50aeuS7IRBUB4AutID7OoqujFAZzni
+         dzssnwes+Te0Kf1uQGeJT25TQMPVHfeLtePh5t2JWPwsbgQAIeYiHmVYA6wjWYlKS9B/
+         d+R0Y5lpM8d8dM/wIZ77Bi4OFNDSadKoJfvzzfLOcrAEfPSOD1LiC6G1K+CXPaHb2hOI
+         sVhwmeRdg55weYnDlKH1eBMIb+loLBfW45choQ5IT6ZwA2a1wVgZujDMteplLyj+xJPE
+         M8yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cee0Ydp1kO8u9xvcfzgAFfEixnJwANHVFnUtawqlX6A=;
+        b=fW7WY+i4nBKT+6LSHTxP5a5MKvXleawv3nHHLSJUUN6RDl7nzMr+QA0ydOCFKSqtjs
+         H4VJXF03xnsqF4xQsjwh0iKmFOfhovZ8Hu1a00ZE4gYKnZZFedOq+USva9LKonYWJn6B
+         N1qKcW1brPi4+M8iKGQ2iHCPRhO3XuHo7pnoqEKn9Lf5Hj6A2fhmEGHig7l0RbgHkhKB
+         IV236IscFUMk53ykjRzzdXGqU5PuQxxgxyyhtiazQLFOGMddrfq8o6kLEk/cY/UIPGjj
+         WMIvHYCSFRLol1SmMl2NU+WL/aagLCiuo1u6FOMGpYt6uitOiHhOm8IDR9uMV8lluSho
+         DyDg==
+X-Gm-Message-State: AFqh2kr1HfbOqo67PgL2mPpQDCiN8HXKNbkGK5886wOgOM/BakUUlFXn
+        gbLa+FDpQmHEZvLJKb7MVyweaw==
+X-Google-Smtp-Source: AMrXdXsLRLCer+GNS5A8O6r0Qdt+lzJgTREMPRI5uA3P7HKDR4KqMywbZZ4UuWll9d4bNzJrn+3F1A==
+X-Received: by 2002:a05:6a00:1c8e:b0:581:bfac:7a52 with SMTP id y14-20020a056a001c8e00b00581bfac7a52mr1727118pfw.1.1672847948421;
+        Wed, 04 Jan 2023 07:59:08 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y2-20020a62ce02000000b00582388bd80csm8249512pfg.83.2023.01.04.07.59.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 07:59:07 -0800 (PST)
+Date:   Wed, 4 Jan 2023 15:59:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Yang, Weijiang" <weijiang.yang@intel.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>
+Subject: Re: [PATCH 1/3] KVM: x86: Omit PMU MSRs from KVM_GET_MSR_INDEX_LIST
+ if !enable_pmu
+Message-ID: <Y7WiSDPRwb5NDhn+@google.com>
+References: <20221226111710.51831-1-likexu@tencent.com>
+ <20221226111710.51831-2-likexu@tencent.com>
+ <752cacbf-5268-6ea0-8c5d-36fb297789ee@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <752cacbf-5268-6ea0-8c5d-36fb297789ee@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023, at 17:43, Yann Sionneau wrote:
-> This patch series adds support for the kv3-1 CPU architecture of the kvx family
-> found in the Coolidge (aka MPPA3-80) SoC of Kalray.
->
-> This is an RFC, since kvx support is not yet upstreamed into gcc/binutils,
-> therefore this patch series cannot be merged into Linux for now.
->
-> The goal is to have preliminary reviews and to fix problems early.
->
-> The Kalray VLIW processor family (kvx) has the following features:
-> * 32/64 bits execution mode
-> * 6-issue VLIW architecture
-> * 64 x 64bits general purpose registers
-> * SIMD instructions
-> * little-endian
-> * deep learning co-processor
+On Tue, Dec 27, 2022, Yang, Weijiang wrote:
+> 
+> On 12/26/2022 7:17 PM, Like Xu wrote:
+> > From: Like Xu <likexu@tencent.com>
+> > 
+> > When the PMU is disabled, don't bother sharing the PMU MSRs with
+> > userspace through KVM_GET_MSR_INDEX_LIST.  Instead, filter them out
+> > so userspace doesn't have to keep track of them.
+> > 
+> > Note that 'enable_pmu' is read-only, so userspace has no control over
+> > whether the PMU MSRs are included in the list or not.
+> > 
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Co-developed-by: Aaron Lewis <aaronlewis@google.com>
+> > Signed-off-by: Aaron Lewis <aaronlewis@google.com>
+> > Signed-off-by: Like Xu <likexu@tencent.com>
+> > ---
+> >   arch/x86/include/asm/kvm_host.h |  1 +
+> >   arch/x86/kvm/x86.c              | 22 ++++++++++++++++++++--
+> >   2 files changed, 21 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index f35f1ff4427b..2ed710b393eb 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -514,6 +514,7 @@ struct kvm_pmc {
+> >   #define MSR_ARCH_PERFMON_PERFCTR_MAX	(MSR_ARCH_PERFMON_PERFCTR0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
+> >   #define MSR_ARCH_PERFMON_EVENTSEL_MAX	(MSR_ARCH_PERFMON_EVENTSEL0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
+> >   #define KVM_PMC_MAX_FIXED	3
+> > +#define MSR_ARCH_PERFMON_FIXED_CTR_MAX	(MSR_ARCH_PERFMON_FIXED_CTR0 + KVM_PMC_MAX_FIXED - 1)
+> >   #define KVM_AMD_PMC_MAX_GENERIC	6
+> >   struct kvm_pmu {
+> >   	unsigned nr_arch_gp_counters;
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 5c3ce39cdccb..f570367463c8 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -7054,15 +7054,32 @@ static void kvm_init_msr_list(void)
+> >   				continue;
+> >   			break;
+> >   		case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR_MAX:
+> > -			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
+> > +			if (!enable_pmu || msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
+> >   			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
+> >   				continue;
+> >   			break;
+> >   		case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL_MAX:
+> > -			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
+> > +			if (!enable_pmu || msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
+> >   			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
+> >   				continue;
+> >   			break;
+> > +		case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
+> > +			if (!enable_pmu || msrs_to_save_all[i] - MSR_ARCH_PERFMON_FIXED_CTR0 >=
+> > +			    min(KVM_PMC_MAX_FIXED, kvm_pmu_cap.num_counters_fixed))
 
-Thanks for posting these, I had been wondering about the
-state of the port. Overall this looks really nice, I can
-see that you and the team have looked at other ports
-and generally made the right decisions.
+The num_counters_fixed check is a separate change, no?
 
-I commented on the syscall patch directly, I think it's
-important to stop using the deprecated syscalls as soon
-as possible to avoid having dependencies in too many
-libc binaries. Almost everything else can be changed
-easily as you get closer to upstream inclusion.
+> > +				continue;
+> > +			break;
+> > +		case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
+> > +		case MSR_K7_EVNTSEL0 ... MSR_K7_PERFCTR3:
+> > +		case MSR_CORE_PERF_FIXED_CTR_CTRL:
+> > +		case MSR_CORE_PERF_GLOBAL_STATUS:
+> > +		case MSR_CORE_PERF_GLOBAL_CTRL:
+> > +		case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
+> > +		case MSR_IA32_DS_AREA:
+> > +		case MSR_IA32_PEBS_ENABLE:
+> > +		case MSR_PEBS_DATA_CFG:
 
-I did not receive most of the other patches as I'm
-not subscribed to all the mainline lists. For future 
-submissions, can you add the linux-arch list to Cc for
-all patches?
+Rather than duplicating all list entries, which will be a maintenance problem,
+what about moving PMU MSRs to a separate array?  Sample patch (that applies on top
+of the num_counters_fixed change) at the bottom.
 
-Reading the rest of the series through lore.kernel.org,
-most of the comments I have are for improvements that
-you may find valuable rather than serious mistakes:
+> > +			if (!enable_pmu)
+> > +				continue;
+> > +			break;
+> 
+> 
+> I prefer use a helper to wrap the hunk of PMU msr checks and move the helper
+> to the "default" branch of switch, it makes the code looks nicer:
+> 
+> default:
 
-- the {copy_to,copy_from,clear}_user functions are
-  well worth optimizing better than the byte-at-a-time
-  version you have, even just a C version built around
-  your __get_user/__put_user inline asm should help, and
-  could be added to lib/usercopy.c.
+That won't work as "default" is used to catch MSRs that always exist from the
+guest's perspective.  And even if that weren't the case, I don't like the idea of
+utilizing "default" for PMU MSRs.  The default=>PMU logic in kvm_{g,s}et_msr_common()
+isn't ideal, but it's the lesser of all evils.  But in this case there's no need
+since common KVM code knows all possible MSRs that might be saved.
 
-- The __raw_{read,write}{b,w,l,q} helpers should
-  normally be defined as inline asm instead of
-  volatile pointer dereferences, I've seen cases where
-  the compiler ends up splitting the access or does
-  other things you may not want on MMIO areas.
+---
+ arch/x86/kvm/x86.c | 161 ++++++++++++++++++++++++---------------------
+ 1 file changed, 87 insertions(+), 74 deletions(-)
 
-- I would recomment implementing HAVE_ARCH_VMAP_STACK
-  as well as IRQ stacks, both of these help to
-  avoid data corruption from stack overflow that you
-  will eventually run into.
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 1cc8036d9e91..87bb7024e18f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1419,7 +1419,7 @@ EXPORT_SYMBOL_GPL(kvm_emulate_rdpmc);
+  * may depend on host virtualization features rather than host cpu features.
+  */
+ 
+-static const u32 msrs_to_save_all[] = {
++static const u32 msrs_to_save_base[] = {
+ 	MSR_IA32_SYSENTER_CS, MSR_IA32_SYSENTER_ESP, MSR_IA32_SYSENTER_EIP,
+ 	MSR_STAR,
+ #ifdef CONFIG_X86_64
+@@ -1436,6 +1436,10 @@ static const u32 msrs_to_save_all[] = {
+ 	MSR_IA32_RTIT_ADDR3_A, MSR_IA32_RTIT_ADDR3_B,
+ 	MSR_IA32_UMWAIT_CONTROL,
+ 
++	MSR_IA32_XFD, MSR_IA32_XFD_ERR,
++};
++
++static const u32 msrs_to_save_pmu[] = {
+ 	MSR_ARCH_PERFMON_FIXED_CTR0, MSR_ARCH_PERFMON_FIXED_CTR1,
+ 	MSR_ARCH_PERFMON_FIXED_CTR0 + 2,
+ 	MSR_CORE_PERF_FIXED_CTR_CTRL, MSR_CORE_PERF_GLOBAL_STATUS,
+@@ -1460,11 +1464,10 @@ static const u32 msrs_to_save_all[] = {
+ 	MSR_F15H_PERF_CTL3, MSR_F15H_PERF_CTL4, MSR_F15H_PERF_CTL5,
+ 	MSR_F15H_PERF_CTR0, MSR_F15H_PERF_CTR1, MSR_F15H_PERF_CTR2,
+ 	MSR_F15H_PERF_CTR3, MSR_F15H_PERF_CTR4, MSR_F15H_PERF_CTR5,
+-
+-	MSR_IA32_XFD, MSR_IA32_XFD_ERR,
+ };
+ 
+-static u32 msrs_to_save[ARRAY_SIZE(msrs_to_save_all)];
++static u32 msrs_to_save[ARRAY_SIZE(msrs_to_save_base) +
++			ARRAY_SIZE(msrs_to_save_pmu)];
+ static unsigned num_msrs_to_save;
+ 
+ static const u32 emulated_msrs_all[] = {
+@@ -7001,9 +7004,83 @@ long kvm_arch_vm_ioctl(struct file *filp,
+ 	return r;
+ }
+ 
+-static void kvm_init_msr_list(void)
++static void kvm_probe_msr_to_save(u32 msr_index)
+ {
+ 	u32 dummy[2];
++
++	if (rdmsr_safe(msr_index, &dummy[0], &dummy[1]))
++		return;
++
++	/*
++	 * Even MSRs that are valid in the host may not be exposed to the
++	 * guests in some cases.
++	 */
++	switch (msr_index) {
++	case MSR_IA32_BNDCFGS:
++		if (!kvm_mpx_supported())
++			return;
++		break;
++	case MSR_TSC_AUX:
++		if (!kvm_cpu_cap_has(X86_FEATURE_RDTSCP) &&
++		    !kvm_cpu_cap_has(X86_FEATURE_RDPID))
++			return;
++		break;
++	case MSR_IA32_UMWAIT_CONTROL:
++		if (!kvm_cpu_cap_has(X86_FEATURE_WAITPKG))
++			return;
++		break;
++	case MSR_IA32_RTIT_CTL:
++	case MSR_IA32_RTIT_STATUS:
++		if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT))
++			return;
++		break;
++	case MSR_IA32_RTIT_CR3_MATCH:
++		if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
++		    !intel_pt_validate_hw_cap(PT_CAP_cr3_filtering))
++			return;
++		break;
++	case MSR_IA32_RTIT_OUTPUT_BASE:
++	case MSR_IA32_RTIT_OUTPUT_MASK:
++		if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
++		    (!intel_pt_validate_hw_cap(PT_CAP_topa_output) &&
++		     !intel_pt_validate_hw_cap(PT_CAP_single_range_output)))
++			return;
++		break;
++	case MSR_IA32_RTIT_ADDR0_A ... MSR_IA32_RTIT_ADDR3_B:
++		if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
++		    (msr_index - MSR_IA32_RTIT_ADDR0_A >=
++		     intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2))
++			return;
++		break;
++	case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR_MAX:
++		if (msr_index - MSR_ARCH_PERFMON_PERFCTR0 >=
++		    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
++			return;
++		break;
++	case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL_MAX:
++		if (msr_index - MSR_ARCH_PERFMON_EVENTSEL0 >=
++		    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
++			return;
++		break;
++	case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
++		if (msr_index - MSR_ARCH_PERFMON_FIXED_CTR0 >=
++		    min(KVM_PMC_MAX_FIXED, kvm_pmu_cap.num_counters_fixed))
++			return;
++		break;
++	case MSR_IA32_XFD:
++	case MSR_IA32_XFD_ERR:
++		if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
++			return;
++		break;
++	default:
++		break;
++	}
++
++	msrs_to_save[num_msrs_to_save++] = msr_index;
++}
++
++static void kvm_init_msr_list(void)
++{
+ 	unsigned i;
+ 
+ 	BUILD_BUG_ON_MSG(KVM_PMC_MAX_FIXED != 3,
+@@ -7013,76 +7090,12 @@ static void kvm_init_msr_list(void)
+ 	num_emulated_msrs = 0;
+ 	num_msr_based_features = 0;
+ 
+-	for (i = 0; i < ARRAY_SIZE(msrs_to_save_all); i++) {
+-		if (rdmsr_safe(msrs_to_save_all[i], &dummy[0], &dummy[1]) < 0)
+-			continue;
++	for (i = 0; i < ARRAY_SIZE(msrs_to_save_base); i++)
++		kvm_probe_msr_to_save(msrs_to_save_base[i]);
+ 
+-		/*
+-		 * Even MSRs that are valid in the host may not be exposed
+-		 * to the guests in some cases.
+-		 */
+-		switch (msrs_to_save_all[i]) {
+-		case MSR_IA32_BNDCFGS:
+-			if (!kvm_mpx_supported())
+-				continue;
+-			break;
+-		case MSR_TSC_AUX:
+-			if (!kvm_cpu_cap_has(X86_FEATURE_RDTSCP) &&
+-			    !kvm_cpu_cap_has(X86_FEATURE_RDPID))
+-				continue;
+-			break;
+-		case MSR_IA32_UMWAIT_CONTROL:
+-			if (!kvm_cpu_cap_has(X86_FEATURE_WAITPKG))
+-				continue;
+-			break;
+-		case MSR_IA32_RTIT_CTL:
+-		case MSR_IA32_RTIT_STATUS:
+-			if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT))
+-				continue;
+-			break;
+-		case MSR_IA32_RTIT_CR3_MATCH:
+-			if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
+-			    !intel_pt_validate_hw_cap(PT_CAP_cr3_filtering))
+-				continue;
+-			break;
+-		case MSR_IA32_RTIT_OUTPUT_BASE:
+-		case MSR_IA32_RTIT_OUTPUT_MASK:
+-			if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
+-				(!intel_pt_validate_hw_cap(PT_CAP_topa_output) &&
+-				 !intel_pt_validate_hw_cap(PT_CAP_single_range_output)))
+-				continue;
+-			break;
+-		case MSR_IA32_RTIT_ADDR0_A ... MSR_IA32_RTIT_ADDR3_B:
+-			if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
+-				msrs_to_save_all[i] - MSR_IA32_RTIT_ADDR0_A >=
+-				intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
+-				continue;
+-			break;
+-		case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR_MAX:
+-			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
+-			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
+-				continue;
+-			break;
+-		case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL_MAX:
+-			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
+-			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
+-				continue;
+-			break;
+-		case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
+-			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_FIXED_CTR0 >=
+-			    min(KVM_PMC_MAX_FIXED, kvm_pmu_cap.num_counters_fixed))
+-				continue;
+-			break;
+-		case MSR_IA32_XFD:
+-		case MSR_IA32_XFD_ERR:
+-			if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
+-				continue;
+-			break;
+-		default:
+-			break;
+-		}
+-
+-		msrs_to_save[num_msrs_to_save++] = msrs_to_save_all[i];
++	if (enable_pmu) {
++		for (i = 0; i < ARRAY_SIZE(msrs_to_save_pmu); i++)
++			kvm_probe_msr_to_save(msrs_to_save_pmu[i]);
+ 	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(emulated_msrs_all); i++) {
 
-- You use qspinlock as the only available spinlock
-  implementation, but only support running on a
-  single cluster of 16 cores. It may help to use
-  the generic ticket spinlock instead, or leave it
-  as a Kconfig option, in particular since you only
-  have the emulated xchg16() atomic for qspinlock.
+base-commit: 248deec419748c75f3a0fd6c075fc7687441b7ea
+-- 
 
-- Your defconfig file enables CONFIG_EMBEDDED, which
-  in turn enables CONFIG_EXPERT. This is probably
-  not what you want, so better turn off both of these.
-
-- The GENERIC_CALIBRATE_DELAY should not be necessary
-  since you have a get_cycles() based delay loop.
-  Just set loops_per_jiffy to the correct value based
-  on the frequency of the cycle counter, to save
-  a little time during boot and get a more accurate
-  delay loop.
-
-    Arnd
