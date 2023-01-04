@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A7065CE0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2F265CE66
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbjADILg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S234047AbjADIfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbjADILd (ORCPT
+        with ESMTP id S234002AbjADIen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:11:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5FDDEAC;
-        Wed,  4 Jan 2023 00:11:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D163615C1;
-        Wed,  4 Jan 2023 08:11:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E509C433EF;
-        Wed,  4 Jan 2023 08:11:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672819891;
-        bh=SIPCFfmc72iP44TKzaToJdxfKCMW0e9hhb3cSHdlX8g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jgwopIAIv0bRg9NMUyNLs86h3NhcGTgxs1/Husy6wNrnoeY74XxzztEJdIiOU08ZF
-         TyD9as1T4iMvqVL15mHRsOVLZ9DNt39f92lTvFtLCQOkU3iJ0Jgk8j97amZOZ6eLpB
-         0DuB2VHi6Z+wYka9GvozKlMT9dnsq4O/Yis+sTL12DNdhQA5VJofuqPo4Bwt84sI/S
-         PQjml2a48mKqouGZnLwyB3q/i/9LEOjkxSwiGuFgcrUwvJrRFxt2jUQ5iWBvtyshLe
-         lI/ebQAmbwoKWUXgK/o8jKG/fGgrV6r5DJh6ggzPpOWmuh9AAU51PAecmspB0n8AaI
-         iSEf5uTUKeEoA==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Leon Romanovsky <leonro@nvidia.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org,
-        Michael Guralnik <michaelgur@nvidia.com>,
-        netdev@vger.kernel.org, Or Har-Toov <ohartoov@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH rdma-next 0/4] Rely on firmware to get special mkeys
-Date:   Wed,  4 Jan 2023 10:11:21 +0200
-Message-Id: <cover.1672819469.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 4 Jan 2023 03:34:43 -0500
+X-Greylist: delayed 1312 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Jan 2023 00:34:37 PST
+Received: from nc1.cschramm.eu (nc1.cschramm.eu [IPv6:2a03:4000:48:83:4479:b8ff:fef1:2c03])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC3F1869B;
+        Wed,  4 Jan 2023 00:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cschramm.eu
+        ; s=20160910; h=Subject:Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=bNlUUxPVx6r5E5AB++ov8MvDxQvaPuZGODNmmc20O6w=; b=iI1v8Iozw5C4W77ealjm5cLmhb
+        YNiI0nBBJDW1HrseKXqdff5XLjCQiH3S+3B3N/PQhYf3UEWNou8v8RbiFWZyurBweHRcDxn9FzqlO
+        i3D+LPqICNn9mVcd9eldw7rhVA5OezQuiKJ1bWqNHNkwqL+nR2g9gug/xnrYBIcUvWQA=;
+Received: from [2001:a61:2448:6101:6731:8c4d:dcb5:31dd]
+        by nc1.cschramm.eu with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <debian@cschramm.eu>)
+        id 1pCyt2-008dba-OJ; Wed, 04 Jan 2023 09:12:35 +0100
+Message-ID: <b56a03b8-2a2a-f833-a5d2-cdc50a7ca2bb@cschramm.eu>
+Date:   Wed, 4 Jan 2023 09:12:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+To:     masahiroy@kernel.org, samuel@sholland.org, nathan@kernel.org
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, nicolas@fjasle.eu
+References: <CAK7LNAQc-gEY_v-5f99r=Zeq0oQ3R7apdrc-3M14akhHBp_GoA@mail.gmail.com>
+Content-Language: en-US
+From:   Christopher Schramm <debian@cschramm.eu>
+In-Reply-To: <CAK7LNAQc-gEY_v-5f99r=Zeq0oQ3R7apdrc-3M14akhHBp_GoA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:a61:2448:6101:6731:8c4d:dcb5:31dd
+X-SA-Exim-Mail-From: debian@cschramm.eu
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] kbuild: Fix running modpost with musl libc
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on nc1.cschramm.eu)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+This change seems to break expected symbol warnings when building an 
+external module against a kernel prepared with modules_prepare.
 
-This series from Or extends mlx5 driver to rely on firmware to get
-special mkey values.
+The build used to show
 
-Thanks
+     WARNING: Module.symvers is missing.
+              Modules may not have dependencies or modversions.
+              You may get many unresolved symbol warnings.
 
-Or Har-Toov (4):
-  net/mlx5: Expose bits for querying special mkeys
-  net/mlx5: Change define name for 0x100 lkey value
-  net/mlx5: Use query_special_contexts for mkeys
-  RDMA/mlx5: Use query_special_contexts for mkeys
+followed by those many unresolved symbol warnings.
 
- drivers/infiniband/hw/mlx5/cmd.c              | 41 ++++++++++---------
- drivers/infiniband/hw/mlx5/cmd.h              |  3 +-
- drivers/infiniband/hw/mlx5/main.c             | 10 ++---
- drivers/infiniband/hw/mlx5/mlx5_ib.h          |  9 +++-
- drivers/infiniband/hw/mlx5/odp.c              | 27 ++++--------
- drivers/infiniband/hw/mlx5/srq.c              |  2 +-
- drivers/infiniband/hw/mlx5/wr.c               |  2 +-
- .../net/ethernet/mellanox/mlx5/core/en_main.c |  3 +-
- .../net/ethernet/mellanox/mlx5/core/main.c    | 27 ++++++++++++
- include/linux/mlx5/driver.h                   |  1 +
- include/linux/mlx5/mlx5_ifc.h                 | 10 ++++-
- include/linux/mlx5/qp.h                       |  2 +-
- 12 files changed, 85 insertions(+), 52 deletions(-)
-
--- 
-2.38.1
-
+6.2-rc2 still shows that warning but the unresolved symbol messages are 
+now errors and the build fails (at scripts/Makefile.modpost:137). This 
+seems to happen due to -T getting added.
