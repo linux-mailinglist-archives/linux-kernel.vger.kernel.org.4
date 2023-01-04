@@ -2,170 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6B465E0C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB6B65E0ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234881AbjADXNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 18:13:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
+        id S235058AbjADXZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 18:25:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbjADXNT (ORCPT
+        with ESMTP id S234738AbjADXZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 18:13:19 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E56442E36
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 15:13:08 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id bk16so21353608wrb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 15:13:08 -0800 (PST)
+        Wed, 4 Jan 2023 18:25:48 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419491B1F6
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 15:15:56 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id k137so19249357pfd.8
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 15:15:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xjj6P6cPGhiVQiupD0AtIKtwyJPxy/e9xg2W8dCMeFw=;
-        b=ouGR609RZOmkZkvxjmkRCqfeRj/MaXMqx30eH319QaNfdm7YgDjxkxbal7Kja6Qh7Z
-         +8BGZA+ddz6SjOd7xOBtx619uDQtRU8ZJFD0c3aGCbOcQw94ZPH1JN8lGfibLu90IPMj
-         BVOPJh1aEAKa558Atw5gIiF+YzZrWeh+nFdhqFxunNNAD3xiXY+ryhwiQEfVe+a4G2Vz
-         l2x/gFlxRAxYBvtmcWIMqR1rhXRJZ9rxOz7LM9bpopaSRJr42ggzM/Q+zNHRrqiiNjQp
-         MiLNX+CFFRsEFnHgCrNKgVVAXsvR2wgiCN8cWy3fkJMojvWnTHMSPpw8Pv0ZRcnodyb/
-         ZALA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q+vo9xwxFF4sNhy0dor2wwv3CWFlIdZ4y8k04+IC2tw=;
+        b=Sf+AAe62Oqq7qPWS4uxFkl3QiswCdhiAOIjEAmm1kJoWKUR+7z9fwUi4k6j/ArVuCN
+         BIF0iEoxuYxwW2y42amlbopuTWcSgLTF7ZZZMlkUXnJhjg4n8nGLJ+2XnlSg22N7RRH7
+         26Hm1r9Y63G16hAe48x2LU+ySiL4YIELtFc3H6Ojl2ucar/oiF40Z89STfI4evDrOrVi
+         z4tn0836yogPqQxVT2tEz4RJc5pVKalzScvyKVxDuAZChs1rECnkHAwWTCkK0giDHg6q
+         NeU5Uh4e+6OxDFiolMq4cU1bq1Sd3qxBYGRTJbv15is8bzzbsiKTMGShROJ4cSs/ivUV
+         mSOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xjj6P6cPGhiVQiupD0AtIKtwyJPxy/e9xg2W8dCMeFw=;
-        b=xqIiWNxTCnxXgZYosEU/jppUrXynVGK4xsrJozMDBnpGH+dLBH2H7ulX3PE2u75iDD
-         cIz4HO3qzmus7T/83lY8TeolrQnJtdLdEkl2PnhbyWJ8b1tBphdJu3zB1YL9lTGZc+Xp
-         kGKNcPKZogREjhuVotcDVgplaKeCFtmhGyw22tS+kTHAl7frjAJrLkTzS7HxiwV5+2Vc
-         8lKEUhQKL22OHj8NwF99PcMGnXVDqKTg8hrXt3XGZY5RhvaTvYw47A2Q2/Z0VEteILHA
-         qBx6sis2ek3KT91HNbRrHrSpfAf0IdK5Og+o+7Mo5umpYq0I2NtDT1x5i0Eun2VKc62z
-         bvXA==
-X-Gm-Message-State: AFqh2kpWdcIYUzH+HlfSf3WytthF6T5DYh3eX9YzKExB7g7+0kgcOCFK
-        E6vR+KNoXQnEZiq2VlYtBiFQDDaJdJfdXgHplalXKQ==
-X-Google-Smtp-Source: AMrXdXvQmmKJF7je2ykyKg49si6vBOiZgYQ24TRXbwt8ecY4G5pcHzqdaCr3ixetzN2QoOodEwa6JbYV4Q8cdSd4PLo=
-X-Received: by 2002:a5d:640b:0:b0:290:ef26:df02 with SMTP id
- z11-20020a5d640b000000b00290ef26df02mr947557wru.664.1672873986523; Wed, 04
- Jan 2023 15:13:06 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q+vo9xwxFF4sNhy0dor2wwv3CWFlIdZ4y8k04+IC2tw=;
+        b=yEcl54/56QPJNxkynvkjsWViKhFPJHV9b/BvHyFQ4q1GSuwnK1jjFUrD0EOe5Ha9mC
+         ANxLoXCRJZ+bRthhDBDd7Kig9ndi3qsA3kjk6sHBidwi08Gog46SMkQ/g5LOk8w7PWqi
+         PvVpqsVCrInttac+YwWyIW7tJFt+o8c9E9vGksH0Cdt+lVyO6yxC4ppgZD5CM/mSwJxw
+         URf3VfOoRrEABaRRXWfElaeZ0EEQPFB15zdZJ4Yr6rlK0By24W9EA2dAUgx60WlQvfbi
+         hh78xYFndtg1UT0eRC3lSZJW9tvH93+7zthjL1OGExNn4UBwQrXPCN/aTcXp1nzPF/0Z
+         XAwA==
+X-Gm-Message-State: AFqh2kr7e3gVduMM7QBA9caOnDFdOmtmij7faYAMnZkGE4pNcZ/CgOxG
+        EDGkmtM39i/vYG9XlmFBLpA+ow==
+X-Google-Smtp-Source: AMrXdXtWPhx8lX2YBKuFexnizRb7rOp4rjIGrT9SCAd9fmY3QiDyGClwqv/9WP90ncW3GQ8OaHs68g==
+X-Received: by 2002:a05:6a00:2a9:b0:581:f14:fde9 with SMTP id q9-20020a056a0002a900b005810f14fde9mr32977482pfs.16.1672874155708;
+        Wed, 04 Jan 2023 15:15:55 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:1328:ca09:d4c2:fcbc])
+        by smtp.gmail.com with ESMTPSA id i2-20020aa796e2000000b00581172f7456sm18492509pfq.56.2023.01.04.15.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 15:15:55 -0800 (PST)
+Date:   Wed, 4 Jan 2023 16:15:52 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski@linaro.org, corbet@lwn.net
+Subject: Re: [PATCH v4 1/2] remoteproc: elf_loader: Update resource table
+ name check
+Message-ID: <20230104231552.GD2112402@p14s>
+References: <1671603033-4359-1-git-send-email-quic_srivasam@quicinc.com>
+ <1671603033-4359-2-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-References: <20230101230042.244286-1-jthoughton@google.com>
- <Y7SA839SDcpf+Ll0@monkey> <CADrL8HVeOkj0QH5VZZbRzybNE8CG-tEGFshnA+bG9nMgcWtBSg@mail.gmail.com>
- <Y7Sq+Rs9cpSaHZSk@monkey> <CADrL8HV73m0nVJOK3uv4sbyGKOVZhVxSv2+i4pUV7tozu6vW5Q@mail.gmail.com>
- <Y7Xbo0tUO26khHCA@x1n>
-In-Reply-To: <Y7Xbo0tUO26khHCA@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 4 Jan 2023 23:12:53 +0000
-Message-ID: <CADrL8HVMCxHPBUuXo6dxam0giVcx2kAn=8n-3NjVO0ZddFw_tQ@mail.gmail.com>
-Subject: Re: [PATCH] hugetlb: unshare some PMDs when splitting VMAs
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1671603033-4359-2-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 8:03 PM Peter Xu <peterx@redhat.com> wrote:
+On Wed, Dec 21, 2022 at 11:40:32AM +0530, Srinivasa Rao Mandadapu wrote:
+> Update the way of checking resource table name with prefix substring search
+> instead of complete string search.
+> 
+> In general, Qualcomm DSP binary is prepared by combining different ELFs'.
+> Hence, section header name (e.g. .resource_table), appended with ELF name
+> to differentiate with same section(e.g. resource_table.ac_bin_process) of
+> different ELFs'.
 >
-> On Wed, Jan 04, 2023 at 07:10:11PM +0000, James Houghton wrote:
-> > > > I'll see if I can confirm that this is indeed possible and send a
-> > > > repro if it is.
-> > >
-> > > I think your analysis above is correct.  The key being the failure to unshare
-> > > in the non-PUD_SIZE vma after the split.
-> >
-> > I do indeed hit the WARN_ON_ONCE (repro attached), and the MADV wasn't
-> > even needed (the UFFDIO_REGISTER does the VMA split before "unsharing
-> > all PMDs"). With the fix, we avoid the WARN_ON_ONCE, but the behavior
-> > is still incorrect: I expect the address range to be write-protected,
-> > but it isn't.
-> >
-> > The reason why is that hugetlb_change_protection uses huge_pte_offset,
-> > even if it's being called for a UFFDIO_WRITEPROTECT with
-> > UFFDIO_WRITEPROTECT_MODE_WP. In that particular case, I'm pretty sure
-> > we should be using huge_pte_alloc, but even so, it's not trivial to
-> > get an allocation failure back up to userspace. The non-hugetlb
-> > implementation of UFFDIO_WRITEPROTECT seems to also have this problem.
-> >
-> > Peter, what do you think?
->
-> Indeed.  Thanks for spotting that, James.
->
-> Non-hugetlb should be fine with having empty pgtable entries. Anon doesn't
-> need to care about no-pgtable-populated ranges so far. Shmem does it with a
-> few change_prepare() calls to populate the entries so the markers can be
-> installed later on.
 
-Ah ok! :)
+Well, they are different ELF files so it is implied the resource section may be
+different...  And from what I see this is purely a human thing and not
+specifically needed by machines.  
 
->
-> However I think the fault handling is still not well handled as you pointed
-> out even for shmem: that's the path I probably never triggered myself yet
-> before and the code stayed there since a very early version:
->
-> #define  change_pmd_prepare(vma, pmd, cp_flags)                         \
->         do {                                                            \
->                 if (unlikely(uffd_wp_protect_file(vma, cp_flags))) {    \
->                         if (WARN_ON_ONCE(pte_alloc(vma->vm_mm, pmd)))   \
->                                 break;                                  \
->                 }                                                       \
->         } while (0)
->
-> I think a better thing we can do here (instead of warning and stop the
-> UFFDIO_WRITEPROTECT at the current stage) is returning with -ENOMEM
-> properly so the user can know the error.  We'll need to touch the stacks up
-> to uffd_wp_range() as it's the only one that can trigger the -ENOMEM so
-> far, so as to not ignore retval from change_protection().
->
-> Meanwhile, I'd also wonder whether we should call pagefault_out_of_memory()
-> because it should be the same as when pgtable allocation failure happens in
-> page faults, we may want to OOM already.  I can take care of hugetlb part
-> too along the way.
+I can't imagine this is a new situation and as such must ask how it was working
+before?
 
-I might be misunderstanding, the only case where
-hugetlb_change_protection() would *need* to allocate is when it is
-called from UFFDIO_WRITEPROTECT, not while handling a #pf. So I don't
-think any calls to pagefault_out_of_memory() need to be added.
+> Example readelf output of DSP binary:
+>     [60] .start.ac_bin_process PROGBITS
+>     [61] .resource_table.ac_bin_process PROGBITS
 
->
-> Man page of UFFDIO_WRITEPROTECT may need a fixup too to introduce -ENOMEM.
->
-> I can quickly prepare some patches for this, and hopefully it doesn't need
-> to block the current fix on split.
+The real question is...  Why is this labeled ".resource_table.ac_bin_process"
+rather than simply ".resource_table"?
 
-I don't think it should block this splitting fix. I'll send another
-version of this fix soon.
-
->
-> Any thoughts?
->
-> >
-> > >
-> > > To me, the fact it was somewhat difficult to come up with this scenario is an
-> > > argument what we should just unshare at split time as you propose.  Who
-> > > knows what other issues may exist.
-> > >
-> > > > 60dfaad65a ("mm/hugetlb: allow uffd wr-protect none ptes") is the
-> > > > commit that introduced the WARN_ON_ONCE; perhaps it's a good choice
-> > > > for a Fixes: tag (if above is indeed true).
-> > >
-> > > If the key issue in your above scenario is indeed the failure of
-> > > hugetlb_unshare_all_pmds in the non-PUD_SIZE vma, then perhaps we tag?
-> > >
-> > > 6dfeaff93be1 ("hugetlb/userfaultfd: unshare all pmds for hugetlbfs when
-> > > register wp")
-> >
-> > SGTM. Thanks Mike.
->
-> Looks good here too.
-
-Thanks, Peter!
+>     [62] .comment.ac_bin_process PROGBITS
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+>  drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
+> index 5a412d7..77330d6 100644
+> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+> @@ -272,7 +272,7 @@ find_table(struct device *dev, const struct firmware *fw)
+>  		u64 offset = elf_shdr_get_sh_offset(class, shdr);
+>  		u32 name = elf_shdr_get_sh_name(class, shdr);
+>  
+> -		if (strcmp(name_table + name, ".resource_table"))
+> +		if (!strstarts(name_table + name, ".resource_table"))
+>  			continue;
+>  
+>  		table = (struct resource_table *)(elf_data + offset);
+> -- 
+> 2.7.4
+> 
