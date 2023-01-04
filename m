@@ -2,202 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8EF65DB83
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FDD65DB88
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235370AbjADRsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 12:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S239868AbjADRtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 12:49:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjADRsa (ORCPT
+        with ESMTP id S239803AbjADRtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 12:48:30 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E2C1A3A6
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 09:48:29 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id l139so3105940ybl.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 09:48:29 -0800 (PST)
+        Wed, 4 Jan 2023 12:49:14 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B35FD08;
+        Wed,  4 Jan 2023 09:49:14 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id qk9so84271669ejc.3;
+        Wed, 04 Jan 2023 09:49:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h6ernteAwaoJavQln9yDUlEHLQyyCv6s+N2K/1h5NJc=;
-        b=c8T0coN2VqEx+gs0ROuXhPs7kCS4obyZ/UI06gKIGvD0Ihja5IGREFjVP+Xxd98hZj
-         JmN6Hn34JL/q+Xe5Chb4rHZLYeJKTGtGlwWMd5x8kJy8znBPKE6/o5tJ2P9UAXTSSgnK
-         MtzmlTkj/kIwQNIChRWNpZlXaR43D3nX6jpSSo5VuCbxd3//AF2ac8LKvsJKTEs4ot09
-         LLNkYJuein+LHqM/4NmAVGNItnrA3aVURF2hHR0cB7punrzIHp1y8EDj1LJdZQ7uQNcu
-         zvLexEulaVLFfNrInPdeLZZaK9a/1BABQAZqTJfRnANh7asjBt/H+PsBVOddTmRPWC86
-         0uug==
+        bh=Bq5T3H7ajPyPQ9vioDE0tfMvtiYQIDdq9hBdspYl9j0=;
+        b=CsPmMx+Q8xRhbNWd8KXeVRAKH0EU5k3rTIdnWRqva1tIJPxI1RBQGAz6rUO4ieDl2j
+         D/equzfgg+UmrQVjuz1hEl3E03Xc7L6ITI2RtG0vwVboO9oSbcuKtaAVP3cZyqlkCHJ1
+         2x97dl5O9lwKK3bUIysfz4OJDOn4OTobQd+bvFagZB/BRKhcEoiBRJ5+9ZAXz6B9FHMw
+         289gs0mdZB40AKhClGPTmmG3aSE0MLyuo1nHqSNO/wY5estDyMW0AoB60nKMLfgM6KnJ
+         FYI857FWXYCkbICNc4XI0j4agRAAVsiae7BuiQYtCFmlbELjHsNmGY2D3gNf8FCERPav
+         wZhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h6ernteAwaoJavQln9yDUlEHLQyyCv6s+N2K/1h5NJc=;
-        b=qhhtIj8oZiufqIWYIdwNL2lJweT4Q/iIXjzwCHqnbK2ORM+tOn4MeytBgFxdgK+Szb
-         5VxDCLJHvFic0P4eP5nk+RfymAgnWKaSo2WBruCv8tEEp77GlccvBVF4dxzCeVUd7mqS
-         YY5omTez5CcidJBrxjmFUuOLNZGqFeft2h2juvHue6vZBNsBFF8KslyFgYHlIE6WAm5i
-         B8CNbczuXiVyLvSTBpADW2IacIscx5d9Hx071KZaVn3Oru7I3pvUuUbzmPiLYhs/fCFS
-         QW5jLTpS9IE76pjHAey3WKo1YnJDvabskN3o4fVXHO7FvsPE3QJcpToV1rrKNL86DrNb
-         KtYw==
-X-Gm-Message-State: AFqh2kr57d7KMQSJciEoad1WhxVfyBdCWyA5yXGyLV5C3ZcWT54UpNgp
-        eWRS1nf7bffd8k3/yoG10M6lCfM6d24xiO18caDmRg==
-X-Google-Smtp-Source: AMrXdXuACj2NxKuibRwSdOimb0397QQRnaQeVI/kN9TdsBU3F52F+lvf5NW7TBxyVHHjkeuwiN4WM5G/dxrKKeA1TIs=
-X-Received: by 2002:a25:606:0:b0:709:9335:236e with SMTP id
- 6-20020a250606000000b007099335236emr4325601ybg.288.1672854508646; Wed, 04 Jan
- 2023 09:48:28 -0800 (PST)
+        bh=Bq5T3H7ajPyPQ9vioDE0tfMvtiYQIDdq9hBdspYl9j0=;
+        b=j9xj2Kq+zDyAndNUdgboRb1Erlr0/X4Xi59//tco6pFv98mvYiiUgV06Jl09p+DNmB
+         w8HoWTV4xOqiaEgVHb0za7znP9tZmk+a+GyGxxl5SK2HQT8rAKlZVwWFsgkw4dzC7Ji2
+         vR1oDZD46rj162yvrvTg4X0pKFmVRYX67tM3txfKReQBA4z/OxdCCZANSxzbEIGSYql9
+         T95GgIYHepZ5lL3GcAZ9F1LGgG6fZqlhpBlEwE9/eUqlwXVCJCpDSIz6+ugbnJWlWvNX
+         PS4Y9fL7Xf9JS3J5Uz/FyDvWpeg9FUKDZf84RG/GRd3w4GQfJ33qysOZZK+GoPAXpAvc
+         i6vA==
+X-Gm-Message-State: AFqh2kqro2ehjjZDh8Y+kiczGTXHEKBcQwmS8RXb1UxPyEQkJV4P4/FG
+        890D7N/Q4vwJYs6ACehYaKocanIViucpvrxEo/A=
+X-Google-Smtp-Source: AMrXdXuToPpAs4ZdULVqHtWdd9HVfH4ODJ/5O6IJKp3PSiQVG35IqVIlPTl9GLLWstbDdszTCZHL1e0p2R8lvdEbcqU=
+X-Received: by 2002:a17:907:7e9b:b0:7ad:a2e9:a48c with SMTP id
+ qb27-20020a1709077e9b00b007ada2e9a48cmr3541600ejc.77.1672854552640; Wed, 04
+ Jan 2023 09:49:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20230103-topic-sm8550-upstream-mdss-dsi-v1-0-9ccd7e652fcd@linaro.org>
- <20230103-topic-sm8550-upstream-mdss-dsi-v1-3-9ccd7e652fcd@linaro.org>
- <96ccae6f-3788-e030-480f-7aa2478ca560@linaro.org> <de3860ba-40f9-cdd5-097c-e015f6b19255@linaro.org>
-In-Reply-To: <de3860ba-40f9-cdd5-097c-e015f6b19255@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 4 Jan 2023 19:48:17 +0200
-Message-ID: <CAA8EJpoi8QFpvR0qWpNpenZKzEZAQpwp3gNpGd3RwHovgC+Odw@mail.gmail.com>
-Subject: Re: [PATCH 3/6] drm/msm/dpu: add support for SM8550
-To:     neil.armstrong@linaro.org
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
+ <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
+ <92eb7dfa8b7d447e966a2751e174b642@realtek.com> <87da8c82dec749dc826b5a1b4c4238aa@AcuMS.aculab.com>
+ <eee17e2f4e44a2f38021a839dc39fedc1c1a4141.camel@realtek.com>
+ <a86893f11fe64930897473a38226a9a8@AcuMS.aculab.com> <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
+ <CAFBinCC+1jGJx1McnBY+kr3RTQ-UpxW6JYNpHzStUTredDuCug@mail.gmail.com>
+ <ec6a0988f3f943128e0122d50959185a@AcuMS.aculab.com> <CAFBinCC9sNvQJcu-SOSrFmo4sCx29K6KwXnc-O6MX9TJEHtXYg@mail.gmail.com>
+ <662e2f820e7a478096dd6e09725c093a@AcuMS.aculab.com>
+In-Reply-To: <662e2f820e7a478096dd6e09725c093a@AcuMS.aculab.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 4 Jan 2023 18:49:01 +0100
+Message-ID: <CAFBinCCTa47SRjNHbMB3t2zjiE5Vh1ZQrgT3G38g9g_-mzvh6w@mail.gmail.com>
+Subject: Re: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Ping-Ke Shih <pkshih@realtek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tehuang@realtek.com" <tehuang@realtek.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="0000000000005f1bc105f173cdb2"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 Jan 2023 at 12:08, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->
-> On 04/01/2023 10:45, Dmitry Baryshkov wrote:
-> > On 04/01/2023 11:08, Neil Armstrong wrote:
-> >> Add definitions for the display hardware used on Qualcomm SM8550
-> >> platform.
-> >>
-> >> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> >> ---
-> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 197 +++++++++++++++++++++++++
-> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |   1 +
-> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h    |   2 +
-> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c        |   1 +
-> >>   4 files changed, 201 insertions(+)
-> >>
-> >> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >> index b4ca123d8e69..adf5e25269dc 100644
-> >> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->
-> <snip>
->
-> >> @@ -776,6 +821,45 @@ static const struct dpu_ctl_cfg sm8450_ctl[] = {
-> >>       },
-> >>   };
-> >> +static const struct dpu_ctl_cfg sm8550_ctl[] = {
-> >> +    {
-> >> +    .name = "ctl_0", .id = CTL_0,
-> >> +    .base = 0x15000, .len = 0x290,?
-> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_SPLIT_DISPLAY) | BIT(DPU_CTL_FETCH_ACTIVE),
-> >
-> > CTL_SC7280_MASK | BIT(DPU_CTL_SPLIT_DISPLAY) ?
->
-> Indeed DPU_CTL_VM_CFG is missing, will switch to that.
->
-> >
-> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
-> >> +    },
-> >> +    {
-> >> +    .name = "ctl_1", .id = CTL_1,
-> >> +    .base = 0x16000, .len = 0x290,
-> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_SPLIT_DISPLAY) | BIT(DPU_CTL_FETCH_ACTIVE),
-> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
-> >> +    },
-> >> +    {
-> >> +    .name = "ctl_2", .id = CTL_2,
-> >> +    .base = 0x17000, .len = 0x290,
-> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
-> >
-> > CTL_SC7280_MASK?
->
-> Ack
->
-> >
-> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
-> >> +    },
-> >> +    {
-> >> +    .name = "ctl_3", .id = CTL_3,
-> >> +    .base = 0x18000, .len = 0x290,
-> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
-> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
-> >> +    },
-> >> +    {
-> >> +    .name = "ctl_4", .id = CTL_4,
-> >> +    .base = 0x19000, .len = 0x290,
-> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
-> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 13),
-> >> +    },
-> >> +    {
-> >> +    .name = "ctl_5", .id = CTL_5,
-> >> +    .base = 0x1a000, .len = 0x290,
-> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
-> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 23),
-> >> +    },
-> >> +};
-> >> +
-> >>   static const struct dpu_ctl_cfg sc7280_ctl[] = {
-> >>       {
-> >>       .name = "ctl_0", .id = CTL_0,
->
-> <snip>
->
-> >> @@ -1268,6 +1386,16 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
-> >>       .len = 0x20, .version = 0x20000},
-> >>   };
-> >> +#define PP_BLK_DIPHER(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
-> >> +    {\
-> >> +    .name = _name, .id = _id, \
-> >> +    .base = _base, .len = 0, \
-> >
-> > len = 0 looks incorrect. Any particular reason why can't we use plain PP_BLK here?
->
-> The TE block has been moved to the DSI INTF blocks since SM8350 I think, or earlier.
+--0000000000005f1bc105f173cdb2
+Content-Type: text/plain; charset="UTF-8"
 
-I think, 8150. Marijn has been working on adding support for INTF-based TE.
-
-> This removes the DPU_PINGPONG_DITHER feature used downstream to enable the PP TE callbacks.
-> Since there's only the DIPHER sub-block remaining, this is why I set len to 0.
-
-I went on with some research. Usually PP len is 0xd4. However it seems
-since 8350 (since the change of DSC block) the PP size should be 0x0),
-despite dowsnstream DTs having sde-pp-size=0xd4 for sm8350 and sm8450
-(or 0x4 for neo, DPU 9.1.0).
-So, it looks like you are correct here (and we should fix 8350/8450
-patches instead).
-
+On Wed, Jan 4, 2023 at 5:31 PM David Laight <David.Laight@aculab.com> wrote:
+[...]
+> > > What you may want to do is add compile-time asserts for the
+> > > sizes of the structures.
+> > Do I get you right that something like:
+> >   BUILD_BUG_ON(sizeof(rtw8821c_efuse) != 256);
+> > is what you have in mind?
 >
-> >
-> >> +    .features = BIT(DPU_PINGPONG_DITHER), \
-> >> +    .merge_3d = _merge_3d, \
-> >> +    .sblk = &_sblk, \
-> >> +    .intr_done = _done, \
-> >> +    .intr_rdptr = _rdptr, \
-> >> +    }
-> >>   #define PP_BLK_TE(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
-> >>       {\
-> >>       .name = _name, .id = _id, \
->
-> <snip>
->
+> That looks like the one...
+I tried this (see the attached patch - it's just meant to show what I
+did, it's not meant to be applied upstream).
+With the attached patch but no other patches this makes the rtw88
+driver compile fine on 6.2-rc2.
+
+Adding __packed to struct rtw8723d_efuse changes the size of that
+struct for me (I'm compiling for AArch64 / ARM64).
+With the packed attribute it has 267 bytes, without 268 bytes.
+
+Do you have any ideas as to why that is?
 
 
--- 
-With best wishes
-Dmitry
+Best regards,
+Martin
+
+--0000000000005f1bc105f173cdb2
+Content-Type: text/x-patch; charset="US-ASCII"; name="add-build-bug-on.patch"
+Content-Disposition: attachment; filename="add-build-bug-on.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lchy60110>
+X-Attachment-Id: f_lchy60110
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcnR3ODcyM2Qu
+YyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcnR3ODcyM2QuYwppbmRleCAy
+ZDJmNzY4YmFlMmUuLjQ3MzkyZDcyMmY4ZCAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxl
+c3MvcmVhbHRlay9ydHc4OC9ydHc4NzIzZC5jCisrKyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3Jl
+YWx0ZWsvcnR3ODgvcnR3ODcyM2QuYwpAQCAtMjIyLDYgKzIyMiw4IEBAIHN0YXRpYyBpbnQgcnR3
+ODcyM2RfcmVhZF9lZnVzZShzdHJ1Y3QgcnR3X2RldiAqcnR3ZGV2LCB1OCAqbG9nX21hcCkKIAlz
+dHJ1Y3QgcnR3ODcyM2RfZWZ1c2UgKm1hcDsKIAlpbnQgaTsKIAorCUJVSUxEX0JVR19PTihzaXpl
+b2YoKm1hcCkgIT0gMjY4KTsKKwogCW1hcCA9IChzdHJ1Y3QgcnR3ODcyM2RfZWZ1c2UgKilsb2df
+bWFwOwogCiAJZWZ1c2UtPnJmZV9vcHRpb24gPSAwOwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQv
+d2lyZWxlc3MvcmVhbHRlay9ydHc4OC9ydHc4ODIxYy5jIGIvZHJpdmVycy9uZXQvd2lyZWxlc3Mv
+cmVhbHRlay9ydHc4OC9ydHc4ODIxYy5jCmluZGV4IDE3ZjgwMGY2ZWZiZC4uZWUwZjRhMDg1NmQ1
+IDEwMDY0NAotLS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3J0dzg4MjFj
+LmMKKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC9ydHc4ODIxYy5jCkBA
+IC00NSw2ICs0NSw4IEBAIHN0YXRpYyBpbnQgcnR3ODgyMWNfcmVhZF9lZnVzZShzdHJ1Y3QgcnR3
+X2RldiAqcnR3ZGV2LCB1OCAqbG9nX21hcCkKIAlzdHJ1Y3QgcnR3ODgyMWNfZWZ1c2UgKm1hcDsK
+IAlpbnQgaTsKIAorCUJVSUxEX0JVR19PTihzaXplb2YoKm1hcCkgIT0gNTEyKTsKKwogCW1hcCA9
+IChzdHJ1Y3QgcnR3ODgyMWNfZWZ1c2UgKilsb2dfbWFwOwogCiAJZWZ1c2UtPnJmZV9vcHRpb24g
+PSBtYXAtPnJmZV9vcHRpb247CmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFs
+dGVrL3J0dzg4L3J0dzg4MjJiLmMgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4
+L3J0dzg4MjJiLmMKaW5kZXggNzRkZmI4OWIyYzk0Li4wZGViMDI5MjQxMTQgMTAwNjQ0Ci0tLSBh
+L2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcnR3ODgyMmIuYworKysgYi9kcml2
+ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3J0dzg4MjJiLmMKQEAgLTM4LDYgKzM4LDgg
+QEAgc3RhdGljIGludCBydHc4ODIyYl9yZWFkX2VmdXNlKHN0cnVjdCBydHdfZGV2ICpydHdkZXYs
+IHU4ICpsb2dfbWFwKQogCXN0cnVjdCBydHc4ODIyYl9lZnVzZSAqbWFwOwogCWludCBpOwogCisJ
+QlVJTERfQlVHX09OKHNpemVvZigqbWFwKSAhPSA1MTIpOworCiAJbWFwID0gKHN0cnVjdCBydHc4
+ODIyYl9lZnVzZSAqKWxvZ19tYXA7CiAKIAllZnVzZS0+cmZlX29wdGlvbiA9IG1hcC0+cmZlX29w
+dGlvbjsKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcnR3
+ODgyMmMuYyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcnR3ODgyMmMuYwpp
+bmRleCA5NjRlMjc4ODdmZTIuLjk4MGM1MDIwNmMyMSAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQv
+d2lyZWxlc3MvcmVhbHRlay9ydHc4OC9ydHc4ODIyYy5jCisrKyBiL2RyaXZlcnMvbmV0L3dpcmVs
+ZXNzL3JlYWx0ZWsvcnR3ODgvcnR3ODgyMmMuYwpAQCAtNDEsNiArNDEsOCBAQCBzdGF0aWMgaW50
+IHJ0dzg4MjJjX3JlYWRfZWZ1c2Uoc3RydWN0IHJ0d19kZXYgKnJ0d2RldiwgdTggKmxvZ19tYXAp
+CiAJc3RydWN0IHJ0dzg4MjJjX2VmdXNlICptYXA7CiAJaW50IGk7CiAKKwlCVUlMRF9CVUdfT04o
+c2l6ZW9mKCptYXApICE9IDQxMCk7CisKIAltYXAgPSAoc3RydWN0IHJ0dzg4MjJjX2VmdXNlICop
+bG9nX21hcDsKIAogCWVmdXNlLT5yZmVfb3B0aW9uID0gbWFwLT5yZmVfb3B0aW9uOwo=
+--0000000000005f1bc105f173cdb2--
