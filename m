@@ -2,119 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC23565DB7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8EF65DB83
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239782AbjADRrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 12:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S235370AbjADRsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 12:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239878AbjADRr2 (ORCPT
+        with ESMTP id S231197AbjADRsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 12:47:28 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5D71A055;
-        Wed,  4 Jan 2023 09:47:22 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id x22so84393946ejs.11;
-        Wed, 04 Jan 2023 09:47:22 -0800 (PST)
+        Wed, 4 Jan 2023 12:48:30 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E2C1A3A6
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 09:48:29 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id l139so3105940ybl.12
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 09:48:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cXFF8GYX5Zinjr/Qz/IXvMCn5CnWUu2Qz1tzFtqqkog=;
-        b=JTaSmDfT0/oFcAPRSwmBn0cQRjSCiRxOfE9Oy3DECfRirfNcmbyfAh1OxkTh3gudn/
-         ptZaF9itgHIRga+/R11GcJ85VIR5g4C6L0fbmbGTKId59a0EbwIf1H9a79xCb8fGf9m9
-         Env/rlHBIPAC34UA7LidBeD9nZom+Ta/nfwGU+usHl5zyP/qXRV7ybdKLfQ+dHtFes7H
-         PtYXoNquO7JUUneNAT2/CSHrmeY7EEGIizj4zK9S12fC0OlU6rpcWJVssJpZ8AuA+c+A
-         zA4z5alDhxCTqmDbNIzJ2z4VzbJn30VbXjvCwWDXzF/3XFtN8UBvP2jt6ClXUgF7CCRP
-         LDQA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=h6ernteAwaoJavQln9yDUlEHLQyyCv6s+N2K/1h5NJc=;
+        b=c8T0coN2VqEx+gs0ROuXhPs7kCS4obyZ/UI06gKIGvD0Ihja5IGREFjVP+Xxd98hZj
+         JmN6Hn34JL/q+Xe5Chb4rHZLYeJKTGtGlwWMd5x8kJy8znBPKE6/o5tJ2P9UAXTSSgnK
+         MtzmlTkj/kIwQNIChRWNpZlXaR43D3nX6jpSSo5VuCbxd3//AF2ac8LKvsJKTEs4ot09
+         LLNkYJuein+LHqM/4NmAVGNItnrA3aVURF2hHR0cB7punrzIHp1y8EDj1LJdZQ7uQNcu
+         zvLexEulaVLFfNrInPdeLZZaK9a/1BABQAZqTJfRnANh7asjBt/H+PsBVOddTmRPWC86
+         0uug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cXFF8GYX5Zinjr/Qz/IXvMCn5CnWUu2Qz1tzFtqqkog=;
-        b=vNWwP3HaduUVSxdidlFzMeqzc308xpff45QoZynU97Fmp00WsIK9zEKObxopzR1azv
-         Zepd3TNwWekAmRhMul3dlBNbg61yrWHjcXAueZSHPvE2QxjCnNPG0H1hEBJgu26+Lzpy
-         IykaacEotqjiYkRgzETomJ8z7+i5LqAt0HSgJlZG7etpEJokPbTXDM0f1tmjXLspn25/
-         u2S1t4wErlmv4OoINWLbC2LgxPGTrvA3lD3KyFlHpVfeBEsR8GmBByWuTcqBSRbWXxFe
-         H4PCy8gBQDsGjm54940BH/m1LkTdEuXkdZmeashRnF5JOWoBFzA0kRLbs9kj52Gz2p0A
-         y9Ug==
-X-Gm-Message-State: AFqh2kqZrgGv+LzKiP0XAEyEO9A/Cy+xuYHo/gEaGSZUEi2KMJyPTSCV
-        sGxrf8SWdffgJU+PWvND4kI=
-X-Google-Smtp-Source: AMrXdXvxkZY8R7hruj4X+v4GnStcyC9p+uGPWu6YyXsIpz7AKO6U/tm3Hb4xblKQd6O1o7BYV5nVbQ==
-X-Received: by 2002:a17:906:6dd4:b0:836:e6f7:8138 with SMTP id j20-20020a1709066dd400b00836e6f78138mr52011762ejt.13.1672854440801;
-        Wed, 04 Jan 2023 09:47:20 -0800 (PST)
-Received: from skbuf ([188.26.184.223])
-        by smtp.gmail.com with ESMTPSA id t15-20020a170906608f00b0078d9cd0d2d6sm15862155ejj.11.2023.01.04.09.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 09:47:20 -0800 (PST)
-Date:   Wed, 4 Jan 2023 19:47:18 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Hans J. Schultz" <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20230104174718.kq75drpngmfkflpm@skbuf>
-References: <20230104130603.1624945-1-netdev@kapio-technology.com>
- <20230104130603.1624945-1-netdev@kapio-technology.com>
- <20230104130603.1624945-4-netdev@kapio-technology.com>
- <20230104130603.1624945-4-netdev@kapio-technology.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h6ernteAwaoJavQln9yDUlEHLQyyCv6s+N2K/1h5NJc=;
+        b=qhhtIj8oZiufqIWYIdwNL2lJweT4Q/iIXjzwCHqnbK2ORM+tOn4MeytBgFxdgK+Szb
+         5VxDCLJHvFic0P4eP5nk+RfymAgnWKaSo2WBruCv8tEEp77GlccvBVF4dxzCeVUd7mqS
+         YY5omTez5CcidJBrxjmFUuOLNZGqFeft2h2juvHue6vZBNsBFF8KslyFgYHlIE6WAm5i
+         B8CNbczuXiVyLvSTBpADW2IacIscx5d9Hx071KZaVn3Oru7I3pvUuUbzmPiLYhs/fCFS
+         QW5jLTpS9IE76pjHAey3WKo1YnJDvabskN3o4fVXHO7FvsPE3QJcpToV1rrKNL86DrNb
+         KtYw==
+X-Gm-Message-State: AFqh2kr57d7KMQSJciEoad1WhxVfyBdCWyA5yXGyLV5C3ZcWT54UpNgp
+        eWRS1nf7bffd8k3/yoG10M6lCfM6d24xiO18caDmRg==
+X-Google-Smtp-Source: AMrXdXuACj2NxKuibRwSdOimb0397QQRnaQeVI/kN9TdsBU3F52F+lvf5NW7TBxyVHHjkeuwiN4WM5G/dxrKKeA1TIs=
+X-Received: by 2002:a25:606:0:b0:709:9335:236e with SMTP id
+ 6-20020a250606000000b007099335236emr4325601ybg.288.1672854508646; Wed, 04 Jan
+ 2023 09:48:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104130603.1624945-4-netdev@kapio-technology.com>
- <20230104130603.1624945-4-netdev@kapio-technology.com>
+References: <20230103-topic-sm8550-upstream-mdss-dsi-v1-0-9ccd7e652fcd@linaro.org>
+ <20230103-topic-sm8550-upstream-mdss-dsi-v1-3-9ccd7e652fcd@linaro.org>
+ <96ccae6f-3788-e030-480f-7aa2478ca560@linaro.org> <de3860ba-40f9-cdd5-097c-e015f6b19255@linaro.org>
+In-Reply-To: <de3860ba-40f9-cdd5-097c-e015f6b19255@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 4 Jan 2023 19:48:17 +0200
+Message-ID: <CAA8EJpoi8QFpvR0qWpNpenZKzEZAQpwp3gNpGd3RwHovgC+Odw@mail.gmail.com>
+Subject: Re: [PATCH 3/6] drm/msm/dpu: add support for SM8550
+To:     neil.armstrong@linaro.org
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 02:06:03PM +0100, Hans J. Schultz wrote:
-> This implementation for the Marvell mv88e6xxx chip series, is based on
+On Wed, 4 Jan 2023 at 12:08, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> On 04/01/2023 10:45, Dmitry Baryshkov wrote:
+> > On 04/01/2023 11:08, Neil Armstrong wrote:
+> >> Add definitions for the display hardware used on Qualcomm SM8550
+> >> platform.
+> >>
+> >> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> >> ---
+> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 197 +++++++++++++++++++++++++
+> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |   1 +
+> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h    |   2 +
+> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c        |   1 +
+> >>   4 files changed, 201 insertions(+)
+> >>
+> >> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >> index b4ca123d8e69..adf5e25269dc 100644
+> >> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>
+> <snip>
+>
+> >> @@ -776,6 +821,45 @@ static const struct dpu_ctl_cfg sm8450_ctl[] = {
+> >>       },
+> >>   };
+> >> +static const struct dpu_ctl_cfg sm8550_ctl[] = {
+> >> +    {
+> >> +    .name = "ctl_0", .id = CTL_0,
+> >> +    .base = 0x15000, .len = 0x290,?
+> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_SPLIT_DISPLAY) | BIT(DPU_CTL_FETCH_ACTIVE),
+> >
+> > CTL_SC7280_MASK | BIT(DPU_CTL_SPLIT_DISPLAY) ?
+>
+> Indeed DPU_CTL_VM_CFG is missing, will switch to that.
+>
+> >
+> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+> >> +    },
+> >> +    {
+> >> +    .name = "ctl_1", .id = CTL_1,
+> >> +    .base = 0x16000, .len = 0x290,
+> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_SPLIT_DISPLAY) | BIT(DPU_CTL_FETCH_ACTIVE),
+> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
+> >> +    },
+> >> +    {
+> >> +    .name = "ctl_2", .id = CTL_2,
+> >> +    .base = 0x17000, .len = 0x290,
+> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
+> >
+> > CTL_SC7280_MASK?
+>
+> Ack
+>
+> >
+> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
+> >> +    },
+> >> +    {
+> >> +    .name = "ctl_3", .id = CTL_3,
+> >> +    .base = 0x18000, .len = 0x290,
+> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
+> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
+> >> +    },
+> >> +    {
+> >> +    .name = "ctl_4", .id = CTL_4,
+> >> +    .base = 0x19000, .len = 0x290,
+> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
+> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 13),
+> >> +    },
+> >> +    {
+> >> +    .name = "ctl_5", .id = CTL_5,
+> >> +    .base = 0x1a000, .len = 0x290,
+> >> +    .features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
+> >> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 23),
+> >> +    },
+> >> +};
+> >> +
+> >>   static const struct dpu_ctl_cfg sc7280_ctl[] = {
+> >>       {
+> >>       .name = "ctl_0", .id = CTL_0,
+>
+> <snip>
+>
+> >> @@ -1268,6 +1386,16 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
+> >>       .len = 0x20, .version = 0x20000},
+> >>   };
+> >> +#define PP_BLK_DIPHER(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
+> >> +    {\
+> >> +    .name = _name, .id = _id, \
+> >> +    .base = _base, .len = 0, \
+> >
+> > len = 0 looks incorrect. Any particular reason why can't we use plain PP_BLK here?
+>
+> The TE block has been moved to the DSI INTF blocks since SM8350 I think, or earlier.
 
-Comma between subject and predicate?
+I think, 8150. Marijn has been working on adding support for INTF-based TE.
 
-> handling ATU miss violations occurring when packets ingress on a port
-> that is locked with learning on. This will trigger a
-> SWITCHDEV_FDB_ADD_TO_BRIDGE event, which will result in the bridge module
-> adding a locked FDB entry. This bridge FDB entry will not age out as
-> it has the extern_learn flag set.
-> 
-> Userspace daemons can listen to these events and either accept or deny
-> access for the host, by either replacing the locked FDB entry with a
-> simple entry or leave the locked entry.
-> 
-> If the host MAC address is already present on another port, a ATU
-> member violation will occur, but to no real effect, and the packet will
-> be dropped in hardware. Statistics on these violations can be shown with
-> the command and example output of interest:
-> 
-> ethtool -S ethX
-> NIC statistics:
-> ...
->      atu_member_violation: 5
->      atu_miss_violation: 23
-> ...
-> 
-> Where ethX is the interface of the MAB enabled port.
-> 
-> Furthermore, as added vlan interfaces where the vid is not added to the
-> VTU will cause ATU miss violations reporting the FID as
-> MV88E6XXX_FID_STANDALONE, we need to check and skip the miss violations
-> handling in this case.
-> 
-> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
-> ---
+> This removes the DPU_PINGPONG_DITHER feature used downstream to enable the PP TE callbacks.
+> Since there's only the DIPHER sub-block remaining, this is why I set len to 0.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+I went on with some research. Usually PP len is 0xd4. However it seems
+since 8350 (since the change of DSC block) the PP size should be 0x0),
+despite dowsnstream DTs having sde-pp-size=0xd4 for sm8350 and sm8450
+(or 0x4 for neo, DPU 9.1.0).
+So, it looks like you are correct here (and we should fix 8350/8450
+patches instead).
+
+>
+> >
+> >> +    .features = BIT(DPU_PINGPONG_DITHER), \
+> >> +    .merge_3d = _merge_3d, \
+> >> +    .sblk = &_sblk, \
+> >> +    .intr_done = _done, \
+> >> +    .intr_rdptr = _rdptr, \
+> >> +    }
+> >>   #define PP_BLK_TE(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
+> >>       {\
+> >>       .name = _name, .id = _id, \
+>
+> <snip>
+>
+
+
+-- 
+With best wishes
+Dmitry
