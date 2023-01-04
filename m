@@ -2,72 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11BD65D2A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8338865D2B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234985AbjADM3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
+        id S239080AbjADMbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 07:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234961AbjADM3W (ORCPT
+        with ESMTP id S230087AbjADMbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:29:22 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9F21A234
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 04:29:21 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id m5-20020a6b7f45000000b006fc1dded1b9so2434699ioq.18
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 04:29:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fcj5zEd7cDAScfww7SklL50hfxt3eAMIbzbrLQpIjB0=;
-        b=wzmG06/L8oezVUKbe2Cg1UtA2qmFzMuwkfoU0L+cD1JQaiOqFEQ3HBY7HZQFvdWRIY
-         1Cl31Ad2rXap3aFULiRmr4qCswszPaxkS6D6dP4s+hTEKqwqyrJen4rPES/lXjUB8+Mu
-         KQOTvTnb5TAm9iUJAJIs/XFQjJbV54VEWJlfkr8baU2OW8DhsA6MBFfNTzPm71QCmll7
-         GHpxPsofxPPORH0dr0iVPLfIYK8YTsAzpUyFowxfJ5TKxgk+BT/9ueWys8FYZ0HHkpiX
-         aQVrdkDx0SmSbx3gHhrC+qWW9zpiaCQmfyN/wOVpJgL7dnR1MNKOovbF5slIjgMYW/RQ
-         ZhCw==
-X-Gm-Message-State: AFqh2kr7TkBH4B3G5ybmHWBocIJfAnNxRkM+dqfA6ugEFgouxMCTI222
-        qrD3Kzxk8elzjk66b1LCAp1+pqbimhHhWQGBMSSduoP3q4AA
-X-Google-Smtp-Source: AMrXdXuhsnSVKqSljPe3fO4qiiin9BhckSoK2ZR89pMASmqSjccpISB3AQeo2AXERvs5Zi7JvTsEm7eVkEgU7fZMw3wi7s+7AWjc
+        Wed, 4 Jan 2023 07:31:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E6DFCDC;
+        Wed,  4 Jan 2023 04:31:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97ED76141B;
+        Wed,  4 Jan 2023 12:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8437C433D2;
+        Wed,  4 Jan 2023 12:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672835475;
+        bh=TS1eRADAwtsICh+WYhgcEE7ywnYS5xNwOmdPOvBMuuI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ev46Sg1uRedN6plR7JXX+dH8bN38+vYwuymqfGXUcFSIjQbq2rGDiNqKSoiRaTKQ7
+         OB67NyWXK2MYJ73x2MaureToMeM/AQXoD2u4F+OLypuPDZtYW/w2E36HuqBgSBcNJM
+         RqbUJ40TD3h+rhHcnIuD3BhTtVWCrkNIxgQZvOAPHmunbk2AT9sDrSIXoiyVMvMDhl
+         Ne1wtTc8EI0nveYyEM3L+nycwBCkQel0y8TJzZAKnz8MUHLWT0LhEB6UvjM74CGbNc
+         oGWtLrAON4ymqruvUEEIhkGU7iI8Kla1eRzx6wc6OBgCm1g9YBS0I+ppBNwVGlA8+i
+         E2cwMkCUQxIfw==
+Date:   Wed, 4 Jan 2023 12:31:12 +0000
+From:   ", Jarkko Sakkinen" <jarkko@kernel.org>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Mark Pearson <markpearson@lenovo.com>
+Subject: Re: [PATCH v4 1/3] certs: make blacklisted hash available in klog
+Message-ID: <Y7VxkG0ZsfJEyuFP@kernel.org>
+References: <20221212-keys-blacklist-v4-0-00afeb3137fb@weissschuh.net>
+ <20221212-keys-blacklist-v4-1-00afeb3137fb@weissschuh.net>
 MIME-Version: 1.0
-X-Received: by 2002:a92:190b:0:b0:303:1869:3a84 with SMTP id
- 11-20020a92190b000000b0030318693a84mr4719532ilz.37.1672835360726; Wed, 04 Jan
- 2023 04:29:20 -0800 (PST)
-Date:   Wed, 04 Jan 2023 04:29:20 -0800
-In-Reply-To: <20230104120235.4230-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000071a65905f16f55d0@google.com>
-Subject: Re: [syzbot] possible deadlock in rds_message_put
-From:   syzbot <syzbot+f9db6ff27b9bfdcfeca0@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221212-keys-blacklist-v4-1-00afeb3137fb@weissschuh.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Dec 21, 2022 at 02:08:22AM +0000, Thomas Weiﬂschuh wrote:
+> One common situation triggering this log statement are duplicate hashes
+> reported by the system firmware.
+> 
+> These duplicates should be removed from the firmware.
+> 
+> Without logging the blacklisted hash triggering the issue however the users
+> can not report it properly to the firmware vendors and the firmware vendors
+> can not easily see which specific hash is duplicated.
+> 
+> While changing the log message also use the dedicated ERR_PTR format
+> placeholder for the returned error value.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
+>  certs/blacklist.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/certs/blacklist.c b/certs/blacklist.c
+> index 41f10601cc72..6e260c4b6a19 100644
+> --- a/certs/blacklist.c
+> +++ b/certs/blacklist.c
+> @@ -192,7 +192,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
+>  				   KEY_ALLOC_NOT_IN_QUOTA |
+>  				   KEY_ALLOC_BUILT_IN);
+>  	if (IS_ERR(key)) {
+> -		pr_err("Problem blacklisting hash (%ld)\n", PTR_ERR(key));
+> +		pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
+>  		return PTR_ERR(key);
+>  	}
+>  	return 0;
+> 
+> -- 
+> 2.39.0
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Reported-and-tested-by: syzbot+f9db6ff27b9bfdcfeca0@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         c183e6c3 Merge git://git.kernel.org/pub/scm/linux/kern..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=12ca7750480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8ca07260bb631fb4
-dashboard link: https://syzkaller.appspot.com/bug?extid=f9db6ff27b9bfdcfeca0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14e25424480000
-
-Note: testing is done by a robot and is best-effort only.
+BR, Jarkko
