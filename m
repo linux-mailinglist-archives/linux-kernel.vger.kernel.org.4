@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5538265CF3C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C57065CF42
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239123AbjADJKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
+        id S238974AbjADJLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239018AbjADJJu (ORCPT
+        with ESMTP id S239072AbjADJLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:09:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A8D1C11D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:09:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672823349;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WN89MJjCwknaqCXAnQNz+cH4SbGTgMKetTVEG8R1/tI=;
-        b=dran5fSGkDVZ1UPZ/GeIUg3ybaPD0HFhLO3nrzlQkWMWl+9LUZat5rtOUoO+GQLMEMzK+K
-        kd8/9Q3IzzT5Klp+UQ/dLZTm+91anrzincM6av4TQ5TEr3GM9qTlo1NQve6Kxeoyv5gBgJ
-        iaefAnjB6yuZJqYEWtyPTeoh1CvAAag=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-6Jg9EXBaO52_gmnY01AXbQ-1; Wed, 04 Jan 2023 04:09:06 -0500
-X-MC-Unique: 6Jg9EXBaO52_gmnY01AXbQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F5283C0E441;
-        Wed,  4 Jan 2023 09:09:06 +0000 (UTC)
-Received: from localhost (ovpn-12-189.pek2.redhat.com [10.72.12.189])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AD3B31121314;
-        Wed,  4 Jan 2023 09:09:04 +0000 (UTC)
-Date:   Wed, 4 Jan 2023 17:08:55 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v15 7/7] x86/crash: add x86 crash hotplug support
-Message-ID: <Y7VCJ4QvBIYNnF0b@MiWiFi-R3L-srv>
-References: <20221209153656.3284-1-eric.devolder@oracle.com>
- <20221209153656.3284-8-eric.devolder@oracle.com>
+        Wed, 4 Jan 2023 04:11:17 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CF9DC;
+        Wed,  4 Jan 2023 01:11:16 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id g1so33463339edj.8;
+        Wed, 04 Jan 2023 01:11:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EwljbFY9Lfjs8WqYNdIuIbwZd1SqYR0YdLKGV8vB66I=;
+        b=BLHa+qhetCVIaxZ2fzWLFOSv3sXntflfxV9QOIndkE6ywBBR19tqJHGiYB4lqLjMXR
+         7xaQSvuPe4qMZ89saXEr8cwls4o+8WC2oxDOeM592v31F8qq9Q+3l3DEgjh16d1zyngT
+         qsPG3QgGoKOGaXbuMY36Dzue08wDJIJGLTp+hLsNvrhi8eKWsjjbH/4ZgCR2a8iTmSB9
+         /PmCXya7qZ4bWjEoN08GBX+V8J1/WJLz88ldudVNIWUbo2biFgFaHQLcSy8IQcNew2wD
+         Cur3zHsjL2DOXfuqYRZqh3T5vRnOXDnwyTyGQUVN7vvSOU2E6ZQOUshcFuYQqB8ZqXjr
+         ucwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EwljbFY9Lfjs8WqYNdIuIbwZd1SqYR0YdLKGV8vB66I=;
+        b=OzT7sCoJXZaK6tUVo3Kig9u8gu/roCxtYcS8nPKAqembpWZ3TlsBRRXP7C9oqEr1hA
+         CtC299hk1Ha7FquGU/KHDe//hCIQvAOq33oYRl+5qfVhoOfNLO0CX1drFY2Ib3J4TMxn
+         MSB0Zt2jtPqUAPlZh8rmSDaHesBbXG6IjrRhZ7IlTGSclwjdk7s93eHmAQb97hSR0BPl
+         k4x14yKa0OPSxnw9yWy/2t53o18PzXiexg9+fXlDK2NcdzJnWyiKIYx+1eB8qBUxbbT2
+         KYLCQK9InSvZrfv3fK2fiG2uzXCoJbCpPHPr7Lu/gxVkKrwb+5tujWTYULm8/ySwXIxR
+         ZCjQ==
+X-Gm-Message-State: AFqh2koy+nQbIWRS1MWhvzR46tnKAc/fpWklbTHfvd9HYjh9cre12BQa
+        OFqqAOZoNOU3sH6QA9Kqk2g=
+X-Google-Smtp-Source: AMrXdXvwM+6Mbb80KUkrXkmtrQ9IxQGbERV+Bjh6Dt31qvk4eaOptGabK546Ivunu0L1ByeYK6Exdw==
+X-Received: by 2002:a05:6402:538f:b0:45c:835c:1ebb with SMTP id ew15-20020a056402538f00b0045c835c1ebbmr49094439edb.9.1672823474738;
+        Wed, 04 Jan 2023 01:11:14 -0800 (PST)
+Received: from gmail.com (cpe90-146-206-21.liwest.at. [90.146.206.21])
+        by smtp.gmail.com with ESMTPSA id h13-20020a0564020e0d00b0046b00a9eeb5sm14571437edh.49.2023.01.04.01.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 01:11:14 -0800 (PST)
+Date:   Wed, 4 Jan 2023 10:10:10 +0100
+From:   Johannes Altmanninger <aclopte@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+Message-ID: <Y7VCcgHUC6JtnO2b@gmail.com>
+References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221209153656.3284-8-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,150 +78,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/22 at 10:36am, Eric DeVolder wrote:
-...... snip out
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 9ceb93c176a6..5186df48ce6c 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -42,6 +42,21 @@
->  #include <asm/crash.h>
->  #include <asm/cmdline.h>
->  
-> +/*
-> + * For the kexec_file_load() syscall path, specify the maximum number of
-> + * memory regions that the elfcorehdr buffer/segment can accommodate.
-> + * These regions are obtained via walk_system_ram_res(); eg. the
-> + * 'System RAM' entries in /proc/iomem.
-> + * This value is combined with NR_CPUS_DEFAULT and multiplied by
-> + * sizeof(Elf64_Phdr) to determine the final elfcorehdr memory buffer/
-> + * segment size.
-> + * The value 8192, for example, covers a (sparsely populated) 1TiB system
-> + * consisting of 128MiB memblocks, while resulting in an elfcorehdr
-> + * memory buffer/segment size under 1MiB. This represents a sane choice
-> + * to accommodate both baremetal and virtual machine configurations.
-> + */
-> +#define CRASH_MAX_MEMORY_RANGES 8192
-> +
->  /* Used while preparing memory map entries for second kernel */
->  struct crash_memmap_data {
->  	struct boot_params *params;
-> @@ -394,10 +409,39 @@ int crash_load_segments(struct kimage *image)
->  	if (ret)
->  		return ret;
->  
-> -	image->elf_headers = kbuf.buffer;
-> -	image->elf_headers_sz = kbuf.bufsz;
-> +	image->elf_headers	= kbuf.buffer;
-> +	image->elf_headers_sz	= kbuf.bufsz;
-> +	kbuf.memsz		= kbuf.bufsz;
-> +
-> +#ifdef CONFIG_CRASH_HOTPLUG
-> +	if (IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
-
-Do I miss anything important during reviewing? I can't see why memory
-hotplug is also relying on HOTPLUG_CPU.
-
-> +		/*
-> +		 * Ensure the elfcorehdr segment large enough for hotplug changes.
-> +		 * Start with VMCOREINFO and kernel_map.
-> +		 */
-> +		unsigned long pnum = 2;
-> +
-> +		if (IS_ENABLED(CONFIG_HOTPLUG_CPU))
-> +			pnum += CONFIG_NR_CPUS_DEFAULT;
-> +
-> +		if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG))
-> +			pnum += CRASH_MAX_MEMORY_RANGES;
-> +
-> +		if (pnum < (unsigned long)PN_XNUM) {
-> +			kbuf.memsz = pnum * sizeof(Elf64_Phdr);
-> +			kbuf.memsz += sizeof(Elf64_Ehdr);
-> +
-> +			image->elfcorehdr_index = image->nr_segments;
-> +			image->elfcorehdr_index_valid = true;
-> +
-> +			/* Mark as usable to crash kernel, else crash kernel fails on boot */
-> +			image->elf_headers_sz = kbuf.memsz;
-> +		} else {
-> +			pr_err("number of Phdrs %lu exceeds max\n", pnum);
-> +		}
-> +	}
-> +#endif
->  
-> -	kbuf.memsz = kbuf.bufsz;
->  	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
->  	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
->  	ret = kexec_add_buffer(&kbuf);
-> @@ -412,3 +456,67 @@ int crash_load_segments(struct kimage *image)
->  	return ret;
->  }
->  #endif /* CONFIG_KEXEC_FILE */
-> +
-> +#ifdef CONFIG_CRASH_HOTPLUG
-> +
-> +#undef pr_fmt
-> +#define pr_fmt(fmt) "crash hp: " fmt
-> +
-> +/**
-> + * arch_crash_handle_hotplug_event() - Handle hotplug elfcorehdr changes
-> + * @image: the active struct kimage
-> + *
-> + * To accurately reflect hot un/plug changes, the new elfcorehdr
-> + * is prepared in a kernel buffer, and then it is written on top
-> + * of the existing/old elfcorehdr.
-> + */
-> +void arch_crash_handle_hotplug_event(struct kimage *image)
-> +{
-> +	void *elfbuf = NULL, *old_elfcorehdr;
-> +	unsigned long mem, memsz;
-> +	unsigned long elfsz = 0;
-> +
-> +	/*
-> +	 * Create the new elfcorehdr reflecting the changes to CPU and/or
-> +	 * memory resources.
-> +	 */
-> +	if (prepare_elf_headers(image, &elfbuf, &elfsz)) {
-> +		pr_err("unable to prepare elfcore headers");
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * Obtain address and size of the elfcorehdr segment, and
-> +	 * check it against the new elfcorehdr buffer.
-> +	 */
-> +	mem = image->segment[image->elfcorehdr_index].mem;
-> +	memsz = image->segment[image->elfcorehdr_index].memsz;
-> +	if (elfsz > memsz) {
-> +		pr_err("update elfcorehdr elfsz %lu > memsz %lu",
-> +			elfsz, memsz);
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * Copy new elfcorehdr over the old elfcorehdr at destination.
-> +	 */
-> +	old_elfcorehdr = kmap_local_page(pfn_to_page(mem >> PAGE_SHIFT));
-> +	if (old_elfcorehdr) {
-> +		pr_err("updating elfcorehdr failed\n");
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * Temporarily invalidate the crash image while the
-> +	 * elfcorehdr is updated.
-> +	 */
-> +	xchg(&kexec_crash_image, NULL);
-> +	memcpy_flushcache(old_elfcorehdr, elfbuf, elfsz);
-> +	xchg(&kexec_crash_image, image);
-> +	kunmap_local(old_elfcorehdr);
-> +	pr_debug("updated elfcorehdr\n");
-> +
-> +out:
-> +	vfree(elfbuf);
-> +}
-> +#endif
-> -- 
-> 2.31.1
+On Wed, Dec 28, 2022 at 09:22:56PM +0100, Vlastimil Babka wrote:
+> Ugh, while the problem [1] was fixed in 6.1, it's now happening again on
+> the T460 with 6.2-rc1. Except I didn't see any oops message or
+> "tpm_try_transmit" error this time. The first indication of a problem is
+> this during a resume from suspend to ram:
 > 
+> tpm tpm0: A TPM error (28) occurred continue selftest
+> 
+> and then periodically 
+> 
+> tpm tpm0: A TPM error (28) occurred attempting get random
+> 
+> and further suspend to ram attempts fail:
+> 
+> tpm tpm0: Error (28) sending savestate before suspend
+> tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
+> tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
+> tpm_tis 00:08: PM: failed to suspend: error 28
+> PM: Some devices failed to suspend, or early wake event detected
+> 
+> Unfortunately I doubt I would be able to bisect it as any "good" kernel might
+> be a false negative.
+> 
+> [1] https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
+> 
+> #regzbot introduced: v6.1..v6.2-rc1
 
+I see almost exactly the same symptoms with v6.1.1 on a T460s.
+No "tpm_try_transmit" etc. The only difference is that I get 0x20 instead
+of 0x10 (that's probably immaterial).
+
+Also, I have this line immediately before the tpm error.
+
+	psmouse serio2: Failed to disable mouse on synaptics-pt/serio0
+	tpm tpm0: Error (28) sending savestate before suspend
+	[...]
+
+In the past I have had similar problems on another Thinkpad where a touchpad
+driver prevented suspend.  Unloading the module (I think psmouse, not sure)
+helped. I haven't tried this here since it only happens sometimes.
