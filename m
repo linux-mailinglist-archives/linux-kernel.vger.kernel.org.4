@@ -2,117 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1640465DDEA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EEB65DDEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbjADU4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 15:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
+        id S235320AbjADU67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 15:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjADU4p (ORCPT
+        with ESMTP id S230233AbjADU65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 15:56:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0582644F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 12:56:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C0D461820
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 20:56:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56146C433D2;
-        Wed,  4 Jan 2023 20:56:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672865803;
-        bh=kjiExM4xf3HO6ijvfx7QZuh23bpGDHwsVCfc7Yyk1HU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MisCrzJOQ2AlaoDlUpXq+Z+JR+Yv85yfsw+BX1dGsdcAAK1F3KFqWAGBoy9b3AdJy
-         tenpgFDWp1PWRHP9fBbvk/B+CgcN2tuwAvWoYjbo2ClvYi/WS8bOiPTiM8SD+w0ioz
-         Nc/gSsFOGGJzPNfQMUb4ccqQ+d/WbQNyhHxyWiXacohkg1fgLSOTNA9MCPuXUpjBF+
-         zuoGh3PmfWhKbG4TMGOQvapiZ5l0VZY/jJ9gVeL7M+Vzluo0MHBzyVrwRfTqcoD/TH
-         vi9KS8VYG7DIDxSyRvrvjduugQVqVVyyZqQTV6w+qL0+xnwnjn9Q3A8dViQx0SYWl2
-         WSruTixfjYQtw==
-Received: by pali.im (Postfix)
-        id 6CCE2A3A; Wed,  4 Jan 2023 21:56:40 +0100 (CET)
-Date:   Wed, 4 Jan 2023 21:56:40 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 6.2-rc1
-Message-ID: <20230104205640.o2uy2jk4v6yfm4w3@pali>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20230104190115.ceglfefco475ev6c@pali>
- <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
+        Wed, 4 Jan 2023 15:58:57 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id BC39015FCE
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 12:58:53 -0800 (PST)
+Received: (qmail 481624 invoked by uid 1000); 4 Jan 2023 15:58:52 -0500
+Date:   Wed, 4 Jan 2023 15:58:52 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y7XojCwWskMDEkRS@rowland.harvard.edu>
+References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
+ <YytfFiMT2Xsdwowf@rowland.harvard.edu>
+ <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
+ <114ECED5-FED1-4361-94F7-8D9BC02449B7>
+ <YzSAnclenTz7KQyt@rowland.harvard.edu>
+ <f763bd5ff835458d8750b61da47fe316@huawei.com>
+ <Y7R6SPHGS9U/T6IC@rowland.harvard.edu>
+ <Y7WdKog5K/UV4JhZ@andrea>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7WdKog5K/UV4JhZ@andrea>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 04 January 2023 11:25:41 Linus Torvalds wrote:
-> On Wed, Jan 4, 2023 at 11:01 AM Pali Rohár <pali@kernel.org> wrote:
-> >
-> > Driver is still used and userspace tools for it are part of the udftools
-> > project, which is still under active maintenance. More people already
-> > informed me about this "surprise".
-> 
-> Why is that driver used?
-> 
-> It's *literally* pointless. It's just a shell that forwards ioctl's to
-> the real drivers.
-> 
-> > Any comments on this? Because until now nobody answered why this
-> > actively used driver was removed from kernel without informing anybody:
-> 
-> Well, it's been marked as deprecated for five years, so any kernel
-> config should have gotten this notice for the help entry
-> 
->           Note: This driver is deprecated and will be removed from the
->           kernel in the near future!
-> 
-> but I guess people didn't notice.
-> 
-> It could be re-instated, but it really is a completely useless driver.
-> Just use the *regular* device nodes, not the pointless pktcd ones.
-> 
-> Is there any real reason why udftools can't just use the normal device node?
-> 
-> The historical reason for this driver being pointless goes back *much*
-> longer than five years - it used to be that the pktcd driver was
-> special, and was the only thing that did raw commands.
-> 
-> But the regular block layer was taught to do that back around 2004, so
-> the "pktcd" driver has literally just been a pointless shell for
-> almost two decades.
-> 
-> And I know it was in 2004, because I actually did most of that "make
-> SCSI commands generic" work myself (but had to go back to the old BK
-> archives to find the exact date - it's been two decades, after all).
-> 
-> I did it because I was fed up with the crazy pktcd driver requiring
-> extra work, when I just wanted to write CD's on my regular IDE CD-ROM
-> the obvious way.
-> 
-> So if there is some reason to actually use the pktcd driver, please
-> tell us what that is.
-> 
->               Linus
+On Wed, Jan 04, 2023 at 04:37:14PM +0100, Andrea Parri wrote:
+> Sounds good to me too.  I'm trying to remember why we went for the LKW
+> event to model smp_mb__after_unlock_lock() (as opposed to the LKR event,
+> as suggested above/in po-unlock-lock-po).
 
-Last time I did big retest of optical media was two years ago. At that
-time kernel was not able to mount CD-RW disc in full read-write mode
-from the normal node /dev/cdrom. Via pktcdvd driver mapping it was
-possible without any issue. Was there any change in last 5 (or more)
-years in this CD-RW area? Mounting CD-RW media in read-only mode via
-normal /dev/cdrom node always worked fine. Also "burning" CD-R media
-with userspace burning tools on normal /dev/cdrom node also worked.
-But here it is CD-RW media in read-write mode with kernel udf filesystem
-driver without any userspace involved (after proper formatting).
+I don't remember either, but with the LKR event it would be awkward to 
+include the co part of (co | po) in the smp_mb__after_unlock_lock() 
+definition.  You'd have to write something like ((co? ; rf) | po).
+
+Aside from that, I don't think using LKR vs. LKW makes any difference.
+
+>  Anyway, I currently see no 
+> issue with the above (we know that LKW and LKR come paired), and I think
+> it's good to merge the two notions of "unlock-lock pair" if possible.
+
+Indeed.  It also would eliminate questions about why po-unlock-lock-po 
+doesn't include the co term.
+
+Alan
