@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA9965D77B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C1065D77D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239596AbjADPqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
+        id S239699AbjADPqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239792AbjADPpX (ORCPT
+        with ESMTP id S239703AbjADPq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:45:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321B334751;
-        Wed,  4 Jan 2023 07:45:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD5446177A;
-        Wed,  4 Jan 2023 15:45:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 056B1C433EF;
-        Wed,  4 Jan 2023 15:45:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672847113;
-        bh=29csCBF4JURyjYpQuuNuLUTGmcuSnO2zlMmXA5Fr9S8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=T9FVM8BYsffWLFQL4gRKaT+HXpTeg+IisPbGJEOvE1FH9C8LLaWYfRE6hY1+Den3T
-         PBKP/QmqvfvUk469Y0lE/YJ7+ShrIs890yEwnJQp+VZIvfnW3sY4SDQ2YT3AhS+RYS
-         sEF6XaVa0O6rnaW40pF9mAAwlMdlh3k8lOiTzlRM4ejQ/967p1izRv4Uvkobi3Qa4x
-         ijyIokZbqQm7Csjld8Rp+KTxYFZbGBl37EaPuW6rCx/Unle6FOR1RzxefEctk+u3yT
-         YNVxmD8IZxTemK/KfbMcOXOh421/pmpFKa/FdbrHy0K5Gea3buSg3Lx74pFm572kQ4
-         y4rMeaHOJ4ITg==
-Date:   Wed, 4 Jan 2023 09:45:11 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     bhelgaas@google.com, hdegoede@redhat.com, kernelorg@undead.fr,
-        kjhambrick@gmail.com, 2lprbe78@duck.com,
-        nicholas.johnson-opensource@outlook.com.au, benoitg@coeus.ca,
-        mika.westerberg@linux.intel.com, wse@tuxedocomputers.com,
-        mumblingdrunkard@protonmail.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david.e.box@intel.com,
-        yunying.sun@intel.com
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <20230104154511.GA1071195@bhelgaas>
+        Wed, 4 Jan 2023 10:46:27 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10926395
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 07:46:24 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id a184so12328331pfa.9
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 07:46:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=77fIouPB3CBo9hdk97EBnQZpnfI803efx1airl6rq5E=;
+        b=enIH8aaZueLgX1MGtHL7ltJPuMsimaTiFPZLqexb/VlKTutGZXchcAGzfdKr8olD9S
+         SZ7CV37QHQVHGEHNV/uLAQO44Zjmheixc5pd1r2v9AMtW/FmT9k29f3wVIhzsIvp7POR
+         qo4MNY5TPmuFlAnXMNo2E6zThwrUXOn4ZOmbE0OLNGTQudfcDpZc/oSHy0gOu287qaX6
+         XWGhXLXdo66hZGwMzehaFf2k7pEZwPshmuBGWxORmosyMSvqSv3JdO87nGjocLhXq/lJ
+         lXP7E4E9l+BzQ+Mb5BbhuRi+FauHOyFhkknP/3dJ06wJdpVJTchipPMy0MtyE2pQU+gJ
+         YctA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=77fIouPB3CBo9hdk97EBnQZpnfI803efx1airl6rq5E=;
+        b=RpSJEJUaU5E8MyhDNEYAfnH7zoKHa5tJFGFUx+udfAQzGPa5L9XwVTiQAG/cDbn50H
+         OUG4rdRm7uHQPKP47ow3k4PMWFztb/RcZjqP1Q/Wx7PCtqpNT7Q7/hkIlOaZB5PYg/es
+         HJyzoROSbxRMNJEsniwAlqc/lluEi4+V4Lp8fThNSkArkBi/+WSB6vg8Ne6dWr8AKVTJ
+         t4qo2szPfBJywwA5XDdrNkcWh0R8CZMptVBi8P7rrOPMKAWOA/EOjgeIVX0v6f8xMLuU
+         uAcU7adnqjd+mG0zpcvcBlvT1rbldGgyOo44Wg60T7D05kvb/DhKWMpIc/jUR2aKEIpy
+         EZlw==
+X-Gm-Message-State: AFqh2koRnuSYeapVOCThlBmaBrnHmHj8NvRLe7NC3GlHH+jGaiSqF1YL
+        jhVuGaIHYDU5dR6x1TTJHr0pA+zpYN7soOYEY4cP3g==
+X-Google-Smtp-Source: AMrXdXvCb6udar7PNArrd6qU/zxQY3pjAsYcJ8Psr3n5jsAIiclTlRIqmXn1z0KYUKEvBKNApw0/HUxNliZkrrwTnjc=
+X-Received: by 2002:a63:ba09:0:b0:479:2227:3aa1 with SMTP id
+ k9-20020a63ba09000000b0047922273aa1mr2133298pgf.595.1672847184356; Wed, 04
+ Jan 2023 07:46:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104145032.GA1069244@bhelgaas>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org> <20221219151503.385816-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221219151503.385816-2-krzysztof.kozlowski@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 4 Jan 2023 16:45:48 +0100
+Message-ID: <CAPDyKFrVjenwv0Fe36LBqML-R_w2TjoCwmbnqqOohV_1zH8vJQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] PM: domains: Add GENPD_FLAG_RT_SAFE for PREEMPT_RT
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,73 +75,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 08:50:32AM -0600, Bjorn Helgaas wrote:
-> On Wed, Jan 04, 2023 at 09:39:56AM -0500, Liang, Kan wrote:
-> > Hi Bjorn,
-> > 
-> > Happy new year!
-> > 
-> > We found some PCI issues with the latest 6.2-rc2.
-> > 
-> > - Using the lspci -xxxx, the extended PCI config space of all PCI
-> > devices are missed with the latest 6.2-rc2. The system we used had 932
-> > PCI devices, at least 800 which have extended space as seen when booted
-> > into a 5.15 kernel. But none of them appeared in 6.2-rc2.
-> > - The drivers which rely on the information in the extended PCI config
-> > space don't work anymore. We have confirmed that the perf uncore driver
-> > (uncore performance monitoring) and Intel VSEC driver (telemetry) don't
-> > work in 6.2-rc2. There could be more drivers which are impacted.
-> > 
-> > After a bisect, we found the regression is caused by the below commit
-> > 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map").
-> > After reverting the commit, the issues are gone.
-> > 
-> > Could you please take a look at the issues?
-> 
-> Certainly.  Can you capture the complete dmesg log, please?
+On Mon, 19 Dec 2022 at 16:15, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Realtime kernels with PREEMPT_RT must use raw_spinlock_t for domains
+> which are invoked from CPU idle (thus from atomic section).  Example is
+> cpuidle PSCI domain driver which itself is PREEMPT_RT safe, but is being
+> called as part of cpuidle.
 
-Thanks!  Comparing v5.19 and v6.2-rc2, I see these:
+Just so I don't get this wrong, since the cpuidle-psci also calls
+pm_runtime_* functions so it isn't PREEMPT_RT safe, at least not yet?
 
-  --- v5.19
-  +++ v6.2-rc2
+>
+> Add a flag allowing a power domain provider to indicate it is RT safe.
+> The flag is supposed to be used with existing GENPD_FLAG_IRQ_SAFE.
+>
+> Cc: Adrien Thierry <athierry@redhat.com>
+> Cc: Brian Masney <bmasney@redhat.com>
+> Cc: linux-rt-users@vger.kernel.org
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-  +efi: Remove mem458: MMIO range=[0x80000000-0x8fffffff] (256MB) from e820 map
-  +e820: remove [mem 0x80000000-0x8fffffff] reserved
-  -PCI: MMCONFIG at [mem 0x80000000-0x8fffffff] reserved in E820
-  +PCI: not using MMCONFIG
-  +PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
-  +[Firmware Info]: PCI: MMCONFIG at [mem 0x80000000-0x8fffffff] not reserved in ACPI motherboard resources
-  +PCI: not using MMCONFIG
-   system 00:01: [mem 0xff000000-0xffffffff] has been reserved
-   system 00:02: [mem 0xfd000000-0xfd69ffff] could not be reserved
-   system 00:02: [mem 0xfd6c0000-0xfd6cffff] has been reserved
-   system 00:02: [mem 0xfd6f0000-0xfdffffff] has been reserved
-   system 00:02: [mem 0xfe000000-0xfe01ffff] could not be reserved
-   system 00:02: [mem 0xfe200000-0xfe7fffff] has been reserved
-   system 00:02: [mem 0xff000000-0xffffffff] has been reserved
+For genpd, overall, I think this looks like an okay approach to me.
+Although, let me check the whole series (I need some more time to do
+that) before I give this my blessing.
 
-I think this is a firmware defect.  MCFG says the ECAM space is at
-[mem 0x80000000-0x8fffffff].  Per the PCI Firmware Spec, r3.3, Note 2
-of Table 4-2, this space should be reserved by a motherboard resource,
-i.e., a PNP0C02 device (which would appear as "system 00:01" or
-similar above) with _CRS that includes [mem 0x80000000-0x8fffffff].
+Kind regards
+Uffe
 
-This firmware supplies an EfiMemoryMappedIO region
-[0x80000000-0x8fffffff] for the ECAM space (this could be confirmed by
-adding "efi=debug"), and the bootloader or EFI stub converted that to
-an E820 entry that Linux consumes.
-
-On v5.19, Linux treated that EfiMemoryMappedIO region as a reservation
-of the ECAM space, but starting with v6.2-rc1, Linux removes
-EfiMemoryMappedIO regions from E820.
-
-My understanding is that EfiMemoryMappedIO tells the OS to map the
-area for use by runtime services, but is not intended to prevent the
-OS from using the area.  Some platforms use EfiMemoryMappedIO for PCI
-host bridge apertures, and of course the OS needs to use those.
-
-If your firmware folks disagree and think Linux should be able to
-figure this out differently, I would love to have a conversation about
-how to do this.
-
-Bjorn
+>
+> ---
+>
+> Independently from Adrien, I encountered the same problem around genpd
+> when using PREEMPT_RT kernel.
+>
+> Previous patch by Adrien:
+> https://lore.kernel.org/all/20220615203605.1068453-1-athierry@redhat.com/
+> ---
+>  drivers/base/power/domain.c | 59 +++++++++++++++++++++++++++++++++++--
+>  include/linux/pm_domain.h   | 13 ++++++++
+>  2 files changed, 70 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 967bcf9d415e..4dfce1d476f4 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -119,6 +119,48 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+>         .unlock = genpd_unlock_spin,
+>  };
+>
+> +static void genpd_lock_rawspin(struct generic_pm_domain *genpd)
+> +       __acquires(&genpd->rslock)
+> +{
+> +       unsigned long flags;
+> +
+> +       raw_spin_lock_irqsave(&genpd->rslock, flags);
+> +       genpd->rlock_flags = flags;
+> +}
+> +
+> +static void genpd_lock_nested_rawspin(struct generic_pm_domain *genpd,
+> +                                       int depth)
+> +       __acquires(&genpd->rslock)
+> +{
+> +       unsigned long flags;
+> +
+> +       raw_spin_lock_irqsave_nested(&genpd->rslock, flags, depth);
+> +       genpd->rlock_flags = flags;
+> +}
+> +
+> +static int genpd_lock_interruptible_rawspin(struct generic_pm_domain *genpd)
+> +       __acquires(&genpd->rslock)
+> +{
+> +       unsigned long flags;
+> +
+> +       raw_spin_lock_irqsave(&genpd->rslock, flags);
+> +       genpd->rlock_flags = flags;
+> +       return 0;
+> +}
+> +
+> +static void genpd_unlock_rawspin(struct generic_pm_domain *genpd)
+> +       __releases(&genpd->rslock)
+> +{
+> +       raw_spin_unlock_irqrestore(&genpd->rslock, genpd->rlock_flags);
+> +}
+> +
+> +static const struct genpd_lock_ops genpd_rawspin_ops = {
+> +       .lock = genpd_lock_rawspin,
+> +       .lock_nested = genpd_lock_nested_rawspin,
+> +       .lock_interruptible = genpd_lock_interruptible_rawspin,
+> +       .unlock = genpd_unlock_rawspin,
+> +};
+> +
+>  #define genpd_lock(p)                  p->lock_ops->lock(p)
+>  #define genpd_lock_nested(p, d)                p->lock_ops->lock_nested(p, d)
+>  #define genpd_lock_interruptible(p)    p->lock_ops->lock_interruptible(p)
+> @@ -126,6 +168,8 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+>
+>  #define genpd_status_on(genpd)         (genpd->status == GENPD_STATE_ON)
+>  #define genpd_is_irq_safe(genpd)       (genpd->flags & GENPD_FLAG_IRQ_SAFE)
+> +#define genpd_is_rt_safe(genpd)                (genpd_is_irq_safe(genpd) && \
+> +                                        (genpd->flags & GENPD_FLAG_RT_SAFE))
+>  #define genpd_is_always_on(genpd)      (genpd->flags & GENPD_FLAG_ALWAYS_ON)
+>  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+>  #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
+> @@ -1838,6 +1882,12 @@ static int genpd_add_subdomain(struct generic_pm_domain *genpd,
+>                 return -EINVAL;
+>         }
+>
+> +       if (!genpd_is_rt_safe(genpd) && genpd_is_rt_safe(subdomain)) {
+> +               WARN(1, "Parent %s of subdomain %s must be RT safe\n",
+> +                    genpd->name, subdomain->name);
+> +               return -EINVAL;
+> +       }
+> +
+>         link = kzalloc(sizeof(*link), GFP_KERNEL);
+>         if (!link)
+>                 return -ENOMEM;
+> @@ -2008,8 +2058,13 @@ static void genpd_free_data(struct generic_pm_domain *genpd)
+>  static void genpd_lock_init(struct generic_pm_domain *genpd)
+>  {
+>         if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
+> -               spin_lock_init(&genpd->slock);
+> -               genpd->lock_ops = &genpd_spin_ops;
+> +               if (genpd->flags & GENPD_FLAG_RT_SAFE) {
+> +                       raw_spin_lock_init(&genpd->rslock);
+> +                       genpd->lock_ops = &genpd_rawspin_ops;
+> +               } else {
+> +                       spin_lock_init(&genpd->slock);
+> +                       genpd->lock_ops = &genpd_spin_ops;
+> +               }
+>         } else {
+>                 mutex_init(&genpd->mlock);
+>                 genpd->lock_ops = &genpd_mtx_ops;
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 1cd41bdf73cf..0a1600244963 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -61,6 +61,14 @@
+>   * GENPD_FLAG_MIN_RESIDENCY:   Enable the genpd governor to consider its
+>   *                             components' next wakeup when determining the
+>   *                             optimal idle state.
+> + *
+> + * GENPD_FLAG_RT_SAFE:         When used with GENPD_FLAG_IRQ_SAFE, this informs
+> + *                             genpd that its backend callbacks, ->power_on|off(),
+> + *                             do not use other spinlocks. They might use
+> + *                             raw_spinlocks or other pre-emption-disable
+> + *                             methods, all of which are PREEMPT_RT safe. Note
+> + *                             that, a genpd having this flag set, requires its
+> + *                             masterdomains to also have it set.
+>   */
+>  #define GENPD_FLAG_PM_CLK       (1U << 0)
+>  #define GENPD_FLAG_IRQ_SAFE     (1U << 1)
+> @@ -69,6 +77,7 @@
+>  #define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
+>  #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+>  #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
+> +#define GENPD_FLAG_RT_SAFE      (1U << 7)
+>
+>  enum gpd_status {
+>         GENPD_STATE_ON = 0,     /* PM domain is on */
+> @@ -164,6 +173,10 @@ struct generic_pm_domain {
+>                         spinlock_t slock;
+>                         unsigned long lock_flags;
+>                 };
+> +               struct {
+> +                       raw_spinlock_t rslock;
+> +                       unsigned long rlock_flags;
+> +               };
+>         };
+>
+>  };
+> --
+> 2.34.1
+>
