@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED76D65CB00
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD2565CB04
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbjADAlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S238715AbjADAmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 19:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234247AbjADAlI (ORCPT
+        with ESMTP id S234247AbjADAmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:41:08 -0500
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02839DEE2;
-        Tue,  3 Jan 2023 16:41:06 -0800 (PST)
-Received: by mail-il1-f170.google.com with SMTP id p15so7901647ilg.9;
-        Tue, 03 Jan 2023 16:41:05 -0800 (PST)
+        Tue, 3 Jan 2023 19:42:00 -0500
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9E4140D3;
+        Tue,  3 Jan 2023 16:41:54 -0800 (PST)
+Received: by mail-il1-f169.google.com with SMTP id d10so18881149ilc.12;
+        Tue, 03 Jan 2023 16:41:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0OnDnO+Scf4Eq7m34XnPlJQdfz1ctr+/kVqfeVptYbI=;
-        b=w5i8ySdzVVsgf06XsVVyeNABn/Tir0Rm8Slbu+sB7BRWmzfvBbzDQkIPqNluiBcfZy
-         zEVC95qKyXFOd1NrAZAwDTKymca/uCQfbh/RGxQglXfXiSqyhywdCpSDtxiVUXymTQHu
-         geuoazDxRW5bQePlYDl95t3qn3RF6wugt1/EkUEzYRzZidlJz/c332LhcGWMfl4F2Ii3
-         cq9JDUXKRGBAkqTCxUbgm9sTaDiDopI8dD6F6fpfD6p/hhEstLnOut9pAzAVyuYZaScQ
-         bfiIvEWq7TwILcpTwKgo+0coXGUfry1SwM0LGPxtNufvR4uhYWxJzXyhzwETtcqWVAKW
-         KVxQ==
-X-Gm-Message-State: AFqh2kpbWc+47Z+YaW67RD2wT29O8uqDJYHHEI3aap2Df6Wz7DvXwU5U
-        OKwqs3FdKY9p5qlfa2CJ5Al9wvYrdA==
-X-Google-Smtp-Source: AMrXdXucfQ1h0mlf8D9SnrkgUMGn0Nj5EHYHbNmrDg5Q8wfDlDKtKcdBfklctbTUhVENsupZPJe3KA==
-X-Received: by 2002:a92:cf06:0:b0:30c:39e9:7962 with SMTP id c6-20020a92cf06000000b0030c39e97962mr11082284ilo.9.1672792865191;
-        Tue, 03 Jan 2023 16:41:05 -0800 (PST)
+        bh=7i5QCkn5f7/8bQHHWhpZfw+Hrwcm09g6oLcGGwmqm4Y=;
+        b=tnwWDMwWgDjqvkLQKMpl5kelgrYH1KMlpaOLG+bKTfwgopRJXe1v4HPAdxACJVuIlV
+         2qfLbcbZCh1GlUhQm43NfFWwMiDl7uU2xBPH5hCvJb1aPMs5+noi1DR1XkI7Q7UYeR7o
+         TFNc9nueLHK0iLufsKFLzn3jfnbPepjWwIkYpxovX/+6TqZhOtjyzmcS741hW+oNliTF
+         hKTOVzGpSZ1wFo+/ELissROAI0UjlKhkzPZHlxrYF6xGYHm0YTtWdS9hFF5ftKGL/Xok
+         7lb1DtfJAPd3TseamelXfohpFJlrdsMUivlGTSQUUmTx4xHNF/OE5iv0LQVxWtr4CaFS
+         C9bg==
+X-Gm-Message-State: AFqh2krFZW3wciDBt+e3vjhsOKygIwHLLN8f/p/DccmO+cv/ALiXZ3/K
+        ejKSkZkJBiC9TzWUE4404WICGeVk1A==
+X-Google-Smtp-Source: AMrXdXt8R8M3J07HjvnrwFZepzmoP7CIx516i0FzByPM6GyFR9cjiBdwLlH3aoq3iU0UQkzD0+SzOg==
+X-Received: by 2002:a05:6e02:218d:b0:30c:2266:cfca with SMTP id j13-20020a056e02218d00b0030c2266cfcamr20059297ila.9.1672792913990;
+        Tue, 03 Jan 2023 16:41:53 -0800 (PST)
 Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id e22-20020a02cab6000000b003711ce0dc15sm10628564jap.68.2023.01.03.16.41.04
+        by smtp.gmail.com with ESMTPSA id y17-20020a926411000000b00305e6279bf2sm10160256ilb.74.2023.01.03.16.41.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 16:41:04 -0800 (PST)
-Received: (nullmailer pid 159624 invoked by uid 1000);
-        Wed, 04 Jan 2023 00:41:03 -0000
-Date:   Tue, 3 Jan 2023 18:41:03 -0600
+        Tue, 03 Jan 2023 16:41:53 -0800 (PST)
+Received: (nullmailer pid 160851 invoked by uid 1000);
+        Wed, 04 Jan 2023 00:41:52 -0000
+Date:   Tue, 3 Jan 2023 18:41:52 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     andreas@rammhold.de
-Cc:     devicetree@vger.kernel.org, stable@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Frank Rowand <frowand.list@gmail.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH] of/fdt: run soc memory setup when
- early_init_dt_scan_memory fails
-Message-ID: <167279286226.159538.13769216021607958062.robh@kernel.org>
-References: <20221223112748.2935235-1-andreas@rammhold.de>
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH] dt-bindings: soundwire: qcom,soundwire: correct sizes
+ related to number of ports
+Message-ID: <167279291060.160766.17238671980369497938.robh@kernel.org>
+References: <20221223132159.81211-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221223112748.2935235-1-andreas@rammhold.de>
+In-Reply-To: <20221223132159.81211-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -68,32 +73,20 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 23 Dec 2022 12:27:47 +0100, andreas@rammhold.de wrote:
-> From: Andreas Rammhold <andreas@rammhold.de>
+On Fri, 23 Dec 2022 14:21:59 +0100, Krzysztof Kozlowski wrote:
+> There are several properties depending on number of ports.  Some of them
+> had maximum limit of 5 and some of 8.  SM8450 AudioReach comes with 8
+> ports, so fix the limits:
 > 
-> If memory has been found early_init_dt_scan_memory now returns 1. If
-> it hasn't found any memory it will return 0, allowing other memory
-> setup mechanisms to carry on.
+>   sm8450-sony-xperia-nagara-pdx224.dtb: soundwire-controller@3250000: qcom,ports-word-length: 'oneOf' conditional failed, one must be fixed:
+>     [[255, 255, 255, 255, 255, 255, 255, 255]] is too short
+>     [255, 255, 255, 255, 255, 255, 255, 255] is too long
 > 
-> Previously early_init_dt_scan_memory always returned 0 without
-> distinguishing between any kind of memory setup being done or not. Any
-> code path after the early_init_dt_scan memory call in the ramips
-> plat_mem_setup code wouldn't be executed anymore. Making
-> early_init_dt_scan_memory the only way to initialize the memory.
-> 
-> Some boards, including my mt7621 based Cudy X6 board, depend on memory
-> initialization being done via the soc_info.mem_detect function
-> pointer. Those wouldn't be able to obtain memory and panic the kernel
-> during early bootup with the message "early_init_dt_alloc_memory_arch:
-> Failed to allocate 12416 bytes align=0x40".
-> 
-> Fixes: 1f012283e936 ("of/fdt: Rework early_init_dt_scan_memory() to call directly")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+> Fixes: febc50b82bc9 ("dt-bindings: soundwire: Convert text bindings to DT Schema")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  arch/mips/ralink/of.c | 2 +-
->  drivers/of/fdt.c      | 6 ++++--
->  2 files changed, 5 insertions(+), 3 deletions(-)
+>  .../devicetree/bindings/soundwire/qcom,soundwire.yaml  | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
 
 Applied, thanks!
