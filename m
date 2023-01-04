@@ -2,137 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED4F65DC6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 19:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E51C65DC6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 19:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235439AbjADS5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 13:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S239662AbjADS6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 13:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbjADS5A (ORCPT
+        with ESMTP id S229505AbjADS62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 13:57:00 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3296B13DFA
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 10:56:58 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Wed, 4 Jan 2023 13:58:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F6813DFA;
+        Wed,  4 Jan 2023 10:58:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0F8D71EC02FE;
-        Wed,  4 Jan 2023 19:56:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672858617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=eI6hrybg3gLaj8bRbb/kt2kToyODb7dNUhJzp/ZLGpY=;
-        b=l9gQ/gxHxlA9XtFIgW4MXMZ1vjMsP+AdznrIPuUUkXphaUE1LhTpk4529b/7ZShKtpo6Ud
-        v6V33oRywy0qwExgp4lfdnI52CzmXNWY2jSYaq800QemysqMc3sZs5dBUC47WLIbPQ1bN5
-        Lv+GPYpEe13qujigxQIsY3Uq1GyNDl4=
-Date:   Wed, 4 Jan 2023 19:56:52 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, X86-kernel <x86@kernel.org>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v3 2/6] x86/microcode/core: Take a snapshot before and
- after applying microcode
-Message-ID: <Y7XL9Pr9DiW0wdaM@zn.tnic>
-References: <20230103180212.333496-1-ashok.raj@intel.com>
- <20230103180212.333496-3-ashok.raj@intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95DD1B8189E;
+        Wed,  4 Jan 2023 18:58:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC6AC433D2;
+        Wed,  4 Jan 2023 18:58:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672858704;
+        bh=3vVdpC5QMDKOjWmTQ/3/rRhszXXRqwxpzpXtVyl2ErM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nCRON46YeHs7jNdMfdhH+ALgawFnY0kpHgtnHzibpHnwEad3oX4X0nC2+1J7MMTX6
+         2RXIXGRTQpCNMcfQLXZ8m23hB9NTdaZBuUmupfZmg6rDsO3PozDpW5U/g97y1GuTjn
+         h/Rxnpxcz3whYsdH+pefrXZit7Zk1TJS2rp2mdxnVRhaCqSHTVxELKMvFPh33j8dru
+         zkA+pR1tJ6dR4ev8TktVTJI1kGO34iBW7TGKr+w1orRJQ9cu0Fo2tsECUvFhbJ3Cp7
+         wt9Vq0qBTLUwH7G7krR8wIbvTTVT+dtuUHdQFaOi057xHDyk4u/Z2IwzIOLoE3UT/z
+         KODpDyecyachw==
+Date:   Wed, 4 Jan 2023 18:58:19 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Jean-Jacques Hiblot <jjhiblot@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] leds: led-core: Fix refcount leak in of_led_get
+Message-ID: <Y7XMS64+HVcbq+hn@google.com>
+References: <20221220121807.1543790-1-linmq006@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230103180212.333496-3-ashok.raj@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221220121807.1543790-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 10:02:08AM -0800, Ashok Raj wrote:
-> Fixes: 1008c52c09dc ("x86/CPU: Add a microcode loader callback")
+On Tue, 20 Dec 2022, Miaoqian Lin wrote:
 
-Why a Fixes tag? Do you have a failure scenario for current kernels?
+> class_find_device_by_of_node() calls class_find_device(), it will take
+> the reference, use the put_device() to drop the reference when not need
+> anymore.
+> 
+> Fixes: 699a8c7c4bd3 ("leds: Add of_led_get() and led_put()")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/leds/led-class.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-If so, then it would need stable backporting.
-
-If so, it would need the previous patch too.
-
-> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> index 387578049de0..ac2e67156b9b 100644
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -697,6 +697,7 @@ bool xen_set_default_idle(void);
->  #endif
->  
->  void __noreturn stop_this_cpu(void *dummy);
-> +void microcode_store_cpu_caps(struct cpuinfo_x86 *info);
-
-s/microcode_store_cpu_caps/store_cpu_caps/g
-
->  void microcode_check(struct cpuinfo_x86 *info);
->  
->  enum l1tf_mitigations {
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index b9c7529c920e..7c86c6fd07ae 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -2297,28 +2297,43 @@ void cpu_init_secondary(void)
->  #endif
->  
->  #ifdef CONFIG_MICROCODE_LATE_LOADING
-> +
-> +void microcode_store_cpu_caps(struct cpuinfo_x86 *info)
-> +{
-> +	/* Reload CPUID max function as it might've changed. */
-
-Might've changed how?
-
-> +	info->cpuid_level = cpuid_eax(0);
-> +
-> +	/*
-> +	 * Copy all capability leafs to pick up the synthetic ones so that
-> +	 * memcmp() below doesn't fail on that...
-
-split that comment and put the second part...
-
-> +	 */
-> +	memcpy(info->x86_capability, &boot_cpu_data.x86_capability,
-> +	       sizeof(info->x86_capability));
-> +
-
-... here:
-
-	/*
-	 * ... the ones coming from CPUID will get overwritten here:
-	 */
-
-> +	get_cpu_cap(info);
-> +}
-> +
->  /*
->   * The microcode loader calls this upon late microcode load to recheck features,
->   * only when microcode has been updated. Caller holds microcode_mutex and CPU
->   * hotplug lock.
->   */
-> -void microcode_check(struct cpuinfo_x86 *info)
-> +void microcode_check(struct cpuinfo_x86 *orig)
-					   ^^^^^
-
-Yeah, what dhansen said.
-
-Thx.
+Applied, thanks
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Lee Jones [李琼斯]
