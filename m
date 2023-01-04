@@ -2,159 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D994965D191
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA9165D199
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234532AbjADLhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 06:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S233557AbjADLj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 06:39:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjADLhf (ORCPT
+        with ESMTP id S230200AbjADLj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 06:37:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4CE1B9ED;
-        Wed,  4 Jan 2023 03:37:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 4 Jan 2023 06:39:27 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6778915720
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 03:39:25 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3158CB81629;
-        Wed,  4 Jan 2023 11:37:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3AA1C433EF;
-        Wed,  4 Jan 2023 11:37:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672832250;
-        bh=ifZwfrhIkTGIQJEEvqcP0bIoc8pO2AK8DydzKJqXHo4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nSfA2ISPrHXkRmB4FnqNjYPJVLu7CqJqDLc+3I3BJ12HetiZraycDjom0q0Xt9szC
-         INZUSjxQoYcW5KJDMVxE99EAy16q5fCyYjxxjv8Fq9ZGxbbTerfjOk7FLZ5txZDA/Z
-         xeANQpk7lP+aC2Lw3KmrUChI9zyfSySS4Bh6ZPxT/QwiC+ZQDrV1+MjRnh21kZWogc
-         n/tsMfEoKuqteOM3xQnZdhfcqrK3aU8+84xqomL1bPiZbmUW9sgSqf27CAToNns0u/
-         bWmxyxX18ZK8u/yZVcuvTWCNGDmRKlSKH4IizVmUUJxUhbWWm5jQWpGM3CrsDddiif
-         OMf1yBaQH/FTw==
-Date:   Wed, 4 Jan 2023 13:37:12 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Marc =?iso-8859-1?Q?Poulhi=E8s?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-Subject: Re: [RFC PATCH 11/25] kvx: Add memory management
-Message-ID: <Y7Vk6K5GS5yCkXOZ@kernel.org>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
- <20230103164359.24347-12-ysionneau@kalray.eu>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9C8DA1EC02FE;
+        Wed,  4 Jan 2023 12:39:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672832363;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+gClkcdwaOwO+NXTyvfxCTeJMJYk91I8QSHN3Wevzgs=;
+        b=quQLtXte26cDRwWFBo4GkC9dckjhSQ+7NhJMBlpQIboJfuZA1w6TBYWKZbU8YXV/7cAdG1
+        phlTL+z3yVchHt1zrSRuPONHejPfOjFqyolTuPMovbH86BPJiJzYfz9BWI/iYf5XE6/lBf
+        27nBgU9Te7iQ+7OhbLuukqZMRF6O/tw=
+Date:   Wed, 4 Jan 2023 12:39:18 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Daniel Verkamp <dverkamp@chromium.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH] x86: also disable FSRM if ERMS is disabled
+Message-ID: <Y7VlZsaWz4/b6Phf@zn.tnic>
+References: <20220923005827.1533380-1-dverkamp@chromium.org>
+ <Yy2U2BW6Tx0imGpK@zn.tnic>
+ <CABVzXAk9AXj2Ns7YAh7cCA38t2sGxOEYLv-EfLCoFHr-SUQ2Mw@mail.gmail.com>
+ <Yy3yJfz213Lqo4KC@zn.tnic>
+ <CABVzXAkO4pU+gpUcWOEWDw+W4id=1WEOgeP5+3tBG_LR6=oa=g@mail.gmail.com>
+ <1b184587-128d-e5cc-67e9-1d27feb87213@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230103164359.24347-12-ysionneau@kalray.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1b184587-128d-e5cc-67e9-1d27feb87213@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 05:43:45PM +0100, Yann Sionneau wrote:
-> Add memory management support for kvx, including: cache and tlb
-> management, page fault handling, ioremap/mmap and streaming dma support.
+On Wed, Jan 04, 2023 at 08:43:51AM +0100, Jiri Slaby wrote:
+> Let me resurrect this thread... Our customer has an AMD CPU which has indeed
+> both capabilities under normal circumstances. But they have a cool UEFI BIOS
+> too. They say:
 > 
-> CC: Will Deacon <will@kernel.org>
-> CC: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-> CC: Andrew Morton <akpm@linux-foundation.org>
-> CC: Nick Piggin <npiggin@gmail.com>
-> CC: Peter Zijlstra <peterz@infradead.org>
-> CC: Paul Walmsley <paul.walmsley@sifive.com>
-> CC: Palmer Dabbelt <palmer@dabbelt.com>
-> CC: Albert Ou <aou@eecs.berkeley.edu>
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-arch@vger.kernel.org
-> CC: linux-mm@kvack.org
-> CC: linux-riscv@lists.infradead.org
-> Co-developed-by: Clement Leger <clement.leger@bootlin.com>
-> Signed-off-by: Clement Leger <clement.leger@bootlin.com>
-> Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
-> Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
-> Co-developed-by: Jean-Christophe Pince <jcpince@gmail.com>
-> Signed-off-by: Jean-Christophe Pince <jcpince@gmail.com>
-> Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
-> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
-> Co-developed-by: Julian Vetter <jvetter@kalray.eu>
-> Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-> Co-developed-by: Julien Hascoet <jhascoet@kalray.eu>
-> Signed-off-by: Julien Hascoet <jhascoet@kalray.eu>
-> Co-developed-by: Louis Morhet <lmorhet@kalray.eu>
-> Signed-off-by: Louis Morhet <lmorhet@kalray.eu>
-> Co-developed-by: Marc Poulhiès <dkm@kataplop.net>
-> Signed-off-by: Marc Poulhiès <dkm@kataplop.net>
-> Co-developed-by: Marius Gligor <mgligor@kalray.eu>
-> Signed-off-by: Marius Gligor <mgligor@kalray.eu>
-> Co-developed-by: Vincent Chardon <vincent.chardon@elsys-design.com>
-> Signed-off-by: Vincent Chardon <vincent.chardon@elsys-design.com>
-> Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
-> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
-> ---
->  arch/kvx/include/asm/cache.h         |  46 +++
->  arch/kvx/include/asm/cacheflush.h    | 181 +++++++++
->  arch/kvx/include/asm/fixmap.h        |  47 +++
->  arch/kvx/include/asm/hugetlb.h       |  36 ++
->  arch/kvx/include/asm/l2_cache.h      |  75 ++++
->  arch/kvx/include/asm/l2_cache_defs.h |  64 ++++
->  arch/kvx/include/asm/mem_map.h       |  44 +++
->  arch/kvx/include/asm/mmu.h           | 296 +++++++++++++++
->  arch/kvx/include/asm/mmu_context.h   | 156 ++++++++
->  arch/kvx/include/asm/mmu_stats.h     |  38 ++
->  arch/kvx/include/asm/page.h          | 187 ++++++++++
->  arch/kvx/include/asm/page_size.h     |  29 ++
->  arch/kvx/include/asm/pgalloc.h       | 101 +++++
->  arch/kvx/include/asm/pgtable-bits.h  | 102 ++++++
->  arch/kvx/include/asm/pgtable.h       | 451 +++++++++++++++++++++++
->  arch/kvx/include/asm/rm_fw.h         |  16 +
->  arch/kvx/include/asm/sparsemem.h     |  15 +
->  arch/kvx/include/asm/symbols.h       |  16 +
->  arch/kvx/include/asm/tlb.h           |  24 ++
->  arch/kvx/include/asm/tlb_defs.h      | 131 +++++++
->  arch/kvx/include/asm/tlbflush.h      |  58 +++
->  arch/kvx/include/asm/vmalloc.h       |  10 +
->  arch/kvx/mm/cacheflush.c             | 154 ++++++++
->  arch/kvx/mm/dma-mapping.c            |  95 +++++
->  arch/kvx/mm/extable.c                |  24 ++
->  arch/kvx/mm/fault.c                  | 264 ++++++++++++++
->  arch/kvx/mm/hugetlbpage.c            | 317 ++++++++++++++++
->  arch/kvx/mm/init.c                   | 527 +++++++++++++++++++++++++++
->  arch/kvx/mm/kernel_rwx.c             | 228 ++++++++++++
->  arch/kvx/mm/mmap.c                   |  31 ++
->  arch/kvx/mm/mmu.c                    | 204 +++++++++++
->  arch/kvx/mm/mmu_stats.c              |  94 +++++
->  arch/kvx/mm/tlb.c                    | 433 ++++++++++++++++++++++
->  33 files changed, 4494 insertions(+)
+> """
+> In AMD platform, while disalbe ERMS(Enhanced Rep MOVSB/STOSB) in UEFI
+> (system setup -> processor -> Enhanced Rep MOVSB/STOSB), the OS can't boot
+> normally.
 
-Please strip functionality that's not essential for boot and the re-add it
-after the very core code is merged. I'd say multiple page size, hugetlb and
-strict RWX are not necessary to start with.
+Any particular reason they're disabling ERMS?
 
-I'd also suggest to have separate patches for different parts, like cache
-and tlb management, page tables and page fault fault handling, ioremap/mmap
-and streaming dma support.
+What do they set FSRM to?
 
 -- 
-Sincerely yours,
-Mike.
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
