@@ -2,88 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A21465D457
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A540165D460
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239496AbjADNeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S234514AbjADNf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239503AbjADNeF (ORCPT
+        with ESMTP id S239441AbjADNfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:34:05 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3006::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350413AA80
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:32:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202212; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IOSyy9qLnE23gYPkxy+Uq+fU0lOhXKd4jlSpT2dlU5A=; b=O+uu13MHgjvquntLx1syJgqHOC
-        tmpzfh17d2gQLO8gwkzRIXpvHhnWUXBiMOySVGk87Cs21nrI0LT9qnGy94cmR9Zsn1cAAQUvKrNYm
-        YnBwhZsHy0F7BP0EAdRYEI0lbWVJfgSOBNE4TwkO3tVf/skdSeFhuwSwfk4fCPkJPOvpleHXIk1sf
-        P0lTi1AQdn+RyUjpdFuWWemUzr/WH1CwN4barmJfri/ZnPVElPiXybJ90jHeU9t44c/qCcz7I/0Nc
-        v/lT0dray+ZZ6fmw44qs+SSMcUO6H4psGouO3PnvkEVnxGJnSzjPFpO8r/bvCLQCeHDfZjtvFpdPk
-        h5z/7ywQ==;
-Received: from [2a01:799:95e:b600:b244:dd1d:d193:f437] (port=51160)
-        by smtp.domeneshop.no with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <noralf@tronnes.org>)
-        id 1pD3sh-00BPi2-8O;
-        Wed, 04 Jan 2023 14:32:36 +0100
-Message-ID: <49575355-8572-500f-d66e-6f6497359e6a@tronnes.org>
-Date:   Wed, 4 Jan 2023 14:32:31 +0100
+        Wed, 4 Jan 2023 08:35:19 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8699442E22;
+        Wed,  4 Jan 2023 05:33:19 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id t15so24089430wro.9;
+        Wed, 04 Jan 2023 05:33:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1OZYEOsIa4HC8bLEt9jxOMrEzLh4jE7nib0ZT+FWq/g=;
+        b=SpSZbnAzW6o9lg07NRzRVSfCJpbhYU7a2YVcM/TLkt2cPBzgq5yO33mVU57wQ14Ez+
+         lzUdAcGRRgxyCuqpYSk8Bq4k3/N4Jj4C+CyVZROziBQ0kgqELjPMNQTgm2pMaIilbHz9
+         /kT+HrG87x5VlCzEnKybjkC3u2hgkRrW7cO6PDSI7BMHVAgIUuEZQE/Tx7s4dGPQxItx
+         Pwccv0rxsXD2UyJc/7TsLF0xQb8oYXWCsNegth8cxa73RWYXa2F2nKtgtqS7GiUl6/+r
+         UYsxu5am1bQCRzGlem2QX1gEh0jw0YuzNu1ROY18vdETW9ZGOoTv5nzEtZvshPytMk5b
+         szcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1OZYEOsIa4HC8bLEt9jxOMrEzLh4jE7nib0ZT+FWq/g=;
+        b=bXZrr/GFJj09OM9GybaXDnq4Qhm5mJ+6okyW+NOLimp+g5FIa3SyMFF2CW/vf3RfX6
+         wtmE2uh9dxrcA89ptQgi+x7Om77Xo0eAukk7mMSO6hqfbNgJ+LkbGaZra7J4jbkGtdzT
+         NteJIJZ8eAkLJr9dMdWUOrnBPraP3FF/+bSM6gQ9KFgP9IeavOVQVEBZifJGWvqF8HHd
+         +4cCCKuSyTOPbpTwMNhDCaJQyeChkbOAcdC+1y8queYncSQVT2WKKR3o9mpk7IRWdJ5L
+         5qlwa28gCRYlDwgm5kWCMrcVsvkUve6YuOS+REEbXcSF+1g6lY+oifKVOCKyfySnPbTm
+         qYZA==
+X-Gm-Message-State: AFqh2kpTQr11JE87FUUbzxvTY2Kcfvpb39oKBTLVuES9C1BGRjlVXeD9
+        YaH9NAB3kMPLa6yNaRzsWfI=
+X-Google-Smtp-Source: AMrXdXs4S3mE1SgBSPU2HGJPt7oU9k09p3+BZXz1hKBcx6RAjNzKLxxc12jfkmafWZjX6s/MtZFqOw==
+X-Received: by 2002:a5d:54d0:0:b0:24a:e56d:e20 with SMTP id x16-20020a5d54d0000000b0024ae56d0e20mr29166930wrv.29.1672839190899;
+        Wed, 04 Jan 2023 05:33:10 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id s13-20020adfdb0d000000b002420dba6447sm34648247wri.59.2023.01.04.05.33.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 05:33:10 -0800 (PST)
+Date:   Wed, 4 Jan 2023 16:33:07 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Aleksandr Burakov <a.burakov@rosalinux.ru>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] staging: media: ipu3: buffer overflow fix in
+ imgu_map_node
+Message-ID: <Y7WAExw/lQg4cd1E@kadam>
+References: <20221223123025.5948-1-a.burakov@rosalinux.ru>
+ <Y7LfAR4QdIzp81yW@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/9] drm/gud: use new debugfs device-centered functions
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        etnaviv@lists.freedesktop.org, Liviu Dudau <liviu.dudau@arm.com>,
-        Brian Starkey <brian.starkey@arm.com>,
-        Emma Anholt <emma@anholt.net>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20221226155029.244355-1-mcanal@igalia.com>
- <20221226155029.244355-3-mcanal@igalia.com>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20221226155029.244355-3-mcanal@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7LfAR4QdIzp81yW@paasikivi.fi.intel.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/26/22 16:50, Maíra Canal wrote:
-> Replace the use of drm_debugfs_create_files() with the new
-> drm_debugfs_add_file() function, which center the debugfs files
-> management on the drm_device instead of drm_minor. Moreover, remove the
-> debugfs_init hook and add the debugfs files directly on gud_probe(),
-> before drm_dev_register().
+On Mon, Jan 02, 2023 at 01:41:21PM +0000, Sakari Ailus wrote:
+> > diff --git a/drivers/staging/media/ipu3/ipu3.c b/drivers/staging/media/ipu3/ipu3.c
+> > index 0c453b37f8c4..cb09eb3cc227 100644
+> > --- a/drivers/staging/media/ipu3/ipu3.c
+> > +++ b/drivers/staging/media/ipu3/ipu3.c
+> > @@ -60,8 +60,10 @@ unsigned int imgu_map_node(struct imgu_device *imgu, unsigned int css_queue)
+> >  	for (i = 0; i < IMGU_NODE_NUM; i++)
+> >  		if (imgu_node_map[i].css_queue == css_queue)
+> >  			break;
+> > -
+> > -	return i;
+> > +	if (i < IMGU_NODE_NUM)
+> > +		return i;
+> > +	else
+> > +		return (IMGU_NODE_NUM - 1);
+> >  }
+> >  
+> >  /**************** Dummy buffers ****************/
 > 
-> Signed-off-by: Maíra Canal <mcanal@igalia.com>
-> ---
+> Thanks for the patch. It would require a bug elsewhere in the driver for
+> this to happen. If some handling for this case is added, it shouldn't be
+> hiding the issue.
+> 
+> One easy way could be to add WARN_ON() for this, and return some value (as
+> you do). Zero would do equally well.
+> 
+> I.e.
+> 
+> 	return WARN_ON(i >= IMGU_NODE_NUM) ? 0 : i;
+> 
 
-Acked-by: Noralf Trønnes <noralf@tronnes.org>
+I sent basically the same response but somehow my email never went
+through...  I'm using mutt with gmail Oauth2 and msmtp and so my
+weekly(?) login has expired then something silently eats my outgoing
+emails.
+
+In this case the emails that I sent directly before and after went
+through so it seems like my login wasn't expired or everything would
+have been eaten.
+
+This Oauth2 transition has just been so frustrating.  Am I the only
+person having trouble with it?
+
+regards,
+dan carpenter
+
