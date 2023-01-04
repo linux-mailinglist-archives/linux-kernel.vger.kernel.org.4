@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690CF65D2A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A11BD65D2A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbjADM3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
+        id S234985AbjADM3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 07:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234206AbjADM3I (ORCPT
+        with ESMTP id S234961AbjADM3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:29:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7AB1A224;
-        Wed,  4 Jan 2023 04:29:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90D78B81628;
-        Wed,  4 Jan 2023 12:29:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AB6C433EF;
-        Wed,  4 Jan 2023 12:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672835345;
-        bh=VpZBnDQgpO+oMahbk71quy/7eaPxvqN/v3XHlU5yAs8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nvP6ASrZMvHhcAuGAOT+jzapK5d4RDlHuP7MNzgblqPmZshleLtD6q8jIngbDODgC
-         mS0B6DhdIeJcf+JIBlOej9FcVxj9GaXcQXO/O4XGk6/jskWiCAXqWHGpA95RZRSaMn
-         MedCrXfgpzFU2Gbj7mUD3MoP9XeW/jmuCNuGopv1K4JtY+347xB69jAcXQabIjzt59
-         5p24LKC132KD3ukQLYlqpnYjfR4WeJRrZTi1LIG1PMBenCr59P7LI1K22FG29+qAgh
-         GpFKfoL3w1AM37xqSxzvMQKhWP0QtmuqrLFOkhB7MkEE6PktRyg5dqLG3SedrMrgAT
-         Unx2kERSX0QAw==
-Date:   Wed, 4 Jan 2023 12:29:02 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
-        dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        pvorel@suse.cz, noodles@fb.com, tiwai@suse.de,
-        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
-        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 03/10] KEYS: X.509: Parse Basic Constraints for CA
-Message-ID: <Y7VxDloaHyF8cX5j@kernel.org>
-References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
- <20221214003401.4086781-4-eric.snowberg@oracle.com>
- <b0f29738b919e2705d770017f2f1eb0542c2fad4.camel@linux.ibm.com>
+        Wed, 4 Jan 2023 07:29:22 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9F21A234
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 04:29:21 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id m5-20020a6b7f45000000b006fc1dded1b9so2434699ioq.18
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 04:29:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fcj5zEd7cDAScfww7SklL50hfxt3eAMIbzbrLQpIjB0=;
+        b=wzmG06/L8oezVUKbe2Cg1UtA2qmFzMuwkfoU0L+cD1JQaiOqFEQ3HBY7HZQFvdWRIY
+         1Cl31Ad2rXap3aFULiRmr4qCswszPaxkS6D6dP4s+hTEKqwqyrJen4rPES/lXjUB8+Mu
+         KQOTvTnb5TAm9iUJAJIs/XFQjJbV54VEWJlfkr8baU2OW8DhsA6MBFfNTzPm71QCmll7
+         GHpxPsofxPPORH0dr0iVPLfIYK8YTsAzpUyFowxfJ5TKxgk+BT/9ueWys8FYZ0HHkpiX
+         aQVrdkDx0SmSbx3gHhrC+qWW9zpiaCQmfyN/wOVpJgL7dnR1MNKOovbF5slIjgMYW/RQ
+         ZhCw==
+X-Gm-Message-State: AFqh2kr7TkBH4B3G5ybmHWBocIJfAnNxRkM+dqfA6ugEFgouxMCTI222
+        qrD3Kzxk8elzjk66b1LCAp1+pqbimhHhWQGBMSSduoP3q4AA
+X-Google-Smtp-Source: AMrXdXuhsnSVKqSljPe3fO4qiiin9BhckSoK2ZR89pMASmqSjccpISB3AQeo2AXERvs5Zi7JvTsEm7eVkEgU7fZMw3wi7s+7AWjc
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b0f29738b919e2705d770017f2f1eb0542c2fad4.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:190b:0:b0:303:1869:3a84 with SMTP id
+ 11-20020a92190b000000b0030318693a84mr4719532ilz.37.1672835360726; Wed, 04 Jan
+ 2023 04:29:20 -0800 (PST)
+Date:   Wed, 04 Jan 2023 04:29:20 -0800
+In-Reply-To: <20230104120235.4230-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000071a65905f16f55d0@google.com>
+Subject: Re: [syzbot] possible deadlock in rds_message_put
+From:   syzbot <syzbot+f9db6ff27b9bfdcfeca0@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 06:10:04AM -0500, Mimi Zohar wrote:
-> > diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
-> > index a299c9c56f40..7c5c0ad1c22e 100644
-> > --- a/crypto/asymmetric_keys/x509_parser.h
-> > +++ b/crypto/asymmetric_keys/x509_parser.h
-> > @@ -38,6 +38,7 @@ struct x509_certificate {
-> >  	bool		self_signed;		/* T if self-signed (check unsupported_sig too) */
-> >  	bool		unsupported_sig;	/* T if signature uses unsupported crypto */
-> >  	bool		blacklisted;
-> > +	bool		root_ca;		/* T if basic constraints CA is set */
-> >  }; 
-> 
-> The variable "root_ca" should probably be renamed to just "ca", right?
+Hello,
 
-Perhaps is_ca?
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-BR, Jarkko
+Reported-and-tested-by: syzbot+f9db6ff27b9bfdcfeca0@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         c183e6c3 Merge git://git.kernel.org/pub/scm/linux/kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=12ca7750480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8ca07260bb631fb4
+dashboard link: https://syzkaller.appspot.com/bug?extid=f9db6ff27b9bfdcfeca0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14e25424480000
+
+Note: testing is done by a robot and is best-effort only.
