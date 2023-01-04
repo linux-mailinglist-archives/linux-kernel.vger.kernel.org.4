@@ -2,99 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E0165DF32
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4219065DF36
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240278AbjADVnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 16:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
+        id S240344AbjADVoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 16:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239677AbjADVmo (ORCPT
+        with ESMTP id S240316AbjADVnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 16:42:44 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB551CFE9;
-        Wed,  4 Jan 2023 13:42:42 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NnNPF4NTRz4xyY;
-        Thu,  5 Jan 2023 08:42:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1672868561;
-        bh=c5AO3nQUrD95kxRlrzwvREFMv+bpnPEuWKn84LXpZj0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qlJg11d79B0NF4+t7ptOe+dJ7TJFozY5paj6BEnhboenSpJ3yVAZ+wDD4peqaOiET
-         k+AqC4gSphV+ePFxAWdckZJBpcL1+H/OeHa2qDP/SC3RfWrodJ6tF0R8O67wMBmv6j
-         +HFjVRoI+BATbqwkI4hZJWIRgnMfJzDEg0FVpVpWMSZxh3xcgx/7wSdP+G9CYaPs2E
-         5NUrURIuj83TB0IuscjCb58cmTYsCFDOERB9iPMVjU1XWV3kjwlx3qw1Fyk6SXI384
-         Ksgjd+M+I/0/6VC3eFp6GRXCyNmBoBiwH2qpT719K9+q2adL7TuMCGWy1pebbWP6Tm
-         iScSXcQR3WoDg==
-Date:   Thu, 5 Jan 2023 08:42:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the v4l-dvb-next tree
-Message-ID: <20230105084240.735cb1ce@canb.auug.org.au>
+        Wed, 4 Jan 2023 16:43:51 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A5332183
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 13:43:18 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id p9so1910467iod.13
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 13:43:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=De2KyfyaLkXfGIWsuy0j26Xyb6UuEGvIk8lAUL6BYxQ=;
+        b=mmBC8/1yOQMGUAVIi9g8mQR/Fb42TpXJW+315tHoB4/nUrGGHoJiJninkAw7SIuh0g
+         7l6tkToSC6SF7Sbt7LFj25OS8Km5yZumMCGs4GccDH7S+zs2QUrsgQfgcn2Z1O9vuGDG
+         e4td0IDWxgGu2kMMG42NfeXe0FWg8OTdrXr8YMlM+fA0RM9kVv07Zd20Q9aAFuCNhoP6
+         CpOrDJUVz2mBr0bws2eXF36/UzkK8nHsqgA0fRdh0tlBU0izKdl1R56Vyr78sCcoUSFH
+         6TGpQ/SuK0zsR5+Rg+TAyXPE6V5x59i5MXiPs8NkILiXpixDfOel/p4KAX27wwcnYijl
+         RQwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=De2KyfyaLkXfGIWsuy0j26Xyb6UuEGvIk8lAUL6BYxQ=;
+        b=vcSZ6WyYp2ulTNGRL5F4Y6XlkQhXcq2rgfiQVfvv3TuU5ybCEv1U6dP7eKYSfpYw5A
+         Lw3rgYL6yzAzBEMZo4E1RrQ4HnYRdSSFBdUqvV4QCg8rHAjySWYIIcV4Znt22AHgT7NI
+         aU1sZMWFz93UK9Hk4t29v/99JDB5YYPwZS6NXTRD+Vch3fvP2LCxmRaJjthfm0GZBmgh
+         UejgoBInG9b99ZYUmykxYYIJK+QcBViy2qKHNFcsELXMyBPdKd6j8Tc4ZNjcad5ZWjEH
+         EB8ZAGd/ZgHVjlZnz7Z45axgYWEZ1UtJEh1RuNPtC7BZilgVl4vl/avOd5p223EXsJYY
+         vk0w==
+X-Gm-Message-State: AFqh2kqFyPOEFXujYXO5dgumYQS8hny3VdA4sWdlPbBx2uzhQKt2b9fq
+        qhQl9aW98rJpgGPk1PHzXW6PRA==
+X-Google-Smtp-Source: AMrXdXvHGzhVxBKdjyddv2IcUblMcwy9CA7jssWP24cTVqGbqEvhaSbkEOkGhV1WcRggUW1/A2aflA==
+X-Received: by 2002:a6b:d107:0:b0:6e2:d939:4f30 with SMTP id l7-20020a6bd107000000b006e2d9394f30mr6258295iob.0.1672868597476;
+        Wed, 04 Jan 2023 13:43:17 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id l43-20020a02666b000000b00389e9e6112csm10727559jaf.70.2023.01.04.13.43.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 13:43:16 -0800 (PST)
+Message-ID: <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk>
+Date:   Wed, 4 Jan 2023 14:43:16 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8Y600HhPYrLLol2lz0MGC2v";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: Linux 6.2-rc1
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20230104190115.ceglfefco475ev6c@pali>
+ <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
+ <20230104205640.o2uy2jk4v6yfm4w3@pali>
+ <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8Y600HhPYrLLol2lz0MGC2v
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/4/23 2:32?PM, Linus Torvalds wrote:
+>> But here it is CD-RW media in read-write mode with kernel udf
+>> filesystem driver without any userspace involved (after proper
+>> formatting).
+> 
+> ... but I'm not sure about direct writeable mount support.
+> 
+> That may indeed be an area that only pktcdvd ended up doing. I've
+> never used it myself, even historically.
+> 
+> Let's bring in more people. Because they may not have thought about
+> some RW UDF case.
 
-Hi all,
+We did think about it, since that's the only reason for pktcdvd to
+exist. Basically what the driver does is ensure that any write is 32K in
+size, which is the size which can be written to media. It'll gather data
+as needed to make that happen. Thats it. Outside of that, it's just some
+setup and closing code.
 
-The following commits already exist in Linus Torvald's tree as different
-commits (but the same patches):
+This obviously would be better to handle in userspace, all of it. Back
+when I wrote this driver, we didn't have a lot of the fancier stuff we
+have today. It could be done via ublk, for example, or something like
+that.
 
-  f523c655325c ("media: sun6i-csi: bridge: Error out on invalid port to fix=
- warning")
-  6ceef05440ac ("media: sun6i-csi: capture: Remove useless ret initializati=
-on")
-  1607a95c0d81 ("media: sun6i-mipi-csi2: Clarify return code handling in st=
-ream off path")
-  73402fd7ac09 ("media: sun8i-a83t-mipi-csi2: Clarify return code handling =
-in stream off path")
-  f7f346862bbc ("media: sun6i-isp: proc: Fix return code handling in stream=
- off path")
-  5534ce51056d ("media: sun6i-isp: proc: Error out on invalid port to fix w=
-arning")
-  618001e8b1c6 ("media: sun6i-isp: proc: Declare subdev ops as static")
-  002886582094 ("media: sun6i-isp: capture: Fix uninitialized variable use")
-  10413ad08d57 ("media: sun6i-isp: params: Fix incorrect indentation")
-  d4acfa22b634 ("media: sun6i-isp: params: Unregister pending buffer on cle=
-anup")
+The surprising bit here is:
 
---=20
-Cheers,
-Stephen Rothwell
+1) Someone is still using this driver, and
+2) It actually works!
 
---Sig_/8Y600HhPYrLLol2lz0MGC2v
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+While I'd love to nudge folks in other directions for this use case, and
+I strongly think that we should, it also doesn't seem fair to just yank
+it while folks are using it... But I'd like to VERY strongly encourage
+folks to come up with a new solution for this use case. It really isn't
+a solution that belongs in the kernel today.
 
------BEGIN PGP SIGNATURE-----
+> The removal seems to revert cleanly, although it does require
+> reverting a few subsequent commits too (that removed code that only
+> pktcdvd used):
+> 
+>     git revert db1c7d779767 85d6ce58e493 f40eb99897af
+> 
+> where we have
+> 
+>     db1c7d779767 block: bio_copy_data_iter
+>     85d6ce58e493 block: remove devnode callback from struct
+> block_device_operations
+>     f40eb99897af pktcdvd: remove driver.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO18tAACgkQAVBC80lX
-0Gx/8AgAmWSs9SGT/YWvOQzOthrW10YbCxAZn9CPZSdWjZcpZOwePRUftCMNs4QT
-rkWOAU5IasbcCTR5liGALJmV2F8CqCFwnUpbN7wzR6BwofUUu7TEaiZmADEJJkDU
-+npuHd2SIAj/BiT6yzNiPY5idb7re3jmk5fr28YIOysq/2FSKPq7urOLy318Xdvz
-m4qiyBDWVlyDbOKYkgSuv/XaAzTj0Jm+RzMTp9pg3ZbZtlbJ7QcOlpdWqsEFc0kP
-B0ZDfnQ2lOPePIC8/Mvn3NfPQRDMq100zLwtPrM8kLdUDAy2e6Hr5kta9qEiQQBb
-R9kv8vdQ2wIAwN8lepDxWu6oNiY3dQ==
-=aszs
------END PGP SIGNATURE-----
+I'll queue this up - and unless I hear valid complaints to why we should
+not just reinstate the driver for now, it'll go out with the next pull
+request.
 
---Sig_/8Y600HhPYrLLol2lz0MGC2v--
+-- 
+Jens Axboe
+
