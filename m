@@ -2,89 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A8765DF1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A8265DF1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235357AbjADViC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 16:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
+        id S235463AbjADVjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 16:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjADViA (ORCPT
+        with ESMTP id S230073AbjADVjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 16:38:00 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3661C130;
-        Wed,  4 Jan 2023 13:37:59 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 4 Jan 2023 16:39:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2556D1C130;
+        Wed,  4 Jan 2023 13:39:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NnNHp1Bbtz4xyY;
-        Thu,  5 Jan 2023 08:37:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1672868278;
-        bh=C0JXtlD5/fPVtB3SLUEcSMT8FPurnJz6/P9y9AZtMos=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ro41s/jBU6k+p6n73qa2rJV047u8eM7RxAN4J3RLlVOd2BPs7aMtGMjj5wa01tNd1
-         py+FbMOdlPQ1SyPUAo99Z7FG28FH5T/KNYqETgYFHdvSZ3yx13B+Ux9/RkiGgTlfFa
-         0GNTs83kIUs3MJuKBhHnTg4X7y7gFcGkiIF9W86cjtl/UC/RhbCjUHqG6dk8A8O5xs
-         NRM4tZq/BiGxogwqbufqBxLCG38CxHl9E5YLRInt16NwIQe5zK3aUAHnTC3MENLysp
-         +YOjzw9YdI5iEZvDDQsoWxpCCzGs91RxPpWvsCY9W5aIRKb1oOg85Z3Oinemgjqrsn
-         v4u9KbFdjGGNw==
-Date:   Thu, 5 Jan 2023 08:37:57 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexandre Torgue <alexandre.torgue@st.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the stm32 tree
-Message-ID: <20230105083757.0eddcd51@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1F6AB818FE;
+        Wed,  4 Jan 2023 21:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 626DCC433F1;
+        Wed,  4 Jan 2023 21:39:15 +0000 (UTC)
+Date:   Wed, 4 Jan 2023 16:39:13 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Ross Zwisler <zwisler@google.com>,
+        Ching-lin Yu <chinglinyu@google.com>
+Subject: Re: [RFC][PATCH] ACPI: tracing: Have ACPI debug go to tracing ring
+ buffer
+Message-ID: <20230104163913.7b13cd68@gandalf.local.home>
+In-Reply-To: <CAJZ5v0iNdLyOpAxsCTTq-zqRfWDrJ5_c2DUcJYE5ZFn7u+2qdQ@mail.gmail.com>
+References: <20221214233106.69b2c01b@gandalf.local.home>
+        <Y5trUep9IvCv1Uwy@google.com>
+        <20221215141146.6ceb7cf2@gandalf.local.home>
+        <CAEXW_YQLtK=4LMJ+LHPVWU0wbV-027HJoCEKTjZvBZ6krrn6vw@mail.gmail.com>
+        <20221215151333.49af5442@gandalf.local.home>
+        <CAJZ5v0iNdLyOpAxsCTTq-zqRfWDrJ5_c2DUcJYE5ZFn7u+2qdQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/H17erjzSWIqXgY8UXvbs4V3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/H17erjzSWIqXgY8UXvbs4V3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 30 Dec 2022 16:52:36 +0100
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-Hi all,
+> Personally, I would use a command line option to control the behavior
+> and the Kconfig option to provide its default value.
+> 
 
-The following commits already exist in Linus Torvald's tree as different
-commits (but the same patches):
+I can add that.
 
-  7ad436adc788 ("ARM: multi_v7_defconfig: enable Type-C UCSI and STM32G0 as=
- modules")
-  f6309efcf037 ("ARM: dts: stm32: add mcp23017 pinctrl entry for stm32mp13")
-  c07696f72ebb ("ARM: dts: stm32: add mcp23017 IO expander on I2C1 on stm32=
-mp135f-dk")
-  4cca342b840e ("ARM: dts: stm32: Rename mdio0 to mdio on DHCOR Testbench b=
-oard")
+> This way it can be flipped without rebuilding the kernel if need be.
+> 
+> I would also make the ACPI debug output go into the trace buffer so
+> long as the Kconfig option is not changed or the command line option
+> is not flipped.
 
---=20
-Cheers,
-Stephen Rothwell
+Not sure what you mean by the above? You mean to make going to both as the
+default?
 
---Sig_/H17erjzSWIqXgY8UXvbs4V3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO18bUACgkQAVBC80lX
-0GyWIQf/c12L7FBcJIasyn8HZO8Ye9lHy0fOcqKSwH9lgRZc60jy4ACrSp5JPkpI
-pbGYKNUfq/UvA0R5PWX6djdm6OSozWyVdl8SifKWcsbXJHNJoZ27Pw99fjEcN9IO
-YAL2pD4GWIqaw8uLJxWbED0um0ImCqXC7rYZh8ZPiVOwhZ250pBa7R7sMn91zelY
-qr2y5Ryqo+xFglcc/x2FPnuddq9vimmgi82WQmFeRiIlTYySfYDWsQJ83ybtsC/o
-f3Mk2U+d25EMTkmyCCASm/eLs8OdZ9F/VoGis9pyAPIXLNshXmWOZzVfaE58Vjtg
-DuvUEsdEot5VF4EGKcN9tf422pT6wQ==
-=2RWQ
------END PGP SIGNATURE-----
-
---Sig_/H17erjzSWIqXgY8UXvbs4V3--
+-- Steve
