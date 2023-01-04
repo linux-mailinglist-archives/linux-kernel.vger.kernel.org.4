@@ -2,91 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E0E65DFF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B884465DFFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbjADW0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
+        id S235526AbjADW3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjADW0W (ORCPT
+        with ESMTP id S229464AbjADW3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:26:22 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E7D1CFFB
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:26:22 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id g20so15700610pfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:26:22 -0800 (PST)
+        Wed, 4 Jan 2023 17:29:11 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2833FA12
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:29:09 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id m3so17843082wmq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:29:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FIgokSFORIKySFY6m7tmTjnwpgLEJc31TKVV2WohxQk=;
-        b=k/zWL17knzlSo7mB3DThdqrV9Sai9s+S6GLcTIs+nxQLVB/S/3uvYnfoz63+REvG+v
-         59N4XvM+4JQZvniUqMAfqsd3r2TQ3yapHNBLpOikK9OxZQukVOinpTL9xyHGl6JDKA8d
-         k8oaQz0IkvGSztZocmF3BVy68FljpV+fskL9M+E5uBJ6NrMP/IvMz8JwpR4hKW0rC7Fy
-         o8qZECqhF5rJTiPtASNrRtv1QLSQMRRTG0KmQlPpsyQo+6F2djwcQlNRdJLVfIztay6s
-         EcU/4W3Uywmxvj51GUKUf+6xi+KtWMpsoSJ5vFe+yn2iGdytmvPlEIFU2HIPuHTPsKVG
-         3stA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KqEImEb3zxFSZLJK5O28PW5QmA8rmOHB2VVdmPKgTSM=;
+        b=nc2poSArYIkrQ9l7v8cc3glR6yoUpg0wzCRnHEeAW1jw5rZKve3Hf4XVvYWcL+2Aj8
+         uIayBj1Xt7oKb7rooG/M+EIFXmPl3ad2RRuj99IB/S3PZDzrw67vGNGl1aKKVE5itRAv
+         QA/eft6/1JfkusHMmTjnFE/xXSBOjzVWD53S0EKSgTwBJLYM7YbREXcJt0/PrQXt4G4J
+         qIVS4kar4A1TJR9eifi6N/0kbTFbC0tM7Zsakh9IOGmAtS0+yjMXm6i+jaO/IBTtSyPa
+         YnDRLSJMYsYLhexVmeiBk0qNgH2FEozlsQiDjh/895jyh2Qtz+Huum3RdVjssGdHs4td
+         lGQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FIgokSFORIKySFY6m7tmTjnwpgLEJc31TKVV2WohxQk=;
-        b=lAM3TiSaFlawFDmxTy4VdZGZXznIreUnDrdJkDQKIgVHamDOzRnEj+8PyzuoAuKfle
-         Np+VrVSR6veF487+DXPppQ15eItemAK2HAdtcAZ7dPTSyMgWIEpeJJkr7BJITboK0flb
-         0uafjShqlEQz7hkN3aKT28JIFfkT7T4zPZU+1aU/Zdz/ktjbnalkb6JtOtCZoHBTDR2p
-         gXp7ntJx7BIReAY12aNmYMwuA8hUPiJhaPyuWQmBaCvrMlgsqb1JzsIXlEB1MGDS/wzP
-         SFmCVSCygJb/i83WVSHjgsN1W4Ev27DLxxWtC3iw0au2/bLkurCtwxu4zlddcr3oq6Ti
-         h10g==
-X-Gm-Message-State: AFqh2kodqGjrKI9Dz4N3Ldv8UhQwO4vV1JF9OmFQ33mkhpDqUwDO3PBc
-        XC4VF1JBDRrKTpTz4FBIFDY+qZ23O+o=
-X-Google-Smtp-Source: AMrXdXsUUiE30xfyD4rfqAmn3RuDAlpT95GjaNC+IrK3bwlS3OPFB6SmumXRJ3FtFeQgEVpJqqGG7A==
-X-Received: by 2002:aa7:8c46:0:b0:575:ff07:cb1e with SMTP id e6-20020aa78c46000000b00575ff07cb1emr55248731pfd.31.1672871181506;
-        Wed, 04 Jan 2023 14:26:21 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x29-20020aa79add000000b00580fb018e4bsm19083746pfp.211.2023.01.04.14.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 14:26:20 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 4 Jan 2023 12:26:19 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Richard Clark <richard.xnu.clark@gmail.com>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] workqueue: Add a new flag to spot the potential UAF error
-Message-ID: <Y7X9CwLpuV/M4I+X@slm.duckdns.org>
-References: <20221213043936.6345-1-richard.xnu.clark@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KqEImEb3zxFSZLJK5O28PW5QmA8rmOHB2VVdmPKgTSM=;
+        b=6MIFgLLubH7lhTd4wwbq9FOUwH2+F4cAuHRtJqg4o7eAdvc9RNir8vlz1LToIRgPMC
+         MJ6AH27b+7Xwc35K+1PsrLpOxKwQQbmrSkGWKZUGvZYNV2+UbJX7uFnkJAGG2rdE3NRK
+         fxtROYnN8KEJGBwJ5vf7xanHocxrMcQ8SEahakey8CX5r2kqiskhR2p173fMIbHR/utt
+         Q9Hkz/6rYB16siITpRY0Qos2EPon6mKTtYKO3dFh91eWY6jOLinLVtaUwLEy1ZkgH3/r
+         iNwvYMWdc/hfqbsd1K/IMi9jm4rpaiMxFoCzBfBvinxSU7lUPuDCT8VOb7Y5WIUa5Rtp
+         y4MQ==
+X-Gm-Message-State: AFqh2krSWS9kz4WhtWGE5kZOtP/gh/dKWI7slRz2Z7c+k2AHiDMFHBSt
+        RG4HFWq4i3vWgms9xWzwmryMWaSgcATebaCv
+X-Google-Smtp-Source: AMrXdXvosSW2IMXk+/+QjecXpbDsWIG5+bgibat8r06Du8mLR1UfEgwY7dPUUYm2db8dJYYS1As+5g==
+X-Received: by 2002:a05:600c:34d1:b0:3d7:72e3:f437 with SMTP id d17-20020a05600c34d100b003d772e3f437mr35584965wmq.21.1672871348065;
+        Wed, 04 Jan 2023 14:29:08 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id bg41-20020a05600c3ca900b003d1e34bcbb2sm236756wmb.13.2023.01.04.14.29.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 14:29:07 -0800 (PST)
+Message-ID: <a9dba647-b307-e60f-c31a-3ef7f949d23e@linaro.org>
+Date:   Wed, 4 Jan 2023 23:29:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213043936.6345-1-richard.xnu.clark@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] clocksource/drivers/riscv: Increase the clock source
+ rating
+Content-Language: en-US
+To:     Samuel Holland <samuel@sholland.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20221228004444.61568-1-samuel@sholland.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221228004444.61568-1-samuel@sholland.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 12:39:36PM +0800, Richard Clark wrote:
-> Currently if the user queues a new work item unintentionally
-> into a wq after the destroy_workqueue(wq), the work still can
-> be queued and scheduled without any noticeable kernel message
-> before the end of a RCU grace period.
+On 28/12/2022 01:44, Samuel Holland wrote:
+> RISC-V provides an architectural clock source via the time CSR. This
+> clock source exposes a 64-bit counter synchronized across all CPUs.
+> Because it is accessed using a CSR, it is much more efficient to read
+> than MMIO clock sources. For example, on the Allwinner D1, reading the
+> sun4i timer in a loop takes 131 cycles/iteration, while reading the
+> RISC-V time CSR takes only 5 cycles/iteration.
 > 
-> As a debug-aid facility, this commit adds a new flag
-> __WQ_DESTROYING to spot that issue by triggering a kernel WARN
-> message.
+> Adjust the RISC-V clock source rating so it is preferred over the
+> various platform-specific MMIO clock sources.
 > 
-> Signed-off-by: Richard Clark <richard.xnu.clark@gmail.com>
-
-Applied to wq/for-6.3 w/ whitespace adjustments.
-
-Thanks.
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+Applied, thanks
 
 -- 
-tejun
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
