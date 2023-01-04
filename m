@@ -2,152 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D258B65D1FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3B365D203
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239201AbjADMDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
+        id S234674AbjADMEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 07:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239190AbjADMDf (ORCPT
+        with ESMTP id S239215AbjADMED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:03:35 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77AA032180;
-        Wed,  4 Jan 2023 04:03:34 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9D031042;
-        Wed,  4 Jan 2023 04:04:15 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.37.146])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C581C3F587;
-        Wed,  4 Jan 2023 04:03:30 -0800 (PST)
-Date:   Wed, 4 Jan 2023 12:03:28 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Alexandre Ghiti <alex@ghiti.fr>, arnd@arndb.de,
-        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, ben@decadent.org.uk, bjorn@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
-Subject: Re: [PATCH -next V12 3/7] riscv: entry: Add noinstr to prevent
- instrumentation inserted
-Message-ID: <Y7VrEMJtwC7v7oNy@FVFF77S0Q05N>
-References: <20230103033531.2011112-1-guoren@kernel.org>
- <20230103033531.2011112-4-guoren@kernel.org>
- <36314eb6-e41d-30b9-9ac4-12b88a108b7b@ghiti.fr>
- <CAJF2gTTSretKkJGNV7Y6iJboPuAWUQ=to=RPA8_-Nz8dnufGAg@mail.gmail.com>
+        Wed, 4 Jan 2023 07:04:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502A034773;
+        Wed,  4 Jan 2023 04:03:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E24916142A;
+        Wed,  4 Jan 2023 12:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9AD8C433F0;
+        Wed,  4 Jan 2023 12:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672833827;
+        bh=dwb9nRq7i7xao4WnNre+ZkAiKphG8Sf61V8egDiQSkI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ptJuLWEO5+ZH8Z34rp3mWYaIa1E5FrsTjCXPoMDhzg1KPRLppvkrKzxe0XrcWTwQa
+         d7Ljp7HsN3XNJ48fmiSkr5rXDCc3Wa/dMgg113HQfCAFwOoZVArXj9E8GpD3r1J9gz
+         KCXF8XQXXf6XEALwBFRN2UHVyKdiWsxqewFk8moSfRzeIdVhc3WzWfrW3J6SFC8dbv
+         oJiWX5hcVPWroD6DWOuqk4Uog9K2Bvgdr+DBbsgKfm3ToPuaHCMwpybaNF+pQ/jOZY
+         99N0vbCMHZfRWhjNqPM49+7zcQVDIMj+eMCL789Ct9HAC5yK3zVrmQxkHyE3LDsdzw
+         s1QoWyK5lCPBg==
+Date:   Wed, 4 Jan 2023 12:03:44 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, ashish.kalra@amd.com, harald@profian.com
+Subject: Re: [PATCH RFC v7 02/64] KVM: x86: Add
+ KVM_CAP_UNMAPPED_PRIVATE_MEMORY
+Message-ID: <Y7VrIDfNmhG+BVQ9@kernel.org>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-3-michael.roth@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTTSretKkJGNV7Y6iJboPuAWUQ=to=RPA8_-Nz8dnufGAg@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221214194056.161492-3-michael.roth@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 09:40:38AM +0800, Guo Ren wrote:
-> On Tue, Jan 3, 2023 at 5:12 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
-> >
-> > Hi Guo,
-> >
-> > On 1/3/23 04:35, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Without noinstr the compiler is free to insert instrumentation (think
-> > > all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> > > yet ready to run this early in the entry path, for instance it could
-> > > rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
-> > >
-> > > Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/
-> > > Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-> > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > > Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > ---
-> > >   arch/riscv/kernel/traps.c | 4 ++--
-> > >   arch/riscv/mm/fault.c     | 2 +-
-> > >   2 files changed, 3 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > > index 549bde5c970a..96ec76c54ff2 100644
-> > > --- a/arch/riscv/kernel/traps.c
-> > > +++ b/arch/riscv/kernel/traps.c
-> > > @@ -95,9 +95,9 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
-> > >   }
-> > >
-> > >   #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
-> > > -#define __trap_section               __section(".xip.traps")
-> > > +#define __trap_section __noinstr_section(".xip.traps")
-> > >   #else
-> > > -#define __trap_section
-> > > +#define __trap_section noinstr
-> > >   #endif
-> > >   #define DO_ERROR_INFO(name, signo, code, str)                               \
-> > >   asmlinkage __visible __trap_section void name(struct pt_regs *regs) \
-> > > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> > > index d86f7cebd4a7..b26f68eac61c 100644
-> > > --- a/arch/riscv/mm/fault.c
-> > > +++ b/arch/riscv/mm/fault.c
-> > > @@ -204,7 +204,7 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
-> > >    * This routine handles page faults.  It determines the address and the
-> > >    * problem, and then passes it off to one of the appropriate routines.
-> > >    */
-> > > -asmlinkage void do_page_fault(struct pt_regs *regs)
-> > > +asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
-> >
-> >
-> > (I dug the archive but can't find the series before v4, so sorry if it
-> > was already answered)
-> >
-> > I think we should not disable the instrumentation of those trap handlers
-> > as at least profiling them with ftrace would provide valuable
-> > information (and gcov would be nice too): why do we need to do that? A
-> > trap very early in the boot process is not recoverable anyway.
-> Everything that calls irqentry_enter() should be noinstr, and this
-> patch prepares for the next generic_entry convert.
+On Wed, Dec 14, 2022 at 01:39:54PM -0600, Michael Roth wrote:
+> This mainly indicates to KVM that it should expect all private guest
+> memory to be backed by private memslots. Ideally this would work
+> similarly for others archs, give or take a few additional flags, but
+> for now it's a simple boolean indicator for x86.
 > 
-> eg:
-> asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
-> {
->         irqentry_state_t state = irqentry_enter(regs);
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  3 +++
+>  arch/x86/kvm/x86.c              | 10 ++++++++++
+>  include/uapi/linux/kvm.h        |  1 +
+>  3 files changed, 14 insertions(+)
 > 
->         __do_page_fault(regs);
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 27ef31133352..2b6244525107 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1438,6 +1438,9 @@ struct kvm_arch {
+>  	 */
+>  #define SPLIT_DESC_CACHE_MIN_NR_OBJECTS (SPTE_ENT_PER_PAGE + 1)
+>  	struct kvm_mmu_memory_cache split_desc_cache;
+> +
+> +	/* Use/enforce unmapped private memory. */
+> +	bool upm_mode;
+>  };
+>  
+>  struct kvm_vm_stat {
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index c67e22f3e2ee..99ecf99bc4d2 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4421,6 +4421,11 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_EXIT_HYPERCALL:
+>  		r = KVM_EXIT_HYPERCALL_VALID_MASK;
+>  		break;
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +	case KVM_CAP_UNMAPPED_PRIVATE_MEM:
+> +		r = 1;
+> +		break;
+> +#endif
+>  	case KVM_CAP_SET_GUEST_DEBUG2:
+>  		return KVM_GUESTDBG_VALID_MASK;
+>  #ifdef CONFIG_KVM_XEN
+> @@ -6382,6 +6387,10 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		}
+>  		mutex_unlock(&kvm->lock);
+>  		break;
+> +	case KVM_CAP_UNMAPPED_PRIVATE_MEM:
+> +		kvm->arch.upm_mode = true;
+> +		r = 0;
+> +		break;
+>  	default:
+>  		r = -EINVAL;
+>  		break;
+> @@ -12128,6 +12137,7 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+>  	kvm->arch.default_tsc_khz = max_tsc_khz ? : tsc_khz;
+>  	kvm->arch.guest_can_read_msr_platform_info = true;
+>  	kvm->arch.enable_pmu = enable_pmu;
+> +	kvm->arch.upm_mode = false;
+>  
+>  #if IS_ENABLED(CONFIG_HYPERV)
+>  	spin_lock_init(&kvm->arch.hv_root_tdp_lock);
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index c7e9d375a902..cc9424ccf9b2 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1219,6 +1219,7 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
+>  #define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
+>  #define KVM_CAP_MEMORY_ATTRIBUTES 225
+> +#define KVM_CAP_UNMAPPED_PRIVATE_MEM 240
+>  
+>  #ifdef KVM_CAP_IRQ_ROUTING
+>  
+> -- 
+> 2.25.1
 > 
->         local_irq_disable();
-> 
->         irqentry_exit(regs, state);
-> }
-> NOKPROBE_SYMBOL(do_page_fault);
-> 
-> You still could profile __do_page_fault.
-> 
-> >
-> > And I took a look at other architectures, none of them disables the
-> > instrumentation on do_page_fault.
-> That's not true, have a look at power & arm64. All of them have some
-> limitations at the entry of page_fault.
 
-Well, arm64's can't be kprobed, but is *can* be traced with ftrace, and *can*
-be instrumented with KASAN and friends. I'm not sure that we actually need to
-inhibit kprobes for do_page_fault, and we might be able to relax that.
+Why we want to carry non-UPM support still?
 
-As a general thing, we've tried to centralize all the necesarily-noinstr bits
-in arch/arm64/kernel/entry-common.c, and keep everything else as instrumentable
-as possible.
-
-I'd recommend doing similar, and have a central file for any entry bits which
-can't live in the generic entry code, and keep the rest instrumentable. That
-will make it easier to maintain and verify.
-
-Thanks,
-Mark.
+BR, Jarkko
