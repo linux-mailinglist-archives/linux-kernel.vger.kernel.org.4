@@ -2,57 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8958465DC3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 19:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A219465DC54
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 19:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239893AbjADSg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 13:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S240020AbjADShF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 13:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240012AbjADSgJ (ORCPT
+        with ESMTP id S240082AbjADSgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 13:36:09 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F85717E0E;
-        Wed,  4 Jan 2023 10:36:04 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87CEB1063;
-        Wed,  4 Jan 2023 10:36:45 -0800 (PST)
-Received: from [10.57.44.105] (unknown [10.57.44.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A8273F663;
-        Wed,  4 Jan 2023 10:35:59 -0800 (PST)
-Message-ID: <680a52a9-7493-328d-785f-66a12ee29c91@arm.com>
-Date:   Wed, 4 Jan 2023 19:35:53 +0100
+        Wed, 4 Jan 2023 13:36:37 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C0217E0E;
+        Wed,  4 Jan 2023 10:36:35 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso24966827wmb.3;
+        Wed, 04 Jan 2023 10:36:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rygkofvzOv4xwaY/JKfoRBXfGetYwDagXRjgt1zIpD0=;
+        b=OMkxtzrVCOrPcYJv+voq3zup5Nbwy88VB/lX3PlD3ZGZqRMrWsmcHexZZG5tTpuL+6
+         XMR2qeCpmZ4j+mNjvlSCNPYKeeVkL3wHar+nc+X1jQI7b/jCFNFXsyB/HRq7rUeatxK/
+         +mL6al7z960gVc+xNYaVXBVUU9gLwQhowwEQsW5x47RGMJCiOyto4XB4NwdWehahe25J
+         m/iJTKKKAPiYAk0qnFez/LVBwO7SlezMdFcabwl5RS1KXiBO34vWMHECWkdnFrpgpAUN
+         Ga7dWIxXAV0l0y45ODxfhvhkeDnLL//6qBCtOoFUQviUop8Tyo7t/tjFyz/GAFvUu9/y
+         nKmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rygkofvzOv4xwaY/JKfoRBXfGetYwDagXRjgt1zIpD0=;
+        b=wOaWdXYV6xOyJXhFLtlGOmvsHziqYJG2KZJ2if6CKGp3eyWJtyOM7dztqAPwZmDjmf
+         r/lcUK1elpzKQWsOiJNhgL1H5eT97PKKJ6WrUX+ll/UW5ZEvRzFNMnRhAqTaH8CetqUU
+         nwNj4HZrDijmHBMZbDatPnQYMv4iDjRz1v0M6ndNpmAY2zTZ6RulEqQS4oXmQ5E86uaj
+         0Nvc5gDnSAdskTSz2rqkQ/lNCQ7XbUUwuT3nuv7BeJYGuY1B19ViZ1OzaOHBfvxzrvMJ
+         IOoHbzRqFu4fHugdY5PDAY9rhsxqMezBgA8rVE2uspoyBUM7+NdpwY94SuERQqE91KY8
+         OhMg==
+X-Gm-Message-State: AFqh2kr7cuQAmlDXlTK+OE1O+BmoltKlz2rxR78PSTvGofNfkBxWSiWN
+        ecmZjVbYl+Vt2YhJ/gHuvw==
+X-Google-Smtp-Source: AMrXdXuj7lbhu8dfpTGGBU8qUISxvGXWxG5dyoYk0/Th6BTOnYUwCvJLv9Rra/k2RKMLEuBUWo3Yiw==
+X-Received: by 2002:a7b:cd99:0:b0:3d3:5506:1bac with SMTP id y25-20020a7bcd99000000b003d355061bacmr35060471wmj.30.1672857394124;
+        Wed, 04 Jan 2023 10:36:34 -0800 (PST)
+Received: from p183 ([46.53.251.191])
+        by smtp.gmail.com with ESMTPSA id i2-20020a05600c354200b003d35acb0fd7sm55836505wmq.34.2023.01.04.10.36.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 10:36:33 -0800 (PST)
+Date:   Wed, 4 Jan 2023 21:36:31 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: BUG: core dump in selftest of proc fs
+Message-ID: <Y7XHL8ZRBf7TA/q7@p183>
+References: <fd9206f6-3ec4-cafc-e313-dfddf957bd5e@alu.unizg.hr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 0/5] arch_topology: Build cacheinfo from primary CPU
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Cc:     palmer@rivosinc.com, Ionela.Voinescu@arm.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Gavin Shan <gshan@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org
-References: <20221209103130.572196-1-pierre.gondois@arm.com>
- <0f19cb3f-d6cf-4032-66d2-dedc9d09a0e3@linaro.org>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <0f19cb3f-d6cf-4032-66d2-dedc9d09a0e3@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fd9206f6-3ec4-cafc-e313-dfddf957bd5e@alu.unizg.hr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,93 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/29/22 17:47, Krzysztof Kozlowski wrote:
-> On 09/12/2022 11:31, Pierre Gondois wrote:
->> v2:
->>   - Applied renaming/formatting comments from v1.
->>   - Check CACHE_TYPE_VALID flag in pppt.c.
->> v3:
->>   - Applied Sudeep's suggestions (for patch 5/5):
->>     - Renaming allocate_cache_info() -> fecth_cache_info()
->>     - Updated error message
->>     - Extract an inline allocate_cache_info() function
->>   - Re-run checkpatch with --strict option
->>
->> Note:
->> This patchset requires the following patch to be applied first in
->> order to avoid the same bug described in the commit message:
->> https://lore.kernel.org/all/20221116094958.2141072-1-pierre.gondois@arm.com/
->>
->> [1] and [2] build the CPU topology from the cacheinfo information for
->> both DT/ACPI based systems and remove (struct cpu_topology).llc_id
->> which was used by ACPI only.
->>
->> Creating the cacheinfo for secondary CPUs is done during early boot.
->> Preemption and interrupts are disabled at this stage. On PREEMPT_RT
->> kernels, allocating memory (and parsing the PPTT table for ACPI based
->> systems) triggers a:
->>    'BUG: sleeping function called from invalid context' [4]
->>
->> To prevent this bug, allocate the cacheinfo from the primary CPU when
->> preemption and interrupts are enabled and before booting secondary
->> CPUs. The cache levels/leaves are computed from DT/ACPI PPTT information
->> only, without relying on the arm64 CLIDR_EL1 register.
->> If no cache information is found in the DT/ACPI PPTT, then fallback
->> to the current state, triggering [4] on PREEMPT_RT kernels.
->>
->> Patches to update the arm64 device trees that have incomplete cacheinfo
->> (mostly for missing the 'cache-level' or 'cache-unified' property)
->> have been sent at [3].
->>
->> Tested platforms:
->> - ACPI + PPTT: Ampere Altra, Ampere eMAG, Cavium ThunderX2,
->>    Kunpeng 920, Juno-r2
->> - DT: rb5, db845c, Juno-r2
->>
+On Wed, Jan 04, 2023 at 07:27:40PM +0100, Mirsad Goran Todorovac wrote:
+> Trying to complete `make kselftest` for the first time, so maybe I'm doing something wrong?
 > 
-> I gave the patchset a try with DTS fixes for cache topology on Qualcomm
-> RB5 board (SM8250 SoC) and with KASAN it produces:
+> Or we are having a regression in 6.2-rc2 release candidate ...
 > 
-> BUG: KASAN: slab-out-of-bounds in populate_cache_leaves+0x84/0x15c
-> [    0.633014]  dump_backtrace.part.0+0xe0/0xf0
-> [    0.633035]  show_stack+0x18/0x40
-> [    0.633050]  dump_stack_lvl+0x8c/0xb8
-> [    0.633085]  print_report+0x188/0x488
-> [    0.633106]  kasan_report+0xac/0xf0
-> [    0.633136]  __asan_store4+0x80/0xa4
-> [    0.633158]  populate_cache_leaves+0x84/0x15c
-> [    0.633181]  detect_cache_attributes+0xc0/0x8c4
-> [    0.633213]  update_siblings_masks+0x28/0x43c
-> [    0.633235]  store_cpu_topology+0x98/0xc0
-> [    0.633251]  smp_prepare_cpus+0x2c/0x15c
-> [    0.633281]  kernel_init_freeable+0x22c/0x424
-> [    0.633310]  kernel_init+0x24/0x13c
-> [    0.633328]  ret_from_fork+0x10/0x20
-> [    0.633388]
-> [    0.708729] Allocated by task 1:
-> [    0.712078]  kasan_save_stack+0x2c/0x60
-> [    0.716066]  kasan_set_track+0x2c/0x40
-> [    0.719959]  kasan_save_alloc_info+0x24/0x3c
-> [    0.724387]  __kasan_kmalloc+0xa0/0xbc
-> [    0.728278]  __kmalloc+0x74/0x110
-> [    0.731740]  fetch_cache_info+0x170/0x210
-> [    0.735902]  init_cpu_topology+0x254/0x2bc
-> [    0.740171]  smp_prepare_cpus+0x20/0x15c
-> [    0.744272]  kernel_init_freeable+0x22c/0x424
-> [    0.748791]  kernel_init+0x24/0x13c
-> [    0.752420]  ret_from_fork+0x10/0x20
+> However, the output of selftest run is:
+
+> # proc-empty-vm: proc-empty-vm.c:184: test_proc_pid_maps: Assertion `rv == 0' failed.
+> # /usr/bin/timeout: the monitored command dumped core
+> # Aborted
+> not ok 5 selftests: proc: proc-empty-vm # exit=134
+> # selftests: proc: proc-pid-vm
+> # proc-pid-vm: proc-pid-vm.c:365: main: Assertion `rv == len' failed.
+> # /usr/bin/timeout: the monitored command dumped core
+> # Aborted
 > 
-> Best regards,
-> Krzysztof
+> Please find attached lshw output, dmesg, config and lsmod.
+> 
+> I am available for further diagnostics.
+> 
+> The platform is Ubuntu 22.10 kinetic kudu on a Lenovo Ideapad 3 15ITL6 laptop.
 
-Hello Krzysztof,
-Thanks for trying the patch-set and reporting the issue. Hopefully
-the v4 should solve this:
-https://lore.kernel.org/all/20230104183033.755668-1-pierre.gondois@arm.com/
-
-I will also try to follow the corresponding dts modifications,
-
-Regards,
-Pierre
+What the output of "cat /proc/self/maps" ?
