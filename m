@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF5165D543
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFF265D53E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239597AbjADONc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
+        id S239543AbjADON3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:13:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239558AbjADOMy (ORCPT
+        with ESMTP id S239636AbjADOMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:12:54 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C6912635;
-        Wed,  4 Jan 2023 06:12:53 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 3so18058766iou.12;
-        Wed, 04 Jan 2023 06:12:53 -0800 (PST)
+        Wed, 4 Jan 2023 09:12:39 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6493C1D0C6;
+        Wed,  4 Jan 2023 06:12:38 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id ud5so82977598ejc.4;
+        Wed, 04 Jan 2023 06:12:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FT85qHg6jD8BoFUh0eh/A7wsqPFKPrl5rJEH5SdJkPI=;
-        b=jbwDODxRaL8XWlbYZ7g3ZpGV3UtwDabsR+ej+Hi0SVGzL5eMofk+CFuCi2wECQhxAH
-         mC2LDx2430m7c3VAs69zffBssI2SoECBf9s2eCBYFb6/Wbj2pWIBypYKg2/yICvXim5Q
-         IfrusqIbQoHFJoA07cPJIOBjE3Zdtsz/Xzsjj9Riuw8oCD2HTmoY2to5wJZWfJFsLYPj
-         ql/ObITlGdD1t2jh1LZ1apgEp9wvSCipYt5SBfQLHRdJpAvgz4Q0+2tjOJAESQmyBuBr
-         yDejtDE6UIMtbrjwHkXCAjyIpEj+gehsGKavYJMFTM6kqpWsbx6a8dKvelWG5OTYsnmF
-         d4sw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tg9g76SwEQ03nnPlXSR+de3Y9ReWrRYeaDvRIoSCF7U=;
+        b=LbqgVt1i/G/e5VGblt8eTNeGBoZhrKLBzcJQ54RevnYpe6ESzdpmgOdZQyTVfu0WwJ
+         DzlydqkjwbtKy/NwYvCc1KXQxTAs6FFkMaFnoZaYEXS75lIl4g8xIEcuPDG1j3l2OSBk
+         /fFAc/YOkVr5mSL+5kqVF6foWe7pUxOaLk/58DN8SM1ivOIt6PazWIHJjrPnsrAZa9o8
+         ymUjcvI/7jU8KCCA5mLyOe+U/GnWnsSJfNWybQFypcSc/VJQmFHWgqjLmHXo2dIyQCIH
+         TnbZ+2mMwm/RwwqhXlrz4s3yOOPPcJa5nx3NMiwjDQ8cJ7dKlqsYXc5js2UQ9fkYWeNt
+         thnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FT85qHg6jD8BoFUh0eh/A7wsqPFKPrl5rJEH5SdJkPI=;
-        b=RZL+e2LA8R9vL3BWnXil3WpQKKS88b7M7t9EGoa/NJ7EynItuQg9HJxSBrq37sF9vD
-         DDhXD1XOw+AfhTE+HkxbTBNgkA0r2dhEpmYgCqJIeiQQ7pwmnBMpAEL4OLbtCKcB7nYC
-         tBlgZg8dVB/KOyvT6r3QtwkmLGsNHoi7v5WwSYuE7CN0vd3nUu8v3jFKz++ZEYDOT178
-         FZ3dMzUy1upRBj4riMJgIiYQ6o4/h2qlr9ci3t6QFiQORuorNnztC4ax5aOixO5KV/DC
-         RiaIuW65xlf36pwJJvikcshYRKxmqQfW1W059wG76HVhKA9fxM6Wws7RhYHykc5rXN+l
-         STKw==
-X-Gm-Message-State: AFqh2kq63eUndkT6hSOjnNjUDEjGqUmvqFYC8mVx18rdTmLs0syhDqGc
-        0p1YJL51sROFF9TAD+uyYQC4dqY3EDI=
-X-Google-Smtp-Source: AMrXdXtQcBpaSveZnn8jVYa9SNXp5SkPZ9/6B7MkaKzxriaJ7R7p2+LIpzSAKtDDAk+RVSh0CSliQw==
-X-Received: by 2002:a05:6602:5cd:b0:6bc:d712:8bcd with SMTP id w13-20020a05660205cd00b006bcd7128bcdmr27919673iox.21.1672841572057;
-        Wed, 04 Jan 2023 06:12:52 -0800 (PST)
-Received: from aford-IdeaCentre-A730.lan ([2601:447:d001:9aea:58ca:a321:54c8:c288])
-        by smtp.gmail.com with ESMTPSA id ay28-20020a056638411c00b0038a5af5e831sm11353451jab.100.2023.01.04.06.12.51
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tg9g76SwEQ03nnPlXSR+de3Y9ReWrRYeaDvRIoSCF7U=;
+        b=Fd7pfvwo/mVIwRT6RkWngxdjP/jaCKGze/UgxZG0CpB7k+nm83gJ5+iaukizMx1UX1
+         B2nAF4NqghSYV4gWAQPaKyJihK9ms/lkj6tKOsn1tQqWaikmJA6P0vxAQcjtRl0uGIi2
+         DTg7iejV0ReDdc5gDRA4bysSEE+Ruu0VPLpOw76MVg2RFnRZwJVyILBGrV9OtnnCzWeG
+         MHJ2v3Z6URXjc01KOo/epG+VIHiuTLf/mlDm05VlzLHT14VOG4L9uTAsAxdkD5y4IndL
+         HJbM5ytBMLiJq862j+zv02yYnJ7URq3nPWi20tOlYgCD6Qz7WSvhugqdLD6vOe+Ia17T
+         qi0w==
+X-Gm-Message-State: AFqh2kqdZ5lRjd+lYoinhq2KQs8TBLW77RRimLpwFc95n81ladhcvbCF
+        rVhDmV5wLZMWJwdBXSiZgwY=
+X-Google-Smtp-Source: AMrXdXtXQ0ALq3KiEPUKTv21ShKFEupnZPx4oOAlgODEyOVWekZ+XWvHLHXJ8N2OrlzazchgGI4iPw==
+X-Received: by 2002:a17:906:8e91:b0:7c1:5248:4f3a with SMTP id ru17-20020a1709068e9100b007c152484f3amr37459694ejc.56.1672841556990;
+        Wed, 04 Jan 2023 06:12:36 -0800 (PST)
+Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
+        by smtp.gmail.com with ESMTPSA id t7-20020a1709066bc700b0081bfc79beaesm15199181ejs.75.2023.01.04.06.12.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 06:12:51 -0800 (PST)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] arm64: dts: renesas: r8a774[a/b/e]1-beacon: Update corporate name
-Date:   Wed,  4 Jan 2023 08:12:44 -0600
-Message-Id: <20230104141245.8407-3-aford173@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230104141245.8407-1-aford173@gmail.com>
-References: <20230104141245.8407-1-aford173@gmail.com>
+        Wed, 04 Jan 2023 06:12:36 -0800 (PST)
+Date:   Wed, 4 Jan 2023 15:12:44 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v7 net-next 2/5] drivers/net/phy: add the link modes for
+ the 10BASE-T1S Ethernet PHY
+Message-ID: <Y7WJXFx9Fz1oQiDY@gvm01>
+References: <cover.1671234284.git.piergiorgio.beruto@gmail.com>
+ <fb30ee5dae667a5dfb398171263be7edca6b6b87.1671234284.git.piergiorgio.beruto@gmail.com>
+ <20221216204808.4299a21e@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221216204808.4299a21e@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,72 +79,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the end of 2021, Beacon EmbeddedWorks was sold off from Compass.
-Its legal name is now 'Logic PD, Inc. dba Beacon EmbeddedWorks" and
-as far as I know Compass Electronics doesn't exist anymore.
+On Fri, Dec 16, 2022 at 08:48:08PM -0800, Jakub Kicinski wrote:
+> On Sat, 17 Dec 2022 01:48:33 +0100 Piergiorgio Beruto wrote:
+> > +const int phy_basic_t1s_p2mp_features_array[2] = {
+> > +	ETHTOOL_LINK_MODE_TP_BIT,
+> > +	ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT,
+> > +};
+> > +EXPORT_SYMBOL_GPL(phy_basic_t1s_p2mp_features_array);
+> 
+> Should this be exported? It's not listed in the header.
+I've added the export in phy.h
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
-
-diff --git a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-index 8b6fe235a8f0..b7741c10e778 100644
---- a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-+++ b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright 2020, Compass Electronics Group, LLC
-+ * Copyright 2020, Logic PD, Inc. dba Beacon EmbeddedWorks
-  */
- 
- #include <dt-bindings/gpio/gpio.h>
-diff --git a/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi b/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
-index 1eb713530878..86a9d6381166 100644
---- a/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
-+++ b/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright 2020, Compass Electronics Group, LLC
-+ * Copyright 2020, Logic PD, Inc. dba Beacon EmbeddedWorks
-  */
- 
- #include <dt-bindings/gpio/gpio.h>
-diff --git a/arch/arm64/boot/dts/renesas/r8a774a1-beacon-rzg2m-kit.dts b/arch/arm64/boot/dts/renesas/r8a774a1-beacon-rzg2m-kit.dts
-index 9ae67263c0df..7c0e3252ce65 100644
---- a/arch/arm64/boot/dts/renesas/r8a774a1-beacon-rzg2m-kit.dts
-+++ b/arch/arm64/boot/dts/renesas/r8a774a1-beacon-rzg2m-kit.dts
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright 2020, Compass Electronics Group, LLC
-+ * Copyright 2020, Logic PD, Inc. dba Beacon EmbeddedWorks
-  */
- 
- /dts-v1/;
-diff --git a/arch/arm64/boot/dts/renesas/r8a774b1-beacon-rzg2n-kit.dts b/arch/arm64/boot/dts/renesas/r8a774b1-beacon-rzg2n-kit.dts
-index 89d708346ba8..f1fbd687d0f4 100644
---- a/arch/arm64/boot/dts/renesas/r8a774b1-beacon-rzg2n-kit.dts
-+++ b/arch/arm64/boot/dts/renesas/r8a774b1-beacon-rzg2n-kit.dts
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright 2020, Compass Electronics Group, LLC
-+ * Copyright 2020, Logic PD, Inc. dba Beacon EmbeddedWorks
-  */
- 
- /dts-v1/;
-diff --git a/arch/arm64/boot/dts/renesas/r8a774e1-beacon-rzg2h-kit.dts b/arch/arm64/boot/dts/renesas/r8a774e1-beacon-rzg2h-kit.dts
-index 3e9ced3b2d33..7ee1a1bed212 100644
---- a/arch/arm64/boot/dts/renesas/r8a774e1-beacon-rzg2h-kit.dts
-+++ b/arch/arm64/boot/dts/renesas/r8a774e1-beacon-rzg2h-kit.dts
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright 2020, Compass Electronics Group, LLC
-+ * Copyright 2020, Logic PD, Inc. dba Beacon EmbeddedWorks
-  */
- 
- /dts-v1/;
--- 
-2.34.1
-
+Thanks!
+Piergiorgio
