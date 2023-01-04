@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C2065D5A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE79B65D5AF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239275AbjADO3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
+        id S235017AbjADObZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:31:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235017AbjADO3Y (ORCPT
+        with ESMTP id S235207AbjADObP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:29:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658DA1B1D0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 06:29:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F09126174F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:29:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32078C433D2;
-        Wed,  4 Jan 2023 14:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672842562;
-        bh=/UI6QPvD3oCrqOgTxaQlYrA8PAA4phdFzEfI7uMdEvo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y4p2M/AC+xTfh9JFLOMmjjroaBF3QwtYvCH5KjtB0/sm6k5hW9/vKgaPLWfZ3VjkI
-         r+ndxwc4O3N3AnKqzI7vz8OsBv8ceG72Kfxuvzm6OwdkbRwfeIVevthhKz2L5mMwBd
-         BEYyMuRPJvxqRdq1UGQqxaJ5+7S8yihDiugny7HbFC2GP6xPCCZBSUzmx5uEikZ4WJ
-         PucHYplNX7IHTwdGI1mW6wEGHPxQNohatS7M5ijIdFXZPOu5l+6kTsPmt6GhNxDyjU
-         uIpd4R+KKpLmbsZCzEk1FRvHe9IaOKzrk9wh+HQFKCuDWqhN8NHvMVX5hh8m4A81+M
-         tP0bGUK0uzd3A==
-Date:   Wed, 4 Jan 2023 23:29:18 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Connor O'Brien" <connoro@google.com>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>
-Subject: Re: [PATCH] trace: Add trace points for tasklet entry/exit
-Message-Id: <20230104232918.2791484c39ac54c59a7110f4@kernel.org>
-In-Reply-To: <20230103151554.5c0a6c6f@gandalf.local.home>
-References: <20230103185408.2874345-1-jstultz@google.com>
-        <20230103151554.5c0a6c6f@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 4 Jan 2023 09:31:15 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8065CC7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 06:31:13 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id cp9-20020a17090afb8900b00226a934e0e5so1181560pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 06:31:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/XJG2NgUgahwG/C5s2mJj+3LrHS+xAXkiEzTuBwSRs=;
+        b=QqXodgCDwuVKUISeF3ZkfxaA9MsnxxjHjpuMCSWcn876ipUVIO2fnC0UECQP96UbbR
+         YIwfGWbdCQQgZ0llgMufxX4nb9OclTDJjppSYqC6Iv2FxMHSv+FTY16KoAE5hqUNHEEL
+         ZWopJYbYJm4zMRzoVFs1/5eo0SrdLG7zuIz6srt0Opg/nkp2KPBd7IN1f7GL0pGPuVlZ
+         e7z33VZh+kku9wqc3xtyYMOsuyg1WnhH1d5mVARJRsyZ6Lzz6seQSAq0Brd4srOXmxSg
+         lqrwWhRFTv7YYmodlndIItCNc36dWO7m275KSKzZDn/kSAKQ+mIIe3Aeh45ZoeldoDMt
+         shzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5/XJG2NgUgahwG/C5s2mJj+3LrHS+xAXkiEzTuBwSRs=;
+        b=zNwKx8jQlrIIqSgym9gpVybu8oh8AX0zJL1u6wcIq5C82KZGLpMrue6irVJg9Qyim1
+         Ynyazsb+hw87Kz9vBcfR3q0hcAQG70T51ZdGigmFA81KB6vi+jXtkSlgRnu9TaP1Pcao
+         WU2RNBpaOxrShEUMVMa9y0vlMWx6O2p4KU1M9Dzg5n7XT4W6VxXF8UWMw79T/7Ip+X9/
+         JjlQSivVO2gMsZjEJyjDtMVF+bYFKcCdfcv03dPMbCWrA+d4GriwKGK2bxGgjFhGzlBk
+         0PZ3I8ni7Ce4wHqceEyWF3bXCEtgsJA3ssv1HeSnVM7otYC/1w3ZWt2dnhelpU48R/G1
+         38HQ==
+X-Gm-Message-State: AFqh2kplkwmlJs3MPpuHkHAomGYa+pF9i4UJ2rCYWWUAkmA+gJoWxgs+
+        UAR07iCvwSC678ot/BmjtFbuAw==
+X-Google-Smtp-Source: AMrXdXttLSJRebBGBvcOEgZBpEsufIIBrF3ucpY0qN/nHcQw1ZTcOGIM6L0jkgiVcmBAg69NPLPCwA==
+X-Received: by 2002:a17:90a:9912:b0:219:f970:5119 with SMTP id b18-20020a17090a991200b00219f9705119mr3851370pjp.1.1672842673086;
+        Wed, 04 Jan 2023 06:31:13 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z15-20020a17090a66cf00b00223ed94759csm23072183pjl.39.2023.01.04.06.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 06:31:12 -0800 (PST)
+Date:   Wed, 4 Jan 2023 14:31:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aaron Lewis <aaronlewis@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>
+Subject: Re: [PATCH v2 3/4] KVM: nVMX: Don't muck with allowed sec exec
+ controls on CPUID changes
+Message-ID: <Y7WNrZ9NaDHOxwuG@google.com>
+References: <20221213062306.667649-1-seanjc@google.com>
+ <20221213062306.667649-4-seanjc@google.com>
+ <70872206-7a75-0a19-3df5-a97207e710fa@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <70872206-7a75-0a19-3df5-a97207e710fa@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,160 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 3 Jan 2023 15:15:54 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Tue,  3 Jan 2023 18:54:08 +0000
-> John Stultz <jstultz@google.com> wrote:
-> 
-> > From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
+On Fri, Dec 23, 2022, Paolo Bonzini wrote:
+> On 12/13/22 07:23, Sean Christopherson wrote:
+> > Don't modify the set of allowed secondary execution controls, i.e. the
+> > virtual MSR_IA32_VMX_PROCBASED_CTLS2, in response to guest CPUID changes.
+> > To avoid breaking old userspace that never sets the VMX MSRs, i.e. relies
+> > on KVM to provide a consistent vCPU model, keep the existing behavior if
+> > userspace has never written MSR_IA32_VMX_PROCBASED_CTLS2.
 > > 
-> > Tasklets are supposed to finish their work quickly and
-> > should not block the current running process, but it is not
-> > guaranteed that. Currently softirq_entry/exit can be used to
-> > know total tasklets execution time, but not helpful to track
-> > individual tasklet's execution time. With that we can't find
-> > any culprit tasklet function, which is taking more time.
-> > 
-> > Add tasklet_entry/exit trace point support to track
-> > individual tasklet execution.
-> > 
-> > This patch has been carried in the Android tree for awhile
-> > so I wanted to submit it for review upstream. Feedback would
-> > be appreciated!
-> > 
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > Cc: Connor O'Brien <connoro@google.com>
-> > Cc: kernel-team@android.com
-> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
-> > [elavila: Port to android-mainline]
-> > Signed-off-by: J. Avila <elavila@google.com>
-> > [jstultz: Rebased to upstream, cut unused trace points, added
-> >  comments for the tracepoints, reworded commit]
-> > Signed-off-by: John Stultz <jstultz@google.com>
-> > ---
-> >  include/trace/events/irq.h | 43 ++++++++++++++++++++++++++++++++++++++
-> >  kernel/softirq.c           |  9 ++++++--
-> >  2 files changed, 50 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
-> > index eeceafaaea4c..da85851d4ec1 100644
-> > --- a/include/trace/events/irq.h
-> > +++ b/include/trace/events/irq.h
-> > @@ -160,6 +160,49 @@ DEFINE_EVENT(softirq, softirq_raise,
-> >  	TP_ARGS(vec_nr)
-> >  );
-> >  
-> > +DECLARE_EVENT_CLASS(tasklet,
-> > +
-> > +	TP_PROTO(void *func),
-> > +
-> > +	TP_ARGS(func),
-> > +
-> > +	TP_STRUCT__entry(
+> > KVM should not modify the VMX capabilities presented to L1 based on CPUID
+> > as doing so may discard explicit settings provided by userspace.  E.g. if
+> > userspace does KVM_SET_MSRS => KVM_SET_CPUID and disables a feature in
+> > the VMX MSRs but not CPUID (to prevent exposing the feature to L2), then
+> > stuffing the VMX MSRs during KVM_SET_CPUID will expose the feature to L2
+> > against userspace's wishes.
 > 
-> Could you also add a pointer to the tasklet too?
-> 
-> 		__field(	void *, tasklet)
-> 
-> > +		__field(	void *,	func)
-> > +	),
-> > +
-> > +	TP_fast_assign(
-> 
-> 		__entry->tasklet = t;
-> 
-> > +		__entry->func = func;
-> > +	),
-> > +
-> > +	TP_printk("function=%ps", __entry->func)
-> 
-> This way if we wanted more information, we could use event probes:
-> 
->  # echo 'e:tasklet_info tasklet/tasklet_entry state=+8($tasklet):u64' > dynamic_events
+> The commit message doesn't explain *why* KVM_SET_CPUID would be done before
+> KVM_SET_MSRS.
 
-Hmm, what about saving 'state' and 'count' instead of 'tasklet'?
+I assume you mean why KVM_SET_MSRS would be done before KVM_SET_CPUID2?
 
-I have a question about the basic policy of making a new tracepoint.
+This patch is mostly paranoia, AFAIK there is no userspace that is negatively
+affected by KVM's manipulations.  The only case I can think of is if userspace
+wanted to emulate dynamic CPUID updates, e.g. set an MSR filter to intercept writes
+to MISC_ENABLES to update MONITOR/MWAIT support, but that behavior isn't allowed
+since commit feb627e8d6f6 ("KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN").
 
-Of course we can expand the event with eprobes as you said, but without
-eprobe, this 'tasklet' field of this event just exposing a kernel
-internal object address. That is useless in most cases. And also the
-offset (layout) in the kernel data structure can be changed by some
-debug options. We need an external tool to find correct offset (e.g.
-perf probe).
-
-So my question is when adding a new event, whether it should expose a
-(address of) related data structure, or expose some value fields of
-the structure. IMHO, the basic policy is latter. Of course if the
-data structure is enough big and most of its fields are usually not
-interesting, it may be better to save the data structure itself.
-
-Thank you,
-
-> 
-> -- Steve
-> 
-> 
-> > +);
-> > +
-> > +/**
-> > + * tasklet_entry - called immediately before the tasklet is run
-> > + * @func:  tasklet callback or function being run
-> > + *
-> > + * Used to find individual tasklet execution time
-> > + */
-> > +DEFINE_EVENT(tasklet, tasklet_entry,
-> > +
-> > +	TP_PROTO(void *func),
-> > +
-> > +	TP_ARGS(func)
-> > +);
-> > +
-> > +/**
-> > + * tasklet_exit - called immediately after the tasklet is run
-> > + * @func:  tasklet callback or function being run
-> > + *
-> > + * Used to find individual tasklet execution time
-> > + */
-> > +DEFINE_EVENT(tasklet, tasklet_exit,
-> > +
-> > +	TP_PROTO(void *func),
-> > +
-> > +	TP_ARGS(func)
-> > +);
-> > +
-> >  #endif /*  _TRACE_IRQ_H */
-> >  
-> >  /* This part must be outside protection */
-> > diff --git a/kernel/softirq.c b/kernel/softirq.c
-> > index c8a6913c067d..dbd322524171 100644
-> > --- a/kernel/softirq.c
-> > +++ b/kernel/softirq.c
-> > @@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
-> >  		if (tasklet_trylock(t)) {
-> >  			if (!atomic_read(&t->count)) {
-> >  				if (tasklet_clear_sched(t)) {
-> > -					if (t->use_callback)
-> > +					if (t->use_callback) {
-> > +						trace_tasklet_entry(t->callback);
-> >  						t->callback(t);
-> > -					else
-> > +						trace_tasklet_exit(t->callback);
-> > +					} else {
-> > +						trace_tasklet_entry(t->func);
-> >  						t->func(t->data);
-> > +						trace_tasklet_exit(t->func);
-> > +					}
-> >  				}
-> >  				tasklet_unlock(t);
-> >  				continue;
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+There are scenarios where userspace might do KVM_SET_MSRS before KVM_SET_CPUID,
+e.g. QEMU's reuse of a vCPU for CPU hotplug, but in those cases I would expect
+userspace to follow up with another KVM_SET_MSRS.
