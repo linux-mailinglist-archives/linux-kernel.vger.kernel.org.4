@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9CC65DFA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C660665DFAC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240453AbjADWKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:10:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
+        id S240489AbjADWMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239618AbjADWKB (ORCPT
+        with ESMTP id S240460AbjADWMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:10:01 -0500
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32B813F54;
-        Wed,  4 Jan 2023 14:09:59 -0800 (PST)
-Received: by mail-qt1-x842.google.com with SMTP id x11so28516108qtv.13;
-        Wed, 04 Jan 2023 14:09:59 -0800 (PST)
+        Wed, 4 Jan 2023 17:12:51 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD897193E7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:12:50 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id g10so12923238wmo.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:12:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ssk203t5op2Ko85GQkEOhmk/EZyaEm8HYyhrWRN0IZg=;
-        b=D3aRi9CRLCtwJOUnpE5qMguJFni4UHBtZgBlqjqArAC8/kVQoUTOgWfTyTuO72W/w3
-         NvTeNSABWi/HZW5D2GN5Mca22eNoQSi8ETNGMK8UFtNZ5C4ZpCKPit9wPXNsAYYnEiF8
-         cKddnFN51Pn2/ReaV7AmeEjQvZcftdylpcmbhkCmvPxGLyrOZoG/BIcSO9GL/AR2V2aZ
-         34rFESzun8NPuFt092Ljl2jy57kU97EfvHF2imDn2d/TnIO5194fpYwLIZEsOTndStpS
-         NN6MgjLqij+QzEpqsjwE5wSNI5nRgFyl82cei0cYvXNjkmD4oIrlDMhXya/s0WRXSj4a
-         6DtA==
+        bh=qyxWpwZrLC0D/z1TOjudaUZ9Mh7byi3hhDukVq1HkVU=;
+        b=Egcm8LR+wxVfNvHjtn0fZUQphH9szo/KzOeAEKN5vZ/g39b305WhxRlb0pHFFKPzVr
+         UJFvVfPwsOLuwohy4yZ/WDy2xDbbCYOYD8czWjpBLcqoIi2wrJnGTqZDwp5auYZEe+K1
+         DLMuDwIysgj74J7gb+D+0RRPrOeJgdKZxXMPAU+nMxNNLxdhVi6E/Ac1rXIGte9Azbe4
+         pdw0yfHsS3FaDDfVyDab/JeMJBdf33ykmwc+dm01dei4LDCJH3uBnk8xpjUBsa9gxAeX
+         0bwmsiwmIaxQJ0BTbCVDoaiqvlL/y9cjXET/FrPRLJKfEg1xs6lqvY4rt39plejEQEr2
+         3aAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ssk203t5op2Ko85GQkEOhmk/EZyaEm8HYyhrWRN0IZg=;
-        b=d+lxRU7G7IhPjvKWv9uCoAYug/6N4YxXy0RIb9DCO1pdOD1M522j9rB7HI+2UwF5aA
-         oEjYZAiVz4x+Y+wGyajf9lHTBIac/Ja0vy1oP6SqODEmCJ776dC3hIvRLz/n+wedeb9X
-         l7l/NrASomSzAEe/NkTB6s0JSr1SqiuLPVEnEqy26XJ439WaW8kdDVUMM5G6bL0j27pb
-         aKcVyvGuMqgYOtdIxLSEHtdqYRtXzZeyymt5sI91UmFvFuLdpoPYKsUdQ9JgVQKSYmUM
-         v2uvxkTwmVSk91jIbMWWUHGSpP8DoK+JQFvwrD1JK72cywCFG5dVyv9JYsfFNqqzanXq
-         LbJQ==
-X-Gm-Message-State: AFqh2ko9WHUojzwyCOoNSZniky+WnCQRh52jSH3pI+xUTOEJ9r2gbuda
-        eYYkC15DP/LbtYOAtfsK7uc4v8E+rg==
-X-Google-Smtp-Source: AMrXdXvki4onsJf/WgFzOaFVj9UoXEWe1ZKkt8ae6FY6z+oKXL7LfxSk1HPydGynekseKygXUc5XqQ==
-X-Received: by 2002:ac8:7457:0:b0:3a8:2122:7c28 with SMTP id h23-20020ac87457000000b003a821227c28mr72469064qtr.47.1672870198733;
-        Wed, 04 Jan 2023 14:09:58 -0800 (PST)
-Received: from fedora.mshome.net (119.sub-174-242-144.myvzw.com. [174.242.144.119])
-        by smtp.gmail.com with ESMTPSA id 6-20020ac85646000000b003a6947863e1sm20431531qtt.11.2023.01.04.14.09.57
+        bh=qyxWpwZrLC0D/z1TOjudaUZ9Mh7byi3hhDukVq1HkVU=;
+        b=sy7y5zCzEvFT2NOHdm/1qOMOzfh3+wpt+YoUaqKODvvuM5J4U/fFducs9+6gOH0EPt
+         GFcjH89q5LdOTPD1mbyn7qGvcG5BYsJIlbKZfUTYCApeJAjVRPpEnPdmL2bG4PafCWYO
+         g9uI5DihBEmK/lTHNegKlbdD3yiQHPunTRIwrVEVh8dP0Em7z8bL2uDPqxzP9ZmMpc9H
+         lPBF8bRl2FNCuudmZasKcIBTFIYJzS2CGH+Xdnsf7vJjjPH45/ydP/Ein7SAr2hMObA9
+         KPSDBxw1+xfGa6Sz8Z6kmDrBgPDCUD5BkJvlch5bqvcYiOgpUgOB/jxFcv1p7M3/HS1w
+         2/JA==
+X-Gm-Message-State: AFqh2koPQjGxMiUPFARz2o/0hvatTEv7WhOknCiy5sXcPdhpBYGMsHaE
+        eSL86P66R9asxtXoDJGccQQ=
+X-Google-Smtp-Source: AMrXdXvVRHX6G5nROCXAc/gfZf1AAG7SnrFtp2cDaVixa07sqCFDBUnOm6sL2JLBRzHIv+N19hTwZQ==
+X-Received: by 2002:a05:600c:a10:b0:3d2:2904:dfe9 with SMTP id z16-20020a05600c0a1000b003d22904dfe9mr38999565wmp.21.1672870369472;
+        Wed, 04 Jan 2023 14:12:49 -0800 (PST)
+Received: from arch-laptop.. (host31-53-119-24.range31-53.btcentralplus.com. [31.53.119.24])
+        by smtp.gmail.com with ESMTPSA id l24-20020a1ced18000000b003d99da8d30asm57164wmh.46.2023.01.04.14.12.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 14:09:58 -0800 (PST)
-From:   Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To:     linux-api@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-Subject: [RFC PATCH v1] syscall_user_dispatch: ptrace SUSPEND feature for checkpoint/restore
-Date:   Wed,  4 Jan 2023 17:09:51 -0500
-Message-Id: <20230104220951.34435-1-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.37.3
+        Wed, 04 Jan 2023 14:12:48 -0800 (PST)
+From:   Ben Carter <craterrender@gmail.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Divya Prakash <divya1.prakash@intel.com>,
+        Ben Carter <craterrender@gmail.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] sound: hda: increase timeouts to stop crash on resume with ALC3204 and others
+Date:   Wed,  4 Jan 2023 22:10:24 +0000
+Message-Id: <20230104221024.23524-1-craterrender@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,85 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH to ptrace options, and
-modify Syscall User Dispatch to suspend interception when enabled.
+Upon waking after system suspend, ALSA often crashed with:
+  snd_hda_intel 0000:00:1f.3: CORB reset timeout#2, CORBRP = 65535
+  snd_hda_codec_hdmi hdaudioC1D2: Unable to sync register 0x2f8100. -5
+  snd_hda_codec_realtek hdaudioC1D0: Unable to sync register 0x2b8000. -5
+A temporary fix was established by reloading snd_hda_intel, but increasing
+the rather strict timeout of 1ms to 100ms has remedied the issue on my
+device. Although this is a much larger delay, most hardware took less than
+1ms anyway and it's preferable to the whole audio system crashing.
 
-This is modeled after the similar feature for SECCOMP, which suspends
-SECCOMP interposition.  Without doing this, software like CRIU will
-inject system calls into a process and be intercepted by Syscall
-User Dispatch, either causing a crash (due to blocked signals) or
-the delivery of those signals to a ptracer (not the intended behavior).
-
-Since Syscall User Dispatch is not a privileged feature, a check
-for permissions like SECCOMP does is not required, however attemping
-to set this feature should not be possible when
-CONFIG_CHECKPOINT_RESTORE it not supported.
+Signed-off-by: Ben Carter <craterrender@gmail.com>
 ---
- include/linux/ptrace.h               | 1 +
- include/uapi/linux/ptrace.h          | 3 ++-
- kernel/entry/syscall_user_dispatch.c | 4 ++++
- kernel/ptrace.c                      | 5 +++++
- 4 files changed, 12 insertions(+), 1 deletion(-)
+ sound/hda/hdac_controller.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
-index eaaef3ffec22..17ded8ed3795 100644
---- a/include/linux/ptrace.h
-+++ b/include/linux/ptrace.h
-@@ -45,6 +45,7 @@ extern int ptrace_access_vm(struct task_struct *tsk, unsigned long addr,
+diff --git a/sound/hda/hdac_controller.c b/sound/hda/hdac_controller.c
+index 3c7af6558249..1ab573248452 100644
+--- a/sound/hda/hdac_controller.c
++++ b/sound/hda/hdac_controller.c
+@@ -16,7 +16,7 @@ static void azx_clear_corbrp(struct hdac_bus *bus)
+ {
+ 	int timeout;
  
- #define PT_EXITKILL		(PTRACE_O_EXITKILL << PT_OPT_FLAG_SHIFT)
- #define PT_SUSPEND_SECCOMP	(PTRACE_O_SUSPEND_SECCOMP << PT_OPT_FLAG_SHIFT)
-+#define PT_SUSPEND_SYSCALL_USER_DISPATCH	(PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH << PT_OPT_FLAG_SHIFT)
+-	for (timeout = 1000; timeout > 0; timeout--) {
++	for (timeout = 100000; timeout > 0; timeout--) {
+ 		if (snd_hdac_chip_readw(bus, CORBRP) & AZX_CORBRP_RST)
+ 			break;
+ 		udelay(1);
+@@ -26,7 +26,7 @@ static void azx_clear_corbrp(struct hdac_bus *bus)
+ 			snd_hdac_chip_readw(bus, CORBRP));
  
- extern long arch_ptrace(struct task_struct *child, long request,
- 			unsigned long addr, unsigned long data);
-diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
-index 195ae64a8c87..be602a8d554f 100644
---- a/include/uapi/linux/ptrace.h
-+++ b/include/uapi/linux/ptrace.h
-@@ -146,9 +146,10 @@ struct ptrace_rseq_configuration {
- /* eventless options */
- #define PTRACE_O_EXITKILL		(1 << 20)
- #define PTRACE_O_SUSPEND_SECCOMP	(1 << 21)
-+#define PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH	(1 << 22)
- 
- #define PTRACE_O_MASK		(\
--	0x000000ff | PTRACE_O_EXITKILL | PTRACE_O_SUSPEND_SECCOMP)
-+	0x000000ff | PTRACE_O_EXITKILL | PTRACE_O_SUSPEND_SECCOMP | PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH)
- 
- #include <asm/ptrace.h>
- 
-diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-index 0b6379adff6b..6fad83e34da7 100644
---- a/kernel/entry/syscall_user_dispatch.c
-+++ b/kernel/entry/syscall_user_dispatch.c
-@@ -36,6 +36,10 @@ bool syscall_user_dispatch(struct pt_regs *regs)
- 	struct syscall_user_dispatch *sd = &current->syscall_dispatch;
- 	char state;
- 
-+	if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
-+			unlikely(current->ptrace & PT_SUSPEND_SYSCALL_USER_DISPATCH))
-+		return false;
-+
- 	if (likely(instruction_pointer(regs) - sd->offset < sd->len))
- 		return false;
- 
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 54482193e1ed..a6ad815bd4be 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -370,6 +370,11 @@ static int check_ptrace_options(unsigned long data)
- 	if (data & ~(unsigned long)PTRACE_O_MASK)
- 		return -EINVAL;
- 
-+	if (unlikely(data & PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH)) {
-+		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTART))
-+			return -EINVAL;
-+	}
-+
- 	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
- 		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
- 		    !IS_ENABLED(CONFIG_SECCOMP))
+ 	snd_hdac_chip_writew(bus, CORBRP, 0);
+-	for (timeout = 1000; timeout > 0; timeout--) {
++	for (timeout = 100000; timeout > 0; timeout--) {
+ 		if (snd_hdac_chip_readw(bus, CORBRP) == 0)
+ 			break;
+ 		udelay(1);
 -- 
-2.37.3
+2.39.0
 
