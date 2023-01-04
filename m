@@ -2,144 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7036465CEBF
+	by mail.lfdr.de (Postfix) with ESMTP id BCAE065CEC0
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234456AbjADIvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:51:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
+        id S234619AbjADIvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:51:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238976AbjADIvB (ORCPT
+        with ESMTP id S234723AbjADIvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:51:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B6418E04
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:48:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 4 Jan 2023 03:51:13 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6FE1E3C4;
+        Wed,  4 Jan 2023 00:49:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AE7FBCE16E6
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B76B1C43396
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:48:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672822119;
-        bh=x+pZHCEf+gCp8ljkUtapLHlz3SrGepACquhwLvCQrwM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ct5OOGgVF7oZbygyWdBF0mCA6m0X8EGwV1yzkl4ttxcHSmohW8ZCz+s30CxC5lNPz
-         uTAViqApOSwR9nyd2iPQtA/exdh6s//FAvaR9MKnGGxMiIZaYtqTZO/s2Jqn4Zl8Fj
-         6CAkJLaImV0xxUJe0Vj/899X/TMO73rViHUUZJamPGZI5psmX44GDrRC7FaOXCFa5T
-         HXpnLWgTZA+qbxVzEdvyC1n4MIYhLFuEbLLXdcgjlAs0J84OwzS7IIaEbTCbaYJbKv
-         IOr/f4PQ+qlixJyHur4O3ztApmPW3+Fh4pBCQtdEC3zvMCol04gguEG+sEu0b0vwgz
-         OgZv5rY2CQTyg==
-Received: by mail-ej1-f50.google.com with SMTP id ud5so81031016ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 00:48:39 -0800 (PST)
-X-Gm-Message-State: AFqh2kpCyxM1J1H0ISkRDJjawV3pdEN4vG+H8dJLVGG2r7n7xBZV/0M1
-        eGfLRJHSAgf45bXyMV8kYYfkLTgprulY0mTFnCA=
-X-Google-Smtp-Source: AMrXdXvxQagdXyWyFLKDic95BL/Fg668DmvP+3KepetHctDyaL+FsaSKkrQVJ+86bkwalde7/J5f4RxpIxHTDH7N/EU=
-X-Received: by 2002:a17:906:33d4:b0:7c0:f7af:7c5e with SMTP id
- w20-20020a17090633d400b007c0f7af7c5emr3146027eja.406.1672822117921; Wed, 04
- Jan 2023 00:48:37 -0800 (PST)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E4B1644BB;
+        Wed,  4 Jan 2023 08:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672822143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vhUi6JY1SlAAUBDBWTjbK9W4Y/Fg2W4gAHxeP6wUHIs=;
+        b=0BoLQwRmka75T2nSWi3hj6eZzk4Lz+sMXNG3jF5CsAG7lAKHJas+ETrW4B4Fo4KP7eCp8T
+        BO5Zvw1IH1H1BU/t8OeHVm8s1l4EOd5roNfOWKjKVj7TTNVj/l/FYYBEVHtNe4YdiAtzLX
+        CldGGrQ64cKrt63s2mjSx3WcQXqpB4Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672822143;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vhUi6JY1SlAAUBDBWTjbK9W4Y/Fg2W4gAHxeP6wUHIs=;
+        b=XTwC+5De0X4Q7h7ZrlacivDaZJiAXjrEDRGioIpKQZDViQLeJpkZHuJJna9LLWvuckxdDd
+        RiNQqgDXdqqP2PAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D5D551342C;
+        Wed,  4 Jan 2023 08:49:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IuwlNH89tWNUJAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 04 Jan 2023 08:49:03 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 5724BA0742; Wed,  4 Jan 2023 09:49:03 +0100 (CET)
+Date:   Wed, 4 Jan 2023 09:49:03 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>,
+        syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com
+Subject: Re: [PATCH] ext4: fix use-after-free Read in ext4_find_extent for
+ bigalloc + inline
+Message-ID: <20230104084903.ocrt7mfdehw3sz6n@quack3>
+References: <20230104071559.2051847-1-yebin@huaweicloud.com>
 MIME-Version: 1.0
-References: <20230104074146.578485-1-uwu@icenowy.me> <20230104074146.578485-2-uwu@icenowy.me>
-In-Reply-To: <20230104074146.578485-2-uwu@icenowy.me>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 4 Jan 2023 16:48:24 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQp1bOp9kfoOkbvNnSXQhzrCpG3rn8C+LPPoJtMCCDOdA@mail.gmail.com>
-Message-ID: <CAJF2gTQp1bOp9kfoOkbvNnSXQhzrCpG3rn8C+LPPoJtMCCDOdA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/3] riscv: errata: cmo: add CMO macro variant with
- both VA and PA
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Samuel Holland <samuel@sholland.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104071559.2051847-1-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thx for the patch! It's nice.
+On Wed 04-01-23 15:15:59, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+> 
+> Syzbot found the following issue:
+> loop0: detected capacity change from 0 to 2048
+> EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
+> ==================================================================
+> BUG: KASAN: use-after-free in ext4_ext_binsearch_idx fs/ext4/extents.c:768 [inline]
+> BUG: KASAN: use-after-free in ext4_find_extent+0x76e/0xd90 fs/ext4/extents.c:931
+> Read of size 4 at addr ffff888073644750 by task syz-executor420/5067
+> 
+> CPU: 0 PID: 5067 Comm: syz-executor420 Not tainted 6.2.0-rc1-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+>  print_address_description+0x74/0x340 mm/kasan/report.c:306
+>  print_report+0x107/0x1f0 mm/kasan/report.c:417
+>  kasan_report+0xcd/0x100 mm/kasan/report.c:517
+>  ext4_ext_binsearch_idx fs/ext4/extents.c:768 [inline]
+>  ext4_find_extent+0x76e/0xd90 fs/ext4/extents.c:931
+>  ext4_clu_mapped+0x117/0x970 fs/ext4/extents.c:5809
+>  ext4_insert_delayed_block fs/ext4/inode.c:1696 [inline]
+>  ext4_da_map_blocks fs/ext4/inode.c:1806 [inline]
+>  ext4_da_get_block_prep+0x9e8/0x13c0 fs/ext4/inode.c:1870
+>  ext4_block_write_begin+0x6a8/0x2290 fs/ext4/inode.c:1098
+>  ext4_da_write_begin+0x539/0x760 fs/ext4/inode.c:3082
+>  generic_perform_write+0x2e4/0x5e0 mm/filemap.c:3772
+>  ext4_buffered_write_iter+0x122/0x3a0 fs/ext4/file.c:285
+>  ext4_file_write_iter+0x1d0/0x18f0
+>  call_write_iter include/linux/fs.h:2186 [inline]
+>  new_sync_write fs/read_write.c:491 [inline]
+>  vfs_write+0x7dc/0xc50 fs/read_write.c:584
+>  ksys_write+0x177/0x2a0 fs/read_write.c:637
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f4b7a9737b9
+> RSP: 002b:00007ffc5cac3668 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4b7a9737b9
+> RDX: 00000000175d9003 RSI: 0000000020000200 RDI: 0000000000000004
+> RBP: 00007f4b7a933050 R08: 0000000000000000 R09: 0000000000000000
+> R10: 000000000000079f R11: 0000000000000246 R12: 00007f4b7a9330e0
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+> 
+> Above issue is happens when enable bigalloc and inline data feature. As
+> commit 131294c35ed6 fixed delayed allocation bug in ext4_clu_mapped for
+> bigalloc + inline. But it only resolved issue when has inline data, if
+> inline data has been converted to extent(ext4_da_convert_inline_data_to_extent)
+> before writepages, there is no EXT4_STATE_MAY_INLINE_DATA flag. However
+> i_data is still store inline data in this scene. Then will trigger UAF
+> when find extent.
+> To resolve above issue, there is need to add judge "ext4_has_inline_data(inode)"
+> in ext4_clu_mapped().
+> 
+> Reported-by: syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com
+> Fixes: 131294c35ed6 ("ext4: fix delayed allocation bug in ext4_clu_mapped for bigalloc + inline")
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Looks good to me. Feel free to add:
 
-On Wed, Jan 4, 2023 at 3:42 PM Icenowy Zheng <uwu@icenowy.me> wrote:
->
-> The standardized Zicbom extension supports only VA, however there's some
-> vendor extensions (e.g. XtheadCmo) that can handle cache management
-> operations on PA directly, bypassing the TLB lookup.
->
-> Add a CMO alternatives macro variant that come with both VA and PA
-> supplied, and the code can be patched to use either the VA or the PA at
-> runtime. In this case the codepath is now patched to use VA for Zicbom
-> and PA for XtheadCmo.
->
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->  arch/riscv/include/asm/errata_list.h | 30 ++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> index 46adc1c9428f..bf80dd58145e 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -118,6 +118,9 @@ asm volatile(ALTERNATIVE(                                           \
->  #define THEAD_clean_A0 ".long 0x0255000b"
->  #define THEAD_flush_A0 ".long 0x0275000b"
->  #define THEAD_SYNC_S   ".long 0x0190000b"
-> +#define THEAD_inval_PA_A0      ".long 0x02a5000b"
-> +#define THEAD_clean_PA_A0      ".long 0x0295000b"
-> +#define THEAD_flush_PA_A0      ".long 0x02b5000b"
->
->  #define ALT_CMO_OP(_op, _start, _size, _cachesize)                     \
->  asm volatile(ALTERNATIVE_2(                                            \
-> @@ -144,6 +147,33 @@ asm volatile(ALTERNATIVE_2(                                                \
->             "r"((unsigned long)(_start) + (_size))                      \
->         : "a0")
->
-> +#define ALT_CMO_OP_VPA(_op, _vaddr, _paddr, _size, _cachesize)         \
-> +asm volatile(ALTERNATIVE_2(                                            \
-> +       __nops(6),                                                      \
-> +       "mv a0, %1\n\t"                                                 \
-> +       "j 2f\n\t"                                                      \
-> +       "3:\n\t"                                                        \
-> +       "cbo." __stringify(_op) " (a0)\n\t"                             \
-> +       "add a0, a0, %0\n\t"                                            \
-> +       "2:\n\t"                                                        \
-> +       "bltu a0, %2, 3b\n\t"                                           \
-> +       "nop", 0, CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,           \
-> +       "mv a0, %3\n\t"                                                 \
-> +       "j 2f\n\t"                                                      \
-> +       "3:\n\t"                                                        \
-> +       THEAD_##_op##_PA_A0 "\n\t"                                      \
-> +       "add a0, a0, %0\n\t"                                            \
-> +       "2:\n\t"                                                        \
-> +       "bltu a0, %4, 3b\n\t"                                           \
-> +       THEAD_SYNC_S, THEAD_VENDOR_ID,                                  \
-> +                       ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)      \
-> +       : : "r"(_cachesize),                                            \
-> +           "r"((unsigned long)(_vaddr) & ~((_cachesize) - 1UL)),       \
-> +           "r"((unsigned long)(_vaddr) + (_size)),                     \
-> +           "r"((unsigned long)(_paddr) & ~((_cachesize) - 1UL)),       \
-> +           "r"((unsigned long)(_paddr) + (_size))                      \
-> +       : "a0")
-> +
->  #define THEAD_C9XX_RV_IRQ_PMU                  17
->  #define THEAD_C9XX_CSR_SCOUNTEROF              0x5c5
->
-> --
-> 2.38.1
->
-
-
+>  fs/ext4/extents.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+> index 9de1c9d1a13d..ee5acf2bd5e6 100644
+> --- a/fs/ext4/extents.c
+> +++ b/fs/ext4/extents.c
+> @@ -5802,7 +5802,8 @@ int ext4_clu_mapped(struct inode *inode, ext4_lblk_t lclu)
+>  	 * mapped - no physical clusters have been allocated, and the
+>  	 * file has no extents
+>  	 */
+> -	if (ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
+> +	if (ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA) ||
+> +	    ext4_has_inline_data(inode))
+>  		return 0;
+>  
+>  	/* search for the extent closest to the first block in the cluster */
+> -- 
+> 2.31.1
+> 
 -- 
-Best Regards
- Guo Ren
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
