@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F42C65DD86
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6C965DD8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240143AbjADUQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 15:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S240194AbjADURx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 15:17:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240099AbjADUQT (ORCPT
+        with ESMTP id S235176AbjADURm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 15:16:19 -0500
-Received: from mx23lb.world4you.com (mx23lb.world4you.com [81.19.149.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708BF4085E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 12:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=C0bMdoWKeCFjYfejvYkmS+qO/S9NQwdBaH83mEYfQ5E=; b=p7ulw3/xTwepHz53Ltul6SJRaz
-        lGNjsG19kWzebYll0Fs4DAYlL/645nv44DJZx14JzsjlJ66dII/GlcD0ntImAV+6IXSnCa39TBC/0
-        LQfTIt6yppAy6IV7lV1GJ9azRZxDofMhj5V/08a/gKQy5KuzBRtVEusD4v6b4YxJIFyQ=;
-Received: from [88.117.53.17] (helo=hornet.engleder.at)
-        by mx23lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gerhard@engleder-embedded.com>)
-        id 1pDAAf-0005Ib-8I; Wed, 04 Jan 2023 21:15:33 +0100
-From:   Gerhard Engleder <gerhard@engleder-embedded.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     apw@canonical.com, joe@perches.com, dwaipayanray1@gmail.com,
-        lukas.bulwahn@gmail.com,
-        Gerhard Engleder <gerhard@engleder-embedded.com>
-Subject: [PATCH v2] checkpatch: Ignore ETHTOOL_LINK_MODE_ enum values
-Date:   Wed,  4 Jan 2023 21:15:24 +0100
-Message-Id: <20230104201524.28078-1-gerhard@engleder-embedded.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AV-Do-Run: Yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 15:17:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF337EA0;
+        Wed,  4 Jan 2023 12:17:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BCF36181E;
+        Wed,  4 Jan 2023 20:17:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF3DFC433EF;
+        Wed,  4 Jan 2023 20:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672863461;
+        bh=bdBgMAZ70NSXqd87jqex/E47m7m/OIGhX0jESFYYbTg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=F5XH3xS6btqhCVh/Ed+CkoJri+b05hEFnxgyWInHuj8Bh02tt5hTiAWWBG+m+X/vD
+         lyyAIgT8RUVXIFMm9obwKbW4DCE92qf00ajzgZO5XW3jrd/ZDG49SZ9/5JwNIyalLX
+         wOZetH2MnqackZpdt6UX3CbbxBsq5/tA813FLofK91Hu9ZmhhZ7vppxDbAJriktUzP
+         WNT/LOnW0hD12NkxW4BFp8VgRCuTlj2MYgWtZJvnw1Y8IlZPQa59I+mBs4HSWPB8ev
+         VwoIFFAKukhMKdthpzURxRO6/haW9SGNrA64G12NRFWKDYbsgyT0jpDcWfdBNc5xgC
+         NPaxGThE3ghzw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3B39E57249;
+        Wed,  4 Jan 2023 20:17:40 +0000 (UTC)
+Subject: Re: [GIT PULL]: first v6.2-rc pull request for nfsd
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CE9B9622-234C-462D-9125-5DDDB00DB9A2@oracle.com>
+References: <CE9B9622-234C-462D-9125-5DDDB00DB9A2@oracle.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CE9B9622-234C-462D-9125-5DDDB00DB9A2@oracle.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.2-2
+X-PR-Tracked-Commit-Id: cad853374d85fe678d721512cecfabd7636e51f3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b61778fa5173021e628b3c9372c9ceae01951b34
+Message-Id: <167286346085.24547.5961508170538498439.pr-tracker-bot@kernel.org>
+Date:   Wed, 04 Jan 2023 20:17:40 +0000
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 4104a20646 enum values like
-ETHTOOL_LINK_MODE_Asym_Pause_BIT are ignored. But there are other enums
-like ETHTOOL_LINK_MODE_1000baseT_Full_BIT, which are not ignored
-because of the not matching '1000baseT' substring.
+The pull request you sent on Wed, 4 Jan 2023 14:58:01 +0000:
 
-Add regex to match all ETHTOOL_LINK_MODE enums.
+> https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.2-2
 
-Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
----
- scripts/checkpatch.pl | 2 ++
- 1 file changed, 2 insertions(+)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b61778fa5173021e628b3c9372c9ceae01951b34
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 78cc595b98ce..38659f22e54d 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -5783,6 +5783,8 @@ sub process {
- 			    $var !~ /^(?:[A-Z]+_){1,5}[A-Z]{1,3}[a-z]/ &&
- #Ignore Page<foo> variants
- 			    $var !~ /^(?:Clear|Set|TestClear|TestSet|)Page[A-Z]/ &&
-+#Ignore ETHTOOL_LINK_MODE_<foo> variants
-+			    $var !~ /^ETHTOOL_LINK_MODE_/ &&
- #Ignore SI style variants like nS, mV and dB
- #(ie: max_uV, regulator_min_uA_show, RANGE_mA_VALUE)
- 			    $var !~ /^(?:[a-z0-9_]*|[A-Z0-9_]*)?_?[a-z][A-Z](?:_[a-z0-9_]+|_[A-Z0-9_]+)?$/ &&
+Thank you!
+
 -- 
-2.30.2
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
