@@ -2,260 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0796065D97B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CA565D9AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239713AbjADQZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S239886AbjADQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240020AbjADQZV (ORCPT
+        with ESMTP id S239805AbjADQ0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:25:21 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9EA33D4B;
-        Wed,  4 Jan 2023 08:25:11 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 293763FA17;
-        Wed,  4 Jan 2023 16:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672849510; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6GQ6UHmHAob56A0XyaQkcaVX94yZAzVcA1wdn/Ca/O0=;
-        b=L13945ce5FCvCOYSsZEg3TncOluR7Tk6GFbbmhIFbwbUy5EHY9FfqsOu2+grE5jDpWmOml
-        soEp+pk9taMih5G9w8C5rWDIJ3faXGtFVzBv5EIP0WY3OYbZ8ykcyK2fAjeE7DDI5oC8Ty
-        FLXoQacpLGZj6m3bFR0DwkYu6rm1d74=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A0A7C2C141;
-        Wed,  4 Jan 2023 16:25:08 +0000 (UTC)
-Date:   Wed, 4 Jan 2023 17:25:08 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
-Message-ID: <Y7WoZARt37xGpjXD@alley>
-References: <20221230112729.351-1-thunder.leizhen@huawei.com>
- <20221230112729.351-3-thunder.leizhen@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221230112729.351-3-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 11:26:49 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63D21B1EE;
+        Wed,  4 Jan 2023 08:26:48 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id kw15so83759234ejc.10;
+        Wed, 04 Jan 2023 08:26:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dlNSZ1zKeio5IM+qciAQdm1jmpnza6LnH9wQe17H30s=;
+        b=X2pw5+FFh90/EXimxoLnyKytSb4yzru+hZwCCCd60c5Al23P9O0EPouNqRdmZTVoHw
+         hMdkNZEsUdkzUc6U4X6fDNtaf+e3n0ze06t2lidZUcAGnuYs11WNPVIJ9I0+4py702nh
+         G+lPvwXVaXsxf3VHCDKa7us9TAzGHh8L6Jiis56AVr2Qf47ViIGg6qv3Mt3rSkkXi4Y9
+         yiU++J/VFmKPXd9WZfulHreIhCtYJ4V7YRNJL7QRmnhsBziYZRMia3vRcIddP3GIQvHa
+         y9MWP6iAsPUbIj5z4RXVmaXMhTpZlUleMPP3QdxS1rxMy4wO+n/d5FDyo7Lb1NUYJeHe
+         O8Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dlNSZ1zKeio5IM+qciAQdm1jmpnza6LnH9wQe17H30s=;
+        b=fSI+eMYQFR7+pEFzWR+dwiPwpR1Bqp+1B+Y6HZyHY1ya6EwjN9vrE6CKNm1AGZkABa
+         XbBSZkPM9pG7UwqOXTyuqxzIVaENiLxg8LffyFEmir+vZLvs660xF12mxfWDvh/bhMtb
+         DW9LbHosG7wK3j+04Px40yEdNj1Uvh1YJ/0Jn42koUSgs39Ns3YrGIMZGJIINdCBItvH
+         kcCUVOpENyChi/XRVJndQjuQVk1q59uF1rKfig848gTZHszGGnc9IW9/E8kLSeRXFMQq
+         6jOQjzBTW+I6vpD+JmlSSM+7lghl9PFcTXnnki/cIfQu7X/b3qUXkYd+uISeVVHqllgT
+         qbPQ==
+X-Gm-Message-State: AFqh2kpH/7zWlmaFl79786mli06mERJCodNh5a21Hw7bunlMoQu30LHz
+        8HyGzIEBIo8EAUkcXEQSCHw=
+X-Google-Smtp-Source: AMrXdXuK03+8hwXp7VeEhUZfc57gi6LrVEKudKlHct5gTkoUEV5OH9r7xDFowrsBeN6kcF52Sq7cBQ==
+X-Received: by 2002:a17:906:185b:b0:841:e5b3:c95d with SMTP id w27-20020a170906185b00b00841e5b3c95dmr44848358eje.30.1672849607455;
+        Wed, 04 Jan 2023 08:26:47 -0800 (PST)
+Received: from localhost (host-82-60-200-213.retail.telecomitalia.it. [82.60.200.213])
+        by smtp.gmail.com with ESMTPSA id e11-20020a170906314b00b007ae10525550sm15402209eje.47.2023.01.04.08.26.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 08:26:46 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 04 Jan 2023 17:26:45 +0100
+Message-Id: <CPJJOZKU99U7.2II24G3LHGAXF@vincent>
+From:   "Vincenzo" <vincenzopalazzodev@gmail.com>
+To:     "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        <rust-for-linux@vger.kernel.org>
+Cc:     "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 7/7] rust: sync: add support for dispatching on Arc and
+ ArcBorrow.
+X-Mailer: aerc 0.8.2
+References: <20221228060346.352362-1-wedsonaf@gmail.com>
+ <20221228060346.352362-7-wedsonaf@gmail.com>
+In-Reply-To: <20221228060346.352362-7-wedsonaf@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
-> Function __module_address() can quickly return the pointer of the module
-> to which an address belongs. We do not need to traverse the symbols of all
-> modules to check whether each address in addrs[] is the start address of
-> the corresponding symbol, because register_fprobe_ips() will do this check
-> later.
-> 
-> Assuming that there are m modules, each module has n symbols on average,
-> and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
-> complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
-> and the time complexity of current method is O(K * (log(m) + M)), M <= m.
-> (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
-> the ratio is still greater than 1. Therefore, the new method will
-> generally have better performance.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+On Wed Dec 28, 2022 at 7:03 AM CET, Wedson Almeida Filho wrote:
+> Trait objects (`dyn T`) require trait `T` to be "object safe". One of
+> the requirements for "object safety" is that the receiver have one of
+> the allowed types. This commit adds `Arc<T>` and `ArcBorrow<'_, T>` to
+> the list of allowed types.
+>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
 > ---
->  kernel/trace/bpf_trace.c | 101 ++++++++++++++++-----------------------
->  1 file changed, 40 insertions(+), 61 deletions(-)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 5f3be4bc16403a5..0ff9037098bd241 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2684,69 +2684,55 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
->  	}
->  }
->  
-> -struct module_addr_args {
-> -	unsigned long *addrs;
-> -	u32 addrs_cnt;
-> -	struct module **mods;
-> -	int mods_cnt;
-> -	int mods_cap;
-> -};
-> -
-> -static int module_callback(void *data, const char *name,
-> -			   struct module *mod, unsigned long addr)
-> +static int get_modules_for_addrs(struct module ***out_mods, unsigned long *addrs, u32 addrs_cnt)
->  {
-> -	struct module_addr_args *args = data;
-> -	struct module **mods;
-> -
-> -	/* We iterate all modules symbols and for each we:
-> -	 * - search for it in provided addresses array
-> -	 * - if found we check if we already have the module pointer stored
-> -	 *   (we iterate modules sequentially, so we can check just the last
-> -	 *   module pointer)
-> -	 * - take module reference and store it
-> -	 */
-> -	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
-> -		       bpf_kprobe_multi_addrs_cmp))
-> -		return 0;
-> +	int i, j, err;
-> +	int mods_cnt = 0;
-> +	int mods_cap = 0;
-> +	struct module *mod;
-> +	struct module **mods = NULL;
->  
-> -	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
-> -		return 0;
-> +	for (i = 0; i < addrs_cnt; i++) {
-> +		mod = __module_address(addrs[i]);
-
-This must be called under module_mutex to make sure that the module
-would not disappear.
-
-> +		if (!mod)
-> +			continue;
->  
-> -	if (args->mods_cnt == args->mods_cap) {
-> -		args->mods_cap = max(16, args->mods_cap * 3 / 2);
-> -		mods = krealloc_array(args->mods, args->mods_cap, sizeof(*mods), GFP_KERNEL);
-> -		if (!mods)
-> -			return -ENOMEM;
-> -		args->mods = mods;
-> -	}
-> +		/* check if we already have the module pointer stored */
-> +		for (j = 0; j < mods_cnt; j++) {
-> +			if (mods[j] == mod)
-> +				break;
-> +		}
-
-This might get optimized like the original code.
-
-My understanding is that the addresses are sorted in "addrs" array.
-So, the address is either part of the last found module or it belongs
-to a completely new module.
-
-	for (i = 0; i < addrs_cnt; i++) {
-		/*
-		 * The adresses are sorted. The adress either belongs
-		 * to the last found module or a new one.
-		 *
-		 * This is safe because we already have reference
-		 * on the found modules.
-		 */
-		 if (mods_cnt && within_module(addrs[i], mods[mods_cnt - 1]))
-			continue;
-
-		mutex_lock(&module_mutex);
-		mod = __module_address(addrs[i]);
-		if (mod && !try_module_get(mod)) {
-			mutex_unlock(&module_mutex);
-			goto failed;
-		}
-		mutex_unlock(&module_mutex);
-
-		/*
-		 * Nope when the address was not from a module.
-		 *
-		 * Is this correct? What if the module has gone in
-		 * the meantime? Anyway, the original code
-		 * worked this way.
-		 *
-		 * FIXME: I would personally make sure that it is part
-		 * of vmlinux or so.
-		 */
-		if (!mod)
-			continue;
-
-		/* store the module into mods array */
-		...
-
-
-
-
-> +		if (j < mods_cnt)
-> +			continue;
->  
-> -	if (!try_module_get(mod))
-> -		return -EINVAL;
-> +		if (mods_cnt == mods_cap) {
-> +			struct module **new_mods;
->  
-> -	args->mods[args->mods_cnt] = mod;
-> -	args->mods_cnt++;
-> -	return 0;
-> -}
-> +			mods_cap = max(16, mods_cap * 3 / 2);
-> +			new_mods = krealloc_array(mods, mods_cap, sizeof(*mods), GFP_KERNEL);
-> +			if (!new_mods) {
-> +				err = -ENOMEM;
-> +				goto failed;
-> +			}
-> +			mods = new_mods;
-> +		}
->  
-> -static int get_modules_for_addrs(struct module ***mods, unsigned long *addrs, u32 addrs_cnt)
-> -{
-> -	struct module_addr_args args = {
-> -		.addrs     = addrs,
-> -		.addrs_cnt = addrs_cnt,
-> -	};
-> -	int err;
-> +		if (!try_module_get(mod)) {
-> +			err = -EINVAL;
-> +			goto failed;
-> +		}
->  
-> -	/* We return either err < 0 in case of error, ... */
-> -	err = module_kallsyms_on_each_symbol(NULL, module_callback, &args);
-> -	if (err) {
-> -		kprobe_multi_put_modules(args.mods, args.mods_cnt);
-> -		kfree(args.mods);
-> -		return err;
-> +		mods[mods_cnt] = mod;
-> +		mods_cnt++;
->  	}
->  
-> -	/* or number of modules found if everything is ok. */
-> -	*mods = args.mods;
-> -	return args.mods_cnt;
-> +	*out_mods = mods;
-> +	return mods_cnt;
+>  rust/kernel/lib.rs      |  1 +
+>  rust/kernel/sync/arc.rs | 20 ++++++++++++++++++--
+>  2 files changed, 19 insertions(+), 2 deletions(-)
+>
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 4bde65e7b06b..e0b0e953907d 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -15,6 +15,7 @@
+>  #![feature(allocator_api)]
+>  #![feature(coerce_unsized)]
+>  #![feature(core_ffi_c)]
+> +#![feature(dispatch_from_dyn)]
+>  #![feature(receiver_trait)]
+>  #![feature(unsize)]
+> =20
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index 832bafc74a90..ff73f9240ca1 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -92,9 +92,15 @@ use core::{
+>  /// Coercion from `Arc<Example>` to `Arc<dyn MyTrait>`:
+>  ///
+>  /// ```
+> -/// use kernel::sync::Arc;
+> +/// use kernel::sync::{Arc, ArcBorrow};
+> +///
+> +/// trait MyTrait {
+> +///     // Trait has a function whose `self` type is `Arc<Self>`.
+> +///     fn example1(self: Arc<Self>) {}
+>  ///
+> -/// trait MyTrait {}
+> +///     // Trait has a function whose `self` type is `ArcBorrow<'_, Self=
+>`.
+> +///     fn example2(self: ArcBorrow<'_, Self>) {}
+> +/// }
+>  ///
+>  /// struct Example;
+>  /// impl MyTrait for Example {}
+> @@ -123,6 +129,9 @@ impl<T: ?Sized> core::ops::Receiver for Arc<T> {}
+>  // dynamically-sized type (DST) `U`.
+>  impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::CoerceUnsized<Arc<U>> =
+for Arc<T> {}
+> =20
+> +// This is to allow `Arc<U>` to be dispatched on when `Arc<T>` can be co=
+erced into `Arc<U>`.
+> +impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::DispatchFromDyn<Arc<U>=
+> for Arc<T> {}
 > +
-> +failed:
-> +	kprobe_multi_put_modules(mods, mods_cnt);
-> +	kfree(mods);
-> +	return err;
->  }
->  
->  int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+>  // SAFETY: It is safe to send `Arc<T>` to another thread when the underl=
+ying `T` is `Sync` because
+>  // it effectively means sharing `&T` (which is safe because `T` is `Sync=
+`); additionally, it needs
+>  // `T` to be `Send` because any thread that has an `Arc<T>` may ultimate=
+ly access `T` directly, for
+> @@ -297,6 +306,13 @@ pub struct ArcBorrow<'a, T: ?Sized + 'a> {
+>  // This is to allow [`ArcBorrow`] (and variants) to be used as the type =
+of `self`.
+>  impl<T: ?Sized> core::ops::Receiver for ArcBorrow<'_, T> {}
+> =20
+> +// This is to allow `ArcBorrow<U>` to be dispatched on when `ArcBorrow<T=
+>` can be coerced into
+> +// `ArcBorrow<U>`.
+> +impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::DispatchFromDyn<ArcBor=
+row<'_, U>>
+> +    for ArcBorrow<'_, T>
+> +{
+> +}
+> +
+>  impl<T: ?Sized> Clone for ArcBorrow<'_, T> {
+>      fn clone(&self) -> Self {
+>          *self
+> --=20
+> 2.34.1
 
-Otherwise, it looks good. IMHO, the new code looks more straightforward
-than the original one.
-
-Best Regards,
-Petr
