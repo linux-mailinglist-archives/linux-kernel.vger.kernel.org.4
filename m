@@ -2,64 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D7165E13C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6787D65E116
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235186AbjAEADJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
+        id S234908AbjADXqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 18:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234381AbjAEACf (ORCPT
+        with ESMTP id S229821AbjADXqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:02:35 -0500
-X-Greylist: delayed 1107 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Jan 2023 16:02:34 PST
-Received: from elsa (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net [86.15.83.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5370D24F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 16:02:34 -0800 (PST)
-Received: from ben by elsa with local (Exim 4.96)
-        (envelope-from <ben@fluff.org>)
-        id 1pDDQT-002hIs-3D;
-        Wed, 04 Jan 2023 23:44:05 +0000
-From:   Ben Dooks <ben-linux@fluff.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ben Dooks <ben-linux@fluff.org>, ben@simtec.co.uk
-Subject: [PATCH] mailmap: add alias for Ben Dooks' old simtec address
-Date:   Wed,  4 Jan 2023 23:44:05 +0000
-Message-Id: <20230104234405.643105-1-ben-linux@fluff.org>
-X-Mailer: git-send-email 2.39.0
+        Wed, 4 Jan 2023 18:46:37 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1268BE0C;
+        Wed,  4 Jan 2023 15:46:36 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NnR8C2R0Vz4xyY;
+        Thu,  5 Jan 2023 10:46:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1672875995;
+        bh=0x6e9WwnpoE+BTH7UbITtZWjuTWzb7rqA/AMN6J+S7g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RS+dQNuighHndYiIqsehd3oJgXSearli8TYKTA49ZvuuvwdoOVyKUBmyQQeBL6nwT
+         pRIqRONWGEXTM1qD87frMn7V33egezZ0xDxHuFkiA9m99I33xm8s0xpdOzIXuChUQO
+         EvksSI6w+FHriHjXl5Ec35Y7sLMJLzVg4MZz/7sJHbuJR78m9/gzsuAgGF4tBX4Y97
+         Nx4+oOSBvR9q5/u2+x12HNQ8rzzrlGMfrC0tFkRQnlM/GEqijK3xTXDqAC5QlTDK+F
+         KymCKl5gOKmXlFlKIv57AkE0wvwARpVKz7Abfn/ss5ct0uV05v6k5rpiXIabXscEBp
+         hNONnuZiLGC2w==
+Date:   Thu, 5 Jan 2023 10:46:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the thermal tree
+Message-ID: <20230105104634.54cd6cd4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
-        HELO_NO_DOMAIN,KHOP_HELO_FCRDNS,PDS_RDNS_DYNAMIC_FP,RCVD_IN_SORBS_DUL,
-        RDNS_DYNAMIC,SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/j8JrkqAxU_CsLaPa6H1Ub8q";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ben@simtec.co.uk address may be still active, but not sure for how
-long and I have not worked there for over ten years. Add my ususal
-fluff.org email here.
+--Sig_/j8JrkqAxU_CsLaPa6H1Ub8q
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ben Dooks <ben-linux@fluff.org>
-Cc: ben@simtec.co.uk
----
- .mailmap | 1 +
- 1 file changed, 1 insertion(+)
+Hi all,
 
-diff --git a/.mailmap b/.mailmap
-index ccba4cf0d893..d1c2635ad394 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -67,6 +67,7 @@ Baolin Wang <baolin.wang@linux.alibaba.com> <baolin.wang@unisoc.com>
- Baolin Wang <baolin.wang@linux.alibaba.com> <baolin.wang7@gmail.com>
- Bart Van Assche <bvanassche@acm.org> <bart.vanassche@sandisk.com>
- Bart Van Assche <bvanassche@acm.org> <bart.vanassche@wdc.com>
-+Ben Dooks <ben-linux@fluff.org> <ben@simtec.co.uk>
- Ben Gardner <bgardner@wabtec.com>
- Ben M Cahill <ben.m.cahill@intel.com>
- Ben Widawsky <bwidawsk@kernel.org> <ben@bwidawsk.net>
--- 
-2.39.0
+After merging the thermal tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+make[4]: *** No rule to make target 'drivers/thermal/thermal_acpi.o', neede=
+d by 'drivers/thermal/built-in.a'.  Stop.
+
+Caused by commit
+
+  cc54ca385577 ("thermal/acpi: Add ACPI trip point routines")
+
+Forgot to "git add" a new file?
+
+I have used the thermal tree from next-20221226 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/j8JrkqAxU_CsLaPa6H1Ub8q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO2D9oACgkQAVBC80lX
+0GzX6Af+Nz/NF3vBGTdqqR64mMu53BCH/O90yKPRFpjS/fkDNfDu5XEgMudZsH86
+vD6Scb47Y/8rY1Zw/YhX+5vC9DBcuyhUfJQhsvkQ1xakxtBzabje5a44kQr1J/HU
+sBQbhk2LJdhmQeJO36EfLAJ0fz07+dfPs9qBL5qlevFYUPrprltR9eA6jXWXqmWH
+E+0GEnKaSirCzTsfREkdjWHv8Y6hfg6p1DPh2QJaOrPmWDMd7fcuKlF3Pjzn+/mw
+boZhluz2fXNgKzopVhoFrPeSCGUZur9zjdhxZl6BC/3keW3gVIrwJZkjSuyi7uR9
+c2brABQxnAUkuYW4pnyFjW/mives/A==
+=4zIZ
+-----END PGP SIGNATURE-----
+
+--Sig_/j8JrkqAxU_CsLaPa6H1Ub8q--
