@@ -2,113 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCF865D2FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE8465D30C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjADMrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S231452AbjADMuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 07:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjADMrH (ORCPT
+        with ESMTP id S230423AbjADMuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:47:07 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D854167FA;
-        Wed,  4 Jan 2023 04:47:05 -0800 (PST)
-Received: from [IPV6:2001:4091:a244:801c:ff2e:9846:2bd1:fe62] (unknown [IPv6:2001:4091:a244:801c:ff2e:9846:2bd1:fe62])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 4 Jan 2023 07:50:17 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8A91704B;
+        Wed,  4 Jan 2023 04:50:16 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: rmader)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AE2B6602D11;
-        Wed,  4 Jan 2023 12:47:03 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672836423;
-        bh=t14T8tj2RtWwvBr/+ApmxPga1nTZbNsBeZ5XFdnGQng=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CcWENA6ZZb840wB6qk2QhHwxs8OIx3vzSLQ9bjrCsQQ+AFpTtT0DsMXtDyJwxQMCf
-         RX+HcpgFlMgeTE6HYZZoWESFu1QHdIf7kyTEjpsBRbrq+yXo1GW0JLAki8rkRarDUS
-         H+qq7lwGXG40DskFdTfcIJzkeE1HpqGf4TW0iqHLHYS9RbQ1FC4M7E/QpUNCKEBDOC
-         lhfKYAetjzDID4vQdaVQ7kRa3zIqT5hDjgXDf5BFQpd73DBKk3FAq2AkUBSGlZCsxm
-         hCYzX8dNPRLhFTYLRg6z5m+PMDfqHZ2otUW+2ix7qJMW35iWRc/fklKY9sW5jZQO1K
-         PFkgsW1hQbikA==
-Message-ID: <62b0d46f-7962-ad5f-dd4e-5820d76964b4@collabora.com>
-Date:   Wed, 4 Jan 2023 13:47:00 +0100
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E1EFD1EC02DD;
+        Wed,  4 Jan 2023 13:50:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672836615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=2QcybxR9ZjqVi2pA+cenn1kHGCAZq3Ei7zS8JekyCcI=;
+        b=aETOzOZvJlnJF8PfQBrcbuWt6IltMqy9vcCU1WOK+/7n/uCZUVIUBT4bisySQHxERCl0mf
+        OST8S8/arWL4feZYPq4MxP06osGgTxi6YtCg/VuOMT4bTM8pc7chrrT1jm0zzHC5aDr6Pw
+        lLQisN7O9IRC95JCUYxfent3UOPuUXg=
+Date:   Wed, 4 Jan 2023 13:50:10 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v4 07/39] x86: Add user control-protection fault handler
+Message-ID: <Y7V2AjJsfBnk4Ibx@zn.tnic>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-8-rick.p.edgecombe@intel.com>
+ <Y6HglBhrccduDTQA@zn.tnic>
+ <3aaf1b0d67492415acb9b3d06bb97e916cb7b77a.camel@intel.com>
+ <Y6Li9oIl/tK96KUf@zn.tnic>
+ <0e529db5f814ef7af7b197962c752a1454510a49.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] media: i2c: imx258: Parse and register properties
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, nicholas@rothemail.net,
-        javierm@redhat.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-References: <20221225154234.378555-1-robert.mader@collabora.com>
- <20230102140631.hadlh3stozecnzpj@uno.localdomain>
- <20f405f3-0a82-5d2f-2b0d-ce0d510b5098@collabora.com>
- <20230103171624.qx6hm2exs3d5lg53@uno.localdomain>
- <Y7Uo3JlOoGJAoorz@paasikivi.fi.intel.com>
-From:   Robert Mader <robert.mader@collabora.com>
-In-Reply-To: <Y7Uo3JlOoGJAoorz@paasikivi.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0e529db5f814ef7af7b197962c752a1454510a49.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sure, makes sense!
+On Wed, Dec 21, 2022 at 09:42:50PM +0000, Edgecombe, Rick P wrote:
+> Oh, you mean the whole Kconfig thing. Yea, I mean I see the point about
+> typical configs. But at least CONFIG_X86_CET seems consistent with
+> CONFIG_INTEL_TDX_GUEST, CONFIG_IOMMU_SVA, etc.
+> 
+> What about moving it out of traps.c to a cet.c, like
+> exc_vmm_communication for CONFIG_AMD_MEM_ENCRT? Then the inclusion
+> logic lives in the build files, instead of an ifdef.
 
-Send out v2 now.
+Yeah, that definitely sounds cleaner. Another example would be the #MC handler
+being in mce code and not in traps.c.
 
-On 04.01.23 08:21, Sakari Ailus wrote:
-> Hi Jacopo, Robert,
->
-> On Tue, Jan 03, 2023 at 06:16:24PM +0100, Jacopo Mondi wrote:
->> Hi Robert
->>
->> On Tue, Jan 03, 2023 at 03:11:44PM +0100, Robert Mader wrote:
->>> On 02.01.23 15:06, Jacopo Mondi wrote:
->>>> Hi Robert
->>>>
->>>> On Sun, Dec 25, 2022 at 04:42:34PM +0100, Robert Mader wrote:
->>>>> Analogous to e.g. the imx219. This enables propagating
->>>>> V4L2_CID_CAMERA_SENSOR_ROTATION values so that libcamera
->>>>> can detect the correct rotation from the device tree
->>>>> and propagate it further to e.g. Pipewire.
->>>>>
->>>>> Signed-off-by: Robert Mader <robert.mader@collabora.com>
->>>>> ---
->>>>>    drivers/media/i2c/imx258.c | 13 ++++++++++++-
->>>>>    1 file changed, 12 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
->>>>> index eab5fc1ee2f7..85819043d1e3 100644
->>>>> --- a/drivers/media/i2c/imx258.c
->>>>> +++ b/drivers/media/i2c/imx258.c
->>>>> @@ -9,6 +9,7 @@
->>>>>    #include <linux/pm_runtime.h>
->>>>>    #include <media/v4l2-ctrls.h>
->>>>>    #include <media/v4l2-device.h>
->>>>> +#include <media/v4l2-fwnode.h>
->>>>>    #include <asm/unaligned.h>
->>>>>
->>>>>    #define IMX258_REG_VALUE_08BIT		1
->>>>> @@ -1149,6 +1150,7 @@ static int imx258_init_controls(struct imx258 *imx258)
->>>>>    {
->>>>>    	struct i2c_client *client = v4l2_get_subdevdata(&imx258->sd);
->>>>>    	struct v4l2_ctrl_handler *ctrl_hdlr;
->>>>> +	struct v4l2_fwnode_device_properties props;
->>>> Might be nicer to move this one line up
->>>   Can you say what's your reasoning? I personally slightly prefer
->>> alphabetical order, but no strong opinion :)
->>>
->> I've often been instructed to try to respect the inverse-xmas-tree
-> I'd advise the same, unless there are other reasons to arrange the lines
-> differently.
->
+So yeah, the reason why I'm even mentioning this is that I get an allergic
+reaction when I see unwieldy ifdeffery in one screen worth of code. But this is
+just me. :)
+
+> One aspect that has come up a couple of times, is how closely related
+> all these CET features are (or aren't). Shadow stack and IBT are mostly
+> separate, but do share an xfeature and an exception type. Similarly for
+> supervisor and user mode support for either of the CET features. So
+> maybe that is what is unusual here. There are some aspects that make
+> them look like separate features, which leads people to think they
+> should be separate in the code. But actually separating them leads to
+> excess ifdefery.
+
+Yeah, I think you solved that correctly by having the common X86_CET symbol
+selected by the two.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
