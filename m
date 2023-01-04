@@ -2,115 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803DC65D59B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4A865D5A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjADO3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S235132AbjADO32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjADO27 (ORCPT
+        with ESMTP id S231197AbjADO3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:28:59 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249565F6A
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 06:28:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672842539; x=1704378539;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IGG8D5+mDJRfKsLfUc6wXABONcDCRi6a9dba8mtLmZ0=;
-  b=JD8lwX/6LQhpZy6l4lfmPDMFdCVwe75nDzbs0AzvnNwti5T5xEylapsH
-   Ftb8ham/B/uNcwJE6M5fANnlW8UmMZfPBNbLnGuGlS15NW3ncKgqf/q2Q
-   7yLKjiaPmzcNS1fAw6edbsE/AIklUM9JzC42gumgiZkaqDe4RwNzf2wdm
-   IU9RnDaVOOxnO/FEGiR2qFFlLo19HMi3EravWC6tpEDQ69oxXWivgriMA
-   kLoYOy47OmFuJ6k/5/UBb8y5q5KZ3F61ykmRB7GC/v3n4MN9PTU8QRFjv
-   9pjeeP+t1hF/YbBVto1givZI2TWhdtZ/RzAte2jyqSJ8e9gA8P6QKs4SK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="320654915"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="320654915"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 06:28:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="632795975"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="632795975"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jan 2023 06:28:56 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pD4lD-0000SF-1V;
-        Wed, 04 Jan 2023 14:28:55 +0000
-Date:   Wed, 4 Jan 2023 22:28:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Maxime Ripard <mripard@kernel.org>
-Subject: drivers/gpu/drm/logicvc/logicvc_drm.c:233:26: warning: Local
- variable 'clocks' shadows outer variable [shadowVariable]
-Message-ID: <202301042242.bCTJn52G-lkp@intel.com>
+        Wed, 4 Jan 2023 09:29:15 -0500
+X-Greylist: delayed 306 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Jan 2023 06:29:12 PST
+Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 582281AD99;
+        Wed,  4 Jan 2023 06:29:11 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-01 (Coremail) with SMTP id qwCowACHsO4ujbVjEXbrCg--.46636S2;
+        Wed, 04 Jan 2023 22:29:03 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     leon@kernel.org
+Cc:     pkshih@realtek.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] wifi: rtw89: Add missing check for alloc_workqueue
+Date:   Wed,  4 Jan 2023 22:29:01 +0800
+Message-Id: <20230104142901.1611-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowACHsO4ujbVjEXbrCg--.46636S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urWkZrW5Jw1rJw4DGr4kZwb_yoW8Xr1kp3
+        yrAa45Ja15Gr4DZa1qq3y3uF45W3WrtF4jk3sa9w1ruw1rAwn5W3WYqFy0vrnY9rWqvF15
+        ArZ5X343JFn5WrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUbhL05UUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   69b41ac87e4a664de78a395ff97166f0b2943210
-commit: efeeaefe9be56e8ae5e5b4e9ff6d2275ec977ec5 drm: Add support for the LogiCVC display controller
-date:   7 months ago
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (cppcheck warning):
-        # apt-get install cppcheck
-        git checkout efeeaefe9be56e8ae5e5b4e9ff6d2275ec977ec5
-        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+Add check for the return value of alloc_workqueue since it may return
+NULL pointer.
+Moreover, add destroy_workqueue when rtw89_load_firmware fails.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Fixes: e3ec7017f6a2 ("rtw89: add Realtek 802.11ax driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+CHangelog:
 
-cppcheck warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/logicvc/logicvc_drm.c:233:26: warning: Local variable 'clocks' shadows outer variable [shadowVariable]
-     clk_disable_unprepare(*clocks[i]);
-                            ^
-   drivers/gpu/drm/logicvc/logicvc_drm.c:221:15: note: Shadowed declaration
-    struct clk **clocks[] = {
-                 ^
-   drivers/gpu/drm/logicvc/logicvc_drm.c:233:26: note: Shadow variable
-     clk_disable_unprepare(*clocks[i]);
-                            ^
+v1 -> v2:
 
-vim +/clocks +233 drivers/gpu/drm/logicvc/logicvc_drm.c
+1. Add destroy_workqueue when rtw89_load_firmware fails.
+---
+ drivers/net/wireless/realtek/rtw89/core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-   218	
-   219	static int logicvc_clocks_unprepare(struct logicvc_drm *logicvc)
-   220	{
-   221		struct clk **clocks[] = {
-   222			&logicvc->vclk,
-   223			&logicvc->vclk2,
-   224			&logicvc->lvdsclk,
-   225			&logicvc->lvdsclkn,
-   226		};
-   227		unsigned int i;
-   228	
-   229		for (i = 0; i < ARRAY_SIZE(clocks); i++) {
-   230			if (!*clocks[i])
-   231				continue;
-   232	
- > 233			clk_disable_unprepare(*clocks[i]);
-   234			*clocks[i] = NULL;
-   235		}
-   236	
-   237		return 0;
-   238	}
-   239	
-
+diff --git a/drivers/net/wireless/realtek/rtw89/core.c b/drivers/net/wireless/realtek/rtw89/core.c
+index 931aff8b5dc9..e99eccf11c76 100644
+--- a/drivers/net/wireless/realtek/rtw89/core.c
++++ b/drivers/net/wireless/realtek/rtw89/core.c
+@@ -3124,6 +3124,8 @@ int rtw89_core_init(struct rtw89_dev *rtwdev)
+ 	INIT_DELAYED_WORK(&rtwdev->cfo_track_work, rtw89_phy_cfo_track_work);
+ 	INIT_DELAYED_WORK(&rtwdev->forbid_ba_work, rtw89_forbid_ba_work);
+ 	rtwdev->txq_wq = alloc_workqueue("rtw89_tx_wq", WQ_UNBOUND | WQ_HIGHPRI, 0);
++	if (!rtwdev->txq_wq)
++		return -ENOMEM;
+ 	spin_lock_init(&rtwdev->ba_lock);
+ 	spin_lock_init(&rtwdev->rpwm_lock);
+ 	mutex_init(&rtwdev->mutex);
+@@ -3149,6 +3151,7 @@ int rtw89_core_init(struct rtw89_dev *rtwdev)
+ 	ret = rtw89_load_firmware(rtwdev);
+ 	if (ret) {
+ 		rtw89_warn(rtwdev, "no firmware loaded\n");
++		destroy_workqueue(rtwdev->txq_wq);
+ 		return ret;
+ 	}
+ 	rtw89_ser_init(rtwdev);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
