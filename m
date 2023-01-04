@@ -2,145 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1626C65D1B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8E765D1DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238994AbjADLoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 06:44:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
+        id S239186AbjADLyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 06:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233785AbjADLoD (ORCPT
+        with ESMTP id S239184AbjADLyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 06:44:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5BAA446;
-        Wed,  4 Jan 2023 03:44:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE4F7B80E65;
-        Wed,  4 Jan 2023 11:44:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A7C7C433EF;
-        Wed,  4 Jan 2023 11:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672832639;
-        bh=FtkrwQKPjIIQt23JL1N2L/B3ATEaO9C/KeRdtMfkWVU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HN5AWRVJSrpcHcVcHjUWCvfocTPr2rDXdhKqmiImR4SXWZ9oayeIznJDbRdMUmo9s
-         Ol8rvC2Jt7aj2Lk6o3Y7ygHh5qTky88VeXEtlgEgIRY11Zc54kv5YzCcgawvu3kvjc
-         PcIo/KirUyZanXaX9mSCYkyAcaGbNnBeirZRyxMHslmIo8DqR8BM50x4HQhMpqidKc
-         SsPGE5MQaqJ+5kRH80it/kwXck/uWI//y8oVC69oYyXKRWL9ARsgnTeg9YF6Wt5E5w
-         gQ/qOQRNwNBQvDfKtOQxTKZpTQM4ZmZ8F/45r2QRaWUeUDKl6SRvadBO/2GFWDagHX
-         F6+nJaSfT28SQ==
-Date:   Wed, 4 Jan 2023 11:43:56 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, noodles@fb.com, tiwai@suse.de,
-        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
-        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 04/10] KEYS: X.509: Parse Key Usage
-Message-ID: <Y7VmfLUAacYOjn9y@kernel.org>
-References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
- <20221214003401.4086781-5-eric.snowberg@oracle.com>
+        Wed, 4 Jan 2023 06:54:13 -0500
+X-Greylist: delayed 540 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Jan 2023 03:54:06 PST
+Received: from outbound-smtp47.blacknight.com (outbound-smtp47.blacknight.com [46.22.136.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E161EEDA
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 03:54:06 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp47.blacknight.com (Postfix) with ESMTPS id 9C733FACE0
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:45:04 +0000 (GMT)
+Received: (qmail 1950 invoked from network); 4 Jan 2023 11:45:04 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 4 Jan 2023 11:45:04 -0000
+Date:   Wed, 4 Jan 2023 11:45:02 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/6] mm/page_alloc: Explicitly record high-order atomic
+ allocations in alloc_flags
+Message-ID: <20230104114502.j4hzzjohxk7bdkcj@techsingularity.net>
+References: <20221129151701.23261-1-mgorman@techsingularity.net>
+ <20221129151701.23261-4-mgorman@techsingularity.net>
+ <915a5034-53e6-9464-3fc7-4d1b5a0aa26d@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20221214003401.4086781-5-eric.snowberg@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <915a5034-53e6-9464-3fc7-4d1b5a0aa26d@suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 07:33:55PM -0500, Eric Snowberg wrote:
-> Parse the X.509 Key Usage.  The key usage extension defines the purpose of
-> the key contained in the certificate.
-> 
->    id-ce-keyUsage OBJECT IDENTIFIER ::=  { id-ce 15 }
-> 
->       KeyUsage ::= BIT STRING {
->            digitalSignature        (0),
->            contentCommitment       (1),
->            keyEncipherment         (2),
->            dataEncipherment        (3),
->            keyAgreement            (4),
->            keyCertSign             (5),
->            cRLSign                 (6),
->            encipherOnly            (7),
->            decipherOnly            (8) }
-> 
-> If the keyCertSign is set, store it in the x509_certificate structure.
-> This will be used in a follow on patch that requires knowing the
-> certificate key usage type.
-> 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> ---
->  crypto/asymmetric_keys/x509_cert_parser.c | 22 ++++++++++++++++++++++
->  crypto/asymmetric_keys/x509_parser.h      |  1 +
->  2 files changed, 23 insertions(+)
-> 
-> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-> index b4443e507153..edb22cf04eed 100644
-> --- a/crypto/asymmetric_keys/x509_cert_parser.c
-> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
-> @@ -579,6 +579,28 @@ int x509_process_extension(void *context, size_t hdrlen,
->  		return 0;
->  	}
->  
-> +	if (ctx->last_oid == OID_keyUsage) {
-> +		/*
-> +		 * Get hold of the keyUsage bit string to validate keyCertSign
-> +		 * v[1] is the encoding size
-> +		 *       (Expect either 0x02 or 0x03, making it 1 or 2 bytes)
-> +		 * v[2] is the number of unused bits in the bit string
-> +		 *       (If >= 3 keyCertSign is missing)
-> +		 * v[3] and possibly v[4] contain the bit string
-> +		 * 0x04 is where KeyCertSign lands in this bit string (from
-> +		 *      RFC 5280 4.2.1.3)
-> +		 */
-> +		if (v[0] != ASN1_BTS)
-> +			return -EBADMSG;
-> +		if (vlen < 4)
-> +			return -EBADMSG;
-> +		if (v[1] == 0x02 && v[2] <= 2 && (v[3] & 0x04))
-> +			ctx->cert->kcs_set = true;
-> +		else if (vlen > 4 && v[1] == 0x03 && (v[3] & 0x04))
-> +			ctx->cert->kcs_set = true;
-> +		return 0;
+First off, sorry for the long delay getting back to you. I was sick for
+a few weeks and still catching up. I'm still not 100%.
 
-This is much more easier to follow thanks to explanation.
-
-> +	}
-> +
->  	if (ctx->last_oid == OID_authorityKeyIdentifier) {
->  		/* Get hold of the CA key fingerprint */
->  		ctx->raw_akid = v;
-> diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
-> index 7c5c0ad1c22e..74a9f929e400 100644
-> --- a/crypto/asymmetric_keys/x509_parser.h
-> +++ b/crypto/asymmetric_keys/x509_parser.h
-> @@ -39,6 +39,7 @@ struct x509_certificate {
->  	bool		unsupported_sig;	/* T if signature uses unsupported crypto */
->  	bool		blacklisted;
->  	bool		root_ca;		/* T if basic constraints CA is set */
-> +	bool		kcs_set;		/* T if keyCertSign is set */
->  };
->  
->  /*
-> -- 
-> 2.27.0
+On Thu, Dec 08, 2022 at 05:51:11PM +0100, Vlastimil Babka wrote:
+> On 11/29/22 16:16, Mel Gorman wrote:
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index da746e9eb2cf..e2b65767dda0 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -3710,7 +3710,7 @@ struct page *rmqueue_buddy(struct zone *preferred_zone, struct zone *zone,
+> >  		 * reserved for high-order atomic allocation, so order-0
+> >  		 * request should skip it.
+> >  		 */
+> > -		if (order > 0 && alloc_flags & ALLOC_HARDER)
+> > +		if (alloc_flags & ALLOC_HIGHATOMIC)
+> >  			page = __rmqueue_smallest(zone, order, MIGRATE_HIGHATOMIC);
+> >  		if (!page) {
+> >  			page = __rmqueue(zone, order, migratetype, alloc_flags);
+> > @@ -4028,8 +4028,10 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
+> >  			return true;
+> >  		}
+> >  #endif
+> > -		if (alloc_harder && !free_area_empty(area, MIGRATE_HIGHATOMIC))
+> > +		if ((alloc_flags & ALLOC_HIGHATOMIC) &&
+> > +		    !free_area_empty(area, MIGRATE_HIGHATOMIC)) {
+> >  			return true;
+> 
+> alloc_harder is defined as
+> 	(alloc_flags & (ALLOC_HARDER|ALLOC_OOM));
+> AFAICS this means we no longer allow ALLOC_OOM to use the highatomic
+> reserve. Isn't that a risk?
 > 
 
-LGTM but I'll hold with reviewed-by's up until the patch set overally
-looks good to me and I have actually tested it.
+Yes, it is. I intend to apply the patch below on top. I didn't alter the
+first check for ALLOC_HIGHATOMIC as I wanted OOM handling to only use the
+high-order reserves if there was no other option. While this is a change
+in behaviour, it should be a harmless one. I'll add a note in the changelog.
 
-BR, Jarkko
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 50fc1e7cb154..0ef4f3236a5a 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3710,6 +3710,16 @@ struct page *rmqueue_buddy(struct zone *preferred_zone, struct zone *zone,
+ 			page = __rmqueue_smallest(zone, order, MIGRATE_HIGHATOMIC);
+ 		if (!page) {
+ 			page = __rmqueue(zone, order, migratetype, alloc_flags);
++
++			/*
++			 * If the allocation fails, allow OOM handling access
++			 * to HIGHATOMIC reserves as failing now is worse than
++			 * failing a high-order atomic allocation in the
++			 * future.
++			 */
++			if (!page && (alloc_flags & ALLOC_OOM))
++				page = __rmqueue_smallest(zone, order, MIGRATE_HIGHATOMIC);
++
+ 			if (!page) {
+ 				spin_unlock_irqrestore(&zone->lock, flags);
+ 				return NULL;
+@@ -4023,7 +4033,7 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
+ 			return true;
+ 		}
+ #endif
+-		if ((alloc_flags & ALLOC_HIGHATOMIC) &&
++		if ((alloc_flags & (ALLOC_HIGHATOMIC|ALLOC_OOM)) &&
+ 		    !free_area_empty(area, MIGRATE_HIGHATOMIC)) {
+ 			return true;
+ 		}
+-- 
+Mel Gorman
+SUSE Labs
