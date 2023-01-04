@@ -2,246 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17E065D00C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7434D65D014
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 11:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbjADJ5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
+        id S233760AbjADKBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 05:01:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbjADJ5F (ORCPT
+        with ESMTP id S231288AbjADKBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:57:05 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C64011A3BF;
-        Wed,  4 Jan 2023 01:57:03 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 492D51596;
-        Wed,  4 Jan 2023 01:57:45 -0800 (PST)
-Received: from [10.57.12.241] (unknown [10.57.12.241])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 215EA3F71A;
-        Wed,  4 Jan 2023 01:57:01 -0800 (PST)
-Message-ID: <14dc7a29-c01d-ae0c-e531-66f6f65aee1e@arm.com>
-Date:   Wed, 4 Jan 2023 09:57:00 +0000
+        Wed, 4 Jan 2023 05:01:14 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4DCABCAA;
+        Wed,  4 Jan 2023 02:01:12 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowABXX5dcTrVjC5xuCg--.34318S2;
+        Wed, 04 Jan 2023 18:01:01 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregory.greenman@intel.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        luciano.coelho@intel.com, johannes.berg@intel.com,
+        shaul.triebitz@intel.com
+Cc:     linux-wireless@vger.kernel.or, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] iwlwifi: Add missing check for alloc_ordered_workqueue
+Date:   Wed,  4 Jan 2023 18:00:59 +0800
+Message-Id: <20230104100059.24987-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v5 2/2] cpuidle: teo: Introduce util-awareness
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     daniel.lezcano@linaro.org, Dietmar.Eggemann@arm.com,
-        dsmythies@telus.net, yu.chen.surf@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>
-References: <20221130153204.2085591-1-kajetan.puchalski@arm.com>
- <20221130153204.2085591-3-kajetan.puchalski@arm.com>
- <CAJZ5v0jXkKTUsA1Pdis7T9qzYZBiRFnpJ+AwE3zEuAHNR_=K3A@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0jXkKTUsA1Pdis7T9qzYZBiRFnpJ+AwE3zEuAHNR_=K3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABXX5dcTrVjC5xuCg--.34318S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7trW5try7Xw4kZFW7ZF17Awb_yoW8uFyDpa
+        nxuryjqFW5tw1jqFyrGFWkZas8Ww1UJr1DGFZ2gw45urn7Aw1rJa10gryYqFykGry0gr15
+        CrWjyF15Wr4DXrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5s
+        jjDUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+Add check for the return value of alloc_ordered_workqueue since it may
+return NULL pointer.
 
-Forgive me to jump into the discussion, I would like to clarify some
-stuff.
+Fixes: b481de9ca074 ("[IWLWIFI]: add iwlwifi wireless drivers")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/net/wireless/intel/iwlwifi/dvm/main.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-On 1/3/23 17:53, Rafael J. Wysocki wrote:
-> On Wed, Nov 30, 2022 at 4:33 PM Kajetan Puchalski
-> <kajetan.puchalski@arm.com> wrote:
->>
->> Modern interactive systems, such as recent Android phones, tend to have power
->> efficient shallow idle states. Selecting deeper idle states on a device while a
->> latency-sensitive workload is running can adversely impact performance due to
->> increased latency. Additionally, if the CPU wakes up from a deeper sleep before
->> its target residency as is often the case, it results in a waste of energy on
->> top of that.
->>
->> At the moment, all the available idle governors operate mainly based on their
->> own past correctness metrics along with timer events without taking into account
->> any scheduling information.
-> 
-> I still don't quite agree with the above statement.
-> 
-> It would be accurate enough to state the fact that currently cpuidle
-> governors don't take scheduling information into account.
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/main.c b/drivers/net/wireless/intel/iwlwifi/dvm/main.c
+index a873be109f43..b490a88b97ca 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/main.c
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/main.c
+@@ -1048,9 +1048,11 @@ static void iwl_bg_restart(struct work_struct *data)
+  *
+  *****************************************************************************/
+ 
+-static void iwl_setup_deferred_work(struct iwl_priv *priv)
++static int iwl_setup_deferred_work(struct iwl_priv *priv)
+ {
+ 	priv->workqueue = alloc_ordered_workqueue(DRV_NAME, 0);
++	if (!priv->workqueue)
++		return -ENOMEM;
+ 
+ 	INIT_WORK(&priv->restart, iwl_bg_restart);
+ 	INIT_WORK(&priv->beacon_update, iwl_bg_beacon_update);
+@@ -1067,6 +1069,8 @@ static void iwl_setup_deferred_work(struct iwl_priv *priv)
+ 	timer_setup(&priv->statistics_periodic, iwl_bg_statistics_periodic, 0);
+ 
+ 	timer_setup(&priv->ucode_trace, iwl_bg_ucode_trace, 0);
++
++	return 0;
+ }
+ 
+ void iwl_cancel_deferred_work(struct iwl_priv *priv)
+@@ -1456,7 +1460,9 @@ static struct iwl_op_mode *iwl_op_mode_dvm_start(struct iwl_trans *trans,
+ 	/********************
+ 	 * 6. Setup services
+ 	 ********************/
+-	iwl_setup_deferred_work(priv);
++	if (iwl_setup_deferred_work(priv))
++		goto out_uninit_drv;
++
+ 	iwl_setup_rx_handlers(priv);
+ 
+ 	iwl_power_initialize(priv);
+@@ -1494,6 +1500,7 @@ static struct iwl_op_mode *iwl_op_mode_dvm_start(struct iwl_trans *trans,
+ 	iwl_cancel_deferred_work(priv);
+ 	destroy_workqueue(priv->workqueue);
+ 	priv->workqueue = NULL;
++out_uninit_drv:
+ 	iwl_uninit_drv(priv);
+ out_free_eeprom_blob:
+ 	kfree(priv->eeprom_blob);
+-- 
+2.25.1
 
-Fair enough.
-
-> 
->> Especially on interactive systems, this results in
->> them frequently selecting a deeper idle state and then waking up before its
->> target residency is hit, thus leading to increased wakeup latency and lower
->> performance with no power saving. For 'menu' while web browsing on Android for
->> instance, those types of wakeups ('too deep') account for over 24% of all
->> wakeups.
-> 
-> I don't think that you can convincingly establish a cause-and-effect
-> relationship between not taking scheduling information into account
-> and overestimating the idle duration.
-
-This is tough topic to prove this correctly, good for some PhD studies.
-There is some correlation which we see in the results and measurements,
-though. An interesting topic to study would be the CPU runqueue
-utilization signal nature, when the tasks sleep or migrate. We don't
-have time to study that signal nature over time and if that function
-matches some already discovered process and invented math theory,
-e.g. Erlang distribution or only exponential distribution...
-Your exponentially decaying statistics might fall into same bucket.
-
-> 
-> It would be just fine to say something like "They also tend to
-> overestimate the idle duration quite often, which causes them to
-> select excessively deep idle states, which leads to ...".
-
-Fair enough.
-
-> 
->> At the same time, on some platforms C0 can be power efficient enough to warrant
->> wanting to prefer it over C1.
-> 
-> If you say C0 or C1, a casual reader may think about x86 which
-> probably is not your intention.
-> 
-> I would say "idle state 0" and "idle state 1" instead.  I would also
-> say that this is on systems where idle state 0 is not a polling state.
-
-I agree.
-
-> 
->> This is because the power usage of the two states
->> can be so close that sufficient amounts of too deep C1 sleeps can completely
->> offset the C1 power saving to the point where it would've been more power
->> efficient to just use C0 instead.
->>
->> Sleeps that happened in C0 while they could have used C1 ('too shallow') only
->> save less power than they otherwise could have. Too deep sleeps, on the other
->> hand, harm performance and nullify the potential power saving from using C1 in
->> the first place. While taking this into account, it is clear that on balance it
->> is preferable for an idle governor to have more too shallow sleeps instead of
->> more too deep sleeps on those kinds of platforms.
-> 
-> I don't think that the above paragraphs, while generally true, are
-> relevant for what the patch really does.
-
-I disagree. That's the patch improvement, precisely the threshold
-value of ~1.56% makes this trade-off. We more often prefer too shallow
-idle state 0. When you change that threshold to bigger value, you reduce
-this preference.
-
-> 
-> They would have been relevant if the patch had improved the
-> energy-efficiency, but it doesn't.  It sacrifices energy for
-> performance by reducing the CPU wakeup latency.
-
-I disagree. Let me clarify those results, because there is a lot of
-data I think you might miss some important bits.
-
-Kajetan has provided 4 benchmarks' test results, which are really
-comprehensive.
-
-A. There are 2 benchmarks 'performance-first', so we want better score,
-*no matter the energy cost* (Geekbench 5 and Speedometer).
-The Geekbench5 is most important since a lot of people check it before
-buying a phone. For this benchmark TEO was an issue as you can see:
-multicore score TEO vs TEO_util:
-   2764.8 vs. 2865
-which is ~3.5% improvement, trust me it's a lot.
-
-B. There are 2 benchmarks trying to reflect 'normal usage' of a phone:
-- PCMark Web Browsing
-   score TEO vs. TEO_util
-     5219.8 vs. 5239.9 ---> better score
-   avg power
-     184.8 vs. 184.1 mW ---> lower power, better
-- Jankbench
-   score TEO vs. TEO_util (lower janky frames percentage is better)
-     2.1% vs. 1.3% ---> better score
-   avg power
-     136.9 mW vs. 121.3 mW ----> lower power, better
-
-The results in B. show that it doesn't sacrifice energy for performance.
-We were able to reduce the avg power while even improving the score
-results. It would lead to lower energy for the whole test.
-
-You might ask: how is this possible?
-Or HW design has evolved and made the idle state 0 very attractive
-(reducing more and more power). This created a potential new area
-to explore which was in my head for quite a long. Kajetan was keen to
-explore that space and found many interesting behaviors there.
-Some background about energy and costs.
-Don't forget that to enter a deeper idle state you have to flush the
-caches gently, not just drop the data blindly. That will cost you some
-extra energy (you can drop instr. cache) (comparing to a situation when
-you don't have to do this and you keep the caches on). Then when you
-wakeup the CPU you have to load instr. and data into cache, which cost
-you another extra energy. If you have to do this to/from LPDDR, then it
-is ~10x bigger energy vs. some internal data passing (e.g. L3 -> L2).
-If you do this wrongly (that's what Kajetan is calling "too deep",
-which is a nice new metric IMO) then you will pay those two extra energy
-penalties and most likely not saving enough energy to compensate that
-loss. That's why you might wonder why choosing a deeper idle I couldn't
-save energy... That's the reason.
-
-
-> 
->> This patch specifically tunes TEO to minimise too deep sleeps and minimise
->> latency to achieve better performance.
-> 
-> I'm not sure if you can demonstrate that the number of "too deep
-> sleeps" is really reduced in all cases, but the reduction of latency
-> is readily demonstrable, so I would focus on that part.
-
-Sounds sane
-
-> 
->> To this end, before selecting the next
->> idle state it uses the avg_util signal of a CPU's runqueue in order to determine
->> to what extent the CPU is being utilized. This util value is then compared to a
->> threshold defined as a percentage of the cpu's capacity (capacity >> 6 ie. ~1.5%
->> in the current implementation). If the util is above the threshold, the
->> idle state selected by TEO metrics will be reduced by 1, thus selecting a
->> shallower state. If the util is below the threshold, the governor defaults to
->> the TEO metrics mechanism to try to select the deepest available idle state
->> based on the closest timer event and its own correctness.
->>
->> The main goal of this is to reduce latency and increase performance for some
->> workloads. Under some workloads it will result in an increase in power usage
->> (Geekbench 5) while for other workloads it will also result in a decrease in
->> power usage compared to TEO (PCMark Web, Jankbench, Speedometer).
->>
->> It can provide drastically decreased latency and performance benefits in certain
->> types of workloads that are sensitive to latency.
-> 
-> And I would put some numbers from your cover letter in here.
->
-
-I agree.
-
-[snip]
-
->> + *
->> + * When the CPU is utilized while going into idle, more likely than not it will
->> + * be woken up to do more work soon and so a shallower idle state should be
->> + * selected to minimise latency and maximise performance. When the CPU is not
->> + * being utilized, the usual metrics-based approach to selecting the deepest
->> + * available idle state should be preferred to take advantage of the power
->> + * saving.
-> 
-> I would say "energy saving" instead of "power saving", as the former
-> is technically more accurate.
-
-I agree.
-
-I hope this could help to clarify some bits.
-
-Regards,
-Lukasz
