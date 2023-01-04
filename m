@@ -2,182 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18D265CFF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2441A65CFF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbjADJvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
+        id S234304AbjADJxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:53:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbjADJvO (ORCPT
+        with ESMTP id S229658AbjADJxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:51:14 -0500
-X-Greylist: delayed 322 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Jan 2023 01:51:12 PST
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DF1140D6;
-        Wed,  4 Jan 2023 01:51:12 -0800 (PST)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
-        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1pD0QG-00G85N-8X; Wed, 04 Jan 2023 09:51:00 +0000
-Message-ID: <49bd7b4a-b0e1-3213-8aed-9f39604f3935@codethink.co.uk>
-Date:   Wed, 4 Jan 2023 09:50:58 +0000
+        Wed, 4 Jan 2023 04:53:05 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A9C14D24;
+        Wed,  4 Jan 2023 01:53:04 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30491YKq005437;
+        Wed, 4 Jan 2023 09:53:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=JlmYzHFhOaizUWNQHBWIUaZlKaKHnAOrMQFlQD5zHp0=;
+ b=dmD3vlVV7P/wJKLX+cZIJWvoOhlgQNafs0s1u8CTEYm+9pJ1nUIzF9KSKum3TuejWkHS
+ Oih8jgCiZ2HOtNoycGBGMWPB3xf27kaROMXk3dYoF4aUZL4uCah/Cihd8WjHvusxOQpj
+ FfMfAj6P0m/rhNmQAaRQcsHyMZCDXRZ/zKjMigaHZ4Ve9v4ZYxqaKHB3kdxgqjquT/Mo
+ vimGl0uVuZwDR1wMmYJNEnUU357QePHrsiAlVC/f2Eu5XHjMGvsta3vxt0LxNiKtsNfq
+ V1AXF4AAO/pebYqgDzk9tc2AeyArY2go7ecEWXpFBpCXtYkiOawzV0Y0Ug+U8kJGbEG6 qQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvq49cd2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 09:53:02 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3049Wfsm008979;
+        Wed, 4 Jan 2023 09:53:02 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvq49cd2b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 09:53:02 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303MIg5A001428;
+        Wed, 4 Jan 2023 09:53:00 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mtcbfd2xx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 09:53:00 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3049quIR39256416
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 Jan 2023 09:52:57 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE51120040;
+        Wed,  4 Jan 2023 09:52:56 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2EAA2004B;
+        Wed,  4 Jan 2023 09:52:55 +0000 (GMT)
+Received: from [9.171.35.166] (unknown [9.171.35.166])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  4 Jan 2023 09:52:55 +0000 (GMT)
+Message-ID: <4e8d3f53af2f73a464e4ffc4a9a28c8d31692369.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/1] vfio/type1: Respect IOMMU reserved regions in
+ vfio_test_domain_fgsp()
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Christian =?ISO-8859-1?Q?Borntr=E4ger?= 
+        <borntraeger@linux.ibm.com>
+Date:   Wed, 04 Jan 2023 10:52:55 +0100
+In-Reply-To: <Y7S8loyvHyjAmNdh@ziepe.ca>
+References: <20230102093452.761185-1-schnelle@linux.ibm.com>
+         <20230102093452.761185-2-schnelle@linux.ibm.com>
+         <Y7S8loyvHyjAmNdh@ziepe.ca>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC v5.1 6/9] cache,soc: Move SiFive CCache driver & create
- drivers/cache
-Content-Language: en-GB
-To:     Conor Dooley <conor@kernel.org>, arnd@arndb.de, palmer@dabbelt.com,
-        prabhakar.csengg@gmail.com
-Cc:     Conor Dooley <conor.dooley@microchip.com>, ajones@ventanamicro.com,
-        aou@eecs.berkeley.edu, apatel@ventanamicro.com,
-        atishp@rivosinc.com, biju.das.jz@bp.renesas.com,
-        devicetree@vger.kernel.org, geert@linux-m68k.org,
-        guoren@kernel.org, hch@infradead.org, heiko@sntech.de,
-        jszhang@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, magnus.damm@gmail.com,
-        nathan@kernel.org, paul.walmsley@sifive.com,
-        philipp.tomsich@vrull.eu, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        robh+dt@kernel.org, samuel@sholland.org, soc@kernel.org
-References: <Y62nOqzyuUKqYDpq@spud>
- <20230103210400.3500626-7-conor@kernel.org>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <20230103210400.3500626-7-conor@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 84DkRbnro9HDhaYZVjXnLs_i6XAL8PB5
+X-Proofpoint-GUID: 7V-kUb0cOHQwbR6rfOfSsI_dwpHcgFcB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_05,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ clxscore=1011 priorityscore=1501 malwarescore=0 impostorscore=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 mlxlogscore=946
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301040080
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 21:03, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The Zicbo* set of extensions for cache maintenance arrived too late &
-> several SoCs exist without them that require non-coherent DMA.
-> As things stand, the StarFive JH7100, Microchip PolarFire SoC & Renesas
-> RZ/Five all require cache maintenance and lack instructions for this
-> purpose.
-> Create a subsystem for cache drivers so that vendor specific behaviour
-> can be isolated from arch code, but keep the interfaces etc consistent.
-> Move the existing SiFive CCache driver to create drivers/cache.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->   MAINTAINERS                                   | 15 ++++++++-------
->   drivers/Kconfig                               |  2 ++
->   drivers/Makefile                              |  2 ++
->   drivers/{soc/sifive => cache}/Kconfig         |  8 +++++++-
->   drivers/{soc/sifive => cache}/Makefile        |  0
->   drivers/{soc/sifive => cache}/sifive_ccache.c |  2 +-
->   drivers/edac/sifive_edac.c                    |  2 +-
->   drivers/soc/Kconfig                           |  1 -
->   drivers/soc/Makefile                          |  1 -
->   include/{soc/sifive => cache}/sifive_ccache.h |  0
->   10 files changed, 21 insertions(+), 12 deletions(-)
->   rename drivers/{soc/sifive => cache}/Kconfig (56%)
->   rename drivers/{soc/sifive => cache}/Makefile (100%)
->   rename drivers/{soc/sifive => cache}/sifive_ccache.c (99%)
->   rename include/{soc/sifive => cache}/sifive_ccache.h (100%)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f61eb221415b..4437e96a657b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19054,13 +19054,6 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/dma/sifive,fu540-c000-pdma.yaml
->   F:	drivers/dma/sf-pdma/
->   
-> -SIFIVE SOC DRIVERS
-> -M:	Conor Dooley <conor@kernel.org>
-> -L:	linux-riscv@lists.infradead.org
-> -S:	Maintained
-> -T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-> -F:	drivers/soc/sifive/
-> -
->   SILEAD TOUCHSCREEN DRIVER
->   M:	Hans de Goede <hdegoede@redhat.com>
->   L:	linux-input@vger.kernel.org
-> @@ -19873,6 +19866,14 @@ S:	Supported
->   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
->   F:	drivers/staging/
->   
-> +STANDALONE CACHE CONTROLLER DRIVERS
-> +M:	Conor Dooley <conor@kernel.org>
-> +L:	linux-riscv@lists.infradead.org
-> +S:	Maintained
-> +T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-> +F:	drivers/cache
-> +F:	include/cache
-I thought the riscv list was subscribers only?
+On Tue, 2023-01-03 at 19:39 -0400, Jason Gunthorpe wrote:
+> On Mon, Jan 02, 2023 at 10:34:52AM +0100, Niklas Schnelle wrote:
+> > Since commit cbf7827bc5dc ("iommu/s390: Fix potential s390_domain
+> > aperture shrinking") the s390 IOMMU driver uses a reserved region
+> > instead of an artificially shrunk aperture to restrict IOMMU use based
+> > on the system provided DMA ranges of devices. In particular on current
+> > machines this prevents use of DMA addresses below 2^32 for all devices.
+> > While usually just IOMMU mapping below these addresses is
+> > harmless. However our virtual ISM PCI device looks at new mappings on
+> > IOTLB flush and immediately goes into the error state if such a mapping
+> > violates its allowed DMA ranges. This then breaks pass-through of the
+> > ISM device to a KVM guest.
+> >=20
+> > Analysing this we found that vfio_test_domain_fgsp() maps 2 pages at DM=
+A
+> > address 0 irrespective of the IOMMUs reserved regions. Even if usually
+> > harmless this seems wrong in the general case so instead go through the
+> > freshly updated IOVA list and try to find a range that isn't reserved
+> > and fits 2 pages and use that for testing for fine grained super pages.
+>=20
+> Why does it matter? The s390 driver will not set fgsp=3Dtrue, so if it
+> fails because map fails or does a proper detection it shouldn't make a
+> difference.
+>=20
+> IOW how does this actualy manifest into a failure?
 
-Maybe if we do the suggestion of other cache drivers here we should
-either use the main kernel one or find some arch non-specific list.
+Oh, yeah I agree that's what I meant by saying that just mapping should
+usually be harmless. This is indeedthe case for all normal PCI devices
+on s390 there it doesn't matter.=C2=A0
 
-> +
->   STARFIRE/DURALAN NETWORK DRIVER
->   M:	Ion Badulescu <ionut@badula.org>
->   S:	Odd Fixes
-> diff --git a/drivers/Kconfig b/drivers/Kconfig
-> index 968bd0a6fd78..e592ba5276ae 100644
-> --- a/drivers/Kconfig
-> +++ b/drivers/Kconfig
-> @@ -241,4 +241,6 @@ source "drivers/peci/Kconfig"
->   
->   source "drivers/hte/Kconfig"
->   
-> +source "drivers/cache/Kconfig"
-> +
->   endmenu
-> diff --git a/drivers/Makefile b/drivers/Makefile
-> index bdf1c66141c9..6ff60cf21823 100644
-> --- a/drivers/Makefile
-> +++ b/drivers/Makefile
-> @@ -38,6 +38,8 @@ obj-y				+= clk/
->   # really early.
->   obj-$(CONFIG_DMADEVICES)	+= dma/
->   
-> +obj-y				+= cache/
-> +
->   # SOC specific infrastructure drivers.
->   obj-y				+= soc/
->   
-> diff --git a/drivers/soc/sifive/Kconfig b/drivers/cache/Kconfig
-> similarity index 56%
-> rename from drivers/soc/sifive/Kconfig
-> rename to drivers/cache/Kconfig
-> index ed4c571f8771..bc852f005c10 100644
-> --- a/drivers/soc/sifive/Kconfig
-> +++ b/drivers/cache/Kconfig
-> @@ -1,9 +1,15 @@
->   # SPDX-License-Identifier: GPL-2.0
->   
-> -if SOC_SIFIVE
-> +menuconfig CACHE_CONTROLLER
-> +	bool "Cache controller driver support"
-> +	default y if RISCV
-> +
-> +if CACHE_CONTROLLER
->   
->   config SIFIVE_CCACHE
->   	bool "Sifive Composable Cache controller"
-> +	depends on RISCV
-> +	default y
->   	help
->   	  Support for the composable cache controller on SiFive platforms.
->   
+The problem manifests only with ISM devices which are a special s390
+virtual PCI device that is implemented in the machine hypervisor. This
+device is used for high speed cross-LPAR (Logical Partition)
+communication, basically it allows two LPARs that previously exchanged
+an authentication token to memcpy between their partitioned memory
+using the virtual device. For copying a receiving LPAR will IOMMU map a
+region of memory for the ISM device that it will allow DMAing into
+(memcpy by the hypervisor). All other regions remain unmapped and thus
+inaccessible. In preparation the device  emulation in the machine
+hypervisor intercepts the IOTLB flush and looks at the IOMMU
+translation tables performing e.g. size and alignment checks I presume,
+one of these checks against the start/end DMA boundaries. This check
+fails which leads to the virtual ISM device being put into an error
+state. Being in an error state it then fails to be initialized by the
+guest driver later on.
 
-Maybe we should find and move the ARM PL cache controllers and
-have them here too?
+>=20
+> > -	if (!ret) {
+> > -		size_t unmapped =3D iommu_unmap(domain->domain, 0, PAGE_SIZE);
+> > +	list_for_each_entry(region, regions, list) {
+> > +		if (region->end - region->start < PAGE_SIZE * 2)
+> > +			continue;
+> > =20
+> > -		if (unmapped =3D=3D PAGE_SIZE)
+> > -			iommu_unmap(domain->domain, PAGE_SIZE, PAGE_SIZE);
+> > -		else
+> > -			domain->fgsp =3D true;
+> > +		ret =3D iommu_map(domain->domain, region->start, page_to_phys(pages)=
+, PAGE_SIZE * 2,
+> > +				IOMMU_READ | IOMMU_WRITE | IOMMU_CACHE);
+>=20
+> The region also needs to have 'region->start % (PAGE_SIZE*2) =3D=3D 0' fo=
+r the
+> test to work
+>=20
+> Jason
 
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
-
-https://www.codethink.co.uk/privacy.html
-
+Ah okay makes sense, I guess that check could easily be added.
