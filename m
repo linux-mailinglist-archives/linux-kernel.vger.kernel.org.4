@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323FB65CBA6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 429D965CBB1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 02:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbjADByM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 20:54:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        id S238614AbjADB4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 20:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjADByJ (ORCPT
+        with ESMTP id S230247AbjADB4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 20:54:09 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EC0164AC
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 17:54:09 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id g13so48396902lfv.7
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 17:54:08 -0800 (PST)
+        Tue, 3 Jan 2023 20:56:11 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D0F178A2;
+        Tue,  3 Jan 2023 17:56:10 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id t15so35080496ybq.4;
+        Tue, 03 Jan 2023 17:56:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3ENfREs/+kE8uL6hKvwskOdg+lSrgQr9bKPvZeVGJsQ=;
-        b=l2Oa3ChyCBqNbRs+zG8Q6BjSygUEBDXqjvOtb6ISycKB4uz13FzHAd2NeOuT80deCp
-         F16Ls0b3Hdpp2sDdKdqrXl8/UYlrxyjvUeXNgVAB5u0L9AWtjUCfXBz/NyCx3BzRq69w
-         SrJI+RN9AJ8gOkTUDJYsZuAC+SrK26Y0tfgdEhAIL9ZInzItPmdOXi6ISqi5hB3rWzyp
-         LzT1CpRrx+yJdky8GmUENBZLxQ6IPW2F8yWHMjQpPERIrhnpL4mlBn+ute/muhBRkncO
-         mJQsxGdcc5fHz8hnS+pF0KcU4A/meIIeMZQWHigy0Ppo6dciulyyraX0Yzj3WVydOPce
-         1Mdg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K4wOmTH7AdBL4iuOzbwjUMBRytNfhWEyWPFeK4sWBy4=;
+        b=cKbWf6w24QFBgI1EnWW1sqJLqUmNNKOe5fdQS52IiG+HlxVu21dtgYAQz25SYKQt67
+         5y7xctc3LUwSQWoWvO4NTRT1p1yH2pJyQTNZugd6YPnFfN89F+FKAJrV52qhoEsGLSbc
+         9avlrOQgjWz3tI8Vxr9Xk4V1QbyHIHr5SC8KiEU0Sp0lJ3co64y/eTcrKICX+nNh3AHD
+         NtY5HWdQeF/R+fbOtEBRt+7SbdCiSg0oXEKdqHQA7GY5LCS5Or8dRu1ZlU1obZsoHRBi
+         AhcesjMJLsprvMduauH4uMAW3jjLeVdcd507heZFLGDlbbE/zNV7GyVVoL8NV7KzBMe7
+         x9nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3ENfREs/+kE8uL6hKvwskOdg+lSrgQr9bKPvZeVGJsQ=;
-        b=Ll+Th0zOJcl16LzzXlhyhMPGlBree3l6AQgst+x3r4KzdURaWZUvoqdpe7DuhiiBtK
-         L3JKx9kWsH0DtVsTMo2oNVpGqUrxAiUsE/cnk2gAp1Fc5LulgNDedf7GWHjBACvIxXkY
-         bBUlQvwqQbnQCemZ8u1P1tR3Dy31tFNODNtOlzt8voa9L3Q3upXUfZXv2LIRIMsvbBCe
-         1zkw5NZaczzWwAisBUQwSTEBYz0VCCapfpbBiOjRY3CFTq/r+T4FDOiU/E6xoQq0S6Wm
-         w4mDh4Ff/UcOOCpQ7iSFl+jDY3YJyodGOppM4C33fw24Tu2xRQYQoSrVMTLVurOjAblk
-         ovsw==
-X-Gm-Message-State: AFqh2kq5tL12jPU2Fw7q67NQAznEMSA8AFgsl0fDOlxfdvcvr4CdN9Kt
-        9dF1Av+TfAVkhaHnA+UzK/A9rmQofNPRqEk2wio=
-X-Google-Smtp-Source: AMrXdXummYS5wWjhsB82C1I1nGXyx/WY06hs91ePQQc/dWXl7bXvUORru8MGAx3oYddjt38BMzgtQGyukuftT2d1NC4=
-X-Received: by 2002:ac2:53ae:0:b0:4b5:7968:630f with SMTP id
- j14-20020ac253ae000000b004b57968630fmr3152653lfh.351.1672797246897; Tue, 03
- Jan 2023 17:54:06 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K4wOmTH7AdBL4iuOzbwjUMBRytNfhWEyWPFeK4sWBy4=;
+        b=wHui8zbYgxJBWUHTcnQ/FBlBCIKTbOK2B28c+7egwqERTOrxezYOwNuF2aL3jLEcfV
+         zLmIz1mhQQq/koo2Q1Ph2my4+PwkNE9P0tPrf6hb4kmgATBsI+k3XAKGfDE9KVRlXLmy
+         OG27hOA20Wj37vL59TNEbusUuy1zdMixR6tzZuKskUsHHhNvGcRPLp4AMNZg771KHlVd
+         YYQt5msm935yyVqD9tR7HTD2QbLkmTa6BxUa4h5FpniNH2HPYHLcP7Zk++oEzAPlBIjl
+         e3Y7KLo7zlmr9OL2SLkXgOonRSwya9hAnn9pIpHXCBdUDrJVNptKBKX8SEKAR66+nxuj
+         WOGA==
+X-Gm-Message-State: AFqh2kpLUe1yn3OYkJnP7JubmKjDiJrZAfCGO8lH8VsnKcB8QyscrYWs
+        ruajVn3kPXLh6b2V7FMUO013DCbn5L/2Zyn52Ew=
+X-Google-Smtp-Source: AMrXdXt4GnqdkyJnjP8zMXH7iI+c+15e0+LPvhTq1mbGSgQzKC0W+H2/9Zu8ROxMsaOHO++Oeb/fRvRxQc9KuE8d6O8=
+X-Received: by 2002:a25:e6c1:0:b0:761:d9ec:328f with SMTP id
+ d184-20020a25e6c1000000b00761d9ec328fmr4371243ybh.507.1672797370167; Tue, 03
+ Jan 2023 17:56:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20221230154332.5082-1-chao@kernel.org> <167276540205.24190.7786330518792341546.git-patchwork-notify@kernel.org>
-In-Reply-To: <167276540205.24190.7786330518792341546.git-patchwork-notify@kernel.org>
-From:   Yuwei Guan <ssawgyw@gmail.com>
-Date:   Wed, 4 Jan 2023 09:53:32 +0800
-Message-ID: <CALJQGLmws5BBdDUYp3qiytEWrCLegT6RA+M+9H7O1kYfoy6TXg@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to avoid NULL pointer dereference in f2fs_issue_flush()
-To:     patchwork-bot+f2fs@kernel.org
-Cc:     Chao Yu <chao@kernel.org>, jaegeuk@kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
+References: <20221207173053.1463800-1-carlos.bilbao@amd.com>
+ <20221228174623.144199-1-carlos.bilbao@amd.com> <87wn64fq7d.fsf@meer.lwn.net>
+ <CANiq72mC+WzOxhZVtEvnsFYzuBPkd51=TYXK01ztcTZ-CAcUiw@mail.gmail.com> <87h6x7cfiy.fsf@meer.lwn.net>
+In-Reply-To: <87h6x7cfiy.fsf@meer.lwn.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 4 Jan 2023 02:55:59 +0100
+Message-ID: <CANiq72n3qnWwDjp0E1xY1m15qhMHz8_AXcL9hstVM8Xwfi=pbw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/2] docs: Integrate rustdoc into Rust documentation
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org,
+        akiyks@gmail.com, jani.nikula@linux.intel.com,
+        rdunlap@infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, konstantin@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -70,47 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-<patchwork-bot+f2fs@kernel.org> =E4=BA=8E2023=E5=B9=B41=E6=9C=884=E6=97=A5=
-=E5=91=A8=E4=B8=89 01:04=E5=86=99=E9=81=93=EF=BC=9A
+On Wed, Jan 4, 2023 at 1:25 AM Jonathan Corbet <corbet@lwn.net> wrote:
 >
-> Hello:
->
-> This patch was applied to jaegeuk/f2fs.git (dev)
-> by Jaegeuk Kim <jaegeuk@kernel.org>:
->
-> On Fri, 30 Dec 2022 23:43:32 +0800 you wrote:
-> > With below two cases, it will cause NULL pointer dereference when
-> > accessing SM_I(sbi)->fcc_info in f2fs_issue_flush().
-> >
-> > a) If kthread_run() fails in f2fs_create_flush_cmd_control(), it will
-> > release SM_I(sbi)->fcc_info,
-> >
-> > - mount -o noflush_merge /dev/vda /mnt/f2fs
-> > - mount -o remount,flush_merge /dev/vda /mnt/f2fs  -- kthread_run() fai=
-ls
-> > - dd if=3D/dev/zero of=3D/mnt/f2fs/file bs=3D4k count=3D1 conv=3Dfsync
-> >
-> > [...]
->
-> Here is the summary with links:
->   - [f2fs-dev] f2fs: fix to avoid NULL pointer dereference in f2fs_issue_=
-flush()
->     https://git.kernel.org/jaegeux/f2fs/c/b3d83066cbeb
->
+> Does it really need objtool?
 
-Hi jeageuk,
-There is a character error in patchwork configuration, :).
-:s/jaegeux/jeageuk/g
+No, it does not. That is a byproduct of using the `prepare` target to
+setup Rust for the descend, but we could rearrange some things for
+`rustdoc`.
 
-> You are awesome, thank you!
-> --
-> Deet-doot-dot, I am a bot.
-> https://korg.docs.kernel.org/patchwork/pwbot.html
->
->
->
->
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> A certain amount of extra building is OK as long as it doesn't radically
+> slow down the (already glacial) docs build.  I'd like it to not *break*
+> the docs build if the right dependencies aren't there, though.
+
+I agree if we go with a fixed/preset/configless approach, because in
+that case we will always have `CONFIG_RUST=y` and therefore the
+generation of Rust docs is really just an attempt that may or may not
+fail (or we could only attempt to do so if the dependencies are met
+exactly as expected).
+
+On the other hand, if we went with the current setup, where a config
+is used, then if the user has specified `CONFIG_RUST=y`, I think it is
+fair to fail, since the operation cannot be completed, just like the
+normal build. Of course, we could also do the "just attempt it"
+approach and print a loud message if it failed, but I think, as a
+user, would still prefer as a user if it just failed.
+
+> It seems like that step should fail regardless, not just for the docs
+> build, no?
+
+The bindgen step should fail the same way for both normal builds and
+docs, indeed.
+
+I think I understand now what you meant by "fail more gracefully". I
+thought you meant fail with a better/proper message given versioning
+information or similar, but you primarily meant avoid breaking the
+entire docs build if the Rust part fails, right?
+
+Cheers,
+Miguel
