@@ -2,114 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD8B65D740
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B5465D741
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239478AbjADPaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
+        id S229743AbjADPaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239213AbjADPaU (ORCPT
+        with ESMTP id S229499AbjADPaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:30:20 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6AB1B9C9;
+        Wed, 4 Jan 2023 10:30:21 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F4A11B9DD;
+        Wed,  4 Jan 2023 07:30:20 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14DF4165C;
+        Wed,  4 Jan 2023 07:31:02 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.37.146])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 601133F23F;
         Wed,  4 Jan 2023 07:30:19 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id fy8so19443836ejc.13;
-        Wed, 04 Jan 2023 07:30:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RlY5zc887o4HmnQmxYxtgGa5YwnXO1c9ubHXsFfKj/w=;
-        b=pbOa1icFKE3DphJvUEUO+QlWK5zCVsP0PI5DQcHnCWNZFfhX1W51ohvn228RBtGQzu
-         CFWAf5bsoM4x61CUXF3bk1PK1zNi59wXfnNlxOoEbVSahX7bfi1XgI9EL3HN29snyqjQ
-         cuitpahioxFArY6+AXzoHjUhicXXHkBUz3Kn9TfDwWkEAKXCI954h17Ie1imYZmE7pFX
-         z0aP9Qh9rnHChXD2awC47/YH9tf/e1BkFxDRs9LEqzPcaiLb59ODEnJR9nhVVYXeeoNV
-         a3ChPIrSrG3LXZ5gRtflQjRu12W2Ia7koQZSA74vSsVqpd82ariTScUNvxj+DQJc7fep
-         Woog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RlY5zc887o4HmnQmxYxtgGa5YwnXO1c9ubHXsFfKj/w=;
-        b=2QHFw4asUWE2AcleTv19MWlQWOTi4Zqvh5T9HDyKAzSuQa90JlASvmPLrb+6jJ2gnK
-         Ruysfo5FqqgCBm8gt9hyqeqq6X3GoJp1BTFK3po2xiECZa/MkuSSb/4HgeJfujGurmoD
-         GWdDPVN4FSLQ0RKjaeb4wclYkk+e70jMTNmEf23bjmeIRBrR5VHW+wKmPuS6DB4hoGWT
-         4Mm3O692wT4ezKOkD38W3twZXLeFuN8GclTE3F+789Ucbkt/LWjUOwa+40WnfkHAfDva
-         YIjRK1kjH8p91B6lGwopeT5duw86ByKpJr0prlC9PNxVXVBzFIN4pIYJXi/mwihuU7+W
-         RkVQ==
-X-Gm-Message-State: AFqh2kpkpdQjLDwb6GFTXZSlJp1SSGq2mS8V1x75hhbZZl1lLM5mKd52
-        CEc8CWPfPwDCuCAxgWT7zLNt4wGLpmmQ32TBdKY=
-X-Google-Smtp-Source: AMrXdXvJmnd3SsJYqbXkYBdYE92lok/9FJfVlIXR0snMPyAbpSQeVOltv/RKbd6e3C34bh6SgwpTS1YG31jJ8fMzjQ4=
-X-Received: by 2002:a17:906:81cf:b0:7c1:6b9e:6f5d with SMTP id
- e15-20020a17090681cf00b007c16b9e6f5dmr4136083ejx.339.1672846218347; Wed, 04
- Jan 2023 07:30:18 -0800 (PST)
+Date:   Wed, 4 Jan 2023 15:30:16 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, revest@chromium.org,
+        rostedt@goodmis.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] ftrace: Export ftrace_free_filter() to modules
+Message-ID: <Y7WbiBXwdhwCMrEz@FVFF77S0Q05N>
+References: <20230103124912.2948963-1-mark.rutland@arm.com>
+ <20230103124912.2948963-3-mark.rutland@arm.com>
+ <20230104235149.2416d0b57f6fba0f2f31ba77@kernel.org>
 MIME-Version: 1.0
-References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
- <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
- <92eb7dfa8b7d447e966a2751e174b642@realtek.com> <87da8c82dec749dc826b5a1b4c4238aa@AcuMS.aculab.com>
- <eee17e2f4e44a2f38021a839dc39fedc1c1a4141.camel@realtek.com>
- <a86893f11fe64930897473a38226a9a8@AcuMS.aculab.com> <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
-In-Reply-To: <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 4 Jan 2023 16:30:07 +0100
-Message-ID: <CAFBinCC+1jGJx1McnBY+kr3RTQ-UpxW6JYNpHzStUTredDuCug@mail.gmail.com>
-Subject: Re: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
-To:     Ping-Ke Shih <pkshih@realtek.com>,
-        "David.Laight@ACULAB.COM" <david.laight@aculab.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tehuang@realtek.com" <tehuang@realtek.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104235149.2416d0b57f6fba0f2f31ba77@kernel.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ping-Ke, Hi David,
+On Wed, Jan 04, 2023 at 11:51:49PM +0900, Masami Hiramatsu wrote:
+> On Tue,  3 Jan 2023 12:49:11 +0000
+> Mark Rutland <mark.rutland@arm.com> wrote:
+> 
+> > Setting filters on an ftrace ops results in some memory being allocated
+> > for the filter hashes, which must be freed before the ops can be freed.
+> > This can be done by removing every individual element of the hash by
+> > calling ftrace_set_filter_ip() or ftrace_set_filter_ips() with `remove`
+> > set, but this is somewhat error prone as it's easy to forget to remove
+> > an element.
+> > 
+> > Make it easier to clean this up by exporting ftrace_free_filter(), which
+> > can be used to clean up all of the filter hashes after an ftrace_ops has
+> > been unregistered.
+> > 
+> > Using this, fix the ftrace-direct* samples to free hashes prior to being
+> > unloaded. All other code either removes individual filters explicitly or
+> > is built-in and already calls ftrace_free_filter().
+> 
+> So, it seems to fix memory leaks. Then, it may need to go to stable.
+> 
+> Fixes: e1067a07cfbc ("ftrace/samples: Add module to test multi direct modify interface")
+> Fixes: 5fae941b9a6f ("ftrace/samples: Add multi direct interface test module")
+> Cc: stable@vger.kernel.org
+> 
+> And 
+> 
+> Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Thanks!
 
-On Sun, Jan 1, 2023 at 2:09 PM Ping-Ke Shih <pkshih@realtek.com> wrote:
-[...]
-> Yes, it should not use bit filed. Instead, use a __le16 for all fields, such as
-I think this can be done in a separate patch.
-My v2 of this patch has reduced these changes to a minimum, see [0]
+Thanks!
 
-[...]
-> struct rtw8821ce_efuse {
->    ...
->    u8 data1;       // offset 0x100
->    __le16 data2;   // offset 0x101-0x102
->    ...
-> } __packed;
->
-> Without __packed, compiler could has pad between data1 and data2,
-> and then get wrong result.
-My understanding is that this is the reason why we need __packed.
+Assuming Steve is also happy with the series, I assume one of you two will pick
+this up and fold those in.
 
-So my idea for the next steps is:
-- I will send a v3 of my series but change the wording in the commit
-description so it only mentions padding (but dropping the re-ordering
-part)
-- maybe Ping-Ke or his team can send a patch to fix the endian/bit
-field problem in the PCIe eFuse structs
-- (I'll keep working on SDIO support)
+I've folded all those tags in my local branch (and pushed that to my
+ftrace/ops-sample branch on kernel.org), so if you'd prefer I post a v3 with
+those I'm quite happy to do so.
 
-Does this make sense to both of you?
+Thanks,
+Mark.
 
-
-Best regards,
-Martin
-
-
-[0] https://lore.kernel.org/linux-wireless/20221229124845.1155429-2-martin.blumenstingl@googlemail.com/
+> 
+> > 
+> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > Cc: Florent Revest <revest@chromium.org>
+> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> > ---
+> >  kernel/trace/ftrace.c                       | 23 ++++++++++++++++++++-
+> >  samples/ftrace/ftrace-direct-multi-modify.c |  1 +
+> >  samples/ftrace/ftrace-direct-multi.c        |  1 +
+> >  3 files changed, 24 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> > index 442438b93fe98..750aa3f08b25a 100644
+> > --- a/kernel/trace/ftrace.c
+> > +++ b/kernel/trace/ftrace.c
+> > @@ -1248,12 +1248,17 @@ static void free_ftrace_hash_rcu(struct ftrace_hash *hash)
+> >  	call_rcu(&hash->rcu, __free_ftrace_hash_rcu);
+> >  }
+> >  
+> > +/**
+> > + * ftrace_free_filter - remove all filters for an ftrace_ops
+> > + * @ops - the ops to remove the filters from
+> > + */
+> >  void ftrace_free_filter(struct ftrace_ops *ops)
+> >  {
+> >  	ftrace_ops_init(ops);
+> >  	free_ftrace_hash(ops->func_hash->filter_hash);
+> >  	free_ftrace_hash(ops->func_hash->notrace_hash);
+> >  }
+> > +EXPORT_SYMBOL_GPL(ftrace_free_filter);
+> >  
+> >  static struct ftrace_hash *alloc_ftrace_hash(int size_bits)
+> >  {
+> > @@ -5839,6 +5844,10 @@ EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi);
+> >   *
+> >   * Filters denote which functions should be enabled when tracing is enabled
+> >   * If @ip is NULL, it fails to update filter.
+> > + *
+> > + * This can allocate memory which must be freed before @ops can be freed,
+> > + * either by removing each filtered addr or by using
+> > + * ftrace_free_filter(@ops).
+> >   */
+> >  int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
+> >  			 int remove, int reset)
+> > @@ -5858,7 +5867,11 @@ EXPORT_SYMBOL_GPL(ftrace_set_filter_ip);
+> >   *
+> >   * Filters denote which functions should be enabled when tracing is enabled
+> >   * If @ips array or any ip specified within is NULL , it fails to update filter.
+> > - */
+> > + *
+> > + * This can allocate memory which must be freed before @ops can be freed,
+> > + * either by removing each filtered addr or by using
+> > + * ftrace_free_filter(@ops).
+> > +*/
+> >  int ftrace_set_filter_ips(struct ftrace_ops *ops, unsigned long *ips,
+> >  			  unsigned int cnt, int remove, int reset)
+> >  {
+> > @@ -5900,6 +5913,10 @@ ftrace_set_regex(struct ftrace_ops *ops, unsigned char *buf, int len,
+> >   *
+> >   * Filters denote which functions should be enabled when tracing is enabled.
+> >   * If @buf is NULL and reset is set, all functions will be enabled for tracing.
+> > + *
+> > + * This can allocate memory which must be freed before @ops can be freed,
+> > + * either by removing each filtered addr or by using
+> > + * ftrace_free_filter(@ops).
+> >   */
+> >  int ftrace_set_filter(struct ftrace_ops *ops, unsigned char *buf,
+> >  		       int len, int reset)
+> > @@ -5919,6 +5936,10 @@ EXPORT_SYMBOL_GPL(ftrace_set_filter);
+> >   * Notrace Filters denote which functions should not be enabled when tracing
+> >   * is enabled. If @buf is NULL and reset is set, all functions will be enabled
+> >   * for tracing.
+> > + *
+> > + * This can allocate memory which must be freed before @ops can be freed,
+> > + * either by removing each filtered addr or by using
+> > + * ftrace_free_filter(@ops).
+> >   */
+> >  int ftrace_set_notrace(struct ftrace_ops *ops, unsigned char *buf,
+> >  			int len, int reset)
+> > diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
+> > index d52370cad0b6e..a825dbd2c9cfd 100644
+> > --- a/samples/ftrace/ftrace-direct-multi-modify.c
+> > +++ b/samples/ftrace/ftrace-direct-multi-modify.c
+> > @@ -152,6 +152,7 @@ static void __exit ftrace_direct_multi_exit(void)
+> >  {
+> >  	kthread_stop(simple_tsk);
+> >  	unregister_ftrace_direct_multi(&direct, my_tramp);
+> > +	ftrace_free_filter(&direct);
+> >  }
+> >  
+> >  module_init(ftrace_direct_multi_init);
+> > diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
+> > index ec1088922517d..d955a26506053 100644
+> > --- a/samples/ftrace/ftrace-direct-multi.c
+> > +++ b/samples/ftrace/ftrace-direct-multi.c
+> > @@ -79,6 +79,7 @@ static int __init ftrace_direct_multi_init(void)
+> >  static void __exit ftrace_direct_multi_exit(void)
+> >  {
+> >  	unregister_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
+> > +	ftrace_free_filter(&direct);
+> >  }
+> >  
+> >  module_init(ftrace_direct_multi_init);
+> > -- 
+> > 2.30.2
+> > 
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
