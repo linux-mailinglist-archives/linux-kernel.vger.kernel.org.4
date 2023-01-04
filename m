@@ -2,88 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB76C65CEDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFECF65CEE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233578AbjADI5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S234759AbjADI7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234044AbjADI5T (ORCPT
+        with ESMTP id S234051AbjADI7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:57:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2210A1B9FD
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:57:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1E1CB815C6
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:57:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E23BC433D2;
-        Wed,  4 Jan 2023 08:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672822634;
-        bh=Jj05/IYvXvNdjB6MaDfn5BYk3BLXM/xtTSHhm5j1AwI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=sQzmBVGlMhrznPIyI4B6Vc7l39vqBTGjiKCIrR35BQwIkdj4ThgtFuZm60wjH8RBB
-         G5ErEA+tbKHLNBwj9itnNJ0DcAbOs/rbVvC5XH3FFsny0RcI8Flrkva3Mz7KlHnFcw
-         F0Ytqx07xsT3gmi/pxV2ZhR2m1ZqvNSuctA1l1UXrb5a4MFoSjDHLe8a5NwErX8QKF
-         fTVWFOhd6bnEc/elT6Ymsmb7V4isRJepIjG+IaBPkolMyfFq8wm9LslcgtjYR+f3kE
-         LIfEXlTFl2Q0H3peefHIQ/oWcOZSRj4RXzWXS6Mx10pIZ2v44n3nUskQhxVJvMqu0X
-         /0OzXo0bZq6uw==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     "liaochang (A)" <liaochang1@huawei.com>,
-        Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, rostedt@goodmis.org, mingo@redhat.com,
-        sfr@canb.auug.org.au
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/9] riscv/kprobe: Add common RVI and RVC instruction
- decoder code
-In-Reply-To: <ab66152d-0ae1-3edb-4f1d-01ab49edc25d@huawei.com>
-References: <20221224114315.850130-1-chenguokai17@mails.ucas.ac.cn>
- <20221224114315.850130-5-chenguokai17@mails.ucas.ac.cn>
- <87tu18vmnx.fsf@all.your.base.are.belong.to.us>
- <ab66152d-0ae1-3edb-4f1d-01ab49edc25d@huawei.com>
-Date:   Wed, 04 Jan 2023 09:57:11 +0100
-Message-ID: <871qoasmmw.fsf@all.your.base.are.belong.to.us>
+        Wed, 4 Jan 2023 03:59:18 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC35222;
+        Wed,  4 Jan 2023 00:59:13 -0800 (PST)
+X-UUID: d498b7d652c2461d9add940560a0d76f-20230104
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=VkE+9Be2IZo1wTEmkjQlAica3O0qe2SLkKytbv3x8GQ=;
+        b=Ae830jSL6ytkRP7GkDoR/7DK7kT51c1AsQ4kSARGMoIu0lBlWXDJHTXgVgykchLkqy11wBhmOsBsAr/8b/C1hzpIOEh4EIZA+bA2ZRKvSEvRt3XEZbd2VWOWsdk8sC7oEkrL+A4zirEojKV7kaZiTP3DQrtQajMOt6+oDY1q4PQ=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.16,REQID:e5abeeb3-4e17-45e1-8358-3deee29bb035,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.16,REQID:e5abeeb3-4e17-45e1-8358-3deee29bb035,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:09771b1,CLOUDID:89189b53-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:230104165906DAX5D3VZ,BulkQuantity:1,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI
+        :0,OSA:0
+X-CID-BVR: 0,NGT
+X-UUID: d498b7d652c2461d9add940560a0d76f-20230104
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1887014069; Wed, 04 Jan 2023 16:59:03 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 4 Jan 2023 16:59:02 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 4 Jan 2023 16:59:00 +0800
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Biao Huang" <biao.huang@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <netdev@vger.kernel.org>
+Subject: [PATCH v7 0/2] arm64: dts: mt8195: Add Ethernet controller
+Date:   Wed, 4 Jan 2023 16:58:55 +0800
+Message-ID: <20230104085857.2410-1-biao.huang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"liaochang (A)" <liaochang1@huawei.com> writes:
+Changes in v7:
+1. move mdio node to .dtsi, and remove the compatible
+property in ethernet-phy node as Andrew's comments.
+2. add netdev@ to cc list as Jakub's reminder.
 
->> Shouldn't the mask be 0xf003?
->
-> Actually, the mask should be 0xf003 indeedly, but it also bring another p=
-roblem that
-> it can't tell C.MV and C.JR via the mask and value parts. Look opcodes be=
-low:
->
->       15 14 13 12 | 11 10  9  8 | 7 6 5 4 | 3 2  1 0
-> C.JR:  1  0  0  0 |             rs1           0  1 0
-> C.MV:  1  0  0  0 |              rd         rs2  1 0
->
-> The only differece between C.MV and C.JR is the bits[2~6], these bitfield=
- of C.JR is zero,
-> the ones of C.MV is rs2 which never be zero. In order to tell C.MV and C.=
-JR correclty, it
-> is better to adjust the mask of C.JR to be 0xf07f as your patch(riscv, kp=
-robe: Stricter c.jr/c.jalr decoding)
->
-> Looking forward to your feedback.
+Changes in v6:
+1. add reviewed-by as Angelo's comments
+2. remove fix_mac_speed in driver as Andrew's comments.
 
-Yup, that was the reason I submitted the fix! Let's wait for the fix to
-be applied, and not include that fix in your feature series.
+Changes in v5:
+1. reorder the clocks as Angelo's comments
+2. add a driver patch to fix rgmii-id issue, then we can
+use a ususal way rgmii/rgmii-id as Andrew's comments.
+
+Changes in v4:
+1. remove {address,size}-cells = <0> to avoid warning as Angelo's feedback.
+2. Add reviewd-by as Angelo's comments.
+
+Changes in v3:
+1. move stmmac-axi-config, rx-queues-config, tx-queues-configs inside ethernet
+node as Angelo's comments.
+2. add {address,size}-cells = <0> in ethernet node as Angelo's comments.
+
+Changes in v2:
+1. modify pinctrl node used by ethernet to match rules in pinctrl-mt8195.yaml,
+which is pointed by Krzysztof.
+2. remove "mac-address" property in ethernet node as comments of Krzysztof.
+
+Changes in v1:
+add dts node for MT8195 Ethernet controller
+
+Biao Huang (2):
+  stmmac: dwmac-mediatek: remove the dwmac_fix_mac_speed
+  arm64: dts: mt8195: Add Ethernet controller
+
+ arch/arm64/boot/dts/mediatek/mt8195-demo.dts  | 77 ++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 92 +++++++++++++++++++
+ .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 26 ------
+ 3 files changed, 169 insertions(+), 26 deletions(-)
+
+-- 
+2.18.0
 
 
-Bj=C3=B6rn
