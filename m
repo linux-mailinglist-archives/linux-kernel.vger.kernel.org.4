@@ -2,179 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB9D65D7A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D68465D7AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239719AbjADP52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S239729AbjADP6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239277AbjADP50 (ORCPT
+        with ESMTP id S234523AbjADP6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:57:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91712AE9
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 07:56:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672847803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JHICDqOYgukumk9LLwV3EBYxIew7z8FbH0jMEwELhJU=;
-        b=K6gSSx8NYBjYZIDsxGHtl8cwV8teKLO5FPMC1Srcm3tECOCC92DiLytevTs4B12G1QAqSr
-        xYgFTn+6Whz6X7ImG7n1YIhME1y0Jiybbl/Y5ZDqGyYbwOJidt9/yG1/mOl7DYZ6dDx3h8
-        DSgtCt1DZt+PVEGky6sJ++io9U45q9s=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-675-PatMQ56pPSWba6xKx7_W3Q-1; Wed, 04 Jan 2023 10:56:41 -0500
-X-MC-Unique: PatMQ56pPSWba6xKx7_W3Q-1
-Received: by mail-wr1-f71.google.com with SMTP id v4-20020adfa1c4000000b002753317406aso3604454wrv.21
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 07:56:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JHICDqOYgukumk9LLwV3EBYxIew7z8FbH0jMEwELhJU=;
-        b=S74YpJArpBPchHDooHD1hCE6nEdAXII1biWvV2Ndq+h0eDjS+5pcJZTHS5+vpdrcqU
-         ZHtkNzhZvnRE9OhjglOb9NHr7OjTAaBYjWSE+tQYMvuHiLHrBXEdn8/HF4xfTcSatbzs
-         DVkXjd6+qCnfXi5Ic0Dfi8IcJheGbRruv2xn9CQevQ3R860QLhJScvtxXKwAibyHCK3Z
-         F6tCE6L3gJxgrMzK8hifrwKAo4jHQTOcZLrEMHtAXdJTida6qDSbXN7P8B6K9rDoSWgb
-         ljRa7Hs4sgh2Yx2OgC4ol9QaptGz0vHROApuWZ6Q2vpYxsZ7FzMgRRlphIJk/4odNuRa
-         abuQ==
-X-Gm-Message-State: AFqh2kowUGRzha7qNHNNtUeyY2V4ucA8quKU0DbBFRl5rT79y3rJTw8s
-        FlxI835lTi7sSVdVfCjNGGja4g23Gjg6r5YKGLoDZV9Ln7/t7yVeDZzeXpYBpuE1nUQeRTYiNFl
-        ePLRqznFe7nhMTaOyNrV0a/Yz
-X-Received: by 2002:a05:600c:1c8e:b0:3d2:4234:e8fe with SMTP id k14-20020a05600c1c8e00b003d24234e8femr34647339wms.19.1672847799934;
-        Wed, 04 Jan 2023 07:56:39 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt40B+dtViPfORnTqodkSNT3rePREF+wDWgBhvy/3xO+yStgoKvUDgnDiJUjA2nL/MozidRew==
-X-Received: by 2002:a05:600c:1c8e:b0:3d2:4234:e8fe with SMTP id k14-20020a05600c1c8e00b003d24234e8femr34647305wms.19.1672847799605;
-        Wed, 04 Jan 2023 07:56:39 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:f100:8100:5a6c:eb:fd3b? (p200300cbc703f10081005a6c00ebfd3b.dip0.t-ipconnect.de. [2003:cb:c703:f100:8100:5a6c:eb:fd3b])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003d96efd09b7sm49070632wmp.19.2023.01.04.07.56.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 07:56:39 -0800 (PST)
-Message-ID: <0c4e35de-f790-5399-c812-ff90a4ab7531@redhat.com>
-Date:   Wed, 4 Jan 2023 16:56:37 +0100
+        Wed, 4 Jan 2023 10:58:39 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5362AE9;
+        Wed,  4 Jan 2023 07:58:38 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304Dac8R011623;
+        Wed, 4 Jan 2023 15:58:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=lxbXq7tSXdc2NhdKJ648YCpDm7VY9JfrIMWfq28a2WE=;
+ b=KlzRNdAdI5eozuAna1gLTiasOGbHIwJAmtZyUN3o9GOlH0XGANB4Sk7GAaZKhJzTVUfZ
+ v6Pz1ABQS3eNSQUbUByVCXPsC2B7u1gA8mEKclrimOs2rmH8+kFl1e9tjpSKJXvpIFaT
+ JG20X4xRN9Z+hEo0+wYNvx0fU41OaXr8aysA4XC9gQ6uLyxo499xeJeJ1LXigSVCL1ac
+ AeETHDiBwh5qBDfCY7got0Yu0zw46vLTZq6dS79jl5e4M0JQl3QkGtA2B8LdndamoluC
+ kXnwuqFZIgs87Xu4PjKJ1L3+Beget9936cCBMAfoC28UagrAnw4mFdtESEWsZUY2QLhU tw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvf24sa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 15:58:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 304FwUgn000716
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 4 Jan 2023 15:58:30 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 4 Jan 2023 07:58:25 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [RESEND v3 0/4] Add resets for ADSP based audio clock controller driver
+Date:   Wed, 4 Jan 2023 21:28:08 +0530
+Message-ID: <1672847892-25154-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20221020215318.4193269-1-opendmb@gmail.com>
- <bff78f19-fd40-d9be-6592-93a7a4a91587@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 0/9] mm: introduce Designated Movable Blocks
-In-Reply-To: <bff78f19-fd40-d9be-6592-93a7a4a91587@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 90CwTaOiokZFtoPRuIlym-W2J9NszD0K
+X-Proofpoint-GUID: 90CwTaOiokZFtoPRuIlym-W2J9NszD0K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ clxscore=1015 priorityscore=1501 spamscore=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=729 mlxscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301040132
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.01.23 00:43, Florian Fainelli wrote:
-> On 10/20/22 14:53, Doug Berger wrote:
->> MOTIVATION:
->> Some Broadcom devices (e.g. 7445, 7278) contain multiple memory
->> controllers with each mapped in a different address range within
->> a Uniform Memory Architecture. Some users of these systems have
->> expressed the desire to locate ZONE_MOVABLE memory on each
->> memory controller to allow user space intensive processing to
->> make better use of the additional memory bandwidth.
->> Unfortunately, the historical monotonic layout of zones would
->> mean that if the lowest addressed memory controller contains
->> ZONE_MOVABLE memory then all of the memory available from
->> memory controllers at higher addresses must also be in the
->> ZONE_MOVABLE zone. This would force all kernel memory accesses
->> onto the lowest addressed memory controller and significantly
->> reduce the amount of memory available for non-movable
->> allocations.
->>
->> The main objective of this patch set is therefore to allow a
->> block of memory to be designated as part of the ZONE_MOVABLE
->> zone where it will always only be used by the kernel page
->> allocator to satisfy requests for movable pages. The term
->> Designated Movable Block is introduced here to represent such a
->> block. The favored implementation allows extension of the
->> 'movablecore' kernel parameter to allow specification of a base
->> address and support for multiple blocks. The existing
->> 'movablecore' mechanisms are retained.
->>
->> BACKGROUND:
->> NUMA architectures support distributing movablecore memory
->> across each node, but it is undesirable to introduce the
->> overhead and complexities of NUMA on systems that don't have a
->> Non-Uniform Memory Architecture.
->>
->> Commit 342332e6a925 ("mm/page_alloc.c: introduce kernelcore=mirror option")
->> also depends on zone overlap to support sytems with multiple
->> mirrored ranges.
->>
->> Commit c6f03e2903c9 ("mm, memory_hotplug: remove zone restrictions")
->> embraced overlapped zones for memory hotplug.
->>
->> This commit set follows their lead to allow the ZONE_MOVABLE
->> zone to overlap other zones. Designated Movable Blocks are made
->> absent from overlapping zones and present within the
->> ZONE_MOVABLE zone.
->>
->> I initially investigated an implementation using a Designated
->> Movable migrate type in line with comments[1] made by Mel Gorman
->> regarding a "sticky" MIGRATE_MOVABLE type to avoid using
->> ZONE_MOVABLE. However, this approach was riskier since it was
->> much more instrusive on the allocation paths. Ultimately, the
->> progress made by the memory hotplug folks to expand the
->> ZONE_MOVABLE functionality convinced me to follow this approach.
->>
-> 
-> Mel, David, does the sub-thread discussion with Doug help ensuring that
-> all of the context is gathered before getting into a more detailed patch
-> review on a patch-by-patch basis?
-> 
-> Eventually we may need a fairly firm answer as to whether the proposed
-> approach has any chance of landing upstream in order to either commit to
-> in subsequent iterations of this patch set, or find an alternative.
+Add resets and remove qdsp6ss clcok controller for audioreach based platforms. 
 
+Changes since v2:
+    -- Revert removing qdsp6ss clock control.
+    -- Add Conditional check for qdsp6ss clock registration.
+Changes since v1:
+    -- Update commit message.
+    -- Remove qdsp6ss clock control.
 
-As raised, I'd appreciate if less intrusive alternatives could be 
-evaluated (e.g., fake NUMA nodes and being ablee to just use mbind(), 
-moving such memory to ZONE_MOVABLE after boot via something like daxctl).
+Srinivasa Rao Mandadapu (4):
+  dt-bindings: clock: qcom,sc7280-lpasscc: Add qcom,adsp-pil-mode
+    property
+  dt-bindings: clock: qcom,sc7280-lpasscc: Add resets for audioreach
+  clk: qcom: lpasscc-sc7280: Skip qdsp6ss clock registration
+  clk: qcom: lpasscc-sc7280: Add resets for audioreach
 
-I'm not convinced that these intrusive changes are worth it at this 
-point. Further, some of the assumptions (ZONE_MOVABLE == user space) are 
-not really future proof as I raised.
+ .../bindings/clock/qcom,sc7280-lpasscc.yaml        | 19 ++++++++++--
+ drivers/clk/qcom/lpasscc-sc7280.c                  | 35 ++++++++++++++++++----
+ 2 files changed, 47 insertions(+), 7 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.7.4
 
