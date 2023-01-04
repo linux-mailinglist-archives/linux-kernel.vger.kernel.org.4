@@ -2,72 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F8565CDD8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092E065CDD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbjADHr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 02:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
+        id S233710AbjADHq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 02:46:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbjADHrw (ORCPT
+        with ESMTP id S233436AbjADHq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 02:47:52 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5A1167CF;
-        Tue,  3 Jan 2023 23:47:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672818471; x=1704354471;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6R09QmeYh3AUpWd1Fk6QvWgloEhaBRweABxyf0WRt2k=;
-  b=QH8wkcrfu42KG2Mcydut7Gwt1C7rQ1H+rKIf+QPpeIB8xLnWS+wRB3NC
-   oTy7m/CaNb4vDtil8B0JpCjbpkd2GxJ/q0KOxTyjR6LgraBvdiwluwpjF
-   f+Bey2oArHTw7H0QSVvzeFu4dKjjyW0yFEbzKqVMZ9ExPfvtcgsQonqe3
-   Gv9x9z/CkwVER6v7hhxSTd6yusulQ1RqfV+YR2TcWE+vJbNeuTb+X4drm
-   s+y/XIAhF749sw54GRmNtHYRuzWkJeKJd89ijUYDtDALCvx4cYcj4ycz0
-   8BRuh55oYu+gn0/qyvUcFObgvPT60atnPRn9JrEnP0Mg8zcO8fSXvhpEW
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="384161649"
-X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="384161649"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 23:45:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="685672401"
-X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="685672401"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 03 Jan 2023 23:45:31 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 97526162; Wed,  4 Jan 2023 09:46:03 +0200 (EET)
-Date:   Wed, 4 Jan 2023 09:46:03 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [PATCH v1 1/1] thunderbolt: Refactor tb_acpi_add_link()
-Message-ID: <Y7UuuzerRxPMJLpr@black.fi.intel.com>
-References: <20230102192404.88076-1-andriy.shevchenko@linux.intel.com>
+        Wed, 4 Jan 2023 02:46:27 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923DF101E4;
+        Tue,  3 Jan 2023 23:46:24 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B3AAE38CE3;
+        Wed,  4 Jan 2023 07:46:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1672818382; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AlUS4rFMq/APir3cFferSBeDNPK/ORyz2z3RjBS+Um4=;
+        b=kveBcYfoIUBtm3F0Ar3Wt0T3ZwXS220F+aCXcfEt2trlB9EBAJ7qi0tZCSyVz9Jy394vRi
+        bIuf4P+Yn+4Jd+aASe+doB5O3LBOQ7JR8s7BLXkkgluwrr98grKK2n4HmMHlAGF69yc/5M
+        zuCrK+UYdOn2OzeZlK/la6hCRvOh7Cc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 93117133D1;
+        Wed,  4 Jan 2023 07:46:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LFCDIM4utWORBgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 04 Jan 2023 07:46:22 +0000
+Date:   Wed, 4 Jan 2023 08:46:21 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] mm: remove zap_page_range and create zap_vma_pages
+Message-ID: <Y7UuzV94Yo59PwTa@dhcp22.suse.cz>
+References: <20230104002732.232573-1-mike.kravetz@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230102192404.88076-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230104002732.232573-1-mike.kravetz@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 09:24:04PM +0200, Andy Shevchenko wrote:
-> Convert while loop into do-while with only a single call to
-> acpi_get_first_physical_node(). No functional change intended.
+On Tue 03-01-23 16:27:32, Mike Kravetz wrote:
+> zap_page_range was originally designed to unmap pages within an address
+> range that could span multiple vmas.  While working on [1], it was
+> discovered that all callers of zap_page_range pass a range entirely within
+> a single vma.  In addition, the mmu notification call within zap_page
+> range does not correctly handle ranges that span multiple vmas.  When
+> crossing a vma boundary, a new mmu_notifier_range_init/end call pair
+> with the new vma should be made.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Instead of fixing zap_page_range, do the following:
+> - Create a new routine zap_vma_pages() that will remove all pages within
+>   the passed vma.  Most users of zap_page_range pass the entire vma and
+>   can use this new routine.
+> - For callers of zap_page_range not passing the entire vma, instead call
+>   zap_page_range_single().
+> - Remove zap_page_range.
+> 
+> [1] https://lore.kernel.org/linux-mm/20221114235507.294320-2-mike.kravetz@oracle.com/
+> Suggested-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-Applied, thanks!
+This looks even better than the previous version.
+Acked-by: Michal Hocko <mhocko@suse.com>
+
+minor nit
+
+[...]
+> diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+> index ad608ef2a243..ffa36cfe5884 100644
+> --- a/mm/page-writeback.c
+> +++ b/mm/page-writeback.c
+> @@ -2713,7 +2713,7 @@ void folio_account_cleaned(struct folio *folio, struct bdi_writeback *wb)
+>   *
+>   * The caller must hold lock_page_memcg().  Most callers have the folio
+>   * locked.  A few have the folio blocked from truncation through other
+> - * means (eg zap_page_range() has it mapped and is holding the page table
+> + * means (eg zap_vma_pages() has it mapped and is holding the page table
+>   * lock).  This can also be called from mark_buffer_dirty(), which I
+>   * cannot prove is always protected against truncate.
+
+strictly speaking this should be unmap_page_range
+-- 
+Michal Hocko
+SUSE Labs
