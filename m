@@ -2,90 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4093065D5A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AAC65D58C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239116AbjADOaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
+        id S239223AbjADOYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239405AbjADOaB (ORCPT
+        with ESMTP id S234370AbjADOYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:30:01 -0500
-Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A93E33D9C8;
-        Wed,  4 Jan 2023 06:29:40 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-01 (Coremail) with SMTP id qwCowAD3_3P7i7VjaEnrCg--.12743S2;
-        Wed, 04 Jan 2023 22:23:55 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     leon@kernel.org
-Cc:     pkshih@realtek.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] wifi: rtw89: Add missing check for alloc_workqueue
-Date:   Wed,  4 Jan 2023 22:23:53 +0800
-Message-Id: <20230104142353.25093-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 4 Jan 2023 09:24:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5922938AE7;
+        Wed,  4 Jan 2023 06:24:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA31B6174F;
+        Wed,  4 Jan 2023 14:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FD8C433EF;
+        Wed,  4 Jan 2023 14:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672842275;
+        bh=Tvw/x+3j2FJAWZR3JbN82C07+AuFNwia8+xecuq+n7o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EKnYONBubZJiYy6kZ8vRWQ/SbAeQv9KoLLlPxd9bWLvQIoTy1BlvGVcZlAy3fwaq8
+         z5bzWeviSu+dbwbSPiCg8TWN1h0dUcAlNJpnl9nNdqiPO1P5fau758TiuvtSspQ98D
+         +vJit1TLPZwQjmk7e5vdRuAVu6loCrA1Nt8mRzJzB6JeDn/eQSVu4ZP5/mXiii59Jx
+         Tnrkor/SEYD3++iM14vWT5Tm4d0ZoUHa3B6Ke/0SXLkkd8cakxD5yFF7ZnDs4FOsD9
+         lWCCyBPzRvzfU19lmLdqe6Hp77AJmMEaF40AShtrNdVnsYQwMc7zXYnsBy3P6Pdj/B
+         usLzYJDtDbNRQ==
+Date:   Wed, 4 Jan 2023 14:24:30 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
+ GPIO providing driver
+Message-ID: <Y7WMHl1Mv1alXadG@google.com>
+References: <20221007153323.1326-1-henning.schild@siemens.com>
+ <Y6WX1Y9GZmvxqlCc@google.com>
+ <20230102162227.523d2a73@md1za8fc.ad001.siemens.net>
+ <20230103212059.5c80fecb@md1za8fc.ad001.siemens.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAD3_3P7i7VjaEnrCg--.12743S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cry8Aw4UCw45Wr1DGw1DGFg_yoW8Xr4fp3
-        yrAw1UAa15Jr1DCa92vw43CF15Wa1rtFW8u3s2gw1rXw15X34rGa4jga4Yvrn09FWvqFyY
-        yFZ5XasxGrn5ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUjuWlDUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230103212059.5c80fecb@md1za8fc.ad001.siemens.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 07:41:36PM +0800, Leon Romanovsky wrote:
-> On Wed, Jan 04, 2023 at 05:33:53PM +0800, Jiasheng Jiang wrote:
->> Add check for the return value of alloc_workqueue since it may return
->> NULL pointer.
->> 
->> Fixes: e3ec7017f6a2 ("rtw89: add Realtek 802.11ax driver")
->> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
->> ---
->>  drivers/net/wireless/realtek/rtw89/core.c | 2 ++
->>  1 file changed, 2 insertions(+)
->> 
->> diff --git a/drivers/net/wireless/realtek/rtw89/core.c b/drivers/net/wireless/realtek/rtw89/core.c
->> index 931aff8b5dc9..006fe0499f81 100644
->> --- a/drivers/net/wireless/realtek/rtw89/core.c
->> +++ b/drivers/net/wireless/realtek/rtw89/core.c
->> @@ -3124,6 +3124,8 @@ int rtw89_core_init(struct rtw89_dev *rtwdev)
->>  	INIT_DELAYED_WORK(&rtwdev->cfo_track_work, rtw89_phy_cfo_track_work);
->>  	INIT_DELAYED_WORK(&rtwdev->forbid_ba_work, rtw89_forbid_ba_work);
->>  	rtwdev->txq_wq = alloc_workqueue("rtw89_tx_wq", WQ_UNBOUND | WQ_HIGHPRI, 0);
->> +	if (!rtwdev->txq_wq)
->> +		return -ENOMEM;
+On Tue, 03 Jan 2023, Henning Schild wrote:
+
+> Am Mon, 2 Jan 2023 16:22:27 +0100
+> schrieb Henning Schild <henning.schild@siemens.com>:
 > 
-> While the change is fixing one issue, you are adding another one.
-> There is no destroy of this workqueue if rtw89_load_firmware fails.
+> > Am Fri, 23 Dec 2022 11:58:13 +0000
+> > schrieb Lee Jones <lee@kernel.org>:
+> > 
+> > > On Fri, 07 Oct 2022, Henning Schild wrote:
+> > >   
+> > > > If we register a "leds-gpio" platform device for GPIO pins that do
+> > > > not exist we get a -EPROBE_DEFER and the probe will be tried again
+> > > > later. If there is no driver to provide that pin we will poll
+> > > > forever and also create a lot of log messages.
+> > > > 
+> > > > So check if that GPIO driver is configured, if so it will come up
+> > > > eventually. If not, we exit our probe function early and do not
+> > > > even bother registering the "leds-gpio". This method was chosen
+> > > > over "Kconfig depends" since this way we can add support for more
+> > > > devices and GPIO backends more easily without "depends":ing on all
+> > > > GPIO backends.
+> > > > 
+> > > > Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO
+> > > > version of Siemens driver") Reviewed-by: Andy Shevchenko
+> > > > <andy.shevchenko@gmail.com> Signed-off-by: Henning Schild
+> > > > <henning.schild@siemens.com> ---    
+> > > 
+> > > What happened in versions 1 through 3?  Please provide a
+> > > change-log.  
+> > 
+> > Not too much really, but i will write a changelog and cover letter
+> > when sending again. Mostly commit message stuff and later a rebase.
+> 
+> Lee please let me know if you insist on that changelog, in which case i
+> would send that same patch again with a cover-letter that will carry a
+> not too spectacular changelog.
+> 
+> Or get back on the rest of what i wrote earlier, maybe we need another
+> version of the patch and not just the same one again with only a
+> changelog added.
 
-Actually, I do not think the missing of destroy_workqueue is introduced by me.
-Even without my patch, the destroy_workqueue is still missing.
-Anyway, I will submit a v2 that adds the missing destroy_workqueue.
+The change-log is not the issue, and you don't need to provide a
+cover-letter for a single-patch set.
 
-Thanks,
-Jiang
+The issue is that this 'solution' is a hack, built on a hack, built on a
+hack.  There shouldn't be a requirement to check Kconfig options from
+this driver.  In an ideal world the thread handling the -EPROBE_DEFER
+would not create spurious logs to trouble anyone.  What is it that's
+writing those logs?  A User or Kernel Space thread?  Dependencies are
+almost universally controlled with Kconfig 'depends', which is how this
+problem should really be solved.
 
+Taking into consideration the large backlog (nearly 100) of reviews I
+need to do and the fact that there is already a precedent for this
+behaviour inside this file, I'm tempted to apply it; however, I shall not
+be doing so without giving myself (and others) a little more time to
+think it over.
+
+--
+Lee Jones [李琼斯]
+ 
