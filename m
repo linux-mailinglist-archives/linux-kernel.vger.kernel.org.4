@@ -2,191 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CFE65D721
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002D365D71F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239614AbjADPRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S239531AbjADPRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239469AbjADPQb (ORCPT
+        with ESMTP id S239625AbjADPQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:16:31 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2118.outbound.protection.outlook.com [40.107.212.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2792411C3F;
-        Wed,  4 Jan 2023 07:16:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ePv/c5gFQCRX5EuqnJ/IlnC7/h6j9o+ZAtgAHMnvhJzPaw70Z6R9RbXq8f0Q42lnWI2pcS5SjZdHIfM9LK+ZYz5M5ADUbB5NoF2/I0OJS8/s943MTCBlPl2H6bBaQWqzSFGWkk2wf38Z7MgWUOSe5evfVdzDibm35QLRjP6CM+S9ByeSVSLLjK/vUmK2JVbTWk0soufNUdcLXRIuuRN3pnbYA01iSWHRbUnG/LqKiakP23dRaG6dHBAvxeDPALrgTrTbAEOe8JEtV4vfGfsCnSrB+f3dC3GKjDTGqRTToPvffNWyeMs2xPpb5YMhjE5qbfgXVJKt+MF49T6GyaNb3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n+IaTL20KqXT9CdgvhuiuizJz+6iVQB37z47atNM354=;
- b=T9T8T5j8r2qxuXQR7Rz41G938AaGWObgrjXH6zUDbyCKcd30ZpJTzm8Ecd1Audw/rjf6TxDqTrvMR0saD2OHBYJ078qlA/HJOoZB0YECuXRpDHoMnkLSJGCwSpglInS7VZb0yBpXI0doFvPP8tIW5BWhXKk2zEYn00CyLH1prz4Jy4Sz4LFVlEVLN/LubjLAKPetd7RxUHDeBLEwbT1NO26FCdDTZjlm4fxrEz48CrZTVlvjUCXo+nmihVOgmB2XKh4LrYNHJ0eFThLL3swzqQyT0cB1LlOQcfH4A7811BtHsJyFqlZ4jdd/WOKkT5ctKRAburgHV3mmjZXLhSfjjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n+IaTL20KqXT9CdgvhuiuizJz+6iVQB37z47atNM354=;
- b=VBKj5DVlw81C2ktMtW/EwhDzDEJ09G/1IpwhR+HfHK3S2LzXlSJoyZNIsKuUk+8rDWYRP3GxQdlpFivgyglgXb2CMJBEWWBl198AShg4L0zDpvwOMvwj7vyWTGInWFH3D6Ger4kUI3Td1NGjrEL57IxDRR6rY+mbg7qKZ6eSmtw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by MW5PR10MB5807.namprd10.prod.outlook.com
- (2603:10b6:303:19a::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Wed, 4 Jan
- 2023 15:16:25 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::45b5:a860:9cea:a74c]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::45b5:a860:9cea:a74c%4]) with mapi id 15.20.5944.019; Wed, 4 Jan 2023
- 15:16:25 +0000
-Date:   Wed, 4 Jan 2023 07:16:17 -0800
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v6 net-next 09/10] dt-bindings: net: add generic
- ethernet-switch-port binding
-Message-ID: <Y7WYQfFnUjy8ygyR@colin-ia-desktop>
-References: <20230103051401.2265961-1-colin.foster@in-advantage.com>
- <20230103051401.2265961-10-colin.foster@in-advantage.com>
- <20230103175641.nqvo2gk43s3nanwg@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103175641.nqvo2gk43s3nanwg@skbuf>
-X-ClientProxiedBy: BYAPR04CA0035.namprd04.prod.outlook.com
- (2603:10b6:a03:40::48) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Wed, 4 Jan 2023 10:16:56 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69463F08;
+        Wed,  4 Jan 2023 07:16:54 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A06901596;
+        Wed,  4 Jan 2023 07:17:35 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9855E3F23F;
+        Wed,  4 Jan 2023 07:16:52 -0800 (PST)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     arnd@arndb.de, boqun.feng@gmail.com, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, peterz@infradead.org, stable@vger.kernel.org,
+        steve.capper@arm.com
+Subject: [PATCH] arm64: cmpxchg_double*: hazard against entire exchange variable
+Date:   Wed,  4 Jan 2023 15:16:26 +0000
+Message-Id: <20230104151626.3262137-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|MW5PR10MB5807:EE_
-X-MS-Office365-Filtering-Correlation-Id: 637fb156-52a4-4f95-2c18-08daee66a4d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QJPhjUtovYuE9eENfTBUYbf16BCuzCB5qOgr41i6uZst9OVRJ2d3QAFo8z+83Rx1Fh1u3fKVqnTbJxxvssPFwe0YSC5gVNvkj5+lT3EQU+kFvxNkyPU8zzXCE6+H2WhGG2xazpK152Hpw2ZN+qy7M9FnW1KWIwqn8eDEV9kFJmO312SiuK0v3E4qNcRz5tCWQuT35r7JQ0ZdCWhxRQ3yvy5X7+5ub/1439p373NX9zU1qCfQWl+3O+TVwpY8f3FmEsTloqyaEOH3w2dAq0oyg4FtZUU5l6YmTY+tvp8FOkoD02og71r2h3rG8jbyshyBt1ncuxdkCUtLQDzR2B2xymlTFPMUh7dy8v7PJ/IDNCc0vkRqK7ndDzMy51IMdvpQaiAFNrhM1Smc/TcXDluIXGQSiqMDSE+i6u6uoVn3Kfe48blWn0FMDhsxTKxSeE5/RbUg5svn3ZCIB7owiAMXey/uOxm9/lBV3X4mgLISB/4FFFB4IlStcEKd1ux7F1OHiRtevDlK4yQLB5KJbxIsDHoLmW5um6FilEqpiXP8+NzYzd9WbR4RMY9VPbbrHVj9ndFDYYQNRk4auXu8davrgHO3kWg3ND6uTy5ZbouluuF/VyyGrutvjRX+59532fCQwMFXSbZti827zSTCIXuK35aIWEpyYR+YLk4Mbgrvo7VZGEcqifmPUeWuucmFyGo8EvGQia6+EUsMHo+0jP7Biw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39830400003)(376002)(396003)(346002)(366004)(136003)(451199015)(83380400001)(6512007)(9686003)(26005)(33716001)(6506007)(6666004)(86362001)(38100700002)(186003)(316002)(4326008)(478600001)(41300700001)(8676002)(2906002)(7406005)(7416002)(5660300002)(8936002)(44832011)(66556008)(966005)(6486002)(66476007)(66946007)(54906003)(6916009)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mIYEmQTpFrn4tZeYiDrNVtG/F1n7BroSSzj4XWH35FXfhfMzzi78mKbXyY+r?=
- =?us-ascii?Q?ro4RnpIM3eP3mrX8bE7S56oK1ujPMeAR50q7lm6rsh8FN3owRGUe6/2TDdPs?=
- =?us-ascii?Q?Q3iw/8JBWxo5knTuL1VL2sGB6sJ3djbWj1V2a85b5mezshT3rwLtIQhBaU5C?=
- =?us-ascii?Q?sWt4GEyzHveoMQMQ2TlX39QB0Ka97JOR98edWFZou19rn+Ur1yyv2qJRBw04?=
- =?us-ascii?Q?k1h4M/7atkjU4BmgfxyGafN1Q0PPT2/jExpVrdhIRwewp8cmLw3IGVmZFDtO?=
- =?us-ascii?Q?qOGJyHhGbyiALBFY6kex4Z9h9eltepBKZ1BrnyHf8dwXXrlW7bwk32e92dy3?=
- =?us-ascii?Q?kdoxId385oBQ5Cjudwu9MA6ycI0D5XjGkH6zQ8WKmHkvNfBhgtfxy9uGqBHU?=
- =?us-ascii?Q?eYmg4RZmaKpJklQ6VACZVBljWJpUUqTSomFanTxKaRT1YCVS+0hASuoMj7uA?=
- =?us-ascii?Q?j8Dwsm9cokNXpHe505EWuJ3F6+ymYHitgd/gKY9XbYih8TyiYuBAbXlz0Xdk?=
- =?us-ascii?Q?zN1FoYYZaP7eGQTzfIgj6W/FbFgLK2j4leAm14miNwivcioL3alvHHxoVLTo?=
- =?us-ascii?Q?r35eEkXLmBu8Il0As1yBOi75/IhZJPffcucaGD+Xot3qgsZgBlApzNjBMRXa?=
- =?us-ascii?Q?aLSqYp++FouSUeVOXgE3xnyaSVoQZUdJNBanLGQl80uee86RaZ22cCjAY/Bd?=
- =?us-ascii?Q?21tH7gODzcINgpqZ1R35cL1y3RLv3NIUVgHk2sVjWng1noN440DlQgC1Crph?=
- =?us-ascii?Q?EgYdrjz5ea1RT034kbmjJ2l2Nj5IUQ0CmLGR5asfPULq+g8Dc0Ebh1bKalan?=
- =?us-ascii?Q?2WhnfMd/UKz4/jVJEHhcRusOCfnb2GmxYDMlPRpVmFtrM1Bs8qRDdRgNOqlf?=
- =?us-ascii?Q?MGalPynGNjsYnMI/Dvtx0zgRHnbUiC0HmgqiOE+arPDlR31q7e1ORUHfijQl?=
- =?us-ascii?Q?BDiwpcHvqQZeN4nTGqBs03GdU10pESKOehLIQOP1HhbC9uwjFBXd47DLxK24?=
- =?us-ascii?Q?HKvT41kQd36bmQbQCN60DDKCRDT3+T34NmY243Mo4YDFEWvF9d5FwwbAXYLO?=
- =?us-ascii?Q?mKsMaAxfiF79v26zyE8PddGkPZaTNn8rcy9xPJVjfjiQ4qEKyTP6AG9vi43b?=
- =?us-ascii?Q?gEprW099IXOwppPxiCptILMxcQ9wYhRk1D6UACr3Aq48oOA5V4ZGHLvTrU9v?=
- =?us-ascii?Q?D9fcep3/ZVTFTOn4fsFJtnAAmlJG6a2gUKII8kSrBIxIyPJUGqQrWTNUTh5K?=
- =?us-ascii?Q?r6DcLkpcX0n2YYI68/lN8x/5B0PhpJJowCd+OrxunJBtnnS3L2fNjnCeDGgV?=
- =?us-ascii?Q?C6lQZu50chlITIctkxQeTXVKQOJKKjYRISMYBN4lTbMZy4CuCHWAlnqI+7fY?=
- =?us-ascii?Q?d+Hd+OIoJrq3iLk0OaQ0qv06jQQ7yPQPkwzbDmse6GdqO1oe2ie6qtGbTWOT?=
- =?us-ascii?Q?D1FBpSFX4520H9LxulfOdDh/XFY8cFfGLyqStW9py2L2/VM3j921sqD5kQXQ?=
- =?us-ascii?Q?5S6yxXa4meqTsSimJ2IBfGkojTB23E3OmgDjoec4FXJw0GTIHkeC2qyhhRn3?=
- =?us-ascii?Q?oGS3DNtZrVdpi/Euxgl5MtFe9CmROTXYaHRAjOxoGYSzk6rGF+DfI9eXRs6+?=
- =?us-ascii?Q?3A=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 637fb156-52a4-4f95-2c18-08daee66a4d6
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 15:16:25.0764
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q+0S9hr+UL2LwAAhLg94tclt4bJG2GL6XdJJ4ekiyGVIfdSVkX1xLs+1o1yt6YugGECB6Q4lLYIpD922No+zPw6zqW2nlWoc1oew7edEoY4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5807
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 07:56:41PM +0200, Vladimir Oltean wrote:
-> On Mon, Jan 02, 2023 at 09:14:00PM -0800, Colin Foster wrote:
-> > diff --git a/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
-> > new file mode 100644
-> > index 000000000000..126bc0c12cb8
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
-> > @@ -0,0 +1,25 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/net/ethernet-switch-port.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Generic Ethernet Switch Port
-> > +
-> > +maintainers:
-> > +  - Andrew Lunn <andrew@lunn.ch>
-> > +  - Florian Fainelli <f.fainelli@gmail.com>
-> > +  - Vladimir Oltean <olteanv@gmail.com>
-> > +
-> > +description:
-> > +  Ethernet switch port Description
-> 
-> Still doesn't look too great that the ethernet-switch-port description
-> is this thing devoid of meaning. What is said about the dsa-port is what
-> the description should be here, and the description of the dsa-port is
-> that it's a generic Ethernet switch port plus DSA specific properties.
+The inline assembly for arm64's cmpxchg_double*() implementations use a
++Q constraint to hazard against other accesses to the memory location
+being exchanged. However, the pointer passed to the constraint is a
+pointer to unsigned long, and thus the hazard only applies to the first
+8 bytes of the location.
 
-Apologies - you mentioned this earlier as well. I'm not sure how I
-missed it in v5 (and therefore v6)
+GCC can take advantage of this, assuming that other portions of the
+location are unchanged, leading to a number of potential problems.
 
-> 
-> > +
-> > +$ref: ethernet-controller.yaml#
-> > +
-> > +properties:
-> > +  reg:
-> > +    description: Port number
-> > +
-> > +additionalProperties: true
-> 
-> Also, I see your patches are deferred in patchwork, and while this isn't
-> really for me to say, presumably it's because there was no announcement
-> so far that net-next reopened.
+This is similar to what we fixed back in commit:
 
-Based on above, it might be for the better.
+  fee960bed5e857eb ("arm64: xchg: hazard against entire exchange variable")
+
+... but we forgot to adjust cmpxchg_double*() similarly at the same
+time.
+
+The same problem applies, as demonstrated with the following test:
+
+| struct big {
+|         u64 lo, hi;
+| } __aligned(128);
+|
+| unsigned long foo(struct big *b)
+| {
+|         u64 hi_old, hi_new;
+|
+|         hi_old = b->hi;
+|         cmpxchg_double_local(&b->lo, &b->hi, 0x12, 0x34, 0x56, 0x78);
+|         hi_new = b->hi;
+|
+|         return hi_old ^ hi_new;
+| }
+
+... which GCC 12.1.0 compiles as:
+
+| 0000000000000000 <foo>:
+|    0:   d503233f        paciasp
+|    4:   aa0003e4        mov     x4, x0
+|    8:   1400000e        b       40 <foo+0x40>
+|    c:   d2800240        mov     x0, #0x12                       // #18
+|   10:   d2800681        mov     x1, #0x34                       // #52
+|   14:   aa0003e5        mov     x5, x0
+|   18:   aa0103e6        mov     x6, x1
+|   1c:   d2800ac2        mov     x2, #0x56                       // #86
+|   20:   d2800f03        mov     x3, #0x78                       // #120
+|   24:   48207c82        casp    x0, x1, x2, x3, [x4]
+|   28:   ca050000        eor     x0, x0, x5
+|   2c:   ca060021        eor     x1, x1, x6
+|   30:   aa010000        orr     x0, x0, x1
+|   34:   d2800000        mov     x0, #0x0                        // #0    <--- BANG
+|   38:   d50323bf        autiasp
+|   3c:   d65f03c0        ret
+|   40:   d2800240        mov     x0, #0x12                       // #18
+|   44:   d2800681        mov     x1, #0x34                       // #52
+|   48:   d2800ac2        mov     x2, #0x56                       // #86
+|   4c:   d2800f03        mov     x3, #0x78                       // #120
+|   50:   f9800091        prfm    pstl1strm, [x4]
+|   54:   c87f1885        ldxp    x5, x6, [x4]
+|   58:   ca0000a5        eor     x5, x5, x0
+|   5c:   ca0100c6        eor     x6, x6, x1
+|   60:   aa0600a6        orr     x6, x5, x6
+|   64:   b5000066        cbnz    x6, 70 <foo+0x70>
+|   68:   c8250c82        stxp    w5, x2, x3, [x4]
+|   6c:   35ffff45        cbnz    w5, 54 <foo+0x54>
+|   70:   d2800000        mov     x0, #0x0                        // #0     <--- BANG
+|   74:   d50323bf        autiasp
+|   78:   d65f03c0        ret
+
+Notice that at the lines with "BANG" comments, GCC has assumed that the
+higher 8 bytes are unchanged by the cmpxchg_double() call, and that
+`hi_old ^ hi_new` can be reduced to a constant zero, for both LSE and
+LL/SC versions of cmpxchg_double().
+
+This patch fixes the issue by passing a pointer to __uint128_t into the
++Q constraint, ensuring that the compiler hazards against the entire 16
+bytes being modified.
+
+With this change, GCC 12.1.0 compiles the above test as:
+
+| 0000000000000000 <foo>:
+|    0:   f9400407        ldr     x7, [x0, #8]
+|    4:   d503233f        paciasp
+|    8:   aa0003e4        mov     x4, x0
+|    c:   1400000f        b       48 <foo+0x48>
+|   10:   d2800240        mov     x0, #0x12                       // #18
+|   14:   d2800681        mov     x1, #0x34                       // #52
+|   18:   aa0003e5        mov     x5, x0
+|   1c:   aa0103e6        mov     x6, x1
+|   20:   d2800ac2        mov     x2, #0x56                       // #86
+|   24:   d2800f03        mov     x3, #0x78                       // #120
+|   28:   48207c82        casp    x0, x1, x2, x3, [x4]
+|   2c:   ca050000        eor     x0, x0, x5
+|   30:   ca060021        eor     x1, x1, x6
+|   34:   aa010000        orr     x0, x0, x1
+|   38:   f9400480        ldr     x0, [x4, #8]
+|   3c:   d50323bf        autiasp
+|   40:   ca0000e0        eor     x0, x7, x0
+|   44:   d65f03c0        ret
+|   48:   d2800240        mov     x0, #0x12                       // #18
+|   4c:   d2800681        mov     x1, #0x34                       // #52
+|   50:   d2800ac2        mov     x2, #0x56                       // #86
+|   54:   d2800f03        mov     x3, #0x78                       // #120
+|   58:   f9800091        prfm    pstl1strm, [x4]
+|   5c:   c87f1885        ldxp    x5, x6, [x4]
+|   60:   ca0000a5        eor     x5, x5, x0
+|   64:   ca0100c6        eor     x6, x6, x1
+|   68:   aa0600a6        orr     x6, x5, x6
+|   6c:   b5000066        cbnz    x6, 78 <foo+0x78>
+|   70:   c8250c82        stxp    w5, x2, x3, [x4]
+|   74:   35ffff45        cbnz    w5, 5c <foo+0x5c>
+|   78:   f9400480        ldr     x0, [x4, #8]
+|   7c:   d50323bf        autiasp
+|   80:   ca0000e0        eor     x0, x7, x0
+|   84:   d65f03c0        ret
+
+... sampling the high 8 bytes before and after the cmpxchg, and
+performing an EOR, as we'd expect.
+
+For backporting, I've tested this atop linux-4.9.y with GCC 5.5.0. Note
+that linux-4.9.y is oldest currently supported stable release, and
+mandates GCC 5.1+. Unfortunately I couldn't get a GCC 5.1 binary to run
+on my machines due to library incompatibilities.
+
+I've also used a standalone test to check that we can use a __uint128_t
+pointer in a +Q constraint at least as far back as GCC 4.8.5 and LLVM
+3.9.1.
+
+Fixes: 5284e1b4bc8ae6fc ("arm64: xchg: Implement cmpxchg_double")
+Fixes: e9a4b795652f654a ("arm64: cmpxchg_dbl: patch in lse instructions when supported by the CPU")
+Reported-by: Boqun Feng <boqun.feng@gmail.com>
+Link: https://lore.kernel.org/lkml/Y6DEfQXymYVgL3oJ@boqun-archlinux/
+Reported-by: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/lkml/Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net/
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: stable@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Steve Capper <steve.capper@arm.com>
+Cc: Will Deacon <will@kernel.org>
+---
+ arch/arm64/include/asm/atomic_ll_sc.h | 2 +-
+ arch/arm64/include/asm/atomic_lse.h   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/include/asm/atomic_ll_sc.h b/arch/arm64/include/asm/atomic_ll_sc.h
+index 0890e4f568fb7..cbb3d961123b1 100644
+--- a/arch/arm64/include/asm/atomic_ll_sc.h
++++ b/arch/arm64/include/asm/atomic_ll_sc.h
+@@ -315,7 +315,7 @@ __ll_sc__cmpxchg_double##name(unsigned long old1,			\
+ 	"	cbnz	%w0, 1b\n"					\
+ 	"	" #mb "\n"						\
+ 	"2:"								\
+-	: "=&r" (tmp), "=&r" (ret), "+Q" (*(unsigned long *)ptr)	\
++	: "=&r" (tmp), "=&r" (ret), "+Q" (*(__uint128_t *)ptr)		\
+ 	: "r" (old1), "r" (old2), "r" (new1), "r" (new2)		\
+ 	: cl);								\
+ 									\
+diff --git a/arch/arm64/include/asm/atomic_lse.h b/arch/arm64/include/asm/atomic_lse.h
+index 52075e93de6c0..a94d6dacc0292 100644
+--- a/arch/arm64/include/asm/atomic_lse.h
++++ b/arch/arm64/include/asm/atomic_lse.h
+@@ -311,7 +311,7 @@ __lse__cmpxchg_double##name(unsigned long old1,				\
+ 	"	eor	%[old2], %[old2], %[oldval2]\n"			\
+ 	"	orr	%[old1], %[old1], %[old2]"			\
+ 	: [old1] "+&r" (x0), [old2] "+&r" (x1),				\
+-	  [v] "+Q" (*(unsigned long *)ptr)				\
++	  [v] "+Q" (*(__uint128_t *)ptr)				\
+ 	: [new1] "r" (x2), [new2] "r" (x3), [ptr] "r" (x4),		\
+ 	  [oldval1] "r" (oldval1), [oldval2] "r" (oldval2)		\
+ 	: cl);								\
+-- 
+2.30.2
+
