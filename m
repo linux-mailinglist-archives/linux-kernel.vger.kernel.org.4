@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAAC465E0E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D5865E0D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbjADXYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 18:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S234773AbjADXWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 18:22:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235159AbjADXXk (ORCPT
+        with ESMTP id S240549AbjADXWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 18:23:40 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8900448CDB
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 15:22:48 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id bn26so15113680wrb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 15:22:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rZzfdo0ziPPx2TPaj2KeqRicG6hTBB0FcIoqRc87RUk=;
-        b=psyzDoWE8dn3mhEjSUdM6XuCzJlSIkK2IU6izNdCGTNSekIeECgoA1MEej3kHk5Hrg
-         8Lc+rkqfq+9jAG5HM6J1de1Kx2nle37+OKcMMvR1LilN9viKDF3MmJlXbUt+3X9O5kau
-         Oo4Tdz14ipK9o3Le6+3Bg9Z1niTm5o04QT5OAg623BBqkIEnKHzLbkDDNQLmBje3/Dkb
-         UTOHUJAwt6i8WBYMgIIdCyjPp+axosEtGTN/Wo16L5o0qd78TpLc+3QSmxPe8FnMysBW
-         0Gix5pgaQJuBiXYZTAyA1aV650sGnrFCykpvLzaqCFtWwC22M4dzwAb1nS40VFfaGjVC
-         9aow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rZzfdo0ziPPx2TPaj2KeqRicG6hTBB0FcIoqRc87RUk=;
-        b=BjBWyc95PjTqlJ7il69WhT4UyA0buLctXYYScBFPpZAt+PWOr4BIQytaAemOCrVhHp
-         TaAKYRxBM9DzY1hzU9aoPcqjO31hnlmBGoCuL1yU0RxacK5yPf31NgazyrkWXb8Wavnj
-         IpWk19jDOxy/BRtmk16AJNPWA2Ong/ry3x2dXHCtl/QdqIZrI8DjjRT4kPnyZAlV9B0T
-         NFqXX+FlGQ5OJqOUvGPX8yn9QKD6BPajctbnayk1a1JqCuxZoGr/9Cn/yiOcRue88S6K
-         d/OrOewl5LGqT5mijyW+18MKa073AHWAR1AesCsotvyJbYpuwE93BMn7oFyqjPHAnvgm
-         BDzQ==
-X-Gm-Message-State: AFqh2kpzdtrfS0K62eUDtK74PD6oKHH5FWfYIugsggPdGhhGycT5lpSJ
-        J7N2mqUZV+ilXJjAUHGXPj3HlWgTigEKBzu2DMQSppn5AVs=
-X-Google-Smtp-Source: AMrXdXunSszWmBf44gTHaI+aiu3RKary3dRCzwUnnDN8xzpFRk/ihE4hFTVdFobDPpUjKu2HrZdc19y/uuEFYaq0EkM=
-X-Received: by 2002:a5d:5221:0:b0:2b0:6953:fac6 with SMTP id
- i1-20020a5d5221000000b002b06953fac6mr40522wra.131.1672874566982; Wed, 04 Jan
- 2023 15:22:46 -0800 (PST)
+        Wed, 4 Jan 2023 18:22:23 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338213B901;
+        Wed,  4 Jan 2023 15:22:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672874543; x=1704410543;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WkdfgZxzNh8MTB9VLy6eNylsSALpzw0WgKG1HPdLwjk=;
+  b=O2T2qj7I5qDPup5snatMxT+EvfeBiRriiVTBcnezzxWng7gBftljvfqe
+   1mPh4mzn+6B2CUYR9MD6fBDsCWOSELtsdEj+OOmmq1Dlnsrsjf05O7oFV
+   JrUjLpT834gAptGGi4uYmvFlETJCtkKHpns0Yg0Ct+KcmgUZVOJLerOm2
+   5fdJZXAP61r5fmoEFYRnqArekUs1lTrHGSWxz9G19CoRqb/iaPAlq7Tmx
+   9MesyLAFein3xB+ird+9xJP4jGZi1q4cMbdRg9dD0DIRD4FvgKKr69V8f
+   zLB/QoTGb/bZi6jVwtveSBdc8UsLe6w2BgP9XinmqUJGFsyl/cTQ5uDKK
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="301762105"
+X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
+   d="scan'208";a="301762105"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:22:20 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="900739350"
+X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
+   d="scan'208";a="900739350"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:22:19 -0800
+From:   matthew.gerlach@linux.intel.com
+To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v9 0/4] Enhance definition of DFH and use enhancements for UART driver
+Date:   Wed,  4 Jan 2023 15:22:49 -0800
+Message-Id: <20230104232253.24743-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230104222944.2380117-1-nphamcs@gmail.com>
-In-Reply-To: <20230104222944.2380117-1-nphamcs@gmail.com>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Wed, 4 Jan 2023 15:22:35 -0800
-Message-ID: <CAKEwX=Or-OJ=uiYUh88zGJ1bSAYjueTz-UqUEc_cRwCUni_OxQ@mail.gmail.com>
-Subject: Re: [PATCH] workingset: fix confusion around eviction vs refault container
-To:     akpm@linux-foundation.org
-Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 2:29 PM Nhat Pham <nphamcs@gmail.com> wrote:
->
-> From: Johannes Weiner <hannes@cmpxchg.org>
->
-> Refault decisions are made based on the lruvec where the page was
-> evicted, as that determined its LRU order while it was alive. Stats
-> and workingset aging must then occur on the lruvec of the new page, as
-> that's the node and cgroup that experience the refault and that's the
-> lruvec whose nonresident info ages out by a new resident page. Those
-> lruvecs could be different when a page is shared between cgroups, or
-> the refaulting page is allocated on a different node.
->
-> There are currently two mix-ups:
->
-> 1. When swap is available, the resident anon set must be considered
->    when comparing the refault distance. The comparison is made against
->    the right anon set, but the check for swap is not. When pages get
->    evicted from a cgroup with swap, and refault in one without, this
->    can incorrectly consider a hot refault as cold - and vice
->    versa. Fix that by using the eviction cgroup for the swap check.
->
-> 2. The stats and workingset age are updated against the wrong lruvec
->    altogether: the right cgroup but the wrong NUMA node. When a page
->    refaults on a different NUMA node, this will have confusing stats
->    and distort the workingset age on a different lruvec - again
->    possibly resulting in hot/cold misclassifications down the line.
->
-> Fix the swap check and the refault pgdat to address both concerns.
->
-> This was found during code review. It hasn't caused notable issues in
-> production, suggesting that those refault-migrations are relatively
-> rare in practice.
->
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> Co-developed-by: Nhat Pham <nphamcs@gmail.com>
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> ---
->  mm/workingset.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/mm/workingset.c b/mm/workingset.c
-> index ae7e984b23c6..79585d55c45d 100644
-> --- a/mm/workingset.c
-> +++ b/mm/workingset.c
-> @@ -457,6 +457,7 @@ void workingset_refault(struct folio *folio, void *shadow)
->          */
->         nr = folio_nr_pages(folio);
->         memcg = folio_memcg(folio);
-> +       pgdat = folio_pgdat(folio);
->         lruvec = mem_cgroup_lruvec(memcg, pgdat);
->
->         mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + file, nr);
-> @@ -474,7 +475,7 @@ void workingset_refault(struct folio *folio, void *shadow)
->                 workingset_size += lruvec_page_state(eviction_lruvec,
->                                                      NR_INACTIVE_FILE);
->         }
-> -       if (mem_cgroup_get_nr_swap_pages(memcg) > 0) {
-> +       if (mem_cgroup_get_nr_swap_pages(eviction_memcg) > 0) {
->                 workingset_size += lruvec_page_state(eviction_lruvec,
->                                                      NR_ACTIVE_ANON);
->                 if (file) {
-> --
-> 2.30.2
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-Oh this one is sent out twice too... Something is wrong with my pipeline...
-Anyway, please disregard the first email and only review this one!
+This patchset enhances the definition of the Device Feature Header (DFH) used by
+the Device Feature List (DFL) bus and then uses the new enhancements in a UART
+driver.
+
+The enhancements to the DFH includes the introduction of parameter blocks.
+Like PCI capabilities, the DFH parameter blocks further describe
+the hardware to software. In the case of the UART, the parameter blocks
+provide information for the interrupt, clock frequency, and register layout.
+
+Duplication of code parsing of the parameter blocks in multiple DFL drivers
+is a concern. Using swnodes was considered to help minimize parsing code 
+duplication, but their use did not help the problem. Furthermore the highly
+changeable nature of FPGAs employing the DFL bus makes the use of swnodes
+inappropriate. 
+
+Patch 1 updates the DFL documentation to describe the added functionality to DFH.
+
+Patch 2 adds the definitions for DFHv1.
+
+Patch 3 adds basic support for DFHv1. It adds functionality to parse parameter blocks
+and adds the functionality to parse the explicit location of a feature's register set.
+
+Patch 4 adds a DFL UART driver that makes use of the new features of DFHv1.
+
+Basheer Ahmed Muddebihal (1):
+  fpga: dfl: Add DFHv1 Register Definitions
+
+Matthew Gerlach (3):
+  Documentation: fpga: dfl: Add documentation for DFHv1
+  fpga: dfl: add basic support for DFHv1
+  tty: serial: 8250: add DFL bus driver for Altera 16550.
+
+ Documentation/fpga/dfl.rst         | 117 ++++++++++++++
+ drivers/fpga/dfl.c                 | 245 +++++++++++++++++++++++------
+ drivers/fpga/dfl.h                 |  43 +++++
+ drivers/tty/serial/8250/8250_dfl.c | 167 ++++++++++++++++++++
+ drivers/tty/serial/8250/Kconfig    |  12 ++
+ drivers/tty/serial/8250/Makefile   |   1 +
+ include/linux/dfl.h                |   8 +
+ 7 files changed, 542 insertions(+), 51 deletions(-)
+ create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+
+-- 
+2.25.1
+
