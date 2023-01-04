@@ -2,70 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C254E65D50F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCBC65D521
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239426AbjADOI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S239585AbjADOJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234889AbjADOI1 (ORCPT
+        with ESMTP id S239557AbjADOJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:08:27 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5271E19C19;
-        Wed,  4 Jan 2023 06:08:25 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id jo4so82870606ejb.7;
-        Wed, 04 Jan 2023 06:08:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fQ2fFX+jd5hgr44et+KbsoEGFllq9yocAUoxQHQtXKI=;
-        b=E2+uN39UkM5pWjQKMcIiEBanAg8RKYOtDbEyNxYgaxwyESVoYgiQazF9Dy0psSXf9Y
-         o0RmCUe2FljyoGFQKVV6Ao3Qz7TGGTxHGXB1KI1/oJkGaZh9KLigCILMsGjZ7IN8gv2t
-         AZEk70xMOysymm964b6LHCg4gL2JvQBjp1kaViDrbglxXWBaB7dMAEL/Yze5dwWRhPRw
-         l5D8WN5MOEHH2dXBI9c+9QYUKkhOOa53/uUSOYkIBGr61uu6tZIWlEbSDhY3nCT2GnRX
-         4YEYbzX6bqy0rjtg4/wbECnsOZ8JIEgu0m+5i6GWqhCGULCGkw2FgOMcUaQkWxkgdJSk
-         uH8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fQ2fFX+jd5hgr44et+KbsoEGFllq9yocAUoxQHQtXKI=;
-        b=a+7TS7jh0Q/DBLAcy1bzaUplEtBQTxtg0FsUQK2QiEMffPO3HR2IZONPm2N8diOnb5
-         91Sc2aGqMavXfOhCBlR1/lo06WkAmVzaDDWdYVS1+hiW/koguivqnxtkg6mAWQZyTtOy
-         NOWg97JjTe5n1swcDpKZpq2mQEBdfo66gar3b/VX1NLHh7SZ3armvtcsudVZiKVHhQcI
-         j2PcgaKpjZ2GHFRSYoZ+6jJYzgOUUNHHqxousrjEicd1ApyvyNMd2f/pytF87zPnA+JQ
-         6lJSk8hbFPNwA01iOQVnFlTlXCG5A0Xrto36BQkTuFIByz1yRsnWeOpxm3jQ6JxvBq/X
-         bUoQ==
-X-Gm-Message-State: AFqh2kpOah2a//AFa8lrvpFuuqqpeBNwSgMfHjBgtcKQbsxvDKen+P4G
-        6LTEIaLDDzpn2UlJZ7nzAn4=
-X-Google-Smtp-Source: AMrXdXuYMZ3u92smjQOj3cSirxMS1EEMGLqr8sXU95yI0SMSWQDH2k8R6HrIrWrM6P9y7jULm3HpvQ==
-X-Received: by 2002:a17:907:8c82:b0:7c0:f7b2:b19a with SMTP id td2-20020a1709078c8200b007c0f7b2b19amr44385504ejc.27.1672841303904;
-        Wed, 04 Jan 2023 06:08:23 -0800 (PST)
-Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
-        by smtp.gmail.com with ESMTPSA id b2-20020a1709063ca200b007bd1ef2cccasm15138061ejh.48.2023.01.04.06.08.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 06:08:23 -0800 (PST)
-Date:   Wed, 4 Jan 2023 15:08:31 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH ethtool-next 0/2] add support for PLCA RS
-Message-ID: <cover.1672840949.git.piergiorgio.beruto@gmail.com>
+        Wed, 4 Jan 2023 09:09:09 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9A11EC5E;
+        Wed,  4 Jan 2023 06:08:57 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pD4Rp-00044n-Do; Wed, 04 Jan 2023 15:08:53 +0100
+Message-ID: <5db65fd1-575f-df19-0de3-b3e32e4bf1d1@leemhuis.info>
+Date:   Wed, 4 Jan 2023 15:08:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] spi: mediatek: Enable irq before the spi registration
+Content-Language: en-US, de-DE
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221225-mtk-spi-fixes-v1-0-bb6c14c232f8@chromium.org>
+ <167214860344.446872.17166503994226712534.b4-ty@kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <167214860344.446872.17166503994226712534.b4-ty@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1672841337;3790397a;
+X-HE-SMSGID: 1pD4Rp-00044n-Do
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,26 +51,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for the IEEE802.3cg-2019 Clause 148 PLCA
-Reconciliation Sublayer. It adds get/set configuration and get status
-functions. Additionally, shows PLCA capabilities and status when invoked
-without arguments.
+Hi Mark!
 
-Piergiorgio Beruto (2):
-  update UAPI header copies
-  add support for IEEE 802.3cg-2019 Clause 148 - PLCA RS
+On 27.12.22 14:43, Mark Brown wrote:
+> On Sun, 25 Dec 2022 09:37:12 +0100, Ricardo Ribalda wrote:
+>> If the irq is enabled after the spi si registered, there can be a race
+>> with the initialization of the devices on the spi bus.
+>>
+>> Eg:
+>> mtk-spi 1100a000.spi: spi-mem transfer timeout
+>> spi-nor: probe of spi0.0 failed with error -110
+>> Unable to handle kernel NULL pointer dereference at virtual address
+>> 0000000000000010
+>> ...
+>> Call trace:
+>>  mtk_spi_can_dma+0x0/0x2c
+>>
+>> [...]
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thanks!
+> 
+> [1/1] spi: mediatek: Enable irq before the spi registration
+>       commit: b24cded8c065d7cef8690b2c7b82b828cce57708
+> 
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> [...]
 
- Makefile.am                  |   1 +
- ethtool.c                    |  21 +++
- netlink/extapi.h             |   6 +
- netlink/plca.c               | 295 +++++++++++++++++++++++++++++++++++
- netlink/settings.c           |  86 +++++++++-
- uapi/linux/ethtool.h         |   3 +
- uapi/linux/ethtool_netlink.h |  39 +++++
- uapi/linux/net_tstamp.h      |   3 +-
- 8 files changed, 451 insertions(+), 3 deletions(-)
- create mode 100644 netlink/plca.c
+Quick question: why did you queue this for the next merge window? This
+change *afaics* is fixing a reported regression (a kernel oops)
+introduced this cycle:
+https://lore.kernel.org/lkml/Y6dL2ZWgd1BD6kew@makrotopia.org/
 
--- 
-2.37.4
+Or have I missed or confused something?
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+#regzbot poke
