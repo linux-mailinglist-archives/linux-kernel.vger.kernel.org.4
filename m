@@ -2,97 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E0965D5E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B8165D641
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237542AbjADOhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S239612AbjADOnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235113AbjADOhT (ORCPT
+        with ESMTP id S239681AbjADOms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:37:19 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7EE2DDA
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 06:37:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672843039; x=1704379039;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HtQ0/PIlNHRHOzAOijbMWgzI9+6drMS+LW1td1A907w=;
-  b=AaookK6FBW806U/I9cE/w+TtrsY3/B4JeARGcNuIz4qMr2GujsF+PR9J
-   y6DL7BmRb9jXRkmB4ZyXRLLOJFg+3RrG+nKiqPPyFuq4qYI0hWhe87i8k
-   MLZ7BsJLEVMrtgyvP/iFSAew3ayEUUgyJNI8XZ6jdMnrz7T+eqpFUICKH
-   7d3fj/0LDiAZafmurjF/WEaT6Y2SlfpNvLTx+1suVjpU6i1yts/30GY2I
-   bIp7IgkaoGlT2gr74Z7LrLdNAaahTqr4QVs7Aw0wBQfgzSQ9mPfUSMDO+
-   CMvoBob042Uy6sWf4BehxWh1z2jMxBV7atvUCIaHYerzA7UKAy/S/Qiy+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="309713798"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="309713798"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 06:37:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="657128659"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="657128659"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 06:37:05 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     akpm@linux-foundation.org, pmladek@suse.com, tj@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2] kthread_worker: Check all delayed works when destroy kthread worker
-Date:   Wed,  4 Jan 2023 22:42:30 +0800
-Message-Id: <20230104144230.938521-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 4 Jan 2023 09:42:48 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2191EACF
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 06:42:45 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d9so19310100pll.9
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 06:42:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XqrtrKRhDtPaDDzxdLxDCGFf7RuTdmXM7ZNOkYasJp0=;
+        b=annFklxy87JJ3NRbnht+zPMvo+BAwdt75U4NiJoQVnyUOKlpPtp/cRuA2vofqUcQCi
+         P0vuJl1DIw3GMfw5OTu1tZiv2Vj3qPg+WnN/Jx7K9J6RdGVZSi9zs+Zlp1gP2aqAhVjL
+         AqzsIO9GT4hQEORUz+CRmEUeKbk0I42JGplO2YoztwiDlYiMb+TO9BJa/n3E5GXZhbuL
+         GhjKblEIvWoseorJLshQnlvMK+QxSrk5smdrSblQmZ7FyzYfHXRZfElfeDV+lX1tb3YX
+         bS2etoCnGfiK5NAvxGZ+DWDbLoy2IBD1CMYXN4G6CS+r9yhOO0i7f3uaOMNTgYA4dxv9
+         aDCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XqrtrKRhDtPaDDzxdLxDCGFf7RuTdmXM7ZNOkYasJp0=;
+        b=h712TNhLjLpnmEj2GO1xBbrXtXWkFNLcSJUx+e6wRMOWfPOfBO75lx4kBV3RHb5hsE
+         VXBH6ydB48YzNkg4qdFtlvZj0oXcPwB4kHXUldW2DXdob6rCtsUeU5O6MtvzuKGihnAY
+         hiTJMYP5VJSJMvf75Oltge3RkipL+lVhq1pFwnWFP4/EtsMbywuTPGPwhb//kMujycT3
+         4tD9sYqtynrCZ0nWIspvbFjtv/i36ghzZ0NO7/m1QKmcYgPapR+P3v2N8nL6jnw1Hn1m
+         LZnbuBEfHm13fgPz7CLOLuPJgKT0b8g768vQQdLqV/FTQy6OubW6RHb/kFfUcfRojxxO
+         OH7g==
+X-Gm-Message-State: AFqh2kq4M3nl4uriy7cE514WWBlnHADwkilE7O3Z/3kSMUdNeCeM1yOF
+        xxWz6B2WllAd4qG60n07shFNlw==
+X-Google-Smtp-Source: AMrXdXtZlSUzwJzX/CvX/YPyt/O1AXFajoGSeAYuzp0beESFSo5sq4QF1exhZz+z45WMIHfXVDWBFg==
+X-Received: by 2002:a05:6a20:7f59:b0:ac:af5c:2970 with SMTP id e25-20020a056a207f5900b000acaf5c2970mr3145986pzk.3.1672843364859;
+        Wed, 04 Jan 2023 06:42:44 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z15-20020a63190f000000b0046ffe3fea77sm20377445pgl.76.2023.01.04.06.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 06:42:44 -0800 (PST)
+Date:   Wed, 4 Jan 2023 14:42:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aaron Lewis <aaronlewis@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>
+Subject: Re: [PATCH v2 3/4] KVM: nVMX: Don't muck with allowed sec exec
+ controls on CPUID changes
+Message-ID: <Y7WQYLO4Ou8M8ElV@google.com>
+References: <20221213062306.667649-1-seanjc@google.com>
+ <20221213062306.667649-4-seanjc@google.com>
+ <70872206-7a75-0a19-3df5-a97207e710fa@redhat.com>
+ <Y7WNrZ9NaDHOxwuG@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7WNrZ9NaDHOxwuG@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit add a check for delayed works, when destroy kthread worker
-if there are still some pending delayed works will trigger warnning,
-this remind caller should clear all pending delayed works before destroy
-kthread worker.
+On Wed, Jan 04, 2023, Sean Christopherson wrote:
+> On Fri, Dec 23, 2022, Paolo Bonzini wrote:
+> > On 12/13/22 07:23, Sean Christopherson wrote:
+> > > Don't modify the set of allowed secondary execution controls, i.e. the
+> > > virtual MSR_IA32_VMX_PROCBASED_CTLS2, in response to guest CPUID changes.
+> > > To avoid breaking old userspace that never sets the VMX MSRs, i.e. relies
+> > > on KVM to provide a consistent vCPU model, keep the existing behavior if
+> > > userspace has never written MSR_IA32_VMX_PROCBASED_CTLS2.
+> > > 
+> > > KVM should not modify the VMX capabilities presented to L1 based on CPUID
+> > > as doing so may discard explicit settings provided by userspace.  E.g. if
+> > > userspace does KVM_SET_MSRS => KVM_SET_CPUID and disables a feature in
+> > > the VMX MSRs but not CPUID (to prevent exposing the feature to L2), then
+> > > stuffing the VMX MSRs during KVM_SET_CPUID will expose the feature to L2
+> > > against userspace's wishes.
+> > 
+> > The commit message doesn't explain *why* KVM_SET_CPUID would be done before
+> > KVM_SET_MSRS.
+> 
+> I assume you mean why KVM_SET_MSRS would be done before KVM_SET_CPUID2?
+> 
+> This patch is mostly paranoia, AFAIK there is no userspace that is negatively
+> affected by KVM's manipulations.  The only case I can think of is if userspace
+> wanted to emulate dynamic CPUID updates, e.g. set an MSR filter to intercept writes
+> to MISC_ENABLES to update MONITOR/MWAIT support, but that behavior isn't allowed
+> since commit feb627e8d6f6 ("KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN").
+> 
+> There are scenarios where userspace might do KVM_SET_MSRS before KVM_SET_CPUID,
+> e.g. QEMU's reuse of a vCPU for CPU hotplug, but in those cases I would expect
+> userspace to follow up with another KVM_SET_MSRS.
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- v1->v2:
- Only add WARN_ON() and function description
+An argument for taking this patch is that it might be necessary to disallow
+KVM_SET_MSRS after KVM_RUN[*].  If KVM manipulates VMX MSRs during KVM_SET_CPUID2,
+reusing a vCPU with sequence:
 
- kernel/kthread.c | 5 +++++
- 1 file changed, 5 insertions(+)
+  SET_CPUID2 => SET_MSRS => RUN => unplug => hotplug => SET_CPUID2 => SET_MSRS
 
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index f97fd01a2932..7e6751b29101 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -1382,6 +1382,10 @@ EXPORT_SYMBOL_GPL(kthread_flush_worker);
-  * Flush and destroy @worker.  The simple flush is enough because the kthread
-  * worker API is used only in trivial scenarios.  There are no multi-step state
-  * machines needed.
-+ *
-+ * Note that this function is not responsible for handling delayed work, so
-+ * caller should be responsible for queuing or canceling all delayed work items
-+ * before invoke this function.
-  */
- void kthread_destroy_worker(struct kthread_worker *worker)
- {
-@@ -1393,6 +1397,7 @@ void kthread_destroy_worker(struct kthread_worker *worker)
- 
- 	kthread_flush_worker(worker);
- 	kthread_stop(task);
-+	WARN_ON(!list_empty(&worker->delayed_work_list));
- 	WARN_ON(!list_empty(&worker->work_list));
- 	kfree(worker);
- }
--- 
-2.25.1
+sequence will cause the second SET_MSRS to fail due to userspace "changing" the
+MSR value.
 
+[*] https://lore.kernel.org/all/20220805172945.35412-4-seanjc@google.com
