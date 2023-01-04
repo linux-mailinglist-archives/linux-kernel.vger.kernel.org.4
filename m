@@ -2,265 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D52565CC32
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 04:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B7065CC3A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 04:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234411AbjADDkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 22:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
+        id S234326AbjADDqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 22:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjADDkO (ORCPT
+        with ESMTP id S229473AbjADDqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 22:40:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780CB63A6
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 19:39:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672803566;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zLEOnNfnmWkj2vt/eKqMGmTtrEyeN38VkEbI9YRGYgo=;
-        b=ABtyrhLz/wIIN5BxsNmWLfhIzuwe6LoF+jb0O48bz33m0Xjy6VJBQkKy2XyYJibuuJc6J/
-        oA3+Unlh3qfPyOs6L3OkAp7Mu+q4oeqSp4IF8A587+90f6LPoQkZQWXt6n6v469tymlH5V
-        A0mmFsT6a4Ps19LR0FXbKMUPWqV32Pw=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-49-zjilxMaqM0qthTPxQVHgCg-1; Tue, 03 Jan 2023 22:39:25 -0500
-X-MC-Unique: zjilxMaqM0qthTPxQVHgCg-1
-Received: by mail-oo1-f71.google.com with SMTP id x20-20020a4a6214000000b004a36ed7679eso12316298ooc.15
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 19:39:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zLEOnNfnmWkj2vt/eKqMGmTtrEyeN38VkEbI9YRGYgo=;
-        b=tJt8uL2uNW3qT4KR5QGahNGS7h398hO7JjWABMeuqum/YvvTimprvn1uB4qyciQY0B
-         brUgVuAtrNaXAOGzJ9NIrypYzgAcspPnoBC69J/PV2jUmlQPAmBoMupMGPdnYgxoldt2
-         UuaWQIVxmMRuOFyEYK30xsmcRt02c8N41fvTKf5lkRF0pKkOtpaym1GwgffKqBgssME6
-         n31CPRTPbkG3+zh78fEmyVD4Ll+Gpg1nKhtkTLgK1yqSQBYfV8iEkFOs1ZsV0OipWA0v
-         ptkLsHtjaSw2Xsdgl8LPfbg2riM14yxATfQrtnWcM1dR+0MepxFfRSOEC6YgAkUIYFFU
-         s77g==
-X-Gm-Message-State: AFqh2kpol6HgDzdSjgbhYxWDsdkd/KoHBJD1NwSE880/aOLWpAmsDAge
-        4RGXIG4jAPL6MPCn2rcUUmKU0XTbU9SBlDuM0b6e5jC5HQsE1i0M1SXhdOzvxUR0VqQO5uelJl/
-        Wtq+jqooZKyVdUeiGz1uKsPzdYGCmsQXz8PNrVmrq
-X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id u19-20020a056870441300b00144a97b1ae2mr2348263oah.35.1672803564700;
-        Tue, 03 Jan 2023 19:39:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsVz1cKwujH6GJv25hk0r6sfgtJJRuq35xoLxJxoW7+KupoECbyLNoo6T6L/PrFgD6xJ2gklNlIzgvWJxAkF8c=
-X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id
- u19-20020a056870441300b00144a97b1ae2mr2348254oah.35.1672803564372; Tue, 03
- Jan 2023 19:39:24 -0800 (PST)
+        Tue, 3 Jan 2023 22:46:33 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A688183AE;
+        Tue,  3 Jan 2023 19:46:30 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.185])
+        by gateway (Coremail) with SMTP id _____8BxE_CV9rRjB0wKAA--.22796S3;
+        Wed, 04 Jan 2023 11:46:29 +0800 (CST)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxyuaT9rRjAHsTAA--.62435S3;
+        Wed, 04 Jan 2023 11:46:28 +0800 (CST)
+Subject: Re: [PATCH v2] pipe: use __pipe_{lock,unlock} instead of spinlock
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230103063303.23345-1-zhanghongchen@loongson.cn>
+ <Y7RrGOE65XKkzJuz@casper.infradead.org>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <fda0ca43-55b4-0192-bcee-281f5a1dda5a@loongson.cn>
+Date:   Wed, 4 Jan 2023 11:46:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <0000000000005315c105f1652480@google.com>
-In-Reply-To: <0000000000005315c105f1652480@google.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 4 Jan 2023 11:39:13 +0800
-Message-ID: <CACGkMEv7Dbat08DJw3SQ3QXK7H73aYLAMB0jLkuAmyYkLf_Q=w@mail.gmail.com>
-Subject: Re: [syzbot] possible deadlock in rds_message_put
-To:     syzbot <syzbot+f9db6ff27b9bfdcfeca0@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        mst@redhat.com, netdev@vger.kernel.org, pabeni@redhat.com,
-        rds-devel@oss.oracle.com, santosh.shilimkar@oracle.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y7RrGOE65XKkzJuz@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8BxyuaT9rRjAHsTAA--.62435S3
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3XFykGw43tFy8Ww13Xr13urg_yoWxXF48pa
+        n8KF47uFWUAr10gryxGrsxZFn2g390gF17CrWxGa4FvF9FkryFgF4qkFyakFn5Ars7CryY
+        vF4UXa4F9r1UArJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 8:19 AM syzbot
-<syzbot+f9db6ff27b9bfdcfeca0@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    c183e6c3ec34 Merge git://git.kernel.org/pub/scm/linux/kern..
-> git tree:       net-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1161aa7c480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=8ca07260bb631fb4
-> dashboard link: https://syzkaller.appspot.com/bug?extid=f9db6ff27b9bfdcfeca0
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1370b478480000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ab141a480000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/9b693820fb05/disk-c183e6c3.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/e449d80e60dc/vmlinux-c183e6c3.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/08e31763ce79/bzImage-c183e6c3.xz
->
-> The issue was bisected to:
->
-> commit 1628c6877f371194b603330c324828d03e0eacda
-> Author: Jason Wang <jasowang@redhat.com>
-> Date:   Mon Jan 4 06:55:02 2021 +0000
->
->     virtio_vdpa: don't warn when fail to disable vq
->
+Hi Matthew,
 
-There's little chance for this commit to be the first bad one. It only
-removes a WARN_ON().
+On 2023/1/4 am 1:51, Matthew Wilcox wrote:
+> On Tue, Jan 03, 2023 at 02:33:03PM +0800, Hongchen Zhang wrote:
+>> Use spinlock in pipe_read/write cost too much time,IMO
+> 
+> Everybody has an opinion.  Do you have data?
+> 
+I tested this patch using UnixBench's pipe test case on a x86_64 
+machine,and get the following data:
+1) before this patch
+System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+Pipe Throughput                   12440.0     493023.3    396.3
+                                                                    ========
+System Benchmarks Index Score (Partial Only)              396.3
 
-Thanks
+2) after this patch
+System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+Pipe Throughput                   12440.0     507551.4    408.0
+                                                                    ========
+System Benchmarks Index Score (Partial Only)              408.0
 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1479f7da480000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1679f7da480000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1279f7da480000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+f9db6ff27b9bfdcfeca0@syzkaller.appspotmail.com
-> Fixes: 1628c6877f37 ("virtio_vdpa: don't warn when fail to disable vq")
->
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 6.1.0-syzkaller-11778-gc183e6c3ec34 #0 Not tainted
-> ------------------------------------------------------
-> syz-executor390/18169 is trying to acquire lock:
-> ffff8880763af100 (&rm->m_rs_lock){..-.}-{2:2}, at: rds_message_purge net/rds/message.c:138 [inline]
-> ffff8880763af100 (&rm->m_rs_lock){..-.}-{2:2}, at: rds_message_put+0x1dd/0xc20 net/rds/message.c:180
->
-> but task is already holding lock:
-> ffff88802afafa70 (&rs->rs_recv_lock){...-}-{2:2}, at: rds_clear_recv_queue+0x33/0x350 net/rds/recv.c:761
->
-> which lock already depends on the new lock.
->
->
-> the existing dependency chain (in reverse order) is:
->
-> -> #1 (&rs->rs_recv_lock){...-}-{2:2}:
->        __raw_read_lock_irqsave include/linux/rwlock_api_smp.h:160 [inline]
->        _raw_read_lock_irqsave+0x49/0x90 kernel/locking/spinlock.c:236
->        rds_wake_sk_sleep+0x23/0xe0 net/rds/af_rds.c:109
->        rds_send_remove_from_sock+0xb9/0x9e0 net/rds/send.c:634
->        rds_send_path_drop_acked+0x2f3/0x3d0 net/rds/send.c:710
->        rds_tcp_write_space+0x1b5/0x690 net/rds/tcp_send.c:198
->        tcp_new_space net/ipv4/tcp_input.c:5483 [inline]
->        tcp_check_space+0x11b/0x810 net/ipv4/tcp_input.c:5502
->        tcp_data_snd_check net/ipv4/tcp_input.c:5511 [inline]
->        tcp_rcv_established+0x93e/0x2230 net/ipv4/tcp_input.c:6019
->        tcp_v4_do_rcv+0x670/0x9b0 net/ipv4/tcp_ipv4.c:1721
->        sk_backlog_rcv include/net/sock.h:1113 [inline]
->        __release_sock+0x133/0x3b0 net/core/sock.c:2928
->        release_sock+0x58/0x1b0 net/core/sock.c:3485
->        rds_send_xmit+0xafc/0x2540 net/rds/send.c:422
->        rds_sendmsg+0x27d3/0x3080 net/rds/send.c:1381
->        sock_sendmsg_nosec net/socket.c:714 [inline]
->        sock_sendmsg+0xd3/0x120 net/socket.c:734
->        __sys_sendto+0x23a/0x340 net/socket.c:2117
->        __do_sys_sendto net/socket.c:2129 [inline]
->        __se_sys_sendto net/socket.c:2125 [inline]
->        __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2125
->        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->        entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> -> #0 (&rm->m_rs_lock){..-.}-{2:2}:
->        check_prev_add kernel/locking/lockdep.c:3097 [inline]
->        check_prevs_add kernel/locking/lockdep.c:3216 [inline]
->        validate_chain kernel/locking/lockdep.c:3831 [inline]
->        __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
->        lock_acquire kernel/locking/lockdep.c:5668 [inline]
->        lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
->        __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
->        _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
->        rds_message_purge net/rds/message.c:138 [inline]
->        rds_message_put+0x1dd/0xc20 net/rds/message.c:180
->        rds_inc_put net/rds/recv.c:82 [inline]
->        rds_inc_put+0x13e/0x1a0 net/rds/recv.c:76
->        rds_clear_recv_queue+0x14b/0x350 net/rds/recv.c:767
->        rds_release+0xd8/0x3c0 net/rds/af_rds.c:73
->        __sock_release+0xcd/0x280 net/socket.c:650
->        sock_close+0x1c/0x20 net/socket.c:1365
->        __fput+0x27c/0xa90 fs/file_table.c:320
->        task_work_run+0x16f/0x270 kernel/task_work.c:179
->        resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->        exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
->        exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
->        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->        syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
->        do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->        entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> other info that might help us debug this:
->
->  Possible unsafe locking scenario:
->
->        CPU0                    CPU1
->        ----                    ----
->   lock(&rs->rs_recv_lock);
->                                lock(&rm->m_rs_lock);
->                                lock(&rs->rs_recv_lock);
->   lock(&rm->m_rs_lock);
->
->  *** DEADLOCK ***
->
-> 2 locks held by syz-executor390/18169:
->  #0: ffff8880719a3210 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
->  #0: ffff8880719a3210 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
->  #1: ffff88802afafa70 (&rs->rs_recv_lock){...-}-{2:2}, at: rds_clear_recv_queue+0x33/0x350 net/rds/recv.c:761
->
-> stack backtrace:
-> CPU: 0 PID: 18169 Comm: syz-executor390 Not tainted 6.1.0-syzkaller-11778-gc183e6c3ec34 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
->  check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2177
->  check_prev_add kernel/locking/lockdep.c:3097 [inline]
->  check_prevs_add kernel/locking/lockdep.c:3216 [inline]
->  validate_chain kernel/locking/lockdep.c:3831 [inline]
->  __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
->  lock_acquire kernel/locking/lockdep.c:5668 [inline]
->  lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
->  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
->  _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
->  rds_message_purge net/rds/message.c:138 [inline]
->  rds_message_put+0x1dd/0xc20 net/rds/message.c:180
->  rds_inc_put net/rds/recv.c:82 [inline]
->  rds_inc_put+0x13e/0x1a0 net/rds/recv.c:76
->  rds_clear_recv_queue+0x14b/0x350 net/rds/recv.c:767
->  rds_release+0xd8/0x3c0 net/rds/af_rds.c:73
->  __sock_release+0xcd/0x280 net/socket.c:650
->  sock_close+0x1c/0x20 net/socket.c:1365
->  __fput+0x27c/0xa90 fs/file_table.c:320
->  task_work_run+0x16f/0x270 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
->  exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
->  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f4a3a75f5fb
-> Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 03 fd ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 41 fd ff ff 8b 44
-> RSP: 002b:00007ffff26fde60 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-> RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f4a3a75f5fb
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-> RBP: 0000000000000032 R08: 0000000000000000 R09: 00007f4a3a7f51ae
-> R10: 0000000000000000 R11: 0000000000000293 R12: 00007f4a3a8284ec
-> R13: 00007ffff26fdeb0 R14: 00007ffff26fded0 R15: 00007ffff26fdf40
->  </TASK>
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
->
+so we get ~3% speedup.
+
+>> pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+>> On the other hand, we can use __pipe_lock/unlock to protect the
+>> pipe->head/tail in pipe_resize_ring and post_one_notification.
+>>
+>> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+>> ---
+> 
+> you're supposed to write here what changes you made between v1 and v2.
+> 
+I added the linux/fs.h in v2 to fix the linux-test-robot test error in v1.
+>>   fs/pipe.c                 | 24 ++++--------------------
+>>   include/linux/pipe_fs_i.h | 12 ++++++++++++
+>>   kernel/watch_queue.c      |  8 ++++----
+>>   3 files changed, 20 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/fs/pipe.c b/fs/pipe.c
+>> index 42c7ff41c2db..cf449779bf71 100644
+>> --- a/fs/pipe.c
+>> +++ b/fs/pipe.c
+>> @@ -98,16 +98,6 @@ void pipe_unlock(struct pipe_inode_info *pipe)
+>>   }
+>>   EXPORT_SYMBOL(pipe_unlock);
+>>   
+>> -static inline void __pipe_lock(struct pipe_inode_info *pipe)
+>> -{
+>> -	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
+>> -}
+>> -
+>> -static inline void __pipe_unlock(struct pipe_inode_info *pipe)
+>> -{
+>> -	mutex_unlock(&pipe->mutex);
+>> -}
+>> -
+>>   void pipe_double_lock(struct pipe_inode_info *pipe1,
+>>   		      struct pipe_inode_info *pipe2)
+>>   {
+>> @@ -253,8 +243,7 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+>>   	 */
+>>   	was_full = pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+>>   	for (;;) {
+>> -		/* Read ->head with a barrier vs post_one_notification() */
+>> -		unsigned int head = smp_load_acquire(&pipe->head);
+>> +		unsigned int head = pipe->head;
+>>   		unsigned int tail = pipe->tail;
+>>   		unsigned int mask = pipe->ring_size - 1;
+>>   
+>> @@ -322,14 +311,12 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+>>   
+>>   			if (!buf->len) {
+>>   				pipe_buf_release(pipe, buf);
+>> -				spin_lock_irq(&pipe->rd_wait.lock);
+>>   #ifdef CONFIG_WATCH_QUEUE
+>>   				if (buf->flags & PIPE_BUF_FLAG_LOSS)
+>>   					pipe->note_loss = true;
+>>   #endif
+>>   				tail++;
+>>   				pipe->tail = tail;
+>> -				spin_unlock_irq(&pipe->rd_wait.lock);
+>>   			}
+>>   			total_len -= chars;
+>>   			if (!total_len)
+>> @@ -506,16 +493,13 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
+>>   			 * it, either the reader will consume it or it'll still
+>>   			 * be there for the next write.
+>>   			 */
+>> -			spin_lock_irq(&pipe->rd_wait.lock);
+>>   
+>>   			head = pipe->head;
+>>   			if (pipe_full(head, pipe->tail, pipe->max_usage)) {
+>> -				spin_unlock_irq(&pipe->rd_wait.lock);
+>>   				continue;
+>>   			}
+>>   
+>>   			pipe->head = head + 1;
+>> -			spin_unlock_irq(&pipe->rd_wait.lock);
+>>   
+>>   			/* Insert it into the buffer array */
+>>   			buf = &pipe->bufs[head & mask];
+>> @@ -1260,14 +1244,14 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+>>   	if (unlikely(!bufs))
+>>   		return -ENOMEM;
+>>   
+>> -	spin_lock_irq(&pipe->rd_wait.lock);
+>> +	__pipe_lock(pipe);
+>>   	mask = pipe->ring_size - 1;
+>>   	head = pipe->head;
+>>   	tail = pipe->tail;
+>>   
+>>   	n = pipe_occupancy(head, tail);
+>>   	if (nr_slots < n) {
+>> -		spin_unlock_irq(&pipe->rd_wait.lock);
+>> +		__pipe_unlock(pipe);
+>>   		kfree(bufs);
+>>   		return -EBUSY;
+>>   	}
+>> @@ -1303,7 +1287,7 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+>>   	pipe->tail = tail;
+>>   	pipe->head = head;
+>>   
+>> -	spin_unlock_irq(&pipe->rd_wait.lock);
+>> +	__pipe_unlock(pipe);
+>>   
+>>   	/* This might have made more room for writers */
+>>   	wake_up_interruptible(&pipe->wr_wait);
+>> diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
+>> index 6cb65df3e3ba..f5084daf6eaf 100644
+>> --- a/include/linux/pipe_fs_i.h
+>> +++ b/include/linux/pipe_fs_i.h
+>> @@ -2,6 +2,8 @@
+>>   #ifndef _LINUX_PIPE_FS_I_H
+>>   #define _LINUX_PIPE_FS_I_H
+>>   
+>> +#include <linux/fs.h>
+>> +
+>>   #define PIPE_DEF_BUFFERS	16
+>>   
+>>   #define PIPE_BUF_FLAG_LRU	0x01	/* page is on the LRU */
+>> @@ -223,6 +225,16 @@ static inline void pipe_discard_from(struct pipe_inode_info *pipe,
+>>   #define PIPE_SIZE		PAGE_SIZE
+>>   
+>>   /* Pipe lock and unlock operations */
+>> +static inline void __pipe_lock(struct pipe_inode_info *pipe)
+>> +{
+>> +	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
+>> +}
+>> +
+>> +static inline void __pipe_unlock(struct pipe_inode_info *pipe)
+>> +{
+>> +	mutex_unlock(&pipe->mutex);
+>> +}
+>> +
+>>   void pipe_lock(struct pipe_inode_info *);
+>>   void pipe_unlock(struct pipe_inode_info *);
+>>   void pipe_double_lock(struct pipe_inode_info *, struct pipe_inode_info *);
+>> diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
+>> index a6f9bdd956c3..92e46cfe9419 100644
+>> --- a/kernel/watch_queue.c
+>> +++ b/kernel/watch_queue.c
+>> @@ -108,7 +108,7 @@ static bool post_one_notification(struct watch_queue *wqueue,
+>>   	if (!pipe)
+>>   		return false;
+>>   
+>> -	spin_lock_irq(&pipe->rd_wait.lock);
+>> +	__pipe_lock(pipe);
+>>   
+>>   	mask = pipe->ring_size - 1;
+>>   	head = pipe->head;
+>> @@ -135,17 +135,17 @@ static bool post_one_notification(struct watch_queue *wqueue,
+>>   	buf->offset = offset;
+>>   	buf->len = len;
+>>   	buf->flags = PIPE_BUF_FLAG_WHOLE;
+>> -	smp_store_release(&pipe->head, head + 1); /* vs pipe_read() */
+>> +	pipe->head = head + 1;
+>>   
+>>   	if (!test_and_clear_bit(note, wqueue->notes_bitmap)) {
+>> -		spin_unlock_irq(&pipe->rd_wait.lock);
+>> +		__pipe_unlock(pipe);
+>>   		BUG();
+>>   	}
+>>   	wake_up_interruptible_sync_poll_locked(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
+>>   	done = true;
+>>   
+>>   out:
+>> -	spin_unlock_irq(&pipe->rd_wait.lock);
+>> +	__pipe_unlock(pipe);
+>>   	if (done)
+>>   		kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
+>>   	return done;
+>>
+>> base-commit: c8451c141e07a8d05693f6c8d0e418fbb4b68bb7
+>> -- 
+>> 2.31.1
+>>
 
